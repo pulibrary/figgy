@@ -17,6 +17,7 @@ Style/FileName:
     - '**/*.rake'
 Metrics/BlockLength:
   Exclude:
+    - 'app/controllers/catalog_controller.rb'
     - 'config/environments/**/*'
     - 'spec/**/*'
     - 'config/initializers/*'
@@ -42,3 +43,9 @@ RSpec/DescribeClass:
 RSpec/FilePath:
   Exclude:
     - 'spec/registered_adapter_spec.rb'
+RSpec/EmptyExampleGroup:
+  Exclude:
+    - 'spec/models/search_builder_spec.rb'
+RSpec/VerifiedDoubles:
+  Exclude:
+    - 'spec/models/search_builder_spec.rb'

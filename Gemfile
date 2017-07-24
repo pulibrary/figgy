@@ -2,6 +2,7 @@
 source "https://rubygems.org"
 
 gem "autoprefixer-rails"
+gem "blacklight"
 gem "flutie"
 gem "honeybadger"
 gem "jquery-rails"
@@ -16,7 +17,6 @@ gem "suspenders"
 gem "title"
 gem "uglifier"
 gem "valkyrie", git: "https://github.com/samvera-labs/valkyrie.git"
-gem "blacklight"
 
 group :development do
   gem "listen"
