@@ -1,0 +1,14 @@
+.viewer {
+  height: 400px;
+}
+#viewer-modal {
+  .modal-content {
+    padding: 20px;
+  }
+  picture {
+    background-color: rgb(46,46,46);
+  }
+  button.close {
+    margin-bottom: 10px;
+  }
+}

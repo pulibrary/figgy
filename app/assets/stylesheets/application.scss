@@ -1,3 +1,37 @@
+/*
+ *= require normalize-rails
+*/
 @charset "utf-8";
-@import "blacklight";
 @import "bootstrap-sprockets";
+@import "bootstrap";
+@import 'blacklight/blacklight';
+
+// PUL specific styles
+@import 'abstractions/mixins';
+
+@import 'variables/breaks';
+@import 'variables/colors';
+@import 'variables/typography';
+
+@import 'base/typography';
+
+@import 'components/batch_upload';
+@import 'components/bounding_box';
+@import 'components/breadcrumb';
+@import 'components/datepicker';
+@import 'components/fileupload';
+@import 'components/plum_file_manager';
+@import 'components/rtl';
+@import 'components/sorting';
+@import 'components/viewer';
+@import 'components/vocab';
+@import 'components/flash';
+@import 'components/font-face';
+@import 'components/footer';
+@import 'components/header';
+@import 'components/positioning';
+@import 'components/structure_editor';
+@import 'components/tabs';
+@import 'components/welcome_page';
+@import 'components/catalog';
+@import 'components/select_box';

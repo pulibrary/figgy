@@ -1,0 +1,64 @@
+/* Follows minor third modular scale of 1.200 */
+@import 'variables/typography';
+
+html {
+    font-size: 1em;
+}
+
+p {
+    margin-bottom: 1.3em;
+}
+
+h1, h2, h3, h4 {
+    margin: 1.414em 0 0.5em;
+    font-weight: inherit;
+    line-height: 1.2;
+}
+
+h1 {
+    margin-top: 0;
+    // font-size: 2.074em;
+    font-size: 1.3em;
+    margin-bottom: 1em;
+}
+
+h2 {
+    // font-size: 1.728em;
+    font-size: 1.3em;
+}
+
+h3 {
+    font-size: 1.3em;
+}
+
+h4 {
+    font-size: 1.2em;
+}
+
+small, .font-small {
+    font-size: 0.833em;
+}
+
+body .form-control {
+    color: $dark-gray;
+}
+
+#main {
+  h1, h2, h3, h4, h5, h6 {
+    color: $blue;
+  }
+
+  h3 {
+    font-size: 24px;
+    line-height: 1.1em;
+  }
+
+  h3.panel-title {
+    font-size: 1.3em;
+  }
+}
+
+[dir='rtl'] {
+  font-family: verdana, arial;
+  font-size: 150%;
+}

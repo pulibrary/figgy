@@ -1,0 +1,25 @@
+.flash-message {
+  z-index: 100;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  
+  .container {
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+
+    .alert {
+      margin: 0px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      border-radius: 0px;
+      font-size: 18px;
+    }
+
+    // add spacing between multiple alerts
+    .alert:not(:first-child) {
+      margin-top: 5px;
+    }
+  }
+}

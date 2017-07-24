@@ -1,0 +1,14 @@
+<%= form_tag main_app.search_catalog_path, :method => :get, :class => "search-form form-inline clearfix navbar-form" do %>
+  <div class="input-group">
+    <legend class="accessible-hidden">Search <%=t('valkyrie.product_name')%></legend>
+    <%= label_tag :catalog_search, t('valkyrie.search.form.q.label'), :class => "accessible-hidden" %>
+    <%= render_hash_as_hidden_fields(search_state.params_for_search().except(:q, :search_field, :qt, :page, :utf8)) %>
+    <%= text_field_tag(:q, params[:q], :class => "q search-query form-control", :id => "catalog_search", :placeholder => t('valkyrie.search.form.q.placeholder'), :size => "30", :tabindex => "1", :type => "search") %>
+    <span class="input-group-btn">
+      <button type="submit" class="search-submit btn btn-primary" id="keyword-search-submit" tabindex="2">
+        <span class="submit-search-text sr-only">Search</span>
+        <span class="glyphicon glyphicon-search"></span>
+      </button>
+    </span>
+  </div>
+<% end %>

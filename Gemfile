@@ -57,3 +57,5 @@ end
 gem 'rsolr', '>= 1.0'
 
 gem 'devise'
+gem 'modernizr-rails'
+gem 'normalize-rails'

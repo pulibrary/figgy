@@ -1,22 +1,45 @@
+<% provide :body do %>
+
+<%= render 'shared/header' %>
+<%= render 'shared/flash_message' %>
+
+<main>
+  <div id="main" role="main" class="container <%= yield(:page_class) if content_for?(:page_class)%>">
+  <% if content_for?(:page_header) %>
+    <div class="row">
+      <div class="col-md-12 main-header ">
+        <%= yield(:page_header) %>
+      </div>
+    </div>
+  <% end %>
+
+    <%= content_for?(:main) ? yield(:main) : yield %>
+  </div>
+</main>
+
+  <%= render 'shared/footer' %>
+  <%= render 'shared/osd_modal' %>
+
+<% end %>
+
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="ROBOTS" content="NOODP" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <%#
-    Configure default and controller-, and view-specific titles in
-    config/locales/en.yml. For more see:
-    https://github.com/calebthompson/title#usage
-  %>
-  <title><%= title %></title>
-  <%= stylesheet_link_tag :application, media: "all" %>
-  <%= csrf_meta_tags %>
-</head>
-<body class="<%= body_class %>">
-  <%= render "flashes" -%>
-  <%= yield %>
-  <%= render "javascript" %>
-  <%= render "css_overrides" %>
-</body>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title><%= content_for?(:page_title) ? yield(:page_title) : default_page_title %></title>
+    <meta name="viewport" content="width=device-width">
+    <%= csrf_meta_tag %>
+    <%= stylesheet_link_tag 'application' %>
+    <%= javascript_include_tag 'application' %>
+  </head>
+  <body>
+
+    <%= content_for?(:body) ? yield(:body) : yield %>
+
+    <%= render 'shared/ajax_modal' %>
+  </body>
 </html>

@@ -17,3 +17,13 @@ en:
 
   titles:
     application: Figgy
+  valkyrie:
+    institution:
+      name: 'Princeton University Library'
+      homepage_url: 'https://library.princeton.edu'
+    product_name: 'Digital PUL'
+    search:
+      form:
+        q:
+          label: 'Search'
+          placeholder: 'Enter search terms'

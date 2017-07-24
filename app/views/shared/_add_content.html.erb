@@ -1,0 +1,41 @@
+<% if false %>
+<% include_works_link ||= can_ever_create_works? %>
+<% include_collections_link ||= can?(:create, ::Collection) %>
+<% include_roles_link ||= can?(:create, ::Role) %>
+<% if include_works_link || include_collections_link || include_roles_link %>
+  <div class="btn-group add-content">
+    <%= link_to '#', id: "add-content", class: "btn btn-primary dropdown-toggle", data: { toggle: "dropdown"} do %>
+      <span class="glyphicon glyphicon-plus"></span><span class="visuallyhidden">Add</span>
+    <% end %>
+    <ul class="dropdown-menu quick-create">
+      <% if include_works_link %>
+        <li>
+          <%= render 'shared/add_works' %>
+        </li>
+      <% end %>
+      <% if include_collections_link %>
+        <li class="divider"></li>
+        <li><%= link_to 'Add a Collection', main_app.new_collection_path, class: 'menu-heading new-collection', role: 'menuitem' %></li>
+      <% end %>
+      <% if include_roles_link %>
+        <li class="divider"></li>
+        <li><%= link_to 'Manage Roles', role_management.roles_path, class: 'menu-heading manage-roles', role: 'menuitem' %></li>
+        <li><%= link_to 'Workflow Roles', hyrax.admin_workflow_roles_path, class: 'menu-heading manage-workflow-roles', role: 'menuitem' %></li>
+      <% end %>
+      <% if can?(:create, Vocabulary) || can?(:create, EphemeraProject) %>
+        <li class="divider"></li>
+      <% end %>
+      <% if can?(:create, EphemeraProject) %>
+        <li><%= link_to 'Manage Ephemera Projects', main_app.ephemera_projects_path, class: 'menu-heading manage-ephemera-projects', role: 'menuitem' %></li>
+      <% end %>
+      <% if can?(:create, Vocabulary) %>
+        <li><%= link_to 'Manage Vocabularies', main_app.vocabularies_path, class: 'menu-heading manage-vocabularies', role: 'menuitem' %></li>
+      <% end %>
+      <% if can?(:create, AuthToken) %>
+        <li class="divider"></li>
+        <li><%= link_to 'Manage Auth Tokens', main_app.auth_tokens_path, class: 'menu-heading manage-auth-tokens', role: 'menuitem' %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+<% end %>
