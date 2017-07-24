@@ -3,3 +3,9 @@ machine:
     version: 2.3.1
   services:
     - redis
+dependencies:
+  post:
+    - bundle exec rake rubocop
+    - bundle exec rake server:test:
+        background: true
+    - bin/jetty_wait
