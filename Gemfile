@@ -16,6 +16,7 @@ gem "suspenders"
 gem "title"
 gem "uglifier"
 gem "valkyrie", git: "https://github.com/samvera-labs/valkyrie.git"
+gem "blacklight"
 
 group :development do
   gem "listen"
@@ -48,3 +49,9 @@ group :test do
   gem "timecop"
   gem "webmock"
 end
+
+group :development, :test do
+  gem 'solr_wrapper', '>= 0.3'
+end
+
+gem 'rsolr', '>= 1.0'
