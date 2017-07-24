@@ -7,8 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/samvera-labs/valkyrie.git
-  revision: bd0c720ca8f868c2ac796a875da5cddada134f24
-  branch: safe_access_controls_indexer
+  revision: c856985f94e28942667e53693f129a2efe7ed5db
   specs:
     valkyrie (0.1.0)
       active-fedora
