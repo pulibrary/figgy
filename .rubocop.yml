@@ -1,0 +1,44 @@
+require: rubocop-rspec
+inherit_gem:
+  bixby: bixby_default.yml
+AllCops:
+  DisplayCopNames: true
+  TargetRubyVersion: 2.3
+  Exclude:
+    - 'bin/*'
+    - 'config/deploy.rb'
+    - 'vendor/**/*'
+    - 'valkyrie/**/*'
+    - 'db/schema.rb'
+Style/FileName:
+  Enabled: true
+  Exclude:
+    - 'Gemfile'
+    - '**/*.rake'
+Metrics/BlockLength:
+  Exclude:
+    - 'config/environments/**/*'
+    - 'spec/**/*'
+    - 'config/initializers/*'
+    - 'config/routes.rb'
+    - 'lib/specs/**/*'
+    - 'db/schema.rb'
+    - 'lib/tasks/dev.rake'
+Metrics/MethodLength:
+  Exclude:
+    - 'db/migrate/**/*'
+RSpec/MultipleExpectations:
+  Enabled: false
+RSpec/ExampleLength:
+  Enabled: false
+RSpec/DescribeClass:
+  Exclude:
+    - 'spec/abilities/**/*'
+    - 'spec/features/**/*'
+    - 'spec/views/**/*'
+    - 'spec/routing/**/*'
+    - 'spec/inputs/**/*'
+    - 'spec/requests/**/*'
+RSpec/FilePath:
+  Exclude:
+    - 'spec/registered_adapter_spec.rb'

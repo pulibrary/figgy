@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 source "https://rubygems.org"
 
 gem "autoprefixer-rails"
@@ -14,6 +15,7 @@ gem "sprockets", ">= 3.0.0"
 gem "suspenders"
 gem "title"
 gem "uglifier"
+gem "valkyrie", git: "https://github.com/samvera-labs/valkyrie.git"
 
 group :development do
   gem "listen"
@@ -24,6 +26,7 @@ end
 
 group :development, :test do
   gem "awesome_print"
+  gem "bixby"
   gem "bullet"
   gem "bundler-audit", ">= 0.5.0", require: false
   gem "dotenv-rails"
@@ -40,8 +43,8 @@ end
 group :test do
   gem "database_cleaner"
   gem "formulaic"
+  gem "poltergeist"
   gem "simplecov", require: false
   gem "timecop"
   gem "webmock"
-  gem "poltergeist"
 end
