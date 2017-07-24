@@ -53,3 +53,5 @@ RSpec/EmptyExampleGroup:
 RSpec/VerifiedDoubles:
   Exclude:
     - 'spec/models/search_builder_spec.rb'
+    - 'spec/validators/viewing_hint_validator_spec.rb'
+    - 'spec/validators/viewing_direction_validator_spec.rb'
