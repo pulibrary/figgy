@@ -25,9 +25,13 @@ Metrics/BlockLength:
     - 'lib/specs/**/*'
     - 'db/schema.rb'
     - 'lib/tasks/dev.rake'
+    - 'app/models/plum_schema.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
+Metrics/ModuleLength:
+  Exclude:
+    - 'app/models/plum_schema.rb'
 RSpec/MultipleExpectations:
   Enabled: false
 RSpec/ExampleLength:

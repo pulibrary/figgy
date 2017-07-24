@@ -16,3 +16,11 @@ Valkyrie::MetadataAdapter.register(
   ),
   :index_solr
 )
+
+Valkyrie::MetadataAdapter.register(
+  Valkyrie::Persistence::IndexingAdapter.new(
+    metadata_adapter: Valkyrie.config.metadata_adapter,
+    index_adapter: Valkyrie::MetadataAdapter.find(:index_solr)
+  ),
+  :indexing_persister
+)
