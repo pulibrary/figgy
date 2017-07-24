@@ -3,6 +3,7 @@ source "https://rubygems.org"
 
 gem "autoprefixer-rails"
 gem "blacklight"
+gem "devise-guests", git: "https://github.com/cbeer/devise-guests.git"
 gem "flutie"
 gem "honeybadger"
 gem "jquery-rails"
@@ -54,3 +55,5 @@ group :development, :test do
 end
 
 gem 'rsolr', '>= 1.0'
+
+gem 'devise'
