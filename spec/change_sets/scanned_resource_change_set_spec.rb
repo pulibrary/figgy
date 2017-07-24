@@ -33,4 +33,22 @@ RSpec.describe ScannedResourceChangeSet do
       end
     end
   end
+
+  describe "#viewing_hint" do
+    it "is singular" do
+      scanned_resource.viewing_hint = ["Test"]
+      change_set.prepopulate!
+
+      expect(change_set.viewing_hint).to eq "Test"
+    end
+  end
+
+  describe "#viewing_direction" do
+    it "is singular" do
+      scanned_resource.viewing_direction = ["Test"]
+      change_set.prepopulate!
+
+      expect(change_set.viewing_direction).to eq "Test"
+    end
+  end
 end
