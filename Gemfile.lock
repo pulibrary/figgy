@@ -287,11 +287,13 @@ GEM
     mini_magick (4.8.0)
     mini_portile2 (2.2.0)
     minitest (5.10.3)
+    modernizr-rails (2.7.1)
     multi_json (1.12.1)
     multipart-post (2.0.0)
     nio4r (2.1.0)
     nokogiri (1.8.0)
       mini_portile2 (~> 2.2.0)
+    normalize-rails (3.0.3)
     open4 (1.3.4)
     orm_adapter (0.5.0)
     parallel (1.11.2)
@@ -508,6 +510,8 @@ DEPENDENCIES
   honeybadger
   jquery-rails
   listen
+  modernizr-rails
+  normalize-rails
   pg
   poltergeist
   pry-byebug

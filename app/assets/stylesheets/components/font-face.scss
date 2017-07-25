@@ -1,0 +1,64 @@
+@font-face {
+    font-family: 'DejaVu Sans';
+    src: font-url('Dejavu/DejaVuSansCondensed-webfont.eot');
+    src: font-url('Dejavu/DejaVuSansCondensed-webfont.eot?#iefix') format('embedded-opentype'),
+         font-url('Dejavu/DejaVuSansCondensed-webfont.woff') format('woff'),
+         font-url('Dejavu/DejaVuSansCondensed-webfont.ttf') format('truetype'),
+         font-url('Dejavu/DejaVuSansCondensed-webfont.svg#svgFontName') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+  font-family: 'Droid Serif';
+  src: font-url('Droid_Serif/droidserif-webfont.eot'); /* IE9 Compat Modes */
+  src: font-url('Droid_Serif/droidserif-webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       font-url('Droid_Serif/droidserif-webfont.woff2') format('woff2'), /* Super Modern Browsers */
+       font-url('Droid_Serif/droidserif-webfont.woff') format('woff'), /* Pretty Modern Browsers */
+       font-url('Droid_Serif/droidserif-webfont.ttf')  format('truetype'), /* Safari, Android, iOS */
+       font-url('Droid_Serif/droidserif-webfont.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+  font-family: 'work-icons';
+  src: font-url('work-icons/work-icons.eot');
+  src: font-url('work-icons/work-icons.eot?#iefix') format('embedded-opentype'),
+       font-url('work-icons/work-icons.woff') format('woff'),
+       font-url('work-icons/work-icons.ttf') format('truetype'),
+       font-url('work-icons/work-icons.svg#work-icons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.work-icon[class^="icon-"]:before,
+.work-icon[class*=" icon-"]:before {
+  font-family: 'work-icons' !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-collection:before {
+  content: "\61";
+}
+.icon-image-work:before {
+  content: "\62";
+}
+.icon-multi-volume-work:before {
+  content: "\63";
+}
+.icon-raster-work:before {
+  content: "\64";
+}
+.icon-scanned-resource:before {
+  content: "\65";
+}
+.icon-vector-work:before {
+  content: "\66";
+}

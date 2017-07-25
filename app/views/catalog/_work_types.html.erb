@@ -1,0 +1,25 @@
+<% if types.any? {|klass| can? :create, klass} %>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-classify-work">
+        <div class="panel-heading"><%= label %></div>
+        <div class="panel-body">
+          <ul class="classify-work">
+            <% types.each do |klass| %>
+              <% if can? :create, klass %>
+                <li class="work-type work-type-<%= klass %>">
+                  <h4 class="title"><%= klass.human_readable_type %></h4>
+                  <%= content_tag(:div, nil, class: ['work-icon', "icon-#{klass.human_readable_type.downcase.gsub(' ','-')}"]) %>
+                  <%= link_to 'Add New',
+                    main_app.new_polymorphic_path([klass]),
+                    class: "add-button btn btn-primary #{dom_class(klass, 'add_new')}"
+                  %>
+                </li>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class CatalogController < ApplicationController
+  layout "application"
   include Blacklight::Catalog
   def self.search_config
     {

@@ -1,0 +1,133 @@
+@import 'variables/breaks';
+@import 'variables/colors';
+@import 'variables/typography';
+
+.l-footer .block--menu .menu {
+    display: none;
+}
+
+@media (min-width: $bp-small) {
+    .l-footer .block--menu .menu {
+        display: block;
+    }
+}
+
+body {
+    background: $light-gray;
+}
+
+main {
+    background: $white;
+}
+
+.l-footer {
+    background-color: $light-gray;
+    margin: 2em 0;
+}
+
+footer {
+    h2 {
+        font-size: 16px;
+        margin-bottom: 0.75em;
+        font-weight: bold;
+        color: $dark-orange;
+        font-family: $font-serif;
+        a {
+            color: $dark-orange;
+        }
+    }
+}
+
+footer a {
+    color: black;
+}
+
+.l-region--footer .leaf a {
+    line-height: 1.75em;
+}
+
+.l-region--footer address,
+.l-region--footer .footer--copyright,
+.l-region--footer li a {
+    color: $dark-gray;
+    font-size: 0.9em;
+}
+
+.svg .facebook-logo:before,
+.svg .twitter-logo:before,
+.svg .govdocs-logo:before,
+.svg .friends-logo:before,
+.svg .pu-logo:before {
+    content: ' ';
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+}
+
+.svg .facebook-logo,
+.svg .twitter-logo,
+.svg .govdocs-logo,
+.svg .friends-logo,
+.svg .pu-logo {
+    background-size: contain;
+    display: inline-block;
+    line-height: 11px;
+    height: 24px;
+}
+
+.svg .facebook-logo img,
+.svg .twitter-logo img,
+.svg .govdocs-logo img,
+.svg .friends-logo img,
+.svg .pu-logo img {
+    display: none;
+}
+
+.svg .facebook-logo {
+    background-image: image-url("facebook.svg");
+    width: 24px;
+    margin: 0 0.2em 0.75em;
+}
+
+.svg .twitter-logo {
+    background-image: image-url("twitter.svg");
+    width: 24px;
+    margin: 0 0.2em 0.75em;
+}
+
+.svg .govdocs-logo {
+    background-image: image-url("govdocs.svg");
+    width: 27px;
+    margin: 0 0.2em 0.75em;
+}
+
+.svg .friends-logo {
+    background-image: image-url("friends.svg");
+    width: 91px;
+    margin: 0 0.2em 0.75em;
+}
+
+.svg .pu-logo {
+    background-image: image-url("pu.svg");
+    width: 142px;
+    height: 40px;
+    margin: 0.5em 0 0;
+}
+
+.l-region--footer .footer--copyright {
+    margin-top: 0.5em;
+}
+
+footer .menu {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+footer address {
+    margin: 0;
+}
+
+#footer {
+    margin: 0 auto;
+    text-align: left;
+}

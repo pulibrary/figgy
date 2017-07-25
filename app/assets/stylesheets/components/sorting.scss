@@ -1,0 +1,23 @@
+.file_set_viewing_hint {
+  input.radio_buttons {
+    height: auto;
+    margin-left: 0;
+    box-shadow: none;
+  }
+}
+*[data-reorder-id] {
+  img {
+    max-width: 100%;
+  }
+  .radio input.radio_buttons {
+    margin-left: 0;
+  }
+}
+#reorder-actions {
+  .btn {
+    margin-top: 10px;
+  }
+  .btn:first-child {
+    margin-top: 0;
+  }
+}

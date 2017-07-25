@@ -1,0 +1,68 @@
+*[data-action='file-manager'] {
+  @extend .clearfix;
+  ul {
+    .alert-success, .alert-info, .alert-danger {
+      display: none;
+    }
+    &.success {
+      .alert-success {
+        display: block;
+      }
+    }
+    &.pending {
+      .alert-info {
+        display: block;
+      }
+    }
+    &.failure {
+      .alert-danger {
+        display: block;
+      }
+    }
+    li.pending {
+      .panel > form {
+        @extend .panel-info;
+      }
+    }
+    li .attributes .file_set_viewing_hint {
+      margin-bottom: 0px;
+    }
+    li .panel-body {
+      padding-bottom: 0px;
+    }
+    li.failure {
+      .panel > form {
+        @extend .panel-danger;
+      }
+    }
+    &.grid li {
+      .edit_scanned_resource {
+        margin-bottom: 100px;
+      }
+    }
+    li .panel .member_resource_options {
+      padding-left: 30px;
+      margin-top: -10px;
+      float: none;
+    }
+  }
+  li > .ui-selected {
+    background-color: #F39814;
+  }
+
+  li > .ui-selecting {
+    background-color: #FECA40;
+  }
+  .panel > form {
+    @extend .panel-default;
+  }
+}
+#file-manager-extra-tools {
+  @extend .clearfix;
+}
+#bulk-actions {
+  h2 {
+    margin-top: 0;
+  }
+  display: none;
+}
