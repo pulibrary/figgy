@@ -27,6 +27,12 @@ GIT
       reform-rails
       ruby_tika_app
 
+PATH
+  remote: valhalla
+  specs:
+    valhalla (0.1.0)
+      rails (~> 5.1.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -532,6 +538,7 @@ DEPENDENCIES
   timecop
   title
   uglifier
+  valhalla!
   valkyrie!
   web-console
   webmock
