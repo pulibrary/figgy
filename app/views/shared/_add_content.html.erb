@@ -1,3 +1,18 @@
+<% include_works_link = can_ever_create_works? %>
+<% if include_works_link %>
+  <div class="btn-group add-content">
+    <%= link_to '#', id: "add-content", class: "btn btn-primary dropdown-toggle", data: { toggle: "dropdown"} do %>
+      <span class="glyphicon glyphicon-plus"></span><span class="visuallyhidden">Add</span>
+    <% end %>
+    <ul class="dropdown-menu quick-create">
+      <% if include_works_link %>
+        <li>
+          <%= render 'shared/add_works' %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
 <% if false %>
 <% include_works_link ||= can_ever_create_works? %>
 <% include_collections_link ||= can?(:create, ::Collection) %>

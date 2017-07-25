@@ -13,5 +13,9 @@ module Valhalla
     def human_readable_type
       self.class.human_readable_type
     end
+
+    def self.model_name
+      ::ActiveModel::Name.new(self)
+    end
   end
 end
