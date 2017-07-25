@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 module ApplicationHelper
   include ::BlacklightHelper
+  include Valhalla::ApplicationHelper
 
   def application_name
-    t('valkyrie.product_name', default: super)
+    t('valhalla.product_name', default: super)
   end
 
   def default_page_title

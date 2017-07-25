@@ -29,3 +29,20 @@ en:
     # prompts:
     #   defaults:
     #     age: 'Select your age'
+    labels:
+      defaults:
+        source_metadata_identifier: "Source Metadata ID"
+        rights_statement: "Rights Statement"
+        rights_note: "Rights Note"
+        holding_location: "Holding Location"
+        pdf_type: "PDF Type"
+        portion_note: "Portion Note"
+        nav_date: "Navigation Date"
+    required:
+      html: '<span class="label label-info required-tag">required</span>'
+  helpers:
+    submit:
+      create: "Save"
+      update: "Save"
+    action:
+      cancel: "Cancel"

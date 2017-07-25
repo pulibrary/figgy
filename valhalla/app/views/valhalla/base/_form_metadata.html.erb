@@ -1,0 +1,3 @@
+  <% (@change_set.primary_terms).each do |field| %>
+    <%= render_edit_field_partial(field, f: f) %>
+  <% end %>

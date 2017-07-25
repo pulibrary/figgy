@@ -9,7 +9,7 @@ gem "honeybadger"
 gem "jquery-rails"
 gem "pg"
 gem "puma"
-gem "rails", "~> 5.1"
+gem "rails", "5.1.1"
 gem "recipient_interceptor"
 gem "sass-rails", "~> 5.0"
 gem "simple_form"
@@ -57,6 +57,7 @@ end
 gem 'rsolr', '>= 1.0'
 
 gem 'devise'
+gem 'hydra-head'
 gem 'modernizr-rails'
 gem 'normalize-rails'
 gem 'valhalla', path: 'valhalla'

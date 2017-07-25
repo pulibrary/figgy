@@ -6,6 +6,7 @@ module PlumSchema
     attribute :depositor
     attribute :title
     attribute :label
+    attribute :visibility
 
     attribute :relative_path
 

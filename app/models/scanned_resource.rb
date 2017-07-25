@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # Generated with `rails generate valkyrie:model ScannedResource`
-class ScannedResource < Valkyrie::Resource
+class ScannedResource < Valhalla::Resource
   include Valkyrie::Resource::AccessControls
   include PlumSchema
   attribute :id, Valkyrie::Types::ID.optional

@@ -17,11 +17,36 @@ en:
 
   titles:
     application: Figgy
-  valkyrie:
+  valhalla:
+    visibility:
+      open:
+        note_html: Open to the world. Anyone can view.
+        warning_html: ''
+        class: "label-success"
+        text: "Open"
+      authenticated:
+        note_html: Restrict access to only users and/or groups from Princeton University Library.
+        warning_html: ''
+        class: "label-info"
+      restricted:
+        text: "Private"
+        note_html: Only privileged users of this application can see the work.
+        warning_html: ''
+        class: "label-danger"
+    base:
+      form_progress:
+        requirements: 'Requirements'
+        required_descriptions: 'Describe your work'
     institution:
       name: 'Princeton University Library'
       homepage_url: 'https://library.princeton.edu'
     product_name: 'Digital PUL'
+    works:
+      progress:
+        header: 'Save Work'
+      form:
+        tab:
+          metadata: 'Metadata'
     search:
       form:
         q:
