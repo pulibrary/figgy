@@ -11,10 +11,12 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   property :viewing_direction, multiple: false, required: false
   property :portion_note, multiple: false, required: false
   property :nav_date, multiple: false, required: false
-  property :visibility, multiple: false, default: [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE]
+  property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
   property :local_identifier, multiple: true, required: false, default: []
   validates_with ViewingDirectionValidator
   validates_with ViewingHintValidator
+  validate :source_metadata_identifier_or_title
+  validates :rights_statement, :visibility, presence: true
 
   def primary_terms
     [
@@ -28,5 +30,12 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
       :portion_note,
       :nav_date
     ]
+  end
+
+  # Validate that either the source_metadata_identifier or the title is set.
+  def source_metadata_identifier_or_title
+    return if source_metadata_identifier.present? || title.present?
+    errors.add(:title, "You must provide a source metadata id or a title")
+    errors.add(:source_metadata_identifier, "You must provide a source metadata id or a title")
   end
 end
