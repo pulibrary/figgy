@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class CatalogController < ApplicationController
+  include ::Hydra::Catalog
   layout "application"
-  include Blacklight::Catalog
   def self.search_config
     {
       'qf' => %w[title_ssim],
@@ -30,5 +30,9 @@ class CatalogController < ApplicationController
     # Configuration for autocomplete suggestor
     config.autocomplete_enabled = true
     config.autocomplete_path = 'suggest'
+  end
+
+  def has_search_parameters?
+    !params[:q].nil? || !params[:f].blank? || !params[:search_field].blank?
   end
 end

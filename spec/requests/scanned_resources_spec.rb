@@ -3,6 +3,9 @@ require 'rails_helper'
 
 RSpec.describe "Scanned Resources Management" do
   let(:user) { FactoryGirl.create(:admin) }
+  let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+  let(:persister) { adapter.persister }
+  let(:query_service) { adapter.query_service }
   before do
     sign_in user if user
   end
@@ -27,5 +30,39 @@ RSpec.describe "Scanned Resources Management" do
       expect(response.body).to have_checked_field "Private"
       expect(response.body).to have_button "Save"
     end
+  end
+
+  describe "create" do
+    let(:valid_params) do
+      {
+        title: ['Title 1', 'Title 2'],
+        rights_statement: 'Test Statement',
+        visibility: 'restricted'
+      }
+    end
+    let(:invalid_params) do
+      {
+        rights_statement: 'Test Statement',
+        visibility: 'restricted'
+      }
+    end
+    context "when not logged in" do
+      let(:user) { nil }
+      it "throws a CanCan::AccessDenied error" do
+        expect { post "/concern/scanned_resources", params: { scanned_resource: valid_params } }.to raise_error CanCan::AccessDenied
+      end
+    end
+    it "can create a scanned resource" do
+      post "/concern/scanned_resources", params: { scanned_resource: valid_params }
+
+      expect(response).to be_redirect
+      expect(response.location).to start_with "http://www.example.com/catalog/"
+      id = response.location.gsub("http://www.example.com/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
+      expect(find_resource(id).title).to contain_exactly "Title 1", "Title 2"
+    end
+  end
+
+  def find_resource(id)
+    query_service.find_by(id: Valkyrie::ID.new(id.to_s))
   end
 end

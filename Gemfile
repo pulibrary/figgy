@@ -34,7 +34,9 @@ group :development, :test do
   gem "factory_girl_rails"
   gem "pry-byebug"
   gem "pry-rails"
+  gem 'rails-controller-testing'
   gem "rspec-rails", "~> 3.5"
+  gem 'solr_wrapper', '>= 0.3'
 end
 
 group :development, :staging do
@@ -48,10 +50,6 @@ group :test do
   gem "simplecov", require: false
   gem "timecop"
   gem "webmock"
-end
-
-group :development, :test do
-  gem 'solr_wrapper', '>= 0.3'
 end
 
 gem 'rsolr', '>= 1.0'
