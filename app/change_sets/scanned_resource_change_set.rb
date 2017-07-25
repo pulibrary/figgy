@@ -16,7 +16,7 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   validates_with ViewingDirectionValidator
   validates_with ViewingHintValidator
   validate :source_metadata_identifier_or_title
-  validates :rights_statement, :visibility, presence: true
+  validates :visibility, :rights_statement, presence: true
 
   def primary_terms
     [
@@ -34,7 +34,7 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
 
   # Validate that either the source_metadata_identifier or the title is set.
   def source_metadata_identifier_or_title
-    return if source_metadata_identifier.present? || title.present?
+    return if source_metadata_identifier.present? || Array.wrap(title).first.present?
     errors.add(:title, "You must provide a source metadata id or a title")
     errors.add(:source_metadata_identifier, "You must provide a source metadata id or a title")
   end

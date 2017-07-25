@@ -39,6 +39,11 @@ RSpec.describe ScannedResourceChangeSet do
         expect(change_set).not_to be_valid
       end
     end
+    context "when title is an empty array" do
+      it "is invalid" do
+        expect(change_set.validate(title: [""])).to eq false
+      end
+    end
     context "when only metadata_identifier is set" do
       let(:form_resource) { scanned_resource.new(title: "", source_metadata_identifier: "123") }
       it "is valid" do

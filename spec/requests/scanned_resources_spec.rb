@@ -42,6 +42,7 @@ RSpec.describe "Scanned Resources Management" do
     end
     let(:invalid_params) do
       {
+        title: [""],
         rights_statement: 'Test Statement',
         visibility: 'restricted'
       }
@@ -59,6 +60,10 @@ RSpec.describe "Scanned Resources Management" do
       expect(response.location).to start_with "http://www.example.com/catalog/"
       id = response.location.gsub("http://www.example.com/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
       expect(find_resource(id).title).to contain_exactly "Title 1", "Title 2"
+    end
+    it "renders the form if it doesn't create a scanned resource" do
+      post "/concern/scanned_resources", params: { scanned_resource: invalid_params }
+      expect(response.body).to have_field "Title"
     end
   end
 
