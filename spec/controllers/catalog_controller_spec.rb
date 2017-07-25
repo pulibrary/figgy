@@ -13,6 +13,23 @@ RSpec.describe CatalogController do
     end
   end
 
+  describe "#show" do
+    context "when rendered for an admin" do
+      before do
+        sign_in FactoryGirl.create(:admin)
+      end
+      render_views
+      it "renders administration buttons" do
+        resource = persister.save(resource: FactoryGirl.build(:scanned_resource))
+
+        get :show, params: { id: "id-#{resource.id}" }
+
+        expect(response.body).to have_link "Edit This Scanned Resource", href: edit_scanned_resource_path(resource)
+        expect(response.body).to have_link "Delete This Scanned Resource", href: scanned_resource_path(resource)
+      end
+    end
+  end
+
   describe "#has_search_parameters?" do
     context "when only a q is passed" do
       it "returns true" do

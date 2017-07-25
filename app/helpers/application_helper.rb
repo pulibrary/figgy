@@ -19,11 +19,15 @@ module ApplicationHelper
   end
 
   def main_content_classes
-    if params[:action] == "index" && !has_search_parameters?
-      'col-md-12'
+    if !has_search_parameters?
+      'col-xs-12'
     else
       super
     end
+  end
+
+  def show_sidebar_classes
+    'col-xs-12'
   end
 
   def can_ever_create_works?
@@ -38,5 +42,9 @@ module ApplicationHelper
 
   def all_works
     [ScannedResource]
+  end
+
+  def resource
+    @document.resource
   end
 end

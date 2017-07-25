@@ -31,6 +31,12 @@ class CatalogController < ApplicationController
     # Configuration for autocomplete suggestor
     config.autocomplete_enabled = true
     config.autocomplete_path = 'suggest'
+    config.show.document_actions.clear
+    config.add_show_tools_partial(:admin_controls, partial: 'admin_controls', if: :admin?)
+  end
+
+  def admin?
+    can?(:manage, @document.resource)
   end
 
   def has_search_parameters?
