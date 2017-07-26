@@ -113,28 +113,32 @@ RSpec.describe "Scanned Resources Management" do
   describe "update" do
     context "when not logged in" do
       let(:user) { nil }
-      let(:book) { Persister.save(resource: Book.new(title: ["Testing"])) }
       it "throws a CanCan::AccessDenied error" do
-        expect { patch book_path(id: book.id), params: { book: { title: ["Two"] } } }.to raise_error CanCan::AccessDenied
+        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+
+        expect { patch scanned_resource_path(scanned_resource), params: { scanned_resource: { title: ["Two"] } } }.to raise_error CanCan::AccessDenied
       end
     end
-    context "when a bookd oesn't exist" do
+    context "when a scanned resource doesn't exist" do
       it "raises an error" do
-        expect { patch book_path(id: "test") }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+        expect { patch scanned_resource_path(id: "test") }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
       end
     end
     context "when it does exist" do
-      let(:book) { Persister.save(resource: Book.new(title: ["Testing"])) }
-      let(:solr_adapter) { Valkyrie::MetadataAdapter.find(:index_solr) }
       it "saves it and redirects" do
-        patch book_path(id: book.id), params: { book: { title: ["Two"] } }
+        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+        patch scanned_resource_path(scanned_resource), params: { scanned_resource: { title: ["Two"] } }
+
         expect(response).to be_redirect
-        expect(response.location).to eq solr_document_url(id: solr_adapter.resource_factory.from_resource(book)[:id])
+        expect(response.location).to eq solr_document_url(id: "id-#{scanned_resource.id}")
+
         get response.location
         expect(response.body).to have_content "Two"
       end
       it "renders the form if it fails validations" do
-        patch book_path(id: book.id), params: { book: { title: [""] } }
+        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+        patch scanned_resource_path(scanned_resource), params: { scanned_resource: { title: [""] } }
+
         expect(response.body).to have_field "Title"
       end
     end

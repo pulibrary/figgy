@@ -13,11 +13,11 @@ function mutex() {
     var $me = $(this);
     var $other = $('.mutex').not($me);
     if ( $me.val() != '' ) {
-        $other.attr('disabled', 1);
+        $other.attr('readonly', 1);
         $("#mutex_field").val($me.val())
         $("#mutex_field").change()
     } else {
-        $other.removeAttr('disabled');
+        $other.removeAttr('readonly');
         $("#mutex_field").val($other.val())
         $("#mutex_field").change()
     }
