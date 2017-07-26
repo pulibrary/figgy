@@ -31,9 +31,19 @@ class PlumChangeSetPersister
 
   private
 
-    def before_save(change_set:); end
+    def before_save(change_set:)
+      apply_remote_metadata(change_set: change_set)
+    end
 
     def after_save(change_set:, updated_resource:); end
 
     def before_delete(change_set:); end
+
+    def apply_remote_metadata(change_set:)
+      return unless change_set.respond_to?(:source_metadata_identifier)
+      return unless change_set.apply_remote_metadata?
+      attributes = RemoteRecord.retrieve(change_set.source_metadata_identifier).attributes
+      change_set.validate(attributes)
+      change_set.sync
+    end
 end
