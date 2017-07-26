@@ -84,6 +84,62 @@ RSpec.describe "Scanned Resources Management" do
     end
   end
 
+  describe "edit" do
+    context "when not logged in" do
+      let(:user) { nil }
+      it "throws a CanCan::AccessDenied error" do
+        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+
+        expect { get edit_scanned_resource_path(scanned_resource) }.to raise_error CanCan::AccessDenied
+      end
+    end
+    context "when a scanned resource doesn't exist" do
+      it "raises an error" do
+        expect { get edit_scanned_resource_path(id: "test") }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+      end
+    end
+    context "when it does exist" do
+      let(:book) { Persister.save(resource: Book.new(title: ["Testing"])) }
+      it "renders a form" do
+        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+        get edit_scanned_resource_path(scanned_resource)
+
+        expect(response.body).to have_field "Title", with: scanned_resource.title.first
+        expect(response.body).to have_button "Save"
+      end
+    end
+  end
+
+  describe "update" do
+    context "when not logged in" do
+      let(:user) { nil }
+      let(:book) { Persister.save(resource: Book.new(title: ["Testing"])) }
+      it "throws a CanCan::AccessDenied error" do
+        expect { patch book_path(id: book.id), params: { book: { title: ["Two"] } } }.to raise_error CanCan::AccessDenied
+      end
+    end
+    context "when a bookd oesn't exist" do
+      it "raises an error" do
+        expect { patch book_path(id: "test") }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+      end
+    end
+    context "when it does exist" do
+      let(:book) { Persister.save(resource: Book.new(title: ["Testing"])) }
+      let(:solr_adapter) { Valkyrie::MetadataAdapter.find(:index_solr) }
+      it "saves it and redirects" do
+        patch book_path(id: book.id), params: { book: { title: ["Two"] } }
+        expect(response).to be_redirect
+        expect(response.location).to eq solr_document_url(id: solr_adapter.resource_factory.from_resource(book)[:id])
+        get response.location
+        expect(response.body).to have_content "Two"
+      end
+      it "renders the form if it fails validations" do
+        patch book_path(id: book.id), params: { book: { title: [""] } }
+        expect(response.body).to have_field "Title"
+      end
+    end
+  end
+
   def find_resource(id)
     query_service.find_by(id: Valkyrie::ID.new(id.to_s))
   end

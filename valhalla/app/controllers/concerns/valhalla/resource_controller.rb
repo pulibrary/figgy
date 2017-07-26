@@ -42,6 +42,11 @@ module Valhalla
       redirect_to root_path
     end
 
+    def edit
+      @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
+      authorize! :update, @change_set.resource
+    end
+
     def contextual_path(obj, change_set)
       Valhalla::ContextualPath.new(child: obj.id, parent_id: change_set.append_id)
     end
