@@ -1,328 +1,346 @@
 # frozen_string_literal: true
 module PlumSchema
   extend ActiveSupport::Concern
+  def imported_schema
+    [
+      # Hyrax,
+      :depositor,
+      :title,
+      :label,
+      :visibility,
+
+      :relative_path,
+
+      :import_url,
+
+      :part_of,
+      :resource_type,
+      :creator,
+      :contributor,
+      :description,
+      :keyword,
+      # Used for a license,
+      :license,
+
+      # This is for the rights statement,
+      :publisher,
+      :date_created,
+      :subject,
+      :language,
+      :based_near,
+      :related_url,
+      :bibliographic_citation,
+      # Generated from Context,
+      :coverage,
+      :created,
+      :date,
+      :format,
+      :source,
+      :extent,
+      :edition,
+      :cartographic_scale,
+      :call_number,
+      :abridger,
+      :actor,
+      :adapter,
+      :addressee,
+      :analyst,
+      :animator,
+      :annotator,
+      :appellant,
+      :appellee,
+      :applicant,
+      :architect,
+      :arranger,
+      :art_copyist,
+      :art_director,
+      :artist,
+      :artistic_director,
+      :assignee,
+      :associated_name,
+      :attributed_name,
+      :auctioneer,
+      :author,
+      :author_in_quotations_or_text_abstracts,
+      :author_of_afterword_colophon_etc,
+      :author_of_dialog,
+      :author_of_introduction_etc,
+      :autographer,
+      :bibliographic_antecedent,
+      :binder,
+      :binding_designer,
+      :blurb_writer,
+      :book_designer,
+      :book_producer,
+      :bookjacket_designer,
+      :bookplate_designer,
+      :bookseller,
+      :braille_embosser,
+      :broadcaster,
+      :calligrapher,
+      :cartographer,
+      :caster,
+      :censor,
+      :choreographer,
+      :cinematographer,
+      :client,
+      :collection_registrar,
+      :collector,
+      :collotyper,
+      :colorist,
+      :commentator,
+      :commentator_for_written_text,
+      :compiler,
+      :complainant,
+      :complainant_appellant,
+      :complainant_appellee,
+      :composer,
+      :compositor,
+      :conceptor,
+      :conductor,
+      :conservator,
+      :consultant,
+      :consultant_to_a_project,
+      :contestant,
+      :contestant_appellant,
+      :contestant_appellee,
+      :contestee,
+      :contestee_appellant,
+      :contestee_appellee,
+      :contractor,
+      :copyright_claimant,
+      :copyright_holder,
+      :corrector,
+      :correspondent,
+      :costume_designer,
+      :court_governed,
+      :court_reporter,
+      :cover_designer,
+      :curator,
+      :dancer,
+      :data_contributor,
+      :data_manager,
+      :dedicatee,
+      :dedicator,
+      :defendant,
+      :defendant_appellant,
+      :defendant_appellee,
+      :degree_granting_institution,
+      :degree_supervisor,
+      :delineator,
+      :depicted,
+      :designer,
+      :director,
+      :dissertant,
+      :distribution_place,
+      :distributor,
+      :donor,
+      :draftsman,
+      :dubious_author,
+      :editor,
+      :editor_of_compilation,
+      :editor_of_moving_image_work,
+      :electrician,
+      :electrotyper,
+      :enacting_jurisdiction,
+      :engineer,
+      :engraver,
+      :etcher,
+      :event_place,
+      :expert,
+      :facsimilist,
+      :field_director,
+      :film_distributor,
+      :film_director,
+      :film_editor,
+      :film_producer,
+      :filmmaker,
+      :first_party,
+      :forger,
+      :former_owner,
+      :funder,
+      :geographic_information_specialist,
+      :honoree,
+      :host,
+      :host_institution,
+      :illuminator,
+      :illustrator,
+      :inscriber,
+      :instrumentalist,
+      :interviewee,
+      :interviewer,
+      :inventor,
+      :issuing_body,
+      :judge,
+      :jurisdiction_governed,
+      :laboratory,
+      :laboratory_director,
+      :landscape_architect,
+      :lead,
+      :lender,
+      :libelant,
+      :libelant_appellant,
+      :libelant_appellee,
+      :libelee,
+      :libelee_appellant,
+      :libelee_appellee,
+      :librettist,
+      :licensee,
+      :licensor,
+      :lighting_designer,
+      :lithographer,
+      :lyricist,
+      :manufacture_place,
+      :manufacturer,
+      :marbler,
+      :markup_editor,
+      :medium,
+      :metadata_contact,
+      :metal_engraver,
+      :minute_taker,
+      :moderator,
+      :monitor,
+      :music_copyist,
+      :musical_director,
+      :musician,
+      :narrator,
+      :onscreen_presenter,
+      :opponent,
+      :organizer,
+      :originator,
+      :other,
+      :owner,
+      :panelist,
+      :papermaker,
+      :patent_applicant,
+      :patent_holder,
+      :patron,
+      :performer,
+      :permitting_agency,
+      :photographer,
+      :plaintiff,
+      :plaintiff_appellant,
+      :plaintiff_appellee,
+      :platemaker,
+      :praeses,
+      :presenter,
+      :printer,
+      :printer_of_plates,
+      :printmaker,
+      :process_contact,
+      :producer,
+      :production_company,
+      :production_designer,
+      :production_manager,
+      :production_personnel,
+      :production_place,
+      :programmer,
+      :project_director,
+      :proofreader,
+      :provider,
+      :publication_place,
+      :publishing_director,
+      :puppeteer,
+      :radio_director,
+      :radio_producer,
+      :recording_engineer,
+      :recordist,
+      :redaktor,
+      :renderer,
+      :reporter,
+      :marc_repository,
+      :research_team_head,
+      :research_team_member,
+      :researcher,
+      :respondent,
+      :respondent_appellant,
+      :respondent_appellee,
+      :responsible_party,
+      :restager,
+      :restorationist,
+      :reviewer,
+      :rubricator,
+      :scenarist,
+      :scientific_advisor,
+      :screenwriter,
+      :scribe,
+      :sculptor,
+      :second_party,
+      :secretary,
+      :seller,
+      :set_designer,
+      :setting,
+      :signer,
+      :singer,
+      :sound_designer,
+      :speaker,
+      :sponsor,
+      :stage_director,
+      :stage_manager,
+      :standards_body,
+      :stereotyper,
+      :storyteller,
+      :supporting_host,
+      :surveyor,
+      :teacher,
+      :technical_director,
+      :television_director,
+      :television_producer,
+      :thesis_advisor,
+      :transcriber,
+      :translator,
+      :type_designer,
+      :typographer,
+      :university_place,
+      :videographer,
+      :voice_actor,
+      :witness,
+      :wood_engraver,
+      :woodcutter,
+      :writer_of_accompanying_material,
+      :writer_of_added_commentary,
+      :writer_of_added_text,
+      :writer_of_added_lyrics,
+      :writer_of_supplementary_textual_content,
+      :writer_of_introduction,
+      :writer_of_preface
+    ]
+  end
+
+  def local_schema
+    [
+      # Plum,
+      :sort_title,
+      :portion_note,
+      :abstract,
+      :alternative,
+      :identifier,
+      :local_identifier,
+      :replaces,
+      :contents,
+      :rights_statement,
+      :rights_note,
+      :source_metadata_identifier,
+      :source_metadata,
+      :source_jsonld,
+      :holding_location,
+      :ocr_language,
+      :nav_date,
+      :pdf_type,
+      :start_canvas,
+      :container
+
+    ]
+  end
+
+  def schema
+    imported_schema + local_schema
+  end
+  module_function :schema, :imported_schema, :local_schema
+
   included do
-    # Hyrax
-    attribute :depositor
-    attribute :title
-    attribute :label
-    attribute :visibility
-
-    attribute :relative_path
-
-    attribute :import_url
-
-    attribute :part_of
-    attribute :resource_type
-    attribute :creator
-    attribute :contributor
-    attribute :description
-    attribute :keyword
-    # Used for a license
-    attribute :license
-
-    # This is for the rights statement
-    attribute :publisher
-    attribute :date_created
-    attribute :subject
-    attribute :language
-    attribute :based_near
-    attribute :related_url
-    attribute :bibliographic_citation
-    # Plum
-    attribute :sort_title
-    attribute :portion_note
-    attribute :abstract
-    attribute :alternative
-    attribute :identifier
-    attribute :local_identifier
-    attribute :replaces
-    attribute :contents
-    attribute :rights_statement
-    attribute :rights_note
-    attribute :source_metadata_identifier
-    attribute :source_metadata
-    attribute :source_jsonld
-    attribute :holding_location
-    attribute :ocr_language
-    attribute :nav_date
-    attribute :pdf_type
-    attribute :start_canvas
-    attribute :container
-
-    # Generated from Context
-    attribute :coverage
-    attribute :created
-    attribute :date
-    attribute :format
-    attribute :source
-    attribute :extent
-    attribute :edition
-    attribute :cartographic_scale
-    attribute :call_number
-    attribute :abridger
-    attribute :actor
-    attribute :adapter
-    attribute :addressee
-    attribute :analyst
-    attribute :animator
-    attribute :annotator
-    attribute :appellant
-    attribute :appellee
-    attribute :applicant
-    attribute :architect
-    attribute :arranger
-    attribute :art_copyist
-    attribute :art_director
-    attribute :artist
-    attribute :artistic_director
-    attribute :assignee
-    attribute :associated_name
-    attribute :attributed_name
-    attribute :auctioneer
-    attribute :author
-    attribute :author_in_quotations_or_text_abstracts
-    attribute :author_of_afterword_colophon_etc
-    attribute :author_of_dialog
-    attribute :author_of_introduction_etc
-    attribute :autographer
-    attribute :bibliographic_antecedent
-    attribute :binder
-    attribute :binding_designer
-    attribute :blurb_writer
-    attribute :book_designer
-    attribute :book_producer
-    attribute :bookjacket_designer
-    attribute :bookplate_designer
-    attribute :bookseller
-    attribute :braille_embosser
-    attribute :broadcaster
-    attribute :calligrapher
-    attribute :cartographer
-    attribute :caster
-    attribute :censor
-    attribute :choreographer
-    attribute :cinematographer
-    attribute :client
-    attribute :collection_registrar
-    attribute :collector
-    attribute :collotyper
-    attribute :colorist
-    attribute :commentator
-    attribute :commentator_for_written_text
-    attribute :compiler
-    attribute :complainant
-    attribute :complainant_appellant
-    attribute :complainant_appellee
-    attribute :composer
-    attribute :compositor
-    attribute :conceptor
-    attribute :conductor
-    attribute :conservator
-    attribute :consultant
-    attribute :consultant_to_a_project
-    attribute :contestant
-    attribute :contestant_appellant
-    attribute :contestant_appellee
-    attribute :contestee
-    attribute :contestee_appellant
-    attribute :contestee_appellee
-    attribute :contractor
-    attribute :copyright_claimant
-    attribute :copyright_holder
-    attribute :corrector
-    attribute :correspondent
-    attribute :costume_designer
-    attribute :court_governed
-    attribute :court_reporter
-    attribute :cover_designer
-    attribute :curator
-    attribute :dancer
-    attribute :data_contributor
-    attribute :data_manager
-    attribute :dedicatee
-    attribute :dedicator
-    attribute :defendant
-    attribute :defendant_appellant
-    attribute :defendant_appellee
-    attribute :degree_granting_institution
-    attribute :degree_supervisor
-    attribute :delineator
-    attribute :depicted
-    attribute :designer
-    attribute :director
-    attribute :dissertant
-    attribute :distribution_place
-    attribute :distributor
-    attribute :donor
-    attribute :draftsman
-    attribute :dubious_author
-    attribute :editor
-    attribute :editor_of_compilation
-    attribute :editor_of_moving_image_work
-    attribute :electrician
-    attribute :electrotyper
-    attribute :enacting_jurisdiction
-    attribute :engineer
-    attribute :engraver
-    attribute :etcher
-    attribute :event_place
-    attribute :expert
-    attribute :facsimilist
-    attribute :field_director
-    attribute :film_distributor
-    attribute :film_director
-    attribute :film_editor
-    attribute :film_producer
-    attribute :filmmaker
-    attribute :first_party
-    attribute :forger
-    attribute :former_owner
-    attribute :funder
-    attribute :geographic_information_specialist
-    attribute :honoree
-    attribute :host
-    attribute :host_institution
-    attribute :illuminator
-    attribute :illustrator
-    attribute :inscriber
-    attribute :instrumentalist
-    attribute :interviewee
-    attribute :interviewer
-    attribute :inventor
-    attribute :issuing_body
-    attribute :judge
-    attribute :jurisdiction_governed
-    attribute :laboratory
-    attribute :laboratory_director
-    attribute :landscape_architect
-    attribute :lead
-    attribute :lender
-    attribute :libelant
-    attribute :libelant_appellant
-    attribute :libelant_appellee
-    attribute :libelee
-    attribute :libelee_appellant
-    attribute :libelee_appellee
-    attribute :librettist
-    attribute :licensee
-    attribute :licensor
-    attribute :lighting_designer
-    attribute :lithographer
-    attribute :lyricist
-    attribute :manufacture_place
-    attribute :manufacturer
-    attribute :marbler
-    attribute :markup_editor
-    attribute :medium
-    attribute :metadata_contact
-    attribute :metal_engraver
-    attribute :minute_taker
-    attribute :moderator
-    attribute :monitor
-    attribute :music_copyist
-    attribute :musical_director
-    attribute :musician
-    attribute :narrator
-    attribute :onscreen_presenter
-    attribute :opponent
-    attribute :organizer
-    attribute :originator
-    attribute :other
-    attribute :owner
-    attribute :panelist
-    attribute :papermaker
-    attribute :patent_applicant
-    attribute :patent_holder
-    attribute :patron
-    attribute :performer
-    attribute :permitting_agency
-    attribute :photographer
-    attribute :plaintiff
-    attribute :plaintiff_appellant
-    attribute :plaintiff_appellee
-    attribute :platemaker
-    attribute :praeses
-    attribute :presenter
-    attribute :printer
-    attribute :printer_of_plates
-    attribute :printmaker
-    attribute :process_contact
-    attribute :producer
-    attribute :production_company
-    attribute :production_designer
-    attribute :production_manager
-    attribute :production_personnel
-    attribute :production_place
-    attribute :programmer
-    attribute :project_director
-    attribute :proofreader
-    attribute :provider
-    attribute :publication_place
-    attribute :publishing_director
-    attribute :puppeteer
-    attribute :radio_director
-    attribute :radio_producer
-    attribute :recording_engineer
-    attribute :recordist
-    attribute :redaktor
-    attribute :renderer
-    attribute :reporter
-    attribute :marc_repository
-    attribute :research_team_head
-    attribute :research_team_member
-    attribute :researcher
-    attribute :respondent
-    attribute :respondent_appellant
-    attribute :respondent_appellee
-    attribute :responsible_party
-    attribute :restager
-    attribute :restorationist
-    attribute :reviewer
-    attribute :rubricator
-    attribute :scenarist
-    attribute :scientific_advisor
-    attribute :screenwriter
-    attribute :scribe
-    attribute :sculptor
-    attribute :second_party
-    attribute :secretary
-    attribute :seller
-    attribute :set_designer
-    attribute :setting
-    attribute :signer
-    attribute :singer
-    attribute :sound_designer
-    attribute :speaker
-    attribute :sponsor
-    attribute :stage_director
-    attribute :stage_manager
-    attribute :standards_body
-    attribute :stereotyper
-    attribute :storyteller
-    attribute :supporting_host
-    attribute :surveyor
-    attribute :teacher
-    attribute :technical_director
-    attribute :television_director
-    attribute :television_producer
-    attribute :thesis_advisor
-    attribute :transcriber
-    attribute :translator
-    attribute :type_designer
-    attribute :typographer
-    attribute :university_place
-    attribute :videographer
-    attribute :voice_actor
-    attribute :witness
-    attribute :wood_engraver
-    attribute :woodcutter
-    attribute :writer_of_accompanying_material
-    attribute :writer_of_added_commentary
-    attribute :writer_of_added_text
-    attribute :writer_of_added_lyrics
-    attribute :writer_of_supplementary_textual_content
-    attribute :writer_of_introduction
-    attribute :writer_of_preface
+    PlumSchema.schema.each do |field|
+      attribute field
+    end
   end
 end

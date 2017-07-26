@@ -28,7 +28,6 @@ RSpec.describe PlumChangeSetPersister do
       expect(output.title).to eq [RDF::Literal.new("Earth rites : fertility rites in pre-industrial Britain", language: :fr)]
       expect(output.creator).to eq ["Bord, Janet, 1945-"]
       expect(output.call_number).to eq ["BL980.G7 B66 1982"]
-      expect(Valkyrie::MetadataAdapter.find(:index_solr).query_service.find_by(id: output.id).call_number).to eq ["BL980.G7 B66 1982"]
     end
   end
   context "when a source_metadata_identifier is set and it's from PULFA" do
@@ -83,13 +82,15 @@ RSpec.describe PlumChangeSetPersister do
       stub_bibdata(bib_id: '123456')
     end
     it "applies remote metadata from bibdata" do
-      resource = FactoryGirl.create_for_repository(:scanned_resource, title: 'Title', source_metadata_identifier: nil)
+      resource = FactoryGirl.create_for_repository(:scanned_resource, title: 'Title', applicant: 'Test', source_metadata_identifier: nil)
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: '123456', title: [], refresh_remote_metadata: "1")
       change_set.sync
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.title).to eq [RDF::Literal.new("Earth rites : fertility rites in pre-industrial Britain", language: :fr)]
+      expect(output.applicant).to be_blank
+      expect(output.source_metadata_identifier).to eq ['123456']
     end
   end
 end

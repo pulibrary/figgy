@@ -43,10 +43,18 @@ class PlumChangeSetPersister
       return unless change_set.respond_to?(:source_metadata_identifier)
       return unless change_set.apply_remote_metadata?
       attributes = RemoteRecord.retrieve(change_set.source_metadata_identifier).attributes
-      attributes.each do |key, value|
+      blank_attributes.merge(attributes).each do |key, value|
         if change_set.model.respond_to?("#{key}=")
           change_set.model.__send__("#{key}=", value)
         end
       end
+    end
+
+    def blank_attributes
+      Hash[
+        PlumSchema.imported_schema.map do |key|
+          [key, nil]
+        end
+      ]
     end
 end
