@@ -4,6 +4,7 @@ require 'rails_helper'
 RSpec.describe CatalogController do
   let(:persister) { Valkyrie::MetadataAdapter.find(:indexing_persister).persister }
   describe "#index" do
+    render_views
     it "finds all public documents" do
       persister.save(resource: FactoryGirl.build(:scanned_resource))
 
