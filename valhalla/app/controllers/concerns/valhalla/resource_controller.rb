@@ -30,6 +30,18 @@ module Valhalla
       end
     end
 
+    def destroy
+      @change_set = change_set_class.new(find_resource(params[:id]))
+      authorize! :destroy, @change_set.resource
+      persister.buffer_into_index do |buffered_adapter|
+        change_set_persister.with(metadata_adapter: buffered_adapter) do |persist|
+          persist.delete(change_set: @change_set)
+        end
+      end
+      flash[:alert] = "Deleted #{@change_set.resource}"
+      redirect_to root_path
+    end
+
     def contextual_path(obj, change_set)
       Valhalla::ContextualPath.new(child: obj.id, parent_id: change_set.append_id)
     end
@@ -40,6 +52,10 @@ module Valhalla
 
     def resource_params
       params[resource_class.to_s.underscore.to_sym]
+    end
+
+    def find_resource(id)
+      query_service.find_by(id: Valkyrie::ID.new(id))
     end
   end
 end

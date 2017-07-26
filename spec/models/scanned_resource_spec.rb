@@ -25,4 +25,12 @@ RSpec.describe ScannedResource do
     scanned_resource.member_ids = [1, 2, 3, 3]
     expect(scanned_resource.member_ids).to eq [1, 2, 3, 3]
   end
+
+  describe "#to_s" do
+    it "returns the title if possible" do
+      scanned_resource = described_class.new(title: ["One", "Two"])
+
+      expect(scanned_resource.to_s).to eq "Scanned Resource: One and Two"
+    end
+  end
 end

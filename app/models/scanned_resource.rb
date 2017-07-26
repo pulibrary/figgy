@@ -7,4 +7,8 @@ class ScannedResource < Valhalla::Resource
   attribute :member_ids, Valkyrie::Types::Array
   attribute :viewing_hint
   attribute :viewing_direction
+
+  def to_s
+    "#{human_readable_type}: #{title.to_sentence}"
+  end
 end
