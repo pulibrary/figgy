@@ -11,7 +11,7 @@ class RemoteRecord
   end
 
   def attributes
-    NestedResourceBuilder.for(jsonld).result
+    JSONLDBuilder.for(jsonld).result
   end
 
   def jsonld_request
@@ -22,22 +22,11 @@ class RemoteRecord
     @jsonld ||= MultiJson.load(jsonld_request.body, symbolize_keys: true)
   end
 
-  class NestedResourceBuilder < ::Valkyrie::ValueMapper
-  end
-
-  class NestedURIValue < ::Valkyrie::ValueMapper
-    NestedResourceBuilder.register(self)
-    def self.handles?(value)
-      value.is_a?(Hash) && value[:@id] && !value[:@context]
-    end
-
-    def result
-      RDF::URI(value[:@id])
-    end
+  class JSONLDBuilder < ::Valkyrie::ValueMapper
   end
 
   class TypedLiteral < ::Valkyrie::ValueMapper
-    NestedResourceBuilder.register(self)
+    JSONLDBuilder.register(self)
     def self.handles?(value)
       value.is_a?(Hash) && value[:@value] && value[:@language]
     end
@@ -48,7 +37,7 @@ class RemoteRecord
   end
 
   class HashValue < ::Valkyrie::ValueMapper
-    NestedResourceBuilder.register(self)
+    JSONLDBuilder.register(self)
     def self.handles?(value)
       value.is_a?(Hash)
     end
@@ -61,7 +50,7 @@ class RemoteRecord
   end
 
   class EnumerableNestedValue < ::Valkyrie::ValueMapper
-    NestedResourceBuilder.register(self)
+    JSONLDBuilder.register(self)
     def self.handles?(value)
       value.is_a?(Array)
     end

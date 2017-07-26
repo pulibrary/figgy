@@ -32,7 +32,7 @@ RSpec.describe PlumChangeSetPersister do
     it "does not change anything" do
       resource = FactoryGirl.create_for_repository(:scanned_resource, title: 'Title', source_metadata_identifier: nil)
       change_set = change_set_class.new(resource)
-      change_set.validate(source_metadata_identifier: '123456', title: [])
+      change_set.validate(source_metadata_identifier: '123456', title: [], refresh_remote_metadata: "0")
       change_set.sync
       output = change_set_persister.save(change_set: change_set)
 
@@ -57,7 +57,7 @@ RSpec.describe PlumChangeSetPersister do
     it "applies remote metadata from bibdata" do
       resource = FactoryGirl.create_for_repository(:scanned_resource, title: 'Title', source_metadata_identifier: nil)
       change_set = change_set_class.new(resource)
-      change_set.validate(source_metadata_identifier: '123456', title: [], refresh_remote_metadata: 1)
+      change_set.validate(source_metadata_identifier: '123456', title: [], refresh_remote_metadata: "1")
       change_set.sync
       output = change_set_persister.save(change_set: change_set)
 

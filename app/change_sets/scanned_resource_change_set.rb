@@ -48,6 +48,6 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   end
 
   def apply_remote_metadata?
-    source_metadata_identifier.present? && (!persisted? || refresh_remote_metadata)
+    source_metadata_identifier.present? && (!persisted? || refresh_remote_metadata == "1")
   end
 end
