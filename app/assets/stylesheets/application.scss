@@ -2,18 +2,18 @@
  *= require normalize-rails
 */
 @charset "utf-8";
-@import "bootstrap-sprockets";
-@import "bootstrap";
-@import 'blacklight/blacklight';
-
-// PUL specific styles
-@import 'abstractions/mixins';
-
+@import 'variables/typography';
 @import 'variables/breaks';
 @import 'variables/colors';
 @import 'variables/typography';
 
+@import "bootstrap-sprockets";
+@import "bootstrap";
+// PUL specific styles
+@import 'abstractions/mixins';
+
 @import 'base/typography';
+@import "valhalla/valhalla";
 
 @import 'components/batch_upload';
 @import 'components/bounding_box';
@@ -35,3 +35,8 @@
 @import 'components/welcome_page';
 @import 'components/catalog';
 @import 'components/select_box';
+@import 'components/show';
+
+@import 'blacklight/blacklight';
+@import "hydra-editor/hydra-editor";
+

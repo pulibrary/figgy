@@ -1,14 +1,14 @@
 <br />
 <p>
-  <%=t('valkyrie.product_name') %> is a secure application that enables
-  <%=t('valkyrie.institution.name') %> to efficiently carry out varied
+  <%=t('valhalla.product_name') %> is a secure application that enables
+  <%=t('valhalla.institution.name') %> to efficiently carry out varied
   and complex workflows related to digitization while adhereing to standards
   and best practices which ensure that our content will be preserved and
   accessible to our community and the world for generations.
 </p>
 
 <%= render partial: 'catalog/work_types', locals: { label: 'Books, Manuscripts, and Scanned Documents',
-                                                    types: [] } %>
+                                                    types: [ScannedResource] } %>
 
 <%= render partial: 'catalog/work_types', locals: { label: 'Maps and Geospatial Data',
                                                     types: [] } %>

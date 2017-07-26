@@ -10,11 +10,16 @@ AllCops:
     - 'vendor/**/*'
     - 'valkyrie/**/*'
     - 'db/schema.rb'
+    - 'spec/support/**/*'
 Style/FileName:
   Enabled: true
   Exclude:
     - 'Gemfile'
     - '**/*.rake'
+    - 'valhalla/Gemfile'
+Style/PredicateName:
+  Exclude:
+    - 'app/controllers/catalog_controller.rb'
 Metrics/BlockLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
@@ -25,9 +30,13 @@ Metrics/BlockLength:
     - 'lib/specs/**/*'
     - 'db/schema.rb'
     - 'lib/tasks/dev.rake'
+    - 'app/models/plum_schema.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
+Metrics/ModuleLength:
+  Exclude:
+    - 'app/models/plum_schema.rb'
 RSpec/MultipleExpectations:
   Enabled: false
 RSpec/ExampleLength:
@@ -49,3 +58,5 @@ RSpec/EmptyExampleGroup:
 RSpec/VerifiedDoubles:
   Exclude:
     - 'spec/models/search_builder_spec.rb'
+    - 'spec/validators/viewing_hint_validator_spec.rb'
+    - 'spec/validators/viewing_direction_validator_spec.rb'

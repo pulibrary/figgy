@@ -1,0 +1,10 @@
+development:
+  admin:
+    - admin@example.com
+
+test:
+  admin:
+    - admin@example.com
+
+production:
+  # Add roles for users here.

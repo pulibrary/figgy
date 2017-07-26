@@ -9,7 +9,7 @@ gem "honeybadger"
 gem "jquery-rails"
 gem "pg"
 gem "puma"
-gem "rails", "~> 5.1"
+gem "rails", "5.1.1"
 gem "recipient_interceptor"
 gem "sass-rails", "~> 5.0"
 gem "simple_form"
@@ -34,7 +34,9 @@ group :development, :test do
   gem "factory_girl_rails"
   gem "pry-byebug"
   gem "pry-rails"
+  gem 'rails-controller-testing'
   gem "rspec-rails", "~> 3.5"
+  gem 'solr_wrapper', '>= 0.3'
 end
 
 group :development, :staging do
@@ -50,12 +52,11 @@ group :test do
   gem "webmock"
 end
 
-group :development, :test do
-  gem 'solr_wrapper', '>= 0.3'
-end
-
 gem 'rsolr', '>= 1.0'
 
 gem 'devise'
+gem 'hydra-head'
 gem 'modernizr-rails'
 gem 'normalize-rails'
+gem 'string_rtl'
+gem 'valhalla', path: 'valhalla'

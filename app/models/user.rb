@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 class User < ApplicationRecord
+  # Connects this user object to Hydra behaviors.
+  include Hydra::User
+
   # Connects this user object to Blacklights Bookmarks.
   include Blacklight::User
   include Hydra::User
@@ -13,5 +16,9 @@ class User < ApplicationRecord
   # the account.
   def to_s
     email
+  end
+
+  def admin?
+    groups.include?('admin')
   end
 end

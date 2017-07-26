@@ -16,4 +16,12 @@ class SolrDocument
   # and Blacklight::Document::SemanticFields#to_semantic_values
   # Recommendation: Use field names from Dublin Core
   use_extension(Blacklight::Document::DublinCore)
+
+  def resource
+    @resource ||= Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.to_resource(to_h)
+  end
+
+  def decorated_resource
+    @decorated_resource ||= resource.decorate
+  end
 end

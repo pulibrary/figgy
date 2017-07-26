@@ -50,4 +50,7 @@ Rails.application.routes.draw do
       delete 'clear'
     end
   end
+  scope '/concern' do
+    resources :scanned_resources
+  end
 end
