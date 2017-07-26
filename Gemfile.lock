@@ -18,7 +18,8 @@ GIT
 
 GIT
   remote: https://github.com/samvera-labs/valkyrie.git
-  revision: c856985f94e28942667e53693f129a2efe7ed5db
+  revision: ef1fa574433948be445c20eec5e25a5995fcb11c
+  branch: fix_date_parsing
   specs:
     valkyrie (0.1.0)
       active-fedora

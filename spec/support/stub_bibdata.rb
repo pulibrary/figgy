@@ -16,6 +16,17 @@ module BibdataStubbing
         )
     end
   end
+
+  def stub_pulfa(pulfa_id:, body: nil)
+    pulfa_id = pulfa_id.gsub("_", "/")
+    stub_request(:get, "https://findingaids.princeton.edu/collections/#{pulfa_id}.xml?scope=record")
+      .to_return(
+        body: body || file_fixture("pulfa/#{pulfa_id}.xml").read,
+        headers: {
+          'Content-Type' => "application/json+ld"
+        }
+      )
+  end
 end
 
 RSpec.configure do |config|

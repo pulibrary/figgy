@@ -26,6 +26,23 @@ RSpec.describe PlumChangeSetPersister do
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.title).to eq [RDF::Literal.new("Earth rites : fertility rites in pre-industrial Britain", language: :fr)]
+      expect(output.creator).to eq ["Bord, Janet, 1945-"]
+      expect(output.call_number).to eq ["BL980.G7 B66 1982"]
+      expect(Valkyrie::MetadataAdapter.find(:index_solr).query_service.find_by(id: output.id).call_number).to eq ["BL980.G7 B66 1982"]
+    end
+  end
+  context "when a source_metadata_identifier is set and it's from PULFA" do
+    before do
+      stub_pulfa(pulfa_id: "MC016_c9616")
+    end
+    it "applies remote metadata from PULFA" do
+      resource = FactoryGirl.build(:scanned_resource, title: [])
+      change_set = change_set_class.new(resource)
+      change_set.validate(source_metadata_identifier: 'MC016_c9616')
+      change_set.sync
+      output = change_set_persister.save(change_set: change_set)
+
+      expect(output.title).to eq ['Series 5: Speeches, Statements, Press Conferences, Etc - 1953 - Speech: "... Results of the Eleventh Meeting of the Council of NATO"']
     end
   end
   context "when a source_metadata_identifier is set afterwards" do
@@ -48,6 +65,17 @@ RSpec.describe PlumChangeSetPersister do
       change_set = change_set_class.new(resource)
 
       expect(change_set.validate(source_metadata_identifier: '123456')).to eq false
+    end
+  end
+  context "when a source_metadata_identifier is set for the first time, and it doesn't exist from PULFA" do
+    before do
+      stub_pulfa(pulfa_id: "MC016_c9616", body: '')
+    end
+    it "is marked as invalid" do
+      resource = FactoryGirl.build(:scanned_resource, title: [])
+      change_set = change_set_class.new(resource)
+
+      expect(change_set.validate(source_metadata_identifier: 'MC016_c9616')).to eq false
     end
   end
   context "when a source_metadata_identifier is set afterwards and refresh_remote_metadata is set" do

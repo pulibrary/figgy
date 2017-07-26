@@ -16,7 +16,7 @@ gem "simple_form"
 gem "sprockets", ">= 3.0.0"
 gem "title"
 gem "uglifier"
-gem "valkyrie", git: "https://github.com/samvera-labs/valkyrie.git"
+gem "valkyrie", git: "https://github.com/samvera-labs/valkyrie.git", branch: "fix_date_parsing"
 
 group :development do
   gem "listen"

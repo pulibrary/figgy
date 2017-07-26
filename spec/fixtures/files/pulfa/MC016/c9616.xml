@@ -1,0 +1,52 @@
+<c xmlns="urn:isbn:1-931666-22-9" xmlns:pulfa="http://library.princeton.edu/pulfa" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" level="file" id="MC016_c9616">
+    <pulfa:context>
+        <pulfa:uri>https://findingaids.princeton.edu/collections/MC016/c9616</pulfa:uri>
+        <pulfa:breadcrumbs>
+            <pulfa:crumb uri="https://findingaids.princeton.edu/collections/MC016/c8899" level="series">Series 5: Speeches, Statements, Press Conferences, Etc</pulfa:crumb>
+            <pulfa:crumb uri="https://findingaids.princeton.edu/collections/MC016/c9531" level="file">1953</pulfa:crumb>
+        </pulfa:breadcrumbs>
+        <pulfa:collectionInfo>
+            <pulfa:ARK>http://arks.princeton.edu/ark:/88435/br86b3576</pulfa:ARK>
+            <pulfa:uri>https://findingaids.princeton.edu/collections/MC016</pulfa:uri>
+            <pulfa:collection-creators>
+                <persname source="viaf" role="cre" authfilenumber="http://viaf.org/viaf/62342717">Dulles, John Foster, 1888-1959.</persname>
+            </pulfa:collection-creators>
+            <eadid countrycode="US" mainagencycode="US-NjP" url="http://arks.princeton.edu/ark:/88435/br86b3576" urn="ark:/88435/br86b3576">MC016</eadid>
+            <unittitle>John Foster Dulles Papers</unittitle>
+            <unitid type="collection" countrycode="US" repositorycode="US-NjP">MC016</unitid>
+            <unitdate normal="1860/1988" type="inclusive">1860-1988</unitdate>
+            <unitdate normal="1945/1960" type="bulk">1945-1960</unitdate>
+            <extent>262.4 linear feet</extent>
+            <extent>643 boxes</extent>
+        </pulfa:collectionInfo>
+        <pulfa:request type="single">MC016 box 312</pulfa:request>
+    </pulfa:context>
+    <did>
+        <unittitle>Speech: "... Results of the Eleventh Meeting of the Council
+                                of NATO"</unittitle>
+        <unitdate normal="1953-04-29T00:00:00Z/1953-04-29T00:00:00Z">1953 April 29</unitdate>
+        <langmaterial>
+            <language langcode="eng"/>
+        </langmaterial>
+        <physloc type="code">mudd</physloc>
+        <repository id="publicpolicy">
+            <corpname source="lcsh">Princeton University. Library. Dept. of Rare Books and
+                    Special Collections.</corpname>
+            <subarea>Seeley G. Mudd Manuscript Library.</subarea>
+            <subarea>Public Policy Papers.</subarea>
+            <address>
+                <addressline>65 Olden Street</addressline>
+                <addressline>Princeton, New Jersey 08540 USA</addressline>
+            </address>
+        </repository>
+        <container type="box">312</container>
+        <physdesc>
+            <extent type="computed">portion of 1 box</extent>
+        </physdesc>
+        <dao xmlns:xlin="http://www.w3.org/1999/xlink" xlin:type="simple" xlin:role="http://www.loc.gov/METS/" xlin:href="http://findingaids.princeton.edu/folders/MC016/c9616.mets"/>
+    </did>
+    <accessrestrict type="open">
+        <p>Collection is open for research use.</p>
+    </accessrestrict>
+    <controlaccess/>
+</c>
