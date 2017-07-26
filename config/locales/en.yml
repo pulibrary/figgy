@@ -47,6 +47,14 @@ en:
       form:
         tab:
           metadata: 'Metadata'
+      show:
+        attributes:
+          internal_resource:
+            label: "Model"
+          created_at:
+            label: "Date Uploaded"
+          updated_at:
+            label: "Date Modified"
     search:
       form:
         q:

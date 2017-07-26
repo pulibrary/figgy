@@ -33,6 +33,7 @@ class CatalogController < ApplicationController
     config.autocomplete_path = 'suggest'
     config.show.document_actions.clear
     config.add_show_tools_partial(:admin_controls, partial: 'admin_controls', if: :admin?)
+    config.show.partials += [:resource_attributes]
   end
 
   def admin?
