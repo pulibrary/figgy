@@ -5,6 +5,9 @@ RSpec.describe ScannedResourceChangeSet do
   subject(:change_set) { described_class.new(form_resource) }
   let(:scanned_resource) { ScannedResource.new(title: 'Test', rights_statement: 'Stuff', visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE) }
   let(:form_resource) { scanned_resource }
+  before do
+    stub_bibdata(bib_id: '123456')
+  end
   describe "validations" do
     it "is valid by default" do
       expect(change_set).to be_valid
@@ -45,7 +48,7 @@ RSpec.describe ScannedResourceChangeSet do
       end
     end
     context "when only metadata_identifier is set" do
-      let(:form_resource) { scanned_resource.new(title: "", source_metadata_identifier: "123") }
+      let(:form_resource) { scanned_resource.new(title: "", source_metadata_identifier: "123456") }
       it "is valid" do
         expect(change_set).to be_valid
       end

@@ -20,6 +20,7 @@ RSpec.describe "Scanned Resources Management" do
       get "/concern/scanned_resources/new"
       expect(response.body).to have_field "Title"
       expect(response.body).to have_field "Source Metadata ID"
+      expect(response.body).to have_field "scanned_resource[refresh_remote_metadata]"
       expect(response.body).to have_field "Rights Statement"
       expect(response.body).to have_field "Rights Note"
       expect(response.body).to have_field "Local identifier"

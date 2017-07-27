@@ -31,9 +31,30 @@ class PlumChangeSetPersister
 
   private
 
-    def before_save(change_set:); end
+    def before_save(change_set:)
+      apply_remote_metadata(change_set: change_set)
+    end
 
     def after_save(change_set:, updated_resource:); end
 
     def before_delete(change_set:); end
+
+    def apply_remote_metadata(change_set:)
+      return unless change_set.respond_to?(:source_metadata_identifier)
+      return unless change_set.apply_remote_metadata?
+      attributes = RemoteRecord.retrieve(change_set.source_metadata_identifier).attributes
+      blank_attributes.merge(attributes).each do |key, value|
+        if change_set.model.respond_to?("#{key}=")
+          change_set.model.__send__("#{key}=", value)
+        end
+      end
+    end
+
+    def blank_attributes
+      Hash[
+        PlumSchema.imported_schema.map do |key|
+          [key, nil]
+        end
+      ]
+    end
 end

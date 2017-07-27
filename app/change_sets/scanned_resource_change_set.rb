@@ -3,6 +3,7 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   delegate :human_readable_type, to: :model
   property :title, multiple: true, required: true, default: []
   property :source_metadata_identifier, required: true, multiple: false
+  property :refresh_remote_metadata, virtual: true, multiple: false
   property :rights_statement, multiple: false, required: true
   property :rights_note, multiple: false, required: false
   property :viewing_hint, multiple: false, required: false
@@ -16,6 +17,7 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   validates_with ViewingDirectionValidator
   validates_with ViewingHintValidator
   validate :source_metadata_identifier_or_title
+  validate :source_metadata_identifier_valid
   validates :visibility, :rights_statement, presence: true
 
   def primary_terms
@@ -37,5 +39,15 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
     return if source_metadata_identifier.present? || Array.wrap(title).first.present?
     errors.add(:title, "You must provide a source metadata id or a title")
     errors.add(:source_metadata_identifier, "You must provide a source metadata id or a title")
+  end
+
+  def source_metadata_identifier_valid
+    return unless apply_remote_metadata?
+    return if RemoteRecord.retrieve(Array(source_metadata_identifier).first).success?
+    errors.add(:source_metadata_identifier, "Error retrieving metadata")
+  end
+
+  def apply_remote_metadata?
+    source_metadata_identifier.present? && (!persisted? || refresh_remote_metadata == "1")
   end
 end
