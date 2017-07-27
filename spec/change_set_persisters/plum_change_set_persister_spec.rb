@@ -93,4 +93,29 @@ RSpec.describe PlumChangeSetPersister do
       expect(output.source_metadata_identifier).to eq ['123456']
     end
   end
+
+  describe "uploading files" do
+    let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+    it "can append files as FileSets" do
+      resource = FactoryGirl.build(:scanned_resource)
+      change_set = change_set_class.new(resource)
+      change_set.files = [file]
+
+      output = change_set_persister.save(change_set: change_set)
+      members = query_service.find_members(resource: output)
+
+      expect(members.length).to eq 1
+      expect(members[0]).to be_kind_of FileSet
+
+      file_metadata_nodes = query_service.find_members(resource: members[0])
+      expect(file_metadata_nodes.length).to eq 1
+      expect(file_metadata_nodes[0]).to be_kind_of FileMetadata
+
+      original_file_node = file_metadata_nodes[0]
+
+      expect(original_file_node.file_identifiers.length).to eq 1
+      original_file = Valkyrie::StorageAdapter.find_by(id: original_file_node.file_identifiers[0])
+      expect(original_file.read).to eq file.read
+    end
+  end
 end
