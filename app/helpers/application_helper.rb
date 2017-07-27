@@ -3,6 +3,7 @@ module ApplicationHelper
   include ::BlacklightHelper
   include ::Blacklight::LayoutHelperBehavior
   include Valhalla::ApplicationHelper
+  include Valhalla::ContextualPathHelper
 
   def application_name
     t('valhalla.product_name', default: super)
@@ -46,5 +47,13 @@ module ApplicationHelper
 
   def resource
     @document.resource
+  end
+
+  def decorated_resource
+    @document.decorated_resource
+  end
+
+  def decorated_change_set_resource
+    @decorated_change_set_resource ||= @change_set.resource.decorate
   end
 end

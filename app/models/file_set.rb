@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class FileSet < Valkyrie::Resource
+class FileSet < Valhalla::Resource
   include Valkyrie::Resource::AccessControls
   attribute :id, Valkyrie::Types::ID.optional
   attribute :title, Valkyrie::Types::Set

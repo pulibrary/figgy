@@ -1,0 +1,74 @@
+  <div class="actions form-horizontal panel panel-default">
+    <div class="form-group">
+      <%= label_tag "start_with", "Start With:", class: "col-sm-4 control-label" %>
+      <div class="col-sm-8">
+        <%= text_field_tag "start_with", 1, class: "form-control" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= label_tag "unit_label", "Unit Label:", class: "col-sm-4 control-label" %>
+      <div class="col-sm-8">
+        <%= text_field_tag "unit_label", nil, class: "form-control" %>
+      </div>
+    </div>
+    <div class="form-group col-xs-12">
+      <div class="radio col-xs-6">
+        <label>
+          <%= radio_button_tag :method, "paginate", true%>
+          Paginate
+        </label>
+      </div>
+      <div class="radio col-xs-6">
+        <label>
+          <%= radio_button_tag :method, "foliate" %>
+          Foliate
+        </label>
+      </div>
+    </div>
+    <div id="foliate-settings">
+      <div class="form-group">
+        <%= label_tag "front_label", "Front Label:", class: "col-sm-4 control-label" %>
+        <div class="col-sm-8">
+          <%= text_field_tag "front_label", nil, class: "form-control" %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= label_tag "back_label", "Back Label:", class: "col-sm-4 control-label" %>
+        <div class="col-sm-8">
+          <%= text_field_tag "back_label", nil, class: "form-control" %>
+        </div>
+      </div>
+      <div class="form-group col-xs-12">
+        <div class="radio col-xs-6">
+          <label>
+            <%= radio_button_tag :foliate_start_with, "front", true%>
+            Front First
+          </label>
+        </div>
+        <div class="radio col-xs-6">
+          <label>
+            <%= radio_button_tag :foliate_start_with, "back" %>
+            Back First
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group col-xs-12">
+      <div class="checkbox">
+        <label>
+          <%= check_box_tag "bracket" %> Bracket
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+      <%= button_tag "Apply", class: "btn btn-default", data: { action: "apply-labels" } %>
+      <%= button_tag "Sort alphabetically", class: "btn btn-default", data: { action: "alpha-sort-action" }%>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <%= button_tag "Save", class: "btn btn-primary disabled", data: { action: "save-actions" }%>
+      </div>
+    </div>
+  </div>

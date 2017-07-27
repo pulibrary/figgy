@@ -1,0 +1,24 @@
+<li data-reorder-id='<%= node.id %>'>
+    <div class="panel panel-default">
+      <%= simple_form_for node, remote: true, html: {'data-type': 'json'} do |f| %>
+        <div class="panel-heading">
+          <div class="order-title">
+            <%= f.input :title, as: :string, input_html: { name: "#{f.object.model_name.singular}[title][]", class: "title" }, value: node.to_s, label: false, hint: false %>
+          </div>
+          <div class="file-set-link pull-right">
+            <%= link_to contextual_path(node, @change_set).show, title: "Edit" do %>
+              <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+            <% end %>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="attributes">
+            <%= render "file_manager_attributes", node: node, f: f%>
+          </div>
+          <div class="spacer">
+          </div>
+        </div>
+      <% end %>
+      <%= render "file_manager_member_resource_options", node: node %>
+    </div>
+</li>

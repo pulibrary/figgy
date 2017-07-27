@@ -48,7 +48,7 @@ module Valhalla
     end
 
     def update
-      @change_set = change_set_class.new(find_resource(params[:id]))
+      @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
       authorize! :update, @change_set.resource
       if @change_set.validate(resource_params)
         @change_set.sync
@@ -62,6 +62,14 @@ module Valhalla
       else
         render :edit
       end
+    end
+
+    def file_manager
+      @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
+      authorize! :file_manager, @change_set.resource
+      @children = query_service.find_members(resource: @change_set).map do |x|
+        change_set_class.new(x).prepopulate!
+      end.to_a
     end
 
     def contextual_path(obj, change_set)

@@ -13,6 +13,9 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   property :nav_date, multiple: false, required: false
   property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
   property :local_identifier, multiple: true, required: false, default: []
+  property :member_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
+  property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID
+  property :start_canvas, multiple: false, type: Valkyrie::Types::ID
 
   # Virtual Attributes
   property :refresh_remote_metadata, virtual: true, multiple: false

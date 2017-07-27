@@ -52,8 +52,12 @@ class PlumChangeSetPersister
     end
 
     def create_files(change_set:)
-      appender = FileAppender.new(storage_adapter: storage_adapter, persister: persister, files: change_set.files)
+      appender = FileAppender.new(storage_adapter: storage_adapter, persister: persister, files: files(change_set: change_set))
       appender.append_to(change_set.resource)
+    end
+
+    def files(change_set:)
+      change_set.try(:files) || []
     end
 
     def blank_attributes

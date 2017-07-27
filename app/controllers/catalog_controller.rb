@@ -9,6 +9,7 @@ class CatalogController < ApplicationController
       'rows' => 10
     }
   end
+  before_action :parent_document, only: :show
 
   configure_blacklight do |config|
     config.default_solr_params = {
@@ -33,6 +34,7 @@ class CatalogController < ApplicationController
     config.autocomplete_path = 'suggest'
     config.show.document_actions.clear
     config.add_show_tools_partial(:admin_controls, partial: 'admin_controls', if: :admin?)
+    config.show.partials = config.show.partials.insert(1, :parent_breadcrumb)
     config.show.partials += [:resource_attributes]
   end
 
@@ -42,5 +44,10 @@ class CatalogController < ApplicationController
 
   def has_search_parameters?
     !params[:q].nil? || !params[:f].blank? || !params[:search_field].blank?
+  end
+
+  def parent_document
+    return unless params[:parent_id]
+    _, @parent_document = fetch("id-#{params[:parent_id]}")
   end
 end

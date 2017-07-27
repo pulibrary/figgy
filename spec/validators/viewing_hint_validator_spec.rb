@@ -9,7 +9,7 @@ RSpec.describe ViewingHintValidator do
     before do
       allow(errors).to receive(:add)
     end
-    [["individuals"], ["paged"], ["continuous"]].each do |direction|
+    ["individuals", "paged", "continuous"].each do |direction|
       context "when viewing_hint is #{direction}" do
         it "does not add errors" do
           record = build_record(viewing_hint: direction)
