@@ -33,6 +33,7 @@ class PlumChangeSetPersister
 
     def before_save(change_set:)
       apply_remote_metadata(change_set: change_set)
+      create_files(change_set: change_set)
     end
 
     def after_save(change_set:, updated_resource:); end
@@ -48,6 +49,11 @@ class PlumChangeSetPersister
           change_set.model.__send__("#{key}=", value)
         end
       end
+    end
+
+    def create_files(change_set:)
+      appender = FileAppender.new(storage_adapter: storage_adapter, persister: persister, files: change_set.files)
+      appender.append_to(change_set.resource)
     end
 
     def blank_attributes

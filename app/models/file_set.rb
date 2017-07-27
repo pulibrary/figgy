@@ -4,4 +4,5 @@ class FileSet < Valkyrie::Resource
   attribute :id, Valkyrie::Types::ID.optional
   attribute :title, Valkyrie::Types::Set
   attribute :file_identifiers, Valkyrie::Types::Set
+  attribute :member_ids, Valkyrie::Types::Array
 end

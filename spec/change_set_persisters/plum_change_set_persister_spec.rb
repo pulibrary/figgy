@@ -115,7 +115,10 @@ RSpec.describe PlumChangeSetPersister do
 
       expect(original_file_node.file_identifiers.length).to eq 1
       original_file = Valkyrie::StorageAdapter.find_by(id: original_file_node.file_identifiers[0])
-      expect(original_file.read).to eq file.read
+      original_file.rewind
+      content = original_file.read
+      file.rewind
+      expect(content).to eq file.read
     end
   end
 end

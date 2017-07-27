@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 Rails.application.config.to_prepare do
+  Valkyrie::StorageAdapter.register(
+    Valkyrie::Storage::Memory.new,
+    :memory
+  )
+
   Valkyrie::MetadataAdapter.register(
     Valkyrie::Persistence::Postgres::MetadataAdapter.new,
     :postgres

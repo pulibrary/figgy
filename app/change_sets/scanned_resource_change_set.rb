@@ -3,7 +3,6 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   delegate :human_readable_type, to: :model
   property :title, multiple: true, required: true, default: []
   property :source_metadata_identifier, required: true, multiple: false
-  property :refresh_remote_metadata, virtual: true, multiple: false
   property :rights_statement, multiple: false, required: true
   property :rights_note, multiple: false, required: false
   property :viewing_hint, multiple: false, required: false
@@ -14,6 +13,11 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   property :nav_date, multiple: false, required: false
   property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
   property :local_identifier, multiple: true, required: false, default: []
+
+  # Virtual Attributes
+  property :refresh_remote_metadata, virtual: true, multiple: false
+  property :files, virtual: true, multiple: true
+
   validates_with ViewingDirectionValidator
   validates_with ViewingHintValidator
   validate :source_metadata_identifier_or_title
