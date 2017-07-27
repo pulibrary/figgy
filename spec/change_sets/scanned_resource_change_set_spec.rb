@@ -13,26 +13,26 @@ RSpec.describe ScannedResourceChangeSet do
       expect(change_set).to be_valid
     end
     context "when given a bad viewing direction" do
-      let(:form_resource) { scanned_resource.new(viewing_direction: "backwards-to-forwards") }
       it "is invalid" do
+        change_set.validate(viewing_direction: "backwards-to-forwards")
         expect(change_set).not_to be_valid
       end
     end
     context "when given a good viewing direction" do
-      let(:form_resource) { scanned_resource.new(viewing_direction: "left-to-right") }
       it "is valid" do
+        change_set.validate(viewing_direction: "left-to-right")
         expect(change_set).to be_valid
       end
     end
     context "when given a bad viewing hint" do
-      let(:form_resource) { scanned_resource.new(viewing_hint: "bananas") }
       it "is invalid" do
+        change_set.validate(viewing_hint: "bananas")
         expect(change_set).not_to be_valid
       end
     end
     context "when given a good viewing direction" do
-      let(:form_resource) { scanned_resource.new(viewing_hint: "paged") }
       it "is valid" do
+        change_set.validate(viewing_hint: "paged")
         expect(change_set).to be_valid
       end
     end

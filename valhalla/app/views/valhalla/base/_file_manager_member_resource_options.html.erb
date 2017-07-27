@@ -1,0 +1,12 @@
+      <div class="form-group radio_buttons member_resource_options">
+        <span class="radio">
+          <%= radio_button_tag "thumbnail_id", node.id, @change_set.thumbnail_id == node.id, id: "thumbnail_id_#{node.id}", class: "radio_buttons" %>
+          <%= label_tag "thumbnail_id_#{node.id}", "Thumbnail" %>
+        </span>
+      </div>
+      <div class="form-group radio_buttons member_resource_options">
+        <span class="radio">
+          <%= radio_button_tag "start_canvas", node.id, @change_set.start_canvas == node.id, id: "start_canvas_#{node.id}", class: "radio_buttons" %>
+          <%= label_tag "start_canvas_#{node.id}", "Starting Page" %>
+        </span>
+      </div>

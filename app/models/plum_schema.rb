@@ -328,8 +328,8 @@ module PlumSchema
       :nav_date,
       :pdf_type,
       :start_canvas,
-      :container
-
+      :container,
+      :thumbnail_id
     ]
   end
 

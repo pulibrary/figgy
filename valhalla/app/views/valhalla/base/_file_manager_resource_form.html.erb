@@ -1,0 +1,34 @@
+<div class="well">
+  <%= simple_form_for @change_set, remote: true, html: { id: 'resource-form', 'data-type': 'json' } do |f| %>
+    <% directions = ['left-to-right', 'right-to-left', 'top-to-bottom', 'bottom-to-top'] %>
+    <% selected_direction = @change_set.viewing_direction || directions.first %>
+    <div>
+      <label>Viewing Direction:</label>
+      <% directions.each do |val| %>
+        <div class="radio">
+          <%= content_tag :label do %>
+            <%= tag :input, name: "#{f.object.model_name.singular}[viewing_direction]", id: "#{f.object.model_name.singular}_viewing_direction_#{val}", type: :radio, value: val, checked: (val == selected_direction), class: 'resource-radio-button' %>
+            <%= val %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <% hints = ['individuals', 'paged', 'continuous'] %>
+    <% selected_hint = @change_set.viewing_hint || hints.first %>
+    <div>
+      <label>Viewing Hint:</label>
+      <% hints.each do |val| %>
+        <div class="radio">
+          <%= content_tag :label do %>
+            <%= tag :input, name: "#{f.object.model_name.singular}[viewing_hint]", id: "#{f.object.model_name.singular}_hint_#{val}", type: :radio, value: val, checked: (val == selected_hint), class: 'resource-radio-button' %>
+            <%= val %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <%= f.input :thumbnail_id, as: :hidden, input_html: { data: {member_link: 'thumbnail_id'}} %>
+    <%= f.input :start_canvas, as: :hidden, input_html: { data: {member_link: 'start_canvas'}} %>
+  <% end %>
+</div>

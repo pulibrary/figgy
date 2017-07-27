@@ -9,7 +9,7 @@ RSpec.describe ViewingDirectionValidator do
     before do
       allow(errors).to receive(:add)
     end
-    [["left-to-right"], ["right-to-left"], ["top-to-bottom"], ["bottom-to-top"]].each do |direction|
+    ["left-to-right", "right-to-left", "top-to-bottom", "bottom-to-top"].each do |direction|
       context "when viewing_direction is #{direction}" do
         it "does not add errors" do
           record = build_record(viewing_direction: direction)

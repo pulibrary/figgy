@@ -50,7 +50,16 @@ Rails.application.routes.draw do
       delete 'clear'
     end
   end
+
+  # Consider moving these to Valhalla
   scope '/concern' do
-    resources :scanned_resources
+    resources :file_sets
+    resources :scanned_resources do
+      member do
+        get :file_manager
+      end
+    end
   end
+
+  get '/catalog/parent/:parent_id/:id', to: 'catalog#show', as: :parent_solr_document
 end

@@ -1,0 +1,13 @@
+<div id="bulk-actions" class="well">
+  <h2>Bulk Actions</h2>
+  <label>Mark As:</label>
+  <% hints = [["Single Page", :''], ["Non-Paged", :"non-paged"], ["Facing pages",:"facing-pages"]] %>
+  <% hints.each do |label, val| %>
+    <div class="radio">
+      <%= content_tag :label do %>
+        <%= tag :input, name: "bulk_hint", id: "bulk_hint_#{val}", type: :radio, value: val, checked: false, class: 'resource-radio-button' %>
+        <%= label %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

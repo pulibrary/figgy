@@ -10,4 +10,17 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require jquery3
+//= require jquery-ui/widgets/sortable
+//= require jquery-ui/widgets/draggable
+//= require jquery-ui/widgets/selectable
+//= require babel/polyfill
+//= require hydra-editor/hydra-editor
+//= require bootstrap/affix
+//= require valhalla/boot
 //= require_tree .
+$(document).ready(function() {
+  cc = require('valhalla/boot')
+
+  window.booter = new cc.Initializer()
+});

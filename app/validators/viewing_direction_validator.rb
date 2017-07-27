@@ -18,6 +18,6 @@ class ViewingDirectionValidator < ActiveModel::Validator
         "right-to-left",
         "top-to-bottom",
         "bottom-to-top"
-      ].map { |x| Array.wrap(x) }
+      ]
     end
 end
