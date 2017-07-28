@@ -62,6 +62,31 @@ RSpec.describe "Scanned Resources Management" do
       id = response.location.gsub("http://www.example.com/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
       expect(find_resource(id).title).to contain_exactly "Title 1", "Title 2"
     end
+    context "when something bad goes wrong" do
+      it "doesn't persist anything at all when it's solr erroring" do
+        allow(Valkyrie::MetadataAdapter.find(:index_solr)).to receive(:persister).and_return(
+          Valkyrie::MetadataAdapter.find(:index_solr).persister
+        )
+        allow(Valkyrie::MetadataAdapter.find(:index_solr).persister).to receive(:save_all).and_raise("Bad")
+
+        expect do
+          post "/concern/scanned_resources", params: { scanned_resource: valid_params }
+        end.to raise_error "Bad"
+        expect(Valkyrie::MetadataAdapter.find(:postgres).query_service.find_all.to_a.length).to eq 0
+      end
+
+      it "doesn't persist anything at all when it's postgres erroring" do
+        allow(Valkyrie::MetadataAdapter.find(:postgres)).to receive(:persister).and_return(
+          Valkyrie::MetadataAdapter.find(:postgres).persister
+        )
+        allow(Valkyrie::MetadataAdapter.find(:postgres).persister).to receive(:save).and_raise("Bad")
+        expect do
+          post "/concern/scanned_resources", params: { scanned_resource: valid_params }
+        end.to raise_error "Bad"
+        expect(Valkyrie::MetadataAdapter.find(:postgres).query_service.find_all.to_a.length).to eq 0
+        expect(Valkyrie::MetadataAdapter.find(:index_solr).query_service.find_all.to_a.length).to eq 0
+      end
+    end
     it "renders the form if it doesn't create a scanned resource" do
       post "/concern/scanned_resources", params: { scanned_resource: invalid_params }
       expect(response.body).to have_field "Title"
