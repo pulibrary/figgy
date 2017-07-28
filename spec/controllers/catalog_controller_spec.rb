@@ -14,6 +14,32 @@ RSpec.describe CatalogController do
     end
   end
 
+  describe "FileSet behavior" do
+    before do
+      sign_in FactoryGirl.create(:admin)
+    end
+    it "doesn't display indexed FileSets" do
+      persister.save(resource: FactoryGirl.build(:file_set))
+
+      get :index, params: { q: "" }
+
+      expect(assigns(:document_list).length).to eq 0
+    end
+  end
+
+  describe "FileMetadata behavior" do
+    before do
+      sign_in FactoryGirl.create(:admin)
+    end
+    it "doesn't display indexed FileMetadata nodes" do
+      persister.save(resource: FileMetadata.new)
+
+      get :index, params: { q: "" }
+
+      expect(assigns(:document_list).length).to eq 0
+    end
+  end
+
   describe "nested catalog paths" do
     it "loads the parent document when given an ID" do
       child = persister.save(resource: FactoryGirl.build(:file_set))
