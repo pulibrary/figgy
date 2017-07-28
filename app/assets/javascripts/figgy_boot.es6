@@ -1,9 +1,9 @@
 import SaveWorkControl from 'form/save_work_control'
-import ServerUploader from "server_uploader"
+import ServerUploader from "./server_uploader"
 export default class Initializer {
   constructor() {
-    this.initialize_form()
     this.server_uploader = new ServerUploader
+    this.initialize_form()
   }
 
   initialize_form() {

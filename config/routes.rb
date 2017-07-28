@@ -57,6 +57,7 @@ Rails.application.routes.draw do
     resources :scanned_resources do
       member do
         get :file_manager
+        post :browse_everything_files
       end
     end
   end
