@@ -18,10 +18,11 @@
 //= require blacklight/blacklight
 //= require cable
 //= require form/mutex
+//= require browse_everything
 //= require valhalla/valhalla
 //= require hydra-editor/hydra-editor
 //= require_tree .
-Blacklight.onLoad(function() {
+$(document).ready(function() {
   Initializer = require('figgy_boot')
-  window.plum = new Initializer()
+  window.figgy = new Initializer()
 })

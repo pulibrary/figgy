@@ -2,5 +2,5 @@
     <%= render_edit_field_partial(field, f: f) %>
   <% end %>
   <% if @change_set.respond_to?(:files) %>
-    <%= f.input :files, as: :file, input_html: { multiple: true }%>
+    <%= f.input :files, as: :file, input_html: { multiple: true }, required: false %>
   <% end %>

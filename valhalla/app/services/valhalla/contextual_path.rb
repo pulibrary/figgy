@@ -17,6 +17,14 @@ module Valhalla
       end
     end
 
+    def file_manager
+      if parent_id
+        polymorphic_path([:file_manager, child], parent_id: parent_id)
+      else
+        polymorphic_path([:file_manager, child])
+      end
+    end
+
     def to_resource
       nil
     end

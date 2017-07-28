@@ -21,5 +21,28 @@ RSpec.describe ScannedResourcesController do
         expect(assigns(:children).map(&:id)).to eq [child.id]
       end
     end
+
+    describe "POST /concern/scanned_resources/:id/browse_everything_files" do
+      let(:file) { File.open(Rails.root.join("spec", "fixtures", "files", "example.tif")) }
+      let(:params) do
+        {
+          "selected_files" => {
+            "0" => {
+              "url" => "file://#{file.path}",
+              "file_name" => File.basename(file.path),
+              "file_size" => file.size
+            }
+          }
+        }
+      end
+      it "uploads files" do
+        resource = FactoryGirl.create_for_repository(:scanned_resource)
+
+        post :browse_everything_files, params: { id: resource.id, selected_files: params["selected_files"] }
+        reloaded = adapter.query_service.find_by(id: resource.id)
+
+        expect(reloaded.member_ids.length).to eq 1
+      end
+    end
   end
 end

@@ -57,9 +57,12 @@ Rails.application.routes.draw do
     resources :scanned_resources do
       member do
         get :file_manager
+        post :browse_everything_files
       end
     end
   end
 
   get '/catalog/parent/:parent_id/:id', to: 'catalog#show', as: :parent_solr_document
+
+  mount BrowseEverything::Engine => '/browse'
 end
