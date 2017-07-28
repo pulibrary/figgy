@@ -18,6 +18,7 @@
 //= require blacklight/blacklight
 //= require cable
 //= require form/mutex
+//= require browse_everything
 //= require valhalla/valhalla
 //= require hydra-editor/hydra-editor
 //= require_tree .
