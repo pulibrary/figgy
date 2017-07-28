@@ -1,0 +1,21 @@
+      <table class="table table-striped">
+        <caption>Pending Uploads</caption>
+        <thead>
+          <tr>
+            <th>File Name</th>
+            <th>Uploaded</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% uploads.map(&:decorate).each do |pending_upload| %>
+            <tr>
+              <td>
+                <%= pending_upload.original_filename %>
+              </td>
+              <td>
+                <%= pending_upload.created_at %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>

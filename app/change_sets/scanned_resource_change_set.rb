@@ -20,6 +20,7 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   # Virtual Attributes
   property :refresh_remote_metadata, virtual: true, multiple: false
   property :files, virtual: true, multiple: true, required: false
+  property :pending_uploads, multiple: true, required: false
 
   validates_with ViewingDirectionValidator
   validates_with ViewingHintValidator

@@ -11,7 +11,7 @@ class FileAppender
     return resource if files.blank?
     file_sets = build_file_sets || file_nodes
     resource.member_ids = resource.member_ids + file_sets.map(&:id)
-    resource
+    resource.pending_uploads = (resource.pending_uploads || []) - files
   end
 
   def build_file_sets

@@ -37,11 +37,29 @@ RSpec.describe ScannedResourcesController do
       end
       it "uploads files" do
         resource = FactoryGirl.create_for_repository(:scanned_resource)
+        # Ensure that indexing is always safe and done at the end.
+        allow(Valkyrie::MetadataAdapter.find(:index_solr)).to receive(:persister).and_return(Valkyrie::MetadataAdapter.find(:index_solr).persister)
+        allow(Valkyrie::MetadataAdapter.find(:index_solr).persister).to receive(:save)
 
         post :browse_everything_files, params: { id: resource.id, selected_files: params["selected_files"] }
         reloaded = adapter.query_service.find_by(id: resource.id)
 
         expect(reloaded.member_ids.length).to eq 1
+        expect(reloaded.pending_uploads).to be_empty
+        expect(Valkyrie::MetadataAdapter.find(:index_solr).persister).not_to have_received(:save)
+      end
+      it "tracks pending uploads" do
+        resource = FactoryGirl.create_for_repository(:scanned_resource)
+        allow(BrowseEverythingIngestJob).to receive(:perform_later).and_return(true)
+
+        post :browse_everything_files, params: { id: resource.id, selected_files: params["selected_files"] }
+        reloaded = adapter.query_service.find_by(id: resource.id)
+
+        pending_upload = reloaded.pending_uploads[0]
+        expect(pending_upload.file_name).to eq [File.basename(file.path)]
+        expect(pending_upload.url).to eq ["file://#{file.path}"]
+        expect(pending_upload.file_size).to eq [file.size]
+        expect(pending_upload.created_at).not_to be_blank
       end
     end
   end
