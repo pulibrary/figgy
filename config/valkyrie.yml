@@ -3,7 +3,7 @@ development:
   storage_adapter: disk
 
 test:
-  metadata_adapter: memory
+  metadata_adapter: postgres
   storage_adapter: test_disk
 
 production:
