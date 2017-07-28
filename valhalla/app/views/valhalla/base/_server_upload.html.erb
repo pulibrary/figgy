@@ -1,0 +1,14 @@
+ <div class="row">
+  <div class="col-md-3"> 
+    <div class="well well-sm">
+      <%= form_tag polymorphic_path([main_app, :browse_everything_files, @form]), id: "browse-everything-form" do %>
+        <% if params[:parent_id] %>
+          <%= hidden_field_tag 'parent_id', params[:parent_id] %>
+        <% end %>
+        <%= button_tag type: 'button', class: 'browse-everything btn btn-primary' do %>
+          Upload from Server
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

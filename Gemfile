@@ -55,6 +55,8 @@ end
 
 gem 'rsolr', '>= 1.0'
 
+gem 'browse-everything'
+gem 'coffee-rails'
 gem 'devise'
 gem 'hydra-head'
 gem 'modernizr-rails'
@@ -62,5 +64,3 @@ gem 'normalize-rails'
 gem 'pul_metadata_services', github: 'pulibrary/pul_metadata_services', branch: 'master'
 gem 'string_rtl'
 gem 'valhalla', path: 'valhalla'
-gem 'browse-everything'
-gem 'coffee-rails'
