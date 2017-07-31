@@ -19,10 +19,8 @@ module Valhalla
       if @change_set.validate(resource_params)
         @change_set.sync
         obj = nil
-        persister.buffer_into_index do |buffered_adapter|
-          change_set_persister.with(metadata_adapter: buffered_adapter) do |buffered_changeset_persister|
-            obj = buffered_changeset_persister.save(change_set: @change_set)
-          end
+        change_set_persister.buffer_into_index do |buffered_changeset_persister|
+          obj = buffered_changeset_persister.save(change_set: @change_set)
         end
         redirect_to contextual_path(obj, @change_set).show
       else
@@ -33,10 +31,8 @@ module Valhalla
     def destroy
       @change_set = change_set_class.new(find_resource(params[:id]))
       authorize! :destroy, @change_set.resource
-      persister.buffer_into_index do |buffered_adapter|
-        change_set_persister.with(metadata_adapter: buffered_adapter) do |persist|
-          persist.delete(change_set: @change_set)
-        end
+      change_set_persister.buffer_into_index do |persist|
+        persist.delete(change_set: @change_set)
       end
       flash[:alert] = "Deleted #{@change_set.resource}"
       redirect_to root_path
@@ -53,10 +49,8 @@ module Valhalla
       if @change_set.validate(resource_params)
         @change_set.sync
         obj = nil
-        persister.buffer_into_index do |buffered_adapter|
-          change_set_persister.with(metadata_adapter: buffered_adapter) do |persist|
-            obj = persist.save(change_set: @change_set)
-          end
+        change_set_persister.buffer_into_index do |persist|
+          obj = persist.save(change_set: @change_set)
         end
         redirect_to contextual_path(obj, @change_set).show
       else

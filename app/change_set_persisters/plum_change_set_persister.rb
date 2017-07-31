@@ -25,6 +25,12 @@ class PlumChangeSetPersister
     end
   end
 
+  def buffer_into_index(&block)
+    metadata_adapter.persister.buffer_into_index do |buffered_adapter|
+      with(metadata_adapter: buffered_adapter, &block)
+    end
+  end
+
   def with(metadata_adapter:)
     yield self.class.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter)
   end

@@ -342,5 +342,6 @@ module PlumSchema
     PlumSchema.schema.each do |field|
       attribute field
     end
+    attribute :pending_uploads, Valkyrie::Types::Array.member(PendingUpload)
   end
 end
