@@ -55,6 +55,8 @@ en:
             label: "Date Uploaded"
           updated_at:
             label: "Date Modified"
+          member_of_collections:
+            label: "Collections"
     search:
       form:
         q:

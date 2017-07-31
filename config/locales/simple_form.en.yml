@@ -38,6 +38,7 @@ en:
         pdf_type: "PDF Type"
         portion_note: "Portion Note"
         nav_date: "Navigation Date"
+        member_of_collection_ids: "Collections"
     required:
       html: '<span class="label label-info required-tag">required</span>'
   helpers:

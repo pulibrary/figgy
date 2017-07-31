@@ -17,6 +17,8 @@ RSpec.describe "Scanned Resources Management" do
       end
     end
     it "has a form for creating scanned resources" do
+      collection = FactoryGirl.create_for_repository(:collection)
+
       get "/concern/scanned_resources/new"
       expect(response.body).to have_field "Title"
       expect(response.body).to have_field "Source Metadata ID"
@@ -28,6 +30,7 @@ RSpec.describe "Scanned Resources Management" do
       expect(response.body).to have_field "PDF Type"
       expect(response.body).to have_field "Portion Note"
       expect(response.body).to have_field "Navigation Date"
+      expect(response.body).to have_select "Collections", name: "scanned_resource[member_of_collection_ids][]", options: ["", collection.title.first]
       expect(response.body).to have_checked_field "Private"
       expect(response.body).to have_button "Save"
     end
@@ -62,6 +65,26 @@ RSpec.describe "Scanned Resources Management" do
       id = response.location.gsub("http://www.example.com/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
       expect(find_resource(id).title).to contain_exactly "Title 1", "Title 2"
     end
+    context "when joining a collection" do
+      let(:valid_params) do
+        {
+          title: ['Title 1', 'Title 2'],
+          rights_statement: 'Test Statement',
+          visibility: 'restricted',
+          member_of_collection_ids: [collection.id.to_s]
+        }
+      end
+      let(:collection) { FactoryGirl.create_for_repository(:collection) }
+      it "works" do
+        post "/concern/scanned_resources", params: { scanned_resource: valid_params }
+
+        expect(response).to be_redirect
+        expect(response.location).to start_with "http://www.example.com/catalog/"
+        id = response.location.gsub("http://www.example.com/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
+        expect(find_resource(id).member_of_collection_ids).to contain_exactly collection.id
+      end
+    end
+    it "can create and join a collection"
     context "when something bad goes wrong" do
       it "doesn't persist anything at all when it's solr erroring" do
         allow(Valkyrie::MetadataAdapter.find(:index_solr)).to receive(:persister).and_return(

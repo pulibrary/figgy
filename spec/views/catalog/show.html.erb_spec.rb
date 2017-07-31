@@ -3,8 +3,9 @@ require 'rails_helper'
 
 RSpec.describe "catalog/show.html.erb" do
   context "when given a ScannedResource solr document" do
-    let(:scanned_resource) { FactoryGirl.create_for_repository(:scanned_resource, author: "Shakespeare") }
+    let(:scanned_resource) { FactoryGirl.create_for_repository(:scanned_resource, author: "Shakespeare", member_of_collection_ids: [collection.id]) }
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(scanned_resource) }
+    let(:collection) { FactoryGirl.create_for_repository(:collection) }
     let(:solr_document) { SolrDocument.new(document) }
     before do
       Timecop.freeze(Time.zone.local(1990))
@@ -34,6 +35,10 @@ RSpec.describe "catalog/show.html.erb" do
       # Date Modified
       expect(rendered).to have_selector "th", text: "Date Modified"
       expect(rendered).to have_selector ".updated_at", text: "01/01/90 12:00:00 AM UTC"
+
+      # Collection
+      expect(rendered).to have_selector "th", text: "Collections"
+      expect(rendered).to have_selector ".member_of_collections", text: collection.title.first
     end
   end
 end

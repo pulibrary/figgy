@@ -16,6 +16,7 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
   property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID
   property :start_canvas, multiple: false, type: Valkyrie::Types::ID
+  property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
 
   # Virtual Attributes
   property :refresh_remote_metadata, virtual: true, multiple: false
@@ -38,7 +39,8 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
       :holding_location,
       :pdf_type,
       :portion_note,
-      :nav_date
+      :nav_date,
+      :member_of_collection_ids
     ]
   end
 
