@@ -12,7 +12,7 @@ class SearchBuilder < Blacklight::SearchBuilder
   end
 
   def models_to_solr_clause
-    [ScannedResource].join(",")
+    [ScannedResource, Collection].join(",")
   end
 
   def add_access_controls_to_solr_params(*args)

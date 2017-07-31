@@ -40,6 +40,20 @@ RSpec.describe CatalogController do
     end
   end
 
+  describe "Collection behavior" do
+    before do
+      sign_in FactoryGirl.create(:admin)
+    end
+
+    it "displays indexed collections" do
+      persister.save(resource: FactoryGirl.build(:collection))
+
+      get :index, params: { q: "" }
+
+      expect(assigns(:document_list).length).to eq 1
+    end
+  end
+
   describe "nested catalog paths" do
     it "loads the parent document when given an ID" do
       child = persister.save(resource: FactoryGirl.build(:file_set))
