@@ -14,13 +14,16 @@
 //= require jquery-ui/widgets/sortable
 //= require jquery-ui/widgets/draggable
 //= require jquery-ui/widgets/selectable
+//= require bootstrap/affix
 //= require babel/polyfill
 //= require hydra-editor/hydra-editor
-//= require bootstrap/affix
 //= require valhalla/boot
 //= require_tree .
 $(document).ready(function() {
   cc = require('valhalla/boot')
 
   window.booter = new cc.Initializer()
+});
+$(document).ready(function() {
+  $('.multi_value.form-group').manage_fields();
 });

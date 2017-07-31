@@ -17,4 +17,13 @@ RSpec.describe FileSetsController do
       expect(file_set.title).to eq ["Second"]
     end
   end
+
+  describe "GET /concern/file_sets/:id/edit" do
+    render_views
+    it "renders" do
+      file_set = FactoryGirl.create_for_repository(:file_set)
+
+      expect { get :edit, params: { id: file_set.id.to_s } }.not_to raise_error
+    end
+  end
 end
