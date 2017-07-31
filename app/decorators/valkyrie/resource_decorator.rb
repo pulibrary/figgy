@@ -15,7 +15,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   end
 
   def header
-    title.to_sentence
+    Array(title).to_sentence
   end
 
   def manageable_files?

@@ -40,6 +40,32 @@ RSpec.describe CatalogController do
     end
   end
 
+  describe "Collection behavior" do
+    before do
+      sign_in FactoryGirl.create(:admin)
+    end
+
+    it "displays indexed collections" do
+      persister.save(resource: FactoryGirl.build(:collection))
+
+      get :index, params: { q: "" }
+
+      expect(assigns(:document_list).length).to eq 1
+    end
+    context "when a resource has a collection" do
+      render_views
+      it "facets on it" do
+        collection = persister.save(resource: FactoryGirl.build(:collection))
+        persister.save(resource: FactoryGirl.build(:scanned_resource, member_of_collection_ids: [collection.id]))
+
+        get :index, params: { q: "" }
+
+        expect(response.body).to have_selector ".facet-field-heading", text: "Collections"
+        expect(response.body).to have_selector ".facet_select", text: collection.title.first
+      end
+    end
+  end
+
   describe "nested catalog paths" do
     it "loads the parent document when given an ID" do
       child = persister.save(resource: FactoryGirl.build(:file_set))
@@ -74,6 +100,16 @@ RSpec.describe CatalogController do
 
         expect(response.body).to have_link "Edit This File Set", href: edit_file_set_path(resource)
         expect(response.body).to have_link "Delete This File Set", href: file_set_path(resource)
+        expect(response.body).not_to have_link "File Manager"
+      end
+
+      it "renders for a Collection" do
+        resource = persister.save(resource: FactoryGirl.build(:collection))
+
+        get :show, params: { id: "id-#{resource.id}" }
+
+        expect(response.body).to have_link "Edit This Collection", href: edit_collection_path(resource)
+        expect(response.body).to have_link "Delete This Collection", href: collection_path(resource)
         expect(response.body).not_to have_link "File Manager"
       end
     end

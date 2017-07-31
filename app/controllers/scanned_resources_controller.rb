@@ -7,6 +7,11 @@ class ScannedResourcesController < ApplicationController
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
     storage_adapter: Valkyrie.config.storage_adapter
   )
+  before_action :load_collections, only: [:new, :edit]
+
+  def load_collections
+    @collections = query_service.find_all_of_model(model: Collection).map(&:decorate)
+  end
 
   def browse_everything_files
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
