@@ -52,6 +52,18 @@ RSpec.describe CatalogController do
 
       expect(assigns(:document_list).length).to eq 1
     end
+    context "when a resource has a collection" do
+      render_views
+      it "facets on it" do
+        collection = persister.save(resource: FactoryGirl.build(:collection))
+        persister.save(resource: FactoryGirl.build(:scanned_resource, member_of_collection_ids: [collection.id]))
+
+        get :index, params: { q: "" }
+
+        expect(response.body).to have_selector ".facet-field-heading", text: "Collections"
+        expect(response.body).to have_selector ".facet_select", text: collection.title.first
+      end
+    end
   end
 
   describe "nested catalog paths" do

@@ -20,6 +20,7 @@ class CatalogController < ApplicationController
 
     config.index.title_field = 'title_ssim'
     config.index.display_type_field = "internal_resource_ssim"
+    config.add_facet_field 'member_of_collection_titles_ssim', label: 'Collections'
     config.add_facet_field 'internal_resource_ssim', label: 'Type of Work'
     config.add_facet_fields_to_solr_request!
 
