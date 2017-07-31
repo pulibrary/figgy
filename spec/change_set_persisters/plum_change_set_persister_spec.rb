@@ -108,14 +108,21 @@ RSpec.describe PlumChangeSetPersister do
       expect(members.first).to be_kind_of FileSet
 
       file_metadata_nodes = query_service.find_members(resource: members.first)
-      expect(file_metadata_nodes.to_a.length).to eq 1
+      expect(file_metadata_nodes.to_a.length).to eq 2
       expect(file_metadata_nodes.first).to be_kind_of FileMetadata
 
-      original_file_node = file_metadata_nodes.first
+      original_file_node = file_metadata_nodes.find { |x| x.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }
 
       expect(original_file_node.file_identifiers.length).to eq 1
       original_file = Valkyrie::StorageAdapter.find_by(id: original_file_node.file_identifiers.first)
       expect(original_file).to respond_to(:read)
+
+      derivative_file_node = file_metadata_nodes.find { |x| x.use == [Valkyrie::Vocab::PCDMUse.ServiceFile] }
+
+      expect(derivative_file_node).not_to be_blank
+      derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative_file_node.file_identifiers.first)
+      expect(derivative_file).not_to be_blank
+      expect(derivative_file.io.path).to start_with(Rails.root.join("tmp", "derivatives").to_s)
     end
   end
 

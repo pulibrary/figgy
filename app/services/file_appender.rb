@@ -11,15 +11,21 @@ class FileAppender
     return resource if files.blank?
     file_sets = build_file_sets || file_nodes
     resource.member_ids = resource.member_ids + file_sets.map(&:id)
-    resource.pending_uploads = (resource.pending_uploads || []) - files
+    adjust_pending_uploads(resource)
   end
 
   def build_file_sets
     return if processing_derivatives?
     file_nodes.map do |node|
       file_set = create_file_set(node)
+      CreateDerivativesJob.perform_later(file_set.id.to_s)
       file_set
     end
+  end
+
+  def adjust_pending_uploads(resource)
+    return unless resource.respond_to?(:pending_uploads)
+    resource.pending_uploads = (resource.pending_uploads || []) - files
   end
 
   def processing_derivatives?
