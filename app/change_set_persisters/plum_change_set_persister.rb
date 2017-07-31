@@ -44,7 +44,9 @@ class PlumChangeSetPersister
 
     def after_save(change_set:, updated_resource:); end
 
-    def before_delete(change_set:); end
+    def before_delete(change_set:)
+      clean_up_collection_associations(change_set: change_set) if change_set.resource.is_a?(Collection)
+    end
 
     def apply_remote_metadata(change_set:)
       return unless change_set.respond_to?(:source_metadata_identifier)
@@ -54,6 +56,14 @@ class PlumChangeSetPersister
         if change_set.model.respond_to?("#{key}=")
           change_set.model.__send__("#{key}=", value)
         end
+      end
+    end
+
+    def clean_up_collection_associations(change_set:)
+      resources = query_service.find_inverse_references_by(resource: change_set.resource, property: :member_of_collection_ids)
+      resources.each do |resource|
+        resource.member_of_collection_ids -= [change_set.id]
+        persister.save(resource: resource)
       end
     end
 

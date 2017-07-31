@@ -118,4 +118,19 @@ RSpec.describe PlumChangeSetPersister do
       expect(original_file).to respond_to(:read)
     end
   end
+
+  describe "collection interactions" do
+    context "when a collection is deleted" do
+      it "cleans up associations from all its members" do
+        collection = FactoryGirl.create_for_repository(:collection)
+        resource = FactoryGirl.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id)
+        change_set = CollectionChangeSet.new(collection)
+
+        change_set_persister.delete(change_set: change_set)
+        reloaded = query_service.find_by(id: resource.id)
+
+        expect(reloaded.member_of_collection_ids).to eq []
+      end
+    end
+  end
 end
