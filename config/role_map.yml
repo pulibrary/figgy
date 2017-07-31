@@ -1,10 +1,11 @@
 development:
   admin:
-    - admin@example.com
+    - admin
+    - tpend
 
 test:
   admin:
-    - admin@example.com
+    - admin
 
 production:
   # Add roles for users here.

@@ -300,6 +300,7 @@ GEM
     hamster (3.0.0)
       concurrent-ruby (~> 1.0)
     hashdiff (0.3.4)
+    hashie (3.5.6)
     honeybadger (3.1.2)
     httmultiparty (0.3.16)
       httparty (>= 0.7.3)
@@ -412,6 +413,13 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
+    omniauth (1.6.1)
+      hashie (>= 3.4.6, < 3.6.0)
+      rack (>= 1.6.2, < 3)
+    omniauth-cas (1.1.1)
+      addressable (~> 2.3)
+      nokogiri (~> 1.5)
+      omniauth (~> 1.2)
     open4 (1.3.4)
     orm_adapter (0.5.0)
     os (0.9.6)
@@ -674,6 +682,7 @@ DEPENDENCIES
   listen
   modernizr-rails
   normalize-rails
+  omniauth-cas
   pg
   poltergeist
   pry-byebug

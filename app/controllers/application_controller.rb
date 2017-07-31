@@ -5,4 +5,10 @@ class ApplicationController < ActionController::Base
   layout 'application'
 
   protect_from_forgery with: :exception
+
+  def guest_uid_authentication_key(key)
+    key &&= nil unless key.to_s =~ /^guest/
+    return key if key
+    "guest_" + guest_user_unique_suffix
+  end
 end
