@@ -55,4 +55,6 @@ Rails.application.config.to_prepare do
       storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)
     )
   )
+
+  Valkyrie::FileCharacterizationService.services << TikaFileCharacterizationService
 end
