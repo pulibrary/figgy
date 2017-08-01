@@ -33,4 +33,42 @@ RSpec.describe ScannedResource do
       expect(scanned_resource.to_s).to eq "Scanned Resource: One and Two"
     end
   end
+
+  describe "structure" do
+    let(:structure) do
+      {
+        "label": "Top!",
+        "nodes": [
+          {
+            "label": "Chapter 1",
+            "nodes": [
+              {
+                "proxy": resource1.id
+              }
+            ]
+          },
+          {
+            "label": "Chapter 2",
+            "nodes": [
+              {
+                "proxy": resource2.id
+              }
+            ]
+          }
+        ]
+      }
+    end
+    let(:resource1) { FactoryGirl.create_for_repository(:file_set) }
+    let(:resource2) { FactoryGirl.create_for_repository(:file_set) }
+    it "can store structures" do
+      adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
+      scanned_resource = adapter.persister.save(resource: described_class.new(logical_structure: [structure]))
+
+      expect(scanned_resource.logical_structure[0].label).to eq ["Top!"]
+      expect(scanned_resource.logical_structure[0].nodes[0].label).to eq ["Chapter 1"]
+      expect(scanned_resource.logical_structure[0].nodes[0].nodes[0].proxy).to eq [resource1.id]
+      expect(scanned_resource.logical_structure[0].nodes[1].label).to eq ["Chapter 2"]
+      expect(scanned_resource.logical_structure[0].nodes[1].nodes[0].proxy).to eq [resource2.id]
+    end
+  end
 end

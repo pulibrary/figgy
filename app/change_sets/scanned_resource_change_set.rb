@@ -17,6 +17,7 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID
   property :start_canvas, multiple: false, type: Valkyrie::Types::ID
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
+  property :logical_structure, multiple: true, required: false, type: Types::Strict::Array.member(Structure)
 
   # Virtual Attributes
   property :refresh_remote_metadata, virtual: true, multiple: false

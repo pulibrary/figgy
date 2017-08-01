@@ -18,7 +18,7 @@ GIT
 
 GIT
   remote: https://github.com/samvera-labs/valkyrie.git
-  revision: e5371268d53b0dd8cbd7b0fba70147d133d199d9
+  revision: eb066ddd8026355ee5dc5a8a19cb361e6dab9063
   specs:
     valkyrie (0.1.0)
       active-fedora
@@ -679,6 +679,7 @@ DEPENDENCIES
   honeybadger
   hydra-head
   jquery-rails
+  jquery-ui-rails
   listen
   modernizr-rails
   normalize-rails

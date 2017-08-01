@@ -19,4 +19,8 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
   def metadata_adapter
     Valkyrie.config.metadata_adapter
   end
+
+  def manageable_structure?
+    true
+  end
 end

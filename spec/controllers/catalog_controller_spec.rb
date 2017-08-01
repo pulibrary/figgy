@@ -91,6 +91,7 @@ RSpec.describe CatalogController do
         expect(response.body).to have_link "Edit This Scanned Resource", href: edit_scanned_resource_path(resource)
         expect(response.body).to have_link "Delete This Scanned Resource", href: scanned_resource_path(resource)
         expect(response.body).to have_link "File Manager", href: file_manager_scanned_resource_path(resource)
+        expect(response.body).to have_link "Edit Structure", href: structure_scanned_resource_path(resource)
       end
 
       it "renders for a FileSet" do
