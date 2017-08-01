@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require_relative 'figgy'
 Rails.application.config.to_prepare do
   Valkyrie::StorageAdapter.register(
     Valkyrie::Storage::Disk.new(base_path: Rails.root.join("tmp", "files")),
@@ -8,6 +9,11 @@ Rails.application.config.to_prepare do
   Valkyrie::StorageAdapter.register(
     Valkyrie::Storage::Disk.new(base_path: Rails.root.join("tmp", "more_files")),
     :disk
+  )
+
+  Valkyrie::StorageAdapter.register(
+    Valkyrie::Storage::Disk.new(base_path: Figgy.config['derivative_path']),
+    :derivatives
   )
 
   Valkyrie::MetadataAdapter.register(
@@ -37,5 +43,16 @@ Rails.application.config.to_prepare do
       index_adapter: Valkyrie::MetadataAdapter.find(:index_solr)
     ),
     :indexing_persister
+  )
+
+  Hydra::Derivatives.kdu_compress_recipes = Figgy.config['jp2_recipes']
+
+  # Jp2DerivativeService needs its own change_set_persister because the
+  # derivatives may not be in the primary metadata/file storage.
+  Valkyrie::DerivativeService.services << Jp2DerivativeService::Factory.new(
+    change_set_persister: PlumChangeSetPersister.new(
+      metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
+      storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)
+    )
   )
 end

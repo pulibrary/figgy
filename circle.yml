@@ -4,7 +4,10 @@ machine:
   services:
     - redis
 dependencies:
+  cache_directories:
+    - kakadu
   post:
+    - sudo sh bin/ci_kakadu_install.sh
     - bundle exec rake rubocop
     - bundle exec rake server:test:
         background: true
