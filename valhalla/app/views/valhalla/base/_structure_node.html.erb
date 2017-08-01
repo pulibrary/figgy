@@ -1,0 +1,36 @@
+<%= content_tag "li", data: { proxy: node.proxy.first.to_s }.compact, class: (node.proxy ? 'mjs-nestedSortable-no-nesting' : '') do %>
+  <div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="title">
+            <span class="move glyphicon glyphicon-move"></span>
+            <span class="expand-collapse glyphicon"></span>
+            <% if !node.proxy_for_object %>
+              <%= text_field_tag "label", node.label %>
+            <% else %>
+              <%= node.proxy_for_object.title.to_sentence || node.label %>
+            <% end %>
+          </div>
+          <div class="toolbar">
+            <% if !node.proxy_for_object %>
+              <a href="" title="Remove" data-action="remove-list"><span class="glyphicon glyphicon-remove"></span></a>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <% if node.proxy.present? %>
+        <div class="panel-body">
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <% if node.nodes.length > 0 %>
+    <ul>
+      <% node.nodes.each do |order| %>
+        <%= render "structure_node", node: order %>
+      <% end %>
+    </ul>
+  <% end %>
+<% end %>
+</li>

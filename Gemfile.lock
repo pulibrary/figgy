@@ -679,6 +679,7 @@ DEPENDENCIES
   honeybadger
   hydra-head
   jquery-rails
+  jquery-ui-rails
   listen
   modernizr-rails
   normalize-rails
