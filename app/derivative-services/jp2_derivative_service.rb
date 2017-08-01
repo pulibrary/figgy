@@ -68,7 +68,7 @@ class Jp2DerivativeService
   end
 
   def build_file
-    IoDecorator.new(temporary_output, "intermediate_file.jp2", mime_type, use)
+    IoDecorator.new(temporary_output, "intermediate_file.jp2", "image/jp2", use)
   end
 
   def use
