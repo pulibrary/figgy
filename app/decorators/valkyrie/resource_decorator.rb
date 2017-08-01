@@ -21,4 +21,8 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   def manageable_files?
     true
   end
+
+  def manageable_structure?
+    false
+  end
 end
