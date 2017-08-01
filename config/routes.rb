@@ -72,4 +72,8 @@ Rails.application.routes.draw do
   get '/catalog/parent/:parent_id/:id', to: 'catalog#show', as: :parent_solr_document
 
   mount BrowseEverything::Engine => '/browse'
+
+  if Rails.env.development? || Rails.env.test?
+    mount Riiif::Engine => '/image-service', as: 'riiif'
+  end
 end

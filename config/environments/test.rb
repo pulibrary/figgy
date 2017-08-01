@@ -17,4 +17,5 @@ Rails.application.configure do
   config.assets.raise_runtime_errors = true
   config.action_mailer.default_url_options = { host: "www.example.com" }
   config.active_job.queue_adapter = :inline
+  config.action_controller.action_on_unpermitted_parameters = false
 end
