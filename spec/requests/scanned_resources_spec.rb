@@ -193,6 +193,39 @@ RSpec.describe "Scanned Resources Management" do
     end
   end
 
+  describe "structure" do
+    context "when not logged in" do
+      let(:user) { nil }
+      it "throws a CanCan::AccessDenied error" do
+        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+
+        expect { get structure_scanned_resource_path(scanned_resource) }.to raise_error CanCan::AccessDenied
+      end
+    end
+    context "when a scanned resource doesn't exist" do
+      it "raises an error" do
+        expect { get structure_scanned_resource_path(id: "banana") }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+      end
+    end
+    context "when it does exist" do
+      it "renders a structure editor form" do
+        file_set = FactoryGirl.create_for_repository(:file_set)
+        scanned_resource = FactoryGirl.create_for_repository(
+          :scanned_resource,
+          member_ids: file_set.id,
+          logical_structure: [
+            { label: 'testing', nodes: [{ label: 'Chapter 1', nodes: [{ proxy: file_set.id }] }] }
+          ]
+        )
+
+        get structure_scanned_resource_path(scanned_resource)
+
+        expect(response.body).to have_selector "li[data-proxy='#{file_set.id}']"
+        expect(response.body).to have_field('label', with: 'Chapter 1')
+      end
+    end
+  end
+
   def find_resource(id)
     query_service.find_by(id: Valkyrie::ID.new(id.to_s))
   end

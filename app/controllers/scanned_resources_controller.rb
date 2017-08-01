@@ -20,16 +20,6 @@ class ScannedResourcesController < ApplicationController
     authorize! :structure, @change_set.resource
   end
 
-  def save_structure
-    @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
-    authorize! :structure, @change_set.resource
-    @change_set.validate(logical_structure: [params[:logical_structure].to_unsafe_h.deep_symbolize_keys])
-    @change_set.sync
-    change_set_persister.buffer_into_index do |buffered_changeset_persister|
-      buffered_changeset_persister.save(change_set: change_set)
-    end
-  end
-
   def browse_everything_files
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
       change_set.validate(pending_uploads: change_set.pending_uploads + selected_files)

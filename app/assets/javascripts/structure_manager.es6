@@ -69,14 +69,17 @@ export default class StructureManager {
       event.preventDefault()
       let element = $(".sortable")
       let serializer = new StructureParser(element)
-      let url = `/concern/${element.attr("data-class-name")}/${element.attr("data-id")}/structure`
+      let klass = element.attr("data-class-name")
+      let singular_klass = element.attr("data-singular-class-name")
+      let id = element.attr("data-id")
+      let url = `/concern/${klass}/${id}`
       let button = $(this)
       button.text("Saving..")
       button.addClass("disabled")
       $.ajax({
-        type: "POST",
+        type: "PUT",
         url: url,
-        data: JSON.stringify({'logical_structure': serializer.serialize}),
+        data: JSON.stringify({[singular_klass]: {'logical_structure': [serializer.serialize]}}),
         dataType: "json",
         contentType: "application/json"
       }).always(() => {

@@ -10,10 +10,6 @@ class WithProxyForObject < SimpleDelegator
     @proxy_for_object ||= members.find { |x| x.id == proxy.first }
   end
 
-  def label
-    super || proxy_for_object.to_s
-  end
-
   def unstructured_objects
     @unstructured_objects ||=
       begin
