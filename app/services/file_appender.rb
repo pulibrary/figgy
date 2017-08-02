@@ -8,17 +8,17 @@ class FileAppender
   end
 
   def append_to(resource)
-    return resource if files.blank?
+    return [] if files.blank?
     file_sets = build_file_sets || file_nodes
     resource.member_ids = resource.member_ids + file_sets.map(&:id)
     adjust_pending_uploads(resource)
+    file_sets
   end
 
   def build_file_sets
     return if processing_derivatives?
     file_nodes.map do |node|
       file_set = create_file_set(node)
-      CharacterizationJob.perform_later(file_set.id.to_s)
       file_set
     end
   end
