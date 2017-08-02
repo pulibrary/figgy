@@ -339,6 +339,13 @@ GEM
       rails (>= 3.2.6)
     i18n (0.8.6)
     ice_nine (0.11.2)
+    iiif-presentation (0.2.0)
+      activesupport (>= 3.2.18)
+      faraday (>= 0.9)
+      json
+    iiif_manifest (0.2.0)
+      activesupport (>= 4)
+      iiif-presentation (~> 0.2.0)
     inflecto (0.0.2)
     jmespath (1.3.1)
     jquery-rails (4.3.1)
@@ -680,6 +687,7 @@ DEPENDENCIES
   formulaic
   honeybadger
   hydra-head
+  iiif_manifest
   jquery-rails
   jquery-ui-rails
   listen

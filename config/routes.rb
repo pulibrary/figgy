@@ -62,6 +62,7 @@ Rails.application.routes.draw do
       member do
         get :file_manager
         get :structure
+        get :manifest
         post :browse_everything_files
       end
     end
