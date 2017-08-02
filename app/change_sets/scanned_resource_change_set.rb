@@ -5,7 +5,7 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   property :source_metadata_identifier, required: true, multiple: false
   property :rights_statement, multiple: false, required: true
   property :rights_note, multiple: false, required: false
-  property :viewing_hint, multiple: false, required: false
+  property :viewing_hint, multiple: false, required: false, default: "individuals"
   property :pdf_type, multiple: false, required: false
   property :holding_location, multiple: false, required: false
   property :viewing_direction, multiple: false, required: false

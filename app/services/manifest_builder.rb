@@ -32,35 +32,41 @@ class ManifestBuilder
       end
     end
 
-    def manifest_url
-      helper.polymorphic_url([:manifest, resource])
-    end
-
-    def helper
-      @helper ||= ManifestHelper.new
-    end
-
-    def members
-      @members ||= query_service.find_members(resource: resource).to_a
-    end
-
-    def leaf_nodes
-      @leaf_nodes ||= members.select { |x| x.instance_of?(FileSet) }
-    end
-
-    def metadata_adapter
-      Valkyrie.config.metadata_adapter
-    end
-
     def ranges
       logical_structure.map do |top_structure|
         TopStructure.new(top_structure)
       end
     end
 
-    def logical_structure
-      resource.logical_structure || []
+    def manifest_url
+      helper.polymorphic_url([:manifest, resource])
     end
+
+    def viewing_hint
+      Array(resource.viewing_hint).first
+    end
+
+    private
+
+      def helper
+        @helper ||= ManifestHelper.new
+      end
+
+      def members
+        @members ||= query_service.find_members(resource: resource).to_a
+      end
+
+      def leaf_nodes
+        @leaf_nodes ||= members.select { |x| x.instance_of?(FileSet) }
+      end
+
+      def metadata_adapter
+        Valkyrie.config.metadata_adapter
+      end
+
+      def logical_structure
+        resource.logical_structure || []
+      end
   end
 
   class TopStructure

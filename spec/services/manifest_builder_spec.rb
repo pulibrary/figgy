@@ -48,6 +48,7 @@ RSpec.describe ManifestBuilder do
     it "generates a IIIF document" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
+      expect(output["viewingHint"]).to eq "individuals"
       expect(output["sequences"].length).to eq 1
       canvas_id = output["sequences"][0]["canvases"][0]["@id"]
       expect(output["structures"].length).to eq 3
