@@ -51,6 +51,50 @@ class ManifestBuilder
     def metadata_adapter
       Valkyrie.config.metadata_adapter
     end
+
+    def ranges
+      logical_structure.map do |top_structure|
+        TopStructure.new(top_structure)
+      end
+    end
+
+    def logical_structure
+      resource.logical_structure || []
+    end
+  end
+
+  class TopStructure
+    attr_reader :structure
+    def initialize(structure)
+      @structure = structure
+    end
+
+    def label
+      structure.label.to_sentence
+    end
+
+    def ranges
+      @ranges ||= structure.nodes.select { |x| x.proxy.blank? }.map do |node|
+        TopStructure.new(node)
+      end
+    end
+
+    def file_set_presenters
+      @file_set_presenters ||= structure.nodes.select { |x| x.proxy.present? }.map do |node|
+        LeafStructureNode.new(node)
+      end
+    end
+  end
+
+  class LeafStructureNode
+    attr_reader :structure
+    def initialize(structure)
+      @structure = structure
+    end
+
+    def id
+      structure.proxy.first.to_s
+    end
   end
 
   class LeafNode
@@ -60,10 +104,14 @@ class ManifestBuilder
       @resource = resource
     end
 
-    delegate :id, to: :derivative_metadata_node
+    delegate :id, to: :resource
 
     def to_s
       resource.decorate.header
+    end
+
+    def derivative_id
+      derivative_metadata_node.id
     end
 
     def display_image
@@ -97,7 +145,7 @@ class ManifestBuilder
       end
 
       def endpoint
-        IIIFManifest::IIIFEndpoint.new(helper.manifest_image_path(id),
+        IIIFManifest::IIIFEndpoint.new(helper.manifest_image_path(derivative_id),
                                        profile: "http://iiif.io/api/image/2/level2.json")
       end
 
