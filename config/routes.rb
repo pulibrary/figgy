@@ -62,7 +62,7 @@ Rails.application.routes.draw do
       member do
         get :file_manager
         get :structure
-        get :manifest
+        get :manifest, defaults: { format: :json }
         post :browse_everything_files
       end
     end
@@ -76,5 +76,10 @@ Rails.application.routes.draw do
 
   if Rails.env.development? || Rails.env.test?
     mount Riiif::Engine => '/image-service', as: 'riiif'
+  end
+
+  require 'sidekiq/web'
+  authenticate :user do
+    mount Sidekiq::Web => '/sidekiq'
   end
 end

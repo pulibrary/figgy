@@ -1,0 +1,13 @@
+{
+  "modules":
+  {
+    "pagingHeaderPanel":
+    {
+      "options":
+      {
+        "autoCompleteBoxEnabled": false,
+        "imageSelectionBoxEnabled": true
+      }
+    }
+  }
+}

@@ -127,8 +127,6 @@ RSpec.describe PlumChangeSetPersister do
       derivative_file_node = file_metadata_nodes.find { |x| x.use == [Valkyrie::Vocab::PCDMUse.ServiceFile] }
 
       expect(derivative_file_node).not_to be_blank
-      expect(derivative_file_node.width).to eq ["200"]
-      expect(derivative_file_node.height).to eq ["287"]
       derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative_file_node.file_identifiers.first)
       expect(derivative_file).not_to be_blank
       expect(derivative_file.io.path).to start_with(Rails.root.join("tmp", "derivatives").to_s)

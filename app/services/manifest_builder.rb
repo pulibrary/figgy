@@ -41,7 +41,7 @@ class ManifestBuilder
     end
 
     def members
-      @members ||= query_service.find_members(resource: resource)
+      @members ||= query_service.find_members(resource: resource).to_a
     end
 
     def leaf_nodes
@@ -60,7 +60,7 @@ class ManifestBuilder
       @resource = resource
     end
 
-    delegate :id, to: :resource
+    delegate :id, to: :derivative_metadata_node
 
     def to_s
       resource.decorate.header
@@ -76,6 +76,10 @@ class ManifestBuilder
 
     private
 
+      def derivative_metadata_node
+        members.find { |x| x.use.include?(Valkyrie::Vocab::PCDMUse.ServiceFile) }
+      end
+
       def width
         file.width.first
       end
@@ -85,7 +89,11 @@ class ManifestBuilder
       end
 
       def file
-        @file ||= query_service.find_members(resource: resource).first
+        @file ||= members.find { |x| x.use.include?(Valkyrie::Vocab::PCDMUse.OriginalFile) }
+      end
+
+      def members
+        @members ||= query_service.find_members(resource: resource).to_a
       end
 
       def endpoint

@@ -16,7 +16,7 @@ class CreateStategyForRepositoryPattern
       evaluation.notify(:after_build, instance)
       evaluation.notify(:before_create, instance)
       result = evaluation.create(instance)
-      evaluation.notify(:after_create, instance)
+      evaluation.notify(:after_create, result)
     end
 
     result
