@@ -18,7 +18,7 @@ class FileAppender
     return if processing_derivatives?
     file_nodes.map do |node|
       file_set = create_file_set(node)
-      CreateDerivativesJob.perform_later(file_set.id.to_s)
+      CharacterizationJob.perform_later(file_set.id.to_s)
       file_set
     end
   end

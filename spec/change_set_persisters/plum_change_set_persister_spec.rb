@@ -114,12 +114,20 @@ RSpec.describe PlumChangeSetPersister do
       original_file_node = file_metadata_nodes.find { |x| x.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }
 
       expect(original_file_node.file_identifiers.length).to eq 1
+      expect(original_file_node.width).to eq ["200"]
+      expect(original_file_node.height).to eq ["287"]
+      expect(original_file_node.mime_type).to eq ["image/tiff"]
+      expect(original_file_node.checksum[0].sha256).to eq "547c81b080eb2d7c09e363a670c46960ac15a6821033263867dd59a31376509c"
+      expect(original_file_node.checksum[0].md5).to eq "2a28fb702286782b2cbf2ed9a5041ab1"
+      expect(original_file_node.checksum[0].sha1).to eq "1b95e65efc3aefeac1f347218ab6f193328d70f5"
+
       original_file = Valkyrie::StorageAdapter.find_by(id: original_file_node.file_identifiers.first)
       expect(original_file).to respond_to(:read)
 
       derivative_file_node = file_metadata_nodes.find { |x| x.use == [Valkyrie::Vocab::PCDMUse.ServiceFile] }
 
       expect(derivative_file_node).not_to be_blank
+      expect(derivative_file_node.mime_type).to eq ["image/jp2"]
       derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative_file_node.file_identifiers.first)
       expect(derivative_file).not_to be_blank
       expect(derivative_file.io.path).to start_with(Rails.root.join("tmp", "derivatives").to_s)

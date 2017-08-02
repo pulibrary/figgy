@@ -34,6 +34,14 @@ class Jp2DerivativeService
   end
 
   def create_derivatives
+    run_derivatives
+    change_set.files = [build_file]
+    change_set_persister.buffer_into_index do |buffered_persister|
+      buffered_persister.save(change_set: change_set)
+    end
+  end
+
+  def run_derivatives
     Hydra::Derivatives::Jpeg2kImageDerivatives.create(
       filename,
       outputs: [
@@ -45,8 +53,6 @@ class Jp2DerivativeService
         url: URI("file://#{temporary_output.path}")
       ]
     )
-    change_set.files = [build_file]
-    change_set_persister.save(change_set: change_set)
   end
 
   def cleanup_derivatives; end
@@ -62,7 +68,7 @@ class Jp2DerivativeService
   end
 
   def build_file
-    IoDecorator.new(temporary_output, "intermediate_file.jp2", mime_type, use)
+    IoDecorator.new(temporary_output, "intermediate_file.jp2", "image/jp2", use)
   end
 
   def use

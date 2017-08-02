@@ -39,7 +39,7 @@ RSpec.describe ScannedResourcesController do
         resource = FactoryGirl.create_for_repository(:scanned_resource)
         # Ensure that indexing is always safe and done at the end.
         allow(Valkyrie::MetadataAdapter.find(:index_solr)).to receive(:persister).and_return(Valkyrie::MetadataAdapter.find(:index_solr).persister)
-        allow(Valkyrie::MetadataAdapter.find(:index_solr).persister).to receive(:save)
+        allow(Valkyrie::MetadataAdapter.find(:index_solr).persister).to receive(:save).and_call_original
 
         post :browse_everything_files, params: { id: resource.id, selected_files: params["selected_files"] }
         reloaded = adapter.query_service.find_by(id: resource.id)
