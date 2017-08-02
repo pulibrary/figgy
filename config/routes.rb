@@ -62,6 +62,7 @@ Rails.application.routes.draw do
       member do
         get :file_manager
         get :structure
+        get :manifest, defaults: { format: :json }
         post :browse_everything_files
       end
     end
@@ -72,4 +73,13 @@ Rails.application.routes.draw do
   get '/catalog/parent/:parent_id/:id', to: 'catalog#show', as: :parent_solr_document
 
   mount BrowseEverything::Engine => '/browse'
+
+  if Rails.env.development? || Rails.env.test?
+    mount Riiif::Engine => '/image-service', as: 'riiif'
+  end
+
+  require 'sidekiq/web'
+  authenticate :user do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 end

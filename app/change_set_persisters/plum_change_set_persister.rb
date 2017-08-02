@@ -1,22 +1,26 @@
 # frozen_string_literal: true
 class PlumChangeSetPersister
-  attr_reader :metadata_adapter, :storage_adapter
+  attr_reader :metadata_adapter, :storage_adapter, :created_file_sets
   delegate :persister, :query_service, to: :metadata_adapter
-  def initialize(metadata_adapter:, storage_adapter:)
+  def initialize(metadata_adapter:, storage_adapter:, transaction: false)
     @metadata_adapter = metadata_adapter
     @storage_adapter = storage_adapter
+    @transaction = transaction
   end
 
   def save(change_set:)
     before_save(change_set: change_set)
     persister.save(resource: change_set.resource).tap do |output|
       after_save(change_set: change_set, updated_resource: output)
+      after_commit unless transaction?
     end
   end
 
   def delete(change_set:)
     before_delete(change_set: change_set)
-    persister.delete(resource: change_set.resource)
+    persister.delete(resource: change_set.resource).tap do
+      after_commit unless transaction?
+    end
   end
 
   def save_all(change_sets:)
@@ -25,14 +29,22 @@ class PlumChangeSetPersister
     end
   end
 
-  def buffer_into_index(&block)
+  def buffer_into_index
     metadata_adapter.persister.buffer_into_index do |buffered_adapter|
-      with(metadata_adapter: buffered_adapter, &block)
+      with(metadata_adapter: buffered_adapter) do |buffered_changeset_persister|
+        yield(buffered_changeset_persister)
+        @created_file_sets = buffered_changeset_persister.created_file_sets
+      end
     end
+    after_commit
+  end
+
+  def transaction?
+    @transaction
   end
 
   def with(metadata_adapter:)
-    yield self.class.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter)
+    yield self.class.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter, transaction: true)
   end
 
   private
@@ -69,7 +81,15 @@ class PlumChangeSetPersister
 
     def create_files(change_set:)
       appender = FileAppender.new(storage_adapter: storage_adapter, persister: persister, files: files(change_set: change_set))
-      appender.append_to(change_set.resource)
+      @created_file_sets = appender.append_to(change_set.resource)
+    end
+
+    def after_commit
+      return unless @created_file_sets
+      @created_file_sets.each do |file_set|
+        next unless file_set.instance_of?(FileSet)
+        CharacterizationJob.perform_later(file_set.id.to_s)
+      end
     end
 
     def files(change_set:)

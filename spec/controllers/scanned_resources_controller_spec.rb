@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'rails_helper'
+include ActionDispatch::TestProcess
 
 RSpec.describe ScannedResourcesController do
   let(:user) { nil }
@@ -47,6 +48,9 @@ RSpec.describe ScannedResourcesController do
         expect(reloaded.member_ids.length).to eq 1
         expect(reloaded.pending_uploads).to be_empty
         expect(Valkyrie::MetadataAdapter.find(:index_solr).persister).not_to have_received(:save)
+
+        file_sets = Valkyrie.config.metadata_adapter.query_service.find_members(resource: reloaded)
+        expect(file_sets.first.member_ids.length).to eq 2
       end
       it "tracks pending uploads" do
         resource = FactoryGirl.create_for_repository(:scanned_resource)
@@ -61,6 +65,19 @@ RSpec.describe ScannedResourcesController do
         expect(pending_upload.file_size).to eq [file.size]
         expect(pending_upload.created_at).not_to be_blank
       end
+    end
+  end
+
+  describe "GET /concern/scanned_resources/:id/manifest" do
+    let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+    it "returns a IIIF manifest for a resource with a file" do
+      scanned_resource = FactoryGirl.create_for_repository(:scanned_resource, files: [file])
+
+      get :manifest, params: { id: scanned_resource.id.to_s, format: :json }
+      manifest_response = MultiJson.load(response.body, symbolize_keys: true)
+
+      expect(response.headers["Content-Type"]).to include "application/json"
+      expect(manifest_response[:sequences].length).to eq 1
     end
   end
 end

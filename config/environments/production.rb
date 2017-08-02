@@ -32,5 +32,6 @@ Rails.application.configure do
     "Cache-Control" => "public, max-age=31557600"
   }
   config.action_mailer.default_url_options = { host: ENV.fetch("APPLICATION_HOST") }
+  config.action_controller.action_on_unpermitted_parameters = false
 end
 Rack::Timeout.timeout = (ENV["RACK_TIMEOUT"] || 10).to_i
