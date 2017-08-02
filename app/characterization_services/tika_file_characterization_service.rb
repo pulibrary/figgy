@@ -30,10 +30,18 @@ class TikaFileCharacterizationService
   # Provides the SHA256 hexdigest string for the file
   # @return String
   def checksum
+    md5 = Digest::MD5.new
+    sha256 = Digest::SHA256.new
+    sha1 = Digest::SHA1.new
+    while (chunk = file_object.read(1024))
+      md5.update chunk
+      sha256.update chunk
+      sha1.update chunk
+    end
     MultiChecksum.new(
-      sha256: Digest::SHA256.file(filename).hexdigest,
-      md5: Digest::MD5.file(filename).hexdigest,
-      sha1: Digest::SHA1.file(filename).hexdigest
+      sha256: sha256,
+      md5: md5,
+      sha1: sha1
     )
   end
 
