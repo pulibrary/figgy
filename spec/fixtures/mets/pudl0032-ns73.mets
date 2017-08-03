@@ -1,0 +1,2760 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OBJID="ark:/88435/bv73c047c" TYPE="CompiledDigitalObject" xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd">
+  <mets:metsHdr CREATEDATE="2016-03-14T14:24:54.358-04:00" LASTMODDATE="2016-03-14T14:24:54.358-04:00">
+    <mets:metsDocumentID TYPE="PUDL">pudl0032/ns73.mets</mets:metsDocumentID>
+  </mets:metsHdr>
+  <mets:dmdSec ID="mlys4">
+    <mets:mdRef LOCTYPE="URL" MDTYPE="MARC" xlink:href="https://bibdata.princeton.edu/bibliographic/4790889"/>
+  </mets:dmdSec>
+  <mets:dmdSec ID="wvyxo">
+    <mets:mdWrap MDTYPE="MODS">
+      <mets:xmlData>
+        <mods xmlns="http://www.loc.gov/mods/v3" version="3.4" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd">
+          <typeOfResource manuscript="yes">text</typeOfResource>
+          <titleInfo altRepGroup="1" lang="ara" script="Latn" supplied="yes">
+            <title>Sharḥ ḥadīth al-ghamāmah</title>
+          </titleInfo>
+          <titleInfo altRepGroup="1" lang="ara" script="Arab" supplied="yes">
+            <title>شرح حديث الغمامة</title>
+          </titleInfo>
+          <name altRepGroup="2" authority="naf" lang="ara" script="Latn" type="personal">
+            <namePart type="family">Qummī</namePart>
+            <namePart type="given">Muḥammad ibn Mufīd</namePart>
+            <role>
+              <roleTerm authority="marcrelator" type="code">cre</roleTerm>
+            </role>
+          </name>
+          <name altRepGroup="2" lang="ara" script="Arab" type="personal">
+            <namePart type="family">قمي</namePart>
+            <namePart type="given">محمد بن مفيد</namePart>
+            <role>
+              <roleTerm authority="marcrelator" type="code">cre</roleTerm>
+            </role>
+          </name>
+          <genre>Manuscripts, Arabic - 17th century</genre>
+          <originInfo>
+            <dateCreated>[between 168- and 18--?]</dateCreated>
+            <dateCreated encoding="w3cdtf" keyDate="yes" qualifier="approximate">1680</dateCreated>
+            <dateCreated encoding="w3cdtf" qualifier="approximate">1899</dateCreated>
+          </originInfo>
+          <language>
+            <languageTerm authority="iso639-2b" type="code">ara</languageTerm>
+          </language>
+          <physicalDescription>
+            <extent>92 leaves : paper ; 217 × 155 (153 × 73) mm. bound to 220 × 158 mm.</extent>
+          </physicalDescription>
+          <abstract>Commentary on a ḥadīth, completed in Iṣfahān in 1099 H. / 1688 or 89 (GAL)</abstract>
+          <note>Ms. codex</note>
+          <note type="titleSrc">Title from R. Mach and E. Ormsby. Handlist (New Series)</note>
+          <note type="physicalDetails">21 lines per page. Written in medium small naskh in black ink with use of red. European glazed paper with watermark. Foliation in pencil using Western numerals.
+      No. "514" in Arabic script on a label pasted on the spine (vertical ; repeated on fol. 1a). No. "412" in Arabic script on a label pasted on the upper cover (repeated on fol. 1a)</note>
+          <note type="physicalDetails">Collation: Paper ; fol. 92 ; 1-11⁸ 12⁴ ; catchword on the verso of each leaf</note>
+          <note type="bindingInfo">Decorated paper pasted over paper pasteboards</note>
+          <note script="Arab" type="incipit"> الحمد لله مدير الادوار ومعيد الاكوان طبقا عن طبق … وبعد فيقول … [2أ] … محمّد سعيد الشريف القمى … انّى كنت شديد المحرص للاستضائة بانوار القدس</note>
+          <note script="Arab" type="explicit"> فان اصبنا فى ذلك فمن الله الاكبر ومن انوار الائمة الاثنى عشر وان اخطانا فمن نفسنا منبع الشر والضرّ ونستغفر الله من … اللسان و … اهل الشك والعدوان ومن
+      الله العصمة عن الخطاء والى الله المشتكى</note>
+          <subject authority="lcsh">
+            <topic>Hadith (Shiites)</topic>
+            <topic>Commentaries</topic>
+            <genre>Early works to 1800</genre>
+          </subject>
+          <subject authority="lcsh">
+            <topic>Shīʻah</topic>
+            <topic>Doctrines</topic>
+            <temporal>17th century</temporal>
+          </subject>
+          <subject authority="lcsh">
+            <topic>Manuscripts, Arabic</topic>
+            <geographic>New Jersey</geographic>
+            <geographic>Princeton</geographic>
+          </subject>
+          <relatedItem type="isReferencedBy">
+            <note>Mach, R. and E. Ormsby. Handlist (New Series), 1341</note>
+          </relatedItem>
+          <relatedItem type="isReferencedBy">
+            <note>Brockelmann, C. GAL, SII, 579/3b</note>
+          </relatedItem>
+          <relatedItem type="host">
+            <titleInfo>
+              <title>Islamic Manuscripts Collection</title>
+            </titleInfo>
+            <location>
+              <url>http://pudl.princeton.edu/collections/pudl0032</url>
+            </location>
+          </relatedItem>
+          <location>
+            <physicalLocation type="text">Princeton University Library. Department of Rare Books and Special Collections. Manuscripts Collection</physicalLocation>
+            <physicalLocation authority="marcorg" type="code">NjP</physicalLocation>
+            <holdingSimple>
+              <copyInformation>
+                <subLocation>mss</subLocation>
+                <shelfLocator>Islamic Manuscripts, New Series no. 73</shelfLocator>
+              </copyInformation>
+            </holdingSimple>
+          </location>
+          <accessCondition type="useAndReproduction" xlink:href="http://www.princeton.edu/~rbsc/research/rights.html"/>
+          <accessCondition type="restrictionOnAccess" xlink:href="http://www.princeton.edu/~rbsc/research/rules.html"/>
+          <recordInfo>
+            <recordContentSource authority="marcorg">PUL</recordContentSource>
+            <recordIdentifier>http://diglib.princeton.edu/mdata/pudl0032/ns73.mods</recordIdentifier>
+            <recordOrigin>http://catalog.princeton.edu/cgi-bin/Pwebrecon.cgi?BBID=4790889</recordOrigin>
+          </recordInfo>
+        </mods>
+      </mets:xmlData>
+    </mets:mdWrap>
+  </mets:dmdSec>
+  <mets:fileSec>
+    <mets:fileGrp USE="thumbnail">
+      <mets:file ID="jaie2" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000001.tif"/>
+      </mets:file>
+    </mets:fileGrp>
+    <mets:fileGrp USE="masters">
+      <mets:file CHECKSUM="aa2c70843bbd652b0a8ba426b7bc9211c547f9de" CHECKSUMTYPE="SHA-1" ID="gjpt0" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000001.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="fa82535e33a8dc15b0b24e3cbd6323e7c974a94a" CHECKSUMTYPE="SHA-1" ID="i6wt6" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000002.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="1ffec33048911228b4a771ec41db7cbe394a75dd" CHECKSUMTYPE="SHA-1" ID="goszd" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000003.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="75b9361cceb1f6e55e0aefe5ad1fe9502bed7a88" CHECKSUMTYPE="SHA-1" ID="v6huf" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000004.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="8da4ab9cfbbc3667015cf5c8b8168fac6f96c95e" CHECKSUMTYPE="SHA-1" ID="x3mmf" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000005.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="b4aeccba14d3940dc1bb139e90b2835dfbb90aa7" CHECKSUMTYPE="SHA-1" ID="jups6" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000006.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="63169dc49949bc19bdcefa073b0f8d2c1362397" CHECKSUMTYPE="SHA-1" ID="vx5y2" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000007.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="33882574c2d37194804162139d6bcac9f74eab5f" CHECKSUMTYPE="SHA-1" ID="lss1c" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000008.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="14b969c4a613e5e00428eb37ba0401784f826076" CHECKSUMTYPE="SHA-1" ID="sv600" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000009.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="49fa156b036e8c83519351e46ffcd3ded6852dc8" CHECKSUMTYPE="SHA-1" ID="vu4ez" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000010.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="6290c4faae24cf3f2d52ee8db3b016778f3f0a7f" CHECKSUMTYPE="SHA-1" ID="v3ze9" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000011.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="95c7dc68f88f6e5e7ec2d0f79b05834fbff3d924" CHECKSUMTYPE="SHA-1" ID="ftmqq" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000012.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="71181c68496234ed779e85bb6a1f3baa23ffc869" CHECKSUMTYPE="SHA-1" ID="lwhzm" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000013.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="b51bf71a50d997c71e44ac2f733873588dc6ba6a" CHECKSUMTYPE="SHA-1" ID="crtiy" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000014.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="bdb6cae200349ab8644523e1f741f888f127dfd3" CHECKSUMTYPE="SHA-1" ID="yubgf" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000015.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="45a146ab005cd3509e30d5df4d627f4cabcb9164" CHECKSUMTYPE="SHA-1" ID="jgd6s" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000016.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="2b93f014df3e08be10668eae790baeb3c7450baa" CHECKSUMTYPE="SHA-1" ID="oqnep" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000017.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="2b2574d479a56a22ce007067358f684c3d667dbe" CHECKSUMTYPE="SHA-1" ID="ma57w" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000018.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="4b3a1a9c265ea93e101154256370aee7cb9a856b" CHECKSUMTYPE="SHA-1" ID="h0gmh" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000019.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="d5079c6906f5d2c3acb28e47ae24961a78076eb5" CHECKSUMTYPE="SHA-1" ID="zp1wy" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000020.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="832f176663ce778a0b6f420347a9230a598b59ad" CHECKSUMTYPE="SHA-1" ID="b37on" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000021.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="30c01daa4171278204a2b7553aae991c83e4a953" CHECKSUMTYPE="SHA-1" ID="eyrk1" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000022.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="591664c7154350adc3127baaf42a99946faf8eca" CHECKSUMTYPE="SHA-1" ID="giz9b" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000023.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="6c3e46699790d72c89e28394b562544a191d3a6e" CHECKSUMTYPE="SHA-1" ID="jogh7" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000024.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="aa2bd7c89bbb55ab1fcb724a4d8402e7261c1739" CHECKSUMTYPE="SHA-1" ID="eht4m" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000025.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="b358c750bcd5b1aa12e71a211b72bb60bb921229" CHECKSUMTYPE="SHA-1" ID="wpvbl" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000026.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="a378f902938309babdbc0c8d40c8664f6427f41d" CHECKSUMTYPE="SHA-1" ID="nz1uk" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000027.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="c216304d5a281ec08cc5b7ddf80ef56767432863" CHECKSUMTYPE="SHA-1" ID="pjjs0" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000028.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="eea1e4ccdf5607893633e66adffa2560ff80eabe" CHECKSUMTYPE="SHA-1" ID="v28im" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000029.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="6333713eabaa62bfd66565328d89a3e290772814" CHECKSUMTYPE="SHA-1" ID="oajk1" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000030.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="89dc7336678ad4b7e1f94b40f34646feb0b32a6b" CHECKSUMTYPE="SHA-1" ID="rubbs" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000031.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="46d178cd5a5ace54d4c8c3ab3fa6dd0eae1d2ad0" CHECKSUMTYPE="SHA-1" ID="qhjhr" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000032.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="7d0bbaac3e8d514703675f7aea58bbe7c30478e3" CHECKSUMTYPE="SHA-1" ID="ibwql" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000033.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="c85dc0c26e174a57a2cce0b584a5f08a7a8f86a5" CHECKSUMTYPE="SHA-1" ID="qt00r" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000034.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="e4cdd50cab4f1217962c18629697e3807be0247c" CHECKSUMTYPE="SHA-1" ID="lpk08" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000035.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="f24928c7281d9ea2e87a46c2041b1f0e839d383d" CHECKSUMTYPE="SHA-1" ID="q7448" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000036.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="f6d0880858dab8cf37ca8419000cf49d2caf98b8" CHECKSUMTYPE="SHA-1" ID="kv91l" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000037.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="2777ddb0d7deaf47b8c576a67c50660dca99eab8" CHECKSUMTYPE="SHA-1" ID="yflxp" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000038.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="a21e6ca0fc9cf03d7fb0120d4f98f3d239e39444" CHECKSUMTYPE="SHA-1" ID="m0jgw" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000039.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="d31db6c5ac7b858f0416d1dbb779a1c0e80214c8" CHECKSUMTYPE="SHA-1" ID="afthf" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000040.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="6ae8b6fb1a67e03d962fc7bb1ea6089637195e87" CHECKSUMTYPE="SHA-1" ID="nbagc" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000041.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="925d9d24e259d7ab1ee6b81f8bfd6d059f19856d" CHECKSUMTYPE="SHA-1" ID="b5w2d" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000042.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="a5f54238f8d6be4be987560c6fa0ec4548f7c8e2" CHECKSUMTYPE="SHA-1" ID="fetcs" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000043.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="61d6e382e61fa007250e0de7c7e7b277f1e5fba5" CHECKSUMTYPE="SHA-1" ID="y06zr" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000044.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="485ae03b19961f0a4d393ffc3aa8a78a081b40d0" CHECKSUMTYPE="SHA-1" ID="z262g" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000045.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="3bbfc4781f515e7c4c785a774939d30abfda6468" CHECKSUMTYPE="SHA-1" ID="pq3xr" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000046.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="d59cd7426341553dbe1cd3f05cb599833f9c0110" CHECKSUMTYPE="SHA-1" ID="z9epa" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000047.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="ae1b3c642f247caf3ee68ecb49aa67017c9ff301" CHECKSUMTYPE="SHA-1" ID="cjczl" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000048.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="9d3a1e7199e652502e7b415c9586edd85ac3f9e3" CHECKSUMTYPE="SHA-1" ID="mrxjf" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000049.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="2a8bc537afd90ced296e42515490b657522200a5" CHECKSUMTYPE="SHA-1" ID="xrs6o" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000050.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="38e0517a85e28a97e3271c1e32b98060ede64947" CHECKSUMTYPE="SHA-1" ID="nkdft" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000051.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="ec292b90580c8275bc9a38abfc7beb9b55cdf679" CHECKSUMTYPE="SHA-1" ID="ilofu" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000052.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="f10a17be2f1568a3138d116a28ac91c3952a5c51" CHECKSUMTYPE="SHA-1" ID="rj8x8" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000053.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="914bc2eed7a863c12f88e16d71fd3328647c1484" CHECKSUMTYPE="SHA-1" ID="c40ex" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000054.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="ac643c2f1490781866b5923aea6c59f5c6c5a578" CHECKSUMTYPE="SHA-1" ID="dd7td" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000055.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="7fb4de301106ae9eeb2348ac27a344960ad8e409" CHECKSUMTYPE="SHA-1" ID="w47ho" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000056.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="600ad13d0f071559771f9be16ad7d4d85d328d08" CHECKSUMTYPE="SHA-1" ID="qtw3f" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000057.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="e0932fc79e9e72ec834524121c06f8f160435825" CHECKSUMTYPE="SHA-1" ID="y9q7a" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000058.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="282796540658a300b03616c63ac1aac2329efce2" CHECKSUMTYPE="SHA-1" ID="n1ogs" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000059.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="bbc65efae9923dec5b3223204956ccc57c038351" CHECKSUMTYPE="SHA-1" ID="j4uad" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000060.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="22f9ebd620502e98b32c8430e0314e5c082ab562" CHECKSUMTYPE="SHA-1" ID="juvmr" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000061.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="43d29c9b7c7fbff37a8fc9ba58ff5fbd7f2dff3c" CHECKSUMTYPE="SHA-1" ID="dkh8r" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000062.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="1475a16a1e9e9073592e4c6f13cdfc138143fb89" CHECKSUMTYPE="SHA-1" ID="ichmu" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000063.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="4fb36562167deb5b1d4b8e05f9fba27e1472c5a3" CHECKSUMTYPE="SHA-1" ID="og75u" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000064.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="76e951ede9ea50cef60d63780aeb007e0856eea" CHECKSUMTYPE="SHA-1" ID="p5vef" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000065.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="cd044fcbfb9aecb45e2fec4b6018e93a0d6fc0f2" CHECKSUMTYPE="SHA-1" ID="bfeo6" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000066.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="13a62b6c59ad0174164fa12a205f67703741e7c6" CHECKSUMTYPE="SHA-1" ID="m32ad" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000067.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="95ef4be098484d862d7f5d4f0754146a5f511317" CHECKSUMTYPE="SHA-1" ID="khyoo" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000068.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="767f9ddd5555d832aed3973517a1428e86258167" CHECKSUMTYPE="SHA-1" ID="xa0sh" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000069.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="5cbf66c95b33e1559bc006fb7f17e05d1ec78009" CHECKSUMTYPE="SHA-1" ID="ooy1i" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000070.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="36c294e6b53768631cad4b154d5ec6d3a6152329" CHECKSUMTYPE="SHA-1" ID="rgh8a" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000071.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="717be84dfe5c5b1fec457529265a7f827aabe494" CHECKSUMTYPE="SHA-1" ID="ar1w2" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000072.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="f02e1bb9be6fb227544c0beb284a255b450c699d" CHECKSUMTYPE="SHA-1" ID="fldzx" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000073.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="64ff8a56cc9c6aeabdb3e99e901bd2231613243c" CHECKSUMTYPE="SHA-1" ID="of2ms" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000074.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="638530825f8bd44da7ce9c4e5bc45ce951d89f7d" CHECKSUMTYPE="SHA-1" ID="xy1zp" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000075.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="b5464ecbed9978f92a2a29f3bf9036494dc7ec27" CHECKSUMTYPE="SHA-1" ID="b85np" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000076.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="9feed278d041659d19218346c081c21afac00853" CHECKSUMTYPE="SHA-1" ID="oljk8" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000077.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="cae14787a498541176cded994e551b4d7929e20e" CHECKSUMTYPE="SHA-1" ID="mfpf5" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000078.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="16175735f50cb8abb837a7a22375f65db4ca5766" CHECKSUMTYPE="SHA-1" ID="c70qo" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000079.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="4961334c96eeb77d36969a27e133e3aa534516eb" CHECKSUMTYPE="SHA-1" ID="ti26d" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000080.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="60b995e8cac91442c1bc672023a3f764bef0d4d6" CHECKSUMTYPE="SHA-1" ID="ke4jl" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000081.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="b19b38fe91f88fc38e088aa7720a154e46af4d78" CHECKSUMTYPE="SHA-1" ID="k77di" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000082.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="f5ad1fcf0a8ef929b2bb33e72382d5c5f62279ea" CHECKSUMTYPE="SHA-1" ID="lsouo" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000083.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="d8730a8c774c733ea842b80c6e274872a808bbf8" CHECKSUMTYPE="SHA-1" ID="dq9wi" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000084.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="2818081669038d6630b55436b8fb396e5b68e3c0" CHECKSUMTYPE="SHA-1" ID="j5t1t" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000085.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="57eac13d58d2660f4e6c363effdc5504438c5a1f" CHECKSUMTYPE="SHA-1" ID="q4t1b" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000086.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="229e911a2cc65a2fac1e5ce789242f2b796a3304" CHECKSUMTYPE="SHA-1" ID="qhh3a" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000087.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="a42368acfeb807b68063dea968d5b4bd23fb2b20" CHECKSUMTYPE="SHA-1" ID="ugha8" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000088.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="8fbb4ddf0d3abf6b2e11eb3f5ab59e82ad52a327" CHECKSUMTYPE="SHA-1" ID="losio" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000089.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="3626683372107d1682cfddffd8f2c36ebbeb78ae" CHECKSUMTYPE="SHA-1" ID="d9mr4" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000090.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="271bc6b7faf7acffb46067cf938162106c84f391" CHECKSUMTYPE="SHA-1" ID="pm84f" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000091.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="999e04613bdfb37bc00d65ffbbccf59718803691" CHECKSUMTYPE="SHA-1" ID="i3sju" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000092.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="b69145ddf3d3afe4afbe82ba6b686b33515ecfe9" CHECKSUMTYPE="SHA-1" ID="p5yex" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000093.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="b1d4d9fea86c9c1d87ccb21327b2b98890238cd7" CHECKSUMTYPE="SHA-1" ID="i1nhi" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000094.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="72644a8b529483f794105741515939cc4d26d32d" CHECKSUMTYPE="SHA-1" ID="mrdun" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000095.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="93cebc01f87367cc0cb0d70f80be32b7930564c3" CHECKSUMTYPE="SHA-1" ID="zcbcc" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000096.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="94cfb1c591863addfe11b0ec8dc3d6374262b901" CHECKSUMTYPE="SHA-1" ID="b2h6a" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000097.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="5c914d04e068de238f0d2455dc0479a4a71e0e3b" CHECKSUMTYPE="SHA-1" ID="cxkz2" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000098.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="45b2b74bd97f691478c4ac75703480c709ad827f" CHECKSUMTYPE="SHA-1" ID="jp215" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000099.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="8e80dd3b9147db91b27928726b07399f6a39d25e" CHECKSUMTYPE="SHA-1" ID="k87qs" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000100.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="646971e0b699ca391075c7fb4cf1ed8bd7830c49" CHECKSUMTYPE="SHA-1" ID="ofy9l" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000101.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="f1f567f83b0e00b8fb5ce885561694a48b1a3260" CHECKSUMTYPE="SHA-1" ID="cske0" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000102.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="31f2e68d3b85dee88dac2cb5324f60796ce14491" CHECKSUMTYPE="SHA-1" ID="dzikx" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000103.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="f843073113c0a8c4d33693edfd7b10aaaa1a855a" CHECKSUMTYPE="SHA-1" ID="g4coo" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000104.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="54bfc4a268f41bf1ed95739306d111db9c9eda5e" CHECKSUMTYPE="SHA-1" ID="j009b" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000105.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="d4fb7f69a9fab69cb6673c6232ad92dda4795288" CHECKSUMTYPE="SHA-1" ID="xg0nh" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000106.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="493919440215f66a7c2f30b0ac61df75d273c53c" CHECKSUMTYPE="SHA-1" ID="qmuwp" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000107.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="c8ae7125546c753eeff3b324e5be5ffb33ab78e0" CHECKSUMTYPE="SHA-1" ID="pq6ct" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000108.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="97e075b0b8644ac984e6f744fa59b0aed907fbc1" CHECKSUMTYPE="SHA-1" ID="a2vl8" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000109.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="bf50e22252a636c07b346111cc412f0dbd7504ad" CHECKSUMTYPE="SHA-1" ID="wkkqx" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000110.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="2b565158504f62c17e779707bdf89ca1ba9cfdc9" CHECKSUMTYPE="SHA-1" ID="miudo" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000111.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="823b00405c4a584e1ae3d2464d71095aa337bf2e" CHECKSUMTYPE="SHA-1" ID="veqnp" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000112.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="a72f51a5700f2ca47c08db6623ad7b6fc59ec7d" CHECKSUMTYPE="SHA-1" ID="jry6o" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000113.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="9370cb9094dd94e81333b8df06eca21bb11613db" CHECKSUMTYPE="SHA-1" ID="jd351" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000114.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="f4b285bd27ba074e271c7f6b1493d48309e10164" CHECKSUMTYPE="SHA-1" ID="avth2" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000115.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="597a20e04783c55c31378980cab75db0ed8e5350" CHECKSUMTYPE="SHA-1" ID="k89rq" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000116.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="c45c7f3c1317e4189a1e17d29f10c6707f5747af" CHECKSUMTYPE="SHA-1" ID="eh9or" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000117.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="89fd926659957daa3a1aa95209171511b7409c1d" CHECKSUMTYPE="SHA-1" ID="pvr46" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000118.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="dbf611a4f6974a6cc327597a15dc0d18364637fb" CHECKSUMTYPE="SHA-1" ID="p8k75" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000119.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="e4aa30f76d6f83e5963d2b1f6a2f67f0c264ce58" CHECKSUMTYPE="SHA-1" ID="z25yw" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000120.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="a7a3de9bf86727d1383b7ee18eb0529bf3ca11b6" CHECKSUMTYPE="SHA-1" ID="vp34e" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000121.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="779d52a649f4b8dc2122bcda56e56e2ca837e6ca" CHECKSUMTYPE="SHA-1" ID="sk688" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000122.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="dfc8eaee15b8a9368c6468158f69c0907e93e57d" CHECKSUMTYPE="SHA-1" ID="kk3d4" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000123.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="8b4ce35df657c144cc1cd697289f2ccef4c71073" CHECKSUMTYPE="SHA-1" ID="jkduv" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000124.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="a6dc426e359d37a26c094127b714ed73058a6b03" CHECKSUMTYPE="SHA-1" ID="j58lw" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000125.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="234d5671e5456a85b152e84f79bc23c6c61695b" CHECKSUMTYPE="SHA-1" ID="vpy2r" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000126.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="2832296f7ec87ca64f560cd10550bc9b586d7a12" CHECKSUMTYPE="SHA-1" ID="qlv7z" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000127.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="2375fcc419a1cb0cef9306eb1a901f551847cd3e" CHECKSUMTYPE="SHA-1" ID="u9kky" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000128.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="660b0f243592a5315255a4e116164e5fd793e5a2" CHECKSUMTYPE="SHA-1" ID="dc3k5" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000129.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="9b137017b93722f9f3eef5d6cf99f620dcb44601" CHECKSUMTYPE="SHA-1" ID="v12e0" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000130.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="b78e49ae84cfa647c1677b310578393c582afb" CHECKSUMTYPE="SHA-1" ID="yfsy0" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000131.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="17e2abddc03c4498333c87ecbcd324e1cff48c07" CHECKSUMTYPE="SHA-1" ID="toib4" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000132.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="4e8b803b5449af0e9e1e0a7a926b1d002aef48ac" CHECKSUMTYPE="SHA-1" ID="patid" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000133.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="9c9aa6ae736798a39155a07c94b02a1c7f88d608" CHECKSUMTYPE="SHA-1" ID="lra68" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000134.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="7eba49d3019fffb17f432c6e04d3beb8897ec04d" CHECKSUMTYPE="SHA-1" ID="mzvyg" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000135.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="3da73a4a5db0c040ec698708daf1eef10c219de1" CHECKSUMTYPE="SHA-1" ID="nuaby" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000136.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="136f3cad0acd1b7a9f9035ca362c3f79a02e71c4" CHECKSUMTYPE="SHA-1" ID="a6jml" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000137.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="658c9f6ca872da5b89d3f97776a9f667c310710c" CHECKSUMTYPE="SHA-1" ID="tc6fw" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000138.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="b62704d7aa3f7938ef55b1e7054cefe9cdff2bf8" CHECKSUMTYPE="SHA-1" ID="judxf" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000139.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="bf0efc6ef226680ca81db4c3f8d5bd5f2e76b378" CHECKSUMTYPE="SHA-1" ID="hwi4u" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000140.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="45e3a0af82ff26d621d4f4b66bb1e642ec63705b" CHECKSUMTYPE="SHA-1" ID="eefe5" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000141.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="9c1422352c46e85295fc3b4d73553d5d7d866d13" CHECKSUMTYPE="SHA-1" ID="r8f07" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000142.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="14cc8bff656211cdb86b80392cbb81db3c2c4f30" CHECKSUMTYPE="SHA-1" ID="plb9v" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000143.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="873466435a5b69d0f3ea9f93aa1b247787e90973" CHECKSUMTYPE="SHA-1" ID="mk5yx" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000144.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="63fb11e3648add47535241b07e63eae901042468" CHECKSUMTYPE="SHA-1" ID="r7kw4" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000145.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="99ab9006fc1dedf5abc0022d13eb912cf9d05e8a" CHECKSUMTYPE="SHA-1" ID="bnw0q" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000146.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="87e88ae7d39e270764e2ee4084bb08ea6cd16c07" CHECKSUMTYPE="SHA-1" ID="z332a" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000147.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="586de0c2a1278dee816cdb7293beab8c837b3c0e" CHECKSUMTYPE="SHA-1" ID="yiwxp" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000148.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="8604bf5eaf9a83dadcba5097b0dc86781bdf862e" CHECKSUMTYPE="SHA-1" ID="ejhni" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000149.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="cf3829f500768571f95dcb78ee85903031114fb8" CHECKSUMTYPE="SHA-1" ID="i2auj" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000150.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="98d1be8491f74d159fed8d57e1904eb88d12cbd7" CHECKSUMTYPE="SHA-1" ID="is5vm" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000151.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="3416900c4834534442f80aebe6a175ace63b0407" CHECKSUMTYPE="SHA-1" ID="m5jco" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000152.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="c7c1eb57689c2086315633fd192f4b7200583a4c" CHECKSUMTYPE="SHA-1" ID="v4m15" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000153.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="168266b285349b19d31c2ac5d86d9a62c6d4a81f" CHECKSUMTYPE="SHA-1" ID="slf49" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000154.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="f2840580db8092df00724b022f5dd0bdee895d07" CHECKSUMTYPE="SHA-1" ID="w2ezw" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000155.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="359071507d3420fd68c5020a700f63448c393ef6" CHECKSUMTYPE="SHA-1" ID="apk3z" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000156.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="bf046dac6b43ab81b2bacae7c5f9b47a996a35dc" CHECKSUMTYPE="SHA-1" ID="vwazf" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000157.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="d272f985ccb438118e06ad588fce13cabe8fa37c" CHECKSUMTYPE="SHA-1" ID="loua5" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000158.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="a26c676bf2caa6fc82d9ea97e18dc4ed3aad5ef" CHECKSUMTYPE="SHA-1" ID="vkqqx" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000159.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="5c8b583952393c8a7cc25ed0881c724fb8739cdc" CHECKSUMTYPE="SHA-1" ID="v31mj" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000160.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="f5dc18f7dae3a197ed06a69e2cd7cd1209217413" CHECKSUMTYPE="SHA-1" ID="whhq9" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000161.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="b770926c120f27eaf845c5713627a453bf8ee990" CHECKSUMTYPE="SHA-1" ID="ho120" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000162.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="2c2babc04f869a786a38d2194575fca21aa7f028" CHECKSUMTYPE="SHA-1" ID="gxr7a" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000163.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="6c4cd66b72843c8a43174f4f20cc0b7366115877" CHECKSUMTYPE="SHA-1" ID="mictj" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000164.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="c9ca9fb819e021231188aab76ed8d350163a8bad" CHECKSUMTYPE="SHA-1" ID="w3uie" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000165.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="3a7eaec42c6ea8a5fd956049ad33bcff4da31fb7" CHECKSUMTYPE="SHA-1" ID="o953i" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000166.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="e5daeeb3d43325ece9a8a9e25d66021514d4b1e1" CHECKSUMTYPE="SHA-1" ID="jnvp1" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000167.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="7466347123569d1c0b2a13b1eecd88412208f715" CHECKSUMTYPE="SHA-1" ID="dd2gv" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000168.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="7912faa19606b1219f54753cb0eabd4c8e04ad99" CHECKSUMTYPE="SHA-1" ID="m36n8" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000169.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="4633ceb5dd8b6632b0e20b60a2d415201ddfd640" CHECKSUMTYPE="SHA-1" ID="dnm4k" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000170.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="ee8d50c3a2bf4e9341511c0615107c2f2fbbf6b9" CHECKSUMTYPE="SHA-1" ID="x6a4k" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000171.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="f29b0cbfa4836b338a198d791fd64a2cc48d0c1" CHECKSUMTYPE="SHA-1" ID="qosue" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000172.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="d7f389271e27b9d921b6d8e4f62e811723cda9a6" CHECKSUMTYPE="SHA-1" ID="m37hm" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000173.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="a5edff372ce2cedefaf5f13bdf78c9b125d22140" CHECKSUMTYPE="SHA-1" ID="a77bm" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000174.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="a15f09e210fb063137f26f016cf01349fe4ee447" CHECKSUMTYPE="SHA-1" ID="oj5mp" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000175.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="9cd5162f0f001209ef5c54922069c74676cf79e" CHECKSUMTYPE="SHA-1" ID="wjzw4" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000176.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="26aa0560044976d11f37a6eed0f4476c4e373b26" CHECKSUMTYPE="SHA-1" ID="rxh5c" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000177.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="cf258c68c77b7ebb2da920685a03b6a89686948" CHECKSUMTYPE="SHA-1" ID="f0ps5" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000178.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="dac0d0ab274b20db2a525b9f940862babad353cc" CHECKSUMTYPE="SHA-1" ID="kbvs8" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000179.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="c181c92d8d95f420050c287556d91cd1d781a36a" CHECKSUMTYPE="SHA-1" ID="mnx08" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000180.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="9d4bf5d2a3e90384f468bed5635f4473bbb38c60" CHECKSUMTYPE="SHA-1" ID="yblcu" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000181.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="d1f83c1dcf9043faa7a00c5f5c90da1516b1b50" CHECKSUMTYPE="SHA-1" ID="f8tht" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000182.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="5bfc96d8e392e660fd5062cd96e68d7e385c439f" CHECKSUMTYPE="SHA-1" ID="h8bwb" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000183.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="30b2950b3402ec34ac23fe67ab941d7dcd6cacef" CHECKSUMTYPE="SHA-1" ID="lhlc3" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000184.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="d7c6689d264505228a433e19bc9d3287d0a3baac" CHECKSUMTYPE="SHA-1" ID="sdkt0" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000185.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="750360f5f9a3c67c0da6bc8de14fdafad9c2b78a" CHECKSUMTYPE="SHA-1" ID="sipp0" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000186.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="a80d0630fefcdfc3b910ea3418f32d13113f2f53" CHECKSUMTYPE="SHA-1" ID="ow8b6" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000187.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="d1f3dd94e352c6ff229c13442881af2b5c47f925" CHECKSUMTYPE="SHA-1" ID="m7qyf" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/00000188.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="0000000000000000000000000000000000000000" CHECKSUMTYPE="SHA-1" ID="extra" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///tmp/pudl0032/ns73/extra.tif"/>
+      </mets:file>
+    </mets:fileGrp>
+  </mets:fileSec>
+  <mets:structMap TYPE="RelatedObjects">
+    <mets:div DMDID="mlys4 wvyxo" ID="ec9b0" LABEL="Default">
+      <mets:div CONTENTIDS="pudl0032" TYPE="IsPartOf"/>
+      <mets:div ID="aggregates" TYPE="OrderedList">
+        <mets:div ID="jypry" LABEL="image 1" ORDER="1" TYPE="Static">
+          <mets:fptr FILEID="gjpt0"/>
+        </mets:div>
+        <mets:div ID="c69yi" LABEL="image 2" ORDER="2" TYPE="Static">
+          <mets:fptr FILEID="i6wt6"/>
+        </mets:div>
+        <mets:div ID="g1oj2" LABEL="image 3" ORDER="3" TYPE="Static">
+          <mets:fptr FILEID="goszd"/>
+        </mets:div>
+        <mets:div ID="ujt24" LABEL="image 4" ORDER="4" TYPE="Static">
+          <mets:fptr FILEID="v6huf"/>
+        </mets:div>
+        <mets:div ID="aj1d3" LABEL="image 5" ORDER="5" TYPE="Static">
+          <mets:fptr FILEID="x3mmf"/>
+        </mets:div>
+        <mets:div ID="vky7r" LABEL="image 6" ORDER="6" TYPE="Static">
+          <mets:fptr FILEID="jups6"/>
+        </mets:div>
+        <mets:div ID="ipaoy" LABEL="image 7" ORDER="7" TYPE="Static">
+          <mets:fptr FILEID="vx5y2"/>
+        </mets:div>
+        <mets:div ID="d20q7" LABEL="image 8" ORDER="8" TYPE="Static">
+          <mets:fptr FILEID="lss1c"/>
+        </mets:div>
+        <mets:div ID="gz1v8" LABEL="image 9" ORDER="9" TYPE="Static">
+          <mets:fptr FILEID="sv600"/>
+        </mets:div>
+        <mets:div ID="pgtnq" LABEL="image 10" ORDER="10" TYPE="Static">
+          <mets:fptr FILEID="vu4ez"/>
+        </mets:div>
+        <mets:div ID="vt49x" LABEL="image 11" ORDER="11" TYPE="Static">
+          <mets:fptr FILEID="v3ze9"/>
+        </mets:div>
+        <mets:div ID="rcspz" LABEL="image 12" ORDER="12" TYPE="Static">
+          <mets:fptr FILEID="ftmqq"/>
+        </mets:div>
+        <mets:div ID="fpg3z" LABEL="image 13" ORDER="13" TYPE="Static">
+          <mets:fptr FILEID="lwhzm"/>
+        </mets:div>
+        <mets:div ID="avtyz" LABEL="image 14" ORDER="14" TYPE="Static">
+          <mets:fptr FILEID="crtiy"/>
+        </mets:div>
+        <mets:div ID="xi2l2" LABEL="image 15" ORDER="15" TYPE="Static">
+          <mets:fptr FILEID="yubgf"/>
+        </mets:div>
+        <mets:div ID="yc9hn" LABEL="image 16" ORDER="16" TYPE="Static">
+          <mets:fptr FILEID="jgd6s"/>
+        </mets:div>
+        <mets:div ID="tnx4j" LABEL="image 17" ORDER="17" TYPE="Static">
+          <mets:fptr FILEID="oqnep"/>
+        </mets:div>
+        <mets:div ID="skq17" LABEL="image 18" ORDER="18" TYPE="Static">
+          <mets:fptr FILEID="ma57w"/>
+        </mets:div>
+        <mets:div ID="a04tc" LABEL="image 19" ORDER="19" TYPE="Static">
+          <mets:fptr FILEID="h0gmh"/>
+        </mets:div>
+        <mets:div ID="aio8w" LABEL="image 20" ORDER="20" TYPE="Static">
+          <mets:fptr FILEID="zp1wy"/>
+        </mets:div>
+        <mets:div ID="lya00" LABEL="image 21" ORDER="21" TYPE="Static">
+          <mets:fptr FILEID="b37on"/>
+        </mets:div>
+        <mets:div ID="zmeh7" LABEL="image 22" ORDER="22" TYPE="Static">
+          <mets:fptr FILEID="eyrk1"/>
+        </mets:div>
+        <mets:div ID="i6kks" LABEL="image 23" ORDER="23" TYPE="Static">
+          <mets:fptr FILEID="giz9b"/>
+        </mets:div>
+        <mets:div ID="a50nu" LABEL="image 24" ORDER="24" TYPE="Static">
+          <mets:fptr FILEID="jogh7"/>
+        </mets:div>
+        <mets:div ID="zekel" LABEL="image 25" ORDER="25" TYPE="Static">
+          <mets:fptr FILEID="eht4m"/>
+        </mets:div>
+        <mets:div ID="eje4e" LABEL="image 26" ORDER="26" TYPE="Static">
+          <mets:fptr FILEID="wpvbl"/>
+        </mets:div>
+        <mets:div ID="s4gda" LABEL="image 27" ORDER="27" TYPE="Static">
+          <mets:fptr FILEID="nz1uk"/>
+        </mets:div>
+        <mets:div ID="u9rjk" LABEL="image 28" ORDER="28" TYPE="Static">
+          <mets:fptr FILEID="pjjs0"/>
+        </mets:div>
+        <mets:div ID="kvmly" LABEL="image 29" ORDER="29" TYPE="Static">
+          <mets:fptr FILEID="v28im"/>
+        </mets:div>
+        <mets:div ID="vltia" LABEL="image 30" ORDER="30" TYPE="Static">
+          <mets:fptr FILEID="oajk1"/>
+        </mets:div>
+        <mets:div ID="hzroj" LABEL="image 31" ORDER="31" TYPE="Static">
+          <mets:fptr FILEID="rubbs"/>
+        </mets:div>
+        <mets:div ID="n1fb1" LABEL="image 32" ORDER="32" TYPE="Static">
+          <mets:fptr FILEID="qhjhr"/>
+        </mets:div>
+        <mets:div ID="z5jvl" LABEL="image 33" ORDER="33" TYPE="Static">
+          <mets:fptr FILEID="ibwql"/>
+        </mets:div>
+        <mets:div ID="zop17" LABEL="image 34" ORDER="34" TYPE="Static">
+          <mets:fptr FILEID="qt00r"/>
+        </mets:div>
+        <mets:div ID="h08cy" LABEL="image 35" ORDER="35" TYPE="Static">
+          <mets:fptr FILEID="lpk08"/>
+        </mets:div>
+        <mets:div ID="rx3ru" LABEL="image 36" ORDER="36" TYPE="Static">
+          <mets:fptr FILEID="q7448"/>
+        </mets:div>
+        <mets:div ID="t06mz" LABEL="image 37" ORDER="37" TYPE="Static">
+          <mets:fptr FILEID="kv91l"/>
+        </mets:div>
+        <mets:div ID="ria90" LABEL="image 38" ORDER="38" TYPE="Static">
+          <mets:fptr FILEID="yflxp"/>
+        </mets:div>
+        <mets:div ID="kl06o" LABEL="image 39" ORDER="39" TYPE="Static">
+          <mets:fptr FILEID="m0jgw"/>
+        </mets:div>
+        <mets:div ID="b0abw" LABEL="image 40" ORDER="40" TYPE="Static">
+          <mets:fptr FILEID="afthf"/>
+        </mets:div>
+        <mets:div ID="yg2te" LABEL="image 41" ORDER="41" TYPE="Static">
+          <mets:fptr FILEID="nbagc"/>
+        </mets:div>
+        <mets:div ID="g24gf" LABEL="image 42" ORDER="42" TYPE="Static">
+          <mets:fptr FILEID="b5w2d"/>
+        </mets:div>
+        <mets:div ID="b6q01" LABEL="image 43" ORDER="43" TYPE="Static">
+          <mets:fptr FILEID="fetcs"/>
+        </mets:div>
+        <mets:div ID="ljo85" LABEL="image 44" ORDER="44" TYPE="Static">
+          <mets:fptr FILEID="y06zr"/>
+        </mets:div>
+        <mets:div ID="tla8e" LABEL="image 45" ORDER="45" TYPE="Static">
+          <mets:fptr FILEID="z262g"/>
+        </mets:div>
+        <mets:div ID="zd6qm" LABEL="image 46" ORDER="46" TYPE="Static">
+          <mets:fptr FILEID="pq3xr"/>
+        </mets:div>
+        <mets:div ID="odvnq" LABEL="image 47" ORDER="47" TYPE="Static">
+          <mets:fptr FILEID="z9epa"/>
+        </mets:div>
+        <mets:div ID="dn6to" LABEL="image 48" ORDER="48" TYPE="Static">
+          <mets:fptr FILEID="cjczl"/>
+        </mets:div>
+        <mets:div ID="z4r7p" LABEL="image 49" ORDER="49" TYPE="Static">
+          <mets:fptr FILEID="mrxjf"/>
+        </mets:div>
+        <mets:div ID="n3vue" LABEL="image 50" ORDER="50" TYPE="Static">
+          <mets:fptr FILEID="xrs6o"/>
+        </mets:div>
+        <mets:div ID="wetur" LABEL="image 51" ORDER="51" TYPE="Static">
+          <mets:fptr FILEID="nkdft"/>
+        </mets:div>
+        <mets:div ID="ez0ja" LABEL="image 52" ORDER="52" TYPE="Static">
+          <mets:fptr FILEID="ilofu"/>
+        </mets:div>
+        <mets:div ID="koaes" LABEL="image 53" ORDER="53" TYPE="Static">
+          <mets:fptr FILEID="rj8x8"/>
+        </mets:div>
+        <mets:div ID="bylua" LABEL="image 54" ORDER="54" TYPE="Static">
+          <mets:fptr FILEID="c40ex"/>
+        </mets:div>
+        <mets:div ID="hzdo8" LABEL="image 55" ORDER="55" TYPE="Static">
+          <mets:fptr FILEID="dd7td"/>
+        </mets:div>
+        <mets:div ID="b3l19" LABEL="image 56" ORDER="56" TYPE="Static">
+          <mets:fptr FILEID="w47ho"/>
+        </mets:div>
+        <mets:div ID="qlg0u" LABEL="image 57" ORDER="57" TYPE="Static">
+          <mets:fptr FILEID="qtw3f"/>
+        </mets:div>
+        <mets:div ID="fx66a" LABEL="image 58" ORDER="58" TYPE="Static">
+          <mets:fptr FILEID="y9q7a"/>
+        </mets:div>
+        <mets:div ID="mpyw2" LABEL="image 59" ORDER="59" TYPE="Static">
+          <mets:fptr FILEID="n1ogs"/>
+        </mets:div>
+        <mets:div ID="rx4g6" LABEL="image 60" ORDER="60" TYPE="Static">
+          <mets:fptr FILEID="j4uad"/>
+        </mets:div>
+        <mets:div ID="woa62" LABEL="image 61" ORDER="61" TYPE="Static">
+          <mets:fptr FILEID="juvmr"/>
+        </mets:div>
+        <mets:div ID="iuwea" LABEL="image 62" ORDER="62" TYPE="Static">
+          <mets:fptr FILEID="dkh8r"/>
+        </mets:div>
+        <mets:div ID="t8m49" LABEL="image 63" ORDER="63" TYPE="Static">
+          <mets:fptr FILEID="ichmu"/>
+        </mets:div>
+        <mets:div ID="ro4kc" LABEL="image 64" ORDER="64" TYPE="Static">
+          <mets:fptr FILEID="og75u"/>
+        </mets:div>
+        <mets:div ID="och0e" LABEL="image 65" ORDER="65" TYPE="Static">
+          <mets:fptr FILEID="p5vef"/>
+        </mets:div>
+        <mets:div ID="ssmri" LABEL="image 66" ORDER="66" TYPE="Static">
+          <mets:fptr FILEID="bfeo6"/>
+        </mets:div>
+        <mets:div ID="muyl8" LABEL="image 67" ORDER="67" TYPE="Static">
+          <mets:fptr FILEID="m32ad"/>
+        </mets:div>
+        <mets:div ID="tfdot" LABEL="image 68" ORDER="68" TYPE="Static">
+          <mets:fptr FILEID="khyoo"/>
+        </mets:div>
+        <mets:div ID="wm5hc" LABEL="image 69" ORDER="69" TYPE="Static">
+          <mets:fptr FILEID="xa0sh"/>
+        </mets:div>
+        <mets:div ID="d2o60" LABEL="image 70" ORDER="70" TYPE="Static">
+          <mets:fptr FILEID="ooy1i"/>
+        </mets:div>
+        <mets:div ID="ww0se" LABEL="image 71" ORDER="71" TYPE="Static">
+          <mets:fptr FILEID="rgh8a"/>
+        </mets:div>
+        <mets:div ID="vmz1l" LABEL="image 72" ORDER="72" TYPE="Static">
+          <mets:fptr FILEID="ar1w2"/>
+        </mets:div>
+        <mets:div ID="w5jph" LABEL="image 73" ORDER="73" TYPE="Static">
+          <mets:fptr FILEID="fldzx"/>
+        </mets:div>
+        <mets:div ID="fd1o7" LABEL="image 74" ORDER="74" TYPE="Static">
+          <mets:fptr FILEID="of2ms"/>
+        </mets:div>
+        <mets:div ID="mza8o" LABEL="image 75" ORDER="75" TYPE="Static">
+          <mets:fptr FILEID="xy1zp"/>
+        </mets:div>
+        <mets:div ID="yt7ju" LABEL="image 76" ORDER="76" TYPE="Static">
+          <mets:fptr FILEID="b85np"/>
+        </mets:div>
+        <mets:div ID="qfome" LABEL="image 77" ORDER="77" TYPE="Static">
+          <mets:fptr FILEID="oljk8"/>
+        </mets:div>
+        <mets:div ID="qdslo" LABEL="image 78" ORDER="78" TYPE="Static">
+          <mets:fptr FILEID="mfpf5"/>
+        </mets:div>
+        <mets:div ID="hgl1y" LABEL="image 79" ORDER="79" TYPE="Static">
+          <mets:fptr FILEID="c70qo"/>
+        </mets:div>
+        <mets:div ID="g2pas" LABEL="image 80" ORDER="80" TYPE="Static">
+          <mets:fptr FILEID="ti26d"/>
+        </mets:div>
+        <mets:div ID="t15vs" LABEL="image 81" ORDER="81" TYPE="Static">
+          <mets:fptr FILEID="ke4jl"/>
+        </mets:div>
+        <mets:div ID="cop10" LABEL="image 82" ORDER="82" TYPE="Static">
+          <mets:fptr FILEID="k77di"/>
+        </mets:div>
+        <mets:div ID="z7kyd" LABEL="image 83" ORDER="83" TYPE="Static">
+          <mets:fptr FILEID="lsouo"/>
+        </mets:div>
+        <mets:div ID="nji2d" LABEL="image 84" ORDER="84" TYPE="Static">
+          <mets:fptr FILEID="dq9wi"/>
+        </mets:div>
+        <mets:div ID="a2yue" LABEL="image 85" ORDER="85" TYPE="Static">
+          <mets:fptr FILEID="j5t1t"/>
+        </mets:div>
+        <mets:div ID="z02a3" LABEL="image 86" ORDER="86" TYPE="Static">
+          <mets:fptr FILEID="q4t1b"/>
+        </mets:div>
+        <mets:div ID="zbwz8" LABEL="image 87" ORDER="87" TYPE="Static">
+          <mets:fptr FILEID="qhh3a"/>
+        </mets:div>
+        <mets:div ID="g5mkk" LABEL="image 88" ORDER="88" TYPE="Static">
+          <mets:fptr FILEID="ugha8"/>
+        </mets:div>
+        <mets:div ID="m9ty7" LABEL="image 89" ORDER="89" TYPE="Static">
+          <mets:fptr FILEID="losio"/>
+        </mets:div>
+        <mets:div ID="cx0z9" LABEL="image 90" ORDER="90" TYPE="Static">
+          <mets:fptr FILEID="d9mr4"/>
+        </mets:div>
+        <mets:div ID="y4vvp" LABEL="image 91" ORDER="91" TYPE="Static">
+          <mets:fptr FILEID="pm84f"/>
+        </mets:div>
+        <mets:div ID="uxlin" LABEL="image 92" ORDER="92" TYPE="Static">
+          <mets:fptr FILEID="i3sju"/>
+        </mets:div>
+        <mets:div ID="nxytu" LABEL="image 93" ORDER="93" TYPE="Static">
+          <mets:fptr FILEID="p5yex"/>
+        </mets:div>
+        <mets:div ID="axtto" LABEL="image 94" ORDER="94" TYPE="Static">
+          <mets:fptr FILEID="i1nhi"/>
+        </mets:div>
+        <mets:div ID="csjbq" LABEL="image 95" ORDER="95" TYPE="Static">
+          <mets:fptr FILEID="mrdun"/>
+        </mets:div>
+        <mets:div ID="ointr" LABEL="image 96" ORDER="96" TYPE="Static">
+          <mets:fptr FILEID="zcbcc"/>
+        </mets:div>
+        <mets:div ID="s4rfk" LABEL="image 97" ORDER="97" TYPE="Static">
+          <mets:fptr FILEID="b2h6a"/>
+        </mets:div>
+        <mets:div ID="e29oz" LABEL="image 98" ORDER="98" TYPE="Static">
+          <mets:fptr FILEID="cxkz2"/>
+        </mets:div>
+        <mets:div ID="dqy9u" LABEL="image 99" ORDER="99" TYPE="Static">
+          <mets:fptr FILEID="jp215"/>
+        </mets:div>
+        <mets:div ID="n9tek" LABEL="image 100" ORDER="100" TYPE="Static">
+          <mets:fptr FILEID="k87qs"/>
+        </mets:div>
+        <mets:div ID="a539i" LABEL="image 101" ORDER="101" TYPE="Static">
+          <mets:fptr FILEID="ofy9l"/>
+        </mets:div>
+        <mets:div ID="lzv9m" LABEL="image 102" ORDER="102" TYPE="Static">
+          <mets:fptr FILEID="cske0"/>
+        </mets:div>
+        <mets:div ID="m9ddu" LABEL="image 103" ORDER="103" TYPE="Static">
+          <mets:fptr FILEID="dzikx"/>
+        </mets:div>
+        <mets:div ID="z3jo6" LABEL="image 104" ORDER="104" TYPE="Static">
+          <mets:fptr FILEID="g4coo"/>
+        </mets:div>
+        <mets:div ID="yj03t" LABEL="image 105" ORDER="105" TYPE="Static">
+          <mets:fptr FILEID="j009b"/>
+        </mets:div>
+        <mets:div ID="tebqk" LABEL="image 106" ORDER="106" TYPE="Static">
+          <mets:fptr FILEID="xg0nh"/>
+        </mets:div>
+        <mets:div ID="j1rjj" LABEL="image 107" ORDER="107" TYPE="Static">
+          <mets:fptr FILEID="qmuwp"/>
+        </mets:div>
+        <mets:div ID="oytzk" LABEL="image 108" ORDER="108" TYPE="Static">
+          <mets:fptr FILEID="pq6ct"/>
+        </mets:div>
+        <mets:div ID="lcipz" LABEL="image 109" ORDER="109" TYPE="Static">
+          <mets:fptr FILEID="a2vl8"/>
+        </mets:div>
+        <mets:div ID="zm7bk" LABEL="image 110" ORDER="110" TYPE="Static">
+          <mets:fptr FILEID="wkkqx"/>
+        </mets:div>
+        <mets:div ID="bo9i8" LABEL="image 111" ORDER="111" TYPE="Static">
+          <mets:fptr FILEID="miudo"/>
+        </mets:div>
+        <mets:div ID="i4cwq" LABEL="image 112" ORDER="112" TYPE="Static">
+          <mets:fptr FILEID="veqnp"/>
+        </mets:div>
+        <mets:div ID="x731p" LABEL="image 113" ORDER="113" TYPE="Static">
+          <mets:fptr FILEID="jry6o"/>
+        </mets:div>
+        <mets:div ID="oqcnd" LABEL="image 114" ORDER="114" TYPE="Static">
+          <mets:fptr FILEID="jd351"/>
+        </mets:div>
+        <mets:div ID="zn9yy" LABEL="image 115" ORDER="115" TYPE="Static">
+          <mets:fptr FILEID="avth2"/>
+        </mets:div>
+        <mets:div ID="oq42k" LABEL="image 116" ORDER="116" TYPE="Static">
+          <mets:fptr FILEID="k89rq"/>
+        </mets:div>
+        <mets:div ID="th27c" LABEL="image 117" ORDER="117" TYPE="Static">
+          <mets:fptr FILEID="eh9or"/>
+        </mets:div>
+        <mets:div ID="po79y" LABEL="image 118" ORDER="118" TYPE="Static">
+          <mets:fptr FILEID="pvr46"/>
+        </mets:div>
+        <mets:div ID="w65ym" LABEL="image 119" ORDER="119" TYPE="Static">
+          <mets:fptr FILEID="p8k75"/>
+        </mets:div>
+        <mets:div ID="di9jj" LABEL="image 120" ORDER="120" TYPE="Static">
+          <mets:fptr FILEID="z25yw"/>
+        </mets:div>
+        <mets:div ID="z5uza" LABEL="image 121" ORDER="121" TYPE="Static">
+          <mets:fptr FILEID="vp34e"/>
+        </mets:div>
+        <mets:div ID="qryji" LABEL="image 122" ORDER="122" TYPE="Static">
+          <mets:fptr FILEID="sk688"/>
+        </mets:div>
+        <mets:div ID="wmi6j" LABEL="image 123" ORDER="123" TYPE="Static">
+          <mets:fptr FILEID="kk3d4"/>
+        </mets:div>
+        <mets:div ID="w1pk5" LABEL="image 124" ORDER="124" TYPE="Static">
+          <mets:fptr FILEID="jkduv"/>
+        </mets:div>
+        <mets:div ID="fofxo" LABEL="image 125" ORDER="125" TYPE="Static">
+          <mets:fptr FILEID="j58lw"/>
+        </mets:div>
+        <mets:div ID="jdyi1" LABEL="image 126" ORDER="126" TYPE="Static">
+          <mets:fptr FILEID="vpy2r"/>
+        </mets:div>
+        <mets:div ID="mqqy2" LABEL="image 127" ORDER="127" TYPE="Static">
+          <mets:fptr FILEID="qlv7z"/>
+        </mets:div>
+        <mets:div ID="y95zy" LABEL="image 128" ORDER="128" TYPE="Static">
+          <mets:fptr FILEID="u9kky"/>
+        </mets:div>
+        <mets:div ID="lo1kz" LABEL="image 129" ORDER="129" TYPE="Static">
+          <mets:fptr FILEID="dc3k5"/>
+        </mets:div>
+        <mets:div ID="dtd7q" LABEL="image 130" ORDER="130" TYPE="Static">
+          <mets:fptr FILEID="v12e0"/>
+        </mets:div>
+        <mets:div ID="alxpq" LABEL="image 131" ORDER="131" TYPE="Static">
+          <mets:fptr FILEID="yfsy0"/>
+        </mets:div>
+        <mets:div ID="jqx8e" LABEL="image 132" ORDER="132" TYPE="Static">
+          <mets:fptr FILEID="toib4"/>
+        </mets:div>
+        <mets:div ID="hclrd" LABEL="image 133" ORDER="133" TYPE="Static">
+          <mets:fptr FILEID="patid"/>
+        </mets:div>
+        <mets:div ID="fd3vv" LABEL="image 134" ORDER="134" TYPE="Static">
+          <mets:fptr FILEID="lra68"/>
+        </mets:div>
+        <mets:div ID="etlmm" LABEL="image 135" ORDER="135" TYPE="Static">
+          <mets:fptr FILEID="mzvyg"/>
+        </mets:div>
+        <mets:div ID="tturv" LABEL="image 136" ORDER="136" TYPE="Static">
+          <mets:fptr FILEID="nuaby"/>
+        </mets:div>
+        <mets:div ID="x6dmi" LABEL="image 137" ORDER="137" TYPE="Static">
+          <mets:fptr FILEID="a6jml"/>
+        </mets:div>
+        <mets:div ID="c1e7s" LABEL="image 138" ORDER="138" TYPE="Static">
+          <mets:fptr FILEID="tc6fw"/>
+        </mets:div>
+        <mets:div ID="qrnx8" LABEL="image 139" ORDER="139" TYPE="Static">
+          <mets:fptr FILEID="judxf"/>
+        </mets:div>
+        <mets:div ID="jgnw2" LABEL="image 140" ORDER="140" TYPE="Static">
+          <mets:fptr FILEID="hwi4u"/>
+        </mets:div>
+        <mets:div ID="rv06p" LABEL="image 141" ORDER="141" TYPE="Static">
+          <mets:fptr FILEID="eefe5"/>
+        </mets:div>
+        <mets:div ID="s13s1" LABEL="image 142" ORDER="142" TYPE="Static">
+          <mets:fptr FILEID="r8f07"/>
+        </mets:div>
+        <mets:div ID="o433e" LABEL="image 143" ORDER="143" TYPE="Static">
+          <mets:fptr FILEID="plb9v"/>
+        </mets:div>
+        <mets:div ID="n2y3n" LABEL="image 144" ORDER="144" TYPE="Static">
+          <mets:fptr FILEID="mk5yx"/>
+        </mets:div>
+        <mets:div ID="uid13" LABEL="image 145" ORDER="145" TYPE="Static">
+          <mets:fptr FILEID="r7kw4"/>
+        </mets:div>
+        <mets:div ID="sus4j" LABEL="image 146" ORDER="146" TYPE="Static">
+          <mets:fptr FILEID="bnw0q"/>
+        </mets:div>
+        <mets:div ID="eh1l7" LABEL="image 147" ORDER="147" TYPE="Static">
+          <mets:fptr FILEID="z332a"/>
+        </mets:div>
+        <mets:div ID="v9p7b" LABEL="image 148" ORDER="148" TYPE="Static">
+          <mets:fptr FILEID="yiwxp"/>
+        </mets:div>
+        <mets:div ID="yxzlj" LABEL="image 149" ORDER="149" TYPE="Static">
+          <mets:fptr FILEID="ejhni"/>
+        </mets:div>
+        <mets:div ID="fyqa0" LABEL="image 150" ORDER="150" TYPE="Static">
+          <mets:fptr FILEID="i2auj"/>
+        </mets:div>
+        <mets:div ID="a38hv" LABEL="image 151" ORDER="151" TYPE="Static">
+          <mets:fptr FILEID="is5vm"/>
+        </mets:div>
+        <mets:div ID="ojg2e" LABEL="image 152" ORDER="152" TYPE="Static">
+          <mets:fptr FILEID="m5jco"/>
+        </mets:div>
+        <mets:div ID="u2sdq" LABEL="image 153" ORDER="153" TYPE="Static">
+          <mets:fptr FILEID="v4m15"/>
+        </mets:div>
+        <mets:div ID="yjypw" LABEL="image 154" ORDER="154" TYPE="Static">
+          <mets:fptr FILEID="slf49"/>
+        </mets:div>
+        <mets:div ID="yrzho" LABEL="image 155" ORDER="155" TYPE="Static">
+          <mets:fptr FILEID="w2ezw"/>
+        </mets:div>
+        <mets:div ID="n4fjn" LABEL="image 156" ORDER="156" TYPE="Static">
+          <mets:fptr FILEID="apk3z"/>
+        </mets:div>
+        <mets:div ID="ei7nn" LABEL="image 157" ORDER="157" TYPE="Static">
+          <mets:fptr FILEID="vwazf"/>
+        </mets:div>
+        <mets:div ID="unxao" LABEL="image 158" ORDER="158" TYPE="Static">
+          <mets:fptr FILEID="loua5"/>
+        </mets:div>
+        <mets:div ID="wzwt9" LABEL="image 159" ORDER="159" TYPE="Static">
+          <mets:fptr FILEID="vkqqx"/>
+        </mets:div>
+        <mets:div ID="lqb6h" LABEL="image 160" ORDER="160" TYPE="Static">
+          <mets:fptr FILEID="v31mj"/>
+        </mets:div>
+        <mets:div ID="xhrz7" LABEL="image 161" ORDER="161" TYPE="Static">
+          <mets:fptr FILEID="whhq9"/>
+        </mets:div>
+        <mets:div ID="f255b" LABEL="image 162" ORDER="162" TYPE="Static">
+          <mets:fptr FILEID="ho120"/>
+        </mets:div>
+        <mets:div ID="ku5wm" LABEL="image 163" ORDER="163" TYPE="Static">
+          <mets:fptr FILEID="gxr7a"/>
+        </mets:div>
+        <mets:div ID="n3bnh" LABEL="image 164" ORDER="164" TYPE="Static">
+          <mets:fptr FILEID="mictj"/>
+        </mets:div>
+        <mets:div ID="h8k69" LABEL="image 165" ORDER="165" TYPE="Static">
+          <mets:fptr FILEID="w3uie"/>
+        </mets:div>
+        <mets:div ID="oa8vd" LABEL="image 166" ORDER="166" TYPE="Static">
+          <mets:fptr FILEID="o953i"/>
+        </mets:div>
+        <mets:div ID="h8n3t" LABEL="image 167" ORDER="167" TYPE="Static">
+          <mets:fptr FILEID="jnvp1"/>
+        </mets:div>
+        <mets:div ID="p9gj5" LABEL="image 168" ORDER="168" TYPE="Static">
+          <mets:fptr FILEID="dd2gv"/>
+        </mets:div>
+        <mets:div ID="t1ezx" LABEL="image 169" ORDER="169" TYPE="Static">
+          <mets:fptr FILEID="m36n8"/>
+        </mets:div>
+        <mets:div ID="m1i2y" LABEL="image 170" ORDER="170" TYPE="Static">
+          <mets:fptr FILEID="dnm4k"/>
+        </mets:div>
+        <mets:div ID="b71g9" LABEL="image 171" ORDER="171" TYPE="Static">
+          <mets:fptr FILEID="x6a4k"/>
+        </mets:div>
+        <mets:div ID="cpvxk" LABEL="image 172" ORDER="172" TYPE="Static">
+          <mets:fptr FILEID="qosue"/>
+        </mets:div>
+        <mets:div ID="dqflo" LABEL="image 173" ORDER="173" TYPE="Static">
+          <mets:fptr FILEID="m37hm"/>
+        </mets:div>
+        <mets:div ID="my17l" LABEL="image 174" ORDER="174" TYPE="Static">
+          <mets:fptr FILEID="a77bm"/>
+        </mets:div>
+        <mets:div ID="gycfb" LABEL="image 175" ORDER="175" TYPE="Static">
+          <mets:fptr FILEID="oj5mp"/>
+        </mets:div>
+        <mets:div ID="xwbmk" LABEL="image 176" ORDER="176" TYPE="Static">
+          <mets:fptr FILEID="wjzw4"/>
+        </mets:div>
+        <mets:div ID="oqjmp" LABEL="image 177" ORDER="177" TYPE="Static">
+          <mets:fptr FILEID="rxh5c"/>
+        </mets:div>
+        <mets:div ID="f0tbz" LABEL="image 178" ORDER="178" TYPE="Static">
+          <mets:fptr FILEID="f0ps5"/>
+        </mets:div>
+        <mets:div ID="nl29a" LABEL="image 179" ORDER="179" TYPE="Static">
+          <mets:fptr FILEID="kbvs8"/>
+        </mets:div>
+        <mets:div ID="tsmdi" LABEL="image 180" ORDER="180" TYPE="Static">
+          <mets:fptr FILEID="mnx08"/>
+        </mets:div>
+        <mets:div ID="jtv98" LABEL="image 181" ORDER="181" TYPE="Static">
+          <mets:fptr FILEID="yblcu"/>
+        </mets:div>
+        <mets:div ID="ixuyv" LABEL="image 182" ORDER="182" TYPE="Static">
+          <mets:fptr FILEID="f8tht"/>
+        </mets:div>
+        <mets:div ID="zbdb8" LABEL="image 183" ORDER="183" TYPE="Static">
+          <mets:fptr FILEID="h8bwb"/>
+        </mets:div>
+        <mets:div ID="jz66u" LABEL="image 184" ORDER="184" TYPE="Static">
+          <mets:fptr FILEID="lhlc3"/>
+        </mets:div>
+        <mets:div ID="inpcb" LABEL="image 185" ORDER="185" TYPE="Static">
+          <mets:fptr FILEID="sdkt0"/>
+        </mets:div>
+        <mets:div ID="d4y61" LABEL="image 186" ORDER="186" TYPE="Static">
+          <mets:fptr FILEID="sipp0"/>
+        </mets:div>
+        <mets:div ID="n6e7s" LABEL="image 187" ORDER="187" TYPE="Static">
+          <mets:fptr FILEID="ow8b6"/>
+        </mets:div>
+        <mets:div ID="x2ta1" LABEL="image 188" ORDER="188" TYPE="Static">
+          <mets:fptr FILEID="m7qyf"/>
+        </mets:div>
+      </mets:div>
+    </mets:div>
+  </mets:structMap>
+  <mets:structMap LABEL="Foliation" TYPE="Physical">
+    <mets:div DMDID="mlys4 wvyxo" ID="cy0vu" LABEL="Sharḥ ḥadīth al-ghamāmah" TYPE="RTLBoundManuscript">
+      <mets:div ID="apnw2" LABEL="Upper cover" TYPE="UpperCover">
+        <mets:div ID="un5sd" LABEL="outside" ORDER="1" TYPE="CoverOutside">
+          <mets:fptr FILEID="gjpt0"/>
+        </mets:div>
+        <mets:div ID="gj73d" LABEL="inside" ORDER="2" TYPE="CoverInside">
+          <mets:fptr FILEID="i6wt6"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="eagn7" LABEL="f. 1" TYPE="Folio">
+        <mets:div ID="prniy" LABEL="a" ORDER="3" TYPE="Side">
+          <mets:fptr FILEID="goszd"/>
+        </mets:div>
+        <mets:div ID="uov24" LABEL="b" ORDER="4" TYPE="Side">
+          <mets:fptr FILEID="v6huf"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="naovc" LABEL="f. 2" TYPE="Folio">
+        <mets:div ID="vr579" LABEL="a" ORDER="5" TYPE="Side">
+          <mets:fptr FILEID="x3mmf"/>
+        </mets:div>
+        <mets:div ID="yzurl" LABEL="b" ORDER="6" TYPE="Side">
+          <mets:fptr FILEID="jups6"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="l1bh7" LABEL="f. 3" TYPE="Folio">
+        <mets:div ID="vr5a9" LABEL="a" ORDER="7" TYPE="Side">
+          <mets:fptr FILEID="vx5y2"/>
+        </mets:div>
+        <mets:div ID="xqsb9" LABEL="b" ORDER="8" TYPE="Side">
+          <mets:fptr FILEID="lss1c"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="uj0qa" LABEL="f. 4" TYPE="Folio">
+        <mets:div ID="o0xjx" LABEL="a" ORDER="9" TYPE="Side">
+          <mets:fptr FILEID="sv600"/>
+        </mets:div>
+        <mets:div ID="l41yq" LABEL="b" ORDER="10" TYPE="Side">
+          <mets:fptr FILEID="vu4ez"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="s0ube" LABEL="f. 5" TYPE="Folio">
+        <mets:div ID="zm450" LABEL="a" ORDER="11" TYPE="Side">
+          <mets:fptr FILEID="v3ze9"/>
+        </mets:div>
+        <mets:div ID="m0665" LABEL="b" ORDER="12" TYPE="Side">
+          <mets:fptr FILEID="ftmqq"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="cy1oh" LABEL="f. 6" TYPE="Folio">
+        <mets:div ID="b1zjj" LABEL="a" ORDER="13" TYPE="Side">
+          <mets:fptr FILEID="lwhzm"/>
+        </mets:div>
+        <mets:div ID="nboho" LABEL="b" ORDER="14" TYPE="Side">
+          <mets:fptr FILEID="crtiy"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="ii642" LABEL="f. 7" TYPE="Folio">
+        <mets:div ID="aacfs" LABEL="a" ORDER="15" TYPE="Side">
+          <mets:fptr FILEID="yubgf"/>
+        </mets:div>
+        <mets:div ID="j5shd" LABEL="b" ORDER="16" TYPE="Side">
+          <mets:fptr FILEID="jgd6s"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="c94ek" LABEL="f. 8" TYPE="Folio">
+        <mets:div ID="gfbhm" LABEL="a" ORDER="17" TYPE="Side">
+          <mets:fptr FILEID="oqnep"/>
+        </mets:div>
+        <mets:div ID="bql9u" LABEL="b" ORDER="18" TYPE="Side">
+          <mets:fptr FILEID="ma57w"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="uita1" LABEL="f. 9" TYPE="Folio">
+        <mets:div ID="miwso" LABEL="a" ORDER="19" TYPE="Side">
+          <mets:fptr FILEID="h0gmh"/>
+        </mets:div>
+        <mets:div ID="wljf2" LABEL="b" ORDER="20" TYPE="Side">
+          <mets:fptr FILEID="zp1wy"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="bhiqe" LABEL="f. 10" TYPE="Folio">
+        <mets:div ID="p2hqp" LABEL="a" ORDER="21" TYPE="Side">
+          <mets:fptr FILEID="b37on"/>
+        </mets:div>
+        <mets:div ID="lraso" LABEL="b" ORDER="22" TYPE="Side">
+          <mets:fptr FILEID="eyrk1"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="n0jpb" LABEL="f. 11" TYPE="Folio">
+        <mets:div ID="wxwy2" LABEL="a" ORDER="23" TYPE="Side">
+          <mets:fptr FILEID="giz9b"/>
+        </mets:div>
+        <mets:div ID="tzfor" LABEL="b" ORDER="24" TYPE="Side">
+          <mets:fptr FILEID="jogh7"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="cqw4d" LABEL="f. 12" TYPE="Folio">
+        <mets:div ID="dpril" LABEL="a" ORDER="25" TYPE="Side">
+          <mets:fptr FILEID="eht4m"/>
+        </mets:div>
+        <mets:div ID="nev3j" LABEL="b" ORDER="26" TYPE="Side">
+          <mets:fptr FILEID="wpvbl"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="fl2px" LABEL="f. 13" TYPE="Folio">
+        <mets:div ID="w8mml" LABEL="a" ORDER="27" TYPE="Side">
+          <mets:fptr FILEID="nz1uk"/>
+        </mets:div>
+        <mets:div ID="jnsla" LABEL="b" ORDER="28" TYPE="Side">
+          <mets:fptr FILEID="pjjs0"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="jhrst" LABEL="f. 14" TYPE="Folio">
+        <mets:div ID="kxmvg" LABEL="a" ORDER="29" TYPE="Side">
+          <mets:fptr FILEID="v28im"/>
+        </mets:div>
+        <mets:div ID="ko5zu" LABEL="b" ORDER="30" TYPE="Side">
+          <mets:fptr FILEID="oajk1"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="arxvp" LABEL="f. 15" TYPE="Folio">
+        <mets:div ID="lwxqj" LABEL="a" ORDER="31" TYPE="Side">
+          <mets:fptr FILEID="rubbs"/>
+        </mets:div>
+        <mets:div ID="emofq" LABEL="b" ORDER="32" TYPE="Side">
+          <mets:fptr FILEID="qhjhr"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="hdghm" LABEL="f. 16" TYPE="Folio">
+        <mets:div ID="iuios" LABEL="a" ORDER="33" TYPE="Side">
+          <mets:fptr FILEID="ibwql"/>
+        </mets:div>
+        <mets:div ID="pxh0h" LABEL="b" ORDER="34" TYPE="Side">
+          <mets:fptr FILEID="qt00r"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="clots" LABEL="f. 17" TYPE="Folio">
+        <mets:div ID="nk3na" LABEL="a" ORDER="35" TYPE="Side">
+          <mets:fptr FILEID="lpk08"/>
+        </mets:div>
+        <mets:div ID="b0nvt" LABEL="b" ORDER="36" TYPE="Side">
+          <mets:fptr FILEID="q7448"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="gad2y" LABEL="f. 18" TYPE="Folio">
+        <mets:div ID="flym1" LABEL="a" ORDER="37" TYPE="Side">
+          <mets:fptr FILEID="kv91l"/>
+        </mets:div>
+        <mets:div ID="k56k8" LABEL="b" ORDER="38" TYPE="Side">
+          <mets:fptr FILEID="yflxp"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="xm4es" LABEL="f. 19" TYPE="Folio">
+        <mets:div ID="vmnqs" LABEL="a" ORDER="39" TYPE="Side">
+          <mets:fptr FILEID="m0jgw"/>
+        </mets:div>
+        <mets:div ID="o8z03" LABEL="b" ORDER="40" TYPE="Side">
+          <mets:fptr FILEID="afthf"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="nbfnr" LABEL="f. 20" TYPE="Folio">
+        <mets:div ID="j9nn3" LABEL="a" ORDER="41" TYPE="Side">
+          <mets:fptr FILEID="nbagc"/>
+        </mets:div>
+        <mets:div ID="yfvnq" LABEL="b" ORDER="42" TYPE="Side">
+          <mets:fptr FILEID="b5w2d"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="cm8g0" LABEL="f. 21" TYPE="Folio">
+        <mets:div ID="nnh56" LABEL="a" ORDER="43" TYPE="Side">
+          <mets:fptr FILEID="fetcs"/>
+        </mets:div>
+        <mets:div ID="f0al0" LABEL="b" ORDER="44" TYPE="Side">
+          <mets:fptr FILEID="y06zr"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="qsw4e" LABEL="f. 22" TYPE="Folio">
+        <mets:div ID="s4hdp" LABEL="a" ORDER="45" TYPE="Side">
+          <mets:fptr FILEID="z262g"/>
+        </mets:div>
+        <mets:div ID="j2py2" LABEL="b" ORDER="46" TYPE="Side">
+          <mets:fptr FILEID="pq3xr"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="zhnuk" LABEL="f. 23" TYPE="Folio">
+        <mets:div ID="jnt1d" LABEL="a" ORDER="47" TYPE="Side">
+          <mets:fptr FILEID="z9epa"/>
+        </mets:div>
+        <mets:div ID="v5gcr" LABEL="b" ORDER="48" TYPE="Side">
+          <mets:fptr FILEID="cjczl"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="kg77e" LABEL="f. 24" TYPE="Folio">
+        <mets:div ID="r1q8s" LABEL="a" ORDER="49" TYPE="Side">
+          <mets:fptr FILEID="mrxjf"/>
+        </mets:div>
+        <mets:div ID="shtao" LABEL="b" ORDER="50" TYPE="Side">
+          <mets:fptr FILEID="xrs6o"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="fd06b" LABEL="f. 25" TYPE="Folio">
+        <mets:div ID="g1uxg" LABEL="a" ORDER="51" TYPE="Side">
+          <mets:fptr FILEID="nkdft"/>
+        </mets:div>
+        <mets:div ID="co2rs" LABEL="b" ORDER="52" TYPE="Side">
+          <mets:fptr FILEID="ilofu"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="ns400" LABEL="f. 26" TYPE="Folio">
+        <mets:div ID="mltmk" LABEL="a" ORDER="53" TYPE="Side">
+          <mets:fptr FILEID="rj8x8"/>
+        </mets:div>
+        <mets:div ID="ygprn" LABEL="b" ORDER="54" TYPE="Side">
+          <mets:fptr FILEID="c40ex"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="fbek0" LABEL="f. 27" TYPE="Folio">
+        <mets:div ID="tv1pm" LABEL="a" ORDER="55" TYPE="Side">
+          <mets:fptr FILEID="dd7td"/>
+        </mets:div>
+        <mets:div ID="jcejx" LABEL="b" ORDER="56" TYPE="Side">
+          <mets:fptr FILEID="w47ho"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="z7f2r" LABEL="f. 28" TYPE="Folio">
+        <mets:div ID="c2ed7" LABEL="a" ORDER="57" TYPE="Side">
+          <mets:fptr FILEID="qtw3f"/>
+        </mets:div>
+        <mets:div ID="dkqgh" LABEL="b" ORDER="58" TYPE="Side">
+          <mets:fptr FILEID="y9q7a"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="hp561" LABEL="f. 29" TYPE="Folio">
+        <mets:div ID="r1elk" LABEL="a" ORDER="59" TYPE="Side">
+          <mets:fptr FILEID="n1ogs"/>
+        </mets:div>
+        <mets:div ID="iihl4" LABEL="b" ORDER="60" TYPE="Side">
+          <mets:fptr FILEID="j4uad"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="r3qdx" LABEL="f. 30" TYPE="Folio">
+        <mets:div ID="w30fr" LABEL="a" ORDER="61" TYPE="Side">
+          <mets:fptr FILEID="juvmr"/>
+        </mets:div>
+        <mets:div ID="jmg56" LABEL="b" ORDER="62" TYPE="Side">
+          <mets:fptr FILEID="dkh8r"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="h5ld1" LABEL="f. 31" TYPE="Folio">
+        <mets:div ID="wj285" LABEL="a" ORDER="63" TYPE="Side">
+          <mets:fptr FILEID="ichmu"/>
+        </mets:div>
+        <mets:div ID="y20o2" LABEL="b" ORDER="64" TYPE="Side">
+          <mets:fptr FILEID="og75u"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="dhpqe" LABEL="f. 32" TYPE="Folio">
+        <mets:div ID="por93" LABEL="a" ORDER="65" TYPE="Side">
+          <mets:fptr FILEID="p5vef"/>
+        </mets:div>
+        <mets:div ID="nu9eh" LABEL="b" ORDER="66" TYPE="Side">
+          <mets:fptr FILEID="bfeo6"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="zmjfa" LABEL="f. 33" TYPE="Folio">
+        <mets:div ID="ft9sg" LABEL="a" ORDER="67" TYPE="Side">
+          <mets:fptr FILEID="m32ad"/>
+        </mets:div>
+        <mets:div ID="lqn63" LABEL="b" ORDER="68" TYPE="Side">
+          <mets:fptr FILEID="khyoo"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="prm1h" LABEL="f. 34" TYPE="Folio">
+        <mets:div ID="x68d6" LABEL="a" ORDER="69" TYPE="Side">
+          <mets:fptr FILEID="xa0sh"/>
+        </mets:div>
+        <mets:div ID="zerxe" LABEL="b" ORDER="70" TYPE="Side">
+          <mets:fptr FILEID="ooy1i"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="tgn16" LABEL="f. 35" TYPE="Folio">
+        <mets:div ID="oo6oz" LABEL="a" ORDER="71" TYPE="Side">
+          <mets:fptr FILEID="rgh8a"/>
+        </mets:div>
+        <mets:div ID="tb8m6" LABEL="b" ORDER="72" TYPE="Side">
+          <mets:fptr FILEID="ar1w2"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="scc86" LABEL="f. 36" TYPE="Folio">
+        <mets:div ID="q9n1w" LABEL="a" ORDER="73" TYPE="Side">
+          <mets:fptr FILEID="fldzx"/>
+        </mets:div>
+        <mets:div ID="eib5h" LABEL="b" ORDER="74" TYPE="Side">
+          <mets:fptr FILEID="of2ms"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="q3prl" LABEL="f. 37" TYPE="Folio">
+        <mets:div ID="f67gm" LABEL="a" ORDER="75" TYPE="Side">
+          <mets:fptr FILEID="xy1zp"/>
+        </mets:div>
+        <mets:div ID="how18" LABEL="b" ORDER="76" TYPE="Side">
+          <mets:fptr FILEID="b85np"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="jchbv" LABEL="f. 38" TYPE="Folio">
+        <mets:div ID="ji5fi" LABEL="a" ORDER="77" TYPE="Side">
+          <mets:fptr FILEID="oljk8"/>
+        </mets:div>
+        <mets:div ID="yol23" LABEL="b" ORDER="78" TYPE="Side">
+          <mets:fptr FILEID="mfpf5"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="ev7t1" LABEL="f. 39" TYPE="Folio">
+        <mets:div ID="akvqo" LABEL="a" ORDER="79" TYPE="Side">
+          <mets:fptr FILEID="c70qo"/>
+        </mets:div>
+        <mets:div ID="kskld" LABEL="b" ORDER="80" TYPE="Side">
+          <mets:fptr FILEID="ti26d"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="ayfmx" LABEL="f. 40" TYPE="Folio">
+        <mets:div ID="t3zwp" LABEL="a" ORDER="81" TYPE="Side">
+          <mets:fptr FILEID="ke4jl"/>
+        </mets:div>
+        <mets:div ID="jtyvr" LABEL="b" ORDER="82" TYPE="Side">
+          <mets:fptr FILEID="k77di"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="bpb6a" LABEL="f. 41" TYPE="Folio">
+        <mets:div ID="n5rdn" LABEL="a" ORDER="83" TYPE="Side">
+          <mets:fptr FILEID="lsouo"/>
+        </mets:div>
+        <mets:div ID="pnrbe" LABEL="b" ORDER="84" TYPE="Side">
+          <mets:fptr FILEID="dq9wi"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="zz2yp" LABEL="f. 42" TYPE="Folio">
+        <mets:div ID="eq53y" LABEL="a" ORDER="85" TYPE="Side">
+          <mets:fptr FILEID="j5t1t"/>
+        </mets:div>
+        <mets:div ID="ugxwj" LABEL="b" ORDER="86" TYPE="Side">
+          <mets:fptr FILEID="q4t1b"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="jaldx" LABEL="f. 43" TYPE="Folio">
+        <mets:div ID="s952x" LABEL="a" ORDER="87" TYPE="Side">
+          <mets:fptr FILEID="qhh3a"/>
+        </mets:div>
+        <mets:div ID="zl9r9" LABEL="b" ORDER="88" TYPE="Side">
+          <mets:fptr FILEID="ugha8"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="c95c4" LABEL="f. 44" TYPE="Folio">
+        <mets:div ID="kue2n" LABEL="a" ORDER="89" TYPE="Side">
+          <mets:fptr FILEID="losio"/>
+        </mets:div>
+        <mets:div ID="g8tq5" LABEL="b" ORDER="90" TYPE="Side">
+          <mets:fptr FILEID="d9mr4"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="pgiob" LABEL="f. 45" TYPE="Folio">
+        <mets:div ID="onvm4" LABEL="a" ORDER="91" TYPE="Side">
+          <mets:fptr FILEID="pm84f"/>
+        </mets:div>
+        <mets:div ID="vm224" LABEL="b" ORDER="92" TYPE="Side">
+          <mets:fptr FILEID="i3sju"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="zmamh" LABEL="f. 46" TYPE="Folio">
+        <mets:div ID="euv0t" LABEL="a" ORDER="93" TYPE="Side">
+          <mets:fptr FILEID="p5yex"/>
+        </mets:div>
+        <mets:div ID="b0ey2" LABEL="b" ORDER="94" TYPE="Side">
+          <mets:fptr FILEID="i1nhi"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="bcu0v" LABEL="f. 47" TYPE="Folio">
+        <mets:div ID="p9mhe" LABEL="a" ORDER="95" TYPE="Side">
+          <mets:fptr FILEID="mrdun"/>
+        </mets:div>
+        <mets:div ID="vz8uo" LABEL="b" ORDER="96" TYPE="Side">
+          <mets:fptr FILEID="zcbcc"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="ir24q" LABEL="f. 48" TYPE="Folio">
+        <mets:div ID="h4egx" LABEL="a" ORDER="97" TYPE="Side">
+          <mets:fptr FILEID="b2h6a"/>
+        </mets:div>
+        <mets:div ID="oaqvp" LABEL="b" ORDER="98" TYPE="Side">
+          <mets:fptr FILEID="cxkz2"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="svm29" LABEL="f. 49" TYPE="Folio">
+        <mets:div ID="y7c47" LABEL="a" ORDER="99" TYPE="Side">
+          <mets:fptr FILEID="jp215"/>
+        </mets:div>
+        <mets:div ID="l9ajt" LABEL="b" ORDER="100" TYPE="Side">
+          <mets:fptr FILEID="k87qs"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="ay10l" LABEL="f. 50" TYPE="Folio">
+        <mets:div ID="r2bfb" LABEL="a" ORDER="101" TYPE="Side">
+          <mets:fptr FILEID="ofy9l"/>
+        </mets:div>
+        <mets:div ID="gkrn9" LABEL="b" ORDER="102" TYPE="Side">
+          <mets:fptr FILEID="cske0"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="ugdtw" LABEL="f. 51" TYPE="Folio">
+        <mets:div ID="y0nea" LABEL="a" ORDER="103" TYPE="Side">
+          <mets:fptr FILEID="dzikx"/>
+        </mets:div>
+        <mets:div ID="g7k05" LABEL="b" ORDER="104" TYPE="Side">
+          <mets:fptr FILEID="g4coo"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="bzhv7" LABEL="f. 52" TYPE="Folio">
+        <mets:div ID="jxntj" LABEL="a" ORDER="105" TYPE="Side">
+          <mets:fptr FILEID="j009b"/>
+        </mets:div>
+        <mets:div ID="kmkts" LABEL="b" ORDER="106" TYPE="Side">
+          <mets:fptr FILEID="xg0nh"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="wnjfl" LABEL="f. 53" TYPE="Folio">
+        <mets:div ID="k94by" LABEL="a" ORDER="107" TYPE="Side">
+          <mets:fptr FILEID="qmuwp"/>
+        </mets:div>
+        <mets:div ID="l60w5" LABEL="b" ORDER="108" TYPE="Side">
+          <mets:fptr FILEID="pq6ct"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="s27tx" LABEL="f. 54" TYPE="Folio">
+        <mets:div ID="p42b8" LABEL="a" ORDER="109" TYPE="Side">
+          <mets:fptr FILEID="a2vl8"/>
+        </mets:div>
+        <mets:div ID="ihkwu" LABEL="b" ORDER="110" TYPE="Side">
+          <mets:fptr FILEID="wkkqx"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="h3975" LABEL="f. 55" TYPE="Folio">
+        <mets:div ID="cxs18" LABEL="a" ORDER="111" TYPE="Side">
+          <mets:fptr FILEID="miudo"/>
+        </mets:div>
+        <mets:div ID="cnzkk" LABEL="b" ORDER="112" TYPE="Side">
+          <mets:fptr FILEID="veqnp"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="hyj84" LABEL="f. 56" TYPE="Folio">
+        <mets:div ID="zfg0l" LABEL="a" ORDER="113" TYPE="Side">
+          <mets:fptr FILEID="jry6o"/>
+        </mets:div>
+        <mets:div ID="pm9wy" LABEL="b" ORDER="114" TYPE="Side">
+          <mets:fptr FILEID="jd351"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="f74on" LABEL="f. 57" TYPE="Folio">
+        <mets:div ID="z9pd0" LABEL="a" ORDER="115" TYPE="Side">
+          <mets:fptr FILEID="avth2"/>
+        </mets:div>
+        <mets:div ID="pettc" LABEL="b" ORDER="116" TYPE="Side">
+          <mets:fptr FILEID="k89rq"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="n543b" LABEL="f. 58" TYPE="Folio">
+        <mets:div ID="txiwl" LABEL="a" ORDER="117" TYPE="Side">
+          <mets:fptr FILEID="eh9or"/>
+        </mets:div>
+        <mets:div ID="f4dbw" LABEL="b" ORDER="118" TYPE="Side">
+          <mets:fptr FILEID="pvr46"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="cwb1i" LABEL="f. 59" TYPE="Folio">
+        <mets:div ID="nkabq" LABEL="a" ORDER="119" TYPE="Side">
+          <mets:fptr FILEID="p8k75"/>
+        </mets:div>
+        <mets:div ID="sy1kg" LABEL="b" ORDER="120" TYPE="Side">
+          <mets:fptr FILEID="z25yw"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="dwgb7" LABEL="f. 60" TYPE="Folio">
+        <mets:div ID="cz6j8" LABEL="a" ORDER="121" TYPE="Side">
+          <mets:fptr FILEID="vp34e"/>
+        </mets:div>
+        <mets:div ID="j7odm" LABEL="b" ORDER="122" TYPE="Side">
+          <mets:fptr FILEID="sk688"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="kolll" LABEL="f. 61" TYPE="Folio">
+        <mets:div ID="kqcfi" LABEL="a" ORDER="123" TYPE="Side">
+          <mets:fptr FILEID="kk3d4"/>
+        </mets:div>
+        <mets:div ID="dxvpp" LABEL="b" ORDER="124" TYPE="Side">
+          <mets:fptr FILEID="jkduv"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="vvlwr" LABEL="f. 62" TYPE="Folio">
+        <mets:div ID="r8wjb" LABEL="a" ORDER="125" TYPE="Side">
+          <mets:fptr FILEID="j58lw"/>
+        </mets:div>
+        <mets:div ID="jkp7l" LABEL="b" ORDER="126" TYPE="Side">
+          <mets:fptr FILEID="vpy2r"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="psq90" LABEL="f. 63" TYPE="Folio">
+        <mets:div ID="m5wkw" LABEL="a" ORDER="127" TYPE="Side">
+          <mets:fptr FILEID="qlv7z"/>
+        </mets:div>
+        <mets:div ID="o7mw5" LABEL="b" ORDER="128" TYPE="Side">
+          <mets:fptr FILEID="u9kky"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="yjebx" LABEL="f. 64" TYPE="Folio">
+        <mets:div ID="rnk38" LABEL="a" ORDER="129" TYPE="Side">
+          <mets:fptr FILEID="dc3k5"/>
+        </mets:div>
+        <mets:div ID="ppfbm" LABEL="b" ORDER="130" TYPE="Side">
+          <mets:fptr FILEID="v12e0"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="hgrk1" LABEL="f. 65" TYPE="Folio">
+        <mets:div ID="wcrbp" LABEL="a" ORDER="131" TYPE="Side">
+          <mets:fptr FILEID="yfsy0"/>
+        </mets:div>
+        <mets:div ID="l2s8j" LABEL="b" ORDER="132" TYPE="Side">
+          <mets:fptr FILEID="toib4"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="rz8d9" LABEL="f. 66" TYPE="Folio">
+        <mets:div ID="i8dln" LABEL="a" ORDER="133" TYPE="Side">
+          <mets:fptr FILEID="patid"/>
+        </mets:div>
+        <mets:div ID="agv8m" LABEL="b" ORDER="134" TYPE="Side">
+          <mets:fptr FILEID="lra68"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="pmwva" LABEL="f. 67" TYPE="Folio">
+        <mets:div ID="wywar" LABEL="a" ORDER="135" TYPE="Side">
+          <mets:fptr FILEID="mzvyg"/>
+        </mets:div>
+        <mets:div ID="g2ge1" LABEL="b" ORDER="136" TYPE="Side">
+          <mets:fptr FILEID="nuaby"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="wy44y" LABEL="f. 68" TYPE="Folio">
+        <mets:div ID="p4pqb" LABEL="a" ORDER="137" TYPE="Side">
+          <mets:fptr FILEID="a6jml"/>
+        </mets:div>
+        <mets:div ID="wzmkc" LABEL="b" ORDER="138" TYPE="Side">
+          <mets:fptr FILEID="tc6fw"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="oezoo" LABEL="f. 69" TYPE="Folio">
+        <mets:div ID="qhakl" LABEL="a" ORDER="139" TYPE="Side">
+          <mets:fptr FILEID="judxf"/>
+        </mets:div>
+        <mets:div ID="en0rb" LABEL="b" ORDER="140" TYPE="Side">
+          <mets:fptr FILEID="hwi4u"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="qxr4d" LABEL="f. 70" TYPE="Folio">
+        <mets:div ID="l8xl0" LABEL="a" ORDER="141" TYPE="Side">
+          <mets:fptr FILEID="eefe5"/>
+        </mets:div>
+        <mets:div ID="mfe7r" LABEL="b" ORDER="142" TYPE="Side">
+          <mets:fptr FILEID="r8f07"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="dk51v" LABEL="f. 71" TYPE="Folio">
+        <mets:div ID="t6gph" LABEL="a" ORDER="143" TYPE="Side">
+          <mets:fptr FILEID="plb9v"/>
+        </mets:div>
+        <mets:div ID="ts4ru" LABEL="b" ORDER="144" TYPE="Side">
+          <mets:fptr FILEID="mk5yx"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="mokwn" LABEL="f. 72" TYPE="Folio">
+        <mets:div ID="aexbb" LABEL="a" ORDER="145" TYPE="Side">
+          <mets:fptr FILEID="r7kw4"/>
+        </mets:div>
+        <mets:div ID="kk58x" LABEL="b" ORDER="146" TYPE="Side">
+          <mets:fptr FILEID="bnw0q"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="olntb" LABEL="f. 73" TYPE="Folio">
+        <mets:div ID="pbgqb" LABEL="a" ORDER="147" TYPE="Side">
+          <mets:fptr FILEID="z332a"/>
+        </mets:div>
+        <mets:div ID="y9cwe" LABEL="b" ORDER="148" TYPE="Side">
+          <mets:fptr FILEID="yiwxp"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="ivl7m" LABEL="f. 74" TYPE="Folio">
+        <mets:div ID="ok2dx" LABEL="a" ORDER="149" TYPE="Side">
+          <mets:fptr FILEID="ejhni"/>
+        </mets:div>
+        <mets:div ID="b7mjl" LABEL="b" ORDER="150" TYPE="Side">
+          <mets:fptr FILEID="i2auj"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="vhm2m" LABEL="f. 75" TYPE="Folio">
+        <mets:div ID="y2ywq" LABEL="a" ORDER="151" TYPE="Side">
+          <mets:fptr FILEID="is5vm"/>
+        </mets:div>
+        <mets:div ID="h172d" LABEL="b" ORDER="152" TYPE="Side">
+          <mets:fptr FILEID="m5jco"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="e0922" LABEL="f. 76" TYPE="Folio">
+        <mets:div ID="hr74m" LABEL="a" ORDER="153" TYPE="Side">
+          <mets:fptr FILEID="v4m15"/>
+        </mets:div>
+        <mets:div ID="qs8bt" LABEL="b" ORDER="154" TYPE="Side">
+          <mets:fptr FILEID="slf49"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="ehmbs" LABEL="f. 77" TYPE="Folio">
+        <mets:div ID="s1nav" LABEL="a" ORDER="155" TYPE="Side">
+          <mets:fptr FILEID="w2ezw"/>
+        </mets:div>
+        <mets:div ID="lbe2m" LABEL="b" ORDER="156" TYPE="Side">
+          <mets:fptr FILEID="apk3z"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="isxcb" LABEL="f. 78" TYPE="Folio">
+        <mets:div ID="oridv" LABEL="a" ORDER="157" TYPE="Side">
+          <mets:fptr FILEID="vwazf"/>
+        </mets:div>
+        <mets:div ID="jhb3u" LABEL="b" ORDER="158" TYPE="Side">
+          <mets:fptr FILEID="loua5"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="j0e13" LABEL="f. 79" TYPE="Folio">
+        <mets:div ID="vm0js" LABEL="a" ORDER="159" TYPE="Side">
+          <mets:fptr FILEID="vkqqx"/>
+        </mets:div>
+        <mets:div ID="rsfy6" LABEL="b" ORDER="160" TYPE="Side">
+          <mets:fptr FILEID="v31mj"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="m975q" LABEL="f. 80" TYPE="Folio">
+        <mets:div ID="xi4vq" LABEL="a" ORDER="161" TYPE="Side">
+          <mets:fptr FILEID="whhq9"/>
+        </mets:div>
+        <mets:div ID="k2g6z" LABEL="b" ORDER="162" TYPE="Side">
+          <mets:fptr FILEID="ho120"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="gwel1" LABEL="f. 81" TYPE="Folio">
+        <mets:div ID="h9l9a" LABEL="a" ORDER="163" TYPE="Side">
+          <mets:fptr FILEID="gxr7a"/>
+        </mets:div>
+        <mets:div ID="wepmk" LABEL="b" ORDER="164" TYPE="Side">
+          <mets:fptr FILEID="mictj"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="lcs5o" LABEL="f. 82" TYPE="Folio">
+        <mets:div ID="m8vba" LABEL="a" ORDER="165" TYPE="Side">
+          <mets:fptr FILEID="w3uie"/>
+        </mets:div>
+        <mets:div ID="qrpgj" LABEL="b" ORDER="166" TYPE="Side">
+          <mets:fptr FILEID="o953i"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="lwowi" LABEL="f. 83" TYPE="Folio">
+        <mets:div ID="slhx8" LABEL="a" ORDER="167" TYPE="Side">
+          <mets:fptr FILEID="jnvp1"/>
+        </mets:div>
+        <mets:div ID="bycf4" LABEL="b" ORDER="168" TYPE="Side">
+          <mets:fptr FILEID="dd2gv"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="kmprq" LABEL="f. 84" TYPE="Folio">
+        <mets:div ID="q6pvj" LABEL="a" ORDER="169" TYPE="Side">
+          <mets:fptr FILEID="m36n8"/>
+        </mets:div>
+        <mets:div ID="howza" LABEL="b" ORDER="170" TYPE="Side">
+          <mets:fptr FILEID="dnm4k"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="x5jmx" LABEL="f. 85" TYPE="Folio">
+        <mets:div ID="wlyob" LABEL="a" ORDER="171" TYPE="Side">
+          <mets:fptr FILEID="x6a4k"/>
+        </mets:div>
+        <mets:div ID="b15gu" LABEL="b" ORDER="172" TYPE="Side">
+          <mets:fptr FILEID="qosue"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="b46ot" LABEL="f. 86" TYPE="Folio">
+        <mets:div ID="gyzsg" LABEL="a" ORDER="173" TYPE="Side">
+          <mets:fptr FILEID="m37hm"/>
+        </mets:div>
+        <mets:div ID="yoask" LABEL="b" ORDER="174" TYPE="Side">
+          <mets:fptr FILEID="a77bm"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="smhij" LABEL="f. 87" TYPE="Folio">
+        <mets:div ID="e6m2p" LABEL="a" ORDER="175" TYPE="Side">
+          <mets:fptr FILEID="oj5mp"/>
+        </mets:div>
+        <mets:div ID="gs4rp" LABEL="b" ORDER="176" TYPE="Side">
+          <mets:fptr FILEID="wjzw4"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="sfzpt" LABEL="f. 88" TYPE="Folio">
+        <mets:div ID="dbiaa" LABEL="a" ORDER="177" TYPE="Side">
+          <mets:fptr FILEID="rxh5c"/>
+        </mets:div>
+        <mets:div ID="xd6yf" LABEL="b" ORDER="178" TYPE="Side">
+          <mets:fptr FILEID="f0ps5"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="u5870" LABEL="f. 89" TYPE="Folio">
+        <mets:div ID="c9zf0" LABEL="a" ORDER="179" TYPE="Side">
+          <mets:fptr FILEID="kbvs8"/>
+        </mets:div>
+        <mets:div ID="sv7cu" LABEL="b" ORDER="180" TYPE="Side">
+          <mets:fptr FILEID="mnx08"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="emdpt" LABEL="f. 90" TYPE="Folio">
+        <mets:div ID="xlyf2" LABEL="a" ORDER="181" TYPE="Side">
+          <mets:fptr FILEID="yblcu"/>
+        </mets:div>
+        <mets:div ID="s5uk9" LABEL="b" ORDER="182" TYPE="Side">
+          <mets:fptr FILEID="f8tht"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="hvr5g" LABEL="f. 91" TYPE="Folio">
+        <mets:div ID="ljpxv" LABEL="a" ORDER="183" TYPE="Side">
+          <mets:fptr FILEID="h8bwb"/>
+        </mets:div>
+        <mets:div ID="hn5cj" LABEL="a" ORDER="184" TYPE="Side">
+          <mets:fptr FILEID="h8bwb"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="ogtgt" LABEL="f. 92" TYPE="Folio">
+        <mets:div ID="kbrch" LABEL="a" ORDER="185" TYPE="Side">
+          <mets:fptr FILEID="sdkt0"/>
+        </mets:div>
+        <mets:div ID="pz11w" LABEL="b" ORDER="186" TYPE="Side">
+          <mets:fptr FILEID="sipp0"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="laywe" LABEL="f. 1" TYPE="Folio">
+        <mets:div ID="vfps9" LABEL="a" ORDER="3" TYPE="Side">
+          <mets:fptr FILEID="goszd"/>
+        </mets:div>
+        <mets:div ID="ufrcf" LABEL="b" ORDER="4" TYPE="Side">
+          <mets:fptr FILEID="v6huf"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="y3jx9" LABEL="f. 2" TYPE="Folio">
+        <mets:div ID="c73if" LABEL="a" ORDER="5" TYPE="Side">
+          <mets:fptr FILEID="x3mmf"/>
+        </mets:div>
+        <mets:div ID="co9ix" LABEL="b" ORDER="6" TYPE="Side">
+          <mets:fptr FILEID="jups6"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="nckdc" LABEL="f. 3" TYPE="Folio">
+        <mets:div ID="lg50s" LABEL="a" ORDER="7" TYPE="Side">
+          <mets:fptr FILEID="vx5y2"/>
+        </mets:div>
+        <mets:div ID="iq98m" LABEL="b" ORDER="8" TYPE="Side">
+          <mets:fptr FILEID="lss1c"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="dkoma" LABEL="f. 4" TYPE="Folio">
+        <mets:div ID="fa5e8" LABEL="a" ORDER="9" TYPE="Side">
+          <mets:fptr FILEID="sv600"/>
+        </mets:div>
+        <mets:div ID="yop05" LABEL="b" ORDER="10" TYPE="Side">
+          <mets:fptr FILEID="vu4ez"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="xwvwh" LABEL="f. 5" TYPE="Folio">
+        <mets:div ID="r8n51" LABEL="a" ORDER="11" TYPE="Side">
+          <mets:fptr FILEID="v3ze9"/>
+        </mets:div>
+        <mets:div ID="u7rbc" LABEL="b" ORDER="12" TYPE="Side">
+          <mets:fptr FILEID="ftmqq"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="xdjnn" LABEL="f. 6" TYPE="Folio">
+        <mets:div ID="mkgt0" LABEL="a" ORDER="13" TYPE="Side">
+          <mets:fptr FILEID="lwhzm"/>
+        </mets:div>
+        <mets:div ID="btji2" LABEL="b" ORDER="14" TYPE="Side">
+          <mets:fptr FILEID="crtiy"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="k9he5" LABEL="f. 7" TYPE="Folio">
+        <mets:div ID="uti0e" LABEL="a" ORDER="15" TYPE="Side">
+          <mets:fptr FILEID="yubgf"/>
+        </mets:div>
+        <mets:div ID="k8aju" LABEL="b" ORDER="16" TYPE="Side">
+          <mets:fptr FILEID="jgd6s"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="pibvp" LABEL="f. 8" TYPE="Folio">
+        <mets:div ID="xpeh3" LABEL="a" ORDER="17" TYPE="Side">
+          <mets:fptr FILEID="oqnep"/>
+        </mets:div>
+        <mets:div ID="fcvd5" LABEL="b" ORDER="18" TYPE="Side">
+          <mets:fptr FILEID="ma57w"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="g7wn8" LABEL="f. 9" TYPE="Folio">
+        <mets:div ID="bcl2g" LABEL="a" ORDER="19" TYPE="Side">
+          <mets:fptr FILEID="h0gmh"/>
+        </mets:div>
+        <mets:div ID="wxh40" LABEL="b" ORDER="20" TYPE="Side">
+          <mets:fptr FILEID="zp1wy"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="xfmq6" LABEL="f. 10" TYPE="Folio">
+        <mets:div ID="t9ay1" LABEL="a" ORDER="21" TYPE="Side">
+          <mets:fptr FILEID="b37on"/>
+        </mets:div>
+        <mets:div ID="u5jcg" LABEL="b" ORDER="22" TYPE="Side">
+          <mets:fptr FILEID="eyrk1"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="wkaxg" LABEL="f. 11" TYPE="Folio">
+        <mets:div ID="vdfw9" LABEL="a" ORDER="23" TYPE="Side">
+          <mets:fptr FILEID="giz9b"/>
+        </mets:div>
+        <mets:div ID="p4pft" LABEL="b" ORDER="24" TYPE="Side">
+          <mets:fptr FILEID="jogh7"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="gjun2" LABEL="f. 12" TYPE="Folio">
+        <mets:div ID="gla62" LABEL="a" ORDER="25" TYPE="Side">
+          <mets:fptr FILEID="eht4m"/>
+        </mets:div>
+        <mets:div ID="k562z" LABEL="b" ORDER="26" TYPE="Side">
+          <mets:fptr FILEID="wpvbl"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="fr2ws" LABEL="f. 13" TYPE="Folio">
+        <mets:div ID="dpv8x" LABEL="a" ORDER="27" TYPE="Side">
+          <mets:fptr FILEID="nz1uk"/>
+        </mets:div>
+        <mets:div ID="umaeq" LABEL="b" ORDER="28" TYPE="Side">
+          <mets:fptr FILEID="pjjs0"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="t0b50" LABEL="f. 14" TYPE="Folio">
+        <mets:div ID="do8az" LABEL="a" ORDER="29" TYPE="Side">
+          <mets:fptr FILEID="v28im"/>
+        </mets:div>
+        <mets:div ID="l01tm" LABEL="b" ORDER="30" TYPE="Side">
+          <mets:fptr FILEID="oajk1"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="lcu4l" LABEL="f. 15" TYPE="Folio">
+        <mets:div ID="t6q21" LABEL="a" ORDER="31" TYPE="Side">
+          <mets:fptr FILEID="rubbs"/>
+        </mets:div>
+        <mets:div ID="az25i" LABEL="b" ORDER="32" TYPE="Side">
+          <mets:fptr FILEID="qhjhr"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="fzf9n" LABEL="f. 16" TYPE="Folio">
+        <mets:div ID="u1xoj" LABEL="a" ORDER="33" TYPE="Side">
+          <mets:fptr FILEID="ibwql"/>
+        </mets:div>
+        <mets:div ID="c7y9g" LABEL="b" ORDER="34" TYPE="Side">
+          <mets:fptr FILEID="qt00r"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="hdjks" LABEL="f. 17" TYPE="Folio">
+        <mets:div ID="y1uul" LABEL="a" ORDER="35" TYPE="Side">
+          <mets:fptr FILEID="lpk08"/>
+        </mets:div>
+        <mets:div ID="phunk" LABEL="b" ORDER="36" TYPE="Side">
+          <mets:fptr FILEID="q7448"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="tjhmk" LABEL="f. 18" TYPE="Folio">
+        <mets:div ID="cy10n" LABEL="a" ORDER="37" TYPE="Side">
+          <mets:fptr FILEID="kv91l"/>
+        </mets:div>
+        <mets:div ID="v8075" LABEL="b" ORDER="38" TYPE="Side">
+          <mets:fptr FILEID="yflxp"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="jd5vm" LABEL="f. 19" TYPE="Folio">
+        <mets:div ID="ejjoa" LABEL="a" ORDER="39" TYPE="Side">
+          <mets:fptr FILEID="m0jgw"/>
+        </mets:div>
+        <mets:div ID="iw51t" LABEL="b" ORDER="40" TYPE="Side">
+          <mets:fptr FILEID="afthf"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="r3tym" LABEL="f. 20" TYPE="Folio">
+        <mets:div ID="f6r9s" LABEL="a" ORDER="41" TYPE="Side">
+          <mets:fptr FILEID="nbagc"/>
+        </mets:div>
+        <mets:div ID="hvgve" LABEL="b" ORDER="42" TYPE="Side">
+          <mets:fptr FILEID="b5w2d"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="dawql" LABEL="f. 21" TYPE="Folio">
+        <mets:div ID="pw3pi" LABEL="a" ORDER="43" TYPE="Side">
+          <mets:fptr FILEID="fetcs"/>
+        </mets:div>
+        <mets:div ID="t6okn" LABEL="b" ORDER="44" TYPE="Side">
+          <mets:fptr FILEID="y06zr"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="yptar" LABEL="f. 22" TYPE="Folio">
+        <mets:div ID="ypcmj" LABEL="a" ORDER="45" TYPE="Side">
+          <mets:fptr FILEID="z262g"/>
+        </mets:div>
+        <mets:div ID="ec53z" LABEL="b" ORDER="46" TYPE="Side">
+          <mets:fptr FILEID="pq3xr"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="thm7q" LABEL="f. 23" TYPE="Folio">
+        <mets:div ID="eteen" LABEL="a" ORDER="47" TYPE="Side">
+          <mets:fptr FILEID="z9epa"/>
+        </mets:div>
+        <mets:div ID="bey2i" LABEL="b" ORDER="48" TYPE="Side">
+          <mets:fptr FILEID="cjczl"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="ktfgq" LABEL="f. 24" TYPE="Folio">
+        <mets:div ID="xuzuv" LABEL="a" ORDER="49" TYPE="Side">
+          <mets:fptr FILEID="mrxjf"/>
+        </mets:div>
+        <mets:div ID="hrb2i" LABEL="b" ORDER="50" TYPE="Side">
+          <mets:fptr FILEID="xrs6o"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="kxg8k" LABEL="f. 25" TYPE="Folio">
+        <mets:div ID="z2llb" LABEL="a" ORDER="51" TYPE="Side">
+          <mets:fptr FILEID="nkdft"/>
+        </mets:div>
+        <mets:div ID="hctxx" LABEL="b" ORDER="52" TYPE="Side">
+          <mets:fptr FILEID="ilofu"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="kmp7q" LABEL="f. 26" TYPE="Folio">
+        <mets:div ID="cy4y9" LABEL="a" ORDER="53" TYPE="Side">
+          <mets:fptr FILEID="rj8x8"/>
+        </mets:div>
+        <mets:div ID="qvzcy" LABEL="b" ORDER="54" TYPE="Side">
+          <mets:fptr FILEID="c40ex"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="c6fq6" LABEL="f. 27" TYPE="Folio">
+        <mets:div ID="ym4d0" LABEL="a" ORDER="55" TYPE="Side">
+          <mets:fptr FILEID="dd7td"/>
+        </mets:div>
+        <mets:div ID="frjgt" LABEL="b" ORDER="56" TYPE="Side">
+          <mets:fptr FILEID="w47ho"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="b32uu" LABEL="f. 28" TYPE="Folio">
+        <mets:div ID="yw116" LABEL="a" ORDER="57" TYPE="Side">
+          <mets:fptr FILEID="qtw3f"/>
+        </mets:div>
+        <mets:div ID="oozlm" LABEL="b" ORDER="58" TYPE="Side">
+          <mets:fptr FILEID="y9q7a"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="zx4kk" LABEL="f. 29" TYPE="Folio">
+        <mets:div ID="ef5cs" LABEL="a" ORDER="59" TYPE="Side">
+          <mets:fptr FILEID="n1ogs"/>
+        </mets:div>
+        <mets:div ID="z9xa3" LABEL="b" ORDER="60" TYPE="Side">
+          <mets:fptr FILEID="j4uad"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="vj8ae" LABEL="f. 30" TYPE="Folio">
+        <mets:div ID="kfxh8" LABEL="a" ORDER="61" TYPE="Side">
+          <mets:fptr FILEID="juvmr"/>
+        </mets:div>
+        <mets:div ID="hx664" LABEL="b" ORDER="62" TYPE="Side">
+          <mets:fptr FILEID="dkh8r"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="b28s4" LABEL="f. 31" TYPE="Folio">
+        <mets:div ID="ochpa" LABEL="a" ORDER="63" TYPE="Side">
+          <mets:fptr FILEID="ichmu"/>
+        </mets:div>
+        <mets:div ID="z5ke9" LABEL="b" ORDER="64" TYPE="Side">
+          <mets:fptr FILEID="og75u"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="vezgs" LABEL="f. 32" TYPE="Folio">
+        <mets:div ID="ibz5g" LABEL="a" ORDER="65" TYPE="Side">
+          <mets:fptr FILEID="p5vef"/>
+        </mets:div>
+        <mets:div ID="mco8m" LABEL="b" ORDER="66" TYPE="Side">
+          <mets:fptr FILEID="bfeo6"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="har5x" LABEL="f. 33" TYPE="Folio">
+        <mets:div ID="kdemt" LABEL="a" ORDER="67" TYPE="Side">
+          <mets:fptr FILEID="m32ad"/>
+        </mets:div>
+        <mets:div ID="uc16v" LABEL="b" ORDER="68" TYPE="Side">
+          <mets:fptr FILEID="khyoo"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="upvk8" LABEL="f. 34" TYPE="Folio">
+        <mets:div ID="qa9v7" LABEL="a" ORDER="69" TYPE="Side">
+          <mets:fptr FILEID="xa0sh"/>
+        </mets:div>
+        <mets:div ID="hcayr" LABEL="b" ORDER="70" TYPE="Side">
+          <mets:fptr FILEID="ooy1i"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="vbjt4" LABEL="f. 35" TYPE="Folio">
+        <mets:div ID="d9lcy" LABEL="a" ORDER="71" TYPE="Side">
+          <mets:fptr FILEID="rgh8a"/>
+        </mets:div>
+        <mets:div ID="wvibu" LABEL="b" ORDER="72" TYPE="Side">
+          <mets:fptr FILEID="ar1w2"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="bpt1h" LABEL="f. 36" TYPE="Folio">
+        <mets:div ID="he5in" LABEL="a" ORDER="73" TYPE="Side">
+          <mets:fptr FILEID="fldzx"/>
+        </mets:div>
+        <mets:div ID="efesy" LABEL="b" ORDER="74" TYPE="Side">
+          <mets:fptr FILEID="of2ms"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="b2yhr" LABEL="f. 37" TYPE="Folio">
+        <mets:div ID="ur67z" LABEL="a" ORDER="75" TYPE="Side">
+          <mets:fptr FILEID="xy1zp"/>
+        </mets:div>
+        <mets:div ID="f857n" LABEL="b" ORDER="76" TYPE="Side">
+          <mets:fptr FILEID="b85np"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="sx5rf" LABEL="f. 38" TYPE="Folio">
+        <mets:div ID="leid0" LABEL="a" ORDER="77" TYPE="Side">
+          <mets:fptr FILEID="oljk8"/>
+        </mets:div>
+        <mets:div ID="uohth" LABEL="b" ORDER="78" TYPE="Side">
+          <mets:fptr FILEID="mfpf5"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="cquo0" LABEL="f. 39" TYPE="Folio">
+        <mets:div ID="cosn4" LABEL="a" ORDER="79" TYPE="Side">
+          <mets:fptr FILEID="c70qo"/>
+        </mets:div>
+        <mets:div ID="o2chp" LABEL="b" ORDER="80" TYPE="Side">
+          <mets:fptr FILEID="ti26d"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="ajuxp" LABEL="f. 40" TYPE="Folio">
+        <mets:div ID="ukh32" LABEL="a" ORDER="81" TYPE="Side">
+          <mets:fptr FILEID="ke4jl"/>
+        </mets:div>
+        <mets:div ID="x0w12" LABEL="b" ORDER="82" TYPE="Side">
+          <mets:fptr FILEID="k77di"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="sgonp" LABEL="f. 41" TYPE="Folio">
+        <mets:div ID="czk8o" LABEL="a" ORDER="83" TYPE="Side">
+          <mets:fptr FILEID="lsouo"/>
+        </mets:div>
+        <mets:div ID="mt8sx" LABEL="b" ORDER="84" TYPE="Side">
+          <mets:fptr FILEID="dq9wi"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="qnvlb" LABEL="f. 42" TYPE="Folio">
+        <mets:div ID="rzp09" LABEL="a" ORDER="85" TYPE="Side">
+          <mets:fptr FILEID="j5t1t"/>
+        </mets:div>
+        <mets:div ID="zh2cp" LABEL="b" ORDER="86" TYPE="Side">
+          <mets:fptr FILEID="q4t1b"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="usgop" LABEL="f. 43" TYPE="Folio">
+        <mets:div ID="m1r66" LABEL="a" ORDER="87" TYPE="Side">
+          <mets:fptr FILEID="qhh3a"/>
+        </mets:div>
+        <mets:div ID="ahimi" LABEL="b" ORDER="88" TYPE="Side">
+          <mets:fptr FILEID="ugha8"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="u71lv" LABEL="f. 44" TYPE="Folio">
+        <mets:div ID="bg6tq" LABEL="a" ORDER="89" TYPE="Side">
+          <mets:fptr FILEID="losio"/>
+        </mets:div>
+        <mets:div ID="wqqsm" LABEL="b" ORDER="90" TYPE="Side">
+          <mets:fptr FILEID="d9mr4"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="ltf5d" LABEL="f. 45" TYPE="Folio">
+        <mets:div ID="narqe" LABEL="a" ORDER="91" TYPE="Side">
+          <mets:fptr FILEID="pm84f"/>
+        </mets:div>
+        <mets:div ID="sxen2" LABEL="b" ORDER="92" TYPE="Side">
+          <mets:fptr FILEID="i3sju"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="hiwb0" LABEL="f. 46" TYPE="Folio">
+        <mets:div ID="y9cy3" LABEL="a" ORDER="93" TYPE="Side">
+          <mets:fptr FILEID="p5yex"/>
+        </mets:div>
+        <mets:div ID="gzryp" LABEL="b" ORDER="94" TYPE="Side">
+          <mets:fptr FILEID="i1nhi"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="rw6as" LABEL="f. 47" TYPE="Folio">
+        <mets:div ID="vrh3h" LABEL="a" ORDER="95" TYPE="Side">
+          <mets:fptr FILEID="mrdun"/>
+        </mets:div>
+        <mets:div ID="z3bwf" LABEL="b" ORDER="96" TYPE="Side">
+          <mets:fptr FILEID="zcbcc"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="hv8h2" LABEL="f. 48" TYPE="Folio">
+        <mets:div ID="ph65h" LABEL="a" ORDER="97" TYPE="Side">
+          <mets:fptr FILEID="b2h6a"/>
+        </mets:div>
+        <mets:div ID="rh090" LABEL="b" ORDER="98" TYPE="Side">
+          <mets:fptr FILEID="cxkz2"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="afrk0" LABEL="f. 49" TYPE="Folio">
+        <mets:div ID="yshi2" LABEL="a" ORDER="99" TYPE="Side">
+          <mets:fptr FILEID="jp215"/>
+        </mets:div>
+        <mets:div ID="xt6jp" LABEL="b" ORDER="100" TYPE="Side">
+          <mets:fptr FILEID="k87qs"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="jzph0" LABEL="f. 50" TYPE="Folio">
+        <mets:div ID="vc94t" LABEL="a" ORDER="101" TYPE="Side">
+          <mets:fptr FILEID="ofy9l"/>
+        </mets:div>
+        <mets:div ID="s88ah" LABEL="b" ORDER="102" TYPE="Side">
+          <mets:fptr FILEID="cske0"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="npjcr" LABEL="f. 51" TYPE="Folio">
+        <mets:div ID="q7zwb" LABEL="a" ORDER="103" TYPE="Side">
+          <mets:fptr FILEID="dzikx"/>
+        </mets:div>
+        <mets:div ID="f8m04" LABEL="b" ORDER="104" TYPE="Side">
+          <mets:fptr FILEID="g4coo"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="o4z9v" LABEL="f. 52" TYPE="Folio">
+        <mets:div ID="r8b2a" LABEL="a" ORDER="105" TYPE="Side">
+          <mets:fptr FILEID="j009b"/>
+        </mets:div>
+        <mets:div ID="wvlds" LABEL="b" ORDER="106" TYPE="Side">
+          <mets:fptr FILEID="xg0nh"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="cjsmz" LABEL="f. 53" TYPE="Folio">
+        <mets:div ID="hvl5u" LABEL="a" ORDER="107" TYPE="Side">
+          <mets:fptr FILEID="qmuwp"/>
+        </mets:div>
+        <mets:div ID="gdfit" LABEL="b" ORDER="108" TYPE="Side">
+          <mets:fptr FILEID="pq6ct"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="uo7n3" LABEL="f. 54" TYPE="Folio">
+        <mets:div ID="rghgu" LABEL="a" ORDER="109" TYPE="Side">
+          <mets:fptr FILEID="a2vl8"/>
+        </mets:div>
+        <mets:div ID="lhhcp" LABEL="b" ORDER="110" TYPE="Side">
+          <mets:fptr FILEID="wkkqx"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="fh2i7" LABEL="f. 55" TYPE="Folio">
+        <mets:div ID="rj5xy" LABEL="a" ORDER="111" TYPE="Side">
+          <mets:fptr FILEID="miudo"/>
+        </mets:div>
+        <mets:div ID="d83v9" LABEL="b" ORDER="112" TYPE="Side">
+          <mets:fptr FILEID="veqnp"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="q37tc" LABEL="f. 56" TYPE="Folio">
+        <mets:div ID="x3353" LABEL="a" ORDER="113" TYPE="Side">
+          <mets:fptr FILEID="jry6o"/>
+        </mets:div>
+        <mets:div ID="fv9yj" LABEL="b" ORDER="114" TYPE="Side">
+          <mets:fptr FILEID="jd351"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="yzry5" LABEL="f. 57" TYPE="Folio">
+        <mets:div ID="n9fkt" LABEL="a" ORDER="115" TYPE="Side">
+          <mets:fptr FILEID="avth2"/>
+        </mets:div>
+        <mets:div ID="ylpv3" LABEL="b" ORDER="116" TYPE="Side">
+          <mets:fptr FILEID="k89rq"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="fc7ii" LABEL="f. 58" TYPE="Folio">
+        <mets:div ID="asotf" LABEL="a" ORDER="117" TYPE="Side">
+          <mets:fptr FILEID="eh9or"/>
+        </mets:div>
+        <mets:div ID="ivqrb" LABEL="b" ORDER="118" TYPE="Side">
+          <mets:fptr FILEID="pvr46"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="d7zfb" LABEL="f. 59" TYPE="Folio">
+        <mets:div ID="kkiut" LABEL="a" ORDER="119" TYPE="Side">
+          <mets:fptr FILEID="p8k75"/>
+        </mets:div>
+        <mets:div ID="ck59l" LABEL="b" ORDER="120" TYPE="Side">
+          <mets:fptr FILEID="z25yw"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="ey4gy" LABEL="f. 60" TYPE="Folio">
+        <mets:div ID="m3sue" LABEL="a" ORDER="121" TYPE="Side">
+          <mets:fptr FILEID="vp34e"/>
+        </mets:div>
+        <mets:div ID="v90bo" LABEL="b" ORDER="122" TYPE="Side">
+          <mets:fptr FILEID="sk688"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="vwex9" LABEL="f. 61" TYPE="Folio">
+        <mets:div ID="ame7s" LABEL="a" ORDER="123" TYPE="Side">
+          <mets:fptr FILEID="kk3d4"/>
+        </mets:div>
+        <mets:div ID="cylfm" LABEL="b" ORDER="124" TYPE="Side">
+          <mets:fptr FILEID="jkduv"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="vu2pf" LABEL="f. 62" TYPE="Folio">
+        <mets:div ID="rp406" LABEL="a" ORDER="125" TYPE="Side">
+          <mets:fptr FILEID="j58lw"/>
+        </mets:div>
+        <mets:div ID="i1nhe" LABEL="b" ORDER="126" TYPE="Side">
+          <mets:fptr FILEID="vpy2r"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="ziy94" LABEL="f. 63" TYPE="Folio">
+        <mets:div ID="wzzzq" LABEL="a" ORDER="127" TYPE="Side">
+          <mets:fptr FILEID="qlv7z"/>
+        </mets:div>
+        <mets:div ID="f2gap" LABEL="b" ORDER="128" TYPE="Side">
+          <mets:fptr FILEID="u9kky"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="ve2cz" LABEL="f. 64" TYPE="Folio">
+        <mets:div ID="a5nhf" LABEL="a" ORDER="129" TYPE="Side">
+          <mets:fptr FILEID="dc3k5"/>
+        </mets:div>
+        <mets:div ID="d9coc" LABEL="b" ORDER="130" TYPE="Side">
+          <mets:fptr FILEID="v12e0"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="fdogd" LABEL="f. 65" TYPE="Folio">
+        <mets:div ID="lo47z" LABEL="a" ORDER="131" TYPE="Side">
+          <mets:fptr FILEID="yfsy0"/>
+        </mets:div>
+        <mets:div ID="kuzdp" LABEL="b" ORDER="132" TYPE="Side">
+          <mets:fptr FILEID="toib4"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="nmqpj" LABEL="f. 66" TYPE="Folio">
+        <mets:div ID="i2qou" LABEL="a" ORDER="133" TYPE="Side">
+          <mets:fptr FILEID="patid"/>
+        </mets:div>
+        <mets:div ID="ov9e4" LABEL="b" ORDER="134" TYPE="Side">
+          <mets:fptr FILEID="lra68"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="eq3eh" LABEL="f. 67" TYPE="Folio">
+        <mets:div ID="ozsep" LABEL="a" ORDER="135" TYPE="Side">
+          <mets:fptr FILEID="mzvyg"/>
+        </mets:div>
+        <mets:div ID="wdj6g" LABEL="b" ORDER="136" TYPE="Side">
+          <mets:fptr FILEID="nuaby"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="o1bvz" LABEL="f. 68" TYPE="Folio">
+        <mets:div ID="aehuk" LABEL="a" ORDER="137" TYPE="Side">
+          <mets:fptr FILEID="a6jml"/>
+        </mets:div>
+        <mets:div ID="euqjp" LABEL="b" ORDER="138" TYPE="Side">
+          <mets:fptr FILEID="tc6fw"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="mq5at" LABEL="f. 69" TYPE="Folio">
+        <mets:div ID="ij7rx" LABEL="a" ORDER="139" TYPE="Side">
+          <mets:fptr FILEID="judxf"/>
+        </mets:div>
+        <mets:div ID="q4g93" LABEL="b" ORDER="140" TYPE="Side">
+          <mets:fptr FILEID="hwi4u"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="vcvgt" LABEL="f. 70" TYPE="Folio">
+        <mets:div ID="rnq34" LABEL="a" ORDER="141" TYPE="Side">
+          <mets:fptr FILEID="eefe5"/>
+        </mets:div>
+        <mets:div ID="xbnoc" LABEL="b" ORDER="142" TYPE="Side">
+          <mets:fptr FILEID="r8f07"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="fk87n" LABEL="f. 71" TYPE="Folio">
+        <mets:div ID="qt3e8" LABEL="a" ORDER="143" TYPE="Side">
+          <mets:fptr FILEID="plb9v"/>
+        </mets:div>
+        <mets:div ID="oqnoa" LABEL="b" ORDER="144" TYPE="Side">
+          <mets:fptr FILEID="mk5yx"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="a1l91" LABEL="f. 72" TYPE="Folio">
+        <mets:div ID="h5wvv" LABEL="a" ORDER="145" TYPE="Side">
+          <mets:fptr FILEID="r7kw4"/>
+        </mets:div>
+        <mets:div ID="j4xom" LABEL="b" ORDER="146" TYPE="Side">
+          <mets:fptr FILEID="bnw0q"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="m5cqi" LABEL="f. 73" TYPE="Folio">
+        <mets:div ID="jxkbo" LABEL="a" ORDER="147" TYPE="Side">
+          <mets:fptr FILEID="z332a"/>
+        </mets:div>
+        <mets:div ID="a8wb6" LABEL="b" ORDER="148" TYPE="Side">
+          <mets:fptr FILEID="yiwxp"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="yaxho" LABEL="f. 74" TYPE="Folio">
+        <mets:div ID="q0ax1" LABEL="a" ORDER="149" TYPE="Side">
+          <mets:fptr FILEID="ejhni"/>
+        </mets:div>
+        <mets:div ID="sfh0o" LABEL="b" ORDER="150" TYPE="Side">
+          <mets:fptr FILEID="i2auj"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="emtzd" LABEL="f. 75" TYPE="Folio">
+        <mets:div ID="eh6sv" LABEL="a" ORDER="151" TYPE="Side">
+          <mets:fptr FILEID="is5vm"/>
+        </mets:div>
+        <mets:div ID="cu0s0" LABEL="b" ORDER="152" TYPE="Side">
+          <mets:fptr FILEID="m5jco"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="jkt5x" LABEL="f. 76" TYPE="Folio">
+        <mets:div ID="yfw0t" LABEL="a" ORDER="153" TYPE="Side">
+          <mets:fptr FILEID="v4m15"/>
+        </mets:div>
+        <mets:div ID="qdsze" LABEL="b" ORDER="154" TYPE="Side">
+          <mets:fptr FILEID="slf49"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="xkze2" LABEL="f. 77" TYPE="Folio">
+        <mets:div ID="zeddk" LABEL="a" ORDER="155" TYPE="Side">
+          <mets:fptr FILEID="w2ezw"/>
+        </mets:div>
+        <mets:div ID="ovie2" LABEL="b" ORDER="156" TYPE="Side">
+          <mets:fptr FILEID="apk3z"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="mq0yo" LABEL="f. 78" TYPE="Folio">
+        <mets:div ID="oblji" LABEL="a" ORDER="157" TYPE="Side">
+          <mets:fptr FILEID="vwazf"/>
+        </mets:div>
+        <mets:div ID="sj2ei" LABEL="b" ORDER="158" TYPE="Side">
+          <mets:fptr FILEID="loua5"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="ipi25" LABEL="f. 79" TYPE="Folio">
+        <mets:div ID="y7o8r" LABEL="a" ORDER="159" TYPE="Side">
+          <mets:fptr FILEID="vkqqx"/>
+        </mets:div>
+        <mets:div ID="tcp46" LABEL="b" ORDER="160" TYPE="Side">
+          <mets:fptr FILEID="v31mj"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="xb4bp" LABEL="f. 80" TYPE="Folio">
+        <mets:div ID="fmt7g" LABEL="a" ORDER="161" TYPE="Side">
+          <mets:fptr FILEID="whhq9"/>
+        </mets:div>
+        <mets:div ID="fd6bb" LABEL="b" ORDER="162" TYPE="Side">
+          <mets:fptr FILEID="ho120"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="h74yw" LABEL="f. 81" TYPE="Folio">
+        <mets:div ID="mamef" LABEL="a" ORDER="163" TYPE="Side">
+          <mets:fptr FILEID="gxr7a"/>
+        </mets:div>
+        <mets:div ID="jjfo3" LABEL="b" ORDER="164" TYPE="Side">
+          <mets:fptr FILEID="mictj"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="gx943" LABEL="f. 82" TYPE="Folio">
+        <mets:div ID="j9ll9" LABEL="a" ORDER="165" TYPE="Side">
+          <mets:fptr FILEID="w3uie"/>
+        </mets:div>
+        <mets:div ID="wh4zp" LABEL="b" ORDER="166" TYPE="Side">
+          <mets:fptr FILEID="o953i"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="d8036" LABEL="f. 83" TYPE="Folio">
+        <mets:div ID="kqkei" LABEL="a" ORDER="167" TYPE="Side">
+          <mets:fptr FILEID="jnvp1"/>
+        </mets:div>
+        <mets:div ID="pvnuo" LABEL="b" ORDER="168" TYPE="Side">
+          <mets:fptr FILEID="dd2gv"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="blql1" LABEL="f. 84" TYPE="Folio">
+        <mets:div ID="rldxt" LABEL="a" ORDER="169" TYPE="Side">
+          <mets:fptr FILEID="m36n8"/>
+        </mets:div>
+        <mets:div ID="b5sdu" LABEL="b" ORDER="170" TYPE="Side">
+          <mets:fptr FILEID="dnm4k"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="o0tv9" LABEL="f. 85" TYPE="Folio">
+        <mets:div ID="ej49g" LABEL="a" ORDER="171" TYPE="Side">
+          <mets:fptr FILEID="x6a4k"/>
+        </mets:div>
+        <mets:div ID="j39bi" LABEL="b" ORDER="172" TYPE="Side">
+          <mets:fptr FILEID="qosue"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="hzkgy" LABEL="f. 86" TYPE="Folio">
+        <mets:div ID="hqf0y" LABEL="a" ORDER="173" TYPE="Side">
+          <mets:fptr FILEID="m37hm"/>
+        </mets:div>
+        <mets:div ID="q3vbr" LABEL="b" ORDER="174" TYPE="Side">
+          <mets:fptr FILEID="a77bm"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="bothm" LABEL="f. 87" TYPE="Folio">
+        <mets:div ID="slrni" LABEL="a" ORDER="175" TYPE="Side">
+          <mets:fptr FILEID="oj5mp"/>
+        </mets:div>
+        <mets:div ID="eqfvj" LABEL="b" ORDER="176" TYPE="Side">
+          <mets:fptr FILEID="wjzw4"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="b0wvo" LABEL="f. 88" TYPE="Folio">
+        <mets:div ID="q8k9s" LABEL="a" ORDER="177" TYPE="Side">
+          <mets:fptr FILEID="rxh5c"/>
+        </mets:div>
+        <mets:div ID="sxebl" LABEL="b" ORDER="178" TYPE="Side">
+          <mets:fptr FILEID="f0ps5"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="zxjgl" LABEL="f. 89" TYPE="Folio">
+        <mets:div ID="saw2e" LABEL="a" ORDER="179" TYPE="Side">
+          <mets:fptr FILEID="kbvs8"/>
+        </mets:div>
+        <mets:div ID="o6w9r" LABEL="b" ORDER="180" TYPE="Side">
+          <mets:fptr FILEID="mnx08"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="y20zn" LABEL="f. 90" TYPE="Folio">
+        <mets:div ID="hkdra" LABEL="a" ORDER="181" TYPE="Side">
+          <mets:fptr FILEID="yblcu"/>
+        </mets:div>
+        <mets:div ID="xnsj6" LABEL="b" ORDER="182" TYPE="Side">
+          <mets:fptr FILEID="f8tht"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="vqlmp" LABEL="f. 91" TYPE="Folio">
+        <mets:div ID="jpodt" LABEL="a" ORDER="183" TYPE="Side">
+          <mets:fptr FILEID="h8bwb"/>
+        </mets:div>
+        <mets:div ID="p09nt" LABEL="b" ORDER="183" TYPE="Side">
+          <mets:fptr FILEID="lhlc3"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="hbh9h" LABEL="f. 92" TYPE="Folio">
+        <mets:div ID="m00qm" LABEL="a" ORDER="185" TYPE="Side">
+          <mets:fptr FILEID="sdkt0"/>
+        </mets:div>
+        <mets:div ID="v7u21" LABEL="b" ORDER="186" TYPE="Side">
+          <mets:fptr FILEID="sipp0"/>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="jm88d" LABEL="Lower cover" TYPE="LowerCover">
+        <mets:div ID="h2odn" LABEL="inside" ORDER="187" TYPE="CoverInside">
+          <mets:fptr FILEID="ow8b6"/>
+        </mets:div>
+        <mets:div ID="c9o2j" LABEL="outside" ORDER="188" TYPE="CoverOutside">
+          <mets:fptr FILEID="m7qyf"/>
+        </mets:div>
+      </mets:div>
+    </mets:div>
+  </mets:structMap>
+  <mets:structMap LABEL="Contents" TYPE="Logical">
+    <mets:div DMDID="mlys4 wvyxo" ID="pmm7e" LABEL="Sharḥ ḥadīth al-ghamāmah" TYPE="Work">
+      <mets:div ID="s3io1" LABEL="Title page" ORDER="3" TYPE="Section">
+        <mets:fptr FILEID="goszd"/>
+      </mets:div>
+      <mets:div ID="bccp5" LABEL="Preamble" TYPE="Section">
+        <mets:div ID="yue2l" ORDER="4" TYPE="LogicalMember">
+          <mets:fptr FILEID="v6huf"/>
+        </mets:div>
+        <mets:div ID="pk2h9" ORDER="5" TYPE="LogicalMember">
+          <mets:fptr FILEID="x3mmf"/>
+        </mets:div>
+      </mets:div>
+    </mets:div>
+  </mets:structMap>
+</mets:mets>

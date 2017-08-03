@@ -17,8 +17,8 @@ class FileAppender
 
   def build_file_sets
     return if processing_derivatives?
-    file_nodes.map do |node|
-      file_set = create_file_set(node)
+    file_nodes.each_with_index.map do |node, index|
+      file_set = create_file_set(node, files[index])
       file_set
     end
   end
@@ -48,7 +48,13 @@ class FileAppender
     persister.save(resource: node)
   end
 
-  def create_file_set(file_node)
-    persister.save(resource: FileSet.new(title: file_node.original_filename, member_ids: file_node.id))
+  def create_file_set(file_node, file)
+    attributes = {
+      title: file_node.original_filename,
+      member_ids: file_node.id
+    }.merge(
+      file.try(:container_attributes) || {}
+    )
+    persister.save(resource: FileSet.new(attributes))
   end
 end
