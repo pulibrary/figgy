@@ -89,10 +89,10 @@ class METSDocument
   end
 
   def decorated_file(f)
-    IoDecorator.new(
-      file: File.open(f[:path]),
+    IngestableFile.new(
+      file_path: f[:path],
       mime_type: f[:mime_type],
-      original_name: File.basename(f[:path]),
+      original_filename: File.basename(f[:path]),
       container_attributes: container_attributes(f),
       id: f[:id]
     )
