@@ -35,6 +35,7 @@ Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
     - 'app/models/plum_schema.rb'
+    - 'spec/services/manifest_builder_spec.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/plum_schema.rb'

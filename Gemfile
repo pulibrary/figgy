@@ -60,7 +60,7 @@ gem 'browse-everything'
 gem 'coffee-rails'
 gem 'devise'
 gem 'hydra-head'
-gem 'iiif_manifest'
+gem 'iiif_manifest', github: "samvera-labs/iiif_manifest"
 gem 'modernizr-rails'
 gem 'normalize-rails'
 gem 'omniauth-cas'
