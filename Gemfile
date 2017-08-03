@@ -64,6 +64,7 @@ gem 'iiif_manifest', github: "samvera-labs/iiif_manifest"
 gem 'modernizr-rails'
 gem 'normalize-rails'
 gem 'omniauth-cas'
+gem 'openseadragon'
 gem 'pul_metadata_services', github: 'pulibrary/pul_metadata_services', branch: 'master'
 gem 'pul_uv_rails', github: 'pulibrary/pul_uv_rails', branch: 'master'
 gem 'riiif'

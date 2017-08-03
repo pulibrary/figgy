@@ -21,6 +21,8 @@
 //= require browse_everything
 //= require jquery-ui/widgets/sortable
 //= require nestedSortable/jquery.mjs.nestedSortable
+//= require openseadragon/openseadragon
+//= require openseadragon/jquery
 //= require valhalla/valhalla
 //= require_tree .
 $(document).ready(function() {

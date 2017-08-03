@@ -175,6 +175,10 @@ class ManifestBuilder
     def manifest_image_path(id)
       RiiifHelper.new.base_url(id)
     end
+
+    def manifest_image_thumbnail_path(id)
+      "#{manifest_image_path(id)}/full/!200,150/0/default.jpg"
+    end
   end
 
   class RiiifHelper
