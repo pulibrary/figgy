@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OBJID="ark:/88435/rx913q63c" TYPE="CompiledDigitalObject" xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd">
+<mets:metsHdr CREATEDATE="2016-12-20T10:33:03.820-05:00" LASTMODDATE="2016-12-20T10:33:03.821-05:00">
+<mets:metsDocumentID TYPE="PUDL">pudl0076/2538011.mets</mets:metsDocumentID>
+</mets:metsHdr>
+<mets:dmdSec ID="w4s93">
+<mets:mdRef LOCTYPE="URL" MDTYPE="MARC" xlink:href="https://bibdata.princeton.edu/bibliographic/2538011"/>
+</mets:dmdSec>
+<mets:dmdSec ID="boe0m">
+<mets:mdWrap MDTYPE="MODS">
+<mets:xmlData>
+<mods xmlns="http://www.loc.gov/mods/v3">
+   <titleInfo>
+      <title>De l'espirit des loix</title>
+      <subTitle>ou Du rapport que les loix doivent avoir avec la constitution de chaque gouvernemnent, les moeurs,
+         le climat, la religion, le commerce, &amp; c., a quoi l'auteur a ajout e des recherches nouvelles, sur
+         les loix romaines touchant le successions, sur les loix francoises, &amp; sur les loix feodales</subTitle>
+   </titleInfo>
+   <name type="personal" usage="primary">
+      <namePart>Montesquieu, Charles de Secondat</namePart>
+      <namePart type="termsOfAddress">baron de</namePart>
+      <namePart type="date">1689-1755</namePart>
+      <role>
+         <roleTerm authority="marcrelator" type="code">aut</roleTerm>
+      </role>
+   </name>
+   <name type="personal">
+      <namePart>Varnet, Jean Jacob</namePart>
+      <namePart type="date">1698-1789</namePart>
+      <role>
+         <roleTerm authority="marcrelator" type="code">aut</roleTerm>
+      </role>
+   </name>
+   <typeOfResource>text</typeOfResource>
+   <originInfo>
+      <place>
+         <placeTerm type="text">Geneve</placeTerm>
+      </place>
+      <publisher>Barrollot &amp; fils</publisher>
+      <dateIssued encoding="w3cdtf" keyDate="yes" qualifier="inferred">1748</dateIssued>
+   </originInfo>
+   <language>
+      <languageTerm authority="iso639-2b" type="code">fre</languageTerm>
+   </language>
+   <physicalDescription>
+      <extent>2 v. in 1. fold. map (v. 2) 18 cm.</extent>
+   </physicalDescription>
+   <note>Catalogue of the Bibliothe`que Nationale lists 4 issues of the 1st ed., 1748; with this t.p. and imprint
+      (save for spelling og francoises -- their error ?) The first 3 notes are 2 v., the 4, the 4th is 3 v., 12.
+      Later editions, 1748 etc., have different imprints, or notes of ed. on t.p.</note>
+   <note>Original ed., prepared at same time as that in 4 in 1748 containing the map for the illustration of the
+      text, which is lacking often": ms. note, back of v. 1.</note>
+   <note>First edition; edited by J.J. Varnet. cf. Brunet, Manuel du librarie.</note>
+   <subject authority="lcsh">
+      <topic>Political science</topic>
+   </subject>
+   <subject authority="lcsh">
+      <topic>State, The</topic>
+   </subject>
+   <subject authority="lcsh">
+      <topic>Law (Philosophical concept)</topic>
+   </subject>
+   <subject authority="lcsh">
+      <topic>Jurisprudence</topic>
+   </subject>
+   <relatedItem type="host">
+      <typeOfResource collection="yes">text</typeOfResource>
+      <titleInfo>
+         <title>The Sid Lapidus '59 Collection on Liberty and the American Revolution</title>
+      </titleInfo>
+      <location>
+         <url note="Digital Collection">http://pudl.princeton.edu/collections/pudl0076</url>
+      </location>
+   </relatedItem>
+   <location>
+      <physicalLocation type="text">Princeton University Library. Department of Rare Books and Special Collections.</physicalLocation>
+      <physicalLocation authority="marcorg" type="code">NjP</physicalLocation>
+      <holdingSimple>
+         <copyInformation>
+            <subLocation>ex</subLocation>
+            <shelfLocator>Lapidus 1.16</shelfLocator>
+         </copyInformation>
+      </holdingSimple>
+   </location>
+   <recordInfo>
+      <recordContentSource authority="marcorg">NjP</recordContentSource>
+      <recordOrigin>http://catalog.princeton.edu/cgi-bin/Pwebrecon.cgi?BBID=2538011</recordOrigin>
+      <recordIdentifier>http://diglib.princeton.edu/mdata/pudl0076/2538011.mods</recordIdentifier>
+      <languageOfCataloging>
+         <languageTerm authority="iso639-2b" type="code">eng</languageTerm>
+      </languageOfCataloging>
+   </recordInfo>
+</mods>
+</mets:xmlData>
+</mets:mdWrap>
+</mets:dmdSec>
+<mets:fileSec>
+<mets:fileGrp USE="thumbnail">
+<mets:file ID="dzljv" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0076/2538011/vol02/00000001.tif"/>
+</mets:file>
+</mets:fileGrp>
+<mets:fileGrp USE="masters">
+<mets:file CHECKSUM="436e2aabc91dfe2e287ea4438ebe6486" CHECKSUMTYPE="MD5" ID="s45u4" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0076/2538011/vol01/00000001.tif"/>
+</mets:file>
+<mets:file CHECKSUM="6e8e2ad5f4cda91da8928ec8b652fe59" CHECKSUMTYPE="MD5" ID="x04jf" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0076/2538011/vol01/00000002.tif"/>
+</mets:file>
+<mets:file CHECKSUM="a073eab9333d7997d5d80bd703ae8fcb" CHECKSUMTYPE="MD5" ID="iocby" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0076/2538011/vol01/00000003.tif"/>
+</mets:file>
+<mets:file CHECKSUM="cbf3c3886faa4ff05a88c5ba3655566f" CHECKSUMTYPE="MD5" ID="jiots" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0076/2538011/vol01/00000004.tif"/>
+</mets:file>
+</mets:fileGrp>
+</mets:fileSec>
+<mets:structMap TYPE="Physical">
+<mets:div DMDID="w4s93 boe0m" ID="tethc" LABEL="Pagination" TYPE="BoundVolume"/>
+</mets:structMap>
+<mets:structMap TYPE="RelatedObjects">
+<mets:div DMDID="w4s93 boe0m" ID="m7et0" LABEL="Default">
+<mets:div CONTENTIDS="pudl0076" TYPE="IsPartOf"/>
+<mets:div ID="aggregates" TYPE="OrderedList">
+<mets:div ID="dvzjy" LABEL="vol 1 front cover" ORDER="1" TYPE="Static">
+<mets:fptr FILEID="s45u4"/>
+</mets:div>
+<mets:div ID="zxbii" LABEL="vol 1 pastedown" ORDER="2" TYPE="Static">
+<mets:fptr FILEID="x04jf"/>
+</mets:div>
+<mets:div ID="chs02" LABEL="vol 1 front flyleaf 1" ORDER="3" TYPE="Static">
+<mets:fptr FILEID="iocby"/>
+</mets:div>
+<mets:div ID="w0z7l" LABEL="vol 1 front flyleaf 1v" ORDER="4" TYPE="Static">
+<mets:fptr FILEID="jiots"/>
+</mets:div>
+</mets:div>
+</mets:div>
+</mets:structMap>
+</mets:mets>

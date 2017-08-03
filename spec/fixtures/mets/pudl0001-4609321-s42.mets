@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OBJID="ark:/88435/7d278t10z" TYPE="CompiledDigitalObject" xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd">
+  <mets:metsHdr CREATEDATE="2016-03-14T15:21:33.372-04:00" LASTMODDATE="2016-03-14T15:21:33.372-04:00">
+    <mets:metsDocumentID TYPE="PUDL">pudl0001/4609321/s42.mets</mets:metsDocumentID>
+  </mets:metsHdr>
+  <mets:dmdSec ID="x6kkx">
+    <mets:mdRef LOCTYPE="URL" MDTYPE="MARC" xlink:href="https://bibdata.princeton.edu/bibliographic/4609321"/>
+  </mets:dmdSec>
+  <mets:dmdSec ID="p0ov5">
+    <mets:mdWrap MDTYPE="MODS">
+      <mets:xmlData>
+        <mods xmlns="http://www.loc.gov/mods/v3" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+          <titleInfo>
+            <title>Biblia Latina</title>
+          </titleInfo>
+          <titleInfo type="alternative">
+            <title>Gutenberg Bible</title>
+          </titleInfo>
+          <titleInfo type="alternative">
+            <title>Mazarin Bible</title>
+          </titleInfo>
+          <titleInfo type="alternative">
+            <title>Mazarine Bible</title>
+          </titleInfo>
+          <titleInfo type="uniform">
+            <title>Bible. Latin. 1456</title>
+          </titleInfo>
+          <name authority="naf" type="personal">
+            <namePart type="family">Gutenberg</namePart>
+            <namePart type="given">Johann</namePart>
+            <namePart type="date">1397?-1468</namePart>
+            <role>
+              <roleTerm authority="marcrelator" type="code">prt</roleTerm>
+            </role>
+          </name>
+          <name authority="naf" type="personal">
+            <namePart type="given">Master of the Playing Cards</namePart>
+            <namePart type="date">15th cent</namePart>
+            <role>
+              <roleTerm authority="marcrelator" type="code">ilu</roleTerm>
+            </role>
+          </name>
+          <name authority="naf" type="personal">
+            <namePart type="family">Fogel, Johannes</namePart>
+            <namePart type="given">Johannes</namePart>
+            <namePart type="date">fl. 1455-1462</namePart>
+            <role>
+              <roleTerm authority="marcrelator" type="code">bnd</roleTerm>
+            </role>
+          </name>
+          <typeOfResource>text</typeOfResource>
+          <originInfo>
+            <place>
+              <placeTerm type="text">Mainz</placeTerm>
+            </place>
+            <publisher>Printer of the 42-line Bible (Johann Gutenberg?)</publisher>
+            <dateOther type="display">before August 1456</dateOther>
+            <dateIssued encoding="w3cdtf" keyDate="yes">1456</dateIssued>
+          </originInfo>
+          <language>
+            <languageTerm authority="iso639-2b" type="code">lat</languageTerm>
+          </language>
+          <physicalDescription>
+            <form authority="marcform">print</form>
+            <extent>2 v. (324; 319 leaves) ; 40.5 × 28.8 cm. (fol.)</extent>
+          </physicalDescription>
+          <note>Commonly known in English as Gutenberg Bible, formerly known as Mazarin or Mazarine Bible.</note>
+          <note>Twelve leaves supplied from other copies and 5 leaves supplied in facsimile; the 17 leaves are vol. I fo. 1 and vol. II fo. 1, 17,
+      25, 46, 70, 149, 155, 156, 191, 217, 235, 268, 270, 275, 279, and 305.</note>
+          <note>Illuminated by Master of the Playing Cards.</note>
+          <note type="provenance">Predigerkirche, Erfurt, Germany; A. Cohn; Asher and Company; Henry Stevens; George Brinley; Brayton Ives; George
+      Hamilton Cole; and James W. Ellsworth; acquired 2/11/24 from Rosenbach; 2 ff. 11/22/34, Rosenbach; 10 ff. 6/21/37, Rosenbach.
+      NjP</note>
+          <relatedItem type="isReferencedBy">
+            <note>Stillwell B460</note>
+          </relatedItem>
+          <relatedItem type="isReferencedBy">
+            <note>Goff B-526</note>
+          </relatedItem>
+          <relatedItem type="host">
+            <titleInfo>
+              <title>Scheide Library</title>
+              <subTitle>Fifteenth-Century Printing</subTitle>
+            </titleInfo>
+            <location>
+              <url note="Digital collection">http://arks.princeton.edu/ark:/88435/xp68kg247</url>
+            </location>
+          </relatedItem>
+          <accessCondition type="useAndReproduction" xlink:href="http://www.princeton.edu/~rbsc/research/rights.html">Use and
+      reproduction</accessCondition>
+          <accessCondition type="restrictionOnAccess" xlink:href="http://www.princeton.edu/~rbsc/research/rules.html">Restrictions on
+      access</accessCondition>
+          <identifier type="local">4609321</identifier>
+          <location>
+            <physicalLocation type="text">Princeton University. Scheide Library.</physicalLocation>
+            <physicalLocation authority="marcorg" type="code">NjP</physicalLocation>
+            <holdingSimple>
+              <copyInformation>
+                <subLocation>whs</subLocation>
+                <shelfLocator>S4.2</shelfLocator>
+              </copyInformation>
+            </holdingSimple>
+          </location>
+          <recordInfo>
+            <recordContentSource authority="marcorg">NjP</recordContentSource>
+            <recordOrigin>http://catalog.princeton.edu/cgi-bin/Pwebrecon.cgi?BBID=4609321</recordOrigin>
+            <recordIdentifier>http://diglib.princeton.edu/mdata/pudl0001/4609321/s42.mods</recordIdentifier>
+          </recordInfo>
+        </mods>
+      </mets:xmlData>
+    </mets:mdWrap>
+  </mets:dmdSec>
+  <mets:fileSec>
+    <mets:fileGrp USE="thumbnail">
+      <mets:file ID="co69n" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///users/escowles/downloads/tmp/00000001.tif"/>
+      </mets:file>
+    </mets:fileGrp>
+    <mets:fileGrp USE="masters">
+      <mets:file CHECKSUM="33a5b539e3d1f9abbda59776149d57740d9e7788" CHECKSUMTYPE="SHA-1" ID="gylme" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///users/escowles/downloads/tmp/00000001.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="94b8bb21d88a05519be035077ca8e2fcf24b62ce" CHECKSUMTYPE="SHA-1" ID="l898s" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///users/escowles/downloads/tmp/00000002.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="5ff6c95e931d3b71cbaff41c3d1b994390ba44c1" CHECKSUMTYPE="SHA-1" ID="itc6o" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///users/escowles/downloads/tmp/00000003.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="adc66d858b1efe8cb376ad9c021ff9af4dfb7475" CHECKSUMTYPE="SHA-1" ID="tp8n6" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///users/escowles/downloads/tmp/00000657.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="ce773c29f10ad4c08dabe85c69ac0f385b65f0a8" CHECKSUMTYPE="SHA-1" ID="l4e90" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///users/escowles/downloads/tmp/00000658.tif"/>
+      </mets:file>
+      <mets:file CHECKSUM="4e3003e04f6ddba5f1a31064085e6a1a0b18a559" CHECKSUMTYPE="SHA-1" ID="ivg04" MIMETYPE="image/tiff">
+        <mets:FLocat LOCTYPE="URL" xlink:href="file:///users/escowles/downloads/tmp/00000659.tif"/>
+      </mets:file>
+    </mets:fileGrp>
+  </mets:fileSec>
+  <mets:structMap TYPE="RelatedObjects">
+    <mets:div DMDID="x6kkx p0ov5" ID="o64yj" LABEL="Default">
+      <mets:div CONTENTIDS="pudl0001" TYPE="IsPartOf"/>
+      <mets:div ID="aggregates" TYPE="OrderedList">
+        <mets:div ID="a5z8u" LABEL="vol. 1, upper cover" ORDER="1" TYPE="Static">
+          <mets:fptr FILEID="gylme"/>
+        </mets:div>
+        <mets:div ID="bkqa7" LABEL="vol. 1, upper pastedown" ORDER="2" TYPE="Static">
+          <mets:fptr FILEID="l898s"/>
+        </mets:div>
+        <mets:div ID="gezxb" LABEL="vol. 1, leaf 1r, gathering 1/1" ORDER="3" TYPE="Static">
+          <mets:fptr FILEID="itc6o"/>
+        </mets:div>
+        <mets:div ID="x8npn" LABEL="vol. 2, upper pastedown" ORDER="2" TYPE="Static">
+          <mets:fptr FILEID="tp8n6"/>
+        </mets:div>
+        <mets:div ID="xm7tw" LABEL="vol. 2, leaf 1r, gathering 1/1" ORDER="3" TYPE="Static">
+          <mets:fptr FILEID="l4e90"/>
+        </mets:div>
+        <mets:div ID="xjv77" LABEL="vol. 2, leaf 1v" ORDER="4" TYPE="Static">
+          <mets:fptr FILEID="ivg04"/>
+        </mets:div>
+      </mets:div>
+    </mets:div>
+  </mets:structMap>
+  <mets:structMap TYPE="Physical">
+    <mets:div ID="tu1zb" TYPE="MultiVolumeSet">
+      <mets:div ID="phys1" LABEL="first volume" TYPE="BoundVolume">
+        <mets:div ID="xsu9k" LABEL="upper cover" TYPE="UpperCover">
+          <mets:div ID="uel37" LABEL="cover" ORDER="1" TYPE="CoverOutside">
+            <mets:fptr FILEID="gylme"/>
+          </mets:div>
+          <mets:div ID="y9sd8" LABEL="pastedown" ORDER="2" TYPE="Pastedown">
+            <mets:fptr FILEID="l898s"/>
+          </mets:div>
+        </mets:div>
+        <mets:div ID="sj69e" LABEL="gathering 1" TYPE="Gathering">
+          <mets:div ID="w19h0" LABEL="leaf 1, gathering 1/1" TYPE="Leaf">
+            <mets:div ID="tjppa" LABEL="recto" ORDER="3" TYPE="Side">
+              <mets:fptr FILEID="itc6o"/>
+            </mets:div>
+          </mets:div>
+        </mets:div>
+      </mets:div>
+      <mets:div ID="phys2" LABEL="second volume" TYPE="BoundVolume">
+        <mets:div ID="cd0nv" LABEL="upper cover" TYPE="UpperCover">
+          <mets:div ID="wdrhr" LABEL="pastedown" ORDER="2" TYPE="Pastedown">
+            <mets:fptr FILEID="tp8n6"/>
+          </mets:div>
+        </mets:div>
+        <mets:div ID="hresd" LABEL="gathering 1" TYPE="Gathering">
+          <mets:div ID="jvt8x" LABEL="leaf 1, gathering 1/1" TYPE="Leaf">
+            <mets:div ID="yx262" LABEL="recto" ORDER="3" TYPE="Side">
+              <mets:fptr FILEID="l4e90"/>
+            </mets:div>
+            <mets:div ID="sz6nc" LABEL="verso" ORDER="4" TYPE="Side">
+              <mets:fptr FILEID="ivg04"/>
+            </mets:div>
+          </mets:div>
+        </mets:div>
+      </mets:div>
+    </mets:div>
+  </mets:structMap>
+  <mets:structLink>
+    <mets:smLink xlink:from="phys1" xlink:to=""/>
+    <mets:smLink xlink:from="phys2" xlink:to=""/>
+  </mets:structLink>
+</mets:mets>

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OBJID="9ea67394-967c-4daf-a0cd-210d0f6b606f" TYPE="CompiledDigitalObject" xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd">
+<mets:metsHdr CREATEDATE="2016-12-16T15:46:40.000-05:00" LASTMODDATE="2016-12-16T15:46:40.000-05:00">
+<mets:metsDocumentID TYPE="PUDL">pudl0003/tc85_2621.mets</mets:metsDocumentID>
+</mets:metsHdr>
+<mets:dmdSec ID="l9ihx">
+<mets:mdRef LOCTYPE="URL" MDTYPE="MARC" xlink:href="https://bibdata.princeton.edu/bibliographic/4612596"/>
+</mets:dmdSec>
+<mets:dmdSec ID="us0n3">
+<mets:mdWrap MDTYPE="MODS">
+<mets:xmlData>
+<mods xmlns="http://www.loc.gov/mods/v3" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:mods="http://www.loc.gov/mods/v3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd">
+    <titleInfo altRepGroup="02" script="Latn">
+        <title>Tao Jiean shang han quan sheng ji</title>
+        <subTitle>si juan</subTitle>
+    </titleInfo>
+    <titleInfo altRepGroup="03" script="Latn" type="alternative">
+        <title>Quan sheng ji</title>
+    </titleInfo>
+    <titleInfo altRepGroup="04" script="Latn" type="alternative">
+        <title>Shang han quan sheng ji</title>
+    </titleInfo>
+    <titleInfo altRepGroup="05" script="Latn" type="alternative">
+        <title>Tao Jiean shang han huo ren zhi zhang quan sheng ji</title>
+    </titleInfo>
+    <name altRepGroup="01" script="Latn" type="personal">
+        <namePart>Tao, Hua</namePart>
+        <namePart type="date">1369-approximately 1450</namePart>
+        <role>
+            <roleTerm authority="marcrelator" type="code">cre</roleTerm>
+        </role>
+    </name>
+    <name altRepGroup="08" script="Latn" type="personal">
+        <namePart>Zhu, Yingbi</namePart>
+        <role>
+            <roleTerm type="text">ding zheng</roleTerm>
+            <roleTerm authority="marcrelator" type="code">ctb</roleTerm>
+        </role>
+    </name>
+    <name altRepGroup="09" script="Latn" type="personal">
+        <namePart>He, Kuang</namePart>
+        <role>
+            <roleTerm type="text">chong jiao</roleTerm>
+            <roleTerm authority="marcrelator" type="code">ctb</roleTerm>
+        </role>
+    </name>
+    <name altRepGroup="10" script="Latn" type="personal">
+        <namePart>Xue, Zhen</namePart>
+        <namePart type="date">jin shi 1601</namePart>
+        <role>
+            <roleTerm type="text">ke</roleTerm>
+            <roleTerm authority="marcrelator" type="code">ctb</roleTerm>
+        </role>
+    </name>
+    <name altRepGroup="11" script="Latn" type="corporate">
+        <namePart>Yang zheng tang</namePart>
+        <role>
+            <roleTerm type="text">cang ban</roleTerm>
+            <roleTerm authority="marcrelator" type="code">ctb</roleTerm>
+        </role>
+    </name>
+    <typeOfResource>text</typeOfResource>
+    <originInfo altRepGroup="06" script="Latn">
+        <place>
+            <placeTerm type="text">China]</placeTerm>
+        </place>
+        <publisher>Xue Zhen</publisher>
+        <dateIssued>[Ming, between 1601 and 1644]</dateIssued>
+        <dateIssued encoding="marc" keyDate="yes" point="start" qualifier="questionable">1601</dateIssued>
+        <dateIssued encoding="marc" keyDate="yes" point="end" qualifier="questionable">1644</dateIssued>
+    </originInfo>
+    <originInfo altRepGroup="06" script="Latn">
+        <place>
+            <placeTerm type="text">[China] :</placeTerm>
+        </place>
+        <publisher>薛貞,</publisher>
+        <dateIssued>[明, between 1601 and 1644]</dateIssued>
+    </originInfo>
+    <language>
+        <languageTerm authority="iso639-2b" type="code">chi</languageTerm>
+    </language>
+    <physicalDescription>
+        <extent>8 v. ; 25 cm.</extent>
+    </physicalDescription>
+    <note altRepGroup="00" script="Latn" type="statement of responsibility">Zhu Yingbi ding zheng ; He Kuang chong jiao.</note>
+    <note>Library's copy imperfect: some pages in manuscript.</note>
+    <note>In case.</note>
+    <subject authority="lcsh">
+        <topic>Medicine, Chinese</topic>
+        <topic>Early works to 1800</topic>
+    </subject>
+    <subject altRepGroup="07" authority="sk" script="Latn">
+        <topic>Zi bu</topic>
+        <topic>Yi jia lei</topic>
+        <topic>Nei ke</topic>
+    </subject>
+    <name altRepGroup="01" script="Latn" type="personal">
+        <namePart>陶華</namePart>
+        <namePart type="date">1369-approximately 1450</namePart>
+        <role>
+            <roleTerm authority="marcrelator" type="code">cre</roleTerm>
+        </role>
+    </name>
+    <titleInfo altRepGroup="02" script="Latn">
+        <title>陶節菴傷寒全生集</title>
+        <subTitle>四卷</subTitle>
+    </titleInfo>
+    <note altRepGroup="00" script="Latn" type="statement of responsibility">朱映壁訂正 ; 何爌重校.</note>
+    <note>Note to users: Each image contains two pages.  The default viewer displays 2 images (4 pages) at a time.  To view two pages at a time, please select "One-page View" in the lower right corner of the viewer.</note>
+    <note>This item has been digitized as part of a project funded by the Chiang Ching-kuo Foundation.</note>
+    <titleInfo altRepGroup="03" script="Latn" type="alternative">
+        <title>全生集</title>
+    </titleInfo>
+    <titleInfo altRepGroup="04" script="Latn" type="alternative">
+        <title>傷寒全生集</title>
+    </titleInfo>
+    <titleInfo altRepGroup="05" script="Latn" type="alternative">
+        <title>陶節菴傷寒活人指掌全生集</title>
+    </titleInfo>
+    <subject altRepGroup="07" authority="sk" script="Latn">
+        <topic>子部</topic>
+        <topic>醫家類</topic>
+        <topic>内科</topic>
+    </subject>
+    <name altRepGroup="08" script="Latn" type="personal">
+        <namePart>朱映璧</namePart>
+        <role>
+            <roleTerm type="text">訂正</roleTerm>
+            <roleTerm authority="marcrelator" type="code">ctb</roleTerm>
+        </role>
+    </name>
+    <name altRepGroup="09" script="Latn" type="personal">
+        <namePart>何爌</namePart>
+        <role>
+            <roleTerm type="text">重校</roleTerm>
+            <roleTerm authority="marcrelator" type="code">ctb</roleTerm>
+        </role>
+    </name>
+    <name altRepGroup="10" script="Latn" type="personal">
+        <namePart>薛貞</namePart>
+        <namePart type="date">jin shi 1601</namePart>
+        <role>
+            <roleTerm type="text">刻</roleTerm>
+            <roleTerm authority="marcrelator" type="code">ctb</roleTerm>
+        </role>
+    </name>
+    <name altRepGroup="11" script="Latn" type="corporate">
+        <namePart>養正堂</namePart>
+        <role>
+            <roleTerm type="text">藏板</roleTerm>
+            <roleTerm authority="marcrelator" type="code">ctb</roleTerm>
+        </role>
+    </name>
+    <relatedItem type="host">
+        <typeOfResource collection="yes" manuscript="yes">mixed material</typeOfResource>
+        <titleInfo>
+            <title>East Asian Library Digital Bookshelf</title>
+        </titleInfo>
+        <location>
+            <url note="Digital collection">http://pudl.princeton.edu/collections/eal</url>
+        </location>
+    </relatedItem>
+    <location>
+        <physicalLocation type="text">Princeton University. East Asian Library (Gest): Rare Books</physicalLocation>
+        <physicalLocation authority="marcorg" type="code">NjP</physicalLocation>
+        <holdingSimple>
+            <copyInformation>
+                <subLocation>hycrare</subLocation>
+                <shelfLocator>TC85/2621</shelfLocator>
+            </copyInformation>
+        </holdingSimple>
+    </location>
+    <mods:accessCondition type="useAndReproduction" xlink:href="https://library.princeton.edu/eastasian/use-and-reproduction-rights">Use and
+        reproduction</mods:accessCondition>
+    <mods:accessCondition type="restrictionOnAccess" xlink:href="https://library.princeton.edu/eastasian/restrictions-access">Restrictions on
+        access</mods:accessCondition>
+    <recordInfo>
+        <recordContentSource authority="marcorg">NjP</recordContentSource>
+        <recordOrigin>http://catalog.princeton.edu/cgi-bin/Pwebrecon.cgi?BBID=4002145</recordOrigin>
+        <recordIdentifier>http://diglib.princeton.edu/mdata/pudl0003/tc85_2621.mods</recordIdentifier>
+        <languageOfCataloging>
+            <languageTerm authority="iso639-2b" type="code">eng</languageTerm>
+        </languageOfCataloging>
+    </recordInfo>
+</mods>
+</mets:xmlData>
+</mets:mdWrap>
+</mets:dmdSec>
+<mets:fileSec>
+<mets:fileGrp USE="thumbnail">
+<mets:file ID="zowqu" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0003/tc85_2621/vol01/00000001.tif"/>
+</mets:file>
+</mets:fileGrp>
+<mets:fileGrp USE="masters">
+<mets:file CHECKSUM="6655bb5877ff7f898946a3e0b9015f1878db4039" CHECKSUMTYPE="SHA-1" ID="ut669" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0003/tc85_2621/vol01/00000001.tif"/>
+</mets:file>
+<mets:file CHECKSUM="6655bb5877ff7f898946a3e0b9015f1878db4039" CHECKSUMTYPE="SHA-1" ID="ut670" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0003/tc85_2621/vol01/00000002.tif"/>
+</mets:file>
+<mets:file CHECKSUM="f4c22fbaf5fabee98be5bdef21c6e95f2687e676" CHECKSUMTYPE="SHA-1" ID="yuc7d" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0003/tc85_2621/vol02/00000001.tif"/>
+</mets:file>
+</mets:fileGrp>
+</mets:fileSec>
+<mets:structMap TYPE="RelatedObjects">
+<mets:div DMDID="l9ihx us0n3" ID="hmojt" LABEL="Default">
+<mets:div CONTENTIDS="pudl0003" TYPE="IsPartOf"/>
+<mets:div ID="aggregates" TYPE="OrderedList">
+<mets:div ID="c9uxm" LABEL="image 1" ORDER="1" TYPE="Static">
+<mets:fptr FILEID="ut669"/>
+</mets:div>
+<mets:div ID="s1zyv" LABEL="image 1" ORDER="60" TYPE="Static">
+<mets:fptr FILEID="yuc7d"/>
+</mets:div>
+</mets:div>
+</mets:div>
+</mets:structMap>
+</mets:mets>
