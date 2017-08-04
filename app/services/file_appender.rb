@@ -10,7 +10,11 @@ class FileAppender
   def append_to(resource)
     return [] if files.blank?
     file_sets = build_file_sets || file_nodes
-    resource.member_ids = resource.member_ids + file_sets.map(&:id)
+    if resource.respond_to?(:file_metadata)
+      resource.file_metadata += file_sets
+    else
+      resource.member_ids += file_sets.map(&:id)
+    end
     adjust_pending_uploads(resource)
     file_sets
   end
@@ -42,16 +46,16 @@ class FileAppender
   end
 
   def create_node(file)
-    node = persister.save(resource: FileMetadata.for(file: file))
+    node = FileMetadata.for(file: file).new(id: SecureRandom.uuid)
     file = storage_adapter.upload(file: file, resource: node)
     node.file_identifiers = node.file_identifiers + [file.id]
-    persister.save(resource: node)
+    node
   end
 
   def create_file_set(file_node, file)
     attributes = {
       title: file_node.original_filename,
-      member_ids: file_node.id
+      file_metadata: [file_node]
     }.merge(
       file.try(:container_attributes) || {}
     )

@@ -12,10 +12,10 @@ RSpec.describe RiiifResolver do
       let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
       it "returns the attached file path" do
         resource = change_set_persister.save(change_set: ScannedResourceChangeSet.new(ScannedResource.new, files: [file]))
-        file_metadata_node = query_service.find_members(resource: query_service.find_members(resource: resource).first).first
-        file = Valkyrie::StorageAdapter.find_by(id: file_metadata_node.file_identifiers.first)
+        file_set = query_service.find_members(resource: resource).first
+        file = Valkyrie::StorageAdapter.find_by(id: file_set.derivative_file.file_identifiers.first)
 
-        expect(resolver.pattern(file_metadata_node.id.to_s)).to eq file.io.path
+        expect(resolver.pattern(file_set.id.to_s)).to eq file.io.path
       end
     end
   end

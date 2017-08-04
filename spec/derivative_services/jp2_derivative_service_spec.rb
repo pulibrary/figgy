@@ -44,8 +44,7 @@ RSpec.describe Jp2DerivativeService do
     derivative_service.new(valid_change_set).create_derivatives
 
     reloaded = query_service.find_by(id: valid_resource.id)
-    members = query_service.find_members(resource: reloaded)
-    derivative = members.find { |x| x.use.include?(Valkyrie::Vocab::PCDMUse.ServiceFile) }
+    derivative = reloaded.derivative_file
 
     expect(derivative).to be_present
     derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
