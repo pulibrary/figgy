@@ -13,11 +13,7 @@ class Jp2DerivativeService
     end
 
     def original_file(resource)
-      members(resource).find { |x| x.use.include?(Valkyrie::Vocab::PCDMUse.OriginalFile) }
-    end
-
-    def members(resource)
-      metadata_adapter.query_service.find_members(resource: resource)
+      resource.original_file
     end
   end
 

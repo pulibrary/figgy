@@ -21,6 +21,9 @@
       </div>
       <% if node.proxy.present? %>
         <div class="panel-body">
+          <%= osd_modal_for(node.proxy_for_object.thumbnail_id) do %>
+            <%= render_thumbnail_tag(node.proxy_for_object, onerror: default_icon_fallback)%>
+          <% end %>
         </div>
       <% end %>
     </div>

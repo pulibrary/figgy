@@ -29,7 +29,7 @@ class FileAppender
   end
 
   def processing_derivatives?
-    !file_nodes.first.use.include?(Valkyrie::Vocab::PCDMUse.OriginalFile)
+    !file_nodes.first.original_file?
   end
 
   def file_nodes

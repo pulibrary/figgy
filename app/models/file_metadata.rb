@@ -14,4 +14,12 @@ class FileMetadata < Valkyrie::Resource
   def self.for(file:)
     new(label: file.original_filename, original_filename: file.original_filename, mime_type: file.content_type, use: file.try(:use) || [Valkyrie::Vocab::PCDMUse.OriginalFile])
   end
+
+  def original_file?
+    use.include?(Valkyrie::Vocab::PCDMUse.OriginalFile)
+  end
+
+  def derivative?
+    use.include?(Valkyrie::Vocab::PCDMUse.ServiceFile)
+  end
 end

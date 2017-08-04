@@ -38,6 +38,7 @@ class CatalogController < ApplicationController
     config.show.partials = config.show.partials.insert(1, :parent_breadcrumb)
     config.show.partials += [:universal_viewer]
     config.show.partials += [:resource_attributes]
+    config.index.thumbnail_method = :figgy_thumbnail_path
   end
 
   def admin?
