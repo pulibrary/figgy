@@ -17,6 +17,10 @@ class ControlledVocabulary
   class Term < Dry::Struct
     attribute :label, Valkyrie::Types::String
     attribute :value, Valkyrie::Types::Any
+    attribute :notable, Valkyrie::Types::Bool
+    def notable?
+      notable == true
+    end
   end
 
   class RightsStatement
@@ -30,6 +34,10 @@ class ControlledVocabulary
         self.class.authority_config[:terms].map do |term|
           Term.new(term)
         end
+    end
+
+    def find(value)
+      all.find { |x| x.value == value }
     end
   end
 end

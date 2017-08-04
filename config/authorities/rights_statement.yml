@@ -2,6 +2,7 @@
 :terms:
   - :value: http://rightsstatements.org/vocab/InC/1.0/
     :label: In Copyright
+    :notable: true
     :scopeNote: |
       This Rights Statement can be used for an Item that is in copyright. Using
       this statement implies that Princeton University Library has determined
@@ -18,6 +19,7 @@
       <br/>For other uses you need to obtain permission from the rights-holder(s).
   - :value: http://rightsstatements.org/vocab/InC-RUU/1.0/
     :label: In Copyright - Rights-holder(s) Unlocatable or Unidentifiable
+    :notable: true
     :scopeNote: |
       This Rights Statement is intended for use with an Item that has been
       identified as in copyright but for which no rights-holder(s) has been
@@ -36,6 +38,7 @@
       copyright and related rights legislation that applies to your use.
   - :value: http://rightsstatements.org/vocab/InC-EDU/1.0/
     :label: In Copyright - Educational Use Permitted
+    :notable: true
     :scopeNote: |
       This Rights Statement can be used only for copyrighted Items for which
       Princeton University Library is the rights-holder or has been explicitly
@@ -52,6 +55,7 @@
       <br/>For other uses, you need to obtain permission from the rights-holder(s).
   - :value: http://rightsstatements.org/vocab/InC-NC/1.0/
     :label: In Copyright - NonCommercial Use Permitted
+    :notable: true
     :scopeNote: |
       This Rights Statement can be used only for copyrighted Items for which
       Princeton University Library is the rights-holder or has been explicitly
@@ -68,6 +72,7 @@
       <br/>For other uses you need to obtain permission from the rightsholder(s).
   - :value: http://rightsstatements.org/vocab/NoC-CR/1.0/
     :label: No Copyright - Contractual Restrictions
+    :notable: true
     :scopeNote: |
       This Rights Statement can only be used for Items that are in the Public
       Domain but for which the data provider has entered into contractual
@@ -84,6 +89,7 @@
       cultural protections, digitization agreements or donor agreements.
   - :value: http://rightsstatements.org/vocab/NoC-OKLR/1.0/
     :label: No Copyright - Other Known Legal Restrictions
+    :notable: true
     :scopeNote: |
       This Rights Statement should be used for Items that are in the public
       domain but that cannot be freely re-used as the consequence of known
@@ -99,6 +105,7 @@
       impose restrictions on the use of this Item.
   - :value: http://rightsstatements.org/vocab/NKC/1.0/
     :label: No Known Copyright
+    :notable: false
     :scopeNote: |
       This Rights Statement should be used for Items for which the copyright
       status has not been determined conclusively, but for which the data
@@ -116,6 +123,7 @@
       copyright and related rights legislation that applies to your use.
   - :value: http://cicognara.org/microfiche_copyright
     :label: This title is reproduced by permission of the Vatican Library
+    :notable: true
     :scopeNote: |
       This Rights Statement should be used for Cicognara project microfiche.
     :definition: >-
