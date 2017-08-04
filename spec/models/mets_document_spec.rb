@@ -195,9 +195,8 @@ RSpec.describe METSDocument do
       subject(:mets_document) { described_class.new mets_file_multi3 }
 
       it "does not duplicate pages" do
-        expect(mets_document.volume_ids).to eq ['v1log', 'v2log']
-        expect(mets_document.files_for_volume('v1log').length).to eq 730
-        expect(mets_document.files_for_volume('v2log').length).to eq 492
+        expect(mets_document.volume_ids).to eq ['v1log']
+        expect(mets_document.files_for_volume('v1log').length).to eq 3
       end
     end
 
