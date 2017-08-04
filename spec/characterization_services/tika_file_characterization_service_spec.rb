@@ -23,7 +23,6 @@ RSpec.describe TikaFileCharacterizationService do
   end
   let(:book_members) { query_service.find_members(resource: book) }
   let(:valid_file_set) { book_members.first }
-  let(:valid_file_node) { adapter.query_service.find_members(resource: valid_file_set).first }
 
   before do
     output = '547c81b080eb2d7c09e363a670c46960ac15a6821033263867dd59a31376509c'
@@ -32,46 +31,46 @@ RSpec.describe TikaFileCharacterizationService do
   end
 
   it 'characterizes a sample file' do
-    described_class.new(file_node: valid_file_node, persister: persister).characterize
+    described_class.new(file_node: valid_file_set, persister: persister).characterize
   end
 
   it 'sets the height attribute for a file_node on characterize ' do
-    t_file_node = valid_file_node
-    t_file_node.height = nil
+    t_file_node = valid_file_set
+    t_file_node.original_file.height = nil
     new_file_node = described_class.new(file_node: t_file_node, persister: persister).characterize(save: false)
-    expect(new_file_node.height).not_to be_empty
+    expect(new_file_node.original_file.height).not_to be_empty
   end
 
   it 'sets the width attribute for a file_node on characterize' do
-    t_file_node = valid_file_node
-    t_file_node.width = nil
+    t_file_node = valid_file_set
+    t_file_node.original_file.width = nil
     new_file_node = described_class.new(file_node: t_file_node, persister: persister).characterize(save: false)
-    expect(new_file_node.width).not_to be_empty
+    expect(new_file_node.original_file.width).not_to be_empty
   end
 
   it 'saves to the persister by default on characterize' do
-    allow(persister).to receive(:save).and_return(valid_file_node)
-    described_class.new(file_node: valid_file_node, persister: persister).characterize
+    allow(persister).to receive(:save).and_return(valid_file_set)
+    described_class.new(file_node: valid_file_set, persister: persister).characterize
     expect(persister).to have_received(:save).once
   end
 
   it 'does not save to the persister when characterize is called with save false' do
-    allow(persister).to receive(:save).and_return(valid_file_node)
-    described_class.new(file_node: valid_file_node, persister: persister).characterize(save: false)
+    allow(persister).to receive(:save).and_return(valid_file_set)
+    described_class.new(file_node: valid_file_set, persister: persister).characterize(save: false)
     expect(persister).not_to have_received(:save)
   end
 
   it 'sets the mime_type for a file_node on characterize' do
-    t_file_node = valid_file_node
-    t_file_node.mime_type = nil
+    t_file_node = valid_file_set
+    t_file_node.original_file.mime_type = nil
     new_file_node = described_class.new(file_node: t_file_node, persister: persister).characterize(save: false)
-    expect(new_file_node.mime_type).not_to be_empty
+    expect(new_file_node.original_file.mime_type).not_to be_empty
   end
 
   it 'sets the checksum for a file_node on characterize' do
-    t_file_node = valid_file_node
-    t_file_node.checksum = nil
+    t_file_node = valid_file_set
+    t_file_node.original_file.checksum = nil
     new_file_node = described_class.new(file_node: t_file_node, persister: persister).characterize(save: false)
-    expect(new_file_node.checksum).not_to be_empty
+    expect(new_file_node.original_file.checksum).not_to be_empty
   end
 end

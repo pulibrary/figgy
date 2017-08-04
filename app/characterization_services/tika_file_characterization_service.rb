@@ -22,7 +22,8 @@ class TikaFileCharacterizationService
   def characterize(save: true)
     result = JSON.parse(json_output).last
     @file_characterization_attributes = { width: result['tiff:ImageWidth'], height: result['tiff:ImageLength'], mime_type: result['Content-Type'], checksum: checksum }
-    @file_node = @file_node.new(@file_characterization_attributes.to_h)
+    new_file = original_file.new(@file_characterization_attributes.to_h)
+    @file_node.file_metadata = @file_node.file_metadata.select { |x| x.id != new_file.id } + [new_file]
     @persister.save(resource: @file_node) if save
     @file_node
   end
@@ -58,7 +59,11 @@ class TikaFileCharacterizationService
   # Provides the file attached to the file_node
   # @return Valkyrie::FileRepository::File
   def file_object
-    @file_object ||= Valkyrie::StorageAdapter.find_by(id: @file_node.file_identifiers[0])
+    @file_object ||= Valkyrie::StorageAdapter.find_by(id: original_file.file_identifiers[0])
+  end
+
+  def original_file
+    @file_node.original_file
   end
 
   def valid?

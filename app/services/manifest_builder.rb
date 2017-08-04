@@ -117,7 +117,7 @@ class ManifestBuilder
     end
 
     def derivative_id
-      derivative_metadata_node.id
+      resource.id
     end
 
     def display_image
@@ -129,10 +129,6 @@ class ManifestBuilder
     end
 
     private
-
-      def derivative_metadata_node
-        resource.derivative_file
-      end
 
       def width
         file.width.first

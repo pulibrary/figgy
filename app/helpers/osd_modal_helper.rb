@@ -26,9 +26,13 @@ module OsdModalHelper
   def iiif_thumbnail_path(document, image_options = {})
     return unless document.thumbnail_id
     id = Array(document.thumbnail_id).first
+    return build_thumbnail_path(id, image_options) if id == document.id
     thumbnail_document = Valkyrie.config.metadata_adapter.query_service.find_by(id: id)
-    return iiif_thumbnail_path(thumbnail_document, image_options) if thumbnail_document.try(:thumbnail_id)
-    url = ManifestBuilder::ManifestHelper.new.manifest_image_thumbnail_path(thumbnail_document.id)
+    iiif_thumbnail_path(thumbnail_document, image_options)
+  end
+
+  def build_thumbnail_path(id, image_options = {})
+    url = ManifestBuilder::ManifestHelper.new.manifest_image_thumbnail_path(id)
     image_tag url, image_options.merge(onerror: default_icon_fallback) if url.present?
   end
 end
