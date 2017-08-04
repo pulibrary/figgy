@@ -56,16 +56,7 @@ class IngestMETSJob < ApplicationJob
 
     def files
       mets.files.lazy.map do |file|
-        file[:path] = tmp_file(file).path
         mets.decorated_file(file)
-      end
-    end
-
-    def tmp_file(file)
-      basename = Pathname.new(file[:path]).basename
-      Tempfile.new([basename.to_s.split(".").first, basename.extname]).tap do |f|
-        FileUtils.cp(File.open(file[:path]).path, f.path)
-        f.rewind
       end
     end
 
