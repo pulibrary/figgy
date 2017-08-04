@@ -3,7 +3,12 @@ require 'rails_helper'
 
 RSpec.describe "catalog/show.html.erb" do
   context "when given a ScannedResource solr document" do
-    let(:scanned_resource) { FactoryGirl.create_for_repository(:scanned_resource, author: "Shakespeare", member_of_collection_ids: [collection.id]) }
+    let(:scanned_resource) do
+      FactoryGirl.create_for_repository(:scanned_resource,
+                                        author: "Shakespeare",
+                                        member_of_collection_ids: [collection.id],
+                                        holding_location: RDF::URI('https://bibdata.princeton.edu/locations/delivery_locations/1'))
+    end
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(scanned_resource) }
     let(:collection) { FactoryGirl.create_for_repository(:collection) }
     let(:solr_document) { SolrDocument.new(document) }
@@ -39,6 +44,10 @@ RSpec.describe "catalog/show.html.erb" do
       # Collection
       expect(rendered).to have_selector "th", text: "Collections"
       expect(rendered).to have_selector ".member_of_collections", text: collection.title.first
+
+      # Holding Location
+      expect(rendered).to have_selector "th", text: "Holding Location"
+      expect(rendered).to have_selector ".rendered_holding_location", text: "Plasma Physics Library"
     end
   end
 end

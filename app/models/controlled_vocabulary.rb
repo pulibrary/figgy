@@ -14,6 +14,10 @@ class ControlledVocabulary
     []
   end
 
+  def find(value)
+    all.find { |x| x.value == value }
+  end
+
   class Term < Valkyrie::Resource
     attribute :label, Valkyrie::Types::String
     attribute :value, Valkyrie::Types::Any
@@ -24,7 +28,7 @@ class ControlledVocabulary
     end
   end
 
-  class RightsStatement
+  class RightsStatement < ControlledVocabulary
     ControlledVocabulary.register(:rights_statement, self)
     def self.authority_config
       @authority_config ||= YAML.safe_load(File.read(Rails.root.join("config", "authorities", "rights_statement.yml")), [Symbol])
@@ -36,13 +40,9 @@ class ControlledVocabulary
           Term.new(term)
         end
     end
-
-    def find(value)
-      all.find { |x| x.value == value }
-    end
   end
 
-  class PDFType
+  class PDFType < ControlledVocabulary
     ControlledVocabulary.register(:pdf_type, self)
 
     def all
@@ -52,6 +52,24 @@ class ControlledVocabulary
         Term.new(label: 'Bitonal PDF', value: 'bitonal'),
         Term.new(label: 'No PDF', value: 'none')
       ]
+    end
+  end
+
+  class HoldingLocation < ControlledVocabulary
+    ControlledVocabulary.register(:holding_location, self)
+
+    def all
+      json.map do |record|
+        Term.new(label: record[:label], value: record[:url].gsub('.json', ''))
+      end
+    end
+
+    def url
+      Figgy.config['locations_url']
+    end
+
+    def json
+      @json ||= MultiJson.load(Faraday.get(url).body, symbolize_keys: true)
     end
   end
 end

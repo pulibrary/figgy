@@ -1,4 +1,5 @@
 defaults: &defaults
+  locations_url: https://bibdata.princeton.edu/locations/digital_locations.json
   derivative_path: <%= Rails.root.join("tmp", "derivatives") %>
   jp2_recipes:
     default_color: >

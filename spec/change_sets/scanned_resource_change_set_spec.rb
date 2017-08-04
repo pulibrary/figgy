@@ -106,6 +106,14 @@ RSpec.describe ScannedResourceChangeSet do
     end
   end
 
+  describe "#holding_location" do
+    it "converts values to RDF::URIs" do
+      change_set.prepopulate!
+      change_set.validate(holding_location: "http://test.com/")
+      expect(change_set.holding_location).to be_instance_of RDF::URI
+    end
+  end
+
   describe "#rights_statement" do
     let(:form_resource) { ScannedResource.new(rights_statement: RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")) }
     it "is singular, required, and converts to an RDF::URI" do
