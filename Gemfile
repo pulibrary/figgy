@@ -56,6 +56,7 @@ end
 
 gem 'rsolr', '>= 1.0'
 
+gem 'aasm'
 gem 'browse-everything'
 gem 'coffee-rails'
 gem 'devise'

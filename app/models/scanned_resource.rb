@@ -9,6 +9,7 @@ class ScannedResource < Valhalla::Resource
   attribute :viewing_direction
   attribute :member_of_collection_ids
   attribute :logical_structure, Valkyrie::Types::Array.member(Structure.optional).optional
+  attribute :state
 
   def to_s
     "#{human_readable_type}: #{title.to_sentence}"
