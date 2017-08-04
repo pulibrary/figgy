@@ -3,7 +3,7 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   delegate :human_readable_type, to: :model
   property :title, multiple: true, required: true, default: []
   property :source_metadata_identifier, required: true, multiple: false
-  property :rights_statement, multiple: false, required: true
+  property :rights_statement, multiple: false, required: true, default: "http://rightsstatements.org/vocab/NKC/1.0/", type: ::Types::URI
   property :rights_note, multiple: false, required: false
   property :viewing_hint, multiple: false, required: false, default: "individuals"
   property :pdf_type, multiple: false, required: false

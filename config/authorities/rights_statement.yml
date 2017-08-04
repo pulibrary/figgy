@@ -1,0 +1,138 @@
+# derived from https://github.com/rightsstatements/data-model/blob/master/rights-statements.ttl
+:terms:
+  - :value: http://rightsstatements.org/vocab/InC/1.0/
+    :label: In Copyright
+    :scopeNote: |
+      This Rights Statement can be used for an Item that is in copyright. Using
+      this statement implies that Princeton University Library has determined
+      that the Item is in copyright and either is the rights­holder, has
+      obtained permission from the rights­holder(s) to make the Work available,
+      or makes the Work available under an exception or limitation to copyright
+      (including Fair Use) that entitles it to make the Work available.
+    :definition: >-
+      This Item is protected by copyright and/or related rights.
+
+      <br/>You are free to use this Item in any way that is permitted by the
+      copyright and related rights legislation that applies to your use.
+
+      <br/>For other uses you need to obtain permission from the rights-holder(s).
+  - :value: http://rightsstatements.org/vocab/InC-RUU/1.0/
+    :label: In Copyright - Rights-holder(s) Unlocatable or Unidentifiable
+    :scopeNote: |
+      This Rights Statement is intended for use with an Item that has been
+      identified as in copyright but for which no rights-holder(s) has been
+      identified or located after some reasonable investigation. This Rights
+      Statement should only be used if the data provider is reasonably sure
+      that the work is in copyright. This Rights Statement is not intended for
+      use by EU-based data providers who have identified works as Orphan Works
+      in accordance with the EU Orphan Works Directive (they must use InC-OW-EU
+      instead).
+    :definition: >-
+      This Item is protected by copyright and/or related rights. However, for
+      this Item, either (a) no rights-holder(s) have been identified or (b) one
+      or more rights-holder(s) have been identified but none have been located.
+
+      <br/>You are free to use this Item in any way that is permitted by the
+      copyright and related rights legislation that applies to your use.
+  - :value: http://rightsstatements.org/vocab/InC-EDU/1.0/
+    :label: In Copyright - Educational Use Permitted
+    :scopeNote: |
+      This Rights Statement can be used only for copyrighted Items for which
+      Princeton University Library is the rights-holder or has been explicitly
+      authorized by the rights-holder(s) to allow third parties to use the Work
+      for educational purposes without first obtaining permission.
+    :definition: >-
+      This Item is protected by copyright and/or related rights.
+
+      <br/>You are free to use this Item in any way that is permitted by the
+      copyright and related rights legislation that applies to your use. In
+      addition, no permission is required from the rights-holder(s) for
+      educational uses.
+
+      <br/>For other uses, you need to obtain permission from the rights-holder(s).
+  - :value: http://rightsstatements.org/vocab/InC-NC/1.0/
+    :label: In Copyright - NonCommercial Use Permitted
+    :scopeNote: |
+      This Rights Statement can be used only for copyrighted Items for which
+      Princeton University Library is the rights-holder or has been explicitly
+      authorized by the rights-holder(s) to allow third parties to use the Work
+      for non-commercial purposes without obtaining permission first.
+    :definition: >-
+      This Item is protected by copyright and/or related rights.
+
+      <br/>You are free to use this Item in any way that is permitted by the
+      copyright and related rights legislation that applies to your use. In
+      addition, no permission is required from the rights-holder(s) for
+      non-commercial uses.
+
+      <br/>For other uses you need to obtain permission from the rightsholder(s).
+  - :value: http://rightsstatements.org/vocab/NoC-CR/1.0/
+    :label: No Copyright - Contractual Restrictions
+    :scopeNote: |
+      This Rights Statement can only be used for Items that are in the Public
+      Domain but for which the data provider has entered into contractual
+      agreement that requires it to take steps to restrict third party uses of
+      the Item. In order for this Rights Statement to be conclusive, the data
+      provider must provide a link to a page detailing the the contractual
+      restrictions that apply to the use of the Item.
+    :definition: >-
+      Use of this Item is not restricted by copyright and/or related rights.
+
+      <br/>As part of the acquisition or digitization of this Item, Princeton
+      University Library is contractually required to limit the use of this
+      Item. Limitations may include, but are not limited to, privacy issues,
+      cultural protections, digitization agreements or donor agreements.
+  - :value: http://rightsstatements.org/vocab/NoC-OKLR/1.0/
+    :label: No Copyright - Other Known Legal Restrictions
+    :scopeNote: |
+      This Rights Statement should be used for Items that are in the public
+      domain but that cannot be freely re-used as the consequence of known
+      legal restrictions that prevent the data provider from allowing free
+      re-use of the Work, such as cultural heritage or traditional cultural
+      expression protections. In order for this Rights Statement to be
+      conclusive, the data provider must provide a link to a page detailing
+      the the legal restrictions that limit re-use of the Item.
+    :definition: >-
+      Use of this Item is not restricted by copyright and/or related rights.
+
+      <br/>In one or more jurisdictions, laws other than copyright are known to
+      impose restrictions on the use of this Item.
+  - :value: http://rightsstatements.org/vocab/NKC/1.0/
+    :label: No Known Copyright
+    :scopeNote: |
+      This Rights Statement should be used for Items for which the copyright
+      status has not been determined conclusively, but for which the data
+      provider has reasonable cause to believe that the work is not covered by
+      copyright or related rights anymore. This Rights Statement should not be
+      used for Orphan Works (which are assumed to be in-copyright) or for Works
+      where the data provider has not undertaken an effort to ascertain the
+      copyright status of the Work.
+    :definition: >-
+      Princeton University Library reasonably believes that the Item is not
+      restricted by copyright or related rights, but a conclusive determination
+      could not be made.
+
+      <br/>You are free to use this Item in any way that is permitted by the
+      copyright and related rights legislation that applies to your use.
+  - :value: http://cicognara.org/microfiche_copyright
+    :label: This title is reproduced by permission of the Vatican Library
+    :scopeNote: |
+      This Rights Statement should be used for Cicognara project microfiche.
+    :definition: >-
+      This microfiche has been digitized by the Digital Cicognara Library with
+      the permission of the Vatican Library. Neither the Vatican Library nor the
+      Digital Cicognara Library claims any copyright governing this digital
+      resource. It is provided for free, on a non-commercial, open-access basis,
+      for fair-use academic and research purposes only. Anyone who claims
+      copyright over any part of these resources and feels that they should not
+      be presented in this manner is invited to contact the Digital Cicognara
+      Library which will consider such concerns and make every effort to respond
+      appropriately.
+
+      <br/>For publication purposes, it is possible to order high-resolution,
+      black-and-white or color photographic reproductions by using the
+      appropriate Vatican Library order forms. Fees include the cost of the
+      reproductions plus the publication rights. For further information, see
+      the Vatican Library’s Photographic Reproductions web page at
+      https://www.vatlib.it/home.php?pag=riproduzioni_fotografiche.
+      High-resolution photography is available only through the Vatican Library.
