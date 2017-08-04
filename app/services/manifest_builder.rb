@@ -131,7 +131,7 @@ class ManifestBuilder
     private
 
       def derivative_metadata_node
-        members.find { |x| x.use.include?(Valkyrie::Vocab::PCDMUse.ServiceFile) }
+        resource.derivative_file
       end
 
       def width
@@ -143,20 +143,12 @@ class ManifestBuilder
       end
 
       def file
-        @file ||= members.find { |x| x.use.include?(Valkyrie::Vocab::PCDMUse.OriginalFile) }
-      end
-
-      def members
-        @members ||= query_service.find_members(resource: resource).to_a
+        resource.original_file
       end
 
       def endpoint
         IIIFManifest::IIIFEndpoint.new(helper.manifest_image_path(derivative_id),
                                        profile: "http://iiif.io/api/image/2/level2.json")
-      end
-
-      def metadata_adapter
-        Valkyrie.config.metadata_adapter
       end
 
       def helper
