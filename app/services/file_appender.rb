@@ -14,6 +14,7 @@ class FileAppender
       resource.file_metadata += file_sets
     else
       resource.member_ids += file_sets.map(&:id)
+      resource.thumbnail_id = file_sets.first.id if resource.thumbnail_id.blank?
     end
     adjust_pending_uploads(resource)
     file_sets

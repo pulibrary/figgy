@@ -106,6 +106,7 @@ RSpec.describe PlumChangeSetPersister do
 
       expect(members.to_a.length).to eq 1
       expect(members.first).to be_kind_of FileSet
+      expect(output.thumbnail_id).to eq [members.first.id]
 
       file_metadata_nodes = members.first.file_metadata
       expect(file_metadata_nodes.to_a.length).to eq 2
