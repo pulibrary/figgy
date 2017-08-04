@@ -3,5 +3,5 @@
               collection: ControlledVocabulary.for(:rights_statement).all,
               label_method: :label,
               value_method: :value,
-              input_html: { class: 'form-control rights-statement' },
+              input_html: { class: 'form-control rights-statement', data: { notable: ControlledVocabulary.for(:rights_statement).all.select(&:notable?).map(&:value) }},
               required: f.object.required?(key) %>

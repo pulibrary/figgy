@@ -6,7 +6,7 @@ $(document).ready(function(){
 function rights_note_visibility() {
     var stmt = $('.rights-statement');
     var note = $('.rights-note');
-    if ( stmt.val() == 'http://rightsstatements.org/vocab/NKC/1.0/' ) {
+    if ( $.inArray(stmt.val(), stmt.data("notable"))  == -1) {
         note.val('');
         note.attr('readonly', 1);
     } else {

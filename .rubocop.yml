@@ -20,6 +20,9 @@ Style/FileName:
 Style/PredicateName:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
+Rails/OutputSafety:
+  Exclude:
+    - 'app/decorators/**/*'
 Metrics/BlockLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'

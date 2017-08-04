@@ -7,7 +7,7 @@ class ControlledVocabulary
   end
 
   def self.for(key)
-    handlers[key].new || new
+    (handlers[key] || self).new
   end
 
   def all
@@ -18,6 +18,7 @@ class ControlledVocabulary
     attribute :label, Valkyrie::Types::String
     attribute :value, Valkyrie::Types::Any
     attribute :notable, Valkyrie::Types::Bool
+    attribute :definition, Valkyrie::Types::String
     def notable?
       notable == true
     end
