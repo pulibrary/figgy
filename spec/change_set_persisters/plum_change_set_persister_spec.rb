@@ -96,7 +96,7 @@ RSpec.describe PlumChangeSetPersister do
 
   describe "uploading files" do
     let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
-    it "can append files as FileSets" do
+    it "can append files as FileSets", run_real_derivatives: true do
       resource = FactoryGirl.build(:scanned_resource)
       change_set = change_set_class.new(resource)
       change_set.files = [file]
