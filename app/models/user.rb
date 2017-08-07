@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 class User < ApplicationRecord
-  # Connects this user object to Hydra behaviors.
-  include Hydra::User
-
   # Connects this user object to Blacklights Bookmarks.
   include Blacklight::User
   include Hydra::User
+  # Connects this user object to Role-management behaviors.
+  include Hydra::RoleManagement::UserRoles
+
   def self.from_omniauth(access_token)
     User.where(provider: access_token.provider, uid: access_token.uid).first_or_create do |user|
       user.uid = access_token.uid
