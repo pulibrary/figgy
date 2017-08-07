@@ -91,6 +91,24 @@ RSpec.describe ScannedResourcesController do
     end
   end
 
+  describe "destroy" do
+    let(:user) { FactoryGirl.create(:admin) }
+    context "when not logged in" do
+      let(:user) { nil }
+      it "throws a CanCan::AccessDenied error" do
+        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+        expect { delete :destroy, params: { id: scanned_resource.id.to_s } }.to raise_error CanCan::AccessDenied
+      end
+    end
+    it "can delete a book" do
+      scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+      delete :destroy, params: { id: scanned_resource.id.to_s }
+
+      expect(response).to redirect_to root_path
+      expect { query_service.find_by(id: scanned_resource.id) }.to raise_error ::Valkyrie::Persistence::ObjectNotFoundError
+    end
+  end
+
   def find_resource(id)
     query_service.find_by(id: Valkyrie::ID.new(id.to_s))
   end
