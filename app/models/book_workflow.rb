@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # State-based workflow for books: The primary workflow is to start at pending, and progress through
 # metadata_review and final_review to complete.  There are two exceptional workflows: between
 # complete/takedown (for issues requiring an item be suppressed), and between complete/flagged (for issues

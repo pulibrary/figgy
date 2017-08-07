@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe ScannedResourceChangeSet do
   subject(:change_set) { described_class.new(form_resource) }
-  let(:scanned_resource) { ScannedResource.new(title: 'Test', rights_statement: 'Stuff', visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE) }
+  let(:scanned_resource) { ScannedResource.new(title: 'Test', rights_statement: 'Stuff', visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: 'pending') }
   let(:form_resource) { scanned_resource }
   before do
     stub_bibdata(bib_id: '123456')
@@ -65,6 +65,18 @@ RSpec.describe ScannedResourceChangeSet do
         expect(change_set).not_to be_valid
       end
     end
+    context "when given a valid state transition" do
+      it "is valid" do
+        change_set.validate(state: "metadata_review")
+        expect(change_set).to be_valid
+      end
+    end
+    context "when given an invalid state transition" do
+      it "is invalid" do
+        change_set.validate(state: "complete")
+        expect(change_set).not_to be_valid
+      end
+    end
   end
 
   describe "#viewing_hint" do
@@ -120,6 +132,13 @@ RSpec.describe ScannedResourceChangeSet do
       expect(change_set.logical_structure[0].nodes[0].nodes[0].proxy).to eq [resource1.id]
       expect(change_set.logical_structure[0].nodes[1].label).to eq ["Chapter 2"]
       expect(change_set.logical_structure[0].nodes[1].nodes[0].proxy).to eq [resource2.id]
+    end
+  end
+
+  describe "#workflow" do
+    it "has a workflow" do
+      expect(change_set.workflow).to be_a(BookWorkflow)
+      expect(change_set.workflow.pending?).to be true
     end
   end
 end

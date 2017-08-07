@@ -18,7 +18,7 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   property :start_canvas, multiple: false, type: Valkyrie::Types::ID
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
   property :logical_structure, multiple: true, required: false, type: Types::Strict::Array.member(Structure)
-  property :state, multiple: false, required: true, default: 'pending'
+  property :state, multiple: false, required: true, default: BookWorkflow.aasm.initial_state.to_s
 
   # Virtual Attributes
   property :refresh_remote_metadata, virtual: true, multiple: false
@@ -43,6 +43,7 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
       :pdf_type,
       :portion_note,
       :nav_date,
+      :state,
       :member_of_collection_ids
     ]
   end

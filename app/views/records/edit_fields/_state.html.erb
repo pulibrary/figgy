@@ -1,0 +1,3 @@
+<%= f.input :state, as: :radio_buttons,
+            collection: valid_states(f.object),
+            required: f.object.required?(key) %>
