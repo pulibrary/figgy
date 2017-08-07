@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 class ScannedResourceDecorator < Valkyrie::ResourceDecorator
-  self.display_attributes = [:author, :internal_resource, :created_at, :updated_at, :rendered_rights_statement, :member_of_collections, :rendered_holding_location]
+  self.display_attributes = [:imported_author, :internal_resource, :created_at, :updated_at, :rendered_rights_statement, :member_of_collections, :rendered_holding_location]
   delegate :query_service, to: :metadata_adapter
+  delegate :author, to: :primary_imported_metadata, prefix: :imported
 
   def member_of_collections
     @member_of_collections ||=

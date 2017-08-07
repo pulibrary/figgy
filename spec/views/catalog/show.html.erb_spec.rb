@@ -5,7 +5,12 @@ RSpec.describe "catalog/show.html.erb" do
   context "when given a ScannedResource solr document" do
     let(:scanned_resource) do
       FactoryGirl.create_for_repository(:scanned_resource,
-                                        author: "Shakespeare",
+                                        imported_metadata: [
+                                          {
+                                            author: "Shakespeare",
+                                            title: "Imported Title"
+                                          }
+                                        ],
                                         member_of_collection_ids: [collection.id],
                                         holding_location: RDF::URI('https://bibdata.princeton.edu/locations/delivery_locations/1'))
     end
@@ -19,10 +24,12 @@ RSpec.describe "catalog/show.html.erb" do
       stub_blacklight_views
       render
     end
-    it "renders the title" do
-      expect(rendered).to have_content scanned_resource.title.to_sentence
+    it "renders the imported title" do
+      expect(rendered).to have_content scanned_resource.primary_imported_metadata.title.to_sentence
     end
     it "renders all available attributes" do
+      expect(rendered).to have_content "Imported Title"
+
       expect(rendered).to have_selector "#attributes h2", text: "Attributes"
 
       # Author
