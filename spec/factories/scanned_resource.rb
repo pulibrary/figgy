@@ -2,7 +2,7 @@
 FactoryGirl.define do
   factory :scanned_resource do
     title 'Title'
-    rights_statement 'Test Statement'
+    rights_statement RDF::URI('http://rightsstatements.org/vocab/NKC/1.0/')
     visibility 'open'
     read_groups 'public'
     to_create do |instance|

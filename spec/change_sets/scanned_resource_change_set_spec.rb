@@ -97,6 +97,27 @@ RSpec.describe ScannedResourceChangeSet do
     end
   end
 
+  describe "#rights_statement" do
+    let(:form_resource) { ScannedResource.new(rights_statement: RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")) }
+    it "is singular, required, and converts to an RDF::URI" do
+      change_set.prepopulate!
+
+      expect(change_set.rights_statement).to eq RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")
+      change_set.validate(rights_statement: "")
+      expect(change_set).not_to be_valid
+      change_set.validate(rights_statement: "http://rightsstatements.org/vocab/NKC/1.0/")
+      expect(change_set.rights_statement).to be_instance_of RDF::URI
+    end
+    context "when given a blank ScannedResource" do
+      let(:form_resource) { ScannedResource.new }
+      it "sets a default Rights Statement" do
+        change_set.prepopulate!
+
+        expect(change_set.rights_statement).to eq RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")
+      end
+    end
+  end
+
   describe "#logical_structure" do
     let(:structure) do
       {
