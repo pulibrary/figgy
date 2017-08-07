@@ -14,7 +14,7 @@ class ControlledVocabulary
     []
   end
 
-  class Term < Dry::Struct
+  class Term < Valkyrie::Resource
     attribute :label, Valkyrie::Types::String
     attribute :value, Valkyrie::Types::Any
     attribute :notable, Valkyrie::Types::Bool
@@ -39,6 +39,19 @@ class ControlledVocabulary
 
     def find(value)
       all.find { |x| x.value == value }
+    end
+  end
+
+  class PDFType
+    ControlledVocabulary.register(:pdf_type, self)
+
+    def all
+      [
+        Term.new(label: 'Color PDF', value: 'color'),
+        Term.new(label: 'Grayscale PDF', value: 'gray'),
+        Term.new(label: 'Bitonal PDF', value: 'bitonal'),
+        Term.new(label: 'No PDF', value: 'none')
+      ]
     end
   end
 end

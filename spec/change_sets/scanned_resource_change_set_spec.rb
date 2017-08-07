@@ -97,6 +97,15 @@ RSpec.describe ScannedResourceChangeSet do
     end
   end
 
+  describe "#pdf_type" do
+    let(:form_resource) { ScannedResource.new }
+    it "has a default of 'gray'" do
+      change_set.prepopulate!
+
+      expect(change_set.pdf_type).to eq 'gray'
+    end
+  end
+
   describe "#rights_statement" do
     let(:form_resource) { ScannedResource.new(rights_statement: RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")) }
     it "is singular, required, and converts to an RDF::URI" do
