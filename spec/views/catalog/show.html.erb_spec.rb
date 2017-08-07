@@ -24,10 +24,8 @@ RSpec.describe "catalog/show.html.erb" do
       stub_blacklight_views
       render
     end
-    it "renders the imported title" do
-      expect(rendered).to have_content scanned_resource.primary_imported_metadata.title.to_sentence
-    end
     it "renders all available attributes" do
+      expect(rendered).to have_content scanned_resource.primary_imported_metadata.title.to_sentence
       expect(rendered).to have_content "Imported Title"
 
       expect(rendered).to have_selector "#attributes h2", text: "Attributes"
