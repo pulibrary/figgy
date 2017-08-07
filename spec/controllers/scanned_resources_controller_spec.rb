@@ -6,9 +6,95 @@ RSpec.describe ScannedResourcesController do
   let(:user) { nil }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:persister) { adapter.persister }
+  let(:query_service) { adapter.query_service }
   before do
     sign_in user if user
   end
+
+  describe "create" do
+    let(:user) { FactoryGirl.create(:admin) }
+    let(:valid_params) do
+      {
+        title: ['Title 1', 'Title 2'],
+        rights_statement: 'Test Statement',
+        visibility: 'restricted'
+      }
+    end
+    let(:invalid_params) do
+      {
+        title: [""],
+        rights_statement: 'Test Statement',
+        visibility: 'restricted'
+      }
+    end
+    context "when not an admin" do
+      let(:user) { nil }
+      it "throws a CanCan::AccessDenied error" do
+        expect { post :create, params: { scanned_resource: valid_params } }.to raise_error CanCan::AccessDenied
+      end
+    end
+    it "can create a scanned resource" do
+      post :create, params: { scanned_resource: valid_params }
+
+      expect(response).to be_redirect
+      expect(response.location).to start_with "http://test.host/catalog/"
+      id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
+      expect(find_resource(id).title).to contain_exactly "Title 1", "Title 2"
+    end
+    context "when joining a collection" do
+      let(:valid_params) do
+        {
+          title: ['Title 1', 'Title 2'],
+          rights_statement: 'Test Statement',
+          visibility: 'restricted',
+          member_of_collection_ids: [collection.id.to_s]
+        }
+      end
+      let(:collection) { FactoryGirl.create_for_repository(:collection) }
+      it "works" do
+        post :create, params: { scanned_resource: valid_params }
+
+        expect(response).to be_redirect
+        expect(response.location).to start_with "http://test.host/catalog/"
+        id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
+        expect(find_resource(id).member_of_collection_ids).to contain_exactly collection.id
+      end
+    end
+    context "when something bad goes wrong" do
+      it "doesn't persist anything at all when it's solr erroring" do
+        allow(Valkyrie::MetadataAdapter.find(:index_solr)).to receive(:persister).and_return(
+          Valkyrie::MetadataAdapter.find(:index_solr).persister
+        )
+        allow(Valkyrie::MetadataAdapter.find(:index_solr).persister).to receive(:save_all).and_raise("Bad")
+
+        expect do
+          post :create, params: { scanned_resource: valid_params }
+        end.to raise_error "Bad"
+        expect(Valkyrie::MetadataAdapter.find(:postgres).query_service.find_all.to_a.length).to eq 0
+      end
+
+      it "doesn't persist anything at all when it's postgres erroring" do
+        allow(Valkyrie::MetadataAdapter.find(:postgres)).to receive(:persister).and_return(
+          Valkyrie::MetadataAdapter.find(:postgres).persister
+        )
+        allow(Valkyrie::MetadataAdapter.find(:postgres).persister).to receive(:save).and_raise("Bad")
+        expect do
+          post :create, params: { scanned_resource: valid_params }
+        end.to raise_error "Bad"
+        expect(Valkyrie::MetadataAdapter.find(:postgres).query_service.find_all.to_a.length).to eq 0
+        expect(Valkyrie::MetadataAdapter.find(:index_solr).query_service.find_all.to_a.length).to eq 0
+      end
+    end
+    it "renders the form if it doesn't create a scanned resource" do
+      post :create, params: { scanned_resource: invalid_params }
+      expect(response).to render_template "valhalla/base/new"
+    end
+  end
+
+  def find_resource(id)
+    query_service.find_by(id: Valkyrie::ID.new(id.to_s))
+  end
+
   context "when an admin" do
     let(:user) { FactoryGirl.create(:admin) }
     describe "GET /scanned_resources/:id/file_manager" do
