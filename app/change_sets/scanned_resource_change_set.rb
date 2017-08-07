@@ -17,7 +17,7 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID
   property :start_canvas, multiple: false, type: Valkyrie::Types::ID
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
-  property :logical_structure, multiple: true, required: false, type: Types::Strict::Array.member(Structure)
+  property :logical_structure, multiple: true, required: false, type: Types::Strict::Array.member(Structure), default: [Structure.new(label: "Logical", nodes: [])]
   property :state, multiple: false, required: true, default: BookWorkflow.aasm.initial_state.to_s
 
   # Virtual Attributes
