@@ -38,40 +38,6 @@ RSpec.describe "Scanned Resources Management" do
     end
   end
 
-  describe "update" do
-    context "when not logged in" do
-      let(:user) { nil }
-      it "throws a CanCan::AccessDenied error" do
-        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
-
-        expect { patch scanned_resource_path(scanned_resource), params: { scanned_resource: { title: ["Two"] } } }.to raise_error CanCan::AccessDenied
-      end
-    end
-    context "when a scanned resource doesn't exist" do
-      it "raises an error" do
-        expect { patch scanned_resource_path(id: "test") }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
-      end
-    end
-    context "when it does exist" do
-      it "saves it and redirects" do
-        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
-        patch scanned_resource_path(scanned_resource), params: { scanned_resource: { title: ["Two"] } }
-
-        expect(response).to be_redirect
-        expect(response.location).to eq solr_document_url(id: "id-#{scanned_resource.id}")
-
-        get response.location
-        expect(response.body).to have_content "Two"
-      end
-      it "renders the form if it fails validations" do
-        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
-        patch scanned_resource_path(scanned_resource), params: { scanned_resource: { title: [""] } }
-
-        expect(response.body).to have_field "Title"
-      end
-    end
-  end
-
   describe "structure" do
     context "when not logged in" do
       let(:user) { nil }

@@ -136,6 +136,41 @@ RSpec.describe ScannedResourcesController do
     end
   end
 
+  describe "update" do
+    let(:user) { FactoryGirl.create(:admin) }
+    context "when not logged in" do
+      let(:user) { nil }
+      it "throws a CanCan::AccessDenied error" do
+        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+
+        expect { patch :update, params: { id: scanned_resource.id.to_s, scanned_resource: { title: ["Two"] } } }.to raise_error CanCan::AccessDenied
+      end
+    end
+    context "when a scanned resource doesn't exist" do
+      it "raises an error" do
+        expect { patch :update, params: { id: "test"} }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+      end
+    end
+    context "when it does exist" do
+      it "saves it and redirects" do
+        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+        patch :update, params: { id: scanned_resource.id.to_s, scanned_resource: { title: ["Two"] } }
+
+        expect(response).to be_redirect
+        expect(response.location).to eq "http://test.host/catalog/id-#{scanned_resource.id}"
+        id = response.location.gsub("http://test.host/catalog/id-", "")
+        reloaded = find_resource(id)
+        
+        expect(reloaded.title).to eq ["Two"]
+      end
+      it "renders the form if it fails validations" do
+        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+        patch :update, params: { id: scanned_resource.id.to_s, scanned_resource: { title: [""] } }
+
+        expect(response).to render_template "valhalla/base/edit"
+      end
+    end
+  end
 
   def find_resource(id)
     query_service.find_by(id: Valkyrie::ID.new(id.to_s))
