@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class ScannedResourceDecorator < Valkyrie::ResourceDecorator
-  self.display_attributes = [:author, :internal_resource, :created_at, :updated_at, :rendered_rights_statement, :member_of_collections]
+  self.display_attributes = [:author, :internal_resource, :created_at, :updated_at, :rendered_rights_statement, :member_of_collections, :rendered_holding_location]
   delegate :query_service, to: :metadata_adapter
 
   def member_of_collections
@@ -32,6 +32,15 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
         h.content_tag("p") do
           I18n.t("valhalla.works.show.attributes.rights_statement.boilerplate").html_safe
         end
+    end
+  end
+
+  def rendered_holding_location
+    value = holding_location
+    return unless value.present?
+    vocabulary = ControlledVocabulary.for(:holding_location)
+    value.map do |holding_location|
+      vocabulary.find(holding_location).label
     end
   end
 

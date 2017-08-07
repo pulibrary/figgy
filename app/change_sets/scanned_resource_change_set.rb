@@ -7,7 +7,7 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   property :rights_note, multiple: false, required: false
   property :viewing_hint, multiple: false, required: false, default: "individuals"
   property :pdf_type, multiple: false, required: false, default: "gray"
-  property :holding_location, multiple: false, required: false
+  property :holding_location, multiple: false, required: false, type: ::Types::URI
   property :viewing_direction, multiple: false, required: false
   property :portion_note, multiple: false, required: false
   property :nav_date, multiple: false, required: false
