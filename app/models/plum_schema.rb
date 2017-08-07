@@ -3,11 +3,12 @@ module PlumSchema
   extend ActiveSupport::Concern
   def imported_schema
     [
+      :source_metadata,
+      :source_jsonld,
       # Hyrax,
       :depositor,
-      :title,
       :label,
-      :visibility,
+      :title,
 
       :relative_path,
 
@@ -17,7 +18,6 @@ module PlumSchema
       :resource_type,
       :creator,
       :contributor,
-      :description,
       :keyword,
       # Used for a license,
       :license,
@@ -307,41 +307,14 @@ module PlumSchema
     ]
   end
 
-  def local_schema
-    [
-      # Plum,
-      :sort_title,
-      :portion_note,
-      :abstract,
-      :alternative,
-      :identifier,
-      :local_identifier,
-      :replaces,
-      :contents,
-      :rights_statement,
-      :rights_note,
-      :source_metadata_identifier,
-      :source_metadata,
-      :source_jsonld,
-      :holding_location,
-      :ocr_language,
-      :nav_date,
-      :pdf_type,
-      :start_canvas,
-      :container,
-      :thumbnail_id
-    ]
-  end
-
   def schema
-    imported_schema + local_schema
+    imported_schema
   end
-  module_function :schema, :imported_schema, :local_schema
+  module_function :schema, :imported_schema
 
   included do
     PlumSchema.schema.each do |field|
       attribute field
     end
-    attribute :pending_uploads, Valkyrie::Types::Array.member(PendingUpload)
   end
 end
