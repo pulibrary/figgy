@@ -171,6 +171,11 @@ RSpec.describe ScannedResourceChangeSet do
       expect(change_set.logical_structure[0].nodes[1].label).to eq ["Chapter 2"]
       expect(change_set.logical_structure[0].nodes[1].nodes[0].proxy).to eq [resource2.id]
     end
+    it "has a default label" do
+      change_set.prepopulate!
+
+      expect(change_set.logical_structure[0].label).to eq ["Logical"]
+    end
   end
 
   describe "#workflow" do
