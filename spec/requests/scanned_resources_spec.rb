@@ -38,32 +38,6 @@ RSpec.describe "Scanned Resources Management" do
     end
   end
 
-  describe "edit" do
-    context "when not logged in" do
-      let(:user) { nil }
-      it "throws a CanCan::AccessDenied error" do
-        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
-
-        expect { get edit_scanned_resource_path(scanned_resource) }.to raise_error CanCan::AccessDenied
-      end
-    end
-    context "when a scanned resource doesn't exist" do
-      it "raises an error" do
-        expect { get edit_scanned_resource_path(id: "test") }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
-      end
-    end
-    context "when it does exist" do
-      let(:book) { Persister.save(resource: Book.new(title: ["Testing"])) }
-      it "renders a form" do
-        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
-        get edit_scanned_resource_path(scanned_resource)
-
-        expect(response.body).to have_field "Title", with: scanned_resource.title.first
-        expect(response.body).to have_button "Save"
-      end
-    end
-  end
-
   describe "update" do
     context "when not logged in" do
       let(:user) { nil }
