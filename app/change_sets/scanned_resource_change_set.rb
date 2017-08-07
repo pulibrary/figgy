@@ -19,6 +19,7 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
   property :logical_structure, multiple: true, required: false, type: Types::Strict::Array.member(Structure), default: [Structure.new(label: "Logical", nodes: [])]
   property :state, multiple: false, required: true, default: BookWorkflow.aasm.initial_state.to_s
+  property :read_groups, multiple: true, required: false
 
   # Virtual Attributes
   property :refresh_remote_metadata, virtual: true, multiple: false
@@ -46,6 +47,19 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
       :state,
       :member_of_collection_ids
     ]
+  end
+
+  def visibility=(visibility)
+    super.tap do |_result|
+      case visibility
+      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+        self.read_groups = [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
+      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+        self.read_groups = [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED]
+      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+        self.read_groups = []
+      end
+    end
   end
 
   # Validate that either the source_metadata_identifier or the title is set.

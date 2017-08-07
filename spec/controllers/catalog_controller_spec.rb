@@ -127,7 +127,7 @@ RSpec.describe CatalogController do
 
     context "when not logged in" do
       it "does not display resources without the `public` read_groups" do
-        persister.save(resource: FactoryGirl.build(:scanned_resource, read_groups: nil))
+        FactoryGirl.create_for_repository(:complete_private_scanned_resource)
 
         get :index, params: { q: "" }
 

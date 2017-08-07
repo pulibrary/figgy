@@ -7,6 +7,7 @@ class ScannedResource < Valhalla::Resource
   attribute :member_of_collection_ids
   attribute :imported_metadata, Valkyrie::Types::Set.member(ImportedMetadata).optional
   attribute :state
+  attribute :depositor
   # Books
   attribute :source_metadata_identifier
   attribute :title

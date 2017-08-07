@@ -25,6 +25,7 @@ Rails/OutputSafety:
     - 'app/decorators/**/*'
 Metrics/BlockLength:
   Exclude:
+    - 'valhalla/app/models/concerns/valhalla/ability.rb'
     - 'app/controllers/catalog_controller.rb'
     - 'app/models/book_workflow.rb'
     - 'config/environments/**/*'
