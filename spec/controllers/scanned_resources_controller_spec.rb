@@ -11,6 +11,39 @@ RSpec.describe ScannedResourcesController do
     sign_in user if user
   end
 
+  describe "new" do
+    context "when not logged in" do
+      let(:user) { nil }
+      it "throws a CanCan::AccessDenied error" do
+        expect { get :new }.to raise_error CanCan::AccessDenied
+      end
+    end
+    context "when they have permission" do
+      let(:user) { FactoryGirl.create(:admin) }
+      render_views
+      it "has a form for creating scanned resources" do
+        collection = FactoryGirl.create_for_repository(:collection)
+
+        get :new
+        expect(response.body).to have_field "Title"
+        expect(response.body).to have_field "Source Metadata ID"
+        expect(response.body).to have_field "scanned_resource[refresh_remote_metadata]"
+        expect(response.body).to have_field "Rights Statement"
+        expect(response.body).to have_field "Rights Note"
+        expect(response.body).to have_field "Local identifier"
+        expect(response.body).to have_field "Holding Location"
+        expect(response.body).to have_field "Portion Note"
+        expect(response.body).to have_field "Navigation Date"
+        expect(response.body).to have_select "Collections", name: "scanned_resource[member_of_collection_ids][]", options: ["", collection.title.first]
+        expect(response.body).to have_select "Rights Statement", name: "scanned_resource[rights_statement]", options: [""] + ControlledVocabulary.for(:rights_statement).all.map(&:label)
+        expect(response.body).to have_select "PDF Type", name: "scanned_resource[pdf_type]", options: ["Color PDF", "Grayscale PDF", "Bitonal PDF", "No PDF"]
+        expect(response.body).to have_select "Holding Location", name: "scanned_resource[holding_location]", options: [""] + ControlledVocabulary.for(:holding_location).all.map(&:label)
+        expect(response.body).to have_checked_field "Private"
+        expect(response.body).to have_button "Save"
+      end
+    end
+  end
+
   describe "create" do
     let(:user) { FactoryGirl.create(:admin) }
     let(:valid_params) do
@@ -148,7 +181,7 @@ RSpec.describe ScannedResourcesController do
     end
     context "when a scanned resource doesn't exist" do
       it "raises an error" do
-        expect { patch :update, params: { id: "test"} }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+        expect { patch :update, params: { id: "test" } }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
       end
     end
     context "when it does exist" do
@@ -160,7 +193,7 @@ RSpec.describe ScannedResourcesController do
         expect(response.location).to eq "http://test.host/catalog/id-#{scanned_resource.id}"
         id = response.location.gsub("http://test.host/catalog/id-", "")
         reloaded = find_resource(id)
-        
+
         expect(reloaded.title).to eq ["Two"]
       end
       it "renders the form if it fails validations" do
@@ -168,6 +201,42 @@ RSpec.describe ScannedResourcesController do
         patch :update, params: { id: scanned_resource.id.to_s, scanned_resource: { title: [""] } }
 
         expect(response).to render_template "valhalla/base/edit"
+      end
+    end
+  end
+
+  describe "structure" do
+    let(:user) { FactoryGirl.create(:admin) }
+    context "when not logged in" do
+      let(:user) { nil }
+      it "throws a CanCan::AccessDenied error" do
+        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+
+        expect { get :structure, params: { id: scanned_resource.id.to_s } }.to raise_error CanCan::AccessDenied
+      end
+    end
+    context "when a scanned resource doesn't exist" do
+      it "raises an error" do
+        expect { get :structure, params: { id: "banana" } }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+      end
+    end
+    context "when it does exist" do
+      render_views
+      it "renders a structure editor form" do
+        file_set = FactoryGirl.create_for_repository(:file_set)
+        scanned_resource = FactoryGirl.create_for_repository(
+          :scanned_resource,
+          member_ids: file_set.id,
+          logical_structure: [
+            { label: 'testing', nodes: [{ label: 'Chapter 1', nodes: [{ proxy: file_set.id }] }] }
+          ]
+        )
+
+        get :structure, params: { id: scanned_resource.id.to_s }
+
+        expect(response.body).to have_selector "li[data-proxy='#{file_set.id}']"
+        expect(response.body).to have_field('label', with: 'Chapter 1')
+        expect(response.body).to have_link scanned_resource.title.first, href: solr_document_path(id: "id-#{scanned_resource.id}")
       end
     end
   end
