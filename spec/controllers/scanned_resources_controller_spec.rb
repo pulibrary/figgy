@@ -85,6 +85,8 @@ RSpec.describe ScannedResourcesController do
       id = response.location.gsub("http://test.host/catalog/parent/#{parent.id}/", "").gsub(/^id-/, "")
       expect(find_resource(id).title).to contain_exactly "Title 1", "Title 2"
       expect(find_resource(parent.id).member_ids).to eq [Valkyrie::ID.new(id)]
+      solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "id:id-#{id}" })["response"]["docs"][0]
+      expect(solr_record["member_of_ssim"]).to eq ["id-#{parent.id}"]
     end
     context "when joining a collection" do
       let(:valid_params) do

@@ -40,6 +40,24 @@ RSpec.describe CatalogController do
     end
   end
 
+  describe "child resource behavior" do
+    before do
+      sign_in FactoryGirl.create(:admin)
+    end
+    it "doesn't display children of parented resources" do
+      child = persister.save(resource: FactoryGirl.build(:scanned_resource))
+      parent = persister.save(resource: FactoryGirl.build(:scanned_resource, member_ids: child.id))
+      # Re-save to get member_of to index, not necessary if going through
+      #   PlumChangeSetPersister.
+      persister.save(resource: child)
+
+      get :index, params: { q: "" }
+
+      expect(assigns(:document_list).length).to eq 1
+      expect(assigns(:document_list).first.resource.id).to eq parent.id
+    end
+  end
+
   describe "Collection behavior" do
     before do
       sign_in FactoryGirl.create(:admin)

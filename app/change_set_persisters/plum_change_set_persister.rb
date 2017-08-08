@@ -76,6 +76,8 @@ class PlumChangeSetPersister
       parent_obj.thumbnail_id = updated_resource.id if parent_obj.member_ids.blank?
       parent_obj.member_ids = parent_obj.member_ids + [updated_resource.id]
       persister.save(resource: parent_obj)
+      # Re-save to solr unless it's going to be done by save_all
+      persister.save(resource: updated_resource) unless transaction?
     end
 
     def apply_remote_metadata(change_set:)
