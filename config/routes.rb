@@ -67,6 +67,7 @@ Rails.application.routes.draw do
         post :browse_everything_files
       end
     end
+    get '/scanned_resources/:parent_id/new', to: 'scanned_resources#new', as: :parent_new_scanned_resource
   end
 
   resources :collections

@@ -23,8 +23,9 @@ RSpec.describe ScannedResourcesController do
       render_views
       it "has a form for creating scanned resources" do
         collection = FactoryGirl.create_for_repository(:collection)
+        parent = FactoryGirl.create_for_repository(:scanned_resource)
 
-        get :new
+        get :new, params: { parent_id: parent.id.to_s }
         expect(response.body).to have_field "Title"
         expect(response.body).to have_field "Source Metadata ID"
         expect(response.body).to have_field "scanned_resource[refresh_remote_metadata]"
@@ -34,6 +35,7 @@ RSpec.describe ScannedResourcesController do
         expect(response.body).to have_field "Holding Location"
         expect(response.body).to have_field "Portion Note"
         expect(response.body).to have_field "Navigation Date"
+        expect(response.body).to have_selector "#scanned_resource_append_id[value='#{parent.id}']", visible: false
         expect(response.body).to have_select "Collections", name: "scanned_resource[member_of_collection_ids][]", options: ["", collection.title.first]
         expect(response.body).to have_select "Rights Statement", name: "scanned_resource[rights_statement]", options: [""] + ControlledVocabulary.for(:rights_statement).all.map(&:label)
         expect(response.body).to have_select "PDF Type", name: "scanned_resource[pdf_type]", options: ["Color PDF", "Grayscale PDF", "Bitonal PDF", "No PDF"]
@@ -73,6 +75,16 @@ RSpec.describe ScannedResourcesController do
       expect(response.location).to start_with "http://test.host/catalog/"
       id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
       expect(find_resource(id).title).to contain_exactly "Title 1", "Title 2"
+    end
+    it "can create a nested scanned resource" do
+      parent = FactoryGirl.create_for_repository(:scanned_resource)
+      post :create, params: { scanned_resource: valid_params.merge(append_id: parent.id.to_s) }
+
+      expect(response).to be_redirect
+      expect(response.location).to start_with "http://test.host/catalog/parent/#{parent.id}/"
+      id = response.location.gsub("http://test.host/catalog/parent/#{parent.id}/", "").gsub(/^id-/, "")
+      expect(find_resource(id).title).to contain_exactly "Title 1", "Title 2"
+      expect(find_resource(parent.id).member_ids).to eq [Valkyrie::ID.new(id)]
     end
     context "when joining a collection" do
       let(:valid_params) do

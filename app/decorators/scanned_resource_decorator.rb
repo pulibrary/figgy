@@ -48,4 +48,8 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
   def manageable_structure?
     true
   end
+
+  def attachable_objects
+    [ScannedResource]
+  end
 end

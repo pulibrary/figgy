@@ -25,4 +25,8 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   def manageable_structure?
     false
   end
+
+  def attachable_objects
+    []
+  end
 end

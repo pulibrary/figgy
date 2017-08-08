@@ -54,10 +54,18 @@ class PlumChangeSetPersister
       create_files(change_set: change_set)
     end
 
-    def after_save(change_set:, updated_resource:); end
+    def after_save(change_set:, updated_resource:)
+      append(append_id: change_set.append_id, updated_resource: updated_resource) if change_set.append_id.present?
+    end
 
     def before_delete(change_set:)
       clean_up_collection_associations(change_set: change_set) if change_set.resource.is_a?(Collection)
+    end
+
+    def append(append_id:, updated_resource:)
+      parent_obj = query_service.find_by(id: append_id)
+      parent_obj.member_ids = parent_obj.member_ids + [updated_resource.id]
+      persister.save(resource: parent_obj)
     end
 
     def apply_remote_metadata(change_set:)

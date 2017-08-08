@@ -23,7 +23,9 @@ class ManifestBuilder
     end
 
     def work_presenters
-      []
+      @work_presenters ||= (members - leaf_nodes).map do |node|
+        RootNode.new(node)
+      end
     end
 
     def file_set_presenters

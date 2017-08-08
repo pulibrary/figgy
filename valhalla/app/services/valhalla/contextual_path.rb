@@ -10,7 +10,7 @@ module Valhalla
     end
 
     def show
-      if parent_id
+      if parent_id.present?
         polymorphic_path([:parent, :solr_document], parent_id: parent_id, id: "id-#{child.id}")
       else
         polymorphic_path([:solr_document], id: "id-#{child.id}")
@@ -18,7 +18,7 @@ module Valhalla
     end
 
     def file_manager
-      if parent_id
+      if parent_id.present?
         polymorphic_path([:file_manager, child], parent_id: parent_id)
       else
         polymorphic_path([:file_manager, child])

@@ -56,4 +56,15 @@ RSpec.describe ManifestBuilder do
       expect(canvas_id).to eq structure_canvas_id
     end
   end
+  context "when given a nested child" do
+    let(:scanned_resource) { FactoryGirl.create_for_repository(:scanned_resource, member_ids: child.id) }
+    let(:child) { FactoryGirl.create_for_repository(:scanned_resource, files: [file]) }
+    it "builds a IIIF collection" do
+      output = manifest_builder.build
+      expect(output).to be_kind_of Hash
+      expect(output["@type"]).to eq "sc:Collection"
+      expect(output["manifests"].length).to eq 1
+      expect(output["manifests"][0]["@id"]).to eq "http://www.example.com/concern/scanned_resources/#{child.id}/manifest"
+    end
+  end
 end
