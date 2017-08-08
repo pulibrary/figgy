@@ -7,7 +7,7 @@ if ENV.fetch("COVERAGE", false)
     SimpleCov.coverage_dir(dir)
   end
 
-  SimpleCov.start "rails"
+  SimpleCov.start 'rails'
 end
 
 require "webmock/rspec"

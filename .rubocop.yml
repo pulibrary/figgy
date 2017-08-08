@@ -39,11 +39,14 @@ Metrics/BlockLength:
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
-    - 'app/models/plum_schema.rb'
+    - 'app/models/schema/dublin_core.rb'
+    - 'app/models/schema/marc_relators.rb'
+    - 'app/models/schema/plum/local.rb'
     - 'spec/services/manifest_builder_spec.rb'
 Metrics/ModuleLength:
   Exclude:
-    - 'app/models/plum_schema.rb'
+    - 'app/models/schema/dublin_core.rb'
+    - 'app/models/schema/marc_relators.rb'
 RSpec/MultipleExpectations:
   Enabled: false
 RSpec/ExampleLength:

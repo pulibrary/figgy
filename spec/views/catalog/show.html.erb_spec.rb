@@ -5,6 +5,14 @@ RSpec.describe "catalog/show.html.erb" do
   context "when given a ScannedResource solr document" do
     let(:scanned_resource) do
       FactoryGirl.create_for_repository(:scanned_resource,
+                                        label: 'test label',
+                                        actor: 'test person',
+                                        sort_title: 'test title2',
+                                        portion_note: 'test value1',
+                                        rights_statement: 'test statement',
+                                        call_number: 'test value2',
+                                        edition: 'test edition',
+                                        nav_date: 'test date',
                                         imported_metadata: [
                                           {
                                             author: "Shakespeare",
@@ -33,6 +41,34 @@ RSpec.describe "catalog/show.html.erb" do
       # Author
       expect(rendered).to have_selector "th", text: "Author"
       expect(rendered).to have_content "Shakespeare"
+
+      # Label
+      expect(rendered).to have_selector "th", text: "Label"
+      expect(rendered).to have_content "test label"
+
+      # Actor
+      expect(rendered).to have_selector "th", text: "Actor"
+      expect(rendered).to have_content "test person"
+
+      # Sorting Title
+      expect(rendered).not_to have_selector "th", text: "Sort Title"
+      expect(rendered).not_to have_content "test title2"
+
+      # Portion Note
+      expect(rendered).to have_selector "th", text: "Portion Note"
+      expect(rendered).to have_content "test value1"
+
+      # Call Number
+      expect(rendered).to have_selector "th", text: "Call Number"
+      expect(rendered).to have_content "test value2"
+
+      # Edition
+      expect(rendered).to have_selector "th", text: "Edition"
+      expect(rendered).to have_content "test edition"
+
+      # Nav Date
+      expect(rendered).not_to have_selector "th", text: "Nav Date"
+      expect(rendered).not_to have_content "test date"
 
       # Model name
       expect(rendered).to have_selector "th", text: "Model"
