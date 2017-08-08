@@ -8,6 +8,7 @@ export default class Initializer {
     this.initialize_form()
     this.structure_manager = new StructureManager
     this.modal_viewer = new ModalViewer
+    $("select").selectpicker({'liveSearch': true})
   }
 
   initialize_form() {

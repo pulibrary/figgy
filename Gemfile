@@ -73,3 +73,6 @@ gem 'riiif'
 gem 'sidekiq'
 gem 'string_rtl'
 gem 'valhalla', path: 'valhalla'
+source 'https://rails-assets.org' do
+  gem 'rails-assets-bootstrap-select', '1.12.2'
+end

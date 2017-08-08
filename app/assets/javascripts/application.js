@@ -23,6 +23,8 @@
 //= require nestedSortable/jquery.mjs.nestedSortable
 //= require openseadragon/openseadragon
 //= require openseadragon/jquery
+//= require bootstrap-select
+//= require bootstrap_select_dropdown
 //= require valhalla/valhalla
 //= require_tree .
 $(document).ready(function() {

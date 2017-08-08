@@ -1,1 +1,1 @@
-<%= f.input :member_of_collection_ids, collection: @collections, label_method: :title, value_method: :id, input_html: { multiple: f.object.multiple?(key) }, include_blank: true, required: f.object.required?(key) %>
+<%= f.input :member_of_collection_ids, collection: @collections, label_method: :title, value_method: :id, input_html: { multiple: f.object.multiple?(key) }, include_blank: false, required: f.object.required?(key) %>

@@ -1,10 +1,10 @@
 /* toggle rights note field based on which rights statement is selected */
 $(document).ready(function(){
-    $('.rights-statement').change(rights_note_visibility);
+    $('select.rights-statement').change(rights_note_visibility);
 });
 
 function rights_note_visibility() {
-    var stmt = $('.rights-statement');
+    var stmt = $('select.rights-statement');
     var note = $('.rights-note');
     if ( $.inArray(stmt.val(), stmt.data("notable"))  == -1) {
         note.val('');

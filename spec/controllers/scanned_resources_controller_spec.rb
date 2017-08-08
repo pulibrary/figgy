@@ -36,7 +36,7 @@ RSpec.describe ScannedResourcesController do
         expect(response.body).to have_field "Portion Note"
         expect(response.body).to have_field "Navigation Date"
         expect(response.body).to have_selector "#scanned_resource_append_id[value='#{parent.id}']", visible: false
-        expect(response.body).to have_select "Collections", name: "scanned_resource[member_of_collection_ids][]", options: ["", collection.title.first]
+        expect(response.body).to have_select "Collections", name: "scanned_resource[member_of_collection_ids][]", options: [collection.title.first]
         expect(response.body).to have_select "Rights Statement", name: "scanned_resource[rights_statement]", options: [""] + ControlledVocabulary.for(:rights_statement).all.map(&:label)
         expect(response.body).to have_select "PDF Type", name: "scanned_resource[pdf_type]", options: ["Color PDF", "Grayscale PDF", "Bitonal PDF", "No PDF"]
         expect(response.body).to have_select "Holding Location", name: "scanned_resource[holding_location]", options: [""] + ControlledVocabulary.for(:holding_location).all.map(&:label)
