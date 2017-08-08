@@ -30,6 +30,7 @@ class FileAppender
 
   def adjust_pending_uploads(resource)
     return unless resource.respond_to?(:pending_uploads)
+    resource.pending_uploads = [] if resource.pending_uploads.blank?
     resource.pending_uploads = (resource.pending_uploads || []) - files
   end
 

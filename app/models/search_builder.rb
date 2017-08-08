@@ -3,12 +3,17 @@ class SearchBuilder < Blacklight::SearchBuilder
   include Blacklight::Solr::SearchBuilderBehavior
   # Add a filter query to restrict the search to documents the current user has access to
   include Hydra::AccessControlsEnforcement
-  self.default_processor_chain += [:filter_models]
+  self.default_processor_chain += [:filter_models, :filter_parented]
 
   # Add queries that excludes everything except for works and collections
   def filter_models(solr_parameters)
     solr_parameters[:fq] ||= []
     solr_parameters[:fq] << "{!terms f=internal_resource_ssim}#{models_to_solr_clause}"
+  end
+
+  def filter_parented(solr_params)
+    solr_params[:fq] ||= []
+    solr_params[:fq] << "!member_of_ssim:['' TO *]"
   end
 
   def models_to_solr_clause

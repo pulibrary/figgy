@@ -31,7 +31,8 @@ Rails.application.config.to_prepare do
       connection: Blacklight.default_index.connection,
       resource_indexer: CompositeIndexer.new(
         Valkyrie::Indexers::AccessControlsIndexer,
-        CollectionIndexer
+        CollectionIndexer,
+        MemberOfIndexer
       )
     ),
     :index_solr

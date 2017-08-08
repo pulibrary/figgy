@@ -211,6 +211,8 @@ RSpec.describe PlumChangeSetPersister do
       reloaded = query_service.find_by(id: parent.id)
       expect(reloaded.member_ids).to eq [output.id]
       expect(reloaded.thumbnail_id).to eq [output.id]
+      solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "id:id-#{output.id}" })["response"]["docs"][0]
+      expect(solr_record["member_of_ssim"]).to eq ["id-#{parent.id}"]
     end
   end
 end
