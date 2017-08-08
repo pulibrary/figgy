@@ -53,6 +53,10 @@ class METSDocument
     end
   end
 
+  def label
+    []
+  end
+
   def label_for_volume(volume_id)
     volume_node = volume_nodes.find { |vol| vol.attribute("ID").value == volume_id }
     return volume_node.attribute("LABEL").value if volume_node
