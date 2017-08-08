@@ -151,6 +151,21 @@ RSpec.describe PlumChangeSetPersister do
     end
   end
 
+  describe "deleting child SRs" do
+    context "when a child is deleted" do
+      it "cleans up associations" do
+        child = FactoryGirl.create_for_repository(:scanned_resource)
+        parent = FactoryGirl.create_for_repository(:scanned_resource, member_ids: child.id)
+        change_set = ScannedResourceChangeSet.new(child)
+
+        change_set_persister.delete(change_set: change_set)
+        reloaded = query_service.find_by(id: parent.id)
+
+        expect(reloaded.member_ids).to eq []
+      end
+    end
+  end
+
   describe "setting visibility" do
     context "when setting to public" do
       it "adds the public read_group" do

@@ -60,6 +60,15 @@ class PlumChangeSetPersister
 
     def before_delete(change_set:)
       clean_up_collection_associations(change_set: change_set) if change_set.resource.is_a?(Collection)
+      clean_up_membership(change_set: change_set)
+    end
+
+    def clean_up_membership(change_set:)
+      parents = query_service.find_parents(resource: change_set.resource)
+      parents.each do |parent|
+        parent.member_ids -= [change_set.id]
+        persister.save(resource: parent)
+      end
     end
 
     def append(append_id:, updated_resource:)
