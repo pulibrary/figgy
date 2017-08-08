@@ -1,5 +1,20 @@
 # frozen_string_literal: true
 class Valkyrie::ResourceDecorator < ApplicationDecorator
+  self.suppressed_attributes = [
+    :description,
+    :rights_statement,
+    :holding_location,
+    :title,
+    :depositor,
+    :source_metadata_identifier,
+    :source_metadata,
+    :nav_date,
+    :pdf_type,
+    :ocr_language,
+    :keyword,
+    :source_jsonld,
+    :sort_title
+  ]
   self.display_attributes = [:internal_resource, :created_at, :updated_at]
 
   def created_at

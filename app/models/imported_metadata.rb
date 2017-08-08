@@ -1,4 +1,4 @@
 # frozen_string_literal: true
 class ImportedMetadata < Valkyrie::Resource
-  include PlumSchema
+  include Schema::Plum
 end
