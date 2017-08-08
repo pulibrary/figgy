@@ -64,6 +64,7 @@ class PlumChangeSetPersister
 
     def append(append_id:, updated_resource:)
       parent_obj = query_service.find_by(id: append_id)
+      parent_obj.thumbnail_id = updated_resource.id if parent_obj.member_ids.blank?
       parent_obj.member_ids = parent_obj.member_ids + [updated_resource.id]
       persister.save(resource: parent_obj)
     end
