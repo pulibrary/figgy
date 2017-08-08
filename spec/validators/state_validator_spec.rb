@@ -46,13 +46,11 @@ RSpec.describe StateValidator do
 
   def build_record(old_state:, new_state:)
     record = instance_double ScannedResourceChangeSet
-    model = instance_double ScannedResource
     allow(record).to receive(:workflow_class).and_return(BookWorkflow)
-    allow(record).to receive(:changed?).and_return(true)
     allow(record).to receive(:errors).and_return(errors)
-    allow(record).to receive(:state).and_return(new_state)
-    allow(record).to receive(:model).and_return(model)
-    allow(model).to receive(:state).and_return(old_state)
+    allow(record).to receive(:old_state).and_return(old_state)
+    allow(record).to receive(:new_state).and_return(new_state)
+    allow(record).to receive(:state_changed?).and_return(old_state != new_state)
     record
   end
 end

@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 class ScannedResourceChangeSet < Valkyrie::ChangeSet
   delegate :human_readable_type, to: :model
@@ -86,5 +85,17 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
 
   def workflow_class
     BookWorkflow
+  end
+
+  def state_changed?
+    changed?(:state) && !old_state.nil? && old_state != new_state
+  end
+
+  def new_state
+    Array.wrap(state).first
+  end
+
+  def old_state
+    Array.wrap(model.state).first
   end
 end

@@ -8,25 +8,17 @@ class StateValidator < ActiveModel::Validator
   private
 
     def validate_state(record)
-      return if workflow(record).valid_states.include?(new_state(record))
-      record.errors.add :state, "#{new_state(record)} is not a valid state"
+      return if workflow(record).valid_states.include?(record.new_state)
+      record.errors.add :state, "#{record.new_state} is not a valid state"
     end
 
     def validate_transition(record)
-      return unless record.changed?(:state) && !old_state(record).nil? && old_state(record) != new_state(record)
-      return if workflow(record).valid_transitions.include?(new_state(record))
-      record.errors.add :state, "Cannot transition from #{old_state(record)} to #{new_state(record)}"
+      return unless record.state_changed?
+      return if workflow(record).valid_transitions.include?(record.new_state)
+      record.errors.add :state, "Cannot transition from #{record.old_state} to #{record.new_state}"
     end
 
     def workflow(record)
-      record.workflow_class.new(old_state(record))
-    end
-
-    def new_state(record)
-      Array.wrap(record.state).first
-    end
-
-    def old_state(record)
-      Array.wrap(record.model.state).first
+      record.workflow_class.new(record.old_state)
     end
 end
