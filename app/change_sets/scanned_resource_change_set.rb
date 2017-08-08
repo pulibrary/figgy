@@ -1,3 +1,4 @@
+
 # frozen_string_literal: true
 class ScannedResourceChangeSet < Valkyrie::ChangeSet
   delegate :human_readable_type, to: :model
@@ -20,7 +21,6 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   property :logical_structure, multiple: true, required: false, type: Types::Strict::Array.member(Structure), default: [Structure.new(label: "Logical", nodes: [])]
   property :state, multiple: false, required: true, default: BookWorkflow.aasm.initial_state.to_s
   property :read_groups, multiple: true, required: false
-
   # Virtual Attributes
   property :refresh_remote_metadata, virtual: true, multiple: false
   property :files, virtual: true, multiple: true, required: false
@@ -45,7 +45,8 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
       :portion_note,
       :nav_date,
       :state,
-      :member_of_collection_ids
+      :member_of_collection_ids,
+      :append_id
     ]
   end
 

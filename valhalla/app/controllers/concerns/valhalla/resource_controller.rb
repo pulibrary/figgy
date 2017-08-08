@@ -10,7 +10,7 @@ module Valhalla
     end
 
     def new
-      @change_set = change_set_class.new(resource_class.new).prepopulate!
+      @change_set = change_set_class.new(resource_class.new, append_id: params[:parent_id]).prepopulate!
       authorize! :create, resource_class
     end
 

@@ -183,4 +183,18 @@ RSpec.describe PlumChangeSetPersister do
       end
     end
   end
+
+  describe "appending" do
+    it "appends a child via #append_id" do
+      parent = FactoryGirl.create_for_repository(:scanned_resource)
+      resource = FactoryGirl.build(:scanned_resource)
+      change_set = change_set_class.new(resource)
+      change_set.validate(append_id: parent.id.to_s)
+      change_set.sync
+
+      output = change_set_persister.save(change_set: change_set)
+      reloaded = query_service.find_by(id: parent.id)
+      expect(reloaded.member_ids).to eq [output.id]
+    end
+  end
 end
