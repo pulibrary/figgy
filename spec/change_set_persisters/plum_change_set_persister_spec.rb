@@ -195,6 +195,7 @@ RSpec.describe PlumChangeSetPersister do
       output = change_set_persister.save(change_set: change_set)
       reloaded = query_service.find_by(id: parent.id)
       expect(reloaded.member_ids).to eq [output.id]
+      expect(reloaded.thumbnail_id).to eq [output.id]
     end
   end
 end
