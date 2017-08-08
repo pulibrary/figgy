@@ -59,6 +59,14 @@ Rails.application.routes.draw do
   # Consider moving these to Valhalla
   scope '/concern' do
     resources :file_sets
+    resources :multi_volume_works do
+      member do
+        get :file_manager
+        get :structure
+        get :manifest, defaults: { format: :json }
+        post :browse_everything_files
+      end
+    end
     resources :scanned_resources do
       member do
         get :file_manager

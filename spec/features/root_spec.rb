@@ -9,6 +9,8 @@ RSpec.describe "Home Page" do
 
   it "displays creation links for administrators" do
     expect(page).to have_link "New Scanned Resource"
+    expect(page).to have_link "New Multi Volume Work"
+    expect(page).to have_link "Add New", href: new_multi_volume_work_path
     expect(page).to have_link "Add a Collection", href: "/collections/new"
     expect(page).to have_link "Manage Roles"
   end
