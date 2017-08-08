@@ -17,6 +17,10 @@ RSpec.describe ScannedResource do
     scanned_resource.member_ids = [1, 2, 3, 3]
     expect(scanned_resource.member_ids).to eq [1, 2, 3, 3]
   end
+  it "generates read groups with the factory" do
+    factory = FactoryGirl.build(:complete_private_scanned_resource)
+    expect(factory.read_groups).to eq []
+  end
 
   describe "#to_s" do
     it "returns the title if possible" do

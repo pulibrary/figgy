@@ -8,5 +8,8 @@ FactoryGirl.define do
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)
     end
+    factory :private_collection do
+      visibility 'private'
+    end
   end
 end

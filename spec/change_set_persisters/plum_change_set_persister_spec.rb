@@ -150,4 +150,37 @@ RSpec.describe PlumChangeSetPersister do
       end
     end
   end
+
+  describe "setting visibility" do
+    context "when setting to public" do
+      it "adds the public read_group" do
+        resource = FactoryGirl.build(:scanned_resource, read_groups: [])
+        change_set = change_set_class.new(resource)
+        change_set.validate(visibility: 'open')
+        change_set.sync
+
+        expect(change_set.model.read_groups).to eq [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
+      end
+    end
+    context "when setting to princeton only" do
+      it "adds the authenticated read_group" do
+        resource = FactoryGirl.build(:scanned_resource, read_groups: [])
+        change_set = change_set_class.new(resource)
+        change_set.validate(visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED)
+        change_set.sync
+
+        expect(change_set.model.read_groups).to eq [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED]
+      end
+    end
+    context "when setting to private" do
+      it "removes all read groups" do
+        resource = FactoryGirl.build(:scanned_resource, read_groups: ['public'])
+        change_set = change_set_class.new(resource)
+        change_set.validate(visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE)
+        change_set.sync
+
+        expect(change_set.model.read_groups).to eq []
+      end
+    end
+  end
 end
