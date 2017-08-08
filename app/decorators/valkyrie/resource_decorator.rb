@@ -29,6 +29,12 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     output.strftime("%D %r %Z")
   end
 
+  def visibility
+    Array(super).map do |visibility|
+      h.visibility_badge(visibility)
+    end
+  end
+
   def header
     Array(title).to_sentence
   end
