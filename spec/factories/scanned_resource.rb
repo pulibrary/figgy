@@ -5,6 +5,7 @@ FactoryGirl.define do
     rights_statement RDF::URI('http://rightsstatements.org/vocab/NKC/1.0/')
     read_groups 'public'
     pdf_type ["gray"]
+    state 'complete'
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)
     end
