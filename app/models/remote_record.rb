@@ -21,7 +21,7 @@ class RemoteRecord
     end
 
     def client_result
-      @client_result ||= PulMetadataServices::Client.retrieve(Array.wrap(source_metadata_identifier).first)
+      @client_result ||= PulMetadataServices::Client.retrieve(source_metadata_identifier)
     end
   end
 

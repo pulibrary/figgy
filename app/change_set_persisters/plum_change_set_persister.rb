@@ -84,7 +84,7 @@ class PlumChangeSetPersister
       IdentifierService.mint_or_update(persister: persister, resource: change_set.model) if mint_ark?(change_set)
       return unless change_set.respond_to?(:source_metadata_identifier)
       return unless change_set.apply_remote_metadata?
-      attributes = RemoteRecord.retrieve(Array.wrap(change_set.source_metadata_identifier).first).attributes
+      attributes = RemoteRecord.retrieve(change_set.source_metadata_identifier).attributes
       change_set.model.imported_metadata = ImportedMetadata.new(attributes)
     end
 

@@ -42,6 +42,7 @@ RSpec.describe PlumChangeSetPersister do
     it "mints an ARK" do
       resource = FactoryGirl.create(:scanned_resource, title: [], source_metadata_identifier: '123456', state: 'final_review')
       change_set = change_set_class.new(resource)
+      change_set.prepopulate!
       change_set.validate(state: 'complete')
       change_set.sync
       output = change_set_persister.save(change_set: change_set)
