@@ -7,34 +7,36 @@ module Schema
 
     def self.attributes
       [
-        :title, # http://purl.org/dc/terms/title
-        :part_of, # http://purl.org/dc/terms/isPartOf
-        :resource_type, # http://purl.org/dc/terms/type
-        :creator, # http://purl.org/dc/elements/1.1/creator
-        :contributor, # http://purl.org/dc/elements/1.1/contributor
-        :description, # http://purl.org/dc/elements/1.1/description
-        :keyword, # http://purl.org/dc/elements/1.1/relation
-        :coverage, # http://purl.org/dc/elements/1.1/coverage
-        :created, # http://purl.org/dc/terms/created
-        :date, # http://purl.org/dc/elements/1.1/date
-        :source, # http://purl.org/dc/elements/1.1/source
-        :extent, # http://purl.org/dc/terms/extent
-        :license, # http://purl.org/dc/terms/rights
-        :publisher, # http://purl.org/dc/elements/1.1/publisher
-        :date_created, # http://purl.org/dc/terms/created
-        :subject, # http://purl.org/dc/elements/1.1/subject
-        :language, # http://purl.org/dc/elements/1.1/language
-        :bibliographic_citation, # http://purl.org/dc/terms/bibliographicCitation
         :abstract, # http://purl.org/dc/terms/abstract
         :alternative, # http://purl.org/dc/terms/alternative
-        :identifier, # http://purl.org/dc/terms/identifier
-        :local_identifier, # http://purl.org/dc/elements/1.1/identifier
-        :replaces, # http://purl.org/dc/terms/replaces
+        :alternative_title, # http://purl.org/dc/terms/alternative
+        :bibliographic_citation, # http://purl.org/dc/terms/bibliographicCitation
         :contents, # http://purl.org/dc/terms/tableOfContents
-        :rights_note, # http://purl.org/dc/elements/1.1/rights
-        :geo_subject, # http://purl.org/dc/terms/coverage
+        :created, # http://purl.org/dc/terms/created
+        :date_created, # http://purl.org/dc/terms/created
+        :extent, # http://purl.org/dc/terms/extent
         :genre, # http://purl.org/dc/terms/type
-        :alternative_title # http://purl.org/dc/terms/alternative
+        :geo_subject, # http://purl.org/dc/terms/coverage
+        :identifier, # http://purl.org/dc/terms/identifier
+        :license, # http://purl.org/dc/terms/rights
+        :part_of, # http://purl.org/dc/terms/isPartOf
+        :replaces, # http://purl.org/dc/terms/replaces
+        :resource_type, # http://purl.org/dc/terms/type
+        :title, # http://purl.org/dc/terms/title
+        :type, # http://purl.org/dc/terms/type
+
+        :contributor, # http://purl.org/dc/elements/1.1/contributor
+        :coverage, # http://purl.org/dc/elements/1.1/coverage
+        :creator, # http://purl.org/dc/elements/1.1/creator
+        :date, # http://purl.org/dc/elements/1.1/date
+        :description, # http://purl.org/dc/elements/1.1/description
+        :keyword, # http://purl.org/dc/elements/1.1/relation
+        :language, # http://purl.org/dc/elements/1.1/language
+        :local_identifier, # http://purl.org/dc/elements/1.1/identifier
+        :publisher, # http://purl.org/dc/elements/1.1/publisher
+        :rights_note, # http://purl.org/dc/elements/1.1/rights
+        :source, # http://purl.org/dc/elements/1.1/source
+        :subject # http://purl.org/dc/elements/1.1/subject
       ]
     end
 

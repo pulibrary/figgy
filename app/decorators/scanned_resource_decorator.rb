@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class ScannedResourceDecorator < Valkyrie::ResourceDecorator
-  self.display_attributes += Schema::Common.attributes + [:member_of_collections, :rendered_holding_location]
+  self.display_attributes += Schema::Common.attributes + Schema::Common.attributes.map { |attrib| ('imported_' + attrib.to_s).to_sym } + [:member_of_collections, :rendered_holding_location]
   delegate :query_service, to: :metadata_adapter
-  delegate :author, to: :primary_imported_metadata, prefix: :imported
+  delegate(*Schema::Common.attributes, to: :primary_imported_metadata, prefix: :imported)
 
   def member_of_collections
     @member_of_collections ||=
