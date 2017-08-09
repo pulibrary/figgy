@@ -28,6 +28,7 @@ RSpec.describe IngestMETSJob do
       allow(File).to receive(:open).with("/users/escowles/downloads/tmp/00000658.tif").and_return(File.open(tiff_file))
       allow(File).to receive(:open).with("/users/escowles/downloads/tmp/00000659.tif").and_return(File.open(tiff_file))
       stub_bibdata(bib_id: '4612596')
+      stub_bibdata(bib_id: '4609321')
     end
 
     let(:adapter) { Valkyrie.config.metadata_adapter }
@@ -44,6 +45,21 @@ RSpec.describe IngestMETSJob do
       file_sets = adapter.query_service.find_members(resource: book)
       expect(book.logical_structure[0].nodes[0].nodes[0].proxy).to eq [file_sets.first.id]
       expect(file_sets.first.title).to eq ["leaf 1. recto"]
+    end
+    context "when given a work with volumes" do
+      let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-4609321-s42.mets") }
+      it "ingests it" do
+        described_class.perform_now(mets_file, user)
+
+        books = adapter.query_service.find_all_of_model(model: ScannedResource).to_a
+        parent_book = books.find { |x| x.source_metadata_identifier.present? }
+        child_books = books - [parent_book]
+
+        expect(parent_book.member_ids.length).to eq 2
+        expect(child_books[0].logical_structure[0].label).to eq ["Main Structure"]
+        expect(child_books[0].title).to eq ["first volume"]
+        expect(child_books[1].title).to eq ["second volume"]
+      end
     end
   end
 end
