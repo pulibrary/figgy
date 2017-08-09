@@ -280,6 +280,8 @@ GEM
       sxp (~> 1.0)
     erubi (1.6.1)
     execjs (2.7.0)
+    ezid-client (1.7.1)
+      hashie (~> 3.4, >= 3.4.3)
     factory_girl (4.8.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.8.0)
@@ -708,6 +710,7 @@ DEPENDENCIES
   devise
   devise-guests!
   dotenv-rails
+  ezid-client
   factory_girl_rails
   flutie
   formulaic
@@ -755,4 +758,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.15.2
+   1.15.3

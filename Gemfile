@@ -60,6 +60,7 @@ gem 'aasm'
 gem 'browse-everything'
 gem 'coffee-rails'
 gem 'devise'
+gem 'ezid-client'
 gem 'hydra-head'
 gem 'hydra-role-management'
 gem 'iiif_manifest', github: "samvera-labs/iiif_manifest"

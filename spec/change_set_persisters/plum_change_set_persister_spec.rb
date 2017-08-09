@@ -30,6 +30,25 @@ RSpec.describe PlumChangeSetPersister do
       expect(output.primary_imported_metadata.call_number).to eq ["BL980.G7 B66 1982"]
     end
   end
+  context "when a resource is completed" do
+    let(:shoulder) { '99999/fk4' }
+    let(:blade) { '123456' }
+
+    before do
+      stub_bibdata(bib_id: '123456')
+      stub_ezid(shoulder: shoulder, blade: blade)
+    end
+
+    it "mints an ARK" do
+      resource = FactoryGirl.create(:scanned_resource, title: [], source_metadata_identifier: '123456', state: 'final_review')
+      change_set = change_set_class.new(resource)
+      change_set.prepopulate!
+      change_set.validate(state: 'complete')
+      change_set.sync
+      output = change_set_persister.save(change_set: change_set)
+      expect(output.identifier.first).to eq "ark:/#{shoulder}#{blade}"
+    end
+  end
   context "when a source_metadata_identifier is set and it's from PULFA" do
     before do
       stub_pulfa(pulfa_id: "MC016_c9616")
