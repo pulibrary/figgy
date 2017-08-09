@@ -56,7 +56,6 @@ class PlumChangeSetPersister
 
     def after_save(change_set:, updated_resource:)
       append(append_id: change_set.append_id, updated_resource: updated_resource) if change_set.append_id.present?
-      IdentifierService.mint_or_update(updated_resource) if change_set.try(:state_changed?) && change_set.new_state == 'complete'
     end
 
     def before_delete(change_set:)
@@ -82,11 +81,16 @@ class PlumChangeSetPersister
     end
 
     def apply_remote_metadata(change_set:)
+      IdentifierService.mint_or_update(persister: persister, resource: change_set.model) if mint_ark?(change_set)
       return unless change_set.respond_to?(:source_metadata_identifier)
       return unless change_set.apply_remote_metadata?
       attributes = RemoteRecord.retrieve(Array.wrap(change_set.source_metadata_identifier).first).attributes
       change_set.model.imported_metadata = ImportedMetadata.new(attributes)
-      IdentifierService.mint_or_update(persister: persister, resource: change_set.model) if change_set.try(:new_state) == 'complete'
+    end
+
+    def mint_ark?(change_set)
+      return false unless change_set.try(:new_state) == 'complete'
+      change_set.try(:state_changed?) || change_set.apply_remote_metadata?
     end
 
     def clean_up_collection_associations(change_set:)

@@ -88,7 +88,8 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   end
 
   def state_changed?
-    changed?(:state) && !old_state.nil? && old_state != new_state
+    # conditional assignment makes this true if it has ever been true, to allow seeing the change after sync
+    @state_changed ||= changed?(:state) && !old_state.nil? && old_state != new_state
   end
 
   def new_state
