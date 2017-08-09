@@ -40,6 +40,33 @@ RSpec.describe CatalogController do
     end
   end
 
+  describe "incomplete record behavior" do
+    context "as a user" do
+      before do
+        sign_in FactoryGirl.create(:user)
+      end
+      it "doesn't display incomplete items" do
+        persister.save(resource: FactoryGirl.build(:pending_scanned_resource))
+
+        get :index, params: { q: "" }
+
+        expect(assigns(:document_list).length).to eq 0
+      end
+    end
+    context "as an admin" do
+      before do
+        sign_in FactoryGirl.create(:admin)
+      end
+      it "displays incomplete items" do
+        persister.save(resource: FactoryGirl.build(:pending_scanned_resource))
+
+        get :index, params: { q: "" }
+
+        expect(assigns(:document_list).length).to eq 1
+      end
+    end
+  end
+
   describe "child resource behavior" do
     before do
       sign_in FactoryGirl.create(:admin)
