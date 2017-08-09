@@ -5,7 +5,7 @@ module Types
         .new(RDF::URI)
         .constructor do |input|
     if input.present?
-      RDF::URI.new(input)
+      RDF::URI.new(input.to_s)
     else
       input
     end
