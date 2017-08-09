@@ -17,6 +17,7 @@ RSpec.describe PlumChangeSetPersister do
   context "when a source_metadata_identifier is set for the first time" do
     before do
       stub_bibdata(bib_id: '123456')
+      stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "applies remote metadata from bibdata" do
       resource = FactoryGirl.build(:scanned_resource, title: [])
@@ -52,6 +53,7 @@ RSpec.describe PlumChangeSetPersister do
   context "when a source_metadata_identifier is set and it's from PULFA" do
     before do
       stub_pulfa(pulfa_id: "MC016_c9616")
+      stub_ezid(shoulder: "99999/fk4", blade: "MC016_c9616")
     end
     it "applies remote metadata from PULFA" do
       resource = FactoryGirl.build(:scanned_resource, title: [])
@@ -99,6 +101,7 @@ RSpec.describe PlumChangeSetPersister do
   context "when a source_metadata_identifier is set afterwards and refresh_remote_metadata is set" do
     before do
       stub_bibdata(bib_id: '123456')
+      stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "applies remote metadata from bibdata" do
       resource = FactoryGirl.create_for_repository(:scanned_resource, title: 'Title', imported_metadata: [{ applicant: 'Test' }], source_metadata_identifier: nil)
