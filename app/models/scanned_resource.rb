@@ -10,6 +10,7 @@ class ScannedResource < Valhalla::Resource
   attribute :state
   attribute :logical_structure, Valkyrie::Types::Array.member(Structure.optional).optional
   attribute :pending_uploads, Valkyrie::Types::Array.member(PendingUpload)
+  attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
 
   def to_s
     "#{human_readable_type}: #{title.to_sentence}"

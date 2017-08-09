@@ -216,6 +216,31 @@ RSpec.describe ScannedResourcesController do
 
         expect(response).to render_template "valhalla/base/edit"
       end
+      it "can create a workflow note" do
+        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+
+        patch :update, params: { id: scanned_resource.id.to_s, scanned_resource: { new_workflow_note_attributes: { note: "Test", author: "Shakespeare" } } }
+
+        reloaded = find_resource(scanned_resource.id)
+        expect(reloaded.workflow_note.first.author).to eq ["Shakespeare"]
+        expect(reloaded.workflow_note.first.note).to eq ["Test"]
+      end
+      it "doesn't create a workflow note with an empty note" do
+        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+
+        patch :update, params: { id: scanned_resource.id.to_s, scanned_resource: { new_workflow_note_attributes: { author: "Test" } } }
+
+        reloaded = find_resource(scanned_resource.id)
+        expect(reloaded.workflow_note).to be_blank
+      end
+      it "doesn't create a workflow note without an author" do
+        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+
+        patch :update, params: { id: scanned_resource.id.to_s, scanned_resource: { new_workflow_note_attributes: { note: "Test" } } }
+
+        reloaded = find_resource(scanned_resource.id)
+        expect(reloaded.workflow_note).to be_blank
+      end
     end
   end
 

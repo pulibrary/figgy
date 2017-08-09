@@ -129,7 +129,7 @@ RSpec.describe CatalogController do
       end
       render_views
       it "renders administration buttons" do
-        resource = persister.save(resource: FactoryGirl.build(:scanned_resource))
+        resource = persister.save(resource: FactoryGirl.build(:scanned_resource, workflow_note: WorkflowNote.new(author: "Shakespeare", note: "Test Comment")))
 
         get :show, params: { id: "id-#{resource.id}" }
 
@@ -139,6 +139,9 @@ RSpec.describe CatalogController do
         expect(response.body).to have_link "Edit Structure", href: structure_scanned_resource_path(resource)
         expect(response.body).to have_button "Attach Child"
         expect(response.body).to have_link "Attach Scanned Resource", href: parent_new_scanned_resource_path(resource)
+        expect(response.body).to have_content "Review and Approval"
+        expect(response.body).to have_content "Shakespeare"
+        expect(response.body).to have_content "Test Comment"
       end
 
       it "renders for a FileSet" do
@@ -159,6 +162,16 @@ RSpec.describe CatalogController do
         expect(response.body).to have_link "Edit This Collection", href: edit_collection_path(resource)
         expect(response.body).to have_link "Delete This Collection", href: collection_path(resource)
         expect(response.body).not_to have_link "File Manager"
+      end
+    end
+    context "when rendered for a user" do
+      render_views
+      it "doesn't render the workflow panel" do
+        resource = persister.save(resource: FactoryGirl.build(:complete_open_scanned_resource))
+
+        get :show, params: { id: "id-#{resource.id}" }
+
+        expect(response.body).not_to have_content "Review and Approval"
       end
     end
   end

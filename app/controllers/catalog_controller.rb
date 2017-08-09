@@ -38,6 +38,7 @@ class CatalogController < ApplicationController
     config.show.partials = config.show.partials.insert(1, :parent_breadcrumb)
     config.show.partials += [:universal_viewer]
     config.show.partials += [:resource_attributes]
+    config.show.partials += [:workflow_controls]
     config.index.thumbnail_method = :figgy_thumbnail_path
   end
 
@@ -47,6 +48,12 @@ class CatalogController < ApplicationController
 
   def has_search_parameters?
     !params[:q].nil? || !params[:f].blank? || !params[:search_field].blank?
+  end
+
+  def show
+    super
+    @change_set = DynamicChangeSet.new(@document.resource)
+    @change_set.prepopulate!
   end
 
   def parent_document
