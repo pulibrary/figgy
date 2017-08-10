@@ -65,3 +65,37 @@ en:
         q:
           label: 'Search'
           placeholder: 'Enter search terms'
+  state:
+    pending:
+      label: 'Pending'
+      desc:  'Initial digitization, suppressed from display'
+    metadata_review:
+      label: 'Metadata Review'
+      desc:  'Awaiting metadata approval'
+    final_review:
+      label: 'Final Review'
+      desc:  'Awaiting final approval before being published'
+    complete:
+      label: 'Complete'
+      desc:  'Published and accessible according to access control rules'
+    needs_qa:
+      label: 'Needs QA'
+      desc: 'Awaiting approval for images to be public.'
+    flagged:
+      label: 'Flagged'
+      desc:  'In need of attention, but still accessible according to access rules'
+    takedown:
+      label: 'Takedown'
+      desc:  'Formerly-published but suppressed from display'
+    ready_to_ship:
+      label: 'Ready to Ship'
+      desc: 'Ready to ship.'
+    shipped:
+      label: 'Shipped'
+      desc: 'Shipped'
+    received:
+      label: 'Received'
+      desc: 'Received'
+    all_in_production:
+      label: 'All in Production'
+      desc: 'Mark all contained folders as having received QA, and put them into the public display.'

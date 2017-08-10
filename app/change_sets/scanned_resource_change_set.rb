@@ -20,10 +20,13 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   property :logical_structure, multiple: true, required: false, type: Types::Strict::Array.member(Structure), default: [Structure.new(label: "Logical", nodes: [])]
   property :state, multiple: false, required: true, default: BookWorkflow.aasm.initial_state.to_s
   property :read_groups, multiple: true, required: false
+  property :workflow_note, multiple: true, required: false, default: []
   # Virtual Attributes
   property :refresh_remote_metadata, virtual: true, multiple: false
   property :files, virtual: true, multiple: true, required: false
   property :pending_uploads, multiple: true, required: false
+  # Necessary for SimpleForm to show the nested record.
+  property :new_workflow_note_attributes, virtual: true
 
   validates_with StateValidator
   validates_with ViewingDirectionValidator
@@ -43,10 +46,21 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
       :pdf_type,
       :portion_note,
       :nav_date,
-      :state,
       :member_of_collection_ids,
       :append_id
     ]
+  end
+
+  def new_workflow_note_attributes=(attributes)
+    return unless new_workflow_note.validate(attributes)
+    new_workflow_note.sync
+    workflow_note << new_workflow_note.model
+  end
+
+  # Default is set this way so that the WorkflowNoteChangeSet validations don't
+  # show in the nested form.
+  def new_workflow_note
+    @new_workflow_note ||= DynamicChangeSet.new(WorkflowNote.new)
   end
 
   def visibility=(visibility)
