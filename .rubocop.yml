@@ -23,6 +23,9 @@ Style/PredicateName:
 Rails/OutputSafety:
   Exclude:
     - 'app/decorators/**/*'
+Metrics/AbcSize:
+  Exclude:
+    - 'app/services/pdf_generator/cover_page_generator.rb'
 Metrics/BlockLength:
   Exclude:
     - 'valhalla/app/models/concerns/valhalla/ability.rb'
@@ -36,6 +39,7 @@ Metrics/BlockLength:
     - 'db/schema.rb'
     - 'lib/tasks/dev.rake'
     - 'app/models/plum_schema.rb'
+    - 'app/services/pdf_generator/cover_page_generator.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
@@ -43,6 +47,7 @@ Metrics/MethodLength:
     - 'app/models/schema/marc_relators.rb'
     - 'app/models/schema/plum/local.rb'
     - 'spec/services/manifest_builder_spec.rb'
+    - 'app/services/pdf_generator/cover_page_generator.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/dublin_core.rb'

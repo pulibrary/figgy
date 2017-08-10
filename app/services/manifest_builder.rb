@@ -30,7 +30,7 @@ class ManifestBuilder
 
     def file_set_presenters
       @file_set_presenters ||= leaf_nodes.map do |node|
-        LeafNode.new(node)
+        LeafNode.new(node, self)
       end
     end
 
@@ -106,10 +106,11 @@ class ManifestBuilder
   end
 
   class LeafNode
-    attr_reader :resource
+    attr_reader :resource, :parent_node
     delegate :query_service, to: :metadata_adapter
-    def initialize(resource)
+    def initialize(resource, parent_node)
       @resource = resource
+      @parent_node = parent_node
     end
 
     delegate :id, to: :resource

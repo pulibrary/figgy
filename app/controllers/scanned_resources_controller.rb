@@ -39,6 +39,18 @@ class ScannedResourcesController < ApplicationController
     end
   end
 
+  def pdf
+    change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
+    authorize! :pdf, change_set.resource
+    pdf_file = PDFGenerator.new(resource: change_set.resource, storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)).render
+    change_set_persister.buffer_into_index do |buffered_changeset_persister|
+      change_set.validate(file_metadata: [pdf_file])
+      change_set.sync
+      buffered_changeset_persister.save(change_set: change_set)
+    end
+    redirect_to valhalla.download_path(resource_id: change_set.id, id: pdf_file.id)
+  end
+
   def selected_file_params
     params[:selected_files].to_unsafe_h
   end

@@ -21,6 +21,7 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   property :state, multiple: false, required: true, default: BookWorkflow.aasm.initial_state.to_s
   property :read_groups, multiple: true, required: false
   property :workflow_note, multiple: true, required: false, default: []
+  property :file_metadata, multiple: true, required: false, default: []
   # Virtual Attributes
   property :refresh_remote_metadata, virtual: true, multiple: false
   property :files, virtual: true, multiple: true, required: false
