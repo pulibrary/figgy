@@ -214,4 +214,31 @@ RSpec.describe CatalogController do
       end
     end
   end
+
+  describe "manifest lookup" do
+    context "when the manifest is found" do
+      let(:resource) { persister.save(resource: FactoryGirl.build(:scanned_resource, identifier: ['ark:/99999/12345'])) }
+
+      before do
+        resource
+      end
+
+      it "redirects to the manifest" do
+        get :lookup_manifest, params: { prefix: 'ark:', naan: '99999', arkid: '12345' }
+        expect(response).to redirect_to "http://test.host/concern/scanned_resources/#{resource.id}/manifest"
+      end
+      it "doesn't redirect when no_redirect is set" do
+        get :lookup_manifest, params: { prefix: 'ark:', naan: '99999', arkid: '12345', no_redirect: 'true' }
+        expect(response).to be_success
+        expect(JSON.parse(response.body)["url"]).to eq "http://test.host/concern/scanned_resources/#{resource.id}/manifest"
+      end
+    end
+
+    context "when the manifeset is not found" do
+      it "sends a 404 error" do
+        get :lookup_manifest, params: { prefix: 'ark:', naan: '99999', arkid: '99999' }
+        expect(response.status).to be 404
+      end
+    end
+  end
 end

@@ -8,10 +8,6 @@ RSpec.describe IdentifierService do
   let(:base_metadata) { { dc_publisher: 'Princeton University Library', dc_title: 'Title', dc_type: 'Text' } }
   let(:persister) { Valkyrie.config.metadata_adapter.persister }
 
-  before do
-    Rails.application.routes.default_url_options[:host] = 'example.com'
-  end
-
   context "when there is an existing identifier" do
     let(:metadata) { base_metadata.merge(target: "https://pulsearch.princeton.edu/catalog/123456#{obj.id}#view") }
     let(:obj) { FactoryGirl.build :scanned_resource, source_metadata_identifier: '123456', identifier: ark }
@@ -68,7 +64,7 @@ RSpec.describe IdentifierService do
     end
 
     context "without a source_metadata_identifier" do
-      let(:metadata) { base_metadata.merge(target: "http://example.com/concern/scanned_resources/#{obj.id}") }
+      let(:metadata) { base_metadata.merge(target: "http://www.example.com/concern/scanned_resources/#{obj.id}") }
       let(:obj) { FactoryGirl.create :scanned_resource, id: '1234567', source_metadata_identifier: nil }
       it "links to OrangeLight" do
         described_class.mint_or_update(resource: obj, persister: persister)

@@ -53,4 +53,19 @@ class CatalogController < ApplicationController
     return unless params[:parent_id]
     _, @parent_document = fetch("id-#{params[:parent_id]}")
   end
+
+  def lookup_manifest
+    ark = "#{params[:prefix]}/#{params[:naan]}/#{params[:arkid]}"
+    query = "identifier_ssim:#{RSolr.solr_escape(ark)}"
+    _, result = search_results(q: query, fl: "id, internal_resource_ssim", rows: 1)
+
+    if result.first
+      object_id = result.first['id'].gsub(/^id-/, '')
+      model_name = result.first['internal_resource_ssim'].first.underscore.to_sym
+      url = polymorphic_url([:manifest, model_name], id: object_id)
+      params[:no_redirect] ? render(json: { url: url }) : redirect_to(url)
+    else
+      render json: { message: "No manifest found for #{ark}" }, status: 404
+    end
+  end
 end
