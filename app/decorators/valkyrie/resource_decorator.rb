@@ -15,7 +15,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     :source_metadata_identifier,
     :title
   ]
-  self.suppressed_attributes += self.suppressed_attributes.map { |attrib| ('imported_' + attrib.to_s).to_sym }
+  self.suppressed_attributes += imported_attributes(suppressed_attributes)
   self.display_attributes = [:internal_resource, :created_at, :updated_at]
 
   def created_at

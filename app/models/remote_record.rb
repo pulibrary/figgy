@@ -8,6 +8,15 @@ class RemoteRecord
     end
   end
 
+  def self.bibdata?(source_metadata_identifier)
+    PulMetadataServices::Client.bibdata?(source_metadata_identifier)
+  end
+
+  def self.source_metadata_url(id)
+    return "https://bibdata.princeton.edu/bibliographic/#{id}" if bibdata?(id)
+    "https://findingaids.princeton.edu/collections/#{id.tr('_', '/')}.xml?scope=record"
+  end
+
   class PulfaRecord
     attr_reader :source_metadata_identifier
     def initialize(source_metadata_identifier)

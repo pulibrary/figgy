@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 class ScannedResourceDecorator < Valkyrie::ResourceDecorator
-  self.display_attributes += Schema::Common.attributes + Schema::Common.attributes.map { |attrib| ('imported_' + attrib.to_s).to_sym } + [:member_of_collections, :rendered_holding_location]
+  self.display_attributes += Schema::Common.attributes + imported_attributes(Schema::Common.attributes) + [:member_of_collections, :rendered_holding_location] - [:thumbnail_id]
+  self.iiif_manifest_attributes = display_attributes + [:title] - \
+                                  imported_attributes(Schema::Common.attributes) - \
+                                  Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]
   delegate :query_service, to: :metadata_adapter
   delegate(*Schema::Common.attributes, to: :primary_imported_metadata, prefix: :imported)
 
@@ -51,5 +54,19 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
 
   def attachable_objects
     [ScannedResource]
+  end
+
+  def iiif_manifest_attributes
+    current_attributes = attributes(self.class.iiif_manifest_attributes)
+    imported_attributes = attributes(self.class.imported_attributes(Schema::Common.attributes))
+
+    imported_attributes.each_pair do |imported_key, value|
+      key = imported_key.to_s.sub(/imported_/, '').to_sym
+      if current_attributes.key?(key) && value.present?
+        current_attributes[key].concat(value)
+      end
+    end
+
+    current_attributes
   end
 end

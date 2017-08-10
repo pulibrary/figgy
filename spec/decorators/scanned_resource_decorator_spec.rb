@@ -13,4 +13,24 @@ RSpec.describe ScannedResourceDecorator do
       expect(decorator.rendered_rights_statement.first).to include '<a href="http://rightsstatements.org/vocab/NKC/1.0/">No Known Copyright</a>'
     end
   end
+
+  context 'with imported metadata' do
+    let(:resource) do
+      FactoryGirl.build(:scanned_resource,
+                        title: 'test title',
+                        author: 'test author',
+                        imported_metadata: [{
+                          creator: 'test creator',
+                          subject: 'test subject'
+                        }])
+    end
+    describe "#iiif_manifest_attributes" do
+      it "returns attributes merged with the imported metadata for the IIIF Manifest" do
+        expect(decorator.iiif_manifest_attributes).to include title: ['test title']
+        expect(decorator.iiif_manifest_attributes).to include author: ['test author']
+        expect(decorator.iiif_manifest_attributes).to include creator: ['test creator']
+        expect(decorator.iiif_manifest_attributes).to include subject: ['test subject']
+      end
+    end
+  end
 end
