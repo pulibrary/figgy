@@ -76,6 +76,7 @@ Rails.application.routes.draw do
   get "/iiif/lookup/:prefix/:naan/:arkid", to: 'catalog#lookup_manifest', as: :lookup_manifest
 
   mount BrowseEverything::Engine => '/browse'
+  mount Valhalla::Engine => '/'
 
   if Rails.env.development? || Rails.env.test?
     mount Riiif::Engine => '/image-service', as: 'riiif'
