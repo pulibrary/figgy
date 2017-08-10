@@ -28,7 +28,7 @@ class IdentifierService
   end
 
   private_class_method def self.url_for(resource)
-    return Rails.application.routes.url_helpers.scanned_resource_url(resource) if resource.try(:source_metadata_identifier).blank?
+    return Rails.application.routes.url_helpers.scanned_resource_url(resource, host: Figgy.default_url_options[:host]) if resource.try(:source_metadata_identifier).blank?
     return "https://pulsearch.princeton.edu/catalog/#{resource.source_metadata_identifier.first}#view" if PulMetadataServices::Client.bibdata?(resource.source_metadata_identifier.first)
     "http://findingaids.princeton.edu/collections/#{resource.source_metadata_identifier.first.tr('_', '/')}"
   end
