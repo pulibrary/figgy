@@ -47,7 +47,6 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
       :pdf_type,
       :portion_note,
       :nav_date,
-      :state,
       :member_of_collection_ids,
       :append_id
     ]
