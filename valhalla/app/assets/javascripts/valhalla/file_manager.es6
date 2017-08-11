@@ -20,17 +20,17 @@ export default class FileManager {
   }
 
   save_affix() {
-    // let tools = $("#file-manager-tools")
-    // if(tools.length > 0) {
-    //   tools.affix({
-    //     offset: {
-    //       top: $("#file-manager-tools .actions").offset().top,
-    //       bottom: function() {
-    //         return $("#file-manager-extra-tools").outerHeight(true) + $("footer").outerHeight(true)
-    //       }
-    //     }
-    //   })
-    // }
+    let tools = $("#file-manager-tools")
+    if(tools.length > 0) {
+      tools.affix({
+        offset: {
+          top: $("#file-manager-tools .actions").offset().top,
+          bottom: function() {
+            return $("#file-manager-extra-tools").outerHeight(true) + $("footer").outerHeight(true)
+          }
+        }
+      })
+    }
   }
 
   member_tracking() {
