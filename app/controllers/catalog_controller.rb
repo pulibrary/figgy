@@ -39,6 +39,7 @@ class CatalogController < ApplicationController
     config.show.partials += [:universal_viewer]
     config.show.partials += [:resource_attributes]
     config.show.partials += [:workflow_controls]
+    config.show.partials += [:members]
     config.index.thumbnail_method = :figgy_thumbnail_path
   end
 
