@@ -157,6 +157,30 @@ RSpec.describe PlumChangeSetPersister do
       expect(query_service.find_all.to_a.map(&:class)).to contain_exactly ScannedResource, FileSet
     end
   end
+  describe "updating files" do
+    let(:file1) { fixture_file_upload('files/example.tif', 'image/tiff') }
+    let(:file2) { fixture_file_upload('files/holding_locations.json', 'application/json') }
+    it "can append files as FileSets", run_real_derivatives: true do
+      # upload a file
+      resource = FactoryGirl.build(:scanned_resource)
+      change_set = change_set_class.new(resource)
+      change_set.files = [file1]
+      output = change_set_persister.save(change_set: change_set)
+      file_set = query_service.find_members(resource: output).first
+      file_node = file_set.file_metadata.find { |x| x.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }
+      file = storage_adapter.find_by(id: file_node.file_identifiers.first)
+      expect(file.size).to eq 196_882
+
+      # update the file
+      change_set = FileSetChangeSet.new(file_set)
+      change_set.files = [{ file_node.id.to_s => file2 }]
+      change_set_persister.save(change_set: change_set)
+      updated_file_set = query_service.find_by(id: file_set.id)
+      updated_file_node = updated_file_set.file_metadata.find { |x| x.id == file_node.id }
+      updated_file = storage_adapter.find_by(id: updated_file_node.file_identifiers.first)
+      expect(updated_file.size).to eq 5600
+    end
+  end
 
   describe "collection interactions" do
     context "when a collection is deleted" do

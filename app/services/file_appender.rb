@@ -9,6 +9,9 @@ class FileAppender
 
   def append_to(resource)
     return [] if files.blank?
+    updated_files = update_files(resource, files)
+    return updated_files unless updated_files.empty?
+
     file_sets = build_file_sets || file_nodes
     if resource.respond_to?(:file_metadata)
       resource.file_metadata += file_sets
@@ -18,6 +21,15 @@ class FileAppender
     end
     adjust_pending_uploads(resource)
     file_sets
+  end
+
+  def update_files(resource, files)
+    files.select { |file| file.is_a?(Hash) }.map do |file|
+      node = resource.file_metadata.select { |x| x.id.to_s == file.keys.first }.first
+      file_wrapper = UploadDecorator.new(file.values.first, node.original_filename.first)
+      file = storage_adapter.upload(file: file_wrapper, resource: node)
+      node
+    end
   end
 
   def build_file_sets
