@@ -13,7 +13,7 @@ class FileAppender
     return updated_files unless updated_files.empty?
 
     file_sets = build_file_sets || file_nodes
-    if resource.respond_to?(:file_metadata)
+    if file_set?(resource)
       resource.file_metadata += file_sets
     else
       resource.member_ids += file_sets.map(&:id)
@@ -21,6 +21,10 @@ class FileAppender
     end
     adjust_pending_uploads(resource)
     file_sets
+  end
+
+  def file_set?(resource)
+    resource.respond_to?(:file_metadata) && !resource.respond_to?(:member_ids)
   end
 
   def update_files(resource, files)

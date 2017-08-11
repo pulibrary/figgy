@@ -53,7 +53,7 @@ RSpec.describe IngestMETSJob do
 
         books = adapter.query_service.find_all_of_model(model: ScannedResource).to_a
         parent_book = books.find { |x| x.source_metadata_identifier.present? }
-        child_books = books - [parent_book]
+        child_books = adapter.query_service.find_members(resource: parent_book).to_a
 
         expect(parent_book.member_ids.length).to eq 2
         expect(child_books[0].logical_structure[0].label).to eq ["Main Structure"]

@@ -355,4 +355,22 @@ RSpec.describe ScannedResourcesController do
       expect(manifest_response[:sequences].length).to eq 1
     end
   end
+
+  describe "GET /concern/scanned_resources/:id/pdf" do
+    let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+    let(:scanned_resource) { FactoryGirl.create_for_repository(:scanned_resource, files: [file]) }
+    let(:file_set) { scanned_resource.member_ids.first }
+    before do
+      stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,287/0/grey.jpg")
+        .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
+    end
+    it "generates a PDF, attaches it to the SR, and redirects to download for it" do
+      get :pdf, params: { id: scanned_resource.id.to_s }
+      reloaded = adapter.query_service.find_by(id: scanned_resource.id)
+
+      expect(reloaded.file_metadata).not_to be_blank
+      expect(reloaded.pdf_file).not_to be_blank
+      expect(response).to redirect_to Valhalla::Engine.routes.url_helpers.download_path(resource_id: scanned_resource.id.to_s, id: reloaded.pdf_file.id.to_s)
+    end
+  end
 end

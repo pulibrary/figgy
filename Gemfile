@@ -34,6 +34,7 @@ group :development, :test do
   gem 'coveralls'
   gem "dotenv-rails"
   gem "factory_girl_rails"
+  gem 'pdf-reader', github: 'yob/pdf-reader'
   gem "pry-byebug"
   gem "pry-rails"
   gem 'rails-controller-testing'
@@ -77,3 +78,4 @@ gem 'valhalla', path: 'valhalla'
 source 'https://rails-assets.org' do
   gem 'rails-assets-bootstrap-select', '1.12.2'
 end
+gem 'prawn'

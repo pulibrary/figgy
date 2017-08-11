@@ -65,6 +65,7 @@ Rails.application.routes.draw do
         get :structure
         get :manifest, defaults: { format: :json }
         post :browse_everything_files
+        get :pdf
       end
     end
     get '/scanned_resources/:parent_id/new', to: 'scanned_resources#new', as: :parent_new_scanned_resource

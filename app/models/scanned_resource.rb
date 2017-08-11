@@ -11,6 +11,7 @@ class ScannedResource < Valhalla::Resource
   attribute :logical_structure, Valkyrie::Types::Array.member(Structure.optional).optional
   attribute :pending_uploads, Valkyrie::Types::Array.member(PendingUpload)
   attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
+  attribute :file_metadata, Valkyrie::Types::Set.member(FileMetadata.optional)
 
   def to_s
     "#{human_readable_type}: #{title.to_sentence}"
@@ -18,6 +19,12 @@ class ScannedResource < Valhalla::Resource
 
   def primary_imported_metadata
     Array.wrap(imported_metadata).first || ImportedMetadata.new
+  end
+
+  def pdf_file
+    file_metadata.find do |file|
+      file.mime_type == ["application/pdf"]
+    end
   end
 
   def title

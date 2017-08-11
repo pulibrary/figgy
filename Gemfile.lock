@@ -25,6 +25,17 @@ GIT
       iiif-presentation (~> 0.2.0)
 
 GIT
+  remote: git://github.com/yob/pdf-reader.git
+  revision: bb7747a3cb4279ecd963185f357dbd718f9d20f3
+  specs:
+    pdf-reader (2.0.0)
+      Ascii85 (~> 1.0.0)
+      afm (~> 0.2.1)
+      hashery (~> 2.0)
+      ruby-rc4
+      ttfunk
+
+GIT
   remote: https://github.com/cbeer/devise-guests.git
   revision: 0999e0bf31841640ad52331e8db14c3f0e1c9765
   specs:
@@ -66,6 +77,7 @@ GEM
   remote: https://rubygems.org/
   remote: https://rails-assets.org/
   specs:
+    Ascii85 (1.0.2)
     aasm (4.12.2)
       concurrent-ruby (~> 1.0)
     actioncable (5.1.1)
@@ -126,6 +138,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.5.1)
       public_suffix (~> 2.0, >= 2.0.2)
+    afm (0.2.2)
     almond-rails (0.1.0)
       rails (>= 4.2, < 6)
     arel (8.0.0)
@@ -321,6 +334,7 @@ GEM
     hamster (3.0.0)
       concurrent-ruby (~> 1.0)
     hashdiff (0.3.4)
+    hashery (2.1.2)
     hashie (3.5.6)
     honeybadger (3.1.2)
     httmultiparty (0.3.16)
@@ -457,12 +471,16 @@ GEM
     parallel (1.12.0)
     parser (2.4.0.0)
       ast (~> 2.2)
+    pdf-core (0.7.0)
     pg (0.21.0)
     poltergeist (1.15.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
       websocket-driver (>= 0.2.0)
     powerpack (0.1.1)
+    prawn (2.2.2)
+      pdf-core (~> 0.7.0)
+      ttfunk (~> 1.5)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -582,6 +600,7 @@ GEM
       multipart-post
       oauth2
     ruby-progressbar (1.8.1)
+    ruby-rc4 (0.1.5)
     ruby_dep (1.5.0)
     ruby_tika_app (1.5.0)
       open4
@@ -660,6 +679,7 @@ GEM
     title (0.0.7)
       i18n
       rails (>= 3.1)
+    ttfunk (1.5.0)
     twitter-typeahead-rails (0.11.1.pre.corejavascript)
       actionpack (>= 3.1)
       jquery-rails
@@ -725,8 +745,10 @@ DEPENDENCIES
   normalize-rails
   omniauth-cas
   openseadragon
+  pdf-reader!
   pg
   poltergeist
+  prawn
   pry-byebug
   pry-rails
   pul_metadata_services!
