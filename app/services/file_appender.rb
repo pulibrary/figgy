@@ -32,6 +32,7 @@ class FileAppender
       node = resource.file_metadata.select { |x| x.id.to_s == file.keys.first }.first
       file_wrapper = UploadDecorator.new(file.values.first, node.original_filename.first)
       file = storage_adapter.upload(file: file_wrapper, resource: node)
+      node.file_identifiers = file.id
       node
     end
   end
