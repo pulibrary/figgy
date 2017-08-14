@@ -19,9 +19,11 @@ if Rails.env.development? || Rails.env.test?
 
       SolrWrapper.wrap(shared_solr_opts.merge(port: 8984, instance_dir: 'tmp/blacklight-core-test')) do |solr|
         solr.with_collection(name: "blacklight-core-test", dir: Rails.root.join("solr", "config").to_s) do
-          puts "Setup solr"
-          loop do
-            sleep(1)
+          puts "Solr running at http://localhost:8984/solr/blacklight-core-test/, ^C to exit"
+          begin
+            sleep
+          rescue Interrupt
+            puts "\nShutting down..."
           end
         end
       end
@@ -38,8 +40,11 @@ if Rails.env.development? || Rails.env.test?
       SolrWrapper.wrap(managed: true, verbose: true, port: 8983, instance_dir: 'tmp/blacklight-core', persist: false) do |solr|
         solr.with_collection(name: "blacklight-core", dir: Rails.root.join("solr", "config").to_s) do
           puts "Setup solr"
-          loop do
-            sleep(1)
+          puts "Solr running at http://localhost:8983/solr/blacklight-core/, ^C to exit"
+          begin
+            sleep
+          rescue Interrupt
+            puts "\nShutting down..."
           end
         end
       end
