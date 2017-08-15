@@ -4,7 +4,18 @@ include ActionDispatch::TestProcess
 
 RSpec.describe ManifestBuilder do
   subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_resource.id)) }
-  let(:scanned_resource) { FactoryGirl.create_for_repository(:scanned_resource) }
+  let(:scanned_resource) do
+    FactoryGirl.create_for_repository(:scanned_resource,
+                                      title: 'test title1',
+                                      label: 'test label',
+                                      actor: 'test person',
+                                      sort_title: 'test title2',
+                                      portion_note: 'test value1',
+                                      rights_statement: RDF::URI("https://creativecommons.org/licenses/by-nc/4.0/"),
+                                      call_number: 'test value2',
+                                      edition: 'test edition',
+                                      nav_date: 'test date')
+  end
   let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file]) }
   let(:logical_structure) do
   end
@@ -54,6 +65,41 @@ RSpec.describe ManifestBuilder do
       expect(output["structures"].length).to eq 3
       structure_canvas_id = output["structures"][2]["canvases"][0]
       expect(canvas_id).to eq structure_canvas_id
+    end
+
+    it 'generates a IIIF document with metadata' do
+      output = manifest_builder.build
+      expect(output).to be_kind_of Hash
+      expect(output).to include 'metadata'
+      metadata = output["metadata"]
+      expect(metadata).to be_kind_of Array
+      expect(metadata.length).to eq(10)
+
+      metadata_object = metadata.shift
+      expect(metadata_object).to be_kind_of Hash
+
+      expect(metadata_object["label"]).to eq 'Created At'
+      metadata_values = metadata_object['value']
+      expect(metadata_values).to be_kind_of Array
+      metadata_value = metadata_values.shift
+      expect { Date.strptime(metadata_value, '%m/%d/%y') }.not_to raise_error
+
+      metadata_object = metadata.shift
+      expect(metadata_object).to be_kind_of Hash
+
+      expect(metadata_object["label"]).to eq 'Updated At'
+      metadata_values = metadata_object['value']
+      expect(metadata_values).to be_kind_of Array
+      metadata_value = metadata_values.shift
+      expect { Date.strptime(metadata_value, '%m/%d/%y') }.not_to raise_error
+
+      metadata_object = metadata.shift
+      expect(metadata_object).to be_kind_of Hash
+
+      expect(metadata_object["label"]).to eq 'Sort Title'
+      metadata_values = metadata_object['value']
+      expect(metadata_values).to be_kind_of Array
+      expect(metadata_values).to include 'test title2'
     end
   end
   context "when given a nested child" do
