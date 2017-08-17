@@ -20,6 +20,16 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
     super || []
   end
 
+  def members
+    @members ||= member_ids.map do |id|
+      query_service.find_by(id: id)
+    end
+  end
+
+  def volumes
+    @volumes ||= members.select { |r| r.is_a?(ScannedResource) }.map(&:decorate)
+  end
+
   def metadata_adapter
     Valkyrie.config.metadata_adapter
   end
