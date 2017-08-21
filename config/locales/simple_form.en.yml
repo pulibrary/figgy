@@ -29,6 +29,12 @@ en:
     # prompts:
     #   defaults:
     #     age: 'Select your age'
+    options:
+      file_set:
+        viewing_hint:
+          "": 'Single Page'
+          non-paged: 'Non-Paged'
+          facing-pages: 'Facing pages'
     labels:
       defaults:
         source_metadata_identifier: "Source Metadata ID"
