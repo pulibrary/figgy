@@ -7,7 +7,17 @@ class METSDocument
     end
 
     def new
-      mets
+      if pudl3_mvw?
+        Pudl3MVWMetsDocument.new(mets.source_file)
+      else
+        mets
+      end
     end
+
+    private
+
+      def pudl3_mvw?
+        mets.collection_slugs == "pudl0003" && mets.mets.xpath("/mets:mets/mets:structMap[@type='Physical']").empty?
+      end
   end
 end
