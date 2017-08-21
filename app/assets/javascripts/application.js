@@ -20,6 +20,9 @@
 //= require form/mutex
 //= require browse_everything
 //= require jquery-ui/widgets/sortable
+//= require jquery-ui/widgets/slider
+//= require jquery-ui/widgets/datepicker
+//= require jqueryui-timepicker-addon
 //= require nestedSortable/jquery.mjs.nestedSortable
 //= require openseadragon/openseadragon
 //= require openseadragon/jquery

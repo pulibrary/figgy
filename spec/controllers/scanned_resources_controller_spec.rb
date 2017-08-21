@@ -34,7 +34,7 @@ RSpec.describe ScannedResourcesController do
         expect(response.body).to have_field "Local identifier"
         expect(response.body).to have_field "Holding Location"
         expect(response.body).to have_field "Portion Note"
-        expect(response.body).to have_field "Navigation Date"
+        expect(response.body).to have_field "Navigation Date", class: "timepicker"
         expect(response.body).to have_selector "#scanned_resource_append_id[value='#{parent.id}']", visible: false
         expect(response.body).to have_select "Collections", name: "scanned_resource[member_of_collection_ids][]", options: [collection.title.first]
         expect(response.body).to have_select "Rights Statement", name: "scanned_resource[rights_statement]", options: [""] + ControlledVocabulary.for(:rights_statement).all.map(&:label)
