@@ -71,7 +71,11 @@ Rails.application.routes.draw do
     get '/scanned_resources/:parent_id/new', to: 'scanned_resources#new', as: :parent_new_scanned_resource
   end
 
-  resources :collections
+  resources :collections do
+    member do
+      get :manifest, defaults: { format: :json }
+    end
+  end
 
   get '/catalog/parent/:parent_id/:id', to: 'catalog#show', as: :parent_solr_document
   get "/iiif/lookup/:prefix/:naan/:arkid", to: 'catalog#lookup_manifest', as: :lookup_manifest
