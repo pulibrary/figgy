@@ -16,4 +16,13 @@ class CollectionsController < ApplicationController
       end
     end
   end
+
+  def index_manifest
+    @resource = IndexCollection.new
+    respond_to do |f|
+      f.json do
+        render json: ManifestBuilder.new(@resource).build
+      end
+    end
+  end
 end

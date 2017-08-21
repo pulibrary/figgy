@@ -21,6 +21,8 @@ class ManifestBuilder
     def self.for(resource)
       if resource.is_a?(Collection)
         CollectionNode.new(resource)
+      elsif resource.is_a?(IndexCollection)
+        IndexCollectionNode.new(resource)
       else
         new(resource)
       end
@@ -124,15 +126,6 @@ class ManifestBuilder
   end
 
   class CollectionNode < RootNode
-    ##
-    # Retrieves the presenters for each member Work as a separate root
-    # @return [RootNode]
-    def work_presenters
-      @work_presenters ||= (members - leaf_nodes).map do |node|
-        RootNode.for(node)
-      end
-    end
-
     def file_set_presenters
       []
     end
@@ -143,6 +136,32 @@ class ManifestBuilder
 
     def viewing_hint
       nil
+    end
+  end
+
+  class IndexCollectionNode < RootNode
+    def file_set_presenters
+      []
+    end
+
+    def members
+      @members ||= query_service.find_all_of_model(model: Collection).to_a
+    end
+
+    def viewing_hint
+      nil
+    end
+
+    def manifest_url
+      helper.index_manifest_url
+    end
+
+    def to_s
+      "Plum Collections"
+    end
+
+    def description
+      "All collections which are a part of Plum."
     end
   end
 
