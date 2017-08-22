@@ -184,6 +184,10 @@ RSpec.describe CatalogController do
         expect(response).to be_success
         json_body = MultiJson.load(response.body, symbolize_keys: true)
         expect(json_body[:title]).not_to be_blank
+
+        collection = persister.save(resource: FactoryGirl.build(:collection))
+        get :show, params: { id: "id-#{collection.id}", format: :jsonld }
+        expect(response).to be_success
       end
 
       it "renders for a FileSet" do

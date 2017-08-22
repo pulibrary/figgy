@@ -31,16 +31,16 @@ module LinkedData
     {
       '@context': 'https://bibdata.princeton.edu/context.json',
       '@id': obj_url,
-      identifier: resource.identifier,
-      scopeNote: resource.portion_note,
-      navDate: resource.nav_date,
+      identifier: resource.try(:identifier),
+      scopeNote: resource.try(:portion_note),
+      navDate: resource.try(:nav_date),
       edm_rights: rights_object,
       memberOf: collection_objects
     }.reject { |_, v| v.nil? || v.try(:empty?) }
   end
 
   def rights_object
-    return if resource.rights_statement.blank?
+    return if resource.try(:rights_statement).blank?
     {
       '@id': resource.rights_statement.first.to_s,
       '@type': 'dcterms:RightsStatement',
@@ -49,7 +49,7 @@ module LinkedData
   end
 
   def collection_objects
-    return if resource.member_of_collection_ids.blank?
+    return if resource.try(:member_of_collection_ids).blank?
     collections.map do |collection|
       {
         '@id': helper.solr_document_url(id: "id-#{collection.id}"),
@@ -72,7 +72,7 @@ module LinkedData
   end
 
   def imported_jsonld
-    return basic_jsonld unless resource.primary_imported_metadata.source_jsonld.present?
+    return basic_jsonld unless resource.respond_to?(:primary_imported_metadata) && resource.primary_imported_metadata.source_jsonld.present?
     @imported_jsonld ||= JSON.parse(resource.primary_imported_metadata.source_jsonld.first)
   end
 
