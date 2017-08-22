@@ -17,6 +17,7 @@ Style/FileName:
     - 'Gemfile'
     - '**/*.rake'
     - 'valhalla/Gemfile'
+    - 'Capfile'
 Style/PredicateName:
   Exclude:
     - 'app/controllers/catalog_controller.rb'

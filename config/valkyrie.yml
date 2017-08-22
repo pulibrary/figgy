@@ -4,8 +4,12 @@ development:
 
 test:
   metadata_adapter: postgres
-  storage_adapter: test_disk
+  storage_adapter: disk
 
 production:
+  metadata_adapter: postgres
+  storage_adapter: disk
+
+staging:
   metadata_adapter: postgres
   storage_adapter: disk
