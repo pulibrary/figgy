@@ -6,7 +6,7 @@ class ManifestBuilder
     ##
     # @param [Valhalla::Resource] resource the Resource being viewed
     def initialize(resource)
-      @resource = RootNode.new(resource)
+      @resource = resource
     end
 
     def apply(manifest)
@@ -34,7 +34,7 @@ class ManifestBuilder
 
       def figgy_rdf_hash
         {
-          "@id" => helper.polymorphic_url(resource, format: :jsonld),
+          "@id" => helper.solr_document_url(id: "id-#{resource.id}", format: :jsonld),
           "format" => "application/ld+json"
         }
       end
