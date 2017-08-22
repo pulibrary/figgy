@@ -13,6 +13,7 @@ FactoryGirl.define do
       files []
       user nil
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+      import_metadata false
     end
     after(:build) do |resource, evaluator|
       resource.depositor = evaluator.user.uid if evaluator.user.present?
@@ -25,11 +26,14 @@ FactoryGirl.define do
       resource
     end
     after(:create) do |resource, evaluator|
-      if evaluator.files.present?
+      if evaluator.files.present? || evaluator.import_metadata
+        import_metadata = "1" if evaluator.import_metadata
+        change_set = ScannedResourceChangeSet.new(resource, files: evaluator.files, refresh_remote_metadata: import_metadata)
+        change_set.prepopulate!
         ::PlumChangeSetPersister.new(
           metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
           storage_adapter: Valkyrie.config.storage_adapter
-        ).save(change_set: ScannedResourceChangeSet.new(resource, files: evaluator.files))
+        ).save(change_set: change_set)
       end
     end
     factory :open_scanned_resource do

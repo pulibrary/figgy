@@ -144,6 +144,48 @@ RSpec.describe CatalogController do
         expect(response.body).to have_content "Test Comment"
       end
 
+      it "renders RDF views" do
+        stub_bibdata(bib_id: "123456")
+        stub_bibdata_context
+        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        collection = FactoryGirl.create_for_repository(:collection)
+        resource = FactoryGirl.create_for_repository(
+          :scanned_resource,
+          source_metadata_identifier: "123456",
+          import_metadata: true,
+          portion_note: "Test",
+          nav_date: "Test",
+          member_of_collection_ids: collection.id
+        )
+
+        get :show, params: { id: "id-#{resource.id}", format: :jsonld }
+
+        expect(response).to be_success
+        json_body = MultiJson.load(response.body, symbolize_keys: true)
+        expect(json_body[:title][:@value]).to eq "Earth rites : fertility rites in pre-industrial Britain"
+        expect(json_body[:identifier]).not_to be_blank
+        expect(json_body[:scopeNote]).not_to be_blank
+        expect(json_body[:navDate]).not_to be_blank
+        expect(json_body[:edm_rights][:@id]).to eq "http://rightsstatements.org/vocab/NKC/1.0/"
+        expect(json_body[:edm_rights][:@type]).to eq "dcterms:RightsStatement"
+        expect(json_body[:edm_rights][:pref_label]).to eq "No Known Copyright"
+        expect(json_body[:memberOf][0][:@id]).to eq "http://www.example.com/catalog/id-#{collection.id}"
+        expect(json_body[:memberOf][0][:@type]).to eq "pcdm:Collection"
+        expect(json_body[:memberOf][0][:title]).to eq collection.title
+
+        get :show, params: { id: "id-#{resource.id}", format: :nt }
+        expect(response).to be_success
+
+        get :show, params: { id: "id-#{resource.id}", format: :ttl }
+        expect(response).to be_success
+
+        empty_resource = persister.save(resource: FactoryGirl.build(:scanned_resource))
+        get :show, params: { id: "id-#{empty_resource.id}", format: :jsonld }
+        expect(response).to be_success
+        json_body = MultiJson.load(response.body, symbolize_keys: true)
+        expect(json_body[:title]).not_to be_blank
+      end
+
       it "renders for a FileSet" do
         resource = persister.save(resource: FactoryGirl.build(:file_set))
 

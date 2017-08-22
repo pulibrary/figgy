@@ -27,6 +27,16 @@ module BibdataStubbing
         }
       )
   end
+
+  def stub_bibdata_context
+    stub_request(:get, "https://bibdata.princeton.edu/context.json")
+      .to_return(
+        body: file_fixture("bibdata/context.json").read,
+        headers: {
+          'Content-Type' => "application/json"
+        }
+      )
+  end
 end
 
 RSpec.configure do |config|
