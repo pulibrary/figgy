@@ -61,5 +61,26 @@ RSpec.describe IngestMETSJob do
         expect(child_books[1].title).to eq ["second volume"]
       end
     end
+    context "when given a pudl0003 MVW with no structmap" do
+      let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0003-tc85_2621.mets") }
+      before do
+        allow(File).to receive(:open).with("/mnt/diglibdata/pudl/pudl0003/tc85_2621/vol01/00000001.tif").and_return(File.open(tiff_file))
+        allow(File).to receive(:open).with("/mnt/diglibdata/pudl/pudl0003/tc85_2621/vol01/00000002.tif").and_return(File.open(tiff_file))
+        allow(File).to receive(:open).with("/mnt/diglibdata/pudl/pudl0003/tc85_2621/vol02/00000001.tif").and_return(File.open(tiff_file))
+      end
+      it "hacks together a MVW from the path" do
+        described_class.perform_now(mets_file, user)
+
+        books = adapter.query_service.find_all_of_model(model: ScannedResource)
+        parent_book = books.find { |x| x.source_metadata_identifier.present? }
+        expect(parent_book).not_to be_nil
+        expect(parent_book.member_ids).not_to be_blank
+        children = adapter.query_service.find_members(resource: parent_book).to_a
+
+        expect(children.map(&:class)).to eq [ScannedResource, ScannedResource]
+        expect(children[0].member_ids.length).to eq 2
+        expect(children[1].member_ids.length).to eq 1
+      end
+    end
   end
 end
