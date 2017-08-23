@@ -29,6 +29,7 @@ RSpec.describe PlumChangeSetPersister do
       expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Earth rites : fertility rites in pre-industrial Britain", language: :fr)]
       expect(output.primary_imported_metadata.creator).to eq ["Bord, Janet, 1945-"]
       expect(output.primary_imported_metadata.call_number).to eq ["BL980.G7 B66 1982"]
+      expect(output.primary_imported_metadata.source_jsonld).not_to be_blank
     end
   end
   context "when a resource is completed" do
@@ -63,6 +64,7 @@ RSpec.describe PlumChangeSetPersister do
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).to eq ['Series 5: Speeches, Statements, Press Conferences, Etc - 1953 - Speech: "... Results of the Eleventh Meeting of the Council of NATO"']
+      expect(output.primary_imported_metadata.source_metadata).not_to be_blank
     end
   end
   context "when a source_metadata_identifier is set afterwards" do

@@ -1,0 +1,854 @@
+{
+  "@context": {
+    "id" : "@id",
+    "bf": "http://id.loc.gov/ontologies/bibframe/",
+    "bf1": "http://bibframe.org/vocab/",
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "dcterms": "http://purl.org/dc/terms/",
+    "edm": "http://www.europeana.eu/schemas/edm/",
+    "mrel": "http://id.loc.gov/vocabulary/relators/",
+    "mods": "http://opaquenamespace.org/ns/mods/",
+    "pcdm": "http://pcdm.org/models#",
+    "pres": "http://iiif.io/api/presentation/2#",
+    "pulterms": "http://library.princeton.edu/terms/",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+
+    "contributor": {"@id": "dc:contributor"},
+    "coverage": {"@id": "dc:coverage"},
+    "creator": {"@id": "dc:creator"},
+    "date": {"@id": "dc:date"},
+    "description": {"@id": "dc:description"},
+    "format": {"@id": "dc:format"},
+    "identifier": {"@id": "dc:identifier"},
+    "language": {"@id": "dc:language"},
+    "publisher": {"@id": "dc:publisher"},
+    "relation": {"@id": "dc:relation"},
+    "rights": {"@id": "dc:rights"},
+    "source": {"@id": "dc:source"},
+    "subject": {"@id": "dc:subject"},
+    "type": {"@id": "dc:type"},
+
+    "alternative": {"@id": "dcterms:alternative"},
+    "created": {"@id": "dcterms:created"},
+    "extent": {"@id": "dcterms:extent"},
+    "is_part_of": {"@id": "dcterms:isPartOf"},
+    "modified": {"@id": "dcterms:modified"},
+    "spatial": {"@id": "dcterms:spatial"},
+    "title": {"@id": "dcterms:title"},
+    "dcterms_type": {"@id": "dcterms:type"},
+    "abstract": {"@id": "dcterms:abstract"},
+    "contents": {"@id": "dcterms:tableOfContents"},
+
+
+    "edition": {"@id": "bf:editionStatement"},
+    "origin_place": {"@id": "bf:originPlace"},
+    "cartographic_projection": {"@id": "bf1:cartographicProjection"},
+    "cartographic_scale": {"@id": "bf1:cartographicScale"},
+    "edm_rights": {"@id": "edm:rights"},
+    "title_sort": {"@id": "mods:titleForSort"},
+    "memberOf": {"@id": "pcdm:memberOf"},
+    "navDate": {"@id": "pres:navDate"},
+    "call_number": {"@id": "pulterms:call_number"},
+    "exact_match": {"@id": "skos:exactMatch"},
+    "pref_label": {"@id": "skos:prefLabel"},
+    "scopeNote": {"@id": "skos:scopeNote"},
+
+    "abridger": {
+      "@id": "mrel:abr"
+    },
+    "actor": {
+      "@id": "mrel:act"
+    },
+    "adapter": {
+      "@id": "mrel:adp"
+    },
+    "addressee": {
+      "@id": "mrel:rcp"
+    },
+    "analyst": {
+      "@id": "mrel:anl"
+    },
+    "animator": {
+      "@id": "mrel:anm"
+    },
+    "annotator": {
+      "@id": "mrel:ann"
+    },
+    "appellant": {
+      "@id": "mrel:apl"
+    },
+    "appellee": {
+      "@id": "mrel:ape"
+    },
+    "applicant": {
+      "@id": "mrel:app"
+    },
+    "architect": {
+      "@id": "mrel:arc"
+    },
+    "arranger": {
+      "@id": "mrel:arr"
+    },
+    "art_copyist": {
+      "@id": "mrel:acp"
+    },
+    "art_director": {
+      "@id": "mrel:adi"
+    },
+    "artist": {
+      "@id": "mrel:art"
+    },
+    "artistic_director": {
+      "@id": "mrel:ard"
+    },
+    "assignee": {
+      "@id": "mrel:asg"
+    },
+    "associated_name": {
+      "@id": "mrel:asn"
+    },
+    "attributed_name": {
+      "@id": "mrel:att"
+    },
+    "auctioneer": {
+      "@id": "mrel:auc"
+    },
+    "author": {
+      "@id": "mrel:aut"
+    },
+    "author_in_quotations_or_text_abstracts": {
+      "@id": "mrel:aqt"
+    },
+    "author_of_afterword_colophon_etc": {
+      "@id": "mrel:aft"
+    },
+    "author_of_dialog": {
+      "@id": "mrel:aud"
+    },
+    "author_of_introduction_etc": {
+      "@id": "mrel:aui"
+    },
+    "autographer": {
+      "@id": "mrel:ato"
+    },
+    "bibliographic_antecedent": {
+      "@id": "mrel:ant"
+    },
+    "binder": {
+      "@id": "mrel:bnd"
+    },
+    "binding_designer": {
+      "@id": "mrel:bdd"
+    },
+    "blurb_writer": {
+      "@id": "mrel:blw"
+    },
+    "book_designer": {
+      "@id": "mrel:bkd"
+    },
+    "book_producer": {
+      "@id": "mrel:bkp"
+    },
+    "bookjacket_designer": {
+      "@id": "mrel:bjd"
+    },
+    "bookplate_designer": {
+      "@id": "mrel:bpd"
+    },
+    "bookseller": {
+      "@id": "mrel:bsl"
+    },
+    "braille_embosser": {
+      "@id": "mrel:brl"
+    },
+    "broadcaster": {
+      "@id": "mrel:brd"
+    },
+    "calligrapher": {
+      "@id": "mrel:cll"
+    },
+    "cartographer": {
+      "@id": "mrel:ctg"
+    },
+    "caster": {
+      "@id": "mrel:cas"
+    },
+    "censor": {
+      "@id": "mrel:cns"
+    },
+    "choreographer": {
+      "@id": "mrel:chr"
+    },
+    "cinematographer": {
+      "@id": "mrel:cng"
+    },
+    "client": {
+      "@id": "mrel:cli"
+    },
+    "collection_registrar": {
+      "@id": "mrel:cor"
+    },
+    "collector": {
+      "@id": "mrel:col"
+    },
+    "collotyper": {
+      "@id": "mrel:clt"
+    },
+    "colorist": {
+      "@id": "mrel:clr"
+    },
+    "commentator": {
+      "@id": "mrel:cmm"
+    },
+    "commentator_for_written_text": {
+      "@id": "mrel:cwt"
+    },
+    "compiler": {
+      "@id": "mrel:com"
+    },
+    "complainant": {
+      "@id": "mrel:cpl"
+    },
+    "complainant_appellant": {
+      "@id": "mrel:cpt"
+    },
+    "complainant_appellee": {
+      "@id": "mrel:cpe"
+    },
+    "composer": {
+      "@id": "mrel:cmp"
+    },
+    "compositor": {
+      "@id": "mrel:cmt"
+    },
+    "conceptor": {
+      "@id": "mrel:ccp"
+    },
+    "conductor": {
+      "@id": "mrel:cnd"
+    },
+    "conservator": {
+      "@id": "mrel:con"
+    },
+    "consultant": {
+      "@id": "mrel:csl"
+    },
+    "consultant_to_a_project": {
+      "@id": "mrel:csp"
+    },
+    "contestant": {
+      "@id": "mrel:cos"
+    },
+    "contestant_appellant": {
+      "@id": "mrel:cot"
+    },
+    "contestant_appellee": {
+      "@id": "mrel:coe"
+    },
+    "contestee": {
+      "@id": "mrel:cts"
+    },
+    "contestee_appellant": {
+      "@id": "mrel:ctt"
+    },
+    "contestee_appellee": {
+      "@id": "mrel:cte"
+    },
+    "contractor": {
+      "@id": "mrel:ctr"
+    },
+    "copyright_claimant": {
+      "@id": "mrel:cpc"
+    },
+    "copyright_holder": {
+      "@id": "mrel:cph"
+    },
+    "corrector": {
+      "@id": "mrel:crr"
+    },
+    "correspondent": {
+      "@id": "mrel:crp"
+    },
+    "costume_designer": {
+      "@id": "mrel:cst"
+    },
+    "court_governed": {
+      "@id": "mrel:cou"
+    },
+    "court_reporter": {
+      "@id": "mrel:crt"
+    },
+    "cover_designer": {
+      "@id": "mrel:cov"
+    },
+    "curator": {
+      "@id": "mrel:cur"
+    },
+    "dancer": {
+      "@id": "mrel:dnc"
+    },
+    "data_contributor": {
+      "@id": "mrel:dtc"
+    },
+    "data_manager": {
+      "@id": "mrel:dtm"
+    },
+    "dedicatee": {
+      "@id": "mrel:dte"
+    },
+    "dedicator": {
+      "@id": "mrel:dto"
+    },
+    "defendant": {
+      "@id": "mrel:dfd"
+    },
+    "defendant_appellant": {
+      "@id": "mrel:dft"
+    },
+    "defendant_appellee": {
+      "@id": "mrel:dfe"
+    },
+    "degree_granting_institution": {
+      "@id": "mrel:dgg"
+    },
+    "degree_supervisor": {
+      "@id": "mrel:dgs"
+    },
+    "delineator": {
+      "@id": "mrel:dln"
+    },
+    "depicted": {
+      "@id": "mrel:dpc"
+    },
+    "depositor": {
+      "@id": "mrel:dpt"
+    },
+    "designer": {
+      "@id": "mrel:dsr"
+    },
+    "director": {
+      "@id": "mrel:drt"
+    },
+    "dissertant": {
+      "@id": "mrel:dis"
+    },
+    "distribution_place": {
+      "@id": "mrel:dbp"
+    },
+    "distributor": {
+      "@id": "mrel:dst"
+    },
+    "donor": {
+      "@id": "mrel:dnr"
+    },
+    "draftsman": {
+      "@id": "mrel:drm"
+    },
+    "dubious_author": {
+      "@id": "mrel:dub"
+    },
+    "editor": {
+      "@id": "mrel:edt"
+    },
+    "editor_of_compilation": {
+      "@id": "mrel:edc"
+    },
+    "editor_of_moving_image_work": {
+      "@id": "mrel:edm"
+    },
+    "electrician": {
+      "@id": "mrel:elg"
+    },
+    "electrotyper": {
+      "@id": "mrel:elt"
+    },
+    "enacting_jurisdiction": {
+      "@id": "mrel:enj"
+    },
+    "engineer": {
+      "@id": "mrel:eng"
+    },
+    "engraver": {
+      "@id": "mrel:egr"
+    },
+    "etcher": {
+      "@id": "mrel:etr"
+    },
+    "event_place": {
+      "@id": "mrel:evp"
+    },
+    "expert": {
+      "@id": "mrel:exp"
+    },
+    "facsimilist": {
+      "@id": "mrel:fac"
+    },
+    "field_director": {
+      "@id": "mrel:fld"
+    },
+    "film_distributor": {
+      "@id": "mrel:fds"
+    },
+    "film_director": {
+      "@id": "mrel:fmd"
+    },
+    "film_editor": {
+      "@id": "mrel:flm"
+    },
+    "film_producer": {
+      "@id": "mrel:fmp"
+    },
+    "filmmaker": {
+      "@id": "mrel:fmk"
+    },
+    "first_party": {
+      "@id": "mrel:fpy"
+    },
+    "forger": {
+      "@id": "mrel:frg"
+    },
+    "former_owner": {
+      "@id": "mrel:fmo"
+    },
+    "funder": {
+      "@id": "mrel:fnd"
+    },
+    "geographic_information_specialist": {
+      "@id": "mrel:gis"
+    },
+    "honoree": {
+      "@id": "mrel:hnr"
+    },
+    "host": {
+      "@id": "mrel:hst"
+    },
+    "host_institution": {
+      "@id": "mrel:his"
+    },
+    "illuminator": {
+      "@id": "mrel:ilu"
+    },
+    "illustrator": {
+      "@id": "mrel:ill"
+    },
+    "inscriber": {
+      "@id": "mrel:ins"
+    },
+    "instrumentalist": {
+      "@id": "mrel:itr"
+    },
+    "interviewee": {
+      "@id": "mrel:ive"
+    },
+    "interviewer": {
+      "@id": "mrel:ivr"
+    },
+    "inventor": {
+      "@id": "mrel:inv"
+    },
+    "issuing_body": {
+      "@id": "mrel:isb"
+    },
+    "judge": {
+      "@id": "mrel:jud"
+    },
+    "jurisdiction_governed": {
+      "@id": "mrel:jug"
+    },
+    "laboratory": {
+      "@id": "mrel:lbr"
+    },
+    "laboratory_director": {
+      "@id": "mrel:ldr"
+    },
+    "landscape_architect": {
+      "@id": "mrel:lsa"
+    },
+    "lead": {
+      "@id": "mrel:led"
+    },
+    "lender": {
+      "@id": "mrel:len"
+    },
+    "libelant": {
+      "@id": "mrel:lil"
+    },
+    "libelant_appellant": {
+      "@id": "mrel:lit"
+    },
+    "libelant_appellee": {
+      "@id": "mrel:lie"
+    },
+    "libelee": {
+      "@id": "mrel:lel"
+    },
+    "libelee_appellant": {
+      "@id": "mrel:let"
+    },
+    "libelee_appellee": {
+      "@id": "mrel:lee"
+    },
+    "librettist": {
+      "@id": "mrel:lbt"
+    },
+    "licensee": {
+      "@id": "mrel:lse"
+    },
+    "licensor": {
+      "@id": "mrel:lso"
+    },
+    "lighting_designer": {
+      "@id": "mrel:lgd"
+    },
+    "lithographer": {
+      "@id": "mrel:ltg"
+    },
+    "lyricist": {
+      "@id": "mrel:lyr"
+    },
+    "manufacture_place": {
+      "@id": "mrel:mfp"
+    },
+    "manufacturer": {
+      "@id": "mrel:mfr"
+    },
+    "marbler": {
+      "@id": "mrel:mrb"
+    },
+    "markup_editor": {
+      "@id": "mrel:mrk"
+    },
+    "medium": {
+      "@id": "mrel:med"
+    },
+    "metadata_contact": {
+      "@id": "mrel:mdc"
+    },
+    "metal_engraver": {
+      "@id": "mrel:mte"
+    },
+    "minute_taker": {
+      "@id": "mrel:mtk"
+    },
+    "moderator": {
+      "@id": "mrel:mod"
+    },
+    "monitor": {
+      "@id": "mrel:mon"
+    },
+    "music_copyist": {
+      "@id": "mrel:mcp"
+    },
+    "musical_director": {
+      "@id": "mrel:msd"
+    },
+    "musician": {
+      "@id": "mrel:mus"
+    },
+    "narrator": {
+      "@id": "mrel:nrt"
+    },
+    "onscreen_presenter": {
+      "@id": "mrel:osp"
+    },
+    "opponent": {
+      "@id": "mrel:opn"
+    },
+    "organizer": {
+      "@id": "mrel:orm"
+    },
+    "originator": {
+      "@id": "mrel:org"
+    },
+    "other": {
+      "@id": "mrel:oth"
+    },
+    "owner": {
+      "@id": "mrel:own"
+    },
+    "panelist": {
+      "@id": "mrel:pan"
+    },
+    "papermaker": {
+      "@id": "mrel:ppm"
+    },
+    "patent_applicant": {
+      "@id": "mrel:pta"
+    },
+    "patent_holder": {
+      "@id": "mrel:pth"
+    },
+    "patron": {
+      "@id": "mrel:pat"
+    },
+    "performer": {
+      "@id": "mrel:prf"
+    },
+    "permitting_agency": {
+      "@id": "mrel:pma"
+    },
+    "photographer": {
+      "@id": "mrel:pht"
+    },
+    "plaintiff": {
+      "@id": "mrel:ptf"
+    },
+    "plaintiff_appellant": {
+      "@id": "mrel:ptt"
+    },
+    "plaintiff_appellee": {
+      "@id": "mrel:pte"
+    },
+    "platemaker": {
+      "@id": "mrel:plt"
+    },
+    "praeses": {
+      "@id": "mrel:pra"
+    },
+    "presenter": {
+      "@id": "mrel:pre"
+    },
+    "printer": {
+      "@id": "mrel:prt"
+    },
+    "printer_of_plates": {
+      "@id": "mrel:pop"
+    },
+    "printmaker": {
+      "@id": "mrel:prm"
+    },
+    "process_contact": {
+      "@id": "mrel:prc"
+    },
+    "producer": {
+      "@id": "mrel:pro"
+    },
+    "production_company": {
+      "@id": "mrel:prn"
+    },
+    "production_designer": {
+      "@id": "mrel:prs"
+    },
+    "production_manager": {
+      "@id": "mrel:pmn"
+    },
+    "production_personnel": {
+      "@id": "mrel:prd"
+    },
+    "production_place": {
+      "@id": "mrel:prp"
+    },
+    "programmer": {
+      "@id": "mrel:prg"
+    },
+    "project_director": {
+      "@id": "mrel:pdr"
+    },
+    "proofreader": {
+      "@id": "mrel:pfr"
+    },
+    "provider": {
+      "@id": "mrel:prv"
+    },
+    "publication_place": {
+      "@id": "mrel:pup"
+    },
+    "publishing_director": {
+      "@id": "mrel:pbd"
+    },
+    "puppeteer": {
+      "@id": "mrel:ppt"
+    },
+    "radio_director": {
+      "@id": "mrel:rdd"
+    },
+    "radio_producer": {
+      "@id": "mrel:rpc"
+    },
+    "recording_engineer": {
+      "@id": "mrel:rce"
+    },
+    "recordist": {
+      "@id": "mrel:rcd"
+    },
+    "redaktor": {
+      "@id": "mrel:red"
+    },
+    "renderer": {
+      "@id": "mrel:ren"
+    },
+    "reporter": {
+      "@id": "mrel:rpt"
+    },
+    "repository": {
+      "@id": "mrel:rps"
+    },
+    "research_team_head": {
+      "@id": "mrel:rth"
+    },
+    "research_team_member": {
+      "@id": "mrel:rtm"
+    },
+    "researcher": {
+      "@id": "mrel:res"
+    },
+    "respondent": {
+      "@id": "mrel:rsp"
+    },
+    "respondent_appellant": {
+      "@id": "mrel:rst"
+    },
+    "respondent_appellee": {
+      "@id": "mrel:rse"
+    },
+    "responsible_party": {
+      "@id": "mrel:rpy"
+    },
+    "restager": {
+      "@id": "mrel:rsg"
+    },
+    "restorationist": {
+      "@id": "mrel:rsr"
+    },
+    "reviewer": {
+      "@id": "mrel:rev"
+    },
+    "rubricator": {
+      "@id": "mrel:rbr"
+    },
+    "scenarist": {
+      "@id": "mrel:sce"
+    },
+    "scientific_advisor": {
+      "@id": "mrel:sad"
+    },
+    "screenwriter": {
+      "@id": "mrel:aus"
+    },
+    "scribe": {
+      "@id": "mrel:scr"
+    },
+    "sculptor": {
+      "@id": "mrel:scl"
+    },
+    "second_party": {
+      "@id": "mrel:spy"
+    },
+    "secretary": {
+      "@id": "mrel:sec"
+    },
+    "seller": {
+      "@id": "mrel:sll"
+    },
+    "set_designer": {
+      "@id": "mrel:std"
+    },
+    "setting": {
+      "@id": "mrel:stg"
+    },
+    "signer": {
+      "@id": "mrel:sgn"
+    },
+    "singer": {
+      "@id": "mrel:sng"
+    },
+    "sound_designer": {
+      "@id": "mrel:sds"
+    },
+    "speaker": {
+      "@id": "mrel:spk"
+    },
+    "sponsor": {
+      "@id": "mrel:spn"
+    },
+    "stage_director": {
+      "@id": "mrel:sgd"
+    },
+    "stage_manager": {
+      "@id": "mrel:stm"
+    },
+    "standards_body": {
+      "@id": "mrel:stn"
+    },
+    "stereotyper": {
+      "@id": "mrel:str"
+    },
+    "storyteller": {
+      "@id": "mrel:stl"
+    },
+    "supporting_host": {
+      "@id": "mrel:sht"
+    },
+    "surveyor": {
+      "@id": "mrel:srv"
+    },
+    "teacher": {
+      "@id": "mrel:tch"
+    },
+    "technical_director": {
+      "@id": "mrel:tcd"
+    },
+    "television_director": {
+      "@id": "mrel:tld"
+    },
+    "television_producer": {
+      "@id": "mrel:tlp"
+    },
+    "thesis_advisor": {
+      "@id": "mrel:ths"
+    },
+    "transcriber": {
+      "@id": "mrel:trc"
+    },
+    "translator": {
+      "@id": "mrel:trl"
+    },
+    "type_designer": {
+      "@id": "mrel:tyd"
+    },
+    "typographer": {
+      "@id": "mrel:tyg"
+    },
+    "university_place": {
+      "@id": "mrel:uvp"
+    },
+    "videographer": {
+      "@id": "mrel:vdg"
+    },
+    "voice_actor": {
+      "@id": "mrel:vac"
+    },
+    "witness": {
+      "@id": "mrel:wit"
+    },
+    "wood_engraver": {
+      "@id": "mrel:wde"
+    },
+    "woodcutter": {
+      "@id": "mrel:wdc"
+    },
+    "writer_of_accompanying_material": {
+      "@id": "mrel:wam"
+    },
+    "writer_of_added_commentary": {
+      "@id": "mrel:wac"
+    },
+    "writer_of_added_text": {
+      "@id": "mrel:wat"
+    },
+    "writer_of_added_lyrics": {
+      "@id": "mrel:wal"
+    },
+    "writer_of_supplementary_textual_content": {
+      "@id": "mrel:wst"
+    },
+    "writer_of_introduction": {
+      "@id": "mrel:win"
+    },
+    "writer_of_preface": {
+      "@id": "mrel:wpr"
+    }
+  }
+}

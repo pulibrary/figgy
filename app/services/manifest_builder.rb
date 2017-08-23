@@ -29,7 +29,7 @@ class ManifestBuilder
     end
     attr_reader :resource
     delegate :query_service, to: :metadata_adapter
-    delegate :decorate, :source_metadata_identifier, :to_model, to: :resource
+    delegate :decorate, :source_metadata_identifier, :to_model, :id, to: :resource
 
     ##
     # @param [Resource] resource the Resource being modeled as the root

@@ -26,7 +26,7 @@ RSpec.describe ManifestBuilder::SeeAlsoBuilder do
       it 'appends the transformed metadata to the Manifest' do
         expect(manifest.see_also).to be_a Array
         expect(manifest.see_also.length).to eq(2)
-        expect(manifest.see_also.first).to include "@id" => "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}.jsonld", "format" => "application/ld+json"
+        expect(manifest.see_also.first).to include "@id" => "http://www.example.com/catalog/id-#{scanned_resource.id}.jsonld", "format" => "application/ld+json"
         expect(manifest.see_also.last).to include "@id" => 'https://bibdata.princeton.edu/bibliographic/4609321', "format" => "text/xml"
       end
     end
@@ -40,7 +40,7 @@ RSpec.describe ManifestBuilder::SeeAlsoBuilder do
       it 'appends the transformed metadata to the Manifest' do
         expect(manifest.see_also).to be_a Array
         expect(manifest.see_also.length).to eq(2)
-        expect(manifest.see_also.first).to include "@id" => "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}.jsonld", "format" => "application/ld+json"
+        expect(manifest.see_also.first).to include "@id" => "http://www.example.com/catalog/id-#{scanned_resource.id}.jsonld", "format" => "application/ld+json"
         expect(manifest.see_also.last).to include "@id" => 'https://findingaids.princeton.edu/collections/AC044/c0003.xml?scope=record', "format" => "text/xml"
       end
     end

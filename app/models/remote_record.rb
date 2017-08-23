@@ -23,7 +23,9 @@ class RemoteRecord
       @source_metadata_identifier = source_metadata_identifier
     end
 
-    delegate :attributes, to: :client_result
+    def attributes
+      @attributes ||= client_result.attributes.merge(source_metadata: client_result.source)
+    end
 
     def success?
       client_result.source.strip.present?
@@ -41,7 +43,7 @@ class RemoteRecord
   end
 
   def attributes
-    JSONLDBuilder.for(jsonld).result
+    JSONLDBuilder.for(jsonld).result.merge(source_jsonld: jsonld.to_json)
   end
 
   private
