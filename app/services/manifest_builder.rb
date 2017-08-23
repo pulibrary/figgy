@@ -5,7 +5,7 @@ class ManifestBuilder
   ##
   # @param [Resource] resource the Resource subject
   def initialize(resource)
-    @resource = RootNode.new(resource)
+    @resource = RootNode.for(resource)
   end
 
   ##
@@ -18,6 +18,15 @@ class ManifestBuilder
   ##
   # Presenter modeling the Resource subjects as root nodes
   class RootNode
+    def self.for(resource)
+      if resource.is_a?(Collection)
+        CollectionNode.new(resource)
+      elsif resource.is_a?(IndexCollection)
+        IndexCollectionNode.new(resource)
+      else
+        new(resource)
+      end
+    end
     attr_reader :resource
     delegate :query_service, to: :metadata_adapter
     delegate :decorate, :source_metadata_identifier, :to_model, to: :resource
@@ -42,7 +51,7 @@ class ManifestBuilder
     # @return [RootNode]
     def work_presenters
       @work_presenters ||= (members - leaf_nodes).map do |node|
-        RootNode.new(node)
+        RootNode.for(node)
       end
     end
 
@@ -114,6 +123,46 @@ class ManifestBuilder
       def logical_structure
         resource.logical_structure || []
       end
+  end
+
+  class CollectionNode < RootNode
+    def file_set_presenters
+      []
+    end
+
+    def members
+      @members ||= query_service.find_inverse_references_by(resource: resource, property: :member_of_collection_ids).to_a
+    end
+
+    def viewing_hint
+      nil
+    end
+  end
+
+  class IndexCollectionNode < RootNode
+    def file_set_presenters
+      []
+    end
+
+    def members
+      @members ||= query_service.find_all_of_model(model: Collection).to_a
+    end
+
+    def viewing_hint
+      nil
+    end
+
+    def manifest_url
+      helper.index_manifest_url
+    end
+
+    def to_s
+      "Plum Collections"
+    end
+
+    def description
+      "All collections which are a part of Plum."
+    end
   end
 
   ##
@@ -299,6 +348,6 @@ class ManifestBuilder
     # Instantiate the Manifest
     # @return [IIIFManifest]
     def manifest
-      @manifest || @manifest = IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocator).to_h
+      @manifest ||= IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocator).to_h
     end
 end

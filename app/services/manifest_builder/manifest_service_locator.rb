@@ -25,6 +25,42 @@ class ManifestBuilder
         ManifestBuilder::LicenseBuilder
       end
 
+      def child_manifest_builder
+        ConditionalCollectionManifest.new(manifest_builder: super, collection_builder: child_collection_builder)
+      end
+
+      def child_collection_builder
+        IIIFManifest::ManifestServiceLocator::InjectedFactory.new(
+          CollectionManifestBuilder,
+          builders: record_property_builder,
+          top_record_factory: iiif_collection_factory
+        )
+      end
+
+      class CollectionManifestBuilder < IIIFManifest::ManifestBuilder
+        def apply(collection)
+          collection['collections'] ||= []
+          collection['collections'] << to_h
+          collection
+        end
+      end
+
+      class ConditionalCollectionManifest
+        attr_reader :manifest_builder, :collection_builder
+        def initialize(manifest_builder:, collection_builder:)
+          @manifest_builder = manifest_builder
+          @collection_builder = collection_builder
+        end
+
+        def new(work)
+          if work.is_a?(ManifestBuilder::CollectionNode)
+            collection_builder.new(work)
+          else
+            manifest_builder.new(work)
+          end
+        end
+      end
+
       ##
       # Override the Class method for instantiating a CompositeBuilder
       # Insert the metadata manifest builder

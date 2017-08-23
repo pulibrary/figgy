@@ -7,4 +7,22 @@ class CollectionsController < ApplicationController
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
     storage_adapter: Valkyrie.config.storage_adapter
   )
+
+  def manifest
+    @resource = find_resource(params[:id])
+    respond_to do |f|
+      f.json do
+        render json: ManifestBuilder.new(@resource).build
+      end
+    end
+  end
+
+  def index_manifest
+    @resource = IndexCollection.new
+    respond_to do |f|
+      f.json do
+        render json: ManifestBuilder.new(@resource).build
+      end
+    end
+  end
 end
