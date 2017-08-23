@@ -12,7 +12,7 @@ export default class PlumFileManager {
   }
 
   initialize_radio_buttons() {
-    $("*[data-reorder-id] .page_viewing_hint").each((index, element) => {
+    $("*[data-reorder-id] .file_set_viewing_hint").each((index, element) => {
       new RadioTracker($(element))
     })
   }
