@@ -3,7 +3,7 @@
 # for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
 
 require_relative 'config/application'
-require 'rubocop/rake_task'
+require 'rubocop/rake_task' if Rails.env.development? || Rails.env.test?
 
 Rails.application.load_tasks
 task(:default).clear
@@ -16,12 +16,14 @@ if defined? RSpec
   end
 end
 
-desc 'Run RuboCop style checker'
-RuboCop::RakeTask.new(:rubocop) do |task|
-  task.requires << 'rubocop-rspec'
-  task.fail_on_error = true
+if defined? RuboCop
+  desc 'Run RuboCop style checker'
+  RuboCop::RakeTask.new(:rubocop) do |task|
+    task.requires << 'rubocop-rspec'
+    task.fail_on_error = true
+  end
 end
 
 task default: "bundler:audit"
 
-require 'solr_wrapper/rake_task' unless Rails.env.production?
+require 'solr_wrapper/rake_task' unless Rails.env.production? || Rails.env.staging?

@@ -12,10 +12,11 @@ test:
   database: figgy_test
 
 production: &deploy
-  encoding: utf8
-  min_messages: warning
-  pool: <%= [Integer(ENV.fetch("MAX_THREADS", 5)), Integer(ENV.fetch("DB_POOL", 5))].max %>
-  timeout: 5000
-  url:  <%= ENV.fetch("DATABASE_URL", "") %>
+  <<: *default
+  adapter: postgresql
+  database: <%= ENV["FIGGY_DB"] %>
+  host: <%= ENV["FIGGY_DB_HOST"] %>
+  username: <%= ENV["FIGGY_DB_USERNAME"] %>
+  password: <%= ENV["FIGGY_DB_PASSWORD"] %>
 
 staging: *deploy

@@ -20,10 +20,6 @@ class PendingUpload < Valkyrie::Resource
   private
 
     def copied_file_name
-      return @copied_file_name if @copied_file_name
-      BrowseEverything::Retriever.new.download("file_name" => file_name.first, "file_size" => file_size.first, "url" => url.first) do |filename, _retrieved, _total|
-        @copied_file_name = filename
-      end
-      @copied_file_name
+      @copied_file_name ||= BrowseEverything::Retriever.new.download("file_name" => file_name.first, "file_size" => file_size.first, "url" => url.first)
     end
 end

@@ -67,6 +67,16 @@ RSpec.describe ManifestBuilder do
       expect(canvas_id).to eq structure_canvas_id
     end
 
+    context "when in staging" do
+      it "generates cantaloupe links" do
+        allow(Rails.env).to receive(:development?).and_return(false)
+        allow(Rails.env).to receive(:test?).and_return(false)
+
+        output = manifest_builder.build
+        expect(output["sequences"][0]["canvases"][0]["images"][0]["resource"]["service"]["@id"]).to start_with "http://localhost:8182/iiif/2/"
+      end
+    end
+
     it 'generates a IIIF document with metadata' do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash

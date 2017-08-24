@@ -2,12 +2,7 @@
 require_relative 'figgy'
 Rails.application.config.to_prepare do
   Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::Disk.new(base_path: Rails.root.join("tmp", "files")),
-    :test_disk
-  )
-
-  Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::Disk.new(base_path: Rails.root.join("tmp", "more_files")),
+    Valkyrie::Storage::Disk.new(base_path: Figgy.config['repository_path']),
     :disk
   )
 

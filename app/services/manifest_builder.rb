@@ -316,7 +316,11 @@ class ManifestBuilder
     # @param [String] id identifier for the image resource
     # @return [String]
     def manifest_image_path(id)
-      RiiifHelper.new.base_url(id)
+      if Rails.env.development? || Rails.env.test?
+        RiiifHelper.new.base_url(id)
+      else
+        CantaloupeHelper.new.base_url(id)
+      end
     end
 
     ##
@@ -325,6 +329,20 @@ class ManifestBuilder
     # @return [String]
     def manifest_image_thumbnail_path(id)
       "#{manifest_image_path(id)}/full/!200,150/0/default.jpg"
+    end
+  end
+
+  class CantaloupeHelper
+    def base_url(id)
+      file_set = query_service.find_by(id: Valkyrie::ID.new(id))
+      file_metadata = file_set.derivative_file
+      Pathname.new(Figgy.config['cantaloupe_url']).join(
+        CGI.escape("#{file_metadata.id}/intermediate_file.jp2")
+      ).to_s
+    end
+
+    def query_service
+      Valkyrie.config.metadata_adapter.query_service
     end
   end
 

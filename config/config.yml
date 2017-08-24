@@ -1,6 +1,8 @@
 defaults: &defaults
   locations_url: https://bibdata.princeton.edu/locations/digital_locations.json
   derivative_path: <%= Rails.root.join("tmp", "derivatives") %>
+  repository_path: <%= Rails.root.join("tmp", "files") %>
+  cantaloupe_url: <%= ENV.fetch('CANTALOUPE_URL', 'http://localhost:8182/iiif/2/') %>
   jp2_recipes:
     default_color: >
       -rate 2.4,1.48331273,.91673033,.56657224,.35016049,.21641118,.13374944,.08266171 
@@ -67,12 +69,17 @@ defaults: &defaults
 
 development:
   <<: *defaults
+  repository_path: <%= Rails.root.join("tmp", "more_files") %>
 
 test:
   <<: *defaults
 
 production:
   <<: *defaults
+  repository_path: "/opt/repository/files"
+  derivative_path: "/opt/repository/derivatives"
 
 staging:
   <<: *defaults
+  repository_path: "/opt/repository/files"
+  derivative_path: "/opt/repository/derivatives"

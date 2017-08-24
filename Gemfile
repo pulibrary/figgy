@@ -79,4 +79,8 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-bootstrap-select', '1.12.2'
   gem 'rails-assets-jqueryui-timepicker-addon'
 end
+gem 'capistrano', '~> 3.7.1'
+gem 'capistrano-passenger'
+gem 'capistrano-rails'
+gem 'capistrano-rails-console'
 gem 'prawn'
