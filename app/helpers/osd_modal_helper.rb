@@ -7,6 +7,8 @@ module OsdModalHelper
     else
       content_tag :span, class: 'ignore-select', data: { modal_manifest: "#{ManifestBuilder::ManifestHelper.new.manifest_image_path(id)}/info.json" }, &block
     end
+  rescue
+    content_tag :span
   end
 
   def default_icon_fallback

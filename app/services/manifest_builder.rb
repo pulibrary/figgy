@@ -336,6 +336,7 @@ class ManifestBuilder
     def base_url(id)
       file_set = query_service.find_by(id: Valkyrie::ID.new(id))
       file_metadata = file_set.derivative_file
+      raise Valkyrie::Persistence::ObjectNotFoundError, id if file_metadata.nil?
       Pathname.new(Figgy.config['cantaloupe_url']).join(
         CGI.escape("#{file_metadata.id}/intermediate_file.jp2")
       ).to_s
