@@ -11,9 +11,9 @@
 // about supported directives.
 //
 //= require jquery3
-//= require jquery-ui/widgets/sortable
-//= require jquery-ui/widgets/draggable
-//= require jquery-ui/widgets/selectable
+//= require jquery-ui/sortable
+//= require jquery-ui/draggable
+//= require jquery-ui/selectable
 //= require bootstrap/affix
 //= require babel/polyfill
 //= require hydra-editor/hydra-editor

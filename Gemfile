@@ -7,7 +7,7 @@ gem "devise-guests", git: "https://github.com/cbeer/devise-guests.git"
 gem "flutie"
 gem "honeybadger"
 gem "jquery-rails"
-gem 'jquery-ui-rails'
+gem 'jquery-ui-rails', '~> 5.0'
 gem "pg"
 gem "puma"
 gem "rails", "5.1.1"
