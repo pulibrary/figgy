@@ -25,4 +25,5 @@ Rails.application.configure do
   }
   config.action_mailer.default_url_options = { host: ENV.fetch("APPLICATION_HOST", 'localhost'), protocol: ENV.fetch("APPLICATION_HOST_PROTOCOL", "http") }
   config.action_controller.action_on_unpermitted_parameters = false
+  config.force_ssl = true
 end
