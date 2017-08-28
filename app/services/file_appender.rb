@@ -64,7 +64,12 @@ class FileAppender
   end
 
   def create_node(file)
-    node = FileMetadata.for(file: file).new(id: SecureRandom.uuid)
+    attributes = {
+      id: SecureRandom.uuid
+    }.merge(
+      file.try(:node_attributes) || {}
+    )
+    node = FileMetadata.for(file: file).new(attributes)
     file = storage_adapter.upload(file: file, resource: node)
     node.file_identifiers = node.file_identifiers + [file.id]
     node
