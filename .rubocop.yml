@@ -41,6 +41,9 @@ Metrics/BlockLength:
     - 'lib/tasks/dev.rake'
     - 'app/models/plum_schema.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
+Metrics/ClassLength:
+  Exclude:
+    - 'app/change_set_persisters/plum_change_set_persister.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
