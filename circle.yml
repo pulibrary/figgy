@@ -4,6 +4,11 @@ machine:
   services:
     - redis
 dependencies:
+  pre:
+    # Install the latest release of Google Chrome for functional JavaScript testing
+    - curl -L -o google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    - sudo dpkg -i google-chrome.deb
+    - rm google-chrome.deb
   cache_directories:
     - kakadu
   post:

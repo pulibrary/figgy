@@ -47,9 +47,10 @@ group :development, :staging do
 end
 
 group :test do
+  gem 'chromedriver-helper'
   gem "database_cleaner"
   gem "formulaic"
-  gem "poltergeist"
+  gem 'selenium-webdriver'
   gem "simplecov", require: false
   gem "timecop"
   gem "webmock"

@@ -2,6 +2,7 @@ import SaveWorkControl from 'form/save_work_control'
 import ServerUploader from "./server_uploader"
 import StructureManager from "structure_manager"
 import ModalViewer from "modal_viewer"
+import DerivativeForm from "derivative_form"
 export default class Initializer {
   constructor() {
     this.server_uploader = new ServerUploader
@@ -9,6 +10,7 @@ export default class Initializer {
     this.initialize_timepicker()
     this.structure_manager = new StructureManager
     this.modal_viewer = new ModalViewer
+    this.derivative_form = new DerivativeForm
     $("select").selectpicker({'liveSearch': true})
   }
 
