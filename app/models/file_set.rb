@@ -7,6 +7,9 @@ class FileSet < Valhalla::Resource
   attribute :viewing_hint
   attribute :depositor
 
+  delegate :width, :height, :mime_type, :size, to: :original_file, allow_nil: true
+  delegate :md5, :sha1, :sha256, to: :original_file_checksum, allow_nil: true
+
   def thumbnail_id
     id
   end
@@ -18,4 +21,10 @@ class FileSet < Valhalla::Resource
   def original_file
     file_metadata.find(&:original_file?)
   end
+
+  private
+
+    def original_file_checksum
+      original_file&.checksum&.first
+    end
 end

@@ -21,7 +21,7 @@ class TikaFileCharacterizationService
   #   Valkyrie::FileCharacterizationService.for(file_node, persister).characterize(save: false)
   def characterize(save: true)
     result = JSON.parse(json_output).last
-    @file_characterization_attributes = { width: result['tiff:ImageWidth'], height: result['tiff:ImageLength'], mime_type: result['Content-Type'], checksum: checksum }
+    @file_characterization_attributes = { width: result['tiff:ImageWidth'], height: result['tiff:ImageLength'], mime_type: result['Content-Type'], checksum: checksum, size: result['Content-Length'] }
     new_file = original_file.new(@file_characterization_attributes.to_h)
     @file_node.file_metadata = @file_node.file_metadata.select { |x| x.id != new_file.id } + [new_file]
     @persister.save(resource: @file_node) if save

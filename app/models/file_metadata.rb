@@ -10,6 +10,7 @@ class FileMetadata < Valkyrie::Resource
   attribute :original_filename, Valkyrie::Types::Set
   attribute :file_identifiers, Valkyrie::Types::Set
   attribute :use, Valkyrie::Types::Set
+  attribute :size, Valkyrie::Types::Set
 
   def self.for(file:)
     new(label: file.original_filename, original_filename: file.original_filename, mime_type: file.content_type, use: file.try(:use) || [Valkyrie::Vocab::PCDMUse.OriginalFile])
