@@ -2,12 +2,20 @@
 require_relative 'figgy'
 Rails.application.config.to_prepare do
   Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::Disk.new(base_path: Figgy.config['repository_path']),
+    ConfigurablePathDiskStorageAdapter.new(
+      base_path: Figgy.config['repository_path'],
+      unique_identifier: :test_disk,
+      path_generator: ConfigurablePathDiskStorageAdapter::ContentAddressablePath
+    ),
     :disk
   )
 
   Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::Disk.new(base_path: Figgy.config['derivative_path']),
+    ConfigurablePathDiskStorageAdapter.new(
+      base_path: Figgy.config['derivative_path'],
+      unique_identifier: :derivatives,
+      path_generator: ConfigurablePathDiskStorageAdapter::ContentAddressablePath
+    ),
     :derivatives
   )
 
