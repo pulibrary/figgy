@@ -20,7 +20,7 @@ RSpec.describe IdentifierService do
     end
 
     it "updates the ark" do
-      described_class.mint_or_update(resource: obj, persister: persister)
+      described_class.mint_or_update(resource: obj)
       expect(minter).to have_received(:modify).with(ark, metadata)
       expect(obj.identifier.first).to eq(ark)
     end
@@ -43,7 +43,7 @@ RSpec.describe IdentifierService do
       end
 
       it "links to OrangeLight" do
-        described_class.mint_or_update(resource: obj, persister: persister)
+        described_class.mint_or_update(resource: obj)
         expect(minter).to have_received(:mint).with(metadata)
       end
     end
@@ -58,7 +58,7 @@ RSpec.describe IdentifierService do
       end
 
       it "links to OrangeLight" do
-        described_class.mint_or_update(resource: obj, persister: persister)
+        described_class.mint_or_update(resource: obj)
         expect(minter).to have_received(:mint).with(metadata)
       end
     end
@@ -67,7 +67,7 @@ RSpec.describe IdentifierService do
       let(:metadata) { base_metadata.merge(target: "http://www.example.com/concern/scanned_resources/#{obj.id}") }
       let(:obj) { FactoryGirl.create :scanned_resource, id: '1234567', source_metadata_identifier: nil }
       it "links to OrangeLight" do
-        described_class.mint_or_update(resource: obj, persister: persister)
+        described_class.mint_or_update(resource: obj)
         expect(minter).to have_received(:mint).with(metadata)
       end
     end
@@ -84,7 +84,7 @@ RSpec.describe IdentifierService do
     end
 
     it "mints an ARK" do
-      described_class.mint_or_update(resource: obj, persister: persister)
+      described_class.mint_or_update(resource: obj)
       expect(obj.identifier.first).to eq("ark:/#{shoulder}#{blade}")
     end
 

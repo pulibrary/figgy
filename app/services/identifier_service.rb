@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 class IdentifierService
-  def self.mint_or_update(persister:, resource:)
+  def self.mint_or_update(resource:)
     if resource.identifier.present?
       update_metadata resource
     else
       mint_identifier resource
-      persister.save resource: resource
     end
   end
 

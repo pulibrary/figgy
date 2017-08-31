@@ -6,6 +6,7 @@ class FileSet < Valhalla::Resource
   attribute :file_metadata, Valkyrie::Types::Set.member(FileMetadata.optional)
   attribute :viewing_hint
   attribute :depositor
+  attribute :local_identifier
 
   delegate :width, :height, :mime_type, :size, to: :original_file, allow_nil: true
   delegate :md5, :sha1, :sha256, to: :original_file_checksum, allow_nil: true

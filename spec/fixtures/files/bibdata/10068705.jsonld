@@ -1,0 +1,36 @@
+{  
+   "@context":"http://bibdata.princeton.edu/context.json",
+   "@id":"http://bibdata.princeton.edu/bibliographic/10068705",
+   "title":{  
+      "@value":"Catalog, McLoughlin Bros., Inc., 1943 : children's reading, activity and novelty books",
+      "@language":"eng"
+   },
+   "language":"eng",
+   "creator":"McLoughlin Bros",
+   "call_number":"Pams / Eng 20 / Box 89 94151",
+   "extent":"32 pages : illustrations ; 24 cm",
+   "format":"Book",
+   "type":[  
+      "Catalogs",
+      "Bibliography"
+   ],
+   "description":[  
+      "Wrapper title; imprint and date from page [1].",
+      "General index on page 32.",
+      "\"Printed in U.S.A.\" --At foot of upper cover.",
+      "\"McLoughlin Bros., Inc. Springfield, Massachusetts; Publishers of books for children since 1828 ; Catalog 1943\" --Page [1].",
+      "\"New York Salesroom, 200 Fifth Avenue, Room 348\" --At foot of page [1].",
+      "A number of titles stamped in red as \"discontinued.\"",
+      "Cotsen copy: Accompanied by two versions of McLoughlin's 4-page wholesale price list pamphlet for 1943 (22 cm), laid in, with the caption title: \"McLoughlin Bros., Inc., Springfield, Massachusetts. Price List, effective March 1, 1943.\""
+   ],
+   "publisher":"[Springfield, Massachusetts] : McLoughlin Bros. Inc., [1943]",
+   "subject":[  
+      "Children's books—Catalogs",
+      "Children's books—20th century",
+      "Booksellers' catalogs",
+      "Children's literature—Bibliography—Catalogs"
+   ],
+   "title_sort":"Catalog, McLoughlin Bros., Inc., 1943 : children's reading, activity and novelty books.",
+   "created":"1943-01-01T00:00:00Z",
+   "date":"1943"
+}

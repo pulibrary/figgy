@@ -5,12 +5,16 @@ class IngestableFile < Valkyrie::Resource
   attribute :mime_type, Valkyrie::Types::String
   attribute :original_filename, Valkyrie::Types::String
   attribute :container_attributes, Valkyrie::Types::Hash
+  attribute :node_attributes, Valkyrie::Types::Hash
+  attribute :use
+  attribute :copyable, Valkyrie::Types::Bool
 
   def content_type
     mime_type
   end
 
   def path
+    return file_path if copyable
     copied_file_name
   end
 

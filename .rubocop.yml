@@ -80,3 +80,6 @@ RSpec/VerifiedDoubles:
     - 'spec/validators/viewing_hint_validator_spec.rb'
     - 'spec/validators/viewing_direction_validator_spec.rb'
     - 'spec/models/user_spec.rb'
+Metrics/ClassLength:
+  Exclude:
+    - 'app/change_set_persisters/plum_change_set_persister.rb'
