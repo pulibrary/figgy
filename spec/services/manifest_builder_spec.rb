@@ -14,7 +14,10 @@ RSpec.describe ManifestBuilder do
                                       rights_statement: RDF::URI("https://creativecommons.org/licenses/by-nc/4.0/"),
                                       call_number: 'test value2',
                                       edition: 'test edition',
-                                      nav_date: 'test date')
+                                      nav_date: 'test date',
+                                      imported_metadata: [{
+                                        description: "Test Description"
+                                      }])
   end
   let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file]) }
   let(:logical_structure) do
@@ -59,12 +62,19 @@ RSpec.describe ManifestBuilder do
     it "generates a IIIF document" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
+      expect(output["description"]).to eq "Test Description"
       expect(output["viewingHint"]).to eq "individuals"
       expect(output["sequences"].length).to eq 1
       canvas_id = output["sequences"][0]["canvases"][0]["@id"]
       expect(output["structures"].length).to eq 3
       structure_canvas_id = output["structures"][2]["canvases"][0]
       expect(canvas_id).to eq structure_canvas_id
+      first_image = output["sequences"][0]["canvases"][0]["images"][0]
+      expect(first_image["data"]).to eq nil
+      expect(first_image["@type"]).to eq "oa:Annotation"
+      expect(first_image["motivation"]).to eq "sc:painting"
+      expect(first_image["resource"]["data"]).to eq nil
+      expect(first_image["resource"]["service"]["@id"]).not_to be_nil
     end
 
     context "when in staging" do
@@ -83,7 +93,7 @@ RSpec.describe ManifestBuilder do
       expect(output).to include 'metadata'
       metadata = output["metadata"]
       expect(metadata).to be_kind_of Array
-      expect(metadata.length).to eq(10)
+      expect(metadata.length).to eq(11)
 
       metadata_object = metadata.shift
       expect(metadata_object).to be_kind_of Hash
