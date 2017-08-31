@@ -5,8 +5,14 @@ RSpec.describe FileSetsController do
   let(:persister) { Valkyrie.config.metadata_adapter.persister }
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
   let(:user) { FactoryGirl.create(:admin) }
+  let(:manifest_helper_class) { class_double(ManifestBuilder::ManifestHelper).as_stubbed_const(transfer_nested_constants: true) }
+  let(:manifest_helper) { instance_double(ManifestBuilder::ManifestHelper) }
+  let(:rabbit_connection) { instance_double(MessagingClient, publish: true) }
   before do
     sign_in user if user
+    allow(manifest_helper).to receive(:polymorphic_url).and_return('http://test')
+    allow(manifest_helper_class).to receive(:new).and_return(manifest_helper)
+    allow(Figgy).to receive(:messaging_client).and_return(rabbit_connection)
   end
   describe "PATCH /file_sets/id" do
     it "can update a file set" do
@@ -44,6 +50,16 @@ RSpec.describe FileSetsController do
         expect(response).to redirect_to(file_set)
         expect(create_derivatives_class).to have_received(:perform_later)
       end
+    end
+  end
+
+  describe "DELETE /concern/file_sets/id" do
+    render_views
+    it "deletes a file set" do
+      file_set = FactoryGirl.create_for_repository(:file_set)
+      FactoryGirl.create_for_repository(:scanned_resource, member_ids: [file_set.id])
+
+      expect { delete :destroy, params: { id: file_set.id.to_s } }.not_to raise_error
     end
   end
 end

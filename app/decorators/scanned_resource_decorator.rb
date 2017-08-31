@@ -73,4 +73,9 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
 
     current_attributes
   end
+
+  def parents
+    Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_references_by(resource: self, property: :member_of_collection_ids).to_a
+  end
+  alias collections parents
 end

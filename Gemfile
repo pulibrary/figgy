@@ -3,6 +3,7 @@ source "https://rubygems.org"
 
 gem "autoprefixer-rails"
 gem "blacklight"
+gem 'bunny'
 gem "devise-guests", git: "https://github.com/cbeer/devise-guests.git"
 gem "flutie"
 gem "honeybadger"

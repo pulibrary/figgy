@@ -4,4 +4,12 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
   def manageable_files?
     false
   end
+
+  def parents
+    Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_parents(resource: self).to_a
+  end
+
+  def collections
+    []
+  end
 end

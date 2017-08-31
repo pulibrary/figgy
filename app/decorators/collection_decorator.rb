@@ -7,4 +7,10 @@ class CollectionDecorator < Valkyrie::ResourceDecorator
   def manageable_files?
     false
   end
+
+  # Nested collections are not currently supported
+  def parents
+    []
+  end
+  alias collections parents
 end

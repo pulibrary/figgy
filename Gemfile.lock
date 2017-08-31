@@ -145,6 +145,7 @@ GEM
       rails (>= 4.2, < 6)
     archive-zip (0.7.0)
       io-like (~> 0.3.0)
+    amq-protocol (2.2.0)
     arel (8.0.0)
     ast (2.3.0)
     autoprefixer-rails (7.1.2.3)
@@ -205,6 +206,8 @@ GEM
     bundler-audit (0.6.0)
       bundler (~> 1.2)
       thor (~> 0.18)
+    bunny (2.6.6)
+      amq-protocol (>= 2.1.0)
     byebug (9.0.6)
     cancancan (1.17.0)
     capistrano (3.7.2)
@@ -237,6 +240,7 @@ GEM
     chromedriver-helper (1.1.0)
       archive-zip (~> 0.7.0)
       nokogiri (~> 1.6)
+    cliver (0.3.2)
     coderay (1.1.1)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
@@ -764,6 +768,7 @@ DEPENDENCIES
   browse-everything
   bullet
   bundler-audit (>= 0.5.0)
+  bunny
   capistrano (~> 3.7.1)
   capistrano-passenger
   capistrano-rails
