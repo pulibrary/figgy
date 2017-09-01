@@ -58,10 +58,14 @@ class PlumChangeSetPersister
     def before_save(change_set:)
       apply_remote_metadata(change_set: change_set)
       create_files(change_set: change_set)
+      apply_state_and_visibility(change_set: change_set)
+    end
 
+    def apply_state_and_visibility(change_set:)
+      return unless change_set.resource.persisted?
       return if !change_set.changed?(:visibility) && !change_set.changed?(:state)
       members(change_set: change_set).each do |member|
-        member.read_groups = change_set.read_groups if change_set.read_groups
+        member.read_groups = change_set.read_groups
         member.state = change_set.state if change_set.state && member.respond_to?(:state)
         metadata_adapter.persister.save(resource: member)
       end
