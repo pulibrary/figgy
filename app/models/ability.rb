@@ -18,7 +18,7 @@ class Ability
   # Abilities that should be granted to technicians
   def image_editor_permissions
     can [:read, :create, :modify, :update, :publish], curation_concerns
-    can [:create, :read, :edit, :update, :publish, :download], FileSet
+    can [:create, :read, :edit, :update, :publish, :download, :derive], FileSet
     can [:create, :read, :edit, :update, :publish], Collection
 
     # do not allow completing resources

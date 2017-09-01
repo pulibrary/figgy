@@ -1,0 +1,6 @@
+<div class="form-group member_resource_options">
+  <% if node.model_name.singular == "file_set" %>
+    <%= form_tag derivatives_file_set_path(node), class: "rederive", method: "put" %>
+    <button name="button" type="button" class="btn btn-primary" data-href="<%= derivatives_file_set_path(node) %>">Regenerate Derivatives</button>
+  <% end %>
+</div>

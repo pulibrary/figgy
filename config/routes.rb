@@ -58,7 +58,11 @@ Rails.application.routes.draw do
 
   # Consider moving these to Valhalla
   scope '/concern' do
-    resources :file_sets
+    resources :file_sets do
+      member do
+        put :derivatives
+      end
+    end
     resources :scanned_resources do
       member do
         get :file_manager
