@@ -10,24 +10,18 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
   def member_of_collections
     @member_of_collections ||=
       begin
-        member_of_collection_ids.map do |id|
-          query_service.find_by(id: id).decorate
-        end.map(&:title)
+        query_service.find_references_by(resource: model, property: :member_of_collection_ids)
+                     .map(&:decorate)
+                     .map(&:title).to_a
       end
   end
 
-  def member_of_collection_ids
-    super || []
-  end
-
   def members
-    @members ||= member_ids.map do |id|
-      query_service.find_by(id: id)
-    end
+    @members ||= query_service.find_members(resource: model)
   end
 
   def volumes
-    @volumes ||= members.select { |r| r.is_a?(ScannedResource) }.map(&:decorate)
+    @volumes ||= members.select { |r| r.is_a?(ScannedResource) }.map(&:decorate).to_a
   end
 
   def metadata_adapter

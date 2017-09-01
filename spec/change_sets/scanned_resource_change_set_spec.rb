@@ -8,6 +8,13 @@ RSpec.describe ScannedResourceChangeSet do
   before do
     stub_bibdata(bib_id: '123456')
   end
+  describe "#prepopulate!" do
+    it "doesn't make it look changed" do
+      expect(change_set).not_to be_changed
+      change_set.prepopulate!
+      expect(change_set).not_to be_changed
+    end
+  end
   describe "validations" do
     it "is valid by default" do
       expect(change_set).to be_valid
