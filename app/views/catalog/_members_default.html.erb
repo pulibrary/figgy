@@ -10,14 +10,14 @@
     </tr>
     <% unless decorated_resource.volumes.empty? %>
       <% decorated_resource.volumes.each do |volume| %>
+        <% volume_url = parent_solr_document_path("#{resource.id}", "id-#{volume.id}") %>
         <tr>
-          <td><%= render_thumbnail_tag(volume, { class: 'thumbnail-innder', onerror: default_icon_fallback } ) %></td>
+          <td><%= link_to figgy_thumbnail_path(volume, { class: 'thumbnail-inner', onerror: default_icon_fallback }), volume_url %></td>
           <td><%= volume.header %></td>
           <td><%= volume.created_at %></td>
           <td><%= volume.visibility.first.html_safe %></td>
           <td>
-            <%= link_to 'View', parent_solr_document_path("#{resource.id}", "id-#{volume.id}"),
-                                class: 'btn btn-default' %>
+            <%= link_to 'View', volume_url, class: 'btn btn-default' %>
             <%= link_to 'Edit', main_app.polymorphic_path([:edit, volume]), class: 'btn btn-default' %>
             <%= link_to "Delete", main_app.polymorphic_path([volume]), class: 'btn btn-danger',
                                   data: { confirm: "Delete this #{resource.human_readable_type}?" },
