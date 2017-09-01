@@ -37,6 +37,14 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/derivatives', 'tmp/up
 # set :keep_releases, 5
 set :passenger_restart_with_touch, true
 
+desc "Write the current version to public/version.txt"
+task :write_version do
+  on roles(:app), in: :sequence do
+    within repo_path do
+      execute :echo, "figgy `git describe --all --always --long --abbrev=40 HEAD` `date +\"%F %T %Z\"`" > #{release_path}/public/version.txt"
+    end
+  end
+end
 namespace :sidekiq do
   task :quiet do
     # Horrible hack to get PID without having to use terrible PID files
@@ -53,3 +61,4 @@ end
 after 'deploy:starting', 'sidekiq:quiet'
 after 'deploy:reverted', 'sidekiq:restart'
 after 'deploy:published', 'sidekiq:restart'
+after 'deploy:published', 'write_version'
