@@ -114,4 +114,10 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   def old_state
     Array.wrap(model.state).first
   end
+
+  def prepopulate!
+    super.tap do
+      @_changes = Disposable::Twin::Changed::Changes.new
+    end
+  end
 end
