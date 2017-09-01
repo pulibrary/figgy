@@ -18,6 +18,10 @@
         <li class="divider"></li>
         <li><%= link_to 'Manage Roles', role_management.roles_path, class: 'menu-heading manage-roles', role: 'menuitem' %></li>
       <% end %>
+      <% if can?(:create, AuthToken) %>
+        <li class="divider"></li>
+        <li><%= link_to 'Manage Auth Tokens', main_app.auth_tokens_path, class: 'menu-heading manage-auth-tokens', role: 'menuitem' %></li>
+      <% end %>
     </ul>
   </div>
 <% end %>

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Label:</strong>
+  <%= @auth_token.label %>
+</p>
+
+<p>
+  <strong>Group:</strong>
+  <%= @auth_token.group %>
+</p>
+
+<p>
+  <strong>Token:</strong>
+  <%= @auth_token.token %>
+</p>
+
+<%= link_to 'Edit', edit_auth_token_path(@auth_token) %> |
+<%= link_to 'Back', auth_tokens_path %>

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class CollectionsController < ApplicationController
   include Valhalla::ResourceController
+  include TokenAuth
   self.change_set_class = DynamicChangeSet
   self.resource_class = Collection
   self.change_set_persister = ::PlumChangeSetPersister.new(

@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Auth Tokens</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Label</th>
+      <th>Group</th>
+      <th>Token</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @auth_tokens.each do |auth_token| %>
+      <tr>
+        <td><%= auth_token.label %></td>
+        <td><%= auth_token.group %></td>
+        <td><%= auth_token.token %></td>
+        <td><%= link_to 'Show', auth_token %></td>
+        <td><%= link_to 'Edit', edit_auth_token_path(auth_token) %></td>
+        <td><%= link_to 'Destroy', auth_token, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Auth Token', new_auth_token_path %>
