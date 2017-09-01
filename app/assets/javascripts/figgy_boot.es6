@@ -3,6 +3,7 @@ import ServerUploader from "./server_uploader"
 import StructureManager from "structure_manager"
 import ModalViewer from "modal_viewer"
 import DerivativeForm from "derivative_form"
+import UniversalViewer from "universal_viewer"
 export default class Initializer {
   constructor() {
     this.server_uploader = new ServerUploader
@@ -11,6 +12,7 @@ export default class Initializer {
     this.structure_manager = new StructureManager
     this.modal_viewer = new ModalViewer
     this.derivative_form = new DerivativeForm
+    this.universal_viewer = new UniversalViewer
     $("select").selectpicker({'liveSearch': true})
   }
 
