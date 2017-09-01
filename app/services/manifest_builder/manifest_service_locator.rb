@@ -61,6 +61,34 @@ class ManifestBuilder
         end
       end
 
+      def iiif_manifest_factory
+        ::ManifestBuilder::FasterIIIFManifest
+      end
+
+      def iiif_service_factory
+        ::ManifestBuilder::Service
+      end
+
+      def sequence_factory
+        ::ManifestBuilder::FasterIIIFManifest::Sequence
+      end
+
+      def iiif_canvas_factory
+        ::ManifestBuilder::FasterIIIFManifest::Canvas
+      end
+
+      def iiif_annotation_factory
+        ::ManifestBuilder::FasterIIIFManifest::Annotation
+      end
+
+      def iiif_resource_factory
+        ::ManifestBuilder::FasterIIIFManifest::Resource
+      end
+
+      def iiif_range_factory
+        ::ManifestBuilder::FasterIIIFManifest::Range
+      end
+
       ##
       # Override the Class method for instantiating a CompositeBuilder
       # Insert the metadata manifest builder

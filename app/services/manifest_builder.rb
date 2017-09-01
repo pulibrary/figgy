@@ -37,13 +37,15 @@ class ManifestBuilder
       @resource = resource
     end
 
-    delegate :description, to: :resource
-
     ##
     # Stringify the Resource by delegating to the header within the Decorator
     # @return [String]
     def to_s
       resource.decorate.header
+    end
+
+    def description
+      Array.wrap(resource.primary_imported_metadata.description).first
     end
 
     ##
@@ -77,7 +79,7 @@ class ManifestBuilder
     # Helper method for generating the URL to the resource manifest
     # @return [String]
     def manifest_url
-      helper.polymorphic_url([:manifest, resource])
+      helper.manifest_url(resource)
     end
 
     ##
@@ -136,6 +138,10 @@ class ManifestBuilder
 
     def viewing_hint
       nil
+    end
+
+    def description
+      resource.description
     end
   end
 
@@ -238,14 +244,7 @@ class ManifestBuilder
     # Stringify the image using the decorator
     # @return [String]
     def to_s
-      resource.decorate.header
-    end
-
-    ##
-    # Retrieve the ID for the resource
-    # @return [String]
-    def derivative_id
-      resource.id
+      Valkyrie::ResourceDecorator.new(resource).header
     end
 
     ##
@@ -286,7 +285,7 @@ class ManifestBuilder
       # Retrieve an instance of the IIIFManifest::IIIFEndpoint for the service endpoint
       # @return [IIIFManifest::IIIFEndpoint]
       def endpoint
-        IIIFManifest::IIIFEndpoint.new(helper.manifest_image_path(derivative_id),
+        IIIFManifest::IIIFEndpoint.new(helper.manifest_image_path(resource),
                                        profile: "http://iiif.io/api/image/2/level2.json")
       end
 
@@ -311,15 +310,31 @@ class ManifestBuilder
       Figgy.default_url_options
     end
 
+    def manifest_url(resource)
+      if resource.is_a?(Collection)
+        "#{protocol}://#{host}/collections/#{resource.id}/manifest"
+      else
+        "#{protocol}://#{host}/concern/#{resource.model_name.plural}/#{resource.id}/manifest"
+      end
+    end
+
+    def host
+      default_url_options[:host]
+    end
+
+    def protocol
+      default_url_options[:protocol] || "http"
+    end
+
     ##
     # Retrieve the base URL for Riiif
     # @param [String] id identifier for the image resource
     # @return [String]
-    def manifest_image_path(id)
+    def manifest_image_path(resource)
       if Rails.env.development? || Rails.env.test?
-        RiiifHelper.new.base_url(id)
+        RiiifHelper.new.base_url(resource.id)
       else
-        CantaloupeHelper.new.base_url(id)
+        CantaloupeHelper.new.base_url(resource)
       end
     end
 
@@ -328,22 +343,22 @@ class ManifestBuilder
     # @param [String] id identifier for the image resource
     # @return [String]
     def manifest_image_thumbnail_path(id)
-      "#{manifest_image_path(id)}/full/!200,150/0/default.jpg"
-    end
-  end
-
-  class CantaloupeHelper
-    def base_url(id)
       file_set = query_service.find_by(id: Valkyrie::ID.new(id))
-      file_metadata = file_set.derivative_file
-      raise Valkyrie::Persistence::ObjectNotFoundError, id if file_metadata.nil?
-      Pathname.new(Figgy.config['cantaloupe_url']).join(
-        CGI.escape("#{file_metadata.id}/intermediate_file.jp2")
-      ).to_s
+      "#{manifest_image_path(file_set)}/full/!200,150/0/default.jpg"
     end
 
     def query_service
       Valkyrie.config.metadata_adapter.query_service
+    end
+  end
+
+  class CantaloupeHelper
+    def base_url(file_set)
+      file_metadata = file_set.derivative_file
+      raise Valkyrie::Persistence::ObjectNotFoundError, file_set.id if file_metadata.nil?
+      Pathname.new(Figgy.config['cantaloupe_url']).join(
+        CGI.escape("#{file_metadata.id}/intermediate_file.jp2")
+      ).to_s
     end
   end
 
