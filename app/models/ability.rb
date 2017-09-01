@@ -121,4 +121,60 @@ class Ability
   def curation_concerns
     [ScannedResource]
   end
+
+  def auth_token
+    @auth_token ||= AuthToken.find_by(token: options[:auth_token]) || NilToken
+  end
+
+  class NilToken
+    def self.group
+      []
+    end
+  end
+
+  def current_user
+    TokenizedUser.new(super, auth_token)
+  end
+
+  class TokenizedUser < ::Draper::Decorator
+    attr_reader :auth_token
+    delegate_all
+
+    def initialize(user, auth_token)
+      @auth_token = auth_token
+      super(user)
+    end
+
+    def groups
+      @groups ||= super + auth_token.group
+    end
+
+    def ephemera_editor?
+      groups.include?('ephemera_editor')
+    end
+
+    def image_editor?
+      groups.include?('image_editor')
+    end
+
+    def editor?
+      groups.include?('editor')
+    end
+
+    def fulfiller?
+      groups.include?('fulfiller')
+    end
+
+    def curator?
+      groups.include?('curator')
+    end
+
+    def campus_patron?
+      persisted? && provider == "cas" || groups.include?('campus_patron')
+    end
+
+    def admin?
+      groups.include?('admin')
+    end
+  end
 end

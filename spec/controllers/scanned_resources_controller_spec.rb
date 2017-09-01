@@ -18,6 +18,17 @@ RSpec.describe ScannedResourcesController do
         expect { get :new }.to raise_error CanCan::AccessDenied
       end
     end
+
+    context "when not logged in but an auth token is given" do
+      it "renders the full manifest" do
+        resource = FactoryGirl.create_for_repository(:complete_campus_only_scanned_resource)
+        authorization_token = AuthToken.create(group: ["admin"])
+        get :manifest, params: { id: resource.id, format: :json, auth_token: authorization_token.token }
+
+        expect(response).to be_success
+        expect(response.body).not_to eq "{}"
+      end
+    end
     context "when they have permission" do
       let(:user) { FactoryGirl.create(:admin) }
       render_views

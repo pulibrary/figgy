@@ -10,11 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170807201421) do
+ActiveRecord::Schema.define(version: 20170831233259) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
+
+  create_table "auth_tokens", force: :cascade do |t|
+    t.string "label"
+    t.string "group"
+    t.string "token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "bookmarks", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
