@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 class FileAppender
-  attr_reader :storage_adapter, :persister, :files
-  def initialize(storage_adapter:, persister:, files:)
+  attr_reader :storage_adapter, :derivative_storage_adapter, :persister, :files
+  def initialize(storage_adapter:, derivative_storage_adapter:, persister:, files:)
     @storage_adapter = storage_adapter
+    @derivative_storage_adapter = derivative_storage_adapter
     @persister = persister
     @files = files
   end
@@ -31,7 +32,11 @@ class FileAppender
     files.select { |file| file.is_a?(Hash) }.map do |file|
       node = resource.file_metadata.select { |x| x.id.to_s == file.keys.first }.first
       file_wrapper = UploadDecorator.new(file.values.first, node.original_filename.first)
-      file = storage_adapter.upload(file: file_wrapper, resource: node)
+      file = if !derivative_storage_adapter.nil? && node.derivative?
+               derivative_storage_adapter.upload(file: file_wrapper, resource: node)
+             else
+               storage_adapter.upload(file: file_wrapper, resource: node)
+             end
       node
     end
   end

@@ -6,7 +6,8 @@ class ScannedResourcesController < ApplicationController
   self.resource_class = ScannedResource
   self.change_set_persister = ::PlumChangeSetPersister.new(
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
-    storage_adapter: Valkyrie.config.storage_adapter
+    storage_adapter: Valkyrie.config.storage_adapter,
+    derivative_storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)
   )
   before_action :load_collections, only: [:new, :edit]
 
