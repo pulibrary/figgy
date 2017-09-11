@@ -55,7 +55,7 @@ export class FileManagerMember {
 
   persist() {
     if(this.is_changed) {
-      let form = this.element.find("form")
+      let form = this.element.find("form:not(.rederive)")
       let deferred = $.Deferred()
       this.element.addClass("pending")
       this.element.removeClass("success")
