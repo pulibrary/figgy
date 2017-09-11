@@ -25,7 +25,11 @@ class PlumImporter
     file_change_set = FileSetChangeSet.new(member)
     file_change_set.prepopulate!
     file_change_set.files = [derivative(member)]
-    derivative_change_set_persister = change_set_persister.class.new(metadata_adapter: change_set_persister.metadata_adapter, storage_adapter: derivative_storage_adapter)
+    derivative_change_set_persister = change_set_persister.class.new(
+      metadata_adapter: change_set_persister.metadata_adapter,
+      storage_adapter: derivative_storage_adapter,
+      handlers: change_set_persister.handlers
+    )
     derivative_change_set_persister.save(change_set: file_change_set)
   end
 
