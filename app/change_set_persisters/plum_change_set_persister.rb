@@ -1,6 +1,29 @@
 # frozen_string_literal: true
 class PlumChangeSetPersister
+  class_attribute :registered_handlers
+  self.registered_handlers = {}
+
+  def self.register_handler(action, handler)
+    raise "Invalid action #{action} given. Must be one of #{valid_actions.to_sentence}." unless valid_actions.include?(action)
+    registered_handlers[action] ||= []
+    registered_handlers[action] << handler
+  end
+
+  def self.valid_actions
+    [
+      :before_save,
+      :after_save,
+      :before_delete,
+      :after_commit
+    ]
+  end
+  # Eager load these files to ensure they register with the ChangeSetPersister.
+  Dir[__dir__ + '/plum_change_set_persister/*.rb'].each do |file|
+    require_dependency file
+  end
+
   attr_reader :metadata_adapter, :storage_adapter, :created_file_sets, :file_appender
+  attr_accessor :created_file_sets
   delegate :persister, :query_service, to: :metadata_adapter
   def initialize(metadata_adapter:, storage_adapter:, transaction: false, file_appender: FileAppender, characterize: true)
     @metadata_adapter = metadata_adapter
@@ -56,82 +79,26 @@ class PlumChangeSetPersister
   private
 
     def before_save(change_set:)
-      apply_remote_metadata(change_set: change_set)
-      create_files(change_set: change_set)
-
-      return if !change_set.changed?(:visibility) && !change_set.changed?(:state)
-      members(change_set: change_set).each do |member|
-        member.read_groups = change_set.read_groups if change_set.read_groups
-        member.state = change_set.state if change_set.state && member.respond_to?(:state)
-        metadata_adapter.persister.save(resource: member)
+      registered_handlers.fetch(:before_save, []).each do |handler|
+        handler.new(change_set_persister: self, change_set: change_set).run
       end
     end
 
     def after_save(change_set:, updated_resource:)
-      append(append_id: change_set.append_id, updated_resource: updated_resource) if change_set.append_id.present?
+      registered_handlers.fetch(:after_save, []).each do |handler|
+        handler.new(change_set_persister: self, change_set: change_set, post_save_resource: updated_resource).run
+      end
     end
 
     def before_delete(change_set:)
-      clean_up_collection_associations(change_set: change_set) if change_set.resource.is_a?(Collection)
-      clean_up_membership(change_set: change_set)
-    end
-
-    def clean_up_membership(change_set:)
-      parents = query_service.find_parents(resource: change_set.resource)
-      parents.each do |parent|
-        parent.member_ids -= [change_set.id]
-        persister.save(resource: parent)
+      registered_handlers.fetch(:before_delete, []).each do |handler|
+        handler.new(change_set_persister: self, change_set: change_set).run
       end
-    end
-
-    def append(append_id:, updated_resource:)
-      parent_obj = query_service.find_by(id: append_id)
-      parent_obj.thumbnail_id = updated_resource.id if parent_obj.member_ids.blank?
-      parent_obj.member_ids = parent_obj.member_ids + [updated_resource.id]
-      persister.save(resource: parent_obj)
-      # Re-save to solr unless it's going to be done by save_all
-      persister.save(resource: updated_resource) unless transaction?
-    end
-
-    def apply_remote_metadata(change_set:)
-      IdentifierService.mint_or_update(resource: change_set.model) if mint_ark?(change_set)
-      return unless change_set.respond_to?(:source_metadata_identifier)
-      return unless change_set.apply_remote_metadata?
-      attributes = RemoteRecord.retrieve(change_set.source_metadata_identifier).attributes
-      change_set.model.imported_metadata = ImportedMetadata.new(attributes)
-    end
-
-    def mint_ark?(change_set)
-      return false unless change_set.try(:new_state) == 'complete'
-      change_set.try(:state_changed?) || change_set.apply_remote_metadata?
-    end
-
-    def clean_up_collection_associations(change_set:)
-      resources = query_service.find_inverse_references_by(resource: change_set.resource, property: :member_of_collection_ids)
-      resources.each do |resource|
-        resource.member_of_collection_ids -= [change_set.id]
-        persister.save(resource: resource)
-      end
-    end
-
-    def create_files(change_set:)
-      appender = file_appender.new(storage_adapter: storage_adapter, persister: persister, files: files(change_set: change_set))
-      @created_file_sets = appender.append_to(change_set.resource)
     end
 
     def after_commit
-      return unless @created_file_sets
-      @created_file_sets.each do |file_set|
-        next unless file_set.instance_of?(FileSet) && characterize?
-        CharacterizationJob.perform_later(file_set.id.to_s)
+      registered_handlers.fetch(:after_commit, []).each do |handler|
+        handler.new(change_set_persister: self, change_set: nil).run
       end
-    end
-
-    def files(change_set:)
-      change_set.try(:files) || []
-    end
-
-    def members(change_set:)
-      query_service.find_members(resource: change_set.resource)
     end
 end
