@@ -15,7 +15,7 @@ RSpec.describe "catalog/show.html.erb" do
                                         edition: 'test edition',
                                         nav_date: 'test date')
     end
-    let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(scanned_resource) }
+    let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: scanned_resource) }
     let(:collection) { FactoryGirl.create_for_repository(:collection) }
     let(:solr_document) { SolrDocument.new(document) }
     before do
@@ -107,7 +107,7 @@ RSpec.describe "catalog/show.html.erb" do
                                         member_of_collection_ids: [collection.id],
                                         holding_location: RDF::URI('https://bibdata.princeton.edu/locations/delivery_locations/1'))
     end
-    let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(scanned_resource) }
+    let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: scanned_resource) }
     let(:collection) { FactoryGirl.create_for_repository(:collection) }
     let(:solr_document) { SolrDocument.new(document) }
     before do
@@ -204,7 +204,7 @@ RSpec.describe "catalog/show.html.erb" do
   context 'when the ScannedResource has members' do
     let(:child) { FactoryGirl.create_for_repository(:scanned_resource, title: 'vol1', rights_statement: 'x') }
     let(:parent) { FactoryGirl.create_for_repository(:scanned_resource, title: 'Mui', rights_statement: 'y', member_ids: [child.id]) }
-    let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(parent) }
+    let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: parent) }
     let(:solr_document) { SolrDocument.new(document) }
     before do
       assign :document, solr_document
@@ -228,7 +228,7 @@ RSpec.describe "catalog/show.html.erb" do
     let(:scanned_resource) { FactoryGirl.create_for_repository(:scanned_resource, files: [file]) }
     let(:solr) { Valkyrie::MetadataAdapter.find(:index_solr) }
     let(:fileset) { scanned_resource.member_ids.map { |id| solr.query_service.find_by(id: id) }.first }
-    let(:document) { solr.resource_factory.from_resource(fileset) }
+    let(:document) { solr.resource_factory.from_resource(resource: fileset) }
     let(:solr_document) { SolrDocument.new(document) }
     before do
       assign :document, solr_document

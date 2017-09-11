@@ -356,9 +356,16 @@ class ManifestBuilder
     def base_url(file_set)
       file_metadata = file_set.derivative_file
       raise Valkyrie::Persistence::ObjectNotFoundError, file_set.id if file_metadata.nil?
-      Pathname.new(Figgy.config['cantaloupe_url']).join(
-        CGI.escape("#{file_metadata.id}/intermediate_file.jp2")
-      ).to_s
+      begin
+        file = file_metadata.file_identifiers[0].to_s.gsub("disk://", "")
+        id = file.gsub(Figgy.config['derivative_path'], '').gsub(/^\//, '')
+        Pathname.new(Figgy.config['cantaloupe_url']).join(
+          CGI.escape(id.to_s)
+        ).to_s
+      rescue
+        Rails.logger.warn("Unable to find derivative path for #{file_set.id}")
+        nil
+      end
     end
   end
 
