@@ -14,7 +14,7 @@ if Rails.env.development? || Rails.env.test?
   namespace :server do
     desc "Start solr server for testing."
     task :test do
-      shared_solr_opts = { managed: true, verbose: true, persist: false }
+      shared_solr_opts = { managed: true, verbose: true, persist: false, download_dir: 'tmp' }
       shared_solr_opts[:version] = ENV['SOLR_VERSION'] if ENV['SOLR_VERSION']
 
       SolrWrapper.wrap(shared_solr_opts.merge(port: 8984, instance_dir: 'tmp/blacklight-core-test')) do |solr|
@@ -37,7 +37,7 @@ if Rails.env.development? || Rails.env.test?
 
     desc "Start solr server for development."
     task :development do
-      SolrWrapper.wrap(managed: true, verbose: true, port: 8983, instance_dir: 'tmp/blacklight-core', persist: false) do |solr|
+      SolrWrapper.wrap(managed: true, verbose: true, port: 8983, instance_dir: 'tmp/blacklight-core', persist: false, download_dir: 'tmp') do |solr|
         solr.with_collection(name: "blacklight-core", dir: Rails.root.join("solr", "config").to_s) do
           puts "Setup solr"
           puts "Solr running at http://localhost:8983/solr/blacklight-core/, ^C to exit"
