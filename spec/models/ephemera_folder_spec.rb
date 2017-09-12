@@ -13,4 +13,7 @@ RSpec.describe EphemeraFolder do
     folder.member_ids = [1, 2, 3, 3]
     expect(folder.member_ids).to eq [1, 2, 3, 3]
   end
+  it "can have manifests" do
+    expect(folder.class.can_have_manifests?).to be true
+  end
 end
