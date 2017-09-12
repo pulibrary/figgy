@@ -15,6 +15,18 @@ class Ability
     can [:manage], :all
   end
 
+  # Abilities that should be granted to ephemera editors
+  def ephemera_editor_permissions
+    can [:manage], EphemeraBox
+    can [:manage], EphemeraFolder
+    can [:manage], EphemeraTemplate
+    can [:create, :read, :edit, :update, :publish], Collection
+    can [:create, :read, :edit, :update, :publish, :download], FileSet
+    can [:destroy], FileSet do |obj|
+      obj.depositor == [current_user.uid]
+    end
+  end
+
   # Abilities that should be granted to technicians
   def image_editor_permissions
     can [:read, :create, :modify, :update, :publish], curation_concerns
@@ -88,6 +100,9 @@ class Ability
     cannot [:read], curation_concerns do |curation_concern|
       !readable_concern?(curation_concern)
     end
+    cannot [:manifest], EphemeraFolder do |curation_concern|
+      !manifestable_concern?(curation_concern)
+    end
     can :pdf, curation_concerns do |curation_concern|
       ["color", "gray"].include?(Array(curation_concern.pdf_type).first)
     end
@@ -110,6 +125,14 @@ class Ability
     end
   end
 
+  def manifestable_concern?(curation_concern)
+    curation_concern.state.include?("complete") || box_grants_access?(curation_concern)
+  end
+
+  def box_grants_access?(curation_concern)
+    (curation_concern.decorate.ephemera_box.try(:state) || []).include?("all_in_production")
+  end
+
   def universal_reader?
     current_user.curator? || current_user.image_editor? || current_user.completer? || current_user.fulfiller? || current_user.editor? || current_user.admin?
   end
@@ -119,7 +142,7 @@ class Ability
   end
 
   def curation_concerns
-    [ScannedResource]
+    [ScannedResource, EphemeraFolder]
   end
 
   def auth_token

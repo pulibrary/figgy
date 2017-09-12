@@ -10,6 +10,10 @@ module Valhalla
       @_human_readable_type = val
     end
 
+    def self.can_have_manifests?
+      false
+    end
+
     def human_readable_type
       self.class.human_readable_type
     end

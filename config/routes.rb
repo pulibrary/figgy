@@ -74,6 +74,26 @@ Rails.application.routes.draw do
       end
     end
     get '/scanned_resources/:parent_id/new', to: 'scanned_resources#new', as: :parent_new_scanned_resource
+
+    resources :ephemera_projects do
+      resources :ephemera_fields
+    end
+    get '/ephemera_projects/:parent_id/box' => 'ephemera_boxes#new', as: 'ephemera_project_add_box'
+
+    resources :ephemera_boxes
+
+    resources :ephemera_folders do
+      member do
+        get :file_manager
+        get :structure
+        get :manifest, defaults: { format: :json }
+        post :browse_everything_files
+        get :pdf
+      end
+    end
+    get '/ephemera_boxes/:parent_id/ephemera_folders/new', to: 'ephemera_folders#new', as: :parent_new_ephemera_box
+
+    resources :ephemera_fields
   end
 
   resources :collections do

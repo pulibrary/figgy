@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Ephemera Projects</h1>
+
+<ul>
+  <% @ephemera_projects.each do |ephemera_project| %>
+      <li><%= link_to ephemera_project.title, Valhalla::ContextualPath.new(child: ephemera_project, parent_id: nil).show %></li>
+  <% end %>
+</ul>
+
+<br>
+
+<% if can?(:create, EphemeraProject) %>
+  <%= link_to 'New Ephemera Project', new_ephemera_project_path, class: 'btn btn-primary' %>
+<% end %>

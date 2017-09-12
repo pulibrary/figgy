@@ -13,6 +13,10 @@ class ScannedResource < Valhalla::Resource
   attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
   attribute :file_metadata, Valkyrie::Types::Set.member(FileMetadata.optional)
 
+  def self.can_have_manifests?
+    true
+  end
+
   def to_s
     "#{human_readable_type}: #{title.to_sentence}"
   end
