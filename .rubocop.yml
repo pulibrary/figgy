@@ -83,3 +83,5 @@ RSpec/VerifiedDoubles:
 Metrics/ClassLength:
   Exclude:
     - 'app/change_set_persisters/plum_change_set_persister.rb'
+Lint/UnusedMethodArgument:
+  AllowUnusedKeywordArguments: true
