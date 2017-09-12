@@ -44,6 +44,7 @@ Metrics/BlockLength:
 Metrics/ClassLength:
   Exclude:
     - 'app/change_set_persisters/plum_change_set_persister.rb'
+    - 'app/change_sets/scanned_resource_change_set.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
@@ -52,6 +53,7 @@ Metrics/MethodLength:
     - 'app/models/schema/plum/local.rb'
     - 'spec/services/manifest_builder_spec.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
+    - 'app/change_sets/ephemera_folder_change_set.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/dublin_core.rb'
@@ -80,8 +82,5 @@ RSpec/VerifiedDoubles:
     - 'spec/validators/viewing_hint_validator_spec.rb'
     - 'spec/validators/viewing_direction_validator_spec.rb'
     - 'spec/models/user_spec.rb'
-Metrics/ClassLength:
-  Exclude:
-    - 'app/change_set_persisters/plum_change_set_persister.rb'
 Lint/UnusedMethodArgument:
   AllowUnusedKeywordArguments: true

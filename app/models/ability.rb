@@ -74,6 +74,10 @@ class Ability
     curation_concern_read_permissions
   end
 
+  def ephemera_editor_permissions
+    can [:read, :edit, :update], EphemeraProject
+  end
+
   # Abilities that should be granted to patron
   def campus_patron_permissions
     anonymous_permissions
