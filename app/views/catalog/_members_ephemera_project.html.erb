@@ -22,20 +22,20 @@
     <tbody>
       <% decorated_resource.fields.each do |ephemera_field| %>
         <tr>
-          <td><%= ephemera_field.name %></td>
-          <td><%= link_to ephemera_field.vocabulary.label, ephemera_field.vocabulary %></td>
+          <td><%= ephemera_field.name_label %></td>
+          <td><%= link_to ephemera_field.vocabulary_label, Valhalla::ContextualPath.new(child: ephemera_field.vocabulary, parent_id: nil).show %></td>
           <% if can?(:modify, ephemera_field) %>
-            <td><%= link_to 'Edit', edit_ephemera_project_ephemera_field_path(resource, ephemera_field) %></td>
+            <td><%= link_to 'Edit', edit_ephemera_field_path(ephemera_field) %></td>
           <% end %>
           <% if can?(:delete, ephemera_field) %>
-            <td><%= link_to 'Destroy', ephemera_project_ephemera_field_path(resource, ephemera_field), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <td><%= link_to 'Destroy', ephemera_field_path(ephemera_field), method: :delete, data: { confirm: 'Are you sure?' } %></td>
           <% end %>
         </tr>
       <% end %>
     </tbody>
   </table>
   <% if can?(:create, EphemeraField) %>
-    <!--'Add Field'-->
+    <%= link_to 'Add Field', ephemera_project_add_field_path(resource, parent_id: resource.id), class: 'btn btn-primary' %>
   <% end %>
 
   <h2>Templates</h2>
@@ -59,4 +59,3 @@
       <% end %>
     </tbody>
   </table>
-

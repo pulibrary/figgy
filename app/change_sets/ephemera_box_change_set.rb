@@ -16,7 +16,6 @@ class EphemeraBoxChangeSet < Valhalla::ChangeSet
   validate :barcode_valid?
 
   def barcode_valid?
-    # return if barcode.present? && barcode.first.match(/^\d+{14}$/)
     return if Barcode.new(Array.wrap(barcode).first).valid?
     errors.add(:barcode, 'has an invalid checkdigit')
   end

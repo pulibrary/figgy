@@ -222,6 +222,71 @@ RSpec.describe EphemeraFoldersController do
         expect(response.body).to have_button "Save"
       end
     end
+
+    context "with fields" do
+      let(:user) { FactoryGirl.create(:admin) }
+      let(:vocab) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'test vocabulary') }
+      let(:term) { FactoryGirl.create_for_repository(:ephemera_term, label: 'test term', member_of_vocabulary_id: vocab.id) }
+      let(:field) { FactoryGirl.create_for_repository(:ephemera_field, field_name: '1', member_of_vocabulary_id: vocab.id) }
+      let(:box) { FactoryGirl.create_for_repository(:ephemera_box) }
+      let(:project) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [box.id, field.id]) }
+
+      render_views
+      it "retrieves project field terms for the folder" do
+        adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
+        ephemera_folder = FactoryGirl.create_for_repository(:ephemera_folder)
+        box.member_ids = [ephemera_folder.id]
+        adapter.persister.save(resource: box)
+
+        term.member_of_vocabulary_id = vocab.id
+        adapter.persister.save(resource: term)
+
+        field.member_of_vocabulary_id = vocab.id
+        adapter.persister.save(resource: field)
+
+        project.member_ids = [box.id, field.id]
+        adapter.persister.save(resource: project)
+
+        get :edit, params: { id: ephemera_folder.id.to_s, parent_id: box.id }
+
+        expect(assigns(:language)).not_to be_empty
+        expect(assigns(:language).first).to be_an EphemeraTermDecorator
+        expect(assigns(:language).first.label).to eq 'test term'
+      end
+    end
+
+    context "with a subject field" do
+      let(:user) { FactoryGirl.create(:admin) }
+      let(:vocab) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'test vocabulary') }
+      let(:term) { FactoryGirl.create_for_repository(:ephemera_term, label: 'test term', member_of_vocabulary_id: vocab.id) }
+      let(:field) { FactoryGirl.create_for_repository(:ephemera_field, field_name: '5', member_of_vocabulary_id: vocab.id) }
+      let(:box) { FactoryGirl.create_for_repository(:ephemera_box) }
+      let(:project) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [box.id, field.id]) }
+      let(:child_vocab) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'test child vocabulary') }
+
+      render_views
+      it "retrieves project field terms for the folder" do
+        adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
+        ephemera_folder = FactoryGirl.create_for_repository(:ephemera_folder)
+        box.member_ids = [ephemera_folder.id]
+        adapter.persister.save(resource: box)
+
+        child_vocab.member_of_vocabulary_id = vocab.id
+        adapter.persister.save(resource: child_vocab)
+
+        field.member_of_vocabulary_id = vocab.id
+        adapter.persister.save(resource: field)
+
+        project.member_ids = [box.id, field.id]
+        adapter.persister.save(resource: project)
+
+        get :edit, params: { id: ephemera_folder.id.to_s, parent_id: box.id }
+
+        expect(assigns(:subject)).not_to be_empty
+        expect(assigns(:subject).first).to be_an EphemeraVocabularyDecorator
+        expect(assigns(:subject).first.label).to eq 'test child vocabulary'
+      end
+    end
   end
 
   describe "update" do

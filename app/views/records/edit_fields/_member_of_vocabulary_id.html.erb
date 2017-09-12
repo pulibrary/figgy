@@ -1,0 +1,13 @@
+  <%= f.input :member_of_vocabulary_id,
+              label: 'Vocabulary',
+              as: :select,
+              collection: @vocabularies,
+              label_method: :label,
+              value_method: :id,
+              input_html: {
+                multiple: f.object.multiple?(key)
+              },
+              include_blank: true,
+              selected: params[:parent_id] || f.object.member_of_vocabulary_id,
+              required: f.object.required?(key) %>
+<%= link_to 'Add a Vocabulary', new_ephemera_vocabulary_path, class: 'btn btn-primary' %>

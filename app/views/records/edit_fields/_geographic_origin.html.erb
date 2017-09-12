@@ -1,0 +1,16 @@
+<% if @geographic_origin.present? %>
+  <%= f.input :language,
+              label: 'Geographic origin',
+              as: :select,
+              collection: @geographic_origin,
+              label_method: :label,
+              value_method: :uri,
+              input_html: { multiple: f.object.multiple?(key) },
+              required: f.object.required?(key) %>
+<% else %>
+  <% if f.object.multiple? key %>
+    <%= f.input key, as: :multi_value, input_html: { class: 'form-control' }, required: f.object.required?(key) %>
+  <% else %>
+    <%= f.input key, required: f.object.required?(key) %>
+  <% end %>
+<% end %>

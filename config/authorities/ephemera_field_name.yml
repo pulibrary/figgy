@@ -1,0 +1,22 @@
+:terms:
+  - :value: "1"
+    :label: EphemeraFolder.language
+    :notable: true
+    :definition: "Authorities for languages"
+  - :value: "2"
+    :label: EphemeraFolder.geographic_origin
+    :notable: true
+    :definition: "Authorities for geographic origins"
+  - :value: "3"
+    :label: EphemeraFolder.geo_subject
+    :notable: true
+    :definition: "Geographic subject headings"
+  - :value: "4"
+    :label: EphemeraFolder.genre
+    :notable: true
+    :definition: "Authories for genres"
+  - :value: "5"
+    :label: EphemeraFolder.subject
+    :notable: true
+    :definition: "Subject headings"
+  

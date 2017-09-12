@@ -1,0 +1,23 @@
+<% if @subject.present? %>
+  <%= f.input :language,
+              label: 'Subject',
+              as: :grouped_select,
+              collection: @subject,
+              group_method: :terms,
+              group_label_method: :label,
+              label_method: :label,
+              value_method: :uri,
+              input_html: {
+                multiple: f.object.multiple?(key),
+                data: {
+                  live_search: true
+                }
+              },
+              required: f.object.required?(key) %>
+<% else %>
+  <% if f.object.multiple? key %>
+    <%= f.input key, as: :multi_value, input_html: { class: 'form-control' }, required: f.object.required?(key) %>
+  <% else %>
+    <%= f.input key, required: f.object.required?(key) %>
+  <% end %>
+<% end %>
