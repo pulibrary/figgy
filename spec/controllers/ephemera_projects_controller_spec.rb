@@ -89,6 +89,19 @@ RSpec.describe EphemeraProjectsController do
     end
   end
 
+  describe "index" do
+    context "when they have permission" do
+      let(:user) { FactoryGirl.create(:admin) }
+      render_views
+      it "has lists all ephemera projects" do
+        FactoryGirl.create_for_repository(:ephemera_project)
+
+        get :index
+        expect(response.body).to have_content "Test Project"
+      end
+    end
+  end
+
   describe "destroy" do
     let(:user) { FactoryGirl.create(:admin) }
     context "when not logged in" do

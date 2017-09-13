@@ -8,8 +8,11 @@ class EphemeraBoxesController < ApplicationController
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
     storage_adapter: Valkyrie.config.storage_adapter
   )
+  before_action :load_collections, only: [:new, :edit]
 
-  def change_set
-    @change_set ||= change_set_class.new(resource)
-  end
+  private
+
+    def load_collections
+      @collections = query_service.find_all_of_model(model: Collection).map(&:decorate)
+    end
 end

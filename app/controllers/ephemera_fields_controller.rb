@@ -8,8 +8,4 @@ class EphemeraFieldsController < ApplicationController
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
     storage_adapter: Valkyrie.config.storage_adapter
   )
-
-  def change_set
-    @change_set ||= change_set_class.new(resource)
-  end
 end

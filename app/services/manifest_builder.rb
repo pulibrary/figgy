@@ -29,7 +29,8 @@ class ManifestBuilder
     end
     attr_reader :resource
     delegate :query_service, to: :metadata_adapter
-    delegate :decorate, :source_metadata_identifier, :to_model, :id, to: :resource
+    delegate :decorate, :to_model, :id, to: :resource
+    delegate :source_metadata_identifier, to: :resource if @resource.respond_to?(:source_metadata_identifier)
 
     ##
     # @param [Resource] resource the Resource being modeled as the root
@@ -45,7 +46,8 @@ class ManifestBuilder
     end
 
     def description
-      Array.wrap(resource.primary_imported_metadata.description).first
+      value = resource.respond_to?(:primary_imported_metadata) ? resource.primary_imported_metadata.description : resource.description
+      Array.wrap(value).first
     end
 
     ##
@@ -86,7 +88,7 @@ class ManifestBuilder
     # Retrieves the first viewing hint from the resource metadata
     # @return [String]
     def viewing_hint
-      Array(resource.viewing_hint).first
+      resource.respond_to?(:viewing_hint) ? Array(resource.viewing_hint).first : []
     end
 
     private

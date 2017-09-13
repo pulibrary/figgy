@@ -27,14 +27,14 @@ FactoryGirl.define do
       end
       resource
     end
-  end
-  factory :open_ephemera_folder do
-    visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-  end
-  factory :private_ephemera_folder do
-    visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
-  end
-  factory :campus_only_ephemera_folder do
-    visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+    factory :open_ephemera_folder do
+      visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+    end
+    factory :private_ephemera_folder do
+      visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+    end
+    factory :campus_only_ephemera_folder do
+      visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+    end
   end
 end
