@@ -73,16 +73,6 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   end
 
   def iiif_manifest_attributes
-    current_attributes = attributes(self.class.iiif_manifest_attributes)
-    imported_attributes = attributes(self.class.imported_attributes(Schema::Common.attributes))
-
-    imported_attributes.each_pair do |imported_key, value|
-      key = imported_key.to_s.sub(/imported_/, '').to_sym
-      if current_attributes.key?(key) && value.present?
-        current_attributes[key].concat(value)
-      end
-    end
-
-    current_attributes
+    attributes(self.class.iiif_manifest_attributes)
   end
 end

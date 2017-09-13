@@ -8,7 +8,7 @@ class EphemeraFieldDecorator < Valkyrie::ResourceDecorator
   end
 
   def projects
-    @projects ||= members.select { |r| r.is_a?(EphemeraProject) }.map(&:decorate).to_a
+    @projects ||= parents.select { |r| r.is_a?(EphemeraProject) }.map(&:decorate).to_a
   end
 
   def metadata_adapter

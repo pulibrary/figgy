@@ -1,0 +1,15 @@
+# frozen_string_literal: true
+require 'rails_helper'
+
+RSpec.describe EphemeraFolderChangeSet do
+  subject(:change_set) { described_class.new(FactoryGirl.build(:ephemera_folder)) }
+  describe "#visibility" do
+    it "exposes the visibility" do
+      expect(change_set.visibility).to include Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+    end
+    it "can update the visibility" do
+      change_set.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+      expect(change_set.visibility).to include Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+    end
+  end
+end
