@@ -14,6 +14,7 @@ class EphemeraBox < Valhalla::Resource
   attribute :rights_note
   attribute :state, Valkyrie::Types::Set
   attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
+  attribute :thumbnail_id
 
   def title
     'Ephemera Box'

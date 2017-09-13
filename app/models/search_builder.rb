@@ -37,7 +37,7 @@ class SearchBuilder < Blacklight::SearchBuilder
   end
 
   def models_to_solr_clause
-    [ScannedResource, Collection].join(",")
+    [ScannedResource, Collection, EphemeraFolder, EphemeraBox].join(",")
   end
 
   def add_access_controls_to_solr_params(*args)

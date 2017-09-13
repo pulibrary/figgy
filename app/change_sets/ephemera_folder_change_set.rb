@@ -29,7 +29,7 @@ class EphemeraFolderChangeSet < Valkyrie::ChangeSet
   property :read_groups, multiple: true, required: false
   property :files, virtual: true, multiple: true, required: false
   property :pending_uploads, multiple: true, required: false
-  property :visibility, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+  property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
   delegate :human_readable_type, to: :model
 
   def primary_terms

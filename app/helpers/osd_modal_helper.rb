@@ -29,6 +29,7 @@ module OsdModalHelper
     return unless document.thumbnail_id
     id = Array(document.thumbnail_id).first
     return build_thumbnail_path(id, image_options) if id == document.id
+    return if id.blank?
     thumbnail_document = Valkyrie.config.metadata_adapter.query_service.find_by(id: id)
     iiif_thumbnail_path(thumbnail_document, image_options)
   end
