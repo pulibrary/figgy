@@ -24,7 +24,6 @@ class EphemeraFolderChangeSet < Valkyrie::ChangeSet
   property :source_url, required: false
   property :rights_statement, multiple: false, required: true, default: "http://rightsstatements.org/vocab/NKC/1.0/", type: ::Types::URI
   property :rights_note, multiple: false, required: false
-  property :append_id
   property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
   property :read_groups, multiple: true, required: false

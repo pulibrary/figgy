@@ -4,7 +4,6 @@ class EphemeraBox < Valhalla::Resource
   attribute :id, Valkyrie::Types::ID.optional
   attribute :member_ids, Valkyrie::Types::Array
   attribute :member_of_collection_ids
-  attribute :append_id, Valkyrie::Types::Array
   attribute :title, Valkyrie::Types::Set
   attribute :barcode, Valkyrie::Types::Set
   attribute :box_number, Valkyrie::Types::Set

@@ -6,7 +6,6 @@ class ScannedResource < Valhalla::Resource
   attribute :id, Valkyrie::Types::ID.optional
   attribute :member_ids, Valkyrie::Types::Array
   attribute :member_of_collection_ids
-  attribute :append_id, Valkyrie::Types::Array
   attribute :imported_metadata, Valkyrie::Types::Set.member(ImportedMetadata).optional
   attribute :state
   attribute :logical_structure, Valkyrie::Types::Array.member(Structure.optional).optional

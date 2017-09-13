@@ -3,7 +3,6 @@ class EphemeraFolder < Valhalla::Resource
   include Valkyrie::Resource::AccessControls
   attribute :id, Valkyrie::Types::ID.optional
   attribute :member_ids, Valkyrie::Types::Array
-  attribute :append_id, Valkyrie::Types::Array
   attribute :barcode, Valkyrie::Types::Set
   attribute :folder_number, Valkyrie::Types::Set
   attribute :title, Valkyrie::Types::Set
