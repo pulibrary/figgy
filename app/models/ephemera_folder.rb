@@ -38,6 +38,9 @@ class EphemeraFolder < Valhalla::Resource
   attribute :thumbnail_id
   attribute :visibility
 
+  attribute :state
+  attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
+
   def self.can_have_manifests?
     true
   end

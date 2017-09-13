@@ -7,7 +7,12 @@ class ControlledVocabulary
   end
 
   def self.for(key)
-    (handlers[key] || self).new
+    (handlers[key] || self).new(key: key)
+  end
+
+  attr_reader :key
+  def initialize(key: nil)
+    @key = key
   end
 
   def all
@@ -31,12 +36,17 @@ class ControlledVocabulary
   class BookWorkflow < ControlledVocabulary
     include Draper::ViewHelpers
     ControlledVocabulary.register(:state_book_workflow, self)
+    ControlledVocabulary.register(:state_folder_workflow, self)
 
     def all(scope = nil)
       @all ||=
-        ::BookWorkflow.new(scope.state).valid_transitions.unshift(scope.state).map do |state|
+        workflow_class.new(scope.state).valid_transitions.unshift(scope.state).map do |state|
           Term.new(label: view_label(state), value: state)
         end
+    end
+
+    def workflow_class
+      @workflow_class ||= key.to_s.gsub("state_", "").camelize.constantize
     end
 
     def view_label(state)
