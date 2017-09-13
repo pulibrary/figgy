@@ -70,7 +70,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   end
 
   def manageable_structure?
-    true
+    false
   end
 
   def iiif_manifest_attributes

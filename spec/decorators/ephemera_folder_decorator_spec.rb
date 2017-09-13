@@ -17,8 +17,8 @@ RSpec.describe EphemeraFolderDecorator do
   it 'manages files' do
     expect(decorator.manageable_files?).to be true
   end
-  it 'manages structures' do
-    expect(decorator.manageable_structure?).to be true
+  it 'does not manage structures' do
+    expect(decorator.manageable_structure?).to be false
   end
   it 'exposes markup for rights statement' do
     expect(resource.decorate.rendered_rights_statement).not_to be_empty
