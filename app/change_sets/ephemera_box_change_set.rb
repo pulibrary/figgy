@@ -26,8 +26,6 @@ class EphemeraBoxChangeSet < Valkyrie::ChangeSet
       :box_number,
       :shipped_date,
       :tracking_number,
-      :rights_statement,
-      :rights_note,
       :member_of_collection_ids,
       :append_id
     ]

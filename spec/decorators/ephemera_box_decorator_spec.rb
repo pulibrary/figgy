@@ -21,10 +21,6 @@ RSpec.describe EphemeraBoxDecorator do
   it 'can attach folders' do
     expect(resource.decorate.attachable_objects).to include EphemeraFolder
   end
-  it 'exposes markup for rights statement' do
-    expect(resource.decorate.rendered_rights_statement).not_to be_empty
-    expect(resource.decorate.rendered_rights_statement.first).to match(/#{Regexp.escape('http://rightsstatements.org/vocab/NKC/1.0/')}/)
-  end
   context 'with folders' do
     let(:folder) do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
