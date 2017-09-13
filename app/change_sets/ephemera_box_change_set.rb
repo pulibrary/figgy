@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class EphemeraBoxChangeSet < Valkyrie::ChangeSet
-  validates :barcode, :box_number, presence: true
-  validates :visibility, :rights_statement, presence: true
+  validates :barcode, :box_number, :visibility, :rights_statement, presence: true
   property :barcode, multiple: false, required: true
   property :box_number, multiple: false, required: true
   property :shipped_date, multiple: false, required: false

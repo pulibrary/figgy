@@ -9,8 +9,4 @@ RSpec.describe EphemeraField do
   it "has a name" do
     expect(field.name).to include 'test name'
   end
-  it "has ordered member_ids" do
-    field.member_ids = [1, 2, 3, 3]
-    expect(field.member_ids).to eq [1, 2, 3, 3]
-  end
 end

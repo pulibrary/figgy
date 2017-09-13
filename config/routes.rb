@@ -92,6 +92,8 @@ Rails.application.routes.draw do
       end
     end
     get '/ephemera_boxes/:parent_id/ephemera_folders/new', to: 'ephemera_folders#new', as: :parent_new_ephemera_box
+
+    resources :ephemera_fields
   end
 
   resources :collections do
