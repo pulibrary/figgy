@@ -29,6 +29,10 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
     @folders ||= members.select { |r| r.is_a?(EphemeraFolder) }.map(&:decorate).to_a
   end
 
+  def ephemera_project
+    @ephemera_box ||= query_service.find_parents(resource: model).to_a.first.try(:decorate)
+  end
+
   def metadata_adapter
     Valkyrie.config.metadata_adapter
   end
