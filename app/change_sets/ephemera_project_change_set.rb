@@ -4,8 +4,6 @@ class EphemeraProjectChangeSet < Valkyrie::ChangeSet
   property :name, multiple: false
 
   def primary_terms
-    [
-      :name
-    ]
+    [:name]
   end
 end

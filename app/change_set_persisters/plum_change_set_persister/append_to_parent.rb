@@ -11,7 +11,7 @@ class PlumChangeSetPersister
 
     def run
       return unless append_id.present?
-      parent.thumbnail_id = post_save_resource.id if parent.member_ids.blank?
+      parent.thumbnail_id = post_save_resource.id if parent.respond_to?(:thumbnail_id) && parent.member_ids.blank?
       parent.member_ids = parent.member_ids + [post_save_resource.id]
       persister.save(resource: parent)
       # Re-save to solr unless it's going to be done by save_all

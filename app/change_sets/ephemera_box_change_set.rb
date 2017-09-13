@@ -14,10 +14,11 @@ class EphemeraBoxChangeSet < Valkyrie::ChangeSet
   property :rights_statement, multiple: false, required: true, default: "http://rightsstatements.org/vocab/NKC/1.0/", type: ::Types::URI
   property :rights_note, multiple: false, required: false
   delegate :human_readable_type, to: :model
-  validate :barcode_valid
+  validate :barcode_valid?
 
-  def barcode_valid
-    return if barcode.present? && barcode.match(/^\d+{14}$/)
+  def barcode_valid?
+    # return if barcode.present? && barcode.first.match(/^\d+{14}$/)
+    return if Barcode.new(Array.wrap(barcode).first).valid?
     errors.add(:barcode, 'has an invalid checkdigit')
   end
 
