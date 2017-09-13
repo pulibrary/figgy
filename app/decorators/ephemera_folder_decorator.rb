@@ -12,6 +12,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     :height,
     :page_count,
     :rights_statement,
+    :rendered_rights_statement,
     :series,
     :creator,
     :contributor,
@@ -74,5 +75,17 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
 
   def iiif_manifest_attributes
     attributes(self.class.iiif_manifest_attributes)
+  end
+
+  def folder_number
+    super.first
+  end
+
+  def barcode
+    super.first
+  end
+
+  def genre
+    super.first
   end
 end

@@ -12,10 +12,11 @@
       <% decorated_resource.folders.each do |volume| %>
         <% volume_url = parent_solr_document_path("#{resource.id}", "id-#{volume.id}") %>
         <tr>
-          <td><%= link_to figgy_thumbnail_path(volume, { class: 'thumbnail-inner', onerror: default_icon_fallback }), volume_url %></td>
+          <td class="folder_number"><%= link_to volume.folder_number, volume_url %></td>
+          <td>Workflow State Here</td>
           <td><%= volume.header %></td>
-          <td><%= volume.created_at %></td>
-          <td><%= volume.visibility.first.html_safe %></td>
+          <td class="barcode"><%= volume.barcode %></td>
+          <td class="genre"><%= volume.genre %></td>
           <td>
             <%= link_to 'View', volume_url, class: 'btn btn-default' %>
             <%= link_to 'Edit', main_app.polymorphic_path([:edit, volume]), class: 'btn btn-default' %>
