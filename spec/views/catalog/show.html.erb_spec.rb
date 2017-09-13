@@ -223,6 +223,42 @@ RSpec.describe "catalog/show.html.erb" do
     end
   end
 
+  context "when it's a project with boxes" do
+    let(:parent) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [child.id]) }
+    let(:child) { FactoryGirl.create_for_repository(:ephemera_box) }
+    let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: parent) }
+    let(:solr_document) { SolrDocument.new(document) }
+    before do
+      assign :document, solr_document
+      allow(view).to receive(:has_search_parameters?).and_return(false)
+      stub_blacklight_views
+      render
+    end
+
+    it 'shows them' do
+      expect(rendered).to have_selector 'h2', text: 'Boxes'
+      expect(rendered).to have_link 'Box 1', href: solr_document_path(id: "id-#{child.id}")
+    end
+  end
+
+  context "when it's a box with folders" do
+    let(:parent) { FactoryGirl.create_for_repository(:ephemera_box, member_ids: [child.id]) }
+    let(:child) { FactoryGirl.create_for_repository(:ephemera_folder) }
+    let(:child) { FactoryGirl.create_for_repository(:ephemera_box) }
+    let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: parent) }
+    let(:solr_document) { SolrDocument.new(document) }
+    before do
+      assign :document, solr_document
+      allow(view).to receive(:has_search_parameters?).and_return(false)
+      stub_blacklight_views
+      render
+    end
+
+    it 'shows them' do
+      expect(rendered).to have_selector 'h2', text: 'Folders'
+    end
+  end
+
   context 'when given a FileSet' do
     let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
     let(:scanned_resource) { FactoryGirl.create_for_repository(:scanned_resource, files: [file]) }
