@@ -15,6 +15,18 @@ class Ability
     can [:manage], :all
   end
 
+  # Abilities that should be granted to ephemera editors
+  def ephemera_editor_permissions
+    can [:manage], EphemeraBox
+    can [:manage, :manifest], EphemeraFolder
+    can [:manage], EphemeraTemplate
+    can [:create, :read, :edit, :update, :publish], Collection
+    can [:create, :read, :edit, :update, :publish, :download], FileSet
+    can [:destroy], FileSet do |obj|
+      obj.depositor == [current_user.uid]
+    end
+  end
+
   # Abilities that should be granted to technicians
   def image_editor_permissions
     can [:read, :create, :modify, :update, :publish], curation_concerns
@@ -74,10 +86,6 @@ class Ability
     curation_concern_read_permissions
   end
 
-  def ephemera_editor_permissions
-    can [:read, :edit, :update], EphemeraProject
-  end
-
   # Abilities that should be granted to patron
   def campus_patron_permissions
     anonymous_permissions
@@ -123,7 +131,7 @@ class Ability
   end
 
   def curation_concerns
-    [ScannedResource]
+    [ScannedResource, EphemeraFolder]
   end
 
   def auth_token

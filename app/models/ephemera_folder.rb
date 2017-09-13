@@ -29,6 +29,7 @@ class EphemeraFolder < Valhalla::Resource
   attribute :date_created, Valkyrie::Types::Set
   attribute :dspace_url, Valkyrie::Types::Set
   attribute :source_url, Valkyrie::Types::Set
+  attribute :depositor, Valkyrie::Types::Set
   attribute :thumbnail_id
   attribute :visibility
 

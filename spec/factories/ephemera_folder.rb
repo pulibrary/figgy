@@ -11,14 +11,16 @@ FactoryGirl.define do
     page_count '30'
     rights_statement RDF::URI('http://rightsstatements.org/vocab/NKC/1.0/')
     read_groups 'public'
-    member_ids []
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)
     end
     transient do
+      files []
+      user nil
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
     after(:build) do |resource, evaluator|
+      resource.depositor = evaluator.user.uid if evaluator.user.present?
       if evaluator.visibility.present?
         change_set = EphemeraFolderChangeSet.new(resource)
         change_set.validate(visibility: Array(evaluator.visibility).first)
