@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
-  self.display_attributes = [:name]
+  self.display_attributes = [:title]
   delegate :query_service, to: :metadata_adapter
 
   def members
@@ -29,5 +29,9 @@ class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
 
   def manageable_structure?
     false
+  end
+
+  def title
+    super.first
   end
 end

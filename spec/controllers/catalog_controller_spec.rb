@@ -245,6 +245,13 @@ RSpec.describe CatalogController do
 
         expect(response.body).to have_content "Review and Approval"
       end
+      it "renders for an Ephemera Project" do
+        resource = persister.save(resource: FactoryGirl.build(:ephemera_project))
+
+        get :show, params: { id: "id-#{resource.id}" }
+
+        expect(response.body).to have_selector "h1", text: resource.title.first
+      end
     end
     context "when rendered for a user" do
       render_views
