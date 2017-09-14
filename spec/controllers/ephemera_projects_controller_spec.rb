@@ -26,7 +26,7 @@ RSpec.describe EphemeraProjectsController do
         FactoryGirl.create_for_repository(:ephemera_project)
 
         get :new
-        expect(response.body).to have_field "Name"
+        expect(response.body).to have_field "Title"
         expect(response.body).to have_button "Save"
       end
     end
@@ -36,12 +36,12 @@ RSpec.describe EphemeraProjectsController do
     let(:user) { FactoryGirl.create(:admin) }
     let(:valid_params) do
       {
-        name: ['Project 1']
+        title: ['Project 1']
       }
     end
     let(:invalid_params) do
       {
-        name: nil
+        title: nil
       }
     end
     context "when not an admin" do
@@ -56,7 +56,7 @@ RSpec.describe EphemeraProjectsController do
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/catalog/"
       id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
-      expect(find_resource(id).name).to contain_exactly "Project 1"
+      expect(find_resource(id).title).to contain_exactly "Project 1"
     end
     context "when something bad goes wrong" do
       it "doesn't persist anything at all when it's solr erroring" do
@@ -94,10 +94,11 @@ RSpec.describe EphemeraProjectsController do
       let(:user) { FactoryGirl.create(:admin) }
       render_views
       it "has lists all ephemera projects" do
-        FactoryGirl.create_for_repository(:ephemera_project)
+        project = FactoryGirl.create_for_repository(:ephemera_project)
 
         get :index
         expect(response.body).to have_content "Test Project"
+        expect(response.body).not_to have_content project.title.to_s
       end
     end
   end
@@ -141,7 +142,7 @@ RSpec.describe EphemeraProjectsController do
         ephemera_project = FactoryGirl.create_for_repository(:ephemera_project)
         get :edit, params: { id: ephemera_project.id.to_s }
 
-        expect(response.body).to have_field "Name", with: ephemera_project.name.first
+        expect(response.body).to have_field "Title", with: ephemera_project.title.first
         expect(response.body).to have_button "Save"
       end
     end
@@ -154,7 +155,7 @@ RSpec.describe EphemeraProjectsController do
       it "throws a CanCan::AccessDenied error" do
         ephemera_project = FactoryGirl.create_for_repository(:ephemera_project)
 
-        expect { patch :update, params: { id: ephemera_project.id.to_s, ephemera_project: { name: ["Two"] } } }.to raise_error CanCan::AccessDenied
+        expect { patch :update, params: { id: ephemera_project.id.to_s, ephemera_project: { title: ["Two"] } } }.to raise_error CanCan::AccessDenied
       end
     end
     context "when a ephemera project doesn't exist" do
@@ -165,18 +166,18 @@ RSpec.describe EphemeraProjectsController do
     context "when it does exist" do
       it "saves it and redirects" do
         ephemera_project = FactoryGirl.create_for_repository(:ephemera_project)
-        patch :update, params: { id: ephemera_project.id.to_s, ephemera_project: { name: ["Two"] } }
+        patch :update, params: { id: ephemera_project.id.to_s, ephemera_project: { title: ["Two"] } }
 
         expect(response).to be_redirect
         expect(response.location).to eq "http://test.host/catalog/id-#{ephemera_project.id}"
         id = response.location.gsub("http://test.host/catalog/id-", "")
         reloaded = find_resource(id)
 
-        expect(reloaded.name).to eq ["Two"]
+        expect(reloaded.title).to eq ["Two"]
       end
       it "renders the form if it fails validations" do
         ephemera_project = FactoryGirl.create_for_repository(:ephemera_project)
-        patch :update, params: { id: ephemera_project.id.to_s, ephemera_project: { name: nil } }
+        patch :update, params: { id: ephemera_project.id.to_s, ephemera_project: { title: nil } }
 
         expect(response).to render_template "valhalla/base/edit"
       end
