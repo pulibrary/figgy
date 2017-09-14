@@ -237,6 +237,14 @@ RSpec.describe CatalogController do
         expect(response.body).to have_link "Delete This Collection", href: collection_path(resource)
         expect(response.body).not_to have_link "File Manager"
       end
+
+      it "renders for an Ephemera Folder" do
+        resource = persister.save(resource: FactoryGirl.build(:ephemera_folder))
+
+        get :show, params: { id: "id-#{resource.id}" }
+
+        expect(response.body).to have_content "Review and Approval"
+      end
     end
     context "when rendered for a user" do
       render_views

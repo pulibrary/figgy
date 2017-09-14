@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-class ScannedResourceChangeSet < Valkyrie::ChangeSet
+class ScannedResourceChangeSet < Valhalla::ChangeSet
+  apply_workflow(BookWorkflow)
   delegate :human_readable_type, to: :model
   property :title, multiple: true, required: true, default: []
   property :source_metadata_identifier, required: true, multiple: false
@@ -18,16 +19,13 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
   property :start_canvas, multiple: false, type: Valkyrie::Types::ID
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
   property :logical_structure, multiple: true, required: false, type: Types::Strict::Array.member(Structure), default: [Structure.new(label: "Logical", nodes: [])]
-  property :state, multiple: false, required: true, default: BookWorkflow.aasm.initial_state.to_s
   property :read_groups, multiple: true, required: false
-  property :workflow_note, multiple: true, required: false, default: []
   property :file_metadata, multiple: true, required: false, default: []
   # Virtual Attributes
   property :refresh_remote_metadata, virtual: true, multiple: false
   property :files, virtual: true, multiple: true, required: false
   property :pending_uploads, multiple: true, required: false
   # Necessary for SimpleForm to show the nested record.
-  property :new_workflow_note_attributes, virtual: true
 
   validates_with StateValidator
   validates_with ViewingDirectionValidator
@@ -50,18 +48,6 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
       :member_of_collection_ids,
       :append_id
     ]
-  end
-
-  def new_workflow_note_attributes=(attributes)
-    return unless new_workflow_note.validate(attributes)
-    new_workflow_note.sync
-    workflow_note << new_workflow_note.model
-  end
-
-  # Default is set this way so that the WorkflowNoteChangeSet validations don't
-  # show in the nested form.
-  def new_workflow_note
-    @new_workflow_note ||= DynamicChangeSet.new(WorkflowNote.new)
   end
 
   def visibility=(visibility)
@@ -92,27 +78,6 @@ class ScannedResourceChangeSet < Valkyrie::ChangeSet
 
   def apply_remote_metadata?
     source_metadata_identifier.present? && (!persisted? || refresh_remote_metadata == "1")
-  end
-
-  def workflow
-    workflow_class.new(state.first)
-  end
-
-  def workflow_class
-    BookWorkflow
-  end
-
-  def state_changed?
-    # conditional assignment makes this true if it has ever been true, to allow seeing the change after sync
-    @state_changed ||= changed?(:state) && !old_state.nil? && old_state != new_state
-  end
-
-  def new_state
-    Array.wrap(state).first
-  end
-
-  def old_state
-    Array.wrap(model.state).first
   end
 
   def prepopulate!

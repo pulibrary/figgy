@@ -168,6 +168,7 @@ RSpec.describe EphemeraFoldersController do
 
   describe "update" do
     let(:user) { FactoryGirl.create(:admin) }
+    it_behaves_like "a workflow controller", :ephemera_folder
     context "when not logged in" do
       let(:user) { nil }
       it "throws a CanCan::AccessDenied error" do

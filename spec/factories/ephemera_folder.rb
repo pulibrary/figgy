@@ -11,6 +11,7 @@ FactoryGirl.define do
     page_count '30'
     rights_statement RDF::URI('http://rightsstatements.org/vocab/NKC/1.0/')
     read_groups 'public'
+    state 'needs_qa'
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)
     end

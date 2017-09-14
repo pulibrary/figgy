@@ -1,6 +1,8 @@
 # frozen_string_literal: true
-class EphemeraFolderChangeSet < Valkyrie::ChangeSet
+class EphemeraFolderChangeSet < Valhalla::ChangeSet
+  apply_workflow(FolderWorkflow)
   validates :barcode, :folder_number, :title, :language, :genre, :width, :height, :page_count, :visibility, :rights_statement, presence: true
+  validates_with StateValidator
   property :barcode, multiple: false, required: true
   property :folder_number, multiple: false, required: true
   property :title, multiple: false, required: true
@@ -35,6 +37,7 @@ class EphemeraFolderChangeSet < Valkyrie::ChangeSet
   property :viewing_hint, required: false
 
   property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+
   delegate :human_readable_type, to: :model
 
   def primary_terms

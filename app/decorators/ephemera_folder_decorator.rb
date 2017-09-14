@@ -65,6 +65,10 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     end
   end
 
+  def ephemera_box
+    @ephemera_box ||= query_service.find_parents(resource: model).to_a.first.try(:decorate)
+  end
+
   def manageable_files?
     true
   end
