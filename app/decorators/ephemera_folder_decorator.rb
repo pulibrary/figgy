@@ -24,7 +24,6 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     :date_created,
     :dspace_url,
     :source_url,
-    :thumbnail_id,
     :visibility
   ]
   self.iiif_manifest_attributes = display_attributes + [:title] - \
