@@ -12,7 +12,7 @@ class EphemeraBox < Valhalla::Resource
   attribute :visibility, Valkyrie::Types::Set
   attribute :rights_statement
   attribute :rights_note
-  attribute :state, Valkyrie::Types::Set
+  attribute :state
   attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
   attribute :thumbnail_id
 

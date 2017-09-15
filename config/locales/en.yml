@@ -74,6 +74,9 @@ en:
           label: 'Search'
           placeholder: 'Enter search terms'
   state:
+    new:
+      label: 'New'
+      desc: "Newly created"
     pending:
       label: 'Pending'
       desc:  'Initial digitization, suppressed from display'

@@ -62,7 +62,9 @@ RSpec.describe EphemeraBoxesController do
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/catalog/"
       id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
-      expect(find_resource(id).box_number).to contain_exactly "1"
+      resource = find_resource(id)
+      expect(resource.box_number).to contain_exactly "1"
+      expect(resource.state).to contain_exactly "new"
     end
     context "when something bad goes wrong" do
       it "doesn't persist anything at all when it's solr erroring" do
@@ -155,6 +157,7 @@ RSpec.describe EphemeraBoxesController do
         expect { patch :update, params: { id: "test" } }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
       end
     end
+    it_behaves_like "a workflow controller", :ephemera_box
     context "when it does exist" do
       it "saves it and redirects" do
         ephemera_box = FactoryGirl.create_for_repository(:ephemera_box)
