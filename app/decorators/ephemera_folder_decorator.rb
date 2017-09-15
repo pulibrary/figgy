@@ -92,4 +92,12 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   def genre
     super.first
   end
+
+  def rendered_state
+    ControlledVocabulary.for(:state_folder_workflow).badge(state)
+  end
+
+  def state
+    super.first
+  end
 end

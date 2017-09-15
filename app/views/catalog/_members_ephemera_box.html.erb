@@ -13,7 +13,7 @@
         <% volume_url = parent_solr_document_path("#{resource.id}", "id-#{volume.id}") %>
         <tr>
           <td class="folder_number"><%= link_to volume.folder_number, volume_url %></td>
-          <td>Workflow State Here</td>
+          <td><%= volume.rendered_state %></td>
           <td><%= volume.header %></td>
           <td class="barcode"><%= volume.barcode %></td>
           <td class="genre"><%= volume.genre %></td>
