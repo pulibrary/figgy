@@ -37,6 +37,7 @@ class ControlledVocabulary
     include Draper::ViewHelpers
     ControlledVocabulary.register(:state_book_workflow, self)
     ControlledVocabulary.register(:state_folder_workflow, self)
+    ControlledVocabulary.register(:state_box_workflow, self)
 
     def all(scope = nil)
       @all ||=
@@ -67,6 +68,7 @@ class ControlledVocabulary
 
     def state_classes
       @state_classes ||= {
+        new: 'label-default',
         pending: 'label-default',
         needs_qa: 'label-info',
         metadata_review: 'label-info',

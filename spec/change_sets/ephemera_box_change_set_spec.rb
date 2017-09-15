@@ -12,4 +12,11 @@ RSpec.describe EphemeraBoxChangeSet do
       expect(change_set.visibility).to include Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
     end
   end
+
+  describe "#state" do
+    it "pre-populates" do
+      change_set.prepopulate!
+      expect(change_set.state).to eq "new"
+    end
+  end
 end

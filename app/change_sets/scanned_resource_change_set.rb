@@ -79,10 +79,4 @@ class ScannedResourceChangeSet < Valhalla::ChangeSet
   def apply_remote_metadata?
     source_metadata_identifier.present? && (!persisted? || refresh_remote_metadata == "1")
   end
-
-  def prepopulate!
-    super.tap do
-      @_changes = Disposable::Twin::Changed::Changes.new
-    end
-  end
 end

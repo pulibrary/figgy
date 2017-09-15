@@ -6,5 +6,11 @@ module Valhalla
       self.workflow_class = workflow
       include(Valhalla::ChangeSetWorkflow)
     end
+
+    def prepopulate!
+      super.tap do
+        @_changes = Disposable::Twin::Changed::Changes.new
+      end
+    end
   end
 end

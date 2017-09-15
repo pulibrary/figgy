@@ -20,7 +20,7 @@ module Valhalla
       end
 
       def workflow
-        workflow_class.new(state.first)
+        workflow_class.new(state)
       end
 
       def workflow_class
