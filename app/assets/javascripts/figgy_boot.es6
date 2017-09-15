@@ -14,6 +14,7 @@ export default class Initializer {
     this.derivative_form = new DerivativeForm
     this.universal_viewer = new UniversalViewer
     $("select").selectpicker({'liveSearch': true})
+    $(".datatable").DataTable()
   }
 
   initialize_timepicker() {
