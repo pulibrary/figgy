@@ -34,7 +34,7 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
 
   property :start_canvas, required: false
   property :viewing_direction, required: false
-  property :viewing_hint, required: false
+  property :viewing_hint, multiple: false, required: false, default: "individuals"
 
   property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
 

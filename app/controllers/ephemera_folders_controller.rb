@@ -11,6 +11,7 @@ class EphemeraFoldersController < ApplicationController
   before_action :load_collections, only: [:new, :edit]
 
   def manifest
+    authorize! :manifest, resource
     respond_to do |f|
       f.json do
         render json: ManifestBuilder.new(resource).build

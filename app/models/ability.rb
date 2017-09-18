@@ -100,6 +100,9 @@ class Ability
     cannot [:read], curation_concerns do |curation_concern|
       !readable_concern?(curation_concern)
     end
+    cannot [:manifest], EphemeraFolder do |curation_concern|
+      !manifestable_concern?(curation_concern)
+    end
     can :pdf, curation_concerns do |curation_concern|
       ["color", "gray"].include?(Array(curation_concern.pdf_type).first)
     end
@@ -120,6 +123,18 @@ class Ability
     else
       %w[pending metadata_review final_review takedown]
     end
+  end
+
+  def manifestable_concern?(curation_concern)
+    if current_user.ephemera_editor? || current_user.admin?
+      true
+    else
+      curation_concern.state.include?("complete") || box_grants_access?(curation_concern)
+    end
+  end
+
+  def box_grants_access?(curation_concern)
+    (curation_concern.decorate.ephemera_box.try(:state) || []).include?("all_in_production")
   end
 
   def universal_reader?

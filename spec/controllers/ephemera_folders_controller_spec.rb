@@ -64,11 +64,50 @@ RSpec.describe EphemeraFoldersController do
     context "when not logged in but an auth token is given" do
       it "renders the full manifest" do
         resource = FactoryGirl.create_for_repository(:campus_only_ephemera_folder)
-        authorization_token = AuthToken.create(group: ["admin"])
+        authorization_token = AuthToken.create!(group: ["admin"], label: "admin_token")
         get :manifest, params: { id: resource.id, format: :json, auth_token: authorization_token.token }
 
         expect(response).to be_success
         expect(response.body).not_to eq "{}"
+      end
+    end
+  end
+
+  describe "GET /concern/ephemera_folders/:id/manifest" do
+    let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+    context "when signed in as an admin" do
+      let(:user) { FactoryGirl.create(:admin) }
+      it "returns a IIIF manifest for a resource with a file" do
+        sign_in user
+        resource = FactoryGirl.create_for_repository(:ephemera_folder, files: [file])
+
+        get :manifest, params: { id: resource.id.to_s, format: :json }
+        manifest_response = MultiJson.load(response.body, symbolize_keys: true)
+
+        expect(response.headers["Content-Type"]).to include "application/json"
+        expect(manifest_response[:sequences].length).to eq 1
+        expect(manifest_response[:viewingHint]).to eq "individuals"
+      end
+    end
+    context "when not signed in as an admin" do
+      it "does not display needs_qa items" do
+        resource = FactoryGirl.create_for_repository(:ephemera_folder, files: [file])
+
+        expect { get :manifest, params: { id: resource.id.to_s, format: :json } }
+          .to raise_error CanCan::AccessDenied
+      end
+      it "displays complete items" do
+        resource = FactoryGirl.create_for_repository(:complete_ephemera_folder, files: [file])
+
+        expect { get :manifest, params: { id: resource.id.to_s, format: :json } }
+          .not_to raise_error
+      end
+      it "displays needs_qa items which have an all_in_production box" do
+        resource = FactoryGirl.create_for_repository(:ephemera_folder)
+        FactoryGirl.create_for_repository(:ephemera_box, member_ids: resource.id, state: "all_in_production")
+
+        expect { get :manifest, params: { id: resource.id.to_s, format: :json } }
+          .not_to raise_error
       end
     end
   end
