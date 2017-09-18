@@ -249,7 +249,7 @@ RSpec.describe PlumChangeSetPersister do
     context "with existing member resources and file sets" do
       let(:resource1) { FactoryGirl.create_for_repository(:file_set) }
       let(:resource2) { FactoryGirl.create_for_repository(:complete_private_scanned_resource) }
-      it "propagates the access control policies" do
+      it "propagates the access control policies, but not to FileSets" do
         resource = FactoryGirl.build(:scanned_resource, read_groups: [])
         resource.member_ids = [resource1.id, resource2.id]
         adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
@@ -261,7 +261,7 @@ RSpec.describe PlumChangeSetPersister do
 
         updated = change_set_persister.save(change_set: change_set)
         members = query_service.find_members(resource: updated)
-        expect(members.first.read_groups).to eq [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
+        expect(members.first.read_groups).to eq resource1.read_groups
         expect(members.to_a.last.read_groups).to eq [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
       end
     end
