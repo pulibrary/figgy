@@ -33,7 +33,7 @@ class SearchBuilder < Blacklight::SearchBuilder
   end
 
   def all_states
-    BookWorkflow.new(nil).valid_states
+    BookWorkflow.new(nil).valid_states + FolderWorkflow.new(nil).valid_states
   end
 
   def models_to_solr_clause

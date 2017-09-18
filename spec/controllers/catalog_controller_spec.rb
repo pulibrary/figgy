@@ -28,17 +28,28 @@ RSpec.describe CatalogController do
   end
 
   describe "EphemeraFolder behavior" do
-    before do
-      sign_in FactoryGirl.create(:admin)
+    context "when not an admin" do
+      it "displays needs_qa EphemeraFolder" do
+        persister.save(resource: FactoryGirl.build(:ephemera_folder))
+
+        get :index, params: { q: "" }
+
+        expect(assigns(:document_list).length).to eq 1
+      end
     end
-    it "displays indexed EphemeraFolders" do
-      folder = persister.save(resource: FactoryGirl.build(:ephemera_folder))
-      persister.save(resource: FactoryGirl.build(:ephemera_box, member_ids: folder.id))
-      persister.save(resource: folder)
+    context "when an admin" do
+      before do
+        sign_in FactoryGirl.create(:admin)
+      end
+      it "displays indexed EphemeraFolders" do
+        folder = persister.save(resource: FactoryGirl.build(:ephemera_folder))
+        persister.save(resource: FactoryGirl.build(:ephemera_box, member_ids: folder.id))
+        persister.save(resource: folder)
 
-      get :index, params: { q: "" }
+        get :index, params: { q: "" }
 
-      expect(assigns(:document_list).length).to eq 2
+        expect(assigns(:document_list).length).to eq 2
+      end
     end
   end
 
