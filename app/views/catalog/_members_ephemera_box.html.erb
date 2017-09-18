@@ -1,5 +1,6 @@
   <h2>Folders</h2>
-  <table class="table table-striped">
+  <table class="table table-striped datatable">
+    <thead>
     <tr>
       <th>Folder Number</th>
       <th>Workflow State</th>
@@ -8,12 +9,14 @@
       <th>Genre</th>
       <th>Actions</th>
     </tr>
+    </thead>
+    <tbody>
     <% unless decorated_resource.folders.empty? %>
       <% decorated_resource.folders.each do |volume| %>
         <% volume_url = parent_solr_document_path("#{resource.id}", "id-#{volume.id}") %>
         <tr>
           <td class="folder_number"><%= link_to volume.folder_number, volume_url %></td>
-          <td>Workflow State Here</td>
+          <td><%= volume.rendered_state %></td>
           <td><%= volume.header %></td>
           <td class="barcode"><%= volume.barcode %></td>
           <td class="genre"><%= volume.genre %></td>
@@ -29,4 +32,5 @@
     <% else %>
       <td>This work has no folders attached.  Click "Attach Folder" to attach folders.</td>
     <% end %>
+    </tbody>
   </table>

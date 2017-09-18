@@ -36,7 +36,7 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   property :viewing_direction, required: false
   property :viewing_hint, required: false
 
-  property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+  property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
 
   delegate :human_readable_type, to: :model
 

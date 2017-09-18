@@ -24,7 +24,6 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     :date_created,
     :dspace_url,
     :source_url,
-    :thumbnail_id,
     :visibility
   ]
   self.iiif_manifest_attributes = display_attributes + [:title] - \
@@ -90,6 +89,14 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   end
 
   def genre
+    super.first
+  end
+
+  def rendered_state
+    ControlledVocabulary.for(:state_folder_workflow).badge(state)
+  end
+
+  def state
     super.first
   end
 end
