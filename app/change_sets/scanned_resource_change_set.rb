@@ -25,7 +25,6 @@ class ScannedResourceChangeSet < Valhalla::ChangeSet
   property :refresh_remote_metadata, virtual: true, multiple: false
   property :files, virtual: true, multiple: true, required: false
   property :pending_uploads, multiple: true, required: false
-  # Necessary for SimpleForm to show the nested record.
 
   validates_with StateValidator
   validates_with ViewingDirectionValidator

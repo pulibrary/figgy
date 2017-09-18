@@ -69,12 +69,22 @@ Rails.application.config.to_prepare do
 
   # Jp2DerivativeService needs its own change_set_persister because the
   # derivatives may not be in the primary metadata/file storage.
-  Valkyrie::DerivativeService.services << Jp2DerivativeService::Factory.new(
+  Valkyrie::DerivativeService.services << PlumDerivativeService::Factory.new(
     change_set_persister: ::PlumChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
       storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)
     )
   )
 
-  Valkyrie::FileCharacterizationService.services << TikaFileCharacterizationService
+  # ScannedMapDerivativeService needs its own change_set_persister because the
+  # derivatives may not be in the primary metadata/file storage.
+  Valkyrie::DerivativeService.services << ScannedMapDerivativeService::Factory.new(
+    change_set_persister: ::PlumChangeSetPersister.new(
+      metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
+      storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)
+    )
+  )
+
+  Valkyrie::FileCharacterizationService.services << PlumCharacterizationService
+  Valkyrie::FileCharacterizationService.services << GeoCharacterizationService
 end

@@ -13,7 +13,7 @@ class PlumChangeSetPersister
       return unless change_set.respond_to?(:source_metadata_identifier)
       return unless change_set.apply_remote_metadata?
       attributes = RemoteRecord.retrieve(change_set.source_metadata_identifier).attributes
-      change_set.model.imported_metadata = ImportedMetadata.new(attributes)
+      apply(attributes)
       change_set
     end
 
@@ -21,5 +21,17 @@ class PlumChangeSetPersister
       return false unless change_set.try(:new_state) == 'complete'
       change_set.try(:state_changed?) || change_set.apply_remote_metadata?
     end
+
+    private
+
+      def apply(attributes)
+        if change_set.respond_to?(:apply_remote_metadata_directly?) && change_set.apply_remote_metadata_directly?
+          attributes.each do |key, value|
+            change_set.model.send("#{key}=".to_sym, value) if change_set.respond_to?(key)
+          end
+        else
+          change_set.model.imported_metadata = ImportedMetadata.new(attributes)
+        end
+      end
   end
 end

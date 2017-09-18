@@ -16,6 +16,7 @@
 workers 3
 threads_count = 1
 threads(threads_count, threads_count)
+worker_timeout 3600
 
 preload_app!
 

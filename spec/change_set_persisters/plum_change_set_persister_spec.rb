@@ -14,12 +14,12 @@ RSpec.describe PlumChangeSetPersister do
   let(:change_set_class) { ScannedResourceChangeSet }
   it_behaves_like "a Valkyrie::ChangeSetPersister"
 
-  context "when a source_metadata_identifier is set for the first time" do
+  context "when a source_metadata_identifier is set for the first time on a scanned resource" do
     before do
       stub_bibdata(bib_id: '123456')
       stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
-    it "applies remote metadata from bibdata" do
+    it "applies remote metadata from bibdata to an imported metadata resource" do
       resource = FactoryGirl.build(:scanned_resource, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: '123456')
@@ -30,6 +30,25 @@ RSpec.describe PlumChangeSetPersister do
       expect(output.primary_imported_metadata.creator).to eq ["Bord, Janet, 1945-"]
       expect(output.primary_imported_metadata.call_number).to eq ["BL980.G7 B66 1982"]
       expect(output.primary_imported_metadata.source_jsonld).not_to be_blank
+    end
+  end
+  context "when a source_metadata_identifier is set for the first time on a map image" do
+    let(:change_set_class) { ScannedMapChangeSet }
+    before do
+      stub_bibdata(bib_id: '6592452')
+      stub_ezid(shoulder: "99999/fk4", blade: "123456")
+    end
+    it "applies remote metadata from bibdata directly to the resource" do
+      resource = FactoryGirl.build(:scanned_map, title: [])
+      change_set = change_set_class.new(resource)
+      change_set.validate(source_metadata_identifier: '6592452')
+      change_set.sync
+      output = change_set_persister.save(change_set: change_set)
+
+      expect(output.title).to eq ["Brazil, Uruguay, Paraguay & Guyana"]
+      expect(output.creator).to eq ["Bartholomew, John, 1805-1861"]
+      expect(output.subject).to eq ["Brazil—Maps", "Guiana—Maps", "Paraguay—Maps", "Uruguay—Maps"]
+      expect(output.spatial).to eq ["Brazil", "Uruguay", "Paraguay", "Guyana"]
     end
   end
   context "when a resource is completed" do
