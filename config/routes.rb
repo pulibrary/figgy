@@ -76,11 +76,14 @@ Rails.application.routes.draw do
     get '/scanned_resources/:parent_id/new', to: 'scanned_resources#new', as: :parent_new_scanned_resource
 
     resources :ephemera_projects do
+      resources :templates, only: [:new, :create, :destroy]
       resources :ephemera_fields
     end
+    get '/ephemera_projects/:parent_id/templates/new/:model_class', to: 'templates#new', as: :parent_new_template
     get '/ephemera_projects/:parent_id/box' => 'ephemera_boxes#new', as: 'ephemera_project_add_box'
 
-    resources :ephemera_boxes
+    resources :ephemera_boxes do
+    end
 
     resources :ephemera_folders do
       member do

@@ -10,6 +10,15 @@ class EphemeraFoldersController < ApplicationController
   )
   before_action :load_collections, only: [:new, :edit]
 
+  def new_resource
+    if params[:template_id]
+      template = find_resource(params[:template_id])
+      template.nested_properties.first
+    else
+      resource_class.new
+    end
+  end
+
   def manifest
     authorize! :manifest, resource
     respond_to do |f|

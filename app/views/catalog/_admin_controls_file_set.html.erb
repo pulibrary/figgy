@@ -1,0 +1,22 @@
+<h2>Files</h2>
+<%= simple_form_for FileSetChangeSet.new(resource) do |f| %>
+  <table class="table table-striped files">
+    <tr>
+      <th>Label</th>
+      <th>Download</th>
+      <th>Update</th>
+    </tr>
+    <% resource.file_metadata.each do |file| %>
+      <tr>
+        <td><%= file.label.first %></td>
+        <td><%= link_to "Download", valhalla.download_path(resource.id, file.id) %></td>
+        <td><%= f.input "files[][#{file.id}]", as: :file, label: false, required: false %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td colspan="2"></td>
+      <td><%= f.submit 'Update Files', class: 'btn btn-primary' %></td>
+    </tr>
+  </table>
+<% end %>
+<%= render "admin_controls_default" %>

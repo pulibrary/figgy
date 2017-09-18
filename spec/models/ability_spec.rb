@@ -91,11 +91,14 @@ describe Ability do
     let(:creating_user) { image_editor }
     let(:current_user) { ephemera_editor }
     let(:ephemera_folder) { FactoryGirl.create(:ephemera_folder, user: ephemera_editor) }
+    let(:complete_ephemera_folder) { FactoryGirl.create(:complete_ephemera_folder) }
     let(:other_ephemera_folder) { FactoryGirl.create(:ephemera_folder, user: image_editor) }
 
     it {
       is_expected.to be_able_to(:read, open_scanned_resource)
       is_expected.to be_able_to(:manifest, open_scanned_resource)
+      is_expected.to be_able_to(:manifest, complete_ephemera_folder)
+      is_expected.to be_able_to(:manifest, ephemera_folder)
       is_expected.to be_able_to(:pdf, open_scanned_resource)
       is_expected.not_to be_able_to(:color_pdf, open_scanned_resource)
       is_expected.to be_able_to(:read, campus_only_scanned_resource)
