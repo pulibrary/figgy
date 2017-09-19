@@ -8,6 +8,7 @@ class PlumChangeSetPersister
     end
 
     def run
+      return unless change_set.respond_to?(:apply_remote_metadata?)
       IdentifierService.mint_or_update(resource: change_set.model) if mint_ark?
       return unless change_set.respond_to?(:source_metadata_identifier)
       return unless change_set.apply_remote_metadata?

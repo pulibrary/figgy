@@ -27,6 +27,45 @@ RSpec.describe CatalogController do
     end
   end
 
+  describe "EphemeraFolder behavior" do
+    context "when not an admin" do
+      it "displays needs_qa EphemeraFolder" do
+        persister.save(resource: FactoryGirl.build(:ephemera_folder))
+
+        get :index, params: { q: "" }
+
+        expect(assigns(:document_list).length).to eq 1
+      end
+    end
+    context "when an admin" do
+      before do
+        sign_in FactoryGirl.create(:admin)
+      end
+      it "displays indexed EphemeraFolders" do
+        folder = persister.save(resource: FactoryGirl.build(:ephemera_folder))
+        persister.save(resource: FactoryGirl.build(:ephemera_box, member_ids: folder.id))
+        persister.save(resource: folder)
+
+        get :index, params: { q: "" }
+
+        expect(assigns(:document_list).length).to eq 2
+      end
+    end
+  end
+
+  describe "EphemeraBox behavior" do
+    before do
+      sign_in FactoryGirl.create(:admin)
+    end
+    it "displays indexed EphemeraBoxes" do
+      persister.save(resource: FactoryGirl.build(:ephemera_box))
+
+      get :index, params: { q: "" }
+
+      expect(assigns(:document_list).length).to eq 1
+    end
+  end
+
   describe "FileMetadata behavior" do
     before do
       sign_in FactoryGirl.create(:admin)
@@ -208,6 +247,28 @@ RSpec.describe CatalogController do
         expect(response.body).to have_link "Edit This Collection", href: edit_collection_path(resource)
         expect(response.body).to have_link "Delete This Collection", href: collection_path(resource)
         expect(response.body).not_to have_link "File Manager"
+      end
+
+      it "renders for an Ephemera Folder" do
+        resource = persister.save(resource: FactoryGirl.build(:ephemera_folder))
+
+        get :show, params: { id: "id-#{resource.id}" }
+
+        expect(response.body).to have_content "Review and Approval"
+      end
+      it "renders for an Ephemera Project" do
+        resource = persister.save(resource: FactoryGirl.build(:ephemera_project))
+
+        get :show, params: { id: "id-#{resource.id}" }
+
+        expect(response.body).to have_selector "h1", text: resource.title.first
+      end
+      it "renders for an Ephemera Box" do
+        resource = persister.save(resource: FactoryGirl.build(:ephemera_box))
+
+        get :show, params: { id: "id-#{resource.id}" }
+
+        expect(response.body).to have_content "Review and Approval"
       end
     end
     context "when rendered for a user" do

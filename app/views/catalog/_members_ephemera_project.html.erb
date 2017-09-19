@@ -1,0 +1,61 @@
+  <h2>Boxes</h2>
+  <ul>
+    <% decorated_resource.boxes.each do |box| %>
+      <li><%= link_to "Box #{box.box_number.first}", Valhalla::ContextualPath.new(child: box, parent_id: nil).show %></li>
+    <% end %>
+  </ul>
+  <% if can?(:create, EphemeraBox) %>
+    <%= link_to 'Add Box', ephemera_project_add_box_path(resource, parent_id: resource.id), class: 'btn btn-primary' %>
+  <% end %>
+  <br/><br/>
+
+  <h2>Controlled Fields</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Vocabulary</th>
+        <th colspan="2"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% decorated_resource.fields.each do |ephemera_field| %>
+        <tr>
+          <td><%= ephemera_field.name %></td>
+          <td><%= link_to ephemera_field.vocabulary.label, ephemera_field.vocabulary %></td>
+          <% if can?(:modify, ephemera_field) %>
+            <td><%= link_to 'Edit', edit_ephemera_project_ephemera_field_path(resource, ephemera_field) %></td>
+          <% end %>
+          <% if can?(:delete, ephemera_field) %>
+            <td><%= link_to 'Destroy', ephemera_project_ephemera_field_path(resource, ephemera_field), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <% if can?(:create, EphemeraField) %>
+    <!--'Add Field'-->
+  <% end %>
+
+  <h2>Templates</h2>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Template Label</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% decorated_resource.templates.each do |template| %>
+        <tr>
+          <td><%= template.template_label %></td>
+          <td>
+            <!--'Add Delete'-->
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+

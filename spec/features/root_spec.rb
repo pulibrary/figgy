@@ -4,6 +4,7 @@ require 'rails_helper'
 RSpec.feature "Home Page", js: true do
   let(:user) { FactoryGirl.create(:admin) }
   before do
+    FactoryGirl.create_for_repository(:ephemera_project)
     sign_in user
   end
 
@@ -12,5 +13,8 @@ RSpec.feature "Home Page", js: true do
     expect(page).to have_link "New Scanned Resource"
     expect(page).to have_link "Add a Collection", href: "/collections/new"
     expect(page).to have_link "Manage Roles"
+    expect(page).to have_content "Test Project"
+    expect(page).to have_link "View Boxes"
+    expect(page).to have_link "Add Box"
   end
 end

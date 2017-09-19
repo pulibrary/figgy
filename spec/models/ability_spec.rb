@@ -74,7 +74,6 @@ describe Ability do
       is_expected.to be_able_to(:edit, takedown_scanned_resource)
       is_expected.to be_able_to(:edit, flagged_scanned_resource)
       is_expected.to be_able_to(:file_manager, open_scanned_resource)
-      # should be_able_to(:file_manager, open_multi_volume_work)
       is_expected.to be_able_to(:update, open_scanned_resource)
       is_expected.to be_able_to(:update, private_scanned_resource)
       is_expected.to be_able_to(:update, takedown_scanned_resource)
@@ -85,6 +84,57 @@ describe Ability do
       is_expected.to be_able_to(:destroy, flagged_scanned_resource)
       is_expected.to be_able_to(:manifest, open_scanned_resource)
       is_expected.to be_able_to(:manifest, pending_scanned_resource)
+    }
+  end
+
+  describe 'as an ephemera editor' do
+    let(:creating_user) { image_editor }
+    let(:current_user) { ephemera_editor }
+    let(:ephemera_folder) { FactoryGirl.create(:ephemera_folder, user: ephemera_editor) }
+    let(:other_ephemera_folder) { FactoryGirl.create(:ephemera_folder, user: image_editor) }
+
+    it {
+      is_expected.to be_able_to(:read, open_scanned_resource)
+      is_expected.to be_able_to(:manifest, open_scanned_resource)
+      is_expected.to be_able_to(:pdf, open_scanned_resource)
+      is_expected.not_to be_able_to(:color_pdf, open_scanned_resource)
+      is_expected.to be_able_to(:read, campus_only_scanned_resource)
+      is_expected.not_to be_able_to(:read, private_scanned_resource)
+      is_expected.not_to be_able_to(:read, pending_scanned_resource)
+      is_expected.not_to be_able_to(:read, metadata_review_scanned_resource)
+      is_expected.not_to be_able_to(:read, final_review_scanned_resource)
+      is_expected.to be_able_to(:read, complete_scanned_resource)
+      is_expected.not_to be_able_to(:read, takedown_scanned_resource)
+      is_expected.to be_able_to(:read, flagged_scanned_resource)
+      is_expected.to be_able_to(:download, image_editor_file)
+      is_expected.not_to be_able_to(:file_manager, open_scanned_resource)
+      is_expected.not_to be_able_to(:save_structure, open_scanned_resource)
+      is_expected.not_to be_able_to(:update, open_scanned_resource)
+      is_expected.not_to be_able_to(:create, ScannedResource.new)
+      is_expected.to be_able_to(:create, FileSet.new)
+      is_expected.not_to be_able_to(:destroy, image_editor_file)
+      is_expected.to be_able_to(:destroy, ephemera_editor_file)
+      is_expected.not_to be_able_to(:destroy, pending_scanned_resource)
+
+      is_expected.to be_able_to(:create, EphemeraBox.new)
+      is_expected.to be_able_to(:create, EphemeraFolder.new)
+      is_expected.to be_able_to(:read, ephemera_folder)
+      is_expected.to be_able_to(:update, ephemera_folder)
+      is_expected.to be_able_to(:destroy, ephemera_folder)
+      is_expected.to be_able_to(:read, other_ephemera_folder)
+      is_expected.to be_able_to(:update, other_ephemera_folder)
+      is_expected.to be_able_to(:destroy, other_ephemera_folder)
+
+      is_expected.not_to be_able_to(:create, Role.new)
+      is_expected.not_to be_able_to(:destroy, role)
+      is_expected.not_to be_able_to(:complete, pending_scanned_resource)
+      is_expected.not_to be_able_to(:destroy, complete_scanned_resource)
+      is_expected.not_to be_able_to(:destroy, admin_file)
+
+      is_expected.to be_able_to(:create, EphemeraTemplate.new)
+      is_expected.to be_able_to(:read, EphemeraTemplate.new)
+      is_expected.to be_able_to(:update, EphemeraTemplate.new)
+      is_expected.to be_able_to(:destroy, EphemeraTemplate.new)
     }
   end
 

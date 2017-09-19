@@ -17,6 +17,7 @@ class ManifestBuilder
     private
 
       def see_also
+        return figgy_rdf_hash unless resource.respond_to?(:source_metadata_identifier)
         source_metadata_hash.blank? ? figgy_rdf_hash : [figgy_rdf_hash, source_metadata_hash]
       end
 
