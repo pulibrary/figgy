@@ -21,6 +21,9 @@ RSpec.describe EphemeraTermDecorator do
   it 'exposes the title as the label' do
     expect(resource.decorate.title).to eq resource.decorate.label
   end
+  it 'exposes the label when cast to a string' do
+    expect(resource.decorate.to_s).to eq resource.decorate.label
+  end
   context 'when a child of a vocabulary' do
     let(:vocab) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'test parent vocabulary') }
     let(:resource) do

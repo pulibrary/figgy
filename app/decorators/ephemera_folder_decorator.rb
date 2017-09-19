@@ -88,10 +88,6 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     super.first
   end
 
-  def genre
-    super.first
-  end
-
   def rendered_state
     ControlledVocabulary.for(:state_folder_workflow).badge(state)
   end
@@ -99,4 +95,36 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   def state
     super.first
   end
+
+  def genre
+    controlled_value_for(super.first)
+  end
+
+  def geo_subject
+    super.map { |value| controlled_value_for(value) }
+  end
+
+  def geographic_origin
+    super.map { |value| controlled_value_for(value) }
+  end
+
+  def language
+    controlled_value_for(super.first)
+  end
+
+  def subject
+    controlled_value_for(super.first)
+  end
+
+  private
+
+    def find_resource(resource_id)
+      query_service.find_by(id: resource_id).decorate
+    rescue
+      resource_id
+    end
+
+    def controlled_value_for(value)
+      value.present? ? find_resource(value) : value
+    end
 end

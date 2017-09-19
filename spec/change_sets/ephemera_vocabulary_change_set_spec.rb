@@ -13,18 +13,12 @@ RSpec.describe EphemeraVocabularyChangeSet do
         expect(change_set).not_to be_valid
       end
     end
-    context "when given a bad value" do
-      it "is invalid" do
-        change_set.validate(value: nil)
-        expect(change_set).not_to be_valid
-      end
-    end
   end
 
   describe "#primary_terms" do
-    it 'includes the label, value, the definition, and the vocabulary' do
+    it 'includes the label, URI, the definition, and the vocabulary' do
       expect(change_set.primary_terms).to include :label
-      expect(change_set.primary_terms).to include :value
+      expect(change_set.primary_terms).to include :uri
       expect(change_set.primary_terms).to include :definition
       expect(change_set.primary_terms).to include :member_of_vocabulary_id
     end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class EphemeraVocabularyDecorator < Valkyrie::ResourceDecorator
-  self.display_attributes = [:label, :value, :definition, :categories, :terms]
+  self.display_attributes = [:label, :uri, :definition, :categories, :terms]
   delegate :query_service, to: :metadata_adapter
 
   def to_s

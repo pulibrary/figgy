@@ -1,10 +1,10 @@
 <% if @geo_subject.present? %>
-  <%= f.input :language,
+  <%= f.input :geo_subject,
               label: 'Geo subject',
               as: :select,
               collection: @geo_subject,
               label_method: :label,
-              value_method: :uri,
+              value_method: :id,
               input_html: { multiple: f.object.multiple?(key) },
               required: f.object.required?(key) %>
 <% else %>

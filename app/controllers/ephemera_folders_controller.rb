@@ -54,6 +54,10 @@ class EphemeraFoldersController < ApplicationController
     find_resource(params[:id])
   end
 
+  def parent_resource
+    find_resource(params[:parent_id])
+  end
+
   def change_set
     @change_set ||= change_set_class.new(resource)
   end
@@ -63,7 +67,7 @@ class EphemeraFoldersController < ApplicationController
   end
 
   def ephemera_box
-    @ephemera_box ||= find_resource(params[:parent_id]).decorate
+    @ephemera_box ||= params[:parent_id] ? parent_resource.decorate : resource.decorate.ephemera_box
   rescue => e
     Rails.logger.warn e
     nil

@@ -1,18 +1,17 @@
 <% if @subject.present? %>
-  <%= f.input :language,
+  <%= f.input :subject,
               label: 'Subject',
               as: :grouped_select,
               collection: @subject,
               group_method: :terms,
               group_label_method: :label,
               label_method: :label,
-              value_method: :uri,
-              input_html: {
-                multiple: f.object.multiple?(key),
-                data: {
-                  live_search: true
-                }
-              },
+              value_method: :id,
+              input_html: { multiple: f.object.multiple?(key),
+                            data: {
+                              live_search: true
+                            }
+                          },
               required: f.object.required?(key) %>
 <% else %>
   <% if f.object.multiple? key %>

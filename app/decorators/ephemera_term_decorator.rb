@@ -3,6 +3,10 @@ class EphemeraTermDecorator < Valkyrie::ResourceDecorator
   self.display_attributes = [:label, :uri, :code, :tgm_label, :lcsh_label, :vocabulary]
   delegate :query_service, to: :metadata_adapter
 
+  def to_s
+    label
+  end
+
   def title
     label
   end
