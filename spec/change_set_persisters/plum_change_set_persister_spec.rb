@@ -271,18 +271,33 @@ RSpec.describe PlumChangeSetPersister do
     context "with member resources and file sets" do
       let(:resource2) { FactoryGirl.create_for_repository(:complete_private_scanned_resource) }
       it "propagates the workflow state" do
-        resource = FactoryGirl.build(:scanned_resource, read_groups: [], state: 'open')
+        resource = FactoryGirl.build(:scanned_resource, read_groups: [], state: 'pending')
         resource.member_ids = [resource2.id]
         adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
         resource = adapter.persister.save(resource: resource)
 
         change_set = change_set_class.new(resource)
-        change_set.validate(state: 'open')
+        change_set.validate(state: 'pending')
         change_set.sync
 
         output = change_set_persister.save(change_set: change_set)
         members = query_service.find_members(resource: output)
-        expect(members.first.state).to eq ['open']
+        expect(members.first.state).to eq ['pending']
+      end
+    end
+    context "with boxes and folders" do
+      let(:change_set_class) { EphemeraBoxChangeSet }
+      it "doesn't overwrite the folder workflow state" do
+        folder = FactoryGirl.create_for_repository(:ephemera_folder)
+        box = FactoryGirl.create_for_repository(:ephemera_box, member_ids: folder.id)
+
+        change_set = change_set_class.new(box)
+        change_set.validate(state: 'ready_to_ship')
+        change_set.sync
+
+        output = change_set_persister.save(change_set: change_set)
+        members = query_service.find_members(resource: output)
+        expect(members.first.state).not_to eq ['ready_to_ship']
       end
     end
   end
