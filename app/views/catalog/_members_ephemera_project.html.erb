@@ -52,6 +52,7 @@
         <tr>
           <td><%= template.template_label %></td>
           <td>
+            <%= link_to "Delete", ephemera_project_template_path(ephemera_project_id: resource.id, id: template.id), method: :delete, class: 'btn btn-danger', data: { confirm: 'Delete this template?' } %>
             <!--'Add Delete'-->
           </td>
         </tr>

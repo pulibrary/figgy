@@ -10,8 +10,12 @@ module Valhalla
     end
 
     def new
-      @change_set = change_set_class.new(resource_class.new, append_id: params[:parent_id]).prepopulate!
+      @change_set = change_set_class.new(new_resource, append_id: params[:parent_id]).prepopulate!
       authorize! :create, resource_class
+    end
+
+    def new_resource
+      resource_class.new
     end
 
     def create
@@ -23,10 +27,14 @@ module Valhalla
         change_set_persister.buffer_into_index do |buffered_changeset_persister|
           obj = buffered_changeset_persister.save(change_set: @change_set)
         end
-        redirect_to contextual_path(obj, @change_set).show
+        after_create_success(obj, @change_set)
       else
         render :new
       end
+    end
+
+    def after_create_success(obj, change_set)
+      redirect_to contextual_path(obj, change_set).show
     end
 
     def destroy
@@ -36,6 +44,10 @@ module Valhalla
         persist.delete(change_set: @change_set)
       end
       flash[:alert] = "Deleted #{@change_set.resource}"
+      after_delete_success
+    end
+
+    def after_delete_success
       redirect_to root_path
     end
 

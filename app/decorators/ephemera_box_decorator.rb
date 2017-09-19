@@ -30,7 +30,21 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
   end
 
   def ephemera_project
-    @ephemera_box ||= query_service.find_parents(resource: model).to_a.first.try(:decorate)
+    @ephemera_box ||= query_service.find_parents(resource: model).to_a.first.try(:decorate) || NullProject.new
+  end
+
+  class NullProject
+    def header
+      nil
+    end
+
+    def templates
+      []
+    end
+
+    def nil?
+      true
+    end
   end
 
   def metadata_adapter

@@ -16,7 +16,7 @@ class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
   end
 
   def templates
-    @templates ||= members.select { |r| r.is_a?(EphemeraTemplate) }.map(&:decorate).to_a
+    @templates ||= query_service.find_inverse_references_by(resource: self, property: :parent_id).map(&:decorate).to_a
   end
 
   def metadata_adapter

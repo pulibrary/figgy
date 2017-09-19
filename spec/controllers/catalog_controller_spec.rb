@@ -269,6 +269,7 @@ RSpec.describe CatalogController do
         get :show, params: { id: "id-#{resource.id}" }
 
         expect(response.body).to have_content "Review and Approval"
+        expect(response.body).to have_link "Create New Folder Template"
       end
     end
     context "when rendered for a user" do

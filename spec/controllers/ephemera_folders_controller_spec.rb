@@ -51,11 +51,17 @@ RSpec.describe EphemeraFoldersController do
       let(:user) { FactoryGirl.create(:admin) }
       render_views
       it "has a form for creating ephemera folders" do
-        FactoryGirl.create_for_repository(:ephemera_folder)
-
         get :new
         expect(response.body).to have_field "Folder number"
         expect(response.body).to have_button "Save"
+      end
+      it "can use a passed template ID to pre-generate fields" do
+        template = FactoryGirl.create_for_repository(:template, nested_properties: [EphemeraFolder.new(language: "Test")])
+        FactoryGirl.create_for_repository(:ephemera_folder)
+
+        get :new, params: { template_id: template.id.to_s }
+
+        expect(response.body).to have_field "Language", with: "Test"
       end
     end
   end
