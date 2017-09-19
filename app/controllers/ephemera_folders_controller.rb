@@ -10,10 +10,21 @@ class EphemeraFoldersController < ApplicationController
   )
   before_action :load_collections, only: [:new, :edit]
 
+  def after_create_success(obj, _change_set)
+    if params[:commit] == "Save and Create Another"
+      redirect_to parent_new_ephemera_box_path(parent_id: resource_params[:append_id], create_another: obj.id.to_s)
+    else
+      super
+    end
+  end
+
   def new_resource
     if params[:template_id]
       template = find_resource(params[:template_id])
       template.nested_properties.first
+    elsif params[:create_another]
+      resource = find_resource(params[:create_another])
+      resource.new(id: nil, created_at: nil, updated_at: nil)
     else
       resource_class.new
     end
