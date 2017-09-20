@@ -73,4 +73,10 @@ RSpec.describe TikaFileCharacterizationService do
     new_file_node = described_class.new(file_node: t_file_node, persister: persister).characterize(save: false)
     expect(new_file_node.original_file.checksum).not_to be_empty
   end
+
+  describe "#valid?" do
+    it "returns true" do
+      expect(described_class.new(file_node: valid_file_set, persister: persister).valid?).to be true
+    end
+  end
 end
