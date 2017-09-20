@@ -63,6 +63,13 @@ RSpec.describe EphemeraFoldersController do
 
         expect(response.body).to have_field "Language", with: "Test"
       end
+      it "can be passed a previously created record to pre-generate fields" do
+        record = FactoryGirl.create_for_repository(:ephemera_folder, language: "Test")
+
+        get :new, params: { create_another: record.id.to_s }
+
+        expect(response.body).to have_field "Language", with: "Test"
+      end
     end
   end
 
@@ -134,6 +141,12 @@ RSpec.describe EphemeraFoldersController do
       expect(response.location).to start_with "http://test.host/catalog/"
       id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
       expect(find_resource(id).folder_number).to contain_exactly "one"
+    end
+    it "can save and create another" do
+      box = FactoryGirl.create_for_repository(:ephemera_box)
+      post :create, params: { commit: "Save and Create Another", ephemera_folder: valid_params.merge(append_id: box.id) }
+      expect(response).to be_redirect
+      expect(response.location).to start_with "http://test.host/concern/ephemera_boxes/#{box.id}/ephemera_folders/new?create_another"
     end
     context "when something bad goes wrong" do
       it "doesn't persist anything at all when it's solr erroring" do

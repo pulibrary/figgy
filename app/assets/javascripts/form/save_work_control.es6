@@ -45,6 +45,13 @@ export default class SaveWorkControl {
    *
    */
   preventSubmitIfAlreadyInProgress() {
+    let master = this
+    this.saveButton.on('click', function(evt) {
+      if (master.isValid()) {
+        let input = $("<input type='hidden' />").attr("name", $(this)[0].name).attr("value", $(this)[0].value);
+        $(this).closest('form').append(input);
+      }
+    })
     this.form.on('submit', (evt) => {
       if (this.isValid())
         this.saveButton.prop("disabled", true);
