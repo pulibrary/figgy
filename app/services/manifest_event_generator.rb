@@ -25,11 +25,17 @@ class ManifestEventGenerator
 
   private
 
+    def manifest_url(record)
+      helper.polymorphic_url([:manifest, record])
+    rescue
+      ''
+    end
+
     def message(type, record)
       {
         "id" => record ? record.id.to_s : nil,
         "event" => type,
-        "manifest_url" => helper.polymorphic_url([:manifest, record])
+        "manifest_url" => manifest_url(record)
       }
     end
 

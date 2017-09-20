@@ -7,19 +7,18 @@ RSpec.describe PlumChangeSetPersister do
   subject(:change_set_persister) do
     described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter)
   end
+
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:persister) { adapter.persister }
   let(:query_service) { adapter.query_service }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
-  let(:manifest_helper_class) { class_double(ManifestBuilder::ManifestHelper).as_stubbed_const(transfer_nested_constants: true) }
-  let(:manifest_helper) { instance_double(ManifestBuilder::ManifestHelper) }
   let(:change_set_class) { ScannedResourceChangeSet }
   let(:rabbit_connection) { instance_double(MessagingClient, publish: true) }
+
   before do
-    allow(manifest_helper).to receive(:polymorphic_url).and_return('http://test')
-    allow(manifest_helper_class).to receive(:new).and_return(manifest_helper)
     allow(Figgy).to receive(:messaging_client).and_return(rabbit_connection)
   end
+
   it_behaves_like "a Valkyrie::ChangeSetPersister"
 
   context "when a source_metadata_identifier is set for the first time" do
@@ -128,9 +127,10 @@ RSpec.describe PlumChangeSetPersister do
 
   describe "uploading files" do
     let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+
     it "can append files as FileSets", run_real_derivatives: true do
       resource = FactoryGirl.build(:scanned_resource)
-      change_set = change_set_class.new(resource)
+      change_set = change_set_class.new(resource, characterize: false)
       change_set.files = [file]
 
       output = change_set_persister.save(change_set: change_set)
@@ -167,13 +167,15 @@ RSpec.describe PlumChangeSetPersister do
       expect(query_service.find_all.to_a.map(&:class)).to contain_exactly ScannedResource, FileSet
     end
   end
+
   describe "updating files" do
     let(:file1) { fixture_file_upload('files/example.tif', 'image/tiff') }
     let(:file2) { fixture_file_upload('files/holding_locations.json', 'application/json') }
+
     it "can append files as FileSets", run_real_derivatives: true do
       # upload a file
       resource = FactoryGirl.build(:scanned_resource)
-      change_set = change_set_class.new(resource)
+      change_set = change_set_class.new(resource, characterize: false)
       change_set.files = [file1]
       output = change_set_persister.save(change_set: change_set)
       file_set = query_service.find_members(resource: output).first
@@ -190,10 +192,11 @@ RSpec.describe PlumChangeSetPersister do
       updated_file = storage_adapter.find_by(id: updated_file_node.file_identifiers.first)
       expect(updated_file.size).to eq 5600
     end
+
     context 'with a messaging service' do
-      it 'publishes messages for updated file sets' do
+      it 'publishes messages for updated file sets', run_real_derivatives: false do
         resource = FactoryGirl.build(:scanned_resource)
-        change_set = change_set_class.new(resource)
+        change_set = change_set_class.new(resource, characterize: false)
         change_set.files = [file1]
         output = change_set_persister.save(change_set: change_set)
         file_set = query_service.find_members(resource: output).first
@@ -265,15 +268,23 @@ RSpec.describe PlumChangeSetPersister do
         updated_message = {
           "id" => output.id.to_s,
           "event" => "UPDATED",
-          "manifest_url" => 'http://test',
+          "manifest_url" => "http://www.example.com/concern/scanned_resources/#{output.id}/manifest",
           "collection_slugs" => []
         }
-        expect(rabbit_connection).to have_received(:publish).twice.with(updated_message.to_json)
+        expect(rabbit_connection).to have_received(:publish).once.with(updated_message.to_json)
+
+        created_message = {
+          "id" => file_set.id.to_s,
+          "event" => "CREATED",
+          "manifest_url" => "",
+          "collection_slugs" => []
+        }
+        expect(rabbit_connection).to have_received(:publish).twice.with(created_message.to_json)
 
         deleted_message = {
           "id" => file_set.id.to_s,
           "event" => "DELETED",
-          "manifest_url" => 'http://test'
+          "manifest_url" => ''
         }
         expect(rabbit_connection).to have_received(:publish).once.with(deleted_message.to_json)
       end
