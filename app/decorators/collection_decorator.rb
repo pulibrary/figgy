@@ -12,5 +12,6 @@ class CollectionDecorator < Valkyrie::ResourceDecorator
   def parents
     []
   end
+
   alias collections parents
 end

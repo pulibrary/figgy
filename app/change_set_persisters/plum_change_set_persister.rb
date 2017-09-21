@@ -17,15 +17,19 @@ class PlumChangeSetPersister
         PropagateVisibilityAndState
       ],
       after_save: [
-        AppendToParent
+        AppendToParent,
+        PublishMessage::Factory.new(operation: :update)
       ],
       before_delete: [
         CleanupMembership::Factory.new(property: :member_of_collection_ids),
         CleanupMembership::Factory.new(property: :member_ids)
       ],
-      after_delete: [],
+      after_delete: [
+        PublishMessage::Factory.new(operation: :delete)
+      ],
       after_commit: [
-        Characterize
+        Characterize,
+        PublishMessage::Factory.new(operation: :create)
       ]
     }
   end
@@ -92,11 +96,11 @@ class PlumChangeSetPersister
       yield self.class.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter, transaction: true, characterize: @characterize, handlers: handlers)
     end
 
-    private
+    def messenger
+      @messenger ||= ManifestEventGenerator.new(Figgy.messaging_client)
+    end
 
-      def messenger
-        @messenger ||= ManifestEventGenerator.new(Figgy.messaging_client)
-      end
+    private
 
       def before_save(change_set:)
         registered_handlers.fetch(:before_save, []).each do |handler|
@@ -104,22 +108,10 @@ class PlumChangeSetPersister
         end
       end
 
-      # Refactor into a handler
-      def publish_message_update(updated_resource:)
-        messenger.record_updated(updated_resource)
-      end
-
       def after_save(change_set:, updated_resource:)
         registered_handlers.fetch(:after_save, []).each do |handler|
           handler.new(change_set_persister: self, change_set: change_set, post_save_resource: updated_resource).run
         end
-        # Refactor into a handler
-        publish_message_update(updated_resource: updated_resource)
-      end
-
-      # Refactor into a handler
-      def publish_message_create(created_resource:)
-        messenger.record_created(created_resource)
       end
 
       def before_delete(change_set:)
@@ -128,25 +120,16 @@ class PlumChangeSetPersister
         end
       end
 
-      # Refactor into a handler
-      def publish_message_delete(deleted_resource:)
-        messenger.record_deleted(deleted_resource)
-      end
-
       def after_delete(change_set:)
         registered_handlers.fetch(:after_delete, []).each do |handler|
           handler.new(change_set_persister: self, change_set: change_set).run
         end
-        # Refactor into a handler
-        publish_message_delete(deleted_resource: change_set.resource)
       end
 
       def after_commit
         registered_handlers.fetch(:after_commit, []).each do |handler|
           handler.new(change_set_persister: self, change_set: nil).run
         end
-        # Refactor into handlers
-        created_file_sets.each { |created_file_set| publish_message_create(created_resource: created_file_set) } unless created_file_sets.blank?
       end
   end
 end
