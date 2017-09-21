@@ -1,0 +1,7 @@
+:terms:
+  - :value: image/jpeg
+    :label: JPEG
+    :code: JPEG
+  - :value: image/tiff
+    :label: TIFF
+    :code: TIFF

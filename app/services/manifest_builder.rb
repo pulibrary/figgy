@@ -23,6 +23,8 @@ class ManifestBuilder
         CollectionNode.new(resource)
       elsif resource.is_a?(IndexCollection)
         IndexCollectionNode.new(resource)
+      elsif resource.is_a?(ScannedMap)
+        ScannedMapNode.new(resource)
       else
         new(resource)
       end
@@ -171,6 +173,18 @@ class ManifestBuilder
     def description
       "All collections which are a part of Plum."
     end
+  end
+
+  class ScannedMapNode < RootNode
+    def leaf_nodes
+      @leaf_nodes ||= members.select { |x| x.instance_of?(FileSet) && geo_image?(x) }
+    end
+
+    private
+
+      def geo_image?(member)
+        ControlledVocabulary.for(:geo_image_format).include?(member.mime_type.first)
+      end
   end
 
   ##
