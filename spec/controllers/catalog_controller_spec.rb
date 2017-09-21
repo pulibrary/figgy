@@ -66,6 +66,19 @@ RSpec.describe CatalogController do
     end
   end
 
+  describe "ScannedMap behavior" do
+    before do
+      sign_in FactoryGirl.create(:admin)
+    end
+    it "displays indexed EphemeraBoxes" do
+      persister.save(resource: FactoryGirl.build(:scanned_map))
+
+      get :index, params: { q: "" }
+
+      expect(assigns(:document_list).length).to eq 1
+    end
+  end
+
   describe "FileMetadata behavior" do
     before do
       sign_in FactoryGirl.create(:admin)
