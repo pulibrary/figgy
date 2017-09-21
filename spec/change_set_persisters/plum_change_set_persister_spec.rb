@@ -13,11 +13,6 @@ RSpec.describe PlumChangeSetPersister do
   let(:query_service) { adapter.query_service }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
   let(:change_set_class) { ScannedResourceChangeSet }
-  let(:rabbit_connection) { instance_double(MessagingClient, publish: true) }
-
-  before do
-    allow(Figgy).to receive(:messaging_client).and_return(rabbit_connection)
-  end
 
   it_behaves_like "a Valkyrie::ChangeSetPersister"
 
@@ -127,6 +122,9 @@ RSpec.describe PlumChangeSetPersister do
 
   describe "uploading files" do
     let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+    let(:change_set_persister) do
+      described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: true)
+    end
 
     it "can append files as FileSets", run_real_derivatives: true do
       resource = FactoryGirl.build(:scanned_resource)
@@ -171,6 +169,9 @@ RSpec.describe PlumChangeSetPersister do
   describe "updating files" do
     let(:file1) { fixture_file_upload('files/example.tif', 'image/tiff') }
     let(:file2) { fixture_file_upload('files/holding_locations.json', 'application/json') }
+    let(:change_set_persister) do
+      described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: false)
+    end
 
     it "can append files as FileSets", run_real_derivatives: true do
       # upload a file
@@ -194,10 +195,20 @@ RSpec.describe PlumChangeSetPersister do
     end
 
     context 'with a messaging service' do
-      it 'publishes messages for updated file sets', run_real_derivatives: false do
+      let(:rabbit_connection) { instance_double(MessagingClient, publish: true) }
+      let(:change_set_persister) do
+        described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: false)
+      end
+
+      before do
+        allow(Figgy).to receive(:messaging_client).and_return(rabbit_connection)
+      end
+
+      it 'publishes messages for updated file sets', run_real_derivatives: false, rabbit_stubbed: true do
         resource = FactoryGirl.build(:scanned_resource)
         change_set = change_set_class.new(resource, characterize: false)
         change_set.files = [file1]
+
         output = change_set_persister.save(change_set: change_set)
         file_set = query_service.find_members(resource: output).first
 
@@ -207,7 +218,7 @@ RSpec.describe PlumChangeSetPersister do
         expected_result = {
           "id" => output.id.to_s,
           "event" => "UPDATED",
-          "manifest_url" => 'http://test',
+          "manifest_url" => "http://www.example.com/concern/scanned_resources/#{output.id}/manifest",
           "collection_slugs" => []
         }
 
@@ -253,10 +264,12 @@ RSpec.describe PlumChangeSetPersister do
       let(:change_set_persister) do
         described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: false)
       end
+
       before do
         allow(Figgy).to receive(:messaging_client).and_return(rabbit_connection)
       end
-      it 'publishes messages for updated file sets', rabbit: true do
+
+      it 'publishes messages for updated file sets', rabbit_stubbed: true do
         resource = FactoryGirl.build(:scanned_resource)
         change_set = change_set_class.new(resource)
         change_set.files = [file1]
