@@ -42,15 +42,12 @@ RSpec.describe ScannedMapsController do
         expect(response.body).to have_field "scanned_map[refresh_remote_metadata]"
         expect(response.body).to have_field "Rights Statement"
         expect(response.body).to have_field "Rights Note"
-        expect(response.body).to have_field "Coverage"
         expect(response.body).to have_field "Local identifier"
-        expect(response.body).to have_field "Holding Location"
         expect(response.body).to have_selector "#scanned_map_append_id[value='#{parent.id}']", visible: false
         expect(response.body).to have_select "Collections", name: "scanned_map[member_of_collection_ids][]", options: [collection.title.first]
         expect(response.body).to have_field "Spatial"
         expect(response.body).to have_field "Temporal"
         expect(response.body).to have_select "Rights Statement", name: "scanned_map[rights_statement]", options: [""] + ControlledVocabulary.for(:rights_statement).all.map(&:label)
-        expect(response.body).to have_select "Holding Location", name: "scanned_map[holding_location]", options: [""] + ControlledVocabulary.for(:holding_location).all.map(&:label)
         expect(response.body).to have_field "Cartographic scale"
         expect(response.body).to have_checked_field "Private"
         expect(response.body).to have_button "Save"

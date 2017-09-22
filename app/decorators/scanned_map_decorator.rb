@@ -1,6 +1,6 @@
-# frozen_string_literal: true
+# frozen_string_literal: false
 class ScannedMapDecorator < Valkyrie::ResourceDecorator
-  self.display_attributes += Schema::Geo.attributes + [:member_of_collections] - [:thumbnail_id, :coverage]
+  self.display_attributes += Schema::Geo.attributes + [:member_of_collections, :rendered_coverage] - [:thumbnail_id, :coverage]
   self.iiif_manifest_attributes = display_attributes + [:title] - \
                                   Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]
   delegate :query_service, to: :metadata_adapter
@@ -47,6 +47,10 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
           I18n.t("valhalla.works.show.attributes.rights_statement.boilerplate").html_safe
         end
     end
+  end
+
+  def rendered_coverage
+    h.bbox_display(coverage)
   end
 
   def iiif_manifest_attributes

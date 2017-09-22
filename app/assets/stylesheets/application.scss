@@ -4,6 +4,9 @@
  *= require jquery-ui/slider
  *= require jqueryui-timepicker-addon
  *= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
+ *= require leaflet
+ *= require Control.Geocoder
+ *= require leaflet-boundingbox
 */
 @charset "utf-8";
 @import 'variables/typography';

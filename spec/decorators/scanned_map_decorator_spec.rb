@@ -22,6 +22,10 @@ RSpec.describe ScannedMapDecorator do
     expect(resource.decorate.rendered_rights_statement).not_to be_empty
     expect(resource.decorate.rendered_rights_statement.first).to match(/#{Regexp.escape('http://rightsstatements.org/vocab/NKC/1.0/')}/)
   end
+  it "exposes markup for rendered coverage" do
+    expect(resource.decorate.rendered_coverage).to match(/#{Regexp.escape('boundingBoxSelector')}/)
+    expect(resource.decorate.rendered_coverage).to match(/#{Regexp.escape('Toggle Map')}/)
+  end
   context "with file sets" do
     let(:file_set) do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
