@@ -154,4 +154,28 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       expect(rendered).to have_selector 'li.sha256', text: '547c81b080eb2d7c09e363a670c46960ac15a6821033263867dd59a31376509c'
     end
   end
+
+  context 'when given a new ScannedMap instance' do
+    context 'when the ScannedMap has members' do
+      let(:child) { FactoryGirl.create_for_repository(:scanned_map, title: 'vol1', rights_statement: 'x') }
+      let(:parent) { FactoryGirl.create_for_repository(:scanned_map, title: 'Mui', rights_statement: 'y', member_ids: [child.id]) }
+      let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: parent) }
+      let(:solr_document) { SolrDocument.new(document) }
+      before do
+        assign :document, solr_document
+        allow(view).to receive(:has_search_parameters?).and_return(false)
+        stub_blacklight_views
+        render
+      end
+
+      it 'shows them' do
+        expect(rendered).to have_selector 'h2', text: 'Members'
+        expect(rendered).to have_selector 'td', text: 'vol1'
+        expect(rendered).to have_selector 'span.label-success', text: 'Open'
+        expect(rendered).not_to have_link href: solr_document_path(child)
+        expect(rendered).to have_link 'View', href: parent_solr_document_path(parent, "id-#{child.id}")
+        expect(rendered).to have_link 'Edit', href: edit_scanned_map_path(child.id)
+      end
+    end
+  end
 end

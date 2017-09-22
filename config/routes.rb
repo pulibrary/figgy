@@ -112,7 +112,7 @@ Rails.application.routes.draw do
         post :browse_everything_files
       end
     end
-    get '/scanned_maps/:parent_id/new', to: 'scanned_map#new', as: :parent_new_scanned_map
+    get '/scanned_maps/:parent_id/new', to: 'scanned_maps#new', as: :parent_new_scanned_map
   end
 
   resources :collections do

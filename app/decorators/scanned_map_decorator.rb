@@ -18,14 +18,20 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
     @members ||= query_service.find_members(resource: model)
   end
 
+  def scanned_map_members
+    @scanned_maps ||= members.select { |r| r.is_a?(ScannedMap) }.map(&:decorate).to_a
+  end
+
   def geo_image_members
     members.select do |member|
+      next unless member.respond_to?(:mime_type)
       ControlledVocabulary.for(:geo_image_format).include?(member.mime_type.first)
     end
   end
 
   def geo_metadata_members
     members.select do |member|
+      next unless member.respond_to?(:mime_type)
       ControlledVocabulary.for(:geo_metadata_format).include?(member.mime_type.first)
     end
   end
@@ -51,6 +57,10 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
 
   def rendered_coverage
     h.bbox_display(coverage)
+  end
+
+  def attachable_objects
+    [ScannedMap]
   end
 
   def iiif_manifest_attributes

@@ -26,6 +26,9 @@ RSpec.describe ScannedMapDecorator do
     expect(resource.decorate.rendered_coverage).to match(/#{Regexp.escape('boundingBoxSelector')}/)
     expect(resource.decorate.rendered_coverage).to match(/#{Regexp.escape('Toggle Map')}/)
   end
+  it "can attach folders" do
+    expect(resource.decorate.attachable_objects).to include ScannedMap
+  end
   context "with file sets" do
     let(:file_set) do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
