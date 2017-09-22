@@ -1,0 +1,4 @@
+<info:fedora/puls:039r5> <http://purl.org/dc/terms/dateSubmitted> "2014-07-19T05:45:52Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<info:fedora/puls:039r5> <http://purl.org/dc/terms/modified> "2014-07-19T05:45:52Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<info:fedora/puls:039r5> <http://purl.org/dc/terms/modified> "2014-07-19T05:45:57Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<info:fedora/puls:039r5> <http://princeton.edu/pulstore/terms/projectLabel> "Latin American Ephemera" .

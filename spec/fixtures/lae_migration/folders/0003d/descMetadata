@@ -1,0 +1,21 @@
+<info:fedora/puls:0003d> <http://princeton.edu/pulstore/terms/earliestCreated> "" .
+<info:fedora/puls:0003d> <http://princeton.edu/pulstore/terms/latestCreated> "" .
+<info:fedora/puls:0003d> <http://purl.org/dc/terms/description> "" .
+<info:fedora/puls:0003d> <http://purl.org/dc/terms/format> "Postcards" .
+<info:fedora/puls:0003d> <http://purl.org/dc/terms/rights> "This digital reproduction is intended to support research, teaching, and private study. Users are responsible for determining any copyright questions." .
+<info:fedora/puls:0003d> <http://princeton.edu/pulstore/terms/sortTitle> "en negro y blanco. del cordobazo al juicio a las juntas." .
+<info:fedora/puls:0003d> <http://purl.org/dc/terms/alternative> "" .
+<info:fedora/puls:0003d> <http://purl.org/dc/terms/title> "En negro y blanco. Del Cordobazo al juicio a las juntas." .
+<info:fedora/puls:0003d> <http://purl.org/dc/terms/publisher> "Museo de la Memoria - Municipalidad de Rosario" .
+<info:fedora/puls:0003d> <http://princeton.edu/pulstore/terms/isPartOfSeries> "" .
+<info:fedora/puls:0003d> <http://purl.org/dc/terms/language> "Spanish" .
+<info:fedora/puls:0003d> <http://purl.org/dc/terms/coverage> "Wonderland" .
+<info:fedora/puls:0003d> <http://purl.org/dc/terms/subject> "Museums" .
+<info:fedora/puls:0003d> <http://purl.org/dc/terms/subject> "Not Found" .
+<info:fedora/puls:0003d> <http://purl.org/dc/terms/subject> "" .
+<info:fedora/puls:0003d> <http://purl.org/dc/terms/creator> "" .
+<info:fedora/puls:0003d> <http://purl.org/dc/terms/contributor> "" .
+<info:fedora/puls:0003d> <http://princeton.edu/pulstore/terms/pageCount> "2"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<info:fedora/puls:0003d> <http://princeton.edu/pulstore/terms/heightInCM> "11"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<info:fedora/puls:0003d> <http://princeton.edu/pulstore/terms/widthInCM> "16"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<info:fedora/puls:0003d> <http://purl.org/dc/terms/created> "2007"^^<http://www.w3.org/2001/XMLSchema#integer> .

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject VERSION="1.1" PID="puls:039r5"
+xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+<foxml:objectProperties>
+<foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="Image 1"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="fedoraAdmin"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2014-07-19T05:45:52.991Z"/>
+<foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2014-07-19T05:45:58.253Z"/>
+</foxml:objectProperties>
+<foxml:datastream ID="AUDIT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="AUDIT.0" LABEL="Audit Trail for this object" CREATED="2014-07-19T05:45:52.991Z" MIMETYPE="text/xml" FORMAT_URI="info:fedora/fedora-system:format/xml.fedora.audit">
+<foxml:xmlContent>
+<audit:auditTrail xmlns:audit="info:fedora/fedora-system:def/audit#">
+<audit:record ID="AUDREC1">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>RELS-EXT</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2014-07-19T05:45:53.226Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC2">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>rightsMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2014-07-19T05:45:53.369Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC3">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2014-07-19T05:45:53.471Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC4">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>descMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2014-07-19T05:45:53.534Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC5">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>masterTechMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2014-07-19T05:45:53.608Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC6">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>masterImage</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2014-07-19T05:45:53.687Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC7">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>pageOcr</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2014-07-19T05:45:55.116Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC8">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyObject</audit:action>
+<audit:componentID></audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2014-07-19T05:45:57.925Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC9">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>RELS-EXT</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2014-07-19T05:45:58.002Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC10">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByReference</audit:action>
+<audit:componentID>provMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2014-07-19T05:45:58.105Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC11">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByReference</audit:action>
+<audit:componentID>descMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2014-07-19T05:45:58.181Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC12">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>deliverableImage</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2014-07-19T05:45:58.253Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+</audit:auditTrail>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="DC1.0" LABEL="Dublin Core Record for this object" CREATED="2014-07-19T05:45:52.991Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="370">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>Image 1</dc:title>
+  <dc:identifier>puls:039r5</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="RELS-EXT.0" LABEL="Fedora Object-to-Object Relationship Metadata" CREATED="2014-07-19T05:45:53.226Z" MIMETYPE="application/rdf+xml" SIZE="555">
+<foxml:xmlContent>
+<rdf:RDF xmlns:ns0="http://princeton.edu/pulstore/terms/" xmlns:ns1="info:fedora/fedora-system:def/relations-external#" xmlns:ns2="info:fedora/fedora-system:def/model#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="info:fedora/puls:039r5">
+    <ns0:isPartOfProject rdf:resource="info:fedora/puls:0005p"></ns0:isPartOfProject>
+    <ns2:hasModel rdf:resource="info:fedora/afmodel:PulStore_Page"></ns2:hasModel>
+    <ns1:isPartOf rdf:resource="info:fedora/puls:0003d"></ns1:isPartOf>
+  </rdf:Description>
+</rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="RELS-EXT.1" LABEL="Fedora Object-to-Object Relationship Metadata" CREATED="2014-07-19T05:45:58.002Z" MIMETYPE="application/rdf+xml" SIZE="555">
+<foxml:xmlContent>
+<rdf:RDF xmlns:ns0="http://princeton.edu/pulstore/terms/" xmlns:ns1="info:fedora/fedora-system:def/relations-external#" xmlns:ns2="info:fedora/fedora-system:def/model#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="info:fedora/puls:039r5">
+    <ns0:isPartOfProject rdf:resource="info:fedora/puls:0005p"></ns0:isPartOfProject>
+    <ns2:hasModel rdf:resource="info:fedora/afmodel:PulStore_Page"></ns2:hasModel>
+    <ns1:isPartOf rdf:resource="info:fedora/puls:0003d"></ns1:isPartOf>
+  </rdf:Description>
+</rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="rightsMetadata.0" LABEL="" CREATED="2014-07-19T05:45:53.369Z" MIMETYPE="text/xml" SIZE="764">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="puls:039r5+rightsMetadata+rightsMetadata.0"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="provMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="provMetadata.0" LABEL="" CREATED="2014-07-19T05:45:53.471Z" MIMETYPE="text/plain" SIZE="371">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="puls:039r5+provMetadata+provMetadata.0"/>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="provMetadata.1" LABEL="" CREATED="2014-07-19T05:45:58.105Z" MIMETYPE="text/plain" SIZE="502">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="puls:039r5+provMetadata+provMetadata.1"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="descMetadata.0" LABEL="" CREATED="2014-07-19T05:45:53.534Z" MIMETYPE="text/plain" SIZE="123">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="puls:039r5+descMetadata+descMetadata.0"/>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="descMetadata.1" LABEL="" CREATED="2014-07-19T05:45:58.181Z" MIMETYPE="text/plain" SIZE="123">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="puls:039r5+descMetadata+descMetadata.1"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="masterTechMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="masterTechMetadata.0" LABEL="" CREATED="2014-07-19T05:45:53.608Z" MIMETYPE="text/xml" SIZE="4155">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="puls:039r5+masterTechMetadata+masterTechMetadata.0"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="masterImage" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="masterImage.0" LABEL="File Datastream" CREATED="2014-07-19T05:45:53.687Z" MIMETYPE="image/tiff" SIZE="4719024">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="puls:039r5+masterImage+masterImage.0"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="pageOcr" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="pageOcr.0" LABEL="File Datastream" CREATED="2014-07-19T05:45:55.116Z" MIMETYPE="application/xml" SIZE="1584">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="puls:039r5+pageOcr+pageOcr.0"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="deliverableImage" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="deliverableImage.0" LABEL="" CREATED="2014-07-19T05:45:58.253Z" MIMETYPE="image/jp2" SIZE="1408432">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="puls:039r5+deliverableImage+deliverableImage.0"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+</foxml:digitalObject>

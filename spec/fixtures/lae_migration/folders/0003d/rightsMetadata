@@ -1,0 +1,32 @@
+<rightsMetadata xmlns="http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1" version="0.1">
+  <copyright>
+    <human type="title"/>
+    <human type="description"/>
+    <machine type="uri"/>
+  </copyright>
+  <access type="discover">
+    <human/>
+    <machine>
+      
+      
+    <group>all_project_discover</group><group>lae_project_discover</group></machine>
+  </access>
+  <access type="read">
+    <human/>
+    <machine>
+      
+      
+    <group>all_project_readers</group><group>lae_project_readers</group></machine>
+  </access>
+  <access type="edit">
+    <human/>
+    <machine>
+      
+      
+    <group>all_project_writers</group><group>lae_project_writers</group></machine>
+  </access>
+  <embargo>
+    <human/>
+    <machine/>
+  </embargo>
+</rightsMetadata>
