@@ -97,6 +97,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   end
 
   def genre
+    return super if super.blank?
     controlled_value_for(super.first)
   end
 
@@ -105,26 +106,28 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   end
 
   def geographic_origin
-    super.map { |value| controlled_value_for(value) }
+    return super if super.blank?
+    controlled_value_for(super.first)
   end
 
   def language
-    controlled_value_for(super.first)
+    super.map { |value| controlled_value_for(value) }
   end
 
   def subject
-    controlled_value_for(super.first)
+    super.map { |value| controlled_value_for(value) }
   end
 
   private
 
     def find_resource(resource_id)
       query_service.find_by(id: resource_id).decorate
-    rescue
+    rescue Valkyrie::Persistence::ObjectNotFoundError
+      Rails.logger.warn "Failed to find the resource #{resource_id}"
       resource_id
     end
 
     def controlled_value_for(value)
-      value.present? ? find_resource(value) : value
+      value.present? && value.is_a?(Valkyrie::ID) ? find_resource(value) : value
     end
 end

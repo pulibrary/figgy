@@ -12,18 +12,18 @@
     </thead>
     <tbody>
     <% unless decorated_resource.folders.empty? %>
-      <% decorated_resource.folders.each do |volume| %>
-        <% volume_url = parent_solr_document_path("#{resource.id}", "id-#{volume.id}") %>
+      <% decorated_resource.folders.each do |folder| %>
+        <% folder_url = parent_solr_document_path("#{resource.id}", "id-#{folder.id}") %>
         <tr>
-          <td class="folder_number"><%= link_to volume.folder_number, volume_url %></td>
-          <td><%= volume.rendered_state %></td>
-          <td><%= volume.header %></td>
-          <td class="barcode"><%= volume.barcode %></td>
-          <td class="genre"><%= volume.genre %></td>
+          <td class="folder_number"><%= link_to folder.folder_number, folder_url %></td>
+          <td><%= folder.rendered_state %></td>
+          <td><%= folder.header %></td>
+          <td class="barcode"><%= folder.barcode %></td>
+          <td class="genre"><%= folder.genre %></td>
           <td>
-            <%= link_to 'View', volume_url, class: 'btn btn-default' %>
-            <%= link_to 'Edit', main_app.polymorphic_path([:edit, volume]), class: 'btn btn-default' %>
-            <%= link_to "Delete", main_app.polymorphic_path([volume]), class: 'btn btn-danger',
+            <%= link_to 'View', folder_url, class: 'btn btn-default' %>
+            <%= link_to 'Edit', main_app.polymorphic_path([:edit, folder]), class: 'btn btn-default' %>
+            <%= link_to "Delete", main_app.polymorphic_path([folder]), class: 'btn btn-danger',
                                   data: { confirm: "Delete this #{resource.human_readable_type}?" },
                                   method: :delete %>
           </td>

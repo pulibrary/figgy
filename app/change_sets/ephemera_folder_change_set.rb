@@ -9,21 +9,21 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   property :sort_title, required: false
   property :alternative_title, multiple: true, required: false
   property :language, multiple: true, required: true
-  property :genre, multiple: false, required: true
+  property :genre, multiple: false, required: true, type: Valkyrie::Types::ID
   property :width, multiple: false, required: true
   property :height, multiple: false, required: true
   property :page_count, multiple: false, required: true
   property :series, multiple: false, required: false
-  property :creator, required: false
+  property :creator, multiple: false, required: false
   property :contributor, multiple: true, required: false
   property :publisher, multiple: true, required: false
-  property :geographic_origin, required: false
+  property :geographic_origin, multiple: false, required: false, type: Valkyrie::Types::ID
   property :subject, multiple: true, required: false
   property :geo_subject, multiple: true, required: false
-  property :description, required: false
-  property :date_created, required: false
-  property :dspace_url, required: false
-  property :source_url, required: false
+  property :description, multiple: false, required: false
+  property :date_created, multiple: false, required: false
+  property :dspace_url, multiple: false, required: false
+  property :source_url, multiple: false, required: false
   property :rights_statement, multiple: false, required: true, default: "http://rightsstatements.org/vocab/NKC/1.0/", type: ::Types::URI
   property :rights_note, multiple: false, required: false
   property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID
@@ -80,4 +80,51 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
       end
     end
   end
+
+  def genre=(genre_value)
+    return super(genre_value) if genre_value.blank?
+    super(coerce_string_value(genre_value))
+  end
+
+  def geo_subject=(geo_subject_values)
+    return super(geo_subject_values) if geo_subject_values.blank?
+    super(geo_subject_values.map { |geo_subject_value| coerce_string_value(geo_subject_value) })
+  end
+
+  def geographic_origin=(geographic_origin_value)
+    return super(geographic_origin_value) if geographic_origin_value.blank?
+    super(coerce_string_value(geographic_origin_value))
+  end
+
+  def language=(language_values)
+    return super(language_values) if language_values.blank?
+    super(language_values.map { |language_value| coerce_string_value(language_value) })
+  end
+
+  def subject=(subject_values)
+    return super(subject_values) if subject_values.blank?
+    super(subject_values.map { |subject_value| coerce_string_value(subject_value) })
+  end
+
+  private
+
+    def metadata_adapter
+      Valkyrie.config.metadata_adapter
+    end
+    delegate :query_service, to: :metadata_adapter
+
+    def valid_id?(value)
+      query_service.find_by(id: Valkyrie::ID.new(value))
+      true
+    rescue Valkyrie::Persistence::ObjectNotFoundError
+      false
+    end
+
+    def coerce_string_value(value)
+      if value.is_a?(String) && valid_id?(value)
+        Valkyrie::ID.new(value)
+      else
+        value
+      end
+    end
 end

@@ -9,7 +9,7 @@ class EphemeraFolder < Valhalla::Resource
   attribute :sort_title, Valkyrie::Types::Set
   attribute :alternative_title, Valkyrie::Types::Set
   attribute :language, Valkyrie::Types::Set
-  attribute :genre, Valkyrie::Types::Set
+  attribute :genre
   attribute :width, Valkyrie::Types::Set
   attribute :height, Valkyrie::Types::Set
   attribute :page_count, Valkyrie::Types::Set
@@ -22,7 +22,7 @@ class EphemeraFolder < Valhalla::Resource
   attribute :creator, Valkyrie::Types::Set
   attribute :contributor, Valkyrie::Types::Set
   attribute :publisher, Valkyrie::Types::Set
-  attribute :geographic_origin, Valkyrie::Types::Set
+  attribute :geographic_origin
   attribute :subject, Valkyrie::Types::Set
   attribute :geo_subject, Valkyrie::Types::Set
   attribute :description, Valkyrie::Types::Set

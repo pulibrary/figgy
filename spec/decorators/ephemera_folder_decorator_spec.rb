@@ -24,6 +24,22 @@ RSpec.describe EphemeraFolderDecorator do
     expect(resource.decorate.rendered_rights_statement).not_to be_empty
     expect(resource.decorate.rendered_rights_statement.first).to match(/#{Regexp.escape('http://rightsstatements.org/vocab/NKC/1.0/')}/)
   end
+  context 'with controlled vocabulary terms' do
+    let(:term) { FactoryGirl.create_for_repository(:ephemera_term) }
+    let(:resource) { FactoryGirl.build(:ephemera_folder, geographic_origin: term.id) }
+    it 'exposes values for the geographic origin as controlled terms' do
+      expect(resource.decorate.geographic_origin).to be_a EphemeraTerm
+      expect(resource.decorate.geographic_origin.id).to eq term.id
+    end
+    context 'which have been deleted' do
+      let(:resource) { FactoryGirl.build(:ephemera_folder, geographic_origin: Valkyrie::ID.new('no-exist')) }
+
+      it 'exposes values for the geographic origin as controlled terms' do
+        allow(Rails.logger).to receive(:warn).with("Failed to find the resource no-exist")
+        expect(resource.decorate.geographic_origin.id).to eq 'no-exist'
+      end
+    end
+  end
   context 'with file sets' do
     let(:file_set) do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
