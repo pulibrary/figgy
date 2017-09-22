@@ -260,17 +260,32 @@ RSpec.describe ScannedMapsController do
     query_service.find_by(id: Valkyrie::ID.new(id.to_s))
   end
 
-  context "when an admin" do
+  describe "GET /scanned_maps/:id/file_manager" do
     let(:user) { FactoryGirl.create(:admin) }
-    describe "GET /scanned_maps/:id/file_manager" do
-      it "sets the record and children variables" do
-        child = FactoryGirl.create_for_repository(:file_set)
-        parent = FactoryGirl.create_for_repository(:scanned_map, member_ids: child.id)
 
+    context "when an admin and with an image file" do
+      let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: 'image/tiff') }
+
+      it "sets the record and children variables" do
+        child = FactoryGirl.create_for_repository(:file_set, file_metadata: [file_metadata])
+        parent = FactoryGirl.create_for_repository(:scanned_map, member_ids: child.id)
         get :file_manager, params: { id: parent.id }
 
         expect(assigns(:change_set).id).to eq parent.id
         expect(assigns(:children).map(&:id)).to eq [child.id]
+      end
+    end
+
+    context "when an admin and with an fgdc metadata file" do
+      let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: 'application/xml; schema=fgdc') }
+
+      it "sets the record and metadata children variables" do
+        child = FactoryGirl.create_for_repository(:file_set, file_metadata: [file_metadata])
+        parent = FactoryGirl.create_for_repository(:scanned_map, member_ids: child.id)
+        get :file_manager, params: { id: parent.id }
+
+        expect(assigns(:change_set).id).to eq parent.id
+        expect(assigns(:metadata_children).map(&:id)).to eq [child.id]
       end
     end
   end

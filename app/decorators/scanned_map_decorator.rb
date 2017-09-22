@@ -18,6 +18,18 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
     @members ||= query_service.find_members(resource: model)
   end
 
+  def geo_image_members
+    members.select do |member|
+      ControlledVocabulary.for(:geo_image_format).include?(member.mime_type.first)
+    end
+  end
+
+  def geo_metadata_members
+    members.select do |member|
+      ControlledVocabulary.for(:geo_metadata_format).include?(member.mime_type.first)
+    end
+  end
+
   def metadata_adapter
     Valkyrie.config.metadata_adapter
   end

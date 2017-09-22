@@ -56,6 +56,9 @@
   .panel > form {
     @extend .panel-default;
   }
+  .resource-type-heading {
+    padding: 0 15px;
+  }
 }
 #file-manager-extra-tools {
   @extend .clearfix;
@@ -65,4 +68,7 @@
     margin-top: 0;
   }
   display: none;
+}
+.non-selectable-panel {
+  @extend .panel;
 }
