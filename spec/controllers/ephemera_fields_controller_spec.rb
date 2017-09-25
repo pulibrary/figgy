@@ -36,12 +36,14 @@ RSpec.describe EphemeraFieldsController do
     let(:user) { FactoryGirl.create(:admin) }
     let(:valid_params) do
       {
-        name: ['Field 1']
+        field_name: ['test field'],
+        member_of_vocabulary_id: ['test vocabulary id']
       }
     end
     let(:invalid_params) do
       {
-        name: nil
+        field_name: nil,
+        member_of_vocabulary_id: nil
       }
     end
     context "when not an admin" do
@@ -56,7 +58,7 @@ RSpec.describe EphemeraFieldsController do
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/catalog/"
       id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
-      expect(find_resource(id).name).to contain_exactly "Field 1"
+      expect(find_resource(id).field_name).to contain_exactly "test field"
     end
     context "when something bad goes wrong" do
       it "doesn't persist anything at all when it's solr erroring" do
@@ -128,7 +130,7 @@ RSpec.describe EphemeraFieldsController do
         ephemera_field = FactoryGirl.create_for_repository(:ephemera_field)
         get :edit, params: { id: ephemera_field.id.to_s }
 
-        expect(response.body).to have_field "Name", with: ephemera_field.name.first
+        expect(response.body).to have_field "Name", with: '1'
         expect(response.body).to have_button "Save"
       end
     end
@@ -141,7 +143,9 @@ RSpec.describe EphemeraFieldsController do
       it "throws a CanCan::AccessDenied error" do
         ephemera_field = FactoryGirl.create_for_repository(:ephemera_field)
 
-        expect { patch :update, params: { id: ephemera_field.id.to_s, ephemera_field: { name: ["Two"] } } }.to raise_error CanCan::AccessDenied
+        expect do
+          patch :update, params: { id: ephemera_field.id.to_s, ephemera_field: { field_name: ["test field2"], member_of_vocabulary_id: ['test vocabulary id'] } }
+        end.to raise_error CanCan::AccessDenied
       end
     end
     context "when a ephemera field doesn't exist" do
@@ -152,18 +156,18 @@ RSpec.describe EphemeraFieldsController do
     context "when it does exist" do
       it "saves it and redirects" do
         ephemera_field = FactoryGirl.create_for_repository(:ephemera_field)
-        patch :update, params: { id: ephemera_field.id.to_s, ephemera_field: { name: ["Two"] } }
+        patch :update, params: { id: ephemera_field.id.to_s, ephemera_field: { field_name: ["test field2"], member_of_vocabulary_id: ['test vocabulary id'] } }
 
         expect(response).to be_redirect
         expect(response.location).to eq "http://test.host/catalog/id-#{ephemera_field.id}"
         id = response.location.gsub("http://test.host/catalog/id-", "")
         reloaded = find_resource(id)
 
-        expect(reloaded.name).to eq ["Two"]
+        expect(reloaded.field_name).to eq ["test field2"]
       end
       it "renders the form if it fails validations" do
         ephemera_field = FactoryGirl.create_for_repository(:ephemera_field)
-        patch :update, params: { id: ephemera_field.id.to_s, ephemera_field: { name: nil } }
+        patch :update, params: { id: ephemera_field.id.to_s, ephemera_field: { field_name: nil, member_of_vocabulary_id: nil } }
 
         expect(response).to render_template "valhalla/base/edit"
       end

@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 FactoryGirl.define do
   factory :ephemera_field do
-    name 'Test Field'
+    field_name '1'
+    member_of_vocabulary_id 'test id'
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)
     end

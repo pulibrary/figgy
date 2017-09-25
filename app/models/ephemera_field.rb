@@ -2,5 +2,6 @@
 class EphemeraField < Valhalla::Resource
   include Valkyrie::Resource::AccessControls
   attribute :id, Valkyrie::Types::ID.optional
-  attribute :name, Valkyrie::Types::Set
+  attribute :field_name
+  attribute :member_of_vocabulary_id
 end

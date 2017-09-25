@@ -9,6 +9,7 @@ class EphemeraFoldersController < ApplicationController
     storage_adapter: Valkyrie.config.storage_adapter
   )
   before_action :load_collections, only: [:new, :edit]
+  before_action :load_fields, only: [:new, :edit]
 
   def after_create_success(obj, _change_set)
     if params[:commit] == "Save and Create Another"
@@ -53,12 +54,41 @@ class EphemeraFoldersController < ApplicationController
     find_resource(params[:id])
   end
 
+  def parent_resource
+    find_resource(params[:parent_id])
+  end
+
   def change_set
     @change_set ||= change_set_class.new(resource)
   end
 
   def load_collections
     @collections = query_service.find_all_of_model(model: Collection).map(&:decorate)
+  end
+
+  def ephemera_box
+    @ephemera_box ||= params[:parent_id] ? parent_resource.decorate : resource.decorate.ephemera_box
+  rescue => e
+    Rails.logger.warn e
+    nil
+  end
+
+  def fields
+    @fields ||= ephemera_box.ephemera_project.fields
+  rescue => e
+    Rails.logger.warn e
+    []
+  end
+
+  def load_fields
+    fields.each do |field|
+      case field.attribute_name
+      when 'subject'
+        @subject = field.vocabulary.categories
+      else
+        instance_variable_set("@#{field.attribute_name}", field.vocabulary.terms)
+      end
+    end
   end
 
   def browse_everything_files

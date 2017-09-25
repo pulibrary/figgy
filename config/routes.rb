@@ -81,6 +81,7 @@ Rails.application.routes.draw do
     end
     get '/ephemera_projects/:parent_id/templates/new/:model_class', to: 'templates#new', as: :parent_new_template
     get '/ephemera_projects/:parent_id/box' => 'ephemera_boxes#new', as: 'ephemera_project_add_box'
+    get '/ephemera_projects/:parent_id/field', to: 'ephemera_fields#new', as: :ephemera_project_add_field
 
     resources :ephemera_boxes do
     end
@@ -96,7 +97,12 @@ Rails.application.routes.draw do
     end
     get '/ephemera_boxes/:parent_id/ephemera_folders/new', to: 'ephemera_folders#new', as: :parent_new_ephemera_box
 
+    resources :ephemera_vocabularies
+    get '/ephemera_vocabularies/:parent_id/ephemera_categories/new', to: 'ephemera_vocabularies#new', as: :ephemera_vocabulary_add_category
+
     resources :ephemera_fields
+    resources :ephemera_terms
+    get '/ephemera_vocabularies/:parent_id/ephemera_terms/new', to: 'ephemera_terms#new', as: :ephemera_vocabulary_add_term
   end
 
   resources :collections do

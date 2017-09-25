@@ -1,0 +1,7 @@
+<ol class="breadcrumb">
+  <li><%= link_to 'Vocabularies', ephemera_vocabularies_path %></li>
+  <% if decorated_resource.vocabulary %>
+    <li><%= link_to decorated_resource.vocabulary.header, solr_document_path(id: "id-#{decorated_resource.vocabulary.id}") %></li>
+  <% end %>
+  <li><%= decorated_resource.header %></li>
+</ol>

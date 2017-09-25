@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Vocabularies</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Label</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @vocabularies.each do |vocabulary| %>
+      <tr>
+        <td class="vocab"><%= vocabulary.label %></td>
+        <td class="vocab"><%= link_to 'Show', Valhalla::ContextualPath.new(child: vocabulary).show %></td>
+        <td class="vocab"><%= link_to 'Edit', edit_ephemera_vocabulary_path(vocabulary) %></td>
+        <td class="vocab"><%= link_to 'Destroy', vocabulary, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Vocabulary', new_ephemera_vocabulary_path %>

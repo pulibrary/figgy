@@ -124,6 +124,7 @@ describe Ability do
       is_expected.to be_able_to(:read, ephemera_folder)
       is_expected.to be_able_to(:update, ephemera_folder)
       is_expected.to be_able_to(:destroy, ephemera_folder)
+      is_expected.to be_able_to(:manifest, ephemera_folder)
       is_expected.to be_able_to(:read, other_ephemera_folder)
       is_expected.to be_able_to(:update, other_ephemera_folder)
       is_expected.to be_able_to(:destroy, other_ephemera_folder)
@@ -356,6 +357,7 @@ describe Ability do
     let(:no_pdf_scanned_resource) do
       FactoryGirl.build(:open_scanned_resource, user: creating_user, state: 'complete', pdf_type: [])
     end
+    let(:ephemera_folder) { FactoryGirl.create(:ephemera_folder, user: current_user) }
 
     it {
       is_expected.to be_able_to(:read, open_scanned_resource)
@@ -375,6 +377,7 @@ describe Ability do
       is_expected.not_to be_able_to(:read, metadata_review_scanned_resource)
       is_expected.not_to be_able_to(:read, final_review_scanned_resource)
       is_expected.not_to be_able_to(:read, takedown_scanned_resource)
+      is_expected.not_to be_able_to(:manifest, ephemera_folder)
       is_expected.not_to be_able_to(:download, image_editor_file)
       is_expected.not_to be_able_to(:file_manager, open_scanned_resource)
       is_expected.not_to be_able_to(:update, open_scanned_resource)

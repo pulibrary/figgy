@@ -128,4 +128,18 @@ class ControlledVocabulary
       @json ||= MultiJson.load(Faraday.get(url).body, symbolize_keys: true)
     end
   end
+
+  class EphemeraField < ControlledVocabulary
+    ControlledVocabulary.register(:ephemera_field, self)
+    def self.authority_config
+      @authority_config ||= YAML.safe_load(File.read(Rails.root.join("config", "authorities", "ephemera_field_name.yml")), [Symbol])
+    end
+
+    def all(_scope = nil)
+      @all ||=
+        self.class.authority_config[:terms].map do |term|
+          Term.new(term)
+        end
+    end
+  end
 end

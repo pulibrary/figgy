@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>
+  <%= link_to 'Vocabularies', ephemera_vocabularies_path %> » Terms
+</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Label</th>
+      <th>URI</th>
+      <th>Vocabulary</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @terms.each do |term| %>
+      <tr>
+        <td class="vocab"><%= term.label %></td>
+        <td class="vocab"><%= link_to term.uri, term.uri %></td>
+        <td class="vocab"><%= link_to term.vocabulary.label, Valhalla::ContextualPath.new(child: term.vocabulary).show %></td>
+        <td class="vocab"><%= link_to 'Show', Valhalla::ContextualPath.new(child: term).show %></td>
+        <td class="vocab"><%= link_to 'Edit', edit_ephemera_term_path(term) %></td>
+        <td class="vocab"><%= link_to 'Destroy', term, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Vocabulary Term', new_ephemera_term_path %>

@@ -1,0 +1,19 @@
+<div id="attributes">
+  <table class="table table-striped <%= document.decorated_resource.model_name.singular %> attributes">
+    <tbody>
+      <% document.decorated_resource.display_attributes.each do |attribute, values| %>
+        <% if values.present? %>
+          <tr>
+            <th><%= t("valhalla.works.show.attributes.#{attribute}.label", default: attribute.to_s.titleize) %></th>
+            <td>
+              <ul class="tabular">
+                <% values.each do |value| %>
+                  <li class="attribute <%= attribute %>" dir="<%= value.to_s.dir %>"><%= value %></li>
+                <% end %>
+              </ul>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>

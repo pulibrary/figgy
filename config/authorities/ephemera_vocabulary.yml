@@ -1,0 +1,9 @@
+:terms:
+  - :value: "1"
+    :label: Agrarian and rural issues
+    :notable: true
+    :definition: "Test field for agrarian and rural issues"
+  - :value: "2"
+    :label: Arts and culture
+    :notable: true
+    :definition: "Test field for arts and culture"
