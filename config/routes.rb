@@ -113,6 +113,7 @@ Rails.application.routes.draw do
       end
     end
     get '/scanned_maps/:parent_id/new', to: 'scanned_maps#new', as: :parent_new_scanned_map
+    put '/:id/extract_metadata/:file_set_id', to: 'scanned_maps#extract_metadata', as: :extract_metadata
   end
 
   resources :collections do

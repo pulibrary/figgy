@@ -300,4 +300,17 @@ RSpec.describe ScannedMapsController do
       expect(manifest_response[:viewingHint]).to eq "individuals"
     end
   end
+
+  describe "PUT /concern/scanned_maps/:id/extract_metadata/:file_set_id" do
+    let(:user) { FactoryGirl.create(:admin) }
+    let(:file) { fixture_file_upload('files/geo_metadata/fgdc.xml', 'application/xml') }
+    let(:tika_output) { tika_xml_output }
+
+    it "extracts fgdc metadata into scanned map" do
+      scanned_map = FactoryGirl.create_for_repository(:scanned_map, files: [file])
+
+      put :extract_metadata, params: { id: scanned_map.id.to_s, file_set_id: scanned_map.member_ids.first.to_s }
+      expect(query_service.find_by(id: scanned_map.id).title).to eq ["China census data by county, 2000-2010"]
+    end
+  end
 end
