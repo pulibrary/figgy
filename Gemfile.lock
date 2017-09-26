@@ -1,13 +1,13 @@
 GIT
   remote: git://github.com/pulibrary/pul_metadata_services.git
-  revision: 1e2b543def5465913e577b50be8bfede8f98d015
+  revision: b1dbba6e2f20eb34498f9cb23938a5652f5dcc69
   branch: master
   specs:
     pul_metadata_services (0.0.1)
       activesupport (>= 4.2.7.1)
       faraday (~> 0.9.1)
       marc (~> 1.0.0)
-      nokogiri (~> 1.6.6.2)
+      nokogiri (~> 1.6)
 
 GIT
   remote: git://github.com/pulibrary/pul_uv_rails.git
@@ -462,7 +462,7 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.6)
       mime-types (>= 1.16, < 4)
-    marc (1.0.0)
+    marc (1.0.2)
       scrub_rb (>= 1.0.1, < 2)
       unf
     memoist (0.16.0)
@@ -472,7 +472,7 @@ GEM
     mime-types-data (3.2016.0521)
     mimemagic (0.3.2)
     mini_magick (4.8.0)
-    mini_portile (0.6.2)
+    mini_portile2 (2.3.0)
     minitest (5.10.3)
     modernizr-rails (2.7.1)
     multi_json (1.12.1)
@@ -482,8 +482,8 @@ GEM
       net-ssh (>= 2.6.5)
     net-ssh (4.1.0)
     nio4r (2.1.0)
-    nokogiri (1.6.6.4)
-      mini_portile (~> 0.6.0)
+    nokogiri (1.8.1)
+      mini_portile2 (~> 2.3.0)
     normalize-rails (4.1.1)
     oauth2 (1.4.0)
       faraday (>= 0.8, < 0.13)
@@ -827,4 +827,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.15.3
+   1.15.4
