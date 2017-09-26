@@ -17,14 +17,16 @@ class PlumChangeSetPersister
         PropagateVisibilityAndState
       ],
       after_save: [
-        AppendToParent,
+        AppendToParent
+      ],
+      after_save_commit: [
         PublishMessage::Factory.new(operation: :update)
       ],
       before_delete: [
         CleanupMembership::Factory.new(property: :member_of_collection_ids),
         CleanupMembership::Factory.new(property: :member_ids)
       ],
-      after_delete: [
+      after_delete_commit: [
         PublishMessage::Factory.new(operation: :delete)
       ],
       after_commit: [
@@ -55,7 +57,7 @@ class PlumChangeSetPersister
       before_save(change_set: change_set)
       persister.save(resource: change_set.resource).tap do |output|
         after_save(change_set: change_set, updated_resource: output)
-
+        after_save_commit(change_set: change_set, updated_resource: output) unless transaction?
         after_commit unless transaction?
       end
     end
@@ -63,9 +65,9 @@ class PlumChangeSetPersister
     def delete(change_set:)
       before_delete(change_set: change_set)
       persister.delete(resource: change_set.resource).tap do
+        after_delete_commit(change_set: change_set) unless transaction?
         after_commit unless transaction?
       end
-      after_delete(change_set: change_set)
     end
 
     def save_all(change_sets:)
@@ -114,14 +116,20 @@ class PlumChangeSetPersister
         end
       end
 
+      def after_save_commit(change_set:, updated_resource:)
+        registered_handlers.fetch(:after_save_commit, []).each do |handler|
+          handler.new(change_set_persister: self, change_set: change_set, post_save_resource: updated_resource).run
+        end
+      end
+
       def before_delete(change_set:)
         registered_handlers.fetch(:before_delete, []).each do |handler|
           handler.new(change_set_persister: self, change_set: change_set).run
         end
       end
 
-      def after_delete(change_set:)
-        registered_handlers.fetch(:after_delete, []).each do |handler|
+      def after_delete_commit(change_set:)
+        registered_handlers.fetch(:after_delete_commit, []).each do |handler|
           handler.new(change_set_persister: self, change_set: change_set).run
         end
       end
