@@ -42,7 +42,7 @@ module ApplicationHelper
   end
 
   def all_works
-    [ScannedResource]
+    [ScannedResource, ScannedMap]
   end
 
   def resource

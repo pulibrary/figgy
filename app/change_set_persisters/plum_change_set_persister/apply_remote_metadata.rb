@@ -25,10 +25,9 @@ class PlumChangeSetPersister
     private
 
       def apply(attributes)
-        if change_set.respond_to?(:apply_remote_metadata_directly?) && change_set.apply_remote_metadata_directly?
-          attributes.each do |key, value|
-            change_set.model.send("#{key}=".to_sym, value) if change_set.respond_to?(key)
-          end
+        if change_set.apply_remote_metadata_directly?
+          change_set.validate(attributes)
+          change_set.sync
         else
           change_set.model.imported_metadata = ImportedMetadata.new(attributes)
         end

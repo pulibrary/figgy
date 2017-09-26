@@ -29,6 +29,9 @@ RSpec.describe ScannedMapDecorator do
   it "can attach folders" do
     expect(resource.decorate.attachable_objects).to include ScannedMap
   end
+  it "can manage structure" do
+    expect(decorator.manageable_structure?).to be true
+  end
   context "with file sets" do
     let(:file_set) do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)

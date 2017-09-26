@@ -29,8 +29,7 @@ class GeoCharacterizationService
   end
 
   def parent
-    decorator = FileSetDecorator.new(file_node)
-    decorator.parent
+    file_node.decorate.parent
   end
 
   def external_metadata_service

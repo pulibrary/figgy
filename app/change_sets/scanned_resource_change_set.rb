@@ -78,4 +78,8 @@ class ScannedResourceChangeSet < Valhalla::ChangeSet
   def apply_remote_metadata?
     source_metadata_identifier.present? && (!persisted? || refresh_remote_metadata == "1")
   end
+
+  def apply_remote_metadata_directly?
+    false
+  end
 end

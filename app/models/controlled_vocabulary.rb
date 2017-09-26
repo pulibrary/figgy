@@ -102,12 +102,6 @@ class ControlledVocabulary
     end
   end
 
-  class GeoTerm < Valkyrie::Resource
-    attribute :label, Valkyrie::Types::String
-    attribute :value, Valkyrie::Types::Any
-    attribute :code, Valkyrie::Types::String
-  end
-
   class GeoImageFormat < ControlledVocabulary
     ControlledVocabulary.register(:geo_image_format, self)
     def self.authority_config
@@ -117,7 +111,7 @@ class ControlledVocabulary
     def all(_scope = nil)
       @all ||=
         self.class.authority_config[:terms].map do |term|
-          GeoTerm.new(term)
+          Term.new(term)
         end
     end
   end
@@ -131,7 +125,7 @@ class ControlledVocabulary
     def all(_scope = nil)
       @all ||=
         self.class.authority_config[:terms].map do |term|
-          GeoTerm.new(term)
+          Term.new(term)
         end
     end
   end

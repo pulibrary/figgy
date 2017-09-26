@@ -59,6 +59,10 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
     h.bbox_display(coverage)
   end
 
+  def manageable_structure?
+    true
+  end
+
   def attachable_objects
     [ScannedMap]
   end

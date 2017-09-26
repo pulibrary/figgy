@@ -28,7 +28,6 @@ class PlumCharacterizationService
   end
 
   def parent
-    decorator = FileSetDecorator.new(file_node)
-    decorator.parent
+    file_node.decorate.parent
   end
 end

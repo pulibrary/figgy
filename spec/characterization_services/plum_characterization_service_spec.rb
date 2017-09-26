@@ -29,7 +29,7 @@ RSpec.describe PlumCharacterizationService do
     let(:decorator) { instance_double(FileSetDecorator, parent: parent) }
 
     before do
-      allow(FileSetDecorator).to receive(:new).and_return(decorator)
+      allow(valid_file_set).to receive(:decorate).and_return(decorator)
     end
 
     context "with a scanned map parent" do
