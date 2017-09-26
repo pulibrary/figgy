@@ -5,7 +5,6 @@ class PlumImporterJob < ApplicationJob
     change_set_persister = PlumChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
       storage_adapter: Valkyrie::StorageAdapter.find(:plum_storage),
-      derivative_storage_adapter: Valkyrie::StorageAdapter.find(:derivatives),
       characterize: false
     )
     output = nil

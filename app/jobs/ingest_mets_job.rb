@@ -16,8 +16,7 @@ class IngestMETSJob < ApplicationJob
 
   def changeset_persister
     @changeset_persister ||= PlumChangeSetPersister.new(metadata_adapter: metadata_adapter,
-                                                        storage_adapter: storage_adapter,
-                                                        derivative_storage_adapter: derivative_storage_adapter)
+                                                        storage_adapter: storage_adapter)
   end
 
   def metadata_adapter
@@ -26,10 +25,6 @@ class IngestMETSJob < ApplicationJob
 
   def storage_adapter
     Valkyrie.config.storage_adapter
-  end
-
-  def derivative_storage_adapter
-    Valkyrie::StorageAdapter.find(:derivatives)
   end
 
   class Ingester

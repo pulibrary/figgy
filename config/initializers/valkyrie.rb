@@ -35,6 +35,14 @@ Rails.application.config.to_prepare do
     :derivatives
   )
 
+  Valkyrie::StorageAdapter.register(
+    Valhalla::Storage::FileTypedDisk.new(
+      master_storage_adapter: Valkyrie::StorageAdapter.find(:disk),
+      derivative_storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)
+    ),
+    :file_typed_disk
+  )
+
   Valkyrie::MetadataAdapter.register(
     Valkyrie::Persistence::Postgres::MetadataAdapter.new,
     :postgres
