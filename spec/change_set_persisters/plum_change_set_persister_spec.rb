@@ -224,6 +224,25 @@ RSpec.describe PlumChangeSetPersister do
 
         expect(rabbit_connection).to have_received(:publish).at_least(:once).with(expected_result.to_json)
       end
+      it 'publishes messages in a transaction', run_real_derivatives: false, rabbit_stubbed: true do
+        resource = FactoryGirl.build(:scanned_resource)
+        change_set = change_set_class.new(resource, characterize: false)
+        change_set.files = [file1]
+
+        output = nil
+        change_set_persister.buffer_into_index do |buffer|
+          output = buffer.save(change_set: change_set)
+        end
+
+        expected_result = {
+          "id" => output.id.to_s,
+          "event" => "UPDATED",
+          "manifest_url" => "http://www.example.com/concern/scanned_resources/#{output.id}/manifest",
+          "collection_slugs" => []
+        }
+
+        expect(rabbit_connection).to have_received(:publish).at_least(:once).with(expected_result.to_json)
+      end
     end
   end
 
