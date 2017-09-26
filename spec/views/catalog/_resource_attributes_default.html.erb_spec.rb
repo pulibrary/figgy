@@ -1,78 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe "catalog/show.html.erb" do
-  context 'when given a new ScannedResource instance' do
-    let(:scanned_resource) do
-      FactoryGirl.create_for_repository(:scanned_resource,
-                                        title: 'test title1',
-                                        label: 'test label',
-                                        actor: 'test person',
-                                        sort_title: 'test title2',
-                                        portion_note: 'test value1',
-                                        rights_statement: 'test statement',
-                                        call_number: 'test value2',
-                                        edition: 'test edition',
-                                        nav_date: 'test date')
-    end
-    let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: scanned_resource) }
-    let(:collection) { FactoryGirl.create_for_repository(:collection) }
-    let(:solr_document) { SolrDocument.new(document) }
-    before do
-      Timecop.freeze(Time.zone.local(1990))
-      assign :document, solr_document
-      allow(view).to receive(:has_search_parameters?).and_return(false)
-      stub_blacklight_views
-      render
-    end
-    it "renders all available attributes" do
-      # Title
-      expect(rendered).to have_content "test title1"
-
-      expect(rendered).to have_selector "#attributes h2", text: "Attributes"
-
-      # Label
-      expect(rendered).to have_selector "th", text: "Label"
-      expect(rendered).to have_content "test label"
-
-      # Actor
-      expect(rendered).to have_selector "th", text: "Actor"
-      expect(rendered).to have_content "test person"
-
-      # Sorting Title
-      expect(rendered).not_to have_selector "th", text: "Sort Title"
-      expect(rendered).not_to have_content "test title2"
-
-      # Portion Note
-      expect(rendered).to have_selector "th", text: "Portion Note"
-      expect(rendered).to have_content "test value1"
-
-      # Call Number
-      expect(rendered).to have_selector "th", text: "Call Number"
-      expect(rendered).to have_content "test value2"
-
-      # Edition
-      expect(rendered).to have_selector "th", text: "Edition"
-      expect(rendered).to have_content "test edition"
-
-      # Nav Date
-      expect(rendered).not_to have_selector "th", text: "Nav Date"
-      expect(rendered).not_to have_content "test date"
-
-      # Model name
-      expect(rendered).to have_selector "th", text: "Model"
-      expect(rendered).to have_content "ScannedResource"
-
-      # Date Uploaded
-      expect(rendered).to have_selector "th", text: "Date Uploaded"
-      expect(rendered).to have_selector ".created_at", text: "01/01/90 12:00:00 AM UTC"
-
-      # Date Modified
-      expect(rendered).to have_selector "th", text: "Date Modified"
-      expect(rendered).to have_selector ".updated_at", text: "01/01/90 12:00:00 AM UTC"
-    end
-  end
-
+RSpec.describe "catalog/_resource_attributes_default.html.erb" do
   context "when given a ScannedResource solr document" do
     let(:scanned_resource) do
       FactoryGirl.create_for_repository(:scanned_resource,
@@ -114,13 +43,11 @@ RSpec.describe "catalog/show.html.erb" do
       Timecop.freeze(Time.zone.local(1990))
       assign :document, solr_document
       allow(view).to receive(:has_search_parameters?).and_return(false)
+      allow(view).to receive(:document).and_return(solr_document)
       stub_blacklight_views
       render
     end
     it "renders all available attributes" do
-      expect(rendered).to have_content scanned_resource.primary_imported_metadata.title.to_sentence
-      expect(rendered).to have_content "Ars minor [fragment]."
-
       expect(rendered).to have_selector "#attributes h2", text: "Attributes"
 
       # Language
@@ -201,88 +128,6 @@ RSpec.describe "catalog/show.html.erb" do
     end
   end
 
-  context 'when the ScannedResource has members' do
-    let(:child) { FactoryGirl.create_for_repository(:scanned_resource, title: 'vol1', rights_statement: 'x') }
-    let(:parent) { FactoryGirl.create_for_repository(:scanned_resource, title: 'Mui', rights_statement: 'y', member_ids: [child.id]) }
-    let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: parent) }
-    let(:solr_document) { SolrDocument.new(document) }
-    before do
-      assign :document, solr_document
-      allow(view).to receive(:has_search_parameters?).and_return(false)
-      stub_blacklight_views
-      render
-    end
-
-    it 'shows them' do
-      expect(rendered).to have_selector 'h2', text: 'Members'
-      expect(rendered).to have_selector 'td', text: 'vol1'
-      expect(rendered).to have_selector 'span.label-success', text: 'Open'
-      expect(rendered).not_to have_link href: solr_document_path(child)
-      expect(rendered).to have_link 'View', href: parent_solr_document_path(parent, "id-#{child.id}")
-      expect(rendered).to have_link 'Edit', href: edit_scanned_resource_path(child.id)
-    end
-  end
-
-  context "when it's a project with boxes" do
-    let(:parent) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [child.id]) }
-    let(:child) { FactoryGirl.create_for_repository(:ephemera_box) }
-    let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: parent) }
-    let(:solr_document) { SolrDocument.new(document) }
-    before do
-      assign :document, solr_document
-      allow(view).to receive(:has_search_parameters?).and_return(false)
-      stub_blacklight_views
-      render
-    end
-
-    it 'shows them' do
-      expect(rendered).to have_selector 'h2', text: 'Boxes'
-      expect(rendered).to have_link 'Box 1', href: solr_document_path(id: "id-#{child.id}")
-    end
-  end
-
-  context "when it's a project with templates" do
-    let(:parent) { FactoryGirl.create_for_repository(:ephemera_project) }
-    let(:child) { FactoryGirl.create_for_repository(:template, parent_id: parent.id) }
-    let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: parent) }
-    let(:solr_document) { SolrDocument.new(document) }
-    before do
-      child
-      assign :document, solr_document
-      allow(view).to receive(:has_search_parameters?).and_return(false)
-      stub_blacklight_views
-      render
-    end
-    it "shows them" do
-      expect(rendered).to have_selector 'h2', text: 'Templates'
-      expect(rendered).to have_content 'Test Template'
-    end
-  end
-
-  context "when it's a box with folders" do
-    let(:parent) { FactoryGirl.create_for_repository(:ephemera_box, member_ids: [child.id]) }
-    let(:child) { FactoryGirl.create_for_repository(:ephemera_folder) }
-    let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: parent) }
-    let(:solr_document) { SolrDocument.new(document) }
-    before do
-      assign :document, solr_document
-      allow(view).to receive(:has_search_parameters?).and_return(false)
-      stub_blacklight_views
-      render
-    end
-
-    it 'shows them' do
-      expect(rendered).to have_selector 'h2', text: 'Folders'
-      expect(rendered).to have_selector 'td.folder_number', text: "one"
-      expect(rendered).to have_link "one", href: "/catalog/parent/#{parent.id}/id-#{child.id}"
-      expect(rendered).not_to have_selector 'td.folder_number', text: "[\"one\"]"
-      expect(rendered).to have_selector 'td.barcode', text: child.barcode.first
-      expect(rendered).not_to have_selector 'td.barcode', text: "[\"#{child.barcode.first}\"]"
-      expect(rendered).to have_selector 'td.genre', text: child.genre.first
-      expect(rendered).not_to have_selector 'td.genre', text: "[\"#{child.genre.first}\"]"
-    end
-  end
-
   context 'when given a FileSet' do
     let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
     let(:scanned_resource) { FactoryGirl.create_for_repository(:scanned_resource, files: [file]) }
@@ -293,6 +138,7 @@ RSpec.describe "catalog/show.html.erb" do
     before do
       assign :document, solr_document
       allow(view).to receive(:has_search_parameters?).and_return(false)
+      allow(view).to receive(:document).and_return(solr_document)
       stub_blacklight_views
       render
     end
