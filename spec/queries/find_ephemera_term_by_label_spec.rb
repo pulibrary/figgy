@@ -1,0 +1,23 @@
+# frozen_string_literal: true
+require 'rails_helper'
+
+RSpec.describe FindEphemeraTermByLabel do
+  subject(:query) { described_class.new(query_service: query_service) }
+  let(:term) { FactoryGirl.create_for_repository(:ephemera_term, label: "Test", member_of_vocabulary_id: vocab.id) }
+  let(:term2) { FactoryGirl.create_for_repository(:ephemera_term, label: "Test", member_of_vocabulary_id: vocab2.id) }
+  let(:vocab) { FactoryGirl.create_for_repository(:ephemera_vocabulary) }
+  let(:vocab2) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: "Test2") }
+  let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
+
+  describe "#find_term_by_label" do
+    it "can find a term given a label" do
+      output = query.find_term_by_label(label: term.label)
+      expect(output.id).to eq term.id
+    end
+    it "can restrict by a vocab" do
+      term2
+      output = query.find_term_by_label(label: term.label, vocab_label: vocab.label)
+      expect(output.id).to eq term.id
+    end
+  end
+end

@@ -15,6 +15,7 @@ class EphemeraBox < Valhalla::Resource
   attribute :state
   attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
   attribute :thumbnail_id
+  attribute :local_identifier
 
   def title
     'Ephemera Box'

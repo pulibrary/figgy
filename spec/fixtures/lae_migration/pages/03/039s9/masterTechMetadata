@@ -1,0 +1,58 @@
+<fits xmlns="http://hul.harvard.edu/ois/xml/ns/fits/fits_output" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://hul.harvard.edu/ois/xml/ns/fits/fits_output http://hul.harvard.edu/ois/xml/xsd/fits/fits_output.xsd" version="0.8" timestamp="7/19/14 1:46 AM">
+  <identification>
+    <identity format="Tagged Image File Format" mimetype="image/tiff" toolname="FITS" toolversion="0.8">
+      <tool toolname="Jhove" toolversion="1.5"/>
+      <tool toolname="file utility" toolversion="5.09"/>
+      <tool toolname="Exiftool" toolversion="9.13"/>
+      <tool toolname="Droid" toolversion="6.1.3"/>
+      <tool toolname="ffident" toolversion="0.2"/>
+      <tool toolname="Tika" toolversion="1.3"/>
+      <version toolname="Jhove" toolversion="1.5">6.0</version>
+      <externalIdentifier toolname="Droid" toolversion="6.1.3" type="puid">fmt/156</externalIdentifier>
+    </identity>
+  </identification>
+  <fileinfo>
+    <size toolname="Jhove" toolversion="1.5">4683855</size>
+    <creatingApplicationName toolname="Jhove" toolversion="1.5">Omniscan 12.6 Build2225</creatingApplicationName>
+    <lastmodified toolname="Exiftool" toolversion="9.13" status="CONFLICT">2014:07:19 01:45:59-04:00</lastmodified>
+    <lastmodified toolname="Tika" toolversion="1.3" status="CONFLICT">2014-04-11T13:35:06</lastmodified>
+    <filepath toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">/tmp/0002.tif20140719-23046-ldi84x.tif</filepath>
+    <filename toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">0002.tif20140719-23046-ldi84x.tif</filename>
+    <md5checksum toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">2aa5b31ccae32ccfe72c0c7a62d199f9</md5checksum>
+    <fslastmodified toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">1405748759000</fslastmodified>
+  </fileinfo>
+  <filestatus>
+    <well-formed toolname="Jhove" toolversion="1.5" status="SINGLE_RESULT">true</well-formed>
+    <valid toolname="Jhove" toolversion="1.5" status="SINGLE_RESULT">true</valid>
+  </filestatus>
+  <metadata>
+    <image>
+      <byteOrder toolname="Jhove" toolversion="1.5" status="SINGLE_RESULT">little endian</byteOrder>
+      <compressionScheme toolname="Jhove" toolversion="1.5">Uncompressed</compressionScheme>
+      <imageWidth toolname="Jhove" toolversion="1.5">2589</imageWidth>
+      <imageHeight toolname="Jhove" toolversion="1.5">1809</imageHeight>
+      <colorSpace toolname="Jhove" toolversion="1.5">BlackIsZero</colorSpace>
+      <orientation toolname="Jhove" toolversion="1.5">normal*</orientation>
+      <samplingFrequencyUnit toolname="Jhove" toolversion="1.5">in.</samplingFrequencyUnit>
+      <xSamplingFrequency toolname="Jhove" toolversion="1.5">400</xSamplingFrequency>
+      <ySamplingFrequency toolname="Jhove" toolversion="1.5">400</ySamplingFrequency>
+      <bitsPerSample toolname="Jhove" toolversion="1.5">8</bitsPerSample>
+      <samplesPerPixel toolname="Jhove" toolversion="1.5">1</samplesPerPixel>
+      <imageProducer toolname="Jhove" toolversion="1.5" status="SINGLE_RESULT">OS12002 #58177</imageProducer>
+      <scanningSoftwareName toolname="Jhove" toolversion="1.5">Omniscan 12.6 Build2225</scanningSoftwareName>
+    </image>
+  </metadata>
+  <statistics fitsExecutionTime="1466">
+    <tool toolname="OIS Audio Information" toolversion="0.1" status="did not run"/>
+    <tool toolname="ADL Tool" toolversion="0.1" status="did not run"/>
+    <tool toolname="Jhove" toolversion="1.5" executionTime="1250"/>
+    <tool toolname="file utility" toolversion="5.09" executionTime="1084"/>
+    <tool toolname="Exiftool" toolversion="9.13" executionTime="1179"/>
+    <tool toolname="Droid" toolversion="6.1.3" executionTime="263"/>
+    <tool toolname="NLNZ Metadata Extractor" toolversion="3.4GA" status="did not run"/>
+    <tool toolname="OIS File Information" toolversion="0.2" executionTime="341"/>
+    <tool toolname="OIS XML Metadata" toolversion="0.2" status="did not run"/>
+    <tool toolname="ffident" toolversion="0.2" executionTime="702"/>
+    <tool toolname="Tika" toolversion="1.3" executionTime="955"/>
+  </statistics>
+</fits>
