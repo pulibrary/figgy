@@ -21,7 +21,8 @@ class PlumChangeSetPersister
       ],
       before_delete: [
         CleanupMembership::Factory.new(property: :member_of_collection_ids),
-        CleanupMembership::Factory.new(property: :member_ids)
+        CleanupMembership::Factory.new(property: :member_ids),
+        DeleteReferenced::Factory.new(property: :member_of_vocabulary_id)
       ],
       after_commit: [
         Characterize

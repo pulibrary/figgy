@@ -233,6 +233,17 @@ RSpec.describe PlumChangeSetPersister do
     end
   end
 
+  describe "deleting vocabularies" do
+    it "deletes EphemeraFields which reference it" do
+      vocabulary = FactoryGirl.create_for_repository(:ephemera_vocabulary)
+      ephemera_field = FactoryGirl.create_for_repository(:ephemera_field, member_of_vocabulary_id: vocabulary.id)
+      change_set = EphemeraVocabularyChangeSet.new(vocabulary)
+
+      change_set_persister.delete(change_set: change_set)
+      expect { query_service.find_by(id: ephemera_field.id) }.to raise_error Valkyrie::Persistence::ObjectNotFoundError
+    end
+  end
+
   describe "setting visibility" do
     context "when setting to public" do
       it "adds the public read_group" do
