@@ -9,6 +9,15 @@ class EphemeraBoxesController < ApplicationController
     storage_adapter: Valkyrie.config.storage_adapter
   )
   before_action :load_collections, only: [:new, :edit]
+  before_action :cache_project, only: :destroy
+
+  def cache_project
+    @ephemera_project = find_resource(params[:id]).decorate.ephemera_project
+  end
+
+  def after_delete_success
+    redirect_to solr_document_path(id: "id-#{@ephemera_project.id}")
+  end
 
   private
 
