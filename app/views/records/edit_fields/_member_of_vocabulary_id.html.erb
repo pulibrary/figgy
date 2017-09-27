@@ -8,4 +8,3 @@
               include_blank: true,
               selected: params[:parent_id] || f.object.member_of_vocabulary_id,
               required: f.object.required?(key) %>
-<%= link_to 'Add a Vocabulary', new_ephemera_vocabulary_path, class: 'btn btn-primary', target: "new_vocabulary" %>
