@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'rails_helper'
+include ActionDispatch::TestProcess
 
 RSpec.describe FileSetsController do
   let(:persister) { Valkyrie.config.metadata_adapter.persister }
@@ -21,6 +22,35 @@ RSpec.describe FileSetsController do
 
       file_set = query_service.find_by(id: file_set.id)
       expect(file_set.title).to eq ["Second"]
+    end
+
+    context 'with replacement master and derivative files' do
+      let(:master_file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+      let(:derivative_file) { fixture_file_upload('files/example.jp2', 'image/jp2') }
+      let(:scanned_resource) { FactoryGirl.create_for_repository(:scanned_resource, title: "Test Title", files: [master_file]) }
+      let(:file_set) { Valkyrie.config.metadata_adapter.query_service.find_by(id: scanned_resource.member_ids.first) }
+
+      it 'uploads master and derivative files to separate locations' do
+        updated_master_file = fixture_file_upload('files/example.tif', 'image/tiff')
+        updated_derivative_file = fixture_file_upload('files/example.jp2', 'image/jp2')
+
+        patch :update, params: {
+          id: file_set.id.to_s,
+          file_set: {
+            files: [
+              { file_set.file_metadata.first.id => updated_master_file }
+            ],
+            derivative_files: [
+              { file_set.file_metadata.last.id => updated_derivative_file }
+            ]
+          }
+        }
+
+        updated_file_set = query_service.find_by(id: file_set.id)
+        expect(updated_file_set.file_metadata.length).to eq 2
+        expect(updated_file_set.file_metadata.first).to be_a FileMetadata
+        expect(updated_file_set.file_metadata.last).to be_a FileMetadata
+      end
     end
   end
 

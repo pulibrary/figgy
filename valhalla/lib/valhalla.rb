@@ -5,5 +5,4 @@ module Valhalla
   require 'hydra-editor'
   require 'font-awesome-rails'
   require 'jquery-ui-rails'
-  require 'valhalla/storage'
 end

@@ -19,8 +19,16 @@ class FileSet < Valhalla::Resource
     file_metadata.find(&:derivative?)
   end
 
+  def derivative_files
+    file_metadata.select(&:derivative?)
+  end
+
   def original_file
     file_metadata.find(&:original_file?)
+  end
+
+  def original_files
+    file_metadata.select(&:original_file?)
   end
 
   private
