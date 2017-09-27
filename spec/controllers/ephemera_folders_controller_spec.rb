@@ -190,9 +190,10 @@ RSpec.describe EphemeraFoldersController do
     end
     it "can delete a book" do
       ephemera_folder = FactoryGirl.create_for_repository(:ephemera_folder)
+      ephemera_box = FactoryGirl.create_for_repository(:ephemera_box, member_ids: ephemera_folder.id)
       delete :destroy, params: { id: ephemera_folder.id.to_s }
 
-      expect(response).to redirect_to root_path
+      expect(response).to redirect_to solr_document_path(id: "id-#{ephemera_box.id}")
       expect { query_service.find_by(id: ephemera_folder.id) }.to raise_error ::Valkyrie::Persistence::ObjectNotFoundError
     end
   end
