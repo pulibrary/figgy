@@ -44,6 +44,7 @@ class CatalogController < ApplicationController
     config.show.partials += [:categories]
     config.show.partials += [:terms]
     config.index.thumbnail_method = :figgy_thumbnail_path
+    config.show.document_presenter_class = ValkyrieShowPresenter
   end
 
   def admin?

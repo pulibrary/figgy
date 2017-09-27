@@ -51,4 +51,8 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   def attachable_objects
     []
   end
+
+  def heading
+    Array.wrap(title).first
+  end
 end
