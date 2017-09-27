@@ -103,6 +103,17 @@ Rails.application.routes.draw do
     resources :ephemera_fields
     resources :ephemera_terms
     get '/ephemera_vocabularies/:parent_id/ephemera_terms/new', to: 'ephemera_terms#new', as: :ephemera_vocabulary_add_term
+
+    resources :scanned_maps do
+      member do
+        get :file_manager
+        get :structure
+        get :manifest, defaults: { format: :json }
+        post :browse_everything_files
+      end
+    end
+    get '/scanned_maps/:parent_id/new', to: 'scanned_maps#new', as: :parent_new_scanned_map
+    put '/:id/extract_metadata/:file_set_id', to: 'scanned_maps#extract_metadata', as: :extract_metadata
   end
 
   resources :collections do

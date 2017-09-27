@@ -37,12 +37,22 @@ class Jp2DerivativeService
     end
   end
 
+  def parent
+    decorator = FileSetDecorator.new(change_set)
+    decorator.parent
+  end
+
+  def recipe
+    return :default unless parent.is_a?(ScannedMap)
+    :geo
+  end
+
   def run_derivatives
     Hydra::Derivatives::Jpeg2kImageDerivatives.create(
       filename,
       outputs: [
         label: 'intermediate_file',
-        recipe: :default,
+        recipe: recipe,
         service: {
           datastream: 'intermediate_file'
         },

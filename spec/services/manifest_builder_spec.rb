@@ -133,4 +133,23 @@ RSpec.describe ManifestBuilder do
       expect(output["manifests"][0]["@id"]).to eq "http://www.example.com/concern/scanned_resources/#{child.id}/manifest"
     end
   end
+  context "when given a scanned map" do
+    subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_map.id)) }
+    let(:scanned_map) do
+      FactoryGirl.create_for_repository(:scanned_map, description: "Test Description")
+    end
+    let(:change_set) { ScannedMapChangeSet.new(scanned_map, files: [file]) }
+    before do
+      output = change_set_persister.save(change_set: change_set)
+      change_set = ScannedMapChangeSet.new(output)
+      change_set.sync
+      change_set_persister.save(change_set: change_set)
+    end
+    it "builds a IIIF document" do
+      output = manifest_builder.build
+      expect(output).to be_kind_of Hash
+      expect(output["description"]).to eq "Test Description"
+      expect(output["sequences"][0]["canvases"][0]["images"].length).to eq 1
+    end
+  end
 end

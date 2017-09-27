@@ -1,0 +1,7 @@
+:terms:
+  - :value: application/xml; schema=fgdc
+    :label: FGDC
+  - :value: application/xml; schema=iso19139
+    :label: ISO19139
+  - :value: application/mods+xml
+    :label: MODS

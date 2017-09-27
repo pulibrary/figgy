@@ -13,6 +13,9 @@
 //= require jquery3
 //= require jquery_ujs
 //= require modernizr
+//= require leaflet
+//= require Control.Geocoder
+//= require leaflet-boundingbox
 //
 // Required by Blacklight
 //= require blacklight/blacklight

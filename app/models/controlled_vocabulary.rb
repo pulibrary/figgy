@@ -23,6 +23,10 @@ class ControlledVocabulary
     all.find { |x| x.value == value }
   end
 
+  def include?(value)
+    !find(value).nil?
+  end
+
   class Term < Valkyrie::Resource
     attribute :label, Valkyrie::Types::String
     attribute :value, Valkyrie::Types::Any
@@ -88,6 +92,34 @@ class ControlledVocabulary
     ControlledVocabulary.register(:rights_statement, self)
     def self.authority_config
       @authority_config ||= YAML.safe_load(File.read(Rails.root.join("config", "authorities", "rights_statement.yml")), [Symbol])
+    end
+
+    def all(_scope = nil)
+      @all ||=
+        self.class.authority_config[:terms].map do |term|
+          Term.new(term)
+        end
+    end
+  end
+
+  class GeoImageFormat < ControlledVocabulary
+    ControlledVocabulary.register(:geo_image_format, self)
+    def self.authority_config
+      @authority_config ||= YAML.safe_load(File.read(Rails.root.join("config", "authorities", "geo_image_formats.yml")), [Symbol])
+    end
+
+    def all(_scope = nil)
+      @all ||=
+        self.class.authority_config[:terms].map do |term|
+          Term.new(term)
+        end
+    end
+  end
+
+  class GeoMetadataFormat < ControlledVocabulary
+    ControlledVocabulary.register(:geo_metadata_format, self)
+    def self.authority_config
+      @authority_config ||= YAML.safe_load(File.read(Rails.root.join("config", "authorities", "geo_metadata_formats.yml")), [Symbol])
     end
 
     def all(_scope = nil)
