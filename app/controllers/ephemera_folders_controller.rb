@@ -10,6 +10,7 @@ class EphemeraFoldersController < ApplicationController
   )
   before_action :load_collections, only: [:new, :edit]
   before_action :load_fields, only: [:new, :edit]
+  before_action :cache_box, only: [:destroy]
 
   def after_create_success(obj, _change_set)
     if params[:commit] == "Save and Create Another"
@@ -17,6 +18,14 @@ class EphemeraFoldersController < ApplicationController
     else
       super
     end
+  end
+
+  def cache_box
+    @cached_box = find_resource(params[:id]).decorate.ephemera_box
+  end
+
+  def after_delete_success
+    redirect_to solr_document_path(id: "id-#{@cached_box.id}")
   end
 
   def new_resource
