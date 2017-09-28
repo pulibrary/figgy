@@ -242,17 +242,4 @@ RSpec.describe VectorWorksController do
       end
     end
   end
-
-  describe "PUT /concern/vector_works/:id/extract_metadata/:file_set_id" do
-    let(:user) { FactoryGirl.create(:admin) }
-    let(:file) { fixture_file_upload('files/geo_metadata/fgdc.xml', 'application/xml') }
-    let(:tika_output) { tika_xml_output }
-
-    it "extracts fgdc metadata into vector work" do
-      vector_work = FactoryGirl.create_for_repository(:vector_work, files: [file])
-
-      put :extract_metadata, params: { id: vector_work.id.to_s, file_set_id: vector_work.member_ids.first.to_s }
-      expect(query_service.find_by(id: vector_work.id).title).to eq ["China census data by county, 2000-2010"]
-    end
-  end
 end

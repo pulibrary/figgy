@@ -22,7 +22,7 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
     @scanned_maps ||= members.select { |r| r.is_a?(ScannedMap) }.map(&:decorate).to_a
   end
 
-  def geo_image_members
+  def geo_members
     members.select do |member|
       next unless member.respond_to?(:mime_type)
       ControlledVocabulary.for(:geo_image_format).include?(member.mime_type.first)
