@@ -1,14 +1,11 @@
 # frozen_string_literal: true
-class EphemeraFoldersController < ApplicationController
-  include Valhalla::ResourceController
-  include TokenAuth
+class EphemeraFoldersController < BaseResourceController
   self.change_set_class = DynamicChangeSet
   self.resource_class = EphemeraFolder
   self.change_set_persister = ::PlumChangeSetPersister.new(
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
     storage_adapter: Valkyrie.config.storage_adapter
   )
-  before_action :load_collections, only: [:new, :edit]
   before_action :load_fields, only: [:new, :edit]
   before_action :cache_box, only: [:destroy]
 
@@ -59,20 +56,8 @@ class EphemeraFoldersController < ApplicationController
     end
   end
 
-  def resource
-    find_resource(params[:id])
-  end
-
   def parent_resource
     find_resource(params[:parent_id])
-  end
-
-  def change_set
-    @change_set ||= change_set_class.new(resource)
-  end
-
-  def load_collections
-    @collections = query_service.find_all_of_model(model: Collection).map(&:decorate)
   end
 
   def ephemera_box

@@ -1,13 +1,12 @@
 # frozen_string_literal: true
-class EphemeraBoxesController < ApplicationController
-  include Valhalla::ResourceController
-  include TokenAuth
+class EphemeraBoxesController < BaseResourceController
   self.change_set_class = DynamicChangeSet
   self.resource_class = EphemeraBox
   self.change_set_persister = ::PlumChangeSetPersister.new(
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
     storage_adapter: Valkyrie.config.storage_adapter
   )
+
   before_action :load_collections, only: [:new, :edit]
   before_action :cache_project, only: :destroy
 
