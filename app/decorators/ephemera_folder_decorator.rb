@@ -49,6 +49,10 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     Valkyrie.config.metadata_adapter
   end
 
+  def collections
+    @collections ||= query_service.find_references_by(resource: self, property: :member_of_collection_ids).to_a
+  end
+
   def rendered_rights_statement
     rights_statement.map do |rights_statement|
       term = ControlledVocabulary.for(:rights_statement).find(rights_statement)
