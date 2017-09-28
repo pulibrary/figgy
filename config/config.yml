@@ -8,67 +8,72 @@ defaults: &defaults
   plum_derivative_path: "/mnt/libimages1/data/jp2s/plum_prod"
   jp2_recipes:
     default_color: >
-      -rate 2.4,1.48331273,.91673033,.56657224,.35016049,.21641118,.13374944,.08266171 
-      -jp2_space sRGB 
-      -double_buffering 10 
-      -num_threads 1 
-      -no_weights 
-      Clevels=6 
-      Clayers=8 
-      Cblk=\{64,64\} 
-      Cuse_sop=yes 
-      Cuse_eph=yes  
-      Corder=RPCL 
-      ORGgen_plt=yes 
-      ORGtparts=R 
+      -rate 2.4,1.48331273,.91673033,.56657224,.35016049,.21641118,.13374944,.08266171
+      -jp2_space sRGB
+      -double_buffering 10
+      -num_threads 1
+      -no_weights
+      Clevels=6
+      Clayers=8
+      Cblk=\{64,64\}
+      Cuse_sop=yes
+      Cuse_eph=yes
+      Corder=RPCL
+      ORGgen_plt=yes
+      ORGtparts=R
       Stiles=\{1024,1024\}
     default_gray: >
-      -rate 2.4,1.48331273,.91673033,.56657224,.35016049,.21641118,.13374944,.08266171 
-      -jp2_space sLUM 
-      -double_buffering 10 
+      -rate 2.4,1.48331273,.91673033,.56657224,.35016049,.21641118,.13374944,.08266171
+      -jp2_space sLUM
+      -double_buffering 10
       -num_threads 1
-      -no_weights 
-      Clevels=6 
-      Clayers=8 
-      Cblk=\{64,64\} 
-      Cuse_sop=yes 
-      Cuse_eph=yes  
-      Corder=RPCL 
-      ORGgen_plt=yes 
-      ORGtparts=R 
+      -no_weights
+      Clevels=6
+      Clayers=8
+      Cblk=\{64,64\}
+      Cuse_sop=yes
+      Cuse_eph=yes
+      Corder=RPCL
+      ORGgen_plt=yes
+      ORGtparts=R
       Stiles=\{1024,1024\}
     geo_color: >
       -no_palette
-      -rate 2.4,1.48331273,.91673033,.56657224,.35016049,.21641118,.13374944,.08266171 
-      -jp2_space sRGB 
-      -double_buffering 10 
-      -num_threads 1 
-      -no_weights 
-      Clevels=6 
-      Clayers=8 
-      Cblk=\{64,64\} 
-      Cuse_sop=yes 
-      Cuse_eph=yes  
-      Corder=RPCL 
-      ORGgen_plt=yes 
-      ORGtparts=R 
+      -rate 2.4,1.48331273,.91673033,.56657224,.35016049,.21641118,.13374944,.08266171
+      -jp2_space sRGB
+      -double_buffering 10
+      -num_threads 1
+      -no_weights
+      Clevels=6
+      Clayers=8
+      Cblk=\{64,64\}
+      Cuse_sop=yes
+      Cuse_eph=yes
+      Corder=RPCL
+      ORGgen_plt=yes
+      ORGtparts=R
       Stiles=\{1024,1024\}
     geo_gray: >
       -no_palette
-      -rate 2.4,1.48331273,.91673033,.56657224,.35016049,.21641118,.13374944,.08266171 
-      -jp2_space sLUM 
-      -double_buffering 10 
+      -rate 2.4,1.48331273,.91673033,.56657224,.35016049,.21641118,.13374944,.08266171
+      -jp2_space sLUM
+      -double_buffering 10
       -num_threads 1
-      -no_weights 
-      Clevels=6 
-      Clayers=8 
-      Cblk=\{64,64\} 
-      Cuse_sop=yes 
-      Cuse_eph=yes  
-      Corder=RPCL 
-      ORGgen_plt=yes 
-      ORGtparts=R 
+      -no_weights
+      Clevels=6
+      Clayers=8
+      Cblk=\{64,64\}
+      Cuse_sop=yes
+      Cuse_eph=yes
+      Corder=RPCL
+      ORGgen_plt=yes
+      ORGtparts=R
       Stiles=\{1024,1024\}
+  events:
+    server: 'amqp://localhost:5672'
+    exchange:
+      plum: "plum_events"
+      geoblacklight: "gbl_events"
 
 development:
   <<: *defaults
@@ -78,6 +83,8 @@ test:
   <<: *defaults
   plum_binary_path: <%= Rails.root.join("spec", "fixtures", "plum_binaries") %>
   plum_derivative_path: <%= Rails.root.join("spec", "fixtures", "plum_derivatives") %>
+  events:
+    log_file: '/dev/null'
 
 production:
   <<: *defaults
