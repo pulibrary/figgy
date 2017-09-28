@@ -6,11 +6,18 @@
       <th>Download</th>
       <th>Update</th>
     </tr>
-    <% resource.file_metadata.each do |file| %>
+    <% resource.original_files.each do |file| %>
       <tr>
         <td><%= file.label.first %></td>
         <td><%= link_to "Download", valhalla.download_path(resource.id, file.id) %></td>
         <td><%= f.input "files[][#{file.id}]", as: :file, label: false, required: false %></td>
+      </tr>
+    <% end %>
+    <% resource.derivative_files.each do |file| %>
+      <tr>
+        <td><%= file.label.first %></td>
+        <td><%= link_to "Download", valhalla.download_path(resource.id, file.id) %></td>
+        <td><%= f.input "derivative_files[][#{file.id}]", as: :file, label: false, required: false %></td>
       </tr>
     <% end %>
     <tr>
