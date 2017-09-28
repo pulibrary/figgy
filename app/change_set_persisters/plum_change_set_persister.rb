@@ -150,7 +150,7 @@ class PlumChangeSetPersister
 
       def after_commit
         registered_handlers.fetch(:after_commit, []).each do |handler|
-          instance = handler.new(change_set_persister: self, change_set: nil)
+          instance = handler.new(change_set_persister: self, change_set: nil, created_file_sets: @created_file_sets)
           if transaction?
             queued_events << instance
           else
