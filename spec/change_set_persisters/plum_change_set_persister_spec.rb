@@ -218,9 +218,12 @@ RSpec.describe PlumChangeSetPersister do
       let(:change_set_persister) do
         described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: false)
       end
+      let(:resource) { FactoryGirl.build(:ephemera_folder) }
+      let(:change_set) { EphemeraFolderChangeSet.new(resource, characterize: false) }
 
       before do
         allow(Figgy).to receive(:messaging_client).and_return(rabbit_connection)
+        change_set.files = [file1]
       end
 
       it 'publishes messages for updated file sets', run_real_derivatives: false, rabbit_stubbed: true do
@@ -244,22 +247,41 @@ RSpec.describe PlumChangeSetPersister do
         expect(rabbit_connection).to have_received(:publish).at_least(:once).with(expected_result.to_json)
       end
 
-      it 'publishes messages for updated ephemera folders', run_real_derivatives: false, rabbit_stubbed: true do
-        resource = FactoryGirl.build(:ephemera_folder)
-        change_set = EphemeraFolderChangeSet.new(resource, characterize: false)
-        change_set.files = [file1]
-
+      it 'publishes messages for updates and creating file sets', run_real_derivatives: false, rabbit_stubbed: true do
         output = change_set_persister.save(change_set: change_set)
         file_set = query_service.find_members(resource: output).first
 
-        change_set = FileSetChangeSet.new(file_set)
-        change_set_persister.save(change_set: change_set)
+        fs_change_set = FileSetChangeSet.new(file_set)
+        fs_output = change_set_persister.save(change_set: fs_change_set)
 
         expected_result = {
           "id" => output.id.to_s,
           "event" => "UPDATED",
           "manifest_url" => "http://www.example.com/concern/ephemera_folders/#{output.id}/manifest",
           "collection_slugs" => []
+        }
+
+        expect(rabbit_connection).to have_received(:publish).at_least(:once).with(expected_result.to_json)
+
+        fs_expected_result = {
+          "id" => fs_output.id.to_s,
+          "event" => "CREATED",
+          "manifest_url" => "",
+          "collection_slugs" => []
+        }
+
+        expect(rabbit_connection).to have_received(:publish).at_least(:once).with(fs_expected_result.to_json)
+      end
+
+      it 'publishes messages for deletion', run_real_derivatives: false, rabbit_stubbed: true do
+        output = change_set_persister.save(change_set: change_set)
+        updated_change_set = EphemeraFolderChangeSet.new(output)
+        change_set_persister.delete(change_set: updated_change_set)
+
+        expected_result = {
+          "id" => output.id.to_s,
+          "event" => "DELETED",
+          "manifest_url" => "http://www.example.com/concern/ephemera_folders/#{output.id}/manifest"
         }
 
         expect(rabbit_connection).to have_received(:publish).at_least(:once).with(expected_result.to_json)
