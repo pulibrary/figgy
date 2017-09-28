@@ -23,6 +23,22 @@ RSpec.describe CatalogController do
 
       expect(assigns(:document_list).length).to eq 1
     end
+    it "can search by imported metadata title" do
+      stub_bibdata(bib_id: "123456")
+      stub_ezid(shoulder: "99999/fk4", blade: "123456")
+      persister.save(resource: FactoryGirl.create_for_repository(:scanned_resource, source_metadata_identifier: "123456", import_metadata: true))
+
+      get :index, params: { q: "Earth rites" }
+
+      expect(assigns(:document_list).length).to eq 1
+    end
+    it "can search by non-imported title" do
+      persister.save(resource: FactoryGirl.build(:scanned_resource, title: "Testing This"))
+
+      get :index, params: { q: "Testing" }
+
+      expect(assigns(:document_list).length).to eq 1
+    end
   end
 
   describe "FileSet behavior" do
