@@ -40,7 +40,7 @@ class PlumChangeSetPersister
 
   class Basic
     attr_reader :metadata_adapter, :storage_adapter, :created_file_sets, :handlers
-    attr_accessor :created_file_sets
+    attr_accessor :created_file_sets, :queued_events
     delegate :persister, :query_service, to: :metadata_adapter
     def initialize(metadata_adapter:, storage_adapter:, transaction: false, characterize: true, handlers: {})
       @metadata_adapter = metadata_adapter
@@ -48,6 +48,7 @@ class PlumChangeSetPersister
       @transaction = transaction
       @characterize = characterize
       @handlers = handlers
+      @queued_events = []
     end
 
     def registered_handlers
@@ -58,16 +59,16 @@ class PlumChangeSetPersister
       before_save(change_set: change_set)
       persister.save(resource: change_set.resource).tap do |output|
         after_save(change_set: change_set, updated_resource: output)
-        after_save_commit(change_set: change_set, updated_resource: output) unless transaction?
-        after_commit unless transaction?
+        after_save_commit(change_set: change_set, updated_resource: output)
+        after_commit
       end
     end
 
     def delete(change_set:)
       before_delete(change_set: change_set)
       persister.delete(resource: change_set.resource).tap do
-        after_delete_commit(change_set: change_set) unless transaction?
-        after_commit unless transaction?
+        after_delete_commit(change_set: change_set)
+        after_commit
       end
     end
 
@@ -82,9 +83,11 @@ class PlumChangeSetPersister
         with(metadata_adapter: buffered_adapter) do |buffered_changeset_persister|
           yield(buffered_changeset_persister)
           @created_file_sets = buffered_changeset_persister.created_file_sets
+          self.queued_events = buffered_changeset_persister.queued_events
         end
       end
-      after_commit
+      queued_events.each(&:run)
+      self.queued_events = []
     end
 
     def transaction?
@@ -119,7 +122,12 @@ class PlumChangeSetPersister
 
       def after_save_commit(change_set:, updated_resource:)
         registered_handlers.fetch(:after_save_commit, []).each do |handler|
-          handler.new(change_set_persister: self, change_set: change_set, post_save_resource: updated_resource).run
+          instance = handler.new(change_set_persister: self, change_set: change_set, post_save_resource: updated_resource)
+          if transaction?
+            queued_events << instance
+          else
+            instance.run
+          end
         end
       end
 
@@ -131,13 +139,23 @@ class PlumChangeSetPersister
 
       def after_delete_commit(change_set:)
         registered_handlers.fetch(:after_delete_commit, []).each do |handler|
-          handler.new(change_set_persister: self, change_set: change_set).run
+          instance = handler.new(change_set_persister: self, change_set: change_set)
+          if transaction?
+            queued_events << instance
+          else
+            instance.run
+          end
         end
       end
 
       def after_commit
         registered_handlers.fetch(:after_commit, []).each do |handler|
-          handler.new(change_set_persister: self, change_set: nil).run
+          instance = handler.new(change_set_persister: self, change_set: nil)
+          if transaction?
+            queued_events << instance
+          else
+            instance.run
+          end
         end
       end
   end
