@@ -243,6 +243,27 @@ RSpec.describe PlumChangeSetPersister do
 
         expect(rabbit_connection).to have_received(:publish).at_least(:once).with(expected_result.to_json)
       end
+
+      it 'publishes messages for updated ephemera folders', run_real_derivatives: false, rabbit_stubbed: true do
+        resource = FactoryGirl.build(:ephemera_folder)
+        change_set = EphemeraFolderChangeSet.new(resource, characterize: false)
+        change_set.files = [file1]
+
+        output = change_set_persister.save(change_set: change_set)
+        file_set = query_service.find_members(resource: output).first
+
+        change_set = FileSetChangeSet.new(file_set)
+        change_set_persister.save(change_set: change_set)
+
+        expected_result = {
+          "id" => output.id.to_s,
+          "event" => "UPDATED",
+          "manifest_url" => "http://www.example.com/concern/ephemera_folders/#{output.id}/manifest",
+          "collection_slugs" => []
+        }
+
+        expect(rabbit_connection).to have_received(:publish).at_least(:once).with(expected_result.to_json)
+      end
     end
   end
 
