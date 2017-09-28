@@ -32,6 +32,18 @@ RSpec.describe CatalogController do
 
       expect(assigns(:document_list).length).to eq 1
     end
+    it "can search by ARK" do
+      stub_bibdata(bib_id: "123456")
+      stub_ezid(shoulder: "99999/fk4", blade: "123456")
+      persister.save(resource: FactoryGirl.create_for_repository(:scanned_resource, source_metadata_identifier: "123456", import_metadata: true))
+
+      get :index, params: { q: "ark:/99999/fk4123456" }
+
+      expect(assigns(:document_list).length).to eq 1
+
+      get :index, params: { q: "fk4123456" }
+      expect(assigns(:document_list).length).to eq 1
+    end
     it "can search by non-imported title" do
       persister.save(resource: FactoryGirl.build(:scanned_resource, title: "Testing This"))
 
