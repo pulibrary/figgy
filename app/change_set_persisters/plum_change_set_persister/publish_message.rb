@@ -26,17 +26,18 @@ class PlumChangeSetPersister
   end
 
   class PublishCreatedMessage
-    attr_reader :change_set_persister, :change_set
+    attr_reader :change_set_persister, :change_set, :created_file_sets
     def initialize(change_set_persister:, change_set: nil, created_file_sets: nil)
       @change_set = change_set
       @change_set_persister = change_set_persister
+      @created_file_sets = created_file_sets
     end
 
     def run
       created_file_sets.each { |created_file_set| messenger.record_created(created_file_set) } unless created_file_sets.blank?
     end
 
-    delegate :messenger, :created_file_sets, to: :change_set_persister
+    delegate :messenger, to: :change_set_persister
   end
 
   class PublishUpdatedMessage
