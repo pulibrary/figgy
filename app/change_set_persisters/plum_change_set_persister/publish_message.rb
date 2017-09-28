@@ -27,7 +27,7 @@ class PlumChangeSetPersister
 
   class PublishCreatedMessage
     attr_reader :change_set_persister, :change_set
-    def initialize(change_set_persister:, change_set: nil)
+    def initialize(change_set_persister:, change_set: nil, created_file_sets: nil)
       @change_set = change_set
       @change_set_persister = change_set_persister
     end

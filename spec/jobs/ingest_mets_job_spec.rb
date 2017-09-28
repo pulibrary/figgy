@@ -45,6 +45,7 @@ RSpec.describe IngestMETSJob do
       file_sets = adapter.query_service.find_members(resource: book)
       expect(book.logical_structure[0].nodes[0].nodes[0].proxy).to eq [file_sets.first.id]
       expect(file_sets.first.title).to eq ["leaf 1. recto"]
+      expect(file_sets.first.derivative_file).not_to be_blank
     end
     context "when given a work with volumes" do
       let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-4609321-s42.mets") }
