@@ -24,7 +24,7 @@ class IngestMETSJob < ApplicationJob
   end
 
   def storage_adapter
-    Valkyrie.config.storage_adapter
+    Valkyrie::StorageAdapter.find(:disk_via_copy)
   end
 
   class Ingester
