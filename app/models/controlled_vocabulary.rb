@@ -130,6 +130,20 @@ class ControlledVocabulary
     end
   end
 
+  class GeoVectorFormat < ControlledVocabulary
+    ControlledVocabulary.register(:geo_vector_format, self)
+    def self.authority_config
+      @authority_config ||= YAML.safe_load(File.read(Rails.root.join("config", "authorities", "geo_vector_formats.yml")), [Symbol])
+    end
+
+    def all(_scope = nil)
+      @all ||=
+        self.class.authority_config[:terms].map do |term|
+          Term.new(term)
+        end
+    end
+  end
+
   class PDFType < ControlledVocabulary
     ControlledVocabulary.register(:pdf_type, self)
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# TODO: don't inherit from scanned resource, just copy properties?
 class ScannedMapChangeSet < ScannedResourceChangeSet
   include GeoChangeSetProperties
 

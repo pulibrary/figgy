@@ -25,7 +25,7 @@ class GeoCharacterizationService
   end
 
   def valid?
-    parent.is_a?(ScannedMap)
+    parent.respond_to?(:geo_resource?) && parent.geo_resource?
   end
 
   def parent

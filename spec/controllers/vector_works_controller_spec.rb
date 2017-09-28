@@ -1,0 +1,258 @@
+# frozen_string_literal: true
+require 'rails_helper'
+include ActionDispatch::TestProcess
+
+RSpec.describe VectorWorksController do
+  let(:user) { nil }
+  let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+  let(:persister) { adapter.persister }
+  let(:query_service) { adapter.query_service }
+  before do
+    sign_in user if user
+  end
+
+  describe "new" do
+    context "when not logged in" do
+      let(:user) { nil }
+      it "throws a CanCan::AccessDenied error" do
+        expect { get :new }.to raise_error CanCan::AccessDenied
+      end
+    end
+
+    context "when logged in, with permission" do
+      let(:user) { FactoryGirl.create(:admin) }
+      render_views
+      it "has a form for creating vector works" do
+        collection = FactoryGirl.create_for_repository(:collection)
+        # TODO: look at what create_for_repository actually does
+        parent = FactoryGirl.create_for_repository(:vector_work)
+
+        get :new, params: { parent_id: parent.id.to_s }
+        expect(response.body).to have_field "Title"
+        expect(response.body).to have_field "Rights Statement"
+        expect(response.body).to have_field "Rights Note"
+        expect(response.body).to have_field "Local identifier"
+        expect(response.body).to have_selector "#vector_work_append_id[value='#{parent.id}']", visible: false
+        expect(response.body).to have_select "Collections", name: "vector_work[member_of_collection_ids][]", options: [collection.title.first]
+        expect(response.body).to have_field "Spatial"
+        expect(response.body).to have_field "Temporal"
+        expect(response.body).to have_select "Rights Statement", name: "vector_work[rights_statement]", options: [""] + ControlledVocabulary.for(:rights_statement).all.map(&:label)
+        expect(response.body).to have_field "Cartographic scale"
+        expect(response.body).to have_field "Cartographic projection"
+        expect(response.body).to have_checked_field "Private"
+        expect(response.body).to have_button "Save"
+      end
+    end
+  end
+
+  describe "create" do
+    let(:user) { FactoryGirl.create(:admin) }
+    let(:valid_params) do
+      {
+        title: ['Title 1', 'Title 2'],
+        rights_statement: 'Test Statement',
+        visibility: 'restricted'
+      }
+    end
+    let(:invalid_params) do
+      {
+        title: [""],
+        rights_statement: 'Test Statement',
+        visibility: 'restricted'
+      }
+    end
+    context "when not logged in" do
+      let(:user) { nil }
+      it "throws a CanCan::AccessDenied error" do
+        expect { post :create, params: { vector_work: valid_params } }.to raise_error CanCan::AccessDenied
+      end
+    end
+    it "can create a vector work" do
+      post :create, params: { vector_work: valid_params }
+
+      expect(response).to be_redirect
+      expect(response.location).to start_with "http://test.host/catalog/"
+      id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
+      expect(find_resource(id).title).to contain_exactly "Title 1", "Title 2"
+    end
+    context "when joining a collection" do
+      let(:valid_params) do
+        {
+          title: ['Title 1', 'Title 2'],
+          rights_statement: 'Test Statement',
+          visibility: 'restricted',
+          member_of_collection_ids: [collection.id.to_s]
+        }
+      end
+      let(:collection) { FactoryGirl.create_for_repository(:collection) }
+      it "works" do
+        post :create, params: { vector_work: valid_params }
+
+        expect(response).to be_redirect
+        expect(response.location).to start_with "http://test.host/catalog/"
+        id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
+        expect(find_resource(id).member_of_collection_ids).to contain_exactly collection.id
+      end
+    end
+    # TODO: Do we need this in multiple tests?
+    context "when something goes wrong" do
+      it "doesn't persist anything at all when it's solr erroring" do
+        allow(Valkyrie::MetadataAdapter.find(:index_solr)).to receive(:persister).and_return(
+          Valkyrie::MetadataAdapter.find(:index_solr).persister
+        )
+        allow(Valkyrie::MetadataAdapter.find(:index_solr).persister).to receive(:save_all).and_raise("Bad")
+
+        expect do
+          post :create, params: { vector_work: valid_params }
+        end.to raise_error "Bad"
+        expect(Valkyrie::MetadataAdapter.find(:postgres).query_service.find_all.to_a.length).to eq 0
+      end
+
+      it "doesn't persist anything at all when it's postgres erroring" do
+        allow(Valkyrie::MetadataAdapter.find(:postgres)).to receive(:persister).and_return(
+          Valkyrie::MetadataAdapter.find(:postgres).persister
+        )
+        allow(Valkyrie::MetadataAdapter.find(:postgres).persister).to receive(:save).and_raise("Bad")
+        expect do
+          post :create, params: { vector_work: valid_params }
+        end.to raise_error "Bad"
+        expect(Valkyrie::MetadataAdapter.find(:postgres).query_service.find_all.to_a.length).to eq 0
+        expect(Valkyrie::MetadataAdapter.find(:index_solr).query_service.find_all.to_a.length).to eq 0
+      end
+    end
+    it "renders the form if it doesn't create a vector work" do
+      post :create, params: { vector_work: invalid_params }
+      expect(response).to render_template "valhalla/base/new"
+    end
+  end
+
+  describe "destroy" do
+    let(:user) { FactoryGirl.create(:admin) }
+    context "when not logged in" do
+      let(:user) { nil }
+      it "throws a CanCan::AccessDenied error" do
+        vector_work = FactoryGirl.create_for_repository(:vector_work)
+        expect { delete :destroy, params: { id: vector_work.id.to_s } }.to raise_error CanCan::AccessDenied
+      end
+    end
+    it "can delete a book" do
+      vector_work = FactoryGirl.create_for_repository(:vector_work)
+      delete :destroy, params: { id: vector_work.id.to_s }
+
+      expect(response).to redirect_to root_path
+      expect { query_service.find_by(id: vector_work.id) }.to raise_error ::Valkyrie::Persistence::ObjectNotFoundError
+    end
+  end
+
+  describe "edit" do
+    let(:user) { FactoryGirl.create(:admin) }
+    context "when not logged in" do
+      let(:user) { nil }
+      it "throws a CanCan::AccessDenied error" do
+        vector_work = FactoryGirl.create_for_repository(:vector_work)
+
+        expect { get :edit, params: { id: vector_work.id.to_s } }.to raise_error CanCan::AccessDenied
+      end
+    end
+    context "when a vector work doesn't exist" do
+      it "raises an error" do
+        expect { get :edit, params: { id: "test" } }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+      end
+    end
+    context "when it does exist" do
+      render_views
+      it "renders a form" do
+        vector_work = FactoryGirl.create_for_repository(:vector_work)
+        get :edit, params: { id: vector_work.id.to_s }
+
+        expect(response.body).to have_field "Title", with: vector_work.title.first
+        expect(response.body).to have_button "Save"
+      end
+    end
+  end
+
+  describe "update" do
+    let(:user) { FactoryGirl.create(:admin) }
+    context "when not logged in" do
+      let(:user) { nil }
+      it "throws a CanCan::AccessDenied error" do
+        vector_work = FactoryGirl.create_for_repository(:vector_work)
+
+        expect { patch :update, params: { id: vector_work.id.to_s, vector_work: { title: ["Two"] } } }.to raise_error CanCan::AccessDenied
+      end
+    end
+    context "when a vector work doesn't exist" do
+      it "raises an error" do
+        expect { patch :update, params: { id: "test" } }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+      end
+    end
+    context "when it does exist" do
+      it "saves it and redirects" do
+        vector_work = FactoryGirl.create_for_repository(:vector_work)
+        patch :update, params: { id: vector_work.id.to_s, vector_work: { title: ["Two"] } }
+
+        expect(response).to be_redirect
+        expect(response.location).to eq "http://test.host/catalog/id-#{vector_work.id}"
+        id = response.location.gsub("http://test.host/catalog/id-", "")
+        reloaded = find_resource(id)
+
+        expect(reloaded.title).to eq ["Two"]
+      end
+      it "renders the form if it fails validations" do
+        vector_work = FactoryGirl.create_for_repository(:vector_work)
+        patch :update, params: { id: vector_work.id.to_s, vector_work: { title: [""] } }
+
+        expect(response).to render_template "valhalla/base/edit"
+      end
+      it_behaves_like "a workflow controller", :vector_work
+    end
+  end
+
+  # TODO: move to spec helper?
+  def find_resource(id)
+    query_service.find_by(id: Valkyrie::ID.new(id.to_s))
+  end
+
+  describe "GET /vector_works/:id/file_manager" do
+    let(:user) { FactoryGirl.create(:admin) }
+
+    context "when an admin and with a shapefile" do
+      let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: 'application/zip; ogr-format="ESRI Shapefile"') }
+
+      it "sets the record and children variables" do
+        child = FactoryGirl.create_for_repository(:file_set, file_metadata: [file_metadata])
+        parent = FactoryGirl.create_for_repository(:vector_work, member_ids: child.id)
+        get :file_manager, params: { id: parent.id }
+
+        expect(assigns(:change_set).id).to eq parent.id
+        expect(assigns(:children).map(&:id)).to eq [child.id]
+      end
+    end
+
+    context "when an admin and with an fgdc metadata file" do
+      let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: 'application/xml; schema=fgdc') }
+
+      it "sets the record and metadata children variables" do
+        child = FactoryGirl.create_for_repository(:file_set, file_metadata: [file_metadata])
+        parent = FactoryGirl.create_for_repository(:vector_work, member_ids: child.id)
+        get :file_manager, params: { id: parent.id }
+
+        expect(assigns(:change_set).id).to eq parent.id
+        expect(assigns(:metadata_children).map(&:id)).to eq [child.id]
+      end
+    end
+  end
+
+  describe "PUT /concern/vector_works/:id/extract_metadata/:file_set_id" do
+    let(:user) { FactoryGirl.create(:admin) }
+    let(:file) { fixture_file_upload('files/geo_metadata/fgdc.xml', 'application/xml') }
+    let(:tika_output) { tika_xml_output }
+
+    it "extracts fgdc metadata into vector work" do
+      vector_work = FactoryGirl.create_for_repository(:vector_work, files: [file])
+
+      put :extract_metadata, params: { id: vector_work.id.to_s, file_set_id: vector_work.member_ids.first.to_s }
+      expect(query_service.find_by(id: vector_work.id).title).to eq ["China census data by county, 2000-2010"]
+    end
+  end
+end

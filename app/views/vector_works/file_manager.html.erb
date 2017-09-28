@@ -1,0 +1,23 @@
+<h1>File Manager</h1>
+<ul class="breadcrumb">
+  <li><%= link_to decorated_change_set_resource.header, solr_document_path(id: "id-#{@change_set.id}") %></li>
+  <li class="active">File Manager</li>
+</ul>
+<% if !@children.empty? %>
+  <div data-action="file-manager">
+    <div class="col-md-3" id="file-manager-tools">
+      <h2>Toolbar</h2>
+      <%= render "file_manager_actions" %>
+    </div>
+    <div class="col-md-3" id="label-tools-spacer" class="fixed"></div>
+    <div class="col-md-9" id="order-grid">
+      <%= render "file_manager_members" %>
+      <% if !@metadata_children.empty? %>
+        <%= render 'geo_metadata_members' %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+<div id="file-manager-extra-tools">
+  <%= render "file_manager_extra_tools" %>
+</div>

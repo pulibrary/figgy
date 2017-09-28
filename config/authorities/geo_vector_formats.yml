@@ -1,0 +1,7 @@
+:terms:
+  - :value: application/zip; ogr-format="ESRI Shapefile"
+    :term: ESRI Shapefile
+    :definition: ESRI Shapefile
+  - :value: application/vnd.geo+json
+    :term: GeoJSON
+    :definition: GeoJSON

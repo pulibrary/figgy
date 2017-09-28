@@ -10,7 +10,8 @@ module Schema
         :provenance, #  http://purl.org/dc/terms/provenance
         :spatial, # http://purl.org/dc/terms/spatial
         :temporal, # http://purl.org/dc/terms/temporal
-        :issued # http://purl.org/dc/terms/issued
+        :issued, # http://purl.org/dc/terms/issued
+        :cartographic_projection # http://bibframe.org/vocab/cartographicProjection
       ]
     end
 
