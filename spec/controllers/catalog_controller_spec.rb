@@ -14,6 +14,17 @@ RSpec.describe CatalogController do
     end
   end
 
+  describe "#index" do
+    it "can search by source metadata identifier" do
+      stub_bibdata(bib_id: "123456")
+      persister.save(resource: FactoryGirl.build(:scanned_resource, source_metadata_identifier: "123456"))
+
+      get :index, params: { q: "123456" }
+
+      expect(assigns(:document_list).length).to eq 1
+    end
+  end
+
   describe "FileSet behavior" do
     before do
       sign_in FactoryGirl.create(:admin)
