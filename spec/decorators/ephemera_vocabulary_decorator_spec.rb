@@ -39,22 +39,35 @@ RSpec.describe EphemeraVocabularyDecorator do
       expect(resource.decorate.vocabulary_label).to eq resource.decorate.vocabulary.label
     end
   end
+
+  describe "#terms" do
+    it "lists all terms in alphabetical order" do
+      resource = FactoryGirl.create_for_repository(:ephemera_vocabulary)
+      FactoryGirl.create_for_repository(:ephemera_term, label: "C", member_of_vocabulary_id: resource.id)
+      FactoryGirl.create_for_repository(:ephemera_term, label: "A", member_of_vocabulary_id: resource.id)
+
+      expect(resource.decorate.terms.map(&:label)).to eq ["A", "C"]
+    end
+  end
+
   context 'when a parent of other vocabularies' do
     let(:resource) { FactoryGirl.create_for_repository(:ephemera_vocabulary) }
     before do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
-      child1 = FactoryGirl.build(:ephemera_vocabulary, label: 'test child vocabulary1')
+      child1 = FactoryGirl.build(:ephemera_vocabulary, label: 'test child vocabulary2')
       child1.member_of_vocabulary_id = resource.id
       adapter.persister.save(resource: child1)
-      child2 = FactoryGirl.build(:ephemera_vocabulary, label: 'test child vocabulary2')
+      child2 = FactoryGirl.build(:ephemera_vocabulary, label: 'test child vocabulary1')
       child2.member_of_vocabulary_id = resource.id
       adapter.persister.save(resource: child2)
     end
 
     it 'retrieves the parent vocabulary' do
-      expect(resource.decorate.categories.length).to eq 2
-      expect(resource.decorate.categories.first).to be_a EphemeraVocabulary
-      expect(resource.decorate.categories.last).to be_a EphemeraVocabulary
+      categories = resource.decorate.categories
+      expect(categories.length).to eq 2
+      expect(categories.map(&:label)).to eq ["test child vocabulary1", "test child vocabulary2"]
+      expect(categories.first).to be_a EphemeraVocabulary
+      expect(categories.last).to be_a EphemeraVocabulary
     end
   end
 end
