@@ -4,7 +4,7 @@ class CatalogController < ApplicationController
   layout "application"
   def self.search_config
     {
-      'qf' => %w[title_ssim source_metadata_identifier_ssim],
+      'qf' => %w[identifier_tesim title_ssim title_tesim source_metadata_identifier_ssim],
       'qt' => 'search',
       'rows' => 10
     }
