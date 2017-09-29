@@ -60,6 +60,23 @@ RSpec.describe PlumImporter do
     expect(output.logical_structure[0].nodes[1].label).to eq ["Chapter 2"]
     expect(output.logical_structure[0].nodes[0].nodes[0].proxy).to eq [members[1].id]
   end
+  context "when a derivative is missing" do
+    before do
+      import_plum_record("#{id}-broken")
+      stub_bibdata(bib_id: "10068705")
+    end
+    it "generates it" do
+      Valkyrie::MetadataAdapter.find(:indexing_persister).persister.save(
+        resource: Collection.new(local_identifier: "pqb98np484", slug: "cotsen", title: "Treasures of the Cotsen Collection")
+      )
+      output = nil
+      change_set_persister.buffer_into_index do |buffered_changeset_persister|
+        output = described_class.new(id: id, change_set_persister: buffered_changeset_persister).import!
+      end
+      members = query_service.find_members(resource: output).to_a
+      expect(members[0].derivative_file).not_to be_blank
+    end
+  end
 
   context "when given a multi volume work" do
     let(:id) { "p3b593k91p" }

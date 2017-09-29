@@ -31,6 +31,12 @@ class PlumImporter
       handlers: change_set_persister.handlers
     )
     derivative_change_set_persister.save(change_set: file_change_set)
+  rescue Errno::ENOENT
+    queue_derivative(member)
+  end
+
+  def queue_derivative(member)
+    CreateDerivativesJob.perform_later(member.id.to_s)
   end
 
   def update_structure(resource, members, change_set_persister)
