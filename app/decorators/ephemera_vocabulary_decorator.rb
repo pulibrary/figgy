@@ -32,7 +32,7 @@ class EphemeraVocabularyDecorator < Valkyrie::ResourceDecorator
   def find_references
     @referenced_by ||=
       begin
-        query_service.find_inverse_references_by(resource: model, property: :member_of_vocabulary_id)
+        query_service.find_inverse_references_by(resource: model, property: :member_of_vocabulary_id).to_a
 
       end
   end
@@ -41,14 +41,14 @@ class EphemeraVocabularyDecorator < Valkyrie::ResourceDecorator
     @categories ||=
       find_references.select { |r| r.is_a?(EphemeraVocabulary) }
                      .map(&:decorate)
-                     .to_a
+                     .sort_by(&:label)
   end
 
   def terms
     @terms ||=
       find_references.select { |r| r.is_a?(EphemeraTerm) }
                      .map(&:decorate)
-                     .to_a
+                     .sort_by(&:label)
   end
 
   def manageable_files?
