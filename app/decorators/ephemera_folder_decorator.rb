@@ -22,6 +22,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     :geo_subject,
     :description,
     :date_created,
+    :rendered_date_range,
     :dspace_url,
     :source_url,
     :visibility
@@ -51,6 +52,15 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
 
   def collections
     @collections ||= query_service.find_references_by(resource: self, property: :member_of_collection_ids).to_a
+  end
+
+  def rendered_date_range
+    return unless first_range.present?
+    first_range.range_string
+  end
+
+  def first_range
+    @first_range ||= Array.wrap(date_range).map(&:decorate).first
   end
 
   def rendered_rights_statement

@@ -154,4 +154,21 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       expect(rendered).to have_selector 'li.sha256', text: '547c81b080eb2d7c09e363a670c46960ac15a6821033263867dd59a31376509c'
     end
   end
+  context 'when given an Ephemera Folder' do
+    let(:folder) { FactoryGirl.create_for_repository(:ephemera_folder, date_range: DateRange.new(start: "1989", end: "2017")) }
+    let(:document) { solr.resource_factory.from_resource(resource: folder) }
+    let(:solr) { Valkyrie::MetadataAdapter.find(:index_solr) }
+    let(:solr_document) { SolrDocument.new(document) }
+
+    before do
+      assign :document, solr_document
+      allow(view).to receive(:document).and_return(solr_document)
+      render
+    end
+
+    it "shows the date range" do
+      expect(rendered).to have_selector "th", text: "Date Range"
+      expect(rendered).to have_selector 'li.rendered_date_range', text: '1989-2017'
+    end
+  end
 end

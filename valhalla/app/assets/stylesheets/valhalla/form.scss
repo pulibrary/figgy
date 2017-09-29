@@ -114,3 +114,8 @@ form.button-to {
 .required-tag {
   vertical-align: baseline;
 }
+.has-error {
+  .control-label {
+    margin-left: 0.5em;
+  }
+}

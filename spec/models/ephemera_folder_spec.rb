@@ -16,4 +16,8 @@ RSpec.describe EphemeraFolder do
   it "can have manifests" do
     expect(folder.class.can_have_manifests?).to be true
   end
+  it "can have a date range" do
+    folder.date_range = DateRange.new(start: "2017", end: "2018")
+    expect(folder.date_range.first.start).to eq ["2017"]
+  end
 end

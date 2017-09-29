@@ -2,6 +2,7 @@
 class EphemeraFolderChangeSet < Valhalla::ChangeSet
   apply_workflow(FolderWorkflow)
   validates :barcode, :folder_number, :title, :language, :genre, :width, :height, :page_count, :visibility, :rights_statement, presence: true
+  validate :date_range_validity
   validates_with StateValidator
   property :barcode, multiple: false, required: true
   property :folder_number, multiple: false, required: true
@@ -40,7 +41,24 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   property :pdf_type, multiple: false, required: false
   property :local_identifier, multiple: false, required: false
 
+  property :date_range, multiple: false, required: false
+  property :date_range_form_attributes, virtual: true
   delegate :human_readable_type, to: :model
+
+  def date_range_form_attributes=(attributes)
+    return unless date_range_form.validate(attributes)
+    date_range_form.sync
+    self.date_range = date_range_form.model
+  end
+
+  def date_range_validity
+    return if date_range_form.valid?
+    errors.add(:date_range_form, "is not valid.")
+  end
+
+  def date_range_form
+    @date_range_form ||= DynamicChangeSet.new(Array.wrap(date_range).first || DateRange.new).tap(&:prepopulate!)
+  end
 
   def primary_terms
     [
@@ -64,6 +82,7 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
       :geo_subject,
       :description,
       :date_created,
+      :date_range_form,
       :dspace_url,
       :source_url,
       :append_id
