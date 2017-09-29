@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class EphemeraBoxChangeSet < Valhalla::ChangeSet
+  include BaseResourceChangeSet
   apply_workflow BoxWorkflow
   validates :barcode, :box_number, :visibility, :rights_statement, presence: true
   property :barcode, multiple: false, required: true
@@ -31,16 +32,8 @@ class EphemeraBoxChangeSet < Valhalla::ChangeSet
     ]
   end
 
-  def visibility=(visibility)
-    super.tap do |_result|
-      case visibility
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-        self.read_groups = [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
-        self.read_groups = [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED]
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
-        self.read_groups = []
-      end
-    end
+  # Override base class; we don't have remote metadata here
+  def apply_remote_metadata?
+    false
   end
 end

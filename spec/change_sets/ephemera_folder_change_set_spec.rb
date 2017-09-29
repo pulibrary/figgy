@@ -98,4 +98,10 @@ RSpec.describe EphemeraFolderChangeSet do
       expect(change_set.subject).to be_empty
     end
   end
+
+  describe "#apply_remote_metadata?" do
+    it "overrides to be false" do
+      expect(change_set.apply_remote_metadata?).to be false
+    end
+  end
 end

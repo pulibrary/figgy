@@ -19,4 +19,10 @@ RSpec.describe EphemeraBoxChangeSet do
       expect(change_set.state).to eq "new"
     end
   end
+
+  describe "#apply_remote_metadata?" do
+    it "overrides to be false" do
+      expect(change_set.apply_remote_metadata?).to be false
+    end
+  end
 end

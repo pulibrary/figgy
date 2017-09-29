@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class EphemeraFolderChangeSet < Valhalla::ChangeSet
+  include BaseResourceChangeSet
   apply_workflow(FolderWorkflow)
   validates :barcode, :folder_number, :title, :language, :genre, :width, :height, :page_count, :visibility, :rights_statement, presence: true
   validates_with StateValidator
@@ -70,19 +71,6 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
     ]
   end
 
-  def visibility=(visibility)
-    super.tap do |_result|
-      case visibility
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-        self.read_groups = [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
-        self.read_groups = [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED]
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
-        self.read_groups = []
-      end
-    end
-  end
-
   def genre=(genre_value)
     return super(genre_value) if genre_value.blank?
     super(coerce_string_value(genre_value))
@@ -106,6 +94,11 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   def subject=(subject_values)
     return super(subject_values) if subject_values.blank?
     super(subject_values.map { |subject_value| coerce_string_value(subject_value) })
+  end
+
+  # Override base class; we don't have remote metadata here
+  def apply_remote_metadata?
+    false
   end
 
   private

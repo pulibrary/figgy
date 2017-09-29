@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class ScannedResourceChangeSet < Valhalla::ChangeSet
+  include BaseResourceChangeSet
   apply_workflow(BookWorkflow)
   delegate :human_readable_type, to: :model
   property :title, multiple: true, required: true, default: []
@@ -29,8 +30,8 @@ class ScannedResourceChangeSet < Valhalla::ChangeSet
   validates_with StateValidator
   validates_with ViewingDirectionValidator
   validates_with ViewingHintValidator
-  validate :source_metadata_identifier_or_title
-  validate :source_metadata_identifier_valid
+  validates_with SourceMetadataIdentifierValidator
+  validates_with SourceMetadataIdentifierOrTitleValidator
   validates :visibility, :rights_statement, presence: true
 
   def primary_terms
@@ -47,39 +48,5 @@ class ScannedResourceChangeSet < Valhalla::ChangeSet
       :member_of_collection_ids,
       :append_id
     ]
-  end
-
-  def visibility=(visibility)
-    super.tap do |_result|
-      case visibility
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-        self.read_groups = [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
-        self.read_groups = [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED]
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
-        self.read_groups = []
-      end
-    end
-  end
-
-  # Validate that either the source_metadata_identifier or the title is set.
-  def source_metadata_identifier_or_title
-    return if source_metadata_identifier.present? || Array.wrap(title).first.present?
-    errors.add(:title, "You must provide a source metadata id or a title")
-    errors.add(:source_metadata_identifier, "You must provide a source metadata id or a title")
-  end
-
-  def source_metadata_identifier_valid
-    return unless apply_remote_metadata?
-    return if RemoteRecord.retrieve(Array(source_metadata_identifier).first).success?
-    errors.add(:source_metadata_identifier, "Error retrieving metadata")
-  end
-
-  def apply_remote_metadata?
-    source_metadata_identifier.present? && (!persisted? || refresh_remote_metadata == "1")
-  end
-
-  def apply_remote_metadata_directly?
-    false
   end
 end
