@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 # A base mixin for resources that hold files
-module BaseResourceChangeSet
+module VisibilityProperty
   extend ActiveSupport::Concern
 
   included do
+    # override this property to define a different default
+    property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+
     def visibility=(visibility)
       super.tap do |_result|
         case visibility
@@ -15,14 +18,6 @@ module BaseResourceChangeSet
           self.read_groups = []
         end
       end
-    end
-
-    def apply_remote_metadata?
-      source_metadata_identifier.present? && (!persisted? || refresh_remote_metadata == "1")
-    end
-
-    def apply_remote_metadata_directly?
-      false
     end
   end
 end

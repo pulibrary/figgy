@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 class ScannedResourceChangeSet < Valhalla::ChangeSet
-  include BaseResourceChangeSet
   apply_workflow(BookWorkflow)
   delegate :human_readable_type, to: :model
+
+  include VisibilityProperty
+  include RemoteMetadataProperty
   property :title, multiple: true, required: true, default: []
   property :source_metadata_identifier, required: true, multiple: false
   property :rights_statement, multiple: false, required: true, default: "http://rightsstatements.org/vocab/NKC/1.0/", type: ::Types::URI
@@ -13,7 +15,6 @@ class ScannedResourceChangeSet < Valhalla::ChangeSet
   property :viewing_direction, multiple: false, required: false
   property :portion_note, multiple: false, required: false
   property :nav_date, multiple: false, required: false
-  property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
   property :local_identifier, multiple: true, required: false, default: []
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
   property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID
@@ -23,7 +24,6 @@ class ScannedResourceChangeSet < Valhalla::ChangeSet
   property :read_groups, multiple: true, required: false
   property :file_metadata, multiple: true, required: false, default: []
   # Virtual Attributes
-  property :refresh_remote_metadata, virtual: true, multiple: false
   property :files, virtual: true, multiple: true, required: false
   property :pending_uploads, multiple: true, required: false
 

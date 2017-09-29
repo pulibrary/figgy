@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 class EphemeraFolderChangeSet < Valhalla::ChangeSet
-  include BaseResourceChangeSet
   apply_workflow(FolderWorkflow)
   validates :barcode, :folder_number, :title, :language, :genre, :width, :height, :page_count, :visibility, :rights_statement, presence: true
   validates_with StateValidator
+
+  include VisibilityProperty
   property :barcode, multiple: false, required: true
   property :folder_number, multiple: false, required: true
   property :title, multiple: false, required: true
@@ -37,6 +38,7 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   property :viewing_direction, required: false
   property :viewing_hint, multiple: false, required: false, default: "individuals"
 
+  # override the default value defined in VisibilityProperty
   property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
   property :pdf_type, multiple: false, required: false
   property :local_identifier, multiple: false, required: false
@@ -94,11 +96,6 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   def subject=(subject_values)
     return super(subject_values) if subject_values.blank?
     super(subject_values.map { |subject_value| coerce_string_value(subject_value) })
-  end
-
-  # Override base class; we don't have remote metadata here
-  def apply_remote_metadata?
-    false
   end
 
   private
