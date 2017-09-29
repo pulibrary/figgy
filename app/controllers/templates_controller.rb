@@ -9,6 +9,7 @@ class TemplatesController < ApplicationController
   )
 
   before_action :find_parent, only: [:new, :create, :destroy]
+  before_action :load_fields, only: [:new]
 
   def find_parent
     @parent ||= query_service.find_by(id: Valkyrie::ID.new(params[:ephemera_project_id]))
@@ -34,5 +35,20 @@ class TemplatesController < ApplicationController
 
   def _prefixes
     @_prefixes ||= super + ['valhalla/base']
+  end
+
+  def load_fields
+    fields.each do |field|
+      case field.attribute_name
+      when 'subject'
+        @subject = field.vocabulary.categories
+      else
+        instance_variable_set("@#{field.attribute_name}", field.vocabulary.terms)
+      end
+    end
+  end
+
+  def fields
+    @fields ||= find_parent.decorate.fields
   end
 end
