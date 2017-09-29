@@ -12,4 +12,7 @@ RSpec.describe VectorWork do
   it "can have manifests" do
     expect(vector_work.class.can_have_manifests?).to be false
   end
+  it "is a geo resource" do
+    expect(vector_work.geo_resource?).to be true
+  end
 end
