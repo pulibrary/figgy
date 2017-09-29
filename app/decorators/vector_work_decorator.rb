@@ -1,15 +1,7 @@
 # frozen_string_literal: false
 class VectorWorkDecorator < Valkyrie::ResourceDecorator
-  self.display_attributes += Schema::Geo.attributes + [:member_of_collections, :rendered_coverage] - [:thumbnail_id, :coverage]
-
-  def member_of_collections
-    @member_of_collections ||=
-      begin
-        query_service.find_references_by(resource: model, property: :member_of_collection_ids)
-                     .map(&:decorate)
-                     .map(&:title).to_a
-      end
-  end
+  include MemberOfCollectionsDisplay
+  self.display_attributes += Schema::Geo.attributes + [:rendered_coverage] - [:thumbnail_id, :coverage]
 
   def members
     @members ||= query_service.find_members(resource: model)
