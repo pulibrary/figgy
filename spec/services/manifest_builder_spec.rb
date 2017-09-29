@@ -77,6 +77,15 @@ RSpec.describe ManifestBuilder do
       expect(first_image["resource"]["service"]["@id"]).not_to be_nil
     end
 
+    context "when there's no derivative_file" do
+      it "doesn't generate a IIIF endpoint" do
+        allow_any_instance_of(FileSet).to receive(:derivative_file).and_return(nil)
+        output = manifest_builder.build
+        first_image = output["sequences"][0]["canvases"][0]["images"][0]
+        expect(first_image["resource"]["service"]).to be_nil
+      end
+    end
+
     context "when in staging" do
       it "generates cantaloupe links" do
         allow(Rails.env).to receive(:development?).and_return(false)
