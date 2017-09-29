@@ -42,6 +42,7 @@ Metrics/BlockLength:
     - 'app/models/plum_schema.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'valhalla/app/change_sets/valhalla/change_set_workflow.rb'
+    - 'app/services/linked_resource_builder/linked_ephemera_folder.rb'
 Metrics/ClassLength:
   Exclude:
     - 'app/change_set_persisters/plum_change_set_persister.rb'
@@ -58,6 +59,7 @@ Metrics/MethodLength:
     - 'spec/services/manifest_builder_spec.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/change_sets/ephemera_folder_change_set.rb'
+    - 'app/services/linked_resource_builder/linked_ephemera_folder.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/dublin_core.rb'

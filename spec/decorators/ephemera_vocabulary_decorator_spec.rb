@@ -15,9 +15,6 @@ RSpec.describe EphemeraVocabularyDecorator do
   it 'does not manage structures' do
     expect(decorator.manageable_structure?).to be false
   end
-  it 'exposes the metadata adapter' do
-    expect(resource.decorate.metadata_adapter).to be_a Valkyrie::Persistence::Postgres::MetadataAdapter
-  end
   it 'exposes the label as the title' do
     expect(resource.decorate.title).to eq resource.decorate.label
   end
@@ -37,6 +34,11 @@ RSpec.describe EphemeraVocabularyDecorator do
 
     it 'exposes the label for the vocabulary' do
       expect(resource.decorate.vocabulary_label).to eq resource.decorate.vocabulary.label
+    end
+
+    it 'features the URI of the vocabulary in the internal URL' do
+      expect(resource.decorate.internal_url).to be_a URI
+      expect(resource.decorate.internal_url.to_s).to eq 'https://plum.princeton.edu/ns/testParentVocabulary/testVocabulary'
     end
   end
 

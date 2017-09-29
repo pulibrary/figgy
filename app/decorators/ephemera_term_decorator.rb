@@ -2,12 +2,25 @@
 class EphemeraTermDecorator < Valkyrie::ResourceDecorator
   self.display_attributes = [:label, :uri, :code, :tgm_label, :lcsh_label, :vocabulary]
 
-  def to_s
-    label
+  def label
+    Array.wrap(super).first
+  end
+  alias title label
+  alias to_s label
+
+  def external_uri_exists?
+    value = Array.wrap(model.uri).first
+    value.present?
   end
 
-  def title
-    label
+  def internal_url
+    return Array.wrap(model.uri).first if vocabulary.blank?
+    vocabulary_uri = vocabulary.uri.to_s.end_with?('/') ? vocabulary.uri.to_s : vocabulary.uri.to_s + '/'
+    URI.join(vocabulary_uri, camelized_label)
+  end
+
+  def uri
+    external_uri_exists? ? Array.wrap(super).first : internal_url
   end
 
   def manageable_files?
@@ -27,4 +40,14 @@ class EphemeraTermDecorator < Valkyrie::ResourceDecorator
                      .to_a.first
       end
   end
+
+  private
+
+    def metadata_adapter
+      Valkyrie.config.metadata_adapter
+    end
+
+    def camelized_label
+      Array.wrap(label).first.gsub(/\s/, '_').camelize(:lower)
+    end
 end

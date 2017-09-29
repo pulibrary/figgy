@@ -13,7 +13,7 @@
   <tbody>
     <% @vocabularies.each do |vocabulary| %>
       <tr>
-        <td class="vocab"><%= vocabulary.label %></td>
+        <td class="vocab"><%= link_to vocabulary.label, Valhalla::ContextualPath.new(child: vocabulary).show %></td>
         <td class="vocab"><%= link_to 'Show', Valhalla::ContextualPath.new(child: vocabulary).show %></td>
         <td class="vocab"><%= link_to 'Edit', edit_ephemera_vocabulary_path(vocabulary) %></td>
         <td class="vocab"><%= link_to 'Destroy', vocabulary, method: :delete, data: { confirm: 'Are you sure?' } %></td>

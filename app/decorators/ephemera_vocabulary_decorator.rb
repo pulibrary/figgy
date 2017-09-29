@@ -2,12 +2,35 @@
 class EphemeraVocabularyDecorator < Valkyrie::ResourceDecorator
   self.display_attributes = [:label, :uri, :definition, :categories, :terms]
 
-  def to_s
-    label
+  def label
+    Array.wrap(super).first
+  end
+  alias title label
+  alias to_s label
+
+  def external_uri_exists?
+    value = Array.wrap(model.uri).first
+    value.present?
   end
 
-  def title
-    to_s
+  def vocabulary_uri
+    vocabulary.uri.to_s.end_with?('/') ? vocabulary.uri.to_s : vocabulary.uri.to_s + '/'
+  end
+
+  def vocabulary_ns
+    Figgy.config['vocabulary_namespace'].end_with?('/') ? Figgy.config['vocabulary_namespace'] : Figgy.config['vocabulary_namespace'] + '/'
+  end
+
+  def internal_url
+    if vocabulary.present? && vocabulary.uri.present?
+      URI.join(vocabulary_uri, camelized_label)
+    else
+      URI.join(vocabulary_ns, camelized_label)
+    end
+  end
+
+  def uri
+    external_uri_exists? ? Array.wrap(super).first : internal_url
   end
 
   def vocabulary
@@ -53,4 +76,14 @@ class EphemeraVocabularyDecorator < Valkyrie::ResourceDecorator
   def manageable_structure?
     false
   end
+
+  private
+
+    def metadata_adapter
+      Valkyrie.config.metadata_adapter
+    end
+
+    def camelized_label
+      Array.wrap(label).first.gsub(/\s/, '_').camelize(:lower)
+    end
 end

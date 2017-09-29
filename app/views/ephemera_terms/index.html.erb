@@ -17,8 +17,8 @@
   <tbody>
     <% @terms.each do |term| %>
       <tr>
-        <td class="vocab"><%= term.label %></td>
-        <td class="vocab"><%= link_to term.uri, term.uri %></td>
+        <td class="vocab"><%= link_to term.label, Valhalla::ContextualPath.new(child: term).show %></td>
+        <td class="vocab"><%= link_to term.uri.to_s, term.uri.to_s %></td>
         <td class="vocab"><%= link_to term.vocabulary.label, Valhalla::ContextualPath.new(child: term.vocabulary).show %></td>
         <td class="vocab"><%= link_to 'Show', Valhalla::ContextualPath.new(child: term).show %></td>
         <td class="vocab"><%= link_to 'Edit', edit_ephemera_term_path(term) %></td>

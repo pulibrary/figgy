@@ -74,6 +74,7 @@ defaults: &defaults
     exchange:
       plum: "plum_events"
       geoblacklight: "gbl_events"
+  vocabulary_namespace: <%= ENV.fetch('FIGGY_VOCAB_NS', 'https://plum.princeton.edu/ns/') %>
 
 development:
   <<: *defaults
@@ -95,7 +96,7 @@ production:
   plum_derivative_path: <%= ENV["PLUM_DERIVATIVE_PATH"] || "/mnt/libimages1/data/jp2s/plum_prod" %>
   events:
     server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
-    exchange: 
+    exchange:
       plum: "plum_events"
       geoblacklight: "gbl_events"
 
@@ -108,6 +109,6 @@ staging:
   plum_derivative_path: <%= ENV["PLUM_DERIVATIVE_PATH"] || "/mnt/libimages1/data/jp2s/plum_prod" %>
   events:
     server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
-    exchange: 
+    exchange:
       plum: "plum_events"
       geoblacklight: "gbl_events"
