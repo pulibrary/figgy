@@ -10,7 +10,6 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
   ]
 
   self.iiif_manifest_attributes = []
-  delegate :query_service, to: :metadata_adapter
 
   def member_of_collections
     @member_of_collections ||=
@@ -45,10 +44,6 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
     def nil?
       true
     end
-  end
-
-  def metadata_adapter
-    Valkyrie.config.metadata_adapter
   end
 
   def manageable_files?

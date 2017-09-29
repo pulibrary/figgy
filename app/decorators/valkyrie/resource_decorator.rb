@@ -55,4 +55,9 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   def heading
     Array.wrap(title).first
   end
+
+  def metadata_adapter
+    Valkyrie.config.metadata_adapter
+  end
+  delegate :query_service, to: :metadata_adapter
 end

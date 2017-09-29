@@ -1,7 +1,6 @@
 # frozen_string_literal: false
 class VectorWorkDecorator < Valkyrie::ResourceDecorator
   self.display_attributes += Schema::Geo.attributes + [:member_of_collections, :rendered_coverage] - [:thumbnail_id, :coverage]
-  delegate :query_service, to: :metadata_adapter
 
   def member_of_collections
     @member_of_collections ||=
@@ -34,10 +33,6 @@ class VectorWorkDecorator < Valkyrie::ResourceDecorator
       next unless member.respond_to?(:mime_type)
       ControlledVocabulary.for(:geo_metadata_format).include?(member.mime_type.first)
     end
-  end
-
-  def metadata_adapter
-    Valkyrie.config.metadata_adapter
   end
 
   def rendered_rights_statement

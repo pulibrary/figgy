@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class EphemeraFieldDecorator < Valkyrie::ResourceDecorator
   self.display_attributes = [:rendered_name, :vocabulary]
-  delegate :query_service, to: :metadata_adapter
 
   def parents
     @parents ||= query_service.find_parents(resource: model)
@@ -9,10 +8,6 @@ class EphemeraFieldDecorator < Valkyrie::ResourceDecorator
 
   def projects
     @projects ||= parents.select { |r| r.is_a?(EphemeraProject) }.map(&:decorate).to_a
-  end
-
-  def metadata_adapter
-    Valkyrie.config.metadata_adapter
   end
 
   def name_label

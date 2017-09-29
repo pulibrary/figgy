@@ -30,8 +30,6 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
                                   imported_attributes(Schema::Common.attributes) - \
                                   Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]
 
-  delegate :query_service, to: :metadata_adapter
-
   def member_of_collections
     @member_of_collections ||=
       begin
@@ -43,10 +41,6 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
 
   def members
     @members ||= query_service.find_members(resource: model)
-  end
-
-  def metadata_adapter
-    Valkyrie.config.metadata_adapter
   end
 
   def collections

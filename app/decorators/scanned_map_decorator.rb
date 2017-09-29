@@ -3,7 +3,6 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   self.display_attributes += Schema::Geo.attributes + [:member_of_collections, :rendered_coverage] - [:thumbnail_id, :coverage, :cartographic_projection]
   self.iiif_manifest_attributes = display_attributes + [:title] - \
                                   Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]
-  delegate :query_service, to: :metadata_adapter
 
   def member_of_collections
     @member_of_collections ||=
@@ -34,10 +33,6 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
       next unless member.respond_to?(:mime_type)
       ControlledVocabulary.for(:geo_metadata_format).include?(member.mime_type.first)
     end
-  end
-
-  def metadata_adapter
-    Valkyrie.config.metadata_adapter
   end
 
   def rendered_rights_statement
