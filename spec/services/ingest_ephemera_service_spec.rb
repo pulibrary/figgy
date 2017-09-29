@@ -68,6 +68,11 @@ RSpec.describe IngestEphemeraService, :admin_set do
         found_project = query_service.find_parents(resource: box).to_a.first
         expect(found_project.id).to eq project.id
       end
+
+      it "can ingest via a job" do
+        IngestEphemeraJob.perform_now(folder, project.title.first)
+        expect(ingested.title).to eq ["En negro y blanco. Del Cordobazo al juicio a las juntas."]
+      end
     end
 
     context "when the folder doesn't exist" do
