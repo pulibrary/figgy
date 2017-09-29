@@ -9,10 +9,20 @@ RSpec.describe TemplatesController do
     end
     render_views
     it "renders a form for the given model with no required fields" do
-      project = FactoryGirl.create_for_repository(:ephemera_project)
+      vocabulary = FactoryGirl.create_for_repository(:ephemera_vocabulary)
+      subject_vocabulary = FactoryGirl.create_for_repository(:ephemera_vocabulary, label: "Subjects")
+      toy_vocabulary = FactoryGirl.create_for_repository(:ephemera_vocabulary, label: "Toys", member_of_vocabulary_id: subject_vocabulary.id)
+      FactoryGirl.create_for_repository(:ephemera_term, member_of_vocabulary_id: toy_vocabulary.id, label: "Trains")
+      field = FactoryGirl.create_for_repository(:ephemera_field, field_name: '5', member_of_vocabulary_id: subject_vocabulary.id)
+      FactoryGirl.create_for_repository(:ephemera_term, member_of_vocabulary_id: vocabulary.id, label: "Test")
+      field2 = FactoryGirl.create_for_repository(:ephemera_field, field_name: '1', member_of_vocabulary_id: vocabulary.id)
+      project = FactoryGirl.create_for_repository(:ephemera_project, member_ids: [field.id, field2.id])
+
       get :new, params: { model_class: "EphemeraFolder", ephemera_project_id: project.id.to_s }
 
       expect(response.body).to have_field "template[title]"
+      expect(response.body).to have_select "Language", options: ["Test"]
+      expect(response.body).to have_select "Subject"
     end
   end
   describe "#destroy" do
