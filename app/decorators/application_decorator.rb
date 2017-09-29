@@ -11,11 +11,11 @@ class ApplicationDecorator < Draper::Decorator
   end
 
   def display_attributes
-    attributes(self.class.display_attributes - self.class.suppressed_attributes)
+    local_attributes(self.class.display_attributes - self.class.suppressed_attributes)
   end
 
   def iiif_manifest_attributes
-    attributes(self.class.iiif_manifest_attributes)
+    local_attributes(self.class.iiif_manifest_attributes)
   end
 
   def [](attribute)
@@ -26,7 +26,7 @@ class ApplicationDecorator < Draper::Decorator
 
   private
 
-    def attributes(attribute_names)
+    def local_attributes(attribute_names)
       Hash[
         attribute_names.map do |attribute|
           [attribute, Array.wrap(self.[](attribute))]
