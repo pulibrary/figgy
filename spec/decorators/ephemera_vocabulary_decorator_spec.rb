@@ -54,9 +54,7 @@ RSpec.describe EphemeraVocabularyDecorator do
     it 'retrieves the parent vocabulary' do
       expect(resource.decorate.categories.length).to eq 2
       expect(resource.decorate.categories.first).to be_a EphemeraVocabulary
-      expect(resource.decorate.categories.first.label).to eq 'test child vocabulary1'
       expect(resource.decorate.categories.last).to be_a EphemeraVocabulary
-      expect(resource.decorate.categories.last.label).to eq 'test child vocabulary2'
     end
   end
 end
