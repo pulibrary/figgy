@@ -25,6 +25,14 @@ RSpec.describe OsdModalHelper do
     end
   end
 
+  describe "#build_thumbnail_path" do
+    context "when encountering an error finding a derivative" do
+      it "generates a default image" do
+        expect(helper.build_thumbnail_path("bad")).to eq helper.image_tag('default.png')
+      end
+    end
+  end
+
   describe "#figgy_thumbnail_path" do
     context "when given a two-level deep resource" do
       it "uses the fileset thumbnail ID" do
