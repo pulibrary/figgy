@@ -81,7 +81,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   end
 
   def iiif_manifest_attributes
-    attributes(self.class.iiif_manifest_attributes)
+    local_attributes(self.class.iiif_manifest_attributes)
   end
 
   def folder_number

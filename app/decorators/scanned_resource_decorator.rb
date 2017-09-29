@@ -61,8 +61,8 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
   end
 
   def iiif_manifest_attributes
-    current_attributes = attributes(self.class.iiif_manifest_attributes)
-    imported_attributes = attributes(self.class.imported_attributes(Schema::Common.attributes))
+    current_attributes = local_attributes(self.class.iiif_manifest_attributes)
+    imported_attributes = local_attributes(self.class.imported_attributes(Schema::Common.attributes))
 
     imported_attributes.each_pair do |imported_key, value|
       key = imported_key.to_s.sub(/imported_/, '').to_sym
