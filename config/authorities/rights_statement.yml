@@ -1,5 +1,20 @@
 # derived from https://github.com/rightsstatements/data-model/blob/master/rights-statements.ttl
 :terms:
+  - :value: http://rightsstatements.org/vocab/CNE/1.0/
+    :label: Copyright Not Evaluated
+    :notable: true
+    :scopeNote: |
+      This Rights Statement should be used for Items for which the copyright status
+      is unknown and for which the data provider has not undertaken an effort to
+      determine the copyright status of the work
+    :definition: >-
+      The copyright and related rights status of this Item has not been evaluated.
+
+      <br/>Please refer to the organization that has made the Item available for more
+      information.
+
+      <br/>You are free to use this Item in any way that is permitted by the
+      copyright and related rights legislation that applies to your use.
   - :value: http://rightsstatements.org/vocab/InC/1.0/
     :label: In Copyright
     :notable: true
