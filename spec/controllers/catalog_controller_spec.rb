@@ -45,7 +45,7 @@ RSpec.describe CatalogController do
       expect(assigns(:document_list).length).to eq 1
     end
     it "can search by non-imported title" do
-      persister.save(resource: FactoryGirl.build(:scanned_resource, title: "Testing This"))
+      persister.save(resource: FactoryGirl.build(:scanned_resource, title: "Tësting This"))
 
       get :index, params: { q: "Testing" }
 
