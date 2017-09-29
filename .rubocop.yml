@@ -89,5 +89,8 @@ RSpec/VerifiedDoubles:
     - 'spec/validators/viewing_hint_validator_spec.rb'
     - 'spec/validators/viewing_direction_validator_spec.rb'
     - 'spec/models/user_spec.rb'
+RSpec/AnyInstance:
+  Exclude:
+    - 'spec/jobs/ingest_mets_job_spec.rb'
 Lint/UnusedMethodArgument:
   AllowUnusedKeywordArguments: true

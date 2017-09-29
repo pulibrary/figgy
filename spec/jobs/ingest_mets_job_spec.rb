@@ -27,6 +27,7 @@ RSpec.describe IngestMETSJob do
       allow(File).to receive(:open).with("/users/escowles/downloads/tmp/00000657.tif").and_return(File.open(tiff_file))
       allow(File).to receive(:open).with("/users/escowles/downloads/tmp/00000658.tif").and_return(File.open(tiff_file))
       allow(File).to receive(:open).with("/users/escowles/downloads/tmp/00000659.tif").and_return(File.open(tiff_file))
+      allow_any_instance_of(IngestableFile).to receive(:path).and_return(tiff_file)
       stub_bibdata(bib_id: '4612596')
       stub_bibdata(bib_id: '4609321')
     end
@@ -34,6 +35,7 @@ RSpec.describe IngestMETSJob do
     let(:adapter) { Valkyrie.config.metadata_adapter }
     it "ingests a METS file" do
       described_class.perform_now(mets_file, user)
+      allow(FileUtils).to receive(:mv).and_call_original
 
       book = adapter.query_service.find_all_of_model(model: ScannedResource).first
       expect(book).not_to be_nil
@@ -46,6 +48,7 @@ RSpec.describe IngestMETSJob do
       expect(book.logical_structure[0].nodes[0].nodes[0].proxy).to eq [file_sets.first.id]
       expect(file_sets.first.title).to eq ["leaf 1. recto"]
       expect(file_sets.first.derivative_file).not_to be_blank
+      expect(FileUtils).not_to have_received(:mv)
     end
     context "when given a work with volumes" do
       let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-4609321-s42.mets") }

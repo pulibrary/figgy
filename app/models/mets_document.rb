@@ -98,7 +98,8 @@ class METSDocument
       mime_type: f[:mime_type],
       original_filename: File.basename(f[:path]),
       container_attributes: container_attributes(f),
-      id: f[:id]
+      id: f[:id],
+      copyable: true
     )
   end
 
