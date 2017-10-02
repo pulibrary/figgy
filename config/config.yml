@@ -93,6 +93,11 @@ production:
   plum_solr_url: <%= ENV["PLUM_SOLR_URL"] %>
   plum_binary_path: <%= ENV["PLUM_BINARY_PATH"] || "/mnt/diglibdata/hydra_binaries" %>
   plum_derivative_path: <%= ENV["PLUM_DERIVATIVE_PATH"] || "/mnt/libimages1/data/jp2s/plum_prod" %>
+  events:
+    server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
+    exchange: 
+      plum: "plum_events"
+      geoblacklight: "gbl_events"
 
 staging:
   <<: *defaults
@@ -101,3 +106,8 @@ staging:
   plum_solr_url: <%= ENV["PLUM_SOLR_URL"] %>
   plum_binary_path: <%= ENV["PLUM_BINARY_PATH"] || "/mnt/diglibdata/hydra_binaries" %>
   plum_derivative_path: <%= ENV["PLUM_DERIVATIVE_PATH"] || "/mnt/libimages1/data/jp2s/plum_prod" %>
+  events:
+    server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
+    exchange: 
+      plum: "plum_events"
+      geoblacklight: "gbl_events"
