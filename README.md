@@ -4,6 +4,21 @@ A digital repository application using [Valkyrie](https://github.com/samvera-lab
 Figgy is a proof-of-concept port of [Plum](https://github.com/pulibrary/plum) to Valkyrie to explore
 functionality, performance, and scalability.
 
+## Dependencies
+
+* Ruby
+* Java (to run Solr server)
+* Postgres
+* [Redis](http://redis.io/)
+    * Start Redis with `redis-server` or if you're on certain Linuxes, you can do this via `sudo service redis-server start`.
+* [ImageMagick](https://www.imagemagick.org)
+    * On a mac, do `brew install imagemagick --with-little-cms-2`
+* [Kakadu](http://kakadusoftware.com/)
+    * On a mac, extract the file and run the pkg installer therein (don't get distracted by the files called kdu_show)
+* [RabbitMQ](https://www.rabbitmq.com/) (Optional)
+    * Start with rabbitmq-server
+    * Used for publishing create/update/delete events for systems such as
+      [Pomegranate](https://github.com/pulibrary/pomegranate)
 
 ## Initial Setup
 
