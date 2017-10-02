@@ -39,6 +39,16 @@ RSpec.describe EphemeraFolderChangeSet do
       result = change_set.validate(date_range_form_attributes: { start: "2018", end: "2017" })
       expect(result).to eq false
     end
+    it "is invalid if only start is given" do
+      change_set.prepopulate!
+      result = change_set.validate(date_range_form_attributes: { start: "2018", end: "" })
+      expect(result).to eq false
+    end
+    it "is invalid if only end is given" do
+      change_set.prepopulate!
+      result = change_set.validate(date_range_form_attributes: { start: "", end: "2018" })
+      expect(result).to eq false
+    end
     it "has a default" do
       change_set.prepopulate!
       expect(change_set.date_range_form.start).to be_nil
