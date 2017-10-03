@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class ScannedResourcesController < BaseResourceController
-  include BrowseEverythingable
   self.change_set_class = DynamicChangeSet
   self.resource_class = ScannedResource
   self.change_set_persister = ::PlumChangeSetPersister.new(

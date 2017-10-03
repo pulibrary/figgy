@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class EphemeraFoldersController < BaseResourceController
-  include BrowseEverythingable
   self.change_set_class = DynamicChangeSet
   self.resource_class = EphemeraFolder
   self.change_set_persister = ::PlumChangeSetPersister.new(
