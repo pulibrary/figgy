@@ -37,5 +37,7 @@ module OsdModalHelper
   def build_thumbnail_path(id, image_options = {})
     url = ManifestBuilder::ManifestHelper.new.manifest_image_thumbnail_path(id)
     image_tag url, image_options.merge(onerror: default_icon_fallback) if url.present?
+  rescue
+    image_tag 'default.png'
   end
 end

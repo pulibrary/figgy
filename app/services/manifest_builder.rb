@@ -301,6 +301,7 @@ class ManifestBuilder
       # Retrieve an instance of the IIIFManifest::IIIFEndpoint for the service endpoint
       # @return [IIIFManifest::IIIFEndpoint]
       def endpoint
+        return unless resource.derivative_file
         IIIFManifest::IIIFEndpoint.new(helper.manifest_image_path(resource),
                                        profile: "http://iiif.io/api/image/2/level2.json")
       end

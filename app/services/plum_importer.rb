@@ -16,12 +16,12 @@ class PlumImporter
     file_sets = members.select { |x| x.is_a?(FileSet) }
     file_sets.each do |member|
       id_cache[member.local_identifier.first] = member.id.to_s
-      generate_derivative(member)
+      import_derivative(member)
     end
     update_structure(output, members, change_set_persister)
   end
 
-  def generate_derivative(member)
+  def import_derivative(member)
     file_change_set = FileSetChangeSet.new(member)
     file_change_set.prepopulate!
     file_change_set.files = [derivative(member)]
@@ -31,6 +31,12 @@ class PlumImporter
       handlers: change_set_persister.handlers
     )
     derivative_change_set_persister.save(change_set: file_change_set)
+  rescue Errno::ENOENT
+    generate_derivative(member)
+  end
+
+  def generate_derivative(member)
+    CreateDerivativesJob.perform_later(member.id.to_s)
   end
 
   def update_structure(resource, members, change_set_persister)
