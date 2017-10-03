@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
-  include MemberOfCollectionsDisplay
   self.display_attributes = [
     :barcode,
     :box_number,
     :shipped_date,
     :tracking_number,
-    :visibility
+    :visibility,
+    :member_of_collections
   ]
 
   self.iiif_manifest_attributes = []

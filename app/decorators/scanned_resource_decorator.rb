@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class ScannedResourceDecorator < Valkyrie::ResourceDecorator
-  include MemberOfCollectionsDisplay
-  self.display_attributes += Schema::Common.attributes + imported_attributes(Schema::Common.attributes) + [:rendered_holding_location] - [:thumbnail_id]
+  self.display_attributes += Schema::Common.attributes + imported_attributes(Schema::Common.attributes) + [:rendered_holding_location, :member_of_collections] - [:thumbnail_id]
   self.iiif_manifest_attributes = display_attributes + [:title] - \
                                   imported_attributes(Schema::Common.attributes) - \
                                   Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]

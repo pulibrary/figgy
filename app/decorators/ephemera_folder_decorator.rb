@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
-  include MemberOfCollectionsDisplay
   self.display_attributes = [
     :barcode,
     :folder_number,
@@ -26,7 +25,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     :dspace_url,
     :source_url,
     :visibility
-  ] - [:member_of_collections]
+  ]
   self.iiif_manifest_attributes = display_attributes + [:title] - \
                                   imported_attributes(Schema::Common.attributes) - \
                                   Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]

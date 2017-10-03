@@ -1,7 +1,6 @@
 # frozen_string_literal: false
 class ScannedMapDecorator < Valkyrie::ResourceDecorator
-  include MemberOfCollectionsDisplay
-  self.display_attributes += Schema::Geo.attributes + [:rendered_coverage] - [:thumbnail_id, :coverage, :cartographic_projection]
+  self.display_attributes += Schema::Geo.attributes + [:rendered_coverage, :member_of_collections] - [:thumbnail_id, :coverage, :cartographic_projection]
   self.iiif_manifest_attributes = display_attributes + [:title] - \
                                   Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]
 
