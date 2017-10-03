@@ -66,6 +66,14 @@ RSpec.describe EphemeraBoxesController do
       expect(resource.box_number).to contain_exactly "1"
       expect(resource.state).to contain_exactly "new"
     end
+    it "will index the project if possible" do
+      project = FactoryGirl.create_for_repository(:ephemera_project)
+      post :create, params: { ephemera_box: valid_params.merge(append_id: project.id.to_s) }
+
+      id = query_service.find_all_of_model(model: EphemeraBox).to_a.first.id
+      solr_record = Blacklight.default_index.connection.get("select", params: { q: "id:id-#{id}", rows: 1 })["response"]["docs"].first
+      expect(solr_record["ephemera_project_ssim"]).to eq project.title
+    end
     context "when something bad goes wrong" do
       it "doesn't persist anything at all when it's solr erroring" do
         allow(Valkyrie::MetadataAdapter.find(:index_solr)).to receive(:persister).and_return(

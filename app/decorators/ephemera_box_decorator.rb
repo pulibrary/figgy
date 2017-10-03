@@ -24,6 +24,8 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
   end
 
   class NullProject
+    def title; end
+
     def header
       nil
     end
