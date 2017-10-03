@@ -1,21 +1,21 @@
 # frozen_string_literal: false
-class ScannedMapDecorator < Valkyrie::ResourceDecorator
-  self.display_attributes += Schema::Geo.attributes + [:rendered_coverage, :member_of_collections] - [:thumbnail_id, :coverage, :cartographic_projection]
-  self.iiif_manifest_attributes = display_attributes + [:title] - \
-                                  Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]
+class VectorWorkDecorator < Valkyrie::ResourceDecorator
+  self.display_attributes += Schema::Geo.attributes + [:rendered_coverage, :member_of_collections] - [:thumbnail_id, :coverage]
 
   def members
     @members ||= query_service.find_members(resource: model)
   end
 
-  def scanned_map_members
-    @scanned_maps ||= members.select { |r| r.is_a?(ScannedMap) }.map(&:decorate).to_a
+  # Use case for nesting vector works
+  #   - time series: e.g., nyc transit system, released every 6 months
+  def vector_work_members
+    @vector_works ||= members.select { |r| r.is_a?(VectorWork) }.map(&:decorate).to_a
   end
 
   def geo_members
     members.select do |member|
       next unless member.respond_to?(:mime_type)
-      ControlledVocabulary.for(:geo_image_format).include?(member.mime_type.first)
+      ControlledVocabulary.for(:geo_vector_format).include?(member.mime_type.first)
     end
   end
 
@@ -46,14 +46,10 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   end
 
   def manageable_structure?
-    true
+    false
   end
 
   def attachable_objects
-    [ScannedMap]
-  end
-
-  def iiif_manifest_attributes
-    local_attributes(self.class.iiif_manifest_attributes)
+    [VectorWork]
   end
 end

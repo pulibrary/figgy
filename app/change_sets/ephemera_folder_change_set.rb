@@ -4,6 +4,8 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   validates :barcode, :folder_number, :title, :language, :genre, :width, :height, :page_count, :visibility, :rights_statement, presence: true
   validate :date_range_validity
   validates_with StateValidator
+
+  include VisibilityProperty
   property :barcode, multiple: false, required: true
   property :folder_number, multiple: false, required: true
   property :title, multiple: false, required: true
@@ -37,6 +39,7 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   property :viewing_direction, required: false
   property :viewing_hint, multiple: false, required: false, default: "individuals"
 
+  # override the default value defined in VisibilityProperty
   property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
   property :pdf_type, multiple: false, required: false
   property :local_identifier, multiple: false, required: false
@@ -87,19 +90,6 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
       :source_url,
       :append_id
     ]
-  end
-
-  def visibility=(visibility)
-    super.tap do |_result|
-      case visibility
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-        self.read_groups = [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
-        self.read_groups = [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED]
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
-        self.read_groups = []
-      end
-    end
   end
 
   def genre=(genre_value)

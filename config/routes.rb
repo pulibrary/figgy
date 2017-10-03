@@ -114,7 +114,16 @@ Rails.application.routes.draw do
       end
     end
     get '/scanned_maps/:parent_id/new', to: 'scanned_maps#new', as: :parent_new_scanned_map
-    put '/:id/extract_metadata/:file_set_id', to: 'scanned_maps#extract_metadata', as: :extract_metadata
+    put '/scanned_maps/:id/extract_metadata/:file_set_id', to: 'scanned_maps#extract_metadata', as: :scanned_maps_extract_metadata
+
+    resources :vector_works do
+      member do
+        get :file_manager
+        post :browse_everything_files
+      end
+    end
+    get '/vector_works/:parent_id/new', to: 'vector_works#new', as: :parent_new_vector_work
+    put '/vector_works/:id/extract_metadata/:file_set_id', to: 'vector_works#extract_metadata', as: :vector_works_extract_metadata
   end
 
   resources :collections do

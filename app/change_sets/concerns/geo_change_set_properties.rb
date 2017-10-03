@@ -15,5 +15,6 @@ module GeoChangeSetProperties
     property :subject, multiple: false, required: false
     property :temporal, multiple: true, required: false, default: []
     property :cartographic_scale, multiple: false, required: false
+    property :cartographic_projection, multiple: false, required: false
   end
 end

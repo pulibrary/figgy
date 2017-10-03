@@ -2,12 +2,15 @@
 class EphemeraBoxChangeSet < Valhalla::ChangeSet
   apply_workflow BoxWorkflow
   validates :barcode, :box_number, :visibility, :rights_statement, presence: true
+
+  include VisibilityProperty
   property :barcode, multiple: false, required: true
   property :box_number, multiple: false, required: true
   property :shipped_date, multiple: false, required: false
   property :tracking_number, multiple: false, required: false
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
+  # override the default value defined in VisibilityProperty
   property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
   property :read_groups, multiple: true, required: false
   property :rights_statement, multiple: false, required: true, default: "http://rightsstatements.org/vocab/NKC/1.0/", type: ::Types::URI
@@ -29,18 +32,5 @@ class EphemeraBoxChangeSet < Valhalla::ChangeSet
       :member_of_collection_ids,
       :append_id
     ]
-  end
-
-  def visibility=(visibility)
-    super.tap do |_result|
-      case visibility
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-        self.read_groups = [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
-        self.read_groups = [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED]
-      when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
-        self.read_groups = []
-      end
-    end
   end
 end

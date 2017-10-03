@@ -1,0 +1,30 @@
+  <h2>Members</h2>
+  <table class="table table-striped">
+    <tr>
+     <th>Thumbnail</th>
+     <th>Title</th>
+     <th>Date Uploaded</th>
+     <th>Visibility</th>
+     <th>Actions</th>
+    </tr>
+    <% unless decorated_resource.vector_work_members.empty? %>
+      <% decorated_resource.vector_work_members.each do |vector_work| %>
+        <% vector_work_url = parent_solr_document_path("#{resource.id}", "id-#{vector_work.id}") %>
+        <tr>
+          <td><%= link_to figgy_thumbnail_path(vector_work, { class: 'thumbnail-inner', onerror: default_icon_fallback }), vector_work_url %></td>
+          <td><%= vector_work.header %></td>
+          <td><%= vector_work.created_at %></td>
+          <td><%= vector_work.visibility.first.html_safe %></td>
+          <td>
+            <%= link_to 'View', vector_work_url, class: 'btn btn-default' %>
+            <%= link_to 'Edit', main_app.polymorphic_path([:edit, vector_work]), class: 'btn btn-default' %>
+            <%= link_to "Delete", main_app.polymorphic_path([vector_work]), class: 'btn btn-danger',
+                                  data: { confirm: "Delete this #{resource.human_readable_type}?" },
+                                  method: :delete %>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <td>This work has no vector works attached.  Click "Attach Child" to attach vector works.</td>
+    <% end %>
+  </table>

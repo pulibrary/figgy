@@ -5,21 +5,11 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
     :box_number,
     :shipped_date,
     :tracking_number,
-    :member_of_collections,
-    :visibility
+    :visibility,
+    :member_of_collections
   ]
 
   self.iiif_manifest_attributes = []
-  delegate :query_service, to: :metadata_adapter
-
-  def member_of_collections
-    @member_of_collections ||=
-      begin
-        query_service.find_references_by(resource: model, property: :member_of_collection_ids)
-                     .map(&:decorate)
-                     .map(&:title).to_a
-      end
-  end
 
   def members
     @members ||= query_service.find_members(resource: model)
@@ -45,10 +35,6 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
     def nil?
       true
     end
-  end
-
-  def metadata_adapter
-    Valkyrie.config.metadata_adapter
   end
 
   def manageable_files?

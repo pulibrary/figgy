@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryGirl.define do
-  factory :scanned_map do
+  factory :vector_work do
     title 'Title'
     rights_statement RDF::URI('http://rightsstatements.org/vocab/NKC/1.0/')
     read_groups 'public'
@@ -18,7 +18,7 @@ FactoryGirl.define do
     after(:build) do |resource, evaluator|
       resource.depositor = evaluator.user.uid if evaluator.user.present?
       if evaluator.visibility.present?
-        change_set = ScannedMapChangeSet.new(resource)
+        change_set = VectorWorkChangeSet.new(resource)
         change_set.validate(visibility: Array(evaluator.visibility).first)
         change_set.sync
         resource = change_set.model
@@ -28,7 +28,7 @@ FactoryGirl.define do
     after(:create) do |resource, evaluator|
       if evaluator.files.present? || evaluator.import_metadata
         import_metadata = "1" if evaluator.import_metadata
-        change_set = ScannedMapChangeSet.new(resource, files: evaluator.files, refresh_remote_metadata: import_metadata)
+        change_set = VectorWorkChangeSet.new(resource, files: evaluator.files, refresh_remote_metadata: import_metadata)
         change_set.prepopulate!
         ::PlumChangeSetPersister.new(
           metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
@@ -36,36 +36,36 @@ FactoryGirl.define do
         ).save(change_set: change_set)
       end
     end
-    factory :open_scanned_map do
+    factory :open_vector_work do
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
-    factory :complete_open_scanned_map do
+    factory :complete_open_vector_work do
       state "complete"
     end
-    factory :complete_private_scanned_map do
+    factory :complete_private_vector_work do
       state "complete"
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
     end
-    factory :takedown_scanned_map do
+    factory :takedown_vector_work do
       state "takedown"
     end
-    factory :flagged_scanned_map do
+    factory :flagged_vector_work do
       state "flagged"
     end
-    factory :pending_scanned_map do
+    factory :pending_vector_work do
       state "pending"
     end
-    factory :complete_campus_only_scanned_map do
+    factory :complete_campus_only_vector_work do
       state "complete"
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
     end
-    factory :metadata_review_scanned_map do
+    factory :metadata_review_vector_work do
       state "metadata_review"
     end
-    factory :final_review_scanned_map do
+    factory :final_review_vector_work do
       state "final_review"
     end
-    factory :complete_scanned_map do
+    factory :complete_vector_work do
       state "complete"
     end
   end

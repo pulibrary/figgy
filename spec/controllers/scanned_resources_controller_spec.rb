@@ -285,6 +285,8 @@ RSpec.describe ScannedResourcesController do
       end
     end
 
+    # This block tests functionality defined in `app/controllers/concerns/browse_everythingable.rb`
+    #   Acts as a 'master spec' in this regard
     describe "POST /concern/scanned_resources/:id/browse_everything_files" do
       let(:file) { File.open(Rails.root.join("spec", "fixtures", "files", "example.tif")) }
       let(:params) do

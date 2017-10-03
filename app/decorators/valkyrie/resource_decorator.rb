@@ -55,4 +55,20 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   def heading
     Array.wrap(title).first
   end
+
+  def metadata_adapter
+    Valkyrie.config.metadata_adapter
+  end
+  delegate :query_service, to: :metadata_adapter
+
+  # resource decorators will use this method if they define :member_of_collections
+  #   in self.display_attributes
+  def member_of_collections
+    @member_of_collections ||=
+      begin
+        query_service.find_references_by(resource: model, property: :member_of_collection_ids)
+                     .map(&:decorate)
+                     .map(&:title).to_a
+      end
+  end
 end

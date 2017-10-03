@@ -1,20 +1,10 @@
 # frozen_string_literal: true
 class ScannedResourceDecorator < Valkyrie::ResourceDecorator
-  self.display_attributes += Schema::Common.attributes + imported_attributes(Schema::Common.attributes) + [:member_of_collections, :rendered_holding_location] - [:thumbnail_id]
+  self.display_attributes += Schema::Common.attributes + imported_attributes(Schema::Common.attributes) + [:rendered_holding_location, :member_of_collections] - [:thumbnail_id]
   self.iiif_manifest_attributes = display_attributes + [:title] - \
                                   imported_attributes(Schema::Common.attributes) - \
                                   Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]
-  delegate :query_service, to: :metadata_adapter
   delegate(*Schema::Common.attributes, to: :primary_imported_metadata, prefix: :imported)
-
-  def member_of_collections
-    @member_of_collections ||=
-      begin
-        query_service.find_references_by(resource: model, property: :member_of_collection_ids)
-                     .map(&:decorate)
-                     .map(&:title).to_a
-      end
-  end
 
   def members
     @members ||= query_service.find_members(resource: model)
@@ -22,10 +12,6 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
 
   def volumes
     @volumes ||= members.select { |r| r.is_a?(ScannedResource) }.map(&:decorate).to_a
-  end
-
-  def metadata_adapter
-    Valkyrie.config.metadata_adapter
   end
 
   def rendered_rights_statement
