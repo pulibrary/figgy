@@ -32,6 +32,9 @@ module OsdModalHelper
     return if id.blank?
     thumbnail_document = Valkyrie.config.metadata_adapter.query_service.find_by(id: id)
     iiif_thumbnail_path(thumbnail_document, image_options)
+  rescue Valkyrie::Persistence::ObjectNotFoundError
+    Valkyrie.logger.warn "Unable to load thumbnail for #{document}"
+    nil
   end
 
   def build_thumbnail_path(id, image_options = {})
