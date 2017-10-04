@@ -42,6 +42,12 @@ RSpec.describe OsdModalHelper do
 
         expect(helper.figgy_thumbnail_path(parent_book)).to include file_set.id.to_s
       end
+      it "returns nothing when the fileset doesn't exist" do
+        book = FactoryGirl.create_for_repository(:scanned_resource, thumbnail_id: Valkyrie::ID.new("busted"))
+        parent_book = FactoryGirl.create_for_repository(:scanned_resource, thumbnail_id: book.id)
+
+        expect(helper.figgy_thumbnail_path(parent_book)).to eq nil
+      end
     end
   end
 end
