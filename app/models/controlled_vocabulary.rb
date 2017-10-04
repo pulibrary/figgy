@@ -144,6 +144,24 @@ class ControlledVocabulary
     end
   end
 
+  class Language < ControlledVocabulary
+    ControlledVocabulary.register(:language, self)
+
+    def all(_scope = nil)
+      ISO_639::ISO_639_1.map(&:first).uniq.map do |value|
+        find(value)
+      end
+    end
+
+    def find(value)
+      Term.new(label: label(value), value: value)
+    end
+
+    def label(value)
+      ISO_639.find_by_code(value).try(:english_name) || value
+    end
+  end
+
   class PDFType < ControlledVocabulary
     ControlledVocabulary.register(:pdf_type, self)
 

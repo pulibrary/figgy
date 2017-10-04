@@ -64,4 +64,10 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
     Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_references_by(resource: self, property: :member_of_collection_ids).to_a
   end
   alias collections parents
+
+  def display_imported_language
+    (imported_language || []).map do |language|
+      ControlledVocabulary.for(:language).find(language).label
+    end
+  end
 end

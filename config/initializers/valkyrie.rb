@@ -67,7 +67,8 @@ Rails.application.config.to_prepare do
       resource_indexer: CompositeIndexer.new(
         Valkyrie::Indexers::AccessControlsIndexer,
         CollectionIndexer,
-        MemberOfIndexer
+        MemberOfIndexer,
+        FacetIndexer
       )
     ),
     :index_solr
