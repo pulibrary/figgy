@@ -148,6 +148,15 @@ RSpec.describe EphemeraFoldersController do
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/ephemera_boxes/#{box.id}/ephemera_folders/new?create_another"
     end
+    it "indexes the folder with the project it's a part of" do
+      box = FactoryGirl.create_for_repository(:ephemera_box)
+      project = FactoryGirl.create_for_repository(:ephemera_project, member_ids: box.id)
+      post :create, params: { ephemera_folder: valid_params.merge(append_id: box.id) }
+
+      id = query_service.find_all_of_model(model: EphemeraFolder).to_a.first.id
+      solr_record = Blacklight.default_index.connection.get("select", params: { q: "id:id-#{id}", rows: 1 })["response"]["docs"].first
+      expect(solr_record["ephemera_project_ssim"]).to eq project.title
+    end
     context "when something bad goes wrong" do
       it "doesn't persist anything at all when it's solr erroring" do
         allow(Valkyrie::MetadataAdapter.find(:index_solr)).to receive(:persister).and_return(

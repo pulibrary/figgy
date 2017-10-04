@@ -68,7 +68,8 @@ Rails.application.config.to_prepare do
         Valkyrie::Indexers::AccessControlsIndexer,
         CollectionIndexer,
         MemberOfIndexer,
-        FacetIndexer
+        FacetIndexer,
+        ProjectIndexer
       )
     ),
     :index_solr
