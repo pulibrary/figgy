@@ -1,10 +1,12 @@
 # frozen_string_literal: true
-class QueryAdapter
-  def initialize(query_service:)
-    @query_service = query_service
-  end
+module QueryAdapter
+  class Base
+    def initialize(query_service:)
+      @query_service = query_service
+    end
 
-  def all
-    @query_service.find_all
+    def all
+      @query_service.find_all.lazy.to_a
+    end
   end
 end

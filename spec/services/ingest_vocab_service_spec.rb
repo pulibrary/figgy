@@ -8,8 +8,8 @@ RSpec.describe IngestVocabService do
   let(:storage_adapter) { Valkyrie::StorageAdapter.find(:lae_storage) }
   let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
 
-  let(:ephemera_vocabularies) { QueryAdapter::CompositeQueryAdapter::EphemeraVocabularyCompositeQueryAdapter.new(query_service: adapter.query_service, change_set_persister: change_set_persister) }
-  let(:ephemera_terms) { QueryAdapter::CompositeQueryAdapter::EphemeraTermCompositeQueryAdapter.new(query_service: adapter.query_service, change_set_persister: change_set_persister) }
+  let(:ephemera_vocabularies) { CompositeQueryAdapter::EphemeraVocabularyCompositeQueryAdapter.new(query_service: adapter.query_service, change_set_persister: change_set_persister) }
+  let(:ephemera_terms) { CompositeQueryAdapter::EphemeraTermCompositeQueryAdapter.new(query_service: adapter.query_service, change_set_persister: change_set_persister) }
 
   describe "#ingest" do
     context "with categories" do

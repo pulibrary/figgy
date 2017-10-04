@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-class QueryAdapter
-  class EphemeraVocabularyQueryAdapter < QueryAdapter
+module QueryAdapter
+  class EphemeraVocabularyQueryAdapter < Base
     def find_by(label:, vocabulary: nil)
       category_label = vocabulary.try(:label)
       vocabulary = FindEphemeraVocabularyByLabel.new(query_service: @query_service).find_vocabulary_by_label(label: label, category_label: category_label)

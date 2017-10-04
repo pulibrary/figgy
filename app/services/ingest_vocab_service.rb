@@ -14,11 +14,11 @@ class IngestVocabService
   end
 
   def ephemera_vocabularies
-    @ephemera_vocabularies ||= QueryAdapter::CompositeQueryAdapter::EphemeraVocabularyCompositeQueryAdapter.new(query_service: query_service, change_set_persister: change_set_persister)
+    @ephemera_vocabularies ||= CompositeQueryAdapter::EphemeraVocabularyCompositeQueryAdapter.new(query_service: query_service, change_set_persister: change_set_persister)
   end
 
   def ephemera_terms
-    @ephemera_terms ||= QueryAdapter::CompositeQueryAdapter::EphemeraTermCompositeQueryAdapter.new(query_service: query_service, change_set_persister: change_set_persister)
+    @ephemera_terms ||= CompositeQueryAdapter::EphemeraTermCompositeQueryAdapter.new(query_service: query_service, change_set_persister: change_set_persister)
   end
 
   def ingest

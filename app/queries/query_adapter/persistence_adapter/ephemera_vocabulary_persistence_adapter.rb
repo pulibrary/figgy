@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-class QueryAdapter
-  class PersistenceAdapter
-    class EphemeraVocabularyPersistenceAdapter < PersistenceAdapter
+module QueryAdapter
+  module PersistenceAdapter
+    class EphemeraVocabularyPersistenceAdapter < Base
       private
 
         def save(label:, vocabulary: nil)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-class CompositeQueryAdapter
-  class EphemeraVocabularyCompositeQueryAdapter < CompositeQueryAdapter
+module CompositeQueryAdapter
+  class EphemeraVocabularyCompositeQueryAdapter < Base
     class_attribute :query_adapter_class
     self.query_adapter_class = QueryAdapter::EphemeraVocabularyQueryAdapter
     class_attribute :persistence_adapter_class
