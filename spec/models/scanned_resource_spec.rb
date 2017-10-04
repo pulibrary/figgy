@@ -21,6 +21,16 @@ RSpec.describe ScannedResource do
     factory = FactoryGirl.build(:complete_private_scanned_resource)
     expect(factory.read_groups).to eq []
   end
+  context "with imported metadata" do
+    before do
+      stub_bibdata(bib_id: "123456")
+    end
+    it "indexes subject" do
+      scanned_resource = FactoryGirl.create(:pending_scanned_resource, source_metadata_identifier: "123456", import_metadata: true)
+      index = Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: scanned_resource)
+      expect(index[:display_subject_ssim]).to eq scanned_resource.imported_metadata.first.subject
+    end
+  end
 
   describe "#to_s" do
     it "returns the title if possible" do

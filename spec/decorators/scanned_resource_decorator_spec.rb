@@ -21,7 +21,8 @@ RSpec.describe ScannedResourceDecorator do
                         author: 'test author',
                         imported_metadata: [{
                           creator: 'test creator',
-                          subject: 'test subject'
+                          subject: 'test subject',
+                          language: 'eng'
                         }])
     end
     describe "#iiif_manifest_attributes" do
@@ -30,6 +31,11 @@ RSpec.describe ScannedResourceDecorator do
         expect(decorator.iiif_manifest_attributes).to include author: ['test author']
         expect(decorator.iiif_manifest_attributes).to include creator: ['test creator']
         expect(decorator.iiif_manifest_attributes).to include subject: ['test subject']
+      end
+    end
+    describe "#display_imported_language" do
+      it "maps keys to english strings" do
+        expect(decorator.display_imported_language).to eq ["English"]
       end
     end
   end
