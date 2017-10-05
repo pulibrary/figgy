@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class LinkedResourceBuilder
+module LinkedData
   class LinkedEphemeraVocabulary < LinkedResource
     delegate(
       :uri,

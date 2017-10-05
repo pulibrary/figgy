@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe LinkedResourceBuilder::LinkedEphemeraFolder do
+RSpec.describe LinkedData::LinkedEphemeraFolder do
   subject(:linked_ephemera_folder) { described_class.new(resource: ephemera_folder) }
   let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder) }
   let(:ephemera_term) { FactoryGirl.create_for_repository(:ephemera_term, label: 'test term') }

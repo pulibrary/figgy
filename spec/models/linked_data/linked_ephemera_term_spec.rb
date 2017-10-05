@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe LinkedResourceBuilder::LinkedEphemeraTerm do
+RSpec.describe LinkedData::LinkedEphemeraTerm do
   subject(:linked_ephemera_term) { described_class.new(resource: ephemera_term) }
   let(:ephemera_vocabulary) { FactoryGirl.create_for_repository(:ephemera_vocabulary) }
   let(:ephemera_term) { FactoryGirl.create_for_repository(:ephemera_term, member_of_vocabulary_id: [ephemera_vocabulary.id]) }

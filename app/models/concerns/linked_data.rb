@@ -12,7 +12,7 @@ module LinkedData
   end
 
   def export_as_jsonld
-    jsonld.to_json
+    LinkedResourceFactory.new(resource: resource).new.to_jsonld
   end
 
   def export_as_nt
@@ -21,9 +21,5 @@ module LinkedData
 
   def export_as_ttl
     RDF::Graph.new.from_jsonld(export_as_jsonld).dump(:ttl)
-  end
-
-  def jsonld
-    LinkedResourceBuilder.new(resource: resource).build
   end
 end

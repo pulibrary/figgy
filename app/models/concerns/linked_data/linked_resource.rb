@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class LinkedResourceBuilder
+module LinkedData
   class LinkedResource
     attr_reader :resource
     delegate(
@@ -52,9 +52,10 @@ class LinkedResourceBuilder
       values.reject { |k, _| k == :'@context' }
     end
 
-    def to_json
-      imported_jsonld.merge(local_fields)
+    def to_jsonld
+      imported_jsonld.merge(local_fields).to_json
     end
+    alias to_json to_jsonld
     alias to_s to_json
 
     private
