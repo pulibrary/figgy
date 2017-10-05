@@ -69,7 +69,8 @@ Rails.application.config.to_prepare do
         CollectionIndexer,
         MemberOfIndexer,
         FacetIndexer,
-        ProjectIndexer
+        ProjectIndexer,
+        HumanReadableTypeIndexer
       )
     ),
     :index_solr

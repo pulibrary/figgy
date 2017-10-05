@@ -70,4 +70,9 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
       ControlledVocabulary.for(:language).find(language).label
     end
   end
+
+  def human_readable_type
+    return model.human_readable_type if volumes.empty?
+    I18n.translate("valhalla.models.multi_volume_work", default: 'Multi Volume Work')
+  end
 end
