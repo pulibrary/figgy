@@ -142,7 +142,8 @@ class PlumImporter
         depositor: solr_doc["depositor_ssim"],
         source_metadata_identifier: solr_doc.fetch("source_metadata_identifier_ssim", []).first,
         title: solr_doc["title_tesim"],
-        state: solr_doc["workflow_state_name_ssim"]
+        state: solr_doc["workflow_state_name_ssim"],
+        identifier: solr_doc.fetch("identifier_tesim", []).first
       }
     end
 

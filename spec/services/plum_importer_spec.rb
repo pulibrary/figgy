@@ -35,6 +35,7 @@ RSpec.describe PlumImporter do
     expect(output.member_ids.length).to eq 2
     expect(output.local_identifier).to eq ["ps7529f137"]
     expect(output.member_of_collection_ids.length).to eq 2
+    expect(output.identifier).to eq ["ark:/88435/sx61dp92j"]
 
     collections = query_service.find_references_by(resource: output, property: :member_of_collection_ids)
     expect(collections.flat_map(&:slug)).to contain_exactly "cotsen", "pudl0139"
