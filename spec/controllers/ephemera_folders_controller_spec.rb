@@ -273,11 +273,11 @@ RSpec.describe EphemeraFoldersController do
       let(:box) { FactoryGirl.create_for_repository(:ephemera_box) }
       let(:project) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [box.id, field.id]) }
       let(:child_vocab) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'test child vocabulary') }
+      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder) }
 
       render_views
-      it "retrieves project field terms for the folder" do
+      before do
         adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
-        ephemera_folder = FactoryGirl.create_for_repository(:ephemera_folder)
         box.member_ids = [ephemera_folder.id]
         adapter.persister.save(resource: box)
 
@@ -289,7 +289,9 @@ RSpec.describe EphemeraFoldersController do
 
         project.member_ids = [box.id, field.id]
         adapter.persister.save(resource: project)
+      end
 
+      it "retrieves project field terms for the folder" do
         get :edit, params: { id: ephemera_folder.id.to_s, parent_id: box.id }
 
         expect(assigns(:subject)).not_to be_empty

@@ -9,6 +9,15 @@ FactoryGirl.define do
     width '10'
     height '20'
     page_count '30'
+    alternative_title 'test alternative title'
+    series 'test series'
+    creator 'test creator'
+    contributor ['test contributor']
+    publisher ['test publisher']
+    description 'test description'
+    date_created '1970/01/01'
+    source_url 'http://example.com'
+    dspace_url 'http://example.com'
     rights_statement RDF::URI('http://rightsstatements.org/vocab/NKC/1.0/')
     read_groups 'public'
     state 'needs_qa'

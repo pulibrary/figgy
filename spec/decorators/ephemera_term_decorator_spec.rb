@@ -15,9 +15,6 @@ RSpec.describe EphemeraTermDecorator do
   it 'does not manage structures' do
     expect(decorator.manageable_structure?).to be false
   end
-  it 'exposes the metadata adapter' do
-    expect(resource.decorate.metadata_adapter).to be_a Valkyrie::Persistence::Postgres::MetadataAdapter
-  end
   it 'exposes the title as the label' do
     expect(resource.decorate.title).to eq resource.decorate.label
   end

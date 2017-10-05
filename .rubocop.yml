@@ -58,6 +58,7 @@ Metrics/MethodLength:
     - 'spec/services/manifest_builder_spec.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/change_sets/ephemera_folder_change_set.rb'
+    - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/dublin_core.rb'

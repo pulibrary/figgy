@@ -27,11 +27,6 @@ RSpec.feature "Ephemera Terms", js: true do
         adapter.persister.save(resource: ephemera_term)
       end
 
-      scenario 'users can view existing terms' do
-        visit ephemera_terms_path
-        expect(page.find(:css, 'td.vocab:first-child')).to have_content 'test term'
-      end
-
       scenario 'users can view an existing term' do
         visit Valhalla::ContextualPath.new(child: ephemera_term).show
         expect(page).to have_content 'test term'

@@ -36,7 +36,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   end
 
   def collections
-    @collections ||= query_service.find_references_by(resource: self, property: :member_of_collection_ids).to_a
+    @collections ||= query_service.find_references_by(resource: self, property: :member_of_collection_ids).to_a.map(&:decorate)
   end
 
   def rendered_date_range
@@ -65,6 +65,10 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
 
   def ephemera_box
     @ephemera_box ||= query_service.find_parents(resource: model).to_a.first.try(:decorate)
+  end
+
+  def ephemera_project
+    @ephemera_project ||= ephemera_box.ephemera_project
   end
 
   def manageable_files?
@@ -115,6 +119,13 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
 
   def subject
     super.map { |value| controlled_value_for(value) }
+  end
+
+  def categories
+    subject.map do |value|
+      next unless value.is_a? EphemeraTermDecorator
+      value.vocabulary
+    end.reject(&:nil?)
   end
 
   private
