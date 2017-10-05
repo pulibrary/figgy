@@ -7,7 +7,7 @@ class FindEphemeraTermByLabel
     @query_service = query_service
   end
 
-  def find_term_by_label(label:, vocab_label: nil)
+  def find_ephemera_term_by_label(label:, vocab_label: nil)
     if vocab_label
       vocab = run_query(query, EphemeraVocabulary.to_s, vocab_label).first
       internal_array = "[{\"id\": \"#{vocab.id}\"}]"

@@ -7,9 +7,9 @@ class FindEphemeraVocabularyByLabel
     @query_service = query_service
   end
 
-  def find_vocabulary_by_label(label:, category_label: nil)
-    if category_label
-      category = run_query(query, EphemeraVocabulary.to_s, category_label).first
+  def find_ephemera_vocabulary_by_label(label:, parent_vocab: nil)
+    if parent_vocab
+      category = run_query(query, EphemeraVocabulary.to_s, parent_vocab.label).first
       internal_array = "[{\"id\": \"#{category.id}\"}]"
       run_query(query_with_vocab_id, EphemeraVocabulary.to_s, label, internal_array).first
     else

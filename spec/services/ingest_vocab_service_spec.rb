@@ -8,8 +8,8 @@ RSpec.describe IngestVocabService do
   let(:storage_adapter) { Valkyrie::StorageAdapter.find(:lae_storage) }
   let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
 
-  let(:ephemera_vocabularies) { CompositeQueryAdapter::EphemeraVocabularyCompositeQueryAdapter.new(query_service: adapter.query_service, change_set_persister: change_set_persister) }
-  let(:ephemera_terms) { CompositeQueryAdapter::EphemeraTermCompositeQueryAdapter.new(query_service: adapter.query_service, change_set_persister: change_set_persister) }
+  let(:ephemera_vocabularies) { QueryAdapter.new(query_service: adapter.query_service, model: EphemeraVocabulary) }
+  let(:ephemera_terms) { QueryAdapter.new(query_service: adapter.query_service, model: EphemeraTerm) }
 
   describe "#ingest" do
     context "with categories" do
@@ -33,7 +33,7 @@ RSpec.describe IngestVocabService do
       it "loads the terms with categories & a parent vocab" do
         expect(ephemera_terms.all.map(&:label)).to contain_exactly('Agricultural development projects', 'Architecture')
         expect(ephemera_vocabularies.all.map(&:label)).to contain_exactly('LAE Subjects', 'Agrarian and rural issues', 'Arts and culture')
-        expect(ephemera_vocabularies.find_by(label: "Arts and culture").vocabulary.label).to eq 'LAE Subjects'
+        expect(ephemera_vocabularies.find_with(FindEphemeraVocabularyByLabel, label: "Arts and culture").first.vocabulary.label).to eq 'LAE Subjects'
       end
     end
 
