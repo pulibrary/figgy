@@ -13,6 +13,7 @@ export default class Initializer {
     this.modal_viewer = new ModalViewer
     this.derivative_form = new DerivativeForm
     this.universal_viewer = new UniversalViewer
+    $("optgroup").addClass("closed")
     $("select").selectpicker({'liveSearch': true})
     $(".datatable").DataTable()
   }
