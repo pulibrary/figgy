@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class FindEphemeraTermByLabel
+class FindEphemeraVocabularyByLabel
   attr_reader :query_service
   delegate :resource_factory, to: :query_service
   delegate :orm_class, to: :resource_factory
@@ -7,13 +7,13 @@ class FindEphemeraTermByLabel
     @query_service = query_service
   end
 
-  def find_ephemera_term_by_label(label:, parent_vocab_label: nil)
+  def find_ephemera_vocabulary_by_label(label:, parent_vocab_label: nil)
     if parent_vocab_label
       parent_vocab = run_query(query, EphemeraVocabulary.to_s, parent_vocab_label).first
       internal_array = "[{\"id\": \"#{parent_vocab.id}\"}]"
-      run_query(query_with_vocab_id, EphemeraTerm.to_s, label, internal_array).first
+      run_query(query_with_vocab_id, EphemeraVocabulary.to_s, label, internal_array).first
     else
-      run_query(query, EphemeraTerm.to_s, label).first
+      run_query(query, EphemeraVocabulary.to_s, label).first
     end
   end
 

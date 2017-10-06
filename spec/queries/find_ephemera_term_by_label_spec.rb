@@ -9,14 +9,14 @@ RSpec.describe FindEphemeraTermByLabel do
   let(:vocab2) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: "Test2") }
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
 
-  describe "#find_term_by_label" do
+  describe "#find_ephemera_term_by_label" do
     it "can find a term given a label" do
-      output = query.find_term_by_label(label: term.label)
+      output = query.find_ephemera_term_by_label(label: term.label)
       expect(output.id).to eq term.id
     end
     it "can restrict by a vocab" do
       term2
-      output = query.find_term_by_label(label: term.label, vocab_label: vocab.label)
+      output = query.find_ephemera_term_by_label(label: term.label, parent_vocab_label: vocab.label)
       expect(output.id).to eq term.id
     end
   end
