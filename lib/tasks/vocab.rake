@@ -16,6 +16,8 @@ namespace :vocab do
       storage_adapter: Valkyrie::StorageAdapter.find(:lae_storage)
     )
 
-    IngestVocabService.new(change_set_persister, file, name, columns).ingest
+    change_set_persister.buffer_into_index do |buffered_change_set_persister|
+      IngestVocabService.new(buffered_change_set_persister, file, name, columns).ingest
+    end
   end
 end
