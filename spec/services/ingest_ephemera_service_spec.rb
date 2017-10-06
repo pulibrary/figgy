@@ -39,13 +39,20 @@ RSpec.describe IngestEphemeraService, :admin_set do
           end
         end.to change { query_service.find_all_of_model(model: EphemeraFolder).to_a.length }.by(1)
         expect(ingested.title).to eq(["En negro y blanco. Del Cordobazo al juicio a las juntas."])
+        expect(ingested.alternative_title).to eq ["Alternative"]
+        expect(ingested.sort_title).to eq ["en negro y blanco. del cordobazo al juicio a las juntas."]
+        expect(ingested.date_range.first.start.first).to eq "1993"
+        expect(ingested.date_range.first.end.first).to eq "2004"
         expect(ingested.barcode).to eq ["32101093680013"]
+        expect(ingested.description).to eq ["Test description"]
         expect(ingested.read_groups).to eq []
         expect(ingested.pdf_type).to eq ["none"]
         expect(ingested.member_ids.length).to eq 2
         expect(ingested.rights_statement).to eq [RDF::URI('http://rightsstatements.org/vocab/NKC/1.0/')]
         expect(ingested.local_identifier).to eq ['0003d']
         expect(ingested.folder_number).to eq ['2']
+        expect(ingested.height).to eq ['11']
+        expect(ingested.width).to eq ['16']
 
         members = query_service.find_members(resource: ingested).to_a
 
