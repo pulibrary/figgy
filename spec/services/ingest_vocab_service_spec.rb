@@ -5,11 +5,13 @@ RSpec.describe IngestVocabService do
   let(:genre_csv) { Rails.root.join('spec', 'fixtures', 'lae_genres.csv') }
   let(:subject_csv) { Rails.root.join('spec', 'fixtures', 'lae_subjects.csv') }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+  let(:query_service) { adapter.query_service }
   let(:storage_adapter) { Valkyrie::StorageAdapter.find(:lae_storage) }
   let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
 
-  let(:ephemera_vocabularies) { QueryAdapter.new(query_service: adapter.query_service, model: EphemeraVocabulary) }
-  let(:ephemera_terms) { QueryAdapter.new(query_service: adapter.query_service, model: EphemeraTerm) }
+  let(:ephemera_vocabularies) { query_service.find_all_of_model(model: EphemeraVocabulary).to_a.map(&:decorate) }
+  let(:ephemera_vocabulary_query) { FindEphemeraVocabularyByLabel.new(query_service: query_service) }
+  let(:ephemera_terms) { query_service.find_all_of_model(model: EphemeraTerm).to_a.map(&:decorate) }
 
   describe "#ingest" do
     context "with categories" do
@@ -19,8 +21,8 @@ RSpec.describe IngestVocabService do
       end
 
       it "loads the terms with categories" do
-        expect(ephemera_terms.all.map(&:label)).to contain_exactly('Agricultural development projects', 'Architecture')
-        expect(ephemera_vocabularies.all.map(&:label)).to contain_exactly('Agrarian and rural issues', 'Arts and culture')
+        expect(ephemera_terms.map(&:label)).to contain_exactly('Agricultural development projects', 'Architecture')
+        expect(ephemera_vocabularies.map(&:label)).to contain_exactly('Agrarian and rural issues', 'Arts and culture')
       end
     end
 
@@ -31,9 +33,9 @@ RSpec.describe IngestVocabService do
       end
 
       it "loads the terms with categories & a parent vocab" do
-        expect(ephemera_terms.all.map(&:label)).to contain_exactly('Agricultural development projects', 'Architecture')
-        expect(ephemera_vocabularies.all.map(&:label)).to contain_exactly('LAE Subjects', 'Agrarian and rural issues', 'Arts and culture')
-        expect(ephemera_vocabularies.find_with(FindEphemeraVocabularyByLabel, label: "Arts and culture").first.vocabulary.label).to eq 'LAE Subjects'
+        expect(ephemera_terms.map(&:label)).to contain_exactly('Agricultural development projects', 'Architecture')
+        expect(ephemera_vocabularies.map(&:label)).to contain_exactly('LAE Subjects', 'Agrarian and rural issues', 'Arts and culture')
+        expect(ephemera_vocabulary_query.find_ephemera_vocabulary_by_label(label: "Arts and culture").decorate.vocabulary.label).to eq 'LAE Subjects'
       end
     end
 
@@ -44,9 +46,9 @@ RSpec.describe IngestVocabService do
       end
 
       it "loads the terms with categories" do
-        expect(ephemera_terms.all.map(&:label)).to contain_exactly('Brochures', 'Electoral paraphernalia')
-        expect(ephemera_terms.all.map(&:lcsh_label)).to include('Political collectibles')
-        expect(ephemera_terms.all.map(&:tgm_label)).to include('Leaflets')
+        expect(ephemera_terms.map(&:label)).to contain_exactly('Brochures', 'Electoral paraphernalia')
+        expect(ephemera_terms.map(&:lcsh_label)).to include('Political collectibles')
+        expect(ephemera_terms.map(&:tgm_label)).to include('Leaflets')
       end
     end
   end

@@ -7,10 +7,10 @@ class FindEphemeraVocabularyByLabel
     @query_service = query_service
   end
 
-  def find_ephemera_vocabulary_by_label(label:, parent_vocab: nil)
-    if parent_vocab
-      category = run_query(query, EphemeraVocabulary.to_s, parent_vocab.label).first
-      internal_array = "[{\"id\": \"#{category.id}\"}]"
+  def find_ephemera_vocabulary_by_label(label:, parent_vocab_label: nil)
+    if parent_vocab_label
+      parent_vocab = run_query(query, EphemeraVocabulary.to_s, parent_vocab_label).first
+      internal_array = "[{\"id\": \"#{parent_vocab.id}\"}]"
       run_query(query_with_vocab_id, EphemeraVocabulary.to_s, label, internal_array).first
     else
       run_query(query, EphemeraVocabulary.to_s, label).first

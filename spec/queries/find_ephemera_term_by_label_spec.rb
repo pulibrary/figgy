@@ -16,7 +16,7 @@ RSpec.describe FindEphemeraTermByLabel do
     end
     it "can restrict by a vocab" do
       term2
-      output = query.find_ephemera_term_by_label(label: term.label, vocab_label: vocab.label)
+      output = query.find_ephemera_term_by_label(label: term.label, parent_vocab_label: vocab.label)
       expect(output.id).to eq term.id
     end
   end

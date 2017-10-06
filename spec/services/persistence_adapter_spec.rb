@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe PersistenceAdapter do
-  let(:query_adapter) { QueryAdapter.new(query_service: query_service, model: EphemeraVocabulary) }
+  let(:ephemera_vocabularies) { query_service.find_all_of_model(model: EphemeraVocabulary).to_a.map(&:decorate) }
   let(:adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { adapter.query_service }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
@@ -13,9 +13,9 @@ RSpec.describe PersistenceAdapter do
     it "persists a new resource" do
       persistence_adapter.create(label: 'test vocabulary')
 
-      expect(query_adapter.all).not_to be_empty
-      expect(query_adapter.all.first).to be_a EphemeraVocabularyDecorator
-      expect(query_adapter.all.first.label).to eq 'test vocabulary'
+      expect(ephemera_vocabularies).not_to be_empty
+      expect(ephemera_vocabularies.first).to be_a EphemeraVocabularyDecorator
+      expect(ephemera_vocabularies.first.label).to eq 'test vocabulary'
     end
     context 'when using a non-existent model' do
       before do

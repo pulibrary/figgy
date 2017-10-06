@@ -343,7 +343,7 @@ class IngestEphemeraService
     end
 
     def find_term(label, vocab_label)
-      term_query_service.find_ephemera_term_by_label(label: label, vocab_label: vocab_label).id
+      term_query_service.find_ephemera_term_by_label(label: label, parent_vocab_label: vocab_label).id
     rescue
       label
     end
