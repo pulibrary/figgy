@@ -274,6 +274,7 @@ class IngestEphemeraService
       @query_service = query_service
     end
 
+    # rubocop:disable Metrics/MethodLength
     def attributes
       {
         title: title,
@@ -286,12 +287,42 @@ class IngestEphemeraService
         genre: genre,
         subject: subject,
         language: language,
-        geo_subject: geo_subject
+        geo_subject: geo_subject,
+        sort_title: sort_title,
+        date_range: date_range,
+        height: height,
+        width: width
       }
+    end
+    # rubocop:enable Metrics/MethodLength
+
+    def date_range
+      return unless date_start && date_end
+      DateRange.new(start: date_start, end: date_end)
+    end
+
+    def height
+      value(::PULStore.heightInCM)
+    end
+
+    def width
+      value(::PULStore.widthInCM)
+    end
+
+    def date_start
+      value(::PULStore.earliestCreated)
+    end
+
+    def date_end
+      value(::PULStore.latestCreated)
     end
 
     def title
       value(::RDF::Vocab::DC.title)
+    end
+
+    def sort_title
+      value(::PULStore.sortTitle)
     end
 
     def alternative_title
