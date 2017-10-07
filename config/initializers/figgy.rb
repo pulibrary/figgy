@@ -5,7 +5,7 @@ module Figgy
   end
 
   def messaging_client
-    @messaging_client ||= MessagingClient.new(Figgy.config['events']['server'], config: Figgy.config['events'])
+    @messaging_client ||= MessagingClient.new(Figgy.config['events']['server'])
   end
 
   def default_url_options
