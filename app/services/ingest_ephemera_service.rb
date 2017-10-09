@@ -2,9 +2,10 @@
 class IngestEphemeraService
   delegate :metadata_adapter, to: :change_set_persister
   delegate :query_service, to: :metadata_adapter
-  attr_reader :folder_dir, :project, :logger, :change_set_persister
-  def initialize(folder_dir, project, change_set_persister, logger = Logger.new(STDOUT))
+  attr_reader :folder_dir, :state, :project, :logger, :change_set_persister
+  def initialize(folder_dir, state, project, change_set_persister, logger = Logger.new(STDOUT))
     @folder_dir = folder_dir
+    @state = state
     @project = project
     @change_set_persister = change_set_persister
     @logger = logger
@@ -15,6 +16,7 @@ class IngestEphemeraService
     change_set.validate(desc_metadata.attributes)
     change_set.validate(prov_metadata.attributes)
     change_set.validate(default_attributes)
+    change_set.validate(state: state) if state
     change_set.validate(append_id: box.id)
     change_set.sync
     change_set_persister.save(change_set: change_set)
@@ -87,7 +89,7 @@ class IngestEphemeraService
   def default_attributes
     {
       pdf_type: 'none',
-      rights_statement: 'http://rightsstatements.org/vocab/NKC/1.0/',
+      rights_statement: 'http://rightsstatements.org/vocab/CNE/1.0/',
       files: files,
       local_identifier: local_identifier
     }
