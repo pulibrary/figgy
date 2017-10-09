@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe IngestEphemeraService, :admin_set do
-  subject(:ingest_service) { described_class.new(folder, project.title.first, change_set_persister, logger) }
+  subject(:ingest_service) { described_class.new(folder, nil, project.title.first, change_set_persister, logger) }
   let(:folder) { Rails.root.join('spec', 'fixtures', 'lae_migration', 'folders', '0003d') }
   let(:project) { FactoryGirl.create_for_repository(:ephemera_project) }
   let(:logger) { Logger.new(nil) }
@@ -35,7 +35,7 @@ RSpec.describe IngestEphemeraService, :admin_set do
       it "ingests an ephemera folder" do
         expect do
           change_set_persister.buffer_into_index do |buffered|
-            described_class.new(folder, project.title.first, buffered, logger).ingest
+            described_class.new(folder, "complete", project.title.first, buffered, logger).ingest
           end
         end.to change { query_service.find_all_of_model(model: EphemeraFolder).to_a.length }.by(1)
         expect(ingested.title).to eq(["En negro y blanco. Del Cordobazo al juicio a las juntas."])
@@ -48,7 +48,8 @@ RSpec.describe IngestEphemeraService, :admin_set do
         expect(ingested.read_groups).to eq []
         expect(ingested.pdf_type).to eq ["none"]
         expect(ingested.member_ids.length).to eq 2
-        expect(ingested.rights_statement).to eq [RDF::URI('http://rightsstatements.org/vocab/NKC/1.0/')]
+        expect(ingested.rights_statement).to eq [RDF::URI('http://rightsstatements.org/vocab/CNE/1.0/')]
+        expect(ingested.state).to eq ["complete"]
         expect(ingested.local_identifier).to eq ['0003d']
         expect(ingested.folder_number).to eq ['2']
         expect(ingested.height).to eq ['11']
@@ -63,7 +64,7 @@ RSpec.describe IngestEphemeraService, :admin_set do
         expect(ingested.subject).to contain_exactly museums.id, "Not Found"
         expect(ingested.language.first).to eq(spanish.id)
         expect(ingested.geo_subject.first).to eq(wonderland.id)
-        expect(ingested.state.first).to eq "needs_qa"
+        expect(ingested.state.first).to eq "complete"
 
         box = query_service.find_parents(resource: ingested).to_a.first
 
@@ -77,7 +78,7 @@ RSpec.describe IngestEphemeraService, :admin_set do
       end
 
       it "can ingest via a job" do
-        IngestEphemeraJob.perform_now(folder, project.title.first)
+        IngestEphemeraJob.perform_now(folder, nil, project.title.first)
         expect(ingested.title).to eq ["En negro y blanco. Del Cordobazo al juicio a las juntas."]
       end
     end
