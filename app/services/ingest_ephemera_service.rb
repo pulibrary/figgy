@@ -290,6 +290,7 @@ class IngestEphemeraService
         subject: subject,
         language: language,
         geo_subject: geo_subject,
+        geographic_origin: geographic_origin,
         sort_title: sort_title,
         date_range: date_range,
         height: height,
@@ -371,6 +372,12 @@ class IngestEphemeraService
 
     def geo_subject
       value(::RDF::Vocab::DC.coverage).map do |value|
+        find_term(value, "LAE Areas")
+      end
+    end
+
+    def geographic_origin
+      value(::RDF::Vocab::MARCRelators.mfp).map do |value|
         find_term(value, "LAE Areas")
       end
     end

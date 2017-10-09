@@ -20,7 +20,7 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   property :creator, multiple: false, required: false
   property :contributor, multiple: true, required: false
   property :publisher, multiple: true, required: false
-  property :geographic_origin, multiple: false, required: false, type: Valkyrie::Types::ID
+  property :geographic_origin, multiple: false, required: false
   property :subject, multiple: true, required: false
   property :geo_subject, multiple: true, required: false
   property :description, multiple: false, required: false

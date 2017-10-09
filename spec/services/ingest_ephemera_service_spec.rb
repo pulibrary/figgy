@@ -15,6 +15,7 @@ RSpec.describe IngestEphemeraService, :admin_set do
   let(:museums) { FactoryGirl.create_for_repository(:ephemera_term, label: "Museums", member_of_vocabulary_id: subjects.id) }
   let(:spanish) { FactoryGirl.create_for_repository(:ephemera_term, label: "Spanish", member_of_vocabulary_id: languages.id) }
   let(:wonderland) { FactoryGirl.create_for_repository(:ephemera_term, label: "Wonderland", member_of_vocabulary_id: areas.id) }
+  let(:argentina) { FactoryGirl.create_for_repository(:ephemera_term, label: "Argentina", member_of_vocabulary_id: areas.id) }
   let(:change_set_persister) do
     PlumChangeSetPersister.new(metadata_adapter: metadata_adapter,
                                storage_adapter: storage_adapter)
@@ -26,6 +27,7 @@ RSpec.describe IngestEphemeraService, :admin_set do
     museums
     spanish
     wonderland
+    argentina
   end
 
   describe "#ingest" do
@@ -64,6 +66,7 @@ RSpec.describe IngestEphemeraService, :admin_set do
         expect(ingested.subject).to contain_exactly museums.id, "Not Found"
         expect(ingested.language.first).to eq(spanish.id)
         expect(ingested.geo_subject.first).to eq(wonderland.id)
+        expect(ingested.geographic_origin.first).to eq(argentina.id)
         expect(ingested.state.first).to eq "complete"
 
         box = query_service.find_parents(resource: ingested).to_a.first
