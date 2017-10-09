@@ -25,9 +25,19 @@ class ImageDerivativeService
       attribute :output_name, Valkyrie::Types::String
     end
   end
+  class IoDecorator < SimpleDelegator
+    attr_reader :original_filename, :content_type, :use
+    def initialize(io, original_filename, content_type, use)
+      @original_filename = original_filename
+      @content_type = content_type
+      @use = use
+      super(io)
+    end
+  end
   attr_reader :change_set, :original_file, :image_config, :use, :change_set_persister
   delegate :width, :height, :format, :output_name, to: :image_config
   delegate :mime_type, to: :original_file
+  delegate :resource, to: :change_set
   def initialize(change_set:, original_file:, change_set_persister:, image_config:)
     @change_set = change_set
     @original_file = original_file
@@ -59,16 +69,6 @@ class ImageDerivativeService
     )
   end
 
-  class IoDecorator < SimpleDelegator
-    attr_reader :original_filename, :content_type, :use
-    def initialize(io, original_filename, content_type, use)
-      @original_filename = original_filename
-      @content_type = content_type
-      @use = use
-      super(io)
-    end
-  end
-
   def build_file
     IoDecorator.new(temporary_output, "#{output_name}.#{format}", image_mime_type, use)
   end
@@ -77,7 +77,15 @@ class ImageDerivativeService
     [Valkyrie::Vocab::PCDMUse.ServiceFile]
   end
 
-  def cleanup_derivatives; end
+  def cleanup_derivatives
+    deleted_files = []
+    image_derivatives = resource.file_metadata.select { |file| file.derivative? && file.mime_type.include?(image_mime_type) }
+    image_derivatives.each do |file|
+      storage_adapter.delete(id: file.id)
+      deleted_files << file.id
+      cleanup_derivative_metadata(derivatives: deleted_files)
+    end
+  end
 
   def filename
     return Pathname.new(file_object.io.path) if file_object.io.respond_to?(:path) && File.exist?(file_object.io.path)
@@ -102,4 +110,18 @@ class ImageDerivativeService
   def valid?
     ALLOWABLE_FORMATS.include?(mime_type.first)
   end
+
+  private
+
+    def storage_adapter
+      @storage_adapter ||= Valkyrie::StorageAdapter.find(:derivatives)
+    end
+
+    def cleanup_derivative_metadata(derivatives:)
+      resource.file_metadata = resource.file_metadata.reject { |file| derivatives.include?(file.id) }
+      updated_change_set = FileSetChangeSet.new(resource)
+      change_set_persister.buffer_into_index do |buffered_persister|
+        buffered_persister.save(change_set: updated_change_set)
+      end
+    end
 end

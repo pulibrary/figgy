@@ -39,7 +39,10 @@ class ScannedMapDerivativeService
     thumbnail_derivative_service.create_derivatives if thumbnail_derivative_service.valid?
   end
 
-  def cleanup_derivatives; end
+  def cleanup_derivatives
+    jp2_derivative_service.cleanup_derivatives if jp2_derivative_service.valid?
+    thumbnail_derivative_service.cleanup_derivatives if thumbnail_derivative_service.valid?
+  end
 
   def jp2_derivative_service
     Jp2DerivativeService::Factory.new(change_set_persister: change_set_persister).new(change_set)

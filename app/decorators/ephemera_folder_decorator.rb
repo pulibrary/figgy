@@ -37,6 +37,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   end
 
   def collections
+    return [] if members.nil?
     @collections ||= query_service.find_references_by(resource: self, property: :member_of_collection_ids).to_a.map(&:decorate)
   end
 

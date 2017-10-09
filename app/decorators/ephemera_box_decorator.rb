@@ -20,6 +20,7 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
   end
 
   def folders
+    return [] if members.nil?
     @folders ||= members.select { |r| r.is_a?(EphemeraFolder) }.map(&:decorate).to_a
   end
 

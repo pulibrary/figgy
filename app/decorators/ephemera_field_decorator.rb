@@ -7,6 +7,7 @@ class EphemeraFieldDecorator < Valkyrie::ResourceDecorator
   end
 
   def projects
+    return [] if parents.nil?
     @projects ||= parents.select { |r| r.is_a?(EphemeraProject) }.map(&:decorate).to_a
   end
 

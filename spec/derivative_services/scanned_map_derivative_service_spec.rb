@@ -46,4 +46,12 @@ RSpec.describe ScannedMapDerivativeService do
     expect(jp2s.count).to eq 1
     expect(thumbnails.count).to eq 1
   end
+
+  describe '#cleanup_derivatives' do
+    it "deletes the attached fileset when the resource is deleted" do
+      derivative_service.new(valid_change_set).cleanup_derivatives
+      reloaded = query_service.find_by(id: valid_resource.id)
+      expect(reloaded.file_metadata.select(&:derivative?)).to be_empty
+    end
+  end
 end

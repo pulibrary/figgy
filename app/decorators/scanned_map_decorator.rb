@@ -9,10 +9,12 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   end
 
   def scanned_map_members
+    return [] if members.nil?
     @scanned_maps ||= members.select { |r| r.is_a?(ScannedMap) }.map(&:decorate).to_a
   end
 
   def geo_members
+    return [] if members.nil?
     members.select do |member|
       next unless member.respond_to?(:mime_type)
       ControlledVocabulary.for(:geo_image_format).include?(member.mime_type.first)
@@ -20,6 +22,7 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   end
 
   def geo_metadata_members
+    return [] if members.nil?
     members.select do |member|
       next unless member.respond_to?(:mime_type)
       ControlledVocabulary.for(:geo_metadata_format).include?(member.mime_type.first)

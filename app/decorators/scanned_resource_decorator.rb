@@ -11,7 +11,13 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
   end
 
   def volumes
+    return [] if members.nil?
     @volumes ||= members.select { |r| r.is_a?(ScannedResource) }.map(&:decorate).to_a
+  end
+
+  def file_sets
+    return [] if members.nil?
+    @file_sets ||= members.select { |r| r.is_a?(FileSet) }.map(&:decorate).to_a
   end
 
   def rendered_rights_statement

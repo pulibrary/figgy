@@ -183,6 +183,22 @@ RSpec.describe PlumChangeSetPersister do
 
       expect(query_service.find_all.to_a.map(&:class)).to contain_exactly ScannedResource, FileSet
     end
+
+    it "cleans up derivatives", run_real_derivatives: true do
+      resource = FactoryGirl.build(:scanned_resource)
+      change_set = change_set_class.new(resource, characterize: true)
+      change_set.files = [file]
+      output = change_set_persister.save(change_set: change_set)
+      file_set = query_service.find_members(resource: output).first
+      expect(file_set.file_metadata.select(&:derivative?)).not_to be_empty
+
+      updated_change_set = change_set_class.new(output)
+      change_set_persister.delete(change_set: updated_change_set)
+
+      query_service.find_members(resource: output).first
+      derivative = file_set.file_metadata.select(&:derivative?).first
+      expect { query_service.find_by(id: derivative.id) }.to raise_error Valkyrie::Persistence::ObjectNotFoundError
+    end
   end
 
   describe "updating files" do

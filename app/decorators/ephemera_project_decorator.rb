@@ -7,10 +7,12 @@ class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
   end
 
   def boxes
+    return [] if members.nil?
     @boxes ||= members.select { |r| r.is_a?(EphemeraBox) }.map(&:decorate).to_a
   end
 
   def fields
+    return [] if members.nil?
     @fields ||= members.select { |r| r.is_a?(EphemeraField) }.map(&:decorate).to_a
   end
 

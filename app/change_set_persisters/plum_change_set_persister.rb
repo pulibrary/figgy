@@ -23,6 +23,7 @@ class PlumChangeSetPersister
         PublishMessage::Factory.new(operation: :update)
       ],
       before_delete: [
+        CleanupDerivatives,
         CleanupMembership::Factory.new(property: :member_of_collection_ids),
         CleanupMembership::Factory.new(property: :member_ids),
         DeleteReferenced::Factory.new(property: :member_of_vocabulary_id)
