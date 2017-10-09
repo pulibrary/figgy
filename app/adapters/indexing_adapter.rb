@@ -25,6 +25,7 @@ class IndexingAdapter
     attr_reader :metadata_adapter
     delegate :index_adapter, to: :metadata_adapter
     delegate :persister, to: :primary_adapter
+    delegate :wipe!, to: :composite_persister
     def initialize(metadata_adapter:)
       @metadata_adapter = metadata_adapter
     end
