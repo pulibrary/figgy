@@ -50,6 +50,7 @@ Metrics/ClassLength:
     - 'app/change_sets/scanned_resource_change_set.rb'
     - 'app/models/ability.rb'
     - 'app/decorators/ephemera_folder_decorator.rb'
+    - 'app/services/ingest_ephemera_service.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'

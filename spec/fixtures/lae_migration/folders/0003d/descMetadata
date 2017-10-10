@@ -10,6 +10,7 @@
 <info:fedora/puls:0003d> <http://princeton.edu/pulstore/terms/isPartOfSeries> "" .
 <info:fedora/puls:0003d> <http://purl.org/dc/terms/language> "Spanish" .
 <info:fedora/puls:0003d> <http://purl.org/dc/terms/coverage> "Wonderland" .
+<info:fedora/puls:0003d> <http://id.loc.gov/vocabulary/relators/mfp> "Argentina" .
 <info:fedora/puls:0003d> <http://purl.org/dc/terms/subject> "Museums" .
 <info:fedora/puls:0003d> <http://purl.org/dc/terms/subject> "Not Found" .
 <info:fedora/puls:0003d> <http://purl.org/dc/terms/subject> "" .
