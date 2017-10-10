@@ -1,6 +1,10 @@
 # frozen_string_literal: true
+# Creates file sets to be added to resources via a changeset
 class FileAppender
   attr_reader :storage_adapter, :persister, :files
+
+  # files must respond to:
+  #   #path, #content_type, and #original_filename
   def initialize(storage_adapter:, persister:, files:)
     @storage_adapter = storage_adapter
     @persister = persister
