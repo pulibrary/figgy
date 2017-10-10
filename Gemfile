@@ -21,6 +21,7 @@ gem "uglifier"
 gem "valkyrie", git: "https://github.com/samvera-labs/valkyrie.git"
 
 group :development do
+  gem "faker"
   gem "listen"
   gem "spring"
   gem "spring-commands-rspec"

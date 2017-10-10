@@ -41,6 +41,11 @@ bundle install
    - In a separate terminal: `rails s`
    - Access Figgy at http://localhost:3000/
 
+## Load sample development data
+
+1. Log in to your development instance using your princeton credentials; this creates your user in figgy's db.
+1. Start sidekiq (see below)
+1. `rails db:seed` # pipe through `grep -v WARN` to ignore log warnings about the rabbitmq port
 
 ## Background workers
 
