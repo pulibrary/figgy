@@ -63,10 +63,14 @@ RSpec.describe IngestEphemeraService, :admin_set do
         expect(members.last.title).to eq ["2"]
 
         expect(ingested.genre.first).to eq postcards.id
+        expect(ingested.genre.first).to be_kind_of(Valkyrie::ID)
         expect(ingested.subject).to contain_exactly museums.id, "Not Found"
         expect(ingested.language.first).to eq(spanish.id)
+        expect(ingested.language.first).to be_kind_of(Valkyrie::ID)
         expect(ingested.geo_subject.first).to eq(wonderland.id)
+        expect(ingested.geo_subject.first).to be_kind_of(Valkyrie::ID)
         expect(ingested.geographic_origin.first).to eq(argentina.id)
+        expect(ingested.geographic_origin.first).to be_kind_of(Valkyrie::ID)
         expect(ingested.state.first).to eq "complete"
 
         box = query_service.find_parents(resource: ingested).to_a.first
