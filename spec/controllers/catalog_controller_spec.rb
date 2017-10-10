@@ -35,6 +35,22 @@ RSpec.describe CatalogController do
       expect(facets["state_ssim"]).to eq ["complete", 1]
       expect(facets["display_subject_ssim"]).to eq [output.imported_metadata[0].subject.first, 1]
     end
+    it "can search by local identifiers" do
+      persister.save(resource: FactoryGirl.create_for_repository(:scanned_resource, local_identifier: "p3b593k91p"))
+
+      get :index, params: { q: "p3b593k91p" }
+      expect(assigns(:document_list).length).to eq 1
+    end
+    context 'with imported metadata' do
+      it "can search by imported local identifiers" do
+        stub_bibdata(bib_id: "8543429")
+        stub_ezid(shoulder: "99999/fk4", blade: "8543429")
+        persister.save(resource: FactoryGirl.create_for_repository(:scanned_resource, source_metadata_identifier: "8543429", import_metadata: true))
+
+        get :index, params: { q: "cico:xjt" }
+        expect(assigns(:document_list).length).to eq 1
+      end
+    end
     it "can search by ARK" do
       stub_bibdata(bib_id: "123456")
       stub_ezid(shoulder: "99999/fk4", blade: "123456")
