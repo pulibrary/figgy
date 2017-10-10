@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     get 'sign_out', to: 'devise/sessions#destroy', as: :destroy_user_session
     get 'users/auth/cas', to: 'users/omniauth_authorize#passthru', defaults: { provider: :cas }, as: "new_user_session"
   end
+  resources :users, only: [:index, :create, :destroy]
   mount Hydra::RoleManagement::Engine => '/'
   concern :exportable, Blacklight::Routes::Exportable.new
 

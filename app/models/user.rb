@@ -5,6 +5,7 @@ class User < ApplicationRecord
   include Hydra::User
   # Connects this user object to Role-management behaviors.
   include Hydra::RoleManagement::UserRoles
+  validates :uid, :email, presence: true
 
   def self.from_omniauth(access_token)
     User.where(provider: access_token.provider, uid: access_token.uid).first_or_create do |user|

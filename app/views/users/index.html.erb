@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Users</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>UID</th>
+      <th>Email</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |u| %>
+      <tr>
+        <td><%= u.uid %></td>
+        <td><%= u.email %></td>
+        <td><%= link_to 'Destroy', u, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= simple_form_for(User.new) do |f| %>
+  <%= f.error_notification %>
+
+  <%= f.input :uid, label: false, wrapper_html: { class: "form-inline" } do %>
+    <%= f.input_field :uid, label: false %>
+    <%= f.submit("Add User") %>
+  <% end %>
+<% end %>
