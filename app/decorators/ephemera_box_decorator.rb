@@ -16,11 +16,10 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
   end
 
   def members
-    @members ||= query_service.find_members(resource: model)
+    @members ||= find_members(resource: model)
   end
 
   def folders
-    return [] if members.nil?
     @folders ||= members.select { |r| r.is_a?(EphemeraFolder) }.map(&:decorate).to_a
   end
 
@@ -55,4 +54,10 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
   def attachable_objects
     [EphemeraFolder]
   end
+
+  private
+
+    def find_members(resource:)
+      query_service.find_members(resource: resource) || []
+    end
 end

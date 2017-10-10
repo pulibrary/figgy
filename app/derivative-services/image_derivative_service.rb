@@ -83,8 +83,8 @@ class ImageDerivativeService
     image_derivatives.each do |file|
       storage_adapter.delete(id: file.id)
       deleted_files << file.id
-      cleanup_derivative_metadata(derivatives: deleted_files)
     end
+    cleanup_derivative_metadata(derivatives: deleted_files)
   end
 
   def filename

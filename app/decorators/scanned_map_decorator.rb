@@ -5,16 +5,14 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
                                   Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]
 
   def members
-    @members ||= query_service.find_members(resource: model)
+    @members ||= find_members(resource: model)
   end
 
   def scanned_map_members
-    return [] if members.nil?
     @scanned_maps ||= members.select { |r| r.is_a?(ScannedMap) }.map(&:decorate).to_a
   end
 
   def geo_members
-    return [] if members.nil?
     members.select do |member|
       next unless member.respond_to?(:mime_type)
       ControlledVocabulary.for(:geo_image_format).include?(member.mime_type.first)
@@ -22,7 +20,6 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   end
 
   def geo_metadata_members
-    return [] if members.nil?
     members.select do |member|
       next unless member.respond_to?(:mime_type)
       ControlledVocabulary.for(:geo_metadata_format).include?(member.mime_type.first)
@@ -59,4 +56,10 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   def iiif_manifest_attributes
     local_attributes(self.class.iiif_manifest_attributes)
   end
+
+  private
+
+    def find_members(resource:)
+      query_service.find_members(resource: resource) || []
+    end
 end

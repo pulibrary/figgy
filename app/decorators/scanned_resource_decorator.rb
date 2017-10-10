@@ -7,16 +7,14 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
   delegate(*Schema::Common.attributes, to: :primary_imported_metadata, prefix: :imported)
 
   def members
-    @members ||= query_service.find_members(resource: model)
+    @members ||= find_members(resource: model)
   end
 
   def volumes
-    return [] if members.nil?
     @volumes ||= members.select { |r| r.is_a?(ScannedResource) }.map(&:decorate).to_a
   end
 
   def file_sets
-    return [] if members.nil?
     @file_sets ||= members.select { |r| r.is_a?(FileSet) }.map(&:decorate).to_a
   end
 
@@ -81,4 +79,10 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
     return model.human_readable_type if volumes.empty?
     I18n.translate("valhalla.models.multi_volume_work", default: 'Multi Volume Work')
   end
+
+  private
+
+    def find_members(resource:)
+      query_service.find_members(resource: resource) || []
+    end
 end

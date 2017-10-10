@@ -33,11 +33,10 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
                                   Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]
 
   def members
-    @members ||= query_service.find_members(resource: model)
+    @members ||= find_members(resource: model)
   end
 
   def collections
-    return [] if members.nil?
     @collections ||= query_service.find_references_by(resource: self, property: :member_of_collection_ids).to_a.map(&:decorate)
   end
 
@@ -141,5 +140,9 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
 
     def controlled_value_for(value)
       value.present? && value.is_a?(Valkyrie::ID) ? find_resource(value) : value
+    end
+
+    def find_members(resource:)
+      query_service.find_members(resource: resource) || []
     end
 end

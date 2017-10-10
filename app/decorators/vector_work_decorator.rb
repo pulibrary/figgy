@@ -3,7 +3,7 @@ class VectorWorkDecorator < Valkyrie::ResourceDecorator
   self.display_attributes += Schema::Geo.attributes + [:rendered_coverage, :member_of_collections] - [:thumbnail_id, :coverage]
 
   def members
-    @members ||= query_service.find_members(resource: model)
+    @members ||= find_members(resource: model)
   end
 
   # Use case for nesting vector works
@@ -52,4 +52,10 @@ class VectorWorkDecorator < Valkyrie::ResourceDecorator
   def attachable_objects
     [VectorWork]
   end
+
+  private
+
+    def find_members(resource:)
+      query_service.find_members(resource: resource) || []
+    end
 end
