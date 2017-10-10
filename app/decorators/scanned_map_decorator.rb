@@ -4,10 +4,6 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   self.iiif_manifest_attributes = display_attributes + [:title] - \
                                   Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]
 
-  def members
-    @members ||= find_members(resource: model)
-  end
-
   def scanned_map_members
     @scanned_maps ||= members.select { |r| r.is_a?(ScannedMap) }.map(&:decorate).to_a
   end
@@ -56,10 +52,4 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   def iiif_manifest_attributes
     local_attributes(self.class.iiif_manifest_attributes)
   end
-
-  private
-
-    def find_members(resource:)
-      query_service.find_members(resource: resource) || []
-    end
 end

@@ -54,10 +54,4 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
   def attachable_objects
     [EphemeraFolder]
   end
-
-  private
-
-    def find_members(resource:)
-      query_service.find_members(resource: resource) || []
-    end
 end

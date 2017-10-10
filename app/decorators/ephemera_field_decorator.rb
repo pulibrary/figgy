@@ -2,10 +2,6 @@
 class EphemeraFieldDecorator < Valkyrie::ResourceDecorator
   self.display_attributes = [:rendered_name, :vocabulary]
 
-  def parents
-    @parents ||= find_parents(resource: model)
-  end
-
   def projects
     @projects ||= parents.select { |r| r.is_a?(EphemeraProject) }.map(&:decorate).to_a
   end
@@ -59,9 +55,5 @@ class EphemeraFieldDecorator < Valkyrie::ResourceDecorator
 
     def name_term
       @name_term ||= ControlledVocabulary.for(:ephemera_field).find(field_name.first)
-    end
-
-    def find_parents(resource:)
-      query_service.find_parents(resource: resource) || []
     end
 end

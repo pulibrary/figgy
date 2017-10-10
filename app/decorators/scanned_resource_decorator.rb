@@ -6,10 +6,6 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
                                   Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]
   delegate(*Schema::Common.attributes, to: :primary_imported_metadata, prefix: :imported)
 
-  def members
-    @members ||= find_members(resource: model)
-  end
-
   def volumes
     @volumes ||= members.select { |r| r.is_a?(ScannedResource) }.map(&:decorate).to_a
   end
@@ -79,10 +75,4 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
     return model.human_readable_type if volumes.empty?
     I18n.translate("valhalla.models.multi_volume_work", default: 'Multi Volume Work')
   end
-
-  private
-
-    def find_members(resource:)
-      query_service.find_members(resource: resource) || []
-    end
 end
