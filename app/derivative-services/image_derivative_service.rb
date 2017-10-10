@@ -77,6 +77,9 @@ class ImageDerivativeService
     [Valkyrie::Vocab::PCDMUse.ServiceFile]
   end
 
+  # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
+  # Please note that this simply deletes the files themselves from storage
+  # File membership for the parent of the Valkyrie::StorageAdapter::File is removed using #cleanup_derivative_metadata
   def cleanup_derivatives
     deleted_files = []
     image_derivatives = resource.file_metadata.select { |file| file.derivative? && file.mime_type.include?(image_mime_type) }
@@ -117,9 +120,12 @@ class ImageDerivativeService
       @storage_adapter ||= Valkyrie::StorageAdapter.find(:derivatives)
     end
 
+    # This removes all Valkyrie::StorageAdapter::File member Objects from a given Resource (usually a FileSet)
+    # Resources consistently store the membership using #file_metadata
+    # A ChangeSet for the purged members is created and persisted
     def cleanup_derivative_metadata(derivatives:)
       resource.file_metadata = resource.file_metadata.reject { |file| derivatives.include?(file.id) }
-      updated_change_set = FileSetChangeSet.new(resource)
+      updated_change_set = DynamicChangeSet.new(resource)
       change_set_persister.buffer_into_index do |buffered_persister|
         buffered_persister.save(change_set: updated_change_set)
       end
