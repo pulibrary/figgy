@@ -51,7 +51,7 @@ class Valhalla::DownloadsController < ApplicationController
     response.headers['Content-Type'] = file_desc.mime_type.first.to_s
     response.headers['Content-Length'] ||= binary_file.size.to_s
     # Prevent Rack::ETag from calculating a digest over body
-    response.headers['Last-Modified'] = modified_date
+    response.headers['Last-Modified'] = modified_date if modified_date
   end
 
   def modified_date
