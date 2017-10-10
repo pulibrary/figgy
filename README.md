@@ -12,7 +12,7 @@ functionality, performance, and scalability.
 * [Redis](http://redis.io/)
     * Start Redis with `redis-server` or if you're on certain Linuxes, you can do this via `sudo service redis-server start`.
 * [ImageMagick](https://www.imagemagick.org)
-    * On a mac, do `brew install imagemagick --with-little-cms-2`
+    * On a mac, do `brew install imagemagick --with-little-cms2 --with-openjpeg`
 * [Kakadu](http://kakadusoftware.com/)
     * On a mac, extract the file and run the pkg installer therein (don't get distracted by the files called kdu_show)
 * [RabbitMQ](https://www.rabbitmq.com/) (Optional)
