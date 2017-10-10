@@ -84,6 +84,8 @@ test:
   <<: *defaults
   plum_binary_path: <%= Rails.root.join("spec", "fixtures", "plum_binaries") %>
   plum_derivative_path: <%= Rails.root.join("spec", "fixtures", "plum_derivatives") %>
+  repository_path: <%= Rails.root.join("tmp", "test_files") %>
+  derivative_path: <%= Rails.root.join("tmp", "test_derivatives") %>
   events:
     log_file: '/dev/null'
 

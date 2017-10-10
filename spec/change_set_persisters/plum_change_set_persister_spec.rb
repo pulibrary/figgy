@@ -179,7 +179,7 @@ RSpec.describe PlumChangeSetPersister do
       expect(derivative_file_node).not_to be_blank
       derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative_file_node.file_identifiers.first)
       expect(derivative_file).not_to be_blank
-      expect(derivative_file.io.path).to start_with(Rails.root.join("tmp", "derivatives").to_s)
+      expect(derivative_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config['derivative_path']).to_s)
 
       expect(query_service.find_all.to_a.map(&:class)).to contain_exactly ScannedResource, FileSet
     end
