@@ -20,12 +20,6 @@ if Rails.env.development? || Rails.env.test?
       end
     end
 
-    desc "Cleanup test servers"
-    task :clean_test do
-      SolrWrapper.instance(managed: true, verbose: true, port: 8984, instance_dir: 'tmp/blacklight-core-test', persist: false).remove_instance_dir!
-      puts "Cleaned up test solr server."
-    end
-
     desc "Start solr server for development."
     task :development do
       SolrWrapper.wrap(managed: true, verbose: true, port: 8983, instance_dir: 'tmp/blacklight-core', persist: false, download_dir: 'tmp') do |solr|
@@ -38,6 +32,16 @@ if Rails.env.development? || Rails.env.test?
             puts "\nShutting down..."
           end
         end
+      end
+    end
+  end
+
+  namespace :clean do
+    namespace :test do
+      desc "Cleanup test servers"
+      task :solr do
+        SolrWrapper.instance(managed: true, verbose: true, port: 8984, instance_dir: 'tmp/blacklight-core-test', persist: false).remove_instance_dir!
+        puts "Cleaned up test solr server."
       end
     end
   end
