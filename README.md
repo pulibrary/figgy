@@ -55,3 +55,6 @@ background jobs that are queued:
 ```
 bundle exec sidekiq
 ```
+
+## More
+For links to helpful valkyrie documentation and troubleshooting tips, visit the [wiki pages](https://github.com/pulibrary/figgy/wiki).
