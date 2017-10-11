@@ -44,5 +44,14 @@ if Rails.env.development? || Rails.env.test?
         puts "Cleaned up test solr server."
       end
     end
+
+    namespace :development do
+      desc "Delete all development metadata, index, and original/derivative data"
+      task all: :environment do
+        seeder = DataSeeder.new
+        seeder.wipe_metadata!
+        seeder.wipe_files!
+      end
+    end
   end
 end
