@@ -15,14 +15,14 @@ RSpec.describe IngestVocabService do
 
   describe "#ingest" do
     context "with categories" do
-      let(:ingest_vocab_service) { described_class.new(change_set_persister, subject_csv, nil, label: 'subject', category: 'category', uri: 'uri') }
+      let(:ingest_vocab_service) { described_class.new(change_set_persister, subject_csv, 'Subjects', label: 'subject', category: 'category', uri: 'uri') }
       before do
         ingest_vocab_service.ingest
       end
 
       it "loads the terms with categories" do
         expect(ephemera_terms.map(&:label)).to contain_exactly('Agricultural development projects', 'Architecture')
-        expect(ephemera_vocabularies.map(&:label)).to contain_exactly('Agrarian and rural issues', 'Arts and culture')
+        expect(ephemera_vocabularies.map(&:label)).to contain_exactly('Agrarian and rural issues', 'Arts and culture', 'Subjects')
       end
     end
 
