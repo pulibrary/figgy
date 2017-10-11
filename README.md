@@ -50,3 +50,13 @@ background jobs that are queued:
 ```
 bundle exec sidekiq
 ```
+
+
+## Loading controlled vocabularies
+
+To load the controlled vocabularies in `config/vocab/`:
+  - `rails vocab:load CSV=config/vocab/iso639-1.csv NAME="LAE Languages"
+  - `rails vocab:load CSV=config/vocab/iso639-2.csv NAME="ISO-639-2 Languages"
+  - `rails vocab:load CSV=config/vocab/lae_areas.csv NAME="LAE Areas"
+  - `rails vocab:load CSV=config/vocab/lae_genres.csv NAME="LAE Genres" LABEL=pul_label
+  - `rails vocab:load CSV=config/vocab/lae_subjects.csv NAME="LAE Subjects" CATEGORY=category LABEL=subject
