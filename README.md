@@ -56,7 +56,6 @@ background jobs that are queued:
 bundle exec sidekiq
 ```
 
-
 ## Loading controlled vocabularies
 
 To load the controlled vocabularies in `config/vocab/`:
@@ -65,3 +64,6 @@ To load the controlled vocabularies in `config/vocab/`:
   - `rails vocab:load CSV=config/vocab/lae_areas.csv NAME="LAE Areas"
   - `rails vocab:load CSV=config/vocab/lae_genres.csv NAME="LAE Genres" LABEL=pul_label
   - `rails vocab:load CSV=config/vocab/lae_subjects.csv NAME="LAE Subjects" CATEGORY=category LABEL=subject
+
+## More
+For links to helpful valkyrie documentation and troubleshooting tips, visit the [wiki pages](https://github.com/pulibrary/figgy/wiki).
