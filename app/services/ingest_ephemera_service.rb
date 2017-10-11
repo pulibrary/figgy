@@ -281,6 +281,7 @@ class IngestEphemeraService
       {
         title: title,
         alternative_title: alternative_title,
+        series: series,
         description: description,
         publisher: publisher,
         creator: creator,
@@ -294,7 +295,8 @@ class IngestEphemeraService
         sort_title: sort_title,
         date_range: date_range,
         height: height,
-        width: width
+        width: width,
+        page_count: page_count
       }
     end
     # rubocop:enable Metrics/MethodLength
@@ -312,6 +314,10 @@ class IngestEphemeraService
       value(::PULStore.widthInCM)
     end
 
+    def page_count
+      value(::PULStore.pageCount)
+    end
+
     def date_start
       value(::PULStore.earliestCreated)
     end
@@ -326,6 +332,10 @@ class IngestEphemeraService
 
     def sort_title
       value(::PULStore.sortTitle)
+    end
+
+    def series
+      value(::PULStore.isPartOfSeries)
     end
 
     def alternative_title
