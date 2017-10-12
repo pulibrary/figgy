@@ -11,6 +11,6 @@ class EphemeraFieldsController < ApplicationController
   before_action :load_vocabularies, only: [:new, :edit]
 
   def load_vocabularies
-    @vocabularies = query_service.find_all_of_model(model: EphemeraVocabulary).map(&:decorate)
+    @vocabularies = query_service.find_all_of_model(model: EphemeraVocabulary).map(&:decorate).sort_by(&:label)
   end
 end

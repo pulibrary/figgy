@@ -47,6 +47,7 @@ RSpec.describe IngestEphemeraService, :admin_set do
         expect(ingested.date_range.first.end.first).to eq "2004"
         expect(ingested.barcode).to eq ["32101093680013"]
         expect(ingested.description).to eq ["Test description"]
+        expect(ingested.series).to eq ['Test Series']
         expect(ingested.read_groups).to eq []
         expect(ingested.pdf_type).to eq ["none"]
         expect(ingested.member_ids.length).to eq 2
@@ -56,6 +57,7 @@ RSpec.describe IngestEphemeraService, :admin_set do
         expect(ingested.folder_number).to eq ['2']
         expect(ingested.height).to eq ['11']
         expect(ingested.width).to eq ['16']
+        expect(ingested.page_count).to eq ['2']
 
         members = query_service.find_members(resource: ingested).to_a
 

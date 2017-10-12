@@ -11,4 +11,6 @@ class PULStore < RDF::StrictVocabulary('http://princeton.edu/pulstore/terms/')
   term :suppressed, label: 'Suppressed', type: 'rdf:Property'
   term :heightInCM, label: 'Height in CM', type: 'rdf:Property'
   term :widthInCM, label: 'Width in CM', type: 'rdf:Property'
+  term :isPartOfSeries, label: 'Is Part Of Series', type: 'rdf:Property'
+  term :pageCount, label: 'Page Count', type: 'rdf:Property'
 end

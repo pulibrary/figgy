@@ -12,20 +12,21 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     :height,
     :page_count,
     :rights_statement,
-    :rendered_rights_statement,
     :series,
     :creator,
     :contributor,
     :publisher,
     :geographic_origin,
     :subject,
+    :categories,
     :geo_subject,
     :description,
     :date_created,
     :rendered_date_range,
     :dspace_url,
     :source_url,
-    :visibility
+    :visibility,
+    :rendered_rights_statement
   ]
   self.iiif_manifest_attributes = display_attributes + [:title] - \
                                   imported_attributes(Schema::Common.attributes) - \

@@ -7,7 +7,7 @@
 <info:fedora/puls:0003d> <http://purl.org/dc/terms/alternative> "Alternative" .
 <info:fedora/puls:0003d> <http://purl.org/dc/terms/title> "En negro y blanco. Del Cordobazo al juicio a las juntas." .
 <info:fedora/puls:0003d> <http://purl.org/dc/terms/publisher> "Museo de la Memoria - Municipalidad de Rosario" .
-<info:fedora/puls:0003d> <http://princeton.edu/pulstore/terms/isPartOfSeries> "" .
+<info:fedora/puls:0003d> <http://princeton.edu/pulstore/terms/isPartOfSeries> "Test Series" .
 <info:fedora/puls:0003d> <http://purl.org/dc/terms/language> "Spanish" .
 <info:fedora/puls:0003d> <http://purl.org/dc/terms/coverage> "Wonderland" .
 <info:fedora/puls:0003d> <http://id.loc.gov/vocabulary/relators/mfp> "Argentina" .
