@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 class EphemeraVocabularyDecorator < Valkyrie::ResourceDecorator
-  self.display_attributes = [:label, :uri, :definition, :categories, :terms]
+  display(
+    [
+      :label,
+      :uri,
+      :definition,
+      :categories,
+      :terms
+    ]
+  )
 
   def label
     Array.wrap(super).first

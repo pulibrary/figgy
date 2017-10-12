@@ -102,7 +102,7 @@ RSpec.describe ManifestBuilder do
       expect(output).to include 'metadata'
       metadata = output["metadata"]
       expect(metadata).to be_kind_of Array
-      expect(metadata.length).to eq(11)
+      expect(metadata.length).to eq(10)
 
       metadata_object = metadata.shift
       expect(metadata_object).to be_kind_of Hash
@@ -125,10 +125,10 @@ RSpec.describe ManifestBuilder do
       metadata_object = metadata.shift
       expect(metadata_object).to be_kind_of Hash
 
-      expect(metadata_object["label"]).to eq 'Sort Title'
+      expect(metadata_object["label"]).to eq 'Portion Note'
       metadata_values = metadata_object['value']
       expect(metadata_values).to be_kind_of Array
-      expect(metadata_values).to include 'test title2'
+      expect(metadata_values).to include 'test value1'
     end
   end
   context "when given a nested child" do

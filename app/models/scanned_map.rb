@@ -5,6 +5,7 @@ class ScannedMap < Valhalla::Resource
   attribute :id, Valkyrie::Types::ID.optional
   attribute :member_ids, Valkyrie::Types::Array
   attribute :member_of_collection_ids
+  attribute :imported_metadata, Valkyrie::Types::Set.member(ImportedMetadata).optional
   attribute :state
   attribute :logical_structure, Valkyrie::Types::Array.member(Structure.optional).optional
   attribute :pending_uploads, Valkyrie::Types::Array.member(PendingUpload)
@@ -21,7 +22,7 @@ class ScannedMap < Valhalla::Resource
   end
 
   def primary_imported_metadata
-    Array.wrap(self).first
+    Array.wrap(imported_metadata).first || ImportedMetadata.new
   end
 
   def geo_resource?
