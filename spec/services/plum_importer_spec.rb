@@ -50,6 +50,8 @@ RSpec.describe PlumImporter do
     expect(members[0].local_identifier).to eq ["p73669555b"]
     expect(members[0].original_file.width).to eq ["4686"]
     expect(members[0].original_file.height).to eq ["7200"]
+    expect(members[0].original_file.checksum.count).to eq 1
+    expect(members[0].original_file.checksum.first).to be_a MultiChecksum
     expect(members[0].derivative_file).not_to be_blank
     expect(members[0].derivative_file.file_identifiers[0].to_s).to include("/#{Figgy.config['derivative_path']}/")
     expect(output.thumbnail_id).to eq [members[1].id]

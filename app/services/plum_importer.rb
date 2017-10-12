@@ -16,9 +16,16 @@ class PlumImporter
     file_sets = members.select { |x| x.is_a?(FileSet) }
     file_sets.each do |member|
       id_cache[member.local_identifier.first] = member.id.to_s
+      add_checksums(member)
       import_derivative(member)
     end
     update_structure(output, members, change_set_persister)
+  end
+
+  def add_checksums(member)
+    member.original_file.checksum = member.original_file.file_identifiers.map do |id|
+      MultiChecksum.for(Valkyrie::StorageAdapter.find_by(id: id))
+    end
   end
 
   def import_derivative(member)
@@ -59,6 +66,7 @@ class PlumImporter
     members.find { |x| x.member_ids.map(&:to_s).include?(thumbnail_id) }.try(:id)
   end
 
+  # A resource changeset
   def change_set
     @change_set ||= ScannedResourceChangeSet.new(resource).tap do |change_set|
       change_set.prepopulate!
@@ -99,6 +107,7 @@ class PlumImporter
     @plum_solr ||= RSolr.connect(url: Figgy.config["plum_solr_url"])
   end
 
+  # the resource document
   def document
     @document ||= PlumDocument.new(plum_solr.get("select", params: { q: "id:#{id}", rows: 1 })["response"]["docs"].first, self)
   end
@@ -129,6 +138,7 @@ class PlumImporter
     end
   end
 
+  # resource document
   class PlumDocument
     attr_reader :solr_doc, :importer
     delegate :file_set_documents, to: :files_container
