@@ -23,10 +23,8 @@ class PlumImporter
   end
 
   def add_checksums(member)
-    member.original_file.file_identifiers.map do |id|
-      member.original_file.checksum << MultiChecksum.for(
-        Valkyrie::StorageAdapter.find_by(id: id)
-      )
+    member.original_file.checksum = member.original_file.file_identifiers.map do |id|
+      MultiChecksum.for(Valkyrie::StorageAdapter.find_by(id: id))
     end
   end
 
