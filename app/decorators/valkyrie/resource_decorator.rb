@@ -2,7 +2,6 @@
 class Valkyrie::ResourceDecorator < ApplicationDecorator
   self.suppressed_attributes = [
     :depositor,
-    :description,
     :holding_location,
     :keyword,
     :nav_date,

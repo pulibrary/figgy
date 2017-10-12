@@ -28,7 +28,6 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     :visibility,
     :rendered_rights_statement
   ]
-  self.suppressed_attributes -= [:description]
   self.iiif_manifest_attributes = display_attributes + [:title] - \
                                   imported_attributes(Schema::Common.attributes) - \
                                   Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]
