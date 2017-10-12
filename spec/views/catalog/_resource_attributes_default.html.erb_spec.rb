@@ -71,8 +71,8 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       expect(rendered).to have_content "Early works to 1500"
 
       # Description
-      expect(rendered).not_to have_selector "th", text: "Description"
-      expect(rendered).not_to have_content "WHS fragment is parts of 2 leaves (ff. 2.7, Schwenke 6,1-9,6; 10,2-12,5; 22,1-23,21; 24,2-36) of a 27-line edition; vellum; Type 5."
+      expect(rendered).to have_selector "th", text: "Description"
+      expect(rendered).to have_content "WHS fragment is parts of 2 leaves (ff. 2.7, Schwenke 6,1-9,6; 10,2-12,5; 22,1-23,21; 24,2-36) of a 27-line edition; vellum; Type 5."
 
       # Publisher
       expect(rendered).to have_selector "th", text: "Publisher"
