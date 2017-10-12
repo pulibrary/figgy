@@ -67,6 +67,7 @@ Rails.application.config.to_prepare do
       resource_indexer: CompositeIndexer.new(
         Valkyrie::Indexers::AccessControlsIndexer,
         CollectionIndexer,
+        EphemeraBoxIndexer,
         MemberOfIndexer,
         FacetIndexer,
         ProjectIndexer,

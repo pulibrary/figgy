@@ -9,6 +9,9 @@ RSpec.describe EphemeraBoxDecorator do
       expect(resource.decorate).to be_a described_class
     end
   end
+  it 'has a title' do
+    expect(decorator.title).to eq('Box 1')
+  end
   it 'does not manage files' do
     expect(decorator.manageable_files?).to be false
   end
