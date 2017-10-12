@@ -51,6 +51,7 @@ Metrics/ClassLength:
     - 'app/models/ability.rb'
     - 'app/decorators/ephemera_folder_decorator.rb'
     - 'app/services/ingest_ephemera_service.rb'
+    - 'app/services/plum_importer.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'

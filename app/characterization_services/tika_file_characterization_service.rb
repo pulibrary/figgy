@@ -21,29 +21,17 @@ class TikaFileCharacterizationService
   #   Valkyrie::FileCharacterizationService.for(file_node, persister).characterize(save: false)
   def characterize(save: true)
     result = JSON.parse(json_output).last
-    @file_characterization_attributes = { width: result['tiff:ImageWidth'], height: result['tiff:ImageLength'], mime_type: result['Content-Type'], checksum: checksum, size: result['Content-Length'] }
+    @file_characterization_attributes = {
+      width: result['tiff:ImageWidth'],
+      height: result['tiff:ImageLength'],
+      mime_type: result['Content-Type'],
+      checksum: MultiChecksum.for(file_object),
+      size: result['Content-Length']
+    }
     new_file = original_file.new(@file_characterization_attributes.to_h)
     @file_node.file_metadata = @file_node.file_metadata.select { |x| x.id != new_file.id } + [new_file]
     @persister.save(resource: @file_node) if save
     @file_node
-  end
-
-  # Provides the SHA256 hexdigest string for the file
-  # @return String
-  def checksum
-    md5 = Digest::MD5.new
-    sha256 = Digest::SHA256.new
-    sha1 = Digest::SHA1.new
-    while (chunk = file_object.read(1024))
-      md5.update chunk
-      sha256.update chunk
-      sha1.update chunk
-    end
-    MultiChecksum.new(
-      sha256: sha256,
-      md5: md5,
-      sha1: sha1
-    )
   end
 
   def json_output
@@ -57,7 +45,7 @@ class TikaFileCharacterizationService
   end
 
   # Provides the file attached to the file_node
-  # @return Valkyrie::FileRepository::File
+  # @return Valkyrie::StorageAdapter::File
   def file_object
     @file_object ||= Valkyrie::StorageAdapter.find_by(id: original_file.file_identifiers[0])
   end

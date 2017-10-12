@@ -71,7 +71,9 @@ RSpec.describe TikaFileCharacterizationService do
     t_file_node = valid_file_set
     t_file_node.original_file.checksum = nil
     new_file_node = described_class.new(file_node: t_file_node, persister: persister).characterize(save: false)
-    expect(new_file_node.original_file.checksum).not_to be_empty
+    checksum = new_file_node.original_file.checksum
+    expect(checksum.count).to eq 1
+    expect(checksum.first).to be_a MultiChecksum
   end
 
   describe "#valid?" do
