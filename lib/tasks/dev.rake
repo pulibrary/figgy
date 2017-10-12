@@ -27,7 +27,17 @@ if Rails.env.development? || Rails.env.test?
           puts "Setup solr"
           puts "Solr running at http://localhost:8983/solr/blacklight-core/, ^C to exit"
           begin
-            sleep
+            if ENV['ENABLE_RAILS']
+              # If HOST specified, bind to that IP with -b
+              server_options = " -b #{ENV['HOST']}" if ENV['HOST']
+              IO.popen("rails server#{server_options}") do |io|
+                io.each do |line|
+                  puts line
+                end
+              end
+            else
+              sleep
+            end
           rescue Interrupt
             puts "\nShutting down..."
           end
