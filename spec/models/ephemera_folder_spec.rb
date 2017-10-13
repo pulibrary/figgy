@@ -20,4 +20,8 @@ RSpec.describe EphemeraFolder do
     folder.date_range = DateRange.new(start: "2017", end: "2018")
     expect(folder.date_range.first.start).to eq ["2017"]
   end
+  it "has provenance attribute" do
+    folder.provenance = ["Donated by The Mario Bros"]
+    expect(folder.provenance.first).to eq "Donated by The Mario Bros"
+  end
 end

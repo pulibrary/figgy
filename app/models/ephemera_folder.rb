@@ -27,6 +27,7 @@ class EphemeraFolder < Valhalla::Resource
   attribute :geo_subject, Valkyrie::Types::Set
   attribute :description, Valkyrie::Types::Set
   attribute :date_created, Valkyrie::Types::Set
+  attribute :provenance, Valkyrie::Types::Set
   attribute :dspace_url
   attribute :source_url
   attribute :depositor, Valkyrie::Types::Set

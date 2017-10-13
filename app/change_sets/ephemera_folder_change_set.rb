@@ -25,6 +25,7 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   property :geo_subject, multiple: true, required: false
   property :description, multiple: false, required: false
   property :date_created, multiple: false, required: false
+  property :provenance, multiple: false, required: false
   property :dspace_url, multiple: false, required: false
   property :source_url, multiple: false, required: false
   property :rights_statement, multiple: false, required: true, default: "http://rightsstatements.org/vocab/NKC/1.0/", type: ::Types::URI
@@ -86,6 +87,7 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
       :description,
       :date_created,
       :date_range_form,
+      :provenance,
       :dspace_url,
       :source_url,
       :append_id

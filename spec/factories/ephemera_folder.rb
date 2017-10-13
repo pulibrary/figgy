@@ -16,6 +16,7 @@ FactoryGirl.define do
     publisher ['test publisher']
     description 'test description'
     date_created '1970/01/01'
+    provenance ['Donated by the Mario Bros.']
     source_url 'http://example.com'
     dspace_url 'http://example.com'
     rights_statement RDF::URI('http://rightsstatements.org/vocab/NKC/1.0/')
