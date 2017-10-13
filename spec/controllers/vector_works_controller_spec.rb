@@ -72,7 +72,7 @@ RSpec.describe VectorWorksController do
 
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/catalog/"
-      id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
+      id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/")
       expect(find_resource(id).title).to contain_exactly "Title 1", "Title 2"
     end
     context "when joining a collection" do
@@ -90,7 +90,7 @@ RSpec.describe VectorWorksController do
 
         expect(response).to be_redirect
         expect(response.location).to start_with "http://test.host/catalog/"
-        id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
+        id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/")
         expect(find_resource(id).member_of_collection_ids).to contain_exactly collection.id
       end
     end
@@ -192,8 +192,8 @@ RSpec.describe VectorWorksController do
         patch :update, params: { id: vector_work.id.to_s, vector_work: { title: ["Two"] } }
 
         expect(response).to be_redirect
-        expect(response.location).to eq "http://test.host/catalog/id-#{vector_work.id}"
-        id = response.location.gsub("http://test.host/catalog/id-", "")
+        expect(response.location).to eq "http://test.host/catalog/#{vector_work.id}"
+        id = response.location.gsub("http://test.host/catalog/", "")
         reloaded = find_resource(id)
 
         expect(reloaded.title).to eq ["Two"]

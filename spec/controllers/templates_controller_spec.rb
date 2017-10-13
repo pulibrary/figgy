@@ -36,7 +36,7 @@ RSpec.describe TemplatesController do
       delete :destroy, params: { ephemera_project_id: project.id.to_s, id: template.id.to_s }
 
       expect { query_service.find_by(id: template.id) }.to raise_error Valkyrie::Persistence::ObjectNotFoundError
-      expect(response).to redirect_to solr_document_path(id: "id-#{project.id}")
+      expect(response).to redirect_to solr_document_path(id: project.id.to_s)
     end
   end
   describe "#create" do

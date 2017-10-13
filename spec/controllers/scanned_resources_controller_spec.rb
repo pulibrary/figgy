@@ -84,7 +84,7 @@ RSpec.describe ScannedResourcesController do
 
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/catalog/"
-      id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
+      id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/")
       expect(find_resource(id).title).to contain_exactly "Title 1", "Title 2"
     end
     it "can create a nested scanned resource" do
@@ -93,10 +93,10 @@ RSpec.describe ScannedResourcesController do
 
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/catalog/parent/#{parent.id}/"
-      id = response.location.gsub("http://test.host/catalog/parent/#{parent.id}/", "").gsub(/^id-/, "")
+      id = response.location.gsub("http://test.host/catalog/parent/#{parent.id}/", "")
       expect(find_resource(id).title).to contain_exactly "Title 1", "Title 2"
       expect(find_resource(parent.id).member_ids).to eq [Valkyrie::ID.new(id)]
-      solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "id:id-#{id}" })["response"]["docs"][0]
+      solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "id:#{id}" })["response"]["docs"][0]
       expect(solr_record["member_of_ssim"]).to eq ["id-#{parent.id}"]
     end
     context "when joining a collection" do
@@ -114,7 +114,7 @@ RSpec.describe ScannedResourcesController do
 
         expect(response).to be_redirect
         expect(response.location).to start_with "http://test.host/catalog/"
-        id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
+        id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/")
         expect(find_resource(id).member_of_collection_ids).to contain_exactly collection.id
       end
     end
@@ -215,8 +215,8 @@ RSpec.describe ScannedResourcesController do
         patch :update, params: { id: scanned_resource.id.to_s, scanned_resource: { title: ["Two"] } }
 
         expect(response).to be_redirect
-        expect(response.location).to eq "http://test.host/catalog/id-#{scanned_resource.id}"
-        id = response.location.gsub("http://test.host/catalog/id-", "")
+        expect(response.location).to eq "http://test.host/catalog/#{scanned_resource.id}"
+        id = response.location.gsub("http://test.host/catalog/", "")
         reloaded = find_resource(id)
 
         expect(reloaded.title).to eq ["Two"]
@@ -262,7 +262,7 @@ RSpec.describe ScannedResourcesController do
 
         expect(response.body).to have_selector "li[data-proxy='#{file_set.id}']"
         expect(response.body).to have_field('label', with: 'Chapter 1')
-        expect(response.body).to have_link scanned_resource.title.first, href: solr_document_path(id: "id-#{scanned_resource.id}")
+        expect(response.body).to have_link scanned_resource.title.first, href: solr_document_path(id: scanned_resource.id.to_s)
       end
     end
   end

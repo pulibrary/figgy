@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
   <% unless decorated_resource.ephemera_project.nil? %>
-    <li><%= link_to decorated_resource.ephemera_project.header, solr_document_path(id: "id-#{decorated_resource.ephemera_project.id}") %></li>
+    <li><%= link_to decorated_resource.ephemera_project.header, solr_document_path(id: "#{decorated_resource.ephemera_project.id}") %></li>
   <% end %>
   <li><%= decorated_resource.header %></li>
 </ol>

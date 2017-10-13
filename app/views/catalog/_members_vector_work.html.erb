@@ -9,7 +9,7 @@
     </tr>
     <% unless decorated_resource.vector_work_members.empty? %>
       <% decorated_resource.vector_work_members.each do |vector_work| %>
-        <% vector_work_url = parent_solr_document_path("#{resource.id}", "id-#{vector_work.id}") %>
+        <% vector_work_url = parent_solr_document_path("#{resource.id}", "#{vector_work.id}") %>
         <tr>
           <td><%= link_to figgy_thumbnail_path(vector_work, { class: 'thumbnail-inner', onerror: default_icon_fallback }), vector_work_url %></td>
           <td><%= vector_work.header %></td>

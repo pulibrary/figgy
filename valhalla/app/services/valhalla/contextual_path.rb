@@ -11,9 +11,9 @@ module Valhalla
 
     def show
       if parent_id.present?
-        polymorphic_path([:parent, :solr_document], parent_id: parent_id, id: "id-#{child.id}")
+        polymorphic_path([:parent, :solr_document], parent_id: parent_id, id: child.id.to_s)
       else
-        polymorphic_path([:solr_document], id: "id-#{child.id}")
+        polymorphic_path([:solr_document], id: child.id.to_s)
       end
     end
 

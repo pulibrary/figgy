@@ -22,7 +22,7 @@ class TemplatesController < ApplicationController
   end
 
   def after_create_success(_obj, _change_set)
-    redirect_to solr_document_path(id: "id-#{@parent.id}")
+    redirect_to solr_document_path(id: @parent.id.to_s)
   end
 
   def after_delete_success

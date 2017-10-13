@@ -15,7 +15,7 @@ RSpec.describe "catalog/_members_ephemera_box" do
     it 'shows them' do
       expect(rendered).to have_selector 'h2', text: 'Folders'
       expect(rendered).to have_selector 'td.folder_number', text: "one"
-      expect(rendered).to have_link "one", href: "/catalog/parent/#{parent.id}/id-#{child.id}"
+      expect(rendered).to have_link "one", href: "/catalog/parent/#{parent.id}/#{child.id}"
       expect(rendered).not_to have_selector 'td.folder_number', text: "[\"one\"]"
       expect(rendered).to have_selector 'td.barcode', text: child.barcode.first
       expect(rendered).not_to have_selector 'td.barcode', text: "[\"#{child.barcode.first}\"]"

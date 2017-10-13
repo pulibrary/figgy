@@ -75,7 +75,7 @@ RSpec.describe EphemeraVocabulariesController do
 
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/catalog/"
-      id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
+      id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/")
       expect(find_resource(id).label).to contain_exactly "test label"
     end
     context "when something bad goes wrong" do
@@ -175,8 +175,8 @@ RSpec.describe EphemeraVocabulariesController do
         patch :update, params: { id: ephemera_vocabulary.id.to_s, ephemera_vocabulary: { label: ["test label"], value: ["test value"] } }
 
         expect(response).to be_redirect
-        expect(response.location).to eq "http://test.host/catalog/id-#{ephemera_vocabulary.id}"
-        id = response.location.gsub("http://test.host/catalog/id-", "")
+        expect(response.location).to eq "http://test.host/catalog/#{ephemera_vocabulary.id}"
+        id = response.location.gsub("http://test.host/catalog/", "")
         reloaded = find_resource(id)
 
         expect(reloaded.label).to eq ["test label"]

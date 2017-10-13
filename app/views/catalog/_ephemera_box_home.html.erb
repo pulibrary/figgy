@@ -10,7 +10,7 @@
               <li class="work-type work-type-<%= project.title %>">
                 <h4 class="title"><%= project.title %></h4>
                 <%= content_tag(:div, nil, class: ['work-icon', "icon-#{project.title.downcase.gsub(' ','-')}"]) %>
-                <%= link_to 'View Boxes', solr_document_path(id: "id-#{project.id}"),
+                <%= link_to 'View Boxes', solr_document_path(id: "#{project.id}"),
                   class: "add-button btn btn-primary #{dom_class(project, 'view')}" %>
                 <%= link_to 'Add Box', ephemera_project_add_box_path(project, parent_id: project.id),
                   class: "add-button btn btn-primary #{dom_class(project, 'add_new')}" %>
