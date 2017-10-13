@@ -35,6 +35,9 @@ RSpec.describe OsdModalHelper do
 
   describe "#figgy_thumbnail_path" do
     context "when given a two-level deep resource" do
+      before do
+        allow(Valkyrie.logger).to receive(:warn).and_return(nil)
+      end
       it "uses the fileset thumbnail ID" do
         file_set = FactoryGirl.create_for_repository(:file_set)
         book = FactoryGirl.create_for_repository(:scanned_resource, thumbnail_id: file_set.id)
