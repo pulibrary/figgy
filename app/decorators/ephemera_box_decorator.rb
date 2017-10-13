@@ -11,6 +11,10 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
 
   self.iiif_manifest_attributes = []
 
+  def title
+    "Box #{box_number.first}"
+  end
+
   def members
     @members ||= query_service.find_members(resource: model)
   end
