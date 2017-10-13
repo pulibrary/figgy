@@ -22,6 +22,13 @@ RSpec.describe EphemeraFolderChangeSet do
     end
   end
 
+  describe "#provenance" do
+    it "pre-populates as single-value" do
+      change_set.prepopulate!
+      expect(change_set.provenance).to eq FactoryGirl.build(:ephemera_folder).provenance.first
+    end
+  end
+
   describe "#date_range" do
     it "can set it" do
       change_set.prepopulate!

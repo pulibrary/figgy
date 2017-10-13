@@ -23,6 +23,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     :description,
     :date_created,
     :rendered_date_range,
+    :provenance,
     :dspace_url,
     :source_url,
     :visibility,
@@ -30,7 +31,8 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   ]
   self.iiif_manifest_attributes = display_attributes + [:title] - \
                                   imported_attributes(Schema::Common.attributes) - \
-                                  Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]
+                                  Schema::IIIF.attributes - \
+                                  [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id, :provenance]
 
   def collections
     @collections ||= query_service.find_references_by(resource: self, property: :member_of_collection_ids).to_a.map(&:decorate)
