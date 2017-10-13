@@ -16,7 +16,7 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
   end
 
   def members
-    @members ||= query_service.find_members(resource: model)
+    @members ||= find_members(resource: model)
   end
 
   def folders

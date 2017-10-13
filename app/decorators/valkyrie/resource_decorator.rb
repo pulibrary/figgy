@@ -70,4 +70,35 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
                      .map(&:title).to_a
       end
   end
+
+  # Accesses all Resources referenced by a given Resource using the :member_ids property
+  # @return [Array<Valkyrie::Resource>] an array of Resources (possibly empty)
+  def members
+    @members ||= find_members(resource: model)
+  end
+
+  # Accesses all Resources referencing a given Resource using the :member_ids property
+  # i. e. it "accesses all Resources for which a given Resource is a member of"
+  # @return [Array<Valkyrie::Resource>] an array of Resources (possibly empty)
+  def parents
+    @parents ||= find_parents(resource: model)
+  end
+
+  private
+
+    # Queries the metadata adapter for all referenced resources for a given resource using :member_ids
+    # Returns an empty Array rather than nil
+    # @see Valkyrie::Persistence::Solr::Queries::FindMembersQuery
+    # @return [Array<Valkyrie::Resource>] an array of Resources (possibly empty)
+    def find_members(resource:)
+      query_service.find_members(resource: resource) || []
+    end
+
+    # Queries the metadata adapter for all resources referencing a given resource using :member_ids
+    # Returns an empty Array rather than nil
+    # @see Valkyrie::Persistence::Solr::Queries::FindInverseReferencesQuery
+    # @return [Array<Valkyrie::Resource>] an array of Resources (possibly empty)
+    def find_parents(resource:)
+      query_service.find_parents(resource: resource) || []
+    end
 end

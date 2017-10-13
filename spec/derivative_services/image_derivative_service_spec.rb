@@ -42,4 +42,17 @@ RSpec.describe ImageDerivativeService do
     expect(image.width).to eq 200
     expect(image.height).to eq 287
   end
+
+  describe '#cleanup_derivatives' do
+    before do
+      derivative_service.new(valid_change_set).create_derivatives
+    end
+
+    it "deletes the attached fileset when the resource is deleted" do
+      derivative_service.new(valid_change_set).cleanup_derivatives
+
+      reloaded = query_service.find_by(id: valid_resource.id)
+      expect(reloaded.file_metadata.select { |file| file.derivative? && file.mime_type.include?('image/jpeg') }).to be_empty
+    end
+  end
 end

@@ -7,7 +7,7 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
   end
 
   def parent
-    query_service.find_parents(resource: model).try(:first)
+    parents.first
   end
 
   def collections

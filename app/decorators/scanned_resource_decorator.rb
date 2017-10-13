@@ -6,12 +6,12 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
                                   Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]
   delegate(*Schema::Common.attributes, to: :primary_imported_metadata, prefix: :imported)
 
-  def members
-    @members ||= query_service.find_members(resource: model)
-  end
-
   def volumes
     @volumes ||= members.select { |r| r.is_a?(ScannedResource) }.map(&:decorate).to_a
+  end
+
+  def file_sets
+    @file_sets ||= members.select { |r| r.is_a?(FileSet) }.map(&:decorate).to_a
   end
 
   def rendered_rights_statement

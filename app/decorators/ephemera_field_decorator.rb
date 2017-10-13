@@ -2,10 +2,6 @@
 class EphemeraFieldDecorator < Valkyrie::ResourceDecorator
   self.display_attributes = [:rendered_name, :vocabulary]
 
-  def parents
-    @parents ||= query_service.find_parents(resource: model)
-  end
-
   def projects
     @projects ||= parents.select { |r| r.is_a?(EphemeraProject) }.map(&:decorate).to_a
   end

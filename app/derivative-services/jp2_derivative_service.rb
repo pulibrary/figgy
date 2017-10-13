@@ -2,7 +2,7 @@
 class Jp2DerivativeService
   class Factory
     attr_reader :change_set_persister
-    delegate :metadata_adapter, to: :change_set_persister
+    delegate :metadata_adapter, :storage_adapter, to: :change_set_persister
     delegate :query_service, to: :metadata_adapter
     def initialize(change_set_persister:)
       @change_set_persister = change_set_persister
@@ -17,8 +17,19 @@ class Jp2DerivativeService
     end
   end
 
+  class IoDecorator < SimpleDelegator
+    attr_reader :original_filename, :content_type, :use
+    def initialize(io, original_filename, content_type, use)
+      @original_filename = original_filename
+      @content_type = content_type
+      @use = use
+      super(io)
+    end
+  end
+
   attr_reader :change_set, :change_set_persister, :original_file
   delegate :mime_type, to: :original_file
+  delegate :resource, to: :change_set
   def initialize(change_set:, change_set_persister:, original_file:)
     @change_set = change_set
     @change_set_persister = change_set_persister
@@ -61,16 +72,17 @@ class Jp2DerivativeService
     )
   end
 
-  def cleanup_derivatives; end
-
-  class IoDecorator < SimpleDelegator
-    attr_reader :original_filename, :content_type, :use
-    def initialize(io, original_filename, content_type, use)
-      @original_filename = original_filename
-      @content_type = content_type
-      @use = use
-      super(io)
+  # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
+  # Please note that this simply deletes the files themselves from storage
+  # File membership for the parent of the Valkyrie::StorageAdapter::File is removed using #cleanup_derivative_metadata
+  def cleanup_derivatives
+    deleted_files = []
+    jp2_derivatives = resource.file_metadata.select { |file| file.derivative? && file.mime_type.include?('image/jp2') }
+    jp2_derivatives.each do |file|
+      storage_adapter.delete(id: file.id)
+      deleted_files << file.id
     end
+    cleanup_derivative_metadata(derivatives: deleted_files)
   end
 
   def build_file
@@ -92,4 +104,21 @@ class Jp2DerivativeService
   def temporary_output
     @temporary_file ||= Tempfile.new
   end
+
+  private
+
+    def storage_adapter
+      @storage_adapter ||= Valkyrie::StorageAdapter.find(:derivatives)
+    end
+
+    # This removes all Valkyrie::StorageAdapter::File member Objects from a given Resource (usually a FileSet)
+    # Resources consistently store the membership using #file_metadata
+    # A ChangeSet for the purged members is created and persisted
+    def cleanup_derivative_metadata(derivatives:)
+      resource.file_metadata = resource.file_metadata.reject { |file| derivatives.include?(file.id) }
+      updated_change_set = DynamicChangeSet.new(resource)
+      change_set_persister.buffer_into_index do |buffered_persister|
+        buffered_persister.save(change_set: updated_change_set)
+      end
+    end
 end

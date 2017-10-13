@@ -22,7 +22,8 @@ class PlumChangeSetPersister
     end
 
     def members
-      query_service.find_members(resource: change_set.resource).select do |x|
+      found = query_service.find_members(resource: change_set.resource) || []
+      found.select do |x|
         !x.is_a?(FileSet)
       end
     end

@@ -41,4 +41,16 @@ RSpec.describe PlumDerivativeService do
     derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
     expect(derivative_file.read).not_to be_blank
   end
+
+  describe '#cleanup_derivatives' do
+    before do
+      derivative_service.new(valid_change_set).create_derivatives
+    end
+
+    it "deletes the attached fileset when the resource is deleted" do
+      derivative_service.new(valid_change_set).cleanup_derivatives
+      reloaded = query_service.find_by(id: valid_resource.id)
+      expect(reloaded.file_metadata.select(&:derivative?)).to be_empty
+    end
+  end
 end

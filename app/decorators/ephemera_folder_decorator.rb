@@ -32,10 +32,6 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
                                   imported_attributes(Schema::Common.attributes) - \
                                   Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]
 
-  def members
-    @members ||= query_service.find_members(resource: model)
-  end
-
   def collections
     @collections ||= query_service.find_references_by(resource: self, property: :member_of_collection_ids).to_a.map(&:decorate)
   end

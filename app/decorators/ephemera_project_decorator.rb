@@ -2,10 +2,6 @@
 class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
   self.display_attributes = [:title]
 
-  def members
-    @members ||= query_service.find_members(resource: model)
-  end
-
   def boxes
     @boxes ||= members.select { |r| r.is_a?(EphemeraBox) }.map(&:decorate).to_a
   end

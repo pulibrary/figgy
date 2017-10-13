@@ -38,7 +38,11 @@ class PlumDerivativeService
     jp2_derivative_service.create_derivatives if jp2_derivative_service.valid?
   end
 
-  def cleanup_derivatives; end
+  # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
+  # (see Jp2DerivativeService#cleanup_derivatives)
+  def cleanup_derivatives
+    jp2_derivative_service.cleanup_derivatives if jp2_derivative_service.valid?
+  end
 
   def jp2_derivative_service
     Jp2DerivativeService::Factory.new(change_set_persister: change_set_persister).new(change_set)
