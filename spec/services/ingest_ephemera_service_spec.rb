@@ -81,6 +81,10 @@ RSpec.describe IngestEphemeraService, :admin_set do
         expect(box.local_identifier).to eq ["00014"]
         expect(box.barcode).to eq ["32101081556985"]
         expect(box.box_number).to eq ["1"]
+        expect(box.tracking_number).to eq ["1Z0803280352213599"]
+        expect(box.shipped_date).to eq ["2014-04-08"]
+        expect(box.received_date).to eq ["2014-05-12"]
+        expect(box.state).to eq ["received"]
 
         found_project = query_service.find_parents(resource: box).to_a.first
         expect(found_project.id).to eq project.id

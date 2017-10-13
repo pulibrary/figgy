@@ -13,4 +13,8 @@ class PULStore < RDF::StrictVocabulary('http://princeton.edu/pulstore/terms/')
   term :widthInCM, label: 'Width in CM', type: 'rdf:Property'
   term :isPartOfSeries, label: 'Is Part Of Series', type: 'rdf:Property'
   term :pageCount, label: 'Page Count', type: 'rdf:Property'
+  term :trackingNumber, label: 'trackingNumber', type: 'rdf:Property'
+  term :shippedDate, label: 'shippedDate', type: 'rdf:Property'
+  term :receivedDate, label: 'receivedDate', type: 'rdf:Property'
+  term :state, label: 'state', type: 'rdf:Property'
 end
