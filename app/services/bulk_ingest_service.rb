@@ -18,7 +18,7 @@ class BulkIngestService
 
   def attach_dir(base_directory:, property:, file_filter: nil)
     property_value = File.basename(base_directory)
-    resource = property_query_service.find_by_string_property(property: property, value: property_value).first
+    resource = query_service.custom_queries.find_by_string_property(property: property, value: property_value).first
 
     logger.info "Found #{resource.id} for #{property}:#{property_value}"
     attach_files(base_directory: base_directory, resource: resource, file_filter: file_filter)
@@ -45,9 +45,5 @@ class BulkIngestService
       )
     end
     files
-  end
-
-  def property_query_service
-    @query_service ||= FindByStringProperty.new(query_service: query_service)
   end
 end

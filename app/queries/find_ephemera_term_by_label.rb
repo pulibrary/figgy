@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 class FindEphemeraTermByLabel
+  def self.queries
+    [:find_ephemera_term_by_label]
+  end
+
   attr_reader :query_service
   delegate :resource_factory, to: :query_service
   delegate :orm_class, to: :resource_factory

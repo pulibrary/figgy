@@ -14,16 +14,8 @@ class IngestVocabService
     @logger = logger
   end
 
-  def vocab_query
-    @vocab_query ||= FindEphemeraVocabularyByLabel.new(query_service: query_service)
-  end
-
   def vocab_persistence
     @vocab_persistence ||= PersistenceAdapter.new(change_set_persister: change_set_persister, model: EphemeraVocabulary)
-  end
-
-  def term_query
-    @term_query ||= FindEphemeraTermByLabel.new(query_service: query_service)
   end
 
   def term_persistence
@@ -32,7 +24,7 @@ class IngestVocabService
 
   def ingest_vocabulary(label:, parent_vocab: nil)
     return unless label
-    vocab = vocab_query.find_ephemera_vocabulary_by_label(label: label, parent_vocab_label: parent_vocab.try(:label))
+    vocab = query_service.custom_queries.find_ephemera_vocabulary_by_label(label: label, parent_vocab_label: parent_vocab.try(:label))
     return vocab if vocab.present?
     vocab_persistence.create(label: label) do |change_set|
       change_set.member_of_vocabulary_id = parent_vocab.id if parent_vocab.present?
@@ -40,7 +32,7 @@ class IngestVocabService
   end
 
   def ingest_term(label:, tgm_label:, lcsh_label:, uri:, parent_vocab:)
-    term = term_query.find_ephemera_term_by_label(label: label)
+    term = query_service.custom_queries.find_ephemera_term_by_label(label: label)
     return term if term.present?
     term_persistence.create(label: label, tgm_label: tgm_label, lcsh_label: lcsh_label, uri: uri) do |change_set|
       change_set.member_of_vocabulary_id = parent_vocab.id if parent_vocab.present?
