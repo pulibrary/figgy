@@ -8,6 +8,7 @@ class EphemeraBox < Valhalla::Resource
   attribute :barcode, Valkyrie::Types::Set
   attribute :box_number, Valkyrie::Types::Set
   attribute :shipped_date, Valkyrie::Types::Set
+  attribute :received_date, Valkyrie::Types::Set
   attribute :tracking_number, Valkyrie::Types::Set
   attribute :visibility
   attribute :rights_statement

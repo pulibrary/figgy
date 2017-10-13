@@ -7,6 +7,7 @@ class EphemeraBoxChangeSet < Valhalla::ChangeSet
   property :barcode, multiple: false, required: true
   property :box_number, multiple: false, required: true
   property :shipped_date, multiple: false, required: false
+  property :received_date, multiple: false, required: false
   property :tracking_number, multiple: false, required: false
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
@@ -28,6 +29,7 @@ class EphemeraBoxChangeSet < Valhalla::ChangeSet
       :barcode,
       :box_number,
       :shipped_date,
+      :received_date,
       :tracking_number,
       :member_of_collection_ids,
       :append_id

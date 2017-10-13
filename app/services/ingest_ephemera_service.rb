@@ -220,7 +220,11 @@ class IngestEphemeraService
         barcode: barcode,
         folder_number: folder_number,
         box_number: box_number,
-        visibility: visibility
+        visibility: visibility,
+        tracking_number: tracking_number,
+        shipped_date: shipped_date,
+        received_date: received_date,
+        state: state
       }
     end
 
@@ -257,6 +261,24 @@ class IngestEphemeraService
 
     def visibility_private
       Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+    end
+
+    def tracking_number
+      value(::PULStore.trackingNumber)
+    end
+
+    def shipped_date
+      value(::PULStore.shippedDate)
+    end
+
+    def received_date
+      value(::PULStore.receivedDate)
+    end
+
+    def state
+      workflow = BoxWorkflow.new(nil)
+      val = value(::PULStore.state).first
+      workflow.valid_states.include?(val.downcase) ? val.downcase : workflow.aasm.current_state.to_s
     end
 
     def value(predicate)
