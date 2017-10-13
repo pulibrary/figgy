@@ -241,7 +241,7 @@ RSpec.describe CatalogController do
       it "renders administration buttons" do
         resource = persister.save(resource: FactoryGirl.build(:scanned_resource, workflow_note: WorkflowNote.new(author: "Shakespeare", note: "Test Comment")))
 
-        get :show, params: { id: "id-#{resource.id}" }
+        get :show, params: { id: resource.id.to_s }
 
         expect(response.body).to have_link "Edit This Scanned Resource", href: edit_scanned_resource_path(resource)
         expect(response.body).to have_link "Delete This Scanned Resource", href: scanned_resource_path(resource)
@@ -268,7 +268,7 @@ RSpec.describe CatalogController do
           member_of_collection_ids: collection.id
         )
 
-        get :show, params: { id: "id-#{resource.id}", format: :jsonld }
+        get :show, params: { id: resource.id.to_s, format: :jsonld }
 
         expect(response).to be_success
         json_body = MultiJson.load(response.body, symbolize_keys: true)
@@ -279,31 +279,31 @@ RSpec.describe CatalogController do
         expect(json_body[:edm_rights][:@id]).to eq "http://rightsstatements.org/vocab/NKC/1.0/"
         expect(json_body[:edm_rights][:@type]).to eq "dcterms:RightsStatement"
         expect(json_body[:edm_rights][:pref_label]).to eq "No Known Copyright"
-        expect(json_body[:memberOf][0][:@id]).to eq "http://www.example.com/catalog/id-#{collection.id}"
+        expect(json_body[:memberOf][0][:@id]).to eq "http://www.example.com/catalog/#{collection.id}"
         expect(json_body[:memberOf][0][:@type]).to eq "pcdm:Collection"
         expect(json_body[:memberOf][0][:title]).to eq collection.title
 
-        get :show, params: { id: "id-#{resource.id}", format: :nt }
+        get :show, params: { id: resource.id.to_s, format: :nt }
         expect(response).to be_success
 
-        get :show, params: { id: "id-#{resource.id}", format: :ttl }
+        get :show, params: { id: resource.id.to_s, format: :ttl }
         expect(response).to be_success
 
         empty_resource = persister.save(resource: FactoryGirl.build(:scanned_resource))
-        get :show, params: { id: "id-#{empty_resource.id}", format: :jsonld }
+        get :show, params: { id: empty_resource.id.to_s, format: :jsonld }
         expect(response).to be_success
         json_body = MultiJson.load(response.body, symbolize_keys: true)
         expect(json_body[:title]).not_to be_blank
 
         collection = persister.save(resource: FactoryGirl.build(:collection))
-        get :show, params: { id: "id-#{collection.id}", format: :jsonld }
+        get :show, params: { id: collection.id.to_s, format: :jsonld }
         expect(response).to be_success
       end
 
       it "renders for a FileSet" do
         resource = persister.save(resource: FactoryGirl.build(:file_set))
 
-        get :show, params: { id: "id-#{resource.id}" }
+        get :show, params: { id: resource.id.to_s }
 
         expect(response.body).to have_link "Edit This File Set", href: edit_file_set_path(resource)
         expect(response.body).to have_link "Delete This File Set", href: file_set_path(resource)
@@ -313,7 +313,7 @@ RSpec.describe CatalogController do
       it "renders for a Collection" do
         resource = persister.save(resource: FactoryGirl.build(:collection))
 
-        get :show, params: { id: "id-#{resource.id}" }
+        get :show, params: { id: resource.id.to_s }
 
         expect(response.body).to have_link "Edit This Collection", href: edit_collection_path(resource)
         expect(response.body).to have_link "Delete This Collection", href: collection_path(resource)
@@ -323,21 +323,21 @@ RSpec.describe CatalogController do
       it "renders for an Ephemera Folder" do
         resource = persister.save(resource: FactoryGirl.build(:ephemera_folder))
 
-        get :show, params: { id: "id-#{resource.id}" }
+        get :show, params: { id: resource.id.to_s }
 
         expect(response.body).to have_content "Review and Approval"
       end
       it "renders for an Ephemera Project" do
         resource = persister.save(resource: FactoryGirl.build(:ephemera_project))
 
-        get :show, params: { id: "id-#{resource.id}" }
+        get :show, params: { id: resource.id.to_s }
 
         expect(response.body).to have_selector "h1", text: resource.title.first
       end
       it "renders for an Ephemera Box" do
         resource = persister.save(resource: FactoryGirl.build(:ephemera_box))
 
-        get :show, params: { id: "id-#{resource.id}" }
+        get :show, params: { id: resource.id.to_s }
 
         expect(response.body).to have_content "Review and Approval"
         expect(response.body).to have_link "Create New Folder Template"
@@ -348,7 +348,7 @@ RSpec.describe CatalogController do
       it "doesn't render the workflow panel" do
         resource = persister.save(resource: FactoryGirl.build(:complete_open_scanned_resource))
 
-        get :show, params: { id: "id-#{resource.id}" }
+        get :show, params: { id: resource.id.to_s }
 
         expect(response.body).not_to have_content "Review and Approval"
       end

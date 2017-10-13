@@ -13,7 +13,7 @@
     <tbody>
     <% unless decorated_resource.folders.empty? %>
       <% decorated_resource.folders.each do |folder| %>
-        <% folder_url = parent_solr_document_path("#{resource.id}", "id-#{folder.id}") %>
+        <% folder_url = parent_solr_document_path("#{resource.id}", "#{folder.id}") %>
         <tr>
           <td class="folder_number"><%= link_to folder.folder_number, folder_url %></td>
           <td><%= folder.rendered_state %></td>

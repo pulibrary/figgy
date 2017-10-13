@@ -17,7 +17,7 @@ RSpec.describe "catalog/_members_scanned_resource" do
       expect(rendered).to have_selector 'td', text: 'vol1'
       expect(rendered).to have_selector 'span.label-success', text: 'Open'
       expect(rendered).not_to have_link href: solr_document_path(child)
-      expect(rendered).to have_link 'View', href: parent_solr_document_path(parent, "id-#{child.id}")
+      expect(rendered).to have_link 'View', href: parent_solr_document_path(parent, child.id)
       expect(rendered).to have_link 'Edit', href: edit_scanned_resource_path(child.id)
     end
   end

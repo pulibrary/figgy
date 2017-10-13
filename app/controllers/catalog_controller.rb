@@ -67,7 +67,7 @@ class CatalogController < ApplicationController
 
   def parent_document
     return unless params[:parent_id]
-    _, @parent_document = fetch("id-#{params[:parent_id]}")
+    _, @parent_document = fetch(params[:parent_id])
   end
 
   def lookup_manifest
@@ -76,7 +76,7 @@ class CatalogController < ApplicationController
     _, result = search_results(q: query, fl: "id, internal_resource_ssim", rows: 1)
 
     if result.first
-      object_id = result.first['id'].gsub(/^id-/, '')
+      object_id = result.first['id']
       model_name = result.first['internal_resource_ssim'].first.underscore.to_sym
       url = polymorphic_url([:manifest, model_name], id: object_id)
       params[:no_redirect] ? render(json: { url: url }) : redirect_to(url)

@@ -82,7 +82,7 @@ RSpec.describe ScannedMapsController do
 
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/catalog/"
-      id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
+      id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/")
       expect(find_resource(id).title).to contain_exactly "Title 1", "Title 2"
     end
     context "when joining a collection" do
@@ -100,7 +100,7 @@ RSpec.describe ScannedMapsController do
 
         expect(response).to be_redirect
         expect(response.location).to start_with "http://test.host/catalog/"
-        id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
+        id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/")
         expect(find_resource(id).member_of_collection_ids).to contain_exactly collection.id
       end
     end
@@ -201,8 +201,8 @@ RSpec.describe ScannedMapsController do
         patch :update, params: { id: scanned_map.id.to_s, scanned_map: { title: ["Two"] } }
 
         expect(response).to be_redirect
-        expect(response.location).to eq "http://test.host/catalog/id-#{scanned_map.id}"
-        id = response.location.gsub("http://test.host/catalog/id-", "")
+        expect(response.location).to eq "http://test.host/catalog/#{scanned_map.id}"
+        id = response.location.gsub("http://test.host/catalog/", "")
         reloaded = find_resource(id)
 
         expect(reloaded.title).to eq ["Two"]
@@ -248,7 +248,7 @@ RSpec.describe ScannedMapsController do
 
         expect(response.body).to have_selector "li[data-proxy='#{file_set.id}']"
         expect(response.body).to have_field('label', with: 'Chapter 1')
-        expect(response.body).to have_link scanned_map.title.first, href: solr_document_path(id: "id-#{scanned_map.id}")
+        expect(response.body).to have_link scanned_map.title.first, href: solr_document_path(id: scanned_map.id)
       end
     end
   end

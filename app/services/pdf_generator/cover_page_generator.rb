@@ -73,7 +73,7 @@ class PDFGenerator
 
         header(prawn_document, "Download Information")
         prawn_document.text "Date Rendered: #{Time.current.strftime('%Y-%m-%d %I:%M:%S %p %Z')}"
-        prawn_document.text "Available Online at: <u><a href='#{helper.solr_document_url(id: "id-#{resource.id}")}'>#{helper.solr_document_url(id: "id-#{resource.id}")}</a></u>", inline_format: true
+        prawn_document.text "Available Online at: <u><a href='#{helper.solr_document_url(id: resource.id)}'>#{helper.solr_document_url(id: resource.id)}</a></u>", inline_format: true
       end
     end
 

@@ -76,7 +76,7 @@ module LinkedData
 
     def collection_objects
       super.push(
-        '@id': helper.solr_document_url(id: "id-#{ephemera_box.id}"),
+        '@id': helper.solr_document_url(id: ephemera_box.id),
         '@type': 'pcdm:Collection',
         barcode: barcode,
         label: ephemera_box.try(:header),

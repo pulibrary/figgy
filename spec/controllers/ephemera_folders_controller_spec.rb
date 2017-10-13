@@ -139,7 +139,7 @@ RSpec.describe EphemeraFoldersController do
 
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/catalog/"
-      id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/").gsub(/^id-/, "")
+      id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/")
       expect(find_resource(id).folder_number).to contain_exactly "one"
     end
     it "can save and create another" do
@@ -154,7 +154,7 @@ RSpec.describe EphemeraFoldersController do
       post :create, params: { ephemera_folder: valid_params.merge(append_id: box.id) }
 
       id = query_service.find_all_of_model(model: EphemeraFolder).to_a.first.id
-      solr_record = Blacklight.default_index.connection.get("select", params: { q: "id:id-#{id}", rows: 1 })["response"]["docs"].first
+      solr_record = Blacklight.default_index.connection.get("select", params: { q: "id:#{id}", rows: 1 })["response"]["docs"].first
       expect(solr_record["ephemera_project_ssim"]).to eq project.title
     end
     context "when something bad goes wrong" do
@@ -202,7 +202,7 @@ RSpec.describe EphemeraFoldersController do
       ephemera_box = FactoryGirl.create_for_repository(:ephemera_box, member_ids: ephemera_folder.id)
       delete :destroy, params: { id: ephemera_folder.id.to_s }
 
-      expect(response).to redirect_to solr_document_path(id: "id-#{ephemera_box.id}")
+      expect(response).to redirect_to solr_document_path(id: ephemera_box.id)
       expect { query_service.find_by(id: ephemera_folder.id) }.to raise_error ::Valkyrie::Persistence::ObjectNotFoundError
     end
   end
@@ -323,8 +323,8 @@ RSpec.describe EphemeraFoldersController do
         patch :update, params: { id: ephemera_folder.id.to_s, ephemera_folder: { folder_number: ["Two"] } }
 
         expect(response).to be_redirect
-        expect(response.location).to eq "http://test.host/catalog/id-#{ephemera_folder.id}"
-        id = response.location.gsub("http://test.host/catalog/id-", "")
+        expect(response.location).to eq "http://test.host/catalog/#{ephemera_folder.id}"
+        id = response.location.gsub("http://test.host/catalog/", "")
         reloaded = find_resource(id)
 
         expect(reloaded.folder_number).to eq ["Two"]

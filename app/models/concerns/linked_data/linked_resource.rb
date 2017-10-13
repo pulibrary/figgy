@@ -77,7 +77,7 @@ module LinkedData
         return [] if resource.try(:member_of_collection_ids).blank?
         collections.map do |collection|
           {
-            '@id': helper.solr_document_url(id: "id-#{collection.id}"),
+            '@id': helper.solr_document_url(id: collection.id),
             '@type': 'pcdm:Collection',
             title: collection.title
           }
