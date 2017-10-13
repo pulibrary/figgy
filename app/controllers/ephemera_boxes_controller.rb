@@ -15,7 +15,7 @@ class EphemeraBoxesController < BaseResourceController
   end
 
   def after_delete_success
-    redirect_to solr_document_path(id: @ephemera_project.id.to_s)
+    redirect_to solr_document_path(id: @ephemera_project.id)
   end
 
   private

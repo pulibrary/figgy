@@ -35,7 +35,7 @@ class ManifestBuilder
 
       def figgy_rdf_hash
         {
-          "@id" => helper.solr_document_url(id: resource.id.to_s, format: :jsonld),
+          "@id" => helper.solr_document_url(id: resource.id, format: :jsonld),
           "format" => "application/ld+json"
         }
       end

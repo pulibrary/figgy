@@ -262,7 +262,7 @@ RSpec.describe ScannedResourcesController do
 
         expect(response.body).to have_selector "li[data-proxy='#{file_set.id}']"
         expect(response.body).to have_field('label', with: 'Chapter 1')
-        expect(response.body).to have_link scanned_resource.title.first, href: solr_document_path(id: scanned_resource.id.to_s)
+        expect(response.body).to have_link scanned_resource.title.first, href: solr_document_path(id: scanned_resource.id)
       end
     end
   end

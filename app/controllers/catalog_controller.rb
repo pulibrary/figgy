@@ -67,7 +67,7 @@ class CatalogController < ApplicationController
 
   def parent_document
     return unless params[:parent_id]
-    _, @parent_document = fetch(params[:parent_id].to_s)
+    _, @parent_document = fetch(params[:parent_id])
   end
 
   def lookup_manifest

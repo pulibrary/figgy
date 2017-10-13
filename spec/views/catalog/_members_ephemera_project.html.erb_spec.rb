@@ -14,7 +14,7 @@ RSpec.describe "catalog/_members_ephemera_project" do
 
     it 'shows them' do
       expect(rendered).to have_selector 'h2', text: 'Boxes'
-      expect(rendered).to have_link 'Box 1', href: solr_document_path(id: child.id.to_s)
+      expect(rendered).to have_link 'Box 1', href: solr_document_path(id: child.id)
     end
   end
   context "when it's a project with templates" do

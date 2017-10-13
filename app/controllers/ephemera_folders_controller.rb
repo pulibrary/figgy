@@ -22,7 +22,7 @@ class EphemeraFoldersController < BaseResourceController
   end
 
   def after_delete_success
-    redirect_to solr_document_path(id: @cached_box.id.to_s)
+    redirect_to solr_document_path(id: @cached_box.id)
   end
 
   def new_resource

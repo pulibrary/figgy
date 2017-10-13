@@ -202,7 +202,7 @@ RSpec.describe EphemeraFoldersController do
       ephemera_box = FactoryGirl.create_for_repository(:ephemera_box, member_ids: ephemera_folder.id)
       delete :destroy, params: { id: ephemera_folder.id.to_s }
 
-      expect(response).to redirect_to solr_document_path(id: ephemera_box.id.to_s)
+      expect(response).to redirect_to solr_document_path(id: ephemera_box.id)
       expect { query_service.find_by(id: ephemera_folder.id) }.to raise_error ::Valkyrie::Persistence::ObjectNotFoundError
     end
   end
