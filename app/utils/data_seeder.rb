@@ -71,11 +71,6 @@ class DataSeeder
       { file: File.join('spec', 'fixtures', 'lae_subjects.csv'), name: "LAE Subjects",
         columns: { label: "subject", category: "category" } }
     ]
-    change_set_persister = PlumChangeSetPersister.new(
-      metadata_adapter: metadata_adapter,
-      storage_adapter: Valkyrie::StorageAdapter.find(:lae_storage)
-    )
-
     to_load.each do |vocab|
       change_set_persister.buffer_into_index do |buffered_change_set_persister|
         IngestVocabService.new(buffered_change_set_persister, vocab[:file], vocab[:name], vocab[:columns], logger).ingest
@@ -113,20 +108,14 @@ class DataSeeder
       change_set = DynamicChangeSet.new(child)
       change_set.append_id = parent_id
       change_set.prepopulate!
-      ::PlumChangeSetPersister.new(
-        metadata_adapter: metadata_adapter,
-        storage_adapter: Valkyrie.config.storage_adapter
-      ).save(change_set: change_set)
+      change_set_persister.save(change_set: change_set)
     end
 
     def add_file(resource:)
       change_set = DynamicChangeSet.new(resource)
       change_set.files = [IngestableFile.new(file_path: Rails.root.join('spec', 'fixtures', 'files', 'example.tif'), mime_type: "image/tiff", original_filename: "example.tif")]
       change_set.prepopulate!
-      ::PlumChangeSetPersister.new(
-        metadata_adapter: metadata_adapter,
-        storage_adapter: Valkyrie.config.storage_adapter
-      ).save(change_set: change_set)
+      change_set_persister.save(change_set: change_set)
     end
 
     def object_count_report
@@ -143,4 +132,12 @@ class DataSeeder
     def metadata_adapter
       Valkyrie::MetadataAdapter.find(:indexing_persister)
     end
+
+    def change_set_persister
+      ::PlumChangeSetPersister.new(
+        metadata_adapter: metadata_adapter,
+        storage_adapter: Valkyrie.config.storage_adapter
+      )
+    end
+
 end
