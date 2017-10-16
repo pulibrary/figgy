@@ -37,11 +37,11 @@ class IngestEphemeraService
   end
 
   def project_resource
-    @project_resource ||= title_query.find_by_title(title: project).first
+    @project_resource ||= query_service.custom_queries.find_by_string_property(property: :title, value: project).first
   end
 
   def find_box(id)
-    local_identifier_query.find_by_local_identifier(local_identifier: id).first
+    query_service.custom_queries.find_by_local_identifier(local_identifier: id).first
   end
 
   def basedir
@@ -50,14 +50,6 @@ class IngestEphemeraService
 
   def box_prov_metadata(box)
     ProvMetadata.new(File.open("#{basedir}/boxes/#{box.local_identifier.first}/provMetadata"), box)
-  end
-
-  def local_identifier_query
-    FindByLocalIdentifier.new(query_service: query_service)
-  end
-
-  def title_query
-    FindByTitle.new(query_service: query_service)
   end
 
   def box_metadata
@@ -415,7 +407,7 @@ class IngestEphemeraService
     end
 
     def find_term(label, vocab_label)
-      term_query_service.find_ephemera_term_by_label(label: label, parent_vocab_label: vocab_label).id
+      query_service.custom_queries.find_ephemera_term_by_label(label: label, parent_vocab_label: vocab_label).id
     rescue
       label
     end
@@ -426,10 +418,6 @@ class IngestEphemeraService
 
     def graph
       @graph ||= RDF::Graph.load(file.path)
-    end
-
-    def term_query_service
-      FindEphemeraTermByLabel.new(query_service: query_service)
     end
   end
 end

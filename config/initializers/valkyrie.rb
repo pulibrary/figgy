@@ -108,4 +108,8 @@ Rails.application.config.to_prepare do
 
   Valkyrie::FileCharacterizationService.services << PlumCharacterizationService
   Valkyrie::FileCharacterizationService.services << GeoCharacterizationService
+
+  [FindByLocalIdentifier, FindByStringProperty, FindEphemeraTermByLabel, FindEphemeraVocabularyByLabel].each do |query_handler|
+    Valkyrie.config.metadata_adapter.query_service.custom_queries.register_query_handler(query_handler)
+  end
 end
