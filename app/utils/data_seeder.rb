@@ -5,6 +5,7 @@ require 'faker'
 
 class DataSeeder
   attr_accessor :logger
+  delegate :query_service, :persister, to: :metadata_adapter
 
   def initialize(logger = Logger.new(STDOUT))
     raise("DataSeeder is not for use in production!") if Rails.env == 'production'
@@ -32,7 +33,7 @@ class DataSeeder
 
   def generate_resource_with_many_files(n:)
     sr = ScannedResource.new(attributes_hash.merge(title: "Multi-file resource"))
-    sr = Valkyrie::MetadataAdapter.find(:indexing_persister).persister.save(resource: sr)
+    sr = persister.save(resource: sr)
     n.times { add_file(resource: sr) }
     logger.info "Created scanned resource #{sr.id}: #{sr.title} with #{n} files"
   end
@@ -46,7 +47,7 @@ class DataSeeder
 
   def generate_scanned_resource(attrs = {})
     sr = ScannedResource.new(attributes_hash.merge(attrs))
-    sr = Valkyrie::MetadataAdapter.find(:indexing_persister).persister.save(resource: sr)
+    sr = persister.save(resource: sr)
     add_file(resource: sr)
     logger.info "Created scanned resource #{sr.id}: #{sr.title}"
     sr
@@ -54,7 +55,7 @@ class DataSeeder
 
   def generate_scanned_map
     sm = ScannedMap.new(attributes_hash)
-    sm = Valkyrie::MetadataAdapter.find(:indexing_persister).persister.save(resource: sm)
+    sm = persister.save(resource: sm)
     add_file(resource: sm)
     logger.info "Created scanned map #{sm.id}: #{sm.title}"
   end
@@ -71,7 +72,7 @@ class DataSeeder
         columns: { label: "subject", category: "category" } }
     ]
     change_set_persister = PlumChangeSetPersister.new(
-      metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
+      metadata_adapter: metadata_adapter,
       storage_adapter: Valkyrie::StorageAdapter.find(:lae_storage)
     )
 
@@ -84,7 +85,7 @@ class DataSeeder
 
   def generate_ephemera_project
     ep = EphemeraProject.new(title: "An Ephemera Project")
-    ep = Valkyrie::MetadataAdapter.find(:indexing_persister).persister.save(resource: ep)
+    ep = persister.save(resource: ep)
     logger.info "Created ephemera project #{ep.id}: #{ep.title}"
     ep
   end
@@ -113,7 +114,7 @@ class DataSeeder
       change_set.append_id = parent_id
       change_set.prepopulate!
       ::PlumChangeSetPersister.new(
-        metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
+        metadata_adapter: metadata_adapter,
         storage_adapter: Valkyrie.config.storage_adapter
       ).save(change_set: change_set)
     end
@@ -123,19 +124,23 @@ class DataSeeder
       change_set.files = [IngestableFile.new(file_path: Rails.root.join('spec', 'fixtures', 'files', 'example.tif'), mime_type: "image/tiff", original_filename: "example.tif")]
       change_set.prepopulate!
       ::PlumChangeSetPersister.new(
-        metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
+        metadata_adapter: metadata_adapter,
         storage_adapter: Valkyrie.config.storage_adapter
       ).save(change_set: change_set)
     end
 
     def object_count_report
       report = []
-      db_count = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_all.count
+      db_count = query_service.find_all.count
       report << "#{db_count} total objects in metadata store"
-      solr_count = Valkyrie::MetadataAdapter.find(:index_solr).query_service.find_all.count
+      solr_count = query_service.find_all.count
       report << "#{solr_count} total objects in index"
       report.each do |line|
         logger.info line
       end
+    end
+
+    def metadata_adapter
+      Valkyrie::MetadataAdapter.find(:indexing_persister)
     end
 end
