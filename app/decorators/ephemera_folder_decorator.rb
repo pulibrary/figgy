@@ -31,8 +31,11 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   ]
   self.iiif_manifest_attributes = display_attributes + [:title] - \
                                   imported_attributes(Schema::Common.attributes) - \
-                                  Schema::IIIF.attributes - \
-                                  [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id, :provenance]
+                                  Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]
+
+  def members
+    @members ||= query_service.find_members(resource: model).to_a
+  end
 
   def collections
     @collections ||= query_service.find_references_by(resource: self, property: :member_of_collection_ids).to_a.map(&:decorate)
@@ -63,11 +66,15 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   end
 
   def ephemera_box
-    @ephemera_box ||= query_service.find_parents(resource: model).to_a.first.try(:decorate)
+    @ephemera_box ||= query_service.find_parents(resource: model).map(&:decorate).to_a.first
   end
 
   def ephemera_project
-    @ephemera_project ||= ephemera_box.ephemera_project
+    @ephemera_project ||= ephemera_box.try(:ephemera_project)
+  end
+
+  def collection_slugs
+    @collection_slugs ||= Array.wrap(ephemera_project.try(:slug))
   end
 
   def manageable_files?

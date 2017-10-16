@@ -4,4 +4,9 @@ class EphemeraProject < Valhalla::Resource
   attribute :id, Valkyrie::Types::ID.optional
   attribute :member_ids, Valkyrie::Types::Array
   attribute :title, Valkyrie::Types::Set
+  attribute :slug, Valkyrie::Types::Set
+
+  def logical_structure
+    []
+  end
 end

@@ -80,6 +80,9 @@ Rails.application.routes.draw do
     resources :ephemera_projects do
       resources :templates, only: [:new, :create, :destroy]
       resources :ephemera_fields
+      member do
+        get :manifest, defaults: { format: :json }
+      end
     end
     get '/ephemera_projects/:parent_id/templates/new/:model_class', to: 'templates#new', as: :parent_new_template
     get '/ephemera_projects/:parent_id/box' => 'ephemera_boxes#new', as: 'ephemera_project_add_box'

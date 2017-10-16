@@ -184,6 +184,42 @@ RSpec.describe EphemeraProjectsController do
     end
   end
 
+  describe "GET /concern/ephemera_project/:id/manifest", manifest: true do
+    let(:ephemera_project) { FactoryGirl.create_for_repository(:ephemera_project) }
+
+    it "returns a IIIF manifest for an ephemera project", manifest: true do
+      get :manifest, params: { id: ephemera_project.id.to_s, format: :json }
+      manifest_response = MultiJson.load(response.body, symbolize_keys: true)
+
+      expect(response.headers["Content-Type"]).to include "application/json"
+      expect(manifest_response[:metadata]).not_to be_empty
+      expect(manifest_response[:metadata][0]).to include label: 'Exhibit', value: ephemera_project.decorate.slug
+    end
+
+    context 'when the project has boxes' do
+      let(:ephemera_box1) { FactoryGirl.create_for_repository(:ephemera_box) }
+      let(:ephemera_box2) { FactoryGirl.create_for_repository(:ephemera_box) }
+      let(:ephemera_project) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_box1.id, ephemera_box2.id]) }
+
+      before do
+        ephemera_box1
+        ephemera_box2
+      end
+
+      it "returns manifests for the ephemera boxes", manifest: true do
+        get :manifest, params: { id: ephemera_project.id.to_s, format: :json }
+        manifest_response = MultiJson.load(response.body, symbolize_keys: true)
+
+        expect(response.headers["Content-Type"]).to include "application/json"
+        expect(manifest_response[:metadata]).not_to be_empty
+        expect(manifest_response[:metadata][0]).to include label: 'Exhibit', value: ephemera_project.decorate.slug
+        expect(manifest_response[:manifests].length).to eq 2
+        expect(manifest_response[:manifests][0][:@id]).to eq "http://www.example.com/concern/ephemera_boxes/#{ephemera_box1.id}/manifest"
+        expect(manifest_response[:manifests][1][:@id]).to eq "http://www.example.com/concern/ephemera_boxes/#{ephemera_box2.id}/manifest"
+      end
+    end
+  end
+
   def find_resource(id)
     query_service.find_by(id: Valkyrie::ID.new(id.to_s))
   end

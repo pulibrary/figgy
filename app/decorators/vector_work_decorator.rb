@@ -2,6 +2,10 @@
 class VectorWorkDecorator < Valkyrie::ResourceDecorator
   self.display_attributes += Schema::Geo.attributes + [:rendered_coverage, :member_of_collections] - [:thumbnail_id, :coverage]
 
+  def members
+    @members ||= query_service.find_members(resource: model).to_a
+  end
+
   # Use case for nesting vector works
   #   - time series: e.g., nyc transit system, released every 6 months
   def vector_work_members

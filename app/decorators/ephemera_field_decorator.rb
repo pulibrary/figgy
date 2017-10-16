@@ -5,6 +5,10 @@ class EphemeraFieldDecorator < Valkyrie::ResourceDecorator
 
   # Retrieves the EphemeraProjects to which this EphemeraField is linked
   # @return [Array<EphemeraProject>]
+  def parents
+    @parents ||= query_service.find_parents(resource: model).to_a
+  end
+
   def projects
     @projects ||= parents.select { |r| r.is_a?(EphemeraProject) }.map(&:decorate).to_a
   end

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class EphemeraProjectsController < ApplicationController
+class EphemeraProjectsController < BaseResourceController
   include Valhalla::ResourceController
   include TokenAuth
   self.change_set_class = DynamicChangeSet
@@ -12,6 +12,15 @@ class EphemeraProjectsController < ApplicationController
 
   def index
     render 'index'
+  end
+
+  def manifest
+    @resource = find_resource(params[:id])
+    respond_to do |f|
+      f.json do
+        render json: ManifestBuilder.new(@resource).build
+      end
+    end
   end
 
   private

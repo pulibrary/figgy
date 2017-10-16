@@ -55,7 +55,7 @@ RSpec.describe CollectionsController do
       end
     end
 
-    describe "GET /concern/scanned_resources/:id/manifest" do
+    describe "GET /concern/collections/:id/manifest" do
       it "returns a IIIF manifest for a collection" do
         collection = FactoryGirl.create_for_repository(:collection)
         scanned_resource = FactoryGirl.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id)
@@ -65,15 +65,17 @@ RSpec.describe CollectionsController do
 
         expect(response.headers["Content-Type"]).to include "application/json"
         expect(manifest_response[:manifests].length).to eq 1
-        expect(manifest_response[:viewingHint]).to be_nil
+        expect(manifest_response[:viewingHint]).to eq 'multi-part'
         expect(manifest_response[:manifests][0][:@id]).to eq "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest"
       end
     end
 
     describe "GET /iiif/collections" do
+      let(:collection) { FactoryGirl.create_for_repository(:collection) }
+      before do
+        collection
+      end
       it "returns a IIIF manifest of all collections" do
-        collection = FactoryGirl.create_for_repository(:collection)
-
         get :index_manifest, params: { format: :json }
         manifest_response = MultiJson.load(response.body, symbolize_keys: true)
 
@@ -82,6 +84,34 @@ RSpec.describe CollectionsController do
         expect(manifest_response[:label]).to eq "Plum Collections"
         expect(manifest_response[:collections].length).to eq 1
         expect(manifest_response[:collections][0][:@id]).to eq "http://www.example.com/collections/#{collection.id}/manifest"
+      end
+    end
+
+    context 'with ephemera projects' do
+      let(:collection) { FactoryGirl.create_for_repository(:collection) }
+      let(:collection2) { FactoryGirl.create_for_repository(:collection) }
+      let(:ephemera_box1) { FactoryGirl.create_for_repository(:ephemera_box, member_of_collection_ids: [collection.id]) }
+      let(:ephemera_box2) { FactoryGirl.create_for_repository(:ephemera_box, member_of_collection_ids: [collection2.id]) }
+      let(:ephemera_project1) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_box1.id]) }
+      let(:ephemera_project2) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_box2.id]) }
+      before do
+        collection
+        collection2
+        ephemera_box1
+        ephemera_box2
+        ephemera_project1
+        ephemera_project2
+      end
+      it 'exposes collections containing these projects' do
+        get :index_manifest, params: { format: :json }
+        manifest_response = MultiJson.load(response.body, symbolize_keys: true)
+
+        expect(manifest_response[:@id]).to eq "http://www.example.com/iiif/collections"
+        expect(manifest_response[:@type]).to eq "sc:Collection"
+        expect(manifest_response[:label]).to eq "Plum Collections"
+        expect(manifest_response[:collections].length).to eq 2
+        expect(manifest_response[:collections][0][:@id]).to eq "http://www.example.com/collections/#{collection.id}/manifest"
+        expect(manifest_response[:collections][1][:@id]).to eq "http://www.example.com/collections/#{collection2.id}/manifest"
       end
     end
   end

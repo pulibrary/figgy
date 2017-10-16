@@ -37,6 +37,19 @@ class ManifestBuilder
         )
       end
 
+      # Provides the builders injected into the factory for manifests of collections
+      # @see IIIFManifest::ManifestServiceLocator#collection_manifest_builder
+      # @return [IIIFManifest::ManifestBuilder::CompositeBuilderFactory] the factory of multiple builders
+      def collection_manifest_builders
+        composite_builder_factory.new(
+          record_property_builder,
+          child_manifest_builder_factory,
+          metadata_manifest_builder,
+          see_also_builder,
+          composite_builder: composite_builder
+        )
+      end
+
       class CollectionManifestBuilder < IIIFManifest::ManifestBuilder
         def apply(collection)
           collection['collections'] ||= []
