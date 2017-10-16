@@ -20,14 +20,20 @@ RSpec.describe DataSeeder do
   # combine tests to reduce expensive object creation
   describe "#generate_dev_data and #object_count_report" do
     it "generates lots of objects" do
-      # number of objects to expect
-      x = many_members * 2 + # each has a file set
-          3 + # 1 for each generate_* method called (the resource)
-          2 + # 1 for each generate_* method that creates a fileset
-          many_files
+      n_files = many_members + 1 + # parent, and each member has a fileset
+                many_files +
+                1 # the scanned map created
+      n_scanned_resources = many_members + 1 + # the parent member
+                            1 # the many files parent
 
       seeder.generate_dev_data(many_files: many_files, many_members: many_members)
-      expect(Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_all.count).to eq x
+      query_service = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
+      expect(query_service.find_all_of_model(model: FileSet).count).to eq n_files
+      expect(query_service.find_all_of_model(model: ScannedResource).count).to eq n_scanned_resources
+      expect(query_service.find_all_of_model(model: ScannedMap).count).to eq 1
+      vocabs = query_service.find_all_of_model(model: EphemeraVocabulary).count
+      expect(vocabs).to be > 1
+      expect(query_service.find_all_of_model(model: EphemeraTerm).count).to be > vocabs
 
       seeder.wipe_metadata!
       expect(Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_all.count).to eq 0

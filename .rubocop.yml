@@ -52,6 +52,7 @@ Metrics/ClassLength:
     - 'app/decorators/ephemera_folder_decorator.rb'
     - 'app/services/ingest_ephemera_service.rb'
     - 'app/services/plum_importer.rb'
+    - 'app/utils/data_seeder.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
@@ -62,6 +63,7 @@ Metrics/MethodLength:
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/change_sets/ephemera_folder_change_set.rb'
     - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
+    - 'app/utils/data_seeder.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/dublin_core.rb'

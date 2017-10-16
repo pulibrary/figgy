@@ -16,6 +16,7 @@ class DataSeeder
     generate_resource_with_many_members(n: many_members)
     generate_scanned_map
     object_count_report
+    load_vocabs
   end
 
   def wipe_metadata!
@@ -55,6 +56,31 @@ class DataSeeder
     sm = Valkyrie::MetadataAdapter.find(:indexing_persister).persister.save(resource: sm)
     add_file(resource: sm)
     logger.info "Created scanned map #{sm.id}: #{sm.title}"
+  end
+
+  def load_vocabs
+    to_load = [
+      { file: "config/vocab/iso639-1.csv", name: "LAE Languages",
+        columns: { label: "label", category: nil } },
+      { file: "config/vocab/iso639-2.csv", name: "ISO-639-2 Languages",
+        columns: { label: "label", category: nil } },
+      { file: "config/vocab/lae_areas.csv", name: "LAE Areas",
+        columns: { label: "label", category: nil } },
+      { file: "config/vocab/lae_genres.csv", name: "LAE Genres",
+        columns: { label: "pul_label", category: nil } },
+      { file: "config/vocab/lae_subjects.csv", name: "LAE Subjects",
+        columns: { label: "subject", category: "category" } }
+    ]
+    change_set_persister = PlumChangeSetPersister.new(
+      metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
+      storage_adapter: Valkyrie::StorageAdapter.find(:lae_storage)
+    )
+
+    to_load.each do |vocab|
+      change_set_persister.buffer_into_index do |buffered_change_set_persister|
+        IngestVocabService.new(buffered_change_set_persister, vocab[:file], vocab[:name], vocab[:columns], logger).ingest
+      end
+    end
   end
 
   private
