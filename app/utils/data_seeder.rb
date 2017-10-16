@@ -62,13 +62,11 @@ class DataSeeder
     to_load = [
       { file: "config/vocab/iso639-1.csv", name: "LAE Languages",
         columns: { label: "label", category: nil } },
-      { file: "config/vocab/iso639-2.csv", name: "ISO-639-2 Languages",
-        columns: { label: "label", category: nil } },
       { file: "config/vocab/lae_areas.csv", name: "LAE Areas",
         columns: { label: "label", category: nil } },
-      { file: "config/vocab/lae_genres.csv", name: "LAE Genres",
+      { file: File.join('spec', 'fixtures', 'lae_genres.csv'), name: "LAE Genres",
         columns: { label: "pul_label", category: nil } },
-      { file: "config/vocab/lae_subjects.csv", name: "LAE Subjects",
+      { file: File.join('spec', 'fixtures', 'lae_subjects.csv'), name: "LAE Subjects",
         columns: { label: "subject", category: "category" } }
     ]
     change_set_persister = PlumChangeSetPersister.new(
