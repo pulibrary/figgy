@@ -34,6 +34,7 @@ RSpec.describe DataSeeder do
       vocabs = query_service.find_all_of_model(model: EphemeraVocabulary).count
       expect(vocabs).to be > 1
       expect(query_service.find_all_of_model(model: EphemeraTerm).count).to be > vocabs
+      expect(query_service.find_all_of_model(model: EphemeraProject).count).to eq 1
 
       seeder.wipe_metadata!
       expect(Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_all.count).to eq 0

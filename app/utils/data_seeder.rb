@@ -17,6 +17,7 @@ class DataSeeder
     generate_scanned_map
     object_count_report
     load_vocabs
+    generate_ephemera_project
   end
 
   def wipe_metadata!
@@ -79,6 +80,13 @@ class DataSeeder
         IngestVocabService.new(buffered_change_set_persister, vocab[:file], vocab[:name], vocab[:columns], logger).ingest
       end
     end
+  end
+
+  def generate_ephemera_project
+    ep = EphemeraProject.new(title: "An Ephemera Project")
+    ep = Valkyrie::MetadataAdapter.find(:indexing_persister).persister.save(resource: ep)
+    logger.info "Created ephemera project #{ep.id}: #{ep.title}"
+    ep
   end
 
   private
