@@ -68,10 +68,16 @@ class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
 
   private
 
+    # Generate the slug prefix from the existing label
+    # @return [String] the prefix for the slug
+    def generated_slug_prefix
+      title.gsub(/\s/, '_').downcase
+    end
+
     # Generate the slug value from the Valkyrie Resource ID
     # @return [Slug] the slug for the resource
     def generated_slug
-      @slug ||= Slug.new(prefix: 'lae', seed: model.id.to_s)
+      @slug ||= Slug.new(prefix: generated_slug_prefix, seed: model.id.to_s)
     end
 
     # Generate the Hash for the IIIF Manifest metadata exposing the slug as an "Exhibit" property

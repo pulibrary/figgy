@@ -17,12 +17,12 @@ RSpec.describe EphemeraProjectDecorator do
   end
   describe '#slug' do
     it 'generates a slug' do
-      expect(decorator.slug).to eq "lae-#{resource.id.to_s.slice(0, 4)}"
+      expect(decorator.slug).to eq "test_project-#{resource.id.to_s.slice(0, 4)}"
     end
   end
   describe '#iiif_manifest_attributes' do
     it 'includes the "exhibit" property in the IIIF Manifest metadata' do
-      expect(decorator.iiif_manifest_attributes).to include(exhibit: "lae-#{resource.id.to_s.slice(0, 4)}")
+      expect(decorator.iiif_manifest_attributes).to include(exhibit: "test_project-#{resource.id.to_s.slice(0, 4)}")
     end
   end
 end
