@@ -11,4 +11,5 @@ unless User.count < 1
   seeder.wipe_files!
   UserUtils.promote_user_to_admin(user: User.first)
   seeder.generate_dev_data(many_members: 2, many_files: 3)
+  seeder.generate_ephemera_project
 end

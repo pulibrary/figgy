@@ -17,8 +17,6 @@ class DataSeeder
     generate_resource_with_many_members(n: many_members)
     generate_scanned_map
     object_count_report
-    load_vocabs
-    generate_ephemera_project
   end
 
   def wipe_metadata!
@@ -60,6 +58,16 @@ class DataSeeder
     logger.info "Created scanned map #{sm.id}: #{sm.title}"
   end
 
+  def generate_ephemera_project
+    load_vocabs
+    ep = EphemeraProject.new(title: "An Ephemera Project")
+    ep = persister.save(resource: ep)
+    logger.info "Created ephemera project #{ep.id}: #{ep.title}"
+    add_ephemera_fields(ep)
+    #generate_ephemera_boxes
+    #generate_ephemera_folders
+  end
+
   def load_vocabs
     to_load = [
       { file: "config/vocab/iso639-1.csv", name: "LAE Languages",
@@ -78,11 +86,28 @@ class DataSeeder
     end
   end
 
-  def generate_ephemera_project
-    ep = EphemeraProject.new(title: "An Ephemera Project")
-    ep = persister.save(resource: ep)
-    logger.info "Created ephemera project #{ep.id}: #{ep.title}"
-    ep
+  def add_ephemera_fields(project)
+    project_change_set = DynamicChangeSet.new(project)
+    [ ['1', 'LAE Languages'],
+      ['2', 'LAE Areas'],
+      ['3', 'LAE Areas'],
+      ['4', 'LAE Genres'],
+      ['5', 'LAE Subjects']
+    ].each do |pair|
+      # create the ephemera field
+      field_change_set = DynamicChangeSet.new(EphemeraField.new)
+      vocab = query_service.custom_queries.find_ephemera_vocabulary_by_label(label: pair[1])
+      raise "Could not ingest the field for #{pair[0]}!" unless field_change_set.validate(field_name: [pair[0]], member_of_vocabulary_id: vocab.id)
+      field_change_set.sync
+      updated_field = change_set_persister.save(change_set: field_change_set)
+      # add the field to the project
+      project_change_set.prepopulate!
+      project_change_set.member_ids << updated_field.id
+      raise "Could not update the project for #{project}!" unless project_change_set.validate(member_ids: project_change_set.member_ids)
+      project_change_set.sync
+      updated_project = change_set_persister.save(change_set: project_change_set)
+      logger.info "Added ephemera field #{updated_field.id} to project #{updated_project.title}"
+    end
   end
 
   private
