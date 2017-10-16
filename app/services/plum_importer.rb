@@ -99,7 +99,9 @@ class PlumImporter
       local_identifier: document.id,
       pdf_type: document.pdf_type,
       rights_statement: document.rights_statement,
-      member_of_collection_ids: document.collection_ids
+      member_of_collection_ids: document.collection_ids,
+      viewing_hint: document.viewing_hint,
+      viewing_direction: document.viewing_direction
     }
   end
 
@@ -194,6 +196,14 @@ class PlumImporter
       else
         Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
       end
+    end
+
+    def viewing_hint
+      solr_doc.fetch("viewing_hint_ssim", []).first
+    end
+
+    def viewing_direction
+      solr_doc.fetch("viewing_direction_ssim", []).first
     end
 
     def read_groups_value
