@@ -167,7 +167,7 @@ RSpec.describe EphemeraProjectsController do
     context "when it does exist" do
       it "saves it and redirects" do
         ephemera_project = FactoryGirl.create_for_repository(:ephemera_project)
-        patch :update, params: { id: ephemera_project.id.to_s, ephemera_project: { title: ["Two"] } }
+        patch :update, params: { id: ephemera_project.id.to_s, ephemera_project: { title: ["Two"], slug: ["updated-slug"] } }
 
         expect(response).to be_redirect
         expect(response.location).to eq "http://test.host/catalog/#{ephemera_project.id}"
@@ -175,6 +175,7 @@ RSpec.describe EphemeraProjectsController do
         reloaded = find_resource(id)
 
         expect(reloaded.title).to eq ["Two"]
+        expect(reloaded.slug).to eq ["updated-slug"]
       end
       it "renders the form if it fails validations" do
         ephemera_project = FactoryGirl.create_for_repository(:ephemera_project)
