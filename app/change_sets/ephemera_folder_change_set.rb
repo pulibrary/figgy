@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 class EphemeraFolderChangeSet < Valhalla::ChangeSet
   apply_workflow(FolderWorkflow)
-  validates :barcode, :folder_number, :title, :language, :genre, :width, :height, :page_count, :visibility, :rights_statement, presence: true
+  validates :title, :language, :genre, :width, :height, :page_count, :visibility, :rights_statement, presence: true
   validate :date_range_validity
   validates_with StateValidator
 
   include VisibilityProperty
-  property :barcode, multiple: false, required: true
-  property :folder_number, multiple: false, required: true
+  property :barcode, multiple: false, required: false
+  property :folder_number, multiple: false, required: false
   property :title, multiple: false, required: true
   property :sort_title, required: false
   property :alternative_title, multiple: true, required: false
