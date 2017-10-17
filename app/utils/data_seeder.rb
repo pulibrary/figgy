@@ -58,14 +58,14 @@ class DataSeeder
     logger.info "Created scanned map #{sm.id}: #{sm.title}"
   end
 
-  def generate_ephemera_project
+  def generate_ephemera_project(n_folders: 3)
     load_vocabs
     ep = EphemeraProject.new(title: "An Ephemera Project")
     ep = persister.save(resource: ep)
     logger.info "Created ephemera project #{ep.id}: #{ep.title}"
     add_ephemera_fields(ep)
-    add_ephemera_box(ep)
-    #generate_ephemera_folders
+    box = add_ephemera_box(ep)
+    add_ephemera_folders(n: n_folders, project: ep, box: box)
   end
 
   def load_vocabs
@@ -100,18 +100,18 @@ class DataSeeder
       field_change_set.sync
       updated_field = change_set_persister.save(change_set: field_change_set)
       # add the field to the project
-      add_to_project(project: project, member: updated_field)
+      add_member(parent: project, member: updated_field)
     end
   end
 
-  def add_to_project(project:, member:)
-    project_change_set = DynamicChangeSet.new(project)
-    project_change_set.prepopulate!
-    project_change_set.member_ids << member.id
-    raise "Could not update the project for #{project}!" unless project_change_set.validate(member_ids: project_change_set.member_ids)
-    project_change_set.sync
-    updated_project = change_set_persister.save(change_set: project_change_set)
-    logger.info "Added #{member.class} #{member.id} to project #{updated_project.title}"
+  def add_member(parent:, member:)
+    parent_change_set = DynamicChangeSet.new(parent)
+    parent_change_set.prepopulate!
+    parent_change_set.member_ids << member.id
+    raise "Could not update #{parent}!" unless parent_change_set.validate(member_ids: parent_change_set.member_ids)
+    parent_change_set.sync
+    updated_parent = change_set_persister.save(change_set: parent_change_set)
+    logger.info "Added #{member.class} #{member.id} to #{parent.class} #{updated_parent.title || updated_parent.box_number}"
   end
 
   def add_ephemera_box(project)
@@ -119,7 +119,29 @@ class DataSeeder
     change_set.validate(barcode: '00000000000000', box_number: '1')
     change_set.sync
     box = change_set_persister.save(change_set: change_set)
-    add_to_project(project: project, member: box)
+    add_member(parent: project, member: box)
+    box
+  end
+
+  def add_ephemera_folders(n:, project:, box:)
+    n.times do |i|
+      change_set = DynamicChangeSet.new(EphemeraFolder.new)
+      change_set.validate(
+        barcode: '00000000000000',
+        folder_number: i,
+        title: Faker::Food.dish,
+        language: query_service.custom_queries.find_ephemera_term_by_label(label: 'English').id,
+        genre: query_service.custom_queries.find_ephemera_term_by_label(label: 'Brochures').id,
+        width: rand(50),
+        height: rand(100),
+        page_count: rand(600),
+        description: Faker::Matz.quote,
+      )
+      change_set.sync
+      folder = change_set_persister.save(change_set: change_set)
+      add_file(resource: folder)
+      add_member(parent: box, member: folder)
+    end
   end
 
   private

@@ -51,6 +51,8 @@ RSpec.describe DataSeeder do
       d = query_service.find_all_of_model(model: EphemeraProject).first.decorate
       expect(d.members.select { |m| m.is_a? EphemeraField }.to_a.count).to eq 5
       expect(d.members.select { |m| m.is_a? EphemeraBox }.to_a.count).to eq 1
+      d = query_service.find_all_of_model(model: EphemeraBox).first.decorate
+      expect(d.members.select { |m| m.is_a? EphemeraFolder }.to_a.count).to eq 3
     end
   end
 end
