@@ -8,4 +8,22 @@ class EphemeraProjectChangeSet < Valkyrie::ChangeSet
   def primary_terms
     [:title, :slug]
   end
+
+  def validate(resource_params = nil)
+    # Ensure that the property is unique
+    slug = resource_params.fetch(:slug, nil)
+    if slug
+      slug_value = Array.wrap(slug).first
+      results = query_service.custom_queries.find_by_string_property(property: :slug, value: slug_value).to_a
+      return false unless results.empty?
+    end
+    super(resource_params)
+  end
+
+  private
+
+    def metadata_adapter
+      Valkyrie.config.metadata_adapter
+    end
+    delegate :query_service, to: :metadata_adapter
 end
