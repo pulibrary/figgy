@@ -36,7 +36,8 @@ RSpec.describe EphemeraProjectsController do
     let(:user) { FactoryGirl.create(:admin) }
     let(:valid_params) do
       {
-        title: ['Project 1']
+        title: ['Project 1'],
+        slug: ['test-project-1234']
       }
     end
     let(:invalid_params) do
