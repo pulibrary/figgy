@@ -13,7 +13,12 @@ class FileMetadata < Valkyrie::Resource
   attribute :size, Valkyrie::Types::Set
 
   def self.for(file:)
-    new(label: file.original_filename, original_filename: file.original_filename, mime_type: file.content_type, use: file.try(:use) || [Valkyrie::Vocab::PCDMUse.OriginalFile])
+    new(label: file.original_filename,
+        original_filename: file.original_filename,
+        mime_type: file.content_type,
+        use: file.try(:use) || [Valkyrie::Vocab::PCDMUse.OriginalFile],
+        created_at: Time.current,
+        updated_at: Time.current)
   end
 
   def original_file?

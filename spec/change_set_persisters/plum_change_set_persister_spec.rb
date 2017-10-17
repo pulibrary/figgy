@@ -160,6 +160,8 @@ RSpec.describe PlumChangeSetPersister do
       file_metadata_nodes = members.first.file_metadata
       expect(file_metadata_nodes.to_a.length).to eq 2
       expect(file_metadata_nodes.first).to be_kind_of FileMetadata
+      expect(file_metadata_nodes.first.created_at).not_to be nil
+      expect(file_metadata_nodes.first.updated_at).not_to be nil
 
       original_file_node = file_metadata_nodes.find { |x| x.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }
 
@@ -208,6 +210,11 @@ RSpec.describe PlumChangeSetPersister do
       described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: false)
     end
 
+    before do
+      now = Time.current
+      allow(Time).to receive(:current).and_return(now, now + 1, now + 2)
+    end
+
     it "can append files as FileSets", run_real_derivatives: true do
       # upload a file
       resource = FactoryGirl.build(:scanned_resource)
@@ -227,6 +234,7 @@ RSpec.describe PlumChangeSetPersister do
       updated_file_node = updated_file_set.file_metadata.find { |x| x.id == file_node.id }
       updated_file = storage_adapter.find_by(id: updated_file_node.file_identifiers.first)
       expect(updated_file.size).to eq 5600
+      expect(updated_file_node.updated_at).to be > updated_file_node.created_at
     end
 
     context 'with a messaging service' do
