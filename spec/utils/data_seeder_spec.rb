@@ -49,10 +49,10 @@ RSpec.describe DataSeeder do
       expect(query_service.find_all_of_model(model: EphemeraTerm).count).to be > vocabs
       expect(query_service.find_all_of_model(model: EphemeraProject).count).to eq 1
       d = query_service.find_all_of_model(model: EphemeraProject).first.decorate
-      expect(d.members.select { |m| m.is_a? EphemeraField }.to_a.count).to eq 5
-      expect(d.members.select { |m| m.is_a? EphemeraBox }.to_a.count).to eq 1
+      expect(d.members.select { |m| m.is_a? EphemeraField }.to_a.size).to eq 5
+      expect(d.members.select { |m| m.is_a? EphemeraBox }.to_a.size).to eq 1
       d = query_service.find_all_of_model(model: EphemeraBox).first.decorate
-      expect(d.members.select { |m| m.is_a? EphemeraFolder }.to_a.count).to eq 3
+      expect(d.members.select { |m| m.is_a? EphemeraFolder }.to_a.size).to eq 3
     end
   end
 end

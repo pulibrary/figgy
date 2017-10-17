@@ -87,7 +87,8 @@ class DataSeeder
   end
 
   def add_ephemera_fields(project)
-    [ ['1', 'LAE Languages'],
+    [
+      ['1', 'LAE Languages'],
       ['2', 'LAE Areas'],
       ['3', 'LAE Areas'],
       ['4', 'LAE Genres'],
@@ -135,7 +136,7 @@ class DataSeeder
         width: rand(50),
         height: rand(100),
         page_count: rand(600),
-        description: Faker::Matz.quote,
+        description: Faker::Matz.quote
       )
       change_set.sync
       folder = change_set_persister.save(change_set: change_set)
@@ -198,5 +199,4 @@ class DataSeeder
         storage_adapter: Valkyrie.config.storage_adapter
       )
     end
-
 end
