@@ -64,7 +64,7 @@ class DataSeeder
     ep = persister.save(resource: ep)
     logger.info "Created ephemera project #{ep.id}: #{ep.title}"
     add_ephemera_fields(ep)
-    #generate_ephemera_boxes
+    add_ephemera_box(ep)
     #generate_ephemera_folders
   end
 
@@ -87,7 +87,6 @@ class DataSeeder
   end
 
   def add_ephemera_fields(project)
-    project_change_set = DynamicChangeSet.new(project)
     [ ['1', 'LAE Languages'],
       ['2', 'LAE Areas'],
       ['3', 'LAE Areas'],
@@ -101,13 +100,26 @@ class DataSeeder
       field_change_set.sync
       updated_field = change_set_persister.save(change_set: field_change_set)
       # add the field to the project
-      project_change_set.prepopulate!
-      project_change_set.member_ids << updated_field.id
-      raise "Could not update the project for #{project}!" unless project_change_set.validate(member_ids: project_change_set.member_ids)
-      project_change_set.sync
-      updated_project = change_set_persister.save(change_set: project_change_set)
-      logger.info "Added ephemera field #{updated_field.id} to project #{updated_project.title}"
+      add_to_project(project: project, member: updated_field)
     end
+  end
+
+  def add_to_project(project:, member:)
+    project_change_set = DynamicChangeSet.new(project)
+    project_change_set.prepopulate!
+    project_change_set.member_ids << member.id
+    raise "Could not update the project for #{project}!" unless project_change_set.validate(member_ids: project_change_set.member_ids)
+    project_change_set.sync
+    updated_project = change_set_persister.save(change_set: project_change_set)
+    logger.info "Added #{member.class} #{member.id} to project #{updated_project.title}"
+  end
+
+  def add_ephemera_box(project)
+    change_set = DynamicChangeSet.new(EphemeraBox.new)
+    change_set.validate(barcode: '00000000000000', box_number: '1')
+    change_set.sync
+    box = change_set_persister.save(change_set: change_set)
+    add_to_project(project: project, member: box)
   end
 
   private

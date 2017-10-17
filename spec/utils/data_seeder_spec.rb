@@ -48,8 +48,9 @@ RSpec.describe DataSeeder do
       expect(vocabs).to be > 1
       expect(query_service.find_all_of_model(model: EphemeraTerm).count).to be > vocabs
       expect(query_service.find_all_of_model(model: EphemeraProject).count).to eq 1
-      project = query_service.find_all_of_model(model: EphemeraProject).first
-      expect(project.member_ids.count).to eq 5
+      d = query_service.find_all_of_model(model: EphemeraProject).first.decorate
+      expect(d.members.select { |m| m.is_a? EphemeraField }.to_a.count).to eq 5
+      expect(d.members.select { |m| m.is_a? EphemeraBox }.to_a.count).to eq 1
     end
   end
 end
