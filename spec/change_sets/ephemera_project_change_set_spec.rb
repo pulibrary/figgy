@@ -41,5 +41,8 @@ RSpec.describe EphemeraProjectChangeSet do
     it 'ensures that only unique slugs can be persisted' do
       expect(change_set.validate(slug: 'test_project-1234')).to be false
     end
+    it 'ensures that only valid slugs can be persisted' do
+      expect(change_set.validate(slug: 'test_project-!@#$')).to be false
+    end
   end
 end
