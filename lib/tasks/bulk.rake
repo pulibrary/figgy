@@ -26,7 +26,7 @@ namespace :bulk do
 
     begin
       if background
-        IngestDiskFolderJob.perform_later(
+        IngestFolderJob.perform_later(
           directory: dir,
           collection: collection,
           source_metadata_identifier: bib,
@@ -34,7 +34,7 @@ namespace :bulk do
           replaces: replaces
         )
       else
-        IngestDiskFolderJob.perform_now(
+        IngestFolderJob.perform_now(
           directory: dir,
           collection: collection,
           source_metadata_identifier: bib,
@@ -54,6 +54,7 @@ namespace :bulk do
     user = User.all.select(&:admin?).first unless user
     dir = ENV['DIR']
     bib = ENV['BIB']
+    background = ENV['BACKGROUND']
 
     abort "usage: rake bulk:ingest_scanned_maps BIB=1234567 DIR=/path/to/files" unless dir && Dir.exist?(dir)
 
@@ -63,13 +64,16 @@ namespace :bulk do
     @logger.info "ingesting as: #{user.user_key} (override with USER=foo)"
 
     begin
-      change_set_persister = PlumChangeSetPersister.new(
-        metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
-        storage_adapter: Valkyrie::StorageAdapter.find(:disk_via_copy)
-      )
-      change_set_persister.buffer_into_index do |buffered_change_set_persister|
-        ingest_service = BulkIngestService.new(change_set_persister: buffered_change_set_persister, klass: ScannedMap, logger: @logger)
-        ingest_service.attach_dir(base_directory: dir, file_filter: '.tif', source_metadata_identifier: bib)
+      if background
+        IngestMapFolderJob.perform_later(
+          directory: dir,
+          source_metadata_identifier: bib
+        )
+      else
+        IngestMapFolderJob.perform_now(
+          directory: dir,
+          source_metadata_identifier: bib
+        )
       end
     rescue => e
       @logger.error "Error: #{e.message}"
@@ -84,6 +88,8 @@ namespace :bulk do
     dir = ENV['DIR']
     field = ENV['FIELD']
     filter = ENV['FILTER']
+    background = ENV['BACKGROUND']
+
     abort "usage: rake bulk:attach_each_dir DIR=/path/to/files FIELD=barcode FILTER=filter" unless field && dir && Dir.exist?(dir)
 
     @logger = Logger.new(STDOUT)
@@ -92,13 +98,18 @@ namespace :bulk do
     @logger.info "filtering to files ending with #{filter}" if filter
 
     begin
-      change_set_persister = PlumChangeSetPersister.new(
-        metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
-        storage_adapter: Valkyrie::StorageAdapter.find(:disk_via_copy)
-      )
-      change_set_persister.buffer_into_index do |buffered_change_set_persister|
-        ingest_service = BulkIngestService.new(change_set_persister: buffered_change_set_persister, logger: @logger)
-        ingest_service.attach_each_dir(base_directory: dir, property: field, file_filter: filter)
+      if background
+        IngestFoldersJob.perform_later(
+          directory: dir,
+          property: field,
+          file_filter: filter
+        )
+      else
+        IngestFoldersJob.perform_now(
+          directory: dir,
+          property: field,
+          file_filter: filter
+        )
       end
     rescue => e
       @logger.error "Error: #{e.message}"
