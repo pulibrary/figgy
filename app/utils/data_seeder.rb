@@ -131,7 +131,8 @@ class DataSeeder
         barcode: '00000000000000',
         folder_number: i,
         title: Faker::Food.dish,
-        language: query_service.custom_queries.find_ephemera_term_by_label(label: 'English').id,
+        # I don't know why this doesn't work; skipping for now
+        # language: query_service.custom_queries.find_ephemera_term_by_label(label: 'English').id,
         genre: query_service.custom_queries.find_ephemera_term_by_label(label: 'Brochures').id,
         width: rand(50),
         height: rand(100),
