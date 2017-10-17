@@ -12,13 +12,19 @@ RSpec.describe ::BlacklightHelper do
     end
     context "when given an EphemeraTerm" do
       it "renders the label" do
-        expect(helper.render_document_heading(document, tag: :h1)).to eq "<h1 itemprop=\"name\">Test</h1>"
+        expect(helper.render_document_heading(document, tag: :h1)).to eq "<h1 itemprop=\"name\" dir=\"ltr\">Test</h1>"
       end
     end
     context "when given a Vocabulary" do
       let(:model) { FactoryGirl.build(:ephemera_vocabulary, id: "test", label: "Test") }
       it "renders the label" do
-        expect(helper.render_document_heading(document, tag: :h1)).to eq "<h1 itemprop=\"name\">Test</h1>"
+        expect(helper.render_document_heading(document, tag: :h1)).to eq "<h1 itemprop=\"name\" dir=\"ltr\">Test</h1>"
+      end
+    end
+    context "when given a value with RTL text" do
+      let(:model) { FactoryGirl.build(:ephemera_vocabulary, id: "test", label: "للفاسق") }
+      it "renders the label" do
+        expect(helper.render_document_heading(document, tag: :h1)).to eq "<h1 itemprop=\"name\" dir=\"rtl\">للفاسق</h1>"
       end
     end
   end
