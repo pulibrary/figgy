@@ -34,6 +34,7 @@ class FileAppender
   def update_files(resource, files)
     files.select { |file| file.is_a?(Hash) }.map do |file|
       node = resource.file_metadata.select { |x| x.id.to_s == file.keys.first }.first
+      node.updated_at = Time.current
       file_wrapper = UploadDecorator.new(file.values.first, node.original_filename.first)
       file = storage_adapter.upload(file: file_wrapper, resource: node)
       node
