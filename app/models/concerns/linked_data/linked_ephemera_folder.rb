@@ -27,19 +27,19 @@ module LinkedData
     end
 
     def genre
-      LinkedNode.new(resource: decorated_resource.genre).without_context
+      Array.wrap(LinkedNode.new(resource: decorated_resource.genre).without_context)
     end
 
     def geographic_origin
-      LinkedNode.new(resource: decorated_resource.geographic_origin).without_context
+      Array.wrap(LinkedNode.new(resource: decorated_resource.geographic_origin).without_context)
     end
 
     def language
-      decorated_resource.language.map { |r| LinkedResourceFactory.new(resource: r).new.without_context }.reject { |v| v.nil? || v.try(:empty?) }
+      decorated_resource.language.map { |r| LinkedNode.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
     end
 
     def subject
-      decorated_resource.subject.map { |r| LinkedResourceFactory.new(resource: r).new.without_context }.reject { |v| v.nil? || v.try(:empty?) }
+      decorated_resource.subject.map { |r| LinkedNode.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
     end
 
     def categories
