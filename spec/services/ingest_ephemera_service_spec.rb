@@ -4,6 +4,7 @@ require 'rails_helper'
 RSpec.describe IngestEphemeraService, :admin_set do
   subject(:ingest_service) { described_class.new(folder, nil, project.title.first, change_set_persister, logger) }
   let(:folder) { Rails.root.join('spec', 'fixtures', 'lae_migration', 'folders', '0003d') }
+  let(:empty_folder) { Rails.root.join('spec', 'fixtures', 'lae_migration', 'folders', '012g6') }
   let(:project) { FactoryGirl.create_for_repository(:ephemera_project) }
   let(:logger) { Logger.new(nil) }
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
@@ -93,6 +94,29 @@ RSpec.describe IngestEphemeraService, :admin_set do
       it "can ingest via a job" do
         IngestEphemeraJob.perform_now(folder, nil, project.title.first)
         expect(ingested.title).to eq ["En negro y blanco. Del Cordobazo al juicio a las juntas."]
+      end
+    end
+
+    context "with a valid folder with no attached images" do
+      let(:ingested) { query_service.find_all_of_model(model: EphemeraFolder).first }
+
+      it "ingests an ephemera folder" do
+        expect do
+          change_set_persister.buffer_into_index do |buffered|
+            described_class.new(empty_folder, "complete", project.title.first, buffered, logger).ingest
+          end
+        end.to change { query_service.find_all_of_model(model: EphemeraFolder).to_a.length }.by(1)
+        expect(ingested.title).to eq(["Se firmó el convenio para terminar el Edificio Único de Sociales. El cambio se hace desde abajo: La Vallese."])
+        expect(ingested.barcode).to eq ["32101089002131"]
+        expect(ingested.member_ids.length).to eq 0
+        expect(ingested.rights_statement).to eq [RDF::URI('http://rightsstatements.org/vocab/CNE/1.0/')]
+        expect(ingested.state).to eq ["complete"]
+        expect(ingested.local_identifier).to eq ['012g6']
+        expect(ingested.folder_number).to eq ['7']
+        expect(ingested.page_count).to eq ['1']
+
+        members = query_service.find_members(resource: ingested).to_a
+        expect(members).to eq []
       end
     end
 

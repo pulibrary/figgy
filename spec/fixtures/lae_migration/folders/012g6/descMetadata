@@ -1,0 +1,23 @@
+<info:fedora/puls:012g6> <http://princeton.edu/pulstore/terms/earliestCreated> "" .
+<info:fedora/puls:012g6> <http://princeton.edu/pulstore/terms/latestCreated> "" .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/description> "" .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/format> "Flyers" .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/rights> "This digital reproduction is intended to support research, teaching, and private study. Users are responsible for determining any copyright questions." .
+<info:fedora/puls:012g6> <http://princeton.edu/pulstore/terms/sortTitle> "se firmó el convenio para terminar el edificio único de sociales. el cambio se hace desde abajo: la vallese." .
+<info:fedora/puls:012g6> <http://id.loc.gov/vocabulary/relators/mfp> "Argentina" .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/alternative> "" .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/coverage> "Argentina" .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/title> "Se firmó el convenio para terminar el Edificio Único de Sociales. El cambio se hace desde abajo: La Vallese." .
+<info:fedora/puls:012g6> <http://princeton.edu/pulstore/terms/category> "Education" .
+<info:fedora/puls:012g6> <http://princeton.edu/pulstore/terms/category> "Politics and government" .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/language> "Spanish" .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/publisher> "Frente Universitario de Liberación Nacional (FULNA) " .
+<info:fedora/puls:012g6> <http://princeton.edu/pulstore/terms/isPartOfSeries> "" .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/subject> "Education--Political aspects" .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/subject> "Students--Political activity" .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/creator> "" .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/contributor> "Universidad de Buenos Aires (UBA)" .
+<info:fedora/puls:012g6> <http://princeton.edu/pulstore/terms/pageCount> "1"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<info:fedora/puls:012g6> <http://princeton.edu/pulstore/terms/heightInCM> "22"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<info:fedora/puls:012g6> <http://princeton.edu/pulstore/terms/widthInCM> "17"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/created> "2008"^^<http://www.w3.org/2001/XMLSchema#integer> .

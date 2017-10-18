@@ -1,0 +1,22 @@
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/dateSubmitted> "2014-05-22T16:02:54Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<info:fedora/puls:012g6> <http://princeton.edu/pulstore/terms/barcode> "32101089002131" .
+<info:fedora/puls:012g6> <http://princeton.edu/pulstore/terms/errorNote> "" .
+<info:fedora/puls:012g6> <http://princeton.edu/pulstore/terms/projectLabel> "Latin American Ephemera" .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/modified> "2014-05-22T16:02:54Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/modified> "2014-05-22T16:10:38Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/modified> "2014-05-23T21:03:20Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/modified> "2014-07-08T18:39:40Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/modified> "2014-07-29T18:18:23Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/modified> "2014-07-30T16:25:19Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/modified> "2014-07-30T16:29:47Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/modified> "2014-12-04T19:31:51Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/modified> "2014-12-17T14:34:07Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/modified> "2014-12-17T14:37:49Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/modified> "2014-12-17T14:41:22Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/modified> "2015-02-04T03:44:11Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/modified> "2015-02-04T04:41:34Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<info:fedora/puls:012g6> <http://purl.org/dc/terms/modified> "2015-02-04T04:41:34Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<info:fedora/puls:012g6> <http://princeton.edu/pulstore/terms/suppressed> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<info:fedora/puls:012g6> <http://princeton.edu/pulstore/terms/passedQc> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<info:fedora/puls:012g6> <http://princeton.edu/pulstore/terms/state> "Has Core Metadata" .
+<info:fedora/puls:012g6> <http://princeton.edu/pulstore/terms/physicalNumber> "7"^^<http://www.w3.org/2001/XMLSchema#integer> .
