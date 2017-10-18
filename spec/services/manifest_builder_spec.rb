@@ -161,6 +161,7 @@ RSpec.describe ManifestBuilder do
       expect(output["sequences"][0]["canvases"][0]["images"].length).to eq 1
     end
   end
+
   context "when given an ephemera project" do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: ephemera_project.id)) }
     let(:ephemera_project) do
@@ -179,6 +180,28 @@ RSpec.describe ManifestBuilder do
       expect(output["metadata"]).to be_kind_of Array
       expect(output["metadata"]).not_to be_empty
       expect(output["metadata"].first).to include "label" => "Exhibit", "value" => ephemera_project.decorate.slug
+    end
+  end
+
+  context "when given a collection" do
+    subject(:manifest_builder) { described_class.new(query_service.find_by(id: collection.id)) }
+    let(:collection) { FactoryGirl.create_for_repository(:collection) }
+    let(:change_set) { CollectionChangeSet.new(collection) }
+    let(:scanned_resource) { FactoryGirl.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id]) }
+
+    before do
+      scanned_resource
+      output = change_set_persister.save(change_set: change_set)
+      change_set = CollectionChangeSet.new(output)
+      change_set.sync
+      change_set_persister.save(change_set: change_set)
+    end
+    it "builds a IIIF document" do
+      output = manifest_builder.build
+      expect(output).to be_kind_of Hash
+      expect(output["@type"]).to eq "sc:Collection"
+      expect(output["manifests"].length).to eq 1
+      expect(output["manifests"][0]["@id"]).to eq "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest"
     end
   end
 end
