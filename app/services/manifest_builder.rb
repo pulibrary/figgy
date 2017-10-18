@@ -22,6 +22,8 @@ class ManifestBuilder
       case resource
       when Collection
         CollectionNode.new(resource)
+      when EphemeraProject
+        CollectionNode.new(resource)
       when IndexCollection
         IndexCollectionNode.new(resource)
       when ScannedMap
@@ -94,9 +96,14 @@ class ManifestBuilder
 
     ##
     # Retrieves the first viewing hint from the resource metadata
+    # Returns multi-part if it's a Multi-Volume Work.
     # @return [String]
     def viewing_hint
-      resource.respond_to?(:viewing_hint) ? Array(resource.viewing_hint).first : []
+      if !work_presenters.empty?
+        'multi-part'
+      else
+        resource.respond_to?(:viewing_hint) ? Array(resource.viewing_hint).first : []
+      end
     end
 
     private
@@ -143,17 +150,15 @@ class ManifestBuilder
     end
 
     def description
-      resource.description
+      resource.try(:description)
     end
 
-    def viewing_hint
-      'multi-part'
-    end
+    def viewing_hint; end
   end
 
   class IndexCollectionNode < CollectionNode
     def members
-      @members ||= query_service.find_all_of_model(model: Collection).to_a
+      @members ||= query_service.find_all_of_model(model: Collection).to_a + query_service.find_all_of_model(model: EphemeraProject).to_a
     end
 
     def manifest_url

@@ -71,11 +71,13 @@ class ManifestBuilder
       alias imported_identifier_value identifier_value
 
       def value
-        if respond_to?("#{@attribute}_value".to_sym)
-          send("#{@attribute}_value".to_sym)
-        else
-          @value
-        end
+        Array.wrap(
+          if respond_to?("#{@attribute}_value".to_sym)
+            send("#{@attribute}_value".to_sym)
+          else
+            @value
+          end
+        )
       end
 
       def to_h

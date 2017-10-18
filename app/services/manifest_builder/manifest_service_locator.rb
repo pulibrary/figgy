@@ -32,7 +32,13 @@ class ManifestBuilder
       def child_collection_builder
         IIIFManifest::ManifestServiceLocator::InjectedFactory.new(
           CollectionManifestBuilder,
-          builders: record_property_builder,
+          builders:
+          composite_builder_factory.new(
+            record_property_builder,
+            metadata_manifest_builder,
+            see_also_builder,
+            composite_builder: composite_builder
+          ),
           top_record_factory: iiif_collection_factory
         )
       end

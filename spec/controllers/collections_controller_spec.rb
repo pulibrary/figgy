@@ -65,7 +65,6 @@ RSpec.describe CollectionsController do
 
         expect(response.headers["Content-Type"]).to include "application/json"
         expect(manifest_response[:manifests].length).to eq 1
-        expect(manifest_response[:viewingHint]).to eq 'multi-part'
         expect(manifest_response[:manifests][0][:@id]).to eq "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest"
       end
     end
@@ -109,9 +108,13 @@ RSpec.describe CollectionsController do
         expect(manifest_response[:@id]).to eq "http://www.example.com/iiif/collections"
         expect(manifest_response[:@type]).to eq "sc:Collection"
         expect(manifest_response[:label]).to eq "Plum Collections"
-        expect(manifest_response[:collections].length).to eq 2
+        expect(manifest_response[:collections].length).to eq 4
         expect(manifest_response[:collections][0][:@id]).to eq "http://www.example.com/collections/#{collection.id}/manifest"
         expect(manifest_response[:collections][1][:@id]).to eq "http://www.example.com/collections/#{collection2.id}/manifest"
+        expect(manifest_response[:collections][2][:@id]).to eq "http://www.example.com/concern/ephemera_projects/#{ephemera_project1.id}/manifest"
+        expect(manifest_response[:collections][3][:@id]).to eq "http://www.example.com/concern/ephemera_projects/#{ephemera_project2.id}/manifest"
+        expect(manifest_response[:collections][3][:metadata][0][:value]).to eq ephemera_project2.slug
+        expect(manifest_response[:collections][3][:viewingHint]).to be_blank
       end
     end
   end
