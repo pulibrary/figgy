@@ -14,6 +14,10 @@ class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
     @fields ||= members.select { |r| r.is_a?(EphemeraField) }.map(&:decorate).to_a
   end
 
+  def folders
+    @folders ||= members.select { |r| r.is_a?(EphemeraFolder) }.map(&:decorate).to_a
+  end
+
   def templates
     @templates ||= query_service.find_inverse_references_by(resource: self, property: :parent_id).map(&:decorate).to_a
   end

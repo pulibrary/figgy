@@ -66,15 +66,19 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   end
 
   def ephemera_box
-    @ephemera_box ||= query_service.find_parents(resource: model).map(&:decorate).to_a.first
+    @ephemera_box ||= parent if parent.is_a?(EphemeraBox)
   end
 
   def ephemera_project
-    @ephemera_project ||= ephemera_box.try(:ephemera_project)
+    @ephemera_project ||= parent.is_a?(EphemeraBox) ? parent.ephemera_project : parent
   end
 
   def collection_slugs
     @collection_slugs ||= Array.wrap(ephemera_project.try(:slug))
+  end
+
+  def parent
+    @parent ||= query_service.find_parents(resource: model).to_a.first.try(:decorate)
   end
 
   def manageable_files?

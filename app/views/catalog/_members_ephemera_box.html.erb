@@ -2,7 +2,9 @@
   <table class="table table-striped datatable">
     <thead>
     <tr>
-      <th>Folder Number</th>
+      <% if decorated_resource.is_a?(EphemeraBox) %>
+        <th>Folder Number</th>
+      <% end %>
       <th>Workflow State</th>
       <th>Title</th>
       <th>Barcode</th>
@@ -15,7 +17,9 @@
       <% decorated_resource.folders.each do |folder| %>
         <% folder_url = parent_solr_document_path("#{resource.id}", "#{folder.id}") %>
         <tr>
-          <td class="folder_number"><%= link_to folder.folder_number, folder_url %></td>
+          <% if decorated_resource.is_a?(EphemeraBox) %>
+            <td class="folder_number"><%= link_to folder.folder_number, folder_url %></td>
+          <% end %>
           <td><%= folder.rendered_state %></td>
           <td><%= folder.header %></td>
           <td class="barcode"><%= folder.barcode %></td>

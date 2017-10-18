@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 class EphemeraFolderChangeSet < Valhalla::ChangeSet
+  def self.new(record, *args)
+    return DynamicChangeSet.new(record, *args) unless record.is_a?(EphemeraFolder)
+    super
+  end
+
   apply_workflow(FolderWorkflow)
   validates :barcode, :folder_number, :title, :language, :genre, :width, :height, :page_count, :visibility, :rights_statement, presence: true
   validate :date_range_validity

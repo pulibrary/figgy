@@ -63,6 +63,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   # resource decorators will use this method if they define :member_of_collections
   #   in self.display_attributes
   def member_of_collections
+    return [] unless model.respond_to?(:member_of_collection_ids)
     @member_of_collections ||=
       begin
         query_service.find_references_by(resource: model, property: :member_of_collection_ids)

@@ -25,4 +25,17 @@ RSpec.describe EphemeraProjectDecorator do
       expect(decorator.iiif_manifest_attributes).to include(exhibit: "test_project-1234")
     end
   end
+  context "when there are folders and boxes attached" do
+    let(:folder) { FactoryGirl.create_for_repository(:ephemera_folder) }
+    let(:box) { FactoryGirl.create_for_repository(:ephemera_box) }
+    let(:resource) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [box.id, folder.id]) }
+
+    it "provides access to folders" do
+      expect(decorator.folders.map(&:id)).to eq([folder.id])
+    end
+
+    it "provides access to boxes" do
+      expect(decorator.boxes.map(&:id)).to eq([box.id])
+    end
+  end
 end

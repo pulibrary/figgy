@@ -9,6 +9,10 @@ class EphemeraFoldersController < BaseResourceController
   before_action :load_fields, only: [:new, :edit]
   before_action :cache_box, only: [:destroy]
 
+  def change_set_class
+    @change_set_class ||= parent_resource.is_a?(EphemeraProject) ? BoxlessEphemeraFolderChangeSet : EphemeraFolderChangeSet
+  end
+
   def after_create_success(obj, _change_set)
     if params[:commit] == "Save and Create Another"
       redirect_to parent_new_ephemera_box_path(parent_id: resource_params[:append_id], create_another: obj.id.to_s)
@@ -47,6 +51,7 @@ class EphemeraFoldersController < BaseResourceController
   end
 
   def parent_resource
+    return unless params[:parent_id]
     find_resource(params[:parent_id])
   end
 

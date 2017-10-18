@@ -68,6 +68,15 @@ RSpec.describe EphemeraFolderDecorator do
       expect(resource.decorate.ephemera_box.id).to eq box.id
     end
   end
+  context "within a project" do
+    let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder) }
+    it "can return the box it's a member of" do
+      project = FactoryGirl.create_for_repository(:ephemera_project, member_ids: resource.id)
+
+      expect(resource.decorate.ephemera_project.id).to eq project.id
+      expect(resource.decorate.ephemera_box).to be nil
+    end
+  end
   it 'exposes IIIF manifests' do
     expect(decorator.iiif_manifest_attributes).to include alternative_title: ['test alternative title']
     expect(decorator.iiif_manifest_attributes).to include barcode: ["12345678901234"]

@@ -100,6 +100,7 @@ Rails.application.routes.draw do
         get :pdf
       end
     end
+    get '/ephemera_projects/:parent_id/ephemera_folders/new', to: 'ephemera_folders#new', as: :boxless_new_ephemera_folder
     get '/ephemera_boxes/:parent_id/ephemera_folders/new', to: 'ephemera_folders#new', as: :parent_new_ephemera_box
 
     resources :ephemera_vocabularies
