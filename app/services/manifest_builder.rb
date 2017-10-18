@@ -133,7 +133,7 @@ class ManifestBuilder
       # Retrieve the TopStructure for the resource manifest
       # @param [TopStructure]
       def logical_structure
-        resource.logical_structure || []
+        resource.try(:logical_structure) || []
       end
   end
 
