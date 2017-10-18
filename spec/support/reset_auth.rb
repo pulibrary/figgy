@@ -4,5 +4,6 @@ RSpec.configure do |config|
     OmniAuth.config.mock_auth[:cas] = nil
     Rails.application.env_config["devise.mapping"] = Devise.mappings[:user] # If using Devise
     Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:twitter]
+    stub_request(:get, Devise.omniauth_configs[:cas].strategy.url).to_return(status: 200, body: "", headers: {})
   end
 end
