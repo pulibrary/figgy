@@ -9,7 +9,7 @@ class CollectionDecorator < Valkyrie::ResourceDecorator
   end
 
   def members
-    @members ||= query_service.find_inverse_references_by(resource: self, property: :member_of_collection_ids).to_a
+    @members ||= query_service.find_inverse_references_by(resource: model, property: :member_of_collection_ids).to_a
   end
 
   # Nested collections are not currently supported

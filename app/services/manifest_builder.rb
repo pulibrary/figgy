@@ -19,11 +19,12 @@ class ManifestBuilder
   # Presenter modeling the Resource subjects as root nodes
   class RootNode
     def self.for(resource)
-      if resource.is_a?(Collection)
+      case resource
+      when Collection
         CollectionNode.new(resource)
-      elsif resource.is_a?(IndexCollection)
+      when IndexCollection
         IndexCollectionNode.new(resource)
-      elsif resource.is_a?(ScannedMap)
+      when ScannedMap
         ScannedMapNode.new(resource)
       else
         new(resource)
@@ -48,7 +49,12 @@ class ManifestBuilder
     end
 
     def description
-      value = resource.respond_to?(:primary_imported_metadata) ? resource.primary_imported_metadata.description : resource.description
+      value = if resource.respond_to?(:primary_imported_metadata)
+                resource.primary_imported_metadata.try(:description)
+              else
+                resource.try(:description)
+              end
+
       Array.wrap(value).first
     end
 
@@ -106,7 +112,7 @@ class ManifestBuilder
       # Retrieve the child members for the subject resource of the Manifest
       # @return [Resource]
       def members
-        @members ||= query_service.find_members(resource: resource).to_a
+        @members ||= decorate.members
       end
 
       ##
@@ -136,30 +142,18 @@ class ManifestBuilder
       []
     end
 
-    def members
-      @members ||= query_service.find_inverse_references_by(resource: resource, property: :member_of_collection_ids).to_a
-    end
-
-    def viewing_hint
-      nil
-    end
-
     def description
       resource.description
     end
-  end
-
-  class IndexCollectionNode < RootNode
-    def file_set_presenters
-      []
-    end
-
-    def members
-      @members ||= query_service.find_all_of_model(model: Collection).to_a
-    end
 
     def viewing_hint
-      nil
+      'multi-part'
+    end
+  end
+
+  class IndexCollectionNode < CollectionNode
+    def members
+      @members ||= query_service.find_all_of_model(model: Collection).to_a
     end
 
     def manifest_url
@@ -172,6 +166,10 @@ class ManifestBuilder
 
     def description
       "All collections which are a part of Plum."
+    end
+
+    def id
+      nil
     end
   end
 
@@ -328,8 +326,11 @@ class ManifestBuilder
     end
 
     def manifest_url(resource)
-      if resource.is_a?(Collection)
+      case resource
+      when Collection
         "#{protocol}://#{host}/collections/#{resource.id}/manifest"
+      when FileSet
+        "#{protocol}://#{host}/concern/#{resource.decorate.parent.model_name.plural}/#{resource.decorate.parent.id}/manifest"
       else
         "#{protocol}://#{host}/concern/#{resource.model_name.plural}/#{resource.id}/manifest"
       end

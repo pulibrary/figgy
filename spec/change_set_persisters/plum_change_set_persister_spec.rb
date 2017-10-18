@@ -237,13 +237,13 @@ RSpec.describe PlumChangeSetPersister do
       expect(updated_file_node.updated_at).to be > updated_file_node.created_at
     end
 
-    context 'with a messaging service' do
+    context 'with a messaging service for scanned resources' do
       let(:rabbit_connection) { instance_double(MessagingClient, publish: true) }
       let(:change_set_persister) do
         described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: false)
       end
-      let(:resource) { FactoryGirl.build(:ephemera_folder) }
-      let(:change_set) { EphemeraFolderChangeSet.new(resource, characterize: false) }
+      let(:resource) { FactoryGirl.build(:scanned_resource) }
+      let(:change_set) { ScannedResourceChangeSet.new(resource, characterize: false) }
 
       before do
         allow(Figgy).to receive(:messaging_client).and_return(rabbit_connection)
@@ -251,10 +251,6 @@ RSpec.describe PlumChangeSetPersister do
       end
 
       it 'publishes messages for updated file sets', run_real_derivatives: false, rabbit_stubbed: true do
-        resource = FactoryGirl.build(:scanned_resource)
-        change_set = change_set_class.new(resource, characterize: false)
-        change_set.files = [file1]
-
         output = change_set_persister.save(change_set: change_set)
         file_set = query_service.find_members(resource: output).first
 
@@ -281,7 +277,7 @@ RSpec.describe PlumChangeSetPersister do
         expected_result = {
           "id" => output.id.to_s,
           "event" => "UPDATED",
-          "manifest_url" => "http://www.example.com/concern/ephemera_folders/#{output.id}/manifest",
+          "manifest_url" => "http://www.example.com/concern/scanned_resources/#{output.id}/manifest",
           "collection_slugs" => []
         }
 
@@ -290,7 +286,84 @@ RSpec.describe PlumChangeSetPersister do
         fs_expected_result = {
           "id" => fs_output.id.to_s,
           "event" => "CREATED",
-          "manifest_url" => "",
+          "manifest_url" => "http://www.example.com/concern/scanned_resources/#{output.id}/manifest",
+          "collection_slugs" => []
+        }
+
+        expect(rabbit_connection).to have_received(:publish).at_least(:once).with(fs_expected_result.to_json)
+      end
+
+      it 'publishes messages for deletion', run_real_derivatives: false, rabbit_stubbed: true do
+        output = change_set_persister.save(change_set: change_set)
+        updated_change_set = ScannedResourceChangeSet.new(output)
+        change_set_persister.delete(change_set: updated_change_set)
+
+        expected_result = {
+          "id" => output.id.to_s,
+          "event" => "DELETED",
+          "manifest_url" => "http://www.example.com/concern/scanned_resources/#{output.id}/manifest"
+        }
+
+        expect(rabbit_connection).to have_received(:publish).at_least(:once).with(expected_result.to_json)
+      end
+    end
+
+    context 'with a messaging service for Ephemera Folder' do
+      let(:rabbit_connection) { instance_double(MessagingClient, publish: true) }
+      let(:change_set_persister) do
+        described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: false)
+      end
+      let(:resource) { FactoryGirl.build(:ephemera_folder) }
+      let(:change_set) { EphemeraFolderChangeSet.new(resource, characterize: false) }
+
+      before do
+        allow(Figgy).to receive(:messaging_client).and_return(rabbit_connection)
+        change_set.files = [file1]
+      end
+
+      it 'publishes messages for updated file sets', run_real_derivatives: false, rabbit_stubbed: true do
+        output = change_set_persister.save(change_set: change_set)
+        ephemera_box = FactoryGirl.create_for_repository(:ephemera_box, member_ids: [output.id])
+        ephemera_project = FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id])
+
+        file_set = query_service.find_members(resource: output).first
+
+        change_set = FileSetChangeSet.new(file_set)
+        change_set_persister.save(change_set: change_set)
+
+        expected_result = {
+          "id" => output.id.to_s,
+          "event" => "UPDATED",
+          "manifest_url" => "http://www.example.com/concern/ephemera_folders/#{output.id}/manifest",
+          "collection_slugs" => [ephemera_project.decorate.slug]
+        }
+
+        expect(rabbit_connection).to have_received(:publish).at_least(:once).with(expected_result.to_json)
+      end
+
+      it 'publishes messages for updates and creating file sets', run_real_derivatives: false, rabbit_stubbed: true do
+        output = change_set_persister.save(change_set: change_set)
+        ephemera_box = FactoryGirl.create_for_repository(:ephemera_box, member_ids: [output.id])
+        ephemera_project = FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id])
+
+        file_set = query_service.find_members(resource: output).first
+
+        fs_change_set = FileSetChangeSet.new(file_set)
+        fs_output = change_set_persister.save(change_set: fs_change_set)
+
+        expected_result = {
+          "id" => output.id.to_s,
+          "event" => "UPDATED",
+          "manifest_url" => "http://www.example.com/concern/ephemera_folders/#{output.id}/manifest",
+          "collection_slugs" => [ephemera_project.decorate.slug]
+        }
+
+        expect(rabbit_connection).to have_received(:publish).at_least(:once).with(expected_result.to_json)
+
+        fs_expected_result = {
+          "id" => fs_output.id.to_s,
+          "event" => "CREATED",
+          "manifest_url" => "http://www.example.com/concern/ephemera_folders/#{output.id}/manifest",
           "collection_slugs" => []
         }
 
@@ -308,7 +381,51 @@ RSpec.describe PlumChangeSetPersister do
           "manifest_url" => "http://www.example.com/concern/ephemera_folders/#{output.id}/manifest"
         }
 
+        expect(rabbit_connection).to have_received(:publish).once.with(expected_result.to_json)
+      end
+    end
+
+    context 'with an Ephemera Box' do
+      let(:rabbit_connection) { instance_double(MessagingClient, publish: true) }
+      let(:change_set_persister) do
+        described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: false)
+      end
+      let(:resource) { FactoryGirl.create_for_repository(:ephemera_box) }
+      let(:change_set) { EphemeraBoxChangeSet.new(resource, characterize: false) }
+
+      before do
+        allow(Figgy).to receive(:messaging_client).and_return(rabbit_connection)
+      end
+
+      it 'publishes messages for updated properties', run_real_derivatives: false, rabbit_stubbed: true do
+        output = change_set_persister.save(change_set: change_set)
+        ephemera_project = FactoryGirl.create_for_repository(:ephemera_project, member_ids: [output.id])
+
+        change_set = EphemeraBoxChangeSet.new(output, tracking_number: '23456')
+        change_set_persister.save(change_set: change_set)
+
+        expected_result = {
+          "id" => output.id.to_s,
+          "event" => "UPDATED",
+          "manifest_url" => "http://www.example.com/concern/ephemera_boxes/#{output.id}/manifest",
+          "collection_slugs" => [ephemera_project.decorate.slug]
+        }
+
         expect(rabbit_connection).to have_received(:publish).at_least(:once).with(expected_result.to_json)
+      end
+
+      it 'publishes messages for deletion', run_real_derivatives: false, rabbit_stubbed: true do
+        output = change_set_persister.save(change_set: change_set)
+        updated_change_set = EphemeraBoxChangeSet.new(output)
+        change_set_persister.delete(change_set: updated_change_set)
+
+        expected_result = {
+          "id" => output.id.to_s,
+          "event" => "DELETED",
+          "manifest_url" => "http://www.example.com/concern/ephemera_boxes/#{output.id}/manifest"
+        }
+
+        expect(rabbit_connection).to have_received(:publish).once.with(expected_result.to_json)
       end
     end
   end

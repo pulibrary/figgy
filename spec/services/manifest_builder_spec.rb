@@ -161,4 +161,24 @@ RSpec.describe ManifestBuilder do
       expect(output["sequences"][0]["canvases"][0]["images"].length).to eq 1
     end
   end
+  context "when given an ephemera project" do
+    subject(:manifest_builder) { described_class.new(query_service.find_by(id: ephemera_project.id)) }
+    let(:ephemera_project) do
+      FactoryGirl.create_for_repository(:ephemera_project)
+    end
+    let(:change_set) { EphemeraProjectChangeSet.new(ephemera_project) }
+    before do
+      output = change_set_persister.save(change_set: change_set)
+      change_set = EphemeraProjectChangeSet.new(output)
+      change_set.sync
+      change_set_persister.save(change_set: change_set)
+    end
+    it "builds a IIIF document" do
+      output = manifest_builder.build
+      expect(output).to be_kind_of Hash
+      expect(output["metadata"]).to be_kind_of Array
+      expect(output["metadata"]).not_to be_empty
+      expect(output["metadata"].first).to include "label" => "Exhibit", "value" => ephemera_project.decorate.slug
+    end
+  end
 end

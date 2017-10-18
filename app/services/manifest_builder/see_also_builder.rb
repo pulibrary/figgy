@@ -18,7 +18,7 @@ class ManifestBuilder
 
       def see_also
         return figgy_rdf_hash unless resource.respond_to?(:source_metadata_identifier)
-        source_metadata_hash.blank? ? figgy_rdf_hash : [figgy_rdf_hash, source_metadata_hash]
+        source_metadata_hash.nil? ? figgy_rdf_hash : [figgy_rdf_hash, source_metadata_hash]
       end
 
       def source_metadata_hash
@@ -34,6 +34,7 @@ class ManifestBuilder
       end
 
       def figgy_rdf_hash
+        return if resource.id.nil?
         {
           "@id" => helper.solr_document_url(id: resource.id, format: :jsonld),
           "format" => "application/ld+json"

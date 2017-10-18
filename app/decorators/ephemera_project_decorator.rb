@@ -2,6 +2,10 @@
 class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
   self.display_attributes = [:title]
 
+  def members
+    @members ||= query_service.find_members(resource: model).to_a
+  end
+
   def boxes
     @boxes ||= members.select { |r| r.is_a?(EphemeraBox) }.map(&:decorate).to_a
   end
@@ -25,4 +29,20 @@ class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
   def title
     super.first
   end
+
+  def slug
+    Array.wrap(super).first
+  end
+
+  def iiif_manifest_attributes
+    local_attributes(self.class.iiif_manifest_attributes).merge iiif_manifest_exhibit
+  end
+
+  private
+
+    # Generate the Hash for the IIIF Manifest metadata exposing the slug as an "Exhibit" property
+    # @return [Hash] the exhibit metadata hash
+    def iiif_manifest_exhibit
+      { exhibit: slug }
+    end
 end

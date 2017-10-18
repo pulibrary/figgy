@@ -119,8 +119,7 @@ RSpec.describe EphemeraFoldersController do
         resource = FactoryGirl.create_for_repository(:ephemera_folder)
         FactoryGirl.create_for_repository(:ephemera_box, member_ids: resource.id, state: "all_in_production")
 
-        expect { get :manifest, params: { id: resource.id.to_s, format: :json } }
-          .not_to raise_error
+        expect { get :manifest, params: { id: resource.id.to_s, format: :json } }.not_to raise_error
       end
     end
   end

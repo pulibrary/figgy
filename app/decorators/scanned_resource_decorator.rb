@@ -6,6 +6,10 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
                                   Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]
   delegate(*Schema::Common.attributes, to: :primary_imported_metadata, prefix: :imported)
 
+  def members
+    @members ||= query_service.find_members(resource: model).to_a
+  end
+
   def volumes
     @volumes ||= members.select { |r| r.is_a?(ScannedResource) }.map(&:decorate).to_a
   end
@@ -64,6 +68,10 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
     Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_references_by(resource: self, property: :member_of_collection_ids).to_a
   end
   alias collections parents
+
+  def collection_slugs
+    @collection_slugs ||= collections.map(&:slug)
+  end
 
   def display_imported_language
     (imported_language || []).map do |language|

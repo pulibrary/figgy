@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class ManifestEventGenerator
   attr_reader :rabbit_exchange
+
   def initialize(rabbit_exchange)
     @rabbit_exchange = rabbit_exchange
   end
@@ -26,7 +27,7 @@ class ManifestEventGenerator
   private
 
     def manifest_url(record)
-      helper.polymorphic_url([:manifest, record])
+      helper.manifest_url(record)
     rescue
       ''
     end
@@ -39,11 +40,14 @@ class ManifestEventGenerator
       }
     end
 
+    def collection_slugs_for(resource)
+      return [] unless resource.decorate.try(:collection_slugs)
+      resource.decorate.collection_slugs.compact
+    end
+
     def message_with_collections(type, record)
       output = message(type, record)
-      if record.decorate.respond_to? :collections
-        output["collection_slugs"] = record.decorate.collections.map { |collection| collection.try(:slug) }.compact
-      end
+      output["collection_slugs"] = collection_slugs_for record
       output
     end
 

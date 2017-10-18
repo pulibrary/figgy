@@ -36,7 +36,8 @@ RSpec.describe EphemeraProjectsController do
     let(:user) { FactoryGirl.create(:admin) }
     let(:valid_params) do
       {
-        title: ['Project 1']
+        title: ['Project 1'],
+        slug: ['test-project-1234']
       }
     end
     let(:invalid_params) do
@@ -166,7 +167,7 @@ RSpec.describe EphemeraProjectsController do
     context "when it does exist" do
       it "saves it and redirects" do
         ephemera_project = FactoryGirl.create_for_repository(:ephemera_project)
-        patch :update, params: { id: ephemera_project.id.to_s, ephemera_project: { title: ["Two"] } }
+        patch :update, params: { id: ephemera_project.id.to_s, ephemera_project: { title: ["Two"], slug: ["updated-slug"] } }
 
         expect(response).to be_redirect
         expect(response.location).to eq "http://test.host/catalog/#{ephemera_project.id}"
@@ -174,12 +175,49 @@ RSpec.describe EphemeraProjectsController do
         reloaded = find_resource(id)
 
         expect(reloaded.title).to eq ["Two"]
+        expect(reloaded.slug).to eq ["updated-slug"]
       end
       it "renders the form if it fails validations" do
         ephemera_project = FactoryGirl.create_for_repository(:ephemera_project)
         patch :update, params: { id: ephemera_project.id.to_s, ephemera_project: { title: nil } }
 
         expect(response).to render_template "valhalla/base/edit"
+      end
+    end
+  end
+
+  describe "GET /concern/ephemera_project/:id/manifest", manifest: true do
+    let(:ephemera_project) { FactoryGirl.create_for_repository(:ephemera_project) }
+
+    it "returns a IIIF manifest for an ephemera project", manifest: true do
+      get :manifest, params: { id: ephemera_project.id.to_s, format: :json }
+      manifest_response = MultiJson.load(response.body, symbolize_keys: true)
+
+      expect(response.headers["Content-Type"]).to include "application/json"
+      expect(manifest_response[:metadata]).not_to be_empty
+      expect(manifest_response[:metadata][0]).to include label: 'Exhibit', value: ephemera_project.decorate.slug
+    end
+
+    context 'when the project has boxes' do
+      let(:ephemera_box1) { FactoryGirl.create_for_repository(:ephemera_box) }
+      let(:ephemera_box2) { FactoryGirl.create_for_repository(:ephemera_box) }
+      let(:ephemera_project) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_box1.id, ephemera_box2.id]) }
+
+      before do
+        ephemera_box1
+        ephemera_box2
+      end
+
+      it "returns manifests for the ephemera boxes", manifest: true do
+        get :manifest, params: { id: ephemera_project.id.to_s, format: :json }
+        manifest_response = MultiJson.load(response.body, symbolize_keys: true)
+
+        expect(response.headers["Content-Type"]).to include "application/json"
+        expect(manifest_response[:metadata]).not_to be_empty
+        expect(manifest_response[:metadata][0]).to include label: 'Exhibit', value: ephemera_project.decorate.slug
+        expect(manifest_response[:manifests].length).to eq 2
+        expect(manifest_response[:manifests][0][:@id]).to eq "http://www.example.com/concern/ephemera_boxes/#{ephemera_box1.id}/manifest"
+        expect(manifest_response[:manifests][1][:@id]).to eq "http://www.example.com/concern/ephemera_boxes/#{ephemera_box2.id}/manifest"
       end
     end
   end
