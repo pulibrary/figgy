@@ -11,7 +11,7 @@ class Valhalla::DownloadsController < ApplicationController
   end
 
   def resource
-    @resource ||= query_service.find_by(id: params[:resource_id])
+    @resource ||= query_service.find_by(id: Valkyrie::ID.new(params[:resource_id]))
   rescue Valkyrie::Persistence::ObjectNotFoundError
     nil
   end
