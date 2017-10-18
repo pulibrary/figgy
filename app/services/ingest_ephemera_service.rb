@@ -137,7 +137,7 @@ class IngestEphemeraService
     end
 
     def page_identifiers
-      page_folder_hash[File.basename(folder_dir)].sort
+      page_folder_hash.fetch(File.basename(folder_dir), []).sort
     end
 
     def read_hash(filename)

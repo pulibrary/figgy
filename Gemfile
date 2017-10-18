@@ -13,6 +13,7 @@ gem "pg"
 gem "puma"
 gem "rails", "5.1.1"
 gem "recipient_interceptor"
+gem 'redis-namespace'
 gem "sass-rails", "~> 5.0"
 gem "simple_form"
 gem "sprockets", ">= 3.0.0"
