@@ -106,13 +106,12 @@ class DataSeeder
   end
 
   def add_member(parent:, member:)
-    parent_change_set = DynamicChangeSet.new(parent)
-    parent_change_set.prepopulate!
-    parent_change_set.member_ids << member.id
-    raise "Could not update #{parent}!" unless parent_change_set.validate(member_ids: parent_change_set.member_ids)
-    parent_change_set.sync
-    updated_parent = change_set_persister.save(change_set: parent_change_set)
-    logger.info "Added #{member.class} #{member.id} to #{parent.class} #{updated_parent.title || updated_parent.box_number}"
+    member_change_set = DynamicChangeSet.new(member)
+    member_change_set.prepopulate!
+    member_change_set.append_id = parent.id
+    member_change_set.sync
+    change_set_persister.save(change_set: member_change_set)
+    logger.info "Added #{member.class} #{member.id} to #{parent.class} #{parent.title || parent.box_number}"
   end
 
   def add_ephemera_box(project)
