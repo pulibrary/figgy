@@ -593,6 +593,8 @@ GEM
     recipient_interceptor (0.1.2)
       mail
     redis (3.3.3)
+    redis-namespace (1.5.3)
+      redis (~> 3.0, >= 3.0.4)
     reform (2.2.4)
       disposable (>= 0.4.1)
       representable (>= 2.4.0, < 3.1.0)
@@ -822,6 +824,7 @@ DEPENDENCIES
   rails-assets-jqueryui-timepicker-addon!
   rails-controller-testing
   recipient_interceptor
+  redis-namespace
   riiif
   rsolr (>= 1.0)
   rspec-rails (~> 3.5)
