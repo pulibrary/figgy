@@ -7,6 +7,5 @@ test:
 production: &production
   host: <%= ENV['FIGGY_REDIS_URL'] || 'localhost' %>
   port: <%= ENV['FIGGY_REDIS_PORT'] || '6379' %>
-  namespace: 'figgy'
 staging:
   <<: *production
