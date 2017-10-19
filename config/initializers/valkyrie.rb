@@ -72,6 +72,7 @@ Rails.application.config.to_prepare do
         FacetIndexer,
         ProjectIndexer,
         HumanReadableTypeIndexer,
+        SortingIndexer,
         ImportedMetadataIndexer
       )
     ),

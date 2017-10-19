@@ -49,6 +49,15 @@ class CatalogController < ApplicationController
     config.show.partials += [:terms]
     config.index.thumbnail_method = :figgy_thumbnail_path
     config.show.document_presenter_class = ValkyrieShowPresenter
+
+    # "sort results by" options
+    config.add_sort_field "score desc, updated_at_dtsi desc", label: "relevance \u25BC"
+    config.add_sort_field "title_ssort asc", label: "title (A-Z)"
+    config.add_sort_field "title_ssort desc", label: "title (Z-A)"
+    config.add_sort_field "created_at_dtsi desc", label: "date created \u25BC"
+    config.add_sort_field "created_at_dtsi asc", label: "date created \u25B2"
+    config.add_sort_field "updated_at_dtsi desc", label: "date modified \u25BC"
+    config.add_sort_field "updated_at_dtsi asc", label: "date modified \u25B2"
   end
 
   def admin?

@@ -70,6 +70,16 @@ RSpec.describe CatalogController do
 
       expect(assigns(:document_list).length).to eq 1
     end
+    it "can sort by title" do
+      persister.save(resource: FactoryGirl.build(:scanned_resource, title: "Resource A"))
+      persister.save(resource: FactoryGirl.build(:scanned_resource, title: "Resource B"))
+
+      get :index, params: { q: "resource", sort: "title_ssort asc" }
+      expect(assigns(:document_list).map { |r| r.resource.title.first }).to eq(["Resource A", "Resource B"])
+
+      get :index, params: { q: "resource", sort: "title_ssort desc" }
+      expect(assigns(:document_list).map { |r| r.resource.title.first }).to eq(["Resource B", "Resource A"])
+    end
   end
 
   describe "FileSet behavior" do
