@@ -133,6 +133,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
 
   def categories
     subject.map do |value|
+      value = value.decorate if value.is_a? EphemeraTerm
       next unless value.is_a? EphemeraTermDecorator
       value.vocabulary
     end.reject(&:nil?)

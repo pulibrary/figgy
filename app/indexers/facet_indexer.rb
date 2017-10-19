@@ -29,7 +29,7 @@ class FacetIndexer
     terms.concat(decorated_resource.categories) if decorated_resource.try(:categories)
     terms.map do |term|
       term.respond_to?(:label) ? term.label : term
-    end
+    end.uniq
   end
 
   def language_terms
@@ -37,7 +37,7 @@ class FacetIndexer
     terms.concat(decorated_resource.language) if decorated_resource.try(:language)
     terms.map do |term|
       term.respond_to?(:label) ? term.label : term
-    end
+    end.uniq
   end
 
   def decorated_resource
