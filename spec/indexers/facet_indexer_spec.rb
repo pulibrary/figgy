@@ -14,17 +14,18 @@ RSpec.describe FacetIndexer do
       end
     end
     context "when the resource has only local metadata" do
-      let(:vocabulary) { FactoryGirl.create(:ephemera_vocabulary, label: 'Egg Creatures') }
-      let(:language) { FactoryGirl.create(:ephemera_term, label: 'English') }
+      let(:vocabulary) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'Large vocabulary') }
+      let(:category) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'Egg Creatures', member_of_vocabulary_id: [vocabulary.id]) }
+      let(:language) { FactoryGirl.create_for_repository(:ephemera_term, label: 'English', member_of_vocabulary_id: [vocabulary.id]) }
       let(:subject_terms) do
-        [FactoryGirl.create(:ephemera_term, label: 'Birdo', member_of_vocabulary_id: vocabulary.id),
-         FactoryGirl.create(:ephemera_term, label: 'Yoshi', member_of_vocabulary_id: vocabulary.id)]
+        [FactoryGirl.create_for_repository(:ephemera_term, label: 'Birdo', member_of_vocabulary_id: [category.id]),
+         FactoryGirl.create_for_repository(:ephemera_term, label: 'Yoshi', member_of_vocabulary_id: [category.id])]
       end
       it "indexes subject, language" do
-        folder = FactoryGirl.create(:ephemera_folder, subject: subject_terms, language: language)
+        folder = FactoryGirl.create_for_repository(:ephemera_folder, subject: subject_terms, language: language)
         output = described_class.new(resource: folder).to_solr
 
-        expect(output[:display_subject_ssim]).to contain_exactly("Birdo", "Yoshi")
+        expect(output[:display_subject_ssim]).to contain_exactly("Birdo", "Yoshi", "Egg Creatures")
         expect(output[:display_language_ssim]).to contain_exactly("English")
       end
     end
