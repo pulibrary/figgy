@@ -60,7 +60,7 @@ class DataSeeder
 
   def generate_ephemera_project(n_folders: 3)
     load_vocabs
-    ep = EphemeraProject.new(title: "An Ephemera Project")
+    ep = EphemeraProject.new(title: "An Ephemera Project", slug: 'test-project')
     ep = persister.save(resource: ep)
     logger.info "Created ephemera project #{ep.id}: #{ep.title}"
     add_ephemera_fields(ep)

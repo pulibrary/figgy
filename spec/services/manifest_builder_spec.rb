@@ -138,6 +138,7 @@ RSpec.describe ManifestBuilder do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
       expect(output["@type"]).to eq "sc:Collection"
+      expect(output["viewingHint"]).to eq "multi-part"
       expect(output["manifests"].length).to eq 1
       expect(output["manifests"][0]["@id"]).to eq "http://www.example.com/concern/scanned_resources/#{child.id}/manifest"
     end
@@ -179,7 +180,7 @@ RSpec.describe ManifestBuilder do
       expect(output).to be_kind_of Hash
       expect(output["metadata"]).to be_kind_of Array
       expect(output["metadata"]).not_to be_empty
-      expect(output["metadata"].first).to include "label" => "Exhibit", "value" => ephemera_project.decorate.slug
+      expect(output["metadata"].first).to include "label" => "Exhibit", "value" => [ephemera_project.decorate.slug]
     end
   end
 

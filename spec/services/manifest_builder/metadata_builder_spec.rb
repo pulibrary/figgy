@@ -48,7 +48,7 @@ RSpec.describe ManifestBuilder::MetadataBuilder do
 
       it 'appends the transformed metadata to the Manifest' do
         expect(manifest.metadata).to be_an Array
-        expect(manifest.metadata).to include label: "Exhibit", value: "lae-d957"
+        expect(manifest.metadata).to include label: "Exhibit", value: ["lae-d957"]
       end
     end
   end
