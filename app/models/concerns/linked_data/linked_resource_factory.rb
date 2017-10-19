@@ -15,8 +15,6 @@ module LinkedData
         LinkedEphemeraVocabulary.new(resource: resource_node)
       when EphemeraTerm
         LinkedEphemeraTerm.new(resource: resource_node)
-      when String
-        LinkedNode.new(resource: resource_node)
       when NilClass
         Literal.new(value: resource_node)
       else

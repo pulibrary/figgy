@@ -16,8 +16,23 @@ module LinkedData
     end
 
     def as_json
-      resource.respond_to?(:uri) ? RDF::URI(Array.wrap(resource.uri).first).as_json : RDF::URI(resource).as_json
+      resource.respond_to?(:uri) ? embedded_resource(resource) : RDF::URI(resource).as_json
     end
     alias without_context as_json
+
+    def embedded_resource(resource)
+      if resource.is_a?(EphemeraVocabularyDecorator)
+        resource.label
+      else
+        {
+          "@id" => resource.h.polymorphic_url(resource),
+          "@type" => "skos:Concept",
+          "pref_label" => resource.label,
+          "exact_match" => {
+            "@id" => resource.uri
+          }
+        }
+      end
+    end
   end
 end

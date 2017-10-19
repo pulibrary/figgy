@@ -43,15 +43,6 @@ module LinkedData
       }.reject { |_, v| v.nil? || v.try(:empty?) }
     end
 
-    def as_json(_options = nil)
-      imported_jsonld.merge(local_fields)
-    end
-
-    def without_context(values = nil)
-      values ||= as_json
-      values.reject { |k, _| k == :'@context' }
-    end
-
     def to_jsonld
       imported_jsonld.merge(local_fields).to_json
     end
