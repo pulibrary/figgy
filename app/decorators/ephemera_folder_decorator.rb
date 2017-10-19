@@ -131,13 +131,13 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   def rendered_subject
     subject.map do |value|
       value = value.decorate if value.is_a? EphemeraTerm
-      display = [
-        link_to_facet_search(field: 'display_subject_ssim', value: value.vocabulary.label),
-        " -- ",
-        link_to_facet_search(field: 'display_subject_ssim', value: value.label)
-      ]
+      linked_category = link_to_facet_search(field: 'display_subject_ssim', value: value.vocabulary.label)
       # Don't link to both if they're the same
-      value.label == value.vocabulary.label ? display[0] : display.join.html_safe
+      if value.label == value.vocabulary.label
+        linked_category
+      else
+        "#{linked_category} -- #{link_to_facet_search(field: 'display_subject_ssim', value: value.label)}".html_safe
+      end
     end
   end
 
