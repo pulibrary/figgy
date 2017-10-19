@@ -23,7 +23,7 @@ class ManifestBuilder
       when Collection
         CollectionNode.new(resource)
       when EphemeraProject
-        CollectionNode.new(resource)
+        EphemeraProjectNode.new(resource)
       when IndexCollection
         IndexCollectionNode.new(resource)
       when ScannedMap
@@ -119,7 +119,7 @@ class ManifestBuilder
       # Retrieve the child members for the subject resource of the Manifest
       # @return [Resource]
       def members
-        @members ||= decorate.members
+        @members ||= decorate.members.to_a
       end
 
       ##
@@ -154,6 +154,12 @@ class ManifestBuilder
     end
 
     def viewing_hint; end
+  end
+
+  class EphemeraProjectNode < CollectionNode
+    def members
+      @members ||= query_service.custom_queries.find_project_folders(resource: resource).to_a
+    end
   end
 
   class IndexCollectionNode < CollectionNode

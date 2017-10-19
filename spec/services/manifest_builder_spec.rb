@@ -166,21 +166,23 @@ RSpec.describe ManifestBuilder do
   context "when given an ephemera project" do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: ephemera_project.id)) }
     let(:ephemera_project) do
-      FactoryGirl.create_for_repository(:ephemera_project)
+      FactoryGirl.create_for_repository(:ephemera_project, member_ids: [box.id, ephemera_term.id, folder2.id])
     end
+    let(:ephemera_term) { FactoryGirl.create_for_repository(:ephemera_term) }
+    let(:box) { FactoryGirl.create_for_repository(:ephemera_box, member_ids: folder.id) }
+    let(:folder) { FactoryGirl.create_for_repository(:ephemera_folder) }
+    let(:folder2) { FactoryGirl.create_for_repository(:ephemera_folder, member_ids: folder3.id) }
+    let(:folder3) { FactoryGirl.create_for_repository(:ephemera_folder) }
     let(:change_set) { EphemeraProjectChangeSet.new(ephemera_project) }
-    before do
-      output = change_set_persister.save(change_set: change_set)
-      change_set = EphemeraProjectChangeSet.new(output)
-      change_set.sync
-      change_set_persister.save(change_set: change_set)
-    end
     it "builds a IIIF document" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
       expect(output["metadata"]).to be_kind_of Array
       expect(output["metadata"]).not_to be_empty
       expect(output["metadata"].first).to include "label" => "Exhibit", "value" => [ephemera_project.decorate.slug]
+      expect(output["manifests"][0]["@id"]).to eq "http://www.example.com/concern/ephemera_folders/#{folder.id}/manifest"
+      expect(output["manifests"][1]["@id"]).to eq "http://www.example.com/concern/ephemera_folders/#{folder2.id}/manifest"
+      expect(output["manifests"].length).to eq 2
     end
   end
 

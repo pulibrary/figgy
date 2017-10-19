@@ -198,9 +198,10 @@ RSpec.describe EphemeraProjectsController do
       expect(manifest_response[:metadata][0]).to include label: 'Exhibit', value: [ephemera_project.decorate.slug]
     end
 
-    context 'when the project has boxes' do
-      let(:ephemera_box1) { FactoryGirl.create_for_repository(:ephemera_box) }
+    context 'when the project has folders' do
+      let(:ephemera_box1) { FactoryGirl.create_for_repository(:ephemera_box, member_ids: folder1.id) }
       let(:ephemera_box2) { FactoryGirl.create_for_repository(:ephemera_box) }
+      let(:folder1) { FactoryGirl.create_for_repository(:ephemera_folder) }
       let(:ephemera_project) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_box1.id, ephemera_box2.id]) }
 
       before do
@@ -215,9 +216,8 @@ RSpec.describe EphemeraProjectsController do
         expect(response.headers["Content-Type"]).to include "application/json"
         expect(manifest_response[:metadata]).not_to be_empty
         expect(manifest_response[:metadata][0]).to include label: 'Exhibit', value: [ephemera_project.decorate.slug]
-        expect(manifest_response[:manifests].length).to eq 2
-        expect(manifest_response[:manifests][0][:@id]).to eq "http://www.example.com/concern/ephemera_boxes/#{ephemera_box1.id}/manifest"
-        expect(manifest_response[:manifests][1][:@id]).to eq "http://www.example.com/concern/ephemera_boxes/#{ephemera_box2.id}/manifest"
+        expect(manifest_response[:manifests].length).to eq 1
+        expect(manifest_response[:manifests][0][:@id]).to eq "http://www.example.com/concern/ephemera_folders/#{folder1.id}/manifest"
       end
     end
   end
