@@ -65,6 +65,8 @@ en:
             label: "SHA-256"
           rendered_date_range:
             label: "Date Range"
+          rendered_subject:
+            label: "Subject"
           rights_statement:
             pdf_boilerplate: |
               Princeton University Library claims no copyright governing this digital resource. It is provided for free, on a non-commercial, open-access basis, for fair-use academic and research purposes only. Anyone who claims copyright over any part of these resources and feels that they should not be presented in this manner is invited to contact Princeton University Library, who will in turn consider such concerns and make every effort to respond appropriately.

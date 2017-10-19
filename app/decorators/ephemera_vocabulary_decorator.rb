@@ -55,6 +55,7 @@ class EphemeraVocabularyDecorator < Valkyrie::ResourceDecorator
       end
   end
 
+  # a category is just a nested vocabulary
   def categories
     @categories ||=
       find_references.select { |r| r.is_a?(EphemeraVocabulary) }

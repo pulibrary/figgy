@@ -17,8 +17,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     :contributor,
     :publisher,
     :geographic_origin,
-    :subject,
-    :categories,
+    :rendered_subject,
     :geo_subject,
     :description,
     :date_created,
@@ -29,7 +28,8 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     :visibility,
     :rendered_rights_statement
   ]
-  self.iiif_manifest_attributes = display_attributes + [:title] - \
+  self.iiif_manifest_attributes = display_attributes + \
+                                  [:subject, :categories] - \
                                   imported_attributes(Schema::Common.attributes) - \
                                   Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]
 
@@ -127,6 +127,20 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     super.map { |value| controlled_value_for(value) }
   end
 
+  # Provide "Category -- Subject" with each linked to faceted search results
+  def rendered_subject
+    subject.map do |value|
+      value = value.decorate if value.is_a? EphemeraTerm
+      display = [
+        link_to_facet_search(field: 'display_subject_ssim', value: value.vocabulary.label),
+        " -- ",
+        link_to_facet_search(field: 'display_subject_ssim', value: value.label)
+      ]
+      # Don't link to both if they're the same
+      value.label == value.vocabulary.label ? display[0] : display.join.html_safe
+    end
+  end
+
   def subject
     super.map { |value| controlled_value_for(value) }
   end
@@ -150,5 +164,11 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
 
     def controlled_value_for(value)
       value.present? && value.is_a?(Valkyrie::ID) ? find_resource(value) : value
+    end
+
+    def link_to_facet_search(field:, value:)
+      # I'm not sure why we can't use catalog_path. but root_path is essentially the same
+      query = { "f[#{field}][]" => value }.to_param
+      h.link_to value, "#{h.root_path}?#{query}"
     end
 end

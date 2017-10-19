@@ -40,6 +40,19 @@ RSpec.describe EphemeraFolderDecorator do
       end
     end
   end
+  context 'with subjects and categories' do
+    let(:category) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'Art and Culture') }
+    let(:subject_term) { FactoryGirl.create_for_repository(:ephemera_term, label: 'Architecture', member_of_vocabulary_id: category.id) }
+    let(:category2) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'Economics') }
+    let(:subject_term2) { FactoryGirl.create_for_repository(:ephemera_term, label: 'Economics', member_of_vocabulary_id: category2.id) }
+    let(:resource) { FactoryGirl.build(:ephemera_folder, subject: [subject_term, subject_term2]) }
+    it 'provides links to facets' do
+      expect(resource.decorate.rendered_subject).to contain_exactly(
+        "<a href=\"/?f%5Bdisplay_subject_ssim%5D%5B%5D=Art+and+Culture\">Art and Culture</a> -- <a href=\"/?f%5Bdisplay_subject_ssim%5D%5B%5D=Architecture\">Architecture</a>",
+        "<a href=\"/?f%5Bdisplay_subject_ssim%5D%5B%5D=Economics\">Economics</a>"
+      )
+    end
+  end
   context 'with collections' do
     let(:collection) { FactoryGirl.create_for_repository(:collection) }
     let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, member_of_collection_ids: [collection.id]) }
