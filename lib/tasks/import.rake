@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 namespace :import do
-  desc "Imports an ID from Plum"
+  desc "Imports a resource from Plum"
   task plum: :environment do
     id = ENV['ID']
     abort "usage: rake import:plum ID=plumid" unless id
