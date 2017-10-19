@@ -12,7 +12,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       it 'exposes the values as JSON-LD Objects' do
         expect(linked_ephemera_folder.geo_subject).not_to be_empty
         expect(linked_ephemera_folder.geo_subject.first).to eq(
-          "@id" => "http://test.host/concern/ephemera_terms/#{ephemera_term.id}",
+          "@id" => "http://www.example.com/concern/ephemera_terms/#{ephemera_term.id}",
           "@type" => "skos:Concept",
           "pref_label" => ephemera_term.label,
           "exact_match" => { "@id" => ephemera_term.uri.first }
@@ -34,7 +34,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       it 'exposes the values as JSON-LD Objects' do
         expect(linked_ephemera_folder.genre).to eq(
           [{
-            "@id" => "http://test.host/concern/ephemera_terms/#{ephemera_term.id}",
+            "@id" => "http://www.example.com/concern/ephemera_terms/#{ephemera_term.id}",
             "@type" => "skos:Concept",
             "pref_label" => ephemera_term.label,
             "exact_match" => { "@id" => ephemera_term.uri.first }
@@ -56,7 +56,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       it 'exposes the values as JSON-LD Objects' do
         expect(linked_ephemera_folder.geographic_origin).to eq(
           [{
-            "@id" => "http://test.host/concern/ephemera_terms/#{ephemera_term.id}",
+            "@id" => "http://www.example.com/concern/ephemera_terms/#{ephemera_term.id}",
             "@type" => "skos:Concept",
             "pref_label" => ephemera_term.label,
             "exact_match" => { "@id" => ephemera_term.uri.first }
@@ -78,7 +78,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       it 'exposes the values as JSON-LD Objects' do
         expect(linked_ephemera_folder.language).not_to be_empty
         expect(linked_ephemera_folder.language.first).to eq(
-          "@id" => "http://test.host/concern/ephemera_terms/#{ephemera_term.id}",
+          "@id" => "http://www.example.com/concern/ephemera_terms/#{ephemera_term.id}",
           "@type" => "skos:Concept",
           "pref_label" => ephemera_term.label,
           "exact_match" => { "@id" => ephemera_term.uri.first }
@@ -100,7 +100,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       it 'exposes the values as JSON-LD Objects' do
         expect(linked_ephemera_folder.subject).not_to be_empty
         expect(linked_ephemera_folder.subject.first).to eq(
-          "@id" => "http://test.host/concern/ephemera_terms/#{ephemera_term.id}",
+          "@id" => "http://www.example.com/concern/ephemera_terms/#{ephemera_term.id}",
           "@type" => "skos:Concept",
           "pref_label" => ephemera_term.label,
           "exact_match" => { "@id" => ephemera_term.uri.first }

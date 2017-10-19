@@ -25,7 +25,7 @@ module LinkedData
         resource.label
       else
         {
-          "@id" => resource.h.polymorphic_url(resource),
+          "@id" => helper.url_for(resource),
           "@type" => "skos:Concept",
           "pref_label" => resource.label,
           "exact_match" => {
@@ -33,6 +33,10 @@ module LinkedData
           }
         }
       end
+    end
+
+    def helper
+      ManifestBuilder::ManifestHelper.new
     end
   end
 end
