@@ -141,6 +141,7 @@ RSpec.describe ManifestBuilder do
       expect(output["viewingHint"]).to eq "multi-part"
       expect(output["manifests"].length).to eq 1
       expect(output["manifests"][0]["@id"]).to eq "http://www.example.com/concern/scanned_resources/#{child.id}/manifest"
+      expect(output["manifests"][0]["viewingHint"]).to be_nil
     end
   end
   context "when given a scanned map" do
