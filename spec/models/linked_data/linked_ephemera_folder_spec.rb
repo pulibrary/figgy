@@ -108,7 +108,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
           "exact_match" => { "@id" => ephemera_child_term.uri.first },
           "in_scheme" => {
             "@id" => "http://www.example.com/concern/ephemera_vocabularies/#{ephemera_vocabulary.id}",
-            "@type" => "skos:Concept",
+            "@type" => "skos:ConceptScheme",
             "pref_label" => ephemera_vocabulary.label,
             "exact_match" => { "@id" => ephemera_vocabulary.uri.first }
           }
@@ -133,7 +133,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
         expect(linked_ephemera_folder.categories).not_to be_empty
         expect(linked_ephemera_folder.categories.first).to eq(
           "@id" => "http://www.example.com/concern/ephemera_vocabularies/#{ephemera_vocabulary.id}",
-          "@type" => "skos:Concept",
+          "@type" => "skos:ConceptScheme",
           "pref_label" => ephemera_vocabulary.label,
           "exact_match" => { "@id" => ephemera_vocabulary.uri.first }
         )

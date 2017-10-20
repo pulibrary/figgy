@@ -50,9 +50,17 @@ module LinkedData
         }
       end
 
+      def type
+        if resource.is_a?(EphemeraVocabulary)
+          'skos:ConceptScheme'
+        else
+          'skos:Concept'
+        end
+      end
+
       def attributes
         {
-          '@type': 'skos:Concept',
+          '@type': type,
           pref_label: try(:label),
           exact_match: exact_match
         }.merge!(vocabulary_attributes)
