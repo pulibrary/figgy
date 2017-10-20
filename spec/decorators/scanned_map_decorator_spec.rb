@@ -32,6 +32,19 @@ RSpec.describe ScannedMapDecorator do
   it "can manage structure" do
     expect(decorator.manageable_structure?).to be true
   end
+  describe '#language' do
+    let(:resource) do
+      FactoryGirl.build(:scanned_map,
+                        title: "test title",
+                        author: "test author",
+                        creator: "test creator",
+                        subject: "test subject",
+                        language: ["eng"])
+    end
+    it "exposes the language" do
+      expect(decorator.language).to eq ['English']
+    end
+  end
   context "with file sets" do
     let(:file_set) do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)

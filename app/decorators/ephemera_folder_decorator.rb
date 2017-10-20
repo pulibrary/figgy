@@ -1,37 +1,45 @@
 # frozen_string_literal: true
 class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
-  self.display_attributes = [
-    :barcode,
-    :folder_number,
-    :title,
-    :sort_title,
-    :alternative_title,
-    :language,
-    :genre,
-    :width,
-    :height,
-    :page_count,
-    :rights_statement,
-    :series,
-    :creator,
-    :contributor,
-    :publisher,
-    :geographic_origin,
-    :rendered_subject,
-    :geo_subject,
-    :description,
-    :date_created,
-    :rendered_date_range,
-    :provenance,
-    :dspace_url,
-    :source_url,
-    :visibility,
-    :rendered_rights_statement
-  ]
-  self.iiif_manifest_attributes = display_attributes + \
-                                  [:subject, :categories] - \
-                                  imported_attributes(Schema::Common.attributes) - \
-                                  Schema::IIIF.attributes - [:visibility, :internal_resource, :rights_statement, :rendered_rights_statement, :thumbnail_id]
+  display(
+    [
+      :barcode,
+      :folder_number,
+      :title,
+      :sort_title,
+      :alternative_title,
+      :language,
+      :genre,
+      :width,
+      :height,
+      :page_count,
+      :rights_statement,
+      :rendered_rights_statement,
+      :series,
+      :creator,
+      :contributor,
+      :publisher,
+      :geographic_origin,
+      :subject,
+      :geo_subject,
+      :description,
+      :date_created,
+      :rendered_date_range,
+      :dspace_url,
+      :source_url,
+      :visibility
+    ]
+  )
+  iiif_manifest_display(displayed_attributes)
+  iiif_manifest_suppress(Schema::IIIF.attributes)
+  iiif_manifest_suppress(
+    [
+      :visibility,
+      :internal_resource,
+      :rights_statement,
+      :rendered_rights_statement,
+      :thumbnail_id
+    ]
+  )
 
   def members
     @members ||= query_service.find_members(resource: model).to_a
@@ -87,10 +95,6 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
 
   def manageable_structure?
     false
-  end
-
-  def iiif_manifest_attributes
-    local_attributes(self.class.iiif_manifest_attributes)
   end
 
   def folder_number

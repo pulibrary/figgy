@@ -13,7 +13,19 @@ RSpec.describe ScannedResourceDecorator do
       expect(decorator.rendered_rights_statement.first).to include '<a href="http://rightsstatements.org/vocab/NKC/1.0/">No Known Copyright</a>'
     end
   end
-
+  describe '#created' do
+    let(:resource) do
+      FactoryGirl.build(:scanned_resource,
+                        title: 'test title',
+                        created: '01/01/1970',
+                        imported_metadata: [{
+                          creator: 'test creator'
+                        }])
+    end
+    it 'exposes a formatted string for the created date' do
+      expect(decorator.created).to eq ["January 1, 1970"]
+    end
+  end
   context 'with imported metadata' do
     let(:resource) do
       FactoryGirl.build(:scanned_resource,

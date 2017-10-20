@@ -47,16 +47,15 @@ class ManifestBuilder
     # Stringify the Resource by delegating to the header within the Decorator
     # @return [String]
     def to_s
-      resource.decorate.header
+      decorate.header
     end
 
     def description
-      value = if resource.respond_to?(:primary_imported_metadata)
-                resource.primary_imported_metadata.try(:description)
+      value = if resource.respond_to?(:primary_imported_metadata) && resource.primary_imported_metadata.description.present?
+                resource.primary_imported_metadata.description
               else
-                resource.try(:description)
+                decorate.try(:description)
               end
-
       Array.wrap(value).first
     end
 
@@ -150,7 +149,7 @@ class ManifestBuilder
     end
 
     def description
-      resource.try(:description)
+      decorate.try(:description)
     end
 
     def viewing_hint; end

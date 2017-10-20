@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class EphemeraTemplateDecorator < Valkyrie::ResourceDecorator
-  self.display_attributes = []
+  self.displayed_attributes = []
 
   def manageable_files?
     false
