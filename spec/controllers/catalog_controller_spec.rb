@@ -12,6 +12,11 @@ RSpec.describe CatalogController do
 
       expect(assigns(:document_list).length).to eq 1
     end
+    it "can find documents via JSON" do
+      get :index, params: { q: "", format: :json }
+
+      expect(response).to be_success
+    end
   end
 
   describe "#index" do
