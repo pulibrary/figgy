@@ -75,6 +75,11 @@ defaults: &defaults
       plum: "plum_events"
       geoblacklight: "gbl_events"
   vocabulary_namespace: <%= ENV.fetch('FIGGY_VOCAB_NS', 'https://plum.princeton.edu/ns/') %>
+  devise:
+    omniauth:
+      cas:
+        host: <%= ENV.fetch('CAS_HOST', 'fed.princeton.edu') %>
+        url: <%= ENV.fetch('CAS_URL', 'https://fed.princeton.edu/cas') %>
 
 development:
   <<: *defaults
@@ -88,6 +93,11 @@ test:
   derivative_path: <%= Rails.root.join("tmp", "test_derivatives") %>
   events:
     log_file: '/dev/null'
+  devise:
+    omniauth:
+      cas:
+        host: <%= ENV.fetch('CAS_HOST', 'localhost.localdomain') %>
+        url: <%= ENV.fetch('CAS_URL', 'https://localhost.localdomain/cas') %>
 
 production:
   <<: *defaults
