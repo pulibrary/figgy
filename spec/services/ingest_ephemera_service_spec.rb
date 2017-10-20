@@ -134,4 +134,21 @@ RSpec.describe IngestEphemeraService, :admin_set do
       end
     end
   end
+
+  describe "state" do
+    let(:box) { FactoryGirl.build(:ephemera_box) }
+    let(:box_prov) { File.new Rails.root.join('spec', 'fixtures', 'lae_migration', 'boxes', '00014', 'provMetadata') }
+    let(:folder) { FactoryGirl.build(:ephemera_folder) }
+    let(:folder_prov1) { File.new Rails.root.join('spec', 'fixtures', 'lae_migration', 'folders', '0003d', 'provMetadata') }
+    let(:folder_prov2) { File.new Rails.root.join('spec', 'fixtures', 'lae_migration', 'folders', '012g6', 'provMetadata') }
+    it "parses the state for a box" do
+      expect(IngestEphemeraService::ProvMetadata.new(box_prov, box).state).to eq 'received'
+    end
+    it "maps 'in production' folders to 'complete'" do
+      expect(IngestEphemeraService::ProvMetadata.new(folder_prov1, folder).state).to eq 'complete'
+    end
+    it "maps other folder states to 'needs_qa'" do
+      expect(IngestEphemeraService::ProvMetadata.new(folder_prov2, folder).state).to eq 'needs_qa'
+    end
+  end
 end

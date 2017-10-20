@@ -268,9 +268,20 @@ class IngestEphemeraService
     end
 
     def state
-      workflow = BoxWorkflow.new(nil)
-      val = value(::PULStore.state).first
-      workflow.valid_states.include?(val.downcase) ? val.downcase : workflow.aasm.current_state.to_s
+      val = value(::PULStore.state).first.downcase.tr(" ", "_")
+      resource.is_a?(EphemeraBox) ? box_state(val) : folder_state(val)
+    end
+
+    def box_state(val)
+      box_workflow.valid_states.include?(val) ? val : box_workflow.aasm.current_state.to_s
+    end
+
+    def box_workflow
+      @box_workflow ||= BoxWorkflow.new(nil)
+    end
+
+    def folder_state(val)
+      val.eql?("in_production") ? "complete" : FolderWorkflow.new(nil).aasm.current_state.to_s
     end
 
     def value(predicate)
