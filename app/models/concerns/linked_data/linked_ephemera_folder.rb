@@ -23,7 +23,7 @@ module LinkedData
     )
 
     def geo_subject
-      decorated_resource.geo_subject.map { |r| LinkedNode.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
+      decorated_resource.geo_subject.map { |r| LinkedEphemeraTerm.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
     end
 
     def genre
@@ -35,25 +35,25 @@ module LinkedData
     end
 
     def language
-      decorated_resource.language.map { |r| LinkedNode.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
+      decorated_resource.language.map { |r| LinkedEphemeraTerm.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
     end
 
     def subject
-      decorated_resource.subject.map { |r| LinkedNode.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
+      decorated_resource.subject.map { |r| LinkedEphemeraTerm.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
     end
 
     def categories
-      decorated_resource.categories.map { |r| LinkedNode.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
+      decorated_resource.categories.map { |r| LinkedEphemeraTerm.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
     end
 
     def source
       return if decorated_resource.source_url.nil?
-      decorated_resource.source_url.map { |r| LinkedNode.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
+      decorated_resource.source_url.map { |r| LinkedEphemeraTerm.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
     end
 
     def related_url
       return if decorated_resource.dspace_url.nil?
-      decorated_resource.dspace_url.map { |r| LinkedNode.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
+      decorated_resource.dspace_url.map { |r| LinkedEphemeraTerm.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
     end
 
     def page_count

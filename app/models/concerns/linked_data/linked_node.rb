@@ -21,18 +21,14 @@ module LinkedData
     alias without_context as_json
 
     def embedded_resource(resource)
-      if resource.is_a?(EphemeraVocabularyDecorator)
-        resource.label
-      else
-        {
-          "@id" => helper.url_for(resource),
-          "@type" => "skos:Concept",
-          "pref_label" => resource.label,
-          "exact_match" => {
-            "@id" => resource.uri
-          }
+      {
+        "@id" => helper.url_for(resource),
+        "@type" => "skos:Concept",
+        "pref_label" => resource.label,
+        "exact_match" => {
+          "@id" => resource.uri
         }
-      end
+      }
     end
 
     def helper
