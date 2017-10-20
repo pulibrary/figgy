@@ -8,27 +8,25 @@ class ApplicationDecorator < Draper::Decorator
   # Add a set of attributes to be displayed
   # @param attribute_names [Symbol] the symbolized names of the attributes being displayed
   def self.display(attribute_names)
-    attribute_names = Array.wrap(attribute_names)
-    self.displayed_attributes += attribute_names
+    self.displayed_attributes += Array.wrap(attribute_names)
   end
 
   # Remove a set of attributes from display
   # @param attribute_names [Symbol]
   def self.suppress(attribute_names)
-    attribute_names = Array.wrap(attribute_names)
-    attribute_names.each { |attribute_name| self.displayed_attributes.delete(attribute_name) }
+    self.displayed_attributes -= Array.wrap(attribute_names)
   end
 
   # Add an attribute to be displayed in the IIIF Manifest
   # @param attribute_name [Symbol] the symbolized name of the attribute being displayed
   def self.iiif_manifest_display(attribute_names)
-    attribute_names = Array.wrap(attribute_names)
-    self.iiif_manifest_attributes += attribute_names
+    self.iiif_manifest_attributes += Array.wrap(attribute_names)
   end
 
+  # Remove a set of attributes from being displayed in the IIIF Manifest
+  # @param attribute_names [Symbol]
   def self.iiif_manifest_suppress(attribute_names)
-    attribute_names = Array.wrap(attribute_names)
-    attribute_names.each { |attribute_name| self.iiif_manifest_attributes.delete(attribute_name) }
+    self.iiif_manifest_attributes -= Array.wrap(attribute_names)
   end
 
   delegate :model_name, :attributes, to: :object
