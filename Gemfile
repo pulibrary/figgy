@@ -7,6 +7,7 @@ gem 'bunny'
 gem "devise-guests", git: "https://github.com/cbeer/devise-guests.git"
 gem "flutie"
 gem "honeybadger"
+gem 'jbuilder'
 gem "jquery-rails"
 gem 'jquery-ui-rails', '~> 5.0'
 gem "pg"

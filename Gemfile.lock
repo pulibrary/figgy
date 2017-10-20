@@ -801,6 +801,7 @@ DEPENDENCIES
   hydra-role-management
   iiif_manifest!
   iso-639
+  jbuilder
   jquery-datatables-rails (~> 3.4.0)
   jquery-rails
   jquery-ui-rails (~> 5.0)
