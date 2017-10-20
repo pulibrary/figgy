@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class ManifestBuilder
-  class LicenseBuilder
+  class RenderingBuilder
     attr_reader :resource
 
     ##
@@ -14,17 +14,25 @@ class ManifestBuilder
     # @param [IIIF::Presentation::Manifest] manifest the IIIF manifest being
     # @return [IIIF::Presentation::Manifest]
     def apply(manifest)
-      manifest.license = license
+      manifest.rendering = rendering_hash if identifier?
       manifest
     end
 
     private
 
-      def license
-        statements = resource.decorate.rights_statement.map(&:value)
-        statements.empty? ? nil : statements.first
-      rescue
-        nil
+      def identifier?
+        resource.decorate.identifier.present?
+      end
+
+      def identifier
+        Array.wrap(resource.decorate.identifier).first
+      end
+
+      def rendering_hash
+        {
+          "@id" => "http://arks.princeton.edu/#{identifier}",
+          "format" => "text/html"
+        }
       end
   end
 end

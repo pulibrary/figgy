@@ -25,6 +25,13 @@ class ManifestBuilder
         ManifestBuilder::LicenseBuilder
       end
 
+      ##
+      # Class accessor for the rendering builder
+      # @return [Class]
+      def rendering_builder
+        ManifestBuilder::RenderingBuilder
+      end
+
       def child_manifest_builder
         ConditionalCollectionManifest.new(manifest_builder: real_child_manifest_builder, collection_builder: child_collection_builder)
       end
@@ -144,6 +151,7 @@ class ManifestBuilder
           see_also_builder,
           license_builder,
           thumbnail_builder,
+          rendering_builder,
           composite_builder: composite_builder
         )
       end
