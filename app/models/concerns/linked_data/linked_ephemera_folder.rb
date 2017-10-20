@@ -27,11 +27,11 @@ module LinkedData
     end
 
     def genre
-      Array.wrap(LinkedNode.new(resource: decorated_resource.genre).without_context)
+      Array.wrap(LinkedEphemeraTerm.new(resource: decorated_resource.genre).without_context)
     end
 
     def geographic_origin
-      Array.wrap(LinkedNode.new(resource: decorated_resource.geographic_origin).without_context)
+      Array.wrap(LinkedEphemeraTerm.new(resource: decorated_resource.geographic_origin).without_context)
     end
 
     def language

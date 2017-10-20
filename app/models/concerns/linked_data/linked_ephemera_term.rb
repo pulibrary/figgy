@@ -24,10 +24,6 @@ module LinkedData
       end
     end
 
-    def obj_url
-      helper.url_for(resource)
-    end
-
     def basic_jsonld
       {}
     end

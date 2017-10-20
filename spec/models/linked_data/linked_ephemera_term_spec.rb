@@ -9,7 +9,7 @@ RSpec.describe LinkedData::LinkedEphemeraTerm do
   describe '#local_fields' do
     it 'exposes the attributes for serialization into JSON-LD' do
       expect(linked_ephemera_term.local_fields).not_to be_empty
-      expect(linked_ephemera_term.local_fields[:'@id'].to_s).to eq "http://www.example.com/concern/ephemera_terms/#{ephemera_term.id}"
+      expect(linked_ephemera_term.local_fields[:'@id'].to_s).to eq "http://www.example.com/catalog/#{ephemera_term.id}"
       expect(linked_ephemera_term.local_fields[:'@type']).to eq "skos:Concept"
       expect(linked_ephemera_term.local_fields[:pref_label]).to eq "test term"
       expect(linked_ephemera_term.local_fields["in_scheme"]).to be_a Hash
