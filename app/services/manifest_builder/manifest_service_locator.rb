@@ -26,9 +26,28 @@ class ManifestBuilder
       end
 
       def child_manifest_builder
-        ConditionalCollectionManifest.new(manifest_builder: super, collection_builder: child_collection_builder)
+        ConditionalCollectionManifest.new(manifest_builder: real_child_manifest_builder, collection_builder: child_collection_builder)
       end
 
+      ##
+      # Builder for a manifest which is a sub-item in a collection.
+      def real_child_manifest_builder
+        IIIFManifest::ManifestServiceLocator::InjectedFactory.new(
+          IIIFManifest::ManifestBuilder,
+          builders: child_record_property_builder,
+          top_record_factory: iiif_manifest_factory
+        )
+      end
+
+      ##
+      # Builder for record properties to be applied when rendering as a
+      # "manifest" sub-item in a collection.
+      def child_record_property_builder
+        ManifestBuilder::ChildRecordPropertyBuilder
+      end
+
+      ##
+      # Builder for collections which are sub-collections.
       def child_collection_builder
         IIIFManifest::ManifestServiceLocator::InjectedFactory.new(
           CollectionManifestBuilder,
