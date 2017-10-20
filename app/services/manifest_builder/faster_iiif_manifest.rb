@@ -48,6 +48,10 @@ class ManifestBuilder
       inner_hash["license"] = license
     end
 
+    def rendering=(rendering)
+      inner_hash["rendering"] = rendering
+    end
+
     def initial_attributes
       {
         "@context" => "http://iiif.io/api/presentation/2/context.json",

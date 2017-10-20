@@ -63,6 +63,8 @@ class ManifestBuilder
             record_property_builder,
             metadata_manifest_builder,
             see_also_builder,
+            license_builder,
+            rendering_builder,
             composite_builder: composite_builder
           ),
           top_record_factory: iiif_collection_factory
@@ -78,6 +80,8 @@ class ManifestBuilder
           child_manifest_builder_factory,
           metadata_manifest_builder,
           see_also_builder,
+          license_builder,
+          rendering_builder,
           composite_builder: composite_builder
         )
       end
