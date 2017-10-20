@@ -59,6 +59,10 @@ class ManifestBuilder
       Array.wrap(value).first
     end
 
+    def thumbnail_id
+      resource.try(:thumbnail_id)
+    end
+
     ##
     # Retrieves the presenters for each member Work as a separate root
     # @return [RootNode]

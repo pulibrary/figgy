@@ -127,6 +127,10 @@ class ManifestBuilder
         ::ManifestBuilder::FasterIIIFManifest::Range
       end
 
+      def thumbnail_builder
+        ::ManifestBuilder::ThumbnailBuilder
+      end
+
       ##
       # Override the Class method for instantiating a CompositeBuilder
       # Insert the metadata manifest builder
@@ -139,6 +143,7 @@ class ManifestBuilder
           metadata_manifest_builder,
           see_also_builder,
           license_builder,
+          thumbnail_builder,
           composite_builder: composite_builder
         )
       end
