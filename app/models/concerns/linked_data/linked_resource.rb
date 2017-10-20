@@ -44,7 +44,11 @@ module LinkedData
     end
 
     def to_jsonld
-      imported_jsonld.merge(local_fields).to_json
+      as_jsonld.to_json
+    end
+
+    def as_jsonld
+      imported_jsonld.merge(local_fields).stringify_keys
     end
     alias to_json to_jsonld
     alias to_s to_json

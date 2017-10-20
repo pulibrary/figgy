@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 module LinkedData
   class LinkedEphemeraTerm < LinkedResource
+    def self.new(resource:)
+      if resource.respond_to?(:uri)
+        super(resource: resource)
+      else
+        Literal.new(value: resource)
+      end
+    end
+
     delegate(
       :uri,
       :internal_url,
@@ -16,27 +24,43 @@ module LinkedData
       end
     end
 
+    def obj_url
+      helper.url_for(resource)
+    end
+
+    def basic_jsonld
+      {}
+    end
+
+    def without_context
+      as_jsonld.except("@context")
+    end
+
     private
 
       def exact_match
         return unless external_uri_exists?
-        Array.wrap(uri).first
+        { "@id" => Array.wrap(uri).first }
       end
 
       def vocabulary_attributes
         return {} unless vocabulary
         {
-          in_scheme: {
-            '@id': vocabulary.try(:uri),
-            pref_label: vocabulary.try(:label)
-          }
+          "in_scheme" => self.class.new(resource: vocabulary).without_context
         }
+      end
+
+      def type
+        if resource.is_a?(EphemeraVocabulary)
+          'skos:ConceptScheme'
+        else
+          'skos:Concept'
+        end
       end
 
       def attributes
         {
-          '@id': internal_url,
-          '@type': 'skos:Concept',
+          '@type': type,
           pref_label: try(:label),
           exact_match: exact_match
         }.merge!(vocabulary_attributes)
