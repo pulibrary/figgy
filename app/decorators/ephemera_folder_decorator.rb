@@ -30,7 +30,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     ]
   )
   iiif_manifest_display(displayed_attributes + [:subject, :categories])
-  iiif_manifest_suppress(Schema::IIIF.attributes) 
+  iiif_manifest_suppress(Schema::IIIF.attributes)
   iiif_manifest_suppress(
     [
       :visibility,
