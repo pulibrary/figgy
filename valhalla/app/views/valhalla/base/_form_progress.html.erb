@@ -16,16 +16,19 @@
       <%= render 'form_visibility_component', f: f %>
     </div>
   </div>
-  <div class="panel-footer text-center">
-    <br>
-    <%# send user back to object from edit, back to home from new %>
-    <%= link_to t(:'helpers.action.cancel'),
-                f.object.id ? solr_document_path(id: f.object.id) : main_app.root_path,
-                class: 'btn btn-default' %>
-
+  <div class="panel-footer text-center panel-save-controls">
     <%= f.submit class: 'btn btn-primary' %>
     <% if f.object.resource.is_a?(EphemeraFolder) && params[:controller] == "ephemera_folders" %>
       <%= f.submit "Save and Create Another", class: 'btn btn-primary' %>
+
     <% end %>
   </div>
+  <% if params[:action] == "edit" %>
+    <div class="panel-footer text-center panel-delete-controls">
+      <%= link_to t(:'helpers.action.cancel'),
+                  main_app.root_path,
+                  class: 'btn btn-default' %>
+      <%= link_to "Delete This #{f.object.resource.human_readable_type}", main_app.polymorphic_path([f.object.resource]), class: 'btn btn-danger', data: { confirm: "Delete this #{f.object.resource.human_readable_type}?" }, method: :delete %>
+    </div>
+  <% end %>
 </aside>
