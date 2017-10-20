@@ -19,7 +19,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
       :contributor,
       :publisher,
       :geographic_origin,
-      :subject,
+      :rendered_subject,
       :geo_subject,
       :description,
       :date_created,
@@ -29,7 +29,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
       :visibility
     ]
   )
-  iiif_manifest_display(displayed_attributes)
+  iiif_manifest_display(displayed_attributes + [:subject, :categories])
   iiif_manifest_suppress(Schema::IIIF.attributes)
   iiif_manifest_suppress(
     [
