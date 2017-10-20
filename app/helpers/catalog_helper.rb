@@ -9,6 +9,6 @@ module CatalogHelper
     document ||= @document
 
     val = presenter(document).heading
-    content_tag(tag, val, itemprop: "name", dir: val.dir)
+    content_tag(tag, val, itemprop: "name", dir: val.to_s.dir)
   end
 end
