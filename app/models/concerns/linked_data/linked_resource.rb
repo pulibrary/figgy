@@ -3,7 +3,6 @@ module LinkedData
   class LinkedResource
     attr_reader :resource
     delegate(
-      :title,
       :collections,
       to: :decorated_resource
     )
@@ -12,50 +11,39 @@ module LinkedData
       @resource = resource
     end
 
-    def basic_jsonld
-      {
-        title: try(:title)
-      }
-    end
-
-    def imported_jsonld
-      return basic_jsonld unless resource.respond_to?(:primary_imported_metadata) && resource.primary_imported_metadata.source_jsonld.present?
-      @imported_jsonld ||= JSON.parse(resource.primary_imported_metadata.source_jsonld.first)
-    end
-
-    def helper
-      @helper ||= ManifestBuilder::ManifestHelper.new
-    end
-
-    def obj_url
-      helper.solr_document_url(id: resource.id)
-    end
-
-    def local_fields
-      {
-        '@context': 'https://bibdata.princeton.edu/context.json',
-        '@id': obj_url,
-        identifier: resource.try(:identifier),
-        scopeNote: resource.try(:portion_note),
-        navDate: resource.try(:nav_date),
-        edm_rights: rights_object,
-        memberOf: collection_objects
-      }.reject { |_, v| v.nil? || v.try(:empty?) }
+    def as_jsonld
+      linked_properties.reject { |_, v| v.nil? || v.try(:empty?) }.stringify_keys
     end
 
     def to_jsonld
       as_jsonld.to_json
     end
-
-    def as_jsonld
-      imported_jsonld.merge(local_fields).stringify_keys
-    end
     alias to_json to_jsonld
     alias to_s to_json
 
+    def without_context
+      as_jsonld.except("@context")
+    end
+
+    def title
+      Array.wrap(decorated_resource.title).first
+    end
+
     private
 
-      def rights_object
+      def decorated_resource
+        @decorated_resource ||= resource.decorate
+      end
+
+      def helper
+        @helper ||= ManifestBuilder::ManifestHelper.new
+      end
+
+      def url
+        @url ||= helper.solr_document_url(id: resource.id)
+      end
+
+      def linked_rights
         return if resource.try(:rights_statement).blank?
         {
           '@id': resource.rights_statement.first.to_s,
@@ -64,19 +52,25 @@ module LinkedData
         }
       end
 
-      def decorated_resource
-        @decorated_resource ||= resource.decorate
+      def linked_collections
+        return [] if resource.try(:member_of_collection_ids).blank?
+        collections.map { |collection| LinkedCollection.new(resource: collection).as_jsonld }
       end
 
-      def collection_objects
-        return [] if resource.try(:member_of_collection_ids).blank?
-        collections.map do |collection|
-          {
-            '@id': helper.solr_document_url(id: collection.id),
-            '@type': 'pcdm:Collection',
-            title: collection.title
-          }
-        end
+      def properties
+        { title: try(:title) }
+      end
+
+      def linked_properties
+        {
+          '@context': 'https://bibdata.princeton.edu/context.json',
+          '@id': url,
+          identifier: resource.try(:identifier),
+          scopeNote: resource.try(:portion_note),
+          navDate: resource.try(:nav_date),
+          edm_rights: linked_rights,
+          memberOf: linked_collections
+        }.merge(properties)
       end
   end
 end

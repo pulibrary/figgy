@@ -1,0 +1,38 @@
+# frozen_string_literal: true
+require 'rails_helper'
+
+RSpec.shared_examples 'LinkedData::Resource' do
+  subject(:linked_resource) { LinkedData::LinkedResourceFactory.new(resource: resource).new }
+
+  before do
+    raise 'resource must be set with `let(:resource)`' unless
+      defined? resource
+  end
+
+  describe '#as_jsonld' do
+    it "provides the base local fields" do
+      expect(linked_resource.as_jsonld).to be_a Hash
+      expect(linked_resource.as_jsonld).not_to be_empty
+      expect(linked_resource.as_jsonld).to include '@context' => 'https://bibdata.princeton.edu/context.json'
+    end
+  end
+
+  describe ".new" do
+    before do
+      class MyCustomResource < Valkyrie::Resource
+        attribute :id, Valkyrie::Types::ID.optional
+        attribute :title, Valkyrie::Types::Set
+      end
+    end
+
+    after do
+      Object.send(:remove_const, :MyCustomResource)
+    end
+
+    subject(:linked_resource) { LinkedData::LinkedResourceFactory.new(resource: custom_resource).new }
+    let(:custom_resource) { MyCustomResource.new(title: 'test title 1') }
+    it '#title' do
+      expect(linked_resource.title).to include 'test title 1'
+    end
+  end
+end

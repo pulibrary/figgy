@@ -2,13 +2,23 @@
 require 'rails_helper'
 
 RSpec.describe LinkedData::LinkedEphemeraFolder do
-  subject(:linked_ephemera_folder) { described_class.new(resource: ephemera_folder) }
-  let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder) }
+  subject(:linked_ephemera_folder) { described_class.new(resource: resource) }
+  let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder) }
   let(:ephemera_term) { FactoryGirl.create_for_repository(:ephemera_term, label: 'test term') }
+
+  let(:ephemera_box) { FactoryGirl.create_for_repository(:ephemera_box, member_ids: [resource.id]) }
+  let(:ephemera_project) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id]) }
+
+  before do
+    ephemera_box
+    ephemera_project
+  end
+
+  it_behaves_like "LinkedData::Resource"
 
   describe '#geo_subject' do
     context 'with Valkyrie::IDs for values' do
-      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, geo_subject: [ephemera_term.id]) }
+      let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, geo_subject: [ephemera_term.id]) }
       it 'exposes the values as JSON-LD Objects' do
         expect(linked_ephemera_folder.geo_subject).not_to be_empty
         expect(linked_ephemera_folder.geo_subject.first).to eq(
@@ -20,7 +30,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       end
     end
     context 'with strings for values' do
-      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, geo_subject: ["test value"]) }
+      let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, geo_subject: ["test value"]) }
       it 'exposes the values as JSON Strings' do
         expect(linked_ephemera_folder.geo_subject).not_to be_empty
         expect(linked_ephemera_folder.geo_subject.first).to eq 'test value'
@@ -30,7 +40,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
 
   describe '#genre' do
     context 'with Valkyrie::IDs for values' do
-      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, genre: ephemera_term.id) }
+      let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, genre: ephemera_term.id) }
       it 'exposes the values as JSON-LD Objects' do
         expect(linked_ephemera_folder.genre).to eq(
           [{
@@ -43,7 +53,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       end
     end
     context 'with strings for values' do
-      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, genre: ["test value"]) }
+      let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, genre: ["test value"]) }
       it 'exposes the values as JSON Strings' do
         expect(linked_ephemera_folder.genre).to eq ['test value']
       end
@@ -52,7 +62,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
 
   describe '#geographic_origin' do
     context 'with Valkyrie::IDs for values' do
-      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, geographic_origin: ephemera_term.id) }
+      let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, geographic_origin: ephemera_term.id) }
       it 'exposes the values as JSON-LD Objects' do
         expect(linked_ephemera_folder.geographic_origin).to eq(
           [{
@@ -65,7 +75,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       end
     end
     context 'with strings for values' do
-      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, geographic_origin: ["test value"]) }
+      let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, geographic_origin: ["test value"]) }
       it 'exposes the values as JSON Strings' do
         expect(linked_ephemera_folder.geographic_origin).to eq ['test value']
       end
@@ -74,7 +84,8 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
 
   describe '#language' do
     context 'with Valkyrie::IDs for values' do
-      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, language: [ephemera_term.id]) }
+      let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, language: [ephemera_term.id]) }
+
       it 'exposes the values as JSON-LD Objects' do
         expect(linked_ephemera_folder.language).not_to be_empty
         expect(linked_ephemera_folder.language.first).to eq(
@@ -86,7 +97,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       end
     end
     context 'with strings for values' do
-      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, language: ["test value"]) }
+      let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, language: ["test value"]) }
       it 'exposes the values as JSON Strings' do
         expect(linked_ephemera_folder.language).not_to be_empty
         expect(linked_ephemera_folder.language.first).to eq 'test value'
@@ -96,7 +107,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
 
   describe '#subject' do
     context 'with Valkyrie::IDs for values' do
-      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, subject: [ephemera_child_term.id]) }
+      let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, subject: [ephemera_child_term.id]) }
 
       let(:parent_ephemera_vocabulary) { FactoryGirl.create_for_repository(:ephemera_vocabulary) }
       let(:ephemera_vocabulary) { FactoryGirl.create_for_repository(:ephemera_vocabulary, uri: 'https://example.com/ns/testVocabulary', member_of_vocabulary_id: parent_ephemera_vocabulary.id) }
@@ -108,7 +119,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
           "@type" => "skos:Concept",
           "pref_label" => ephemera_child_term.label,
           "in_scheme" => {
-            "@id" => "http://www.example.com/catalog/#{ephemera_vocabulary.id}",
+            "@id" => "https://plum.princeton.edu/ns/testVocabulary/testVocabulary",
             "@type" => "skos:ConceptScheme",
             "pref_label" => ephemera_vocabulary.label,
             "exact_match" => { "@id" => ephemera_vocabulary.uri.first }
@@ -117,7 +128,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       end
     end
     context 'with strings for values' do
-      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, subject: ["test value"]) }
+      let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, subject: ["test value"]) }
       it 'exposes the values as JSON Strings' do
         expect(linked_ephemera_folder.subject).not_to be_empty
         expect(linked_ephemera_folder.subject.first).to eq 'test value'
@@ -129,7 +140,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
     context 'with Valkyrie::IDs for values' do
       let(:ephemera_vocabulary) { FactoryGirl.create_for_repository(:ephemera_vocabulary, uri: 'https://example.com/ns/testVocabulary') }
       let(:ephemera_child_term) { FactoryGirl.create_for_repository(:ephemera_term, label: 'test child term', member_of_vocabulary_id: ephemera_vocabulary.id) }
-      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, subject: [ephemera_child_term.id]) }
+      let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, subject: [ephemera_child_term.id]) }
       it 'exposes the values as strings' do
         expect(linked_ephemera_folder.categories).not_to be_empty
         expect(linked_ephemera_folder.categories.first).to eq(
@@ -141,7 +152,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       end
     end
     context 'with strings for values' do
-      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, subject: ["test value"]) }
+      let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, subject: ["test value"]) }
       it 'exposes the values as JSON Strings' do
         expect(linked_ephemera_folder.categories).to be_empty
       end
@@ -150,14 +161,14 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
 
   describe '#source' do
     context 'with Valkyrie::IDs for values' do
-      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, source_url: 'https://example.com/test-source') }
+      let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, source_url: 'https://example.com/test-source') }
       it 'exposes the values as JSON-LD Objects' do
         expect(linked_ephemera_folder.source).not_to be_empty
         expect(linked_ephemera_folder.source.first).to eq('https://example.com/test-source')
       end
     end
     context 'with strings for values' do
-      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, source_url: "test value") }
+      let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, source_url: "test value") }
       it 'exposes the values as JSON Strings' do
         expect(linked_ephemera_folder.source).not_to be_empty
         expect(linked_ephemera_folder.source.first).to eq 'test value'
@@ -167,14 +178,14 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
 
   describe '#related_url' do
     context 'with Valkyrie::IDs for values' do
-      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, dspace_url: 'http://dataspace.princeton.edu/jspui/handle/test') }
+      let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, dspace_url: 'http://dataspace.princeton.edu/jspui/handle/test') }
       it 'exposes the values as JSON-LD Objects' do
         expect(linked_ephemera_folder.related_url).not_to be_empty
         expect(linked_ephemera_folder.related_url.first).to eq('http://dataspace.princeton.edu/jspui/handle/test')
       end
     end
     context 'with strings for values' do
-      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, dspace_url: "test value") }
+      let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, dspace_url: "test value") }
       it 'exposes the values as JSON Strings' do
         expect(linked_ephemera_folder.related_url).not_to be_empty
         expect(linked_ephemera_folder.related_url.first).to eq 'test value'
@@ -183,7 +194,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
   end
 
   describe '#page_count' do
-    let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, page_count: ["2", "3"]) }
+    let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, page_count: ["2", "3"]) }
     it 'exposes the values as JSON Strings' do
       expect(linked_ephemera_folder.page_count).to be_a String
       expect(linked_ephemera_folder.page_count).to eq '2'
@@ -191,38 +202,43 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
   end
 
   describe "date_range" do
-    let(:box) { FactoryGirl.create_for_repository(:ephemera_box, member_ids: ephemera_folder.id) }
-    let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, date_created: "2012", date_range: [DateRange.new(start: "2013", end: "2017")]) }
-    it 'exposes the values as a nested date range' do
+    let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, date_created: "2012", date_range: [DateRange.new(start: "2013", end: "2017")]) }
+    let(:box) { FactoryGirl.create_for_repository(:ephemera_box, member_ids: resource.id) }
+
+    before do
       box
+    end
+
+    it 'exposes the values as a nested date range' do
       expect(linked_ephemera_folder.date_range.first).to be_a Hash
       expect(linked_ephemera_folder.date_range.first).to eq(
         "@type" => "edm:TimeSpan",
         "begin" => ["2013"],
         "end" => ["2017"]
       )
+
       expect(linked_ephemera_folder.date_created.first).to eq "2012"
-      expect(linked_ephemera_folder.local_fields[:date_range]).to eq linked_ephemera_folder.date_range
-      expect(linked_ephemera_folder.local_fields[:date_created]).to eq linked_ephemera_folder.date_created
+      expect(linked_ephemera_folder.as_jsonld['date_range']).to eq linked_ephemera_folder.date_range
+      expect(linked_ephemera_folder.as_jsonld['date_created']).to eq linked_ephemera_folder.date_created
     end
+
     context "when there's no date range" do
-      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder) }
+      let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder) }
       it "doesn't add the field" do
-        box
-        expect(linked_ephemera_folder.local_fields[:date_range]).to be_blank
+        expect(linked_ephemera_folder.as_jsonld['date_range']).to be_blank
       end
     end
+
     context "when there's a blank date range" do
-      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, date_range: [DateRange.new]) }
+      let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, date_range: [DateRange.new]) }
       it "doesn't add the field" do
-        box
-        expect(linked_ephemera_folder.local_fields[:date_range]).to be_blank
+        expect(linked_ephemera_folder.as_jsonld['date_range']).to be_blank
       end
     end
   end
 
-  describe '#local_fields' do
-    let(:ephemera_folder) do
+  describe '#as_jsonld' do
+    let(:resource) do
       FactoryGirl.create_for_repository(
         :ephemera_folder,
         barcode: '00000000000000',
@@ -245,21 +261,21 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
     end
 
     it 'exposes the attributes for serialization into JSON-LD' do
-      ephemera_box = FactoryGirl.create_for_repository(:ephemera_box, member_ids: [ephemera_folder.id])
+      ephemera_box = FactoryGirl.create_for_repository(:ephemera_box, member_ids: [resource.id])
       FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id])
 
-      expect(linked_ephemera_folder.local_fields).not_to be_empty
+      expect(linked_ephemera_folder.as_jsonld).not_to be_empty
 
-      expect(linked_ephemera_folder.local_fields[:barcode]).to eq "00000000000000"
-      expect(linked_ephemera_folder.local_fields[:folder_number]).to eq "1"
-      expect(linked_ephemera_folder.local_fields[:sort_title]).to eq ["test title"]
-      expect(linked_ephemera_folder.local_fields[:width]).to eq ["test width"]
-      expect(linked_ephemera_folder.local_fields[:height]).to eq ["test height"]
-      expect(linked_ephemera_folder.local_fields[:page_count]).to eq "test page count"
-      expect(linked_ephemera_folder.local_fields[:creator]).to eq ["test creator"]
-      expect(linked_ephemera_folder.local_fields[:contributor]).to eq ['test contributor']
-      expect(linked_ephemera_folder.local_fields[:publisher]).to eq ['test publisher']
-      expect(linked_ephemera_folder.local_fields[:description]).to eq ["test description"]
+      expect(linked_ephemera_folder.as_jsonld['barcode']).to eq "00000000000000"
+      expect(linked_ephemera_folder.as_jsonld['folder_number']).to eq "1"
+      expect(linked_ephemera_folder.as_jsonld['sort_title']).to eq ["test title"]
+      expect(linked_ephemera_folder.as_jsonld['width']).to eq ["test width"]
+      expect(linked_ephemera_folder.as_jsonld['height']).to eq ["test height"]
+      expect(linked_ephemera_folder.as_jsonld['page_count']).to eq "test page count"
+      expect(linked_ephemera_folder.as_jsonld['creator']).to eq ["test creator"]
+      expect(linked_ephemera_folder.as_jsonld['contributor']).to eq ['test contributor']
+      expect(linked_ephemera_folder.as_jsonld['publisher']).to eq ['test publisher']
+      expect(linked_ephemera_folder.as_jsonld['description']).to eq ["test description"]
     end
   end
 end
