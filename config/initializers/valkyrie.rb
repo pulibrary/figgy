@@ -21,7 +21,7 @@ Rails.application.config.to_prepare do
   Valkyrie::StorageAdapter.register(
     Valkyrie::Storage::Disk.new(
       base_path: Figgy.config['derivative_path'],
-      file_mover: ->(old, new) { FileUtils.ln(old, new, force: true) }
+      file_mover: PlumDerivativeMover.method(:link_or_copy)
     ),
     :plum_derivatives
   )
