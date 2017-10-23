@@ -10,7 +10,7 @@ RSpec.describe PlumDerivativeMover do
   end
 
   context "in test" do
-    let(:new) { Rails.root.join('tmp', 'derivatives', 'copied.jsonld') }
+    let(:new) { Rails.root.join('tmp', 'copied.jsonld') }
 
     it "copies the file" do
       described_class.link_or_copy(old, new)
@@ -19,7 +19,7 @@ RSpec.describe PlumDerivativeMover do
     end
   end
   context "in production" do
-    let(:new) { Rails.root.join('tmp', 'derivatives', 'linked.jsonld') }
+    let(:new) { Rails.root.join('tmp', 'linked.jsonld') }
 
     before do
       allow(Rails.env).to receive(:production?).and_return(true)
