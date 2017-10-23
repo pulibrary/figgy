@@ -24,6 +24,12 @@ RSpec.describe EphemeraBoxDecorator do
   it 'can attach folders' do
     expect(resource.decorate.attachable_objects).to include EphemeraFolder
   end
+  it "displays a state badge" do
+    expect(decorator.rendered_state).to eq("<span class=\"label label-default\">New</span>")
+  end
+  it "exposes a single barcode" do
+    expect(decorator.barcode).to eq("00000000000000")
+  end
   context 'with folders' do
     let(:folder) do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
