@@ -1,9 +1,32 @@
   <h2>Boxes</h2>
-  <ul>
+  <table class="table table-striped datatable">
+    <thead>
+    <tr>
+      <th>Workflow State</th>
+      <th>Title</th>
+      <th>Barcode</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
     <% decorated_resource.boxes.each do |box| %>
-      <li><%= link_to "Box #{box.box_number.first}", Valhalla::ContextualPath.new(child: box, parent_id: nil).show %></li>
+      <% box_url = parent_solr_document_path("#{resource.id}", "#{box.id}") %>
+      <tr>
+        <td><%= box.rendered_state %></td>
+        <td><%= box.header %></td>
+        <td class="barcode"><%= box.barcode %></td>
+        <td>
+          <%= link_to 'View', box_url, class: 'btn btn-default' %>
+          <%= link_to 'Edit', main_app.polymorphic_path([:edit, box]), class: 'btn btn-default' %>
+          <%= link_to "Delete", main_app.polymorphic_path([box]), class: 'btn btn-danger',
+                                data: { confirm: "Delete this #{resource.human_readable_type}?" },
+                                method: :delete %>
+        </td>
+      </tr>
     <% end %>
-  </ul>
+    </tbody>
+  </table>
+
   <% if can?(:create, EphemeraBox) %>
     <%= link_to 'Add Box', ephemera_project_add_box_path(resource, parent_id: resource.id), class: 'btn btn-primary' %>
   <% end %>

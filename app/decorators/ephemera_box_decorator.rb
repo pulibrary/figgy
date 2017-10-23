@@ -62,4 +62,16 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
   def attachable_objects
     [EphemeraFolder]
   end
+
+  def rendered_state
+    ControlledVocabulary.for(:state_box_workflow).badge(state)
+  end
+
+  def state
+    super.first
+  end
+
+  def barcode
+    super.first
+  end
 end
