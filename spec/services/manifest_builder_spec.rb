@@ -75,6 +75,9 @@ RSpec.describe ManifestBuilder do
       expect(first_image["motivation"]).to eq "sc:painting"
       expect(first_image["resource"]["data"]).to eq nil
       expect(first_image["resource"]["service"]["@id"]).not_to be_nil
+      expect(output["thumbnail"]).not_to be_blank
+      expect(output["thumbnail"]["@id"]).to eq "#{first_image['resource']['service']['@id']}/full/!200,150/0/default.jpg"
+      expect(output["thumbnail"]["service"]["@id"]).to eq first_image["resource"]["service"]["@id"]
     end
 
     context "when there's no derivative_file" do
