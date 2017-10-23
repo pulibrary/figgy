@@ -69,6 +69,7 @@ RSpec.feature "Ephemera Vocabularies", js: true do
   scenario 'users can create controlled vocabularies' do
     visit new_ephemera_vocabulary_path
 
+    expect(page).to have_selector('h1', text: 'New Vocabulary')
     page.fill_in 'ephemera_vocabulary_label', with: 'test creating a vocabulary'
     page.find('form.new_ephemera_vocabulary').native.submit
 
@@ -119,6 +120,7 @@ RSpec.feature "Ephemera Vocabularies", js: true do
       visit Valhalla::ContextualPath.new(child: ephemera_vocabulary).show
       click_link 'Add Category'
 
+      expect(page).to have_selector('h1', text: 'New Category')
       page.fill_in 'ephemera_vocabulary_label', with: 'test category'
       page.find('form.new_ephemera_vocabulary').native.submit
 

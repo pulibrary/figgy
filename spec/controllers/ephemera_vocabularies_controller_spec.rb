@@ -105,7 +105,7 @@ RSpec.describe EphemeraVocabulariesController do
     end
     it "renders the form if it doesn't create a ephemera vocabulary" do
       post :create, params: { ephemera_vocabulary: invalid_params }
-      expect(response).to render_template "valhalla/base/new"
+      expect(response).to render_template "ephemera_vocabularies/new"
     end
   end
 
