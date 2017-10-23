@@ -15,13 +15,7 @@ class ManifestBuilder
     # @return [IIIF::Presentation::Manifest]
     def apply(manifest)
       # This is currently here to work around https://github.com/iiif-prezi/osullivan/issues/56
-      if identifier?
-        if manifest.is_a? FasterIIIFManifest
-          manifest.rendering = rendering_hash
-        else
-          manifest.insert(-1, 'rendering', rendering_hash)
-        end
-      end
+      manifest['rendering'] = rendering_hash if identifier?
       manifest
     end
 
