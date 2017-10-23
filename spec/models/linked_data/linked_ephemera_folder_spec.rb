@@ -12,7 +12,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       it 'exposes the values as JSON-LD Objects' do
         expect(linked_ephemera_folder.geo_subject).not_to be_empty
         expect(linked_ephemera_folder.geo_subject.first).to eq(
-          "@id" => "http://www.example.com/concern/ephemera_terms/#{ephemera_term.id}",
+          "@id" => "http://www.example.com/catalog/#{ephemera_term.id}",
           "@type" => "skos:Concept",
           "pref_label" => ephemera_term.label,
           "exact_match" => { "@id" => ephemera_term.uri.first }
@@ -34,7 +34,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       it 'exposes the values as JSON-LD Objects' do
         expect(linked_ephemera_folder.genre).to eq(
           [{
-            "@id" => "http://www.example.com/concern/ephemera_terms/#{ephemera_term.id}",
+            "@id" => "http://www.example.com/catalog/#{ephemera_term.id}",
             "@type" => "skos:Concept",
             "pref_label" => ephemera_term.label,
             "exact_match" => { "@id" => ephemera_term.uri.first }
@@ -56,7 +56,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       it 'exposes the values as JSON-LD Objects' do
         expect(linked_ephemera_folder.geographic_origin).to eq(
           [{
-            "@id" => "http://www.example.com/concern/ephemera_terms/#{ephemera_term.id}",
+            "@id" => "http://www.example.com/catalog/#{ephemera_term.id}",
             "@type" => "skos:Concept",
             "pref_label" => ephemera_term.label,
             "exact_match" => { "@id" => ephemera_term.uri.first }
@@ -78,7 +78,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       it 'exposes the values as JSON-LD Objects' do
         expect(linked_ephemera_folder.language).not_to be_empty
         expect(linked_ephemera_folder.language.first).to eq(
-          "@id" => "http://www.example.com/concern/ephemera_terms/#{ephemera_term.id}",
+          "@id" => "http://www.example.com/catalog/#{ephemera_term.id}",
           "@type" => "skos:Concept",
           "pref_label" => ephemera_term.label,
           "exact_match" => { "@id" => ephemera_term.uri.first }
@@ -97,17 +97,18 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
   describe '#subject' do
     context 'with Valkyrie::IDs for values' do
       let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, subject: [ephemera_child_term.id]) }
-      let(:ephemera_vocabulary) { FactoryGirl.create_for_repository(:ephemera_vocabulary, uri: 'https://example.com/ns/testVocabulary') }
-      let(:ephemera_child_term) { FactoryGirl.create_for_repository(:ephemera_term, label: 'test child term', member_of_vocabulary_id: ephemera_vocabulary.id) }
+
+      let(:parent_ephemera_vocabulary) { FactoryGirl.create_for_repository(:ephemera_vocabulary) }
+      let(:ephemera_vocabulary) { FactoryGirl.create_for_repository(:ephemera_vocabulary, uri: 'https://example.com/ns/testVocabulary', member_of_vocabulary_id: parent_ephemera_vocabulary.id) }
+      let(:ephemera_child_term) { FactoryGirl.create_for_repository(:ephemera_term, label: 'test child term', member_of_vocabulary_id: ephemera_vocabulary.id, uri: nil) }
       it 'exposes the values as JSON-LD Objects' do
         expect(linked_ephemera_folder.subject).not_to be_empty
         expect(linked_ephemera_folder.subject.first).to eq(
-          "@id" => "http://www.example.com/concern/ephemera_terms/#{ephemera_child_term.id}",
+          "@id" => "http://www.example.com/catalog/#{ephemera_child_term.id}",
           "@type" => "skos:Concept",
           "pref_label" => ephemera_child_term.label,
-          "exact_match" => { "@id" => ephemera_child_term.uri.first },
           "in_scheme" => {
-            "@id" => "http://www.example.com/concern/ephemera_vocabularies/#{ephemera_vocabulary.id}",
+            "@id" => "http://www.example.com/catalog/#{ephemera_vocabulary.id}",
             "@type" => "skos:ConceptScheme",
             "pref_label" => ephemera_vocabulary.label,
             "exact_match" => { "@id" => ephemera_vocabulary.uri.first }
@@ -132,7 +133,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       it 'exposes the values as strings' do
         expect(linked_ephemera_folder.categories).not_to be_empty
         expect(linked_ephemera_folder.categories.first).to eq(
-          "@id" => "http://www.example.com/concern/ephemera_vocabularies/#{ephemera_vocabulary.id}",
+          "@id" => "http://www.example.com/catalog/#{ephemera_vocabulary.id}",
           "@type" => "skos:ConceptScheme",
           "pref_label" => ephemera_vocabulary.label,
           "exact_match" => { "@id" => ephemera_vocabulary.uri.first }

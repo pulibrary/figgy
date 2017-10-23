@@ -24,10 +24,6 @@ module LinkedData
       end
     end
 
-    def obj_url
-      helper.url_for(resource)
-    end
-
     def basic_jsonld
       {}
     end
@@ -39,12 +35,12 @@ module LinkedData
     private
 
       def exact_match
-        return unless external_uri_exists?
-        { "@id" => Array.wrap(uri).first }
+        return {} unless external_uri_exists?
+        { "exact_match" => { "@id" => Array.wrap(uri).first } }
       end
 
       def vocabulary_attributes
-        return {} unless vocabulary
+        return {} unless vocabulary && !resource.is_a?(EphemeraVocabulary)
         {
           "in_scheme" => self.class.new(resource: vocabulary).without_context
         }
@@ -61,9 +57,8 @@ module LinkedData
       def attributes
         {
           '@type': type,
-          pref_label: try(:label),
-          exact_match: exact_match
-        }.merge!(vocabulary_attributes)
+          pref_label: try(:label)
+        }.merge!(vocabulary_attributes).merge!(exact_match)
       end
   end
 end
