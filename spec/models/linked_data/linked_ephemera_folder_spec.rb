@@ -205,6 +205,20 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       expect(linked_ephemera_folder.local_fields[:date_range]).to eq linked_ephemera_folder.date_range
       expect(linked_ephemera_folder.local_fields[:date_created]).to eq linked_ephemera_folder.date_created
     end
+    context "when there's no date range" do
+      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder) }
+      it "doesn't add the field" do
+        box
+        expect(linked_ephemera_folder.local_fields[:date_range]).to be_blank
+      end
+    end
+    context "when there's a blank date range" do
+      let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, date_range: [DateRange.new]) }
+      it "doesn't add the field" do
+        box
+        expect(linked_ephemera_folder.local_fields[:date_range]).to be_blank
+      end
+    end
   end
 
   describe '#local_fields' do
