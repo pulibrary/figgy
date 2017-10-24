@@ -55,6 +55,7 @@ Metrics/ClassLength:
     - 'app/services/plum_importer.rb'
     - 'app/utils/data_seeder.rb'
     - 'app/decorators/scanned_resource_decorator.rb'
+    - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
