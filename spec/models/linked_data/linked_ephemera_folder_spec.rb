@@ -192,7 +192,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
 
   describe "date_range" do
     let(:box) { FactoryGirl.create_for_repository(:ephemera_box, member_ids: ephemera_folder.id) }
-    let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, date_range: [DateRange.new(start: "2013", end: "2017")]) }
+    let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, date_created: "2012", date_range: [DateRange.new(start: "2013", end: "2017")]) }
     it 'exposes the values as a nested date range' do
       box
       expect(linked_ephemera_folder.date_range.first).to be_a Hash
@@ -201,7 +201,9 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
         "begin" => ["2013"],
         "end" => ["2017"]
       )
+      expect(linked_ephemera_folder.date_created.first).to eq "2012"
       expect(linked_ephemera_folder.local_fields[:date_range]).to eq linked_ephemera_folder.date_range
+      expect(linked_ephemera_folder.local_fields[:date_created]).to eq linked_ephemera_folder.date_created
     end
   end
 
