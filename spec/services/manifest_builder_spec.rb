@@ -15,6 +15,7 @@ RSpec.describe ManifestBuilder do
                                       call_number: 'test value2',
                                       edition: 'test edition',
                                       nav_date: 'test date',
+                                      identifier: 'ark:/88435/abc1234de',
                                       imported_metadata: [{
                                         description: "Test Description"
                                       }])
@@ -64,6 +65,7 @@ RSpec.describe ManifestBuilder do
       expect(output).to be_kind_of Hash
       expect(output["description"]).to eq "Test Description"
       expect(output["viewingHint"]).to eq "individuals"
+      expect(output["rendering"]).to include "@id" => "http://arks.princeton.edu/ark:/88435/abc1234de", "format" => "text/html"
       expect(output["sequences"].length).to eq 1
       canvas_id = output["sequences"][0]["canvases"][0]["@id"]
       expect(output["structures"].length).to eq 3
@@ -105,7 +107,7 @@ RSpec.describe ManifestBuilder do
       expect(output).to include 'metadata'
       metadata = output["metadata"]
       expect(metadata).to be_kind_of Array
-      expect(metadata.length).to eq(10)
+      expect(metadata.length).to eq(11)
 
       metadata_object = metadata.shift
       expect(metadata_object).to be_kind_of Hash
@@ -135,7 +137,7 @@ RSpec.describe ManifestBuilder do
     end
   end
   context "when given a nested child" do
-    let(:scanned_resource) { FactoryGirl.create_for_repository(:scanned_resource, member_ids: child.id) }
+    let(:scanned_resource) { FactoryGirl.create_for_repository(:scanned_resource, member_ids: child.id, identifier: 'ark:/88435/5m60qr98h') }
     let(:child) { FactoryGirl.create_for_repository(:scanned_resource, files: [file]) }
     it "builds a IIIF collection" do
       output = manifest_builder.build
@@ -145,6 +147,9 @@ RSpec.describe ManifestBuilder do
       expect(output["manifests"].length).to eq 1
       expect(output["manifests"][0]["@id"]).to eq "http://www.example.com/concern/scanned_resources/#{child.id}/manifest"
       expect(output["manifests"][0]["viewingHint"]).to be_nil
+      expect(output["seeAlso"]).to include "@id" => "http://www.example.com/catalog/#{scanned_resource.id}.jsonld", "format" => "application/ld+json"
+      expect(output["rendering"]).to include "@id" => "http://arks.princeton.edu/ark:/88435/5m60qr98h", "format" => "text/html"
+      expect(output["license"]).to eq "http://rightsstatements.org/vocab/NKC/1.0/"
     end
   end
   context "when given a scanned map" do
