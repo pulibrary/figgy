@@ -190,6 +190,21 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
     end
   end
 
+  describe "date_range" do
+    let(:box) { FactoryGirl.create_for_repository(:ephemera_box, member_ids: ephemera_folder.id) }
+    let(:ephemera_folder) { FactoryGirl.create_for_repository(:ephemera_folder, date_range: [DateRange.new(start: "2013", end: "2017")]) }
+    it 'exposes the values as a nested date range' do
+      box
+      expect(linked_ephemera_folder.date_range.first).to be_a Hash
+      expect(linked_ephemera_folder.date_range.first).to eq(
+        "@type" => "edm:TimeSpan",
+        "begin" => ["2013"],
+        "end" => ["2017"]
+      )
+      expect(linked_ephemera_folder.local_fields[:date_range]).to eq linked_ephemera_folder.date_range
+    end
+  end
+
   describe '#local_fields' do
     let(:ephemera_folder) do
       FactoryGirl.create_for_repository(

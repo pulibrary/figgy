@@ -84,6 +84,10 @@ module LinkedData
       )
     end
 
+    def date_range
+      Array.wrap(resource.date_range).map { |r| LinkedDateRange.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
+    end
+
     private
 
       def attributes
@@ -111,7 +115,8 @@ module LinkedData
           page_count: try(:page_count),
           created: try(:created_at),
           modified: try(:updated_at),
-          folder_number: try(:folder_number)
+          folder_number: try(:folder_number),
+          date_range: try(:date_range)
         }
       end
   end
