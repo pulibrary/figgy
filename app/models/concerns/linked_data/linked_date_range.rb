@@ -3,6 +3,7 @@
 module LinkedData
   class LinkedDateRange < LinkedResource
     def local_fields
+      return {} if resource.start.blank? || resource.end.blank?
       {
         "@type" => "edm:TimeSpan",
         "begin" => resource.start,
