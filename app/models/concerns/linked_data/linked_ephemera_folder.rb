@@ -19,6 +19,7 @@ module LinkedData
       :updated_at,
       :folder_number,
       :ephemera_box,
+      :date_created,
       to: :decorated_resource
     )
 
@@ -116,7 +117,8 @@ module LinkedData
           created: try(:created_at),
           modified: try(:updated_at),
           folder_number: try(:folder_number),
-          date_range: try(:date_range)
+          date_range: try(:date_range),
+          date_created: try(:date_created)
         }
       end
   end
