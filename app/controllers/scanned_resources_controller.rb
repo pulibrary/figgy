@@ -6,6 +6,7 @@ class ScannedResourcesController < BaseResourceController
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
     storage_adapter: Valkyrie.config.storage_adapter
   )
+
   # manifest thing
   def structure
     @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!

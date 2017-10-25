@@ -10,6 +10,7 @@ class EphemeraTermsController < ApplicationController
   )
   before_action :load_vocabularies, only: [:new, :edit]
   before_action :load_terms, only: [:index]
+  rescue_from CanCan::AccessDenied, with: :deny_resource_access
 
   def index
     render 'index'
