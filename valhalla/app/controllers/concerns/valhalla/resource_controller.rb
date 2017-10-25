@@ -52,8 +52,10 @@ module Valhalla
     end
 
     def edit
-      @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
+      @change_set = change_set_class.new(find_resource(params[:id]))
       authorize! :update, @change_set.resource
+      @change_set.validate({})
+      @change_set.prepopulate!
     end
 
     def update

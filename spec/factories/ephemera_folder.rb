@@ -23,6 +23,7 @@ FactoryGirl.define do
     rights_statement RDF::URI('http://rightsstatements.org/vocab/NKC/1.0/')
     read_groups 'public'
     state 'needs_qa'
+    member_of_collection_ids []
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)
     end
