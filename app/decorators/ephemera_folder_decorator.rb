@@ -13,7 +13,6 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
       :height,
       :page_count,
       :rights_statement,
-      :rendered_rights_statement,
       :series,
       :creator,
       :contributor,
@@ -26,7 +25,8 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
       :rendered_date_range,
       :dspace_url,
       :source_url,
-      :visibility
+      :visibility,
+      :rendered_rights_statement
     ]
   )
   iiif_manifest_display(displayed_attributes + [:subject, :categories])
