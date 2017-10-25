@@ -1,0 +1,16 @@
+<% if can?(:show, Report.new) %>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-reports panel-classify-work">
+        <div class="panel-heading">Reports</div>
+        <div class="panel-body">
+          <ul>
+            <% Report.all.sort.each do |report| %>
+              <li class="title"><%= link_to report.to_s.titleize, send("#{report}_path") %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
