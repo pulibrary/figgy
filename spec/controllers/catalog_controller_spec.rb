@@ -296,7 +296,7 @@ RSpec.describe CatalogController do
         expect(json_body[:edm_rights][:pref_label]).to eq "No Known Copyright"
         expect(json_body[:memberOf][0][:@id]).to eq "http://www.example.com/catalog/#{collection.id}"
         expect(json_body[:memberOf][0][:@type]).to eq "pcdm:Collection"
-        expect(json_body[:memberOf][0][:title]).to eq collection.title
+        expect(json_body[:memberOf][0][:title]).to eq collection.title.first
 
         get :show, params: { id: resource.id.to_s, format: :nt }
         expect(response).to be_success
@@ -307,8 +307,6 @@ RSpec.describe CatalogController do
         empty_resource = persister.save(resource: FactoryGirl.build(:scanned_resource))
         get :show, params: { id: empty_resource.id.to_s, format: :jsonld }
         expect(response).to be_success
-        json_body = MultiJson.load(response.body, symbolize_keys: true)
-        expect(json_body[:title]).not_to be_blank
 
         collection = persister.save(resource: FactoryGirl.build(:collection))
         get :show, params: { id: collection.id.to_s, format: :jsonld }

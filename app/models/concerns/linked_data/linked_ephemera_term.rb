@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module LinkedData
-  class LinkedEphemeraTerm < LinkedResource
+  class LinkedEphemeraTerm < LinkedVocabularyBase
     def self.new(resource:)
       if resource.respond_to?(:uri)
         super(resource: resource)
@@ -9,40 +9,12 @@ module LinkedData
       end
     end
 
-    delegate(
-      :uri,
-      :internal_url,
-      :external_uri_exists?,
-      :label,
-      :vocabulary,
-      to: :decorated_resource
-    )
-
-    def local_fields
-      super.tap do |fields|
-        fields.merge!(attributes).reject { |_, v| v.nil? || v.try(:empty?) }
-      end
-    end
-
-    def basic_jsonld
-      {}
-    end
-
-    def without_context
-      as_jsonld.except("@context")
-    end
-
     private
 
-      def exact_match
-        return {} unless external_uri_exists?
-        { "exact_match" => { "@id" => Array.wrap(uri).first } }
-      end
-
-      def vocabulary_attributes
+      def vocabulary_properties
         return {} unless vocabulary && !resource.is_a?(EphemeraVocabulary)
         {
-          "in_scheme" => self.class.new(resource: vocabulary).without_context
+          "in_scheme" => LinkedEphemeraVocabulary.new(resource: vocabulary).without_context
         }
       end
 
@@ -54,11 +26,11 @@ module LinkedData
         end
       end
 
-      def attributes
+      def properties
         {
           '@type': type,
           pref_label: try(:label)
-        }.merge!(vocabulary_attributes).merge!(exact_match)
+        }.merge!(vocabulary_properties).merge!(exact_match)
       end
   end
 end

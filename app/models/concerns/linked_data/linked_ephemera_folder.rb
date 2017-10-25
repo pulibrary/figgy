@@ -2,7 +2,6 @@
 module LinkedData
   class LinkedEphemeraFolder < LinkedResource
     delegate(
-      :collections,
       :alternative_title,
       :creator,
       :contributor,
@@ -61,12 +60,6 @@ module LinkedData
       Array.wrap(decorated_resource.page_count).first
     end
 
-    def local_fields
-      super.tap do |fields|
-        fields.merge!(attributes).reject { |_, v| v.nil? || v.try(:empty?) }
-      end
-    end
-
     def barcode
       Array.wrap(ephemera_box.try(:barcode)).first
     end
@@ -75,23 +68,23 @@ module LinkedData
       Array.wrap(ephemera_box.try(:box_number)).first
     end
 
-    def collection_objects
-      super.push(
-        '@id': helper.solr_document_url(id: ephemera_box.id),
-        '@type': 'pcdm:Collection',
-        barcode: barcode,
-        label: ephemera_box.try(:header),
-        box_number: box_number
-      )
-    end
-
     def date_range
-      Array.wrap(resource.date_range).map { |r| LinkedDateRange.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
+      Array.wrap(decorated_resource.date_range).map { |r| LinkedDateRange.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
     end
 
     private
 
-      def attributes
+      def linked_collections
+        super.push(
+          '@id': helper.solr_document_url(id: ephemera_box.id),
+          '@type': 'pcdm:Collection',
+          barcode: barcode,
+          label: ephemera_box.try(:header),
+          box_number: box_number
+        )
+      end
+
+      def properties
         {
           '@type': 'pcdm:Object',
           alternative: try(:alternative_title),

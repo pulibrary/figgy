@@ -74,6 +74,9 @@ Metrics/ModuleLength:
 Metrics/ParameterLists:
   Exclude:
     - 'app/change_set_persisters/plum_change_set_persister.rb'
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'app/models/concerns/linked_data/linked_resource_factory.rb'
 RSpec/MultipleExpectations:
   Enabled: false
 RSpec/ExampleLength:
