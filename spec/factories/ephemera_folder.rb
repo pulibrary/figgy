@@ -2,6 +2,7 @@
 FactoryGirl.define do
   factory :ephemera_folder do
     barcode '12345678901234'
+    local_identifier 'xyz1'
     folder_number 'one'
     title 'test folder'
     language 'test language'

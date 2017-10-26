@@ -311,6 +311,13 @@ RSpec.describe CatalogController do
         collection = persister.save(resource: FactoryGirl.build(:collection))
         get :show, params: { id: collection.id.to_s, format: :jsonld }
         expect(response).to be_success
+
+        folder = persister.save(resource: FactoryGirl.build(:ephemera_folder))
+        persister.save(resource: FactoryGirl.build(:ephemera_project, member_ids: [folder.id]))
+        get :show, params: { id: folder.id.to_s, format: :jsonld }
+        expect(response).to be_success
+        json_body = MultiJson.load(response.body, symbolize_keys: true)
+        expect(json_body[:local_identifier][0]).to eq 'xyz1'
       end
 
       it "renders for a FileSet" do

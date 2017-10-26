@@ -7,6 +7,7 @@ module LinkedData
       :contributor,
       :publisher,
       :barcode,
+      :local_identifier,
       :folder_number,
       :ephemera_project,
       :description,
@@ -75,6 +76,7 @@ module LinkedData
     private
 
       def linked_collections
+        return unless ephemera_box
         super.push(
           '@id': helper.solr_document_url(id: ephemera_box.id),
           '@type': 'pcdm:Collection',
@@ -92,6 +94,7 @@ module LinkedData
           contributor: try(:contributor),
           publisher: try(:publisher),
           barcode: try(:barcode),
+          local_identifier: try(:local_identifier),
           label: "Folder #{folder_number}",
           is_part_of: ephemera_project.title,
           coverage: try(:geo_subject),
