@@ -23,6 +23,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
       :description,
       :date_created,
       :rendered_date_range,
+      :local_identifier,
       :dspace_url,
       :source_url,
       :visibility,

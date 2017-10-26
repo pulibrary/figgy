@@ -133,6 +133,7 @@ class DataSeeder
         language: [query_service.custom_queries.find_ephemera_term_by_label(label: 'English').id],
         genre: query_service.custom_queries.find_ephemera_term_by_label(label: 'Brochures').id,
         subject: [query_service.custom_queries.find_ephemera_term_by_label(label: 'Architecture').id],
+        local_identifier: "xyz#{i}",
         width: rand(50),
         height: rand(100),
         page_count: rand(600),
