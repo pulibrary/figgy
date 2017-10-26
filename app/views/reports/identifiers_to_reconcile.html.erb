@@ -1,0 +1,21 @@
+<h2>Identifiers to Reconcile</h2>
+<p>
+  <%= link_to "Download CSV", identifiers_to_reconcile_path(format: :csv) %>
+</p>
+
+<table class="table table-striped datatable">
+  <thead>
+    <tr>
+      <th>BibID</th>
+      <th>ARK</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @resources.each do |r| %>
+      <tr>
+        <td><%= r.source_metadata_identifier.first %></td>
+        <td><%= r.identifier.first %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
