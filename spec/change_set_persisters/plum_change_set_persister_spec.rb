@@ -460,6 +460,19 @@ RSpec.describe PlumChangeSetPersister do
     end
   end
 
+  describe "deleting multi-volume scanned resources" do
+    it "deletes children" do
+      child = FactoryGirl.create_for_repository(:scanned_resource)
+      parent = FactoryGirl.create_for_repository(:scanned_resource, member_ids: child.id)
+      change_set = ScannedResourceChangeSet.new(parent)
+      change_set_persister.save(change_set: change_set)
+
+      change_set_persister.delete(change_set: change_set)
+
+      expect { query_service.find_by(id: child.id) }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+    end
+  end
+
   describe "deleting vocabularies" do
     it "deletes EphemeraFields which reference it" do
       vocabulary = FactoryGirl.create_for_repository(:ephemera_vocabulary)
