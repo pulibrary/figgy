@@ -120,12 +120,12 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
   def created
     output = super
     return if output.blank?
-    output.map { |value| Date.parse(value).strftime("%B %-d, %Y") }
+    output.map { |value| Date.parse(value.to_s).strftime("%B %-d, %Y") }
   end
 
   def imported_created
     output = imported_attribute(:created)
     return if output.blank?
-    output.map { |value| Date.parse(value).strftime("%B %-d, %Y") }
+    output.map { |value| Date.parse(value.to_s).strftime("%B %-d, %Y") }
   end
 end

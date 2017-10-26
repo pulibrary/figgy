@@ -26,6 +26,20 @@ RSpec.describe ScannedResourceDecorator do
       expect(decorator.created).to eq ["January 1, 1970"]
     end
   end
+  describe "#imported_created" do
+    let(:resource) do
+      FactoryGirl.build(:scanned_resource,
+                        title: 'test title',
+                        created: '01/01/1970',
+                        imported_metadata: [{
+                          creator: 'test creator',
+                          created: Date.parse("01/01/1970")
+                        }])
+    end
+    it 'exposes a formatted string for the created date' do
+      expect(decorator.imported_created).to eq ["January 1, 1970"]
+    end
+  end
   context 'with imported metadata' do
     let(:resource) do
       FactoryGirl.build(:scanned_resource,
