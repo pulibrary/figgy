@@ -2,7 +2,7 @@
 class ReportsController < ApplicationController
   def identifiers_to_reconcile
     authorize! :show, Report
-    @resources = find_identifiers_to_reconcile_query.find_identifiers_to_reconcile
+    @resources = Valkyrie.config.metadata_adapter.query_service.custom_queries.find_identifiers_to_reconcile
     respond_to do |format|
       format.html
       format.csv do
@@ -21,9 +21,5 @@ class ReportsController < ApplicationController
           csv << fields.map { |k, _v| Array.wrap(record.send(k)).first }
         end
       end
-    end
-
-    def find_identifiers_to_reconcile_query
-      FindIdentifiersToReconcile.new(query_service: Valkyrie.config.metadata_adapter.query_service)
     end
 end
