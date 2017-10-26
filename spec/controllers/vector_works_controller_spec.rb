@@ -12,12 +12,7 @@ RSpec.describe VectorWorksController do
   end
 
   describe "new" do
-    context "when not logged in" do
-      let(:user) { nil }
-      it "throws a CanCan::AccessDenied error" do
-        expect { get :new }.to raise_error CanCan::AccessDenied
-      end
-    end
+    it_behaves_like "an access controlled new request"
 
     context "when logged in, with permission" do
       let(:user) { FactoryGirl.create(:admin) }
@@ -61,11 +56,9 @@ RSpec.describe VectorWorksController do
         visibility: 'restricted'
       }
     end
-    context "when not logged in" do
-      let(:user) { nil }
-      it "throws a CanCan::AccessDenied error" do
-        expect { post :create, params: { vector_work: valid_params } }.to raise_error CanCan::AccessDenied
-      end
+    context "access control" do
+      let(:params) { valid_params }
+      it_behaves_like "an access controlled create request"
     end
     it "can create a vector work" do
       post :create, params: { vector_work: valid_params }
@@ -128,12 +121,9 @@ RSpec.describe VectorWorksController do
 
   describe "destroy" do
     let(:user) { FactoryGirl.create(:admin) }
-    context "when not logged in" do
-      let(:user) { nil }
-      it "throws a CanCan::AccessDenied error" do
-        vector_work = FactoryGirl.create_for_repository(:vector_work)
-        expect { delete :destroy, params: { id: vector_work.id.to_s } }.to raise_error CanCan::AccessDenied
-      end
+    context "access control" do
+      let(:factory) { :vector_work }
+      it_behaves_like "an access controlled destroy request"
     end
     it "can delete a book" do
       vector_work = FactoryGirl.create_for_repository(:vector_work)
@@ -146,13 +136,9 @@ RSpec.describe VectorWorksController do
 
   describe "edit" do
     let(:user) { FactoryGirl.create(:admin) }
-    context "when not logged in" do
-      let(:user) { nil }
-      it "throws a CanCan::AccessDenied error" do
-        vector_work = FactoryGirl.create_for_repository(:vector_work)
-
-        expect { get :edit, params: { id: vector_work.id.to_s } }.to raise_error CanCan::AccessDenied
-      end
+    context "access control" do
+      let(:factory) { :vector_work }
+      it_behaves_like "an access controlled edit request"
     end
     context "when a vector work doesn't exist" do
       it "raises an error" do
@@ -173,13 +159,10 @@ RSpec.describe VectorWorksController do
 
   describe "update" do
     let(:user) { FactoryGirl.create(:admin) }
-    context "when not logged in" do
-      let(:user) { nil }
-      it "throws a CanCan::AccessDenied error" do
-        vector_work = FactoryGirl.create_for_repository(:vector_work)
-
-        expect { patch :update, params: { id: vector_work.id.to_s, vector_work: { title: ["Two"] } } }.to raise_error CanCan::AccessDenied
-      end
+    context "access control" do
+      let(:factory) { :vector_work }
+      let(:extra_params) { { vector_work: { title: ["Two"] } } }
+      it_behaves_like "an access controlled update request"
     end
     context "when a vector work doesn't exist" do
       it "raises an error" do

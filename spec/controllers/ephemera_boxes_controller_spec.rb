@@ -12,12 +12,7 @@ RSpec.describe EphemeraBoxesController do
   end
 
   describe "new" do
-    context "when not logged in" do
-      let(:user) { nil }
-      it "throws a CanCan::AccessDenied error" do
-        expect { get :new }.to raise_error CanCan::AccessDenied
-      end
-    end
+    it_behaves_like "an access controlled new request"
 
     context "when they have permission" do
       let(:user) { FactoryGirl.create(:admin) }
@@ -50,11 +45,9 @@ RSpec.describe EphemeraBoxesController do
         visibility: 'restricted'
       }
     end
-    context "when not an admin" do
-      let(:user) { nil }
-      it "throws a CanCan::AccessDenied error" do
-        expect { post :create, params: { ephemera_box: valid_params } }.to raise_error CanCan::AccessDenied
-      end
+    context "access control" do
+      let(:params) { valid_params }
+      it_behaves_like "an access controlled create request"
     end
     it "can create an ephemera box" do
       post :create, params: { ephemera_box: valid_params }
@@ -107,12 +100,9 @@ RSpec.describe EphemeraBoxesController do
 
   describe "destroy" do
     let(:user) { FactoryGirl.create(:admin) }
-    context "when not logged in" do
-      let(:user) { nil }
-      it "throws a CanCan::AccessDenied error" do
-        ephemera_box = FactoryGirl.create_for_repository(:ephemera_box)
-        expect { delete :destroy, params: { id: ephemera_box.id.to_s } }.to raise_error CanCan::AccessDenied
-      end
+    context "access control" do
+      let(:factory) { :ephemera_box }
+      it_behaves_like "an access controlled destroy request"
     end
     it "can delete a book" do
       ephemera_box = FactoryGirl.create_for_repository(:ephemera_box)
@@ -126,13 +116,9 @@ RSpec.describe EphemeraBoxesController do
 
   describe "edit" do
     let(:user) { FactoryGirl.create(:admin) }
-    context "when not logged in" do
-      let(:user) { nil }
-      it "throws a CanCan::AccessDenied error" do
-        ephemera_box = FactoryGirl.create_for_repository(:ephemera_box)
-
-        expect { get :edit, params: { id: ephemera_box.id.to_s } }.to raise_error CanCan::AccessDenied
-      end
+    context "access control" do
+      let(:factory) { :ephemera_box }
+      it_behaves_like "an access controlled edit request"
     end
     context "when a ephemera box doesn't exist" do
       it "raises an error" do
@@ -153,13 +139,10 @@ RSpec.describe EphemeraBoxesController do
 
   describe "update" do
     let(:user) { FactoryGirl.create(:admin) }
-    context "when not logged in" do
-      let(:user) { nil }
-      it "throws a CanCan::AccessDenied error" do
-        ephemera_box = FactoryGirl.create_for_repository(:ephemera_box)
-
-        expect { patch :update, params: { id: ephemera_box.id.to_s, ephemera_box: { box_number: ["Two"] } } }.to raise_error CanCan::AccessDenied
-      end
+    context "access control" do
+      let(:factory) { :ephemera_box }
+      let(:extra_params) { { ephemera_box: { title: ["Two"] } } }
+      it_behaves_like "an access controlled update request"
     end
     context "when a ephemera box doesn't exist" do
       it "raises an error" do

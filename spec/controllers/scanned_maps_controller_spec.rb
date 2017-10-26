@@ -12,12 +12,7 @@ RSpec.describe ScannedMapsController do
   end
 
   describe "new" do
-    context "when not logged in" do
-      let(:user) { nil }
-      it "throws a CanCan::AccessDenied error" do
-        expect { get :new }.to raise_error CanCan::AccessDenied
-      end
-    end
+    it_behaves_like "an access controlled new request"
 
     context "when not logged in but an auth token is given" do
       it "renders the full manifest" do
@@ -71,11 +66,9 @@ RSpec.describe ScannedMapsController do
         visibility: 'restricted'
       }
     end
-    context "when not an admin" do
-      let(:user) { nil }
-      it "throws a CanCan::AccessDenied error" do
-        expect { post :create, params: { scanned_map: valid_params } }.to raise_error CanCan::AccessDenied
-      end
+    context "access control" do
+      let(:params) { valid_params }
+      it_behaves_like "an access controlled create request"
     end
     it "can create a map image" do
       post :create, params: { scanned_map: valid_params }
@@ -137,12 +130,9 @@ RSpec.describe ScannedMapsController do
 
   describe "destroy" do
     let(:user) { FactoryGirl.create(:admin) }
-    context "when not logged in" do
-      let(:user) { nil }
-      it "throws a CanCan::AccessDenied error" do
-        scanned_map = FactoryGirl.create_for_repository(:scanned_map)
-        expect { delete :destroy, params: { id: scanned_map.id.to_s } }.to raise_error CanCan::AccessDenied
-      end
+    context "access control" do
+      let(:factory) { :scanned_map }
+      it_behaves_like "an access controlled destroy request"
     end
     it "can delete a book" do
       scanned_map = FactoryGirl.create_for_repository(:scanned_map)
@@ -155,13 +145,9 @@ RSpec.describe ScannedMapsController do
 
   describe "edit" do
     let(:user) { FactoryGirl.create(:admin) }
-    context "when not logged in" do
-      let(:user) { nil }
-      it "throws a CanCan::AccessDenied error" do
-        scanned_map = FactoryGirl.create_for_repository(:scanned_map)
-
-        expect { get :edit, params: { id: scanned_map.id.to_s } }.to raise_error CanCan::AccessDenied
-      end
+    context "access control" do
+      let(:factory) { :scanned_map }
+      it_behaves_like "an access controlled edit request"
     end
     context "when a map image doesn't exist" do
       it "raises an error" do
@@ -182,13 +168,10 @@ RSpec.describe ScannedMapsController do
 
   describe "update" do
     let(:user) { FactoryGirl.create(:admin) }
-    context "when not logged in" do
-      let(:user) { nil }
-      it "throws a CanCan::AccessDenied error" do
-        scanned_map = FactoryGirl.create_for_repository(:scanned_map)
-
-        expect { patch :update, params: { id: scanned_map.id.to_s, scanned_map: { title: ["Two"] } } }.to raise_error CanCan::AccessDenied
-      end
+    context "access control" do
+      let(:factory) { :scanned_map }
+      let(:extra_params) { { scanned_map: { title: ["Two"] } } }
+      it_behaves_like "an access controlled update request"
     end
     context "when a map image doesn't exist" do
       it "raises an error" do
@@ -221,10 +204,11 @@ RSpec.describe ScannedMapsController do
     let(:user) { FactoryGirl.create(:admin) }
     context "when not logged in" do
       let(:user) { nil }
-      it "throws a CanCan::AccessDenied error" do
+      it "redirects to login or root" do
         scanned_map = FactoryGirl.create_for_repository(:scanned_map)
 
-        expect { get :structure, params: { id: scanned_map.id.to_s } }.to raise_error CanCan::AccessDenied
+        get :structure, params: { id: scanned_map.id.to_s }
+        expect(response).to be_redirect
       end
     end
     context "when a map image doesn't exist" do

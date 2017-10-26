@@ -12,4 +12,15 @@ class ApplicationController < ActionController::Base
     return key if key
     "guest_" + guest_user_unique_suffix
   end
+
+  # use it in a subclass like:
+  #   rescue_from CanCan::AccessDenied, with: :deny_resource_access
+  def deny_resource_access(exception)
+    raise exception if :manifest == exception.action
+    if current_user
+      redirect_to root_url, alert: exception.message
+    else
+      redirect_to '/users/auth/cas', alert: exception.message
+    end
+  end
 end
