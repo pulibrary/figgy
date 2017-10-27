@@ -266,6 +266,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
 
       expect(linked_ephemera_folder.as_jsonld).not_to be_empty
 
+      expect(linked_ephemera_folder.as_jsonld['title']).to eq "test title"
       expect(linked_ephemera_folder.as_jsonld['barcode']).to eq "00000000000000"
       expect(linked_ephemera_folder.as_jsonld['folder_number']).to eq "1"
       expect(linked_ephemera_folder.as_jsonld['sort_title']).to eq ["test title"]
