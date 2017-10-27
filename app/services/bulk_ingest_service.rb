@@ -107,12 +107,15 @@ class BulkIngestService
       file_paths = file_paths.select { |file| file.extname.ends_with?(file_filter) } if file_filter.present?
 
       nodes = []
-      file_paths.sort.each do |f|
+      file_paths.sort.each_with_index do |f, idx|
         nodes << IngestableFile.new(
           file_path: f,
           mime_type: "image/tiff",
           original_filename: File.basename(f),
-          copyable: true
+          copyable: true,
+          container_attributes: {
+            title: (idx + 1).to_s
+          }
         )
       end
       nodes
