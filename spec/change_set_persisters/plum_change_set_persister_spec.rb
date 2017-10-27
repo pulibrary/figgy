@@ -457,6 +457,32 @@ RSpec.describe PlumChangeSetPersister do
 
         expect(reloaded.member_ids).to eq []
       end
+
+      it "cleans up structure nodes" do
+        child1 = FactoryGirl.create_for_repository(:scanned_resource, title: ['child1'])
+        child2 = FactoryGirl.create_for_repository(:scanned_resource, title: ['child2'])
+        structure = {
+          "label": "Top!",
+          "nodes": [
+            { "label": "Chapter 1",
+              "nodes": [
+                { "proxy": child1.id }
+              ] },
+            { "label": "Chapter 2",
+              "nodes": [
+                { "proxy": child2.id }
+              ] }
+          ]
+        }
+        parent = FactoryGirl.create_for_repository(:scanned_resource, logical_structure: [structure], member_ids: [child1.id, child2.id])
+        change_set = ScannedResourceChangeSet.new(child1)
+
+        change_set_persister.delete(change_set: change_set)
+        reloaded = query_service.find_by(id: parent.id)
+
+        chapter1_node = reloaded.logical_structure.first.nodes.first
+        expect(chapter1_node.nodes).to be_empty
+      end
     end
   end
 
