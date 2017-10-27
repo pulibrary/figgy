@@ -67,6 +67,7 @@ Metrics/MethodLength:
     - 'app/change_sets/ephemera_folder_change_set.rb'
     - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
     - 'app/utils/data_seeder.rb'
+    - 'app/services/bulk_ingest_service.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/dublin_core.rb'

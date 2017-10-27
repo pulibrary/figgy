@@ -24,6 +24,9 @@ RSpec.describe IngestLaeFolderJob do
 
         expect(reloaded1.member_ids.length).to eq 1
         expect(reloaded2.member_ids.length).to eq 2
+
+        file_sets = query_service.find_members(resource: reloaded2)
+        expect(file_sets.flat_map(&:title).to_a).to eq ["1", "2"]
       end
     end
   end
