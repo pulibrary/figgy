@@ -4,30 +4,26 @@ require 'rails_helper'
 RSpec.feature "Ephemera Folders", js: true do
   let(:user) { FactoryGirl.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+  let(:ephemera_project) do
+    res = FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id])
+    adapter.persister.save(resource: res)
+  end
+  let(:ephemera_box) do
+    res = FactoryGirl.create_for_repository(:ephemera_box, member_ids: [ephemera_folder.id])
+    adapter.persister.save(resource: res)
+  end
+  let(:ephemera_folder) do
+    res = FactoryGirl.create_for_repository(:ephemera_folder)
+    adapter.persister.save(resource: res)
+  end
 
   before do
     sign_in user
+    ephemera_project
+    ephemera_box
   end
 
   context 'when users have added an ephemera folder' do
-    let(:ephemera_project) do
-      res = FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id])
-      adapter.persister.save(resource: res)
-    end
-    let(:ephemera_box) do
-      res = FactoryGirl.create_for_repository(:ephemera_box, member_ids: [ephemera_folder.id])
-      adapter.persister.save(resource: res)
-    end
-    let(:ephemera_folder) do
-      res = FactoryGirl.create_for_repository(:ephemera_folder)
-      adapter.persister.save(resource: res)
-    end
-
-    before do
-      ephemera_project
-      ephemera_box
-    end
-
     scenario 'users can view an existing folder' do
       visit Valhalla::ContextualPath.new(child: ephemera_folder).show
       expect(page).to have_content 'test folder'

@@ -36,7 +36,7 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   property :rights_statement, multiple: false, required: true, default: "http://rightsstatements.org/vocab/NKC/1.0/", type: ::Types::URI
   property :rights_note, multiple: false, required: false
   property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID
-  property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
+  property :member_of_collection_ids, multiple: true, required: false, default: [], type: Types::Strict::Array.member(Valkyrie::Types::ID)
   property :read_groups, multiple: true, required: false
   property :files, virtual: true, multiple: true, required: false
   property :pending_uploads, multiple: true, required: false
@@ -66,7 +66,7 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   end
 
   def date_range_form
-    @date_range_form ||= DynamicChangeSet.new(Array.wrap(date_range).first || DateRange.new).tap(&:prepopulate!)
+    @date_range_form ||= DynamicChangeSet.new(date_range_value || DateRange.new).tap(&:prepopulate!)
   end
 
   def primary_terms
@@ -144,5 +144,9 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
       else
         value
       end
+    end
+
+    def date_range_value
+      Array.wrap(date_range).first
     end
 end
