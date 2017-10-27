@@ -75,6 +75,16 @@ RSpec.describe CatalogController do
 
       expect(assigns(:document_list).length).to eq 1
     end
+
+    context 'with indexed ephemera folders' do
+      it "can search by barcode" do
+        persister.save(resource: FactoryGirl.build(:ephemera_folder, barcode: '123456789abcde'))
+        get :index, params: { q: "123456789abcde" }
+
+        expect(assigns(:document_list).length).to eq 1
+      end
+    end
+
     it "can sort by title" do
       persister.save(resource: FactoryGirl.build(:scanned_resource, title: "Resource A"))
       persister.save(resource: FactoryGirl.build(:scanned_resource, title: "Resource B"))
@@ -134,6 +144,13 @@ RSpec.describe CatalogController do
       persister.save(resource: FactoryGirl.build(:ephemera_box))
 
       get :index, params: { q: "" }
+
+      expect(assigns(:document_list).length).to eq 1
+    end
+
+    it "indexes by barcode" do
+      persister.save(resource: FactoryGirl.build(:ephemera_box, barcode: 'abcde012345678'))
+      get :index, params: { q: "abcde012345678" }
 
       expect(assigns(:document_list).length).to eq 1
     end
