@@ -135,10 +135,10 @@ describe Ability do
       is_expected.not_to be_able_to(:destroy, complete_scanned_resource)
       is_expected.not_to be_able_to(:destroy, admin_file)
 
-      is_expected.to be_able_to(:create, EphemeraTemplate.new)
-      is_expected.to be_able_to(:read, EphemeraTemplate.new)
-      is_expected.to be_able_to(:update, EphemeraTemplate.new)
-      is_expected.to be_able_to(:destroy, EphemeraTemplate.new)
+      is_expected.to be_able_to(:create, Template.new)
+      is_expected.to be_able_to(:read, Template.new)
+      is_expected.to be_able_to(:update, Template.new)
+      is_expected.to be_able_to(:destroy, Template.new)
     }
   end
 
