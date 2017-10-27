@@ -7,19 +7,17 @@ class PlumChangeSetPersister
         @property = property
       end
 
-      def new(change_set_persister:, change_set:, post_save_resource: nil)
+      def new(change_set_persister:, change_set:)
         DeleteReferenced.new(change_set_persister: change_set_persister,
                              change_set: change_set,
-                             post_save_resource: post_save_resource,
                              property: property)
       end
     end
-    attr_reader :change_set_persister, :change_set, :post_save_resource, :property
+    attr_reader :change_set_persister, :change_set, :property
     delegate :query_service, :persister, :transaction?, to: :change_set_persister
-    def initialize(change_set_persister:, change_set:, property:, post_save_resource: nil)
+    def initialize(change_set_persister:, change_set:, property:)
       @change_set = change_set
       @change_set_persister = change_set_persister
-      @post_save_resource = post_save_resource
       @property = property
     end
 
