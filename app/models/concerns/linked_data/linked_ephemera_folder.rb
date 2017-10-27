@@ -89,6 +89,7 @@ module LinkedData
       def properties
         {
           '@type': 'pcdm:Object',
+          title: try(:title),
           alternative: try(:alternative_title),
           creator: try(:creator),
           contributor: try(:contributor),
