@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe TemplatesController do
-  let(:user) { FactoryGirl.create(:admin) }
+  let(:user) { FactoryGirl.create(:ephemera_editor) }
   describe "#new" do
     before do
       sign_in user if user
@@ -27,7 +27,7 @@ RSpec.describe TemplatesController do
   end
   describe "#destroy" do
     before do
-      sign_in FactoryGirl.create(:admin)
+      sign_in FactoryGirl.create(:ephemera_editor)
     end
     it "deletes a template" do
       project = FactoryGirl.create_for_repository(:ephemera_project)
