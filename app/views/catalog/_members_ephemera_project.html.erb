@@ -3,7 +3,7 @@
     <thead>
     <tr>
       <th>Workflow State</th>
-      <th>Title</th>
+      <th>Box Number</th>
       <th>Barcode</th>
       <th>Actions</th>
     </tr>
@@ -13,7 +13,7 @@
       <% box_url = parent_solr_document_path("#{resource.id}", "#{box.id}") %>
       <tr>
         <td><%= box.rendered_state %></td>
-        <td><%= box.header %></td>
+        <td><%= box.box_number.first %></td>
         <td class="barcode"><%= box.barcode %></td>
         <td>
           <%= link_to 'View', box_url, class: 'btn btn-default' %>

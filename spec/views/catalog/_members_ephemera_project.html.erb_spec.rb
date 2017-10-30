@@ -16,7 +16,7 @@ RSpec.describe "catalog/_members_ephemera_project" do
     it 'shows them' do
       expect(rendered).to have_selector 'h2', text: 'Boxes'
       expect(rendered).to have_selector 'span.label-default', text: 'New'
-      expect(rendered).to have_selector 'td', text: 'Box 1'
+      expect(rendered).to have_selector 'td', text: '1'
       expect(rendered).to have_selector 'td', text: '00000000000000'
       expect(rendered).to have_link 'View', href: parent_solr_document_path(parent.id, child.id)
       expect(rendered).to have_link 'Edit', href: edit_ephemera_box_path(child.id)
