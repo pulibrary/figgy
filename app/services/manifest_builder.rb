@@ -97,6 +97,10 @@ class ManifestBuilder
       helper.manifest_url(resource)
     end
 
+    def manifest_metadata
+      resource.decorate.iiif_metadata
+    end
+
     ##
     # Retrieves the first viewing hint from the resource metadata
     # Returns multi-part if it's a Multi-Volume Work.
