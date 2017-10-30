@@ -33,7 +33,7 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   property :provenance, multiple: false, required: false
   property :dspace_url, multiple: false, required: false
   property :source_url, multiple: false, required: false
-  property :rights_statement, multiple: false, required: true, default: "http://rightsstatements.org/vocab/NKC/1.0/", type: ::Types::URI
+  property :rights_statement, multiple: false, required: true, default: "http://rightsstatements.org/vocab/CNE/1.0/", type: ::Types::URI
   property :rights_note, multiple: false, required: false
   property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID
   property :member_of_collection_ids, multiple: true, required: false, default: [], type: Types::Strict::Array.member(Valkyrie::Types::ID)
@@ -81,7 +81,6 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
       :width,
       :height,
       :page_count,
-      :rights_statement,
       :series,
       :creator,
       :contributor,
@@ -95,6 +94,7 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
       :provenance,
       :dspace_url,
       :source_url,
+      :rights_statement,
       :append_id
     ]
   end
