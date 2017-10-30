@@ -25,4 +25,36 @@ RSpec.describe Valkyrie::ResourceDecorator do
       expect(decorator.parents.to_a).not_to be_empty
     end
   end
+
+  describe '#iiif_metadata' do
+    context 'when viewing a new Scanned Resource' do
+      let(:resource) do
+        FactoryGirl.create_for_repository(:scanned_resource,
+                                          title: ['test title'],
+                                          pdf_type: ['Gray'],
+                                          identifier: ["http://arks.princeton.edu/ark:/88435/5m60qr98h"],
+                                          created: ['01/01/1970'])
+      end
+      let(:metadata) { resource.decorate.iiif_metadata }
+
+      it 'returns iiif attributes in label/value key/val hash pairs' do
+        expect(metadata).to be_an Array
+        expect(metadata).to include("label" => "Title", "value" => ["test title"])
+        expect(metadata).to include("label" => "Identifier", "value" => \
+          ["<a href='http://arks.princeton.edu/ark:/88435/5m60qr98h' alt='Identifier'>http://arks.princeton.edu/ark:/88435/5m60qr98h</a>"])
+        expect(metadata).to include("label" => "PDF Type", "value" => ["Gray"])
+        expect(metadata).to include("label" => "Created", "value" => ['01/01/1970'])
+      end
+    end
+
+    context 'when viewing an Ephemera Project' do
+      let(:resource) { FactoryGirl.create_for_repository(:ephemera_project, slug: "lae-d957") }
+      let(:metadata) { resource.decorate.iiif_metadata }
+
+      it 'returns slug attributes as exhibit' do
+        expect(metadata).to be_an Array
+        expect(metadata).to include "label" => "Exhibit", "value" => ["lae-d957"]
+      end
+    end
+  end
 end

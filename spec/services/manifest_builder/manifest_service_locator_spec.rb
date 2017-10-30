@@ -2,12 +2,6 @@
 require 'rails_helper'
 
 RSpec.describe ManifestBuilder::ManifestServiceLocator do
-  describe '.metadata_manifest_builder' do
-    it 'returns the class for building manifest metadata' do
-      expect(described_class.metadata_manifest_builder).to eq ManifestBuilder::MetadataBuilder
-    end
-  end
-
   describe '.see_also_builder' do
     it 'returns the class for building manifest see also links' do
       expect(described_class.see_also_builder).to eq ManifestBuilder::SeeAlsoBuilder

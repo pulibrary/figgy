@@ -147,6 +147,7 @@ RSpec.describe ManifestBuilder do
       expect(output["manifests"].length).to eq 1
       expect(output["manifests"][0]["@id"]).to eq "http://www.example.com/concern/scanned_resources/#{child.id}/manifest"
       expect(output["manifests"][0]["viewingHint"]).to be_nil
+      expect(output["manifests"][0]["metadata"]).to be_nil
       expect(output["seeAlso"]).to include "@id" => "http://www.example.com/catalog/#{scanned_resource.id}.jsonld", "format" => "application/ld+json"
       expect(output["rendering"]).to include "@id" => "http://arks.princeton.edu/ark:/88435/5m60qr98h", "format" => "text/html"
       expect(output["license"]).to eq "http://rightsstatements.org/vocab/NKC/1.0/"

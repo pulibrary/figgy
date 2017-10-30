@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe ManifestBuilder::MetadataBuilder::MetadataObject do
+RSpec.describe Valkyrie::ResourceDecorator::MetadataObject do
   subject(:metadata_object) { described_class.new('test attribute', ['test value']) }
 
   describe '#pdf_type_label' do
@@ -26,7 +26,7 @@ RSpec.describe ManifestBuilder::MetadataBuilder::MetadataObject do
 
   describe '#to_h' do
     it 'returns a hash for the label and value for the attribute' do
-      expect(metadata_object.to_h).to eq label: 'Test Attribute', value: ['test value']
+      expect(metadata_object.to_h).to eq "label" => 'Test Attribute', "value" => ['test value']
     end
   end
 

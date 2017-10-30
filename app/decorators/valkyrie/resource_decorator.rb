@@ -93,6 +93,86 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     @parents ||= find_parents(resource: model)
   end
 
+  # prepare metadata as an array of label/value hash pairs
+  # as required by samvera-labs/iiif_manifest
+  def iiif_metadata
+    iiif_manifest_attributes.select { |_, value| value.present? }.map do |u, v|
+      MetadataObject.new(u, v).to_h
+    end
+  end
+
+  class MetadataObject
+    def initialize(attribute, value)
+      @attribute = attribute
+      @value = value
+    end
+
+    def pdf_type_label
+      'PDF Type'
+    end
+
+    def label
+      if respond_to?("#{@attribute}_label".to_sym)
+        send("#{@attribute}_label".to_sym)
+      else
+        @attribute.to_s.titleize
+      end
+    end
+
+    def date_value
+      @value.map do |date|
+        date.split("/").map do |d|
+          if year_only(date.split("/"))
+            Date.parse(d).strftime("%Y")
+          else
+            Date.parse(d).strftime("%m/%d/%Y")
+          end
+        end.join("-")
+      end
+    rescue => e
+      Rails.logger.warn e.message
+      @value
+    end
+
+    alias created_value date_value
+    alias imported_created_value created_value
+    alias updated_value date_value
+    alias imported_updated_value updated_value
+    private :date_value
+
+    def identifier_value
+      @value.map do |id|
+        if id =~ /^https?\:\/\//
+          "<a href='#{id}' alt='#{label}'>#{id}</a>"
+        else
+          id
+        end
+      end
+    end
+
+    alias imported_identifier_value identifier_value
+
+    def value
+      Array.wrap(
+        if respond_to?("#{@attribute}_value".to_sym)
+          send("#{@attribute}_value".to_sym)
+        else
+          @value
+        end
+      )
+    end
+
+    def to_h
+      { 'label' => label, 'value' => value }
+    end
+
+    private
+
+      def year_only(dates)
+        dates.length == 2 && dates.first.end_with?("-01-01T00:00:00Z") && dates.last.end_with?("-12-31T23:59:59Z")
+      end
+  end
+
   private
 
     # Queries the metadata adapter for all referenced resources for a given resource using :member_ids
