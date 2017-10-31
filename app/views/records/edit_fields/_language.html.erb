@@ -3,7 +3,7 @@
 <% if @language.present? %>
   <%= f.input :language,
               label: 'Language',
-              collection: @language,
+              collection: reorder_languages(@language),
               label_method: :label,
               value_method: :id,
               input_html: { multiple: f.object.multiple?(key) },
