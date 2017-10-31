@@ -22,6 +22,9 @@ RSpec.describe "catalog/_members_ephemera_box" do
       expect(rendered).not_to have_selector 'td.barcode', text: "[\"#{child.barcode.first}\"]"
       expect(rendered).to have_selector 'td.genre', text: child.genre.first
       expect(rendered).not_to have_selector 'td.genre', text: "[\"#{child.genre.first}\"]"
+      expect(rendered).to have_link "View", href: "/catalog/parent/#{parent.id}/#{child.id}"
+      expect(rendered).to have_link "Edit", href: "/concern/ephemera_folders/#{child.id}/edit"
+      expect(rendered).not_to have_link "Delete", href: "/concern/ephemera_folders/#{child.id}"
     end
   end
   context "when it's a project with folders" do
@@ -40,6 +43,7 @@ RSpec.describe "catalog/_members_ephemera_box" do
       expect(rendered).to have_selector 'td', text: 'test folder'
       expect(rendered).to have_link "View", href: "/catalog/parent/#{parent.id}/#{child.id}"
       expect(rendered).to have_link "Edit", href: "/concern/ephemera_folders/#{child.id}/edit"
+      expect(rendered).not_to have_link "Delete", href: "/concern/ephemera_folders/#{child.id}"
     end
   end
 end

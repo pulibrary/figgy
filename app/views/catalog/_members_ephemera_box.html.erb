@@ -27,9 +27,6 @@
           <td>
             <%= link_to 'View', folder_url, class: 'btn btn-default' %>
             <%= link_to 'Edit', main_app.polymorphic_path([:edit, folder]), class: 'btn btn-default' %>
-            <%= link_to "Delete", main_app.polymorphic_path([folder]), class: 'btn btn-danger',
-                                  data: { confirm: "Delete this #{resource.human_readable_type}?" },
-                                  method: :delete %>
           </td>
         </tr>
       <% end %>
