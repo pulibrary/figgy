@@ -15,7 +15,7 @@ class EphemeraFoldersController < BaseResourceController
 
   def after_create_success(obj, _change_set)
     if params[:commit] == "Save and Create Another"
-      redirect_to parent_new_ephemera_box_path(parent_id: resource_params[:append_id], create_another: obj.id.to_s)
+      redirect_to parent_new_ephemera_box_path(parent_id: resource_params[:append_id], create_another: obj.id.to_s), notice: "Folder #{obj.folder_number.first} Saved, Creating Another..."
     else
       super
     end
