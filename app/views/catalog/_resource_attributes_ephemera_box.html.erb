@@ -20,7 +20,16 @@
             <td>
               <ul class="tabular">
                 <% values.each do |value| %>
-                  <li class="attribute <%= attribute %>" dir="<%= value.to_s.dir %>"><%= value %></li>
+                  <li class="attribute <%= attribute %>" dir="<%= value.to_s.dir %>">
+                    <%= value %>
+
+                    <% if (attribute == :drive_barcode) %>
+                      <%= simple_form_for(@change_set, html: { class: 'inline pull-right' }) do |f| %>
+                        <%= f.hidden_field :drive_barcode, value: "" %>
+                        <%= f.submit "Detach Hard Drive", class: "btn btn-danger" %>
+                      <% end %>
+                    <% end %>
+                  </li>
                 <% end %>
               </ul>
             </td>

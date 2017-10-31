@@ -137,6 +137,21 @@ RSpec.describe EphemeraBoxesController do
     end
   end
 
+  describe "attach_drive" do
+    let(:user) { FactoryGirl.create(:admin) }
+
+    context "when it exists" do
+      render_views
+      it "renders a form" do
+        ephemera_box = FactoryGirl.create_for_repository(:ephemera_box)
+        get :attach_drive, params: { id: ephemera_box.id.to_s }
+
+        expect(response.body).to have_field "Drive barcode"
+        expect(response.body).to have_button "Save"
+      end
+    end
+  end
+
   describe "update" do
     let(:user) { FactoryGirl.create(:admin) }
     context "access control" do
