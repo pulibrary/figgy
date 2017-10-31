@@ -25,10 +25,10 @@ class PlumChangeSetPersister
       before_delete: [
         CleanupStructure,
         CleanupDerivatives,
-        CleanupMembership::Factory.new(property: :member_of_collection_ids),
-        CleanupMembership::Factory.new(property: :member_ids),
         DeleteReferenced::Factory.new(property: :member_of_vocabulary_id),
-        DeleteMembers
+        DeleteMembers::Factory.new(property: :member_ids),
+        CleanupMembership::Factory.new(property: :member_ids),
+        CleanupMembership::Factory.new(property: :member_of_collection_ids)
       ],
       after_delete_commit: [
         PublishMessage::Factory.new(operation: :delete)
