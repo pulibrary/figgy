@@ -77,6 +77,9 @@ class EphemeraFoldersController < BaseResourceController
     []
   end
 
+  # provides instance variables to views
+  #   e.g. array of decorated EphemeraTerms at
+  #   app/views/records/edit_fields/_language.html.erb
   def load_fields
     fields.each do |field|
       case field.attribute_name
