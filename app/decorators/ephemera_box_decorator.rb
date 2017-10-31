@@ -6,6 +6,7 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
       :box_number,
       :shipped_date,
       :tracking_number,
+      :drive_barcode,
       :visibility,
       :member_of_collections
     ]
@@ -68,6 +69,10 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
   end
 
   def state
+    super.first
+  end
+
+  def drive_barcode
     super.first
   end
 

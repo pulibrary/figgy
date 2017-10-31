@@ -89,6 +89,9 @@ Rails.application.routes.draw do
     get '/ephemera_projects/:parent_id/field', to: 'ephemera_fields#new', as: :ephemera_project_add_field
 
     resources :ephemera_boxes do
+      member do
+        get :attach_drive
+      end
     end
 
     resources :ephemera_folders do

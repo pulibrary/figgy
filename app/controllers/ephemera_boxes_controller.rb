@@ -10,6 +10,10 @@ class EphemeraBoxesController < BaseResourceController
   before_action :load_collections, only: [:new, :edit]
   before_action :cache_project, only: :destroy
 
+  def attach_drive
+    edit
+  end
+
   def cache_project
     @ephemera_project = find_resource(params[:id]).decorate.ephemera_project
   end

@@ -6,6 +6,7 @@ class EphemeraBox < Valhalla::Resource
   attribute :member_of_collection_ids
   attribute :title, Valkyrie::Types::Set
   attribute :barcode, Valkyrie::Types::Set
+  attribute :drive_barcode, Valkyrie::Types::Set
   attribute :box_number, Valkyrie::Types::Set
   attribute :shipped_date, Valkyrie::Types::Set
   attribute :received_date, Valkyrie::Types::Set

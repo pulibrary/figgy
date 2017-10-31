@@ -13,6 +13,21 @@ RSpec.describe EphemeraBoxChangeSet do
     end
   end
 
+  describe "drive_barcode" do
+    it "is invalid if the drive barcode is invalid" do
+      expect(change_set).to be_valid
+
+      change_set.drive_barcode = ["11111111111111"]
+      expect(change_set).not_to be_valid
+    end
+
+    it "is valid if the drive barcode is valid" do
+      expect(change_set).to be_valid
+      change_set.drive_barcode = ["11111111111110"]
+      expect(change_set).to be_valid
+    end
+  end
+
   describe "#state" do
     it "pre-populates" do
       change_set.prepopulate!

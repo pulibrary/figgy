@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe "catalog/_members_ephemera_project" do
   context "when it's a project with boxes and folders" do
     let(:parent) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [child.id, child_folder.id]) }
-    let(:child) { FactoryGirl.create_for_repository(:ephemera_box) }
+    let(:child) { FactoryGirl.create_for_repository(:ephemera_box, drive_barcode: '11111111111110') }
     let(:child_folder) { FactoryGirl.create_for_repository(:ephemera_folder) }
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: parent) }
     let(:solr_document) { SolrDocument.new(document) }
@@ -18,6 +18,7 @@ RSpec.describe "catalog/_members_ephemera_project" do
       expect(rendered).to have_selector 'span.label-default', text: 'New'
       expect(rendered).to have_selector 'td', text: '1'
       expect(rendered).to have_selector 'td', text: '00000000000000'
+      expect(rendered).to have_selector 'td', text: '11111111111110'
       expect(rendered).to have_link 'View', href: parent_solr_document_path(parent.id, child.id)
       expect(rendered).to have_link 'Edit', href: edit_ephemera_box_path(child.id)
 
