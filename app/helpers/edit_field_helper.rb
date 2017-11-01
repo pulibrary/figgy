@@ -1,8 +1,7 @@
 # frozen_string_literal: false
 module EditFieldHelper
-  def reorder_languages(languages)
-    front_languages = %w[English Portuguese Spanish]
-    pull_to_front(languages) { |term| front_languages.include? term.label }
+  def reorder_languages(languages, top_languages)
+    pull_to_front(languages) { |term| top_languages.include? term }
   end
 
   private

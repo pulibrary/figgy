@@ -13,4 +13,7 @@ RSpec.describe EphemeraProject do
     project.member_ids = [1, 2, 3, 3]
     expect(project.member_ids).to eq [1, 2, 3, 3]
   end
+  it "has property top_language" do
+    expect(project.top_language).to eq []
+  end
 end
