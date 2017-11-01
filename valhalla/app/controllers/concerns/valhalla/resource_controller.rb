@@ -67,10 +67,14 @@ module Valhalla
         change_set_persister.buffer_into_index do |persist|
           obj = persist.save(change_set: @change_set)
         end
-        redirect_to contextual_path(obj, @change_set).show
+        after_update_success(obj, @change_set)
       else
         render :edit
       end
+    end
+
+    def after_update_success(obj, change_set)
+      redirect_to contextual_path(obj, change_set).show
     end
 
     def file_manager

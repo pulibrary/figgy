@@ -21,6 +21,14 @@ class EphemeraFoldersController < BaseResourceController
     end
   end
 
+  def after_update_success(obj, _change_set)
+    if params[:commit] == "Save and Create Another"
+      redirect_to parent_new_ephemera_box_path(parent_id: obj.decorate.parent.id, create_another: obj.id.to_s), notice: "Folder #{obj.folder_number.first} Saved, Creating Another..."
+    else
+      super
+    end
+  end
+
   def cache_box
     @cached_box = find_resource(params[:id]).decorate.ephemera_box
   end
