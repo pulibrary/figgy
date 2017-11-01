@@ -311,6 +311,17 @@ RSpec.describe EphemeraFoldersController do
 
         expect(reloaded.folder_number).to eq ["Two"]
       end
+      it "can save and create another" do
+        folder = FactoryGirl.create_for_repository(:ephemera_folder)
+        box = FactoryGirl.create_for_repository(:ephemera_box, member_ids: [folder.id])
+        patch :update, params: { commit: "Save and Create Another", id: folder.id.to_s, ephemera_folder: { folder_number: ["Two"] } }
+
+        expect(response).to be_redirect
+        expect(response.location).to start_with "http://test.host/concern/ephemera_boxes/#{box.id}/ephemera_folders/new?create_another"
+
+        reloaded = find_resource(folder.id)
+        expect(reloaded.folder_number).to eq ["Two"]
+      end
       it "renders the form if it fails validations" do
         ephemera_folder = FactoryGirl.create_for_repository(:ephemera_folder)
         patch :update, params: { id: ephemera_folder.id.to_s, ephemera_folder: invalid_params }
