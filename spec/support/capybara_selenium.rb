@@ -8,7 +8,8 @@ Capybara.register_driver(:headless_chrome) do |app|
   )
 
   http_client = Selenium::WebDriver::Remote::Http::Default.new
-  http_client.timeout = 120
+  http_client.read_timeout = 120
+  http_client.open_timeout = 120
   Capybara::Selenium::Driver.new(app,
                                  browser: :chrome,
                                  desired_capabilities: capabilities,
