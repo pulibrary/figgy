@@ -1,4 +1,5 @@
 import SaveWorkControl from 'form/save_work_control'
+import DuplicateResourceDetectorFactory from 'form/detect_duplicates'
 import ServerUploader from "./server_uploader"
 import StructureManager from "structure_manager"
 import ModalViewer from "modal_viewer"
@@ -38,5 +39,9 @@ export default class Initializer {
     if($("#form-progress").length > 0) {
       new SaveWorkControl($("#form-progress"))
     }
+
+    $(".detect-duplicates").each(function(_i, element) {
+      DuplicateResourceDetectorFactory.build($(element))
+    })
   }
 }
