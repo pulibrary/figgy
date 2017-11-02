@@ -65,6 +65,15 @@
     <%= link_to 'Add Field', ephemera_project_add_field_path(resource, parent_id: resource.id), class: 'btn btn-primary' %>
   <% end %>
 
+  <% unless decorated_resource.top_language.blank? %>
+    <h2>Top languages</h2>
+    <ul>
+      <% decorated_resource.top_language.each do |top_lang| %>
+        <li><%= top_lang.label %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
   <h2>Templates</h2>
 
   <table class="table table-striped">

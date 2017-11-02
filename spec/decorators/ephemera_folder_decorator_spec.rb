@@ -4,26 +4,32 @@ require 'rails_helper'
 RSpec.describe EphemeraFolderDecorator do
   subject(:decorator) { described_class.new(resource) }
   let(:resource) { FactoryGirl.build(:ephemera_folder) }
+
   describe "decoration" do
     it "decorates an EphemeraFolder" do
       expect(resource.decorate).to be_a described_class
     end
   end
+
   describe "decoration" do
     it "decorates an EphemeraFolder" do
       expect(resource.decorate).to be_a described_class
     end
   end
+
   it 'manages files' do
     expect(decorator.manageable_files?).to be true
   end
+
   it 'does not manage structures' do
     expect(decorator.manageable_structure?).to be false
   end
+
   it 'exposes markup for rights statement' do
     expect(resource.decorate.rendered_rights_statement).not_to be_empty
     expect(resource.decorate.rendered_rights_statement.first).to match(/#{Regexp.escape('http://rightsstatements.org/vocab/NKC/1.0/')}/)
   end
+
   context 'with controlled vocabulary terms' do
     let(:term) { FactoryGirl.create_for_repository(:ephemera_term) }
     let(:resource) { FactoryGirl.build(:ephemera_folder, geographic_origin: term.id) }
@@ -40,6 +46,7 @@ RSpec.describe EphemeraFolderDecorator do
       end
     end
   end
+
   context 'with subjects and categories' do
     let(:category) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'Art and Culture') }
     let(:subject_term) { FactoryGirl.create_for_repository(:ephemera_term, label: 'Architecture', member_of_vocabulary_id: category.id) }
@@ -53,6 +60,7 @@ RSpec.describe EphemeraFolderDecorator do
       )
     end
   end
+
   context 'with collections' do
     let(:collection) { FactoryGirl.create_for_repository(:collection) }
     let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, member_of_collection_ids: [collection.id]) }
@@ -61,6 +69,7 @@ RSpec.describe EphemeraFolderDecorator do
       expect(resource.decorate.collections.to_a.first).to be_a Collection
     end
   end
+
   context 'with file sets' do
     let(:file_set) do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
@@ -73,6 +82,7 @@ RSpec.describe EphemeraFolderDecorator do
       expect(resource.decorate.members.to_a.first).to be_a FileSet
     end
   end
+
   context "within a box" do
     let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder) }
     it "can return the box it's a member of" do
@@ -81,6 +91,7 @@ RSpec.describe EphemeraFolderDecorator do
       expect(resource.decorate.ephemera_box.id).to eq box.id
     end
   end
+
   context "within a project" do
     let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder) }
     it "can return the box it's a member of" do
@@ -90,6 +101,7 @@ RSpec.describe EphemeraFolderDecorator do
       expect(resource.decorate.ephemera_box).to be nil
     end
   end
+
   it 'exposes IIIF manifests' do
     expect(decorator.iiif_manifest_attributes).to include alternative_title: ['test alternative title']
     expect(decorator.iiif_manifest_attributes).to include barcode: ["12345678901234"]

@@ -1,7 +1,9 @@
+<%# @language defined at
+    https://github.com/pulibrary/figgy/blob/765c946aca7123dc97af8de9791de7a1220595cc/app/controllers/ephemera_folders_controller.rb#L72 %>
 <% if @language.present? %>
   <%= f.input :language,
               label: 'Language',
-              collection: @language,
+              collection: reorder_languages(@language, top_languages),
               label_method: :label,
               value_method: :id,
               input_html: { multiple: f.object.multiple?(key) },

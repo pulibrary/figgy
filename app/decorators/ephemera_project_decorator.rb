@@ -38,6 +38,10 @@ class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
     Array.wrap(super).first
   end
 
+  def top_language
+    super.map { |id| query_service.find_by(id: id) }
+  end
+
   # Access the resources attributes exposed for the IIIF Manifest metadata
   # @return [Hash] a Hash of all of the resource attributes
   def iiif_manifest_attributes

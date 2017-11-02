@@ -23,6 +23,7 @@ RSpec.describe EphemeraProjectsController do
         get :new
         expect(response.body).to have_field "Title"
         expect(response.body).to have_button "Save"
+        expect(response.body).not_to have_field "Top Language"
       end
     end
   end
@@ -133,6 +134,18 @@ RSpec.describe EphemeraProjectsController do
         expect(response.body).to have_button "Save"
       end
     end
+    context "when it has a language field" do
+      render_views
+      it "renders top language field" do
+        ephemera_vocabulary = FactoryGirl.create_for_repository(:ephemera_vocabulary)
+        ephemera_field = FactoryGirl.create_for_repository(:ephemera_field, member_of_vocabulary_id: [ephemera_vocabulary.id])
+        ephemera_project = FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_field.id])
+        FactoryGirl.create_for_repository(:ephemera_term, label: 'English', member_of_vocabulary_id: [ephemera_vocabulary.id])
+        get :edit, params: { id: ephemera_project.id.to_s }
+
+        expect(response.body).to have_field "Top Language"
+      end
+    end
   end
 
   describe "update" do
@@ -148,9 +161,10 @@ RSpec.describe EphemeraProjectsController do
       end
     end
     context "when it does exist" do
+      let(:eng) { FactoryGirl.create_for_repository(:ephemera_term, label: 'English') }
       it "saves it and redirects" do
         ephemera_project = FactoryGirl.create_for_repository(:ephemera_project)
-        patch :update, params: { id: ephemera_project.id.to_s, ephemera_project: { title: ["Two"], slug: ["updated-slug"] } }
+        patch :update, params: { id: ephemera_project.id.to_s, ephemera_project: { title: ["Two"], slug: ["updated-slug"], top_language: [eng.id.to_s] } }
 
         expect(response).to be_redirect
         expect(response.location).to eq "http://test.host/catalog/#{ephemera_project.id}"
@@ -159,6 +173,7 @@ RSpec.describe EphemeraProjectsController do
 
         expect(reloaded.title).to eq ["Two"]
         expect(reloaded.slug).to eq ["updated-slug"]
+        expect(reloaded.top_language).to eq [eng.id]
       end
       it "renders the form if it fails validations" do
         ephemera_project = FactoryGirl.create_for_repository(:ephemera_project)

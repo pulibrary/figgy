@@ -16,6 +16,20 @@ RSpec.describe EphemeraProjectChangeSet do
     end
   end
 
+  describe '#langugae_options' do
+    let(:resource) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_field.id]) }
+    let(:ephemera_field) { FactoryGirl.create_for_repository(:ephemera_field, member_of_vocabulary_id: [ephemera_vocabulary.id]) }
+    let(:ephemera_vocabulary) { FactoryGirl.create_for_repository(:ephemera_vocabulary) }
+    it 'returns terms from the language field' do
+      eng = FactoryGirl.create_for_repository(:ephemera_term, label: 'English', member_of_vocabulary_id: [ephemera_vocabulary.id])
+      por = FactoryGirl.create_for_repository(:ephemera_term, label: 'Portuguese', member_of_vocabulary_id: [ephemera_vocabulary.id])
+      ids = change_set.language_options.map(&:id)
+      expect(ids.size).to eq 2
+      expect(ids).to include eng.id
+      expect(ids).to include por.id
+    end
+  end
+
   describe '#member_ids' do
     let(:ephemera_box) { FactoryGirl.create_for_repository(:ephemera_box) }
     let(:resource) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id]) }
@@ -28,8 +42,8 @@ RSpec.describe EphemeraProjectChangeSet do
   end
 
   describe '#primary_terms' do
-    it 'exposes the title and slug as the primary terms for Ephemera Projects' do
-      expect(change_set.primary_terms).to eq [:title, :slug]
+    it 'exposes the title, slug, and top_language as the primary terms for Ephemera Projects' do
+      expect(change_set.primary_terms).to eq [:title, :slug, :top_language]
     end
   end
 

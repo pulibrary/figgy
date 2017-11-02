@@ -1,14 +1,23 @@
 # frozen_string_literal: true
 class EphemeraProjectChangeSet < Valkyrie::ChangeSet
-  validates :title, :slug, presence: true
   property :title, multiple: false
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
   property :slug, multiple: false, required: true
+  property :top_language, multiple: true, required: false
+
+  validates :title, :slug, presence: true
   validate :slug_unique?
   validate :slug_valid?
 
   def primary_terms
-    [:title, :slug]
+    [:title, :slug, :top_language]
+  end
+
+  def top_language=(top_language_values)
+    return super(top_language_values) if top_language_values.blank?
+    super(top_language_values.reject(&:blank?).map do |top_language_value|
+      Valkyrie::ID.new(top_language_value)
+    end)
   end
 
   def slug_valid?
@@ -19,6 +28,11 @@ class EphemeraProjectChangeSet < Valkyrie::ChangeSet
   def slug_unique?
     return unless slug_exists?
     errors.add(:slug, 'is already in use by another project')
+  end
+
+  # @return array of EphemeraTerms available in an EphemeraField called 'language'
+  def language_options
+    model.decorate.fields.select { |field| field.attribute_name == 'language' }.map { |field| field.vocabulary.terms }.flatten
   end
 
   private

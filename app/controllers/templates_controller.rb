@@ -51,4 +51,10 @@ class TemplatesController < ApplicationController
   def fields
     @fields ||= find_parent.decorate.fields
   end
+
+  def top_languages
+    # parent is always an ephemera project
+    find_parent.decorate.top_language
+  end
+  helper_method :top_languages
 end

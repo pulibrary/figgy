@@ -63,6 +63,7 @@ class EphemeraFoldersController < BaseResourceController
     find_resource(params[:parent_id])
   end
 
+  # TODO: this could return a project in a boxless setup?
   def ephemera_box
     @ephemera_box ||= params[:parent_id] ? parent_resource.decorate : resource.decorate.ephemera_box
   rescue => e
@@ -70,6 +71,7 @@ class EphemeraFoldersController < BaseResourceController
     nil
   end
 
+  # TODO: seems like this could fail in a boxless folder / project setup
   def fields
     @fields ||= ephemera_box.ephemera_project.fields
   rescue => e
@@ -77,6 +79,9 @@ class EphemeraFoldersController < BaseResourceController
     []
   end
 
+  # provides instance variables to views
+  #   e.g. array of decorated EphemeraTerms at
+  #   app/views/records/edit_fields/_language.html.erb
   def load_fields
     fields.each do |field|
       case field.attribute_name
@@ -86,5 +91,15 @@ class EphemeraFoldersController < BaseResourceController
         instance_variable_set("@#{field.attribute_name}", field.vocabulary.terms)
       end
     end
+  end
+
+  def top_languages
+    ephemera_project.top_language
+  end
+  helper_method :top_languages
+
+  # returns decorated project
+  def ephemera_project
+    ephemera_box ? ephemera_box.ephemera_project : parent_resource.decorate
   end
 end
