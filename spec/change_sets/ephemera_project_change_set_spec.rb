@@ -23,9 +23,10 @@ RSpec.describe EphemeraProjectChangeSet do
     it 'returns terms from the language field' do
       eng = FactoryGirl.create_for_repository(:ephemera_term, label: 'English', member_of_vocabulary_id: [ephemera_vocabulary.id])
       por = FactoryGirl.create_for_repository(:ephemera_term, label: 'Portuguese', member_of_vocabulary_id: [ephemera_vocabulary.id])
-      expect(change_set.language_options.size).to eq 2
-      expect(change_set.language_options).to include eng
-      expect(change_set.language_options).to include por
+      ids = change_set.language_options.map(&:id)
+      expect(ids.size).to eq 2
+      expect(ids).to include eng.id
+      expect(ids).to include por.id
     end
   end
 
