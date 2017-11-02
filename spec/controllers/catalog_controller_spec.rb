@@ -253,14 +253,27 @@ RSpec.describe CatalogController do
     end
   end
 
-  describe "nested catalog paths" do
-    it "loads the parent document when given an ID" do
-      child = persister.save(resource: FactoryGirl.build(:file_set))
-      parent = persister.save(resource: FactoryGirl.build(:scanned_resource, member_ids: child.id))
+  describe "nested catalog file_set paths" do
+    context "when you have permission to view file sets" do
+      before do
+        sign_in FactoryGirl.create(:admin)
+      end
+      it "loads the parent document when given an ID" do
+        child = persister.save(resource: FactoryGirl.build(:file_set))
+        parent = persister.save(resource: FactoryGirl.build(:scanned_resource, member_ids: child.id))
 
-      get :show, params: { parent_id: parent.id, id: child.id }
+        get :show, params: { parent_id: parent.id, id: child.id }
 
-      expect(assigns(:parent_document)).not_to be_nil
+        expect(assigns(:parent_document)).not_to be_nil
+      end
+    end
+    context "as a public user" do
+      it "errors with Blacklight::AccessControls::AccessDenied" do
+        child = persister.save(resource: FactoryGirl.build(:file_set))
+        parent = persister.save(resource: FactoryGirl.build(:scanned_resource, member_ids: child.id))
+
+        expect { get :show, params: { parent_id: parent.id, id: child.id } }.to raise_error(Blacklight::AccessControls::AccessDenied)
+      end
     end
   end
 

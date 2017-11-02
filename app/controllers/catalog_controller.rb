@@ -11,6 +11,9 @@ class CatalogController < ApplicationController
   end
   before_action :parent_document, only: :show
 
+  # enforce hydra access controls
+  before_action :enforce_show_permissions, only: :show
+
   configure_blacklight do |config|
     config.default_solr_params = {
       qf: search_config['qf'],
