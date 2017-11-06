@@ -64,6 +64,30 @@ RSpec.feature "Ephemera Vocabularies", js: true do
         expect(page.all(:css, '.dropdown-menu.open').first.all(:css, 'a:last-child').last).to have_content 'test term'
       end
     end
+
+    context 'when users have added a field and boxless' do
+      let(:ephemera_field) do
+        res = FactoryGirl.create_for_repository(:ephemera_field, member_of_vocabulary_id: ephemera_vocabulary.id)
+        adapter.persister.save(resource: res)
+      end
+
+      before do
+        res = FactoryGirl.create_for_repository(:ephemera_term)
+        res.member_of_vocabulary_id = ephemera_vocabulary.id
+        adapter.persister.save(resource: res)
+
+        ephemera_project.member_ids = [ephemera_field.id]
+        adapter.persister.save(resource: ephemera_project)
+      end
+
+      scenario 'users can add folder metadata using controlled vocabularies' do
+        visit parent_new_ephemera_box_path(parent_id: ephemera_project.id)
+
+        expect(page).to have_selector('.ephemera_folder_language button.dropdown-toggle')
+        page.find(:css, '[data-id="ephemera_folder_language"]').click
+        expect(page.all(:css, '.dropdown-menu.open').first.all(:css, 'a:last-child').last).to have_content 'test term'
+      end
+    end
   end
 
   scenario 'users can create controlled vocabularies' do

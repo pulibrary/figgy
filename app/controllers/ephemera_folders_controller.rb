@@ -63,17 +63,8 @@ class EphemeraFoldersController < BaseResourceController
     find_resource(params[:parent_id])
   end
 
-  # TODO: this could return a project in a boxless setup?
-  def ephemera_box
-    @ephemera_box ||= params[:parent_id] ? parent_resource.decorate : resource.decorate.ephemera_box
-  rescue => e
-    Rails.logger.warn e
-    nil
-  end
-
-  # TODO: seems like this could fail in a boxless folder / project setup
   def fields
-    @fields ||= ephemera_box.ephemera_project.fields
+    @fields ||= ephemera_project.fields
   rescue => e
     Rails.logger.warn e
     []
@@ -100,6 +91,6 @@ class EphemeraFoldersController < BaseResourceController
 
   # returns decorated project
   def ephemera_project
-    ephemera_box ? ephemera_box.ephemera_project : parent_resource.decorate
+    parent_resource.is_a?(EphemeraProject) ? parent_resource.decorate : parent_resource.decorate.ephemera_project
   end
 end
