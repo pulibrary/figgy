@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe "catalog/_members_scanned_resource" do
+RSpec.describe "catalog/_members_multi_volume_work" do
   context 'when the ScannedResource has members' do
     let(:child) { FactoryGirl.create_for_repository(:scanned_resource, title: 'vol1', rights_statement: 'x') }
     let(:parent) { FactoryGirl.create_for_repository(:scanned_resource, title: 'Mui', rights_statement: 'y', member_ids: [child.id]) }
