@@ -8,6 +8,14 @@ namespace :import do
     PlumImporterJob.perform_later(id)
   end
 
+  desc "Re-run characterization for an object"
+  task recharacterize: :environment do
+    id = ENV['ID']
+    abort "usage: rake import:recharacterize ID=plumid" unless id
+
+    RecharacterizeJob.perform_later(id)
+  end
+
   desc "Ingest a METS file."
   task mets: :environment do
     file = ENV['FILE']
