@@ -95,6 +95,20 @@ RSpec.describe CatalogController do
       get :index, params: { q: "resource", sort: "title_ssort desc" }
       expect(assigns(:document_list).map { |r| r.resource.title.first }).to eq(["Resource B", "Resource A"])
     end
+
+    it "allows multiple anonymous users to search" do
+      u1 = User.new uid: 'guest_123'
+      u1.save(validate: false)
+      sign_in u1
+      get :index, params: { q: "" }
+      expect(response).to be_success
+
+      u2 = User.new uid: 'guest_456'
+      u2.save(validate: false)
+      sign_in u2
+      get :index, params: { q: "" }
+      expect(response).to be_success
+    end
   end
 
   describe "FileSet behavior" do
