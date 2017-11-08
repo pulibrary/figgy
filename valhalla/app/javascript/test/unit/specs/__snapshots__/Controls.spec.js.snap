@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Controls.vue has the expected html structure 1`] = `
+<div
+  class="controls"
+>
+  <!---->
+   
+  <button
+    class="btn btn-lg btn-primary"
+    disabled="disabled"
+    id="save_btn"
+    type="button"
+  >
+    
+    Save
+  
+  </button>
+</div>
+`;

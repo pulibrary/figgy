@@ -1,0 +1,127 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilesetForm.vue has the expected html structure 1`] = `
+<div>
+  <h2>
+    Edit 
+    <small>
+      the selected item
+    </small>
+  </h2>
+   
+  <div
+    class="row"
+  >
+    <div
+      class="col-md-12"
+    >
+      <form
+        class="formContent form-inline"
+      >
+        <div
+          class="form-group"
+        >
+          <label
+            class="control-label"
+            for="label"
+          >
+            Label
+          </label>
+           
+          <input
+            class="form-control"
+            id="label"
+            name="label"
+            type="text"
+            value="1"
+          />
+        </div>
+         
+        <div
+          class="form-group"
+        >
+          <label
+            class="control-label"
+            for="pageType"
+          >
+            Page Type
+          </label>
+           
+          <select
+            class="form-control"
+            id="pageType"
+          >
+            <option
+              value="single"
+            >
+              Single Page (Default)
+            </option>
+             
+            <option
+              value="non-paged"
+            >
+              Non-Paged
+            </option>
+             
+            <option
+              value="facing"
+            >
+              Facing Pages
+            </option>
+          </select>
+        </div>
+         
+        <br />
+         
+        <div
+          class="form-group"
+        >
+          <div
+            class="checkbox"
+          >
+            <label>
+              <input
+                id="isThumbnail"
+                type="checkbox"
+              />
+              
+              Set as Thumbnail
+            </label>
+          </div>
+           
+          <div
+            class="checkbox"
+          >
+            <label>
+              <input
+                id="isStartPage"
+                type="checkbox"
+              />
+              
+              Set as Start Page
+            </label>
+          </div>
+        </div>
+         
+        <input
+          id="canvas_id"
+          name="canvas_id"
+          type="hidden"
+        />
+      </form>
+    </div>
+     
+    <div
+      class="col-md-12"
+    >
+      <a
+        class="btn btn-default btn-lg"
+        href="/catalog/parent/undefined/50b5e49b-ade7-4278-8265-4f72081f26a5"
+        id="replace-file-button"
+      >
+        Replace or Delete File
+      </a>
+    </div>
+  </div>
+</div>
+`;
