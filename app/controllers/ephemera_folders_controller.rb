@@ -59,8 +59,12 @@ class EphemeraFoldersController < BaseResourceController
   end
 
   def parent_resource
-    return unless params[:parent_id]
-    find_resource(params[:parent_id])
+    @parent_resource ||=
+      if params[:id]
+        find_resource(params[:id]).decorate.parent
+      elsif params[:parent_id]
+        find_resource(params[:parent_id])
+      end
   end
 
   def fields
