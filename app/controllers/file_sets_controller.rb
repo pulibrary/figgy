@@ -43,7 +43,12 @@ class FileSetsController < ApplicationController
 
     update_derivatives if derivative_resource_params
 
-    redirect_to contextual_path(obj, @change_set).show
+    respond_to do |format|
+      format.html do
+        redirect_to contextual_path(obj, @change_set).show
+      end
+      format.json { head :ok }
+    end
   end
 
   private

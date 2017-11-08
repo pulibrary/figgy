@@ -67,7 +67,10 @@ module Valhalla
         change_set_persister.buffer_into_index do |persist|
           obj = persist.save(change_set: @change_set)
         end
-        after_update_success(obj, @change_set)
+        respond_to do |format|
+          format.html { after_update_success(obj, @change_set) }
+          format.json { head :ok }
+        end
       else
         after_update_failure
       end

@@ -17,13 +17,6 @@ RSpec.describe "valhalla/base/file_manager.html.erb", type: :view do
   end
 
   it "renders correctly" do
-    expect(rendered).to include "<h1>File Manager</h1>"
-    expect(rendered).to have_selector "input[name='file_set[title][]'][type='text'][value='#{member.title.first}']"
-    expect(rendered).to have_selector("a[href=\"#{Valhalla::ContextualPath.new(child: member, parent_id: parent.id).show}\"]")
-    expect(rendered).to have_link "Test Title", href: "/catalog/#{parent.id}"
-    expect(rendered).to have_selector("#sortable form", count: 2)
-    expect(rendered).to have_selector("form#resource-form")
-    expect(rendered).to have_selector("input[name='file_set[viewing_hint]']")
-    expect(rendered).to have_selector("img[src='#{ManifestBuilder::ManifestHelper.new.manifest_image_path(member.thumbnail_id)}/full/!200,150/0/default.jpg']")
+    expect(rendered).to include "<div id=\"filemanager\" data-class-name=\"#{ parent.model_name.plural }\" data-resource=\"#{ parent.id }\"/>"
   end
 end

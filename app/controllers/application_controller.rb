@@ -17,15 +17,15 @@ class ApplicationController < ActionController::Base
   #   rescue_from CanCan::AccessDenied, with: :deny_resource_access
   def deny_resource_access(exception)
     respond_to do |format|
+      format.json { head :forbidden }
       format.html do
+        raise exception if :manifest == exception.action
         if current_user
           redirect_to root_url, alert: exception.message
         else
           redirect_to '/users/auth/cas', alert: exception.message
         end
       end
-      # :manifest action, file manager update requests
-      format.json { head :not_found }
     end
   end
 end

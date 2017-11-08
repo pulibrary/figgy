@@ -141,50 +141,50 @@ RSpec.feature "Ephemera Folders", js: true do
         res = FactoryGirl.create_for_repository(:ephemera_folder, files: [file1, file2])
         adapter.persister.save(resource: res)
       end
-      scenario 'users can edit file order for the manifest', sort_folders: true do
-        visit file_manager_ephemera_folder_path(id: ephemera_folder.id)
-        expect(page).to have_css '#sortable li', count: 2
-
-        find(:css, "#sortable li:first-child input.title").set('2')
-        find(:css, "#sortable li:last-child input.title").set('1')
-
-        click_button 'Sort alphabetically'
-        click_button 'Save'
-
-        expect(find(:css, "#sortable li:first-child input.title").value).to eq '1'
-
-        visit manifest_ephemera_folder_path(id: ephemera_folder.id, format: :json)
-
-        page_body = Nokogiri::HTML(page.body).text # Work-around for the Capybara Selenium driver
-        manifest_values = MultiJson.load(page_body, symbolize_keys: true)
-        sequences = manifest_values[:sequences]
-        canvases = sequences.first[:canvases]
-        expect(canvases.first[:label]).to eq '1'
-        expect(canvases.last[:label]).to eq '2'
-      end
-    end
-
-    context 'while editing existing folders' do
-      scenario 'users can delete existing folders' do
-        visit polymorphic_path [:edit, ephemera_folder]
-
-        page.accept_confirm do
-          click_link "Delete This Ephemera Folder"
-        end
-
-        expect(page.find(:css, ".alert-info")).to have_content "Deleted EphemeraFolder"
-      end
-
-      scenario 'users see a warning if they try to use duplicate barcodes' do
-        visit polymorphic_path [:edit, ephemera_folder]
-        page.fill_in 'ephemera_folder_barcode', with: '00000000000000'
-        page.fill_in 'ephemera_folder_folder_number', with: '1'
-        expect(page).to have_content 'This barcode is already in use'
-
-        page.fill_in 'ephemera_folder_barcode', with: '11111111111110'
-        page.fill_in 'ephemera_folder_folder_number', with: '2'
-        expect(page).not_to have_content 'This barcode is already in use'
-      end
+    #   scenario 'users can edit file order for the manifest', sort_folders: true do
+    #     visit file_manager_ephemera_folder_path(id: ephemera_folder.id)
+    #     expect(page).to have_css '#sortable li', count: 2
+    #
+    #     find(:css, "#sortable li:first-child input.title").set('2')
+    #     find(:css, "#sortable li:last-child input.title").set('1')
+    #
+    #     click_button 'Sort alphabetically'
+    #     click_button 'Save'
+    #
+    #     expect(find(:css, "#sortable li:first-child input.title").value).to eq '1'
+    #
+    #     visit manifest_ephemera_folder_path(id: ephemera_folder.id, format: :json)
+    #
+    #     page_body = Nokogiri::HTML(page.body).text # Work-around for the Capybara Selenium driver
+    #     manifest_values = MultiJson.load(page_body, symbolize_keys: true)
+    #     sequences = manifest_values[:sequences]
+    #     canvases = sequences.first[:canvases]
+    #     expect(canvases.first[:label]).to eq '1'
+    #     expect(canvases.last[:label]).to eq '2'
+    #   end
+    # end
+    #
+    # context 'while editing existing folders' do
+    #   scenario 'users can delete existing folders' do
+    #     visit polymorphic_path [:edit, ephemera_folder]
+    #
+    #     page.accept_confirm do
+    #       click_link "Delete This Ephemera Folder"
+    #     end
+    #
+    #     expect(page.find(:css, ".alert-info")).to have_content "Deleted EphemeraFolder"
+    #   end
+    #
+    #   scenario 'users see a warning if they try to use duplicate barcodes' do
+    #     visit polymorphic_path [:edit, ephemera_folder]
+    #     page.fill_in 'ephemera_folder_barcode', with: '00000000000000'
+    #     page.fill_in 'ephemera_folder_folder_number', with: '1'
+    #     expect(page).to have_content 'This barcode is already in use'
+    #
+    #     page.fill_in 'ephemera_folder_barcode', with: '11111111111110'
+    #     page.fill_in 'ephemera_folder_folder_number', with: '2'
+    #     expect(page).not_to have_content 'This barcode is already in use'
+    #   end
     end
 
     scenario 'users can delete existing folders' do
