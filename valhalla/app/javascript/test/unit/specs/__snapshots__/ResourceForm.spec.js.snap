@@ -1,0 +1,150 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ResourceForm.vue has the expected html structure 1`] = `
+<div>
+  <h2>
+    Set Properties 
+    <small>
+      for this resource
+    </small>
+  </h2>
+   
+  <div
+    class="row"
+  >
+    <div
+      class="form-group col-md-6"
+    >
+      <fieldset>
+        <legend>
+          Viewing Direction
+        </legend>
+         
+        <div>
+          <div
+            class="radio"
+          >
+            <label>
+              <input
+                class="viewDirInput"
+                name="viewDir"
+                type="radio"
+              />
+              
+              left-to-right
+            
+            </label>
+          </div>
+        </div>
+        <div>
+          <div
+            class="radio"
+          >
+            <label>
+              <input
+                class="viewDirInput"
+                name="viewDir"
+                type="radio"
+              />
+              
+              right-to-left
+            
+            </label>
+          </div>
+        </div>
+        <div>
+          <div
+            class="radio"
+          >
+            <label>
+              <input
+                class="viewDirInput"
+                name="viewDir"
+                type="radio"
+              />
+              
+              top-to-bottom
+            
+            </label>
+          </div>
+        </div>
+        <div>
+          <div
+            class="radio"
+          >
+            <label>
+              <input
+                class="viewDirInput"
+                name="viewDir"
+                type="radio"
+              />
+              
+              bottom-to-top
+            
+            </label>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+     
+    <div
+      class="form-group col-md-6"
+    >
+      <fieldset>
+        <legend>
+          Viewing Hint
+        </legend>
+         
+        <div>
+          <div
+            class="radio"
+          >
+            <label>
+              <input
+                class="viewHintInput"
+                name="viewHint"
+                type="radio"
+              />
+              
+              individuals
+            
+            </label>
+          </div>
+        </div>
+        <div>
+          <div
+            class="radio"
+          >
+            <label>
+              <input
+                class="viewHintInput"
+                name="viewHint"
+                type="radio"
+              />
+              
+              paged
+            
+            </label>
+          </div>
+        </div>
+        <div>
+          <div
+            class="radio"
+          >
+            <label>
+              <input
+                class="viewHintInput"
+                name="viewHint"
+                type="radio"
+              />
+              
+              continuous
+            
+            </label>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+</div>
+`;

@@ -105,7 +105,7 @@ RSpec.describe EphemeraFoldersController do
 
         get :manifest, params: { id: resource.id.to_s, format: :json }
 
-        expect(response).to be_not_found
+        expect(response).to be_forbidden
       end
       it "displays complete items" do
         resource = FactoryBot.create_for_repository(:complete_ephemera_folder, files: [file])
