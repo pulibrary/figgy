@@ -47,10 +47,14 @@ RSpec.feature "Ephemera Vocabularies", js: true do
         adapter.persister.save(resource: res)
       end
 
-      before do
+      let(:ephemera_term) do
         res = FactoryGirl.create_for_repository(:ephemera_term)
         res.member_of_vocabulary_id = ephemera_vocabulary.id
         adapter.persister.save(resource: res)
+      end
+
+      before do
+        ephemera_term
 
         ephemera_project.member_ids = [ephemera_box.id, ephemera_field.id]
         adapter.persister.save(resource: ephemera_project)
@@ -59,6 +63,19 @@ RSpec.feature "Ephemera Vocabularies", js: true do
       scenario 'users can add folder metadata using controlled vocabularies' do
         visit parent_new_ephemera_box_path(parent_id: ephemera_box.id)
 
+        expect(page).to have_selector('.ephemera_folder_language button.dropdown-toggle')
+        page.find(:css, '[data-id="ephemera_folder_language"]').click
+        expect(page.all(:css, '.dropdown-menu.open').first.all(:css, 'a:last-child').last).to have_content 'test term'
+      end
+
+      scenario 'users can edit folder metadata with controlled vocabularies' do
+        folder = FactoryGirl.create_for_repository(:ephemera_folder, language: ephemera_term.id)
+        adapter.persister.save(resource: folder)
+
+        ephemera_box.member_ids = [folder.id]
+        adapter.persister.save(resource: ephemera_box)
+
+        visit edit_ephemera_folder_path(folder.id)
         expect(page).to have_selector('.ephemera_folder_language button.dropdown-toggle')
         page.find(:css, '[data-id="ephemera_folder_language"]').click
         expect(page.all(:css, '.dropdown-menu.open').first.all(:css, 'a:last-child').last).to have_content 'test term'
@@ -81,7 +98,7 @@ RSpec.feature "Ephemera Vocabularies", js: true do
       end
 
       scenario 'users can add folder metadata using controlled vocabularies' do
-        visit parent_new_ephemera_box_path(parent_id: ephemera_project.id)
+        visit boxless_new_ephemera_folder_path(parent_id: ephemera_project.id)
 
         expect(page).to have_selector('.ephemera_folder_language button.dropdown-toggle')
         page.find(:css, '[data-id="ephemera_folder_language"]').click
