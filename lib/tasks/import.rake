@@ -5,7 +5,7 @@ namespace :import do
     id = ENV['ID']
     abort "usage: rake import:plum ID=plumid" unless id
 
-    PlumImporterJob.perform_later(id)
+    PlumImporterJob.set(queue: :low).perform_later(id)
   end
 
   desc "Re-run characterization for an object"
@@ -13,7 +13,7 @@ namespace :import do
     id = ENV['ID']
     abort "usage: rake import:recharacterize ID=plumid" unless id
 
-    RecharacterizeJob.perform_later(id)
+    RecharacterizeJob.set(queue: :low).perform_later(id)
   end
 
   desc "Ingest a METS file."
@@ -28,6 +28,6 @@ namespace :import do
     @logger.info "ingesting as: #{user.user_key} (override with USER=foo)"
     @logger.info "queuing job to ingest file: #{file}"
 
-    IngestMETSJob.perform_later(file, user)
+    IngestMETSJob.set(queue: :low).perform_later(file, user)
   end
 end

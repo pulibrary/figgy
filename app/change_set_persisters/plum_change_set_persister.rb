@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 class PlumChangeSetPersister
-  def self.new(metadata_adapter:, storage_adapter:, transaction: false, characterize: true)
+  def self.new(metadata_adapter:, storage_adapter:, transaction: false, characterize: true, queue: :default)
     Basic.new(metadata_adapter: metadata_adapter,
               storage_adapter: storage_adapter,
               transaction: transaction,
               characterize: characterize,
+              queue: queue,
               handlers: registered_handlers)
   end
 
@@ -43,15 +44,16 @@ class PlumChangeSetPersister
 
   class Basic
     attr_reader :metadata_adapter, :storage_adapter, :created_file_sets, :handlers
-    attr_accessor :created_file_sets, :queued_events
+    attr_accessor :created_file_sets, :queued_events, :queue
     delegate :persister, :query_service, to: :metadata_adapter
-    def initialize(metadata_adapter:, storage_adapter:, transaction: false, characterize: true, handlers: {})
+    def initialize(metadata_adapter:, storage_adapter:, transaction: false, characterize: true, queue: :default, handlers: {})
       @metadata_adapter = metadata_adapter
       @storage_adapter = storage_adapter
       @transaction = transaction
       @characterize = characterize
       @handlers = handlers
       @queued_events = []
+      @queue = queue
     end
 
     def registered_handlers
@@ -102,7 +104,7 @@ class PlumChangeSetPersister
     end
 
     def with(metadata_adapter:)
-      yield self.class.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter, transaction: true, characterize: @characterize, handlers: handlers)
+      yield self.class.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter, transaction: true, characterize: @characterize, queue: queue, handlers: handlers)
     end
 
     def messenger

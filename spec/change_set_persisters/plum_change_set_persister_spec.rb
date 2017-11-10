@@ -187,12 +187,18 @@ RSpec.describe PlumChangeSetPersister do
     end
 
     it "cleans up derivatives", run_real_derivatives: true do
+      allow(CharacterizationJob).to receive(:set).and_call_original
+      allow(CreateDerivativesJob).to receive(:set).and_call_original
+
       resource = FactoryGirl.build(:scanned_resource)
       change_set = change_set_class.new(resource, characterize: true)
       change_set.files = [file]
+      change_set_persister.queue = 'low'
       output = change_set_persister.save(change_set: change_set)
       file_set = query_service.find_members(resource: output).first
       expect(file_set.file_metadata.select(&:derivative?)).not_to be_empty
+      expect(CharacterizationJob).to have_received(:set).with(queue: 'low')
+      expect(CreateDerivativesJob).to have_received(:set).with(queue: 'low')
 
       updated_change_set = change_set_class.new(output)
       change_set_persister.delete(change_set: updated_change_set)

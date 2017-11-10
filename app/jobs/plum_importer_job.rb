@@ -7,6 +7,7 @@ class PlumImporterJob < ApplicationJob
       storage_adapter: Valkyrie::StorageAdapter.find(:plum_storage),
       characterize: false
     )
+    change_set_persister.queue = queue_name
     output = nil
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
       output = PlumImporter.new(id: id, change_set_persister: buffered_changeset_persister).import!
