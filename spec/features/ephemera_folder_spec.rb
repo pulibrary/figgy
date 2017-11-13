@@ -21,6 +21,7 @@ RSpec.feature "Ephemera Folders", js: true do
     sign_in user
     ephemera_project
     ephemera_box
+    ephemera_folder
   end
 
   context 'within an existing ephemera project' do
@@ -87,6 +88,17 @@ RSpec.feature "Ephemera Folders", js: true do
       expect(page).to have_content 'EphemeraFolder'
     end
 
+    scenario 'users see a warning if they try to use duplicate barcodes' do
+      visit parent_new_ephemera_box_path(parent_id: ephemera_box.id)
+      page.fill_in 'ephemera_folder_barcode', with: '00000000000000'
+      page.fill_in 'ephemera_folder_folder_number', with: '1'
+      expect(page).to have_content 'This barcode is already in use'
+
+      page.fill_in 'ephemera_folder_barcode', with: '11111111111111'
+      page.fill_in 'ephemera_folder_folder_number', with: '2'
+      expect(page).not_to have_content 'This barcode is already in use'
+    end
+
     scenario 'users can save a new folder and create another' do
       visit parent_new_ephemera_box_path(parent_id: ephemera_box.id)
 
@@ -130,6 +142,17 @@ RSpec.feature "Ephemera Folders", js: true do
         end
 
         expect(page.find(:css, ".alert-info")).to have_content "Deleted EphemeraFolder"
+      end
+
+      scenario 'users see a warning if they try to use duplicate barcodes' do
+        visit polymorphic_path [:edit, ephemera_folder]
+        page.fill_in 'ephemera_folder_barcode', with: '00000000000000'
+        page.fill_in 'ephemera_folder_folder_number', with: '1'
+        expect(page).to have_content 'This barcode is already in use'
+
+        page.fill_in 'ephemera_folder_barcode', with: '11111111111110'
+        page.fill_in 'ephemera_folder_folder_number', with: '2'
+        expect(page).not_to have_content 'This barcode is already in use'
       end
     end
 
