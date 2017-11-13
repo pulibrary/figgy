@@ -6,6 +6,7 @@ class IngestLaeFolderJob < ApplicationJob
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
       storage_adapter: Valkyrie::StorageAdapter.find(:lae_storage)
     )
+    change_set_persister.queue = queue_name
     output = nil
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
       output = BulkIngestService.new(change_set_persister: buffered_changeset_persister, logger: logger)

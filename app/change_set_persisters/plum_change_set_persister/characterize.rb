@@ -14,7 +14,7 @@ class PlumChangeSetPersister
       return unless created_file_sets.present?
       created_file_sets.each do |file_set|
         next unless file_set.instance_of?(FileSet) && characterize?
-        ::CharacterizationJob.perform_later(file_set.id.to_s)
+        ::CharacterizationJob.set(queue: change_set_persister.queue).perform_later(file_set.id.to_s)
       end
     end
   end

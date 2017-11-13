@@ -7,11 +7,11 @@ namespace :lae do
     state = ENV['STATE']
 
     abort "usage: PROJECT=projectlabel STATE=state rake lae:ingest /path/to/lae/folder" unless Dir.exist?(folder_dir) && project.present?
-    IngestEphemeraJob.perform_later(folder_dir, state, project)
+    IngestEphemeraJob.set(queue: :low).perform_later(folder_dir, state, project)
   end
   task ingest_disk_files: :environment do
     folder_dir = ARGV[1]
     abort "usage: rake lae:ingest_disk_files /path/to/lae/folder" unless Dir.exist?(folder_dir)
-    IngestLaeFolderJob.perform_later(folder_dir)
+    IngestLaeFolderJob.set(queue: :low).perform_later(folder_dir)
   end
 end

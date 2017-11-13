@@ -26,7 +26,7 @@ namespace :bulk do
 
     begin
       if background
-        IngestFolderJob.perform_later(
+        IngestFolderJob.set(queue: :low).perform_later(
           directory: dir,
           collection: collection,
           source_metadata_identifier: bib,
@@ -65,7 +65,7 @@ namespace :bulk do
 
     begin
       if background
-        IngestMapFolderJob.perform_later(
+        IngestMapFolderJob.set(queue: :low).perform_later(
           directory: dir,
           source_metadata_identifier: bib
         )
@@ -99,7 +99,7 @@ namespace :bulk do
 
     begin
       if background
-        IngestFoldersJob.perform_later(
+        IngestFoldersJob.set(queue: :low).perform_later(
           directory: dir,
           property: field,
           file_filter: filter

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class IngestMETSJob < ApplicationJob
-  queue_as :ingest
   attr_reader :mets
 
   # @param [String] mets_file Filename of a METS file to ingest
@@ -16,7 +15,8 @@ class IngestMETSJob < ApplicationJob
 
   def changeset_persister
     @changeset_persister ||= PlumChangeSetPersister.new(metadata_adapter: metadata_adapter,
-                                                        storage_adapter: storage_adapter)
+                                                        storage_adapter: storage_adapter,
+                                                        queue: queue_name)
   end
 
   def metadata_adapter
