@@ -249,6 +249,7 @@ RSpec.describe PlumChangeSetPersister do
         described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: false)
       end
       let(:resource) { FactoryGirl.build(:scanned_resource) }
+      let(:collection) { FactoryGirl.create_for_repository(:collection) }
       let(:change_set) { ScannedResourceChangeSet.new(resource, characterize: false) }
 
       before do
@@ -257,6 +258,8 @@ RSpec.describe PlumChangeSetPersister do
       end
 
       it 'publishes messages for updated file sets', run_real_derivatives: false, rabbit_stubbed: true do
+        change_set.member_of_collection_ids = [collection.id]
+        change_set.sync
         output = change_set_persister.save(change_set: change_set)
         file_set = query_service.find_members(resource: output).first
 
@@ -267,7 +270,7 @@ RSpec.describe PlumChangeSetPersister do
           "id" => output.id.to_s,
           "event" => "UPDATED",
           "manifest_url" => "http://www.example.com/concern/scanned_resources/#{output.id}/manifest",
-          "collection_slugs" => []
+          "collection_slugs" => ['test']
         }
 
         expect(rabbit_connection).to have_received(:publish).at_least(:once).with(expected_result.to_json)

@@ -101,8 +101,9 @@ RSpec.describe EphemeraFoldersController do
       it "does not display needs_qa items" do
         resource = FactoryGirl.create_for_repository(:ephemera_folder, files: [file])
 
-        expect { get :manifest, params: { id: resource.id.to_s, format: :json } }
-          .to raise_error CanCan::AccessDenied
+        get :manifest, params: { id: resource.id.to_s, format: :json }
+
+        expect(response).to be_not_found
       end
       it "displays complete items" do
         resource = FactoryGirl.create_for_repository(:complete_ephemera_folder, files: [file])

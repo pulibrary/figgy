@@ -17,6 +17,7 @@ class ScannedResourcesController < BaseResourceController
 
   def manifest
     @resource = find_resource(params[:id])
+    authorize! :manifest, @resource
     respond_to do |f|
       f.json do
         render json: ManifestBuilder.new(@resource).build
