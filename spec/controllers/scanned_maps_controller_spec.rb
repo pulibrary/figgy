@@ -17,7 +17,7 @@ RSpec.describe ScannedMapsController do
     context "when not logged in but an auth token is given" do
       it "renders the full manifest" do
         resource = FactoryGirl.create_for_repository(:complete_campus_only_scanned_map)
-        authorization_token = AuthToken.create(group: ["admin"])
+        authorization_token = AuthToken.create!(group: ["admin"], label: "Administration Token")
         get :manifest, params: { id: resource.id, format: :json, auth_token: authorization_token.token }
 
         expect(response).to be_success

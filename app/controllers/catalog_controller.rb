@@ -73,6 +73,7 @@ class CatalogController < ApplicationController
 
   def show
     super
+    authorize! :show, @document.resource
     @change_set = DynamicChangeSet.new(@document.resource)
     @change_set.prepopulate!
   end

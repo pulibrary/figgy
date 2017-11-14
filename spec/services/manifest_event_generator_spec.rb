@@ -27,7 +27,7 @@ RSpec.describe ManifestEventGenerator do
           "id" => record_in_collection.id.to_s,
           "event" => "CREATED",
           "manifest_url" => "http://www.example.com/concern/scanned_resources/#{record_in_collection.id}/manifest",
-          "collection_slugs" => [collection.slug]
+          "collection_slugs" => collection.slug
         }
 
         manifest_event_generator.record_created(record_in_collection)
@@ -58,7 +58,7 @@ RSpec.describe ManifestEventGenerator do
           "id" => record_in_collection.id.to_s,
           "event" => "UPDATED",
           "manifest_url" => "http://www.example.com/concern/scanned_resources/#{record_in_collection.id}/manifest",
-          "collection_slugs" => [collection.slug]
+          "collection_slugs" => collection.slug
         }
 
         manifest_event_generator.record_updated(record_in_collection)

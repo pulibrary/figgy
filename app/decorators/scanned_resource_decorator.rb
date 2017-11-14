@@ -97,7 +97,7 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
   alias collections parents
 
   def collection_slugs
-    @collection_slugs ||= collections.map(&:slug)
+    @collection_slugs ||= collections.flat_map(&:slug)
   end
 
   def human_readable_type
