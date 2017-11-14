@@ -69,12 +69,33 @@ module Valhalla
         end
         after_update_success(obj, @change_set)
       else
-        render :edit
+        after_update_failure
       end
+    rescue Valkyrie::Persistence::ObjectNotFoundError => e
+      after_update_error e
     end
 
     def after_update_success(obj, change_set)
-      redirect_to contextual_path(obj, change_set).show
+      respond_to do |format|
+        format.html do
+          redirect_to contextual_path(obj, change_set).show
+        end
+        format.json { head :ok }
+      end
+    end
+
+    def after_update_failure
+      respond_to do |format|
+        format.html { render :edit }
+        format.json { head :bad_request }
+      end
+    end
+
+    def after_update_error(e)
+      respond_to do |format|
+        format.html { raise e }
+        format.json { head :not_found }
+      end
     end
 
     def file_manager
