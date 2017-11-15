@@ -188,8 +188,9 @@ RSpec.describe ScannedResourcesController do
     end
   end
 
-  describe "update" do
+  describe "html update" do
     let(:user) { FactoryGirl.create(:admin) }
+
     context "access control" do
       let(:factory) { :scanned_resource }
       let(:extra_params) { { scanned_resource: { title: ["Two"] } } }
@@ -219,6 +220,47 @@ RSpec.describe ScannedResourcesController do
         expect(response).to render_template "valhalla/base/edit"
       end
       it_behaves_like "a workflow controller", :scanned_resource
+    end
+  end
+
+  describe "json update" do
+    let(:user) { FactoryGirl.create(:admin) }
+
+    context "when not an admin" do
+      let(:user) { FactoryGirl.create(:user) }
+      it "returns 404" do
+        resource = FactoryGirl.create_for_repository(:scanned_resource)
+        params = { id: resource.id.to_s, scanned_resource: { member_ids: ["not_an_id"] }, format: :json }
+        patch :update, params: params
+        expect(response.status).to eq(404)
+      end
+    end
+
+    context "when a scanned resource doesn't exist" do
+      it "returns 404" do
+        patch :update, params: { id: "not_an_id", format: :json }
+        expect(response.status).to eq(404)
+      end
+    end
+
+    context "when the scanned resource does exist" do
+      it "returns 400 for invalid data" do
+        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+        params = { id: scanned_resource.id.to_s, scanned_resource: { title: [""] }, format: :json }
+        patch :update, params: params
+        expect(response.status).to eq(400)
+      end
+      it "updates and returns 200 for valid data" do
+        file_set1 = FactoryGirl.create_for_repository(:file_set)
+        file_set2 = FactoryGirl.create_for_repository(:file_set)
+        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource, member_ids: [file_set1.id, file_set2.id])
+
+        params = { id: scanned_resource.id.to_s, scanned_resource: { member_ids: [file_set2.id, file_set1.id] }, format: :json }
+        patch :update, params: params
+        expect(response.status).to eq(200)
+        reloaded = find_resource(scanned_resource.id)
+        expect(reloaded.member_ids.first.to_s).to eq file_set2.id.to_s
+      end
     end
   end
 

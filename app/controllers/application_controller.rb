@@ -16,12 +16,16 @@ class ApplicationController < ActionController::Base
   # use it in a subclass like:
   #   rescue_from CanCan::AccessDenied, with: :deny_resource_access
   def deny_resource_access(exception)
-    if exception.action == :manifest
-      render plain: '{}', status: 404
-    elsif current_user
-      redirect_to root_url, alert: exception.message
-    else
-      redirect_to '/users/auth/cas', alert: exception.message
+    respond_to do |format|
+      format.html do
+        if current_user
+          redirect_to root_url, alert: exception.message
+        else
+          redirect_to '/users/auth/cas', alert: exception.message
+        end
+      end
+      # :manifest action, file manager update requests
+      format.json { head :not_found }
     end
   end
 end

@@ -72,6 +72,7 @@ Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/dublin_core.rb'
     - 'app/models/schema/marc_relators.rb'
+    - 'valhalla/app/controllers/concerns/valhalla/resource_controller.rb'
 Metrics/ParameterLists:
   Exclude:
     - 'app/change_set_persisters/plum_change_set_persister.rb'
