@@ -20,7 +20,7 @@ class PlumCharacterizationService
   # @example characterize a file and do not persist the changes
   #   Valkyrie::FileCharacterizationService.for(file_node, persister).characterize(save: false)
   def characterize(save: true)
-    TikaFileCharacterizationService.new(file_node: file_node, persister: persister).characterize
+    ImagemagickCharacterizationService.new(file_node: file_node, persister: persister).characterize
   end
 
   def valid?
