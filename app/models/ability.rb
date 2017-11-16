@@ -17,9 +17,7 @@ class Ability
 
   # Abilities that should be granted to ephemera editors
   def ephemera_editor_permissions
-    can [:manage], EphemeraBox
-    can [:manage], EphemeraFolder
-    can [:manage], Template
+    ephemera_permissions
     can [:create, :read, :edit, :update, :publish], Collection
     can [:create, :read, :edit, :update, :publish, :download], FileSet
     can [:destroy], FileSet do |obj|
@@ -29,6 +27,7 @@ class Ability
 
   # Abilities that should be granted to technicians
   def image_editor_permissions
+    ephemera_permissions
     can [:read, :create, :modify, :update, :publish], curation_concerns
     can [:create, :read, :edit, :update, :publish, :download, :derive], FileSet
     can [:create, :read, :edit, :update, :publish], Collection
@@ -44,8 +43,14 @@ class Ability
       obj.depositor == [current_user.uid]
     end
     cannot [:destroy], curation_concerns do |obj|
-      !obj.identifier.blank?
+      !obj.try(:identifier).blank?
     end
+  end
+
+  def ephemera_permissions
+    can [:manage], EphemeraBox
+    can [:manage], EphemeraFolder
+    can [:manage], Template
   end
 
   def completer_permissions

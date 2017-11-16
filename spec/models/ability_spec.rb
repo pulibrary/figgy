@@ -145,6 +145,9 @@ describe Ability do
   describe 'as an image editor' do
     let(:creating_user) { image_editor }
     let(:current_user) { image_editor }
+    let(:ephemera_folder) { FactoryGirl.create(:ephemera_folder, user: ephemera_editor) }
+    let(:complete_ephemera_folder) { FactoryGirl.create(:complete_ephemera_folder) }
+    let(:other_ephemera_folder) { FactoryGirl.create(:ephemera_folder, user: image_editor) }
 
     it {
       is_expected.to be_able_to(:read, open_scanned_resource)
@@ -167,6 +170,16 @@ describe Ability do
       is_expected.to be_able_to(:create, FileSet.new)
       is_expected.to be_able_to(:destroy, image_editor_file)
       is_expected.to be_able_to(:destroy, pending_scanned_resource)
+
+      is_expected.to be_able_to(:create, EphemeraBox.new)
+      is_expected.to be_able_to(:create, EphemeraFolder.new)
+      is_expected.to be_able_to(:read, ephemera_folder)
+      is_expected.to be_able_to(:update, ephemera_folder)
+      is_expected.to be_able_to(:destroy, ephemera_folder)
+      is_expected.to be_able_to(:manifest, ephemera_folder)
+      is_expected.to be_able_to(:read, other_ephemera_folder)
+      is_expected.to be_able_to(:update, other_ephemera_folder)
+      is_expected.to be_able_to(:destroy, other_ephemera_folder)
 
       is_expected.not_to be_able_to(:create, Role.new)
       is_expected.not_to be_able_to(:destroy, role)
