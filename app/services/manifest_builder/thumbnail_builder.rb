@@ -21,9 +21,9 @@ class ManifestBuilder
       end
 
       def thumbnail
-        return nil unless thumbnail_id
+        return nil unless thumbnail_id && file_set
         {
-          "@id" => helper.manifest_image_thumbnail_path(thumbnail_id),
+          "@id" => helper.manifest_image_thumbnail_path(file_set.id),
           "service" => {
             "@context" => "http://iiiif.io/api/image/2/context.json",
             "@id" => helper.manifest_image_path(file_set),
@@ -34,6 +34,8 @@ class ManifestBuilder
 
       def file_set
         @file_set ||= query_service.find_by(id: thumbnail_id)
+      rescue Valkyrie::Persistence::ObjectNotFoundError
+        @file_set ||= query_service.find_by(id: resource.file_set_presenters.first.id)
       end
 
       def query_service
