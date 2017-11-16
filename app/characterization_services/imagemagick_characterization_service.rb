@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Class for Apache Tika based file characterization service
-# defines the Apache Tika based characterization service a ValkyrieFileCharacterization service
+# Class for ImageMagick based file characterization service
+# defines the ImageMagick based characterization service a ValkyrieFileCharacterization service
 # @since 0.1.0
 class ImagemagickCharacterizationService
   attr_reader :file_node, :persister
