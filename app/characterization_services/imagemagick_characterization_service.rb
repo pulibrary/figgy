@@ -21,11 +21,11 @@ class ImagemagickCharacterizationService
   #   Valkyrie::FileCharacterizationService.for(file_node, persister).characterize(save: false)
   def characterize(save: true)
     @file_characterization_attributes = {
-      width: image_data['geometry']['width'].to_s,
-      height: image_data['geometry']['height'].to_s,
-      mime_type: image_data['mimeType'],
+      width: image.width.to_s,
+      height: image.height.to_s,
+      mime_type: image.mime_type,
       checksum: MultiChecksum.for(file_object),
-      size: image_data['filesize']
+      size: image.size
     }
     new_file = original_file.new(@file_characterization_attributes.to_h)
     @file_node.file_metadata = @file_node.file_metadata.select { |x| x.id != new_file.id } + [new_file]
@@ -41,10 +41,6 @@ class ImagemagickCharacterizationService
 
   def image
     @image ||= MiniMagick::Image.open(filename)
-  end
-
-  def image_data
-    @image_data ||= image.data
   end
 
   # Provides the file attached to the file_node
