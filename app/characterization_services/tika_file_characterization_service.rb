@@ -20,13 +20,12 @@ class TikaFileCharacterizationService
   # @example characterize a file and do not persist the changes
   #   Valkyrie::FileCharacterizationService.for(file_node, persister).characterize(save: false)
   def characterize(save: true)
-    result = JSON.parse(json_output).last
     @file_characterization_attributes = {
-      width: result['tiff:ImageWidth'],
-      height: result['tiff:ImageLength'],
-      mime_type: result['Content-Type'],
+      width: json_output['tiff:ImageWidth'],
+      height: json_output['tiff:ImageLength'],
+      mime_type: json_output['Content-Type'],
       checksum: MultiChecksum.for(file_object),
-      size: result['Content-Length']
+      size: json_output['Content-Length']
     }
     new_file = original_file.new(@file_characterization_attributes.to_h)
     @file_node.file_metadata = @file_node.file_metadata.select { |x| x.id != new_file.id } + [new_file]
@@ -35,7 +34,7 @@ class TikaFileCharacterizationService
   end
 
   def json_output
-    "[#{RubyTikaApp.new(filename.to_s).to_json.gsub('}{', '},{')}]"
+    @json_output ||= JSON.parse("[#{RubyTikaApp.new(filename.to_s).to_json.gsub('}{', '},{')}]").last
   end
 
   # Determines the location of the file on disk for the file_node
