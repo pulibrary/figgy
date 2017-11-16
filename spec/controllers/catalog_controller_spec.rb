@@ -76,9 +76,9 @@ RSpec.describe CatalogController do
       expect(assigns(:document_list).length).to eq 1
     end
 
-    context 'with indexed ephemera folders' do
+    context 'with indexed completed ephemera folders' do
       it "can search by barcode" do
-        persister.save(resource: FactoryGirl.build(:ephemera_folder, barcode: '123456789abcde'))
+        persister.save(resource: FactoryGirl.build(:ephemera_folder, barcode: '123456789abcde', state: 'complete'))
         get :index, params: { q: "123456789abcde" }
 
         expect(assigns(:document_list).length).to eq 1
@@ -126,14 +126,23 @@ RSpec.describe CatalogController do
 
   describe "EphemeraFolder behavior" do
     context "when not an admin" do
-      it "displays needs_qa EphemeraFolder" do
-        persister.save(resource: FactoryGirl.build(:ephemera_folder))
+      it "displays a completed EphemeraFolder" do
+        persister.save(resource: FactoryGirl.build(:ephemera_folder, state: 'complete'))
 
         get :index, params: { q: "" }
 
         expect(assigns(:document_list).length).to eq 1
       end
+
+      it "does not display incomplete EphemeraFolders" do
+        persister.save(resource: FactoryGirl.build(:ephemera_folder))
+
+        get :index, params: { q: "" }
+
+        expect(assigns(:document_list).length).to eq 0
+      end
     end
+
     context "when an admin" do
       before do
         sign_in FactoryGirl.create(:admin)
@@ -151,22 +160,52 @@ RSpec.describe CatalogController do
   end
 
   describe "EphemeraBox behavior" do
-    before do
-      sign_in FactoryGirl.create(:admin)
+    context 'as an administrator' do
+      before do
+        sign_in FactoryGirl.create(:admin)
+      end
+      it "displays indexed EphemeraBoxes" do
+        persister.save(resource: FactoryGirl.build(:ephemera_box))
+
+        get :index, params: { q: "" }
+
+        expect(assigns(:document_list).length).to eq 1
+      end
+
+      it "indexes by barcode" do
+        persister.save(resource: FactoryGirl.build(:ephemera_box, barcode: 'abcde012345678'))
+        get :index, params: { q: "abcde012345678" }
+
+        expect(assigns(:document_list).length).to eq 1
+      end
     end
-    it "displays indexed EphemeraBoxes" do
-      persister.save(resource: FactoryGirl.build(:ephemera_box))
 
-      get :index, params: { q: "" }
+    context 'within an incomplete EphemeraBox' do
+      let(:ephemera_folder) { FactoryGirl.build(:ephemera_folder) }
+      let(:ephemera_box) { FactoryGirl.build(:ephemera_box, member_ids: [ephemera_folder.id]) }
+      before do
+        persister.save(resource: ephemera_folder)
+        persister.save(resource: ephemera_box)
+      end
+      it "does not display complete EphemeraFolders" do
+        get :index, params: { q: "" }
 
-      expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:document_list).length).to eq 0
+      end
     end
 
-    it "indexes by barcode" do
-      persister.save(resource: FactoryGirl.build(:ephemera_box, barcode: 'abcde012345678'))
-      get :index, params: { q: "abcde012345678" }
+    context 'within a complete EphemeraBox' do
+      let(:ephemera_folder) { FactoryGirl.build(:ephemera_folder, state: 'complete') }
+      let(:ephemera_box) { FactoryGirl.build(:ephemera_box, member_ids: [ephemera_folder.id], state: 'all_in_production') }
+      before do
+        persister.save(resource: ephemera_folder)
+        persister.save(resource: ephemera_box)
+      end
+      it "does display complete EphemeraFolders" do
+        get :index, params: { q: "" }
 
-      expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:document_list).length).to eq 1
+      end
     end
   end
 

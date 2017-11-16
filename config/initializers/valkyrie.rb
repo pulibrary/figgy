@@ -68,6 +68,7 @@ Rails.application.config.to_prepare do
         Valkyrie::Indexers::AccessControlsIndexer,
         CollectionIndexer,
         EphemeraBoxIndexer,
+        EphemeraFolderIndexer,
         MemberOfIndexer,
         FacetIndexer,
         ProjectIndexer,
