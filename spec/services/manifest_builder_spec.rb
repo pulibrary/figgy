@@ -91,6 +91,32 @@ RSpec.describe ManifestBuilder do
       end
     end
 
+    context "when a thumbnail_id doesn't exist" do
+      let(:scanned_resource) do
+        FactoryGirl.create_for_repository(:scanned_resource,
+                                          title: 'test title1',
+                                          label: 'test label',
+                                          actor: 'test person',
+                                          sort_title: 'test title2',
+                                          portion_note: 'test value1',
+                                          rights_statement: RDF::URI("https://creativecommons.org/licenses/by-nc/4.0/"),
+                                          call_number: 'test value2',
+                                          edition: 'test edition',
+                                          nav_date: 'test date',
+                                          identifier: 'ark:/88435/abc1234de',
+                                          thumbnail_id: Valkyrie::ID.new("blablabla"),
+                                          imported_metadata: [{
+                                            description: "Test Description"
+                                          }])
+      end
+      it "uses the first canvas as the thumbnail" do
+        output = manifest_builder.build
+        first_image = output["sequences"][0]["canvases"][0]["images"][0]
+        expect(output["thumbnail"]).not_to be_blank
+        expect(output["thumbnail"]["@id"]).to eq "#{first_image['resource']['service']['@id']}/full/!200,150/0/default.jpg"
+      end
+    end
+
     context "when in staging" do
       it "generates cantaloupe links" do
         allow(Rails.env).to receive(:development?).and_return(false)
