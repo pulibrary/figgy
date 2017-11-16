@@ -12,3 +12,5 @@
 /tags
 /tmp/*
 /staged_files/*
+/node_modules
+/public/packs
