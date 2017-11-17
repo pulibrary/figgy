@@ -17,6 +17,8 @@ class VectorWorkChangeSet < Valhalla::ChangeSet
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
   property :read_groups, multiple: true, required: false
   property :file_metadata, multiple: true, required: false, default: []
+  property :depositor, multiple: false, require: false
+
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
   property :pending_uploads, multiple: true, required: false
