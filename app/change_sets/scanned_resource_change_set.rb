@@ -23,6 +23,8 @@ class ScannedResourceChangeSet < Valhalla::ChangeSet
   property :logical_structure, multiple: true, required: false, type: Types::Strict::Array.member(Structure), default: [Structure.new(label: "Logical", nodes: [])]
   property :read_groups, multiple: true, required: false
   property :file_metadata, multiple: true, required: false, default: []
+  property :depositor, multiple: false, require: false
+
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
   property :pending_uploads, multiple: true, required: false

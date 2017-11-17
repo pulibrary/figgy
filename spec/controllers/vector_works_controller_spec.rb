@@ -66,7 +66,9 @@ RSpec.describe VectorWorksController do
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/catalog/"
       id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/")
-      expect(find_resource(id).title).to contain_exactly "Title 1", "Title 2"
+      resource = find_resource(id)
+      expect(resource.title).to contain_exactly "Title 1", "Title 2"
+      expect(resource.depositor).to eq [user.uid]
     end
     context "when joining a collection" do
       let(:valid_params) do

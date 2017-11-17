@@ -21,7 +21,7 @@ module Valhalla
     def create
       @change_set = change_set_class.new(resource_class.new)
       authorize! :create, @change_set.resource
-      if @change_set.validate(resource_params)
+      if @change_set.validate(resource_params.merge(depositor: [current_user.uid]))
         @change_set.sync
         obj = nil
         change_set_persister.buffer_into_index do |buffered_changeset_persister|
