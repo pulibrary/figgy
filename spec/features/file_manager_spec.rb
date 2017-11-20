@@ -71,4 +71,28 @@ RSpec.feature "File Manager", js: true do
       end
     end
   end
+
+  context 'with a geo metadata file' do
+    let(:original_file) { FileMetadata.new(use: Valkyrie::Vocab::PCDMUse.OriginalFile, mime_type: 'application/xml; schema=fgdc') }
+    let(:extractor) { instance_double(GeoMetadataExtractor) }
+    let(:resource) do
+      res = FactoryGirl.create_for_repository(:scanned_map)
+      res.member_ids = [file_set.id]
+      adapter.persister.save(resource: res)
+    end
+
+    before do
+      file_set.file_metadata = [original_file]
+      adapter.persister.save(resource: file_set)
+      allow(GeoMetadataExtractor).to receive(:new).and_return(extractor)
+      allow(extractor).to receive(:extract).and_return(true)
+    end
+
+    scenario 'users extract metadata from an fgdc metadata file' do
+      visit polymorphic_path [:file_manager, resource]
+      expect(page).to have_selector('form.extract_metadata button')
+      click_button 'Extract'
+      expect(page).to have_selector '.alert-success .text', text: 'Metadata is being extracted'
+    end
+  end
 end
