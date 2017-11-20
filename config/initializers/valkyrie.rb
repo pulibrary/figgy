@@ -62,19 +62,21 @@ Rails.application.config.to_prepare do
   )
 
   Valkyrie::MetadataAdapter.register(
-    Valkyrie::Persistence::Solr::MetadataAdapter.new(
-      connection: Blacklight.default_index.connection,
-      resource_indexer: CompositeIndexer.new(
-        Valkyrie::Indexers::AccessControlsIndexer,
-        CollectionIndexer,
-        EphemeraBoxIndexer,
-        EphemeraFolderIndexer,
-        MemberOfIndexer,
-        FacetIndexer,
-        ProjectIndexer,
-        HumanReadableTypeIndexer,
-        SortingIndexer,
-        ImportedMetadataIndexer
+    BenchmarkingMetadataAdapter.new(
+      Valkyrie::Persistence::Solr::MetadataAdapter.new(
+        connection: Blacklight.default_index.connection,
+        resource_indexer: CompositeIndexer.new(
+          Valkyrie::Indexers::AccessControlsIndexer,
+          CollectionIndexer,
+          EphemeraBoxIndexer,
+          EphemeraFolderIndexer,
+          MemberOfIndexer,
+          FacetIndexer,
+          ProjectIndexer,
+          HumanReadableTypeIndexer,
+          SortingIndexer,
+          ImportedMetadataIndexer
+        )
       )
     ),
     :index_solr
