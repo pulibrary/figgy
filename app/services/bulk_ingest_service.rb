@@ -55,10 +55,6 @@ class BulkIngestService
 
   private
 
-    def property_query_service
-      @query_service ||= FindByStringProperty.new(query_service: query_service)
-    end
-
     def new_resource(klass:, **attributes)
       collection = attributes.delete(:collection)
 
@@ -76,7 +72,7 @@ class BulkIngestService
     end
 
     def find_by(property:, value:)
-      results = property_query_service.find_by_string_property(property: property, value: value).to_a
+      results = query_service.custom_queries.find_by_string_property(property: property, value: value).to_a
       raise "Failed to find the resource for #{property}:#{value}" if results.empty?
       results.first
     rescue => error

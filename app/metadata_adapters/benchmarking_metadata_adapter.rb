@@ -63,6 +63,7 @@ class BenchmarkingMetadataAdapter
   class QueryService
     include ActiveSupport::Benchmarkable
     attr_reader :query_service
+    delegate :resource_factory, to: :query_service
     def initialize(query_service)
       @query_service = query_service
     end

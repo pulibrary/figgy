@@ -52,7 +52,9 @@ Rails.application.config.to_prepare do
   )
 
   Valkyrie::MetadataAdapter.register(
-    Valkyrie::Persistence::Postgres::MetadataAdapter.new,
+    BenchmarkingMetadataAdapter.new(
+      Valkyrie::Persistence::Postgres::MetadataAdapter.new
+    ),
     :postgres
   )
 
