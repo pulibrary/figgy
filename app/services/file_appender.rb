@@ -36,7 +36,7 @@ class FileAppender
       node = resource.file_metadata.select { |x| x.id.to_s == file.keys.first }.first
       node.updated_at = Time.current
       file_wrapper = UploadDecorator.new(file.values.first, node.original_filename.first)
-      file = storage_adapter.upload(file: file_wrapper, resource: node)
+      file = storage_adapter.upload(file: file_wrapper, resource: node, original_filename: file_wrapper.original_filename)
       node
     end
   end
@@ -75,7 +75,7 @@ class FileAppender
       file.try(:node_attributes) || {}
     )
     node = FileMetadata.for(file: file).new(attributes)
-    file = storage_adapter.upload(file: file, resource: node)
+    file = storage_adapter.upload(file: file, resource: node, original_filename: file.original_filename)
     node.file_identifiers = node.file_identifiers + [file.id]
     node
   end

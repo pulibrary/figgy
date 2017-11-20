@@ -114,4 +114,5 @@ Rails.application.config.to_prepare do
   [FindByLocalIdentifier, FindByStringProperty, FindEphemeraTermByLabel, FindEphemeraVocabularyByLabel, MemoryEfficientAllQuery, FindProjectFolders, FindIdentifiersToReconcile].each do |query_handler|
     Valkyrie.config.metadata_adapter.query_service.custom_queries.register_query_handler(query_handler)
   end
+  Valkyrie.logger = Rails.logger
 end
