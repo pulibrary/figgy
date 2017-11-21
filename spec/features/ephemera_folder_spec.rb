@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'rails_helper'
+include ActionDispatch::TestProcess
 
 RSpec.feature "Ephemera Folders", js: true do
   let(:user) { FactoryGirl.create(:admin) }
@@ -131,6 +132,36 @@ RSpec.feature "Ephemera Folders", js: true do
       page.find('form.edit_ephemera_folder').native.submit
 
       expect(page).to have_content 'updated folder title'
+    end
+
+    context 'when users are managing files' do
+      let(:file1) { fixture_file_upload('files/example.tif', 'image/tiff') }
+      let(:file2) { fixture_file_upload('files/color-landscape.tif', 'image/tiff') }
+      let(:ephemera_folder) do
+        res = FactoryGirl.create_for_repository(:ephemera_folder, files: [file1, file2])
+        adapter.persister.save(resource: res)
+      end
+      scenario 'users can edit file order for the manifest', sort_folders: true do
+        visit file_manager_ephemera_folder_path(id: ephemera_folder.id)
+        expect(page).to have_css '#sortable li', count: 2
+
+        find(:css, "#sortable li:first-child input.title").set('2')
+        find(:css, "#sortable li:last-child input.title").set('1')
+
+        click_button 'Sort alphabetically'
+        click_button 'Save'
+
+        expect(find(:css, "#sortable li:first-child input.title").value).to eq '1'
+
+        visit manifest_ephemera_folder_path(id: ephemera_folder.id, format: :json)
+
+        page_body = Nokogiri::HTML(page.body).text # Work-around for the Capybara Selenium driver
+        manifest_values = MultiJson.load(page_body, symbolize_keys: true)
+        sequences = manifest_values[:sequences]
+        canvases = sequences.first[:canvases]
+        expect(canvases.first[:label]).to eq '1'
+        expect(canvases.last[:label]).to eq '2'
+      end
     end
 
     context 'while editing existing folders' do
