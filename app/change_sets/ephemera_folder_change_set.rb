@@ -37,6 +37,7 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   property :rights_note, multiple: false, required: false
   property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID
   property :member_of_collection_ids, multiple: true, required: false, default: [], type: Types::Strict::Array.member(Valkyrie::Types::ID)
+  property :member_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
   property :read_groups, multiple: true, required: false
   property :depositor, multiple: false, require: false
   property :files, virtual: true, multiple: true, required: false

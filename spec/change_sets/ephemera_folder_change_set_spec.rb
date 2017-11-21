@@ -17,4 +17,10 @@ RSpec.describe EphemeraFolderChangeSet do
       expect(change_set.required?(:folder_number)).to eq true
     end
   end
+
+  describe "#member_ids" do
+    it "is not required" do
+      expect(change_set.required?(:member_ids)).to eq false
+    end
+  end
 end
