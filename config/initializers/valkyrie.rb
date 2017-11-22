@@ -52,7 +52,9 @@ Rails.application.config.to_prepare do
   )
 
   Valkyrie::MetadataAdapter.register(
-    Valkyrie::Persistence::Postgres::MetadataAdapter.new,
+    BenchmarkingMetadataAdapter.new(
+      Valkyrie::Persistence::Postgres::MetadataAdapter.new
+    ),
     :postgres
   )
 
@@ -62,19 +64,21 @@ Rails.application.config.to_prepare do
   )
 
   Valkyrie::MetadataAdapter.register(
-    Valkyrie::Persistence::Solr::MetadataAdapter.new(
-      connection: Blacklight.default_index.connection,
-      resource_indexer: CompositeIndexer.new(
-        Valkyrie::Indexers::AccessControlsIndexer,
-        CollectionIndexer,
-        EphemeraBoxIndexer,
-        EphemeraFolderIndexer,
-        MemberOfIndexer,
-        FacetIndexer,
-        ProjectIndexer,
-        HumanReadableTypeIndexer,
-        SortingIndexer,
-        ImportedMetadataIndexer
+    BenchmarkingMetadataAdapter.new(
+      Valkyrie::Persistence::Solr::MetadataAdapter.new(
+        connection: Blacklight.default_index.connection,
+        resource_indexer: CompositeIndexer.new(
+          Valkyrie::Indexers::AccessControlsIndexer,
+          CollectionIndexer,
+          EphemeraBoxIndexer,
+          EphemeraFolderIndexer,
+          MemberOfIndexer,
+          FacetIndexer,
+          ProjectIndexer,
+          HumanReadableTypeIndexer,
+          SortingIndexer,
+          ImportedMetadataIndexer
+        )
       )
     ),
     :index_solr
@@ -114,4 +118,5 @@ Rails.application.config.to_prepare do
   [FindByLocalIdentifier, FindByStringProperty, FindEphemeraTermByLabel, FindEphemeraVocabularyByLabel, MemoryEfficientAllQuery, FindProjectFolders, FindIdentifiersToReconcile].each do |query_handler|
     Valkyrie.config.metadata_adapter.query_service.custom_queries.register_query_handler(query_handler)
   end
+  Valkyrie.logger = Rails.logger
 end

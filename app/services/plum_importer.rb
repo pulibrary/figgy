@@ -16,16 +16,14 @@ class PlumImporter
     file_sets = members.select { |x| x.is_a?(FileSet) }
     file_sets.each do |member|
       id_cache[member.local_identifier.first] = member.id.to_s
-      add_checksums(member)
       import_derivative(member)
+      add_checksums(member)
     end
     update_structure(output, members, change_set_persister)
   end
 
   def add_checksums(member)
-    member.original_file.checksum = member.original_file.file_identifiers.map do |id|
-      MultiChecksum.for(Valkyrie::StorageAdapter.find_by(id: id))
-    end
+    GenerateChecksumJob.set(queue: :low).perform_later(member.id.to_s)
   end
 
   def import_derivative(member)
@@ -43,7 +41,7 @@ class PlumImporter
   end
 
   def generate_derivative(member)
-    CreateDerivativesJob.perform_later(member.id.to_s)
+    CreateDerivativesJob.set(queue: :low).perform_later(member.id.to_s)
   end
 
   def update_structure(resource, members, change_set_persister)
