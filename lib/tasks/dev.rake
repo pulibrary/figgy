@@ -2,7 +2,7 @@
 if Rails.env.development? || Rails.env.test?
   require "factory_girl"
 
-  namespace :server do
+  namespace :figgy do
     desc "Start solr server for testing."
     task :test do
       shared_solr_opts = { managed: true, verbose: true, persist: false, download_dir: 'tmp' }

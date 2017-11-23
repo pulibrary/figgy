@@ -32,12 +32,12 @@ bundle install
 
 1. For test:
    - `RAILS_ENV=test rake db:setup`
-   - `rake server:test`
+   - `rake figgy:test`
    - In a separate terminal: `rspec`
 2. For development:
    - ``export SECRET_KEY_BASE=`rake secret` ``
    - `rake db:setup`
-   - `rake server:development`
+   - `rake figgy:development`
    - In a separate terminal: `rails s`
    - Access Figgy at http://localhost:3000/
 

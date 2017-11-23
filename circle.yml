@@ -14,6 +14,6 @@ dependencies:
   post:
     - sudo sh bin/ci_kakadu_install.sh
     - bundle exec rake rubocop
-    - bundle exec rake server:test:
+    - bundle exec rake figgy:test:
         background: true
     - bin/jetty_wait
