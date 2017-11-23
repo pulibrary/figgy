@@ -56,6 +56,7 @@ RSpec.describe PlumImporter do
     expect(members[0].original_file.checksum.first).to be_a MultiChecksum
     expect(members[0].derivative_file).not_to be_blank
     expect(members[0].derivative_file.file_identifiers[0].to_s).to include("/#{Figgy.config['derivative_path']}/")
+    expect(members[0].title).to eq ["image 1"]
     expect(output.thumbnail_id).to eq [members[1].id]
     expect(FileUtils).not_to have_received(:mv)
 

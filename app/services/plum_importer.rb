@@ -329,7 +329,7 @@ class PlumImporter
             file_path: file_set.file_path,
             mime_type: "image/tiff",
             original_filename: file_set.original_filename,
-            container_attributes: { local_identifier: file_set.id },
+            container_attributes: { local_identifier: file_set.id, title: file_set.title },
             node_attributes: file_set.file_attributes,
             copyable: true
           )
@@ -382,6 +382,10 @@ class PlumImporter
 
     def id
       solr_doc["id"]
+    end
+
+    def title
+      Array.wrap(solr_doc["title_tesim"]).first || original_filename
     end
 
     def file_attributes
