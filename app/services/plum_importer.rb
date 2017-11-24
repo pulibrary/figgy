@@ -16,16 +16,14 @@ class PlumImporter
     file_sets = members.select { |x| x.is_a?(FileSet) }
     file_sets.each do |member|
       id_cache[member.local_identifier.first] = member.id.to_s
-      add_checksums(member)
       import_derivative(member)
+      add_checksums(member)
     end
     update_structure(output, members, change_set_persister)
   end
 
   def add_checksums(member)
-    member.original_file.checksum = member.original_file.file_identifiers.map do |id|
-      MultiChecksum.for(Valkyrie::StorageAdapter.find_by(id: id))
-    end
+    GenerateChecksumJob.set(queue: :low).perform_later(member.id.to_s)
   end
 
   def import_derivative(member)
@@ -43,7 +41,7 @@ class PlumImporter
   end
 
   def generate_derivative(member)
-    CreateDerivativesJob.perform_later(member.id.to_s)
+    CreateDerivativesJob.set(queue: :low).perform_later(member.id.to_s)
   end
 
   def update_structure(resource, members, change_set_persister)
@@ -331,7 +329,7 @@ class PlumImporter
             file_path: file_set.file_path,
             mime_type: "image/tiff",
             original_filename: file_set.original_filename,
-            container_attributes: { local_identifier: file_set.id },
+            container_attributes: { local_identifier: file_set.id, title: file_set.title },
             node_attributes: file_set.file_attributes,
             copyable: true
           )
@@ -384,6 +382,10 @@ class PlumImporter
 
     def id
       solr_doc["id"]
+    end
+
+    def title
+      Array.wrap(solr_doc["title_tesim"]).first || original_filename
     end
 
     def file_attributes
