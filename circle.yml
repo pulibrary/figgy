@@ -1,4 +1,6 @@
 machine:
+  node:
+    version: 8.2.1
   ruby:
     version: 2.3.4
   services:
