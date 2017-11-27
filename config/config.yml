@@ -4,7 +4,7 @@ defaults: &defaults
   repository_path: <%= Rails.root.join("tmp", "files") %>
   cantaloupe_url: <%= ENV.fetch('CANTALOUPE_URL', 'http://localhost:8182/iiif/2/') %>
   plum_solr_url: <%= "http://127.0.0.1:#{ENV['TEST_JETTY_PORT'] || 8984}/solr/blacklight-core-test" %>
-  plum_binary_path: "/Users/Sellis/Desktop"
+  plum_binary_path: "/mnt/diglibdata/hydra_binaries"
   plum_derivative_path: "/mnt/libimages1/data/jp2s/plum_prod"
   jp2_recipes:
     default_color: >
