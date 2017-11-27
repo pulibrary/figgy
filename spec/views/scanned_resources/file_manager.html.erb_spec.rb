@@ -17,6 +17,6 @@ RSpec.describe "valhalla/base/file_manager.html.erb", type: :view do
   end
 
   it "renders correctly" do
-    expect(rendered).to include "<div id=\"filemanager\" data-class-name=\"#{ parent.model_name.plural }\" data-resource=\"#{ parent.id }\"/>"
+    expect(rendered).to include "<div id=\"filemanager\" data-class-name=\"#{parent.model_name.plural}\" data-resource=\"#{parent.id}\"/>"
   end
 end
