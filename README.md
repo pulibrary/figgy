@@ -7,6 +7,7 @@ functionality, performance, and scalability.
 ## Dependencies
 
 * Ruby
+* Node v.8.2.1
 * Java (to run Solr server)
 * Postgres
 * [Redis](http://redis.io/)
@@ -26,6 +27,7 @@ functionality, performance, and scalability.
 git clone https://github.com/pulibrary/figgy.git
 cd figgy
 bundle install
+npm install
 ```
 
 ## Setup server
@@ -38,7 +40,7 @@ bundle install
    - ``export SECRET_KEY_BASE=`rake secret` ``
    - `rake db:setup`
    - `rake figgy:development`
-   - In a separate terminal: `rails s`
+   - In a separate terminal: `foreman start`
    - Access Figgy at http://localhost:3000/
 
 ## Load sample development data
