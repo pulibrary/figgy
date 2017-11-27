@@ -22,7 +22,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/66</span>
+        <span class='fraction'>0/68</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -32,12 +32,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/25</span>
+        <span class='fraction'>0/27</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/53</span>
+        <span class='fraction'>0/54</span>
       </div>
     </div>
   </div>
@@ -234,7 +234,11 @@
 189
 190
 191
-192</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+192
+193
+194
+195
+196</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -339,6 +343,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -433,108 +441,109 @@
       &lt;button @click.capture="selectNone()" id="select_none_btn" class="btn btn-default btn-sm"&gt;&lt;i class="fa fa-th fa-inverse"&gt;&lt;/i&gt; None&lt;/button&gt;
       &lt;button @click.capture="selectAlternate()" id="select_alternate_btn" class="btn btn-default btn-sm"&gt;&lt;i class="fa fa-th fa-inverse"&gt;&lt;/i&gt; Alternate&lt;/button&gt;
       &lt;button @click<span class="cstat-no" title="statement not covered" >.capture="selectInverse(</span>)" id="select_inverse_btn" class="btn btn-default btn-sm"&gt;&lt;i class="fa fa-th fa-inverse"&gt;&lt;/i&gt; Inverse&lt;/button&gt;
-      &lt;div id="img_sizer"&gt;
-        &lt;i class="fa <span class="cstat-no" title="statement not covered" >fa-image"&gt;&lt;/i&gt;</span>
-        &lt;input @input="resizeThumbs($event)" style="display:inline-block;" type="range" min="40" max="400" value="200"&gt;
-        &lt;<span class="fstat-no" title="function not covered" >i class="fa fa-image fa</span>-lg"&gt;&lt;/<span class="cstat-no" title="statement not covered" >i&gt;</span>
-      &lt;/div&gt;
-<span class="cstat-no" title="statement not covered" >    &lt;/div&gt;</span>
+      &lt;button @click.capture="uploadFile()" id="upload_file" class="btn btn-default btn-sm"&gt;&lt;i class="fa fa-th fa-upload"&gt;&lt;/i&gt; Upload File&lt;/button&gt;
+      &lt;div id="img_si<span class="cstat-no" title="statement not covered" >zer"&gt;</span>
+        &lt;i class="fa fa-image"&gt;&lt;/i&gt;
+        &lt;<span class="fstat-no" title="function not covered" >input @input="resizeThu</span>mbs($ev<span class="cstat-no" title="statement not covered" >ent)" style="display:inline-block;" type="range" min="4</span>0" max="400" value="200"&gt;
+        &lt;i class="fa fa-image fa-lg"&gt;&lt;/i&gt;
+<span class="cstat-no" title="statement not covered" >      &lt;/div&gt;</span>
+    &lt;/div&gt;
     &lt;draggable v-model="thumbnails" tag="div" name="list-complete" class="img_gallery"&gt;
         &lt;div @click.capture="select(thumbnail.id, $event)"
               v-bind:style="{'max-width': thumbPixelWidth + 'px' }"
-              class="thumbnail"
-              v-b<span class="fstat-no" title="function not covered" >ind:c</span>lass="{ hasChanged: hasChanged(thumbnail.id), selected: isSelected(thumbnail) }"
-<span class="cstat-no" title="statement not covered" >              v-for="thumbnail in thumbnails" :key="thumbnail.id"&gt;</span>
+              cla<span class="fstat-no" title="function not covered" >ss="t</span>humbnail"
+<span class="cstat-no" title="statement not covered" >              v-bind:class="{ hasChanged: hasChanged(thumbnail.id), selected: isSelected(thumbnail) }"</span>
+              v-for="thumbnail in thumbnails" :key="thumbnail.id"&gt;
           &lt;img :src="thumbnail.url" class="thumb"&gt;
           &lt;div v-bind:style="{'padding': captionPixelPadding + 'px' }" class="caption"&gt;
             {{thumbnail.label}}
           &lt;/div&gt;
         &lt;/div&gt;
-    &lt;/draggable&gt;
-  &lt;/div&gt;<span class="fstat-no" title="function not covered" ></span>
-&lt;/templa<span class="cstat-no" title="statement not covered" >te&gt;</span>
-&nbsp;
-&lt;script&gt;<span class="fstat-no" title="function not covered" ></span>
-import d<span class="cstat-no" title="statement not covered" >raggable from 'vuedraggable'</span>
+    &lt;/draggable&gt;<span class="fstat-no" title="function not covered" ></span>
+  &lt;/div&gt;<span class="cstat-no" title="statement not covered" ></span>
+&lt;/template&gt;
+<span class="fstat-no" title="function not covered" ></span>
+&lt;script&gt;<span class="cstat-no" title="statement not covered" ></span>
+import draggable from 'vuedraggable'
 export default {
   name: 'thumbnails',
   components: {
-    draggable
-  },<span class="fstat-no" title="function not covered" ></span>
-  data: function () {<span class="cstat-no" title="statement not covered" ></span>
-    re<span class="cstat-no" title="statement not covered" >turn {</span>
-      thumbPixelWidth: 200,
-      captionPixelPadding: 9<span class="fstat-no" title="function not covered" ></span>
-    }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
+    draggable<span class="fstat-no" title="function not covered" ></span>
   },<span class="cstat-no" title="statement not covered" ></span>
+  data<span class="cstat-no" title="statement not covered" >: function () {</span>
+    return {
+      thumbPixelWidth: 200,<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >      captionPixelPadding: 9<span class="fstat-no" title="function not covered" ></span></span>
+    }<span class="cstat-no" title="statement not covered" ></span>
+  },
   computed: {
-    thumbnails: {
-      get () {<span class="fstat-no" title="function not covered" ></span>
-        return this.$<span class="cstat-no" title="statement not covered" >sto</span>re.state.images
-<span class="cstat-no" title="statement not covered" >      },</span>
+    thumbnails: {<span class="fstat-no" title="function not covered" ></span>
+      get () {<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        return this.$store.state.images</span>
+      },<span class="cstat-no" title="statement not covered" ></span>
       se<span class="cstat-no" title="statement not covered" >t (value) {</span>
-<span class="cstat-no" title="statement not covered" >        this.$store.dispatch('sortImages', val</span>ue)
-      }<span class="cstat-no" title="statement not covered" ></span>
-    }
+<span class="cstat-no" title="statement not covered" >        this.$store.dispatch('sortImages', value)</span>
+      }
+    }<span class="cstat-no" title="statement not covered" ></span>
   },<span class="cstat-no" title="statement not covered" ></span>
   methods: {<span class="cstat-no" title="statement not covered" ></span>
-    getImageById: funct<span class="cstat-no" title="statement not covered" >ion (id) {</span>
+    getImageById: fu<span class="cstat-no" title="statement not covered" >nction (id) {</span>
       var elementPos<span class="cstat-no" title="statement not covered" > = this.getImageIndexByI</span>d(id)
-      return this.$s<span class="cstat-no" title="statement not covered" >tore.state.images[elemen</span>tPos]
+      retu<span class="cstat-no" title="statement not covered" >rn this.$store.state.images[elementPos]</span>
     },<span class="cstat-no" title="statement not covered" ></span>
-    getImage<span class="cstat-no" title="statement not covered" >IndexById: function (id) {</span>
-      return this.$store.state.images.map(function (image) {
-        re<span class="cstat-no" title="statement not covered" >turn image.id</span>
-      }).indexOf(id)
-    },<span class="cstat-no" title="statement not covered" ></span>
+    getImageIndexById: function (id) {
+      retu<span class="cstat-no" title="statement not covered" >rn this.$store.state.images.map(function (image)</span> {
+        return image.id
+      }).i<span class="cstat-no" title="statement not covered" >ndexOf(id)</span>
+    },
     select: function (id, event) {
       var selected = []
-      if (event.metaKey) {
-        selected = this.<span class="fstat-no" title="function not covered" >$store.sta</span>te.selected
-<span class="cstat-no" title="statement not covered" >        selected.push(this.getImageById(id))</span>
-        this.$store.dispatch('handleSelect', selected)
-      } else {<span class="fstat-no" title="function not covered" ></span>
-        if (this.$sto<span class="cstat-no" title="statement not covered" >re.</span>state.selected.length === 1 &amp;&amp; event.shiftKey) {
-          var first =<span class="cstat-no" title="statement not covered" > this.getImageIndexById(this.$st</span>ore.state.selected[0].id)
+      if (event.metaKey)<span class="fstat-no" title="function not covered" > {</span>
+<span class="cstat-no" title="statement not covered" >        selected = this.$store.state.selected</span>
+        selected.push(this.getImageById(id))
+        this.$store.dispatch('<span class="fstat-no" title="function not covered" >handleSelect', s</span>elected)
+      } else {<span class="cstat-no" title="statement not covered" ></span>
+        if (this.$sto<span class="cstat-no" title="statement not covered" >re.state.selected.length === 1 &amp;</span>&amp; event.shiftKey) {
+<span class="cstat-no" title="statement not covered" >          var first = this.getImageIndexById(this.$store.state.selected[0].id)</span>
 <span class="cstat-no" title="statement not covered" >          var second = this.getImageIndexById(id)</span>
-<span class="cstat-no" title="statement not covered" >          var min = Math.min(first, second)</span>
-          var max = Math.max(first, second)
-<span class="cstat-no" title="statement not covered" >          for (var i = min; i &lt;= max; i++) {</span>
-            selected.push(this.$store.state.images[i])
-          }<span class="fstat-no" title="function not covered" ></span>
-          this.$store<span class="cstat-no" title="statement not covered" >.di</span>spatch('handleSelect', selected)
-        } else {<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >          this.$store.dispatch('handleSelect', [this.getImageById(id)])</span>
-<span class="cstat-no" title="statement not covered" >        }</span>
-      }
-    },<span class="cstat-no" title="statement not covered" ></span>
-    selectAll: function () {
-      this.$store.dispatc<span class="fstat-no" title="function not covered" >h('handleSe</span>lect', this.$store.state.images)
-    },<span class="cstat-no" title="statement not covered" ></span>
-    selectAlternate: function () {
-      var selected = []<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      var imgTotal = this.$store.state.images.length</span>
-      fo<span class="cstat-no" title="statement not covered" >r (var i = 0;</span> i &lt; imgTotal; i = i + 2) {
-        selected.push(this.$store.state.images[i])
-      }<span class="cstat-no" title="statement not covered" ></span>
-      this.$store.dispatch('handleSelect', selected)
+          var min = Math.min(first, second)
+<span class="cstat-no" title="statement not covered" >          var max = Math.max(first, second)</span>
+          for (var i = min; i &lt;= max; i++) {
+            selected.push(th<span class="fstat-no" title="function not covered" >is.$store.stat</span>e.images[i])
+          }<span class="cstat-no" title="statement not covered" ></span>
+          this.$store<span class="cstat-no" title="statement not covered" >.dispatch('handleSelect', select</span>ed)
+<span class="cstat-no" title="statement not covered" >        } else {</span>
+<span class="cstat-no" title="statement not covered" >          this.$store.dispatch('handleSelect', [this</span>.getImageById(id)])
+        }
+<span class="cstat-no" title="statement not covered" >      }</span>
     },
-    selectInverse: functi<span class="fstat-no" title="function not covered" >on () {</span>
+    selectAll: function (<span class="fstat-no" title="function not covered" >) {</span>
+<span class="cstat-no" title="statement not covered" >      this.$store.dispatch('handleSelect', this.</span>$store.state.images)
+    },
+    selectAlternate: func<span class="fstat-no" title="function not covered" >tion () {</span>
 <span class="cstat-no" title="statement not covered" >      var selected = []</span>
       va<span class="cstat-no" title="statement not covered" >r imgTotal = </span>this.$store.state.images.length
-      for (var i = 1; i &lt; imgTotal; i = i + 2) {
+      for (var i = 0; i &lt; imgTotal; i = i + 2) {
 <span class="cstat-no" title="statement not covered" >        selected.push(</span>this.$store.state.images[i])
       }
       this.$store.dispatch('handleSelect', selected)
     },<span class="fstat-no" title="function not covered" ></span>
-    se<span class="cstat-no" title="statement not covered" >lectNone: function () {</span>
-<span class="cstat-no" title="statement not covered" >      this.$store.dispatch('handleSelect', [])</span>
+    se<span class="cstat-no" title="statement not covered" >lectInverse: function () {</span>
+      va<span class="cstat-no" title="statement not covered" >r selected = </span>[]
+      var imgTotal = this.$store.state.images.length
+      fo<span class="cstat-no" title="statement not covered" >r (var i = 1; </span>i &lt; imgTotal; i = i + 2) {
+        selected.push(this.$store.state.images[i])
+      }
+      this.$store.dispatch(<span class="fstat-no" title="function not covered" >'handleSelect</span>', selected)
     },<span class="cstat-no" title="statement not covered" ></span>
-    hasChanged: function (id) {
-      if<span class="cstat-no" title="statement not covered" > (this.$store.state.changeList.index</span>Of(id) &gt; -1) {
+    se<span class="cstat-no" title="statement not covered" >lectNone: function () {</span>
+      th<span class="cstat-no" title="statement not covered" >is.$store.dispatch('handleSelect', [</span>])
+    },
+    hasC<span class="cstat-no" title="statement not covered" >hanged: function (id) {</span>
+      if (this.$store.state.changeList.indexOf(id) &gt; -1) {
         return true
-      } else {
-        return false
+      } else {<span class="fstat-no" title="function not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        return false</span>
       }
     },
     isSelected: function (thumbnail) {
@@ -551,6 +560,9 @@ export default {
       } else {
         this.$data.captionPixelPadding = 9
       }
+    },
+    uploadFile: function (event) {
+      document.getElementById('browse_everything').click();
     }
   }
 }
@@ -567,7 +579,7 @@ export default {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >.img_gallery {<span class="cstat-no" title="statement not covered" ></span></span>
   overflow: auto;<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  height: calc(100% - 40px);<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>
+<span class="cstat-no" title="statement not covered" >  height: calc(100% - 40px);<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>
 <span class="cstat-no" title="statement not covered" >  border-radius: 4px;</span>
   margin-bottom: 40px;
   clear: both;
@@ -622,7 +634,7 @@ export default {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Nov 20 2017 11:42:55 GMT-0500 (EST)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Nov 27 2017 11:55:41 GMT-0500 (EST)
 </div>
 </div>
 <script src="prettify.js"></script>

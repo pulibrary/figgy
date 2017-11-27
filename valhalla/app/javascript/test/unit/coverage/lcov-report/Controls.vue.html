@@ -22,7 +22,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/23</span>
+        <span class='fraction'>0/30</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -32,12 +32,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/8</span>
+        <span class='fraction'>0/11</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/18</span>
+        <span class='fraction'>0/25</span>
       </div>
     </div>
   </div>
@@ -94,7 +94,20 @@
 49
 50
 51
-52</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -137,15 +150,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&lt;<span class="cstat-no" title="statement not covered" >t<span class="fstat-no" title="function not covered" >em</span>plate&gt;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&lt;<span class="cstat-no" title="statement not covered" >t<span class="fstat-no" title="function not covered" >em</span>plate&gt;</span>
   &lt;div class="controls"&gt;
     &lt;div v-if="orderChanged" id="orderChangedIcon" class="alert alert-info" role="alert"&gt;
 <span class="cstat-no" title="statement not covered" >      &lt;i class="fa fa-exchange"&gt;&lt;/i&gt; Page order has changed.</span>
@@ -176,33 +202,46 @@ export default {
       } <span class="cstat-no" title="statement not covered" >else {</span>
         return true
       }<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
-    }<span class="cstat-no" title="statement not covered" ></span>
-  },
-  meth<span class="cstat-no" title="statement not covered" >ods: {</span>
+    },<span class="cstat-no" title="statement not covered" ></span>
+    fileSetPayload: function () {
+<span class="cstat-no" title="statement not covered" >      var changed = this.$store.sta</span>te.images.filter(image =&gt; this.$store.state.changeList.indexOf(image.id) !== -1 )
+      var payload = changed.map((file) =&gt; {
+        return {id: file.<span class="fstat-no" title="function not covered" >id, title: </span>file.label, page_type: file.page_type }
+<span class="cstat-no" title="statement not covered" >      })</span>
+      re<span class="cstat-no" title="statement not covered" >turn payload</span>
+    }
+  },<span class="cstat-no" title="statement not covered" ></span>
+  methods: {
     save: function () {
-      let body = {<span class="fstat-no" title="function not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        ephemera_folder: {</span>
-<span class="cstat-no" title="statement not covered" >          member_ids: </span>this.$store.getters.imageIdList,
-          id: this.$store.state.id
-<span class="cstat-no" title="statement not covered" >        }</span>
+      console.log(this.fileSe<span class="fstat-no" title="function not covered" >tPayload)</span>
+      let body = {<span class="cstat-no" title="statement not covered" ></span>
+        resource : {
+          ephemera_f<span class="cstat-no" title="statement not covered" >older: {<span class="fstat-no" title="function not covered" ></span></span>
+<span class="cstat-no" title="statement not covered" >            member_ids: this.$store.getters.imageIdList,</span>
+            thumbnail_id: this.$store.state.thumbnail,
+            start_ca<span class="cstat-no" title="statement not covered" >nvas: this.$<span class="fstat-no" title="function not covered" >st</span>ore.state.startpage,</span>
+<span class="cstat-no" title="statement not covered" >            id: this.$store.state.id</span>
+          }
+<span class="cstat-no" title="statement not covered" >        },</span>
+        file_sets: this.fileSetPayload
       }
       this.$store.dispatch('saveState', body)
-    }
-  }
-}<span class="fstat-no" title="function not covered" ></span>
-&lt;/script&gt;<span class="cstat-no" title="statement not covered" ></span>
+    }<span class="fstat-no" title="function not covered" ></span>
+  }<span class="cstat-no" title="statement not covered" ></span>
+}<span class="cstat-no" title="statement not covered" ></span>
+&lt;/script&gt;
 &nbsp;
 &lt;!-- Add "scoped" attribute to limit CSS to this component only --&gt;
 &lt;style&gt;
 &nbsp;
 &lt;/style&gt;
-<span class="cstat-no" title="statement not covered" ></span></pre></td></tr>
+&nbsp;</pre></td></tr>
 </table></pre>
 <div class='push'></div><!-- for sticky footer -->
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Nov 20 2017 11:42:55 GMT-0500 (EST)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Nov 27 2017 11:55:41 GMT-0500 (EST)
 </div>
 </div>
 <script src="prettify.js"></script>
