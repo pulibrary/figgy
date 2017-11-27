@@ -113,6 +113,14 @@ class ManifestBuilder
       end
     end
 
+    ##
+    # Retrieves the first viewing direction from the resource metadata
+    # read by method in record_property_builder
+    # @return [String]
+    def viewing_direction
+      resource.respond_to?(:viewing_direction) ? Array(resource.viewing_direction).first : []
+    end
+
     private
 
       ##

@@ -28,6 +28,11 @@ class ManifestBuilder
       inner_hash["viewingHint"] = viewing_hint
     end
 
+    def viewing_direction=(viewing_direction)
+      return unless viewing_direction.present?
+      inner_hash["viewingDirection"] = viewing_direction
+    end
+
     def sequences
       inner_hash["sequences"] || []
     end
