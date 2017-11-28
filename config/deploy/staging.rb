@@ -9,8 +9,6 @@
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 server 'figgy-staging1', user: 'deploy', roles: %w[app db web worker]
 
-rails   "webpack"
-
 # role-based syntax
 # ==================
 
