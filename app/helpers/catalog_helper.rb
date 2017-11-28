@@ -8,7 +8,8 @@ module CatalogHelper
     tag = options.fetch(:tag, :h4)
     document ||= @document
 
-    val = presenter(document).heading
-    content_tag(tag, val, itemprop: "name", dir: val.to_s.dir)
+    # escape manually to allow <br /> to go through unescaped
+    val = Array.wrap(presenter(document).heading).map { |v| h(v) }.join("<br />")
+    content_tag(tag, val, { itemprop: "name", dir: val.to_s.dir }, false)
   end
 end

@@ -73,10 +73,6 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     []
   end
 
-  def heading
-    first_title
-  end
-
   def metadata_adapter
     Valkyrie.config.metadata_adapter
   end
