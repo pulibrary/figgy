@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
   <% if @parent_document %>
-    <li><%= link_to @parent_document.decorated_resource.header, @parent_document %></li>
+    <li><%= link_to @parent_document.decorated_resource.first_title, @parent_document %></li>
   <% end %>
-  <li><%= @document.decorated_resource.header %></li>
+  <li><%= @document.decorated_resource.first_title %></li>
 </ol>
