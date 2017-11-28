@@ -57,4 +57,28 @@ RSpec.describe Valkyrie::ResourceDecorator do
       end
     end
   end
+
+  describe '#first_title' do
+    let(:resource) { FactoryGirl.create_for_repository(:scanned_resource, title: ["There and back again", "A hobbit's tale"]) }
+
+    it 'returns the first title' do
+      expect(resource.decorate.first_title).to eq "There and back again"
+    end
+  end
+
+  describe '#merged_titles' do
+    let(:resource) { FactoryGirl.create_for_repository(:scanned_resource, title: ["There and back again", "A hobbit's tale"]) }
+
+    it 'returns a one-line title string' do
+      expect(resource.decorate.merged_titles).to eq "There and back again; A hobbit's tale"
+    end
+  end
+
+  describe '#titles' do
+    let(:resource) { FactoryGirl.create_for_repository(:scanned_resource, title: ["There and back again", "A hobbit's tale"]) }
+
+    it 'returns the title array' do
+      expect(resource.decorate.titles).to eq ["There and back again", "A hobbit's tale"]
+    end
+  end
 end

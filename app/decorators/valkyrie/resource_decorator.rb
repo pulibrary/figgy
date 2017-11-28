@@ -43,8 +43,22 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     end
   end
 
+  # Use of this method is discouraged.
+  # Use first_title or all_titles for a one-line title presentation
   def header
     Array(title).to_sentence
+  end
+
+  def first_title
+    Array.wrap(title).first
+  end
+
+  def merged_titles
+    Array.wrap(title).join('; ')
+  end
+
+  def titles
+    Array.wrap(title)
   end
 
   def manageable_files?
@@ -60,7 +74,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   end
 
   def heading
-    Array.wrap(title).first
+    first_title
   end
 
   def metadata_adapter
