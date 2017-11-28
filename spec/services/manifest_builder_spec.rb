@@ -18,7 +18,8 @@ RSpec.describe ManifestBuilder do
                                       identifier: 'ark:/88435/abc1234de',
                                       imported_metadata: [{
                                         description: "Test Description"
-                                      }])
+                                      }],
+                                      viewing_direction: ["right-to-left"])
   end
   let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file]) }
   let(:logical_structure) do
@@ -50,6 +51,7 @@ RSpec.describe ManifestBuilder do
       }.deep_symbolize_keys
     ]
   end
+
   describe "#build" do
     before do
       output = change_set_persister.save(change_set: change_set)
@@ -65,6 +67,7 @@ RSpec.describe ManifestBuilder do
       expect(output).to be_kind_of Hash
       expect(output["description"]).to eq "Test Description"
       expect(output["viewingHint"]).to eq "individuals"
+      expect(output["viewingDirection"]).to eq "right-to-left"
       expect(output["rendering"]).to include "@id" => "http://arks.princeton.edu/ark:/88435/abc1234de", "format" => "text/html"
       expect(output["sequences"].length).to eq 1
       canvas_id = output["sequences"][0]["canvases"][0]["@id"]
@@ -162,6 +165,7 @@ RSpec.describe ManifestBuilder do
       expect(metadata_values).to include 'test value1'
     end
   end
+
   context "when given a nested child" do
     let(:scanned_resource) { FactoryGirl.create_for_repository(:scanned_resource, member_ids: child.id, identifier: 'ark:/88435/5m60qr98h') }
     let(:child) { FactoryGirl.create_for_repository(:scanned_resource, files: [file]) }
@@ -179,6 +183,7 @@ RSpec.describe ManifestBuilder do
       expect(output["license"]).to eq "http://rightsstatements.org/vocab/NKC/1.0/"
     end
   end
+
   context "when given a scanned map" do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_map.id)) }
     let(:scanned_map) do
@@ -244,6 +249,7 @@ RSpec.describe ManifestBuilder do
       expect(output["metadata"].first).to include "label" => "Exhibit", "value" => [collection.decorate.slug]
       expect(output["manifests"].length).to eq 1
       expect(output["manifests"][0]["@id"]).to eq "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest"
+      expect(output["viewingDirection"]).to eq nil
     end
   end
 end
