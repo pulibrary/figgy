@@ -9,6 +9,14 @@
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 server 'figgy-staging1', user: 'deploy', roles: %w[app db web worker]
 
+on roles(:app), in: :sequence, wait: 5 do
+  within release_path do
+    with { rails_env: fetch(:rails_env), node_env: :production } do
+      execute :rake, 'rails webpacker:compile'
+    end
+  end
+end
+
 # role-based syntax
 # ==================
 
