@@ -259,7 +259,7 @@ GEM
       tins (~> 1.6)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    crass (1.0.2)
+    crass (1.0.3)
     database_cleaner (1.6.1)
     declarative (0.0.10)
     declarative-builder (0.1.0)
@@ -578,7 +578,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rainbow (2.2.2)
       rake
-    rake (12.2.1)
+    rake (12.3.0)
     rb-fsevent (0.10.2)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
@@ -852,7 +852,7 @@ DEPENDENCIES
   valkyrie!
   web-console
   webmock
-  webpacker (~> 3.0)
+  webpacker (= 3.0.2)
 
 BUNDLED WITH
    1.15.4
