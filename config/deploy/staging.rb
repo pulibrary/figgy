@@ -9,10 +9,15 @@
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 server 'figgy-staging1', user: 'deploy', roles: %w[app db web worker]
 
-on roles(:app), in: :sequence, wait: 5 do
-  within release_path do
-    with { rails_env: fetch(:rails_env), node_env: :production } do
-      execute :rake, 'rails webpacker:compile'
+before "deploy:assets:precompile", "deploy:yarn_install"
+
+namespace :deploy do
+  desc 'Run rake yarn:install'
+  task :yarn_install do
+    on roles(:web) do
+      within release_path do
+        execute("cd #{release_path} && yarn install")
+      end
     end
   end
 end
