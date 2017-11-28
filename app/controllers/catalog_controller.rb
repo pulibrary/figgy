@@ -9,6 +9,11 @@ class CatalogController < ApplicationController
       'rows' => 10
     }
   end
+
+  # The search builder to find the collections' members
+  class_attribute :member_search_builder_class
+  self.member_search_builder_class = CollectionMemberSearchBuilder
+
   before_action :parent_document, only: :show
 
   # enforce hydra access controls
@@ -68,15 +73,25 @@ class CatalogController < ApplicationController
     can?(:edit, @document.resource)
   end
 
+  def admin?
+    can?(:manage, resource)
+  end
+
   def has_search_parameters?
     !params[:q].nil? || !params[:f].blank? || !params[:search_field].blank?
   end
 
+  def resource
+    @resource ||= @document.resource
+  end
+
   def show
     super
-    authorize! :show, @document.resource
-    @change_set = DynamicChangeSet.new(@document.resource)
+    authorize! :show, resource
+    @change_set = DynamicChangeSet.new(resource)
     @change_set.prepopulate!
+    @document_facade = document_facade
+    @response = @document_facade.query_response unless @document_facade.members.empty?
   end
 
   def parent_document
@@ -98,4 +113,42 @@ class CatalogController < ApplicationController
       render json: { message: "No manifest found for #{ark}" }, status: 404
     end
   end
+
+  private
+
+    # Instantiates the search builder that builds a query for items that are
+    # members of the current collection. This is used in the show view.
+    def member_search_builder
+      @member_search_builder ||= member_search_builder_class.new(self)
+    end
+
+    # You can override this method if you need to provide additional inputs to the search
+    # builder. For example:
+    #   search_field: 'all_fields'
+    # @return <Hash> the inputs required for the collection member search builder
+    def params_for_members_query
+      params.merge(q: params[:cq])
+    end
+
+    # @return <Hash> a representation of the solr query that find the collection members
+    def query_for_collection_members
+      member_search_builder.with(params_for_members_query).query
+    end
+
+    def current_page
+      params.fetch(:page, 1)
+    end
+
+    def per_page
+      params.fetch(:per_page, 10)
+    end
+
+    def document_facade
+      SolrFacadeService.instance(
+        repository: repository,
+        query: query_for_collection_members,
+        current_page: current_page,
+        per_page: per_page
+      )
+    end
 end

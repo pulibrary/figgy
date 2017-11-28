@@ -17,6 +17,7 @@ en:
 
   titles:
     application: Figgy
+  sort_label: Sort
   valhalla:
     visibility:
       open:

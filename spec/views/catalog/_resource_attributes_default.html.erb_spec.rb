@@ -147,6 +147,7 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       # Collection
       expect(rendered).to have_selector "th", text: "Collections"
       expect(rendered).to have_selector ".member_of_collections", text: collection.title.first
+      expect(rendered).to have_link collection.title.first, href: "/catalog/#{collection.id}"
 
       # Holding Location
       expect(rendered).to have_selector "th", text: "Holding Location"
