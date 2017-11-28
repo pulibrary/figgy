@@ -141,6 +141,7 @@ RSpec.feature "Ephemera Folders", js: true do
         res = FactoryGirl.create_for_repository(:ephemera_folder, files: [file1, file2])
         adapter.persister.save(resource: res)
       end
+
       xscenario 'users can edit file order for the manifest', sort_folders: true do
         visit file_manager_ephemera_folder_path(id: ephemera_folder.id)
         expect(page).to have_css '#sortable li', count: 2
@@ -152,15 +153,7 @@ RSpec.feature "Ephemera Folders", js: true do
         click_button 'Save'
 
         expect(find(:css, "#sortable li:first-child input.title").value).to eq '1'
-
-        visit manifest_ephemera_folder_path(id: ephemera_folder.id, format: :json)
-
-        page_body = Nokogiri::HTML(page.body).text # Work-around for the Capybara Selenium driver
-        manifest_values = MultiJson.load(page_body, symbolize_keys: true)
-        sequences = manifest_values[:sequences]
-        canvases = sequences.first[:canvases]
-        expect(canvases.first[:label]).to eq '1'
-        expect(canvases.last[:label]).to eq '2'
+        expect(find(:css, "#sortable li:last-child input.title").value).to eq '2'
       end
     end
 

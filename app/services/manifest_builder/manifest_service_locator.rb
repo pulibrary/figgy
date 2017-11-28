@@ -46,6 +46,10 @@ class ManifestBuilder
         ManifestBuilder::ChildRecordPropertyBuilder
       end
 
+      def record_property_builder
+        ManifestBuilder::RecordPropertyBuilder
+      end
+
       ##
       # Builder for collections which are sub-collections.
       def child_collection_builder
