@@ -9,16 +9,7 @@
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 server 'figgy-staging1', user: 'deploy', roles: %w[app db web worker]
 
-on roles(:app), in: :sequence, wait: 5 do
-    as :deploy  do
-      # commands in this block execute as the "deploy" user.
-      with rails_env: :staging do
-        # commands in this block execute with the environment
-        # variable RAILS_ENV=production
-        NODE_ENV=production bundle exec rails webpacker:compile
-      end
-    end
-end
+rake   "webpack"
 
 # role-based syntax
 # ==================

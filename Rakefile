@@ -24,6 +24,12 @@ if defined? RuboCop
   end
 end
 
+
+task :webpack do
+  sh "NODE_ENV=production bundle exec rails webpacker:compile"
+end
+
+
 task default: "bundler:audit"
 
 require 'solr_wrapper/rake_task' unless Rails.env.production? || Rails.env.staging?
