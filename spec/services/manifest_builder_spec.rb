@@ -164,6 +164,16 @@ RSpec.describe ManifestBuilder do
       expect(metadata_values).to be_kind_of Array
       expect(metadata_values).to include 'test value1'
     end
+
+    context "when the resource has multiple titles" do
+      let(:scanned_resource) do
+        FactoryGirl.create_for_repository(:scanned_resource, title: ['title1', 'title2'])
+      end
+      it "joins them with a semicolon" do
+        output = manifest_builder.build
+        expect(output["label"]).to eq 'title1; title2'
+      end
+    end
   end
 
   context "when given a nested child" do

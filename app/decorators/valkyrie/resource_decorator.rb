@@ -43,10 +43,8 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     end
   end
 
-  # Use of this method is discouraged.
-  # Use first_title or all_titles for a one-line title presentation
   def header
-    Array(title).to_sentence
+    merged_titles
   end
 
   def first_title
