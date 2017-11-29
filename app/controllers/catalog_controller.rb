@@ -52,6 +52,7 @@ class CatalogController < ApplicationController
     config.show.partials += [:terms]
     config.index.thumbnail_method = :figgy_thumbnail_path
     config.show.document_presenter_class = ValkyrieShowPresenter
+    config.index.document_presenter_class = FiggyIndexPresenter
 
     # "sort results by" options
     config.add_sort_field "score desc, updated_at_dtsi desc", label: "relevance \u25BC"
