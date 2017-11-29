@@ -12,7 +12,7 @@
         <% vector_work_url = parent_solr_document_path("#{resource.id}", "#{vector_work.id}") %>
         <tr>
           <td><%= link_to figgy_thumbnail_path(vector_work, { class: 'thumbnail-inner', onerror: default_icon_fallback }), vector_work_url %></td>
-          <td><%= vector_work.header %></td>
+          <td><%= vector_work.first_title %></td>
           <td><%= vector_work.created_at %></td>
           <td><%= vector_work.visibility.first.html_safe %></td>
           <td>

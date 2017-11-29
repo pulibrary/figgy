@@ -27,5 +27,11 @@ RSpec.describe ::BlacklightHelper do
         expect(helper.render_document_heading(document, tag: :h1)).to eq "<h1 itemprop=\"name\" dir=\"rtl\">للفاسق</h1>"
       end
     end
+    context "when given a resource with multiple titles" do
+      let(:model) { FactoryGirl.build(:scanned_resource, title: ["There and back again", "A hobbit's tale"]) }
+      it "renders all titles, on separate lines" do
+        expect(helper.render_document_heading(document, tag: :h1)).to eq "<h1 itemprop=\"name\" dir=\"ltr\">There and back again<br />A hobbit&#39;s tale</h1>"
+      end
+    end
   end
 end

@@ -44,7 +44,19 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   end
 
   def header
-    Array(title).to_sentence
+    merged_titles
+  end
+
+  def first_title
+    Array.wrap(title).first
+  end
+
+  def merged_titles
+    Array.wrap(title).join('; ')
+  end
+
+  def titles
+    Array.wrap(title)
   end
 
   def manageable_files?
@@ -57,10 +69,6 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
 
   def attachable_objects
     []
-  end
-
-  def heading
-    Array.wrap(title).first
   end
 
   def metadata_adapter

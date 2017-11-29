@@ -12,7 +12,7 @@
         <% volume_url = parent_solr_document_path("#{resource.id}", "#{volume.id}") %>
         <tr>
           <td><%= link_to figgy_thumbnail_path(volume, { class: 'thumbnail-inner', onerror: default_icon_fallback }), volume_url %></td>
-          <td><%= volume.header %></td>
+          <td><%= volume.first_title %></td>
           <td><%= volume.created_at %></td>
           <td><%= volume.visibility.first.html_safe %></td>
           <td>
