@@ -12,7 +12,7 @@
         <% scanned_map_url = parent_solr_document_path("#{resource.id}", "#{scanned_map.id}") %>
         <tr>
           <td><%= link_to figgy_thumbnail_path(scanned_map, { class: 'thumbnail-inner', onerror: default_icon_fallback }), scanned_map_url %></td>
-          <td><%= scanned_map.header %></td>
+          <td><%= scanned_map.first_title %></td>
           <td><%= scanned_map.created_at %></td>
           <td><%= scanned_map.visibility.first.html_safe %></td>
           <td>
