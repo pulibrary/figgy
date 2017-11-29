@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1511968957606" clover="3.2.0">
-  <project timestamp="1511968957607" name="All files">
+<coverage generated="1511970507292" clover="3.2.0">
+  <project timestamp="1511970507293" name="All files">
     <metrics statements="124" coveredstatements="1" conditionals="120" coveredconditionals="1" methods="84" coveredmethods="1" elements="328" coveredelements="3" complexity="0" loc="124" ncloc="124" packages="1" files="4" classes="4">
       <file name="Controls.vue" path="/Users/Sellis/Development/figgy/valhalla/app/javascript/components/Controls.vue">
         <metrics statements="25" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="11" coveredmethods="0"/>
