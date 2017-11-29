@@ -24,10 +24,15 @@ const mutations = {
     state.id = ImageCollection.id
     state.startPage = ImageCollection.startpage
     state.thumbnail = ImageCollection.thumbnail
+    state.viewingHint = ImageCollection.viewingHint
+    state.viewingDirection = ImageCollection.viewingDirection
     state.images = ImageCollection.images
     state.ogImages = ImageCollection.images
-    // state.images = [ ...ImageCollection.images ]
-    // state.ogImages = [ ...ImageCollection.images ]
+    state.ogState = { startPage: ImageCollection.startpage,
+                      thumbnail: ImageCollection.thumbnail,
+                      viewingHint: ImageCollection.viewingHint,
+                      viewingDirection: ImageCollection.viewingDirection
+                    }
   },
   SAVE_STATE (state, reset) {
     alert('state saved!')
@@ -49,6 +54,12 @@ const mutations = {
   },
   UPDATE_THUMBNAIL (state, thumbnail) {
     state.thumbnail = thumbnail
+  },
+  UPDATE_VIEWDIR (state, viewDir) {
+    state.viewingDirection = viewDir
+  },
+  UPDATE_VIEWHINT (state, viewHint) {
+    state.viewingHint = viewHint
   }
 }
 
@@ -111,6 +122,12 @@ const actions = {
   },
   updateThumbnail (context, thumbnail) {
     context.commit('UPDATE_THUMBNAIL', thumbnail)
+  },
+  updateViewDir (context, viewDir) {
+    context.commit('UPDATE_VIEWDIR', viewDir)
+  },
+  updateViewHint (context, viewHint) {
+    context.commit('UPDATE_VIEWHINT', viewHint)
   }
 }
 

@@ -23,7 +23,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style scoped>
 #detail {
   height: 100%;
   padding: 15px;

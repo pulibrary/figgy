@@ -23,6 +23,20 @@ export default {
       var imgOrder = JSON.stringify(this.$store.state.images.map(img => img.id))
       return ogOrder !== imgOrder
     },
+    stateChanged: function () {
+      var propsChanged = []
+      propsChanged.push(this.$store.state.ogState.thumbnail !== this.$store.state.thumbnail)
+      propsChanged.push(this.$store.state.ogState.startPage !== this.$store.state.startPage)
+      propsChanged.push(this.$store.state.ogState.viewingHint !== this.$store.state.viewingHint)
+      propsChanged.push(this.$store.state.ogState.viewingDirection !== this.$store.state.viewingDirection)
+      propsChanged.push(this.$store.state.changeList.length > 0)
+      console.log(propsChanged)
+      if (propsChanged.indexOf(true)) {
+        return true
+      } else {
+        return false
+      }
+    },
     isDisabled: function () {
       if (this.orderChanged || this.$store.state.changeList.length > 0) {
         return false
@@ -59,6 +73,6 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style scoped>
 
 </style>

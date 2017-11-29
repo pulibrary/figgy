@@ -1,6 +1,64 @@
 <template>
   <div class="formPanel actions">
-    <p v-if="selectedTotal === 0" id="noneSelected" class="formContent">No items selected.</p>
+    <div v-if="selectedTotal === 0" id="noneSelected" class="formContent">
+      <h2>Set Properties <small>for this resource</small></h2>
+      <div class="row">
+        <!-- Viewing Direction-->
+        <div class="form-group col-md-6">
+          <fieldset>
+            <legend>Viewing Direction</legend>
+            <div class="radio">
+              <label>
+                <input v-model="viewDir" type="radio" name="viewDir" v-bind:value="left-to-right" value="left-to-right">
+                Left-to-Right (Default)
+              </label>
+            </div>
+            <div class="radio">
+              <label for="rtl">
+                <input v-model="viewDir" type="radio" name="viewDir" v-bind:value="right-to-left" value="right-to-left">
+                Right-to-Left
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input v-model="viewDir" type="radio" name="viewDir" v-bind:value="top-to-bottom" value="top-to-bottom">
+                Top-to-Bottom
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input v-model="viewDir" type="radio" name="viewDir" v-bind:value="bottom-to-top" value="bottom-to-top">
+                Bottom-to-Top
+              </label>
+            </div>
+          </fieldset>
+        </div>
+        <!-- Viewing Hint-->
+        <div class="form-group col-md-6">
+          <fieldset>
+            <legend>Viewing Hint</legend>
+            <div class="radio">
+              <label>
+                <input v-model="viewHint" type="radio" name="viewHint" id="individuals" value="individuals">
+                Individuals (Default)
+              </label>
+            </div>
+            <div class="radio">
+              <label for="rtl">
+                <input v-model="viewHint" type="radio" name="viewHint" id="paged" value="paged">
+                Paged
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input v-model="viewHint" type="radio" name="viewHint" id="continuous" value="continuous">
+                Continuous
+              </label>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
     <!-- Multiple Selected Form-->
     <div v-if="selectedTotal > 1" id="multiSelected" >
       <h2>Generate Labels <small>for selected items</small></h2>
@@ -72,13 +130,13 @@
         <div class="checkbox">
           <label>
             <input @change="updateThumbnail()" v-model="isThumbnail" id="isThumbnail" type="checkbox" value="">
-            Set as Thumbnail <a href="#">(?)</a>
+            Set as Thumbnail</a>
           </label>
       </div>
         <div class="checkbox">
           <label>
             <input @change="updateStartPage()" v-model="isStartPage" id="isStartPage" type="checkbox" value="">
-            Set as Start Page <a href="#">(?)</a>
+            Set as Start Page</a>
           </label>
         </div>
       </div>
@@ -117,6 +175,23 @@ export default {
       var id = this.$store.state.selected[0].id
       return this.$store.state.thumbnail === id
     },
+    viewDir: {
+      get() {
+        return this.$store.state.viewingDirection;
+      },
+      set(value) {
+        console.log(value)
+        this.$store.dispatch('updateViewDir', value)
+      }
+    },
+    viewHint: {
+      get() {
+        return this.$store.state.viewingHint;
+      },
+      set(value) {
+        this.$store.dispatch('updateViewHint', value)
+      }
+    },
     singleForm () {
       return {
         label: this.$store.state.selected[0].label,
@@ -138,6 +213,14 @@ export default {
       var thumbnail = this.$store.state.selected[0].id
       this.$store.dispatch('updateThumbnail', thumbnail)
     },
+    // updateViewDir () {
+    //   var viewDir = this.$store.state.viewingDirection
+    //   this.$store.dispatch('updateViewDir', viewDir)
+    // },
+    // updateViewHint () {
+    //   var viewHint = this.$store.state.updateViewHint
+    //   this.$store.dispatch('updateViewHint', viewHint)
+    // },
     updateSingle () {
       var changeList = this.$store.state.changeList
       var images = this.$store.state.images
@@ -176,7 +259,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style scoped>
 
 .form-inline fieldset {
   display: inline-block;
@@ -184,6 +267,20 @@ export default {
 
 .form-inline .row {
   margin-top:15px;
+}
+
+fieldset {
+  margin: auto;
+}
+
+legend {
+  font-size: 14px;
+  margin: auto;
+}
+
+.radio label {
+  margin: auto;
+  padding-left: 30px;
 }
 
 </style>

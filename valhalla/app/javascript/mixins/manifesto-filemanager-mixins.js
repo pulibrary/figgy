@@ -34,6 +34,8 @@ const ManifestoFilemanagerMixins = {
   imageCollection: function (resource) {
     const s = this.mainSequence()
     const canvases = s.getCanvases()
+    const viewDir = this.getViewingDirection()
+    const viewHint = this.getViewingHint()
     var imageCollection = {}
     imageCollection.id = resource.id
     imageCollection.startpage = null
@@ -43,6 +45,14 @@ const ManifestoFilemanagerMixins = {
     imageCollection.thumbnail = null
     if (this.thumbnail != 'undefined') {
       imageCollection.thumbnail = this.thumbnail
+    }
+    imageCollection.viewingDirection = null
+    if (viewDir != 'undefined') {
+      imageCollection.viewingDirection = viewDir.value
+    }
+    imageCollection.viewingHint = null
+    if (viewHint != 'undefined') {
+      imageCollection.viewingHint = viewHint.value
     }
     imageCollection.images = canvases.map(canvas => ({
       label: this.getEnglishLabel(canvas),
