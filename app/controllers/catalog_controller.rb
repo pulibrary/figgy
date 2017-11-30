@@ -73,10 +73,6 @@ class CatalogController < ApplicationController
     can?(:edit, @document.resource)
   end
 
-  def admin?
-    can?(:manage, resource)
-  end
-
   def has_search_parameters?
     !params[:q].nil? || !params[:f].blank? || !params[:search_field].blank?
   end
@@ -144,7 +140,7 @@ class CatalogController < ApplicationController
     end
 
     def document_facade
-      SolrFacadeService.instance(
+      SolrFacade.new(
         repository: repository,
         query: query_for_collection_members,
         current_page: current_page,

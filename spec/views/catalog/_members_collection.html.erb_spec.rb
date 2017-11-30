@@ -26,7 +26,7 @@ RSpec.describe "catalog/_members_collection.html.erb" do
                       start: 0,
                       grouped?: false)
     end
-    let(:document_facade) { instance_double(SolrFacadeService::SolrFacade, total_pages: 1, members: member_documents) }
+    let(:document_facade) { instance_double(SolrFacade, total_pages: 1, members: member_documents) }
     let(:member_documents) do
       [
         SolrDocument.new(Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: scanned_resource1)),

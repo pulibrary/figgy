@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe SolrFacadeService do
-  let(:solr_facade_klass) { class_double(SolrFacadeService::SolrFacade).as_stubbed_const(transfer_nested_constants: true) }
-  before do
-    allow(solr_facade_klass).to receive(:new)
-  end
+RSpec.describe SolrFacade do
+  subject(:solr_facade) { described_class.new(repository: repository, query: query, current_page: 2, per_page: 11) }
   let(:repository) { instance_double(Blacklight::Solr::Repository) }
   let(:query) do
     {
@@ -26,18 +23,26 @@ RSpec.describe SolrFacadeService do
       "sort" => "score desc, updated_at_dtsi desc"
     }
   end
+  let(:response) { instance_double(Blacklight::Solr::Response) }
+  let(:response_documents) { [instance_double(SolrDocument)] }
 
-  describe '.instance' do
+  describe '#query_response' do
     before do
-      described_class.instance(repository: repository, query: query, current_page: 2, per_page: 11)
+      allow(repository).to receive(:search).and_return(response)
     end
-    it 'builds a new SolrFacade Object' do
-      expect(solr_facade_klass).to have_received(:new).with(
-        repository: repository,
-        query: query,
-        current_page: 2,
-        per_page: 11
-      )
+    it 'queries the Solr Index' do
+      expect(solr_facade.query_response).to eq response
+      expect(repository).to have_received(:search).with(query)
+    end
+  end
+
+  describe '#members' do
+    before do
+      allow(response).to receive(:documents).and_return(response_documents)
+      allow(repository).to receive(:search).and_return(response)
+    end
+    it 'queries the Solr Index' do
+      expect(solr_facade.members).to eq response_documents
     end
   end
 end
