@@ -30,15 +30,15 @@ export default {
       propsChanged.push(this.$store.state.ogState.viewingHint !== this.$store.state.viewingHint)
       propsChanged.push(this.$store.state.ogState.viewingDirection !== this.$store.state.viewingDirection)
       propsChanged.push(this.$store.state.changeList.length > 0)
-      console.log(propsChanged)
-      if (propsChanged.indexOf(true)) {
+      propsChanged.push(this.orderChanged)
+      if (propsChanged.indexOf(true) > -1) {
         return true
       } else {
         return false
       }
     },
     isDisabled: function () {
-      if (this.orderChanged || this.$store.state.changeList.length > 0) {
+      if (this.stateChanged) {
         return false
       } else {
         return true

@@ -7,29 +7,13 @@
         <div class="form-group col-md-6">
           <fieldset>
             <legend>Viewing Direction</legend>
-            <div class="radio">
-              <label>
-                <input v-model="viewDir" type="radio" name="viewDir" v-bind:value="left-to-right" value="left-to-right">
-                Left-to-Right (Default)
-              </label>
-            </div>
-            <div class="radio">
-              <label for="rtl">
-                <input v-model="viewDir" type="radio" name="viewDir" v-bind:value="right-to-left" value="right-to-left">
-                Right-to-Left
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input v-model="viewDir" type="radio" name="viewDir" v-bind:value="top-to-bottom" value="top-to-bottom">
-                Top-to-Bottom
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input v-model="viewDir" type="radio" name="viewDir" v-bind:value="bottom-to-top" value="bottom-to-top">
-                Bottom-to-Top
-              </label>
+            <div v-for="viewDir in viewDirs">
+              <div class="radio">
+                <label>
+                  <input v-model="dirPicked" type="radio" name="viewDir" :value="viewDir.short">
+                  {{viewDir.long}}
+                </label>
+              </div>
             </div>
           </fieldset>
         </div>
@@ -37,23 +21,13 @@
         <div class="form-group col-md-6">
           <fieldset>
             <legend>Viewing Hint</legend>
-            <div class="radio">
-              <label>
-                <input v-model="viewHint" type="radio" name="viewHint" id="individuals" value="individuals">
-                Individuals (Default)
-              </label>
-            </div>
-            <div class="radio">
-              <label for="rtl">
-                <input v-model="viewHint" type="radio" name="viewHint" id="paged" value="paged">
-                Paged
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input v-model="viewHint" type="radio" name="viewHint" id="continuous" value="continuous">
-                Continuous
-              </label>
+            <div v-for="viewHint in viewHints">
+              <div class="radio">
+                <label>
+                  <input v-model="hintPicked" type="radio" name="viewHint" :value="viewHint.label">
+                  {{viewHint.label}}
+                </label>
+              </div>
             </div>
           </fieldset>
         </div>
@@ -160,10 +134,37 @@ export default {
         'startWith': 'front',
         'unitLabel': 'p. ',
         'bracket': false
-      }
+      },
+      viewDirs: [
+        {short: "ltr", long: "left-to-right"},
+        {short: "rtl", long: "right-to-left"},
+        {short: "ttb", long: "top-to-bottom"},
+        {short: "btt", long: "bottom-to-top"},
+      ],
+      viewHints: [
+        {label: "individual"},
+        {label: "paged"},
+        {label: "continuous"}
+      ]
     }
   },
   computed: {
+    dirPicked: {
+      get() {
+        return this.$store.state.viewingDirection
+      },
+      set(value) {
+        this.$store.dispatch('updateViewDir', value)
+      }
+    },
+    hintPicked: {
+      get() {
+        return this.$store.state.viewingHint
+      },
+      set(value) {
+        this.$store.dispatch('updateViewHint', value)
+      }
+    },
     selectedTotal () {
       return this.$store.state.selected.length
     },
@@ -174,15 +175,6 @@ export default {
     isThumbnail () {
       var id = this.$store.state.selected[0].id
       return this.$store.state.thumbnail === id
-    },
-    viewDir: {
-      get() {
-        return this.$store.state.viewingDirection;
-      },
-      set(value) {
-        console.log(value)
-        this.$store.dispatch('updateViewDir', value)
-      }
     },
     viewHint: {
       get() {
@@ -213,14 +205,6 @@ export default {
       var thumbnail = this.$store.state.selected[0].id
       this.$store.dispatch('updateThumbnail', thumbnail)
     },
-    // updateViewDir () {
-    //   var viewDir = this.$store.state.viewingDirection
-    //   this.$store.dispatch('updateViewDir', viewDir)
-    // },
-    // updateViewHint () {
-    //   var viewHint = this.$store.state.updateViewHint
-    //   this.$store.dispatch('updateViewHint', viewHint)
-    // },
     updateSingle () {
       var changeList = this.$store.state.changeList
       var images = this.$store.state.images

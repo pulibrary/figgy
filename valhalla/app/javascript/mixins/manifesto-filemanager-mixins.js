@@ -38,20 +38,20 @@ const ManifestoFilemanagerMixins = {
     const viewHint = this.getViewingHint()
     var imageCollection = {}
     imageCollection.id = resource.id
-    imageCollection.startpage = null
-    if (this.startCanvas != 'undefined') {
+    imageCollection.startpage = ''
+    if (typeof this.startCanvas != 'undefined') {
       imageCollection.startpage = this.startCanvas
     }
-    imageCollection.thumbnail = null
-    if (this.thumbnail != 'undefined') {
+    imageCollection.thumbnail = ''
+    if (typeof this.thumbnail != 'undefined') {
       imageCollection.thumbnail = this.thumbnail
     }
-    imageCollection.viewingDirection = null
-    if (viewDir != 'undefined') {
-      imageCollection.viewingDirection = viewDir.value
+    imageCollection.viewingDirection = ''
+    if (typeof viewDir != 'undefined') {
+      imageCollection.viewingDirection = this.mapViewDir(viewDir.value)
     }
-    imageCollection.viewingHint = null
-    if (viewHint != 'undefined') {
+    imageCollection.viewingHint = ''
+    if (typeof viewHint != 'undefined') {
       imageCollection.viewingHint = viewHint.value
     }
     imageCollection.images = canvases.map(canvas => ({
@@ -61,6 +61,18 @@ const ManifestoFilemanagerMixins = {
       url: this.getCanvasMainThumb(canvas)
     }))
     return imageCollection
+  },
+
+  mapViewDir: function (value) {
+    // we need this because vue binding does not like values with hyphens
+    // because they cannot be used as js properties
+    const map = [ {short: "ltr", long: "left-to-right"},
+                  {short: "rtl", long: "right-to-left"},
+                  {short: "ttb", long: "top-to-bottom"},
+                  {short: "btt", long: "bottom-to-top"},
+                ]
+    const viewDir = map.find(val => val.long === value)
+    return viewDir.short
   },
 
 }

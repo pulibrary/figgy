@@ -13,7 +13,8 @@ const state = {
   images: [],
   selected: [],
   ogImages: [],
-  changeList: []
+  changeList: [],
+  ogState: {}
 }
 
 const mutations = {
