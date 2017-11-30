@@ -63,7 +63,7 @@ RSpec.feature "Scanned Resources", js: true do
 
     it 'shows the admin controls' do
       visit solr_document_path(scanned_resource)
-      expect(page).to have_link 'File Manager', file_manager_scanned_resource_path(scanned_resource)
+      expect(page).to have_link 'File Manager', href: file_manager_scanned_resource_path(scanned_resource)
     end
   end
 end

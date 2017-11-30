@@ -73,8 +73,9 @@ RSpec.describe ScannedResourceDecorator do
     end
     let(:resource) { FactoryGirl.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id]) }
     it 'retrieves the title of parents' do
-      expect(resource.decorate.member_of_collections.to_a).not_to be_empty
-      expect(resource.decorate.member_of_collections.to_a.first).to eq 'Title'
+      expect(resource.decorate.member_of_collections).not_to be_empty
+      expect(resource.decorate.member_of_collections.first).to be_a CollectionDecorator
+      expect(resource.decorate.member_of_collections.first.title).to eq 'Title'
     end
   end
 end

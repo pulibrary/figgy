@@ -83,8 +83,8 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     @member_of_collections ||=
       begin
         query_service.find_references_by(resource: model, property: :member_of_collection_ids)
+                     .to_a
                      .map(&:decorate)
-                     .map(&:title).to_a
       end
   end
 
