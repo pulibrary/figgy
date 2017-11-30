@@ -12,33 +12,12 @@
 <script>
 export default {
   name: 'controls',
-  data: function () {
-    return {
-      hidden: this.orderChanged
-    }
-  },
   computed: {
     orderChanged: function () {
-      var ogOrder = JSON.stringify(this.$store.state.ogImages.map(img => img.id))
-      var imgOrder = JSON.stringify(this.$store.state.images.map(img => img.id))
-      return ogOrder !== imgOrder
-    },
-    stateChanged: function () {
-      var propsChanged = []
-      propsChanged.push(this.$store.state.ogState.thumbnail !== this.$store.state.thumbnail)
-      propsChanged.push(this.$store.state.ogState.startPage !== this.$store.state.startPage)
-      propsChanged.push(this.$store.state.ogState.viewingHint !== this.$store.state.viewingHint)
-      propsChanged.push(this.$store.state.ogState.viewingDirection !== this.$store.state.viewingDirection)
-      propsChanged.push(this.$store.state.changeList.length > 0)
-      propsChanged.push(this.orderChanged)
-      if (propsChanged.indexOf(true) > -1) {
-        return true
-      } else {
-        return false
-      }
+      return this.$store.getters.orderChanged
     },
     isDisabled: function () {
-      if (this.stateChanged) {
+      if (this.$store.getters.stateChanged) {
         return false
       } else {
         return true
@@ -60,7 +39,9 @@ export default {
           ephemera_folder: {
             member_ids: this.$store.getters.imageIdList,
             thumbnail_id: this.$store.state.thumbnail,
-            start_canvas: this.$store.state.startpage,
+            start_canvas: this.$store.state.startPage,
+            viewing_hint: this.$store.state.viewingHint,
+            viewing_direction: this.$store.state.viewingDirection,
             id: this.$store.state.id
           }
         },

@@ -1,9 +1,9 @@
 const ManifestoFilemanagerMixins = {
 
   mainSequence: function () {
-    // mainSequence is the one without an id (not ideal since it could have an id)
     const s = this.getSequences()
     const main_sequence = s.filter((seq) => seq.id !== 'undefined')
+    // the default Sequence is the first in the list
     return main_sequence[0]
   },
 
@@ -20,8 +20,8 @@ const ManifestoFilemanagerMixins = {
   getResourceId: function (canvas) {
     const images = canvas.getImages()
     const r = images[0].getResource()
-    // this seems to be a bug in manifesto ...
-    // getResource() returns an object instead of a string
+    // the double id property is due to a bug in our manifests ...
+    // see https://github.com/pulibrary/figgy/issues/598
     return r.id.id
   },
 
@@ -39,8 +39,8 @@ const ManifestoFilemanagerMixins = {
     var imageCollection = {}
     imageCollection.id = resource.id
     imageCollection.startpage = ''
-    if (typeof this.startCanvas != 'undefined') {
-      imageCollection.startpage = this.startCanvas
+    if (typeof s.getStartCanvas() != 'undefined') {
+      imageCollection.startpage = s.getStartCanvas()
     }
     imageCollection.thumbnail = ''
     if (typeof this.thumbnail != 'undefined') {
@@ -48,7 +48,7 @@ const ManifestoFilemanagerMixins = {
     }
     imageCollection.viewingDirection = ''
     if (typeof viewDir != 'undefined') {
-      imageCollection.viewingDirection = this.mapViewDir(viewDir.value)
+      imageCollection.viewingDirection = viewDir.value
     }
     imageCollection.viewingHint = ''
     if (typeof viewHint != 'undefined') {
@@ -61,18 +61,6 @@ const ManifestoFilemanagerMixins = {
       url: this.getCanvasMainThumb(canvas)
     }))
     return imageCollection
-  },
-
-  mapViewDir: function (value) {
-    // we need this because vue binding does not like values with hyphens
-    // because they cannot be used as js properties
-    const map = [ {short: "ltr", long: "left-to-right"},
-                  {short: "rtl", long: "right-to-left"},
-                  {short: "ttb", long: "top-to-bottom"},
-                  {short: "btt", long: "bottom-to-top"},
-                ]
-    const viewDir = map.find(val => val.long === value)
-    return viewDir.short
   },
 
 }

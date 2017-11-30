@@ -10,8 +10,8 @@
             <div v-for="viewDir in viewDirs">
               <div class="radio">
                 <label>
-                  <input v-model="dirPicked" type="radio" name="viewDir" :value="viewDir.short">
-                  {{viewDir.long}}
+                  <input v-model="dirPicked" type="radio" name="viewDir" :value="viewDir.label">
+                  {{viewDir.label}}
                 </label>
               </div>
             </div>
@@ -103,13 +103,13 @@
       <div class="form-group">
         <div class="checkbox">
           <label>
-            <input @change="updateThumbnail()" v-model="isThumbnail" id="isThumbnail" type="checkbox" value="">
+            <input @change="updateThumbnail()" v-model="isThumbnail" id="isThumbnail" type="checkbox" :value="thumbnail" :checked="isThumbnail">
             Set as Thumbnail</a>
           </label>
       </div>
         <div class="checkbox">
           <label>
-            <input @change="updateStartPage()" v-model="isStartPage" id="isStartPage" type="checkbox" value="">
+            <input @change="updateStartPage()" v-model="isStartPage" id="isStartPage" type="checkbox" :value="thumbnail" :checked="isStartPage">
             Set as Start Page</a>
           </label>
         </div>
@@ -136,20 +136,25 @@ export default {
         'bracket': false
       },
       viewDirs: [
-        {short: "ltr", long: "left-to-right"},
-        {short: "rtl", long: "right-to-left"},
-        {short: "ttb", long: "top-to-bottom"},
-        {short: "btt", long: "bottom-to-top"},
+        {label: "left-to-right"},
+        {label: "right-to-left"},
+        {label: "top-to-bottom"},
+        {label: "bottom-to-top"},
       ],
       viewHints: [
         {label: "individual"},
         {label: "paged"},
         {label: "continuous"}
-      ]
+      ],
+      dirPicked: this.viewingDirection,
+      hintPicked: this.viewingHint
     }
   },
   computed: {
-    dirPicked: {
+    thumbnail: function() {
+      return this.$store.state.thumbnail
+    },
+    viewingDirection: {
       get() {
         return this.$store.state.viewingDirection
       },
@@ -157,7 +162,7 @@ export default {
         this.$store.dispatch('updateViewDir', value)
       }
     },
-    hintPicked: {
+    viewingHint: {
       get() {
         return this.$store.state.viewingHint
       },
@@ -175,14 +180,6 @@ export default {
     isThumbnail () {
       var id = this.$store.state.selected[0].id
       return this.$store.state.thumbnail === id
-    },
-    viewHint: {
-      get() {
-        return this.$store.state.viewingHint;
-      },
-      set(value) {
-        this.$store.dispatch('updateViewHint', value)
-      }
     },
     singleForm () {
       return {
@@ -205,6 +202,10 @@ export default {
       var thumbnail = this.$store.state.selected[0].id
       this.$store.dispatch('updateThumbnail', thumbnail)
     },
+    // updateViewDir (event) {
+    //   var value = event.target.value
+    //   this.$store.dispatch('updateViewDir', value)
+    // },
     updateSingle () {
       var changeList = this.$store.state.changeList
       var images = this.$store.state.images
