@@ -11,32 +11,37 @@ class FileAppender
     @files = files
   end
 
-  def append_to(resource)
-    return [] if files.blank?
-    updated_files = update_files(resource, files)
-    return updated_files unless updated_files.empty?
+  def file_set?(resource)
+    ResourceDetector.file_set?(resource)
+  end
 
-    file_sets = build_file_sets || file_nodes
-    if file_set?(resource)
-      resource.file_metadata += file_sets
-    else
-      resource.member_ids += file_sets.map(&:id)
-      resource.thumbnail_id = file_sets.first.id if resource.thumbnail_id.blank?
+  def viewable_resource?(resource)
+    ResourceDetector.viewable_resource?(resource)
+  end
+
+  def append_to(resource)
+    return [] if files.empty?
+    updated_files = update_files(resource)
+    return updated_files unless updated_files.empty?
+    file_resources = FileResources.new(build_file_sets || file_nodes)
+    resource.file_metadata += file_resources.file_metadata if file_set?(resource)
+    if viewable_resource?(resource)
+      resource.member_ids += file_resources.ids
+      resource.thumbnail_id = file_resources.first.id if resource.thumbnail_id.blank?
     end
     adjust_pending_uploads(resource)
-    file_sets
+    file_resources
   end
 
-  def file_set?(resource)
-    resource.respond_to?(:file_metadata) && !resource.respond_to?(:member_ids)
-  end
-
-  def update_files(resource, files)
+  def update_files(resource)
     files.select { |file| file.is_a?(Hash) }.map do |file|
       node = resource.file_metadata.select { |x| x.id.to_s == file.keys.first }.first
       node.updated_at = Time.current
       file_wrapper = UploadDecorator.new(file.values.first, node.original_filename.first)
-      file = storage_adapter.upload(file: file_wrapper, resource: node, original_filename: file_wrapper.original_filename)
+
+      node.label = file.values.first.original_filename
+      node.mime_type = file.values.first.content_type
+      storage_adapter.upload(file: file_wrapper, original_filename: file_wrapper.original_filename, resource: node)
       node
     end
   end

@@ -1,29 +1,35 @@
 <h2>Files</h2>
-<%= simple_form_for FileSetChangeSet.new(resource) do |f| %>
+<%= simple_form_for FileSetChangeSet.new(resource), html: { class: ['edit_file_set', 'admin_controls'] } do |f| %>
   <table class="table table-striped files">
-    <tr>
-      <th>Label</th>
-      <th>Download</th>
-      <th>Update</th>
-    </tr>
+    <thead>
+      <tr>
+        <th>Label</th>
+        <th>Download</th>
+        <th>Update</th>
+      </tr>
+    </thead>
+    <tbody>
     <% resource.original_files.each do |file| %>
       <tr>
-        <td><%= file.label.first %></td>
+        <td><span class="label label-success">Original File</span>&nbsp;<%= file.label.first %></td>
         <td><%= link_to "Download", valhalla.download_path(resource.id, file.id) %></td>
         <td><%= f.input "files[][#{file.id}]", as: :file, label: false, required: false %></td>
       </tr>
     <% end %>
     <% resource.derivative_files.each do |file| %>
       <tr>
-        <td><%= file.label.first %></td>
+        <td><span class="label label-info">Derivative File</span>&nbsp;<%= file.label.first %></td>
         <td><%= link_to "Download", valhalla.download_path(resource.id, file.id) %></td>
         <td><%= f.input "derivative_files[][#{file.id}]", as: :file, label: false, required: false %></td>
       </tr>
     <% end %>
-    <tr>
-      <td colspan="2"></td>
-      <td><%= f.submit 'Update Files', class: 'btn btn-primary' %></td>
-    </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="2"></td>
+        <td><%= f.submit 'Update Files', class: 'btn btn-primary', disabled: true %></td>
+      </tr>
+    </tfoot>
   </table>
 <% end %>
 <%= render "admin_controls_default" %>

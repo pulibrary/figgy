@@ -24,6 +24,12 @@ RSpec.describe FileSetsController do
       expect(file_set.title).to eq ["Second"]
     end
 
+    context "with an invalid FileSet ID" do
+      it 'displays an error' do
+        expect { patch :update, params: { id: 'no-exist', file_set: { title: ["Second"] } } }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+      end
+    end
+
     context 'with replacement master and derivative files' do
       let(:master_file) { fixture_file_upload('files/example.tif', 'image/tiff') }
       let(:derivative_file) { fixture_file_upload('files/example.jp2', 'image/jp2') }

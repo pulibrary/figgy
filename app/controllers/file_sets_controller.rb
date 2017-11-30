@@ -34,29 +34,33 @@ class FileSetsController < ApplicationController
   def update
     @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
     authorize! :update, @change_set.resource
-    render :edit unless @change_set.validate(resource_params)
-    @change_set.sync
-    obj = nil
-    change_set_persister.buffer_into_index do |persist|
-      obj = persist.save(change_set: @change_set)
+    if @change_set.validate(resource_params)
+      @change_set.sync
+      obj = nil
+      change_set_persister.buffer_into_index do |persist|
+        obj = persist.save(change_set: @change_set)
+      end
+      update_derivatives unless derivative_resource_params.empty?
+
+      after_update_success(obj, @change_set)
     end
-
-    update_derivatives if derivative_resource_params
-
-    redirect_to contextual_path(obj, @change_set).show
+  rescue Valkyrie::Persistence::ObjectNotFoundError => error
+    after_update_error error
   end
 
   private
 
-    def filtered_file_params(filter:)
-      filtered = params[resource_class.to_s.underscore.to_sym]
-      filtered['files'] = filtered.fetch(filter, [])
-      filtered.delete(filter)
-      filtered.to_unsafe_h
+    def filtered_file_params(file_filter:)
+      filtered = resource_params
+      files = filtered.fetch(file_filter, [])
+      return {} if files.empty?
+      filtered['files'] = files
+      filtered.delete(file_filter)
+      filtered
     end
 
     def derivative_resource_params
-      @derivative_resource_params ||= filtered_file_params(filter: 'derivative_files')
+      @derivative_resource_params ||= filtered_file_params(file_filter: 'derivative_files')
     end
 
     def update_derivatives
