@@ -57,4 +57,13 @@ RSpec.feature "Scanned Resources", js: true do
       expect(page).to have_selector 'td', text: 'vol1'
     end
   end
+
+  context 'as an image_editor' do
+    let(:user) { FactoryGirl.create(:image_editor) }
+
+    it 'shows the admin controls' do
+      visit solr_document_path(scanned_resource)
+      expect(page).to have_link 'File Manager', file_manager_scanned_resource_path(scanned_resource)
+    end
+  end
 end

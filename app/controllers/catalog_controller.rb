@@ -41,7 +41,7 @@ class CatalogController < ApplicationController
     config.autocomplete_enabled = true
     config.autocomplete_path = 'suggest'
     config.show.document_actions.clear
-    config.add_show_tools_partial(:admin_controls, partial: 'admin_controls', if: :admin?)
+    config.add_show_tools_partial(:admin_controls, partial: 'admin_controls', if: :can_edit?)
     config.show.partials = config.show.partials.insert(1, :parent_breadcrumb)
     config.show.partials += [:universal_viewer]
     config.show.partials += [:resource_attributes]
@@ -64,8 +64,8 @@ class CatalogController < ApplicationController
     config.add_sort_field "updated_at_dtsi asc", label: "date modified \u25B2"
   end
 
-  def admin?
-    can?(:manage, @document.resource)
+  def can_edit?
+    can?(:edit, @document.resource)
   end
 
   def has_search_parameters?
