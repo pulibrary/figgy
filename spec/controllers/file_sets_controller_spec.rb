@@ -80,6 +80,13 @@ RSpec.describe FileSetsController do
         expect(response).to redirect_to(file_set)
         expect(create_derivatives_class).to have_received(:perform_later)
       end
+
+      it "can return json" do
+        put :derivatives, params: { id: file_set.id.to_s }, format: :json
+
+        expect(response.status).to eq 200
+        expect(response.body).to eq "{\"success\":true}"
+      end
     end
   end
 
