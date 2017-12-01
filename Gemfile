@@ -28,6 +28,7 @@ group :development do
   gem "spring"
   gem "spring-commands-rspec"
   gem "web-console"
+  gem "foreman"
 end
 
 group :development, :test do
