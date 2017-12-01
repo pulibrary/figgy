@@ -28,6 +28,7 @@ git clone https://github.com/pulibrary/figgy.git
 cd figgy
 bundle install
 npm install
+npm install -g foreman
 ```
 
 ## Setup server

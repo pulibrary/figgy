@@ -95,14 +95,11 @@ const actions = {
 
     let file_set_promises = []
     for (let i = 0; i < body.file_sets.length; i++) {
-      console.log(body.file_sets[i].id)
       file_set_promises.push(axios.patch('/concern/file_sets/' + body.file_sets[i].id, body.file_sets[i]))
     }
 
     axios.patch('/concern/ephemera_folders/' + body.resource.ephemera_folder.id, body.resource).then((response) => {
-      console.log(response)
       axios.all(file_set_promises).then(axios.spread((...args) => {
-        console.log(args)
         context.commit('SAVE_STATE', [])
       }, (err) => {
         alert(errors.join('\n'))

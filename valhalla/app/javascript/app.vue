@@ -8,7 +8,6 @@
 </template>
 
 <script>
-// import {Gallery, Detail, Panel, Controls} from 'filemanager'
 import Gallery from './components/Gallery'
 import Detail from './components/Detail'
 import Panel from './components/Panel'

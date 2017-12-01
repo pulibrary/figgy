@@ -4,7 +4,6 @@ import App from '../app.vue'
 import store from '../store'
 
 document.addEventListener('DOMContentLoaded', () => {
-// document.addEventListener('turbolinks:load', () => {
   const app = new Vue({
     el: '#filemanager',
     template: '<App/>',
