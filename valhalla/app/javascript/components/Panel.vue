@@ -86,35 +86,46 @@
       </form>
     </div>
     <!-- Single Selected Form-->
-      <form v-if="selectedTotal === 1" id="singleSelected" class="formContent form-horizontal">
-        <div class="form-group">
-          <label class="control-label" for="label">Label</label>
-          <input @input="updateSingle()" v-model="singleForm.label" type="text" name="label" id="label" value="1" class="form-control">
+    <div v-if="selectedTotal === 1" id="singleSelected" >
+      <h2>Edit <small>the selected item</small></h2>
+      <div class="row">
+        <div class="col-md-6">
+          <form class="formContent form-inline">
+            <div class="form-group">
+              <label class="control-label" for="label">Label</label>
+              <input @input="updateSingle()" v-model="singleForm.label" type="text" name="label" id="label" value="1" class="form-control">
+            </div>
+            <div class="form-group">
+              <label class="control-label" for="pageType">Page Type</label>
+              <select @change="updateSingle()" v-model="singleForm.pageType" id="pageType" class="form-control">
+                <option value="single">Single Page (Default)</option>
+                <option value="non-paged">Non-Paged</option>
+                <option value="facing">Facing Pages</option>
+              </select>
+            </div>
+            <br/>
+            <div class="form-group">
+              <div class="checkbox">
+                <label>
+                  <input @change="updateThumbnail()" v-model="isThumbnail" id="isThumbnail" type="checkbox" :value="thumbnail">
+                  Set as Thumbnail</a>
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input @change="updateStartPage()" v-model="isStartPage" id="isStartPage" type="checkbox" :value="startPage">
+                  Set as Start Page</a>
+                </label>
+              </div>
+            </div>
+            <input id="canvas_id" type="hidden" name="canvas_id">
+          </form>
         </div>
-      <div class="form-group">
-        <label class="control-label" for="pageType">Page Type</label>
-        <select @change="updateSingle()" v-model="singleForm.pageType" id="pageType" class="form-control">
-          <option value="single">Single Page (Default)</option>
-          <option value="non-paged">Non-Paged</option>
-          <option value="facing">Facing Pages</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <div class="checkbox">
-          <label>
-            <input @change="updateThumbnail()" v-model="isThumbnail" id="isThumbnail" type="checkbox" :value="thumbnail">
-            Set as Thumbnail</a>
-          </label>
-      </div>
-        <div class="checkbox">
-          <label>
-            <input @change="updateStartPage()" v-model="isStartPage" id="isStartPage" type="checkbox" :value="startPage">
-            Set as Start Page</a>
-          </label>
+        <div class="col-md-6">
+            <a :href="singleForm.editLink" class="btn btn-default btn-lg">Replace or Delete File</a>
         </div>
       </div>
-      <input id="canvas_id" type="hidden" name="canvas_id">
-    </form>
+    </div>
   </div>
 </template>
 
@@ -176,7 +187,8 @@ export default {
         label: this.$store.state.selected[0].label,
         id: this.$store.state.selected[0].id,
         pageType: this.$store.state.selected[0].pageType,
-        url: this.$store.state.selected[0].url
+        url: this.$store.state.selected[0].url,
+        editLink: '/catalog/parent/' + this.$store.state.id + '/' + this.$store.state.selected[0].id
       }
     }
   },
@@ -246,6 +258,14 @@ export default {
 
 .form-inline .row {
   margin-top:15px;
+}
+
+#singleSelected .form-group {
+  line-height: 3em;
+}
+
+.checkbox {
+  display: block;
 }
 
 fieldset {
