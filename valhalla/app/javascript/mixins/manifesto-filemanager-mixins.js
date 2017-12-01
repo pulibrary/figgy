@@ -1,3 +1,5 @@
+import default_image from 'default.png'
+
 const ManifestoFilemanagerMixins = {
 
   mainSequence: function () {
@@ -9,7 +11,7 @@ const ManifestoFilemanagerMixins = {
 
   getCanvasMainThumb: function (canvas) {
     const images = canvas.getImages()
-    var thumb = "http://via.placeholder.com/300x400"
+    var thumb = default_image
     var services = images[0].getResource().getServices()
     if (services.length) {
       thumb = services[0].id + '/full/400,/0/default.jpg'

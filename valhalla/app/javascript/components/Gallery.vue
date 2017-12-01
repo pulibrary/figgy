@@ -1,11 +1,18 @@
 <template>
   <div class="content">
     <div class="gallery_controls">
-      Select:
-      <button @click.capture="selectAll()" id="select_all_btn" class="btn btn-default btn-sm"><i class="fa fa-th"></i> All</button>
-      <button @click.capture="selectNone()" id="select_none_btn" class="btn btn-default btn-sm"><i class="fa fa-th fa-inverse"></i> None</button>
-      <button @click.capture="selectAlternate()" id="select_alternate_btn" class="btn btn-default btn-sm"><i class="fa fa-th fa-inverse"></i> Alternate</button>
-      <button @click.capture="selectInverse()" id="select_inverse_btn" class="btn btn-default btn-sm"><i class="fa fa-th fa-inverse"></i> Inverse</button>
+      <div class="dropdown">
+        <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="selectOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          Select
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="selectOptions">
+          <li><a @click.capture="selectAll()" id="select_all_btn">All</a></li>
+          <li><a @click.capture="selectNone()" id="select_none_btn">None</a></li>
+          <li><a @click.capture="selectAlternate()" id="select_alternate_btn">Alternate</a></li>
+          <li><a @click.capture="selectInverse()" id="select_inverse_btn">Inverse</a></li>
+        </ul>
+      </div>
       <button @click.capture="uploadFile()" id="upload_file" class="btn btn-default btn-sm"><i class="fa fa-th fa-upload"></i> Upload File</button>
       <div id="img_sizer">
         <i class="fa fa-image"></i>
@@ -190,6 +197,10 @@ export default {
 
 .thumb {
   pointer-events: none;
+}
+
+.dropdown {
+  display: inline-block;
 }
 
 </style>
