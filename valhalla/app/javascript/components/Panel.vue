@@ -10,7 +10,7 @@
             <div v-for="viewDir in viewDirs">
               <div class="radio">
                 <label>
-                  <input v-model="dirPicked" type="radio" name="viewDir" :value="viewDir.label">
+                  <input @change="updateViewDir($event)" v-model="viewingDirection" type="radio" name="viewDir" :value="viewDir.label">
                   {{viewDir.label}}
                 </label>
               </div>
@@ -24,7 +24,7 @@
             <div v-for="viewHint in viewHints">
               <div class="radio">
                 <label>
-                  <input v-model="hintPicked" type="radio" name="viewHint" :value="viewHint.label">
+                  <input @change="updateViewHint($event)" v-model="viewingHint" type="radio" name="viewHint" :value="viewHint.label">
                   {{viewHint.label}}
                 </label>
               </div>
@@ -37,7 +37,6 @@
     <div v-if="selectedTotal > 1" id="multiSelected" >
       <h2>Generate Labels <small>for selected items</small></h2>
       <form class="formContent form-inline">
-        <!-- <div id="preview" class="row"><p class="text-muted">Example: <em>{{ example }}</em></p></div> -->
         <div class="row">
           <div class="form-group">
             <label class="control-label" for="unitLabel">Unit Label</label>
@@ -103,13 +102,13 @@
       <div class="form-group">
         <div class="checkbox">
           <label>
-            <input @change="updateThumbnail()" v-model="isThumbnail" id="isThumbnail" type="checkbox" :value="thumbnail" :checked="isThumbnail">
+            <input @change="updateThumbnail()" v-model="isThumbnail" id="isThumbnail" type="checkbox" :value="thumbnail">
             Set as Thumbnail</a>
           </label>
       </div>
         <div class="checkbox">
           <label>
-            <input @change="updateStartPage()" v-model="isStartPage" id="isStartPage" type="checkbox" :value="thumbnail" :checked="isStartPage">
+            <input @change="updateStartPage()" v-model="isStartPage" id="isStartPage" type="checkbox" :value="startPage">
             Set as Start Page</a>
           </label>
         </div>
@@ -142,33 +141,24 @@ export default {
         {label: "bottom-to-top"},
       ],
       viewHints: [
-        {label: "individual"},
+        {label: "individuals"},
         {label: "paged"},
         {label: "continuous"}
-      ],
-      dirPicked: this.viewingDirection,
-      hintPicked: this.viewingHint
+      ]
     }
   },
   computed: {
-    thumbnail: function() {
+    thumbnail: function () {
       return this.$store.state.thumbnail
     },
-    viewingDirection: {
-      get() {
-        return this.$store.state.viewingDirection
-      },
-      set(value) {
-        this.$store.dispatch('updateViewDir', value)
-      }
+    startPage: function () {
+      return this.$store.state.startPage
     },
-    viewingHint: {
-      get() {
-        return this.$store.state.viewingHint
-      },
-      set(value) {
-        this.$store.dispatch('updateViewHint', value)
-      }
+    viewingDirection: function () {
+      return this.$store.state.viewingDirection
+    },
+    viewingHint: function () {
+      return this.$store.state.viewingHint
     },
     selectedTotal () {
       return this.$store.state.selected.length
@@ -202,10 +192,14 @@ export default {
       var thumbnail = this.$store.state.selected[0].id
       this.$store.dispatch('updateThumbnail', thumbnail)
     },
-    // updateViewDir (event) {
-    //   var value = event.target.value
-    //   this.$store.dispatch('updateViewDir', value)
-    // },
+    updateViewDir (event) {
+      var value = event.target.value
+      this.$store.dispatch('updateViewDir', value)
+    },
+    updateViewHint (event) {
+      var value = event.target.value
+      this.$store.dispatch('updateViewHint', value)
+    },
     updateSingle () {
       var changeList = this.$store.state.changeList
       var images = this.$store.state.images

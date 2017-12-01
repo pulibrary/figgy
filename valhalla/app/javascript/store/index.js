@@ -10,6 +10,8 @@ const state = {
   id: '',
   startPage: '',
   thumbnail: '',
+  viewingDirection: '',
+  viewingHint: '',
   images: [],
   selected: [],
   ogImages: [],
