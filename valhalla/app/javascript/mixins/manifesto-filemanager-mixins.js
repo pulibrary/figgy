@@ -31,6 +31,16 @@ const ManifestoFilemanagerMixins = {
     return english.value
   },
 
+  getThumbnailId: function () {
+    const t = this.getThumbnail()
+    var id = ''
+    if (typeof t != 'undefined') {
+      const parse = t.__jsonld.service["@id"].split('/')
+      id = parse[parse.length-1]
+    }
+    return id
+  },
+
   imageCollection: function (resource) {
     const s = this.mainSequence()
     const canvases = s.getCanvases()
@@ -42,10 +52,7 @@ const ManifestoFilemanagerMixins = {
     if (typeof s.getStartCanvas() != 'undefined') {
       imageCollection.startpage = s.getStartCanvas()
     }
-    imageCollection.thumbnail = ''
-    if (typeof this.thumbnail != 'undefined') {
-      imageCollection.thumbnail = this.thumbnail
-    }
+    imageCollection.thumbnail = this.getThumbnailId()
     imageCollection.viewingDirection = ''
     if (typeof viewDir != 'undefined') {
       imageCollection.viewingDirection = viewDir.value

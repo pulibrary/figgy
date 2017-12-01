@@ -34,7 +34,7 @@
     "@rails/webpacker": "^3.0.2",
     "axios": "^0.17.1",
     "babel-polyfill": "^6.26.0",
-    "manifesto.js": "^2.1.12",
+    "manifesto.js": "^2.2.0",
     "page-label-generator": "^1.0.4",
     "typings": "^2.1.1",
     "vue": "^2.5.3",
