@@ -6,7 +6,7 @@ class ManifestBuilder
   class RecordPropertyBuilder < IIIFManifest::ManifestBuilder::RecordPropertyBuilder
     def apply(manifest)
       manifest = super
-      manifest.viewing_direction = viewing_direction if viewing_direction.present?
+      manifest.viewing_direction = viewing_direction if viewing_direction.present? && manifest.respond_to?(:viewing_direction=)
       manifest
     end
 

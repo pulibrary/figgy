@@ -177,7 +177,12 @@ RSpec.describe ManifestBuilder do
   end
 
   context "when given a nested child" do
-    let(:scanned_resource) { FactoryGirl.create_for_repository(:scanned_resource, member_ids: child.id, identifier: 'ark:/88435/5m60qr98h') }
+    let(:scanned_resource) do
+      FactoryGirl.create_for_repository(:scanned_resource,
+                                        member_ids: child.id,
+                                        identifier: 'ark:/88435/5m60qr98h',
+                                        viewing_direction: "right-to-left")
+    end
     let(:child) { FactoryGirl.create_for_repository(:scanned_resource, files: [file]) }
     it "builds a IIIF collection" do
       output = manifest_builder.build
@@ -191,6 +196,8 @@ RSpec.describe ManifestBuilder do
       expect(output["seeAlso"]).to include "@id" => "http://www.example.com/catalog/#{scanned_resource.id}.jsonld", "format" => "application/ld+json"
       expect(output["rendering"]).to include "@id" => "http://arks.princeton.edu/ark:/88435/5m60qr98h", "format" => "text/html"
       expect(output["license"]).to eq "http://rightsstatements.org/vocab/NKC/1.0/"
+      # not allowed in collections until iiif presentation api v3
+      expect(output["viewingDirection"]).to eq nil
     end
   end
 
