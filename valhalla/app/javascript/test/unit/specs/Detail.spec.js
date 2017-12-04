@@ -33,7 +33,7 @@ describe('Detail.vue', () => {
   })
 
   it('has the expected html structure', () => {
-    expect(cmp.$el).toMatchSnapshot()
+    expect(cmp.element).toMatchSnapshot()
   })
 
   it('selectedImageUrl function has the expected value', () => {
