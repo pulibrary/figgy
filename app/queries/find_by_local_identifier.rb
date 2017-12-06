@@ -12,20 +12,13 @@ class FindByLocalIdentifier
   end
 
   def find_by_local_identifier(local_identifier:)
-    internal_array = "[\"#{local_identifier}\"]"
-    run_query(query, internal_array)
+    string_property_query.find_by_string_property(
+      property: :local_identifier,
+      value: local_identifier
+    )
   end
 
-  def query
-    <<-SQL
-      select * FROM orm_resources WHERE
-      metadata->'local_identifier' @> ?
-    SQL
-  end
-
-  def run_query(query, *args)
-    orm_class.find_by_sql(([query] + args)).lazy.map do |object|
-      resource_factory.to_resource(object: object)
-    end
+  def string_property_query
+    @string_property_query ||= FindByStringProperty.new(query_service: query_service)
   end
 end
