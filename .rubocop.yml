@@ -11,6 +11,7 @@ AllCops:
     - 'valkyrie/**/*'
     - 'db/schema.rb'
     - 'spec/support/**/*'
+    - 'node_modules/**/*'
 Style/FileName:
   Enabled: true
   Exclude:
@@ -69,6 +70,8 @@ Metrics/MethodLength:
     - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
     - 'app/utils/data_seeder.rb'
     - 'app/services/bulk_ingest_service.rb'
+    - 'app/controllers/file_sets_controller.rb'
+    - 'valhalla/app/controllers/concerns/valhalla/resource_controller.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/dublin_core.rb'
@@ -84,6 +87,9 @@ RSpec/MultipleExpectations:
   Enabled: false
 RSpec/ExampleLength:
   Enabled: false
+RSpec/NestedGroups:
+  Exclude:
+    - 'spec/controllers/scanned_resources_controller_spec.rb'
 RSpec/DescribeClass:
   Exclude:
     - 'spec/abilities/**/*'

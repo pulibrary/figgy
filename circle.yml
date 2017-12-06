@@ -1,4 +1,6 @@
 machine:
+  node:
+    version: 8.2.1
   ruby:
     version: 2.3.4
   services:
@@ -12,6 +14,7 @@ dependencies:
   cache_directories:
     - kakadu
   post:
+    - NODE_ENV=test bundle exec rails webpacker:compile
     - sudo sh bin/ci_kakadu_install.sh
     - bundle exec rake rubocop
     - bundle exec rake figgy:test:

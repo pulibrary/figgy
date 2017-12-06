@@ -56,4 +56,28 @@ module ApplicationHelper
   def decorated_change_set_resource
     @decorated_change_set_resource ||= @change_set.resource.decorate
   end
+
+  def filemanager_layout?
+    layout_type == 'filemanager'
+  end
+
+  def container_type
+    if filemanager_layout?
+      'container-fluid'
+    else
+      'container'
+    end
+  end
+
+  ##
+  # Gets current layout for use in rendering partials
+  # @return [String] filemanager, default
+  def layout_type
+    resource_types = ['scanned_resources', 'ephemera_folders']
+    if resource_types.include? params[:controller]
+      'filemanager'
+    else
+      'default'
+    end
+  end
 end
