@@ -109,10 +109,13 @@ RSpec.describe CollectionsController do
         expect(manifest_response[:@type]).to eq "sc:Collection"
         expect(manifest_response[:label]).to eq "Plum Collections"
         expect(manifest_response[:collections].length).to eq 4
-        expect(manifest_response[:collections][0][:@id]).to eq "http://www.example.com/collections/#{collection.id}/manifest"
-        expect(manifest_response[:collections][1][:@id]).to eq "http://www.example.com/collections/#{collection2.id}/manifest"
-        expect(manifest_response[:collections][2][:@id]).to eq "http://www.example.com/concern/ephemera_projects/#{ephemera_project1.id}/manifest"
-        expect(manifest_response[:collections][3][:@id]).to eq "http://www.example.com/concern/ephemera_projects/#{ephemera_project2.id}/manifest"
+        ids = manifest_response[:collections].map { |x| x[:@id] }
+        expect(ids).to contain_exactly(
+          "http://www.example.com/collections/#{collection.id}/manifest",
+          "http://www.example.com/collections/#{collection2.id}/manifest",
+          "http://www.example.com/concern/ephemera_projects/#{ephemera_project1.id}/manifest",
+          "http://www.example.com/concern/ephemera_projects/#{ephemera_project2.id}/manifest"
+        )
         expect(manifest_response[:collections][3][:metadata][0][:value]).to eq ephemera_project2.slug
         expect(manifest_response[:collections][3][:viewingHint]).to be_blank
       end
