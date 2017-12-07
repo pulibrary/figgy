@@ -4,6 +4,7 @@ class PlumImporter
   attr_writer :all_collections, :id_cache
   delegate :metadata_adapter, to: :change_set_persister
   delegate :query_service, to: :metadata_adapter
+  delegate :delayed_queue, to: :change_set_persister
   def initialize(id:, change_set_persister:)
     @id = id
     @change_set_persister = change_set_persister
@@ -23,7 +24,9 @@ class PlumImporter
   end
 
   def add_checksums(member)
-    GenerateChecksumJob.set(queue: :low).perform_later(member.id.to_s)
+    delayed_queue.add do
+      GenerateChecksumJob.set(queue: :low).perform_later(member.id.to_s)
+    end
   end
 
   def import_derivative(member)
@@ -41,7 +44,9 @@ class PlumImporter
   end
 
   def generate_derivative(member)
-    CreateDerivativesJob.set(queue: :low).perform_later(member.id.to_s)
+    delayed_queue.add do
+      CreateDerivativesJob.set(queue: :low).perform_later(member.id.to_s)
+    end
   end
 
   def update_structure(resource, members, change_set_persister)
