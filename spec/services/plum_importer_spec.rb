@@ -83,6 +83,22 @@ RSpec.describe PlumImporter do
       expect(members[0].derivative_file).not_to be_blank
     end
   end
+  context "when something kills the transaction" do
+    with_queue_adapter :test
+    it "doesn't run a checksum job" do
+      Valkyrie::MetadataAdapter.find(:indexing_persister).persister.save(
+        resource: Collection.new(local_identifier: "pqb98np484", slug: "cotsen", title: "Treasures of the Cotsen Collection")
+      )
+      expect do
+        change_set_persister.buffer_into_index do |buffered_changeset_persister|
+          importer = described_class.new(id: id, change_set_persister: buffered_changeset_persister)
+          allow(importer).to receive(:update_structure).and_raise("Broken!")
+          importer.import!
+        end
+      end.to raise_exception("Broken!")
+      expect(ActiveJob::Base.queue_adapter.enqueued_jobs.size).to eq 0
+    end
+  end
 
   context "when given a multi volume work" do
     let(:id) { "p3b593k91p" }
