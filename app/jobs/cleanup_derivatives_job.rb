@@ -14,7 +14,7 @@ class CleanupDerivativesJob < ApplicationJob
     file_set = query_service.find_by(id: Valkyrie::ID.new(file_set_id))
     Valkyrie::DerivativeService.for(FileSetChangeSet.new(file_set)).cleanup_derivatives
   rescue Valkyrie::Persistence::ObjectNotFoundError
-    Rails.logger.error "Unable to find FileSet #{file_set_id}"
+    Rails.logger.error "Unable to find FileSet #{file_set_id} for deletion, derivative files are probably left behind"
   end
 
   private
