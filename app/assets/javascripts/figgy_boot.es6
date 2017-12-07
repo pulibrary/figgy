@@ -6,6 +6,8 @@ import ModalViewer from "modal_viewer"
 import DerivativeForm from "derivative_form"
 import MetadataForm from "metadata_form"
 import UniversalViewer from "universal_viewer"
+import FileSetForm from "file_set_form"
+
 export default class Initializer {
   constructor() {
     this.server_uploader = new ServerUploader
@@ -42,8 +44,12 @@ export default class Initializer {
       new SaveWorkControl($("#form-progress"))
     }
 
-    $(".detect-duplicates").each(function(_i, element) {
+    $(".detect-duplicates").each((_i, element) =>
       DuplicateResourceDetectorFactory.build($(element))
-    })
+    )
+
+    $("form.edit_file_set.admin_controls").each((_i, element) =>
+      new FileSetForm($(element))
+    )
   }
 }
