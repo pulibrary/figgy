@@ -1,5 +1,6 @@
 <template>
   <div id="filemanager">
+    <flash :timeout="10000" :display-icons="true" transition="fade"></flash>
     <gallery></gallery>
     <detail></detail>
     <panel></panel>
@@ -24,7 +25,7 @@ export default {
 }
 </script>
 
-<style>
+<style scope>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

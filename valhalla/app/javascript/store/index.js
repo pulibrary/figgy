@@ -3,11 +3,13 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import manifesto from 'manifesto.js'
 import mixins from '../mixins/manifesto-filemanager-mixins'
+import Pluralize from 'pluralize'
 
 Vue.use(Vuex)
 
 const state = {
   id: '',
+  resourceClassName: '',
   startPage: '',
   thumbnail: '',
   viewingDirection: '',
@@ -25,6 +27,7 @@ const mutations = {
   },
   SET_STATE (state, ImageCollection) {
     state.id = ImageCollection.id
+    state.resourceClassName = ImageCollection.resourceClassName
     state.startPage = ImageCollection.startpage
     state.thumbnail = ImageCollection.thumbnail
     state.viewingHint = ImageCollection.viewingHint
@@ -38,7 +41,7 @@ const mutations = {
                     }
   },
   SAVE_STATE (state, reset) {
-    alert('state saved!')
+    flash('State saved!', 'success')
     state.ogImages = [ ...state.images ]
     state.changeList = [ ...reset ]
     state.selected = [ ...reset ]
@@ -97,8 +100,8 @@ const actions = {
     for (let i = 0; i < body.file_sets.length; i++) {
       file_set_promises.push(axios.patch('/concern/file_sets/' + body.file_sets[i].id, body.file_sets[i]))
     }
-
-    axios.patch('/concern/ephemera_folders/' + body.resource.ephemera_folder.id, body.resource).then((response) => {
+    let resourceClassNames = Object.keys(body.resource)
+    axios.patch('/concern/' + Pluralize.plural(resourceClassNames[0]) + '/' + body.resource[resourceClassNames[0]].id, body.resource).then((response) => {
       axios.all(file_set_promises).then(axios.spread((...args) => {
         context.commit('SAVE_STATE', [])
       }, (err) => {

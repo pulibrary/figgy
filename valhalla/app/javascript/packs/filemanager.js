@@ -2,7 +2,16 @@ import 'babel-polyfill'
 import Vue from 'vue/dist/vue.esm'
 import App from '../app.vue'
 import store from '../store'
+import Flash from 'vue-flash'
 
+// global flash messaging component
+Vue.component('flash', Flash);
+window.events = new Vue()
+window.flash = function(message, type) {
+    window.events.$emit('flash', message, type)
+};
+
+// mount the filemanager app
 document.addEventListener('DOMContentLoaded', () => {
   const app = new Vue({
     el: '#filemanager',

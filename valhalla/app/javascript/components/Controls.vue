@@ -33,19 +33,17 @@ export default {
   },
   methods: {
     save: function () {
-      console.log(this.fileSetPayload)
       let body = {
-        resource : {
-          ephemera_folder: {
-            member_ids: this.$store.getters.imageIdList,
-            thumbnail_id: this.$store.state.thumbnail,
-            start_canvas: this.$store.state.startPage,
-            viewing_hint: this.$store.state.viewingHint,
-            viewing_direction: this.$store.state.viewingDirection,
-            id: this.$store.state.id
-          }
-        },
+        resource : {},
         file_sets: this.fileSetPayload
+      }
+      body.resource[this.$store.state.resourceClassName] = {
+        member_ids: this.$store.getters.imageIdList,
+        thumbnail_id: this.$store.state.thumbnail,
+        start_canvas: this.$store.state.startPage,
+        viewing_hint: this.$store.state.viewingHint,
+        viewing_direction: this.$store.state.viewingDirection,
+        id: this.$store.state.id
       }
       this.$store.dispatch('saveState', body)
     }
@@ -54,6 +52,6 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 
 </style>

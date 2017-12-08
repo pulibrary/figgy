@@ -1,4 +1,5 @@
 import default_image from 'default.png'
+import Pluralize from 'pluralize'
 
 const ManifestoFilemanagerMixins = {
 
@@ -50,6 +51,7 @@ const ManifestoFilemanagerMixins = {
     const viewHint = this.getViewingHint()
     var imageCollection = {}
     imageCollection.id = resource.id
+    imageCollection.resourceClassName = Pluralize.singular(resource.class_name)
     imageCollection.startpage = ''
     if (typeof s.getStartCanvas() != 'undefined') {
       imageCollection.startpage = s.getStartCanvas()
