@@ -24,6 +24,15 @@ RSpec.describe EphemeraFolderChangeSet do
     end
   end
 
+  describe "#subject" do
+    let(:change_set) { described_class.new(FactoryGirl.build(:ephemera_folder, subject: nil)) }
+    it "is required" do
+      expect(change_set.required?(:subject)).to eq true
+      expect(change_set).not_to be_valid
+      expect(described_class.new(FactoryGirl.build(:ephemera_folder, subject: "test"))).to be_valid
+    end
+  end
+
   describe "#visibility" do
     let(:change_set) { described_class.new(FactoryGirl.build(:ephemera_folder, visibility: nil)) }
     it "has a default of open" do

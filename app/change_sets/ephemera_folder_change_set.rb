@@ -8,6 +8,7 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   apply_workflow(FolderWorkflow)
   validates :barcode, :folder_number, :title, :language, :genre, :width, :height, :page_count, :visibility, :rights_statement, presence: true
   validate :date_range_validity
+  validate :subject_present
   validates_with StateValidator
 
   include VisibilityProperty
@@ -26,7 +27,7 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   property :contributor, multiple: true, required: false
   property :publisher, multiple: true, required: false
   property :geographic_origin, multiple: false, required: false
-  property :subject, multiple: true, required: false
+  property :subject, multiple: true, required: true
   property :geo_subject, multiple: true, required: false
   property :description, multiple: false, required: false
   property :date_created, multiple: false, required: false
@@ -148,5 +149,10 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
 
     def date_range_value
       Array.wrap(date_range).first
+    end
+
+    def subject_present
+      return if Array.wrap(subject).first.present?
+      errors.add(:subject, "must be provided.")
     end
 end

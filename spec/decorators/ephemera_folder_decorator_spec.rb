@@ -121,7 +121,7 @@ RSpec.describe EphemeraFolderDecorator do
     expect(decorator.iiif_manifest_attributes).to include series: ['test series']
     expect(decorator.iiif_manifest_attributes).to include sort_title: []
     expect(decorator.iiif_manifest_attributes).to include source_url: ['http://example.com']
-    expect(decorator.iiif_manifest_attributes).to include subject: []
+    expect(decorator.iiif_manifest_attributes).to include subject: ["test subject"]
     expect(decorator.iiif_manifest_attributes).to include title: ['test folder']
     expect(decorator.iiif_manifest_attributes).to include width: ['10']
   end

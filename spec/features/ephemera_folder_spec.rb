@@ -37,6 +37,7 @@ RSpec.feature "Ephemera Folders", js: true do
       page.fill_in 'ephemera_folder_width', with: 'test width'
       page.fill_in 'ephemera_folder_height', with: 'test height'
       page.fill_in 'ephemera_folder_page_count', with: 'test page count'
+      page.fill_in 'ephemera_folder_subject', with: 'test subject'
       page.find(:css, '[data-id="ephemera_folder_rights_statement"]').click
       page.all(:css, '.dropdown-menu.open').first.all(:css, 'a:last-child').last.click
 
@@ -58,6 +59,7 @@ RSpec.feature "Ephemera Folders", js: true do
       page.fill_in 'ephemera_folder_width', with: 'test width'
       page.fill_in 'ephemera_folder_height', with: 'test height'
       page.fill_in 'ephemera_folder_page_count', with: 'test page count'
+      page.fill_in 'ephemera_folder_subject', with: 'test subject'
       page.find(:css, '[data-id="ephemera_folder_rights_statement"]').click
       page.all(:css, '.dropdown-menu.open').first.all(:css, 'a:last-child').last.click
 
@@ -81,6 +83,7 @@ RSpec.feature "Ephemera Folders", js: true do
       page.fill_in 'ephemera_folder_width', with: 'test width'
       page.fill_in 'ephemera_folder_height', with: 'test height'
       page.fill_in 'ephemera_folder_page_count', with: 'test page count'
+      page.fill_in 'ephemera_folder_subject', with: 'test subject'
       page.find(:css, '[data-id="ephemera_folder_rights_statement"]').click
       page.all(:css, '.dropdown-menu.open').first.all(:css, 'a:last-child').last.click
 
@@ -113,6 +116,7 @@ RSpec.feature "Ephemera Folders", js: true do
       page.fill_in 'ephemera_folder_width', with: 'test width'
       page.fill_in 'ephemera_folder_height', with: 'test height'
       page.fill_in 'ephemera_folder_page_count', with: 'test page count'
+      page.fill_in 'ephemera_folder_subject', with: 'test subject'
       page.find(:css, '[data-id="ephemera_folder_rights_statement"]').click
       page.all(:css, '.dropdown-menu.open').first.all(:css, 'a:last-child').last.click
 
