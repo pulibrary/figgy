@@ -18,7 +18,8 @@ RSpec.describe EphemeraFoldersController do
       height: ['20'],
       page_count: ['30'],
       rights_statement: 'Test Statement',
-      visibility: 'restricted'
+      visibility: 'restricted',
+      subject: ['stuff']
     }
   end
   let(:invalid_params) do
@@ -32,7 +33,8 @@ RSpec.describe EphemeraFoldersController do
       height: nil,
       page_count: nil,
       rights_statement: 'Test Statement',
-      visibility: 'restricted'
+      visibility: 'restricted',
+      subject: nil
     }
   end
   before do

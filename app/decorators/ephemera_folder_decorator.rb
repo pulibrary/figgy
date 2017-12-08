@@ -135,13 +135,17 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   # Provide "Category -- Subject" with each linked to faceted search results
   def rendered_subject
     subject.map do |value|
-      value = value.decorate if value.is_a? EphemeraTerm
-      linked_category = link_to_facet_search(field: 'display_subject_ssim', value: value.vocabulary.label)
-      # Don't link to both if they're the same
-      if value.label == value.vocabulary.label
-        linked_category
+      if value.is_a? EphemeraTerm
+        value = value.decorate if value.is_a? EphemeraTerm
+        linked_category = link_to_facet_search(field: 'display_subject_ssim', value: value.vocabulary.label)
+        # Don't link to both if they're the same
+        if value.label == value.vocabulary.label
+          linked_category
+        else
+          "#{linked_category} -- #{link_to_facet_search(field: 'display_subject_ssim', value: value.label)}".html_safe
+        end
       else
-        "#{linked_category} -- #{link_to_facet_search(field: 'display_subject_ssim', value: value.label)}".html_safe
+        value
       end
     end
   end

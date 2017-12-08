@@ -12,6 +12,7 @@ FactoryGirl.define do
     page_count '30'
     alternative_title 'test alternative title'
     series 'test series'
+    subject 'test subject'
     creator 'test creator'
     contributor ['test contributor']
     publisher ['test publisher']

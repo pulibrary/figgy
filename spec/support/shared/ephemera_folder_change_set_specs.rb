@@ -138,7 +138,7 @@ RSpec.shared_examples "an ephemera folder change set" do |change_set_class|
     end
 
     it 'does not coerce subject values into IDs' do
-      expect(change_set.subject).to be_empty
+      expect(change_set.subject).to eq ["test subject"]
     end
   end
 end
