@@ -14,7 +14,7 @@ class EphemeraFoldersController < BaseResourceController
   end
 
   def after_create_success(obj, _change_set)
-    if params[:commit] == "Save and Create Another"
+    if params[:commit] == "Save and Duplicate Metadata"
       redirect_to parent_new_ephemera_box_path(parent_id: resource_params[:append_id], create_another: obj.id.to_s), notice: "Folder #{obj.folder_number.first} Saved, Creating Another..."
     else
       super
@@ -22,7 +22,7 @@ class EphemeraFoldersController < BaseResourceController
   end
 
   def after_update_success(obj, _change_set)
-    if params[:commit] == "Save and Create Another"
+    if params[:commit] == "Save and Duplicate Metadata"
       redirect_to parent_new_ephemera_box_path(parent_id: obj.decorate.parent.id, create_another: obj.id.to_s), notice: "Folder #{obj.folder_number.first} Saved, Creating Another..."
     else
       super
@@ -43,7 +43,7 @@ class EphemeraFoldersController < BaseResourceController
       template.nested_properties.first
     elsif params[:create_another]
       resource = find_resource(params[:create_another])
-      resource.new(id: nil, created_at: nil, updated_at: nil)
+      resource.new(id: nil, created_at: nil, updated_at: nil, barcode: nil, folder_number: nil)
     else
       resource_class.new
     end

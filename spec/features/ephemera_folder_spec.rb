@@ -61,9 +61,11 @@ RSpec.feature "Ephemera Folders", js: true do
       page.find(:css, '[data-id="ephemera_folder_rights_statement"]').click
       page.all(:css, '.dropdown-menu.open').first.all(:css, 'a:last-child').last.click
 
-      page.click_on 'Save and Create Another'
+      page.click_on 'Save and Duplicate Metadata'
 
       expect(page).to have_content 'Folder 2 Saved, Creating Another...'
+      expect(page).not_to have_field 'ephemera_folder_barcode', with: '00000000000000'
+      expect(page).not_to have_field 'ephemera_folder_number', with: '2'
     end
   end
 
@@ -114,7 +116,7 @@ RSpec.feature "Ephemera Folders", js: true do
       page.find(:css, '[data-id="ephemera_folder_rights_statement"]').click
       page.all(:css, '.dropdown-menu.open').first.all(:css, 'a:last-child').last.click
 
-      page.click_on 'Save and Create Another'
+      page.click_on 'Save and Duplicate Metadata'
 
       expect(page).to have_content 'Folder 4 Saved, Creating Another...'
     end

@@ -139,7 +139,7 @@ RSpec.describe EphemeraFoldersController do
     end
     it "can save and create another" do
       box = FactoryGirl.create_for_repository(:ephemera_box)
-      post :create, params: { commit: "Save and Create Another", ephemera_folder: valid_params.merge(append_id: box.id) }
+      post :create, params: { commit: "Save and Duplicate Metadata", ephemera_folder: valid_params.merge(append_id: box.id) }
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/ephemera_boxes/#{box.id}/ephemera_folders/new?create_another"
     end
@@ -317,7 +317,7 @@ RSpec.describe EphemeraFoldersController do
       it "can save and create another" do
         folder = FactoryGirl.create_for_repository(:ephemera_folder)
         box = FactoryGirl.create_for_repository(:ephemera_box, member_ids: [folder.id])
-        patch :update, params: { commit: "Save and Create Another", id: folder.id.to_s, ephemera_folder: { folder_number: ["Two"] } }
+        patch :update, params: { commit: "Save and Duplicate Metadata", id: folder.id.to_s, ephemera_folder: { folder_number: ["Two"] } }
 
         expect(response).to be_redirect
         expect(response.location).to start_with "http://test.host/concern/ephemera_boxes/#{box.id}/ephemera_folders/new?create_another"

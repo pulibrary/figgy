@@ -19,7 +19,7 @@
   <div class="panel-footer text-center panel-save-controls">
     <%= f.submit class: 'btn btn-primary' %>
     <% if f.object.resource.is_a?(EphemeraFolder) && params[:controller] == "ephemera_folders" %>
-      <%= f.submit "Save and Create Another", class: 'btn btn-primary' %>
+      <%= f.submit "Save and Duplicate Metadata", class: 'btn btn-primary' %>
 
     <% end %>
   </div>
