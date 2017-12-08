@@ -47,8 +47,6 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   property :viewing_direction, required: false
   property :viewing_hint, multiple: false, required: false, default: "individuals"
 
-  # override the default value defined in VisibilityProperty
-  property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
   property :pdf_type, multiple: false, required: false
   property :local_identifier, multiple: false, required: false
 

@@ -44,7 +44,7 @@ RSpec.describe ScannedMapsController do
         expect(response.body).to have_field "Temporal"
         expect(response.body).to have_select "Rights Statement", name: "scanned_map[rights_statement]", options: [""] + ControlledVocabulary.for(:rights_statement).all.map(&:label)
         expect(response.body).to have_field "Cartographic scale"
-        expect(response.body).to have_checked_field "Private"
+        expect(response.body).to have_checked_field "Open"
         expect(response.body).to have_button "Save"
       end
     end

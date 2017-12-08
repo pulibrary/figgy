@@ -72,6 +72,13 @@ RSpec.describe ScannedResourceChangeSet do
         expect(change_set).not_to be_valid
       end
     end
+    context "when visibility hasn't been set" do
+      let(:form_resource) { scanned_resource.new(visibility: nil) }
+      it "has a default of public" do
+        change_set.prepopulate!
+        expect(change_set.visibility).to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+      end
+    end
     context "when given a valid state transition" do
       it "is valid" do
         change_set.validate(state: "metadata_review")
