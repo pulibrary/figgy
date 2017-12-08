@@ -34,7 +34,7 @@ RSpec.describe VectorWorksController do
         expect(response.body).to have_select "Rights Statement", name: "vector_work[rights_statement]", options: [""] + ControlledVocabulary.for(:rights_statement).all.map(&:label)
         expect(response.body).to have_field "Cartographic scale"
         expect(response.body).to have_field "Cartographic projection"
-        expect(response.body).to have_checked_field "Private"
+        expect(response.body).to have_checked_field "Open"
         expect(response.body).to have_button "Save"
       end
     end

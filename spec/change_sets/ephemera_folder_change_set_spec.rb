@@ -23,4 +23,12 @@ RSpec.describe EphemeraFolderChangeSet do
       expect(change_set.required?(:member_ids)).to eq false
     end
   end
+
+  describe "#visibility" do
+    let(:change_set) { described_class.new(FactoryGirl.build(:ephemera_folder, visibility: nil)) }
+    it "has a default of open" do
+      change_set.prepopulate!
+      expect(change_set.visibility).to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+    end
+  end
 end

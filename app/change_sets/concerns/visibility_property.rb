@@ -5,7 +5,7 @@ module VisibilityProperty
 
   included do
     # override this property to define a different default
-    property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+    property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
 
     def visibility=(visibility)
       super.tap do |_result|
