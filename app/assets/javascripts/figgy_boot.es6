@@ -18,6 +18,9 @@ export default class Initializer {
     this.derivative_form = new DerivativeForm
     this.metadata_form = new MetadataForm
     this.universal_viewer = new UniversalViewer
+    // Incompatibility in Blacklight with newer versions of jQuery seem to be
+    // causing this to not run. Manually calling it so facet more links work.
+    Blacklight.ajaxModal.setup_modal()
     $("optgroup").addClass("closed")
     $("select").selectpicker({'liveSearch': true})
     $(".datatable").DataTable()

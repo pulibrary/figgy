@@ -28,12 +28,12 @@ class CatalogController < ApplicationController
 
     config.index.title_field = 'title_ssim'
     config.index.display_type_field = "human_readable_type_ssim"
-    config.add_facet_field 'member_of_collection_titles_ssim', label: 'Collections'
-    config.add_facet_field 'human_readable_type_ssim', label: 'Type of Work'
-    config.add_facet_field 'ephemera_project_ssim', label: 'Ephemera Project'
-    config.add_facet_field 'display_subject_ssim', label: 'Subject'
-    config.add_facet_field 'display_language_ssim', label: 'Language'
-    config.add_facet_field 'state_ssim', label: 'State'
+    config.add_facet_field 'member_of_collection_titles_ssim', label: 'Collections', limit: 5
+    config.add_facet_field 'human_readable_type_ssim', label: 'Type of Work', limit: 5
+    config.add_facet_field 'ephemera_project_ssim', label: 'Ephemera Project', limit: 5
+    config.add_facet_field 'display_subject_ssim', label: 'Subject', limit: 5
+    config.add_facet_field 'display_language_ssim', label: 'Language', limit: 5
+    config.add_facet_field 'state_ssim', label: 'State', limit: 5
     config.add_facet_fields_to_solr_request!
 
     config.add_search_field 'all_fields', label: 'All Fields'
