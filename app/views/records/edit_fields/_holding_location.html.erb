@@ -1,6 +1,6 @@
   <%= f.input key,
               as: :select,
-              collection: ControlledVocabulary.for(key).all,
+              collection: ControlledVocabulary.for(key).all.sort_by { |loc| loc.label },
               label_method: :label,
               value_method: :value,
               input_html: { class: 'form-control rights-statement' },
