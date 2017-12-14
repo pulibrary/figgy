@@ -64,6 +64,11 @@ RSpec.describe ScannedResourceDecorator do
         expect(decorator.display_imported_language).to eq ["English"]
       end
     end
+    describe "raw imported metadata" do
+      it "is not displayed" do
+        expect(decorator.display_attributes.keys).not_to include :source_metadata
+      end
+    end
   end
   context 'within a collection' do
     let(:collection) do
