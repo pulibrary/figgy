@@ -1,5 +1,5 @@
 <%= f.input :member_of_collection_ids,
-            collection: @collections.sort_by { |c| c.title },
+            collection: @collections.sort_by(&:title),
             label_method: :title,
             value_method: :id,
             input_html: { multiple: f.object.multiple?(key) },
