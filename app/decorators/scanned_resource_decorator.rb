@@ -12,6 +12,7 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
       :thumbnail_id,
       :imported_author,
       :source_jsonld,
+      :source_metadata,
       :sort_title
     ]
   )
