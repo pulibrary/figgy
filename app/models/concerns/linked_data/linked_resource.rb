@@ -26,7 +26,13 @@ module LinkedData
     end
 
     def title
-      Array.wrap(decorated_resource.title).first
+      resource.title.map do |title|
+        if title.is_a?(RDF::Literal)
+          title
+        else
+          RDF::Literal.new(title, language: :eng)
+        end
+      end
     end
 
     private

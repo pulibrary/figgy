@@ -365,12 +365,15 @@ RSpec.describe CatalogController do
           nav_date: "Test",
           member_of_collection_ids: collection.id
         )
+        resource.primary_imported_metadata.title += ["test"]
+        resource = persister.save(resource: resource)
 
         get :show, params: { id: resource.id.to_s, format: :jsonld }
 
         expect(response).to be_success
         json_body = MultiJson.load(response.body, symbolize_keys: true)
-        expect(json_body[:title][:@value]).to eq "Earth rites : fertility rites in pre-industrial Britain"
+        expect(json_body[:title][0][:@value]).to eq "Earth rites : fertility rites in pre-industrial Britain"
+        expect(json_body[:title][1][:@value]).to eq "test"
         expect(json_body[:identifier]).not_to be_blank
         expect(json_body[:scopeNote]).not_to be_blank
         expect(json_body[:navDate]).not_to be_blank
