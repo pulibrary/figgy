@@ -32,7 +32,7 @@ RSpec.shared_examples 'LinkedData::Resource' do
     subject(:linked_resource) { LinkedData::LinkedResourceFactory.new(resource: custom_resource).new }
     let(:custom_resource) { MyCustomResource.new(title: 'test title 1') }
     it '#title' do
-      expect(linked_resource.title).to include 'test title 1'
+      expect(linked_resource.title).to include RDF::Literal.new('test title 1', language: :eng)
     end
   end
 end

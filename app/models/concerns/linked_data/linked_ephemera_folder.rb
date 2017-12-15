@@ -73,6 +73,10 @@ module LinkedData
       Array.wrap(decorated_resource.date_range).map { |r| LinkedDateRange.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
     end
 
+    def title
+      Array.wrap(decorated_resource.title).first
+    end
+
     private
 
       def linked_collections
