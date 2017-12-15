@@ -47,7 +47,7 @@ class ManifestBuilder
     # Stringify the Resource by delegating to the header within the Decorator
     # @return [String]
     def to_s
-      decorate.header
+      resource.title.map(&:to_s)
     end
 
     def description

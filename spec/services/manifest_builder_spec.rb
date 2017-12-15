@@ -65,6 +65,7 @@ RSpec.describe ManifestBuilder do
     it "generates a IIIF document" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
+      expect(output["label"]).to eq ['test title1']
       expect(output["description"]).to eq "Test Description"
       expect(output["viewingHint"]).to eq "individuals"
       expect(output["viewingDirection"]).to eq "right-to-left"
@@ -169,9 +170,9 @@ RSpec.describe ManifestBuilder do
       let(:scanned_resource) do
         FactoryGirl.create_for_repository(:scanned_resource, title: ['title1', 'title2'])
       end
-      it "joins them with a semicolon" do
+      it "uses an array" do
         output = manifest_builder.build
-        expect(output["label"]).to eq 'title1; title2'
+        expect(output["label"]).to eq ['title1', 'title2']
       end
     end
   end
