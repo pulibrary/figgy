@@ -4,11 +4,11 @@ require 'rails_helper'
 RSpec.describe VectorWorkDecorator do
   subject(:decorator) { described_class.new(resource) }
   let(:resource) do
-    FactoryGirl.build(:vector_work,
-                      title: "test title",
-                      author: "test author",
-                      creator: "test creator",
-                      subject: "test subject")
+    FactoryBot.build(:vector_work,
+                     title: "test title",
+                     author: "test author",
+                     creator: "test creator",
+                     subject: "test subject")
   end
   it "exposes markup for rights statement" do
     expect(resource.decorate.rendered_rights_statement).not_to be_empty
@@ -27,10 +27,10 @@ RSpec.describe VectorWorkDecorator do
   context "with file sets" do
     let(:file_set) do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
-      res = FactoryGirl.build(:file_set)
+      res = FactoryBot.build(:file_set)
       adapter.persister.save(resource: res)
     end
-    let(:resource) { FactoryGirl.create_for_repository(:vector_work, member_ids: [file_set.id]) }
+    let(:resource) { FactoryBot.create_for_repository(:vector_work, member_ids: [file_set.id]) }
     it "retrieves members" do
       expect(resource.decorate.members.to_a).not_to be_empty
       expect(resource.decorate.members.to_a.first).to be_a FileSet

@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe FileSetDecorator do
   subject(:decorator) { described_class.new(file_set) }
-  let(:file_set) { FactoryGirl.create_for_repository(:file_set) }
+  let(:file_set) { FactoryBot.create_for_repository(:file_set) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
 
   it 'has no files which can be managed' do
@@ -18,7 +18,7 @@ RSpec.describe FileSetDecorator do
 
   describe '#parent' do
     it "exposes parent resources" do
-      res = FactoryGirl.create_for_repository(:scanned_resource)
+      res = FactoryBot.create_for_repository(:scanned_resource)
       res.member_ids = [file_set.id]
       parent = adapter.persister.save(resource: res)
 

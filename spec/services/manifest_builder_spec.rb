@@ -5,21 +5,21 @@ include ActionDispatch::TestProcess
 RSpec.describe ManifestBuilder do
   subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_resource.id)) }
   let(:scanned_resource) do
-    FactoryGirl.create_for_repository(:scanned_resource,
-                                      title: 'test title1',
-                                      label: 'test label',
-                                      actor: 'test person',
-                                      sort_title: 'test title2',
-                                      portion_note: 'test value1',
-                                      rights_statement: RDF::URI("https://creativecommons.org/licenses/by-nc/4.0/"),
-                                      call_number: 'test value2',
-                                      edition: 'test edition',
-                                      nav_date: 'test date',
-                                      identifier: 'ark:/88435/abc1234de',
-                                      imported_metadata: [{
-                                        description: "Test Description"
-                                      }],
-                                      viewing_direction: ["right-to-left"])
+    FactoryBot.create_for_repository(:scanned_resource,
+                                     title: 'test title1',
+                                     label: 'test label',
+                                     actor: 'test person',
+                                     sort_title: 'test title2',
+                                     portion_note: 'test value1',
+                                     rights_statement: RDF::URI("https://creativecommons.org/licenses/by-nc/4.0/"),
+                                     call_number: 'test value2',
+                                     edition: 'test edition',
+                                     nav_date: 'test date',
+                                     identifier: 'ark:/88435/abc1234de',
+                                     imported_metadata: [{
+                                       description: "Test Description"
+                                     }],
+                                     viewing_direction: ["right-to-left"])
   end
   let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file]) }
   let(:logical_structure) do
@@ -97,21 +97,21 @@ RSpec.describe ManifestBuilder do
 
     context "when a thumbnail_id doesn't exist" do
       let(:scanned_resource) do
-        FactoryGirl.create_for_repository(:scanned_resource,
-                                          title: 'test title1',
-                                          label: 'test label',
-                                          actor: 'test person',
-                                          sort_title: 'test title2',
-                                          portion_note: 'test value1',
-                                          rights_statement: RDF::URI("https://creativecommons.org/licenses/by-nc/4.0/"),
-                                          call_number: 'test value2',
-                                          edition: 'test edition',
-                                          nav_date: 'test date',
-                                          identifier: 'ark:/88435/abc1234de',
-                                          thumbnail_id: Valkyrie::ID.new("blablabla"),
-                                          imported_metadata: [{
-                                            description: "Test Description"
-                                          }])
+        FactoryBot.create_for_repository(:scanned_resource,
+                                         title: 'test title1',
+                                         label: 'test label',
+                                         actor: 'test person',
+                                         sort_title: 'test title2',
+                                         portion_note: 'test value1',
+                                         rights_statement: RDF::URI("https://creativecommons.org/licenses/by-nc/4.0/"),
+                                         call_number: 'test value2',
+                                         edition: 'test edition',
+                                         nav_date: 'test date',
+                                         identifier: 'ark:/88435/abc1234de',
+                                         thumbnail_id: Valkyrie::ID.new("blablabla"),
+                                         imported_metadata: [{
+                                           description: "Test Description"
+                                         }])
       end
       it "uses the first canvas as the thumbnail" do
         output = manifest_builder.build
@@ -168,7 +168,7 @@ RSpec.describe ManifestBuilder do
 
     context "when the resource has multiple titles" do
       let(:scanned_resource) do
-        FactoryGirl.create_for_repository(:scanned_resource, title: ['title1', 'title2'])
+        FactoryBot.create_for_repository(:scanned_resource, title: ['title1', 'title2'])
       end
       it "uses an array" do
         output = manifest_builder.build
@@ -179,12 +179,12 @@ RSpec.describe ManifestBuilder do
 
   context "when given a nested child" do
     let(:scanned_resource) do
-      FactoryGirl.create_for_repository(:scanned_resource,
-                                        member_ids: child.id,
-                                        identifier: 'ark:/88435/5m60qr98h',
-                                        viewing_direction: "right-to-left")
+      FactoryBot.create_for_repository(:scanned_resource,
+                                       member_ids: child.id,
+                                       identifier: 'ark:/88435/5m60qr98h',
+                                       viewing_direction: "right-to-left")
     end
-    let(:child) { FactoryGirl.create_for_repository(:scanned_resource, files: [file]) }
+    let(:child) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
     it "builds a IIIF collection" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
@@ -205,7 +205,7 @@ RSpec.describe ManifestBuilder do
   context "when given a scanned map" do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_map.id)) }
     let(:scanned_map) do
-      FactoryGirl.create_for_repository(:scanned_map, description: "Test Description")
+      FactoryBot.create_for_repository(:scanned_map, description: "Test Description")
     end
     let(:change_set) { ScannedMapChangeSet.new(scanned_map, files: [file]) }
     before do
@@ -225,13 +225,13 @@ RSpec.describe ManifestBuilder do
   context "when given an ephemera project" do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: ephemera_project.id)) }
     let(:ephemera_project) do
-      FactoryGirl.create_for_repository(:ephemera_project, member_ids: [box.id, ephemera_term.id, folder2.id])
+      FactoryBot.create_for_repository(:ephemera_project, member_ids: [box.id, ephemera_term.id, folder2.id])
     end
-    let(:ephemera_term) { FactoryGirl.create_for_repository(:ephemera_term) }
-    let(:box) { FactoryGirl.create_for_repository(:ephemera_box, member_ids: folder.id) }
-    let(:folder) { FactoryGirl.create_for_repository(:ephemera_folder) }
-    let(:folder2) { FactoryGirl.create_for_repository(:ephemera_folder, member_ids: folder3.id) }
-    let(:folder3) { FactoryGirl.create_for_repository(:ephemera_folder) }
+    let(:ephemera_term) { FactoryBot.create_for_repository(:ephemera_term) }
+    let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: folder.id) }
+    let(:folder) { FactoryBot.create_for_repository(:ephemera_folder) }
+    let(:folder2) { FactoryBot.create_for_repository(:ephemera_folder, member_ids: folder3.id) }
+    let(:folder3) { FactoryBot.create_for_repository(:ephemera_folder) }
     let(:change_set) { EphemeraProjectChangeSet.new(ephemera_project) }
     it "builds a IIIF document" do
       output = manifest_builder.build
@@ -247,9 +247,9 @@ RSpec.describe ManifestBuilder do
 
   context "when given a collection" do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: collection.id)) }
-    let(:collection) { FactoryGirl.create_for_repository(:collection) }
+    let(:collection) { FactoryBot.create_for_repository(:collection) }
     let(:change_set) { CollectionChangeSet.new(collection) }
-    let(:scanned_resource) { FactoryGirl.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id]) }
+    let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id]) }
 
     before do
       scanned_resource

@@ -19,8 +19,8 @@ RSpec.describe ManifestBuilder::SeeAlsoBuilder do
 
     context 'when viewing a Scanned Resource with Voyager source ID' do
       let(:scanned_resource) do
-        FactoryGirl.create_for_repository(:scanned_resource,
-                                          source_metadata_identifier: "4609321")
+        FactoryBot.create_for_repository(:scanned_resource,
+                                         source_metadata_identifier: "4609321")
       end
 
       it 'appends the transformed metadata to the Manifest' do
@@ -33,8 +33,8 @@ RSpec.describe ManifestBuilder::SeeAlsoBuilder do
 
     context 'when viewing a Scanned Resource with PULFA source ID' do
       let(:scanned_resource) do
-        FactoryGirl.create_for_repository(:scanned_resource,
-                                          source_metadata_identifier: "AC044_c0003")
+        FactoryBot.create_for_repository(:scanned_resource,
+                                         source_metadata_identifier: "AC044_c0003")
       end
 
       it 'appends the transformed metadata to the Manifest' do

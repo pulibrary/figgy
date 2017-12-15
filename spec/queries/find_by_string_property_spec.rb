@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe FindByStringProperty do
   subject(:query) { described_class.new(query_service: query_service) }
-  let(:box) { FactoryGirl.create_for_repository(:ephemera_folder, barcode: "1234567") }
+  let(:box) { FactoryBot.create_for_repository(:ephemera_folder, barcode: "1234567") }
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
 
   describe "#find_by_string_property" do

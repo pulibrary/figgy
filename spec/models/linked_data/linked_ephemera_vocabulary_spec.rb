@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe LinkedData::LinkedEphemeraVocabulary do
   subject(:linked_ephemera_vocabulary) { described_class.new(resource: resource) }
-  let(:resource) { FactoryGirl.create_for_repository(:ephemera_vocabulary) }
+  let(:resource) { FactoryBot.create_for_repository(:ephemera_vocabulary) }
 
   it_behaves_like "LinkedData::Resource"
 
@@ -16,7 +16,7 @@ RSpec.describe LinkedData::LinkedEphemeraVocabulary do
     end
 
     context 'with an external URI' do
-      let(:resource) { FactoryGirl.create_for_repository(:ephemera_vocabulary, uri: 'https://namespace.org/ns/anotherVocabulary/anotherTerm') }
+      let(:resource) { FactoryBot.create_for_repository(:ephemera_vocabulary, uri: 'https://namespace.org/ns/anotherVocabulary/anotherTerm') }
 
       it 'uses a SKOS:exactMatch predicate to link the two resources' do
         expect(linked_ephemera_vocabulary.as_jsonld['exact_match']).to eq "@id" => "https://namespace.org/ns/anotherVocabulary/anotherTerm"

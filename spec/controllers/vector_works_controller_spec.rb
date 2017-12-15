@@ -15,12 +15,12 @@ RSpec.describe VectorWorksController do
     it_behaves_like "an access controlled new request"
 
     context "when logged in, with permission" do
-      let(:user) { FactoryGirl.create(:admin) }
+      let(:user) { FactoryBot.create(:admin) }
       render_views
       it "has a form for creating vector works" do
-        collection = FactoryGirl.create_for_repository(:collection)
+        collection = FactoryBot.create_for_repository(:collection)
         # TODO: look at what create_for_repository actually does
-        parent = FactoryGirl.create_for_repository(:vector_work)
+        parent = FactoryBot.create_for_repository(:vector_work)
 
         get :new, params: { parent_id: parent.id.to_s }
         expect(response.body).to have_field "Title"
@@ -41,7 +41,7 @@ RSpec.describe VectorWorksController do
   end
 
   describe "create" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do
       {
         title: ['Title 1', 'Title 2'],
@@ -79,7 +79,7 @@ RSpec.describe VectorWorksController do
           member_of_collection_ids: [collection.id.to_s]
         }
       end
-      let(:collection) { FactoryGirl.create_for_repository(:collection) }
+      let(:collection) { FactoryBot.create_for_repository(:collection) }
       it "works" do
         post :create, params: { vector_work: valid_params }
 
@@ -122,13 +122,13 @@ RSpec.describe VectorWorksController do
   end
 
   describe "destroy" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :vector_work }
       it_behaves_like "an access controlled destroy request"
     end
     it "can delete a book" do
-      vector_work = FactoryGirl.create_for_repository(:vector_work)
+      vector_work = FactoryBot.create_for_repository(:vector_work)
       delete :destroy, params: { id: vector_work.id.to_s }
 
       expect(response).to redirect_to root_path
@@ -137,7 +137,7 @@ RSpec.describe VectorWorksController do
   end
 
   describe "edit" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :vector_work }
       it_behaves_like "an access controlled edit request"
@@ -150,7 +150,7 @@ RSpec.describe VectorWorksController do
     context "when it does exist" do
       render_views
       it "renders a form" do
-        vector_work = FactoryGirl.create_for_repository(:vector_work)
+        vector_work = FactoryBot.create_for_repository(:vector_work)
         get :edit, params: { id: vector_work.id.to_s }
 
         expect(response.body).to have_field "Title", with: vector_work.title.first
@@ -160,7 +160,7 @@ RSpec.describe VectorWorksController do
   end
 
   describe "update" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :vector_work }
       let(:extra_params) { { vector_work: { title: ["Two"] } } }
@@ -173,7 +173,7 @@ RSpec.describe VectorWorksController do
     end
     context "when it does exist" do
       it "saves it and redirects" do
-        vector_work = FactoryGirl.create_for_repository(:vector_work)
+        vector_work = FactoryBot.create_for_repository(:vector_work)
         patch :update, params: { id: vector_work.id.to_s, vector_work: { title: ["Two"] } }
 
         expect(response).to be_redirect
@@ -184,7 +184,7 @@ RSpec.describe VectorWorksController do
         expect(reloaded.title).to eq ["Two"]
       end
       it "renders the form if it fails validations" do
-        vector_work = FactoryGirl.create_for_repository(:vector_work)
+        vector_work = FactoryBot.create_for_repository(:vector_work)
         patch :update, params: { id: vector_work.id.to_s, vector_work: { title: [""] } }
 
         expect(response).to render_template "valhalla/base/edit"
@@ -199,14 +199,14 @@ RSpec.describe VectorWorksController do
   end
 
   describe "GET /vector_works/:id/file_manager" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
 
     context "when an admin and with a shapefile" do
       let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: 'application/zip; ogr-format="ESRI Shapefile"') }
 
       it "sets the record and children variables" do
-        child = FactoryGirl.create_for_repository(:file_set, file_metadata: [file_metadata])
-        parent = FactoryGirl.create_for_repository(:vector_work, member_ids: child.id)
+        child = FactoryBot.create_for_repository(:file_set, file_metadata: [file_metadata])
+        parent = FactoryBot.create_for_repository(:vector_work, member_ids: child.id)
         get :file_manager, params: { id: parent.id }
 
         expect(assigns(:change_set).id).to eq parent.id
@@ -218,8 +218,8 @@ RSpec.describe VectorWorksController do
       let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: 'application/xml; schema=fgdc') }
 
       it "sets the record and metadata children variables" do
-        child = FactoryGirl.create_for_repository(:file_set, file_metadata: [file_metadata])
-        parent = FactoryGirl.create_for_repository(:vector_work, member_ids: child.id)
+        child = FactoryBot.create_for_repository(:file_set, file_metadata: [file_metadata])
+        parent = FactoryBot.create_for_repository(:vector_work, member_ids: child.id)
         get :file_manager, params: { id: parent.id }
 
         expect(assigns(:change_set).id).to eq parent.id

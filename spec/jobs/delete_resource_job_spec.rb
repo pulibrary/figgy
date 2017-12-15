@@ -4,7 +4,7 @@ include ActionDispatch::TestProcess
 
 RSpec.describe DeleteResourceJob do
   describe ".perform" do
-    let(:resource) { FactoryGirl.create_for_repository(:scanned_resource, files: [file], holding_location: ["https://bibdata.princeton.edu/locations/delivery_locations/1"]) }
+    let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], holding_location: ["https://bibdata.princeton.edu/locations/delivery_locations/1"]) }
     let(:file) { fixture_file_upload('files/color-landscape.tif', 'image/tiff') }
     let(:db) { Valkyrie::MetadataAdapter.find(:postgres) }
     let(:solr) { Valkyrie::MetadataAdapter.find(:index_solr) }

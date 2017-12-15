@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 if Rails.env.development? || Rails.env.test?
-  require "factory_girl"
+  require "factory_bot"
 
   namespace :figgy do
     desc "Start solr server for testing."

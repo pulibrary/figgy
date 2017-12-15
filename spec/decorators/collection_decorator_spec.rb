@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe CollectionDecorator do
   subject(:decorator) { described_class.new(collection) }
-  let(:collection) { FactoryGirl.create_for_repository(:collection) }
+  let(:collection) { FactoryBot.create_for_repository(:collection) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
 
   it 'has no files which can be managed' do

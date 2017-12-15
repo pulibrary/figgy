@@ -7,8 +7,8 @@ RSpec.describe ManifestBuilder::LicenseBuilder do
     let(:manifest) { IIIF::Presentation::Manifest.new }
     let(:decorated) { ScannedResourceDecorator.new(scanned_resource) }
     let(:scanned_resource) do
-      FactoryGirl.create_for_repository(:scanned_resource,
-                                        rights_statement: RDF::URI("https://creativecommons.org/licenses/by-nc/4.0/"))
+      FactoryBot.create_for_repository(:scanned_resource,
+                                       rights_statement: RDF::URI("https://creativecommons.org/licenses/by-nc/4.0/"))
     end
 
     context 'when viewing a new Scanned Resource' do
@@ -23,8 +23,8 @@ RSpec.describe ManifestBuilder::LicenseBuilder do
 
     context 'when viewing a new Scanned Resource with an invalid rights statement' do
       let(:scanned_resource) do
-        FactoryGirl.create_for_repository(:scanned_resource,
-                                          rights_statement: 1234)
+        FactoryBot.create_for_repository(:scanned_resource,
+                                         rights_statement: 1234)
       end
 
       before do

@@ -3,8 +3,8 @@ require 'rails_helper'
 
 RSpec.describe LinkedData::LinkedEphemeraTerm do
   subject(:linked_ephemera_term) { described_class.new(resource: resource) }
-  let(:ephemera_vocabulary) { FactoryGirl.create_for_repository(:ephemera_vocabulary) }
-  let(:resource) { FactoryGirl.create_for_repository(:ephemera_term, member_of_vocabulary_id: [ephemera_vocabulary.id]) }
+  let(:ephemera_vocabulary) { FactoryBot.create_for_repository(:ephemera_vocabulary) }
+  let(:resource) { FactoryBot.create_for_repository(:ephemera_term, member_of_vocabulary_id: [ephemera_vocabulary.id]) }
 
   it_behaves_like "LinkedData::Resource"
 

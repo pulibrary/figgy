@@ -3,12 +3,12 @@ require 'rails_helper'
 
 RSpec.describe EditFieldHelper, type: :helper do
   describe 'reorder_languages' do
-    let(:eng) { FactoryGirl.create_for_repository(:ephemera_term, label: 'English') }
-    let(:por) { FactoryGirl.create_for_repository(:ephemera_term, label: 'Portuguese') }
-    let(:spa) { FactoryGirl.create_for_repository(:ephemera_term, label: 'Spanish') }
+    let(:eng) { FactoryBot.create_for_repository(:ephemera_term, label: 'English') }
+    let(:por) { FactoryBot.create_for_repository(:ephemera_term, label: 'Portuguese') }
+    let(:spa) { FactoryBot.create_for_repository(:ephemera_term, label: 'Spanish') }
     let(:languages) do
-      [FactoryGirl.create_for_repository(:ephemera_term, label: 'Abkhazian').decorate,
-       FactoryGirl.create_for_repository(:ephemera_term, label: 'Afar').decorate,
+      [FactoryBot.create_for_repository(:ephemera_term, label: 'Abkhazian').decorate,
+       FactoryBot.create_for_repository(:ephemera_term, label: 'Afar').decorate,
        eng.decorate,
        por.decorate,
        spa.decorate]

@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe EphemeraFieldDecorator do
   subject(:decorator) { described_class.new(resource) }
-  let(:resource) { FactoryGirl.build(:ephemera_field) }
+  let(:resource) { FactoryBot.build(:ephemera_field) }
   describe "decoration" do
     it "decorates an EphemeraField" do
       expect(resource.decorate).to be_a described_class
@@ -29,10 +29,10 @@ RSpec.describe EphemeraFieldDecorator do
     expect(resource.decorate.rendered_name.first).to match(/EphemeraFolder\.language/)
   end
   context 'within a project' do
-    let(:resource) { FactoryGirl.create_for_repository(:ephemera_field) }
+    let(:resource) { FactoryBot.create_for_repository(:ephemera_field) }
     before do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
-      project = FactoryGirl.build(:ephemera_project)
+      project = FactoryBot.build(:ephemera_project)
       project.member_ids = [resource.id]
       adapter.persister.save(resource: project)
     end
@@ -43,10 +43,10 @@ RSpec.describe EphemeraFieldDecorator do
     end
   end
   context 'when a child of another vocabulary' do
-    let(:vocab) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'test parent vocabulary') }
+    let(:vocab) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'test parent vocabulary') }
     let(:resource) do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
-      res = FactoryGirl.build(:ephemera_field)
+      res = FactoryBot.build(:ephemera_field)
       res.member_of_vocabulary_id = vocab.id
       adapter.persister.save(resource: res)
     end

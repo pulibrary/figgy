@@ -2,10 +2,10 @@
 require 'rails_helper'
 
 RSpec.feature "Scanned Resources", js: true do
-  let(:user) { FactoryGirl.create(:admin) }
+  let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:scanned_resource) do
-    res = FactoryGirl.create_for_repository(:scanned_resource)
+    res = FactoryBot.create_for_repository(:scanned_resource)
     adapter.persister.save(resource: res)
   end
   let(:change_set) do
@@ -39,10 +39,10 @@ RSpec.feature "Scanned Resources", js: true do
 
   let(:persister) { Valkyrie::MetadataAdapter.find(:indexing_persister).persister }
   let(:volume1) do
-    persister.save(resource: FactoryGirl.create_for_repository(:scanned_resource, title: 'vol1'))
+    persister.save(resource: FactoryBot.create_for_repository(:scanned_resource, title: 'vol1'))
   end
   let(:multi_volume_work) do
-    persister.save(resource: FactoryGirl.create_for_repository(:scanned_resource, member_ids: [volume1.id]))
+    persister.save(resource: FactoryBot.create_for_repository(:scanned_resource, member_ids: [volume1.id]))
   end
 
   context 'within a multi-volume work' do
@@ -59,7 +59,7 @@ RSpec.feature "Scanned Resources", js: true do
   end
 
   context 'as an image_editor' do
-    let(:user) { FactoryGirl.create(:image_editor) }
+    let(:user) { FactoryBot.create(:image_editor) }
 
     it 'shows the admin controls' do
       visit solr_document_path(scanned_resource)

@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Collection do
-  subject(:collection) { FactoryGirl.build(:collection) }
+  subject(:collection) { FactoryBot.build(:collection) }
   it "has a title" do
     collection.title = "Test"
     expect(collection.title).to eq ["Test"]

@@ -2,10 +2,10 @@
 require 'rails_helper'
 
 RSpec.feature "Ephemera Vocabularies", js: true do
-  let(:user) { FactoryGirl.create(:admin) }
+  let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:ephemera_project) do
-    res = FactoryGirl.create_for_repository(:ephemera_project)
+    res = FactoryBot.create_for_repository(:ephemera_project)
     adapter.persister.save(resource: res)
   end
 
@@ -14,7 +14,7 @@ RSpec.feature "Ephemera Vocabularies", js: true do
   end
 
   context 'when users visit a project' do
-    let(:ephemera_vocabulary) { FactoryGirl.create_for_repository(:ephemera_vocabulary) }
+    let(:ephemera_vocabulary) { FactoryBot.create_for_repository(:ephemera_vocabulary) }
 
     before do
       adapter.persister.save(resource: ephemera_vocabulary)
@@ -38,17 +38,17 @@ RSpec.feature "Ephemera Vocabularies", js: true do
 
     context 'when users have added a field and a box' do
       let(:ephemera_field) do
-        res = FactoryGirl.create_for_repository(:ephemera_field, member_of_vocabulary_id: ephemera_vocabulary.id)
+        res = FactoryBot.create_for_repository(:ephemera_field, member_of_vocabulary_id: ephemera_vocabulary.id)
         adapter.persister.save(resource: res)
       end
 
       let(:ephemera_box) do
-        res = FactoryGirl.create_for_repository(:ephemera_box)
+        res = FactoryBot.create_for_repository(:ephemera_box)
         adapter.persister.save(resource: res)
       end
 
       let(:ephemera_term) do
-        res = FactoryGirl.create_for_repository(:ephemera_term)
+        res = FactoryBot.create_for_repository(:ephemera_term)
         res.member_of_vocabulary_id = ephemera_vocabulary.id
         adapter.persister.save(resource: res)
       end
@@ -69,7 +69,7 @@ RSpec.feature "Ephemera Vocabularies", js: true do
       end
 
       scenario 'users can edit folder metadata with controlled vocabularies' do
-        folder = FactoryGirl.create_for_repository(:ephemera_folder, language: ephemera_term.id)
+        folder = FactoryBot.create_for_repository(:ephemera_folder, language: ephemera_term.id)
         adapter.persister.save(resource: folder)
 
         ephemera_box.member_ids = [folder.id]
@@ -84,12 +84,12 @@ RSpec.feature "Ephemera Vocabularies", js: true do
 
     context 'when users have added a field and boxless' do
       let(:ephemera_field) do
-        res = FactoryGirl.create_for_repository(:ephemera_field, member_of_vocabulary_id: ephemera_vocabulary.id)
+        res = FactoryBot.create_for_repository(:ephemera_field, member_of_vocabulary_id: ephemera_vocabulary.id)
         adapter.persister.save(resource: res)
       end
 
       before do
-        res = FactoryGirl.create_for_repository(:ephemera_term)
+        res = FactoryBot.create_for_repository(:ephemera_term)
         res.member_of_vocabulary_id = ephemera_vocabulary.id
         adapter.persister.save(resource: res)
 
@@ -118,7 +118,7 @@ RSpec.feature "Ephemera Vocabularies", js: true do
   end
 
   context 'when users have added a controlled vocabulary' do
-    let(:ephemera_vocabulary) { FactoryGirl.create_for_repository(:ephemera_vocabulary) }
+    let(:ephemera_vocabulary) { FactoryBot.create_for_repository(:ephemera_vocabulary) }
 
     before do
       adapter.persister.save(resource: ephemera_vocabulary)

@@ -3,8 +3,8 @@ require 'rails_helper'
 
 RSpec.describe "catalog/_members_ephemera_box" do
   context "when it's a box with folders" do
-    let(:parent) { FactoryGirl.create_for_repository(:ephemera_box, member_ids: [child.id]) }
-    let(:child) { FactoryGirl.create_for_repository(:ephemera_folder) }
+    let(:parent) { FactoryBot.create_for_repository(:ephemera_box, member_ids: [child.id]) }
+    let(:child) { FactoryBot.create_for_repository(:ephemera_folder) }
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: parent) }
     let(:solr_document) { SolrDocument.new(document) }
     before do
@@ -28,8 +28,8 @@ RSpec.describe "catalog/_members_ephemera_box" do
     end
   end
   context "when it's a project with folders" do
-    let(:parent) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [child.id]) }
-    let(:child) { FactoryGirl.create_for_repository(:ephemera_folder) }
+    let(:parent) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [child.id]) }
+    let(:child) { FactoryBot.create_for_repository(:ephemera_folder) }
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: parent) }
     let(:solr_document) { SolrDocument.new(document) }
     before do

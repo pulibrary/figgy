@@ -4,7 +4,7 @@ include ActionDispatch::TestProcess
 
 RSpec.describe ManifestBuilder::CantaloupeHelper do
   let(:cantaloupe_helper) { described_class.new }
-  let(:scanned_resource) { FactoryGirl.create_for_repository(:scanned_resource, files: [file]) }
+  let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
   let(:file_set) { query_service.find_members(resource: scanned_resource).to_a.first }
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
   let(:derivative_file) { file_set.derivative_file }

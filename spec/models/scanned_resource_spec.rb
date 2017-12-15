@@ -18,7 +18,7 @@ RSpec.describe ScannedResource do
     expect(scanned_resource.member_ids).to eq [1, 2, 3, 3]
   end
   it "generates read groups with the factory" do
-    factory = FactoryGirl.build(:complete_private_scanned_resource)
+    factory = FactoryBot.build(:complete_private_scanned_resource)
     expect(factory.read_groups).to eq []
   end
   context "with imported metadata" do
@@ -26,7 +26,7 @@ RSpec.describe ScannedResource do
       stub_bibdata(bib_id: "123456")
     end
     it "indexes subject" do
-      scanned_resource = FactoryGirl.create(:pending_scanned_resource, source_metadata_identifier: "123456", import_metadata: true)
+      scanned_resource = FactoryBot.create(:pending_scanned_resource, source_metadata_identifier: "123456", import_metadata: true)
       index = Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: scanned_resource)
       expect(index[:display_subject_ssim]).to eq scanned_resource.imported_metadata.first.subject
     end
@@ -64,8 +64,8 @@ RSpec.describe ScannedResource do
         ]
       }
     end
-    let(:resource1) { FactoryGirl.create_for_repository(:file_set) }
-    let(:resource2) { FactoryGirl.create_for_repository(:file_set) }
+    let(:resource1) { FactoryBot.create_for_repository(:file_set) }
+    let(:resource2) { FactoryBot.create_for_repository(:file_set) }
     it "can store structures" do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
       scanned_resource = adapter.persister.save(resource: described_class.new(logical_structure: [structure]))

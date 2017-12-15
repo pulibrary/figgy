@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Report do
-  let(:admin) { FactoryGirl.create(:admin) }
+  let(:admin) { FactoryBot.create(:admin) }
   let(:current_ability) { Ability.new(admin) }
 
   it "can be viewed by admin users" do

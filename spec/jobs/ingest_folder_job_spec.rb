@@ -13,7 +13,7 @@ RSpec.describe IngestFolderJob do
       let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
 
       it 'ingests the resources' do
-        coll = FactoryGirl.create_for_repository(:collection)
+        coll = FactoryBot.create_for_repository(:collection)
 
         ingest_service = instance_double(BulkIngestService)
         allow(ingest_service).to receive(:attach_dir)

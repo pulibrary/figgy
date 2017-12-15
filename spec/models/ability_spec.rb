@@ -6,57 +6,57 @@ describe Ability do
   subject { described_class.new(current_user) }
 
   let(:open_scanned_resource) do
-    FactoryGirl.create(:complete_open_scanned_resource, user: creating_user)
+    FactoryBot.create(:complete_open_scanned_resource, user: creating_user)
   end
 
   let(:private_scanned_resource) do
-    FactoryGirl.create(:complete_private_scanned_resource, user: creating_user)
+    FactoryBot.create(:complete_private_scanned_resource, user: creating_user)
   end
 
   let(:campus_only_scanned_resource) do
-    FactoryGirl.create(:complete_campus_only_scanned_resource, user: creating_user)
+    FactoryBot.create(:complete_campus_only_scanned_resource, user: creating_user)
   end
 
   let(:pending_scanned_resource) do
-    FactoryGirl.create(:pending_scanned_resource, user: creating_user)
+    FactoryBot.create(:pending_scanned_resource, user: creating_user)
   end
 
   let(:metadata_review_scanned_resource) do
-    FactoryGirl.create(:metadata_review_scanned_resource, user: creating_user)
+    FactoryBot.create(:metadata_review_scanned_resource, user: creating_user)
   end
 
   let(:final_review_scanned_resource) do
-    FactoryGirl.create(:final_review_scanned_resource, user: creating_user)
+    FactoryBot.create(:final_review_scanned_resource, user: creating_user)
   end
 
   let(:complete_scanned_resource) do
-    FactoryGirl.create(:complete_scanned_resource, user: image_editor, identifier: ['ark:/99999/fk4445wg45'])
+    FactoryBot.create(:complete_scanned_resource, user: image_editor, identifier: ['ark:/99999/fk4445wg45'])
   end
 
   let(:takedown_scanned_resource) do
-    FactoryGirl.create(:takedown_scanned_resource, user: image_editor, identifier: ['ark:/99999/fk4445wg45'])
+    FactoryBot.create(:takedown_scanned_resource, user: image_editor, identifier: ['ark:/99999/fk4445wg45'])
   end
 
   let(:flagged_scanned_resource) do
-    FactoryGirl.create(:flagged_scanned_resource, user: image_editor, identifier: ['ark:/99999/fk4445wg45'])
+    FactoryBot.create(:flagged_scanned_resource, user: image_editor, identifier: ['ark:/99999/fk4445wg45'])
   end
 
-  let(:ephemera_editor_file) { FactoryGirl.build(:file_set, user: ephemera_editor) }
-  let(:image_editor_file) { FactoryGirl.build(:file_set, user: image_editor) }
-  let(:admin_file) { FactoryGirl.build(:file_set, user: admin_user) }
+  let(:ephemera_editor_file) { FactoryBot.build(:file_set, user: ephemera_editor) }
+  let(:image_editor_file) { FactoryBot.build(:file_set, user: image_editor) }
+  let(:admin_file) { FactoryBot.build(:file_set, user: admin_user) }
 
-  let(:admin_user) { FactoryGirl.create(:admin) }
-  let(:ephemera_editor) { FactoryGirl.create(:ephemera_editor) }
-  let(:image_editor) { FactoryGirl.create(:image_editor) }
-  let(:editor) { FactoryGirl.create(:editor) }
-  let(:completer) { FactoryGirl.create(:completer) }
-  let(:fulfiller) { FactoryGirl.create(:fulfiller) }
-  let(:curator) { FactoryGirl.create(:curator) }
-  let(:campus_user) { FactoryGirl.create(:user) }
+  let(:admin_user) { FactoryBot.create(:admin) }
+  let(:ephemera_editor) { FactoryBot.create(:ephemera_editor) }
+  let(:image_editor) { FactoryBot.create(:image_editor) }
+  let(:editor) { FactoryBot.create(:editor) }
+  let(:completer) { FactoryBot.create(:completer) }
+  let(:fulfiller) { FactoryBot.create(:fulfiller) }
+  let(:curator) { FactoryBot.create(:curator) }
+  let(:campus_user) { FactoryBot.create(:user) }
   let(:role) { Role.where(name: 'admin').first_or_create }
 
   describe 'as an admin' do
-    let(:admin_user) { FactoryGirl.create(:admin) }
+    let(:admin_user) { FactoryBot.create(:admin) }
     let(:creating_user) { image_editor }
     let(:current_user) { admin_user }
 
@@ -90,9 +90,9 @@ describe Ability do
   describe 'as an ephemera editor' do
     let(:creating_user) { image_editor }
     let(:current_user) { ephemera_editor }
-    let(:ephemera_folder) { FactoryGirl.create(:ephemera_folder, user: ephemera_editor) }
-    let(:complete_ephemera_folder) { FactoryGirl.create(:complete_ephemera_folder) }
-    let(:other_ephemera_folder) { FactoryGirl.create(:ephemera_folder, user: image_editor) }
+    let(:ephemera_folder) { FactoryBot.create(:ephemera_folder, user: ephemera_editor) }
+    let(:complete_ephemera_folder) { FactoryBot.create(:complete_ephemera_folder) }
+    let(:other_ephemera_folder) { FactoryBot.create(:ephemera_folder, user: image_editor) }
 
     it {
       is_expected.to be_able_to(:read, open_scanned_resource)
@@ -145,9 +145,9 @@ describe Ability do
   describe 'as an image editor' do
     let(:creating_user) { image_editor }
     let(:current_user) { image_editor }
-    let(:ephemera_folder) { FactoryGirl.create(:ephemera_folder, user: ephemera_editor) }
-    let(:complete_ephemera_folder) { FactoryGirl.create(:complete_ephemera_folder) }
-    let(:other_ephemera_folder) { FactoryGirl.create(:ephemera_folder, user: image_editor) }
+    let(:ephemera_folder) { FactoryBot.create(:ephemera_folder, user: ephemera_editor) }
+    let(:complete_ephemera_folder) { FactoryBot.create(:complete_ephemera_folder) }
+    let(:other_ephemera_folder) { FactoryBot.create(:ephemera_folder, user: image_editor) }
 
     it {
       is_expected.to be_able_to(:read, open_scanned_resource)
@@ -259,7 +259,7 @@ describe Ability do
   describe 'as a fulfiller' do
     let(:creating_user) { image_editor }
     let(:current_user) { fulfiller }
-    let(:collection) { FactoryGirl.create :private_collection }
+    let(:collection) { FactoryBot.create :private_collection }
 
     it {
       is_expected.to be_able_to(:read, open_scanned_resource)
@@ -324,7 +324,7 @@ describe Ability do
   end
 
   describe 'as a campus user' do
-    let(:creating_user) { FactoryGirl.create(:image_editor) }
+    let(:creating_user) { FactoryBot.create(:image_editor) }
     let(:current_user) { campus_user }
 
     it {
@@ -362,15 +362,15 @@ describe Ability do
   end
 
   describe 'as an anonymous user' do
-    let(:creating_user) { FactoryGirl.create(:image_editor) }
+    let(:creating_user) { FactoryBot.create(:image_editor) }
     let(:current_user) { nil }
     let(:color_enabled_resource) do
-      FactoryGirl.build(:open_scanned_resource, user: creating_user, state: 'complete', pdf_type: ['color'])
+      FactoryBot.build(:open_scanned_resource, user: creating_user, state: 'complete', pdf_type: ['color'])
     end
     let(:no_pdf_scanned_resource) do
-      FactoryGirl.build(:open_scanned_resource, user: creating_user, state: 'complete', pdf_type: [])
+      FactoryBot.build(:open_scanned_resource, user: creating_user, state: 'complete', pdf_type: [])
     end
-    let(:ephemera_folder) { FactoryGirl.create(:ephemera_folder, user: current_user) }
+    let(:ephemera_folder) { FactoryBot.create(:ephemera_folder, user: current_user) }
 
     it {
       is_expected.to be_able_to(:read, open_scanned_resource)

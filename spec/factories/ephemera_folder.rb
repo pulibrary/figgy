@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :ephemera_folder do
     barcode '12345678901234'
     local_identifier 'xyz1'

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
-# Factories in Factory Girl don't return the value returned via `to_create`.
+# Factories in Factory Bot doesn't return the value returned via `to_create`.
 # This custom strategy is necessary to enable data mapper patterns in Factory
-# Girl.
+# Bot.
 #
 # Copied from:
-#   https://github.com/thoughtbot/factory_girl/issues/565
+#   https://github.com/thoughtbot/factory_bot/issues/565
 class CreateStategyForRepositoryPattern
   def association(runner)
     runner.run
@@ -22,4 +22,4 @@ class CreateStategyForRepositoryPattern
     result
   end
 end
-FactoryGirl.register_strategy(:create_for_repository, CreateStategyForRepositoryPattern)
+FactoryBot.register_strategy(:create_for_repository, CreateStategyForRepositoryPattern)

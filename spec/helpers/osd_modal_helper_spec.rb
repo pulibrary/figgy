@@ -12,7 +12,7 @@ RSpec.describe OsdModalHelper do
       end
     end
     context "when encountering an error retrieving the derivative" do
-      let(:file_set) { FactoryGirl.create_for_repository(:file_set) }
+      let(:file_set) { FactoryBot.create_for_repository(:file_set) }
       let(:manifest_helper_class) { class_double(ManifestBuilder::ManifestHelper).as_stubbed_const(transfer_nested_constants: true) }
       let(:manifest_helper) { instance_double(ManifestBuilder::ManifestHelper) }
       before do
@@ -39,15 +39,15 @@ RSpec.describe OsdModalHelper do
         allow(Valkyrie.logger).to receive(:warn).and_return(nil)
       end
       it "uses the fileset thumbnail ID" do
-        file_set = FactoryGirl.create_for_repository(:file_set)
-        book = FactoryGirl.create_for_repository(:scanned_resource, thumbnail_id: file_set.id)
-        parent_book = FactoryGirl.create_for_repository(:scanned_resource, thumbnail_id: book.id)
+        file_set = FactoryBot.create_for_repository(:file_set)
+        book = FactoryBot.create_for_repository(:scanned_resource, thumbnail_id: file_set.id)
+        parent_book = FactoryBot.create_for_repository(:scanned_resource, thumbnail_id: book.id)
 
         expect(helper.figgy_thumbnail_path(parent_book)).to include file_set.id.to_s
       end
       it "returns nothing when the fileset doesn't exist" do
-        book = FactoryGirl.create_for_repository(:scanned_resource, thumbnail_id: Valkyrie::ID.new("busted"))
-        parent_book = FactoryGirl.create_for_repository(:scanned_resource, thumbnail_id: book.id)
+        book = FactoryBot.create_for_repository(:scanned_resource, thumbnail_id: Valkyrie::ID.new("busted"))
+        parent_book = FactoryBot.create_for_repository(:scanned_resource, thumbnail_id: book.id)
 
         expect(helper.figgy_thumbnail_path(parent_book)).to eq nil
       end

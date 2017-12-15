@@ -15,10 +15,10 @@ RSpec.describe EphemeraVocabulariesController do
     it_behaves_like "an access controlled new request"
 
     context "when they have permission" do
-      let(:user) { FactoryGirl.create(:admin) }
+      let(:user) { FactoryBot.create(:admin) }
       render_views
       it "has a form for creating ephemera vocabularies" do
-        FactoryGirl.create_for_repository(:ephemera_vocabulary)
+        FactoryBot.create_for_repository(:ephemera_vocabulary)
 
         get :new
         expect(response.body).to have_field "Label"
@@ -29,12 +29,12 @@ RSpec.describe EphemeraVocabulariesController do
 
   describe "index" do
     context "when they have permission" do
-      let(:user) { FactoryGirl.create(:admin) }
-      let(:vocab) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'test parent vocabulary') }
+      let(:user) { FactoryBot.create(:admin) }
+      let(:vocab) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'test parent vocabulary') }
       render_views
       it "has lists all ephemera vocabularies" do
         adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
-        res = FactoryGirl.build(:ephemera_vocabulary, label: 'test term', member_of_vocabulary_id: vocab.id)
+        res = FactoryBot.build(:ephemera_vocabulary, label: 'test term', member_of_vocabulary_id: vocab.id)
         res.member_of_vocabulary_id = vocab.id
         child_vocab = adapter.persister.save(resource: res)
 
@@ -46,7 +46,7 @@ RSpec.describe EphemeraVocabulariesController do
   end
 
   describe "create" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do
       {
         label: ['test label'],
@@ -103,13 +103,13 @@ RSpec.describe EphemeraVocabulariesController do
   end
 
   describe "destroy" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :ephemera_vocabulary }
       it_behaves_like "an access controlled destroy request"
     end
     it "can delete a book" do
-      ephemera_vocabulary = FactoryGirl.create_for_repository(:ephemera_vocabulary)
+      ephemera_vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary)
       delete :destroy, params: { id: ephemera_vocabulary.id.to_s }
 
       expect(response).to redirect_to root_path
@@ -118,7 +118,7 @@ RSpec.describe EphemeraVocabulariesController do
   end
 
   describe "edit" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :ephemera_vocabulary }
       it_behaves_like "an access controlled edit request"
@@ -131,7 +131,7 @@ RSpec.describe EphemeraVocabulariesController do
     context "when it does exist" do
       render_views
       it "renders a form" do
-        ephemera_vocabulary = FactoryGirl.create_for_repository(:ephemera_vocabulary)
+        ephemera_vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary)
         get :edit, params: { id: ephemera_vocabulary.id.to_s }
 
         expect(response.body).to have_field "Label", with: 'test vocabulary'
@@ -141,7 +141,7 @@ RSpec.describe EphemeraVocabulariesController do
   end
 
   describe "update" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :ephemera_vocabulary }
       let(:extra_params) { { ephemera_vocabulary: { label: ["test label"], value: ["test value"] } } }
@@ -154,7 +154,7 @@ RSpec.describe EphemeraVocabulariesController do
     end
     context "when it does exist" do
       it "saves it and redirects" do
-        ephemera_vocabulary = FactoryGirl.create_for_repository(:ephemera_vocabulary)
+        ephemera_vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary)
         patch :update, params: { id: ephemera_vocabulary.id.to_s, ephemera_vocabulary: { label: ["test label"], value: ["test value"] } }
 
         expect(response).to be_redirect
@@ -165,7 +165,7 @@ RSpec.describe EphemeraVocabulariesController do
         expect(reloaded.label).to eq ["test label"]
       end
       it "renders the form if it fails validations" do
-        ephemera_vocabulary = FactoryGirl.create_for_repository(:ephemera_vocabulary)
+        ephemera_vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary)
         patch :update, params: { id: ephemera_vocabulary.id.to_s, ephemera_vocabulary: { label: nil, value: nil } }
 
         expect(response).to render_template "valhalla/base/edit"

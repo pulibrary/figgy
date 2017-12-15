@@ -4,9 +4,9 @@ require 'rails_helper'
 RSpec.describe ManifestEventGenerator do
   subject(:manifest_event_generator) { described_class.new(rabbit_connection) }
   let(:rabbit_connection) { instance_double(MessagingClient, publish: true) }
-  let(:record) { FactoryGirl.create_for_repository(:scanned_resource) }
-  let(:collection) { FactoryGirl.create_for_repository(:collection) }
-  let(:record_in_collection) { FactoryGirl.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id]) }
+  let(:record) { FactoryBot.create_for_repository(:scanned_resource) }
+  let(:collection) { FactoryBot.create_for_repository(:collection) }
+  let(:record_in_collection) { FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id]) }
 
   describe "#record_created" do
     it "publishes a persistent JSON message" do

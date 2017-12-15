@@ -22,7 +22,7 @@ RSpec.describe PlumChangeSetPersister do
       stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "applies remote metadata from bibdata to an imported metadata resource" do
-      resource = FactoryGirl.build(:scanned_resource, title: [])
+      resource = FactoryBot.build(:scanned_resource, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: '123456')
       change_set.sync
@@ -41,7 +41,7 @@ RSpec.describe PlumChangeSetPersister do
       stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "applies remote metadata from bibdata directly to the resource" do
-      resource = FactoryGirl.build(:scanned_map, title: [])
+      resource = FactoryBot.build(:scanned_map, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: '6592452')
       change_set.sync
@@ -63,7 +63,7 @@ RSpec.describe PlumChangeSetPersister do
     end
 
     it "mints an ARK" do
-      resource = FactoryGirl.create(:scanned_resource, title: [], source_metadata_identifier: '123456', state: 'final_review')
+      resource = FactoryBot.create(:scanned_resource, title: [], source_metadata_identifier: '123456', state: 'final_review')
       change_set = change_set_class.new(resource)
       change_set.prepopulate!
       change_set.validate(state: 'complete')
@@ -78,7 +78,7 @@ RSpec.describe PlumChangeSetPersister do
       stub_ezid(shoulder: "99999/fk4", blade: "MC016_c9616")
     end
     it "applies remote metadata from PULFA" do
-      resource = FactoryGirl.build(:scanned_resource, title: [])
+      resource = FactoryBot.build(:scanned_resource, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: 'MC016_c9616')
       change_set.sync
@@ -90,7 +90,7 @@ RSpec.describe PlumChangeSetPersister do
   end
   context "when a source_metadata_identifier is set afterwards" do
     it "does not change anything" do
-      resource = FactoryGirl.create_for_repository(:scanned_resource, title: 'Title', source_metadata_identifier: nil)
+      resource = FactoryBot.create_for_repository(:scanned_resource, title: 'Title', source_metadata_identifier: nil)
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: '123456', title: [], refresh_remote_metadata: "0")
       change_set.sync
@@ -104,7 +104,7 @@ RSpec.describe PlumChangeSetPersister do
       stub_bibdata(bib_id: '123456', status: 404)
     end
     it "is marked as invalid" do
-      resource = FactoryGirl.build(:scanned_resource, title: [])
+      resource = FactoryBot.build(:scanned_resource, title: [])
       change_set = change_set_class.new(resource)
 
       expect(change_set.validate(source_metadata_identifier: '123456')).to eq false
@@ -115,7 +115,7 @@ RSpec.describe PlumChangeSetPersister do
       stub_pulfa(pulfa_id: "MC016_c9616", body: '')
     end
     it "is marked as invalid" do
-      resource = FactoryGirl.build(:scanned_resource, title: [])
+      resource = FactoryBot.build(:scanned_resource, title: [])
       change_set = change_set_class.new(resource)
 
       expect(change_set.validate(source_metadata_identifier: 'MC016_c9616')).to eq false
@@ -127,7 +127,7 @@ RSpec.describe PlumChangeSetPersister do
       stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "applies remote metadata from bibdata" do
-      resource = FactoryGirl.create_for_repository(:scanned_resource, title: 'Title', imported_metadata: [{ applicant: 'Test' }], source_metadata_identifier: nil)
+      resource = FactoryBot.create_for_repository(:scanned_resource, title: 'Title', imported_metadata: [{ applicant: 'Test' }], source_metadata_identifier: nil)
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: '123456', title: [], refresh_remote_metadata: "1")
       change_set.sync
@@ -146,7 +146,7 @@ RSpec.describe PlumChangeSetPersister do
     end
 
     it "can append files as FileSets", run_real_derivatives: true do
-      resource = FactoryGirl.build(:scanned_resource)
+      resource = FactoryBot.build(:scanned_resource)
       change_set = change_set_class.new(resource, characterize: false)
       change_set.files = [file]
 
@@ -190,7 +190,7 @@ RSpec.describe PlumChangeSetPersister do
       allow(CharacterizationJob).to receive(:set).and_call_original
       allow(CreateDerivativesJob).to receive(:set).and_call_original
 
-      resource = FactoryGirl.build(:scanned_resource)
+      resource = FactoryBot.build(:scanned_resource)
       change_set = change_set_class.new(resource, characterize: true)
       change_set.files = [file]
       change_set_persister.queue = 'low'
@@ -223,7 +223,7 @@ RSpec.describe PlumChangeSetPersister do
 
     it "can append files as FileSets", run_real_derivatives: true do
       # upload a file
-      resource = FactoryGirl.build(:scanned_resource)
+      resource = FactoryBot.build(:scanned_resource)
       change_set = change_set_class.new(resource, characterize: false)
       change_set.files = [file1]
       output = change_set_persister.save(change_set: change_set)
@@ -248,8 +248,8 @@ RSpec.describe PlumChangeSetPersister do
       let(:change_set_persister) do
         described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: false)
       end
-      let(:resource) { FactoryGirl.build(:scanned_resource) }
-      let(:collection) { FactoryGirl.create_for_repository(:collection) }
+      let(:resource) { FactoryBot.build(:scanned_resource) }
+      let(:collection) { FactoryBot.create_for_repository(:collection) }
       let(:change_set) { ScannedResourceChangeSet.new(resource, characterize: false) }
 
       before do
@@ -322,7 +322,7 @@ RSpec.describe PlumChangeSetPersister do
       let(:change_set_persister) do
         described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: false)
       end
-      let(:resource) { FactoryGirl.build(:ephemera_folder) }
+      let(:resource) { FactoryBot.build(:ephemera_folder) }
       let(:change_set) { EphemeraFolderChangeSet.new(resource, characterize: false) }
 
       before do
@@ -332,8 +332,8 @@ RSpec.describe PlumChangeSetPersister do
 
       it 'publishes messages for updated file sets', run_real_derivatives: false, rabbit_stubbed: true do
         output = change_set_persister.save(change_set: change_set)
-        ephemera_box = FactoryGirl.create_for_repository(:ephemera_box, member_ids: [output.id])
-        ephemera_project = FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id])
+        ephemera_box = FactoryBot.create_for_repository(:ephemera_box, member_ids: [output.id])
+        ephemera_project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id])
 
         file_set = query_service.find_members(resource: output).first
 
@@ -352,8 +352,8 @@ RSpec.describe PlumChangeSetPersister do
 
       it 'publishes messages for updates and creating file sets', run_real_derivatives: false, rabbit_stubbed: true do
         output = change_set_persister.save(change_set: change_set)
-        ephemera_box = FactoryGirl.create_for_repository(:ephemera_box, member_ids: [output.id])
-        ephemera_project = FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id])
+        ephemera_box = FactoryBot.create_for_repository(:ephemera_box, member_ids: [output.id])
+        ephemera_project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id])
 
         file_set = query_service.find_members(resource: output).first
 
@@ -399,7 +399,7 @@ RSpec.describe PlumChangeSetPersister do
       let(:change_set_persister) do
         described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: false)
       end
-      let(:resource) { FactoryGirl.create_for_repository(:ephemera_box) }
+      let(:resource) { FactoryBot.create_for_repository(:ephemera_box) }
       let(:change_set) { EphemeraBoxChangeSet.new(resource, characterize: false) }
 
       before do
@@ -408,7 +408,7 @@ RSpec.describe PlumChangeSetPersister do
 
       it 'publishes messages for updated properties', run_real_derivatives: false, rabbit_stubbed: true do
         output = change_set_persister.save(change_set: change_set)
-        ephemera_project = FactoryGirl.create_for_repository(:ephemera_project, member_ids: [output.id])
+        ephemera_project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [output.id])
 
         change_set = EphemeraBoxChangeSet.new(output, tracking_number: '23456')
         change_set_persister.save(change_set: change_set)
@@ -442,8 +442,8 @@ RSpec.describe PlumChangeSetPersister do
   describe "collection interactions" do
     context "when a collection is deleted" do
       it "cleans up associations from all its members" do
-        collection = FactoryGirl.create_for_repository(:collection)
-        resource = FactoryGirl.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id)
+        collection = FactoryBot.create_for_repository(:collection)
+        resource = FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id)
         change_set = CollectionChangeSet.new(collection)
 
         change_set_persister.delete(change_set: change_set)
@@ -457,8 +457,8 @@ RSpec.describe PlumChangeSetPersister do
   describe "deleting child SRs" do
     context "when a child is deleted" do
       it "cleans up associations" do
-        child = FactoryGirl.create_for_repository(:scanned_resource)
-        parent = FactoryGirl.create_for_repository(:scanned_resource, member_ids: child.id)
+        child = FactoryBot.create_for_repository(:scanned_resource)
+        parent = FactoryBot.create_for_repository(:scanned_resource, member_ids: child.id)
         change_set = ScannedResourceChangeSet.new(child)
 
         change_set_persister.delete(change_set: change_set)
@@ -468,8 +468,8 @@ RSpec.describe PlumChangeSetPersister do
       end
 
       it "cleans up structure nodes" do
-        child1 = FactoryGirl.create_for_repository(:scanned_resource, title: ['child1'])
-        child2 = FactoryGirl.create_for_repository(:scanned_resource, title: ['child2'])
+        child1 = FactoryBot.create_for_repository(:scanned_resource, title: ['child1'])
+        child2 = FactoryBot.create_for_repository(:scanned_resource, title: ['child2'])
         structure = {
           "label": "Top!",
           "nodes": [
@@ -483,7 +483,7 @@ RSpec.describe PlumChangeSetPersister do
               ] }
           ]
         }
-        parent = FactoryGirl.create_for_repository(:scanned_resource, logical_structure: [structure], member_ids: [child1.id, child2.id])
+        parent = FactoryBot.create_for_repository(:scanned_resource, logical_structure: [structure], member_ids: [child1.id, child2.id])
         change_set = ScannedResourceChangeSet.new(child1)
 
         change_set_persister.delete(change_set: change_set)
@@ -497,8 +497,8 @@ RSpec.describe PlumChangeSetPersister do
 
   describe "deleting multi-volume scanned resources" do
     it "deletes children" do
-      child = FactoryGirl.create_for_repository(:scanned_resource)
-      parent = FactoryGirl.create_for_repository(:scanned_resource, member_ids: child.id)
+      child = FactoryBot.create_for_repository(:scanned_resource)
+      parent = FactoryBot.create_for_repository(:scanned_resource, member_ids: child.id)
       change_set = ScannedResourceChangeSet.new(parent)
       change_set_persister.save(change_set: change_set)
 
@@ -510,8 +510,8 @@ RSpec.describe PlumChangeSetPersister do
 
   describe "deleting vocabularies" do
     it "deletes EphemeraFields which reference it" do
-      vocabulary = FactoryGirl.create_for_repository(:ephemera_vocabulary)
-      ephemera_field = FactoryGirl.create_for_repository(:ephemera_field, member_of_vocabulary_id: vocabulary.id)
+      vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary)
+      ephemera_field = FactoryBot.create_for_repository(:ephemera_field, member_of_vocabulary_id: vocabulary.id)
       change_set = EphemeraVocabularyChangeSet.new(vocabulary)
 
       change_set_persister.delete(change_set: change_set)
@@ -522,7 +522,7 @@ RSpec.describe PlumChangeSetPersister do
   describe "setting visibility" do
     context "when setting to public" do
       it "adds the public read_group" do
-        resource = FactoryGirl.build(:scanned_resource, read_groups: [])
+        resource = FactoryBot.build(:scanned_resource, read_groups: [])
         change_set = change_set_class.new(resource)
         change_set.validate(visibility: 'open')
         change_set.sync
@@ -532,7 +532,7 @@ RSpec.describe PlumChangeSetPersister do
     end
     context "when setting to princeton only" do
       it "adds the authenticated read_group" do
-        resource = FactoryGirl.build(:scanned_resource, read_groups: [])
+        resource = FactoryBot.build(:scanned_resource, read_groups: [])
         change_set = change_set_class.new(resource)
         change_set.validate(visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED)
         change_set.sync
@@ -542,7 +542,7 @@ RSpec.describe PlumChangeSetPersister do
     end
     context "when setting to private" do
       it "removes all read groups" do
-        resource = FactoryGirl.build(:scanned_resource, read_groups: ['public'])
+        resource = FactoryBot.build(:scanned_resource, read_groups: ['public'])
         change_set = change_set_class.new(resource)
         change_set.validate(visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE)
         change_set.sync
@@ -552,10 +552,10 @@ RSpec.describe PlumChangeSetPersister do
     end
 
     context "with existing member resources and file sets" do
-      let(:resource1) { FactoryGirl.create_for_repository(:file_set) }
-      let(:resource2) { FactoryGirl.create_for_repository(:complete_private_scanned_resource) }
+      let(:resource1) { FactoryBot.create_for_repository(:file_set) }
+      let(:resource2) { FactoryBot.create_for_repository(:complete_private_scanned_resource) }
       it "propagates the access control policies, but not to FileSets" do
-        resource = FactoryGirl.build(:scanned_resource, read_groups: [])
+        resource = FactoryBot.build(:scanned_resource, read_groups: [])
         resource.member_ids = [resource1.id, resource2.id]
         adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
         resource = adapter.persister.save(resource: resource)
@@ -574,9 +574,9 @@ RSpec.describe PlumChangeSetPersister do
 
   describe "setting state" do
     context "with member resources and file sets" do
-      let(:resource2) { FactoryGirl.create_for_repository(:complete_private_scanned_resource) }
+      let(:resource2) { FactoryBot.create_for_repository(:complete_private_scanned_resource) }
       it "propagates the workflow state" do
-        resource = FactoryGirl.build(:scanned_resource, read_groups: [], state: 'pending')
+        resource = FactoryBot.build(:scanned_resource, read_groups: [], state: 'pending')
         resource.member_ids = [resource2.id]
         adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
         resource = adapter.persister.save(resource: resource)
@@ -593,8 +593,8 @@ RSpec.describe PlumChangeSetPersister do
     context "with boxes and folders" do
       let(:change_set_class) { EphemeraBoxChangeSet }
       it "doesn't overwrite the folder workflow state" do
-        folder = FactoryGirl.create_for_repository(:ephemera_folder)
-        box = FactoryGirl.create_for_repository(:ephemera_box, member_ids: folder.id)
+        folder = FactoryBot.create_for_repository(:ephemera_folder)
+        box = FactoryBot.create_for_repository(:ephemera_box, member_ids: folder.id)
 
         change_set = change_set_class.new(box)
         change_set.validate(state: 'ready_to_ship')
@@ -609,8 +609,8 @@ RSpec.describe PlumChangeSetPersister do
 
   describe "appending" do
     it "appends a child via #append_id" do
-      parent = FactoryGirl.create_for_repository(:scanned_resource)
-      resource = FactoryGirl.build(:scanned_resource)
+      parent = FactoryBot.create_for_repository(:scanned_resource)
+      resource = FactoryBot.build(:scanned_resource)
       change_set = change_set_class.new(resource)
       change_set.validate(append_id: parent.id.to_s)
       change_set.sync

@@ -2,14 +2,14 @@
 require 'rails_helper'
 
 RSpec.feature "Ephemera Boxes", js: true do
-  let(:user) { FactoryGirl.create(:admin) }
+  let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:ephemera_box) do
-    res = FactoryGirl.create_for_repository(:ephemera_box)
+    res = FactoryBot.create_for_repository(:ephemera_box)
     adapter.persister.save(resource: res)
   end
   let(:ephemera_project) do
-    res = FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id])
+    res = FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id])
     adapter.persister.save(resource: res)
   end
 
@@ -56,7 +56,7 @@ RSpec.feature "Ephemera Boxes", js: true do
   context 'when a user edits an existing ephemera box' do
     context 'with ephemera boxes already created' do
       let(:existing_ephemera_box) do
-        res = FactoryGirl.create_for_repository(:ephemera_box)
+        res = FactoryBot.create_for_repository(:ephemera_box)
         adapter.persister.save(resource: res)
       end
       let(:change_set) do

@@ -5,7 +5,7 @@ include ActionDispatch::TestProcess
 RSpec.describe PDFGenerator do
   subject(:generator) { described_class.new(resource: resource, storage_adapter: storage_adapter) }
   let(:file) { fixture_file_upload('files/color-landscape.tif', 'image/tiff') }
-  let(:resource) { FactoryGirl.create_for_repository(:scanned_resource, files: [file], holding_location: ["https://bibdata.princeton.edu/locations/delivery_locations/1"]) }
+  let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], holding_location: ["https://bibdata.princeton.edu/locations/delivery_locations/1"]) }
   let(:file_set) { query_service.find_members(resource: resource).to_a.first }
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
   let(:persister) { Valkyrie.config.metadata_adapter.persister }
@@ -31,7 +31,7 @@ RSpec.describe PDFGenerator do
       end
     end
     context "when it's set to color" do
-      let(:resource) { FactoryGirl.create_for_repository(:scanned_resource, files: [file], pdf_type: ['color']) }
+      let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], pdf_type: ['color']) }
       before do
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,287/0/default.jpg")
           .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
@@ -43,7 +43,7 @@ RSpec.describe PDFGenerator do
       end
     end
     context "when it's an arabic manifest" do
-      let(:resource) { FactoryGirl.create_for_repository(:scanned_resource, files: [file], language: 'ara', title: 'المفاتيح') }
+      let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], language: 'ara', title: 'المفاتيح') }
       before do
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,287/0/grey.jpg")
           .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)

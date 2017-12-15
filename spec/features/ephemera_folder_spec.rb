@@ -3,18 +3,18 @@ require 'rails_helper'
 include ActionDispatch::TestProcess
 
 RSpec.feature "Ephemera Folders", js: true do
-  let(:user) { FactoryGirl.create(:admin) }
+  let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:ephemera_project) do
-    res = FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id])
+    res = FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id])
     adapter.persister.save(resource: res)
   end
   let(:ephemera_box) do
-    res = FactoryGirl.create_for_repository(:ephemera_box, member_ids: [ephemera_folder.id])
+    res = FactoryBot.create_for_repository(:ephemera_box, member_ids: [ephemera_folder.id])
     adapter.persister.save(resource: res)
   end
   let(:ephemera_folder) do
-    res = FactoryGirl.create_for_repository(:ephemera_folder)
+    res = FactoryBot.create_for_repository(:ephemera_folder)
     adapter.persister.save(resource: res)
   end
 
@@ -144,7 +144,7 @@ RSpec.feature "Ephemera Folders", js: true do
       let(:file1) { fixture_file_upload('files/example.tif', 'image/tiff') }
       let(:file2) { fixture_file_upload('files/color-landscape.tif', 'image/tiff') }
       let(:ephemera_folder) do
-        res = FactoryGirl.create_for_repository(:ephemera_folder, files: [file1, file2])
+        res = FactoryBot.create_for_repository(:ephemera_folder, files: [file1, file2])
         adapter.persister.save(resource: res)
       end
 

@@ -35,7 +35,7 @@ RSpec.describe AuthTokensController, type: :controller do
     { group: ["Invalid"], label: "" }
   end
 
-  let(:user) { FactoryGirl.create(:admin) }
+  let(:user) { FactoryBot.create(:admin) }
   before do
     sign_in user
   end

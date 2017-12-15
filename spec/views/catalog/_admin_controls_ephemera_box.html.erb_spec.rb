@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe "catalog/_admin_controls_ephemera_box" do
-  let(:box) { FactoryGirl.create_for_repository(:ephemera_box) }
+  let(:box) { FactoryBot.create_for_repository(:ephemera_box) }
   let(:solr) { Valkyrie::MetadataAdapter.find(:index_solr) }
   let(:document) { solr.resource_factory.from_resource(resource: box) }
   let(:solr_document) { SolrDocument.new(document) }

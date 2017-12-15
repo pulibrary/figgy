@@ -6,7 +6,7 @@ module Features
       user = if who.instance_of?(User)
                who.uid
              else
-               FactoryGirl.create(:user).uid
+               FactoryBot.create(:user).uid
              end
       OmniAuth.config.test_mode = true
       OmniAuth.config.add_mock(:cas, uid: user)

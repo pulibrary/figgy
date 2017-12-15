@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe UserUtils do
   describe ".promote_user_to_admin" do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
 
     # stub out the log messages
     let(:logger) { double }
