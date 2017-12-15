@@ -44,8 +44,9 @@ class ManifestBuilder
     end
 
     ##
-    # Stringify the Resource by delegating to the header within the Decorator
-    # @return [String]
+    # Returns representation of the object as an array of strings - often the
+    #   title.
+    # @return [Array<String>]
     def to_s
       resource.title.map(&:to_s)
     end
