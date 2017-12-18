@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe EphemeraVocabularyDecorator do
   subject(:decorator) { described_class.new(resource) }
-  let(:resource) { FactoryGirl.build(:ephemera_vocabulary) }
+  let(:resource) { FactoryBot.build(:ephemera_vocabulary) }
   describe "decoration" do
     it "decorates an EphemeraVocabulary" do
       expect(resource.decorate).to be_a described_class
@@ -19,10 +19,10 @@ RSpec.describe EphemeraVocabularyDecorator do
     expect(resource.decorate.title).to eq resource.decorate.label
   end
   context 'when a child of another vocabulary' do
-    let(:vocab) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'test parent vocabulary') }
+    let(:vocab) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'test parent vocabulary') }
     let(:resource) do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
-      res = FactoryGirl.build(:ephemera_vocabulary)
+      res = FactoryBot.build(:ephemera_vocabulary)
       res.member_of_vocabulary_id = vocab.id
       adapter.persister.save(resource: res)
     end
@@ -44,22 +44,22 @@ RSpec.describe EphemeraVocabularyDecorator do
 
   describe "#terms" do
     it "lists all terms in alphabetical order" do
-      resource = FactoryGirl.create_for_repository(:ephemera_vocabulary)
-      FactoryGirl.create_for_repository(:ephemera_term, label: "C", member_of_vocabulary_id: resource.id)
-      FactoryGirl.create_for_repository(:ephemera_term, label: "A", member_of_vocabulary_id: resource.id)
+      resource = FactoryBot.create_for_repository(:ephemera_vocabulary)
+      FactoryBot.create_for_repository(:ephemera_term, label: "C", member_of_vocabulary_id: resource.id)
+      FactoryBot.create_for_repository(:ephemera_term, label: "A", member_of_vocabulary_id: resource.id)
 
       expect(resource.decorate.terms.map(&:label)).to eq ["A", "C"]
     end
   end
 
   context 'when a parent of other vocabularies' do
-    let(:resource) { FactoryGirl.create_for_repository(:ephemera_vocabulary) }
+    let(:resource) { FactoryBot.create_for_repository(:ephemera_vocabulary) }
     before do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
-      child1 = FactoryGirl.build(:ephemera_vocabulary, label: 'test child vocabulary2')
+      child1 = FactoryBot.build(:ephemera_vocabulary, label: 'test child vocabulary2')
       child1.member_of_vocabulary_id = resource.id
       adapter.persister.save(resource: child1)
-      child2 = FactoryGirl.build(:ephemera_vocabulary, label: 'test child vocabulary1')
+      child2 = FactoryBot.build(:ephemera_vocabulary, label: 'test child vocabulary1')
       child2.member_of_vocabulary_id = resource.id
       adapter.persister.save(resource: child2)
     end

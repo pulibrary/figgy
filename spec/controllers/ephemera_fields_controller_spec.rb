@@ -15,10 +15,10 @@ RSpec.describe EphemeraFieldsController do
     it_behaves_like "an access controlled new request"
 
     context "when they have permission" do
-      let(:user) { FactoryGirl.create(:admin) }
+      let(:user) { FactoryBot.create(:admin) }
       render_views
       it "has a form for creating ephemera fields" do
-        FactoryGirl.create_for_repository(:ephemera_field)
+        FactoryBot.create_for_repository(:ephemera_field)
 
         get :new
         expect(response.body).to have_field "Name"
@@ -28,7 +28,7 @@ RSpec.describe EphemeraFieldsController do
   end
 
   describe "create" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do
       {
         field_name: ['test field'],
@@ -85,13 +85,13 @@ RSpec.describe EphemeraFieldsController do
   end
 
   describe "destroy" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :ephemera_field }
       it_behaves_like "an access controlled destroy request"
     end
     it "can delete a book" do
-      ephemera_field = FactoryGirl.create_for_repository(:ephemera_field)
+      ephemera_field = FactoryBot.create_for_repository(:ephemera_field)
       delete :destroy, params: { id: ephemera_field.id.to_s }
 
       expect(response).to redirect_to root_path
@@ -100,7 +100,7 @@ RSpec.describe EphemeraFieldsController do
   end
 
   describe "edit" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :ephemera_field }
       it_behaves_like "an access controlled edit request"
@@ -113,7 +113,7 @@ RSpec.describe EphemeraFieldsController do
     context "when it does exist" do
       render_views
       it "renders a form" do
-        ephemera_field = FactoryGirl.create_for_repository(:ephemera_field)
+        ephemera_field = FactoryBot.create_for_repository(:ephemera_field)
         get :edit, params: { id: ephemera_field.id.to_s }
 
         expect(response.body).to have_field "Name", with: '1'
@@ -123,7 +123,7 @@ RSpec.describe EphemeraFieldsController do
   end
 
   describe "update" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :ephemera_field }
       let(:extra_params) { { ephemera_field: { title: ["Two"] } } }
@@ -136,7 +136,7 @@ RSpec.describe EphemeraFieldsController do
     end
     context "when it does exist" do
       it "saves it and redirects" do
-        ephemera_field = FactoryGirl.create_for_repository(:ephemera_field)
+        ephemera_field = FactoryBot.create_for_repository(:ephemera_field)
         patch :update, params: { id: ephemera_field.id.to_s, ephemera_field: { field_name: ["test field2"], member_of_vocabulary_id: ['test vocabulary id'] } }
 
         expect(response).to be_redirect
@@ -147,7 +147,7 @@ RSpec.describe EphemeraFieldsController do
         expect(reloaded.field_name).to eq ["test field2"]
       end
       it "renders the form if it fails validations" do
-        ephemera_field = FactoryGirl.create_for_repository(:ephemera_field)
+        ephemera_field = FactoryBot.create_for_repository(:ephemera_field)
         patch :update, params: { id: ephemera_field.id.to_s, ephemera_field: { field_name: nil, member_of_vocabulary_id: nil } }
 
         expect(response).to render_template "valhalla/base/edit"

@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe CollectionChangeSet do
   subject(:change_set) { described_class.new(collection) }
-  let(:collection) { FactoryGirl.build(:collection) }
+  let(:collection) { FactoryBot.build(:collection) }
   before do
     change_set.prepopulate!
   end

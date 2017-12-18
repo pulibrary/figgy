@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :scanned_resource do
     title 'Title'
     rights_statement RDF::URI('http://rightsstatements.org/vocab/NKC/1.0/')

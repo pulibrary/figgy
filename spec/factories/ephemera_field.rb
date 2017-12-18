@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :ephemera_field do
     field_name '1'
     member_of_vocabulary_id 'test id'

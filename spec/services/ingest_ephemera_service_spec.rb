@@ -5,18 +5,18 @@ RSpec.describe IngestEphemeraService, :admin_set do
   subject(:ingest_service) { described_class.new(folder, nil, project.title.first, change_set_persister, logger) }
   let(:folder) { Rails.root.join('spec', 'fixtures', 'lae_migration', 'folders', '0003d') }
   let(:empty_folder) { Rails.root.join('spec', 'fixtures', 'lae_migration', 'folders', '012g6') }
-  let(:project) { FactoryGirl.create_for_repository(:ephemera_project) }
+  let(:project) { FactoryBot.create_for_repository(:ephemera_project) }
   let(:logger) { Logger.new(nil) }
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
-  let(:genres) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'LAE Genres') }
-  let(:subjects) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'LAE Subjects') }
-  let(:languages) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'LAE Languages') }
-  let(:areas) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'LAE Areas') }
-  let(:postcards) { FactoryGirl.create_for_repository(:ephemera_term, label: "Postcards", member_of_vocabulary_id: genres.id) }
-  let(:museums) { FactoryGirl.create_for_repository(:ephemera_term, label: "Museums", member_of_vocabulary_id: subjects.id) }
-  let(:spanish) { FactoryGirl.create_for_repository(:ephemera_term, label: "Spanish", member_of_vocabulary_id: languages.id) }
-  let(:wonderland) { FactoryGirl.create_for_repository(:ephemera_term, label: "Wonderland", member_of_vocabulary_id: areas.id) }
-  let(:argentina) { FactoryGirl.create_for_repository(:ephemera_term, label: "Argentina", member_of_vocabulary_id: areas.id) }
+  let(:genres) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'LAE Genres') }
+  let(:subjects) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'LAE Subjects') }
+  let(:languages) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'LAE Languages') }
+  let(:areas) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'LAE Areas') }
+  let(:postcards) { FactoryBot.create_for_repository(:ephemera_term, label: "Postcards", member_of_vocabulary_id: genres.id) }
+  let(:museums) { FactoryBot.create_for_repository(:ephemera_term, label: "Museums", member_of_vocabulary_id: subjects.id) }
+  let(:spanish) { FactoryBot.create_for_repository(:ephemera_term, label: "Spanish", member_of_vocabulary_id: languages.id) }
+  let(:wonderland) { FactoryBot.create_for_repository(:ephemera_term, label: "Wonderland", member_of_vocabulary_id: areas.id) }
+  let(:argentina) { FactoryBot.create_for_repository(:ephemera_term, label: "Argentina", member_of_vocabulary_id: areas.id) }
   let(:change_set_persister) do
     PlumChangeSetPersister.new(metadata_adapter: metadata_adapter,
                                storage_adapter: storage_adapter)
@@ -136,9 +136,9 @@ RSpec.describe IngestEphemeraService, :admin_set do
   end
 
   describe "state" do
-    let(:box) { FactoryGirl.build(:ephemera_box) }
+    let(:box) { FactoryBot.build(:ephemera_box) }
     let(:box_prov) { File.new Rails.root.join('spec', 'fixtures', 'lae_migration', 'boxes', '00014', 'provMetadata') }
-    let(:folder) { FactoryGirl.build(:ephemera_folder) }
+    let(:folder) { FactoryBot.build(:ephemera_folder) }
     let(:folder_prov1) { File.new Rails.root.join('spec', 'fixtures', 'lae_migration', 'folders', '0003d', 'provMetadata') }
     let(:folder_prov2) { File.new Rails.root.join('spec', 'fixtures', 'lae_migration', 'folders', '012g6', 'provMetadata') }
     it "parses the state for a box" do

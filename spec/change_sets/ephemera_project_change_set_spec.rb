@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe EphemeraProjectChangeSet do
   subject(:change_set) { described_class.new(resource) }
-  let(:resource) { FactoryGirl.build(:ephemera_project) }
+  let(:resource) { FactoryBot.build(:ephemera_project) }
   describe '#title' do
     it 'accesses the title of an Ephemera Project' do
       expect(change_set.title).to include 'Test Project'
@@ -17,12 +17,12 @@ RSpec.describe EphemeraProjectChangeSet do
   end
 
   describe '#langugae_options' do
-    let(:resource) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_field.id]) }
-    let(:ephemera_field) { FactoryGirl.create_for_repository(:ephemera_field, member_of_vocabulary_id: [ephemera_vocabulary.id]) }
-    let(:ephemera_vocabulary) { FactoryGirl.create_for_repository(:ephemera_vocabulary) }
+    let(:resource) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_field.id]) }
+    let(:ephemera_field) { FactoryBot.create_for_repository(:ephemera_field, member_of_vocabulary_id: [ephemera_vocabulary.id]) }
+    let(:ephemera_vocabulary) { FactoryBot.create_for_repository(:ephemera_vocabulary) }
     it 'returns terms from the language field' do
-      eng = FactoryGirl.create_for_repository(:ephemera_term, label: 'English', member_of_vocabulary_id: [ephemera_vocabulary.id])
-      por = FactoryGirl.create_for_repository(:ephemera_term, label: 'Portuguese', member_of_vocabulary_id: [ephemera_vocabulary.id])
+      eng = FactoryBot.create_for_repository(:ephemera_term, label: 'English', member_of_vocabulary_id: [ephemera_vocabulary.id])
+      por = FactoryBot.create_for_repository(:ephemera_term, label: 'Portuguese', member_of_vocabulary_id: [ephemera_vocabulary.id])
       ids = change_set.language_options.map(&:id)
       expect(ids.size).to eq 2
       expect(ids).to include eng.id
@@ -31,8 +31,8 @@ RSpec.describe EphemeraProjectChangeSet do
   end
 
   describe '#member_ids' do
-    let(:ephemera_box) { FactoryGirl.create_for_repository(:ephemera_box) }
-    let(:resource) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id]) }
+    let(:ephemera_box) { FactoryBot.create_for_repository(:ephemera_box) }
+    let(:resource) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id]) }
     before do
       ephemera_box
     end
@@ -48,7 +48,7 @@ RSpec.describe EphemeraProjectChangeSet do
   end
 
   describe '#validate' do
-    let(:existing_resource) { FactoryGirl.create_for_repository(:ephemera_project, slug: 'test_project-1234') }
+    let(:existing_resource) { FactoryBot.create_for_repository(:ephemera_project, slug: 'test_project-1234') }
     before do
       existing_resource
     end

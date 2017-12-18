@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe EphemeraFolderChangeSet do
-  let(:change_set) { described_class.new(FactoryGirl.build(:ephemera_folder)) }
+  let(:change_set) { described_class.new(FactoryBot.build(:ephemera_folder)) }
 
   it_behaves_like "an ephemera folder change set", described_class
 
@@ -25,16 +25,16 @@ RSpec.describe EphemeraFolderChangeSet do
   end
 
   describe "#subject" do
-    let(:change_set) { described_class.new(FactoryGirl.build(:ephemera_folder, subject: nil)) }
+    let(:change_set) { described_class.new(FactoryBot.build(:ephemera_folder, subject: nil)) }
     it "is required" do
       expect(change_set.required?(:subject)).to eq true
       expect(change_set).not_to be_valid
-      expect(described_class.new(FactoryGirl.build(:ephemera_folder, subject: "test"))).to be_valid
+      expect(described_class.new(FactoryBot.build(:ephemera_folder, subject: "test"))).to be_valid
     end
   end
 
   describe "#visibility" do
-    let(:change_set) { described_class.new(FactoryGirl.build(:ephemera_folder, visibility: nil)) }
+    let(:change_set) { described_class.new(FactoryBot.build(:ephemera_folder, visibility: nil)) }
     it "has a default of open" do
       change_set.prepopulate!
       expect(change_set.visibility).to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC

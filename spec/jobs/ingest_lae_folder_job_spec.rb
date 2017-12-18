@@ -7,8 +7,8 @@ RSpec.describe IngestLaeFolderJob do
       let(:barcode1) { '32101075851400' }
       let(:barcode2) { '32101075851418' }
       let(:lae_dir) { Rails.root.join('spec', 'fixtures', 'lae') }
-      let(:folder1) { FactoryGirl.create_for_repository(:ephemera_folder, barcode: [barcode1]) }
-      let(:folder2) { FactoryGirl.create_for_repository(:ephemera_folder, barcode: [barcode2]) }
+      let(:folder1) { FactoryBot.create_for_repository(:ephemera_folder, barcode: [barcode1]) }
+      let(:folder2) { FactoryBot.create_for_repository(:ephemera_folder, barcode: [barcode2]) }
       let(:query_service) { metadata_adapter.query_service }
       let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
       before do

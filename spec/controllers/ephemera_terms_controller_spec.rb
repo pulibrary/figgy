@@ -15,10 +15,10 @@ RSpec.describe EphemeraTermsController do
     it_behaves_like "an access controlled new request"
 
     context "when they have permission" do
-      let(:user) { FactoryGirl.create(:admin) }
+      let(:user) { FactoryBot.create(:admin) }
       render_views
       it "has a form for creating ephemera vocabularies" do
-        FactoryGirl.create_for_repository(:ephemera_term)
+        FactoryBot.create_for_repository(:ephemera_term)
 
         get :new
         expect(response.body).to have_field "Label"
@@ -28,7 +28,7 @@ RSpec.describe EphemeraTermsController do
   end
 
   describe "create" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do
       {
         label: ['test label'],
@@ -85,13 +85,13 @@ RSpec.describe EphemeraTermsController do
   end
 
   describe "destroy" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :ephemera_term }
       it_behaves_like "an access controlled destroy request"
     end
     it "can delete a book" do
-      ephemera_term = FactoryGirl.create_for_repository(:ephemera_term)
+      ephemera_term = FactoryBot.create_for_repository(:ephemera_term)
       delete :destroy, params: { id: ephemera_term.id.to_s }
 
       expect(response).to redirect_to root_path
@@ -100,7 +100,7 @@ RSpec.describe EphemeraTermsController do
   end
 
   describe "edit" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :ephemera_term }
       it_behaves_like "an access controlled edit request"
@@ -113,7 +113,7 @@ RSpec.describe EphemeraTermsController do
     context "when it does exist" do
       render_views
       it "renders a form" do
-        ephemera_term = FactoryGirl.create_for_repository(:ephemera_term)
+        ephemera_term = FactoryBot.create_for_repository(:ephemera_term)
         get :edit, params: { id: ephemera_term.id.to_s }
 
         expect(response.body).to have_field "Label", with: 'test term'
@@ -123,7 +123,7 @@ RSpec.describe EphemeraTermsController do
   end
 
   describe "update" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :ephemera_term }
       let(:extra_params) { { ephemera_term: { label: ["test label"], member_of_vocabulary_id: ["test id"] } } }
@@ -136,7 +136,7 @@ RSpec.describe EphemeraTermsController do
     end
     context "when it does exist" do
       it "saves it and redirects" do
-        ephemera_term = FactoryGirl.create_for_repository(:ephemera_term)
+        ephemera_term = FactoryBot.create_for_repository(:ephemera_term)
         patch :update, params: { id: ephemera_term.id.to_s, ephemera_term: { label: ["test label"], member_of_vocabulary_id: ["test id"] } }
 
         expect(response).to be_redirect
@@ -147,7 +147,7 @@ RSpec.describe EphemeraTermsController do
         expect(reloaded.label).to eq ["test label"]
       end
       it "renders the form if it fails validations" do
-        ephemera_term = FactoryGirl.create_for_repository(:ephemera_term)
+        ephemera_term = FactoryBot.create_for_repository(:ephemera_term)
         patch :update, params: { id: ephemera_term.id.to_s, ephemera_term: { label: nil, member_of_vocabulary_id: nil } }
 
         expect(response).to render_template "valhalla/base/edit"
@@ -157,12 +157,12 @@ RSpec.describe EphemeraTermsController do
 
   describe "index" do
     context "when they have permission" do
-      let(:user) { FactoryGirl.create(:admin) }
-      let(:vocab) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'test parent vocabulary') }
+      let(:user) { FactoryBot.create(:admin) }
+      let(:vocab) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'test parent vocabulary') }
       render_views
       it "has lists all ephemera terms" do
         adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
-        res = FactoryGirl.build(:ephemera_term, label: 'test term', member_of_vocabulary_id: vocab.id)
+        res = FactoryBot.build(:ephemera_term, label: 'test term', member_of_vocabulary_id: vocab.id)
         res.member_of_vocabulary_id = vocab.id
         term = adapter.persister.save(resource: res)
 

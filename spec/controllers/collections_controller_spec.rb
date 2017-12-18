@@ -10,7 +10,7 @@ RSpec.describe CollectionsController do
     sign_in user if user
   end
   context "when an admin" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     describe "POST /collections" do
       it "creates a collection" do
         post :create, params: { collection: { title: 'test', slug: 'slug', visibility: 'open', description: '' } }
@@ -36,7 +36,7 @@ RSpec.describe CollectionsController do
     describe "GET /collections/edit" do
       render_views
       it "renders an existing record" do
-        collection = persister.save(resource: FactoryGirl.build(:collection))
+        collection = persister.save(resource: FactoryBot.build(:collection))
 
         get :edit, params: { id: collection.id.to_s }
 
@@ -46,7 +46,7 @@ RSpec.describe CollectionsController do
 
     describe "PATCH /collections/:id" do
       it "updates an existing record" do
-        collection = persister.save(resource: FactoryGirl.build(:collection))
+        collection = persister.save(resource: FactoryBot.build(:collection))
 
         patch :update, params: { id: collection.id.to_s, collection: { title: 'New' } }
         reloaded = query_service.find_by(id: collection.id)
@@ -57,8 +57,8 @@ RSpec.describe CollectionsController do
 
     describe "GET /concern/collections/:id/manifest" do
       it "returns a IIIF manifest for a collection" do
-        collection = FactoryGirl.create_for_repository(:collection)
-        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id)
+        collection = FactoryBot.create_for_repository(:collection)
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id)
 
         get :manifest, params: { id: collection.id.to_s, format: :json }
         manifest_response = MultiJson.load(response.body, symbolize_keys: true)
@@ -70,7 +70,7 @@ RSpec.describe CollectionsController do
     end
 
     describe "GET /iiif/collections" do
-      let(:collection) { FactoryGirl.create_for_repository(:collection) }
+      let(:collection) { FactoryBot.create_for_repository(:collection) }
       before do
         collection
       end
@@ -87,12 +87,12 @@ RSpec.describe CollectionsController do
     end
 
     context 'with ephemera projects' do
-      let(:collection) { FactoryGirl.create_for_repository(:collection) }
-      let(:collection2) { FactoryGirl.create_for_repository(:collection) }
-      let(:ephemera_box1) { FactoryGirl.create_for_repository(:ephemera_box, member_of_collection_ids: [collection.id]) }
-      let(:ephemera_box2) { FactoryGirl.create_for_repository(:ephemera_box, member_of_collection_ids: [collection2.id]) }
-      let(:ephemera_project1) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_box1.id]) }
-      let(:ephemera_project2) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [ephemera_box2.id]) }
+      let(:collection) { FactoryBot.create_for_repository(:collection) }
+      let(:collection2) { FactoryBot.create_for_repository(:collection) }
+      let(:ephemera_box1) { FactoryBot.create_for_repository(:ephemera_box, member_of_collection_ids: [collection.id]) }
+      let(:ephemera_box2) { FactoryBot.create_for_repository(:ephemera_box, member_of_collection_ids: [collection2.id]) }
+      let(:ephemera_project1) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_box1.id]) }
+      let(:ephemera_project2) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_box2.id]) }
       before do
         collection
         collection2

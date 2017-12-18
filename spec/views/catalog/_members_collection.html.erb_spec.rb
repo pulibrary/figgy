@@ -3,16 +3,16 @@ require 'rails_helper'
 
 RSpec.describe "catalog/_members_collection.html.erb" do
   context "when it's a collection with members" do
-    let(:collection) { FactoryGirl.create_for_repository(:collection) }
+    let(:collection) { FactoryBot.create_for_repository(:collection) }
     let(:scanned_resource1) do
-      FactoryGirl.create_for_repository(
+      FactoryBot.create_for_repository(
         :scanned_resource,
         title: ['First Member'],
         member_of_collection_ids: [collection.id]
       )
     end
     let(:scanned_resource2) do
-      FactoryGirl.create_for_repository(
+      FactoryBot.create_for_repository(
         :scanned_resource,
         title: ['Second Member'],
         member_of_collection_ids: [collection.id]

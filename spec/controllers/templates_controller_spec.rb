@@ -2,21 +2,21 @@
 require 'rails_helper'
 
 RSpec.describe TemplatesController do
-  let(:user) { FactoryGirl.create(:ephemera_editor) }
+  let(:user) { FactoryBot.create(:ephemera_editor) }
   describe "#new" do
     before do
       sign_in user if user
     end
     render_views
     it "renders a form for the given model with no required fields" do
-      vocabulary = FactoryGirl.create_for_repository(:ephemera_vocabulary)
-      subject_vocabulary = FactoryGirl.create_for_repository(:ephemera_vocabulary, label: "Subjects")
-      toy_vocabulary = FactoryGirl.create_for_repository(:ephemera_vocabulary, label: "Toys", member_of_vocabulary_id: subject_vocabulary.id)
-      FactoryGirl.create_for_repository(:ephemera_term, member_of_vocabulary_id: toy_vocabulary.id, label: "Trains")
-      field = FactoryGirl.create_for_repository(:ephemera_field, field_name: '5', member_of_vocabulary_id: subject_vocabulary.id)
-      FactoryGirl.create_for_repository(:ephemera_term, member_of_vocabulary_id: vocabulary.id, label: "Test")
-      field2 = FactoryGirl.create_for_repository(:ephemera_field, field_name: '1', member_of_vocabulary_id: vocabulary.id)
-      project = FactoryGirl.create_for_repository(:ephemera_project, member_ids: [field.id, field2.id])
+      vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary)
+      subject_vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary, label: "Subjects")
+      toy_vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary, label: "Toys", member_of_vocabulary_id: subject_vocabulary.id)
+      FactoryBot.create_for_repository(:ephemera_term, member_of_vocabulary_id: toy_vocabulary.id, label: "Trains")
+      field = FactoryBot.create_for_repository(:ephemera_field, field_name: '5', member_of_vocabulary_id: subject_vocabulary.id)
+      FactoryBot.create_for_repository(:ephemera_term, member_of_vocabulary_id: vocabulary.id, label: "Test")
+      field2 = FactoryBot.create_for_repository(:ephemera_field, field_name: '1', member_of_vocabulary_id: vocabulary.id)
+      project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [field.id, field2.id])
 
       get :new, params: { model_class: "EphemeraFolder", ephemera_project_id: project.id.to_s }
 
@@ -27,11 +27,11 @@ RSpec.describe TemplatesController do
   end
   describe "#destroy" do
     before do
-      sign_in FactoryGirl.create(:ephemera_editor)
+      sign_in FactoryBot.create(:ephemera_editor)
     end
     it "deletes a template" do
-      project = FactoryGirl.create_for_repository(:ephemera_project)
-      template = FactoryGirl.create_for_repository(:template)
+      project = FactoryBot.create_for_repository(:ephemera_project)
+      template = FactoryBot.create_for_repository(:template)
 
       delete :destroy, params: { ephemera_project_id: project.id.to_s, id: template.id.to_s }
 
@@ -44,7 +44,7 @@ RSpec.describe TemplatesController do
       sign_in user if user
     end
     it "can create a template with a child set of properties" do
-      project = FactoryGirl.create_for_repository(:ephemera_project)
+      project = FactoryBot.create_for_repository(:ephemera_project)
       post :create, params: {
         ephemera_project_id: project.id.to_s,
         template:
@@ -63,7 +63,7 @@ RSpec.describe TemplatesController do
       expect(template.parent_id).to eq project.id
     end
     it "re-renders the form if no title is added" do
-      project = FactoryGirl.create_for_repository(:ephemera_project)
+      project = FactoryBot.create_for_repository(:ephemera_project)
       post :create, params: {
         ephemera_project_id: project.id.to_s,
         template:

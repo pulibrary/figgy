@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe BoxlessEphemeraFolderChangeSet do
-  subject(:change_set) { described_class.new(FactoryGirl.build(:ephemera_folder)) }
+  subject(:change_set) { described_class.new(FactoryBot.build(:ephemera_folder)) }
 
   it_behaves_like "an ephemera folder change set", described_class
 

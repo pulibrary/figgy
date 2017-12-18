@@ -10,7 +10,7 @@ RSpec.describe IdentifierService do
 
   context "when there is an existing identifier" do
     let(:metadata) { base_metadata.merge(target: "https://pulsearch.princeton.edu/catalog/123456#{obj.id}#view") }
-    let(:obj) { FactoryGirl.build :scanned_resource, source_metadata_identifier: '123456', identifier: ark }
+    let(:obj) { FactoryBot.build :scanned_resource, source_metadata_identifier: '123456', identifier: ark }
 
     before do
       stub_bibdata(bib_id: '123456')
@@ -36,7 +36,7 @@ RSpec.describe IdentifierService do
     context "with a bibdata source_metadata_identifier" do
       let(:bib) { '123456' }
       let(:metadata) { base_metadata.merge(target: "https://pulsearch.princeton.edu/catalog/#{bib}#view") }
-      let(:obj) { FactoryGirl.build :scanned_resource, source_metadata_identifier: bib }
+      let(:obj) { FactoryBot.build :scanned_resource, source_metadata_identifier: bib }
 
       before do
         stub_bibdata(bib_id: '123456')
@@ -51,7 +51,7 @@ RSpec.describe IdentifierService do
     context "with a pulfa source_metadata_identifier" do
       let(:cid) { 'MC016/c9616' }
       let(:metadata) { base_metadata.merge(target: "http://findingaids.princeton.edu/collections/#{cid}") }
-      let(:obj) { FactoryGirl.build :scanned_resource, source_metadata_identifier: cid }
+      let(:obj) { FactoryBot.build :scanned_resource, source_metadata_identifier: cid }
 
       before do
         stub_pulfa(pulfa_id: 'MC016/c9616')
@@ -65,7 +65,7 @@ RSpec.describe IdentifierService do
 
     context "without a source_metadata_identifier" do
       let(:metadata) { base_metadata.merge(target: "http://www.example.com/concern/scanned_resources/#{obj.id}") }
-      let(:obj) { FactoryGirl.create :scanned_resource, id: '1234567', source_metadata_identifier: nil }
+      let(:obj) { FactoryBot.create :scanned_resource, id: '1234567', source_metadata_identifier: nil }
       it "links to OrangeLight" do
         described_class.mint_or_update(resource: obj)
         expect(minter).to have_received(:mint).with(metadata)
@@ -75,7 +75,7 @@ RSpec.describe IdentifierService do
 
   context "integration test" do
     let(:metadata) { base_metadata.merge(target: "http://example.com/concern/scanned_resources/#{obj.id}") }
-    let(:obj) { FactoryGirl.create :scanned_resource, id: '1234567', source_metadata_identifier: nil }
+    let(:obj) { FactoryBot.create :scanned_resource, id: '1234567', source_metadata_identifier: nil }
     let(:shoulder) { '99999/fk4' }
     let(:blade) { '123456' }
 

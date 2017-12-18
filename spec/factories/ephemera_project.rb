@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :ephemera_project do
     title 'Test Project'
     slug 'test_project-1234'

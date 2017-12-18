@@ -173,8 +173,8 @@ RSpec.describe ScannedResourceChangeSet do
         ]
       }
     end
-    let(:resource1) { FactoryGirl.create_for_repository(:file_set) }
-    let(:resource2) { FactoryGirl.create_for_repository(:file_set) }
+    let(:resource1) { FactoryBot.create_for_repository(:file_set) }
+    let(:resource2) { FactoryBot.create_for_repository(:file_set) }
     it "can set a whole structure all at once" do
       change_set.prepopulate!
       expect(change_set.validate(logical_structure: [structure])).to eq true

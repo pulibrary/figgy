@@ -1,6 +1,6 @@
 RSpec.shared_examples "an ephemera folder change set" do |change_set_class|
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
-  let(:change_set) { change_set_class.new(FactoryGirl.build(:ephemera_folder)) }
+  let(:change_set) { change_set_class.new(FactoryBot.build(:ephemera_folder)) }
   describe "#visibility" do
     it "exposes the visibility" do
       expect(change_set.visibility).to include Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
@@ -21,7 +21,7 @@ RSpec.shared_examples "an ephemera folder change set" do |change_set_class|
   describe "#provenance" do
     it "pre-populates as single-value" do
       change_set.prepopulate!
-      expect(change_set.provenance).to eq FactoryGirl.build(:ephemera_folder).provenance.first
+      expect(change_set.provenance).to eq FactoryBot.build(:ephemera_folder).provenance.first
     end
   end
 
@@ -59,7 +59,7 @@ RSpec.shared_examples "an ephemera folder change set" do |change_set_class|
     end
     context "when there's a date range set" do
       it "sets it single-valued appropriately" do
-        change_set = described_class.new(FactoryGirl.build(:ephemera_folder, date_range: DateRange.new(start: "2017", end: "2018")))
+        change_set = described_class.new(FactoryBot.build(:ephemera_folder, date_range: DateRange.new(start: "2017", end: "2018")))
         change_set.prepopulate!
         expect(change_set.date_range_form.start).to eq "2017"
       end
@@ -68,19 +68,19 @@ RSpec.shared_examples "an ephemera folder change set" do |change_set_class|
 
   context 'with controlled vocabulary terms' do
     subject(:change_set) do
-      described_class.new(FactoryGirl.build(:ephemera_folder))
+      described_class.new(FactoryBot.build(:ephemera_folder))
     end
 
     let(:term1) do
-      res = FactoryGirl.create_for_repository(:ephemera_term)
+      res = FactoryBot.create_for_repository(:ephemera_term)
       adapter.persister.save(resource: res)
     end
     let(:term2) do
-      res = FactoryGirl.create_for_repository(:ephemera_term)
+      res = FactoryBot.create_for_repository(:ephemera_term)
       adapter.persister.save(resource: res)
     end
     let(:term3) do
-      res = FactoryGirl.create_for_repository(:ephemera_term)
+      res = FactoryBot.create_for_repository(:ephemera_term)
       adapter.persister.save(resource: res)
     end
 

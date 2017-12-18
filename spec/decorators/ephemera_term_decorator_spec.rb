@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe EphemeraTermDecorator do
   subject(:decorator) { described_class.new(resource) }
-  let(:resource) { FactoryGirl.build(:ephemera_term) }
+  let(:resource) { FactoryBot.build(:ephemera_term) }
   describe "decoration" do
     it "decorates an EphemeraTerm" do
       expect(resource.decorate).to be_a described_class
@@ -22,10 +22,10 @@ RSpec.describe EphemeraTermDecorator do
     expect(resource.decorate.to_s).to eq resource.decorate.label
   end
   context 'when a child of a vocabulary' do
-    let(:vocab) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'test parent vocabulary') }
+    let(:vocab) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'test parent vocabulary') }
     let(:resource) do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
-      res = FactoryGirl.build(:ephemera_term)
+      res = FactoryBot.build(:ephemera_term)
       res.member_of_vocabulary_id = vocab.id
       adapter.persister.save(resource: res)
     end

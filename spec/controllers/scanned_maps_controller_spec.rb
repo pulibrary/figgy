@@ -16,7 +16,7 @@ RSpec.describe ScannedMapsController do
 
     context "when not logged in but an auth token is given" do
       it "renders the full manifest" do
-        resource = FactoryGirl.create_for_repository(:complete_campus_only_scanned_map)
+        resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_map)
         authorization_token = AuthToken.create!(group: ["admin"], label: "Administration Token")
         get :manifest, params: { id: resource.id, format: :json, auth_token: authorization_token.token }
 
@@ -25,11 +25,11 @@ RSpec.describe ScannedMapsController do
       end
     end
     context "when they have permission" do
-      let(:user) { FactoryGirl.create(:admin) }
+      let(:user) { FactoryBot.create(:admin) }
       render_views
       it "has a form for creating map images" do
-        collection = FactoryGirl.create_for_repository(:collection)
-        parent = FactoryGirl.create_for_repository(:scanned_map)
+        collection = FactoryBot.create_for_repository(:collection)
+        parent = FactoryBot.create_for_repository(:scanned_map)
 
         get :new, params: { parent_id: parent.id.to_s }
         expect(response.body).to have_field "Title"
@@ -51,7 +51,7 @@ RSpec.describe ScannedMapsController do
   end
 
   describe "create" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do
       {
         title: ['Title 1', 'Title 2'],
@@ -87,7 +87,7 @@ RSpec.describe ScannedMapsController do
           member_of_collection_ids: [collection.id.to_s]
         }
       end
-      let(:collection) { FactoryGirl.create_for_repository(:collection) }
+      let(:collection) { FactoryBot.create_for_repository(:collection) }
       it "works" do
         post :create, params: { scanned_map: valid_params }
 
@@ -129,13 +129,13 @@ RSpec.describe ScannedMapsController do
   end
 
   describe "destroy" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :scanned_map }
       it_behaves_like "an access controlled destroy request"
     end
     it "can delete a book" do
-      scanned_map = FactoryGirl.create_for_repository(:scanned_map)
+      scanned_map = FactoryBot.create_for_repository(:scanned_map)
       delete :destroy, params: { id: scanned_map.id.to_s }
 
       expect(response).to redirect_to root_path
@@ -144,7 +144,7 @@ RSpec.describe ScannedMapsController do
   end
 
   describe "edit" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :scanned_map }
       it_behaves_like "an access controlled edit request"
@@ -157,7 +157,7 @@ RSpec.describe ScannedMapsController do
     context "when it does exist" do
       render_views
       it "renders a form" do
-        scanned_map = FactoryGirl.create_for_repository(:scanned_map)
+        scanned_map = FactoryBot.create_for_repository(:scanned_map)
         get :edit, params: { id: scanned_map.id.to_s }
 
         expect(response.body).to have_field "Title", with: scanned_map.title.first
@@ -167,7 +167,7 @@ RSpec.describe ScannedMapsController do
   end
 
   describe "update" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :scanned_map }
       let(:extra_params) { { scanned_map: { title: ["Two"] } } }
@@ -180,7 +180,7 @@ RSpec.describe ScannedMapsController do
     end
     context "when it does exist" do
       it "saves it and redirects" do
-        scanned_map = FactoryGirl.create_for_repository(:scanned_map)
+        scanned_map = FactoryBot.create_for_repository(:scanned_map)
         patch :update, params: { id: scanned_map.id.to_s, scanned_map: { title: ["Two"] } }
 
         expect(response).to be_redirect
@@ -191,7 +191,7 @@ RSpec.describe ScannedMapsController do
         expect(reloaded.title).to eq ["Two"]
       end
       it "renders the form if it fails validations" do
-        scanned_map = FactoryGirl.create_for_repository(:scanned_map)
+        scanned_map = FactoryBot.create_for_repository(:scanned_map)
         patch :update, params: { id: scanned_map.id.to_s, scanned_map: { title: [""] } }
 
         expect(response).to render_template "valhalla/base/edit"
@@ -201,11 +201,11 @@ RSpec.describe ScannedMapsController do
   end
 
   describe "structure" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "when not logged in" do
       let(:user) { nil }
       it "redirects to login or root" do
-        scanned_map = FactoryGirl.create_for_repository(:scanned_map)
+        scanned_map = FactoryBot.create_for_repository(:scanned_map)
 
         get :structure, params: { id: scanned_map.id.to_s }
         expect(response).to be_redirect
@@ -219,8 +219,8 @@ RSpec.describe ScannedMapsController do
     context "when it does exist" do
       render_views
       it "renders a structure editor form" do
-        file_set = FactoryGirl.create_for_repository(:file_set)
-        scanned_map = FactoryGirl.create_for_repository(
+        file_set = FactoryBot.create_for_repository(:file_set)
+        scanned_map = FactoryBot.create_for_repository(
           :scanned_map,
           member_ids: file_set.id,
           logical_structure: [
@@ -242,14 +242,14 @@ RSpec.describe ScannedMapsController do
   end
 
   describe "GET /scanned_maps/:id/file_manager" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
 
     context "when an admin and with an image file" do
       let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: 'image/tiff') }
 
       it "sets the record and children variables" do
-        child = FactoryGirl.create_for_repository(:file_set, file_metadata: [file_metadata])
-        parent = FactoryGirl.create_for_repository(:scanned_map, member_ids: child.id)
+        child = FactoryBot.create_for_repository(:file_set, file_metadata: [file_metadata])
+        parent = FactoryBot.create_for_repository(:scanned_map, member_ids: child.id)
         get :file_manager, params: { id: parent.id }
 
         expect(assigns(:change_set).id).to eq parent.id
@@ -261,8 +261,8 @@ RSpec.describe ScannedMapsController do
       let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: 'application/xml; schema=fgdc') }
 
       it "sets the record and metadata children variables" do
-        child = FactoryGirl.create_for_repository(:file_set, file_metadata: [file_metadata])
-        parent = FactoryGirl.create_for_repository(:scanned_map, member_ids: child.id)
+        child = FactoryBot.create_for_repository(:file_set, file_metadata: [file_metadata])
+        parent = FactoryBot.create_for_repository(:scanned_map, member_ids: child.id)
         get :file_manager, params: { id: parent.id }
 
         expect(assigns(:change_set).id).to eq parent.id
@@ -274,7 +274,7 @@ RSpec.describe ScannedMapsController do
   describe "GET /concern/scanned_maps/:id/manifest" do
     let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
     it "returns a IIIF manifest for a resource with a file" do
-      scanned_map = FactoryGirl.create_for_repository(:scanned_map, files: [file])
+      scanned_map = FactoryBot.create_for_repository(:scanned_map, files: [file])
 
       get :manifest, params: { id: scanned_map.id.to_s, format: :json }
       manifest_response = MultiJson.load(response.body, symbolize_keys: true)
@@ -288,12 +288,12 @@ RSpec.describe ScannedMapsController do
   # Tests functionality defined in `app/controllers/concerns/geo_resource_controller.rb`
   #   Acts as a 'master spec' in this regard
   describe "PUT /concern/scanned_maps/:id/extract_metadata/:file_set_id" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     let(:file) { fixture_file_upload('files/geo_metadata/fgdc.xml', 'application/xml') }
     let(:tika_output) { tika_xml_output }
 
     it "extracts fgdc metadata into scanned map" do
-      scanned_map = FactoryGirl.create_for_repository(:scanned_map, files: [file])
+      scanned_map = FactoryBot.create_for_repository(:scanned_map, files: [file])
 
       put :extract_metadata, params: { id: scanned_map.id.to_s, file_set_id: scanned_map.member_ids.first.to_s }
       expect(query_service.find_by(id: scanned_map.id).title).to eq ["China census data by county, 2000-2010"]

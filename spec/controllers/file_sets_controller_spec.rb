@@ -5,7 +5,7 @@ include ActionDispatch::TestProcess
 RSpec.describe FileSetsController do
   let(:persister) { Valkyrie.config.metadata_adapter.persister }
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
-  let(:user) { FactoryGirl.create(:admin) }
+  let(:user) { FactoryBot.create(:admin) }
   let(:manifest_helper_class) { class_double(ManifestBuilder::ManifestHelper).as_stubbed_const(transfer_nested_constants: true) }
   let(:manifest_helper) { instance_double(ManifestBuilder::ManifestHelper) }
   let(:rabbit_connection) { instance_double(MessagingClient, publish: true) }
@@ -17,7 +17,7 @@ RSpec.describe FileSetsController do
   end
   describe "PATCH /file_sets/id" do
     it "can update a file set" do
-      file_set = FactoryGirl.create_for_repository(:file_set)
+      file_set = FactoryBot.create_for_repository(:file_set)
       patch :update, params: { id: file_set.id.to_s, file_set: { title: ["Second"] } }
 
       file_set = query_service.find_by(id: file_set.id)
@@ -33,7 +33,7 @@ RSpec.describe FileSetsController do
     context 'with replacement master and derivative files' do
       let(:master_file) { fixture_file_upload('files/example.tif', 'image/tiff') }
       let(:derivative_file) { fixture_file_upload('files/example.jp2', 'image/jp2') }
-      let(:scanned_resource) { FactoryGirl.create_for_repository(:scanned_resource, title: "Test Title", files: [master_file]) }
+      let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, title: "Test Title", files: [master_file]) }
       let(:file_set) { Valkyrie.config.metadata_adapter.query_service.find_by(id: scanned_resource.member_ids.first) }
 
       it 'uploads master and derivative files to separate locations' do
@@ -63,7 +63,7 @@ RSpec.describe FileSetsController do
   describe "GET /concern/file_sets/:id/edit" do
     render_views
     it "renders" do
-      file_set = FactoryGirl.create_for_repository(:file_set)
+      file_set = FactoryBot.create_for_repository(:file_set)
 
       expect { get :edit, params: { id: file_set.id.to_s } }.not_to raise_error
     end
@@ -73,7 +73,7 @@ RSpec.describe FileSetsController do
     context 'with a derivative service for images in the TIFF' do
       let(:create_derivatives_class) { class_double(CreateDerivativesJob).as_stubbed_const(transfer_nested_constants: true) }
       let(:original_file) { instance_double(FileMetadata) }
-      let(:file_set) { FactoryGirl.create_for_repository(:file_set) }
+      let(:file_set) { FactoryBot.create_for_repository(:file_set) }
       before do
         allow(original_file).to receive(:mime_type).and_return('image/tiff')
         allow(file_set).to receive(:original_file).and_return(original_file)
@@ -92,8 +92,8 @@ RSpec.describe FileSetsController do
   describe "DELETE /concern/file_sets/id" do
     render_views
     it "deletes a file set" do
-      file_set = FactoryGirl.create_for_repository(:file_set)
-      FactoryGirl.create_for_repository(:scanned_resource, member_ids: [file_set.id])
+      file_set = FactoryBot.create_for_repository(:file_set)
+      FactoryBot.create_for_repository(:scanned_resource, member_ids: [file_set.id])
 
       expect { delete :destroy, params: { id: file_set.id.to_s } }.not_to raise_error
     end

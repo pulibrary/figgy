@@ -2,11 +2,11 @@
 require 'rails_helper'
 
 RSpec.feature "File Manager", js: true do
-  let(:user) { FactoryGirl.create(:admin) }
+  let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
-  let(:file_set) { FactoryGirl.create_for_repository(:file_set) }
+  let(:file_set) { FactoryBot.create_for_repository(:file_set) }
   let(:resource) do
-    res = FactoryGirl.create_for_repository(:scanned_resource)
+    res = FactoryBot.create_for_repository(:scanned_resource)
     res.member_ids = [file_set.id]
     adapter.persister.save(resource: res)
   end
@@ -76,7 +76,7 @@ RSpec.feature "File Manager", js: true do
     let(:original_file) { FileMetadata.new(use: Valkyrie::Vocab::PCDMUse.OriginalFile, mime_type: 'application/xml; schema=fgdc') }
     let(:extractor) { instance_double(GeoMetadataExtractor) }
     let(:resource) do
-      res = FactoryGirl.create_for_repository(:scanned_map)
+      res = FactoryBot.create_for_repository(:scanned_map)
       res.member_ids = [file_set.id]
       adapter.persister.save(resource: res)
     end

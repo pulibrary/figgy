@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe IngestMETSJob do
   describe "integration test" do
-    let(:user) { FactoryGirl.build(:admin) }
+    let(:user) { FactoryBot.build(:admin) }
     let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-4612596.mets") }
     let(:tiff_file) { Rails.root.join("spec", "fixtures", "files", "example.tif") }
     let(:mime_type) { 'image/tiff' }

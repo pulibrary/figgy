@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe EphemeraFolderDecorator do
   subject(:decorator) { described_class.new(resource) }
-  let(:resource) { FactoryGirl.build(:ephemera_folder) }
+  let(:resource) { FactoryBot.build(:ephemera_folder) }
 
   describe "decoration" do
     it "decorates an EphemeraFolder" do
@@ -31,14 +31,14 @@ RSpec.describe EphemeraFolderDecorator do
   end
 
   context 'with controlled vocabulary terms' do
-    let(:term) { FactoryGirl.create_for_repository(:ephemera_term) }
-    let(:resource) { FactoryGirl.build(:ephemera_folder, geographic_origin: term.id) }
+    let(:term) { FactoryBot.create_for_repository(:ephemera_term) }
+    let(:resource) { FactoryBot.build(:ephemera_folder, geographic_origin: term.id) }
     it 'exposes values for the geographic origin as controlled terms' do
       expect(resource.decorate.geographic_origin).to be_a EphemeraTerm
       expect(resource.decorate.geographic_origin.id).to eq term.id
     end
     context 'which have been deleted' do
-      let(:resource) { FactoryGirl.build(:ephemera_folder, geographic_origin: Valkyrie::ID.new('no-exist')) }
+      let(:resource) { FactoryBot.build(:ephemera_folder, geographic_origin: Valkyrie::ID.new('no-exist')) }
 
       it 'exposes values for the geographic origin as controlled terms' do
         allow(Rails.logger).to receive(:warn).with("Failed to find the resource no-exist")
@@ -48,11 +48,11 @@ RSpec.describe EphemeraFolderDecorator do
   end
 
   context 'with subjects and categories' do
-    let(:category) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'Art and Culture') }
-    let(:subject_term) { FactoryGirl.create_for_repository(:ephemera_term, label: 'Architecture', member_of_vocabulary_id: category.id) }
-    let(:category2) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: 'Economics') }
-    let(:subject_term2) { FactoryGirl.create_for_repository(:ephemera_term, label: 'Economics', member_of_vocabulary_id: category2.id) }
-    let(:resource) { FactoryGirl.build(:ephemera_folder, subject: [subject_term, subject_term2]) }
+    let(:category) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'Art and Culture') }
+    let(:subject_term) { FactoryBot.create_for_repository(:ephemera_term, label: 'Architecture', member_of_vocabulary_id: category.id) }
+    let(:category2) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'Economics') }
+    let(:subject_term2) { FactoryBot.create_for_repository(:ephemera_term, label: 'Economics', member_of_vocabulary_id: category2.id) }
+    let(:resource) { FactoryBot.build(:ephemera_folder, subject: [subject_term, subject_term2]) }
     it 'provides links to facets' do
       expect(resource.decorate.rendered_subject).to contain_exactly(
         "<a href=\"/?f%5Bdisplay_subject_ssim%5D%5B%5D=Art+and+Culture\">Art and Culture</a> -- <a href=\"/?f%5Bdisplay_subject_ssim%5D%5B%5D=Architecture\">Architecture</a>",
@@ -62,8 +62,8 @@ RSpec.describe EphemeraFolderDecorator do
   end
 
   context 'with collections' do
-    let(:collection) { FactoryGirl.create_for_repository(:collection) }
-    let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, member_of_collection_ids: [collection.id]) }
+    let(:collection) { FactoryBot.create_for_repository(:collection) }
+    let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, member_of_collection_ids: [collection.id]) }
     it 'retrieves all parent collections' do
       expect(resource.decorate.collections.to_a).not_to be_empty
       expect(resource.decorate.collections.to_a.first).to be_a Collection
@@ -73,10 +73,10 @@ RSpec.describe EphemeraFolderDecorator do
   context 'with file sets' do
     let(:file_set) do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
-      res = FactoryGirl.build(:file_set)
+      res = FactoryBot.build(:file_set)
       adapter.persister.save(resource: res)
     end
-    let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder, member_ids: [file_set.id]) }
+    let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, member_ids: [file_set.id]) }
     it 'retrieves members' do
       expect(resource.decorate.members.to_a).not_to be_empty
       expect(resource.decorate.members.to_a.first).to be_a FileSet
@@ -84,18 +84,18 @@ RSpec.describe EphemeraFolderDecorator do
   end
 
   context "within a box" do
-    let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder) }
+    let(:resource) { FactoryBot.create_for_repository(:ephemera_folder) }
     it "can return the box it's a member of" do
-      box = FactoryGirl.create_for_repository(:ephemera_box, member_ids: resource.id)
+      box = FactoryBot.create_for_repository(:ephemera_box, member_ids: resource.id)
 
       expect(resource.decorate.ephemera_box.id).to eq box.id
     end
   end
 
   context "within a project" do
-    let(:resource) { FactoryGirl.create_for_repository(:ephemera_folder) }
+    let(:resource) { FactoryBot.create_for_repository(:ephemera_folder) }
     it "can return the box it's a member of" do
-      project = FactoryGirl.create_for_repository(:ephemera_project, member_ids: resource.id)
+      project = FactoryBot.create_for_repository(:ephemera_project, member_ids: resource.id)
 
       expect(resource.decorate.ephemera_project.id).to eq project.id
       expect(resource.decorate.ephemera_box).to be nil

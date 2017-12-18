@@ -15,10 +15,10 @@ RSpec.describe EphemeraBoxesController do
     it_behaves_like "an access controlled new request"
 
     context "when they have permission" do
-      let(:user) { FactoryGirl.create(:admin) }
+      let(:user) { FactoryBot.create(:admin) }
       render_views
       it "has a form for creating ephemera boxes" do
-        FactoryGirl.create_for_repository(:ephemera_box)
+        FactoryBot.create_for_repository(:ephemera_box)
 
         get :new
         expect(response.body).to have_field "Box number"
@@ -28,7 +28,7 @@ RSpec.describe EphemeraBoxesController do
   end
 
   describe "create" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do
       {
         barcode: ['00000000000000'],
@@ -60,7 +60,7 @@ RSpec.describe EphemeraBoxesController do
       expect(resource.state).to contain_exactly "new"
     end
     it "will index the project if possible" do
-      project = FactoryGirl.create_for_repository(:ephemera_project)
+      project = FactoryBot.create_for_repository(:ephemera_project)
       post :create, params: { ephemera_box: valid_params.merge(append_id: project.id.to_s) }
 
       id = query_service.find_all_of_model(model: EphemeraBox).to_a.first.id
@@ -99,14 +99,14 @@ RSpec.describe EphemeraBoxesController do
   end
 
   describe "destroy" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :ephemera_box }
       it_behaves_like "an access controlled destroy request"
     end
     it "can delete a book" do
-      ephemera_box = FactoryGirl.create_for_repository(:ephemera_box)
-      ephemera_project = FactoryGirl.create_for_repository(:ephemera_project, member_ids: ephemera_box.id)
+      ephemera_box = FactoryBot.create_for_repository(:ephemera_box)
+      ephemera_project = FactoryBot.create_for_repository(:ephemera_project, member_ids: ephemera_box.id)
       delete :destroy, params: { id: ephemera_box.id.to_s }
 
       expect(response).to redirect_to solr_document_path(id: ephemera_project.id)
@@ -115,7 +115,7 @@ RSpec.describe EphemeraBoxesController do
   end
 
   describe "edit" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :ephemera_box }
       it_behaves_like "an access controlled edit request"
@@ -128,7 +128,7 @@ RSpec.describe EphemeraBoxesController do
     context "when it does exist" do
       render_views
       it "renders a form" do
-        ephemera_box = FactoryGirl.create_for_repository(:ephemera_box)
+        ephemera_box = FactoryBot.create_for_repository(:ephemera_box)
         get :edit, params: { id: ephemera_box.id.to_s }
 
         expect(response.body).to have_field "Box number", with: ephemera_box.box_number.first
@@ -138,12 +138,12 @@ RSpec.describe EphemeraBoxesController do
   end
 
   describe "attach_drive" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
 
     context "when it exists" do
       render_views
       it "renders a form" do
-        ephemera_box = FactoryGirl.create_for_repository(:ephemera_box)
+        ephemera_box = FactoryBot.create_for_repository(:ephemera_box)
         get :attach_drive, params: { id: ephemera_box.id.to_s }
 
         expect(response.body).to have_field "Drive barcode"
@@ -153,7 +153,7 @@ RSpec.describe EphemeraBoxesController do
   end
 
   describe "update" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :ephemera_box }
       let(:extra_params) { { ephemera_box: { title: ["Two"] } } }
@@ -167,7 +167,7 @@ RSpec.describe EphemeraBoxesController do
     it_behaves_like "a workflow controller", :ephemera_box
     context "when it does exist" do
       it "saves it and redirects" do
-        ephemera_box = FactoryGirl.create_for_repository(:ephemera_box)
+        ephemera_box = FactoryBot.create_for_repository(:ephemera_box)
         patch :update, params: { id: ephemera_box.id.to_s, ephemera_box: { box_number: ["Two"] } }
 
         expect(response).to be_redirect
@@ -178,7 +178,7 @@ RSpec.describe EphemeraBoxesController do
         expect(reloaded.box_number).to eq ["Two"]
       end
       it "renders the form if it fails validations" do
-        ephemera_box = FactoryGirl.create_for_repository(:ephemera_box)
+        ephemera_box = FactoryBot.create_for_repository(:ephemera_box)
         patch :update, params: { id: ephemera_box.id.to_s, ephemera_box: { box_number: nil } }
 
         expect(response).to render_template "valhalla/base/edit"

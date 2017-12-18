@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :ephemera_term do
     label 'test term'
     uri 'https://example.com/ns/testVocabulary#testTerm'

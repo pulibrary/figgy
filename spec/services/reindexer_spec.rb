@@ -13,7 +13,7 @@ RSpec.describe Reindexer do
   describe ".reindex_all" do
     context "when there are records not in solr" do
       it "puts them in solr" do
-        resource = FactoryGirl.build(:scanned_resource)
+        resource = FactoryBot.build(:scanned_resource)
         output = postgres_adapter.persister.save(resource: resource)
         expect { solr_adapter.query_service.find_by(id: output.id) }.to raise_error Valkyrie::Persistence::ObjectNotFoundError
 
@@ -24,7 +24,7 @@ RSpec.describe Reindexer do
     end
     context "when there are records in solr which are no longer in postgres" do
       it "gets rid of them" do
-        resource = FactoryGirl.build(:scanned_resource)
+        resource = FactoryBot.build(:scanned_resource)
         output = solr_adapter.persister.save(resource: resource)
 
         described_class.reindex_all(logger: logger)

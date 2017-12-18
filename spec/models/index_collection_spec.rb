@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe IndexCollection do
-  subject(:index_collection) { FactoryGirl.build(:index_collection) }
+  subject(:index_collection) { FactoryBot.build(:index_collection) }
   describe '#decorate' do
     it 'decorates an index collection' do
       expect(index_collection.decorate).to be_a IndexCollectionDecorator

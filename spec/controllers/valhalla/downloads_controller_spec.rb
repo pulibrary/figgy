@@ -6,10 +6,10 @@ RSpec.describe Valhalla::DownloadsController do
   let(:disk) { Valkyrie.config.storage_adapter }
   let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: meta, storage_adapter: disk) }
   let(:sample_file) { fixture_file_upload('files/example.tif', 'image/tiff') }
-  let(:resource) { FactoryGirl.create_for_repository(:scanned_resource, files: [sample_file]) }
+  let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [sample_file]) }
   let(:file_set) { resource.member_ids.map { |id| meta.query_service.find_by(id: id) }.first }
   let(:file_node) { file_set.file_metadata.first }
-  let(:user) { FactoryGirl.create(:admin) }
+  let(:user) { FactoryBot.create(:admin) }
 
   routes { Valhalla::Engine.routes }
 

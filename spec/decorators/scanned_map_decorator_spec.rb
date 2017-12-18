@@ -4,11 +4,11 @@ require 'rails_helper'
 RSpec.describe ScannedMapDecorator do
   subject(:decorator) { described_class.new(resource) }
   let(:resource) do
-    FactoryGirl.build(:scanned_map,
-                      title: "test title",
-                      author: "test author",
-                      creator: "test creator",
-                      subject: "test subject")
+    FactoryBot.build(:scanned_map,
+                     title: "test title",
+                     author: "test author",
+                     creator: "test creator",
+                     subject: "test subject")
   end
   describe "#iiif_manifest_attributes" do
     it "returns attributes" do
@@ -34,12 +34,12 @@ RSpec.describe ScannedMapDecorator do
   end
   describe '#language' do
     let(:resource) do
-      FactoryGirl.build(:scanned_map,
-                        title: "test title",
-                        author: "test author",
-                        creator: "test creator",
-                        subject: "test subject",
-                        language: ["eng"])
+      FactoryBot.build(:scanned_map,
+                       title: "test title",
+                       author: "test author",
+                       creator: "test creator",
+                       subject: "test subject",
+                       language: ["eng"])
     end
     it "exposes the language" do
       expect(decorator.language).to eq ['English']
@@ -48,10 +48,10 @@ RSpec.describe ScannedMapDecorator do
   context "with file sets" do
     let(:file_set) do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
-      res = FactoryGirl.build(:file_set)
+      res = FactoryBot.build(:file_set)
       adapter.persister.save(resource: res)
     end
-    let(:resource) { FactoryGirl.create_for_repository(:scanned_map, member_ids: [file_set.id]) }
+    let(:resource) { FactoryBot.create_for_repository(:scanned_map, member_ids: [file_set.id]) }
     it "retrieves members" do
       expect(resource.decorate.members.to_a).not_to be_empty
       expect(resource.decorate.members.to_a.first).to be_a FileSet

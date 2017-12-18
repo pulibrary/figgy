@@ -19,8 +19,8 @@ RSpec.describe BulkIngestService do
       let(:barcode1) { '32101075851400' }
       let(:barcode2) { '32101075851418' }
       let(:lae_dir) { Rails.root.join('spec', 'fixtures', 'lae') }
-      let(:folder1) { FactoryGirl.create_for_repository(:ephemera_folder, barcode: [barcode1]) }
-      let(:folder2) { FactoryGirl.create_for_repository(:ephemera_folder, barcode: [barcode2]) }
+      let(:folder1) { FactoryBot.create_for_repository(:ephemera_folder, barcode: [barcode1]) }
+      let(:folder2) { FactoryBot.create_for_repository(:ephemera_folder, barcode: [barcode2]) }
       before do
         folder1
         folder2
@@ -52,7 +52,7 @@ RSpec.describe BulkIngestService do
       end
 
       it 'ingests the resources' do
-        coll = FactoryGirl.create_for_repository(:collection)
+        coll = FactoryBot.create_for_repository(:collection)
 
         ingester.attach_dir(
           base_directory: single_dir,
@@ -78,7 +78,7 @@ RSpec.describe BulkIngestService do
       let(:bib) { '4609321' }
       let(:local_id) { 'cico:xyz' }
       let(:replaces) { 'pudl0001/4609321/331' }
-      let(:coll) { FactoryGirl.create(:collection) }
+      let(:coll) { FactoryBot.create(:collection) }
 
       before do
         stub_bibdata(bib_id: '4609321')
@@ -86,7 +86,7 @@ RSpec.describe BulkIngestService do
       end
 
       it 'ingests the resources', bulk: true do
-        coll = FactoryGirl.create_for_repository(:collection)
+        coll = FactoryBot.create_for_repository(:collection)
 
         ingester.attach_dir(
           base_directory: multi_dir,

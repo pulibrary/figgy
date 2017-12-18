@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe ApplicationDecorator do
   subject(:decorator) { described_class.new(resource) }
-  let(:resource) { FactoryGirl.build(:scanned_resource) }
+  let(:resource) { FactoryBot.build(:scanned_resource) }
 
   describe '#iiif_manifest_attributes' do
     it 'defaults to no attributes for the IIIF Manifest' do

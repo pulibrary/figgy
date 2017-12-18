@@ -3,8 +3,8 @@ require 'rails_helper'
 
 RSpec.describe "catalog/_members_scanned_map" do
   context 'when the ScannedMap has members' do
-    let(:child) { FactoryGirl.create_for_repository(:scanned_map, title: 'vol1', rights_statement: 'x') }
-    let(:parent) { FactoryGirl.create_for_repository(:scanned_map, title: 'Mui', rights_statement: 'y', member_ids: [child.id]) }
+    let(:child) { FactoryBot.create_for_repository(:scanned_map, title: 'vol1', rights_statement: 'x') }
+    let(:parent) { FactoryBot.create_for_repository(:scanned_map, title: 'Mui', rights_statement: 'y', member_ids: [child.id]) }
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: parent) }
     let(:solr_document) { SolrDocument.new(document) }
     before do

@@ -3,10 +3,10 @@ require 'rails_helper'
 
 RSpec.describe FindEphemeraTermByLabel do
   subject(:query) { described_class.new(query_service: query_service) }
-  let(:term) { FactoryGirl.create_for_repository(:ephemera_term, label: "Test", member_of_vocabulary_id: vocab.id) }
-  let(:term2) { FactoryGirl.create_for_repository(:ephemera_term, label: "Test", member_of_vocabulary_id: vocab2.id) }
-  let(:vocab) { FactoryGirl.create_for_repository(:ephemera_vocabulary) }
-  let(:vocab2) { FactoryGirl.create_for_repository(:ephemera_vocabulary, label: "Test2") }
+  let(:term) { FactoryBot.create_for_repository(:ephemera_term, label: "Test", member_of_vocabulary_id: vocab.id) }
+  let(:term2) { FactoryBot.create_for_repository(:ephemera_term, label: "Test", member_of_vocabulary_id: vocab2.id) }
+  let(:vocab) { FactoryBot.create_for_repository(:ephemera_vocabulary) }
+  let(:vocab2) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: "Test2") }
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
 
   describe "#find_ephemera_term_by_label" do

@@ -3,9 +3,9 @@ require 'rails_helper'
 
 RSpec.describe "catalog/_members_ephemera_project" do
   context "when it's a project with boxes and folders" do
-    let(:parent) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [child.id, child_folder.id]) }
-    let(:child) { FactoryGirl.create_for_repository(:ephemera_box, drive_barcode: '11111111111110') }
-    let(:child_folder) { FactoryGirl.create_for_repository(:ephemera_folder) }
+    let(:parent) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [child.id, child_folder.id]) }
+    let(:child) { FactoryBot.create_for_repository(:ephemera_box, drive_barcode: '11111111111110') }
+    let(:child_folder) { FactoryBot.create_for_repository(:ephemera_folder) }
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: parent) }
     let(:solr_document) { SolrDocument.new(document) }
     before do
@@ -31,8 +31,8 @@ RSpec.describe "catalog/_members_ephemera_project" do
     end
   end
   context "when it's a project with templates" do
-    let(:parent) { FactoryGirl.create_for_repository(:ephemera_project) }
-    let(:child) { FactoryGirl.create_for_repository(:template, parent_id: parent.id) }
+    let(:parent) { FactoryBot.create_for_repository(:ephemera_project) }
+    let(:child) { FactoryBot.create_for_repository(:template, parent_id: parent.id) }
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: parent) }
     let(:solr_document) { SolrDocument.new(document) }
     before do

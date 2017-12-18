@@ -2,9 +2,9 @@
 require 'rails_helper'
 
 RSpec.feature "Home Page", js: true do
-  let(:user) { FactoryGirl.create(:admin) }
+  let(:user) { FactoryBot.create(:admin) }
   before do
-    FactoryGirl.create_for_repository(:ephemera_project)
+    FactoryBot.create_for_repository(:ephemera_project)
     sign_in user
   end
 

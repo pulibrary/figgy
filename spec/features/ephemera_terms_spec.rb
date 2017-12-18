@@ -2,10 +2,10 @@
 require 'rails_helper'
 
 RSpec.feature "Ephemera Terms", js: true do
-  let(:user) { FactoryGirl.create(:admin) }
+  let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:ephemera_project) do
-    res = FactoryGirl.create_for_repository(:ephemera_project)
+    res = FactoryBot.create_for_repository(:ephemera_project)
     adapter.persister.save(resource: res)
   end
 
@@ -15,12 +15,12 @@ RSpec.feature "Ephemera Terms", js: true do
 
   context 'when users have added a controlled vocabulary' do
     let(:ephemera_vocabulary) do
-      res = FactoryGirl.create_for_repository(:ephemera_vocabulary)
+      res = FactoryBot.create_for_repository(:ephemera_vocabulary)
       adapter.persister.save(resource: res)
     end
 
     context 'when users have added terms to the vocabulary' do
-      let(:ephemera_term) { FactoryGirl.create_for_repository(:ephemera_term) }
+      let(:ephemera_term) { FactoryBot.create_for_repository(:ephemera_term) }
 
       before do
         ephemera_term.member_of_vocabulary_id = ephemera_vocabulary.id

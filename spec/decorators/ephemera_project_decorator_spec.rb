@@ -3,8 +3,8 @@ require 'rails_helper'
 
 RSpec.describe EphemeraProjectDecorator do
   subject(:decorator) { described_class.new(resource) }
-  let(:resource) { FactoryGirl.create_for_repository(:ephemera_project, top_language: [term.id]) }
-  let(:term) { FactoryGirl.create_for_repository(:ephemera_term) }
+  let(:resource) { FactoryBot.create_for_repository(:ephemera_project, top_language: [term.id]) }
+  let(:term) { FactoryBot.create_for_repository(:ephemera_term) }
 
   describe "decoration" do
     it "decorates an EphemeraProject" do
@@ -40,9 +40,9 @@ RSpec.describe EphemeraProjectDecorator do
   end
 
   context "when there are folders and boxes attached" do
-    let(:folder) { FactoryGirl.create_for_repository(:ephemera_folder) }
-    let(:box) { FactoryGirl.create_for_repository(:ephemera_box) }
-    let(:resource) { FactoryGirl.create_for_repository(:ephemera_project, member_ids: [box.id, folder.id]) }
+    let(:folder) { FactoryBot.create_for_repository(:ephemera_folder) }
+    let(:box) { FactoryBot.create_for_repository(:ephemera_box) }
+    let(:resource) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [box.id, folder.id]) }
 
     it "provides access to folders" do
       expect(decorator.folders.map(&:id)).to eq([folder.id])

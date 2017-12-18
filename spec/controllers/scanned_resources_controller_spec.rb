@@ -16,7 +16,7 @@ RSpec.describe ScannedResourcesController do
 
     context "when not logged in but an auth token is given" do
       it "renders the full manifest" do
-        resource = FactoryGirl.create_for_repository(:complete_campus_only_scanned_resource)
+        resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource)
         authorization_token = AuthToken.create!(group: ["admin"], label: "Admin Token")
         get :manifest, params: { id: resource.id, format: :json, auth_token: authorization_token.token }
 
@@ -26,18 +26,18 @@ RSpec.describe ScannedResourcesController do
     end
     context "when not logged in" do
       it "returns a 404" do
-        resource = FactoryGirl.create_for_repository(:complete_campus_only_scanned_resource)
+        resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource)
         get :manifest, params: { id: resource.id, format: :json }
 
         expect(response).to be_not_found
       end
     end
     context "when they have permission" do
-      let(:user) { FactoryGirl.create(:admin) }
+      let(:user) { FactoryBot.create(:admin) }
       render_views
       it "has a form for creating scanned resources" do
-        collection = FactoryGirl.create_for_repository(:collection)
-        parent = FactoryGirl.create_for_repository(:scanned_resource)
+        collection = FactoryBot.create_for_repository(:collection)
+        parent = FactoryBot.create_for_repository(:scanned_resource)
 
         get :new, params: { parent_id: parent.id.to_s }
         expect(response.body).to have_field "Title"
@@ -61,7 +61,7 @@ RSpec.describe ScannedResourcesController do
   end
 
   describe "create" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do
       {
         title: ['Title 1', 'Title 2'],
@@ -91,7 +91,7 @@ RSpec.describe ScannedResourcesController do
       expect(resource.depositor).to eq [user.uid]
     end
     it "can create a nested scanned resource" do
-      parent = FactoryGirl.create_for_repository(:scanned_resource)
+      parent = FactoryBot.create_for_repository(:scanned_resource)
       post :create, params: { scanned_resource: valid_params.merge(append_id: parent.id.to_s) }
 
       expect(response).to be_redirect
@@ -111,7 +111,7 @@ RSpec.describe ScannedResourcesController do
           member_of_collection_ids: [collection.id.to_s]
         }
       end
-      let(:collection) { FactoryGirl.create_for_repository(:collection) }
+      let(:collection) { FactoryBot.create_for_repository(:collection) }
       it "works" do
         post :create, params: { scanned_resource: valid_params }
 
@@ -153,13 +153,13 @@ RSpec.describe ScannedResourcesController do
   end
 
   describe "destroy" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :scanned_resource }
       it_behaves_like "an access controlled destroy request"
     end
     it "can delete a book" do
-      scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+      scanned_resource = FactoryBot.create_for_repository(:scanned_resource)
       delete :destroy, params: { id: scanned_resource.id.to_s }
 
       expect(response).to redirect_to root_path
@@ -168,7 +168,7 @@ RSpec.describe ScannedResourcesController do
   end
 
   describe "edit" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :scanned_resource }
       it_behaves_like "an access controlled edit request"
@@ -181,7 +181,7 @@ RSpec.describe ScannedResourcesController do
     context "when it does exist" do
       render_views
       it "renders a form" do
-        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource)
         get :edit, params: { id: scanned_resource.id.to_s }
 
         expect(response.body).to have_field "Title", with: scanned_resource.title.first
@@ -191,7 +191,7 @@ RSpec.describe ScannedResourcesController do
   end
 
   describe "html update" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
 
     context "access control" do
       let(:factory) { :scanned_resource }
@@ -205,7 +205,7 @@ RSpec.describe ScannedResourcesController do
     end
     context "when it does exist" do
       it "saves it and redirects" do
-        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource)
         patch :update, params: { id: scanned_resource.id.to_s, scanned_resource: { title: ["Two"] } }
 
         expect(response).to be_redirect
@@ -216,7 +216,7 @@ RSpec.describe ScannedResourcesController do
         expect(reloaded.title).to eq ["Two"]
       end
       it "renders the form if it fails validations" do
-        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource)
         patch :update, params: { id: scanned_resource.id.to_s, scanned_resource: { title: [""] } }
 
         expect(response).to render_template "valhalla/base/edit"
@@ -226,12 +226,12 @@ RSpec.describe ScannedResourcesController do
   end
 
   describe "json update" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
 
     context "when not an admin" do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { FactoryBot.create(:user) }
       it "returns 404" do
-        resource = FactoryGirl.create_for_repository(:scanned_resource)
+        resource = FactoryBot.create_for_repository(:scanned_resource)
         params = { id: resource.id.to_s, scanned_resource: { member_ids: ["not_an_id"] }, format: :json }
         patch :update, params: params
         expect(response.status).to eq(404)
@@ -247,15 +247,15 @@ RSpec.describe ScannedResourcesController do
 
     context "when the scanned resource does exist" do
       it "returns 400 for invalid data" do
-        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource)
         params = { id: scanned_resource.id.to_s, scanned_resource: { title: [""] }, format: :json }
         patch :update, params: params
         expect(response.status).to eq(400)
       end
       it "updates and returns 200 for valid data" do
-        file_set1 = FactoryGirl.create_for_repository(:file_set)
-        file_set2 = FactoryGirl.create_for_repository(:file_set)
-        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource, member_ids: [file_set1.id, file_set2.id])
+        file_set1 = FactoryBot.create_for_repository(:file_set)
+        file_set2 = FactoryBot.create_for_repository(:file_set)
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: [file_set1.id, file_set2.id])
 
         params = { id: scanned_resource.id.to_s, scanned_resource: { member_ids: [file_set2.id, file_set1.id] }, format: :json }
         patch :update, params: params
@@ -267,11 +267,11 @@ RSpec.describe ScannedResourcesController do
   end
 
   describe "structure" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     context "when not logged in" do
       let(:user) { nil }
       it "redirects to login or root" do
-        scanned_resource = FactoryGirl.create_for_repository(:scanned_resource)
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource)
 
         get :structure, params: { id: scanned_resource.id.to_s }
         expect(response).to be_redirect
@@ -285,8 +285,8 @@ RSpec.describe ScannedResourcesController do
     context "when it does exist" do
       render_views
       it "renders a structure editor form" do
-        file_set = FactoryGirl.create_for_repository(:file_set)
-        scanned_resource = FactoryGirl.create_for_repository(
+        file_set = FactoryBot.create_for_repository(:file_set)
+        scanned_resource = FactoryBot.create_for_repository(
           :scanned_resource,
           member_ids: file_set.id,
           logical_structure: [
@@ -308,11 +308,11 @@ RSpec.describe ScannedResourcesController do
   end
 
   context "when an admin" do
-    let(:user) { FactoryGirl.create(:admin) }
+    let(:user) { FactoryBot.create(:admin) }
     describe "GET /scanned_resources/:id/file_manager" do
       it "sets the record and children variables" do
-        child = FactoryGirl.create_for_repository(:file_set)
-        parent = FactoryGirl.create_for_repository(:scanned_resource, member_ids: child.id)
+        child = FactoryBot.create_for_repository(:file_set)
+        parent = FactoryBot.create_for_repository(:scanned_resource, member_ids: child.id)
 
         get :file_manager, params: { id: parent.id }
 
@@ -337,7 +337,7 @@ RSpec.describe ScannedResourcesController do
         }
       end
       it "uploads files" do
-        resource = FactoryGirl.create_for_repository(:scanned_resource)
+        resource = FactoryBot.create_for_repository(:scanned_resource)
         # Ensure that indexing is always safe and done at the end.
         allow(Valkyrie::MetadataAdapter.find(:index_solr)).to receive(:persister).and_return(Valkyrie::MetadataAdapter.find(:index_solr).persister)
         allow(Valkyrie::MetadataAdapter.find(:index_solr).persister).to receive(:save).and_call_original
@@ -353,7 +353,7 @@ RSpec.describe ScannedResourcesController do
         expect(file_sets.first.file_metadata.length).to eq 2
       end
       it "tracks pending uploads" do
-        resource = FactoryGirl.create_for_repository(:scanned_resource)
+        resource = FactoryBot.create_for_repository(:scanned_resource)
         allow(BrowseEverythingIngestJob).to receive(:perform_later).and_return(true)
 
         post :browse_everything_files, params: { id: resource.id, selected_files: params["selected_files"] }
@@ -371,7 +371,7 @@ RSpec.describe ScannedResourcesController do
   describe "GET /concern/scanned_resources/:id/manifest" do
     let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
     it "returns a IIIF manifest for a resource with a file" do
-      scanned_resource = FactoryGirl.create_for_repository(:scanned_resource, files: [file])
+      scanned_resource = FactoryBot.create_for_repository(:scanned_resource, files: [file])
 
       get :manifest, params: { id: scanned_resource.id.to_s, format: :json }
       manifest_response = MultiJson.load(response.body, symbolize_keys: true)
@@ -384,7 +384,7 @@ RSpec.describe ScannedResourcesController do
 
   describe "GET /concern/scanned_resources/:id/pdf" do
     let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
-    let(:scanned_resource) { FactoryGirl.create_for_repository(:scanned_resource, files: [file]) }
+    let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
     let(:file_set) { scanned_resource.member_ids.first }
     before do
       stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,287/0/grey.jpg")

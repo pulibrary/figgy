@@ -1,6 +1,6 @@
 RSpec.shared_examples "a workflow controller" do |factory_resource|
   it "can create a workflow note" do
-    resource = FactoryGirl.create_for_repository(factory_resource)
+    resource = FactoryBot.create_for_repository(factory_resource)
 
     patch :update, params: { id: resource.id.to_s, resource.model_name.singular.to_sym => { new_workflow_note_attributes: { note: "Test", author: "Shakespeare" } } }
 
@@ -9,7 +9,7 @@ RSpec.shared_examples "a workflow controller" do |factory_resource|
     expect(reloaded.workflow_note.first.note).to eq ["Test"]
   end
   it "doesn't create a workflow note with an empty note" do
-    resource = FactoryGirl.create_for_repository(factory_resource)
+    resource = FactoryBot.create_for_repository(factory_resource)
 
     patch :update, params: { id: resource.id.to_s, resource.model_name.singular.to_sym => { new_workflow_note_attributes: { author: "Test" } } }
 
@@ -17,7 +17,7 @@ RSpec.shared_examples "a workflow controller" do |factory_resource|
     expect(reloaded.workflow_note).to be_blank
   end
   it "doesn't create a workflow note without an author" do
-    resource = FactoryGirl.create_for_repository(factory_resource)
+    resource = FactoryBot.create_for_repository(factory_resource)
 
     patch :update, params: { id: resource.id.to_s, resource.model_name.singular.to_sym => { new_workflow_note_attributes: { note: "Test" } } }
 

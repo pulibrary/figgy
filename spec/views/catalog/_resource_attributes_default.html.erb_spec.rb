@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe "catalog/_resource_attributes_default.html.erb" do
   context 'when given a FileSet' do
     let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
-    let(:scanned_resource) { FactoryGirl.create_for_repository(:scanned_resource, files: [file]) }
+    let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
     let(:solr) { Valkyrie::MetadataAdapter.find(:index_solr) }
     let(:fileset) { scanned_resource.member_ids.map { |id| solr.query_service.find_by(id: id) }.first }
     let(:document) { solr.resource_factory.from_resource(resource: fileset) }
@@ -30,40 +30,40 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
   end
   context "when given a ScannedResource solr document" do
     let(:scanned_resource) do
-      FactoryGirl.create_for_repository(:scanned_resource,
-                                        imported_metadata: [
-                                          {
-                                            title: "Ars minor [fragment].",
-                                            language: "lat",
-                                            creator: "Donatus, Aelius",
-                                            call_number: "114.14",
-                                            extent: "2 partial leaves ; 20 x 14.8 cm.",
-                                            format: "Book",
-                                            type: "Early works to 1500",
-                                            description: "WHS fragment is parts of 2 leaves (ff. 2.7, Schwenke 6,1-9,6; 10,2-12,5; 22,1-23,21; 24,2-36) of a 27-line edition; vellum; Type 5.",
-                                            publisher: "[Netherlands : Prototypography, about 1465-1480].",
-                                            subject: [
-                                              "Latin language—Grammar—Early works to 1500",
-                                              "Type and type-founding—Specimens"
-                                            ],
-                                            sort_title: "Ars minor [fragment].",
-                                            former_owner: [
-                                              "Hodgkin, John Eliot"
-                                            ],
-                                            bookseller: [
-                                              "Maggs Bros"
-                                            ],
-                                            author: "Donatus, Aelius",
-                                            created: ['1465-01-01T00:00:00Z', '1480-12-31T23:59:59Z'],
-                                            date: "1465-1480",
-                                            identifier: "http://arks.princeton.edu/ark:/88435/5m60qr98h"
-                                          }
-                                        ],
-                                        member_of_collection_ids: [collection.id],
-                                        holding_location: RDF::URI('https://bibdata.princeton.edu/locations/delivery_locations/1'))
+      FactoryBot.create_for_repository(:scanned_resource,
+                                       imported_metadata: [
+                                         {
+                                           title: "Ars minor [fragment].",
+                                           language: "lat",
+                                           creator: "Donatus, Aelius",
+                                           call_number: "114.14",
+                                           extent: "2 partial leaves ; 20 x 14.8 cm.",
+                                           format: "Book",
+                                           type: "Early works to 1500",
+                                           description: "WHS fragment is parts of 2 leaves (ff. 2.7, Schwenke 6,1-9,6; 10,2-12,5; 22,1-23,21; 24,2-36) of a 27-line edition; vellum; Type 5.",
+                                           publisher: "[Netherlands : Prototypography, about 1465-1480].",
+                                           subject: [
+                                             "Latin language—Grammar—Early works to 1500",
+                                             "Type and type-founding—Specimens"
+                                           ],
+                                           sort_title: "Ars minor [fragment].",
+                                           former_owner: [
+                                             "Hodgkin, John Eliot"
+                                           ],
+                                           bookseller: [
+                                             "Maggs Bros"
+                                           ],
+                                           author: "Donatus, Aelius",
+                                           created: ['1465-01-01T00:00:00Z', '1480-12-31T23:59:59Z'],
+                                           date: "1465-1480",
+                                           identifier: "http://arks.princeton.edu/ark:/88435/5m60qr98h"
+                                         }
+                                       ],
+                                       member_of_collection_ids: [collection.id],
+                                       holding_location: RDF::URI('https://bibdata.princeton.edu/locations/delivery_locations/1'))
     end
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: scanned_resource) }
-    let(:collection) { FactoryGirl.create_for_repository(:collection) }
+    let(:collection) { FactoryBot.create_for_repository(:collection) }
     let(:solr_document) { SolrDocument.new(document) }
     before do
       Timecop.freeze(Time.zone.local(1990))
@@ -156,60 +156,60 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
   end
   context "when given a ScannedMap solr document" do
     let(:scanned_map) do
-      FactoryGirl.create_for_repository(:scanned_map,
-                                        imported_metadata: [
-                                          {
-                                            title: "Map of The British Cameroons",
-                                            language: "eng",
-                                            creator: "Nigeria. Survey Department",
-                                            call_number: "G8731.F7 1927 .C6",
-                                            extent: [
-                                              "Scale 1:3,000,000 (E 8°33ʹ00ʹʹ--E 14°37ʹ00ʹʹ/N 12°30ʹ00ʹʹ--N 3°53ʹ24ʹʹ).",
-                                              "1 map : black and white ; 40 x 26 cm"
-                                            ],
-                                            format: "Map",
-                                            type: "Maps",
-                                            description: [
-                                              "Map shows the Cameroons under the British administration were divided by a strech of approximately 45 miles into north and south by the Benue River.",
-                                              "Map shows area administered by the Residents of Bornu, Yola, and Muri provinces.",
-                                              "Original map is filed in the Map/Geospatial Center, map reproduction is attached to companion volume.",
-                                              "Copy 2: \"R. O,1007\" ; \"928.10531.A633.1125.9/27.\""
-                                            ],
-                                            publisher: [
-                                              "[Lagos], Nigeria : Survey Department, March 1926.",
-                                              "London : His Majesty's Stationery Office, 1927.",
-                                              "[London] : Malby & Sons. Lith., 1927."
-                                            ],
-                                            subject: [
-                                              "Administrative and political divisions—Maps",
-                                              "Cameroon—Administrative and political divisions",
-                                              "Nigeria—Administrative and political divisions",
-                                              "Great Britain—Colonies",
-                                              "Cameroon—Maps",
-                                              "Nigeria—Maps",
-                                              "Nigeria",
-                                              "Cameroon"
-                                            ],
-                                            coverage: "northlimit=12.500000; eastlimit=014.620000; southlimit=03.890000; westlimit=008.550000; units=degrees; projection=EPSG:4326",
-                                            sort_title: "Map of The British Cameroons / reproduced at Survey Department, Nigeria.",
-                                            cartographic_scale: "Scale 1:3,000,000",
-                                            spatial: [
-                                              "Cameroon",
-                                              "Nigeria"
-                                            ],
-                                            issuing_body: [
-                                              "Great Britain. His Majesty's Stationery Office",
-                                              "Great Britain. Colonial Office"
-                                            ],
-                                            cartographer: "Nigeria. Survey Department",
-                                            created: "1927-01-01T00:00:00Z/1926-12-31T23:59:59Z",
-                                            date: "1927-1926"
-                                          }
-                                        ],
-                                        member_of_collection_ids: [collection.id])
+      FactoryBot.create_for_repository(:scanned_map,
+                                       imported_metadata: [
+                                         {
+                                           title: "Map of The British Cameroons",
+                                           language: "eng",
+                                           creator: "Nigeria. Survey Department",
+                                           call_number: "G8731.F7 1927 .C6",
+                                           extent: [
+                                             "Scale 1:3,000,000 (E 8°33ʹ00ʹʹ--E 14°37ʹ00ʹʹ/N 12°30ʹ00ʹʹ--N 3°53ʹ24ʹʹ).",
+                                             "1 map : black and white ; 40 x 26 cm"
+                                           ],
+                                           format: "Map",
+                                           type: "Maps",
+                                           description: [
+                                             "Map shows the Cameroons under the British administration were divided by a strech of approximately 45 miles into north and south by the Benue River.",
+                                             "Map shows area administered by the Residents of Bornu, Yola, and Muri provinces.",
+                                             "Original map is filed in the Map/Geospatial Center, map reproduction is attached to companion volume.",
+                                             "Copy 2: \"R. O,1007\" ; \"928.10531.A633.1125.9/27.\""
+                                           ],
+                                           publisher: [
+                                             "[Lagos], Nigeria : Survey Department, March 1926.",
+                                             "London : His Majesty's Stationery Office, 1927.",
+                                             "[London] : Malby & Sons. Lith., 1927."
+                                           ],
+                                           subject: [
+                                             "Administrative and political divisions—Maps",
+                                             "Cameroon—Administrative and political divisions",
+                                             "Nigeria—Administrative and political divisions",
+                                             "Great Britain—Colonies",
+                                             "Cameroon—Maps",
+                                             "Nigeria—Maps",
+                                             "Nigeria",
+                                             "Cameroon"
+                                           ],
+                                           coverage: "northlimit=12.500000; eastlimit=014.620000; southlimit=03.890000; westlimit=008.550000; units=degrees; projection=EPSG:4326",
+                                           sort_title: "Map of The British Cameroons / reproduced at Survey Department, Nigeria.",
+                                           cartographic_scale: "Scale 1:3,000,000",
+                                           spatial: [
+                                             "Cameroon",
+                                             "Nigeria"
+                                           ],
+                                           issuing_body: [
+                                             "Great Britain. His Majesty's Stationery Office",
+                                             "Great Britain. Colonial Office"
+                                           ],
+                                           cartographer: "Nigeria. Survey Department",
+                                           created: "1927-01-01T00:00:00Z/1926-12-31T23:59:59Z",
+                                           date: "1927-1926"
+                                         }
+                                       ],
+                                       member_of_collection_ids: [collection.id])
     end
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: scanned_map) }
-    let(:collection) { FactoryGirl.create_for_repository(:collection) }
+    let(:collection) { FactoryBot.create_for_repository(:collection) }
     let(:solr_document) { SolrDocument.new(document) }
     before do
       Timecop.freeze(Time.zone.local(1990))
@@ -280,7 +280,7 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
     end
   end
   context 'when given an Ephemera Folder' do
-    let(:folder) { FactoryGirl.create_for_repository(:ephemera_folder, date_range: DateRange.new(start: "1989", end: "2017")) }
+    let(:folder) { FactoryBot.create_for_repository(:ephemera_folder, date_range: DateRange.new(start: "1989", end: "2017")) }
     let(:document) { solr.resource_factory.from_resource(resource: folder) }
     let(:solr) { Valkyrie::MetadataAdapter.find(:index_solr) }
     let(:solr_document) { SolrDocument.new(document) }
