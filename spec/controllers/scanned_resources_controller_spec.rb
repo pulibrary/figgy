@@ -231,7 +231,7 @@ RSpec.describe ScannedResourcesController do
         expect(response).to be_redirect
         expect(response.location).to eq "http://test.host/catalog/#{scanned_resource.id}"
         id = response.location.gsub("http://test.host/catalog/", "")
-        reloaded = find_resource(id)
+        find_resource(id)
       end
     end
 
