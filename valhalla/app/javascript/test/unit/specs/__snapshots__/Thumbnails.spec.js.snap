@@ -1,0 +1,142 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Thumbnails.vue has the expected html structure 1`] = `
+<div
+  class="gallery"
+>
+  <div
+    class="gallery_controls"
+  >
+    <div
+      class="dropdown"
+    >
+      <button
+        aria-expanded="true"
+        aria-haspopup="true"
+        class="btn btn-default btn-sm dropdown-toggle"
+        data-toggle="dropdown"
+        id="selectOptions"
+        type="button"
+      >
+        
+        Select
+        
+        <span
+          class="caret"
+        />
+      </button>
+       
+      <ul
+        aria-labelledby="selectOptions"
+        class="dropdown-menu"
+      >
+        <li>
+          <a
+            id="select_all_btn"
+          >
+            All
+          </a>
+        </li>
+         
+        <li>
+          <a
+            id="select_none_btn"
+          >
+            None
+          </a>
+        </li>
+         
+        <li>
+          <a
+            id="select_alternate_btn"
+          >
+            Alternate
+          </a>
+        </li>
+         
+        <li>
+          <a
+            id="select_inverse_btn"
+          >
+            Inverse
+          </a>
+        </li>
+      </ul>
+    </div>
+     
+    <button
+      class="btn btn-default btn-sm"
+      id="upload_file"
+    >
+      <i
+        class="fa fa-th fa-upload"
+      />
+       Upload File
+    </button>
+     
+    <div
+      id="img_sizer"
+    >
+      <i
+        class="fa fa-image"
+      />
+       
+      <input
+        id="resize_thumbs_input"
+        max="400"
+        min="40"
+        style="display: inline-block;"
+        type="range"
+        value="200"
+      />
+       
+      <i
+        class="fa fa-image fa-lg"
+      />
+    </div>
+  </div>
+   
+  <div
+    class="img_gallery"
+    name="list-complete"
+    tag="div"
+  >
+    <div
+      class="thumbnail"
+      style="max-width: 200px;"
+    >
+      <img
+        class="thumb"
+        src="http://example.com"
+      />
+       
+      <div
+        class="caption"
+        style="padding: 9px;"
+      >
+        
+          baz
+        
+      </div>
+    </div>
+    <div
+      class="thumbnail"
+      style="max-width: 200px;"
+    >
+      <img
+        class="thumb"
+        src="http://example.com"
+      />
+       
+      <div
+        class="caption"
+        style="padding: 9px;"
+      >
+        
+          foo
+        
+      </div>
+    </div>
+  </div>
+</div>
+`;

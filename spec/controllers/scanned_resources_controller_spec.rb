@@ -25,11 +25,10 @@ RSpec.describe ScannedResourcesController do
       end
     end
     context "when not logged in" do
-      it "returns a 404" do
+      it "returns a 403" do
         resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource)
         get :manifest, params: { id: resource.id, format: :json }
-
-        expect(response).to be_not_found
+        expect(response).to be_forbidden
       end
     end
     context "when they have permission" do
@@ -193,35 +192,95 @@ RSpec.describe ScannedResourcesController do
   describe "html update" do
     let(:user) { FactoryBot.create(:admin) }
 
-    context "access control" do
-      let(:factory) { :scanned_resource }
-      let(:extra_params) { { scanned_resource: { title: ["Two"] } } }
-      it_behaves_like "an access controlled update request"
-    end
-    context "when a scanned resource doesn't exist" do
-      it "raises an error" do
-        expect { patch :update, params: { id: "test" } }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+    context "html" do
+      context "access control" do
+        let(:factory) { :scanned_resource }
+        let(:extra_params) { { scanned_resource: { title: ["Two"] } } }
+        it_behaves_like "an access controlled update request"
+      end
+      context "when a scanned resource doesn't exist" do
+        it "raises an error" do
+          expect { patch :update, params: { id: "test" } }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+        end
+      end
+      context "when it does exist" do
+        it "saves it and redirects" do
+          scanned_resource = FactoryBot.create_for_repository(:scanned_resource)
+          patch :update, params: { id: scanned_resource.id.to_s, scanned_resource: { title: ["Two"] } }
+
+          expect(response).to be_redirect
+          expect(response.location).to eq "http://test.host/catalog/#{scanned_resource.id}"
+          id = response.location.gsub("http://test.host/catalog/", "")
+          reloaded = find_resource(id)
+
+          expect(reloaded.title).to eq ["Two"]
+        end
+        it "renders the form if it fails validations" do
+          scanned_resource = FactoryBot.create_for_repository(:scanned_resource)
+          patch :update, params: { id: scanned_resource.id.to_s, scanned_resource: { title: [""] } }
+
+          expect(response).to render_template "valhalla/base/edit"
+        end
+        it_behaves_like "a workflow controller", :scanned_resource
       end
     end
     context "when it does exist" do
       it "saves it and redirects" do
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource)
         patch :update, params: { id: scanned_resource.id.to_s, scanned_resource: { title: ["Two"] } }
-
         expect(response).to be_redirect
         expect(response.location).to eq "http://test.host/catalog/#{scanned_resource.id}"
         id = response.location.gsub("http://test.host/catalog/", "")
-        reloaded = find_resource(id)
+        find_resource(id)
+      end
+    end
 
-        expect(reloaded.title).to eq ["Two"]
+    context "json" do
+      context "when not an admin" do
+        let(:user) { FactoryBot.create(:user) }
+        it "returns 403" do
+          resource = FactoryBot.create_for_repository(:scanned_resource)
+          params = { id: resource.id.to_s, scanned_resource: { member_ids: ["not_an_id"] }, format: :json }
+          patch :update, params: params
+          expect(response.status).to eq(403)
+        end
+      end
+
+      context "when a scanned resource doesn't exist" do
+        it "returns 404" do
+          patch :update, params: { id: "not_an_id", format: :json }
+          expect(response.status).to eq(404)
+        end
       end
       it "renders the form if it fails validations" do
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource)
         patch :update, params: { id: scanned_resource.id.to_s, scanned_resource: { title: [""] } }
-
         expect(response).to render_template "valhalla/base/edit"
       end
-      it_behaves_like "a workflow controller", :scanned_resource
+
+      context "when the scanned resource does exist" do
+        context "invalid data submitted" do
+          it "returns 400" do
+            scanned_resource = FactoryBot.create_for_repository(:scanned_resource)
+            params = { id: scanned_resource.id.to_s, scanned_resource: { title: [""] }, format: :json }
+            patch :update, params: params
+            expect(response.status).to eq(400)
+          end
+        end
+        context "valid data submitted" do
+          it "updates and returns 200" do
+            file_set1 = FactoryBot.create_for_repository(:file_set)
+            file_set2 = FactoryBot.create_for_repository(:file_set)
+            scanned_resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: [file_set1.id, file_set2.id])
+
+            params = { id: scanned_resource.id.to_s, scanned_resource: { member_ids: [file_set2.id, file_set1.id] }, format: :json }
+            patch :update, params: params
+            expect(response.status).to eq(200)
+            reloaded = find_resource(scanned_resource.id)
+            expect(reloaded.member_ids.first.to_s).to eq file_set2.id.to_s
+          end
+        end
+      end
     end
   end
 
@@ -234,7 +293,7 @@ RSpec.describe ScannedResourcesController do
         resource = FactoryBot.create_for_repository(:scanned_resource)
         params = { id: resource.id.to_s, scanned_resource: { member_ids: ["not_an_id"] }, format: :json }
         patch :update, params: params
-        expect(response.status).to eq(404)
+        expect(response.status).to eq(403)
       end
     end
 

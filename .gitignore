@@ -12,5 +12,7 @@
 /tags
 /tmp/*
 /staged_files/*
-/node_modules
 /public/packs
+/public/packs-test
+/node_modules
+/valhalla/app/javascript/test/unit/coverage/*

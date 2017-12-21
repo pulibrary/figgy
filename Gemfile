@@ -21,8 +21,10 @@ gem "sprockets", ">= 3.0.0"
 gem "title"
 gem "uglifier"
 gem "valkyrie", git: "https://github.com/samvera-labs/valkyrie.git"
+gem 'webpacker', '3.0.2'
 
 group :development do
+  gem "foreman"
   gem "listen"
   gem "spring"
   gem "spring-commands-rspec"
