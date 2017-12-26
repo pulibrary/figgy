@@ -89,6 +89,53 @@ RSpec.describe ScannedResourcesController do
       expect(resource.title).to contain_exactly "Title 1", "Title 2"
       expect(resource.depositor).to eq [user.uid]
     end
+    context "when asked to save and import" do
+      before do
+        allow(BrowseEverything).to receive(:config).and_return(
+          "file_system" => {
+            home: Rails.root.join("spec", "fixtures", "staged_files").to_s
+          }
+        )
+        stub_bibdata(bib_id: '123456')
+        stub_bibdata(bib_id: '4609321')
+      end
+      it "can create and import at once" do
+        post :create, params: {
+          scanned_resource: {
+            source_metadata_identifier: "123456",
+            rights_statement: 'Test Statement',
+            visibility: 'restricted'
+          },
+          commit: "Save and Ingest"
+        }
+
+        expect(response).to be_redirect
+        expect(response.location).to start_with "http://test.host/catalog/"
+        id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/")
+        resource = find_resource(id)
+
+        expect(resource.member_ids.length).to eq 2
+      end
+      it "can create and import a MVW" do
+        post :create, params: {
+          scanned_resource: {
+            source_metadata_identifier: "4609321",
+            rights_statement: 'Test Statement',
+            visibility: 'restricted'
+          },
+          commit: "Save and Ingest"
+        }
+
+        expect(response).to be_redirect
+        expect(response.location).to start_with "http://test.host/catalog/"
+        id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/")
+        resource = find_resource(id)
+
+        expect(resource.member_ids.length).to eq 2
+        members = query_service.find_members(resource: resource)
+        expect(members.flat_map(&:title)).to contain_exactly "vol1", "vol2"
+      end
+    end
     it "can create a nested scanned resource" do
       parent = FactoryBot.create_for_repository(:scanned_resource)
       post :create, params: { scanned_resource: valid_params.merge(append_id: parent.id.to_s) }
@@ -456,6 +503,47 @@ RSpec.describe ScannedResourcesController do
       expect(reloaded.file_metadata).not_to be_blank
       expect(reloaded.pdf_file).not_to be_blank
       expect(response).to redirect_to Valhalla::Engine.routes.url_helpers.download_path(resource_id: scanned_resource.id.to_s, id: reloaded.pdf_file.id.to_s)
+    end
+  end
+
+  describe "GET /concern/scanned_resources/save_and_ingest/:id" do
+    let(:user) { FactoryBot.create(:admin) }
+    before do
+      allow(BrowseEverything).to receive(:config).and_return(
+        "file_system" => {
+          home: Rails.root.join("spec", "fixtures", "staged_files").to_s
+        }
+      )
+    end
+    it "returns JSON for whether a directory exists" do
+      get :save_and_ingest, params: { format: :json, id: "123456" }
+
+      output = JSON.parse(response.body, symbolize_keys: true)
+
+      expect(output["exists"]).to eq true
+      expect(output["location"]).to eq "DPUL/Santa/ready/123456"
+      expect(output["file_count"]).to eq 2
+    end
+    it "returns JSON for when it's a MVW" do
+      get :save_and_ingest, params: { format: :json, id: "4609321" }
+
+      output = JSON.parse(response.body, symbolize_keys: true)
+
+      expect(output["exists"]).to eq true
+      expect(output["location"]).to eq "DPUL/Santa/ready/4609321"
+      expect(output["file_count"]).to eq 0
+      expect(output["volume_count"]).to eq 2
+    end
+    context "when a folder doesn't exist" do
+      it "returns JSON appropriately" do
+        get :save_and_ingest, params: { format: :json, id: "1234" }
+
+        output = JSON.parse(response.body, symbolize_keys: true)
+
+        expect(output["exists"]).to eq false
+        expect(output["location"]).to be_nil
+        expect(output["file_count"]).to be_nil
+      end
     end
   end
 end

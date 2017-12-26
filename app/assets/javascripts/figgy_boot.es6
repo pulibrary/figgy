@@ -7,6 +7,7 @@ import DerivativeForm from "derivative_form"
 import MetadataForm from "metadata_form"
 import UniversalViewer from "universal_viewer"
 import FileSetForm from "file_set_form"
+import SaveAndIngestHandler from "save_and_ingest_handler"
 
 export default class Initializer {
   constructor() {
@@ -18,6 +19,7 @@ export default class Initializer {
     this.derivative_form = new DerivativeForm
     this.metadata_form = new MetadataForm
     this.universal_viewer = new UniversalViewer
+    this.save_and_ingest_handler = new SaveAndIngestHandler
     // Incompatibility in Blacklight with newer versions of jQuery seem to be
     // causing this to not run. Manually calling it so facet more links work.
     Blacklight.ajaxModal.setup_modal()

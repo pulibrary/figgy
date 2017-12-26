@@ -7,6 +7,17 @@ class ScannedResourcesController < BaseResourceController
     storage_adapter: Valkyrie.config.storage_adapter
   )
 
+  def after_create_success(obj, change_set)
+    super
+    handle_save_and_ingest(obj)
+  end
+
+  def handle_save_and_ingest(obj)
+    return unless params[:commit] == "Save and Ingest"
+    locator = IngestFolderLocator.new(id: params[:scanned_resource][:source_metadata_identifier])
+    IngestFolderJob.perform_later(directory: locator.folder_pathname.to_s, property: "id", id: obj.id.to_s)
+  end
+
   # manifest thing
   def structure
     @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
@@ -35,5 +46,68 @@ class ScannedResourcesController < BaseResourceController
       buffered_changeset_persister.save(change_set: change_set)
     end
     redirect_to valhalla.download_path(resource_id: change_set.id, id: pdf_file.id)
+  end
+
+  def save_and_ingest
+    authorize! :create, resource_class
+    respond_to do |f|
+      f.json do
+        render json: save_and_ingest_response
+      end
+    end
+  end
+
+  def save_and_ingest_response
+    locator = IngestFolderLocator.new(id: params[:id])
+    {
+      exists: locator.exists?,
+      location: locator.location,
+      file_count: locator.file_count,
+      volume_count: locator.volume_count
+    }
+  end
+
+  class IngestFolderLocator
+    attr_reader :id
+    def initialize(id:)
+      @id = id
+    end
+
+    def root_path
+      Pathname.new(BrowseEverything.config["file_system"][:home]).join("studio_new")
+    end
+
+    def exists?
+      folder_location.present?
+    end
+
+    def location
+      return unless exists?
+      folder_pathname.relative_path_from(root_path)
+    end
+
+    def file_count
+      return unless exists?
+      Dir.glob(folder_pathname.join("**")).select do |file|
+        File.file?(file)
+      end.count
+    end
+
+    def volume_count
+      return unless exists?
+      Dir.glob(folder_pathname.join("**")).select do |file|
+        File.directory?(file)
+      end.count
+    end
+
+    def folder_pathname
+      @folder_pathname ||= Pathname.new(folder_location)
+    end
+
+    private
+
+      def folder_location
+        @folder_location ||= Dir.glob(root_path.join("**/#{id}")).first
+      end
   end
 end
