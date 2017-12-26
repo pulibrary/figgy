@@ -41,16 +41,17 @@
     ]
   },
   "dependencies": {
-    "@rails/webpacker": "^3.0.2",
+    "@rails/webpacker": "^3.2.0",
     "axios": "^0.17.1",
     "babel-polyfill": "^6.26.0",
     "manifesto.js": "^2.2.0",
     "page-label-generator": "^1.0.4",
     "pluralize": "^7.0.0",
+    "postcss-smart-import": "^0.7.6",
     "typings": "^2.1.1",
     "vue": "^2.5.3",
     "vue-flash": "^2.1.1",
-    "vue-loader": "^13.5.0",
+    "vue-loader": "^13.6.1",
     "vue-template-compiler": "^2.5.3",
     "vuedraggable": "^2.14.1",
     "vuex": "^2.4.1"
