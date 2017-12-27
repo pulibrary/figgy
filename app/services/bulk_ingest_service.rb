@@ -25,7 +25,7 @@ class BulkIngestService
   # @param file_filter [String] the filter used for matching against the filename extension
   def attach_dir(base_directory:, property: nil, file_filter: nil, **attributes)
     directory_path = Pathname.new(base_directory)
-    file_name = File.basename(base_directory)
+    file_name = attributes[:id] || File.basename(base_directory)
     attributes[:title] = [directory_path.basename] if attributes.fetch(:title, []).blank?
 
     resource = find_or_create_by(property: property, value: file_name, **attributes)
@@ -41,7 +41,7 @@ class BulkIngestService
     child_resources = dirs(path: path).map do |subdir_path|
       attach_children(
         path: subdir_path,
-        resource: new_resource(klass: resource.class, **child_attributes),
+        resource: new_resource(klass: resource.class, **child_attributes.merge(title: [subdir_path.basename])),
         file_filter: file_filter
       )
     end
@@ -76,7 +76,11 @@ class BulkIngestService
     end
 
     def find_by(property:, value:)
-      results = property_query_service.find_by_string_property(property: property, value: value).to_a
+      results = if property.to_sym == :id
+                  [query_service.find_by(id: Valkyrie::ID.new(value.to_s))]
+                else
+                  property_query_service.find_by_string_property(property: property, value: value).to_a
+                end
       raise "Failed to find the resource for #{property}:#{value}" if results.empty?
       results.first
     rescue => error

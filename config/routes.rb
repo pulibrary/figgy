@@ -74,6 +74,9 @@ Rails.application.routes.draw do
         post :browse_everything_files
         get :pdf
       end
+      collection do
+        get "save_and_ingest/:id", action: :save_and_ingest
+      end
     end
     get '/scanned_resources/:parent_id/new', to: 'scanned_resources#new', as: :parent_new_scanned_resource
 

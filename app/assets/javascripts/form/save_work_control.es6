@@ -84,7 +84,7 @@ export default class SaveWorkControl {
     if (!this.form) {
       return
     }
-    this.saveButton = this.element.find(':submit')
+    this.saveButton = this.element.find('.save:submit')
     this.requiredFields = new RequiredFields(this.form, () => this.formStateChanged())
     this.requiredMetadata = new ChecklistItem(this.element.find('#required-metadata'))
     this.preventSubmit()
