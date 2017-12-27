@@ -46,6 +46,10 @@ FactoryBot.define do
       state "complete"
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
     end
+    factory :pending_private_scanned_resource do
+      state "pending"
+      visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+    end
     factory :takedown_scanned_resource do
       state "takedown"
     end

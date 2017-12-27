@@ -623,4 +623,71 @@ RSpec.describe PlumChangeSetPersister do
       expect(solr_record["member_of_ssim"]).to eq ["id-#{parent.id}"]
     end
   end
+
+  context "setting visibility from remote metadata" do
+    context "when date is before 1924" do
+      it "sets it to public domain and open" do
+        stub_bibdata(bib_id: "4609321")
+        resource = FactoryBot.build(:pending_private_scanned_resource)
+        change_set = change_set_class.new(resource)
+        change_set.prepopulate!
+        change_set.validate(source_metadata_identifier: '4609321', set_visibility_by_date: "1")
+        change_set.sync
+
+        output = change_set_persister.save(change_set: change_set)
+        reloaded = query_service.find_by(id: output.id)
+        expect(reloaded.visibility).to eq [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC]
+        expect(reloaded.read_groups).to eq ['public']
+        expect(reloaded.rights_statement).to eq [RDF::URI.new("http://rightsstatements.org/vocab/NKC/1.0/")]
+      end
+    end
+    context "when date is after 1924" do
+      it "sets it to in copyright and private" do
+        stub_bibdata(bib_id: "123456")
+        resource = FactoryBot.build(:pending_private_scanned_resource)
+        change_set = change_set_class.new(resource)
+        change_set.prepopulate!
+        change_set.validate(source_metadata_identifier: '123456', set_visibility_by_date: "1")
+        change_set.sync
+
+        output = change_set_persister.save(change_set: change_set)
+        reloaded = query_service.find_by(id: output.id)
+        expect(reloaded.visibility).to eq [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE]
+        expect(reloaded.read_groups).to eq []
+        expect(reloaded.rights_statement).to eq [RDF::URI.new("http://rightsstatements.org/vocab/InC/1.0/")]
+      end
+    end
+    context "when given a bad date" do
+      it "does nothing" do
+        stub_bibdata(bib_id: "123456789")
+        resource = FactoryBot.build(:pending_scanned_resource)
+        change_set = change_set_class.new(resource)
+        change_set.prepopulate!
+        change_set.validate(source_metadata_identifier: '123456789', set_visibility_by_date: "1")
+        change_set.sync
+
+        output = change_set_persister.save(change_set: change_set)
+        reloaded = query_service.find_by(id: output.id)
+        expect(reloaded.visibility).to eq [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC]
+        expect(reloaded.read_groups).to eq ['public']
+        expect(reloaded.rights_statement).to eq [RDF::URI.new("http://rightsstatements.org/vocab/NKC/1.0/")]
+      end
+    end
+    context "when not told to set visibility by date" do
+      it "does nothing" do
+        stub_bibdata(bib_id: "123456")
+        resource = FactoryBot.build(:pending_scanned_resource)
+        change_set = change_set_class.new(resource)
+        change_set.prepopulate!
+        change_set.validate(source_metadata_identifier: '123456')
+        change_set.sync
+
+        output = change_set_persister.save(change_set: change_set)
+        reloaded = query_service.find_by(id: output.id)
+        expect(reloaded.visibility).to eq [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC]
+        expect(reloaded.read_groups).to eq ['public']
+        expect(reloaded.rights_statement).to eq [RDF::URI.new("http://rightsstatements.org/vocab/NKC/1.0/")]
+      end
+    end
+  end
 end

@@ -6,6 +6,11 @@ module VisibilityProperty
   included do
     # override this property to define a different default
     property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+    property :set_visibility_by_date, virtual: true, multiple: false
+
+    def set_visibility_by_date?
+      set_visibility_by_date == "1"
+    end
 
     def visibility=(visibility)
       super.tap do |_result|
