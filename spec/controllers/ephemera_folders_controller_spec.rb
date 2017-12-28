@@ -307,7 +307,7 @@ RSpec.describe EphemeraFoldersController do
     context "when it does exist" do
       it "saves it and redirects" do
         ephemera_folder = FactoryBot.create_for_repository(:ephemera_folder)
-        patch :update, params: { id: ephemera_folder.id.to_s, ephemera_folder: { folder_number: ["Two"] } }
+        patch :update, params: { id: ephemera_folder.id.to_s, ephemera_folder: { subject: ["", "bla"], folder_number: ["Two"] } }
 
         expect(response).to be_redirect
         expect(response.location).to eq "http://test.host/catalog/#{ephemera_folder.id}"

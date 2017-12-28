@@ -152,7 +152,7 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
     end
 
     def subject_present
-      return if Array.wrap(subject).first.present?
+      return if Array.wrap(subject).find(&:present?)
       errors.add(:subject, "must be provided.")
     end
 end
