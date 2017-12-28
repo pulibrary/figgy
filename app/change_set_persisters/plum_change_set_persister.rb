@@ -14,6 +14,7 @@ class PlumChangeSetPersister
     {
       before_save: [
         ApplyRemoteMetadata,
+        ApplyVisibilityByDate,
         CreateFile::Factory.new(file_appender: FileAppender),
         PropagateVisibilityAndState
       ],
