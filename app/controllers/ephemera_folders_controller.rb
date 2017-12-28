@@ -6,7 +6,7 @@ class EphemeraFoldersController < BaseResourceController
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
     storage_adapter: Valkyrie.config.storage_adapter
   )
-  before_action :load_fields, only: [:new, :edit]
+  before_action :load_fields, only: [:new, :edit, :update, :create]
   before_action :cache_box, only: [:destroy]
 
   def change_set_class
