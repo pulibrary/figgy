@@ -20,6 +20,14 @@ const ManifestoFilemanagerMixins = {
     return thumb
   },
 
+  getManifestThumb: function (manifest) {
+    var thumb = manifest.getThumbnail()
+    if (!thumb) {
+      thumb = default_image // maybe have a default img for volume?
+    }
+    return thumb
+  },
+
   getResourceId: function (canvas) {
     const images = canvas.getImages()
     const r = images[0].getResource()
@@ -34,6 +42,18 @@ const ManifestoFilemanagerMixins = {
     return english.value
   },
 
+  getMVWImageCollection: function () {
+    let imageCollection = {}
+    const manifests = this.getManifests()
+    imageCollection.images = manifests.map(manifest => ({
+      // label: this.getEnglishTitle(manifest),
+      id: this.id,
+      // page_type: "single",
+      url: this.getManifestThumb(manifest)
+    }))
+    return imageCollection
+  },
+
   getThumbnailId: function () {
     const t = this.getThumbnail()
     var id = ''
@@ -45,32 +65,39 @@ const ManifestoFilemanagerMixins = {
   },
 
   imageCollection: function (resource) {
-    const s = this.mainSequence()
-    const canvases = s.getCanvases()
-    const viewDir = this.getViewingDirection()
-    const viewHint = this.getViewingHint()
-    var imageCollection = {}
-    imageCollection.id = resource.id
-    imageCollection.resourceClassName = Pluralize.singular(resource.class_name)
-    imageCollection.startpage = ''
-    if (typeof s.getStartCanvas() != 'undefined') {
-      imageCollection.startpage = s.getStartCanvas()
+    const IIIFResourceType = this.getIIIFResourceType()
+    let imageCollection = {}
+    if (IIIFResourceType.value == 'collection') {
+      imageCollection = this.getMVWImageCollection()
+      console.log(imageCollection)
+    } else {
+      const s = this.mainSequence()
+      const canvases = s.getCanvases()
+      const viewDir = this.getViewingDirection()
+      const viewHint = this.getViewingHint()
+
+      imageCollection.id = resource.id
+      imageCollection.resourceClassName = Pluralize.singular(resource.class_name)
+      imageCollection.startpage = ''
+      if (typeof s.getStartCanvas() != 'undefined') {
+        imageCollection.startpage = s.getStartCanvas()
+      }
+      imageCollection.thumbnail = this.getThumbnailId()
+      imageCollection.viewingDirection = ''
+      if (typeof viewDir != 'undefined') {
+        imageCollection.viewingDirection = viewDir.value
+      }
+      imageCollection.viewingHint = ''
+      if (typeof viewHint != 'undefined') {
+        imageCollection.viewingHint = viewHint.value
+      }
+      imageCollection.images = canvases.map(canvas => ({
+        label: this.getEnglishLabel(canvas),
+        id: this.getResourceId(canvas),
+        page_type: "single",
+        url: this.getCanvasMainThumb(canvas)
+      }))
     }
-    imageCollection.thumbnail = this.getThumbnailId()
-    imageCollection.viewingDirection = ''
-    if (typeof viewDir != 'undefined') {
-      imageCollection.viewingDirection = viewDir.value
-    }
-    imageCollection.viewingHint = ''
-    if (typeof viewHint != 'undefined') {
-      imageCollection.viewingHint = viewHint.value
-    }
-    imageCollection.images = canvases.map(canvas => ({
-      label: this.getEnglishLabel(canvas),
-      id: this.getResourceId(canvas),
-      page_type: "single",
-      url: this.getCanvasMainThumb(canvas)
-    }))
     return imageCollection
   },
 
