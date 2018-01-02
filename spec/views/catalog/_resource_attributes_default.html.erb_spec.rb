@@ -9,6 +9,7 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
     let(:fileset) { scanned_resource.member_ids.map { |id| solr.query_service.find_by(id: id) }.first }
     let(:document) { solr.resource_factory.from_resource(resource: fileset) }
     let(:solr_document) { SolrDocument.new(document) }
+    with_queue_adapter :inline
     before do
       assign :document, solr_document
       allow(view).to receive(:has_search_parameters?).and_return(false)

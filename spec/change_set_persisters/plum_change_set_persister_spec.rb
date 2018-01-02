@@ -4,6 +4,7 @@ require 'valkyrie/specs/shared_specs'
 include ActionDispatch::TestProcess
 
 RSpec.describe PlumChangeSetPersister do
+  with_queue_adapter :inline
   subject(:change_set_persister) do
     described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter)
   end

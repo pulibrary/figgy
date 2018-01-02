@@ -288,6 +288,7 @@ RSpec.describe ScannedMapsController do
   # Tests functionality defined in `app/controllers/concerns/geo_resource_controller.rb`
   #   Acts as a 'master spec' in this regard
   describe "PUT /concern/scanned_maps/:id/extract_metadata/:file_set_id" do
+    with_queue_adapter :inline
     let(:user) { FactoryBot.create(:admin) }
     let(:file) { fixture_file_upload('files/geo_metadata/fgdc.xml', 'application/xml') }
     let(:tika_output) { tika_xml_output }

@@ -3,6 +3,7 @@ require 'rails_helper'
 include ActionDispatch::TestProcess
 
 RSpec.describe RiiifResolver do
+  with_queue_adapter :inline
   subject(:resolver) { described_class.new }
   describe "#pattern" do
     context "when given an ID" do

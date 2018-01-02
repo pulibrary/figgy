@@ -3,6 +3,7 @@ require 'rails_helper'
 include ActionDispatch::TestProcess
 
 RSpec.describe ManifestBuilder::CantaloupeHelper do
+  with_queue_adapter :inline
   let(:cantaloupe_helper) { described_class.new }
   let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
   let(:file_set) { query_service.find_members(resource: scanned_resource).to_a.first }
