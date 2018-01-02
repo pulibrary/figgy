@@ -31,6 +31,7 @@ RSpec.describe FileSetsController do
     end
 
     context 'with replacement master and derivative files' do
+      with_queue_adapter :inline
       let(:master_file) { fixture_file_upload('files/example.tif', 'image/tiff') }
       let(:derivative_file) { fixture_file_upload('files/example.jp2', 'image/jp2') }
       let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, title: "Test Title", files: [master_file]) }

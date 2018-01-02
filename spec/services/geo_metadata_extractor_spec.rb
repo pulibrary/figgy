@@ -3,6 +3,7 @@ require 'rails_helper'
 include ActionDispatch::TestProcess
 
 RSpec.describe GeoMetadataExtractor do
+  with_queue_adapter :inline
   subject(:extractor) { described_class.new(change_set: change_set, file_node: file_set, persister: persister) }
   let(:adapter) { Valkyrie.config.metadata_adapter }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }

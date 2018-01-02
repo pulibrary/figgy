@@ -4,6 +4,7 @@ require 'valkyrie/specs/shared_specs'
 include ActionDispatch::TestProcess
 
 RSpec.describe ScannedMapDerivativeService do
+  with_queue_adapter :inline
   it_behaves_like "a Valkyrie::DerivativeService"
 
   let(:derivative_service) do

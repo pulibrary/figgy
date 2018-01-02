@@ -3,6 +3,7 @@ require 'rails_helper'
 include ActionDispatch::TestProcess
 
 RSpec.describe ManifestBuilder do
+  with_queue_adapter :inline
   subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_resource.id)) }
   let(:scanned_resource) do
     FactoryBot.create_for_repository(:scanned_resource,

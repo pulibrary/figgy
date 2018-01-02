@@ -3,6 +3,7 @@ require 'rails_helper'
 include ActionDispatch::TestProcess
 
 RSpec.describe ScannedResourcesController do
+  with_queue_adapter :inline
   let(:user) { nil }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:persister) { adapter.persister }

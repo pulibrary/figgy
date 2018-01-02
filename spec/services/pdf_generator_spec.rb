@@ -3,6 +3,7 @@ require 'rails_helper'
 include ActionDispatch::TestProcess
 
 RSpec.describe PDFGenerator do
+  with_queue_adapter :inline
   subject(:generator) { described_class.new(resource: resource, storage_adapter: storage_adapter) }
   let(:file) { fixture_file_upload('files/color-landscape.tif', 'image/tiff') }
   let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], holding_location: ["https://bibdata.princeton.edu/locations/delivery_locations/1"]) }

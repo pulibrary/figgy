@@ -2,6 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe PlumImporter do
+  with_queue_adapter :inline
   subject(:importer) { described_class.new(id: id, change_set_persister: change_set_persister) }
   let(:id) { "ps7529f137" }
   let(:change_set_persister) do
