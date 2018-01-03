@@ -5,6 +5,7 @@ const mutations = {
   },
   SET_STATE (state, ImageCollection) {
     state.id = ImageCollection.id
+    state.isMultiVolume = ImageCollection.isMultiVolume
     state.resourceClassName = ImageCollection.resourceClassName
     state.startPage = ImageCollection.startpage
     state.thumbnail = ImageCollection.thumbnail

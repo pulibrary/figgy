@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="form-group">
+        <div v-if="!isMultiVolume" class="form-group">
           <label class="control-label" for="labelMethod">Labeling Method</label>
           <select @change="updateMultiLabels()" v-model="labelerOpts.method" id="labelMethod" class="form-control">
             <option value="paginate">Paginate (Default)</option>
@@ -71,6 +71,9 @@ export default {
     }
   },
   computed: {
+    isMultiVolume: function () {
+      return this.$store.state.isMultiVolume
+    },
     selectedTotal () {
       return this.$store.state.selected.length
     }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Set Properties <small>for this resource</small></h2>
+    <h2>Set Properties <small>for this <span v-if="isMultiVolume">multi-volume</span> resource</small></h2>
     <div class="row">
       <!-- Viewing Direction-->
       <div class="form-group col-md-6">
@@ -17,7 +17,7 @@
         </fieldset>
       </div>
       <!-- Viewing Hint-->
-      <div class="form-group col-md-6">
+      <div v-if="!isMultiVolume" class="form-group col-md-6">
         <fieldset>
           <legend>Viewing Hint</legend>
           <div v-for="viewHint in viewHints">
@@ -53,8 +53,16 @@ export default {
     }
   },
   computed: {
-    viewingDirection: function () {
-      return this.$store.state.viewingDirection
+    isMultiVolume: function () {
+      return this.$store.state.isMultiVolume
+    },
+    viewingDirection: {
+      get () {
+        return this.$store.state.viewingDirection
+      },
+      set () {
+        // need to have something here or Vue complains
+      }
     },
     viewingHint: function () {
       return this.$store.state.viewingHint

@@ -69,4 +69,18 @@ export default {
   border: 1px solid #ddd;
 }
 
+.alert-wrap {
+  position: fixed;
+  width: 500px;
+  height: 200px;
+  top: 200px;
+  left: 50%;
+  margin-top: -100px; /* Negative half of height. */
+  margin-left: -250px; /* Negative half of width. */
+  /* position: fixed;
+  right: 25px;
+  bottom: 25px; */
+  z-index: 9999;
+}
+
 </style>

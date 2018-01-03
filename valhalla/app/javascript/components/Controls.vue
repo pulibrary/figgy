@@ -3,7 +3,7 @@
     <div v-if="orderChanged" id="orderChangedIcon" class="alert alert-info" role="alert">
       <i class="fa fa-exchange"></i> Page order has changed.
     </div>
-    <button @click="save" id="save_btn" type="button" class="btn btn-lg btn-primary" :disabled="isDisabled">
+    <button @click="saveHandler" id="save_btn" type="button" class="btn btn-lg btn-primary" :disabled="isDisabled">
       Save
     </button>
   </div>
@@ -24,6 +24,9 @@ export default {
     },
     imageIdList: function () {
       return this.$store.getters.imageIdList
+    },
+    isMultiVolume: function () {
+      return this.$store.state.isMultiVolume
     },
     thumbnail: function () {
       return this.$store.state.thumbnail
@@ -56,9 +59,23 @@ export default {
         return {id: file.id, title: file.label, page_type: file.page_type }
       })
       return payload
+    },
+    volumePayload: function () {
+      var changed = this.images.filter(image => this.changeList.indexOf(image.id) !== -1 )
+      var payload = changed.map((file) => {
+        return {id: file.id, title: file.label }
+      })
+      return payload
     }
   },
   methods: {
+    saveHandler: function () {
+      if (this.isMultiVolume) {
+        this.saveMVW()
+      } else {
+        this.save()
+      }
+    },
     save: function () {
       let body = {
         resource : {},
@@ -69,6 +86,18 @@ export default {
         thumbnail_id: this.thumbnail,
         start_canvas: this.startPage,
         viewing_hint: this.viewingHint,
+        viewing_direction: this.viewingDirection,
+        id: this.id
+      }
+      this.$store.dispatch('saveState', body)
+    },
+    saveMVW: function () {
+      let body = {
+        resource : {},
+        volumes: this.volumePayload
+      }
+      body.resource[this.resourceClassName] = {
+        member_ids: this.imageIdList,
         viewing_direction: this.viewingDirection,
         id: this.id
       }
