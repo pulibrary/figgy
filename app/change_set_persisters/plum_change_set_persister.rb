@@ -22,7 +22,8 @@ class PlumChangeSetPersister
         AppendToParent
       ],
       after_save_commit: [
-        PublishMessage::Factory.new(operation: :update)
+        PublishMessage::Factory.new(operation: :update),
+        ReindexChildrenOnState::Factory.new(model: EphemeraBox, state: "all_in_production")
       ],
       before_delete: [
         CleanupStructure,

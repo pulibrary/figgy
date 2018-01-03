@@ -605,6 +605,19 @@ RSpec.describe PlumChangeSetPersister do
         members = query_service.find_members(resource: output)
         expect(members.first.state).not_to eq ['ready_to_ship']
       end
+      it "re-indexes the child folders when marked all_in_production" do
+        solr = Blacklight.default_index.connection
+        folder = FactoryBot.create_for_repository(:ephemera_folder, state: "needs_qa")
+        box = FactoryBot.create_for_repository(:ephemera_box, state: 'received', member_ids: folder.id)
+
+        change_set = change_set_class.new(box)
+        change_set.validate(state: 'all_in_production')
+        change_set.sync
+
+        change_set_persister.save(change_set: change_set)
+        doc = solr.get("select", params: { q: "id:#{folder.id}", fl: "read_access_group_ssim", rows: 1 })["response"]["docs"].first
+        expect(doc["read_access_group_ssim"]).to eq ["public"]
+      end
     end
   end
 
