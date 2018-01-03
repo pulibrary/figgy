@@ -605,7 +605,13 @@ RSpec.describe PlumChangeSetPersister do
         members = query_service.find_members(resource: output)
         expect(members.first.state).not_to eq ['ready_to_ship']
       end
-      it "re-indexes the child folders when marked all_in_production" do
+      let(:rabbit_connection) { instance_double(MessagingClient, publish: true) }
+      before do
+        allow(Figgy).to receive(:messaging_client).and_return(rabbit_connection)
+      end
+
+      it "re-indexes the child folders when marked all_in_production", rabbit_stubbed: true do
+        allow(rabbit_connection).to receive(:publish)
         solr = Blacklight.default_index.connection
         folder = FactoryBot.create_for_repository(:ephemera_folder, state: "needs_qa")
         box = FactoryBot.create_for_repository(:ephemera_box, state: 'received', member_ids: folder.id)
@@ -617,6 +623,13 @@ RSpec.describe PlumChangeSetPersister do
         change_set_persister.save(change_set: change_set)
         doc = solr.get("select", params: { q: "id:#{folder.id}", fl: "read_access_group_ssim", rows: 1 })["response"]["docs"].first
         expect(doc["read_access_group_ssim"]).to eq ["public"]
+        expected_result = {
+          "id" => folder.id.to_s,
+          "event" => "UPDATED",
+          "manifest_url" => "http://www.example.com/concern/ephemera_folders/#{folder.id}/manifest",
+          "collection_slugs" => []
+        }
+        expect(rabbit_connection).to have_received(:publish).once.with(expected_result.to_json)
       end
     end
   end

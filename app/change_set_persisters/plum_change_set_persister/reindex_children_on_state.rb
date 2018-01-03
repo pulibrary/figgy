@@ -29,7 +29,8 @@ class PlumChangeSetPersister
     def run
       return unless post_save_resource.is_a?(model) && post_save_resource.state == Array.wrap(state)
       children.each do |resource|
-        persister.save(resource: resource)
+        cs = DynamicChangeSet.new(resource)
+        change_set_persister.save(change_set: cs)
       end
     end
 
