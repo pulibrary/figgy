@@ -181,27 +181,50 @@ RSpec.describe CatalogController do
     end
 
     context 'within an incomplete EphemeraBox' do
-      let(:ephemera_folder) { FactoryBot.build(:ephemera_folder) }
-      let(:ephemera_box) { FactoryBot.build(:ephemera_box, member_ids: [ephemera_folder.id]) }
+      let(:ephemera_folder) { FactoryBot.build(:ephemera_folder, state: 'complete') }
+      let(:ephemera_box) { FactoryBot.build(:ephemera_box, state: 'new') }
       before do
-        persister.save(resource: ephemera_folder)
-        persister.save(resource: ephemera_box)
+        box = persister.save(resource: ephemera_box)
+        folder = persister.save(resource: ephemera_folder)
+        box.member_ids = folder.id
+        persister.save(resource: box)
+        persister.save(resource: folder)
       end
-      it "does not display complete EphemeraFolders" do
+      it "does display complete EphemeraFolders" do
         get :index, params: { q: "" }
 
-        expect(assigns(:document_list).length).to eq 0
+        expect(assigns(:document_list).length).to eq 1
       end
     end
 
     context 'within a complete EphemeraBox' do
       let(:ephemera_folder) { FactoryBot.build(:ephemera_folder, state: 'complete') }
-      let(:ephemera_box) { FactoryBot.build(:ephemera_box, member_ids: [ephemera_folder.id], state: 'all_in_production') }
+      let(:ephemera_box) { FactoryBot.build(:ephemera_box, state: 'all_in_production') }
       before do
-        persister.save(resource: ephemera_folder)
-        persister.save(resource: ephemera_box)
+        box = persister.save(resource: ephemera_box)
+        folder = persister.save(resource: ephemera_folder)
+        box.member_ids = folder.id
+        persister.save(resource: box)
+        persister.save(resource: folder)
       end
       it "does display complete EphemeraFolders" do
+        get :index, params: { q: "" }
+
+        expect(assigns(:document_list).length).to eq 1
+      end
+    end
+
+    context "an incomplete folder within a complete box" do
+      let(:ephemera_folder) { FactoryBot.build(:ephemera_folder, state: 'needs_qa') }
+      let(:ephemera_box) { FactoryBot.build(:ephemera_box, state: 'all_in_production') }
+      before do
+        box = persister.save(resource: ephemera_box)
+        folder = persister.save(resource: ephemera_folder)
+        box.member_ids = folder.id
+        persister.save(resource: box)
+        persister.save(resource: folder)
+      end
+      it "does display incomplete folders" do
         get :index, params: { q: "" }
 
         expect(assigns(:document_list).length).to eq 1
