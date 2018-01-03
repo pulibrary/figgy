@@ -9,19 +9,6 @@
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 server 'figgy-staging1', user: 'deploy', roles: %w[app db web worker]
 
-before "deploy:assets:precompile", "deploy:npm_install"
-
-namespace :deploy do
-  desc 'Run rake npm install'
-  task :npm_install do
-    on roles(:web) do
-      within release_path do
-        execute("cd #{release_path} && npm install")
-      end
-    end
-  end
-end
-
 # role-based syntax
 # ==================
 
