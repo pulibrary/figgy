@@ -51,7 +51,7 @@ RSpec.describe BulkIngestService do
         stub_ezid(shoulder: "99999/fk4", blade: "4609321")
       end
 
-      it 'ingests the resources' do
+      it 'ingests the resources, ignoring dotfiles' do
         coll = FactoryBot.create_for_repository(:collection)
 
         ingester.attach_dir(
@@ -65,6 +65,7 @@ RSpec.describe BulkIngestService do
         updated_collection = query_service.find_by(id: coll.id)
         decorated_collection = updated_collection.decorate
         expect(decorated_collection.members.to_a.length).to eq 1
+        expect(decorated_collection.members.first.member_ids.length).to eq 2
 
         resource = decorated_collection.members.to_a.first
         expect(resource.source_metadata_identifier).to include(bib)
