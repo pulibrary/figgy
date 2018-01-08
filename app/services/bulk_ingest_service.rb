@@ -109,6 +109,7 @@ class BulkIngestService
     def files(path:, file_filter: nil)
       file_paths = path.children.select(&:file?)
       file_paths = file_paths.select { |file| file.extname.ends_with?(file_filter) } if file_filter.present?
+      file_paths.reject! { |x| x.basename.to_s.start_with?(".") }
 
       nodes = []
       file_paths.sort.each_with_index do |f, idx|
