@@ -1,5 +1,5 @@
 <template>
-  <div class="gallery">
+  <div class="gallery" @click.capture="deselect($event)">
     <div class="gallery_controls">
       <div class="dropdown">
         <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="selectOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -69,6 +69,11 @@ export default {
     }
   },
   methods: {
+    deselect: function (event) {
+      if (event.target.className === 'img_gallery') {
+        this.selectNone()
+      }
+    },
     getImageById: function (id) {
       var elementPos = this.getImageIndexById(id)
       return this.thumbnails[elementPos]
@@ -101,6 +106,7 @@ export default {
       }
     },
     select: function (id, event) {
+      event.stopPropagation()
       var selected = []
       if (event.metaKey) {
         selected = this.selected

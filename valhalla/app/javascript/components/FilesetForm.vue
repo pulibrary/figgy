@@ -8,35 +8,38 @@
             <label class="control-label" for="label">Label</label>
             <input @input="updateSingle()" v-model="singleForm.label" type="text" name="label" id="label" value="1" class="form-control">
           </div>
-          <div class="form-group">
-            <label class="control-label" for="pageType">Page Type</label>
-            <select @change="updateSingle()" v-model="singleForm.pageType" id="pageType" class="form-control">
-              <option value="single">Single Page (Default)</option>
-              <option value="non-paged">Non-Paged</option>
-              <option value="facing">Facing Pages</option>
-            </select>
-          </div>
-          <br/>
-          <div class="form-group">
-            <div class="checkbox">
-              <label>
-                <input @change="updateThumbnail()" v-model="isThumbnail" id="isThumbnail" type="checkbox" :value="thumbnail">
-                Set as Thumbnail</a>
-              </label>
+          <div v-if="!isMultiVolume">
+            <div class="form-group">
+              <label class="control-label" for="pageType">Page Type</label>
+              <select @change="updateSingle()" v-model="singleForm.pageType" id="pageType" class="form-control">
+                <option value="single">Single Page (Default)</option>
+                <option value="non-paged">Non-Paged</option>
+                <option value="facing">Facing Pages</option>
+              </select>
             </div>
-            <div class="checkbox">
-              <label>
-                <input @change="updateStartPage()" v-model="isStartPage" id="isStartPage" type="checkbox" :value="startPage">
-                Set as Start Page</a>
-              </label>
+            <br/>
+            <div class="form-group">
+              <div class="checkbox">
+                <label>
+                  <input @change="updateThumbnail()" v-model="isThumbnail" id="isThumbnail" type="checkbox" :value="thumbnail">
+                  Set as Thumbnail</a>
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input @change="updateStartPage()" v-model="isStartPage" id="isStartPage" type="checkbox" :value="startPage">
+                  Set as Start Page</a>
+                </label>
+              </div>
+            </div>
+            <input id="canvas_id" type="hidden" name="canvas_id">
+            <div class="col-md-12">
+                <a :href="singleForm.editLink" id="replace-file-button" class="btn btn-default btn-lg">Replace or Delete File</a>
             </div>
           </div>
-          <input id="canvas_id" type="hidden" name="canvas_id">
         </form>
       </div>
-      <div class="col-md-12">
-          <a :href="singleForm.editLink" id="replace-file-button" class="btn btn-default btn-lg">Replace or Delete File</a>
-      </div>
+
     </div>
   </div>
 </template>
@@ -47,6 +50,9 @@ export default {
   computed: {
     thumbnail: function () {
       return this.$store.state.thumbnail
+    },
+    isMultiVolume: function () {
+      return this.$store.state.isMultiVolume
     },
     startPage: function () {
       return this.$store.state.startPage

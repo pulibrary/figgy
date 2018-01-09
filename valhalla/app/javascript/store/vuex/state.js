@@ -2,6 +2,7 @@
 const state = {
   id: '',
   resourceClassName: '',
+  isMultiVolume: false,
   startPage: '',
   thumbnail: '',
   viewingDirection: '',

@@ -1,5 +1,5 @@
 import actions from '@/store/vuex/actions'
-import { body } from '@/test/fixtures/image-collection'
+import { body, mvwBody } from '@/test/fixtures/image-collection'
 
 jest.mock('axios')
 
@@ -23,6 +23,22 @@ describe('actions', () => {
   })
 
   it('saveState', () => {
+    let data
+
+    let mockCommit = (state, payload) => {
+      data = payload
+    }
+    actions.saveState({ commit: mockCommit }, body)
+      .then(() => {
+         // should reset state
+         expect(data).toEqual([])
+      }).catch(
+      (error) => {
+        console.log(error);
+      })
+  })
+
+  it('saveMVWState', () => {
     let data
 
     let mockCommit = (state, payload) => {

@@ -109,6 +109,12 @@ describe('Thumbnails.vue', () => {
     expect(actions.handleSelect).toHaveBeenCalled()
   })
 
+  it('deselects all thumbnails when clicking outside of the files', () => {
+    const wrapper = mount(Thumbnails, { options, store, localVue })
+    wrapper.find('.img_gallery').trigger('click')
+    expect(actions.handleSelect).toHaveBeenCalled()
+  })
+
   it('changes thumbnail size when range input changes', () => {
     const wrapper = mount(Thumbnails, { options, store, localVue })
     const input = wrapper.find('#resize_thumbs_input')

@@ -12,6 +12,18 @@ export const imageCollection = [
     "url":"http://example.com"
   }]
 
+export const mvwImageCollection = [
+    {
+      "label": "Volume I",
+      "id": "2d1a4bb7-50b6-4b80-921c-58767ebdca9c",
+      "url": "/packs/_/_/_/app/assets/images/default_vol-6307afcef289ce38b0880c2bd03657f0.png"
+    },
+    {
+      "label": "Volume II",
+      "id": "03a1cabe-e599-4df8-899b-ceb71f8db669",
+      "url": "/packs/_/_/_/app/assets/images/default_vol-6307afcef289ce38b0880c2bd03657f0.png"
+    }]
+
 export const emptyChangeList = []
 export const changeList = ['50b5e49b-ade7-4278-8265-4f72081f26a5']
 
@@ -103,6 +115,29 @@ export const initState = {
   ]
 }
 
+export const mvwBody = {
+  "resource": {
+    "scanned_resource": {
+      "member_ids": [
+        "03a1cabe-e599-4df8-899b-ceb71f8db669",
+        "2d1a4bb7-50b6-4b80-921c-58767ebdca9c"
+      ],
+      "viewing_direction": "right-to-left",
+      "id": "2b807928-20e4-437d-aa6e-65bde98ea142"
+    }
+  },
+  "volumes": [
+    {
+      "id": "03a1cabe-e599-4df8-899b-ceb71f8db669",
+      "title": "Vol. 1"
+    },
+    {
+      "id": "2d1a4bb7-50b6-4b80-921c-58767ebdca9c",
+      "title": "Vol. 2"
+    }
+  ]
+}
+
 export const body = {
   "resource": {
     "ephemera_folder": {
@@ -165,7 +200,8 @@ const fixtures = {
   thumbnail,
   startPage,
   initState,
-  body
+  body,
+  mvwBody
 }
 
 export default fixtures

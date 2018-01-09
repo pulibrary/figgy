@@ -31,14 +31,20 @@ const actions = {
 
     axios.defaults.headers.common['X-CSRF-Token'] = token
     axios.defaults.headers.common['Accept'] = 'application/json'
-    let file_set_promises = []
-    for (let i = 0; i < body.file_sets.length; i++) {
-      file_set_promises.push(axios.patch('/concern/file_sets/' + body.file_sets[i].id, body.file_sets[i]))
+    let member_promises = []
+    if(body.hasOwnProperty('file_sets')){
+      for (let i = 0; i < body.file_sets.length; i++) {
+        member_promises.push(axios.patch('/concern/file_sets/' + body.file_sets[i].id, body.file_sets[i]))
+      }
+    } else {
+      for (let i = 0; i < body.volumes.length; i++) {
+        member_promises.push(axios.patch('/concern/scanned_resources/' + body.volumes[i].id, body.volumes[i]))
+      }
     }
     let resourceClassNames = Object.keys(body.resource)
     return axios.patch('/concern/' + Pluralize.plural(resourceClassNames[0]) + '/' + body.resource[resourceClassNames[0]].id, body.resource)
       .then((response) => {
-        return axios.all(file_set_promises)
+        return axios.all(member_promises)
           .then(([...args]) => {
             context.commit('SAVE_STATE', [])
           }).catch(

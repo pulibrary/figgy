@@ -5,7 +5,9 @@ exports[`ResourceForm.vue has the expected html structure 1`] = `
   <h2>
     Set Properties 
     <small>
-      for this resource
+      for this 
+      <!---->
+       resource
     </small>
   </h2>
    
