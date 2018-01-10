@@ -72,6 +72,7 @@ RSpec.describe ManifestBuilder do
       expect(output["viewingDirection"]).to eq "right-to-left"
       expect(output["rendering"]).to include "@id" => "http://arks.princeton.edu/ark:/88435/abc1234de", "format" => "text/html"
       expect(output["sequences"].length).to eq 1
+      expect(output["sequences"][0]["viewingHint"]).to eq "individuals"
       canvas_id = output["sequences"][0]["canvases"][0]["@id"]
       expect(output["structures"].length).to eq 3
       structure_canvas_id = output["structures"][2]["canvases"][0]

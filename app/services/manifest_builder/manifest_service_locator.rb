@@ -137,6 +137,14 @@ class ManifestBuilder
         ::ManifestBuilder::ThumbnailBuilder
       end
 
+      def sequence_builder
+        IIIFManifest::ManifestServiceLocator::InjectedFactory.new(
+          ::ManifestBuilder::SequenceBuilder,
+          canvas_builder_factory: canvas_builder_factory,
+          sequence_factory: sequence_factory
+        )
+      end
+
       ##
       # Override the Class method for instantiating a CompositeBuilder
       # Insert see_also_builder, license_builder, thumbnail_builder, rendering_builder
