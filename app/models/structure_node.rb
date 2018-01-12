@@ -7,6 +7,6 @@ class StructureNode < Valkyrie::Resource
   # Prevents empty updated_at/created_at properties from filling up the postgres
   # column.
   def to_hash
-    super.compact
+    super.compact.select { |_k, v| v.present? }
   end
 end
