@@ -821,7 +821,7 @@ DEPENDENCIES
   omniauth-cas
   openseadragon
   pdf-reader!
-  pg
+  pg (~> 0.21)
   prawn
   pry-byebug
   pry-rails
