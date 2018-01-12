@@ -5,7 +5,6 @@ class BaseResourceController < ApplicationController
   include Valhalla::ResourceController
   include TokenAuth
   before_action :load_collections, only: [:new, :edit]
-  rescue_from CanCan::AccessDenied, with: :deny_resource_access
 
   def load_collections
     @collections = query_service.find_all_of_model(model: Collection).map(&:decorate)
