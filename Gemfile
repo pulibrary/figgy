@@ -10,7 +10,7 @@ gem "honeybadger"
 gem 'jbuilder'
 gem "jquery-rails"
 gem 'jquery-ui-rails', '~> 5.0'
-gem "pg"
+gem "pg", "~> 0.21"
 gem "puma"
 gem "rails", "5.1.1"
 gem "recipient_interceptor"
