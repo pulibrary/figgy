@@ -6,7 +6,7 @@ class Collection < Valhalla::Resource
   attribute :slug, Valkyrie::Types::Set
   attribute :description, Valkyrie::Types::Set
   attribute :visibility, Valkyrie::Types::Set
-  attribute :local_identifier
+  attribute :local_identifier, Valkyrie::Types::Set
 
   def thumbnail_id; end
 end
