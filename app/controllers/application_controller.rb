@@ -13,8 +13,7 @@ class ApplicationController < ActionController::Base
     "guest_" + guest_user_unique_suffix
   end
 
-  # use it in a subclass like:
-  #   rescue_from CanCan::AccessDenied, with: :deny_resource_access
+  rescue_from Blacklight::AccessControls::AccessDenied, CanCan::AccessDenied, with: :deny_resource_access
   def deny_resource_access(exception)
     respond_to do |format|
       format.json { head :forbidden }

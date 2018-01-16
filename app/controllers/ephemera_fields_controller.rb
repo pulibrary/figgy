@@ -9,7 +9,6 @@ class EphemeraFieldsController < ApplicationController
     storage_adapter: Valkyrie.config.storage_adapter
   )
   before_action :load_vocabularies, only: [:new, :edit]
-  rescue_from CanCan::AccessDenied, with: :deny_resource_access
 
   def load_vocabularies
     @vocabularies = query_service.find_all_of_model(model: EphemeraVocabulary).map(&:decorate).sort_by(&:label)

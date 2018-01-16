@@ -344,11 +344,13 @@ RSpec.describe CatalogController do
       end
     end
     context "as a public user" do
-      it "errors with Blacklight::AccessControls::AccessDenied" do
+      it "redirects and displays a warning that the item is private" do
         child = persister.save(resource: FactoryBot.build(:file_set))
         parent = persister.save(resource: FactoryBot.build(:scanned_resource, member_ids: child.id))
 
-        expect { get :show, params: { parent_id: parent.id, id: child.id } }.to raise_error(Blacklight::AccessControls::AccessDenied)
+        expect { get :show, params: { parent_id: parent.id, id: child.id } }.not_to raise_error
+        expect(response.status).to be 302
+        expect(flash[:alert]).to eq "You do not have sufficient access privileges to read this document, which has been marked private."
       end
     end
   end

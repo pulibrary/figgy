@@ -9,7 +9,6 @@ class EphemeraVocabulariesController < ApplicationController
     storage_adapter: Valkyrie.config.storage_adapter
   )
   before_action :load_vocabularies, only: [:index, :new, :edit]
-  rescue_from CanCan::AccessDenied, with: :deny_resource_access
 
   def index
     render 'index'
