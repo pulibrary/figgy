@@ -14,7 +14,7 @@
         </ul>
       </div>
       <button v-if="!isMultiVolume" @click.capture="uploadFile()" id="upload_file_btn" class="btn btn-default btn-sm"><i class="fa fa-th fa-upload"></i> Upload Files</button>
-      <button v-if="pendingUploads" @click.capture="refreshPage()" id="refresh_page_btn" class="btn btn-default btn-sm">Pending Uploads (Refresh)</button>
+      <button v-if="pendingUploads" @click.capture="refreshPage()" id="refresh_page_btn" class="btn btn-default btn-sm"><i class="fa fa-th fa-clock-o"></i> Pending Uploads (Refresh)</button>
       <div id="img_sizer">
         <i class="fa fa-image"></i>
         <input @input="resizeThumbs($event)" id="resize_thumbs_input" style="display:inline-block;" type="range" min="40" max="400" value="200">
