@@ -80,8 +80,10 @@ const ManifestoFilemanagerMixins = {
     const t = this.getThumbnail()
     var id = ''
     if (typeof t != 'undefined') {
-      const parse = t.__jsonld.service["@id"].split('/')
-      id = parse[parse.length-1]
+      if(t){
+        const parse = t.__jsonld.service["@id"].split('/')
+        id = parse[parse.length-1]
+      }
     }
     return id
   },
