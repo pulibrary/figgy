@@ -3,7 +3,7 @@
     <div class="gallery_controls">
       <div class="dropdown">
         <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="selectOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          Select
+          Selection Options
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" aria-labelledby="selectOptions">
@@ -13,7 +13,8 @@
           <li><a @click.capture="selectInverse()" id="select_inverse_btn">Inverse</a></li>
         </ul>
       </div>
-      <button @click.capture="uploadFile()" id="upload_file" class="btn btn-default btn-sm"><i class="fa fa-th fa-upload"></i> Upload File</button>
+      <button v-if="!isMultiVolume" @click.capture="uploadFile()" id="upload_file_btn" class="btn btn-default btn-sm"><i class="fa fa-th fa-upload"></i> Upload Files</button>
+      <button v-if="pendingUploads" @click.capture="refreshPage()" id="refresh_page_btn" class="btn btn-default btn-sm"><i class="fa fa-th fa-clock-o"></i> Pending Uploads (Refresh)</button>
       <div id="img_sizer">
         <i class="fa fa-image"></i>
         <input @input="resizeThumbs($event)" id="resize_thumbs_input" style="display:inline-block;" type="range" min="40" max="400" value="200">
@@ -39,13 +40,20 @@
 import draggable from 'vuedraggable'
 export default {
   name: 'thumbnails',
+  created: function () {
+    var elms = [...document.getElementById('file-manager-browse-everything').getElementsByTagName('tr')]
+    if (elms.length) {
+      this.pendingUploads = true
+    }
+  },
   components: {
     draggable
   },
   data: function () {
     return {
       thumbPixelWidth: 200,
-      captionPixelPadding: 9
+      captionPixelPadding: 9,
+      pendingUploads: false
     }
   },
   computed: {
@@ -61,6 +69,9 @@ export default {
       get () {
         return this.$store.state.changeList
       }
+    },
+    isMultiVolume: function () {
+      return this.$store.state.isMultiVolume
     },
     selected: {
       get () {
@@ -148,6 +159,15 @@ export default {
     },
     selectNone: function () {
       this.$store.dispatch('handleSelect', [])
+    },
+    refreshPage: function () {
+      if (this.$store.getters.stateChanged) {
+        if (window.confirm("You have unsaved changes that will be lost on refresh. Do you really want to refresh?")) {
+          window.location.reload(true)
+        }
+      } else {
+        window.location.reload(true)
+      }
     },
     uploadFile: function (event) {
       document.getElementById('browse_everything').click();

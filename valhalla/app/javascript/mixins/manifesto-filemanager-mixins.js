@@ -95,17 +95,12 @@ const ManifestoFilemanagerMixins = {
       imageCollection = this.getMVWImageCollection(imageCollection)
     } else {
       const s = this.mainSequence()
-      const canvases = s.getCanvases()
       const viewDir = this.getViewingDirection()
       const viewHint = this.getViewingHint()
       imageCollection.isMultiVolume = false
-      imageCollection.startpage = ''
-      if (typeof s.getStartCanvas() != 'undefined') {
-        imageCollection.startpage = s.getStartCanvas()
-      }
-      imageCollection.thumbnail = this.getThumbnailId()
-
+      imageCollection.thumbnail = ''
       imageCollection.viewingDirection = ''
+      imageCollection.startpage = ''
       if (typeof viewDir != 'undefined') {
         imageCollection.viewingDirection = viewDir.value
       }
@@ -113,12 +108,23 @@ const ManifestoFilemanagerMixins = {
       if (typeof viewHint != 'undefined') {
         imageCollection.viewingHint = viewHint.value
       }
-      imageCollection.images = canvases.map(canvas => ({
-        label: this.getEnglishLabel(canvas),
-        id: this.getResourceId(canvas),
-        page_type: "single",
-        url: this.getCanvasMainThumb(canvas)
-      }))
+      // if this is a "blank" manifest, we can't get canvases
+      if(typeof s != 'undefined') {
+        const canvases = s.getCanvases()
+        imageCollection.thumbnail = this.getThumbnailId()
+        if (typeof s.getStartCanvas() != 'undefined') {
+          imageCollection.startpage = s.getStartCanvas()
+        }
+        imageCollection.images = canvases.map(canvas => ({
+          label: this.getEnglishLabel(canvas),
+          id: this.getResourceId(canvas),
+          page_type: "single",
+          url: this.getCanvasMainThumb(canvas)
+        }))
+      } else {
+        imageCollection.images = []
+      }
+
     }
     return imageCollection
   },

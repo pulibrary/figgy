@@ -19,7 +19,7 @@ exports[`Thumbnails.vue has the expected html structure 1`] = `
         type="button"
       >
         
-        Select
+        Selection Options
         
         <span
           class="caret"
@@ -66,13 +66,15 @@ exports[`Thumbnails.vue has the expected html structure 1`] = `
      
     <button
       class="btn btn-default btn-sm"
-      id="upload_file"
+      id="upload_file_btn"
     >
       <i
         class="fa fa-th fa-upload"
       />
-       Upload File
+       Upload Files
     </button>
+     
+    <!---->
      
     <div
       id="img_sizer"
