@@ -165,6 +165,8 @@ export default {
         if (window.confirm("You have unsaved changes that will be lost on refresh. Do you really want to refresh?")) {
           window.location.reload(true)
         }
+      } else {
+        window.location.reload(true)
       }
     },
     uploadFile: function (event) {
