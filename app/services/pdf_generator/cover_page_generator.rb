@@ -110,7 +110,7 @@ class PDFGenerator
 
       def dir_split(s)
         chunks = []
-        s.split(/\s/).each do |word|
+        s.to_s.split(/\s/).each do |word|
           chunks << (chunks.last && chunks.last.dir == word.dir ? "#{chunks.pop} #{word}" : word)
         end
         chunks
