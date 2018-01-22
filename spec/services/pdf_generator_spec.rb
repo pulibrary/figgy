@@ -6,7 +6,14 @@ RSpec.describe PDFGenerator do
   with_queue_adapter :inline
   subject(:generator) { described_class.new(resource: resource, storage_adapter: storage_adapter) }
   let(:file) { fixture_file_upload('files/color-landscape.tif', 'image/tiff') }
-  let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], holding_location: ["https://bibdata.princeton.edu/locations/delivery_locations/1"]) }
+  let(:resource) do
+    FactoryBot.create_for_repository(
+      :scanned_resource,
+      files: [file],
+      holding_location: ["https://bibdata.princeton.edu/locations/delivery_locations/1"],
+      title: RDF::Literal.new("Test", language: :en)
+    )
+  end
   let(:file_set) { query_service.find_members(resource: resource).to_a.first }
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
   let(:persister) { Valkyrie.config.metadata_adapter.persister }
