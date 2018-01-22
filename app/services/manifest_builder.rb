@@ -122,6 +122,16 @@ class ManifestBuilder
       resource.respond_to?(:viewing_direction) ? Array(resource.viewing_direction).first : []
     end
 
+    def sequence_rendering
+      [
+        {
+          "@id" => helper.pdf_url(resource),
+          label: "Download as PDF",
+          format: "application/pdf"
+        }
+      ]
+    end
+
     private
 
       ##
@@ -361,6 +371,10 @@ class ManifestBuilder
       else
         "#{protocol}://#{host}/concern/#{resource.model_name.plural}/#{resource.id}/manifest"
       end
+    end
+
+    def pdf_url(resource)
+      manifest_url(resource).gsub("manifest", "pdf")
     end
 
     def host
