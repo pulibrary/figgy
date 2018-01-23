@@ -6,8 +6,7 @@ module Schema
     extend ActiveSupport::Concern
 
     def self.attributes
-      OpaqueMods.attributes +
-        SKOS.attributes +
+      SKOS.attributes +
         DublinCore.attributes +
         EDM.attributes +
         Local.attributes +
@@ -18,7 +17,8 @@ module Schema
           :import_url, # http://scholarsphere.psu.edu/ns#importUrl
           :label, # info:fedora/fedora-system:def/model#downloadFilename
           :relative_path, # http://scholarsphere.psu.edu/ns#relativePath
-          :visibility # No RDF URI - See hydra-access-controls
+          :visibility, # No RDF URI - See hydra-access-controls
+          :sort_title # http://opaquenamespace.org/ns/mods/titleForSort
         ]
     end
 
