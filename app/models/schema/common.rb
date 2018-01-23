@@ -7,7 +7,6 @@ module Schema
 
     def self.attributes
       DublinCore.attributes +
-        Local.attributes +
         Schema::IIIF.attributes +
         MARCRelators.attributes +
         [
@@ -23,7 +22,20 @@ module Schema
           :cartographic_scale, # http://bibframe.org/vocab/cartographicScale
           :edition, # http://id.loc.gov/ontologies/bibframe/editionStatement
           :geographic_origin, # http://id.loc.gov/ontologies/bibframe/originPlace
-          :holding_location # http://bibframe.org/vocab/heldBy
+          :holding_location, # http://bibframe.org/vocab/heldBy
+
+          :source_metadata_identifier, # Local
+          :source_metadata, # Local
+          :source_jsonld, # Local
+          :call_number, # Local
+          :barcode, # Local
+          :series, # Local
+          :ocr_language, # Local
+          :pdf_type, # Local
+          :container, # Local
+          :thumbnail_id, # Local
+          :imported_author, # Local
+          :rendered_rights_statement # Local
         ]
     end
 
