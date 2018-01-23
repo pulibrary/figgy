@@ -6,12 +6,20 @@ module Schema
     extend ActiveSupport::Concern
 
     def self.attributes
-      Plum.attributes + [
-        :import_url, # http://scholarsphere.psu.edu/ns#importUrl
-        :label, # info:fedora/fedora-system:def/model#downloadFilename
-        :relative_path, # http://scholarsphere.psu.edu/ns#relativePath
-        :visibility # No RDF URI - See hydra-access-controls
-      ]
+      OpaqueMods.attributes +
+        SKOS.attributes +
+        DublinCore.attributes +
+        EDM.attributes +
+        Local.attributes +
+        BIBFRAME.attributes +
+        Schema::IIIF.attributes +
+        MARCRelators.attributes +
+        [
+          :import_url, # http://scholarsphere.psu.edu/ns#importUrl
+          :label, # info:fedora/fedora-system:def/model#downloadFilename
+          :relative_path, # http://scholarsphere.psu.edu/ns#relativePath
+          :visibility # No RDF URI - See hydra-access-controls
+        ]
     end
 
     included do
