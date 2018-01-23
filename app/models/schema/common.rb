@@ -8,7 +8,6 @@ module Schema
     def self.attributes
       SKOS.attributes +
         DublinCore.attributes +
-        EDM.attributes +
         Local.attributes +
         BIBFRAME.attributes +
         Schema::IIIF.attributes +
@@ -18,7 +17,8 @@ module Schema
           :label, # info:fedora/fedora-system:def/model#downloadFilename
           :relative_path, # http://scholarsphere.psu.edu/ns#relativePath
           :visibility, # No RDF URI - See hydra-access-controls
-          :sort_title # http://opaquenamespace.org/ns/mods/titleForSort
+          :sort_title, # http://opaquenamespace.org/ns/mods/titleForSort
+          :rights_statement # http://www.europeana.eu/schemas/edm/rights
         ]
     end
 
