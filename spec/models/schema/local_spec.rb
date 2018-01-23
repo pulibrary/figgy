@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe Schema::Plum::Local do
+RSpec.describe Schema::Local do
   before do
     class TestResource < Valhalla::Resource
-      include Schema::Plum::Local
+      include Schema::Local
     end
   end
 
