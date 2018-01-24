@@ -29,6 +29,7 @@ RSpec.describe Schema::Common do
       resource.cartographic_scale = 'test scale'
       resource.holding_location = 'test location'
       resource.ocr_language = 'test value4'
+      resource.resource_type = 'test format'
     end
 
     it 'mixes in the module' do
@@ -49,6 +50,7 @@ RSpec.describe Schema::Common do
       expect(resource.cartographic_scale).to include 'test scale'
       expect(resource.holding_location).to include 'test location'
       expect(resource.ocr_language).to include 'test value4'
+      expect(resource.resource_type).to include 'test format'
     end
   end
 end
