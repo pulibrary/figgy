@@ -25,6 +25,11 @@ RSpec.describe Schema::Common do
       resource.edition = 'test edition'
       resource.nav_date = 'test date'
       resource.label = 'test value3'
+      resource.geographic_origin = 'test origin'
+      resource.cartographic_scale = 'test scale'
+      resource.holding_location = 'test location'
+      resource.ocr_language = 'test value4'
+      resource.resource_type = 'test format'
     end
 
     it 'mixes in the module' do
@@ -41,6 +46,11 @@ RSpec.describe Schema::Common do
       expect(resource.edition).to include 'test edition'
       expect(resource.nav_date).to include 'test date'
       expect(resource.label).to include 'test value3'
+      expect(resource.geographic_origin).to include 'test origin'
+      expect(resource.cartographic_scale).to include 'test scale'
+      expect(resource.holding_location).to include 'test location'
+      expect(resource.ocr_language).to include 'test value4'
+      expect(resource.resource_type).to include 'test format'
     end
   end
 end
