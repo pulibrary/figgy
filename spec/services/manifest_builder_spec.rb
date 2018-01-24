@@ -143,28 +143,19 @@ RSpec.describe ManifestBuilder do
       expect(metadata).to be_kind_of Array
       expect(metadata.length).to eq(11)
 
-      metadata_object = metadata.shift
-      expect(metadata_object).to be_kind_of Hash
-
-      expect(metadata_object["label"]).to eq 'Created At'
+      metadata_object = metadata.find { |h| h['label'] == 'Created At' }
       metadata_values = metadata_object['value']
       expect(metadata_values).to be_kind_of Array
       metadata_value = metadata_values.shift
       expect { Date.strptime(metadata_value, '%m/%d/%y') }.not_to raise_error
 
-      metadata_object = metadata.shift
-      expect(metadata_object).to be_kind_of Hash
-
-      expect(metadata_object["label"]).to eq 'Updated At'
+      metadata_object = metadata.find { |h| h['label'] == 'Updated At' }
       metadata_values = metadata_object['value']
       expect(metadata_values).to be_kind_of Array
       metadata_value = metadata_values.shift
       expect { Date.strptime(metadata_value, '%m/%d/%y') }.not_to raise_error
 
-      metadata_object = metadata.shift
-      expect(metadata_object).to be_kind_of Hash
-
-      expect(metadata_object["label"]).to eq 'Portion Note'
+      metadata_object = metadata.find { |h| h['label'] == 'Portion Note' }
       metadata_values = metadata_object['value']
       expect(metadata_values).to be_kind_of Array
       expect(metadata_values).to include 'test value1'
