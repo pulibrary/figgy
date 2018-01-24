@@ -14,7 +14,7 @@ class ManifestBuilder
     # @param [IIIF::Presentation::Manifest] manifest the IIIF manifest being
     # @return [IIIF::Presentation::Manifest]
     def apply(manifest)
-      manifest.license = license
+      manifest["license"] = license
       manifest
     end
 

@@ -10,7 +10,7 @@ class ManifestBuilder
     end
 
     def apply(manifest)
-      manifest.see_also = see_also
+      manifest["seeAlso"] = see_also
       manifest
     end
 

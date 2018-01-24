@@ -119,6 +119,7 @@ class ManifestBuilder
     # read by method in record_property_builder
     # @return [String]
     def viewing_direction
+      return if viewing_hint == 'multi-part'
       resource.respond_to?(:viewing_direction) ? Array(resource.viewing_direction).first : []
     end
 
