@@ -41,7 +41,6 @@ Metrics/BlockLength:
     - 'lib/specs/**/*'
     - 'db/schema.rb'
     - 'lib/tasks/dev.rake'
-    - 'app/models/plum_schema.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'valhalla/app/change_sets/valhalla/change_set_workflow.rb'
     - 'lib/tasks/bulk.rake'
@@ -61,9 +60,8 @@ Metrics/ClassLength:
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
-    - 'app/models/schema/dublin_core.rb'
+    - 'app/models/schema/common.rb'
     - 'app/models/schema/marc_relators.rb'
-    - 'app/models/schema/plum/local.rb'
     - 'spec/services/manifest_builder_spec.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/change_sets/ephemera_folder_change_set.rb'
@@ -74,7 +72,6 @@ Metrics/MethodLength:
     - 'valhalla/app/controllers/concerns/valhalla/resource_controller.rb'
 Metrics/ModuleLength:
   Exclude:
-    - 'app/models/schema/dublin_core.rb'
     - 'app/models/schema/marc_relators.rb'
     - 'valhalla/app/controllers/concerns/valhalla/resource_controller.rb'
 Metrics/ParameterLists:
