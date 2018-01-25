@@ -25,7 +25,7 @@ class DataSeeder
 
   def wipe_files!
     [Figgy.config['derivative_path'], Figgy.config['repository_path']].each do |dir_path|
-      Pathname.new(dir_path).children.each(&:rmtree)
+      Pathname.new(dir_path).children.each(&:rmtree) if Pathname.new(dir_path).exist?
     end
   end
 
