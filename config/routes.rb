@@ -78,6 +78,14 @@ Rails.application.routes.draw do
         get "save_and_ingest/:id", action: :save_and_ingest
       end
     end
+
+    # Added for redirects for IIIF Manifests.
+    resources :multi_volume_works, controller: "scanned_resources", only: [] do
+      member do
+        get :manifest, defaults: { format: :json }
+      end
+    end
+
     get '/scanned_resources/:parent_id/new', to: 'scanned_resources#new', as: :parent_new_scanned_resource
 
     resources :ephemera_projects do
