@@ -487,6 +487,15 @@ RSpec.describe ScannedResourcesController do
       expect(manifest_response[:sequences].length).to eq 1
       expect(manifest_response[:viewingHint]).to eq "individuals"
     end
+    context "when given a local identifier" do
+      it "returns it still" do
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, local_identifier: "pk643fd004", files: [file])
+
+        get :manifest, params: { id: scanned_resource.local_identifier.first, format: :json }
+
+        expect(response).to redirect_to manifest_scanned_resource_path(id: scanned_resource.id.to_s)
+      end
+    end
   end
 
   describe "GET /concern/scanned_resources/:id/pdf" do
