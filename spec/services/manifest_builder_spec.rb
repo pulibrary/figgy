@@ -57,6 +57,9 @@ RSpec.describe ManifestBuilder do
     before do
       output = change_set_persister.save(change_set: change_set)
       file_set_id = output.member_ids.first
+      file_set = query_service.find_by(id: file_set_id)
+      file_set.local_identifier = "p79409x97p"
+      metadata_adapter.persister.save(resource: file_set)
       change_set = ScannedResourceChangeSet.new(output)
       change_set.validate(logical_structure: logical_structure(file_set_id))
       change_set.sync
@@ -80,6 +83,7 @@ RSpec.describe ManifestBuilder do
       structure_canvas_id = output["structures"][2]["canvases"][0]
       expect(canvas_id).to eq structure_canvas_id
       first_image = output["sequences"][0]["canvases"][0]["images"][0]
+      expect(output["sequences"][0]["canvases"][0]["local_identifier"]).to eq "p79409x97p"
       expect(first_image["data"]).to eq nil
       expect(first_image["@type"]).to eq "oa:Annotation"
       expect(first_image["motivation"]).to eq "sc:painting"

@@ -78,6 +78,16 @@ class ManifestBuilder
       end
 
       ##
+      # Overridden to allow adding local_identifier to canvas.
+      def canvas_builder
+        IIIFManifest::ManifestServiceLocator::InjectedFactory.new(
+          ::ManifestBuilder::CanvasBuilder,
+          iiif_canvas_factory: iiif_canvas_factory,
+          image_builder: image_builder
+        )
+      end
+
+      ##
       # Override sequence builder to support adding viewingHint.
       def sequence_builder
         IIIFManifest::ManifestServiceLocator::InjectedFactory.new(
