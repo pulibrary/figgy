@@ -5,6 +5,37 @@ class ManifestBuilder
   class ManifestServiceLocator < IIIFManifest::ManifestServiceLocator
     class << self
       ##
+      # Override the Class method for instantiating a CompositeBuilder
+      # Insert see_also_builder, license_builder, thumbnail_builder, rendering_builder
+      # @return [IIIFManifest::ManifestBuilder::CompositeBuilder]
+      def manifest_builders
+        composite_builder_factory.new(
+          record_property_builder,
+          sequence_builder,
+          structure_builder,
+          see_also_builder,
+          license_builder,
+          thumbnail_builder,
+          rendering_builder,
+          composite_builder: composite_builder
+        )
+      end
+
+      # Provides the builders injected into the factory for manifests of collections
+      # @see IIIFManifest::ManifestServiceLocator#collection_manifest_builder
+      # @return [IIIFManifest::ManifestBuilder::CompositeBuilderFactory] the factory of multiple builders
+      def collection_manifest_builders
+        composite_builder_factory.new(
+          record_property_builder,
+          child_manifest_builder_factory,
+          see_also_builder,
+          license_builder,
+          rendering_builder,
+          composite_builder: composite_builder
+        )
+      end
+
+      ##
       # Class accessor for the "see also" builder
       # @return [Class]
       def see_also_builder
@@ -25,8 +56,35 @@ class ManifestBuilder
         ManifestBuilder::RenderingBuilder
       end
 
+      ##
+      # Overridden to support setting viewing_direction.
+      def record_property_builder
+        ManifestBuilder::RecordPropertyBuilder
+      end
+
+      ##
+      # Objects are either in 'manifests' or 'collections' depending on if the
+      # child resource is a IIIF::Manifest or a IIIF::Collection. This special
+      # class will pick the builder which puts it in the right place. Replace
+      # when we put everything in `members` per IIIF 2.1.
       def child_manifest_builder
         ConditionalCollectionManifest.new(manifest_builder: real_child_manifest_builder, collection_builder: child_collection_builder)
+      end
+
+      ##
+      # Builder to add thumbnails to manifests.
+      def thumbnail_builder
+        ::ManifestBuilder::ThumbnailBuilder
+      end
+
+      ##
+      # Override sequence builder to support adding viewingHint.
+      def sequence_builder
+        IIIFManifest::ManifestServiceLocator::InjectedFactory.new(
+          ::ManifestBuilder::SequenceBuilder, # This whole method is overridden just for this constant.
+          canvas_builder_factory: canvas_builder_factory,
+          sequence_factory: sequence_factory
+        )
       end
 
       ##
@@ -46,10 +104,6 @@ class ManifestBuilder
         ManifestBuilder::ChildRecordPropertyBuilder
       end
 
-      def record_property_builder
-        ManifestBuilder::RecordPropertyBuilder
-      end
-
       ##
       # Builder for collections which are sub-collections.
       def child_collection_builder
@@ -64,20 +118,6 @@ class ManifestBuilder
             composite_builder: composite_builder
           ),
           top_record_factory: iiif_collection_factory
-        )
-      end
-
-      # Provides the builders injected into the factory for manifests of collections
-      # @see IIIFManifest::ManifestServiceLocator#collection_manifest_builder
-      # @return [IIIFManifest::ManifestBuilder::CompositeBuilderFactory] the factory of multiple builders
-      def collection_manifest_builders
-        composite_builder_factory.new(
-          record_property_builder,
-          child_manifest_builder_factory,
-          see_also_builder,
-          license_builder,
-          rendering_builder,
-          composite_builder: composite_builder
         )
       end
 
@@ -103,63 +143,6 @@ class ManifestBuilder
             manifest_builder.new(work)
           end
         end
-      end
-
-      def iiif_manifest_factory
-        ::ManifestBuilder::FasterIIIFManifest
-      end
-
-      def iiif_service_factory
-        ::ManifestBuilder::Service
-      end
-
-      def sequence_factory
-        ::ManifestBuilder::FasterIIIFManifest::Sequence
-      end
-
-      def iiif_canvas_factory
-        ::ManifestBuilder::FasterIIIFManifest::Canvas
-      end
-
-      def iiif_annotation_factory
-        ::ManifestBuilder::FasterIIIFManifest::Annotation
-      end
-
-      def iiif_resource_factory
-        ::ManifestBuilder::FasterIIIFManifest::Resource
-      end
-
-      def iiif_range_factory
-        ::ManifestBuilder::FasterIIIFManifest::Range
-      end
-
-      def thumbnail_builder
-        ::ManifestBuilder::ThumbnailBuilder
-      end
-
-      def sequence_builder
-        IIIFManifest::ManifestServiceLocator::InjectedFactory.new(
-          ::ManifestBuilder::SequenceBuilder,
-          canvas_builder_factory: canvas_builder_factory,
-          sequence_factory: sequence_factory
-        )
-      end
-
-      ##
-      # Override the Class method for instantiating a CompositeBuilder
-      # Insert see_also_builder, license_builder, thumbnail_builder, rendering_builder
-      # @return [IIIFManifest::ManifestBuilder::CompositeBuilder]
-      def manifest_builders
-        composite_builder_factory.new(
-          record_property_builder,
-          sequence_builder,
-          structure_builder,
-          see_also_builder,
-          license_builder,
-          thumbnail_builder,
-          rendering_builder,
-          composite_builder: composite_builder
-        )
       end
     end
   end

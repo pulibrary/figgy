@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe ManifestBuilder::LicenseBuilder do
   describe '#apply' do
     let(:builder) { described_class.new(scanned_resource) }
-    let(:manifest) { IIIF::Presentation::Manifest.new }
+    let(:manifest) { ManifestBuilder::ManifestServiceLocator.iiif_manifest_factory.new }
     let(:decorated) { ScannedResourceDecorator.new(scanned_resource) }
     let(:scanned_resource) do
       FactoryBot.create_for_repository(:scanned_resource,
@@ -17,7 +17,7 @@ RSpec.describe ManifestBuilder::LicenseBuilder do
       end
 
       it 'appends the transformed metadata to the Manifest' do
-        expect(manifest.license).to eq "https://creativecommons.org/licenses/by-nc/4.0/"
+        expect(manifest["license"]).to eq "https://creativecommons.org/licenses/by-nc/4.0/"
       end
     end
 
@@ -32,7 +32,7 @@ RSpec.describe ManifestBuilder::LicenseBuilder do
       end
 
       it 'appends the transformed metadata to the Manifest' do
-        expect(manifest.license).to be nil
+        expect(manifest["license"]).to be nil
       end
     end
   end

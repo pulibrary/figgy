@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe ManifestBuilder::SeeAlsoBuilder do
   describe '#apply' do
     let(:builder) { described_class.new(scanned_resource) }
-    let(:manifest) { IIIF::Presentation::Manifest.new }
+    let(:manifest) { ManifestBuilder::ManifestServiceLocator.iiif_manifest_factory.new }
     let(:decorated) { ScannedResourceDecorator.new(scanned_resource) }
     let(:remote_record_class) { class_double(RemoteRecord).as_stubbed_const }
     let(:remote_record_response) { instance_double(Faraday::Response) }
@@ -24,10 +24,10 @@ RSpec.describe ManifestBuilder::SeeAlsoBuilder do
       end
 
       it 'appends the transformed metadata to the Manifest' do
-        expect(manifest.see_also).to be_a Array
-        expect(manifest.see_also.length).to eq(2)
-        expect(manifest.see_also.first).to include "@id" => "http://www.example.com/catalog/#{scanned_resource.id}.jsonld", "format" => "application/ld+json"
-        expect(manifest.see_also.last).to include "@id" => 'https://bibdata.princeton.edu/bibliographic/4609321', "format" => "text/xml"
+        expect(manifest["seeAlso"]).to be_a Array
+        expect(manifest["seeAlso"].length).to eq(2)
+        expect(manifest["seeAlso"].first).to include "@id" => "http://www.example.com/catalog/#{scanned_resource.id}.jsonld", "format" => "application/ld+json"
+        expect(manifest["seeAlso"].last).to include "@id" => 'https://bibdata.princeton.edu/bibliographic/4609321', "format" => "text/xml"
       end
     end
 
@@ -38,10 +38,10 @@ RSpec.describe ManifestBuilder::SeeAlsoBuilder do
       end
 
       it 'appends the transformed metadata to the Manifest' do
-        expect(manifest.see_also).to be_a Array
-        expect(manifest.see_also.length).to eq(2)
-        expect(manifest.see_also.first).to include "@id" => "http://www.example.com/catalog/#{scanned_resource.id}.jsonld", "format" => "application/ld+json"
-        expect(manifest.see_also.last).to include "@id" => 'https://findingaids.princeton.edu/collections/AC044/c0003.xml?scope=record', "format" => "text/xml"
+        expect(manifest["seeAlso"]).to be_a Array
+        expect(manifest["seeAlso"].length).to eq(2)
+        expect(manifest["seeAlso"].first).to include "@id" => "http://www.example.com/catalog/#{scanned_resource.id}.jsonld", "format" => "application/ld+json"
+        expect(manifest["seeAlso"].last).to include "@id" => 'https://findingaids.princeton.edu/collections/AC044/c0003.xml?scope=record', "format" => "text/xml"
       end
     end
   end
