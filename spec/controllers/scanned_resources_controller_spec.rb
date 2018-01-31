@@ -454,7 +454,7 @@ RSpec.describe ScannedResourcesController do
 
         expect(reloaded.member_ids.length).to eq 1
         expect(reloaded.pending_uploads).to be_empty
-        expect(Valkyrie::MetadataAdapter.find(:index_solr).persister).not_to have_received(:save)
+        expect(Valkyrie::MetadataAdapter.find(:index_solr).persister).not_to have_received(:save).with(resource: resource)
 
         file_sets = Valkyrie.config.metadata_adapter.query_service.find_members(resource: reloaded)
         expect(file_sets.first.file_metadata.length).to eq 2
