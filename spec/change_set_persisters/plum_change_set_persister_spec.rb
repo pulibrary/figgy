@@ -184,7 +184,7 @@ RSpec.describe PlumChangeSetPersister do
       expect(derivative_file).not_to be_blank
       expect(derivative_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config['derivative_path']).to_s)
 
-      expect(query_service.find_all.to_a.map(&:class)).to contain_exactly ScannedResource, FileSet
+      expect(query_service.find_all.to_a.map(&:class)).to contain ScannedResource, FileSet
     end
 
     it "cleans up derivatives", run_real_derivatives: true do
