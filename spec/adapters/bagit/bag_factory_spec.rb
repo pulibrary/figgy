@@ -1,0 +1,50 @@
+# frozen_string_literal: true
+require 'rails_helper'
+include ActionDispatch::TestProcess
+
+RSpec.describe Bagit::BagFactory, run_real_derivatives: true do
+  subject(:bag_factory) { described_class.new(adapter: adapter) }
+  let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+  let(:adapter) do
+    Bagit::MetadataAdapter.new(
+      base_path: bag_path
+    )
+  end
+  let(:bag_path) { Rails.root.join("tmp", "test_bags") }
+  let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], source_metadata_identifier: "123456") }
+  before do
+    stub_bibdata(bib_id: '123456')
+  end
+  after do
+    FileUtils.rm_rf(bag_path) if File.exist?(bag_path)
+  end
+
+  describe ".new" do
+    it "returns a bag factory for a resource" do
+      output = bag_factory.new(resource: resource)
+      expect(output).to be_a Bagit::BagFactory::ResourceFactory
+    end
+  end
+
+  describe ".create" do
+    let(:resource_factory) { bag_factory.new(resource: resource) }
+    it "builds a bag on disk" do
+      resource_factory.create!
+      resource_path = bag_path.join(resource.id.to_s)
+      expect(File.exist?(resource_path)).to eq true
+      expect(File.read(resource_path.join("bagit.txt")).split("\n")).to eq [
+        "BagIt-Version: 0.97",
+        "Tag-File-Character-Encoding: UTF-8"
+      ]
+      expect(File.exist?(resource_path.join("metadata", "#{resource.id}.jsonld"))).to eq true
+      expect(File.exist?(resource_path.join("tagmanifest-sha256.txt"))).to eq true
+      tag_manifest_contents = File.read(resource_path.join("tagmanifest-sha256.txt")).split("\n").map(&:split)
+      expect(tag_manifest_contents).to eq [
+        [
+          Digest::SHA256.file(resource_path.join("metadata", "#{resource.id}.jsonld")).hexdigest,
+          "metadata/#{resource.id}.jsonld"
+        ]
+      ]
+    end
+  end
+end
