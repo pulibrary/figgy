@@ -448,6 +448,7 @@ RSpec.describe ScannedResourcesController do
         # Ensure that indexing is always safe and done at the end.
         allow(Valkyrie::MetadataAdapter.find(:index_solr)).to receive(:persister).and_return(Valkyrie::MetadataAdapter.find(:index_solr).persister)
         allow(Valkyrie::MetadataAdapter.find(:index_solr).persister).to receive(:save).and_call_original
+        allow(Valkyrie::MetadataAdapter.find(:index_solr).persister).to receive(:save_all).and_call_original
 
         post :browse_everything_files, params: { id: resource.id, selected_files: params["selected_files"] }
         reloaded = adapter.query_service.find_by(id: resource.id)
@@ -455,6 +456,7 @@ RSpec.describe ScannedResourcesController do
         expect(reloaded.member_ids.length).to eq 1
         expect(reloaded.pending_uploads).to be_empty
         expect(Valkyrie::MetadataAdapter.find(:index_solr).persister).not_to have_received(:save)
+        expect(Valkyrie::MetadataAdapter.find(:index_solr).persister).to have_received(:save_all).at_least(1).times
 
         file_sets = Valkyrie.config.metadata_adapter.query_service.find_members(resource: reloaded)
         expect(file_sets.first.file_metadata.length).to eq 2
