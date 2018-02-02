@@ -145,6 +145,10 @@ RSpec.describe PlumChangeSetPersister do
     let(:change_set_persister) do
       described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: true)
     end
+    before do
+      # stub out this call; it interferes with test that unexpected objects are not created
+      allow_any_instance_of(CreateFixityCheckJob).to receive(:perform).and_return(true)
+    end
 
     it "can append files as FileSets", run_real_derivatives: true do
       resource = FactoryBot.build(:scanned_resource)
@@ -452,6 +456,26 @@ RSpec.describe PlumChangeSetPersister do
 
         expect(reloaded.member_of_collection_ids).to eq []
       end
+    end
+  end
+
+  describe "when a file set is deleted" do
+    it "deletes the fixity check object for the file" do
+      change_set_persister = described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: false)
+      file = fixture_file_upload('files/example.tif', 'image/tiff')
+
+      resource = FactoryBot.build(:scanned_resource)
+      change_set = change_set_class.new(resource, characterize: false)
+      change_set.files = [file]
+
+      output = change_set_persister.save(change_set: change_set)
+      file_set = query_service.find_members(resource: output).first
+
+      fc = FactoryBot.create_for_repository(:fixity_check, file_set_id: [file_set.id.to_s], file_id: [file_set.original_file.file_identifiers.first.to_s])
+
+      expect(query_service.find_all.to_a.map(&:class)).to include FixityCheck
+      change_set_persister.delete(change_set: FileSetChangeSet.new(file_set, characterize: false))
+      expect(query_service.find_all.to_a.map(&:class)).not_to include FixityCheck
     end
   end
 

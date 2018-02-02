@@ -28,6 +28,7 @@ class PlumChangeSetPersister
       before_delete: [
         CleanupStructure,
         CleanupDerivatives,
+        DeleteFixityCheck,
         DeleteReferenced::Factory.new(property: :member_of_vocabulary_id),
         DeleteMembers::Factory.new(property: :member_ids),
         CleanupMembership::Factory.new(property: :member_ids),
