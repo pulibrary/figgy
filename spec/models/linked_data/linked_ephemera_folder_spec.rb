@@ -278,5 +278,14 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       expect(linked_ephemera_folder.as_jsonld['publisher']).to eq ['test publisher']
       expect(linked_ephemera_folder.as_jsonld['description']).to eq ["test description"]
     end
+    context 'with the title of a series specified' do
+      it 'exposes the attribute in JSON-LD', series: true do
+        ephemera_box = FactoryBot.create_for_repository(:ephemera_box, member_ids: [resource.id])
+        FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id])
+
+        expect(linked_ephemera_folder.as_jsonld).not_to be_empty
+        expect(linked_ephemera_folder.as_jsonld['series']).to eq 'test series'
+      end
+    end
   end
 end

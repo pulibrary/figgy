@@ -29,6 +29,7 @@ Metrics/AbcSize:
   Exclude:
     - 'app/services/ingest_ephemera_service.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
+    - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
 Metrics/BlockLength:
   Exclude:
     - 'valhalla/app/models/concerns/valhalla/ability.rb'
