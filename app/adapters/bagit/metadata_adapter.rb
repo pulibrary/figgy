@@ -14,6 +14,8 @@ module Bagit
       @bag_factory ||= Bagit::BagFactory.new(adapter: self)
     end
 
-    def query_service; end
+    def query_service
+      @query_service ||= Bagit::QueryService.new(adapter: self)
+    end
   end
 end

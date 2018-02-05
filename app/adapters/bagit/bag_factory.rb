@@ -24,6 +24,10 @@ module Bagit
         export_metadata
       end
 
+      def delete!
+        FileUtils.rm_rf(bag_path)
+      end
+
       private
 
         def bag_path

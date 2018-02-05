@@ -17,11 +17,13 @@ module Bagit
     end
 
     def save_all(resources:)
-      # save a bunch
+      resources.map do |resource|
+        save(resource: resource)
+      end
     end
 
     def delete(resource:)
-      # delete a resource
+      bag_factory.new(resource: resource).delete!
     end
 
     def wipe!
