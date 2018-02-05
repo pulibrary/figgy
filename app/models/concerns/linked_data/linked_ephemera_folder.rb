@@ -77,6 +77,10 @@ module LinkedData
       Array.wrap(decorated_resource.title).first
     end
 
+    def series
+      Array.wrap(decorated_resource.series).first
+    end
+
     private
 
       def linked_collections
@@ -119,7 +123,8 @@ module LinkedData
           modified: try(:updated_at),
           folder_number: try(:folder_number),
           date_range: try(:date_range),
-          date_created: try(:date_created)
+          date_created: try(:date_created),
+          series: try(:series)
         }
       end
   end
