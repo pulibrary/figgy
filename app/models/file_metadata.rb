@@ -6,6 +6,11 @@ class FileMetadata < Valkyrie::Resource
   attribute :mime_type, Valkyrie::Types::Set
   attribute :height, Valkyrie::Types::Set
   attribute :width, Valkyrie::Types::Set
+  attribute :bits_per_sample, Valkyrie::Types::Set
+  attribute :x_resolution, Valkyrie::Types::Set
+  attribute :y_resolution, Valkyrie::Types::Set
+  attribute :camera_model, Valkyrie::Types::Set
+  attribute :software, Valkyrie::Types::Set
   attribute :checksum, Valkyrie::Types::Set
   attribute :original_filename, Valkyrie::Types::Set
   attribute :file_identifiers, Valkyrie::Types::Set
