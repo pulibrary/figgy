@@ -17,6 +17,12 @@ class FileMetadata < Valkyrie::Resource
   attribute :use, Valkyrie::Types::Set
   attribute :size, Valkyrie::Types::Set
 
+  # fixity attributes
+  attribute :fixity_actual_checksum, Valkyrie::Types::Set
+  attribute :fixity_success, Valkyrie::Types::Int
+  attribute :fixity_last_run_date, Valkyrie::Types::Set
+  attribute :fixity_last_success_date, Valkyrie::Types::Set
+
   def self.for(file:)
     new(label: file.original_filename,
         original_filename: file.original_filename,
