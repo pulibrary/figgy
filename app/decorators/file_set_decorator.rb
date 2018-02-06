@@ -8,7 +8,9 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
       :size,
       :md5,
       :sha1,
-      :sha256
+      :sha256,
+      :camera_model,
+      :software
     ]
   )
 

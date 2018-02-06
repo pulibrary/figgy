@@ -76,6 +76,41 @@ RSpec.describe TikaFileCharacterizationService do
     expect(checksum.first).to be_a MultiChecksum
   end
 
+  it 'sets the bits per sample attribute for a file_node on characterize' do
+    t_file_node = valid_file_set
+    t_file_node.original_file.width = nil
+    new_file_node = described_class.new(file_node: t_file_node, persister: persister).characterize(save: false)
+    expect(new_file_node.original_file.bits_per_sample).not_to be_empty
+  end
+
+  it 'sets the x resolution attribute for a file_node on characterize' do
+    t_file_node = valid_file_set
+    t_file_node.original_file.width = nil
+    new_file_node = described_class.new(file_node: t_file_node, persister: persister).characterize(save: false)
+    expect(new_file_node.original_file.x_resolution).not_to be_empty
+  end
+
+  it 'sets the y resolution attribute for a file_node on characterize' do
+    t_file_node = valid_file_set
+    t_file_node.original_file.width = nil
+    new_file_node = described_class.new(file_node: t_file_node, persister: persister).characterize(save: false)
+    expect(new_file_node.original_file.y_resolution).not_to be_empty
+  end
+
+  it 'sets the camera model attribute for a file_node on characterize' do
+    t_file_node = valid_file_set
+    t_file_node.original_file.width = nil
+    new_file_node = described_class.new(file_node: t_file_node, persister: persister).characterize(save: false)
+    expect(new_file_node.original_file.camera_model).not_to be_empty
+  end
+
+  it 'sets the software attribute for a file_node on characterize' do
+    t_file_node = valid_file_set
+    t_file_node.original_file.width = nil
+    new_file_node = described_class.new(file_node: t_file_node, persister: persister).characterize(save: false)
+    expect(new_file_node.original_file.software).not_to be_empty
+  end
+
   describe "#valid?" do
     it "returns true" do
       expect(described_class.new(file_node: valid_file_set, persister: persister).valid?).to be true

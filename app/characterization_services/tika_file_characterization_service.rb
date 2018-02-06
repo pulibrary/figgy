@@ -20,15 +20,7 @@ class TikaFileCharacterizationService
   # @example characterize a file and do not persist the changes
   #   Valkyrie::FileCharacterizationService.for(file_node, persister).characterize(save: false)
   def characterize(save: true)
-    result = JSON.parse(json_output).last
-    @file_characterization_attributes = {
-      width: result['tiff:ImageWidth'],
-      height: result['tiff:ImageLength'],
-      mime_type: result['Content-Type'],
-      checksum: MultiChecksum.for(file_object),
-      size: result['Content-Length']
-    }
-    new_file = original_file.new(@file_characterization_attributes.to_h)
+    new_file = original_file.new(file_characterization_attributes.to_h)
     @file_node.file_metadata = @file_node.file_metadata.select { |x| x.id != new_file.id } + [new_file]
     @persister.save(resource: @file_node) if save
     @file_node
@@ -36,6 +28,22 @@ class TikaFileCharacterizationService
 
   def json_output
     "[#{RubyTikaApp.new(filename.to_s).to_json.gsub('}{', '},{')}]"
+  end
+
+  def file_characterization_attributes
+    result = JSON.parse(json_output).last
+    {
+      width: result['tiff:ImageWidth'],
+      height: result['tiff:ImageLength'],
+      mime_type: result['Content-Type'],
+      checksum: MultiChecksum.for(file_object),
+      size: result['Content-Length'],
+      bits_per_sample: result['tiff:BitsPerSample'],
+      x_resolution: result['tiff:XResolution'],
+      y_resolution: result['tiff:YResolution'],
+      camera_model: result['Model'],
+      software: result['Software']
+    }
   end
 
   # Determines the location of the file on disk for the file_node
@@ -64,5 +72,7 @@ class TikaFileCharacterizationService
     attribute :height, Valkyrie::Types::Int
     attribute :mime_type, Valkyrie::Types::String
     attribute :checksum, Valkyrie::Types::String
+    attribute :camera_model, Valkyrie::Types::String
+    attribute :software, Valkyrie::Types::String
   end
 end

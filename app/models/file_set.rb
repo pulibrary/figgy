@@ -8,7 +8,7 @@ class FileSet < Valhalla::Resource
   attribute :depositor
   attribute :local_identifier
 
-  delegate :width, :height, :mime_type, :size, to: :original_file, allow_nil: true
+  delegate :width, :height, :mime_type, :size, :camera_model, :software, to: :original_file, allow_nil: true
   delegate :md5, :sha1, :sha256, to: :original_file_checksum, allow_nil: true
 
   def thumbnail_id
