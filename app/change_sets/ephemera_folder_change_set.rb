@@ -18,7 +18,7 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   property :sort_title, required: false
   property :alternative_title, multiple: true, required: false
   property :language, multiple: true, required: true
-  property :genre, multiple: false, required: true, type: Valkyrie::Types::ID
+  property :genre, multiple: false, required: true
   property :width, multiple: false, required: true
   property :height, multiple: false, required: true
   property :page_count, multiple: false, required: true

@@ -98,6 +98,8 @@ class ManifestBuilder
       helper.manifest_url(resource)
     end
 
+    # Generate the IIIF Manifest metadata using the resource decorator
+    # @return [Hash] the manifest metadata
     def manifest_metadata
       resource.decorate.iiif_metadata
     end
