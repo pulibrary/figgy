@@ -2,6 +2,7 @@
 module Bagit
   class BagFactory
     attr_reader :adapter
+    delegate :base_path, to: :adapter
     def initialize(adapter:)
       @adapter = adapter
     end
@@ -25,17 +26,23 @@ module Bagit
       end
 
       def delete!
-        FileUtils.rm_rf(bag_path)
+        if adapter.nested?
+          lines = File.readlines(bag_path.join("tagmanifest-sha256.txt")).select do |line|
+            !line.include?(metadata_digest_path.relative_path_from(bag_path).to_s)
+          end
+          File.open(bag_path.join("tagmanifest-sha256.txt"), 'w') do |f|
+            f.write(lines.join("\n"))
+          end
+          FileUtils.rm_f(metadata_digest_path)
+        else
+          FileUtils.rm_rf(bag_path)
+        end
       end
 
       private
 
         def bag_path
-          @bag_path ||= base_path.join(resource_id)
-        end
-
-        def resource_id
-          @resource_id ||= resource.id.to_s.delete("/")
+          @bag_path ||= adapter.bag_path(id: resource.id)
         end
 
         def create_bagit_txt

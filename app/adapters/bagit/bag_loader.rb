@@ -19,7 +19,7 @@ module Bagit
     private
 
       def bag_path
-        @bag_path ||= base_path.join(id.to_s)
+        @bag_path ||= adapter.bag_path(id: id)
       end
 
       def converted_attributes
