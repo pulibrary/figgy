@@ -165,6 +165,38 @@ RSpec.describe ManifestBuilder do
       expect(metadata_values).to include 'test value1'
     end
 
+    context "when the resource has linked vocabulary terms" do
+      subject(:manifest_builder) { described_class.new(query_service.find_by(id: ephemera_folder.id)) }
+
+      let(:category) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'Art and Culture') }
+      let(:subject_term) { FactoryBot.create_for_repository(:ephemera_term, label: 'Architecture', member_of_vocabulary_id: category.id) }
+      let(:ephemera_folder) do
+        FactoryBot.create_for_repository(:ephemera_folder, subject: [subject_term.id])
+      end
+      it "transforms the term into JSON-LD" do
+        output = manifest_builder.build
+        expect(output).to be_kind_of Hash
+        expect(output).to include 'metadata'
+        metadata = output["metadata"]
+        expect(metadata).to be_kind_of Array
+        expect(metadata.length).to eq(23)
+
+        metadata_object = metadata.find { |h| h['label'] == 'Subject' }
+        metadata_values = metadata_object['value']
+        expect(metadata_values).to be_kind_of Array
+        metadata_value = metadata_values.shift
+
+        expect(metadata_value['@id']).to eq "http://www.example.com/catalog/#{subject_term.id}"
+        expect(metadata_value['@type']).to eq 'skos:Concept'
+        expect(metadata_value['pref_label']).to eq 'Architecture'
+
+        metadata_value_vocab = metadata_value['in_scheme']
+        expect(metadata_value_vocab['@id']).to eq "https://plum.princeton.edu/ns/artAndCulture"
+        expect(metadata_value_vocab['@type']).to eq 'skos:ConceptScheme'
+        expect(metadata_value_vocab['pref_label']).to eq 'Art and Culture'
+      end
+    end
+
     context "when the resource has multiple titles" do
       let(:scanned_resource) do
         FactoryBot.create_for_repository(:scanned_resource, title: ['title1', 'title2'])

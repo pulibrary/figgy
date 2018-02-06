@@ -103,22 +103,25 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
 
   # prepare metadata as an array of label/value hash pairs
   # as required by samvera-labs/iiif_manifest
+  # @return [Array<MetadataObject>] an array of objects modeling the metadata values
   def iiif_metadata
     iiif_manifest_attributes.select { |_, value| value.present? }.map do |u, v|
       MetadataObject.new(u, v).to_h
     end
   end
 
+  # Models metadata values within a manifest
   class MetadataObject
+    # Constructor
+    # @param [Symbol] (symbolized) metadata attribute name
+    # @param [Object] metadata attribute value
     def initialize(attribute, value)
       @attribute = attribute
       @value = value
     end
 
-    def pdf_type_label
-      'PDF Type'
-    end
-
+    # Provides the label for a given metadata attribute
+    # @return [String] the label
     def label
       if respond_to?("#{@attribute}_label".to_sym)
         send("#{@attribute}_label".to_sym)
@@ -127,6 +130,14 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
       end
     end
 
+    # Overrides the label for the attribute :pdf_type
+    # @return [String] the label
+    def pdf_type_label
+      'PDF Type'
+    end
+
+    # Parses and formats date-string values
+    # @return [Array<String>] the formatted date strings
     def date_value
       @value.map do |date|
         date.split("/").map do |d|
@@ -142,12 +153,15 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
       @value
     end
 
+    # Aliases all methods which may contain date strings
     alias created_value date_value
     alias imported_created_value created_value
     alias updated_value date_value
     alias imported_updated_value updated_value
     private :date_value
 
+    # For identifiers containing URL's into markup, generates HTML link markup
+    # @return [Array<String>] HTML markup for links, or the original identifiers
     def identifier_value
       @value.map do |id|
         if id =~ /^https?\:\/\//
@@ -158,8 +172,32 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
       end
     end
 
+    # Aliases the method for imported identifiers
     alias imported_identifier_value identifier_value
 
+    # Generates a resource transformed into linked data (only if it is an EphemeraTerm)
+    # Otherwise, the original Object is returned
+    # @return [Array<LinkedResource, Object>] the linked or unlinked resources
+    def linkable_value
+      values = Array.wrap(@value)
+      values.map do |element|
+        return element unless element.is_a?(EphemeraTerm)
+
+        factory = LinkedData::LinkedResourceFactory.new(resource: element)
+        factory.new.without_context
+      end
+    end
+
+    # Aliases all methods which may contain linked data terms
+    alias geo_subject_value linkable_value
+    alias genre_value_value linkable_value
+    alias geographic_origin_value linkable_value
+    alias language_value linkable_value
+    alias subject_value linkable_value
+    private :linkable_value
+
+    # Attempts to use an overridden method for transforming metadata values
+    # @return [Array<Object>] the array of metadata values
     def value
       Array.wrap(
         if respond_to?("#{@attribute}_value".to_sym)
@@ -170,12 +208,17 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
       )
     end
 
+    # Provides a Hash representation of the metadata attribute name/value mapping
+    # @return [Hash]
     def to_h
       { 'label' => label, 'value' => value }
     end
 
     private
 
+      # Determine if the first and last elements within an array of date strings each only capture a range of years
+      # @param [Array<String>] the array of date-strings
+      # @return [TrueClass, FalseClass]
       def year_only(dates)
         dates.length == 2 && dates.first.end_with?("-01-01T00:00:00Z") && dates.last.end_with?("-12-31T23:59:59Z")
       end
