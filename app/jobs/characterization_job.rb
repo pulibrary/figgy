@@ -7,6 +7,7 @@ class CharacterizationJob < ApplicationJob
     metadata_adapter.persister.buffer_into_index do |buffered_adapter|
       Valkyrie::FileCharacterizationService.for(file_node: file_set, persister: buffered_adapter.persister).characterize
     end
+    CreateFixityCheckJob.set(queue: queue_name).perform_later(file_set_id)
     CreateDerivativesJob.set(queue: queue_name).perform_later(file_set_id)
   end
 
