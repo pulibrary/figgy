@@ -91,10 +91,12 @@ RSpec.describe CheckFixityRecursiveJob do
     end
 
     it 'saves the file_set' do
-      job_instance.perform
       query_service = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
       fs = query_service.find_by(id: file_set2.id)
-      expect(fs.created_at).to be < fs.updated_at
+      expect(fs.original_file.fixity_success).not_to be 1
+      job_instance.perform
+      fs = query_service.find_by(id: file_set2.id)
+      expect(fs.original_file.fixity_success).to be 1
     end
   end
 end
