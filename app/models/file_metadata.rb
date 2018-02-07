@@ -20,8 +20,8 @@ class FileMetadata < Valkyrie::Resource
   # fixity attributes
   attribute :fixity_actual_checksum, Valkyrie::Types::Set
   attribute :fixity_success, Valkyrie::Types::Int
-  attribute :fixity_last_run_date, Valkyrie::Types::Set
-  attribute :fixity_last_success_date, Valkyrie::Types::Set
+  attribute :fixity_last_run_date, Valkyrie::Types::DateTime.optional
+  attribute :fixity_last_success_date, Valkyrie::Types::DateTime.optional
 
   def self.for(file:)
     new(label: file.original_filename,
@@ -38,5 +38,26 @@ class FileMetadata < Valkyrie::Resource
 
   def derivative?
     use.include?(Valkyrie::Vocab::PCDMUse.ServiceFile)
+  end
+
+  # Populates FileMetadata with fixity check results
+  # @return [FileMetadata] you'll need to save this node after running the fixity
+  def run_fixity
+    # don't run if there has been a failure.
+    # probably best to create a new FileSet at that point.
+    return self if fixity_success&.zero?
+    actual_file = Valkyrie.config.storage_adapter.find_by(id: file_identifiers.first)
+    new_checksum = MultiChecksum.for(actual_file)
+    if checksum.include? new_checksum
+      self.fixity_success = 1
+      self.fixity_actual_checksum = [new_checksum]
+      self.fixity_last_run_date = Time.now.utc
+      self.fixity_last_success_date = fixity_last_run_date.dup
+    else
+      self.fixity_success = 0
+      self.fixity_actual_checksum = [new_checksum]
+      self.fixity_last_run_date = Time.now.utc
+    end
+    self
   end
 end
