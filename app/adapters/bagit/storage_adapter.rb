@@ -7,7 +7,7 @@ module Bagit
     end
 
     def for(bag_id:)
-      Instance.new(base_path: base_path, bag_id: bag_id)
+      Instance.new(base_path: base_path, bag_id: bag_id.to_s)
     end
 
     class Instance
@@ -19,8 +19,9 @@ module Bagit
 
       def upload(file:, original_filename:, resource: nil)
         FileUtils.mkdir_p(data_path)
-        new_path = data_path.join(generate_id)
-        FileUtils.cp(file.path, new_path)
+        new_path = data_path.join("#{generate_id}-#{original_filename}")
+        old_path = file.try(:disk_path) || file.path
+        FileUtils.cp(old_path, new_path)
         output_file = find_by(id: Valkyrie::ID.new("bag://#{new_path}"))
         create_manifests(output_file)
         output_file

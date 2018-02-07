@@ -51,6 +51,20 @@ Rails.application.config.to_prepare do
     :derivatives
   )
 
+  Valkyrie::StorageAdapter.register(
+    Bagit::StorageAdapter.new(
+      base_path: Figgy.config["bag_path"]
+    ),
+    :bags
+  )
+
+  Valkyrie::MetadataAdapter.register(
+    Bagit::MetadataAdapter.new(
+      base_path: Figgy.config["bag_path"]
+    ),
+    :bags
+  )
+
   Valkyrie::MetadataAdapter.register(
     Valkyrie::Persistence::Postgres::MetadataAdapter.new,
     :postgres

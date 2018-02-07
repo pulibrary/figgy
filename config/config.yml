@@ -6,6 +6,7 @@ defaults: &defaults
   plum_solr_url: <%= "http://127.0.0.1:#{ENV['TEST_JETTY_PORT'] || 8984}/solr/blacklight-core-test" %>
   plum_binary_path: "/mnt/diglibdata/hydra_binaries"
   plum_derivative_path: "/mnt/libimages1/data/jp2s/plum_prod"
+  bag_path: <%= Rails.root.join("tmp", "bags") %>
   jp2_recipes:
     default_color: >
       -rate 2.4,1.48331273,.91673033,.56657224,.35016049,.21641118,.13374944,.08266171
@@ -91,6 +92,7 @@ test:
   plum_derivative_path: <%= Rails.root.join("spec", "fixtures", "plum_derivatives") %>
   repository_path: <%= Rails.root.join("tmp", "test_files") %>
   derivative_path: <%= Rails.root.join("tmp", "test_derivatives") %>
+  bag_path: <%= Rails.root.join("tmp", "test_bags") %>
   events:
     log_file: '/dev/null'
   devise:

@@ -11,7 +11,10 @@ RSpec.describe Valkyrie::MetadataAdapter do
   after do
     Valkyrie.logger.level = :info
   end
-  described_class.adapters.each do |_key, adapter|
+  described_class.adapters.each do |key, adapter|
+    # Skip bag adapter because the specs don't clean up after themselves and
+    # it's tested in spec/adapters/bagit/metadata_adapter_spec.rb
+    next if key == :bags
     describe adapter do
       let(:adapter) { adapter }
       let(:persister) { adapter.persister }
