@@ -38,7 +38,12 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
       :internal_resource,
       :rights_statement,
       :rendered_rights_statement,
-      :thumbnail_id
+      :thumbnail_id,
+      :rendered_date_range,
+      :rendered_subject,
+      :created_at,
+      :updated_at,
+      :sort_title
     ]
   )
 

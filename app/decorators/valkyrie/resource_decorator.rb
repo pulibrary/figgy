@@ -184,13 +184,14 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
         return element unless element.is_a?(EphemeraTerm)
 
         factory = LinkedData::LinkedResourceFactory.new(resource: element)
-        factory.new.without_context
+        resource = factory.new.without_context
+        resource.fetch('pref_label')
       end
     end
 
     # Aliases all methods which may contain linked data terms
     alias geo_subject_value linkable_value
-    alias genre_value_value linkable_value
+    alias genre_value linkable_value
     alias geographic_origin_value linkable_value
     alias language_value linkable_value
     alias subject_value linkable_value
