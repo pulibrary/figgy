@@ -18,6 +18,10 @@ RSpec.describe Bagit::BagExporter do
   end
   with_queue_adapter :inline
   it "can store a resource as a bag", run_real_derivatives: true do
+    resource
+    sha_digest = Digest::SHA1.new
+    allow(Digest::SHA1).to receive(:new).and_return(sha_digest)
+    allow(sha_digest).to receive(:update).and_call_original
     exporter.export(resource: resource)
     # Metadata files for the resource.
     expect(File.exist?(bag_path.join("tagmanifest-sha256.txt"))).to eq true
@@ -31,5 +35,7 @@ RSpec.describe Bagit::BagExporter do
     file_set = exporter.metadata_adapter.for(bag_id: resource.id).query_service.find_by(id: member_id)
     expect(file_set.original_file.file_identifiers.first.to_s).to start_with "bag://"
     expect(exporter.storage_adapter.for(bag_id: resource.id).find_by(id: file_set.original_file.file_identifiers.first)).not_to be_blank
+    # Don't generate checksums - they already exist.
+    expect(sha_digest).not_to have_received(:update)
   end
 end
