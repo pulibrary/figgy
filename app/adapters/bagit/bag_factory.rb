@@ -21,8 +21,10 @@ module Bagit
 
       def create!
         FileUtils.mkdir_p(bag_path)
-        create_bagit_txt
-        create_bag_info
+        unless adapter.nested?
+          create_bagit_txt
+          create_bag_info
+        end
         export_metadata
       end
 
