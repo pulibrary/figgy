@@ -5,9 +5,10 @@ class PlumImporter
   delegate :metadata_adapter, to: :change_set_persister
   delegate :query_service, to: :metadata_adapter
   delegate :delayed_queue, to: :change_set_persister
-  def initialize(id:, change_set_persister:)
+  def initialize(id:, change_set_persister:, logger: Rails.logger)
     @id = id
     @change_set_persister = change_set_persister
+    @logger = logger
   end
 
   def import!
@@ -49,15 +50,26 @@ class PlumImporter
     end
   end
 
+  def logical_structure_from(values)
+    MultiJson.load(values, symbolize_keys: true)
+  rescue StandardError => error
+    @logger.warn "Failed to parse the logical structure while importing #{resource.id}: #{error}"
+    {}
+  end
+
   def update_structure(resource, members, change_set_persister)
     change_set = ScannedResourceChangeSet.new(resource).tap(&:prepopulate!)
     structure = document.structure
     members.each do |member|
       structure = structure.gsub(member.local_identifier[0], member.id.to_s)
     end
+
+    thumbnail_id = find_thumbnail_id(members)
+    @logger.warn "Failed to find the thumbnail ID for #{resource.id}" unless thumbnail_id
+
     change_set.validate(
-      logical_structure: [MultiJson.load(structure, symbolize_keys: true)],
-      thumbnail_id: find_thumbnail_id(members)
+      logical_structure: [logical_structure_from(structure)],
+      thumbnail_id: thumbnail_id
     )
     change_set.sync
     change_set_persister.save(change_set: change_set)
@@ -112,9 +124,15 @@ class PlumImporter
     @plum_solr ||= RSolr.connect(url: Figgy.config["plum_solr_url"])
   end
 
+  def plum_solr_get_document
+    response = plum_solr.get("select", params: { q: "id:#{id}", rows: 1 })
+    docs = response.dig("response", "docs") || []
+    docs.first || {}
+  end
+
   # the resource document
   def document
-    @document ||= PlumDocument.new(plum_solr.get("select", params: { q: "id:#{id}", rows: 1 })["response"]["docs"].first, self)
+    @document ||= PlumDocument.new(plum_solr_get_document, self)
   end
 
   def all_collections
@@ -154,10 +172,10 @@ class PlumImporter
 
     def attributes
       {
-        depositor: solr_doc["depositor_ssim"],
+        depositor: solr_doc.fetch("depositor_ssim", []),
         source_metadata_identifier: solr_doc.fetch("source_metadata_identifier_ssim", []).first,
-        title: solr_doc["title_tesim"],
-        state: solr_doc["workflow_state_name_ssim"],
+        title: solr_doc.fetch("title_tesim", []),
+        state: solr_doc.fetch("workflow_state_name_ssim", []),
         identifier: solr_doc.fetch("identifier_tesim", []).first,
         local_identifier: solr_doc.fetch("local_identifier_ssim", []).first
       }
@@ -362,8 +380,11 @@ class PlumImporter
       end
     end
 
+    # Provides the structural metadata cached in the Solr Document
+    # @return [String]
     def structure
-      solr_doc["logical_order_tesim"][0]
+      values = solr_doc.fetch("logical_order_tesim", [])
+      values.first || "{}"
     end
   end
 

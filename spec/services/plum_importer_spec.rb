@@ -137,6 +137,40 @@ RSpec.describe PlumImporter do
 
       expect(query_service.find_all_of_model(model: ScannedResource).to_a.length).to eq 3
     end
+    context 'when it fails to find a Plum Solr Document' do
+      let(:logger) { instance_double(Logger) }
+      before do
+        allow(logger).to receive(:warn)
+      end
+      it 'logs a warning when the thumbnail cannot be extracted' do
+        output = nil
+        importer = nil
+        change_set_persister.buffer_into_index do |buffered_changeset_persister|
+          importer = described_class.new(id: 'ps7529f138', change_set_persister: buffered_changeset_persister, logger: logger)
+          output = importer.import!
+        end
+        expect(output.id).not_to be_blank
+        expect(output.thumbnail_id).to be_empty
+        expect(logger).to have_received(:warn).with("Failed to find the thumbnail ID for #{output.id}")
+      end
+    end
+  end
+
+  describe '#logical_structure_from' do
+    context 'when it fails to find a Plum Solr Document' do
+      let(:logger) { instance_double(Logger) }
+      before do
+        allow(logger).to receive(:warn)
+      end
+      it 'logs a warning when the logical structure cannot be parsed' do
+        importer = nil
+        change_set_persister.buffer_into_index do |buffered_changeset_persister|
+          importer = described_class.new(id: 'ps7529f138', change_set_persister: buffered_changeset_persister, logger: logger)
+        end
+        expect(importer.logical_structure_from(nil)).to be_empty
+        expect(logger).to have_received(:warn).with(/Failed to parse the logical structure while importing /)
+      end
+    end
   end
 
   def query_service
