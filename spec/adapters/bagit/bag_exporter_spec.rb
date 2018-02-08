@@ -16,7 +16,8 @@ RSpec.describe Bagit::BagExporter do
   after do
     exporter.metadata_adapter.persister.wipe!
   end
-  it "can store a resource as a bag" do
+  with_queue_adapter :inline
+  it "can store a resource as a bag", run_real_derivatives: true do
     exporter.export(resource: resource)
     # Metadata files for the resource.
     expect(File.exist?(bag_path.join("tagmanifest-sha256.txt"))).to eq true

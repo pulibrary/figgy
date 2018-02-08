@@ -23,18 +23,32 @@ module Bagit
         old_path = file.try(:disk_path) || file.path
         FileUtils.cp(old_path, new_path)
         output_file = find_by(id: Valkyrie::ID.new("bag://#{new_path.relative_path_from(base_path)}"))
-        create_manifests(output_file)
+        create_manifests(output_file, original_filename, resource)
         output_file
       end
 
-      def create_manifests(file)
-        checksums = file.checksum(digests: [Digest::SHA1.new, Digest::MD5.new, Digest::SHA256.new])
+      def create_manifests(file, original_filename, resource)
+        checksums = get_checksums(file, original_filename, resource)
         file_path = Pathname.new(file_path(file.id)).relative_path_from(bag_path)
         ["sha1", "md5", "sha256"].each_with_index do |algorithm, idx|
           File.open(bag_path.join("manifest-#{algorithm}.txt"), 'a') do |f|
             f.puts("#{checksums[idx]}  #{file_path}")
           end
         end
+      end
+
+      def get_checksums(file, original_filename, resource)
+        existing_file_checksum = find_checksum(original_filename, resource)
+        if existing_file_checksum
+          [existing_file_checksum.sha1, existing_file_checksum.md5, existing_file_checksum.sha256]
+        else
+          file.checksum(digests: [Digest::SHA1.new, Digest::MD5.new, Digest::SHA256.new])
+        end
+      end
+
+      def find_checksum(original_filename, resource)
+        return unless resource.respond_to?(:file_metadata)
+        Array.wrap(resource.file_metadata).find { |x| x.original_filename.include?(original_filename) }.try(:checksum).try(:first)
       end
 
       def generate_id
