@@ -22,6 +22,7 @@ module Bagit
       def create!
         FileUtils.mkdir_p(bag_path)
         create_bagit_txt
+        create_bag_info
         export_metadata
       end
 
@@ -46,7 +47,11 @@ module Bagit
         end
 
         def create_bagit_txt
-          render_template_to_file(template: "bagit.txt", file: bag_path.join("bagit.txt"))
+          render_template_to_file(template: "bagit.txt.erb", file: bag_path.join("bagit.txt"))
+        end
+
+        def create_bag_info
+          render_template_to_file(template: "bag-info.txt.erb", file: bag_path.join("bag-info.txt"))
         end
 
         def export_metadata
@@ -73,12 +78,16 @@ module Bagit
         end
 
         def render_template_to_file(template:, file:)
-          output = ERB.new(File.read(template_path.join(template))).result(binding)
+          output = ERB.new(File.read(template_path.join(template)), nil, '-').result(binding)
           File.open(file, 'w') { |f| f.write(output) }
         end
 
         def template_path
           Pathname.new(__dir__).join("templates")
+        end
+
+        def helper
+          @helper ||= ManifestBuilder::ManifestHelper.new
         end
     end
   end

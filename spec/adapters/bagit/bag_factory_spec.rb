@@ -11,7 +11,7 @@ RSpec.describe Bagit::BagFactory, run_real_derivatives: true do
     )
   end
   let(:bag_path) { Rails.root.join("tmp", "test_bags") }
-  let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], source_metadata_identifier: "123456") }
+  let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], source_metadata_identifier: "123456", identifier: "ark:/88435/7d278t10z") }
   before do
     stub_bibdata(bib_id: '123456')
   end
@@ -44,6 +44,17 @@ RSpec.describe Bagit::BagFactory, run_real_derivatives: true do
           Digest::SHA256.file(resource_path.join("metadata", "#{resource.id}.jsonld")).hexdigest,
           "metadata/#{resource.id}.jsonld"
         ]
+      ]
+      # bag-info.txt
+      expect(File.exist?(resource_path.join("bag-info.txt"))).to eq true
+      date = Time.current.strftime("%Y-%m-%d")
+      expect(File.read(resource_path.join("bag-info.txt")).split("\n")).to eq [
+        "Bagging-Date: #{date}",
+        "External-Description: #{resource.title.first}",
+        "External-Identifier: ark:/88435/7d278t10z",
+        "Internal-Sender-Identifier: http://www.example.com/catalog/#{resource.id}",
+        "Organization-Address: One Washington Road, Princeton, NJ 08544-2098, USA",
+        "Source-Organization: Princeton University Library"
       ]
     end
   end
