@@ -22,7 +22,7 @@ module Bagit
         new_path = data_path.join("#{generate_id}-#{original_filename}")
         old_path = file.try(:disk_path) || file.path
         FileUtils.cp(old_path, new_path)
-        output_file = find_by(id: Valkyrie::ID.new("bag://#{new_path}"))
+        output_file = find_by(id: Valkyrie::ID.new("bag://#{new_path.relative_path_from(base_path)}"))
         create_manifests(output_file)
         output_file
       end
@@ -32,7 +32,7 @@ module Bagit
         file_path = Pathname.new(file_path(file.id)).relative_path_from(bag_path)
         ["sha1", "md5", "sha256"].each_with_index do |algorithm, idx|
           File.open(bag_path.join("manifest-#{algorithm}.txt"), 'a') do |f|
-            f.puts("#{checksums[idx]} #{file_path}")
+            f.puts("#{checksums[idx]}  #{file_path}")
           end
         end
       end
@@ -56,7 +56,7 @@ module Bagit
       end
 
       def file_path(id)
-        id.to_s.gsub(/^bag:\/\//, '')
+        base_path.join(Pathname.new(id.to_s.gsub(/^bag:\/\//, '')))
       end
 
       def handles?(id:)

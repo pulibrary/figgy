@@ -71,7 +71,7 @@ module Bagit
         def digest_metadata
           hash = Digest::SHA256.file(metadata_digest_path).hexdigest
           File.open(bag_path.join("tagmanifest-sha256.txt"), 'a') do |f|
-            f.puts("#{hash} #{metadata_digest_path.relative_path_from(bag_path)}")
+            f.puts("#{hash}  #{metadata_digest_path.relative_path_from(bag_path)}")
           end
         end
 

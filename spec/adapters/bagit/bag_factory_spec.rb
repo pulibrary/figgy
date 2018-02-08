@@ -38,12 +38,9 @@ RSpec.describe Bagit::BagFactory, run_real_derivatives: true do
       ]
       expect(File.exist?(resource_path.join("metadata", "#{resource.id}.jsonld"))).to eq true
       expect(File.exist?(resource_path.join("tagmanifest-sha256.txt"))).to eq true
-      tag_manifest_contents = File.read(resource_path.join("tagmanifest-sha256.txt")).split("\n").map(&:split)
+      tag_manifest_contents = File.read(resource_path.join("tagmanifest-sha256.txt")).split("\n")
       expect(tag_manifest_contents).to eq [
-        [
-          Digest::SHA256.file(resource_path.join("metadata", "#{resource.id}.jsonld")).hexdigest,
-          "metadata/#{resource.id}.jsonld"
-        ]
+        "#{Digest::SHA256.file(resource_path.join('metadata', "#{resource.id}.jsonld")).hexdigest}  metadata/#{resource.id}.jsonld"
       ]
       # bag-info.txt
       expect(File.exist?(resource_path.join("bag-info.txt"))).to eq true
