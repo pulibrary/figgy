@@ -31,12 +31,16 @@ class FileMetadata < Valkyrie::Resource
         updated_at: Time.current)
   end
 
+  def derivative?
+    use.include?(Valkyrie::Vocab::PCDMUse.ServiceFile)
+  end
+
   def original_file?
     use.include?(Valkyrie::Vocab::PCDMUse.OriginalFile)
   end
 
-  def derivative?
-    use.include?(Valkyrie::Vocab::PCDMUse.ServiceFile)
+  def thumbnail_file?
+    use.include?(Valkyrie::Vocab::PCDMUse.ThumbnailImage)
   end
 
   # Populates FileMetadata with fixity check results

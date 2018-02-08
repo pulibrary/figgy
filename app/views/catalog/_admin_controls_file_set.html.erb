@@ -23,6 +23,13 @@
         <td><%= f.input "derivative_files[][#{file.id}]", as: :file, label: false, required: false %></td>
       </tr>
     <% end %>
+    <% resource.thumbnail_files.each do |file| %>
+      <tr>
+        <td><span class="label label-info">Thumbnail File</span>&nbsp;<%= file.label.first %></td>
+        <td><%= link_to "Download", valhalla.download_path(resource.id, file.id) %></td>
+        <td><%= f.input "thumbnail_files[][#{file.id}]", as: :file, label: false, required: false %></td>
+      </tr>
+    <% end %>
     </tbody>
     <tfoot>
       <tr>

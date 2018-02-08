@@ -130,6 +130,7 @@ Rails.application.routes.draw do
         get :file_manager
         get :structure
         get :manifest, defaults: { format: :json }
+        get :geoblacklight, defaults: { format: :json }
         post :browse_everything_files
       end
     end
@@ -139,6 +140,7 @@ Rails.application.routes.draw do
     resources :vector_works do
       member do
         get :file_manager
+        get :geoblacklight, defaults: { format: :json }
         post :browse_everything_files
       end
     end

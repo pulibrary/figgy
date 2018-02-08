@@ -30,15 +30,13 @@ RSpec.describe ImageDerivativeService do
     end
   end
 
-  it 'creates a JPEG and attaches it to the fileset' do
+  it 'creates a JPEG thumbnail and attaches it to the fileset' do
     derivative_service.new(valid_change_set).create_derivatives
-
     reloaded = query_service.find_by(id: valid_resource.id)
-    derivative = reloaded.derivative_file
-
-    expect(derivative).to be_present
-    derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
-    image = MiniMagick::Image.open(derivative_file.disk_path)
+    thumbnail = reloaded.thumbnail_files.first
+    expect(thumbnail).to be_present
+    thumbnail_file = Valkyrie::StorageAdapter.find_by(id: thumbnail.file_identifiers.first)
+    image = MiniMagick::Image.open(thumbnail_file.disk_path)
     expect(image.width).to eq 200
     expect(image.height).to eq 287
   end
@@ -50,9 +48,8 @@ RSpec.describe ImageDerivativeService do
 
     it "deletes the attached fileset when the resource is deleted" do
       derivative_service.new(valid_change_set).cleanup_derivatives
-
       reloaded = query_service.find_by(id: valid_resource.id)
-      expect(reloaded.file_metadata.select { |file| file.derivative? && file.mime_type.include?('image/jpeg') }).to be_empty
+      expect(reloaded.file_metadata.select { |file| (file.derivative? || file.thumbnail_file?) && file.mime_type.include?(image_mime_type) }).to be_empty
     end
   end
 end

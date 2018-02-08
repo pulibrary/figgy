@@ -92,5 +92,6 @@ gem 'capistrano-rails-console'
 gem "faker"
 gem 'iso-639'
 gem 'jquery-datatables-rails', '~> 3.4.0'
+gem 'json-schema'
 gem 'leaflet-rails', '~> 0.7'
 gem 'prawn'

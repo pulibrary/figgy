@@ -227,4 +227,36 @@ RSpec.describe VectorWorksController do
       end
     end
   end
+
+  describe "GET /vector_works/:id/geoblacklight" do
+    let(:user) { FactoryBot.create(:admin) }
+    let(:vector_work) { FactoryBot.create_for_repository(:vector_work) }
+    let(:builder) { instance_double(GeoResources::Discovery::DocumentBuilder) }
+
+    before do
+      allow(GeoResources::Discovery::DocumentBuilder).to receive(:new).and_return(builder)
+    end
+
+    context 'with a valid geoblacklight document' do
+      before do
+        allow(builder).to receive(:to_hash).and_return(id: 'test')
+      end
+
+      it 'renders the document' do
+        get :geoblacklight, params: { id: vector_work.id, format: :json }
+        expect(response).to be_success
+      end
+    end
+
+    context 'with an invalid geoblacklight document' do
+      before do
+        allow(builder).to receive(:to_hash).and_return(error: 'problem')
+      end
+
+      it 'returns an error message' do
+        get :geoblacklight, params: { id: vector_work.id, format: :json }
+        expect(response.body).to include('problem')
+      end
+    end
+  end
 end

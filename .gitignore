@@ -16,3 +16,4 @@
 /public/packs-test
 /node_modules
 /valhalla/app/javascript/test/unit/coverage/*
+/yarn.lock

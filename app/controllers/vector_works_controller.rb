@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class VectorWorksController < BaseResourceController
   include GeoResourceController
+  include GeoblacklightDocumentController
 
   self.change_set_class = DynamicChangeSet
   self.resource_class = VectorWork

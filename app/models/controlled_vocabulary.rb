@@ -210,6 +210,24 @@ class ControlledVocabulary
     end
   end
 
+  # Controlled vocabulary for raster geospatial media types
+  class GeoRasterFormat < ControlledVocabulary
+    ControlledVocabulary.register(:geo_raster_format, self)
+    # Accessor for the class attribute storing the media types within an authorities YAML file
+    def self.authority_config
+      @authority_config ||= YAML.safe_load(File.read(Rails.root.join("config", "authorities", "geo_raster_formats.yml")), [Symbol])
+    end
+
+    # Accesses all Terms specified within the YAML config. files
+    # @return [Array<Term>] the Term Objects modeling each geospatial raster media type
+    def all(_scope = nil)
+      @all ||=
+        self.class.authority_config[:terms].map do |term|
+          Term.new(term)
+        end
+    end
+  end
+
   # Controlled vocabulary for ISO language codes
   # Unlike with other authorities, no YAML file is used for these values
   class Language < ControlledVocabulary
