@@ -3,7 +3,7 @@ class CheckFixityRecursiveJob < ApplicationJob
   delegate :query_service, to: :metadata_adapter
 
   def perform
-    file_set = find_next_file_to_check
+    file_set = query_service.custom_queries.least_recently_updated_file_set
     original_file_metadata = file_set.run_fixity
     file_set.file_metadata = file_set.file_metadata.select { |x| !x.original_file? } + Array.wrap(original_file_metadata)
     metadata_adapter.persister.save(resource: file_set)
@@ -11,10 +11,6 @@ class CheckFixityRecursiveJob < ApplicationJob
   end
 
   private
-
-    def find_next_file_to_check
-      query_service.find_all_of_model(model: FileSet).sort_by(&:updated_at).first
-    end
 
     def metadata_adapter
       Valkyrie::MetadataAdapter.find(:indexing_persister)
