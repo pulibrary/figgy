@@ -44,7 +44,8 @@ class FileMetadata < Valkyrie::Resource
   def run_fixity
     # don't run if there has been a failure.
     # probably best to create a new FileSet at that point.
-    return self if fixity_success&.zero?
+    # also don't run if there's no existing checksum; characterization hasn't finished
+    return self if fixity_success&.zero? || checksum.empty?
     actual_file = Valkyrie.config.storage_adapter.find_by(id: file_identifiers.first)
     new_checksum = MultiChecksum.for(actual_file)
     if checksum.include? new_checksum

@@ -1,0 +1,17 @@
+# frozen_string_literal: true
+class CheckFixityJob < ApplicationJob
+  delegate :query_service, to: :metadata_adapter
+
+  def perform(file_set_id)
+    file_set = query_service.find_by(id: Valkyrie::ID.new(file_set_id))
+    original_file_metadata = file_set.run_fixity
+    file_set.file_metadata = file_set.file_metadata.select { |x| !x.original_file? } + Array.wrap(original_file_metadata)
+    metadata_adapter.persister.save(resource: file_set)
+  end
+
+  private
+
+    def metadata_adapter
+      Valkyrie::MetadataAdapter.find(:indexing_persister)
+    end
+end
