@@ -473,6 +473,13 @@ RSpec.describe CatalogController do
         expect(response.body).to have_content "Review and Approval"
         expect(response.body).to have_link "Create New Folder Template"
       end
+      it "renders for a MediaResource" do
+        resource = persister.save(resource: FactoryBot.build(:media_resource))
+
+        get :show, params: { id: resource.id.to_s }
+
+        expect(response.body).to have_selector "h1", text: resource.title.first
+      end
     end
     context "when rendered for a user" do
       render_views

@@ -11,6 +11,7 @@ RSpec.feature "Home Page", js: true do
   scenario "displays creation links for administrators" do
     click_link 'Add'
     expect(page).to have_link "New Scanned Resource"
+    expect(page).to have_link "New Media Resource"
     expect(page).to have_link "Add a Collection", href: "/collections/new"
     expect(page).to have_link "Manage Roles"
     expect(page).to have_content "Test Project"
