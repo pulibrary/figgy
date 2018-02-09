@@ -25,6 +25,9 @@ class PlumChangeSetPersister
         PublishMessage::Factory.new(operation: :update),
         ReindexChildrenOnState::Factory.new(model: EphemeraBox, state: "all_in_production")
       ],
+      after_update_commit: [
+        CheckFixity
+      ],
       before_delete: [
         CleanupStructure,
         CleanupDerivatives,
@@ -62,9 +65,11 @@ class PlumChangeSetPersister
     end
 
     def save(change_set:)
+      updating = change_set.persisted?
       before_save(change_set: change_set)
       persister.save(resource: change_set.resource).tap do |output|
         after_save(change_set: change_set, updated_resource: output)
+        after_update_commit(change_set: change_set, updated_resource: output) if updating
         after_save_commit(change_set: change_set, updated_resource: output)
         after_commit
       end
@@ -159,6 +164,15 @@ class PlumChangeSetPersister
 
       def after_save_commit(change_set:, updated_resource:)
         registered_handlers.fetch(:after_save_commit, []).each do |handler|
+          instance = handler.new(change_set_persister: self, change_set: change_set, post_save_resource: updated_resource)
+          delayed_queue.add do
+            instance.run
+          end
+        end
+      end
+
+      def after_update_commit(change_set:, updated_resource:)
+        registered_handlers.fetch(:after_update_commit, []).each do |handler|
           instance = handler.new(change_set_persister: self, change_set: change_set, post_save_resource: updated_resource)
           delayed_queue.add do
             instance.run

@@ -5,7 +5,6 @@ include ActionDispatch::TestProcess
 RSpec.describe CheckFixityJob do
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
-  #let(:persister) { adapter.persister }
   let(:query_service) { adapter.query_service }
   let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
   let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }

@@ -26,7 +26,7 @@ RSpec.describe CheckFixityRecursiveJob do
   let(:file_metadata2) do
     FileMetadata.new(
       use: [Valkyrie::Vocab::PCDMUse.OriginalFile],
-      mime_type: 'image/tiff',
+      mime_type: 'image/tiff'
     )
   end
 
