@@ -1,9 +1,9 @@
 # frozen_string_literal: true
-# Generated with `rails generate valkyrie:model Medium`
+# Generated with `rails generate valkyrie:model MediaResource`
 require 'rails_helper'
 require 'valkyrie/specs/shared_specs'
 
-RSpec.describe Medium do
+RSpec.describe MediaResource do
   let(:resource_klass) { described_class }
   it_behaves_like "a Valkyrie::Resource"
   it "has ordered member_ids" do
