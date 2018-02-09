@@ -81,6 +81,34 @@ namespace :bulk do
     end
   end
 
+  desc "Link resources to thumbnails (if they should be missing them)"
+  task link_missing_thumbnails: :environment do
+    background = ENV['BACKGROUND']
+    model = ENV['MODEL']
+
+    @logger = Logger.new(STDOUT)
+    query = FindMissingThumbnailResources.new(query_service: Valkyrie::MetadataAdapter.find(:index_solr).query_service)
+    resources = if model.present?
+                  @logger.info "linking missing thumbnails for #{model.to_s.titleize}"
+                  query.find_missing_thumbnail_resources(model: model)
+                else
+                  @logger.info "linking missing thumbnails for Scanned Resources"
+                  query.find_missing_thumbnail_resources
+                end
+    resources.each do |resource|
+      begin
+        if background
+          MissingThumbnailJob.set(queue: :low).perform_later(resource.id)
+        else
+          MissingThumbnailJob.perform_now(resource.id)
+        end
+      rescue => e
+        @logger.error "Error: #{e.message}"
+        @logger.error e.backtrace
+      end
+    end
+  end
+
   desc "Attach a set of directories of TIFFs to existing objects, using the directory names as identifiers to find the objects"
   task attach_each_dir: :environment do
     user = User.find_by_user_key(ENV['USER']) if ENV['USER']
