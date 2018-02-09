@@ -8,7 +8,14 @@ RSpec.describe ScannedMapDecorator do
                      title: "test title",
                      author: "test author",
                      creator: "test creator",
+                     references: links.to_json,
                      subject: "test subject")
+  end
+  let(:links) do
+    {
+      "http://www.jstor.org/stable/1797655": ["www.jstor.org"],
+      "iiif_manifest_paths": "https://plum.princeton.edu/concern/image_works/pb8518582r/manifest"
+    }
   end
   describe "#iiif_manifest_attributes" do
     it "returns attributes" do
@@ -25,6 +32,10 @@ RSpec.describe ScannedMapDecorator do
   it "exposes markup for rendered coverage" do
     expect(resource.decorate.rendered_coverage).to match(/#{Regexp.escape('boundingBoxSelector')}/)
     expect(resource.decorate.rendered_coverage).to match(/#{Regexp.escape('Toggle Map')}/)
+  end
+  it "exposes markup for rendered links" do
+    expect(resource.decorate.rendered_links).to include(/www.jstor.org/)
+    expect(resource.decorate.rendered_links).not_to include(/manifest/)
   end
   it "can attach folders" do
     expect(resource.decorate.attachable_objects).to include ScannedMap
