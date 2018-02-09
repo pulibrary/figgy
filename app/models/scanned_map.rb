@@ -11,6 +11,8 @@ class ScannedMap < Valhalla::Resource
   attribute :pending_uploads, Valkyrie::Types::Array.member(PendingUpload)
   attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
   attribute :file_metadata, Valkyrie::Types::Set.member(FileMetadata.optional)
+  attribute :relation
+  attribute :references
 
   def self.can_have_manifests?
     true

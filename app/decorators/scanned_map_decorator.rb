@@ -4,7 +4,9 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   display(
     [
       :rendered_coverage,
-      :member_of_collections
+      :member_of_collections,
+      :relation,
+      :rendered_links
     ]
   )
   suppress(
@@ -69,6 +71,15 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
 
   def rendered_coverage
     h.bbox_display(coverage)
+  end
+
+  def rendered_links
+    return unless references
+    refs = JSON.parse(references.first)
+    refs.delete('iiif_manifest_paths')
+    refs.map do |url, _label|
+      h.link_to(url, url)
+    end
   end
 
   def manageable_structure?

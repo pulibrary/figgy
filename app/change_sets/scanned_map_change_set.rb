@@ -5,6 +5,9 @@ class ScannedMapChangeSet < ScannedResourceChangeSet
 
   apply_workflow(BookWorkflow)
 
+  property :relation, multiple: false, required: false
+  property :references, multiple: false, required: false
+
   # rubocop:disable Metrics/MethodLength
   def primary_terms
     [
