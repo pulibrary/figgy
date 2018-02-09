@@ -42,7 +42,7 @@ module ApplicationHelper
   end
 
   def all_works
-    [ScannedResource, ScannedMap, VectorWork]
+    [ScannedResource, MediaResource, ScannedMap, VectorWork]
   end
 
   def resource

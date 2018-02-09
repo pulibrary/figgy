@@ -78,6 +78,7 @@ Rails.application.routes.draw do
         get "save_and_ingest/:id", action: :save_and_ingest
       end
     end
+    resources :media_resources
 
     # Added for redirects for IIIF Manifests.
     resources :multi_volume_works, controller: "scanned_resources", only: [] do
