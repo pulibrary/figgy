@@ -33,8 +33,4 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
   def collection_slugs
     @collection_slugs ||= parent.try(:collection_slugs)
   end
-
-  def fixity_sort_date
-    fixity_last_run_date.present? ? fixity_last_run_date : model.created_at
-  end
 end

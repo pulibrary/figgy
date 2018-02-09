@@ -13,7 +13,7 @@ class CheckFixityRecursiveJob < ApplicationJob
   private
 
     def find_next_file_to_check
-      query_service.find_all_of_model(model: FileSet).map(&:decorate).sort_by(&:fixity_sort_date).first
+      query_service.find_all_of_model(model: FileSet).sort_by(&:updated_at).first
     end
 
     def metadata_adapter

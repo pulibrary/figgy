@@ -30,8 +30,8 @@ RSpec.describe FileSet do
         original_file_metadata = file_set.run_fixity
         expect(original_file_metadata).to be_a FileMetadata
         expect(original_file_metadata.fixity_success).to eq 1
+        expect(original_file_metadata.fixity_actual_checksum.first).to be_a MultiChecksum
         expect(original_file_metadata.fixity_last_success_date).to be_a Time
-        expect(original_file_metadata.fixity_last_run_date).to be_a Time
       end
     end
 
@@ -47,8 +47,8 @@ RSpec.describe FileSet do
         file_set = query_service.find_members(resource: output).first
         original_file_metadata = file_set.run_fixity
         expect(original_file_metadata.fixity_success).to eq 0
+        expect(original_file_metadata.fixity_actual_checksum.first).to be_a MultiChecksum
         expect(original_file_metadata.fixity_last_success_date).to be_nil
-        expect(original_file_metadata.fixity_last_run_date).to be_a Time
       end
 
       it 'does not run again' do
