@@ -1,0 +1,8 @@
+Bagging-Date: <%= Time.current.strftime("%Y-%m-%d") %>
+External-Description: <%= resource.try(:title).try(:first) %>
+<%- if resource.try(:identifier).present? -%>
+External-Identifier: <%= resource.try(:identifier).try(:first) %>
+<%- end -%>
+Internal-Sender-Identifier: <%= helper.solr_document_url(id: resource.id.to_s) %>
+Organization-Address: One Washington Road, Princeton, NJ 08544-2098, USA
+Source-Organization: Princeton University Library
