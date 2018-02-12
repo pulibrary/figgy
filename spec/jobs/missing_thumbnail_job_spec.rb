@@ -36,5 +36,13 @@ RSpec.describe MissingThumbnailJob do
         expect(updated_resource.thumbnail_id.first.to_s).to eq member.thumbnail_id.first.to_s
       end
     end
+
+    context 'when the resource has no filesets' do
+      let(:resource) { FactoryBot.create_for_repository(:scanned_resource) }
+      let(:logger) { instance_double(Logger) }
+      it 'has no thumbnail' do
+        expect(updated_resource.thumbnail_id).to be nil
+      end
+    end
   end
 end

@@ -9,7 +9,7 @@ class MissingThumbnailJob < ApplicationJob
 
     member_thumbnail_ids = member_thumbnail_ids_for(resource)
     if member_thumbnail_ids.empty?
-      @logger.warn "Failed to locate a thumbnail for #{id}"
+      logger.warn "Failed to locate a thumbnail for #{id}"
       return resource
     end
     new_thumbnail_id = member_thumbnail_ids.first
@@ -28,7 +28,7 @@ class MissingThumbnailJob < ApplicationJob
     # @param resource [Valhalla::Resource] the repository resource
     # @return [Array<Valkyrie::ID>] the array of thumbnail IDs
     def member_thumbnail_ids_for(resource)
-      return if resource.member_ids.empty?
+      return [] if resource.member_ids.empty?
       members = metadata_adapter.query_service.find_members(resource: resource)
       thumbnail_ids = members.to_a.map(&:thumbnail_id).reject(&:nil?)
       thumbnail_ids += members.map { |member| member_thumbnail_ids(member) } if thumbnail_ids.empty?
