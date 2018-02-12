@@ -13,6 +13,7 @@ module Bagit
       resource.created_at ||= Time.current
       resource.updated_at = Time.current
       bag_factory.new(resource: resource).create!
+      resource.new_record = false
       resource
     end
 
