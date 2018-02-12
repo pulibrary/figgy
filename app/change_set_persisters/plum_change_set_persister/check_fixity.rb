@@ -12,7 +12,8 @@ class PlumChangeSetPersister
     def run
       return unless post_save_resource.instance_of? FileSet
       # Don't run if a file has been updated; fixity will run after characterization on the new file
-      return if change_set.changed.keys.include? 'files'
+      new_file_scenarios = ['files', 'pending_uploads']
+      return unless (change_set.changed.keys & new_file_scenarios).empty?
       ::CheckFixityJob.set(queue: change_set_persister.queue).perform_later(post_save_resource.id.to_s)
     end
   end
