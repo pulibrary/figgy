@@ -49,4 +49,12 @@ RSpec.describe MediaResourceChangeSet do
       expect(change_set.workflow.pending?).to be true
     end
   end
+
+  describe "#primary_terms" do
+    it "includes basic metadata" do
+      expect(change_set.primary_terms).to include :local_identifier
+      expect(change_set.primary_terms).to include :rights_statement
+      expect(change_set.primary_terms).to include :title
+    end
+  end
 end
