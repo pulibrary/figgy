@@ -6,7 +6,9 @@ class CheckFixityJob < ApplicationJob
     file_set = query_service.find_by(id: Valkyrie::ID.new(file_set_id))
     original_file_metadata = file_set.run_fixity
     file_set.file_metadata = file_set.file_metadata.select { |x| !x.original_file? } + Array.wrap(original_file_metadata)
-    metadata_adapter.persister.save(resource: file_set)
+    metadata_adapter.persister.buffer_into_index do |buffered_adapter|
+      buffered_adapter.persister.save(resource: file_set)
+    end
   end
 
   private
