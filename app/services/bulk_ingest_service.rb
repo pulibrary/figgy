@@ -29,7 +29,8 @@ class BulkIngestService
     attributes[:title] = [directory_path.basename] if attributes.fetch(:title, []).blank?
 
     resource = find_or_create_by(property: property, value: file_name, **attributes)
-    attach_children(path: directory_path, resource: resource, file_filter: file_filter, **attributes)
+    child_attributes = attributes.reject { |k, _v| k == :source_metadata_identifier }
+    attach_children(path: directory_path, resource: resource, file_filter: file_filter, **child_attributes)
   end
 
   # For a given directory and root resource, iterate through the directory file children and ingest them
@@ -99,7 +100,7 @@ class BulkIngestService
     # @param file_filter [String] the filter used for matching against the filename extension
     # @return [Array<Pathname>] the paths to any subdirectories
     def dirs(path:)
-      path.children.select(&:directory?)
+      path.children.select(&:directory?).sort
     end
 
     # Retrieve the files within a given directory

@@ -111,6 +111,8 @@ RSpec.describe BulkIngestService do
         child_resource = decorated_resource.volumes.first
         expect(child_resource).to be_a ScannedResource
         expect(child_resource.local_identifier).to include(local_id)
+        expect(child_resource.source_metadata_identifier).to be_nil
+        expect(child_resource.title).to eq ["vol1"]
       end
     end
 
