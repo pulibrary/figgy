@@ -13,11 +13,6 @@ namespace :bulk do
 
     abort "usage: rake bulk:ingest DIR=/path/to/files BIB=1234567 COLL=collid LOCAL_ID=local_id REPLACES=replaces" unless dir && Dir.exist?(dir)
 
-    if coll.present?
-      query = FindByTitle.new(query_service: Valkyrie.config.metadata_adapter.query_service)
-      collection = query.find_by_title(title: coll)
-    end
-
     @logger = Logger.new(STDOUT)
     @logger.warn "No BIB id specified" unless bib
     @logger.info "ingesting files from: #{dir}"
@@ -28,7 +23,7 @@ namespace :bulk do
       if background
         IngestFolderJob.set(queue: :low).perform_later(
           directory: dir,
-          collection: collection,
+          member_of_collection_ids: [coll],
           source_metadata_identifier: bib,
           local_identifier: local_id,
           replaces: replaces
@@ -36,7 +31,7 @@ namespace :bulk do
       else
         IngestFolderJob.perform_now(
           directory: dir,
-          collection: collection,
+          member_of_collection_ids: [coll],
           source_metadata_identifier: bib,
           local_identifier: local_id,
           replaces: replaces
