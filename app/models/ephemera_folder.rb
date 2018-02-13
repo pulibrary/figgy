@@ -41,6 +41,7 @@ class EphemeraFolder < Valhalla::Resource
   attribute :visibility
   attribute :pdf_type
   attribute :local_identifier
+  attribute :identifier
 
   attribute :state
   attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
