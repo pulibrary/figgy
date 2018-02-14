@@ -18,7 +18,7 @@ class ScannedResourcesController < BaseResourceController
     IngestFolderJob.perform_later(directory: locator.folder_pathname.to_s, property: "id", id: obj.id.to_s)
   end
 
-  # manifest thing
+  # View the structural metadata for a given repository resource
   def structure
     @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
     @logical_order = (Array(@change_set.logical_structure).first || Structure.new).decorate
@@ -26,6 +26,7 @@ class ScannedResourcesController < BaseResourceController
     authorize! :structure, @change_set.resource
   end
 
+  # Render the IIIF presentation manifest for a given repository resource
   def manifest
     @resource = find_resource(params[:id])
     authorize! :manifest, @resource

@@ -9,6 +9,10 @@ class BulkIngestService
     @logger = logger
   end
 
+  # Iterate through a list of directories and attach the files within each
+  # @param base_directory [String] the path to the parent directory
+  # @param property [String, nil] the resource property (when attaching files to existing resources)
+  # @param file_filter [String, nil] the filter used for matching against the filename extension
   def attach_each_dir(base_directory:, property: nil, file_filter: nil, **attributes)
     Dir["#{base_directory}/*"].sort.each do |subdir|
       next unless File.directory?(subdir)
@@ -21,10 +25,11 @@ class BulkIngestService
   # This may attach to existing resources (such as EphemeraFolder objects) using a property (e. g. "barcode")
   # This may also create new resources (such as ScannedResource objects)
   # @param base_directory [String] the path to the base directory
-  # @param property [String] the resource property (for an existing resource)
-  # @param file_filter [String] the filter used for matching against the filename extension
+  # @param property [String, nil] the resource property (when attaching files to existing resources)
+  # @param file_filter [String, nil] the filter used for matching against the filename extension
   def attach_dir(base_directory:, property: nil, file_filter: nil, **attributes)
-    directory_path = Pathname.new(base_directory)
+    directory_path = absolute_path(base_directory)
+
     file_name = attributes[:id] || File.basename(base_directory)
     attributes[:title] = [directory_path.basename] if attributes.fetch(:title, []).blank?
 
@@ -33,33 +38,49 @@ class BulkIngestService
     attach_children(path: directory_path, resource: resource, file_filter: file_filter, **child_attributes)
   end
 
-  # For a given directory and root resource, iterate through the directory file children and ingest them
-  # If a subdirectory is found, create a new resource, append this to the parent resource, and recurse through this subdirectory
-  # If a file is found, append this to the parent resource
-  def attach_children(path:, resource:, file_filter: nil, **attributes)
-    child_attributes = attributes.except(:collection)
-
-    child_resources = dirs(path: path).map do |subdir_path|
-      attach_children(
-        path: subdir_path,
-        resource: new_resource(klass: resource.class, **child_attributes.merge(title: [subdir_path.basename])),
-        file_filter: file_filter
-      )
-    end
-    child_files = files(path: path, file_filter: file_filter)
-
-    change_set = DynamicChangeSet.new(resource)
-    change_set.validate(member_ids: child_resources.map(&:id), files: child_files)
-    change_set.sync
-    change_set_persister.save(change_set: change_set)
-  end
-
   private
 
+    # Generate an absolute path to a file system node (i. e. directories, files, links, and pipes)
+    # @param directory_path [String] the path to the file system node
+    # @return [Pathname] the path
+    def absolute_path(directory_path)
+      path_value = File.absolute_path(directory_path)
+      Pathname.new(path_value)
+    end
+
+    # For a given directory and root resource, iterate through the directory file children and ingest them
+    # If a subdirectory is found, create a new resource, append this to the parent resource, and recurse through this subdirectory
+    # If a file is found, append this to the parent resource
+    # @param path [Pathname] the path to the directory containing the child directories
+    # @param resource [Valhalla::Resource] the resource being used to construct child resources
+    # @param file_filter [String, nil] the filter used for matching against the filename extension
+    def attach_children(path:, resource:, file_filter: nil, **attributes)
+      child_attributes = attributes.except(:collection)
+
+      child_resources = dirs(path: path).map do |subdir_path|
+        attach_children(
+          path: subdir_path,
+          resource: new_resource(klass: resource.class, **child_attributes.merge(title: [subdir_path.basename])),
+          file_filter: file_filter
+        )
+      end
+      child_files = files(path: path, file_filter: file_filter)
+
+      change_set = DynamicChangeSet.new(resource)
+      change_set.validate(member_ids: child_resources.map(&:id), files: child_files)
+      change_set.sync
+      change_set_persister.save(change_set: change_set)
+    end
+
+    # Accesses the query service for finding repository resources using a metadata property
+    # @return [FindByStringProperty] the query service
     def property_query_service
       @query_service ||= FindByStringProperty.new(query_service: query_service)
     end
 
+    # Create a new repository resource
+    # @param klass [Class] the class of the resource being constructed
+    # @return [Valhalla::Resource] the newly created resource
     def new_resource(klass:, **attributes)
       collection = attributes.delete(:collection)
 
@@ -96,8 +117,7 @@ class BulkIngestService
     end
 
     # Retrieve the files within a given directory
-    # @param path [Pathname] the path to the directory containing the sbudirectories
-    # @param file_filter [String] the filter used for matching against the filename extension
+    # @param path [Pathname] the path to the directory containing the child directories
     # @return [Array<Pathname>] the paths to any subdirectories
     def dirs(path:)
       path.children.select(&:directory?).sort

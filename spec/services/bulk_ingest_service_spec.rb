@@ -39,21 +39,18 @@ RSpec.describe BulkIngestService do
   end
 
   describe '#attach_dir' do
+    let(:logger) { Logger.new(nil) }
+    let(:single_dir) { Rails.root.join('spec', 'fixtures', 'ingest_single') }
+    let(:bib) { '4609321' }
+    let(:local_id) { 'cico:xyz' }
+    let(:replaces) { 'pudl0001/4609321/331' }
+    let(:coll) { FactoryBot.create_for_repository(:collection) }
+    before do
+      stub_bibdata(bib_id: '4609321')
+      stub_ezid(shoulder: "99999/fk4", blade: "4609321")
+    end
     context 'with a directory of Scanned TIFFs' do
-      let(:logger) { Logger.new(nil) }
-      let(:single_dir) { Rails.root.join('spec', 'fixtures', 'ingest_single') }
-      let(:bib) { '4609321' }
-      let(:local_id) { 'cico:xyz' }
-      let(:replaces) { 'pudl0001/4609321/331' }
-
-      before do
-        stub_bibdata(bib_id: '4609321')
-        stub_ezid(shoulder: "99999/fk4", blade: "4609321")
-      end
-
       it 'ingests the resources, ignoring dotfiles' do
-        coll = FactoryBot.create_for_repository(:collection)
-
         ingester.attach_dir(
           base_directory: single_dir,
           file_filter: '.tif',
@@ -70,6 +67,27 @@ RSpec.describe BulkIngestService do
         resource = decorated_collection.members.to_a.first
         expect(resource.source_metadata_identifier).to include(bib)
         expect(resource.local_identifier).to include(local_id)
+      end
+    end
+
+    context 'with a relative path for the directory' do
+      let(:bulk_ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger) }
+      let(:single_dir) { File.join('spec', 'fixtures', 'ingest_single') }
+      before do
+        allow(bulk_ingester).to receive(:attach_children)
+      end
+      it 'attaches directories using an absolute path' do
+        bulk_ingester.attach_dir(
+          base_directory: single_dir,
+          file_filter: '.tif',
+          source_metadata_identifier: bib,
+          local_identifier: local_id,
+          collection: coll
+        )
+
+        expect(bulk_ingester).to have_received(:attach_children).with(
+          hash_including(path: Rails.root.join('spec', 'fixtures', 'ingest_single'))
+        )
       end
     end
 
