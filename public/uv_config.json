@@ -8,6 +8,13 @@
         "autoCompleteBoxEnabled": false,
         "imageSelectionBoxEnabled": true
       }
+    },
+    "contentLeftPanel":
+    {
+      "options":
+      {
+        "defaultToTreeEnabled": true
+      }
     }
   }
 }
