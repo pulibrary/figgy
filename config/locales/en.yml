@@ -24,13 +24,14 @@ en:
         note_html: Open to the world. Anyone can view.
         warning_html: ''
         class: "label-success"
-        text: "Open"
+        text: "open"
       authenticated:
         note_html: Restrict access to only users and/or groups from Princeton University Library.
         warning_html: ''
         class: "label-info"
+        text: "princeton"
       restricted:
-        text: "Private"
+        text: "private"
         note_html: Only privileged users of this application can see the work.
         warning_html: ''
         class: "label-danger"
