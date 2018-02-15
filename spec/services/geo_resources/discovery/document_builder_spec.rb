@@ -8,16 +8,16 @@ describe GeoResources::Discovery::DocumentBuilder do
   subject(:document_builder) { described_class.new(query_service.find_by(id: geo_work.id), document_class) }
   let(:geo_work) do
     FactoryBot.create_for_repository(:vector_work,
-                                     title: "Geo Work",
+                                     title: 'Geo Work',
                                      coverage: coverage.to_s,
-                                     description: "This is a Geo Work",
-                                     creator: "Yosiwo George",
-                                     publisher: "National Geographic",
+                                     description: 'This is a Geo Work',
+                                     creator: 'Yosiwo George',
+                                     publisher: 'National Geographic',
                                      issued: issued,
-                                     spatial: "Micronesia",
-                                     temporal: "2011",
-                                     subject: "Human settlements",
-                                     language: "Esperanto",
+                                     spatial: 'Micronesia',
+                                     temporal: '2011',
+                                     subject: 'Human settlements',
+                                     language: 'Esperanto',
                                      visibility: visibility,
                                      identifier: 'ark:/99999/fk4')
   end
@@ -83,9 +83,13 @@ describe GeoResources::Discovery::DocumentBuilder do
 
       # references
       refs = JSON.parse(document['dct_references_s'])
-      expect(refs['http://schema.org/url']).to include("http://www.example.com/concern/vector_works/")
-      expect(refs['http://www.isotc211.org/schemas/2005/gmd/']).to include("http://www.example.com/downloads/")
-      expect(refs['http://schema.org/downloadUrl']).to include("http://www.example.com/downloads/")
+      expect(refs['http://schema.org/url']).to match(/concern\/vector_works/)
+      expect(refs['http://www.isotc211.org/schemas/2005/gmd/']).to match(/downloads/)
+      expect(refs['http://schema.org/downloadUrl']).to match(/downloads/)
+      expect(refs['http://www.opengis.net/def/serviceType/ogc/wms']).to match(/geoserver\/public\/wms/)
+      expect(refs['http://www.opengis.net/def/serviceType/ogc/wfs']).to match(/geoserver\/public\/wfs/)
+      expect(refs['http://iiif.io/api/image']).to be nil
+      expect(refs['http://iiif.io/api/presentation#manifest']).to be nil
     end
   end
 
@@ -95,32 +99,6 @@ describe GeoResources::Discovery::DocumentBuilder do
 
     before do
       change_set_persister.save(change_set: change_set)
-    end
-
-    context 'with a missing required metadata field' do
-      let(:coverage) { nil }
-
-      it 'returns an error document' do
-        expect(document['error'][0]).to include('solr_geom')
-        expect(document['error'].size).to eq(1)
-        expect(document_builder.to_hash[:error].size).to eq(1)
-      end
-    end
-
-    context 'with an authenticated visibility' do
-      let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
-
-      it 'returns a restricted rights field value' do
-        expect(document['dc_rights_s']).to eq('Restricted')
-      end
-    end
-
-    context 'with a private visibility' do
-      let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
-
-      it 'returns an empty document' do
-        expect(document).to eq({})
-      end
     end
 
     context 'with no description' do
@@ -133,14 +111,63 @@ describe GeoResources::Discovery::DocumentBuilder do
       let(:change_set) { VectorWorkChangeSet.new(geo_work, files: [file]) }
       let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
 
-      it 'has a thumbnail ref' do
+      it 'has correct references' do
         refs = JSON.parse(document['dct_references_s'])
-        expect(refs['http://schema.org/thumbnailUrl']).to match(/#{Regexp.escape("http://www.example.com/downloads/")}/)
+        expect(refs['http://schema.org/thumbnailUrl']).to match(/downloads/)
+        expect(refs['http://iiif.io/api/image']).to  match(/image-service/)
+        expect(refs['http://iiif.io/api/presentation#manifest']).to match(/concern\/scanned_maps/)
+        expect(refs['http://iiif.io/api/image']).to match(/image-service/)
+        expect(refs['http://www.opengis.net/def/serviceType/ogc/wms']).to be nil
+        expect(refs['http://www.opengis.net/def/serviceType/ogc/wfs']).to be nil
       end
 
       it 'has layer info fields' do
         expect(document['layer_geom_type_s']).to eq('Image')
         expect(document['dc_format_s']).to eq('TIFF')
+      end
+    end
+
+    context 'with an authenticated visibility' do
+      let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
+
+      it 'returns a restricted rights field value' do
+        expect(document['dc_rights_s']).to eq('Restricted')
+      end
+    end
+
+    context 'with a private visibility' do
+      let(:change_set) { VectorWorkChangeSet.new(geo_work, files: [file]) }
+      let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+      let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
+
+      it 'returns a document with reduced references and restricted access' do
+        refs = JSON.parse(document['dct_references_s'])
+        expect(refs).to have_key 'http://schema.org/url'
+        expect(refs).to have_key 'http://schema.org/thumbnailUrl'
+        expect(refs).not_to have_key 'http://schema.org/downloadUrl'
+        expect(refs).not_to have_key 'http://iiif.io/api/image'
+        expect(document['dc_rights_s']).to eq 'Restricted'
+      end
+    end
+
+    context 'with a public visibility and a missing required metadata field' do
+      let(:coverage) { nil }
+
+      it 'returns an error document' do
+        expect(document['error'][0]).to include('solr_geom')
+        expect(document['error'].size).to eq(1)
+        expect(document_builder.to_hash[:error].size).to eq(1)
+      end
+    end
+
+    context 'with a private visibility and a missing required metadata field' do
+      let(:coverage) { nil }
+      let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
+
+      it 'returns an error document' do
+        expect(document['error'][0]).to include('solr_geom')
+        expect(document['error'].size).to eq(1)
+        expect(document_builder.to_hash[:error].size).to eq(1)
       end
     end
   end

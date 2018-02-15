@@ -19,13 +19,12 @@ module GeoResources
 
         private
 
-          # Returns a year associated with the layer. Taken from first
-          # value in temporal.
-          # @return [Integer] year
-          def layer_year
-            date = resource_decorator.temporal.first
-            year = date.match(/(?<=\D|^)(\d{4})(?=\D|$)/)
-            year ? year[0].to_i : nil
+          # Returns the date the layer was issued.
+          # @return [String] date in XMLSchema format.
+          def issued
+            datetime = resource_decorator.issued.first
+            datetime = DateTime.parse(datetime).utc
+            datetime.utc.xmlschema
           rescue
             ''
           end
@@ -36,12 +35,13 @@ module GeoResources
             resource_decorator.model.updated_at.utc.xmlschema
           end
 
-          # Returns the date the layer was issued.
-          # @return [String] date in XMLSchema format.
-          def issued
-            datetime = resource_decorator.issued.first
-            datetime = DateTime.parse(datetime).utc
-            datetime.utc.xmlschema
+          # Returns a year associated with the layer. Taken from first
+          # value in temporal or from resource created date.
+          # @return [Integer] year
+          def layer_year
+            date = resource_decorator.temporal.first || resource_decorator.model.created_at
+            year = date.match(/(?<=\D|^)(\d{4})(?=\D|$)/)
+            year ? year[0].to_i : nil
           rescue
             ''
           end

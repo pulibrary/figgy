@@ -18,11 +18,12 @@ module GeoResources
 
         private
 
-          # Returns an array of attributes to add to document.
-          # @return [Array] attributes
-          def simple_attributes
-            [:creator, :subject, :spatial, :temporal,
-             :title, :provenance, :language, :publisher]
+          # Builds more complex metadata attributes.
+          # @param [AbstractDocument] discovery document
+          def build_complex_attributes(document)
+            document.identifier = identifier
+            document.description = description
+            document.access_rights = resource_decorator.model.visibility.first
           end
 
           # Builds simple metadata attributes.
@@ -35,12 +36,12 @@ module GeoResources
             end
           end
 
-          # Builds more complex metadata attributes.
-          # @param [AbstractDocument] discovery document
-          def build_complex_attributes(document)
-            document.identifier = identifier
-            document.description = description
-            document.access_rights = resource_decorator.model.visibility.first
+          # Returns the work description. If none is available,
+          # a basic description is created.
+          # @return [String] description
+          def description
+            return resource_decorator.description.join(" ") unless resource_decorator.description.empty?
+            "A #{resource_decorator.human_readable_type.downcase} object."
           end
 
           # Returns the work indentifier. This is (usually) different from the hydra/fedora work id.
@@ -53,12 +54,11 @@ module GeoResources
             resource_decorator.id.to_s
           end
 
-          # Returns the work description. If none is available,
-          # a basic description is created.
-          # @return [String] description
-          def description
-            return resource_decorator.description.join(" ") unless resource_decorator.description.empty?
-            "A #{resource_decorator.human_readable_type.downcase} object."
+          # Returns an array of attributes to add to document.
+          # @return [Array] attributes
+          def simple_attributes
+            [:creator, :subject, :spatial, :temporal,
+             :title, :provenance, :language, :publisher]
           end
       end
     end

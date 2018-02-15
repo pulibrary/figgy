@@ -8,12 +8,6 @@ module GeoResources
           @resource_decorator = resource_decorator
         end
 
-        # Returns url for geo concern show page.
-        # @return [String] geo concern show page url
-        def to_s
-          document_helper.polymorphic_url(resource_decorator, host: host, protocol: protocol)
-        end
-
         # Returns url for downloading the original file.
         # @return [String] original file download url
         def file_download
@@ -45,6 +39,12 @@ module GeoResources
           return unless id
           path = url_helpers.download_path(resource_id: @file_set.id.to_s, id: id)
           "#{protocol}://#{host}#{path}"
+        end
+
+        # Returns url for geo concern show page.
+        # @return [String] geo concern show page url
+        def to_s
+          document_helper.polymorphic_url(resource_decorator, host: host, protocol: protocol)
         end
 
         private

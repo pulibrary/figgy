@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-require 'active_support/core_ext/hash/indifferent_access'
-
 module GeoResources
   module Discovery
     class DocumentBuilder
@@ -22,14 +20,14 @@ module GeoResources
         # Returns the wms server url.
         # @return [String] wms server url
         def wms_path
-          return unless @config && visibility && file_set
+          return unless @config && visibility && file_set && file_set_format?
           "#{path}/#{@config[:workspace]}/wms"
         end
 
         # Returns the wfs server url.
         # @return [String] wfs server url
         def wfs_path
-          return unless @config && visibility && file_set
+          return unless @config && visibility && file_set && file_set_format?
           "#{path}/#{@config[:workspace]}/wfs"
         end
 
@@ -46,6 +44,36 @@ module GeoResources
             end
           end
 
+          # Tests if the file set is a vector or raster format.
+          # @return [Bool]
+          def file_set_format?
+            raster_file_set? || vector_file_set?
+          end
+
+          # Mime type of the file set.
+          # @return [String]
+          def file_set_mime_type
+            file_set.mime_type.first
+          end
+
+          # Geoserver base url.
+          # @return [String] geoserver base url
+          def path
+            @config[:url].chomp('/rest')
+          end
+
+          # Tests if the file set is a valid raster format.
+          # @return [Bool]
+          def raster_file_set?
+            ControlledVocabulary.for(:geo_raster_format).include? file_set_mime_type
+          end
+
+          # Tests if the file set is a valid vector format.
+          # @return [Bool]
+          def vector_file_set?
+            ControlledVocabulary.for(:geo_vector_format).include? file_set_mime_type
+          end
+
           # Returns the file set visibility if it's open and authenticated.
           # @return [String] file set visibility
           def visibility
@@ -58,12 +86,6 @@ module GeoResources
           def valid_visibilities
             [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
              Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED]
-          end
-
-          # Geoserver base url.
-          # @return [String] geoserver base url
-          def path
-            @config[:url].chomp('/rest')
           end
       end
     end

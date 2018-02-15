@@ -18,17 +18,12 @@ module GeoResources
 
         private
 
-          # Uses parent work class to determine file geometry type.
-          # These geom types are used in geoblacklight documents.
-          # @return [String] file geometry type
-          def geom_type
-            case resource_decorator.model_name.to_s
-            when /ScannedMap/
-              'Image'
-            when /RasterWork/
-              'Raster'
-            when /VectorWork/
-              vector_geom_type
+          # Gets geo file set decorator
+          # @return [FileSet] geo file set decorator
+          def file_set
+            @file_set ||= begin
+              members = resource_decorator.geo_members
+              members.first.decorate unless members.empty?
             end
           end
 
@@ -44,13 +39,6 @@ module GeoResources
             end
           end
 
-          # Returns the geometry for a vector file.
-          # @return [String] vector geometry
-          def vector_geom_type
-            return 'Mixed' unless file_set
-            file_set.try(:geometry_type) || 'Mixed'
-          end
-
           # Returns the 'geo' mime type of the first file attached to the work.
           # @return [String] file mime type
           def geo_mime_type
@@ -58,13 +46,25 @@ module GeoResources
             file_set.mime_type.first
           end
 
-          # Gets geo file set decorator
-          # @return [FileSet] geo file set decorator
-          def file_set
-            @file_set ||= begin
-              members = resource_decorator.geo_members
-              members.first.decorate unless members.empty?
+          # Uses parent work class to determine file geometry type.
+          # These geom types are used in geoblacklight documents.
+          # @return [String] file geometry type
+          def geom_type
+            case resource_decorator.model_name.to_s
+            when /ScannedMap/
+              'Image'
+            when /RasterWork/
+              'Raster'
+            when /VectorWork/
+              vector_geom_type
             end
+          end
+
+          # Returns the geometry for a vector file.
+          # @return [String] vector geometry
+          def vector_geom_type
+            return 'Mixed' unless file_set
+            file_set.try(:geometry_type) || 'Mixed'
           end
       end
     end

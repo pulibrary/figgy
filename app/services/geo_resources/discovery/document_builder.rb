@@ -17,7 +17,8 @@ module GeoResources
         DateBuilder,
         ReferencesBuilder,
         LayerInfoBuilder,
-        SlugBuilder
+        SlugBuilder,
+        IIIFBuilder
       ]
 
       # Class used to generate urls for links in the document.

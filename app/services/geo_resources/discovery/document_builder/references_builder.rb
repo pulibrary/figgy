@@ -20,14 +20,6 @@ module GeoResources
 
         private
 
-          # Builds metadata file references.
-          # @param [AbstractDocument] discovery document
-          def build_metadata_refs(document)
-            document.fgdc = fgdc
-            document.iso19139 = iso19139
-            document.mods = mods
-          end
-
           # Builds geospatial file download references.
           # @param [AbstractDocument] discovery document
           def build_download_refs(document)
@@ -39,28 +31,12 @@ module GeoResources
             document.wfs_path = wfs_path
           end
 
-          # Returns the identifier to use with WMS/WFS/WCS services.
-          # @return [String] wxs indentifier
-          def wxs_identifier
-            wxs.identifier
-          end
-
-          # Returns the wms server url.
-          # @return [String] wms server url
-          def wms_path
-            wxs.wms_path
-          end
-
-          # Returns the wfs server url.
-          # @return [String] wfs server url
-          def wfs_path
-            wxs.wfs_path
-          end
-
-          # Returns a url to access further descriptive information.
-          # @return [String] work show page url
-          def url
-            path.to_s
+          # Builds metadata file references.
+          # @param [AbstractDocument] discovery document
+          def build_metadata_refs(document)
+            document.fgdc = fgdc
+            document.iso19139 = iso19139
+            document.mods = mods
           end
 
           # Returns a direct file download url
@@ -93,8 +69,32 @@ module GeoResources
             path.thumbnail
           end
 
+          # Returns a url to access further descriptive information.
+          # @return [String] work show page url
+          def url
+            path.to_s
+          end
+
           def wxs
             @wxs ||= Wxs.new(resource_decorator)
+          end
+
+          # Returns the identifier to use with WMS/WFS/WCS services.
+          # @return [String] wxs indentifier
+          def wxs_identifier
+            wxs.identifier
+          end
+
+          # Returns the wms server url.
+          # @return [String] wms server url
+          def wms_path
+            wxs.wms_path
+          end
+
+          # Returns the wfs server url.
+          # @return [String] wfs server url
+          def wfs_path
+            wxs.wfs_path
           end
       end
     end
