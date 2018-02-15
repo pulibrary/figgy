@@ -116,7 +116,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   end
 
   def state
-    super.first
+    Array.wrap(super).first
   end
 
   def genre

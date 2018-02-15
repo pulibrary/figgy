@@ -7,6 +7,7 @@ defaults: &defaults
   plum_binary_path: "/mnt/diglibdata/hydra_binaries"
   plum_derivative_path: "/mnt/libimages1/data/jp2s/plum_prod"
   bag_path: <%= Rails.root.join("tmp", "bags") %>
+  pudl_root: <%= Rails.root.join("tmp", "pudl_root") %>
   jp2_recipes:
     default_color: >
       -rate 2.4,1.48331273,.91673033,.56657224,.35016049,.21641118,.13374944,.08266171
@@ -93,6 +94,7 @@ test:
   repository_path: <%= Rails.root.join("tmp", "test_files") %>
   derivative_path: <%= Rails.root.join("tmp", "test_derivatives") %>
   bag_path: <%= Rails.root.join("tmp", "test_bags") %>
+  pudl_root: <%= Rails.root.join("spec", "fixtures", "test_pudl_root") %>
   events:
     log_file: '/dev/null'
   devise:
@@ -109,6 +111,7 @@ production:
   plum_binary_path: <%= ENV["PLUM_BINARY_PATH"] || "/mnt/diglibdata/hydra_binaries" %>
   plum_derivative_path: <%= ENV["PLUM_DERIVATIVE_PATH"] || "/mnt/libimages1/data/jp2s/plum_prod" %>
   bag_path: <%= ENV["FIGGY_BAG_PATH"] || Rails.root.join("tmp", "bags") %>
+  pudl_root: <%= ENV["FIGGY_PUDL_ROOT"]  %>
   events:
     server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
     exchange:
@@ -123,6 +126,7 @@ staging:
   plum_binary_path: <%= ENV["PLUM_BINARY_PATH"] || "/mnt/diglibdata/hydra_binaries" %>
   plum_derivative_path: <%= ENV["PLUM_DERIVATIVE_PATH"] || "/mnt/libimages1/data/jp2s/plum_prod" %>
   bag_path: <%= ENV["FIGGY_BAG_PATH"] || Rails.root.join("tmp", "bags") %>
+  pudl_root: <%= ENV["FIGGY_PUDL_ROOT"]  %>
   events:
     server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
     exchange:

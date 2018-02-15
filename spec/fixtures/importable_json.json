@@ -1,0 +1,55 @@
+[
+  {
+    "ids": {
+      "ark": "ark:/88435/1n79h566m",
+      "pudl": "pudl0025/02/0002"
+    },
+    "title": "¿Y si defendemos la salud pública?",
+    "sort_title": "y si defendemos la salud pública",
+    "names": [
+      {
+        "label": "Central de Trabajadores Argentinos",
+        "established": true
+      }
+    ],
+    "geo_origin": "Argentina",
+    "date": "Unknown",
+    "dimensions": {
+      "width": 42,
+      "height": 30
+    },
+    "subjects": [
+      {
+        "category": "Politics and government",
+        "topic": "Government policy"
+      },
+      {
+        "category": "Education",
+        "topic": "Education and state"
+      },
+      {
+        "category": "Labor",
+        "topic": "Labor unions"
+      },
+      {
+        "category": "Politics and government",
+        "topic": "Protest movements"
+      },
+      {
+        "category": "Labor",
+        "topic": "Strikes and lockouts"
+      },
+      {
+        "category": "Politics and government",
+        "topic": "Protest movements"
+      }
+    ],
+    "language": "spa",
+    "files": [
+      {
+        "sha1": "ea2ae0d99c0768ff00606f836a72cca4221336e2",
+        "path": "pudl_root:pudl0025/02/0002/00000001.tif"
+      }
+    ]
+  }
+]
