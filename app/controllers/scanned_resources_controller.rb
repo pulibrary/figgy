@@ -18,7 +18,7 @@ class ScannedResourcesController < BaseResourceController
     IngestFolderJob.perform_later(directory: locator.folder_pathname.to_s, property: "id", id: obj.id.to_s)
   end
 
-  # manifest thing
+  # View the structural metadata for a given repository resource
   def structure
     @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
     @logical_order = (Array(@change_set.logical_structure).first || Structure.new).decorate
@@ -26,6 +26,7 @@ class ScannedResourcesController < BaseResourceController
     authorize! :structure, @change_set.resource
   end
 
+  # Render the IIIF presentation manifest for a given repository resource
   def manifest
     @resource = find_resource(params[:id])
     authorize! :manifest, @resource
@@ -69,49 +70,5 @@ class ScannedResourcesController < BaseResourceController
       file_count: locator.file_count,
       volume_count: locator.volume_count
     }
-  end
-
-  class IngestFolderLocator
-    attr_reader :id
-    def initialize(id:)
-      @id = id
-    end
-
-    def root_path
-      Pathname.new(BrowseEverything.config["file_system"][:home]).join("studio_new")
-    end
-
-    def exists?
-      folder_location.present?
-    end
-
-    def location
-      return unless exists?
-      folder_pathname.relative_path_from(root_path)
-    end
-
-    def file_count
-      return unless exists?
-      Dir.glob(folder_pathname.join("**")).select do |file|
-        File.file?(file)
-      end.count
-    end
-
-    def volume_count
-      return unless exists?
-      Dir.glob(folder_pathname.join("**")).select do |file|
-        File.directory?(file)
-      end.count
-    end
-
-    def folder_pathname
-      @folder_pathname ||= Pathname.new(folder_location)
-    end
-
-    private
-
-      def folder_location
-        @folder_location ||= Dir.glob(root_path.join("**/#{id}")).first
-      end
   end
 end

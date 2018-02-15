@@ -117,6 +117,7 @@ RSpec.describe ScannedResourcesController do
 
         expect(resource.member_ids.length).to eq 2
       end
+
       it "can create and import a MVW" do
         post :create, params: {
           scanned_resource: {
