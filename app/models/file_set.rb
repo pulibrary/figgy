@@ -31,6 +31,10 @@ class FileSet < Valhalla::Resource
     file_metadata.select(&:original_file?)
   end
 
+  def thumbnail_files
+    file_metadata.select(&:thumbnail_file?)
+  end
+
   private
 
     def original_file_checksum

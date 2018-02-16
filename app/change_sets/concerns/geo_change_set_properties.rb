@@ -9,7 +9,7 @@ module GeoChangeSetProperties
     property :identifier, multiple: false, required: false
     property :issued, multiple: false, required: false
     property :language, multiple: false, required: false
-    property :provenance, multiple: false, required: false
+    property :provenance, multiple: false, required: false, default: "Princeton"
     property :publisher, multiple: false, required: false
     property :spatial, multiple: true, required: false, default: []
     property :subject, multiple: false, required: false

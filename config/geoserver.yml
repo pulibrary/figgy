@@ -1,0 +1,42 @@
+geoserver:
+  # GeoServer config options for open and public data
+  open: &open
+    # Set to the REST API for the GeoServer
+    url: <%= ENV['PUBLIC_GEOSERVER_URL'] || "http://localhost:8181/geoserver/rest" %>
+    # Optional user and password, set to false to disable
+    user: <%= ENV['PUBLIC_GEOSERVER_USER'] || "admin" %>
+    password: <%= ENV['PUBLIC_GEOSERVER_PASSWORD'] || "geoserver" %>
+    # Set to your GWC server, or "builtin" for the one bundled with GeoServer
+    geowebcache_url: <%= ENV['PUBLIC_GEOSERVER_GWC_URL'] || "builtin" %>
+    # Name of the workspace to save your data in
+    workspace: <%= ENV['PUBLIC_GEOSERVER_WS'] || "public" %>
+    # Path on geoserver machine to mounted/mirrored derivates directory
+    derivatives_path: <%= ENV['PUBLIC_GEOSERVER_DERIVATIVES_PATH'] || "/opt/geoserver/data_dir/derivatives" %>
+    restclient:
+      # Set to false to disable or stdout, stderr, or filename
+      logfile: stderr
+      # Timeout (in seconds)
+      timeout: 300
+      # Open Timeout (in seconds)
+      open_timeout: 60
+
+  # GeoServer config options for restricted data or data that needs authentication
+  authenticated:
+    # Set to the REST API for the GeoServer
+    url: <%= ENV['PUBLIC_GEOSERVER_URL'] || "http://localhost:8181/geoserver/rest" %>
+    # Optional user and password, set to false to disable
+    user: <%= ENV['PUBLIC_GEOSERVER_USER'] || "admin" %>
+    password: <%= ENV['PUBLIC_GEOSERVER_PASSWORD'] || "geoserver" %>
+    # Set to your GWC server, or "builtin" for the one bundled with GeoServer
+    geowebcache_url: <%= ENV['PUBLIC_GEOSERVER_GWC_URL'] || "builtin" %>
+    # Name of the workspace to save your data in
+    workspace: <%= ENV['AUTH_GEOSERVER_WS'] || "restricted" %>
+    # Path on geoserver machine to mounted/mirrored derivates directory
+    derivatives_path: <%= ENV['PUBLIC_GEOSERVER_DERIVATIVES_PATH'] || "/opt/geoserver/data_dir/derivatives" %>
+    restclient:
+      # Set to false to disable or stdout, stderr, or filename
+      logfile: stderr
+      # Timeout (in seconds)
+      timeout: 300
+      # Open Timeout (in seconds)
+      open_timeout: 60

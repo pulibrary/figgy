@@ -74,7 +74,7 @@ class ImageDerivativeService
   end
 
   def use
-    [Valkyrie::Vocab::PCDMUse.ServiceFile]
+    [Valkyrie::Vocab::PCDMUse.ThumbnailImage]
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
@@ -82,7 +82,7 @@ class ImageDerivativeService
   # File membership for the parent of the Valkyrie::StorageAdapter::File is removed using #cleanup_derivative_metadata
   def cleanup_derivatives
     deleted_files = []
-    image_derivatives = resource.file_metadata.select { |file| file.derivative? && file.mime_type.include?(image_mime_type) }
+    image_derivatives = resource.file_metadata.select { |file| (file.derivative? || file.thumbnail_file?) && file.mime_type.include?(image_mime_type) }
     image_derivatives.each do |file|
       storage_adapter.delete(id: file.id)
       deleted_files << file.id
