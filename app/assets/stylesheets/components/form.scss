@@ -2,6 +2,9 @@
   .checkbox input[type='checkbox'] {
     margin-left: 0;
   }
+  .required-tag {
+    background-color: $dark-blue;
+  }
 }
 .form-group .radio input.radio_buttons {
   margin-left: 0;
@@ -9,4 +12,37 @@
 .panel-delete-controls {
   border-top-width: 0px;
   padding-top: 0px;
+}
+.set-access-controls, #attributes {
+  .radio {
+    display: inline-block;
+  }
+  .label {
+    font-size: 14px;
+    font-variant: small-caps;
+    padding-top: inherit;
+    &-success {
+      background-color: $white;
+      color: $university-black;
+      border: 2px solid $gainsboro;
+      padding-bottom: 2px;
+      padding-right: 6px;
+    }
+    &-info {
+      background-color: $princeton-orange;
+      color: $university-black;
+      border: 2px solid $university-black;
+      padding-bottom: 2px;
+      padding-right: 6px;
+    }
+    &-danger {
+      background-color: $university-black;
+      padding-left: 10px;
+    }
+    &-icon {
+      width: 10px;
+      margin-right: 6px;
+      margin-bottom: 2px;
+    }
+  }
 }
