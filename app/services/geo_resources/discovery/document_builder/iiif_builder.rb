@@ -44,7 +44,7 @@ module GeoResources
           end
 
           def iiif_path
-            helper.manifest_image_path(file_set.id)
+            helper.manifest_image_path(file_set)
           end
 
           def manifest_path
