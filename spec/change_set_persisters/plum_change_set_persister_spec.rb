@@ -139,6 +139,24 @@ RSpec.describe PlumChangeSetPersister do
       expect(output.source_metadata_identifier).to eq ['123456']
     end
   end
+  context "when a source_metadata_identifier is set for the first time on a scanned map" do
+    let(:change_set_class) { ScannedMapChangeSet }
+
+    before do
+      stub_bibdata(bib_id: '6866386')
+      stub_ezid(shoulder: "99999/fk4", blade: "6866386")
+    end
+    it "applies remote metadata from bibdata, without identifier, directly to resource" do
+      resource = FactoryBot.build(:scanned_map, title: [])
+      change_set = change_set_class.new(resource)
+      change_set.validate(source_metadata_identifier: '6866386')
+      change_set.sync
+      output = change_set_persister.save(change_set: change_set)
+
+      expect(output.title).to eq [RDF::Literal.new("Eastern Turkey in Asia. Malatia, sheet 16. Series I.D.W.O. no. 1522", language: :und)]
+      expect(output.identifier).to be nil
+    end
+  end
 
   describe "uploading files" do
     let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
