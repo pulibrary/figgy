@@ -52,7 +52,8 @@ module GeoResources
           end
 
           def manifestable?
-            resource_decorator.model_name == 'ScannedMap'
+            return unless resource_decorator.class.respond_to?(:can_have_manifests?)
+            resource_decorator.class.can_have_manifests?
           end
       end
     end
