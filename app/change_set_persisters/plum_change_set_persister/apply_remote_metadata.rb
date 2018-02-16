@@ -26,6 +26,7 @@ class PlumChangeSetPersister
 
       def apply(attributes)
         if change_set.apply_remote_metadata_directly?
+          attributes.delete(:identifier)
           change_set.validate(attributes)
           change_set.sync
         else
