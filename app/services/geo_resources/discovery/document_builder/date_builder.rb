@@ -35,15 +35,32 @@ module GeoResources
             resource_decorator.model.updated_at.utc.xmlschema
           end
 
-          # Returns a year associated with the layer. Taken from first
-          # value in temporal or from resource created date.
+          # Returns a year associated with the layer.
           # @return [Integer] year
           def layer_year
-            date = resource_decorator.temporal.first || resource_decorator.model.created_at
+            layer_year_temporal || layer_year_created
+          end
+
+          # Returns a year from resource created date.
+          # @return [Integer] year
+          def layer_year_created
+            year_from_date(resource_decorator.model.created_at)
+          end
+
+          # Returns a year from first value in temporal.
+          # @return [Integer] year
+          def layer_year_temporal
+            return if resource_decorator.temporal.empty?
+            year_from_date(resource_decorator.temporal.first)
+          end
+
+          # Extracts year as your digit integer from date string
+          # @return [Integer] year
+          def year_from_date(date)
             year = date.match(/(?<=\D|^)(\d{4})(?=\D|$)/)
             year ? year[0].to_i : nil
           rescue
-            ''
+            nil
           end
       end
     end
