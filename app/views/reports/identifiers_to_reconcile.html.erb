@@ -8,6 +8,7 @@
     <tr>
       <th>BibID</th>
       <th>ARK</th>
+      <th>Title</th>
     </tr>
   </thead>
   <tbody>
@@ -15,6 +16,7 @@
       <tr>
         <td><%= r.source_metadata_identifier.first %></td>
         <td><%= r.identifier.first %></td>
+        <td><%= r.title.first %></td>
       </tr>
     <% end %>
   </tbody>
