@@ -59,7 +59,9 @@ module GeoResources
             dct_references_s: clean_document(references).to_json.to_s,
             layer_geom_type_s: geom_type,
             dc_format_s: format,
-            dct_issued_dt: issued
+            dct_issued_dt: issued,
+            suppressed_b: suppressed,
+            dct_source_sm: source
           }
         end
         # rubocop:enable Metrics/LineLength, Metrics/AbcSize
@@ -70,7 +72,7 @@ module GeoResources
             dc_identifier_s: identifier,
             layer_slug_s: slug,
             uuid: slug,
-            dc_title_s: title.first,
+            dc_title_s: title,
             solr_geom: solr_coverage,
             dct_provenance_s: provenance.first,
             dc_rights_s: rights

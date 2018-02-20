@@ -11,6 +11,8 @@ module GeoResources
       # - ReferencesBuilder: builds service reference fields such as thumbnail and download url.
       # - LayerInfoBuilder: builds fields about the geospatial file such as geometry and format.
       # - SlugBuilder: builds the Geoblacklight slug field.
+      # - IIIFBuilder: builds the iiif manifest url for references.
+      # - RelationshipBuilder: builds fields concerning parent child relationships between docs.
       self.services = [
         BasicMetadataBuilder,
         SpatialBuilder,
@@ -18,7 +20,8 @@ module GeoResources
         ReferencesBuilder,
         LayerInfoBuilder,
         SlugBuilder,
-        IIIFBuilder
+        IIIFBuilder,
+        RelationshipBuilder
       ]
 
       # Class used to generate urls for links in the document.

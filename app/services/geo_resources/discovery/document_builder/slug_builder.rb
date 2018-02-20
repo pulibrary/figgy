@@ -13,19 +13,19 @@ module GeoResources
           document.slug = slug
         end
 
+        # Returns the document slug for use in discovery systems.
+        # @return [String] document slug
+        def slug
+          identifier = Array.wrap(ark || resource_decorator.id.to_s).first
+          id = identifier.gsub(%r(ark:/\d{5}/), '')
+          "#{resource_decorator.provenance.first.parameterize}-#{id}"
+        end
+
         private
 
           def ark
             identifier = resource_decorator.identifier.try(:first)
             identifier.to_s if identifier
-          end
-
-          # Returns the document slug for use in discovery systems.
-          # @return [String] document slug
-          def slug
-            identifier = Array.wrap(ark || resource_decorator.id.to_s).first
-            id = identifier.gsub(%r(ark:/\d{5}/), '')
-            "#{resource_decorator.provenance.first.parameterize}-#{id}"
           end
       end
     end

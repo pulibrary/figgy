@@ -21,9 +21,10 @@ module GeoResources
           # Builds more complex metadata attributes.
           # @param [AbstractDocument] discovery document
           def build_complex_attributes(document)
-            document.identifier = identifier
-            document.description = description
             document.access_rights = resource_decorator.model.visibility.first
+            document.description = description
+            document.identifier = identifier
+            document.title = title
           end
 
           # Builds simple metadata attributes.
@@ -58,7 +59,12 @@ module GeoResources
           # @return [Array] attributes
           def simple_attributes
             [:creator, :subject, :spatial, :temporal,
-             :title, :provenance, :language, :publisher]
+             :provenance, :language, :publisher]
+          end
+
+          def title
+            titles = resource_decorator.title
+            titles&.first.to_s
           end
       end
     end
