@@ -12,7 +12,7 @@ module GeoChangeSetProperties
     property :provenance, multiple: false, required: false, default: "Princeton"
     property :publisher, multiple: false, required: false
     property :spatial, multiple: true, required: false, default: []
-    property :subject, multiple: false, required: false
+    property :subject, multiple: true, required: false, default: []
     property :temporal, multiple: true, required: false, default: []
     property :cartographic_scale, multiple: false, required: false
     property :cartographic_projection, multiple: false, required: false
