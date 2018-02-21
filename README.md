@@ -9,7 +9,7 @@ functionality, performance, and scalability.
 * Ruby
 * Node v.8.2.1
 * Java (to run Solr server)
-* Postgres
+* Postgres (for OSX dev systems, install via homebrew)
 * [Redis](http://redis.io/)
     * Start Redis with `redis-server` or if you're on certain Linuxes, you can do this via `sudo service redis-server start`.
 * [ImageMagick](https://www.imagemagick.org)
@@ -35,7 +35,7 @@ npm install
 1. For test:
    - `RAILS_ENV=test rake db:setup`
    - `rake figgy:test`
-   - In a separate terminal: `rspec`
+   - In a separate terminal: `bundle exec rspec`
 2. For development:
    - ``export SECRET_KEY_BASE=`rake secret` ``
    - `rake db:setup`
