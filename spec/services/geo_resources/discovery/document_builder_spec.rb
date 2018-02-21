@@ -114,7 +114,7 @@ describe GeoResources::Discovery::DocumentBuilder do
       it 'has correct references' do
         refs = JSON.parse(document['dct_references_s'])
         expect(refs['http://schema.org/thumbnailUrl']).to match(/downloads/)
-        expect(refs['http://iiif.io/api/image']).to  match(/image-service/)
+        expect(refs['http://iiif.io/api/image']).to match(/image-service/)
         expect(refs['http://iiif.io/api/presentation#manifest']).to match(/concern\/scanned_maps/)
         expect(refs['http://iiif.io/api/image']).to match(/image-service/)
         expect(refs['http://www.opengis.net/def/serviceType/ogc/wms']).to be nil
@@ -168,6 +168,69 @@ describe GeoResources::Discovery::DocumentBuilder do
         expect(document['error'][0]).to include('solr_geom')
         expect(document['error'].size).to eq(1)
         expect(document_builder.to_hash[:error].size).to eq(1)
+      end
+    end
+  end
+
+  describe 'scanned map set' do
+    let(:geo_work) do
+      FactoryBot.create_for_repository(:scanned_map,
+                                       member_ids: child.id,
+                                       thumbnail_id: child.id,
+                                       coverage: coverage.to_s,
+                                       visibility: visibility,
+                                       identifier: 'ark:/99999/fk4')
+    end
+    let(:child) { FactoryBot.create_for_repository(:scanned_map, coverage: coverage.to_s, visibility: visibility) }
+    let(:parent_change_set) { ScannedMapChangeSet.new(geo_work, files: []) }
+
+    before do
+      change_set_persister.save(change_set: parent_change_set)
+      change_set_persister.save(change_set: child_change_set)
+    end
+
+    context 'with a child resouce' do
+      subject(:document_builder) { described_class.new(query_service.find_by(id: child.id), document_class) }
+      let(:child_change_set) { ScannedMapChangeSet.new(child, files: []) }
+      it 'returns a suppressed document with a source field' do
+        expect(document['suppressed_b']).to eq true
+        expect(document['dct_source_sm']).to eq ['princeton-fk4']
+      end
+    end
+
+    context 'with a parent resource' do
+      let(:child_change_set) { ScannedMapChangeSet.new(child, files: [file]) }
+      let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+
+      it 'returns an un-suppressed document with a thumbnail ref and no source field' do
+        expect(document['suppressed_b']).to be_nil
+        expect(document['dct_source_sm']).to be_nil
+      end
+
+      it 'returns document with thumbnail and iiif refs' do
+        refs = JSON.parse(document['dct_references_s'])
+        expect(refs['http://schema.org/thumbnailUrl']).to match(/downloads/)
+        expect(refs['http://iiif.io/api/presentation#manifest']).to match(/concern\/scanned_maps/)
+        expect(refs['http://iiif.io/api/image']).to match(/image-service/)
+      end
+    end
+
+    context 'with a parent resource that is missing its thumbnail file set' do
+      let(:geo_work) do
+        FactoryBot.create_for_repository(:scanned_map,
+                                         member_ids: child.id,
+                                         thumbnail_id: missing_id,
+                                         coverage: coverage.to_s,
+                                         visibility: visibility)
+      end
+      let(:missing_id) { Valkyrie::ID.new('missing') }
+      let(:child_change_set) { ScannedMapChangeSet.new(child, files: [file]) }
+      let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+
+      it 'returns document with no thumbnail or iiif refs' do
+        refs = JSON.parse(document['dct_references_s'])
+        expect(refs['http://schema.org/thumbnailUrl']).to be_nil
+        expect(refs['http://iiif.io/api/presentation#manifest']).to be_nil
       end
     end
   end

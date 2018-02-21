@@ -35,6 +35,22 @@ class ManifestBuilder
         )
       end
 
+      # Provides the builders injected into the factory for manifests of sammelbands
+      # @see IIIFManifest::ManifestServiceLocator#sammelband_manifest_builders
+      # @return [IIIFManifest::ManifestBuilder::CompositeBuilderFactory] the factory of multiple builders
+      def sammelband_manifest_builders
+        composite_builder_factory.new(
+          record_property_builder,
+          sammelband_sequence_builder,
+          structure_builder,
+          see_also_builder,
+          license_builder,
+          thumbnail_builder,
+          rendering_builder,
+          composite_builder: composite_builder
+        )
+      end
+
       ##
       # Class accessor for the "see also" builder
       # @return [Class]

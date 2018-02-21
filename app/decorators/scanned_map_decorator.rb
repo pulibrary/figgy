@@ -32,12 +32,14 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
 
   delegate(*Schema::Common.attributes, to: :primary_imported_metadata, prefix: :imported)
 
-  def members
-    @members ||= query_service.find_members(resource: model).to_a
+  def attachable_objects
+    [ScannedMap]
   end
 
-  def scanned_map_members
-    @scanned_maps ||= members.select { |r| r.is_a?(ScannedMap) }.map(&:decorate).to_a
+  # Display the resource attributes
+  # @return [Hash] a Hash of all of the resource attributes
+  def display_attributes
+    super.reject { |k, v| imported_attributes.fetch(k, nil) == v }
   end
 
   def geo_members
@@ -51,6 +53,66 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
     members.select do |member|
       next unless member.respond_to?(:mime_type)
       ControlledVocabulary.for(:geo_metadata_format).include?(member.mime_type.first)
+    end
+  end
+
+  def human_readable_type
+    return I18n.translate("valhalla.models.map_set", default: 'Map Set') if map_set?
+    model.human_readable_type
+  end
+
+  # Access the resources attributes exposed for the IIIF Manifest metadata
+  # @return [Hash] a Hash of all of the resource attributes
+  def iiif_manifest_attributes
+    super.merge imported_attributes
+  end
+
+  def imported_attribute(attribute_key)
+    return primary_imported_metadata.send(attribute_key) if primary_imported_metadata.try(attribute_key)
+    Array.wrap(primary_imported_metadata.attributes.fetch(attribute_key, []))
+  end
+
+  # Access the resource attributes imported from an external service
+  # @return [Hash] a Hash of all of the resource attributes
+  def imported_attributes
+    @imported_attributes ||= ImportedAttributes.new(subject: self, keys: self.class.displayed_attributes).to_h
+  end
+
+  def imported_language
+    imported_attribute(:language).map do |language|
+      ControlledVocabulary.for(:language).find(language).label
+    end
+  end
+  alias display_imported_language imported_language
+
+  def language
+    (super || []).map do |language|
+      ControlledVocabulary.for(:language).find(language).label
+    end
+  end
+
+  def manageable_structure?
+    true
+  end
+
+  def map_set?
+    !scanned_map_members.empty?
+  end
+
+  def members
+    @members ||= query_service.find_members(resource: model).to_a
+  end
+
+  def rendered_coverage
+    h.bbox_display(coverage)
+  end
+
+  def rendered_links
+    return unless references
+    refs = JSON.parse(references.first)
+    refs.delete('iiif_manifest_paths')
+    refs.map do |url, _label|
+      h.link_to(url, url)
     end
   end
 
@@ -69,60 +131,7 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
     end
   end
 
-  def rendered_coverage
-    h.bbox_display(coverage)
+  def scanned_map_members
+    @scanned_maps ||= members.select { |r| r.is_a?(ScannedMap) }.map(&:decorate).to_a
   end
-
-  def rendered_links
-    return unless references
-    refs = JSON.parse(references.first)
-    refs.delete('iiif_manifest_paths')
-    refs.map do |url, _label|
-      h.link_to(url, url)
-    end
-  end
-
-  def manageable_structure?
-    true
-  end
-
-  def attachable_objects
-    [ScannedMap]
-  end
-
-  # Access the resource attributes imported from an external service
-  # @return [Hash] a Hash of all of the resource attributes
-  def imported_attributes
-    @imported_attributes ||= ImportedAttributes.new(subject: self, keys: self.class.displayed_attributes).to_h
-  end
-
-  # Display the resource attributes
-  # @return [Hash] a Hash of all of the resource attributes
-  def display_attributes
-    super.reject { |k, v| imported_attributes.fetch(k, nil) == v }
-  end
-
-  # Access the resources attributes exposed for the IIIF Manifest metadata
-  # @return [Hash] a Hash of all of the resource attributes
-  def iiif_manifest_attributes
-    super.merge imported_attributes
-  end
-
-  def language
-    (super || []).map do |language|
-      ControlledVocabulary.for(:language).find(language).label
-    end
-  end
-
-  def imported_attribute(attribute_key)
-    return primary_imported_metadata.send(attribute_key) if primary_imported_metadata.try(attribute_key)
-    Array.wrap(primary_imported_metadata.attributes.fetch(attribute_key, []))
-  end
-
-  def imported_language
-    imported_attribute(:language).map do |language|
-      ControlledVocabulary.for(:language).find(language).label
-    end
-  end
-  alias display_imported_language imported_language
 end

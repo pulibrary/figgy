@@ -17,9 +17,15 @@ module GeoResources
         private
 
           # Gets the representative file set.
-          # @return [FileSet] representative file set
+          # @return [FileSetDecorator] representative file set decorator
           def file_set
-            @file_set ||= begin
+            geo_file_set || map_set_file_set
+          end
+
+          # Returns the representative geo file set decorator attached to work.
+          # @return [FileSetDecorator] geo file set decorator
+          def geo_file_set
+            @geo_file_set ||= begin
               member_id = resource_decorator.thumbnail_id.try(:first)
               return nil unless member_id
               members = resource_decorator.geo_members.select { |m| m.id == member_id }
@@ -52,8 +58,25 @@ module GeoResources
           end
 
           def manifestable?
-            return unless resource_decorator.class.respond_to?(:can_have_manifests?)
-            resource_decorator.class.can_have_manifests?
+            resource_decorator.class.try(:can_have_manifests?)
+          end
+
+          # Returns a map set's representative file set decorator.
+          # @return [FileSetDecorator] representative file set decorator
+          def map_set_file_set
+            @map_set_file_set ||= begin
+              member_id = Array.wrap(resource_decorator.thumbnail_id).first
+              return unless member_id
+              member = query_service.find_by(id: member_id)
+              member_file_sets = member.decorate.geo_members
+              member_file_sets.first.decorate unless member_file_sets.empty?
+            end
+          rescue Valkyrie::Persistence::ObjectNotFoundError
+            nil
+          end
+
+          def query_service
+            Valkyrie.config.metadata_adapter.query_service
           end
       end
     end

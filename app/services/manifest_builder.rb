@@ -218,6 +218,10 @@ class ManifestBuilder
       @leaf_nodes ||= members.select { |x| x.instance_of?(FileSet) && geo_image?(x) }
     end
 
+    def sammelband?
+      true
+    end
+
     private
 
       def geo_image?(member)

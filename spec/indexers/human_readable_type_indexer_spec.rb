@@ -19,5 +19,15 @@ RSpec.describe HumanReadableTypeIndexer do
         expect(output[:human_readable_type_ssim]).to eq 'Multi Volume Work'
       end
     end
+
+    context 'when a scanned map has scanned map members' do
+      let(:child_member) { FactoryBot.create_for_repository(:scanned_map) }
+      let(:scanned_map) { FactoryBot.create_for_repository(:scanned_map, member_ids: [child_member.id]) }
+      it 'indexes the scanned map as a map set' do
+        output = described_class.new(resource: scanned_map).to_solr
+
+        expect(output[:human_readable_type_ssim]).to eq 'Map Set'
+      end
+    end
   end
 end
