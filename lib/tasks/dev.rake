@@ -8,9 +8,9 @@ if Rails.env.development? || Rails.env.test?
       shared_solr_opts = { managed: true, verbose: true, persist: false, download_dir: 'tmp' }
       shared_solr_opts[:version] = ENV['SOLR_VERSION'] if ENV['SOLR_VERSION']
 
-      SolrWrapper.wrap(shared_solr_opts.merge(port: 8984, instance_dir: 'tmp/blacklight-core-test')) do |solr|
-        solr.with_collection(name: "blacklight-core-test", dir: Rails.root.join("solr", "config").to_s) do
-          puts "Solr running at http://localhost:8984/solr/blacklight-core-test/, ^C to exit"
+      SolrWrapper.wrap(shared_solr_opts.merge(port: 8984, instance_dir: 'tmp/figgy-core-test')) do |solr|
+        solr.with_collection(name: "figgy-core-test", dir: Rails.root.join("solr", "config").to_s) do
+          puts "Solr running at http://localhost:8984/solr/figgy-core-test/, ^C to exit"
           begin
             sleep
           rescue Interrupt
@@ -22,10 +22,10 @@ if Rails.env.development? || Rails.env.test?
 
     desc "Start solr server for development."
     task :development do
-      SolrWrapper.wrap(managed: true, verbose: true, port: 8983, instance_dir: 'tmp/blacklight-core', persist: false, download_dir: 'tmp') do |solr|
-        solr.with_collection(name: "blacklight-core", dir: Rails.root.join("solr", "config").to_s) do
+      SolrWrapper.wrap(managed: true, verbose: true, port: 8983, instance_dir: 'tmp/figgy-core-dev', persist: false, download_dir: 'tmp') do |solr|
+        solr.with_collection(name: "figgy-core-dev", dir: Rails.root.join("solr", "config").to_s) do
           puts "Setup solr"
-          puts "Solr running at http://localhost:8983/solr/blacklight-core/, ^C to exit"
+          puts "Solr running at http://localhost:8983/solr/figgy-core-dev/, ^C to exit"
           begin
             if ENV['ENABLE_RAILS']
               # If HOST specified, bind to that IP with -b
@@ -50,7 +50,7 @@ if Rails.env.development? || Rails.env.test?
     namespace :test do
       desc "Cleanup test servers"
       task :solr do
-        SolrWrapper.instance(managed: true, verbose: true, port: 8984, instance_dir: 'tmp/blacklight-core-test', persist: false).remove_instance_dir!
+        SolrWrapper.instance(managed: true, verbose: true, port: 8984, instance_dir: 'tmp/figgy-core-test', persist: false).remove_instance_dir!
         puts "Cleaned up test solr server."
       end
     end
