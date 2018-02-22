@@ -2,7 +2,7 @@
   <%# DataTable looks for certain data attributes on initialization
     # https://datatables.net/examples/advanced_init/html5-data-options.html
     # here we sort descending by folder number %>
-  <table class="table table-striped datatable" data-order='[[0, "desc"]]'>
+  <table id="members" class="table table-striped datatable" data-order='[[0, "desc"]]'>
     <thead>
     <tr>
       <% if decorated_resource.is_a?(EphemeraBox) %>
