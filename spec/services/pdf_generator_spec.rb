@@ -11,7 +11,13 @@ RSpec.describe PDFGenerator do
       :scanned_resource,
       files: [file],
       holding_location: ["https://bibdata.princeton.edu/locations/delivery_locations/1"],
-      title: RDF::Literal.new("Test", language: :en)
+      title: RDF::Literal.new("Bolʹshevik Tom", language: :en),
+      imported_metadata: [{
+        creator: "مرحبا يا العالم",
+        extent: "299 leaves : paper ; 206 x 152 mm. bound to 209 x 153 mm.",
+        description: "Ms. codex.",
+        language: 'ara'
+      }]
     )
   end
   let(:file_set) { query_service.find_members(resource: resource).to_a.first }
@@ -21,7 +27,7 @@ RSpec.describe PDFGenerator do
   describe "#render" do
     context "when set to gray" do
       before do
-        stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/287,200/0/grey.jpg")
+        stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/287,200/0/gray.jpg")
           .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-landscape-pdf.jpg")), status: 200)
         file_set.original_file.width = 287
         file_set.original_file.height = 200
@@ -53,7 +59,7 @@ RSpec.describe PDFGenerator do
     context "when it's an arabic manifest" do
       let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], language: 'ara', title: 'المفاتيح') }
       before do
-        stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,287/0/grey.jpg")
+        stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,287/0/gray.jpg")
           .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
       end
       it "renders" do

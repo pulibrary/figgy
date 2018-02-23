@@ -85,6 +85,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-bootstrap-select', '1.12.2'
   gem 'rails-assets-jqueryui-timepicker-addon'
 end
+gem 'arabic-letter-connector'
 gem 'capistrano', '~> 3.7.1'
 gem 'capistrano-passenger'
 gem 'capistrano-rails'
