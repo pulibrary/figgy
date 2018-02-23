@@ -22,7 +22,7 @@ class PDFGenerator
 
     def quality
       if @quality == 'gray'
-        'grey'
+        'gray'
       else
         'default'
       end
