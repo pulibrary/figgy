@@ -13,9 +13,10 @@ RSpec.describe PDFGenerator do
       holding_location: ["https://bibdata.princeton.edu/locations/delivery_locations/1"],
       title: RDF::Literal.new("Bolʹshevik Tom", language: :en),
       imported_metadata: [{
-        creator: "Aḥsāʼī, Aḥmad ibn Zayn al-Dīn, 1753-1826",
+        creator: "مرحبا يا العالم",
         extent: "299 leaves : paper ; 206 x 152 mm. bound to 209 x 153 mm.",
-        description: "Ms. codex."
+        description: "Ms. codex.",
+        language: 'ara'
       }]
     )
   end

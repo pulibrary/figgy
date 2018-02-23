@@ -143,6 +143,7 @@ GEM
     almond-rails (0.1.0)
       rails (>= 4.2, < 6)
     amq-protocol (2.2.0)
+    arabic-letter-connector (0.1.1)
     archive-zip (0.7.0)
       io-like (~> 0.3.0)
     arel (8.0.0)
@@ -778,6 +779,7 @@ PLATFORMS
 
 DEPENDENCIES
   aasm
+  arabic-letter-connector
   autoprefixer-rails
   awesome_print
   bixby
