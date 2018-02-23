@@ -64,4 +64,10 @@ RSpec.describe CicognaraCSV do
       end
     end
   end
+
+  describe "#date" do
+    it "returns nil when given an invalid date" do
+      expect(described_class.date('invalid_date')).to be_nil
+    end
+  end
 end
