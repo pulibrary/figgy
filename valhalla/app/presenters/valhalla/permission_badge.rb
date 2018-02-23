@@ -13,14 +13,14 @@ module Valhalla
     # Draws a span tag with styles for a bootstrap label
     # @return [String] the span markup
     def render
-      content_tag(:span, children, class: "label #{dom_label_class}")
+      content_tag(:div, children, class: "label #{label_class}")
     end
 
     private
 
       # Retrieve the class for the badge elements
       # @return [String] the class name
-      def dom_label_class
+      def label_class
         I18n.t("valhalla.visibility.#{@visibility}.class")
       end
 
@@ -30,22 +30,26 @@ module Valhalla
         I18n.t("valhalla.visibility.#{@visibility}.text")
       end
 
+      def text_span
+        content_tag(:span, text, class: 'text')
+      end
+
       # Generate the path for the visibility icon
       # @return [String] the path to the visibility icon
       def icon_file_name
-        "#{@visibility}_visibility.png"
+        "#{@visibility}_visibility"
       end
 
       # Generate the markup for the visibility icon
       # @return [String] the markup
       def icon
-        image_tag("/assets/valhalla/#{icon_file_name}", alt: @visibility, class: "label-icon")
+        content_tag(:span, '', class: 'icon')
       end
 
       # Generate the markup within the <span>
       # @return [String] the markup
       def children
-        icon + text
+        icon + text_span
       end
   end
 end

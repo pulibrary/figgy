@@ -13,20 +13,37 @@
   border-top-width: 0px;
   padding-top: 0px;
 }
-.set-access-controls, #attributes {
+.set-access-controls, #attributes, #members {
   .radio {
     display: inline-block;
   }
   .label {
     font-size: 14px;
     font-variant: small-caps;
-    padding-top: inherit;
+    padding-top: 0px;
+    span {
+      display: inline-block;
+    }
+    .icon {
+      height: 12px;
+      width: 12px;
+      background-size: 10px;
+      background-repeat: no-repeat;
+      position: relative;
+      top: 2px;
+    }
+    .text {
+      margin-left: 4px;
+    }
     &-success {
       background-color: $white;
       color: $university-black;
       border: 2px solid $gainsboro;
       padding-bottom: 2px;
       padding-right: 6px;
+      .icon {
+        background-image: image-url("open_visibility.png");
+      }
     }
     &-info {
       background-color: $princeton-orange;
@@ -34,15 +51,16 @@
       border: 2px solid $university-black;
       padding-bottom: 2px;
       padding-right: 6px;
+      .icon {
+        background-image: image-url("authenticated_visibility.png");
+      }
     }
     &-danger {
       background-color: $university-black;
       padding-left: 10px;
-    }
-    &-icon {
-      width: 10px;
-      margin-right: 6px;
-      margin-bottom: 2px;
+      .icon {
+        background-image: image-url("restricted_visibility.png");
+      }
     }
   }
 }
