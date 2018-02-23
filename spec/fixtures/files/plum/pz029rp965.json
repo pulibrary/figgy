@@ -1,0 +1,933 @@
+[
+  {
+    "system_create_dtsi": "2017-05-14T18:39:47Z",
+    "system_modified_dtsi": "2017-06-08T19:38:35Z",
+    "has_model_ssim": [
+      "MapSet"
+    ],
+    "id": "pz029rp965",
+    "accessControl_ssim": [
+      "7392ecbf-d2f4-4f16-b755-7cbe41ae0ef3"
+    ],
+    "hasRelatedMediaFragment_ssim": [
+      "px346gq20z"
+    ],
+    "hasRelatedImage_ssim": [
+      "pww72dz06k"
+    ],
+    "depositor_ssim": [
+      "eliotj"
+    ],
+    "depositor_tesim": [
+      "eliotj"
+    ],
+    "title_tesim": [
+      "Mount Holly, N.J."
+    ],
+    "date_modified_dtsi": "2017-06-08T19:38:35Z",
+    "isPartOf_ssim": [
+      "admin_set/default"
+    ],
+    "creator_tesim": [
+      "Sanborn Map Company"
+    ],
+    "description_tesim": [
+      "Includes key and text.",
+      "\"Dec. 1884.\"",
+      "North oriented toward upper right."
+    ],
+    "rights_statement_tesim": [
+      "http://rightsstatements.org/vocab/NKC/1.0/"
+    ],
+    "publisher_tesim": [
+      "New York : Sanborn Map & Publishing Co., Limited, 1884."
+    ],
+    "date_created_tesim": [
+      "1884-01-01T00:00:00Z"
+    ],
+    "subject_tesim": [
+      "Mount Holly (N.J.)—Maps",
+      "Real property—New Jersey—Mount Holly—Maps"
+    ],
+    "language_tesim": [
+      "eng"
+    ],
+    "identifier_tesim": [
+      "ark:/88435/x346d706h"
+    ],
+    "sort_title_ssim": [
+      "Mount Holly, N.J. [map]."
+    ],
+    "sort_title_tesim": [
+      "Mount Holly, N.J. [map]."
+    ],
+    "source_metadata_identifier_ssim": [
+      "5144620"
+    ],
+    "source_metadata_identifier_tesim": [
+      "5144620"
+    ],
+    "source_jsonld_ssim": [
+      "{\"@context\":\"http://bibdata.princeton.edu/context.json\",\"@id\":\"http://bibdata.princeton.edu/bibliographic/5144620\",\"title\":{\"@value\":\"Mount Holly, N.J.\",\"@language\":\"eng\"},\"language\":\"eng\",\"creator\":\"Sanborn Map Company\",\"call_number\":[\"HMC04 (Mount Holly)\",\"Electronic Resource\"],\"extent\":[\"Scale [ca. 1:600]. 50 ft. to an inch.\",\"1 map on 5 sheets : col. ; each 64 x 54 cm.\"],\"format\":\"Map\",\"type\":\"Maps\",\"description\":[\"\\\"Dec. 1884.\\\"\",\"Includes key and text.\",\"North oriented toward upper right.\"],\"publisher\":\"New York : Sanborn Map & Publishing Co., Limited, 1884.\",\"subject\":[\"Real property—New Jersey—Mount Holly—Maps\",\"Mount Holly (N.J.)—Maps\"],\"title_sort\":\"Mount Holly, N.J. [map].\",\"cartographic_scale\":\"Scale [ca. 1:600]. 50 ft. to an inch.\",\"spatial\":\"New Jersey\",\"former_owner\":[\"Library of Congress. Map Division\"],\"author\":\"Sanborn Map Company\",\"created\":\"1884-01-01T00:00:00Z\",\"date\":\"1884\"}"
+    ],
+    "source_jsonld_tesim": [
+      "{\"@context\":\"http://bibdata.princeton.edu/context.json\",\"@id\":\"http://bibdata.princeton.edu/bibliographic/5144620\",\"title\":{\"@value\":\"Mount Holly, N.J.\",\"@language\":\"eng\"},\"language\":\"eng\",\"creator\":\"Sanborn Map Company\",\"call_number\":[\"HMC04 (Mount Holly)\",\"Electronic Resource\"],\"extent\":[\"Scale [ca. 1:600]. 50 ft. to an inch.\",\"1 map on 5 sheets : col. ; each 64 x 54 cm.\"],\"format\":\"Map\",\"type\":\"Maps\",\"description\":[\"\\\"Dec. 1884.\\\"\",\"Includes key and text.\",\"North oriented toward upper right.\"],\"publisher\":\"New York : Sanborn Map & Publishing Co., Limited, 1884.\",\"subject\":[\"Real property—New Jersey—Mount Holly—Maps\",\"Mount Holly (N.J.)—Maps\"],\"title_sort\":\"Mount Holly, N.J. [map].\",\"cartographic_scale\":\"Scale [ca. 1:600]. 50 ft. to an inch.\",\"spatial\":\"New Jersey\",\"former_owner\":[\"Library of Congress. Map Division\"],\"author\":\"Sanborn Map Company\",\"created\":\"1884-01-01T00:00:00Z\",\"date\":\"1884\"}"
+    ],
+    "coverage_ssim": [
+      "northlimit=40.011; eastlimit=-74.768; southlimit=39.979; westlimit=-74.807; units=degrees; projection=EPSG:4326"
+    ],
+    "coverage_tesim": [
+      "northlimit=40.011; eastlimit=-74.768; southlimit=39.979; westlimit=-74.807; units=degrees; projection=EPSG:4326"
+    ],
+    "created_ssim": [
+      "1884-01-01T00:00:00Z"
+    ],
+    "created_tesim": [
+      "1884-01-01T00:00:00Z"
+    ],
+    "date_ssim": [
+      "1884"
+    ],
+    "date_tesim": [
+      "1884"
+    ],
+    "format_ssim": [
+      "Map"
+    ],
+    "format_tesim": [
+      "Map"
+    ],
+    "extent_ssim": [
+      "1 map on 5 sheets : col. ; each 64 x 54 cm.",
+      "Scale [ca. 1:600]. 50 ft. to an inch."
+    ],
+    "extent_tesim": [
+      "1 map on 5 sheets : col. ; each 64 x 54 cm.",
+      "Scale [ca. 1:600]. 50 ft. to an inch."
+    ],
+    "cartographic_scale_ssim": [
+      "Scale [ca. 1:600]. 50 ft. to an inch."
+    ],
+    "cartographic_scale_tesim": [
+      "Scale [ca. 1:600]. 50 ft. to an inch."
+    ],
+    "call_number_ssim": [
+      "Electronic Resource",
+      "HMC04 (Mount Holly)"
+    ],
+    "call_number_tesim": [
+      "Electronic Resource",
+      "HMC04 (Mount Holly)"
+    ],
+    "author_ssim": [
+      "Sanborn Map Company"
+    ],
+    "author_tesim": [
+      "Sanborn Map Company"
+    ],
+    "former_owner_ssim": [
+      "Library of Congress. Map Division"
+    ],
+    "former_owner_tesim": [
+      "Library of Congress. Map Division"
+    ],
+    "viewing_direction_tesim": [
+      "left-to-right"
+    ],
+    "viewing_direction_ssim": [
+      "left-to-right"
+    ],
+    "viewing_hint_tesim": [
+      "individuals"
+    ],
+    "viewing_hint_ssim": [
+      "individuals"
+    ],
+    "spatial_tesim": [
+      "New Jersey"
+    ],
+    "spatial_ssim": [
+      "New Jersey"
+    ],
+    "thumbnail_path_ss": "/downloads/pww72dz06k?file=thumbnail",
+    "suppressed_bsi": false,
+    "actionable_workflow_roles_ssim": [
+      "geo_works-admin",
+      "geo_works-editor",
+      "geo_works-notify_metadata_review",
+      "geo_works-notify_final_review",
+      "geo_works-notify_complete",
+      "geo_works-notify_takedown",
+      "geo_works-curator",
+      "geo_works-notify_flagged"
+    ],
+    "workflow_state_name_ssim": [
+      "complete"
+    ],
+    "member_ids_ssim": [
+      "pd791w328s",
+      "p4168b439x"
+    ],
+    "member_of_collections_ssim": [
+      "Sanborn Fire Insurance Maps of New Jersey"
+    ],
+    "member_of_collection_ids_ssim": [
+      "pcc08m4398"
+    ],
+    "file_set_ids_ssim": [
+      "pd791w328s",
+      "p4168b439x"
+    ],
+    "admin_set_tesim": [
+      "Default Admin Set"
+    ],
+    "member_of_collection_slugs_ssim": [
+      "sanborn"
+    ],
+    "has_model_literals_ssim": [
+      "MapSet"
+    ],
+    "part_of_literals_ssim": [
+      "{\"@id\":\"http://lib-fedora3:8080/fedora/rest/prod/ad/mi/n_/se/admin_set/default\"}"
+    ],
+    "creator_literals_ssim": [
+      "Sanborn Map Company"
+    ],
+    "publisher_literals_ssim": [
+      "New York : Sanborn Map & Publishing Co., Limited, 1884."
+    ],
+    "date_created_literals_ssim": [
+      "1884-01-01T00:00:00Z"
+    ],
+    "subject_literals_ssim": [
+      "Mount Holly (N.J.)—Maps",
+      "Real property—New Jersey—Mount Holly—Maps"
+    ],
+    "language_literals_ssim": [
+      "eng"
+    ],
+    "identifier_literals_ssim": [
+      "ark:/88435/x346d706h"
+    ],
+    "coverage_literals_ssim": [
+      "northlimit=40.011; eastlimit=-74.768; southlimit=39.979; westlimit=-74.807; units=degrees; projection=EPSG:4326"
+    ],
+    "created_literals_ssim": [
+      "1884-01-01T00:00:00Z"
+    ],
+    "date_literals_ssim": [
+      "1884"
+    ],
+    "format_literals_ssim": [
+      "Map"
+    ],
+    "extent_literals_ssim": [
+      "1 map on 5 sheets : col. ; each 64 x 54 cm.",
+      "Scale [ca. 1:600]. 50 ft. to an inch."
+    ],
+    "cartographic_scale_literals_ssim": [
+      "Scale [ca. 1:600]. 50 ft. to an inch."
+    ],
+    "call_number_literals_ssim": [
+      "Electronic Resource",
+      "HMC04 (Mount Holly)"
+    ],
+    "author_literals_ssim": [
+      "Sanborn Map Company"
+    ],
+    "former_owner_literals_ssim": [
+      "Library of Congress. Map Division"
+    ],
+    "title_literals_ssim": [
+      "{\"@value\":\"Mount Holly, N.J.\",\"@language\":\"eng\"}"
+    ],
+    "identifier_ssim": [
+      "ark:/88435/x346d706h"
+    ],
+    "human_readable_type_tesim": [
+      "Map Set"
+    ],
+    "read_access_group_ssim": [
+      "private"
+    ],
+    "edit_access_person_ssim": [
+      "eliotj"
+    ],
+    "logical_order_tesim": [
+      "{}"
+    ]
+  },
+  {
+    "system_create_dtsi": "2017-05-14T18:40:07Z",
+    "system_modified_dtsi": "2017-05-23T17:44:51Z",
+    "has_model_ssim": [
+      "ImageWork"
+    ],
+    "id": "pd791w328s",
+    "accessControl_ssim": [
+      "3a99c347-de97-4996-96f6-daf182f56512"
+    ],
+    "hasRelatedMediaFragment_ssim": [
+      "pw6636q30k"
+    ],
+    "hasRelatedImage_ssim": [
+      "pw6636q30k"
+    ],
+    "depositor_ssim": [
+      "eliotj"
+    ],
+    "depositor_tesim": [
+      "eliotj"
+    ],
+    "title_tesim": [
+      "Mount Holly, N.J. (Sheet 2)."
+    ],
+    "creator_tesim": [
+      "Sanborn Map Company"
+    ],
+    "description_tesim": [
+      "\"Dec. 1884.\"",
+      "North oriented toward upper right.",
+      "Includes key and text."
+    ],
+    "rights_statement_tesim": [
+      "http://rightsstatements.org/vocab/NKC/1.0/"
+    ],
+    "publisher_tesim": [
+      "New York : Sanborn Map & Publishing Co., Limited, 1884."
+    ],
+    "date_created_tesim": [
+      "1884-01-01T00:00:00Z"
+    ],
+    "subject_tesim": [
+      "Mount Holly (N.J.)—Maps",
+      "Real property—New Jersey—Mount Holly—Maps"
+    ],
+    "language_tesim": [
+      "eng"
+    ],
+    "identifier_tesim": [
+      "ark:/88435/js956h52x"
+    ],
+    "sort_title_ssim": [
+      "Mount Holly, N.J. [map]."
+    ],
+    "sort_title_tesim": [
+      "Mount Holly, N.J. [map]."
+    ],
+    "source_metadata_identifier_ssim": [
+      "5144620"
+    ],
+    "source_metadata_identifier_tesim": [
+      "5144620"
+    ],
+    "source_jsonld_ssim": [
+      "{\"@context\":\"http://bibdata.princeton.edu/context.json\",\"@id\":\"http://bibdata.princeton.edu/bibliographic/5144620\",\"title\":{\"@value\":\"Mount Holly, N.J.\",\"@language\":\"eng\"},\"language\":\"eng\",\"creator\":\"Sanborn Map Company\",\"call_number\":[\"HMC04 (Mount Holly)\",\"Electronic Resource\"],\"extent\":[\"Scale [ca. 1:600]. 50 ft. to an inch.\",\"1 map on 5 sheets : col. ; each 64 x 54 cm.\"],\"format\":\"Map\",\"type\":\"Maps\",\"description\":[\"\\\"Dec. 1884.\\\"\",\"Includes key and text.\",\"North oriented toward upper right.\"],\"publisher\":\"New York : Sanborn Map & Publishing Co., Limited, 1884.\",\"subject\":[\"Real property—New Jersey—Mount Holly—Maps\",\"Mount Holly (N.J.)—Maps\"],\"title_sort\":\"Mount Holly, N.J. [map].\",\"cartographic_scale\":\"Scale [ca. 1:600]. 50 ft. to an inch.\",\"spatial\":\"New Jersey\",\"former_owner\":[\"Library of Congress. Map Division\"],\"author\":\"Sanborn Map Company\",\"created\":\"1884-01-01T00:00:00Z\",\"date\":\"1884\"}"
+    ],
+    "source_jsonld_tesim": [
+      "{\"@context\":\"http://bibdata.princeton.edu/context.json\",\"@id\":\"http://bibdata.princeton.edu/bibliographic/5144620\",\"title\":{\"@value\":\"Mount Holly, N.J.\",\"@language\":\"eng\"},\"language\":\"eng\",\"creator\":\"Sanborn Map Company\",\"call_number\":[\"HMC04 (Mount Holly)\",\"Electronic Resource\"],\"extent\":[\"Scale [ca. 1:600]. 50 ft. to an inch.\",\"1 map on 5 sheets : col. ; each 64 x 54 cm.\"],\"format\":\"Map\",\"type\":\"Maps\",\"description\":[\"\\\"Dec. 1884.\\\"\",\"Includes key and text.\",\"North oriented toward upper right.\"],\"publisher\":\"New York : Sanborn Map & Publishing Co., Limited, 1884.\",\"subject\":[\"Real property—New Jersey—Mount Holly—Maps\",\"Mount Holly (N.J.)—Maps\"],\"title_sort\":\"Mount Holly, N.J. [map].\",\"cartographic_scale\":\"Scale [ca. 1:600]. 50 ft. to an inch.\",\"spatial\":\"New Jersey\",\"former_owner\":[\"Library of Congress. Map Division\"],\"author\":\"Sanborn Map Company\",\"created\":\"1884-01-01T00:00:00Z\",\"date\":\"1884\"}"
+    ],
+    "coverage_ssim": [
+      "northlimit=40.011; eastlimit=-74.768; southlimit=39.979; westlimit=-74.807; units=degrees; projection=EPSG:4326"
+    ],
+    "coverage_tesim": [
+      "northlimit=40.011; eastlimit=-74.768; southlimit=39.979; westlimit=-74.807; units=degrees; projection=EPSG:4326"
+    ],
+    "created_ssim": [
+      "1884-01-01T00:00:00Z"
+    ],
+    "created_tesim": [
+      "1884-01-01T00:00:00Z"
+    ],
+    "date_ssim": [
+      "1884"
+    ],
+    "date_tesim": [
+      "1884"
+    ],
+    "format_ssim": [
+      "Map"
+    ],
+    "format_tesim": [
+      "Map"
+    ],
+    "extent_ssim": [
+      "1 map on 5 sheets : col. ; each 64 x 54 cm.",
+      "Scale [ca. 1:600]. 50 ft. to an inch."
+    ],
+    "extent_tesim": [
+      "1 map on 5 sheets : col. ; each 64 x 54 cm.",
+      "Scale [ca. 1:600]. 50 ft. to an inch."
+    ],
+    "cartographic_scale_ssim": [
+      "Scale [ca. 1:600]. 50 ft. to an inch."
+    ],
+    "cartographic_scale_tesim": [
+      "Scale [ca. 1:600]. 50 ft. to an inch."
+    ],
+    "call_number_ssim": [
+      "HMC04 (Mount Holly)",
+      "Electronic Resource"
+    ],
+    "call_number_tesim": [
+      "HMC04 (Mount Holly)",
+      "Electronic Resource"
+    ],
+    "author_ssim": [
+      "Sanborn Map Company"
+    ],
+    "author_tesim": [
+      "Sanborn Map Company"
+    ],
+    "former_owner_ssim": [
+      "Library of Congress. Map Division"
+    ],
+    "former_owner_tesim": [
+      "Library of Congress. Map Division"
+    ],
+    "spatial_tesim": [
+      "New Jersey"
+    ],
+    "spatial_ssim": [
+      "New Jersey"
+    ],
+    "thumbnail_path_ss": "/downloads/pw6636q30k?file=thumbnail",
+    "suppressed_bsi": false,
+    "actionable_workflow_roles_ssim": [
+      "geo_works-admin",
+      "geo_works-editor",
+      "geo_works-notify_metadata_review",
+      "geo_works-notify_final_review",
+      "geo_works-notify_complete",
+      "geo_works-notify_takedown",
+      "geo_works-curator",
+      "geo_works-notify_flagged"
+    ],
+    "workflow_state_name_ssim": [
+      "complete"
+    ],
+    "member_ids_ssim": [
+      "pw6636q30k"
+    ],
+    "file_set_ids_ssim": [
+      "pw6636q30k"
+    ],
+    "has_model_literals_ssim": [
+      "ImageWork"
+    ],
+    "creator_literals_ssim": [
+      "Sanborn Map Company"
+    ],
+    "publisher_literals_ssim": [
+      "New York : Sanborn Map & Publishing Co., Limited, 1884."
+    ],
+    "date_created_literals_ssim": [
+      "1884-01-01T00:00:00Z"
+    ],
+    "subject_literals_ssim": [
+      "Mount Holly (N.J.)—Maps",
+      "Real property—New Jersey—Mount Holly—Maps"
+    ],
+    "language_literals_ssim": [
+      "eng"
+    ],
+    "identifier_literals_ssim": [
+      "ark:/88435/js956h52x"
+    ],
+    "coverage_literals_ssim": [
+      "northlimit=40.011; eastlimit=-74.768; southlimit=39.979; westlimit=-74.807; units=degrees; projection=EPSG:4326"
+    ],
+    "created_literals_ssim": [
+      "1884-01-01T00:00:00Z"
+    ],
+    "date_literals_ssim": [
+      "1884"
+    ],
+    "format_literals_ssim": [
+      "Map"
+    ],
+    "extent_literals_ssim": [
+      "1 map on 5 sheets : col. ; each 64 x 54 cm.",
+      "Scale [ca. 1:600]. 50 ft. to an inch."
+    ],
+    "cartographic_scale_literals_ssim": [
+      "Scale [ca. 1:600]. 50 ft. to an inch."
+    ],
+    "call_number_literals_ssim": [
+      "HMC04 (Mount Holly)",
+      "Electronic Resource"
+    ],
+    "author_literals_ssim": [
+      "Sanborn Map Company"
+    ],
+    "former_owner_literals_ssim": [
+      "Library of Congress. Map Division"
+    ],
+    "title_literals_ssim": [
+      "Mount Holly, N.J. (Sheet 2)."
+    ],
+    "identifier_ssim": [
+      "ark:/88435/js956h52x"
+    ],
+    "human_readable_type_tesim": [
+      "Image Work"
+    ],
+    "read_access_group_ssim": [
+      "public"
+    ],
+    "edit_access_person_ssim": [
+      "eliotj"
+    ],
+    "logical_order_tesim": [
+      "{}"
+    ]
+  },
+  {
+    "system_create_dtsi": "2017-05-14T18:40:08Z",
+    "system_modified_dtsi": "2017-05-14T18:40:14Z",
+    "has_model_ssim": [
+      "FileSet"
+    ],
+    "id": "pw6636q30k",
+    "creator_tesim": [
+      "eliotj"
+    ],
+    "accessControl_ssim": [
+      "6537421e-32dd-4581-a018-5af1c5559013"
+    ],
+    "depositor_ssim": [
+      "eliotj"
+    ],
+    "depositor_tesim": [
+      "eliotj"
+    ],
+    "title_tesim": [
+      "Sheet 2"
+    ],
+    "date_uploaded_dtsi": "2017-05-14T18:40:08Z",
+    "date_modified_dtsi": "2017-05-14T18:40:08Z",
+    "geo_mime_type_tesim": [
+      "image/tiff"
+    ],
+    "geo_mime_type_ssim": [
+      "image/tiff"
+    ],
+    "thumbnail_path_ss": "/downloads/pw6636q30k?file=thumbnail",
+    "hasRelatedMediaFragment_ssim": [
+      "pw6636q30k"
+    ],
+    "hasRelatedImage_ssim": [
+      "pw6636q30k"
+    ],
+    "label_tesim": [
+      "js956h52x.tif"
+    ],
+    "label_ssi": "js956h52x.tif",
+    "file_format_tesim": [
+      "js956h52x.tif\" (Tagged Image File Format, TIFF Baseline palette-color (Class P))"
+    ],
+    "file_size_lts": 84586004,
+    "height_is": 10088,
+    "width_is": 8383,
+    "mime_type_ssi": "message/external-body;access-type=URL;url=\"http://plum.princeton.edu:9090/pw/66/36/q3/pw6636q30k/js956h52x.tif\"",
+    "digest_ssim": [
+      "urn:sha1:da39a3ee5e6b4b0d3255bfef95601890afd80709"
+    ],
+    "original_checksum_tesim": [
+      "05e8c4fb381c594dda67badf804edb03"
+    ],
+    "read_access_group_ssim": [
+      "public"
+    ],
+    "edit_access_person_ssim": [
+      "eliotj"
+    ],
+    "human_readable_type_tesim": [
+      "File"
+    ],
+    "color_space_ssim": [
+      "RGB Palette"
+    ],
+    "ordered_by_ssim": [
+      "pd791w328s"
+    ],
+    "valid_ssim": [
+      "true"
+    ],
+    "well_formed_ssim": [
+      "true"
+    ]
+  },
+  {
+    "system_create_dtsi": "2017-05-14T18:39:55Z",
+    "system_modified_dtsi": "2017-05-23T17:44:49Z",
+    "has_model_ssim": [
+      "ImageWork"
+    ],
+    "id": "p4168b439x",
+    "accessControl_ssim": [
+      "5bff1b54-4274-4232-ab59-4cc42f9d4d8d"
+    ],
+    "hasRelatedMediaFragment_ssim": [
+      "pww72dz06k"
+    ],
+    "hasRelatedImage_ssim": [
+      "pww72dz06k"
+    ],
+    "depositor_ssim": [
+      "eliotj"
+    ],
+    "depositor_tesim": [
+      "eliotj"
+    ],
+    "title_tesim": [
+      "Mount Holly, N.J. (Sheet 1)."
+    ],
+    "creator_tesim": [
+      "Sanborn Map Company"
+    ],
+    "description_tesim": [
+      "Includes key and text.",
+      "North oriented toward upper right.",
+      "\"Dec. 1884.\""
+    ],
+    "rights_statement_tesim": [
+      "http://rightsstatements.org/vocab/NKC/1.0/"
+    ],
+    "publisher_tesim": [
+      "New York : Sanborn Map & Publishing Co., Limited, 1884."
+    ],
+    "date_created_tesim": [
+      "1884-01-01T00:00:00Z"
+    ],
+    "subject_tesim": [
+      "Mount Holly (N.J.)—Maps",
+      "Real property—New Jersey—Mount Holly—Maps"
+    ],
+    "language_tesim": [
+      "eng"
+    ],
+    "identifier_tesim": [
+      "ark:/88435/9g54xk26j"
+    ],
+    "sort_title_ssim": [
+      "Mount Holly, N.J. [map]."
+    ],
+    "sort_title_tesim": [
+      "Mount Holly, N.J. [map]."
+    ],
+    "source_metadata_identifier_ssim": [
+      "5144620"
+    ],
+    "source_metadata_identifier_tesim": [
+      "5144620"
+    ],
+    "source_jsonld_ssim": [
+      "{\"@context\":\"http://bibdata.princeton.edu/context.json\",\"@id\":\"http://bibdata.princeton.edu/bibliographic/5144620\",\"title\":{\"@value\":\"Mount Holly, N.J.\",\"@language\":\"eng\"},\"language\":\"eng\",\"creator\":\"Sanborn Map Company\",\"call_number\":[\"HMC04 (Mount Holly)\",\"Electronic Resource\"],\"extent\":[\"Scale [ca. 1:600]. 50 ft. to an inch.\",\"1 map on 5 sheets : col. ; each 64 x 54 cm.\"],\"format\":\"Map\",\"type\":\"Maps\",\"description\":[\"\\\"Dec. 1884.\\\"\",\"Includes key and text.\",\"North oriented toward upper right.\"],\"publisher\":\"New York : Sanborn Map & Publishing Co., Limited, 1884.\",\"subject\":[\"Real property—New Jersey—Mount Holly—Maps\",\"Mount Holly (N.J.)—Maps\"],\"title_sort\":\"Mount Holly, N.J. [map].\",\"cartographic_scale\":\"Scale [ca. 1:600]. 50 ft. to an inch.\",\"spatial\":\"New Jersey\",\"former_owner\":[\"Library of Congress. Map Division\"],\"author\":\"Sanborn Map Company\",\"created\":\"1884-01-01T00:00:00Z\",\"date\":\"1884\"}"
+    ],
+    "source_jsonld_tesim": [
+      "{\"@context\":\"http://bibdata.princeton.edu/context.json\",\"@id\":\"http://bibdata.princeton.edu/bibliographic/5144620\",\"title\":{\"@value\":\"Mount Holly, N.J.\",\"@language\":\"eng\"},\"language\":\"eng\",\"creator\":\"Sanborn Map Company\",\"call_number\":[\"HMC04 (Mount Holly)\",\"Electronic Resource\"],\"extent\":[\"Scale [ca. 1:600]. 50 ft. to an inch.\",\"1 map on 5 sheets : col. ; each 64 x 54 cm.\"],\"format\":\"Map\",\"type\":\"Maps\",\"description\":[\"\\\"Dec. 1884.\\\"\",\"Includes key and text.\",\"North oriented toward upper right.\"],\"publisher\":\"New York : Sanborn Map & Publishing Co., Limited, 1884.\",\"subject\":[\"Real property—New Jersey—Mount Holly—Maps\",\"Mount Holly (N.J.)—Maps\"],\"title_sort\":\"Mount Holly, N.J. [map].\",\"cartographic_scale\":\"Scale [ca. 1:600]. 50 ft. to an inch.\",\"spatial\":\"New Jersey\",\"former_owner\":[\"Library of Congress. Map Division\"],\"author\":\"Sanborn Map Company\",\"created\":\"1884-01-01T00:00:00Z\",\"date\":\"1884\"}"
+    ],
+    "coverage_ssim": [
+      "northlimit=40.011; eastlimit=-74.768; southlimit=39.979; westlimit=-74.807; units=degrees; projection=EPSG:4326"
+    ],
+    "coverage_tesim": [
+      "northlimit=40.011; eastlimit=-74.768; southlimit=39.979; westlimit=-74.807; units=degrees; projection=EPSG:4326"
+    ],
+    "created_ssim": [
+      "1884-01-01T00:00:00Z"
+    ],
+    "created_tesim": [
+      "1884-01-01T00:00:00Z"
+    ],
+    "date_ssim": [
+      "1884"
+    ],
+    "date_tesim": [
+      "1884"
+    ],
+    "format_ssim": [
+      "Map"
+    ],
+    "format_tesim": [
+      "Map"
+    ],
+    "extent_ssim": [
+      "1 map on 5 sheets : col. ; each 64 x 54 cm.",
+      "Scale [ca. 1:600]. 50 ft. to an inch."
+    ],
+    "extent_tesim": [
+      "1 map on 5 sheets : col. ; each 64 x 54 cm.",
+      "Scale [ca. 1:600]. 50 ft. to an inch."
+    ],
+    "cartographic_scale_ssim": [
+      "Scale [ca. 1:600]. 50 ft. to an inch."
+    ],
+    "cartographic_scale_tesim": [
+      "Scale [ca. 1:600]. 50 ft. to an inch."
+    ],
+    "call_number_ssim": [
+      "HMC04 (Mount Holly)",
+      "Electronic Resource"
+    ],
+    "call_number_tesim": [
+      "HMC04 (Mount Holly)",
+      "Electronic Resource"
+    ],
+    "author_ssim": [
+      "Sanborn Map Company"
+    ],
+    "author_tesim": [
+      "Sanborn Map Company"
+    ],
+    "former_owner_ssim": [
+      "Library of Congress. Map Division"
+    ],
+    "former_owner_tesim": [
+      "Library of Congress. Map Division"
+    ],
+    "spatial_tesim": [
+      "New Jersey"
+    ],
+    "spatial_ssim": [
+      "New Jersey"
+    ],
+    "thumbnail_path_ss": "/downloads/pww72dz06k?file=thumbnail",
+    "suppressed_bsi": false,
+    "actionable_workflow_roles_ssim": [
+      "geo_works-admin",
+      "geo_works-editor",
+      "geo_works-notify_metadata_review",
+      "geo_works-notify_final_review",
+      "geo_works-notify_complete",
+      "geo_works-notify_takedown",
+      "geo_works-curator",
+      "geo_works-notify_flagged"
+    ],
+    "workflow_state_name_ssim": [
+      "complete"
+    ],
+    "member_ids_ssim": [
+      "pww72dz06k"
+    ],
+    "file_set_ids_ssim": [
+      "pww72dz06k"
+    ],
+    "has_model_literals_ssim": [
+      "ImageWork"
+    ],
+    "creator_literals_ssim": [
+      "Sanborn Map Company"
+    ],
+    "publisher_literals_ssim": [
+      "New York : Sanborn Map & Publishing Co., Limited, 1884."
+    ],
+    "date_created_literals_ssim": [
+      "1884-01-01T00:00:00Z"
+    ],
+    "subject_literals_ssim": [
+      "Mount Holly (N.J.)—Maps",
+      "Real property—New Jersey—Mount Holly—Maps"
+    ],
+    "language_literals_ssim": [
+      "eng"
+    ],
+    "identifier_literals_ssim": [
+      "ark:/88435/9g54xk26j"
+    ],
+    "coverage_literals_ssim": [
+      "northlimit=40.011; eastlimit=-74.768; southlimit=39.979; westlimit=-74.807; units=degrees; projection=EPSG:4326"
+    ],
+    "created_literals_ssim": [
+      "1884-01-01T00:00:00Z"
+    ],
+    "date_literals_ssim": [
+      "1884"
+    ],
+    "format_literals_ssim": [
+      "Map"
+    ],
+    "extent_literals_ssim": [
+      "1 map on 5 sheets : col. ; each 64 x 54 cm.",
+      "Scale [ca. 1:600]. 50 ft. to an inch."
+    ],
+    "cartographic_scale_literals_ssim": [
+      "Scale [ca. 1:600]. 50 ft. to an inch."
+    ],
+    "call_number_literals_ssim": [
+      "HMC04 (Mount Holly)",
+      "Electronic Resource"
+    ],
+    "author_literals_ssim": [
+      "Sanborn Map Company"
+    ],
+    "former_owner_literals_ssim": [
+      "Library of Congress. Map Division"
+    ],
+    "title_literals_ssim": [
+      "Mount Holly, N.J. (Sheet 1)."
+    ],
+    "identifier_ssim": [
+      "ark:/88435/9g54xk26j"
+    ],
+    "human_readable_type_tesim": [
+      "Image Work"
+    ],
+    "edit_access_person_ssim": [
+      "eliotj"
+    ],
+    "logical_order_tesim": [
+      "{}"
+    ]
+  },
+  {
+    "system_create_dtsi": "2017-05-14T18:39:56Z",
+    "system_modified_dtsi": "2017-05-14T18:39:59Z",
+    "has_model_ssim": [
+      "FileSet"
+    ],
+    "id": "pww72dz06k",
+    "creator_tesim": [
+      "eliotj"
+    ],
+    "accessControl_ssim": [
+      "9870dc6f-1262-478c-85f1-b0f443f42169"
+    ],
+    "depositor_ssim": [
+      "eliotj"
+    ],
+    "depositor_tesim": [
+      "eliotj"
+    ],
+    "title_tesim": [
+      "Sheet 1"
+    ],
+    "date_uploaded_dtsi": "2017-05-14T18:39:56Z",
+    "date_modified_dtsi": "2017-05-14T18:39:56Z",
+    "geo_mime_type_tesim": [
+      "image/tiff"
+    ],
+    "geo_mime_type_ssim": [
+      "image/tiff"
+    ],
+    "thumbnail_path_ss": "/downloads/pww72dz06k?file=thumbnail",
+    "hasRelatedMediaFragment_ssim": [
+      "pww72dz06k"
+    ],
+    "hasRelatedImage_ssim": [
+      "pww72dz06k"
+    ],
+    "label_tesim": [
+      "9g54xk26j.tif"
+    ],
+    "label_ssi": "9g54xk26j.tif",
+    "file_format_tesim": [
+      "9g54xk26j.tif\" (TIFF Baseline palette-color (Class P), Tagged Image File Format)"
+    ],
+    "file_size_lts": 85176508,
+    "height_is": 10091,
+    "width_is": 8439,
+    "mime_type_ssi": "message/external-body;access-type=URL;url=\"http://plum.princeton.edu:9090/pw/w7/2d/z0/pww72dz06k/9g54xk26j.tif\"",
+    "digest_ssim": [
+      "urn:sha1:da39a3ee5e6b4b0d3255bfef95601890afd80709"
+    ],
+    "original_checksum_tesim": [
+      "296e7406283a28b746f920832ba2424e"
+    ],
+    "read_access_group_ssim": [
+      "public"
+    ],
+    "edit_access_person_ssim": [
+      "eliotj"
+    ],
+    "human_readable_type_tesim": [
+      "File"
+    ],
+    "color_space_ssim": [
+      "RGB Palette"
+    ],
+    "ordered_by_ssim": [
+      "p4168b439x"
+    ],
+    "valid_ssim": [
+      "true"
+    ],
+    "well_formed_ssim": [
+      "true"
+    ]
+  },
+  {
+    "system_create_dtsi": "2017-05-14T18:41:18Z",
+    "system_modified_dtsi": "2017-05-14T18:41:18Z",
+    "has_model_ssim": [
+      "ActiveFedora::Aggregation::ListSource"
+    ],
+    "id": "pz029rp965/list_source",
+    "ordered_targets_ssim": [
+      "p4168b439x",
+      "pd791w328s"
+    ],
+    "proxy_in_ssi": "pz029rp965"
+  },
+  {
+    "system_create_dtsi": "2017-05-14T18:40:16Z",
+    "system_modified_dtsi": "2017-05-14T18:40:16Z",
+    "has_model_ssim": [
+      "ActiveFedora::Aggregation::ListSource"
+    ],
+    "id": "pd791w328s/list_source",
+    "ordered_targets_ssim": [
+      "pw6636q30k"
+    ],
+    "proxy_in_ssi": "pd791w328s"
+  },
+  {
+    "system_create_dtsi": "2017-05-14T18:40:00Z",
+    "system_modified_dtsi": "2017-05-14T18:40:00Z",
+    "has_model_ssim": [
+      "ActiveFedora::Aggregation::ListSource"
+    ],
+    "id": "p4168b439x/list_source",
+    "ordered_targets_ssim": [
+      "pww72dz06k"
+    ],
+    "proxy_in_ssi": "p4168b439x"
+  },
+  {
+    "system_create_dtsi": "2017-05-21T05:25:30Z",
+    "system_modified_dtsi": "2017-05-21T07:34:40Z",
+    "has_model_ssim": [
+      "Collection"
+    ],
+    "id": "pcc08m4398",
+    "accessControl_ssim": [
+      "e061a20f-3c4f-4f20-9dfa-ae63eea5a211"
+    ],
+    "depositor_ssim": [
+      "eliotj"
+    ],
+    "depositor_tesim": [
+      "eliotj"
+    ],
+    "title_tesim": [
+      "Sanborn Fire Insurance Maps of New Jersey"
+    ],
+    "exhibit_id_tesim": [
+      "sanborn"
+    ],
+    "exhibit_id_ssim": [
+      "sanborn"
+    ],
+    "thumbnail_path_ss": "/assets/collection-a38b932554788aa578debf2319e8c4ba8a7db06b3ba57ecda1391a548a4b6e0a.png",
+    "bytes_lts": 0,
+    "read_access_group_ssim": [
+      "public"
+    ],
+    "edit_access_person_ssim": [
+      "eliotj"
+    ],
+    "human_readable_type_tesim": [
+      "Collection"
+    ]
+  }
+]
