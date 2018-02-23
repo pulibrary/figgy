@@ -11,7 +11,12 @@ RSpec.describe PDFGenerator do
       :scanned_resource,
       files: [file],
       holding_location: ["https://bibdata.princeton.edu/locations/delivery_locations/1"],
-      title: RDF::Literal.new("Test", language: :en)
+      title: RDF::Literal.new("Bolʹshevik Tom", language: :en),
+      imported_metadata: [{
+        creator: "Aḥsāʼī, Aḥmad ibn Zayn al-Dīn, 1753-1826",
+        extent: "299 leaves : paper ; 206 x 152 mm. bound to 209 x 153 mm.",
+        description: "Ms. codex."
+      }]
     )
   end
   let(:file_set) { query_service.find_members(resource: resource).to_a.first }

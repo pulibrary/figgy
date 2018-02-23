@@ -32,13 +32,16 @@ class PDFGenerator
       noto_ara_r = Rails.root.join("app", "assets", "fonts", "NotoNaskhArabic", "NotoNaskhArabic-Regular.ttf")
       amiri_b = Rails.root.join("app", "assets", "fonts", "amiri", "amiri-bold.ttf")
       amiri_r = Rails.root.join("app", "assets", "fonts", "amiri", "amiri-regular.ttf")
+      dejavu = Rails.root.join("app", "assets", "fonts", "Dejavu", "DejaVuSerif-webfont.ttf")
 
       prawn_document.font_families.update(
         "amiri" => { normal: amiri_r, italic: amiri_r, bold: amiri_b, bold_italic: amiri_b },
         "noto_cjk" => { normal: noto_cjk_r, italic: noto_cjk_r, bold: noto_cjk_b, bold_italic: noto_cjk_b },
-        "noto_ara" => { normal: noto_ara_r, italic: noto_ara_r, bold: noto_ara_b, bold_italic: noto_ara_b }
+        "noto_ara" => { normal: noto_ara_r, italic: noto_ara_r, bold: noto_ara_b, bold_italic: noto_ara_b },
+        "dejavu" => { normal: dejavu, italic: dejavu, bold: dejavu, bold_italic: dejavu }
       )
-      prawn_document.fallback_fonts(["noto_cjk", "noto_ara", "amiri"])
+      prawn_document.fallback_fonts(["noto_cjk", "noto_ara", "amiri", "dejavu"])
+      prawn_document.font("dejavu")
 
       prawn_document.bounding_box([15, Canvas::LETTER_HEIGHT - 15], width: Canvas::LETTER_WIDTH - 30, height: Canvas::LETTER_HEIGHT - 30) do
         prawn_document.image Rails.root.join("app", "assets", "images", "pul_logo_long.png").to_s, position: :center, width: Canvas::LETTER_WIDTH - 30
