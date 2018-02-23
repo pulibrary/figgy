@@ -26,7 +26,7 @@ RSpec.describe PDFGenerator do
   describe "#render" do
     context "when set to gray" do
       before do
-        stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/287,200/0/grey.jpg")
+        stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/287,200/0/gray.jpg")
           .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-landscape-pdf.jpg")), status: 200)
         file_set.original_file.width = 287
         file_set.original_file.height = 200
