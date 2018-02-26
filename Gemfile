@@ -71,7 +71,8 @@ end
 gem 'rsolr', '>= 1.0'
 
 gem 'aasm'
-gem 'browse-everything'
+gem 'browse-everything', github: 'samvera/browse-everything'
+# gem 'extracted_library', :path => './vendor/extracted_library'
 gem 'coffee-rails'
 gem 'devise'
 gem 'ezid-client'

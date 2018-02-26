@@ -31,11 +31,15 @@ class BaseResourceController < ApplicationController
 
   def selected_files
     @selected_files ||= selected_file_params.values.map do |x|
-      PendingUpload.new(x.symbolize_keys.merge(id: SecureRandom.uuid, created_at: Time.current.utc.iso8601))
+      auth_header_values = x.delete("auth_header")
+      auth_header = JSON.generate(auth_header_values)
+      PendingUpload.new(x.symbolize_keys.merge(id: SecureRandom.uuid, created_at: Time.current.utc.iso8601, auth_header: auth_header))
     end
   end
 
-  def selected_file_params
-    params[:selected_files].to_unsafe_h
-  end
+  private
+
+    def selected_file_params
+      params[:selected_files].to_unsafe_h
+    end
 end

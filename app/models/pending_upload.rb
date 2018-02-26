@@ -4,6 +4,7 @@ class PendingUpload < Valkyrie::Resource
   attribute :file_name
   attribute :url
   attribute :file_size, Valkyrie::Types::Set.member(Valkyrie::Types::Coercible::Int)
+  attribute :auth_header
 
   def original_filename
     @file_name.first
@@ -19,7 +20,12 @@ class PendingUpload < Valkyrie::Resource
 
   private
 
+    def headers
+      return {} if auth_header.empty?
+      JSON.parse auth_header.first
+    end
+
     def copied_file_name
-      @copied_file_name ||= BrowseEverything::Retriever.new.download("file_name" => file_name.first, "file_size" => file_size.first, "url" => url.first)
+      @copied_file_name ||= BrowseEverything::Retriever.new.download("file_name" => file_name.first, "file_size" => file_size.first, "url" => url.first, "auth_header" => headers)
     end
 end
