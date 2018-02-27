@@ -176,7 +176,6 @@ describe GeoResources::Discovery::DocumentBuilder do
     let(:geo_work) do
       FactoryBot.create_for_repository(:scanned_map,
                                        member_ids: child.id,
-                                       thumbnail_id: child.id,
                                        coverage: coverage.to_s,
                                        visibility: visibility,
                                        identifier: 'ark:/99999/fk4')
@@ -201,6 +200,13 @@ describe GeoResources::Discovery::DocumentBuilder do
     context 'with a parent resource' do
       let(:child_change_set) { ScannedMapChangeSet.new(child, files: [file]) }
       let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+
+      before do
+        change_set = ScannedMapChangeSet.new(geo_work)
+        change_set.validate(thumbnail_id: child.member_ids[0])
+        change_set.sync
+        change_set_persister.save(change_set: change_set)
+      end
 
       it 'returns an un-suppressed document with a thumbnail ref and no source field' do
         expect(document['suppressed_b']).to be_nil
