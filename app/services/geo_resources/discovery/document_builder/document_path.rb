@@ -80,9 +80,8 @@ module GeoResources
           def map_set_file_set
             member_id = Array.wrap(resource_decorator.thumbnail_id).first
             return unless member_id
-            member = query_service.find_by(id: member_id)
-            member_file_sets = member.decorate.geo_members
-            member_file_sets.first.decorate unless member_file_sets.empty?
+            file_set = query_service.find_by(id: member_id)
+            file_set.decorate if file_set && file_set.is_a?(FileSet)
           rescue Valkyrie::Persistence::ObjectNotFoundError
             nil
           end
