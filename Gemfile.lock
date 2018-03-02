@@ -51,7 +51,7 @@ GIT
 
 GIT
   remote: https://github.com/samvera-labs/valkyrie.git
-  revision: c5e0319bc9400d56ef68f937955931dbf735a3da
+  revision: fee63e0e637c8d9e829ea3932d7f3f3ec42c9bb9
   branch: fix_types
   specs:
     valkyrie (0.1.0)
@@ -829,6 +829,7 @@ DEPENDENCIES
   json-schema
   leaflet-rails (~> 0.7)
   listen
+  mini_magick
   modernizr-rails
   normalize-rails
   omniauth-cas

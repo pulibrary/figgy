@@ -20,6 +20,6 @@ class EphemeraBox < Valhalla::Resource
   attribute :local_identifier
 
   def title
-    'Ephemera Box'
+    ['Ephemera Box']
   end
 end

@@ -24,7 +24,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
         expect(linked_ephemera_folder.geo_subject.first).to eq(
           "@id" => "http://www.example.com/catalog/#{ephemera_term.id}",
           "@type" => "skos:Concept",
-          "pref_label" => ephemera_term.label,
+          "pref_label" => ephemera_term.label.first,
           "exact_match" => { "@id" => ephemera_term.uri.first }
         )
       end
@@ -46,7 +46,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
           [{
             "@id" => "http://www.example.com/catalog/#{ephemera_term.id}",
             "@type" => "skos:Concept",
-            "pref_label" => ephemera_term.label,
+            "pref_label" => ephemera_term.label.first,
             "exact_match" => { "@id" => ephemera_term.uri.first }
           }]
         )
@@ -68,7 +68,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
           [{
             "@id" => "http://www.example.com/catalog/#{ephemera_term.id}",
             "@type" => "skos:Concept",
-            "pref_label" => ephemera_term.label,
+            "pref_label" => ephemera_term.label.first,
             "exact_match" => { "@id" => ephemera_term.uri.first }
           }]
         )
@@ -91,7 +91,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
         expect(linked_ephemera_folder.language.first).to eq(
           "@id" => "http://www.example.com/catalog/#{ephemera_term.id}",
           "@type" => "skos:Concept",
-          "pref_label" => ephemera_term.label,
+          "pref_label" => ephemera_term.label.first,
           "exact_match" => { "@id" => ephemera_term.uri.first }
         )
       end
@@ -117,11 +117,11 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
         expect(linked_ephemera_folder.subject.first).to eq(
           "@id" => "http://www.example.com/catalog/#{ephemera_child_term.id}",
           "@type" => "skos:Concept",
-          "pref_label" => ephemera_child_term.label,
+          "pref_label" => ephemera_child_term.label.first,
           "in_scheme" => {
             "@id" => "https://plum.princeton.edu/ns/testVocabulary/testVocabulary",
             "@type" => "skos:ConceptScheme",
-            "pref_label" => ephemera_vocabulary.label,
+            "pref_label" => ephemera_vocabulary.label.first,
             "exact_match" => { "@id" => ephemera_vocabulary.uri.first }
           }
         )
@@ -146,7 +146,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
         expect(linked_ephemera_folder.categories.first).to eq(
           "@id" => "http://www.example.com/catalog/#{ephemera_vocabulary.id}",
           "@type" => "skos:ConceptScheme",
-          "pref_label" => ephemera_vocabulary.label,
+          "pref_label" => ephemera_vocabulary.label.first,
           "exact_match" => { "@id" => ephemera_vocabulary.uri.first }
         )
       end

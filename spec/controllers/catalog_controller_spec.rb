@@ -202,6 +202,7 @@ RSpec.describe CatalogController do
       let(:ephemera_box) { FactoryBot.build(:ephemera_box, state: 'all_in_production') }
       before do
         box = persister.save(resource: ephemera_box)
+        puts "Finding Folder"
         folder = persister.save(resource: ephemera_folder)
         box.member_ids = folder.id
         persister.save(resource: box)
