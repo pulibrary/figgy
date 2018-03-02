@@ -14,6 +14,16 @@ module Bagit
       loader.load!
     end
 
+    def find_many_by_ids(ids:)
+      ids.map do |id|
+        begin
+          find_by(id: id)
+        rescue ::Valkyrie::Persistence::ObjectNotFoundError
+          nil
+        end
+      end.reject(&:nil?)
+    end
+
     def find_all
       adapter.bag_paths.lazy.map do |bag_path|
         find_by(id: Valkyrie::ID.new(Pathname.new(bag_path).basename))
