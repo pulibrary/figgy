@@ -16,6 +16,8 @@ class MemberOfIndexer
   def parents
     @parents ||=
       query_service.find_parents(resource: resource)
+  rescue ArgumentError
+    @parents = []
   end
 
   def metadata_adapter

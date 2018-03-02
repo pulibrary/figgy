@@ -33,18 +33,18 @@ RSpec.describe FolderJSONImporter do
       expect(first_resource.creator).to eq ["Central de Trabajadores Argentinos"]
       expect(first_resource.language.first).to be_a Valkyrie::ID
       language = adapter.query_service.find_by(id: first_resource.language.first)
-      expect(language.label).to eq "Spanish"
+      expect(language.label).to eq ["Spanish"]
 
       expect(first_resource.geographic_origin.first).to be_a Valkyrie::ID
       geographic_origin = adapter.query_service.find_by(id: first_resource.geographic_origin.first)
-      expect(geographic_origin.label).to eq "Argentina"
+      expect(geographic_origin.label).to eq ["Argentina"]
       expect(geographic_origin.member_of_vocabulary_id).not_to be_blank
 
       expect(first_resource.page_count).to eq ["1"]
       expect(first_resource.subject.length).to eq 5
       expect(first_resource.subject.map(&:class).uniq).to eq [Valkyrie::ID]
       subjects = query_service.find_references_by(resource: first_resource, property: :subject)
-      expect(subjects.map(&:label)).to contain_exactly(
+      expect(subjects.flat_map(&:label)).to contain_exactly(
         "Government policy",
         "Education and state",
         "Labor unions",

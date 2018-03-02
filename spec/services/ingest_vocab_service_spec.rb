@@ -51,9 +51,9 @@ RSpec.describe IngestVocabService do
       end
 
       it "loads the terms with categories" do
-        expect(ephemera_terms.map(&:label)).to contain_exactly('Brochures', 'Electoral paraphernalia')
-        expect(ephemera_terms.map(&:lcsh_label)).to include('Political collectibles')
-        expect(ephemera_terms.map(&:tgm_label)).to include('Leaflets')
+        expect(ephemera_terms.flat_map(&:label)).to contain_exactly('Brochures', 'Electoral paraphernalia')
+        expect(ephemera_terms.flat_map(&:lcsh_label)).to include('Political collectibles')
+        expect(ephemera_terms.flat_map(&:tgm_label)).to include('Leaflets')
       end
     end
   end

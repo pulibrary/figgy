@@ -5,5 +5,5 @@ class EphemeraVocabulary < Valhalla::Resource
   attribute :label
   attribute :uri
   attribute :definition
-  attribute :member_of_vocabulary_id
+  attribute :member_of_vocabulary_id, Valkyrie::Types::Set
 end

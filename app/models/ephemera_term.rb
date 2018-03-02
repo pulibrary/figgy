@@ -7,5 +7,5 @@ class EphemeraTerm < Valhalla::Resource
   attribute :code
   attribute :tgm_label
   attribute :lcsh_label
-  attribute :member_of_vocabulary_id
+  attribute :member_of_vocabulary_id, Valkyrie::Types::Set
 end
