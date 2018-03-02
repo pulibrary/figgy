@@ -108,7 +108,7 @@ describe GeoResources::Discovery::DocumentBuilder do
     end
 
     context 'with a tiff file' do
-      let(:change_set) { VectorWorkChangeSet.new(geo_work, files: [file]) }
+      let(:change_set) { ScannedMapChangeSet.new(geo_work, files: [file]) }
       let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
 
       it 'has correct references' do
@@ -237,6 +237,29 @@ describe GeoResources::Discovery::DocumentBuilder do
         refs = JSON.parse(document['dct_references_s'])
         expect(refs['http://schema.org/thumbnailUrl']).to be_nil
         expect(refs['http://iiif.io/api/presentation#manifest']).to be_nil
+      end
+    end
+  end
+
+  describe 'raster resource' do
+    let(:geo_work) { FactoryBot.create_for_repository(:raster_resource, coverage: coverage.to_s, visibility: visibility) }
+    let(:change_set) { RasterResourceChangeSet.new(geo_work, files: []) }
+
+    before do
+      output = change_set_persister.save(change_set: change_set)
+      file_set_id = output.member_ids[0]
+      file_set = query_service.find_by(id: file_set_id)
+      file_set.original_file.mime_type = 'image/tiff; gdal-format=GTiff'
+      metadata_adapter.persister.save(resource: file_set)
+    end
+
+    context 'with a geo-tiff file' do
+      let(:change_set) { RasterResourceChangeSet.new(geo_work, files: [file]) }
+      let(:file) { fixture_file_upload('files/example.tif', 'image/tiff; gdal-format=GTiff') }
+
+      it 'has layer info fields' do
+        expect(document['layer_geom_type_s']).to eq('Raster')
+        expect(document['dc_format_s']).to eq('GeoTIFF')
       end
     end
   end

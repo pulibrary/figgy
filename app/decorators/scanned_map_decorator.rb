@@ -33,7 +33,7 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   delegate(*Schema::Common.attributes, to: :primary_imported_metadata, prefix: :imported)
 
   def attachable_objects
-    [ScannedMap]
+    [ScannedMap, RasterResource]
   end
 
   # Display the resource attributes

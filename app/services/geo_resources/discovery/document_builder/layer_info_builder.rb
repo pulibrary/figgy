@@ -50,14 +50,9 @@ module GeoResources
           # These geom types are used in geoblacklight documents.
           # @return [String] file geometry type
           def geom_type
-            case resource_decorator.model_name.to_s
-            when /ScannedMap/
-              'Image'
-            when /RasterWork/
-              'Raster'
-            when /VectorWork/
-              vector_geom_type
-            end
+            return 'Image' if resource_decorator.model.is_a?(ScannedMap)
+            return 'Raster' if resource_decorator.model.is_a?(RasterResource)
+            return vector_geom_type if resource_decorator.model.is_a?(VectorWork)
           end
 
           # Returns the geometry for a vector file.

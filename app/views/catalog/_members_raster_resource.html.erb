@@ -1,0 +1,30 @@
+  <h2>Members</h2>
+  <table id="members" class="table table-striped">
+    <tr>
+     <th>Thumbnail</th>
+     <th>Title</th>
+     <th>Date Uploaded</th>
+     <th>Visibility</th>
+     <th>Actions</th>
+    </tr>
+    <% unless decorated_resource.raster_resource_members.empty? %>
+      <% decorated_resource.raster_resource_members.each do |raster_resource| %>
+        <% raster_resource_url = parent_solr_document_path("#{resource.id}", "#{raster_resource.id}") %>
+        <tr>
+          <td><%= link_to figgy_thumbnail_path(raster_resource, { class: 'thumbnail-inner', onerror: default_icon_fallback }), raster_resource_url %></td>
+          <td><%= raster_resource.first_title %></td>
+          <td><%= raster_resource.created_at %></td>
+          <td><%= raster_resource.visibility.first.html_safe %></td>
+          <td>
+            <%= link_to 'View', raster_resource_url, class: 'btn btn-default' %>
+            <%= link_to 'Edit', main_app.polymorphic_path([:edit, raster_resource]), class: 'btn btn-default' %>
+            <%= link_to "Delete", main_app.polymorphic_path([raster_resource]), class: 'btn btn-danger',
+                                  data: { confirm: "Delete this #{resource.human_readable_type}?" },
+                                  method: :delete %>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <td>This work has no raster resources attached.  Click "Attach Child" to attach raster resources.</td>
+    <% end %>
+  </table>

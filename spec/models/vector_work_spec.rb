@@ -9,7 +9,7 @@ RSpec.describe VectorWork do
   it "has a title" do
     expect(vector_work.title).to include 'test title'
   end
-  it "can have manifests" do
+  it "does not have manifests" do
     expect(vector_work.class.can_have_manifests?).to be false
   end
   it "is a geo resource" do
