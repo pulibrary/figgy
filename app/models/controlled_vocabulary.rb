@@ -2,7 +2,7 @@
 
 # Base Class for controlled vocabularies for local authorities
 # Terms within these vocabularies are stored within YAML files
-# *Please* note that these are distinct from EphemeraVocabulary and Vocab Classes
+# *Please* note that this class is distinct from EphemeraVocabulary
 class ControlledVocabulary
   class_attribute :handlers
   self.handlers = {}
@@ -57,6 +57,8 @@ class ControlledVocabulary
     attribute :definition, Valkyrie::Types::String
 
     # Whether or not this Term has been marked as notable
+    #  Notable means that a user can add a note about this term via the UI.
+    #  Used in rights statements.
     # @return [Boolean] whether or not this Term is notable
     def notable?
       notable == true
