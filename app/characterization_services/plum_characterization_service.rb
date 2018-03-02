@@ -16,9 +16,9 @@ class PlumCharacterizationService
   # @param save [Boolean] should the persister save the file_node after Characterization
   # @return [FileNode]
   # @example characterize a file and persist the changes by default
-  #   Valkyrie::FileCharacterizationService.for(file_node, persister).characterize
+  #   Valkyrie::Derivatives::FileCharacterizationService.for(file_node, persister).characterize
   # @example characterize a file and do not persist the changes
-  #   Valkyrie::FileCharacterizationService.for(file_node, persister).characterize(save: false)
+  #   Valkyrie::Derivatives::FileCharacterizationService.for(file_node, persister).characterize(save: false)
   def characterize(save: true)
     ImagemagickCharacterizationService.new(file_node: file_node, persister: persister).characterize
   end

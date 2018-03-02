@@ -42,8 +42,17 @@ GIT
       devise
 
 GIT
+  remote: https://github.com/samvera-labs/valkyrie-derivatives.git
+  revision: fe5fd1a58fff28346754d581fbcbfe7010f33321
+  specs:
+    valkyrie-derivatives (0.1.0)
+      hydra-derivatives
+      valkyrie
+
+GIT
   remote: https://github.com/samvera-labs/valkyrie.git
-  revision: b824b3e33bede36e73921c94f9ffdcdf8f6809be
+  revision: c5e0319bc9400d56ef68f937955931dbf735a3da
+  branch: fix_types
   specs:
     valkyrie (0.1.0)
       active-fedora
@@ -54,15 +63,13 @@ GIT
       draper
       dry-struct
       dry-types
-      hydra-access-controls
-      hydra-derivatives
       json
       json-ld
       pg (< 1.0)
+      railties
       rdf
       reform
       reform-rails
-      ruby_tika_app
 
 PATH
   remote: valhalla
@@ -810,6 +817,7 @@ DEPENDENCIES
   foreman
   formulaic
   honeybadger
+  hydra-access-controls
   hydra-head
   hydra-role-management
   iiif_manifest!
@@ -843,6 +851,7 @@ DEPENDENCIES
   riiif
   rsolr (>= 1.0)
   rspec-rails (~> 3.5)
+  ruby_tika_app
   sass-rails (~> 5.0)
   selenium-webdriver
   sidekiq
@@ -858,6 +867,7 @@ DEPENDENCIES
   uglifier
   valhalla!
   valkyrie!
+  valkyrie-derivatives!
   web-console
   webmock
   webpacker (= 3.2.0)
