@@ -133,7 +133,7 @@ Rails.application.config.to_prepare do
     MemoryEfficientAllQuery,
     FindProjectFolders,
     FindIdentifiersToReconcile,
-    LeastRecentlyUpdatedFileSet,
+    LeastRecentlyUpdatedFileSets,
     MostRecentlyUpdatedFileSets
   ].each do |query_handler|
     Valkyrie.config.metadata_adapter.query_service.custom_queries.register_query_handler(query_handler)

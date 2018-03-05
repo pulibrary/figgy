@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-class LeastRecentlyUpdatedFileSet
+class LeastRecentlyUpdatedFileSets
   def self.queries
-    [:least_recently_updated_file_set]
+    [:least_recently_updated_file_sets]
   end
 
   attr_reader :query_service
@@ -11,8 +11,8 @@ class LeastRecentlyUpdatedFileSet
     @query_service = query_service
   end
 
-  def least_recently_updated_file_set
-    run_query(query).first
+  def least_recently_updated_file_sets
+    run_query(query)
   end
 
   def query
@@ -20,7 +20,7 @@ class LeastRecentlyUpdatedFileSet
       select * FROM orm_resources WHERE
       internal_resource='FileSet'
       order by updated_at
-      limit 1
+      limit 50
     SQL
   end
 
