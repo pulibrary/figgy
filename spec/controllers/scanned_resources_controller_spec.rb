@@ -135,7 +135,7 @@ RSpec.describe ScannedResourcesController do
 
         expect(resource.member_ids.length).to eq 2
         members = query_service.find_members(resource: resource)
-        expect(members.flat_map(&:title)).to contain_exactly "vol1", "vol2"
+        expect(members.flat_map(&:title)).to contain_exactly "Vol 1", "Vol 2"
       end
     end
     it "can create a nested scanned resource" do
