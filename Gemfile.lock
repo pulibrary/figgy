@@ -261,6 +261,8 @@ GEM
       safe_yaml (~> 1.0.0)
     crass (1.0.3)
     database_cleaner (1.6.1)
+    ddtrace (0.11.2)
+      msgpack
     declarative (0.0.10)
     declarative-builder (0.1.0)
       declarative-option (< 0.2.0)
@@ -488,6 +490,7 @@ GEM
     mini_portile2 (2.3.0)
     minitest (5.10.3)
     modernizr-rails (2.7.1)
+    msgpack (1.2.4)
     multi_json (1.12.2)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
@@ -796,6 +799,7 @@ DEPENDENCIES
   coffee-rails
   coveralls
   database_cleaner
+  ddtrace
   devise
   devise-guests!
   dotenv-rails

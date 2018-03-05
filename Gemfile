@@ -51,6 +51,10 @@ group :development, :staging do
   gem "rack-mini-profiler", require: false
 end
 
+group :production, :staging do
+  gem 'ddtrace'
+end
+
 group :test do
   gem 'chromedriver-helper'
   gem "database_cleaner"
