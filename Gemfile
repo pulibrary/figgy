@@ -51,7 +51,7 @@ group :development, :staging do
   gem "rack-mini-profiler", require: false
 end
 
-group :production, :staging do
+group :production do
   gem 'ddtrace'
 end
 
