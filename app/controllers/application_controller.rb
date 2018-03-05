@@ -27,4 +27,10 @@ class ApplicationController < ActionController::Base
       end
     end
   end
+
+  # Figgy has no use cases for having unique shared searches, and this prevents
+  # the user list from growing out of control.
+  def guest_user
+    @guest_user ||= User.where(guest: true).first || super
+  end
 end
