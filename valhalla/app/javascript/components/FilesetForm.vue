@@ -33,9 +33,6 @@
               </div>
             </div>
             <input id="canvas_id" type="hidden" name="canvas_id">
-            <div class="col-md-12">
-                <a :href="singleForm.editLink" id="replace-file-button" class="btn btn-default btn-lg">Replace or Delete File</a>
-            </div>
           </div>
         </form>
       </div>
@@ -70,8 +67,7 @@ export default {
         label: this.$store.state.selected[0].label,
         id: this.$store.state.selected[0].id,
         pageType: this.$store.state.selected[0].pageType,
-        url: this.$store.state.selected[0].url,
-        editLink: '/catalog/parent/' + this.$store.state.id + '/' + this.$store.state.selected[0].id
+        url: this.$store.state.selected[0].url
       }
     }
   },
