@@ -31,15 +31,6 @@ class FindEphemeraVocabularyByLabel
     SQL
   end
 
-  def query_with_vocab_id
-    <<-SQL
-      select * from orm_resources WHERE
-      internal_resource = ? AND
-      metadata->>'label' = ? AND
-      metadata->'member_of_vocabulary_id' @> ?
-    SQL
-  end
-
   def run_query(query, *args)
     orm_class.find_by_sql(([query] + args)).lazy.map do |object|
       resource_factory.to_resource(object: object)
