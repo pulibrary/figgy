@@ -15,9 +15,6 @@
 <script>
 export default {
   name: 'controls',
-  data: {
-    hidden: true
-  },
   computed: {
     id: function () {
       return this.$store.state.id
@@ -30,7 +27,7 @@ export default {
     },
     editLink: function () {
       let link = ''
-      if (!this.isEditDisabled) {
+      if (!this.hidden) {
         link = '/catalog/parent/' + this.$store.state.id + '/' + this.$store.state.selected[0].id
       }
       return link

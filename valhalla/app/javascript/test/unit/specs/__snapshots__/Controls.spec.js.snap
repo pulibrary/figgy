@@ -2,19 +2,31 @@
 
 exports[`Controls.vue has the expected html structure 1`] = `
 <div
-  class="controls"
+  class="bg"
 >
-  <!---->
-   
-  <button
-    class="btn btn-lg btn-primary"
-    disabled="disabled"
-    id="save_btn"
-    type="button"
+  <div
+    class="controls"
   >
+    <!---->
+     
+    <button
+      class="btn btn-lg btn-primary"
+      disabled="disabled"
+      id="save_btn"
+      type="button"
+    >
+      
+      Apply Changes
     
-    Save
-  
-  </button>
+    </button>
+     
+    <a
+      class="is-hidden"
+      href=""
+      id="replace-file-button"
+    >
+      Manage Page Files
+    </a>
+  </div>
 </div>
 `;

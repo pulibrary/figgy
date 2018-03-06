@@ -41,7 +41,11 @@ import draggable from 'vuedraggable'
 export default {
   name: 'thumbnails',
   created: function () {
-    var elms = [...document.getElementById('file-manager-browse-everything').getElementsByTagName('tr')]
+    var browse_everything = document.getElementById('file-manager-browse-everything')
+    var elms = []
+    if (browse_everything) {
+      elms = [...document.getElementById('file-manager-browse-everything').getElementsByTagName('tr')]
+    }
     if (elms.length) {
       this.pendingUploads = true
     }
