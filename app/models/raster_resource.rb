@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class VectorWork < Valhalla::Resource
+class RasterResource < Valhalla::Resource
   include Valkyrie::Resource::AccessControls
   include Schema::Geo
 

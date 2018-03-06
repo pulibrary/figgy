@@ -146,6 +146,16 @@ Rails.application.routes.draw do
     end
     get '/vector_works/:parent_id/new', to: 'vector_works#new', as: :parent_new_vector_work
     put '/vector_works/:id/extract_metadata/:file_set_id', to: 'vector_works#extract_metadata', as: :vector_works_extract_metadata
+
+    resources :raster_resources do
+      member do
+        get :file_manager
+        get :geoblacklight, defaults: { format: :json }
+        post :browse_everything_files
+      end
+    end
+    get '/raster_resources/:parent_id/new', to: 'raster_resources#new', as: :parent_new_raster_resource
+    put '/raster_resources/:id/extract_metadata/:file_set_id', to: 'raster_resources#extract_metadata', as: :raster_resources_extract_metadata
   end
 
   resources :collections do
