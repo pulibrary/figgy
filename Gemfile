@@ -23,7 +23,7 @@ gem "simple_form"
 gem "sprockets", ">= 3.0.0"
 gem "title"
 gem "uglifier"
-gem "valkyrie", git: "https://github.com/samvera-labs/valkyrie.git", branch: "handle_casting_blank_valkyrie_ids"
+gem "valkyrie", '1.0.0.rc1'
 gem "valkyrie-derivatives", git: "https://github.com/samvera-labs/valkyrie-derivatives.git"
 gem 'webpacker', '3.2.0'
 

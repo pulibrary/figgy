@@ -49,28 +49,6 @@ GIT
       hydra-derivatives
       valkyrie
 
-GIT
-  remote: https://github.com/samvera-labs/valkyrie.git
-  revision: 90728a4841d67ff7c9f01ad614599ffbb1a3e615
-  branch: handle_casting_blank_valkyrie_ids
-  specs:
-    valkyrie (0.1.0)
-      active-fedora
-      active-triples
-      activemodel
-      activerecord
-      activesupport
-      draper
-      dry-struct
-      dry-types
-      json
-      json-ld
-      pg (< 1.0)
-      railties
-      rdf
-      reform
-      reform-rails
-
 PATH
   remote: valhalla
   specs:
@@ -762,6 +740,22 @@ GEM
     unf_ext (0.0.7.4)
     unicode-display_width (1.3.0)
     uniform_notifier (1.10.0)
+    valkyrie (1.0.0.rc1)
+      active-fedora
+      active-triples
+      activemodel
+      activerecord
+      activesupport
+      draper
+      dry-struct
+      dry-types
+      json
+      json-ld
+      pg (< 1.0)
+      railties
+      rdf
+      reform
+      reform-rails
     warden (1.2.7)
       rack (>= 1.0)
     web-console (3.5.1)
@@ -867,7 +861,7 @@ DEPENDENCIES
   title
   uglifier
   valhalla!
-  valkyrie!
+  valkyrie (= 1.0.0.rc1)
   valkyrie-derivatives!
   web-console
   webmock

@@ -8,7 +8,7 @@
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 server 'figgy1', user: 'deploy', roles: %w[app db web worker]
-server 'figgy2', user: 'deploy', roles: %w[app db web worker]
+server 'figgy2', user: 'deploy', roles: %w[app web worker]
 server 'lib-proc2', user: 'deploy', roles: %w[worker]
 server 'lib-proc3', user: 'deploy', roles: %w[worker]
 server 'lib-proc5', user: 'deploy', roles: %w[worker]
