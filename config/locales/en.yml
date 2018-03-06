@@ -42,7 +42,7 @@ en:
     institution:
       name: 'Princeton University Library'
       homepage_url: 'https://library.princeton.edu'
-    product_name: 'Digital PUL'
+    product_name: 'Figgy'
     works:
       progress:
         header: 'Save Work'
