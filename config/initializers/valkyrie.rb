@@ -66,7 +66,9 @@ Rails.application.config.to_prepare do
   )
 
   Valkyrie::MetadataAdapter.register(
-    Valkyrie::Persistence::Postgres::MetadataAdapter.new,
+    InstrumentedAdapter.new(
+      metadata_adapter: Valkyrie::Persistence::Postgres::MetadataAdapter.new
+    ),
     :postgres
   )
 
@@ -76,19 +78,21 @@ Rails.application.config.to_prepare do
   )
 
   Valkyrie::MetadataAdapter.register(
-    Valkyrie::Persistence::Solr::MetadataAdapter.new(
-      connection: Blacklight.default_index.connection,
-      resource_indexer: CompositeIndexer.new(
-        Valkyrie::Indexers::AccessControlsIndexer,
-        CollectionIndexer,
-        EphemeraBoxIndexer,
-        EphemeraFolderIndexer,
-        MemberOfIndexer,
-        FacetIndexer,
-        ProjectIndexer,
-        HumanReadableTypeIndexer,
-        SortingIndexer,
-        ImportedMetadataIndexer
+    InstrumentedAdapter.new(
+      metadata_adapter: Valkyrie::Persistence::Solr::MetadataAdapter.new(
+        connection: Blacklight.default_index.connection,
+        resource_indexer: CompositeIndexer.new(
+          Valkyrie::Indexers::AccessControlsIndexer,
+          CollectionIndexer,
+          EphemeraBoxIndexer,
+          EphemeraFolderIndexer,
+          MemberOfIndexer,
+          FacetIndexer,
+          ProjectIndexer,
+          HumanReadableTypeIndexer,
+          SortingIndexer,
+          ImportedMetadataIndexer
+        )
       )
     ),
     :index_solr

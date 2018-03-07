@@ -4,6 +4,7 @@ source "https://rubygems.org"
 gem "autoprefixer-rails"
 gem "blacklight"
 gem 'bunny'
+gem 'ddtrace'
 gem "devise-guests", git: "https://github.com/cbeer/devise-guests.git"
 gem "flutie"
 gem "honeybadger"
@@ -49,10 +50,6 @@ end
 
 group :development, :staging do
   gem "rack-mini-profiler", require: false
-end
-
-group :production do
-  gem 'ddtrace'
 end
 
 group :test do
