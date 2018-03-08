@@ -24,9 +24,8 @@ class InstrumentedAdapter < SimpleDelegator
       tracer.trace(span_name) do |span|
         span.service = "valkyrie-#{metadata_adapter.class}"
         span.span_type = Datadog::Ext::AppTypes::DB
-        output = yield(span)
         span.resource = resource
-        output
+        yield(span)
       end
     end
 
