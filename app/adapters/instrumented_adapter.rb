@@ -49,9 +49,8 @@ class InstrumentedAdapter < SimpleDelegator
 
     def delete(resource:)
       trace('valkyrie.delete') do |span|
-        __getobj__.delete(resource: resource).tap do
-          span.set_tag('param.resource', resource.id.to_s)
-        end
+        span.set_tag('param.resource', resource.id.to_s)
+        __getobj__.delete(resource: resource)
       end
     end
 
@@ -71,9 +70,8 @@ class InstrumentedAdapter < SimpleDelegator
 
     def find_by(id:)
       trace('valkyrie.find_by_id') do |span|
-        __getobj__.find_by(id: id).tap do
-          span.set_tag('param.id', id.to_s)
-        end
+        span.set_tag('param.id', id.to_s)
+        __getobj__.find_by(id: id)
       end
     end
 
@@ -85,44 +83,39 @@ class InstrumentedAdapter < SimpleDelegator
 
     def find_all_of_model(model:)
       trace('valkyrie.find_all_of_model') do |span|
-        __getobj__.find_all_of_model(model: model).tap do
-          span.set_tag('param.model', model.to_s)
-        end
+        span.set_tag('param.model', model.to_s)
+        __getobj__.find_all_of_model(model: model)
       end
     end
 
     def find_members(resource:, model: nil)
       trace('valkyrie.find_members') do |span|
-        __getobj__.find_members(resource: resource, model: model).tap do
-          span.set_tag('param.model', model.to_s)
-          span.set_tag('param.resource', resource.id.to_s)
-        end
+        span.set_tag('param.model', model.to_s)
+        span.set_tag('param.resource', resource.id.to_s)
+        __getobj__.find_members(resource: resource, model: model)
       end
     end
 
     def find_parents(resource:)
       trace('valkyrie.find_parents') do |span|
-        __getobj__.find_parents(resource: resource).tap do
-          span.set_tag('param.resource', resource.id.to_s)
-        end
+        span.set_tag('param.resource', resource.id.to_s)
+        __getobj__.find_parents(resource: resource)
       end
     end
 
     def find_references_by(resource:, property:)
       trace('valkyrie.find_references_by') do |span|
-        __getobj__.find_references_by(resource: resource, property: property).tap do
-          span.set_tag('param.resource', resource.id.to_s)
-          span.set_tag('param.property', property.to_s)
-        end
+        span.set_tag('param.resource', resource.id.to_s)
+        span.set_tag('param.property', property.to_s)
+        __getobj__.find_references_by(resource: resource, property: property)
       end
     end
 
     def find_inverse_references_by(resource:, property:)
       trace('valkyrie.find_inverse_references_by') do |span|
-        __getobj__.find_inverse_references_by(resource: resource, property: property).tap do
-          span.set_tag('param.resource', resource.id.to_s)
-          span.set_tag('param.property', property.to_s)
-        end
+        span.set_tag('param.resource', resource.id.to_s)
+        span.set_tag('param.property', property.to_s)
+        __getobj__.find_inverse_references_by(resource: resource, property: property)
       end
     end
 
