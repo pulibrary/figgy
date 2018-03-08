@@ -75,6 +75,7 @@ gem 'browse-everything'
 gem 'coffee-rails'
 gem 'devise'
 gem 'ezid-client'
+gem 'geo_works-derivatives', github: "pulibrary/geo_works-derivatives"
 gem 'hydra-head'
 gem 'hydra-role-management'
 gem 'iiif_manifest', github: "samvera-labs/iiif_manifest"

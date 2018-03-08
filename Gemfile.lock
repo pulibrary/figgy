@@ -1,4 +1,13 @@
 GIT
+  remote: git://github.com/pulibrary/geo_works-derivatives.git
+  revision: 862873602a96a61e3ec30469cb88585f52f6adae
+  specs:
+    geo_works-derivatives (0.1.0)
+      hydra-derivatives
+      mime-types
+      simpler-tiles
+
+GIT
   remote: git://github.com/pulibrary/pul_metadata_services.git
   revision: a1c76e56acbd56efbb160ca320c9c1e7b82440a6
   branch: master
@@ -683,6 +692,7 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.1)
+    simpler-tiles (0.3.1)
     skydrive (1.2.0)
       activesupport
       httmultiparty
@@ -816,6 +826,7 @@ DEPENDENCIES
   flutie
   foreman
   formulaic
+  geo_works-derivatives!
   honeybadger
   hydra-access-controls
   hydra-head
