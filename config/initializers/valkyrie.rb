@@ -67,7 +67,8 @@ Rails.application.config.to_prepare do
 
   Valkyrie::MetadataAdapter.register(
     InstrumentedAdapter.new(
-      metadata_adapter: Valkyrie::Persistence::Postgres::MetadataAdapter.new
+      metadata_adapter: Valkyrie::Persistence::Postgres::MetadataAdapter.new,
+      tracer: Datadog.tracer
     ),
     :postgres
   )
@@ -93,7 +94,8 @@ Rails.application.config.to_prepare do
           SortingIndexer,
           ImportedMetadataIndexer
         )
-      )
+      ),
+      tracer: Datadog.tracer
     ),
     :index_solr
   )
