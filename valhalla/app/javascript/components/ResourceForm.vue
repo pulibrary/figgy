@@ -2,6 +2,7 @@
   <div>
     <h2>Set Properties <small>for this <span v-if="isMultiVolume">multi-volume</span> resource</small></h2>
     <div class="row">
+      <p class="file_count">Total files: {{fileCount}}</p>
       <!-- Viewing Direction-->
       <div class="form-group col-md-6">
         <fieldset>
@@ -53,6 +54,9 @@ export default {
     }
   },
   computed: {
+    fileCount: function () {
+      return this.$store.state.images.length
+    },
     isMultiVolume: function () {
       return this.$store.state.isMultiVolume
     },
@@ -96,6 +100,11 @@ legend {
 .radio label {
   margin: auto;
   padding-left: 30px;
+}
+
+.file_count {
+  font-style: italic;
+  color: #777777;
 }
 
 </style>

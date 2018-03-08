@@ -1,6 +1,7 @@
 import Vuex from 'vuex'
 import { mount, createLocalVue } from 'vue-test-utils'
 import ResourceForm from '@/components/ResourceForm'
+import Fixtures from '@/test/fixtures/image-collection'
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
@@ -18,7 +19,8 @@ describe('ResourceForm.vue', () => {
     }
     state = {
       viewingDirection: 'bottom-to-top',
-      viewingHint: 'continuous'
+      viewingHint: 'continuous',
+      images: Fixtures.imageCollection
     }
     store = new Vuex.Store({
       state,
@@ -51,6 +53,13 @@ describe('ResourceForm.vue', () => {
     const wrapper = mount(ResourceForm, { options, store, localVue })
     wrapper.find('.viewHintInput').trigger('change')
     expect(actions.updateViewHint).toHaveBeenCalled()
+  })
+
+  it('displays the correct image (aka, fileset) count', () => {
+    const wrapper = mount(ResourceForm, { options, store, localVue })
+    const expanded = wrapper.find('.file_count')
+    const fileCount = expanded.html()
+    expect(fileCount).toEqual('<p class="file_count">Total files: 2</p>')
   })
 
   it('has the expected html structure', () => {

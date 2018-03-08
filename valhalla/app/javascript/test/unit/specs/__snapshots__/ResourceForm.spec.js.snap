@@ -14,6 +14,12 @@ exports[`ResourceForm.vue has the expected html structure 1`] = `
   <div
     class="row"
   >
+    <p
+      class="file_count"
+    >
+      Total files: 2
+    </p>
+     
     <div
       class="form-group col-md-6"
     >
