@@ -17,10 +17,6 @@ class ManifestBuilder
 
     private
 
-      def helper
-        @helper ||= ManifestHelper.new
-      end
-
       def path
         canvas_builder.new(file_set, resource).path
       end

@@ -29,6 +29,7 @@ RSpec.describe ManifestBuilder do
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { metadata_adapter.query_service }
   let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+  let(:start_canvas) { nil }
 
   def logical_structure(file_set_id)
     [
@@ -61,7 +62,7 @@ RSpec.describe ManifestBuilder do
       file_set.local_identifier = "p79409x97p"
       metadata_adapter.persister.save(resource: file_set)
       change_set = ScannedResourceChangeSet.new(output)
-      change_set.validate(logical_structure: logical_structure(file_set_id), start_canvas: file_set_id)
+      change_set.validate(logical_structure: logical_structure(file_set_id), start_canvas: start_canvas || file_set_id)
       change_set.sync
       change_set_persister.save(change_set: change_set)
     end
@@ -127,6 +128,15 @@ RSpec.describe ManifestBuilder do
         first_image = output["sequences"][0]["canvases"][0]["images"][0]
         expect(output["thumbnail"]).not_to be_blank
         expect(output["thumbnail"]["@id"]).to eq "#{first_image['resource']['service']['@id']}/full/!200,150/0/default.jpg"
+      end
+    end
+
+    context "when a start_canvas doesn't exist" do
+      let(:start_canvas) { Valkyrie::ID.new("blablabla") }
+      it "doesn't set a startCanvas" do
+        output = manifest_builder.build
+        first_sequence = output["sequences"][0]
+        expect(first_sequence["startCanvas"]).to be_nil
       end
     end
 
