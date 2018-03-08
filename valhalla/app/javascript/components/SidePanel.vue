@@ -31,3 +31,8 @@ export default {
   }
 }
 </script>
+<style>
+.sidePanel h2 {
+  margin-left: -15px;
+}
+</style>
