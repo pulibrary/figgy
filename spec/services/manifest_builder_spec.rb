@@ -61,7 +61,7 @@ RSpec.describe ManifestBuilder do
       file_set.local_identifier = "p79409x97p"
       metadata_adapter.persister.save(resource: file_set)
       change_set = ScannedResourceChangeSet.new(output)
-      change_set.validate(logical_structure: logical_structure(file_set_id))
+      change_set.validate(logical_structure: logical_structure(file_set_id), start_canvas: file_set_id)
       change_set.sync
       change_set_persister.save(change_set: change_set)
     end
@@ -92,6 +92,7 @@ RSpec.describe ManifestBuilder do
       expect(output["thumbnail"]).not_to be_blank
       expect(output["thumbnail"]["@id"]).to eq "#{first_image['resource']['service']['@id']}/full/!200,150/0/default.jpg"
       expect(output["thumbnail"]["service"]["@id"]).to eq first_image["resource"]["service"]["@id"]
+      expect(output["sequences"][0]["startCanvas"]).to eq canvas_id
     end
 
     context "when there's no derivative_file" do

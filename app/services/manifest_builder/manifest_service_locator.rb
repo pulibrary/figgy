@@ -78,6 +78,13 @@ class ManifestBuilder
         ManifestBuilder::RecordPropertyBuilder
       end
 
+      def start_canvas_builder
+        IIIFManifest::ManifestServiceLocator::InjectedFactory.new(
+          ::ManifestBuilder::StartCanvasBuilder,
+          canvas_builder: canvas_builder
+        )
+      end
+
       ##
       # Objects are either in 'manifests' or 'collections' depending on if the
       # child resource is a IIIF::Manifest or a IIIF::Collection. This special
@@ -109,7 +116,8 @@ class ManifestBuilder
         IIIFManifest::ManifestServiceLocator::InjectedFactory.new(
           ::ManifestBuilder::SequenceBuilder, # This whole method is overridden just for this constant.
           canvas_builder_factory: canvas_builder_factory,
-          sequence_factory: sequence_factory
+          sequence_factory: sequence_factory,
+          start_canvas_builder: start_canvas_builder
         )
       end
 
