@@ -109,18 +109,6 @@ exports[`FilesetForm.vue has the expected html structure 1`] = `
             name="canvas_id"
             type="hidden"
           />
-           
-          <div
-            class="col-md-12"
-          >
-            <a
-              class="btn btn-default btn-lg"
-              href="/catalog/parent/undefined/50b5e49b-ade7-4278-8265-4f72081f26a5"
-              id="replace-file-button"
-            >
-              Replace or Delete File
-            </a>
-          </div>
         </div>
       </form>
     </div>

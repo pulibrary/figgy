@@ -8,6 +8,9 @@ const getters = {
     var imgOrder = JSON.stringify(state.images.map(img => img.id))
     return ogOrder !== imgOrder
   },
+  selectedTotal: state => {
+    return state.selected.length
+  },
   stateChanged: (state,getters) => {
     var propsChanged = []
     propsChanged.push(state.ogState.thumbnail !== state.thumbnail)

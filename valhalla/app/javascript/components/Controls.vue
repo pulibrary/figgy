@@ -1,11 +1,14 @@
 <template>
-  <div class="controls">
-    <div v-if="orderChanged" id="orderChangedIcon" class="alert alert-info" role="alert">
-      <i class="fa fa-exchange"></i> Page order has changed.
+  <div class="bg">
+    <div class="controls">
+      <div v-if="orderChanged" id="orderChangedIcon" class="alert alert-info" role="alert">
+        <i class="fa fa-exchange"></i> Page order has changed.
+      </div>
+      <button @click="saveHandler" id="save_btn" type="button" class="btn btn-lg btn-primary" :disabled="isDisabled">
+        Apply Changes
+      </button>
+      <a :href="editLink" id="replace-file-button" v-bind:class="{'is-hidden' : hidden }">Manage Page Files</a>
     </div>
-    <button @click="saveHandler" id="save_btn" type="button" class="btn btn-lg btn-primary" :disabled="isDisabled">
-      Save
-    </button>
   </div>
 </template>
 
@@ -21,6 +24,13 @@ export default {
     },
     images: function () {
       return this.$store.state.images
+    },
+    editLink: function () {
+      let link = ''
+      if (!this.hidden) {
+        link = '/catalog/parent/' + this.$store.state.id + '/' + this.$store.state.selected[0].id
+      }
+      return link
     },
     imageIdList: function () {
       return this.$store.getters.imageIdList
@@ -51,6 +61,13 @@ export default {
         return false
       } else {
         return true
+      }
+    },
+    hidden: function () {
+      if (this.$store.getters.selectedTotal != 1) {
+        return true
+      } else {
+        return false
       }
     },
     fileSetPayload: function () {
@@ -109,5 +126,20 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+#replace-file-button {
+  padding: 1.5rem;
+}
+.is-hidden {
+  display: none;
+}
+.bg {
+  background: #f9f9f9;
+  margin-left: -30px;
+  margin-right: -30px;
+  padding: 20px;
+  overflow: hidden;
+  height: 100%;
+}
+
 
 </style>

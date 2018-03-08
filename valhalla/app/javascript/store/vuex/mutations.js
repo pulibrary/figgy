@@ -1,7 +1,7 @@
 // mutations
 const mutations = {
   SELECT (state, imgArray) {
-    state.selected = imgArray
+    state.selected = [ ...imgArray ]
   },
   SET_STATE (state, ImageCollection) {
     state.id = ImageCollection.id
