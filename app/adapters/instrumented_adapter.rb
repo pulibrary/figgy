@@ -75,6 +75,13 @@ class InstrumentedAdapter < SimpleDelegator
       end
     end
 
+    def find_many_by_ids(ids:)
+      trace('valkyrie.find_many_by_ids') do |span|
+        span.set_tag('param.ids', ids.map(&:to_s))
+        __getobj__.find_many_by_ids(ids: ids)
+      end
+    end
+
     def find_all
       trace('valkyrie.find_all') do
         __getobj__.find_all

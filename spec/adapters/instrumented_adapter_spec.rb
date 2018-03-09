@@ -29,10 +29,10 @@ RSpec.describe InstrumentedAdapter do
       adapter.persister.save_all(resources: [output])
       adapter.query_service.find_by(id: output.id)
       adapter.query_service.find_all
-      adapter.query_service.find_members(resource: resource)
-      adapter.query_service.find_parents(resource: resource)
-      adapter.query_service.find_references_by(resource: resource, property: :member_ids)
-      adapter.query_service.find_inverse_references_by(resource: resource, property: :member_ids)
+      adapter.query_service.find_members(resource: output)
+      adapter.query_service.find_parents(resource: output)
+      adapter.query_service.find_references_by(resource: output, property: :member_ids)
+      adapter.query_service.find_inverse_references_by(resource: output, property: :member_ids)
       adapter.query_service.find_all_of_model(model: resource.class)
       adapter.persister.delete(resource: output)
       expect(tracer).to have_received(:trace).with("valkyrie.query").exactly(7).times
