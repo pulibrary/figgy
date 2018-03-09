@@ -27,6 +27,7 @@ export const manifest = {
       "rendering": [
 
       ],
+      "startCanvas": "http://localhost:3000/concern/scanned_resources/9f2f6a73-05aa-4e57-ae1f-84c085211224/manifest/canvas/b8a003bd-cddb-4b01-9acc-4ac3086efc3a",
       "canvases": [
         {
           "@type": "sc:Canvas",

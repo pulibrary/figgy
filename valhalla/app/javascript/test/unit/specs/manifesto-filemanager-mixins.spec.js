@@ -54,6 +54,12 @@ describe('mixins', () => {
       const t = manifestation.getThumbnailId()
       expect(t).toBe('80b02791-4bd9-4566-9a9f-4b3062ba2e0d')
     })
+
+    it('getStartCanvasId', () => {
+      const s = manifestation.mainSequence()
+      const sc = manifestation.getStartCanvasId(s)
+      expect(sc).toBe('b8a003bd-cddb-4b01-9acc-4ac3086efc3a')
+    })
   })
 
   describe('multi-volume methods', () => {

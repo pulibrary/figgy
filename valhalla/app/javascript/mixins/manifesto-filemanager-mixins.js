@@ -76,6 +76,18 @@ const ManifestoFilemanagerMixins = {
     return imageCollection
   },
 
+  getStartCanvasId: function (s) {
+    const sc = s.getStartCanvas()
+    var id = ''
+    if (typeof sc != 'undefined') {
+      if(sc){
+        const parse = sc.split('/')
+        id = parse[parse.length-1]
+      }
+    }
+    return id
+  },
+
   getThumbnailId: function () {
     const t = this.getThumbnail()
     var id = ''
@@ -102,7 +114,7 @@ const ManifestoFilemanagerMixins = {
       imageCollection.isMultiVolume = false
       imageCollection.thumbnail = ''
       imageCollection.viewingDirection = ''
-      imageCollection.startpage = ''
+      imageCollection.startPage = ''
       if (typeof viewDir != 'undefined') {
         imageCollection.viewingDirection = viewDir.value
       }
@@ -114,9 +126,7 @@ const ManifestoFilemanagerMixins = {
       if(typeof s != 'undefined') {
         const canvases = s.getCanvases()
         imageCollection.thumbnail = this.getThumbnailId()
-        if (typeof s.getStartCanvas() != 'undefined') {
-          imageCollection.startpage = s.getStartCanvas()
-        }
+        imageCollection.startPage = this.getStartCanvasId(s)
         imageCollection.images = canvases.map(canvas => ({
           label: this.getEnglishLabel(canvas),
           id: this.getResourceId(canvas),
