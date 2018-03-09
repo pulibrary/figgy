@@ -20,6 +20,7 @@ class GeoCharacterizationService
   def characterize(save: true)
     TikaFileCharacterizationService.new(file_node: file_node, persister: persister).characterize
     vector_characterization_service.characterize if vector_characterization_service.valid?
+    raster_characterization_service.characterize if raster_characterization_service.valid?
     external_metadata_service.characterize if external_metadata_service.valid?
   end
 
@@ -33,6 +34,10 @@ class GeoCharacterizationService
 
   def external_metadata_service
     @external_metadata_service ||= ExternalMetadataCharacterizationService.new(file_node: file_node, persister: persister)
+  end
+
+  def raster_characterization_service
+    @raster_characterization_service ||= RasterCharacterizationService.new(file_node: file_node, persister: persister)
   end
 
   def vector_characterization_service

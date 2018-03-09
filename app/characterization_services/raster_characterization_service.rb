@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Class for vector resource file characterization service
-class VectorCharacterizationService
+# Class for raster resource file characterization service
+class RasterCharacterizationService
   attr_reader :file_node, :persister
   def initialize(file_node:, persister:)
     @file_node = file_node
@@ -18,7 +18,7 @@ class VectorCharacterizationService
   # @example characterize a file and do not persist the changes
   #   Valkyrie::FileCharacterizationService.for(file_node, persister).characterize(save: false)
   def characterize(save: true)
-    unzip_vector if zip_file?
+    unzip_raster if zip_file?
     new_file = original_file.new(file_characterization_attributes.to_h)
     @file_node.file_metadata = @file_node.file_metadata.select { |x| x.id != new_file.id } + [new_file]
     @persister.save(resource: @file_node) if save
@@ -35,8 +35,7 @@ class VectorCharacterizationService
   # @return [Hash]
   def file_characterization_attributes
     {
-      geometry: info_service.geom,
-      mime_type: vector_mime_type
+      mime_type: raster_mime_type
     }
   end
 
@@ -52,10 +51,10 @@ class VectorCharacterizationService
     @file_object ||= Valkyrie::StorageAdapter.find_by(id: original_file.file_identifiers[0])
   end
 
-  # Service that provides information about a vector dataset
-  # @return [GeoWorks::Derivatives::Processors::Vector::Info]
+  # Service that provides information about a raster dataset
+  # @return [GeoWorks::Derivatives::Processors::Raster::Info]
   def info_service
-    @info_service ||= GeoWorks::Derivatives::Processors::Vector::Info.new(vector_path)
+    @info_service ||= GeoWorks::Derivatives::Processors::Raster::Info.new(raster_path)
   end
 
   def original_file
@@ -66,28 +65,28 @@ class VectorCharacterizationService
     file_node.decorate.parent
   end
 
-  # Uncompresses a zipped vector file and sets vector_path variable to the resulting directory.
-  def unzip_vector
-    system "unzip -o -j #{filename} -d #{zip_file_directory}" unless File.directory?(zip_file_directory)
-    @vector_path = zip_file_directory
-  end
-
-  def valid?
-    parent.is_a?(VectorWork)
-  end
-
-  # Gets a vector's 'geo mime type' by looking up the format's driver in a controlled vocabulary.
+  # Gets a raster's 'geo mime type' by looking up the format's driver in a controlled vocabulary.
   # If the driver is not found, the original mime_type is returned.
-  def vector_mime_type
-    term = ControlledVocabulary::GeoVectorFormat.new.all.find { |x| x.definition == info_service.driver }
+  def raster_mime_type
+    term = ControlledVocabulary::GeoRasterFormat.new.all.find { |x| x.definition == info_service.driver }
     term ? term.value : original_file.mime_type
   end
 
-  # Path to the vector dataset. The path points to a directory for file formats that are saved as zip files.
+  # Path to the raster dataset. The path points to a directory for file formats that are saved as zip files.
   # The path points to the original file for formats that are not saved as zip files.
   # @return [String]
-  def vector_path
-    @vector_path ||= filename
+  def raster_path
+    @raster_path ||= filename
+  end
+
+  # Uncompresses a zipped raster file and sets raster_path variable to the resulting directory.
+  def unzip_raster
+    system "unzip -o -j #{filename} -d #{zip_file_directory}" unless File.directory?(zip_file_directory)
+    @raster_path = zip_file_directory
+  end
+
+  def valid?
+    parent.is_a?(RasterResource)
   end
 
   # Tests if original file is a zip file

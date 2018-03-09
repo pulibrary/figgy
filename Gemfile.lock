@@ -1,6 +1,7 @@
 GIT
   remote: git://github.com/pulibrary/geo_works-derivatives.git
-  revision: 862873602a96a61e3ec30469cb88585f52f6adae
+  revision: 0e7e87f0b1b954bf762f956d111ef940f50d9282
+  tag: v0.1.0
   specs:
     geo_works-derivatives (0.1.0)
       hydra-derivatives
