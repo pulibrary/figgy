@@ -2,58 +2,83 @@
 require_relative 'figgy'
 Rails.application.config.to_prepare do
   Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::Disk.new(base_path: Figgy.config['repository_path'],
-                                file_mover: lambda { |old, new|
-                                              FileUtils.mv(old, new)
-                                              FileUtils.chmod(0o644, new)
-                                            }),
+    InstrumentedStorageAdapter.new(
+      storage_adapter: Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config['repository_path'],
+        file_mover: lambda { |old, new|
+                      FileUtils.mv(old, new)
+                      FileUtils.chmod(0o644, new)
+                    }
+      ),
+      tracer: Datadog.tracer
+    ),
     :disk
   )
 
   Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::Disk.new(
-      base_path: Figgy.config['repository_path'],
-      file_mover: ->(old, new) { FileUtils.ln(old, new, force: true) }
+    InstrumentedStorageAdapter.new(
+      storage_adapter: Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config['repository_path'],
+        file_mover: ->(old, new) { FileUtils.ln(old, new, force: true) }
+      ),
+      tracer: Datadog.tracer
     ),
     :plum_storage
   )
 
   Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::Disk.new(
-      base_path: Figgy.config['derivative_path'],
-      file_mover: PlumDerivativeMover.method(:link_or_copy)
+    InstrumentedStorageAdapter.new(
+      storage_adapter:  Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config['derivative_path'],
+        file_mover: PlumDerivativeMover.method(:link_or_copy)
+      ),
+      tracer: Datadog.tracer
     ),
     :plum_derivatives
   )
 
   Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::Disk.new(
-      base_path: Figgy.config['repository_path'],
-      file_mover: FileUtils.method(:cp)
+    InstrumentedStorageAdapter.new(
+      storage_adapter: Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config['repository_path'],
+        file_mover: FileUtils.method(:cp)
+      ),
+      tracer: Datadog.tracer
     ),
     :lae_storage
   )
 
   Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::Disk.new(
-      base_path: Figgy.config['repository_path'],
-      file_mover: FileUtils.method(:cp)
+    InstrumentedStorageAdapter.new(
+      storage_adapter: Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config['repository_path'],
+        file_mover: FileUtils.method(:cp)
+      ),
+      tracer: Datadog.tracer
     ),
     :disk_via_copy
   )
 
   Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::Disk.new(base_path: Figgy.config['derivative_path'],
-                                file_mover: lambda { |old, new|
-                                              FileUtils.mv(old, new)
-                                              FileUtils.chmod(0o644, new)
-                                            }),
+    InstrumentedStorageAdapter.new(
+      storage_adapter: Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config['derivative_path'],
+        file_mover: lambda { |old, new|
+                      FileUtils.mv(old, new)
+                      FileUtils.chmod(0o644, new)
+                    }
+      ),
+      tracer: Datadog.tracer
+    ),
     :derivatives
   )
 
   Valkyrie::StorageAdapter.register(
-    Bagit::StorageAdapter.new(
-      base_path: Figgy.config["bag_path"]
+    InstrumentedStorageAdapter.new(
+      storage_adapter: Bagit::StorageAdapter.new(
+        base_path: Figgy.config["bag_path"]
+      ),
+      tracer: Datadog.tracer
     ),
     :bags
   )
