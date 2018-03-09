@@ -1,20 +1,18 @@
 # frozen_string_literal: true
-if Rails.env.production?
-  require 'ddtrace'
-  Datadog.configure do |c|
-    # Rails
-    c.use :rails
+Datadog.configure do |c|
+  c.tracer(enabled: false) unless Rails.env.production?
+  # Rails
+  c.use :rails
 
-    # Redis
-    c.use :redis
+  # Redis
+  c.use :redis
 
-    # Net::HTTP
-    c.use :http
+  # Net::HTTP
+  c.use :http
 
-    # Sidekiq
-    c.use :sidekiq
+  # Sidekiq
+  c.use :sidekiq
 
-    # Faraday
-    c.use :faraday
-  end
+  # Faraday
+  c.use :faraday
 end
