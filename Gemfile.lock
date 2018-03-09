@@ -457,6 +457,12 @@ GEM
     logging (2.2.2)
       little-plugger (~> 1.1)
       multi_json (~> 1.10)
+    lograge (0.9.0)
+      actionpack (>= 4)
+      activesupport (>= 4)
+      railties (>= 4)
+      request_store (~> 1.0)
+    logstash-event (1.2.02)
     loofah (2.1.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -823,6 +829,8 @@ DEPENDENCIES
   json-schema
   leaflet-rails (~> 0.7)
   listen
+  lograge
+  logstash-event
   mini_magick
   modernizr-rails
   normalize-rails
