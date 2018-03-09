@@ -31,7 +31,7 @@ describe GeoResources::Discovery::DocumentBuilder do
   let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { metadata_adapter.query_service }
-  let(:file) { fixture_file_upload('files/shapefile.zip') }
+  let(:file) { fixture_file_upload('files/vector/shapefile.zip') }
   let(:metadata_file) { fixture_file_upload('files/geo_metadata/iso.xml') }
   let(:document) { JSON.parse(document_builder.to_json(nil)) }
 
