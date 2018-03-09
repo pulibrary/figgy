@@ -61,6 +61,8 @@ class EphemeraVocabularyDecorator < Valkyrie::ResourceDecorator
         query_service.find_inverse_references_by(resource: model, property: :member_of_vocabulary_id).to_a
 
       end
+  rescue ArgumentError
+    @referenced_by ||= []
   end
 
   # a category is just a nested vocabulary

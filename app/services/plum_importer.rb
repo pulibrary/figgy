@@ -76,7 +76,7 @@ class PlumImporter
   end
 
   def find_thumbnail_id(members)
-    thumbnail_id = id_cache.fetch(document.thumbnail_id, resource.thumbnail_id.first.to_s)
+    thumbnail_id = id_cache.fetch(document.thumbnail_id, Array.wrap(resource.thumbnail_id).first.to_s)
     return thumbnail_id if members.map(&:id).map(&:to_s).include?(thumbnail_id)
     members.find { |x| x.member_ids.map(&:to_s).include?(thumbnail_id) }.try(:id)
   end

@@ -7,10 +7,21 @@ module Bagit
     end
 
     def find_by(id:)
-      raise ArgumentError, 'id must be a Valkyrie::ID' unless id.is_a? Valkyrie::ID
+      raise ArgumentError, 'id must be a Valkyrie::ID' unless id.is_a?(Valkyrie::ID) || id.is_a?(String)
+      id = Valkyrie::ID.new(id.to_s)
       loader = Bagit::BagLoader.new(adapter: adapter, id: id)
       raise Valkyrie::Persistence::ObjectNotFoundError unless loader.exist?
       loader.load!
+    end
+
+    def find_many_by_ids(ids:)
+      ids.map do |id|
+        begin
+          find_by(id: id)
+        rescue ::Valkyrie::Persistence::ObjectNotFoundError
+          nil
+        end
+      end.reject(&:nil?)
     end
 
     def find_all
@@ -44,8 +55,8 @@ module Bagit
     end
 
     def find_inverse_references_by(resource:, property:)
+      raise ArgumentError, 'resource is not saved' unless resource.persisted?
       Valkyrie.logger.warn("Bagit Query Service has been asked to find inverse references. This will require iterating over the metadata of every bag - AVOID.")
-      return [] unless resource.id.present?
       find_all.select do |potential_inverse_reference|
         (potential_inverse_reference.try(property) || []).include?(resource.id)
       end

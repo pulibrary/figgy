@@ -12,6 +12,7 @@ module Bagit
       resource = generate_id(resource) if resource.id.blank?
       resource.created_at ||= Time.current
       resource.updated_at = Time.current
+      ensure_multiple_values!(resource)
       bag_factory.new(resource: resource).create!
       resource.new_record = false
       resource
@@ -35,6 +36,13 @@ module Bagit
 
       def generate_id(resource)
         resource.new(id: SecureRandom.uuid)
+      end
+
+      def ensure_multiple_values!(resource)
+        bad_keys = resource.attributes.except(:internal_resource, :created_at, :updated_at, :new_record, :id).select do |_k, v|
+          !v.nil? && !v.is_a?(Array)
+        end
+        raise ::Valkyrie::Persistence::UnsupportedDatatype, "#{resource}: #{bad_keys.keys} have non-array values, which can not be persisted by Valkyrie. Cast to arrays." unless bad_keys.keys.empty?
       end
   end
 end

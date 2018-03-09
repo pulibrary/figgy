@@ -2,8 +2,8 @@
 class EphemeraVocabulary < Valhalla::Resource
   include Valkyrie::Resource::AccessControls
   attribute :id, Valkyrie::Types::ID.optional
-  attribute :label, Valkyrie::Types::String
+  attribute :label
   attribute :uri
-  attribute :definition, Valkyrie::Types::String
-  attribute :member_of_vocabulary_id
+  attribute :definition
+  attribute :member_of_vocabulary_id, Valkyrie::Types::Set
 end

@@ -93,6 +93,8 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
 
   def parent
     @parent ||= query_service.find_parents(resource: model).to_a.first.try(:decorate)
+  rescue ArgumentError
+    @parent ||= []
   end
 
   def manageable_files?

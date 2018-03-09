@@ -7,20 +7,24 @@ gem 'bunny'
 gem "devise-guests", git: "https://github.com/cbeer/devise-guests.git"
 gem "flutie"
 gem "honeybadger"
+gem 'hydra-access-controls'
 gem 'jbuilder'
 gem "jquery-rails"
 gem 'jquery-ui-rails', '~> 5.0'
+gem 'mini_magick'
 gem "pg", "~> 0.21"
 gem "puma"
 gem "rails", "5.1.1"
 gem "recipient_interceptor"
 gem 'redis-namespace'
+gem "ruby_tika_app"
 gem "sass-rails", "~> 5.0"
 gem "simple_form"
 gem "sprockets", ">= 3.0.0"
 gem "title"
 gem "uglifier"
-gem "valkyrie", git: "https://github.com/samvera-labs/valkyrie.git"
+gem "valkyrie", '1.0.0.rc1'
+gem "valkyrie-derivatives", git: "https://github.com/samvera-labs/valkyrie-derivatives.git"
 gem 'webpacker', '3.2.0'
 
 group :development do

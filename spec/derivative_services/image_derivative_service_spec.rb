@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 require 'rails_helper'
-require 'valkyrie/specs/shared_specs'
+require 'valkyrie/derivatives/specs/shared_specs'
 include ActionDispatch::TestProcess
 
 RSpec.describe ImageDerivativeService do
-  it_behaves_like "a Valkyrie::DerivativeService"
+  it_behaves_like "a Valkyrie::Derivatives::DerivativeService"
 
   let(:derivative_service) do
     ImageDerivativeService::Factory.new(change_set_persister: change_set_persister)

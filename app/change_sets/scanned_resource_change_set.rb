@@ -17,8 +17,8 @@ class ScannedResourceChangeSet < Valhalla::ChangeSet
   property :nav_date, multiple: false, required: false
   property :local_identifier, multiple: true, required: false, default: []
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
-  property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID
-  property :start_canvas, multiple: false, type: Valkyrie::Types::ID
+  property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID.optional
+  property :start_canvas, multiple: false, type: Valkyrie::Types::ID.optional
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
   property :logical_structure, multiple: true, required: false, type: Types::Strict::Array.member(Structure), default: [Structure.new(label: "Logical", nodes: [])]
   property :read_groups, multiple: true, required: false

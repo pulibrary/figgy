@@ -13,28 +13,21 @@ class FindEphemeraVocabularyByLabel
 
   def find_ephemera_vocabulary_by_label(label:, parent_vocab_label: nil)
     if parent_vocab_label
-      parent_vocab = run_query(query, EphemeraVocabulary.to_s, parent_vocab_label).first
-      internal_array = "[{\"id\": \"#{parent_vocab.id}\"}]"
-      run_query(query_with_vocab_id, EphemeraVocabulary.to_s, label, internal_array).first
+      internal_array = { label: Array.wrap(parent_vocab_label) }.to_json
+      parent_vocab = run_query(query, EphemeraVocabulary.to_s, internal_array).first
+      internal_array = { label: Array.wrap(label), member_of_vocabulary_id: Array.wrap(parent_vocab.id) }.to_json
+      run_query(query, EphemeraVocabulary.to_s, internal_array).first
     else
-      run_query(query, EphemeraVocabulary.to_s, label).first
+      internal_array = { label: Array.wrap(label) }.to_json
     end
+    run_query(query, EphemeraVocabulary.to_s, internal_array).first
   end
 
   def query
     <<-SQL
       select * FROM orm_resources WHERE
       internal_resource = ? AND
-      metadata->>'label' = ?
-    SQL
-  end
-
-  def query_with_vocab_id
-    <<-SQL
-      select * from orm_resources WHERE
-      internal_resource = ? AND
-      metadata->>'label' = ? AND
-      metadata->'member_of_vocabulary_id' @> ?
+      metadata @> ?
     SQL
   end
 

@@ -6,7 +6,7 @@ class EphemeraTermChangeSet < Valkyrie::ChangeSet
   property :code, multiple: false, required: false
   property :tgm_label, multiple: false, required: false
   property :lcsh_label, multiple: false, required: false
-  property :member_of_vocabulary_id, multiple: false, required: true, type: Valkyrie::Types::ID
+  property :member_of_vocabulary_id, multiple: false, required: true, type: Valkyrie::Types::ID.optional
 
   def primary_terms
     [

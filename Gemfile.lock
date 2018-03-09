@@ -42,27 +42,12 @@ GIT
       devise
 
 GIT
-  remote: https://github.com/samvera-labs/valkyrie.git
-  revision: b824b3e33bede36e73921c94f9ffdcdf8f6809be
+  remote: https://github.com/samvera-labs/valkyrie-derivatives.git
+  revision: fe5fd1a58fff28346754d581fbcbfe7010f33321
   specs:
-    valkyrie (0.1.0)
-      active-fedora
-      active-triples
-      activemodel
-      activerecord
-      activesupport
-      draper
-      dry-struct
-      dry-types
-      hydra-access-controls
+    valkyrie-derivatives (0.1.0)
       hydra-derivatives
-      json
-      json-ld
-      pg (< 1.0)
-      rdf
-      reform
-      reform-rails
-      ruby_tika_app
+      valkyrie
 
 PATH
   remote: valhalla
@@ -755,6 +740,22 @@ GEM
     unf_ext (0.0.7.4)
     unicode-display_width (1.3.0)
     uniform_notifier (1.10.0)
+    valkyrie (1.0.0.rc1)
+      active-fedora
+      active-triples
+      activemodel
+      activerecord
+      activesupport
+      draper
+      dry-struct
+      dry-types
+      json
+      json-ld
+      pg (< 1.0)
+      railties
+      rdf
+      reform
+      reform-rails
     warden (1.2.7)
       rack (>= 1.0)
     web-console (3.5.1)
@@ -810,6 +811,7 @@ DEPENDENCIES
   foreman
   formulaic
   honeybadger
+  hydra-access-controls
   hydra-head
   hydra-role-management
   iiif_manifest!
@@ -821,6 +823,7 @@ DEPENDENCIES
   json-schema
   leaflet-rails (~> 0.7)
   listen
+  mini_magick
   modernizr-rails
   normalize-rails
   omniauth-cas
@@ -843,6 +846,7 @@ DEPENDENCIES
   riiif
   rsolr (>= 1.0)
   rspec-rails (~> 3.5)
+  ruby_tika_app
   sass-rails (~> 5.0)
   selenium-webdriver
   sidekiq
@@ -857,7 +861,8 @@ DEPENDENCIES
   title
   uglifier
   valhalla!
-  valkyrie!
+  valkyrie (= 1.0.0.rc1)
+  valkyrie-derivatives!
   web-console
   webmock
   webpacker (= 3.2.0)

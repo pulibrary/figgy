@@ -26,7 +26,7 @@ RSpec.describe ScannedResource do
       stub_bibdata(bib_id: "123456")
     end
     it "indexes subject" do
-      scanned_resource = FactoryBot.create(:pending_scanned_resource, source_metadata_identifier: "123456", import_metadata: true)
+      scanned_resource = FactoryBot.create_for_repository(:pending_scanned_resource, source_metadata_identifier: "123456", import_metadata: true)
       index = Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: scanned_resource)
       expect(index[:display_subject_ssim]).to eq scanned_resource.imported_metadata.first.subject
     end

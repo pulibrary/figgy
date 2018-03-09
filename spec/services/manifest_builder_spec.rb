@@ -200,14 +200,14 @@ RSpec.describe ManifestBuilder do
         expect(metadata_values).to be_kind_of Array
         metadata_value = metadata_values.shift
 
-        expect(metadata_value).to eq subject_term.label
+        expect(metadata_value).to eq subject_term.label.first
 
         metadata_object = metadata.find { |h| h['label'] == 'Genre' }
         metadata_values = metadata_object['value']
         expect(metadata_values).to be_kind_of Array
         metadata_value = metadata_values.shift
 
-        expect(metadata_value).to eq genre_term.label
+        expect(metadata_value).to eq genre_term.label.first
       end
     end
 

@@ -28,7 +28,7 @@ class FacetIndexer
     terms.concat(decorated_resource.subject) if decorated_resource.try(:subject)
     terms.concat(decorated_resource.categories) if decorated_resource.try(:categories)
     terms.map do |term|
-      term.respond_to?(:label) ? term.label : term
+      term.respond_to?(:label) ? Array.wrap(term.label).first : term
     end.uniq
   end
 
@@ -36,7 +36,7 @@ class FacetIndexer
     terms = []
     terms.concat(decorated_resource.language) if decorated_resource.try(:language)
     terms.map do |term|
-      term.respond_to?(:label) ? term.label : term
+      term.respond_to?(:label) ? Array.wrap(term.label).first : term
     end.uniq
   end
 

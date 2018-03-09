@@ -2,7 +2,7 @@
 class EphemeraFieldChangeSet < Valkyrie::ChangeSet
   validates :field_name, :member_of_vocabulary_id, presence: true
   property :field_name, multiple: false, required: true
-  property :member_of_vocabulary_id, multiple: false, required: true, type: Valkyrie::Types::ID
+  property :member_of_vocabulary_id, multiple: false, required: true, type: Valkyrie::Types::ID.optional
 
   def primary_terms
     [:field_name, :member_of_vocabulary_id, :append_id]

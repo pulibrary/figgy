@@ -150,7 +150,7 @@ RSpec.describe PlumImporter do
           output = importer.import!
         end
         expect(output.id).not_to be_blank
-        expect(output.thumbnail_id).to be_empty
+        expect(output.thumbnail_id).to be_nil
         expect(logger).to have_received(:warn).with("Failed to find the thumbnail ID for #{output.id}")
       end
     end
