@@ -26,9 +26,6 @@ RSpec.describe DashboardController, type: :controller do
     file_set_change_set = FileSetChangeSet.new(file_set)
     file_set.file_metadata = file_metadata
     change_set_persister.save(change_set: file_set_change_set)
-
-    allow_any_instance_of(MostRecentlyUpdatedFileSets).to receive(:most_recently_updated_file_sets).and_return [resource, resource2, resource3]
-    allow_any_instance_of(LeastRecentlyUpdatedFileSets).to receive(:least_recently_updated_file_sets).and_return [resource3, resource2, resource]
   end
 
   describe "GET #fixity" do
@@ -37,19 +34,29 @@ RSpec.describe DashboardController, type: :controller do
       expect(response).to have_http_status(:success)
     end
 
-    it "sets most recently-updated filesets" do
-      get :fixity
-      expect(assigns[:recents].size).to eq 3
-    end
-
-    it "sets fixity failures" do
+    it "sets fixity failures variable" do
       get :fixity
       expect(assigns[:failures].size).to eq 1
     end
 
-    it "sets least-recenty-updated filesets" do
-      get :fixity
-      expect(assigns[:upcoming].size).to eq 3
+    context "most-recently-upated filesets" do
+      before do
+        allow_any_instance_of(FileSetsSortedByUpdated).to receive(:file_sets_sorted_by_updated).and_return [resource, resource2, resource3]
+      end
+      it "sets recents variable" do
+        get :fixity
+        expect(assigns[:recents].size).to eq 3
+      end
+    end
+
+    context "least-recently-upated filesets" do
+      before do
+        allow_any_instance_of(FileSetsSortedByUpdated).to receive(:file_sets_sorted_by_updated).and_return [resource3, resource2, resource]
+      end
+      it "sets upcoming variable" do
+        get :fixity
+        expect(assigns[:upcoming].size).to eq 3
+      end
     end
   end
 end

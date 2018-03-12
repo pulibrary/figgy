@@ -3,7 +3,7 @@ class CheckFixityRecursiveJob < ApplicationJob
   delegate :query_service, to: :metadata_adapter
 
   def perform
-    file_set = query_service.custom_queries.least_recently_updated_file_sets.first
+    file_set = query_service.custom_queries.file_sets_sorted_by_updated(limit: 1).first
     CheckFixityJob.perform_now(file_set.id)
     CheckFixityRecursiveJob.set(queue: queue_name).perform_later
   end

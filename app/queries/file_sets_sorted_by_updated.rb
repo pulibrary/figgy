@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-class MostRecentlyUpdatedFileSets
+class FileSetsSortedByUpdated
   def self.queries
-    [:most_recently_updated_file_sets]
+    [:file_sets_sorted_by_updated]
   end
 
   attr_reader :query_service
@@ -11,17 +11,23 @@ class MostRecentlyUpdatedFileSets
     @query_service = query_service
   end
 
-  def most_recently_updated_file_sets
-    run_query(query)
+  def file_sets_sorted_by_updated(sort: 'asc', limit: 50)
+    run_query("#{query} #{order(sort)} #{number(limit)}")
   end
 
   def query
     <<-SQL
       select * FROM orm_resources WHERE
       internal_resource='FileSet'
-      order by updated_at desc
-      limit 50
     SQL
+  end
+
+  def order(sort)
+    "order by updated_at #{sort}"
+  end
+
+  def number(limit)
+    "limit #{limit}"
   end
 
   def run_query(query)

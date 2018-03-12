@@ -2,7 +2,7 @@
 require 'rails_helper'
 include ActionDispatch::TestProcess
 
-RSpec.describe MostRecentlyUpdatedFileSets do
+RSpec.describe FileSetsSortedByUpdated do
   let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
   let(:file2) { fixture_file_upload('files/example.tif', 'image/tiff') }
   let(:file3) { fixture_file_upload('files/example.tif', 'image/tiff') }
@@ -39,13 +39,25 @@ RSpec.describe MostRecentlyUpdatedFileSets do
     query_service.find_members(resource: output3).first
   end
 
-  describe "#most_recently_updated_file_sets" do
-    it "finds most recently updated file sets with the given limit" do
-      result = query_service.custom_queries.most_recently_updated_file_sets
+  describe "#file_sets_sorted_by_updated" do
+    it "finds least recently updated file sets with the given limit" do
+      result = query_service.custom_queries.file_sets_sorted_by_updated
       expect(result.count).to eq 3
-      expect(result.next.id.to_s).to eq query_service.find_members(resource: output3).first.id.to_s
-      expect(result.next.id.to_s).to eq query_service.find_members(resource: output2).first.id.to_s
       expect(result.next.id.to_s).to eq query_service.find_members(resource: output).first.id.to_s
+      expect(result.next.id.to_s).to eq query_service.find_members(resource: output2).first.id.to_s
+      expect(result.next.id.to_s).to eq query_service.find_members(resource: output3).first.id.to_s
     end
+
+    it "returns a lazy enumerator" do
+      result = query_service.custom_queries.file_sets_sorted_by_updated
+      expect(result).to be_a Enumerator::Lazy
+    end
+  end
+
+  it "finds most recently updated file sets with the given limit" do
+    result = query_service.custom_queries.file_sets_sorted_by_updated(sort: 'desc', limit: 2)
+    expect(result.count).to eq 2
+    expect(result.next.id.to_s).to eq query_service.find_members(resource: output3).first.id.to_s
+    expect(result.next.id.to_s).to eq query_service.find_members(resource: output2).first.id.to_s
   end
 end
