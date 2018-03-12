@@ -1,2 +1,10 @@
-<h1>Dashboard#fixity</h1>
-<p>Find me in app/views/dashboard/fixity.html.erb</p>
+<h2>Fixity Dashboard</h2>
+
+<h3>Failed Fixity Checks</h3>
+<%= render partial: "fixity_table", locals: {resources: @failures} %>
+
+<h3>Recent Fixity Checks</h3>
+<%= render partial: "fixity_table", locals: {resources: @recents} %>
+
+<h3>Upcoming Fixity Checks</h3>
+<%= render partial: "fixity_table", locals: {resources: @upcoming} %>
