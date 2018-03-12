@@ -10,6 +10,15 @@ class EphemeraBoxesController < BaseResourceController
   before_action :load_collections, only: [:new, :edit]
   before_action :cache_project, only: :destroy
 
+  def folders
+    authorize! :read, resource
+    render json: { data: datatables_folders }
+  end
+
+  def datatables_folders
+    FolderDataSource.new(resource: resource.decorate, helper: self).data
+  end
+
   def attach_drive
     edit
   end

@@ -23,11 +23,6 @@ RSpec.describe "catalog/_members_ephemera_project" do
       expect(rendered).to have_link 'Edit', href: edit_ephemera_box_path(child.id)
 
       expect(rendered).to have_selector 'h2', text: 'Folders'
-      expect(rendered).to have_selector 'span.label-info', text: 'Needs QA'
-      expect(rendered).to have_selector 'td', text: 'test folder'
-      expect(rendered).to have_selector 'td', text: '12345678901234'
-      expect(rendered).to have_link 'View', href: parent_solr_document_path(parent.id, child_folder.id)
-      expect(rendered).to have_link 'Edit', href: edit_ephemera_folder_path(child_folder.id)
     end
   end
   context "when it's a project with templates" do

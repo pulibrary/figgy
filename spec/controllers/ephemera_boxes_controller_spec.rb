@@ -27,6 +27,38 @@ RSpec.describe EphemeraBoxesController do
     end
   end
 
+  describe "folders" do
+    context "when not logged in" do
+      let(:user) { nil }
+      it "redirects CanCan::AccessDenied error to login" do
+        box = FactoryBot.create_for_repository(:private_ephemera_box)
+        get :folders, params: { id: box.id }
+        expect(response).to redirect_to('/users/auth/cas')
+      end
+    end
+    context "when they have permission" do
+      let(:user) { FactoryBot.create(:admin) }
+      render_views
+      it "renders a JSON list of a project's folders" do
+        folder = FactoryBot.create_for_repository(:ephemera_folder)
+        box = FactoryBot.create_for_repository(:ephemera_box, member_ids: folder.id)
+
+        get :folders, params: { id: box.id.to_s, formats: :json }
+
+        json = JSON.parse(response.body)
+        expect(json["data"].length).to eq 1
+        expect(json["data"][0]["folder_number"]).to eq folder.folder_number.first
+        expect(json["data"][0]["workflow_state"]).to eq "<span class=\"label label-info\">Needs QA</span>"
+        expect(json["data"][0]["title"]).to eq folder.title
+        expect(json["data"][0]["barcode"]).to eq folder.barcode.first
+        expect(json["data"][0]["genre"]).to eq folder.genre.first
+        expect(json["data"][0]["actions"]).to have_link "View", href: "/catalog/parent/#{box.id}/#{folder.id}"
+        expect(json["data"][0]["actions"]).to have_link "Edit", href: "/concern/ephemera_folders/#{folder.id}/edit"
+        expect(json["data"][0]["actions"]).not_to have_link "Delete"
+      end
+    end
+  end
+
   describe "create" do
     let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do

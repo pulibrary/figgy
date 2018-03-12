@@ -95,6 +95,9 @@ Rails.application.routes.draw do
       resources :templates, only: [:new, :create, :destroy]
       resources :ephemera_fields
       member do
+        get :folders, defaults: { format: :json }
+      end
+      member do
         get :manifest, defaults: { format: :json }
       end
     end
@@ -105,6 +108,9 @@ Rails.application.routes.draw do
     resources :ephemera_boxes do
       member do
         get :attach_drive
+      end
+      member do
+        get :folders, defaults: { format: :json }
       end
     end
 

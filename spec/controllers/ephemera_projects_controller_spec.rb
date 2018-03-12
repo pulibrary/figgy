@@ -98,6 +98,28 @@ RSpec.describe EphemeraProjectsController do
     end
   end
 
+  describe "folders" do
+    context "when they have permission" do
+      let(:user) { FactoryBot.create(:admin) }
+      render_views
+      it "renders a JSON list of a project's folders" do
+        folder = FactoryBot.create_for_repository(:ephemera_folder)
+        project = FactoryBot.create_for_repository(:ephemera_project, member_ids: folder.id)
+
+        get :folders, params: { id: project.id.to_s, formats: :json }
+
+        json = JSON.parse(response.body)
+        expect(json["data"].length).to eq 1
+        expect(json["data"][0]["folder_number"]).to eq folder.folder_number.first
+        expect(json["data"][0]["workflow_state"]).to eq "<span class=\"label label-info\">Needs QA</span>"
+        expect(json["data"][0]["title"]).to eq folder.title
+        expect(json["data"][0]["barcode"]).to eq folder.barcode.first
+        expect(json["data"][0]["genre"]).to eq folder.genre.first
+        expect(json["data"][0]["actions"]).not_to be_blank
+      end
+    end
+  end
+
   describe "destroy" do
     let(:user) { FactoryBot.create(:admin) }
     context "access control" do
