@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe DashboardController, type: :controller do
+RSpec.describe FixityDashboardController, type: :controller do
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
   let(:query_service) { adapter.query_service }
@@ -28,14 +28,14 @@ RSpec.describe DashboardController, type: :controller do
     change_set_persister.save(change_set: file_set_change_set)
   end
 
-  describe "GET #fixity" do
+  describe "GET #show" do
     it "returns http success" do
-      get :fixity
+      get :show
       expect(response).to have_http_status(:success)
     end
 
     it "sets fixity failures variable" do
-      get :fixity
+      get :show
       expect(assigns[:failures].size).to eq 1
     end
 
@@ -44,7 +44,7 @@ RSpec.describe DashboardController, type: :controller do
         allow_any_instance_of(FileSetsSortedByUpdated).to receive(:file_sets_sorted_by_updated).and_return [resource, resource2, resource3]
       end
       it "sets recents variable" do
-        get :fixity
+        get :show
         expect(assigns[:recents].size).to eq 3
       end
     end
@@ -54,7 +54,7 @@ RSpec.describe DashboardController, type: :controller do
         allow_any_instance_of(FileSetsSortedByUpdated).to receive(:file_sets_sorted_by_updated).and_return [resource3, resource2, resource]
       end
       it "sets upcoming variable" do
-        get :fixity
+        get :show
         expect(assigns[:upcoming].size).to eq 3
       end
     end

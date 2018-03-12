@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
-  get 'dashboard/fixity'
+  get 'dashboard/fixity', to: 'fixity_dashboard#show'
 
   resources :auth_tokens
   default_url_options Rails.application.config.action_mailer.default_url_options
