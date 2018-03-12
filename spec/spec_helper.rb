@@ -25,6 +25,13 @@ RSpec.configure do |config|
 
   config.example_status_persistence_file_path = "tmp/rspec_examples.txt"
   config.order = :random
+
+  # Cleanup test files and derivatives
+  config.after(:suite) do
+    break unless Rails.env.test?
+    FileUtils.rm_rf(Figgy.config['derivative_path'])
+    FileUtils.rm_rf(Figgy.config['repository_path'])
+  end
 end
 
 WebMock.disable_net_connect!(allow_localhost: true)

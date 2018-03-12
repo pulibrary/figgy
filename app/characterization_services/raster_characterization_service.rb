@@ -81,7 +81,7 @@ class RasterCharacterizationService
 
   # Uncompresses a zipped raster file and sets raster_path variable to the resulting directory.
   def unzip_raster
-    system "unzip -o -j #{filename} -d #{zip_file_directory}" unless File.directory?(zip_file_directory)
+    system "unzip -qq -o -j #{filename} -d #{zip_file_directory}" unless File.directory?(zip_file_directory)
     @raster_path = zip_file_directory
   end
 

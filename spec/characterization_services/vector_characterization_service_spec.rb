@@ -18,18 +18,6 @@ RSpec.describe VectorCharacterizationService do
   let(:vector_work_members) { query_service.find_members(resource: vector_work) }
   let(:valid_file_set) { vector_work_members.first }
 
-  context "with a shapefile" do
-    let(:file) { fixture_file_upload("files/vector/shapefile.zip", "application/zip") }
-    let(:tika_output) { tika_shapefile_output }
-
-    it "sets the correct mime_type and geometry attributes on the file_node on characterize" do
-      file_node = valid_file_set
-      new_file_node = described_class.new(file_node: file_node, persister: persister).characterize(save: false)
-      expect(new_file_node.original_file.mime_type).to eq ['application/zip; ogr-format="ESRI Shapefile"']
-      expect(new_file_node.original_file.geometry).to eq ["Polygon"]
-    end
-  end
-
   context "with a geojson file" do
     let(:file) { fixture_file_upload("files/vector/geo.json", "application/vnd.geo+json") }
     let(:tika_output) { tika_geojson_output }

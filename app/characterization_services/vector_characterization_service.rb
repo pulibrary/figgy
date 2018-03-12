@@ -68,12 +68,12 @@ class VectorCharacterizationService
 
   # Uncompresses a zipped vector file and sets vector_path variable to the resulting directory.
   def unzip_vector
-    system "unzip -o -j #{filename} -d #{zip_file_directory}" unless File.directory?(zip_file_directory)
+    system "unzip -qq -o -j #{filename} -d #{zip_file_directory}" unless File.directory?(zip_file_directory)
     @vector_path = zip_file_directory
   end
 
   def valid?
-    parent.is_a?(VectorWork)
+    parent.is_a?(VectorWork) && original_file.mime_type != ["application/xml"]
   end
 
   # Gets a vector's 'geo mime type' by looking up the format's driver in a controlled vocabulary.

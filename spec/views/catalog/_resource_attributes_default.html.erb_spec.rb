@@ -74,6 +74,7 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       stub_blacklight_views
       render
     end
+    after { Timecop.return }
     it "renders all available attributes" do
       expect(rendered).to have_selector "#attributes h2", text: "Attributes"
 
@@ -220,6 +221,7 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       stub_blacklight_views
       render
     end
+    after { Timecop.return }
     it "renders all available attributes" do
       expect(rendered).to have_selector "#attributes h2", text: "Attributes"
 
