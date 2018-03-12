@@ -160,6 +160,15 @@ Rails.application.config.to_prepare do
     )
   )
 
+  # RasterResourceDerivativeService needs its own change_set_persister because the
+  # derivatives may not be in the primary metadata/file storage.
+  Valkyrie::Derivatives::DerivativeService.services << RasterResourceDerivativeService::Factory.new(
+    change_set_persister: ::PlumChangeSetPersister.new(
+      metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
+      storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)
+    )
+  )
+
   Valkyrie::Derivatives::FileCharacterizationService.services << PlumCharacterizationService
   Valkyrie::Derivatives::FileCharacterizationService.services << GeoCharacterizationService
 
