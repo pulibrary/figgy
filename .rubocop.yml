@@ -12,6 +12,7 @@ AllCops:
     - 'db/schema.rb'
     - 'spec/support/**/*'
     - 'node_modules/**/*'
+    - 'simple-tiles/**/*'
 Style/FileName:
   Enabled: true
   Exclude:
