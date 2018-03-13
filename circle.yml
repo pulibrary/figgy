@@ -12,7 +12,7 @@ dependencies:
     - sudo dpkg -i google-chrome.deb
     - rm google-chrome.deb
     - sudo apt-get update
-    - sudo apt-get update; sudo sudo apt-get install libgdal1h libgdal-dev gdal-bin libcairo2-dev libpango1.0-dev
+    - sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev
     - sudo sh bin/ci_simple_tiles_install.sh
   cache_directories:
     - kakadu

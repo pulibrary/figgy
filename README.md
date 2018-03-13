@@ -37,18 +37,16 @@ Linux:
 * Install dependencies:
 
   ```
-  libgdal-dev
-  libcairo2-dev
-  libpango1.0-dev
+  apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev
   ```
 
 * Compile:
 
   ```
-  $ git clone git@github.com:propublica/simple-tiles.git
-  $ cd simple-tiles
-  $ ./configure
-  $ make && make install
+  git clone git@github.com:propublica/simple-tiles.git
+  cd simple-tiles
+  ./configure
+  make && make install
   ```
 
 ## Initial Setup
