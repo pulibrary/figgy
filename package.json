@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "@rails/webpacker": "^3.3.1",
+    "ajv": "^6.2.1",
     "axios": "^0.17.1",
     "babel-polyfill": "^6.26.0",
     "manifesto.js": "^2.2.0",
