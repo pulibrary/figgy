@@ -1,7 +1,5 @@
 # frozen_string_literal: true
-class DashboardController < ApplicationController
-  delegate :query_service, to: :metadata_adapter
-
+class ReportsController < ApplicationController
   def identifiers_to_reconcile
     authorize! :show, Report
     @resources = Valkyrie.config.metadata_adapter.query_service.custom_queries.find_identifiers_to_reconcile
@@ -14,12 +12,6 @@ class DashboardController < ApplicationController
     end
   end
 
-  def fixity
-    @failures = query_service.custom_queries.find_fixity_failures
-    @recents = query_service.custom_queries.file_sets_sorted_by_updated(sort: 'desc', limit: 10)
-    @upcoming = query_service.custom_queries.file_sets_sorted_by_updated(limit: 20)
-  end
-
   private
 
     def to_csv(records, fields:)
@@ -29,9 +21,5 @@ class DashboardController < ApplicationController
           csv << fields.map { |k, _v| Array.wrap(record.send(k)).first }
         end
       end
-    end
-
-    def metadata_adapter
-      Valkyrie::MetadataAdapter.find(:indexing_persister)
     end
 end

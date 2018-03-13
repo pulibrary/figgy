@@ -1,0 +1,22 @@
+<table class="table table-striped datatable">
+  <thead>
+    <tr>
+      <th>File Set Title</th>
+      <th>Parent Resource Title</th>
+      <th>Last Fixity Check Status</th>
+      <th>Date Last Checked</th>
+      <th>Date of Last Success</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% resources.each do |resource| %>
+      <tr>
+        <td><%= link_to resource.title.first, Valhalla::ContextualPath.new(child: resource, parent_id: resource.parent.id).show %></td>
+        <td><%= link_to resource.parent.title.first, Valhalla::ContextualPath.new(child: resource.parent).show %></td>
+        <td><%= resource.original_file.fixity_success == 0 ? "failed" : "succeeded" %></td>
+        <td><%= resource.updated_at %></td>
+        <td><%= resource.original_file.fixity_last_success_date.strftime("%m/%d/%y %I:%M:%S %p %Z") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

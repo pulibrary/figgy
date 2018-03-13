@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
-  get 'dashboard/fixity'
+  get 'dashboard/fixity', to: 'fixity_dashboard#show', as: 'fixity_dashboard'
 
   resources :auth_tokens
   default_url_options Rails.application.config.action_mailer.default_url_options
@@ -170,7 +170,7 @@ Rails.application.routes.draw do
   get '/catalog/parent/:parent_id/:id', to: 'catalog#show', as: :parent_solr_document
   get "/iiif/lookup/:prefix/:naan/:arkid", to: 'catalog#lookup_manifest', as: :lookup_manifest
 
-  get "/reports/identifiers_to_reconcile", to: "dashboard#identifiers_to_reconcile", as: :identifiers_to_reconcile
+  get "/reports/identifiers_to_reconcile", to: "reports#identifiers_to_reconcile", as: :identifiers_to_reconcile
 
   mount BrowseEverything::Engine => '/browse'
   mount Valhalla::Engine => '/'
