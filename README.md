@@ -30,6 +30,8 @@ bundle install
 npm install
 ```
 
+Remember you'll need to run `bundle install` and `npm install` on an ongoing basis as dependencies are updated.
+
 ## Setup server
 
 1. For test:
@@ -66,6 +68,10 @@ To load the controlled vocabularies in `config/vocab/`:
   - `rails vocab:load CSV=config/vocab/lae_areas.csv NAME="LAE Areas"`
   - `rails vocab:load CSV=config/vocab/lae_genres.csv NAME="LAE Genres" LABEL=pul_label`
   - `rails vocab:load CSV=config/vocab/lae_subjects.csv NAME="LAE Subjects" CATEGORY=category LABEL=subject`
+
+## Note on webpacker setup
+
+Webpacker documentation assumes use of yarn as a javascript package manager. Our setup uses npm directly instead of yarn. Therefore, when upgrading webpacker modify instructions on the webpacker README to use `npm update --save` instead of `yarn upgrade --latest`
 
 ## More
 For links to helpful valkyrie documentation and troubleshooting tips, visit the [wiki pages](https://github.com/pulibrary/figgy/wiki).
