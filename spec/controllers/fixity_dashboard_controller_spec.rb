@@ -29,6 +29,11 @@ RSpec.describe FixityDashboardController, type: :controller do
   end
 
   describe "GET #show" do
+    let(:user) { FactoryBot.create(:admin) }
+    before do
+      sign_in user if user
+    end
+
     it "returns http success" do
       get :show
       expect(response).to have_http_status(:success)
@@ -56,6 +61,15 @@ RSpec.describe FixityDashboardController, type: :controller do
       it "sets upcoming variable" do
         get :show
         expect(assigns[:upcoming].size).to eq 3
+      end
+    end
+
+    context "for non-admin users" do
+      let(:user) { nil }
+
+      it "prevents viewing" do
+        get :show
+        expect(response).to be_redirect
       end
     end
   end
