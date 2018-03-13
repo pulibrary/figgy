@@ -255,7 +255,7 @@ describe GeoResources::Discovery::DocumentBuilder do
 
     context 'with a geo-tiff file' do
       let(:change_set) { RasterResourceChangeSet.new(geo_work, files: [file]) }
-      let(:file) { fixture_file_upload('files/example.tif', 'image/tiff; gdal-format=GTiff') }
+      let(:file) { fixture_file_upload('files/raster/geotiff.tif', 'image/tiff; gdal-format=GTiff') }
 
       it 'has layer info fields' do
         expect(document['layer_geom_type_s']).to eq('Raster')

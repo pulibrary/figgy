@@ -37,10 +37,10 @@ class GeoCharacterizationService
   end
 
   def raster_characterization_service
-    @raster_characterization_service ||= RasterCharacterizationService.new(file_node: file_node, persister: persister)
+    @raster_characterization_service ||= GdalCharacterizationService::Raster.new(file_node: file_node, persister: persister)
   end
 
   def vector_characterization_service
-    @vector_characterization_service ||= VectorCharacterizationService.new(file_node: file_node, persister: persister)
+    @vector_characterization_service ||= GdalCharacterizationService::Vector.new(file_node: file_node, persister: persister)
   end
 end
