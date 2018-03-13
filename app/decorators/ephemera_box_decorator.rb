@@ -24,6 +24,10 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
     @folders ||= members.select { |r| r.is_a?(EphemeraFolder) }.map(&:decorate).to_a
   end
 
+  def folders_count
+    @folders_count ||= query_service.custom_queries.count_members(resource: model, model: EphemeraFolder)
+  end
+
   def ephemera_projects
     @ephemera_projects ||= query_service.find_parents(resource: model).map(&:decorate).to_a
   end

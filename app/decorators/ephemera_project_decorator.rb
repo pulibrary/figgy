@@ -18,6 +18,10 @@ class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
     @folders ||= query_service.find_members(resource: model, model: EphemeraFolder).map(&:decorate).to_a
   end
 
+  def folders_count
+    @folders_count ||= query_service.custom_queries.count_members(resource: model, model: EphemeraFolder)
+  end
+
   def templates
     @templates ||= query_service.find_inverse_references_by(resource: self, property: :parent_id).map(&:decorate).to_a
   end
