@@ -7,15 +7,15 @@ class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
   end
 
   def boxes
-    @boxes ||= members.select { |r| r.is_a?(EphemeraBox) }.map(&:decorate).to_a
+    @boxes ||= query_service.find_members(resource: model, model: EphemeraBox).map(&:decorate).to_a
   end
 
   def fields
-    @fields ||= members.select { |r| r.is_a?(EphemeraField) }.map(&:decorate).to_a
+    @fields ||= query_service.find_members(resource: model, model: EphemeraField).map(&:decorate).to_a
   end
 
   def folders
-    @folders ||= members.select { |r| r.is_a?(EphemeraFolder) }.map(&:decorate).to_a
+    @folders ||= query_service.find_members(resource: model, model: EphemeraFolder).map(&:decorate).to_a
   end
 
   def templates
