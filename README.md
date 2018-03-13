@@ -20,6 +20,36 @@ functionality, performance, and scalability.
     * Start with rabbitmq-server
     * Used for publishing create/update/delete events for systems such as
       [Pomegranate](https://github.com/pulibrary/pomegranate)
+* [GDAL](http://www.gdal.org/)
+    * You can install it on Mac OSX with `brew install gdal`.
+    * On Ubuntu, use `sudo apt-get install gdal-bin`.
+
+## Simple Tiles
+
+Figgy requires the image generation library [Simple Tiles](http://propublica.github.io/simple-tiles/).
+
+Mac OS X:
+
+* Install via Homebrew: ```brew install simple-tiles```
+
+Linux:
+
+* Install dependencies:
+
+  ```
+  libgdal-dev
+  libcairo2-dev
+  libpango1.0-dev
+  ```
+
+* Compile:
+
+  ```
+  $ git clone git@github.com:propublica/simple-tiles.git
+  $ cd simple-tiles
+  $ ./configure
+  $ make && make install
+  ```
 
 ## Initial Setup
 
