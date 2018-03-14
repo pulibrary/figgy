@@ -97,6 +97,10 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
   end
   alias collections parents
 
+  def decorated_parent_resource
+    @decorated_parent_resource ||= Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_parents(resource: self).first.try(:decorate)
+  end
+
   def collection_slugs
     @collection_slugs ||= collections.flat_map(&:slug)
   end
