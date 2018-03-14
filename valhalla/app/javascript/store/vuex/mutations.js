@@ -1,5 +1,8 @@
 // mutations
 const mutations = {
+  CHANGE_MANIFEST_LOAD_STATE (state, loadState) {
+    state.manifestLoadState = loadState
+  },
   SELECT (state, imgArray) {
     state.selected = [ ...imgArray ]
   },

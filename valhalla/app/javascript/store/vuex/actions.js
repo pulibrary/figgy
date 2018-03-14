@@ -10,10 +10,15 @@ const actions = {
     return axios.get(manifest_uri).then((response) => {
       const manifestation = Object.assign(manifesto.create(JSON.stringify(response.data)), mixins)
       window.manifestation = manifestation
-      context.commit('SET_STATE', manifestation.imageCollection(resource) )
+      context.commit('CHANGE_MANIFEST_LOAD_STATE', 'LOADED')
+      context.commit('SET_STATE', manifestation.imageCollection(resource))
     }, (err) => {
+      context.commit('CHANGE_MANIFEST_LOAD_STATE', 'LOADING_ERROR')
       console.log(err)
     })
+  },
+  changeManifestLoadState (context, loadState) {
+    context.commit('CHANGE_MANIFEST_LOAD_STATE', loadState)
   },
   handleSelect (context, imgArray) {
     context.commit('SELECT', imgArray)
