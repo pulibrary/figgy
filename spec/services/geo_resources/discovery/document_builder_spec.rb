@@ -31,7 +31,7 @@ describe GeoResources::Discovery::DocumentBuilder do
   let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { metadata_adapter.query_service }
-  let(:file) { fixture_file_upload('files/shapefile.zip') }
+  let(:file) { fixture_file_upload('files/vector/shapefile.zip') }
   let(:metadata_file) { fixture_file_upload('files/geo_metadata/iso.xml') }
   let(:document) { JSON.parse(document_builder.to_json(nil)) }
 
@@ -255,7 +255,7 @@ describe GeoResources::Discovery::DocumentBuilder do
 
     context 'with a geo-tiff file' do
       let(:change_set) { RasterResourceChangeSet.new(geo_work, files: [file]) }
-      let(:file) { fixture_file_upload('files/example.tif', 'image/tiff; gdal-format=GTiff') }
+      let(:file) { fixture_file_upload('files/raster/geotiff.tif', 'image/tiff; gdal-format=GTiff') }
 
       it 'has layer info fields' do
         expect(document['layer_geom_type_s']).to eq('Raster')

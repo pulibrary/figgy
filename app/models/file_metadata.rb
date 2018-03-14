@@ -16,6 +16,7 @@ class FileMetadata < Valkyrie::Resource
   attribute :file_identifiers, Valkyrie::Types::Set
   attribute :use, Valkyrie::Types::Set
   attribute :size, Valkyrie::Types::Set
+  attribute :geometry, Valkyrie::Types::Set
 
   # fixity attributes
   attribute :fixity_actual_checksum, Valkyrie::Types::Set

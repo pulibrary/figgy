@@ -13,7 +13,7 @@ describe GeoResources::Discovery::DocumentBuilder::Wxs do
   let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { metadata_adapter.query_service }
-  let(:file) { fixture_file_upload('files/shapefile.zip', 'application/zip; ogr-format="ESRI Shapefile"') }
+  let(:file) { fixture_file_upload('files/vector/shapefile.zip', 'application/zip; ogr-format="ESRI Shapefile"') }
 
   before do
     output = change_set_persister.save(change_set: change_set)

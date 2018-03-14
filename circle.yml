@@ -11,8 +11,12 @@ dependencies:
     - curl -L -o google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     - sudo dpkg -i google-chrome.deb
     - rm google-chrome.deb
+    - sudo apt-get update
+    - sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev
+    - sudo sh bin/ci_simple_tiles_install.sh
   cache_directories:
     - kakadu
+    - simple-tiles
   post:
     - NODE_ENV=test bundle exec rails webpacker:compile
     - sudo sh bin/ci_kakadu_install.sh

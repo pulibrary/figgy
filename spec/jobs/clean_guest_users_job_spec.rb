@@ -10,6 +10,7 @@ RSpec.describe CleanGuestUsersJob do
       allow(user).to receive(:destroy)
       allow(User).to receive(:where).and_return(users)
     end
+    after { Timecop.return }
     it "queries the database for guest users and destroys them" do
       described_class.perform_now
       expect(User).to have_received(:where).with("guest = ? and updated_at < ?", true, Time.current - 7.days)

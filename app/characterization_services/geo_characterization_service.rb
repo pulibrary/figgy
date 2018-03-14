@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-# Class for Apache Tika based file characterization service
-# defines the Apache Tika based characterization service a ValkyrieFileCharacterization service
-# @since 0.1.0
+# Class for geo resource file characterization service
 class GeoCharacterizationService
   attr_reader :file_node, :persister
   def initialize(file_node:, persister:)
@@ -21,6 +19,8 @@ class GeoCharacterizationService
   #   Valkyrie::Derivatives::FileCharacterizationService.for(file_node, persister).characterize(save: false)
   def characterize(save: true)
     TikaFileCharacterizationService.new(file_node: file_node, persister: persister).characterize
+    vector_characterization_service.characterize if vector_characterization_service.valid?
+    raster_characterization_service.characterize if raster_characterization_service.valid?
     external_metadata_service.characterize if external_metadata_service.valid?
   end
 
@@ -34,5 +34,13 @@ class GeoCharacterizationService
 
   def external_metadata_service
     @external_metadata_service ||= ExternalMetadataCharacterizationService.new(file_node: file_node, persister: persister)
+  end
+
+  def raster_characterization_service
+    @raster_characterization_service ||= GdalCharacterizationService::Raster.new(file_node: file_node, persister: persister)
+  end
+
+  def vector_characterization_service
+    @vector_characterization_service ||= GdalCharacterizationService::Vector.new(file_node: file_node, persister: persister)
   end
 end

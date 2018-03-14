@@ -1,13 +1,13 @@
 :terms:
   - :value: image/tiff; gdal-format=GTiff
     :label: GeoTIFF
-    :definition: GTiff
+    :definition: GTiff/GeoTIFF
   - :value: text/plain; gdal-format=AAIGrid
     :label: Arc/Info ASCII Grid
     :definition: AAIGrid
   - :value: application/octet-stream; gdal-format=AIG
     :label: Arc/Info Binary Grid
-    :definition: AIG
+    :definition: AIG/Arc/Info
   - :value: text/plain; gdal-format=USGSDEM
     :label: USGS ASCII DEM
-    :definition: USGSDEM
+    :definition: USGSDEM/USGS
