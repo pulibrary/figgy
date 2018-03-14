@@ -21,22 +21,31 @@
         <i class="fa fa-image fa-lg"></i>
       </div>
     </div>
-    <draggable v-model="thumbnails" tag="div" name="list-complete" class="img_gallery">
-        <div @click.capture="select(thumbnail.id, $event)"
-              v-bind:style="{'max-width': thumbPixelWidth + 'px' }"
-              class="thumbnail"
-              v-bind:class="{ hasChanged: hasChanged(thumbnail.id), selected: isSelected(thumbnail) }"
-              v-for="thumbnail in thumbnails" :key="thumbnail.id">
-          <img :src="thumbnail.url" class="thumb">
-          <div v-bind:style="{'padding': captionPixelPadding + 'px' }" class="caption">
-            {{thumbnail.label}}
+    <transition name="fade">
+      <div v-if="show" class="progress">
+          <div class="progress-bar" role="progressbar" v-bind:style="'width: '
+          + pctLoaded + '%'" v-bind:aria-valuenow="pctLoaded" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+    </transition>
+    <div v-images-loaded:on.progress="imageProgress">
+      <draggable v-model="thumbnails" tag="div" name="list-complete" class="img_gallery">
+          <div @click.capture="select(thumbnail.id, $event)"
+                v-bind:style="{'max-width': thumbPixelWidth + 'px' }"
+                class="thumbnail"
+                v-bind:class="{ hasChanged: hasChanged(thumbnail.id), selected: isSelected(thumbnail) }"
+                v-for="thumbnail in thumbnails" :key="thumbnail.id">
+            <img :src="thumbnail.url" class="thumb">
+            <div v-bind:style="{'padding': captionPixelPadding + 'px' }" class="caption">
+              {{thumbnail.label}}
+            </div>
           </div>
-        </div>
-    </draggable>
+      </draggable>
+    </div>
   </div>
 </template>
 
 <script>
+import imagesLoaded from 'vue-images-loaded'
 import draggable from 'vuedraggable'
 export default {
   name: 'thumbnails',
@@ -53,11 +62,17 @@ export default {
   components: {
     draggable
   },
+  directives: {
+    imagesLoaded
+  },
   data: function () {
     return {
       thumbPixelWidth: 200,
       captionPixelPadding: 9,
-      pendingUploads: false
+      pendingUploads: false,
+      show: true,
+      numLoaded: 0,
+      pctLoaded: 0
     }
   },
   computed: {
@@ -103,6 +118,17 @@ export default {
         return true
       } else {
         return false
+      }
+    },
+    hideProgressBar: function () {
+      this.show = false
+    },
+    imageProgress: function (instance, image ) {
+      let total = this.thumbnails.length
+      this.numLoaded = this.numLoaded + 1
+      this.pctLoaded = this.numLoaded * 100 / total
+      if (this.numLoaded == total) {
+        setTimeout(this.hideProgressBar, 1000)
       }
     },
     isSelected: function (thumbnail) {
@@ -241,6 +267,41 @@ export default {
 
 .dropdown {
   display: inline-block;
+}
+
+.overlay {
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background-color:rgba(0, 0, 0, 0.85);
+    background: url(data:;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAABl0RVh0U29mdHdhcmUAUGFpbnQuTkVUIHYzLjUuNUmK/OAAAAATSURBVBhXY2RgYNgHxGAAYuwDAA78AjwwRoQYAAAAAElFTkSuQmCC) repeat scroll transparent\9; /* ie fallback png background image */
+    z-index:9999;
+    color:white;
+    border-radius: 4px;
+}
+
+.txt {
+    font-size: 4rem;
+    display: inline-block;
+    position: relative;
+    float: left;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
+.progress {
+  border-radius: 0px;
+  max-height: 3px;
 }
 
 </style>
