@@ -11,6 +11,8 @@ class CountMembers
     @query_service = query_service
   end
 
+  # @param resource [Valkyrie::Resource] resources whose members will be counted
+  # @param model [Symbol] (default nil) if specified, only members of given model will be counted
   def count_members(resource:, model: nil)
     if model
       orm_class.connection.execute(find_members_with_resource_query(resource, model)).first["count"]
