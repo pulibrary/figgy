@@ -19,4 +19,15 @@ RSpec.describe "valhalla/base/file_manager.html.erb", type: :view do
   it "renders correctly" do
     expect(rendered).to include "<div id=\"filemanager\" data-class-name=\"#{parent.model_name.plural}\" data-resource=\"#{parent.id}\"></div>"
   end
+  context "when given a MVW" do
+    let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, title: "Test Title", member_ids: [child.id]) }
+    let(:child) { FactoryBot.create_for_repository(:scanned_resource, title: "Child Title") }
+    let(:member) { DynamicChangeSet.new(child) }
+    let(:parent) { scanned_resource && member }
+    let(:members) { [] }
+    it "renders a breadcrumb for the parent" do
+      expect(rendered).to have_selector "li a[href='/catalog/#{child.id}']", text: "Child Title"
+      expect(rendered).to have_selector "li a[href='/catalog/#{scanned_resource.id}']", text: "Test Title"
+    end
+  end
 end
