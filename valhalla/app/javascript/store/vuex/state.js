@@ -11,7 +11,8 @@ const state = {
   selected: [],
   ogImages: [],
   changeList: [],
-  ogState: {}
+  ogState: {},
+  manifestLoadState: 'NOT_LOADED'
 }
 
 export default state

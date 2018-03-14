@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         this.resource.id = this.$el.attributes['data-resource'].value
         this.resource.class_name = this.$el.attributes['data-class-name'].value
         this.$store.dispatch('loadImageCollection', this.resource)
+        this.$store.dispatch('changeManifestLoadState', 'LOADING')
     },
   })
 })
