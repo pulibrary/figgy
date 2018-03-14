@@ -12,6 +12,7 @@ class SearchBuilder < Blacklight::SearchBuilder
     solr_parameters[:fq] << "{!terms f=internal_resource_ssim}#{models_to_solr_clause}"
   end
 
+  # Keeps child resources of multi-volume works (MVWs) from appearing in results
   def filter_parented(solr_params)
     solr_params[:fq] ||= []
     solr_params[:fq] << "!member_of_ssim:['' TO *]"
