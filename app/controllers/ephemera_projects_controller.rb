@@ -14,6 +14,14 @@ class EphemeraProjectsController < BaseResourceController
     render 'index'
   end
 
+  def folders
+    render json: { data: datatables_folders }
+  end
+
+  def datatables_folders
+    FolderDataSource.new(resource: resource.decorate, helper: self).data
+  end
+
   def manifest
     @resource = find_resource(params[:id])
     respond_to do |f|

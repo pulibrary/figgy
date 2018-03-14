@@ -2,38 +2,21 @@
   <%# DataTable looks for certain data attributes on initialization
     # https://datatables.net/examples/advanced_init/html5-data-options.html
     # here we sort descending by folder number %>
-  <table id="members" class="table table-striped datatable" data-order='[[0, "desc"]]'>
+  <table id="members" class="table table-striped datatable" data-ajax='<%= polymorphic_path([:folders, resource], format: :json) %>' data-order='[[0, "desc"]]'>
     <thead>
     <tr>
       <% if decorated_resource.is_a?(EphemeraBox) %>
-        <th>Folder Number</th>
+        <th data-data="folder_number">Folder Number</th>
       <% end %>
-      <th>Workflow State</th>
-      <th>Title</th>
-      <th>Barcode</th>
-      <th>Genre</th>
-      <th>Actions</th>
+      <th data-data="workflow_state">Workflow State</th>
+      <th data-data="title">Title</th>
+      <th data-data="barcode">Barcode</th>
+      <th data-data="genre">Genre</th>
+      <th data-data="actions">Actions</th>
     </tr>
     </thead>
     <tbody>
-    <% unless decorated_resource.folders.empty? %>
-      <% decorated_resource.folders.each do |folder| %>
-        <% folder_url = parent_solr_document_path("#{resource.id}", "#{folder.id}") %>
-        <tr>
-          <% if decorated_resource.is_a?(EphemeraBox) %>
-            <td class="folder_number"><%= link_to folder.folder_number, folder_url %></td>
-          <% end %>
-          <td><%= folder.rendered_state %></td>
-          <td><%= folder.header %></td>
-          <td class="barcode"><%= folder.barcode %></td>
-          <td class="genre"><%= folder.genre %></td>
-          <td>
-            <%= link_to 'View', folder_url, class: 'btn btn-default' %>
-            <%= link_to 'Edit', main_app.polymorphic_path([:edit, folder]), class: 'btn btn-default' %>
-          </td>
-        </tr>
-      <% end %>
-    <% else %>
+    <% if decorated_resource.folders_count == 0 %>
       <td>This work has no folders attached.  Click "Attach Folder" to attach folders.</td>
     <% end %>
     </tbody>
