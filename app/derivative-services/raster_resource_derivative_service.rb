@@ -128,7 +128,7 @@ class RasterResourceDerivativeService
   private
 
     def storage_adapter
-      @storage_adapter ||= Valkyrie::StorageAdapter.find(:derivatives)
+      @storage_adapter ||= Valkyrie::StorageAdapter.find(:geo_derivatives)
     end
 
     # This removes all Valkyrie::StorageAdapter::File member Objects from a given Resource (usually a FileSet)

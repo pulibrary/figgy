@@ -35,12 +35,14 @@ RSpec.describe RasterResourceDerivativeService do
     end
   end
 
-  it "creates a display raster intermediate file and a thumbnail" do
+  it "creates a display raster intermediate file and a thumbnail in the geo derivatives directory" do
     resource = query_service.find_by(id: valid_resource.id)
     rasters = resource.file_metadata.find_all { |f| f.label == ["display_raster.tif"] }
     thumbnails = resource.file_metadata.find_all { |f| f.label == ["thumbnail.png"] }
-    expect(rasters.count).to eq 1
-    expect(thumbnails.count).to eq 1
+    raster_file = Valkyrie::StorageAdapter.find_by(id: rasters.first.file_identifiers.first)
+    thumbnail_file = Valkyrie::StorageAdapter.find_by(id: thumbnails.first.file_identifiers.first)
+    expect(raster_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config['geo_derivative_path']).to_s)
+    expect(thumbnail_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config['geo_derivative_path']).to_s)
   end
 
   describe "#cleanup_derivatives" do
