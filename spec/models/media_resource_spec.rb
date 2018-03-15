@@ -11,4 +11,10 @@ RSpec.describe MediaResource do
     media.member_ids = [1, 2, 3, 3]
     expect(media.member_ids).to eq [1, 2, 3, 3]
   end
+
+  it "has bag validation attributes" do
+    media = described_class.new
+    media.bag_validation_success = 1
+    expect(media.bag_validation_success).to eq 1
+  end
 end
