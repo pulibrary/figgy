@@ -14,10 +14,17 @@ exports[`ResourceForm.vue has the expected html structure 1`] = `
   <div
     class="row"
   >
-    <p
-      class="file_count"
-    >
-      Total files: 2
+    <p>
+      <span
+        class="file_count"
+      >
+        Total files: 2
+      </span>
+      <span
+        class="bibid"
+      >
+         | BibId: 4609321
+      </span>
     </p>
      
     <div

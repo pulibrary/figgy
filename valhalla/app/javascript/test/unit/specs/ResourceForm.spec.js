@@ -18,6 +18,7 @@ describe('ResourceForm.vue', () => {
       updateViewHint: jest.fn()
     }
     state = {
+      bibid: '4609321',
       viewingDirection: 'bottom-to-top',
       viewingHint: 'continuous',
       images: Fixtures.imageCollection
@@ -59,7 +60,14 @@ describe('ResourceForm.vue', () => {
     const wrapper = mount(ResourceForm, { options, store, localVue })
     const expanded = wrapper.find('.file_count')
     const fileCount = expanded.html()
-    expect(fileCount).toEqual('<p class="file_count">Total files: 2</p>')
+    expect(fileCount).toEqual('<span class="file_count">Total files: 2</span>')
+  })
+
+  it('displays the bibid, if it has one', () => {
+    const wrapper = mount(ResourceForm, { options, store, localVue })
+    const expanded = wrapper.find('.bibid')
+    const bibid = expanded.html()
+    expect(bibid).toEqual('<span class="bibid"> | BibId: 4609321</span>')
   })
 
   it('has the expected html structure', () => {

@@ -11,6 +11,19 @@ const ManifestoFilemanagerMixins = {
     return main_sequence[0]
   },
 
+  getBibId: function () {
+    let bibid = null
+    const md = this.getMetadata()
+    let bibArray = md.filter((el) =>
+        el.resource.label === 'Source Metadata Identifier'
+    )
+    if (bibArray.length) {
+      bibid = bibArray[0].resource.value[0]
+    }
+
+    return bibid
+  },
+
   getCanvasMainThumb: function (canvas) {
     const images = canvas.getImages()
     let thumb = default_image
@@ -104,6 +117,7 @@ const ManifestoFilemanagerMixins = {
     const IIIFResourceType = this.getIIIFResourceType()
     let imageCollection = {}
     imageCollection.id = resource.id
+    imageCollection.bibid = this.getBibId()
     imageCollection.resourceClassName = Pluralize.singular(resource.class_name)
     if (IIIFResourceType.value == 'collection') {
       imageCollection = this.getMVWImageCollection(imageCollection)

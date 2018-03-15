@@ -8,6 +8,7 @@ const mutations = {
   },
   SET_STATE (state, ImageCollection) {
     state.id = ImageCollection.id
+    state.bibid = ImageCollection.bibid
     state.isMultiVolume = ImageCollection.isMultiVolume
     state.resourceClassName = ImageCollection.resourceClassName
     state.startPage = ImageCollection.startPage
