@@ -60,6 +60,12 @@ describe('mixins', () => {
       const sc = manifestation.getStartCanvasId(s)
       expect(sc).toBe('b8a003bd-cddb-4b01-9acc-4ac3086efc3a')
     })
+
+    it('getBibId', () => {
+      const bibid = manifestation.getBibId()
+      expect(bibid).toBe('4609321')
+    })
+
   })
 
   describe('multi-volume methods', () => {

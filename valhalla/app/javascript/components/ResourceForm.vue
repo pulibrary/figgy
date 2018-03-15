@@ -2,8 +2,7 @@
   <div>
     <h2>Set Properties <small>for this <span v-if="isMultiVolume">multi-volume</span> resource</small></h2>
     <div class="row">
-      <p class="file_count">Total files: {{fileCount}}</p>
-      <p v-if="bibId" class="bibid">BibId: {{bibId}}</p>
+      <p><span class="file_count">Total files: {{fileCount}}</span><span v-if="bibId" class="bibid"> | BibId: {{bibId}}</span></p>
       <!-- Viewing Direction-->
       <div class="form-group col-md-6">
         <fieldset>

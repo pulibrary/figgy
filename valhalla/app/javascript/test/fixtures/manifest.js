@@ -17,6 +17,12 @@ export const manifest = {
       "value": [
         "foo"
       ]
+    },
+    {
+      "label": "Source Metadata Identifier",
+      "value": [
+      "4609321"
+      ]
     }
   ],
   "viewingDirection": "left-to-right",
