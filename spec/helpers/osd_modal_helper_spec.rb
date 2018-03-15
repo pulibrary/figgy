@@ -24,33 +24,4 @@ RSpec.describe OsdModalHelper do
       end
     end
   end
-
-  describe "#build_thumbnail_path" do
-    context "when encountering an error finding a derivative" do
-      it "generates a default image" do
-        expect(helper.build_thumbnail_path("bad")).to eq helper.image_tag('default.png')
-      end
-    end
-  end
-
-  describe "#figgy_thumbnail_path" do
-    context "when given a two-level deep resource" do
-      before do
-        allow(Valkyrie.logger).to receive(:warn).and_return(nil)
-      end
-      it "uses the fileset thumbnail ID" do
-        file_set = FactoryBot.create_for_repository(:file_set)
-        book = FactoryBot.create_for_repository(:scanned_resource, thumbnail_id: file_set.id)
-        parent_book = FactoryBot.create_for_repository(:scanned_resource, thumbnail_id: book.id)
-
-        expect(helper.figgy_thumbnail_path(parent_book)).to include file_set.id.to_s
-      end
-      it "returns nothing when the fileset doesn't exist" do
-        book = FactoryBot.create_for_repository(:scanned_resource, thumbnail_id: Valkyrie::ID.new("busted"))
-        parent_book = FactoryBot.create_for_repository(:scanned_resource, thumbnail_id: book.id)
-
-        expect(helper.figgy_thumbnail_path(parent_book)).to eq nil
-      end
-    end
-  end
 end
