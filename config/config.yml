@@ -1,6 +1,7 @@
 defaults: &defaults
   locations_url: https://bibdata.princeton.edu/locations/digital_locations.json
   derivative_path: <%= Rails.root.join("tmp", "derivatives") %>
+  geo_derivative_path: <%= Rails.root.join("tmp", "geo_derivatives") %>
   repository_path: <%= Rails.root.join("tmp", "files") %>
   cantaloupe_url: <%= ENV.fetch('CANTALOUPE_URL', 'http://localhost:8182/iiif/2/') %>
   plum_solr_url: <%= "http://127.0.0.1:#{ENV['TEST_JETTY_PORT'] || 8984}/solr/figgy-core-test" %>
@@ -93,6 +94,7 @@ test:
   plum_derivative_path: <%= Rails.root.join("spec", "fixtures", "plum_derivatives") %>
   repository_path: <%= Rails.root.join("tmp", "test_files") %>
   derivative_path: <%= Rails.root.join("tmp", "test_derivatives") %>
+  geo_derivative_path: <%= Rails.root.join("tmp", "test_geo_derivatives") %>
   bag_path: <%= Rails.root.join("tmp", "test_bags") %>
   pudl_root: <%= Rails.root.join("spec", "fixtures", "test_pudl_root") %>
   events:
@@ -107,6 +109,7 @@ production:
   <<: *defaults
   repository_path: "/opt/repository/files"
   derivative_path: "/opt/repository/derivatives"
+  geo_derivative_path: "/opt/repository/geo_derivatives"
   plum_solr_url: <%= ENV["PLUM_SOLR_URL"] %>
   plum_binary_path: <%= ENV["PLUM_BINARY_PATH"] || "/mnt/diglibdata/hydra_binaries" %>
   plum_derivative_path: <%= ENV["PLUM_DERIVATIVE_PATH"] || "/mnt/libimages1/data/jp2s/plum_prod" %>
@@ -122,6 +125,7 @@ staging:
   <<: *defaults
   repository_path: "/opt/repository/files"
   derivative_path: "/opt/repository/derivatives"
+  geo_derivative_path: "/opt/repository/geo_derivatives"
   plum_solr_url: <%= ENV["PLUM_SOLR_URL"] %>
   plum_binary_path: <%= ENV["PLUM_BINARY_PATH"] || "/mnt/diglibdata/hydra_binaries" %>
   plum_derivative_path: <%= ENV["PLUM_DERIVATIVE_PATH"] || "/mnt/libimages1/data/jp2s/plum_prod" %>

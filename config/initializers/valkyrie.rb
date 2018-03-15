@@ -75,6 +75,20 @@ Rails.application.config.to_prepare do
 
   Valkyrie::StorageAdapter.register(
     InstrumentedStorageAdapter.new(
+      storage_adapter: Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config['geo_derivative_path'],
+        file_mover: lambda { |old, new|
+                      FileUtils.mv(old, new)
+                      FileUtils.chmod(0o644, new)
+                    }
+      ),
+      tracer: Datadog.tracer
+    ),
+    :geo_derivatives
+  )
+
+  Valkyrie::StorageAdapter.register(
+    InstrumentedStorageAdapter.new(
       storage_adapter: Bagit::StorageAdapter.new(
         base_path: Figgy.config["bag_path"]
       ),
@@ -151,21 +165,17 @@ Rails.application.config.to_prepare do
     )
   )
 
-  # VectorWorkDerivativeService needs its own change_set_persister because the
-  # derivatives may not be in the primary metadata/file storage.
   Valkyrie::Derivatives::DerivativeService.services << VectorWorkDerivativeService::Factory.new(
     change_set_persister: ::PlumChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
-      storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)
+      storage_adapter: Valkyrie::StorageAdapter.find(:geo_derivatives)
     )
   )
 
-  # RasterResourceDerivativeService needs its own change_set_persister because the
-  # derivatives may not be in the primary metadata/file storage.
   Valkyrie::Derivatives::DerivativeService.services << RasterResourceDerivativeService::Factory.new(
     change_set_persister: ::PlumChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
-      storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)
+      storage_adapter: Valkyrie::StorageAdapter.find(:geo_derivatives)
     )
   )
 
