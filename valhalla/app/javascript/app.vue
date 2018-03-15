@@ -30,7 +30,7 @@ export default {
 }
 </script>
 
-<style scope>
+<style scoped>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -91,7 +91,7 @@ export default {
   /* position: fixed;
   right: 25px;
   bottom: 25px; */
-  z-index: 9999;
+  z-index: -1;
 }
 
 

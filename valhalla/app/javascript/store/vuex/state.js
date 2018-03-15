@@ -1,6 +1,7 @@
 // state
 const state = {
   id: '',
+  bibid: '',
   resourceClassName: '',
   isMultiVolume: false,
   startPage: '',

@@ -3,6 +3,7 @@
     <h2>Set Properties <small>for this <span v-if="isMultiVolume">multi-volume</span> resource</small></h2>
     <div class="row">
       <p class="file_count">Total files: {{fileCount}}</p>
+      <p v-if="bibId" class="bibid">BibId: {{bibId}}</p>
       <!-- Viewing Direction-->
       <div class="form-group col-md-6">
         <fieldset>
@@ -54,6 +55,9 @@ export default {
     }
   },
   computed: {
+    bibId: function () {
+      return this.$store.state.bibid
+    },
     fileCount: function () {
       return this.$store.state.images.length
     },
@@ -103,6 +107,11 @@ legend {
 }
 
 .file_count {
+  font-style: italic;
+  color: #777777;
+}
+
+.bibid {
   font-style: italic;
   color: #777777;
 }
