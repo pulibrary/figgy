@@ -28,10 +28,6 @@ class RasterResourceChangeSet < Valhalla::ChangeSet
   validates_with SourceMetadataIdentifierOrTitleValidator
   validates :visibility, :rights_statement, presence: true
 
-  def apply_remote_metadata_directly?
-    true
-  end
-
   # rubocop:disable Metrics/MethodLength
   def primary_terms
     [

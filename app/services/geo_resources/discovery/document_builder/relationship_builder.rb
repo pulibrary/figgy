@@ -27,7 +27,7 @@ module GeoResources
           end
 
           def scanned_map?
-            resource_decorator.is_a?(ScannedMap)
+            resource_decorator.model.is_a?(ScannedMap)
           end
 
           # Returns an array of parent document ids (slugs).

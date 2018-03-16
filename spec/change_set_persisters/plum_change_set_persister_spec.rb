@@ -35,25 +35,62 @@ RSpec.describe PlumChangeSetPersister do
       expect(output.primary_imported_metadata.source_jsonld).not_to be_blank
     end
   end
-  context "when a source_metadata_identifier is set for the first time on a map image" do
+  context "when a source_metadata_identifier is set for the first time on a scanned map" do
     let(:change_set_class) { ScannedMapChangeSet }
     before do
       stub_bibdata(bib_id: '6592452')
       stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
-    it "applies remote metadata from bibdata directly to the resource" do
+    it "applies remote metadata from bibdata to an imported metadata resource" do
       resource = FactoryBot.build(:scanned_map, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: '6592452')
       change_set.sync
       output = change_set_persister.save(change_set: change_set)
 
-      expect(output.title).to eq ["Brazil, Uruguay, Paraguay & Guyana"]
-      expect(output.creator).to eq ["Bartholomew, John, 1805-1861"]
-      expect(output.subject).to eq ["Brazil—Maps", "Guiana—Maps", "Paraguay—Maps", "Uruguay—Maps"]
-      expect(output.spatial).to eq ["Brazil", "Uruguay", "Paraguay", "Guyana"]
+      expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Brazil, Uruguay, Paraguay & Guyana", language: :eng)]
+      expect(output.primary_imported_metadata.creator).to eq ["Bartholomew, John, 1805-1861"]
+      expect(output.primary_imported_metadata.subject).to eq ["Brazil—Maps", "Guiana—Maps", "Paraguay—Maps", "Uruguay—Maps"]
+      expect(output.primary_imported_metadata.spatial).to eq ["Brazil", "Uruguay", "Paraguay", "Guyana"]
     end
   end
+
+  context "when a source_metadata_identifier is set for the first time on a vector work" do
+    let(:change_set_class) { VectorWorkChangeSet }
+    before do
+      stub_bibdata(bib_id: '9649080')
+      stub_ezid(shoulder: "99999/fk4", blade: "123456")
+    end
+    it "applies remote metadata from bibdata to an imported metadata resource" do
+      resource = FactoryBot.build(:vector_work, title: [])
+      change_set = change_set_class.new(resource)
+      change_set.validate(source_metadata_identifier: '9649080')
+      change_set.sync
+      output = change_set_persister.save(change_set: change_set)
+
+      expect(output.primary_imported_metadata.title).to eq ["Syria 100K Vector Dataset"]
+      expect(output.primary_imported_metadata.creator).to eq ["East View Geospatial, Inc"]
+    end
+  end
+
+  context "when a source_metadata_identifier is set for the first time on a raster resource" do
+    let(:change_set_class) { RasterResourceChangeSet }
+    before do
+      stub_bibdata(bib_id: '9637153')
+      stub_ezid(shoulder: "99999/fk4", blade: "123456")
+    end
+    it "applies remote metadata from bibdata to an imported metadata resource" do
+      resource = FactoryBot.build(:raster_resource, title: [])
+      change_set = change_set_class.new(resource)
+      change_set.validate(source_metadata_identifier: '9637153')
+      change_set.sync
+      output = change_set_persister.save(change_set: change_set)
+
+      expect(output.primary_imported_metadata.title).to eq ["Laos : 1:50,000 scale : Digital Raster graphics (DRGs) of topographic maps : complete coverage of the country (Full GeoTiff); 403 maps"]
+      expect(output.primary_imported_metadata.creator).to eq ["Land Info Worldwide Mapping, LLC"]
+    end
+  end
+
   context "when a resource is completed" do
     let(:shoulder) { '99999/fk4' }
     let(:blade) { '123456' }
@@ -146,15 +183,15 @@ RSpec.describe PlumChangeSetPersister do
       stub_bibdata(bib_id: '6866386')
       stub_ezid(shoulder: "99999/fk4", blade: "6866386")
     end
-    it "applies remote metadata from bibdata, without identifier, directly to resource" do
+    it "applies remote metadata from bibdata" do
       resource = FactoryBot.build(:scanned_map, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: '6866386')
       change_set.sync
       output = change_set_persister.save(change_set: change_set)
 
-      expect(output.title).to eq [RDF::Literal.new("Eastern Turkey in Asia. Malatia, sheet 16. Series I.D.W.O. no. 1522", language: :und)]
-      expect(output.identifier).to be nil
+      expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Eastern Turkey in Asia. Malatia, sheet 16. Series I.D.W.O. no. 1522", language: :und)]
+      expect(output.source_metadata_identifier).to eq ['6866386']
     end
   end
 

@@ -100,10 +100,4 @@ RSpec.describe RasterResourceChangeSet do
       expect(change_set.workflow.pending?).to be true
     end
   end
-
-  describe "#apply_remote_metadata_directly?" do
-    it "applies remote metadata directly to the model" do
-      expect(change_set.apply_remote_metadata_directly?).to be true
-    end
-  end
 end

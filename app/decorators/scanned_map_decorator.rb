@@ -29,8 +29,7 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
       :thumbnail_id
     ]
   )
-
-  delegate(*Schema::Common.attributes, to: :primary_imported_metadata, prefix: :imported)
+  delegate(*Schema::Geo.attributes, to: :primary_imported_metadata, prefix: :imported)
 
   def attachable_objects
     [ScannedMap, RasterResource]
@@ -104,7 +103,8 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   end
 
   def rendered_coverage
-    h.bbox_display(coverage)
+    display_coverage = coverage || imported_metadata.try(:first).try(:coverage)
+    h.bbox_display(display_coverage)
   end
 
   def rendered_links

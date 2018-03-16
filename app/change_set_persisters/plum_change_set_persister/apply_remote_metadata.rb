@@ -25,13 +25,7 @@ class PlumChangeSetPersister
     private
 
       def apply(attributes)
-        if change_set.apply_remote_metadata_directly?
-          attributes.delete(:identifier)
-          change_set.validate(attributes)
-          change_set.sync
-        else
-          change_set.model.imported_metadata = ImportedMetadata.new(attributes)
-        end
+        change_set.model.imported_metadata = ImportedMetadata.new(attributes)
       end
   end
 end
