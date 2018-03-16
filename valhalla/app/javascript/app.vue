@@ -80,20 +80,22 @@ export default {
   border: 1px solid #ddd;
 }
 
+/*
+This allows centralized placement of
+vue-flash alerts, but blocks user clicks
+See https://github.com/pulibrary/figgy/issues/920
+for details
+
 .alert-wrap {
   position: fixed;
   width: 500px;
   height: 200px;
   top: 200px;
   left: 50%;
-  margin-top: -100px; /* Negative half of height. */
-  margin-left: -250px; /* Negative half of width. */
-  /* position: fixed;
-  right: 25px;
-  bottom: 25px; */
+  margin-top: -100px;
+  margin-left: -250px;
   z-index: -1;
-}
-
+} */
 
 .loader,
 .loader:after {
