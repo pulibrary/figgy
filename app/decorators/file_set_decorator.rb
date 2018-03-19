@@ -4,6 +4,9 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
     [
       :height,
       :width,
+      :x_resolution,
+      :y_resolution,
+      :bits_per_sample,
       :mime_type,
       :size,
       :md5,
@@ -11,7 +14,8 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
       :sha256,
       :camera_model,
       :software,
-      :geometry
+      :geometry,
+      :processing_note
     ]
   )
 
