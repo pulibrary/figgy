@@ -24,6 +24,33 @@ RSpec.describe RasterResourceDecorator do
   it "cannot manage structure" do
     expect(decorator.manageable_structure?).to be false
   end
+  describe "#display_imported_language" do
+    context "with imported metadata" do
+      let(:resource) do
+        FactoryBot.build(:raster_resource,
+                         title: "test title",
+                         imported_metadata: [{
+                           language: "eng"
+                         }])
+      end
+
+      it "maps keys to english strings" do
+        expect(decorator.display_imported_language).to eq ["English"]
+      end
+    end
+  end
+  describe "#language" do
+    context "with direct metadata" do
+      let(:resource) do
+        FactoryBot.build(:raster_resource,
+                         title: "test title",
+                         language: ["eng"])
+      end
+      it "exposes the language" do
+        expect(decorator.language).to eq ["English"]
+      end
+    end
+  end
   context "with file sets" do
     let(:file_set) do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)

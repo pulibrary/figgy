@@ -58,7 +58,7 @@ module GeoResources
           end
 
           def manifestable?
-            resource_decorator.class.try(:can_have_manifests?)
+            resource_decorator.model.class.can_have_manifests?
           end
 
           # Returns a map set's representative file set decorator.

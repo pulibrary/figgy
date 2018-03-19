@@ -88,10 +88,10 @@ RSpec.describe PlumScannedMapImporter do
 
       members = query_service.find_members(resource: output).to_a
       expect(members[0]).to be_a ScannedMap
-      expect(members[0].title).to eq ["Mount Holly, N.J. (Sheet 1)."]
+      expect(members[0].title.first.to_s).to eq "Mount Holly, N.J. (Sheet 1)."
       expect(members[0].visibility).to eq [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED]
       expect(members[0].member_ids.length).to eq 1
-      expect(members[1].title).to eq ["Mount Holly, N.J. (Sheet 2)."]
+      expect(members[1].title.first.to_s).to eq "Mount Holly, N.J. (Sheet 2)."
       expect(members[1].member_ids.length).to eq 1
       expect(output.thumbnail_id).to eq [members[0].member_ids.first]
 

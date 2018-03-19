@@ -98,7 +98,26 @@ describe GeoResources::Discovery::DocumentBuilder do
     let(:change_set) { ScannedMapChangeSet.new(geo_work, files: []) }
 
     before do
+      stub_bibdata(bib_id: '5144620')
       change_set_persister.save(change_set: change_set)
+    end
+
+    context 'with remote metadata' do
+      let(:geo_work) do
+        FactoryBot.create_for_repository(:scanned_map,
+                                         source_metadata_identifier: '5144620',
+                                         coverage: coverage.to_s,
+                                         subject: ['Sanborn', 'Mount Holly (N.J.)—Maps'],
+                                         visibility: visibility,
+                                         identifier: 'ark:/99999/fk4',
+                                         imported_metadata: [{
+                                           subject: ['Mount Holly (N.J.)—Maps']
+                                         }])
+      end
+
+      it 'merges and deduplicates direct and imported attributes' do
+        expect(document['dc_subject_sm']).to eq ['Mount Holly (N.J.)—Maps', 'Sanborn']
+      end
     end
 
     context 'with no description' do

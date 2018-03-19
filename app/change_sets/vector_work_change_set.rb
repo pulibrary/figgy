@@ -51,8 +51,4 @@ class VectorWorkChangeSet < Valhalla::ChangeSet
     ]
   end
   # rubocop:enable Metrics/MethodLength
-
-  def apply_remote_metadata_directly?
-    true
-  end
 end

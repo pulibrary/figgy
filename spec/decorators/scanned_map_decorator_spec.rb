@@ -43,17 +43,31 @@ RSpec.describe ScannedMapDecorator do
   it "can manage structure" do
     expect(decorator.manageable_structure?).to be true
   end
-  describe '#language' do
-    let(:resource) do
-      FactoryBot.build(:scanned_map,
-                       title: "test title",
-                       author: "test author",
-                       creator: "test creator",
-                       subject: "test subject",
-                       language: ["eng"])
+  describe "#display_imported_language" do
+    context "with imported metadata" do
+      let(:resource) do
+        FactoryBot.build(:scanned_map,
+                         title: "test title",
+                         imported_metadata: [{
+                           language: "eng"
+                         }])
+      end
+
+      it "maps keys to english strings" do
+        expect(decorator.display_imported_language).to eq ["English"]
+      end
     end
-    it "exposes the language" do
-      expect(decorator.language).to eq ['English']
+  end
+  describe "#language" do
+    context "with direct metadata" do
+      let(:resource) do
+        FactoryBot.build(:scanned_map,
+                         title: "test title",
+                         language: ["eng"])
+      end
+      it "exposes the language" do
+        expect(decorator.language).to eq ["English"]
+      end
     end
   end
   context "with file sets" do

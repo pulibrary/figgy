@@ -30,4 +30,9 @@ class ScannedMap < Valhalla::Resource
   def geo_resource?
     true
   end
+
+  def title
+    imported_title = primary_imported_metadata.title.present? ? primary_imported_metadata.title : []
+    @title.present? ? @title : imported_title
+  end
 end

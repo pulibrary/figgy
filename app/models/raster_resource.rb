@@ -6,6 +6,7 @@ class RasterResource < Valhalla::Resource
   attribute :id, Valkyrie::Types::ID.optional
   attribute :member_ids, Valkyrie::Types::Array
   attribute :member_of_collection_ids
+  attribute :imported_metadata, Valkyrie::Types::Set.member(ImportedMetadata).optional
   attribute :state
   attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
   attribute :file_metadata, Valkyrie::Types::Set.member(FileMetadata.optional)
@@ -17,5 +18,14 @@ class RasterResource < Valhalla::Resource
 
   def geo_resource?
     true
+  end
+
+  def primary_imported_metadata
+    Array.wrap(imported_metadata).first || ImportedMetadata.new
+  end
+
+  def title
+    imported_title = primary_imported_metadata.title.present? ? primary_imported_metadata.title : []
+    @title.present? ? @title : imported_title
   end
 end

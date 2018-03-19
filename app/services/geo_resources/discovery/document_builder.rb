@@ -28,7 +28,7 @@ module GeoResources
       self.root_path_class = DocumentPath
 
       def initialize(record, document)
-        @resource_decorator = record.decorate
+        @resource_decorator = GeoblacklightMetadataDecorator.new(record.decorate)
         @document = document
         builders.build(document)
       end
