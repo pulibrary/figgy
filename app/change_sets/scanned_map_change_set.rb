@@ -17,6 +17,7 @@ class ScannedMapChangeSet < ScannedResourceChangeSet
       :rights_note,
       :coverage,
       :local_identifier,
+      :holding_location,
       :member_of_collection_ids,
       :append_id,
       :description,
