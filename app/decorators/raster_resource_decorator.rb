@@ -3,6 +3,7 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
   display(Schema::Geo.attributes)
   display(
     [
+      :rendered_holding_location,
       :rendered_coverage,
       :member_of_collections
     ]
@@ -10,7 +11,8 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
   suppress(
     [
       :thumbnail_id,
-      :coverage
+      :coverage,
+      :source_jsonld
     ]
   )
   delegate(*Schema::Geo.attributes, to: :primary_imported_metadata, prefix: :imported)
@@ -74,6 +76,15 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
   def rendered_coverage
     display_coverage = coverage || imported_metadata.try(:first).try(:coverage)
     h.bbox_display(display_coverage)
+  end
+
+  def rendered_holding_location
+    value = holding_location
+    return unless value.present?
+    vocabulary = ControlledVocabulary.for(:holding_location)
+    value.map do |holding_location|
+      vocabulary.find(holding_location).label
+    end
   end
 
   def rendered_rights_statement

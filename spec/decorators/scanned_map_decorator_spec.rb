@@ -9,7 +9,8 @@ RSpec.describe ScannedMapDecorator do
                      author: "test author",
                      creator: "test creator",
                      references: links.to_json,
-                     subject: "test subject")
+                     subject: "test subject",
+                     holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/14")
   end
   let(:links) do
     {
@@ -28,6 +29,9 @@ RSpec.describe ScannedMapDecorator do
   it "exposes markup for rights statement" do
     expect(resource.decorate.rendered_rights_statement).not_to be_empty
     expect(resource.decorate.rendered_rights_statement.first).to match(/#{Regexp.escape('http://rightsstatements.org/vocab/NKC/1.0/')}/)
+  end
+  it "exposes markup for rendered holding_location" do
+    expect(resource.decorate.rendered_holding_location.first).to eq("Lewis Library")
   end
   it "exposes markup for rendered coverage" do
     expect(resource.decorate.rendered_coverage).to match(/#{Regexp.escape('boundingBoxSelector')}/)
