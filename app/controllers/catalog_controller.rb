@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class CatalogController < ApplicationController
   include ::Hydra::Catalog
+  include TokenAuth
   layout "application"
   def self.search_config
     {
