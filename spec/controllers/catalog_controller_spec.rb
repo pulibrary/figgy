@@ -356,6 +356,16 @@ RSpec.describe CatalogController do
   end
 
   describe "#show" do
+    context "when rendered for an admin auth token" do
+      render_views
+      it "renders" do
+        authorization_token = AuthToken.create!(group: ["admin"], label: "Admin Token")
+        resource = persister.save(resource: FactoryBot.build(:pending_private_scanned_resource, workflow_note: WorkflowNote.new(author: "Shakespeare", note: "Test Comment")))
+
+        get :show, params: { id: resource.id, format: :json, auth_token: authorization_token.token }
+        expect(response).to be_success
+      end
+    end
     context "when rendered for an admin" do
       before do
         sign_in FactoryBot.create(:admin)
