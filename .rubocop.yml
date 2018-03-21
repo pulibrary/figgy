@@ -12,7 +12,7 @@ AllCops:
     - 'db/schema.rb'
     - 'spec/support/**/*'
     - 'node_modules/**/*'
-    - 'simple-tiles/**/*'
+    - 'tmp/**/*'
 Style/FileName:
   Enabled: true
   Exclude:
@@ -20,22 +20,9 @@ Style/FileName:
     - '**/*.rake'
     - 'valhalla/Gemfile'
     - 'Capfile'
-    - 'simple-tiles/Vagrantfile'
 Style/PredicateName:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
-Style/FrozenStringLiteralComment:
-  Exclude:
-    - 'simple-tiles/Vagrantfile'
-Style/BarePercentLiterals:
-  Exclude:
-    - 'simple-tiles/Vagrantfile'
-Style/PercentLiteralDelimiters:
-  Exclude:
-    - 'simple-tiles/Vagrantfile'
-Style/UnneededPercentQ:
-  Exclude:
-    - 'simple-tiles/Vagrantfile'
 Rails/OutputSafety:
   Exclude:
     - 'app/decorators/**/*'

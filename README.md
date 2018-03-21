@@ -48,6 +48,15 @@ Linux:
   ./configure
   make && make install
   ```
+  * Python:
+
+    Should you receive the following error during the installation...
+
+    ```
+    TypeError: unsupported operand type(s) for +: 'dict_items' and 'list' make: *** [install] Error 2
+    ```
+
+    ...please know that you must downgrade to the latest stable release of Python 2.x.
 
 ## Initial Setup
 
