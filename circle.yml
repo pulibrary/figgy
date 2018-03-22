@@ -13,11 +13,11 @@ dependencies:
     - rm google-chrome.deb
     - sudo apt-get update
     - sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev
-    - sudo sh bin/ci_simple_tiles_install.sh
   cache_directories:
     - kakadu
-    - simple-tiles
+    - tmp/simple-tiles
   post:
+    - sudo sh bin/ci_simple_tiles_install.sh
     - NODE_ENV=test bundle exec rails webpacker:compile
     - sudo sh bin/ci_kakadu_install.sh
     - bundle exec rake rubocop

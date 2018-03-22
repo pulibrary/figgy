@@ -48,6 +48,15 @@ Linux:
   ./configure
   make && make install
   ```
+  * Python:
+
+    Should you receive the following error during the installation...
+
+    ```
+    TypeError: unsupported operand type(s) for +: 'dict_items' and 'list' make: *** [install] Error 2
+    ```
+
+    ...please know that you must downgrade to the latest stable release of Python 2.x.
 
 ## Initial Setup
 
@@ -100,6 +109,10 @@ To load the controlled vocabularies in `config/vocab/`:
 ## Note on webpacker setup
 
 Webpacker documentation assumes use of yarn as a javascript package manager. Our setup uses npm directly instead of yarn. Therefore, when upgrading webpacker modify instructions on the webpacker README to use `npm update --save` instead of `yarn upgrade --latest`
+
+## Uploading files from Google Drive
+
+By default, Figgy provides users with the ability to upload files from the local file system environment, using the directory `/staged_files`.  However, Figgy may also be configured to upload files from a user's Google Drive account.
 
 ## More
 For links to helpful valkyrie documentation and troubleshooting tips, visit the [wiki pages](https://github.com/pulibrary/figgy/wiki).
