@@ -20,13 +20,7 @@ exports[`Controls.vue has the expected html structure 1`] = `
     
     </button>
      
-    <a
-      class="is-hidden"
-      href=""
-      id="replace-file-button"
-    >
-      Manage Page Files
-    </a>
+    <!---->
   </div>
 </div>
 `;
