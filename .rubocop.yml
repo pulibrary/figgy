@@ -119,6 +119,7 @@ RSpec/AnyInstance:
   Exclude:
     - 'spec/jobs/ingest_mets_job_spec.rb'
     - 'spec/services/manifest_builder_spec.rb'
+    - 'spec/services/geoblacklight_messaging_client_spec.rb'
     - 'spec/services/messaging_client_spec.rb'
     - 'spec/jobs/check_fixity_recursive_job_spec.rb'
     - 'spec/controllers/fixity_dashboard_controller_spec.rb'

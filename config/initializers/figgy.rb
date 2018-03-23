@@ -8,6 +8,10 @@ module Figgy
     @messaging_client ||= MessagingClient.new(Figgy.config['events']['server'])
   end
 
+  def geoblacklight_messaging_client
+    @geoblacklight_messaging_client ||= GeoblacklightMessagingClient.new(Figgy.config['events']['server'])
+  end
+
   def default_url_options
     @default_url_options ||= ActionMailer::Base.default_url_options
   end
@@ -18,5 +22,5 @@ module Figgy
       YAML.safe_load(ERB.new(File.read(Rails.root.join("config", "config.yml"))).result, [], [], true)[Rails.env]
     end
 
-    module_function :config, :config_yaml, :messaging_client, :default_url_options
+    module_function :config, :config_yaml, :messaging_client, :geoblacklight_messaging_client, :default_url_options
 end

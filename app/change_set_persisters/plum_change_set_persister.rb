@@ -145,7 +145,7 @@ class PlumChangeSetPersister
     end
 
     def messenger
-      @messenger ||= ManifestEventGenerator.new(Figgy.messaging_client)
+      @messenger ||= EventGenerator.new
     end
 
     private

@@ -16,7 +16,7 @@ class GeoblacklightMetadataDecorator < SimpleDelegator
     # Merge direct attribute values with imported attribute values and deduplicate.
     def merged_attributes
       direct_attributes.map do |key, value|
-        imported_value = __getobj__.imported_attributes.fetch(key, nil) || []
+        imported_value = __getobj__.primary_imported_metadata.send(key) || []
         merged_values = imported_value + value
         [key, merged_values.uniq]
       end.to_h

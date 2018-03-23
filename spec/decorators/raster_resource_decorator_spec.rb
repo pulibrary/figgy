@@ -55,6 +55,21 @@ RSpec.describe RasterResourceDecorator do
       end
     end
   end
+  describe "#imported_attributes" do
+    context "with imported metadata" do
+      let(:resource) do
+        FactoryBot.build(:scanned_map,
+                         title: "test title",
+                         imported_metadata: [{
+                           subject: "test subject"
+                         }])
+      end
+
+      it "maps keys to english strings" do
+        expect(decorator.imported_attributes).to include subject: ["test subject"]
+      end
+    end
+  end
   context "with file sets" do
     let(:file_set) do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
