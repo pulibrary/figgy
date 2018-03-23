@@ -17,7 +17,7 @@ const mutations = {
     state.viewingDirection = ImageCollection.viewingDirection
     state.images = ImageCollection.images
     state.ogImages = ImageCollection.images
-    state.ogState = { startPage: ImageCollection.startpage,
+    state.ogState = { startPage: ImageCollection.startPage,
                       thumbnail: ImageCollection.thumbnail,
                       viewingHint: ImageCollection.viewingHint,
                       viewingDirection: ImageCollection.viewingDirection
