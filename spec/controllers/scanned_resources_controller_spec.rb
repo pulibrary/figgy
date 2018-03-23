@@ -93,7 +93,7 @@ RSpec.describe ScannedResourcesController do
     context "when asked to save and import" do
       before do
         allow(BrowseEverything).to receive(:config).and_return(
-          "file_system" => {
+          file_system: {
             home: Rails.root.join("spec", "fixtures", "staged_files").to_s
           }
         )
@@ -523,7 +523,7 @@ RSpec.describe ScannedResourcesController do
     let(:user) { FactoryBot.create(:admin) }
     before do
       allow(BrowseEverything).to receive(:config).and_return(
-        "file_system" => {
+        file_system: {
           home: Rails.root.join("spec", "fixtures", "staged_files").to_s
         }
       )
