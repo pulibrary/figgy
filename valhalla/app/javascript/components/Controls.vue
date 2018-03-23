@@ -7,7 +7,7 @@
       <button @click="saveHandler" id="save_btn" type="button" class="btn btn-lg btn-primary" :disabled="isDisabled">
         Apply Changes
       </button>
-      <a :href="editLink" id="replace-file-button" v-bind:class="{'is-hidden' : hidden }">Manage Page Files</a>
+      <a v-if="!hidden" :href="editLink" id="replace-file-button">Manage Page Files</a>
     </div>
   </div>
 </template>
@@ -128,6 +128,7 @@ export default {
 <style>
 #replace-file-button {
   padding: 1.5rem;
+  display: inline-block;
 }
 .is-hidden {
   display: none;
