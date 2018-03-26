@@ -12,15 +12,15 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   validates_with StateValidator
 
   include VisibilityProperty
-  property :barcode, multiple: false, required: true
-  property :folder_number, multiple: false, required: true
+  property :barcode, multiple: false, required: true  # note: default required; overridden below
+  property :folder_number, multiple: false, required: true  # note: default required; overridden below
   property :title, multiple: false, required: true
   property :sort_title, required: false
   property :alternative_title, multiple: true, required: false
   property :language, multiple: true, required: true
   property :genre, multiple: false, required: true
-  property :width, multiple: false, required: true
-  property :height, multiple: false, required: true
+  property :width, multiple: false, required: true  # note: default required; overridden below
+  property :height, multiple: false, required: true  # note: default required; overridden below
   property :page_count, multiple: false, required: true
   property :series, multiple: false, required: false
   property :creator, multiple: false, required: false
@@ -54,6 +54,15 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   property :date_range, multiple: false, required: false
   property :date_range_form_attributes, virtual: true
   delegate :human_readable_type, to: :model
+
+  def required?(field_name)
+    contextual_requirements = [:barcode, :folder_number, :height, :width]
+    if contextual_requirements.include?(field_name) && model.decorate.parent.respond_to?(:model)
+      model.decorate.parent.model.class != EphemeraProject
+    else
+      super
+    end
+  end
 
   def date_range_form_attributes=(attributes)
     return unless date_range_form.validate(attributes)

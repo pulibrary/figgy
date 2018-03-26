@@ -40,4 +40,34 @@ RSpec.describe EphemeraFolderChangeSet do
       expect(change_set.visibility).to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
   end
+
+  context "within a box" do
+    let(:change_set) { described_class.new(resource) }
+    let(:resource) { FactoryBot.create_for_repository(:ephemera_folder) }
+
+    describe "required fields" do
+      it "are required" do
+        box = FactoryBot.create_for_repository(:ephemera_box, member_ids: resource.id)
+        expect(change_set.required?(:barcode)).to eq true
+        expect(change_set.required?(:folder_number)).to eq true
+        expect(change_set.required?(:height)).to eq true
+        expect(change_set.required?(:width)).to eq true
+      end
+    end
+  end
+
+  context "within a project" do
+    let(:change_set) { described_class.new(resource) }
+    let(:resource) { FactoryBot.create_for_repository(:ephemera_folder) }
+
+    describe "required field overrides" do
+      it "are not required" do
+        project = FactoryBot.create_for_repository(:ephemera_project, member_ids: resource.id)
+        expect(change_set.required?(:barcode)).to eq false
+        expect(change_set.required?(:folder_number)).to eq false
+        expect(change_set.required?(:height)).to eq false
+        expect(change_set.required?(:width)).to eq false
+      end
+    end
+  end
 end

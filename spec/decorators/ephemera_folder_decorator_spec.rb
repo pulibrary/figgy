@@ -94,7 +94,7 @@ RSpec.describe EphemeraFolderDecorator do
 
   context "within a project" do
     let(:resource) { FactoryBot.create_for_repository(:ephemera_folder) }
-    it "can return the box it's a member of" do
+    it "can return the project it's a member of" do
       project = FactoryBot.create_for_repository(:ephemera_project, member_ids: resource.id)
 
       expect(resource.decorate.ephemera_project.id).to eq project.id
