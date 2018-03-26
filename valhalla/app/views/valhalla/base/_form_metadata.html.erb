@@ -1,7 +1,5 @@
   <% (@change_set.primary_terms).each do |field| %>
-    <% cache field do %>
-      <%= render_edit_field_partial field, f: f, cached: true %>
-    <% end %>
+    <%= cached_field(@change_set, field, f) %>
   <% end %>
   <% if @change_set.respond_to?(:files) %>
     <%= f.input :files, as: :file, input_html: { multiple: true }, required: false %>
