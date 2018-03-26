@@ -57,8 +57,8 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   delegate :human_readable_type, to: :model
 
   def required?(field_name)
-    if contextual_requirements.include?(field_name) && model.decorate.parent.respond_to?(:model)
-      model.decorate.parent.model.class != EphemeraProject
+    if contextual_requirements.include?(field_name)
+      !boxless?
     else
       super
     end
@@ -166,7 +166,7 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
     end
 
     def contextual_requirements_present
-      return if model.decorate.parent.respond_to?(:model) && model.decorate.parent.model.class == EphemeraProject
+      return if boxless?
       contextual_requirements.each do |prop|
         unless Array.wrap(send(prop)).find(&:present?)
           errors.add(prop, "must be provided.")
@@ -176,5 +176,13 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
 
     def contextual_requirements
       [:barcode, :folder_number, :height, :width]
+    end
+
+    def parent
+      @parent ||= model.decorate.parent
+    end
+
+    def boxless?
+      parent.respond_to?(:model) && parent.model.class == EphemeraProject
     end
 end
