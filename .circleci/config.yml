@@ -48,6 +48,7 @@ jobs:
           - run: dockerize -wait tcp://localhost:5432 -timeout 1m
           - run: NODE_ENV=test bundle exec rails webpacker:compile
           - run: sudo sh bin/ci_kakadu_install.sh
+          - run: npm test
           - run: bundle exec rake rubocop
           - run: 
               command: bundle exec rake figgy:test
