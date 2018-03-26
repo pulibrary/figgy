@@ -5,7 +5,9 @@ class BoxlessEphemeraFolderChangeSet < EphemeraFolderChangeSet
     super
   end
 
-  validates :title, :language, :genre, :width, :height, :page_count, :visibility, :rights_statement, presence: true
+  validates :title, :language, :genre, :page_count, :visibility, :rights_statement, presence: true
   property :barcode, multiple: false, required: false
   property :folder_number, multiple: false, required: false
+  property :width, multiple: false, required: false
+  property :height, multiple: false, required: false
 end
