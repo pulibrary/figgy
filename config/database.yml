@@ -9,6 +9,9 @@ development: &default
 
 test:
   <<: *default
+  host: <%= ENV["FIGGY_DB_HOST"] %>
+  username: <%= ENV["FIGGY_DB_USERNAME"] %>
+  password: <%= ENV["FIGGY_DB_PASSWORD"] %>
   database: figgy_test
 
 production: &deploy
