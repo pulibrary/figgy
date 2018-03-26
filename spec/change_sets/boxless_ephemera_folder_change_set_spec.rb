@@ -17,4 +17,16 @@ RSpec.describe BoxlessEphemeraFolderChangeSet do
       expect(change_set.required?(:folder_number)).to eq false
     end
   end
+
+  describe "#height" do
+    it "is not required" do
+      expect(change_set.required?(:height)).to eq false
+    end
+  end
+
+  describe "#width" do
+    it "is not required" do
+      expect(change_set.required?(:width)).to eq false
+    end
+  end
 end
