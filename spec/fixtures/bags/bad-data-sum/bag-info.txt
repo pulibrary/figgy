@@ -1,0 +1,5 @@
+Bagging-Date: 2018-03-15
+External-Description: Mushroom Risotto
+Internal-Sender-Identifier: http://localhost:3000/catalog/2635062f-a448-4734-9471-e96e7cf21b20
+Organization-Address: One Washington Road, Princeton, NJ 08544-2098, USA
+Source-Organization: Princeton University Library
