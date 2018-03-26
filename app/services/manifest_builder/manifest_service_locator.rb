@@ -17,6 +17,7 @@ class ManifestBuilder
           license_builder,
           thumbnail_builder,
           rendering_builder,
+          logo_builder,
           composite_builder: composite_builder
         )
       end
@@ -70,6 +71,13 @@ class ManifestBuilder
       # @return [Class]
       def rendering_builder
         ManifestBuilder::RenderingBuilder
+      end
+
+      ##
+      # Class accessor for the logo builder
+      # @return [Class]
+      def logo_builder
+        ManifestBuilder::LogoBuilder
       end
 
       ##

@@ -94,6 +94,7 @@ RSpec.describe ManifestBuilder do
       expect(output["thumbnail"]["@id"]).to eq "#{first_image['resource']['service']['@id']}/full/!200,150/0/default.jpg"
       expect(output["thumbnail"]["service"]["@id"]).to eq first_image["resource"]["service"]["@id"]
       expect(output["sequences"][0]["startCanvas"]).to eq canvas_id
+      expect(output["logo"]).to eq("https://www.example.com/assets/pul_logo_icon-7b5f9384dfa5ca04f4851c6ee9e44e2d6953e55f893472a3e205e1591d3b2ca6.png")
     end
 
     context "when there's no derivative_file" do
