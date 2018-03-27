@@ -245,6 +245,7 @@ RSpec.describe ManifestBuilder do
       expect(output["license"]).to eq "http://rightsstatements.org/vocab/NKC/1.0/"
       # not allowed in collections until iiif presentation api v3
       expect(output["viewingDirection"]).to eq nil
+      expect(output["manifests"][0]["thumbnail"]["@id"]).to eq "http://www.example.com/image-service/#{child.member_ids.first}/full/!200,150/0/default.jpg"
     end
   end
 

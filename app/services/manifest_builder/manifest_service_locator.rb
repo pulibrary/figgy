@@ -134,7 +134,12 @@ class ManifestBuilder
       def real_child_manifest_builder
         IIIFManifest::ManifestServiceLocator::InjectedFactory.new(
           IIIFManifest::ManifestBuilder,
-          builders: child_record_property_builder,
+          builders:
+          composite_builder_factory.new(
+            child_record_property_builder,
+            thumbnail_builder,
+            composite_builder: composite_builder
+          ),
           top_record_factory: iiif_manifest_factory
         )
       end
