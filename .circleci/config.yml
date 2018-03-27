@@ -77,7 +77,8 @@ jobs:
           background: true
       - run: bin/jetty_wait
       - run: bundle exec rake db:setup
-      - run: bundle exec rspec spec
+      - run: bundle exec rake knapsack:rspec
+        parallelism: 3
   npm_test:
     working_directory: ~/figgy
     docker:
