@@ -75,7 +75,7 @@ gem 'browse-everything', github: 'samvera/browse-everything'
 gem 'coffee-rails'
 gem 'devise'
 gem 'ezid-client'
-gem 'geo_works-derivatives', github: "pulibrary/geo_works-derivatives", tag: 'v0.1.0'
+gem 'geo_works-derivatives', github: "pulibrary/geo_works-derivatives", tag: 'v0.2.1'
 gem 'hydra-head'
 gem 'hydra-role-management'
 gem 'iiif_manifest', github: "samvera-labs/iiif_manifest"
