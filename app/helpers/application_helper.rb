@@ -80,39 +80,4 @@ module ApplicationHelper
       'default'
     end
   end
-
-  def metadata_adapter
-    Valkyrie::MetadataAdapter.find(:postgres)
-  end
-
-  def cached_field(change_set, field, f)
-    model = change_set.model
-    decorated = model.decorate
-
-    if decorated.respond_to?(:parent)
-      if decorated.parent.empty?
-        if params[:parent_id]
-          parent_id = params[:parent_id]
-          parent = metadata_adapter.query_service.find_by(id: Valkyrie::ID.new(parent_id))
-        end
-      else
-        parent = decorated.parent.first
-      end
-      updated = parent ? parent.updated_at : ''
-    elsif model.updated_at
-      updated = model.updated_at
-    end
-
-    if updated
-      cache_key_base = updated.to_f.to_s
-
-      cache_key = "#{cache_key_base}/#{field}"
-
-      Rails.cache.fetch(cache_key, expires_in: 24.hours) do
-        render_edit_field_partial field, f: f
-      end
-    else
-      render_edit_field_partial field, f: f
-    end
-  end
 end
