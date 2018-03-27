@@ -97,6 +97,17 @@ RSpec.describe ManifestBuilder do
       expect(output["logo"]).to eq("https://www.example.com/assets/pul_logo_icon-7b5f9384dfa5ca04f4851c6ee9e44e2d6953e55f893472a3e205e1591d3b2ca6.png")
     end
 
+    context "when it's a cicognara item" do
+      let(:scanned_resource) do
+        FactoryBot.create_for_repository(:scanned_resource,
+                                         rights_statement: RDF::URI("http://cicognara.org/microfiche_copyright"))
+      end
+      it "provides the vatican logo" do
+        output = manifest_builder.build
+        expect(output["logo"]).to eq("https://www.example.com/assets/vatican-f101dc8edbdd7cfb0b0152c2d2304e805c215cbff0e7ac25fb72dbfd1c568bfc.png")
+      end
+    end
+
     context "when there's no derivative_file" do
       it "doesn't generate a IIIF endpoint" do
         allow_any_instance_of(FileSet).to receive(:derivative_file).and_return(nil)
