@@ -4,7 +4,9 @@ require 'rails_helper'
 RSpec.describe DataSeeder do
   let(:seeder) { described_class.new(logger) }
   let(:many_files) { 2 }
-  let(:many_members) { 2 }
+  let(:mvw_volumes) { 2 }
+  let(:sammel_files) { 2 }
+  let(:sammel_vols) { 2 }
   let(:query_service) { Valkyrie::MetadataAdapter.find(:indexing_persister).query_service }
 
   # stub out the log messages
@@ -21,13 +23,17 @@ RSpec.describe DataSeeder do
   # combine tests to reduce expensive object creation
   describe "#generate_dev_data" do
     it "generates lots of objects" do
-      n_files = many_members + 1 + # parent, and each member has a fileset
+      n_files = mvw_volumes + # each volume member has a fileset
+                sammel_vols + #  each volume member has a fileset
+                sammel_files +
                 many_files +
                 1 # the scanned map created
-      n_scanned_resources = many_members + 1 + # the parent member
-                            1 # the many files parent
+      n_scanned_resources = mvw_volumes + sammel_vols +
+                            1 + # the mvw parent
+                            1 + # the many files parent
+                            1 # the sammelband parent
 
-      seeder.generate_dev_data(many_files: many_files, many_members: many_members)
+      seeder.generate_dev_data(many_files: many_files, mvw_volumes: mvw_volumes, sammel_files: sammel_files, sammel_vols: sammel_vols)
       expect(query_service.find_all_of_model(model: FileSet).count).to eq n_files
       expect(query_service.find_all_of_model(model: ScannedResource).count).to eq n_scanned_resources
       expect(query_service.find_all_of_model(model: ScannedMap).count).to eq 1
