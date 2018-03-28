@@ -22,7 +22,7 @@ class EphemeraFolderChangeSet < Valhalla::ChangeSet
   property :width, multiple: false, required: true
   property :height, multiple: false, required: true
   property :page_count, multiple: false, required: true
-  property :series, multiple: false, required: false
+  property :series, multiple: true, required: false
   property :creator, multiple: false, required: false
   property :contributor, multiple: true, required: false
   property :publisher, multiple: true, required: false

@@ -40,4 +40,10 @@ RSpec.describe EphemeraFolderChangeSet do
       expect(change_set.visibility).to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
   end
+
+  describe "#series" do
+    it "is multi-valued" do
+      expect(change_set.multiple?(:series)).to be true
+    end
+  end
 end
