@@ -12,9 +12,10 @@ class DataSeeder
     @logger = logger
   end
 
-  def generate_dev_data(many_files:, many_members:)
-    generate_resource_with_many_files(n: many_files)
-    generate_resource_with_many_members(n: many_members)
+  def generate_dev_data(many_files:, mvw_volumes:, sammel_files:, sammel_vols:)
+    generate_resource_with_files(n: many_files)
+    generate_multi_volume_work(n: mvw_volumes)
+    generate_sammelband(file_count: sammel_files, volume_count: sammel_vols)
     generate_scanned_map
     object_count_report
   end
@@ -29,24 +30,32 @@ class DataSeeder
     end
   end
 
-  def generate_resource_with_many_files(n:)
-    sr = ScannedResource.new(attributes_hash.merge(title: "Multi-file resource"))
+  def generate_resource_with_files(n:)
+    sr = generate_scanned_resource(title: "Resource with #{n} files")
     sr = persister.save(resource: sr)
     n.times { add_file(resource: sr) }
     logger.info "Created scanned resource #{sr.id}: #{sr.title} with #{n} files"
+    sr
   end
 
-  def generate_resource_with_many_members(n:)
-    parent = generate_scanned_resource(title: "Parent resource with many members")
+  def generate_multi_volume_work(n:)
+    parent = generate_scanned_resource(title: "Multi volume work")
     n.times do
-      add_child_resource(child: generate_scanned_resource, parent_id: parent.id)
+      add_child_resource(child: generate_resource_with_files(n: 1), parent_id: parent.id)
+    end
+  end
+
+  def generate_sammelband(file_count:, volume_count:)
+    parent = generate_scanned_resource(title: "Sammelband")
+    file_count.times { add_file(resource: parent) }
+    volume_count.times do
+      add_child_resource(child: generate_resource_with_files(n: 1), parent_id: parent.id)
     end
   end
 
   def generate_scanned_resource(attrs = {})
     sr = ScannedResource.new(attributes_hash.merge(attrs))
     sr = persister.save(resource: sr)
-    add_file(resource: sr)
     logger.info "Created scanned resource #{sr.id}: #{sr.title}"
     sr
   end
