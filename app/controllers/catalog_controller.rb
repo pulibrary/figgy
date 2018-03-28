@@ -70,7 +70,10 @@ class CatalogController < ApplicationController
     config.add_sort_field "updated_at_dtsi asc", label: "date modified \u25B2"
   end
 
+  # Determine whether or not a user can edit the resource in the current context
+  # @return [TrueClass, FalseClass]
   def can_edit?
+    return false unless @document
     can?(:edit, @document.resource)
   end
 
