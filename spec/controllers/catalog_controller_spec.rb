@@ -156,6 +156,25 @@ RSpec.describe CatalogController do
 
         expect(assigns(:document_list).length).to eq 2
       end
+
+      context 'with a non-Latin title which has been transliterated' do
+        let(:title) { 'Что делать?' }
+        let(:transliterated_title) { 'Chto delat\'?' }
+
+        before do
+          persister.save(resource: FactoryBot.build(:ephemera_folder, title: title, transliterated_title: transliterated_title))
+        end
+
+        it 'can search by the non-Latin title' do
+          get :index, params: { q: 'Что' }
+          expect(assigns(:document_list).length).to eq 1
+        end
+
+        it 'can search by the transliterated title' do
+          get :index, params: { q: 'Chto' }
+          expect(assigns(:document_list).length).to eq 1
+        end
+      end
     end
   end
 

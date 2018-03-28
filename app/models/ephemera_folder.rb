@@ -8,6 +8,7 @@ class EphemeraFolder < Valhalla::Resource
   attribute :title, Valkyrie::Types::Set
   attribute :sort_title, Valkyrie::Types::Set
   attribute :alternative_title, Valkyrie::Types::Set
+  attribute :transliterated_title, Valkyrie::Types::Set
   attribute :language, Valkyrie::Types::Set
   attribute :genre
   attribute :width, Valkyrie::Types::Set

@@ -9,6 +9,15 @@ RSpec.describe EphemeraFolder do
   it "has a title" do
     expect(folder.title).to include 'test title'
   end
+  context 'with a title in a non-Latin orthographies' do
+    subject(:folder) { described_class.new(title: title, transliterated_title: transliterated_title) }
+    let(:title) { 'Что делать?' }
+    let(:transliterated_title) { 'Chto delat\'?' }
+    it 'has a non-Latin title and a transliterated Latin title' do
+      expect(folder.title).to include title
+      expect(folder.transliterated_title).to include transliterated_title
+    end
+  end
   it "has ordered member_ids" do
     folder.member_ids = [1, 2, 3, 3]
     expect(folder.member_ids).to eq [1, 2, 3, 3]
