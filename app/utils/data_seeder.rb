@@ -157,7 +157,8 @@ class DataSeeder
         read_groups: 'public',
         state: 'complete',
         visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
-        import_metadata: false
+        import_metadata: false,
+        provenance: 'the moon'
       }
     end
 
