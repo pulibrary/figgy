@@ -26,7 +26,7 @@ class PlumDerivativeService
   end
 
   def valid?
-    mime_type == ['image/tiff'] && !parent.is_a?(ScannedMap)
+    ['image/tiff', 'image/jpeg'].include?(mime_type.first) && !parent.is_a?(ScannedMap)
   end
 
   def parent

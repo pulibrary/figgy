@@ -26,40 +26,65 @@ RSpec.describe Jp2DerivativeService do
   describe '#valid?' do
     subject(:valid_file) { derivative_service.new(valid_change_set) }
 
-    context 'when given a valid mime_type' do
+    context 'when given a tiff mime_type' do
       it { is_expected.to be_valid }
+    end
+
+    context 'when given a jpeg mime_type' do
+      it 'is valid' do
+        # rubocop:disable RSpec/SubjectStub
+        allow(valid_file).to receive(:mime_type).and_return(['image/jpeg'])
+        # rubocop:enable RSpec/SubjectStub
+        is_expected.to be_valid
+      end
     end
 
     context 'when given an invalid mime_type' do
       it 'does not validate' do
         # rubocop:disable RSpec/SubjectStub
-        allow(valid_file).to receive(:mime_type).and_return(['image/jpeg'])
+        allow(valid_file).to receive(:mime_type).and_return(['image/not-valid'])
         # rubocop:enable RSpec/SubjectStub
         is_expected.not_to be_valid
       end
     end
   end
 
-  it "creates a JP2 and attaches it to the fileset" do
-    derivative_service.new(valid_change_set).create_derivatives
-
-    reloaded = query_service.find_by(id: valid_resource.id)
-    derivative = reloaded.derivative_file
-
-    expect(derivative).to be_present
-    derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
-    expect(derivative_file.read).not_to be_blank
-  end
-
-  describe '#cleanup_derivatives' do
-    before do
+  context 'tiff source' do
+    it "creates a JP2 and attaches it to the fileset" do
       derivative_service.new(valid_change_set).create_derivatives
+
+      reloaded = query_service.find_by(id: valid_resource.id)
+      derivative = reloaded.derivative_file
+
+      expect(derivative).to be_present
+      derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
+      expect(derivative_file.read).not_to be_blank
     end
 
-    it "deletes the attached fileset when the resource is deleted" do
-      derivative_service.new(valid_change_set).cleanup_derivatives
+    describe '#cleanup_derivatives' do
+      before do
+        derivative_service.new(valid_change_set).create_derivatives
+      end
+
+      it "deletes the attached fileset when the resource is deleted" do
+        derivative_service.new(valid_change_set).cleanup_derivatives
+        reloaded = query_service.find_by(id: valid_resource.id)
+        expect(reloaded.file_metadata.select(&:derivative?)).to be_empty
+      end
+    end
+  end
+
+  context 'jpeg source' do
+    let(:file) { fixture_file_upload('files/large-jpg-test.jpg', 'image/jpeg') }
+    it "creates a JP2 and attaches it to the fileset" do
+      derivative_service.new(valid_change_set).create_derivatives
+
       reloaded = query_service.find_by(id: valid_resource.id)
-      expect(reloaded.file_metadata.select(&:derivative?)).to be_empty
+      derivative = reloaded.derivative_file
+
+      expect(derivative).to be_present
+      derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
+      expect(derivative_file.read).not_to be_blank
     end
   end
 end

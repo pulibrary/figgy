@@ -26,7 +26,13 @@ RSpec.describe PlumDerivativeService do
   describe '#valid?' do
     subject(:valid_file) { derivative_service.new(valid_change_set) }
 
-    context 'when given a valid mime_type' do
+    context 'when given mime_type image/tiff' do
+      it { is_expected.to be_valid }
+    end
+
+    context 'when given mime_type image/jpeg' do
+      let(:file) { fixture_file_upload('files/large-jpg-test.jpg', 'image/jpeg') }
+
       it { is_expected.to be_valid }
     end
   end
