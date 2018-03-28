@@ -42,6 +42,7 @@ class Valhalla::DownloadsController < ApplicationController
   # Customize the :download ability in your Ability class, or override this method
   def authorize_download!
     authorize! :download, resource
+    authorize! :download, load_file
   end
 
   # Copied from hydra-head and adjusted to handle the fact that we don't have a

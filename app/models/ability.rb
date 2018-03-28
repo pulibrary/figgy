@@ -102,22 +102,28 @@ class Ability
   end
 
   def curation_concern_read_permissions
-    cannot [:read], curation_concerns do |curation_concern|
-      !readable_concern?(curation_concern)
+    cannot [:read], curation_concerns do |resource|
+      !readable_concern?(resource)
     end
-    cannot [:manifest], EphemeraFolder do |curation_concern|
-      !manifestable_concern?(curation_concern)
+    cannot [:manifest], EphemeraFolder do |resource|
+      !manifestable_concern?(resource)
     end
-    can :pdf, curation_concerns do |curation_concern|
-      ["color", "gray"].include?(Array(curation_concern.pdf_type).first)
+    can :pdf, curation_concerns do |resource|
+      ["color", "gray"].include?(Array(resource.pdf_type).first)
     end
-    can :color_pdf, curation_concerns do |curation_concern|
-      curation_concern.pdf_type == ["color"]
+    can :download, curation_concerns do |resource|
+      resource.respond_to?(:visibility) && resource.visibility.include?(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
+    end
+    can :download, Valhalla::DownloadsController::FileWithMetadata do |resource|
+      resource.mime_type == 'application/pdf'
+    end
+    can :color_pdf, curation_concerns do |resource|
+      resource.pdf_type == ["color"]
     end
   end
 
-  def readable_concern?(curation_concern)
-    !unreadable_states.include?(curation_concern.state.first)
+  def readable_concern?(resource)
+    !unreadable_states.include?(resource.state.first)
   end
 
   def unreadable_states
@@ -130,12 +136,12 @@ class Ability
     end
   end
 
-  def manifestable_concern?(curation_concern)
-    curation_concern.state.include?("complete") || box_grants_access?(curation_concern)
+  def manifestable_concern?(resource)
+    resource.state.include?("complete") || box_grants_access?(resource)
   end
 
-  def box_grants_access?(curation_concern)
-    (curation_concern.decorate.ephemera_box.try(:state) || []).include?("all_in_production")
+  def box_grants_access?(resource)
+    (resource.decorate.ephemera_box.try(:state) || []).include?("all_in_production")
   end
 
   def universal_reader?
