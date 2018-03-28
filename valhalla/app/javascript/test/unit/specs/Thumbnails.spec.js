@@ -22,7 +22,8 @@ describe('Thumbnails.vue', () => {
       images: Fixtures.imageCollection,
       selected: Fixtures.selected,
       ogImages: Fixtures.imageCollection,
-      changeList: Fixtures.emptyChangeList
+      changeList: Fixtures.emptyChangeList,
+      cut: []
     }
     store = new Vuex.Store({
       state,
@@ -44,6 +45,11 @@ describe('Thumbnails.vue', () => {
         selected: {
           get () {
             return state.selected
+          }
+        },
+        cut: {
+          get () {
+            return state.cut
           }
         }
       }
