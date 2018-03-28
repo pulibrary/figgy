@@ -86,8 +86,8 @@ describe GeoResources::Discovery::DocumentBuilder do
       expect(refs['http://schema.org/url']).to match(/concern\/vector_works/)
       expect(refs['http://www.isotc211.org/schemas/2005/gmd/']).to match(/downloads/)
       expect(refs['http://schema.org/downloadUrl']).to match(/downloads/)
-      expect(refs['http://www.opengis.net/def/serviceType/ogc/wms']).to match(/geoserver\/public\/wms/)
-      expect(refs['http://www.opengis.net/def/serviceType/ogc/wfs']).to match(/geoserver\/public\/wfs/)
+      expect(refs['http://www.opengis.net/def/serviceType/ogc/wms']).to match(/geoserver\/public-figgy\/wms/)
+      expect(refs['http://www.opengis.net/def/serviceType/ogc/wfs']).to match(/geoserver\/public-figgy\/wfs/)
       expect(refs['http://iiif.io/api/image']).to be nil
       expect(refs['http://iiif.io/api/presentation#manifest']).to be nil
     end

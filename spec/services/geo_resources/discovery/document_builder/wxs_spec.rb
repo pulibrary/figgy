@@ -27,7 +27,7 @@ describe GeoResources::Discovery::DocumentBuilder::Wxs do
     context 'public document' do
       it 'returns a public identifier' do
         file_set_id = geo_work.member_ids[0]
-        expect(wxs_builder.identifier).to eq "public:#{file_set_id}"
+        expect(wxs_builder.identifier).to eq "public-figgy:#{file_set_id}"
       end
     end
 
@@ -43,14 +43,14 @@ describe GeoResources::Discovery::DocumentBuilder::Wxs do
   describe '#wms_path' do
     context 'public document' do
       it 'returns a public wms path' do
-        expect(wxs_builder.wms_path).to eq 'http://localhost:8181/geoserver/public/wms'
+        expect(wxs_builder.wms_path).to eq 'http://localhost:8080/geoserver/public-figgy/wms'
       end
     end
 
     context 'restricted document' do
       let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
       it 'returns a restricted value' do
-        expect(wxs_builder.wms_path).to eq 'http://localhost:8181/geoserver/restricted/wms'
+        expect(wxs_builder.wms_path).to eq 'http://localhost:8080/geoserver/restricted-figgy/wms'
       end
     end
 
@@ -66,7 +66,7 @@ describe GeoResources::Discovery::DocumentBuilder::Wxs do
     context 'public document' do
       let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
       it 'returns a valid wms path' do
-        expect(wxs_builder.wfs_path).to eq 'http://localhost:8181/geoserver/public/wfs'
+        expect(wxs_builder.wfs_path).to eq 'http://localhost:8080/geoserver/public-figgy/wfs'
       end
     end
 

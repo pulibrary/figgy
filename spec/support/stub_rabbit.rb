@@ -7,6 +7,8 @@ RSpec.configure do |config|
 
       allow_any_instance_of(PlumChangeSetPersister::Basic).to receive(:messenger) do
         rabbit = instance_double(EventGenerator)
+        allow(rabbit).to receive(:derivatives_created)
+        allow(rabbit).to receive(:derivatives_deleted)
         allow(rabbit).to receive(:record_created)
         allow(rabbit).to receive(:record_updated)
         allow(rabbit).to receive(:record_deleted)

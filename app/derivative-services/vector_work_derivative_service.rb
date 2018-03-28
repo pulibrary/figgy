@@ -63,6 +63,7 @@ class VectorWorkDerivativeService
     change_set_persister.buffer_into_index do |buffered_persister|
       buffered_persister.save(change_set: change_set)
     end
+    unzip_display
   end
 
   def file_object
@@ -77,7 +78,7 @@ class VectorWorkDerivativeService
     {
       input_format: original_file.mime_type.first,
       label: :display_vector,
-      id: original_file.id,
+      id: resource.id,
       format: 'zip',
       url: URI("file://#{temporary_display_output.path}")
     }
@@ -87,7 +88,7 @@ class VectorWorkDerivativeService
     {
       input_format: original_file.mime_type.first,
       label: :thumbnail,
-      id: original_file.id,
+      id: resource.id,
       format: 'png',
       size: '200x150',
       url: URI("file://#{temporary_thumbnail_output.path}")
@@ -111,6 +112,14 @@ class VectorWorkDerivativeService
 
   def temporary_thumbnail_output
     @temporary_thumbnail_output ||= Tempfile.new
+  end
+
+  # Unzip display raster so it can be read by GeoServer
+  def unzip_display
+    derivative_file = change_set.model.derivative_file
+    derivative_path = Valkyrie::StorageAdapter.find_by(id: derivative_file.file_identifiers.first).io.path
+    shapefile_dir = "#{File.dirname(derivative_path)}/#{File.basename(derivative_path, '.zip')}"
+    system "unzip -qq -o #{derivative_path} -d #{shapefile_dir}"
   end
 
   def use_display

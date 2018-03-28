@@ -77,7 +77,7 @@ class RasterResourceDerivativeService
     {
       input_format: original_file.mime_type.first,
       label: :display_raster,
-      id: original_file.id,
+      id: resource.id,
       format: 'tif',
       url: URI("file://#{temporary_display_output.path}")
     }
@@ -87,7 +87,7 @@ class RasterResourceDerivativeService
     {
       input_format: original_file.mime_type.first,
       label: :thumbnail,
-      id: original_file.id,
+      id: resource.id,
       format: 'png',
       size: '200x150',
       url: URI("file://#{temporary_thumbnail_output.path}")

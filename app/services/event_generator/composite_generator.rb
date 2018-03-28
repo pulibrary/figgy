@@ -7,6 +7,14 @@ class EventGenerator
       @generators = generators
     end
 
+    def derivatives_created(record)
+      delegate_to_generator(__method__, record)
+    end
+
+    def derivatives_deleted(record)
+      delegate_to_generator(__method__, record)
+    end
+
     def record_created(record)
       delegate_to_generator(__method__, record)
     end

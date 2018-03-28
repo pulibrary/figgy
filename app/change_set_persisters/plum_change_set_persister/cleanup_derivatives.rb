@@ -8,6 +8,7 @@ class PlumChangeSetPersister
     # Access the resource within the ChangeSet attribute
     # @return [Valkyrie::Resource]
     delegate :resource, to: :change_set
+    delegate :messenger, to: :change_set_persister
     # The initializer
     # @param change_set_persist [ChangeSetPersister] the change set persister
     # @param change_set [ChangeSet] the change set for a resource
