@@ -12,6 +12,7 @@ gem 'hydra-access-controls'
 gem 'jbuilder'
 gem "jquery-rails"
 gem 'jquery-ui-rails', '~> 5.0'
+gem 'knapsack'
 gem 'lograge'
 gem 'logstash-event'
 gem 'mini_magick'

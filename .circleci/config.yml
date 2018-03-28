@@ -1,58 +1,125 @@
 ---
 version: 2
 jobs:
-    build:
-      working_directory: ~/figgy
-      docker:
-        - image: circleci/ruby:2.3.6-node-browsers
-          environment:
-            RAILS_ENV: test
-            FIGGY_DB_HOST: localhost
-            FIGGY_DB_USERNAME: figgy
-            FIGGY_DB_PASSWORD:  ""
-        - image: postgres:9.5
-          environment:
-            POSTGRES_USER: figgy
-            POSTGRES_DB: figgy_test
-            POSTGRES_PASSWORD: ""
-      steps:
-          - checkout
-          - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev
-          - run: sudo sh bin/ci_simple_tiles_install.sh
-          # Restore Cached Dependencies
-          - type: cache-restore
-            name: Restore bundle cache
-            key: figgy-{{ checksum "Gemfile.lock" }}
-          # Bundle install dependencies
-          - run: bundle install --path vendor/bundle
-          # Cache Dependencies
-          - type: cache-save
-            name: Store bundle cache
-            key: figgy-{{ checksum "Gemfile.lock" }}
-            paths:
-              - vendor/bundle
-          # Only necessary if app uses webpacker or yarn in some other way
-          - restore_cache:
-              keys:
-                - figgy-npm-{{ checksum "package-lock.json" }}
-                - figgy-npm-
-          - run:
-              name: NPM install
-              command: npm install
-          # Store yarn / webpacker cache
-          - save_cache:
-              key: figgy-npm-{{ checksum "package-lock.json" }}
-              paths:
-                - npm_modules
-          # Wait for DB
-          - run: dockerize -wait tcp://localhost:5432 -timeout 1m
-          - run: NODE_ENV=test bundle exec rails webpacker:compile
-          - run: sudo sh bin/ci_kakadu_install.sh
-          - run: npm test
-          - run: bundle exec rake rubocop
-          - run: 
-              command: bundle exec rake figgy:test
-              background: true
-          - run: bin/jetty_wait
-          - run: bundle exec rake db:setup
-          - run: bundle exec rspec spec
+  build:
+    working_directory: ~/figgy
+    docker:
+      - image: circleci/ruby:2.3.6-node-browsers
+        environment:
+          RAILS_ENV: test
+          FIGGY_DB_HOST: localhost
+          FIGGY_DB_USERNAME: figgy
+          FIGGY_DB_PASSWORD:  ""
+      - image: postgres:10.3
+        environment:
+          POSTGRES_USER: figgy
+          POSTGRES_DB: figgy_test
+          POSTGRES_PASSWORD: ""
+    steps:
+      - checkout
+      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev
+      - run: sudo sh bin/ci_simple_tiles_install.sh
+      # Restore Cached Dependencies
+      - type: cache-restore
+        name: Restore bundle cache
+        key: figgy-{{ checksum "Gemfile.lock" }}
+      # Bundle install dependencies
+      - run: bundle install --path vendor/bundle
+      # Cache Dependencies
+      - type: cache-save
+        name: Store bundle cache
+        key: figgy-{{ checksum "Gemfile.lock" }}
+        paths:
+          - vendor/bundle
+      # Only necessary if app uses webpacker or yarn in some other way
+      - restore_cache:
+          keys:
+            - figgy-npm-{{ checksum "package-lock.json" }}
+            - figgy-npm-
+      - run:
+          name: NPM install
+          command: npm install
+      # Store yarn / webpacker cache
+      - save_cache:
+          key: figgy-npm-{{ checksum "package-lock.json" }}
+          paths:
+            - npm_modules
+      - run: NODE_ENV=test bundle exec rails webpacker:compile
+      - persist_to_workspace:
+          root: '~/figgy'
+          paths: '*'
+  test:
+    working_directory: ~/figgy
+    parallelism: 3
+    docker:
+      - image: circleci/ruby:2.3.6-node-browsers
+        environment:
+          RAILS_ENV: test
+          FIGGY_DB_HOST: localhost
+          FIGGY_DB_USERNAME: figgy
+          FIGGY_DB_PASSWORD:  ""
+      - image: postgres:10.3
+        environment:
+          POSTGRES_USER: figgy
+          POSTGRES_DB: figgy_test
+          POSTGRES_PASSWORD: ""
+    steps:
+      - attach_workspace:
+          at: '~/figgy'
+      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev
+      - run: sudo sh bin/ci_simple_tiles_install.sh
+      # Wait for DB
+      - run: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run: sudo sh bin/ci_kakadu_install.sh
+      # Bundle install dependencies
+      - run: bundle install --path vendor/bundle
+      - run: 
+          command: bundle exec rake figgy:test
+          background: true
+      - run: bin/jetty_wait
+      - run: bundle exec rake db:setup
+      - run: bundle exec rake knapsack:rspec
+  npm_test:
+    working_directory: ~/figgy
+    docker:
+      - image: circleci/ruby:2.3.6-node-browsers
+        environment:
+          RAILS_ENV: test
+          FIGGY_DB_HOST: localhost
+          FIGGY_DB_USERNAME: figgy
+          FIGGY_DB_PASSWORD:  ""
+    steps:
+      - attach_workspace:
+          at: '~/figgy'
+      - run: npm test
+  rubocop:
+    working_directory: ~/figgy
+    docker:
+      - image: circleci/ruby:2.3.6-node-browsers
+        environment:
+          RAILS_ENV: test
+          FIGGY_DB_HOST: localhost
+          FIGGY_DB_USERNAME: figgy
+          FIGGY_DB_PASSWORD:  ""
+    steps:
+      - attach_workspace:
+          at: '~/figgy'
+      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev
+      - run: sudo sh bin/ci_simple_tiles_install.sh
+      # Bundle install dependencies
+      - run: bundle install --path vendor/bundle
+      - run: bundle exec rake rubocop
+workflows:
+  version: 2
+  build_accept_deploy:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - npm_test:
+          requires:
+            - build
+      - rubocop:
+          requires:
+            - build
