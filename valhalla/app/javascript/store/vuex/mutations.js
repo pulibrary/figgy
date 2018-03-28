@@ -3,6 +3,12 @@ const mutations = {
   CHANGE_MANIFEST_LOAD_STATE (state, loadState) {
     state.manifestLoadState = loadState
   },
+  CUT (state, imgArray) {
+    state.cut = [ ...imgArray ]
+  },
+  PASTE (state, imgArray) {
+    state.images = [ ...imgArray ]
+  },
   SELECT (state, imgArray) {
     state.selected = [ ...imgArray ]
   },
