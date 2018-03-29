@@ -453,6 +453,8 @@ GEM
       activerecord
       kaminari-core (= 1.0.1)
     kaminari-core (1.0.1)
+    knapsack (1.16.0)
+      rake
     ldp (0.7.0)
       deprecation
       faraday
@@ -840,6 +842,7 @@ DEPENDENCIES
   jquery-rails
   jquery-ui-rails (~> 5.0)
   json-schema
+  knapsack
   leaflet-rails (~> 0.7)
   listen
   lograge

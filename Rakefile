@@ -27,3 +27,4 @@ end
 task default: "bundler:audit"
 
 require 'solr_wrapper/rake_task' unless Rails.env.production? || Rails.env.staging?
+Knapsack.load_tasks if defined?(Knapsack)
