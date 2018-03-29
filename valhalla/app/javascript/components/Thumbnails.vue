@@ -131,39 +131,19 @@ export default {
       }).indexOf(id)
     },
     hasChanged: function (id) {
-      if (this.changeList.indexOf(id) > -1) {
-        return true
-      } else {
-        return false
-      }
+      return this.changeList.indexOf(id) > -1
     },
     isCut: function (thumbnail) {
-      if (this.cut.indexOf(thumbnail) > -1) {
-        return true
-      } else {
-        return false
-      }
+      return this.cut.indexOf(thumbnail) > -1
     },
     isSelected: function (thumbnail) {
-      if (this.selected.indexOf(thumbnail) > -1) {
-        return true
-      } else {
-        return false
-      }
+      return this.selected.indexOf(thumbnail) > -1
     },
     isCutDisabled: function () {
-      if (!this.cut.length) {
-        return false
-      } else {
-        return true
-      }
+      return !!this.cut.length
     },
     isPasteDisabled: function () {
-      if (this.cut.length && this.selected.length) {
-        return false
-      } else {
-        return true
-      }
+      return !(this.cut.length && this.selected.length)
     },
     resizeThumbs: function (event) {
       this.thumbPixelWidth = event.target.value

@@ -32,8 +32,14 @@ const mutations = {
   SAVE_STATE (state, reset) {
     flash('State saved!', 'success')
     state.ogImages = [ ...state.images ]
+    state.ogState = { startPage: state.startPage,
+                      thumbnail: state.thumbnail,
+                      viewingHint: state.viewingHint,
+                      viewingDirection: state.viewingDirection
+                    }
     state.changeList = [ ...reset ]
     state.selected = [ ...reset ]
+    state.cut = [ ...reset ]
   },
   SORT_IMAGES (state, value) {
     state.images = [ ...value ]
