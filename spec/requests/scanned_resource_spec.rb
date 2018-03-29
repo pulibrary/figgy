@@ -11,7 +11,7 @@ RSpec.describe "ScannedResource requests", type: :request do
   let(:user) { FactoryBot.create(:admin) }
 
   before do
-    stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,287/0/gray.jpg")
+    stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/gray.jpg")
       .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
   end
 
