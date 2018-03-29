@@ -34,6 +34,16 @@
             </div>
             <input id="canvas_id" type="hidden" name="canvas_id">
           </div>
+          <div v-else>
+            <div class="form-group">
+              <div class="checkbox">
+                <label>
+                  <input @change="updateThumbnail()" v-model="isThumbnail" id="isThumbnail" type="checkbox" :value="thumbnail">
+                  Set as Resource Thumbnail</a>
+                </label>
+              </div>
+            </div>
+          </div>
         </form>
       </div>
 

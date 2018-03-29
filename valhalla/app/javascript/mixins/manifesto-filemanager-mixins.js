@@ -36,12 +36,9 @@ const ManifestoFilemanagerMixins = {
 
   getManifestThumb: function (manifest) {
     let thumb = default_vol
-    // ToDo: if a manifest must be dereferenced, return a promise via manifest.load
-    if(manifest.isLoaded){
-      let t = manifest.getThumbnail()
-      if (t.id) {
-        thumb = t.id
-      }
+    let t = manifest.getThumbnail()
+    if (t.id) {
+      thumb = t.id
     }
     return thumb
   },

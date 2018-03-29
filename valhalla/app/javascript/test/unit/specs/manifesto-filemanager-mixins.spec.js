@@ -77,15 +77,11 @@ describe('mixins', () => {
       expect(title).toBe('Vol 1')
     })
 
-    // Dependency error is making it impossible to test this function (works in prod)
-    // TypeError: val.entries is not a function
-    //   at printImmutableEntries (node_modules/pretty-format/build/plugins/immutable.js:44:5)
-    //
-    // it('getManifestThumb', () => {
-    //   const manifests = manifestation.getManifests()
-    //   const thumb = manifestation.getManifestThumb(manifests[0])
-    //   expect(thumb).toBe('http://localhost:3000/image-service/50b5e49b-ade7-4278-8265-4f72081f26a5/full/400,/0/default.jpg')
-    // })
+    it('getManifestThumb', () => {
+      const manifests = manifestation.getManifests()
+      const thumb = manifestation.getManifestThumb(manifests[0])
+      expect(thumb).toBe('http://localhost:3000/image-service/24e3e7c3-90a7-45a6-8f18-df1c905a9a0a/full/!200,150/0/default.jpg')
+    })
 
     it('getMVWImageCollection', () => {
       const resource = {"id":"2b807928-20e4-437d-aa6e-65bde98ea142","class_name":"scanned_resources"}
