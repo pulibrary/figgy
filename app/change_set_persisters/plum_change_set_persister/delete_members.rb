@@ -14,7 +14,7 @@ class PlumChangeSetPersister
       end
     end
     attr_reader :change_set_persister, :change_set, :property
-    delegate :query_service, :persister, :transaction?, :messenger, to: :change_set_persister
+    delegate :query_service, :persister, :transaction?, to: :change_set_persister
     def initialize(change_set_persister:, change_set:, property:)
       @change_set = change_set
       @change_set_persister = change_set_persister
@@ -23,7 +23,6 @@ class PlumChangeSetPersister
 
     def run
       resources.each do |resource|
-        messenger.derivatives_deleted(resource)
         cs = DynamicChangeSet.new(resource)
         change_set_persister.delete(change_set: cs)
       end

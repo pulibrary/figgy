@@ -21,6 +21,10 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
     [RasterResource, VectorWork]
   end
 
+  def file_sets
+    @file_sets ||= members.select { |r| r.is_a?(FileSet) }.map(&:decorate).to_a
+  end
+
   def geo_metadata_members
     members.select do |member|
       next unless member.respond_to?(:mime_type)
