@@ -3,6 +3,12 @@ const mutations = {
   CHANGE_MANIFEST_LOAD_STATE (state, loadState) {
     state.manifestLoadState = loadState
   },
+  CUT (state, imgArray) {
+    state.cut = [ ...imgArray ]
+  },
+  PASTE (state, imgArray) {
+    state.images = [ ...imgArray ]
+  },
   SELECT (state, imgArray) {
     state.selected = [ ...imgArray ]
   },
@@ -26,8 +32,14 @@ const mutations = {
   SAVE_STATE (state, reset) {
     flash('State saved!', 'success')
     state.ogImages = [ ...state.images ]
+    state.ogState = { startPage: state.startPage,
+                      thumbnail: state.thumbnail,
+                      viewingHint: state.viewingHint,
+                      viewingDirection: state.viewingDirection
+                    }
     state.changeList = [ ...reset ]
     state.selected = [ ...reset ]
+    state.cut = [ ...reset ]
   },
   SORT_IMAGES (state, value) {
     state.images = [ ...value ]

@@ -15,6 +15,8 @@ describe('Thumbnails.vue', () => {
   beforeEach(() => {
     actions = {
       handleSelect: jest.fn(),
+      handleCut: jest.fn(),
+      handlePaste: jest.fn(),
       resizeThumbs: jest.fn(()=>{event: {target: {value: '100'}}}),
       sortImages: jest.fn()
     }
@@ -22,7 +24,8 @@ describe('Thumbnails.vue', () => {
       images: Fixtures.imageCollection,
       selected: Fixtures.selected,
       ogImages: Fixtures.imageCollection,
-      changeList: Fixtures.emptyChangeList
+      changeList: Fixtures.emptyChangeList,
+      cut: []
     }
     store = new Vuex.Store({
       state,
@@ -44,6 +47,11 @@ describe('Thumbnails.vue', () => {
         selected: {
           get () {
             return state.selected
+          }
+        },
+        cut: {
+          get () {
+            return state.cut
           }
         }
       }
@@ -124,5 +132,13 @@ describe('Thumbnails.vue', () => {
     expect(resizedThumb.hasStyle('max-width', '100px')).toBe(true)
   })
 
-
+  it('cuts a selected thumbnail when cut link is clicked', () => {
+    const wrapper = mount(Thumbnails, { options, store, localVue })
+    wrapper.find('.img_gallery div:first-child').trigger('click')
+    wrapper.find('#cut_btn').trigger('click')
+    expect(actions.handleCut).toHaveBeenCalled()
+    wrapper.find('.img_gallery div:first-child').trigger('click')
+    wrapper.find('#paste_after_btn').trigger('click')
+    expect(actions.handlePaste).toHaveBeenCalled()
+  })
 })

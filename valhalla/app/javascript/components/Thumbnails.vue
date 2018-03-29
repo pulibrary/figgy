@@ -1,6 +1,8 @@
 <template>
   <div class="gallery" @click.capture="deselect($event)">
     <div class="gallery_controls">
+      <button v-if="!isMultiVolume" @click.capture="uploadFile()" id="upload_file_btn" class="btn btn-default btn-sm"><i class="fa fa-th fa-upload"></i> Upload Files</button>
+      <button v-if="pendingUploads" @click.capture="refreshPage()" id="refresh_page_btn" class="btn btn-default btn-sm"><i class="fa fa-th fa-clock-o"></i> Pending Uploads (Refresh)</button>
       <div class="dropdown">
         <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="selectOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
           Selection Options
@@ -13,8 +15,17 @@
           <li><a @click.capture="selectInverse()" id="select_inverse_btn">Inverse</a></li>
         </ul>
       </div>
-      <button v-if="!isMultiVolume" @click.capture="uploadFile()" id="upload_file_btn" class="btn btn-default btn-sm"><i class="fa fa-th fa-upload"></i> Upload Files</button>
-      <button v-if="pendingUploads" @click.capture="refreshPage()" id="refresh_page_btn" class="btn btn-default btn-sm"><i class="fa fa-th fa-clock-o"></i> Pending Uploads (Refresh)</button>
+      <div v-if="selected.length" class="dropdown">
+        <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="withSelected" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          With selected &hellip;
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="withSelected">
+          <li v-bind:class="{ disabled: isCutDisabled() }"><a @click="cutSelected()" id="cut_btn">Cut</a></li>
+          <li v-bind:class="{ disabled: isPasteDisabled() }"><a @click="paste(-1)" id="paste_before_btn">Paste Before</a></li>
+          <li v-bind:class="{ disabled: isPasteDisabled() }"><a @click="paste(1)" id="paste_after_btn">Paste After</a></li>
+        </ul>
+      </div>
       <div id="img_sizer">
         <i class="fa fa-image"></i>
         <input @input="resizeThumbs($event)" id="resize_thumbs_input" style="display:inline-block;" type="range" min="40" max="400" value="200">
@@ -25,7 +36,7 @@
         <div @click.capture="select(thumbnail.id, $event)"
               v-bind:style="{'max-width': thumbPixelWidth + 'px' }"
               class="thumbnail"
-              v-bind:class="{ hasChanged: hasChanged(thumbnail.id), selected: isSelected(thumbnail) }"
+              v-bind:class="{ hasChanged: hasChanged(thumbnail.id), selected: isSelected(thumbnail), cut: isCut(thumbnail) }"
               v-for="thumbnail in thumbnails" :key="thumbnail.id">
           <img :src="thumbnail.url" class="thumb">
           <div v-bind:style="{'padding': captionPixelPadding + 'px' }" class="caption">
@@ -81,9 +92,30 @@ export default {
       get () {
         return this.$store.state.selected
       }
+    },
+    cut: {
+      get () {
+        return this.$store.state.cut
+      }
     }
   },
   methods: {
+    cutSelected: function () {
+      this.$store.dispatch('handleCut', this.selected)
+      this.selectNone()
+    },
+    paste: function (indexModifier) {
+      let thumbnails = this.thumbnails
+      thumbnails = thumbnails.filter(val => !this.cut.includes(val))
+      let pasteAfterIndex = this.getImageIndexById(this.selected[this.selected.length-1].id) + indexModifier
+      thumbnails.splice(pasteAfterIndex, 0, ...this.cut)
+      this.$store.dispatch('handlePaste', thumbnails)
+      this.resetCut()
+      this.selectNone()
+    },
+    resetCut: function () {
+      this.$store.dispatch('handleCut', [])
+    },
     deselect: function (event) {
       if (event.target.className === 'img_gallery') {
         this.selectNone()
@@ -99,18 +131,19 @@ export default {
       }).indexOf(id)
     },
     hasChanged: function (id) {
-      if (this.changeList.indexOf(id) > -1) {
-        return true
-      } else {
-        return false
-      }
+      return this.changeList.indexOf(id) > -1
+    },
+    isCut: function (thumbnail) {
+      return this.cut.indexOf(thumbnail) > -1
     },
     isSelected: function (thumbnail) {
-      if (this.selected.indexOf(thumbnail) > -1) {
-        return true
-      } else {
-        return false
-      }
+      return this.selected.indexOf(thumbnail) > -1
+    },
+    isCutDisabled: function () {
+      return !!this.cut.length
+    },
+    isPasteDisabled: function () {
+      return !(this.cut.length && this.selected.length)
     },
     resizeThumbs: function (event) {
       this.thumbPixelWidth = event.target.value
@@ -122,23 +155,25 @@ export default {
     },
     select: function (id, event) {
       event.stopPropagation()
-      var selected = []
-      if (event.metaKey) {
-        selected = this.selected
-        selected.push(this.getImageById(id))
-        this.$store.dispatch('handleSelect', selected)
-      } else {
-        if (this.selected.length === 1 && event.shiftKey) {
-          var first = this.getImageIndexById(this.selected[0].id)
-          var second = this.getImageIndexById(id)
-          var min = Math.min(first, second)
-          var max = Math.max(first, second)
-          for (var i = min; i <= max; i++) {
-            selected.push(this.thumbnails[i])
-          }
+      if (!this.isCut(this.getImageById(id))) { // can't select cut thumbnail
+        var selected = []
+        if (event.metaKey) {
+          selected = this.selected
+          selected.push(this.getImageById(id))
           this.$store.dispatch('handleSelect', selected)
         } else {
-          this.$store.dispatch('handleSelect', [this.getImageById(id)])
+          if (this.selected.length === 1 && event.shiftKey) {
+            var first = this.getImageIndexById(this.selected[0].id)
+            var second = this.getImageIndexById(id)
+            var min = Math.min(first, second)
+            var max = Math.max(first, second)
+            for (var i = min; i <= max; i++) {
+              selected.push(this.thumbnails[i])
+            }
+            this.$store.dispatch('handleSelect', selected)
+          } else {
+            this.$store.dispatch('handleSelect', [this.getImageById(id)])
+          }
         }
       }
     },
@@ -230,6 +265,10 @@ export default {
   background-color: Tomato
 }
 
+.cut {
+  opacity: 0.2;
+}
+
 .thumbnail .caption {
   pointer-events: none;
   overflow: hidden;
@@ -239,8 +278,11 @@ export default {
   pointer-events: none;
 }
 
+.dropdown-menu li {
+  cursor: default;
+}
+
 .dropdown {
   display: inline-block;
 }
-
 </style>

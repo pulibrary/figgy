@@ -7,6 +7,18 @@ exports[`Thumbnails.vue has the expected html structure 1`] = `
   <div
     class="gallery_controls"
   >
+    <button
+      class="btn btn-default btn-sm"
+      id="upload_file_btn"
+    >
+      <i
+        class="fa fa-th fa-upload"
+      />
+       Upload Files
+    </button>
+     
+    <!---->
+     
     <div
       class="dropdown"
     >
@@ -64,17 +76,60 @@ exports[`Thumbnails.vue has the expected html structure 1`] = `
       </ul>
     </div>
      
-    <button
-      class="btn btn-default btn-sm"
-      id="upload_file_btn"
+    <div
+      class="dropdown"
     >
-      <i
-        class="fa fa-th fa-upload"
-      />
-       Upload Files
-    </button>
-     
-    <!---->
+      <button
+        aria-expanded="true"
+        aria-haspopup="true"
+        class="btn btn-default btn-sm dropdown-toggle"
+        data-toggle="dropdown"
+        id="withSelected"
+        type="button"
+      >
+        
+        With selected …
+        
+        <span
+          class="caret"
+        />
+      </button>
+       
+      <ul
+        aria-labelledby="withSelected"
+        class="dropdown-menu"
+      >
+        <li
+          class=""
+        >
+          <a
+            id="cut_btn"
+          >
+            Cut
+          </a>
+        </li>
+         
+        <li
+          class="disabled"
+        >
+          <a
+            id="paste_before_btn"
+          >
+            Paste Before
+          </a>
+        </li>
+         
+        <li
+          class="disabled"
+        >
+          <a
+            id="paste_after_btn"
+          >
+            Paste After
+          </a>
+        </li>
+      </ul>
+    </div>
      
     <div
       id="img_sizer"

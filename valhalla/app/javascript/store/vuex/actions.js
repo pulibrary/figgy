@@ -23,6 +23,12 @@ const actions = {
   handleSelect (context, imgArray) {
     context.commit('SELECT', imgArray)
   },
+  handleCut (context, imgArray) {
+    context.commit('CUT', imgArray)
+  },
+  handlePaste (context, imgArray) {
+    context.commit('PASTE', imgArray)
+  },
   saveState (context, body) {
     window.body = body
     let errors = []

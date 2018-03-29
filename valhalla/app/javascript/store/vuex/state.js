@@ -13,7 +13,8 @@ const state = {
   ogImages: [],
   changeList: [],
   ogState: {},
-  manifestLoadState: 'NOT_LOADED'
+  manifestLoadState: 'NOT_LOADED',
+  cut: []
 }
 
 export default state
