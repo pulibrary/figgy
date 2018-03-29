@@ -78,12 +78,20 @@ defaults: &defaults
     exchange:
       plum: "plum_events"
       geoblacklight: "gbl_events"
+      geoserver: "geoserver_events"
   vocabulary_namespace: <%= ENV.fetch('FIGGY_VOCAB_NS', 'https://plum.princeton.edu/ns/') %>
   devise:
     omniauth:
       cas:
         host: <%= ENV.fetch('CAS_HOST', 'fed.princeton.edu') %>
         url: <%= ENV.fetch('CAS_URL', 'https://fed.princeton.edu/cas') %>
+  geoserver:
+    url: <%= ENV['GEOSERVER_URL'] || "http://localhost:8080/geoserver" %>
+    derivatives_path: <%= ENV['GEOSERVER_DERIVATIVES_PATH'] || Rails.root.join("tmp", "geo_derivatives") %>
+    open:
+      workspace: <%= ENV['PUBLIC_GEOSERVER_WS'] || "public-figgy" %>
+    authenticated:
+      workspace: <%= ENV['RESTRICTED_GEOSERVER_WS'] || "restricted-figgy" %>
 
 development:
   <<: *defaults
@@ -105,6 +113,13 @@ test:
       cas:
         host: <%= ENV.fetch('CAS_HOST', 'localhost.localdomain') %>
         url: <%= ENV.fetch('CAS_URL', 'https://localhost.localdomain/cas') %>
+  geoserver:
+    url: <%= ENV['GEOSERVER_URL'] || "http://localhost:8080/geoserver" %>
+    derivatives_path: <%= ENV['GEOSERVER_DERIVATIVES_PATH'] || Rails.root.join("tmp", "test_geo_derivatives") %>
+    open:
+      workspace: <%= ENV['PUBLIC_GEOSERVER_WS'] || "public-figgy" %>
+    authenticated:
+      workspace: <%= ENV['RESTRICTED_GEOSERVER_WS'] || "restricted-figgy" %>
 
 production:
   <<: *defaults
@@ -121,6 +136,7 @@ production:
     exchange:
       plum: "plum_events"
       geoblacklight: "gbl_events"
+      geoserver: "geoserver_events"
 
 staging:
   <<: *defaults
@@ -137,3 +153,11 @@ staging:
     exchange:
       plum: "plum_events"
       geoblacklight: "gbl_events"
+      geoserver: "geoserver_events"
+  geoserver:
+    url: <%= ENV['GEOSERVER_URL'] || "http://localhost:8080/geoserver" %>
+    derivatives_path: <%= ENV['GEOSERVER_DERIVATIVES_PATH'] || Rails.root.join("tmp", "geo_derivatives") %>
+    open:
+      workspace: <%= ENV['PUBLIC_GEOSERVER_WS'] || "public-figgy-staging" %>
+    authenticated:
+      workspace: <%= ENV['RESTRICTED_GEOSERVER_WS'] || "restricted-figgy-staging" %>

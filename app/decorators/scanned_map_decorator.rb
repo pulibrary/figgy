@@ -36,6 +36,10 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
     [ScannedMap, RasterResource]
   end
 
+  def file_sets
+    @file_sets ||= members.select { |r| r.is_a?(FileSet) }.map(&:decorate).to_a
+  end
+
   # Display the resource attributes
   # @return [Hash] a Hash of all of the resource attributes
   def display_attributes

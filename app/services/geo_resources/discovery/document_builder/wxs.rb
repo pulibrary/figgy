@@ -6,7 +6,7 @@ module GeoResources
         attr_reader :resource_decorator
         def initialize(resource_decorator)
           @resource_decorator = resource_decorator
-          @config = GeoServer.config[visibility].try(:with_indifferent_access)
+          @config = Figgy.config['geoserver'].try(:with_indifferent_access)
         end
 
         # Returns the identifier to use with WMS/WFS/WCS services.
@@ -14,21 +14,21 @@ module GeoResources
         def identifier
           return unless file_set
           return file_set.id.to_s unless @config && visibility
-          "#{@config[:workspace]}:#{file_set.id}" if @config[:workspace]
+          "#{@config[visibility][:workspace]}:#{file_set.id}" if @config[visibility][:workspace]
         end
 
         # Returns the wms server url.
         # @return [String] wms server url
         def wms_path
           return unless @config && visibility && file_set && file_set_format?
-          "#{path}/#{@config[:workspace]}/wms"
+          "#{path}/#{@config[visibility][:workspace]}/wms"
         end
 
         # Returns the wfs server url.
         # @return [String] wfs server url
         def wfs_path
           return unless @config && visibility && file_set && file_set_format?
-          "#{path}/#{@config[:workspace]}/wfs"
+          "#{path}/#{@config[visibility][:workspace]}/wfs"
         end
 
         private

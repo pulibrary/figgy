@@ -7,6 +7,10 @@ class EventGenerator
       @rabbit_exchange = rabbit_exchange
     end
 
+    def derivatives_created(record); end
+
+    def derivatives_deleted(record); end
+
     def record_created(record); end
 
     def record_deleted(record)

@@ -10,7 +10,7 @@ RSpec.shared_examples "an EventGenerator" do
   end
 
   it "responds all of the composite generator methods with a single record argument" do
-    composite_methods = [:record_created, :record_deleted, :record_updated]
+    composite_methods = [:derivatives_created, :derivatives_deleted, :record_created, :record_deleted, :record_updated]
     expect(event_generator).to respond_to(*composite_methods).with(1).argument
   end
 

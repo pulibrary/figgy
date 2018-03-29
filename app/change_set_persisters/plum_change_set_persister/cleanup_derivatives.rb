@@ -19,7 +19,7 @@ class PlumChangeSetPersister
     # Run the persistence handler
     # Iterates through each FileSet for the resource being updated, and deletes its derivative File member
     def run
-      return unless decorated_resource.respond_to?(:file_sets) && file_sets.present?
+      return unless file_sets.present?
       file_sets.each do |file_set|
         next unless file_set.instance_of?(FileSet)
         ::CleanupDerivativesJob.perform_later(file_set.id.to_s)
@@ -37,7 +37,10 @@ class PlumChangeSetPersister
       # Access the FileSets for the resource
       # @return [Array<FileSet>, nil] return an array of FileSets or nil
       def file_sets
-        @file_sets ||= decorated_resource.try(:file_sets)
+        @file_sets ||= begin
+          wrapped_file_set = [decorated_resource] if decorated_resource.is_a?(FileSet)
+          wrapped_file_set || decorated_resource.try(:file_sets)
+        end
       end
   end
 end
