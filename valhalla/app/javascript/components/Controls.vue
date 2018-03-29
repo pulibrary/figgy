@@ -116,6 +116,7 @@ export default {
       body.resource[this.resourceClassName] = {
         member_ids: this.imageIdList,
         viewing_direction: this.viewingDirection,
+        thumbnail_id: this.thumbnail,
         id: this.id
       }
       this.$store.dispatch('saveState', body)
