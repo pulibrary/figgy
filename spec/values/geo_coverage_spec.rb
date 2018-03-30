@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe GeoResources::GeoCoverage do
+describe GeoCoverage do
   subject(:geo_coverage) { described_class.new(43.039, -69.856, 42.943, -71.032) }
   let(:cov_string) do
     'northlimit=43.039; eastlimit=-69.856; southlimit=42.943; '\

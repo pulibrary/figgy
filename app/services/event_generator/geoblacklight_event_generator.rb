@@ -57,11 +57,11 @@ class EventGenerator
       end
 
       def generate_document(record)
-        GeoResources::GeoDiscovery::DocumentBuilder.new(record, GeoResources::GeoDiscovery::GeoblacklightDocument.new)
+        GeoDiscovery::DocumentBuilder.new(record, GeoDiscovery::GeoblacklightDocument.new)
       end
 
       def slug(record)
-        GeoResources::GeoDiscovery::DocumentBuilder::SlugBuilder.new(record).slug
+        GeoDiscovery::DocumentBuilder::SlugBuilder.new(record).slug
       end
   end
 end
