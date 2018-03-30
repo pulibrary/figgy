@@ -12,7 +12,7 @@ class PDFGenerator
       prawn_document.start_new_page layout: downloader.layout
       page_size = [Canvas::LETTER_WIDTH, Canvas::LETTER_HEIGHT]
       page_size.reverse! unless downloader.portrait?
-      prawn_document.image downloader.download, width: downloader.width, height: downloader.height, fit: page_size
+      prawn_document.image downloader.download, width: page_size.first, height: page_size.last, fit: page_size
     end
     prawn_document.render_file(tmp_file.path)
     build_node

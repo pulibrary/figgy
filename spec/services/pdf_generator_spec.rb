@@ -27,7 +27,7 @@ RSpec.describe PDFGenerator do
   describe "#render" do
     context "when set to gray" do
       before do
-        stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/287,200/0/gray.jpg")
+        stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/287,/0/gray.jpg")
           .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-landscape-pdf.jpg")), status: 200)
         file_set.original_file.width = 287
         file_set.original_file.height = 200
@@ -47,7 +47,7 @@ RSpec.describe PDFGenerator do
     context "when it's set to color" do
       let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], pdf_type: ['color']) }
       before do
-        stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,287/0/default.jpg")
+        stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/default.jpg")
           .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
       end
       it "will do a color PDF" do
@@ -59,7 +59,7 @@ RSpec.describe PDFGenerator do
     context "when it's an arabic manifest" do
       let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], language: 'ara', title: 'المفاتيح') }
       before do
-        stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,287/0/gray.jpg")
+        stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/gray.jpg")
           .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
       end
       it "renders" do
