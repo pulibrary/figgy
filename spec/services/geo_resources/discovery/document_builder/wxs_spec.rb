@@ -6,10 +6,10 @@ describe GeoResources::Discovery::DocumentBuilder::Wxs do
   with_queue_adapter :inline
   subject(:wxs_builder) { described_class.new(decorator) }
 
-  let(:geo_work) { FactoryBot.create_for_repository(:vector_work, visibility: visibility) }
+  let(:geo_work) { FactoryBot.create_for_repository(:vector_resource, visibility: visibility) }
   let(:decorator) { query_service.find_by(id: geo_work.id).decorate }
   let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
-  let(:change_set) { VectorWorkChangeSet.new(geo_work, files: [file]) }
+  let(:change_set) { VectorResourceChangeSet.new(geo_work, files: [file]) }
   let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { metadata_adapter.query_service }

@@ -52,7 +52,7 @@ module GeoResources
           def geom_type
             return 'Image' if resource_decorator.model.is_a?(ScannedMap)
             return 'Raster' if resource_decorator.model.is_a?(RasterResource)
-            return vector_geom_type if resource_decorator.model.is_a?(VectorWork)
+            return vector_geom_type if resource_decorator.model.is_a?(VectorResource)
           end
 
           # Returns the geometry for a vector file.

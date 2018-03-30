@@ -132,7 +132,7 @@ class GdalCharacterizationService
     end
 
     def valid?
-      parent.is_a?(VectorWork) && original_file.mime_type != ["application/xml"]
+      parent.is_a?(VectorResource) && original_file.mime_type != ["application/xml"]
     end
   end
 end

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class VectorWorkChangeSet < Valhalla::ChangeSet
+class VectorResourceChangeSet < Valhalla::ChangeSet
   apply_workflow(BookWorkflow)
   delegate :human_readable_type, to: :model
 

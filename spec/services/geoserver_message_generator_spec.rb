@@ -17,12 +17,12 @@ RSpec.describe GeoserverMessageGenerator do
   end
 
   describe "#generate" do
-    context "with a public vector work derivative" do
+    context "with a public vector resource derivative" do
       let(:file) { fixture_file_upload("files/vector/shapefile.zip", "application/zip") }
       let(:tika_output) { tika_shapefile_output }
       let(:resource) do
         FactoryBot.create_for_repository(
-          :vector_work,
+          :vector_resource,
           files: [file],
           title: RDF::Literal.new(resource_title, language: :en),
           visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC

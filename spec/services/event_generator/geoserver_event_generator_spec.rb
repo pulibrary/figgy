@@ -10,7 +10,7 @@ RSpec.describe EventGenerator::GeoserverEventGenerator do
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
   let(:file) { fixture_file_upload("files/vector/shapefile.zip", "application/zip") }
   let(:tika_output) { tika_shapefile_output }
-  let(:resource) { FactoryBot.create_for_repository(:vector_work, files: [file]) }
+  let(:resource) { FactoryBot.create_for_repository(:vector_resource, files: [file]) }
   let(:record) { query_service.find_members(resource: resource).to_a.first }
 
   it_behaves_like "an EventGenerator"

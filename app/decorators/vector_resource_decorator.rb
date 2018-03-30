@@ -1,5 +1,5 @@
 # frozen_string_literal: false
-class VectorWorkDecorator < Valkyrie::ResourceDecorator
+class VectorResourceDecorator < Valkyrie::ResourceDecorator
   display(Schema::Geo.attributes)
   display(
     [
@@ -18,7 +18,7 @@ class VectorWorkDecorator < Valkyrie::ResourceDecorator
   delegate(*Schema::Geo.attributes, to: :primary_imported_metadata, prefix: :imported)
 
   def attachable_objects
-    [VectorWork]
+    [VectorResource]
   end
 
   def file_sets
@@ -100,9 +100,9 @@ class VectorWorkDecorator < Valkyrie::ResourceDecorator
     end
   end
 
-  # Use case for nesting vector works
+  # Use case for nesting vector resources
   #   - time series: e.g., nyc transit system, released every 6 months
-  def vector_work_members
-    @vector_works ||= members.select { |r| r.is_a?(VectorWork) }.map(&:decorate).to_a
+  def vector_resource_members
+    @vector_resources ||= members.select { |r| r.is_a?(VectorResource) }.map(&:decorate).to_a
   end
 end

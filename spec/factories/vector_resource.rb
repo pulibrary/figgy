@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :vector_work do
+  factory :vector_resource do
     title 'Title'
     rights_statement RDF::URI('http://rightsstatements.org/vocab/NKC/1.0/')
     read_groups 'public'
@@ -18,7 +18,7 @@ FactoryBot.define do
     after(:build) do |resource, evaluator|
       resource.depositor = evaluator.user.uid if evaluator.user.present?
       if evaluator.visibility.present?
-        change_set = VectorWorkChangeSet.new(resource)
+        change_set = VectorResourceChangeSet.new(resource)
         change_set.validate(visibility: Array(evaluator.visibility).first)
         change_set.sync
         resource = change_set.model
@@ -28,7 +28,7 @@ FactoryBot.define do
     after(:create) do |resource, evaluator|
       if evaluator.files.present? || evaluator.import_metadata
         import_metadata = "1" if evaluator.import_metadata
-        change_set = VectorWorkChangeSet.new(resource, files: evaluator.files, refresh_remote_metadata: import_metadata)
+        change_set = VectorResourceChangeSet.new(resource, files: evaluator.files, refresh_remote_metadata: import_metadata)
         change_set.prepopulate!
         ::PlumChangeSetPersister.new(
           metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
@@ -36,36 +36,36 @@ FactoryBot.define do
         ).save(change_set: change_set)
       end
     end
-    factory :open_vector_work do
+    factory :open_vector_resource do
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
-    factory :complete_open_vector_work do
+    factory :complete_open_vector_resource do
       state "complete"
     end
-    factory :complete_private_vector_work do
+    factory :complete_private_vector_resource do
       state "complete"
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
     end
-    factory :takedown_vector_work do
+    factory :takedown_vector_resource do
       state "takedown"
     end
-    factory :flagged_vector_work do
+    factory :flagged_vector_resource do
       state "flagged"
     end
-    factory :pending_vector_work do
+    factory :pending_vector_resource do
       state "pending"
     end
-    factory :complete_campus_only_vector_work do
+    factory :complete_campus_only_vector_resource do
       state "complete"
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
     end
-    factory :metadata_review_vector_work do
+    factory :metadata_review_vector_resource do
       state "metadata_review"
     end
-    factory :final_review_vector_work do
+    factory :final_review_vector_resource do
       state "final_review"
     end
-    factory :complete_vector_work do
+    factory :complete_vector_resource do
       state "complete"
     end
   end

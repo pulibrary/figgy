@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class VectorWorkDerivativeService
+class VectorResourceDerivativeService
   class Factory
     attr_reader :change_set_persister
     delegate :metadata_adapter, :storage_adapter, to: :change_set_persister
@@ -9,7 +9,7 @@ class VectorWorkDerivativeService
     end
 
     def new(change_set)
-      VectorWorkDerivativeService.new(change_set: change_set, change_set_persister: change_set_persister, original_file: original_file(change_set.resource))
+      VectorResourceDerivativeService.new(change_set: change_set, change_set_persister: change_set_persister, original_file: original_file(change_set.resource))
     end
 
     def original_file(resource)
@@ -131,7 +131,7 @@ class VectorWorkDerivativeService
   end
 
   def valid?
-    parent.is_a?(VectorWork) && ControlledVocabulary::GeoVectorFormat.new.include?(mime_type.first)
+    parent.is_a?(VectorResource) && ControlledVocabulary::GeoVectorFormat.new.include?(mime_type.first)
   end
 
   private

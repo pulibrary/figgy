@@ -11,7 +11,7 @@ RSpec.describe SolrFacade do
       "facet.pivot" => [],
       "fq" =>
         [
-          "{!terms f=internal_resource_ssim}ScannedResource,Collection,EphemeraFolder,EphemeraBox,ScannedMap,VectorWork",
+          "{!terms f=internal_resource_ssim}ScannedResource,Collection,EphemeraFolder,EphemeraBox,ScannedMap,VectorResource",
           "!member_of_ssim:['' TO *]",
           "member_of_collection_ids_ssim:id-test"
         ],
