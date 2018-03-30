@@ -3,25 +3,29 @@ export const imageCollection = [
     "label":"baz",
     "id":"50b5e49b-ade7-4278-8265-4f72081f26a5",
     "page_type":"single",
-    "url":"http://example.com"
+    "url":"http://example.com",
+    "service":"http://localhost:3000/image-service/50b5e49b-ade7-4278-8265-4f72081f26a5"
   },
   {
     "label":"foo",
     "id":"dae7619f-16a7-4306-93e4-70b4b192955c",
     "page_type":"single",
-    "url":"http://example.com"
+    "url":"http://example.com",
+    "service":"http://localhost:3000/image-service/50b5e49b-ade7-4278-8265-4f72081f26a5"
   }]
 
 export const mvwImageCollection = [
     {
       "label": "Volume I",
       "id": "2d1a4bb7-50b6-4b80-921c-58767ebdca9c",
-      "url": "/packs/_/_/_/app/assets/images/default_vol-6307afcef289ce38b0880c2bd03657f0.png"
+      "url": "/packs/_/_/_/app/assets/images/default_vol-6307afcef289ce38b0880c2bd03657f0.png",
+      "service":"http://localhost:3000/image-service/2d1a4bb7-50b6-4b80-921c-58767ebdca9c"
     },
     {
       "label": "Volume II",
       "id": "03a1cabe-e599-4df8-899b-ceb71f8db669",
-      "url": "/packs/_/_/_/app/assets/images/default_vol-6307afcef289ce38b0880c2bd03657f0.png"
+      "url": "/packs/_/_/_/app/assets/images/default_vol-6307afcef289ce38b0880c2bd03657f0.png",
+      "service":"http://localhost:3000/image-service/03a1cabe-e599-4df8-899b-ceb71f8db669"
     }]
 
 export const emptyChangeList = []
@@ -75,6 +79,7 @@ export const initState = {
   "viewingDirection": "left-to-right",
   "viewingHint": "individuals",
   "changeList" : [],
+  "selected": [],
   "images": [
     {
       "label": "[p. i (recto)]",
@@ -111,6 +116,31 @@ export const initState = {
       "id": "0a3e268f-5872-444e-bdbd-b1a7b01dcb57",
       "page_type": "single",
       "url": "\/packs\/_\/_\/_\/app\/assets\/images\/default-1927ff44629d419a4bb2dfdc4317a78a.png"
+    }
+  ]
+}
+
+export const initStateSelected = {
+  "id": "9a25e0ce-4f64-4995-bae5-29140a453fa3",
+  "resourceClassName": "ephemera_folder",
+  "startpage": "",
+  "thumbnail": "80b02791-4bd9-4566-9a9f-4b3062ba2e0d",
+  "viewingDirection": "left-to-right",
+  "viewingHint": "individuals",
+  "changeList" : [],
+  "selected": [  {
+      "label":"baz",
+      "id":"50b5e49b-ade7-4278-8265-4f72081f26a5",
+      "page_type":"single",
+      "url":"http://example.com"
+    }
+  ],
+  "images": [
+    {
+      "label":"baz",
+      "id":"50b5e49b-ade7-4278-8265-4f72081f26a5",
+      "page_type":"single",
+      "url":"http://example.com"
     }
   ]
 }
@@ -200,6 +230,7 @@ const fixtures = {
   thumbnail,
   startPage,
   initState,
+  initStateSelected,
   body,
   mvwBody
 }

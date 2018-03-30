@@ -27,20 +27,41 @@ const ManifestoFilemanagerMixins = {
   getCanvasMainThumb: function (canvas) {
     const images = canvas.getImages()
     let thumb = default_image
-    let services = images[0].getResource().getServices()
-    if (services.length) {
-      thumb = services[0].id + '/full/400,/0/default.jpg'
+    let service = this.getCanvasMainService(canvas)
+    if (service.length) {
+      thumb = service + '/full/400,/0/default.jpg'
     }
     return thumb
+  },
+
+  getCanvasMainService: function (canvas) {
+    const images = canvas.getImages()
+    let service = ''
+    let services = images[0].getResource().getServices()
+    if (services.length) {
+      service = services[0].id
+    }
+    return service
   },
 
   getManifestThumb: function (manifest) {
     let thumb = default_vol
     let t = manifest.getThumbnail()
+    window.t = t
     if (t.id) {
       thumb = t.id
     }
     return thumb
+  },
+
+  getManifestService: function (manifest) {
+    let t = manifest.getThumbnail()
+    let service = ''
+    let services = t.getServices()
+    if (services.length) {
+      service = services[0].id
+    }
+    return service
   },
 
   getMemberId: function (manifest) {
@@ -81,7 +102,8 @@ const ManifestoFilemanagerMixins = {
     imageCollection.images = manifests.map(manifest => ({
       label: this.getEnglishTitle(manifest),
       id: this.getMemberId(manifest),
-      url: this.getManifestThumb(manifest)
+      url: this.getManifestThumb(manifest),
+      service: this.getManifestService(manifest)
     }))
     return imageCollection
   },
@@ -142,7 +164,8 @@ const ManifestoFilemanagerMixins = {
           label: this.getEnglishLabel(canvas),
           id: this.getResourceId(canvas),
           page_type: "single",
-          url: this.getCanvasMainThumb(canvas)
+          url: this.getCanvasMainThumb(canvas),
+          service: this.getCanvasMainService(canvas)
         }))
       } else {
         imageCollection.images = []
