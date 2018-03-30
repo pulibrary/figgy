@@ -7,7 +7,7 @@ describe GeoResources::Discovery::DocumentBuilder do
   with_queue_adapter :inline
   subject(:document_builder) { described_class.new(query_service.find_by(id: geo_work.id), document_class) }
   let(:geo_work) do
-    FactoryBot.create_for_repository(:vector_work,
+    FactoryBot.create_for_repository(:vector_resource,
                                      title: 'Geo Work',
                                      coverage: coverage.to_s,
                                      description: 'This is a Geo Work',
@@ -27,7 +27,7 @@ describe GeoResources::Discovery::DocumentBuilder do
   let(:issued) { '01/02/2013' }
   let(:issued_xmlschema) { '2013-02-01T00:00:00Z' }
   let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
-  let(:change_set) { VectorWorkChangeSet.new(geo_work, files: [file, metadata_file]) }
+  let(:change_set) { VectorResourceChangeSet.new(geo_work, files: [file, metadata_file]) }
   let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { metadata_adapter.query_service }
@@ -35,7 +35,7 @@ describe GeoResources::Discovery::DocumentBuilder do
   let(:metadata_file) { fixture_file_upload('files/geo_metadata/iso.xml') }
   let(:document) { JSON.parse(document_builder.to_json(nil)) }
 
-  describe 'vector work' do
+  describe 'vector resource' do
     before do
       output = change_set_persister.save(change_set: change_set)
       file_set_id = output.member_ids[0]
@@ -83,7 +83,7 @@ describe GeoResources::Discovery::DocumentBuilder do
 
       # references
       refs = JSON.parse(document['dct_references_s'])
-      expect(refs['http://schema.org/url']).to match(/concern\/vector_works/)
+      expect(refs['http://schema.org/url']).to match(/concern\/vector_resources/)
       expect(refs['http://www.isotc211.org/schemas/2005/gmd/']).to match(/downloads/)
       expect(refs['http://schema.org/downloadUrl']).to match(/downloads/)
       expect(refs['http://www.opengis.net/def/serviceType/ogc/wms']).to match(/geoserver\/public-figgy\/wms/)
@@ -155,7 +155,7 @@ describe GeoResources::Discovery::DocumentBuilder do
     end
 
     context 'with a private visibility' do
-      let(:change_set) { VectorWorkChangeSet.new(geo_work, files: [file]) }
+      let(:change_set) { VectorResourceChangeSet.new(geo_work, files: [file]) }
       let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
       let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
 

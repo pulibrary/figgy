@@ -15,7 +15,7 @@ module LinkedData
         LinkedEphemeraVocabulary.new(resource: resource_node)
       when EphemeraTerm
         LinkedEphemeraTerm.new(resource: resource_node)
-      when ScannedResource || ScannedMap || VectorWork
+      when ScannedResource || ScannedMap || VectorResource
         LinkedImportedResource.new(resource: resource_node)
       when NilClass
         Literal.new(value: resource_node)

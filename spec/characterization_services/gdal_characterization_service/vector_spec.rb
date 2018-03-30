@@ -11,11 +11,11 @@ RSpec.describe GdalCharacterizationService::Vector do
   let(:query_service) { adapter.query_service }
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
-  let(:vector_work) do
-    change_set_persister.save(change_set: VectorWorkChangeSet.new(VectorWork.new, files: [file]))
+  let(:vector_resource) do
+    change_set_persister.save(change_set: VectorResourceChangeSet.new(VectorResource.new, files: [file]))
   end
-  let(:vector_work_members) { query_service.find_members(resource: vector_work) }
-  let(:valid_file_set) { vector_work_members.first }
+  let(:vector_resource_members) { query_service.find_members(resource: vector_resource) }
+  let(:valid_file_set) { vector_resource_members.first }
 
   context "with a geojson file" do
     let(:file) { fixture_file_upload("files/vector/geo.json", "application/vnd.geo+json") }

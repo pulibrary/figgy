@@ -145,15 +145,15 @@ Rails.application.routes.draw do
     get '/scanned_maps/:parent_id/new', to: 'scanned_maps#new', as: :parent_new_scanned_map
     put '/scanned_maps/:id/extract_metadata/:file_set_id', to: 'scanned_maps#extract_metadata', as: :scanned_maps_extract_metadata
 
-    resources :vector_works do
+    resources :vector_resources do
       member do
         get :file_manager
         get :geoblacklight, defaults: { format: :json }
         post :browse_everything_files
       end
     end
-    get '/vector_works/:parent_id/new', to: 'vector_works#new', as: :parent_new_vector_work
-    put '/vector_works/:id/extract_metadata/:file_set_id', to: 'vector_works#extract_metadata', as: :vector_works_extract_metadata
+    get '/vector_resources/:parent_id/new', to: 'vector_resources#new', as: :parent_new_vector_resource
+    put '/vector_resources/:id/extract_metadata/:file_set_id', to: 'vector_resources#extract_metadata', as: :vector_resources_extract_metadata
 
     resources :raster_resources do
       member do

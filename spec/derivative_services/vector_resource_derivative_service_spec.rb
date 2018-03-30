@@ -3,12 +3,12 @@ require 'rails_helper'
 require 'valkyrie/derivatives/specs/shared_specs'
 include ActionDispatch::TestProcess
 
-RSpec.describe VectorWorkDerivativeService do
+RSpec.describe VectorResourceDerivativeService do
   with_queue_adapter :inline
   it_behaves_like "a Valkyrie::Derivatives::DerivativeService"
 
   let(:derivative_service) do
-    VectorWorkDerivativeService::Factory.new(change_set_persister: change_set_persister)
+    VectorResourceDerivativeService::Factory.new(change_set_persister: change_set_persister)
   end
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
@@ -16,11 +16,11 @@ RSpec.describe VectorWorkDerivativeService do
   let(:query_service) { adapter.query_service }
   let(:file) { fixture_file_upload("files/vector/shapefile.zip", "application/zip") }
   let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
-  let(:vector_work) do
-    change_set_persister.save(change_set: VectorWorkChangeSet.new(VectorWork.new, files: [file]))
+  let(:vector_resource) do
+    change_set_persister.save(change_set: VectorResourceChangeSet.new(VectorResource.new, files: [file]))
   end
-  let(:vector_work_members) { query_service.find_members(resource: vector_work) }
-  let(:valid_resource) { vector_work_members.first }
+  let(:vector_resource_members) { query_service.find_members(resource: vector_resource) }
+  let(:valid_resource) { vector_resource_members.first }
   let(:valid_change_set) { DynamicChangeSet.new(valid_resource) }
   let(:tika_output) { tika_shapefile_output }
 

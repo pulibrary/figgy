@@ -165,7 +165,7 @@ Rails.application.config.to_prepare do
     )
   )
 
-  Valkyrie::Derivatives::DerivativeService.services << VectorWorkDerivativeService::Factory.new(
+  Valkyrie::Derivatives::DerivativeService.services << VectorResourceDerivativeService::Factory.new(
     change_set_persister: ::PlumChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
       storage_adapter: Valkyrie::StorageAdapter.find(:geo_derivatives)

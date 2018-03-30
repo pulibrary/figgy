@@ -32,29 +32,29 @@ RSpec.describe ThumbnailHelper do
       end
     end
 
-    context "when given a vector work" do
+    context "when given a vector resource" do
       let(:thumbnail_file_id) { Valkyrie::ID.new("test_id") }
       let(:thumbnail_file) { FileMetadata.new(id: thumbnail_file_id, use: [Valkyrie::Vocab::PCDMUse.ThumbnailImage]) }
       let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: [thumbnail_file]) }
-      let(:vector_work) { FactoryBot.create_for_repository(:vector_work, thumbnail_id: file_set.id, member_ids: [file_set.id]) }
+      let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource, thumbnail_id: file_set.id, member_ids: [file_set.id]) }
 
       before do
-        allow(file_set).to receive(:parent).and_return(vector_work)
+        allow(file_set).to receive(:parent).and_return(vector_resource)
       end
 
       it "returns the path to the thumbnail derivative image" do
-        expect(helper.figgy_thumbnail_path(vector_work)).to include valhalla.download_path(file_set.id, thumbnail_file_id)
+        expect(helper.figgy_thumbnail_path(vector_resource)).to include valhalla.download_path(file_set.id, thumbnail_file_id)
       end
     end
 
-    context "when given a fileset with a vector work parent" do
+    context "when given a fileset with a vector resource parent" do
       let(:thumbnail_file_id) { Valkyrie::ID.new("test_id") }
       let(:thumbnail_file) { FileMetadata.new(id: thumbnail_file_id, use: [Valkyrie::Vocab::PCDMUse.ThumbnailImage]) }
       let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: [thumbnail_file]) }
-      let(:vector_work) { FactoryBot.create_for_repository(:vector_work, thumbnail_id: file_set.id, member_ids: [file_set.id]) }
+      let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource, thumbnail_id: file_set.id, member_ids: [file_set.id]) }
 
       before do
-        allow(file_set).to receive(:parent).and_return(vector_work)
+        allow(file_set).to receive(:parent).and_return(vector_resource)
       end
 
       it "returns the path to the thumbnail derivative image" do

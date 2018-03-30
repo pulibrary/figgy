@@ -55,14 +55,14 @@ RSpec.describe PlumChangeSetPersister do
     end
   end
 
-  context "when a source_metadata_identifier is set for the first time on a vector work" do
-    let(:change_set_class) { VectorWorkChangeSet }
+  context "when a source_metadata_identifier is set for the first time on a vector resource" do
+    let(:change_set_class) { VectorResourceChangeSet }
     before do
       stub_bibdata(bib_id: '9649080')
       stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "applies remote metadata from bibdata to an imported metadata resource" do
-      resource = FactoryBot.build(:vector_work, title: [])
+      resource = FactoryBot.build(:vector_resource, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: '9649080')
       change_set.sync

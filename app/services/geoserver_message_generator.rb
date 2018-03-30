@@ -36,7 +36,7 @@ class GeoserverMessageGenerator
     end
 
     def layer_type
-      return :shapefile if vector_work_parent?
+      return :shapefile if vector_resource_parent?
       :geotiff
     end
 
@@ -45,7 +45,7 @@ class GeoserverMessageGenerator
     end
 
     def path
-      return shapefile_path if vector_work_parent?
+      return shapefile_path if vector_resource_parent?
       geotiff_path
     end
 
@@ -61,8 +61,8 @@ class GeoserverMessageGenerator
       Array(resource.decorate.parent.title).first.to_s
     end
 
-    def vector_work_parent?
-      parent.is_a?(VectorWork)
+    def vector_resource_parent?
+      parent.is_a?(VectorResource)
     end
 
     def workspace

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe VectorWorkChangeSet do
+RSpec.describe VectorResourceChangeSet do
   subject(:change_set) { described_class.new(form_resource) }
-  let(:vector_work) { VectorWork.new(title: 'Test', rights_statement: 'Stuff', visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: 'pending') }
-  let(:form_resource) { vector_work }
+  let(:vector_resource) { VectorResource.new(title: 'Test', rights_statement: 'Stuff', visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: 'pending') }
+  let(:form_resource) { vector_resource }
   before do
     stub_bibdata(bib_id: '6592452')
   end
@@ -22,7 +22,7 @@ RSpec.describe VectorWorkChangeSet do
       expect(change_set).to be_valid
     end
     context "when neither title or metadata identifier is set" do
-      let(:form_resource) { vector_work.new(title: "", source_metadata_identifier: "") }
+      let(:form_resource) { vector_resource.new(title: "", source_metadata_identifier: "") }
       it "is invalid" do
         expect(change_set).not_to be_valid
       end
@@ -33,19 +33,19 @@ RSpec.describe VectorWorkChangeSet do
       end
     end
     context "when only metadata_identifier is set" do
-      let(:form_resource) { vector_work.new(title: "", source_metadata_identifier: "6592452") }
+      let(:form_resource) { vector_resource.new(title: "", source_metadata_identifier: "6592452") }
       it "is valid" do
         expect(change_set).to be_valid
       end
     end
     context "when rights_statement isn't set" do
-      let(:form_resource) { vector_work.new(rights_statement: [""]) }
+      let(:form_resource) { vector_resource.new(rights_statement: [""]) }
       it "is invalid" do
         expect(change_set).not_to be_valid
       end
     end
     context "when visibility isn't set" do
-      let(:form_resource) { vector_work.new(visibility: [""]) }
+      let(:form_resource) { vector_resource.new(visibility: [""]) }
       it "is invalid" do
         expect(change_set).not_to be_valid
       end
@@ -73,7 +73,7 @@ RSpec.describe VectorWorkChangeSet do
   end
 
   describe "#rights_statement" do
-    let(:form_resource) { VectorWork.new(rights_statement: RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")) }
+    let(:form_resource) { VectorResource.new(rights_statement: RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")) }
     it "is singular, required, and converts to an RDF::URI" do
       change_set.prepopulate!
 
@@ -83,8 +83,8 @@ RSpec.describe VectorWorkChangeSet do
       change_set.validate(rights_statement: "http://rightsstatements.org/vocab/NKC/1.0/")
       expect(change_set.rights_statement).to be_instance_of RDF::URI
     end
-    context "when given a blank VectorWork" do
-      let(:form_resource) { VectorWork.new }
+    context "when given a blank VectorResource" do
+      let(:form_resource) { VectorResource.new }
       it "sets a default Rights Statement" do
         change_set.prepopulate!
 

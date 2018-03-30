@@ -18,7 +18,7 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
   delegate(*Schema::Geo.attributes, to: :primary_imported_metadata, prefix: :imported)
 
   def attachable_objects
-    [RasterResource, VectorWork]
+    [RasterResource, VectorResource]
   end
 
   def file_sets
