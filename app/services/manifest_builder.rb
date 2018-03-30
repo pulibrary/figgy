@@ -35,7 +35,10 @@ class ManifestBuilder
     attr_reader :resource
     delegate :query_service, to: :metadata_adapter
     delegate :decorate, :to_model, :id, to: :resource
-    delegate :source_metadata_identifier, to: :resource if @resource.respond_to?(:source_metadata_identifier)
+
+    def source_metadata_identifier
+      resource.try(:source_metadata_identifier)
+    end
 
     ##
     # @param [Resource] resource the Resource being modeled as the root

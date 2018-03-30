@@ -17,6 +17,7 @@ RSpec.describe ManifestBuilder do
                                      edition: 'test edition',
                                      nav_date: 'test date',
                                      identifier: 'ark:/88435/abc1234de',
+                                     source_metadata_identifier: '123456',
                                      imported_metadata: [{
                                        description: "Test Description"
                                      }],
@@ -56,6 +57,7 @@ RSpec.describe ManifestBuilder do
 
   describe "#build" do
     before do
+      stub_bibdata(bib_id: "123456")
       output = change_set_persister.save(change_set: change_set)
       file_set_id = output.member_ids.first
       file_set = query_service.find_by(id: file_set_id)
@@ -95,6 +97,8 @@ RSpec.describe ManifestBuilder do
       expect(output["thumbnail"]["service"]["@id"]).to eq first_image["resource"]["service"]["@id"]
       expect(output["sequences"][0]["startCanvas"]).to eq canvas_id
       expect(output["logo"]).to eq("https://www.example.com/assets/pul_logo_icon-7b5f9384dfa5ca04f4851c6ee9e44e2d6953e55f893472a3e205e1591d3b2ca6.png")
+      expect(output["seeAlso"].length).to eq 2
+      expect(output["seeAlso"].last).to include "@id" => 'https://bibdata.princeton.edu/bibliographic/123456', "format" => "text/xml"
     end
 
     context "when it's a cicognara item" do
@@ -168,7 +172,7 @@ RSpec.describe ManifestBuilder do
       expect(output).to include 'metadata'
       metadata = output["metadata"]
       expect(metadata).to be_kind_of Array
-      expect(metadata.length).to eq(11)
+      expect(metadata.length).to eq(12)
 
       metadata_object = metadata.find { |h| h['label'] == 'Created At' }
       metadata_values = metadata_object['value']
