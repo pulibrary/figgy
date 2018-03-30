@@ -15,11 +15,11 @@ module GeoblacklightDocumentController
   private
 
     def geoblacklight_document_class
-      GeoResources::Discovery::GeoblacklightDocument
+      GeoResources::GeoDiscovery::GeoblacklightDocument
     end
 
     def geoblacklight_builder
       @resource = find_resource(params[:id])
-      @geoblacklight_builder ||= GeoResources::Discovery::DocumentBuilder.new(@resource, geoblacklight_document_class.new)
+      @geoblacklight_builder ||= GeoResources::GeoDiscovery::DocumentBuilder.new(@resource, geoblacklight_document_class.new)
     end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module GeoResources
-  module Discovery
+  module GeoDiscovery
     class AbstractDocument
       attr_accessor :identifier, :provenance, :creator, :subject, :spatial, :temporal,
                     :title, :description, :access_rights, :language, :issued,

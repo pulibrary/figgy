@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module GeoResources
-  module Discovery
+  module GeoDiscovery
     class DocumentBuilder
       class DateBuilder
         attr_reader :resource_decorator

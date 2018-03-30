@@ -11,7 +11,7 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
 
   describe "#record_deleted" do
     it "publishes a persistent JSON delete message with the geoblacklight slug as the id" do
-      slug = GeoResources::Discovery::DocumentBuilder::SlugBuilder.new(record).slug
+      slug = GeoResources::GeoDiscovery::DocumentBuilder::SlugBuilder.new(record).slug
       expected_result = {
         "id" => slug,
         "event" => "DELETED"
@@ -26,7 +26,7 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
   describe "#record_updated" do
     context "with a record in a completed state" do
       it "publishes a persistent JSON updated message with geoblacklight document" do
-        gbl_doc = GeoResources::Discovery::DocumentBuilder.new(record, GeoResources::Discovery::GeoblacklightDocument.new)
+        gbl_doc = GeoResources::GeoDiscovery::DocumentBuilder.new(record, GeoResources::GeoDiscovery::GeoblacklightDocument.new)
         expected_result = {
           "id" => record.id.to_s,
           "event" => "UPDATED",
@@ -43,7 +43,7 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
       let(:record) { FactoryBot.create_for_repository(:scanned_map, state: "takedown") }
 
       it "publishes a persistent JSON delete message with the geoblacklight slug as the id" do
-        slug = GeoResources::Discovery::DocumentBuilder::SlugBuilder.new(record).slug
+        slug = GeoResources::GeoDiscovery::DocumentBuilder::SlugBuilder.new(record).slug
         expected_result = {
           "id" => slug,
           "event" => "DELETED"

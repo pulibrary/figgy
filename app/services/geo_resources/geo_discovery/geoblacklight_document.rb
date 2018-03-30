@@ -2,7 +2,7 @@
 require 'json-schema'
 
 module GeoResources
-  module Discovery
+  module GeoDiscovery
     # For details on the schema,
     # @see 'https://github.com/geoblacklight/geoblacklight/wiki/Schema'
     class GeoblacklightDocument < AbstractDocument
