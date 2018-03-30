@@ -23,7 +23,7 @@ describe GeoResources::GeoDiscovery::DocumentBuilder do
   end
 
   let(:document_class) { GeoResources::GeoDiscovery::GeoblacklightDocument.new }
-  let(:coverage) { GeoResources::Coverage.new(43.039, -69.856, 42.943, -71.032) }
+  let(:coverage) { GeoResources::GeoCoverage.new(43.039, -69.856, 42.943, -71.032) }
   let(:issued) { '01/02/2013' }
   let(:issued_xmlschema) { '2013-02-01T00:00:00Z' }
   let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }

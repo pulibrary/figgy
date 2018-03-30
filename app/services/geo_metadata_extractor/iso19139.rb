@@ -31,7 +31,7 @@ class GeoMetadataExtractor
         e = node.at_xpath('gmd:eastBoundLongitude/gco:Decimal', NS).text.to_f
         n = node.at_xpath('gmd:northBoundLatitude/gco:Decimal', NS).text.to_f
         s = node.at_xpath('gmd:southBoundLatitude/gco:Decimal', NS).text.to_f
-        return GeoResources::Coverage.new(n, e, s, w).to_s
+        return GeoResources::GeoCoverage.new(n, e, s, w).to_s
       end
       nil
     end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module GeoResources
-  class Coverage
+  class GeoCoverage
     class ParseError < StandardError; end
     class InvalidGeometryError < StandardError; end
 

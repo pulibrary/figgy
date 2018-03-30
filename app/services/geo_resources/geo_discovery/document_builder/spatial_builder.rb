@@ -18,9 +18,9 @@ module GeoResources
         private
 
           # Parses coverage field from geo resource and instantiates a coverage object.
-          # @return [GeoResources::Coverage] coverage object
+          # @return [GeoCoverage] coverage object
           def coverage
-            @coverage ||= GeoResources::Coverage.parse(resource_decorator.coverage.first)
+            @coverage ||= GeoResources::GeoCoverage.parse(resource_decorator.coverage.first)
           end
 
           # Returns the coverage in solr format. For example:
