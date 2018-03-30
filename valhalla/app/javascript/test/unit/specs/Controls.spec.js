@@ -78,7 +78,7 @@ describe('Controls.vue', () => {
     expect(actions.saveState).toHaveBeenCalled()
   })
 
-  it('allows save once something has changed', () => {
+  it('shows the openseadragon div when a single fileset is selected', () => {
     actions = {
       saveState: jest.fn()
     }
