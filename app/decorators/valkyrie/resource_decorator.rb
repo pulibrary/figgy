@@ -197,6 +197,12 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     alias subject_value linkable_value
     private :linkable_value
 
+    # Ensures that only the titles of collections are specified within the Manifest metadata
+    # @return [Array<String>] the collection titles
+    def member_of_collections_value
+      @value.map(&:title)
+    end
+
     # Attempts to use an overridden method for transforming metadata values
     # @return [Array<Object>] the array of metadata values
     def value
