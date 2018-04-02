@@ -3,7 +3,7 @@ require 'rails_helper'
 include ActionDispatch::TestProcess
 
 # See https://github.com/geoblacklight/geoblacklight/wiki/Schema
-describe GeoResources::Discovery::DocumentBuilder do
+describe GeoDiscovery::DocumentBuilder do
   with_queue_adapter :inline
   subject(:document_builder) { described_class.new(query_service.find_by(id: geo_work.id), document_class) }
   let(:geo_work) do
@@ -22,8 +22,8 @@ describe GeoResources::Discovery::DocumentBuilder do
                                      identifier: 'ark:/99999/fk4')
   end
 
-  let(:document_class) { GeoResources::Discovery::GeoblacklightDocument.new }
-  let(:coverage) { GeoResources::Coverage.new(43.039, -69.856, 42.943, -71.032) }
+  let(:document_class) { GeoDiscovery::GeoblacklightDocument.new }
+  let(:coverage) { GeoCoverage.new(43.039, -69.856, 42.943, -71.032) }
   let(:issued) { '01/02/2013' }
   let(:issued_xmlschema) { '2013-02-01T00:00:00Z' }
   let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }

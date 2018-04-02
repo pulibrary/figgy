@@ -31,7 +31,7 @@ class GeoMetadataExtractor
 
     def coverage
       doc.at_xpath('//idinfo/spdom/bounding').tap do |node|
-        return GeoResources::Coverage.new(
+        return GeoCoverage.new(
           coverage_coordinate(node, 'north'),
           coverage_coordinate(node, 'east'),
           coverage_coordinate(node, 'south'),

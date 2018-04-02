@@ -2,7 +2,7 @@
 require 'rails_helper'
 include ActionDispatch::TestProcess
 
-describe GeoResources::Discovery::DocumentBuilder::Wxs do
+describe GeoDiscovery::DocumentBuilder::Wxs do
   with_queue_adapter :inline
   subject(:wxs_builder) { described_class.new(decorator) }
 

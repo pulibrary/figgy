@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-describe GeoResources::Discovery::AbstractDocument do
+describe GeoDiscovery::AbstractDocument do
   subject(:abstract_document) { described_class.new }
 
   describe '#to_hash' do

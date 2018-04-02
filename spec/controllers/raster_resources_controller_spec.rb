@@ -203,10 +203,10 @@ RSpec.describe RasterResourcesController do
   describe "GET /raster_resources/:id/geoblacklight" do
     let(:user) { FactoryBot.create(:admin) }
     let(:raster_resource) { FactoryBot.create_for_repository(:raster_resource) }
-    let(:builder) { instance_double(GeoResources::Discovery::DocumentBuilder) }
+    let(:builder) { instance_double(GeoDiscovery::DocumentBuilder) }
 
     before do
-      allow(GeoResources::Discovery::DocumentBuilder).to receive(:new).and_return(builder)
+      allow(GeoDiscovery::DocumentBuilder).to receive(:new).and_return(builder)
     end
 
     context 'with a valid geoblacklight document' do
