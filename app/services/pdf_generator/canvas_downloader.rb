@@ -48,11 +48,6 @@ class PDFGenerator
         [max_dimensions[:width], canvas.width].min
       end
 
-      def max_height
-        return Canvas::BITONAL_SIZE if bitonal?
-        [max_dimensions[:height], canvas.height].min
-      end
-
       def scale_factor
         3.0
       end

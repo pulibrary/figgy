@@ -81,4 +81,19 @@ RSpec.describe Valkyrie::ResourceDecorator do
       expect(resource.decorate.titles).to eq ["There and back again", "A hobbit's tale"]
     end
   end
+
+  describe '#member_of_collections_value' do
+    let(:collection) { FactoryBot.create_for_repository(:collection, title: 'My Nietzsche Collection') }
+    let(:resource) do
+      FactoryBot.create_for_repository(
+        :scanned_resource,
+        title: ["Menschliches, Allzumenschliches", "Ein Buch für freie Geister"],
+        member_of_collection_ids: collection.id
+      )
+    end
+
+    it 'returns the titles of collections' do
+      expect(resource.decorate.iiif_metadata).to include('label' => 'Member Of Collections', 'value' => ['My Nietzsche Collection'])
+    end
+  end
 end
