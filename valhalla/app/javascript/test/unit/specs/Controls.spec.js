@@ -78,6 +78,26 @@ describe('Controls.vue', () => {
     expect(actions.saveState).toHaveBeenCalled()
   })
 
+  it('shows the openseadragon div when a single fileset is selected', () => {
+    actions = {
+      saveState: jest.fn()
+    }
+    getters = {
+      orderChanged: () => true,
+      stateChanged: () => true
+    }
+    state = Fixtures.initStateSelected
+    store = new Vuex.Store({
+      getters,
+      actions,
+      state
+    })
+
+    const wrapper = mount(Controls, { options, store, localVue })
+
+    expect(wrapper.find('.osd').exists()).toBeTruthy()
+  })
+
   it('has the expected html structure', () => {
     const wrapper = mount(Controls, { options, store, localVue })
     expect(wrapper.element).toMatchSnapshot()

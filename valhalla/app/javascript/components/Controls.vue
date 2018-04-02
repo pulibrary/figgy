@@ -9,12 +9,27 @@
       </button>
       <a v-if="!hidden" :href="editLink" id="replace-file-button">Manage Page Files</a>
     </div>
+    <div v-if="selectedTotal === 1" class="osd">
+      <div class="viewport" :id="viewerId"></div>
+    </div>
   </div>
 </template>
 
 <script>
+import OpenSeadragon from 'openseadragon'
 export default {
   name: 'controls',
+  data: function () {
+    return {
+      viewer: null
+    }
+  },
+  props: {
+    viewerId: {
+      type: String,
+      default: 'viewer'
+    }
+  },
   computed: {
     id: function () {
       return this.$store.state.id
@@ -24,6 +39,9 @@ export default {
     },
     images: function () {
       return this.$store.state.images
+    },
+    selected: function () {
+      return this.$store.state.selected
     },
     editLink: function () {
       let link = ''
@@ -38,11 +56,14 @@ export default {
     isMultiVolume: function () {
       return this.$store.state.isMultiVolume
     },
-    thumbnail: function () {
-      return this.$store.state.thumbnail
+    selectedTotal () {
+      return this.$store.state.selected.length
     },
     startPage: function () {
       return this.$store.state.startPage
+    },
+    thumbnail: function () {
+      return this.$store.state.thumbnail
     },
     viewingHint: function () {
       return this.$store.state.viewingHint
@@ -86,6 +107,17 @@ export default {
     }
   },
   methods: {
+    initOSD: function () {
+        if (this.viewer) {
+          this.viewer.destroy()
+          this.viewer = null
+        }
+        this.viewer = OpenSeadragon({
+          id: this.viewerId,
+          showNavigationControl: false,
+          tileSources: [ this.selected[0].service + "/info.json" ]
+        })
+    },
     saveHandler: function () {
       if (this.isMultiVolume) {
         this.saveMVW()
@@ -121,6 +153,11 @@ export default {
       }
       this.$store.dispatch('saveState', body)
     }
+  },
+  updated: function () {
+    if (this.selectedTotal === 1) {
+      this.initOSD()
+    }
   }
 }
 </script>
@@ -139,9 +176,20 @@ export default {
   margin-left: -30px;
   margin-right: -30px;
   padding: 20px;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   height: 100%;
 }
 
+.osd {
+  background: #fff;
+  margin-top: 20px;
+  flex-basis: 40%;
+}
+
+.viewport {
+  height: 100%;
+  width: 100%;
+}
 
 </style>

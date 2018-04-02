@@ -6,7 +6,7 @@
     <filesets-form v-if="selectedTotal > 1" id="multiSelected"/>
     <!-- Single Selected Form-->
     <fileset-form v-if="selectedTotal === 1" id="singleSelected"/>
-    <controls></controls>
+    <controls viewerId="viewer"></controls>
   </div>
 </template>
 

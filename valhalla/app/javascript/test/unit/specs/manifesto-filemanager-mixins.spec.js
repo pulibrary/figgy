@@ -66,6 +66,13 @@ describe('mixins', () => {
       expect(bibid).toBe('4609321')
     })
 
+    it('getCanvasMainService', () => {
+      const s = manifestation.mainSequence()
+      const canvases = s.getCanvases()
+      const service = manifestation.getCanvasMainService(canvases[1])
+      expect(service).toBe('http://localhost:3000/image-service/50b5e49b-ade7-4278-8265-4f72081f26a5')
+    })
+
   })
 
   describe('multi-volume methods', () => {
@@ -88,6 +95,12 @@ describe('mixins', () => {
       const ic = manifestation.imageCollection(resource)
       expect(ic.id).toBe('2b807928-20e4-437d-aa6e-65bde98ea142')
       expect(ic.images[0].label).toBe('Vol 1')
+    })
+
+    it('getManifestService', () => {
+      const manifests = manifestation.getManifests()
+      const service = manifestation.getManifestService(manifests[0])
+      expect(service).toBe('http://localhost:3000/image-service/24e3e7c3-90a7-45a6-8f18-df1c905a9a0a')
     })
 
   })
