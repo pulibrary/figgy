@@ -37,7 +37,7 @@ class Jp2DerivativeService
   end
 
   def valid?
-    mime_type == ['image/tiff']
+    ['image/tiff', 'image/jpeg'].include?(mime_type.first)
   end
 
   def create_derivatives
@@ -59,6 +59,15 @@ class Jp2DerivativeService
   end
 
   def run_derivatives
+    case mime_type
+    when ['image/tiff']
+      run_tiff_derivatives
+    when ['image/jpeg']
+      run_jpg_derivatives
+    end
+  end
+
+  def run_tiff_derivatives
     Hydra::Derivatives::Jpeg2kImageDerivatives.create(
       filename,
       outputs: [
@@ -68,6 +77,17 @@ class Jp2DerivativeService
           datastream: 'intermediate_file'
         },
         url: URI("file://#{temporary_output.path}")
+      ]
+    )
+  end
+
+  def run_jpg_derivatives
+    Hydra::Derivatives::ImageDerivatives.create(
+      filename,
+      outputs: [
+        label: 'intermediate_file',
+        url: URI("file://#{temporary_output.path}"),
+        format: 'jp2'
       ]
     )
   end
