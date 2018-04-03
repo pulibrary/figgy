@@ -29,6 +29,7 @@ module Valhalla
         end
         after_create_success(obj, @change_set)
       else
+        Rails.logger.warn(@change_set.errors.details)
         render :new
       end
     end
