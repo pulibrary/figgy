@@ -30,6 +30,16 @@ RSpec.describe EventGenerator::GeoserverEventGenerator do
   end
 
   describe "#valid?" do
+    context "with a raster file set with a derivative" do
+      let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tif") }
+      let(:tika_output) { tika_geotiff_output }
+      let(:resource) { FactoryBot.create_for_repository(:raster_resource, files: [file]) }
+
+      it "publishes a persistent JSON message" do
+        expect(event_generator.valid?(record)).to be true
+      end
+    end
+
     context "with a scanned resource" do
       let(:record) { FactoryBot.create_for_repository(:scanned_resource) }
 
@@ -38,7 +48,7 @@ RSpec.describe EventGenerator::GeoserverEventGenerator do
       end
     end
 
-    context "with a raster file set without a derivative" do
+    context "with a file set without a derivative" do
       before do
         persister = Valkyrie.config.metadata_adapter.persister
         record.file_metadata = record.file_metadata.reject(&:derivative?)
