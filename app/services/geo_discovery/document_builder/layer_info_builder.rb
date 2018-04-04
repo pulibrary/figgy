@@ -58,7 +58,7 @@ module GeoDiscovery
         # @return [String] vector geometry
         def vector_geom_type
           return 'Mixed' unless file_set
-          file_set.try(:geometry_type) || 'Mixed'
+          file_set.try(:geometry).try(:first) || 'Mixed'
         end
     end
   end

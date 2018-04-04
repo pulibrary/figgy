@@ -28,7 +28,7 @@ class GdalCharacterizationService
 
   # Removes unzipped files
   def clean_up_zip_directory
-    FileUtils.rm_r(zip_file_directory)
+    FileUtils.rm_rf(zip_file_directory)
   end
 
   # Path to the  dataset. The path points to a directory for file formats that are saved as zip files.

@@ -78,7 +78,8 @@ class RasterResourceDerivativeService
       input_format: original_file.mime_type.first,
       label: :display_raster,
       id: resource.id,
-      format: 'tif',
+      format: "tif",
+      output_srid: "EPSG:3857",
       url: URI("file://#{temporary_display_output.path}")
     }
   end
@@ -88,8 +89,8 @@ class RasterResourceDerivativeService
       input_format: original_file.mime_type.first,
       label: :thumbnail,
       id: resource.id,
-      format: 'png',
-      size: '200x150',
+      format: "png",
+      size: "200x150",
       url: URI("file://#{temporary_thumbnail_output.path}")
     }
   end

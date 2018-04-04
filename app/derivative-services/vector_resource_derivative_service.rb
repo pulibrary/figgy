@@ -79,7 +79,8 @@ class VectorResourceDerivativeService
       input_format: original_file.mime_type.first,
       label: :display_vector,
       id: resource.id,
-      format: 'zip',
+      format: "zip",
+      output_srid: "EPSG:3857",
       url: URI("file://#{temporary_display_output.path}")
     }
   end
@@ -89,8 +90,8 @@ class VectorResourceDerivativeService
       input_format: original_file.mime_type.first,
       label: :thumbnail,
       id: resource.id,
-      format: 'png',
-      size: '200x150',
+      format: "png",
+      size: "200x150",
       url: URI("file://#{temporary_thumbnail_output.path}")
     }
   end
