@@ -26,15 +26,21 @@ module ThumbnailHelper
   end
 
   def geo_thumbnail_path(document, image_options = {})
-    unless document.is_a?(FileSet)
-      file_set_id = Array(document.thumbnail_id).first
-      return unless file_set_id
-      document = Valkyrie.config.metadata_adapter.query_service.find_by(id: file_set_id)
-    end
+    return build_geo_thumbnail_path(document, image_options) if document.is_a?(FileSet)
+    return unless document.thumbnail_id
+    id = Array(document.thumbnail_id).first
+    file_set = Valkyrie.config.metadata_adapter.query_service.find_by(id: id)
+    build_geo_thumbnail_path(file_set, image_options)
+  rescue Valkyrie::Persistence::ObjectNotFoundError
+    Valkyrie.logger.warn "Unable to load thumbnail for #{document}"
+    image_tag 'default.png'
+  end
+
+  def build_geo_thumbnail_path(document, image_options = {})
     thumbnail_id = document.thumbnail_files.first.try(:id)
-    return unless thumbnail_id
     url = valhalla.download_path(document.id, thumbnail_id)
-    image_tag url, image_options.merge(onerror: default_icon_fallback) if url.present?
+    return image_tag 'default.png' unless url.present?
+    image_tag url, image_options.merge(onerror: default_icon_fallback)
   end
 
   def iiif_thumbnail_path(document, image_options = {})
