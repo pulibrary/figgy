@@ -62,7 +62,7 @@ RSpec.describe ThumbnailHelper do
       end
     end
 
-    context "when encountering an error finding a derivative" do
+    context "when encountering an error finding a scanned resource derivative" do
       let(:manifest_helper) { instance_double(ManifestBuilder::ManifestHelper) }
 
       before do
@@ -75,6 +75,22 @@ RSpec.describe ThumbnailHelper do
         book = FactoryBot.create_for_repository(:scanned_resource, thumbnail_id: file_set.id)
 
         expect(helper.figgy_thumbnail_path(book)).to eq helper.image_tag("default.png")
+      end
+    end
+
+    context "when encountering an error finding a vector resource derivative" do
+      let(:thumbnail_file_id) { Valkyrie::ID.new("test_id") }
+      let(:thumbnail_file) { FileMetadata.new(id: thumbnail_file_id, use: [Valkyrie::Vocab::PCDMUse.ThumbnailImage]) }
+      let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: [thumbnail_file]) }
+      let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource, thumbnail_id: file_set.id, member_ids: [file_set.id]) }
+
+      before do
+        allow(Valkyrie.config.metadata_adapter.query_service).to receive(:find_by).and_raise(Valkyrie::Persistence::ObjectNotFoundError)
+        allow(file_set).to receive(:parent).and_return(vector_resource)
+      end
+
+      it "generates a default image" do
+        expect(helper.figgy_thumbnail_path(vector_resource)).to eq helper.image_tag("default.png")
       end
     end
   end
