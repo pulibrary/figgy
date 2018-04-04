@@ -13,6 +13,9 @@ dl.document-metadata {
   }
   > .document-thumbnail {
     padding-left: 0;
+    > a img {
+      width: 200px;
+    }
   }
 }
 
