@@ -5,13 +5,15 @@ class User < ApplicationRecord
   include Hydra::User
   # Connects this user object to Role-management behaviors.
   include Hydra::RoleManagement::UserRoles
-  validates :uid, :email, presence: true
+  validates :uid, :email, presence: true, uniqueness: true
 
   def self.from_omniauth(access_token)
-    User.where(provider: access_token.provider, uid: access_token.uid).first_or_create do |user|
-      user.uid = access_token.uid
+    unique_uid = access_token.uid
+    User.where(provider: access_token.provider, uid: unique_uid).first_or_create do |user|
+      user.uid = unique_uid
       user.provider = access_token.provider
-      user.email = "#{access_token.uid}@princeton.edu"
+      email = "#{access_token.uid}@princeton.edu"
+      user.email = email
     end
   end
   # Include default devise modules. Others available are:
