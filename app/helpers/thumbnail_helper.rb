@@ -38,8 +38,8 @@ module ThumbnailHelper
 
   def build_geo_thumbnail_path(document, image_options = {})
     thumbnail_id = document.thumbnail_files.first.try(:id)
+    return image_tag 'default.png' unless thumbnail_id
     url = valhalla.download_path(document.id, thumbnail_id)
-    return image_tag 'default.png' unless url.present?
     image_tag url, image_options.merge(onerror: default_icon_fallback)
   end
 
