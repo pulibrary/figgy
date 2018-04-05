@@ -58,7 +58,20 @@ module GeoDiscovery
         # @return [String] vector geometry
         def vector_geom_type
           return 'Mixed' unless file_set
-          file_set.try(:geometry).try(:first) || 'Mixed'
+          geometry = file_set.try(:geometry).try(:first) || 'Mixed'
+          vector_geom_clean(geometry)
+        end
+
+        # Returns unwanted strings from OGR/GDAL geometry types.
+        # @return [String] cleaned geometry
+        def vector_geom_clean(value)
+          return "Mixed" if value == "None"
+          removable_strings = ["Multi ", "3D ", " String"]
+          removable_strings.each  do |s|
+            value = value.gsub(s, "")
+          end
+
+          value
         end
     end
   end
