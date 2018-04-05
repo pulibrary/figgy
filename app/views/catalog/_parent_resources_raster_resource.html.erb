@@ -1,0 +1,77 @@
+
+  <%= simple_form_for @change_set do |f| %>
+    <table id="parent-raster-resources"
+           class="table table-striped parent-resources parent-raster-resources"
+           data-update-url="<%= vector_resources_attach_to_parent_path(id: resource.id) %>"
+           data-query-url="<%= solr_document_path(id: resource.id) %>"
+           data-parents="<%= decorated_resource.parents.to_a.map { |parents| parents.id.to_s } %>"
+           data-resource-id="<%= resource.id.to_s %>"
+           data-param-key="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>">
+      <thead>
+        <tr>
+         <th>Thumbnail</th>
+         <th>Title</th>
+         <th>Date Uploaded</th>
+         <th>Visibility</th>
+         <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% unless decorated_resource.raster_resource_parents.empty? %>
+          <% decorated_resource.raster_resource_parents.each do |raster_resource| %>
+            <% raster_resource_url = parent_solr_document_path("#{resource.id}", "#{raster_resource.id}") %>
+            <tr data-resource-id="<%= raster_resource.id.to_s %>" data-update-url="<%= vector_resources_remove_from_parent_path(id: resource.id) %>">
+              <td><%= link_to figgy_thumbnail_path(raster_resource, { class: 'thumbnail-inner', onerror: default_icon_fallback }), raster_resource_url %></td>
+              <td><%= raster_resource.first_title %></td>
+              <td><%= raster_resource.created_at %></td>
+              <td><%= raster_resource.visibility.first.html_safe %></td>
+              <td>
+                <%= link_to 'View', raster_resource_url, class: 'btn btn-default' %>
+                <%= link_to 'Edit', main_app.polymorphic_path([:edit, raster_resource]), class: 'btn btn-default' %>
+                <span class="input-group-btn">
+                  <%= f.button :button, "Detach", class: ["btn","btn-danger", 'btn-remove-row'] %>
+                </span>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td>This work has no raster resources attached.  Click "Attach" to attach to an existing raster resource.</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        <% end %>
+      </tbody>
+
+      <tfoot>
+        <tr class="parent-resources-attach" >
+          <td>
+            <%= f.input :parent_ids,
+                        collection: @unrelated_parent_raster_resources.sort_by(&:title),
+                        label_method: :title,
+                        value_method: :id,
+                        include_blank: false,
+                        selected: nil,
+                        label: "Attach to an existing resource...",
+                        required: false,
+                        input_html: {
+                          multiple: false,
+                          class: ["related_resource_ids", "resource_parent_ids", "form-control"],
+                          'aria-labelledby' => ""
+                        } %>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>
+            <span class="input-group-btn">
+              <%= f.button :button, "Attach", class: ["btn","btn-primary","btn-add-row"] %>
+            </span>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  <% end %>

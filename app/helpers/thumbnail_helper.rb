@@ -2,11 +2,15 @@
 module ThumbnailHelper
   include ::BlacklightHelper
 
+  def default_path
+    image_tag 'default.png', class: 'thumbnail-inner'
+  end
+
   def build_iiif_thumbnail_path(id, image_options = {})
     url = ManifestBuilder::ManifestHelper.new.manifest_image_thumbnail_path(id)
     image_tag url, image_options.merge(onerror: default_icon_fallback) if url.present?
   rescue
-    image_tag 'default.png'
+    default_path
   end
 
   def default_icon_fallback
@@ -14,7 +18,7 @@ module ThumbnailHelper
   end
 
   def figgy_thumbnail_path(document, image_options = {})
-    document = document.try(:resource) || document
+    document = document.try(:resource) || document.try(:model) || document
     value = send(plum_thumbnail_method(document), document, image_options)
     value
   end
@@ -25,21 +29,31 @@ module ThumbnailHelper
     parent.try(:geo_resource?) ? true : false
   end
 
+  def geo_file_set(resource)
+    return unless resource.thumbnail_id
+    id = Array(resource.thumbnail_id).first
+    child = Valkyrie.config.metadata_adapter.query_service.find_by(id: id)
+    return child if child.is_a? FileSet
+    geo_file_set child
+  rescue Valkyrie::Persistence::ObjectNotFoundError
+    Valkyrie.logger.warn "Unable to load thumbnail for #{resource}"
+    nil
+  end
+
   def geo_thumbnail_path(document, image_options = {})
     return build_geo_thumbnail_path(document, image_options) if document.is_a?(FileSet)
-    return unless document.thumbnail_id
-    id = Array(document.thumbnail_id).first
-    file_set = Valkyrie.config.metadata_adapter.query_service.find_by(id: id)
+    file_set = geo_file_set document
+    return default_path if file_set.nil?
     build_geo_thumbnail_path(file_set, image_options)
-  rescue Valkyrie::Persistence::ObjectNotFoundError
-    Valkyrie.logger.warn "Unable to load thumbnail for #{document}"
-    image_tag 'default.png'
   end
 
   def build_geo_thumbnail_path(document, image_options = {})
-    thumbnail_id = document.thumbnail_files.first.try(:id)
-    return image_tag 'default.png' unless thumbnail_id
-    url = valhalla.download_path(document.id, thumbnail_id)
+    thumbnail_id = document.thumbnail_files.first.try :id
+    return default_path unless thumbnail_id
+
+    url = valhalla.download_path document.id, thumbnail_id
+    return default_path unless url.present?
+
     image_tag url, image_options.merge(onerror: default_icon_fallback)
   end
 

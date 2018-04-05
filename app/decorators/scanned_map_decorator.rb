@@ -139,4 +139,8 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   def scanned_map_members
     @scanned_maps ||= members.select { |r| r.is_a?(ScannedMap) }.map(&:decorate).to_a
   end
+
+  def raster_resource_members
+    @raster_resources ||= members.select { |r| r.is_a?(RasterResource) }.map(&:decorate).to_a
+  end
 end

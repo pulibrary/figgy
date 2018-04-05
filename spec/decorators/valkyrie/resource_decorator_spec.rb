@@ -138,6 +138,12 @@ RSpec.describe Valkyrie::ResourceDecorator do
         resource.state = ['pending']
         expect(resource.decorate.public_readable_state?).to eq false
       end
+  describe '#form_input_values' do
+    let(:resource) { FactoryBot.build(:scanned_resource, title: "Архипела́г ГУЛА́Г") }
+    it 'generates OpenStruct Objects for select form field values' do
+      expect(resource.decorate.form_input_values).to be_an OpenStruct
+      expect(resource.decorate.form_input_values.title).to eq 'Архипела́г ГУЛА́Г'
+      expect(resource.decorate.form_input_values.id).to eq resource.id.to_s
     end
   end
 end

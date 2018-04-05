@@ -74,7 +74,7 @@ RSpec.describe ThumbnailHelper do
         file_set = FactoryBot.create_for_repository(:file_set)
         book = FactoryBot.create_for_repository(:scanned_resource, thumbnail_id: file_set.id)
 
-        expect(helper.figgy_thumbnail_path(book)).to eq helper.image_tag("default.png")
+        expect(helper.figgy_thumbnail_path(book)).to eq helper.image_tag 'default.png', class: 'thumbnail-inner'
       end
     end
 
@@ -90,8 +90,38 @@ RSpec.describe ThumbnailHelper do
       end
 
       it "generates a default image" do
-        expect(helper.figgy_thumbnail_path(vector_resource)).to eq helper.image_tag("default.png")
+        expect(helper.figgy_thumbnail_path(vector_resource)).to eq helper.image_tag 'default.png', class: 'thumbnail-inner'
       end
+    end
+  end
+
+  describe '#geo_file_set' do
+    let(:file_set) { FactoryBot.create_for_repository(:file_set) }
+    let(:raster_resource) { FactoryBot.create_for_repository(:raster_resource, thumbnail_id: file_set.id) }
+    let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource, thumbnail_id: raster_resource.id) }
+
+    context 'without a thumbnail' do
+      let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource, thumbnail_id: nil) }
+      it 'return a nil value' do
+        expect(helper.geo_file_set(vector_resource)).to be nil
+      end
+    end
+    context 'with a deleted thumbnail' do
+      let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource, thumbnail_id: 'no-exist') }
+      it 'return a nil value' do
+        expect(helper.geo_file_set(vector_resource)).to be nil
+      end
+    end
+    context 'with a valid thumbnail' do
+      let(:file_set) { FactoryBot.create_for_repository(:file_set) }
+      let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource, thumbnail_id: file_set.id) }
+      it 'accesses the thumbnail' do
+        expect(helper.geo_file_set(vector_resource)).to be_a FileSet
+      end
+    end
+
+    it 'accesses the thumbnail from the related geo resource' do
+      expect(helper.geo_file_set(vector_resource)).to be_a FileSet
     end
   end
 end

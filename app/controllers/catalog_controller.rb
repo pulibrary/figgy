@@ -20,6 +20,12 @@ class CatalogController < ApplicationController
   # enforce hydra access controls
   before_action :enforce_show_permissions, only: :show
 
+  before_action :load_scanned_maps, only: [:show]
+  before_action :load_raster_resources, only: [:show]
+  before_action :load_vector_resources, only: [:show]
+  before_action :load_parent_scanned_maps, only: [:show]
+  before_action :load_parent_raster_resources, only: [:show]
+
   configure_blacklight do |config|
     config.default_solr_params = {
       qf: search_config['qf'],
@@ -114,6 +120,31 @@ class CatalogController < ApplicationController
     end
   end
 
+  def load_scanned_maps
+    id = params[:id]
+    @unattached_scanned_maps = load_unattached_resources(id: id, model: ScannedMap)
+  end
+
+  def load_raster_resources
+    id = params[:id]
+    @unattached_raster_resources = load_unattached_resources(id: id, model: RasterResource)
+  end
+
+  def load_vector_resources
+    id = params[:id]
+    @unattached_vector_resources = load_unattached_resources(id: id, model: VectorResource)
+  end
+
+  def load_parent_scanned_maps
+    id = params[:id]
+    @unrelated_parent_scanned_maps = load_unrelated_parent_resources(id: id, model: ScannedMap)
+  end
+
+  def load_parent_raster_resources
+    id = params[:id]
+    @unrelated_parent_raster_resources = load_unrelated_parent_resources(id: id, model: RasterResource)
+  end
+
   private
 
     # Instantiates the search builder that builds a query for items that are
@@ -150,5 +181,19 @@ class CatalogController < ApplicationController
         current_page: current_page,
         per_page: per_page
       )
+    end
+
+    def query_service
+      Valkyrie.config.metadata_adapter.query_service
+    end
+
+    def load_unattached_resources(id:, model:)
+      resources = query_service.custom_queries.find_unrelated(id: id, model: model.to_s)
+      resources.map(&:decorate).map(&:form_input_values)
+    end
+
+    def load_unrelated_parent_resources(id:, model:)
+      resources = query_service.custom_queries.find_unrelated_parents(id: id, model: model.to_s)
+      resources.map(&:decorate).map(&:form_input_values)
     end
 end
