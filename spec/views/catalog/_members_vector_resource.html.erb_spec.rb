@@ -14,6 +14,7 @@ RSpec.describe "catalog/_members_vector_resource" do
       assign :change_set, change_set
       assign :unattached_vector_resources, []
       assign :unrelated_parent_raster_resources, []
+      assign :unrelated_parent_vector_resources, []
       render
     end
 

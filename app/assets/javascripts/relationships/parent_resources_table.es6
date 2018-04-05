@@ -8,8 +8,14 @@ export default class ParentResourcesTable extends RelatedResourcesTable {
   constructor(element, form) {
     super(element, form)
     this.attribute = 'member_ids'
+    this.members = []
+  }
+
+  bindTable(element) {
+    super.bindTable(element)
     this.parents = this.table.data('parents')
     this.resourceId = this.table.data('resource-id')
+    this.parents = this.table.data('parents')
   }
 
   /**
@@ -22,7 +28,7 @@ export default class ParentResourcesTable extends RelatedResourcesTable {
         id: parentId,
         [this.attribute]: [this.resourceId]
       }
-    };
+    }
   }
 
   /**
@@ -39,10 +45,11 @@ export default class ParentResourcesTable extends RelatedResourcesTable {
       if ($.inArray(parentId, $this.parents) > -1) {
         $this.setWarningMessage($row, 'Resource is already related.')
       } else {
+        $this.parents.push(parentId)
         $this.hideWarningMessage($row)
         $element.prop('disabled', true)
-        $this.setLoading(true)
 
+        $this.setLoading(true)
         $this.callAjax({
           row: $row,
           members: null,
@@ -53,9 +60,9 @@ export default class ParentResourcesTable extends RelatedResourcesTable {
           data: $this.buildFormData(parentId),
           on_error: $this.handleError,
           on_success: $this.reloadTable
-        });
+        })
       }
-    });
+    })
   }
 
   /**
@@ -67,6 +74,7 @@ export default class ParentResourcesTable extends RelatedResourcesTable {
     $this.element.find('.btn-remove-row').click((event) => {
       const $element = $(event.target)
       const $row = $element.parents('tr:first')
+
       const parentId = $row.data('resource-id')
       const index = $this.parents.indexOf(parentId)
       $this.parents.splice(index, 1)
@@ -74,7 +82,6 @@ export default class ParentResourcesTable extends RelatedResourcesTable {
 
       $element.prop('disabled', true)
       $this.setLoading(true)
-
       $this.callAjax({
         row: $row,
         members: null,
@@ -86,6 +93,20 @@ export default class ParentResourcesTable extends RelatedResourcesTable {
         on_error: $this.handleError,
         on_success: $this.reloadTable
       })
-    });
+    })
+  }
+
+  updateTable() {
+    this.table.attr('data-parents', this.constructor.arrayToString(this.parents))
+    super.updateTable()
+  }
+
+  updateParents() {
+    this.table.data('parents', this.members)
+  }
+
+  update() {
+    this.updateParents()
+    super.update()
   }
 }

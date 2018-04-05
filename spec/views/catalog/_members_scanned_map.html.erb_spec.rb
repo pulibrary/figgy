@@ -14,6 +14,7 @@ RSpec.describe "catalog/_members_scanned_map" do
       assign :change_set, change_set
       assign :unattached_scanned_maps, []
       assign :unattached_raster_resources, []
+      assign :unrelated_parent_scanned_maps, []
       render
     end
 

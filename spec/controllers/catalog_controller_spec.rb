@@ -582,6 +582,107 @@ RSpec.describe CatalogController do
         expect(response.body).not_to have_content "Review and Approval"
       end
     end
+
+    context 'when viewing a scanned map' do
+      let(:resource) { FactoryBot.create_for_repository(:scanned_map) }
+      let(:attachable_resource1) { FactoryBot.create_for_repository(:raster_resource) }
+      let(:attachable_resource2) { FactoryBot.create_for_repository(:scanned_map) }
+      let(:parent_resource) { FactoryBot.create_for_repository(:scanned_map) }
+
+      render_views
+
+      before do
+        persister.save(resource: resource)
+        persister.save(resource: attachable_resource1)
+        persister.save(resource: attachable_resource2)
+        persister.save(resource: parent_resource)
+        sign_in FactoryBot.create(:admin)
+      end
+
+      it 'retrieves attachable resources' do
+        get :show, params: { id: resource.id }
+        expect(response).to be_success
+
+        expect(assigns(:unattached_scanned_maps)).not_to be_empty
+        expect(assigns(:unattached_scanned_maps).first.id).to eq attachable_resource2.id.to_s
+        expect(assigns(:unattached_raster_resources)).not_to be_empty
+        expect(assigns(:unattached_raster_resources).first.id).to eq attachable_resource1.id.to_s
+
+        parent_ids = assigns(:unrelated_parent_scanned_maps).map(&:id)
+        expect(parent_ids).not_to be_empty
+        expect(parent_ids).to include parent_resource.id.to_s
+      end
+    end
+
+    context 'when viewing a raster resource' do
+      let(:resource) { FactoryBot.create_for_repository(:raster_resource) }
+      let(:attachable_resource1) { FactoryBot.create_for_repository(:vector_resource) }
+      let(:attachable_resource2) { FactoryBot.create_for_repository(:raster_resource) }
+      let(:parent_resource1) { FactoryBot.create_for_repository(:scanned_map) }
+      let(:parent_resource2) { FactoryBot.create_for_repository(:raster_resource) }
+
+      render_views
+
+      before do
+        persister.save(resource: resource)
+        persister.save(resource: attachable_resource1)
+        persister.save(resource: attachable_resource2)
+        persister.save(resource: parent_resource1)
+        persister.save(resource: parent_resource2)
+        sign_in FactoryBot.create(:admin)
+      end
+
+      it 'retrieves attachable resources' do
+        get :show, params: { id: resource.id }
+        expect(response).to be_success
+
+        expect(assigns(:unattached_raster_resources)).not_to be_empty
+        expect(assigns(:unattached_raster_resources).first.id).to eq attachable_resource2.id.to_s
+        expect(assigns(:unattached_vector_resources)).not_to be_empty
+        expect(assigns(:unattached_vector_resources).first.id).to eq attachable_resource1.id.to_s
+
+        parent_ids = assigns(:unrelated_parent_scanned_maps).map(&:id)
+        expect(parent_ids).not_to be_empty
+        expect(parent_ids).to include parent_resource1.id.to_s
+
+        parent_ids = assigns(:unrelated_parent_raster_resources).map(&:id)
+        expect(parent_ids).not_to be_empty
+        expect(parent_ids).to include parent_resource2.id.to_s
+      end
+    end
+
+    context 'when viewing a vector resource' do
+      let(:resource) { FactoryBot.create_for_repository(:vector_resource) }
+      let(:attachable_resource) { FactoryBot.create_for_repository(:vector_resource) }
+      let(:parent_resource1) { FactoryBot.create_for_repository(:raster_resource) }
+      let(:parent_resource2) { FactoryBot.create_for_repository(:vector_resource) }
+
+      render_views
+
+      before do
+        persister.save(resource: resource)
+        persister.save(resource: attachable_resource)
+        persister.save(resource: parent_resource1)
+        persister.save(resource: parent_resource2)
+        sign_in FactoryBot.create(:admin)
+      end
+
+      it 'retrieves attachable resources' do
+        get :show, params: { id: resource.id }
+        expect(response).to be_success
+
+        expect(assigns(:unattached_vector_resources)).not_to be_empty
+        expect(assigns(:unattached_vector_resources).first.id).to eq attachable_resource.id.to_s
+
+        parent_ids = assigns(:unrelated_parent_raster_resources).map(&:id)
+        expect(parent_ids).not_to be_empty
+        expect(parent_ids).to include parent_resource1.id.to_s
+
+        parent_ids = assigns(:unrelated_parent_vector_resources).map(&:id)
+        expect(parent_ids).not_to be_empty
+        expect(parent_ids).to include parent_resource2.id.to_s
+      end
+    end
   end
 
   describe "#has_search_parameters?" do
