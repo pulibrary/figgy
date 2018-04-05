@@ -71,7 +71,7 @@ end
 gem 'rsolr', '>= 1.0'
 
 gem 'aasm'
-gem 'browse-everything', github: 'jrgriffiniii/browse-everything', branch: 'hotfix-filesystem'
+gem 'browse-everything', github: 'samvera/browse-everything'
 gem 'coffee-rails'
 gem 'devise'
 gem 'ezid-client'

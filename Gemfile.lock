@@ -1,23 +1,4 @@
 GIT
-  remote: git://github.com/jrgriffiniii/browse-everything.git
-  revision: 9e9c9c076207e61787a8b2a09ff5b391e83d2461
-  branch: hotfix-filesystem
-  specs:
-    browse-everything (0.15.1)
-      addressable (~> 2.5)
-      aws-sdk-s3
-      bootstrap-sass (~> 3.2)
-      dropbox_api (>= 0.1.10)
-      font-awesome-rails
-      google-api-client (~> 0.9)
-      google_drive (~> 2.1)
-      httparty (~> 0.15)
-      rails (>= 4.2)
-      ruby-box
-      sass-rails
-      signet (~> 0.8)
-
-GIT
   remote: git://github.com/pulibrary/geo_works-derivatives.git
   revision: 9ed9a083bf0749391db1687daa4fcc38df02103c
   tag: v0.2.1
@@ -51,6 +32,24 @@ GIT
   specs:
     iiif_manifest (0.3.0)
       activesupport (>= 4)
+
+GIT
+  remote: git://github.com/samvera/browse-everything.git
+  revision: 6416ce9d611a3f24d9684916edc0484e737c34d9
+  specs:
+    browse-everything (0.15.1)
+      addressable (~> 2.5)
+      aws-sdk-s3
+      bootstrap-sass (~> 3.2)
+      dropbox_api (>= 0.1.10)
+      font-awesome-rails
+      google-api-client (~> 0.9)
+      google_drive (~> 2.1)
+      httparty (~> 0.15)
+      rails (>= 4.2)
+      ruby-box
+      sass-rails
+      signet (~> 0.8)
 
 GIT
   remote: git://github.com/yob/pdf-reader.git
@@ -165,15 +164,15 @@ GEM
     autoprefixer-rails (8.2.0)
       execjs
     awesome_print (1.8.0)
-    aws-partitions (1.76.0)
-    aws-sdk-core (3.18.1)
+    aws-partitions (1.78.0)
+    aws-sdk-core (3.19.0)
       aws-partitions (~> 1.0)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
     aws-sdk-kms (1.5.0)
       aws-sdk-core (~> 3)
       aws-sigv4 (~> 1.0)
-    aws-sdk-s3 (1.8.2)
+    aws-sdk-s3 (1.9.0)
       aws-sdk-core (~> 3)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.0)
@@ -354,15 +353,15 @@ GEM
       i18n
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    google-api-client (0.20.0)
+    google-api-client (0.19.8)
       addressable (~> 2.5, >= 2.5.1)
       googleauth (>= 0.5, < 0.7.0)
       httpclient (>= 2.8.1, < 3.0)
       mime-types (~> 3.0)
       representable (~> 3.0)
       retriable (>= 2.0, < 4.0)
-    google_drive (2.1.3)
-      google-api-client (>= 0.11.0, < 1.0.0)
+    google_drive (2.1.9)
+      google-api-client (>= 0.11.0, < 0.20.0)
       googleauth (>= 0.5.0, < 1.0.0)
       nokogiri (>= 1.5.3, < 2.0.0)
     googleauth (0.5.1)
@@ -423,7 +422,7 @@ GEM
     jbuilder (2.7.0)
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
-    jmespath (1.3.1)
+    jmespath (1.4.0)
     jquery-datatables-rails (3.4.0)
       actionpack (>= 3.1)
       jquery-rails
