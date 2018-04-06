@@ -26,6 +26,7 @@ Style/PredicateName:
 Rails/OutputSafety:
   Exclude:
     - 'app/decorators/**/*'
+    - 'valhalla/app/helpers/valhalla/application_helper.rb'
 Metrics/AbcSize:
   Exclude:
     - 'app/services/ingest_ephemera_service.rb'
@@ -79,10 +80,12 @@ Metrics/MethodLength:
     - 'valhalla/app/controllers/concerns/valhalla/resource_controller.rb'
     - 'app/services/folder_json_importer.rb'
     - 'app/models/ability.rb'
+    - 'valhalla/app/helpers/valhalla/application_helper.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
     - 'valhalla/app/controllers/concerns/valhalla/resource_controller.rb'
+    - 'valhalla/app/helpers/valhalla/application_helper.rb'
 Metrics/ParameterLists:
   Exclude:
     - 'app/change_set_persisters/plum_change_set_persister.rb'

@@ -1,2 +1,0 @@
-  <%= f.input :rights_note, as: :text, 
-      input_html: { class: 'rights-note', readonly: !ControlledVocabulary.for(:rights_statement).find(f.object.rights_statement).try(:notable?) }, required: f.object.required?(:rights_note)  %>
