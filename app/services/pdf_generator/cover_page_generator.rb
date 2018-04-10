@@ -61,12 +61,26 @@ class PDFGenerator
         prawn_document.move_down 20
 
         header(prawn_document, "Citation Information")
-        text(prawn_document, resource.primary_imported_metadata.creator)
+        if resource.respond_to? :primary_imported_metadata
+          creator = resource.primary_imported_metadata.creator
+          edition = resource.primary_imported_metadata.edition
+          extent = resource.primary_imported_metadata.extent
+          description = resource.primary_imported_metadata.description
+          call_number = resource.primary_imported_metadata.call_number
+        else
+          creator = resource.creator
+          edition = resource.edition
+          extent = resource.extent
+          description = resource.description
+          call_number = resource.call_number
+        end
+
+        text(prawn_document, creator)
         text(prawn_document, resource.title)
-        text(prawn_document, resource.primary_imported_metadata.edition)
-        text(prawn_document, resource.primary_imported_metadata.extent)
-        text(prawn_document, resource.primary_imported_metadata.description)
-        text(prawn_document, resource.primary_imported_metadata.call_number)
+        text(prawn_document, edition)
+        text(prawn_document, extent)
+        text(prawn_document, description)
+        text(prawn_document, call_number)
         # collection name (from EAD) ? not in jsonld
 
         header(prawn_document, "Contact Information")
@@ -108,7 +122,10 @@ class PDFGenerator
       end
 
       def lang_is_arabic?
-        resource.primary_imported_metadata.language && resource.primary_imported_metadata.language.first && resource.primary_imported_metadata.language.first == 'ara'
+        resource.respond_to?(:primary_imported_metadata) &&
+          resource.primary_imported_metadata.language &&
+          resource.primary_imported_metadata.language.first &&
+          resource.primary_imported_metadata.language.first == 'ara'
       end
 
       def dir_split(s)
