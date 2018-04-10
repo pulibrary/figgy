@@ -14,7 +14,7 @@ RSpec.describe SimpleResourceDecorator do
     end
   end
 
-  describe '#parents' do
+  context 'within a collection' do
     let(:parent_collection) { FactoryBot.create_for_repository(:collection) }
     let(:resource) { FactoryBot.create_for_repository(:simple_resource, member_of_collection_ids: [parent_collection.id]) }
 
@@ -22,8 +22,17 @@ RSpec.describe SimpleResourceDecorator do
       parent_collection
     end
 
-    it 'retrieves all parent resources' do
-      expect(decorator.parents.to_a).not_to be_empty
+    describe '#parents' do
+      it 'retrieves all parent resources' do
+        expect(decorator.parents.to_a).not_to be_empty
+      end
+    end
+
+    describe '#collection_slugs' do
+      it 'generates slugs for any existing collections' do
+        expect(decorator.collection_slugs).not_to be_empty
+        expect(decorator.collection_slugs.first).to eq 'test'
+      end
     end
   end
 
