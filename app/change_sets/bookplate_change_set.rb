@@ -16,7 +16,6 @@ class BookplateChangeSet < Valhalla::ChangeSet
   property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID.optional
   property :start_canvas, multiple: false, type: Valkyrie::Types::ID.optional
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
-  property :logical_structure, multiple: true, required: false, type: Types::Strict::Array.member(Structure), default: [Structure.new(label: "Logical", nodes: [])]
   property :read_groups, multiple: true, required: false
   property :file_metadata, multiple: true, required: false, default: []
   property :depositor, multiple: false, require: false

@@ -8,7 +8,6 @@ class Bookplate < Valhalla::Resource
   attribute :member_of_collection_ids
 
   attribute :state
-  attribute :logical_structure, Valkyrie::Types::Array.member(Structure.optional).optional
   attribute :pending_uploads, Valkyrie::Types::Array.member(PendingUpload)
   attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
   attribute :file_metadata, Valkyrie::Types::Set.member(FileMetadata.optional)

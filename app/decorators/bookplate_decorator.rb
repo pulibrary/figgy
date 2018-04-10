@@ -71,7 +71,7 @@ class BookplateDecorator < Valhalla::ResourceDecorator
   end
 
   def manageable_structure?
-    true
+    false
   end
 
   def parents
