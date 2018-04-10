@@ -1,29 +1,19 @@
 # frozen_string_literal: true
 class Valkyrie::ResourceDecorator < ApplicationDecorator
-  display(
-    [
-      :internal_resource,
-      :created_at,
-      :updated_at
-    ]
-  )
-  suppress(
-    [
-      :depositor,
-      :description,
-      :holding_location,
-      :keyword,
-      :nav_date,
-      :ocr_language,
-      :pdf_type,
-      :rights_statement,
-      :sort_title,
-      :source_jsonld,
-      :source_metadata,
-      :source_metadata_identifier,
-      :title
-    ]
-  )
+  display :internal_resource, :created_at, :updated_at
+  suppress :depositor,
+           :description,
+           :holding_location,
+           :keyword,
+           :nav_date,
+           :ocr_language,
+           :pdf_type,
+           :rights_statement,
+           :sort_title,
+           :source_jsonld,
+           :source_metadata,
+           :source_metadata_identifier,
+           :title
 
   def created_at
     output = super

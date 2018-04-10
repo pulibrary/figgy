@@ -1,14 +1,6 @@
 # frozen_string_literal: true
 class EphemeraVocabularyDecorator < Valkyrie::ResourceDecorator
-  display(
-    [
-      :label,
-      :uri,
-      :definition,
-      :categories,
-      :terms
-    ]
-  )
+  display :label, :uri, :definition, :categories, :terms
 
   def label
     Array.wrap(super).first
