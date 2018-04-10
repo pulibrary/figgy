@@ -1,35 +1,26 @@
 # frozen_string_literal: false
 class ScannedMapDecorator < Valkyrie::ResourceDecorator
-  display(Schema::Geo.attributes)
-  display(
-    [
-      :rendered_holding_location,
-      :rendered_coverage,
-      :member_of_collections,
-      :relation,
-      :rendered_links
-    ]
-  )
-  suppress(
-    [
-      :thumbnail_id,
-      :coverage,
-      :cartographic_projection,
-      :source_jsonld,
-      :sort_title
-    ]
-  )
-  iiif_manifest_display(displayed_attributes)
-  iiif_manifest_suppress(Schema::IIIF.attributes)
-  iiif_manifest_suppress(
-    [
-      :visibility,
-      :internal_resource,
-      :rights_statement,
-      :rendered_rights_statement,
-      :thumbnail_id
-    ]
-  )
+  display Schema::Geo.attributes,
+          :rendered_holding_location,
+          :rendered_coverage,
+          :member_of_collections,
+          :relation,
+          :rendered_links
+
+  suppress :thumbnail_id,
+           :coverage,
+           :cartographic_projection,
+           :source_jsonld,
+           :sort_title
+
+  display_in_manifest displayed_attributes
+  suppress_from_manifest Schema::IIIF.attributes,
+                         :visibility,
+                         :internal_resource,
+                         :rights_statement,
+                         :rendered_rights_statement,
+                         :thumbnail_id
+
   delegate(*Schema::Geo.attributes, to: :primary_imported_metadata, prefix: :imported)
 
   def attachable_objects

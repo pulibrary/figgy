@@ -70,8 +70,8 @@ module Schema
     end
 
     included do
-      Common.attributes.each do |field|
-        attribute field
+      Common.attributes.each do |common_attribute|
+        attribute common_attribute
       end
     end
   end
