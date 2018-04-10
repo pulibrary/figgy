@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CollectionDecorator < Valkyrie::ResourceDecorator
+class CollectionDecorator < Valhalla::ResourceDecorator
   def title
     Array(super).first
   end

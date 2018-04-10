@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class DateRangeDecorator < Valkyrie::ResourceDecorator
+class DateRangeDecorator < Valhalla::ResourceDecorator
   def range_string
     return unless start && self.end
     "#{start.first}-#{self.end.first}"

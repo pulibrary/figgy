@@ -1,5 +1,5 @@
 # frozen_string_literal: false
-class VectorResourceDecorator < Valkyrie::ResourceDecorator
+class VectorResourceDecorator < Valhalla::ResourceDecorator
   display Schema::Geo.attributes, :rendered_holding_location, :rendered_coverage, :member_of_collections
   suppress :thumbnail_id, :coverage, :source_jsonld
 

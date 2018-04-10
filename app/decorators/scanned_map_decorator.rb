@@ -1,5 +1,5 @@
 # frozen_string_literal: false
-class ScannedMapDecorator < Valkyrie::ResourceDecorator
+class ScannedMapDecorator < Valhalla::ResourceDecorator
   display Schema::Geo.attributes,
           :rendered_holding_location,
           :rendered_coverage,

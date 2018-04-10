@@ -305,7 +305,7 @@ class ManifestBuilder
     # Stringify the image using the decorator
     # @return [String]
     def to_s
-      Valkyrie::ResourceDecorator.new(resource).header
+      Valhalla::ResourceDecorator.new(resource).header
     end
 
     ##

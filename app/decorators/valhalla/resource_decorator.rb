@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Valkyrie::ResourceDecorator < ApplicationDecorator
+class Valhalla::ResourceDecorator < ApplicationDecorator
   display :internal_resource, :created_at, :updated_at
   suppress :depositor,
            :description,

@@ -102,6 +102,16 @@ RSpec.describe EphemeraFolderDecorator do
     end
   end
 
+  context 'when viewing an Ephemera Project' do
+    let(:resource) { FactoryBot.create_for_repository(:ephemera_project, slug: "lae-d957") }
+    let(:metadata) { resource.decorate.iiif_metadata }
+
+    it 'returns slug attributes as exhibit' do
+      expect(metadata).to be_an Array
+      expect(metadata).to include "label" => "Exhibit", "value" => ["lae-d957"]
+    end
+  end
+
   it 'exposes IIIF manifests' do
     expect(decorator.iiif_manifest_attributes).to include alternative_title: ['test alternative title']
     expect(decorator.iiif_manifest_attributes).to include barcode: ["12345678901234"]
