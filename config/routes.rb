@@ -91,6 +91,14 @@ Rails.application.routes.draw do
 
     get '/scanned_resources/:parent_id/new', to: 'scanned_resources#new', as: :parent_new_scanned_resource
 
+    resources :simple_resources do
+      member do
+        get :file_manager
+        get :manifest, defaults: { format: :json }
+        get :pdf
+      end
+    end
+
     resources :ephemera_projects do
       resources :templates, only: [:new, :create, :destroy]
       resources :ephemera_fields
