@@ -64,6 +64,7 @@ Metrics/ClassLength:
     - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
     - 'app/controllers/catalog_controller.rb'
     - 'app/services/manifest_builder/manifest_service_locator.rb'
+    - 'app/services/pdf_generator/cover_page_generator.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
@@ -98,6 +99,8 @@ RSpec/NestedGroups:
   Exclude:
     - 'spec/controllers/scanned_resources_controller_spec.rb'
     - 'spec/controllers/catalog_controller_spec.rb'
+    - 'spec/change_sets/bookplate_change_set_spec.rb'
+    - 'spec/controllers/bookplates_controller_spec.rb'
 RSpec/DescribeClass:
   Exclude:
     - 'spec/abilities/**/*'
