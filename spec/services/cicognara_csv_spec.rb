@@ -52,8 +52,8 @@ RSpec.describe CicognaraCSV do
                                          member_of_collection_ids: [col.id], import_metadata: true
       end
       let(:values) do
-        [['cico:qgb', 'Microfiche', manifest_url, 'Princeton University Library', 'Oversize NA2810 .H75f',
-          '2068747', "ark:/99999/fk44609321", nil, 'Amsterdam: J. Jeansson, 1620', '1620', nil, nil,
+        [['cico:qgb', 'Microfiche', manifest_url, 'Bibliotheca Apostolica Vaticana', 'Oversize NA2810 .H75f',
+          'cico:qgb', "ark:/99999/fk44609321", nil, 'Amsterdam: J. Jeansson, 1620', '1620', nil, nil,
           '39 . 30 plates. 30 x 40 cm.', 'http://cicognara.org/microfiche_copyright', true]]
       end
       before do
