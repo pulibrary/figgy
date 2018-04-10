@@ -29,7 +29,6 @@ RSpec.feature "Ephemera Folders", js: true do
     scenario 'users can save a new folder' do
       visit boxless_new_ephemera_folder_path(parent_id: ephemera_project.id)
 
-      page.fill_in 'ephemera_folder_barcode', with: '00000000000000'
       page.fill_in 'ephemera_folder_folder_number', with: '1'
       page.fill_in 'ephemera_folder_title', with: 'test new ephemera folder'
       page.fill_in 'ephemera_folder_language', with: 'test language'
@@ -51,7 +50,6 @@ RSpec.feature "Ephemera Folders", js: true do
     scenario 'users can save a new folder and create another' do
       visit boxless_new_ephemera_folder_path(parent_id: ephemera_project.id)
 
-      page.fill_in 'ephemera_folder_barcode', with: '00000000000000'
       page.fill_in 'ephemera_folder_folder_number', with: '2'
       page.fill_in 'ephemera_folder_title', with: 'test new ephemera folder'
       page.fill_in 'ephemera_folder_language', with: 'test language'
@@ -66,7 +64,6 @@ RSpec.feature "Ephemera Folders", js: true do
       page.click_on 'Save and Duplicate Metadata'
 
       expect(page).to have_content 'Folder 2 Saved, Creating Another...'
-      expect(page).not_to have_field 'ephemera_folder_barcode', with: '00000000000000'
       expect(page).not_to have_field 'ephemera_folder_number', with: '2'
     end
   end
