@@ -1,32 +1,15 @@
 # frozen_string_literal: true
 class ScannedResourceDecorator < Valkyrie::ResourceDecorator
-  display(Schema::Common.attributes)
-  display(
-    [
-      :rendered_holding_location,
-      :member_of_collections
-    ]
-  )
-  suppress(
-    [
-      :thumbnail_id,
-      :imported_author,
-      :source_jsonld,
-      :source_metadata,
-      :sort_title
-    ]
-  )
-  iiif_manifest_display(displayed_attributes)
-  iiif_manifest_suppress(Schema::IIIF.attributes)
-  iiif_manifest_suppress(
-    [
-      :visibility,
-      :internal_resource,
-      :rights_statement,
-      :rendered_rights_statement,
-      :thumbnail_id
-    ]
-  )
+  display Schema::Common.attributes, :rendered_holding_location, :member_of_collections
+  suppress :thumbnail_id, :imported_author, :source_jsonld, :source_metadata, :sort_title
+
+  display_in_manifest displayed_attributes
+  suppress_from_manifest Schema::IIIF.attributes,
+                         :visibility,
+                         :internal_resource,
+                         :rights_statement,
+                         :rendered_rights_statement,
+                         :thumbnail_id
 
   delegate(*Schema::Common.attributes, to: :primary_imported_metadata, prefix: :imported)
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
-  display(:title)
+  display :title
 
   def members
     @members ||= query_service.find_members(resource: model).to_a

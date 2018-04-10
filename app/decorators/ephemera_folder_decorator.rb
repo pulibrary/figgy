@@ -1,51 +1,44 @@
 # frozen_string_literal: true
 class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
-  display(
-    [
-      :barcode,
-      :folder_number,
-      :title,
-      :sort_title,
-      :alternative_title,
-      :language,
-      :genre,
-      :width,
-      :height,
-      :page_count,
-      :rights_statement,
-      :series,
-      :creator,
-      :contributor,
-      :publisher,
-      :geographic_origin,
-      :rendered_subject,
-      :geo_subject,
-      :description,
-      :date_created,
-      :rendered_date_range,
-      :local_identifier,
-      :dspace_url,
-      :source_url,
-      :visibility,
-      :rendered_rights_statement
-    ]
-  )
-  iiif_manifest_display(displayed_attributes + [:subject, :categories])
-  iiif_manifest_suppress(Schema::IIIF.attributes)
-  iiif_manifest_suppress(
-    [
-      :visibility,
-      :internal_resource,
-      :rights_statement,
-      :rendered_rights_statement,
-      :thumbnail_id,
-      :rendered_date_range,
-      :rendered_subject,
-      :created_at,
-      :updated_at,
-      :sort_title
-    ]
-  )
+  display :barcode,
+          :folder_number,
+          :title,
+          :sort_title,
+          :alternative_title,
+          :language,
+          :genre,
+          :width,
+          :height,
+          :page_count,
+          :rights_statement,
+          :series,
+          :creator,
+          :contributor,
+          :publisher,
+          :geographic_origin,
+          :rendered_subject,
+          :geo_subject,
+          :description,
+          :date_created,
+          :rendered_date_range,
+          :local_identifier,
+          :dspace_url,
+          :source_url,
+          :visibility,
+          :rendered_rights_statement
+
+  display_in_manifest displayed_attributes, :subject, :categories
+  suppress_from_manifest Schema::IIIF.attributes,
+                         :visibility,
+                         :internal_resource,
+                         :rights_statement,
+                         :rendered_rights_statement,
+                         :thumbnail_id,
+                         :rendered_date_range,
+                         :rendered_subject,
+                         :created_at,
+                         :updated_at,
+                         :sort_title
 
   def members
     @members ||= query_service.find_members(resource: model).to_a
