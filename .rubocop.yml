@@ -50,7 +50,7 @@ Metrics/BlockLength:
 Metrics/ClassLength:
   Exclude:
     - 'app/change_set_persisters/plum_change_set_persister.rb'
-    - 'app/change_sets/ephemera_folder_change_set.rb'
+    - 'app/change_sets/ephemera_folder_change_set_base.rb'
     - 'app/change_sets/scanned_resource_change_set.rb'
     - 'app/models/ability.rb'
     - 'app/decorators/ephemera_folder_decorator.rb'
@@ -71,7 +71,7 @@ Metrics/MethodLength:
     - 'app/models/schema/marc_relators.rb'
     - 'spec/services/manifest_builder_spec.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
-    - 'app/change_sets/ephemera_folder_change_set.rb'
+    - 'app/change_sets/ephemera_folder_change_set_base.rb'
     - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
     - 'app/utils/data_seeder.rb'
     - 'app/services/bulk_ingest_service.rb'
