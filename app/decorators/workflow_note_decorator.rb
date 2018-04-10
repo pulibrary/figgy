@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class WorkflowNoteDecorator < Valhalla::ResourceDecorator
+class WorkflowNoteDecorator < Valkyrie::ResourceDecorator
   def note
     super.first
   end

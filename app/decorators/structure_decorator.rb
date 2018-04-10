@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class StructureDecorator < Valhalla::ResourceDecorator
+class StructureDecorator < Valkyrie::ResourceDecorator
   def form_label
     label.first
   end

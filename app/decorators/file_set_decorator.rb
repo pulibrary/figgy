@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class FileSetDecorator < Valhalla::ResourceDecorator
+class FileSetDecorator < Valkyrie::ResourceDecorator
   display :height,
           :width,
           :x_resolution,

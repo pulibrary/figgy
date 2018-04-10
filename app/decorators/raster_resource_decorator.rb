@@ -1,5 +1,5 @@
 # frozen_string_literal: false
-class RasterResourceDecorator < Valhalla::ResourceDecorator
+class RasterResourceDecorator < Valkyrie::ResourceDecorator
   display Schema::Geo.attributes, :rendered_holding_location, :rendered_coverage, :member_of_collections
   suppress :thumbnail_id, :coverage, :source_jsonld
 

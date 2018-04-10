@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class EphemeraBoxDecorator < Valhalla::ResourceDecorator
+class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
   display :barcode,
           :box_number,
           :shipped_date,

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class EphemeraProjectDecorator < Valhalla::ResourceDecorator
+class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
   display :title
 
   def members

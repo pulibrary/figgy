@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # Decorator for EphemeraField Objects
-class EphemeraFieldDecorator < Valhalla::ResourceDecorator
+class EphemeraFieldDecorator < Valkyrie::ResourceDecorator
   display :rendered_name, :vocabulary
 
   # Retrieves the EphemeraProjects to which this EphemeraField is linked

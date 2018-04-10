@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class MediaResourceDecorator < Valhalla::ResourceDecorator
+class MediaResourceDecorator < Valkyrie::ResourceDecorator
   display Schema::Common.attributes
   suppress :title,
            :thumbnail_id,

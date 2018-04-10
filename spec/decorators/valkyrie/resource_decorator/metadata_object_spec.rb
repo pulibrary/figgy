@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe Valhalla::ResourceDecorator::MetadataObject do
+RSpec.describe Valkyrie::ResourceDecorator::MetadataObject do
   subject(:metadata_object) { described_class.new('test attribute', ['test value']) }
 
   describe '#pdf_type_label' do

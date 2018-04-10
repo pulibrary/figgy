@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class EphemeraTermDecorator < Valhalla::ResourceDecorator
+class EphemeraTermDecorator < Valkyrie::ResourceDecorator
   display :label, :uri, :code, :tgm_label, :lcsh_label, :vocabulary
 
   def label

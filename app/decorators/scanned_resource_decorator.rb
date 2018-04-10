@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class ScannedResourceDecorator < Valhalla::ResourceDecorator
+class ScannedResourceDecorator < Valkyrie::ResourceDecorator
   display Schema::Common.attributes, :rendered_holding_location, :member_of_collections
   suppress :thumbnail_id, :imported_author, :source_jsonld, :source_metadata, :sort_title
 

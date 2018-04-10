@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class EphemeraFolderDecorator < Valhalla::ResourceDecorator
+class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   display :barcode,
           :folder_number,
           :title,

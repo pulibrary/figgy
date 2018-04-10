@@ -6,7 +6,7 @@ RSpec.describe ScannedResourceDecorator do
   let(:resource) { FactoryBot.build(:scanned_resource) }
   let(:resource_klass) { ScannedResource }
 
-  it_behaves_like 'a Valhalla::ResourceDecorator'
+  it_behaves_like 'a Valkyrie::ResourceDecorator'
 
   describe "#imported_created" do
     let(:resource) do
@@ -63,6 +63,8 @@ RSpec.describe ScannedResourceDecorator do
 
     it 'retrieves all parent resources' do
       expect(decorator.parents.to_a).not_to be_empty
+      expect(decorator.parents.first).to be_a Collection
+      expect(decorator.parents.first.id).to eq parent_collection.id
     end
   end
 end
