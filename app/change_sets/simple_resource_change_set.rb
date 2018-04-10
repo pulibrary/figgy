@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class BookplateChangeSet < Valhalla::ChangeSet
+class SimpleResourceChangeSet < Valhalla::ChangeSet
   delegate :human_readable_type, to: :model
 
   include VisibilityProperty

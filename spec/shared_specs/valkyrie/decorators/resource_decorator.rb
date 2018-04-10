@@ -21,7 +21,7 @@ RSpec.shared_examples 'a Valkyrie::ResourceDecorator' do
   end
   describe '#created' do
     let(:resource) do
-      FactoryBot.build(:bookplate,
+      FactoryBot.build(factory_name,
                        title: 'test title',
                        created: '01/01/1970')
     end

@@ -153,7 +153,7 @@ class Ability
   end
 
   def curation_concerns
-    [ScannedResource, EphemeraFolder, ScannedMap, VectorResource, Bookplate]
+    [ScannedResource, EphemeraFolder, ScannedMap, VectorResource, SimpleResource]
   end
 
   def auth_token

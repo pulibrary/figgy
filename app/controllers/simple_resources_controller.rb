@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 # A base controller for resources, intended for inheritance
-class BookplatesController < BaseResourceController
-  self.change_set_class = BookplateChangeSet
-  self.resource_class = Bookplate
+class SimpleResourcesController < BaseResourceController
+  self.change_set_class = SimpleResourceChangeSet
+  self.resource_class = SimpleResource
   self.change_set_persister = ::PlumChangeSetPersister.new(
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
     storage_adapter: Valkyrie.config.storage_adapter
@@ -21,7 +21,7 @@ class BookplatesController < BaseResourceController
   rescue Valkyrie::Persistence::ObjectNotFoundError
     @resource = query_service.custom_queries.find_by_local_identifier(local_identifier: params[:id]).first
     raise Valkyrie::Persistence::ObjectNotFoundError unless @resource
-    redirect_to manifest_bookplate_path(id: @resource.id.to_s)
+    redirect_to manifest_simple_resource_path(id: @resource.id.to_s)
   end
 
   def pdf

@@ -91,7 +91,7 @@ Rails.application.routes.draw do
 
     get '/scanned_resources/:parent_id/new', to: 'scanned_resources#new', as: :parent_new_scanned_resource
 
-    resources :bookplates do
+    resources :simple_resources do
       member do
         get :file_manager
         get :manifest, defaults: { format: :json }

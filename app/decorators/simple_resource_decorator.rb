@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class BookplateDecorator < Valkyrie::ResourceDecorator
+class SimpleResourceDecorator < Valkyrie::ResourceDecorator
   display Schema::Common.attributes, :member_of_collections
   display :visibility, # No RDF URI - See hydra-access-controls
           :abstract, # http://purl.org/dc/terms/abstract

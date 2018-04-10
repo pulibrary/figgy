@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe BookplateDecorator do
+RSpec.describe SimpleResourceDecorator do
   subject(:decorator) { described_class.new(resource) }
-  let(:resource) { FactoryBot.build(:bookplate) }
-  let(:resource_klass) { Bookplate }
+  let(:resource_klass) { SimpleResource }
+  let(:resource) { FactoryBot.build(:simple_resource) }
 
   it_behaves_like 'a Valkyrie::ResourceDecorator'
 
@@ -16,7 +16,7 @@ RSpec.describe BookplateDecorator do
 
   describe '#parents' do
     let(:parent_collection) { FactoryBot.create_for_repository(:collection) }
-    let(:resource) { FactoryBot.create_for_repository(:bookplate, member_of_collection_ids: [parent_collection.id]) }
+    let(:resource) { FactoryBot.create_for_repository(:simple_resource, member_of_collection_ids: [parent_collection.id]) }
 
     before do
       parent_collection
@@ -28,8 +28,8 @@ RSpec.describe BookplateDecorator do
   end
 
   describe '#decorated_parent_resource' do
-    let(:resource) { FactoryBot.create_for_repository(:bookplate) }
-    let(:parent) { FactoryBot.create_for_repository(:bookplate, member_ids: [resource.id]) }
+    let(:resource) { FactoryBot.create_for_repository(:simple_resource) }
+    let(:parent) { FactoryBot.create_for_repository(:simple_resource, member_ids: [resource.id]) }
 
     before do
       parent
