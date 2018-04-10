@@ -10,7 +10,7 @@ class EphemeraFoldersController < BaseResourceController
   before_action :cache_box, only: [:destroy]
 
   def change_set_class
-    @change_set_class ||= parent_resource.is_a?(EphemeraProject) ? BoxlessEphemeraFolderChangeSet : EphemeraFolderChangeSet
+    @change_set_class ||= parent_resource.is_a?(EphemeraBox) ? EphemeraFolderChangeSet : BoxlessEphemeraFolderChangeSet
   end
 
   def after_create_success(obj, _change_set)
