@@ -115,7 +115,10 @@ class Ability
       resource.respond_to?(:visibility) && resource.visibility.include?(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
     end
     can :download, Valhalla::DownloadsController::FileWithMetadata do |resource|
-      resource.mime_type == 'application/pdf'
+      download_file_with_metadata?(resource)
+    end
+    can :download, FileSet do |resource|
+      geo_file_set?(resource)
     end
     can :color_pdf, curation_concerns do |resource|
       resource.pdf_type == ["color"]
@@ -153,11 +156,49 @@ class Ability
   end
 
   def curation_concerns
-    [ScannedResource, EphemeraFolder, ScannedMap, VectorResource, SimpleResource]
+    [ScannedResource, EphemeraFolder, ScannedMap, VectorResource, RasterResource, SimpleResource]
   end
 
   def auth_token
     @auth_token ||= AuthToken.find_by(token: options[:auth_token]) || NilToken
+  end
+
+  def download_file_with_metadata?(resource)
+    pdf_file?(resource) || geo_thumbnail?(resource) || geo_metadata?(resource) || geo_public_file?(resource)
+  end
+
+  # Geo metadata is always downloadable
+  def geo_metadata?(resource)
+    ControlledVocabulary::GeoMetadataFormat.new.include?(resource.mime_type)
+  end
+
+  # Geo thumbnails are always downloadable
+  def geo_thumbnail?(resource)
+    return true if /thumbnail/ =~ resource.original_name
+    false
+  end
+
+  # Find visibility of parent geo resource and return true if it's public
+  def geo_public_file?(resource)
+    file_set = query_service.find_by(id: resource.file_set_id)
+    visibility = file_set.decorate.parent.model.visibility
+    visibility.include?(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
+  end
+
+  def geo_file_set?(resource)
+    return false unless resource.is_a?(FileSet)
+    parent = resource.decorate.parent
+    parent.try(:geo_resource?)
+  rescue StandardError
+    false
+  end
+
+  def pdf_file?(resource)
+    resource.mime_type == 'application/pdf'
+  end
+
+  def query_service
+    Valkyrie.config.metadata_adapter.query_service
   end
 
   class NilToken

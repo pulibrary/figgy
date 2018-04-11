@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 require "cancan/matchers"
+include ActionDispatch::TestProcess
 
 describe Ability do
   subject { described_class.new(current_user) }
@@ -371,6 +372,25 @@ describe Ability do
       FactoryBot.build(:open_scanned_resource, user: creating_user, state: 'complete', pdf_type: [])
     end
     let(:ephemera_folder) { FactoryBot.create(:ephemera_folder, user: current_user) }
+    let(:open_vector_resource) { FactoryBot.create(:complete_open_vector_resource, user: creating_user) }
+    let(:private_vector_resource) { FactoryBot.create(:complete_private_vector_resource, user: creating_user) }
+    let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+    let(:storage_adapter) { Valkyrie.config.storage_adapter }
+    let(:persister) { adapter.persister }
+    let(:query_service) { adapter.query_service }
+    let(:file) { fixture_file_upload("files/vector/geo.json", "application/vnd.geo+json") }
+    let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
+    let(:vector_resource_members) { query_service.find_members(resource: vector_resource) }
+    let(:file_set) { vector_resource_members.first }
+    let(:vector_file) do
+      Valhalla::DownloadsController::FileWithMetadata.new(id: "1234", file: '', mime_type: "application/vnd.geo+json", original_name: "file.geosjon", file_set_id: file_set.id)
+    end
+    let(:metadata_file) do
+      Valhalla::DownloadsController::FileWithMetadata.new(id: "5768", file: '', mime_type: "application/xml; schema=fgdc", original_name: "fgdc.xml", file_set_id: file_set.id)
+    end
+    let(:thumbnail_file) do
+      Valhalla::DownloadsController::FileWithMetadata.new(id: "9abc", file: '', mime_type: "image/png", original_name: "thumbnail.png", file_set_id: file_set.id)
+    end
 
     it {
       is_expected.to be_able_to(:read, open_scanned_resource)
@@ -381,7 +401,6 @@ describe Ability do
       is_expected.to be_able_to(:read, flagged_scanned_resource)
       is_expected.to be_able_to(:manifest, flagged_scanned_resource)
       is_expected.to be_able_to(:color_pdf, color_enabled_resource)
-
       is_expected.not_to be_able_to(:pdf, no_pdf_scanned_resource)
       is_expected.not_to be_able_to(:flag, open_scanned_resource)
       is_expected.not_to be_able_to(:read, campus_only_scanned_resource)
@@ -404,5 +423,31 @@ describe Ability do
       is_expected.not_to be_able_to(:complete, pending_scanned_resource)
       is_expected.not_to be_able_to(:destroy, admin_file)
     }
+
+    context "with an open vector resource" do
+      let(:vector_resource) do
+        change_set_persister.save(change_set: VectorResourceChangeSet.new(open_vector_resource, files: [file]))
+      end
+
+      it {
+        is_expected.to be_able_to(:download, file_set)
+        is_expected.to be_able_to(:download, thumbnail_file)
+        is_expected.to be_able_to(:download, metadata_file)
+        is_expected.to be_able_to(:download, vector_file)
+      }
+    end
+
+    context "with a private vector resource" do
+      let(:vector_resource) do
+        change_set_persister.save(change_set: VectorResourceChangeSet.new(private_vector_resource, files: [file]))
+      end
+
+      it {
+        is_expected.to be_able_to(:download, file_set)
+        is_expected.to be_able_to(:download, thumbnail_file)
+        is_expected.to be_able_to(:download, metadata_file)
+        is_expected.not_to be_able_to(:download, vector_file)
+      }
+    end
   end
 end
