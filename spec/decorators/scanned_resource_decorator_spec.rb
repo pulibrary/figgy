@@ -63,6 +63,8 @@ RSpec.describe ScannedResourceDecorator do
 
     it 'retrieves all parent resources' do
       expect(decorator.parents.to_a).not_to be_empty
+      expect(decorator.parents.first).to be_a Collection
+      expect(decorator.parents.first.id).to eq parent_collection.id
     end
   end
 end
