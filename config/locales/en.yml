@@ -116,3 +116,9 @@ en:
     all_in_production:
       label: 'All in Production'
       desc: 'Mark all contained folders as having received QA, and put them into the public display.'
+    draft:
+      label: 'Draft'
+      desc: 'Still in-progress, should not be published to public sites or manifests'
+    published:
+      label: 'Published'
+      desc: 'Published and accessible according to access control rules'
