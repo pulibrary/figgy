@@ -4,28 +4,10 @@ require 'rails_helper'
 RSpec.describe ScannedResourceDecorator do
   subject(:decorator) { described_class.new(resource) }
   let(:resource) { FactoryBot.build(:scanned_resource) }
-  describe "#rendered_rights_statement" do
-    it "returns an HTML rights statement" do
-      term = ControlledVocabulary.for(:rights_statement).find(resource.rights_statement.first)
-      expect(decorator.rendered_rights_statement.length).to eq 1
-      expect(decorator.rendered_rights_statement.first).to include term.definition
-      expect(decorator.rendered_rights_statement.first).to include I18n.t("valhalla.works.show.attributes.rights_statement.boilerplate")
-      expect(decorator.rendered_rights_statement.first).to include '<a href="http://rightsstatements.org/vocab/NKC/1.0/">No Known Copyright</a>'
-    end
-  end
-  describe '#created' do
-    let(:resource) do
-      FactoryBot.build(:scanned_resource,
-                       title: 'test title',
-                       created: '01/01/1970',
-                       imported_metadata: [{
-                         creator: 'test creator'
-                       }])
-    end
-    it 'exposes a formatted string for the created date' do
-      expect(decorator.created).to eq ["January 1, 1970"]
-    end
-  end
+  let(:resource_klass) { ScannedResource }
+
+  it_behaves_like 'a Valkyrie::ResourceDecorator'
+
   describe "#imported_created" do
     let(:resource) do
       FactoryBot.build(:scanned_resource,
@@ -70,17 +52,19 @@ RSpec.describe ScannedResourceDecorator do
       end
     end
   end
-  context 'within a collection' do
-    let(:collection) do
-      adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
-      res = FactoryBot.build(:collection)
-      adapter.persister.save(resource: res)
+
+  describe '#parents' do
+    let(:parent_collection) { FactoryBot.create_for_repository(:collection) }
+    let(:resource) { FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [parent_collection.id]) }
+
+    before do
+      parent_collection
     end
-    let(:resource) { FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id]) }
-    it 'retrieves the title of parents' do
-      expect(resource.decorate.member_of_collections).not_to be_empty
-      expect(resource.decorate.member_of_collections.first).to be_a CollectionDecorator
-      expect(resource.decorate.member_of_collections.first.title).to eq 'Title'
+
+    it 'retrieves all parent resources' do
+      expect(decorator.parents.to_a).not_to be_empty
+      expect(decorator.parents.first).to be_a Collection
+      expect(decorator.parents.first.id).to eq parent_collection.id
     end
   end
 end

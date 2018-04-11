@@ -1,20 +1,8 @@
 # frozen_string_literal: false
 class VectorResourceDecorator < Valkyrie::ResourceDecorator
-  display(Schema::Geo.attributes)
-  display(
-    [
-      :rendered_holding_location,
-      :rendered_coverage,
-      :member_of_collections
-    ]
-  )
-  suppress(
-    [
-      :thumbnail_id,
-      :coverage,
-      :source_jsonld
-    ]
-  )
+  display Schema::Geo.attributes, :rendered_holding_location, :rendered_coverage, :member_of_collections
+  suppress :thumbnail_id, :coverage, :source_jsonld
+
   delegate(*Schema::Geo.attributes, to: :primary_imported_metadata, prefix: :imported)
 
   def attachable_objects
