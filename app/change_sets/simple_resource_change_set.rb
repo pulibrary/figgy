@@ -2,6 +2,8 @@
 class SimpleResourceChangeSet < Valhalla::ChangeSet
   delegate :human_readable_type, to: :model
 
+  apply_workflow(DraftPublishWorkflow)
+
   include VisibilityProperty
   property :title, multiple: true, required: true, default: []
   property :rights_statement, multiple: false, required: true, default: "http://rightsstatements.org/vocab/NKC/1.0/", type: ::Types::URI

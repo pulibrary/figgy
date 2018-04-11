@@ -134,7 +134,9 @@ class ControlledVocabulary
         ready_to_ship: 'label-info',
         shipped: 'label-info',
         received: 'label-default',
-        all_in_production: 'label-success'
+        all_in_production: 'label-success',
+        draft: 'label-default',
+        published: 'label-success'
       }
     end
   end
