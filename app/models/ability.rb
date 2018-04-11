@@ -15,42 +15,14 @@ class Ability
     can [:manage], :all
   end
 
-  # Abilities that should be granted to ephemera editors
-  def ephemera_editor_permissions
-    ephemera_permissions
-    can [:create, :read, :edit, :update, :publish], Collection
-    can [:create, :read, :edit, :update, :publish, :download], FileSet
-    can [:destroy], FileSet do |obj|
-      obj.depositor == [current_user.uid]
-    end
+  def anonymous_permissions
+    # do not allow viewing incomplete resources
+    curation_concern_read_permissions
   end
 
-  # Abilities that should be granted to technicians
-  def image_editor_permissions
-    ephemera_permissions
-    can [:read, :create, :modify, :update, :publish], curation_concerns
-    can [:create, :read, :edit, :update, :publish, :download, :derive], FileSet
-    can [:create, :read, :edit, :update, :publish], Collection
-
-    # do not allow completing resources
-    cannot [:complete], curation_concerns
-
-    # only allow deleting for own objects, without ARKs
-    can [:destroy], FileSet do |obj|
-      obj.depositor == [current_user.uid]
-    end
-    can [:destroy], curation_concerns do |obj|
-      obj.depositor == [current_user.uid]
-    end
-    cannot [:destroy], curation_concerns do |obj|
-      !obj.try(:identifier).blank?
-    end
-  end
-
-  def ephemera_permissions
-    can [:manage], EphemeraBox
-    can [:manage], EphemeraFolder
-    can [:manage], Template
+  # Abilities that should be granted to patron
+  def campus_patron_permissions
+    anonymous_permissions
   end
 
   def completer_permissions
@@ -61,43 +33,6 @@ class Ability
     # allow completing resources
     can [:complete], curation_concerns
 
-    curation_concern_read_permissions
-  end
-
-  def editor_permissions
-    can [:read, :modify, :update], curation_concerns
-    can [:read, :edit, :update], FileSet
-    can [:read, :edit, :update], Collection
-
-    # do not allow completing resources
-    cannot [:complete], curation_concerns
-
-    curation_concern_read_permissions
-  end
-
-  def fulfiller_permissions
-    can [:read], curation_concerns
-    can [:read, :download], FileSet
-    can [:read], Collection
-    curation_concern_read_permissions
-  end
-
-  def curator_permissions
-    can [:read], curation_concerns
-    can [:read], FileSet
-    can [:read], Collection
-
-    # do not allow viewing pending resources
-    curation_concern_read_permissions
-  end
-
-  # Abilities that should be granted to patron
-  def campus_patron_permissions
-    anonymous_permissions
-  end
-
-  def anonymous_permissions
-    # do not allow viewing incomplete resources
     curation_concern_read_permissions
   end
 
@@ -125,42 +60,85 @@ class Ability
     end
   end
 
-  def readable_concern?(resource)
-    !unreadable_states.include?(resource.state.first)
+  def curator_permissions
+    can [:read], curation_concerns
+    can [:read], FileSet
+    can [:read], Collection
+
+    # do not allow viewing pending resources
+    curation_concern_read_permissions
   end
 
-  def unreadable_states
-    if current_user.curator?
-      %w[pending]
-    elsif universal_reader?
-      []
-    else
-      %w[pending metadata_review final_review takedown]
+  def editor_permissions
+    can [:read, :modify, :update], curation_concerns
+    can [:read, :edit, :update], FileSet
+    can [:read, :edit, :update], Collection
+
+    # do not allow completing resources
+    cannot [:complete], curation_concerns
+
+    curation_concern_read_permissions
+  end
+
+  # Abilities that should be granted to ephemera editors
+  def ephemera_editor_permissions
+    ephemera_permissions
+    can [:create, :read, :edit, :update, :publish], Collection
+    can [:create, :read, :edit, :update, :publish, :download], FileSet
+    can [:destroy], FileSet do |obj|
+      obj.depositor == [current_user.uid]
     end
   end
 
-  def manifestable_concern?(resource)
-    resource.state.include?("complete") || box_grants_access?(resource)
+  def ephemera_permissions
+    can [:manage], EphemeraBox
+    can [:manage], EphemeraFolder
+    can [:manage], Template
+  end
+
+  def fulfiller_permissions
+    can [:read], curation_concerns
+    can [:read, :download], FileSet
+    can [:read], Collection
+    curation_concern_read_permissions
+  end
+
+  # Abilities that should be granted to technicians
+  def image_editor_permissions
+    ephemera_permissions
+    can [:read, :create, :modify, :update, :publish], curation_concerns
+    can [:create, :read, :edit, :update, :publish, :download, :derive], FileSet
+    can [:create, :read, :edit, :update, :publish], Collection
+
+    # do not allow completing resources
+    cannot [:complete], curation_concerns
+
+    # only allow deleting for own objects, without ARKs
+    can [:destroy], FileSet do |obj|
+      obj.depositor == [current_user.uid]
+    end
+    can [:destroy], curation_concerns do |obj|
+      obj.depositor == [current_user.uid]
+    end
+    cannot [:destroy], curation_concerns do |obj|
+      !obj.try(:identifier).blank?
+    end
+  end
+
+  def auth_token
+    @auth_token ||= AuthToken.find_by(token: options[:auth_token]) || NilToken
   end
 
   def box_grants_access?(resource)
     (resource.decorate.ephemera_box.try(:state) || []).include?("all_in_production")
   end
 
-  def universal_reader?
-    current_user.curator? || current_user.image_editor? || current_user.completer? || current_user.fulfiller? || current_user.editor? || current_user.admin?
-  end
-
-  def roles
-    ['anonymous', 'campus_patron', 'completer', 'curator', 'fulfiller', 'editor', 'ephemera_editor', 'image_editor', 'admin']
-  end
-
   def curation_concerns
     [ScannedResource, EphemeraFolder, ScannedMap, VectorResource, RasterResource, SimpleResource]
   end
 
-  def auth_token
-    @auth_token ||= AuthToken.find_by(token: options[:auth_token]) || NilToken
+  def current_user
+    TokenizedUser.new(super, auth_token)
   end
 
   def download_file_with_metadata?(resource)
@@ -170,12 +148,6 @@ class Ability
   # Geo metadata is always downloadable
   def geo_metadata?(resource)
     ControlledVocabulary::GeoMetadataFormat.new.include?(resource.mime_type)
-  end
-
-  # Geo thumbnails are always downloadable
-  def geo_thumbnail?(resource)
-    return true if /thumbnail/ =~ resource.original_name
-    false
   end
 
   # Find visibility of parent geo resource and return true if it's public
@@ -193,6 +165,16 @@ class Ability
     false
   end
 
+  # Geo thumbnails are always downloadable
+  def geo_thumbnail?(resource)
+    return true if /thumbnail/ =~ resource.original_name
+    false
+  end
+
+  def manifestable_concern?(resource)
+    resource.state.include?("complete") || box_grants_access?(resource)
+  end
+
   def pdf_file?(resource)
     resource.mime_type == 'application/pdf'
   end
@@ -201,14 +183,32 @@ class Ability
     Valkyrie.config.metadata_adapter.query_service
   end
 
+  def readable_concern?(resource)
+    !unreadable_states.include?(resource.state.first)
+  end
+
+  def roles
+    ['anonymous', 'campus_patron', 'completer', 'curator', 'fulfiller', 'editor', 'ephemera_editor', 'image_editor', 'admin']
+  end
+
+  def universal_reader?
+    current_user.curator? || current_user.image_editor? || current_user.completer? || current_user.fulfiller? || current_user.editor? || current_user.admin?
+  end
+
+  def unreadable_states
+    if current_user.curator?
+      %w[pending]
+    elsif universal_reader?
+      []
+    else
+      %w[pending metadata_review final_review takedown]
+    end
+  end
+
   class NilToken
     def self.group
       []
     end
-  end
-
-  def current_user
-    TokenizedUser.new(super, auth_token)
   end
 
   class TokenizedUser < ::Draper::Decorator
