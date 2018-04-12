@@ -192,6 +192,29 @@ export const manifest = {
               "on": "http://localhost:3000/concern/ephemera_folders/9a25e0ce-4f64-4995-bae5-29140a453fa3/manifest/canvas/0a3e268f-5872-444e-bdbd-b1a7b01dcb57"
             }
           ]
+        },
+        {
+          "@type": "sc:Canvas",
+          "@id": "http://localhost:3000/concern/ephemera_folders/9a25e0ce-4f64-4995-bae5-29140a453fa3/manifest/canvas/foo",
+          "label": "",
+          "width": "1202",
+          "height": "1200",
+          "images": [
+            {
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "resource": {
+                "@type": "dctypes:Image",
+                "@id": {
+                  "id": "foo"
+                },
+                "height": "1200",
+                "width": "1202",
+                "format": "image/jpeg"
+              },
+              "on": "http://localhost:3000/concern/ephemera_folders/9a25e0ce-4f64-4995-bae5-29140a453fa3/manifest/canvas/foo"
+            }
+          ]
         }
       ]
     }

@@ -50,6 +50,13 @@ describe('mixins', () => {
       expect(label).toBe('[p. i (verso)]')
     })
 
+    it('getEnglishLabel when label is blank', () => {
+      const s = manifestation.mainSequence()
+      const canvases = s.getCanvases()
+      const label = manifestation.getEnglishLabel(canvases[6])
+      expect(label).toBe('')
+    })
+
     it('getThumbnailId', () => {
       const t = manifestation.getThumbnailId()
       expect(t).toBe('80b02791-4bd9-4566-9a9f-4b3062ba2e0d')
