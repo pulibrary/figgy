@@ -88,7 +88,11 @@ const ManifestoFilemanagerMixins = {
   getEnglishLabel: function (canvas) {
     const translations = canvas.getLabel()
     const english = translations.find(translation => translation.locale === "en-GB")
-    return english.value
+    let value = ""
+    if (typeof english != 'undefined') {
+      value = english.value
+    }
+    return value
   },
 
   getMVWImageCollection: function (imageCollection) {
