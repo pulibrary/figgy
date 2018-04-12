@@ -49,6 +49,7 @@ class IngestMETSJob < ApplicationJob
       resource.source_metadata_identifier = mets.bib_id
       resource.title = mets.label
       resource.files = files.to_a
+      resource.member_of_collection_ids = [slug_to_id(mets.collection_slug)] if mets.respond_to?(:collection_slug)
       resource.sync
       output = changeset_persister.save(change_set: resource)
       files.each_with_index do |file, index|
@@ -68,6 +69,10 @@ class IngestMETSJob < ApplicationJob
       mets.files.lazy.map do |file|
         mets.decorated_file(file)
       end
+    end
+
+    def slug_to_id(slug)
+      query_service.custom_queries.find_by_string_property(property: :slug, value: slug).first&.id
     end
 
     def resource

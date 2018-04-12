@@ -16,7 +16,7 @@ class METSDocument
     @mets.xpath("/mets:mets/mets:dmdSec/mets:mdRef/@xlink:href").to_s.gsub(/.*\//, '')
   end
 
-  def collection_slugs
+  def collection_slug
     @mets.xpath("/mets:mets/mets:structMap[@TYPE='RelatedObjects']//mets:div[@TYPE='IsPartOf']/@CONTENTIDS").to_s
   end
 
