@@ -17,5 +17,6 @@ RSpec.feature "Home Page", js: true do
     expect(page).to have_content "Test Project"
     expect(page).to have_link "View Boxes"
     expect(page).to have_link "Add Box"
+    expect(page).to have_link "New Simple Resource"
   end
 end
