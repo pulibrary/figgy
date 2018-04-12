@@ -22,6 +22,30 @@ class SimpleResourceChangeSet < Valhalla::ChangeSet
   property :file_metadata, multiple: true, required: false, default: []
   property :depositor, multiple: false, require: false
 
+  property :abstract, multiple: true, required: false, default: []
+  property :alternative, multiple: true, required: false, default: []
+  property :alternative_title, multiple: true, required: false, default: []
+  property :bibliographic_citation, multiple: true, required: false, default: []
+  property :contents, multiple: true, required: false, default: []
+  property :extent, multiple: true, required: false, default: []
+  property :genre, multiple: true, required: false, default: []
+  property :geo_subject, multiple: true, required: false, default: []
+  property :identifier, multiple: true, required: false, default: []
+  property :license, multiple: true, required: false, default: []
+  property :part_of, multiple: true, required: false, default: []
+  property :replaces, multiple: true, required: false, default: []
+  property :type, multiple: true, required: false, default: []
+  property :contributor, multiple: true, required: false, default: []
+  property :coverage, multiple: true, required: false, default: []
+  property :creator, multiple: true, required: false, default: []
+  property :date, multiple: true, required: false, default: []
+  property :description, multiple: true, required: false, default: []
+  property :keyword, multiple: true, required: false, default: []
+  property :language, multiple: true, required: false, default: []
+  property :publisher, multiple: true, required: false, default: []
+  property :source, multiple: true, required: false, default: []
+  property :subject, multiple: true, required: false, default: []
+
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
   property :pending_uploads, multiple: true, required: false
@@ -41,7 +65,30 @@ class SimpleResourceChangeSet < Valhalla::ChangeSet
       :portion_note,
       :nav_date,
       :member_of_collection_ids,
-      :append_id
+      :append_id,
+      :abstract,
+      :alternative,
+      :alternative_title,
+      :bibliographic_citation,
+      :contents,
+      :extent,
+      :genre,
+      :geo_subject,
+      :identifier,
+      :license,
+      :part_of,
+      :replaces,
+      :type,
+      :contributor,
+      :coverage,
+      :creator,
+      :date,
+      :description,
+      :keyword,
+      :language,
+      :publisher,
+      :source,
+      :subject
     ]
   end
 end
