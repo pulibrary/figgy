@@ -48,7 +48,7 @@ class SimpleResourceDecorator < Valkyrie::ResourceDecorator
                          :thumbnail_id
 
   def members
-    @members ||= query_service.find_members(resource: model).to_a
+    @members ||= query_service.find_members(resource: model).map(&:decorate).to_a
   end
 
   def file_sets
