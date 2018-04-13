@@ -10,8 +10,8 @@
     </tr>
   </thead>
   <tbody>
-    <% unless decorated_resource.members.empty? %>
-      <% decorated_resource.members.each do |member| %>
+    <% unless decorated_resource.simple_resource_members.empty? %>
+      <% decorated_resource.simple_resource_members.each do |member| %>
         <% member_url = parent_solr_document_path("#{resource.id}", "#{member.id}") %>
         <tr>
           <td><%= link_to figgy_thumbnail_path(member, { class: 'thumbnail-inner', onerror: default_icon_fallback }), member_url %></td>
