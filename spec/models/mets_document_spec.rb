@@ -60,7 +60,7 @@ RSpec.describe METSDocument do
     end
 
     it "has a collection slug" do
-      expect(mets_document.collection_slugs).to eq('pudl0001')
+      expect(mets_document.collection_slug).to eq('pudl0001')
     end
   end
 

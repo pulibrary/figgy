@@ -17,7 +17,7 @@ class METSDocument
     private
 
       def pudl3_mvw?
-        mets.collection_slugs == "pudl0003" && mets.mets.xpath("/mets:mets/mets:structMap[@type='Physical']").empty?
+        mets.collection_slug == "pudl0003" && mets.mets.xpath("/mets:mets/mets:structMap[@type='Physical']").empty?
       end
   end
 end

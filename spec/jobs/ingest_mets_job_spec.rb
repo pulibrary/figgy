@@ -9,6 +9,7 @@ RSpec.describe IngestMETSJob do
     let(:tiff_file) { Rails.root.join("spec", "fixtures", "files", "example.tif") }
     let(:mime_type) { 'image/tiff' }
     let(:file) { IoDecorator.new(File.new(tiff_file), mime_type, File.basename(tiff_file)) }
+    let(:pudl0001) { FactoryBot.build(:collection, id: Valkyrie::ID.new('pudl0001'), slug: "pudl0001") }
     let(:order) do
       {
         nodes: [{
@@ -29,6 +30,8 @@ RSpec.describe IngestMETSJob do
       allow(File).to receive(:open).with("/users/escowles/downloads/tmp/00000658.tif").and_return(File.open(tiff_file))
       allow(File).to receive(:open).with("/users/escowles/downloads/tmp/00000659.tif").and_return(File.open(tiff_file))
       allow_any_instance_of(IngestableFile).to receive(:path).and_return(tiff_file)
+      allow(Valkyrie.config.metadata_adapter.query_service.custom_queries).to receive(:find_by_string_property).and_return([pudl0001])
+      allow(Valkyrie.config.metadata_adapter.query_service).to receive(:find_references_by).and_return([pudl0001])
       stub_bibdata(bib_id: '4612596')
       stub_bibdata(bib_id: '4609321')
     end
@@ -50,6 +53,7 @@ RSpec.describe IngestMETSJob do
       expect(file_sets.first.title).to eq ["leaf 1. recto"]
       expect(file_sets.first.derivative_file).not_to be_blank
       expect(FileUtils).not_to have_received(:mv)
+      expect(book.member_of_collection_ids).to eq [pudl0001.id]
     end
     context "when given a work with volumes" do
       let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-4609321-s42.mets") }
