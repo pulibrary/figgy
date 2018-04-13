@@ -99,6 +99,8 @@ Rails.application.routes.draw do
       end
     end
 
+    get '/simple_resources/:parent_id/new', to: 'simple_resources#new', as: :parent_new_simple_resource
+
     resources :ephemera_projects do
       resources :templates, only: [:new, :create, :destroy]
       resources :ephemera_fields

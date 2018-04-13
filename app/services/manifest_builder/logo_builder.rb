@@ -7,7 +7,8 @@ class ManifestBuilder
     # @param [Valhalla::Resource] resource the Resource being viewed
     def initialize(record)
       @record = record
-      @host = "https://#{Figgy.default_url_options[:host]}"
+      protocol = /localhost/.match?(Figgy.default_url_options[:host]) ? 'http' : 'https'
+      @host = "#{protocol}://#{Figgy.default_url_options[:host]}"
     end
 
     def apply(manifest)

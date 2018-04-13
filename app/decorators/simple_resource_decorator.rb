@@ -52,7 +52,11 @@ class SimpleResourceDecorator < Valkyrie::ResourceDecorator
   end
 
   def file_sets
-    @file_sets ||= members.select { |r| r.is_a?(FileSet) }.map(&:decorate).to_a
+    @file_sets ||= members.select { |r| r.is_a?(FileSet) }
+  end
+
+  def simple_resource_members
+    @simple_resource_members || members.select { |r| r.is_a?(SimpleResource) }
   end
 
   def rendered_rights_statement
@@ -72,6 +76,10 @@ class SimpleResourceDecorator < Valkyrie::ResourceDecorator
 
   def manageable_structure?
     false
+  end
+
+  def attachable_objects
+    [SimpleResource]
   end
 
   def parents
