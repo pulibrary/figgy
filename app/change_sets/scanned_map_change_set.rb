@@ -3,7 +3,7 @@
 class ScannedMapChangeSet < ScannedResourceChangeSet
   include GeoChangeSetProperties
 
-  apply_workflow(BookWorkflow)
+  apply_workflow(WorkflowRegistry.workflow_for(ScannedMap))
 
   property :relation, multiple: false, required: false
   property :references, multiple: false, required: false

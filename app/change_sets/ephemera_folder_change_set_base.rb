@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class EphemeraFolderChangeSetBase < Valhalla::ChangeSet
-  apply_workflow(FolderWorkflow)
+  apply_workflow(WorkflowRegistry.workflow_for(EphemeraFolder))
   validate :date_range_validity
   validate :subject_present
   validates_with StateValidator

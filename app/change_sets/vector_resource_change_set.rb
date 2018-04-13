@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class VectorResourceChangeSet < Valhalla::ChangeSet
-  apply_workflow(BookWorkflow)
+  apply_workflow(WorkflowRegistry.workflow_for(VectorResource))
   delegate :human_readable_type, to: :model
 
   include GeoChangeSetProperties
