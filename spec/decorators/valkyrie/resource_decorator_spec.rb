@@ -96,4 +96,48 @@ RSpec.describe Valkyrie::ResourceDecorator do
       expect(resource.decorate.iiif_metadata).to include('label' => 'Member Of Collections', 'value' => ['My Nietzsche Collection'])
     end
   end
+
+  describe 'manifestable_state?' do
+    describe 'for resources without workflows' do
+      let(:resource) { FactoryBot.build(:ephemera_term) }
+      it 'defaults to true' do
+        expect(resource.decorate.manifestable_state?).to eq true
+      end
+    end
+
+    describe 'a resource with manifestable workflow state' do
+      it 'returns true' do
+        expect(resource.decorate.manifestable_state?).to eq true
+      end
+    end
+
+    describe 'a resource with non-manifestable workflow state' do
+      it 'returns false' do
+        resource.state = ['metadata_review']
+        expect(resource.decorate.manifestable_state?).to eq false
+      end
+    end
+  end
+
+  describe 'public_readable_state?' do
+    describe 'for resources without workflows' do
+      let(:resource) { FactoryBot.build(:ephemera_term) }
+      it 'defaults to true' do
+        expect(resource.decorate.public_readable_state?).to eq true
+      end
+    end
+
+    describe 'a resource with indexable workflow state' do
+      it 'returns true' do
+        expect(resource.decorate.public_readable_state?).to eq true
+      end
+    end
+
+    describe 'a resource with non-indexable workflow state' do
+      it 'returns false' do
+        resource.state = ['pending']
+        expect(resource.decorate.public_readable_state?).to eq false
+      end
+    end
+  end
 end

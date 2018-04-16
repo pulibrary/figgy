@@ -83,14 +83,59 @@ RSpec.describe EphemeraFolderDecorator do
     end
   end
 
+  # rubocop:disable RSpec/NestedGroups
   context "within a box" do
     let(:resource) { FactoryBot.create_for_repository(:ephemera_folder) }
-    it "can return the box it's a member of" do
-      box = FactoryBot.create_for_repository(:ephemera_box, member_ids: resource.id)
+    let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: resource.id, state: "new") }
+    before { box }
 
+    it "can return the box it's a member of" do
       expect(resource.decorate.ephemera_box.id).to eq box.id
     end
+
+    describe 'manifestable_state?' do
+      describe 'the box is not all in production' do
+        it 'returns true when in a manifestable state' do
+          resource.state = ["complete"]
+          expect(resource.decorate.manifestable_state?).to eq true
+        end
+        it 'returns false when in a non-manifestable state' do
+          resource.state = ['needs_qa']
+          expect(resource.decorate.manifestable_state?).to eq false
+        end
+      end
+
+      describe 'the box is all in production' do
+        let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: resource.id, state: "all_in_production") }
+        it 'returns true when in a non-manifestable state' do
+          resource.state = ['needs_qa']
+          expect(resource.decorate.manifestable_state?).to eq true
+        end
+      end
+    end
+
+    describe 'public_readable_state?' do
+      describe 'the box is not all in production' do
+        it 'returns true when in an indexable state' do
+          resource.state = ["complete"]
+          expect(resource.decorate.public_readable_state?).to eq true
+        end
+        it 'returns false when in a non-indexable state' do
+          resource.state = ['needs_qa']
+          expect(resource.decorate.public_readable_state?).to eq false
+        end
+      end
+
+      describe 'the box is all in production' do
+        let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: resource.id, state: "all_in_production") }
+        it 'returns true when in a non-indexable state' do
+          resource.state = ['needs_qa']
+          expect(resource.decorate.public_readable_state?).to eq true
+        end
+      end
+    end
   end
+  # rubocop:enable RSpec/NestedGroups
 
   context "within a project" do
     let(:resource) { FactoryBot.create_for_repository(:ephemera_folder) }
@@ -99,6 +144,28 @@ RSpec.describe EphemeraFolderDecorator do
 
       expect(resource.decorate.ephemera_project.id).to eq project.id
       expect(resource.decorate.ephemera_box).to be nil
+    end
+
+    describe 'manifestable_state?' do
+      it 'returns true when in a manifestable state' do
+        resource.state = ["complete"]
+        expect(resource.decorate.manifestable_state?).to eq true
+      end
+      it 'returns false when in a non-manifestable state' do
+        resource.state = ['needs_qa']
+        expect(resource.decorate.manifestable_state?).to eq false
+      end
+    end
+
+    describe 'public_readable_state?' do
+      it 'returns true when in an indexable state' do
+        resource.state = ["complete"]
+        expect(resource.decorate.public_readable_state?).to eq true
+      end
+      it 'returns false when in a non-indexable state' do
+        resource.state = ['needs_qa']
+        expect(resource.decorate.public_readable_state?).to eq false
+      end
     end
   end
 

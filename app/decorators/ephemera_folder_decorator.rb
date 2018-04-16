@@ -162,6 +162,16 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     end.reject(&:nil?)
   end
 
+  def manifestable_state?
+    if ephemera_box.nil? || !ephemera_box.manifestable_state?
+      super
+    else
+      # box is in production; we should publish
+      true
+    end
+  end
+  alias public_readable_state? manifestable_state?
+
   private
 
     def find_resource(resource_id)

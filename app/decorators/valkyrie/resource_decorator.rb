@@ -100,6 +100,15 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     end
   end
 
+  def manifestable_state?
+    WorkflowRegistry.workflow_for(model.class).manifest_states.include? Array.wrap(state).first.underscore.to_sym
+  rescue WorkflowRegistry::EntryNotFound
+    # if there's no workflow, default to true
+    true
+  end
+  # alias until there's some reason to vary the logic
+  alias public_readable_state? manifestable_state?
+
   # Models metadata values within a manifest
   class MetadataObject
     # Constructor
