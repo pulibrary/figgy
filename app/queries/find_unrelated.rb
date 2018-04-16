@@ -13,13 +13,8 @@ class FindUnrelated
 
   def find_unrelated_query(id:, model:)
     <<-SQL
-      SELECT final.* FROM orm_resources AS final
-        INNER JOIN (SELECT resource.id FROM orm_resources AS resource
-          WHERE resource.internal_resource='#{model}'
-          EXCEPT (SELECT (member->>'id')::uuid FROM orm_resources AS parent,
-            jsonb_array_elements(parent.metadata->'member_ids') as member
-            WHERE parent.id='#{id}')
-        ) AS joined ON joined.id=final.id;
+      SELECT resource.* FROM orm_resources AS resource
+      WHERE resource.id != '#{id}'::uuid AND resource.internal_resource='#{model}';
     SQL
   end
 

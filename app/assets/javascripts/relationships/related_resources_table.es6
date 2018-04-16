@@ -26,7 +26,26 @@ export default class RelatedResourcesTable {
     this.works = this.table.find('tr');
     this.workIds = Array.from(this.works.map((i) => this.works.eq(i).data('work-id')));
     this.model = this.table.data('param-key');
+    this.resourceId = this.table.data('resource-id')
+
+    this.loading = false
+    this.$loading = this.table.prev('.loading-status')
     this.bindButtons();
+  }
+
+  update() {
+    if(this.loading) {
+      this.$loading.removeClass('hidden')
+      this.table.addClass('loading')
+    } else {
+      this.$loading.addClass('hidden')
+      this.table.removeClass('loading')
+    }
+  }
+
+  setLoading(state) {
+    this.loading = state
+    this.update()
   }
 
   /**
@@ -45,8 +64,9 @@ export default class RelatedResourcesTable {
   bindAddButton() {
     const $this = this;
     $this.element.find('.btn-add-row').click(() => {
-      const $row = $this.element.find('.member-actions');
-      const attachedId = $this.$select.val();
+      const $element = $(event.target)
+      const $row = $this.element.find('.member-actions')
+      const attachedId = $this.$select.val()
 
       if (attachedId === '') {
         $this.setWarningMessage($row, 'ID cannot be empty.');
@@ -55,14 +75,19 @@ export default class RelatedResourcesTable {
       } else {
         $this.members.push(attachedId);
         $this.hideWarningMessage($row);
+        $element.prop('disabled', true)
+
+        $this.setLoading(true)
         $this.callAjax({
           row: $row,
           members: null,
           member: null,
           url: $this.update_url,
+          element: $element,
+          object: $this,
           data: $this.buildFormData(),
           on_error: $this.handleError,
-          on_success: $this.reloadTable()
+          on_success: $this.reloadTable
         });
       }
     });
@@ -75,16 +100,22 @@ export default class RelatedResourcesTable {
   bindRemoveButton() {
     const $this = this;
     $this.element.find('.btn-remove-row').click(() => {
+      const $element = $(event.target)
       const $row = $(this).parents('tr:first');
       const memberId = $row.data('resource-id');
       const index = $this.members.indexOf(memberId);
+
       $this.members.splice(index, 1);
+      $element.prop('disabled', true)
+      $this.setLoading(true)
       $this.callAjax({
         row: $row,
         members: null,
         member: null,
         data: $this.buildFormData(),
         url: $this.update_url,
+        element: $element,
+        object: $this,
         on_error: $this.handleError,
         on_success: $this.reloadTable
       });
@@ -110,7 +141,9 @@ export default class RelatedResourcesTable {
    */
   setWarningMessage(row, message) {
     const $this = this;
-    $this.element.find('.message.has-warning').text(message).removeClass('hidden');
+    const $warning = $this.element.find('#warning-message');
+    $warning.text(message);
+    $warning.parent().removeClass('hidden');
   }
 
   /**
@@ -135,8 +168,10 @@ export default class RelatedResourcesTable {
       url: args.url,
       data: JSON.stringify(args.data),
     }).done(() => {
+        args.element.prop('disabled', false)
         args.on_success.call($this, args);
     }).fail((jqxhr) => {
+        args.element.prop('disabled', false)
         args.on_error.call($this, args, jqxhr);
     });
   }
@@ -147,7 +182,9 @@ export default class RelatedResourcesTable {
   */
   reloadTable() {
     const $this = this;
-    $this.$tbody.load(`${$this.query_url} table#${this.element[0].id} tbody > *`, () => {
+
+    $this.$tbody.load(`${$this.query_url} #${this.element[0].id} tbody > *`, () => {
+      $this.setLoading(false)
       $this.bindButtons();
     });
   }
@@ -158,6 +195,7 @@ export default class RelatedResourcesTable {
   * @param {Object} jqxhr the jQuery XHR response object
   */
   handleError(args, jqxhr) {
+    this.setLoading(false)
     let message = jqxhr.statusText;
     if (jqxhr.responseJSON) {
       message = jqxhr.responseJSON.description;

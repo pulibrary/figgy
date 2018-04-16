@@ -1,6 +1,7 @@
   <h3>Vector Resources</h3>
 
   <%= simple_form_for @change_set do |f| %>
+    <div class="loading-status hidden">Loading...</div>
     <table id="members-vector-resources"
     class="table table-striped member-resources member-vector-resources"
     data-update-url="<%= polymorphic_url([resource]) %>"
@@ -14,9 +15,8 @@
          <th>Date Uploaded</th>
          <th>Visibility</th>
          <th>Actions</th>
-        </tr>
+       </tr>
       </thead>
-
       <tbody>
         <% unless decorated_resource.vector_resource_members.empty? %>
           <% decorated_resource.vector_resource_members.each do |vector_resource| %>
@@ -44,6 +44,13 @@
             <td></td>
           </tr>
         <% end %>
+        <tr class="message has-warning hidden">
+          <td id="warning-message" class="alert-warning"></td>
+          <td class="alert-warning"></td>
+          <td class="alert-warning"></td>
+          <td class="alert-warning"></td>
+          <td class="alert-warning"></td>
+        </tr>
       </tbody>
 
       <tfoot>
@@ -53,9 +60,9 @@
                         collection: @unattached_vector_resources.sort_by(&:title),
                         label_method: :title,
                         value_method: :id,
-                        include_blank: false,
+                        include_blank: "Attach an existing resource...",
                         selected: nil,
-                        label: "Attach an existing resource...",
+                        label: false,
                         required: false,
                         input_html: {
                           multiple: false,

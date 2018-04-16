@@ -1,5 +1,6 @@
 
   <%= simple_form_for @change_set do |f| %>
+    <div class="loading-status hidden">Loading...</div>
     <table id="parent-scanned-maps"
            class="table table-striped parent-resources parent-scanned-maps"
            data-update-url="<%= raster_resources_attach_to_parent_path(id: resource.id) %>"
@@ -37,13 +38,20 @@
           <% end %>
         <% else %>
           <tr>
-            <td>This work has no raster resources attached.  Click "Attach" to attach to an existing raster resource.</td>
+            <td>This work is not attached to any scanned maps.  Click "Attach" to attach to an existing scanned map.</td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
           </tr>
         <% end %>
+        <tr class="message has-warning hidden">
+          <td id="warning-message" class="alert-warning"></td>
+          <td class="alert-warning"></td>
+          <td class="alert-warning"></td>
+          <td class="alert-warning"></td>
+          <td class="alert-warning"></td>
+        </tr>
       </tbody>
 
       <tfoot>
@@ -53,9 +61,9 @@
                         collection: @unrelated_parent_scanned_maps.sort_by(&:title),
                         label_method: :title,
                         value_method: :id,
-                        include_blank: false,
+                        include_blank: "Attach to an existing resource...",
                         selected: nil,
-                        label: "Attach to an existing resource...",
+                        label: false,
                         required: false,
                         input_html: {
                           multiple: false,

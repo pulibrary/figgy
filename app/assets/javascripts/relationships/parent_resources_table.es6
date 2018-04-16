@@ -31,19 +31,25 @@ export default class ParentResourcesTable extends RelatedResourcesTable {
    */
   bindAddButton() {
     const $this = this;
-    $this.element.find('.btn-add-row').click(() => {
-      const $row = $(this).parents('.parent-resources-attach')
+    $this.element.find('.btn-add-row').click((event) => {
+      const $element = $(event.target)
+      const $row = $element.parents('.parent-resources-attach')
       const parentId = $this.$select.val()
 
       if ($.inArray(parentId, $this.parents) > -1) {
         $this.setWarningMessage($row, 'Resource is already related.')
       } else {
         $this.hideWarningMessage($row)
+        $element.prop('disabled', true)
+        $this.setLoading(true)
+
         $this.callAjax({
           row: $row,
           members: null,
           member: null,
           url: $this.update_url,
+          element: $element,
+          object: $this,
           data: $this.buildFormData(parentId),
           on_error: $this.handleError,
           on_success: $this.reloadTable
@@ -59,19 +65,24 @@ export default class ParentResourcesTable extends RelatedResourcesTable {
   bindRemoveButton() {
     const $this = this;
     $this.element.find('.btn-remove-row').click((event) => {
-      const $row = $(event.target).parents('tr:first')
-
+      const $element = $(event.target)
+      const $row = $element.parents('tr:first')
       const parentId = $row.data('resource-id')
       const index = $this.parents.indexOf(parentId)
       $this.parents.splice(index, 1)
-
       const update_url = $row.data('update-url')
+
+      $element.prop('disabled', true)
+      $this.setLoading(true)
+
       $this.callAjax({
         row: $row,
         members: null,
         member: null,
         data: $this.buildFormData(parentId),
         url: update_url,
+        element: $element,
+        object: $this,
         on_error: $this.handleError,
         on_success: $this.reloadTable
       })

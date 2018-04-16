@@ -13,12 +13,9 @@ class FindUnrelatedParents
 
   def find_unrelated_parents_query
     <<-SQL
-        SELECT parent.* FROM orm_resources parent,
-        jsonb_array_elements(parent.metadata->'member_ids') WITH ORDINALITY AS b(member, member_pos)
-        JOIN orm_resources member ON (b.member->>'id')::#{id_type} != member.id WHERE member.id = ?
-        AND parent.internal_resource = ?
-        ORDER BY b.member_pos
-      SQL
+      SELECT resource.* FROM orm_resources AS resource
+      WHERE resource.id != ? AND resource.internal_resource = ?;
+    SQL
   end
 
   # @param id [Valkyrie::ID, String]

@@ -1,11 +1,13 @@
   <h3>Raster Resources</h3>
 
   <%= simple_form_for @change_set do |f| %>
+    <div class="loading-status hidden">Loading...</div>
     <table id="members-raster-resources"
     class="table table-striped member-resources member-raster-resources"
     data-update-url="<%= polymorphic_url([resource]) %>"
     data-query-url="<%= solr_document_path(id: resource.id) %>"
     data-members="<%= decorated_resource.members.map { |member| member.id.to_s } %>"
+    data-resource-id="<%= resource.id.to_s %>"
     data-param-key="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>">
       <thead>
         <tr>
@@ -43,8 +45,14 @@
             <td></td>
           </tr>
         <% end %>
+        <tr class="message has-warning hidden">
+          <td class="alert-warning"></td>
+          <td id="warning-message" class="alert-warning"></td>
+          <td class="alert-warning"></td>
+          <td class="alert-warning"></td>
+          <td class="alert-warning"></td>
+        </tr>
       </tbody>
-
       <tfoot>
         <tr class="member-resources-attach">
           <td>
@@ -52,9 +60,9 @@
                         collection: @unattached_raster_resources.sort_by(&:title),
                         label_method: :title,
                         value_method: :id,
-                        include_blank: false,
+                        include_blank: "Attach an existing resource...",
                         selected: nil,
-                        label: "Attach an existing resource...",
+                        label: false,
                         required: false,
                         input_html: {
                           multiple: false,

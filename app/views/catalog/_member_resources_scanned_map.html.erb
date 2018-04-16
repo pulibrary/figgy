@@ -1,6 +1,7 @@
   <h3>Scanned Maps</h3>
 
   <%= simple_form_for @change_set do |f| %>
+    <div class="loading-status hidden">Loading...</div>
     <table id="members-scanned-maps"
     class="table table-striped member-resources member-scanned-maps"
     data-update-url="<%= polymorphic_url([resource]) %>"
@@ -44,6 +45,13 @@
             <td></td>
           </tr>
         <% end %>
+        <tr class="message has-warning hidden">
+          <td id="warning-message" class="alert-warning"></td>
+          <td class="alert-warning"></td>
+          <td class="alert-warning"></td>
+          <td class="alert-warning"></td>
+          <td class="alert-warning"></td>
+        </tr>
       </tbody>
 
       <tfoot>
@@ -53,9 +61,9 @@
                         collection: @unattached_scanned_maps.sort_by(&:title),
                         label_method: :title,
                         value_method: :id,
-                        include_blank: false,
+                        include_blank: "Attach an existing resource...",
                         selected: nil,
-                        label: "Attach an existing resource...",
+                        label: false,
                         required: false,
                         input_html: {
                           multiple: false,
