@@ -129,10 +129,6 @@ class Ability
     @auth_token ||= AuthToken.find_by(token: options[:auth_token]) || NilToken
   end
 
-  def box_grants_access?(resource)
-    (resource.decorate.ephemera_box.try(:state) || []).include?("all_in_production")
-  end
-
   def curation_concerns
     [ScannedResource, EphemeraFolder, ScannedMap, VectorResource, RasterResource, SimpleResource]
   end
@@ -171,20 +167,22 @@ class Ability
     false
   end
 
-  def manifestable_concern?(resource)
-    resource.state.include?("complete") || box_grants_access?(resource)
-  end
-
   def pdf_file?(resource)
     resource.mime_type == 'application/pdf'
   end
 
-  def query_service
-    Valkyrie.config.metadata_adapter.query_service
+  def manifestable_concern?(resource)
+    resource.decorate.manifestable_state?
   end
 
   def readable_concern?(resource)
-    !unreadable_states.include?(resource.state.first)
+    return false if current_user.curator? && Array.wrap(resource.state).include?("pending")
+    return true if universal_reader?
+    resource.decorate.public_readable_state?
+  end
+
+  def query_service
+    Valkyrie.config.metadata_adapter.query_service
   end
 
   def roles
@@ -193,16 +191,6 @@ class Ability
 
   def universal_reader?
     current_user.curator? || current_user.image_editor? || current_user.completer? || current_user.fulfiller? || current_user.editor? || current_user.admin?
-  end
-
-  def unreadable_states
-    if current_user.curator?
-      %w[pending]
-    elsif universal_reader?
-      []
-    else
-      %w[pending metadata_review final_review takedown]
-    end
   end
 
   class NilToken
