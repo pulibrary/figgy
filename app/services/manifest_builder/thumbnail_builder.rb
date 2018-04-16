@@ -21,7 +21,7 @@ class ManifestBuilder
       end
 
       def thumbnail
-        return nil unless thumbnail_id && file_set
+        return nil unless thumbnail_id && file_set && file_set.derivative_file
         {
           "@id" => helper.manifest_image_thumbnail_path(file_set.id),
           "service" => {

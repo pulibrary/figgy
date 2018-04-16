@@ -55,6 +55,28 @@ RSpec.describe ManifestBuilder do
     ]
   end
 
+  context "when the thumbnail derivative isn't generated" do
+    with_queue_adapter :test
+    before do
+      allow(Rails.env).to receive(:development?).and_return(false)
+      allow(Rails.env).to receive(:test?).and_return(false)
+      stub_bibdata(bib_id: "123456")
+      output = change_set_persister.save(change_set: change_set)
+      file_set_id = output.member_ids.first
+      file_set = query_service.find_by(id: file_set_id)
+      file_set.local_identifier = "p79409x97p"
+      metadata_adapter.persister.save(resource: file_set)
+      change_set = ScannedResourceChangeSet.new(output)
+      change_set.validate(logical_structure: logical_structure(file_set_id), start_canvas: start_canvas || file_set_id)
+      change_set.sync
+      change_set_persister.save(change_set: change_set)
+    end
+    it "doesn't error" do
+      output = manifest_builder.build
+      expect(output["thumbnail"]).to be_blank
+    end
+  end
+
   describe "#build" do
     before do
       stub_bibdata(bib_id: "123456")
