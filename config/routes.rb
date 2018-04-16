@@ -95,6 +95,7 @@ Rails.application.routes.draw do
       member do
         get :file_manager
         get :manifest, defaults: { format: :json }
+        post :browse_everything_files
         get :pdf
       end
     end
