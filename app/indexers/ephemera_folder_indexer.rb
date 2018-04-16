@@ -16,8 +16,8 @@ class EphemeraFolderIndexer
   private
 
     def read_groups
-      return [] unless decorated.state == 'complete' || (decorated.ephemera_box.present? && decorated.ephemera_box.try(:state) == 'all_in_production')
-      resource.read_groups
+      return resource.read_groups if resource.decorate.public_readable_state?
+      []
     end
 
     def decorated
