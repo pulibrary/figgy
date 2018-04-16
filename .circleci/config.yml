@@ -122,3 +122,22 @@ workflows:
       - rubocop:
           requires:
             - build
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - npm_test:
+          requires:
+            - build
+      - rubocop:
+          requires:
+            - build
