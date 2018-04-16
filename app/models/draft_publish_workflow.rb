@@ -23,11 +23,6 @@ class DraftPublishWorkflow
     end
   end
 
-  # this workflow doesn't have a suppressed state but other code checks for it; make it false
-  def suppressed?
-    false
-  end
-
   def valid_states
     aasm.states.map(&:name).map(&:to_s)
   end

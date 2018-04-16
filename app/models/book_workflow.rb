@@ -47,10 +47,6 @@ class BookWorkflow
     end
   end
 
-  def suppressed?
-    pending? || metadata_review? || final_review? || takedown?
-  end
-
   def valid_states
     aasm.states.map(&:name).map(&:to_s)
   end

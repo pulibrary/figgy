@@ -22,11 +22,6 @@ class FolderWorkflow
     end
   end
 
-  # note suppression can be overridden by the box a folder belongs to
-  def suppressed?
-    false
-  end
-
   def valid_states
     aasm.states.map(&:name).map(&:to_s)
   end
