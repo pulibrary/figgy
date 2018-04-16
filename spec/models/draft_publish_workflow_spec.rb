@@ -32,4 +32,14 @@ describe DraftPublishWorkflow do
   it 'reports valid states' do
     expect(workflow.valid_states).to eq %w[draft published]
   end
+
+  describe 'access states' do
+    it 'provides a list of read-accessible states' do
+      expect(described_class.public_read_states).to contain_exactly :published
+    end
+
+    it 'provides a list of manifest-publishable states' do
+      expect(described_class.manifest_states).to contain_exactly :published
+    end
+  end
 end

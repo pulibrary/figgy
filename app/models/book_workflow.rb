@@ -58,4 +58,14 @@ class BookWorkflow
   def valid_transitions
     aasm.states(permitted: true).map(&:name).map(&:to_s)
   end
+
+  # States in which the record can be indexed as publicly viewable
+  def self.public_read_states
+    [:complete, :flagged]
+  end
+
+  # States in which a manifest can be published for the record
+  def self.manifest_states
+    [:complete, :flagged]
+  end
 end

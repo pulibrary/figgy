@@ -64,4 +64,14 @@ describe BoxWorkflow do
       expect(workflow.valid_states).to eq [:new, :ready_to_ship, :shipped, :received, :all_in_production].map(&:to_s)
     end
   end
+
+  describe 'access states' do
+    it 'provides a list of read-accessible states' do
+      expect(described_class.public_read_states).to contain_exactly :all_in_production
+    end
+
+    it 'provides a list of manifest-publishable states' do
+      expect(described_class.manifest_states).to contain_exactly :all_in_production
+    end
+  end
 end

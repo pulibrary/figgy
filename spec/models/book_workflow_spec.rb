@@ -88,4 +88,14 @@ describe BookWorkflow do
       expect(workflow.suppressed?).to be false
     end
   end
+
+  describe 'access states' do
+    it 'provides a list of read-accessible states' do
+      expect(described_class.public_read_states).to contain_exactly :complete, :flagged
+    end
+
+    it 'provides a list of manifest-publishable states' do
+      expect(described_class.manifest_states).to contain_exactly :complete, :flagged
+    end
+  end
 end
