@@ -33,11 +33,11 @@ class DraftPublishWorkflow
 
   # States in which the record can be indexed as publicly viewable
   def self.public_read_states
-    [:published]
+    [:published].map(&:to_s)
   end
 
   # States in which a manifest can be published for the record
   def self.manifest_states
-    [:published]
+    [:published].map(&:to_s)
   end
 end

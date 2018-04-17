@@ -101,7 +101,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   end
 
   def manifestable_state?
-    WorkflowRegistry.workflow_for(model.class).manifest_states.include? Array.wrap(state).first.underscore.to_sym
+    WorkflowRegistry.workflow_for(model.class).manifest_states.include? Array.wrap(state).first.underscore
   rescue WorkflowRegistry::EntryNotFound
     # if there's no workflow, default to true
     true

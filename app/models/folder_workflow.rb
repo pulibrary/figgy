@@ -33,14 +33,16 @@ class FolderWorkflow
   # States in which the record can be indexed as publicly viewable
   # Note that a folder should be readable in any state if it is contained
   # by a box with state 'all_in_production'
+  # @return array of strings
   def self.public_read_states
-    [:complete]
+    [:complete].map(&:to_s)
   end
 
   # States in which a manifest can be published for the record
   # Note that a folder manifest should be published in any state if it is contained
   # by a box with state 'all_in_production'
+  # @return array of strings
   def self.manifest_states
-    [:complete]
+    [:complete].map(&:to_s)
   end
 end

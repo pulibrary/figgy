@@ -25,11 +25,11 @@ describe FolderWorkflow do
 
   describe 'access states' do
     it 'provides a list of read-accessible states' do
-      expect(described_class.public_read_states).to contain_exactly :complete
+      expect(described_class.public_read_states).to contain_exactly "complete"
     end
 
     it 'provides a list of manifest-publishable states' do
-      expect(described_class.manifest_states).to contain_exactly :complete
+      expect(described_class.manifest_states).to contain_exactly "complete"
     end
   end
 end

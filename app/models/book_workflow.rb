@@ -57,11 +57,11 @@ class BookWorkflow
 
   # States in which the record can be indexed as publicly viewable
   def self.public_read_states
-    [:complete, :flagged]
+    [:complete, :flagged].map(&:to_s)
   end
 
   # States in which a manifest can be published for the record
   def self.manifest_states
-    [:complete, :flagged]
+    [:complete, :flagged].map(&:to_s)
   end
 end
