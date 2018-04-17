@@ -73,7 +73,7 @@ module ApplicationHelper
   # Gets current layout for use in rendering partials
   # @return [String] filemanager, default
   def layout_type
-    resource_types = ['scanned_resources', 'ephemera_folders']
+    resource_types = ['scanned_resources', 'ephemera_folders', 'simple_resources']
     if resource_types.include? params[:controller]
       'filemanager'
     else
