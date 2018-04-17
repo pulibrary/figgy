@@ -100,6 +100,8 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     end
   end
 
+  # Should this folder have a manifest?
+  # @return [TrueClass, FalseClass]
   def manifestable_state?
     WorkflowRegistry.workflow_for(model.class).manifest_states.include? Array.wrap(state).first.underscore
   rescue WorkflowRegistry::EntryNotFound
@@ -107,6 +109,8 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     true
   end
 
+  # Is this folder publicly viewable?
+  # @return [TrueClass, FalseClass]
   def public_readable_state?
     WorkflowRegistry.workflow_for(model.class).public_read_states.include? Array.wrap(state).first.underscore
   rescue WorkflowRegistry::EntryNotFound

@@ -31,7 +31,7 @@ class DraftPublishWorkflow
     aasm.states(permitted: true).map(&:name).map(&:to_s)
   end
 
-  # States in which the record can be indexed as publicly viewable
+  # States in which the record is publicly readable (as allowed by visilibility)
   def self.public_read_states
     [:published].map(&:to_s)
   end

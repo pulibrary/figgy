@@ -181,7 +181,10 @@ class Ability
     resource.decorate.public_readable_state?
   end
 
-  # also used by search builder
+  # The search builder needs to enumerate actual names of states
+  #   so although this duplicates some logic with #readable_concern?
+  #   we need both
+  # @see app/models/search_builder.rb
   def unreadable_states
     return ["pending"] if current_user.curator?
     return [] if universal_reader?
