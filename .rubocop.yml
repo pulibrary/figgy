@@ -49,6 +49,7 @@ Metrics/BlockLength:
     - 'lib/tasks/bulk.rake'
     - 'lib/tasks/lae.rake'
     - 'app/change_sets/simple_resource_change_set.rb'
+    - 'app/controllers/concerns/resource_relations.rb'
 Metrics/ClassLength:
   Exclude:
     - 'app/change_set_persisters/plum_change_set_persister.rb'
