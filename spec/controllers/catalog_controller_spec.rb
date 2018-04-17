@@ -141,6 +141,14 @@ RSpec.describe CatalogController do
 
         expect(assigns(:document_list).length).to eq 0
       end
+
+      it "does not display EphemeraBoxes" do
+        persister.save(resource: FactoryBot.build(:ephemera_box, state: 'all_in_production'))
+
+        get :index, params: { q: "" }
+
+        expect(assigns(:document_list).length).to eq 0
+      end
     end
 
     context "when an admin" do
@@ -155,6 +163,14 @@ RSpec.describe CatalogController do
         get :index, params: { q: "" }
 
         expect(assigns(:document_list).length).to eq 2
+      end
+
+      it "displays all_in_production  EphemeraBoxes" do
+        persister.save(resource: FactoryBot.build(:ephemera_box, state: 'all_in_production'))
+
+        get :index, params: { q: "" }
+
+        expect(assigns(:document_list).length).to eq 1
       end
 
       context 'with a non-Latin title which has been transliterated' do
