@@ -37,13 +37,19 @@ class BoxWorkflow
     aasm.states(permitted: true).map(&:name).map(&:to_s)
   end
 
-  # States in which the record can be indexed as publicly viewable
+  # States in which the record should be publicly viewable
+  # (boxes are never publicly viewable)
   def self.public_read_states
+    []
+  end
+
+  # States in which a manifest can be published
+  def self.manifest_states
     [:all_in_production].map(&:to_s)
   end
 
-  # States in which a manifest can be published for the record
-  def self.manifest_states
+  # states that grant read access to contained items
+  def self.grant_access_states
     [:all_in_production].map(&:to_s)
   end
 end

@@ -30,11 +30,16 @@ class FolderWorkflow
     aasm.states(permitted: true).map(&:name).map(&:to_s)
   end
 
-  # States in which the record can be indexed as publicly viewable
-  # Note that a folder should be readable in any state if it is contained
-  # by a box with state 'all_in_production'
+  # States in which the record can be publicly viewable
+  # All states must be included here because any state is viewable if its container allows it
   # @return array of strings
   def self.public_read_states
+    [:needs_qa, :complete].map(&:to_s)
+  end
+
+  # States in which the record is indexable
+  # Folders are consulted and will override this if appropriate
+  def self.index_states
     [:complete].map(&:to_s)
   end
 

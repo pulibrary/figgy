@@ -46,7 +46,7 @@ RSpec.describe WorkflowRegistry do
 
   describe ".public_read_states" do
     it "returns a list of public read states" do
-      expect(described_class.public_read_states).to contain_exactly "all_in_production", "complete", "flagged", "published"
+      expect(described_class.public_read_states).to contain_exactly "complete", "flagged", "needs_qa", "published"
     end
   end
 end

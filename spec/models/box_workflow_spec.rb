@@ -66,7 +66,7 @@ describe BoxWorkflow do
 
   describe 'access states' do
     it 'provides a list of read-accessible states' do
-      expect(described_class.public_read_states).to contain_exactly "all_in_production"
+      expect(described_class.public_read_states).to be_empty
     end
 
     it 'provides a list of manifest-publishable states' do

@@ -42,4 +42,19 @@ RSpec.describe EphemeraBoxDecorator do
       expect(resource.decorate.folders.to_a.first).to be_a EphemeraFolder
     end
   end
+
+  describe "#grant_access_state?" do
+    context 'in state: new' do
+      let(:resource) { FactoryBot.build(:ephemera_box, state: 'new') }
+      it "doesn't grant access" do
+        expect(resource.decorate.grant_access_state?).to be false
+      end
+    end
+    context 'in state: all_in_production' do
+      let(:resource) { FactoryBot.build(:ephemera_box, state: 'all_in_production') }
+      it "does grant access" do
+        expect(resource.decorate.grant_access_state?).to be true
+      end
+    end
+  end
 end

@@ -36,6 +36,12 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
     @ephemera_box ||= query_service.find_parents(resource: model).to_a.first.try(:decorate) || NullProject.new
   end
 
+  # Whether this box has a workflow state that grants access to its contents
+  # @return [TrueClass, FalseClass]
+  def grant_access_state?
+    WorkflowRegistry.workflow_for(model.class).grant_access_states.include? Array.wrap(state).first.underscore
+  end
+
   class NullProject
     def title; end
 

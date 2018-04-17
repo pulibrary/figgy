@@ -116,13 +116,30 @@ RSpec.describe EphemeraFolderDecorator do
 
     describe 'public_readable_state?' do
       describe 'the box is not all in production' do
-        it 'returns true when in an indexable state' do
+        it 'returns true when in a readable state' do
           resource.state = ["complete"]
           expect(resource.decorate.public_readable_state?).to eq true
         end
+      end
+
+      describe 'the box is all in production' do
+        let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: resource.id, state: "all_in_production") }
+        it 'returns true when in a non-readable state' do
+          resource.state = ['needs_qa']
+          expect(resource.decorate.public_readable_state?).to eq true
+        end
+      end
+    end
+
+    describe 'indexable?' do
+      describe 'the box is not all in production' do
+        it 'returns true when in an indexable state' do
+          resource.state = ["complete"]
+          expect(resource.decorate.indexable?).to eq true
+        end
         it 'returns false when in a non-indexable state' do
           resource.state = ['needs_qa']
-          expect(resource.decorate.public_readable_state?).to eq false
+          expect(resource.decorate.indexable?).to eq false
         end
       end
 
@@ -130,7 +147,7 @@ RSpec.describe EphemeraFolderDecorator do
         let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: resource.id, state: "all_in_production") }
         it 'returns true when in a non-indexable state' do
           resource.state = ['needs_qa']
-          expect(resource.decorate.public_readable_state?).to eq true
+          expect(resource.decorate.indexable?).to eq true
         end
       end
     end
@@ -158,13 +175,21 @@ RSpec.describe EphemeraFolderDecorator do
     end
 
     describe 'public_readable_state?' do
-      it 'returns true when in an indexable state' do
+      it 'returns true when in a readable state' do
         resource.state = ["complete"]
         expect(resource.decorate.public_readable_state?).to eq true
       end
+    end
+
+    describe 'indexable?' do
+      it 'returns true when in an indexable state' do
+        resource.state = ["complete"]
+        expect(resource.decorate.indexable?).to eq true
+      end
+
       it 'returns false when in a non-indexable state' do
         resource.state = ['needs_qa']
-        expect(resource.decorate.public_readable_state?).to eq false
+        expect(resource.decorate.indexable?).to eq false
       end
     end
   end
