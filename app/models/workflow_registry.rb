@@ -16,4 +16,18 @@ class WorkflowRegistry
   rescue KeyError
     raise EntryNotFound, resource_class
   end
+
+  def self.unregister(resource_class)
+    hash.delete(resource_class)
+  end
+
+  # @return array of strings
+  def self.all_states
+    hash.values.uniq.map { |klass| klass.new(nil).valid_states }.flatten.uniq
+  end
+
+  # @return array of strings
+  def self.public_read_states
+    hash.values.uniq.map(&:public_read_states).flatten.uniq
+  end
 end
