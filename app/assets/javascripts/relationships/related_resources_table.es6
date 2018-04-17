@@ -101,7 +101,7 @@ export default class RelatedResourcesTable {
     const $this = this;
     $this.element.find('.btn-remove-row').click(() => {
       const $element = $(event.target)
-      const $row = $(this).parents('tr:first');
+      const $row = $element.parents('tr:first');
       const memberId = $row.data('resource-id');
       const index = $this.members.indexOf(memberId);
 
