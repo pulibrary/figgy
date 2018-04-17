@@ -170,7 +170,15 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
       true
     end
   end
-  alias public_readable_state? manifestable_state?
+
+  def public_readable_state?
+    if ephemera_box.nil? || !ephemera_box.public_readable_state?
+      super
+    else
+      # box is in production; we should publish
+      true
+    end
+  end
 
   private
 
