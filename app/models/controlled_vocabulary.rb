@@ -161,6 +161,17 @@ class ControlledVocabulary
     end
   end
 
+  class OCRLanguage < ControlledVocabulary
+    ControlledVocabulary.register(:ocr_language, self)
+
+    def all(_scope = nil)
+      @all ||=
+        Tesseract.languages.map do |code, label|
+          Term.new(label: label, value: code.to_s)
+        end.sort_by(&:label)
+    end
+  end
+
   # Controlled vocabulary for raster geospatial media types
   class GeoImageFormat < ControlledVocabulary
     ControlledVocabulary.register(:geo_image_format, self)
