@@ -30,11 +30,7 @@ class SearchBuilder < Blacklight::SearchBuilder
   end
 
   def readable_states
-    all_states - unreadable_states
-  end
-
-  def all_states
-    BookWorkflow.new(nil).valid_states + FolderWorkflow.new(nil).valid_states + DraftPublishWorkflow.new(nil).valid_states
+    WorkflowRegistry.all_states - unreadable_states
   end
 
   def models_to_solr_clause
