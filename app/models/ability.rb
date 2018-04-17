@@ -176,9 +176,16 @@ class Ability
   end
 
   def readable_concern?(resource)
-    return false if current_user.curator? && Array.wrap(resource.state).include?("pending")
+    return false if unreadable_states.include? Array.wrap(resource.state).first
     return true if universal_reader?
     resource.decorate.public_readable_state?
+  end
+
+  # also used by search builder
+  def unreadable_states
+    return ["pending"] if current_user.curator?
+    return [] if universal_reader?
+    WorkflowRegistry.all_states - WorkflowRegistry.public_read_states
   end
 
   def query_service
