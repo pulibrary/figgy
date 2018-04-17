@@ -1,5 +1,9 @@
   <div class="form-actions">
     <%= link_to "All Terms", ephemera_terms_path, class: 'btn btn-default' %>
-    <%= link_to "Edit This #{resource.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-default' %>
-    <%= link_to "Delete This #{resource.human_readable_type}", main_app.polymorphic_path([resource]), class: 'btn btn-danger pull-right', data: { confirm: "Delete this #{resource.human_readable_type}?" }, method: :delete %>
+    <% if can_edit? %>
+      <%= link_to "Edit This #{resource.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-default' %>
+    <% end %>
+    <% if can_delete? %>
+      <%= link_to "Delete This #{resource.human_readable_type}", main_app.polymorphic_path([resource]), class: 'btn btn-danger pull-right', data: { confirm: "Delete this #{resource.human_readable_type}?" }, method: :delete %>
+    <% end %>
   </div>

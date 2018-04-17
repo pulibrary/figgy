@@ -1,33 +1,44 @@
   <div class="form-actions">
-    <%= link_to "Edit This #{resource.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-default' %>
-    <% if decorated_resource.manageable_files? %>
-      <%= link_to "File Manager", main_app.polymorphic_path([:file_manager, resource]), class: 'btn btn-default' %>
+    <% if can_edit? %>
+      <%= link_to "Edit This #{resource.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-default' %>
     <% end %>
-    <% if decorated_resource.manageable_structure? %>
-      <%= link_to "Edit Structure", main_app.polymorphic_path([:structure, resource]), class: 'btn btn-default' %>
+    <% if can_manage_files? %>
+      <% if decorated_resource.manageable_files? %>
+        <%= link_to "File Manager", main_app.polymorphic_path([:file_manager, resource]), class: 'btn btn-default' %>
+      <% end %>
     <% end %>
-    <% if decorated_resource.attachable_objects.length > 0 %>
-        <div class="btn-group">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Attach Child <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu">
-            <% decorated_resource.attachable_objects.each do |concern| %>
-              <li>
-                <%= link_to "Attach #{concern.human_readable_type}", polymorphic_path([:parent, :new, resource]) %>
-              </li>
-            <% end %>
-          </ul>
-        </div>
+    <% if can_manage_structure? %>
+      <% if decorated_resource.manageable_structure? %>
+        <%= link_to "Edit Structure", main_app.polymorphic_path([:structure, resource]), class: 'btn btn-default' %>
+      <% end %>
+    <% end %>
+    <% if can_edit? %>
+      <% if decorated_resource.attachable_objects.length > 0 %>
+          <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Attach Child <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <% decorated_resource.attachable_objects.each do |concern| %>
+                <li>
+                  <%= link_to "Attach #{concern.human_readable_type}", polymorphic_path([:parent, :new, resource]) %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+      <% end %>
     <% end %>
 
     <div class="pull-right">
-      <% if decorated_resource.ephemera_box %>
-        <%= link_to 'Attach Another Folder', new_ephemera_folder_path(parent_id: decorated_resource.ephemera_box.id), class: 'btn btn-primary' %>
-      <% elsif decorated_resource.ephemera_project %>
-        <%= link_to 'Attach Another Folder', boxless_new_ephemera_folder_path(parent_id: decorated_resource.ephemera_project.id), class: 'btn btn-primary' %>
+      <% if can_create_ephemera_folder_for? %>
+        <% if decorated_resource.ephemera_box %>
+          <%= link_to 'Attach Another Folder', new_ephemera_folder_path(parent_id: decorated_resource.ephemera_box.id), class: 'btn btn-primary' %>
+        <% elsif decorated_resource.ephemera_project %>
+          <%= link_to 'Attach Another Folder', boxless_new_ephemera_folder_path(parent_id: decorated_resource.ephemera_project.id), class: 'btn btn-primary' %>
+        <% end %>
       <% end %>
-
-      <%= link_to "Delete This #{resource.human_readable_type}", main_app.polymorphic_path([resource]), class: 'btn btn-danger', data: { confirm: "Delete this #{resource.human_readable_type}?" }, method: :delete %>
+      <% if can_delete? %>
+        <%= link_to "Delete This #{resource.human_readable_type}", main_app.polymorphic_path([resource]), class: 'btn btn-danger', data: { confirm: "Delete this #{resource.human_readable_type}?" }, method: :delete %>
+      <% end %>
     </div>
   </div>

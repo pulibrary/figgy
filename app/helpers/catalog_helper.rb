@@ -12,4 +12,32 @@ module CatalogHelper
     val = Array.wrap(presenter(document).heading).map { |v| h(v) }.join("<br />")
     content_tag(tag, val, { itemprop: "name", dir: val.to_s.dir }, false)
   end
+
+  def can_edit?
+    can? :update, resource
+  end
+
+  def can_manage_files?
+    can? :file_manager, resource
+  end
+
+  def can_manage_structure?
+    can? :structure, resource
+  end
+
+  def can_delete?
+    can? :destroy, resource
+  end
+
+  def can_create_template_from?
+    can?(:edit, resource) && can?(:create, Template)
+  end
+
+  def can_create_ephemera_folder_for?
+    can?(:edit, resource) && can?(:create, EphemeraFolder)
+  end
+
+  def can_download?
+    can? :download, resource
+  end
 end
