@@ -18,6 +18,8 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev libappindicator3-1
+      - run: chromedriver -v
+      - run: google-chrome --version
       - run:
           name: Install Chrome
           command: |
