@@ -23,16 +23,21 @@ class DraftPublishWorkflow
     end
   end
 
-  # this workflow doesn't have a suppressed state but other code checks for it; make it false
-  def suppressed?
-    false
-  end
-
   def valid_states
     aasm.states.map(&:name).map(&:to_s)
   end
 
   def valid_transitions
     aasm.states(permitted: true).map(&:name).map(&:to_s)
+  end
+
+  # States in which the record is publicly readable (as allowed by visilibility)
+  def self.public_read_states
+    [:published].map(&:to_s)
+  end
+
+  # States in which a manifest can be published for the record
+  def self.manifest_states
+    [:published].map(&:to_s)
   end
 end

@@ -29,15 +29,27 @@ class BoxWorkflow
     end
   end
 
-  def suppressed?
-    false
-  end
-
   def valid_states
     aasm.states.map(&:name).map(&:to_s)
   end
 
   def valid_transitions
     aasm.states(permitted: true).map(&:name).map(&:to_s)
+  end
+
+  # States in which the record should be publicly viewable
+  # (boxes are never publicly viewable)
+  def self.public_read_states
+    []
+  end
+
+  # States in which a manifest can be published
+  def self.manifest_states
+    [:all_in_production].map(&:to_s)
+  end
+
+  # states that grant read access to contained items
+  def self.grant_access_states
+    [:all_in_production].map(&:to_s)
   end
 end

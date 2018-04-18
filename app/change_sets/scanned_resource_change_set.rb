@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class ScannedResourceChangeSet < Valhalla::ChangeSet
-  apply_workflow(BookWorkflow)
+  apply_workflow(WorkflowRegistry.workflow_for(ScannedResource))
   delegate :human_readable_type, to: :model
 
   include VisibilityProperty

@@ -13,7 +13,6 @@ describe BookWorkflow do
       expect(workflow.may_complete?).to be false
       expect(workflow.may_takedown?).to be false
       expect(workflow.may_flag?).to be false
-      expect(workflow.suppressed?).to be true
 
       # digitization signoff moves to metadata review
       expect(workflow.finalize_digitization).to be true
@@ -23,7 +22,6 @@ describe BookWorkflow do
       expect(workflow.may_complete?).to be false
       expect(workflow.may_takedown?).to be false
       expect(workflow.may_flag?).to be false
-      expect(workflow.suppressed?).to be true
 
       # metadata signoff moves to final review
       expect(workflow.finalize_metadata).to be true
@@ -33,7 +31,6 @@ describe BookWorkflow do
       expect(workflow.may_complete?).to be true
       expect(workflow.may_takedown?).to be false
       expect(workflow.may_flag?).to be false
-      expect(workflow.suppressed?).to be true
 
       # final signoff moves to complete
       expect(workflow.complete).to be true
@@ -43,7 +40,6 @@ describe BookWorkflow do
       expect(workflow.may_complete?).to be false
       expect(workflow.may_takedown?).to be true
       expect(workflow.may_flag?).to be true
-      expect(workflow.suppressed?).to be false
     end
   end
 
@@ -53,19 +49,16 @@ describe BookWorkflow do
       expect(workflow.complete?).to be true
       expect(workflow.may_restore?).to be false
       expect(workflow.may_takedown?).to be true
-      expect(workflow.suppressed?).to be false
 
       expect(workflow.takedown).to be true
       expect(workflow.takedown?).to be true
       expect(workflow.may_restore?).to be true
       expect(workflow.may_takedown?).to be false
-      expect(workflow.suppressed?).to be true
 
       expect(workflow.restore).to be true
       expect(workflow.complete?).to be true
       expect(workflow.may_restore?).to be false
       expect(workflow.may_takedown?).to be true
-      expect(workflow.suppressed?).to be false
     end
   end
 
@@ -75,17 +68,24 @@ describe BookWorkflow do
       expect(workflow.complete?).to be true
       expect(workflow.may_flag?).to be true
       expect(workflow.may_unflag?).to be false
-      expect(workflow.suppressed?).to be false
 
       expect(workflow.flag).to be true
       expect(workflow.may_flag?).to be false
       expect(workflow.may_unflag?).to be true
-      expect(workflow.suppressed?).to be false
 
       expect(workflow.unflag).to be true
       expect(workflow.may_flag?).to be true
       expect(workflow.may_unflag?).to be false
-      expect(workflow.suppressed?).to be false
+    end
+  end
+
+  describe 'access states' do
+    it 'provides a list of read-accessible states' do
+      expect(described_class.public_read_states).to contain_exactly "complete", "flagged"
+    end
+
+    it 'provides a list of manifest-publishable states' do
+      expect(described_class.manifest_states).to contain_exactly "complete", "flagged"
     end
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class EphemeraBoxChangeSet < Valhalla::ChangeSet
-  apply_workflow BoxWorkflow
+  apply_workflow(WorkflowRegistry.workflow_for(EphemeraBox))
   validates :barcode, :box_number, :visibility, :rights_statement, presence: true
 
   include VisibilityProperty

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class RasterResourceChangeSet < Valhalla::ChangeSet
-  apply_workflow(BookWorkflow)
+  apply_workflow(WorkflowRegistry.workflow_for(RasterResource))
   delegate :human_readable_type, to: :model
 
   include GeoChangeSetProperties

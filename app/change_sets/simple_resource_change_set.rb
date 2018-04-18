@@ -2,7 +2,7 @@
 class SimpleResourceChangeSet < Valhalla::ChangeSet
   delegate :human_readable_type, to: :model
 
-  apply_workflow(DraftPublishWorkflow)
+  apply_workflow(WorkflowRegistry.workflow_for(SimpleResource))
 
   include VisibilityProperty
   property :title, multiple: true, required: true, default: []

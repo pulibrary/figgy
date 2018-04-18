@@ -162,7 +162,39 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     end.reject(&:nil?)
   end
 
+  # Should this folder have a manifest?
+  # @return [TrueClass, FalseClass]
+  def manifestable_state?
+    if ephemera_box.nil? || !ephemera_box.manifestable_state?
+      super
+    else
+      # box is in production; we should publish
+      true
+    end
+  end
+
+  # Is this folder publicly viewable?
+  # @return [TrueClass, FalseClass]
+  def public_readable_state?
+    if ephemera_box.nil? || !ephemera_box.grant_access_state?
+      super
+    else
+      # box is in production; it's public
+      true
+    end
+  end
+
+  # Should this folder be indexed?
+  # @return [TrueClass, FalseClass]
+  def indexable?
+    index_state? || (!ephemera_box.nil? && ephemera_box.grant_access_state?)
+  end
+
   private
+
+    def index_state?
+      WorkflowRegistry.workflow_for(model.class).index_states.include? Array.wrap(state).first.underscore
+    end
 
     def find_resource(resource_id)
       query_service.find_by(id: resource_id).decorate
