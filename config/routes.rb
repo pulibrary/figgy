@@ -66,6 +66,7 @@ Rails.application.routes.draw do
     resources :file_sets do
       member do
         put :derivatives
+        get :text
       end
     end
     resources :scanned_resources do

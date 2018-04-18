@@ -5,13 +5,13 @@ class RunOCRJob < ApplicationJob
   def perform(file_set_id)
     file_set = query_service.find_by(id: Valkyrie::ID.new(file_set_id))
     change_set = DynamicChangeSet.new(file_set)
-    derivative_service.new(change_set).create_derivatives
+    derivative_service_factory.new(change_set).create_derivatives
   end
 
   private
 
-    def derivative_service
-      @derivative_service ||= HocrDerivativeService::Factory.new(change_set_persister: change_set_persister)
+    def derivative_service_factory
+      @derivative_service_factory ||= HocrDerivativeService::Factory.new(change_set_persister: change_set_persister)
     end
 
     def change_set_persister

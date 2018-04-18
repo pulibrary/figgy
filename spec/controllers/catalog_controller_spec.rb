@@ -407,7 +407,7 @@ RSpec.describe CatalogController do
       end
       render_views
       it "renders administration buttons" do
-        resource = persister.save(resource: FactoryBot.build(:scanned_resource, workflow_note: WorkflowNote.new(author: "Shakespeare", note: "Test Comment")))
+        resource = persister.save(resource: FactoryBot.build(:scanned_resource, workflow_note: WorkflowNote.new(author: "Shakespeare", note: "Test Comment"), ocr_language: "eng"))
 
         get :show, params: { id: resource.id.to_s }
 

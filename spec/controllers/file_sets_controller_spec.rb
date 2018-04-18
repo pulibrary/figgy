@@ -70,6 +70,16 @@ RSpec.describe FileSetsController do
     end
   end
 
+  describe "GET /concern/file_sets/:id/text" do
+    render_views
+    it "renders the ocr_content property as text" do
+      file_set = FactoryBot.create_for_repository(:file_set, ocr_content: "blabla test")
+      get :text, params: { id: file_set.id.to_s }
+      expect(response.body).to eq "blabla test"
+      expect(response.content_type).to eq "text/plain"
+    end
+  end
+
   describe "PUT /file_sets/id" do
     context 'with a derivative service for images in the TIFF' do
       let(:create_derivatives_class) { class_double(CreateDerivativesJob).as_stubbed_const(transfer_nested_constants: true) }

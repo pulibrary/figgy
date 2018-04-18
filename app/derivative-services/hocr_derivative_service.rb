@@ -35,7 +35,7 @@ class HocrDerivativeService
   def create_derivatives
     run_derivatives
     change_set.hocr_content = created_file.read
-    change_set.ocr_content = ActionView::Base.full_sanitizer.sanitize(change_set.hocr_content).split.join("\n")
+    change_set.ocr_content = ActionView::Base.full_sanitizer.sanitize(change_set.hocr_content).split("\n").map(&:strip).select(&:present?).join(" ")
     FileUtils.rm_f(created_file.path)
     change_set.sync
     change_set_persister.buffer_into_index do |buffered_persister|
