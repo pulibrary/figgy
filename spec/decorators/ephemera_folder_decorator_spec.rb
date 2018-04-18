@@ -131,23 +131,23 @@ RSpec.describe EphemeraFolderDecorator do
       end
     end
 
-    describe 'indexable?' do
+    describe 'index_read_groups?' do
       describe 'the box is not all in production' do
-        it 'returns true when in an indexable state' do
+        it 'returns true when in a read-group-indexable state' do
           resource.state = ["complete"]
-          expect(resource.decorate.indexable?).to eq true
+          expect(resource.decorate.index_read_groups?).to eq true
         end
-        it 'returns false when in a non-indexable state' do
+        it 'returns false when in a non-read-group-indexable state' do
           resource.state = ['needs_qa']
-          expect(resource.decorate.indexable?).to eq false
+          expect(resource.decorate.index_read_groups?).to eq false
         end
       end
 
       describe 'the box is all in production' do
         let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: resource.id, state: "all_in_production") }
-        it 'returns true when in a non-indexable state' do
+        it 'returns true when in a non-read-group-indexable state' do
           resource.state = ['needs_qa']
-          expect(resource.decorate.indexable?).to eq true
+          expect(resource.decorate.index_read_groups?).to eq true
         end
       end
     end
@@ -181,15 +181,15 @@ RSpec.describe EphemeraFolderDecorator do
       end
     end
 
-    describe 'indexable?' do
-      it 'returns true when in an indexable state' do
+    describe 'index_read_groups?' do
+      it 'returns true when in a read-group-indexable state' do
         resource.state = ["complete"]
-        expect(resource.decorate.indexable?).to eq true
+        expect(resource.decorate.index_read_groups?).to eq true
       end
 
-      it 'returns false when in a non-indexable state' do
+      it 'returns false when in a non-read-group-indexable state' do
         resource.state = ['needs_qa']
-        expect(resource.decorate.indexable?).to eq false
+        expect(resource.decorate.index_read_groups?).to eq false
       end
     end
   end

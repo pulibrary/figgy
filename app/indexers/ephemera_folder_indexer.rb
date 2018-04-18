@@ -16,7 +16,7 @@ class EphemeraFolderIndexer
   private
 
     def read_groups
-      return resource.read_groups if resource.decorate.indexable?
+      return resource.read_groups if resource.decorate.index_read_groups?
       []
     end
 end

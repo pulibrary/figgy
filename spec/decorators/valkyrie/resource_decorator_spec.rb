@@ -127,13 +127,13 @@ RSpec.describe Valkyrie::ResourceDecorator do
       end
     end
 
-    describe 'a resource with indexable workflow state' do
+    describe 'a resource with public-readable workflow state' do
       it 'returns true' do
         expect(resource.decorate.public_readable_state?).to eq true
       end
     end
 
-    describe 'a resource with non-indexable workflow state' do
+    describe 'a resource with non-public-readable workflow state' do
       it 'returns false' do
         resource.state = ['pending']
         expect(resource.decorate.public_readable_state?).to eq false
