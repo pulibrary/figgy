@@ -3,6 +3,7 @@
 class MediaResource < Valhalla::Resource
   include Valkyrie::Resource::AccessControls
   include Schema::Common
+  include BagValidation
   attribute :id, Valkyrie::Types::ID.optional
   attribute :member_ids, Valkyrie::Types::Array
   attribute :member_of_collection_ids

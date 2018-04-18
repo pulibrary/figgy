@@ -9,6 +9,7 @@ functionality, performance, and scalability.
 * Ruby
 * Node v.8.2.1
 * Java (to run Solr server)
+* Python 2.6+ (to run bag validation)
 * Postgres (for OSX dev systems, install via homebrew)
 * [Redis](http://redis.io/)
     * Start Redis with `redis-server` or if you're on certain Linuxes, you can do this via `sudo service redis-server start`.
@@ -23,6 +24,8 @@ functionality, performance, and scalability.
 * [GDAL](http://www.gdal.org/)
     * You can install it on Mac OSX with `brew install gdal`.
     * On Ubuntu, use `sudo apt-get install gdal-bin`.
+* [bagit-python](https://github.com/LibraryOfCongress/bagit-python)
+    * `pip install bagit`
 
 ## Simple Tiles
 
