@@ -17,7 +17,7 @@ jobs:
           POSTGRES_PASSWORD: ""
     steps:
       - checkout
-      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev
+      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev google-chrome-stable
       - run: sudo sh bin/ci_simple_tiles_install.sh
       # Restore Cached Dependencies
       - type: cache-restore
