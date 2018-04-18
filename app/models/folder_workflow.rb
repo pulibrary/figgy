@@ -37,9 +37,9 @@ class FolderWorkflow
     [:needs_qa, :complete].map(&:to_s)
   end
 
-  # States in which the record is indexable
+  # States in which read groups for the record are indexable
   # Folders are consulted and will override this if appropriate
-  def self.index_states
+  def self.index_read_groups_states
     [:complete].map(&:to_s)
   end
 

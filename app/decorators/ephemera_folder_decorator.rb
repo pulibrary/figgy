@@ -184,16 +184,16 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     end
   end
 
-  # Should this folder be indexed?
+  # Should read groups be indexed for this folder?
   # @return [TrueClass, FalseClass]
-  def indexable?
-    index_state? || (!ephemera_box.nil? && ephemera_box.grant_access_state?)
+  def index_read_groups?
+    index_read_group_state? || (!ephemera_box.nil? && ephemera_box.grant_access_state?)
   end
 
   private
 
-    def index_state?
-      WorkflowRegistry.workflow_for(model.class).index_states.include? Array.wrap(state).first.underscore
+    def index_read_group_state?
+      WorkflowRegistry.workflow_for(model.class).index_read_groups_states.include? Array.wrap(state).first.underscore
     end
 
     def find_resource(resource_id)
