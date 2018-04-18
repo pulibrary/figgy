@@ -271,7 +271,7 @@ RSpec.describe CatalogController do
     before do
       sign_in FactoryBot.create(:admin)
     end
-    it "displays indexed EphemeraBoxes" do
+    it "displays indexed ScannedMaps" do
       persister.save(resource: FactoryBot.build(:scanned_map))
 
       get :index, params: { q: "" }
@@ -290,6 +290,23 @@ RSpec.describe CatalogController do
       get :index, params: { q: "" }
 
       expect(assigns(:document_list).length).to eq 0
+    end
+  end
+
+  describe "SimpleResource behavior" do
+    it "does not display a Simple Resource in draft state" do
+      persister.save(resource: FactoryBot.build(:simple_resource, state: 'draft'))
+
+      get :index, params: { q: "" }
+
+      expect(assigns(:document_list).length).to eq 0
+    end
+    it "does display a Simple Resource in published state" do
+      persister.save(resource: FactoryBot.build(:simple_resource, state: 'published'))
+
+      get :index, params: { q: "" }
+
+      expect(assigns(:document_list).length).to eq 1
     end
   end
 
