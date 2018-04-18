@@ -39,5 +39,20 @@ RSpec.describe IngestGeoportalRecordJob do
         expect(vector.identifier).to eq [ark]
       end
     end
+
+    context "when extracting from fgdc record raises an exception" do
+      let(:extractor) { instance_double(GeoMetadataExtractor::Fgdc) }
+      before do
+        allow(GeoMetadataExtractor::Fgdc).to receive(:new).and_return(extractor)
+        allow(extractor).to receive(:extract).and_raise(StandardError, "Fail")
+      end
+
+      it "gracefully handles the error and does not apply metadata" do
+        described_class.perform_now(fgdc_path: fgdc_path, user: user, base_data_path: base_data_path)
+
+        vector = adapter.query_service.find_all_of_model(model: VectorResource).first
+        expect(vector.title).not_to eq ["China census data by county, 2000-2010"]
+      end
+    end
   end
 end

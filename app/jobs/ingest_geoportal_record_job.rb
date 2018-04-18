@@ -28,8 +28,6 @@ class IngestGeoportalRecordJob < ApplicationJob
   def dataset_path
     path = onlink.gsub("http://map.princeton.edu/download/data", @base_data_path)
     return path if File.exist? path
-    logger.info "Geoportal Record #{@fgdc_path} does not have a valid dataset path"
-    false
   end
 
   def fgdc_doc
@@ -58,8 +56,6 @@ class IngestGeoportalRecordJob < ApplicationJob
 
   def valid_record?
     return true if geoform == "vector digital data"
-    logger.info "Geoportal Record #{@fgdc_path} is not valid"
-    false
   end
 
   class Ingester
