@@ -72,6 +72,8 @@ jobs:
       - run: sudo sh bin/ci_kakadu_install.sh
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
+      # Downgrade chromedriver to prevent incompatibility with installed chrome
+      - run: chromedriver-update 2.37
       - run: 
           command: bundle exec rake figgy:test
           background: true
