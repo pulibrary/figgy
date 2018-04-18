@@ -4,7 +4,7 @@ jobs:
   build:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.3.6-node-browsers
+      - image: circleci/ruby:2.3.7-node
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
@@ -25,6 +25,8 @@ jobs:
         key: figgy-{{ checksum "Gemfile.lock" }}
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
+      # Downgrade chromedriver to prevent incompatibility with installed chrome
+      - run: chromedriver-update 2.37
       # Cache Dependencies
       - type: cache-save
         name: Store bundle cache
@@ -51,7 +53,7 @@ jobs:
   test:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.3.6-node-browsers
+      - image: circleci/ruby:2.3.7-node
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
@@ -81,7 +83,7 @@ jobs:
   npm_test:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.3.6-node-browsers
+      - image: circleci/ruby:2.3.7-node
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
@@ -94,7 +96,7 @@ jobs:
   rubocop:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.3.6-node-browsers
+      - image: circleci/ruby:2.3.7-node
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
