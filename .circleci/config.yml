@@ -25,6 +25,8 @@ jobs:
         key: figgy-{{ checksum "Gemfile.lock" }}
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
+      # Downgrade chromedriver to prevent incompatibility with installed chrome
+      - run: chromedriver-update 2.37
       # Cache Dependencies
       - type: cache-save
         name: Store bundle cache
