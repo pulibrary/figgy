@@ -35,7 +35,6 @@ class VectorResourceChangeSet < Valhalla::ChangeSet
       :source_metadata_identifier,
       :rights_statement,
       :rights_note,
-      :coverage,
       :local_identifier,
       :holding_location,
       :member_of_collection_ids,
@@ -48,7 +47,8 @@ class VectorResourceChangeSet < Valhalla::ChangeSet
       :creator,
       :language,
       :cartographic_scale,
-      :cartographic_projection
+      :cartographic_projection,
+      :coverage
     ]
   end
   # rubocop:enable Metrics/MethodLength
