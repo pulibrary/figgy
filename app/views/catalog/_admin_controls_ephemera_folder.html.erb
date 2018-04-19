@@ -9,7 +9,7 @@
     <% end %>
     <% if can?(:structure, resource) %>
       <% if decorated_resource.manageable_structure? %>
-        <%= link_to "Edit Structure", main_app.polymorphic_path([:structure, resource]), class: 'btn btn-default' %>
+        <%= link_to "Structure Manager", main_app.polymorphic_path([:structure, resource]), class: 'btn btn-default' %>
       <% end %>
     <% end %>
     <% if can?(:update, resource) %>

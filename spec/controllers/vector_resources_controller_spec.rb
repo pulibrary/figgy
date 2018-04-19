@@ -187,19 +187,6 @@ RSpec.describe VectorResourcesController do
         expect(assigns(:children).map(&:id)).to eq [child.id]
       end
     end
-
-    context "when an admin and with an fgdc metadata file" do
-      let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: 'application/xml; schema=fgdc') }
-
-      it "sets the record and metadata children variables" do
-        child = FactoryBot.create_for_repository(:file_set, file_metadata: [file_metadata])
-        parent = FactoryBot.create_for_repository(:vector_resource, member_ids: child.id)
-        get :file_manager, params: { id: parent.id }
-
-        expect(assigns(:change_set).id).to eq parent.id
-        expect(assigns(:metadata_children).map(&:id)).to eq [child.id]
-      end
-    end
   end
 
   describe "GET /vector_resources/:id/geoblacklight" do

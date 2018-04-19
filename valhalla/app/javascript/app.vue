@@ -1,5 +1,5 @@
 <template>
-  <div id="filemanager">
+  <div id="order-manager">
     <transition name="fade">
       <div v-if="manifestLoading" class="overlay">
           <div class="loader"/>
@@ -48,7 +48,7 @@ export default {
   width: 100vw;
 }
 
-#filemanager {
+#order-manager {
   position: relative;
   height: 80vh;
   width: 98vw;

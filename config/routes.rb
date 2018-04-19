@@ -71,6 +71,7 @@ Rails.application.routes.draw do
     resources :scanned_resources do
       member do
         get :file_manager
+        get :order_manager
         get :structure
         get :manifest, defaults: { format: :json }
         post :browse_everything_files
@@ -94,6 +95,7 @@ Rails.application.routes.draw do
     resources :simple_resources do
       member do
         get :file_manager
+        get :order_manager
         get :manifest, defaults: { format: :json }
         post :browse_everything_files
         get :pdf
@@ -128,6 +130,7 @@ Rails.application.routes.draw do
     resources :ephemera_folders do
       member do
         get :file_manager
+        get :order_manager
         get :structure
         get :manifest, defaults: { format: :json }
         post :browse_everything_files
@@ -147,6 +150,7 @@ Rails.application.routes.draw do
     resources :scanned_maps do
       member do
         get :file_manager
+        get :order_manager
         get :structure
         get :manifest, defaults: { format: :json }
         get :geoblacklight, defaults: { format: :json }
