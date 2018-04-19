@@ -2,7 +2,6 @@
 class CatalogController < ApplicationController
   include ::Hydra::Catalog
   include TokenAuth
-  include ResourceRelations
   layout "application"
   def self.search_config
     {
@@ -90,8 +89,6 @@ class CatalogController < ApplicationController
     super
     authorize! :show, resource
 
-    load_attachable_resources!
-    load_relatable_resources!
     @change_set = DynamicChangeSet.new(resource)
     @change_set.prepopulate!
     @document_facade = document_facade

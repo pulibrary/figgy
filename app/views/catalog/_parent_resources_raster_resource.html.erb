@@ -57,19 +57,13 @@
       <tfoot>
         <tr class="parent-resources-attach" >
           <td>
-            <%= f.input :parent_ids,
-                        collection: @unrelated_parent_raster_resources.sort_by(&:title),
-                        label_method: :title,
-                        value_method: :id,
-                        include_blank: "Attach to an existing resource...",
-                        selected: nil,
+            <%= f.input :member_ids,
+                        class: ["related_resource_ids", "resource_parent_ids", "form-control"],
+                        placeholder: 'Attach to an existing resource...',
+
                         label: false,
                         required: false,
-                        input_html: {
-                          multiple: false,
-                          class: ["related_resource_ids", "resource_parent_ids", "form-control"],
-                          'aria-labelledby' => ""
-                        } %>
+                        input_html: { value: nil } %>
           </td>
           <td></td>
           <td></td>

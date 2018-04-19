@@ -57,18 +57,12 @@
         <tr class="member-resources-attach">
           <td>
             <%= f.input :member_ids,
-                        collection: @unattached_raster_resources.sort_by(&:title),
-                        label_method: :title,
-                        value_method: :id,
-                        include_blank: "Attach an existing resource...",
-                        selected: nil,
+                        class: ["related_resource_ids", "resource_member_ids", "form-control"],
+                        placeholder: 'Attach an existing resource...',
+
                         label: false,
                         required: false,
-                        input_html: {
-                          multiple: false,
-                          class: ["related_resource_ids", "resource_member_ids", "form-control"],
-                          'aria-labelledby' => ""
-                        } %>
+                        input_html: { value: nil } %>
           </td>
           <td></td>
           <td></td>
