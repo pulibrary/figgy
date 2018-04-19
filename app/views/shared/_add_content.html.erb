@@ -13,6 +13,7 @@
       <% if can?(:create, ::Collection) %>
         <li class="divider"></li>
         <li><%= link_to 'Add a Collection', main_app.new_collection_path, class: 'menu-heading new-collection', role: 'menuitem' %></li>
+        <li><%= link_to 'Add an Archival Media Collection', main_app.new_archival_media_collection_path, class: 'menu-heading new-collection', role: 'menuitem' %></li>
       <% end %>
       <% if can?(:create, ::Role) %>
         <li class="divider"></li>
