@@ -20,7 +20,7 @@ export default class RelatedResourcesTable {
     this.$authenticityToken = this.$form.find('input[name="authenticity_token"]');
     this.authenticityToken = this.$authenticityToken.val();
 
-    this.$select = this.table.find('select.related_resource_ids')
+    this.$select = this.table.find('input.related_resource_ids')
 
     this.members = this.table.data('members');
     this.works = this.table.find('tr');
