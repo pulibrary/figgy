@@ -195,7 +195,7 @@ RSpec.describe PlumChangeSetPersister do
     end
   end
 
-  describe "uploading files" do
+  describe "running ocr after changing ocr_language" do
     let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
     let(:change_set_persister) do
       described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: true)
@@ -205,6 +205,33 @@ RSpec.describe PlumChangeSetPersister do
       resource = FactoryBot.build(:scanned_resource)
       change_set = change_set_class.new(resource, characterize: false)
       change_set.files = [file]
+      change_set.sync
+
+      output = change_set_persister.save(change_set: change_set)
+      members = query_service.find_members(resource: output)
+      expect(members.first.hocr_content).not_to be_present
+
+      change_set = change_set_class.new(output)
+      change_set.validate(ocr_language: "eng")
+      change_set.sync
+
+      output = change_set_persister.save(change_set: change_set)
+      members = query_service.find_members(resource: output)
+      expect(members.first.hocr_content).to be_present
+    end
+  end
+
+  describe "uploading files" do
+    let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+    let(:change_set_persister) do
+      described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: true)
+    end
+
+    it "can append files as FileSets", run_real_derivatives: true do
+      resource = FactoryBot.build(:scanned_resource)
+      change_set = change_set_class.new(resource, characterize: false, ocr_language: ["eng"])
+      change_set.files = [file]
+      change_set.sync
 
       output = change_set_persister.save(change_set: change_set)
       members = query_service.find_members(resource: output)
@@ -240,6 +267,8 @@ RSpec.describe PlumChangeSetPersister do
       expect(derivative_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config['derivative_path']).to_s)
 
       expect(query_service.find_all.to_a.map(&:class)).to contain_exactly ScannedResource, FileSet
+
+      expect(members.first.hocr_content).not_to be_blank
     end
 
     it "cleans up derivatives", run_real_derivatives: true do
@@ -247,8 +276,9 @@ RSpec.describe PlumChangeSetPersister do
       allow(CreateDerivativesJob).to receive(:set).and_call_original
 
       resource = FactoryBot.build(:scanned_resource)
-      change_set = change_set_class.new(resource, characterize: true)
+      change_set = change_set_class.new(resource, characterize: true, ocr_language: ["eng"])
       change_set.files = [file]
+      change_set.sync
       change_set_persister.queue = 'low'
       output = change_set_persister.save(change_set: change_set)
       file_set = query_service.find_members(resource: output).first

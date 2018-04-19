@@ -29,7 +29,7 @@ RSpec.describe ManifestBuilder do
   let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { metadata_adapter.query_service }
-  let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+  let(:file) { fixture_file_upload('files/abstract.tiff', 'image/tiff') }
   let(:start_canvas) { nil }
 
   def logical_structure(file_set_id)
@@ -80,6 +80,7 @@ RSpec.describe ManifestBuilder do
   describe "#build" do
     before do
       stub_bibdata(bib_id: "123456")
+      change_set.validate(ocr_language: "eng")
       output = change_set_persister.save(change_set: change_set)
       file_set_id = output.member_ids.first
       file_set = query_service.find_by(id: file_set_id)
@@ -109,6 +110,10 @@ RSpec.describe ManifestBuilder do
       expect(canvas_id).to eq structure_canvas_id
       first_image = output["sequences"][0]["canvases"][0]["images"][0]
       expect(output["sequences"][0]["canvases"][0]["local_identifier"]).to eq "p79409x97p"
+      canvas_rendering = output["sequences"][0]["canvases"][0]["rendering"][0]
+      expect(canvas_rendering["@id"]).to eq "http://www.example.com/concern/file_sets/#{scanned_resource.member_ids.first}/text"
+      expect(canvas_rendering["format"]).to eq "text/plain"
+      expect(canvas_rendering["label"]).to eq "Download page text"
       expect(first_image["data"]).to eq nil
       expect(first_image["@type"]).to eq "oa:Annotation"
       expect(first_image["motivation"]).to eq "sc:painting"

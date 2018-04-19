@@ -41,6 +41,8 @@ RSpec.shared_examples 'a BaseResourceController' do
         expect(response.body).to have_select "Collections", name: "#{model_name}[member_of_collection_ids][]", options: [collection.title.first]
         expect(response.body).to have_select "Rights Statement", name: "#{model_name}[rights_statement]", options: [""] + ControlledVocabulary.for(:rights_statement).all.map(&:label)
         expect(response.body).to have_select "PDF Type", name: "#{model_name}[pdf_type]", options: ["Color PDF", "Grayscale PDF", "Bitonal PDF", "No PDF"]
+        languages = Tesseract.languages
+        expect(response.body).to have_select "OCR Language", name: "#{model_name}[ocr_language]", options: languages.values + [""]
         expect(response.body).to have_checked_field "Open"
         expect(response.body).to have_button "Save"
       end

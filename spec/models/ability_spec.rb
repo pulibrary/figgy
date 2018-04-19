@@ -5,13 +5,23 @@ include ActionDispatch::TestProcess
 
 describe Ability do
   subject { described_class.new(current_user) }
+  let(:page_file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+  let(:page_file_2) { fixture_file_upload('files/example.tif', 'image/tiff') }
 
   let(:open_scanned_resource) do
-    FactoryBot.create(:complete_open_scanned_resource, user: creating_user)
+    FactoryBot.create_for_repository(:complete_open_scanned_resource, user: creating_user, files: [page_file])
+  end
+
+  let(:open_file_set) do
+    query_service.find_by(id: open_scanned_resource.member_ids.first)
+  end
+
+  let(:closed_file_set) do
+    query_service.find_by(id: private_scanned_resource.member_ids.first)
   end
 
   let(:private_scanned_resource) do
-    FactoryBot.create(:complete_private_scanned_resource, user: creating_user)
+    FactoryBot.create_for_repository(:complete_private_scanned_resource, user: creating_user, files: [page_file_2])
   end
 
   let(:campus_only_scanned_resource) do
@@ -394,6 +404,7 @@ describe Ability do
 
     it {
       is_expected.to be_able_to(:read, open_scanned_resource)
+      is_expected.to be_able_to(:read, open_file_set)
       is_expected.to be_able_to(:manifest, open_scanned_resource)
       is_expected.to be_able_to(:pdf, open_scanned_resource)
       is_expected.to be_able_to(:read, complete_scanned_resource)

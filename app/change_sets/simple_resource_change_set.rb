@@ -45,6 +45,7 @@ class SimpleResourceChangeSet < Valhalla::ChangeSet
   property :publisher, multiple: true, required: false, default: []
   property :source, multiple: true, required: false, default: []
   property :subject, multiple: true, required: false, default: []
+  property :ocr_language, multiple: true, require: false, default: []
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
@@ -62,6 +63,7 @@ class SimpleResourceChangeSet < Valhalla::ChangeSet
       :rights_note,
       :local_identifier,
       :pdf_type,
+      :ocr_language,
       :portion_note,
       :nav_date,
       :member_of_collection_ids,

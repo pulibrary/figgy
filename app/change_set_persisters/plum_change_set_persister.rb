@@ -26,7 +26,8 @@ class PlumChangeSetPersister
         ReindexChildrenOnState::Factory.new(model: EphemeraBox, state: "all_in_production")
       ],
       after_update_commit: [
-        CheckFixity
+        CheckFixity,
+        UpdateOCR
       ],
       before_delete: [
         CleanupStructure,
