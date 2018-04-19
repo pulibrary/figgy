@@ -46,8 +46,12 @@ RSpec.describe "catalog/_admin_controls_default" do
       expect(rendered).to have_link 'File Manager', href: file_manager_scanned_resource_path(id: scanned_resource.id)
     end
 
-    it 'renders the structure editor link for resources' do
-      expect(rendered).to have_link 'Edit Structure', href: structure_scanned_resource_path(id: scanned_resource.id)
+    it 'renders the order_manager link for resources' do
+      expect(rendered).to have_link 'Order Manager', href: order_manager_scanned_resource_path(id: scanned_resource.id)
+    end
+
+    it 'renders the structure manager link for resources' do
+      expect(rendered).to have_link 'Structure Manager', href: structure_scanned_resource_path(id: scanned_resource.id)
     end
 
     it 'renders links for attaching child resources' do
