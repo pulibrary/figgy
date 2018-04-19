@@ -139,4 +139,14 @@ namespace :bulk do
       @logger.error e.backtrace
     end
   end
+
+  desc "Update all members of a Collection to the specified state"
+  task update_state: :environment do
+    coll = ENV['COLL']
+    state = ENV['STATE']
+
+    abort "usage: rake bulk:update_sate COLL=[collection id] STATE=[state]" unless coll
+    logger = Logger.new(STDOUT)
+    UpdateState.perform(collection_id: Valkyrie::ID.new(coll), state: state, metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), logger: logger)
+  end
 end
