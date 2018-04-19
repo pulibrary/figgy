@@ -35,6 +35,8 @@ class ScannedResourceChangeSet < Valhalla::ChangeSet
   validates_with ViewingHintValidator
   validates_with SourceMetadataIdentifierValidator
   validates_with SourceMetadataIdentifierOrTitleValidator
+  validates_with MemberValidator
+  validates_with CollectionValidator
   validates :visibility, :rights_statement, presence: true
 
   def primary_terms

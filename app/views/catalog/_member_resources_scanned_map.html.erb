@@ -21,7 +21,7 @@
       <tbody>
         <% unless decorated_resource.scanned_map_members.empty? %>
           <% decorated_resource.scanned_map_members.each do |scanned_map| %>
-            <% scanned_map_url = parent_solr_document_path("#{resource.id}", "#{scanned_map.id}") %>
+            <% scanned_map_url = parent_solr_document_path(parent_id: resource.id, id: scanned_map.id) %>
             <tr data-resource-id="<%= scanned_map.id.to_s %>">
               <td><%= link_to figgy_thumbnail_path(scanned_map, { class: 'thumbnail-inner', onerror: default_icon_fallback }), scanned_map_url %></td>
               <td><%= scanned_map.first_title %></td>
@@ -58,12 +58,17 @@
         <tr class="member-resources-attach">
           <td>
             <%= f.input :member_ids,
-                        class: ["related_resource_ids", "resource_member_ids", "form-control"],
                         placeholder: 'Attach an existing resource...',
-
                         label: false,
                         required: false,
-                        input_html: { value: nil } %>
+                        input_html: {
+                          class: [
+                            'related_resource_ids',
+                            'resource_member_ids',
+                            'form-control'
+                          ],
+                          value: nil
+                        } %>
           </td>
           <td></td>
           <td></td>

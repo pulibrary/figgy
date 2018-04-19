@@ -3,7 +3,7 @@
     <div class="loading-status hidden">Loading...</div>
     <table id="parent-scanned-maps"
            class="table table-striped parent-resources parent-scanned-maps"
-           data-update-url="<%= raster_resources_attach_to_parent_path(id: resource.id) %>"
+           data-update-url="<%= polymorphic_path([ActiveModel::Naming.route_key(resource.class), :attach_to_parent], id: resource.id) %>"
            data-query-url="<%= solr_document_path(id: resource.id) %>"
            data-parents="<%= decorated_resource.parents.to_a.map { |parents| parents.id.to_s } %>"
            data-resource-id="<%= resource.id.to_s %>"
@@ -21,8 +21,8 @@
       <tbody>
         <% unless decorated_resource.scanned_map_parents.empty? %>
           <% decorated_resource.scanned_map_parents.each do |scanned_map| %>
-            <% scanned_map_url = parent_solr_document_path("#{resource.id}", "#{scanned_map.id}") %>
-            <tr data-resource-id="<%= scanned_map.id.to_s %>" data-update-url="<%= raster_resources_remove_from_parent_path(id: resource.id) %>">
+            <% scanned_map_url = parent_solr_document_path(scanned_map.id) %>
+            <tr data-resource-id="<%= scanned_map.id.to_s %>" data-update-url="<%= polymorphic_path([ActiveModel::Naming.route_key(resource.class), :remove_from_parent], id: resource.id) %>">
               <td><%= link_to figgy_thumbnail_path(scanned_map, { class: 'thumbnail-inner', onerror: default_icon_fallback }), scanned_map_url %></td>
               <td><%= scanned_map.first_title %></td>
               <td><%= scanned_map.created_at %></td>
@@ -58,12 +58,17 @@
         <tr class="parent-resources-attach" >
           <td>
             <%= f.input :member_ids,
-                        class: ["related_resource_ids", "resource_parent_ids", "form-control"],
                         placeholder: 'Attach to an existing resource...',
-
                         label: false,
                         required: false,
-                        input_html: { value: nil } %>
+                        input_html: {
+                          class: [
+                            'related_resource_ids',
+                            'resource_parent_ids',
+                            'form-control'
+                          ],
+                          value: nil
+                        } %>
           </td>
           <td></td>
           <td></td>

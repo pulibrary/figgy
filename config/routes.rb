@@ -156,6 +156,8 @@ Rails.application.routes.draw do
     end
     get '/scanned_maps/:parent_id/new', to: 'scanned_maps#new', as: :parent_new_scanned_map
     put '/scanned_maps/:id/extract_metadata/:file_set_id', to: 'scanned_maps#extract_metadata', as: :scanned_maps_extract_metadata
+    patch '/scanned_maps/:id/attach_to_parent', to: 'scanned_maps#attach_to_parent', as: :scanned_maps_attach_to_parent, defaults: { format: :json }
+    patch '/scanned_maps/:id/remove_from_parent', to: 'scanned_maps#remove_from_parent', as: :scanned_maps_remove_from_parent, defaults: { format: :json }
 
     resources :vector_resources do
       member do

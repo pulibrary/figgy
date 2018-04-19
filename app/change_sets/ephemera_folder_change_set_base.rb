@@ -45,6 +45,9 @@ class EphemeraFolderChangeSetBase < Valhalla::ChangeSet
   property :date_range_form_attributes, virtual: true
   delegate :human_readable_type, to: :model
 
+  validates_with MemberValidator
+  validates_with CollectionValidator
+
   def date_range_form_attributes=(attributes)
     return unless date_range_form.validate(attributes)
     date_range_form.sync

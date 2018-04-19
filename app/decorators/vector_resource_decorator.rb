@@ -97,4 +97,8 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
   def raster_resource_parents
     @raster_resource_parents ||= parents.select { |r| r.is_a?(RasterResource) }.map(&:decorate).to_a
   end
+
+  def vector_resource_parents
+    @vector_resource_parents ||= parents.select { |r| r.is_a?(VectorResource) }.map(&:decorate).to_a
+  end
 end

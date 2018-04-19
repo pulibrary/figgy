@@ -9,6 +9,8 @@ class EphemeraProjectChangeSet < Valkyrie::ChangeSet
   validate :slug_unique?
   validate :slug_valid?
 
+  validates_with MemberValidator
+
   def primary_terms
     [:title, :slug, :top_language]
   end

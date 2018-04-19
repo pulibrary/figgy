@@ -152,8 +152,4 @@ class CatalogController < ApplicationController
         per_page: per_page
       )
     end
-
-    def query_service
-      Valkyrie.config.metadata_adapter.query_service
-    end
 end

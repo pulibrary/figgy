@@ -7,6 +7,7 @@ class TemplateChangeSet < Valhalla::ChangeSet
   property :child_change_set_attributes, virtual: true
   property :parent_id, multiple: false, type: Valkyrie::Types::ID.optional
   validates :title, presence: true
+  validates_with ParentValidator
 
   def child_change_set_attributes=(attributes)
     self.nested_properties = [attributes.to_unsafe_h.merge(internal_resource: model_class)]

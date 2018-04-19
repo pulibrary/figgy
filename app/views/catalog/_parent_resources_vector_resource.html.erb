@@ -1,13 +1,13 @@
-  <h3>Vector Resources</h3>
 
   <%= simple_form_for @change_set do |f| %>
     <div class="loading-status hidden">Loading...</div>
-    <table id="members-vector-resources"
-    class="table table-striped member-resources member-vector-resources"
-    data-update-url="<%= polymorphic_url([resource]) %>"
-    data-query-url="<%= solr_document_path(id: resource.id) %>"
-    data-members="<%= decorated_resource.members.map { |member| member.id.to_s } %>"
-    data-param-key="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>">
+    <table id="parent-vector-resources"
+           class="table table-striped parent-resources parent-vector-resources"
+           data-update-url="<%= polymorphic_path([ActiveModel::Naming.route_key(resource.class), :attach_to_parent], id: resource.id) %>"
+           data-query-url="<%= solr_document_path(id: resource.id) %>"
+           data-parents="<%= decorated_resource.parents.to_a.map { |parents| parents.id.to_s } %>"
+           data-resource-id="<%= resource.id.to_s %>"
+           data-param-key="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>">
       <thead>
         <tr>
          <th>Thumbnail</th>
@@ -15,13 +15,14 @@
          <th>Date Uploaded</th>
          <th>Visibility</th>
          <th>Actions</th>
-       </tr>
+        </tr>
       </thead>
+
       <tbody>
-        <% unless decorated_resource.vector_resource_members.empty? %>
-          <% decorated_resource.vector_resource_members.each do |vector_resource| %>
-            <% vector_resource_url = parent_solr_document_path(parent_id: resource.id, id: vector_resource.id) %>
-            <tr data-resource-id="<%= vector_resource.id.to_s %>">
+        <% unless decorated_resource.vector_resource_parents.empty? %>
+          <% decorated_resource.vector_resource_parents.each do |vector_resource| %>
+            <% vector_resource_url = parent_solr_document_path(vector_resource.id) %>
+            <tr data-resource-id="<%= vector_resource.id.to_s %>" data-update-url="<%= polymorphic_path([ActiveModel::Naming.route_key(resource.class), :remove_from_parent], id: resource.id) %>">
               <td><%= link_to figgy_thumbnail_path(vector_resource, { class: 'thumbnail-inner', onerror: default_icon_fallback }), vector_resource_url %></td>
               <td><%= vector_resource.first_title %></td>
               <td><%= vector_resource.created_at %></td>
@@ -37,7 +38,7 @@
           <% end %>
         <% else %>
           <tr>
-            <td>This work has no vector resources attached.  Click "Attach Child" to attach vector resources.</td>
+            <td>This work is not attached to any vector resources.  Click "Attach" to attach to an existing vector resource.</td>
             <td></td>
             <td></td>
             <td></td>
@@ -54,16 +55,16 @@
       </tbody>
 
       <tfoot>
-        <tr class="member-resources-attach">
+        <tr class="parent-resources-attach" >
           <td>
             <%= f.input :member_ids,
-                        placeholder: 'Attach an existing resource...',
+                        placeholder: 'Attach to an existing resource...',
                         label: false,
                         required: false,
                         input_html: {
                           class: [
                             'related_resource_ids',
-                            'resource_member_ids',
+                            'resource_parent_ids',
                             'form-control'
                           ],
                           value: nil

@@ -62,6 +62,30 @@ RSpec.describe RasterResourceChangeSet do
         expect(change_set).not_to be_valid
       end
     end
+    context "when given a non-UUID for a collection" do
+      it "is not valid" do
+        change_set.validate(member_of_collection_ids: ['not-valid'])
+        expect(change_set).not_to be_valid
+      end
+    end
+    context "when given a valid UUID for a collection which does not exist" do
+      it "is not valid" do
+        change_set.validate(member_of_collection_ids: ['b8823acb-d42b-4e62-a5c9-de5f94cbd3f6'])
+        expect(change_set).not_to be_valid
+      end
+    end
+    context "when given a non-UUID for a member resource" do
+      it "is not valid" do
+        change_set.validate(member_ids: ['not-valid'])
+        expect(change_set).not_to be_valid
+      end
+    end
+    context "when given a valid UUID for a member resource which does not exist" do
+      it "is not valid" do
+        change_set.validate(member_ids: ['55a14e79-710d-42c1-86aa-3d8cdaa62930'])
+        expect(change_set).not_to be_valid
+      end
+    end
   end
 
   describe "#holding_location" do

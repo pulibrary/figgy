@@ -17,6 +17,8 @@ class MediaResourceChangeSet < Valhalla::ChangeSet
   property :files, virtual: true, multiple: true, required: false
 
   validates_with StateValidator
+  validates_with MemberValidator
+  validates_with CollectionValidator
   validates :visibility, :rights_statement, presence: true
 
   def primary_terms
