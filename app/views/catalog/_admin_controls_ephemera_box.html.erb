@@ -1,5 +1,8 @@
   <div class="form-actions">
-    <%= link_to "Edit This #{resource.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-default' %>
+    <% if can?(:update, resource) %>
+      <%= link_to "Edit This #{resource.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-default' %>
+    <% end %>
+    <% if can?(:edit, resource) && can?(:create, Template) %>
       <div class="btn-group">
         <%= link_to "Create New Folder Template", new_ephemera_project_template_path([decorated_resource.ephemera_project], model_class: "EphemeraFolder"), class: 'btn btn-default' %>
           <div class="btn-group">
@@ -17,9 +20,14 @@
             </ul>
           </div>
       </div>
+    <% end %>
 
     <div class="pull-right">
-      <%= link_to "Attach Hard Drive", attach_drive_ephemera_box_path(resource), class: 'btn btn-primary' %>
-      <%= link_to "Delete This #{resource.human_readable_type}", main_app.polymorphic_path([resource]), class: 'btn btn-danger', data: { confirm: "Delete this #{resource.human_readable_type}?" }, method: :delete %>
+      <% if can?(:update, resource) %>
+        <%= link_to "Attach Hard Drive", attach_drive_ephemera_box_path(resource), class: 'btn btn-primary' %>
+      <% end %>
+      <% if can?(:destroy, resource) %>
+        <%= link_to "Delete This #{resource.human_readable_type}", main_app.polymorphic_path([resource]), class: 'btn btn-danger', data: { confirm: "Delete this #{resource.human_readable_type}?" }, method: :delete %>
+      <% end %>
     </div>
   </div>

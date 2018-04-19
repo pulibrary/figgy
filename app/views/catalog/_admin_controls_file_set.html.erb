@@ -12,29 +12,57 @@
     <% resource.original_files.each do |file| %>
       <tr>
         <td><span class="label label-success">Original File</span>&nbsp;<%= file.label.first %></td>
-        <td><%= link_to "Download", valhalla.download_path(resource.id, file.id) %></td>
-        <td><%= f.input "files[][#{file.id}]", as: :file, label: false, required: false %></td>
+        <% if can?(:download, resource) %>
+          <td><%= link_to "Download", valhalla.download_path(resource.id, file.id) %></td>
+        <% else %>
+          <td></td>
+        <% end %>
+        <% if can?(:update, resource) %>
+          <td><%= f.input "files[][#{file.id}]", as: :file, label: false, required: false %></td>
+        <% else %>
+          <td></td>
+        <% end %>
       </tr>
     <% end %>
     <% resource.derivative_files.each do |file| %>
       <tr>
         <td><span class="label label-info">Derivative File</span>&nbsp;<%= file.label.first %></td>
-        <td><%= link_to "Download", valhalla.download_path(resource.id, file.id) %></td>
-        <td><%= f.input "derivative_files[][#{file.id}]", as: :file, label: false, required: false %></td>
+        <% if can?(:download, resource) %>
+          <td><%= link_to "Download", valhalla.download_path(resource.id, file.id) %></td>
+        <% else %>
+          <td></td>
+        <% end %>
+        <% if can?(:update, resource) %>
+          <td><%= f.input "derivative_files[][#{file.id}]", as: :file, label: false, required: false %></td>
+        <% else %>
+          <td></td>
+        <% end %>
       </tr>
     <% end %>
     <% resource.thumbnail_files.each do |file| %>
       <tr>
         <td><span class="label label-info">Thumbnail File</span>&nbsp;<%= file.label.first %></td>
-        <td><%= link_to "Download", valhalla.download_path(resource.id, file.id) %></td>
-        <td><%= f.input "thumbnail_files[][#{file.id}]", as: :file, label: false, required: false %></td>
+        <% if can?(:download, resource) %>
+          <td><%= link_to "Download", valhalla.download_path(resource.id, file.id) %></td>
+        <% else %>
+          <td></td>
+        <% end %>
+        <% if can?(:update, resource) %>
+          <td><%= f.input "thumbnail_files[][#{file.id}]", as: :file, label: false, required: false %></td>
+        <% else %>
+          <td></td>
+        <% end %>
       </tr>
     <% end %>
     </tbody>
     <tfoot>
       <tr>
         <td colspan="2"></td>
-        <td><%= f.submit 'Update Files', class: 'btn btn-primary', disabled: true %></td>
+        <% if can?(:update, resource) %>
+          <td><%= f.submit 'Update Files', class: 'btn btn-primary', disabled: true %></td>
+        <% else %>
+          <td></td>
+        <% end %>
       </tr>
     </tfoot>
   </table>
