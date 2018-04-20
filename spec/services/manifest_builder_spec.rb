@@ -354,7 +354,8 @@ RSpec.describe ManifestBuilder do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: collection.id)) }
     let(:collection) { FactoryBot.create_for_repository(:collection) }
     let(:change_set) { CollectionChangeSet.new(collection) }
-    let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id]) }
+    let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id], member_ids: scanned_resource_2.id, thumbnail_id: scanned_resource_2.id) }
+    let(:scanned_resource_2) { FactoryBot.create_for_repository(:scanned_resource) }
 
     before do
       scanned_resource
