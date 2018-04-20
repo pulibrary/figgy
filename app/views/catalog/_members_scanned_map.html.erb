@@ -1,30 +1,6 @@
-  <h2>Members</h2>
-  <table id="members" class="table table-striped">
-    <tr>
-     <th>Thumbnail</th>
-     <th>Title</th>
-     <th>Date Uploaded</th>
-     <th>Visibility</th>
-     <th>Actions</th>
-    </tr>
-    <% unless decorated_resource.scanned_map_members.empty? %>
-      <% decorated_resource.scanned_map_members.each do |scanned_map| %>
-        <% scanned_map_url = parent_solr_document_path("#{resource.id}", "#{scanned_map.id}") %>
-        <tr>
-          <td><%= link_to figgy_thumbnail_path(scanned_map, { class: 'thumbnail-inner', onerror: default_icon_fallback }), scanned_map_url %></td>
-          <td><%= scanned_map.first_title %></td>
-          <td><%= scanned_map.created_at %></td>
-          <td><%= scanned_map.visibility.first.html_safe %></td>
-          <td>
-            <%= link_to 'View', scanned_map_url, class: 'btn btn-default' %>
-            <%= link_to 'Edit', main_app.polymorphic_path([:edit, scanned_map]), class: 'btn btn-default' %>
-            <%= link_to "Delete", main_app.polymorphic_path([scanned_map]), class: 'btn btn-danger',
-                                  data: { confirm: "Delete this #{resource.human_readable_type}?" },
-                                  method: :delete %>
-          </td>
-        </tr>
-      <% end %>
-    <% else %>
-      <td>This work has no scanned maps attached.  Click "Attach Child" to attach scanned maps.</td>
-    <% end %>
-  </table>
+  <h2>Related Resources</h2>
+  <%= render partial: 'member_resources_scanned_map' %>
+  <%= render partial: 'member_resources_raster_resource' %>
+
+  <h2>Parent Scanned Maps</h2>
+  <%= render partial: 'parent_resources_scanned_map' %>

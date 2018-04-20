@@ -26,6 +26,8 @@ class RasterResourceChangeSet < Valhalla::ChangeSet
   validates_with StateValidator
   validates_with SourceMetadataIdentifierValidator
   validates_with SourceMetadataIdentifierOrTitleValidator
+  validates_with MemberValidator
+  validates_with CollectionValidator
   validates :visibility, :rights_statement, presence: true
 
   # rubocop:disable Metrics/MethodLength

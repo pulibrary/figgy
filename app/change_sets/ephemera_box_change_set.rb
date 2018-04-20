@@ -20,6 +20,8 @@ class EphemeraBoxChangeSet < Valhalla::ChangeSet
   delegate :human_readable_type, to: :model
   validate :barcode_valid?
   validate :drive_barcode_valid?
+  validates_with MemberValidator
+  validates_with CollectionValidator
 
   def barcode_valid?
     return if Barcode.new(Array.wrap(barcode).first).valid?

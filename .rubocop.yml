@@ -49,6 +49,7 @@ Metrics/BlockLength:
     - 'lib/tasks/bulk.rake'
     - 'lib/tasks/lae.rake'
     - 'app/change_sets/simple_resource_change_set.rb'
+    - 'app/controllers/concerns/resource_relations.rb'
 Metrics/ClassLength:
   Exclude:
     - 'app/change_set_persisters/plum_change_set_persister.rb'
@@ -84,6 +85,7 @@ Metrics/MethodLength:
     - 'app/models/ability.rb'
     - 'app/models/controlled_vocabulary.rb'
     - 'app/change_sets/simple_resource_change_set.rb'
+    - 'app/controllers/base_resource_controller.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'

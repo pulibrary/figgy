@@ -239,6 +239,12 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
       end
   end
 
+  def form_input_values
+    title_value = Array.wrap(title).first
+    title = title_value.is_a?(RDF::Literal) ? title_value.value : title_value
+    OpenStruct.new id: id.to_s, title: title
+  end
+
   private
 
     # Queries the metadata adapter for all referenced resources for a given resource using :member_ids

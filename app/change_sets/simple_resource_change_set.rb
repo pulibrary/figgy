@@ -54,6 +54,8 @@ class SimpleResourceChangeSet < Valhalla::ChangeSet
   validates_with ViewingDirectionValidator
   validates_with ViewingHintValidator
   validates_with TitleValidator
+  validates_with MemberValidator
+  validates_with CollectionValidator
   validates :visibility, :rights_statement, presence: true
 
   def primary_terms

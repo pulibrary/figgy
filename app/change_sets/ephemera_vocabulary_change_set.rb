@@ -6,6 +6,8 @@ class EphemeraVocabularyChangeSet < Valkyrie::ChangeSet
   property :definition, multiple: false, required: false
   property :member_of_vocabulary_id, multiple: false, required: false, type: Valkyrie::Types::ID.optional
 
+  validates_with VocabularyValidator
+
   def primary_terms
     [:label, :uri, :definition, :member_of_vocabulary_id]
   end

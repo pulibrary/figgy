@@ -7,6 +7,8 @@ RSpec.describe EphemeraFieldsController do
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:persister) { adapter.persister }
   let(:query_service) { adapter.query_service }
+  let(:ephemera_vocabulary) { FactoryBot.create_for_repository(:ephemera_vocabulary) }
+  let(:ephemera_field) { FactoryBot.create_for_repository(:ephemera_field, member_of_vocabulary_id: ephemera_vocabulary.id) }
   before do
     sign_in user if user
   end
@@ -32,7 +34,7 @@ RSpec.describe EphemeraFieldsController do
     let(:valid_params) do
       {
         field_name: ['test field'],
-        member_of_vocabulary_id: ['test vocabulary id']
+        member_of_vocabulary_id: [ephemera_vocabulary.id]
       }
     end
     let(:invalid_params) do
@@ -63,7 +65,7 @@ RSpec.describe EphemeraFieldsController do
         expect do
           post :create, params: { ephemera_field: valid_params }
         end.to raise_error "Bad"
-        expect(Valkyrie::MetadataAdapter.find(:postgres).query_service.find_all.to_a.length).to eq 0
+        expect(Valkyrie::MetadataAdapter.find(:postgres).query_service.find_all_of_model(model: EphemeraField).to_a.length).to eq 0
       end
 
       it "doesn't persist anything at all when it's postgres erroring" do
@@ -91,7 +93,6 @@ RSpec.describe EphemeraFieldsController do
       it_behaves_like "an access controlled destroy request"
     end
     it "can delete a book" do
-      ephemera_field = FactoryBot.create_for_repository(:ephemera_field)
       delete :destroy, params: { id: ephemera_field.id.to_s }
 
       expect(response).to redirect_to root_path
@@ -113,7 +114,6 @@ RSpec.describe EphemeraFieldsController do
     context "when it does exist" do
       render_views
       it "renders a form" do
-        ephemera_field = FactoryBot.create_for_repository(:ephemera_field)
         get :edit, params: { id: ephemera_field.id.to_s }
 
         expect(response.body).to have_field "Name", with: '1'
@@ -136,8 +136,7 @@ RSpec.describe EphemeraFieldsController do
     end
     context "when it does exist" do
       it "saves it and redirects" do
-        ephemera_field = FactoryBot.create_for_repository(:ephemera_field)
-        patch :update, params: { id: ephemera_field.id.to_s, ephemera_field: { field_name: ["test field2"], member_of_vocabulary_id: ['test vocabulary id'] } }
+        patch :update, params: { id: ephemera_field.id.to_s, ephemera_field: { field_name: ["test field2"], member_of_vocabulary_id: [ephemera_vocabulary.id] } }
 
         expect(response).to be_redirect
         expect(response.location).to eq "http://test.host/catalog/#{ephemera_field.id}"
@@ -147,7 +146,6 @@ RSpec.describe EphemeraFieldsController do
         expect(reloaded.field_name).to eq ["test field2"]
       end
       it "renders the form if it fails validations" do
-        ephemera_field = FactoryBot.create_for_repository(:ephemera_field)
         patch :update, params: { id: ephemera_field.id.to_s, ephemera_field: { field_name: nil, member_of_vocabulary_id: nil } }
 
         expect(response).to render_template "valhalla/base/edit"

@@ -8,6 +8,8 @@ import MetadataForm from "metadata_form"
 import UniversalViewer from "universal_viewer"
 import FileSetForm from "file_set_form"
 import SaveAndIngestHandler from "save_and_ingest_handler"
+import MemberResourcesTables from "relationships/member_resources_table"
+import ParentResourcesTables from "relationships/parent_resources_table"
 
 export default class Initializer {
   constructor() {
@@ -20,6 +22,7 @@ export default class Initializer {
     this.metadata_form = new MetadataForm
     this.universal_viewer = new UniversalViewer
     this.save_and_ingest_handler = new SaveAndIngestHandler
+
     // Incompatibility in Blacklight with newer versions of jQuery seem to be
     // causing this to not run. Manually calling it so facet more links work.
     Blacklight.ajaxModal.setup_modal()
@@ -56,5 +59,17 @@ export default class Initializer {
     $("form.edit_file_set.admin_controls").each((_i, element) =>
       new FileSetForm($(element))
     )
+
+    $(".document table.member-resources").each((_i, element) => {
+      const $element = $(element)
+      const $form = $element.parent('form')
+      new MemberResourcesTables($element, $form)
+    })
+
+    $(".document table.parent-resources").each((_i, element) => {
+      const $element = $(element)
+      const $form = $element.parent('form')
+      new ParentResourcesTables($element, $form)
+    })
   }
 }
