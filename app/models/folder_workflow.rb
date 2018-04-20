@@ -50,4 +50,10 @@ class FolderWorkflow
   def self.manifest_states
     [:complete].map(&:to_s)
   end
+
+  # States in which an ark can be minted for the record
+  # @return [Array<String>] the states for which an ARK can be minted
+  def self.ark_mint_states
+    []
+  end
 end

@@ -32,7 +32,7 @@ RSpec.describe CicognaraCSV do
           false]]
       end
       let(:obj) do
-        FactoryBot.create_for_repository :scanned_resource,
+        FactoryBot.create_for_repository :complete_scanned_resource,
                                          source_metadata_identifier: ['2068747'],
                                          member_of_collection_ids: [col.id], import_metadata: true
       end
@@ -46,7 +46,7 @@ RSpec.describe CicognaraCSV do
 
     context "with a Vatican/Cicognara rights statement" do
       let(:obj) do
-        FactoryBot.create_for_repository :scanned_resource,
+        FactoryBot.create_for_repository :complete_scanned_resource,
                                          source_metadata_identifier: ['2068747'],
                                          rights_statement: ['http://cicognara.org/microfiche_copyright'],
                                          member_of_collection_ids: [col.id], import_metadata: true

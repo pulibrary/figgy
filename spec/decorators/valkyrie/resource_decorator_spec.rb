@@ -3,11 +3,11 @@ require 'rails_helper'
 
 RSpec.describe Valkyrie::ResourceDecorator do
   subject(:decorator) { described_class.new(resource) }
-  let(:resource) { FactoryBot.build(:scanned_resource) }
+  let(:resource) { FactoryBot.build(:complete_scanned_resource) }
 
   describe '#members' do
-    let(:child_resource) { FactoryBot.create_for_repository(:scanned_resource) }
-    let(:resource) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [child_resource.id]) }
+    let(:child_resource) { FactoryBot.create_for_repository(:complete_scanned_resource) }
+    let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: [child_resource.id]) }
 
     it 'retrieves all member resources' do
       expect(decorator.members.to_a).not_to be_empty
@@ -15,8 +15,8 @@ RSpec.describe Valkyrie::ResourceDecorator do
   end
 
   describe '#parents' do
-    let(:resource) { FactoryBot.create_for_repository(:scanned_resource) }
-    let(:parent_resource) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [resource.id]) }
+    let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource) }
+    let(:parent_resource) { FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: [resource.id]) }
     before do
       parent_resource
     end
@@ -29,7 +29,7 @@ RSpec.describe Valkyrie::ResourceDecorator do
   describe '#iiif_metadata' do
     context 'when viewing a new Scanned Resource' do
       let(:resource) do
-        FactoryBot.create_for_repository(:scanned_resource,
+        FactoryBot.create_for_repository(:complete_scanned_resource,
                                          title: ['test title'],
                                          pdf_type: ['Gray'],
                                          identifier: ["http://arks.princeton.edu/ark:/88435/5m60qr98h"],
@@ -59,7 +59,7 @@ RSpec.describe Valkyrie::ResourceDecorator do
   end
 
   describe '#first_title' do
-    let(:resource) { FactoryBot.create_for_repository(:scanned_resource, title: ["There and back again", "A hobbit's tale"]) }
+    let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource, title: ["There and back again", "A hobbit's tale"]) }
 
     it 'returns the first title' do
       expect(resource.decorate.first_title).to eq "There and back again"
@@ -67,7 +67,7 @@ RSpec.describe Valkyrie::ResourceDecorator do
   end
 
   describe '#merged_titles' do
-    let(:resource) { FactoryBot.create_for_repository(:scanned_resource, title: ["There and back again", "A hobbit's tale"]) }
+    let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource, title: ["There and back again", "A hobbit's tale"]) }
 
     it 'returns a one-line title string' do
       expect(resource.decorate.merged_titles).to eq "There and back again; A hobbit's tale"
@@ -75,7 +75,7 @@ RSpec.describe Valkyrie::ResourceDecorator do
   end
 
   describe '#titles' do
-    let(:resource) { FactoryBot.create_for_repository(:scanned_resource, title: ["There and back again", "A hobbit's tale"]) }
+    let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource, title: ["There and back again", "A hobbit's tale"]) }
 
     it 'returns the title array' do
       expect(resource.decorate.titles).to eq ["There and back again", "A hobbit's tale"]
@@ -86,7 +86,7 @@ RSpec.describe Valkyrie::ResourceDecorator do
     let(:collection) { FactoryBot.create_for_repository(:collection, title: 'My Nietzsche Collection') }
     let(:resource) do
       FactoryBot.create_for_repository(
-        :scanned_resource,
+        :complete_scanned_resource,
         title: ["Menschliches, Allzumenschliches", "Ein Buch für freie Geister"],
         member_of_collection_ids: collection.id
       )
@@ -147,6 +147,43 @@ RSpec.describe Valkyrie::ResourceDecorator do
       expect(resource.decorate.form_input_values).to be_an OpenStruct
       expect(resource.decorate.form_input_values.title).to eq 'Архипела́г ГУЛА́Г'
       expect(resource.decorate.form_input_values.id).to eq resource.id.to_s
+    end
+  end
+
+  describe '#ark_mintable_state?' do
+    context 'with a published SimpleResource' do
+      let(:resource) { FactoryBot.build(:published_simple_resource) }
+      it 'returns true' do
+        expect(resource.decorate.ark_mintable_state?).to eq true
+      end
+    end
+
+    context 'with a complete Multi-Volume Work' do
+      let(:resource) { FactoryBot.build(:complete_scanned_resource) }
+      it 'returns true' do
+        expect(resource.decorate.ark_mintable_state?).to eq true
+      end
+    end
+
+    context 'with an EphemeraBox' do
+      let(:resource) { FactoryBot.build(:ephemera_box) }
+      it 'returns false' do
+        expect(resource.decorate.ark_mintable_state?).to eq false
+      end
+    end
+
+    context 'with an EphemeraFolder' do
+      let(:resource) { FactoryBot.build(:ephemera_folder) }
+      it 'returns false' do
+        expect(resource.decorate.ark_mintable_state?).to eq false
+      end
+    end
+
+    context 'when a resource is without a workflow' do
+      let(:resource) { FactoryBot.build(:ephemera_term) }
+      it 'defaults to false' do
+        expect(resource.decorate.ark_mintable_state?).to eq false
+      end
     end
   end
 end

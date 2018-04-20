@@ -11,7 +11,6 @@ class SimpleResourceDecorator < Valkyrie::ResourceDecorator
           :date_created, # http://purl.org/dc/terms/created
           :extent, # http://purl.org/dc/terms/extent
           :genre, # http://purl.org/dc/terms/type
-          :identifier, # http://purl.org/dc/terms/identifier
           :license, # http://purl.org/dc/terms/rights
           :part_of, # http://purl.org/dc/terms/isPartOf
           :replaces, # http://purl.org/dc/terms/replaces

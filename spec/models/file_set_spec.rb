@@ -3,6 +3,12 @@ require 'rails_helper'
 include ActionDispatch::TestProcess
 
 RSpec.describe FileSet do
+  let(:shoulder) { '99999/fk4' }
+  let(:blade) { '123456' }
+  before do
+    stub_ezid(shoulder: shoulder, blade: blade)
+  end
+
   describe '.run_fixity' do
     let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
     let(:resource) { FactoryBot.build(:scanned_resource) }

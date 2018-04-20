@@ -52,4 +52,10 @@ class BoxWorkflow
   def self.grant_access_states
     [:all_in_production].map(&:to_s)
   end
+
+  # States in which an ark can be minted for the record
+  # @return [Array<String>] the states for which an ARK can be minted
+  def self.ark_mint_states
+    []
+  end
 end

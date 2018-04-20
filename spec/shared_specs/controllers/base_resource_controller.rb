@@ -332,8 +332,11 @@ RSpec.shared_examples 'a BaseResourceController' do
 
   describe "#manifest" do
     let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+    before do
+      stub_ezid(shoulder: '99999/fk4', blade: '123456')
+    end
     it "returns a IIIF manifest for a resource with a file" do
-      resource = FactoryBot.create_for_repository(factory, files: [file])
+      resource = FactoryBot.create_for_repository(manifestable_factory, files: [file])
 
       get :manifest, params: { id: resource.id.to_s, format: :json }
       manifest_response = MultiJson.load(response.body, symbolize_keys: true)

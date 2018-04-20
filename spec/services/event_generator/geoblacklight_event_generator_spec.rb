@@ -5,7 +5,7 @@ include ActionDispatch::TestProcess
 RSpec.describe EventGenerator::GeoblacklightEventGenerator do
   subject(:event_generator) { described_class.new(rabbit_connection) }
   let(:rabbit_connection) { instance_double(GeoblacklightMessagingClient, publish: true) }
-  let(:record) { FactoryBot.create_for_repository(:scanned_map) }
+  let(:record) { FactoryBot.create_for_repository(:complete_scanned_map) }
 
   it_behaves_like "an EventGenerator"
 

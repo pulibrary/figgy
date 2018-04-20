@@ -17,6 +17,8 @@ RSpec.feature "SimpleResources", js: true do
   end
 
   before do
+    stub_ezid(shoulder: '99999/fk4', blade: '123456')
+
     change_set.sync
     change_set_persister.save(change_set: change_set)
     sign_in user
@@ -43,7 +45,6 @@ RSpec.feature "SimpleResources", js: true do
     expect(page).to have_field 'Extent'
     expect(page).to have_field 'Genre'
     expect(page).to have_field 'Geo subject'
-    expect(page).to have_field 'Identifier'
     expect(page).to have_field 'License'
     expect(page).to have_field 'Part of'
     expect(page).to have_field 'Replaces'

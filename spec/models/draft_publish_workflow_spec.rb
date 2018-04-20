@@ -38,5 +38,9 @@ describe DraftPublishWorkflow do
     it 'provides a list of manifest-publishable states' do
       expect(described_class.manifest_states).to contain_exactly "published"
     end
+
+    it 'provides a list of states valid for minting a new ARK' do
+      expect(described_class.ark_mint_states).to contain_exactly 'published'
+    end
   end
 end

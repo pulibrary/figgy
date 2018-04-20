@@ -7,6 +7,12 @@ describe Ability do
   subject { described_class.new(current_user) }
   let(:page_file) { fixture_file_upload('files/example.tif', 'image/tiff') }
   let(:page_file_2) { fixture_file_upload('files/example.tif', 'image/tiff') }
+  let(:shoulder) { '99999/fk4' }
+  let(:blade) { '123456' }
+
+  before do
+    stub_ezid(shoulder: shoulder, blade: blade)
+  end
 
   let(:open_scanned_resource) do
     FactoryBot.create_for_repository(:complete_open_scanned_resource, user: creating_user, files: [page_file])
@@ -439,6 +445,11 @@ describe Ability do
       let(:vector_resource) do
         change_set_persister.save(change_set: VectorResourceChangeSet.new(open_vector_resource, files: [file]))
       end
+      let(:shoulder) { '99999/fk4' }
+      let(:blade) { '123456' }
+      before do
+        stub_ezid(shoulder: shoulder, blade: blade)
+      end
 
       it {
         is_expected.to be_able_to(:download, file_set)
@@ -451,6 +462,11 @@ describe Ability do
     context "with a private vector resource" do
       let(:vector_resource) do
         change_set_persister.save(change_set: VectorResourceChangeSet.new(private_vector_resource, files: [file]))
+      end
+      let(:shoulder) { '99999/fk4' }
+      let(:blade) { '123456' }
+      before do
+        stub_ezid(shoulder: shoulder, blade: blade)
       end
 
       it {
