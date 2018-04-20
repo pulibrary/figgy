@@ -38,20 +38,21 @@ RSpec.describe PlumChangeSetPersister do
   context "when a source_metadata_identifier is set for the first time on a scanned map" do
     let(:change_set_class) { ScannedMapChangeSet }
     before do
-      stub_bibdata(bib_id: '6592452')
+      stub_bibdata(bib_id: '10001789')
       stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "applies remote metadata from bibdata to an imported metadata resource" do
       resource = FactoryBot.build(:scanned_map, title: [])
       change_set = change_set_class.new(resource)
-      change_set.validate(source_metadata_identifier: '6592452')
+      change_set.validate(source_metadata_identifier: '10001789')
       change_set.sync
       output = change_set_persister.save(change_set: change_set)
 
-      expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Brazil, Uruguay, Paraguay & Guyana", language: :eng)]
-      expect(output.primary_imported_metadata.creator).to eq ["Bartholomew, John, 1805-1861"]
-      expect(output.primary_imported_metadata.subject).to eq ["Brazil—Maps", "Guiana—Maps", "Paraguay—Maps", "Uruguay—Maps"]
-      expect(output.primary_imported_metadata.spatial).to eq ["Brazil", "Uruguay", "Paraguay", "Guyana"]
+      expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Cameroons under United Kingdom Trusteeship 1949", language: :eng)]
+      expect(output.primary_imported_metadata.creator).to eq ["Nigeria. Survey Department"]
+      expect(output.primary_imported_metadata.subject).to include "Administrative and political divisions—Maps"
+      expect(output.primary_imported_metadata.spatial).to eq ["Cameroon", "Nigeria"]
+      expect(output.primary_imported_metadata.coverage).to eq ["northlimit=12.500000; eastlimit=014.620000; southlimit=03.890000; westlimit=008.550000; units=degrees; projection=EPSG:4326"]
     end
   end
 
