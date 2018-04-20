@@ -14,13 +14,18 @@ RSpec.describe PlumChangeSetPersister do
   let(:query_service) { adapter.query_service }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
   let(:change_set_class) { ScannedResourceChangeSet }
+  let(:shoulder) { '99999/fk4' }
+  let(:blade) { '123456' }
 
   it_behaves_like "a Valkyrie::ChangeSetPersister"
+
+  before do
+    stub_ezid(shoulder: shoulder, blade: blade)
+  end
 
   context "when a source_metadata_identifier is set for the first time on a scanned resource" do
     before do
       stub_bibdata(bib_id: '123456')
-      stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "applies remote metadata from bibdata to an imported metadata resource" do
       resource = FactoryBot.build(:scanned_resource, title: [])
@@ -60,7 +65,6 @@ RSpec.describe PlumChangeSetPersister do
     let(:change_set_class) { VectorResourceChangeSet }
     before do
       stub_bibdata(bib_id: '9649080')
-      stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "applies remote metadata from bibdata to an imported metadata resource" do
       resource = FactoryBot.build(:vector_resource, title: [])
@@ -78,7 +82,6 @@ RSpec.describe PlumChangeSetPersister do
     let(:change_set_class) { RasterResourceChangeSet }
     before do
       stub_bibdata(bib_id: '9637153')
-      stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "applies remote metadata from bibdata to an imported metadata resource" do
       resource = FactoryBot.build(:raster_resource, title: [])
@@ -92,13 +95,9 @@ RSpec.describe PlumChangeSetPersister do
     end
   end
 
-  context "when a resource is completed" do
-    let(:shoulder) { '99999/fk4' }
-    let(:blade) { '123456' }
-
+  context "when a scanned resource is completed" do
     before do
       stub_bibdata(bib_id: '123456')
-      stub_ezid(shoulder: shoulder, blade: blade)
     end
 
     it "mints an ARK" do
@@ -111,10 +110,25 @@ RSpec.describe PlumChangeSetPersister do
       expect(output.identifier.first).to eq "ark:/#{shoulder}#{blade}"
     end
   end
+
+  context "when a simple resource is completed" do
+    let(:change_set_class) { SimpleResourceChangeSet }
+
+    it "mints an ARK" do
+      resource = FactoryBot.create(:draft_simple_resource)
+      change_set = change_set_class.new(resource)
+      change_set.prepopulate!
+      change_set.validate(state: 'published')
+      change_set.sync
+      output = change_set_persister.save(change_set: change_set)
+      expect(output.identifier.first).to eq "ark:/#{shoulder}#{blade}"
+    end
+  end
+
   context "when a source_metadata_identifier is set and it's from PULFA" do
+    let(:blade) { 'MC016_c9616' }
     before do
       stub_pulfa(pulfa_id: "MC016_c9616")
-      stub_ezid(shoulder: "99999/fk4", blade: "MC016_c9616")
     end
     it "applies remote metadata from PULFA" do
       resource = FactoryBot.build(:scanned_resource, title: [])
@@ -163,7 +177,6 @@ RSpec.describe PlumChangeSetPersister do
   context "when a source_metadata_identifier is set afterwards and refresh_remote_metadata is set" do
     before do
       stub_bibdata(bib_id: '123456')
-      stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "applies remote metadata from bibdata" do
       resource = FactoryBot.create_for_repository(:scanned_resource, title: 'Title', imported_metadata: [{ applicant: 'Test' }], source_metadata_identifier: nil)
@@ -179,10 +192,10 @@ RSpec.describe PlumChangeSetPersister do
   end
   context "when a source_metadata_identifier is set for the first time on a scanned map" do
     let(:change_set_class) { ScannedMapChangeSet }
+    let(:blade) { '6866386' }
 
     before do
       stub_bibdata(bib_id: '6866386')
-      stub_ezid(shoulder: "99999/fk4", blade: "6866386")
     end
     it "applies remote metadata from bibdata" do
       resource = FactoryBot.build(:scanned_map, title: [])

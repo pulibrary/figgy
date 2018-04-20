@@ -30,7 +30,6 @@ class SimpleResourceChangeSet < Valhalla::ChangeSet
   property :extent, multiple: true, required: false, default: []
   property :genre, multiple: true, required: false, default: []
   property :geo_subject, multiple: true, required: false, default: []
-  property :identifier, multiple: true, required: false, default: []
   property :license, multiple: true, required: false, default: []
   property :part_of, multiple: true, required: false, default: []
   property :replaces, multiple: true, required: false, default: []
@@ -78,7 +77,6 @@ class SimpleResourceChangeSet < Valhalla::ChangeSet
       :extent,
       :genre,
       :geo_subject,
-      :identifier,
       :license,
       :part_of,
       :replaces,

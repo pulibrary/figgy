@@ -68,6 +68,7 @@ Metrics/ClassLength:
     - 'app/controllers/catalog_controller.rb'
     - 'app/services/manifest_builder/manifest_service_locator.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
+    - 'app/decorators/valkyrie/resource_decorator.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'

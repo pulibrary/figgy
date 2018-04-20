@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe ReportsController, type: :controller do
   let(:user) { FactoryBot.create(:admin) }
-  let(:resource) { FactoryBot.build(:scanned_resource, title: []) }
+  let(:resource) { FactoryBot.build(:complete_scanned_resource, title: []) }
   let(:resource2) { FactoryBot.create_for_repository(:scanned_resource, title: []) }
   let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
   let(:data) { "bibid,ark,title\n123456,ark:/99999/fk48675309,Earth rites : fertility rites in pre-industrial Britain\n" }

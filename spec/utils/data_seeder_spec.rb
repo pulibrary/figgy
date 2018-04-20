@@ -22,6 +22,9 @@ RSpec.describe DataSeeder do
 
   # combine tests to reduce expensive object creation
   describe "#generate_dev_data" do
+    before do
+      stub_ezid(shoulder: '99999/fk4', blade: '123456')
+    end
     it "generates lots of objects" do
       n_files = mvw_volumes + # each volume member has a fileset
                 sammel_vols + #  each volume member has a fileset

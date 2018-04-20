@@ -6,7 +6,7 @@ RSpec.describe CatalogController do
   describe "#index" do
     render_views
     it "finds all public documents" do
-      persister.save(resource: FactoryBot.build(:scanned_resource))
+      persister.save(resource: FactoryBot.build(:complete_scanned_resource))
 
       get :index, params: { q: "" }
 
@@ -22,7 +22,7 @@ RSpec.describe CatalogController do
   describe "#index" do
     it "can search by source metadata identifier" do
       stub_bibdata(bib_id: "123456")
-      persister.save(resource: FactoryBot.build(:scanned_resource, source_metadata_identifier: "123456"))
+      persister.save(resource: FactoryBot.build(:complete_scanned_resource, source_metadata_identifier: "123456"))
 
       get :index, params: { q: "123456" }
 
@@ -31,7 +31,7 @@ RSpec.describe CatalogController do
     it "can search by imported metadata title" do
       stub_bibdata(bib_id: "123456")
       stub_ezid(shoulder: "99999/fk4", blade: "123456")
-      output = persister.save(resource: FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456", import_metadata: true))
+      output = persister.save(resource: FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "123456", import_metadata: true))
 
       get :index, params: { q: "Earth rites" }
 
@@ -41,7 +41,7 @@ RSpec.describe CatalogController do
       expect(facets["display_subject_ssim"]).to eq [output.imported_metadata[0].subject.first, 1]
     end
     it "can search by local identifiers" do
-      persister.save(resource: FactoryBot.create_for_repository(:scanned_resource, local_identifier: "p3b593k91p"))
+      persister.save(resource: FactoryBot.create_for_repository(:complete_scanned_resource, local_identifier: "p3b593k91p"))
 
       get :index, params: { q: "p3b593k91p" }
       expect(assigns(:document_list).length).to eq 1
@@ -50,7 +50,7 @@ RSpec.describe CatalogController do
       it "can search by imported local identifiers" do
         stub_bibdata(bib_id: "8543429")
         stub_ezid(shoulder: "99999/fk4", blade: "8543429")
-        persister.save(resource: FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "8543429", import_metadata: true))
+        persister.save(resource: FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "8543429", import_metadata: true))
 
         get :index, params: { q: "cico:xjt" }
         expect(assigns(:document_list).length).to eq 1
@@ -59,7 +59,7 @@ RSpec.describe CatalogController do
     it "can search by ARK" do
       stub_bibdata(bib_id: "123456")
       stub_ezid(shoulder: "99999/fk4", blade: "123456")
-      persister.save(resource: FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456", import_metadata: true))
+      persister.save(resource: FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "123456", import_metadata: true))
 
       get :index, params: { q: "ark:/99999/fk4123456" }
 
@@ -69,7 +69,7 @@ RSpec.describe CatalogController do
       expect(assigns(:document_list).length).to eq 1
     end
     it "can search by non-imported title" do
-      persister.save(resource: FactoryBot.build(:scanned_resource, title: "Tësting This"))
+      persister.save(resource: FactoryBot.build(:complete_scanned_resource, title: "Tësting This"))
 
       get :index, params: { q: "Testing" }
 
@@ -86,8 +86,8 @@ RSpec.describe CatalogController do
     end
 
     it "can sort by title" do
-      persister.save(resource: FactoryBot.build(:scanned_resource, title: "Resource A"))
-      persister.save(resource: FactoryBot.build(:scanned_resource, title: "Resource B"))
+      persister.save(resource: FactoryBot.build(:complete_scanned_resource, title: "Resource A"))
+      persister.save(resource: FactoryBot.build(:complete_scanned_resource, title: "Resource B"))
 
       get :index, params: { q: "resource", sort: "title_ssort asc" }
       expect(assigns(:document_list).map { |r| r.resource.title.first }).to eq(["Resource A", "Resource B"])
@@ -342,8 +342,8 @@ RSpec.describe CatalogController do
       sign_in FactoryBot.create(:admin)
     end
     it "doesn't display children of parented resources" do
-      child = persister.save(resource: FactoryBot.build(:scanned_resource))
-      parent = persister.save(resource: FactoryBot.build(:scanned_resource, member_ids: child.id))
+      child = persister.save(resource: FactoryBot.build(:complete_scanned_resource))
+      parent = persister.save(resource: FactoryBot.build(:complete_scanned_resource, member_ids: child.id))
       # Re-save to get member_of to index, not necessary if going through
       #   PlumChangeSetPersister.
       persister.save(resource: child)
@@ -371,7 +371,7 @@ RSpec.describe CatalogController do
       render_views
       it "facets on it" do
         collection = persister.save(resource: FactoryBot.build(:collection))
-        persister.save(resource: FactoryBot.build(:scanned_resource, member_of_collection_ids: [collection.id]))
+        persister.save(resource: FactoryBot.build(:complete_scanned_resource, member_of_collection_ids: [collection.id]))
 
         get :index, params: { q: "" }
 
@@ -388,7 +388,7 @@ RSpec.describe CatalogController do
       end
       it "loads the parent document when given an ID" do
         child = persister.save(resource: FactoryBot.build(:file_set))
-        parent = persister.save(resource: FactoryBot.build(:scanned_resource, member_ids: child.id))
+        parent = persister.save(resource: FactoryBot.build(:complete_scanned_resource, member_ids: child.id))
 
         get :show, params: { parent_id: parent.id, id: child.id }
 
@@ -398,7 +398,7 @@ RSpec.describe CatalogController do
     context "as a public user" do
       it "redirects and displays a warning that the item is private" do
         child = persister.save(resource: FactoryBot.build(:file_set))
-        parent = persister.save(resource: FactoryBot.build(:scanned_resource, member_ids: child.id))
+        parent = persister.save(resource: FactoryBot.build(:complete_scanned_resource, member_ids: child.id))
 
         expect { get :show, params: { parent_id: parent.id, id: child.id } }.not_to raise_error
         expect(response.status).to be 302
@@ -424,7 +424,7 @@ RSpec.describe CatalogController do
       end
       render_views
       it "renders administration buttons" do
-        resource = persister.save(resource: FactoryBot.build(:scanned_resource, workflow_note: WorkflowNote.new(author: "Shakespeare", note: "Test Comment"), ocr_language: "eng"))
+        resource = persister.save(resource: FactoryBot.build(:complete_scanned_resource, workflow_note: WorkflowNote.new(author: "Shakespeare", note: "Test Comment"), ocr_language: "eng"))
 
         get :show, params: { id: resource.id.to_s }
 
@@ -445,7 +445,7 @@ RSpec.describe CatalogController do
         stub_ezid(shoulder: "99999/fk4", blade: "123456")
         collection = FactoryBot.create_for_repository(:collection)
         resource = FactoryBot.create_for_repository(
-          :scanned_resource,
+          :complete_scanned_resource,
           source_metadata_identifier: "123456",
           import_metadata: true,
           portion_note: "Test",
@@ -477,7 +477,7 @@ RSpec.describe CatalogController do
         get :show, params: { id: resource.id.to_s, format: :ttl }
         expect(response).to be_success
 
-        empty_resource = persister.save(resource: FactoryBot.build(:scanned_resource))
+        empty_resource = persister.save(resource: FactoryBot.build(:complete_scanned_resource))
         get :show, params: { id: empty_resource.id.to_s, format: :jsonld }
         expect(response).to be_success
 
@@ -577,7 +577,7 @@ RSpec.describe CatalogController do
     context "when logged in as an admin" do
       it "displays all resources" do
         user = FactoryBot.create(:admin)
-        persister.save(resource: FactoryBot.build(:scanned_resource, read_groups: nil, edit_users: nil))
+        persister.save(resource: FactoryBot.build(:complete_scanned_resource, read_groups: nil, edit_users: nil))
 
         sign_in user
         get :index, params: { q: "" }
@@ -588,7 +588,7 @@ RSpec.describe CatalogController do
     context "when logged in" do
       it "displays resources which the user can edit" do
         user = FactoryBot.create(:user)
-        persister.save(resource: FactoryBot.build(:scanned_resource, read_groups: nil, edit_users: user.user_key))
+        persister.save(resource: FactoryBot.build(:complete_scanned_resource, read_groups: nil, edit_users: user.user_key))
 
         sign_in user
         get :index, params: { q: "" }
@@ -597,7 +597,7 @@ RSpec.describe CatalogController do
       end
       it "displays resources which are explicitly given permission to that user" do
         user = FactoryBot.create(:user)
-        persister.save(resource: FactoryBot.build(:scanned_resource, read_groups: nil, read_users: user.user_key))
+        persister.save(resource: FactoryBot.build(:complete_scanned_resource, read_groups: nil, read_users: user.user_key))
 
         sign_in user
         get :index, params: { q: "" }
@@ -609,7 +609,7 @@ RSpec.describe CatalogController do
 
   describe "manifest lookup" do
     context "when the manifest is found" do
-      let(:resource) { persister.save(resource: FactoryBot.build(:scanned_resource, identifier: ['ark:/99999/12345'])) }
+      let(:resource) { persister.save(resource: FactoryBot.build(:complete_scanned_resource, identifier: ['ark:/99999/12345'])) }
 
       before do
         resource

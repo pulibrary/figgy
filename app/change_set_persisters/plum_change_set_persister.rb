@@ -13,6 +13,7 @@ class PlumChangeSetPersister
   def self.registered_handlers
     {
       before_save: [
+        MintIdentifier,
         ApplyRemoteMetadata,
         ApplyVisibilityByDate,
         CreateFile::Factory.new(file_appender: FileAppender),

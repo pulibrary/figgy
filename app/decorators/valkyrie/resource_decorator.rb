@@ -100,7 +100,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     end
   end
 
-  # Should this folder have a manifest?
+  # Should this resource have a manifest?
   # @return [TrueClass, FalseClass]
   def manifestable_state?
     WorkflowRegistry.workflow_for(model.class).manifest_states.include? Array.wrap(state).first.underscore
@@ -109,13 +109,22 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     true
   end
 
-  # Is this folder publicly viewable?
+  # Is this resource publicly viewable?
   # @return [TrueClass, FalseClass]
   def public_readable_state?
     WorkflowRegistry.workflow_for(model.class).public_read_states.include? Array.wrap(state).first.underscore
   rescue WorkflowRegistry::EntryNotFound
     # if there's no workflow, default to true
     true
+  end
+
+  # Should this simple resource have an ARK minted?
+  # @return [TrueClass, FalseClass]
+  def ark_mintable_state?
+    WorkflowRegistry.workflow_for(model.class).ark_mint_states.include? Array.wrap(state).first&.underscore
+  rescue WorkflowRegistry::EntryNotFound
+    # if there's no workflow, default to false
+    false
   end
 
   # Models metadata values within a manifest
