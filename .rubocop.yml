@@ -136,5 +136,6 @@ RSpec/AnyInstance:
     - 'spec/services/messaging_client_spec.rb'
     - 'spec/jobs/check_fixity_recursive_job_spec.rb'
     - 'spec/controllers/fixity_dashboard_controller_spec.rb'
+    - 'spec/change_sets/archival_media_collection_change_set_spec.rb'
 Lint/UnusedMethodArgument:
   AllowUnusedKeywordArguments: true
