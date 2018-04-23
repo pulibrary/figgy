@@ -9,8 +9,11 @@
       </button>
       <a v-if="!hidden" :href="editLink" id="replace-file-button">Manage Page Files</a>
     </div>
-    <div v-if="selectedTotal === 1" class="osd">
-      <div class="viewport" :id="viewerId"></div>
+    <h3 v-if="selectedTotal === 1" class="osd-title">Zoom <small>on the selected item</small></h3>
+    <div v-if="selectedTotal === 1" class="osd-wrapper">
+      <div class="osd">
+        <div class="viewport" :id="viewerId"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -183,8 +186,21 @@ export default {
 
 .osd {
   background: #fff;
-  margin-top: 20px;
+  height: 100%;
+  width: 100%;
+}
+
+.osd-wrapper {
+  background: #fff;
   flex-basis: 40%;
+  border-radius: 4px;
+  border: 2px solid #9ecaed;
+  box-shadow: 0 0 10px #9ecaed;
+  padding: 10px;
+}
+
+h3.osd-title {
+  font-size: 18px;
 }
 
 .viewport {

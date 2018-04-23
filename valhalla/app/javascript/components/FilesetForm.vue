@@ -77,6 +77,7 @@ export default {
         label: this.$store.state.selected[0].label,
         id: this.$store.state.selected[0].id,
         pageType: this.$store.state.selected[0].pageType,
+        service: this.$store.state.selected[0].service,
         url: this.$store.state.selected[0].url
       }
     }
