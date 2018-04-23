@@ -43,14 +43,14 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
     end
 
     context "when source_metadata_identifier is set" do
-      let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "AC044") }
+      let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "AC044_c0003") }
       let(:file) { File.open(Rails.root.join("spec", "fixtures", "some_finding_aid.xml"), 'r') }
       before do
         allow_any_instance_of(BagPathValidator).to receive(:validate).and_return(true)
       end
 
       it "is valid" do
-        stub_request(:get, "https://findingaids.princeton.edu/collections/AC044.xml?scope=record")
+        stub_request(:get, "https://findingaids.princeton.edu/collections/AC044/c0003.xml?scope=record")
           .with(headers: { 'Accept' => '*/*', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent' => 'Faraday v0.9.2' })
           .to_return(status: 200, body: file, headers: {})
         expect(change_set).to be_valid
