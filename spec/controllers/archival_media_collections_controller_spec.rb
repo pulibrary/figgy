@@ -17,12 +17,30 @@ RSpec.describe ArchivalMediaCollectionsController do
   context "when an admin" do
     let(:user) { FactoryBot.create(:admin) }
 
-    describe "GET /collections/new" do
+    describe "GET /archival_media_collections/new" do
       render_views
       it "renders a new record form" do
         get :new
 
         expect(response).to render_template("valhalla/base/_form")
+      end
+    end
+
+    describe "POST /archival_media_collections" do
+      let(:file) { File.open(Rails.root.join("spec", "fixtures", "some_finding_aid.xml"), 'r') }
+
+      it "creates a collection and imports metadata" do
+        stub_request(:get, "https://findingaids.princeton.edu/collections/AC044.xml?scope=record")
+          .with(headers: { 'Accept' => '*/*', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent' => 'Faraday v0.9.2' })
+          .to_return(status: 200, body: file, headers: {})
+        post :create, params: { archival_media_collection: { source_metadata_identifier: "AC044", refresh_remote_metadata: "0", bag_path: "/idk/some/path" } }
+
+        expect(response).to be_redirect
+
+        collection = query_service.find_all_of_model(model: ArchivalMediaCollection).first
+        expect(collection.source_metadata_identifier).to eq ['AC044']
+        expect(collection.primary_imported_metadata).to be_a ImportedMetadata
+        expect(collection.title).to contain_exactly "Series 1: Committee Administration - Alumni Council: Proposals for Electing Young Alumni Trustees"
       end
     end
   end
