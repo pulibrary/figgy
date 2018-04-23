@@ -30,7 +30,7 @@ RSpec.describe DataSeeder do
                 sammel_vols + #  each volume member has a fileset
                 sammel_files +
                 many_files +
-                1 # the scanned map created
+                9 # geo files created
       n_scanned_resources = mvw_volumes + sammel_vols +
                             1 + # the mvw parent
                             1 + # the many files parent
@@ -39,7 +39,9 @@ RSpec.describe DataSeeder do
       seeder.generate_dev_data(many_files: many_files, mvw_volumes: mvw_volumes, sammel_files: sammel_files, sammel_vols: sammel_vols)
       expect(query_service.find_all_of_model(model: FileSet).count).to eq n_files
       expect(query_service.find_all_of_model(model: ScannedResource).count).to eq n_scanned_resources
-      expect(query_service.find_all_of_model(model: ScannedMap).count).to eq 1
+      expect(query_service.find_all_of_model(model: ScannedMap).count).to eq 5
+      expect(query_service.find_all_of_model(model: RasterResource).count).to eq 2
+      expect(query_service.find_all_of_model(model: VectorResource).count).to eq 1
 
       seeder.wipe_metadata!
       expect(Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_all.count).to eq 0

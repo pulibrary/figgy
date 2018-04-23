@@ -17,6 +17,10 @@ class DataSeeder
     generate_multi_volume_work(n: mvw_volumes)
     generate_sammelband(file_count: sammel_files, volume_count: sammel_vols)
     generate_scanned_map
+    generate_raster_resource
+    generate_vector_resource
+    generate_scanned_map_with_raster_child
+    generate_map_set(n: 2)
     object_count_report
   end
 
@@ -60,11 +64,12 @@ class DataSeeder
     sr
   end
 
-  def generate_scanned_map
-    sm = ScannedMap.new(attributes_hash)
+  def generate_scanned_map(attrs = {})
+    sm = ScannedMap.new(attributes_hash.merge(geo_attributes).merge(attrs))
     sm = persister.save(resource: sm)
     add_file(resource: sm)
     logger.info "Created scanned map #{sm.id}: #{sm.title}"
+    sm
   end
 
   def generate_ephemera_project(n_folders: 3)
@@ -75,6 +80,38 @@ class DataSeeder
     add_ephemera_fields(ep)
     box = add_ephemera_box(ep)
     add_ephemera_folders(n: n_folders, project: ep, box: box)
+  end
+
+  def generate_map_set(n:)
+    parent = generate_scanned_map(title: "Map Set")
+    n.times do
+      add_child_resource(child: generate_scanned_map, parent_id: parent.id)
+    end
+  end
+
+  def generate_raster_resource
+    rr = RasterResource.new(attributes_hash.merge(geo_attributes))
+    rr = persister.save(resource: rr)
+    file = IngestableFile.new(file_path: Rails.root.join('spec', 'fixtures', 'files', 'raster', 'geotiff.tif'), mime_type: "image/tiff", original_filename: "geotiff.tif")
+    add_file(resource: rr, file: file)
+    logger.info "Created raster resource #{rr.id}: #{rr.title}"
+    rr
+  end
+
+  def generate_vector_resource
+    vr = VectorResource.new(attributes_hash.merge(geo_attributes))
+    vr = persister.save(resource: vr)
+    file = IngestableFile.new(file_path: Rails.root.join('spec', 'fixtures', 'files', 'vector', 'shapefile.zip'), mime_type: "application/zip", original_filename: "shapefile.zip")
+    add_file(resource: vr, file: file)
+    logger.info "Created vector resource #{vr.id}: #{vr.title}"
+    vr
+  end
+
+  def generate_scanned_map_with_raster_child
+    parent = generate_scanned_map(title: "Scanned Map with Raster Child")
+    add_file(resource: parent)
+    add_child_resource(child: generate_raster_resource, parent_id: parent.id)
+    logger.info "Created scanned map with raster child #{parent.id}: #{parent.title}"
   end
 
   def load_vocabs
@@ -171,6 +208,13 @@ class DataSeeder
       }
     end
 
+    def geo_attributes
+      {
+        coverage: coverage,
+        provenance: 'Princeton'
+      }
+    end
+
     def rights_statements
       ControlledVocabulary.for(:rights_statement).all
     end
@@ -182,10 +226,11 @@ class DataSeeder
       change_set_persister.save(change_set: change_set)
     end
 
-    def add_file(resource:)
+    def add_file(resource:, file: nil)
+      ingestable_file = file || IngestableFile.new(file_path: Rails.root.join('spec', 'fixtures', 'files', 'example.tif'), mime_type: "image/tiff", original_filename: "example.tif")
       change_set = DynamicChangeSet.new(resource)
       change_set.prepopulate!
-      change_set.files = [IngestableFile.new(file_path: Rails.root.join('spec', 'fixtures', 'files', 'example.tif'), mime_type: "image/tiff", original_filename: "example.tif")]
+      change_set.files = [ingestable_file]
       change_set_persister.save(change_set: change_set)
     end
 
@@ -209,5 +254,9 @@ class DataSeeder
         metadata_adapter: metadata_adapter,
         storage_adapter: Valkyrie.config.storage_adapter
       )
+    end
+
+    def coverage
+      "northlimit=40.424427; eastlimit=-74.48246; southlimit=40.135958; westlimit=-74.939246; units=degrees; projection=EPSG:4326"
     end
 end
