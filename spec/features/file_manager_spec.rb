@@ -36,10 +36,6 @@ RSpec.feature "File Manager", js: true do
       allow(riiif_helper).to receive(:base_url).and_return('http://localhost/test-resource')
       allow(riiif_helper_class).to receive(:new).and_return(riiif_helper)
     end
-    scenario 'users can visiting the file management interface' do
-      visit polymorphic_path [:file_manager, resource]
-      expect(page).to have_selector('#filemanager')
-    end
     context 'with a derivative service for images in the TIFF' do
       let(:create_derivatives_class) { class_double(CreateDerivativesJob).as_stubbed_const(transfer_nested_constants: true) }
       let(:original_file) { instance_double(FileMetadata) }

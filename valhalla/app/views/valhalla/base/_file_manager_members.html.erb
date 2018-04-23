@@ -1,5 +1,5 @@
-<ul id="sortable" data-id="<%= CGI.escape(@change_set.id.to_s) %>" data-class-name="<%= @change_set.model_name.plural %>" data-singular-class-name="<%= @change_set.model_name.singular %>" class="list-unstyled grid clearfix">
+<div data-id="<%= CGI.escape(@change_set.id.to_s) %>" data-class-name="<%= @change_set.model_name.plural %>" data-singular-class-name="<%= @change_set.model_name.singular %>" class="gallery clearfix">
  <% @children.each do |member| %>
    <%= render "file_manager_member", node: member %>
  <% end %>
-</ul>
+</div>

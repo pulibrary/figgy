@@ -1,9 +1,0 @@
-  <div class="resource-type-heading">
-    <h2>Metadata Files</h2>
-  </div>
-
-  <ul class="list-unstyled grid clearfix">
-    <% @metadata_children.each do |member| %>
-     <%= render "geo_metadata_member", node: member %>
-    <% end %>
-  </ul>

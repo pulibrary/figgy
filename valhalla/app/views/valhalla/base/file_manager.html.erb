@@ -1,20 +1,26 @@
-<% content_for :head do %>
-  <%= javascript_pack_tag 'filemanager' %>
-  <%= stylesheet_pack_tag 'filemanager' %>
-<% end %>
-
-<div class="container">
+<h1>File Manager</h1>
 <ul class="breadcrumb">
-  <% if decorated_change_set_resource.try(:decorated_parent_resource).present? %>
-    <li><%= link_to decorated_change_set_resource.decorated_parent_resource.first_title, solr_document_path(id: "#{decorated_change_set_resource.decorated_parent_resource.id}") %></li>
-  <% end %>
   <li><%= link_to decorated_change_set_resource.first_title, solr_document_path(id: "#{@change_set.id}") %></li>
   <li class="active">File Manager</li>
 </ul>
-</div>
-
-<div id="file-manager-browse-everything">
+<div id="file-manager-extra-tools">
   <%= render "file_manager_extra_tools" %>
 </div>
-
-<div id="filemanager" data-class-name="<%= @change_set.model_name.plural %>" data-resource="<%= @change_set.id %>"></div>
+<div>
+</div>
+<% if !@children.empty? %>
+  <div data-action="file-manager">
+    <div class="col-md-12">
+      <p class="text-muted">
+        <em>Total files: <%= @change_set.member_ids.count %>
+        <% if @change_set.respond_to?(:source_metadata_identifier) && @change_set.source_metadata_identifier.present? %>
+          | BibId: <%= @change_set.source_metadata_identifier %>
+        <% end %>
+        </em>
+      </p>
+    </div>
+    <div class="col-md-12">
+      <%= render "file_manager_members" %>
+    </div>
+  </div>
+<% end %>

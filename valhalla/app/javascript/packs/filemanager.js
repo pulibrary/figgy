@@ -14,7 +14,7 @@ window.flash = function(message, type) {
 // mount the filemanager app
 document.addEventListener('DOMContentLoaded', () => {
   const app = new Vue({
-    el: '#filemanager',
+    el: '#order-manager',
     template: '<App/>',
     components: { App },
     store,

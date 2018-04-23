@@ -327,19 +327,6 @@ RSpec.describe ManifestBuilder do
     end
   end
 
-  context "when given a scanned map with a raster child" do
-    subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_map.id)) }
-    let(:scanned_map) do
-      FactoryBot.create_for_repository(:scanned_map, description: "Test Description", member_ids: child.id)
-    end
-    let(:file) { fixture_file_upload('files/raster/geotiff.tif', 'image/tiff') }
-    let(:child) { FactoryBot.create_for_repository(:raster_resource, files: [file]) }
-    it "builds a IIIF document without the raster child" do
-      output = manifest_builder.build
-      expect(output["sequences"]).to be_nil
-    end
-  end
-
   context "when given an ephemera project" do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: ephemera_project.id)) }
     let(:ephemera_project) do

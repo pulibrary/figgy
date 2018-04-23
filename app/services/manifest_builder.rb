@@ -217,10 +217,6 @@ class ManifestBuilder
   end
 
   class ScannedMapNode < RootNode
-    def members
-      @members ||= decorate.members.reject { |x| x.is_a?(RasterResource) }.to_a
-    end
-
     def leaf_nodes
       @leaf_nodes ||= members.select { |x| x.instance_of?(FileSet) && geo_image?(x) }
     end
