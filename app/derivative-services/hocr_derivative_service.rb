@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 class HocrDerivativeService
   class Factory
-    attr_reader :change_set_persister
+    attr_reader :change_set_persister, :processor_factory
     delegate :metadata_adapter, :storage_adapter, to: :change_set_persister
     delegate :query_service, to: :metadata_adapter
-    def initialize(change_set_persister:)
+    def initialize(change_set_persister:, processor_factory: TesseractProcessor)
       @change_set_persister = change_set_persister
+      @processor_factory = processor_factory
     end
 
     def new(change_set)
-      HocrDerivativeService.new(change_set: change_set, change_set_persister: change_set_persister, original_file: original_file(change_set.resource))
+      HocrDerivativeService.new(change_set: change_set, change_set_persister: change_set_persister, original_file: original_file(change_set.resource), processor_factory: processor_factory)
     end
 
     def original_file(resource)
@@ -17,15 +18,56 @@ class HocrDerivativeService
     end
   end
 
-  attr_reader :change_set, :change_set_persister, :original_file
+  class TesseractProcessor
+    attr_reader :ocr_language, :file_path
+    def initialize(ocr_language:, file_path:)
+      @ocr_language = ocr_language
+      @file_path = file_path
+    end
+
+    def run!
+      run_derivatives
+      Result.new(hocr_content: created_file.read).tap do
+        FileUtils.rm_f(created_file)
+      end
+    end
+
+    class Result
+      attr_reader :hocr_content
+      def initialize(hocr_content:)
+        @hocr_content = hocr_content
+      end
+
+      def ocr_content
+        @ocr_content ||= ActionView::Base.full_sanitizer.sanitize(hocr_content).split("\n").map(&:strip).select(&:present?).join("\n")
+      end
+    end
+
+    private
+
+      def run_derivatives
+        system("tesseract", file_path.to_s, temporary_output.path.to_s, "-l #{ocr_language.join('+')}", "hocr", out: File::NULL, err: File::NULL)
+      end
+
+      def temporary_output
+        @temporary_file ||= Tempfile.new
+      end
+
+      def created_file
+        @created_file ||= File.open("#{temporary_output.path}.hocr")
+      end
+  end
+
+  attr_reader :change_set, :change_set_persister, :original_file, :processor
   delegate :mime_type, to: :original_file
   delegate :resource, to: :change_set
   delegate :metadata_adapter, :storage_adapter, to: :change_set_persister
   delegate :query_service, to: :metadata_adapter
-  def initialize(change_set:, change_set_persister:, original_file:)
+  def initialize(change_set:, change_set_persister:, original_file:, processor_factory:)
     @change_set = change_set
     @change_set_persister = change_set_persister
     @original_file = original_file
+    @processor = processor_factory.new(ocr_language: parent.ocr_language, file_path: filename)
   end
 
   def valid?
@@ -33,10 +75,9 @@ class HocrDerivativeService
   end
 
   def create_derivatives
-    run_derivatives
-    change_set.hocr_content = created_file.read
-    change_set.ocr_content = ActionView::Base.full_sanitizer.sanitize(change_set.hocr_content).split("\n").map(&:strip).select(&:present?).join("\n")
-    FileUtils.rm_f(created_file.path)
+    result = processor.run!
+    change_set.hocr_content = result.hocr_content
+    change_set.ocr_content = result.ocr_content
     change_set.sync
     change_set_persister.buffer_into_index do |buffered_persister|
       buffered_persister.save(change_set: change_set)
@@ -48,18 +89,6 @@ class HocrDerivativeService
 
   def parent
     @parent ||= query_service.find_parents(resource: change_set.resource).first
-  end
-
-  def run_derivatives
-    system("tesseract", filename.to_s, temporary_output.path.to_s, "-l #{parent.ocr_language.join('+')}", "hocr", out: File::NULL, err: File::NULL)
-  end
-
-  def temporary_output
-    @temporary_file ||= Tempfile.new
-  end
-
-  def created_file
-    @created_file ||= File.open("#{temporary_output.path}.hocr")
   end
 
   def filename
