@@ -26,7 +26,9 @@ RSpec.feature "ScannedMaps", js: true do
     visit new_scanned_map_path
 
     expect(page).to have_field 'Title'
+    expect(page).not_to have_css '.mutex[name="scanned_map[title][]"]'
     expect(page).to have_field 'Source Metadata ID'
+    expect(page).not_to have_css '.mutex[name="scanned_map[source_metadata_identifier]"'
     expect(page).to have_css '.select[for="scanned_map_rights_statement"]', text: 'Rights Statement'
     expect(page).to have_field 'Rights Note'
     expect(page).to have_field 'Local identifier'
