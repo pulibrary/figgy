@@ -17,17 +17,11 @@ RSpec.describe "valhalla/base/file_manager.html.erb", type: :view do
   end
 
   it "renders correctly" do
-    expect(rendered).to include "<div id=\"filemanager\" data-class-name=\"#{parent.model_name.plural}\" data-resource=\"#{parent.id}\"></div>"
-  end
-  context "when given a MVW" do
-    let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, title: "Test Title", member_ids: [child.id]) }
-    let(:child) { FactoryBot.create_for_repository(:scanned_resource, title: "Child Title") }
-    let(:member) { DynamicChangeSet.new(child) }
-    let(:parent) { scanned_resource && member }
-    let(:members) { [] }
-    it "renders a breadcrumb for the parent" do
-      expect(rendered).to have_selector "li a[href='/catalog/#{child.id}']", text: "Child Title"
-      expect(rendered).to have_selector "li a[href='/catalog/#{scanned_resource.id}']", text: "Test Title"
-    end
+    expect(rendered).to include "<h1>File Manager</h1>"
+    expect(rendered).to include member.title.first.to_s
+    expect(rendered).to have_selector("a[href=\"#{Valhalla::ContextualPath.new(child: member, parent_id: parent.id).show}\"]")
+    expect(rendered).to have_link "Test Title", href: "/catalog/#{parent.id}"
+    expect(rendered).to have_selector(".gallery form", count: 2)
+    expect(rendered).to have_selector("img[src='#{ManifestBuilder::ManifestHelper.new.manifest_image_path(member.thumbnail_id)}/full/!200,150/0/default.jpg']")
   end
 end

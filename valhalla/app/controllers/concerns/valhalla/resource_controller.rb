@@ -107,6 +107,14 @@ module Valhalla
       end.to_a
     end
 
+    def order_manager
+      @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
+      authorize! :order_manager, @change_set.resource
+      @children = query_service.find_members(resource: @change_set).map do |x|
+        change_set_class.new(x).prepopulate!
+      end.to_a
+    end
+
     def contextual_path(obj, change_set)
       Valhalla::ContextualPath.new(child: obj.id, parent_id: change_set.append_id)
     end
