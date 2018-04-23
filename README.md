@@ -23,6 +23,10 @@ functionality, performance, and scalability.
 * [GDAL](http://www.gdal.org/)
     * You can install it on Mac OSX with `brew install gdal`.
     * On Ubuntu, use `sudo apt-get install gdal-bin`.
+* [Tesseract](https://github.com/tesseract-ocr/tesseract)
+    * Version 3.04 is on the servers; homebrew installs 3.05: `brew install
+      tesseract --with-all-languages`
+    * For Ubuntu you'll have to [compile](https://github.com/tesseract-ocr/tesseract/wiki/Compiling) it.
 
 ## Simple Tiles
 
