@@ -17,7 +17,7 @@ class GeoblacklightMetadataDecorator < SimpleDelegator
     def merged_attributes
       direct_attributes.map do |key, value|
         imported_value = __getobj__.primary_imported_metadata.send(key) || []
-        merged_values = imported_value + value
+        merged_values = no_merge_keys.include?(key) ? value : imported_value + value
         [key, merged_values.uniq]
       end.to_h
     end
@@ -26,5 +26,10 @@ class GeoblacklightMetadataDecorator < SimpleDelegator
       Schema::Geo.attributes.map do |attribute|
         [attribute, Array.wrap(__getobj__.[](attribute))]
       end.to_h
+    end
+
+    # Keys that shouldn't be merged with imported metadata.
+    def no_merge_keys
+      [:identifier]
     end
 end
