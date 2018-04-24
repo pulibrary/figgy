@@ -111,12 +111,15 @@ describe GeoDiscovery::DocumentBuilder do
                                          visibility: visibility,
                                          identifier: 'ark:/99999/fk4',
                                          imported_metadata: [{
-                                           subject: ['Mount Holly (N.J.)—Maps']
+                                           subject: ['Mount Holly (N.J.)—Maps'],
+                                           identifier: 'http://arks.princeton.edu/ark:/99999/fk4'
                                          }])
       end
 
-      it 'merges and deduplicates direct and imported attributes' do
+      it 'merges and deduplicates direct and imported attributes; does not merge identifier' do
         expect(document['dc_subject_sm']).to eq ['Mount Holly (N.J.)—Maps', 'Sanborn']
+        expect(document['dc_identifier_s']).to eq 'ark:/99999/fk4'
+        expect(document['layer_slug_s']).to eq 'princeton-fk4'
       end
     end
 
