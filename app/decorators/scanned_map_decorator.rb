@@ -98,6 +98,10 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
     @members ||= query_service.find_members(resource: model).to_a
   end
 
+  def scanned_map_parents
+    @scanned_map_parents ||= parents.select { |r| r.is_a?(ScannedMap) }.map(&:decorate).to_a
+  end
+
   def rendered_coverage
     display_coverage = coverage || imported_metadata.try(:first).try(:coverage)
     h.bbox_display(display_coverage)
@@ -138,5 +142,9 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
 
   def scanned_map_members
     @scanned_maps ||= members.select { |r| r.is_a?(ScannedMap) }.map(&:decorate).to_a
+  end
+
+  def raster_resource_members
+    @raster_resources ||= members.select { |r| r.is_a?(RasterResource) }.map(&:decorate).to_a
   end
 end

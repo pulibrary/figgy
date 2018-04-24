@@ -58,6 +58,9 @@ class Ability
     can :color_pdf, curation_concerns do |resource|
       resource.pdf_type == ["color"]
     end
+    can :read, FileSet do |resource|
+      can?(:read, resource.decorate.parent.object)
+    end
   end
 
   def curator_permissions

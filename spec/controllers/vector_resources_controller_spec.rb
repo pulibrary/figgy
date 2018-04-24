@@ -220,4 +220,42 @@ RSpec.describe VectorResourcesController do
       end
     end
   end
+
+  describe '#attach_to_parent' do
+    let(:user) { FactoryBot.create(:admin) }
+    let(:parent_raster_resource) { FactoryBot.create_for_repository(:raster_resource) }
+    let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource) }
+
+    it 'appends an existing ScannedMap as a parent' do
+      patch :attach_to_parent, params: {
+        id: vector_resource.id.to_s, parent_resource: {
+          id: parent_raster_resource.id.to_s, member_ids: [vector_resource.id.to_s]
+        }
+      }
+
+      persisted = query_service.find_by(id: vector_resource.id)
+      expect(persisted.decorate.raster_resource_parents).not_to be_empty
+      expect(persisted.decorate.raster_resource_parents.first.id).to eq parent_raster_resource.id
+    end
+  end
+
+  describe '#remove_from_parent' do
+    let(:user) { FactoryBot.create(:admin) }
+    let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource) }
+
+    context 'when a RasterResource belongs to a ScannedMap parent' do
+      it 'removes an existing parent ScannedMap' do
+        parent_raster_resource = FactoryBot.create_for_repository(:raster_resource, member_ids: [vector_resource.id])
+
+        patch :remove_from_parent, params: {
+          id: vector_resource.id.to_s, parent_resource: {
+            id: parent_raster_resource.id.to_s, member_ids: [vector_resource.id.to_s]
+          }
+        }
+
+        persisted = query_service.find_by(id: vector_resource.id)
+        expect(persisted.decorate.raster_resource_parents).to be_empty
+      end
+    end
+  end
 end

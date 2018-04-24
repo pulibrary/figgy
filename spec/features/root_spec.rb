@@ -13,6 +13,7 @@ RSpec.feature "Home Page", js: true do
     expect(page).to have_link "New Scanned Resource"
     expect(page).to have_link "New Media Resource"
     expect(page).to have_link "Add a Collection", href: "/collections/new"
+    expect(page).to have_link "Add an Archival Media Collection"
     expect(page).to have_link "Manage Roles"
     expect(page).to have_content "Test Project"
     expect(page).to have_link "View Boxes"

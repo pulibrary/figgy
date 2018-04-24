@@ -260,8 +260,11 @@ RSpec.describe ScannedMapsController do
 
   describe "GET /concern/scanned_maps/:id/manifest" do
     let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+    before do
+      stub_ezid(shoulder: '99999/fk4', blade: '123456')
+    end
     it "returns a IIIF manifest for a resource with a file" do
-      scanned_map = FactoryBot.create_for_repository(:scanned_map, files: [file])
+      scanned_map = FactoryBot.create_for_repository(:complete_scanned_map, files: [file])
 
       get :manifest, params: { id: scanned_map.id.to_s, format: :json }
       manifest_response = MultiJson.load(response.body, symbolize_keys: true)
@@ -285,6 +288,44 @@ RSpec.describe ScannedMapsController do
 
       put :extract_metadata, params: { id: scanned_map.id.to_s, file_set_id: scanned_map.member_ids.first.to_s }
       expect(query_service.find_by(id: scanned_map.id).title).to eq ["China census data by county, 2000-2010"]
+    end
+  end
+
+  describe '#attach_to_parent' do
+    let(:user) { FactoryBot.create(:admin) }
+    let(:parent_scanned_map) { FactoryBot.create_for_repository(:scanned_map) }
+    let(:scanned_map) { FactoryBot.create_for_repository(:scanned_map) }
+
+    it 'appends an existing ScannedMap as a parent' do
+      patch :attach_to_parent, params: {
+        id: scanned_map.id.to_s, parent_resource: {
+          id: parent_scanned_map.id.to_s, member_ids: [scanned_map.id.to_s]
+        }
+      }
+
+      persisted = query_service.find_by(id: scanned_map.id)
+      expect(persisted.decorate.scanned_map_parents).not_to be_empty
+      expect(persisted.decorate.scanned_map_parents.first.id).to eq parent_scanned_map.id
+    end
+  end
+
+  describe '#remove_from_parent' do
+    let(:user) { FactoryBot.create(:admin) }
+    let(:scanned_map) { FactoryBot.create_for_repository(:scanned_map) }
+
+    context 'when a ScannedMap belongs to a ScannedMap parent' do
+      it 'removes an existing parent ScannedMap' do
+        parent_scanned_map = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map.id])
+
+        patch :remove_from_parent, params: {
+          id: scanned_map.id.to_s, parent_resource: {
+            id: parent_scanned_map.id.to_s, member_ids: [scanned_map.id.to_s]
+          }
+        }
+
+        persisted = query_service.find_by(id: scanned_map.id)
+        expect(persisted.decorate.scanned_map_parents).to be_empty
+      end
     end
   end
 end

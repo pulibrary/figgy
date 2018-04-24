@@ -66,6 +66,7 @@ Rails.application.routes.draw do
     resources :file_sets do
       member do
         put :derivatives
+        get :text
       end
     end
     resources :scanned_resources do
@@ -159,6 +160,8 @@ Rails.application.routes.draw do
     end
     get '/scanned_maps/:parent_id/new', to: 'scanned_maps#new', as: :parent_new_scanned_map
     put '/scanned_maps/:id/extract_metadata/:file_set_id', to: 'scanned_maps#extract_metadata', as: :scanned_maps_extract_metadata
+    patch '/scanned_maps/:id/attach_to_parent', to: 'scanned_maps#attach_to_parent', as: :scanned_maps_attach_to_parent, defaults: { format: :json }
+    patch '/scanned_maps/:id/remove_from_parent', to: 'scanned_maps#remove_from_parent', as: :scanned_maps_remove_from_parent, defaults: { format: :json }
 
     resources :vector_resources do
       member do
@@ -169,6 +172,8 @@ Rails.application.routes.draw do
     end
     get '/vector_resources/:parent_id/new', to: 'vector_resources#new', as: :parent_new_vector_resource
     put '/vector_resources/:id/extract_metadata/:file_set_id', to: 'vector_resources#extract_metadata', as: :vector_resources_extract_metadata
+    patch '/vector_resources/:id/attach_to_parent', to: 'vector_resources#attach_to_parent', as: :vector_resources_attach_to_parent, defaults: { format: :json }
+    patch '/vector_resources/:id/remove_from_parent', to: 'vector_resources#remove_from_parent', as: :vector_resources_remove_from_parent, defaults: { format: :json }
 
     resources :raster_resources do
       member do
@@ -179,6 +184,8 @@ Rails.application.routes.draw do
     end
     get '/raster_resources/:parent_id/new', to: 'raster_resources#new', as: :parent_new_raster_resource
     put '/raster_resources/:id/extract_metadata/:file_set_id', to: 'raster_resources#extract_metadata', as: :raster_resources_extract_metadata
+    patch '/raster_resources/:id/attach_to_parent', to: 'raster_resources#attach_to_parent', as: :raster_resources_attach_to_parent, defaults: { format: :json }
+    patch '/raster_resources/:id/remove_from_parent', to: 'raster_resources#remove_from_parent', as: :raster_resources_remove_from_parent, defaults: { format: :json }
   end
 
   resources :collections do
@@ -187,6 +194,8 @@ Rails.application.routes.draw do
     end
   end
   get "/iiif/collections", defaults: { format: :json }, to: "collections#index_manifest", as: :index_manifest
+
+  resources :archival_media_collections
 
   get '/catalog/parent/:parent_id/:id', to: 'catalog#show', as: :parent_solr_document
   get "/iiif/lookup/:prefix/:naan/:arkid", to: 'catalog#lookup_manifest', as: :lookup_manifest

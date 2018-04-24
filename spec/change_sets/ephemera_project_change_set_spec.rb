@@ -16,7 +16,7 @@ RSpec.describe EphemeraProjectChangeSet do
     end
   end
 
-  describe '#langugae_options' do
+  describe '#language_options' do
     let(:resource) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_field.id]) }
     let(:ephemera_field) { FactoryBot.create_for_repository(:ephemera_field, member_of_vocabulary_id: [ephemera_vocabulary.id]) }
     let(:ephemera_vocabulary) { FactoryBot.create_for_repository(:ephemera_vocabulary) }
@@ -57,6 +57,18 @@ RSpec.describe EphemeraProjectChangeSet do
     end
     it 'ensures that only valid slugs can be persisted' do
       expect(change_set.validate(slug: 'test_project-!@#$')).to be false
+    end
+    context "when given a non-UUID for a member resource" do
+      it "is not valid" do
+        change_set.validate(member_ids: ['not-valid'])
+        expect(change_set).not_to be_valid
+      end
+    end
+    context "when given a valid UUID for a member resource which does not exist" do
+      it "is not valid" do
+        change_set.validate(member_ids: ['55a14e79-710d-42c1-86aa-3d8cdaa62930'])
+        expect(change_set).not_to be_valid
+      end
     end
   end
 end

@@ -9,6 +9,7 @@ RSpec.describe ScannedResourcesController do
   let(:persister) { adapter.persister }
   let(:query_service) { adapter.query_service }
   let(:resource_klass) { ScannedResource }
+  let(:manifestable_factory) { :complete_scanned_resource }
 
   before do
     sign_in user if user

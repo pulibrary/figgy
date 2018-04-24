@@ -8,6 +8,8 @@ class EphemeraTermChangeSet < Valkyrie::ChangeSet
   property :lcsh_label, multiple: false, required: false
   property :member_of_vocabulary_id, multiple: false, required: true, type: Valkyrie::Types::ID.optional
 
+  validates_with VocabularyValidator
+
   def primary_terms
     [
       :label,

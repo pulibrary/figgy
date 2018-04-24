@@ -31,6 +31,7 @@ Metrics/AbcSize:
     - 'app/services/ingest_ephemera_service.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
+    - 'app/models/ability.rb'
 Metrics/BlockLength:
   Exclude:
     - 'valhalla/app/models/concerns/valhalla/ability.rb'
@@ -48,6 +49,7 @@ Metrics/BlockLength:
     - 'lib/tasks/bulk.rake'
     - 'lib/tasks/lae.rake'
     - 'app/change_sets/simple_resource_change_set.rb'
+    - 'app/controllers/concerns/resource_relations.rb'
 Metrics/ClassLength:
   Exclude:
     - 'app/change_set_persisters/plum_change_set_persister.rb'
@@ -66,6 +68,7 @@ Metrics/ClassLength:
     - 'app/controllers/catalog_controller.rb'
     - 'app/services/manifest_builder/manifest_service_locator.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
+    - 'app/decorators/valkyrie/resource_decorator.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
@@ -83,6 +86,7 @@ Metrics/MethodLength:
     - 'app/models/ability.rb'
     - 'app/models/controlled_vocabulary.rb'
     - 'app/change_sets/simple_resource_change_set.rb'
+    - 'app/controllers/base_resource_controller.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
@@ -132,5 +136,6 @@ RSpec/AnyInstance:
     - 'spec/services/messaging_client_spec.rb'
     - 'spec/jobs/check_fixity_recursive_job_spec.rb'
     - 'spec/controllers/fixity_dashboard_controller_spec.rb'
+    - 'spec/change_sets/archival_media_collection_change_set_spec.rb'
 Lint/UnusedMethodArgument:
   AllowUnusedKeywordArguments: true

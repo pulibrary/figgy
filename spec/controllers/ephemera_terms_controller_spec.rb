@@ -7,6 +7,7 @@ RSpec.describe EphemeraTermsController do
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:persister) { adapter.persister }
   let(:query_service) { adapter.query_service }
+  let(:ephemera_vocabulary) { FactoryBot.create_for_repository(:ephemera_vocabulary) }
   before do
     sign_in user if user
   end
@@ -32,7 +33,7 @@ RSpec.describe EphemeraTermsController do
     let(:valid_params) do
       {
         label: ['test label'],
-        member_of_vocabulary_id: ['test id']
+        member_of_vocabulary_id: [ephemera_vocabulary.id]
       }
     end
     let(:invalid_params) do
@@ -63,7 +64,7 @@ RSpec.describe EphemeraTermsController do
         expect do
           post :create, params: { ephemera_term: valid_params }
         end.to raise_error "Bad"
-        expect(Valkyrie::MetadataAdapter.find(:postgres).query_service.find_all.to_a.length).to eq 0
+        expect(Valkyrie::MetadataAdapter.find(:postgres).query_service.find_all_of_model(model: EphemeraTerm).to_a.length).to eq 0
       end
 
       it "doesn't persist anything at all when it's postgres erroring" do
@@ -126,7 +127,7 @@ RSpec.describe EphemeraTermsController do
     let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :ephemera_term }
-      let(:extra_params) { { ephemera_term: { label: ["test label"], member_of_vocabulary_id: ["test id"] } } }
+      let(:extra_params) { { ephemera_term: { label: ["test label"], member_of_vocabulary_id: [ephemera_vocabulary.id] } } }
       it_behaves_like "an access controlled update request"
     end
     context "when a ephemera term doesn't exist" do
@@ -137,7 +138,7 @@ RSpec.describe EphemeraTermsController do
     context "when it does exist" do
       it "saves it and redirects" do
         ephemera_term = FactoryBot.create_for_repository(:ephemera_term)
-        patch :update, params: { id: ephemera_term.id.to_s, ephemera_term: { label: ["test label"], member_of_vocabulary_id: ["test id"] } }
+        patch :update, params: { id: ephemera_term.id.to_s, ephemera_term: { label: ["test label"], member_of_vocabulary_id: [ephemera_vocabulary.id] } }
 
         expect(response).to be_redirect
         expect(response.location).to eq "http://test.host/catalog/#{ephemera_term.id}"

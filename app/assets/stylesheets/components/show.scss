@@ -23,3 +23,23 @@ table.dataTable thead .sorting_desc:after {
 table.dataTable thead > tr > th {
   padding-left: 20px;
 }
+
+.simple_form {
+  .loading-status {
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    z-index: 1;
+    color: #555555;
+  }
+
+  .member-resources.loading, .parent-resources.loading {
+    opacity: 0.4;
+  }
+}
+
+.member-resources-attach, .parent-resources-attach {
+  .form-group.select {
+    width: 232px;
+  }
+}

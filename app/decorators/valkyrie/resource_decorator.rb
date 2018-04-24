@@ -100,7 +100,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     end
   end
 
-  # Should this folder have a manifest?
+  # Should this resource have a manifest?
   # @return [TrueClass, FalseClass]
   def manifestable_state?
     WorkflowRegistry.workflow_for(model.class).manifest_states.include? Array.wrap(state).first.underscore
@@ -109,13 +109,22 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     true
   end
 
-  # Is this folder publicly viewable?
+  # Is this resource publicly viewable?
   # @return [TrueClass, FalseClass]
   def public_readable_state?
     WorkflowRegistry.workflow_for(model.class).public_read_states.include? Array.wrap(state).first.underscore
   rescue WorkflowRegistry::EntryNotFound
     # if there's no workflow, default to true
     true
+  end
+
+  # Should this simple resource have an ARK minted?
+  # @return [TrueClass, FalseClass]
+  def ark_mintable_state?
+    WorkflowRegistry.workflow_for(model.class).ark_mint_states.include? Array.wrap(state).first&.underscore
+  rescue WorkflowRegistry::EntryNotFound
+    # if there's no workflow, default to false
+    false
   end
 
   # Models metadata values within a manifest
@@ -237,6 +246,12 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
       def year_only(dates)
         dates.length == 2 && dates.first.end_with?("-01-01T00:00:00Z") && dates.last.end_with?("-12-31T23:59:59Z")
       end
+  end
+
+  def form_input_values
+    title_value = Array.wrap(title).first
+    title = title_value.is_a?(RDF::Literal) ? title_value.value : title_value
+    OpenStruct.new id: id.to_s, title: title
   end
 
   private

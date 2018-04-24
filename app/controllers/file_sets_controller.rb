@@ -24,6 +24,12 @@ class FileSetsController < ApplicationController
     end
   end
 
+  def text
+    resource = find_resource(params[:id])
+    authorize! :read, resource
+    render plain: resource.ocr_content.first
+  end
+
   def derivative_change_set_persister
     ::PlumChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),

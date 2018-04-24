@@ -4,13 +4,13 @@ jobs:
   build:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.3.6-node-browsers
+      - image: circleci/ruby:2.3.7-node-browsers
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
           FIGGY_DB_USERNAME: figgy
           FIGGY_DB_PASSWORD:  ""
-      - image: postgres:10.3
+      - image: postgres:10.3-alpine
         environment:
           POSTGRES_USER: figgy
           POSTGRES_DB: figgy_test
@@ -67,7 +67,7 @@ jobs:
       - attach_workspace:
           at: '~/figgy'
       - run: sudo apt-get update
-      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev
+      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev tesseract-ocr tesseract-ocr-ita tesseract-ocr-eng
       - run: sudo sh bin/ci_simple_tiles_install.sh
       # Wait for DB
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
@@ -76,7 +76,7 @@ jobs:
       - run: bundle install --path vendor/bundle
       # Downgrade chromedriver to prevent incompatibility with installed chrome
       - run: chromedriver-update 2.37
-      - run: 
+      - run:
           command: bundle exec rake figgy:test
           background: true
       - run: bin/jetty_wait

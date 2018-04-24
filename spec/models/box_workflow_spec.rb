@@ -72,5 +72,9 @@ describe BoxWorkflow do
     it 'provides a list of manifest-publishable states' do
       expect(described_class.manifest_states).to contain_exactly "all_in_production"
     end
+
+    it 'provides a list of states valid for minting a new ARK' do
+      expect(described_class.ark_mint_states).to be_empty
+    end
   end
 end

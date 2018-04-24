@@ -33,9 +33,19 @@ class ManifestBuilder
       end
 
       def file_set
-        @file_set ||= query_service.find_by(id: thumbnail_id)
+        @file_set ||= find_thumbnail_file_set(thumbnail_id)
       rescue Valkyrie::Persistence::ObjectNotFoundError
         @file_set ||= query_service.find_by(id: resource.file_set_presenters.first.id)
+      end
+
+      def find_thumbnail_file_set(record_id)
+        return unless record_id.present?
+        record = query_service.find_by(id: Valkyrie::ID.new(record_id.to_s))
+        if record.is_a?(FileSet)
+          record
+        else
+          find_thumbnail_file_set(Array.wrap(record.thumbnail_id).first || Array.wrap(record.member_ids.first))
+        end
       end
 
       def query_service

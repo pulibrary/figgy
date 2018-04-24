@@ -14,13 +14,18 @@ RSpec.describe PlumChangeSetPersister do
   let(:query_service) { adapter.query_service }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
   let(:change_set_class) { ScannedResourceChangeSet }
+  let(:shoulder) { '99999/fk4' }
+  let(:blade) { '123456' }
 
   it_behaves_like "a Valkyrie::ChangeSetPersister"
+
+  before do
+    stub_ezid(shoulder: shoulder, blade: blade)
+  end
 
   context "when a source_metadata_identifier is set for the first time on a scanned resource" do
     before do
       stub_bibdata(bib_id: '123456')
-      stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "applies remote metadata from bibdata to an imported metadata resource" do
       resource = FactoryBot.build(:scanned_resource, title: [])
@@ -38,20 +43,21 @@ RSpec.describe PlumChangeSetPersister do
   context "when a source_metadata_identifier is set for the first time on a scanned map" do
     let(:change_set_class) { ScannedMapChangeSet }
     before do
-      stub_bibdata(bib_id: '6592452')
+      stub_bibdata(bib_id: '10001789')
       stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "applies remote metadata from bibdata to an imported metadata resource" do
       resource = FactoryBot.build(:scanned_map, title: [])
       change_set = change_set_class.new(resource)
-      change_set.validate(source_metadata_identifier: '6592452')
+      change_set.validate(source_metadata_identifier: '10001789')
       change_set.sync
       output = change_set_persister.save(change_set: change_set)
 
-      expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Brazil, Uruguay, Paraguay & Guyana", language: :eng)]
-      expect(output.primary_imported_metadata.creator).to eq ["Bartholomew, John, 1805-1861"]
-      expect(output.primary_imported_metadata.subject).to eq ["Brazil—Maps", "Guiana—Maps", "Paraguay—Maps", "Uruguay—Maps"]
-      expect(output.primary_imported_metadata.spatial).to eq ["Brazil", "Uruguay", "Paraguay", "Guyana"]
+      expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Cameroons under United Kingdom Trusteeship 1949", language: :eng)]
+      expect(output.primary_imported_metadata.creator).to eq ["Nigeria. Survey Department"]
+      expect(output.primary_imported_metadata.subject).to include "Administrative and political divisions—Maps"
+      expect(output.primary_imported_metadata.spatial).to eq ["Cameroon", "Nigeria"]
+      expect(output.primary_imported_metadata.coverage).to eq ["northlimit=12.500000; eastlimit=014.620000; southlimit=03.890000; westlimit=008.550000; units=degrees; projection=EPSG:4326"]
     end
   end
 
@@ -59,7 +65,6 @@ RSpec.describe PlumChangeSetPersister do
     let(:change_set_class) { VectorResourceChangeSet }
     before do
       stub_bibdata(bib_id: '9649080')
-      stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "applies remote metadata from bibdata to an imported metadata resource" do
       resource = FactoryBot.build(:vector_resource, title: [])
@@ -77,7 +82,6 @@ RSpec.describe PlumChangeSetPersister do
     let(:change_set_class) { RasterResourceChangeSet }
     before do
       stub_bibdata(bib_id: '9637153')
-      stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "applies remote metadata from bibdata to an imported metadata resource" do
       resource = FactoryBot.build(:raster_resource, title: [])
@@ -91,13 +95,9 @@ RSpec.describe PlumChangeSetPersister do
     end
   end
 
-  context "when a resource is completed" do
-    let(:shoulder) { '99999/fk4' }
-    let(:blade) { '123456' }
-
+  context "when a scanned resource is completed" do
     before do
       stub_bibdata(bib_id: '123456')
-      stub_ezid(shoulder: shoulder, blade: blade)
     end
 
     it "mints an ARK" do
@@ -110,10 +110,25 @@ RSpec.describe PlumChangeSetPersister do
       expect(output.identifier.first).to eq "ark:/#{shoulder}#{blade}"
     end
   end
+
+  context "when a simple resource is completed" do
+    let(:change_set_class) { SimpleResourceChangeSet }
+
+    it "mints an ARK" do
+      resource = FactoryBot.create(:draft_simple_resource)
+      change_set = change_set_class.new(resource)
+      change_set.prepopulate!
+      change_set.validate(state: 'published')
+      change_set.sync
+      output = change_set_persister.save(change_set: change_set)
+      expect(output.identifier.first).to eq "ark:/#{shoulder}#{blade}"
+    end
+  end
+
   context "when a source_metadata_identifier is set and it's from PULFA" do
+    let(:blade) { 'MC016_c9616' }
     before do
       stub_pulfa(pulfa_id: "MC016_c9616")
-      stub_ezid(shoulder: "99999/fk4", blade: "MC016_c9616")
     end
     it "applies remote metadata from PULFA" do
       resource = FactoryBot.build(:scanned_resource, title: [])
@@ -162,7 +177,6 @@ RSpec.describe PlumChangeSetPersister do
   context "when a source_metadata_identifier is set afterwards and refresh_remote_metadata is set" do
     before do
       stub_bibdata(bib_id: '123456')
-      stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "applies remote metadata from bibdata" do
       resource = FactoryBot.create_for_repository(:scanned_resource, title: 'Title', imported_metadata: [{ applicant: 'Test' }], source_metadata_identifier: nil)
@@ -178,10 +192,10 @@ RSpec.describe PlumChangeSetPersister do
   end
   context "when a source_metadata_identifier is set for the first time on a scanned map" do
     let(:change_set_class) { ScannedMapChangeSet }
+    let(:blade) { '6866386' }
 
     before do
       stub_bibdata(bib_id: '6866386')
-      stub_ezid(shoulder: "99999/fk4", blade: "6866386")
     end
     it "applies remote metadata from bibdata" do
       resource = FactoryBot.build(:scanned_map, title: [])
@@ -195,7 +209,7 @@ RSpec.describe PlumChangeSetPersister do
     end
   end
 
-  describe "uploading files" do
+  describe "running ocr after changing ocr_language" do
     let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
     let(:change_set_persister) do
       described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: true)
@@ -205,6 +219,33 @@ RSpec.describe PlumChangeSetPersister do
       resource = FactoryBot.build(:scanned_resource)
       change_set = change_set_class.new(resource, characterize: false)
       change_set.files = [file]
+      change_set.sync
+
+      output = change_set_persister.save(change_set: change_set)
+      members = query_service.find_members(resource: output)
+      expect(members.first.hocr_content).not_to be_present
+
+      change_set = change_set_class.new(output)
+      change_set.validate(ocr_language: "eng")
+      change_set.sync
+
+      output = change_set_persister.save(change_set: change_set)
+      members = query_service.find_members(resource: output)
+      expect(members.first.hocr_content).to be_present
+    end
+  end
+
+  describe "uploading files" do
+    let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+    let(:change_set_persister) do
+      described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: true)
+    end
+
+    it "can append files as FileSets", run_real_derivatives: true do
+      resource = FactoryBot.build(:scanned_resource)
+      change_set = change_set_class.new(resource, characterize: false, ocr_language: ["eng"])
+      change_set.files = [file]
+      change_set.sync
 
       output = change_set_persister.save(change_set: change_set)
       members = query_service.find_members(resource: output)
@@ -240,6 +281,8 @@ RSpec.describe PlumChangeSetPersister do
       expect(derivative_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config['derivative_path']).to_s)
 
       expect(query_service.find_all.to_a.map(&:class)).to contain_exactly ScannedResource, FileSet
+
+      expect(members.first.hocr_content).not_to be_blank
     end
 
     it "cleans up derivatives", run_real_derivatives: true do
@@ -247,8 +290,9 @@ RSpec.describe PlumChangeSetPersister do
       allow(CreateDerivativesJob).to receive(:set).and_call_original
 
       resource = FactoryBot.build(:scanned_resource)
-      change_set = change_set_class.new(resource, characterize: true)
+      change_set = change_set_class.new(resource, characterize: true, ocr_language: ["eng"])
       change_set.files = [file]
+      change_set.sync
       change_set_persister.queue = 'low'
       output = change_set_persister.save(change_set: change_set)
       file_set = query_service.find_members(resource: output).first

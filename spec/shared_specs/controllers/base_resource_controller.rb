@@ -41,6 +41,8 @@ RSpec.shared_examples 'a BaseResourceController' do
         expect(response.body).to have_select "Collections", name: "#{model_name}[member_of_collection_ids][]", options: [collection.title.first]
         expect(response.body).to have_select "Rights Statement", name: "#{model_name}[rights_statement]", options: [""] + ControlledVocabulary.for(:rights_statement).all.map(&:label)
         expect(response.body).to have_select "PDF Type", name: "#{model_name}[pdf_type]", options: ["Color PDF", "Grayscale PDF", "Bitonal PDF", "No PDF"]
+        languages = Tesseract.languages
+        expect(response.body).to have_select "OCR Language", name: "#{model_name}[ocr_language]", options: languages.values + [""]
         expect(response.body).to have_checked_field "Open"
         expect(response.body).to have_button "Save"
       end
@@ -330,8 +332,11 @@ RSpec.shared_examples 'a BaseResourceController' do
 
   describe "#manifest" do
     let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+    before do
+      stub_ezid(shoulder: '99999/fk4', blade: '123456')
+    end
     it "returns a IIIF manifest for a resource with a file" do
-      resource = FactoryBot.create_for_repository(factory, files: [file])
+      resource = FactoryBot.create_for_repository(manifestable_factory, files: [file])
 
       get :manifest, params: { id: resource.id.to_s, format: :json }
       manifest_response = MultiJson.load(response.body, symbolize_keys: true)

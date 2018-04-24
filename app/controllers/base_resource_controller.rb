@@ -37,9 +37,65 @@ class BaseResourceController < ApplicationController
     end
   end
 
+  # Attach a resource to a parent
+  def attach_to_parent
+    @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
+    parent_resource = find_resource(parent_resource_params[:id])
+    authorize! :update, parent_resource
+
+    parent_change_set = DynamicChangeSet.new(parent_resource).prepopulate!
+    if parent_change_set.validate(parent_resource_params)
+      current_member_ids = parent_resource.member_ids
+      attached_member_ids = parent_change_set.member_ids
+      parent_change_set.member_ids = current_member_ids + attached_member_ids
+      parent_change_set.sync
+      obj = nil
+      change_set_persister.buffer_into_index do |persist|
+        obj = persist.save(change_set: parent_change_set)
+      end
+      after_update_success(obj, @change_set)
+    else
+      after_update_failure
+    end
+  rescue Dry::Types::ConstraintError
+    after_update_failure
+  rescue Valkyrie::Persistence::ObjectNotFoundError => e
+    after_update_error e
+  end
+
+  # Remove a resource from a parent
+  def remove_from_parent
+    @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
+    parent_resource = find_resource(parent_resource_params[:id])
+    authorize! :update, parent_resource
+
+    parent_change_set = DynamicChangeSet.new(parent_resource).prepopulate!
+    if parent_change_set.validate(parent_resource_params)
+      current_member_ids = parent_resource.member_ids
+      removed_member_ids = parent_change_set.member_ids
+      parent_change_set.member_ids = current_member_ids - removed_member_ids
+      parent_change_set.sync
+      obj = nil
+      change_set_persister.buffer_into_index do |persist|
+        obj = persist.save(change_set: parent_change_set)
+      end
+      after_update_success(obj, @change_set)
+    else
+      after_update_failure
+    end
+  rescue Dry::Types::ConstraintError
+    after_update_failure
+  rescue Valkyrie::Persistence::ObjectNotFoundError => e
+    after_update_error e
+  end
+
   private
 
     def selected_file_params
       params[:selected_files].to_unsafe_h
+    end
+
+    def parent_resource_params
+      params[:parent_resource].to_unsafe_h
     end
 end

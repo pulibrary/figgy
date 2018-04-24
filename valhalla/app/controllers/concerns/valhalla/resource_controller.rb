@@ -81,7 +81,7 @@ module Valhalla
         format.html do
           redirect_to contextual_path(obj, change_set).show
         end
-        format.json { head :ok }
+        format.json { render json: { status: 'ok' } }
       end
     end
 

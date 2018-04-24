@@ -61,5 +61,14 @@ RSpec.describe "catalog/_admin_controls_default" do
     it 'renders the delete link for resources' do
       expect(rendered).to have_link 'Delete This Scanned Resource', href: scanned_resource_path(id: scanned_resource.id)
     end
+
+    context 'with a scanned map resource' do
+      let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_map) }
+
+      it 'renders links for attaching a child scanned map resource and raster resource' do
+        expect(rendered).to have_link 'Attach Scanned Map', href: parent_new_scanned_map_path(parent_id: scanned_resource.id)
+        expect(rendered).to have_link 'Attach Raster Resource', href: parent_new_raster_resource_path(parent_id: scanned_resource.id)
+      end
+    end
   end
 end

@@ -1,0 +1,357 @@
+@import "variables";
+
+@font-face {
+    font-family: 'pul-icons';
+    src:    font-url('icons/pul-icons.eot?7ecx6q');
+    src:    font-url('icons/pul-icons.eot?7ecx6q#iefix') format('embedded-opentype'),
+        font-url('icons/pul-icons.ttf?7ecx6q') format('truetype'),
+        font-url('icons/pul-icons.woff?7ecx6q') format('woff'),
+        font-url('icons/pul-icons.svg?7ecx6q#pul-icons') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'pul-icons' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@function unicode($str) {
+  @return unquote("\"") + $str + unquote("\"");
+}
+
+.icon-file-format-xml {
+  &:before {
+    content: unicode($icon-file-format-xml);
+  }
+}
+.icon-file-pdf {
+  &:before {
+    content: unicode($icon-file-pdf);
+  }
+}
+.icon-warning {
+  &:before {
+    content: unicode($icon-warning);
+  }
+}
+.icon-spinner {
+  &:before {
+    content: unicode($icon-spinner);
+  }
+}
+.icon-rssfeed {
+  &:before {
+    content: unicode($icon-rssfeed);
+  }
+}
+.icon-article-express--small {
+  &:before {
+    content: unicode($icon-article-express--small);
+  }
+}
+.icon-plus-sign-alt {
+  &:before {
+    content: unicode($icon-plus-sign-alt);
+  }
+}
+.icon-down {
+  &:before {
+    content: unicode($icon-down);
+  }
+}
+.icon-right {
+  &:before {
+    content: unicode($icon-right);
+  }
+}
+.icon-caret-left {
+  &:before {
+    content: unicode($icon-caret-left);
+  }
+}
+.icon-caret-right {
+  &:before {
+    content: unicode($icon-caret-right);
+  }
+}
+.icon-bookmark {
+  &:before {
+    content: unicode($icon-bookmark);
+  }
+}
+.icon-bookslibrary {
+  &:before {
+    content: unicode($icon-bookslibrary);
+  }
+}
+.icon-moveback {
+  &:before {
+    content: unicode($icon-moveback);
+  }
+}
+.icon-cite {
+  &:before {
+    content: unicode($icon-cite);
+  }
+}
+.icon-search {
+  &:before {
+    content: unicode($icon-search);
+  }
+}
+.icon-share {
+  &:before {
+    content: unicode($icon-share);
+  }
+}
+.icon-minus-sign-alt {
+  &:before {
+    content: unicode($icon-minus-sign-alt);
+  }
+}
+.icon-refresh {
+  &:before {
+    content: unicode($icon-refresh);
+  }
+}
+.icon-senior-thesis {
+  &:before {
+    content: unicode($icon-senior-thesis);
+  }
+}
+.icon-data-file {
+  &:before {
+    content: unicode($icon-data-file);
+  }
+}
+.icon-map {
+  &:before {
+    content: unicode($icon-map);
+  }
+}
+.icon-manuscript {
+  &:before {
+    content: unicode($icon-manuscript);
+  }
+}
+.icon-audio {
+  &:before {
+    content: unicode($icon-audio);
+  }
+}
+.icon-musical-score {
+  &:before {
+    content: unicode($icon-musical-score);
+  }
+}
+.icon-video-projected-medium {
+  &:before {
+    content: unicode($icon-video-projected-medium);
+  }
+}
+.icon-visual-material {
+  &:before {
+    content: unicode($icon-visual-material);
+  }
+}
+.icon-toggle.collapsed {
+  &:before {
+    content: unicode($icon-toggle-collapsed);
+  }
+}
+.icon-remove {
+  &:before {
+    content: unicode($icon-remove);
+  }
+}
+.icon-toggle {
+  &:before {
+    content: unicode($icon-toggle);
+  }
+}
+.icon-book {
+  &:before {
+    content: unicode($icon-book);
+  }
+}
+.icon-journal {
+  &:before {
+    content: unicode($icon-journal);
+  }
+}
+.icon-mixed-material {
+  &:before {
+    content: unicode($icon-mixed-material);
+  }
+}
+.icon-dissertation {
+  &:before {
+    content: unicode($icon-dissertation);
+  }
+}
+.icon-unknown {
+  &:before {
+    content: unicode($icon-unknown);
+  }
+}
+.icon-databases {
+  &:before {
+    content: unicode($icon-databases);
+  }
+}
+.icon-text {
+  &:before {
+    content: unicode($icon-text);
+  }
+}
+.icon-library {
+  &:before {
+    content: unicode($icon-library);
+  }
+}
+.icon-web {
+  &:before {
+    content: unicode($icon-web);
+  }
+}
+.icon-home {
+  &:before {
+    content: unicode($icon-home);
+  }
+}
+.icon-compass {
+  &:before {
+    content: unicode($icon-compass);
+  }
+}
+.icon-location {
+  &:before {
+    content: unicode($icon-location);
+  }
+}
+.icon-guide {
+  &:before {
+    content: unicode($icon-guide);
+  }
+}
+.icon-windows {
+  &:before {
+    content: unicode($icon-windows);
+  }
+}
+.icon-cd {
+  &:before {
+    content: unicode($icon-cd);
+  }
+}
+.icon-lp {
+  &:before {
+    content: unicode($icon-lp);
+  }
+}
+.icon-question {
+  &:before {
+    content: unicode($icon-question);
+  }
+}
+.icon-best-bet {
+  &:before {
+    content: unicode($icon-best-bet);
+  }
+}
+.icon-archives {
+  &:before {
+    content: unicode($icon-archives);
+  }
+}
+.icon-collections {
+  &:before {
+    content: unicode($icon-collections);
+  }
+}
+.icon-newspaper {
+  &:before {
+    content: unicode($icon-newspaper);
+  }
+}
+.icon-newtab {
+  &:before {
+    content: unicode($icon-newtab);
+  }
+}
+.icon-mobile {
+  &:before {
+    content: unicode($icon-mobile);
+  }
+}
+.icon-phone {
+  &:before {
+    content: unicode($icon-phone);
+  }
+}
+.icon-phone-book {
+  &:before {
+    content: unicode($icon-phone-book);
+  }
+}
+.icon-chat {
+  &:before {
+    content: unicode($icon-chat);
+  }
+}
+.icon-staff {
+  &:before {
+    content: unicode($icon-staff);
+  }
+}
+.icon-email {
+  &:before {
+    content: unicode($icon-email);
+  }
+}
+.icon-calendar {
+  &:before {
+    content: unicode($icon-calendar);
+  }
+}
+.icon-clock {
+  &:before {
+    content: unicode($icon-clock);
+  }
+}
+.icon-links {
+  &:before {
+    content: unicode($icon-links);
+  }
+}
+.icon-print {
+  &:before {
+    content: unicode($icon-print);
+  }
+}
+.icon-digital {
+  &:before {
+    content: unicode($icon-digital);
+  }
+}
+.icon-film {
+  &:before {
+    content: unicode($icon-film);
+  }
+}
+.icon-add-box {
+  &:before {
+    content: unicode($icon-add-box);
+  }
+}

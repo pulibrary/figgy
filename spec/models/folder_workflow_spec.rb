@@ -31,5 +31,9 @@ describe FolderWorkflow do
     it 'provides a list of manifest-publishable states' do
       expect(described_class.manifest_states).to contain_exactly "complete"
     end
+
+    it 'provides a list of states valid for minting a new ARK' do
+      expect(described_class.ark_mint_states).to be_empty
+    end
   end
 end

@@ -30,7 +30,6 @@ class SimpleResourceChangeSet < Valhalla::ChangeSet
   property :extent, multiple: true, required: false, default: []
   property :genre, multiple: true, required: false, default: []
   property :geo_subject, multiple: true, required: false, default: []
-  property :identifier, multiple: true, required: false, default: []
   property :license, multiple: true, required: false, default: []
   property :part_of, multiple: true, required: false, default: []
   property :replaces, multiple: true, required: false, default: []
@@ -45,6 +44,7 @@ class SimpleResourceChangeSet < Valhalla::ChangeSet
   property :publisher, multiple: true, required: false, default: []
   property :source, multiple: true, required: false, default: []
   property :subject, multiple: true, required: false, default: []
+  property :ocr_language, multiple: true, require: false, default: []
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
@@ -53,6 +53,8 @@ class SimpleResourceChangeSet < Valhalla::ChangeSet
   validates_with ViewingDirectionValidator
   validates_with ViewingHintValidator
   validates_with TitleValidator
+  validates_with MemberValidator
+  validates_with CollectionValidator
   validates :visibility, :rights_statement, presence: true
 
   def primary_terms
@@ -62,6 +64,7 @@ class SimpleResourceChangeSet < Valhalla::ChangeSet
       :rights_note,
       :local_identifier,
       :pdf_type,
+      :ocr_language,
       :portion_note,
       :nav_date,
       :member_of_collection_ids,
@@ -74,7 +77,6 @@ class SimpleResourceChangeSet < Valhalla::ChangeSet
       :extent,
       :genre,
       :geo_subject,
-      :identifier,
       :license,
       :part_of,
       :replaces,

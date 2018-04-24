@@ -4,8 +4,8 @@ FactoryBot.define do
     title 'Title'
     rights_statement RDF::URI('http://rightsstatements.org/vocab/NKC/1.0/')
     read_groups 'public'
-    pdf_type ["gray"]
-    state 'published'
+    pdf_type ['gray']
+    state 'draft'
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)
     end
@@ -33,6 +33,12 @@ FactoryBot.define do
           storage_adapter: Valkyrie.config.storage_adapter
         ).save(change_set: change_set)
       end
+    end
+    factory :draft_simple_resource do
+      state 'draft'
+    end
+    factory :published_simple_resource do
+      state 'published'
     end
   end
 end

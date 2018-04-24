@@ -28,6 +28,15 @@ RSpec.describe VectorResourceDecorator do
   it "cannot manage structure" do
     expect(decorator.manageable_structure?).to be false
   end
+  describe '#raster_resource_parents' do
+    let(:resource) { FactoryBot.create_for_repository(:vector_resource) }
+    it 'accesses parent scanned maps' do
+      raster_resource = FactoryBot.create_for_repository(:raster_resource, member_ids: [resource.id])
+      expect(resource.decorate.raster_resource_parents).not_to be_empty
+      expect(resource.decorate.raster_resource_parents.first).to be_a RasterResourceDecorator
+      expect(resource.decorate.raster_resource_parents.first.id).to eq raster_resource.id
+    end
+  end
   describe "#display_imported_language" do
     context "with imported metadata" do
       let(:resource) do
@@ -80,6 +89,16 @@ RSpec.describe VectorResourceDecorator do
     it "retrieves members" do
       expect(resource.decorate.members.to_a).not_to be_empty
       expect(resource.decorate.members.to_a.first).to be_a FileSet
+    end
+  end
+
+  describe '#vector_resource_members' do
+    let(:child) { FactoryBot.create_for_repository(:vector_resource) }
+    let(:resource) { FactoryBot.create_for_repository(:vector_resource, member_ids: [child.id]) }
+
+    it 'decorates member vector resources' do
+      expect(resource.decorate.vector_resource_members).not_to be_empty
+      expect(resource.decorate.vector_resource_members.first.id).to eq child.id
     end
   end
 end

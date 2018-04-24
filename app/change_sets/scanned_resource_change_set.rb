@@ -24,6 +24,7 @@ class ScannedResourceChangeSet < Valhalla::ChangeSet
   property :read_groups, multiple: true, required: false
   property :file_metadata, multiple: true, required: false, default: []
   property :depositor, multiple: false, require: false
+  property :ocr_language, multiple: true, require: false, default: []
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
@@ -34,6 +35,8 @@ class ScannedResourceChangeSet < Valhalla::ChangeSet
   validates_with ViewingHintValidator
   validates_with SourceMetadataIdentifierValidator
   validates_with SourceMetadataIdentifierOrTitleValidator
+  validates_with MemberValidator
+  validates_with CollectionValidator
   validates :visibility, :rights_statement, presence: true
 
   def primary_terms
@@ -45,6 +48,7 @@ class ScannedResourceChangeSet < Valhalla::ChangeSet
       :local_identifier,
       :holding_location,
       :pdf_type,
+      :ocr_language,
       :portion_note,
       :nav_date,
       :member_of_collection_ids,

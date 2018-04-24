@@ -13,6 +13,7 @@ class PlumChangeSetPersister
   def self.registered_handlers
     {
       before_save: [
+        MintIdentifier,
         ApplyRemoteMetadata,
         ApplyVisibilityByDate,
         CreateFile::Factory.new(file_appender: FileAppender),
@@ -26,7 +27,8 @@ class PlumChangeSetPersister
         ReindexChildrenOnState::Factory.new(model: EphemeraBox, state: "all_in_production")
       ],
       after_update_commit: [
-        CheckFixity
+        CheckFixity,
+        UpdateOCR
       ],
       before_delete: [
         CleanupStructure,

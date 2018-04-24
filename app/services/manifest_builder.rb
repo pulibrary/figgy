@@ -303,7 +303,7 @@ class ManifestBuilder
       @parent_node = parent_node
     end
 
-    delegate :id, :local_identifier, to: :resource
+    delegate :id, :local_identifier, :ocr_content, :to_model, to: :resource
 
     ##
     # Stringify the image using the decorator

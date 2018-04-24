@@ -9,4 +9,13 @@ RSpec.describe ControlledVocabulary do
       end
     end
   end
+
+  describe "ocr_language" do
+    let(:vocabulary) { described_class.for(:ocr_language) }
+    describe "#all" do
+      it "returns all languages" do
+        expect(vocabulary.all).to include ControlledVocabulary::Term.new(label: "English", value: "eng")
+      end
+    end
+  end
 end
