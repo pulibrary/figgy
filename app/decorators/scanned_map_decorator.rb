@@ -27,14 +27,14 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
     [ScannedMap, RasterResource]
   end
 
-  def file_sets
-    @file_sets ||= members.select { |r| r.is_a?(FileSet) }.map(&:decorate).to_a
-  end
-
   # Display the resource attributes
   # @return [Hash] a Hash of all of the resource attributes
   def display_attributes
     super.reject { |k, v| imported_attributes.fetch(k, nil) == v }
+  end
+
+  def file_sets
+    @file_sets ||= members.select { |r| r.is_a?(FileSet) }.map(&:decorate).to_a
   end
 
   def geo_members
@@ -98,8 +98,8 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
     @members ||= query_service.find_members(resource: model).to_a
   end
 
-  def scanned_map_parents
-    @scanned_map_parents ||= parents.select { |r| r.is_a?(ScannedMap) }.map(&:decorate).to_a
+  def raster_resource_members
+    @raster_resources ||= members.select { |r| r.is_a?(RasterResource) }.map(&:decorate).to_a
   end
 
   def rendered_coverage
@@ -144,7 +144,12 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
     @scanned_maps ||= members.select { |r| r.is_a?(ScannedMap) }.map(&:decorate).to_a
   end
 
-  def raster_resource_members
-    @raster_resources ||= members.select { |r| r.is_a?(RasterResource) }.map(&:decorate).to_a
+  def scanned_map_parents
+    @scanned_map_parents ||= parents.select { |r| r.is_a?(ScannedMap) }.map(&:decorate).to_a
+  end
+
+  def title
+    return "#{super.first} (#{portion_note.first})" if portion_note
+    super
   end
 end

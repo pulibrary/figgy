@@ -101,4 +101,15 @@ RSpec.describe VectorResourceDecorator do
       expect(resource.decorate.vector_resource_members.first.id).to eq child.id
     end
   end
+  describe "#title" do
+    context "with a portion note" do
+      let(:resource) do
+        FactoryBot.build(:raster_resource, title: "test title", portion_note: "sheet 1")
+      end
+
+      it "appends the portion note to the displayed title" do
+        expect(resource.decorate.title).to eq "test title (sheet 1)"
+      end
+    end
+  end
 end

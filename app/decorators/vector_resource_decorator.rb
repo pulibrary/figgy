@@ -59,6 +59,10 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
     @members ||= query_service.find_members(resource: model).to_a
   end
 
+  def raster_resource_parents
+    @raster_resource_parents ||= parents.select { |r| r.is_a?(RasterResource) }.map(&:decorate).to_a
+  end
+
   def rendered_coverage
     display_coverage = coverage || imported_metadata.try(:first).try(:coverage)
     h.bbox_display(display_coverage)
@@ -88,14 +92,15 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
     end
   end
 
+  def title
+    return "#{super.first} (#{portion_note.first})" if portion_note
+    super
+  end
+
   # Use case for nesting vector resources
   #   - time series: e.g., nyc transit system, released every 6 months
   def vector_resource_members
     @vector_resources ||= members.select { |r| r.is_a?(VectorResource) }.map(&:decorate).to_a
-  end
-
-  def raster_resource_parents
-    @raster_resource_parents ||= parents.select { |r| r.is_a?(RasterResource) }.map(&:decorate).to_a
   end
 
   def vector_resource_parents

@@ -95,4 +95,15 @@ RSpec.describe ScannedMapDecorator do
       expect(resource.decorate.members.to_a.first).to be_a FileSet
     end
   end
+  describe "#title" do
+    context "with a portion note" do
+      let(:resource) do
+        FactoryBot.build(:scanned_map, title: "test title", portion_note: "sheet 1")
+      end
+
+      it "appends the portion note to the displayed title" do
+        expect(resource.decorate.title).to eq "test title (sheet 1)"
+      end
+    end
+  end
 end

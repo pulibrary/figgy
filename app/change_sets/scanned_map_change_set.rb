@@ -15,6 +15,7 @@ class ScannedMapChangeSet < ScannedResourceChangeSet
       :source_metadata_identifier,
       :rights_statement,
       :rights_note,
+      :portion_note,
       :local_identifier,
       :holding_location,
       :member_of_collection_ids,
