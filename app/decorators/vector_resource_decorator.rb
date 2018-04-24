@@ -88,6 +88,11 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
     end
   end
 
+  def title
+    return "#{super.first} (#{portion_note.first})" if portion_note
+    super
+  end
+
   # Use case for nesting vector resources
   #   - time series: e.g., nyc transit system, released every 6 months
   def vector_resource_members

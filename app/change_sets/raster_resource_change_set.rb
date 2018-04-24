@@ -18,6 +18,7 @@ class RasterResourceChangeSet < Valhalla::ChangeSet
   property :read_groups, multiple: true, required: false
   property :file_metadata, multiple: true, required: false, default: []
   property :depositor, multiple: false, require: false
+  property :portion_note, multiple: false, required: false
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
@@ -37,6 +38,7 @@ class RasterResourceChangeSet < Valhalla::ChangeSet
       :source_metadata_identifier,
       :rights_statement,
       :rights_note,
+      :portion_note,
       :local_identifier,
       :holding_location,
       :member_of_collection_ids,

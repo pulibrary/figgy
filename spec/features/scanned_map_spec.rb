@@ -29,6 +29,7 @@ RSpec.feature "ScannedMaps", js: true do
     expect(page).to have_field 'Source Metadata ID'
     expect(page).to have_css '.select[for="scanned_map_rights_statement"]', text: 'Rights Statement'
     expect(page).to have_field 'Rights Note'
+    expect(page).to have_field 'Portion Note'
     expect(page).to have_field 'Local identifier'
     expect(page).to have_css '.select[for="scanned_map_holding_location"]', text: 'Holding Location'
     expect(page).to have_css '.select[for="scanned_map_member_of_collection_ids"]', text: 'Collections'

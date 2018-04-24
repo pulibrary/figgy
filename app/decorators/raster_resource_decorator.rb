@@ -105,4 +105,9 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
         end
     end
   end
+
+  def title
+    return "#{super.first} (#{portion_note.first})" if portion_note
+    super
+  end
 end

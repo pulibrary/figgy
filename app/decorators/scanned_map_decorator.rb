@@ -147,4 +147,9 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   def raster_resource_members
     @raster_resources ||= members.select { |r| r.is_a?(RasterResource) }.map(&:decorate).to_a
   end
+
+  def title
+    return "#{super.first} (#{portion_note.first})" if portion_note
+    super
+  end
 end
