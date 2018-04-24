@@ -18,7 +18,6 @@ RSpec.describe "catalog/_members_vector_resource" do
     end
 
     it 'shows them' do
-      expect(rendered).to have_selector 'h2', text: 'Related Resources'
       expect(rendered).to have_selector 'td', text: 'child vector'
       expect(rendered).to have_selector 'div.label-success .text', text: 'open'
       expect(rendered).not_to have_link href: solr_document_path(child)
