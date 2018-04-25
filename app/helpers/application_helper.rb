@@ -57,12 +57,12 @@ module ApplicationHelper
     @decorated_change_set_resource ||= @change_set.resource.decorate
   end
 
-  def filemanager_layout?
-    layout_type == 'filemanager'
+  def ordermanager_layout?
+    layout_type == 'ordermanager'
   end
 
   def container_type
-    if filemanager_layout?
+    if ordermanager_layout?
       'container-fluid'
     else
       'container'
@@ -71,11 +71,10 @@ module ApplicationHelper
 
   ##
   # Gets current layout for use in rendering partials
-  # @return [String] filemanager, default
+  # @return [String] ordermanager, default
   def layout_type
-    resource_types = ['scanned_resources', 'ephemera_folders', 'simple_resources']
-    if resource_types.include? params[:controller]
-      'filemanager'
+    if params[:action] == "order_manager"
+      'ordermanager'
     else
       'default'
     end

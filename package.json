@@ -1,5 +1,5 @@
 {
-  "name": "filemanager-rails",
+  "name": "ordermanager-rails",
   "private": true,
   "scripts": {
     "unit": "jest valhalla/app/javascript/test/unit/specs --coverage",
@@ -36,7 +36,7 @@
       "valhalla/app/javascript/store/vuex/**/*.{js,vue}",
       "valhalla/app/javascript/mixins/**/*.{js,vue}",
       "!valhalla/app/javascript/app.vue",
-      "!valhalla/app/javascript/packs/filemanager.js",
+      "!valhalla/app/javascript/packs/ordermanager.js",
       "!**/node_modules/**"
     ]
   },
