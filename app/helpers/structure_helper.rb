@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module StructureHelper
   def structure_page_header
-    h = content_tag(:h1, 'Edit Structure')
+    h = content_tag(:h1, 'Structure Manager')
     h += bulk_edit_breadcrumb
     h
   end
@@ -23,7 +23,7 @@ module StructureHelper
     end
 
     def header
-      content_tag(:li, 'Edit Structure', class: :active)
+      content_tag(:li, 'Structure Manager', class: :active)
     end
 
     def bulk_edit_parent_path(change_set, parent)

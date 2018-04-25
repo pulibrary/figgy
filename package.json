@@ -1,5 +1,5 @@
 {
-  "name": "filemanager-rails",
+  "name": "ordermanager-rails",
   "private": true,
   "scripts": {
     "unit": "jest valhalla/app/javascript/test/unit/specs --coverage",
@@ -36,7 +36,7 @@
       "valhalla/app/javascript/store/vuex/**/*.{js,vue}",
       "valhalla/app/javascript/mixins/**/*.{js,vue}",
       "!valhalla/app/javascript/app.vue",
-      "!valhalla/app/javascript/packs/filemanager.js",
+      "!valhalla/app/javascript/packs/ordermanager.js",
       "!**/node_modules/**"
     ]
   },
@@ -46,6 +46,7 @@
     "axios": "^0.17.1",
     "babel-polyfill": "^6.26.0",
     "manifesto.js": "^2.2.0",
+    "npm": "^6.0.0",
     "openseadragon": "^2.3.1",
     "page-label-generator": "^1.0.4",
     "pluralize": "^7.0.0",
