@@ -15,8 +15,6 @@ class CatalogController < ApplicationController
   class_attribute :member_search_builder_class
   self.member_search_builder_class = CollectionMemberSearchBuilder
 
-  before_action :parent_document, only: :show
-
   # enforce hydra access controls
   before_action :enforce_show_permissions, only: :show
 
@@ -89,15 +87,22 @@ class CatalogController < ApplicationController
     super
     authorize! :show, resource
 
+    set_parent_document
     @change_set = DynamicChangeSet.new(resource)
     @change_set.prepopulate!
     @document_facade = document_facade
     @response = @document_facade.query_response unless @document_facade.members.empty?
   end
 
-  def parent_document
-    return unless params[:parent_id]
-    _, @parent_document = fetch(params[:parent_id])
+  def set_parent_document
+    if params[:parent_id]
+      _, @parent_document = fetch(params[:parent_id])
+    # we know in our data a fileset never has more than one parent; grab it for breadcrumb convenience
+    elsif @document[:internal_resource_ssim].include? "FileSet"
+      query = "member_ids_ssim:id-#{params['id']}"
+      _, result = search_results(q: query, rows: 1)
+      @parent_document = result.first if result.first
+    end
   end
 
   def lookup_manifest
