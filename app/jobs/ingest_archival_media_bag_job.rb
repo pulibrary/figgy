@@ -170,9 +170,6 @@ class IngestArchivalMediaBagJob < ApplicationJob
       end
 
       def ingest
-        component_dict = BarcodeComponentDict.new(collection)
-        component_groups = bag.component_groups(component_dict)
-
         component_groups.each do |cid, sides|
           media_resource = MediaResourceChangeSet.new(find_or_create_media_resource(cid))
           sides.each do |side|
@@ -186,36 +183,46 @@ class IngestArchivalMediaBagJob < ApplicationJob
         end
       end
 
-      def create_av_file_set(side)
-        file_set = FileSet.new(title: side)
-        bag.file_groups[side].each do |file| # this is an IngestableAudioFile object
-          node = create_node(file)
-          file_set.file_metadata += Array.wrap(node)
+      private
+
+        def component_dict
+          @component_dict ||= BarcodeComponentDict.new(collection)
         end
-        file_set = changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
-      end
 
-      def create_node(file)
-        attributes = { id: SecureRandom.uuid }
-        node = FileMetadata.for(file: file).new(attributes)
-        file = storage_adapter.upload(file: file, resource: node, original_filename: file.original_filename)
-        node.file_identifiers = node.file_identifiers + [file.id]
-        node
-      end
+        def component_groups
+          @component_groups ||= bag.component_groups(component_dict)
+        end
 
-      def find_or_create_media_resource(component_id)
-        results = query_service.custom_queries.find_by_string_property(property: :source_metadata_identifier, value: component_id)
-        return results.first unless results.size.zero?
-        MediaResource.new(source_metadata_identifier: component_id)
-      end
+        def create_av_file_set(side)
+          file_set = FileSet.new(title: side)
+          bag.file_groups[side].each do |file| # this is an IngestableAudioFile object
+            node = create_node(file)
+            file_set.file_metadata += Array.wrap(node)
+          end
+          file_set = changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
+        end
 
-      def storage_adapter
-        Valkyrie::StorageAdapter.find(:disk_via_copy)
-      end
+        def create_node(file)
+          attributes = { id: SecureRandom.uuid }
+          node = FileMetadata.for(file: file).new(attributes)
+          file = storage_adapter.upload(file: file, resource: node, original_filename: file.original_filename)
+          node.file_identifiers = node.file_identifiers + [file.id]
+          node
+        end
 
-      def query_service
-        Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
-      end
+        def find_or_create_media_resource(component_id)
+          results = query_service.custom_queries.find_by_string_property(property: :source_metadata_identifier, value: component_id)
+          return results.first unless results.size.zero?
+          MediaResource.new(source_metadata_identifier: component_id)
+        end
+
+        def storage_adapter
+          Valkyrie::StorageAdapter.find(:disk_via_copy)
+        end
+
+        def query_service
+          Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
+        end
     end
 
   # end private
