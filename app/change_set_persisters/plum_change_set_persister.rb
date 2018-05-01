@@ -32,13 +32,12 @@ class PlumChangeSetPersister
       ],
       before_delete: [
         CleanupStructure,
-        CleanupDerivatives,
         DeleteReferenced::Factory.new(property: :member_of_vocabulary_id),
-        DeleteMembers::Factory.new(property: :member_ids),
         CleanupMembership::Factory.new(property: :member_ids),
         CleanupMembership::Factory.new(property: :member_of_collection_ids)
       ],
       after_delete_commit: [
+        DeleteMembers::Factory.new(property: :member_ids),
         PublishMessage::Factory.new(operation: :delete)
       ],
       after_commit: [
@@ -204,6 +203,7 @@ class PlumChangeSetPersister
             instance.run
           end
         end
+        self.created_file_sets = []
       end
   end
 end

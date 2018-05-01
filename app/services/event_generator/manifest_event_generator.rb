@@ -12,18 +12,21 @@ class EventGenerator
     def derivatives_deleted(record); end
 
     def record_created(record)
+      return unless record
       publish_message(
         message_with_collections("CREATED", record)
       )
     end
 
     def record_deleted(record)
+      return unless record
       publish_message(
         message("DELETED", record)
       )
     end
 
     def record_updated(record)
+      return unless record
       publish_message(
         message_with_collections("UPDATED", record)
       )

@@ -34,6 +34,12 @@ RSpec.describe SimpleResourceDecorator do
         expect(decorator.collection_slugs.first).to eq 'test'
       end
     end
+
+    describe "#file_sets" do
+      it "retrieves all file sets" do
+        expect(decorator.file_sets).to be_empty
+      end
+    end
   end
 
   describe '#decorated_parent_resource' do
