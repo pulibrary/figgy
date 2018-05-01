@@ -105,15 +105,15 @@ class IngestArchivalMediaBagJob < ApplicationJob
       end
 
       def master?
-        path.fnmatch "*_pm.wav"
+        path.to_s.end_with?("_pm.wav")
       end
 
       def intermediate?
-        path.fnmatch "*_i.wav"
+        path.to_s.end_with?("_i.wav")
       end
 
       def access?
-        path.fnmatch "*_a.mp3"
+        path.to_s.end_with?("_a.mp3")
       end
 
       def barcode_with_part
