@@ -119,14 +119,6 @@ class IngestArchivalMediaBagJob < ApplicationJob
       def barcode_with_part
         @barcode_with_part ||= BARCODE_WITH_PART_REGEX.match(original_filename.to_s)[1]
       end
-
-      def barcode
-        barcode_with_part.split('_').first
-      end
-
-      def part
-        barcode_with_part.split('_').last
-      end
     end
 
     # Wraps a hash of component_id => barcode_with_part
@@ -137,8 +129,8 @@ class IngestArchivalMediaBagJob < ApplicationJob
         parse_dict
       end
 
-      def lookup(barcode)
-        @dict[barcode]
+      def lookup(barcode_with_part)
+        @dict[barcode_with_part]
       end
 
       private
@@ -147,7 +139,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
         def parse_dict
           @dict = {}
           barcode_nodes.each do |node|
-            @dict[get_barcode(node)] = get_id(node)
+            @dict[get_barcode_with_part(node)] = get_id(node)
           end
         end
 
@@ -163,7 +155,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
           node.parent.parent.attributes['id'].value
         end
 
-        def get_barcode(node)
+        def get_barcode_with_part(node)
           BARCODE_WITH_PART_REGEX.match(node.content)[1]
         end
     end

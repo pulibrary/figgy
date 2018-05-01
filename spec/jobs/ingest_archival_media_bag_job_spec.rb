@@ -12,7 +12,7 @@ RSpec.describe IngestArchivalMediaBagJob do
     let(:storage_adapter) { Valkyrie.config.storage_adapter }
     let(:query_service) { adapter.query_service }
     let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
-    let(:collection_cid) { collection.source_metadata_identifier }
+    let(:collection_cid) { collection.source_metadata_identifier.first }
     # We need to actually save it with persister to get the imported metadata
     let(:collection) do
       cs = DynamicChangeSet.new(ArchivalMediaCollection.new)
@@ -25,27 +25,57 @@ RSpec.describe IngestArchivalMediaBagJob do
       stub_request(:get, "https://findingaids.princeton.edu/collections/C0652.xml?scope=record")
         .with(headers: { 'Accept' => '*/*', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent' => 'Faraday v0.9.2' })
         .to_return(status: 200, body: xml, headers: {})
-      described_class.perform_now(collection_component: collection_cid.first, bag_path: bag_path, user: user)
     end
 
-    it 'creates one FileSet per barcode (with part, e.g., 32101047382401_1)' do
-      expect(query_service.find_all_of_model(model: FileSet).size).to eq 2
+    context "when you're ingesting to a collection you've already created" do
+      before do
+        described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
+      end
+
+      it 'creates one FileSet per barcode (with part, e.g., 32101047382401_1)' do
+        expect(query_service.find_all_of_model(model: FileSet).size).to eq 2
+      end
+
+      it 'adds all 3 file types to the file set' do
+        file_set = query_service.find_all_of_model(model: FileSet).first
+        expect(file_set.file_metadata.count).to eq 3
+        expect(file_set.file_metadata.map { |file| file.use.first.to_s }).to contain_exactly(
+          "http://pcdm.org/use#PreservationMasterFile", "http://pcdm.org/use#ServiceFile", "http://pcdm.org/use#IntermediateFile"
+        )
+      end
+
+      it 'creates one MediaResource per component id' do
+        expect(query_service.find_all_of_model(model: MediaResource).size).to eq 1
+      end
+
+      it 'for each compopnent id-based MediaRsource, puts it on the collection' do
+        expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
+      end
     end
 
-    it 'adds all 3 file types to the file set' do
-      file_set = query_service.find_all_of_model(model: FileSet).first
-      expect(file_set.file_metadata.count).to eq 3
-      expect(file_set.file_metadata.map { |file| file.use.first.to_s }).to contain_exactly(
-        "http://pcdm.org/use#PreservationMasterFile", "http://pcdm.org/use#ServiceFile", "http://pcdm.org/use#IntermediateFile"
-      )
+    context "when the collection doesn't exist yet" do
+      let(:collection_cid) { "C0652" }
+      before do
+        described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
+      end
+
+      it "creates a collection for you" do
+        expect(query_service.find_all_of_model(model: ArchivalMediaCollection).size).to eq 1
+        collection = query_service.find_all_of_model(model: ArchivalMediaCollection).first
+        expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
+      end
     end
 
-    it 'creates one MediaResource per component id' do
-      expect(query_service.find_all_of_model(model: MediaResource).size).to eq 1
-    end
+    context "when another type of resource references the component ID" do
+      before do
+        FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: collection_cid)
+        described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
+      end
 
-    it 'for each compopnent id-based MediaRsource, puts it on the collection' do
-      expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
+      it "doesn't try to use that other resource as an archival media collection" do
+        expect(query_service.find_all_of_model(model: ScannedResource).first.source_metadata_identifier.first).to eq collection_cid
+        expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
+      end
     end
   end
 end
