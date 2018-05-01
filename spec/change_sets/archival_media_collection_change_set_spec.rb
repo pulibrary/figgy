@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe ArchivalMediaCollectionChangeSet do
   let(:change_set) { described_class.new(collection, bag_path: "") }
-  let(:collection) { FactoryBot.build(:archival_media_collection) }
+  let(:collection) { FactoryBot.build(:archival_media_collection, state: 'draft') }
   let(:form_resource) { collection }
 
   before do
@@ -57,21 +57,26 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
       end
     end
 
-    context "when bag path is not set" do
+    context "when an invalid bag path is set" do
       let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "Totally an identifier") }
+      let(:change_set) { described_class.new(collection, bag_path: "/not/a/bag") }
+
       before do
         allow_any_instance_of(SourceMetadataIdentifierValidator).to receive(:validate).and_return(true)
+        allow(Dir).to receive(:exist?).and_return(false)
       end
       it "is invalid" do
         expect(change_set).not_to be_valid
       end
     end
 
-    context "when bag path is not set" do
+    context "when a valid bag path is set" do
       let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "Totally an identifier") }
       let(:change_set) { described_class.new(collection, bag_path: "/totally/a/bag") }
+
       before do
         allow_any_instance_of(SourceMetadataIdentifierValidator).to receive(:validate).and_return(true)
+        allow(Dir).to receive(:exist?).and_return(true)
       end
       it "is valid" do
         expect(change_set).to be_valid
@@ -82,6 +87,14 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
   describe "#primary_terms" do
     it "returns the primary terms" do
       expect(change_set.primary_terms).to contain_exactly :source_metadata_identifier, :bag_path
+    end
+  end
+
+  describe "#workflow" do
+    it "has a workflow" do
+      change_set.prepopulate!
+      expect(change_set.workflow).to be_a(DraftPublishWorkflow)
+      expect(change_set.workflow.draft?).to be true
     end
   end
 end

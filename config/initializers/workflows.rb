@@ -2,6 +2,11 @@
 
 Rails.application.config.to_prepare do
   WorkflowRegistry.register(
+    resource_class: ArchivalMediaCollection,
+    workflow_class: DraftPublishWorkflow
+  )
+
+  WorkflowRegistry.register(
     resource_class: EphemeraFolder,
     workflow_class: FolderWorkflow
   )
