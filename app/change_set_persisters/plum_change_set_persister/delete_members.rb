@@ -22,15 +22,14 @@ class PlumChangeSetPersister
     end
 
     def run
-      resources.each do |resource|
-        cs = DynamicChangeSet.new(resource)
-        change_set_persister.delete(change_set: cs)
+      return unless change_set.resource.respond_to?(property)
+      ids.map do |id|
+        DeleteMemberJob.perform_later(id.to_s)
       end
     end
 
-    def resources
-      return [] unless change_set.resource.respond_to? property
-      query_service.find_references_by(resource: change_set.resource, property: property)
+    def ids
+      change_set.resource.try(property) || []
     end
   end
 end

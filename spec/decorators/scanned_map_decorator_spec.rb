@@ -120,4 +120,10 @@ RSpec.describe ScannedMapDecorator do
       expect(decorator.collections.first.id).to eq parent_collection.id
     end
   end
+
+  describe "#file_sets" do
+    it "retrieves all file sets" do
+      expect(decorator.file_sets).to be_empty
+    end
+  end
 end
