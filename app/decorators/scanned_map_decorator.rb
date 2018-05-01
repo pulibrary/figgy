@@ -27,6 +27,10 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
     [ScannedMap, RasterResource]
   end
 
+  def collections
+    Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_references_by(resource: self, property: :member_of_collection_ids).to_a
+  end
+
   # Display the resource attributes
   # @return [Hash] a Hash of all of the resource attributes
   def display_attributes
