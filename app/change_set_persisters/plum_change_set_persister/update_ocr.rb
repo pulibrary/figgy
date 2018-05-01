@@ -10,7 +10,7 @@ class PlumChangeSetPersister
     end
 
     def run
-      return unless change_set.changed["ocr_language"]
+      return unless change_set.changed["ocr_language"] == true && change_set.ocr_language.present?
       query_service.find_members(resource: post_save_resource, model: FileSet).each do |file_set|
         ::RunOCRJob.set(queue: change_set_persister.queue).perform_later(file_set.id.to_s)
       end
