@@ -1,3 +1,10 @@
 .bootstrap-select .dropdown-header {
   cursor: pointer;
 }
+
+.bootstrap-select.btn-group.show-tick 
+.dropdown-menu li.selected 
+a span.check-mark {
+  color: #5cb85c;
+  position: relative !important;
+}
