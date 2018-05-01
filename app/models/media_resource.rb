@@ -5,7 +5,7 @@ class MediaResource < Valhalla::Resource
   include Schema::Common
   attribute :id, Valkyrie::Types::ID.optional
   attribute :member_ids, Valkyrie::Types::Array
-  attribute :member_of_collection_ids
+  attribute :member_of_collection_ids, Valkyrie::Types::Set
   attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
   attribute :state
 end
