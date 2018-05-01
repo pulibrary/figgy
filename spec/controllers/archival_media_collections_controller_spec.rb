@@ -29,6 +29,10 @@ RSpec.describe ArchivalMediaCollectionsController do
     describe "POST /archival_media_collections" do
       let(:file) { File.open(Rails.root.join("spec", "fixtures", "some_finding_aid.xml"), 'r') }
 
+      before do
+        allow(Dir).to receive(:exist?).and_return(true)
+      end
+
       it "creates a collection and imports metadata" do
         stub_request(:get, "https://findingaids.princeton.edu/collections/AC044/c0003.xml?scope=record")
           .with(headers: { 'Accept' => '*/*', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent' => 'Faraday v0.9.2' })
