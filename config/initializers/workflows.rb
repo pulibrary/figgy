@@ -13,7 +13,7 @@ Rails.application.config.to_prepare do
 
   WorkflowRegistry.register(
     resource_class: MediaResource,
-    workflow_class: BookWorkflow
+    workflow_class: DraftPublishWorkflow
   )
 
   WorkflowRegistry.register(

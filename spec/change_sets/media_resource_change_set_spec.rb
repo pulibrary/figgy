@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe MediaResourceChangeSet do
   subject(:change_set) { described_class.new(form_resource) }
-  let(:scanned_resource) { MediaResource.new(title: 'Test', rights_statement: 'Stuff', visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: 'pending') }
+  let(:scanned_resource) { MediaResource.new(title: 'Test', rights_statement: 'Stuff', visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: 'draft') }
   let(:form_resource) { scanned_resource }
   before do
     stub_bibdata(bib_id: '123456')
@@ -69,8 +69,8 @@ RSpec.describe MediaResourceChangeSet do
   describe "#workflow" do
     it "has a workflow" do
       change_set.prepopulate!
-      expect(change_set.workflow).to be_a(BookWorkflow)
-      expect(change_set.workflow.pending?).to be true
+      expect(change_set.workflow).to be_a(DraftPublishWorkflow)
+      expect(change_set.workflow.draft?).to be true
     end
   end
 
