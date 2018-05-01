@@ -4,9 +4,9 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
   def perform(collection_component:, bag_path:, user:)
     bag = ArchivalMediaBagParser.new(path: bag_path)
-    metadata_adapter.persister.buffer_into_index do |buffered_adapter|
+    changeset_persister.buffer_into_index do |buffered_persister|
       amc = find_or_create_amc(collection_component)
-      Ingester.new(collection: amc, bag: bag, user: user, adapter: buffered_adapter).ingest
+      Ingester.new(collection: amc, bag: bag, user: user, changeset_persister: buffered_persister).ingest
     end
   end
 
@@ -161,15 +161,12 @@ class IngestArchivalMediaBagJob < ApplicationJob
     end
 
     class Ingester
-      delegate :query_service, to: :adapter
-      delegate :persister, to: :adapter
-
-      attr_reader :collection, :bag, :user, :adapter
-      def initialize(collection:, bag:, user:, adapter:)
+      attr_reader :collection, :bag, :user, :changeset_persister
+      def initialize(collection:, bag:, user:, changeset_persister:)
         @collection = collection
         @bag = bag
         @user = user
-        @adapter = adapter
+        @changeset_persister = changeset_persister
       end
 
       def ingest
@@ -177,13 +174,15 @@ class IngestArchivalMediaBagJob < ApplicationJob
         component_groups = bag.component_groups(component_dict)
 
         component_groups.each do |cid, sides|
-          media_resource = find_or_create_media_resource(cid)
+          media_resource = MediaResourceChangeSet.new(find_or_create_media_resource(cid))
           sides.each do |side|
             file_set = create_av_file_set(side)
             media_resource.member_ids += Array.wrap(file_set.id)
+            media_resource.sync
           end
           media_resource.member_of_collection_ids += Array.wrap(collection.id)
-          persister.save(resource: media_resource)
+          media_resource.sync
+          changeset_persister.save(change_set: media_resource)
         end
       end
 
@@ -193,7 +192,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
           node = create_node(file)
           file_set.file_metadata += Array.wrap(node)
         end
-        file_set = persister.save(resource: file_set)
+        file_set = changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
       end
 
       def create_node(file)
@@ -212,6 +211,10 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
       def storage_adapter
         Valkyrie::StorageAdapter.find(:disk_via_copy)
+      end
+
+      def query_service
+        Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
       end
     end
 
