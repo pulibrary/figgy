@@ -106,4 +106,18 @@ RSpec.describe ScannedMapDecorator do
       end
     end
   end
+  describe "#collections" do
+    let(:parent_collection) { FactoryBot.create_for_repository(:collection) }
+    let(:resource) { FactoryBot.create_for_repository(:scanned_map, member_of_collection_ids: [parent_collection.id]) }
+
+    before do
+      parent_collection
+    end
+
+    it "retrieves all parent resources" do
+      expect(decorator.collections.to_a).not_to be_empty
+      expect(decorator.collections.first).to be_a Collection
+      expect(decorator.collections.first.id).to eq parent_collection.id
+    end
+  end
 end
