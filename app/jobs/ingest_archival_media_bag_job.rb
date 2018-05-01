@@ -3,9 +3,9 @@ class IngestArchivalMediaBagJob < ApplicationJob
   BARCODE_WITH_PART_REGEX = /(\d{14}_\d+)_.*/
 
   def perform(collection_component:, bag_path:, user:)
-    amc = find_or_create_amc(collection_component)
     bag = ArchivalMediaBagParser.new(path: bag_path)
     metadata_adapter.persister.buffer_into_index do |buffered_adapter|
+      amc = find_or_create_amc(collection_component)
       Ingester.new(collection: amc, bag: bag, user: user, adapter: buffered_adapter).ingest
     end
   end
