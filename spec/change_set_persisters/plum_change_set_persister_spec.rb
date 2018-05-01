@@ -235,6 +235,31 @@ RSpec.describe PlumChangeSetPersister do
     end
   end
 
+  describe "ocr functionality" do
+    let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+    let(:change_set_persister) do
+      described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: true)
+    end
+    it "doesn't run OCR if blank" do
+      resource = FactoryBot.build(:scanned_resource)
+      change_set = change_set_class.new(resource, characterize: false)
+      change_set.files = [file]
+      change_set.sync
+
+      output = change_set_persister.save(change_set: change_set)
+      members = query_service.find_members(resource: output)
+      expect(members.first.hocr_content).not_to be_present
+
+      change_set = change_set_class.new(output)
+      change_set.validate(ocr_language: "")
+      change_set.sync
+
+      output = change_set_persister.save(change_set: change_set)
+      members = query_service.find_members(resource: output)
+      expect(members.first.hocr_content).not_to be_present
+    end
+  end
+
   describe "uploading files" do
     let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
     let(:change_set_persister) do
