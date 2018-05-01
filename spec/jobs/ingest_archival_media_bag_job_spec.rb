@@ -22,9 +22,7 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
 
     before do
-      stub_request(:get, "https://findingaids.princeton.edu/collections/C0652.xml?scope=record")
-        .with(headers: { 'Accept' => '*/*', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent' => 'Faraday v0.9.2' })
-        .to_return(status: 200, body: xml, headers: {})
+      stub_pulfa(pulfa_id: 'C0652')
     end
 
     context "when you're ingesting to a collection you've already created" do
