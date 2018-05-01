@@ -16,7 +16,7 @@ RSpec.describe IngestArchivalMediaBagJob do
     # We need to actually save it with persister to get the imported metadata
     let(:collection) do
       cs = DynamicChangeSet.new(ArchivalMediaCollection.new)
-      cs.validate(source_metadata_identifier: "C0652", bag_path: bag_path)
+      cs.validate(source_metadata_identifier: "C0652")
       cs.sync
       change_set_persister.save(change_set: cs)
     end

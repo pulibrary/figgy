@@ -7,6 +7,7 @@ class ArchivalMediaCollectionChangeSet < Valhalla::ChangeSet
   property :source_metadata_identifier, multiple: false, required: true
   property :bag_path, multiple: false, required: true, virtual: true
   property :visibility, multiple: false, required: false
+  property :depositor, multiple: false, required: false, virtual: true
 
   validates :source_metadata_identifier, presence: true
   validates_with BagPathValidator
