@@ -12,11 +12,7 @@
   <div data-action="file-manager">
     <div class="col-md-12">
       <p class="text-muted">
-        <em>Total files: <%= @change_set.member_ids.count %>
-        <% if @change_set.respond_to?(:source_metadata_identifier) && @change_set.source_metadata_identifier.present? %>
-          | BibId: <%= @change_set.source_metadata_identifier %>
-        <% end %>
-        </em>
+        <em>Total files: <%= @children.count %></em>
       </p>
     </div>
     <div class="col-md-12">

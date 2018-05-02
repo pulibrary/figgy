@@ -89,4 +89,19 @@ RSpec.feature "File Manager", js: true do
       expect(page).to have_selector '.alert-success .text', text: 'Metadata is being extracted'
     end
   end
+
+  context "with a child resource" do
+    let(:child_resource) { FactoryBot.create_for_repository(:scanned_resource, title: "Child Resource") }
+    let(:resource) do
+      res = FactoryBot.create_for_repository(:scanned_resource)
+      res.member_ids = [file_set.id, child_resource.id]
+      adapter.persister.save(resource: res)
+    end
+
+    it "doesn't render the child" do
+      visit polymorphic_path [:file_manager, resource]
+      expect(page).to have_selector("form[data-type='json']", count: 1)
+      expect(page).not_to have_selector("form[data-type='json']", text: "Child Resource")
+    end
+  end
 end
