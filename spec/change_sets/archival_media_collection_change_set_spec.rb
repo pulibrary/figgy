@@ -50,9 +50,7 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
       end
 
       it "is valid" do
-        stub_request(:get, "https://findingaids.princeton.edu/collections/AC044/c0003.xml?scope=record")
-          .with(headers: { 'Accept' => '*/*', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent' => 'Faraday v0.9.2' })
-          .to_return(status: 200, body: file, headers: {})
+        stub_pulfa(pulfa_id: "AC044/c0003")
         expect(change_set).to be_valid
       end
     end

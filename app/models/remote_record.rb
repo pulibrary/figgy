@@ -24,7 +24,7 @@ class RemoteRecord
     end
 
     def attributes
-      @attributes ||= client_result.attributes.merge(source_metadata: client_result.source)
+      @attributes ||= client_result.attributes.merge(source_metadata: client_result.full_source)
     end
 
     def success?

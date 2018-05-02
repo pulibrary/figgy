@@ -26,6 +26,13 @@ module BibdataStubbing
           'Content-Type' => "application/json+ld"
         }
       )
+    stub_request(:get, "https://findingaids.princeton.edu/collections/#{pulfa_id}.xml")
+      .to_return(
+        body: body || file_fixture("pulfa/#{pulfa_id}_full.xml").read,
+        headers: {
+          'Content-Type' => "application/json+ld"
+        }
+      )
   end
 
   def stub_bibdata_context
