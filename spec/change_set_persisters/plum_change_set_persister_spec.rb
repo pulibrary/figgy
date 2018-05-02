@@ -141,6 +141,24 @@ RSpec.describe PlumChangeSetPersister do
       expect(output.primary_imported_metadata.source_metadata).not_to be_blank
     end
   end
+
+  context "when a source_metadata_identifier is set for a collection from PULFA" do
+    let(:blade) { 'C0652' }
+    let(:change_set_class) { ArchivalMediaCollectionChangeSet }
+    before do
+      stub_pulfa(pulfa_id: "C0652")
+    end
+    it "applies remote metadata from PULFA" do
+      resource = FactoryBot.build(:archival_media_collection, title: [])
+      change_set = change_set_class.new(resource)
+      change_set.validate(source_metadata_identifier: blade)
+      change_set.sync
+      output = change_set_persister.save(change_set: change_set)
+
+      expect(output.primary_imported_metadata.title).to eq ['Emir Rodriguez Monegal Papers']
+      expect(output.primary_imported_metadata.source_metadata).not_to be_blank
+    end
+  end
   context "when a source_metadata_identifier is set afterwards" do
     it "does not change anything" do
       resource = FactoryBot.create_for_repository(:scanned_resource, title: 'Title', source_metadata_identifier: nil)
