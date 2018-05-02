@@ -13,7 +13,7 @@ class FileSetsController < ApplicationController
     file_set = find_resource(params[:id])
     @change_set = change_set_class.new(file_set).prepopulate!
     authorize! :derive, @change_set.resource
-    output = CreateDerivativesJob.perform_later(params[:id])
+    output = RegenerateDerivativesJob.perform_later(params[:id])
     respond_to do |format|
       format.json do
         render json: output
