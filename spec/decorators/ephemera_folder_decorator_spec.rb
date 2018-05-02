@@ -70,6 +70,14 @@ RSpec.describe EphemeraFolderDecorator do
     end
   end
 
+  context 'Will not error with no collections' do
+    let(:collection) { FactoryBot.create_for_repository(:collection) }
+    let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, member_of_collection_ids: []) }
+    it 'tries to sort by title a nil array' do
+      expect(resource.decorate.collections.sort_by(&:title)).to be_truthy
+    end
+  end
+
   context 'with file sets' do
     let(:file_set) do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
