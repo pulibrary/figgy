@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 class ArchivalMediaCollection < Collection
-  attribute :identifier
+  include Schema::Common
   attribute :imported_metadata, Valkyrie::Types::Set.member(ImportedMetadata).optional
-  attribute :source_metadata_identifier
   attribute :state
   attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
 
