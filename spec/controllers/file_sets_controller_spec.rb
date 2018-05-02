@@ -82,7 +82,7 @@ RSpec.describe FileSetsController do
 
   describe "PUT /file_sets/id" do
     context 'with a derivative service for images in the TIFF' do
-      let(:create_derivatives_class) { class_double(CreateDerivativesJob).as_stubbed_const(transfer_nested_constants: true) }
+      let(:create_derivatives_class) { class_double(RegenerateDerivativesJob).as_stubbed_const(transfer_nested_constants: true) }
       let(:original_file) { instance_double(FileMetadata) }
       let(:file_set) { FactoryBot.create_for_repository(:file_set) }
       before do
