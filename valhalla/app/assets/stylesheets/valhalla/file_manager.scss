@@ -25,10 +25,8 @@
     width: 16rem;
     margin: 0 1rem 1rem 0;
     .thumbnail {
-      height: 150px;
-      img {
-        max-height: 140px;
-      }
+      height: 160px;
+      overflow:hidden;
     }
     .order-title {
       display: inline-block;
