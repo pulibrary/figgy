@@ -10,7 +10,7 @@ GIT
 
 GIT
   remote: git://github.com/pulibrary/pul_metadata_services.git
-  revision: 683c0b3431a7f12d1cbf9f3b948d1d6b5e05e5f0
+  revision: 466ca418ca460e38c7f92ce5017c314e517512dc
   branch: master
   specs:
     pul_metadata_services (0.0.1)
