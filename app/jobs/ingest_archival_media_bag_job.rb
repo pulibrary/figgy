@@ -3,6 +3,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
   BARCODE_WITH_PART_REGEX = /(\d{14}_\d+)_.*/
 
   def perform(collection_component:, bag_path:, user:)
+    bag_path = Pathname.new(bag_path.to_s)
     bag = ArchivalMediaBagParser.new(path: bag_path)
     changeset_persister.buffer_into_index do |buffered_persister|
       amc = find_or_create_amc(collection_component)
