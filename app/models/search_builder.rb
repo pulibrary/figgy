@@ -9,7 +9,7 @@ class SearchBuilder < Blacklight::SearchBuilder
   # Add queries that excludes everything except for works and collections
   def filter_models(solr_parameters)
     solr_parameters[:fq] ||= []
-    solr_parameters[:fq] << "{!terms f=internal_resource_ssim}#{models_to_solr_clause}"
+    solr_parameters[:fq] << "!{!terms f=internal_resource_ssim}#{models_to_solr_clause}"
   end
 
   # Keeps child resources of multi-volume works (MVWs) from appearing in results
@@ -34,7 +34,7 @@ class SearchBuilder < Blacklight::SearchBuilder
   end
 
   def models_to_solr_clause
-    [ScannedResource, Collection, EphemeraFolder, EphemeraBox, ScannedMap, VectorResource, RasterResource, SimpleResource].join(",")
+    [FileSet, EphemeraProject, EphemeraVocabulary, EphemeraTerm, FileMetadata].join(",")
   end
 
   def add_access_controls_to_solr_params(*args)

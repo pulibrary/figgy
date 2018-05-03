@@ -381,6 +381,34 @@ RSpec.describe CatalogController do
     end
   end
 
+  describe "ArchivalMediaCollection behavior" do
+    before do
+      sign_in FactoryBot.create(:admin)
+    end
+
+    it "displays indexed ArchivalMediaCollections" do
+      persister.save(resource: FactoryBot.build(:archival_media_collection))
+
+      get :index, params: { q: "" }
+
+      expect(assigns(:document_list).length).to eq 1
+    end
+  end
+
+  describe "MediaResource behavior" do
+    before do
+      sign_in FactoryBot.create(:admin)
+    end
+
+    it "displays indexed MediaResources" do
+      persister.save(resource: FactoryBot.build(:media_resource))
+
+      get :index, params: { q: "" }
+
+      expect(assigns(:document_list).length).to eq 1
+    end
+  end
+
   describe "nested catalog file_set paths" do
     context "when you have permission to view file sets" do
       before do
