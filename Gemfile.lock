@@ -1,9 +1,9 @@
 GIT
   remote: git://github.com/pulibrary/geo_works-derivatives.git
-  revision: 6adb6fccfb92e668cd689f43f1fb47ac45f30c9d
-  tag: v0.3.0
+  revision: 2b683bb587bf13c58c5e1ff4060910e5d915a71e
+  tag: v0.3.1
   specs:
-    geo_works-derivatives (0.3.0)
+    geo_works-derivatives (0.3.1)
       hydra-derivatives
       mime-types
       simpler-tiles
