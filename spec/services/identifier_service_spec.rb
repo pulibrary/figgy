@@ -9,7 +9,7 @@ RSpec.describe IdentifierService do
   let(:persister) { Valkyrie.config.metadata_adapter.persister }
 
   context "when there is an existing identifier" do
-    let(:metadata) { base_metadata.merge(target: "https://pulsearch.princeton.edu/catalog/123456#{obj.id}#view") }
+    let(:metadata) { base_metadata.merge(target: "https://catalog.princeton.edu/catalog/123456#{obj.id}#view") }
     let(:obj) { FactoryBot.build :scanned_resource, source_metadata_identifier: '123456', identifier: ark }
 
     before do
@@ -35,7 +35,7 @@ RSpec.describe IdentifierService do
 
     context "with a bibdata source_metadata_identifier" do
       let(:bib) { '123456' }
-      let(:metadata) { base_metadata.merge(target: "https://pulsearch.princeton.edu/catalog/#{bib}#view") }
+      let(:metadata) { base_metadata.merge(target: "https://catalog.princeton.edu/catalog/#{bib}#view") }
       let(:obj) { FactoryBot.build :scanned_resource, source_metadata_identifier: bib }
 
       before do
@@ -64,7 +64,7 @@ RSpec.describe IdentifierService do
     end
 
     context "without a source_metadata_identifier" do
-      let(:metadata) { base_metadata.merge(target: "http://www.example.com/concern/scanned_resources/#{obj.id}") }
+      let(:metadata) { base_metadata.merge(target: "http://www.example.com/catalog/#{obj.id}") }
       let(:obj) { FactoryBot.create :scanned_resource, id: '1234567', source_metadata_identifier: nil }
       it "links to OrangeLight" do
         described_class.mint_or_update(resource: obj)
@@ -74,7 +74,7 @@ RSpec.describe IdentifierService do
   end
 
   context "integration test" do
-    let(:metadata) { base_metadata.merge(target: "http://example.com/concern/scanned_resources/#{obj.id}") }
+    let(:metadata) { base_metadata.merge(target: "http://example.com/catalog/#{obj.id}") }
     let(:obj) { FactoryBot.create :scanned_resource, id: '1234567', source_metadata_identifier: nil }
     let(:shoulder) { '99999/fk4' }
     let(:blade) { '123456' }
