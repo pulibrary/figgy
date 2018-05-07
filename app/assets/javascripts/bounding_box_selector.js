@@ -25,7 +25,7 @@ function boundingBoxSelector(options) {
   L.Control.geocoder({ position: 'topleft' }).addTo(map);
 
   if (options.readonly) {
-    new L.Rectangle(initialBounds, { color: 'white', weight: 2, opacity: 0.9 }).addTo(map);
+    new L.Rectangle(initialBounds, { color: 'blue', weight: 2, opacity: 0.9 }).addTo(map);
   } else {
     boundingBox = new L.BoundingBox({ bounds: initialBounds,
                                    buttonPosition: 'topright', }).addTo(map);
