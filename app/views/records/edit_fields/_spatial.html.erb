@@ -1,0 +1,5 @@
+<% if f.object.multiple? :spatial %>
+  <%= f.input key, as: :multi_value, input_html: { class: 'form-control' }, label: "Place Name", required: f.object.required?(key) %>
+<% else %>
+  <%= f.input key, label: "Place Name", required: f.object.required?(key) %>
+<% end %>
