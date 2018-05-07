@@ -79,7 +79,7 @@ class RasterResourceDerivativeService
       label: :display_raster,
       id: resource.id,
       format: "tif",
-      output_srid: "EPSG:3857",
+      srid: "EPSG:3857",
       url: URI("file://#{temporary_display_output.path}")
     }
   end
