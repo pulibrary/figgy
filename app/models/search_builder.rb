@@ -34,7 +34,7 @@ class SearchBuilder < Blacklight::SearchBuilder
   end
 
   def models_to_solr_clause
-    [FileSet, EphemeraProject, EphemeraVocabulary, EphemeraTerm, FileMetadata].join(",")
+    [FileSet, EphemeraProject, EphemeraVocabulary, EphemeraTerm, FileMetadata, EphemeraField].join(",")
   end
 
   def add_access_controls_to_solr_params(*args)
