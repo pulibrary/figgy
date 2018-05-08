@@ -14,6 +14,17 @@ module Bagit
       loader.load!
     end
 
+    def find_by_alternate_identifier(alternate_identifier:)
+      raise ArgumentError, "alternate_identifier must be a Valkyrie::ID" unless alternate_identifier.is_a?(Valkyrie::ID) || alternate_identifier.is_a?(String)
+      Valkyrie.logger.warn("Bagit Query Service has been asked to find a resource by its alternate identifier. This will require iterating over the metadata of every bag - AVOID.")
+      alternate_identifier = Valkyrie::ID.new(alternate_identifier.to_s)
+      output = find_all.find do |resource|
+        resource.alternate_ids.include?(alternate_identifier)
+      end
+      raise Valkyrie::Persistence::ObjectNotFoundError unless output.present?
+      output
+    end
+
     def find_many_by_ids(ids:)
       ids.map do |id|
         begin
