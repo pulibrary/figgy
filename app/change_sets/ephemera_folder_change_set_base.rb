@@ -33,6 +33,7 @@ class EphemeraFolderChangeSetBase < Valhalla::ChangeSet
   property :depositor, multiple: false, require: false
   property :files, virtual: true, multiple: true, required: false
   property :pending_uploads, multiple: true, required: false
+  property :append_id, virtual: true, multiple: false, required: false
 
   property :start_canvas, required: false
   property :viewing_direction, required: false
@@ -65,6 +66,7 @@ class EphemeraFolderChangeSetBase < Valhalla::ChangeSet
 
   def primary_terms
     [
+      :append_id,
       :barcode,
       :folder_number,
       :title,
@@ -88,8 +90,7 @@ class EphemeraFolderChangeSetBase < Valhalla::ChangeSet
       :provenance,
       :dspace_url,
       :source_url,
-      :rights_statement,
-      :append_id
+      :rights_statement
     ]
   end
 
