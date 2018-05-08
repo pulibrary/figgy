@@ -23,12 +23,12 @@ Rails.application.config.to_prepare do
 
   WorkflowRegistry.register(
     resource_class: RasterResource,
-    workflow_class: BookWorkflow
+    workflow_class: GeoWorkflow
   )
 
   WorkflowRegistry.register(
     resource_class: ScannedMap,
-    workflow_class: BookWorkflow
+    workflow_class: GeoWorkflow
   )
 
   WorkflowRegistry.register(
@@ -43,6 +43,6 @@ Rails.application.config.to_prepare do
 
   WorkflowRegistry.register(
     resource_class: VectorResource,
-    workflow_class: BookWorkflow
+    workflow_class: GeoWorkflow
   )
 end
