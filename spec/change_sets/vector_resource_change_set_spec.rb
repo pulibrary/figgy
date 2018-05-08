@@ -12,7 +12,7 @@ RSpec.describe VectorResourceChangeSet do
   describe "#workflow" do
     it "has a workflow" do
       change_set.prepopulate!
-      expect(change_set.workflow).to be_a(BookWorkflow)
+      expect(change_set.workflow).to be_a(GeoWorkflow)
       expect(change_set.workflow.pending?).to be true
     end
   end
@@ -52,7 +52,7 @@ RSpec.describe VectorResourceChangeSet do
     end
     context "when given a valid state transition" do
       it "is valid" do
-        change_set.validate(state: "metadata_review")
+        change_set.validate(state: "final_review")
         expect(change_set).to be_valid
       end
     end
@@ -114,14 +114,6 @@ RSpec.describe VectorResourceChangeSet do
 
         expect(change_set.rights_statement).to eq RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")
       end
-    end
-  end
-
-  describe "#workflow" do
-    it "has a workflow" do
-      change_set.prepopulate!
-      expect(change_set.workflow).to be_a(BookWorkflow)
-      expect(change_set.workflow.pending?).to be true
     end
   end
 end
