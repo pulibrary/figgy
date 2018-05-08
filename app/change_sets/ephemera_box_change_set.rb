@@ -41,7 +41,6 @@ class EphemeraBoxChangeSet < Valhalla::ChangeSet
       :received_date,
       :tracking_number,
       :drive_barcode,
-      :member_of_collection_ids,
       :append_id
     ]
   end

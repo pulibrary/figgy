@@ -3,6 +3,7 @@ class EphemeraBox < Valhalla::Resource
   include Valkyrie::Resource::AccessControls
   attribute :id, Valkyrie::Types::ID.optional
   attribute :member_ids, Valkyrie::Types::Array
+  # member_of_collection_ids is no longer in use for boxes, see #1204
   attribute :member_of_collection_ids
   attribute :title, Valkyrie::Types::Set
   attribute :barcode, Valkyrie::Types::Set
