@@ -31,6 +31,7 @@ class EphemeraFolderChangeSetBase < Valhalla::ChangeSet
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID.optional)
   property :read_groups, multiple: true, required: false
   property :depositor, multiple: false, require: false
+  property :ocr_language, multiple: true, require: false, default: []
   property :files, virtual: true, multiple: true, required: false
   property :pending_uploads, multiple: true, required: false
 
@@ -75,6 +76,7 @@ class EphemeraFolderChangeSetBase < Valhalla::ChangeSet
       :width,
       :height,
       :page_count,
+      :ocr_language,
       :series,
       :creator,
       :contributor,

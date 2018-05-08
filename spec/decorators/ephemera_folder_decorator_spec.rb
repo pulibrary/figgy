@@ -226,4 +226,12 @@ RSpec.describe EphemeraFolderDecorator do
     expect(decorator.iiif_manifest_attributes).to include title: ['test folder']
     expect(decorator.iiif_manifest_attributes).to include width: ['10']
   end
+
+  context 'with an OCR language of english' do
+    let(:resource) { FactoryBot.build(:ephemera_folder, ocr_language: 'eng', state: 'complete') }
+
+    it 'generates markup for OCR languages' do
+      expect(decorator.rendered_ocr_language).to eq ['English']
+    end
+  end
 end

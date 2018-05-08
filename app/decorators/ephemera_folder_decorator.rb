@@ -25,7 +25,8 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
           :dspace_url,
           :source_url,
           :visibility,
-          :rendered_rights_statement
+          :rendered_rights_statement,
+          :rendered_ocr_language
 
   display_in_manifest displayed_attributes, :subject, :categories
   suppress_from_manifest Schema::IIIF.attributes,
@@ -33,6 +34,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
                          :internal_resource,
                          :rights_statement,
                          :rendered_rights_statement,
+                         :rendered_ocr_language,
                          :thumbnail_id,
                          :rendered_date_range,
                          :rendered_subject,
@@ -69,6 +71,14 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
         h.content_tag("p") do
           I18n.t("valhalla.works.show.attributes.rights_statement.boilerplate").html_safe
         end
+    end
+  end
+
+  def rendered_ocr_language
+    return unless ocr_language.present?
+    vocabulary = ControlledVocabulary.for(:ocr_language)
+    ocr_language.map do |language|
+      vocabulary.find(language).label
     end
   end
 
