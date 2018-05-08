@@ -150,15 +150,22 @@ describe GeoDiscovery::DocumentBuilder do
     end
 
     context 'with an authenticated visibility' do
+      let(:change_set) { ScannedMapChangeSet.new(geo_work, files: [file]) }
+      let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
       let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
 
-      it 'returns a restricted rights field value' do
-        expect(document['dc_rights_s']).to eq('Restricted')
+      it 'returns a document with reduced references and restricted access' do
+        refs = JSON.parse(document['dct_references_s'])
+        expect(refs).to have_key 'http://schema.org/url'
+        expect(refs).to have_key 'http://schema.org/thumbnailUrl'
+        expect(refs).not_to have_key 'http://schema.org/downloadUrl'
+        expect(refs).not_to have_key 'http://iiif.io/api/image'
+        expect(document['dc_rights_s']).to eq 'Restricted'
       end
     end
 
     context 'with a private visibility' do
-      let(:change_set) { VectorResourceChangeSet.new(geo_work, files: [file]) }
+      let(:change_set) { ScannedMapChangeSet.new(geo_work, files: [file]) }
       let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
       let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
 
