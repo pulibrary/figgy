@@ -9,7 +9,7 @@ module GeoDiscovery
     # @param _args [Array<Object>] arguments needed for the renderer, unused here
     # @return [Hash] geoblacklight document as a hash
     def to_hash(_args = nil)
-      return document unless access_rights == private_visibility
+      return document unless build_private_document?
       private_document
     end
 
@@ -17,7 +17,7 @@ module GeoDiscovery
     # @param _args [Array<Object>] arguments needed for the json renderer, unused here
     # @return [String] geoblacklight document as a json string
     def to_json(_args = nil)
-      return document.to_json unless access_rights == private_visibility
+      return document.to_json unless build_private_document?
       private_document.to_json
     end
 
@@ -135,6 +135,10 @@ module GeoDiscovery
         }
       end
 
+      def restricted_visibility
+        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+      end
+
       # Returns the geoblacklight rights field based on work visibility.
       # @return [String] geoblacklight access rights
       def rights
@@ -162,6 +166,12 @@ module GeoDiscovery
       # @return [String]
       def schema_path
         Rails.root.join("config", "discovery", "geoblacklight-schema.json")
+      end
+
+      def build_private_document?
+        return true if geom_type == "Image" && access_rights == restricted_visibility
+        return true if access_rights == private_visibility
+        false
       end
 
       # Validates the geoblacklight document against the json schema.
