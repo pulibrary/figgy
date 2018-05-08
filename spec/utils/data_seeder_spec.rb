@@ -52,7 +52,14 @@ RSpec.describe DataSeeder do
   end
 
   describe "#generate_ephemera_project" do
-    it "adds ephemera objects" do
+    it "adds ephemera objects without boxes" do
+      seeder.generate_ephemera_project(n_boxes: 0)
+      expect(query_service.find_all_of_model(model: EphemeraProject).count).to eq 1
+      expect(query_service.find_all_of_model(model: EphemeraBox).size).to eq 0
+      expect(query_service.find_all_of_model(model: EphemeraFolder).size).to eq 3
+    end
+
+    it "adds ephemera objects with boxes" do
       seeder.generate_ephemera_project
 
       vocabs = query_service.find_all_of_model(model: EphemeraVocabulary).count
@@ -60,10 +67,10 @@ RSpec.describe DataSeeder do
       expect(query_service.find_all_of_model(model: EphemeraTerm).count).to be > vocabs
       expect(query_service.find_all_of_model(model: EphemeraProject).count).to eq 1
       d = query_service.find_all_of_model(model: EphemeraProject).first.decorate
-      expect(d.members.select { |m| m.is_a? EphemeraField }.to_a.size).to eq 5
-      expect(d.members.select { |m| m.is_a? EphemeraBox }.to_a.size).to eq 1
+      expect(d.members.select { |m| m.is_a? EphemeraField }.size).to eq 5
+      expect(d.members.select { |m| m.is_a? EphemeraBox }.size).to eq 1
       d = query_service.find_all_of_model(model: EphemeraBox).first.decorate
-      expect(d.members.select { |m| m.is_a? EphemeraFolder }.to_a.size).to eq 3
+      expect(d.members.select { |m| m.is_a? EphemeraFolder }.size).to eq 3
     end
   end
 end

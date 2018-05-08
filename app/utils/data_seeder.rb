@@ -24,14 +24,14 @@ class DataSeeder
     object_count_report
   end
 
-  def generate_ephemera_project(n_folders: 3)
+  def generate_ephemera_project(project: EphemeraProject.new(title: "An Ephemera Project", slug: 'test-project'), n_folders: 3, n_boxes: 1)
     load_vocabs
-    ep = EphemeraProject.new(title: "An Ephemera Project", slug: 'test-project')
-    ep = persister.save(resource: ep)
-    logger.info "Created ephemera project #{ep.id}: #{ep.title}"
-    add_ephemera_fields(ep)
-    box = add_ephemera_box(ep)
-    add_ephemera_folders(n: n_folders, project: ep, box: box)
+    project = persister.save(resource: project)
+    logger.info "Created ephemera project #{project.id}: #{project.title}"
+    add_ephemera_fields(project)
+    n_boxes.times { add_ephemera_box(project) }
+    box = query_service.find_by(id: project.id).decorate.boxes.first
+    add_ephemera_folders(n: n_folders, project: project, box: box)
   end
 
   def generate_map_set(n:)
@@ -171,7 +171,7 @@ class DataSeeder
         change_set.sync
         folder = change_set_persister.save(change_set: change_set)
         add_file(resource: folder)
-        add_member(parent: box, member: folder)
+        add_member(parent: box || project, member: folder)
       end
     end
 
