@@ -9,20 +9,14 @@
     <script type="text/javascript" src="uv/lib/offline.js"></script>
     <script type="text/javascript" src="uv/helpers.js"></script>
     <style>
-        body {
-            margin: 0px;
-            padding: 20px;
-        }
-
-        #uv {
+        /* #uv {
             width: 924px;
             height: 668px;
-            /* width: 1024px;
-            height: 576px; */
-        }
-
-        #options {
-            padding: 20px 0 0 0;
+        } */
+        body {
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
         }
     </style>
 </head>
@@ -37,24 +31,22 @@
 
     <script type="text/javascript">
 
+        var $UV = $('#uv');
         var uv, manifest, urlDataProvider;
 
         window.addEventListener('uvLoaded', function(e) {
 
             urlDataProvider = new UV.URLDataProvider();
-            setSelectedManifest();
             setupUV();
 
         }, false);
 
         function setupUV() {
 
-          var url_string = window.location.href;
-          var url = new URL(url_string);
-          var m = url.searchParams.get("manifest");
+          var manifest = Utils.Urls.getHashParameter('manifest');
 
             var data = {
-                iiifResourceUri: m,
+                iiifResourceUri: manifest,
                 configUri: 'uv/examples-config.json',
                 collectionIndex: Number(urlDataProvider.get('c', 0)),
                 manifestIndex: Number(urlDataProvider.get('m', 0)),
@@ -73,38 +65,18 @@
 
         }
 
-        function setSelectedManifest() {
-
-            manifest = Utils.Urls.getHashParameter('manifest');
-
-            if (manifest) {
-                $('#manifestSelect').val(manifest);
-            } else {
-                var options = $('#manifestSelect option');
-
-                if (options.length) {
-                    manifest = options[0].value;
-                }
-            }
-
-            $('#manifest').val(manifest);
+        function resize() {
+            var windowWidth = window.innerWidth;
+            var windowHeight = window.innerHeight;
+            $UV.width(windowWidth);
+            $UV.height(windowHeight);
         }
 
-        $('#manifestSelect').on('change', function() {
-            $('#manifest').val($('#manifestSelect option:selected').val());
+        $(window).on('resize' ,function() {
+            resize();
         });
 
-        $('#setManifestButton').on('click', function() {
-            manifest = $('#manifest').val();
-
-            uv.set({
-                iiifResourceUri: manifest,
-                collectionIndex: 0,
-                manifestIndex: 0,
-                sequenceIndex: 0,
-                canvasIndex: 0
-            });
-        });
+        resize();
 
     </script>
 

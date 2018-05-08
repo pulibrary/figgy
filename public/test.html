@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .intrinsic-container {
+      position: relative;
+      height: 0;
+      overflow: hidden;
+    }
+
+    /* 16x9 Aspect Ratio */
+    .intrinsic-container-16x9 {
+      padding-bottom: 56.25%;
+    }
+
+    .intrinsic-container iframe {
+      position: absolute;
+      top:0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .container {
+      padding: 50px;
+    }
+  </style>
+
+</head>
+<body>
+  <div class="container">
+  <h1>Sample UV iFrame Embed</h1>
+  <div class="intrinsic-container intrinsic-container-16x9">
+    <iframe src="http://localhost:3000/uv.html#?manifest=http://localhost:3000/concern/scanned_resources/957799cf-86e7-4ce2-bee7-62861bf52b16/manifest&c=0&m=0&s=0&cv=0&config=uv/examples-config.json&locales=en-GB:English (GB),cy-GB:Cymraeg&xywh=-80,-18,358,318&r=0" allowfullscreen></iframe>
+  </div>
+</div>
+</body>
+</html>
