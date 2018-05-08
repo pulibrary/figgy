@@ -44,7 +44,6 @@ RSpec.describe PlumChangeSetPersister do
     let(:change_set_class) { ScannedMapChangeSet }
     before do
       stub_bibdata(bib_id: '10001789')
-      stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "applies remote metadata from bibdata to an imported metadata resource" do
       resource = FactoryBot.build(:scanned_map, title: [])
@@ -58,6 +57,7 @@ RSpec.describe PlumChangeSetPersister do
       expect(output.primary_imported_metadata.subject).to include "Administrative and political divisions—Maps"
       expect(output.primary_imported_metadata.spatial).to eq ["Cameroon", "Nigeria"]
       expect(output.primary_imported_metadata.coverage).to eq ["northlimit=12.500000; eastlimit=014.620000; southlimit=03.890000; westlimit=008.550000; units=degrees; projection=EPSG:4326"]
+      expect(output.identifier).to eq(['ark:/88435/jq085p05h'])
     end
   end
 
