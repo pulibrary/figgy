@@ -10,6 +10,7 @@ RSpec.describe ScannedMapDecorator do
                      creator: "test creator",
                      references: links.to_json,
                      subject: "test subject",
+                     identifier: "ark:/99999/fk4",
                      holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/14")
   end
   let(:links) do
@@ -40,6 +41,9 @@ RSpec.describe ScannedMapDecorator do
   it "exposes markup for rendered links" do
     expect(resource.decorate.rendered_links).to include(/www.jstor.org/)
     expect(resource.decorate.rendered_links).not_to include(/manifest/)
+  end
+  it "renders the identifier as an ark" do
+    expect(resource.decorate.ark).to eq("http://arks.princeton.edu/ark:/99999/fk4")
   end
   it "can attach folders" do
     expect(resource.decorate.attachable_objects).to include ScannedMap

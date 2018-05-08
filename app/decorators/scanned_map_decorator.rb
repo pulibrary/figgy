@@ -1,6 +1,7 @@
 # frozen_string_literal: false
 class ScannedMapDecorator < Valkyrie::ResourceDecorator
   display Schema::Geo.attributes,
+          :ark,
           :rendered_holding_location,
           :rendered_coverage,
           :member_of_collections,
@@ -10,6 +11,7 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   suppress :thumbnail_id,
            :coverage,
            :cartographic_projection,
+           :identifier,
            :source_jsonld,
            :sort_title
 
@@ -22,6 +24,12 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
                          :thumbnail_id
 
   delegate(*Schema::Geo.attributes, to: :primary_imported_metadata, prefix: :imported)
+
+  def ark
+    id = identifier.try(:first)
+    return unless id
+    "http://arks.princeton.edu/#{id}"
+  end
 
   def attachable_objects
     [ScannedMap, RasterResource]

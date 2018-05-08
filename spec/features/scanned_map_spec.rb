@@ -44,7 +44,7 @@ RSpec.feature "ScannedMaps", js: true do
         :scanned_map,
         title: "new scanned map",
         visibility: "open",
-        identifier: "test value",
+        identifier: "ark:/99999/fk4",
         creator: "test value",
         description: "test value",
         language: "test value",
@@ -69,7 +69,6 @@ RSpec.feature "ScannedMaps", js: true do
       visit solr_document_path scanned_map
 
       expect(page).to have_css ".attribute.visibility", text: "open"
-      expect(page).to have_css ".attribute.identifier", text: "test value"
       expect(page).to have_css ".attribute.title", text: "new scanned map"
       expect(page).to have_css ".attribute.creator", text: "test value"
       expect(page).to have_css ".attribute.description", text: "test value"
@@ -81,6 +80,7 @@ RSpec.feature "ScannedMaps", js: true do
       expect(page).to have_css ".attribute.portion_note", text: "test portion note"
       expect(page).to have_css ".attribute.cartographic_scale", text: "test value"
       expect(page).to have_css ".attribute.provenance", text: "Princeton"
+      expect(page).to have_css ".attribute.ark", text: "http://arks.princeton.edu/ark:/99999/fk4"
       expect(page).to have_css "th", text: "Place Name"
       expect(page).to have_css ".attribute.spatial", text: "test value"
       expect(page).to have_css ".attribute.temporal", text: "test value"

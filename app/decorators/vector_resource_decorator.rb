@@ -1,9 +1,15 @@
 # frozen_string_literal: false
 class VectorResourceDecorator < Valkyrie::ResourceDecorator
-  display Schema::Geo.attributes, :rendered_holding_location, :rendered_coverage, :member_of_collections
-  suppress :thumbnail_id, :coverage, :source_jsonld
+  display Schema::Geo.attributes, :ark, :rendered_holding_location, :rendered_coverage, :member_of_collections
+  suppress :coverage, :identifier, :source_jsonld, :thumbnail_id
 
   delegate(*Schema::Geo.attributes, to: :primary_imported_metadata, prefix: :imported)
+
+  def ark
+    id = identifier.try(:first)
+    return unless id
+    "http://arks.princeton.edu/#{id}"
+  end
 
   def attachable_objects
     [VectorResource]
