@@ -9,6 +9,7 @@ RSpec.describe VectorResourceDecorator do
                      author: "test author",
                      creator: "test creator",
                      subject: "test subject",
+                     identifier: "ark:/99999/fk4",
                      holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/14")
   end
   it "exposes markup for rights statement" do
@@ -21,6 +22,9 @@ RSpec.describe VectorResourceDecorator do
   it "exposes markup for rendered coverage" do
     expect(resource.decorate.rendered_coverage).to match(/#{Regexp.escape('boundingBoxSelector')}/)
     expect(resource.decorate.rendered_coverage).to match(/#{Regexp.escape('Toggle Map')}/)
+  end
+  it "renders the identifier as an ark" do
+    expect(resource.decorate.ark).to eq("http://arks.princeton.edu/ark:/99999/fk4")
   end
   it "can attach folders" do
     expect(resource.decorate.attachable_objects).to include VectorResource
