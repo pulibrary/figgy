@@ -11,12 +11,6 @@ RSpec.describe EphemeraFolderDecorator do
     end
   end
 
-  describe "decoration" do
-    it "decorates an EphemeraFolder" do
-      expect(resource.decorate).to be_a described_class
-    end
-  end
-
   it 'manages files' do
     expect(decorator.manageable_files?).to be true
   end

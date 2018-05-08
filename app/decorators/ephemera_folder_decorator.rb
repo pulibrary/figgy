@@ -5,6 +5,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
           :title,
           :sort_title,
           :alternative_title,
+          :transliterated_title,
           :language,
           :genre,
           :width,
