@@ -9,6 +9,7 @@ class EphemeraFolderChangeSetBase < Valhalla::ChangeSet
   property :title, multiple: false, required: true
   property :sort_title, required: false
   property :alternative_title, multiple: true, required: false
+  property :transliterated_title, multiple: true, required: false
   property :language, multiple: true, required: true
   property :genre, multiple: false, required: true
   property :page_count, multiple: false, required: true
@@ -70,6 +71,7 @@ class EphemeraFolderChangeSetBase < Valhalla::ChangeSet
       :title,
       :sort_title,
       :alternative_title,
+      :transliterated_title,
       :language,
       :genre,
       :width,

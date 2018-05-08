@@ -47,6 +47,12 @@ RSpec.describe EphemeraFolderChangeSet do
     end
   end
 
+  describe '#primary_terms' do
+    it 'includes the transliterated title as a primary term' do
+      expect(change_set.primary_terms).to include :transliterated_title
+    end
+  end
+
   describe "validations" do
     context "when given a non-UUID for a collection" do
       it "is not valid" do
