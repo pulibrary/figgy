@@ -1,34 +1,115 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PUL Universal Viewer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <link href="/uv/bootstrap.min.css" rel="stylesheet">
-    <link href="/uv/styles.min.css" rel="stylesheet">
-    <!--<meta property="og:title" content="UniversalViewer"/>-->
-    <!--<meta property="og:image" content="http://universalviewer.io/logo.jpg"/>-->
-    <!--<meta property="og:image:type" content="image/jpeg" />-->
-    <!--<meta property="og:image:width" content="600" />-->
-    <!--<meta property="og:image:height" content="600" />-->
-    <!--<meta property="fb:app_id" content="1061317590587322" />-->
-    <!--<script type="text/javascript" id="embedUV" src="/src/lib/embed.js"></script>-->
-    <!--<script type="text/javascript" id="embedUV" src="uv/lib/embed.js"></script>-->
+    <title>Universal Viewer Examples</title>
+    <link rel="icon" href="uv/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="uv/uv.css">
+    <script type="text/javascript" src="uv/utils.js"></script>
+    <script type="text/javascript" src="uv/lib/offline.js"></script>
+    <script type="text/javascript" src="uv/helpers.js"></script>
+    <style>
+        body {
+            margin: 0px;
+            padding: 20px;
+        }
+
+        #uv {
+            width: 924px;
+            height: 668px;
+            /* width: 1024px;
+            height: 576px; */
+        }
+
+        #options {
+            padding: 20px 0 0 0;
+        }
+    </style>
 </head>
-<body class="viewer">
+<body>
 
-    <main>
-        <div id="uv" class="uv" data-config="/uv_config.json" data-no-load="true"></div>
-    </main>
+    <!--<div>
+        <h1>UV v3.0 alpha testing</h1>
+        <p>Please report any issues you find on the <a href="https://github.com/UniversalViewer/universalviewer/milestone/8" target="_blank">UV 3.0 milestone</a></p>
+    </div>-->
 
-    <footer>
+    <div id="uv" class="uv"></div>
 
-    </footer>
+    <script type="text/javascript">
 
-    <script type="text/javascript" src="/uv/browserdetect.js"></script>
-    <script type="text/javascript" src="/uv/utils.js"></script>
-    <script type="text/javascript" src="/uv/jquery.js"></script>
-    <script type="text/javascript" src="/uv/jquery-plugins.js"></script>
-    <script type="text/javascript" src="/uv/uv.js"></script>
+        var uv, manifest, urlDataProvider;
+
+        window.addEventListener('uvLoaded', function(e) {
+
+            urlDataProvider = new UV.URLDataProvider();
+            setSelectedManifest();
+            setupUV();
+
+        }, false);
+
+        function setupUV() {
+
+          var url_string = window.location.href;
+          var url = new URL(url_string);
+          var m = url.searchParams.get("manifest");
+
+            var data = {
+                iiifResourceUri: m,
+                configUri: 'uv/examples-config.json',
+                collectionIndex: Number(urlDataProvider.get('c', 0)),
+                manifestIndex: Number(urlDataProvider.get('m', 0)),
+                sequenceIndex: Number(urlDataProvider.get('s', 0)),
+                canvasIndex: Number(urlDataProvider.get('cv', 0)),
+                rotation: Number(urlDataProvider.get('r', 0)),
+                rangeId: urlDataProvider.get('rid', ''),
+                xywh: urlDataProvider.get('xywh', '')
+            };
+
+            uv = createUV('#uv', data, urlDataProvider);
+
+            uv.on('created', function() {
+                Utils.Urls.setHashParameter('manifest', manifest);
+            });
+
+        }
+
+        function setSelectedManifest() {
+
+            manifest = Utils.Urls.getHashParameter('manifest');
+
+            if (manifest) {
+                $('#manifestSelect').val(manifest);
+            } else {
+                var options = $('#manifestSelect option');
+
+                if (options.length) {
+                    manifest = options[0].value;
+                }
+            }
+
+            $('#manifest').val(manifest);
+        }
+
+        $('#manifestSelect').on('change', function() {
+            $('#manifest').val($('#manifestSelect option:selected').val());
+        });
+
+        $('#setManifestButton').on('click', function() {
+            manifest = $('#manifest').val();
+
+            uv.set({
+                iiifResourceUri: manifest,
+                collectionIndex: 0,
+                manifestIndex: 0,
+                sequenceIndex: 0,
+                canvasIndex: 0
+            });
+        });
+
+    </script>
+
+    <!-- Put at the bottom of the page to ensure that the uvLoaded event isn't fired before a listener is registered -->
+    <script type="text/javascript" src="uv/uv.js"></script>
 
 </body>
 </html>
