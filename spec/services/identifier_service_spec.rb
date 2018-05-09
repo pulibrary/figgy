@@ -26,6 +26,39 @@ RSpec.describe IdentifierService do
     end
   end
 
+  context "when there is an imported identifier" do
+    let(:obj) do
+      resource = FactoryBot.build :scanned_resource, source_metadata_identifier: '10001789'
+      change_set = DynamicChangeSet.new(resource)
+      change_set.validate(source_metadata_identifier: '10001789')
+      change_set.sync
+      change_set_persister.save(change_set: change_set)
+    end
+    let(:change_set_persister) do
+      PlumChangeSetPersister.new(
+        metadata_adapter: Valkyrie.config.metadata_adapter,
+        storage_adapter: Valkyrie.config.storage_adapter
+      )
+    end
+    let(:base_metadata) { { dc_publisher: 'Princeton University Library', dc_title: 'Cameroons under United Kingdom Trusteeship 1949', dc_type: 'Text' } }
+    let(:metadata) { base_metadata.merge(target: "https://catalog.princeton.edu/catalog/10001789#view") }
+    let(:ark) { 'ark:/88435/jq085p05h' }
+
+    before do
+      stub_bibdata(bib_id: '10001789')
+      allow(described_class).to receive(:minter).and_return(minter)
+      allow(described_class).to receive(:minter_user).and_return('pudiglib')
+      allow(minter).to receive(:modify)
+    end
+
+    it "updates the ark" do
+      described_class.mint_or_update(resource: obj)
+      expect(minter).to have_received(:modify).with(ark, metadata)
+      expect(obj.identifier).to eq([ark])
+      expect(obj.imported_metadata.first.identifier.first).to eq("http://arks.princeton.edu/#{ark}")
+    end
+  end
+
   context "when the identifier is blank" do
     before do
       allow(described_class).to receive(:minter).and_return(minter)
