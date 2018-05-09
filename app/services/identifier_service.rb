@@ -1,16 +1,23 @@
 # frozen_string_literal: true
 class IdentifierService
   def self.mint_or_update(resource:)
-    if resource.identifier.present?
+    if identifier_for(resource).present?
       update_metadata resource
     else
       mint_identifier resource
     end
   end
 
+  private_class_method def self.identifier_for(resource)
+    return resource.identifier if resource.identifier.present?
+    return unless resource.respond_to? :imported_metadata
+    ark_url = resource.imported_metadata&.first&.identifier&.first
+    ark_url&.gsub(/.*ark:/, "ark:")
+  end
+
   private_class_method def self.update_metadata(resource)
     return if minter_user == "apitest"
-    minter.modify(Array.wrap(resource.identifier).first, metadata(resource))
+    minter.modify(Array.wrap(identifier_for(resource)).first, metadata(resource))
   end
 
   private_class_method def self.mint_identifier(resource)
