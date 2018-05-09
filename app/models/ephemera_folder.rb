@@ -33,6 +33,7 @@ class EphemeraFolder < Valhalla::Resource
   attribute :source_url
   attribute :depositor, Valkyrie::Types::Set
   attribute :date_range
+  attribute :ocr_language, Valkyrie::Types::Set
 
   attribute :start_canvas
   attribute :viewing_direction

@@ -80,4 +80,32 @@ RSpec.describe HocrDerivativeService do
       expect(reloaded.hocr_content).not_to be_blank
     end
   end
+
+  context 'ephemera folder' do
+    let(:ephemera_folder) do
+      change_set_persister.save(change_set: EphemeraFolderChangeSet.new(EphemeraFolder.new(ocr_language: 'eng', state: 'complete'), files: [file]))
+    end
+    let(:folder_members) { query_service.find_members(resource: ephemera_folder) }
+    let(:valid_resource) { folder_members.first }
+    let(:valid_change_set) { DynamicChangeSet.new(valid_resource) }
+
+    let(:hocr_content) { File.read(Rails.root.join("spec", "fixtures", "hocr.hocr")) }
+    let(:ocr_content) { File.read(Rails.root.join("spec", "fixtures", "ocr.txt")) }
+    let(:service) { derivative_service.new(valid_change_set) }
+    before do
+      processor = instance_double(processor_factory)
+      allow(processor_factory).to receive(:new).and_return(processor)
+      result = HocrDerivativeService::TesseractProcessor::Result.new(hocr_content: hocr_content)
+      allow(processor).to receive(:run!).and_return(result)
+    end
+    it 'creates an HOCR file and attaches it as a property to the fileset' do
+      service.create_derivatives
+
+      reloaded = query_service.find_by(id: valid_resource.id)
+      expect(reloaded.hocr_content).not_to be_blank
+      expect(reloaded.ocr_content).not_to be_blank
+      expect(reloaded.hocr_content.first).to eq hocr_content
+      expect(reloaded.ocr_content.first).to eq ocr_content.strip
+    end
+  end
 end
