@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 require 'bagit'
 
+# Job for ingesting ArchivalMediaCollection objects as Bags
+# @see https://tools.ietf.org/html/draft-kunze-bagit-14 BagIt File Packaging Format
+# Please note that this is typically invoked when any given ArchivalMediaCollection is persisted
+# (see PlumChangeSetPersister.registered_handlers and PlumChangeSetPersister::IngestBag)
 class IngestArchivalMediaBagJob < ApplicationJob
   BARCODE_WITH_PART_REGEX = /(\d{14}_\d+)_.*/
 
@@ -81,7 +85,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
         end
 
         # Validates that this is in compliance with the BagIt specification
-        # @see https://tools.ietf.org/html/draft-kunze-bagit-14
+        # @see https://tools.ietf.org/html/draft-kunze-bagit-14 BagIt File Packaging Format
         # @return [TrueClass, FalseClass]
         def valid?
           bag = BagIt::Bag.new @path
