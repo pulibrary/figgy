@@ -35,7 +35,7 @@ GIT
 
 GIT
   remote: git://github.com/samvera/browse-everything.git
-  revision: 6416ce9d611a3f24d9684916edc0484e737c34d9
+  revision: 15c81b71cd6b9a12f49bdce907d5013531d9fbb4
   specs:
     browse-everything (0.15.1)
       addressable (~> 2.5)
@@ -164,15 +164,15 @@ GEM
     autoprefixer-rails (8.2.0)
       execjs
     awesome_print (1.8.0)
-    aws-partitions (1.78.0)
-    aws-sdk-core (3.19.0)
+    aws-partitions (1.85.0)
+    aws-sdk-core (3.20.2)
       aws-partitions (~> 1.0)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
     aws-sdk-kms (1.5.0)
       aws-sdk-core (~> 3)
       aws-sigv4 (~> 1.0)
-    aws-sdk-s3 (1.9.0)
+    aws-sdk-s3 (1.10.0)
       aws-sdk-core (~> 3)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.0)
@@ -360,7 +360,7 @@ GEM
       mime-types (~> 3.0)
       representable (~> 3.0)
       retriable (>= 2.0, < 4.0)
-    google_drive (2.1.9)
+    google_drive (2.1.10)
       google-api-client (>= 0.11.0, < 0.20.0)
       googleauth (>= 0.5.0, < 1.0.0)
       nokogiri (>= 1.5.3, < 2.0.0)
