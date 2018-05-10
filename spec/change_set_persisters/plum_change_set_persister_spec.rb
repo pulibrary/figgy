@@ -859,4 +859,32 @@ RSpec.describe PlumChangeSetPersister do
       end
     end
   end
+
+  context 'when persisting a bag' do
+    let(:bag_path) { Rails.root.join('spec', 'fixtures', 'bags', 'valid_bag') }
+    let(:resource) { FactoryBot.build(:archival_media_collection) }
+    let(:change_set_class) { ArchivalMediaCollectionChangeSet }
+    let(:change_set) { change_set_class.new(resource, bag_path: bag_path) }
+
+    before do
+      stub_pulfa(pulfa_id: 'C0652')
+      change_set.prepopulate!
+      change_set.validate(source_metadata_identifier: 'C0652')
+      change_set.sync
+    end
+
+    it 'persists the file using the bag adapter' do
+      output = change_set_persister.save(change_set: change_set)
+      expect(output).to be_an ArchivalMediaCollection
+      expect(output.id).not_to be nil
+    end
+
+    context 'with an invalid bag path' do
+      let(:bag_path) { Rails.root.join('spec', 'fixtures', 'bags', 'invalid_bag') }
+
+      it 'raises an error and does not persist the file' do
+        expect { change_set_persister.save(change_set: change_set) }.to raise_error(IngestArchivalMediaBagJob::InvalidBagError, "Bag at #{bag_path} is an invalid bag")
+      end
+    end
+  end
 end

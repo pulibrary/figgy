@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require 'bagit'
+
 class IngestArchivalMediaBagJob < ApplicationJob
   BARCODE_WITH_PART_REGEX = /(\d{14}_\d+)_.*/
 
@@ -38,6 +40,8 @@ class IngestArchivalMediaBagJob < ApplicationJob
       Valkyrie::StorageAdapter.find(:disk_via_copy)
     end
 
+    class InvalidBagError < StandardError; end
+
     # get all the data files, group them in file sets (master (original_file), intermediate (for download), access)
     class ArchivalMediaBagParser
       attr_reader :path, :audio_files, :file_groups, :component_groups
@@ -45,6 +49,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
         @path = path
         @file_groups = {}
         @component_groups = {}
+        raise InvalidBagError, "Bag at #{@path} is an invalid bag" unless valid?
       end
 
       # group all the files in the bag by barcode_with_part
@@ -57,6 +62,8 @@ class IngestArchivalMediaBagJob < ApplicationJob
       end
 
       # file_groups in groups by component id
+      # @param component_dict [BarcodeComponentDict]
+      # @return [Hash] map keying EAD component IDs to file barcodes
       def component_groups(component_dict)
         return @component_groups unless @component_groups.empty?
         file_groups.keys.each do |barcode_with_part|
@@ -71,6 +78,14 @@ class IngestArchivalMediaBagJob < ApplicationJob
         # create an AudioPath object for each audio file
         def audio_files
           @audio_files ||= path.join("data").each_child.select { |file| [".wav", ".mp3"].include? file.extname }.map { |file| IngestableAudioFile.new(path: file) }
+        end
+
+        # Validates that this is in compliance with the BagIt specification
+        # @see https://tools.ietf.org/html/draft-kunze-bagit-14
+        # @return [TrueClass, FalseClass]
+        def valid?
+          bag = BagIt::Bag.new @path
+          bag.valid?
         end
     end
 
@@ -122,14 +137,20 @@ class IngestArchivalMediaBagJob < ApplicationJob
       end
     end
 
+    # Dictionary implemented using a wrapper for a Hash
     # Wraps a hash of component_id => barcode_with_part
     class BarcodeComponentDict
       attr_reader :collection, :dict
+      # Constructor
+      # @param collection [Collection]
       def initialize(collection)
         @collection = collection
-        parse_dict
+        parse_dict!
       end
 
+      # Retrieve an EAD component ID for any given barcode
+      # @param barcode_with_part [String] the barcode
+      # @param [String] the EAD component ID
       def lookup(barcode_with_part)
         @dict[barcode_with_part]
       end
@@ -137,32 +158,49 @@ class IngestArchivalMediaBagJob < ApplicationJob
       private
 
         # query the EAD for filenames, navigates back up to their component IDs
-        def parse_dict
+        def parse_dict!
           @dict = {}
           barcode_nodes.each do |node|
             @dict[get_barcode_with_part(node)] = get_id(node)
           end
         end
 
+        # Parses XML from Collection Resource metadata
+        # @return [Nokogiri::XML::Element] the root element of the XML Document
         def xml
           @xml ||= Nokogiri::XML(collection.imported_metadata.first.source_metadata.first).remove_namespaces!
         end
 
+        # Retrieves the set of XML Elements containing barcodes within the EAD
+        # @return [Nokogiri::XML::Set]
         def barcode_nodes
           xml.xpath('//altformavail/p')
         end
 
+        # Retrieves a "grandparent" ID attribute value for any given  XML Element
+        # @param node [Nokogiri::XML::Node]
+        # @return [String]
         def get_id(node)
           node.parent.parent.attributes['id'].value
         end
 
+        # Extracts the barcode using the XML Element content and a regexp
+        # @param node [Nokogiri::XML::Node]
+        # @return [String] the captured string content
         def get_barcode_with_part(node)
           BARCODE_WITH_PART_REGEX.match(node.content)[1]
         end
     end
 
+    # Service Class for ingesting the bag as a procedure
     class Ingester
       attr_reader :collection, :bag, :user, :changeset_persister
+
+      # Constructor
+      # @param collection [Collection]
+      # @param bag [ArchivalMediaBagParser] bag parser Object
+      # @param user [User]
+      # @param changeset_persister [ChangeSetPersister] persister used for storing the bag
       def initialize(collection:, bag:, user:, changeset_persister:)
         @collection = collection
         @bag = bag
@@ -170,6 +208,9 @@ class IngestArchivalMediaBagJob < ApplicationJob
         @changeset_persister = changeset_persister
       end
 
+      # Method for procedurally ingesting the bag
+      # Each component ID may be mapped to one or many physical "sides" of a media object (e. g. an audio tape)
+      # These sides are logically modeled using a barcode-based identifier
       def ingest
         component_groups.each do |cid, sides|
           media_resource = MediaResourceChangeSet.new(find_or_create_media_resource(cid))
@@ -186,14 +227,19 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
       private
 
+        # @return [BarcodeComponentDict]
         def component_dict
           @component_dict ||= BarcodeComponentDict.new(collection)
         end
 
+        # @return [Hash] map of EAD component IDs to file barcodes
         def component_groups
           @component_groups ||= bag.component_groups(component_dict)
         end
 
+        # Creates and persists a FileSet for a media object
+        # @param side [String] side/barcode for a given media object
+        # @return [FileSet] the persisted FileSet containing the binary and file metadata
         def create_av_file_set(side)
           file_set = FileSet.new(title: side)
           bag.file_groups[side].each do |file| # this is an IngestableAudioFile object
@@ -203,6 +249,9 @@ class IngestArchivalMediaBagJob < ApplicationJob
           file_set = changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
         end
 
+        # Creates file metadata and uploads a binary file
+        # @param file [File] the file being uploaded
+        # @return [FileMetadata]
         def create_node(file)
           attributes = { id: SecureRandom.uuid }
           node = FileMetadata.for(file: file).new(attributes)
