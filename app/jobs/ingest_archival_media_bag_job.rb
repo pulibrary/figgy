@@ -142,7 +142,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
     class BarcodeComponentDict
       attr_reader :collection, :dict
       # Constructor
-      # @param collection [Collection]
+      # @param collection [ArchivalMediaCollection]
       def initialize(collection)
         @collection = collection
         parse_dict!
@@ -197,7 +197,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
       attr_reader :collection, :bag, :user, :changeset_persister
 
       # Constructor
-      # @param collection [Collection]
+      # @param collection [ArchivalMediaCollection]
       # @param bag [ArchivalMediaBagParser] bag parser Object
       # @param user [User]
       # @param changeset_persister [ChangeSetPersister] persister used for storing the bag
