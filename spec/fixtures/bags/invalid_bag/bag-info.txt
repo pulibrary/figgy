@@ -1,0 +1,3 @@
+Bag-Software-Agent: BagIt Ruby Gem (http://bagit.rubyforge.org)
+Bagging-Date: 2018-05-10
+Payload-Oxum: 37.1
