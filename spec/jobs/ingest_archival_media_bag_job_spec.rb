@@ -46,7 +46,7 @@ RSpec.describe IngestArchivalMediaBagJob do
         expect(query_service.find_all_of_model(model: MediaResource).size).to eq 1
       end
 
-      it 'for each compopnent id-based MediaRsource, puts it on the collection' do
+      it 'for each component id-based MediaRsource, puts it on the collection' do
         expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
       end
     end
@@ -73,6 +73,14 @@ RSpec.describe IngestArchivalMediaBagJob do
       it "doesn't try to use that other resource as an archival media collection" do
         expect(query_service.find_all_of_model(model: ScannedResource).first.source_metadata_identifier.first).to eq collection_cid
         expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
+      end
+    end
+
+    context 'with a path to an invalid bag' do
+      let(:bag_path) { Rails.root.join('spec', 'fixtures', 'bags', 'invalid_bag') }
+
+      it 'raises an error' do
+        expect { described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user) }.to raise_error(IngestArchivalMediaBagJob::InvalidBagError, "Bag at #{bag_path} is an invalid bag")
       end
     end
   end

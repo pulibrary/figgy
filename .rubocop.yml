@@ -69,6 +69,9 @@ Metrics/ClassLength:
     - 'app/services/manifest_builder/manifest_service_locator.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/decorators/valkyrie/resource_decorator.rb'
+Metrics/LineLength:
+  Exclude:
+    - 'spec/jobs/ingest_archival_media_bag_job_spec.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
