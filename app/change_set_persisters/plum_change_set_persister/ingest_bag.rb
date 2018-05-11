@@ -1,5 +1,8 @@
 # frozen_string_literal: true
+
 class PlumChangeSetPersister
+  # Persistence handler for persisting ArchivalMediaCollections as Bags
+  # @see https://tools.ietf.org/html/draft-kunze-bagit-14 BagIt File Packaging Format
   class IngestBag
     attr_reader :change_set_persister, :change_set, :post_save_resource
 
