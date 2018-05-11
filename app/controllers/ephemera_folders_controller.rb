@@ -8,6 +8,7 @@ class EphemeraFoldersController < BaseResourceController
   )
   before_action :load_fields, only: [:new, :edit, :update, :create]
   before_action :cache_box, only: [:destroy]
+  before_action :load_boxes, only: [:edit]
 
   def change_set_class
     @change_set_class ||= parent_resource.is_a?(EphemeraBox) ? EphemeraFolderChangeSet : BoxlessEphemeraFolderChangeSet
@@ -58,6 +59,9 @@ class EphemeraFoldersController < BaseResourceController
     end
   end
 
+  # @returns Valkyrie::Resource or nil
+  # @note Returns nil if resource has no parent and params[:parent_id] has not been set
+  #   This is common in tests but UI doesn't permit it in production
   def parent_resource
     @parent_resource ||=
       if params[:id]
@@ -88,13 +92,40 @@ class EphemeraFoldersController < BaseResourceController
     end
   end
 
+  # provides instance variables needed to populate collection and selected for append_id
+  # @see app/views/ephemera_folders/edit_fields/_append_id.html.erb
+  def load_boxes
+    @available_boxes = available_boxes
+    @selected_box = ephemera_box&.id.to_s
+    @add_to_box = ephemera_box.nil?
+  end
+
+  # returns decorators
+  def available_boxes
+    if ephemera_project
+      ephemera_project.boxes
+    else
+      []
+    end.unshift(nil_box)
+  end
+
+  def ephemera_box
+    parent_resource.is_a?(EphemeraBox) ? parent_resource : nil
+  end
+
+  def nil_box
+    Struct.new(:title, :id).new('', '')
+  end
+
   def top_languages
     ephemera_project.top_language
   end
   helper_method :top_languages
 
   # returns decorated project
+  # or nil if #parent_resource was nil
   def ephemera_project
+    return if parent_resource.nil?
     parent_resource.is_a?(EphemeraProject) ? parent_resource.decorate : parent_resource.decorate.ephemera_project
   end
 end

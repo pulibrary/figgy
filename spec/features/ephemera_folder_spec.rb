@@ -168,25 +168,51 @@ RSpec.feature "Ephemera Folders", js: true do
     end
 
     context 'while editing existing folders' do
-      scenario 'users can delete existing folders' do
-        visit polymorphic_path [:edit, ephemera_folder]
+      context 'boxed folder' do
+        scenario 'users can delete existing folders' do
+          visit polymorphic_path [:edit, ephemera_folder]
 
-        page.accept_confirm do
-          click_link "Delete This Ephemera Folder"
+          page.accept_confirm do
+            click_link "Delete This Ephemera Folder"
+          end
+
+          expect(page.find(:css, ".alert-info")).to have_content "Deleted EphemeraFolder"
         end
 
-        expect(page.find(:css, ".alert-info")).to have_content "Deleted EphemeraFolder"
+        scenario 'users see a warning if they try to use duplicate barcodes' do
+          visit polymorphic_path [:edit, ephemera_folder]
+          page.fill_in 'ephemera_folder_barcode', with: '00000000000000'
+          page.fill_in 'ephemera_folder_folder_number', with: '1'
+          expect(page).to have_content 'This barcode is already in use'
+
+          page.fill_in 'ephemera_folder_barcode', with: '11111111111110'
+          page.fill_in 'ephemera_folder_folder_number', with: '2'
+          expect(page).not_to have_content 'This barcode is already in use'
+        end
+
+        scenario "form doesn't allow changing the box" do
+          visit polymorphic_path [:edit, ephemera_folder]
+
+          expect(page).not_to have_content 'Add to Box'
+        end
       end
 
-      scenario 'users see a warning if they try to use duplicate barcodes' do
-        visit polymorphic_path [:edit, ephemera_folder]
-        page.fill_in 'ephemera_folder_barcode', with: '00000000000000'
-        page.fill_in 'ephemera_folder_folder_number', with: '1'
-        expect(page).to have_content 'This barcode is already in use'
+      context "boxless folder" do
+        let(:ephemera_project) do
+          res = FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id, ephemera_folder.id])
+          adapter.persister.save(resource: res)
+        end
+        let(:ephemera_box) do
+          res = FactoryBot.create_for_repository(:ephemera_box)
+          adapter.persister.save(resource: res)
+        end
+        scenario "form initializes with available ephemera boxes populated" do
+          visit polymorphic_path [:edit, ephemera_folder]
 
-        page.fill_in 'ephemera_folder_barcode', with: '11111111111110'
-        page.fill_in 'ephemera_folder_folder_number', with: '2'
-        expect(page).not_to have_content 'This barcode is already in use'
+          expect(page).to have_content 'Add to Box'
+          box1opt = page.find_all(:css, '.ephemera_folder_append_id option').map(&:text)
+          expect(box1opt).to include "Box 1"
+        end
       end
     end
 

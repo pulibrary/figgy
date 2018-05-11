@@ -72,6 +72,7 @@ Metrics/ClassLength:
 Metrics/LineLength:
   Exclude:
     - 'spec/jobs/ingest_archival_media_bag_job_spec.rb'
+    - 'app/controllers/ephemera_folders_controller.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
