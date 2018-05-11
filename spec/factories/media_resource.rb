@@ -4,7 +4,7 @@ FactoryBot.define do
     title 'Title'
     rights_statement RDF::URI('http://rightsstatements.org/vocab/NKC/1.0/')
     read_groups 'public'
-    state 'complete'
+    state 'draft'
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)
     end
@@ -22,6 +22,9 @@ FactoryBot.define do
         resource = change_set.model
       end
       resource
+    end
+    factory :published_media_resource do
+      state "published"
     end
   end
 end

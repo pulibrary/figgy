@@ -47,5 +47,34 @@ RSpec.describe ArchivalMediaCollectionsController do
         expect(IngestArchivalMediaBagJob).to have_received(:perform_later).with(collection_component: "AC044_c0003", bag_path: "/idk/some/path", user: user)
       end
     end
+
+    describe "GET /archival_media_collections/[id]/ark_report" do
+      let(:collection) { FactoryBot.create_for_repository(:archival_media_collection, source_metadata_identifier: ["C0652"]) }
+      let(:resource) { FactoryBot.build(:published_media_resource, title: []) }
+      let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
+      let(:data) { "ark,component_id\nark:/99999/fk47564298,C0652_c0377\n" }
+
+      before do
+        stub_ezid(shoulder: "99999/fk4", blade: "7564298")
+        stub_pulfa(pulfa_id: 'C0652_c0377')
+
+        change_set = MediaResourceChangeSet.new(resource)
+        change_set.validate(source_metadata_identifier: 'C0652_c0377', member_of_collection_ids: [collection.id])
+        change_set.sync
+        change_set_persister.save(change_set: change_set)
+      end
+
+      it "displays html" do
+        get :ark_report, params: { id: collection.id }
+
+        expect(response).to render_template :ark_report
+      end
+
+      it "allows downloading a CSV file" do
+        get :ark_report, params: { id: collection.id, format: 'csv' }
+
+        expect(response.body).to eq(data)
+      end
+    end
   end
 end
