@@ -891,12 +891,12 @@ RSpec.describe PlumChangeSetPersister do
   describe '#save' do
     context 'when persisting a bag of audiovisual resources in an existing collection' do
       let(:bag_path) { Rails.root.join('spec', 'fixtures', 'av', 'la_c0652_2017_05_bag') }
-      let(:xml) { File.open(Rails.root.join('spec', 'fixtures', 'av', 'C0652.xml'), 'r') }
       let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: 'C0652') }
       let(:change_set) { ArchivalMediaCollectionChangeSet.new(collection, source_metadata_identifier: 'C0652', bag_path: bag_path) }
 
       before do
         stub_pulfa(pulfa_id: 'C0652')
+        stub_pulfa(pulfa_id: 'C0652_c0377')
       end
 
       it 'propagates the imported metadata to all member MediaResources' do
@@ -909,6 +909,7 @@ RSpec.describe PlumChangeSetPersister do
 
         expect(members.first.title).to include 'Emir Rodriguez Monegal Papers'
         expect(members.first.title).to eq output.title
+        expect(members.first.source_metadata_identifier).to include 'C0652_c0377'
       end
     end
   end
