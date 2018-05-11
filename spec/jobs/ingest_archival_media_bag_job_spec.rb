@@ -23,6 +23,7 @@ RSpec.describe IngestArchivalMediaBagJob do
 
     before do
       stub_pulfa(pulfa_id: 'C0652')
+      stub_pulfa(pulfa_id: 'C0652_c0377')
     end
 
     context "when you're ingesting to a collection you've already created" do

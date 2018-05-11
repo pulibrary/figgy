@@ -3,11 +3,8 @@ require 'rails_helper'
 
 RSpec.describe MediaResourceChangeSet do
   subject(:change_set) { described_class.new(form_resource) }
-  let(:scanned_resource) { MediaResource.new(title: 'Test', rights_statement: 'Stuff', visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: 'draft') }
-  let(:form_resource) { scanned_resource }
-  before do
-    stub_bibdata(bib_id: '123456')
-  end
+  let(:media_resource) { MediaResource.new(title: 'Test', rights_statement: 'Stuff', visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: 'draft') }
+  let(:form_resource) { media_resource }
   describe "#prepopulate!" do
     it "doesn't make it look changed" do
       expect(change_set).not_to be_changed
@@ -79,6 +76,27 @@ RSpec.describe MediaResourceChangeSet do
       expect(change_set.primary_terms).to include :local_identifier
       expect(change_set.primary_terms).to include :rights_statement
       expect(change_set.primary_terms).to include :title
+    end
+  end
+
+  context 'with imported metadata and without a title' do
+    let(:media_resource) do
+      MediaResource.new(
+        source_metadata_identifier: 'C0652_c0377',
+        rights_statement: 'Stuff',
+        visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE,
+        state: 'draft'
+      )
+    end
+
+    before do
+      stub_pulfa(pulfa_id: 'C0652_c0377')
+    end
+
+    describe '#valid?' do
+      it 'is a valid change set' do
+        expect(change_set).to be_valid
+      end
     end
   end
 end

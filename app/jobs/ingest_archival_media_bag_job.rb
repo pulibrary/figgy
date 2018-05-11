@@ -217,25 +217,28 @@ class IngestArchivalMediaBagJob < ApplicationJob
       # These sides are logically modeled using a barcode-based identifier
       def ingest
         component_groups.each do |cid, sides|
-          media_resource = MediaResourceChangeSet.new(find_or_create_media_resource(cid))
+          media_resource = find_or_create_media_resource(cid)
+          media_resource_change_set = MediaResourceChangeSet.new(media_resource, source_metadata_identifier: media_resource.source_metadata_identifier.first)
           sides.each do |side|
             file_set = create_av_file_set(side)
-            media_resource.member_ids += Array.wrap(file_set.id)
-            media_resource.sync
+            media_resource_change_set.member_ids += Array.wrap(file_set.id)
+            media_resource_change_set.sync
           end
-          media_resource.member_of_collection_ids += Array.wrap(collection.id)
-          media_resource.sync
-          changeset_persister.save(change_set: media_resource)
+          media_resource_change_set.member_of_collection_ids += Array.wrap(collection.id)
+          media_resource_change_set.sync
+          changeset_persister.save(change_set: media_resource_change_set)
         end
       end
 
       private
 
+        # Construct a new Barcode/EAD Component dictionary for an ArchivalMediaCollection
         # @return [BarcodeComponentDict]
         def component_dict
           @component_dict ||= BarcodeComponentDict.new(collection)
         end
 
+        # Retrieve a Hash of EAD Component IDs/Barcodes for file barcodes specified in a given Bag
         # @return [Hash] map of EAD component IDs to file barcodes
         def component_groups
           @component_groups ||= bag.component_groups(component_dict)
@@ -264,6 +267,9 @@ class IngestArchivalMediaBagJob < ApplicationJob
           node
         end
 
+        # Creates or finds an existing MediaResource Object using an EAD Component ID
+        # @param component_id [String]
+        # @return [MediaResource]
         def find_or_create_media_resource(component_id)
           results = query_service.custom_queries.find_by_string_property(property: :source_metadata_identifier, value: component_id)
           return results.first unless results.size.zero?
