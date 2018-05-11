@@ -899,7 +899,7 @@ RSpec.describe PlumChangeSetPersister do
         stub_pulfa(pulfa_id: 'C0652_c0377')
       end
 
-      it 'propagates the imported metadata to all member MediaResources' do
+      it 'persists imported metadata for new MediaResources' do
         output = change_set_persister.save(change_set: change_set)
         reloaded = query_service.find_by(id: output.id)
 
