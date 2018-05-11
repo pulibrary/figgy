@@ -1,0 +1,14 @@
+<%# If folder has no box, allow adding to one %>
+<% if @add_to_box %>
+  <%= f.input :append_id,
+              label: 'Add to Box',
+              as: :select,
+              collection: @available_boxes,
+              selected: @selected_box,
+              label_method: :title,
+              value_method: :id,
+              input_html: { multiple: f.object.multiple?(key) },
+              required: f.object.required?(key) %>
+<% else %>
+  <%= f.input :append_id, as: :hidden %>
+<% end %>

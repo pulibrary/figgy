@@ -68,9 +68,31 @@ RSpec.describe EphemeraFoldersController do
         expect(response.body).to have_field "Language", with: "Test"
       end
     end
+    context "when created within a box" do
+      it "doesn't set @available_boxes and @selected_box" do
+        box = FactoryBot.create_for_repository(:ephemera_box)
+        FactoryBot.create_for_repository(:ephemera_project, member_ids: box.id)
+
+        get :new, params: { parent_id: box.id.to_s }
+
+        expect(assigns(:available_boxes)).to be_nil
+        expect(assigns(:selected_box)).to be_nil
+      end
+    end
+    context "when created within a folder" do
+      it "sets @available_boxes and @selected_box" do
+        box = FactoryBot.create_for_repository(:ephemera_box)
+        project = FactoryBot.create_for_repository(:ephemera_project, member_ids: box.id)
+
+        get :new, params: { parent_id: project.id.to_s }
+
+        expect(assigns(:available_boxes)).to be_nil
+        expect(assigns(:selected_box)).to be_nil
+      end
+    end
   end
 
-  describe "new" do
+  describe "manifest" do
     context "when not logged in but an auth token is given" do
       it "renders the full manifest" do
         resource = FactoryBot.create_for_repository(:campus_only_ephemera_folder)
@@ -220,6 +242,31 @@ RSpec.describe EphemeraFoldersController do
 
         expect(response.body).to have_field "Folder number", with: ephemera_folder.folder_number.first
         expect(response.body).to have_button "Save"
+      end
+    end
+
+    context "when inside a box" do
+      it "sets @available_boxes and @selected_box" do
+        ephemera_folder = FactoryBot.create_for_repository(:ephemera_folder)
+        box = FactoryBot.create_for_repository(:ephemera_box, member_ids: ephemera_folder.id)
+        FactoryBot.create_for_repository(:ephemera_project, member_ids: box.id)
+
+        get :edit, params: { id: ephemera_folder.id.to_s }
+
+        expect(assigns(:available_boxes).map(&:title)).to include "Box 1"
+        expect(assigns(:selected_box)).to eq box.id.to_s
+      end
+    end
+    context "when boxless" do
+      it "sets @available_boxes and @selected_box" do
+        box = FactoryBot.create_for_repository(:ephemera_box)
+        ephemera_folder = FactoryBot.create_for_repository(:ephemera_folder)
+        FactoryBot.create_for_repository(:ephemera_project, member_ids: [box.id, ephemera_folder.id])
+
+        get :edit, params: { id: ephemera_folder.id.to_s }
+
+        expect(assigns(:available_boxes).map(&:title)).to include "Box 1"
+        expect(assigns(:selected_box)).to eq ""
       end
     end
 
