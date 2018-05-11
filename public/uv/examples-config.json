@@ -1,5 +1,6 @@
 {
   "options": {
+    "shareFrameEnabled": false,
     "dropEnabled": true,
     "footerPanelEnabled": true,
     "headerPanelEnabled": true,
