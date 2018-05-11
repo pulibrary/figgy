@@ -15,4 +15,8 @@ class MediaResourceDecorator < Valkyrie::ResourceDecorator
   def manageable_structure?
     false
   end
+
+  def file_sets
+    @file_sets ||= members.select { |r| r.is_a?(FileSet) }.map(&:decorate).to_a
+  end
 end
