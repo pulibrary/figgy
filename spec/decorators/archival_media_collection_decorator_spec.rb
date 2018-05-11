@@ -42,4 +42,16 @@ RSpec.describe ArchivalMediaCollectionDecorator do
       end
     end
   end
+
+  describe "#media_resources" do
+    let(:collection) { FactoryBot.create_for_repository(:archival_media_collection) }
+
+    it "returns child media resources" do
+      mr1 = FactoryBot.create_for_repository(:media_resource, member_of_collection_ids: [collection.id])
+      mr2 = FactoryBot.create_for_repository(:media_resource, member_of_collection_ids: [collection.id])
+      sr = FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id])
+
+      expect(decorator.media_resources.size).to eq 2
+    end
+  end
 end

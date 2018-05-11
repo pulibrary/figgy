@@ -34,4 +34,8 @@ class ArchivalMediaCollectionDecorator < CollectionDecorator
     end
   end
   alias display_imported_language imported_language
+
+  def media_resources
+    members.select { |resource| resource.is_a? MediaResource }
+  end
 end
