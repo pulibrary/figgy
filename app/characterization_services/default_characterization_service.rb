@@ -3,7 +3,7 @@
 # Class for Apache Tika based file characterization service
 # defines the Apache Tika based characterization service a ValkyrieFileCharacterization service
 # @since 0.1.0
-class PlumCharacterizationService
+class DefaultCharacterizationService
   attr_reader :file_node, :persister
   def initialize(file_node:, persister:)
     @file_node = file_node

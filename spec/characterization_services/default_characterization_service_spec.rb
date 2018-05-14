@@ -4,7 +4,7 @@ require "rails_helper"
 require "valkyrie/specs/shared_specs"
 include ActionDispatch::TestProcess
 
-RSpec.describe PlumCharacterizationService do
+RSpec.describe DefaultCharacterizationService do
   let(:file_characterization_service) { described_class }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }

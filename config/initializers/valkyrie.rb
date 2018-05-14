@@ -179,7 +179,7 @@ Rails.application.config.to_prepare do
     )
   )
 
-  Valkyrie::Derivatives::FileCharacterizationService.services << PlumCharacterizationService
+  Valkyrie::Derivatives::FileCharacterizationService.services << DefaultCharacterizationService
   Valkyrie::Derivatives::FileCharacterizationService.services << GeoCharacterizationService
 
   [
