@@ -11,7 +11,7 @@ class EphemeraProjectsController < BaseResourceController
   before_action :load_ephemera_projects, only: :index
 
   def index
-    render 'index'
+    render "index"
   end
 
   def folders

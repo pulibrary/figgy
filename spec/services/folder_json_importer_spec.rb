@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe FolderJSONImporter do
   subject(:importer) { described_class.new(file: file, attributes: attributes, change_set_persister: change_set_persister) }
@@ -11,7 +11,7 @@ RSpec.describe FolderJSONImporter do
   end
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:query_service) { adapter.query_service }
-  let(:file) { File.open(Rails.root.join("spec", "fixtures", "importable_json.json"), 'r') }
+  let(:file) { File.open(Rails.root.join("spec", "fixtures", "importable_json.json"), "r") }
   let(:project) { FactoryBot.create_for_repository(:ephemera_project) }
   let(:attributes) do
     {

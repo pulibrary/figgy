@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ArchivalMediaCollection do
   subject(:collection) { FactoryBot.build(:archival_media_collection) }

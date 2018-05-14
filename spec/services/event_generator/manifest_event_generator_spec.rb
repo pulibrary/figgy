@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe EventGenerator::ManifestEventGenerator do
   subject(:event_generator) { described_class.new(rabbit_connection) }
@@ -23,7 +23,7 @@ RSpec.describe EventGenerator::ManifestEventGenerator do
 
       expect(rabbit_connection).to have_received(:publish).with(expected_result.to_json)
     end
-    context 'with a record in a collection' do
+    context "with a record in a collection" do
       it "embeds collection memberships" do
         expected_result = {
           "id" => record_in_collection.id.to_s,
@@ -54,7 +54,7 @@ RSpec.describe EventGenerator::ManifestEventGenerator do
   end
 
   describe "#record_updated" do
-    context 'with a record in a collection' do
+    context "with a record in a collection" do
       it "publishes a persistent JSON message with collection memberships" do
         expected_result = {
           "id" => record_in_collection.id.to_s,

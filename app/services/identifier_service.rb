@@ -19,9 +19,9 @@ class IdentifierService
 
   private_class_method def self.metadata(resource)
     {
-      dc_publisher: 'Princeton University Library',
-      dc_title: resource.title.join('; '),
-      dc_type: 'Text',
+      dc_publisher: "Princeton University Library",
+      dc_title: resource.title.join("; "),
+      dc_type: "Text",
       target: url_for(resource)
     }
   end

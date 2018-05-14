@@ -1,20 +1,20 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe SimpleResourceDecorator do
   subject(:decorator) { described_class.new(resource) }
   let(:resource_klass) { SimpleResource }
   let(:resource) { FactoryBot.build(:simple_resource) }
 
-  it_behaves_like 'a Valkyrie::ResourceDecorator'
+  it_behaves_like "a Valkyrie::ResourceDecorator"
 
-  describe '.manageable_structure?' do
-    it 'is does not have a logical structure' do
+  describe ".manageable_structure?" do
+    it "is does not have a logical structure" do
       expect(decorator.manageable_structure?).to be false
     end
   end
 
-  context 'within a collection' do
+  context "within a collection" do
     let(:parent_collection) { FactoryBot.create_for_repository(:collection) }
     let(:resource) { FactoryBot.create_for_repository(:simple_resource, member_of_collection_ids: [parent_collection.id]) }
 
@@ -22,16 +22,16 @@ RSpec.describe SimpleResourceDecorator do
       parent_collection
     end
 
-    describe '#parents' do
-      it 'retrieves all parent resources' do
+    describe "#parents" do
+      it "retrieves all parent resources" do
         expect(decorator.parents.to_a).not_to be_empty
       end
     end
 
-    describe '#collection_slugs' do
-      it 'generates slugs for any existing collections' do
+    describe "#collection_slugs" do
+      it "generates slugs for any existing collections" do
         expect(decorator.collection_slugs).not_to be_empty
-        expect(decorator.collection_slugs.first).to eq 'test'
+        expect(decorator.collection_slugs.first).to eq "test"
       end
     end
 
@@ -42,7 +42,7 @@ RSpec.describe SimpleResourceDecorator do
     end
   end
 
-  describe '#decorated_parent_resource' do
+  describe "#decorated_parent_resource" do
     let(:resource) { FactoryBot.create_for_repository(:simple_resource) }
     let(:parent) { FactoryBot.create_for_repository(:simple_resource, member_ids: [resource.id]) }
 
@@ -50,7 +50,7 @@ RSpec.describe SimpleResourceDecorator do
       parent
     end
 
-    it 'retrieves all parent resources' do
+    it "retrieves all parent resources" do
       expect(decorator.decorated_parent_resource).to be_a described_class
     end
   end

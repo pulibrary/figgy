@@ -1,16 +1,16 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 include ActionDispatch::TestProcess
 
 RSpec.describe FileSet do
-  let(:shoulder) { '99999/fk4' }
-  let(:blade) { '123456' }
+  let(:shoulder) { "99999/fk4" }
+  let(:blade) { "123456" }
   before do
     stub_ezid(shoulder: shoulder, blade: blade)
   end
 
-  describe '.run_fixity' do
-    let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+  describe ".run_fixity" do
+    let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
     let(:resource) { FactoryBot.build(:scanned_resource) }
     let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
     let(:storage_adapter) { Valkyrie.config.storage_adapter }
@@ -29,8 +29,8 @@ RSpec.describe FileSet do
       CharacterizationJob.perform_now(file_set.id.to_s)
     end
 
-    describe 'when check succeeds' do
-      it 'sets fixity attributes as successful' do
+    describe "when check succeeds" do
+      it "sets fixity attributes as successful" do
         # neet to reload the file_set after characterization has run
         file_set = query_service.find_members(resource: output).first
         original_file_metadata = file_set.run_fixity
@@ -41,15 +41,15 @@ RSpec.describe FileSet do
       end
     end
 
-    describe 'when check fails' do
+    describe "when check fails" do
       before do
         file_set = query_service.find_members(resource: output).first
         filename = file_set.original_file.file_identifiers[0].to_s.gsub("disk://", "")
-        new_file = File.join(fixture_path, 'files/color-landscape.tif')
+        new_file = File.join(fixture_path, "files/color-landscape.tif")
         FileUtils.cp(new_file, filename)
       end
 
-      it 'sets the fixity attributes according to failure' do
+      it "sets the fixity attributes according to failure" do
         file_set = query_service.find_members(resource: output).first
         original_file_metadata = file_set.run_fixity
         expect(original_file_metadata.fixity_success).to eq 0
@@ -57,7 +57,7 @@ RSpec.describe FileSet do
         expect(original_file_metadata.fixity_last_success_date).to be_nil
       end
 
-      it 'does not run again' do
+      it "does not run again" do
         file_set = query_service.find_members(resource: output).first
         original_file_metadata = file_set.run_fixity
         expect(original_file_metadata.fixity_success).to eq 0

@@ -42,7 +42,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   end
 
   def merged_titles
-    Array.wrap(title).join('; ')
+    Array.wrap(title).join("; ")
   end
 
   def titles
@@ -150,7 +150,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     # Overrides the label for the attribute :pdf_type
     # @return [String] the label
     def pdf_type_label
-      'PDF Type'
+      "PDF Type"
     end
 
     # Parses and formats date-string values
@@ -202,7 +202,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
 
         factory = LinkedData::LinkedResourceFactory.new(resource: element)
         resource = factory.new.without_context
-        resource.fetch('pref_label')
+        resource.fetch("pref_label")
       end
     end
 
@@ -235,7 +235,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     # Provides a Hash representation of the metadata attribute name/value mapping
     # @return [Hash]
     def to_h
-      { 'label' => label, 'value' => value }
+      { "label" => label, "value" => value }
     end
 
     private

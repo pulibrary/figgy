@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe PosterIngesterJob do
   let(:file) { Rails.root.join("spec", "fixtures", "importable_json.json").to_s }

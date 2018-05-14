@@ -49,16 +49,16 @@ module GeoDiscovery
         # These geom types are used in geoblacklight documents.
         # @return [String] file geometry type
         def geom_type
-          return 'Image' if resource_decorator.model.is_a?(ScannedMap)
-          return 'Raster' if resource_decorator.model.is_a?(RasterResource)
+          return "Image" if resource_decorator.model.is_a?(ScannedMap)
+          return "Raster" if resource_decorator.model.is_a?(RasterResource)
           return vector_geom_type if resource_decorator.model.is_a?(VectorResource)
         end
 
         # Returns the geometry for a vector file.
         # @return [String] vector geometry
         def vector_geom_type
-          return 'Mixed' unless file_set
-          geometry = file_set.try(:geometry).try(:first) || 'Mixed'
+          return "Mixed" unless file_set
+          geometry = file_set.try(:geometry).try(:first) || "Mixed"
           vector_geom_clean(geometry)
         end
 

@@ -19,7 +19,7 @@ class PDFGenerator
   end
 
   def build_node
-    file = IngestableFile.new(file_path: tmp_file.path, mime_type: 'application/pdf', original_filename: 'derivative_pdf.pdf')
+    file = IngestableFile.new(file_path: tmp_file.path, mime_type: "application/pdf", original_filename: "derivative_pdf.pdf")
     node = FileMetadata.for(file: file).new(id: SecureRandom.uuid)
     stored_file = storage_adapter.upload(resource: node, file: file, original_filename: Array.wrap(node.original_filename).first)
     node.file_identifiers = stored_file.id
@@ -37,7 +37,7 @@ class PDFGenerator
   end
 
   def canvas_images
-    @canvas_images ||= manifest['sequences'][0]['canvases'].map { |x| x['images'][0] }.map do |x|
+    @canvas_images ||= manifest["sequences"][0]["canvases"].map { |x| x["images"][0] }.map do |x|
       Canvas.new(x)
     end
   end

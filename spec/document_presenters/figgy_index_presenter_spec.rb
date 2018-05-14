@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe FiggyIndexPresenter do
   let(:request_context) { double }
@@ -7,7 +7,7 @@ RSpec.describe FiggyIndexPresenter do
   let(:presenter) { described_class.new(document, request_context, config) }
   let(:document) do
     SolrDocument.new(id: 1,
-                     'title_ssim' => ['title1', 'title2'])
+                     "title_ssim" => ["title1", "title2"])
   end
   let(:a_proc) { proc { nil } }
 

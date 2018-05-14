@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   # Adds a few additional behaviors into the application controller
   include Blacklight::Controller
   helper Openseadragon::OpenseadragonHelper
-  layout 'application'
+  layout "application"
 
   protect_from_forgery with: :exception
 
@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
         if current_user
           redirect_to root_url, alert: exception.message
         else
-          redirect_to '/users/auth/cas', alert: exception.message
+          redirect_to "/users/auth/cas", alert: exception.message
         end
       end
     end

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 include ActionDispatch::TestProcess
 
 RSpec.describe CheckFixityRecursiveJob do
-  let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
-  let(:file2) { fixture_file_upload('files/example.tif', 'image/tiff') }
+  let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+  let(:file2) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:resource) { FactoryBot.build(:scanned_resource) }
   let(:resource2) { FactoryBot.build(:scanned_resource) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
@@ -37,7 +37,7 @@ RSpec.describe CheckFixityRecursiveJob do
   end
 
   describe "#find_next_file_to_check" do
-    it 'finds the file set least-recently-updated' do
+    it "finds the file set least-recently-updated" do
       described_class.perform_now
       file_set = query_service.find_members(resource: output).first
       file_set2 = query_service.find_members(resource: output2).first
@@ -49,12 +49,12 @@ RSpec.describe CheckFixityRecursiveJob do
   describe "#perform" do
     let(:job_instance) { described_class.new }
 
-    it 'recurses' do
+    it "recurses" do
       expect_any_instance_of(ActiveJob::ConfiguredJob).to receive(:perform_later)
       job_instance.perform
     end
 
-    it 'saves the file_set' do
+    it "saves the file_set" do
       query_service = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
       fs = query_service.find_members(resource: output2).first
       expect(fs.original_file.fixity_success).not_to be 1

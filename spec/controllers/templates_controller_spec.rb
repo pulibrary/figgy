@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe TemplatesController do
   let(:user) { FactoryBot.create(:ephemera_editor) }
@@ -13,9 +13,9 @@ RSpec.describe TemplatesController do
       subject_vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary, label: "Subjects")
       toy_vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary, label: "Toys", member_of_vocabulary_id: subject_vocabulary.id)
       FactoryBot.create_for_repository(:ephemera_term, member_of_vocabulary_id: toy_vocabulary.id, label: "Trains")
-      field = FactoryBot.create_for_repository(:ephemera_field, field_name: '5', member_of_vocabulary_id: subject_vocabulary.id)
+      field = FactoryBot.create_for_repository(:ephemera_field, field_name: "5", member_of_vocabulary_id: subject_vocabulary.id)
       FactoryBot.create_for_repository(:ephemera_term, member_of_vocabulary_id: vocabulary.id, label: "Test")
-      field2 = FactoryBot.create_for_repository(:ephemera_field, field_name: '1', member_of_vocabulary_id: vocabulary.id)
+      field2 = FactoryBot.create_for_repository(:ephemera_field, field_name: "1", member_of_vocabulary_id: vocabulary.id)
       project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [field.id, field2.id])
 
       get :new, params: { model_class: "EphemeraFolder", ephemera_project_id: project.id.to_s }

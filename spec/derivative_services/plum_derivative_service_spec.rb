@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-require 'rails_helper'
-require 'valkyrie/derivatives/specs/shared_specs'
+require "rails_helper"
+require "valkyrie/derivatives/specs/shared_specs"
 include ActionDispatch::TestProcess
 
 RSpec.describe PlumDerivativeService do
@@ -14,7 +14,7 @@ RSpec.describe PlumDerivativeService do
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
   let(:persister) { adapter.persister }
   let(:query_service) { adapter.query_service }
-  let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+  let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
   let(:scanned_resource) do
     change_set_persister.save(change_set: ScannedResourceChangeSet.new(ScannedResource.new, files: [file]))
@@ -23,15 +23,15 @@ RSpec.describe PlumDerivativeService do
   let(:valid_resource) { book_members.first }
   let(:valid_change_set) { DynamicChangeSet.new(valid_resource) }
 
-  describe '#valid?' do
+  describe "#valid?" do
     subject(:valid_file) { derivative_service.new(valid_change_set) }
 
-    context 'when given mime_type image/tiff' do
+    context "when given mime_type image/tiff" do
       it { is_expected.to be_valid }
     end
 
-    context 'when given mime_type image/jpeg' do
-      let(:file) { fixture_file_upload('files/large-jpg-test.jpg', 'image/jpeg') }
+    context "when given mime_type image/jpeg" do
+      let(:file) { fixture_file_upload("files/large-jpg-test.jpg", "image/jpeg") }
 
       it { is_expected.to be_valid }
     end
@@ -48,7 +48,7 @@ RSpec.describe PlumDerivativeService do
     expect(derivative_file.read).not_to be_blank
   end
 
-  describe '#cleanup_derivatives' do
+  describe "#cleanup_derivatives" do
     before do
       derivative_service.new(valid_change_set).create_derivatives
     end

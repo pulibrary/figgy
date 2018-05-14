@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe OsdModalHelper do
   describe "#osd_modal_for" do
@@ -19,7 +19,7 @@ RSpec.describe OsdModalHelper do
         allow(manifest_helper_class).to receive(:new).and_return(manifest_helper)
         allow(manifest_helper).to receive(:manifest_image_path).and_raise(Valkyrie::Persistence::ObjectNotFoundError)
       end
-      it 'generates an empty <span>' do
+      it "generates an empty <span>" do
         expect(helper.osd_modal_for(file_set.id)).to eq "<span></span>"
       end
     end

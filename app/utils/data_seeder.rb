@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 # these methods created for use in rake tasks and db/seeds.rb
-require 'faker'
+require "faker"
 
 class DataSeeder
   attr_accessor :logger
   delegate :query_service, :persister, to: :metadata_adapter
 
   def initialize(logger = Logger.new(STDOUT))
-    raise("DataSeeder is not for use in production!") if Rails.env == 'production'
+    raise("DataSeeder is not for use in production!") if Rails.env == "production"
     @logger = logger
   end
 
@@ -24,7 +24,7 @@ class DataSeeder
     object_count_report
   end
 
-  def generate_ephemera_project(project: EphemeraProject.new(title: "An Ephemera Project", slug: 'test-project'), n_folders: 3, n_boxes: 1)
+  def generate_ephemera_project(project: EphemeraProject.new(title: "An Ephemera Project", slug: "test-project"), n_folders: 3, n_boxes: 1)
     load_vocabs
     project = persister.save(resource: project)
     logger.info "Created ephemera project #{project.id}: #{project.title}"
@@ -90,7 +90,7 @@ class DataSeeder
   def generate_raster_resource
     rr = RasterResource.new(attributes_hash.merge(geo_attributes))
     rr = persister.save(resource: rr)
-    file = IngestableFile.new(file_path: Rails.root.join('spec', 'fixtures', 'files', 'raster', 'geotiff.tif'), mime_type: "image/tiff", original_filename: "geotiff.tif")
+    file = IngestableFile.new(file_path: Rails.root.join("spec", "fixtures", "files", "raster", "geotiff.tif"), mime_type: "image/tiff", original_filename: "geotiff.tif")
     add_file(resource: rr, file: file)
     logger.info "Created raster resource #{rr.id}: #{rr.title}"
     rr
@@ -99,14 +99,14 @@ class DataSeeder
   def generate_vector_resource
     vr = VectorResource.new(attributes_hash.merge(geo_attributes))
     vr = persister.save(resource: vr)
-    file = IngestableFile.new(file_path: Rails.root.join('spec', 'fixtures', 'files', 'vector', 'shapefile.zip'), mime_type: "application/zip", original_filename: "shapefile.zip")
+    file = IngestableFile.new(file_path: Rails.root.join("spec", "fixtures", "files", "vector", "shapefile.zip"), mime_type: "application/zip", original_filename: "shapefile.zip")
     add_file(resource: vr, file: file)
     logger.info "Created vector resource #{vr.id}: #{vr.title}"
     vr
   end
 
   def wipe_files!
-    [Figgy.config['derivative_path'], Figgy.config['repository_path']].each do |dir_path|
+    [Figgy.config["derivative_path"], Figgy.config["repository_path"]].each do |dir_path|
       Pathname.new(dir_path).children.each(&:rmtree) if Pathname.new(dir_path).exist?
     end
   end
@@ -126,7 +126,7 @@ class DataSeeder
 
     def add_ephemera_box(project)
       change_set = DynamicChangeSet.new(EphemeraBox.new)
-      change_set.validate(barcode: '00000000000000', box_number: '1')
+      change_set.validate(barcode: "00000000000000", box_number: "1")
       change_set.sync
       box = change_set_persister.save(change_set: change_set)
       add_member(parent: project, member: box)
@@ -135,11 +135,11 @@ class DataSeeder
 
     def add_ephemera_fields(project)
       [
-        ['1', 'LAE Languages'],
-        ['2', 'LAE Areas'],
-        ['3', 'LAE Areas'],
-        ['4', 'LAE Genres'],
-        ['5', 'LAE Subjects']
+        ["1", "LAE Languages"],
+        ["2", "LAE Areas"],
+        ["3", "LAE Areas"],
+        ["4", "LAE Genres"],
+        ["5", "LAE Subjects"]
       ].each do |pair|
         # create the ephemera field
         field_change_set = DynamicChangeSet.new(EphemeraField.new)
@@ -156,12 +156,12 @@ class DataSeeder
       n.times do |i|
         change_set = DynamicChangeSet.new(EphemeraFolder.new)
         change_set.validate(
-          barcode: '00000000000000',
+          barcode: "00000000000000",
           folder_number: i,
           title: Faker::Food.dish,
-          language: [query_service.custom_queries.find_ephemera_term_by_label(label: 'English').id],
-          genre: query_service.custom_queries.find_ephemera_term_by_label(label: 'Brochures').id,
-          subject: [query_service.custom_queries.find_ephemera_term_by_label(label: 'Architecture').id],
+          language: [query_service.custom_queries.find_ephemera_term_by_label(label: "English").id],
+          genre: query_service.custom_queries.find_ephemera_term_by_label(label: "Brochures").id,
+          subject: [query_service.custom_queries.find_ephemera_term_by_label(label: "Architecture").id],
           local_identifier: "xyz#{i}",
           width: rand(50),
           height: rand(100),
@@ -176,7 +176,7 @@ class DataSeeder
     end
 
     def add_file(resource:, file: nil)
-      ingestable_file = file || IngestableFile.new(file_path: Rails.root.join('spec', 'fixtures', 'files', 'example.tif'), mime_type: "image/tiff", original_filename: "example.tif")
+      ingestable_file = file || IngestableFile.new(file_path: Rails.root.join("spec", "fixtures", "files", "example.tif"), mime_type: "image/tiff", original_filename: "example.tif")
       change_set = DynamicChangeSet.new(resource)
       change_set.prepopulate!
       change_set.files = [ingestable_file]
@@ -198,11 +198,11 @@ class DataSeeder
         description: Faker::Matz.quote,
         rights_statement: rights_statements[rand(rights_statements.count)].value,
         files: [],
-        read_groups: 'public',
-        state: 'complete',
+        read_groups: "public",
+        state: "complete",
         visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
         import_metadata: false,
-        provenance: 'the moon'
+        provenance: "the moon"
       }
     end
 
@@ -220,7 +220,7 @@ class DataSeeder
     def geo_attributes
       {
         coverage: coverage,
-        provenance: 'Princeton'
+        provenance: "Princeton"
       }
     end
 
@@ -230,9 +230,9 @@ class DataSeeder
           columns: { label: "label", category: nil } },
         { file: "config/vocab/lae_areas.csv", name: "LAE Areas",
           columns: { label: "label", category: nil } },
-        { file: File.join('spec', 'fixtures', 'lae_genres.csv'), name: "LAE Genres",
+        { file: File.join("spec", "fixtures", "lae_genres.csv"), name: "LAE Genres",
           columns: { label: "pul_label", category: nil } },
-        { file: File.join('spec', 'fixtures', 'lae_subjects.csv'), name: "LAE Subjects",
+        { file: File.join("spec", "fixtures", "lae_subjects.csv"), name: "LAE Subjects",
           columns: { label: "subject", category: "category" } }
       ]
       to_load.each do |vocab|

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 include ActionDispatch::TestProcess
 
 RSpec.describe RasterResourcesController do
@@ -44,16 +44,16 @@ RSpec.describe RasterResourcesController do
     let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do
       {
-        title: ['Title 1', 'Title 2'],
-        rights_statement: 'Test Statement',
-        visibility: 'restricted'
+        title: ["Title 1", "Title 2"],
+        rights_statement: "Test Statement",
+        visibility: "restricted"
       }
     end
     let(:invalid_params) do
       {
         title: [""],
-        rights_statement: 'Test Statement',
-        visibility: 'restricted'
+        rights_statement: "Test Statement",
+        visibility: "restricted"
       }
     end
     context "access control" do
@@ -73,9 +73,9 @@ RSpec.describe RasterResourcesController do
     context "when joining a collection" do
       let(:valid_params) do
         {
-          title: ['Title 1', 'Title 2'],
-          rights_statement: 'Test Statement',
-          visibility: 'restricted',
+          title: ["Title 1", "Title 2"],
+          rights_statement: "Test Statement",
+          visibility: "restricted",
           member_of_collection_ids: [collection.id.to_s]
         }
       end
@@ -175,7 +175,7 @@ RSpec.describe RasterResourcesController do
     let(:user) { FactoryBot.create(:admin) }
 
     context "when an admin and with a geotiff" do
-      let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: 'image/tiff; gdal-format=GTiff') }
+      let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: "image/tiff; gdal-format=GTiff") }
 
       it "sets the record and children variables" do
         child = FactoryBot.create_for_repository(:file_set, file_metadata: [file_metadata])
@@ -197,19 +197,19 @@ RSpec.describe RasterResourcesController do
       allow(GeoDiscovery::DocumentBuilder).to receive(:new).and_return(builder)
     end
 
-    context 'with a valid geoblacklight document' do
+    context "with a valid geoblacklight document" do
       before do
-        allow(builder).to receive(:to_hash).and_return(id: 'test')
+        allow(builder).to receive(:to_hash).and_return(id: "test")
       end
 
-      it 'renders the document' do
+      it "renders the document" do
         get :geoblacklight, params: { id: raster_resource.id, format: :json }
         expect(response).to be_success
       end
     end
   end
 
-  describe '#attach_to_parent' do
+  describe "#attach_to_parent" do
     let(:user) { FactoryBot.create(:admin) }
     let(:child) { FactoryBot.create_for_repository(:raster_resource) }
     let(:parent) { FactoryBot.create_for_repository(:scanned_map) }
@@ -220,14 +220,14 @@ RSpec.describe RasterResourcesController do
       }
     end
 
-    it 'attaches a raster resource to any scanned map resource' do
+    it "attaches a raster resource to any scanned map resource" do
       patch :attach_to_parent, params: params, format: :json
 
       expect(response.status).to eq(200)
       reloaded = find_resource(parent.id)
       expect(reloaded.member_ids.first.to_s).to eq child.id.to_s
     end
-    context 'with invalid parameter types' do
+    context "with invalid parameter types" do
       let(:params) do
         {
           id: child.id,
@@ -235,12 +235,12 @@ RSpec.describe RasterResourcesController do
         }
       end
 
-      it 'returns a bad request server response' do
+      it "returns a bad request server response" do
         patch :attach_to_parent, params: params, format: :json
         expect(response.status).to eq 400
       end
     end
-    context 'with invalid parameters' do
+    context "with invalid parameters" do
       let(:params) do
         {
           id: child.id,
@@ -248,27 +248,27 @@ RSpec.describe RasterResourcesController do
         }
       end
 
-      it 'returns a bad request server response' do
+      it "returns a bad request server response" do
         patch :attach_to_parent, params: params, format: :json
         expect(response.status).to eq 400
       end
     end
-    context 'with an invalid parent ID' do
+    context "with an invalid parent ID" do
       let(:params) do
         {
           id: child.id,
-          parent_resource: { id: 'invalid', member_ids: [child.id] }
+          parent_resource: { id: "invalid", member_ids: [child.id] }
         }
       end
 
-      it 'returns a not found server response' do
+      it "returns a not found server response" do
         patch :attach_to_parent, params: params, format: :json
         expect(response.status).to eq 404
       end
     end
   end
 
-  describe '#remove_from_parent' do
+  describe "#remove_from_parent" do
     let(:user) { FactoryBot.create(:admin) }
     let(:child) { FactoryBot.create_for_repository(:raster_resource) }
     let(:parent) { FactoryBot.create_for_repository(:scanned_map) }
@@ -278,14 +278,14 @@ RSpec.describe RasterResourcesController do
         parent_resource: { id: parent.id, member_ids: [child.id] }
       }
     end
-    it 'removes any raster resource attached to a given scanned map resource' do
+    it "removes any raster resource attached to a given scanned map resource" do
       patch :remove_from_parent, params: params, format: :json
 
       expect(response.status).to eq(200)
       reloaded = find_resource(parent.id)
       expect(reloaded.member_ids).to be_empty
     end
-    context 'with invalid parameter types' do
+    context "with invalid parameter types" do
       let(:params) do
         {
           id: child.id,
@@ -293,12 +293,12 @@ RSpec.describe RasterResourcesController do
         }
       end
 
-      it 'returns a bad request server response' do
+      it "returns a bad request server response" do
         patch :remove_from_parent, params: params, format: :json
         expect(response.status).to eq 400
       end
     end
-    context 'with invalid parameters' do
+    context "with invalid parameters" do
       let(:params) do
         {
           id: child.id,
@@ -306,32 +306,32 @@ RSpec.describe RasterResourcesController do
         }
       end
 
-      it 'returns a bad request server response' do
+      it "returns a bad request server response" do
         patch :remove_from_parent, params: params, format: :json
         expect(response.status).to eq 400
       end
     end
-    context 'with an invalid parent ID' do
+    context "with an invalid parent ID" do
       let(:params) do
         {
           id: child.id,
-          parent_resource: { id: 'invalid', member_ids: [child.id] }
+          parent_resource: { id: "invalid", member_ids: [child.id] }
         }
       end
 
-      it 'returns a not found server response' do
+      it "returns a not found server response" do
         patch :remove_from_parent, params: params, format: :json
         expect(response.status).to eq 404
       end
     end
   end
 
-  describe '#attach_to_parent' do
+  describe "#attach_to_parent" do
     let(:user) { FactoryBot.create(:admin) }
     let(:parent_scanned_map) { FactoryBot.create_for_repository(:scanned_map) }
     let(:raster_resource) { FactoryBot.create_for_repository(:raster_resource) }
 
-    it 'appends an existing ScannedMap as a parent' do
+    it "appends an existing ScannedMap as a parent" do
       patch :attach_to_parent, params: {
         id: raster_resource.id.to_s, parent_resource: {
           id: parent_scanned_map.id.to_s, member_ids: [raster_resource.id.to_s]
@@ -344,12 +344,12 @@ RSpec.describe RasterResourcesController do
     end
   end
 
-  describe '#remove_from_parent' do
+  describe "#remove_from_parent" do
     let(:user) { FactoryBot.create(:admin) }
     let(:raster_resource) { FactoryBot.create_for_repository(:raster_resource) }
 
-    context 'when a RasterResource belongs to a ScannedMap parent' do
-      it 'removes an existing parent ScannedMap' do
+    context "when a RasterResource belongs to a ScannedMap parent" do
+      it "removes an existing parent ScannedMap" do
         parent_scanned_map = FactoryBot.create_for_repository(:scanned_map, member_ids: [raster_resource.id])
 
         patch :remove_from_parent, params: {

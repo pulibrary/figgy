@@ -22,6 +22,6 @@ class GeoblacklightMessagingClient
     end
 
     def exchange
-      @exchange ||= channel.fanout(Figgy.config['events']['exchange']['geoblacklight'], durable: true)
+      @exchange ||= channel.fanout(Figgy.config["events"]["exchange"]["geoblacklight"], durable: true)
     end
 end

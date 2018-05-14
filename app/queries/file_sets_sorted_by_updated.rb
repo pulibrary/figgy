@@ -11,7 +11,7 @@ class FileSetsSortedByUpdated
     @query_service = query_service
   end
 
-  def file_sets_sorted_by_updated(sort: 'asc', limit: 50)
+  def file_sets_sorted_by_updated(sort: "asc", limit: 50)
     run_query("#{query} #{order(sort)} #{number(limit)}")
   end
 

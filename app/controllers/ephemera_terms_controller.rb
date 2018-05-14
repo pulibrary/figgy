@@ -12,7 +12,7 @@ class EphemeraTermsController < ApplicationController
   before_action :load_terms, only: [:index]
 
   def index
-    render 'index'
+    render "index"
   end
 
   def load_vocabularies

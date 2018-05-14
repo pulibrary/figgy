@@ -50,10 +50,10 @@ class Valhalla::DownloadsController < ApplicationController
   # modified_date in Valkyrie yet.
   def prepare_file_headers
     send_file_headers! content_options
-    response.headers['Content-Type'] = file_desc.mime_type.first.to_s
-    response.headers['Content-Length'] ||= binary_file.size.to_s
+    response.headers["Content-Type"] = file_desc.mime_type.first.to_s
+    response.headers["Content-Length"] ||= binary_file.size.to_s
     # Prevent Rack::ETag from calculating a digest over body
-    response.headers['Last-Modified'] = modified_date if modified_date
+    response.headers["Last-Modified"] = modified_date if modified_date
   end
 
   def modified_date

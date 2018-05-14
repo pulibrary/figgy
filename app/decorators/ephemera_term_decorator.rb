@@ -15,7 +15,7 @@ class EphemeraTermDecorator < Valkyrie::ResourceDecorator
 
   def internal_url
     return Array.wrap(model.uri).first if vocabulary.blank?
-    vocabulary_uri = vocabulary.uri.to_s.end_with?('/') ? vocabulary.uri.to_s : vocabulary.uri.to_s + '/'
+    vocabulary_uri = vocabulary.uri.to_s.end_with?("/") ? vocabulary.uri.to_s : vocabulary.uri.to_s + "/"
     URI.join(vocabulary_uri, camelized_label)
   end
 
@@ -48,6 +48,6 @@ class EphemeraTermDecorator < Valkyrie::ResourceDecorator
     end
 
     def camelized_label
-      Array.wrap(label).first.gsub(/\s/, '_').camelize(:lower)
+      Array.wrap(label).first.gsub(/\s/, "_").camelize(:lower)
     end
 end

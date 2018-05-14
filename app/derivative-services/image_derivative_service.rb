@@ -4,7 +4,7 @@ class ImageDerivativeService
     attr_reader :change_set_persister, :image_config
     delegate :metadata_adapter, to: :change_set_persister
     delegate :query_service, to: :metadata_adapter
-    def initialize(change_set_persister:, image_config: ImageConfig.new(width: 200, height: 150, format: 'jpg', mime_type: 'image/jpeg', output_name: 'thumbnail'))
+    def initialize(change_set_persister:, image_config: ImageConfig.new(width: 200, height: 150, format: "jpg", mime_type: "image/jpeg", output_name: "thumbnail"))
       @change_set_persister = change_set_persister
       @image_config = image_config
     end
@@ -103,11 +103,11 @@ class ImageDerivativeService
   end
 
   ALLOWABLE_FORMATS = [
-    'image/bmp',
-    'image/gif',
-    'image/jpeg',
-    'image/png',
-    'image/tiff'
+    "image/bmp",
+    "image/gif",
+    "image/jpeg",
+    "image/png",
+    "image/tiff"
   ].freeze
 
   def valid?

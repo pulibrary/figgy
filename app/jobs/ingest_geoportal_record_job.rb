@@ -35,7 +35,7 @@ class IngestGeoportalRecordJob < ApplicationJob
   end
 
   def geoform
-    node = fgdc_doc.at_xpath('//idinfo/citation/citeinfo/geoform')
+    node = fgdc_doc.at_xpath("//idinfo/citation/citeinfo/geoform")
     return nil if node.nil?
     node.text
   end
@@ -45,7 +45,7 @@ class IngestGeoportalRecordJob < ApplicationJob
   end
 
   def onlink
-    node = fgdc_doc.at_xpath('//idinfo/citation/citeinfo/onlink')
+    node = fgdc_doc.at_xpath("//idinfo/citation/citeinfo/onlink")
     return nil if node.nil?
     node.text
   end

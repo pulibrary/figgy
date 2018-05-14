@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe User, type: :model do
   subject(:user) { FactoryBot.create(:user) }
@@ -56,7 +56,7 @@ RSpec.describe User, type: :model do
       expect(user.uid).to include "test"
     end
 
-    it 'ensures that users have unique IDs' do
+    it "ensures that users have unique IDs" do
       token = double("token", provider: "cas", uid: "test1")
       user = described_class.from_omniauth(token)
       expect(user).to be_persisted
@@ -66,10 +66,10 @@ RSpec.describe User, type: :model do
       new_user = described_class.from_omniauth token
       expect(new_user).to eq user
 
-      invalid_user = described_class.new uid: 'test1'
+      invalid_user = described_class.new uid: "test1"
       expect(invalid_user).not_to be_valid
       expect(invalid_user.errors).to include :uid
-      expect(invalid_user.errors[:uid]).to include 'has already been taken'
+      expect(invalid_user.errors[:uid]).to include "has already been taken"
     end
   end
 end

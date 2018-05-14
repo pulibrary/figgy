@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ScannedMapDecorator do
   subject(:decorator) { described_class.new(resource) }
@@ -21,10 +21,10 @@ RSpec.describe ScannedMapDecorator do
   end
   describe "#iiif_manifest_attributes" do
     it "returns attributes" do
-      expect(decorator.iiif_manifest_attributes).to include title: ['test title']
-      expect(decorator.iiif_manifest_attributes).to include author: ['test author']
-      expect(decorator.iiif_manifest_attributes).to include creator: ['test creator']
-      expect(decorator.iiif_manifest_attributes).to include subject: ['test subject']
+      expect(decorator.iiif_manifest_attributes).to include title: ["test title"]
+      expect(decorator.iiif_manifest_attributes).to include author: ["test author"]
+      expect(decorator.iiif_manifest_attributes).to include creator: ["test creator"]
+      expect(decorator.iiif_manifest_attributes).to include subject: ["test subject"]
     end
   end
   it "exposes markup for rights statement" do
@@ -51,10 +51,10 @@ RSpec.describe ScannedMapDecorator do
   it "can manage structure" do
     expect(decorator.manageable_structure?).to be true
   end
-  describe '#raster_resource_members' do
+  describe "#raster_resource_members" do
     let(:raster_resource) { FactoryBot.create_for_repository(:raster_resource) }
     let(:resource) { FactoryBot.create_for_repository(:scanned_map, member_ids: [raster_resource.id]) }
-    it 'accesses raster resources' do
+    it "accesses raster resources" do
       expect(resource.decorate.raster_resource_members).not_to be_empty
       expect(resource.decorate.raster_resource_members.first).to be_a RasterResourceDecorator
       expect(resource.decorate.raster_resource_members.first.id).to eq raster_resource.id

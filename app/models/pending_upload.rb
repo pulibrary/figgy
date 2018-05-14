@@ -11,7 +11,7 @@ class PendingUpload < Valkyrie::Resource
   end
 
   def content_type
-    'text/plain'
+    "text/plain"
   end
 
   def path

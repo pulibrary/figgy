@@ -8,29 +8,29 @@ class InstrumentedStorageAdapter
 
   def upload(file:, original_filename:, resource: nil)
     trace("valkyrie.storage.upload") do |span|
-      span.set_tag('param.original_filename', original_filename)
-      span.set_tag('param.resource', resource.try(:id).to_s)
+      span.set_tag("param.original_filename", original_filename)
+      span.set_tag("param.resource", resource.try(:id).to_s)
       storage_adapter.upload(file: file, original_filename: original_filename, resource: resource)
     end
   end
 
   def handles?(id:)
     trace("valkyrie.storage.handles?") do |span|
-      span.set_tag('param.id', id.to_s)
+      span.set_tag("param.id", id.to_s)
       storage_adapter.handles?(id: id)
     end
   end
 
   def find_by(id:)
     trace("valkyrie.storage.find_by") do |span|
-      span.set_tag('param.id', id.to_s)
+      span.set_tag("param.id", id.to_s)
       storage_adapter.find_by(id: id)
     end
   end
 
   def delete(id:)
     trace("valkyrie.storage.delete") do |span|
-      span.set_tag('param.id', id.to_s)
+      span.set_tag("param.id", id.to_s)
       storage_adapter.delete(id: id)
     end
   end
@@ -44,12 +44,12 @@ class InstrumentedStorageAdapter
       span.service = "valkyrie-#{storage_adapter.class}"
       span.span_type = Datadog::Ext::AppTypes::DB
       span.resource = resource
-      span.set_tag('storage_adapter.inspect', storage_adapter.inspect)
+      span.set_tag("storage_adapter.inspect", storage_adapter.inspect)
       yield(span)
     end
   end
 
   def span_name
-    'valkyrie.storage'
+    "valkyrie.storage"
   end
 end

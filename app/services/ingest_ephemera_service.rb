@@ -45,7 +45,7 @@ class IngestEphemeraService
   end
 
   def basedir
-    File.expand_path('../..', folder_dir)
+    File.expand_path("../..", folder_dir)
   end
 
   def box_prov_metadata(box)
@@ -72,16 +72,16 @@ class IngestEphemeraService
 
     def namespaces
       {
-        pulstore: 'http://princeton.edu/pulstore/terms/',
-        rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+        pulstore: "http://princeton.edu/pulstore/terms/",
+        rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
       }
     end
   end
 
   def default_attributes
     {
-      pdf_type: 'none',
-      rights_statement: 'http://rightsstatements.org/vocab/CNE/1.0/',
+      pdf_type: "none",
+      rights_statement: "http://rightsstatements.org/vocab/CNE/1.0/",
       files: files,
       local_identifier: local_identifier
     }
@@ -151,7 +151,7 @@ class IngestEphemeraService
     end
 
     def basedir
-      File.expand_path('../..', folder_dir)
+      File.expand_path("../..", folder_dir)
     end
 
     class Page
@@ -244,7 +244,7 @@ class IngestEphemeraService
     end
 
     def suppressed?
-      value(::PULStore.suppressed) == ['true']
+      value(::PULStore.suppressed) == ["true"]
     end
 
     def visibility_public

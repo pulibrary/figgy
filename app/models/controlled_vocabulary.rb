@@ -124,20 +124,20 @@ class ControlledVocabulary
     # @return [Hash] the state to HTML class mapping
     def state_classes
       @state_classes ||= {
-        new: 'label-default',
-        pending: 'label-default',
-        needs_qa: 'label-info',
-        metadata_review: 'label-info',
-        final_review: 'label-primary',
-        complete: 'label-success',
-        flagged: 'label-warning',
-        takedown: 'label-danger',
-        ready_to_ship: 'label-info',
-        shipped: 'label-info',
-        received: 'label-default',
-        all_in_production: 'label-success',
-        draft: 'label-default',
-        published: 'label-success'
+        new: "label-default",
+        pending: "label-default",
+        needs_qa: "label-info",
+        metadata_review: "label-info",
+        final_review: "label-primary",
+        complete: "label-success",
+        flagged: "label-warning",
+        takedown: "label-danger",
+        ready_to_ship: "label-info",
+        shipped: "label-info",
+        received: "label-default",
+        all_in_production: "label-success",
+        draft: "label-default",
+        published: "label-success"
       }
     end
   end
@@ -282,10 +282,10 @@ class ControlledVocabulary
     # @return [Array<Term>] the Term Objects modeling each PDF type
     def all(_scope = nil)
       [
-        Term.new(label: 'Color PDF', value: 'color'),
-        Term.new(label: 'Grayscale PDF', value: 'gray'),
-        Term.new(label: 'Bitonal PDF', value: 'bitonal'),
-        Term.new(label: 'No PDF', value: 'none')
+        Term.new(label: "Color PDF", value: "color"),
+        Term.new(label: "Grayscale PDF", value: "gray"),
+        Term.new(label: "Bitonal PDF", value: "bitonal"),
+        Term.new(label: "No PDF", value: "none")
       ]
     end
   end
@@ -299,14 +299,14 @@ class ControlledVocabulary
     # @return [Array<Term>] the Term Objects capturing the most recently holding location for an item
     def all(_scope = nil)
       json.map do |record|
-        Term.new(label: record[:label], value: record[:url].gsub('.json', ''))
+        Term.new(label: record[:label], value: record[:url].gsub(".json", ""))
       end
     end
 
     # Access the URL for the PULFA locations endpoint from the app. config.
     # @return [String] the endpoint URL
     def url
-      Figgy.config['locations_url']
+      Figgy.config["locations_url"]
     end
 
     # Query and retrieve for the holding location from PULFA over the HTTP

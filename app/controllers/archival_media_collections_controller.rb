@@ -9,7 +9,7 @@ class ArchivalMediaCollectionsController < CollectionsController
     respond_to do |format|
       format.html
       format.csv do
-        send_data to_csv(@resources, fields: { identifier: 'ark', source_metadata_identifier: 'component_id' }),
+        send_data to_csv(@resources, fields: { identifier: "ark", source_metadata_identifier: "component_id" }),
                   filename: "ark-report-#{collection.source_metadata_identifier.first}-#{Time.zone.today}.csv"
       end
     end

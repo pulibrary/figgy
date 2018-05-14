@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :scanned_map do
-    title 'Title'
-    rights_statement RDF::URI('http://rightsstatements.org/vocab/NKC/1.0/')
-    read_groups 'public'
+    title "Title"
+    rights_statement RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")
+    read_groups "public"
     pdf_type ["gray"]
-    state 'pending'
+    state "pending"
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)
     end

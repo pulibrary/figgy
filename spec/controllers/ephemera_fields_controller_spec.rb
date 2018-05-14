@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 include ActionDispatch::TestProcess
 
 RSpec.describe EphemeraFieldsController do
@@ -33,7 +33,7 @@ RSpec.describe EphemeraFieldsController do
     let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do
       {
-        field_name: ['test field'],
+        field_name: ["test field"],
         member_of_vocabulary_id: [ephemera_vocabulary.id]
       }
     end
@@ -116,7 +116,7 @@ RSpec.describe EphemeraFieldsController do
       it "renders a form" do
         get :edit, params: { id: ephemera_field.id.to_s }
 
-        expect(response.body).to have_field "Name", with: '1'
+        expect(response.body).to have_field "Name", with: "1"
         expect(response.body).to have_button "Save"
       end
     end

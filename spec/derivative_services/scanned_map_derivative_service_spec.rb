@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-require 'rails_helper'
-require 'valkyrie/derivatives/specs/shared_specs'
+require "rails_helper"
+require "valkyrie/derivatives/specs/shared_specs"
 include ActionDispatch::TestProcess
 
 RSpec.describe ScannedMapDerivativeService do
@@ -14,7 +14,7 @@ RSpec.describe ScannedMapDerivativeService do
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
   let(:persister) { adapter.persister }
   let(:query_service) { adapter.query_service }
-  let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+  let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
   let(:scanned_map) do
     change_set_persister.save(change_set: ScannedMapChangeSet.new(ScannedMap.new, files: [file]))
@@ -48,7 +48,7 @@ RSpec.describe ScannedMapDerivativeService do
     expect(thumbnails.count).to eq 1
   end
 
-  describe '#cleanup_derivatives' do
+  describe "#cleanup_derivatives" do
     it "deletes the attached fileset when the resource is deleted" do
       derivative_service.new(valid_change_set).cleanup_derivatives
       reloaded = query_service.find_by(id: valid_resource.id)

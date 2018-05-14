@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "catalog/_members_ephemera_box" do
   context "when it's a box with folders" do
@@ -12,9 +12,9 @@ RSpec.describe "catalog/_members_ephemera_box" do
       render
     end
 
-    it 'shows them' do
-      expect(rendered).to have_selector 'h2', text: 'Folders'
-      expect(rendered).to have_selector 'th', text: 'Folder Number'
+    it "shows them" do
+      expect(rendered).to have_selector "h2", text: "Folders"
+      expect(rendered).to have_selector "th", text: "Folder Number"
       expect(rendered).to have_selector "table.datatable[data-ajax='/concern/ephemera_boxes/#{parent.id}/folders']"
     end
   end
@@ -28,9 +28,9 @@ RSpec.describe "catalog/_members_ephemera_box" do
       render
     end
 
-    it 'shows them' do
-      expect(rendered).to have_selector 'h2', text: 'Folders'
-      expect(rendered).not_to have_selector 'th', text: 'Folder Number'
+    it "shows them" do
+      expect(rendered).to have_selector "h2", text: "Folders"
+      expect(rendered).not_to have_selector "th", text: "Folder Number"
       expect(rendered).to have_selector "table.datatable[data-ajax='/concern/ephemera_projects/#{parent.id}/folders']"
     end
   end

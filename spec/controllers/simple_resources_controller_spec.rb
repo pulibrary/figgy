@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 include ActionDispatch::TestProcess
 
 RSpec.describe SimpleResourcesController do
@@ -11,7 +11,7 @@ RSpec.describe SimpleResourcesController do
   let(:resource_klass) { SimpleResource }
   let(:manifestable_factory) { :published_simple_resource }
 
-  it_behaves_like 'a BaseResourceController'
+  it_behaves_like "a BaseResourceController"
 
   # Helper method just for the test suite
   def find_resource(id)

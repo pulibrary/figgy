@@ -71,7 +71,7 @@ class HocrDerivativeService
   end
 
   def valid?
-    ['image/tiff', 'image/jpeg'].include?(mime_type.first)
+    ["image/tiff", "image/jpeg"].include?(mime_type.first)
   end
 
   def create_derivatives

@@ -113,7 +113,7 @@ class ManifestBuilder
     # @return [String]
     def viewing_hint
       if !work_presenters.empty?
-        'multi-part'
+        "multi-part"
       else
         resource.respond_to?(:viewing_hint) ? Array(resource.viewing_hint).first : []
       end
@@ -124,7 +124,7 @@ class ManifestBuilder
     # read by method in record_property_builder
     # @return [String]
     def viewing_direction
-      return if viewing_hint == 'multi-part'
+      return if viewing_hint == "multi-part"
       resource.respond_to?(:viewing_direction) ? Array(resource.viewing_direction).first : []
     end
 
@@ -204,11 +204,11 @@ class ManifestBuilder
     end
 
     def to_s
-      'Plum Collections'
+      "Plum Collections"
     end
 
     def description
-      'All collections which are a part of Plum.'
+      "All collections which are a part of Plum."
     end
 
     def id
@@ -431,8 +431,8 @@ class ManifestBuilder
       raise Valkyrie::Persistence::ObjectNotFoundError, file_set.id if file_metadata.nil?
       begin
         file = file_metadata.file_identifiers[0].to_s.gsub("disk://", "")
-        id = file.gsub(Figgy.config['derivative_path'], '').gsub(/^\//, '')
-        Pathname.new(Figgy.config['cantaloupe_url']).join(
+        id = file.gsub(Figgy.config["derivative_path"], "").gsub(/^\//, "")
+        Pathname.new(Figgy.config["cantaloupe_url"]).join(
           CGI.escape(id.to_s)
         ).to_s
       rescue

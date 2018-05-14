@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-require 'rails_helper'
-require 'valkyrie/derivatives/specs/shared_specs'
+require "rails_helper"
+require "valkyrie/derivatives/specs/shared_specs"
 include ActionDispatch::TestProcess
 
 RSpec.describe ImageDerivativeService do
@@ -13,7 +13,7 @@ RSpec.describe ImageDerivativeService do
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
   let(:persister) { adapter.persister }
   let(:query_service) { adapter.query_service }
-  let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+  let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
   let(:scanned_map) do
     change_set_persister.save(change_set: ScannedMapChangeSet.new(ScannedMap.new, files: [file]))
@@ -22,15 +22,15 @@ RSpec.describe ImageDerivativeService do
   let(:valid_resource) { scanned_map_members.first }
   let(:valid_change_set) { DynamicChangeSet.new(valid_resource) }
 
-  describe '#valid?' do
+  describe "#valid?" do
     subject(:valid_file) { derivative_service.new(valid_change_set) }
 
-    context 'when given a valid mime_type' do
+    context "when given a valid mime_type" do
       it { is_expected.to be_valid }
     end
   end
 
-  it 'creates a JPEG thumbnail and attaches it to the fileset' do
+  it "creates a JPEG thumbnail and attaches it to the fileset" do
     derivative_service.new(valid_change_set).create_derivatives
     reloaded = query_service.find_by(id: valid_resource.id)
     thumbnail = reloaded.thumbnail_files.first
@@ -41,7 +41,7 @@ RSpec.describe ImageDerivativeService do
     expect(image.height).to eq 287
   end
 
-  describe '#cleanup_derivatives' do
+  describe "#cleanup_derivatives" do
     before do
       derivative_service.new(valid_change_set).create_derivatives
     end

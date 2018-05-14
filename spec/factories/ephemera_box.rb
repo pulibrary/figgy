@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :ephemera_box do
-    barcode '00000000000000'
-    box_number '1'
-    rights_statement RDF::URI('http://rightsstatements.org/vocab/NKC/1.0/')
-    read_groups 'public'
+    barcode "00000000000000"
+    box_number "1"
+    rights_statement RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")
+    read_groups "public"
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)
     end

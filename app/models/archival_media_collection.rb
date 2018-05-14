@@ -10,6 +10,6 @@ class ArchivalMediaCollection < Collection
   end
 
   def title
-    primary_imported_metadata.title.present? ? primary_imported_metadata.title : ['']
+    primary_imported_metadata.title.present? ? primary_imported_metadata.title : [""]
   end
 end

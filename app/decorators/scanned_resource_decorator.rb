@@ -100,7 +100,7 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
 
   def human_readable_type
     return model.human_readable_type if volumes.empty?
-    I18n.translate("valhalla.models.multi_volume_work", default: 'Multi Volume Work')
+    I18n.translate("valhalla.models.multi_volume_work", default: "Multi Volume Work")
   end
 
   def imported_attribute(attribute_key)

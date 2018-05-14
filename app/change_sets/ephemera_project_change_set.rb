@@ -24,17 +24,17 @@ class EphemeraProjectChangeSet < Valkyrie::ChangeSet
 
   def slug_valid?
     return if Slug.new(Array.wrap(slug).first).valid?
-    errors.add(:slug, 'contains invalid characters, please only use alphanumerics, dashes, and underscores')
+    errors.add(:slug, "contains invalid characters, please only use alphanumerics, dashes, and underscores")
   end
 
   def slug_unique?
     return unless slug_exists?
-    errors.add(:slug, 'is already in use by another project')
+    errors.add(:slug, "is already in use by another project")
   end
 
   # @return array of EphemeraTerms available in an EphemeraField called 'language'
   def language_options
-    model.decorate.fields.select { |field| field.attribute_name == 'language' }.map { |field| field.vocabulary.terms }.flatten
+    model.decorate.fields.select { |field| field.attribute_name == "language" }.map { |field| field.vocabulary.terms }.flatten
   end
 
   private

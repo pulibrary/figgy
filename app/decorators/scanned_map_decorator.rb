@@ -64,7 +64,7 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   end
 
   def human_readable_type
-    return I18n.translate("valhalla.models.map_set", default: 'Map Set') if map_set?
+    return I18n.translate("valhalla.models.map_set", default: "Map Set") if map_set?
     model.human_readable_type
   end
 
@@ -131,7 +131,7 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   def rendered_links
     return unless references
     refs = JSON.parse(references.first)
-    refs.delete('iiif_manifest_paths')
+    refs.delete("iiif_manifest_paths")
     refs.map do |url, _label|
       h.link_to(url, url)
     end

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 include ActionDispatch::TestProcess
 
 RSpec.describe PDFGenerator do
   with_queue_adapter :inline
   subject(:generator) { described_class.new(resource: resource, storage_adapter: storage_adapter) }
-  let(:file) { fixture_file_upload('files/color-landscape.tif', 'image/tiff') }
+  let(:file) { fixture_file_upload("files/color-landscape.tif", "image/tiff") }
   let(:resource) do
     FactoryBot.create_for_repository(
       :scanned_resource,
@@ -16,7 +16,7 @@ RSpec.describe PDFGenerator do
         creator: "مرحبا يا العالم",
         extent: "299 leaves : paper ; 206 x 152 mm. bound to 209 x 153 mm.",
         description: "Ms. codex.",
-        language: 'ara'
+        language: "ara"
       }]
     )
   end
@@ -45,7 +45,7 @@ RSpec.describe PDFGenerator do
       end
     end
     context "when it's set to color" do
-      let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], pdf_type: ['color']) }
+      let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], pdf_type: ["color"]) }
       before do
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/default.jpg")
           .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
@@ -57,7 +57,7 @@ RSpec.describe PDFGenerator do
       end
     end
     context "when it's an arabic manifest" do
-      let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], language: 'ara', title: 'المفاتيح') }
+      let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], language: "ara", title: "المفاتيح") }
       before do
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/gray.jpg")
           .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "catalog/_resource_attributes_default.html.erb" do
-  context 'when given a FileSet' do
-    let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+  context "when given a FileSet" do
+    let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
     let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
     let(:solr) { Valkyrie::MetadataAdapter.find(:index_solr) }
     let(:fileset) { scanned_resource.member_ids.map { |id| solr.query_service.find_by(id: id) }.first }
@@ -18,15 +18,15 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       render
     end
 
-    it 'shows technical metadata' do
-      expect(rendered).to have_selector 'li.internal_resource', text: 'FileSet'
-      expect(rendered).to have_selector 'li.height', text: '287'
-      expect(rendered).to have_selector 'li.width', text: '200'
-      expect(rendered).to have_selector 'li.mime_type', text: 'image/tiff'
-      expect(rendered).to have_selector 'li.size', text: '196882'
-      expect(rendered).to have_selector 'li.md5', text: '2a28fb702286782b2cbf2ed9a5041ab1'
-      expect(rendered).to have_selector 'li.sha1', text: '1b95e65efc3aefeac1f347218ab6f193328d70f5'
-      expect(rendered).to have_selector 'li.sha256', text: '547c81b080eb2d7c09e363a670c46960ac15a6821033263867dd59a31376509c'
+    it "shows technical metadata" do
+      expect(rendered).to have_selector "li.internal_resource", text: "FileSet"
+      expect(rendered).to have_selector "li.height", text: "287"
+      expect(rendered).to have_selector "li.width", text: "200"
+      expect(rendered).to have_selector "li.mime_type", text: "image/tiff"
+      expect(rendered).to have_selector "li.size", text: "196882"
+      expect(rendered).to have_selector "li.md5", text: "2a28fb702286782b2cbf2ed9a5041ab1"
+      expect(rendered).to have_selector "li.sha1", text: "1b95e65efc3aefeac1f347218ab6f193328d70f5"
+      expect(rendered).to have_selector "li.sha256", text: "547c81b080eb2d7c09e363a670c46960ac15a6821033263867dd59a31376509c"
     end
   end
   context "when given a ScannedResource solr document" do
@@ -55,13 +55,13 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
                                              "Maggs Bros"
                                            ],
                                            author: "Donatus, Aelius",
-                                           created: ['1465-01-01T00:00:00Z', '1480-12-31T23:59:59Z'],
+                                           created: ["1465-01-01T00:00:00Z", "1480-12-31T23:59:59Z"],
                                            date: "1465-1480",
                                            identifier: "http://arks.princeton.edu/ark:/88435/5m60qr98h"
                                          }
                                        ],
                                        member_of_collection_ids: [collection.id],
-                                       holding_location: RDF::URI('https://bibdata.princeton.edu/locations/delivery_locations/1'))
+                                       holding_location: RDF::URI("https://bibdata.princeton.edu/locations/delivery_locations/1"))
     end
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: scanned_resource) }
     let(:collection) { FactoryBot.create_for_repository(:collection) }
@@ -282,7 +282,7 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       expect(rendered).to have_selector ".member_of_collections", text: collection.title.first
     end
   end
-  context 'when given an Ephemera Folder' do
+  context "when given an Ephemera Folder" do
     let(:folder) { FactoryBot.create_for_repository(:ephemera_folder, date_range: DateRange.new(start: "1989", end: "2017")) }
     let(:document) { solr.resource_factory.from_resource(resource: folder) }
     let(:solr) { Valkyrie::MetadataAdapter.find(:index_solr) }
@@ -296,7 +296,7 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
 
     it "shows the date range" do
       expect(rendered).to have_selector "th", text: "Date Range"
-      expect(rendered).to have_selector 'li.rendered_date_range', text: '1989-2017'
+      expect(rendered).to have_selector "li.rendered_date_range", text: "1989-2017"
     end
   end
 end

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :media_resource do
-    title 'Title'
-    rights_statement RDF::URI('http://rightsstatements.org/vocab/NKC/1.0/')
-    read_groups 'public'
-    state 'draft'
+    title "Title"
+    rights_statement RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")
+    read_groups "public"
+    state "draft"
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)
     end

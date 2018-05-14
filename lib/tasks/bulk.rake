@@ -2,14 +2,14 @@
 namespace :bulk do
   desc "Ingest a directory of TIFFs as a ScannedResource, or a directory of directories as a MultiVolumeWork"
   task ingest: :environment do
-    user = User.find_by_user_key(ENV['USER']) if ENV['USER']
+    user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
     user = User.all.select(&:admin?).first unless user
-    dir = ENV['DIR']
-    bib = ENV['BIB']
-    coll = ENV['COLL']
-    local_id = ENV['LOCAL_ID']
-    replaces = ENV['REPLACES']
-    background = ENV['BACKGROUND']
+    dir = ENV["DIR"]
+    bib = ENV["BIB"]
+    coll = ENV["COLL"]
+    local_id = ENV["LOCAL_ID"]
+    replaces = ENV["REPLACES"]
+    background = ENV["BACKGROUND"]
 
     abort "usage: rake bulk:ingest DIR=/path/to/files BIB=1234567 COLL=collid LOCAL_ID=local_id REPLACES=replaces" unless dir && Dir.exist?(dir)
 
@@ -45,11 +45,11 @@ namespace :bulk do
 
   desc "Ingest a directory of scanned map TIFFs, each filename corresponds to a Bib ID"
   task ingest_scanned_maps: :environment do
-    user = User.find_by_user_key(ENV['USER']) if ENV['USER']
+    user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
     user = User.all.select(&:admin?).first unless user
-    dir = ENV['DIR']
-    bib = ENV['BIB']
-    background = ENV['BACKGROUND']
+    dir = ENV["DIR"]
+    bib = ENV["BIB"]
+    background = ENV["BACKGROUND"]
 
     abort "usage: rake bulk:ingest_scanned_maps BIB=1234567 DIR=/path/to/files" unless dir && Dir.exist?(dir)
 
@@ -78,8 +78,8 @@ namespace :bulk do
 
   desc "Link resources to thumbnails (if they should be missing them)"
   task link_missing_thumbnails: :environment do
-    background = ENV['BACKGROUND']
-    model = ENV['MODEL']
+    background = ENV["BACKGROUND"]
+    model = ENV["MODEL"]
 
     @logger = Logger.new(STDOUT)
     query = FindMissingThumbnailResources.new(query_service: Valkyrie::MetadataAdapter.find(:index_solr).query_service)
@@ -106,12 +106,12 @@ namespace :bulk do
 
   desc "Attach a set of directories of TIFFs to existing objects, using the directory names as identifiers to find the objects"
   task attach_each_dir: :environment do
-    user = User.find_by_user_key(ENV['USER']) if ENV['USER']
+    user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
     user = User.all.select(&:admin?).first unless user
-    dir = ENV['DIR']
-    field = ENV['FIELD']
-    filter = ENV['FILTER']
-    background = ENV['BACKGROUND']
+    dir = ENV["DIR"]
+    field = ENV["FIELD"]
+    filter = ENV["FILTER"]
+    background = ENV["BACKGROUND"]
 
     abort "usage: rake bulk:attach_each_dir DIR=/path/to/files FIELD=barcode FILTER=filter" unless field && dir && Dir.exist?(dir)
 
@@ -142,8 +142,8 @@ namespace :bulk do
 
   desc "Update all members of a Collection to the specified state"
   task update_state: :environment do
-    coll = ENV['COLL']
-    state = ENV['STATE']
+    coll = ENV["COLL"]
+    state = ENV["STATE"]
 
     abort "usage: rake bulk:update_sate COLL=[collection id] STATE=[state]" unless coll
     logger = Logger.new(STDOUT)

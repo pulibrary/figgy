@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 include ActionDispatch::TestProcess
 
 RSpec.describe ManifestBuilder do
@@ -7,17 +7,17 @@ RSpec.describe ManifestBuilder do
   subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_resource.id)) }
   let(:scanned_resource) do
     FactoryBot.create_for_repository(:scanned_resource,
-                                     title: 'test title1',
-                                     label: 'test label',
-                                     actor: 'test person',
-                                     sort_title: 'test title2',
-                                     portion_note: 'test value1',
+                                     title: "test title1",
+                                     label: "test label",
+                                     actor: "test person",
+                                     sort_title: "test title2",
+                                     portion_note: "test value1",
                                      rights_statement: RDF::URI("https://creativecommons.org/licenses/by-nc/4.0/"),
-                                     call_number: 'test value2',
-                                     edition: 'test edition',
-                                     nav_date: 'test date',
-                                     identifier: 'ark:/88435/abc1234de',
-                                     source_metadata_identifier: '123456',
+                                     call_number: "test value2",
+                                     edition: "test edition",
+                                     nav_date: "test date",
+                                     identifier: "ark:/88435/abc1234de",
+                                     source_metadata_identifier: "123456",
                                      imported_metadata: [{
                                        description: "Test Description"
                                      }],
@@ -29,7 +29,7 @@ RSpec.describe ManifestBuilder do
   let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { metadata_adapter.query_service }
-  let(:file) { fixture_file_upload('files/abstract.tiff', 'image/tiff') }
+  let(:file) { fixture_file_upload("files/abstract.tiff", "image/tiff") }
   let(:start_canvas) { nil }
 
   def logical_structure(file_set_id)
@@ -95,7 +95,7 @@ RSpec.describe ManifestBuilder do
     it "generates a IIIF document" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
-      expect(output["label"]).to eq ['test title1']
+      expect(output["label"]).to eq ["test title1"]
       expect(output["description"]).to eq "Test Description"
       expect(output["viewingHint"]).to eq "individuals"
       expect(output["viewingDirection"]).to eq "right-to-left"
@@ -125,7 +125,7 @@ RSpec.describe ManifestBuilder do
       expect(output["sequences"][0]["startCanvas"]).to eq canvas_id
       expect(output["logo"]).to eq("https://www.example.com/assets/pul_logo_icon-7b5f9384dfa5ca04f4851c6ee9e44e2d6953e55f893472a3e205e1591d3b2ca6.png")
       expect(output["seeAlso"].length).to eq 2
-      expect(output["seeAlso"].last).to include "@id" => 'https://bibdata.princeton.edu/bibliographic/123456', "format" => "text/xml"
+      expect(output["seeAlso"].last).to include "@id" => "https://bibdata.princeton.edu/bibliographic/123456", "format" => "text/xml"
     end
 
     context "when it's a cicognara item" do
@@ -151,16 +151,16 @@ RSpec.describe ManifestBuilder do
     context "when a thumbnail_id doesn't exist" do
       let(:scanned_resource) do
         FactoryBot.create_for_repository(:scanned_resource,
-                                         title: 'test title1',
-                                         label: 'test label',
-                                         actor: 'test person',
-                                         sort_title: 'test title2',
-                                         portion_note: 'test value1',
+                                         title: "test title1",
+                                         label: "test label",
+                                         actor: "test person",
+                                         sort_title: "test title2",
+                                         portion_note: "test value1",
                                          rights_statement: RDF::URI("https://creativecommons.org/licenses/by-nc/4.0/"),
-                                         call_number: 'test value2',
-                                         edition: 'test edition',
-                                         nav_date: 'test date',
-                                         identifier: 'ark:/88435/abc1234de',
+                                         call_number: "test value2",
+                                         edition: "test edition",
+                                         nav_date: "test date",
+                                         identifier: "ark:/88435/abc1234de",
                                          thumbnail_id: Valkyrie::ID.new("blablabla"),
                                          imported_metadata: [{
                                            description: "Test Description"
@@ -193,60 +193,60 @@ RSpec.describe ManifestBuilder do
       end
     end
 
-    it 'generates a IIIF document with metadata' do
+    it "generates a IIIF document with metadata" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
-      expect(output).to include 'metadata'
+      expect(output).to include "metadata"
       metadata = output["metadata"]
       expect(metadata).to be_kind_of Array
       expect(metadata.length).to eq(12)
 
-      metadata_object = metadata.find { |h| h['label'] == 'Created At' }
-      metadata_values = metadata_object['value']
+      metadata_object = metadata.find { |h| h["label"] == "Created At" }
+      metadata_values = metadata_object["value"]
       expect(metadata_values).to be_kind_of Array
       metadata_value = metadata_values.shift
-      expect { Date.strptime(metadata_value, '%m/%d/%y') }.not_to raise_error
+      expect { Date.strptime(metadata_value, "%m/%d/%y") }.not_to raise_error
 
-      metadata_object = metadata.find { |h| h['label'] == 'Updated At' }
-      metadata_values = metadata_object['value']
+      metadata_object = metadata.find { |h| h["label"] == "Updated At" }
+      metadata_values = metadata_object["value"]
       expect(metadata_values).to be_kind_of Array
       metadata_value = metadata_values.shift
-      expect { Date.strptime(metadata_value, '%m/%d/%y') }.not_to raise_error
+      expect { Date.strptime(metadata_value, "%m/%d/%y") }.not_to raise_error
 
-      metadata_object = metadata.find { |h| h['label'] == 'Portion Note' }
-      metadata_values = metadata_object['value']
+      metadata_object = metadata.find { |h| h["label"] == "Portion Note" }
+      metadata_values = metadata_object["value"]
       expect(metadata_values).to be_kind_of Array
-      expect(metadata_values).to include 'test value1'
+      expect(metadata_values).to include "test value1"
     end
 
     context "when the resource has linked vocabulary terms" do
       subject(:manifest_builder) { described_class.new(query_service.find_by(id: ephemera_folder.id)) }
 
-      let(:category) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'Art and Culture') }
-      let(:subject_term) { FactoryBot.create_for_repository(:ephemera_term, label: 'Architecture', member_of_vocabulary_id: category.id) }
+      let(:category) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: "Art and Culture") }
+      let(:subject_term) { FactoryBot.create_for_repository(:ephemera_term, label: "Architecture", member_of_vocabulary_id: category.id) }
 
-      let(:genres_category) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'Library of Congress Genre/Form Terms') }
-      let(:genre_term) { FactoryBot.create_for_repository(:ephemera_term, label: 'Experimental films', member_of_vocabulary_id: genres_category.id) }
+      let(:genres_category) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: "Library of Congress Genre/Form Terms") }
+      let(:genre_term) { FactoryBot.create_for_repository(:ephemera_term, label: "Experimental films", member_of_vocabulary_id: genres_category.id) }
       let(:ephemera_folder) do
         FactoryBot.create_for_repository(:ephemera_folder, subject: [subject_term.id], genre: genre_term.id)
       end
       it "transforms the subject terms into JSON-LD" do
         output = manifest_builder.build
         expect(output).to be_kind_of Hash
-        expect(output).to include 'metadata'
+        expect(output).to include "metadata"
         metadata = output["metadata"]
         expect(metadata).to be_kind_of Array
         expect(metadata.length).to eq(20)
 
-        metadata_object = metadata.find { |h| h['label'] == 'Subject' }
-        metadata_values = metadata_object['value']
+        metadata_object = metadata.find { |h| h["label"] == "Subject" }
+        metadata_values = metadata_object["value"]
         expect(metadata_values).to be_kind_of Array
         metadata_value = metadata_values.shift
 
         expect(metadata_value).to eq subject_term.label.first
 
-        metadata_object = metadata.find { |h| h['label'] == 'Genre' }
-        metadata_values = metadata_object['value']
+        metadata_object = metadata.find { |h| h["label"] == "Genre" }
+        metadata_values = metadata_object["value"]
         expect(metadata_values).to be_kind_of Array
         metadata_value = metadata_values.shift
 
@@ -256,11 +256,11 @@ RSpec.describe ManifestBuilder do
 
     context "when the resource has multiple titles" do
       let(:scanned_resource) do
-        FactoryBot.create_for_repository(:scanned_resource, title: ['title1', 'title2'])
+        FactoryBot.create_for_repository(:scanned_resource, title: ["title1", "title2"])
       end
       it "uses an array" do
         output = manifest_builder.build
-        expect(output["label"]).to eq ['title1', 'title2']
+        expect(output["label"]).to eq ["title1", "title2"]
       end
     end
   end
@@ -269,7 +269,7 @@ RSpec.describe ManifestBuilder do
     let(:scanned_resource) do
       FactoryBot.create_for_repository(:scanned_resource,
                                        member_ids: child.id,
-                                       identifier: 'ark:/88435/5m60qr98h',
+                                       identifier: "ark:/88435/5m60qr98h",
                                        viewing_direction: "right-to-left")
     end
     let(:child) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
@@ -321,9 +321,9 @@ RSpec.describe ManifestBuilder do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
       expect(output["description"]).to eq "Test Description"
-      expect(output['@type']).to eq 'sc:Manifest'
-      expect(output['manifests']).to eq nil
-      expect(output['sequences'].first['canvases'].length).to eq 1
+      expect(output["@type"]).to eq "sc:Manifest"
+      expect(output["manifests"]).to eq nil
+      expect(output["sequences"].first["canvases"].length).to eq 1
     end
   end
 
@@ -332,7 +332,7 @@ RSpec.describe ManifestBuilder do
     let(:scanned_map) do
       FactoryBot.create_for_repository(:scanned_map, description: "Test Description", member_ids: child.id)
     end
-    let(:file) { fixture_file_upload('files/raster/geotiff.tif', 'image/tiff') }
+    let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tiff") }
     let(:child) { FactoryBot.create_for_repository(:raster_resource, files: [file]) }
     it "builds a IIIF document without the raster child" do
       output = manifest_builder.build

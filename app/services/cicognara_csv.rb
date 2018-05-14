@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 class CicognaraCSV
   def self.headers
-    ['digital_cico_number', 'label', 'manifest', 'contributing_library',
-     'owner_call_number', 'owner_system_number', 'other_number',
-     'version_edition_statement', 'version_publication_statement', 'version_publication_date',
-     'additional_responsibility', 'provenance', 'physical_characteristics', 'rights', 'based_on_original']
+    ["digital_cico_number", "label", "manifest", "contributing_library",
+     "owner_call_number", "owner_system_number", "other_number",
+     "version_edition_statement", "version_publication_statement", "version_publication_date",
+     "additional_responsibility", "provenance", "physical_characteristics", "rights", "based_on_original"]
   end
 
   def self.values(col_id)
@@ -37,7 +37,7 @@ class CicognaraCSV
   end
 
   def self.original?(r)
-    first(r.rights_statement) == 'http://cicognara.org/microfiche_copyright'
+    first(r.rights_statement) == "http://cicognara.org/microfiche_copyright"
   end
 
   def self.extract_dclnum(r)

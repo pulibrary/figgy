@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe PlumChangeSetPersister::PropagateVisibilityAndState do
   subject(:hook) { described_class.new(change_set_persister: change_set_persister, change_set: change_set) }

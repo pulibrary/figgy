@@ -13,19 +13,8 @@ AllCops:
     - 'spec/support/**/*'
     - 'node_modules/**/*'
     - 'tmp/**/*'
-Style/FileName:
-  Enabled: true
-  Exclude:
-    - 'Gemfile'
-    - '**/*.rake'
-    - 'valhalla/Gemfile'
-    - 'Capfile'
-Style/PredicateName:
-  Exclude:
-    - 'app/controllers/catalog_controller.rb'
-Rails/OutputSafety:
-  Exclude:
-    - 'app/decorators/**/*'
+Lint/UnusedMethodArgument:
+  AllowUnusedKeywordArguments: true
 Metrics/AbcSize:
   Exclude:
     - 'app/services/ingest_ephemera_service.rb'
@@ -70,6 +59,10 @@ Metrics/ClassLength:
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/decorators/valkyrie/resource_decorator.rb'
     - 'app/controllers/ephemera_folders_controller.rb'
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'app/models/concerns/linked_data/linked_resource_factory.rb'
+    - 'app/services/file_appender.rb'
 Metrics/LineLength:
   Exclude:
     - 'spec/jobs/ingest_archival_media_bag_job_spec.rb'
@@ -98,39 +91,9 @@ Metrics/ModuleLength:
 Metrics/ParameterLists:
   Exclude:
     - 'app/change_set_persisters/plum_change_set_persister.rb'
-Metrics/CyclomaticComplexity:
+Rails/OutputSafety:
   Exclude:
-    - 'app/models/concerns/linked_data/linked_resource_factory.rb'
-    - 'app/services/file_appender.rb'
-RSpec/MultipleExpectations:
-  Enabled: false
-RSpec/ExampleLength:
-  Enabled: false
-RSpec/NestedGroups:
-  Exclude:
-    - 'spec/controllers/scanned_resources_controller_spec.rb'
-    - 'spec/controllers/catalog_controller_spec.rb'
-    - 'spec/controllers/simple_resources_controller_spec.rb'
-RSpec/DescribeClass:
-  Exclude:
-    - 'spec/abilities/**/*'
-    - 'spec/features/**/*'
-    - 'spec/views/**/*'
-    - 'spec/routing/**/*'
-    - 'spec/inputs/**/*'
-    - 'spec/requests/**/*'
-RSpec/FilePath:
-  Exclude:
-    - 'spec/registered_adapter_spec.rb'
-RSpec/EmptyExampleGroup:
-  Exclude:
-    - 'spec/models/search_builder_spec.rb'
-RSpec/VerifiedDoubles:
-  Exclude:
-    - 'spec/models/search_builder_spec.rb'
-    - 'spec/validators/viewing_hint_validator_spec.rb'
-    - 'spec/validators/viewing_direction_validator_spec.rb'
-    - 'spec/models/user_spec.rb'
+    - 'app/decorators/**/*'
 RSpec/AnyInstance:
   Exclude:
     - 'spec/jobs/ingest_mets_job_spec.rb'
@@ -141,5 +104,44 @@ RSpec/AnyInstance:
     - 'spec/jobs/check_fixity_recursive_job_spec.rb'
     - 'spec/controllers/fixity_dashboard_controller_spec.rb'
     - 'spec/change_sets/archival_media_collection_change_set_spec.rb'
-Lint/UnusedMethodArgument:
-  AllowUnusedKeywordArguments: true
+RSpec/DescribeClass:
+  Exclude:
+    - 'spec/abilities/**/*'
+    - 'spec/features/**/*'
+    - 'spec/views/**/*'
+    - 'spec/routing/**/*'
+    - 'spec/inputs/**/*'
+    - 'spec/requests/**/*'
+RSpec/EmptyExampleGroup:
+  Exclude:
+    - 'spec/models/search_builder_spec.rb'
+RSpec/ExampleLength:
+  Enabled: false
+RSpec/FilePath:
+  Exclude:
+    - 'spec/registered_adapter_spec.rb'
+RSpec/MultipleExpectations:
+  Enabled: false
+RSpec/NestedGroups:
+  Exclude:
+    - 'spec/controllers/scanned_resources_controller_spec.rb'
+    - 'spec/controllers/catalog_controller_spec.rb'
+    - 'spec/controllers/simple_resources_controller_spec.rb'
+RSpec/VerifiedDoubles:
+  Exclude:
+    - 'spec/models/search_builder_spec.rb'
+    - 'spec/validators/viewing_hint_validator_spec.rb'
+    - 'spec/validators/viewing_direction_validator_spec.rb'
+    - 'spec/models/user_spec.rb'
+Style/FileName:
+  Enabled: true
+  Exclude:
+    - 'Gemfile'
+    - '**/*.rake'
+    - 'valhalla/Gemfile'
+    - 'Capfile'
+Style/PredicateName:
+  Exclude:
+    - 'app/controllers/catalog_controller.rb'
+Style/StringLiterals:
+  EnforcedStyle: double_quotes

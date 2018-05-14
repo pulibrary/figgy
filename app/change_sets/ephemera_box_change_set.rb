@@ -25,12 +25,12 @@ class EphemeraBoxChangeSet < Valhalla::ChangeSet
 
   def barcode_valid?
     return if Barcode.new(Array.wrap(barcode).first).valid?
-    errors.add(:barcode, 'has an invalid checkdigit')
+    errors.add(:barcode, "has an invalid checkdigit")
   end
 
   def drive_barcode_valid?
     return if drive_barcode.nil? || drive_barcode.empty? || Barcode.new(Array.wrap(drive_barcode).first).valid?
-    errors.add(:drive_barcode, 'has an invalid checkdigit')
+    errors.add(:drive_barcode, "has an invalid checkdigit")
   end
 
   def primary_terms

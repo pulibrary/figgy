@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe RegenerateDerivativesJob do
   describe "#perform" do
@@ -31,7 +31,7 @@ RSpec.describe RegenerateDerivativesJob do
       end
 
       it "logs the exception" do
-        described_class.perform_now('bogus')
+        described_class.perform_now("bogus")
         expect(logger).to have_received(:error)
       end
     end

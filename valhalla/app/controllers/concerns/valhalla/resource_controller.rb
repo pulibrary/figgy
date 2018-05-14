@@ -81,7 +81,7 @@ module Valhalla
         format.html do
           redirect_to contextual_path(obj, change_set).show
         end
-        format.json { render json: { status: 'ok' } }
+        format.json { render json: { status: "ok" } }
       end
     end
 
@@ -121,7 +121,7 @@ module Valhalla
     end
 
     def _prefixes
-      @_prefixes ||= super + ['valhalla/base']
+      @_prefixes ||= super + ["valhalla/base"]
     end
 
     def resource_params

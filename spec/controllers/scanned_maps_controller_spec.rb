@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 include ActionDispatch::TestProcess
 
 RSpec.describe ScannedMapsController do
@@ -54,16 +54,16 @@ RSpec.describe ScannedMapsController do
     let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do
       {
-        title: ['Title 1', 'Title 2'],
-        rights_statement: 'Test Statement',
-        visibility: 'restricted'
+        title: ["Title 1", "Title 2"],
+        rights_statement: "Test Statement",
+        visibility: "restricted"
       }
     end
     let(:invalid_params) do
       {
         title: [""],
-        rights_statement: 'Test Statement',
-        visibility: 'restricted'
+        rights_statement: "Test Statement",
+        visibility: "restricted"
       }
     end
     context "access control" do
@@ -81,9 +81,9 @@ RSpec.describe ScannedMapsController do
     context "when joining a collection" do
       let(:valid_params) do
         {
-          title: ['Title 1', 'Title 2'],
-          rights_statement: 'Test Statement',
-          visibility: 'restricted',
+          title: ["Title 1", "Title 2"],
+          rights_statement: "Test Statement",
+          visibility: "restricted",
           member_of_collection_ids: [collection.id.to_s]
         }
       end
@@ -224,14 +224,14 @@ RSpec.describe ScannedMapsController do
           :scanned_map,
           member_ids: file_set.id,
           logical_structure: [
-            { label: 'testing', nodes: [{ label: 'Chapter 1', nodes: [{ proxy: file_set.id }] }] }
+            { label: "testing", nodes: [{ label: "Chapter 1", nodes: [{ proxy: file_set.id }] }] }
           ]
         )
 
         get :structure, params: { id: scanned_map.id.to_s }
 
         expect(response.body).to have_selector "li[data-proxy='#{file_set.id}']"
-        expect(response.body).to have_field('label', with: 'Chapter 1')
+        expect(response.body).to have_field("label", with: "Chapter 1")
         expect(response.body).to have_link scanned_map.title.first, href: solr_document_path(id: scanned_map.id)
       end
     end
@@ -245,7 +245,7 @@ RSpec.describe ScannedMapsController do
     let(:user) { FactoryBot.create(:admin) }
 
     context "when an admin and with an image file" do
-      let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: 'image/tiff') }
+      let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: "image/tiff") }
 
       it "sets the record and children variables" do
         child = FactoryBot.create_for_repository(:file_set, file_metadata: [file_metadata])
@@ -259,9 +259,9 @@ RSpec.describe ScannedMapsController do
   end
 
   describe "GET /concern/scanned_maps/:id/manifest" do
-    let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+    let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
     before do
-      stub_ezid(shoulder: '99999/fk4', blade: '123456')
+      stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "returns a IIIF manifest for a resource with a file" do
       scanned_map = FactoryBot.create_for_repository(:complete_scanned_map, files: [file])
@@ -280,7 +280,7 @@ RSpec.describe ScannedMapsController do
   describe "PUT /concern/scanned_maps/:id/extract_metadata/:file_set_id" do
     with_queue_adapter :inline
     let(:user) { FactoryBot.create(:admin) }
-    let(:file) { fixture_file_upload('files/geo_metadata/fgdc.xml', 'application/xml') }
+    let(:file) { fixture_file_upload("files/geo_metadata/fgdc.xml", "application/xml") }
     let(:tika_output) { tika_xml_output }
 
     it "extracts fgdc metadata into scanned map" do
@@ -291,12 +291,12 @@ RSpec.describe ScannedMapsController do
     end
   end
 
-  describe '#attach_to_parent' do
+  describe "#attach_to_parent" do
     let(:user) { FactoryBot.create(:admin) }
     let(:parent_scanned_map) { FactoryBot.create_for_repository(:scanned_map) }
     let(:scanned_map) { FactoryBot.create_for_repository(:scanned_map) }
 
-    it 'appends an existing ScannedMap as a parent' do
+    it "appends an existing ScannedMap as a parent" do
       patch :attach_to_parent, params: {
         id: scanned_map.id.to_s, parent_resource: {
           id: parent_scanned_map.id.to_s, member_ids: [scanned_map.id.to_s]
@@ -309,12 +309,12 @@ RSpec.describe ScannedMapsController do
     end
   end
 
-  describe '#remove_from_parent' do
+  describe "#remove_from_parent" do
     let(:user) { FactoryBot.create(:admin) }
     let(:scanned_map) { FactoryBot.create_for_repository(:scanned_map) }
 
-    context 'when a ScannedMap belongs to a ScannedMap parent' do
-      it 'removes an existing parent ScannedMap' do
+    context "when a ScannedMap belongs to a ScannedMap parent" do
+      it "removes an existing parent ScannedMap" do
         parent_scanned_map = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map.id])
 
         patch :remove_from_parent, params: {

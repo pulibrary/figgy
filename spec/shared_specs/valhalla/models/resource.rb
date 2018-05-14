@@ -1,9 +1,9 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.shared_examples 'a Valhalla::Resource' do
+RSpec.shared_examples "a Valhalla::Resource" do
   before do
-    raise 'resource must be set with `let(:resource)`' unless
+    raise "resource must be set with `let(:resource)`" unless
       defined? resource
   end
 
@@ -22,16 +22,16 @@ RSpec.shared_examples 'a Valhalla::Resource' do
     expect(resource.member_ids).to eq [1, 2, 3, 3]
   end
 
-  describe '.can_have_manifests?' do
-    it 'exposes IIIF Manifests' do
+  describe ".can_have_manifests?" do
+    it "exposes IIIF Manifests" do
       expect(described_class.can_have_manifests?).to be true
     end
   end
 
-  describe '#pdf_file' do
+  describe "#pdf_file" do
     let(:file_metadata) { FileMetadata.new mime_type: ["application/pdf"], use: [Valkyrie::Vocab::PCDMUse.OriginalFile] }
 
-    it 'retrieves only PDF FileSets' do
+    it "retrieves only PDF FileSets" do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
       resource = adapter.persister.save(resource: described_class.new(file_metadata: [file_metadata]))
 

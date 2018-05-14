@@ -1,16 +1,16 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe CicognaraCSV do
   describe "#headers" do
     let(:headers) do
-      ['digital_cico_number', 'label', 'manifest', 'contributing_library', 'owner_call_number',
-       'owner_system_number', 'other_number', 'version_edition_statement', 'version_publication_statement',
-       'version_publication_date', 'additional_responsibility', 'provenance', 'physical_characteristics',
-       'rights', 'based_on_original']
+      ["digital_cico_number", "label", "manifest", "contributing_library", "owner_call_number",
+       "owner_system_number", "other_number", "version_edition_statement", "version_publication_statement",
+       "version_publication_date", "additional_responsibility", "provenance", "physical_characteristics",
+       "rights", "based_on_original"]
     end
 
-    it 'has a list of headers' do
+    it "has a list of headers" do
       expect(described_class.headers).to eq(headers)
     end
   end
@@ -26,20 +26,20 @@ RSpec.describe CicognaraCSV do
 
     context "with a non-Vatican/Cicognara rights statement" do
       let(:values) do
-        [['cico:qgb', 'Princeton University Library', manifest_url, 'Princeton University Library',
-          'Oversize NA2810 .H75f', '2068747', 'ark:/99999/fk44609321', nil, 'Amsterdam: J. Jeansson, 1620',
-          '1620', nil, nil, '39 . 30 plates. 30 x 40 cm.', 'http://rightsstatements.org/vocab/NKC/1.0/',
+        [["cico:qgb", "Princeton University Library", manifest_url, "Princeton University Library",
+          "Oversize NA2810 .H75f", "2068747", "ark:/99999/fk44609321", nil, "Amsterdam: J. Jeansson, 1620",
+          "1620", nil, nil, "39 . 30 plates. 30 x 40 cm.", "http://rightsstatements.org/vocab/NKC/1.0/",
           false]]
       end
       let(:obj) do
         FactoryBot.create_for_repository :complete_scanned_resource,
-                                         source_metadata_identifier: ['2068747'],
+                                         source_metadata_identifier: ["2068747"],
                                          member_of_collection_ids: [col.id], import_metadata: true
       end
       before do
         obj
       end
-      it 'has values' do
+      it "has values" do
         expect(described_class.values(col.id)).to eq(values)
       end
     end
@@ -47,19 +47,19 @@ RSpec.describe CicognaraCSV do
     context "with a Vatican/Cicognara rights statement" do
       let(:obj) do
         FactoryBot.create_for_repository :complete_scanned_resource,
-                                         source_metadata_identifier: ['2068747'],
-                                         rights_statement: ['http://cicognara.org/microfiche_copyright'],
+                                         source_metadata_identifier: ["2068747"],
+                                         rights_statement: ["http://cicognara.org/microfiche_copyright"],
                                          member_of_collection_ids: [col.id], import_metadata: true
       end
       let(:values) do
-        [['cico:qgb', 'Microfiche', manifest_url, 'Bibliotheca Apostolica Vaticana', 'Oversize NA2810 .H75f',
-          'cico:qgb', "ark:/99999/fk44609321", nil, 'Amsterdam: J. Jeansson, 1620', '1620', nil, nil,
-          '39 . 30 plates. 30 x 40 cm.', 'http://cicognara.org/microfiche_copyright', true]]
+        [["cico:qgb", "Microfiche", manifest_url, "Bibliotheca Apostolica Vaticana", "Oversize NA2810 .H75f",
+          "cico:qgb", "ark:/99999/fk44609321", nil, "Amsterdam: J. Jeansson, 1620", "1620", nil, nil,
+          "39 . 30 plates. 30 x 40 cm.", "http://cicognara.org/microfiche_copyright", true]]
       end
       before do
         obj
       end
-      it 'has values' do
+      it "has values" do
         expect(described_class.values(col.id)).to eq(values)
       end
     end
@@ -67,7 +67,7 @@ RSpec.describe CicognaraCSV do
 
   describe "#date" do
     it "returns nil when given an invalid date" do
-      expect(described_class.date('invalid_date')).to be_nil
+      expect(described_class.date("invalid_date")).to be_nil
     end
   end
 end

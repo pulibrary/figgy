@@ -16,7 +16,7 @@ class EphemeraFieldDecorator < Valkyrie::ResourceDecorator
   # Retrieves the label for the field name
   # @return [String]
   def name_label
-    name_term.blank? ? 'Unnamed' : name_term.label
+    name_term.blank? ? "Unnamed" : name_term.label
   end
 
   # Aliases the title to the field name
@@ -28,7 +28,7 @@ class EphemeraFieldDecorator < Valkyrie::ResourceDecorator
   # Retrieves the attribute name to which the EphemeraField is linked in its name
   # e. g. EphemeraFolder.language is linked to dc:language, EphemeraFolder.subject to dc:subject
   def attribute_name
-    name_label.split('.').last
+    name_label.split(".").last
   end
 
   # Retrieves the HTML for a link to the EphemeraField
@@ -60,7 +60,7 @@ class EphemeraFieldDecorator < Valkyrie::ResourceDecorator
   # Retrieves the label for the linked vocabulary
   # @return [String] the vocabulary label
   def vocabulary_label
-    vocabulary.blank? ? 'Unnassigned' : vocabulary.label
+    vocabulary.blank? ? "Unnassigned" : vocabulary.label
   end
 
   # Ensures that users cannot manage files for this Resource

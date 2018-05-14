@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-require 'rails_helper'
-require 'valkyrie/specs/shared_specs'
+require "rails_helper"
+require "valkyrie/specs/shared_specs"
 
 ##
 # These tests just ensure all our registered adapters pass the shared specs.

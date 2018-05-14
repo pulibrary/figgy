@@ -1,12 +1,12 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe IngestLaeFolderJob do
-  describe '#perform' do
-    context 'with a set of LAE images' do
-      let(:barcode1) { '32101075851400' }
-      let(:barcode2) { '32101075851418' }
-      let(:lae_dir) { Rails.root.join('spec', 'fixtures', 'lae') }
+  describe "#perform" do
+    context "with a set of LAE images" do
+      let(:barcode1) { "32101075851400" }
+      let(:barcode2) { "32101075851418" }
+      let(:lae_dir) { Rails.root.join("spec", "fixtures", "lae") }
       let(:folder1) { FactoryBot.create_for_repository(:ephemera_folder, barcode: [barcode1]) }
       let(:folder2) { FactoryBot.create_for_repository(:ephemera_folder, barcode: [barcode2]) }
       let(:query_service) { metadata_adapter.query_service }
@@ -16,7 +16,7 @@ RSpec.describe IngestLaeFolderJob do
         folder2
       end
 
-      it 'attaches the files' do
+      it "attaches the files" do
         described_class.perform_now(lae_dir)
 
         reloaded1 = query_service.find_by(id: folder1.id)

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 describe DraftPublishWorkflow do
-  subject(:workflow) { described_class.new 'draft' }
+  subject(:workflow) { described_class.new "draft" }
 
-  describe 'ingest workflow' do
-    it 'proceeds through ingest workflow' do
+  describe "ingest workflow" do
+    it "proceeds through ingest workflow" do
       # initial state: draft
       expect(workflow.draft?).to be true
       expect(workflow.may_publish?).to be true
@@ -26,21 +26,21 @@ describe DraftPublishWorkflow do
     end
   end
 
-  it 'reports valid states' do
+  it "reports valid states" do
     expect(workflow.valid_states).to eq %w[draft published]
   end
 
-  describe 'access states' do
-    it 'provides a list of read-accessible states' do
+  describe "access states" do
+    it "provides a list of read-accessible states" do
       expect(described_class.public_read_states).to contain_exactly "published"
     end
 
-    it 'provides a list of manifest-publishable states' do
+    it "provides a list of manifest-publishable states" do
       expect(described_class.manifest_states).to contain_exactly "published"
     end
 
-    it 'provides a list of states valid for minting a new ARK' do
-      expect(described_class.ark_mint_states).to contain_exactly 'published'
+    it "provides a list of states valid for minting a new ARK" do
+      expect(described_class.ark_mint_states).to contain_exactly "published"
     end
   end
 end

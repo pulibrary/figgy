@@ -34,13 +34,13 @@ class TemplatesController < ApplicationController
   end
 
   def _prefixes
-    @_prefixes ||= super + ['valhalla/base']
+    @_prefixes ||= super + ["valhalla/base"]
   end
 
   def load_fields
     fields.each do |field|
       case field.attribute_name
-      when 'subject'
+      when "subject"
         @subject = field.vocabulary.categories
       else
         instance_variable_set("@#{field.attribute_name}", field.vocabulary.terms)

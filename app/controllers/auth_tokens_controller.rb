@@ -24,7 +24,7 @@ class AuthTokensController < ApplicationController
     @auth_token = AuthToken.new(auth_token_params)
 
     if @auth_token.save
-      redirect_to @auth_token, notice: 'Auth token was successfully created.'
+      redirect_to @auth_token, notice: "Auth token was successfully created."
     else
       render :new
     end
@@ -33,7 +33,7 @@ class AuthTokensController < ApplicationController
   # PATCH/PUT /auth_tokens/1
   def update
     if @auth_token.update(auth_token_params)
-      redirect_to @auth_token, notice: 'Auth token was successfully updated.'
+      redirect_to @auth_token, notice: "Auth token was successfully updated."
     else
       render :edit
     end
@@ -42,7 +42,7 @@ class AuthTokensController < ApplicationController
   # DELETE /auth_tokens/1
   def destroy
     @auth_token.destroy
-    redirect_to auth_tokens_url, notice: 'Auth token was successfully destroyed.'
+    redirect_to auth_tokens_url, notice: "Auth token was successfully destroyed."
   end
 
   private

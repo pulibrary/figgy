@@ -1,18 +1,18 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe IngestFolderJob do
-  describe '#perform' do
-    context 'with a directory of Scanned TIFFs' do
+  describe "#perform" do
+    context "with a directory of Scanned TIFFs" do
       let(:logger) { Logger.new(nil) }
-      let(:single_dir) { Rails.root.join('spec', 'fixtures', 'ingest_single') }
-      let(:bib) { '4609321' }
-      let(:local_id) { 'cico:xyz' }
-      let(:replaces) { 'pudl0001/4609321/331' }
+      let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single") }
+      let(:bib) { "4609321" }
+      let(:local_id) { "cico:xyz" }
+      let(:replaces) { "pudl0001/4609321/331" }
       let(:query_service) { metadata_adapter.query_service }
       let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
 
-      it 'ingests the resources' do
+      it "ingests the resources" do
         coll = FactoryBot.create_for_repository(:collection)
 
         ingest_service = instance_double(BulkIngestService)
@@ -28,7 +28,7 @@ RSpec.describe IngestFolderJob do
 
         expect(ingest_service).to have_received(:attach_dir).with(
           base_directory: single_dir,
-          file_filter: '.tif',
+          file_filter: ".tif",
           source_metadata_identifier: bib,
           local_identifier: local_id,
           member_of_collection_ids: [coll.id]

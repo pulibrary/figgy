@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 include ActionDispatch::TestProcess
 
 RSpec.describe VectorResourcesController do
@@ -44,16 +44,16 @@ RSpec.describe VectorResourcesController do
     let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do
       {
-        title: ['Title 1', 'Title 2'],
-        rights_statement: 'Test Statement',
-        visibility: 'restricted'
+        title: ["Title 1", "Title 2"],
+        rights_statement: "Test Statement",
+        visibility: "restricted"
       }
     end
     let(:invalid_params) do
       {
         title: [""],
-        rights_statement: 'Test Statement',
-        visibility: 'restricted'
+        rights_statement: "Test Statement",
+        visibility: "restricted"
       }
     end
     context "access control" do
@@ -73,9 +73,9 @@ RSpec.describe VectorResourcesController do
     context "when joining a collection" do
       let(:valid_params) do
         {
-          title: ['Title 1', 'Title 2'],
-          rights_statement: 'Test Statement',
-          visibility: 'restricted',
+          title: ["Title 1", "Title 2"],
+          rights_statement: "Test Statement",
+          visibility: "restricted",
           member_of_collection_ids: [collection.id.to_s]
         }
       end
@@ -198,35 +198,35 @@ RSpec.describe VectorResourcesController do
       allow(GeoDiscovery::DocumentBuilder).to receive(:new).and_return(builder)
     end
 
-    context 'with a valid geoblacklight document' do
+    context "with a valid geoblacklight document" do
       before do
-        allow(builder).to receive(:to_hash).and_return(id: 'test')
+        allow(builder).to receive(:to_hash).and_return(id: "test")
       end
 
-      it 'renders the document' do
+      it "renders the document" do
         get :geoblacklight, params: { id: vector_resource.id, format: :json }
         expect(response).to be_success
       end
     end
 
-    context 'with an invalid geoblacklight document' do
+    context "with an invalid geoblacklight document" do
       before do
-        allow(builder).to receive(:to_hash).and_return(error: 'problem')
+        allow(builder).to receive(:to_hash).and_return(error: "problem")
       end
 
-      it 'returns an error message' do
+      it "returns an error message" do
         get :geoblacklight, params: { id: vector_resource.id, format: :json }
-        expect(response.body).to include('problem')
+        expect(response.body).to include("problem")
       end
     end
   end
 
-  describe '#attach_to_parent' do
+  describe "#attach_to_parent" do
     let(:user) { FactoryBot.create(:admin) }
     let(:parent_raster_resource) { FactoryBot.create_for_repository(:raster_resource) }
     let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource) }
 
-    it 'appends an existing ScannedMap as a parent' do
+    it "appends an existing ScannedMap as a parent" do
       patch :attach_to_parent, params: {
         id: vector_resource.id.to_s, parent_resource: {
           id: parent_raster_resource.id.to_s, member_ids: [vector_resource.id.to_s]
@@ -239,12 +239,12 @@ RSpec.describe VectorResourcesController do
     end
   end
 
-  describe '#remove_from_parent' do
+  describe "#remove_from_parent" do
     let(:user) { FactoryBot.create(:admin) }
     let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource) }
 
-    context 'when a RasterResource belongs to a ScannedMap parent' do
-      it 'removes an existing parent ScannedMap' do
+    context "when a RasterResource belongs to a ScannedMap parent" do
+      it "removes an existing parent ScannedMap" do
         parent_raster_resource = FactoryBot.create_for_repository(:raster_resource, member_ids: [vector_resource.id])
 
         patch :remove_from_parent, params: {

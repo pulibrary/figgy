@@ -3,8 +3,8 @@ namespace :lae do
   desc "Ingest one or more LAE folders"
   task ingest: :environment do
     folder_dir = ARGV[1]
-    project = ENV['PROJECT']
-    state = ENV['STATE']
+    project = ENV["PROJECT"]
+    state = ENV["STATE"]
 
     abort "usage: PROJECT=projectlabel STATE=state rake lae:ingest /path/to/lae/folder" unless Dir.exist?(folder_dir) && project.present?
     IngestEphemeraJob.set(queue: :low).perform_later(folder_dir, state, project)
@@ -16,7 +16,7 @@ namespace :lae do
   end
   task ingest_posters: :environment do
     file = ARGV[1]
-    project_label = ENV['PROJECT']
+    project_label = ENV["PROJECT"]
 
     abort "usage: PROJECT=projectlabel rake lae:ingest_posters /path/to/lae.json" unless File.exist?(file) && project_label.present?
     PosterIngesterJob.perform_later(file, project_label)

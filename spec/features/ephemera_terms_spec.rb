@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.feature "Ephemera Terms", js: true do
   let(:user) { FactoryBot.create(:admin) }
@@ -13,13 +13,13 @@ RSpec.feature "Ephemera Terms", js: true do
     sign_in user
   end
 
-  context 'when users have added a controlled vocabulary' do
+  context "when users have added a controlled vocabulary" do
     let(:ephemera_vocabulary) do
       res = FactoryBot.create_for_repository(:ephemera_vocabulary)
       adapter.persister.save(resource: res)
     end
 
-    context 'when users have added terms to the vocabulary' do
+    context "when users have added terms to the vocabulary" do
       let(:ephemera_term) { FactoryBot.create_for_repository(:ephemera_term) }
 
       before do
@@ -27,20 +27,20 @@ RSpec.feature "Ephemera Terms", js: true do
         adapter.persister.save(resource: ephemera_term)
       end
 
-      scenario 'users can view an existing term' do
+      scenario "users can view an existing term" do
         visit Valhalla::ContextualPath.new(child: ephemera_term).show
-        expect(page).to have_content 'test term'
+        expect(page).to have_content "test term"
       end
 
-      scenario 'users can edit existing terms' do
+      scenario "users can edit existing terms" do
         visit polymorphic_path [:edit, ephemera_term]
-        page.fill_in 'ephemera_term_label', with: 'updated label'
-        page.find('form.edit_ephemera_term').native.submit
+        page.fill_in "ephemera_term_label", with: "updated label"
+        page.find("form.edit_ephemera_term").native.submit
 
-        expect(page).to have_content 'updated label'
+        expect(page).to have_content "updated label"
       end
 
-      scenario 'users can delete existing terms' do
+      scenario "users can delete existing terms" do
         visit Valhalla::ContextualPath.new(child: ephemera_term).show
 
         page.accept_confirm do

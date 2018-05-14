@@ -23,15 +23,15 @@ module GeoDiscovery
     end
 
     def to_hash(_arg)
-      raise 'this method should be overriden and return the document as a hash'
+      raise "this method should be overriden and return the document as a hash"
     end
 
     def to_json(_arg)
-      raise 'this method should be overriden and return the document as json'
+      raise "this method should be overriden and return the document as json"
     end
 
     def to_xml(_arg)
-      raise 'this method should be overriden and return the document as xml'
+      raise "this method should be overriden and return the document as xml"
     end
   end
 end

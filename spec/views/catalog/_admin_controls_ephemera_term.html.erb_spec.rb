@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "catalog/_admin_controls_ephemera_term" do
   let(:term) { FactoryBot.create_for_repository(:ephemera_term) }
@@ -14,25 +14,25 @@ RSpec.describe "catalog/_admin_controls_ephemera_term" do
     render
   end
 
-  it 'hides the edit link from users' do
-    expect(rendered).not_to have_link 'Edit This Ephemera Term'
+  it "hides the edit link from users" do
+    expect(rendered).not_to have_link "Edit This Ephemera Term"
   end
 
-  it 'hides the delete link from users' do
-    expect(rendered).not_to have_link 'Delete This Ephemera Term'
+  it "hides the delete link from users" do
+    expect(rendered).not_to have_link "Delete This Ephemera Term"
   end
 
-  context 'as an admin. user' do
+  context "as an admin. user" do
     let(:user) { FactoryBot.create(:admin) }
-    it 'renders the edit link' do
-      expect(rendered).to have_link 'Edit This Ephemera Term', href: edit_ephemera_term_path(term.id)
+    it "renders the edit link" do
+      expect(rendered).to have_link "Edit This Ephemera Term", href: edit_ephemera_term_path(term.id)
     end
   end
 
-  context 'as an admin. user' do
+  context "as an admin. user" do
     let(:user) { FactoryBot.create(:admin) }
-    it 'renders the delete link' do
-      expect(rendered).to have_link 'Delete This Ephemera Term', href: ephemera_term_path(term.id)
+    it "renders the delete link" do
+      expect(rendered).to have_link "Delete This Ephemera Term", href: ephemera_term_path(term.id)
     end
   end
 end

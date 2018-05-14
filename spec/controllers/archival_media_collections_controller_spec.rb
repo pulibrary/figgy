@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ArchivalMediaCollectionsController do
   let(:user) { nil }
@@ -27,7 +27,7 @@ RSpec.describe ArchivalMediaCollectionsController do
     end
 
     describe "POST /archival_media_collections" do
-      let(:file) { File.open(Rails.root.join("spec", "fixtures", "some_finding_aid.xml"), 'r') }
+      let(:file) { File.open(Rails.root.join("spec", "fixtures", "some_finding_aid.xml"), "r") }
 
       before do
         allow(Dir).to receive(:exist?).and_return(true)
@@ -41,7 +41,7 @@ RSpec.describe ArchivalMediaCollectionsController do
         expect(response).to be_redirect
 
         collection = query_service.find_all_of_model(model: ArchivalMediaCollection).first
-        expect(collection.source_metadata_identifier).to eq ['AC044_c0003']
+        expect(collection.source_metadata_identifier).to eq ["AC044_c0003"]
         expect(collection.primary_imported_metadata).to be_a ImportedMetadata
         expect(collection.title).to contain_exactly "Series 1: Committee Administration - Alumni Council: Proposals for Electing Young Alumni Trustees"
         expect(IngestArchivalMediaBagJob).to have_received(:perform_later).with(collection_component: "AC044_c0003", bag_path: "/idk/some/path", user: user)
@@ -56,10 +56,10 @@ RSpec.describe ArchivalMediaCollectionsController do
 
       before do
         stub_ezid(shoulder: "99999/fk4", blade: "7564298")
-        stub_pulfa(pulfa_id: 'C0652_c0377')
+        stub_pulfa(pulfa_id: "C0652_c0377")
 
         change_set = MediaResourceChangeSet.new(resource)
-        change_set.validate(source_metadata_identifier: 'C0652_c0377', member_of_collection_ids: [collection.id])
+        change_set.validate(source_metadata_identifier: "C0652_c0377", member_of_collection_ids: [collection.id])
         change_set.sync
         change_set_persister.save(change_set: change_set)
       end
@@ -71,7 +71,7 @@ RSpec.describe ArchivalMediaCollectionsController do
       end
 
       it "allows downloading a CSV file" do
-        get :ark_report, params: { id: collection.id, format: 'csv' }
+        get :ark_report, params: { id: collection.id, format: "csv" }
 
         expect(response.body).to eq(data)
       end

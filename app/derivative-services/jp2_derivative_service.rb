@@ -37,7 +37,7 @@ class Jp2DerivativeService
   end
 
   def valid?
-    ['image/tiff', 'image/jpeg'].include?(mime_type.first)
+    ["image/tiff", "image/jpeg"].include?(mime_type.first)
   end
 
   def create_derivatives
@@ -60,9 +60,9 @@ class Jp2DerivativeService
 
   def run_derivatives
     case mime_type
-    when ['image/tiff']
+    when ["image/tiff"]
       run_tiff_derivatives
-    when ['image/jpeg']
+    when ["image/jpeg"]
       run_jpg_derivatives
     end
   end
@@ -71,10 +71,10 @@ class Jp2DerivativeService
     Hydra::Derivatives::Jpeg2kImageDerivatives.create(
       filename,
       outputs: [
-        label: 'intermediate_file',
+        label: "intermediate_file",
         recipe: recipe,
         service: {
-          datastream: 'intermediate_file'
+          datastream: "intermediate_file"
         },
         url: URI("file://#{temporary_output.path}")
       ]
@@ -85,9 +85,9 @@ class Jp2DerivativeService
     Hydra::Derivatives::ImageDerivatives.create(
       filename,
       outputs: [
-        label: 'intermediate_file',
+        label: "intermediate_file",
         url: URI("file://#{temporary_output.path}"),
-        format: 'jp2'
+        format: "jp2"
       ]
     )
   end
@@ -97,7 +97,7 @@ class Jp2DerivativeService
   # File membership for the parent of the Valkyrie::StorageAdapter::File is removed using #cleanup_derivative_metadata
   def cleanup_derivatives
     deleted_files = []
-    jp2_derivatives = resource.file_metadata.select { |file| file.derivative? && file.mime_type.include?('image/jp2') }
+    jp2_derivatives = resource.file_metadata.select { |file| file.derivative? && file.mime_type.include?("image/jp2") }
     jp2_derivatives.each do |file|
       storage_adapter.delete(id: file.id)
       deleted_files << file.id

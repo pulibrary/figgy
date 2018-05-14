@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "catalog/_members_collection.html.erb" do
   context "when it's a collection with members" do
@@ -7,14 +7,14 @@ RSpec.describe "catalog/_members_collection.html.erb" do
     let(:scanned_resource1) do
       FactoryBot.create_for_repository(
         :scanned_resource,
-        title: ['First Member'],
+        title: ["First Member"],
         member_of_collection_ids: [collection.id]
       )
     end
     let(:scanned_resource2) do
       FactoryBot.create_for_repository(
         :scanned_resource,
-        title: ['Second Member'],
+        title: ["Second Member"],
         member_of_collection_ids: [collection.id]
       )
     end
@@ -43,8 +43,8 @@ RSpec.describe "catalog/_members_collection.html.erb" do
       render
     end
 
-    it 'shows all member resources' do
-      expect(rendered).to have_selector 'h2', text: 'Members'
+    it "shows all member resources" do
+      expect(rendered).to have_selector "h2", text: "Members"
       expect(rendered).to have_link "First Member", href: "/catalog/#{scanned_resource1.id}"
       expect(rendered).to have_link "Second Member", href: "/catalog/#{scanned_resource2.id}"
     end

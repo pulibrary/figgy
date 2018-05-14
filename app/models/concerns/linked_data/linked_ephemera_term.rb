@@ -20,9 +20,9 @@ module LinkedData
 
       def type
         if resource.is_a?(EphemeraVocabulary)
-          'skos:ConceptScheme'
+          "skos:ConceptScheme"
         else
-          'skos:Concept'
+          "skos:Concept"
         end
       end
 

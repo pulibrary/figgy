@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe TemplateChangeSet do
   subject(:change_set) { described_class.new(template) }
@@ -24,13 +24,13 @@ RSpec.describe TemplateChangeSet do
   describe "validations" do
     context "when given a non-UUID for a parent resource" do
       it "is not valid" do
-        change_set.validate(parent_id: ['not-valid'])
+        change_set.validate(parent_id: ["not-valid"])
         expect(change_set).not_to be_valid
       end
     end
     context "when given a valid UUID for a parent resource which does not exist" do
       it "is not valid" do
-        change_set.validate(parent_id: ['b8823acb-d42b-4e62-a5c9-de5f94cbd3f6'])
+        change_set.validate(parent_id: ["b8823acb-d42b-4e62-a5c9-de5f94cbd3f6"])
         expect(change_set).not_to be_valid
       end
     end

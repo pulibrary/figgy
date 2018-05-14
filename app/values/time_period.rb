@@ -16,13 +16,13 @@ class TimePeriod
   private
 
     def append_caldate
-      doc.at_xpath('//idinfo/timeperd/timeinfo/mdattim/sngdate/caldate | //idinfo/timeperd/timeinfo/sngdate/caldate').tap do |node|
+      doc.at_xpath("//idinfo/timeperd/timeinfo/mdattim/sngdate/caldate | //idinfo/timeperd/timeinfo/sngdate/caldate").tap do |node|
         initial_value << node.text[0..3] unless node.nil? # extract year only
       end
     end
 
     def append_begdate
-      doc.at_xpath('//idinfo/timeperd/timeinfo/rngdates/begdate').tap do |node|
+      doc.at_xpath("//idinfo/timeperd/timeinfo/rngdates/begdate").tap do |node|
         initial_value << node.text[0..3] unless node.nil? # extract year only
       end
     end

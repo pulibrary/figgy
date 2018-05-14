@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-require 'rails_helper'
-require 'valkyrie/derivatives/specs/shared_specs'
+require "rails_helper"
+require "valkyrie/derivatives/specs/shared_specs"
 include ActionDispatch::TestProcess
 
 RSpec.describe VectorResourceDerivativeService do
@@ -41,8 +41,8 @@ RSpec.describe VectorResourceDerivativeService do
     thumbnails = resource.file_metadata.find_all { |f| f.label == ["thumbnail.png"] }
     shapefile_file = Valkyrie::StorageAdapter.find_by(id: shapefiles.first.file_identifiers.first)
     thumbnail_file = Valkyrie::StorageAdapter.find_by(id: thumbnails.first.file_identifiers.first)
-    expect(shapefile_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config['geo_derivative_path']).to_s)
-    expect(thumbnail_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config['geo_derivative_path']).to_s)
+    expect(shapefile_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
+    expect(thumbnail_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
   end
 
   describe "#cleanup_derivatives" do

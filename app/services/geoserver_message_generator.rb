@@ -24,11 +24,11 @@ class GeoserverMessageGenerator
     end
 
     def geotiff_path
-      derivative_file_path.gsub(Figgy.config['geo_derivative_path'], geoserver_base_path)
+      derivative_file_path.gsub(Figgy.config["geo_derivative_path"], geoserver_base_path)
     end
 
     def geoserver_base_path
-      Figgy.config['geoserver']['derivatives_path']
+      Figgy.config["geoserver"]["derivatives_path"]
     end
 
     def id
@@ -67,7 +67,7 @@ class GeoserverMessageGenerator
 
     def workspace
       visibility = parent.model.visibility.try(:first)
-      return Figgy.config['geoserver']['open']['workspace'] if visibility == public_visibility
-      Figgy.config['geoserver']['authenticated']['workspace']
+      return Figgy.config["geoserver"]["open"]["workspace"] if visibility == public_visibility
+      Figgy.config["geoserver"]["authenticated"]["workspace"]
     end
 end

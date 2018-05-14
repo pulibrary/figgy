@@ -4,7 +4,7 @@ module BoundingBoxHelper
 
   # rubocop:disable Rails/OutputSafety
   def bbox_input(property, change_set)
-    markup = ''
+    markup = ""
     markup << %(<div id='bbox'></div>)
     markup << bbox_display_inputs
     markup << bbox_edit_script_tag(property, change_set)
@@ -12,7 +12,7 @@ module BoundingBoxHelper
   end
 
   def bbox_display(coverage)
-    markup = ''
+    markup = ""
     markup << %(<tr><th></th>\n<td id='accordion'><ul class='tabular'>)
     markup << %(<div id='bbox' class='collapse in'></div>)
     markup << bbox_display_inputs

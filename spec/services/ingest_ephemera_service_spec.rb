@@ -1,17 +1,17 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe IngestEphemeraService, :admin_set do
   subject(:ingest_service) { described_class.new(folder, nil, project.title.first, change_set_persister, logger) }
-  let(:folder) { Rails.root.join('spec', 'fixtures', 'lae_migration', 'folders', '0003d') }
-  let(:empty_folder) { Rails.root.join('spec', 'fixtures', 'lae_migration', 'folders', '012g6') }
+  let(:folder) { Rails.root.join("spec", "fixtures", "lae_migration", "folders", "0003d") }
+  let(:empty_folder) { Rails.root.join("spec", "fixtures", "lae_migration", "folders", "012g6") }
   let(:project) { FactoryBot.create_for_repository(:ephemera_project) }
   let(:logger) { Logger.new(nil) }
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
-  let(:genres) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'LAE Genres') }
-  let(:subjects) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'LAE Subjects') }
-  let(:languages) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'LAE Languages') }
-  let(:areas) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'LAE Areas') }
+  let(:genres) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: "LAE Genres") }
+  let(:subjects) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: "LAE Subjects") }
+  let(:languages) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: "LAE Languages") }
+  let(:areas) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: "LAE Areas") }
   let(:postcards) { FactoryBot.create_for_repository(:ephemera_term, label: "Postcards", member_of_vocabulary_id: genres.id) }
   let(:museums) { FactoryBot.create_for_repository(:ephemera_term, label: "Museums", member_of_vocabulary_id: subjects.id) }
   let(:spanish) { FactoryBot.create_for_repository(:ephemera_term, label: "Spanish", member_of_vocabulary_id: languages.id) }
@@ -48,17 +48,17 @@ RSpec.describe IngestEphemeraService, :admin_set do
         expect(ingested.date_range.first.end.first).to eq "2004"
         expect(ingested.barcode).to eq ["32101093680013"]
         expect(ingested.description).to eq ["Test description"]
-        expect(ingested.series).to eq ['Test Series']
+        expect(ingested.series).to eq ["Test Series"]
         expect(ingested.read_groups).to eq []
         expect(ingested.pdf_type).to eq ["none"]
         expect(ingested.member_ids.length).to eq 2
-        expect(ingested.rights_statement).to eq [RDF::URI('http://rightsstatements.org/vocab/CNE/1.0/')]
+        expect(ingested.rights_statement).to eq [RDF::URI("http://rightsstatements.org/vocab/CNE/1.0/")]
         expect(ingested.state).to eq ["complete"]
-        expect(ingested.local_identifier).to eq ['0003d']
-        expect(ingested.folder_number).to eq ['2']
-        expect(ingested.height).to eq ['11']
-        expect(ingested.width).to eq ['16']
-        expect(ingested.page_count).to eq ['2']
+        expect(ingested.local_identifier).to eq ["0003d"]
+        expect(ingested.folder_number).to eq ["2"]
+        expect(ingested.height).to eq ["11"]
+        expect(ingested.width).to eq ["16"]
+        expect(ingested.page_count).to eq ["2"]
 
         members = query_service.find_members(resource: ingested).to_a
 
@@ -109,11 +109,11 @@ RSpec.describe IngestEphemeraService, :admin_set do
         expect(ingested.title).to eq(["Se firmó el convenio para terminar el Edificio Único de Sociales. El cambio se hace desde abajo: La Vallese."])
         expect(ingested.barcode).to eq ["32101089002131"]
         expect(ingested.member_ids.length).to eq 0
-        expect(ingested.rights_statement).to eq [RDF::URI('http://rightsstatements.org/vocab/CNE/1.0/')]
+        expect(ingested.rights_statement).to eq [RDF::URI("http://rightsstatements.org/vocab/CNE/1.0/")]
         expect(ingested.state).to eq ["complete"]
-        expect(ingested.local_identifier).to eq ['012g6']
-        expect(ingested.folder_number).to eq ['7']
-        expect(ingested.page_count).to eq ['1']
+        expect(ingested.local_identifier).to eq ["012g6"]
+        expect(ingested.folder_number).to eq ["7"]
+        expect(ingested.page_count).to eq ["1"]
 
         members = query_service.find_members(resource: ingested).to_a
         expect(members).to eq []
@@ -121,7 +121,7 @@ RSpec.describe IngestEphemeraService, :admin_set do
     end
 
     context "when the folder doesn't exist" do
-      let(:folder) { Rails.root.join('spec', 'fixtures', 'bogus') }
+      let(:folder) { Rails.root.join("spec", "fixtures", "bogus") }
       let(:logger) { instance_double(Logger) }
 
       before do
@@ -137,18 +137,18 @@ RSpec.describe IngestEphemeraService, :admin_set do
 
   describe "state" do
     let(:box) { FactoryBot.build(:ephemera_box) }
-    let(:box_prov) { File.new Rails.root.join('spec', 'fixtures', 'lae_migration', 'boxes', '00014', 'provMetadata') }
+    let(:box_prov) { File.new Rails.root.join("spec", "fixtures", "lae_migration", "boxes", "00014", "provMetadata") }
     let(:folder) { FactoryBot.build(:ephemera_folder) }
-    let(:folder_prov1) { File.new Rails.root.join('spec', 'fixtures', 'lae_migration', 'folders', '0003d', 'provMetadata') }
-    let(:folder_prov2) { File.new Rails.root.join('spec', 'fixtures', 'lae_migration', 'folders', '012g6', 'provMetadata') }
+    let(:folder_prov1) { File.new Rails.root.join("spec", "fixtures", "lae_migration", "folders", "0003d", "provMetadata") }
+    let(:folder_prov2) { File.new Rails.root.join("spec", "fixtures", "lae_migration", "folders", "012g6", "provMetadata") }
     it "parses the state for a box" do
-      expect(IngestEphemeraService::ProvMetadata.new(box_prov, box).state).to eq 'received'
+      expect(IngestEphemeraService::ProvMetadata.new(box_prov, box).state).to eq "received"
     end
     it "maps 'in production' folders to 'complete'" do
-      expect(IngestEphemeraService::ProvMetadata.new(folder_prov1, folder).state).to eq 'complete'
+      expect(IngestEphemeraService::ProvMetadata.new(folder_prov1, folder).state).to eq "complete"
     end
     it "maps other folder states to 'needs_qa'" do
-      expect(IngestEphemeraService::ProvMetadata.new(folder_prov2, folder).state).to eq 'needs_qa'
+      expect(IngestEphemeraService::ProvMetadata.new(folder_prov2, folder).state).to eq "needs_qa"
     end
   end
 end

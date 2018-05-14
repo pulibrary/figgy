@@ -1,13 +1,13 @@
 # frozen_string_literal: true
-require 'rails_helper'
-require 'valkyrie/specs/shared_specs'
+require "rails_helper"
+require "valkyrie/specs/shared_specs"
 
 RSpec.describe EphemeraProject do
-  subject(:project) { described_class.new(title: 'test name') }
+  subject(:project) { described_class.new(title: "test name") }
   let(:resource_klass) { described_class }
   it_behaves_like "a Valkyrie::Resource"
   it "has a title" do
-    expect(project.title).to include 'test name'
+    expect(project.title).to include "test name"
   end
   it "has ordered member_ids" do
     project.member_ids = [1, 2, 3, 3]

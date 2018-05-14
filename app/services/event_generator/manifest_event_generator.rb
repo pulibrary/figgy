@@ -45,7 +45,7 @@ class EventGenerator
       def manifest_url(record)
         helper.manifest_url(record)
       rescue
-        ''
+        ""
       end
 
       def message(type, record)

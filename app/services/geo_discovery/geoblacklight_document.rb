@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'json-schema'
+require "json-schema"
 
 module GeoDiscovery
   # For details on the schema,
@@ -67,7 +67,7 @@ module GeoDiscovery
 
       def document_hash_required
         {
-          geoblacklight_version: '1.0',
+          geoblacklight_version: "1.0",
           dc_identifier_s: identifier,
           layer_slug_s: slug,
           uuid: slug,
@@ -103,10 +103,10 @@ module GeoDiscovery
       # Dct references hash with download, WxS, and IIIF refs removed
       def private_references
         {
-          'http://schema.org/url' => url,
-          'http://www.opengis.net/cat/csw/csdgm' => fgdc,
-          'http://www.isotc211.org/schemas/2005/gmd/' => iso19139,
-          'http://schema.org/thumbnailUrl' => thumbnail
+          "http://schema.org/url" => url,
+          "http://www.opengis.net/cat/csw/csdgm" => fgdc,
+          "http://www.isotc211.org/schemas/2005/gmd/" => iso19139,
+          "http://schema.org/thumbnailUrl" => thumbnail
         }
       end
 
@@ -122,16 +122,16 @@ module GeoDiscovery
       # @return [Hash] geoblacklight references as a hash
       def references
         {
-          'http://schema.org/url' => url,
-          'http://www.opengis.net/cat/csw/csdgm' => fgdc,
-          'http://www.isotc211.org/schemas/2005/gmd/' => iso19139,
-          'http://www.loc.gov/mods/v3' => mods,
-          'http://schema.org/downloadUrl' => download,
-          'http://schema.org/thumbnailUrl' => thumbnail,
-          'http://www.opengis.net/def/serviceType/ogc/wms' => wms_path,
-          'http://www.opengis.net/def/serviceType/ogc/wfs' => wfs_path,
-          'http://iiif.io/api/image' => iiif,
-          'http://iiif.io/api/presentation#manifest' => iiif_manifest
+          "http://schema.org/url" => url,
+          "http://www.opengis.net/cat/csw/csdgm" => fgdc,
+          "http://www.isotc211.org/schemas/2005/gmd/" => iso19139,
+          "http://www.loc.gov/mods/v3" => mods,
+          "http://schema.org/downloadUrl" => download,
+          "http://schema.org/thumbnailUrl" => thumbnail,
+          "http://www.opengis.net/def/serviceType/ogc/wms" => wms_path,
+          "http://www.opengis.net/def/serviceType/ogc/wfs" => wfs_path,
+          "http://iiif.io/api/image" => iiif,
+          "http://iiif.io/api/presentation#manifest" => iiif_manifest
         }
       end
 
@@ -144,9 +144,9 @@ module GeoDiscovery
       def rights
         case access_rights
         when public_visibility
-          'Public'
+          "Public"
         else
-          'Restricted'
+          "Restricted"
         end
       end
 
@@ -159,7 +159,7 @@ module GeoDiscovery
       # Returns a hash of errors from json schema validation.
       # @return [Hash] json schema validation errors
       def schema_errors(doc)
-        { error: JSON::Validator.fully_validate(schema, doc, fragment: '#/definitions/layer') }
+        { error: JSON::Validator.fully_validate(schema, doc, fragment: "#/definitions/layer") }
       end
 
       # Returns a path to the geoblackligh schema document
@@ -177,7 +177,7 @@ module GeoDiscovery
       # Validates the geoblacklight document against the json schema.
       # @return [Boolean] is the document valid?
       def valid?(doc)
-        JSON::Validator.validate(schema, doc, fragment: '#/definitions/layer')
+        JSON::Validator.validate(schema, doc, fragment: "#/definitions/layer")
       end
   end
 end

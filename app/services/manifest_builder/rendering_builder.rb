@@ -15,7 +15,7 @@ class ManifestBuilder
     # @return [IIIF::Presentation::Manifest]
     def apply(manifest)
       # This is currently here to work around https://github.com/iiif-prezi/osullivan/issues/56
-      manifest['rendering'] = rendering_hash if identifier?
+      manifest["rendering"] = rendering_hash if identifier?
       manifest
     end
 

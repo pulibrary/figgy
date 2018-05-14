@@ -31,16 +31,16 @@ class ExternalMetadataCharacterizationService
   end
 
   def fgdc?
-    !document.at_xpath('//metadata/idinfo').nil?
+    !document.at_xpath("//metadata/idinfo").nil?
   end
 
   def iso19139?
-    !document.at_xpath('//gmd:metadataStandardName', ISO_NAMESPACE).nil?
+    !document.at_xpath("//gmd:metadataStandardName", ISO_NAMESPACE).nil?
   end
 
   ISO_NAMESPACE = {
-    'xmlns:gmd' => 'http://www.isotc211.org/2005/gmd',
-    'xmlns:gco' => 'http://www.isotc211.org/2005/gco'
+    "xmlns:gmd" => "http://www.isotc211.org/2005/gmd",
+    "xmlns:gco" => "http://www.isotc211.org/2005/gco"
   }.freeze
 
   def document

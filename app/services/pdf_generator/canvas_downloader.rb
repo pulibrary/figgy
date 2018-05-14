@@ -3,13 +3,13 @@ class PDFGenerator
   class CanvasDownloader
     attr_reader :canvas
     delegate :width, :height, to: :canvas
-    def initialize(canvas, quality: 'gray')
+    def initialize(canvas, quality: "gray")
       @canvas = canvas
       @quality = quality
     end
 
     def download
-      open(canvas_url, 'rb')
+      open(canvas_url, "rb")
     end
 
     def layout
@@ -21,8 +21,8 @@ class PDFGenerator
     end
 
     def quality
-      return @quality if ['gray', 'bitonal'].include?(@quality)
-      'default'
+      return @quality if ["gray", "bitonal"].include?(@quality)
+      "default"
     end
 
     def portrait?
@@ -36,7 +36,7 @@ class PDFGenerator
       end
 
       def format
-        bitonal? ? 'png' : 'jpg'
+        bitonal? ? "png" : "jpg"
       end
 
       def max_dimensions
@@ -53,7 +53,7 @@ class PDFGenerator
       end
 
       def bitonal?
-        quality == 'bitonal'
+        quality == "bitonal"
       end
   end
 end

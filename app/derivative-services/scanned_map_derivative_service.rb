@@ -26,7 +26,7 @@ class ScannedMapDerivativeService
   end
 
   def valid?
-    mime_type == ['image/tiff'] && parent.is_a?(ScannedMap)
+    mime_type == ["image/tiff"] && parent.is_a?(ScannedMap)
   end
 
   def parent
@@ -58,8 +58,8 @@ class ScannedMapDerivativeService
   def image_config
     ImageDerivativeService::Factory::ImageConfig.new(width: 200,
                                                      height: 150,
-                                                     format: 'png',
-                                                     mime_type: 'image/png',
-                                                     output_name: 'thumbnail')
+                                                     format: "png",
+                                                     mime_type: "image/png",
+                                                     output_name: "thumbnail")
   end
 end

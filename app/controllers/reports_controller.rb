@@ -6,7 +6,7 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv do
-        send_data to_csv(@resources, fields: { source_metadata_identifier: 'bibid', identifier: 'ark', title: 'title' }),
+        send_data to_csv(@resources, fields: { source_metadata_identifier: "bibid", identifier: "ark", title: "title" }),
                   filename: "identifiers-to-reconcile-#{Time.zone.today}.csv"
       end
     end

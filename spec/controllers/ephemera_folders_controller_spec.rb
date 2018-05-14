@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 include ActionDispatch::TestProcess
 
 RSpec.describe EphemeraFoldersController do
@@ -9,17 +9,17 @@ RSpec.describe EphemeraFoldersController do
   let(:query_service) { adapter.query_service }
   let(:valid_params) do
     {
-      barcode: ['12345678901234'],
-      folder_number: ['one'],
-      title: ['test folder'],
-      language: ['test language'],
-      genre: ['test genre'],
-      width: ['10'],
-      height: ['20'],
-      page_count: ['30'],
-      rights_statement: 'Test Statement',
-      visibility: 'restricted',
-      subject: ['stuff']
+      barcode: ["12345678901234"],
+      folder_number: ["one"],
+      title: ["test folder"],
+      language: ["test language"],
+      genre: ["test genre"],
+      width: ["10"],
+      height: ["20"],
+      page_count: ["30"],
+      rights_statement: "Test Statement",
+      visibility: "restricted",
+      subject: ["stuff"]
     }
   end
   let(:invalid_params) do
@@ -32,8 +32,8 @@ RSpec.describe EphemeraFoldersController do
       width: nil,
       height: nil,
       page_count: nil,
-      rights_statement: 'Test Statement',
-      visibility: 'restricted',
+      rights_statement: "Test Statement",
+      visibility: "restricted",
       subject: nil
     }
   end
@@ -106,7 +106,7 @@ RSpec.describe EphemeraFoldersController do
   end
 
   describe "GET /concern/ephemera_folders/:id/manifest" do
-    let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+    let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
     context "when signed in as an admin" do
       let(:user) { FactoryBot.create(:admin) }
       it "returns a IIIF manifest for a resource with a file" do
@@ -272,9 +272,9 @@ RSpec.describe EphemeraFoldersController do
 
     context "with fields" do
       let(:user) { FactoryBot.create(:admin) }
-      let(:vocab) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'test vocabulary') }
-      let(:term) { FactoryBot.create_for_repository(:ephemera_term, label: 'test term', member_of_vocabulary_id: vocab.id) }
-      let(:field) { FactoryBot.create_for_repository(:ephemera_field, field_name: '1', member_of_vocabulary_id: vocab.id) }
+      let(:vocab) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: "test vocabulary") }
+      let(:term) { FactoryBot.create_for_repository(:ephemera_term, label: "test term", member_of_vocabulary_id: vocab.id) }
+      let(:field) { FactoryBot.create_for_repository(:ephemera_field, field_name: "1", member_of_vocabulary_id: vocab.id) }
       let(:box) { FactoryBot.create_for_repository(:ephemera_box) }
       let(:project) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [box.id, field.id]) }
 
@@ -298,18 +298,18 @@ RSpec.describe EphemeraFoldersController do
 
         expect(assigns(:language)).not_to be_empty
         expect(assigns(:language).first).to be_an EphemeraTermDecorator
-        expect(assigns(:language).first.label).to eq 'test term'
+        expect(assigns(:language).first.label).to eq "test term"
       end
     end
 
     context "with a subject field" do
       let(:user) { FactoryBot.create(:admin) }
-      let(:vocab) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'test vocabulary') }
-      let(:term) { FactoryBot.create_for_repository(:ephemera_term, label: 'test term', member_of_vocabulary_id: vocab.id) }
-      let(:field) { FactoryBot.create_for_repository(:ephemera_field, field_name: '5', member_of_vocabulary_id: vocab.id) }
+      let(:vocab) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: "test vocabulary") }
+      let(:term) { FactoryBot.create_for_repository(:ephemera_term, label: "test term", member_of_vocabulary_id: vocab.id) }
+      let(:field) { FactoryBot.create_for_repository(:ephemera_field, field_name: "5", member_of_vocabulary_id: vocab.id) }
       let(:box) { FactoryBot.create_for_repository(:ephemera_box) }
       let(:project) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [box.id, field.id]) }
-      let(:child_vocab) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'test child vocabulary') }
+      let(:child_vocab) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: "test child vocabulary") }
       let(:ephemera_folder) { FactoryBot.create_for_repository(:ephemera_folder) }
 
       render_views
@@ -333,7 +333,7 @@ RSpec.describe EphemeraFoldersController do
 
         expect(assigns(:subject)).not_to be_empty
         expect(assigns(:subject).first).to be_an EphemeraVocabularyDecorator
-        expect(assigns(:subject).first.label).to eq 'test child vocabulary'
+        expect(assigns(:subject).first.label).to eq "test child vocabulary"
       end
     end
   end

@@ -5,7 +5,7 @@ module GeoDiscovery
       attr_reader :resource_decorator
       def initialize(resource_decorator)
         @resource_decorator = resource_decorator
-        @config = Figgy.config['geoserver'].try(:with_indifferent_access)
+        @config = Figgy.config["geoserver"].try(:with_indifferent_access)
       end
 
       # Returns the identifier to use with WMS/WFS/WCS services.
@@ -58,7 +58,7 @@ module GeoDiscovery
         # Geoserver base url.
         # @return [String] geoserver base url
         def path
-          @config[:url].chomp('/rest')
+          @config[:url].chomp("/rest")
         end
 
         # Tests if the file set is a valid raster format.

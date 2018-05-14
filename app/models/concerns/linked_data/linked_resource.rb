@@ -53,7 +53,7 @@ module LinkedData
         return if resource.try(:rights_statement).blank?
         {
           '@id': resource.rights_statement.first.to_s,
-          '@type': 'dcterms:RightsStatement',
+          '@type': "dcterms:RightsStatement",
           pref_label: ControlledVocabulary.for(:rights_statement).find(resource.rights_statement.first).label
         }
       end
@@ -69,7 +69,7 @@ module LinkedData
 
       def linked_properties
         {
-          '@context': 'https://bibdata.princeton.edu/context.json',
+          '@context': "https://bibdata.princeton.edu/context.json",
           '@id': url,
           identifier: resource.try(:identifier),
           scopeNote: resource.try(:portion_note),

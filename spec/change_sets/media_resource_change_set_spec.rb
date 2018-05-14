@@ -1,9 +1,9 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe MediaResourceChangeSet do
   subject(:change_set) { described_class.new(form_resource) }
-  let(:media_resource) { MediaResource.new(title: 'Test', rights_statement: 'Stuff', visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: 'draft') }
+  let(:media_resource) { MediaResource.new(title: "Test", rights_statement: "Stuff", visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: "draft") }
   let(:form_resource) { media_resource }
   describe "#prepopulate!" do
     it "doesn't make it look changed" do
@@ -18,25 +18,25 @@ RSpec.describe MediaResourceChangeSet do
     end
     context "when given a non-UUID for a collection" do
       it "is not valid" do
-        change_set.validate(member_of_collection_ids: ['not-valid'])
+        change_set.validate(member_of_collection_ids: ["not-valid"])
         expect(change_set).not_to be_valid
       end
     end
     context "when given a valid UUID for a collection which does not exist" do
       it "is not valid" do
-        change_set.validate(member_of_collection_ids: ['b8823acb-d42b-4e62-a5c9-de5f94cbd3f6'])
+        change_set.validate(member_of_collection_ids: ["b8823acb-d42b-4e62-a5c9-de5f94cbd3f6"])
         expect(change_set).not_to be_valid
       end
     end
     context "when given a non-UUID for a member resource" do
       it "is not valid" do
-        change_set.validate(member_ids: ['not-valid'])
+        change_set.validate(member_ids: ["not-valid"])
         expect(change_set).not_to be_valid
       end
     end
     context "when given a valid UUID for a member resource which does not exist" do
       it "is not valid" do
-        change_set.validate(member_ids: ['55a14e79-710d-42c1-86aa-3d8cdaa62930'])
+        change_set.validate(member_ids: ["55a14e79-710d-42c1-86aa-3d8cdaa62930"])
         expect(change_set).not_to be_valid
       end
     end
@@ -79,22 +79,22 @@ RSpec.describe MediaResourceChangeSet do
     end
   end
 
-  context 'with imported metadata and without a title' do
+  context "with imported metadata and without a title" do
     let(:media_resource) do
       MediaResource.new(
-        source_metadata_identifier: 'C0652_c0377',
-        rights_statement: 'Stuff',
+        source_metadata_identifier: "C0652_c0377",
+        rights_statement: "Stuff",
         visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE,
-        state: 'draft'
+        state: "draft"
       )
     end
 
     before do
-      stub_pulfa(pulfa_id: 'C0652_c0377')
+      stub_pulfa(pulfa_id: "C0652_c0377")
     end
 
-    describe '#valid?' do
-      it 'is a valid change set' do
+    describe "#valid?" do
+      it "is a valid change set" do
         expect(change_set).to be_valid
       end
     end

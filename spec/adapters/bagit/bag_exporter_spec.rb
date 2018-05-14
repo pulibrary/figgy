@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 include ActionDispatch::TestProcess
 
 RSpec.describe Bagit::BagExporter do
@@ -12,7 +12,7 @@ RSpec.describe Bagit::BagExporter do
   end
   let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
   let(:bag_path) { exporter.metadata_adapter.bag_path(id: resource.id) }
-  let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+  let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
   after do
     exporter.metadata_adapter.persister.wipe!
   end
