@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe PlumChangeSetPersister::PropagateVisibilityAndState do
+RSpec.describe ChangeSetPersister::PropagateVisibilityAndState do
   subject(:hook) { described_class.new(change_set_persister: change_set_persister, change_set: change_set) }
-  let(:change_set_persister) { instance_double(PlumChangeSetPersister::Basic, query_service: query_service) }
+  let(:change_set_persister) { instance_double(ChangeSetPersister::Basic, query_service: query_service) }
   let(:change_set) { ScannedResourceChangeSet.new(scanned_resource) }
   let(:scanned_resource) { ScannedResource.new }
   let(:query_service) { instance_double(Valkyrie::Persistence::Memory::QueryService) }

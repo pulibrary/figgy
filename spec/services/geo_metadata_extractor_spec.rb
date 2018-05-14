@@ -9,7 +9,7 @@ RSpec.describe GeoMetadataExtractor do
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
   let(:persister) { adapter.persister }
   let(:query_service) { adapter.query_service }
-  let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
+  let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
   let(:map) do
     change_set_persister.save(change_set: ScannedMapChangeSet.new(ScannedMap.new, files: [file]))
   end

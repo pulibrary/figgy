@@ -6,7 +6,7 @@ RSpec.describe PersistenceAdapter do
   let(:adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { adapter.query_service }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
-  let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
+  let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
   let(:persistence_adapter) { described_class.new(change_set_persister: change_set_persister, model: EphemeraVocabulary) }
 
   describe "#create" do

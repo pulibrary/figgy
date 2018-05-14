@@ -12,7 +12,7 @@ RSpec.feature "Scanned Resources", js: true do
     ScannedResourceChangeSet.new(scanned_resource)
   end
   let(:change_set_persister) do
-    PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: Valkyrie.config.storage_adapter)
+    ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: Valkyrie.config.storage_adapter)
   end
 
   before do

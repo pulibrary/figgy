@@ -4,7 +4,7 @@ require "rails_helper"
 RSpec.describe Valhalla::DownloadsController do
   let(:meta) { Valkyrie.config.metadata_adapter }
   let(:disk) { Valkyrie.config.storage_adapter }
-  let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: meta, storage_adapter: disk) }
+  let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: meta, storage_adapter: disk) }
   let(:sample_file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [sample_file]) }
   let(:file_set) { resource.member_ids.map { |id| meta.query_service.find_by(id: id) }.first }

@@ -13,7 +13,7 @@ RSpec.describe MissingThumbnailJob do
       change_set_persister.save(change_set: change_set)
     end
     let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
-    let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
+    let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
     let(:query_service) { metadata_adapter.query_service }
     let(:updated_resource) { query_service.find_by(id: Valkyrie::ID.new(resource.id)) }
     let(:file_sets) { query_service.find_members(resource: resource) }

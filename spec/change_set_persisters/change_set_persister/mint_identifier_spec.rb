@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe PlumChangeSetPersister::MintIdentifier do
+RSpec.describe ChangeSetPersister::MintIdentifier do
   subject(:hook) { described_class.new(change_set_persister: change_set_persister, change_set: change_set) }
-  let(:change_set_persister) { instance_double(PlumChangeSetPersister::Basic, query_service: query_service) }
+  let(:change_set_persister) { instance_double(ChangeSetPersister::Basic, query_service: query_service) }
   let(:change_set) { SimpleResourceChangeSet.new(simple_resource) }
   let(:simple_resource) { FactoryBot.create(:published_simple_resource) }
   let(:query_service) { instance_double(Valkyrie::Persistence::Memory::QueryService) }

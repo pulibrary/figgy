@@ -345,7 +345,7 @@ RSpec.describe CatalogController do
       child = persister.save(resource: FactoryBot.build(:complete_scanned_resource))
       parent = persister.save(resource: FactoryBot.build(:complete_scanned_resource, member_ids: child.id))
       # Re-save to get member_of to index, not necessary if going through
-      #   PlumChangeSetPersister.
+      #   ChangeSetPersister.
       persister.save(resource: child)
 
       get :index, params: { q: "" }

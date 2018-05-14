@@ -28,7 +28,7 @@ FactoryBot.define do
       if evaluator.files.present?
         change_set = SimpleResourceChangeSet.new(resource, files: evaluator.files)
         change_set.prepopulate!
-        ::PlumChangeSetPersister.new(
+        ::ChangeSetPersister.new(
           metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
           storage_adapter: Valkyrie.config.storage_adapter
         ).save(change_set: change_set)

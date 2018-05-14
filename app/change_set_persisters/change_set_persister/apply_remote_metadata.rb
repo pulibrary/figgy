@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class PlumChangeSetPersister
+class ChangeSetPersister
   class ApplyRemoteMetadata
     attr_reader :change_set_persister, :change_set
     def initialize(change_set_persister:, change_set:, post_save_resource: nil)

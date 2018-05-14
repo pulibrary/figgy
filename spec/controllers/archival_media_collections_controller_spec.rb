@@ -55,7 +55,7 @@ RSpec.describe ArchivalMediaCollectionsController do
     describe "GET /archival_media_collections/[id]/ark_report" do
       let(:collection) { FactoryBot.create_for_repository(:archival_media_collection, source_metadata_identifier: ["C0652"]) }
       let(:resource) { FactoryBot.build(:published_media_resource, title: []) }
-      let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
+      let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
       let(:data) { "ark,component_id\nark:/99999/fk47564298,C0652_c0377\n" }
 
       before do

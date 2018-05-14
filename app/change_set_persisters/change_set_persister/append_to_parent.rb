@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class PlumChangeSetPersister
+class ChangeSetPersister
   class AppendToParent
     attr_reader :change_set_persister, :change_set, :post_save_resource
     delegate :query_service, :persister, :transaction?, to: :change_set_persister

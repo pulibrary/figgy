@@ -7,7 +7,7 @@ RSpec.describe IngestVocabService do
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:query_service) { adapter.query_service }
   let(:storage_adapter) { Valkyrie::StorageAdapter.find(:lae_storage) }
-  let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
+  let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
 
   let(:ephemera_vocabularies) { query_service.find_all_of_model(model: EphemeraVocabulary).to_a.map(&:decorate) }
   let(:ephemera_vocabulary_query) { FindEphemeraVocabularyByLabel.new(query_service: query_service) }

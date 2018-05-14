@@ -13,7 +13,7 @@ RSpec.feature "SimpleResources", js: true do
     SimpleResourceChangeSet.new(simple_resource)
   end
   let(:change_set_persister) do
-    PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: Valkyrie.config.storage_adapter)
+    ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: Valkyrie.config.storage_adapter)
   end
 
   before do

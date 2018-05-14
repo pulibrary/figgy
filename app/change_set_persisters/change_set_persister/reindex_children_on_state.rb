@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class PlumChangeSetPersister
+class ChangeSetPersister
   class ReindexChildrenOnState
     class Factory
       attr_reader :model, :state

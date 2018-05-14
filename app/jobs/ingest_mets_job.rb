@@ -14,9 +14,9 @@ class IngestMETSJob < ApplicationJob
   end
 
   def changeset_persister
-    @changeset_persister ||= PlumChangeSetPersister.new(metadata_adapter: metadata_adapter,
-                                                        storage_adapter: storage_adapter,
-                                                        queue: queue_name)
+    @changeset_persister ||= ChangeSetPersister.new(metadata_adapter: metadata_adapter,
+                                                    storage_adapter: storage_adapter,
+                                                    queue: queue_name)
   end
 
   def metadata_adapter

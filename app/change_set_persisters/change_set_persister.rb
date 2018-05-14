@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class PlumChangeSetPersister
+class ChangeSetPersister
   def self.new(metadata_adapter:, storage_adapter:, transaction: false, characterize: true, queue: :default)
     Basic.new(metadata_adapter: metadata_adapter,
               storage_adapter: storage_adapter,

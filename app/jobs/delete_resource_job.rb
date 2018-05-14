@@ -15,6 +15,6 @@ class DeleteResourceJob < ApplicationJob
   end
 
   def change_set_persister
-    PlumChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter)
+    ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter)
   end
 end

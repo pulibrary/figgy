@@ -25,6 +25,6 @@ class PosterIngesterJob < ApplicationJob
   end
 
   def change_set_persister
-    @change_set_persister ||= PlumChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter)
+    @change_set_persister ||= ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter)
   end
 end

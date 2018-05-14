@@ -15,7 +15,7 @@ class RunOCRJob < ApplicationJob
     end
 
     def change_set_persister
-      @change_set_persister ||= PlumChangeSetPersister.new(
+      @change_set_persister ||= ChangeSetPersister.new(
         metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
         storage_adapter: Valkyrie.config.storage_adapter
       )
