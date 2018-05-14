@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe METSDocument do
   let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-4612596.mets") }
@@ -48,19 +48,19 @@ RSpec.describe METSDocument do
     subject(:mets_document) { described_class.new mets_file }
 
     it "has an ark id" do
-      expect(mets_document.ark_id).to eq('ark:/88435/5m60qr98h')
+      expect(mets_document.ark_id).to eq("ark:/88435/5m60qr98h")
     end
 
     it "has a bib id" do
-      expect(mets_document.bib_id).to eq('4612596')
+      expect(mets_document.bib_id).to eq("4612596")
     end
 
     it "has a pudl id" do
-      expect(mets_document.pudl_id).to eq('pudl0001/4612596')
+      expect(mets_document.pudl_id).to eq("pudl0001/4612596")
     end
 
     it "has a collection slug" do
-      expect(mets_document.collection_slug).to eq('pudl0001')
+      expect(mets_document.collection_slug).to eq("pudl0001")
     end
   end
 
@@ -68,16 +68,16 @@ RSpec.describe METSDocument do
     subject(:mets_document) { described_class.new mets_file_rtl }
 
     it "has a thumbnail url" do
-      expect(mets_document.thumbnail_path).to eq('/tmp/pudl0032/ns73/00000001.tif')
+      expect(mets_document.thumbnail_path).to eq("/tmp/pudl0032/ns73/00000001.tif")
     end
 
     it "has an array of files" do
       expect(mets_document.files.length).to eq(189)
       file = mets_document.files.first
-      expect(file[:checksum]).to eq('aa2c70843bbd652b0a8ba426b7bc9211c547f9de')
-      expect(file[:mime_type]).to eq('image/tiff')
-      expect(file[:path]).to eq('/tmp/pudl0032/ns73/00000001.tif')
-      expect(file[:replaces]).to eq('pudl0032/ns73/00000001')
+      expect(file[:checksum]).to eq("aa2c70843bbd652b0a8ba426b7bc9211c547f9de")
+      expect(file[:mime_type]).to eq("image/tiff")
+      expect(file[:path]).to eq("/tmp/pudl0032/ns73/00000001.tif")
+      expect(file[:replaces]).to eq("pudl0032/ns73/00000001")
     end
 
     it "has no options for files present in the structMap" do
@@ -85,11 +85,11 @@ RSpec.describe METSDocument do
     end
 
     it "has marks a file not present in the structMap as non-paged" do
-      expect(mets_document.file_opts(mets_document.files.last)).to eq(viewing_hint: 'non-paged')
+      expect(mets_document.file_opts(mets_document.files.last)).to eq(viewing_hint: "non-paged")
     end
 
-    it 'finds labels for files' do
-      expect(mets_document.file_label('gjpt0')).to eq('Upper cover. outside')
+    it "finds labels for files" do
+      expect(mets_document.file_label("gjpt0")).to eq("Upper cover. outside")
     end
   end
 
@@ -101,7 +101,7 @@ RSpec.describe METSDocument do
         expect(mets_document.right_to_left).to be false
       end
       it "has a right-to-left viewing direction" do
-        expect(mets_document.viewing_direction).to eq('left-to-right')
+        expect(mets_document.viewing_direction).to eq("left-to-right")
       end
     end
 
@@ -112,7 +112,7 @@ RSpec.describe METSDocument do
         expect(mets_document.right_to_left).to be true
       end
       it "has a right-to-left viewing direction" do
-        expect(mets_document.viewing_direction).to eq('right-to-left')
+        expect(mets_document.viewing_direction).to eq("right-to-left")
       end
     end
   end
@@ -122,7 +122,7 @@ RSpec.describe METSDocument do
       subject(:mets_document) { described_class.new mets_file }
 
       it "is paged" do
-        expect(mets_document.viewing_hint).to eq('paged')
+        expect(mets_document.viewing_hint).to eq("paged")
       end
     end
 
@@ -156,23 +156,23 @@ RSpec.describe METSDocument do
       end
 
       it "has volume ids" do
-        expect(mets_document.volume_ids).to eq ['phys1', 'phys2']
+        expect(mets_document.volume_ids).to eq ["phys1", "phys2"]
       end
 
       it "has volume labels" do
-        expect(mets_document.label_for_volume('phys1')).to eq 'first volume'
+        expect(mets_document.label_for_volume("phys1")).to eq "first volume"
       end
 
       it "has volume file lists" do
-        expect(mets_document.files_for_volume('phys1').length).to eq 3
+        expect(mets_document.files_for_volume("phys1").length).to eq 3
       end
 
       it "builds a label for a file from hierarchy (but does not include volume label)" do
-        expect(mets_document.file_label('l898s')).to eq('upper cover. pastedown')
+        expect(mets_document.file_label("l898s")).to eq("upper cover. pastedown")
       end
 
       it "includes volume labels in replaces string" do
-        expect(mets_document.files_for_volume('phys1').first[:replaces]).to eq 'pudl0001/4609321/s42/phys1/00000001'
+        expect(mets_document.files_for_volume("phys1").first[:replaces]).to eq "pudl0001/4609321/s42/phys1/00000001"
       end
     end
 
@@ -187,7 +187,7 @@ RSpec.describe METSDocument do
       subject(:mets_document) { described_class.new mets_file_multi2 }
 
       it "uses the logical structure" do
-        expect(mets_document.volume_ids).to eq ['v1log', 'v2log', 'v3log', 'v4log', 'v5log', 'v6log', 'v7log']
+        expect(mets_document.volume_ids).to eq ["v1log", "v2log", "v3log", "v4log", "v5log", "v6log", "v7log"]
       end
     end
 
@@ -195,8 +195,8 @@ RSpec.describe METSDocument do
       subject(:mets_document) { described_class.new mets_file_multi3 }
 
       it "does not duplicate pages" do
-        expect(mets_document.volume_ids).to eq ['v1log']
-        expect(mets_document.files_for_volume('v1log').length).to eq 3
+        expect(mets_document.volume_ids).to eq ["v1log"]
+        expect(mets_document.files_for_volume("v1log").length).to eq 3
       end
     end
 
@@ -262,8 +262,8 @@ RSpec.describe METSDocument do
       end
 
       it "uses the logical structure" do
-        expect(mets_document.volume_ids).to eq ['v1phys', 'v2phys']
-        expect(mets_document.structure_for_volume('v1phys')).to eq expected_structure
+        expect(mets_document.volume_ids).to eq ["v1phys", "v2phys"]
+        expect(mets_document.structure_for_volume("v1phys")).to eq expected_structure
       end
     end
 

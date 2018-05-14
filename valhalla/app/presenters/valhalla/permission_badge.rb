@@ -31,7 +31,7 @@ module Valhalla
       end
 
       def text_span
-        content_tag(:span, text, class: 'text')
+        content_tag(:span, text, class: "text")
       end
 
       # Generate the path for the visibility icon
@@ -43,7 +43,7 @@ module Valhalla
       # Generate the markup for the visibility icon
       # @return [String] the markup
       def icon
-        content_tag(:span, '', class: 'icon')
+        content_tag(:span, "", class: "icon")
       end
 
       # Generate the markup within the <span>

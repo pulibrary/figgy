@@ -1,11 +1,11 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 describe FolderWorkflow do
-  subject(:workflow) { described_class.new 'needs_qa' }
+  subject(:workflow) { described_class.new "needs_qa" }
 
-  describe 'ingest workflow' do
-    it 'proceeds through ingest workflow' do
+  describe "ingest workflow" do
+    it "proceeds through ingest workflow" do
       # initial state: needs_qa
       expect(workflow.needs_qa?).to be true
       expect(workflow.may_complete?).to be true
@@ -23,16 +23,16 @@ describe FolderWorkflow do
     end
   end
 
-  describe 'access states' do
-    it 'provides a list of read-accessible states' do
+  describe "access states" do
+    it "provides a list of read-accessible states" do
       expect(described_class.public_read_states).to contain_exactly "complete", "needs_qa"
     end
 
-    it 'provides a list of manifest-publishable states' do
+    it "provides a list of manifest-publishable states" do
       expect(described_class.manifest_states).to contain_exactly "complete"
     end
 
-    it 'provides a list of states valid for minting a new ARK' do
+    it "provides a list of states valid for minting a new ARK" do
       expect(described_class.ark_mint_states).to be_empty
     end
   end

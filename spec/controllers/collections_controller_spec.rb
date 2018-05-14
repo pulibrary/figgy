@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe CollectionsController do
   let(:user) { nil }
@@ -13,14 +13,14 @@ RSpec.describe CollectionsController do
     let(:user) { FactoryBot.create(:admin) }
     describe "POST /collections" do
       it "creates a collection" do
-        post :create, params: { collection: { title: 'test', slug: 'slug', visibility: 'open', description: '' } }
+        post :create, params: { collection: { title: "test", slug: "slug", visibility: "open", description: "" } }
 
         expect(response).to be_redirect
 
         collection = query_service.find_all_of_model(model: Collection).first
-        expect(collection.title).to eq ['test']
-        expect(collection.slug).to eq ['slug']
-        expect(collection.visibility).to eq ['open']
+        expect(collection.title).to eq ["test"]
+        expect(collection.slug).to eq ["slug"]
+        expect(collection.visibility).to eq ["open"]
         expect(collection.description).to eq []
       end
     end
@@ -48,10 +48,10 @@ RSpec.describe CollectionsController do
       it "updates an existing record" do
         collection = persister.save(resource: FactoryBot.build(:collection))
 
-        patch :update, params: { id: collection.id.to_s, collection: { title: 'New' } }
+        patch :update, params: { id: collection.id.to_s, collection: { title: "New" } }
         reloaded = query_service.find_by(id: collection.id)
 
-        expect(reloaded.title).to eq ['New']
+        expect(reloaded.title).to eq ["New"]
       end
     end
 
@@ -86,7 +86,7 @@ RSpec.describe CollectionsController do
       end
     end
 
-    context 'with ephemera projects' do
+    context "with ephemera projects" do
       let(:collection) { FactoryBot.create_for_repository(:collection) }
       let(:collection2) { FactoryBot.create_for_repository(:collection) }
       let(:ephemera_box1) { FactoryBot.create_for_repository(:ephemera_box, member_of_collection_ids: [collection.id]) }
@@ -101,7 +101,7 @@ RSpec.describe CollectionsController do
         ephemera_project1
         ephemera_project2
       end
-      it 'exposes collections containing these projects' do
+      it "exposes collections containing these projects" do
         get :index_manifest, params: { format: :json }
         manifest_response = MultiJson.load(response.body, symbolize_keys: true)
 

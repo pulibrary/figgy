@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-require 'rails_helper'
-require 'valkyrie/specs/shared_specs'
+require "rails_helper"
+require "valkyrie/specs/shared_specs"
 include ActionDispatch::TestProcess
 
 RSpec.describe Bagit::StorageAdapter do
@@ -10,7 +10,7 @@ RSpec.describe Bagit::StorageAdapter do
       base_path: Rails.root.join("tmp", "bags")
     ).for(bag_id: "123456789")
   end
-  let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+  let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
   before do
     FileUtils.rm_rf(Rails.root.join("tmp", "bags"))
   end

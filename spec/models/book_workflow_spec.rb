@@ -1,11 +1,11 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 describe BookWorkflow do
-  subject(:workflow) { described_class.new 'pending' }
+  subject(:workflow) { described_class.new "pending" }
 
-  describe 'ingest workflow' do
-    it 'proceeds through ingest workflow' do
+  describe "ingest workflow" do
+    it "proceeds through ingest workflow" do
       # initial state: pending
       expect(workflow.pending?).to be true
       expect(workflow.may_finalize_digitization?).to be true
@@ -43,9 +43,9 @@ describe BookWorkflow do
     end
   end
 
-  describe 'takedown workflow' do
+  describe "takedown workflow" do
     subject(:workflow) { described_class.new :complete }
-    it 'goes back and forth between complete and takedown' do
+    it "goes back and forth between complete and takedown" do
       expect(workflow.complete?).to be true
       expect(workflow.may_restore?).to be false
       expect(workflow.may_takedown?).to be true
@@ -62,9 +62,9 @@ describe BookWorkflow do
     end
   end
 
-  describe 'flagging workflow' do
+  describe "flagging workflow" do
     subject(:workflow) { described_class.new :complete }
-    it 'goes back and forth between flagged and unflagged' do
+    it "goes back and forth between flagged and unflagged" do
       expect(workflow.complete?).to be true
       expect(workflow.may_flag?).to be true
       expect(workflow.may_unflag?).to be false
@@ -79,17 +79,17 @@ describe BookWorkflow do
     end
   end
 
-  describe 'access states' do
-    it 'provides a list of read-accessible states' do
+  describe "access states" do
+    it "provides a list of read-accessible states" do
       expect(described_class.public_read_states).to contain_exactly "complete", "flagged"
     end
 
-    it 'provides a list of manifest-publishable states' do
+    it "provides a list of manifest-publishable states" do
       expect(described_class.manifest_states).to contain_exactly "complete", "flagged"
     end
 
-    it 'provides a list of states valid for minting a new ARK' do
-      expect(described_class.ark_mint_states).to contain_exactly 'complete'
+    it "provides a list of states valid for minting a new ARK" do
+      expect(described_class.ark_mint_states).to contain_exactly "complete"
     end
   end
 end

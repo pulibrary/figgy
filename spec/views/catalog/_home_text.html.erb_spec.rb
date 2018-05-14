@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "catalog/_home_text.html.erb" do
   before do
@@ -10,16 +10,16 @@ RSpec.describe "catalog/_home_text.html.erb" do
   context "when the user is an admin" do
     let(:user) { FactoryBot.create(:admin) }
 
-    it 'has a link to the fixity dashboard' do
-      expect(rendered).to have_link 'Fixity Dashboard'
+    it "has a link to the fixity dashboard" do
+      expect(rendered).to have_link "Fixity Dashboard"
     end
   end
 
   context "when the user is not an admin" do
     let(:user) { FactoryBot.create(:curator) }
 
-    it 'does not have a link to the fixity dashboard' do
-      expect(rendered).not_to have_link 'Fixity Dashboard'
+    it "does not have a link to the fixity dashboard" do
+      expect(rendered).not_to have_link "Fixity Dashboard"
     end
   end
 end

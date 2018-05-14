@@ -28,31 +28,31 @@ class User < ApplicationRecord
   end
 
   def admin?
-    groups.include?('admin')
+    groups.include?("admin")
   end
 
   def ephemera_editor?
-    roles.where(name: 'ephemera_editor').exists?
+    roles.where(name: "ephemera_editor").exists?
   end
 
   def image_editor?
-    roles.where(name: 'image_editor').exists?
+    roles.where(name: "image_editor").exists?
   end
 
   def completer?
-    roles.where(name: 'completer').exists?
+    roles.where(name: "completer").exists?
   end
 
   def editor?
-    roles.where(name: 'editor').exists?
+    roles.where(name: "editor").exists?
   end
 
   def fulfiller?
-    roles.where(name: 'fulfiller').exists?
+    roles.where(name: "fulfiller").exists?
   end
 
   def curator?
-    roles.where(name: 'curator').exists?
+    roles.where(name: "curator").exists?
   end
 
   def campus_patron?

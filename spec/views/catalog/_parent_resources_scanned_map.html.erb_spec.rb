@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "catalog/_parent_resources_scanned_map" do
   context "when a ScannedMap has a parent" do

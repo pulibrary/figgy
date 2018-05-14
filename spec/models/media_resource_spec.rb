@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # Generated with `rails generate valkyrie:model MediaResource`
-require 'rails_helper'
-require 'valkyrie/specs/shared_specs'
+require "rails_helper"
+require "valkyrie/specs/shared_specs"
 
 RSpec.describe MediaResource do
   let(:resource_klass) { described_class }

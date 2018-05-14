@@ -29,7 +29,7 @@ module GeoDiscovery
         def to_solr
           "ENVELOPE(#{coverage.w}, #{coverage.e}, #{coverage.n}, #{coverage.s})"
         rescue
-          ''
+          ""
         end
     end
   end

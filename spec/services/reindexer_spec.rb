@@ -1,10 +1,10 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Reindexer do
   let(:solr_adapter) { Valkyrie::MetadataAdapter.find(:index_solr) }
   let(:postgres_adapter) { Valkyrie::MetadataAdapter.find(:postgres) }
-  let(:logger) { instance_double('Logger').as_null_object }
+  let(:logger) { instance_double("Logger").as_null_object }
 
   before do
     Valkyrie.logger.level = Logger::ERROR

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'csv'
+require "csv"
 
 class IngestVocabService
   delegate :metadata_adapter, to: :change_set_persister

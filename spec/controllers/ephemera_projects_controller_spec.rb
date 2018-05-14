@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 include ActionDispatch::TestProcess
 
 RSpec.describe EphemeraProjectsController do
@@ -32,8 +32,8 @@ RSpec.describe EphemeraProjectsController do
     let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do
       {
-        title: ['Project 1'],
-        slug: ['test-project-1234']
+        title: ["Project 1"],
+        slug: ["test-project-1234"]
       }
     end
     let(:invalid_params) do
@@ -162,7 +162,7 @@ RSpec.describe EphemeraProjectsController do
         ephemera_vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary)
         ephemera_field = FactoryBot.create_for_repository(:ephemera_field, member_of_vocabulary_id: [ephemera_vocabulary.id])
         ephemera_project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_field.id])
-        FactoryBot.create_for_repository(:ephemera_term, label: 'English', member_of_vocabulary_id: [ephemera_vocabulary.id])
+        FactoryBot.create_for_repository(:ephemera_term, label: "English", member_of_vocabulary_id: [ephemera_vocabulary.id])
         get :edit, params: { id: ephemera_project.id.to_s }
 
         expect(response.body).to have_field "Top Language"
@@ -183,7 +183,7 @@ RSpec.describe EphemeraProjectsController do
       end
     end
     context "when it does exist" do
-      let(:eng) { FactoryBot.create_for_repository(:ephemera_term, label: 'English') }
+      let(:eng) { FactoryBot.create_for_repository(:ephemera_term, label: "English") }
       it "saves it and redirects" do
         ephemera_project = FactoryBot.create_for_repository(:ephemera_project)
         patch :update, params: { id: ephemera_project.id.to_s, ephemera_project: { title: ["Two"], slug: ["updated-slug"], top_language: [eng.id.to_s] } }
@@ -215,10 +215,10 @@ RSpec.describe EphemeraProjectsController do
 
       expect(response.headers["Content-Type"]).to include "application/json"
       expect(manifest_response[:metadata]).not_to be_empty
-      expect(manifest_response[:metadata][0]).to include label: 'Exhibit', value: [ephemera_project.decorate.slug]
+      expect(manifest_response[:metadata][0]).to include label: "Exhibit", value: [ephemera_project.decorate.slug]
     end
 
-    context 'when the project has folders' do
+    context "when the project has folders" do
       let(:ephemera_box1) { FactoryBot.create_for_repository(:ephemera_box, member_ids: folder1.id) }
       let(:ephemera_box2) { FactoryBot.create_for_repository(:ephemera_box) }
       let(:folder1) { FactoryBot.create_for_repository(:ephemera_folder) }
@@ -235,7 +235,7 @@ RSpec.describe EphemeraProjectsController do
 
         expect(response.headers["Content-Type"]).to include "application/json"
         expect(manifest_response[:metadata]).not_to be_empty
-        expect(manifest_response[:metadata][0]).to include label: 'Exhibit', value: [ephemera_project.decorate.slug]
+        expect(manifest_response[:metadata][0]).to include label: "Exhibit", value: [ephemera_project.decorate.slug]
         expect(manifest_response[:manifests].length).to eq 1
         expect(manifest_response[:manifests][0][:@id]).to eq "http://www.example.com/concern/ephemera_folders/#{folder1.id}/manifest"
       end

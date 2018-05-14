@@ -33,16 +33,16 @@ class TikaFileCharacterizationService
   def file_characterization_attributes
     result = JSON.parse(json_output).last
     {
-      width: result['tiff:ImageWidth'],
-      height: result['tiff:ImageLength'],
-      mime_type: result['Content-Type'],
+      width: result["tiff:ImageWidth"],
+      height: result["tiff:ImageLength"],
+      mime_type: result["Content-Type"],
       checksum: MultiChecksum.for(file_object),
-      size: result['Content-Length'],
-      bits_per_sample: result['tiff:BitsPerSample'],
-      x_resolution: result['tiff:XResolution'],
-      y_resolution: result['tiff:YResolution'],
-      camera_model: result['Model'],
-      software: result['Software']
+      size: result["Content-Length"],
+      bits_per_sample: result["tiff:BitsPerSample"],
+      x_resolution: result["tiff:XResolution"],
+      y_resolution: result["tiff:YResolution"],
+      camera_model: result["Model"],
+      software: result["Software"]
     }
   end
 

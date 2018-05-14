@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "Simple Resource Routes" do
   it "routes nested record creates appropriately" do

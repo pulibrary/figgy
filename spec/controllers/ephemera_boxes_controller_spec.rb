@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 include ActionDispatch::TestProcess
 
 RSpec.describe EphemeraBoxesController do
@@ -33,7 +33,7 @@ RSpec.describe EphemeraBoxesController do
       it "redirects CanCan::AccessDenied error to login" do
         box = FactoryBot.create_for_repository(:private_ephemera_box)
         get :folders, params: { id: box.id }
-        expect(response).to redirect_to('/users/auth/cas')
+        expect(response).to redirect_to("/users/auth/cas")
       end
     end
     context "when they have permission" do
@@ -63,18 +63,18 @@ RSpec.describe EphemeraBoxesController do
     let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do
       {
-        barcode: ['00000000000000'],
-        box_number: ['1'],
-        rights_statement: 'Test Statement',
-        visibility: 'restricted'
+        barcode: ["00000000000000"],
+        box_number: ["1"],
+        rights_statement: "Test Statement",
+        visibility: "restricted"
       }
     end
     let(:invalid_params) do
       {
         barcode: nil,
         box_number: nil,
-        rights_statement: 'Test Statement',
-        visibility: 'restricted'
+        rights_statement: "Test Statement",
+        visibility: "restricted"
       }
     end
     context "access control" do

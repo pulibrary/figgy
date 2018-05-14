@@ -14,7 +14,7 @@ class FiggyIndexPresenter < ::Blacklight::IndexPresenter
     value = case field_or_string_or_proc
             when Symbol
               config = field_config(field_or_string_or_proc)
-              Array.wrap(document[field_or_string_or_proc]).join('; ')
+              Array.wrap(document[field_or_string_or_proc]).join("; ")
             when Proc
               field_or_string_or_proc.call(document, opts)
             when String

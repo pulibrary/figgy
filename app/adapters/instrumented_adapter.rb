@@ -30,7 +30,7 @@ class InstrumentedAdapter < SimpleDelegator
     end
 
     def span_name
-      'valkyrie.persist'
+      "valkyrie.persist"
     end
   end
   class InstrumentedPersister < InstrumentedService
@@ -40,24 +40,24 @@ class InstrumentedAdapter < SimpleDelegator
     end
 
     def save(resource:)
-      trace('valkyrie.save') do |span|
+      trace("valkyrie.save") do |span|
         __getobj__.save(resource: resource).tap do |output|
-          span.set_tag('param.resource', output.id.to_s)
+          span.set_tag("param.resource", output.id.to_s)
         end
       end
     end
 
     def delete(resource:)
-      trace('valkyrie.delete') do |span|
-        span.set_tag('param.resource', resource.id.to_s)
+      trace("valkyrie.delete") do |span|
+        span.set_tag("param.resource", resource.id.to_s)
         __getobj__.delete(resource: resource)
       end
     end
 
     def save_all(resources:)
-      trace('valkyrie.save_all') do |span|
+      trace("valkyrie.save_all") do |span|
         __getobj__.save_all(resources: resources).tap do |output|
-          span.set_tag('param.resources', output.map { |x| x.id.to_s })
+          span.set_tag("param.resources", output.map { |x| x.id.to_s })
         end
       end
     end
@@ -69,65 +69,65 @@ class InstrumentedAdapter < SimpleDelegator
     end
 
     def find_by(id:)
-      trace('valkyrie.find_by_id') do |span|
-        span.set_tag('param.id', id.to_s)
+      trace("valkyrie.find_by_id") do |span|
+        span.set_tag("param.id", id.to_s)
         __getobj__.find_by(id: id)
       end
     end
 
     def find_many_by_ids(ids:)
-      trace('valkyrie.find_many_by_ids') do |span|
-        span.set_tag('param.ids', ids.map(&:to_s))
+      trace("valkyrie.find_many_by_ids") do |span|
+        span.set_tag("param.ids", ids.map(&:to_s))
         __getobj__.find_many_by_ids(ids: ids)
       end
     end
 
     def find_all
-      trace('valkyrie.find_all') do
+      trace("valkyrie.find_all") do
         __getobj__.find_all
       end
     end
 
     def find_all_of_model(model:)
-      trace('valkyrie.find_all_of_model') do |span|
-        span.set_tag('param.model', model.to_s)
+      trace("valkyrie.find_all_of_model") do |span|
+        span.set_tag("param.model", model.to_s)
         __getobj__.find_all_of_model(model: model)
       end
     end
 
     def find_members(resource:, model: nil)
-      trace('valkyrie.find_members') do |span|
-        span.set_tag('param.model', model.to_s)
-        span.set_tag('param.resource', resource.id.to_s)
+      trace("valkyrie.find_members") do |span|
+        span.set_tag("param.model", model.to_s)
+        span.set_tag("param.resource", resource.id.to_s)
         __getobj__.find_members(resource: resource, model: model)
       end
     end
 
     def find_parents(resource:)
-      trace('valkyrie.find_parents') do |span|
-        span.set_tag('param.resource', resource.id.to_s)
+      trace("valkyrie.find_parents") do |span|
+        span.set_tag("param.resource", resource.id.to_s)
         __getobj__.find_parents(resource: resource)
       end
     end
 
     def find_references_by(resource:, property:)
-      trace('valkyrie.find_references_by') do |span|
-        span.set_tag('param.resource', resource.id.to_s)
-        span.set_tag('param.property', property.to_s)
+      trace("valkyrie.find_references_by") do |span|
+        span.set_tag("param.resource", resource.id.to_s)
+        span.set_tag("param.property", property.to_s)
         __getobj__.find_references_by(resource: resource, property: property)
       end
     end
 
     def find_inverse_references_by(resource:, property:)
-      trace('valkyrie.find_inverse_references_by') do |span|
-        span.set_tag('param.resource', resource.id.to_s)
-        span.set_tag('param.property', property.to_s)
+      trace("valkyrie.find_inverse_references_by") do |span|
+        span.set_tag("param.resource", resource.id.to_s)
+        span.set_tag("param.property", property.to_s)
         __getobj__.find_inverse_references_by(resource: resource, property: property)
       end
     end
 
     def span_name
-      'valkyrie.query'
+      "valkyrie.query"
     end
   end
 end

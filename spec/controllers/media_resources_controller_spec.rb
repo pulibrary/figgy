@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 include ActionDispatch::TestProcess
 
 RSpec.describe MediaResourcesController do
@@ -14,16 +14,16 @@ RSpec.describe MediaResourcesController do
   describe "create" do
     let(:valid_params) do
       {
-        title: ['Title 1', 'Title 2'],
-        rights_statement: 'Test Statement',
-        visibility: 'restricted'
+        title: ["Title 1", "Title 2"],
+        rights_statement: "Test Statement",
+        visibility: "restricted"
       }
     end
     let(:invalid_params) do
       {
         title: [""],
-        rights_statement: 'Test Statement',
-        visibility: 'restricted'
+        rights_statement: "Test Statement",
+        visibility: "restricted"
       }
     end
     context "access control" do

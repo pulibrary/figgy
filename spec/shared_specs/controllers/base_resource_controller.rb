@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.shared_examples 'a BaseResourceController' do
+RSpec.shared_examples "a BaseResourceController" do
   include ActionDispatch::Routing::PolymorphicRoutes
   include Rails.application.routes.url_helpers
 
@@ -15,7 +15,7 @@ RSpec.shared_examples 'a BaseResourceController' do
   let(:factory) { param_key }
 
   before do
-    raise 'resource_klass must be set with `let(:resource_klass)`' unless
+    raise "resource_klass must be set with `let(:resource_klass)`" unless
       defined? resource_klass
     sign_in user if user
   end
@@ -53,16 +53,16 @@ RSpec.shared_examples 'a BaseResourceController' do
     let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do
       {
-        title: ['Title 1', 'Title 2'],
-        rights_statement: 'Test Statement',
-        visibility: 'restricted'
+        title: ["Title 1", "Title 2"],
+        rights_statement: "Test Statement",
+        visibility: "restricted"
       }
     end
     let(:invalid_params) do
       {
         title: [""],
-        rights_statement: 'Test Statement',
-        visibility: 'restricted'
+        rights_statement: "Test Statement",
+        visibility: "restricted"
       }
     end
     context "access control" do
@@ -84,9 +84,9 @@ RSpec.shared_examples 'a BaseResourceController' do
       let(:user) { FactoryBot.create(:admin) }
       let(:valid_params) do
         {
-          title: ['Title 1', 'Title 2'],
-          rights_statement: 'Test Statement',
-          visibility: 'restricted',
+          title: ["Title 1", "Title 2"],
+          rights_statement: "Test Statement",
+          visibility: "restricted",
           member_of_collection_ids: [collection.id.to_s]
         }
       end
@@ -317,7 +317,7 @@ RSpec.shared_examples 'a BaseResourceController' do
 
   context "when an admin" do
     let(:user) { FactoryBot.create(:admin) }
-    describe '#file_manager' do
+    describe "#file_manager" do
       it "sets the record and children variables" do
         child = FactoryBot.create_for_repository(:file_set)
         parent = FactoryBot.create_for_repository(factory, member_ids: child.id)
@@ -331,9 +331,9 @@ RSpec.shared_examples 'a BaseResourceController' do
   end
 
   describe "#manifest" do
-    let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+    let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
     before do
-      stub_ezid(shoulder: '99999/fk4', blade: '123456')
+      stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "returns a IIIF manifest for a resource with a file" do
       resource = FactoryBot.create_for_repository(manifestable_factory, files: [file])
@@ -356,8 +356,8 @@ RSpec.shared_examples 'a BaseResourceController' do
     end
   end
 
-  describe '#pdf' do
-    let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+  describe "#pdf" do
+    let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
     let(:resource) { FactoryBot.create_for_repository(factory, files: [file]) }
     let(:file_set) { resource.member_ids.first }
     before do

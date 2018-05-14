@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ReportsController, type: :controller do
   let(:user) { FactoryBot.create(:admin) }
@@ -10,11 +10,11 @@ RSpec.describe ReportsController, type: :controller do
 
   before do
     sign_in user
-    stub_bibdata(bib_id: '123456')
+    stub_bibdata(bib_id: "123456")
     stub_ezid(shoulder: "99999/fk4", blade: "8675309")
 
     change_set = ScannedResourceChangeSet.new(resource)
-    change_set.validate(source_metadata_identifier: '123456')
+    change_set.validate(source_metadata_identifier: "123456")
     change_set.sync
     change_set_persister.save(change_set: change_set)
   end
@@ -25,7 +25,7 @@ RSpec.describe ReportsController, type: :controller do
       expect(response).to render_template :identifiers_to_reconcile
     end
     it "allows downloading a CSV file" do
-      get :identifiers_to_reconcile, format: 'csv'
+      get :identifiers_to_reconcile, format: "csv"
       expect(response.body).to eq(data)
     end
   end

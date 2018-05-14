@@ -5,10 +5,10 @@ if Rails.env.development? || Rails.env.test?
   namespace :figgy do
     desc "Start solr server for testing."
     task :test do
-      shared_solr_opts = { managed: true, verbose: true, persist: false, download_dir: 'tmp' }
-      shared_solr_opts[:version] = ENV['SOLR_VERSION'] if ENV['SOLR_VERSION']
+      shared_solr_opts = { managed: true, verbose: true, persist: false, download_dir: "tmp" }
+      shared_solr_opts[:version] = ENV["SOLR_VERSION"] if ENV["SOLR_VERSION"]
 
-      SolrWrapper.wrap(shared_solr_opts.merge(port: 8984, instance_dir: 'tmp/figgy-core-test')) do |solr|
+      SolrWrapper.wrap(shared_solr_opts.merge(port: 8984, instance_dir: "tmp/figgy-core-test")) do |solr|
         solr.with_collection(name: "figgy-core-test", dir: Rails.root.join("solr", "config").to_s) do
           puts "Solr running at http://localhost:8984/solr/figgy-core-test/, ^C to exit"
           begin
@@ -22,14 +22,14 @@ if Rails.env.development? || Rails.env.test?
 
     desc "Start solr server for development."
     task :development do
-      SolrWrapper.wrap(managed: true, verbose: true, port: 8983, instance_dir: 'tmp/figgy-core-dev', persist: false, download_dir: 'tmp') do |solr|
+      SolrWrapper.wrap(managed: true, verbose: true, port: 8983, instance_dir: "tmp/figgy-core-dev", persist: false, download_dir: "tmp") do |solr|
         solr.with_collection(name: "figgy-core-dev", dir: Rails.root.join("solr", "config").to_s) do
           puts "Setup solr"
           puts "Solr running at http://localhost:8983/solr/figgy-core-dev/, ^C to exit"
           begin
-            if ENV['ENABLE_RAILS']
+            if ENV["ENABLE_RAILS"]
               # If HOST specified, bind to that IP with -b
-              server_options = " -b #{ENV['HOST']}" if ENV['HOST']
+              server_options = " -b #{ENV['HOST']}" if ENV["HOST"]
               IO.popen("rails server#{server_options}") do |io|
                 io.each do |line|
                   puts line
@@ -50,7 +50,7 @@ if Rails.env.development? || Rails.env.test?
     namespace :test do
       desc "Cleanup test servers"
       task :solr do
-        SolrWrapper.instance(managed: true, verbose: true, port: 8984, instance_dir: 'tmp/figgy-core-test', persist: false).remove_instance_dir!
+        SolrWrapper.instance(managed: true, verbose: true, port: 8984, instance_dir: "tmp/figgy-core-test", persist: false).remove_instance_dir!
         puts "Cleaned up test solr server."
       end
     end

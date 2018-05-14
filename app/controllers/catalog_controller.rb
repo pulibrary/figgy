@@ -5,9 +5,9 @@ class CatalogController < ApplicationController
   layout "application"
   def self.search_config
     {
-      'qf' => %w[identifier_tesim title_ssim title_tesim transliterated_title_ssim transliterated_title_tesim source_metadata_identifier_ssim local_identifier_ssim barcode_ssim],
-      'qt' => 'search',
-      'rows' => 10
+      "qf" => %w[identifier_tesim title_ssim title_tesim transliterated_title_ssim transliterated_title_tesim source_metadata_identifier_ssim local_identifier_ssim barcode_ssim],
+      "qt" => "search",
+      "rows" => 10
     }
   end
 
@@ -20,22 +20,22 @@ class CatalogController < ApplicationController
 
   configure_blacklight do |config|
     config.default_solr_params = {
-      qf: search_config['qf'],
-      qt: search_config['qt'],
-      rows: search_config['rows']
+      qf: search_config["qf"],
+      qt: search_config["qt"],
+      rows: search_config["rows"]
     }
 
-    config.index.title_field = 'title_ssim'
+    config.index.title_field = "title_ssim"
     config.index.display_type_field = "human_readable_type_ssim"
-    config.add_facet_field 'member_of_collection_titles_ssim', label: 'Collections', limit: 5
-    config.add_facet_field 'human_readable_type_ssim', label: 'Type of Work', limit: 5
-    config.add_facet_field 'ephemera_project_ssim', label: 'Ephemera Project', limit: 5
-    config.add_facet_field 'display_subject_ssim', label: 'Subject', limit: 5
-    config.add_facet_field 'display_language_ssim', label: 'Language', limit: 5
-    config.add_facet_field 'state_ssim', label: 'State', limit: 5
+    config.add_facet_field "member_of_collection_titles_ssim", label: "Collections", limit: 5
+    config.add_facet_field "human_readable_type_ssim", label: "Type of Work", limit: 5
+    config.add_facet_field "ephemera_project_ssim", label: "Ephemera Project", limit: 5
+    config.add_facet_field "display_subject_ssim", label: "Subject", limit: 5
+    config.add_facet_field "display_language_ssim", label: "Language", limit: 5
+    config.add_facet_field "state_ssim", label: "State", limit: 5
     config.add_facet_fields_to_solr_request!
 
-    config.add_search_field 'all_fields', label: 'All Fields'
+    config.add_search_field "all_fields", label: "All Fields"
 
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.
@@ -43,9 +43,9 @@ class CatalogController < ApplicationController
 
     # Configuration for autocomplete suggestor
     config.autocomplete_enabled = true
-    config.autocomplete_path = 'suggest'
+    config.autocomplete_path = "suggest"
     config.show.document_actions.clear
-    config.add_show_tools_partial(:admin_controls, partial: 'admin_controls', if: :can_edit?)
+    config.add_show_tools_partial(:admin_controls, partial: "admin_controls", if: :can_edit?)
     config.show.partials = config.show.partials.insert(1, :parent_breadcrumb)
     config.show.partials += [:universal_viewer]
     config.show.partials += [:resource_attributes]
@@ -111,8 +111,8 @@ class CatalogController < ApplicationController
     _, result = search_results(q: query, fl: "id, internal_resource_ssim", rows: 1)
 
     if result.first
-      object_id = result.first['id']
-      model_name = result.first['internal_resource_ssim'].first.underscore.to_sym
+      object_id = result.first["id"]
+      model_name = result.first["internal_resource_ssim"].first.underscore.to_sym
       url = polymorphic_url([:manifest, model_name], id: object_id)
       params[:no_redirect] ? render(json: { url: url }) : redirect_to(url)
     else

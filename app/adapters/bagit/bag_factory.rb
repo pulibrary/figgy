@@ -33,7 +33,7 @@ module Bagit
           lines = File.readlines(bag_path.join("tagmanifest-sha256.txt")).select do |line|
             !line.include?(metadata_digest_path.relative_path_from(bag_path).to_s)
           end
-          File.open(bag_path.join("tagmanifest-sha256.txt"), 'w') do |f|
+          File.open(bag_path.join("tagmanifest-sha256.txt"), "w") do |f|
             f.write(lines.join("\n"))
           end
           FileUtils.rm_f(metadata_digest_path)
@@ -58,7 +58,7 @@ module Bagit
 
         def export_metadata
           FileUtils.mkdir_p(bag_path.join("metadata"))
-          File.open(metadata_digest_path, 'w') do |f|
+          File.open(metadata_digest_path, "w") do |f|
             f.write(resource_metadata.to_json)
           end
           digest_metadata
@@ -70,7 +70,7 @@ module Bagit
 
         def digest_metadata
           hash = Digest::SHA256.file(metadata_digest_path).hexdigest
-          File.open(bag_path.join("tagmanifest-sha256.txt"), 'a') do |f|
+          File.open(bag_path.join("tagmanifest-sha256.txt"), "a") do |f|
             f.puts("#{hash}  #{metadata_digest_path.relative_path_from(bag_path)}")
           end
         end
@@ -80,8 +80,8 @@ module Bagit
         end
 
         def render_template_to_file(template:, file:)
-          output = ERB.new(File.read(template_path.join(template)), nil, '-').result(binding)
-          File.open(file, 'w') { |f| f.write(output) }
+          output = ERB.new(File.read(template_path.join(template)), nil, "-").result(binding)
+          File.open(file, "w") { |f| f.write(output) }
         end
 
         def template_path

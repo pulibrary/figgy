@@ -1,8 +1,8 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe PlumDerivativeMover do
-  let(:old) { Rails.root.join('spec', 'fixtures', 'files', 'bibdata', '123456.jsonld') }
+  let(:old) { Rails.root.join("spec", "fixtures", "files", "bibdata", "123456.jsonld") }
 
   before do
     allow(FileUtils).to receive(:cp).and_call_original
@@ -10,7 +10,7 @@ RSpec.describe PlumDerivativeMover do
   end
 
   context "in test" do
-    let(:new) { Rails.root.join('tmp', 'copied.jsonld') }
+    let(:new) { Rails.root.join("tmp", "copied.jsonld") }
 
     it "copies the file" do
       described_class.link_or_copy(old, new)
@@ -19,7 +19,7 @@ RSpec.describe PlumDerivativeMover do
     end
   end
   context "in production" do
-    let(:new) { Rails.root.join('tmp', 'linked.jsonld') }
+    let(:new) { Rails.root.join("tmp", "linked.jsonld") }
 
     before do
       allow(Rails.env).to receive(:production?).and_return(true)

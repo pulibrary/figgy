@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe EphemeraProjectDecorator do
   subject(:decorator) { described_class.new(resource) }
@@ -12,28 +12,28 @@ RSpec.describe EphemeraProjectDecorator do
     end
   end
 
-  it 'does not manage files' do
+  it "does not manage files" do
     expect(decorator.manageable_files?).to be false
   end
 
-  it 'does not manage structures' do
+  it "does not manage structures" do
     expect(decorator.manageable_structure?).to be false
   end
 
-  describe '#slug' do
-    it 'generates a slug' do
+  describe "#slug" do
+    it "generates a slug" do
       expect(decorator.slug).to eq "test_project-1234"
     end
   end
 
-  describe '#iiif_manifest_attributes' do
+  describe "#iiif_manifest_attributes" do
     it 'includes the "exhibit" property in the IIIF Manifest metadata' do
       expect(decorator.iiif_manifest_attributes).to include(exhibit: "test_project-1234")
     end
   end
 
-  describe '#top_language' do
-    it 'returns an array of terms' do
+  describe "#top_language" do
+    it "returns an array of terms" do
       expect(decorator.top_language.size).to eq 1
       expect(decorator.top_language.first.id).to eq term.id
     end

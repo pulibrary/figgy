@@ -3,7 +3,7 @@ module ThumbnailHelper
   include ::BlacklightHelper
 
   def default_path
-    image_tag 'default.png', class: 'thumbnail-inner'
+    image_tag "default.png", class: "thumbnail-inner"
   end
 
   def build_iiif_thumbnail_path(id, image_options = {})

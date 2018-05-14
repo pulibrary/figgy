@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 include ActionDispatch::TestProcess
 
 RSpec.describe RiiifResolver do
@@ -7,7 +7,7 @@ RSpec.describe RiiifResolver do
   subject(:resolver) { described_class.new }
   describe "#pattern" do
     context "when given an ID" do
-      let(:file) { fixture_file_upload('files/example.tif', 'image/tiff') }
+      let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
       let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
       let(:query_service) { metadata_adapter.query_service }
       let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }

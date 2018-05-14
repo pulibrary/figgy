@@ -11,7 +11,7 @@ class EphemeraVocabulariesController < ApplicationController
   before_action :load_vocabularies, only: [:index, :new, :edit]
 
   def index
-    render 'index'
+    render "index"
   end
 
   def load_vocabularies

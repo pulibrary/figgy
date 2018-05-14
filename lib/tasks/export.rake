@@ -2,7 +2,7 @@
 namespace :export do
   desc "Imports a resource from Plum"
   task cicognara: :environment do
-    coll = ENV['COLL']
+    coll = ENV["COLL"]
     abort "usage: rake export:cicognara COLL=[collection id]" unless coll
 
     CSV do |csv|

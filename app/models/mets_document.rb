@@ -13,7 +13,7 @@ class METSDocument
   end
 
   def bib_id
-    @mets.xpath("/mets:mets/mets:dmdSec/mets:mdRef/@xlink:href").to_s.gsub(/.*\//, '')
+    @mets.xpath("/mets:mets/mets:dmdSec/mets:mdRef/@xlink:href").to_s.gsub(/.*\//, "")
   end
 
   def collection_slug
@@ -21,12 +21,12 @@ class METSDocument
   end
 
   def pudl_id
-    @mets.xpath("/mets:mets/mets:metsHdr/mets:metsDocumentID").first.content.gsub(/\.mets/, '')
+    @mets.xpath("/mets:mets/mets:metsHdr/mets:metsDocumentID").first.content.gsub(/\.mets/, "")
   end
 
   def thumbnail_path
     xp = "/mets:mets/mets:fileSec/mets:fileGrp[@USE='thumbnail']/mets:file/mets:FLocat/@xlink:href"
-    @mets.xpath(xp).to_s.gsub(/file:\/\//, '')
+    @mets.xpath(xp).to_s.gsub(/file:\/\//, "")
   end
 
   def viewing_direction
@@ -34,13 +34,13 @@ class METSDocument
   end
 
   def right_to_left
-    @mets.xpath("/mets:mets/mets:structMap[@TYPE='Physical']/mets:div/@TYPE").to_s.start_with? 'RTL'
+    @mets.xpath("/mets:mets/mets:structMap[@TYPE='Physical']/mets:div/@TYPE").to_s.start_with? "RTL"
   end
 
   def viewing_hint
     type = @mets.xpath("/mets:mets/mets:structMap[@TYPE='Physical']/mets:div/@TYPE").to_s
-    return if ['TightBoundManuscript', 'ScrollSet', 'BoundArt'].any? { |w| type.include?(w) }
-    'paged'
+    return if ["TightBoundManuscript", "ScrollSet", "BoundArt"].any? { |w| type.include?(w) }
+    "paged"
   end
 
   def multi_volume?
@@ -75,13 +75,13 @@ class METSDocument
   end
 
   def file_info(file, volume_id = nil)
-    path = file.xpath('mets:FLocat/@xlink:href').to_s.gsub(/file:\/\//, '')
+    path = file.xpath("mets:FLocat/@xlink:href").to_s.gsub(/file:\/\//, "")
     replaces = volume_id ? "#{volume_id}/" : ""
     replaces += File.basename(path, File.extname(path))
     {
-      id: file.xpath('@ID').to_s,
-      checksum: file.xpath('@CHECKSUM').to_s.rjust(40, '0'),
-      mime_type: file.xpath('@MIMETYPE').to_s,
+      id: file.xpath("@ID").to_s,
+      checksum: file.xpath("@CHECKSUM").to_s.rjust(40, "0"),
+      mime_type: file.xpath("@MIMETYPE").to_s,
       path: path,
       replaces: "#{pudl_id}/#{replaces}"
     }
@@ -89,7 +89,7 @@ class METSDocument
 
   def file_opts(file)
     return {} if @mets.xpath("count(//mets:div/mets:fptr[@FILEID='#{file[:id]}'])").positive?
-    { viewing_hint: 'non-paged' }
+    { viewing_hint: "non-paged" }
   end
 
   def decorated_file(f)

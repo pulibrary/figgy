@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe IngestMETSJob do
   describe "integration test" do
@@ -7,14 +7,14 @@ RSpec.describe IngestMETSJob do
     let(:user) { FactoryBot.build(:admin) }
     let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-4612596.mets") }
     let(:tiff_file) { Rails.root.join("spec", "fixtures", "files", "example.tif") }
-    let(:mime_type) { 'image/tiff' }
+    let(:mime_type) { "image/tiff" }
     let(:file) { IoDecorator.new(File.new(tiff_file), mime_type, File.basename(tiff_file)) }
-    let(:pudl0001) { FactoryBot.build(:collection, id: Valkyrie::ID.new('pudl0001'), slug: "pudl0001") }
+    let(:pudl0001) { FactoryBot.build(:collection, id: Valkyrie::ID.new("pudl0001"), slug: "pudl0001") }
     let(:order) do
       {
         nodes: [{
-          label: 'leaf 1', nodes: [{
-            label: 'leaf 1. recto', proxy: fileset2.id
+          label: "leaf 1", nodes: [{
+            label: "leaf 1. recto", proxy: fileset2.id
           }]
         }]
       }
@@ -32,8 +32,8 @@ RSpec.describe IngestMETSJob do
       allow_any_instance_of(IngestableFile).to receive(:path).and_return(tiff_file)
       allow(Valkyrie.config.metadata_adapter.query_service.custom_queries).to receive(:find_by_string_property).and_return([pudl0001])
       allow(Valkyrie.config.metadata_adapter.query_service).to receive(:find_references_by).and_return([pudl0001])
-      stub_bibdata(bib_id: '4612596')
-      stub_bibdata(bib_id: '4609321')
+      stub_bibdata(bib_id: "4612596")
+      stub_bibdata(bib_id: "4609321")
     end
 
     let(:adapter) { Valkyrie.config.metadata_adapter }
@@ -45,8 +45,8 @@ RSpec.describe IngestMETSJob do
       expect(book).not_to be_nil
       expect(book.source_metadata_identifier).to eq ["4612596"]
       expect(book.logical_structure[0].nodes.length).to eq 1
-      expect(book.logical_structure[0].nodes[0].label).to contain_exactly 'leaf 1'
-      expect(book.logical_structure[0].nodes[0].nodes[0].label).to contain_exactly 'leaf 1. recto'
+      expect(book.logical_structure[0].nodes[0].label).to contain_exactly "leaf 1"
+      expect(book.logical_structure[0].nodes[0].nodes[0].label).to contain_exactly "leaf 1. recto"
       expect(book.member_ids).not_to be_blank
       file_sets = adapter.query_service.find_members(resource: book)
       expect(book.logical_structure[0].nodes[0].nodes[0].proxy).to eq [file_sets.first.id]

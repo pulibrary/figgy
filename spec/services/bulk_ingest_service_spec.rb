@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe BulkIngestService do
   subject(:ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger) }
@@ -14,11 +14,11 @@ RSpec.describe BulkIngestService do
     )
   end
 
-  describe '#attach_each_dir' do
-    context 'with a set of LAE images' do
-      let(:barcode1) { '32101075851400' }
-      let(:barcode2) { '32101075851418' }
-      let(:lae_dir) { Rails.root.join('spec', 'fixtures', 'lae') }
+  describe "#attach_each_dir" do
+    context "with a set of LAE images" do
+      let(:barcode1) { "32101075851400" }
+      let(:barcode2) { "32101075851418" }
+      let(:lae_dir) { Rails.root.join("spec", "fixtures", "lae") }
       let(:folder1) { FactoryBot.create_for_repository(:ephemera_folder, barcode: [barcode1]) }
       let(:folder2) { FactoryBot.create_for_repository(:ephemera_folder, barcode: [barcode2]) }
       before do
@@ -26,8 +26,8 @@ RSpec.describe BulkIngestService do
         folder2
       end
 
-      it 'attaches the files' do
-        ingester.attach_each_dir(base_directory: lae_dir, property: :barcode, file_filter: '.tif')
+      it "attaches the files" do
+        ingester.attach_each_dir(base_directory: lae_dir, property: :barcode, file_filter: ".tif")
 
         reloaded1 = query_service.find_by(id: folder1.id)
         reloaded2 = query_service.find_by(id: folder2.id)
@@ -38,22 +38,22 @@ RSpec.describe BulkIngestService do
     end
   end
 
-  describe '#attach_dir' do
+  describe "#attach_dir" do
     let(:logger) { Logger.new(nil) }
-    let(:single_dir) { Rails.root.join('spec', 'fixtures', 'ingest_single') }
-    let(:bib) { '4609321' }
-    let(:local_id) { 'cico:xyz' }
-    let(:replaces) { 'pudl0001/4609321/331' }
+    let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single") }
+    let(:bib) { "4609321" }
+    let(:local_id) { "cico:xyz" }
+    let(:replaces) { "pudl0001/4609321/331" }
     let(:coll) { FactoryBot.create_for_repository(:collection) }
     before do
-      stub_bibdata(bib_id: '4609321')
+      stub_bibdata(bib_id: "4609321")
       stub_ezid(shoulder: "99999/fk4", blade: "4609321")
     end
-    context 'with a directory of Scanned TIFFs' do
-      it 'ingests the resources, ignoring dotfiles' do
+    context "with a directory of Scanned TIFFs" do
+      it "ingests the resources, ignoring dotfiles" do
         ingester.attach_dir(
           base_directory: single_dir,
-          file_filter: '.tif',
+          file_filter: ".tif",
           source_metadata_identifier: bib,
           local_identifier: local_id,
           collection: coll
@@ -70,46 +70,46 @@ RSpec.describe BulkIngestService do
       end
     end
 
-    context 'with a relative path for the directory' do
+    context "with a relative path for the directory" do
       let(:bulk_ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger) }
-      let(:single_dir) { File.join('spec', 'fixtures', 'ingest_single') }
+      let(:single_dir) { File.join("spec", "fixtures", "ingest_single") }
       before do
         allow(bulk_ingester).to receive(:attach_children)
       end
-      it 'attaches directories using an absolute path' do
+      it "attaches directories using an absolute path" do
         bulk_ingester.attach_dir(
           base_directory: single_dir,
-          file_filter: '.tif',
+          file_filter: ".tif",
           source_metadata_identifier: bib,
           local_identifier: local_id,
           collection: coll
         )
 
         expect(bulk_ingester).to have_received(:attach_children).with(
-          hash_including(path: Rails.root.join('spec', 'fixtures', 'ingest_single'))
+          hash_including(path: Rails.root.join("spec", "fixtures", "ingest_single"))
         )
       end
     end
 
-    context 'with a directory of subdirectories of TIFFs' do
+    context "with a directory of subdirectories of TIFFs" do
       let(:logger) { Logger.new(nil) }
-      let(:multi_dir) { Rails.root.join('spec', 'fixtures', 'ingest_multi') }
-      let(:bib) { '4609321' }
-      let(:local_id) { 'cico:xyz' }
-      let(:replaces) { 'pudl0001/4609321/331' }
+      let(:multi_dir) { Rails.root.join("spec", "fixtures", "ingest_multi") }
+      let(:bib) { "4609321" }
+      let(:local_id) { "cico:xyz" }
+      let(:replaces) { "pudl0001/4609321/331" }
       let(:coll) { FactoryBot.create(:collection) }
 
       before do
-        stub_bibdata(bib_id: '4609321')
+        stub_bibdata(bib_id: "4609321")
         stub_ezid(shoulder: "99999/fk4", blade: "4609321")
       end
 
-      it 'ingests the resources', bulk: true do
+      it "ingests the resources", bulk: true do
         coll = FactoryBot.create_for_repository(:collection)
 
         ingester.attach_dir(
           base_directory: multi_dir,
-          file_filter: '.tif',
+          file_filter: ".tif",
           source_metadata_identifier: bib,
           local_identifier: local_id,
           collection: coll
@@ -134,25 +134,25 @@ RSpec.describe BulkIngestService do
       end
     end
 
-    context 'with invalid property arguments' do
+    context "with invalid property arguments" do
       let(:logger) { instance_double(Logger) }
-      let(:single_dir) { Rails.root.join('spec', 'fixtures', 'ingest_single') }
-      let(:bib) { '4609321' }
-      let(:local_id) { 'cico:xyz' }
-      let(:replaces) { 'pudl0001/4609321/331' }
+      let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single") }
+      let(:bib) { "4609321" }
+      let(:local_id) { "cico:xyz" }
+      let(:replaces) { "pudl0001/4609321/331" }
 
       before do
         allow(logger).to receive(:warn)
         allow(logger).to receive(:info)
-        stub_bibdata(bib_id: '4609321')
+        stub_bibdata(bib_id: "4609321")
         stub_ezid(shoulder: "99999/fk4", blade: "4609321")
       end
 
-      it 'does not ingest the resources and logs a warning' do
+      it "does not ingest the resources and logs a warning" do
         ingester.attach_dir(
           base_directory: single_dir,
-          property: 'noexist',
-          file_filter: '.tif',
+          property: "noexist",
+          file_filter: ".tif",
           source_metadata_identifier: bib
         )
 

@@ -10,7 +10,7 @@ module LinkedData
       def linked_properties
         {
           '@id': url,
-          '@type': 'pcdm:Collection',
+          '@type': "pcdm:Collection",
           title: title
         }
       end

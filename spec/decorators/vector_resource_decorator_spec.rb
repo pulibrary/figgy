@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe VectorResourceDecorator do
   subject(:decorator) { described_class.new(resource) }
@@ -32,9 +32,9 @@ RSpec.describe VectorResourceDecorator do
   it "cannot manage structure" do
     expect(decorator.manageable_structure?).to be false
   end
-  describe '#raster_resource_parents' do
+  describe "#raster_resource_parents" do
     let(:resource) { FactoryBot.create_for_repository(:vector_resource) }
-    it 'accesses parent scanned maps' do
+    it "accesses parent scanned maps" do
       raster_resource = FactoryBot.create_for_repository(:raster_resource, member_ids: [resource.id])
       expect(resource.decorate.raster_resource_parents).not_to be_empty
       expect(resource.decorate.raster_resource_parents.first).to be_a RasterResourceDecorator
@@ -96,11 +96,11 @@ RSpec.describe VectorResourceDecorator do
     end
   end
 
-  describe '#vector_resource_members' do
+  describe "#vector_resource_members" do
     let(:child) { FactoryBot.create_for_repository(:vector_resource) }
     let(:resource) { FactoryBot.create_for_repository(:vector_resource, member_ids: [child.id]) }
 
-    it 'decorates member vector resources' do
+    it "decorates member vector resources" do
       expect(resource.decorate.vector_resource_members).not_to be_empty
       expect(resource.decorate.vector_resource_members.first.id).to eq child.id
     end

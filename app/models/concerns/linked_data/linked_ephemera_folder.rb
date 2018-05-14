@@ -87,7 +87,7 @@ module LinkedData
         return unless ephemera_box
         super.push(
           '@id': helper.solr_document_url(id: ephemera_box.id),
-          '@type': 'pcdm:Collection',
+          '@type': "pcdm:Collection",
           barcode: barcode,
           label: ephemera_box.try(:first_title),
           box_number: box_number
@@ -96,7 +96,7 @@ module LinkedData
 
       def properties
         {
-          '@type': 'pcdm:Object',
+          '@type': "pcdm:Object",
           title: try(:title),
           alternative: try(:alternative_title),
           creator: try(:creator),

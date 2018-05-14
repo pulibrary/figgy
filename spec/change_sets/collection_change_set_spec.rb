@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe CollectionChangeSet do
   subject(:change_set) { described_class.new(collection) }

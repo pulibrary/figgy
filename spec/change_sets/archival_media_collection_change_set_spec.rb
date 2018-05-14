@@ -1,9 +1,9 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ArchivalMediaCollectionChangeSet do
   let(:change_set) { described_class.new(collection, bag_path: "") }
-  let(:collection) { FactoryBot.build(:archival_media_collection, state: 'draft') }
+  let(:collection) { FactoryBot.build(:archival_media_collection, state: "draft") }
   let(:form_resource) { collection }
 
   before do
@@ -44,7 +44,7 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
 
     context "when source_metadata_identifier is set" do
       let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "AC044_c0003") }
-      let(:file) { File.open(Rails.root.join("spec", "fixtures", "some_finding_aid.xml"), 'r') }
+      let(:file) { File.open(Rails.root.join("spec", "fixtures", "some_finding_aid.xml"), "r") }
       before do
         allow_any_instance_of(BagPathValidator).to receive(:validate).and_return(true)
       end

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ::BlacklightHelper do
   describe "#render_document_heading" do
@@ -8,7 +8,7 @@ RSpec.describe ::BlacklightHelper do
     let(:document) { SolrDocument.new(solr_document) }
     before do
       allow(helper).to receive(:blacklight_config).and_return(CatalogController.blacklight_config)
-      allow(helper).to receive(:action_name).and_return('show')
+      allow(helper).to receive(:action_name).and_return("show")
     end
     context "when given an EphemeraTerm" do
       it "renders the label" do

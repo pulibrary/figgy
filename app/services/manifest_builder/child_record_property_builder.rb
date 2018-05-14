@@ -7,7 +7,7 @@ class ManifestBuilder
     end
 
     def apply(manifest)
-      manifest['@id'] = record.manifest_url.to_s
+      manifest["@id"] = record.manifest_url.to_s
       manifest.label = record.to_s
       manifest.description = record.description
       manifest

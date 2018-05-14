@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe CatalogController do
   let(:persister) { Valkyrie::MetadataAdapter.find(:indexing_persister).persister }
@@ -46,7 +46,7 @@ RSpec.describe CatalogController do
       get :index, params: { q: "p3b593k91p" }
       expect(assigns(:document_list).length).to eq 1
     end
-    context 'with imported metadata' do
+    context "with imported metadata" do
       it "can search by imported local identifiers" do
         stub_bibdata(bib_id: "8543429")
         stub_ezid(shoulder: "99999/fk4", blade: "8543429")
@@ -76,9 +76,9 @@ RSpec.describe CatalogController do
       expect(assigns(:document_list).length).to eq 1
     end
 
-    context 'with indexed completed ephemera folders' do
+    context "with indexed completed ephemera folders" do
       it "can search by barcode" do
-        persister.save(resource: FactoryBot.build(:ephemera_folder, barcode: '123456789abcde', state: 'complete'))
+        persister.save(resource: FactoryBot.build(:ephemera_folder, barcode: "123456789abcde", state: "complete"))
         get :index, params: { q: "123456789abcde" }
 
         expect(assigns(:document_list).length).to eq 1
@@ -97,13 +97,13 @@ RSpec.describe CatalogController do
     end
 
     it "allows multiple anonymous users to search" do
-      u1 = User.new uid: 'guest_123'
+      u1 = User.new uid: "guest_123"
       u1.save(validate: false)
       sign_in u1
       get :index, params: { q: "" }
       expect(response).to be_success
 
-      u2 = User.new uid: 'guest_456'
+      u2 = User.new uid: "guest_456"
       u2.save(validate: false)
       sign_in u2
       get :index, params: { q: "" }
@@ -127,7 +127,7 @@ RSpec.describe CatalogController do
   describe "EphemeraFolder behavior" do
     context "when not an admin" do
       it "displays a completed EphemeraFolder" do
-        persister.save(resource: FactoryBot.build(:ephemera_folder, state: 'complete'))
+        persister.save(resource: FactoryBot.build(:ephemera_folder, state: "complete"))
 
         get :index, params: { q: "" }
 
@@ -143,7 +143,7 @@ RSpec.describe CatalogController do
       end
 
       it "does not display EphemeraBoxes" do
-        persister.save(resource: FactoryBot.build(:ephemera_box, state: 'all_in_production'))
+        persister.save(resource: FactoryBot.build(:ephemera_box, state: "all_in_production"))
 
         get :index, params: { q: "" }
 
@@ -166,28 +166,28 @@ RSpec.describe CatalogController do
       end
 
       it "displays all_in_production  EphemeraBoxes" do
-        persister.save(resource: FactoryBot.build(:ephemera_box, state: 'all_in_production'))
+        persister.save(resource: FactoryBot.build(:ephemera_box, state: "all_in_production"))
 
         get :index, params: { q: "" }
 
         expect(assigns(:document_list).length).to eq 1
       end
 
-      context 'with a non-Latin title which has been transliterated' do
-        let(:title) { 'Что делать?' }
+      context "with a non-Latin title which has been transliterated" do
+        let(:title) { "Что делать?" }
         let(:transliterated_title) { 'Chto delat\'?' }
 
         before do
           persister.save(resource: FactoryBot.build(:ephemera_folder, title: title, transliterated_title: transliterated_title))
         end
 
-        it 'can search by the non-Latin title' do
-          get :index, params: { q: 'Что' }
+        it "can search by the non-Latin title" do
+          get :index, params: { q: "Что" }
           expect(assigns(:document_list).length).to eq 1
         end
 
-        it 'can search by the transliterated title' do
-          get :index, params: { q: 'Chto' }
+        it "can search by the transliterated title" do
+          get :index, params: { q: "Chto" }
           expect(assigns(:document_list).length).to eq 1
         end
       end
@@ -195,7 +195,7 @@ RSpec.describe CatalogController do
   end
 
   describe "EphemeraBox behavior" do
-    context 'as an administrator' do
+    context "as an administrator" do
       before do
         sign_in FactoryBot.create(:admin)
       end
@@ -208,16 +208,16 @@ RSpec.describe CatalogController do
       end
 
       it "indexes by barcode" do
-        persister.save(resource: FactoryBot.build(:ephemera_box, barcode: 'abcde012345678'))
+        persister.save(resource: FactoryBot.build(:ephemera_box, barcode: "abcde012345678"))
         get :index, params: { q: "abcde012345678" }
 
         expect(assigns(:document_list).length).to eq 1
       end
     end
 
-    context 'within an incomplete EphemeraBox' do
-      let(:ephemera_folder) { FactoryBot.build(:ephemera_folder, state: 'complete') }
-      let(:ephemera_box) { FactoryBot.build(:ephemera_box, state: 'new') }
+    context "within an incomplete EphemeraBox" do
+      let(:ephemera_folder) { FactoryBot.build(:ephemera_folder, state: "complete") }
+      let(:ephemera_box) { FactoryBot.build(:ephemera_box, state: "new") }
       before do
         box = persister.save(resource: ephemera_box)
         folder = persister.save(resource: ephemera_folder)
@@ -232,9 +232,9 @@ RSpec.describe CatalogController do
       end
     end
 
-    context 'within a complete EphemeraBox' do
-      let(:ephemera_folder) { FactoryBot.build(:ephemera_folder, state: 'complete') }
-      let(:ephemera_box) { FactoryBot.build(:ephemera_box, state: 'all_in_production') }
+    context "within a complete EphemeraBox" do
+      let(:ephemera_folder) { FactoryBot.build(:ephemera_folder, state: "complete") }
+      let(:ephemera_box) { FactoryBot.build(:ephemera_box, state: "all_in_production") }
       before do
         box = persister.save(resource: ephemera_box)
         folder = persister.save(resource: ephemera_folder)
@@ -250,8 +250,8 @@ RSpec.describe CatalogController do
     end
 
     context "an incomplete folder within a complete box" do
-      let(:ephemera_folder) { FactoryBot.build(:ephemera_folder, state: 'needs_qa') }
-      let(:ephemera_box) { FactoryBot.build(:ephemera_box, state: 'all_in_production') }
+      let(:ephemera_folder) { FactoryBot.build(:ephemera_folder, state: "needs_qa") }
+      let(:ephemera_box) { FactoryBot.build(:ephemera_box, state: "all_in_production") }
       before do
         box = persister.save(resource: ephemera_box)
         folder = persister.save(resource: ephemera_folder)
@@ -295,14 +295,14 @@ RSpec.describe CatalogController do
 
   describe "SimpleResource behavior" do
     it "does not display a Simple Resource in draft state" do
-      persister.save(resource: FactoryBot.build(:simple_resource, state: 'draft'))
+      persister.save(resource: FactoryBot.build(:simple_resource, state: "draft"))
 
       get :index, params: { q: "" }
 
       expect(assigns(:document_list).length).to eq 0
     end
     it "does display a Simple Resource in published state" do
-      persister.save(resource: FactoryBot.build(:simple_resource, state: 'published'))
+      persister.save(resource: FactoryBot.build(:simple_resource, state: "published"))
 
       get :index, params: { q: "" }
 
@@ -519,7 +519,7 @@ RSpec.describe CatalogController do
         get :show, params: { id: folder.id.to_s, format: :jsonld }
         expect(response).to be_success
         json_body = MultiJson.load(response.body, symbolize_keys: true)
-        expect(json_body[:local_identifier][0]).to eq 'xyz1'
+        expect(json_body[:local_identifier][0]).to eq "xyz1"
       end
 
       it "renders for a FileSet" do
@@ -638,18 +638,18 @@ RSpec.describe CatalogController do
 
   describe "manifest lookup" do
     context "when the manifest is found" do
-      let(:resource) { persister.save(resource: FactoryBot.build(:complete_scanned_resource, identifier: ['ark:/99999/12345'])) }
+      let(:resource) { persister.save(resource: FactoryBot.build(:complete_scanned_resource, identifier: ["ark:/99999/12345"])) }
 
       before do
         resource
       end
 
       it "redirects to the manifest" do
-        get :lookup_manifest, params: { prefix: 'ark:', naan: '99999', arkid: '12345' }
+        get :lookup_manifest, params: { prefix: "ark:", naan: "99999", arkid: "12345" }
         expect(response).to redirect_to "http://test.host/concern/scanned_resources/#{resource.id}/manifest"
       end
       it "doesn't redirect when no_redirect is set" do
-        get :lookup_manifest, params: { prefix: 'ark:', naan: '99999', arkid: '12345', no_redirect: 'true' }
+        get :lookup_manifest, params: { prefix: "ark:", naan: "99999", arkid: "12345", no_redirect: "true" }
         expect(response).to be_success
         expect(JSON.parse(response.body)["url"]).to eq "http://test.host/concern/scanned_resources/#{resource.id}/manifest"
       end
@@ -657,7 +657,7 @@ RSpec.describe CatalogController do
 
     context "when the manifeset is not found" do
       it "sends a 404 error" do
-        get :lookup_manifest, params: { prefix: 'ark:', naan: '99999', arkid: '99999' }
+        get :lookup_manifest, params: { prefix: "ark:", naan: "99999", arkid: "99999" }
         expect(response.status).to be 404
       end
     end

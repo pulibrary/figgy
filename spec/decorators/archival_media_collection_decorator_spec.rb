@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ArchivalMediaCollectionDecorator do
   subject(:decorator) { described_class.new(collection) }
@@ -17,7 +17,7 @@ RSpec.describe ArchivalMediaCollectionDecorator do
     end
   end
 
-  context 'with imported metadata' do
+  context "with imported metadata" do
     let(:collection) do
       FactoryBot.build(:archival_media_collection,
                        imported_metadata: [{

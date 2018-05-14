@@ -22,6 +22,6 @@ class MessagingClient
     end
 
     def exchange
-      @exchange ||= channel.fanout(Figgy.config['events']['exchange']['plum'], durable: true)
+      @exchange ||= channel.fanout(Figgy.config["events"]["exchange"]["plum"], durable: true)
     end
 end

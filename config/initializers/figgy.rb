@@ -5,15 +5,15 @@ module Figgy
   end
 
   def messaging_client
-    @messaging_client ||= MessagingClient.new(Figgy.config['events']['server'])
+    @messaging_client ||= MessagingClient.new(Figgy.config["events"]["server"])
   end
 
   def geoblacklight_messaging_client
-    @geoblacklight_messaging_client ||= GeoblacklightMessagingClient.new(Figgy.config['events']['server'])
+    @geoblacklight_messaging_client ||= GeoblacklightMessagingClient.new(Figgy.config["events"]["server"])
   end
 
   def geoserver_messaging_client
-    @geoserver_messaging_client ||= GeoserverMessagingClient.new(Figgy.config['events']['server'])
+    @geoserver_messaging_client ||= GeoserverMessagingClient.new(Figgy.config["events"]["server"])
   end
 
   def default_url_options

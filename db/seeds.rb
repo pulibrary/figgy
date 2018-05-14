@@ -12,5 +12,5 @@ unless User.count < 1
   UserUtils.promote_user_to_admin(user: User.first)
   seeder.generate_dev_data(mvw_volumes: 4, many_files: 3, sammel_files: 2, sammel_vols: 2)
   seeder.generate_ephemera_project
-  seeder.generate_ephemera_project(project: EphemeraProject.new(title: 'Boxless Ephemera Project', slug: 'boxless-project'), n_boxes: 0)
+  seeder.generate_ephemera_project(project: EphemeraProject.new(title: "Boxless Ephemera Project", slug: "boxless-project"), n_boxes: 0)
 end

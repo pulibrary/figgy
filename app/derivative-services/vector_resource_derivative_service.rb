@@ -41,7 +41,7 @@ class VectorResourceDerivativeService
   end
 
   def build_thumbnail_file
-    IoDecorator.new(temporary_thumbnail_output, "thumbnail.png", 'image/png', use_thumbnail)
+    IoDecorator.new(temporary_thumbnail_output, "thumbnail.png", "image/png", use_thumbnail)
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)

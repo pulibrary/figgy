@@ -11,7 +11,7 @@ class ManifestBuilder
 
     def apply(manifest)
       return manifest unless start_canvas_id && file_set
-      manifest['startCanvas'] = path
+      manifest["startCanvas"] = path
       manifest
     end
 

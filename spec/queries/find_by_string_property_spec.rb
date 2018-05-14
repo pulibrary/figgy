@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe FindByStringProperty do
   subject(:query) { described_class.new(query_service: query_service) }

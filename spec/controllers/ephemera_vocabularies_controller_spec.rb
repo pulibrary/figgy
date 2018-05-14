@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 include ActionDispatch::TestProcess
 
 RSpec.describe EphemeraVocabulariesController do
@@ -30,11 +30,11 @@ RSpec.describe EphemeraVocabulariesController do
   describe "index" do
     context "when they have permission" do
       let(:user) { FactoryBot.create(:admin) }
-      let(:vocab) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'test parent vocabulary') }
+      let(:vocab) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: "test parent vocabulary") }
       render_views
       it "has lists all ephemera vocabularies" do
         adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
-        res = FactoryBot.build(:ephemera_vocabulary, label: 'test term', member_of_vocabulary_id: vocab.id)
+        res = FactoryBot.build(:ephemera_vocabulary, label: "test term", member_of_vocabulary_id: vocab.id)
         res.member_of_vocabulary_id = vocab.id
         child_vocab = adapter.persister.save(resource: res)
 
@@ -49,8 +49,8 @@ RSpec.describe EphemeraVocabulariesController do
     let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do
       {
-        label: ['test label'],
-        value: ['test value']
+        label: ["test label"],
+        value: ["test value"]
       }
     end
     let(:invalid_params) do
@@ -134,7 +134,7 @@ RSpec.describe EphemeraVocabulariesController do
         ephemera_vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary)
         get :edit, params: { id: ephemera_vocabulary.id.to_s }
 
-        expect(response.body).to have_field "Label", with: 'test vocabulary'
+        expect(response.body).to have_field "Label", with: "test vocabulary"
         expect(response.body).to have_button "Save"
       end
     end

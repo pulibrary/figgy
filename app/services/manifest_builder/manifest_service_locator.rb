@@ -170,8 +170,8 @@ class ManifestBuilder
 
       class CollectionManifestBuilder < IIIFManifest::ManifestBuilder
         def apply(collection)
-          collection['collections'] ||= []
-          collection['collections'] << to_h
+          collection["collections"] ||= []
+          collection["collections"] << to_h
           collection
         end
       end

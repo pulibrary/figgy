@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class CollectionMemberSearchBuilder < ::SearchBuilder
   class_attribute :collection_membership_field
-  self.collection_membership_field = 'member_of_collection_ids_ssim'
+  self.collection_membership_field = "member_of_collection_ids_ssim"
   self.default_processor_chain += [:member_of_collection]
 
   def member_of_collection(solr_parameters)

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe PlumChangeSetPersister::PublishMessage::Factory do
   let(:query_service) { instance_double(Valkyrie::Persistence::Memory::QueryService) }
@@ -7,8 +7,8 @@ RSpec.describe PlumChangeSetPersister::PublishMessage::Factory do
   let(:change_set) { ScannedResourceChangeSet.new(scanned_resource) }
   let(:scanned_resource) { ScannedResource.new }
 
-  describe '.new' do
-    it 'initializes a new PublishMessage Object' do
+  describe ".new" do
+    it "initializes a new PublishMessage Object" do
       expect(described_class.new(operation: :create)
               .new(change_set_persister: change_set_persister, change_set: change_set))
         .to be_a PlumChangeSetPersister::PublishCreatedMessage
@@ -20,7 +20,7 @@ RSpec.describe PlumChangeSetPersister::PublishMessage::Factory do
         .to be_a PlumChangeSetPersister::PublishDeletedMessage
     end
 
-    it 'raises an issue when attempting to initialize a publisher object for unsupported operations' do
+    it "raises an issue when attempting to initialize a publisher object for unsupported operations" do
       expect do
         described_class.new(operation: :unsupport)
                        .new(change_set_persister: change_set_persister, change_set: change_set)

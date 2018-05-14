@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "catalog/_admin_controls_ephemera_box" do
   let(:box) { FactoryBot.create_for_repository(:ephemera_box) }
@@ -14,15 +14,15 @@ RSpec.describe "catalog/_admin_controls_ephemera_box" do
     render
   end
 
-  it 'hides the button to attach a hard drive from users' do
-    expect(rendered).not_to have_link 'Attach Hard Drive', href: attach_drive_ephemera_box_path(box.id)
+  it "hides the button to attach a hard drive from users" do
+    expect(rendered).not_to have_link "Attach Hard Drive", href: attach_drive_ephemera_box_path(box.id)
   end
 
-  context 'as an admin. user' do
+  context "as an admin. user" do
     let(:user) { FactoryBot.create(:admin) }
 
-    it 'displays a button to attach a hard drive' do
-      expect(rendered).to have_link 'Attach Hard Drive', href: attach_drive_ephemera_box_path(box.id)
+    it "displays a button to attach a hard drive" do
+      expect(rendered).to have_link "Attach Hard Drive", href: attach_drive_ephemera_box_path(box.id)
     end
   end
 end

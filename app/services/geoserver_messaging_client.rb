@@ -22,6 +22,6 @@ class GeoserverMessagingClient
     end
 
     def exchange
-      @exchange ||= channel.fanout(Figgy.config['events']['exchange']['geoserver'], durable: true)
+      @exchange ||= channel.fanout(Figgy.config["events"]["exchange"]["geoserver"], durable: true)
     end
 end

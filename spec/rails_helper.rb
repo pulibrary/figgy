@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 ENV["RACK_ENV"] = "test"
-require 'simplecov'
-require 'coveralls'
+require "simplecov"
+require "coveralls"
 
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(
   [
@@ -10,7 +10,7 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(
   ]
 )
 SimpleCov.start "rails" do
-  add_filter '/valhalla/'
+  add_filter "/valhalla/"
 end
 
 require File.expand_path("../../config/environment", __FILE__)

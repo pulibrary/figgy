@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 include ActionDispatch::TestProcess
 
 RSpec.describe GeoMetadataExtractor do
@@ -20,7 +20,7 @@ RSpec.describe GeoMetadataExtractor do
   let(:tika_output) { tika_xml_output }
 
   context "with fgdc metadata" do
-    let(:file) { fixture_file_upload('files/geo_metadata/fgdc.xml', 'application/xml') }
+    let(:file) { fixture_file_upload("files/geo_metadata/fgdc.xml", "application/xml") }
 
     it "extracts metadata and updates the parent resource" do
       extractor.extract
@@ -34,7 +34,7 @@ RSpec.describe GeoMetadataExtractor do
   end
 
   context "with iso metadata" do
-    let(:file) { fixture_file_upload('files/geo_metadata/iso.xml', 'application/xml') }
+    let(:file) { fixture_file_upload("files/geo_metadata/iso.xml", "application/xml") }
 
     it "extracts metadata and updates the parent resource" do
       extractor.extract

@@ -84,7 +84,7 @@ class EphemeraFoldersController < BaseResourceController
   def load_fields
     fields.each do |field|
       case field.attribute_name
-      when 'subject'
+      when "subject"
         @subject = field.vocabulary.categories
       else
         instance_variable_set("@#{field.attribute_name}", field.vocabulary.terms)
@@ -114,7 +114,7 @@ class EphemeraFoldersController < BaseResourceController
   end
 
   def nil_box
-    Struct.new(:title, :id).new('', '')
+    Struct.new(:title, :id).new("", "")
   end
 
   def top_languages

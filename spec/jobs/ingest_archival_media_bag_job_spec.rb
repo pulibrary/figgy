@@ -1,11 +1,11 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe IngestArchivalMediaBagJob do
-  describe 'lae bag' do
+  describe "lae bag" do
     with_queue_adapter :inline
-    let(:bag_path) { Rails.root.join('spec', 'fixtures', 'av', 'la_c0652_2017_05_bag') }
-    let(:xml) { File.open(Rails.root.join('spec', 'fixtures', 'av', 'C0652.xml'), 'r') }
+    let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag") }
+    let(:xml) { File.open(Rails.root.join("spec", "fixtures", "av", "C0652.xml"), "r") }
     let(:user) { FactoryBot.create(:admin) }
 
     let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
@@ -22,8 +22,8 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
 
     before do
-      stub_pulfa(pulfa_id: 'C0652')
-      stub_pulfa(pulfa_id: 'C0652_c0377')
+      stub_pulfa(pulfa_id: "C0652")
+      stub_pulfa(pulfa_id: "C0652_c0377")
     end
 
     context "when you're ingesting to a collection you've already created" do
@@ -31,11 +31,11 @@ RSpec.describe IngestArchivalMediaBagJob do
         described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
       end
 
-      it 'creates one FileSet per barcode (with part, e.g., 32101047382401_1)' do
+      it "creates one FileSet per barcode (with part, e.g., 32101047382401_1)" do
         expect(query_service.find_all_of_model(model: FileSet).size).to eq 2
       end
 
-      it 'adds all 3 file types to the file set' do
+      it "adds all 3 file types to the file set" do
         file_set = query_service.find_all_of_model(model: FileSet).first
         expect(file_set.file_metadata.count).to eq 3
         expect(file_set.file_metadata.map { |file| file.use.first.to_s }).to contain_exactly(
@@ -43,11 +43,11 @@ RSpec.describe IngestArchivalMediaBagJob do
         )
       end
 
-      it 'creates one MediaResource per component id' do
+      it "creates one MediaResource per component id" do
         expect(query_service.find_all_of_model(model: MediaResource).size).to eq 1
       end
 
-      it 'for each component id-based MediaRsource, puts it on the collection' do
+      it "for each component id-based MediaRsource, puts it on the collection" do
         expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
       end
     end
@@ -77,10 +77,10 @@ RSpec.describe IngestArchivalMediaBagJob do
       end
     end
 
-    context 'with a path to an invalid bag' do
-      let(:bag_path) { Rails.root.join('spec', 'fixtures', 'bags', 'invalid_bag') }
+    context "with a path to an invalid bag" do
+      let(:bag_path) { Rails.root.join("spec", "fixtures", "bags", "invalid_bag") }
 
-      it 'raises an error' do
+      it "raises an error" do
         expect { described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user) }.to raise_error(IngestArchivalMediaBagJob::InvalidBagError, "Bag at #{bag_path} is an invalid bag")
       end
     end

@@ -171,7 +171,7 @@ class Ability
   end
 
   def pdf_file?(resource)
-    resource.mime_type == 'application/pdf'
+    resource.mime_type == "application/pdf"
   end
 
   def manifestable_concern?(resource)
@@ -199,7 +199,7 @@ class Ability
   end
 
   def roles
-    ['anonymous', 'campus_patron', 'completer', 'curator', 'fulfiller', 'editor', 'ephemera_editor', 'image_editor', 'admin']
+    ["anonymous", "campus_patron", "completer", "curator", "fulfiller", "editor", "ephemera_editor", "image_editor", "admin"]
   end
 
   def universal_reader?
@@ -226,31 +226,31 @@ class Ability
     end
 
     def ephemera_editor?
-      groups.include?('ephemera_editor')
+      groups.include?("ephemera_editor")
     end
 
     def image_editor?
-      groups.include?('image_editor')
+      groups.include?("image_editor")
     end
 
     def editor?
-      groups.include?('editor')
+      groups.include?("editor")
     end
 
     def fulfiller?
-      groups.include?('fulfiller')
+      groups.include?("fulfiller")
     end
 
     def curator?
-      groups.include?('curator')
+      groups.include?("curator")
     end
 
     def campus_patron?
-      persisted? && provider == "cas" || groups.include?('campus_patron')
+      persisted? && provider == "cas" || groups.include?("campus_patron")
     end
 
     def admin?
-      groups.include?('admin')
+      groups.include?("admin")
     end
   end
 end

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
-require_relative 'figgy'
+require_relative "figgy"
 Rails.application.config.to_prepare do
   Valkyrie::StorageAdapter.register(
     InstrumentedStorageAdapter.new(
       storage_adapter: Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config['repository_path'],
+        base_path: Figgy.config["repository_path"],
         file_mover: lambda { |old, new|
                       FileUtils.mv(old, new)
                       FileUtils.chmod(0o644, new)
@@ -18,7 +18,7 @@ Rails.application.config.to_prepare do
   Valkyrie::StorageAdapter.register(
     InstrumentedStorageAdapter.new(
       storage_adapter: Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config['repository_path'],
+        base_path: Figgy.config["repository_path"],
         file_mover: ->(old, new) { FileUtils.ln(old, new, force: true) }
       ),
       tracer: Datadog.tracer
@@ -29,7 +29,7 @@ Rails.application.config.to_prepare do
   Valkyrie::StorageAdapter.register(
     InstrumentedStorageAdapter.new(
       storage_adapter:  Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config['derivative_path'],
+        base_path: Figgy.config["derivative_path"],
         file_mover: PlumDerivativeMover.method(:link_or_copy)
       ),
       tracer: Datadog.tracer
@@ -40,7 +40,7 @@ Rails.application.config.to_prepare do
   Valkyrie::StorageAdapter.register(
     InstrumentedStorageAdapter.new(
       storage_adapter: Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config['repository_path'],
+        base_path: Figgy.config["repository_path"],
         file_mover: FileUtils.method(:cp)
       ),
       tracer: Datadog.tracer
@@ -51,7 +51,7 @@ Rails.application.config.to_prepare do
   Valkyrie::StorageAdapter.register(
     InstrumentedStorageAdapter.new(
       storage_adapter: Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config['repository_path'],
+        base_path: Figgy.config["repository_path"],
         file_mover: FileUtils.method(:cp)
       ),
       tracer: Datadog.tracer
@@ -62,7 +62,7 @@ Rails.application.config.to_prepare do
   Valkyrie::StorageAdapter.register(
     InstrumentedStorageAdapter.new(
       storage_adapter: Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config['derivative_path'],
+        base_path: Figgy.config["derivative_path"],
         file_mover: lambda { |old, new|
                       FileUtils.mv(old, new)
                       FileUtils.chmod(0o644, new)
@@ -76,7 +76,7 @@ Rails.application.config.to_prepare do
   Valkyrie::StorageAdapter.register(
     InstrumentedStorageAdapter.new(
       storage_adapter: Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config['geo_derivative_path'],
+        base_path: Figgy.config["geo_derivative_path"],
         file_mover: lambda { |old, new|
                       FileUtils.mv(old, new)
                       FileUtils.chmod(0o644, new)
@@ -147,7 +147,7 @@ Rails.application.config.to_prepare do
     :indexing_persister
   )
 
-  Hydra::Derivatives.kdu_compress_recipes = Figgy.config['jp2_recipes']
+  Hydra::Derivatives.kdu_compress_recipes = Figgy.config["jp2_recipes"]
 
   # Jp2DerivativeService needs its own change_set_persister because the
   # derivatives may not be in the primary metadata/file storage.

@@ -31,7 +31,7 @@ module Bagit
         checksums = get_checksums(file, original_filename, resource)
         file_path = Pathname.new(file_path(file.id)).relative_path_from(bag_path)
         ["sha1", "md5", "sha256"].each_with_index do |algorithm, idx|
-          File.open(bag_path.join("manifest-#{algorithm}.txt"), 'a') do |f|
+          File.open(bag_path.join("manifest-#{algorithm}.txt"), "a") do |f|
             f.puts("#{checksums[idx]}  #{file_path}")
           end
         end
@@ -64,13 +64,13 @@ module Bagit
       end
 
       def find_by(id:)
-        Valkyrie::StorageAdapter::File.new(id: Valkyrie::ID.new(id.to_s), io: ::File.open(file_path(id), 'rb'))
+        Valkyrie::StorageAdapter::File.new(id: Valkyrie::ID.new(id.to_s), io: ::File.open(file_path(id), "rb"))
       rescue Errno::ENOENT
         raise Valkyrie::StorageAdapter::FileNotFound
       end
 
       def file_path(id)
-        base_path.join(Pathname.new(id.to_s.gsub(/^bag:\/\//, '')))
+        base_path.join(Pathname.new(id.to_s.gsub(/^bag:\/\//, "")))
       end
 
       def handles?(id:)
@@ -85,7 +85,7 @@ module Bagit
           lines = File.readlines(bag_path.join("manifest-#{algorithm}.txt")).select do |line|
             !line.include?(file_path.to_s)
           end
-          File.open(bag_path.join("manifest-#{algorithm}.txt"), 'w') do |f|
+          File.open(bag_path.join("manifest-#{algorithm}.txt"), "w") do |f|
             f.write(lines.join("\n"))
           end
         end

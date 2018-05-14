@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'bagit'
+require "bagit"
 
 # Job for ingesting ArchivalMediaCollection objects as Bags
 # @see https://tools.ietf.org/html/draft-kunze-bagit-14 BagIt File Packaging Format
@@ -178,14 +178,14 @@ class IngestArchivalMediaBagJob < ApplicationJob
         # Retrieves the set of XML Elements containing barcodes within the EAD
         # @return [Nokogiri::XML::Set]
         def barcode_nodes
-          xml.xpath('//altformavail/p')
+          xml.xpath("//altformavail/p")
         end
 
         # Retrieves a "grandparent" ID attribute value for any given  XML Element
         # @param node [Nokogiri::XML::Node]
         # @return [String]
         def get_id(node)
-          node.parent.parent.attributes['id'].value
+          node.parent.parent.attributes["id"].value
         end
 
         # Extracts the barcode using the XML Element content and a regexp

@@ -6,7 +6,7 @@ module ApplicationHelper
   include Valhalla::ContextualPathHelper
 
   def application_name
-    t('valhalla.product_name', default: super)
+    t("valhalla.product_name", default: super)
   end
 
   def default_page_title
@@ -16,19 +16,19 @@ module ApplicationHelper
   end
 
   def construct_page_title(*elements)
-    (elements.flatten.compact + [application_name]).join(' // ')
+    (elements.flatten.compact + [application_name]).join(" // ")
   end
 
   def main_content_classes
     if !has_search_parameters?
-      'col-xs-12'
+      "col-xs-12"
     else
       super
     end
   end
 
   def show_sidebar_classes
-    'col-xs-12'
+    "col-xs-12"
   end
 
   def can_ever_create_works?
@@ -58,14 +58,14 @@ module ApplicationHelper
   end
 
   def ordermanager_layout?
-    layout_type == 'ordermanager'
+    layout_type == "ordermanager"
   end
 
   def container_type
     if ordermanager_layout?
-      'container-fluid'
+      "container-fluid"
     else
-      'container'
+      "container"
     end
   end
 
@@ -74,9 +74,9 @@ module ApplicationHelper
   # @return [String] ordermanager, default
   def layout_type
     if params[:action] == "order_manager"
-      'ordermanager'
+      "ordermanager"
     else
-      'default'
+      "default"
     end
   end
 end

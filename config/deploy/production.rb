@@ -7,13 +7,13 @@
 # server 'example.com', user: 'deploy', roles: %w{app db web}, my_property: :my_value
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
-server 'figgy1', user: 'deploy', roles: %w[app db web]
-server 'figgy2', user: 'deploy', roles: %w[app web]
-server 'lib-proc2', user: 'deploy', roles: %w[worker]
-server 'lib-proc3', user: 'deploy', roles: %w[worker]
-server 'lib-proc4', user: 'deploy', roles: %w[worker]
-server 'lib-proc5', user: 'deploy', roles: %w[worker]
-server 'lib-proc6', user: 'deploy', roles: %w[worker]
+server "figgy1", user: "deploy", roles: %w[app db web]
+server "figgy2", user: "deploy", roles: %w[app web]
+server "lib-proc2", user: "deploy", roles: %w[worker]
+server "lib-proc3", user: "deploy", roles: %w[worker]
+server "lib-proc4", user: "deploy", roles: %w[worker]
+server "lib-proc5", user: "deploy", roles: %w[worker]
+server "lib-proc6", user: "deploy", roles: %w[worker]
 
 # role-based syntax
 # ==================

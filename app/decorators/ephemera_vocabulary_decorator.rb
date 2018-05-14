@@ -14,11 +14,11 @@ class EphemeraVocabularyDecorator < Valkyrie::ResourceDecorator
   end
 
   def vocabulary_uri
-    vocabulary.uri.to_s.end_with?('/') ? vocabulary.uri.to_s : vocabulary.uri.to_s + '/'
+    vocabulary.uri.to_s.end_with?("/") ? vocabulary.uri.to_s : vocabulary.uri.to_s + "/"
   end
 
   def vocabulary_ns
-    Figgy.config['vocabulary_namespace'].end_with?('/') ? Figgy.config['vocabulary_namespace'] : Figgy.config['vocabulary_namespace'] + '/'
+    Figgy.config["vocabulary_namespace"].end_with?("/") ? Figgy.config["vocabulary_namespace"] : Figgy.config["vocabulary_namespace"] + "/"
   end
 
   def internal_url
@@ -44,7 +44,7 @@ class EphemeraVocabularyDecorator < Valkyrie::ResourceDecorator
   end
 
   def vocabulary_label
-    vocabulary.blank? ? 'Unnassigned' : vocabulary.label
+    vocabulary.blank? ? "Unnassigned" : vocabulary.label
   end
 
   def find_references
@@ -87,6 +87,6 @@ class EphemeraVocabularyDecorator < Valkyrie::ResourceDecorator
     end
 
     def camelized_label
-      Array.wrap(label).first.gsub(/\s/, '_').camelize(:lower)
+      Array.wrap(label).first.gsub(/\s/, "_").camelize(:lower)
     end
 end

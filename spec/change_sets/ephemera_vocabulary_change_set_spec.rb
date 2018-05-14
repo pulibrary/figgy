@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe EphemeraVocabularyChangeSet do
   subject(:change_set) { described_class.new(FactoryBot.build(:ephemera_vocabulary)) }
@@ -15,20 +15,20 @@ RSpec.describe EphemeraVocabularyChangeSet do
     end
     context "when given a non-UUID for a parent vocabulary" do
       it "is not valid" do
-        change_set.validate(member_of_vocabulary_id: ['not-valid'])
+        change_set.validate(member_of_vocabulary_id: ["not-valid"])
         expect(change_set).not_to be_valid
       end
     end
     context "when given a valid UUID for a parent resource which does not exist" do
       it "is not valid" do
-        change_set.validate(member_of_vocabulary_id: ['b8823acb-d42b-4e62-a5c9-de5f94cbd3f6'])
+        change_set.validate(member_of_vocabulary_id: ["b8823acb-d42b-4e62-a5c9-de5f94cbd3f6"])
         expect(change_set).not_to be_valid
       end
     end
   end
 
   describe "#primary_terms" do
-    it 'includes the label, URI, the definition, and the vocabulary' do
+    it "includes the label, URI, the definition, and the vocabulary" do
       expect(change_set.primary_terms).to include :label
       expect(change_set.primary_terms).to include :uri
       expect(change_set.primary_terms).to include :definition

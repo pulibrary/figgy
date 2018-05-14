@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.feature "Scanned Resources", js: true do
   let(:user) { FactoryBot.create(:admin) }
@@ -16,54 +16,54 @@ RSpec.feature "Scanned Resources", js: true do
   end
 
   before do
-    change_set.source_metadata_identifier = '4612596'
+    change_set.source_metadata_identifier = "4612596"
     change_set.sync
     change_set_persister.save(change_set: change_set)
     sign_in user
   end
 
-  context 'when a user creates a new scanned resource' do
-    context 'with scanned resources already created' do
-      scenario 'users see a warning if they try to use duplicate barcodes' do
+  context "when a user creates a new scanned resource" do
+    context "with scanned resources already created" do
+      scenario "users see a warning if they try to use duplicate barcodes" do
         visit new_scanned_resource_path
-        page.fill_in 'scanned_resource_source_metadata_identifier', with: '4612596'
-        find('#scanned_resource_portion_note').click
-        expect(page).to have_content 'This ID is already in use'
+        page.fill_in "scanned_resource_source_metadata_identifier", with: "4612596"
+        find("#scanned_resource_portion_note").click
+        expect(page).to have_content "This ID is already in use"
 
-        page.fill_in 'scanned_resource_source_metadata_identifier', with: '8543429'
-        page.fill_in 'scanned_resource_portion_note', with: 'Test another note'
-        expect(page).not_to have_content 'This ID is already in use'
+        page.fill_in "scanned_resource_source_metadata_identifier", with: "8543429"
+        page.fill_in "scanned_resource_portion_note", with: "Test another note"
+        expect(page).not_to have_content "This ID is already in use"
       end
     end
   end
 
   let(:persister) { Valkyrie::MetadataAdapter.find(:indexing_persister).persister }
   let(:volume1) do
-    persister.save(resource: FactoryBot.create_for_repository(:scanned_resource, title: 'vol1'))
+    persister.save(resource: FactoryBot.create_for_repository(:scanned_resource, title: "vol1"))
   end
   let(:multi_volume_work) do
     persister.save(resource: FactoryBot.create_for_repository(:scanned_resource, member_ids: [volume1.id]))
   end
 
-  context 'within a multi-volume work' do
+  context "within a multi-volume work" do
     before do
       multi_volume_work
     end
 
-    scenario 'the volumes are displayed as members' do
+    scenario "the volumes are displayed as members" do
       visit solr_document_path(multi_volume_work)
 
-      expect(page).to have_selector 'h2', text: 'Members'
-      expect(page).to have_selector 'td', text: 'vol1'
+      expect(page).to have_selector "h2", text: "Members"
+      expect(page).to have_selector "td", text: "vol1"
     end
   end
 
-  context 'as an image_editor' do
+  context "as an image_editor" do
     let(:user) { FactoryBot.create(:image_editor) }
 
-    it 'shows the admin controls' do
+    it "shows the admin controls" do
       visit solr_document_path(scanned_resource)
-      expect(page).to have_link 'File Manager', href: file_manager_scanned_resource_path(scanned_resource)
+      expect(page).to have_link "File Manager", href: file_manager_scanned_resource_path(scanned_resource)
     end
   end
 end

@@ -7,7 +7,7 @@ if ENV.fetch("COVERAGE", false)
     SimpleCov.coverage_dir(dir)
   end
 
-  SimpleCov.start 'rails'
+  SimpleCov.start "rails"
 end
 
 require "webmock/rspec"
@@ -29,9 +29,9 @@ RSpec.configure do |config|
   # Cleanup test files and derivatives
   config.after(:suite) do
     break unless Rails.env.test?
-    FileUtils.rm_rf(Figgy.config['derivative_path'])
-    FileUtils.rm_rf(Figgy.config['geo_derivative_path'])
-    FileUtils.rm_rf(Figgy.config['repository_path'])
+    FileUtils.rm_rf(Figgy.config["derivative_path"])
+    FileUtils.rm_rf(Figgy.config["geo_derivative_path"])
+    FileUtils.rm_rf(Figgy.config["repository_path"])
   end
 end
 

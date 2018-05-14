@@ -1,29 +1,29 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :ephemera_folder do
-    barcode '12345678901234'
-    local_identifier 'xyz1'
-    folder_number 'one'
-    title 'test folder'
-    language 'test language'
-    genre 'test genre'
-    width '10'
-    height '20'
-    page_count '30'
-    alternative_title 'test alternative title'
-    series 'test series'
-    subject 'test subject'
-    creator 'test creator'
-    contributor ['test contributor']
-    publisher ['test publisher']
-    description 'test description'
-    date_created '1970/01/01'
-    provenance ['Donated by the Mario Bros.']
-    source_url 'http://example.com'
-    dspace_url 'http://example.com'
-    rights_statement RDF::URI('http://rightsstatements.org/vocab/NKC/1.0/')
-    read_groups 'public'
-    state 'needs_qa'
+    barcode "12345678901234"
+    local_identifier "xyz1"
+    folder_number "one"
+    title "test folder"
+    language "test language"
+    genre "test genre"
+    width "10"
+    height "20"
+    page_count "30"
+    alternative_title "test alternative title"
+    series "test series"
+    subject "test subject"
+    creator "test creator"
+    contributor ["test contributor"]
+    publisher ["test publisher"]
+    description "test description"
+    date_created "1970/01/01"
+    provenance ["Donated by the Mario Bros."]
+    source_url "http://example.com"
+    dspace_url "http://example.com"
+    rights_statement RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")
+    read_groups "public"
+    state "needs_qa"
     member_of_collection_ids []
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)

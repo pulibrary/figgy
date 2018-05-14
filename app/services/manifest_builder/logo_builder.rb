@@ -7,7 +7,7 @@ class ManifestBuilder
     # @param [Valhalla::Resource] resource the Resource being viewed
     def initialize(record)
       @record = record
-      protocol = /localhost/.match?(Figgy.default_url_options[:host]) ? 'http' : 'https'
+      protocol = /localhost/.match?(Figgy.default_url_options[:host]) ? "http" : "https"
       @host = "#{protocol}://#{Figgy.default_url_options[:host]}"
     end
 
@@ -20,9 +20,9 @@ class ManifestBuilder
 
       def logo
         if @record.resource.respond_to?(:rights_statement) && @record.resource.rights_statement.include?(RDF::URI("http://cicognara.org/microfiche_copyright"))
-          'vatican.png'
+          "vatican.png"
         else
-          'pul_logo_icon.png'
+          "pul_logo_icon.png"
         end
       end
   end

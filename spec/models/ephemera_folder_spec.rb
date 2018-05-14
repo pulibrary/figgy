@@ -1,19 +1,19 @@
 # frozen_string_literal: true
-require 'rails_helper'
-require 'valkyrie/specs/shared_specs'
+require "rails_helper"
+require "valkyrie/specs/shared_specs"
 
 RSpec.describe EphemeraFolder do
-  subject(:folder) { described_class.new(title: 'test title') }
+  subject(:folder) { described_class.new(title: "test title") }
   let(:resource_klass) { described_class }
   it_behaves_like "a Valkyrie::Resource"
   it "has a title" do
-    expect(folder.title).to include 'test title'
+    expect(folder.title).to include "test title"
   end
-  context 'with a title in a non-Latin orthographies' do
+  context "with a title in a non-Latin orthographies" do
     subject(:folder) { described_class.new(title: title, transliterated_title: transliterated_title) }
-    let(:title) { 'Что делать?' }
+    let(:title) { "Что делать?" }
     let(:transliterated_title) { 'Chto delat\'?' }
-    it 'has a non-Latin title and a transliterated Latin title' do
+    it "has a non-Latin title and a transliterated Latin title" do
       expect(folder.title).to include title
       expect(folder.transliterated_title).to include transliterated_title
     end

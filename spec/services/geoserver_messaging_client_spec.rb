@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe GeoserverMessagingClient do
   subject(:client) { described_class.new(url) }

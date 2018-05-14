@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 include ActionDispatch::TestProcess
 
 RSpec.describe ScannedResourcesController do
@@ -15,7 +15,7 @@ RSpec.describe ScannedResourcesController do
     sign_in user if user
   end
 
-  it_behaves_like 'a BaseResourceController'
+  it_behaves_like "a BaseResourceController"
 
   describe "new" do
     context "when not logged in but an auth token is given" do
@@ -41,16 +41,16 @@ RSpec.describe ScannedResourcesController do
     let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do
       {
-        title: ['Title 1', 'Title 2'],
-        rights_statement: 'Test Statement',
-        visibility: 'restricted'
+        title: ["Title 1", "Title 2"],
+        rights_statement: "Test Statement",
+        visibility: "restricted"
       }
     end
     let(:invalid_params) do
       {
         title: [""],
-        rights_statement: 'Test Statement',
-        visibility: 'restricted'
+        rights_statement: "Test Statement",
+        visibility: "restricted"
       }
     end
     context "when asked to save and import" do
@@ -60,15 +60,15 @@ RSpec.describe ScannedResourcesController do
             home: Rails.root.join("spec", "fixtures", "staged_files").to_s
           }
         )
-        stub_bibdata(bib_id: '123456')
-        stub_bibdata(bib_id: '4609321')
+        stub_bibdata(bib_id: "123456")
+        stub_bibdata(bib_id: "4609321")
       end
       it "can create and import at once" do
         post :create, params: {
           scanned_resource: {
             source_metadata_identifier: "123456",
-            rights_statement: 'Test Statement',
-            visibility: 'restricted'
+            rights_statement: "Test Statement",
+            visibility: "restricted"
           },
           commit: "Save and Ingest"
         }
@@ -85,8 +85,8 @@ RSpec.describe ScannedResourcesController do
         post :create, params: {
           scanned_resource: {
             source_metadata_identifier: "4609321",
-            rights_statement: 'Test Statement',
-            visibility: 'restricted'
+            rights_statement: "Test Statement",
+            visibility: "restricted"
           },
           commit: "Save and Ingest"
         }
@@ -137,14 +137,14 @@ RSpec.describe ScannedResourcesController do
           :scanned_resource,
           member_ids: file_set.id,
           logical_structure: [
-            { label: 'testing', nodes: [{ label: 'Chapter 1', nodes: [{ proxy: file_set.id }] }] }
+            { label: "testing", nodes: [{ label: "Chapter 1", nodes: [{ proxy: file_set.id }] }] }
           ]
         )
 
         get :structure, params: { id: scanned_resource.id.to_s }
 
         expect(response.body).to have_selector "li[data-proxy='#{file_set.id}']"
-        expect(response.body).to have_field('label', with: 'Chapter 1')
+        expect(response.body).to have_field("label", with: "Chapter 1")
         expect(response.body).to have_link scanned_resource.title.first, href: solr_document_path(id: scanned_resource.id)
       end
     end

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe FacetIndexer do
   describe ".to_solr" do
@@ -14,12 +14,12 @@ RSpec.describe FacetIndexer do
       end
     end
     context "when the resource has only local metadata" do
-      let(:vocabulary) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'Large vocabulary') }
-      let(:category) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: 'Egg Creatures', member_of_vocabulary_id: [vocabulary.id]) }
-      let(:language) { FactoryBot.create_for_repository(:ephemera_term, label: 'English', member_of_vocabulary_id: [vocabulary.id]) }
+      let(:vocabulary) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: "Large vocabulary") }
+      let(:category) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: "Egg Creatures", member_of_vocabulary_id: [vocabulary.id]) }
+      let(:language) { FactoryBot.create_for_repository(:ephemera_term, label: "English", member_of_vocabulary_id: [vocabulary.id]) }
       let(:subject_terms) do
-        [FactoryBot.create_for_repository(:ephemera_term, label: 'Birdo', member_of_vocabulary_id: [category.id]),
-         FactoryBot.create_for_repository(:ephemera_term, label: 'Yoshi', member_of_vocabulary_id: [category.id])]
+        [FactoryBot.create_for_repository(:ephemera_term, label: "Birdo", member_of_vocabulary_id: [category.id]),
+         FactoryBot.create_for_repository(:ephemera_term, label: "Yoshi", member_of_vocabulary_id: [category.id])]
       end
       it "indexes subject, language" do
         folder = FactoryBot.create_for_repository(:ephemera_folder, subject: subject_terms, language: language)

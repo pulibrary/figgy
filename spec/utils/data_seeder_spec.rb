@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe DataSeeder do
   let(:seeder) { described_class.new(logger) }
@@ -15,7 +15,7 @@ RSpec.describe DataSeeder do
 
   describe "if run in production" do
     it "raises RuntimeError" do
-      allow(Rails).to receive(:env).and_return('production')
+      allow(Rails).to receive(:env).and_return("production")
       expect { described_class.new(logger) }.to raise_error(RuntimeError, /production/)
     end
   end
@@ -23,7 +23,7 @@ RSpec.describe DataSeeder do
   # combine tests to reduce expensive object creation
   describe "#generate_dev_data" do
     before do
-      stub_ezid(shoulder: '99999/fk4', blade: '123456')
+      stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "generates lots of objects" do
       n_files = mvw_volumes + # each volume member has a fileset
@@ -47,7 +47,7 @@ RSpec.describe DataSeeder do
       expect(Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_all.count).to eq 0
 
       seeder.wipe_files!
-      expect(Dir.glob(Figgy.config['repository_path']).count).to eq 1 # the dir itself
+      expect(Dir.glob(Figgy.config["repository_path"]).count).to eq 1 # the dir itself
     end
   end
 

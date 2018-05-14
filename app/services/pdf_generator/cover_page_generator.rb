@@ -57,7 +57,7 @@ class PDFGenerator
         prawn_document.move_down 20
 
         header(prawn_document, "Princeton University Library Disclaimer")
-        prawn_document.text I18n.t('valhalla.works.show.attributes.rights_statement.boilerplate'), inline_format: true
+        prawn_document.text I18n.t("valhalla.works.show.attributes.rights_statement.boilerplate"), inline_format: true
         prawn_document.move_down 20
 
         header(prawn_document, "Citation Information")
@@ -114,10 +114,10 @@ class PDFGenerator
 
       def display_text(prawn_document, text, options = {})
         bidi_text = dir_split(text).map do |s|
-          s = s.connect_arabic_letters.gsub("\uFEDF\uFE8E", "\uFEFB") if s.dir == 'rtl' && lang_is_arabic?
-          s.dir == 'rtl' ? s.reverse : s
+          s = s.connect_arabic_letters.gsub("\uFEDF\uFE8E", "\uFEFB") if s.dir == "rtl" && lang_is_arabic?
+          s.dir == "rtl" ? s.reverse : s
         end.join(" ")
-        options = options.merge(align: :right, kerning: true) if bidi_text.dir == 'rtl'
+        options = options.merge(align: :right, kerning: true) if bidi_text.dir == "rtl"
         prawn_document.text bidi_text, options
       end
 
@@ -125,7 +125,7 @@ class PDFGenerator
         resource.respond_to?(:primary_imported_metadata) &&
           resource.primary_imported_metadata.language &&
           resource.primary_imported_metadata.language.first &&
-          resource.primary_imported_metadata.language.first == 'ara'
+          resource.primary_imported_metadata.language.first == "ara"
       end
 
       def dir_split(s)

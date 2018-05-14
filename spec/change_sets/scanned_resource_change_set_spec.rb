@@ -1,17 +1,17 @@
 # frozen_string_literal: true
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ScannedResourceChangeSet do
   subject(:change_set) { described_class.new(form_resource) }
   let(:resource_klass) { ScannedResource }
-  let(:scanned_resource) { resource_klass.new(title: 'Test', rights_statement: 'Stuff', visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: 'pending') }
+  let(:scanned_resource) { resource_klass.new(title: "Test", rights_statement: "Stuff", visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: "pending") }
   let(:form_resource) { scanned_resource }
 
   before do
-    stub_bibdata(bib_id: '123456')
+    stub_bibdata(bib_id: "123456")
   end
 
-  it_behaves_like 'a Valhalla::ChangeSet'
+  it_behaves_like "a Valhalla::ChangeSet"
 
   describe "validations" do
     context "when neither title or metadata identifier is set" do

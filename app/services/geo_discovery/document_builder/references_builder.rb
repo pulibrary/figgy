@@ -47,19 +47,19 @@ module GeoDiscovery
         # Returns an FGDC metadata document download url
         # @return [String] FGDC metadata document url
         def fgdc
-          path.metadata_download('FGDC')
+          path.metadata_download("FGDC")
         end
 
         # Returns an ISO19139 metadata document download url
         # @return [String] ISO19139 metadata document url
         def iso19139
-          path.metadata_download('ISO19139')
+          path.metadata_download("ISO19139")
         end
 
         # Returns an MODS metadata document download url
         # @return [String] MODS metadata document url
         def mods
-          path.metadata_download('MODS')
+          path.metadata_download("MODS")
         end
 
         # Returns a thumbnail file url

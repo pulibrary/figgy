@@ -6,7 +6,7 @@ module LinkedData
       def properties
         {
           '@id': internal_url,
-          '@type': 'skos:ConceptScheme',
+          '@type': "skos:ConceptScheme",
           pref_label: try(:label)
         }.merge!(exact_match)
       end
