@@ -30,12 +30,11 @@ RSpec.describe ArchivalMediaCollectionsController do
       let(:file) { File.open(Rails.root.join("spec", "fixtures", "some_finding_aid.xml"), "r") }
 
       before do
+        stub_pulfa(pulfa_id: "AC044/c0003")
         allow(Dir).to receive(:exist?).and_return(true)
       end
 
       it "creates a collection and imports metadata" do
-        stub_pulfa(pulfa_id: "AC044/c0003")
-        allow(IngestArchivalMediaBagJob).to receive(:perform_later)
         post :create, params: { archival_media_collection: { source_metadata_identifier: "AC044_c0003", refresh_remote_metadata: "0", bag_path: "/idk/some/path" } }
 
         expect(response).to be_redirect
@@ -44,7 +43,12 @@ RSpec.describe ArchivalMediaCollectionsController do
         expect(collection.source_metadata_identifier).to eq ["AC044_c0003"]
         expect(collection.primary_imported_metadata).to be_a ImportedMetadata
         expect(collection.title).to contain_exactly "Series 1: Committee Administration - Alumni Council: Proposals for Electing Young Alumni Trustees"
-        expect(IngestArchivalMediaBagJob).to have_received(:perform_later).with(collection_component: "AC044_c0003", bag_path: "/idk/some/path", user: user)
+      end
+
+      it "enqueues the ingest job" do
+        expect do
+          post :create, params: { archival_media_collection: { source_metadata_identifier: "AC044_c0003", refresh_remote_metadata: "0", bag_path: "/idk/some/path" } }
+        end.to enqueue_job(IngestArchivalMediaBagJob)
       end
     end
 

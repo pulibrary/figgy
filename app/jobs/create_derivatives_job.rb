@@ -2,6 +2,7 @@
 class CreateDerivativesJob < ApplicationJob
   delegate :query_service, to: :metadata_adapter
 
+  # @param file_set_id [string] stringified Valkyrie id
   def perform(file_set_id)
     file_set = query_service.find_by(id: Valkyrie::ID.new(file_set_id))
     Valkyrie::Derivatives::DerivativeService.for(FileSetChangeSet.new(file_set)).create_derivatives

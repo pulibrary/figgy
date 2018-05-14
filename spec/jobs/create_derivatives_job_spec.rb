@@ -13,14 +13,16 @@ RSpec.describe CreateDerivativesJob do
     allow(EventGenerator).to receive(:new).and_return(generator)
     allow(generator).to receive(:derivatives_created).and_call_original
     allow(CheckFixityJob).to receive(:set).and_return(CheckFixityJob)
-    allow(CheckFixityJob).to receive(:perform_later)
   end
 
   describe "#perform_now" do
-    it "triggers a derivatives_created message and triggers a fixity job", rabbit_stubbed: true do
-      described_class.perform_now(file_set.id)
+    it "triggers a derivatives_created message", rabbit_stubbed: true do
+      described_class.perform_now(file_set.id.to_s)
       expect(generator).to have_received(:derivatives_created)
-      expect(CheckFixityJob).to have_received(:perform_later)
+    end
+
+    it "enqueues a fixity job", rabbit_stubbed: true do
+      expect { described_class.perform_now(file_set.id.to_s) }.to have_enqueued_job(CheckFixityJob)
     end
   end
 end
