@@ -15,6 +15,7 @@ RSpec.describe "catalog/_members_raster_resource" do
       assign :unattached_raster_resources, []
       assign :unattached_vector_resources, []
       assign :unrelated_parent_scanned_maps, []
+      assign :unrelated_parent_raster_resources, []
       render
     end
 

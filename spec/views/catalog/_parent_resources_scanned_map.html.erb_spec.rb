@@ -13,6 +13,7 @@ RSpec.describe "catalog/_parent_resources_scanned_map" do
       assign :document, solr_document
       assign :resource, solr_document.resource
       assign :change_set, change_set
+      assign :unrelated_parent_scanned_maps, []
       render
     end
 

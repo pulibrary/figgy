@@ -61,7 +61,11 @@
             <tr class="member-resources-attach">
               <td>
                 <%= f.input :member_ids,
-                            placeholder: 'Attach an existing resource...',
+                            collection: @unattached_scanned_maps.sort_by(&:title),
+                            label_method: :title,
+                            value_method: :id,
+                            include_blank: 'Attach an existing resource...',
+                            selected: nil,
                             label: false,
                             required: false,
                             input_html: {

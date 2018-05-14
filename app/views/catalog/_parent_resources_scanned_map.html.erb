@@ -62,7 +62,11 @@
             <tr class="parent-resources-attach" >
               <td>
                 <%= f.input :member_ids,
-                            placeholder: 'Attach to an existing resource...',
+                            collection: @unrelated_parent_scanned_maps.sort_by(&:title),
+                            label_method: :title,
+                            value_method: :id,
+                            include_blank: 'Attach to an existing resource...',
+                            selected: nil,
                             label: false,
                             required: false,
                             input_html: {

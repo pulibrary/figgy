@@ -197,7 +197,11 @@ Rails.application.config.to_prepare do
     Valkyrie.config.metadata_adapter.query_service.custom_queries.register_query_handler(query_handler)
   end
 
-  [FindMissingThumbnailResources].each do |solr_query_handler|
+  [
+    FindMissingThumbnailResources,
+    FindUnrelated,
+    FindUnrelatedParents
+  ].each do |solr_query_handler|
     Valkyrie::MetadataAdapter.find(:index_solr).query_service.custom_queries.register_query_handler(solr_query_handler)
   end
 
