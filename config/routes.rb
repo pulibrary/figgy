@@ -196,6 +196,7 @@ Rails.application.routes.draw do
   get "/iiif/collections", defaults: { format: :json }, to: "collections#index_manifest", as: :index_manifest
 
   resources :archival_media_collections
+  get 'archival_media_collections/:id/ark_report', to: 'archival_media_collections#ark_report', as: :archival_media_collections_ark_report
 
   get '/catalog/parent/:parent_id/:id', to: 'catalog#show', as: :parent_solr_document
   get "/iiif/lookup/:prefix/:naan/:arkid", to: 'catalog#lookup_manifest', as: :lookup_manifest
