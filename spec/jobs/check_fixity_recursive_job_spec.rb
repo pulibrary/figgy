@@ -36,16 +36,6 @@ RSpec.describe CheckFixityRecursiveJob do
     allow_any_instance_of(ActiveJob::ConfiguredJob).to receive(:perform_later).and_return(true)
   end
 
-  describe "#find_next_file_to_check" do
-    it "finds the file set least-recently-updated" do
-      described_class.perform_now
-      file_set = query_service.find_members(resource: output).first
-      file_set2 = query_service.find_members(resource: output2).first
-      expect(file_set.original_file.fixity_success).to be nil
-      expect(file_set2.original_file.fixity_success).to eq 1
-    end
-  end
-
   describe "#perform" do
     let(:job_instance) { described_class.new }
 
