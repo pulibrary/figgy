@@ -31,36 +31,24 @@ RSpec.describe CheckFixityRecursiveJob do
       file_set2 = query_service.find_members(resource: output2).first
       CharacterizationJob.perform_now(file_set2.id.to_s)
     end
-
-    # don't want this to actually run recursively forever
-    allow_any_instance_of(ActiveJob::ConfiguredJob).to receive(:perform_later).and_return(true)
-  end
-
-  describe "#find_next_file_to_check" do
-    it "finds the file set least-recently-updated" do
-      described_class.perform_now
-      file_set = query_service.find_members(resource: output).first
-      file_set2 = query_service.find_members(resource: output2).first
-      expect(file_set.original_file.fixity_success).to be nil
-      expect(file_set2.original_file.fixity_success).to eq 1
-    end
   end
 
   describe "#perform" do
     let(:job_instance) { described_class.new }
 
-    it "recurses" do
-      expect_any_instance_of(ActiveJob::ConfiguredJob).to receive(:perform_later)
-      job_instance.perform
+    it "updates only the least-recently-updated file_set" do
+      file_set2 = query_service.find_members(resource: output2).first
+      expect(file_set2.original_file.fixity_success).to be nil
+
+      described_class.new.perform
+      file_set2 = query_service.find_members(resource: output2).first
+      expect(file_set2.original_file.fixity_success).to be 1
+      file_set = query_service.find_members(resource: output).first
+      expect(file_set.original_file.fixity_success).to be nil
     end
 
-    it "saves the file_set" do
-      query_service = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
-      fs = query_service.find_members(resource: output2).first
-      expect(fs.original_file.fixity_success).not_to be 1
-      job_instance.perform
-      fs = query_service.find_members(resource: output2).first
-      expect(fs.original_file.fixity_success).to be 1
+    it "recurses" do
+      expect { described_class.new.perform }.to have_enqueued_job(described_class)
     end
   end
 end
