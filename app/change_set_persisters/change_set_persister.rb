@@ -82,7 +82,6 @@ class ChangeSetPersister
       before_delete(change_set: change_set)
       persister.delete(resource: change_set.resource).tap do
         after_delete_commit(change_set: change_set)
-        after_commit
       end
     end
 
