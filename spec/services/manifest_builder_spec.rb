@@ -110,10 +110,20 @@ RSpec.describe ManifestBuilder do
       expect(canvas_id).to eq structure_canvas_id
       first_image = output["sequences"][0]["canvases"][0]["images"][0]
       expect(output["sequences"][0]["canvases"][0]["local_identifier"]).to eq "p79409x97p"
-      canvas_rendering = output["sequences"][0]["canvases"][0]["rendering"][0]
+
+      canvas_renderings = output["sequences"][0]["canvases"][0]["rendering"]
+      expect(canvas_renderings.length).to eq 2
+
+      canvas_rendering = canvas_renderings.first
       expect(canvas_rendering["@id"]).to eq "http://www.example.com/concern/file_sets/#{scanned_resource.member_ids.first}/text"
       expect(canvas_rendering["format"]).to eq "text/plain"
       expect(canvas_rendering["label"]).to eq "Download page text"
+
+      canvas_rendering = canvas_renderings.last
+      expect(canvas_rendering['@id']).to eq "http://www.example.com/downloads/#{scanned_resource.member_ids.first}/file/#{scanned_resource.decorate.file_sets.first.original_file.id}"
+      expect(canvas_rendering['format']).to eq 'image/tiff'
+      expect(canvas_rendering['label']).to eq 'Download the original file'
+
       expect(first_image["data"]).to eq nil
       expect(first_image["@type"]).to eq "oa:Annotation"
       expect(first_image["motivation"]).to eq "sc:painting"
