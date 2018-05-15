@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class PlumChangeSetPersister
+class ChangeSetPersister
   class Characterize
     attr_reader :change_set_persister, :change_set, :post_save_resource, :created_file_sets
     delegate :characterize?, to: :change_set_persister

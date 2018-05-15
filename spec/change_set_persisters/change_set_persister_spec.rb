@@ -3,7 +3,7 @@ require "rails_helper"
 require "valkyrie/specs/shared_specs"
 include ActionDispatch::TestProcess
 
-RSpec.describe PlumChangeSetPersister do
+RSpec.describe ChangeSetPersister do
   with_queue_adapter :inline
   subject(:change_set_persister) do
     described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter)

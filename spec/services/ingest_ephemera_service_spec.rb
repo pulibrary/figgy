@@ -18,8 +18,8 @@ RSpec.describe IngestEphemeraService, :admin_set do
   let(:wonderland) { FactoryBot.create_for_repository(:ephemera_term, label: "Wonderland", member_of_vocabulary_id: areas.id) }
   let(:argentina) { FactoryBot.create_for_repository(:ephemera_term, label: "Argentina", member_of_vocabulary_id: areas.id) }
   let(:change_set_persister) do
-    PlumChangeSetPersister.new(metadata_adapter: metadata_adapter,
-                               storage_adapter: storage_adapter)
+    ChangeSetPersister.new(metadata_adapter: metadata_adapter,
+                           storage_adapter: storage_adapter)
   end
   let(:metadata_adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:storage_adapter) { Valkyrie::StorageAdapter.find(:lae_storage) }

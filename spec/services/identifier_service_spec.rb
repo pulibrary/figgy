@@ -35,7 +35,7 @@ RSpec.describe IdentifierService do
       change_set_persister.save(change_set: change_set)
     end
     let(:change_set_persister) do
-      PlumChangeSetPersister.new(
+      ChangeSetPersister.new(
         metadata_adapter: Valkyrie.config.metadata_adapter,
         storage_adapter: Valkyrie.config.storage_adapter
       )

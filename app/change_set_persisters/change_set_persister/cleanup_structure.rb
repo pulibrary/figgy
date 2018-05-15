@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 #
 # A persistence handler for removing StructureNode objects from a resource's logical_structure
-class PlumChangeSetPersister
+class ChangeSetPersister
   class CleanupStructure
     attr_reader :change_set_persister, :change_set
     delegate :resource, to: :change_set

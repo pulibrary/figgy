@@ -37,7 +37,7 @@ RSpec.feature "ScannedMaps", js: true do
       ScannedMapChangeSet.new(scanned_map)
     end
     let(:change_set_persister) do
-      PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: Valkyrie.config.storage_adapter)
+      ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: Valkyrie.config.storage_adapter)
     end
     let(:scanned_map) do
       FactoryBot.create_for_repository(

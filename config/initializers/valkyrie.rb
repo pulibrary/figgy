@@ -152,34 +152,34 @@ Rails.application.config.to_prepare do
   # Jp2DerivativeService needs its own change_set_persister because the
   # derivatives may not be in the primary metadata/file storage.
   Valkyrie::Derivatives::DerivativeService.services << PlumDerivativeService::Factory.new(
-    change_set_persister: ::PlumChangeSetPersister.new(
+    change_set_persister: ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
       storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)
     )
   )
 
   Valkyrie::Derivatives::DerivativeService.services << ScannedMapDerivativeService::Factory.new(
-    change_set_persister: ::PlumChangeSetPersister.new(
+    change_set_persister: ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
       storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)
     )
   )
 
   Valkyrie::Derivatives::DerivativeService.services << VectorResourceDerivativeService::Factory.new(
-    change_set_persister: ::PlumChangeSetPersister.new(
+    change_set_persister: ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
       storage_adapter: Valkyrie::StorageAdapter.find(:geo_derivatives)
     )
   )
 
   Valkyrie::Derivatives::DerivativeService.services << RasterResourceDerivativeService::Factory.new(
-    change_set_persister: ::PlumChangeSetPersister.new(
+    change_set_persister: ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
       storage_adapter: Valkyrie::StorageAdapter.find(:geo_derivatives)
     )
   )
 
-  Valkyrie::Derivatives::FileCharacterizationService.services << PlumCharacterizationService
+  Valkyrie::Derivatives::FileCharacterizationService.services << DefaultCharacterizationService
   Valkyrie::Derivatives::FileCharacterizationService.services << GeoCharacterizationService
 
   [

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class PlumChangeSetPersister
+class ChangeSetPersister
   class PublishMessage
     class Factory
       attr_reader :operation
@@ -14,7 +14,7 @@ class PlumChangeSetPersister
       private
 
         def klass_name
-          "PlumChangeSetPersister::Publish#{operation.to_s.capitalize}#{'e' unless operation.to_s.last == 'e'}dMessage"
+          "ChangeSetPersister::Publish#{operation.to_s.capitalize}#{'e' unless operation.to_s.last == 'e'}dMessage"
         end
 
         def klass

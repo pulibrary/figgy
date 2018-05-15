@@ -4,7 +4,7 @@ require "rails_helper"
 RSpec.describe FolderJSONImporter do
   subject(:importer) { described_class.new(file: file, attributes: attributes, change_set_persister: change_set_persister) }
   let(:change_set_persister) do
-    PlumChangeSetPersister.new(
+    ChangeSetPersister.new(
       metadata_adapter: adapter,
       storage_adapter: Valkyrie::StorageAdapter.find(:disk_via_copy)
     )

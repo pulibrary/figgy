@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class PlumChangeSetPersister
+class ChangeSetPersister
   class DeleteReferenced
     class Factory
       attr_reader :property

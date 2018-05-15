@@ -23,7 +23,7 @@ RSpec.feature "Ephemera Boxes", js: true do
       EphemeraBoxChangeSet.new(ephemera_box)
     end
     let(:change_set_persister) do
-      PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: Valkyrie.config.storage_adapter)
+      ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: Valkyrie.config.storage_adapter)
     end
 
     before do
@@ -63,7 +63,7 @@ RSpec.feature "Ephemera Boxes", js: true do
         EphemeraBoxChangeSet.new(existing_ephemera_box)
       end
       let(:change_set_persister) do
-        PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: Valkyrie.config.storage_adapter)
+        ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: Valkyrie.config.storage_adapter)
       end
 
       before do

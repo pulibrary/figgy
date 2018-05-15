@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class PlumChangeSetPersister
+class ChangeSetPersister
   class PropagateVisibilityAndState
     attr_reader :change_set_persister, :change_set
     delegate :query_service, :persister, to: :change_set_persister

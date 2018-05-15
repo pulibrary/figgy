@@ -15,7 +15,7 @@ RSpec.describe RasterResourceDerivativeService do
   let(:persister) { adapter.persister }
   let(:query_service) { adapter.query_service }
   let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tif") }
-  let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
+  let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
   let(:raster_resource) do
     change_set_persister.save(change_set: RasterResourceChangeSet.new(RasterResource.new, files: [file]))
   end

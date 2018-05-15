@@ -8,7 +8,7 @@ RSpec.describe BulkIngestService do
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:storage_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
   let(:change_set_persister) do
-    PlumChangeSetPersister.new(
+    ChangeSetPersister.new(
       metadata_adapter: metadata_adapter,
       storage_adapter: storage_adapter
     )

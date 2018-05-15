@@ -12,7 +12,7 @@ RSpec.describe FileSetsSortedByUpdated do
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
   let(:query_service) { adapter.query_service }
-  let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
+  let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
   let(:change_set) { ScannedResourceChangeSet.new(resource) }
   let(:change_set2) { ScannedResourceChangeSet.new(resource2) }
   let(:change_set3) { ScannedResourceChangeSet.new(resource3) }

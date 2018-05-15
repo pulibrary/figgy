@@ -10,7 +10,7 @@ describe GeoDiscovery::DocumentBuilder::LayerInfoBuilder do
   let(:decorator) { query_service.find_by(id: geo_work.id).decorate }
   let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
   let(:change_set) { VectorResourceChangeSet.new(geo_work, files: [file]) }
-  let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
+  let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { metadata_adapter.query_service }
   let(:file) { fixture_file_upload("files/vector/shapefile.zip", 'application/zip; ogr-format="ESRI Shapefile"') }

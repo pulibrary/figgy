@@ -42,8 +42,8 @@ class MissingThumbnailJob < ApplicationJob
     end
 
     # Retrieve the change set persister for repository resources
-    # @return [PlumChangeSetPersister]
+    # @return [ChangeSetPersister]
     def change_set_persister
-      PlumChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter)
+      ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter)
     end
 end

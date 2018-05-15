@@ -4,7 +4,7 @@ require "bagit"
 # Job for ingesting ArchivalMediaCollection objects as Bags
 # @see https://tools.ietf.org/html/draft-kunze-bagit-14 BagIt File Packaging Format
 # Please note that this is typically invoked when any given ArchivalMediaCollection is persisted
-# (see PlumChangeSetPersister.registered_handlers and PlumChangeSetPersister::IngestBag)
+# (see ChangeSetPersister.registered_handlers and ChangeSetPersister::IngestBag)
 class IngestArchivalMediaBagJob < ApplicationJob
   BARCODE_WITH_PART_REGEX = /(\d{14}_\d+)_.*/
 
@@ -31,9 +31,9 @@ class IngestArchivalMediaBagJob < ApplicationJob
     end
 
     def changeset_persister
-      @changeset_persister ||= PlumChangeSetPersister.new(metadata_adapter: metadata_adapter,
-                                                          storage_adapter: storage_adapter,
-                                                          queue: queue_name)
+      @changeset_persister ||= ChangeSetPersister.new(metadata_adapter: metadata_adapter,
+                                                      storage_adapter: storage_adapter,
+                                                      queue: queue_name)
     end
 
     def metadata_adapter

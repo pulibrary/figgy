@@ -11,7 +11,7 @@ RSpec.describe IngestArchivalMediaBagJob do
     let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
     let(:storage_adapter) { Valkyrie.config.storage_adapter }
     let(:query_service) { adapter.query_service }
-    let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
+    let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
     let(:collection_cid) { collection.source_metadata_identifier.first }
     # We need to actually save it with persister to get the imported metadata
     let(:collection) do

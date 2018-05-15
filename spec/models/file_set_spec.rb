@@ -15,7 +15,7 @@ RSpec.describe FileSet do
     let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
     let(:storage_adapter) { Valkyrie.config.storage_adapter }
     let(:query_service) { adapter.query_service }
-    let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
+    let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
     let(:change_set) { ScannedResourceChangeSet.new(resource) }
     let(:output) do
       change_set.files = [file]

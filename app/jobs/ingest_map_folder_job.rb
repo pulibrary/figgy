@@ -2,7 +2,7 @@
 class IngestMapFolderJob < ApplicationJob
   def perform(directory:, **attributes)
     Rails.logger.info "Ingesting folder #{directory}"
-    change_set_persister = PlumChangeSetPersister.new(
+    change_set_persister = ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
       storage_adapter: Valkyrie::StorageAdapter.find(:disk_via_copy)
     )

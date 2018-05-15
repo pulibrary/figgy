@@ -41,7 +41,7 @@ Metrics/BlockLength:
     - 'app/controllers/concerns/resource_relations.rb'
 Metrics/ClassLength:
   Exclude:
-    - 'app/change_set_persisters/plum_change_set_persister.rb'
+    - 'app/change_set_persisters/change_set_persister.rb'
     - 'app/change_sets/ephemera_folder_change_set_base.rb'
     - 'app/change_sets/scanned_resource_change_set.rb'
     - 'app/models/ability.rb'
@@ -90,7 +90,7 @@ Metrics/ModuleLength:
     - 'valhalla/app/controllers/concerns/valhalla/resource_controller.rb'
 Metrics/ParameterLists:
   Exclude:
-    - 'app/change_set_persisters/plum_change_set_persister.rb'
+    - 'app/change_set_persisters/change_set_persister.rb'
 Rails/OutputSafety:
   Exclude:
     - 'app/decorators/**/*'

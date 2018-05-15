@@ -6,7 +6,7 @@ RSpec.describe FindIdentifiersToReconcile do
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
   let(:resource) { FactoryBot.build(:complete_scanned_resource, title: []) }
   let(:resource2) { FactoryBot.create_for_repository(:scanned_resource, title: []) }
-  let(:change_set_persister) { PlumChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
+  let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
 
   before do
     stub_bibdata(bib_id: "123456")

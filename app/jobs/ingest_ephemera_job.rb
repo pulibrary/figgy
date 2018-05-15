@@ -2,7 +2,7 @@
 class IngestEphemeraJob < ApplicationJob
   def perform(folder_dir, state, project)
     logger.info "Ingesting ephemera folder #{folder_dir}"
-    change_set_persister = PlumChangeSetPersister.new(
+    change_set_persister = ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
       storage_adapter: Valkyrie::StorageAdapter.find(:lae_storage)
     )
