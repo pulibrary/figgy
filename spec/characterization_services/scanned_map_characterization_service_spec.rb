@@ -19,16 +19,16 @@ RSpec.describe ScannedMapCharacterizationService do
   let(:valid_file_set) { map_members.first }
 
   describe "#characterize" do
-    it "sets the processing note attribute for a file_node on characterize" do
-      t_file_node = valid_file_set
-      t_file_node.original_file.width = nil
-      new_file_node = described_class.new(file_node: t_file_node, persister: persister).characterize(save: false)
-      expect(new_file_node.original_file.processing_note).not_to be_empty
+    it "sets the processing note attribute for a file_set on characterize" do
+      t_file_set = valid_file_set
+      t_file_set.original_file.width = nil
+      new_file_set = described_class.new(file_set: t_file_set, persister: persister).characterize(save: false)
+      expect(new_file_set.original_file.processing_note).not_to be_empty
     end
   end
 
   describe "#valid?" do
-    let(:subject) { described_class.new(file_node: valid_file_set, persister: persister).valid? }
+    let(:subject) { described_class.new(file_set: valid_file_set, persister: persister).valid? }
 
     it { is_expected.to be true }
   end

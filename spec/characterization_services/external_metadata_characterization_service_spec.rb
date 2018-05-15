@@ -21,14 +21,14 @@ RSpec.describe ExternalMetadataCharacterizationService do
   let(:tika_output) { tika_xml_output }
 
   it "characterizes a sample file" do
-    described_class.new(file_node: valid_file_set, persister: persister).characterize
+    described_class.new(file_set: valid_file_set, persister: persister).characterize
   end
 
   context "with an fgdc metadata file" do
     it "sets the file node mime_type with an fgdc mime type schema extension" do
-      file_node = valid_file_set
-      new_file_node = described_class.new(file_node: file_node, persister: persister).characterize(save: false)
-      expect(new_file_node.original_file.mime_type).to eq ["application/xml; schema=fgdc"]
+      file_set = valid_file_set
+      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      expect(new_file_set.original_file.mime_type).to eq ["application/xml; schema=fgdc"]
     end
   end
 
@@ -36,9 +36,9 @@ RSpec.describe ExternalMetadataCharacterizationService do
     let(:file) { fixture_file_upload("files/geo_metadata/iso.xml", "application/xml") }
 
     it "sets the file node mime_type with an iso mime type schema extension" do
-      file_node = valid_file_set
-      new_file_node = described_class.new(file_node: file_node, persister: persister).characterize(save: false)
-      expect(new_file_node.original_file.mime_type).to eq ["application/xml; schema=iso19139"]
+      file_set = valid_file_set
+      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      expect(new_file_set.original_file.mime_type).to eq ["application/xml; schema=iso19139"]
     end
   end
 
@@ -46,9 +46,9 @@ RSpec.describe ExternalMetadataCharacterizationService do
     let(:file) { fixture_file_upload("files/pulfa/MC016/c9616.xml", "application/xml") }
 
     it "sets the file node mime_type without a mime type extension" do
-      file_node = valid_file_set
-      new_file_node = described_class.new(file_node: file_node, persister: persister).characterize(save: false)
-      expect(new_file_node.original_file.mime_type).to eq ["application/xml"]
+      file_set = valid_file_set
+      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      expect(new_file_set.original_file.mime_type).to eq ["application/xml"]
     end
   end
 end

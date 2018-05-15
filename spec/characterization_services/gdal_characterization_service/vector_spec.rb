@@ -21,21 +21,21 @@ RSpec.describe GdalCharacterizationService::Vector do
     let(:file) { fixture_file_upload("files/vector/geo.json", "application/vnd.geo+json") }
     let(:tika_output) { tika_geojson_output }
 
-    it "sets the correct mime_type and geometry attributes on the file_node on characterize" do
-      file_node = valid_file_set
-      new_file_node = described_class.new(file_node: file_node, persister: persister).characterize(save: false)
-      expect(new_file_node.original_file.mime_type).to eq ["application/vnd.geo+json"]
-      expect(new_file_node.original_file.geometry).to eq ["Multi Polygon"]
+    it "sets the correct mime_type and geometry attributes on the file_set on characterize" do
+      file_set = valid_file_set
+      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      expect(new_file_set.original_file.mime_type).to eq ["application/vnd.geo+json"]
+      expect(new_file_set.original_file.geometry).to eq ["Multi Polygon"]
     end
   end
 
   context "with a non-vector file" do
     let(:tika_output) { tika_tiff_output }
 
-    it "sets the correct mime_type on the file_node on characterize" do
-      file_node = valid_file_set
-      new_file_node = described_class.new(file_node: file_node, persister: persister).characterize(save: false)
-      expect(new_file_node.original_file.mime_type).to eq ["image/tiff"]
+    it "sets the correct mime_type on the file_set on characterize" do
+      file_set = valid_file_set
+      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      expect(new_file_set.original_file.mime_type).to eq ["image/tiff"]
     end
   end
 
@@ -49,7 +49,7 @@ RSpec.describe GdalCharacterizationService::Vector do
     context "with a scanned resource parent" do
       let(:parent) { ScannedResource.new }
       it "isn't valid" do
-        expect(described_class.new(file_node: valid_file_set, persister: persister).valid?).to be false
+        expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be false
       end
     end
   end

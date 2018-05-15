@@ -2,28 +2,28 @@
 
 # Base class for GDAL/OGR characterization services from GeoWorks Derivatives
 class GdalCharacterizationService
-  attr_reader :file_node, :persister
-  def initialize(file_node:, persister:)
-    @file_node = file_node
+  attr_reader :file_set, :persister
+  def initialize(file_set:, persister:)
+    @file_set = file_set
     @persister = persister
   end
 
-  # characterizes the file_node passed into this service
+  # characterizes the file_set passed into this service
   # Default options are:
   #   save: true
-  # @param save [Boolean] should the persister save the file_node after Characterization
+  # @param save [Boolean] should the persister save the file_set after Characterization
   # @return [FileNode]
   # @example characterize a file and persist the changes by default
-  #   Valkyrie::FileCharacterizationService.for(file_node, persister).characterize
+  #   Valkyrie::FileCharacterizationService.for(file_set, persister).characterize
   # @example characterize a file and do not persist the changes
-  #   Valkyrie::FileCharacterizationService.for(file_node, persister).characterize(save: false)
+  #   Valkyrie::FileCharacterizationService.for(file_set, persister).characterize(save: false)
   def characterize(save: true)
     unzip_original_file if zip_file?
     new_file = original_file.new(file_characterization_attributes.to_h)
-    @file_node.file_metadata = @file_node.file_metadata.select { |x| x.id != new_file.id } + [new_file]
-    @persister.save(resource: @file_node) if save
+    @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
+    @persister.save(resource: @file_set) if save
     clean_up_zip_directory if zip_file?
-    @file_node
+    @file_set
   end
 
   # Removes unzipped files
@@ -38,13 +38,13 @@ class GdalCharacterizationService
     @dataset_path ||= filename
   end
 
-  # Determines the location of the file on disk for the file_node
+  # Determines the location of the file on disk for the file_set
   # @return [Pathname]
   def filename
     return Pathname.new(file_object.io.path) if file_object.io.respond_to?(:path) && File.exist?(file_object.io.path)
   end
 
-  # Provides the file attached to the file_node
+  # Provides the file attached to the file_set
   # @return [Valkyrie::StorageAdapter::File]
   def file_object
     @file_object ||= Valkyrie::StorageAdapter.find_by(id: original_file.file_identifiers[0])
@@ -58,11 +58,11 @@ class GdalCharacterizationService
   end
 
   def original_file
-    @file_node.original_file
+    @file_set.original_file
   end
 
   def parent
-    file_node.decorate.parent
+    file_set.decorate.parent
   end
 
   # Uncompresses a zipped file and sets dataset_path variable to the resulting directory.

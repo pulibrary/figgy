@@ -19,10 +19,10 @@ RSpec.describe DefaultCharacterizationService do
   let(:valid_file_set) { book_members.first }
 
   it "properly characterizes a sample tiff" do
-    file_node = valid_file_set
-    file_node.original_file.height = nil
-    new_file_node = described_class.new(file_node: file_node, persister: persister).characterize(save: false)
-    expect(new_file_node.original_file.height).not_to be_empty
+    file_set = valid_file_set
+    file_set.original_file.height = nil
+    new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+    expect(new_file_set.original_file.height).not_to be_empty
   end
 
   describe "#valid?" do
@@ -35,7 +35,7 @@ RSpec.describe DefaultCharacterizationService do
     context "with a scanned map parent" do
       let(:parent) { ScannedMap.new }
       it "isn't valid" do
-        expect(described_class.new(file_node: valid_file_set, persister: persister).valid?).to be false
+        expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be false
       end
     end
   end

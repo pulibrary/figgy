@@ -21,10 +21,10 @@ RSpec.describe GdalCharacterizationService::Raster do
     let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tiff") }
     let(:tika_output) { tika_geotiff_output }
 
-    it "sets the correct mime_type on the file_node on characterize" do
-      file_node = valid_file_set
-      new_file_node = described_class.new(file_node: file_node, persister: persister).characterize(save: false)
-      expect(new_file_node.original_file.mime_type).to eq ["image/tiff; gdal-format=GTiff"]
+    it "sets the correct mime_type on the file_set on characterize" do
+      file_set = valid_file_set
+      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      expect(new_file_set.original_file.mime_type).to eq ["image/tiff; gdal-format=GTiff"]
     end
   end
 
@@ -32,20 +32,20 @@ RSpec.describe GdalCharacterizationService::Raster do
     let(:file) { fixture_file_upload("files/raster/arcgrid.zip", "application/zip") }
     let(:tika_output) { tika_arcgrid_output }
 
-    it "sets the correct mime_type on the file_node on characterize" do
-      file_node = valid_file_set
-      new_file_node = described_class.new(file_node: file_node, persister: persister).characterize(save: false)
-      expect(new_file_node.original_file.mime_type).to eq ["application/octet-stream; gdal-format=AIG"]
+    it "sets the correct mime_type on the file_set on characterize" do
+      file_set = valid_file_set
+      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      expect(new_file_set.original_file.mime_type).to eq ["application/octet-stream; gdal-format=AIG"]
     end
   end
 
   context "with a non-georaster file" do
     let(:tika_output) { tika_xml_output }
 
-    it "sets the correct mime_type on the file_node on characterize" do
-      file_node = valid_file_set
-      new_file_node = described_class.new(file_node: file_node, persister: persister).characterize(save: false)
-      expect(new_file_node.original_file.mime_type).to eq ["application/xml"]
+    it "sets the correct mime_type on the file_set on characterize" do
+      file_set = valid_file_set
+      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      expect(new_file_set.original_file.mime_type).to eq ["application/xml"]
     end
   end
 
@@ -59,7 +59,7 @@ RSpec.describe GdalCharacterizationService::Raster do
     context "with a scanned resource parent" do
       let(:parent) { ScannedResource.new }
       it "isn't valid" do
-        expect(described_class.new(file_node: valid_file_set, persister: persister).valid?).to be false
+        expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be false
       end
     end
   end

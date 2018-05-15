@@ -2,37 +2,37 @@
 
 # Class for characterizatizing scanned maps. Adds processing note.
 class ScannedMapCharacterizationService
-  attr_reader :file_node, :persister
-  def initialize(file_node:, persister:)
-    @file_node = file_node
+  attr_reader :file_set, :persister
+  def initialize(file_set:, persister:)
+    @file_set = file_set
     @persister = persister
   end
 
-  # characterizes the file_node passed into this service
+  # characterizes the file_set passed into this service
   # Default options are:
   #   save: true
-  # @param save [Boolean] should the persister save the file_node after Characterization
+  # @param save [Boolean] should the persister save the file_set after Characterization
   # @return [FileNode]
   # @example characterize a file and persist the changes by default
-  #   Valkyrie::Derivatives::FileCharacterizationService.for(file_node, persister).characterize
+  #   Valkyrie::Derivatives::FileCharacterizationService.for(file_set, persister).characterize
   # @example characterize a file and do not persist the changes
-  #   Valkyrie::Derivatives::FileCharacterizationService.for(file_node, persister).characterize(save: false)
+  #   Valkyrie::Derivatives::FileCharacterizationService.for(file_set, persister).characterize(save: false)
   def characterize(save: true)
     @file_characterization_attributes = {
       processing_note: processing_note
     }
     new_file = original_file.new(@file_characterization_attributes.to_h)
-    @file_node.file_metadata = @file_node.file_metadata.select { |x| x.id != new_file.id } + [new_file]
-    @persister.save(resource: @file_node) if save
-    @file_node
+    @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
+    @persister.save(resource: @file_set) if save
+    @file_set
   end
 
   def original_file
-    @file_node.original_file
+    @file_set.original_file
   end
 
   def parent
-    file_node.decorate.parent
+    file_set.decorate.parent
   end
 
   def processing_note
