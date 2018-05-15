@@ -29,15 +29,6 @@ class Ability
 
   def anonymous_permissions
     # do not allow viewing incomplete resources
-    curation_concern_read_permissions
-  end
-
-  # Abilities that should be granted to institutional patron
-  def campus_patron_permissions
-    anonymous_permissions
-  end
-
-  def curation_concern_read_permissions
     cannot [:read], curation_concerns do |resource|
       !readable_concern?(resource)
     end
@@ -64,8 +55,9 @@ class Ability
     end
   end
 
-  def auth_token
-    @auth_token ||= AuthToken.find_by(token: options[:auth_token]) || NilToken
+  # Abilities that should be granted to institutional patron
+  def campus_patron_permissions
+    anonymous_permissions
   end
 
   def curation_concerns
@@ -74,6 +66,10 @@ class Ability
 
   def current_user
     TokenizedUser.new(super, auth_token)
+  end
+
+  def auth_token
+    @auth_token ||= AuthToken.find_by(token: options[:auth_token]) || NilToken
   end
 
   def download_file_with_metadata?(resource)
