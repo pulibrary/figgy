@@ -14,17 +14,26 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
                          :thumbnail_id
 
   delegate(*Schema::Common.attributes, to: :primary_imported_metadata, prefix: :imported)
+  delegate :members, :collections, to: :wayfinder
 
-  def members
-    @members ||= query_service.find_members(resource: model).to_a
-  end
-
+  # TODO: Rename this to decorated_scanned_resources
   def volumes
-    @volumes ||= members.select { |r| r.is_a?(ScannedResource) }.map(&:decorate).to_a
+    wayfinder.decorated_scanned_resources
   end
 
+  # TODO: Rename this to decorated_file_sets
   def file_sets
-    @file_sets ||= members.select { |r| r.is_a?(FileSet) }.map(&:decorate).to_a
+    wayfinder.decorated_file_sets
+  end
+
+  # TODO: Remove this. Parents should be parent resources.
+  def parents
+    collections
+  end
+
+  # TODO: Rename this to decorated_parent
+  def decorated_parent_resource
+    @decorated_parent_resource ||= wayfinder.decorated_parent
   end
 
   def rendered_rights_statement
@@ -83,15 +92,6 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
   # @return [Hash] a Hash of all of the resource attributes
   def iiif_manifest_attributes
     super.merge imported_attributes
-  end
-
-  def parents
-    Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_references_by(resource: self, property: :member_of_collection_ids).to_a
-  end
-  alias collections parents
-
-  def decorated_parent_resource
-    @decorated_parent_resource ||= Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_parents(resource: self).first.try(:decorate)
   end
 
   def collection_slugs

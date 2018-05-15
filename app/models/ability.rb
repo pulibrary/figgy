@@ -88,8 +88,6 @@ class Ability
     return false unless resource.is_a?(FileSet)
     parent = resource.decorate.parent
     parent.try(:geo_resource?)
-  rescue StandardError
-    false
   end
 
   # Geo thumbnails are always downloadable

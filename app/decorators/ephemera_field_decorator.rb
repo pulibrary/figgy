@@ -3,14 +3,18 @@
 class EphemeraFieldDecorator < Valkyrie::ResourceDecorator
   display :rendered_name, :vocabulary
 
-  # Retrieves the EphemeraProjects to which this EphemeraField is linked
-  # @return [Array<EphemeraProject>]
-  def parents
-    @parents ||= query_service.find_parents(resource: model).to_a
+  delegate :parents, to: :wayfinder
+
+  # TODO: Rename to decorated_ephemera_projects
+  def projects
+    wayfinder.decorated_ephemera_projects
   end
 
-  def projects
-    @projects ||= parents.select { |r| r.is_a?(EphemeraProject) }.map(&:decorate).to_a
+  # Retrieves the vocabulary from which the EphemeraField populates its terms
+  # @return [EphemeraVocabulary] the vocabulary linked to the EphemeraField
+  # TODO: Rename to decorated_ephemera_vocabulary
+  def vocabulary
+    wayfinder.decorated_ephemera_vocabulary
   end
 
   # Retrieves the label for the field name
@@ -44,17 +48,6 @@ class EphemeraFieldDecorator < Valkyrie::ResourceDecorator
           term.definition.html_safe
         end
     end
-  end
-
-  # Retrieves the vocabulary from which the EphemeraField populates its terms
-  # @return [EphemeraVocabulary] the vocabulary linked to the EphemeraField
-  def vocabulary
-    @vocabulary ||=
-      begin
-        query_service.find_references_by(resource: model, property: :member_of_vocabulary_id)
-                     .map(&:decorate)
-                     .to_a.first
-      end
   end
 
   # Retrieves the label for the linked vocabulary

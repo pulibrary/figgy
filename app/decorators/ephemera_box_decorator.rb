@@ -12,20 +12,21 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
     "Box #{box_number.first}"
   end
 
-  def members
-    @members ||= query_service.find_members(resource: model).to_a
-  end
+  delegate :members, to: :wayfinder
 
+  # TODO: Rename to decorated_ephemera_folders
   def folders
-    @folders ||= members.select { |r| r.is_a?(EphemeraFolder) }.map(&:decorate).to_a
+    wayfinder.decorated_ephemera_folders
   end
 
+  # TODO: Rename to ephemera_folders_count
   def folders_count
-    @folders_count ||= query_service.custom_queries.count_members(resource: model, model: EphemeraFolder)
+    wayfinder.ephemera_folders_count
   end
 
+  # TODO: Rename to decorated_ephemera_projects
   def ephemera_projects
-    @ephemera_projects ||= query_service.find_parents(resource: model).map(&:decorate).to_a
+    wayfinder.decorated_ephemera_projects
   end
 
   def collection_slugs
@@ -33,7 +34,7 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
   end
 
   def ephemera_project
-    @ephemera_box ||= query_service.find_parents(resource: model).to_a.first.try(:decorate) || NullProject.new
+    ephemera_projects.first || NullProject.new
   end
 
   # Whether this box has a workflow state that grants access to its contents

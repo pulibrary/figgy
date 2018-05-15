@@ -1,29 +1,31 @@
 # frozen_string_literal: true
 class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
   display :title
+  delegate :members, to: :wayfinder
 
-  def members
-    @members ||= query_service.find_members(resource: model).to_a
-  end
-
+  # TODO: Rename to decorated_ephemera_boxes
   def boxes
-    @boxes ||= query_service.find_members(resource: model, model: EphemeraBox).map(&:decorate).to_a
+    wayfinder.decorated_ephemera_boxes
   end
 
+  # TODO: Rename to decorated_ephemera_fields
   def fields
-    @fields ||= query_service.find_members(resource: model, model: EphemeraField).map(&:decorate).to_a
+    wayfinder.decorated_ephemera_fields
   end
 
+  # TODO: Rename to decorated_ephemera_folders
   def folders
-    @folders ||= query_service.find_members(resource: model, model: EphemeraFolder).map(&:decorate).to_a
+    wayfinder.decorated_ephemera_folders
   end
 
+  # TODO: Rename to ephemera_folders_count
   def folders_count
-    @folders_count ||= query_service.custom_queries.count_members(resource: model, model: EphemeraFolder)
+    wayfinder.ephemera_folders_count
   end
 
+  # TODO: Rename to decorated_templates
   def templates
-    @templates ||= query_service.find_inverse_references_by(resource: self, property: :parent_id).map(&:decorate).to_a
+    wayfinder.decorated_templates
   end
 
   def manageable_files?

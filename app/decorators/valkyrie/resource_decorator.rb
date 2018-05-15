@@ -14,6 +14,18 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
            :source_metadata,
            :source_metadata_identifier,
            :title
+  delegate :members, :parents, to: :wayfinder
+
+  def wayfinder
+    @wayfinder ||= Wayfinder.for(object)
+  end
+
+  # resource decorators will use this method if they define :member_of_collections
+  #   in self.display_attributes
+  def member_of_collections
+    return [] unless model.respond_to?(:member_of_collection_ids)
+    wayfinder.decorated_collections
+  end
 
   def created_at
     output = super
@@ -61,35 +73,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     []
   end
 
-  def metadata_adapter
-    Valkyrie.config.metadata_adapter
-  end
-  delegate :query_service, to: :metadata_adapter
-
-  # resource decorators will use this method if they define :member_of_collections
-  #   in self.display_attributes
-  def member_of_collections
-    return [] unless model.respond_to?(:member_of_collection_ids)
-    @member_of_collections ||=
-      begin
-        query_service.find_references_by(resource: model, property: :member_of_collection_ids)
-                     .to_a
-                     .map(&:decorate)
-      end
-  end
-
-  # Accesses all Resources referenced by a given Resource using the :member_ids property
-  # @return [Array<Valkyrie::Resource>] an array of Resources (possibly empty)
-  def members
-    @members ||= find_members(resource: model)
-  end
-
-  # Accesses all Resources referencing a given Resource using the :member_ids property
-  # i. e. it "accesses all Resources for which a given Resource is a member of"
-  # @return [Array<Valkyrie::Resource>] an array of Resources (possibly empty)
-  def parents
-    @parents ||= find_parents(resource: model)
-  end
+  delegate :metadata_adapter, :query_service, to: :wayfinder
 
   # prepare metadata as an array of label/value hash pairs
   # as required by samvera-labs/iiif_manifest
@@ -253,22 +237,4 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     title = title_value.is_a?(RDF::Literal) ? title_value.value : title_value
     OpenStruct.new id: id.to_s, title: title
   end
-
-  private
-
-    # Queries the metadata adapter for all referenced resources for a given resource using :member_ids
-    # Returns an empty Array rather than nil
-    # @see Valkyrie::Persistence::Solr::Queries::FindMembersQuery
-    # @return [Array<Valkyrie::Resource>] an array of Resources (possibly empty)
-    def find_members(resource:)
-      query_service.find_members(resource: resource) || []
-    end
-
-    # Queries the metadata adapter for all resources referencing a given resource using :member_ids
-    # Returns an empty Array rather than nil
-    # @see Valkyrie::Persistence::Solr::Queries::FindInverseReferencesQuery
-    # @return [Array<Valkyrie::Resource>] an array of Resources (possibly empty)
-    def find_parents(resource:)
-      query_service.find_parents(resource: resource) || []
-    end
 end

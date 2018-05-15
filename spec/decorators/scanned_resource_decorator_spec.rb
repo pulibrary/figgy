@@ -67,4 +67,47 @@ RSpec.describe ScannedResourceDecorator do
       expect(decorator.parents.first.id).to eq parent_collection.id
     end
   end
+
+  describe "#members" do
+    let(:resource) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [member.id]) }
+    let(:member) { FactoryBot.create_for_repository(:scanned_resource) }
+    it "retrieves all members" do
+      members = decorator.members
+      expect(members.map(&:id)).to eq [member.id]
+      expect(members.map(&:class)).to eq [ScannedResource]
+    end
+  end
+
+  describe "#volumes" do
+    let(:resource) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [member.id, member2.id]) }
+    let(:member) { FactoryBot.create_for_repository(:scanned_resource) }
+    let(:member2) { FactoryBot.create_for_repository(:file_set) }
+    it "returns all ScannedResource members" do
+      volumes = decorator.volumes
+      expect(volumes.map(&:id)).to eq [member.id]
+      expect(volumes.map(&:class)).to eq [described_class]
+    end
+  end
+
+  describe "#file_sets" do
+    let(:resource) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [member.id, member2.id]) }
+    let(:member) { FactoryBot.create_for_repository(:scanned_resource) }
+    let(:member2) { FactoryBot.create_for_repository(:file_set) }
+    it "returns all FileSet members" do
+      file_sets = decorator.file_sets
+      expect(file_sets.map(&:id)).to eq [member2.id]
+      expect(file_sets.map(&:class)).to eq [FileSetDecorator]
+    end
+  end
+
+  describe "#decorated_parent_resource" do
+    let(:member) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [resource.id]) }
+    let(:resource) { FactoryBot.create_for_repository(:scanned_resource) }
+    it "retrieves the parent, decorated" do
+      member
+      parent = decorator.decorated_parent_resource
+      expect(parent.id).to eq member.id
+      expect(parent.class).to eq described_class
+    end
+  end
 end

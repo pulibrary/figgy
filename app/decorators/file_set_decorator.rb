@@ -15,20 +15,17 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
           :geometry,
           :processing_note
 
+  delegate :collections, to: :wayfinder
+
   def manageable_files?
     false
   end
 
-  def parents
-    query_service.find_parents(resource: model).to_a.map(&:decorate)
-  end
-
+  # TODO: Rename to decorated_parent
   def parent
-    parents.first
-  end
-
-  def collections
-    []
+    wayfinder.decorated_parent
+  rescue ArgumentError
+    nil
   end
 
   def collection_slugs

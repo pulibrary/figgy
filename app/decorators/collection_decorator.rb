@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class CollectionDecorator < Valkyrie::ResourceDecorator
+  delegate :members, :parents, :collections, to: :wayfinder
+
   def title
     Array(super).first
   end
@@ -7,17 +9,6 @@ class CollectionDecorator < Valkyrie::ResourceDecorator
   def manageable_files?
     false
   end
-
-  def members
-    @members ||= query_service.find_inverse_references_by(resource: model, property: :member_of_collection_ids).to_a
-  end
-
-  # Nested collections are not currently supported
-  def parents
-    []
-  end
-
-  alias collections parents
 
   def slug
     Array.wrap(super).first
