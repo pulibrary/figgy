@@ -67,11 +67,12 @@ class ChangeSetPersister
     end
 
     def save(change_set:)
-      updating = change_set.persisted?
       before_save(change_set: change_set)
       persister.save(resource: change_set.resource).tap do |output|
         after_save(change_set: change_set, updated_resource: output)
-        after_update_commit(change_set: change_set, updated_resource: output) if updating
+        # Invoke the "after_update_commit" handlers only if this resource has already been persisted
+        after_update_commit(change_set: change_set) if change_set.persisted?
+
         after_save_commit(change_set: change_set, updated_resource: output)
         after_commit
       end
@@ -173,9 +174,9 @@ class ChangeSetPersister
         end
       end
 
-      def after_update_commit(change_set:, updated_resource:)
+      def after_update_commit(change_set:)
         registered_handlers.fetch(:after_update_commit, []).each do |handler|
-          instance = handler.new(change_set_persister: self, change_set: change_set, post_save_resource: updated_resource)
+          instance = handler.new(change_set_persister: self, change_set: change_set)
           delayed_queue.add do
             instance.run
           end
