@@ -40,10 +40,6 @@ RSpec.describe User, type: :model do
     it "is not anonymous" do
       expect(user).not_to be_anonymous
     end
-
-    it "is not an editor" do
-      expect(user).not_to be_editor
-    end
   end
 
   describe ".from_omniauth" do

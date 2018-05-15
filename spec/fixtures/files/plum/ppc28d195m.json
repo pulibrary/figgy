@@ -82,7 +82,6 @@
     "suppressed_bsi": false,
     "actionable_workflow_roles_ssim": [
       "geo_works-admin",
-      "geo_works-editor",
       "geo_works-notify_metadata_review",
       "geo_works-notify_final_review",
       "geo_works-notify_complete",

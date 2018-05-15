@@ -64,17 +64,6 @@ class Ability
     end
   end
 
-  def editor_permissions
-    can [:read, :modify, :update], curation_concerns
-    can [:read, :edit, :update], FileSet
-    can [:read, :edit, :update], Collection
-
-    # do not allow completing resources
-    cannot [:complete], curation_concerns
-
-    curation_concern_read_permissions
-  end
-
   def ephemera_permissions
     can [:manage], EphemeraBox
     can [:manage], EphemeraFolder
@@ -151,11 +140,11 @@ class Ability
   end
 
   def roles
-    ["anonymous", "campus_patron", "editor", "admin", "staff"]
+    ["anonymous", "campus_patron", "admin", "staff"]
   end
 
   def universal_reader?
-    current_user.staff? || current_user.editor? || current_user.admin?
+    current_user.staff? || current_user.admin?
   end
 
   def read_permissions
@@ -213,10 +202,6 @@ class Ability
 
     def groups
       @groups ||= super + auth_token.group
-    end
-
-    def editor?
-      groups.include?("editor")
     end
 
     def campus_patron?

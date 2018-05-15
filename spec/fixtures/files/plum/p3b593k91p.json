@@ -114,7 +114,6 @@
       "suppressed_bsi":false,
       "actionable_workflow_roles_ssim":[
          "book_works-admin",
-         "book_works-editor",
          "book_works-notify_metadata_review",
          "book_works-notify_final_review",
          "book_works-notify_complete",
@@ -240,7 +239,6 @@
       "suppressed_bsi":false,
       "actionable_workflow_roles_ssim":[
          "book_works-admin",
-         "book_works-editor",
          "book_works-notify_metadata_review",
          "book_works-notify_final_review",
          "book_works-notify_complete",
@@ -388,7 +386,6 @@
       "suppressed_bsi":false,
       "actionable_workflow_roles_ssim":[
          "book_works-admin",
-         "book_works-editor",
          "book_works-notify_metadata_review",
          "book_works-notify_final_review",
          "book_works-notify_complete",
@@ -554,8 +551,7 @@
         "thumbnail_path_ss":"/images/collection.png",
         "bytes_lts":0,
         "read_access_group_ssim":["admin",
-          "staff",
-          "editor"],
+          "staff"],
         "edit_access_person_ssim":["tpend"],
         "human_readable_type_tesim":["Collection"]
         },

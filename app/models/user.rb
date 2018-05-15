@@ -35,10 +35,6 @@ class User < ApplicationRecord
     groups.include?("staff")
   end
 
-  def editor?
-    roles.where(name: "editor").exists?
-  end
-
   def campus_patron?
     persisted? && provider == "cas"
   end

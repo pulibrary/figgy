@@ -126,7 +126,6 @@
       "suppressed_bsi":false,
       "actionable_workflow_roles_ssim":[
          "book_works-admin",
-         "book_works-editor",
          "book_works-notify_metadata_review",
          "book_works-notify_final_review",
          "book_works-notify_complete",
@@ -209,12 +208,10 @@
       ],
       "read_access_group_ssim":[
          "admin",
-         "staff",
-         "editor"
+         "staff"
       ],
       "edit_access_group_ssim":[
          "staff",
-         "editor",
          "admin"
       ],
       "logical_order_tesim":["{\"label\":\"Logical\",\"nodes\":[{\"label\":\"Chapter 1\",\"nodes\":[{\"proxy\":\"p7w62j794r\"}]},{\"label\":\"Chapter 2\",\"nodes\":[{\"proxy\":\"p73669555b\"}]}]}"]
@@ -398,8 +395,7 @@
         "thumbnail_path_ss":"/assets/collection-a38b932554788aa578debf2319e8c4ba8a7db06b3ba57ecda1391a548a4b6e0a.png",
         "bytes_lts":0,
         "read_access_group_ssim":["admin",
-          "staff",
-          "editor"],
+          "staff"],
         "edit_access_person_ssim":["tpend"],
         "human_readable_type_tesim":["Collection"]
         }
