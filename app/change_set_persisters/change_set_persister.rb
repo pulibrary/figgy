@@ -32,6 +32,7 @@ class ChangeSetPersister
         UpdateOCR
       ],
       before_delete: [
+        CleanupFiles,
         CleanupStructure,
         DeleteReferenced::Factory.new(property: :member_of_vocabulary_id),
         CleanupMembership::Factory.new(property: :member_ids),

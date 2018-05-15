@@ -348,7 +348,8 @@ RSpec.describe ChangeSetPersister do
 
       query_service.find_members(resource: output).first
       derivative = file_set.file_metadata.select(&:derivative?).first
-      expect { query_service.find_by(id: derivative.id) }.to raise_error Valkyrie::Persistence::ObjectNotFoundError
+      derivative_path = derivative.file_identifiers.first.to_s.gsub("disk://", "")
+      expect(File.exist?(derivative_path)).to be false
     end
   end
 
