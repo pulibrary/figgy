@@ -4,6 +4,9 @@ A digital repository application using [Valkyrie](https://github.com/samvera-lab
 Figgy is a proof-of-concept port of [Plum](https://github.com/pulibrary/plum) to Valkyrie to explore
 functionality, performance, and scalability.
 
+[![CircleCI](https://circleci.com/gh/pulibrary/figgy.svg?style=svg)](https://circleci.com/gh/pulibrary/figgy)
+[![Coverage Status](https://coveralls.io/repos/pulibrary/figgy/badge.svg?branch=master&service=github)](https://coveralls.io/github/pulibrary/figgy?branch=master)
+
 ## Dependencies
 
 * Ruby
