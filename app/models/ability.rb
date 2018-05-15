@@ -64,12 +64,6 @@ class Ability
     end
   end
 
-  def ephemera_permissions
-    can [:manage], EphemeraBox
-    can [:manage], EphemeraFolder
-    can [:manage], Template
-  end
-
   def auth_token
     @auth_token ||= AuthToken.find_by(token: options[:auth_token]) || NilToken
   end
