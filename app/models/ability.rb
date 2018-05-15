@@ -37,17 +37,6 @@ class Ability
     anonymous_permissions
   end
 
-  def completer_permissions
-    can [:read, :modify, :update], curation_concerns
-    can [:read, :edit, :update], FileSet
-    can [:read, :edit, :update], Collection
-
-    # allow completing resources
-    can [:complete], curation_concerns
-
-    curation_concern_read_permissions
-  end
-
   def curation_concern_read_permissions
     cannot [:read], curation_concerns do |resource|
       !readable_concern?(resource)
@@ -201,11 +190,11 @@ class Ability
   end
 
   def roles
-    ["anonymous", "campus_patron", "completer", "curator", "fulfiller", "editor", "image_editor", "admin", "staff"]
+    ["anonymous", "campus_patron", "curator", "fulfiller", "editor", "image_editor", "admin", "staff"]
   end
 
   def universal_reader?
-    current_user.curator? || current_user.image_editor? || current_user.completer? || current_user.fulfiller? || current_user.editor? || current_user.admin?
+    current_user.curator? || current_user.image_editor? || current_user.fulfiller? || current_user.editor? || current_user.admin?
   end
 
   def read_permissions

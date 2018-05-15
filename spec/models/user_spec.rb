@@ -41,10 +41,6 @@ RSpec.describe User, type: :model do
       expect(user).not_to be_anonymous
     end
 
-    it "is not a completer" do
-      expect(user).not_to be_completer
-    end
-
     it "is not a curator" do
       expect(user).not_to be_curator
     end

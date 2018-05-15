@@ -554,7 +554,7 @@
         "thumbnail_path_ss":"/images/collection.png",
         "bytes_lts":0,
         "read_access_group_ssim":["admin",
-          "completer",
+          "staff",
           "curator",
           "fulfiller",
           "editor",

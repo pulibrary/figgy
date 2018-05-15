@@ -125,7 +125,7 @@
          "book_works-curator",
          "book_works-notify_flagged",
          "book_works-depositing",
-         "book_works-completer"
+         "book_works-staff"
       ],
       "workflow_state_name_ssim":[
          "pending"
@@ -200,7 +200,7 @@
          "curator",
          "fulfiller",
          "admin",
-         "completer",
+         "staff",
          "editor",
          "image_editor"
       ],
@@ -322,7 +322,7 @@
         "thumbnail_path_ss":"/assets/collection-a38b932554788aa578debf2319e8c4ba8a7db06b3ba57ecda1391a548a4b6e0a.png",
         "bytes_lts":0,
         "read_access_group_ssim":["admin",
-          "completer",
+          "staff",
           "curator",
           "fulfiller",
           "editor",

@@ -21,10 +21,6 @@ FactoryBot.define do
       roles { [Role.where(name: "image_editor").first_or_create] }
     end
 
-    factory :completer do
-      roles { [Role.where(name: "completer").first_or_create] }
-    end
-
     factory :editor do
       roles { [Role.where(name: "editor").first_or_create] }
     end
