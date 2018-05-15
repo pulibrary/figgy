@@ -25,10 +25,6 @@ FactoryBot.define do
       roles { [Role.where(name: "editor").first_or_create] }
     end
 
-    factory :fulfiller do
-      roles { [Role.where(name: "fulfiller").first_or_create] }
-    end
-
     factory :curator do
       roles { [Role.where(name: "curator").first_or_create] }
     end

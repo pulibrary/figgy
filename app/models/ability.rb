@@ -90,13 +90,6 @@ class Ability
     can [:manage], Template
   end
 
-  def fulfiller_permissions
-    can [:read], curation_concerns
-    can [:read, :download], FileSet
-    can [:read], Collection
-    curation_concern_read_permissions
-  end
-
   # Abilities that should be granted to technicians
   def image_editor_permissions
     ephemera_permissions
@@ -190,11 +183,11 @@ class Ability
   end
 
   def roles
-    ["anonymous", "campus_patron", "curator", "fulfiller", "editor", "image_editor", "admin", "staff"]
+    ["anonymous", "campus_patron", "curator", "editor", "image_editor", "admin", "staff"]
   end
 
   def universal_reader?
-    current_user.curator? || current_user.image_editor? || current_user.fulfiller? || current_user.editor? || current_user.admin?
+    current_user.curator? || current_user.image_editor? || current_user.editor? || current_user.admin?
   end
 
   def read_permissions
@@ -260,10 +253,6 @@ class Ability
 
     def editor?
       groups.include?("editor")
-    end
-
-    def fulfiller?
-      groups.include?("fulfiller")
     end
 
     def curator?

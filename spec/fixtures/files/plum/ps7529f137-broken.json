@@ -198,7 +198,6 @@
       ],
       "read_access_group_ssim":[
          "curator",
-         "fulfiller",
          "admin",
          "staff",
          "editor",
@@ -324,7 +323,6 @@
         "read_access_group_ssim":["admin",
           "staff",
           "curator",
-          "fulfiller",
           "editor",
           "image_editor"],
         "edit_access_person_ssim":["tpend"],
