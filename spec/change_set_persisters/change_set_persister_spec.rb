@@ -31,7 +31,6 @@ RSpec.describe ChangeSetPersister do
       resource = FactoryBot.build(:scanned_resource, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: "123456")
-      change_set.sync
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Earth rites : fertility rites in pre-industrial Britain", language: :fr)]
@@ -49,7 +48,6 @@ RSpec.describe ChangeSetPersister do
       resource = FactoryBot.build(:scanned_map, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: "10001789")
-      change_set.sync
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Cameroons under United Kingdom Trusteeship 1949", language: :eng)]
@@ -70,7 +68,6 @@ RSpec.describe ChangeSetPersister do
       resource = FactoryBot.build(:vector_resource, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: "9649080")
-      change_set.sync
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).to eq ["Syria 100K Vector Dataset"]
@@ -87,7 +84,6 @@ RSpec.describe ChangeSetPersister do
       resource = FactoryBot.build(:raster_resource, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: "9637153")
-      change_set.sync
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).to eq ["Laos : 1:50,000 scale : Digital Raster graphics (DRGs) of topographic maps : complete coverage of the country (Full GeoTiff); 403 maps"]
@@ -105,7 +101,6 @@ RSpec.describe ChangeSetPersister do
       change_set = change_set_class.new(resource)
       change_set.prepopulate!
       change_set.validate(state: "complete")
-      change_set.sync
       output = change_set_persister.save(change_set: change_set)
       expect(output.identifier.first).to eq "ark:/#{shoulder}#{blade}"
     end
@@ -119,7 +114,6 @@ RSpec.describe ChangeSetPersister do
       change_set = change_set_class.new(resource)
       change_set.prepopulate!
       change_set.validate(state: "published")
-      change_set.sync
       output = change_set_persister.save(change_set: change_set)
       expect(output.identifier.first).to eq "ark:/#{shoulder}#{blade}"
     end
@@ -134,7 +128,6 @@ RSpec.describe ChangeSetPersister do
       resource = FactoryBot.build(:scanned_resource, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: "MC016_c9616")
-      change_set.sync
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).to eq ['Series 5: Speeches, Statements, Press Conferences, Etc - 1953 - Speech: "... Results of the Eleventh Meeting of the Council of NATO"']
@@ -152,7 +145,6 @@ RSpec.describe ChangeSetPersister do
       resource = FactoryBot.build(:archival_media_collection, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: blade)
-      change_set.sync
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).to eq ["Emir Rodriguez Monegal Papers"]
@@ -164,7 +156,6 @@ RSpec.describe ChangeSetPersister do
       resource = FactoryBot.create_for_repository(:scanned_resource, title: "Title", source_metadata_identifier: nil)
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: "123456", title: [], refresh_remote_metadata: "0")
-      change_set.sync
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).to be_blank
@@ -200,7 +191,6 @@ RSpec.describe ChangeSetPersister do
       resource = FactoryBot.create_for_repository(:scanned_resource, title: "Title", imported_metadata: [{ applicant: "Test" }], source_metadata_identifier: nil)
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: "123456", title: [], refresh_remote_metadata: "1")
-      change_set.sync
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Earth rites : fertility rites in pre-industrial Britain", language: :fr)]
@@ -219,7 +209,6 @@ RSpec.describe ChangeSetPersister do
       resource = FactoryBot.build(:scanned_map, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: "6866386")
-      change_set.sync
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Eastern Turkey in Asia. Malatia, sheet 16. Series I.D.W.O. no. 1522", language: :und)]
@@ -237,7 +226,6 @@ RSpec.describe ChangeSetPersister do
       resource = FactoryBot.build(:scanned_resource)
       change_set = change_set_class.new(resource, characterize: false)
       change_set.files = [file]
-      change_set.sync
 
       output = change_set_persister.save(change_set: change_set)
       members = query_service.find_members(resource: output)
@@ -245,7 +233,6 @@ RSpec.describe ChangeSetPersister do
 
       change_set = change_set_class.new(output)
       change_set.validate(ocr_language: "eng")
-      change_set.sync
 
       output = change_set_persister.save(change_set: change_set)
       members = query_service.find_members(resource: output)
@@ -262,7 +249,6 @@ RSpec.describe ChangeSetPersister do
       resource = FactoryBot.build(:scanned_resource)
       change_set = change_set_class.new(resource, characterize: false)
       change_set.files = [file]
-      change_set.sync
 
       output = change_set_persister.save(change_set: change_set)
       members = query_service.find_members(resource: output)
@@ -270,7 +256,6 @@ RSpec.describe ChangeSetPersister do
 
       change_set = change_set_class.new(output)
       change_set.validate(ocr_language: "")
-      change_set.sync
 
       output = change_set_persister.save(change_set: change_set)
       members = query_service.find_members(resource: output)
@@ -288,7 +273,6 @@ RSpec.describe ChangeSetPersister do
       resource = FactoryBot.build(:scanned_resource)
       change_set = change_set_class.new(resource, characterize: false, ocr_language: ["eng"])
       change_set.files = [file]
-      change_set.sync
 
       output = change_set_persister.save(change_set: change_set)
       members = query_service.find_members(resource: output)
@@ -335,7 +319,6 @@ RSpec.describe ChangeSetPersister do
       resource = FactoryBot.build(:scanned_resource)
       change_set = change_set_class.new(resource, characterize: true, ocr_language: ["eng"])
       change_set.files = [file]
-      change_set.sync
       change_set_persister.queue = "low"
       output = change_set_persister.save(change_set: change_set)
       file_set = query_service.find_members(resource: output).first
@@ -402,7 +385,6 @@ RSpec.describe ChangeSetPersister do
 
       it "publishes messages for updated file sets", run_real_derivatives: false, rabbit_stubbed: true do
         change_set.member_of_collection_ids = [collection.id]
-        change_set.sync
         output = change_set_persister.save(change_set: change_set)
         file_set = query_service.find_members(resource: output).first
 
@@ -705,7 +687,6 @@ RSpec.describe ChangeSetPersister do
 
         change_set = change_set_class.new(resource)
         change_set.validate(visibility: Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC)
-        change_set.sync
 
         updated = change_set_persister.save(change_set: change_set)
         members = query_service.find_members(resource: updated)
@@ -726,7 +707,6 @@ RSpec.describe ChangeSetPersister do
 
         change_set = change_set_class.new(resource)
         change_set.validate(state: "pending")
-        change_set.sync
 
         output = change_set_persister.save(change_set: change_set)
         members = query_service.find_members(resource: output)
@@ -741,7 +721,6 @@ RSpec.describe ChangeSetPersister do
 
         change_set = change_set_class.new(box)
         change_set.validate(state: "ready_to_ship")
-        change_set.sync
 
         output = change_set_persister.save(change_set: change_set)
         members = query_service.find_members(resource: output)
@@ -760,7 +739,6 @@ RSpec.describe ChangeSetPersister do
 
         change_set = change_set_class.new(box)
         change_set.validate(state: "all_in_production")
-        change_set.sync
 
         change_set_persister.save(change_set: change_set)
         doc = solr.get("select", params: { q: "id:#{folder.id}", fl: "read_access_group_ssim", rows: 1 })["response"]["docs"].first
@@ -782,7 +760,6 @@ RSpec.describe ChangeSetPersister do
       resource = FactoryBot.build(:scanned_resource)
       change_set = change_set_class.new(resource)
       change_set.validate(append_id: parent.id.to_s)
-      change_set.sync
 
       output = change_set_persister.save(change_set: change_set)
       reloaded = query_service.find_by(id: parent.id)
@@ -801,7 +778,6 @@ RSpec.describe ChangeSetPersister do
         change_set = change_set_class.new(resource)
         change_set.prepopulate!
         change_set.validate(source_metadata_identifier: "4609321", set_visibility_by_date: "1")
-        change_set.sync
 
         output = change_set_persister.save(change_set: change_set)
         reloaded = query_service.find_by(id: output.id)
@@ -817,7 +793,6 @@ RSpec.describe ChangeSetPersister do
         change_set = change_set_class.new(resource)
         change_set.prepopulate!
         change_set.validate(source_metadata_identifier: "123456", set_visibility_by_date: "1")
-        change_set.sync
 
         output = change_set_persister.save(change_set: change_set)
         reloaded = query_service.find_by(id: output.id)
@@ -833,7 +808,6 @@ RSpec.describe ChangeSetPersister do
         change_set = change_set_class.new(resource)
         change_set.prepopulate!
         change_set.validate(source_metadata_identifier: "123456789", set_visibility_by_date: "1")
-        change_set.sync
 
         output = change_set_persister.save(change_set: change_set)
         reloaded = query_service.find_by(id: output.id)
@@ -849,7 +823,6 @@ RSpec.describe ChangeSetPersister do
         change_set = change_set_class.new(resource)
         change_set.prepopulate!
         change_set.validate(source_metadata_identifier: "123456")
-        change_set.sync
 
         output = change_set_persister.save(change_set: change_set)
         reloaded = query_service.find_by(id: output.id)
@@ -870,7 +843,6 @@ RSpec.describe ChangeSetPersister do
       stub_pulfa(pulfa_id: "C0652")
       change_set.prepopulate!
       change_set.validate(source_metadata_identifier: "C0652")
-      change_set.sync
     end
 
     it "persists the file using the bag adapter" do
