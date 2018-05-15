@@ -49,24 +49,13 @@
 import draggable from 'vuedraggable'
 export default {
   name: 'thumbnails',
-  created: function () {
-    var browse_everything = document.getElementById('file-manager-browse-everything')
-    var elms = []
-    if (browse_everything) {
-      elms = [...document.getElementById('file-manager-browse-everything').getElementsByTagName('tr')]
-    }
-    if (elms.length) {
-      this.pendingUploads = true
-    }
-  },
   components: {
     draggable
   },
   data: function () {
     return {
       thumbPixelWidth: 200,
-      captionPixelPadding: 9,
-      pendingUploads: false
+      captionPixelPadding: 9
     }
   },
   computed: {
@@ -205,9 +194,6 @@ export default {
       } else {
         window.location.reload(true)
       }
-    },
-    uploadFile: function (event) {
-      document.getElementById('browse_everything').click();
     }
   }
 }
