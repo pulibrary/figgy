@@ -7,18 +7,6 @@ exports[`Thumbnails.vue has the expected html structure 1`] = `
   <div
     class="gallery_controls"
   >
-    <button
-      class="btn btn-default btn-sm"
-      id="upload_file_btn"
-    >
-      <i
-        class="fa fa-th fa-upload"
-      />
-       Upload Files
-    </button>
-     
-    <!---->
-     
     <div
       class="dropdown"
     >
