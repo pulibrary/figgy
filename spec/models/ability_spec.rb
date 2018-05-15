@@ -127,10 +127,13 @@ describe Ability do
       is_expected.to be_able_to(:update, takedown_scanned_resource)
       is_expected.to be_able_to(:update, flagged_scanned_resource)
       is_expected.to be_able_to(:destroy, staff_scanned_resource)
+      is_expected.to be_able_to(:destroy, staff_file)
       is_expected.not_to be_able_to(:destroy, open_scanned_resource)
       is_expected.not_to be_able_to(:destroy, private_scanned_resource)
       is_expected.not_to be_able_to(:destroy, takedown_scanned_resource)
       is_expected.not_to be_able_to(:destroy, flagged_scanned_resource)
+      is_expected.not_to be_able_to(:destroy, admin_file)
+      is_expected.not_to be_able_to(:destroy, other_staff_file)
       is_expected.to be_able_to(:manifest, open_scanned_resource)
       is_expected.to be_able_to(:manifest, pending_scanned_resource)
     }
