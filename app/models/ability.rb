@@ -18,6 +18,7 @@ class Ability
   # Staff can do anything except delete someone else's stuff
   def staff_permissions
     can [:create, :read, :modify, :update], :all
+    can [:destroy], Template
     can [:destroy], FileSet do |obj|
       obj.depositor == [current_user.uid]
     end
@@ -92,16 +93,6 @@ class Ability
     cannot [:complete], curation_concerns
 
     curation_concern_read_permissions
-  end
-
-  # Abilities that should be granted to ephemera editors
-  def ephemera_editor_permissions
-    ephemera_permissions
-    can [:create, :read, :edit, :update, :publish], Collection
-    can [:create, :read, :edit, :update, :publish, :download], FileSet
-    can [:destroy], FileSet do |obj|
-      obj.depositor == [current_user.uid]
-    end
   end
 
   def ephemera_permissions
@@ -210,7 +201,7 @@ class Ability
   end
 
   def roles
-    ["anonymous", "campus_patron", "completer", "curator", "fulfiller", "editor", "ephemera_editor", "image_editor", "admin", "staff"]
+    ["anonymous", "campus_patron", "completer", "curator", "fulfiller", "editor", "image_editor", "admin", "staff"]
   end
 
   def universal_reader?
@@ -272,10 +263,6 @@ class Ability
 
     def groups
       @groups ||= super + auth_token.group
-    end
-
-    def ephemera_editor?
-      groups.include?("ephemera_editor")
     end
 
     def image_editor?

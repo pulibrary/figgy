@@ -53,10 +53,6 @@ RSpec.describe User, type: :model do
       expect(user).not_to be_editor
     end
 
-    it "is not an ephemera editor" do
-      expect(user).not_to be_ephemera_editor
-    end
-
     it "is not a fulfiller" do
       expect(user).not_to be_fulfiller
     end
