@@ -87,7 +87,7 @@
       "geo_works-notify_final_review",
       "geo_works-notify_complete",
       "geo_works-notify_takedown",
-      "geo_works-curator",
+      "geo_works-staff",
       "geo_works-notify_flagged"
     ],
     "workflow_state_name_ssim": [

@@ -25,10 +25,6 @@ FactoryBot.define do
       roles { [Role.where(name: "editor").first_or_create] }
     end
 
-    factory :curator do
-      roles { [Role.where(name: "curator").first_or_create] }
-    end
-
     factory :complete_reviewer do
       email "complete@example.com"
       roles { [Role.where(name: "notify_complete").first_or_create] }

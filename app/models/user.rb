@@ -43,10 +43,6 @@ class User < ApplicationRecord
     roles.where(name: "editor").exists?
   end
 
-  def curator?
-    roles.where(name: "curator").exists?
-  end
-
   def campus_patron?
     persisted? && provider == "cas"
   end

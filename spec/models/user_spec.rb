@@ -41,10 +41,6 @@ RSpec.describe User, type: :model do
       expect(user).not_to be_anonymous
     end
 
-    it "is not a curator" do
-      expect(user).not_to be_curator
-    end
-
     it "is not an editor" do
       expect(user).not_to be_editor
     end

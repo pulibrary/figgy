@@ -119,7 +119,7 @@
          "book_works-notify_final_review",
          "book_works-notify_complete",
          "book_works-notify_takedown",
-         "book_works-curator",
+         "book_works-staff",
          "book_works-notify_flagged",
          "book_works-depositing"
       ],
@@ -245,7 +245,7 @@
          "book_works-notify_final_review",
          "book_works-notify_complete",
          "book_works-notify_takedown",
-         "book_works-curator",
+         "book_works-staff",
          "book_works-notify_flagged",
          "book_works-depositing"
       ],
@@ -393,7 +393,7 @@
          "book_works-notify_final_review",
          "book_works-notify_complete",
          "book_works-notify_takedown",
-         "book_works-curator",
+         "book_works-staff",
          "book_works-notify_flagged",
          "book_works-depositing"
       ],
@@ -555,7 +555,6 @@
         "bytes_lts":0,
         "read_access_group_ssim":["admin",
           "staff",
-          "curator",
           "editor",
           "image_editor"],
         "edit_access_person_ssim":["tpend"],

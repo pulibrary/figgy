@@ -64,15 +64,6 @@ class Ability
     end
   end
 
-  def curator_permissions
-    can [:read], curation_concerns
-    can [:read], FileSet
-    can [:read], Collection
-
-    # do not allow viewing pending resources
-    curation_concern_read_permissions
-  end
-
   def editor_permissions
     can [:read, :modify, :update], curation_concerns
     can [:read, :edit, :update], FileSet
@@ -173,7 +164,6 @@ class Ability
   #   we need both
   # @see app/models/search_builder.rb
   def unreadable_states
-    return ["pending"] if current_user.curator?
     return [] if universal_reader?
     WorkflowRegistry.all_states - WorkflowRegistry.public_read_states
   end
@@ -183,11 +173,11 @@ class Ability
   end
 
   def roles
-    ["anonymous", "campus_patron", "curator", "editor", "image_editor", "admin", "staff"]
+    ["anonymous", "campus_patron", "editor", "image_editor", "admin", "staff"]
   end
 
   def universal_reader?
-    current_user.curator? || current_user.image_editor? || current_user.editor? || current_user.admin?
+    current_user.staff? || current_user.image_editor? || current_user.editor? || current_user.admin?
   end
 
   def read_permissions
@@ -253,10 +243,6 @@ class Ability
 
     def editor?
       groups.include?("editor")
-    end
-
-    def curator?
-      groups.include?("curator")
     end
 
     def campus_patron?
