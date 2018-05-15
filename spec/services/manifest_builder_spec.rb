@@ -120,9 +120,9 @@ RSpec.describe ManifestBuilder do
       expect(canvas_rendering["label"]).to eq "Download page text"
 
       canvas_rendering = canvas_renderings.last
-      expect(canvas_rendering['@id']).to eq "http://www.example.com/downloads/#{scanned_resource.member_ids.first}/file/#{scanned_resource.decorate.file_sets.first.original_file.id}"
-      expect(canvas_rendering['format']).to eq 'image/tiff'
-      expect(canvas_rendering['label']).to eq 'Download the original file'
+      expect(canvas_rendering["@id"]).to eq "http://www.example.com/downloads/#{scanned_resource.member_ids.first}/file/#{scanned_resource.decorate.file_sets.first.original_file.id}"
+      expect(canvas_rendering["format"]).to eq "image/tiff"
+      expect(canvas_rendering["label"]).to eq "Download the original file"
 
       expect(first_image["data"]).to eq nil
       expect(first_image["@type"]).to eq "oa:Annotation"

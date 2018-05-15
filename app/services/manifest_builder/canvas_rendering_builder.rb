@@ -22,7 +22,7 @@ class ManifestBuilder
 
       return unless downloadable?
       manifest["rendering"] ||= []
-      manifest['rendering'] << download_hash
+      manifest["rendering"] << download_hash
     end
 
     # Construct a helper Object
@@ -60,7 +60,7 @@ class ManifestBuilder
       # Retrieve the web protocol from the App. settings
       # @return [String]
       def protocol
-        default_url_options[:protocol] || 'http'
+        default_url_options[:protocol] || "http"
       end
 
       # Retrieve the helper Module for the routes
@@ -75,9 +75,9 @@ class ManifestBuilder
         original_file = resource.original_file
         original_file_id = original_file.id.to_s
         {
-          '@id' => url_helpers.download_url(resource_id: resource.id.to_s, id: original_file_id, protocol: protocol, host: host),
-          'label' => 'Download the original file',
-          'format' => original_file.mime_type.first
+          "@id" => url_helpers.download_url(resource_id: resource.id.to_s, id: original_file_id, protocol: protocol, host: host),
+          "label" => "Download the original file",
+          "format" => original_file.mime_type.first
         }
       end
   end
