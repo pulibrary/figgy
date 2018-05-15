@@ -31,6 +31,10 @@ class User < ApplicationRecord
     groups.include?("admin")
   end
 
+  def staff?
+    groups.include?("staff")
+  end
+
   def ephemera_editor?
     roles.where(name: "ephemera_editor").exists?
   end

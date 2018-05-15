@@ -8,6 +8,25 @@ RSpec.describe User, type: :model do
       expect(user.to_s).to eq user.uid
     end
   end
+  describe "#staff?" do
+    subject(:user) { FactoryBot.create(:staff) }
+    it "returns true" do
+      expect(user).to be_staff
+    end
+
+    it "is not an admin" do
+      expect(user).not_to be_admin
+    end
+
+    it "is a campus patron" do
+      expect(user).to be_campus_patron
+    end
+
+    it "is not anonymous" do
+      expect(user).not_to be_anonymous
+    end
+  end
+
   describe "#admin?" do
     subject(:user) { FactoryBot.create(:admin) }
     it "returns true" do

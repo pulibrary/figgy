@@ -58,11 +58,16 @@ describe Ability do
     FactoryBot.create(:flagged_scanned_resource, user: image_editor, identifier: ["ark:/99999/fk4445wg45"])
   end
 
+  let(:staff_scanned_resource) do
+    FactoryBot.create(:complete_scanned_resource, user: staff_user, identifier: ["ark:/99999/fk4445wg45"])
+  end
+
   let(:ephemera_editor_file) { FactoryBot.build(:file_set, user: ephemera_editor) }
   let(:image_editor_file) { FactoryBot.build(:file_set, user: image_editor) }
   let(:admin_file) { FactoryBot.build(:file_set, user: admin_user) }
 
   let(:admin_user) { FactoryBot.create(:admin) }
+  let(:staff_user) { FactoryBot.create(:staff) }
   let(:ephemera_editor) { FactoryBot.create(:ephemera_editor) }
   let(:image_editor) { FactoryBot.create(:image_editor) }
   let(:editor) { FactoryBot.create(:editor) }
@@ -99,6 +104,38 @@ describe Ability do
       is_expected.to be_able_to(:destroy, private_scanned_resource)
       is_expected.to be_able_to(:destroy, takedown_scanned_resource)
       is_expected.to be_able_to(:destroy, flagged_scanned_resource)
+      is_expected.to be_able_to(:manifest, open_scanned_resource)
+      is_expected.to be_able_to(:manifest, pending_scanned_resource)
+    }
+  end
+
+  describe "as a staff" do
+    let(:creating_user) { image_editor }
+    let(:current_user) { staff_user }
+
+    it {
+      is_expected.to be_able_to(:create, ScannedResource.new)
+      is_expected.to be_able_to(:create, FileSet.new)
+      is_expected.to be_able_to(:read, open_scanned_resource)
+      is_expected.to be_able_to(:read, private_scanned_resource)
+      is_expected.to be_able_to(:read, takedown_scanned_resource)
+      is_expected.to be_able_to(:read, flagged_scanned_resource)
+      is_expected.to be_able_to(:pdf, open_scanned_resource)
+      is_expected.to be_able_to(:color_pdf, open_scanned_resource)
+      is_expected.to be_able_to(:edit, open_scanned_resource)
+      is_expected.to be_able_to(:edit, private_scanned_resource)
+      is_expected.to be_able_to(:edit, takedown_scanned_resource)
+      is_expected.to be_able_to(:edit, flagged_scanned_resource)
+      is_expected.to be_able_to(:file_manager, open_scanned_resource)
+      is_expected.to be_able_to(:update, open_scanned_resource)
+      is_expected.to be_able_to(:update, private_scanned_resource)
+      is_expected.to be_able_to(:update, takedown_scanned_resource)
+      is_expected.to be_able_to(:update, flagged_scanned_resource)
+      is_expected.to be_able_to(:destroy, staff_scanned_resource)
+      is_expected.not_to be_able_to(:destroy, open_scanned_resource)
+      is_expected.not_to be_able_to(:destroy, private_scanned_resource)
+      is_expected.not_to be_able_to(:destroy, takedown_scanned_resource)
+      is_expected.not_to be_able_to(:destroy, flagged_scanned_resource)
       is_expected.to be_able_to(:manifest, open_scanned_resource)
       is_expected.to be_able_to(:manifest, pending_scanned_resource)
     }

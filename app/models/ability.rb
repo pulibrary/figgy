@@ -15,12 +15,23 @@ class Ability
     can [:manage], :all
   end
 
+  # Staff can do anything except delete someone else's stuff
+  def staff_permissions
+    can [:create, :read, :modify, :update], :all
+    can [:destroy], FileSet do |obj|
+      obj.depositor == [current_user.uid]
+    end
+    can [:destroy], curation_concerns do |obj|
+      obj.depositor == [current_user.uid]
+    end
+  end
+
   def anonymous_permissions
     # do not allow viewing incomplete resources
     curation_concern_read_permissions
   end
 
-  # Abilities that should be granted to patron
+  # Abilities that should be granted to institutional patron
   def campus_patron_permissions
     anonymous_permissions
   end
@@ -199,7 +210,7 @@ class Ability
   end
 
   def roles
-    ["anonymous", "campus_patron", "completer", "curator", "fulfiller", "editor", "ephemera_editor", "image_editor", "admin"]
+    ["anonymous", "campus_patron", "completer", "curator", "fulfiller", "editor", "ephemera_editor", "image_editor", "admin", "staff"]
   end
 
   def universal_reader?
