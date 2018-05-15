@@ -44,10 +44,6 @@ RSpec.describe User, type: :model do
     it "is not an editor" do
       expect(user).not_to be_editor
     end
-
-    it "is not an image editor" do
-      expect(user).not_to be_image_editor
-    end
   end
 
   describe ".from_omniauth" do

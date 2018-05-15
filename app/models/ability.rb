@@ -81,28 +81,6 @@ class Ability
     can [:manage], Template
   end
 
-  # Abilities that should be granted to technicians
-  def image_editor_permissions
-    ephemera_permissions
-    can [:read, :create, :modify, :update, :publish], curation_concerns
-    can [:create, :read, :edit, :update, :publish, :download, :derive], FileSet
-    can [:create, :read, :edit, :update, :publish], Collection
-
-    # do not allow completing resources
-    cannot [:complete], curation_concerns
-
-    # only allow deleting for own objects, without ARKs
-    can [:destroy], FileSet do |obj|
-      obj.depositor == [current_user.uid]
-    end
-    can [:destroy], curation_concerns do |obj|
-      obj.depositor == [current_user.uid]
-    end
-    cannot [:destroy], curation_concerns do |obj|
-      !obj.try(:identifier).blank?
-    end
-  end
-
   def auth_token
     @auth_token ||= AuthToken.find_by(token: options[:auth_token]) || NilToken
   end
@@ -173,11 +151,11 @@ class Ability
   end
 
   def roles
-    ["anonymous", "campus_patron", "editor", "image_editor", "admin", "staff"]
+    ["anonymous", "campus_patron", "editor", "admin", "staff"]
   end
 
   def universal_reader?
-    current_user.staff? || current_user.image_editor? || current_user.editor? || current_user.admin?
+    current_user.staff? || current_user.editor? || current_user.admin?
   end
 
   def read_permissions
@@ -235,10 +213,6 @@ class Ability
 
     def groups
       @groups ||= super + auth_token.group
-    end
-
-    def image_editor?
-      groups.include?("image_editor")
     end
 
     def editor?

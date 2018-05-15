@@ -555,8 +555,7 @@
         "bytes_lts":0,
         "read_access_group_ssim":["admin",
           "staff",
-          "editor",
-          "image_editor"],
+          "editor"],
         "edit_access_person_ssim":["tpend"],
         "human_readable_type_tesim":["Collection"]
         },

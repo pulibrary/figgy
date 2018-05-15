@@ -35,10 +35,6 @@ class User < ApplicationRecord
     groups.include?("staff")
   end
 
-  def image_editor?
-    roles.where(name: "image_editor").exists?
-  end
-
   def editor?
     roles.where(name: "editor").exists?
   end

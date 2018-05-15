@@ -57,8 +57,8 @@ RSpec.feature "Scanned Resources", js: true do
     end
   end
 
-  context "as an image_editor" do
-    let(:user) { FactoryBot.create(:image_editor) }
+  context "as a staff user" do
+    let(:user) { FactoryBot.create(:staff) }
 
     it "shows the admin controls" do
       visit solr_document_path(scanned_resource)
