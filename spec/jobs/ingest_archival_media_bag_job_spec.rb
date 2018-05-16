@@ -17,7 +17,6 @@ RSpec.describe IngestArchivalMediaBagJob do
     let(:collection) do
       cs = DynamicChangeSet.new(ArchivalMediaCollection.new)
       cs.validate(source_metadata_identifier: "C0652")
-      cs.sync
       change_set_persister.save(change_set: cs)
     end
 

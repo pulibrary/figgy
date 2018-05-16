@@ -31,7 +31,6 @@ RSpec.describe IdentifierService do
       resource = FactoryBot.build :scanned_resource, source_metadata_identifier: "10001789"
       change_set = DynamicChangeSet.new(resource)
       change_set.validate(source_metadata_identifier: "10001789")
-      change_set.sync
       change_set_persister.save(change_set: change_set)
     end
     let(:change_set_persister) do

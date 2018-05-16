@@ -127,7 +127,6 @@ class DataSeeder
     def add_ephemera_box(project)
       change_set = DynamicChangeSet.new(EphemeraBox.new)
       change_set.validate(barcode: "00000000000000", box_number: "1")
-      change_set.sync
       box = change_set_persister.save(change_set: change_set)
       add_member(parent: project, member: box)
       box
@@ -145,7 +144,6 @@ class DataSeeder
         field_change_set = DynamicChangeSet.new(EphemeraField.new)
         vocab = query_service.custom_queries.find_ephemera_vocabulary_by_label(label: pair[1])
         raise "Could not ingest the field for #{pair[0]}!" unless field_change_set.validate(field_name: [pair[0]], member_of_vocabulary_id: vocab.id)
-        field_change_set.sync
         updated_field = change_set_persister.save(change_set: field_change_set)
         # add the field to the project
         add_member(parent: project, member: updated_field)
@@ -168,7 +166,6 @@ class DataSeeder
           page_count: rand(600),
           description: Faker::Matz.quote
         )
-        change_set.sync
         folder = change_set_persister.save(change_set: change_set)
         add_file(resource: folder)
         add_member(parent: box || project, member: folder)
@@ -187,7 +184,6 @@ class DataSeeder
       member_change_set = DynamicChangeSet.new(member)
       member_change_set.prepopulate!
       member_change_set.append_id = parent.id
-      member_change_set.sync
       change_set_persister.save(change_set: member_change_set)
       logger.info "Added #{member.class} #{member.id} to #{parent.class} #{parent.title || parent.box_number}"
     end

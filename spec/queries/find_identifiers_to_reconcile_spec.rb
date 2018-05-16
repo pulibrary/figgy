@@ -17,7 +17,6 @@ RSpec.describe FindIdentifiersToReconcile do
     it "finds only resources with newly-minted identifiers" do
       change_set = ScannedResourceChangeSet.new(resource)
       change_set.validate(source_metadata_identifier: "123456")
-      change_set.sync
       saved_resource = change_set_persister.save(change_set: change_set)
 
       output = query.find_identifiers_to_reconcile

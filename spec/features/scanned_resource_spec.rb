@@ -17,7 +17,6 @@ RSpec.feature "Scanned Resources", js: true do
 
   before do
     change_set.source_metadata_identifier = "4612596"
-    change_set.sync
     change_set_persister.save(change_set: change_set)
     sign_in user
   end

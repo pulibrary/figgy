@@ -22,7 +22,6 @@ class BaseResourceController < ApplicationController
   def browse_everything_files
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
       change_set.validate(pending_uploads: change_set.pending_uploads + selected_files)
-      change_set.sync
       buffered_changeset_persister.save(change_set: change_set)
     end
     BrowseEverythingIngestJob.perform_later(resource.id.to_s, self.class.to_s, selected_files.map(&:id).map(&:to_s))
@@ -48,7 +47,6 @@ class BaseResourceController < ApplicationController
       current_member_ids = parent_resource.member_ids
       attached_member_ids = parent_change_set.member_ids
       parent_change_set.member_ids = current_member_ids + attached_member_ids
-      parent_change_set.sync
       obj = nil
       change_set_persister.buffer_into_index do |persist|
         obj = persist.save(change_set: parent_change_set)
@@ -74,7 +72,7 @@ class BaseResourceController < ApplicationController
       current_member_ids = parent_resource.member_ids
       removed_member_ids = parent_change_set.member_ids
       parent_change_set.member_ids = current_member_ids - removed_member_ids
-      parent_change_set.sync
+
       obj = nil
       change_set_persister.buffer_into_index do |persist|
         obj = persist.save(change_set: parent_change_set)

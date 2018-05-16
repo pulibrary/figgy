@@ -61,7 +61,6 @@ RSpec.feature "ScannedMaps", js: true do
     end
 
     before do
-      change_set.sync
       change_set_persister.save(change_set: change_set)
     end
 

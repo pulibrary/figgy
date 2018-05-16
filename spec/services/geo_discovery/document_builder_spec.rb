@@ -233,7 +233,6 @@ describe GeoDiscovery::DocumentBuilder do
       before do
         change_set = ScannedMapChangeSet.new(geo_work)
         change_set.validate(thumbnail_id: child.member_ids[0])
-        change_set.sync
         change_set_persister.save(change_set: change_set)
       end
 

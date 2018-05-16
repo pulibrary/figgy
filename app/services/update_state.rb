@@ -9,7 +9,6 @@ class UpdateState
       logger.info "Updating state to #{state} for #{member}"
       change_set = DynamicChangeSet.new(member)
       change_set.validate(state: state)
-      change_set.sync
       change_set_persister.save(change_set: change_set)
     end
   end

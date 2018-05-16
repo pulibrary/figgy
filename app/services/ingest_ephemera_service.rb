@@ -18,7 +18,6 @@ class IngestEphemeraService
     change_set.validate(default_attributes)
     change_set.validate(state: state) if state
     change_set.validate(append_id: box.id)
-    change_set.sync
     change_set_persister.save(change_set: change_set)
   rescue => e
     logger.warn "Error: #{e.message}"
@@ -32,7 +31,6 @@ class IngestEphemeraService
     change_set = EphemeraBoxChangeSet.new(box)
     change_set.validate(box_prov_metadata(box).attributes)
     change_set.validate(append_id: project_resource.id)
-    change_set.sync
     change_set_persister.save(change_set: change_set)
   end
 

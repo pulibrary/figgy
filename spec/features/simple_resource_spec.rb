@@ -19,7 +19,6 @@ RSpec.feature "SimpleResources", js: true do
   before do
     stub_ezid(shoulder: "99999/fk4", blade: "123456")
 
-    change_set.sync
     change_set_persister.save(change_set: change_set)
     sign_in user
   end
