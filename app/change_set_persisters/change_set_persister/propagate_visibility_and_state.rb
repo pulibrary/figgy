@@ -12,13 +12,23 @@ class ChangeSetPersister
       return if !change_set.changed?(:visibility) && !change_set.changed?(:state)
       members.each do |member|
         member.read_groups = change_set.read_groups if change_set.read_groups
-        member.state = change_set.state if should_set_state?(member)
+        propagate_state(member)
         persister.save(resource: member)
       end
     end
 
-    def should_set_state?(member)
-      change_set.state && member.respond_to?(:state) && valid_states(member).include?(change_set.state)
+    def state_for_related(related)
+      value = DynamicChangeSet.new(related).state_for_related change_set.model, change_set.state
+      value.to_s
+    end
+
+    def should_set_state_for_related?(resource)
+      change_set.state && resource.respond_to?(:state) && valid_states(resource).include?(state_for_related(resource))
+    end
+
+    # Propagate or set the state for a related resource (e. g. a member or parent resource)
+    def propagate_state(resource)
+      resource.state = state_for_related(resource) if should_set_state_for_related?(resource)
     end
 
     def members
@@ -29,7 +39,7 @@ class ChangeSetPersister
     end
 
     def valid_states(member)
-      DynamicChangeSet.new(member).workflow_class.new(nil).valid_states
+      DynamicChangeSet.new(member).workflow_class.new.valid_states
     end
   end
 end

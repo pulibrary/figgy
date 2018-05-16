@@ -4,13 +4,7 @@
 # metadata_review and final_review to complete.  There are two exceptional workflows: between
 # complete/takedown (for issues requiring an item be suppressed), and between complete/flagged (for issues
 # where an item can remain accessible).
-class BookWorkflow
-  include AASM
-
-  def initialize(state)
-    aasm.current_state = state.to_sym unless state.nil?
-  end
-
+class BookWorkflow < BaseWorkflow
   aasm do
     state :pending, initial: true
     state :metadata_review

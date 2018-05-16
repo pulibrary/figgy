@@ -2,13 +2,7 @@
 
 # State-based workflow for folders: Start at requiring QA (will be visible, but
 # not able to view the manifest.) When complete, the manifest is visible.
-class FolderWorkflow
-  include AASM
-
-  def initialize(state)
-    aasm.current_state = state.to_sym unless state.nil?
-  end
-
+class FolderWorkflow < BaseWorkflow
   aasm do
     state :needs_qa, initial: true
     state :complete
@@ -22,12 +16,25 @@ class FolderWorkflow
     end
   end
 
-  def valid_states
-    aasm.states.map(&:name).map(&:to_s)
+  def self.valid_states_for_classes
+    {
+      EphemeraBox: {
+        new: :needs_qa,
+        ready_to_ship: :needs_qa,
+        shipped: :needs_qa,
+        received: :needs_qa,
+        all_in_production: :complete
+      }
+    }
   end
 
-  def valid_transitions
-    aasm.states(permitted: true).map(&:name).map(&:to_s)
+  # Retrieve the state for the resource
+  # @param related_resource [Valhalla::Resource] the resource related to the current workflow
+  # @param related_state [Symbol] the workflow state
+  # @return [String] the workflow state
+  def self.state_for_related(klass:, state:)
+    super unless valid_states_for_classes.key?(klass) && valid_states_for_classes[klass].key?(state)
+    valid_states_for_classes[klass][state]
   end
 
   # States in which the record can be publicly viewable

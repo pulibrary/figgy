@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 
-class BoxWorkflow
-  include AASM
-
-  def initialize(state)
-    aasm.current_state = state.to_sym unless state.nil?
-  end
-
+class BoxWorkflow < BaseWorkflow
   aasm do
     state :new, initial: true
     state :ready_to_ship
@@ -27,14 +21,6 @@ class BoxWorkflow
     event :all_in_production do
       transitions from: :received, to: :all_in_production
     end
-  end
-
-  def valid_states
-    aasm.states.map(&:name).map(&:to_s)
-  end
-
-  def valid_transitions
-    aasm.states(permitted: true).map(&:name).map(&:to_s)
   end
 
   # States in which the record should be publicly viewable
