@@ -19,28 +19,6 @@ Rails.application.config.to_prepare do
     InstrumentedStorageAdapter.new(
       storage_adapter: Valkyrie::Storage::Disk.new(
         base_path: Figgy.config["repository_path"],
-        file_mover: ->(old, new) { FileUtils.ln(old, new, force: true) }
-      ),
-      tracer: Datadog.tracer
-    ),
-    :plum_storage
-  )
-
-  Valkyrie::StorageAdapter.register(
-    InstrumentedStorageAdapter.new(
-      storage_adapter:  Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config["derivative_path"],
-        file_mover: PlumDerivativeMover.method(:link_or_copy)
-      ),
-      tracer: Datadog.tracer
-    ),
-    :plum_derivatives
-  )
-
-  Valkyrie::StorageAdapter.register(
-    InstrumentedStorageAdapter.new(
-      storage_adapter: Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config["repository_path"],
         file_mover: FileUtils.method(:cp)
       ),
       tracer: Datadog.tracer
