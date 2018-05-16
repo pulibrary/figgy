@@ -1,8 +1,6 @@
 <template>
   <div class="gallery" @click.capture="deselect($event)">
     <div class="gallery_controls">
-      <button v-if="!isMultiVolume" @click.capture="uploadFile()" id="upload_file_btn" class="btn btn-default btn-sm"><i class="fa fa-th fa-upload"></i> Upload Files</button>
-      <button v-if="pendingUploads" @click.capture="refreshPage()" id="refresh_page_btn" class="btn btn-default btn-sm"><i class="fa fa-th fa-clock-o"></i> Pending Uploads (Refresh)</button>
       <div class="dropdown">
         <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="selectOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
           Selection Options
@@ -51,24 +49,13 @@
 import draggable from 'vuedraggable'
 export default {
   name: 'thumbnails',
-  created: function () {
-    var browse_everything = document.getElementById('file-manager-browse-everything')
-    var elms = []
-    if (browse_everything) {
-      elms = [...document.getElementById('file-manager-browse-everything').getElementsByTagName('tr')]
-    }
-    if (elms.length) {
-      this.pendingUploads = true
-    }
-  },
   components: {
     draggable
   },
   data: function () {
     return {
       thumbPixelWidth: 200,
-      captionPixelPadding: 9,
-      pendingUploads: false
+      captionPixelPadding: 9
     }
   },
   computed: {
@@ -207,9 +194,6 @@ export default {
       } else {
         window.location.reload(true)
       }
-    },
-    uploadFile: function (event) {
-      document.getElementById('browse_everything').click();
     }
   }
 }
