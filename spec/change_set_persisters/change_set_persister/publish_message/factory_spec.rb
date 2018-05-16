@@ -18,9 +18,6 @@ RSpec.describe ChangeSetPersister::PublishMessage::Factory do
       expect(described_class.new(operation: :delete)
               .new(change_set_persister: change_set_persister, change_set: change_set))
         .to be_a ChangeSetPersister::PublishDeletedMessage
-      expect(described_class.new(operation: :derivatives_delete)
-              .new(change_set_persister: change_set_persister, change_set: change_set))
-        .to be_a ChangeSetPersister::PublishDerivativesDeletedMessage
     end
 
     it "raises an issue when attempting to initialize a publisher object for unsupported operations" do
