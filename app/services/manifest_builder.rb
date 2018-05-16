@@ -204,11 +204,11 @@ class ManifestBuilder
     end
 
     def to_s
-      "Plum Collections"
+      "Figgy Collections"
     end
 
     def description
-      "All collections which are a part of Plum."
+      "All collections which are a part of Figgy."
     end
 
     def id

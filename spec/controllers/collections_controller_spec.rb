@@ -80,7 +80,7 @@ RSpec.describe CollectionsController do
 
         expect(manifest_response[:@id]).to eq "http://www.example.com/iiif/collections"
         expect(manifest_response[:@type]).to eq "sc:Collection"
-        expect(manifest_response[:label]).to eq "Plum Collections"
+        expect(manifest_response[:label]).to eq "Figgy Collections"
         expect(manifest_response[:collections].length).to eq 1
         expect(manifest_response[:collections][0][:@id]).to eq "http://www.example.com/collections/#{collection.id}/manifest"
       end
@@ -107,7 +107,7 @@ RSpec.describe CollectionsController do
 
         expect(manifest_response[:@id]).to eq "http://www.example.com/iiif/collections"
         expect(manifest_response[:@type]).to eq "sc:Collection"
-        expect(manifest_response[:label]).to eq "Plum Collections"
+        expect(manifest_response[:label]).to eq "Figgy Collections"
         expect(manifest_response[:collections].length).to eq 4
         ids = manifest_response[:collections].map { |x| x[:@id] }
         expect(ids).to contain_exactly(
