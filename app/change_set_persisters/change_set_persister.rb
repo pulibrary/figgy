@@ -37,7 +37,8 @@ class ChangeSetPersister
         CleanupStructure,
         DeleteReferenced::Factory.new(property: :member_of_vocabulary_id),
         CleanupMembership::Factory.new(property: :member_ids),
-        CleanupMembership::Factory.new(property: :member_of_collection_ids)
+        CleanupMembership::Factory.new(property: :member_of_collection_ids),
+        PublishMessage::Factory.new(operation: :derivatives_delete)
       ],
       after_delete_commit: [
         DeleteMembers::Factory.new(property: :member_ids),
