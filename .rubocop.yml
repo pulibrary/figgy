@@ -46,6 +46,7 @@ Metrics/ClassLength:
     - 'app/change_sets/scanned_resource_change_set.rb'
     - 'app/models/ability.rb'
     - 'app/decorators/ephemera_folder_decorator.rb'
+    - 'app/derivative-services/vector_resource_derivative_service.rb'
     - 'app/services/geo_discovery/geoblacklight_document.rb'
     - 'app/services/ingest_ephemera_service.rb'
     - 'app/services/plum_importer.rb'

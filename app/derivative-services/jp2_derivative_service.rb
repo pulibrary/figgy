@@ -99,7 +99,7 @@ class Jp2DerivativeService
     deleted_files = []
     jp2_derivatives = resource.file_metadata.select { |file| file.derivative? && file.mime_type.include?("image/jp2") }
     jp2_derivatives.each do |file|
-      storage_adapter.delete(id: file.id)
+      storage_adapter.delete(id: file.file_identifiers.first)
       deleted_files << file.id
     end
     cleanup_derivative_metadata(derivatives: deleted_files)

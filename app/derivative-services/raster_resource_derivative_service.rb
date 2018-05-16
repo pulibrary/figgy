@@ -51,7 +51,7 @@ class RasterResourceDerivativeService
     deleted_files = []
     raster_derivatives = resource.file_metadata.select { |file| file.derivative? || file.thumbnail_file? }
     raster_derivatives.each do |file|
-      storage_adapter.delete(id: file.id)
+      storage_adapter.delete(id: file.file_identifiers.first)
       deleted_files << file.id
     end
     cleanup_derivative_metadata(derivatives: deleted_files)
