@@ -14,7 +14,7 @@ class ChangeSetPersister
       private
 
         def klass_name
-          "ChangeSetPersister::Publish#{operation.to_s.capitalize}#{'e' unless operation.to_s.last == 'e'}dMessage"
+          "ChangeSetPersister::Publish#{operation.to_s.camelize}#{'e' unless operation.to_s.last == 'e'}dMessage"
         end
 
         def klass
@@ -66,6 +66,20 @@ class ChangeSetPersister
 
     def run
       messenger.record_deleted(change_set.resource)
+    end
+
+    delegate :messenger, to: :change_set_persister
+  end
+
+  class PublishDerivativesDeletedMessage
+    attr_reader :change_set_persister, :change_set
+    def initialize(change_set_persister:, change_set:)
+      @change_set = change_set
+      @change_set_persister = change_set_persister
+    end
+
+    def run
+      messenger.derivatives_deleted(change_set.resource) if change_set.resource.is_a? FileSet
     end
 
     delegate :messenger, to: :change_set_persister

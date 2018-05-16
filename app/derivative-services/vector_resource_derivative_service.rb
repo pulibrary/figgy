@@ -51,7 +51,9 @@ class VectorResourceDerivativeService
     deleted_files = []
     vector_derivatives = resource.file_metadata.select { |file| file.derivative? || file.thumbnail_file? }
     vector_derivatives.each do |file|
-      storage_adapter.delete(id: file.id)
+      # Delete the entire directory to remove unzipped display derivatives
+      id = File.dirname(file.file_identifiers.first.to_s)
+      storage_adapter.delete(id: id)
       deleted_files << file.id
     end
     cleanup_derivative_metadata(derivatives: deleted_files)
