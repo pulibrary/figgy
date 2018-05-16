@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 namespace :import do
-  desc "Imports a resource from Plum"
-  task plum: :environment do
-    id = ENV["ID"]
-    abort "usage: rake import:plum ID=plumid" unless id
-
-    PlumImporterJob.set(queue: :low).perform_later(id)
-  end
-
   desc "Re-run characterization for an object"
   task recharacterize: :environment do
     id = ENV["ID"]

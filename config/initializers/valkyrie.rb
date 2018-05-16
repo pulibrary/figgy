@@ -19,28 +19,6 @@ Rails.application.config.to_prepare do
     InstrumentedStorageAdapter.new(
       storage_adapter: Valkyrie::Storage::Disk.new(
         base_path: Figgy.config["repository_path"],
-        file_mover: ->(old, new) { FileUtils.ln(old, new, force: true) }
-      ),
-      tracer: Datadog.tracer
-    ),
-    :plum_storage
-  )
-
-  Valkyrie::StorageAdapter.register(
-    InstrumentedStorageAdapter.new(
-      storage_adapter:  Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config["derivative_path"],
-        file_mover: PlumDerivativeMover.method(:link_or_copy)
-      ),
-      tracer: Datadog.tracer
-    ),
-    :plum_derivatives
-  )
-
-  Valkyrie::StorageAdapter.register(
-    InstrumentedStorageAdapter.new(
-      storage_adapter: Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config["repository_path"],
         file_mover: FileUtils.method(:cp)
       ),
       tracer: Datadog.tracer
@@ -151,7 +129,7 @@ Rails.application.config.to_prepare do
 
   # Jp2DerivativeService needs its own change_set_persister because the
   # derivatives may not be in the primary metadata/file storage.
-  Valkyrie::Derivatives::DerivativeService.services << PlumDerivativeService::Factory.new(
+  Valkyrie::Derivatives::DerivativeService.services << DefaultDerivativeService::Factory.new(
     change_set_persister: ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
       storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)

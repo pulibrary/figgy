@@ -3,12 +3,12 @@ require "rails_helper"
 require "valkyrie/derivatives/specs/shared_specs"
 include ActionDispatch::TestProcess
 
-RSpec.describe PlumDerivativeService do
+RSpec.describe DefaultDerivativeService do
   it_behaves_like "a Valkyrie::Derivatives::DerivativeService"
 
   let(:thumbnail) { Valkyrie::Vocab::PCDMUse.ThumbnailImage }
   let(:derivative_service) do
-    PlumDerivativeService::Factory.new(change_set_persister: change_set_persister)
+    DefaultDerivativeService::Factory.new(change_set_persister: change_set_persister)
   end
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }

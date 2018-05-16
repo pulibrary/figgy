@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class PlumDerivativeService
+class DefaultDerivativeService
   class Factory
     attr_reader :change_set_persister
     delegate :metadata_adapter, to: :change_set_persister
@@ -9,7 +9,7 @@ class PlumDerivativeService
     end
 
     def new(change_set)
-      PlumDerivativeService.new(change_set: change_set, change_set_persister: change_set_persister, original_file: original_file(change_set.resource))
+      DefaultDerivativeService.new(change_set: change_set, change_set_persister: change_set_persister, original_file: original_file(change_set.resource))
     end
 
     def original_file(resource)
