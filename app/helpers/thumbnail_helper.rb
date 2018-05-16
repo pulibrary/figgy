@@ -19,7 +19,7 @@ module ThumbnailHelper
 
   def figgy_thumbnail_path(document, image_options = {})
     document = document.try(:resource) || document.try(:model) || document
-    value = send(plum_thumbnail_method(document), document, image_options)
+    value = send(figgy_thumbnail_method(document), document, image_options)
     value
   end
 
@@ -69,7 +69,7 @@ module ThumbnailHelper
     nil
   end
 
-  def plum_thumbnail_method(document)
+  def figgy_thumbnail_method(document)
     return :geo_thumbnail_path if geo_thumbnail?(document)
     :iiif_thumbnail_path
   end
