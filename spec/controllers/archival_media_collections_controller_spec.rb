@@ -64,7 +64,6 @@ RSpec.describe ArchivalMediaCollectionsController do
 
         change_set = MediaResourceChangeSet.new(resource)
         change_set.validate(source_metadata_identifier: "C0652_c0377", member_of_collection_ids: [collection.id])
-        change_set.sync
         change_set_persister.save(change_set: change_set)
       end
 

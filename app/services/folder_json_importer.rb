@@ -13,7 +13,6 @@ class FolderJSONImporter
     file_resources.map do |resource|
       Valkyrie.logger.info("Ingesting #{resource.title}")
       resource.validate(attributes)
-      resource.sync
       change_set_persister.save(change_set: resource)
     end.to_a
   end

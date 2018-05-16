@@ -26,7 +26,6 @@ class IngestArchivalMediaBagJob < ApplicationJob
       return existing_amc unless existing_amc.nil?
       change_set = DynamicChangeSet.new(ArchivalMediaCollection.new)
       change_set.validate(source_metadata_identifier: component_id)
-      change_set.sync
       changeset_persister.save(change_set: change_set)
     end
 
@@ -225,7 +224,6 @@ class IngestArchivalMediaBagJob < ApplicationJob
             media_resource_change_set.sync
           end
           media_resource_change_set.member_of_collection_ids += Array.wrap(collection.id)
-          media_resource_change_set.sync
           changeset_persister.save(change_set: media_resource_change_set)
         end
       end

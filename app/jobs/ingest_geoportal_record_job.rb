@@ -81,7 +81,6 @@ class IngestGeoportalRecordJob < ApplicationJob
       resource.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
       resource.state = "final_review"
       resource.files = files
-      resource.sync
       output = changeset_persister.save(change_set: resource)
       extract_fgdc_metadata(output)
       mint_ark(output) unless @ark
@@ -94,14 +93,12 @@ class IngestGeoportalRecordJob < ApplicationJob
       attributes.each do |key, value|
         change_set.send("#{key}=".to_sym, value) if change_set.respond_to?(key)
       end
-      change_set.sync
       changeset_persister.save(change_set: change_set)
     end
 
     def complete_record(output)
       new_resource = DynamicChangeSet.new(output)
       new_resource.state = "complete"
-      new_resource.sync
       changeset_persister.save(change_set: new_resource)
     end
 

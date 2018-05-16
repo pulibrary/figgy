@@ -28,7 +28,6 @@ RSpec.feature "Ephemera Boxes", js: true do
 
     before do
       change_set.barcode = "1234"
-      change_set.sync
       change_set_persister.save(change_set: change_set)
     end
 
@@ -68,7 +67,6 @@ RSpec.feature "Ephemera Boxes", js: true do
 
       before do
         change_set.barcode = "11111111111110"
-        change_set.sync
         change_set_persister.save(change_set: change_set)
       end
 

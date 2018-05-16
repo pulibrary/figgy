@@ -50,7 +50,6 @@ class IngestMETSJob < ApplicationJob
       resource.title = mets.label
       resource.files = files.to_a
       resource.member_of_collection_ids = [slug_to_id(mets.collection_slug)] if mets.respond_to?(:collection_slug)
-      resource.sync
       output = changeset_persister.save(change_set: resource)
       files.each_with_index do |file, index|
         mets_to_repo_map[file.id] = output.member_ids[index]
@@ -61,7 +60,6 @@ class IngestMETSJob < ApplicationJob
     def assign_logical_structure(output)
       new_resource = DynamicChangeSet.new(output)
       new_resource.logical_structure = [{ label: "Main Structure", nodes: map_fileids(mets.structure)[:nodes] }]
-      new_resource.sync
       changeset_persister.save(change_set: new_resource)
     end
 
@@ -102,7 +100,6 @@ class IngestMETSJob < ApplicationJob
         volume = Ingester.new(mets: volume_mets, user: user, changeset_persister: changeset_persister).ingest
         resource.member_ids = resource.member_ids + [volume.id]
       end
-      resource.sync
       changeset_persister.save(change_set: resource)
     end
   end

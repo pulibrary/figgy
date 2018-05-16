@@ -15,7 +15,6 @@ RSpec.describe ReportsController, type: :controller do
 
     change_set = ScannedResourceChangeSet.new(resource)
     change_set.validate(source_metadata_identifier: "123456")
-    change_set.sync
     change_set_persister.save(change_set: change_set)
   end
 

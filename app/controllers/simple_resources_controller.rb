@@ -31,7 +31,6 @@ class SimpleResourcesController < BaseResourceController
     pdf_file = PDFGenerator.new(resource: change_set.resource, storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)).render
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
       change_set.validate(file_metadata: [pdf_file])
-      change_set.sync
       buffered_changeset_persister.save(change_set: change_set)
     end
     redirect_to valhalla.download_path(resource_id: change_set.id, id: pdf_file.id)

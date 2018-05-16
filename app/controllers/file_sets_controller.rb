@@ -41,7 +41,6 @@ class FileSetsController < ApplicationController
     @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
     authorize! :update, @change_set.resource
     if @change_set.validate(resource_params)
-      @change_set.sync
       obj = nil
       change_set_persister.buffer_into_index do |persist|
         obj = persist.save(change_set: @change_set)
@@ -71,7 +70,6 @@ class FileSetsController < ApplicationController
 
     def update_derivatives
       return unless @change_set.validate(derivative_resource_params)
-      @change_set.sync
       derivative_change_set_persister.buffer_into_index do |persist|
         persist.save(change_set: @change_set)
       end

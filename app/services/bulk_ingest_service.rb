@@ -68,7 +68,6 @@ class BulkIngestService
 
       change_set = DynamicChangeSet.new(resource)
       change_set.validate(member_ids: child_resources.map(&:id), files: child_files)
-      change_set.sync
       change_set_persister.save(change_set: change_set)
     end
 
@@ -91,7 +90,6 @@ class BulkIngestService
       return unless change_set.validate(**attributes)
       change_set.member_of_collection_ids = [collection.id] if collection.try(:id)
 
-      change_set.sync
       persisted = change_set_persister.save(change_set: change_set)
       logger.info "Created the resource #{persisted.id}"
       persisted

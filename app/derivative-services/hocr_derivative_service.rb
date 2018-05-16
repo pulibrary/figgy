@@ -78,7 +78,6 @@ class HocrDerivativeService
     result = processor.run!
     change_set.hocr_content = result.hocr_content
     change_set.ocr_content = result.ocr_content
-    change_set.sync
     change_set_persister.buffer_into_index do |buffered_persister|
       buffered_persister.save(change_set: change_set)
     end

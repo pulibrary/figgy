@@ -68,7 +68,6 @@ RSpec.describe ManifestBuilder do
       metadata_adapter.persister.save(resource: file_set)
       change_set = ScannedResourceChangeSet.new(output)
       change_set.validate(logical_structure: logical_structure(file_set_id), start_canvas: start_canvas || file_set_id)
-      change_set.sync
       change_set_persister.save(change_set: change_set)
     end
     it "doesn't error" do
@@ -88,7 +87,6 @@ RSpec.describe ManifestBuilder do
       metadata_adapter.persister.save(resource: file_set)
       change_set = ScannedResourceChangeSet.new(output)
       change_set.validate(logical_structure: logical_structure(file_set_id), start_canvas: start_canvas || file_set_id)
-      change_set.sync
       change_set_persister.save(change_set: change_set)
     end
 
@@ -310,7 +308,6 @@ RSpec.describe ManifestBuilder do
     before do
       output = change_set_persister.save(change_set: change_set)
       change_set = ScannedMapChangeSet.new(output)
-      change_set.sync
       change_set_persister.save(change_set: change_set)
     end
     it "builds a IIIF document" do
@@ -384,7 +381,6 @@ RSpec.describe ManifestBuilder do
       scanned_resource
       output = change_set_persister.save(change_set: change_set)
       change_set = CollectionChangeSet.new(output)
-      change_set.sync
       change_set_persister.save(change_set: change_set)
     end
     it "builds a IIIF document" do
