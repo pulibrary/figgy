@@ -31,54 +31,54 @@ RSpec.describe ImagemagickCharacterizationService do
   end
 
   it "characterizes a sample file" do
-    described_class.new(file_node: valid_file_set, persister: persister).characterize
+    described_class.new(file_set: valid_file_set, persister: persister).characterize
   end
 
-  it "sets the height attribute for a file_node on characterize " do
-    t_file_node = valid_file_set
-    t_file_node.original_file.height = nil
-    new_file_node = described_class.new(file_node: t_file_node, persister: persister).characterize(save: false)
-    expect(new_file_node.original_file.height).not_to be_empty
+  it "sets the height attribute for a file_set on characterize " do
+    t_file_set = valid_file_set
+    t_file_set.original_file.height = nil
+    new_file_set = described_class.new(file_set: t_file_set, persister: persister).characterize(save: false)
+    expect(new_file_set.original_file.height).not_to be_empty
   end
 
-  it "sets the width attribute for a file_node on characterize" do
-    t_file_node = valid_file_set
-    t_file_node.original_file.width = nil
-    new_file_node = described_class.new(file_node: t_file_node, persister: persister).characterize(save: false)
-    expect(new_file_node.original_file.width).not_to be_empty
+  it "sets the width attribute for a file_set on characterize" do
+    t_file_set = valid_file_set
+    t_file_set.original_file.width = nil
+    new_file_set = described_class.new(file_set: t_file_set, persister: persister).characterize(save: false)
+    expect(new_file_set.original_file.width).not_to be_empty
   end
 
   it "saves to the persister by default on characterize" do
     allow(persister).to receive(:save).and_return(valid_file_set)
-    described_class.new(file_node: valid_file_set, persister: persister).characterize
+    described_class.new(file_set: valid_file_set, persister: persister).characterize
     expect(persister).to have_received(:save).once
   end
 
   it "does not save to the persister when characterize is called with save false" do
     allow(persister).to receive(:save).and_return(valid_file_set)
-    described_class.new(file_node: valid_file_set, persister: persister).characterize(save: false)
+    described_class.new(file_set: valid_file_set, persister: persister).characterize(save: false)
     expect(persister).not_to have_received(:save)
   end
 
-  it "sets the mime_type for a file_node on characterize" do
-    t_file_node = valid_file_set
-    t_file_node.original_file.mime_type = nil
-    new_file_node = described_class.new(file_node: t_file_node, persister: persister).characterize(save: false)
-    expect(new_file_node.original_file.mime_type).not_to be_empty
+  it "sets the mime_type for a file_set on characterize" do
+    t_file_set = valid_file_set
+    t_file_set.original_file.mime_type = nil
+    new_file_set = described_class.new(file_set: t_file_set, persister: persister).characterize(save: false)
+    expect(new_file_set.original_file.mime_type).not_to be_empty
   end
 
-  it "sets the checksum for a file_node on characterize" do
-    t_file_node = valid_file_set
-    t_file_node.original_file.checksum = nil
-    new_file_node = described_class.new(file_node: t_file_node, persister: persister).characterize(save: false)
-    checksum = new_file_node.original_file.checksum
+  it "sets the checksum for a file_set on characterize" do
+    t_file_set = valid_file_set
+    t_file_set.original_file.checksum = nil
+    new_file_set = described_class.new(file_set: t_file_set, persister: persister).characterize(save: false)
+    checksum = new_file_set.original_file.checksum
     expect(checksum.count).to eq 1
     expect(checksum.first).to be_a MultiChecksum
   end
 
   describe "#valid?" do
     it "returns true" do
-      expect(described_class.new(file_node: valid_file_set, persister: persister).valid?).to be true
+      expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true
     end
   end
 end

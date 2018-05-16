@@ -21,9 +21,9 @@ RSpec.describe GeoCharacterizationService do
   let(:tika_output) { tika_xml_output }
 
   it "properly characterizes an fgdc metadata file" do
-    file_node = valid_file_set
-    new_file_node = described_class.new(file_node: file_node, persister: persister).characterize(save: false)
-    expect(new_file_node.original_file.mime_type).to eq ["application/xml; schema=fgdc"]
+    file_set = valid_file_set
+    new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+    expect(new_file_set.original_file.mime_type).to eq ["application/xml; schema=fgdc"]
   end
 
   describe "#valid?" do
@@ -36,7 +36,7 @@ RSpec.describe GeoCharacterizationService do
     context "with a scanned resource parent" do
       let(:parent) { ScannedResource.new }
       it "isn't valid" do
-        expect(described_class.new(file_node: valid_file_set, persister: persister).valid?).to be false
+        expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be false
       end
     end
   end
