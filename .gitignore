@@ -16,6 +16,6 @@
 /staged_files/*
 /tags
 /tmp/*
-/valhalla/app/javascript/test/unit/coverage/*
+/app/javascript/test/unit/coverage/*
 /yarn.lock
 dump.rdb

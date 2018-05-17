@@ -1,4 +1,4 @@
-import lg from "valhalla/bulk_labeler/label_generator"
+import lg from "bulk_labeler/label_generator"
 export default class LabelerActionsManager {
   constructor(element) {
     this.element = element

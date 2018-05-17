@@ -10,6 +10,7 @@ import FileSetForm from "file_set_form"
 import SaveAndIngestHandler from "save_and_ingest_handler"
 import MemberResourcesTables from "relationships/member_resources_table"
 import ParentResourcesTables from "relationships/parent_resources_table"
+import BulkLabeler from "bulk_labeler/bulk_label"
 
 export default class Initializer {
   constructor() {
@@ -22,6 +23,8 @@ export default class Initializer {
     this.metadata_form = new MetadataForm
     this.universal_viewer = new UniversalViewer
     this.save_and_ingest_handler = new SaveAndIngestHandler
+    this.bulk_labeler = new BulkLabeler
+    this.sortable_placeholder()
 
     // Incompatibility in Blacklight with newer versions of jQuery seem to be
     // causing this to not run. Manually calling it so facet more links work.
@@ -70,6 +73,14 @@ export default class Initializer {
       const $element = $(element)
       const $form = $element.parent('form')
       new ParentResourcesTables($element, $form)
+    })
+  }
+
+  sortable_placeholder() {
+    $( "#sortable" ).on( "sortstart", function( event, ui ) {
+      let found_element = $("#sortable").find("li[data-reorder-id]").last()
+      ui.placeholder.width(found_element.width())
+      ui.placeholder.height(found_element.height())
     })
   }
 }
