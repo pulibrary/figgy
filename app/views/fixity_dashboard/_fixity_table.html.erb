@@ -11,8 +11,8 @@
   <tbody>
     <% resources.each do |resource| %>
       <tr>
-        <td><%= link_to resource.title.first, Valhalla::ContextualPath.new(child: resource, parent_id: resource.parent.id).show %></td>
-        <td><%= link_to resource.parent.title.first, Valhalla::ContextualPath.new(child: resource.parent).show %></td>
+        <td><%= link_to resource.title.first, ContextualPath.new(child: resource, parent_id: resource.parent.id).show %></td>
+        <td><%= link_to resource.parent.title.first, ContextualPath.new(child: resource.parent).show %></td>
         <td><%= format_fixity_success(resource.original_file.fixity_success) %></td>
         <td><%= resource.updated_at %></td>
         <td><%= format_fixity_success_date(resource.original_file.fixity_last_success_date) %></td>

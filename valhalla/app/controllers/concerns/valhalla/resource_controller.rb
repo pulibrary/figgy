@@ -117,7 +117,7 @@ module Valhalla
     end
 
     def contextual_path(obj, change_set)
-      Valhalla::ContextualPath.new(child: obj.id, parent_id: change_set.append_id)
+      ContextualPath.new(child: obj.id, parent_id: change_set.append_id)
     end
 
     def _prefixes

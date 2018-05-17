@@ -27,6 +27,6 @@ module StructureHelper
     end
 
     def bulk_edit_parent_path(change_set, parent)
-      Valhalla::ContextualPath.new(child: change_set, parent_id: parent.try(:id)).show
+      ContextualPath.new(child: change_set, parent_id: parent.try(:id)).show
     end
 end
