@@ -1,13 +1,18 @@
 # frozen_string_literal: true
 require_relative "figgy"
+
 Rails.application.config.to_prepare do
+  # Registers a storage adapter for a *NIX file system
+  # Binaries are persisted by invoking "mv" with access limited to read/write for owning users, and read-only for all others
+  # NOTE: "mv" may preserve the inode for the file system
+  # file_mover should be a lambda or Proc which performs an operation on the file using its path
   Valkyrie::StorageAdapter.register(
     InstrumentedStorageAdapter.new(
       storage_adapter: Valkyrie::Storage::Disk.new(
         base_path: Figgy.config["repository_path"],
-        file_mover: lambda { |old, new|
-                      FileUtils.mv(old, new)
-                      FileUtils.chmod(0o644, new)
+        file_mover: lambda { |old_path, new_path|
+                      FileUtils.mv(old_path, new_path)
+                      FileUtils.chmod(0o644, new_path)
                     }
       ),
       tracer: Datadog.tracer
@@ -15,6 +20,11 @@ Rails.application.config.to_prepare do
     :disk
   )
 
+  # Registers a storage adapter for a *NIX file system
+  # Binaries are persisted by invoking "cp" (duplicating the file)
+  # NOTE: This doubles the size of binaries being persisted if the repository
+  # is deployed on the same file system as the one storing the files being uploaded
+  # NOTE: Separate inodes are created
   Valkyrie::StorageAdapter.register(
     InstrumentedStorageAdapter.new(
       storage_adapter: Valkyrie::Storage::Disk.new(
@@ -26,6 +36,11 @@ Rails.application.config.to_prepare do
     :lae_storage
   )
 
+  # Registers a storage adapter for a *NIX file system
+  # Binaries are persisted by invoking "cp" (duplicating the file)
+  # NOTE: This doubles the size of binaries being persisted if the repository
+  # is deployed on the same file system as the one storing the files being uploaded
+  # NOTE: Separate inodes are created
   Valkyrie::StorageAdapter.register(
     InstrumentedStorageAdapter.new(
       storage_adapter: Valkyrie::Storage::Disk.new(
@@ -37,13 +52,16 @@ Rails.application.config.to_prepare do
     :disk_via_copy
   )
 
+  # Registers a storage adapter for a *NIX file system
+  # Binaries are persisted by invoking "mv" with access limited to read/write for owning users, and read-only for all others
+  # NOTE: "mv" may preserve the inode for the file system
   Valkyrie::StorageAdapter.register(
     InstrumentedStorageAdapter.new(
       storage_adapter: Valkyrie::Storage::Disk.new(
         base_path: Figgy.config["derivative_path"],
-        file_mover: lambda { |old, new|
-                      FileUtils.mv(old, new)
-                      FileUtils.chmod(0o644, new)
+        file_mover: lambda { |old_path, new_path|
+                      FileUtils.mv(old_path, new_path)
+                      FileUtils.chmod(0o644, new_path)
                     }
       ),
       tracer: Datadog.tracer
@@ -51,13 +69,16 @@ Rails.application.config.to_prepare do
     :derivatives
   )
 
+  # Registers a storage adapter for a *NIX file system
+  # Binaries are persisted by invoking "mv" with access limited to read/write for owning users, and read-only for all others
+  # NOTE: "mv" may preserve the inode for the file system
   Valkyrie::StorageAdapter.register(
     InstrumentedStorageAdapter.new(
       storage_adapter: Valkyrie::Storage::Disk.new(
         base_path: Figgy.config["geo_derivative_path"],
-        file_mover: lambda { |old, new|
-                      FileUtils.mv(old, new)
-                      FileUtils.chmod(0o644, new)
+        file_mover: lambda { |old_path, new_path|
+                      FileUtils.mv(old_path, new_path)
+                      FileUtils.chmod(0o644, new_path)
                     }
       ),
       tracer: Datadog.tracer
@@ -65,6 +86,8 @@ Rails.application.config.to_prepare do
     :geo_derivatives
   )
 
+  # Registers a storage adapter for storing a Bag on a *NIX file system
+  # @see https://tools.ietf.org/html/draft-kunze-bagit-14
   Valkyrie::StorageAdapter.register(
     InstrumentedStorageAdapter.new(
       storage_adapter: Bagit::StorageAdapter.new(
@@ -75,6 +98,9 @@ Rails.application.config.to_prepare do
     :bags
   )
 
+  # Register a metadata adapter for storing a Bag on a *NIX file system
+  # @see https://tools.ietf.org/html/draft-kunze-bagit-14
+  # (see Bagit::MetadataAdapter)
   Valkyrie::MetadataAdapter.register(
     Bagit::MetadataAdapter.new(
       base_path: Figgy.config["bag_path"]
@@ -82,6 +108,8 @@ Rails.application.config.to_prepare do
     :bags
   )
 
+  # Registers a metadata adapter for storing resource metadata into PostgreSQL as JSON
+  # (see Valkyrie::Persistence::Postgres::MetadataAdapter)
   Valkyrie::MetadataAdapter.register(
     InstrumentedAdapter.new(
       metadata_adapter: Valkyrie::Persistence::Postgres::MetadataAdapter.new,
@@ -90,11 +118,15 @@ Rails.application.config.to_prepare do
     :postgres
   )
 
+  # Registers a metadata adapter for storing resource metadata into memory
+  # (see Valkyrie::Persistence::Memory::MetadataAdapter)
   Valkyrie::MetadataAdapter.register(
     Valkyrie::Persistence::Memory::MetadataAdapter.new,
     :memory
   )
 
+  # Registers a metadata adapter for storing and indexing resource metadata into Solr
+  # (see Valkyrie::Persistence::Solr::MetadataAdapter)
   Valkyrie::MetadataAdapter.register(
     InstrumentedAdapter.new(
       metadata_adapter: Valkyrie::Persistence::Solr::MetadataAdapter.new(
@@ -117,6 +149,8 @@ Rails.application.config.to_prepare do
     :index_solr
   )
 
+  # Registers a metadata adapter for indexing resource metadata using a registered Solr adapter
+  # (see IndexingAdapter)
   Valkyrie::MetadataAdapter.register(
     IndexingAdapter.new(
       metadata_adapter: Valkyrie.config.metadata_adapter,
@@ -125,10 +159,10 @@ Rails.application.config.to_prepare do
     :indexing_persister
   )
 
+  # Set the JP2 recipes for KDU compression
   Hydra::Derivatives.kdu_compress_recipes = Figgy.config["jp2_recipes"]
 
-  # Jp2DerivativeService needs its own change_set_persister because the
-  # derivatives may not be in the primary metadata/file storage.
+  # Construct and register the derivative service objects for images in the TIFF
   Valkyrie::Derivatives::DerivativeService.services << DefaultDerivativeService::Factory.new(
     change_set_persister: ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
@@ -136,6 +170,7 @@ Rails.application.config.to_prepare do
     )
   )
 
+  # Construct and register the derivative service objects for images in the GeoTIFF
   Valkyrie::Derivatives::DerivativeService.services << ScannedMapDerivativeService::Factory.new(
     change_set_persister: ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
@@ -143,6 +178,7 @@ Rails.application.config.to_prepare do
     )
   )
 
+  # Construct and register the derivative service objects for geospatial vector data sets
   Valkyrie::Derivatives::DerivativeService.services << VectorResourceDerivativeService::Factory.new(
     change_set_persister: ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
@@ -150,6 +186,7 @@ Rails.application.config.to_prepare do
     )
   )
 
+  # Construct and register the derivative service objects for geospatial raster data sets
   Valkyrie::Derivatives::DerivativeService.services << RasterResourceDerivativeService::Factory.new(
     change_set_persister: ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
@@ -163,9 +200,13 @@ Rails.application.config.to_prepare do
     )
   )
 
+  # Register service objects for file characterization
   Valkyrie::Derivatives::FileCharacterizationService.services << DefaultCharacterizationService
+  # Register service objects for geospatial asset file characterization
   Valkyrie::Derivatives::FileCharacterizationService.services << GeoCharacterizationService
 
+  # Register custom queries for the default Valkyrie metadata adapter
+  # (see Valkyrie::Persistence::CustomQueryContainer)
   [
     FindByLocalIdentifier,
     FindByStringProperty,
@@ -181,9 +222,12 @@ Rails.application.config.to_prepare do
     Valkyrie.config.metadata_adapter.query_service.custom_queries.register_query_handler(query_handler)
   end
 
+  # Register custom queries for the Valkyrie Solr metadata adapter used for indexing
+  # (see Valkyrie::Persistence::CustomQueryContainer)
   [FindMissingThumbnailResources].each do |solr_query_handler|
     Valkyrie::MetadataAdapter.find(:index_solr).query_service.custom_queries.register_query_handler(solr_query_handler)
   end
 
+  # Ensure that the logger used for Valkyrie is the same used by Rails
   Valkyrie.logger = Rails.logger
 end
