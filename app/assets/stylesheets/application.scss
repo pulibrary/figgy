@@ -13,15 +13,16 @@
 @import 'variables/breaks';
 @import 'variables/colors';
 @import 'variables/typography';
+@import 'variables/visibility_widget';
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "font-awesome";
+
 // PUL specific styles
 @import 'abstractions/mixins';
 
 @import 'base/typography';
-@import "valhalla/valhalla";
-
 @import 'icons/icons';
 
 @import 'components/batch_upload';
@@ -29,7 +30,7 @@
 @import 'components/breadcrumb';
 @import 'components/datepicker';
 @import 'components/fileupload';
-@import 'components/plum_file_manager';
+@import 'components/file_manager';
 @import 'components/rtl';
 @import 'components/sorting';
 @import 'components/viewer';
