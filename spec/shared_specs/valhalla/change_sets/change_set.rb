@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.shared_examples "a Valhalla::ChangeSet" do
+RSpec.shared_examples "a ChangeSet" do
   before do
     raise "change_set must be set with `let(:change_set)`" unless
       defined? change_set

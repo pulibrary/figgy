@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class DateRangeChangeSet < Valhalla::ChangeSet
+class DateRangeChangeSet < ChangeSet
   validates :start, :end, year: true
   validate :start_before_end
   validate :start_and_end_set

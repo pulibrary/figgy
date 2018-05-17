@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class SimpleResourceChangeSet < Valhalla::ChangeSet
+class SimpleResourceChangeSet < ChangeSet
   delegate :human_readable_type, to: :model
 
   apply_workflow(WorkflowRegistry.workflow_for(SimpleResource))

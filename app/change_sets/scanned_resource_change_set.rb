@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class ScannedResourceChangeSet < Valhalla::ChangeSet
+class ScannedResourceChangeSet < ChangeSet
   apply_workflow(WorkflowRegistry.workflow_for(ScannedResource))
   delegate :human_readable_type, to: :model
 

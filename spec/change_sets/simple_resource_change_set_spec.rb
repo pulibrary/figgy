@@ -7,7 +7,7 @@ RSpec.describe SimpleResourceChangeSet do
   let(:resource) { resource_klass.new(title: "Test", rights_statement: "Stuff", visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: "draft") }
   let(:form_resource) { resource }
 
-  it_behaves_like "a Valhalla::ChangeSet"
+  it_behaves_like "a ChangeSet"
 
   describe "#workflow" do
     it "has a workflow" do
