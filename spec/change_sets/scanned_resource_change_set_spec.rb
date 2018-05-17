@@ -98,7 +98,7 @@ RSpec.describe ScannedResourceChangeSet do
       expect(change_set.logical_structure[0].label).to eq ["Logical"]
     end
   end
-  context "when an EphemeraBox has EphemeraFolder members" do
+  context "when a ScannedResource has ScannedResource members" do
     subject(:change_set) { described_class.new(scanned_resource) }
     let(:scanned_resource_member) { FactoryBot.create_for_repository(:scanned_resource) }
     let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [scanned_resource_member.id]) }

@@ -3,12 +3,22 @@
 class BaseWorkflow
   include AASM
 
-  def self.valid_states_for_classes
-    {}
-  end
+  class << self
+      # Retrieve the state for the resource
+      # @param klass [Symbol] the related resource using a different workflow
+      # @param state [Symbol] the state of the related resource using a different workflow
+      # @return [String] the folder workflow state corresponding to the workflow state of the related resource
+      def state_for_related(klass:, state:)
+        state
+      end
 
-  def self.state_for_related(klass:, state:)
-    state
+    private
+
+      # Generate the mapping for workflow states of relatable resource classes to those in the folder workflow
+      # @return Hash{Symbol => Hash{Symbol => Symbol}}
+      def valid_states_for_classes
+        {}
+      end
   end
 
   def initialize(state = nil)

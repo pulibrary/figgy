@@ -16,25 +16,31 @@ class FolderWorkflow < BaseWorkflow
     end
   end
 
-  def self.valid_states_for_classes
-    {
-      EphemeraBox: {
-        new: :needs_qa,
-        ready_to_ship: :needs_qa,
-        shipped: :needs_qa,
-        received: :needs_qa,
-        all_in_production: :complete
-      }
-    }
-  end
+  class << self
+    # Retrieve the state for the resource
+    # @param klass [Symbol] the related resource using a different workflow
+    # @param state [Symbol] the state of the related resource using a different workflow
+    # @return [String] the folder workflow state corresponding to the workflow state of the related resource
+    def state_for_related(klass:, state:)
+      super unless valid_states_for_classes.key?(klass) && valid_states_for_classes[klass].key?(state)
+      valid_states_for_classes[klass][state]
+    end
 
-  # Retrieve the state for the resource
-  # @param related_resource [Valhalla::Resource] the resource related to the current workflow
-  # @param related_state [Symbol] the workflow state
-  # @return [String] the workflow state
-  def self.state_for_related(klass:, state:)
-    super unless valid_states_for_classes.key?(klass) && valid_states_for_classes[klass].key?(state)
-    valid_states_for_classes[klass][state]
+    private
+
+      # Generate the mapping for workflow states of relatable resource classes to those in the folder workflow
+      # @return Hash{Symbol => Hash{Symbol => Symbol}}
+      def valid_states_for_classes
+        {
+          EphemeraBox: {
+            new: :needs_qa,
+            ready_to_ship: :needs_qa,
+            shipped: :needs_qa,
+            received: :needs_qa,
+            all_in_production: :complete
+          }
+        }
+      end
   end
 
   # States in which the record can be publicly viewable
