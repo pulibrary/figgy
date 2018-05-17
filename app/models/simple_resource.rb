@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # This is a Class for scanned resources with only locally-provided metadata
-class SimpleResource < Valhalla::Resource
+class SimpleResource < Resource
   include Valkyrie::Resource::AccessControls
   include Schema::Common
   attribute :id, Valkyrie::Types::ID.optional

@@ -19,7 +19,7 @@ RSpec.describe PersistenceAdapter do
     end
     context "when using a non-existent model" do
       before do
-        class MyResource < Valhalla::Resource; end
+        class MyResource < Resource; end
       end
 
       after do

@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe Schema::Common do
   before do
-    class TestResource < Valhalla::Resource
+    class TestResource < Resource
       include Schema::Common
     end
   end
@@ -36,7 +36,7 @@ RSpec.describe Schema::Common do
       expect(resource.class.ancestors).to include(described_class)
     end
 
-    it "defines the schema attributes common for a Valhalla::Resource subclass instances" do
+    it "defines the schema attributes common for a Resource subclass instances" do
       expect(resource.title).to include "test title1"
       expect(resource.actor).to include "test person"
       expect(resource.sort_title).to include "test title2"

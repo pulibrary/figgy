@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # Generated with `rails generate valkyrie:model MediaResource`
-class MediaResource < Valhalla::Resource
+class MediaResource < Resource
   include Valkyrie::Resource::AccessControls
   include Schema::Common
   attribute :id, Valkyrie::Types::ID.optional

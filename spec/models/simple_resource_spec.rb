@@ -6,5 +6,5 @@ RSpec.describe SimpleResource do
   let(:resource_klass) { described_class }
   let(:resource) { FactoryBot.create :simple_resource }
 
-  it_behaves_like "a Valhalla::Resource"
+  it_behaves_like "a Resource"
 end

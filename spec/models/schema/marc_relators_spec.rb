@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe Schema::MARCRelators do
   before do
-    class TestResource < Valhalla::Resource
+    class TestResource < Resource
       include Schema::MARCRelators
     end
   end
@@ -24,7 +24,7 @@ RSpec.describe Schema::MARCRelators do
       expect(resource.class.ancestors).to include(described_class)
     end
 
-    it "defines the schema attributes MARCRelators for a Valhalla::Resource subclass instances" do
+    it "defines the schema attributes MARCRelators for a Resource subclass instances" do
       expect(resource.abridger).to include "test person1"
       expect(resource.actor).to include "test person2"
     end

@@ -52,7 +52,7 @@ class BulkIngestService
     # If a subdirectory is found, create a new resource, append this to the parent resource, and recurse through this subdirectory
     # If a file is found, append this to the parent resource
     # @param path [Pathname] the path to the directory containing the child directories
-    # @param resource [Valhalla::Resource] the resource being used to construct child resources
+    # @param resource [Resource] the resource being used to construct child resources
     # @param file_filter [String, nil] the filter used for matching against the filename extension
     def attach_children(path:, resource:, file_filter: nil, **attributes)
       child_attributes = attributes.except(:collection)
@@ -79,7 +79,7 @@ class BulkIngestService
 
     # Create a new repository resource
     # @param klass [Class] the class of the resource being constructed
-    # @return [Valhalla::Resource] the newly created resource
+    # @return [Resource] the newly created resource
     def new_resource(klass:, **attributes)
       collection = attributes.delete(:collection)
 

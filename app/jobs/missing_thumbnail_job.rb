@@ -25,7 +25,7 @@ class MissingThumbnailJob < ApplicationJob
 
     # Recursively retrieve all thumbnail IDs for a given repository resource from its members
     # (This shall halt recursing if a thumbnail ID is found for a member resource)
-    # @param resource [Valhalla::Resource] the repository resource
+    # @param resource [Resource] the repository resource
     # @return [Array<Valkyrie::ID>] the array of thumbnail IDs
     def member_thumbnail_ids_for(resource)
       return [] if resource.member_ids.empty?

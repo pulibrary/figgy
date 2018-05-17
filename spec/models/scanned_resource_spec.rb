@@ -7,7 +7,7 @@ RSpec.describe ScannedResource do
   let(:resource_klass) { described_class }
   let(:resource) { FactoryBot.create :scanned_resource }
 
-  it_behaves_like "a Valhalla::Resource"
+  it_behaves_like "a Resource"
 
   it "generates read groups with the factory" do
     factory = FactoryBot.build(:complete_private_scanned_resource)

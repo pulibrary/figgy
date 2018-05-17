@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.shared_examples "a Valhalla::Resource" do
+RSpec.shared_examples "a Resource" do
   before do
     raise "resource must be set with `let(:resource)`" unless
       defined? resource
