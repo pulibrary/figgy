@@ -88,7 +88,7 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
-    - 'valhalla/app/controllers/concerns/valhalla/resource_controller.rb'
+    - 'app/controllers/concerns/resource_controller.rb'
 Metrics/ParameterLists:
   Exclude:
     - 'app/change_set_persisters/change_set_persister.rb'

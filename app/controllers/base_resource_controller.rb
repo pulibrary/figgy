@@ -2,7 +2,7 @@
 
 # A base controller for resources, intended for inheritance
 class BaseResourceController < ApplicationController
-  include Valhalla::ResourceController
+  include ResourceController
   include TokenAuth
   before_action :load_collections, only: [:new, :edit]
 

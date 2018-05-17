@@ -20,7 +20,7 @@ RSpec.describe "ScannedResource requests", type: :request do
     get "/concern/scanned_resources/#{scanned_resource.id}/pdf"
 
     reloaded = adapter.query_service.find_by(id: scanned_resource.id)
-    expect(response).to redirect_to Valhalla::Engine.routes.url_helpers.download_path(resource_id: scanned_resource.id.to_s, id: reloaded.pdf_file.id.to_s)
+    expect(response).to redirect_to Rails.application.routes.url_helpers.download_path(resource_id: scanned_resource.id.to_s, id: reloaded.pdf_file.id.to_s)
 
     follow_redirect!
 
@@ -32,7 +32,7 @@ RSpec.describe "ScannedResource requests", type: :request do
   end
 
   context "when other derivatives are requested" do
-    let(:download_path) { Valhalla::Engine.routes.url_helpers.download_path(resource_id: scanned_resource.id.to_s, id: file_set.id.to_s) }
+    let(:download_path) { Rails.application.routes.url_helpers.download_path(resource_id: scanned_resource.id.to_s, id: file_set.id.to_s) }
 
     it "redirects the client to be authenticated" do
       get download_path
@@ -47,7 +47,7 @@ RSpec.describe "ScannedResource requests", type: :request do
       get "/concern/scanned_resources/#{scanned_resource.id}/pdf"
 
       reloaded = adapter.query_service.find_by(id: scanned_resource.id)
-      expect(response).to redirect_to Valhalla::Engine.routes.url_helpers.download_path(resource_id: scanned_resource.id.to_s, id: reloaded.pdf_file.id.to_s)
+      expect(response).to redirect_to Rails.application.routes.url_helpers.download_path(resource_id: scanned_resource.id.to_s, id: reloaded.pdf_file.id.to_s)
 
       follow_redirect!
       expect(response).to redirect_to user_cas_omniauth_authorize_path

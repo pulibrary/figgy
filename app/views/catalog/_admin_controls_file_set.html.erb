@@ -13,7 +13,7 @@
       <tr>
         <td><span class="label label-success">Original File</span>&nbsp;<%= file.label.first %></td>
         <% if can?(:download, resource) %>
-          <td><%= link_to "Download", valhalla.download_path(resource.id, file.id) %></td>
+          <td><%= link_to "Download", download_path(resource.id, file.id) %></td>
         <% else %>
           <td></td>
         <% end %>
@@ -28,7 +28,7 @@
       <tr>
         <td><span class="label label-info">Derivative File</span>&nbsp;<%= file.label.first %></td>
         <% if can?(:download, resource) %>
-          <td><%= link_to "Download", valhalla.download_path(resource.id, file.id) %></td>
+          <td><%= link_to "Download", download_path(resource.id, file.id) %></td>
         <% else %>
           <td></td>
         <% end %>
@@ -43,7 +43,7 @@
       <tr>
         <td><span class="label label-info">Thumbnail File</span>&nbsp;<%= file.label.first %></td>
         <% if can?(:download, resource) %>
-          <td><%= link_to "Download", valhalla.download_path(resource.id, file.id) %></td>
+          <td><%= link_to "Download", download_path(resource.id, file.id) %></td>
         <% else %>
           <td></td>
         <% end %>

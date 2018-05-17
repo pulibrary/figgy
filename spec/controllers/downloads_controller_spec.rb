@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe Valhalla::DownloadsController do
+RSpec.describe DownloadsController do
   let(:meta) { Valkyrie.config.metadata_adapter }
   let(:disk) { Valkyrie.config.storage_adapter }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: meta, storage_adapter: disk) }
@@ -10,8 +10,6 @@ RSpec.describe Valhalla::DownloadsController do
   let(:file_set) { resource.member_ids.map { |id| meta.query_service.find_by(id: id) }.first }
   let(:file_node) { file_set.file_metadata.first }
   let(:user) { FactoryBot.create(:admin) }
-
-  routes { Valhalla::Engine.routes }
 
   describe "GET /downloads/:obj/file/:id" do
     context "when logged in" do

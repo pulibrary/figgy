@@ -33,6 +33,6 @@ class SimpleResourcesController < BaseResourceController
       change_set.validate(file_metadata: [pdf_file])
       buffered_changeset_persister.save(change_set: change_set)
     end
-    redirect_to valhalla.download_path(resource_id: change_set.id, id: pdf_file.id)
+    redirect_to download_path(resource_id: change_set.id, id: pdf_file.id)
   end
 end

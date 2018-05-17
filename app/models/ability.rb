@@ -49,7 +49,7 @@ class Ability
     can :download, curation_concerns do |resource|
       resource.respond_to?(:visibility) && resource.visibility.include?(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
     end
-    can :download, Valhalla::DownloadsController::FileWithMetadata do |resource|
+    can :download, DownloadsController::FileWithMetadata do |resource|
       download_file_with_metadata?(resource)
     end
     can :download, FileSet do |resource|

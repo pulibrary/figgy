@@ -61,7 +61,8 @@ Rails.application.routes.draw do
     end
   end
 
-  # Consider moving these to Valhalla
+  get "/downloads/:resource_id/file/:id", to: "downloads#show", as: :download
+
   scope "/concern" do
     resources :file_sets do
       member do

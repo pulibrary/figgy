@@ -370,7 +370,7 @@ RSpec.shared_examples "a BaseResourceController" do
 
       expect(reloaded.file_metadata).not_to be_blank
       expect(reloaded.pdf_file).not_to be_blank
-      expect(response).to redirect_to Valhalla::Engine.routes.url_helpers.download_path(resource_id: resource.id.to_s, id: reloaded.pdf_file.id.to_s)
+      expect(response).to redirect_to Rails.application.routes.url_helpers.download_path(resource_id: resource.id.to_s, id: reloaded.pdf_file.id.to_s)
     end
   end
 end

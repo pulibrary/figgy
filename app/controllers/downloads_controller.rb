@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Valhalla::DownloadsController < ApplicationController
+class DownloadsController < ApplicationController
   include Hydra::Controller::DownloadBehavior
 
   def show
@@ -53,13 +53,7 @@ class Valhalla::DownloadsController < ApplicationController
     response.headers["Content-Type"] = file_desc.mime_type.first.to_s
     response.headers["Content-Length"] ||= binary_file.size.to_s
     # Prevent Rack::ETag from calculating a digest over body
-    response.headers["Last-Modified"] = modified_date if modified_date
-  end
-
-  def modified_date
-    return unless load_file.respond_to?(:updated_at)
-    # Copied/pasted from Hydra-Head.
-    file_desc.updated_at.utc.strftime("%a, %d %b %Y %T GMT")
+    response.headers["Last-Modified"] = file_desc.updated_at.utc.strftime("%a, %d %b %Y %T GMT")
   end
 
   def query_service

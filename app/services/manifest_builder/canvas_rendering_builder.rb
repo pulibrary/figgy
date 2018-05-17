@@ -66,7 +66,7 @@ class ManifestBuilder
       # Retrieve the helper Module for the routes
       # @return [Module]
       def url_helpers
-        Valhalla::Engine.routes.url_helpers
+        Rails.application.routes.url_helpers
       end
 
       # Generate a download Hash for the FileSet and members
