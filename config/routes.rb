@@ -205,7 +205,6 @@ Rails.application.routes.draw do
   get "/reports/identifiers_to_reconcile", to: "reports#identifiers_to_reconcile", as: :identifiers_to_reconcile
 
   mount BrowseEverything::Engine => "/browse"
-  mount Valhalla::Engine => "/"
 
   if Rails.env.development? || Rails.env.test?
     mount Riiif::Engine => "/image-service", as: "riiif"
