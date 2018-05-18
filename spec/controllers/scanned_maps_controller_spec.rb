@@ -124,7 +124,7 @@ RSpec.describe ScannedMapsController do
     end
     it "renders the form if it doesn't create a map image" do
       post :create, params: { scanned_map: invalid_params }
-      expect(response).to render_template "valhalla/base/new"
+      expect(response).to render_template "base/new"
     end
   end
 
@@ -194,7 +194,7 @@ RSpec.describe ScannedMapsController do
         scanned_map = FactoryBot.create_for_repository(:scanned_map)
         patch :update, params: { id: scanned_map.id.to_s, scanned_map: { title: [""] } }
 
-        expect(response).to render_template "valhalla/base/edit"
+        expect(response).to render_template "base/edit"
       end
       it_behaves_like "a workflow controller", :scanned_map
     end

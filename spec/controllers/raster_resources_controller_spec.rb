@@ -91,7 +91,7 @@ RSpec.describe RasterResourcesController do
     end
     it "renders the form if it doesn't create a raster resource" do
       post :create, params: { raster_resource: invalid_params }
-      expect(response).to render_template "valhalla/base/new"
+      expect(response).to render_template "base/new"
     end
   end
 
@@ -161,7 +161,7 @@ RSpec.describe RasterResourcesController do
         raster_resource = FactoryBot.create_for_repository(:raster_resource)
         patch :update, params: { id: raster_resource.id.to_s, raster_resource: { title: [""] } }
 
-        expect(response).to render_template "valhalla/base/edit"
+        expect(response).to render_template "base/edit"
       end
       it_behaves_like "a workflow controller", :raster_resource
     end

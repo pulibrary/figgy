@@ -91,7 +91,7 @@ RSpec.describe VectorResourcesController do
     end
     it "renders the form if it doesn't create a vector resource" do
       post :create, params: { vector_resource: invalid_params }
-      expect(response).to render_template "valhalla/base/new"
+      expect(response).to render_template "base/new"
     end
   end
 
@@ -161,7 +161,7 @@ RSpec.describe VectorResourcesController do
         vector_resource = FactoryBot.create_for_repository(:vector_resource)
         patch :update, params: { id: vector_resource.id.to_s, vector_resource: { title: [""] } }
 
-        expect(response).to render_template "valhalla/base/edit"
+        expect(response).to render_template "base/edit"
       end
       it_behaves_like "a workflow controller", :vector_resource
     end

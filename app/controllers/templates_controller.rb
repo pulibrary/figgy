@@ -34,7 +34,7 @@ class TemplatesController < ApplicationController
   end
 
   def _prefixes
-    @_prefixes ||= super + ["valhalla/base"]
+    @_prefixes ||= super + ["base"]
   end
 
   def load_fields

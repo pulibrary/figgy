@@ -29,7 +29,7 @@ RSpec.describe CollectionsController do
       it "renders a new record" do
         get :new
 
-        expect(response).to render_template("valhalla/base/_form")
+        expect(response).to render_template("base/_form")
       end
     end
 

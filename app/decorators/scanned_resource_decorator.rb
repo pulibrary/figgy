@@ -37,7 +37,7 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
           term.definition.html_safe
         end +
         h.content_tag("p") do
-          I18n.t("valhalla.works.show.attributes.rights_statement.boilerplate").html_safe
+          I18n.t("works.show.attributes.rights_statement.boilerplate").html_safe
         end
     end
   end
@@ -100,7 +100,7 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
 
   def human_readable_type
     return model.human_readable_type if volumes.empty?
-    I18n.translate("valhalla.models.multi_volume_work", default: "Multi Volume Work")
+    I18n.translate("models.multi_volume_work", default: "Multi Volume Work")
   end
 
   def imported_attribute(attribute_key)

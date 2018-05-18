@@ -20,13 +20,13 @@ class PermissionBadge
     # Retrieve the class for the badge elements
     # @return [String] the class name
     def label_class
-      I18n.t("valhalla.visibility.#{@visibility}.class")
+      I18n.t("visibility.#{@visibility}.class")
     end
 
     # Retrieve the text for the badge
     # @return [String] the text for the badge
     def text
-      I18n.t("valhalla.visibility.#{@visibility}.text")
+      I18n.t("visibility.#{@visibility}.text")
     end
 
     def text_span

@@ -120,7 +120,7 @@ module ResourceController
   end
 
   def _prefixes
-    @_prefixes ||= super + ["valhalla/base"]
+    @_prefixes ||= super + ["base"]
   end
 
   def resource_params

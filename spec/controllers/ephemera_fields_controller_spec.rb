@@ -82,7 +82,7 @@ RSpec.describe EphemeraFieldsController do
     end
     it "renders the form if it doesn't create a ephemera field" do
       post :create, params: { ephemera_field: invalid_params }
-      expect(response).to render_template "valhalla/base/new"
+      expect(response).to render_template "base/new"
     end
   end
 
@@ -148,7 +148,7 @@ RSpec.describe EphemeraFieldsController do
       it "renders the form if it fails validations" do
         patch :update, params: { id: ephemera_field.id.to_s, ephemera_field: { field_name: nil, member_of_vocabulary_id: nil } }
 
-        expect(response).to render_template "valhalla/base/edit"
+        expect(response).to render_template "base/edit"
       end
     end
   end

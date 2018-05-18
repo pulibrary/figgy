@@ -4,7 +4,7 @@ module ApplicationHelper
   include ::Blacklight::LayoutHelperBehavior
 
   def application_name
-    t("valhalla.product_name", default: super)
+    t("product_name", default: super)
   end
 
   def default_page_title
