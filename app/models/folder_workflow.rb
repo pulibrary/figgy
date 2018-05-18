@@ -16,26 +16,9 @@ class FolderWorkflow < BaseWorkflow
     end
   end
 
-  # Generate the mapping for workflow states of relatable resource classes to those in the folder workflow
-  # @return Hash{Symbol => Hash{Symbol => Symbol}}
-  def self.state_translations
-    {
-      BoxWorkflow: {
-        new: :needs_qa,
-        ready_to_ship: :needs_qa,
-        shipped: :needs_qa,
-        received: :needs_qa,
-        all_in_production: :complete
-      }
-    }
-  end
-
   def translate_state_from(workflow)
     return super if workflow.class == self.class
-    workflow_class_key = workflow.class.to_s.to_sym
-    state_key = workflow.current_state
-    raise InvalidStateTranslation unless self.class.state_translations.key?(workflow_class_key) && self.class.state_translations[workflow_class_key].key?(state_key)
-    self.class.state_translations[workflow_class_key][state_key]
+    final_state if workflow.final_state?
   end
 
   # States in which the record can be publicly viewable

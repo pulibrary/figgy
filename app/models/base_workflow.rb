@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
 class BaseWorkflow
-  class InvalidTranslation < AASM::InvalidTransition; end
-
   include AASM
-
-  # Generate the mapping for workflow states of relatable resource classes to those in the folder workflow
-  # @return Hash{Symbol => Hash{Symbol => Symbol}}
-  def self.state_translations
-    {}
-  end
 
   delegate :current_state, to: :aasm
 
   def initialize(state = nil)
     aasm.current_state = state.to_sym unless state.nil?
+  end
+
+  def final_state
+    aasm.states.last.name
+  end
+
+  def final_state?
+    current_state == final_state
   end
 
   def translate_state_from(workflow)
