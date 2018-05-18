@@ -112,7 +112,7 @@ module GeoDiscovery
         end
 
         def url_helpers
-          Valhalla::Engine.routes.url_helpers
+          Rails.application.routes.url_helpers
         end
     end
   end

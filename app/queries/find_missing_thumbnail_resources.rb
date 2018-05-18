@@ -16,7 +16,7 @@ class FindMissingThumbnailResources
   end
 
   # Method for finding all resources missing thumbnail IDs
-  # @param model [Valhalla::Resource] the model for the resources
+  # @param model [Resource] the model for the resources
   def find_missing_thumbnail_resources(model: ScannedResource)
     run(model)
   end
@@ -24,14 +24,14 @@ class FindMissingThumbnailResources
   private
 
     # The query for Solr
-    # @param model [Valhalla::Resource] the model for the resources
+    # @param model [Resource] the model for the resources
     def query(model)
       "#{Valkyrie::Persistence::Solr::Queries::MODEL}:#{model} AND -thumbnail_id_ssim:[* TO *]"
     end
 
     # Iterate through the results of the query
-    # @param model [Valhalla::Resource] the model for the resources
-    # @yield [Valhalla::Resource] a resource missing a thumbnail ID
+    # @param model [Resource] the model for the resources
+    # @yield [Resource] a resource missing a thumbnail ID
     def each(model)
       docs = Valkyrie::Persistence::Solr::Queries::DefaultPaginator.new
       while docs.has_next?
@@ -43,7 +43,7 @@ class FindMissingThumbnailResources
     end
 
     # Execute the query
-    # @param model [Valhalla::Resource] the model for the resources
+    # @param model [Resource] the model for the resources
     def run(model)
       enum_for(:each, model)
     end

@@ -125,7 +125,7 @@ RSpec.feature "Ephemera Folders", js: true do
 
   context "when users have added an ephemera folder" do
     scenario "users can view an existing folder" do
-      visit Valhalla::ContextualPath.new(child: ephemera_folder).show
+      visit ContextualPath.new(child: ephemera_folder).show
       expect(page).to have_content "test folder"
     end
 
@@ -217,7 +217,7 @@ RSpec.feature "Ephemera Folders", js: true do
     end
 
     scenario "users can delete existing folders" do
-      visit Valhalla::ContextualPath.new(child: ephemera_folder).show
+      visit ContextualPath.new(child: ephemera_folder).show
 
       page.accept_confirm do
         click_link "Delete This Ephemera Folder"

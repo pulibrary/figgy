@@ -34,13 +34,13 @@ RSpec.describe "catalog/_admin_controls_file_set" do
   end
 
   it "hides the download link for original files" do
-    expect(rendered).not_to have_link "Download", href: valhalla.download_path(resource_id: file_set.id, id: original_file.id)
+    expect(rendered).not_to have_link "Download", href: download_path(resource_id: file_set.id, id: original_file.id)
   end
   it "hides the download link for derivative files" do
-    expect(rendered).not_to have_link "Download", href: valhalla.download_path(resource_id: file_set.id, id: derivative_file.id)
+    expect(rendered).not_to have_link "Download", href: download_path(resource_id: file_set.id, id: derivative_file.id)
   end
   it "hides the download link for thumbnail files" do
-    expect(rendered).not_to have_link "Download", href: valhalla.download_path(resource_id: file_set.id, id: thumbnail_file.id)
+    expect(rendered).not_to have_link "Download", href: download_path(resource_id: file_set.id, id: thumbnail_file.id)
   end
 
   context "as an admin. user" do
@@ -59,13 +59,13 @@ RSpec.describe "catalog/_admin_controls_file_set" do
     end
 
     it "renders the download link for original files" do
-      expect(rendered).to have_link "Download", href: valhalla.download_path(resource_id: file_set.id, id: original_file.id)
+      expect(rendered).to have_link "Download", href: download_path(resource_id: file_set.id, id: original_file.id)
     end
     it "renders the download link for derivative files" do
-      expect(rendered).to have_link "Download", href: valhalla.download_path(resource_id: file_set.id, id: derivative_file.id)
+      expect(rendered).to have_link "Download", href: download_path(resource_id: file_set.id, id: derivative_file.id)
     end
     it "renders the download link for thumbnail files" do
-      expect(rendered).to have_link "Download", href: valhalla.download_path(resource_id: file_set.id, id: thumbnail_file.id)
+      expect(rendered).to have_link "Download", href: download_path(resource_id: file_set.id, id: thumbnail_file.id)
     end
   end
 end

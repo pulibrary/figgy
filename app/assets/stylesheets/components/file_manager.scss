@@ -1,0 +1,145 @@
+*[data-action=file-manager] {
+  .actions {
+    padding: 10px;
+    .form-group div {
+      padding-left: 0;
+    }
+  }
+
+  .ui-selectable {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
+  .btn-group {
+    margin-bottom: 10px;
+    padding-left: 15px;
+  }
+
+  div.gallery {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .img-panel {
+    width: 16rem;
+    margin: 0 1rem 1rem 0;
+    .thumbnail {
+      height: 160px;
+      overflow:hidden;
+    }
+    .order-title {
+      display: inline-block;
+      width: 90%;
+    }
+    .order-title span {
+      overflow-wrap: break-word;
+    }
+    .order-filename {
+      width: 46%;
+      display: inline-block;
+    }
+    .file-set-link {
+      a {
+        font-size: 20px;
+        color: #999;
+      }
+      position: absolute;
+      width: 20px;
+      top: 5px;
+      right: 5px;
+    }
+    .ui-selecting .panel-body {
+      background: #FECA40;
+    }
+    .ui-selected .panel-body {
+      background: #F39814;
+    }
+    .panel-heading {
+      position: relative;
+      min-height: 40px;
+      width: 100%;
+    }
+  }
+}
+
+*[data-action='file-manager'] {
+  @extend .clearfix;
+  ul {
+    .alert-success, .alert-info, .alert-danger {
+      display: none;
+    }
+    &.success {
+      .alert-success {
+        display: block;
+      }
+    }
+    &.pending {
+      .alert-info {
+        display: block;
+      }
+    }
+    &.failure {
+      .alert-danger {
+        display: block;
+      }
+    }
+    li.pending {
+      .panel > form {
+        @extend .panel-info;
+      }
+    }
+    li .attributes .file_set_viewing_hint {
+      margin-bottom: 0px;
+    }
+    li .panel-body {
+      padding-bottom: 0px;
+    }
+    li.failure {
+      .panel > form {
+        @extend .panel-danger;
+      }
+    }
+    &.grid li {
+      .edit_scanned_resource {
+        margin-bottom: 100px;
+      }
+    }
+    li .panel .member_resource_options {
+      padding-left: 30px;
+      margin-top: -10px;
+      float: none;
+    }
+  }
+  li > .ui-selected {
+    background-color: #F39814;
+  }
+
+  li > .ui-selecting {
+    background-color: #FECA40;
+  }
+  .panel > form {
+    @extend .panel-default;
+  }
+  .resource-type-heading {
+    padding: 0 15px;
+  }
+  .extract_metadata {
+    text-align: center;
+  }
+  .rederive {
+    text-align: center;
+  }
+}
+#file-manager-extra-tools {
+  @extend .clearfix;
+}
+#bulk-actions {
+  h2 {
+    margin-top: 0;
+  }
+  display: none;
+}
+.non-selectable-panel {
+  @extend .panel;
+}

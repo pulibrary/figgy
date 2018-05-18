@@ -2,7 +2,7 @@
 
 # A base controller for resources, intended for inheritance
 class BaseResourceController < ApplicationController
-  include Valhalla::ResourceController
+  include ResourceController
   include TokenAuth
   before_action :load_collections, only: [:new, :edit]
 
@@ -25,7 +25,7 @@ class BaseResourceController < ApplicationController
       buffered_changeset_persister.save(change_set: change_set)
     end
     BrowseEverythingIngestJob.perform_later(resource.id.to_s, self.class.to_s, selected_files.map(&:id).map(&:to_s))
-    redirect_to Valhalla::ContextualPath.new(child: resource, parent_id: nil).file_manager
+    redirect_to ContextualPath.new(child: resource, parent_id: nil).file_manager
   end
 
   def selected_files

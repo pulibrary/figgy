@@ -28,7 +28,7 @@ RSpec.feature "Ephemera Terms", js: true do
       end
 
       scenario "users can view an existing term" do
-        visit Valhalla::ContextualPath.new(child: ephemera_term).show
+        visit ContextualPath.new(child: ephemera_term).show
         expect(page).to have_content "test term"
       end
 
@@ -41,7 +41,7 @@ RSpec.feature "Ephemera Terms", js: true do
       end
 
       scenario "users can delete existing terms" do
-        visit Valhalla::ContextualPath.new(child: ephemera_term).show
+        visit ContextualPath.new(child: ephemera_term).show
 
         page.accept_confirm do
           click_link "Delete This Ephemera Term"

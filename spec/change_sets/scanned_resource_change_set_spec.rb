@@ -11,7 +11,7 @@ RSpec.describe ScannedResourceChangeSet do
     stub_bibdata(bib_id: "123456")
   end
 
-  it_behaves_like "a Valhalla::ChangeSet"
+  it_behaves_like "a ChangeSet"
 
   describe "validations" do
     context "when neither title or metadata identifier is set" do

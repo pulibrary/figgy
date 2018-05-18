@@ -4,7 +4,7 @@ require "rails_helper"
 RSpec.describe WorkflowRegistry do
   describe ".register" do
     before do
-      class MyResource < Valhalla::Resource; end
+      class MyResource < Resource; end
       class MyWorkflow; end
     end
 

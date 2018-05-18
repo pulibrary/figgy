@@ -22,7 +22,7 @@ RSpec.describe ArchivalMediaCollectionsController do
       it "renders a new record form" do
         get :new
 
-        expect(response).to render_template("valhalla/base/_form")
+        expect(response).to render_template("base/_form")
       end
     end
 

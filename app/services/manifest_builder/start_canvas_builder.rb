@@ -3,7 +3,7 @@ class ManifestBuilder
   class StartCanvasBuilder
     attr_reader :resource, :canvas_builder
 
-    # @param [Valhalla::Resource] resource the Resource being viewed
+    # @param [Resource] resource the Resource being viewed
     def initialize(resource, canvas_builder:)
       @resource = resource
       @canvas_builder = canvas_builder

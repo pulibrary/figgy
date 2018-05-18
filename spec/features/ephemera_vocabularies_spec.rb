@@ -21,7 +21,7 @@ RSpec.feature "Ephemera Vocabularies", js: true do
     end
 
     scenario "users can add fields linked to controlled vocabularies" do
-      visit Valhalla::ContextualPath.new(child: ephemera_project).show
+      visit ContextualPath.new(child: ephemera_project).show
       click_link "Add Field"
 
       page.find(:css, '[data-id="ephemera_field_field_name"]').click
@@ -31,7 +31,7 @@ RSpec.feature "Ephemera Vocabularies", js: true do
       page.all(:css, ".dropdown-menu.open").last.all(:css, "a:last-child").last.click
       page.find(:css, 'input[value="Save"]').click
 
-      visit Valhalla::ContextualPath.new(child: ephemera_project).show
+      visit ContextualPath.new(child: ephemera_project).show
 
       expect(page).to have_content "EphemeraFolder.subject"
     end
@@ -125,7 +125,7 @@ RSpec.feature "Ephemera Vocabularies", js: true do
     end
 
     scenario "users can view existing controlled vocabularies" do
-      visit Valhalla::ContextualPath.new(child: ephemera_vocabulary).show
+      visit ContextualPath.new(child: ephemera_vocabulary).show
 
       expect(page).to have_content "test vocabulary"
     end
@@ -148,7 +148,7 @@ RSpec.feature "Ephemera Vocabularies", js: true do
     end
 
     scenario "users can delete controlled vocabularies" do
-      visit Valhalla::ContextualPath.new(child: ephemera_vocabulary).show
+      visit ContextualPath.new(child: ephemera_vocabulary).show
 
       page.accept_confirm do
         click_link "Delete This Ephemera Vocabulary"
@@ -158,7 +158,7 @@ RSpec.feature "Ephemera Vocabularies", js: true do
     end
 
     scenario "users can add categories to controlled vocabularies" do
-      visit Valhalla::ContextualPath.new(child: ephemera_vocabulary).show
+      visit ContextualPath.new(child: ephemera_vocabulary).show
       click_link "Add Category"
 
       expect(page).to have_selector("h1", text: "New Category")
@@ -166,19 +166,19 @@ RSpec.feature "Ephemera Vocabularies", js: true do
       page.find("form.new_ephemera_vocabulary").native.submit
 
       expect(page).to have_content "test category"
-      visit Valhalla::ContextualPath.new(child: ephemera_vocabulary).show
+      visit ContextualPath.new(child: ephemera_vocabulary).show
       expect(page).to have_content "test category"
     end
 
     scenario "users can add terms to controlled vocabularies" do
-      visit Valhalla::ContextualPath.new(child: ephemera_vocabulary).show
+      visit ContextualPath.new(child: ephemera_vocabulary).show
       click_link "Add Term"
 
       page.fill_in "ephemera_term_label", with: "test term"
       page.find("form.new_ephemera_term").native.submit
 
       expect(page).to have_content "test term"
-      visit Valhalla::ContextualPath.new(child: ephemera_vocabulary).show
+      visit ContextualPath.new(child: ephemera_vocabulary).show
       expect(page).to have_content "test term"
     end
   end

@@ -2,11 +2,9 @@
 module ApplicationHelper
   include ::BlacklightHelper
   include ::Blacklight::LayoutHelperBehavior
-  include Valhalla::ApplicationHelper
-  include Valhalla::ContextualPathHelper
 
   def application_name
-    t("valhalla.product_name", default: super)
+    t("product_name", default: super)
   end
 
   def default_page_title
@@ -17,6 +15,10 @@ module ApplicationHelper
 
   def construct_page_title(*elements)
     (elements.flatten.compact + [application_name]).join(" // ")
+  end
+
+  def contextual_path(child, parent)
+    ContextualPath.new(child: child, parent_id: parent.try(:id))
   end
 
   def main_content_classes
@@ -78,5 +80,9 @@ module ApplicationHelper
     else
       "default"
     end
+  end
+
+  def visibility_badge(value)
+    PermissionBadge.new(value).render
   end
 end

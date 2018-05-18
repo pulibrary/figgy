@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class MediaResourceChangeSet < Valhalla::ChangeSet
+class MediaResourceChangeSet < ChangeSet
   apply_workflow(WorkflowRegistry.workflow_for(MediaResource))
   delegate :human_readable_type, to: :resource
 

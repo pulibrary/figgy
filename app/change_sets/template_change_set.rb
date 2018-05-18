@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class TemplateChangeSet < Valhalla::ChangeSet
+class TemplateChangeSet < ChangeSet
   self.fields = [:title]
   property :title, required: true, multiple: false
   property :model_class, multiple: false, required: true

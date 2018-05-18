@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Collection < Valhalla::Resource
+class Collection < Resource
   include Valkyrie::Resource::AccessControls
   attribute :id, Valkyrie::Types::ID.optional
   attribute :title, Valkyrie::Types::Set

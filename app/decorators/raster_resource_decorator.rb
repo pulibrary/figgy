@@ -99,7 +99,7 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
           term.definition.html_safe
         end +
         h.content_tag("p") do
-          I18n.t("valhalla.works.show.attributes.rights_statement.boilerplate").html_safe
+          I18n.t("works.show.attributes.rights_statement.boilerplate").html_safe
         end
     end
   end

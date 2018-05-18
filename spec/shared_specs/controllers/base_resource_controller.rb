@@ -141,7 +141,7 @@ RSpec.shared_examples "a BaseResourceController" do
 
     it "renders the form if it doesn't create a new resource" do
       post :create, params: { param_key => invalid_params }
-      expect(response).to render_template "valhalla/base/new"
+      expect(response).to render_template "base/new"
     end
   end
 
@@ -210,7 +210,7 @@ RSpec.shared_examples "a BaseResourceController" do
           resource = FactoryBot.create_for_repository(factory)
           patch :update, params: { id: resource.id.to_s, param_key => { title: [""] } }
 
-          expect(response).to render_template "valhalla/base/edit"
+          expect(response).to render_template "base/edit"
         end
       end
     end
@@ -245,7 +245,7 @@ RSpec.shared_examples "a BaseResourceController" do
       it "renders the form if it fails validations" do
         resource = FactoryBot.create_for_repository(factory)
         patch :update, params: { id: resource.id.to_s, param_key => { title: [""] } }
-        expect(response).to render_template "valhalla/base/edit"
+        expect(response).to render_template "base/edit"
       end
 
       context "when the resource does exist" do
@@ -370,7 +370,7 @@ RSpec.shared_examples "a BaseResourceController" do
 
       expect(reloaded.file_metadata).not_to be_blank
       expect(reloaded.pdf_file).not_to be_blank
-      expect(response).to redirect_to Valhalla::Engine.routes.url_helpers.download_path(resource_id: resource.id.to_s, id: reloaded.pdf_file.id.to_s)
+      expect(response).to redirect_to Rails.application.routes.url_helpers.download_path(resource_id: resource.id.to_s, id: reloaded.pdf_file.id.to_s)
     end
   end
 end

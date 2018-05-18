@@ -18,73 +18,72 @@ en:
   titles:
     application: Figgy
   sort_label: Sort
-  valhalla:
-    visibility:
-      open:
-        note_html: Open to the world. Anyone can view.
-        warning_html: ''
-        class: "label-success"
-        text: "open"
-      authenticated:
-        note_html: Restrict access to only users and/or groups from Princeton University Library.
-        warning_html: ''
-        class: "label-info"
-        text: "princeton"
-      restricted:
-        text: "private"
-        note_html: Only privileged users of this application can see the work.
-        warning_html: ''
-        class: "label-danger"
-    base:
-      form_progress:
-        requirements: 'Requirements'
-        required_descriptions: 'Describe your work'
-    institution:
-      name: 'Princeton University Library'
-      homepage_url: 'https://library.princeton.edu'
-    product_name: 'Figgy'
-    works:
-      progress:
-        header: 'Save Work'
-      form:
-        tab:
-          metadata: 'Metadata'
-      show:
-        attributes:
-          internal_resource:
-            label: "Model"
-          created_at:
-            label: "Date Uploaded"
-          updated_at:
-            label: "Date Modified"
-          member_of_collections:
-            label: "Collections"
-          md5:
-            label: "MD5"
-          sha1:
-            label: "SHA-1"
-          sha256:
-            label: "SHA-256"
-          spatial:
-            label: "Place Name"
-          rendered_date_range:
-            label: "Date Range"
-          rendered_subject:
-            label: "Subject"
-          rendered_rights_statement:
-            label: "Rights Statement"
-          rendered_ocr_language:
-            label: "OCR Language"
-          rights_statement:
-            pdf_boilerplate: |
-              Princeton University Library claims no copyright governing this digital resource. It is provided for free, on a non-commercial, open-access basis, for fair-use academic and research purposes only. Anyone who claims copyright over any part of these resources and feels that they should not be presented in this manner is invited to contact Princeton University Library, who will in turn consider such concerns and make every effort to respond appropriately.
-            boilerplate: |
-              Princeton University Library claims no copyright governing this digital resource. It is provided for free, on a non-commercial, open-access basis, for fair-use academic and research purposes only. Anyone who claims copyright over any part of these resources and feels that they should not be presented in this manner is invited to contact Princeton University Library, who will in turn consider such concerns and make every effort to respond appropriately. We request that users reproducing this resource cite it according the guidelines described at <a href="http://rbsc.princeton.edu/policies/forms-citation" >http://rbsc.princeton.edu/policies/forms-citation</a>.
-    search:
-      form:
-        q:
-          label: 'Search'
-          placeholder: 'Enter search terms'
+  visibility:
+    open:
+      note_html: Open to the world. Anyone can view.
+      warning_html: ''
+      class: "label-success"
+      text: "open"
+    authenticated:
+      note_html: Restrict access to only users and/or groups from Princeton University Library.
+      warning_html: ''
+      class: "label-info"
+      text: "princeton"
+    restricted:
+      text: "private"
+      note_html: Only privileged users of this application can see the work.
+      warning_html: ''
+      class: "label-danger"
+  base:
+    form_progress:
+      requirements: 'Requirements'
+      required_descriptions: 'Describe your work'
+  institution:
+    name: 'Princeton University Library'
+    homepage_url: 'https://library.princeton.edu'
+  product_name: 'Figgy'
+  works:
+    progress:
+      header: 'Save Work'
+    form:
+      tab:
+        metadata: 'Metadata'
+    show:
+      attributes:
+        internal_resource:
+          label: "Model"
+        created_at:
+          label: "Date Uploaded"
+        updated_at:
+          label: "Date Modified"
+        member_of_collections:
+          label: "Collections"
+        md5:
+          label: "MD5"
+        sha1:
+          label: "SHA-1"
+        sha256:
+          label: "SHA-256"
+        spatial:
+          label: "Place Name"
+        rendered_date_range:
+          label: "Date Range"
+        rendered_subject:
+          label: "Subject"
+        rendered_rights_statement:
+          label: "Rights Statement"
+        rendered_ocr_language:
+          label: "OCR Language"
+        rights_statement:
+          pdf_boilerplate: |
+            Princeton University Library claims no copyright governing this digital resource. It is provided for free, on a non-commercial, open-access basis, for fair-use academic and research purposes only. Anyone who claims copyright over any part of these resources and feels that they should not be presented in this manner is invited to contact Princeton University Library, who will in turn consider such concerns and make every effort to respond appropriately.
+          boilerplate: |
+            Princeton University Library claims no copyright governing this digital resource. It is provided for free, on a non-commercial, open-access basis, for fair-use academic and research purposes only. Anyone who claims copyright over any part of these resources and feels that they should not be presented in this manner is invited to contact Princeton University Library, who will in turn consider such concerns and make every effort to respond appropriately. We request that users reproducing this resource cite it according the guidelines described at <a href="http://rbsc.princeton.edu/policies/forms-citation" >http://rbsc.princeton.edu/policies/forms-citation</a>.
+  search:
+    form:
+      q:
+        label: 'Search'
+        placeholder: 'Enter search terms'
   state:
     new:
       label: 'New'

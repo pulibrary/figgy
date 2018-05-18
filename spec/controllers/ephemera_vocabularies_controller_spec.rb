@@ -168,7 +168,7 @@ RSpec.describe EphemeraVocabulariesController do
         ephemera_vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary)
         patch :update, params: { id: ephemera_vocabulary.id.to_s, ephemera_vocabulary: { label: nil, value: nil } }
 
-        expect(response).to render_template "valhalla/base/edit"
+        expect(response).to render_template "base/edit"
       end
     end
   end

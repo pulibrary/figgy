@@ -126,7 +126,7 @@ RSpec.describe EphemeraBoxesController do
     end
     it "renders the form if it doesn't create a ephemera box" do
       post :create, params: { ephemera_box: invalid_params }
-      expect(response).to render_template "valhalla/base/new"
+      expect(response).to render_template "base/new"
     end
   end
 
@@ -213,7 +213,7 @@ RSpec.describe EphemeraBoxesController do
         ephemera_box = FactoryBot.create_for_repository(:ephemera_box)
         patch :update, params: { id: ephemera_box.id.to_s, ephemera_box: { box_number: nil } }
 
-        expect(response).to render_template "valhalla/base/edit"
+        expect(response).to render_template "base/edit"
       end
     end
   end

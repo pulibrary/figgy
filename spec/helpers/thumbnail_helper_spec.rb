@@ -43,7 +43,7 @@ RSpec.describe ThumbnailHelper do
       end
 
       it "returns the path to the thumbnail derivative image" do
-        expect(helper.figgy_thumbnail_path(vector_resource)).to include valhalla.download_path(file_set.id, thumbnail_file_id)
+        expect(helper.figgy_thumbnail_path(vector_resource)).to include download_path(file_set.id, thumbnail_file_id)
       end
     end
 
@@ -58,7 +58,7 @@ RSpec.describe ThumbnailHelper do
       end
 
       it "returns the path to the thumbnail derivative image" do
-        expect(helper.figgy_thumbnail_path(file_set)).to include valhalla.download_path(file_set.id, thumbnail_file_id)
+        expect(helper.figgy_thumbnail_path(file_set)).to include download_path(file_set.id, thumbnail_file_id)
       end
     end
 

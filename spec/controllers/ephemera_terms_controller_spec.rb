@@ -81,7 +81,7 @@ RSpec.describe EphemeraTermsController do
     end
     it "renders the form if it doesn't create a ephemera term" do
       post :create, params: { ephemera_term: invalid_params }
-      expect(response).to render_template "valhalla/base/new"
+      expect(response).to render_template "base/new"
     end
   end
 
@@ -151,7 +151,7 @@ RSpec.describe EphemeraTermsController do
         ephemera_term = FactoryBot.create_for_repository(:ephemera_term)
         patch :update, params: { id: ephemera_term.id.to_s, ephemera_term: { label: nil, member_of_vocabulary_id: nil } }
 
-        expect(response).to render_template "valhalla/base/edit"
+        expect(response).to render_template "base/edit"
       end
     end
   end

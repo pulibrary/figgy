@@ -50,7 +50,7 @@
       <% decorated_resource.fields.each do |ephemera_field| %>
         <tr>
           <td><%= ephemera_field.name_label %></td>
-          <td><%= link_to ephemera_field.vocabulary_label, Valhalla::ContextualPath.new(child: ephemera_field.vocabulary, parent_id: nil).show %></td>
+          <td><%= link_to ephemera_field.vocabulary_label, ContextualPath.new(child: ephemera_field.vocabulary, parent_id: nil).show %></td>
           <% if can?(:modify, ephemera_field) %>
             <td><%= link_to 'Edit', edit_ephemera_field_path(ephemera_field) %></td>
           <% end %>

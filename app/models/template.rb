@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # Templates are used to apply default metadata to multiple ephemera objects
-class Template < Valhalla::Resource
+class Template < Resource
   include Valkyrie::Resource::AccessControls
   attribute :id, Valkyrie::Types::ID.optional
   attribute :title

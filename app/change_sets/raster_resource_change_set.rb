@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class RasterResourceChangeSet < Valhalla::ChangeSet
+class RasterResourceChangeSet < ChangeSet
   apply_workflow(WorkflowRegistry.workflow_for(RasterResource))
   delegate :human_readable_type, to: :model
 

@@ -2,13 +2,13 @@
   "name": "ordermanager-rails",
   "private": true,
   "scripts": {
-    "unit": "jest valhalla/app/javascript/test/unit/specs --coverage",
+    "unit": "jest app/javascript/test/unit/specs --coverage",
     "test": "npm run unit"
   },
   "jest": {
     "roots": [
       "<rootDir>",
-      "<rootDir>/valhalla/app/javascript/test"
+      "<rootDir>/app/javascript/test"
     ],
     "modulePaths": [
       "<rootDir>/app/assets/images"
@@ -19,7 +19,7 @@
       "vue"
     ],
     "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>valhalla/app/javascript/$1",
+      "^@/(.*)$": "<rootDir>app/javascript/$1",
       ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "identity-obj-proxy"
     },
     "transform": {
@@ -27,16 +27,16 @@
       ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
     },
     "setupFiles": [
-      "<rootDir>valhalla/app/javascript/test/setup"
+      "<rootDir>app/javascript/test/setup"
     ],
     "mapCoverage": true,
-    "coverageDirectory": "<rootDir>valhalla/app/javascript/test/unit/coverage",
+    "coverageDirectory": "<rootDir>app/javascript/test/unit/coverage",
     "collectCoverageFrom": [
-      "valhalla/app/javascript/components/**/*.{js,vue}",
-      "valhalla/app/javascript/store/vuex/**/*.{js,vue}",
-      "valhalla/app/javascript/mixins/**/*.{js,vue}",
-      "!valhalla/app/javascript/app.vue",
-      "!valhalla/app/javascript/packs/ordermanager.js",
+      "app/javascript/components/**/*.{js,vue}",
+      "app/javascript/store/vuex/**/*.{js,vue}",
+      "app/javascript/mixins/**/*.{js,vue}",
+      "!app/javascript/app.vue",
+      "!app/javascript/packs/ordermanager.js",
       "!**/node_modules/**"
     ]
   },

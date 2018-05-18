@@ -61,7 +61,8 @@ Rails.application.routes.draw do
     end
   end
 
-  # Consider moving these to Valhalla
+  get "/downloads/:resource_id/file/:id", to: "downloads#show", as: :download
+
   scope "/concern" do
     resources :file_sets do
       member do
@@ -204,7 +205,6 @@ Rails.application.routes.draw do
   get "/reports/identifiers_to_reconcile", to: "reports#identifiers_to_reconcile", as: :identifiers_to_reconcile
 
   mount BrowseEverything::Engine => "/browse"
-  mount Valhalla::Engine => "/"
 
   if Rails.env.development? || Rails.env.test?
     mount Riiif::Engine => "/image-service", as: "riiif"

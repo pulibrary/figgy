@@ -4,7 +4,7 @@ class ManifestBuilder
     attr_reader :resource
 
     ##
-    # @param [Valhalla::Resource] resource the Resource being viewed
+    # @param [Resource] resource the Resource being viewed
     def initialize(resource)
       @resource = RootNode.new(resource)
     end

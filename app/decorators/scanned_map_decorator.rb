@@ -64,7 +64,7 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   end
 
   def human_readable_type
-    return I18n.translate("valhalla.models.map_set", default: "Map Set") if map_set?
+    return I18n.translate("models.map_set", default: "Map Set") if map_set?
     model.human_readable_type
   end
 
@@ -147,7 +147,7 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
           term.definition.html_safe
         end +
         h.content_tag("p") do
-          I18n.t("valhalla.works.show.attributes.rights_statement.boilerplate").html_safe
+          I18n.t("works.show.attributes.rights_statement.boilerplate").html_safe
         end
     end
   end

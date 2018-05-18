@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class ArchivalMediaCollectionChangeSet < Valhalla::ChangeSet
+class ArchivalMediaCollectionChangeSet < ChangeSet
   apply_workflow(WorkflowRegistry.workflow_for(ArchivalMediaCollection))
   delegate :human_readable_type, to: :model
 

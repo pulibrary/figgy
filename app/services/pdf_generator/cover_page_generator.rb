@@ -57,7 +57,7 @@ class PDFGenerator
         prawn_document.move_down 20
 
         header(prawn_document, "Princeton University Library Disclaimer")
-        prawn_document.text I18n.t("valhalla.works.show.attributes.rights_statement.boilerplate"), inline_format: true
+        prawn_document.text I18n.t("works.show.attributes.rights_statement.boilerplate"), inline_format: true
         prawn_document.move_down 20
 
         header(prawn_document, "Citation Information")

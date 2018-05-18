@@ -23,8 +23,10 @@
 //= require form/mutex
 //= require browse_everything
 //= require jquery-ui/sortable
+//= require jquery-ui/draggable
 //= require jquery-ui/slider
 //= require jquery-ui/datepicker
+//= require jquery-ui/selectable
 //= require dataTables/jquery.dataTables
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require jqueryui-timepicker-addon
@@ -33,9 +35,14 @@
 //= require openseadragon/jquery
 //= require bootstrap-select
 //= require bootstrap_select_dropdown
-//= require valhalla/valhalla
+//= require bootstrap/affix
+//= require babel/polyfill
+//= require hydra-editor/hydra-editor
 //= require_tree .
 $(document).ready(function() {
   Initializer = require('figgy_boot')
   window.figgy = new Initializer()
 })
+$(document).ready(function() {
+  $('.multi_value.form-group').manage_fields();
+});

@@ -203,7 +203,7 @@ RSpec.describe EphemeraFoldersController do
     end
     it "renders the form if it doesn't create a ephemera folder" do
       post :create, params: { ephemera_folder: invalid_params }
-      expect(response).to render_template "valhalla/base/new"
+      expect(response).to render_template "base/new"
     end
   end
 
@@ -378,7 +378,7 @@ RSpec.describe EphemeraFoldersController do
         ephemera_folder = FactoryBot.create_for_repository(:ephemera_folder)
         patch :update, params: { id: ephemera_folder.id.to_s, ephemera_folder: invalid_params }
 
-        expect(response).to render_template "valhalla/base/edit"
+        expect(response).to render_template "base/edit"
       end
     end
   end

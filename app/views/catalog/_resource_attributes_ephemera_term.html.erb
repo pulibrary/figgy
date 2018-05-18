@@ -4,7 +4,7 @@
       <% document.decorated_resource.display_attributes.each do |attribute, values| %>
         <% if values.present? %>
           <tr>
-            <th><%= t("valhalla.works.show.attributes.#{attribute}.label", default: attribute.to_s.titleize) %></th>
+            <th><%= t("works.show.attributes.#{attribute}.label", default: attribute.to_s.titleize) %></th>
             <td>
               <ul class="tabular">
                 <% values.each do |value| %>

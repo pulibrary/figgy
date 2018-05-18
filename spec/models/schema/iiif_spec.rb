@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe Schema::IIIF do
   before do
-    class TestResource < Valhalla::Resource
+    class TestResource < Resource
       include Schema::IIIF
     end
   end
@@ -24,7 +24,7 @@ RSpec.describe Schema::IIIF do
       expect(resource.class.ancestors).to include(described_class)
     end
 
-    it "defines the schema attributes IIIF for a Valhalla::Resource subclass instances" do
+    it "defines the schema attributes IIIF for a Resource subclass instances" do
       expect(resource.nav_date).to include "test date"
       expect(resource.viewing_direction).to include "test value"
     end

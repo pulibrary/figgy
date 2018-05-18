@@ -1,5 +1,5 @@
 import {StructureParser} from "structure_parser"
-import shift_enabled_selecting from "valhalla/shift_selecting"
+import shift_enabled_selecting from "shift_selecting"
 export default class StructureManager {
   constructor() {
     this.initialize_sortable()

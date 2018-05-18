@@ -77,15 +77,6 @@ GIT
       hydra-derivatives
       valkyrie
 
-PATH
-  remote: valhalla
-  specs:
-    valhalla (0.1.0)
-      font-awesome-rails (~> 4.2)
-      hydra-editor
-      jquery-ui-rails (~> 5.0)
-      rails (~> 5.1.0)
-
 GEM
   remote: https://rubygems.org/
   remote: https://rails-assets.org/
@@ -402,7 +393,7 @@ GEM
       deprecation
       mime-types (> 2.0, < 4.0)
       mini_magick (>= 3.2, < 5)
-    hydra-editor (3.3.2)
+    hydra-editor (4.0.1)
       active-fedora (>= 9.0.0)
       almond-rails (~> 0.1)
       cancancan (~> 1.8)
@@ -837,6 +828,7 @@ DEPENDENCIES
   geo_works-derivatives!
   honeybadger
   hydra-access-controls
+  hydra-editor
   hydra-head
   hydra-role-management
   iiif_manifest!
@@ -887,7 +879,6 @@ DEPENDENCIES
   timecop
   title
   uglifier
-  valhalla!
   valkyrie (= 1.0.0.rc1)
   valkyrie-derivatives!
   web-console

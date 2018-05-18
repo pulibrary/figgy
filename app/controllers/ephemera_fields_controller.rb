@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class EphemeraFieldsController < ApplicationController
-  include Valhalla::ResourceController
+  include ResourceController
   include TokenAuth
   self.change_set_class = DynamicChangeSet
   self.resource_class = EphemeraField
