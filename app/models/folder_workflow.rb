@@ -16,31 +16,26 @@ class FolderWorkflow < BaseWorkflow
     end
   end
 
-  class << self
-    # Retrieve the state for the resource
-    # @param klass [Symbol] the related resource using a different workflow
-    # @param state [Symbol] the state of the related resource using a different workflow
-    # @return [String] the folder workflow state corresponding to the workflow state of the related resource
-    def state_for_related(klass:, state:)
-      super unless valid_states_for_classes.key?(klass) && valid_states_for_classes[klass].key?(state)
-      valid_states_for_classes[klass][state]
-    end
+  # Generate the mapping for workflow states of relatable resource classes to those in the folder workflow
+  # @return Hash{Symbol => Hash{Symbol => Symbol}}
+  def self.state_translations
+    {
+      BoxWorkflow: {
+        new: :needs_qa,
+        ready_to_ship: :needs_qa,
+        shipped: :needs_qa,
+        received: :needs_qa,
+        all_in_production: :complete
+      }
+    }
+  end
 
-    private
-
-      # Generate the mapping for workflow states of relatable resource classes to those in the folder workflow
-      # @return Hash{Symbol => Hash{Symbol => Symbol}}
-      def valid_states_for_classes
-        {
-          EphemeraBox: {
-            new: :needs_qa,
-            ready_to_ship: :needs_qa,
-            shipped: :needs_qa,
-            received: :needs_qa,
-            all_in_production: :complete
-          }
-        }
-      end
+  def translate_state_from(workflow)
+    return super if workflow.class == self.class
+    workflow_class_key = workflow.class.to_s.to_sym
+    state_key = workflow.current_state
+    raise InvalidStateTranslation unless self.class.state_translations.key?(workflow_class_key) && self.class.state_translations[workflow_class_key].key?(state_key)
+    self.class.state_translations[workflow_class_key][state_key]
   end
 
   # States in which the record can be publicly viewable

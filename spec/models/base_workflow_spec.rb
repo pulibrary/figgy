@@ -2,15 +2,9 @@
 require "rails_helper"
 
 describe BaseWorkflow do
-  describe ".valid_states_for_classes" do
+  describe ".state_translations" do
     it "returns an empty Hash" do
-      expect(described_class.valid_states_for_classes).to eq({})
-    end
-  end
-
-  describe ".state_for_related" do
-    it "returns the state" do
-      expect(described_class.state_for_related(klass: nil, state: "complete")).to eq "complete"
+      expect(described_class.state_translations).to eq({})
     end
   end
 
