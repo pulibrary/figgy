@@ -102,9 +102,7 @@ class Ability
     resource.mime_type == "application/pdf"
   end
 
-  # The search builder needs to enumerate actual names of states
-  #   so although this duplicates some logic with #readable_concern?
-  #   we need both
+  # The search builder uses this to enumerate actual names of states
   # @see app/models/search_builder.rb
   def unreadable_states
     return [] if universal_reader?
@@ -163,12 +161,6 @@ class Ability
         true
       end
     end
-  end
-
-  def readable_concern?(resource)
-    return false if unreadable_states.include? Array.wrap(resource.state).first
-    return true if universal_reader?
-    resource.decorate.public_readable_state?
   end
 
   def group_readable?(obj)
