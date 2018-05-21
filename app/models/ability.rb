@@ -2,8 +2,11 @@
 class Ability
   include Hydra::Ability
   # Define any customized permissions here.
+
+  self.ability_logic +=[:manifest_permissions]
+
   def custom_permissions
-    alias_action :show, :manifest, to: :read
+    alias_action :show, to: :read
     alias_action :color_pdf, :pdf, :edit, :browse_everything_files, :structure, :file_manager, :order_manager, to: :modify
     roles.each do |role|
       send "#{role}_permissions" if current_user.send "#{role}?"
@@ -28,10 +31,6 @@ class Ability
   end
 
   def anonymous_permissions
-    # do not allow viewing incomplete resources
-    cannot [:manifest], EphemeraFolder do |resource|
-      !manifestable_concern?(resource)
-    end
     can :pdf, curation_concerns do |resource|
       ["color", "gray"].include?(Array(resource.pdf_type).first)
     end
@@ -103,10 +102,6 @@ class Ability
     resource.mime_type == "application/pdf"
   end
 
-  def manifestable_concern?(resource)
-    resource.decorate.manifestable_state?
-  end
-
   # The search builder needs to enumerate actual names of states
   #   so although this duplicates some logic with #readable_concern?
   #   we need both
@@ -142,10 +137,27 @@ class Ability
     end
   end
 
+  def manifest_permissions
+    can :manifest, Valkyrie::Resource do |obj|
+      valkyrie_test_manifest(obj) || valkyrie_test_edit(obj)
+    end
+  end
+
+  def valkyrie_test_manifest(obj)
+    if group_readable?(obj) || user_readable?(obj) || universal_reader?
+      # some groups can only read published manifests, even if they have permissions indexed
+      if !current_user.admin? && !current_user.staff?
+        obj.decorate.manifestable_state?
+      else
+        true
+      end
+    end
+  end
+
   def valkyrie_test_read(obj)
     if group_readable?(obj) || user_readable?(obj) || universal_reader?
       # some groups can only read published documents, even if they have permissions indexed
-      if current_user.campus_patron? || current_user.anonymous?
+      if !current_user.admin? && !current_user.staff?
         obj.decorate.public_readable_state?
       else
         true

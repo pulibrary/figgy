@@ -15,7 +15,7 @@ describe Ability do
   end
 
   let(:open_scanned_resource) do
-    FactoryBot.create_for_repository(:complete_open_scanned_resource, user: creating_user, files: [page_file])
+    FactoryBot.create_for_repository(:complete_open_scanned_resource, user: creating_user, title: "Open", files: [page_file])
   end
 
   let(:open_file_set) do
@@ -135,6 +135,7 @@ describe Ability do
       is_expected.not_to be_able_to(:destroy, admin_file)
       is_expected.not_to be_able_to(:destroy, other_staff_file)
       is_expected.to be_able_to(:manifest, open_scanned_resource)
+      is_expected.to be_able_to(:read, pending_scanned_resource)
       is_expected.to be_able_to(:manifest, pending_scanned_resource)
     }
   end
