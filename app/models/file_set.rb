@@ -37,6 +37,14 @@ class FileSet < Resource
     file_metadata.select(&:thumbnail_file?)
   end
 
+  def preservation_files
+    file_metadata.select(&:preservation_file?)
+  end
+
+  def intermediate_files
+    file_metadata.select(&:intermediate_file?)
+  end
+
   private
 
     def original_file_checksum

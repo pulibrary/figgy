@@ -45,6 +45,14 @@ class FileMetadata < Valkyrie::Resource
     use.include?(Valkyrie::Vocab::PCDMUse.ThumbnailImage)
   end
 
+  def preservation_file?
+    use.include?(Valkyrie::Vocab::PCDMUse.PreservationMasterFile)
+  end
+
+  def intermediate_file?
+    use.include?(Valkyrie::Vocab::PCDMUse.IntermediateFile)
+  end
+
   # Populates FileMetadata with fixity check results
   # @return [FileMetadata] you'll need to save this node after running the fixity
   def run_fixity
