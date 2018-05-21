@@ -452,4 +452,104 @@ RSpec.describe Wayfinder do
       end
     end
   end
+
+  context "when given a scanned map" do
+    describe "#collections" do
+      it "returns all collections it's a member of" do
+        collection = FactoryBot.create_for_repository(:collection)
+        resource = FactoryBot.create_for_repository(:scanned_map, member_of_collection_ids: collection.id)
+
+        wayfinder = described_class.for(resource)
+
+        expect(wayfinder.collections.map(&:id)).to eq [collection.id]
+        expect(wayfinder.collections.map(&:class)).to eq [Collection]
+        expect(wayfinder.decorated_collections.map(&:class)).to eq [CollectionDecorator]
+      end
+    end
+    describe "#file_sets" do
+      it "returns all file set members" do
+        scanned_map = FactoryBot.create_for_repository(:scanned_map)
+        file_set = FactoryBot.create_for_repository(:file_set)
+        resource = FactoryBot.create_for_repository(:scanned_map, member_ids: [file_set.id, scanned_map.id])
+
+        wayfinder = described_class.for(resource)
+
+        expect(wayfinder.file_sets.map(&:id)).to eq [file_set.id]
+        expect(wayfinder.file_sets.map(&:class)).to eq [FileSet]
+        expect(wayfinder.decorated_file_sets.map(&:id)).to eq [file_set.id]
+        expect(wayfinder.decorated_file_sets.map(&:class)).to eq [FileSetDecorator]
+      end
+    end
+
+    describe "#geo_image_members" do
+      it "returns all geo image members" do
+        file_set = FactoryBot.create_for_repository(:geo_image_file_set)
+        file_set2 = FactoryBot.create_for_repository(:geo_metadata_file_set)
+        scanned_map = FactoryBot.create_for_repository(:scanned_map, member_ids: [file_set.id, file_set2.id])
+
+        wayfinder = described_class.for(scanned_map)
+
+        expect(wayfinder.geo_image_members.map(&:id)).to eq [file_set.id]
+        expect(wayfinder.geo_image_members.map(&:class)).to eq [FileSet]
+      end
+    end
+
+    describe "#geo_metadata_members" do
+      it "returns all geo metadata members" do
+        file_set = FactoryBot.create_for_repository(:geo_image_file_set)
+        file_set2 = FactoryBot.create_for_repository(:geo_metadata_file_set)
+        scanned_map = FactoryBot.create_for_repository(:scanned_map, member_ids: [file_set.id, file_set2.id])
+
+        wayfinder = described_class.for(scanned_map)
+
+        expect(wayfinder.geo_metadata_members.map(&:id)).to eq [file_set2.id]
+        expect(wayfinder.geo_metadata_members.map(&:class)).to eq [FileSet]
+      end
+    end
+
+    describe "#raster_resources" do
+      it "returns all raster resource members" do
+        raster_resource = FactoryBot.create_for_repository(:raster_resource)
+        child_map = FactoryBot.create_for_repository(:scanned_map)
+        scanned_map = FactoryBot.create_for_repository(:scanned_map, member_ids: [raster_resource.id, child_map.id])
+
+        wayfinder = described_class.for(scanned_map)
+
+        expect(wayfinder.raster_resources.map(&:id)).to eq [raster_resource.id]
+        expect(wayfinder.raster_resources.map(&:class)).to eq [RasterResource]
+        expect(wayfinder.decorated_raster_resources.map(&:id)).to eq [raster_resource.id]
+        expect(wayfinder.decorated_raster_resources.map(&:class)).to eq [RasterResourceDecorator]
+      end
+    end
+
+    describe "#scanned_maps" do
+      it "returns all scanned map members" do
+        raster_resource = FactoryBot.create_for_repository(:raster_resource)
+        child_map = FactoryBot.create_for_repository(:scanned_map)
+        scanned_map = FactoryBot.create_for_repository(:scanned_map, member_ids: [raster_resource.id, child_map.id])
+
+        wayfinder = described_class.for(scanned_map)
+
+        expect(wayfinder.scanned_maps.map(&:id)).to eq [child_map.id]
+        expect(wayfinder.scanned_maps.map(&:class)).to eq [ScannedMap]
+        expect(wayfinder.decorated_scanned_maps.map(&:id)).to eq [child_map.id]
+        expect(wayfinder.decorated_scanned_maps.map(&:class)).to eq [ScannedMapDecorator]
+      end
+    end
+
+    describe "#scanned_map_parents" do
+      it "returns all parents which are scanned maps" do
+        child = FactoryBot.create_for_repository(:scanned_map)
+        parent = FactoryBot.create_for_repository(:scanned_map, member_ids: [child.id])
+        FactoryBot.create_for_repository(:raster_resource, member_ids: [child.id])
+
+        wayfinder = described_class.for(child)
+
+        expect(wayfinder.scanned_map_parents.map(&:id)).to eq [parent.id]
+        expect(wayfinder.scanned_map_parents.map(&:class)).to eq [ScannedMap]
+        expect(wayfinder.decorated_scanned_map_parents.map(&:id)).to eq [parent.id]
+        expect(wayfinder.decorated_scanned_map_parents.map(&:class)).to eq [ScannedMapDecorator]
+      end
+    end
+  end
 end
