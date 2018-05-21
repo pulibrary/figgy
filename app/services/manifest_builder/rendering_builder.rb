@@ -31,7 +31,7 @@ class ManifestBuilder
 
       def rendering_hash
         {
-          "@id" => "http://arks.princeton.edu/#{identifier}",
+          "@id" => Ark.new(identifier).uri,
           "format" => "text/html"
         }
       end

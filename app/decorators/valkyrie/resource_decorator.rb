@@ -15,6 +15,10 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
            :source_metadata_identifier,
            :title
 
+  def ark
+    Ark.new(identifier).uri
+  end
+
   def created_at
     output = super
     return if output.blank?

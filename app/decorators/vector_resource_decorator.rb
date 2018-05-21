@@ -5,12 +5,6 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
 
   delegate(*Schema::Geo.attributes, to: :primary_imported_metadata, prefix: :imported)
 
-  def ark
-    id = identifier.try(:first)
-    return unless id
-    "http://arks.princeton.edu/#{id}"
-  end
-
   def attachable_objects
     [VectorResource]
   end
