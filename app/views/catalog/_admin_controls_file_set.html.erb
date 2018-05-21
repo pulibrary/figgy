@@ -39,6 +39,36 @@
         <% end %>
       </tr>
     <% end %>
+    <% resource.intermediate_files.each do |file| %>
+      <tr>
+        <td><span class="label label-info">Intermediate File</span>&nbsp;<%= file.label.first %></td>
+        <% if can?(:download, resource) %>
+          <td><%= link_to "Download", download_path(resource.id, file.id) %></td>
+        <% else %>
+          <td></td>
+        <% end %>
+        <% if can?(:update, resource) %>
+          <td><%= f.input "intermediate_files[][#{file.id}]", as: :file, label: false, required: false %></td>
+        <% else %>
+          <td></td>
+        <% end %>
+      </tr>
+    <% end %>
+    <% resource.preservation_files.each do |file| %>
+      <tr>
+        <td><span class="label label-info">Preservation Master</span>&nbsp;<%= file.label.first %></td>
+        <% if can?(:download, resource) %>
+          <td><%= link_to "Download", download_path(resource.id, file.id) %></td>
+        <% else %>
+          <td></td>
+        <% end %>
+        <% if can?(:update, resource) %>
+          <td><%= f.input "preservation_files[][#{file.id}]", as: :file, label: false, required: false %></td>
+        <% else %>
+          <td></td>
+        <% end %>
+      </tr>
+    <% end %>
     <% resource.thumbnail_files.each do |file| %>
       <tr>
         <td><span class="label label-info">Thumbnail File</span>&nbsp;<%= file.label.first %></td>
