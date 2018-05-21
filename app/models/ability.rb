@@ -29,9 +29,6 @@ class Ability
 
   def anonymous_permissions
     # do not allow viewing incomplete resources
-    cannot [:read], curation_concerns do |resource|
-      !readable_concern?(resource)
-    end
     cannot [:manifest], EphemeraFolder do |resource|
       !manifestable_concern?(resource)
     end
@@ -110,12 +107,6 @@ class Ability
     resource.decorate.manifestable_state?
   end
 
-  def readable_concern?(resource)
-    return false if unreadable_states.include? Array.wrap(resource.state).first
-    return true if universal_reader?
-    resource.decorate.public_readable_state?
-  end
-
   # The search builder needs to enumerate actual names of states
   #   so although this duplicates some logic with #readable_concern?
   #   we need both
@@ -152,7 +143,20 @@ class Ability
   end
 
   def valkyrie_test_read(obj)
-    group_readable?(obj) || user_readable?(obj)
+    if group_readable?(obj) || user_readable?(obj) || universal_reader?
+      # some groups can only read published documents, even if they have permissions indexed
+      if current_user.campus_patron? || current_user.anonymous?
+        obj.decorate.public_readable_state?
+      else
+        true
+      end
+    end
+  end
+
+  def readable_concern?(resource)
+    return false if unreadable_states.include? Array.wrap(resource.state).first
+    return true if universal_reader?
+    resource.decorate.public_readable_state?
   end
 
   def group_readable?(obj)

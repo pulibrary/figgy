@@ -27,15 +27,15 @@ describe Ability do
   end
 
   let(:private_scanned_resource) do
-    FactoryBot.create_for_repository(:complete_private_scanned_resource, user: creating_user, files: [page_file_2])
+    FactoryBot.create_for_repository(:complete_private_scanned_resource, title: "Private", user: creating_user, files: [page_file_2])
   end
 
   let(:campus_only_scanned_resource) do
-    FactoryBot.create(:complete_campus_only_scanned_resource, user: creating_user)
+    FactoryBot.create(:complete_campus_only_scanned_resource, title: "Campus Only", user: creating_user)
   end
 
   let(:pending_scanned_resource) do
-    FactoryBot.create(:pending_scanned_resource, user: creating_user)
+    FactoryBot.create(:pending_scanned_resource, title: "Pending", user: creating_user)
   end
 
   let(:metadata_review_scanned_resource) do
