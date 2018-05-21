@@ -20,7 +20,7 @@ class Ability
 
   # Staff can do anything except delete someone else's stuff
   def staff_permissions
-    can [:create, :read, :modify, :update], :all
+    can [:create, :read, :modify, :update, :manifest], :all
     can [:destroy], Template
     can [:destroy], FileSet do |obj|
       obj.depositor == [current_user.uid]
@@ -143,22 +143,16 @@ class Ability
 
   def valkyrie_test_manifest(obj)
     return false unless group_readable?(obj) || user_readable?(obj) || universal_reader?
-    # some groups can only read published manifests, even if they have permissions indexed
-    if current_user.admin? || current_user.staff?
-      true
-    else
-      obj.decorate.manifestable_state?
-    end
+    # any group with :all permissions never hits this method
+    #   other groups can only read published manifests, even if they have permissions indexed
+    obj.decorate.manifestable_state?
   end
 
   def valkyrie_test_read(obj)
     return false unless group_readable?(obj) || user_readable?(obj) || universal_reader?
-    # some groups can only read published documents, even if they have permissions indexed
-    if current_user.admin? || current_user.staff?
-      true
-    else
-      obj.decorate.public_readable_state?
-    end
+    # any group with :all permissions never hits this method
+    #   other groups can only read published manifests, even if they have permissions indexed
+    obj.decorate.public_readable_state?
   end
 
   def group_readable?(obj)
