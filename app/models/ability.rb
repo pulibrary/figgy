@@ -144,20 +144,20 @@ class Ability
   def valkyrie_test_manifest(obj)
     return false unless group_readable?(obj) || user_readable?(obj) || universal_reader?
     # some groups can only read published manifests, even if they have permissions indexed
-    if !current_user.admin? && !current_user.staff?
-      obj.decorate.manifestable_state?
-    else
+    if current_user.admin? || current_user.staff?
       true
+    else
+      obj.decorate.manifestable_state?
     end
   end
 
   def valkyrie_test_read(obj)
     return false unless group_readable?(obj) || user_readable?(obj) || universal_reader?
     # some groups can only read published documents, even if they have permissions indexed
-    if !current_user.admin? && !current_user.staff?
-      obj.decorate.public_readable_state?
-    else
+    if current_user.admin? || current_user.staff?
       true
+    else
+      obj.decorate.public_readable_state?
     end
   end
 
