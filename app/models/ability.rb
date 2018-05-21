@@ -3,7 +3,7 @@ class Ability
   include Hydra::Ability
   # Define any customized permissions here.
 
-  self.ability_logic +=[:manifest_permissions]
+  self.ability_logic += [:manifest_permissions]
 
   def custom_permissions
     alias_action :show, to: :read
@@ -142,24 +142,22 @@ class Ability
   end
 
   def valkyrie_test_manifest(obj)
-    if group_readable?(obj) || user_readable?(obj) || universal_reader?
-      # some groups can only read published manifests, even if they have permissions indexed
-      if !current_user.admin? && !current_user.staff?
-        obj.decorate.manifestable_state?
-      else
-        true
-      end
+    return false unless group_readable?(obj) || user_readable?(obj) || universal_reader?
+    # some groups can only read published manifests, even if they have permissions indexed
+    if !current_user.admin? && !current_user.staff?
+      obj.decorate.manifestable_state?
+    else
+      true
     end
   end
 
   def valkyrie_test_read(obj)
-    if group_readable?(obj) || user_readable?(obj) || universal_reader?
-      # some groups can only read published documents, even if they have permissions indexed
-      if !current_user.admin? && !current_user.staff?
-        obj.decorate.public_readable_state?
-      else
-        true
-      end
+    return false unless group_readable?(obj) || user_readable?(obj) || universal_reader?
+    # some groups can only read published documents, even if they have permissions indexed
+    if !current_user.admin? && !current_user.staff?
+      obj.decorate.public_readable_state?
+    else
+      true
     end
   end
 
