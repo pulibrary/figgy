@@ -96,7 +96,7 @@ RSpec.describe AuthTokensController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) do
-        { label: "New Label", group: ["image_editor"] }
+        { label: "New Label", group: ["staff"] }
       end
 
       it "updates the requested auth_token" do
@@ -104,7 +104,7 @@ RSpec.describe AuthTokensController, type: :controller do
         put :update, params: { id: auth_token.to_param, auth_token: new_attributes }
         auth_token.reload
         expect(auth_token.label).to eq "New Label"
-        expect(auth_token.group).to eq ["image_editor"]
+        expect(auth_token.group).to eq ["staff"]
       end
 
       it "redirects to the auth_token" do

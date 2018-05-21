@@ -18,7 +18,7 @@ class ScannedResource < Resource
   end
 
   def to_s
-    "#{human_readable_type}: #{title.to_sentence}"
+    "#{human_readable_type}: #{title&.to_sentence}"
   end
 
   def primary_imported_metadata

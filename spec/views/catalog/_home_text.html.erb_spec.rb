@@ -15,8 +15,8 @@ RSpec.describe "catalog/_home_text.html.erb" do
     end
   end
 
-  context "when the user is not an admin" do
-    let(:user) { FactoryBot.create(:curator) }
+  context "when the user is patron" do
+    let(:user) { FactoryBot.create(:campus_patron) }
 
     it "does not have a link to the fixity dashboard" do
       expect(rendered).not_to have_link "Fixity Dashboard"

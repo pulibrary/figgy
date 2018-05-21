@@ -82,12 +82,11 @@
     "suppressed_bsi": false,
     "actionable_workflow_roles_ssim": [
       "geo_works-admin",
-      "geo_works-editor",
       "geo_works-notify_metadata_review",
       "geo_works-notify_final_review",
       "geo_works-notify_complete",
       "geo_works-notify_takedown",
-      "geo_works-curator",
+      "geo_works-staff",
       "geo_works-notify_flagged"
     ],
     "workflow_state_name_ssim": [
