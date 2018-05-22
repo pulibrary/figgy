@@ -23,5 +23,9 @@ FactoryBot.define do
     factory :geo_raster_file_set do
       file_metadata FileMetadata.new(mime_type: ControlledVocabulary.for(:geo_raster_format).all.first.value, use: Valkyrie::Vocab::PCDMUse.OriginalFile)
     end
+
+    factory :geo_vector_file_set do
+      file_metadata FileMetadata.new(mime_type: ControlledVocabulary.for(:geo_vector_format).all.first.value, use: Valkyrie::Vocab::PCDMUse.OriginalFile)
+    end
   end
 end

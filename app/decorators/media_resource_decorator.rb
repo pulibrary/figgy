@@ -16,6 +16,8 @@ class MediaResourceDecorator < Valkyrie::ResourceDecorator
     false
   end
 
+  delegate :members, :parents, to: :wayfinder
+
   # TODO: Rename to decorated_file_sets
   def file_sets
     wayfinder.decorated_file_sets

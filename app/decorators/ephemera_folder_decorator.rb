@@ -43,7 +43,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
                          :updated_at,
                          :sort_title
 
-  delegate :members, :parent, to: :wayfinder
+  delegate :members, :parent, :query_service, to: :wayfinder
 
   # TODO: Rename to decorated_collections
   def collections

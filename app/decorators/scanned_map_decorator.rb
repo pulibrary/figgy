@@ -35,7 +35,7 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
     [ScannedMap, RasterResource]
   end
 
-  delegate :collections, :geo_metadata_members, :members, to: :wayfinder
+  delegate :collections, :geo_metadata_members, :members, :parents, to: :wayfinder
 
   # TODO: Rename to decorated_file_sets
   def file_sets

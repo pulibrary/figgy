@@ -15,7 +15,9 @@ class Wayfinder < BaseWayfinder
     EphemeraVocabulary => EphemeraVocabularyWayfinder,
     MediaResource => MediaResourceWayfinder,
     RasterResource => RasterResourceWayfinder,
-    ScannedMap => ScannedMapWayfinder
+    ScannedMap => ScannedMapWayfinder,
+    SimpleResource => SimpleResourceWayfinder,
+    VectorResource => VectorResourceWayfinder
   }
 
   def self.for(resource)

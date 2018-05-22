@@ -552,4 +552,152 @@ RSpec.describe Wayfinder do
       end
     end
   end
+
+  context "when given a simple resource" do
+    describe "#members" do
+      it "returns all members" do
+        child = FactoryBot.create_for_repository(:file_set)
+        child_resource = FactoryBot.create_for_repository(:simple_resource)
+        resource = FactoryBot.create_for_repository(:simple_resource, member_ids: [child.id, child_resource.id])
+
+        wayfinder = described_class.for(resource)
+
+        expect(wayfinder.members.map(&:id)).to eq [child.id, child_resource.id]
+        expect(wayfinder.members.map(&:class)).to eq [FileSet, SimpleResource]
+        expect(wayfinder.decorated_members.map(&:id)).to eq [child.id, child_resource.id]
+        expect(wayfinder.decorated_members.map(&:class)).to eq [FileSetDecorator, SimpleResourceDecorator]
+      end
+    end
+    describe "#file_sets" do
+      it "returns all file sets" do
+        child = FactoryBot.create_for_repository(:file_set)
+        child_resource = FactoryBot.create_for_repository(:simple_resource)
+        resource = FactoryBot.create_for_repository(:simple_resource, member_ids: [child.id, child_resource.id])
+
+        wayfinder = described_class.for(resource)
+
+        expect(wayfinder.file_sets.map(&:id)).to eq [child.id]
+        expect(wayfinder.file_sets.map(&:class)).to eq [FileSet]
+        expect(wayfinder.decorated_file_sets.map(&:id)).to eq [child.id]
+        expect(wayfinder.decorated_file_sets.map(&:class)).to eq [FileSetDecorator]
+      end
+    end
+    describe "#simple_resources" do
+      it "returns all simple resource members" do
+        child = FactoryBot.create_for_repository(:file_set)
+        child_resource = FactoryBot.create_for_repository(:simple_resource)
+        resource = FactoryBot.create_for_repository(:simple_resource, member_ids: [child.id, child_resource.id])
+
+        wayfinder = described_class.for(resource)
+
+        expect(wayfinder.simple_resources.map(&:id)).to eq [child_resource.id]
+        expect(wayfinder.simple_resources.map(&:class)).to eq [SimpleResource]
+        expect(wayfinder.decorated_simple_resources.map(&:id)).to eq [child_resource.id]
+        expect(wayfinder.decorated_simple_resources.map(&:class)).to eq [SimpleResourceDecorator]
+      end
+    end
+  end
+
+  context "when given a vector resource" do
+    describe "#members" do
+      it "returns all members" do
+        child = FactoryBot.create_for_repository(:geo_metadata_file_set)
+        child2 = FactoryBot.create_for_repository(:geo_vector_file_set)
+        child_resource = FactoryBot.create_for_repository(:vector_resource)
+        resource = FactoryBot.create_for_repository(:vector_resource, member_ids: [child.id, child2.id, child_resource.id])
+
+        wayfinder = described_class.for(resource)
+
+        expect(wayfinder.members.map(&:id)).to eq [child.id, child2.id, child_resource.id]
+        expect(wayfinder.members.map(&:class)).to eq [FileSet, FileSet, VectorResource]
+        expect(wayfinder.decorated_members.map(&:id)).to eq [child.id, child2.id, child_resource.id]
+        expect(wayfinder.decorated_members.map(&:class)).to eq [FileSetDecorator, FileSetDecorator, VectorResourceDecorator]
+      end
+    end
+    describe "#file_sets" do
+      it "returns all file sets" do
+        child = FactoryBot.create_for_repository(:geo_metadata_file_set)
+        child2 = FactoryBot.create_for_repository(:geo_vector_file_set)
+        child_resource = FactoryBot.create_for_repository(:vector_resource)
+        resource = FactoryBot.create_for_repository(:vector_resource, member_ids: [child.id, child2.id, child_resource.id])
+
+        wayfinder = described_class.for(resource)
+
+        expect(wayfinder.file_sets.map(&:id)).to eq [child.id, child2.id]
+        expect(wayfinder.file_sets.map(&:class)).to eq [FileSet, FileSet]
+        expect(wayfinder.decorated_file_sets.map(&:id)).to eq [child.id, child2.id]
+        expect(wayfinder.decorated_file_sets.map(&:class)).to eq [FileSetDecorator, FileSetDecorator]
+      end
+    end
+
+    describe "#geo_vector_members" do
+      it "returns all vector mime-type filesets" do
+        child = FactoryBot.create_for_repository(:geo_metadata_file_set)
+        child2 = FactoryBot.create_for_repository(:geo_vector_file_set)
+        child_resource = FactoryBot.create_for_repository(:vector_resource)
+        resource = FactoryBot.create_for_repository(:vector_resource, member_ids: [child.id, child2.id, child_resource.id])
+
+        wayfinder = described_class.for(resource)
+
+        expect(wayfinder.geo_vector_members.map(&:id)).to eq [child2.id]
+        expect(wayfinder.geo_vector_members.map(&:class)).to eq [FileSet]
+      end
+    end
+    describe "#geo_metadata_members" do
+      it "returns all metadata mime-type filesets" do
+        child = FactoryBot.create_for_repository(:geo_metadata_file_set)
+        child2 = FactoryBot.create_for_repository(:geo_vector_file_set)
+        child_resource = FactoryBot.create_for_repository(:vector_resource)
+        resource = FactoryBot.create_for_repository(:vector_resource, member_ids: [child.id, child2.id, child_resource.id])
+
+        wayfinder = described_class.for(resource)
+
+        expect(wayfinder.geo_metadata_members.map(&:id)).to eq [child.id]
+        expect(wayfinder.geo_metadata_members.map(&:class)).to eq [FileSet]
+      end
+    end
+    describe "#vector_resources" do
+      it "returns all vector resource members" do
+        child = FactoryBot.create_for_repository(:geo_metadata_file_set)
+        child2 = FactoryBot.create_for_repository(:geo_vector_file_set)
+        child_resource = FactoryBot.create_for_repository(:vector_resource)
+        resource = FactoryBot.create_for_repository(:vector_resource, member_ids: [child.id, child2.id, child_resource.id])
+
+        wayfinder = described_class.for(resource)
+
+        expect(wayfinder.vector_resources.map(&:id)).to eq [child_resource.id]
+        expect(wayfinder.vector_resources.map(&:class)).to eq [VectorResource]
+        expect(wayfinder.decorated_vector_resources.map(&:id)).to eq [child_resource.id]
+        expect(wayfinder.decorated_vector_resources.map(&:class)).to eq [VectorResourceDecorator]
+      end
+    end
+    describe "#raster_resource_parents" do
+      it "returns all parents which are raster resources" do
+        child = FactoryBot.create_for_repository(:vector_resource)
+        raster_parent = FactoryBot.create_for_repository(:raster_resource, member_ids: [child.id])
+        FactoryBot.create_for_repository(:vector_resource, member_ids: [child.id])
+
+        wayfinder = described_class.for(child)
+
+        expect(wayfinder.raster_resource_parents.map(&:id)).to eq [raster_parent.id]
+        expect(wayfinder.raster_resource_parents.map(&:class)).to eq [RasterResource]
+        expect(wayfinder.decorated_raster_resource_parents.map(&:id)).to eq [raster_parent.id]
+        expect(wayfinder.decorated_raster_resource_parents.map(&:class)).to eq [RasterResourceDecorator]
+      end
+    end
+    describe "#vector_resource_parents" do
+      it "returns all parents which are vector resources" do
+        child = FactoryBot.create_for_repository(:vector_resource)
+        FactoryBot.create_for_repository(:raster_resource, member_ids: [child.id])
+        vector_parent = FactoryBot.create_for_repository(:vector_resource, member_ids: [child.id])
+
+        wayfinder = described_class.for(child)
+
+        expect(wayfinder.vector_resource_parents.map(&:id)).to eq [vector_parent.id]
+        expect(wayfinder.vector_resource_parents.map(&:class)).to eq [VectorResource]
+        expect(wayfinder.decorated_vector_resource_parents.map(&:id)).to eq [vector_parent.id]
+        expect(wayfinder.decorated_vector_resource_parents.map(&:class)).to eq [VectorResourceDecorator]
+      end
+    end
+  end
 end
