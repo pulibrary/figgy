@@ -80,7 +80,9 @@ RSpec.describe IngestArchivalMediaBagJob do
       let(:bag_path) { Rails.root.join("spec", "fixtures", "bags", "invalid_bag") }
 
       it "raises an error" do
-        expect { described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user) }.to raise_error(IngestArchivalMediaBagJob::InvalidBagError, "Bag at #{bag_path} is an invalid bag")
+        expect { described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user) }.to raise_error(
+          ArchivalMediaBagParser::InvalidBagError, "Bag at #{bag_path} is an invalid bag"
+        )
       end
     end
   end
