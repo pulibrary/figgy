@@ -93,6 +93,7 @@ Metrics/ParameterLists:
 Rails/OutputSafety:
   Exclude:
     - 'app/decorators/**/*'
+    - 'app/validators/unique_archival_media_component_id_validator.rb'
 RSpec/AnyInstance:
   Exclude:
     - 'spec/jobs/ingest_mets_job_spec.rb'
