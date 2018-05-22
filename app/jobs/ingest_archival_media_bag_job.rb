@@ -56,6 +56,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
       end
 
       # group all the files in the bag by barcode_with_part
+      # @return [Hash] mapping string barcode_with_part to an array of IngestableAudioFiles
       def file_groups
         return @file_groups unless @file_groups.empty?
         audio_files.each do |audio_file|
@@ -90,54 +91,6 @@ class IngestArchivalMediaBagJob < ApplicationJob
           bag = BagIt::Bag.new @path
           bag.valid?
         end
-    end
-
-    # Decorates the Pathname with some convenience parsing methods
-    # Provides methods needed by FileMetadata.for
-    class IngestableAudioFile
-      attr_reader :path, :barcode_with_part
-      def initialize(path:)
-        @path = path
-      end
-
-      def original_filename
-        path.split.last
-      end
-
-      def mime_type
-        if master? || intermediate?
-          "audio/wav"
-        else
-          "audio/mpeg"
-        end
-      end
-      alias content_type mime_type
-
-      def use
-        if master?
-          Valkyrie::Vocab::PCDMUse.PreservationMasterFile
-        elsif intermediate?
-          Valkyrie::Vocab::PCDMUse.IntermediateFile
-        elsif access?
-          Valkyrie::Vocab::PCDMUse.ServiceFile
-        end
-      end
-
-      def master?
-        path.to_s.end_with?("_pm.wav")
-      end
-
-      def intermediate?
-        path.to_s.end_with?("_i.wav")
-      end
-
-      def access?
-        path.to_s.end_with?("_a.mp3")
-      end
-
-      def barcode_with_part
-        @barcode_with_part ||= BARCODE_WITH_PART_REGEX.match(original_filename.to_s)[1]
-      end
     end
 
     # Dictionary implemented using a wrapper for a Hash
