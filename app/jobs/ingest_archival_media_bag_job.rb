@@ -10,7 +10,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
   def perform(collection_component:, bag_path:, user:)
     bag_path = Pathname.new(bag_path.to_s)
-    bag = ArchivalMediaBagParser.new(path: bag_path)
+    bag = ArchivalMediaBagParser.new(path: bag_path, component_id: collection_component)
     changeset_persister.buffer_into_index do |buffered_persister|
       amc = find_or_create_amc(collection_component)
       Ingester.new(collection: amc, bag: bag, user: user, changeset_persister: buffered_persister).ingest
@@ -47,11 +47,12 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
     # get all the data files, group them in file sets (master (original_file), intermediate (for download), access)
     class ArchivalMediaBagParser
-      attr_reader :path, :audio_files, :file_groups, :component_groups
-      def initialize(path:)
+      attr_reader :path, :audio_files, :file_groups, :component_groups, :component_dict
+      def initialize(path:, component_id:)
         @path = path
         @file_groups = {}
         @component_groups = {}
+        @component_dict = BarcodeComponentDict.new(component_id)
         raise InvalidBagError, "Bag at #{@path} is an invalid bag" unless valid?
       end
 
@@ -66,9 +67,8 @@ class IngestArchivalMediaBagJob < ApplicationJob
       end
 
       # file_groups in groups by component id
-      # @param component_dict [BarcodeComponentDict]
       # @return [Hash] map keying EAD component IDs to file barcodes
-      def component_groups(component_dict)
+      def component_groups
         return @component_groups unless @component_groups.empty?
         file_groups.keys.each do |barcode_with_part|
           cid = component_dict.lookup(barcode_with_part)
@@ -96,11 +96,11 @@ class IngestArchivalMediaBagJob < ApplicationJob
     # Dictionary implemented using a wrapper for a Hash
     # Wraps a hash of component_id => barcode_with_part
     class BarcodeComponentDict
-      attr_reader :collection, :dict
+      attr_reader :dict
       # Constructor
       # @param collection [ArchivalMediaCollection]
-      def initialize(collection)
-        @collection = collection
+      def initialize(component_id="fixme")
+        @component_id = component_id
         parse_dict!
       end
 
@@ -124,7 +124,8 @@ class IngestArchivalMediaBagJob < ApplicationJob
         # Parses XML from Collection Resource metadata
         # @return [Nokogiri::XML::Element] the root element of the XML Document
         def xml
-          @xml ||= Nokogiri::XML(collection.imported_metadata.first.source_metadata.first).remove_namespaces!
+          #@xml ||= Nokogiri::XML(collection.imported_metadata.first.source_metadata.first).remove_namespaces!
+          @xml ||= Nokogiri::XML(RemoteRecord.retrieve(@component_id).attributes[:source_metadata]).remove_namespaces!
         end
 
         # Retrieves the set of XML Elements containing barcodes within the EAD
@@ -183,16 +184,10 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
       private
 
-        # Construct a new Barcode/EAD Component dictionary for an ArchivalMediaCollection
-        # @return [BarcodeComponentDict]
-        def component_dict
-          @component_dict ||= BarcodeComponentDict.new(collection)
-        end
-
         # Retrieve a Hash of EAD Component IDs/Barcodes for file barcodes specified in a given Bag
         # @return [Hash] map of EAD component IDs to file barcodes
         def component_groups
-          @component_groups ||= bag.component_groups(component_dict)
+          @component_groups ||= bag.component_groups
         end
 
         # Creates and persists a FileSet for a media object
