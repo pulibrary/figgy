@@ -82,7 +82,7 @@ RSpec.describe ScannedResourceDecorator do
     let(:resource) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [member.id, member2.id]) }
     let(:member) { FactoryBot.create_for_repository(:scanned_resource) }
     let(:member2) { FactoryBot.create_for_repository(:file_set) }
-    it "returns all ScannedResource members" do
+    it "returns all ScannedResource members, decorated" do
       volumes = decorator.volumes
       expect(volumes.map(&:id)).to eq [member.id]
       expect(volumes.map(&:class)).to eq [described_class]
@@ -93,7 +93,7 @@ RSpec.describe ScannedResourceDecorator do
     let(:resource) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [member.id, member2.id]) }
     let(:member) { FactoryBot.create_for_repository(:scanned_resource) }
     let(:member2) { FactoryBot.create_for_repository(:file_set) }
-    it "returns all FileSet members" do
+    it "returns all FileSet members, decorated" do
       file_sets = decorator.file_sets
       expect(file_sets.map(&:id)).to eq [member2.id]
       expect(file_sets.map(&:class)).to eq [FileSetDecorator]

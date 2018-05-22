@@ -16,7 +16,7 @@ RSpec.describe Wayfinder do
     end
 
     describe "#scanned_resources" do
-      it "returns undecorated scanned_resources" do
+      it "returns undecorated scanned_resource members" do
         member = FactoryBot.create_for_repository(:scanned_resource)
         resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: member.id)
 
@@ -27,7 +27,7 @@ RSpec.describe Wayfinder do
       end
     end
 
-    describe "#decorated_scanned_resources" do
+    describe "#decorated_scanned_resource members" do
       it "returns decorated scanned_resources" do
         member = FactoryBot.create_for_repository(:scanned_resource)
         resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: member.id)
@@ -36,87 +36,6 @@ RSpec.describe Wayfinder do
 
         expect(wayfinder.decorated_scanned_resources.map(&:id)).to eq [member.id]
         expect(wayfinder.decorated_scanned_resources.map(&:class)).to eq [ScannedResourceDecorator]
-      end
-    end
-
-    describe "#ephemera_folders" do
-      it "returns undecorated ephemera_folders" do
-        member = FactoryBot.create_for_repository(:ephemera_folder)
-        member2 = FactoryBot.create_for_repository(:scanned_resource)
-        resource = FactoryBot.create_for_repository(:ephemera_box, member_ids: [member.id, member2.id])
-
-        wayfinder = described_class.for(resource)
-
-        expect(wayfinder.ephemera_folders.map(&:id)).to eq [member.id]
-        expect(wayfinder.ephemera_folders.map(&:class)).to eq [EphemeraFolder]
-      end
-    end
-
-    describe "#decorated_ephemera_folders" do
-      it "returns decorated ephemera_folders" do
-        member = FactoryBot.create_for_repository(:ephemera_folder)
-        member2 = FactoryBot.create_for_repository(:scanned_resource)
-        resource = FactoryBot.create_for_repository(:ephemera_box, member_ids: [member.id, member2.id])
-
-        wayfinder = described_class.for(resource)
-
-        expect(wayfinder.decorated_ephemera_folders.map(&:id)).to eq [member.id]
-        expect(wayfinder.decorated_ephemera_folders.map(&:class)).to eq [EphemeraFolderDecorator]
-      end
-    end
-
-    describe "#ephemera_folders_count" do
-      it "returns the number of member folders" do
-        member = FactoryBot.create_for_repository(:ephemera_folder)
-        member2 = FactoryBot.create_for_repository(:scanned_resource)
-        resource = FactoryBot.create_for_repository(:ephemera_box, member_ids: [member.id, member2.id])
-
-        wayfinder = described_class.for(resource)
-
-        expect(wayfinder.ephemera_folders_count).to eq 1
-      end
-    end
-
-    describe "#ephemera_projects" do
-      it "returns all the projects a box is a member of" do
-        member = FactoryBot.create_for_repository(:ephemera_box)
-        resource = FactoryBot.create_for_repository(:ephemera_project, member_ids: [member.id])
-
-        wayfinder = described_class.for(member)
-
-        expect(wayfinder.ephemera_projects.map(&:id)).to eq [resource.id]
-        expect(wayfinder.ephemera_projects.map(&:class).uniq).to eq [EphemeraProject]
-      end
-      it "returns the project a folder is directly attached to" do
-        member = FactoryBot.create_for_repository(:ephemera_folder)
-        resource = FactoryBot.create_for_repository(:ephemera_project, member_ids: [member.id])
-
-        wayfinder = described_class.for(member)
-
-        expect(wayfinder.ephemera_projects.map(&:id)).to eq [resource.id]
-        expect(wayfinder.ephemera_projects.map(&:class).uniq).to eq [EphemeraProject]
-      end
-      it "returns the project a box which a folder is attached to is a member of" do
-        member = FactoryBot.create_for_repository(:ephemera_folder)
-        box = FactoryBot.create_for_repository(:ephemera_box, member_ids: [member.id])
-        resource = FactoryBot.create_for_repository(:ephemera_project, member_ids: [box.id])
-
-        wayfinder = described_class.for(member)
-
-        expect(wayfinder.ephemera_projects.map(&:id)).to eq [resource.id]
-        expect(wayfinder.ephemera_projects.map(&:class).uniq).to eq [EphemeraProject]
-      end
-    end
-
-    describe "#decorated_ephemera_projects" do
-      it "returns all the projects a box is a member of, decorated" do
-        member = FactoryBot.create_for_repository(:ephemera_box)
-        resource = FactoryBot.create_for_repository(:ephemera_project, member_ids: [member.id])
-
-        wayfinder = described_class.for(member)
-
-        expect(wayfinder.decorated_ephemera_projects.map(&:id)).to eq [resource.id]
-        expect(wayfinder.decorated_ephemera_projects.map(&:class).uniq).to eq [EphemeraProjectDecorator]
       end
     end
 
@@ -219,45 +138,93 @@ RSpec.describe Wayfinder do
         expect(wayfinder.decorated_parents.map(&:class).uniq).to eq [ScannedResourceDecorator]
       end
     end
+  end
+  context "when given an ephemera box" do
+    describe "#ephemera_folders" do
+      it "returns undecorated ephemera_folder members" do
+        member = FactoryBot.create_for_repository(:ephemera_folder)
+        member2 = FactoryBot.create_for_repository(:scanned_resource)
+        resource = FactoryBot.create_for_repository(:ephemera_box, member_ids: [member.id, member2.id])
 
-    describe "#media_resources" do
-      it "returns all media resources" do
-        collection = FactoryBot.create_for_repository(:archival_media_collection)
-        FactoryBot.create_for_repository(:media_resource, member_of_collection_ids: [collection.id])
-        FactoryBot.create_for_repository(:media_resource, member_of_collection_ids: [collection.id])
-        FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id])
+        wayfinder = described_class.for(resource)
 
-        wayfinder = described_class.for(collection)
-
-        expect(wayfinder.media_resources.size).to eq 2
-        expect(wayfinder.media_resources.map(&:class).uniq).to eq [MediaResource]
+        expect(wayfinder.ephemera_folders.map(&:id)).to eq [member.id]
+        expect(wayfinder.ephemera_folders.map(&:class)).to eq [EphemeraFolder]
       end
     end
 
-    describe "#ephemera_vocabulary" do
-      it "returns the vocabulary for an ephemera field" do
-        vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary)
-        field = FactoryBot.create_for_repository(:ephemera_field, member_of_vocabulary_id: vocabulary.id)
+    describe "#decorated_ephemera_folders" do
+      it "returns decorated ephemera_folder members" do
+        member = FactoryBot.create_for_repository(:ephemera_folder)
+        member2 = FactoryBot.create_for_repository(:scanned_resource)
+        resource = FactoryBot.create_for_repository(:ephemera_box, member_ids: [member.id, member2.id])
 
-        wayfinder = described_class.for(field)
+        wayfinder = described_class.for(resource)
 
-        expect(wayfinder.ephemera_vocabulary.id).to eq vocabulary.id
-        expect(wayfinder.ephemera_vocabulary.class).to eq EphemeraVocabulary
+        expect(wayfinder.decorated_ephemera_folders.map(&:id)).to eq [member.id]
+        expect(wayfinder.decorated_ephemera_folders.map(&:class)).to eq [EphemeraFolderDecorator]
       end
     end
 
-    describe "#decorated_ephemera_vocabulary" do
-      it "returns the vocabulary for an ephemera field decorated" do
-        vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary)
-        field = FactoryBot.create_for_repository(:ephemera_field, member_of_vocabulary_id: vocabulary.id)
+    describe "#ephemera_folders_count" do
+      it "returns the number of member folders" do
+        member = FactoryBot.create_for_repository(:ephemera_folder)
+        member2 = FactoryBot.create_for_repository(:scanned_resource)
+        resource = FactoryBot.create_for_repository(:ephemera_box, member_ids: [member.id, member2.id])
 
-        wayfinder = described_class.for(field)
+        wayfinder = described_class.for(resource)
 
-        expect(wayfinder.decorated_ephemera_vocabulary.id).to eq vocabulary.id
-        expect(wayfinder.decorated_ephemera_vocabulary.class).to eq EphemeraVocabularyDecorator
+        expect(wayfinder.ephemera_folders_count).to eq 1
       end
     end
 
+    describe "#ephemera_projects" do
+      it "returns all the projects a box is a member of" do
+        member = FactoryBot.create_for_repository(:ephemera_box)
+        resource = FactoryBot.create_for_repository(:ephemera_project, member_ids: [member.id])
+
+        wayfinder = described_class.for(member)
+
+        expect(wayfinder.ephemera_projects.map(&:id)).to eq [resource.id]
+        expect(wayfinder.ephemera_projects.map(&:class).uniq).to eq [EphemeraProject]
+      end
+    end
+
+    describe "#decorated_ephemera_projects" do
+      it "returns all the projects a box is a member of, decorated" do
+        member = FactoryBot.create_for_repository(:ephemera_box)
+        resource = FactoryBot.create_for_repository(:ephemera_project, member_ids: [member.id])
+
+        wayfinder = described_class.for(member)
+
+        expect(wayfinder.decorated_ephemera_projects.map(&:id)).to eq [resource.id]
+        expect(wayfinder.decorated_ephemera_projects.map(&:class).uniq).to eq [EphemeraProjectDecorator]
+      end
+    end
+  end
+  context "when given an ephemera folder" do
+    describe "#ephemera_projects" do
+      it "returns the project a folder is directly attached to" do
+        member = FactoryBot.create_for_repository(:ephemera_folder)
+        resource = FactoryBot.create_for_repository(:ephemera_project, member_ids: [member.id])
+
+        wayfinder = described_class.for(member)
+
+        expect(wayfinder.ephemera_projects.map(&:id)).to eq [resource.id]
+        expect(wayfinder.ephemera_projects.map(&:class).uniq).to eq [EphemeraProject]
+      end
+
+      it "returns the project a box which a folder is attached to is a member of" do
+        member = FactoryBot.create_for_repository(:ephemera_folder)
+        box = FactoryBot.create_for_repository(:ephemera_box, member_ids: [member.id])
+        resource = FactoryBot.create_for_repository(:ephemera_project, member_ids: [box.id])
+
+        wayfinder = described_class.for(member)
+
+        expect(wayfinder.ephemera_projects.map(&:id)).to eq [resource.id]
+        expect(wayfinder.ephemera_projects.map(&:class).uniq).to eq [EphemeraProject]
+      end
+    end
     describe "#ephemera_box" do
       it "returns the ephemera box for an ephemera folder in a box" do
         folder = FactoryBot.create_for_repository(:ephemera_folder)
@@ -281,9 +248,52 @@ RSpec.describe Wayfinder do
         expect(wayfinder.decorated_ephemera_box.class).to eq EphemeraBoxDecorator
       end
     end
+  end
 
+  context "when given an ArchivalMediaCollection" do
+    describe "#media_resources" do
+      it "returns all media resource members" do
+        collection = FactoryBot.create_for_repository(:archival_media_collection)
+        FactoryBot.create_for_repository(:media_resource, member_of_collection_ids: [collection.id])
+        FactoryBot.create_for_repository(:media_resource, member_of_collection_ids: [collection.id])
+        FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id])
+
+        wayfinder = described_class.for(collection)
+
+        expect(wayfinder.media_resources.size).to eq 2
+        expect(wayfinder.media_resources.map(&:class).uniq).to eq [MediaResource]
+      end
+    end
+  end
+
+  context "when given an EphemeraField" do
+    describe "#ephemera_vocabulary" do
+      it "returns the vocabulary for an ephemera field" do
+        vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary)
+        field = FactoryBot.create_for_repository(:ephemera_field, member_of_vocabulary_id: vocabulary.id)
+
+        wayfinder = described_class.for(field)
+
+        expect(wayfinder.ephemera_vocabulary.id).to eq vocabulary.id
+        expect(wayfinder.ephemera_vocabulary.class).to eq EphemeraVocabulary
+      end
+    end
+
+    describe "#decorated_ephemera_vocabulary" do
+      it "returns the vocabulary for an ephemera field decorated" do
+        vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary)
+        field = FactoryBot.create_for_repository(:ephemera_field, member_of_vocabulary_id: vocabulary.id)
+
+        wayfinder = described_class.for(field)
+
+        expect(wayfinder.decorated_ephemera_vocabulary.id).to eq vocabulary.id
+        expect(wayfinder.decorated_ephemera_vocabulary.class).to eq EphemeraVocabularyDecorator
+      end
+    end
+  end
+  context "when given an EphemeraProject" do
     describe "#ephemera_boxes" do
-      it "returns all box members without accessing members for a project" do
+      it "returns all box members undecorated without accessing members for a project" do
         box = FactoryBot.create_for_repository(:ephemera_box)
         folder = FactoryBot.create_for_repository(:ephemera_folder)
         project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [box.id, folder.id])
