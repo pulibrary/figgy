@@ -31,51 +31,75 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
     end
   end
 
-  describe "validations" do
+  describe "source metadata identifier validation" do
+    before do
+      allow_any_instance_of(BagPathValidator).to receive(:validate).and_return(true)
+    end
+
     context "when metadata identifier is not set" do
       let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "") }
-      before do
-        allow_any_instance_of(BagPathValidator).to receive(:validate).and_return(true)
-      end
       it "is invalid" do
         expect(change_set).not_to be_valid
+      end
+    end
+
+    context "when source_metadata_identifier is already in use on another amc" do
+      let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "AC044_c0003") }
+
+      let(:file) { File.open(Rails.root.join("spec", "fixtures", "some_finding_aid.xml"), "r") }
+      it "is invalid" do
+        FactoryBot.create_for_repository(:archival_media_collection, source_metadata_identifier: "AC044_c0003")
+        stub_pulfa(pulfa_id: "AC044/c0003")
+
+        expect(change_set).not_to be_valid
+      end
+    end
+
+    context "when source_metadata_identifier is already in use on a scanned resource" do
+      let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "AC044_c0003") }
+
+      let(:file) { File.open(Rails.root.join("spec", "fixtures", "some_finding_aid.xml"), "r") }
+      it "is invalid" do
+        stub_pulfa(pulfa_id: "AC044/c0003")
+        FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "AC044_c0003")
+
+        expect(change_set).to be_valid
       end
     end
 
     context "when source_metadata_identifier is set" do
       let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "AC044_c0003") }
       let(:file) { File.open(Rails.root.join("spec", "fixtures", "some_finding_aid.xml"), "r") }
-      before do
-        allow_any_instance_of(BagPathValidator).to receive(:validate).and_return(true)
-      end
-
       it "is valid" do
         stub_pulfa(pulfa_id: "AC044/c0003")
         expect(change_set).to be_valid
       end
     end
+  end
+
+  describe "bag path validation" do
+    let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "Totally an identifier") }
+    before do
+      allow_any_instance_of(SourceMetadataIdentifierValidator).to receive(:validate).and_return(true)
+    end
 
     context "when an invalid bag path is set" do
-      let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "Totally an identifier") }
       let(:change_set) { described_class.new(collection, bag_path: "/not/a/bag") }
-
       before do
-        allow_any_instance_of(SourceMetadataIdentifierValidator).to receive(:validate).and_return(true)
         allow(Dir).to receive(:exist?).and_return(false)
       end
+
       it "is invalid" do
         expect(change_set).not_to be_valid
       end
     end
 
     context "when a valid bag path is set" do
-      let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "Totally an identifier") }
       let(:change_set) { described_class.new(collection, bag_path: "/totally/a/bag") }
-
       before do
-        allow_any_instance_of(SourceMetadataIdentifierValidator).to receive(:validate).and_return(true)
         allow(Dir).to receive(:exist?).and_return(true)
       end
+
       it "is valid" do
         expect(change_set).to be_valid
       end
