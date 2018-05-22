@@ -1,4 +1,8 @@
 # frozen_string_literal: true
+# Factory class for automatically finding the appropriate wayfinder for a given
+# Valkyrie::Resource.
+# @example Instantiating a Wayfinder for a ScannedResource
+#   Wayfinder.for(ScannedResource.new) # => #<ScannedResourceWayfinder>
 class Wayfinder < BaseWayfinder
   class_attribute :registered_wayfinders
   self.registered_wayfinders = {

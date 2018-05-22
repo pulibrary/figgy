@@ -1,4 +1,25 @@
 # frozen_string_literal: true
+# Wayfinders are classes which manage navigating relationships between IDs
+# stored on a Valkyrie::Resource to their associated Valkyrie::Resources.
+#
+# These wayfinders are most commonly accessed via
+# {Valkyrie::ResourceDecorator#wayfinder}, however they can also be instantiated
+# stand-alone in a controller or other context via {Wayfinder.for}.
+#
+# @example Instantiate a wayfinder and get all members.
+#   Wayfinder.for(parent).members # => [#<ScannedResource>]
+#
+# @example Define a wayfinder for a class which has FileSets.
+#   class ExampleWayfinder < BaseWayfinder
+#     relationship_by_property :file_sets, property: :member_ids, model: FileSet
+#   end
+#   ExampleWayfinder.new(resource).file_sets # => [#<FileSet>]
+#   ExampleWayfinder.new(resource).decorated_file_sets # => [#<FileSetDecorator>]
+#
+# @example Get a wayfinder through a decorator
+#   ScannedResourceDecorator.new(ScannedResource.new).wayfinder # => #<ScannedResourceWayfinder>
+#
+# @see Wayfinder
 class BaseWayfinder
   # Creates relationship methods `relationship` and `decorated_relationship`
   # which accesses a given property and queries for all IDs contained within.
