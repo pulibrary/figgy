@@ -13,6 +13,7 @@ class ArchivalMediaCollectionChangeSet < ChangeSet
   validates_with BagPathValidator
   validates_with SourceMetadataIdentifierValidator
   validates_with UniqueArchivalMediaComponentIdValidator
+  validates_with UniqueArchivalMediaBarcodeValidator
 
   def primary_terms
     [:source_metadata_identifier, :bag_path]
