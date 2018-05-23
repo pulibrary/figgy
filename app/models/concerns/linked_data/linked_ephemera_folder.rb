@@ -105,7 +105,7 @@ module LinkedData
           barcode: try(:barcode),
           local_identifier: try(:local_identifier),
           label: "Folder #{folder_number}",
-          is_part_of: ephemera_project.title,
+          is_part_of: ephemera_project.try(:title),
           coverage: try(:geo_subject),
           dcterms_type: try(:genre),
           origin_place: try(:geographic_origin),
