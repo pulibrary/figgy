@@ -1,0 +1,22 @@
+<h2>Bulk Ingest <%= @resource_class.human_readable_type.pluralize %></h2>
+
+<div class="col-md-12">
+  <div class="row">
+    <%= form_tag polymorphic_path([main_app, :browse_everything_files_bulk_ingest]), class: "bulk-ingest-form", id: "browse-everything-form" do %>
+      <div class="col-md-3">
+        <%= render "visibility" %>
+      </div>
+      <div class="col-md-3">
+        <%= render "workflow_state" %>
+      </div>
+      <div class="col-md-3">
+        <legend class="bulk-ingest-legend">Files</legend>
+        <div class="well well-sm">
+          <%= button_tag id: 'browse_everything', type: 'button', class: 'browse-everything btn btn-primary' do %>
+            Select Folder on Server
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -13,6 +13,10 @@ RSpec.describe "catalog/_home_text.html.erb" do
     it "has a link to the fixity dashboard" do
       expect(rendered).to have_link "Fixity Dashboard"
     end
+
+    it "has a links to bulk ingest resources" do
+      expect(rendered).to have_link "Bulk Ingest"
+    end
   end
 
   context "when the user is patron" do

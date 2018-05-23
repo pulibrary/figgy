@@ -28,6 +28,7 @@ RSpec.describe IngestFolderJob do
 
         expect(ingest_service).to have_received(:attach_dir).with(
           base_directory: single_dir,
+          property: nil,
           file_filter: ".tif",
           source_metadata_identifier: bib,
           local_identifier: local_id,

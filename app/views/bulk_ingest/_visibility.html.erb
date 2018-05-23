@@ -1,0 +1,29 @@
+    <fieldset>
+      <legend class="bulk-ingest-legend">Visibility</legend>
+      <ul class="visibility">
+        <li class="radio">
+          <label>
+            <%= radio_button_tag :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC, data: { 'target': '#collapsePublic' }  %>
+            <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC) %>
+            <%= t('visibility.open.note_html') %>
+            <div class="collapse" id="collapsePublic">
+              <%= t('visibility.open.warning_html', label: visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)) %>
+            </div>
+          </label>
+        </li>
+        <li class="radio">
+          <label>
+            <%= radio_button_tag :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED %>
+            <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED) %>
+            <%= t('visibility.authenticated.note_html', institution: I18n.t("institution.name")) %>
+          </label>
+        </li>
+        <li class="radio">
+          <label>
+            <%= radio_button_tag :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE %>
+              <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE) %>
+            <%= t('visibility.restricted.note_html') %>
+          </label>
+        </li>
+      </ul>
+    </fieldset>

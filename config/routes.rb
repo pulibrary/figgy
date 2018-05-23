@@ -204,6 +204,9 @@ Rails.application.routes.draw do
 
   get "/reports/identifiers_to_reconcile", to: "reports#identifiers_to_reconcile", as: :identifiers_to_reconcile
 
+  get "bulk_ingest/:resource_type", to: "bulk_ingest#show", as: "bulk_ingest_show"
+  post "bulk_ingest/:resource_type/browse_everything_files", to: "bulk_ingest#browse_everything_files", as: "browse_everything_files_bulk_ingest"
+
   mount BrowseEverything::Engine => "/browse"
 
   if Rails.env.development? || Rails.env.test?
