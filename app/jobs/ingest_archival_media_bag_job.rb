@@ -85,12 +85,14 @@ class IngestArchivalMediaBagJob < ApplicationJob
         end
 
         # Creates and persists a FileSet for a media object
-        # @param side [String] side/barcode for a given media object
+        # @param barcode_with_side [String] barcode_side for a given media object
         # @return [FileSet] the persisted FileSet containing the binary and file metadata
-        def create_av_file_set(side)
-          file_set = FileSet.new(title: side)
-          bag.file_groups[side].each do |file| # this is an IngestableAudioFile object
+        def create_av_file_set(barcode_with_side)
+          file_set = FileSet.new(title: barcode_with_side)
+          bag.file_groups[barcode_with_side].each do |file| # this is an IngestableAudioFile object
             node = create_node(file)
+            file_set.barcode = file.barcode
+            file_set.part = file.part
             file_set.file_metadata += Array.wrap(node)
           end
           file_set = changeset_persister.save(change_set: FileSetChangeSet.new(file_set))

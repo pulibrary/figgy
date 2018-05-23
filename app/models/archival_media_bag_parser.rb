@@ -25,7 +25,7 @@ class ArchivalMediaBagParser
   end
 
   # file_groups in groups by component id
-  # @return [Hash] map keying EAD component IDs to file barcodes
+  # @return [Hash] map keying EAD component IDs to file barcodes (with part qualifier, e.g. "32101047382401_1")
   def component_groups
     return @component_groups unless @component_groups.empty?
     file_groups.keys.each do |barcode_with_part|
