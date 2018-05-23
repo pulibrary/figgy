@@ -381,7 +381,7 @@ class ManifestBuilder
       when Collection
         "#{protocol}://#{host}/collections/#{resource.id}/manifest"
       when FileSet
-        "#{protocol}://#{host}/concern/#{resource.decorate.parent.model_name.plural}/#{resource.decorate.parent.id}/manifest"
+        ""
       else
         "#{protocol}://#{host}/concern/#{resource.model_name.plural}/#{resource.id}/manifest"
       end

@@ -12,6 +12,7 @@ RSpec.configure do |config|
         allow(rabbit).to receive(:record_created)
         allow(rabbit).to receive(:record_updated)
         allow(rabbit).to receive(:record_deleted)
+        allow(rabbit).to receive(:record_member_updated)
         rabbit
       end
 
@@ -22,6 +23,7 @@ RSpec.configure do |config|
         allow(rabbit).to receive(:record_created)
         allow(rabbit).to receive(:record_updated)
         allow(rabbit).to receive(:record_deleted)
+        allow(rabbit).to receive(:record_member_updated)
         rabbit
       end
     end

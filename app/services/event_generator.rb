@@ -7,6 +7,7 @@ class EventGenerator
   delegate :record_created, to: :generators
   delegate :record_deleted, to: :generators
   delegate :record_updated, to: :generators
+  delegate :record_member_updated, to: :generators
 
   def generators
     @generators ||= CompositeGenerator.new(

@@ -29,6 +29,6 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
   end
 
   def collection_slugs
-    @collection_slugs ||= parent.try(:collection_slugs)
+    []
   end
 end

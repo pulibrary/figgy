@@ -25,6 +25,8 @@ class EventGenerator
 
     def record_updated(record); end
 
+    def record_member_updated(record); end
+
     def valid?(record)
       return false unless record.is_a?(FileSet)
       return false unless geo_file_set?(record)

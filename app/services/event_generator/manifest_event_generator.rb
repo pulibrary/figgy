@@ -32,6 +32,13 @@ class EventGenerator
       )
     end
 
+    def record_member_updated(record)
+      return unless record
+      publish_message(
+        message_with_collections("MEMBER_UPDATED", record)
+      )
+    end
+
     def valid?(record)
       if record.is_a?(FileSet)
         record.decorate.parent.try(:geo_resource?) ? false : true
@@ -44,8 +51,6 @@ class EventGenerator
 
       def manifest_url(record)
         helper.manifest_url(record)
-      rescue
-        ""
       end
 
       def message(type, record)
