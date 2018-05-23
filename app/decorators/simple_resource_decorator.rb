@@ -46,16 +46,30 @@ class SimpleResourceDecorator < Valkyrie::ResourceDecorator
                          :rendered_rights_statement,
                          :thumbnail_id
 
+  # TODO: Rename to decorated_members
   def members
-    @members ||= query_service.find_members(resource: model).map(&:decorate).to_a
+    wayfinder.decorated_members
   end
 
+  # TODO: Rename to decorated_file_sets
   def file_sets
-    @file_sets ||= members.select { |r| r.is_a?(FileSet) }
+    wayfinder.decorated_file_sets
   end
 
+  # TODO: Rename to decorated_simple_resources
   def simple_resource_members
-    @simple_resource_members || members.select { |r| r.is_a?(SimpleResource) }
+    wayfinder.decorated_simple_resources
+  end
+
+  # TODO: Rename to decorated_collections
+  def parents
+    wayfinder.decorated_collections
+  end
+  alias collections parents
+
+  # TODO: Rename to decorated_parent
+  def decorated_parent_resource
+    wayfinder.decorated_parent
   end
 
   def rendered_rights_statement
@@ -79,15 +93,6 @@ class SimpleResourceDecorator < Valkyrie::ResourceDecorator
 
   def attachable_objects
     [SimpleResource]
-  end
-
-  def parents
-    Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_references_by(resource: self, property: :member_of_collection_ids).to_a
-  end
-  alias collections parents
-
-  def decorated_parent_resource
-    @decorated_parent_resource ||= Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_parents(resource: self).first.try(:decorate)
   end
 
   def collection_slugs

@@ -43,12 +43,22 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
                          :updated_at,
                          :sort_title
 
-  def members
-    @members ||= query_service.find_members(resource: model).to_a
+  delegate :members, :parent, :query_service, to: :wayfinder
+
+  # TODO: Rename to decorated_collections
+  def collections
+    wayfinder.decorated_collections
   end
 
-  def collections
-    @collections ||= query_service.find_references_by(resource: self, property: :member_of_collection_ids).to_a.map(&:decorate)
+  # TODO: Rename to decorated_ephemera_box
+  def ephemera_box
+    wayfinder.decorated_ephemera_box
+  rescue ArgumentError # Necessary because ability_spec.rb doesn't always save objects. TODO: Fix.
+    nil
+  end
+
+  def ephemera_project
+    wayfinder.decorated_ephemera_projects.first
   end
 
   def rendered_date_range
@@ -83,22 +93,8 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     end
   end
 
-  def ephemera_box
-    @ephemera_box ||= parent if parent.is_a?(EphemeraBox)
-  end
-
-  def ephemera_project
-    @ephemera_project ||= parent.is_a?(EphemeraBox) ? parent.ephemera_project : parent
-  end
-
   def collection_slugs
     @collection_slugs ||= Array.wrap(ephemera_project.try(:slug))
-  end
-
-  def parent
-    @parent ||= query_service.find_parents(resource: model).to_a.first.try(:decorate)
-  rescue ArgumentError
-    @parent ||= []
   end
 
   def manageable_files?
@@ -214,6 +210,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
       resource_id
     end
 
+    # Unsure if I should move this to wayfinder.
     def controlled_value_for(value)
       value.present? && value.is_a?(Valkyrie::ID) ? find_resource(value) : value
     end

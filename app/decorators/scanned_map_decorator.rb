@@ -29,32 +29,37 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
     [ScannedMap, RasterResource]
   end
 
-  def collections
-    Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_references_by(resource: self, property: :member_of_collection_ids).to_a
+  delegate :collections, :geo_metadata_members, :members, :parents, to: :wayfinder
+
+  # TODO: Rename to decorated_file_sets
+  def file_sets
+    wayfinder.decorated_file_sets
+  end
+
+  # TODO: Rename to geo_image_members
+  def geo_members
+    wayfinder.geo_image_members
+  end
+
+  # TODO: Rename to decorated_raster_resources
+  def raster_resource_members
+    wayfinder.decorated_raster_resources
+  end
+
+  # TODO: Rename to decorated_scanned_maps
+  def scanned_map_members
+    wayfinder.decorated_scanned_maps
+  end
+
+  # TODO: Rename to decorated_scanned_map_parents
+  def scanned_map_parents
+    wayfinder.decorated_scanned_map_parents
   end
 
   # Display the resource attributes
   # @return [Hash] a Hash of all of the resource attributes
   def display_attributes
     super.reject { |k, v| imported_attributes.fetch(k, nil) == v }
-  end
-
-  def file_sets
-    @file_sets ||= members.select { |r| r.is_a?(FileSet) }.map(&:decorate).to_a
-  end
-
-  def geo_members
-    members.select do |member|
-      next unless member.respond_to?(:mime_type)
-      ControlledVocabulary.for(:geo_image_format).include?(member.mime_type.first)
-    end
-  end
-
-  def geo_metadata_members
-    members.select do |member|
-      next unless member.respond_to?(:mime_type)
-      ControlledVocabulary.for(:geo_metadata_format).include?(member.mime_type.first)
-    end
   end
 
   def human_readable_type
@@ -100,14 +105,6 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
     !scanned_map_members.empty?
   end
 
-  def members
-    @members ||= query_service.find_members(resource: model).to_a
-  end
-
-  def raster_resource_members
-    @raster_resources ||= members.select { |r| r.is_a?(RasterResource) }.map(&:decorate).to_a
-  end
-
   def rendered_coverage
     display_coverage = coverage || imported_metadata.try(:first).try(:coverage)
     h.bbox_display(display_coverage)
@@ -144,14 +141,6 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
           I18n.t("works.show.attributes.rights_statement.boilerplate").html_safe
         end
     end
-  end
-
-  def scanned_map_members
-    @scanned_maps ||= members.select { |r| r.is_a?(ScannedMap) }.map(&:decorate).to_a
-  end
-
-  def scanned_map_parents
-    @scanned_map_parents ||= parents.select { |r| r.is_a?(ScannedMap) }.map(&:decorate).to_a
   end
 
   def title

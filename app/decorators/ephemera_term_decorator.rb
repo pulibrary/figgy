@@ -2,6 +2,11 @@
 class EphemeraTermDecorator < Valkyrie::ResourceDecorator
   display :label, :uri, :code, :tgm_label, :lcsh_label, :vocabulary
 
+  # TODO: Rename to decorated_vocabulary
+  def vocabulary
+    wayfinder.decorated_vocabulary
+  end
+
   def label
     Array.wrap(super).first
   end
@@ -31,21 +36,7 @@ class EphemeraTermDecorator < Valkyrie::ResourceDecorator
     false
   end
 
-  def vocabulary
-    @vocabulary ||=
-      begin
-        query_service.find_references_by(resource: model, property: :member_of_vocabulary_id)
-                     .select { |r| r.is_a?(EphemeraVocabulary) }
-                     .map(&:decorate)
-                     .to_a.first
-      end
-  end
-
   private
-
-    def metadata_adapter
-      Valkyrie.config.metadata_adapter
-    end
 
     def camelized_label
       Array.wrap(label).first.gsub(/\s/, "_").camelize(:lower)

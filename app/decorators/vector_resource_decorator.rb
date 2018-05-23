@@ -9,22 +9,33 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
     [VectorResource]
   end
 
+  delegate :members, :parents, :geo_metadata_members, to: :wayfinder
+
+  # TODO: Rename to decorated_file_sets
   def file_sets
-    @file_sets ||= members.select { |r| r.is_a?(FileSet) }.map(&:decorate).to_a
+    wayfinder.decorated_file_sets
   end
 
+  # TODO: Rename to geo_vector_members
   def geo_members
-    members.select do |member|
-      next unless member.respond_to?(:mime_type)
-      ControlledVocabulary.for(:geo_vector_format).include?(member.mime_type.first)
-    end
+    wayfinder.geo_vector_members
   end
 
-  def geo_metadata_members
-    members.select do |member|
-      next unless member.respond_to?(:mime_type)
-      ControlledVocabulary.for(:geo_metadata_format).include?(member.mime_type.first)
-    end
+  # TODO: Rename to decorated_raster_resource_parents
+  def raster_resource_parents
+    wayfinder.decorated_raster_resource_parents
+  end
+
+  # Use case for nesting vector resources
+  #   - time series: e.g., nyc transit system, released every 6 months
+  # TODO: Rename to decorated_vector_resources
+  def vector_resource_members
+    wayfinder.decorated_vector_resources
+  end
+
+  # TODO: rename to decorated_vector_resource_parents
+  def vector_resource_parents
+    wayfinder.decorated_vector_resource_parents
   end
 
   def imported_attribute(attribute_key)
@@ -53,14 +64,6 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
 
   def manageable_structure?
     false
-  end
-
-  def members
-    @members ||= query_service.find_members(resource: model).to_a
-  end
-
-  def raster_resource_parents
-    @raster_resource_parents ||= parents.select { |r| r.is_a?(RasterResource) }.map(&:decorate).to_a
   end
 
   def rendered_coverage
@@ -95,15 +98,5 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
   def title
     return "#{super.first} (#{portion_note.first})" if portion_note
     super
-  end
-
-  # Use case for nesting vector resources
-  #   - time series: e.g., nyc transit system, released every 6 months
-  def vector_resource_members
-    @vector_resources ||= members.select { |r| r.is_a?(VectorResource) }.map(&:decorate).to_a
-  end
-
-  def vector_resource_parents
-    @vector_resource_parents ||= parents.select { |r| r.is_a?(VectorResource) }.map(&:decorate).to_a
   end
 end

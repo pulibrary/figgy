@@ -15,9 +15,6 @@ RSpec.describe EphemeraFieldDecorator do
   it "does not manage structures" do
     expect(decorator.manageable_structure?).to be false
   end
-  it "exposes the metadata adapter" do
-    expect(resource.decorate.metadata_adapter).to be_a Valkyrie::Persistence::Postgres::MetadataAdapter
-  end
   it "exposes the label for a controlled name" do
     expect(resource.decorate.name_label).to eq "EphemeraFolder.language"
   end

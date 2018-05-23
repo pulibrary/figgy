@@ -8,22 +8,33 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
     [RasterResource, VectorResource]
   end
 
+  # TODO: Rename to decorated_file_sets
   def file_sets
-    @file_sets ||= members.select { |r| r.is_a?(FileSet) }.map(&:decorate).to_a
+    wayfinder.decorated_file_sets
   end
 
-  def geo_metadata_members
-    members.select do |member|
-      next unless member.respond_to?(:mime_type)
-      ControlledVocabulary.for(:geo_metadata_format).include?(member.mime_type.first)
-    end
+  delegate :geo_metadata_members, :geo_members, :members, :parents, to: :wayfinder
+
+  # Use case for nesting raster resources
+  #   - set of georectified scanned maps or set of aerial imagery
+  #   TODO: Rename to decorated_raster_resources
+  def raster_resource_members
+    wayfinder.decorated_raster_resources
   end
 
-  def geo_members
-    members.select do |member|
-      next unless member.respond_to?(:mime_type)
-      ControlledVocabulary.for(:geo_raster_format).include?(member.mime_type.first)
-    end
+  # TODO: Rename to decorated_raster_resource_parents
+  def raster_resource_parents
+    wayfinder.decorated_raster_resource_parents
+  end
+
+  # TODO: Rename to decorated_scanned_map_parents
+  def scanned_map_parents
+    wayfinder.decorated_scanned_map_parents
+  end
+
+  # TODO: Rename to decorated_vector_resources
+  def vector_resource_members
+    wayfinder.decorated_vector_resources
   end
 
   def imported_attribute(attribute_key)
@@ -54,20 +65,6 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
     false
   end
 
-  def members
-    @members ||= query_service.find_members(resource: model).to_a
-  end
-
-  # Use case for nesting raster resources
-  #   - set of georectified scanned maps or set of aerial imagery
-  def raster_resource_members
-    @raster_resources ||= members.select { |r| r.is_a?(RasterResource) }.map(&:decorate).to_a
-  end
-
-  def raster_resource_parents
-    @raster_resource_parents ||= parents.select { |r| r.is_a?(RasterResource) }.map(&:decorate).to_a
-  end
-
   def rendered_coverage
     display_coverage = coverage || imported_metadata.try(:first).try(:coverage)
     h.bbox_display(display_coverage)
@@ -95,14 +92,6 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
           I18n.t("works.show.attributes.rights_statement.boilerplate").html_safe
         end
     end
-  end
-
-  def scanned_map_parents
-    @scanned_map_parents ||= parents.select { |r| r.is_a?(ScannedMap) }.map(&:decorate).to_a
-  end
-
-  def vector_resource_members
-    @vector_resources ||= members.select { |r| r.is_a?(VectorResource) }.map(&:decorate).to_a
   end
 
   def title

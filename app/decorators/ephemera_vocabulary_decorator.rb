@@ -2,6 +2,24 @@
 class EphemeraVocabularyDecorator < Valkyrie::ResourceDecorator
   display :label, :uri, :definition, :categories, :terms
 
+  # TODO: Rename to decorated_vocabulary
+  def vocabulary
+    wayfinder.decorated_parent_vocabulary
+  end
+
+  # a category is just a nested vocabulary
+  # TODO: Rename to decorated_vocabularies
+  def categories
+    @categories ||= wayfinder.decorated_vocabularies.sort_by(&:label)
+  rescue
+    @categories ||= []
+  end
+
+  # TODO: Rename to decorated_ephemera_terms
+  def terms
+    @terms ||= wayfinder.decorated_ephemera_terms.sort_by(&:label)
+  end
+
   def label
     Array.wrap(super).first
   end
@@ -33,43 +51,8 @@ class EphemeraVocabularyDecorator < Valkyrie::ResourceDecorator
     external_uri_exists? ? Array.wrap(super).first : internal_url
   end
 
-  def vocabulary
-    @vocabulary ||=
-      begin
-        query_service.find_references_by(resource: model, property: :member_of_vocabulary_id)
-                     .select { |r| r.is_a?(EphemeraVocabulary) }
-                     .map(&:decorate)
-                     .to_a.first
-      end
-  end
-
   def vocabulary_label
     vocabulary.blank? ? "Unnassigned" : vocabulary.label
-  end
-
-  def find_references
-    @referenced_by ||=
-      begin
-        query_service.find_inverse_references_by(resource: model, property: :member_of_vocabulary_id).to_a
-
-      end
-  rescue ArgumentError
-    @referenced_by ||= []
-  end
-
-  # a category is just a nested vocabulary
-  def categories
-    @categories ||=
-      find_references.select { |r| r.is_a?(EphemeraVocabulary) }
-                     .map(&:decorate)
-                     .sort_by(&:label)
-  end
-
-  def terms
-    @terms ||=
-      find_references.select { |r| r.is_a?(EphemeraTerm) }
-                     .map(&:decorate)
-                     .sort_by(&:label)
   end
 
   def manageable_files?
@@ -81,10 +64,6 @@ class EphemeraVocabularyDecorator < Valkyrie::ResourceDecorator
   end
 
   private
-
-    def metadata_adapter
-      Valkyrie.config.metadata_adapter
-    end
 
     def camelized_label
       Array.wrap(label).first.gsub(/\s/, "_").camelize(:lower)
