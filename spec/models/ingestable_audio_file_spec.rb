@@ -39,6 +39,14 @@ RSpec.describe IngestableAudioFile do
     describe "#barcode_with_part" do
       it { expect(audio_file.barcode_with_part).to eq "32101047382401_1" }
     end
+
+    describe "#barcode" do
+      it { expect(audio_file.barcode).to eq "32101047382401" }
+    end
+
+    describe "#part" do
+      it { expect(audio_file.part).to eq "1" }
+    end
   end
 
   context "with an intermediate file" do

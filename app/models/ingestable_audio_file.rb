@@ -2,7 +2,7 @@
 # Decorates the Pathname with some convenience parsing methods
 # Provides methods needed by FileMetadata.for
 class IngestableAudioFile
-  attr_reader :path, :barcode_with_part
+  attr_reader :path, :barcode_with_part, :barcode, :part
 
   def initialize(path:)
     @path = path
@@ -45,5 +45,13 @@ class IngestableAudioFile
 
   def barcode_with_part
     @barcode_with_part ||= ArchivalMediaBagParser::BARCODE_WITH_PART_REGEX.match(original_filename.to_s)[1]
+  end
+
+  def barcode
+    @barcode ||= barcode_with_part.split("_").first
+  end
+
+  def part
+    @part ||= barcode_with_part.split("_").last
   end
 end
