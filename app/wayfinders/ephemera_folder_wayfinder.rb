@@ -11,6 +11,6 @@ class EphemeraFolderWayfinder < BaseWayfinder
   # TODO: Move boxless folders to a new model?
   alias original_ephemera_projects ephemera_projects
   def ephemera_projects
-    @ephemera_projects ||= ephemera_box.present? ? Wayfinder.for(ephemera_box).ephemera_projects : original_ephemera_projects
+    @delegated_ephemera_projects ||= ephemera_box.present? ? Wayfinder.for(ephemera_box).ephemera_projects : original_ephemera_projects
   end
 end
