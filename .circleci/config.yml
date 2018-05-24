@@ -23,26 +23,26 @@ jobs:
       # Restore Cached Dependencies
       - type: cache-restore
         name: Restore bundle cache
-        key: figgy-{{ checksum "Gemfile.lock" }}
+        key: figgy-{{ checksum "Gemfile.lock" }}-2
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
       # Cache Dependencies
       - type: cache-save
         name: Store bundle cache
-        key: figgy-{{ checksum "Gemfile.lock" }}
+        key: figgy-{{ checksum "Gemfile.lock" }}-2
         paths:
           - vendor/bundle
       # Only necessary if app uses webpacker or yarn in some other way
       - restore_cache:
           keys:
-            - figgy-npm-{{ checksum "package-lock.json" }}
+            - figgy-npm-{{ checksum "package-lock.json" }}-2
             - figgy-npm-
       - run:
           name: NPM install
           command: npm install
       # Store yarn / webpacker cache
       - save_cache:
-          key: figgy-npm-{{ checksum "package-lock.json" }}
+          key: figgy-npm-{{ checksum "package-lock.json" }}-2
           paths:
             - npm_modules
       - run: NODE_ENV=test bundle exec rails webpacker:compile
