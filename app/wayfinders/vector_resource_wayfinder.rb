@@ -3,6 +3,7 @@ class VectorResourceWayfinder < BaseWayfinder
   relationship_by_property :members, property: :member_ids
   relationship_by_property :file_sets, property: :member_ids, model: FileSet
   relationship_by_property :vector_resources, property: :member_ids, model: VectorResource
+  relationship_by_property :collections, property: :member_of_collection_ids
   inverse_relationship_by_property :parents, property: :member_ids, singular: true
   inverse_relationship_by_property :raster_resource_parents, property: :member_ids, model: RasterResource
   inverse_relationship_by_property :vector_resource_parents, property: :member_ids, model: VectorResource
