@@ -42,6 +42,12 @@ RSpec.describe IngestArchivalMediaBagJob do
         )
       end
 
+      it "puts barcode and part metadata on the file_set model" do
+        file_set = query_service.find_all_of_model(model: FileSet).select { |fs| fs.part.include? "1" }.first
+        expect(file_set.barcode).to contain_exactly "32101047382401"
+        expect(file_set.part).to contain_exactly "1"
+      end
+
       it "creates one MediaResource per component id" do
         expect(query_service.find_all_of_model(model: MediaResource).size).to eq 1
       end
@@ -80,7 +86,9 @@ RSpec.describe IngestArchivalMediaBagJob do
       let(:bag_path) { Rails.root.join("spec", "fixtures", "bags", "invalid_bag") }
 
       it "raises an error" do
-        expect { described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user) }.to raise_error(IngestArchivalMediaBagJob::InvalidBagError, "Bag at #{bag_path} is an invalid bag")
+        expect { described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user) }.to raise_error(
+          ArchivalMediaBagParser::InvalidBagError, "Bag at #{bag_path} is an invalid bag"
+        )
       end
     end
   end

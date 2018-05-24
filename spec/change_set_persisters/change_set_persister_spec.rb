@@ -856,7 +856,7 @@ RSpec.describe ChangeSetPersister do
       let(:bag_path) { Rails.root.join("spec", "fixtures", "bags", "invalid_bag") }
 
       it "raises an error and does not persist the file" do
-        expect { change_set_persister.save(change_set: change_set) }.to raise_error(IngestArchivalMediaBagJob::InvalidBagError, "Bag at #{bag_path} is an invalid bag")
+        expect { change_set_persister.save(change_set: change_set) }.to raise_error(ArchivalMediaBagParser::InvalidBagError, "Bag at #{bag_path} is an invalid bag")
       end
     end
   end

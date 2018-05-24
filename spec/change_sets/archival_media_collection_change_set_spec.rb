@@ -34,6 +34,7 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
   describe "source metadata identifier validation" do
     before do
       allow_any_instance_of(BagPathValidator).to receive(:validate).and_return(true)
+      allow_any_instance_of(UniqueArchivalMediaBarcodeValidator).to receive(:validate).and_return(true)
     end
 
     context "when metadata identifier is not set" do
@@ -46,7 +47,6 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
     context "when source_metadata_identifier is already in use on another amc" do
       let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "AC044_c0003") }
 
-      let(:file) { File.open(Rails.root.join("spec", "fixtures", "some_finding_aid.xml"), "r") }
       it "is invalid" do
         FactoryBot.create_for_repository(:archival_media_collection, source_metadata_identifier: "AC044_c0003")
         stub_pulfa(pulfa_id: "AC044/c0003")
@@ -58,7 +58,6 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
     context "when source_metadata_identifier is already in use on a scanned resource" do
       let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "AC044_c0003") }
 
-      let(:file) { File.open(Rails.root.join("spec", "fixtures", "some_finding_aid.xml"), "r") }
       it "is invalid" do
         stub_pulfa(pulfa_id: "AC044/c0003")
         FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "AC044_c0003")
@@ -69,7 +68,6 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
 
     context "when source_metadata_identifier is set" do
       let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "AC044_c0003") }
-      let(:file) { File.open(Rails.root.join("spec", "fixtures", "some_finding_aid.xml"), "r") }
       it "is valid" do
         stub_pulfa(pulfa_id: "AC044/c0003")
         expect(change_set).to be_valid
@@ -78,9 +76,10 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
   end
 
   describe "bag path validation" do
-    let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "Totally an identifier") }
+    let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "totally_an_identifier") }
     before do
       allow_any_instance_of(SourceMetadataIdentifierValidator).to receive(:validate).and_return(true)
+      allow_any_instance_of(UniqueArchivalMediaBarcodeValidator).to receive(:validate).and_return(true)
     end
 
     context "when an invalid bag path is set" do
@@ -102,6 +101,30 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
 
       it "is valid" do
         expect(change_set).to be_valid
+      end
+    end
+  end
+
+  describe "UniqueArchivalMediaBarcodeValidator" do
+    context "when the collection already has files with that barcode" do
+      let(:av_fixture_bag) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag") }
+      let(:collection_cid) { "C0652" }
+      let(:query_service) { Valkyrie::MetadataAdapter.find(:indexing_persister).query_service }
+      with_queue_adapter :inline
+      before do
+        stub_pulfa(pulfa_id: "C0652")
+        stub_pulfa(pulfa_id: "C0652_c0377")
+      end
+
+      it "is invalid" do
+        # create the collection so we know its id
+        collection = FactoryBot.create_for_repository(:archival_media_collection, source_metadata_identifier: collection_cid)
+        # ingest the bag so it has the barcoes
+        IngestArchivalMediaBagJob.perform_now(collection_component: collection_cid, bag_path: av_fixture_bag, user: nil)
+        # retrieve the collection via the query service and put it in a change set with the bag
+        collection = query_service.find_by(id: collection.id)
+        change_set = described_class.new(collection, bag_path: av_fixture_bag).prepopulate!
+        expect(change_set).not_to be_valid
       end
     end
   end

@@ -9,6 +9,8 @@ class FileSet < Resource
   attribute :local_identifier
   attribute :hocr_content
   attribute :ocr_content
+  attribute :barcode
+  attribute :part
 
   delegate :width, :height, :x_resolution, :y_resolution, :bits_per_sample, :mime_type, :size, :camera_model, :software, :geometry, :run_fixity, :processing_note, to: :original_file, allow_nil: true
   delegate :md5, :sha1, :sha256, to: :original_file_checksum, allow_nil: true

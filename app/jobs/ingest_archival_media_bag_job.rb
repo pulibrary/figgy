@@ -10,7 +10,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
   def perform(collection_component:, bag_path:, user:)
     bag_path = Pathname.new(bag_path.to_s)
-    bag = ArchivalMediaBagParser.new(path: bag_path)
+    bag = ArchivalMediaBagParser.new(path: bag_path, component_id: collection_component)
     changeset_persister.buffer_into_index do |buffered_persister|
       amc = find_or_create_amc(collection_component)
       Ingester.new(collection: amc, bag: bag, user: user, changeset_persister: buffered_persister).ingest
@@ -41,158 +41,6 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
     def storage_adapter
       Valkyrie::StorageAdapter.find(:disk_via_copy)
-    end
-
-    class InvalidBagError < StandardError; end
-
-    # get all the data files, group them in file sets (master (original_file), intermediate (for download), access)
-    class ArchivalMediaBagParser
-      attr_reader :path, :audio_files, :file_groups, :component_groups
-      def initialize(path:)
-        @path = path
-        @file_groups = {}
-        @component_groups = {}
-        raise InvalidBagError, "Bag at #{@path} is an invalid bag" unless valid?
-      end
-
-      # group all the files in the bag by barcode_with_part
-      def file_groups
-        return @file_groups unless @file_groups.empty?
-        audio_files.each do |audio_file|
-          @file_groups[audio_file.barcode_with_part] = @file_groups.fetch(audio_file.barcode_with_part, []).append(audio_file)
-        end
-        @file_groups
-      end
-
-      # file_groups in groups by component id
-      # @param component_dict [BarcodeComponentDict]
-      # @return [Hash] map keying EAD component IDs to file barcodes
-      def component_groups(component_dict)
-        return @component_groups unless @component_groups.empty?
-        file_groups.keys.each do |barcode_with_part|
-          cid = component_dict.lookup(barcode_with_part)
-          @component_groups[cid] = @component_groups.fetch(cid, []).append(barcode_with_part)
-        end
-        @component_groups
-      end
-
-      private
-
-        # create an AudioPath object for each audio file
-        def audio_files
-          @audio_files ||= path.join("data").each_child.select { |file| [".wav", ".mp3"].include? file.extname }.map { |file| IngestableAudioFile.new(path: file) }
-        end
-
-        # Validates that this is in compliance with the BagIt specification
-        # @see https://tools.ietf.org/html/draft-kunze-bagit-14 BagIt File Packaging Format
-        # @return [TrueClass, FalseClass]
-        def valid?
-          bag = BagIt::Bag.new @path
-          bag.valid?
-        end
-    end
-
-    # Decorates the Pathname with some convenience parsing methods
-    # Provides methods needed by FileMetadata.for
-    class IngestableAudioFile
-      attr_reader :path, :barcode_with_part
-      def initialize(path:)
-        @path = path
-      end
-
-      def original_filename
-        path.split.last
-      end
-
-      def mime_type
-        if master? || intermediate?
-          "audio/wav"
-        else
-          "audio/mpeg"
-        end
-      end
-      alias content_type mime_type
-
-      def use
-        if master?
-          Valkyrie::Vocab::PCDMUse.PreservationMasterFile
-        elsif intermediate?
-          Valkyrie::Vocab::PCDMUse.IntermediateFile
-        elsif access?
-          Valkyrie::Vocab::PCDMUse.ServiceFile
-        end
-      end
-
-      def master?
-        path.to_s.end_with?("_pm.wav")
-      end
-
-      def intermediate?
-        path.to_s.end_with?("_i.wav")
-      end
-
-      def access?
-        path.to_s.end_with?("_a.mp3")
-      end
-
-      def barcode_with_part
-        @barcode_with_part ||= BARCODE_WITH_PART_REGEX.match(original_filename.to_s)[1]
-      end
-    end
-
-    # Dictionary implemented using a wrapper for a Hash
-    # Wraps a hash of component_id => barcode_with_part
-    class BarcodeComponentDict
-      attr_reader :collection, :dict
-      # Constructor
-      # @param collection [ArchivalMediaCollection]
-      def initialize(collection)
-        @collection = collection
-        parse_dict!
-      end
-
-      # Retrieve an EAD component ID for any given barcode
-      # @param barcode_with_part [String] the barcode
-      # @param [String] the EAD component ID
-      def lookup(barcode_with_part)
-        @dict[barcode_with_part]
-      end
-
-      private
-
-        # query the EAD for filenames, navigates back up to their component IDs
-        def parse_dict!
-          @dict = {}
-          barcode_nodes.each do |node|
-            @dict[get_barcode_with_part(node)] = get_id(node)
-          end
-        end
-
-        # Parses XML from Collection Resource metadata
-        # @return [Nokogiri::XML::Element] the root element of the XML Document
-        def xml
-          @xml ||= Nokogiri::XML(collection.imported_metadata.first.source_metadata.first).remove_namespaces!
-        end
-
-        # Retrieves the set of XML Elements containing barcodes within the EAD
-        # @return [Nokogiri::XML::Set]
-        def barcode_nodes
-          xml.xpath("//altformavail/p")
-        end
-
-        # Retrieves a "grandparent" ID attribute value for any given  XML Element
-        # @param node [Nokogiri::XML::Node]
-        # @return [String]
-        def get_id(node)
-          node.parent.parent.attributes["id"].value
-        end
-
-        # Extracts the barcode using the XML Element content and a regexp
-        # @param node [Nokogiri::XML::Node]
-        # @return [String] the captured string content
-        def get_barcode_with_part(node)
-          BARCODE_WITH_PART_REGEX.match(node.content)[1]
-        end
     end
 
     # Service Class for ingesting the bag as a procedure
@@ -230,25 +78,21 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
       private
 
-        # Construct a new Barcode/EAD Component dictionary for an ArchivalMediaCollection
-        # @return [BarcodeComponentDict]
-        def component_dict
-          @component_dict ||= BarcodeComponentDict.new(collection)
-        end
-
         # Retrieve a Hash of EAD Component IDs/Barcodes for file barcodes specified in a given Bag
         # @return [Hash] map of EAD component IDs to file barcodes
         def component_groups
-          @component_groups ||= bag.component_groups(component_dict)
+          @component_groups ||= bag.component_groups
         end
 
         # Creates and persists a FileSet for a media object
-        # @param side [String] side/barcode for a given media object
+        # @param barcode_with_side [String] barcode_side for a given media object
         # @return [FileSet] the persisted FileSet containing the binary and file metadata
-        def create_av_file_set(side)
-          file_set = FileSet.new(title: side)
-          bag.file_groups[side].each do |file| # this is an IngestableAudioFile object
+        def create_av_file_set(barcode_with_side)
+          file_set = FileSet.new(title: barcode_with_side)
+          bag.file_groups[barcode_with_side].each do |file| # this is an IngestableAudioFile object
             node = create_node(file)
+            file_set.barcode = file.barcode
+            file_set.part = file.part
             file_set.file_metadata += Array.wrap(node)
           end
           file_set = changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
