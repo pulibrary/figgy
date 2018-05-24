@@ -364,6 +364,19 @@ RSpec.describe Wayfinder do
   end
 
   context "when given a RasterResource" do
+    describe "#collections" do
+      it "returns all collections it's a member of" do
+        collection = FactoryBot.create_for_repository(:collection)
+        resource = FactoryBot.create_for_repository(:raster_resource, member_of_collection_ids: collection.id)
+
+        wayfinder = described_class.for(resource)
+
+        expect(wayfinder.collections.map(&:id)).to eq [collection.id]
+        expect(wayfinder.collections.map(&:class)).to eq [Collection]
+        expect(wayfinder.decorated_collections.map(&:class)).to eq [CollectionDecorator]
+      end
+    end
+
     describe "#decorated_file_sets" do
       it "returns all file sets as decorated resources" do
         file_set = FactoryBot.create_for_repository(:file_set)
@@ -476,6 +489,7 @@ RSpec.describe Wayfinder do
         expect(wayfinder.decorated_collections.map(&:class)).to eq [CollectionDecorator]
       end
     end
+
     describe "#file_sets" do
       it "returns all file set members" do
         scanned_map = FactoryBot.create_for_repository(:scanned_map)
@@ -609,6 +623,18 @@ RSpec.describe Wayfinder do
   end
 
   context "when given a vector resource" do
+    describe "#collections" do
+      it "returns all collections it's a member of" do
+        collection = FactoryBot.create_for_repository(:collection)
+        resource = FactoryBot.create_for_repository(:vector_resource, member_of_collection_ids: collection.id)
+
+        wayfinder = described_class.for(resource)
+
+        expect(wayfinder.collections.map(&:id)).to eq [collection.id]
+        expect(wayfinder.collections.map(&:class)).to eq [Collection]
+        expect(wayfinder.decorated_collections.map(&:class)).to eq [CollectionDecorator]
+      end
+    end
     describe "#members" do
       it "returns all members" do
         child = FactoryBot.create_for_repository(:geo_metadata_file_set)
