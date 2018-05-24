@@ -5,6 +5,7 @@ class ArchivalMediaCollectionsController < CollectionsController
 
   def ark_report
     collection = query_service.find_by(id: params[:id])
+    authorize! :read, collection
     @resources = collection.decorate.media_resources
     respond_to do |format|
       format.html

@@ -17,7 +17,7 @@ RSpec.describe ArchivalMediaCollectionsController do
   context "when an admin" do
     let(:user) { FactoryBot.create(:admin) }
 
-    describe "GET /archival_media_collections/new" do
+    describe "new" do
       render_views
       it "renders a new record form" do
         get :new
@@ -26,7 +26,7 @@ RSpec.describe ArchivalMediaCollectionsController do
       end
     end
 
-    describe "POST /archival_media_collections" do
+    describe "create" do
       let(:file) { File.open(Rails.root.join("spec", "fixtures", "some_finding_aid.xml"), "r") }
 
       before do
@@ -52,7 +52,7 @@ RSpec.describe ArchivalMediaCollectionsController do
       end
     end
 
-    describe "GET /archival_media_collections/[id]/ark_report" do
+    describe "show ark_report" do
       let(:collection) { FactoryBot.create_for_repository(:archival_media_collection, source_metadata_identifier: ["C0652"]) }
       let(:resource) { FactoryBot.build(:published_media_resource, title: []) }
       let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
@@ -77,6 +77,18 @@ RSpec.describe ArchivalMediaCollectionsController do
         get :ark_report, params: { id: collection.id, format: "csv" }
 
         expect(response.body).to eq(data)
+      end
+    end
+  end
+
+  context "when an anonymous user" do
+    describe "show ark_report" do
+      let(:collection) { FactoryBot.create_for_repository(:archival_media_collection, source_metadata_identifier: ["C0652"], state: "draft") }
+
+      it "does not display" do
+        get :ark_report, params: { id: collection.id }
+
+        expect(response).to be_redirect
       end
     end
   end
