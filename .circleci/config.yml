@@ -24,6 +24,8 @@ jobs:
       - type: cache-restore
         name: Restore bundle cache
         key: figgy-{{ checksum "Gemfile.lock" }}
+      # Remove cached simpler-tiles - needs to be reinstalled every time.
+      - run: rm vendor/bundle/ruby/2.3.0/specifications/simpler-tiles-0.3.1.gemspec || true
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
       # Cache Dependencies
@@ -72,6 +74,8 @@ jobs:
       # Wait for DB
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run: sudo sh bin/ci_kakadu_install.sh
+      # Remove cached simpler-tiles - needs to be reinstalled every time.
+      - run: rm vendor/bundle/ruby/2.3.0/specifications/simpler-tiles-0.3.1.gemspec || true
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
       # Downgrade chromedriver to prevent incompatibility with installed chrome
@@ -110,6 +114,8 @@ jobs:
       - run: sudo apt-get update
       - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev
       - run: sudo sh bin/ci_simple_tiles_install.sh
+      # Remove cached simpler-tiles - needs to be reinstalled every time.
+      - run: rm vendor/bundle/ruby/2.3.0/specifications/simpler-tiles-0.3.1.gemspec || true
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
       - run: bundle exec rake rubocop
