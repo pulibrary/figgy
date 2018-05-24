@@ -334,6 +334,26 @@ RSpec.describe ChangeSetPersister do
       derivative_path = derivative.file_identifiers.first.to_s.gsub("disk://", "")
       expect(File.exist?(derivative_path)).to be false
     end
+
+    context "with an xml file" do
+      let(:file) { fixture_file_upload("files/geo_metadata/fgdc.xml", "text/xml") }
+      let(:change_set_persister) do
+        described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: false)
+      end
+
+      it "appends file as a FileSet but does not set the thumbnail_id" do
+        resource = FactoryBot.build(:scanned_resource)
+        change_set = change_set_class.new(resource, characterize: false)
+        change_set.files = [file]
+
+        output = change_set_persister.save(change_set: change_set)
+        members = query_service.find_members(resource: output)
+
+        expect(members.to_a.length).to eq 1
+        expect(members.first).to be_kind_of FileSet
+        expect(output.thumbnail_id).to be_nil
+      end
+    end
   end
 
   describe "updating files" do
