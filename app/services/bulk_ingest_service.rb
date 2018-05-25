@@ -30,9 +30,13 @@ class BulkIngestService
   def attach_dir(base_directory:, property: nil, file_filter: nil, **attributes)
     directory_path = absolute_path(base_directory)
 
-    file_name = attributes[:id] || File.basename(base_directory)
-    attributes[:title] = [directory_path.basename] if attributes.fetch(:title, []).blank?
-
+    base_name = File.basename(base_directory)
+    file_name = attributes[:id] || base_name
+    # Assign a bibid to from the base directory name
+    attributes[:source_metadata_identifier] = base_name if attributes.fetch(:source_metadata_identifier, []).blank? && RemoteRecord.bibdata?(base_name)
+    # Assign a title if source_metadata_identifier is not set
+    title = [directory_path.basename]
+    attributes[:title] = title if attributes.fetch(:title, []).blank? && attributes.fetch(:source_metadata_identifier, []).blank?
     resource = find_or_create_by(property: property, value: file_name, **attributes)
     child_attributes = attributes.reject { |k, _v| k == :source_metadata_identifier }
     attach_children(path: directory_path, resource: resource, file_filter: file_filter, **child_attributes)

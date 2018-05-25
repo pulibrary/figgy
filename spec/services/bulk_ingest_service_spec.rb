@@ -70,6 +70,22 @@ RSpec.describe BulkIngestService do
       end
     end
 
+    context "when a directory has a bibid as a name" do
+      let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_bibid", "4609321") }
+      it "assigns the bibid to the source metada identifier" do
+        ingester.attach_dir(
+          base_directory: single_dir,
+          file_filter: ".tif",
+          collection: coll
+        )
+
+        updated_collection = query_service.find_by(id: coll.id)
+        decorated_collection = updated_collection.decorate
+        resource = decorated_collection.members.to_a.first
+        expect(resource.source_metadata_identifier).to include(bib)
+      end
+    end
+
     context "with a relative path for the directory" do
       let(:bulk_ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger) }
       let(:single_dir) { File.join("spec", "fixtures", "ingest_single") }
