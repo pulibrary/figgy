@@ -222,7 +222,7 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       render
     end
     after { Timecop.return }
-    it "renders all available attributes" do
+    it "renders all available attributes, except if supressed" do
       expect(rendered).to have_selector "#attributes h2", text: "Attributes"
 
       # Language
@@ -237,9 +237,8 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       expect(rendered).to have_selector "th", text: "Call Number"
       expect(rendered).to have_content "G8731.F7 1927 .C6"
 
-      # Extent
-      expect(rendered).to have_selector "th", text: "Extent"
-      expect(rendered).to have_content "Scale 1:3,000,000 (E 8°33ʹ00ʹʹ--E 14°37ʹ00ʹʹ/N 12°30ʹ00ʹʹ--N 3°53ʹ24ʹʹ)."
+      # Extent (supressed)
+      expect(rendered).not_to have_selector "th", text: "Extent"
 
       # Type
       expect(rendered).to have_selector "th", text: "Type"

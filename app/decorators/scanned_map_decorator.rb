@@ -11,6 +11,7 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   suppress :thumbnail_id,
            :coverage,
            :cartographic_projection,
+           :extent,
            :identifier,
            :source_jsonld,
            :sort_title
