@@ -5,4 +5,9 @@ class FileSetWayfinder < BaseWayfinder
   def collections
     []
   end
+
+  def members
+    []
+  end
+  alias decorated_members members
 end

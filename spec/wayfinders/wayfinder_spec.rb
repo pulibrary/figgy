@@ -736,4 +736,16 @@ RSpec.describe Wayfinder do
       end
     end
   end
+  context "when given a file set" do
+    describe "#members" do
+      it "returns an empty array" do
+        file_set = FactoryBot.create_for_repository(:file_set)
+
+        wayfinder = described_class.for(file_set)
+
+        expect(wayfinder.members).to eq []
+        expect(wayfinder.decorated_members).to eq []
+      end
+    end
+  end
 end
