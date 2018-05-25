@@ -27,6 +27,10 @@ class EventGenerator
       delegate_to_generator(__method__, record)
     end
 
+    def record_member_updated(record)
+      delegate_to_generator(__method__, record)
+    end
+
     private
 
       # Send method with record argument to first valid generator

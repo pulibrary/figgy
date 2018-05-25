@@ -394,12 +394,21 @@ RSpec.describe ChangeSetPersister do
 
         expected_result = {
           "id" => output.id.to_s,
-          "event" => "UPDATED",
+          "event" => "MEMBER_UPDATED",
           "manifest_url" => "http://www.example.com/concern/scanned_resources/#{output.id}/manifest",
           "collection_slugs" => ["test"]
         }
 
         expect(rabbit_connection).to have_received(:publish).at_least(:once).with(expected_result.to_json)
+
+        expected_result_fs = {
+          "id" => file_set.id.to_s,
+          "event" => "UPDATED",
+          "manifest_url" => "",
+          "collection_slugs" => []
+        }
+
+        expect(rabbit_connection).to have_received(:publish).at_least(:once).with(expected_result_fs.to_json)
       end
 
       it "publishes messages for updates and creating file sets", run_real_derivatives: false, rabbit_stubbed: true do
@@ -421,7 +430,7 @@ RSpec.describe ChangeSetPersister do
         fs_expected_result = {
           "id" => fs_output.id.to_s,
           "event" => "CREATED",
-          "manifest_url" => "http://www.example.com/concern/scanned_resources/#{output.id}/manifest",
+          "manifest_url" => "",
           "collection_slugs" => []
         }
 
@@ -468,7 +477,7 @@ RSpec.describe ChangeSetPersister do
 
         expected_result = {
           "id" => output.id.to_s,
-          "event" => "UPDATED",
+          "event" => "MEMBER_UPDATED",
           "manifest_url" => "http://www.example.com/concern/ephemera_folders/#{output.id}/manifest",
           "collection_slugs" => [ephemera_project.decorate.slug]
         }
@@ -488,7 +497,7 @@ RSpec.describe ChangeSetPersister do
 
         expected_result = {
           "id" => output.id.to_s,
-          "event" => "UPDATED",
+          "event" => "MEMBER_UPDATED",
           "manifest_url" => "http://www.example.com/concern/ephemera_folders/#{output.id}/manifest",
           "collection_slugs" => [ephemera_project.decorate.slug]
         }
@@ -498,7 +507,7 @@ RSpec.describe ChangeSetPersister do
         fs_expected_result = {
           "id" => fs_output.id.to_s,
           "event" => "CREATED",
-          "manifest_url" => "http://www.example.com/concern/ephemera_folders/#{output.id}/manifest",
+          "manifest_url" => "",
           "collection_slugs" => []
         }
 
@@ -843,7 +852,7 @@ RSpec.describe ChangeSetPersister do
     before do
       stub_pulfa(pulfa_id: "C0652")
       change_set.prepopulate!
-      change_set.validate(source_metadata_identifier: "C0652")
+      change_set.source_metadata_identifier = "C0652"
     end
 
     it "persists the file using the bag adapter" do
