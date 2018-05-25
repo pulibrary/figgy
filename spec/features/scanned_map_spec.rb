@@ -56,7 +56,10 @@ RSpec.feature "ScannedMaps", js: true do
         cartographic_scale: "test value",
         spatial: "test value",
         temporal: "test value",
-        issued: "test value"
+        issued: "test value",
+        imported_metadata: [{
+          extent: "test extent"
+        }]
       )
     end
 
@@ -84,6 +87,7 @@ RSpec.feature "ScannedMaps", js: true do
       expect(page).to have_css ".attribute.spatial", text: "test value"
       expect(page).to have_css ".attribute.temporal", text: "test value"
       expect(page).to have_css ".attribute.issued", text: "test value"
+      expect(page).not_to have_css ".attribute.extent", text: "test extent"
     end
   end
 end
