@@ -1,0 +1,52 @@
+# frozen_string_literal: true
+require "rails_helper"
+require "valkyrie/derivatives/specs/shared_specs"
+include ActionDispatch::TestProcess
+
+RSpec.describe ExternalMetadataDerivativeService do
+  with_queue_adapter :inline
+  it_behaves_like "a Valkyrie::Derivatives::DerivativeService"
+
+  let(:derivative_service) do
+    ExternalMetadataDerivativeService::Factory.new(change_set_persister: change_set_persister)
+  end
+  let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+  let(:storage_adapter) { Valkyrie.config.storage_adapter }
+  let(:persister) { adapter.persister }
+  let(:query_service) { adapter.query_service }
+  let(:file) { fixture_file_upload("files/geo_metadata/fgdc.xml", "application/xml; schema=fgdc") }
+  let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
+  let(:parent_resource) do
+    change_set_persister.save(change_set: VectorResourceChangeSet.new(VectorResource.new, files: [file]))
+  end
+  let(:parent_resource_members) { query_service.find_members(resource: parent_resource) }
+  let(:valid_resource) { parent_resource_members.first }
+  let(:valid_change_set) { DynamicChangeSet.new(valid_resource) }
+  let(:tika_output) { tika_xml_output }
+
+  describe "#valid?" do
+    let(:valid_file) { derivative_service.new(valid_change_set) }
+
+    context "when given an invalid mime_type" do
+      before { allow(valid_file).to receive(:mime_type).and_return(["image/jpeg"]) }
+      it "does not validate" do
+        expect(valid_file).not_to be_valid
+      end
+    end
+
+    context "when given an invalid parent resource type" do
+      let(:parent_resource) do
+        change_set_persister.save(change_set: ScannedMapChangeSet.new(ScannedMap.new, files: [file]))
+      end
+
+      it "does not validate" do
+        expect(valid_file).not_to be_valid
+      end
+    end
+  end
+
+  it "extracts metadata from the file into the parent resource" do
+    parent = query_service.find_by(id: parent_resource.id)
+    expect(parent.title).to eq ["China census data by county, 2000-2010"]
+  end
+end
