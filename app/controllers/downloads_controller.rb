@@ -10,6 +10,11 @@ class DownloadsController < ApplicationController
     end
   end
 
+  def send_content
+    prepare_file_headers
+    send_file(load_file.file.disk_path, filename: load_file.original_name, type: load_file.mime_type, disposition: :inline)
+  end
+
   def resource
     @resource ||= query_service.find_by(id: Valkyrie::ID.new(params[:resource_id]))
   rescue Valkyrie::Persistence::ObjectNotFoundError
@@ -49,7 +54,6 @@ class DownloadsController < ApplicationController
   # Copied from hydra-head and adjusted to handle the fact that we don't have a
   # modified_date in Valkyrie yet.
   def prepare_file_headers
-    send_file_headers! content_options
     response.headers["Content-Type"] = file_desc.mime_type.first.to_s
     response.headers["Content-Length"] ||= binary_file.size.to_s
     # Prevent Rack::ETag from calculating a digest over body
