@@ -852,7 +852,7 @@ RSpec.describe ChangeSetPersister do
     before do
       stub_pulfa(pulfa_id: "C0652")
       change_set.prepopulate!
-      change_set.validate(source_metadata_identifier: "C0652")
+      change_set.source_metadata_identifier = "C0652"
     end
 
     it "persists the file using the bag adapter" do
