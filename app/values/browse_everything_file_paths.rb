@@ -10,9 +10,10 @@ class BrowseEverythingFilePaths
   # for an array of Pathname objects.
   # @return [Pathname]
   def parent_path
+    return file_paths.first.dirname if file_paths.count == 1
     @parent_path ||= begin
-      out_path = file_paths.pop
-      file_paths.each do |f|
+      out_path = file_paths.first
+      file_paths[1..-1].each do |f|
         out_path = compare_paths(f, out_path)
       end
 
@@ -20,14 +21,18 @@ class BrowseEverythingFilePaths
     end
   end
 
-  # Tests if the parent directory directly contains all the selected files.
-  # @return [Boolean]
-  def parent_path_contains_all_files?
+  # Returns the max depth of the calculated parent path
+  # to the last components of the selected file paths.
+  # @return [Integer]
+  def max_parent_path_depth
+    depth = 1
     file_paths.each do |path|
-      return false unless path.dirname == parent_path
+      relative_path = path.relative_path_from(parent_path)
+      num_elements = relative_path.to_s.split("/").size
+      depth = num_elements if num_elements > depth
     end
 
-    true
+    depth
   end
 
   private

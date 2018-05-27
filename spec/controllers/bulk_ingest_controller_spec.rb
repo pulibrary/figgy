@@ -30,33 +30,60 @@ RSpec.describe BulkIngestController do
       allow(IngestFoldersJob).to receive(:perform_later)
     end
 
-    context "when a directory has no sub-directories" do
-      let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single") }
+    context "with one single-volume resource" do
       let(:selected_files) do
         {
-          "0" => { "url" => "#{single_dir}/color.tif", "file_name" => "color.tif", "file_size" => "100" },
-          "1" => { "url" => "#{single_dir}/gray.tif", "file_name" => "gray.tif", "file_size" => "100" }
+          "0" => { "url" => "/base/resource1/1.tif", "file_name" => "1.tif", "file_size" => "100" }
         }
       end
 
       it "ingests the directory as a single resource" do
-        post :browse_everything_files, params: { resource_type: "scanned_resource", workflow: { state: "pending" }, visibility: "open", selected_files: selected_files }
-        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: single_dir.to_s, state: "pending", visibility: "open"))
+        post :browse_everything_files, params: { resource_type: "scanned_resource", workflow: { state: "pending" }, visibility: "open", mvw: false, selected_files: selected_files }
+        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: "/base/resource1", state: "pending", visibility: "open"))
       end
     end
 
-    context "when a directory has sub-directories" do
-      let(:multi_dir) { Rails.root.join("spec", "fixtures", "ingest_multi") }
+    context "with two single-volume resources" do
       let(:selected_files) do
         {
-          "0" => { "url" => "#{multi_dir}/vol1/color.tif", "file_name" => "color.tif", "file_size" => "100" },
-          "1" => { "url" => "#{multi_dir}/vol2/gray.tif", "file_name" => "gray.tif", "file_size" => "100" }
+          "0" => { "url" => "/base/resource1/1.tif", "file_name" => "1.tif", "file_size" => "100" },
+          "1" => { "url" => "/base/resource2/1.tif", "file_name" => "1.tif", "file_size" => "100" }
         }
       end
 
-      it "ingests the directory as multiple resources" do
-        post :browse_everything_files, params: { resource_type: "scanned_resource", workflow: { state: "complete" }, visibility: "private", selected_files: selected_files }
-        expect(IngestFoldersJob).to have_received(:perform_later).with(hash_including(directory: multi_dir.to_s, state: "complete", visibility: "private"))
+      it "ingests the parent as two resources" do
+        post :browse_everything_files, params: { resource_type: "scanned_resource", workflow: { state: "pending" }, visibility: "open", mvw: false, selected_files: selected_files }
+        expect(IngestFoldersJob).to have_received(:perform_later).with(hash_including(directory: "/base", state: "pending", visibility: "open"))
+      end
+    end
+
+    context "with one multi-volume resource" do
+      let(:selected_files) do
+        {
+          "0" => { "url" => "/base/resource1/vol1/1.tif", "file_name" => "1.tif", "file_size" => "100" },
+          "1" => { "url" => "/base/resource1/vol2/1.tif", "file_name" => "1.tif", "file_size" => "100" }
+        }
+      end
+
+      it "ingests the parent as two resources" do
+        post :browse_everything_files, params: { resource_type: "scanned_resource", workflow: { state: "pending" }, visibility: "open", mvw: true, selected_files: selected_files }
+        expect(IngestFoldersJob).to have_received(:perform_later).with(hash_including(directory: "/base", state: "pending", visibility: "open"))
+      end
+    end
+
+    context "with two multi-volume resources" do
+      let(:selected_files) do
+        {
+          "0" => { "url" => "/base/resource1/vol1/1.tif", "file_name" => "1.tif", "file_size" => "100" },
+          "1" => { "url" => "/base/resource1/vol2/1.tif", "file_name" => "1.tif", "file_size" => "100" },
+          "2" => { "url" => "/base/resource2/vol1/1.tif", "file_name" => "1.tif", "file_size" => "100" },
+          "3" => { "url" => "/base/resource2/vol2/1.tif", "file_name" => "1.tif", "file_size" => "100" }
+        }
+      end
+
+      it "ingests the parent as two resources" do
+        post :browse_everything_files, params: { resource_type: "scanned_resource", workflow: { state: "pending" }, visibility: "open", mvw: true, selected_files: selected_files }
+        expect(IngestFoldersJob).to have_received(:perform_later).with(hash_including(directory: "/base", state: "pending", visibility: "open"))
       end
     end
   end

@@ -7,10 +7,10 @@ class BulkIngestController < ApplicationController
   end
 
   def browse_everything_files
-    if file_paths.parent_path_contains_all_files?
-      IngestFolderJob.perform_later(directory: file_paths.parent_path.to_s, file_filter: nil, class_name: resource_class_name, **attributes)
+    if file_paths.max_parent_path_depth == 1
+      IngestFolderJob.perform_later(directory: parent_path.to_s, file_filter: nil, class_name: resource_class_name, **attributes)
     else
-      IngestFoldersJob.perform_later(directory: file_paths.parent_path.to_s, file_filter: nil, class_name: resource_class_name, **attributes)
+      IngestFoldersJob.perform_later(directory: parent_path.to_s, file_filter: nil, class_name: resource_class_name, **attributes)
     end
 
     redirect_to root_url, notice: "Batch Ingest of #{resource_class.human_readable_type.pluralize} started"
@@ -27,6 +27,21 @@ class BulkIngestController < ApplicationController
 
     def file_paths
       @file_paths ||= BrowseEverythingFilePaths.new(selected_files_param)
+    end
+
+    def multi_volume_work?
+      params[:mvw] == "true"
+    end
+
+    def parent_path
+      path = file_paths.parent_path
+      if multi_volume_work? && file_paths.max_parent_path_depth == 2
+        # Single multi-volume works need a parent path one level above to ingest properly.
+        # Otherwise, they are indistinguishable from multiple singe-volume works.
+        File.dirname(path)
+      else
+        path
+      end
     end
 
     def resource_class
