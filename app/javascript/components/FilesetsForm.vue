@@ -133,4 +133,7 @@ legend {
   padding-left: 30px;
 }
 
+.form-group {
+  margin-bottom: 15px;
+}
 </style>
