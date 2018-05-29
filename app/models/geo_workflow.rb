@@ -33,12 +33,14 @@ class GeoWorkflow < BaseWorkflow
     end
   end
 
-  # States in which the record is publicly readable (as allowed by visilibility)
+  # States in which the record is publicly readable (as allowed by visibility)
+  # @return [Array<String>]
   def self.public_read_states
     [:complete, :flagged].map(&:to_s)
   end
 
   # States in which a manifest can be published for the record
+  # @return [Array<String>]
   def self.manifest_states
     [:complete, :flagged].map(&:to_s)
   end

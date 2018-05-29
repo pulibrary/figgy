@@ -25,16 +25,19 @@ class BoxWorkflow < BaseWorkflow
 
   # States in which the record should be publicly viewable
   # (boxes are never publicly viewable)
+  # @return [Array]
   def self.public_read_states
     []
   end
 
   # States in which a manifest can be published
+  # @return [Array<String>]
   def self.manifest_states
     [:all_in_production].map(&:to_s)
   end
 
   # states that grant read access to contained items
+  # @return [Array<String>]
   def self.grant_access_states
     [:all_in_production].map(&:to_s)
   end

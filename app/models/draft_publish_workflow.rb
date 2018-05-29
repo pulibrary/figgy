@@ -18,11 +18,13 @@ class DraftPublishWorkflow < BaseWorkflow
   end
 
   # States in which the record is publicly readable (as allowed by visibility)
+  # @return [Array<String>]
   def self.public_read_states
     [:published].map(&:to_s)
   end
 
   # States in which a manifest can be published for the record
+  # @return [Array<String>]
   def self.manifest_states
     [:published].map(&:to_s)
   end

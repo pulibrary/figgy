@@ -16,6 +16,9 @@ class FolderWorkflow < BaseWorkflow
     end
   end
 
+  # Translates the state of another workflow to correspond to the current state of this workflow
+  # @param workflow [BaseWorkflow]
+  # @return [Symbol]
   def translate_state_from(workflow)
     return super if workflow.class == self.class
     final_state if workflow.final_state?
@@ -30,6 +33,7 @@ class FolderWorkflow < BaseWorkflow
 
   # States in which read groups for the record are indexable
   # Folders are consulted and will override this if appropriate
+  # @return [Array<String>]
   def self.index_read_groups_states
     [:complete].map(&:to_s)
   end
