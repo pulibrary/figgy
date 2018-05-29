@@ -12,6 +12,11 @@ class DownloadsController < ApplicationController
 
   def send_content
     prepare_file_headers
+    # Necessary until a Rack version is released which allows for multiple
+    # HTTP_X_ACCEL_MAPPING. When this commit is in a released version:
+    # https://github.com/rack/rack/commit/f2361997623e5141e6baa907d79f1212b36fbb8b
+    # remove this line and move it to the nginx configuration.
+    request.env["HTTP_X_ACCEL_MAPPING"] = "/opt/repository/=/restricted_repository/"
     send_file(load_file.file.disk_path, filename: load_file.original_name, type: load_file.mime_type, disposition: :inline)
   end
 
