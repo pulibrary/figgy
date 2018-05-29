@@ -5,7 +5,13 @@ Rails.application.config.to_prepare do
   # Registers a storage adapter for a *NIX file system
   # Binaries are persisted by invoking "mv" with access limited to read/write for owning users, and read-only for all others
   # NOTE: "mv" may preserve the inode for the file system
+  # @see http://manpages.ubuntu.com/manpages/xenial/man1/mv.1.html
   # file_mover should be a lambda or Proc which performs an operation on the file using its path
+  # This `mv` ensures that files can be read by any process on the server
+  # `644` is the octal value of the bitmask used in order to ensure that the derivative file globally-readable
+  # The file system in the server environment was overriding this, specifically for cases where files were saved to...
+  # ...the IIIF image server network file share (libimages1) with a file access control octal value of 600 (globally-unreadable)
+  # @see https://help.ubuntu.com/community/FilePermissions
   Valkyrie::StorageAdapter.register(
     InstrumentedStorageAdapter.new(
       storage_adapter: Valkyrie::Storage::Disk.new(
@@ -23,6 +29,7 @@ Rails.application.config.to_prepare do
   # Registers a storage adapter for a *NIX file system
   # Binaries are persisted by invoking "cp" (duplicating the file)
   # NOTE: This doubles the size of binaries being persisted if the repository
+  # @see http://manpages.ubuntu.com/manpages/xenial/man1/cp.1.html
   # is deployed on the same file system as the one storing the files being uploaded
   # NOTE: Separate inodes are created
   Valkyrie::StorageAdapter.register(
@@ -39,6 +46,7 @@ Rails.application.config.to_prepare do
   # Registers a storage adapter for a *NIX file system
   # Binaries are persisted by invoking "cp" (duplicating the file)
   # NOTE: This doubles the size of binaries being persisted if the repository
+  # @see http://manpages.ubuntu.com/manpages/xenial/man1/cp.1.html
   # is deployed on the same file system as the one storing the files being uploaded
   # NOTE: Separate inodes are created
   Valkyrie::StorageAdapter.register(
@@ -55,6 +63,12 @@ Rails.application.config.to_prepare do
   # Registers a storage adapter for a *NIX file system
   # Binaries are persisted by invoking "mv" with access limited to read/write for owning users, and read-only for all others
   # NOTE: "mv" may preserve the inode for the file system
+  # @see http://manpages.ubuntu.com/manpages/xenial/man1/mv.1.html
+  # This `mv` ensures that files can be read by any process on the server
+  # `644` is the octal value of the bitmask used in order to ensure that the derivative file globally-readable
+  # The file system in the server environment was overriding this, specifically for cases where files were saved to...
+  # ...the IIIF image server network file share (libimages1) with a file access control octal value of 600 (globally-unreadable)
+  # @see https://help.ubuntu.com/community/FilePermissions
   Valkyrie::StorageAdapter.register(
     InstrumentedStorageAdapter.new(
       storage_adapter: Valkyrie::Storage::Disk.new(
@@ -72,6 +86,12 @@ Rails.application.config.to_prepare do
   # Registers a storage adapter for a *NIX file system
   # Binaries are persisted by invoking "mv" with access limited to read/write for owning users, and read-only for all others
   # NOTE: "mv" may preserve the inode for the file system
+  # @see http://manpages.ubuntu.com/manpages/xenial/man1/mv.1.html
+  # This `mv` ensures that files can be read by any process on the server
+  # `644` is the octal value of the bitmask used in order to ensure that the derivative file globally-readable
+  # The file system in the server environment was overriding this, specifically for cases where files were saved to...
+  # ...the IIIF image server network file share (libimages1) with a file access control octal value of 600 (globally-unreadable)
+  # @see https://help.ubuntu.com/community/FilePermissions
   Valkyrie::StorageAdapter.register(
     InstrumentedStorageAdapter.new(
       storage_adapter: Valkyrie::Storage::Disk.new(
