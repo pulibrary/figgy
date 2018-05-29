@@ -44,6 +44,13 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
       end
     end
 
+    context "when metadata identifier is set to a string that's not an id" do
+      let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "not an id") }
+      it "is invalid" do
+        expect(change_set).not_to be_valid
+      end
+    end
+
     context "when source_metadata_identifier is already in use on another amc" do
       let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "AC044_c0003") }
 
