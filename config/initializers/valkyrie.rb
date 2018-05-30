@@ -156,6 +156,12 @@ Rails.application.config.to_prepare do
       storage_adapter: Valkyrie::StorageAdapter.find(:geo_derivatives)
     )
   )
+  Valkyrie::Derivatives::DerivativeService.services << ExternalMetadataDerivativeService::Factory.new(
+    change_set_persister: ::ChangeSetPersister.new(
+      metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
+      storage_adapter: Valkyrie::StorageAdapter.find(:geo_derivatives)
+    )
+  )
 
   Valkyrie::Derivatives::FileCharacterizationService.services << DefaultCharacterizationService
   Valkyrie::Derivatives::FileCharacterizationService.services << GeoCharacterizationService
