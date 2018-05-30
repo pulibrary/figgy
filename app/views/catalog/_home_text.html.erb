@@ -8,16 +8,20 @@
 </p>
 
 <%= render partial: 'catalog/work_types', locals: { label: 'Books, Manuscripts, and Scanned Documents',
-                                                    types: [ScannedResource, SimpleResource] } %>
+                                                    types: [ScannedResource, SimpleResource],
+                                                    bulk: [ScannedResource, SimpleResource] } %>
 
 <%= render partial: 'catalog/work_types', locals: { label: 'Audio and Video',
-                                                    types: [MediaResource] } %>
+                                                    types: [MediaResource],
+                                                    bulk: [MediaResource]} %>
 
 <%= render partial: 'catalog/work_types', locals: { label: 'Maps and Geospatial Data',
-                                                    types: [ScannedMap, RasterResource, VectorResource] } %>
+                                                    types: [ScannedMap, RasterResource, VectorResource],
+                                                    bulk: [ScannedMap, RasterResource, VectorResource] } %>
 
 <%= render partial: 'catalog/work_types', locals: { label: 'Collections',
-                                                    types: [Collection, ArchivalMediaCollection] } %>
+                                                    types: [Collection, ArchivalMediaCollection],
+                                                    bulk: [] } %>
 
 <%= render partial: 'catalog/ephemera_box_home' %>
 

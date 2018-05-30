@@ -27,7 +27,9 @@ class FileAppender
     resource.file_metadata += file_resources.file_metadata if file_set?(resource)
     if viewable_resource?(resource)
       resource.member_ids += file_resources.ids
-      resource.thumbnail_id = file_resources.first.id if resource.thumbnail_id.blank?
+      # Set the thumbnail id if a valid file resource is found
+      thumbnail_id = find_thumbnail_id(resource, file_resources)
+      resource.thumbnail_id = thumbnail_id if thumbnail_id
     end
     adjust_pending_uploads(resource)
     file_resources
@@ -93,5 +95,21 @@ class FileAppender
       file.try(:container_attributes) || {}
     )
     persister.save(resource: FileSet.new(attributes))
+  end
+
+  # Returns a thumbnail id for a resource and a array of file_resources.
+  def find_thumbnail_id(resource, file_resources)
+    return unless resource.thumbnail_id.blank?
+    file_resources.each do |file_resource|
+      extension = File.extname(file_resource.original_file.original_filename.first)
+      return file_resource.id unless no_thumbail_extensions.include?(extension)
+    end
+
+    nil
+  end
+
+  # Extensions for original_files that shouldn't be used as thumbnails.
+  def no_thumbail_extensions
+    [".xml"]
   end
 end
