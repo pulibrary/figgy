@@ -38,6 +38,7 @@ class RasterResourceChangeSet < ChangeSet
       :source_metadata_identifier,
       :rights_statement,
       :rights_note,
+      :thumbnail_id,
       :portion_note,
       :local_identifier,
       :holding_location,

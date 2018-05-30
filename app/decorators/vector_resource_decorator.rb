@@ -95,6 +95,11 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
     end
   end
 
+  def thumbnail_members
+    decorated_geo_members = geo_members.map(&:decorate)
+    decorated_geo_members + vector_resource_members
+  end
+
   def title
     return "#{super.first} (#{portion_note.first})" if portion_note
     super
