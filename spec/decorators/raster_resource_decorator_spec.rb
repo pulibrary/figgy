@@ -121,7 +121,7 @@ RSpec.describe RasterResourceDecorator do
       end
 
       it "appends the portion note to the displayed title" do
-        expect(resource.decorate.title).to eq "test title (sheet 1)"
+        expect(resource.decorate.title).to eq ["test title (sheet 1)"]
       end
     end
   end

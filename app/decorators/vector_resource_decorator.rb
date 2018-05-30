@@ -101,7 +101,7 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
   end
 
   def title
-    return "#{super.first} (#{portion_note.first})" if portion_note
+    return ["#{super.first} (#{portion_note.first})"] unless portion_note.blank?
     super
   end
 end
