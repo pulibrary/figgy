@@ -72,7 +72,7 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
         gbl_doc = GeoDiscovery::DocumentBuilder.new(record, GeoDiscovery::GeoblacklightDocument.new)
         expected_result = {
           "id" => record.id.to_s,
-          "event" => "MEMBER_UPDATED",
+          "event" => "UPDATED",
           "doc" => gbl_doc
         }
 

@@ -31,14 +31,7 @@ class EventGenerator
     end
 
     def record_member_updated(record)
-      state = record.state.first
-      if state == "takedown"
-        record_deleted(record)
-      elsif state == "complete"
-        publish_message(
-          message("MEMBER_UPDATED", record)
-        )
-      end
+      record_updated(record)
     end
 
     def valid?(record)
