@@ -6,7 +6,7 @@ module GeoResourceController
       change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
       authorize! :update, change_set.resource
       file_node = query_service.find_by(id: Valkyrie::ID.new(params[:file_set_id]))
-      GeoMetadataExtractor.new(change_set: change_set, file_node: file_node, persister: persister).extract
+      GeoMetadataExtractor.new(change_set: change_set, file_node: file_node, persister: change_set_persister).extract
     end
   end
 end

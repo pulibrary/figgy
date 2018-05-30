@@ -4,10 +4,9 @@ include ActionDispatch::TestProcess
 
 RSpec.describe GeoMetadataExtractor do
   with_queue_adapter :inline
-  subject(:extractor) { described_class.new(change_set: change_set, file_node: file_set, persister: persister) }
+  subject(:extractor) { described_class.new(change_set: change_set, file_node: file_set, persister: change_set_persister) }
   let(:adapter) { Valkyrie.config.metadata_adapter }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
-  let(:persister) { adapter.persister }
   let(:query_service) { adapter.query_service }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
   let(:map) do
