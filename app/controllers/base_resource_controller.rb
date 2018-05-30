@@ -90,7 +90,7 @@ class BaseResourceController < ApplicationController
   private
 
     def selected_file_params
-      params[:selected_files].to_unsafe_h
+      params[:selected_files].try(:to_unsafe_h) || {}
     end
 
     def parent_resource_params

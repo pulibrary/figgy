@@ -172,6 +172,17 @@ RSpec.describe ScannedResourcesController do
           }
         }
       end
+      context "when given an empty array of selected files" do
+        it "doesn't upload anything" do
+          resource = FactoryBot.create_for_repository(:scanned_resource)
+
+          post :browse_everything_files, params: { id: resource.id, selected_files: {} }
+          reloaded = adapter.query_service.find_by(id: resource.id)
+
+          expect(response).to be_redirect
+          expect(reloaded.member_ids.length).to eq 0
+        end
+      end
       it "uploads files" do
         resource = FactoryBot.create_for_repository(:scanned_resource)
         # Ensure that indexing is always safe and done at the end.
