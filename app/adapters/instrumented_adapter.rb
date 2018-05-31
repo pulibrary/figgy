@@ -126,6 +126,13 @@ class InstrumentedAdapter < SimpleDelegator
       end
     end
 
+    def find_by_alternate_identifier(alternate_identifier:)
+      trace("valkyrie.find_by_alternate_identifier") do |span|
+        span.set_tag("param.alternate_identifier", alternate_identifier.to_s)
+        __getobj__.find_by_alternate_identifier(alternate_identifier: alternate_identifier)
+      end
+    end
+
     def span_name
       "valkyrie.query"
     end
