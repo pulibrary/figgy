@@ -2,13 +2,7 @@
 
 # State-based workflow for folders: Start at requiring QA (will be visible, but
 # not able to view the manifest.) When complete, the manifest is visible.
-class FolderWorkflow
-  include AASM
-
-  def initialize(state)
-    aasm.current_state = state.to_sym unless state.nil?
-  end
-
+class FolderWorkflow < BaseWorkflow
   aasm do
     state :needs_qa, initial: true
     state :complete
@@ -22,12 +16,12 @@ class FolderWorkflow
     end
   end
 
-  def valid_states
-    aasm.states.map(&:name).map(&:to_s)
-  end
-
-  def valid_transitions
-    aasm.states(permitted: true).map(&:name).map(&:to_s)
+  # Translates the state of another workflow to correspond to the current state of this workflow
+  # @param workflow [BaseWorkflow]
+  # @return [Symbol]
+  def translate_state_from(workflow)
+    return super if workflow.class == self.class
+    final_state if workflow.final_state?
   end
 
   # States in which the record can be publicly viewable
@@ -39,6 +33,7 @@ class FolderWorkflow
 
   # States in which read groups for the record are indexable
   # Folders are consulted and will override this if appropriate
+  # @return [Array<String>]
   def self.index_read_groups_states
     [:complete].map(&:to_s)
   end

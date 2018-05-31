@@ -2,7 +2,8 @@
 require "rails_helper"
 
 RSpec.describe EphemeraBoxChangeSet do
-  subject(:change_set) { described_class.new(FactoryBot.build(:ephemera_box)) }
+  subject(:change_set) { described_class.new(ephemera_box) }
+  let(:ephemera_box) { FactoryBot.build(:ephemera_box) }
   describe "#visibility" do
     it "exposes the visibility" do
       expect(change_set.visibility).to include Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
@@ -32,6 +33,26 @@ RSpec.describe EphemeraBoxChangeSet do
     it "pre-populates" do
       change_set.prepopulate!
       expect(change_set.state).to eq "new"
+    end
+
+    context "when an EphemeraBox has EphemeraFolder members" do
+      subject(:change_set) { described_class.new(ephemera_box) }
+      let(:ephemera_folder) { FactoryBot.create_for_repository(:ephemera_folder) }
+      let(:ephemera_box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: [ephemera_folder.id]) }
+      let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+      let(:storage_adapter) { Valkyrie.config.storage_adapter }
+      let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
+
+      before do
+        change_set.prepopulate!
+      end
+      it "propagates the state to member resources" do
+        change_set.state = "all_in_production"
+        persisted = change_set_persister.save(change_set: change_set)
+        folders = persisted.decorate.folders
+        expect(folders).not_to be_empty
+        expect(folders.first.state).to eq "complete"
+      end
     end
   end
 

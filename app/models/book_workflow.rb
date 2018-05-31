@@ -4,13 +4,7 @@
 # metadata_review and final_review to complete.  There are two exceptional workflows: between
 # complete/takedown (for issues requiring an item be suppressed), and between complete/flagged (for issues
 # where an item can remain accessible).
-class BookWorkflow
-  include AASM
-
-  def initialize(state)
-    aasm.current_state = state.to_sym unless state.nil?
-  end
-
+class BookWorkflow < BaseWorkflow
   aasm do
     state :pending, initial: true
     state :metadata_review
@@ -47,20 +41,26 @@ class BookWorkflow
     end
   end
 
+  # Retrieve all valid states for this workflow
+  # @return [Array<String>]
   def valid_states
     aasm.states.map(&:name).map(&:to_s)
   end
 
+  # Retrieve all valid state transitions for this workflow
+  # @return [Array<String>]
   def valid_transitions
     aasm.states(permitted: true).map(&:name).map(&:to_s)
   end
 
   # States in which the record is publicly readable (as allowed by visilibility)
+  # @return [Array<String>]
   def self.public_read_states
     [:complete, :flagged].map(&:to_s)
   end
 
   # States in which a manifest can be published for the record
+  # @return [Array<String>]
   def self.manifest_states
     [:complete, :flagged].map(&:to_s)
   end

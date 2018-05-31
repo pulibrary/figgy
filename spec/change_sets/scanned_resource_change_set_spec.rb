@@ -98,4 +98,20 @@ RSpec.describe ScannedResourceChangeSet do
       expect(change_set.logical_structure[0].label).to eq ["Logical"]
     end
   end
+  context "when a ScannedResource has ScannedResource members" do
+    subject(:change_set) { described_class.new(scanned_resource) }
+    let(:scanned_resource_member) { FactoryBot.create_for_repository(:scanned_resource) }
+    let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [scanned_resource_member.id]) }
+    let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+    let(:storage_adapter) { Valkyrie.config.storage_adapter }
+    let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
+
+    it "propagates the state to member resources" do
+      change_set.state = "metadata_review"
+      persisted = change_set_persister.save(change_set: change_set)
+      members = persisted.decorate.members
+      expect(members).not_to be_empty
+      expect(members.first.state).to include "metadata_review"
+    end
+  end
 end
