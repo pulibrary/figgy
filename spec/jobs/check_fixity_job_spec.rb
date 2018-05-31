@@ -40,13 +40,14 @@ RSpec.describe CheckFixityJob do
     end
 
     context "when the file set does not exist" do
+      let(:file_set_id) { "5f4235a3-53c0-42cc-9ada-564ea554264e" }
       before do
         allow(Valkyrie.logger).to receive(:warn)
-        described_class.perform_now("5f4235a3-53c0-42cc-9ada-564ea554264e")
+        described_class.perform_now file_set_id
       end
 
       it "logs a warning" do
-        expect(Valkyrie.logger).to have_received(:warn).with(Valkyrie::Persistence::ObjectNotFoundError)
+        expect(Valkyrie.logger).to have_received(:warn).with "Valkyrie::Persistence::ObjectNotFoundError: Failed to find the resource #{file_set_id}"
       end
     end
   end

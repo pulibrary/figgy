@@ -10,7 +10,7 @@ class CheckFixityJob < ApplicationJob
       buffered_adapter.persister.save(resource: file_set)
     end
   rescue Valkyrie::Persistence::ObjectNotFoundError => error
-    Valkyrie.logger.warn error
+    Valkyrie.logger.warn "#{error}: Failed to find the resource #{file_set_id}"
   end
 
   private
