@@ -38,5 +38,17 @@ RSpec.describe CheckFixityJob do
       fs = query_service.find_by(id: file_set_id)
       expect(fs.original_file.fixity_success).to eq 1
     end
+
+    context "when the file set does not exist" do
+      let(:file_set_id) { "5f4235a3-53c0-42cc-9ada-564ea554264e" }
+      before do
+        allow(Valkyrie.logger).to receive(:warn)
+        described_class.perform_now file_set_id
+      end
+
+      it "logs a warning" do
+        expect(Valkyrie.logger).to have_received(:warn).with "#{described_class}: Valkyrie::Persistence::ObjectNotFoundError: Failed to find the resource #{file_set_id}"
+      end
+    end
   end
 end

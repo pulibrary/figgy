@@ -9,6 +9,8 @@ class CheckFixityJob < ApplicationJob
     metadata_adapter.persister.buffer_into_index do |buffered_adapter|
       buffered_adapter.persister.save(resource: file_set)
     end
+  rescue Valkyrie::Persistence::ObjectNotFoundError => error
+    Valkyrie.logger.warn "#{self.class}: #{error}: Failed to find the resource #{file_set_id}"
   end
 
   private

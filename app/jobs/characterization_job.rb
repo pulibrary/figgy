@@ -9,6 +9,8 @@ class CharacterizationJob < ApplicationJob
       Valkyrie::Derivatives::FileCharacterizationService.for(file_set: file_set, persister: buffered_adapter.persister).characterize
     end
     CreateDerivativesJob.set(queue: queue_name).perform_later(file_set_id)
+  rescue Valkyrie::Persistence::ObjectNotFoundError => error
+    Valkyrie.logger.warn "#{self.class}: #{error}: Failed to find the resource #{file_set_id}"
   end
 
   def metadata_adapter
