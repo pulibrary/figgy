@@ -117,10 +117,6 @@ class InstrumentedAdapter < SimpleDelegator
         span.set_tag("param.id", id.to_s)
         __getobj__.find_by(id: id)
       end
-    rescue ArgumentError => error
-      Valkyrie.logger.warn error.message
-    rescue Valkyrie::Persistence::ObjectNotFoundError => error
-      Valkyrie.logger.warn error
     end
 
     # Traces "find_many_by_ids" operations delegated to the QueryService
@@ -130,8 +126,6 @@ class InstrumentedAdapter < SimpleDelegator
         span.set_tag("param.ids", ids.map(&:to_s))
         __getobj__.find_many_by_ids(ids: ids)
       end
-    rescue ArgumentError => error
-      Valkyrie.logger.warn error.message
     end
 
     # Traces "find_all" operations delegated to the QueryService
@@ -168,8 +162,6 @@ class InstrumentedAdapter < SimpleDelegator
         span.set_tag("param.resource", resource.id.to_s)
         __getobj__.find_parents(resource: resource)
       end
-    rescue ArgumentError => error
-      Valkyrie.logger.warn error.message
     end
 
     # Traces "find_references_by" operations delegated to the QueryService
@@ -192,8 +184,6 @@ class InstrumentedAdapter < SimpleDelegator
         span.set_tag("param.property", property.to_s)
         __getobj__.find_inverse_references_by(resource: resource, property: property)
       end
-    rescue ArgumentError => error
-      Valkyrie.logger.warn error.message
     end
 
     def find_by_alternate_identifier(alternate_identifier:)
