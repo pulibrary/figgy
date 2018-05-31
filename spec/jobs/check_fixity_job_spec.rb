@@ -47,7 +47,7 @@ RSpec.describe CheckFixityJob do
       end
 
       it "logs a warning" do
-        expect(Valkyrie.logger).to have_received(:warn).with "Valkyrie::Persistence::ObjectNotFoundError: Failed to find the resource #{file_set_id}"
+        expect(Valkyrie.logger).to have_received(:warn).with "#{described_class}: Valkyrie::Persistence::ObjectNotFoundError: Failed to find the resource #{file_set_id}"
       end
     end
   end

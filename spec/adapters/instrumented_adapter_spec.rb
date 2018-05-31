@@ -23,7 +23,6 @@ RSpec.describe InstrumentedAdapter do
       allow(span).to receive(:resource=)
       allow(span).to receive(:set_tag)
     end
-
     it "instruments information to datadog" do
       resource = ScannedResource.new
       output = adapter.persister.save(resource: resource)
