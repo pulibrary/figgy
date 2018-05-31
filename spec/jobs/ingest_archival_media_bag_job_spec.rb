@@ -84,6 +84,11 @@ RSpec.describe IngestArchivalMediaBagJob do
 
     context "with a path to an invalid bag" do
       let(:bag_path) { Rails.root.join("spec", "fixtures", "bags", "invalid_bag") }
+      let(:logger) { instance_double(Logger) }
+      before do
+        allow(logger).to receive(:error)
+        allow(Logger).to receive(:new).and_return(logger)
+      end
 
       it "raises an error" do
         expect { described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user) }.to raise_error(

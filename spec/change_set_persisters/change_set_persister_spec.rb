@@ -883,6 +883,11 @@ RSpec.describe ChangeSetPersister do
 
     context "with an invalid bag path" do
       let(:bag_path) { Rails.root.join("spec", "fixtures", "bags", "invalid_bag") }
+      let(:logger) { instance_double(Logger) }
+      before do
+        allow(logger).to receive(:error)
+        allow(Logger).to receive(:new).and_return(logger)
+      end
 
       it "raises an error and does not persist the file" do
         expect { change_set_persister.save(change_set: change_set) }.to raise_error(ArchivalMediaBagParser::InvalidBagError, "Bag at #{bag_path} is an invalid bag")
