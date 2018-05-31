@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+# Service Class for migrating from Valkyrie 0.x releases to 1.0
+# Please note that this approach should not be undertaken for future migrations
 class Valkyrie1Migrator
   def self.call
     [EphemeraTerm, EphemeraVocabulary].each do |model|

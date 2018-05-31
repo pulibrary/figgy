@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe EphemeraFolderMigrator do
+describe UpdateCompletedEphemeraFolders do
+  subject(:migration) { described_class.new }
   let(:adapter) { Valkyrie.config.metadata_adapter }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
   let(:persister) { adapter.persister }
@@ -11,7 +12,7 @@ RSpec.describe EphemeraFolderMigrator do
   let(:folder) { FactoryBot.create_for_repository(:ephemera_folder) }
   let(:orm_folder) { resource_factory.from_resource(resource: folder) }
 
-  describe ".call" do
+  describe "#change" do
     before do
       FactoryBot.create_for_repository(:ephemera_box, state: ["all_in_production"], member_ids: [folder.id])
       orm_folder.metadata[:state] = ["needs_qa"]
@@ -19,7 +20,7 @@ RSpec.describe EphemeraFolderMigrator do
     end
 
     it "ensures that Ephemera Folders in completed Boxes are marked as complete" do
-      described_class.call
+      migration.change
 
       expect(orm_folder.reload.metadata["state"]).to eq ["complete"]
     end
