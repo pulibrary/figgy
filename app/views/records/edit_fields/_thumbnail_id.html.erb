@@ -1,0 +1,9 @@
+  <% if @thumbnail_members %>
+    <%= f.input :thumbnail_id,
+                collection: @thumbnail_members,
+                label_method: :first_title,
+                value_method: :id,
+                input_html: { multiple: f.object.multiple?(key) },
+                include_blank: false,
+                required: f.object.required?(key) %>
+   <% end %>

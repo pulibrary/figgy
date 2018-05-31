@@ -131,6 +131,20 @@ RSpec.describe RasterResourcesController do
         expect(response.body).to have_button "Save"
       end
     end
+    context "when a raster resource has a fileset and child resources" do
+      let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: "image/tiff; gdal-format=GTiff") }
+      let(:file_set) { FactoryBot.create_for_repository(:file_set, title: "File", file_metadata: [file_metadata]) }
+      let(:child_raster_resource) { FactoryBot.create_for_repository(:raster_resource, title: "Child Raster") }
+      let(:child_vector_resource) { FactoryBot.create_for_repository(:vector_resource, title: "Child Vector") }
+
+      render_views
+      it "renders a drop-down to select thumbnail" do
+        raster_resource = FactoryBot.create_for_repository(:raster_resource, member_ids: [child_raster_resource.id, file_set.id, child_vector_resource.id])
+        get :edit, params: { id: raster_resource.id.to_s }
+
+        expect(response.body).to have_select "Thumbnail", name: "raster_resource[thumbnail_id]", options: ["File", "Child Raster", "Child Vector"]
+      end
+    end
   end
 
   describe "update" do

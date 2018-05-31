@@ -94,8 +94,13 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
     end
   end
 
+  def thumbnail_members
+    decorated_geo_members = geo_members.map(&:decorate)
+    decorated_geo_members + raster_resource_members + vector_resource_members
+  end
+
   def title
-    return "#{super.first} (#{portion_note.first})" if portion_note
+    return ["#{super.first} (#{portion_note.first})"] unless portion_note.blank?
     super
   end
 end

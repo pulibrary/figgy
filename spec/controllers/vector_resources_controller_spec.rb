@@ -131,6 +131,19 @@ RSpec.describe VectorResourcesController do
         expect(response.body).to have_button "Save"
       end
     end
+    context "when a vector resource has a fileset and a child resource" do
+      let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: 'application/zip; ogr-format="ESRI Shapefile"') }
+      let(:file_set) { FactoryBot.create_for_repository(:file_set, title: "File", file_metadata: [file_metadata]) }
+      let(:child_vector_resource) { FactoryBot.create_for_repository(:vector_resource, title: "Child Vector") }
+
+      render_views
+      it "renders a drop-down to select thumbnail" do
+        vector_resource = FactoryBot.create_for_repository(:vector_resource, member_ids: [file_set.id, child_vector_resource.id])
+        get :edit, params: { id: vector_resource.id.to_s }
+
+        expect(response.body).to have_select "Thumbnail", name: "vector_resource[thumbnail_id]", options: ["File", "Child Vector"]
+      end
+    end
   end
 
   describe "update" do
