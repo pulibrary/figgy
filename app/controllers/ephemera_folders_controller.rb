@@ -7,7 +7,7 @@ class EphemeraFoldersController < BaseResourceController
     storage_adapter: Valkyrie.config.storage_adapter
   )
   before_action :load_fields, only: [:new, :edit, :update, :create]
-  before_action :cache_box, only: [:destroy]
+  before_action :cache_parent, only: [:destroy]
   before_action :load_boxes, only: [:edit]
 
   def change_set_class
@@ -30,12 +30,12 @@ class EphemeraFoldersController < BaseResourceController
     end
   end
 
-  def cache_box
-    @cached_box = find_resource(params[:id]).decorate.ephemera_box
+  def cache_parent
+    @cached_parent = find_resource(params[:id]).decorate.parent
   end
 
   def after_delete_success
-    redirect_to solr_document_path(id: @cached_box.id)
+    redirect_to solr_document_path(id: @cached_parent.id)
   end
 
   def new_resource
