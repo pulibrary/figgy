@@ -88,9 +88,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   def rendered_ocr_language
     return unless ocr_language.present?
     vocabulary = ControlledVocabulary.for(:ocr_language)
-    ocr_language.map do |language|
-      vocabulary.find(language).label
-    end
+    ocr_language.map { |language| vocabulary.find(language).try(:label) }.compact
   end
 
   def collection_slugs
