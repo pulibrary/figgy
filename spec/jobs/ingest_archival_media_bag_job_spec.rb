@@ -31,11 +31,11 @@ RSpec.describe IngestArchivalMediaBagJob do
       end
 
       it "creates one FileSet per barcode (with part, e.g., 32101047382401_1)" do
-        expect(query_service.find_all_of_model(model: FileSet).size).to eq 2
+        expect(query_service.find_all_of_model(model: FileSet).map(&:title)).to contain_exactly ["32101047382401_1"], ["32101047382401_2"]
       end
 
       it "adds all 3 file types to the file set" do
-        file_set = query_service.find_all_of_model(model: FileSet).first
+        file_set = query_service.find_all_of_model(model: FileSet).find { |fs| fs.title.include? "32101047382401_1" }
         expect(file_set.file_metadata.count).to eq 3
         expect(file_set.file_metadata.map { |file| file.use.first.to_s }).to contain_exactly(
           "http://pcdm.org/use#PreservationMasterFile", "http://pcdm.org/use#ServiceFile", "http://pcdm.org/use#IntermediateFile"
@@ -43,7 +43,7 @@ RSpec.describe IngestArchivalMediaBagJob do
       end
 
       it "puts barcode and part metadata on the file_set model" do
-        file_set = query_service.find_all_of_model(model: FileSet).select { |fs| fs.part.include? "1" }.first
+        file_set = query_service.find_all_of_model(model: FileSet).find { |fs| fs.part.include? "1" }
         expect(file_set.barcode).to contain_exactly "32101047382401"
         expect(file_set.part).to contain_exactly "1"
       end
