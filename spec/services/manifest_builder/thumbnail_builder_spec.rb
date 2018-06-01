@@ -42,9 +42,10 @@ describe ManifestBuilder::ThumbnailBuilder do
         cs = ScannedResourceChangeSet.new(scanned_resource, thumbnail_id: ["invalid-id"])
         change_set_persister.save(change_set: cs)
       end
+      let(:output) { builder.apply(manifest) }
 
-      it "logs a warning" do
-        output = builder.apply(manifest)
+      it "does not raise an exception" do
+        expect { output }.not_to raise_error
         expect(output["thumbnail"]).to be_blank
       end
     end
