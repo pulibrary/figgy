@@ -66,6 +66,9 @@ class VectorResourceDerivativeService
       buffered_persister.save(change_set: change_set)
     end
     unzip_display
+    # Attempt to insert the file_set download path into an FGDC onlink
+    # element now that derivates have been successfully created.
+    UpdateFgdcOnlinkJob.perform_later(parent.id.to_s)
   end
 
   def file_object

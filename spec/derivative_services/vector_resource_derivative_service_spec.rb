@@ -35,6 +35,10 @@ RSpec.describe VectorResourceDerivativeService do
     end
   end
 
+  before do
+    allow(UpdateFgdcOnlinkJob).to receive(:perform_later)
+  end
+
   it "creates a zipped display vector intermediate file and a thumbnail in the geo derivatives directory" do
     resource = query_service.find_by(id: valid_resource.id)
     shapefiles = resource.file_metadata.find_all { |f| f.label == ["display_vector.zip"] }
@@ -43,6 +47,7 @@ RSpec.describe VectorResourceDerivativeService do
     thumbnail_file = Valkyrie::StorageAdapter.find_by(id: thumbnails.first.file_identifiers.first)
     expect(shapefile_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
     expect(thumbnail_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
+    expect(UpdateFgdcOnlinkJob).to have_received(:perform_later)
   end
 
   describe "#cleanup_derivatives" do
