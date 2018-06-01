@@ -10,6 +10,7 @@ RSpec.describe ExternalMetadataDerivativeService do
   let(:derivative_service) do
     ExternalMetadataDerivativeService::Factory.new(change_set_persister: change_set_persister)
   end
+  let(:event_generator) { instance_double(EventGenerator::GeoblacklightEventGenerator).as_null_object }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
   let(:persister) { adapter.persister }
@@ -45,8 +46,14 @@ RSpec.describe ExternalMetadataDerivativeService do
     end
   end
 
-  it "extracts metadata from the file into the parent resource" do
+  before do
+    allow(EventGenerator::GeoblacklightEventGenerator).to receive(:new).and_return(event_generator)
+    allow(event_generator).to receive(:record_updated)
+  end
+
+  it "extracts metadata from the file into the parent resource and triggers an update event", rabbit_stubbed: true do
     parent = query_service.find_by(id: parent_resource.id)
     expect(parent.title).to eq ["China census data by county, 2000-2010"]
+    expect(event_generator).to have_received(:record_updated).twice
   end
 end

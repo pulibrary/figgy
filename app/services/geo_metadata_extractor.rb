@@ -11,14 +11,14 @@ class GeoMetadataExtractor
     raise ArgumentError, "MIME type unspecified or not configured" if schema.blank?
     attributes = extractor_class.new(metadata_xml).extract
     apply_metadata(attributes)
-    persister.save(resource: change_set.resource)
+    persister.save(change_set: change_set)
   end
 
   private
 
     def apply_metadata(attributes)
       attributes.each do |key, value|
-        change_set.model.send("#{key}=".to_sym, value) if change_set.respond_to?(key)
+        change_set.send("#{key}=".to_sym, value) if change_set.respond_to?(key)
       end
     end
 

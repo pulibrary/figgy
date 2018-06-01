@@ -17,8 +17,6 @@ class ExternalMetadataDerivativeService
 
   attr_reader :change_set, :change_set_persister, :original_file
   delegate :mime_type, to: :original_file
-  delegate :metadata_adapter, to: :change_set_persister
-  delegate :persister, to: :metadata_adapter
   def initialize(change_set:, change_set_persister:, original_file:)
     @change_set = change_set
     @change_set_persister = change_set_persister
@@ -29,7 +27,7 @@ class ExternalMetadataDerivativeService
 
   # Extract external geo metadata into parent vector or raster resource.
   def create_derivatives
-    GeoMetadataExtractor.new(change_set: parent_change_set, file_node: change_set.resource, persister: persister).extract
+    GeoMetadataExtractor.new(change_set: parent_change_set, file_node: change_set.resource, persister: change_set_persister).extract
   end
 
   def parent
