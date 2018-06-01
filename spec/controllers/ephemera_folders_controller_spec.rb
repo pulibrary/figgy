@@ -213,12 +213,21 @@ RSpec.describe EphemeraFoldersController do
       let(:factory) { :ephemera_folder }
       it_behaves_like "an access controlled destroy request"
     end
-    it "can delete a book" do
+    it "can delete a folder in a box" do
       ephemera_folder = FactoryBot.create_for_repository(:ephemera_folder)
       ephemera_box = FactoryBot.create_for_repository(:ephemera_box, member_ids: ephemera_folder.id)
       delete :destroy, params: { id: ephemera_folder.id.to_s }
 
       expect(response).to redirect_to solr_document_path(id: ephemera_box.id)
+      expect { query_service.find_by(id: ephemera_folder.id) }.to raise_error ::Valkyrie::Persistence::ObjectNotFoundError
+    end
+    it "can delete a boxless folder" do
+      ephemera_folder = FactoryBot.create_for_repository(:ephemera_folder)
+      ephemera_project = FactoryBot.create_for_repository(:ephemera_project, member_ids: ephemera_folder.id)
+      delete :destroy, params: { id: ephemera_folder.id.to_s }
+
+      expect(response).to be_redirect
+      expect(response).to redirect_to solr_document_path(id: ephemera_project.id)
       expect { query_service.find_by(id: ephemera_folder.id) }.to raise_error ::Valkyrie::Persistence::ObjectNotFoundError
     end
   end
