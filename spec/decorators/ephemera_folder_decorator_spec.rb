@@ -228,4 +228,12 @@ RSpec.describe EphemeraFolderDecorator do
       expect(decorator.rendered_ocr_language).to eq ["English"]
     end
   end
+
+  context "with an invalid OCR language code" do
+    let(:resource) { FactoryBot.build(:ephemera_folder, ocr_language: "foobar", state: "complete") }
+
+    it "generates markup for OCR languages" do
+      expect(decorator.rendered_ocr_language).to be_empty
+    end
+  end
 end
