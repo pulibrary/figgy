@@ -1,0 +1,1076 @@
+<metadata>
+  <idinfo>
+    <citation>
+      <citeinfo>
+        <origin>All China Marketing Research Co., Ltd.</origin>
+        <pubdate>20130416</pubdate>
+        <title>China census data by county, 2000-2010</title>
+        <geoform>vector digital data</geoform>
+      </citeinfo>
+    </citation>
+    <descript>
+      <abstract>2000 and 2010 census data China, displayed at the county level.</abstract>
+      <purpose>For use with GIS software. Allows analysis of 2000 data, 2010 data, or comparison of
+        the two.</purpose>
+    </descript>
+    <timeperd>
+      <timeinfo>
+        <rngdates>
+          <begdate>20000101</begdate>
+          <enddate>20100101</enddate>
+        </rngdates>
+      </timeinfo>
+      <current>Period covered by census.</current>
+    </timeperd>
+    <status>
+      <progress>Complete</progress>
+      <update>Unknown</update>
+    </status>
+    <spdom>
+      <bounding>
+        <westbc>73.446960</westbc>
+        <eastbc>135.085831</eastbc>
+        <northbc>53.557926</northbc>
+        <southbc>6.318641</southbc>
+      </bounding>
+    </spdom>
+    <keywords>
+      <theme>
+        <themekt>None</themekt>
+        <themekey>county</themekey>
+        <themekey>counties</themekey>
+        <themekey>census</themekey>
+        <themekey>population</themekey>
+        <themekey>demographic</themekey>
+        <themekey>households</themekey>
+        <themekey>urban</themekey>
+        <themekey>rural</themekey>
+        <themekey>migration</themekey>
+        <themekey>sex</themekey>
+        <themekey>male</themekey>
+        <themekey>female</themekey>
+        <themekey>age groups</themekey>
+        <themekey>education</themekey>
+        <themekey>literacy</themekey>
+      </theme>
+      <theme>
+        <themekt>ISO 19115 Topic Categories</themekt>
+        <themekey>society</themekey>
+      </theme>
+      <place>
+        <placekt>None</placekt>
+        <placekey>China</placekey>
+      </place>
+      <temporal>
+        <tempkt>None</tempkt>
+        <tempkey>2000</tempkey>
+        <tempkey>2010</tempkey>
+      </temporal>
+    </keywords>
+    <accconst>None</accconst>
+    <useconst>Copyright by All China Marketing Research Co., Ltd. No part of this data product is
+      allowed to be reproduced or re-distributed without permission. Data are for use by Princeton
+      University-affiliated persons only.</useconst>
+    <ptcontac>
+      <cntinfo>
+        <cntorgp>
+          <cntorg>Map and Geospatial Information Center, Lewis Library, Princeton
+            University</cntorg>
+        </cntorgp>
+        <cntaddr>
+          <addrtype>mailing and physical</addrtype>
+          <address>Map and Geospatial Information Center, Lewis Library, Princeton University</address>
+          <city>Princeton</city>
+          <state>NJ</state>
+          <postal>08544</postal>
+          <country>US</country>
+        </cntaddr>
+        <cntvoice>609-258-1097</cntvoice>
+      </cntinfo>
+    </ptcontac>
+    <datacred>All China Marketing Research Co., Ltd.</datacred>
+    <native>Microsoft Windows Vista Version 6.0 (Build 6001) Service Pack 1; Esri ArcGIS
+      10.2.0.3348</native>
+  </idinfo>
+  <Esri>
+    <PublishedDocID>{9107c437-8169-4444-9427-3b6957a09bca}</PublishedDocID>
+  </Esri>
+  <spdoinfo>
+    <direct>Vector</direct>
+    <ptvctinf>
+      <sdtsterm>
+        <sdtstype>GT-polygon composed of chains</sdtstype>
+        <ptvctcnt>2838</ptvctcnt>
+      </sdtsterm>
+    </ptvctinf>
+  </spdoinfo>
+  <spref>
+    <horizsys>
+      <geograph>
+        <latres>8.983152841195215e-009</latres>
+        <longres>8.983152841195215e-009</longres>
+        <geogunit>Decimal Degrees</geogunit>
+      </geograph>
+      <geodetic>
+        <horizdn>D WGS 1984</horizdn>
+        <ellips>WGS 1984</ellips>
+        <semiaxis>6378137.0</semiaxis>
+        <denflat>298.257223563</denflat>
+      </geodetic>
+    </horizsys>
+  </spref>
+  <eainfo>
+    <detailed>
+      <enttyp>
+        <enttypl>2000_2010CountyCensus</enttypl>
+      </enttyp>
+      <attr>
+        <attrlabl>FID</attrlabl>
+        <attrdef>Internal feature number.</attrdef>
+        <attrdefs>Esri</attrdefs>
+        <attrdomv>
+          <udom>Sequential unique whole numbers that are automatically generated.</udom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>Shape</attrlabl>
+        <attrdef>Feature geometry.</attrdef>
+        <attrdefs>Esri</attrdefs>
+        <attrdomv>
+          <udom>Coordinates defining the features.</udom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>GbCounty</attrlabl>
+        <attrdef>Six digit code of County in number</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>County_CH</attrlabl>
+        <attrdef>Chinese name of County</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>County_EN</attrlabl>
+        <attrdef>English name of County</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A100001_00</attrlabl>
+        <attrdef>Total Population in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A100001_10</attrlabl>
+        <attrdef>Total Population in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A100002_00</attrlabl>
+        <attrdef>Urban Population in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A100002_10</attrlabl>
+        <attrdef>Urban Population in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A100003_00</attrlabl>
+        <attrdef>Rural Population in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A100003_10</attrlabl>
+        <attrdef>Rural Population in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A101002_00</attrlabl>
+        <attrdef>Total Number of Family Households in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A101002_10</attrlabl>
+        <attrdef>Total Number of Family Households in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A101007_00</attrlabl>
+        <attrdef>Sex Ratio (Female = 100) in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A101007_10</attrlabl>
+        <attrdef>Sex Ratio (Female = 100) in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A101008_00</attrlabl>
+        <attrdef>Total Population of Family Households in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A101008_10</attrlabl>
+        <attrdef>Total Population of Family Households in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A101016_00</attrlabl>
+        <attrdef>Average Size of Family Households in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A101016_10</attrlabl>
+        <attrdef>Average Size of Family Households in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A103001_00</attrlabl>
+        <attrdef>Total Population with Household Registration (Have not included the whole family
+          and individuals going out ) in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A103001_10</attrlabl>
+        <attrdef>Total Population with Household Registration in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A104010_00</attrlabl>
+        <attrdef>Total Population of Migration from Other Counties in the Same Province in
+          2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A104010_10</attrlabl>
+        <attrdef>Total Population of Migration from Other Counties in the Same Province in
+          2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A104013_00</attrlabl>
+        <attrdef>Total Population of Migration from Other Provinces in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A104013_10</attrlabl>
+        <attrdef>Total Population of Migration from Other Provinces in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A104042_00</attrlabl>
+        <attrdef>Total Population of Migration from the Same County in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A104042_10</attrlabl>
+        <attrdef>Total Population of Migration from the Same County in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A105010_00</attrlabl>
+        <attrdef>% of Non-agricultural Population to Total in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A105010_10</attrlabl>
+        <attrdef>% of Non-agricultural Population to Total in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107002_00</attrlabl>
+        <attrdef>Total Males in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107002_10</attrlabl>
+        <attrdef>Total Males in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107003_00</attrlabl>
+        <attrdef>Total Females in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107003_10</attrlabl>
+        <attrdef>Total Females in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107005_00</attrlabl>
+        <attrdef>Total Males at Age 0 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107005_10</attrlabl>
+        <attrdef>Total Males at Age 0 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107006_00</attrlabl>
+        <attrdef>Total Females at Age 0 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107006_10</attrlabl>
+        <attrdef>Total Females at Age 0 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107008_00</attrlabl>
+        <attrdef>Total Males at Age 1-4 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107008_10</attrlabl>
+        <attrdef>Total Males at Age 1-4 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107009_00</attrlabl>
+        <attrdef>Total Females at Age 1-4 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107009_10</attrlabl>
+        <attrdef>Total Females at Age 1-4 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107011_00</attrlabl>
+        <attrdef>Total Males at Age 5-9 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107011_10</attrlabl>
+        <attrdef>Total Males at Age 5-9 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107012_00</attrlabl>
+        <attrdef>Total Females at Age 5-9 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107012_10</attrlabl>
+        <attrdef>Total Females at Age 5-9 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107014_00</attrlabl>
+        <attrdef>Total Males at 10-14 Age in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107014_10</attrlabl>
+        <attrdef>Total Males at Age 10-14 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107015_00</attrlabl>
+        <attrdef>Total Females at Age 10-14 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107015_10</attrlabl>
+        <attrdef>Total Females at Age 10-14 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107017_00</attrlabl>
+        <attrdef>Total Males at Age 15-19 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107017_10</attrlabl>
+        <attrdef>Total Males at Age 15-19 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107018_00</attrlabl>
+        <attrdef>Total Females at Age 15-19 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107018_10</attrlabl>
+        <attrdef>Total Females at Age 15-19 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107020_00</attrlabl>
+        <attrdef>Total Males at 20-24 Age in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107020_10</attrlabl>
+        <attrdef>Total Males at Age 20-24 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107021_00</attrlabl>
+        <attrdef>Total Females at Age 20-24 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107021_10</attrlabl>
+        <attrdef>Total Females at Age 20-24 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107023_00</attrlabl>
+        <attrdef>Total Males at Age 25-29 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107023_10</attrlabl>
+        <attrdef>Total Males at Age 25-29 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107024_00</attrlabl>
+        <attrdef>Total Females at Age 25-29 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107024_10</attrlabl>
+        <attrdef>Total Females at Age 25-29 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107026_00</attrlabl>
+        <attrdef>Total Males at Age 30-34 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107026_10</attrlabl>
+        <attrdef>Total Males at Age 30-34 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107027_00</attrlabl>
+        <attrdef>Total Females at Age 30-34 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107027_10</attrlabl>
+        <attrdef>Total Females at Age 30-34 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107029_00</attrlabl>
+        <attrdef>Total Males at Age 35-39 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107029_10</attrlabl>
+        <attrdef>Total Males at Age 35-39 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107030_00</attrlabl>
+        <attrdef>Total Females at Age 35-39 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107030_10</attrlabl>
+        <attrdef>Total Females at Age 35-39 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107032_00</attrlabl>
+        <attrdef>Total Males at Age 40-44 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107032_10</attrlabl>
+        <attrdef>Total Males at Age 40-44 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107033_00</attrlabl>
+        <attrdef>Total Females at Age 40-44 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107033_10</attrlabl>
+        <attrdef>Total Females at Age 40-44 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107035_00</attrlabl>
+        <attrdef>Total Males at Age 45-49 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107035_10</attrlabl>
+        <attrdef>Total Males at Age 45-49 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107036_00</attrlabl>
+        <attrdef>Total Females at Age 45-49 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107036_10</attrlabl>
+        <attrdef>Total Females at Age 45-49 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107038_00</attrlabl>
+        <attrdef>Total Males at Age 50-54 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107038_10</attrlabl>
+        <attrdef>Total Males at Age 50-54 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107039_00</attrlabl>
+        <attrdef>Total Females at Age 50-54 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107039_10</attrlabl>
+        <attrdef>Total Females at Age 50-54 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107041_00</attrlabl>
+        <attrdef>Total Males at Age 55-59 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107041_10</attrlabl>
+        <attrdef>Total Males at Age 55-59 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107042_00</attrlabl>
+        <attrdef>Total Females at Age 55-59 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107042_10</attrlabl>
+        <attrdef>Total Females at Age 55-59 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107044_00</attrlabl>
+        <attrdef>Total Males at Age 60-64 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107044_10</attrlabl>
+        <attrdef>Total Males at Age 60-64 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107045_00</attrlabl>
+        <attrdef>Total Females at Age 60-64 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107045_10</attrlabl>
+        <attrdef>Total Females at Age 60-64 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107047_00</attrlabl>
+        <attrdef>Total Males at Age 65-69 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107047_10</attrlabl>
+        <attrdef>Total Males at Age 65-69 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107048_00</attrlabl>
+        <attrdef>Total Females at Age 65-69 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107048_10</attrlabl>
+        <attrdef>Total Females at Age 65-69 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107050_00</attrlabl>
+        <attrdef>Total Males at Age 70-74 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107050_10</attrlabl>
+        <attrdef>Total Males at Age 70-74 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107051_00</attrlabl>
+        <attrdef>Total Females at Age 70-74 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107051_10</attrlabl>
+        <attrdef>Total Females at Age 70-74 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107053_00</attrlabl>
+        <attrdef>Total Males at Age 75-79 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107053_10</attrlabl>
+        <attrdef>Total Males at Age 75-79 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107054_00</attrlabl>
+        <attrdef>Total Females at Age 75-79 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107054_10</attrlabl>
+        <attrdef>Total Females at Age 75-79 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107056_00</attrlabl>
+        <attrdef>Total Males at Age 80-84 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107056_10</attrlabl>
+        <attrdef>Total Males at Age 80-84 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107057_00</attrlabl>
+        <attrdef>Total Females at Age 80-84 in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107057_10</attrlabl>
+        <attrdef>Total Females at Age 80-84 in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107594_00</attrlabl>
+        <attrdef>Total Males at Age 85 and over in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107594_10</attrlabl>
+        <attrdef>Total Males at Age 85 and over in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107604_00</attrlabl>
+        <attrdef>Total Females at Age 85 and over in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A107604_10</attrlabl>
+        <attrdef>Total Females at Age 85 and over in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108005_00</attrlabl>
+        <attrdef>Total Male with No Schooling in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108005_10</attrlabl>
+        <attrdef>Total Male with No Schooling in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108006_00</attrlabl>
+        <attrdef>Total Female with No Schooling in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108006_10</attrlabl>
+        <attrdef>Total Female with No Schooling in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108011_00</attrlabl>
+        <attrdef>Total Male with Primary School Education in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108011_10</attrlabl>
+        <attrdef>Total Male with Primary School Education in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108012_00</attrlabl>
+        <attrdef>Total Female with Primary School Education in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108012_10</attrlabl>
+        <attrdef>Total Female with Primary School Education in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108014_00</attrlabl>
+        <attrdef>Total Male with Junior Middle School Education in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108014_10</attrlabl>
+        <attrdef>Total Male with Junior Middle School Education in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108015_00</attrlabl>
+        <attrdef>Total Female with Junior Middle School Education in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108015_10</attrlabl>
+        <attrdef>Total Female with Junior Middle School Education in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108017_00</attrlabl>
+        <attrdef>Total Male with Senior Middle School Education in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108017_10</attrlabl>
+        <attrdef>Total Male with Senior Middle School Education in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108018_00</attrlabl>
+        <attrdef>Total Female with Senior Middle School Education in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108018_10</attrlabl>
+        <attrdef>Total Female with Senior Middle School Education in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108023_00</attrlabl>
+        <attrdef>Total Male with Junior College Education in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108023_10</attrlabl>
+        <attrdef>Total Male with Junior College Education in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108024_00</attrlabl>
+        <attrdef>Total Female with Junior College Education in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108024_10</attrlabl>
+        <attrdef>Total Female with Junior College Education in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108262_00</attrlabl>
+        <attrdef>Total Male with University and above Education in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108262_10</attrlabl>
+        <attrdef>Total Male with University and above Education in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108272_00</attrlabl>
+        <attrdef>Total Female with University and above Education in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A108272_10</attrlabl>
+        <attrdef>Total Female with University and above Education in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A109004_00</attrlabl>
+        <attrdef>Total Illiterate Population in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A109004_10</attrlabl>
+        <attrdef>Total Illiterate Population in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A109005_00</attrlabl>
+        <attrdef>Total Illiterate Males in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A109005_10</attrlabl>
+        <attrdef>Total Illiterate Males in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A109006_00</attrlabl>
+        <attrdef>Total Illiterate Females in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A109006_10</attrlabl>
+        <attrdef>Total Illiterate Females in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A109007_00</attrlabl>
+        <attrdef>Percentage of Illiterate Population to Total Population of Age 15 &amp; Over in
+          2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A109007_10</attrlabl>
+        <attrdef>Percentage of Illiterate Population to Total Population of Age 15 &amp; Over in
+          2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A109008_00</attrlabl>
+        <attrdef>Percentage of Illiterate Male to Total Population of Age 15 &amp; Over in
+          2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A109008_10</attrlabl>
+        <attrdef>Percentage of Illiterate Male to Total Population of Age 15 &amp; Over in
+          2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A109009_00</attrlabl>
+        <attrdef>Percentage of Illiterate Female to Total Population of Age 15 &amp; Over in
+          2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A109009_10</attrlabl>
+        <attrdef>Percentage of Illiterate Female to Total Population of Age 15 &amp; Over in
+          2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A110003_00</attrlabl>
+        <attrdef>Total Number of Family Households for One Person in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A110003_10</attrlabl>
+        <attrdef>Total Number of Family Households for One Person in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A111003_00</attrlabl>
+        <attrdef>One-Generation Family Households in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A111003_10</attrlabl>
+        <attrdef>One-Generation Family Households in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A111005_00</attrlabl>
+        <attrdef>Two-Generation Family Households in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A111005_10</attrlabl>
+        <attrdef>Two-Generation Family Households in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A111007_00</attrlabl>
+        <attrdef>Three-Generation Family Households in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A111007_10</attrlabl>
+        <attrdef>Three-Generation Family Households in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A111092_00</attrlabl>
+        <attrdef>Four-Generation and Over Family Households in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A111092_10</attrlabl>
+        <attrdef>Four-Generation and Over Family Households in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A114001_00</attrlabl>
+        <attrdef>Number of Family Households (Households) in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A114001_10</attrlabl>
+        <attrdef>Number of Family Households (Households) in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A114003_00</attrlabl>
+        <attrdef>Average Rooms of Household (room/household) in 2000 </attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A114003_10</attrlabl>
+        <attrdef>Average Rooms of Household (room/household) in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A114004_00</attrlabl>
+        <attrdef>Average Floor Space of Building (sq.m/person) in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A114004_10</attrlabl>
+        <attrdef>Average Floor Space of Building (sq.m/person) in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A302006_00</attrlabl>
+        <attrdef>Percentage of Population from Age 0 to 14 to Total Population in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A302006_10</attrlabl>
+        <attrdef>Percentage of Population from Age 0 to 14 to Total Population in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A302007_00</attrlabl>
+        <attrdef>Percentage of Population from Age 15 to Age 64 to Total Population in
+          2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A302007_10</attrlabl>
+        <attrdef>Percentage of Population from Age 15 to Age 64 to Total Population in
+          2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A302008_00</attrlabl>
+        <attrdef>Percentage of Population Age 65 and Over to Total Population in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A302008_10</attrlabl>
+        <attrdef>Percentage of Population Age 65 and Over to Total Population in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A506001_00</attrlabl>
+        <attrdef>Family households with persons aged 65 and over in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A506001_10</attrlabl>
+        <attrdef>Family households with persons aged 65 &amp; Over in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A506002_00</attrlabl>
+        <attrdef>Family households with One Persons of 65 and Over in 2000</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A506002_10</attrlabl>
+        <attrdef>Family households with One Persons of 65 and Over in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A506006_00</attrlabl>
+        <attrdef>Family households with Two Persons of 65 and Over in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>A506006_10</attrlabl>
+        <attrdef>Family households with Two Persons of 65 and Over in 2010</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>GbCity</attrlabl>
+        <attrdef>Four digit code of City in number</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>City_CH</attrlabl>
+        <attrdef>Chinese name of City</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>City_EN</attrlabl>
+        <attrdef>English name of City</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>GbProv</attrlabl>
+        <attrdef>Two digit code of Province in number</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>Prov_CH</attrlabl>
+        <attrdef>Chinese name of Province</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>Prov_EN</attrlabl>
+        <attrdef>English name of Province</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>Map_Source</attrlabl>
+        <attrdef>Year of Map Source</attrdef>
+        <attrdefs>China Data Center</attrdefs>
+      </attr>
+    </detailed>
+  </eainfo>
+  <distinfo>
+    <resdesc>Downloadable Data</resdesc>
+  </distinfo>
+  <metainfo>
+    <metd>20140325</metd>
+    <metc>
+      <cntinfo>
+        <cntorgp>
+          <cntorg>Map and Geospatial Information Center, Lewis Library, Princeton
+            University</cntorg>
+        </cntorgp>
+        <cntaddr>
+          <addrtype>mailing and physical</addrtype>
+          <address>Map and Geospatial Information Center, Lewis Library, Princeton University</address>
+          <city>Princeton</city>
+          <state>NJ</state>
+          <postal>08544</postal>
+          <country>US</country>
+        </cntaddr>
+        <cntvoice>609-258-1097</cntvoice>
+      </cntinfo>
+    </metc>
+    <metstdn>FGDC Content Standard for Digital Geospatial Metadata</metstdn>
+    <metstdv>FGDC-STD-001-1998</metstdv>
+    <mettc>local time</mettc>
+    <metuc>Data are for use by Princeton University-affiliated persons only.</metuc>
+    <metsi>
+      <metsc>Unclassified</metsc>
+    </metsi>
+  </metainfo>
+</metadata>
