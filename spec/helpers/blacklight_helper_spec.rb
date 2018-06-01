@@ -34,4 +34,26 @@ RSpec.describe ::BlacklightHelper do
       end
     end
   end
+
+  describe "render_search_to_page_title_filter" do
+    let(:facet) { "human_readable_type_ssim" }
+    let(:values) { ["Scanned Resource", "Vector Resource"] }
+
+    before do
+      allow(helper).to receive(:blacklight_config).and_return(CatalogController.blacklight_config)
+      allow(helper).to receive(:action_name).and_return("show")
+    end
+
+    it "generates the text for the faceted search" do
+      expect(helper.render_search_to_page_title_filter(facet, values)).to eq "Type of Work: Scanned Resource and Vector Resource"
+    end
+
+    context "with empty values for the facet parameters" do
+      let(:values) { nil }
+
+      it "generates no text" do
+        expect(helper.render_search_to_page_title_filter(facet, values)).to eq ""
+      end
+    end
+  end
 end
