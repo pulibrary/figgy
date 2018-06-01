@@ -38,6 +38,7 @@ Metrics/BlockLength:
     - 'lib/tasks/lae.rake'
     - 'app/change_sets/simple_resource_change_set.rb'
     - 'app/controllers/concerns/resource_relations.rb'
+    - 'lib/tasks/migrate.rake'
 Metrics/ClassLength:
   Exclude:
     - 'app/change_set_persisters/change_set_persister.rb'
