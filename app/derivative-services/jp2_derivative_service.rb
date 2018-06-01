@@ -69,7 +69,7 @@ class Jp2DerivativeService
 
   def run_tiff_derivatives
     Hydra::Derivatives::Jpeg2kImageDerivatives.create(
-      filename,
+      clean_filename,
       outputs: [
         label: "intermediate_file",
         recipe: recipe,
@@ -114,9 +114,15 @@ class Jp2DerivativeService
   end
 
   def filename
+    Pathname.new(file_object.disk_path)
+  end
+
+  def clean_filename
     @filename ||=
       begin
         Pathname.new(cleaned_file.path)
+      rescue MiniMagick::Error
+        filename
       end
   end
 
