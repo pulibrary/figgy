@@ -46,10 +46,11 @@ RSpec.describe IngestArchivalMediaBagJob do
         )
       end
 
-      it "puts barcode and part metadata on the file_set model" do
+      it "puts barcode, part, and transfer notes metadata on the file_set model" do
         file_set = query_service.find_all_of_model(model: FileSet).find { |fs| fs.part&.include? "1" }
         expect(file_set.barcode).to contain_exactly "32101047382401"
         expect(file_set.part).to contain_exactly "1"
+        expect(file_set.transfer_notes.first).to start_with "Side A"
       end
 
       it "creates one MediaResource per component id" do

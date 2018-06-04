@@ -113,9 +113,9 @@ class IngestArchivalMediaBagJob < ApplicationJob
             node = create_node(file)
             file_set.barcode = file.barcode
             file_set.part = file.part
+            file_set.transfer_notes = bag.pbcore_parsers.find { |pbcore| pbcore.barcode == file.barcode }.transfer_notes
             file_set.file_metadata += Array.wrap(node)
           end
-          # todo use the parsed pbcore object to add 2 metadata fields
           file_set = changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
         end
 
