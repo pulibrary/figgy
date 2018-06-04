@@ -39,7 +39,14 @@ RSpec.describe CollectionChangeSet do
 
   describe "#primary_terms" do
     it "returns the primary terms" do
-      expect(change_set.primary_terms).to eq [:title, :slug, :description]
+      expect(change_set.primary_terms).to eq [:title, :slug, :description, :owners]
+    end
+  end
+
+  describe "#owners" do
+    it "is multi-valued and not required" do
+      expect(change_set.multiple?(:owners)).to eq true
+      expect(change_set.required?(:owners)).to eq false
     end
   end
 end

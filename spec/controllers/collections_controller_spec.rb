@@ -30,6 +30,7 @@ RSpec.describe CollectionsController do
         get :new
 
         expect(response).to render_template("base/_form")
+        expect(response.body).to have_select "Owners"
       end
     end
 

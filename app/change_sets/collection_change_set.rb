@@ -5,9 +5,10 @@ class CollectionChangeSet < Valkyrie::ChangeSet
   property :slug, multiple: false, required: true
   property :description, multiple: false, required: false
   property :visibility, multiple: false, required: false
+  property :owners, multiple: true, required: false
   validates :title, :slug, presence: true
 
   def primary_terms
-    [:title, :slug, :description]
+    [:title, :slug, :description, :owners]
   end
 end
