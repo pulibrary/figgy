@@ -33,6 +33,11 @@ RSpec.feature "Scanned Resources", js: true do
         page.fill_in "scanned_resource_portion_note", with: "Test another note"
         expect(page).not_to have_content "This ID is already in use"
       end
+
+      scenario "users can only upload files using the file manager interface" do
+        visit edit_scanned_resource_path(id: scanned_resource.id)
+        expect(page).not_to have_selector ".scanned_resource_files"
+      end
     end
   end
 
