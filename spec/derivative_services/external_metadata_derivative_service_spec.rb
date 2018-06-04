@@ -18,7 +18,7 @@ RSpec.describe ExternalMetadataDerivativeService do
   let(:file) { fixture_file_upload("files/geo_metadata/fgdc.xml", "application/xml; schema=fgdc") }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
   let(:parent_resource) do
-    change_set_persister.save(change_set: VectorResourceChangeSet.new(VectorResource.new, files: [file]))
+    change_set_persister.save(change_set: VectorResourceChangeSet.new(VectorResource.new, visibility: "open", files: [file]))
   end
   let(:parent_resource_members) { query_service.find_members(resource: parent_resource) }
   let(:valid_resource) { parent_resource_members.first }
@@ -54,6 +54,7 @@ RSpec.describe ExternalMetadataDerivativeService do
   it "extracts metadata from the file into the parent resource and triggers an update event", rabbit_stubbed: true do
     parent = query_service.find_by(id: parent_resource.id)
     expect(parent.title).to eq ["China census data by county, 2000-2010"]
+    expect(parent.visibility).to eq ["open"]
     expect(event_generator).to have_received(:record_updated).twice
   end
 end

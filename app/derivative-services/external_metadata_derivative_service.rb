@@ -32,7 +32,7 @@ class ExternalMetadataDerivativeService
 
   def parent
     decorator = FileSetDecorator.new(change_set)
-    decorator.parent
+    decorator.parent.model
   end
 
   def parent_change_set
