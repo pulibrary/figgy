@@ -117,9 +117,13 @@ To load the controlled vocabularies in `config/vocab/`:
 
 Webpacker documentation assumes use of yarn as a javascript package manager. Our setup uses npm directly instead of yarn. Therefore, when upgrading webpacker modify instructions on the webpacker README to use `npm update --save` instead of `yarn upgrade --latest`
 
-## Uploading files from Google Drive
+## Uploading files
 
-By default, Figgy provides users with the ability to upload files from the local file system environment, using the directory `/staged_files`.  However, Figgy may also be configured to upload files from a user's Google Drive account.
+By default, Figgy provides users with the ability to upload binaries from the local file system environment using the directory [https://github.com/pulibrary/figgy/tree/master/staged_files](/staged_files).  One may copy files into this directory for aiding in development, and may upload these files in this directory using the "File Manager" interface (exposed after saving a Work).
+
+### Cloud Storage Support
+
+Figgy may also be configured to upload files from hosted storage providers.  Support for users with Google Drive accounts has been tested and verified.  [Please reference the Browse Everything documentation for more details](https://github.com/pulibrary/figgy/blob/master/BROWSE_EVERYTHING.md).
 
 ## More
 For links to helpful valkyrie documentation and troubleshooting tips, visit the [wiki pages](https://github.com/pulibrary/figgy/wiki).
