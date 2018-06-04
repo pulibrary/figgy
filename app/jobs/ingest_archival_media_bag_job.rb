@@ -66,11 +66,8 @@ class IngestArchivalMediaBagJob < ApplicationJob
         component_groups.each do |cid, sides|
           media_resource = find_or_create_media_resource(cid)
           media_resource_change_set = MediaResourceChangeSet.new(media_resource, source_metadata_identifier: media_resource.source_metadata_identifier.first)
-          sides.each do |side|
-            file_set = create_av_file_set(side)
-            media_resource_change_set.member_ids += Array.wrap(file_set.id)
-            media_resource_change_set.sync
-          end
+          add_av(media_resource_change_set, sides)
+          add_pbcore(media_resource_change_set, sides)
           media_resource_change_set.member_of_collection_ids += Array.wrap(collection.id)
           changeset_persister.save(change_set: media_resource_change_set)
         end
@@ -78,10 +75,33 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
       private
 
-        # Retrieve a Hash of EAD Component IDs/Barcodes for file barcodes specified in a given Bag
-        # @return [Hash] map of EAD component IDs to file barcodes
-        def component_groups
-          @component_groups ||= bag.component_groups
+        def add_av(media_resource_change_set, sides)
+          sides.each do |side|
+            # TODO: pass also a parsed pbcore object to create_av_file_sets
+            file_set = create_av_file_set(side)
+            media_resource_change_set.member_ids += Array.wrap(file_set.id)
+            media_resource_change_set.sync
+          end
+        end
+
+        def add_pbcore(media_resource_change_set, sides)
+          sides.map { |side| side.split("_").first }.uniq.each do |barcode|
+            file_set = create_pbcore_file_set(barcode)
+            media_resource_change_set.member_ids += Array.wrap(file_set.id)
+            media_resource_change_set.sync
+          end
+        end
+
+        # Creates and persists a FileSet for a pbcore xml file
+        # @param barcode [String] barcode_side for a given media object
+        # @return [FileSet] the persisted FileSet containing the binary and file metadata
+        def create_pbcore_file_set(barcode)
+          file_set = FileSet.new(title: barcode)
+          pbcore = bag.pbcore_parsers.find { |pbcore_parser| pbcore_parser.barcode == barcode }
+          file = IngestableFile.new(file_path: pbcore.path, mime_type: "application/xml; schema=pbcore", original_filename: pbcore.path.basename)
+          node = create_node(file)
+          file_set.file_metadata += Array.wrap(node)
+          changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
         end
 
         # Creates and persists a FileSet for a media object
@@ -95,6 +115,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
             file_set.part = file.part
             file_set.file_metadata += Array.wrap(node)
           end
+          # todo use the parsed pbcore object to add 2 metadata fields
           file_set = changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
         end
 
@@ -116,6 +137,12 @@ class IngestArchivalMediaBagJob < ApplicationJob
           results = query_service.custom_queries.find_by_string_property(property: :source_metadata_identifier, value: component_id)
           return results.first unless results.size.zero?
           MediaResource.new(source_metadata_identifier: component_id)
+        end
+
+        # Retrieve a Hash of EAD Component IDs/Barcodes for file barcodes specified in a given Bag
+        # @return [Hash] map of EAD component IDs to file barcodes
+        def component_groups
+          @component_groups ||= bag.component_groups
         end
 
         def storage_adapter

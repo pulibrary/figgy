@@ -17,4 +17,21 @@ RSpec.describe ArchivalMediaBagParser do
   describe "#component_groups" do
     it { expect(amb_parser.component_groups.keys).to contain_exactly "C0652_c0377" }
   end
+
+  describe "#pbcore_parsers" do
+    it { expect(amb_parser.pbcore_parsers.first).to be_a PbcoreParser }
+  end
+
+  describe "PbcoreParser" do
+    describe "#barcode" do
+      it { expect(amb_parser.pbcore_parsers.map(&:barcode)).to contain_exactly "32101047382401" }
+    end
+    describe "#transfer_notes" do
+      let(:expected) do
+        "Side A: Program in silence from approximately 00:12 until 04:06, speed fluctuates throughout program on tape; " \
+          "Side B: Feedback heard throughout program on tape, gradual increass in speed throughout program on tape; "
+      end
+      it { expect(amb_parser.pbcore_parsers.first.transfer_notes).to eq expected }
+    end
+  end
 end
