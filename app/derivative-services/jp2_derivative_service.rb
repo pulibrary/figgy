@@ -68,8 +68,14 @@ class Jp2DerivativeService
   end
 
   def run_tiff_derivatives
+    create_tiff_derivative(filename)
+  rescue RuntimeError # Rescue if there's a compression error.
+    create_tiff_derivative(clean_filename)
+  end
+
+  def create_tiff_derivative(filename)
     Hydra::Derivatives::Jpeg2kImageDerivatives.create(
-      clean_filename,
+      filename,
       outputs: [
         label: "intermediate_file",
         recipe: recipe,
