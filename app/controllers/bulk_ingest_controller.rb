@@ -2,8 +2,9 @@
 class BulkIngestController < ApplicationController
   def show
     authorize! :create, resource_class
-    @states = workflow_states
+    @collections = collections
     @resource_class = resource_class
+    @states = workflow_states
   end
 
   def browse_everything_files
@@ -20,9 +21,15 @@ class BulkIngestController < ApplicationController
 
     def attributes
       {
+        member_of_collection_ids: params[:collections],
         state: params[:workflow][:state],
         visibility: params[:visibility]
       }
+    end
+
+    def collections
+      collection_decorators = query_service.find_all_of_model(model: Collection).map(&:decorate)
+      collection_decorators.to_a.collect { |c| [c.title, c.id.to_s] }
     end
 
     def file_paths
@@ -42,6 +49,10 @@ class BulkIngestController < ApplicationController
       else
         path
       end
+    end
+
+    def query_service
+      Valkyrie.config.metadata_adapter.query_service
     end
 
     def resource_class
