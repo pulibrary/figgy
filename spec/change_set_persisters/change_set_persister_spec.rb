@@ -354,6 +354,50 @@ RSpec.describe ChangeSetPersister do
         expect(output.thumbnail_id).to be_nil
       end
     end
+
+    context "with an audiovisual media file" do
+      with_queue_adapter :inline
+      let(:change_set_class) { MediaResourceChangeSet }
+      let(:file) { fixture_file_upload("files/sample.ogg", "audio/ogg") }
+      let(:change_set_persister) do
+        described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: true)
+      end
+      let(:tracks) { double }
+      let(:audio_track_attributes) { double }
+
+      before do
+        allow(audio_track_attributes).to receive(:encoded_date).and_return Time.zone.parse("UTC 2009-03-30 19:49:13")
+        allow(audio_track_attributes).to receive(:producer).and_return("PULibrary")
+        allow(audio_track_attributes).to receive(:originalsourceform).and_return("cassette")
+        allow(audio_track_attributes).to receive(:duration).and_return(23.123)
+        allow(audio_track_attributes).to receive(:count).and_return 1
+
+        allow(tracks).to receive(:track_types).and_return(["audio"])
+        allow(tracks).to receive(:audio).and_return(audio_track_attributes)
+        allow(tracks).to receive(:video).and_return(nil)
+
+        allow(MediaInfo).to receive(:from).and_return(tracks)
+      end
+
+      it "appends file as a FileSet and extracts the technical metadata" do
+        resource = FactoryBot.build(:media_resource)
+        change_set = change_set_class.new(resource, characterize: true)
+        change_set.files = [file]
+
+        output = change_set_persister.save(change_set: change_set)
+        members = query_service.find_members(resource: output)
+
+        expect(members.to_a.length).to eq 1
+        expect(members.first).to be_kind_of FileSet
+
+        expect(members.first.date_of_digitization).not_to be_empty
+        expect(members.first.date_of_digitization.first).to be_a Time
+        expect(members.first.date_of_digitization.first).to eq DateTime.iso8601("2009-03-30T19:49:13.000Z").to_time.utc
+        expect(members.first.producer).to eq ["PULibrary"]
+        expect(members.first.source_media_type).to eq ["cassette"]
+        expect(members.first.duration).to eq ["23.123"]
+      end
+    end
   end
 
   describe "updating files" do

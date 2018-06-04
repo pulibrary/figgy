@@ -482,6 +482,7 @@ GEM
     marc (1.0.2)
       scrub_rb (>= 1.0.1, < 2)
       unf
+    mediainfo (1.0.2)
     memoist (0.16.0)
     method_source (0.8.2)
     mime-types (3.1)
@@ -842,6 +843,7 @@ DEPENDENCIES
   listen
   lograge
   logstash-event
+  mediainfo (~> 1.0)
   mini_magick
   modernizr-rails
   normalize-rails

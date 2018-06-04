@@ -17,4 +17,10 @@ class MediaResource < Resource
   def title
     primary_imported_metadata.title.present? ? primary_imported_metadata.title : @title
   end
+
+  # Determines if this is a media resource
+  # @return [TrueClass, FalseClass]
+  def media_resource?
+    true
+  end
 end

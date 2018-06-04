@@ -30,6 +30,9 @@ functionality, performance, and scalability.
     * Version 3.04 is on the servers; homebrew installs 3.05: `brew install
       tesseract --with-all-languages`
     * For Ubuntu you'll have to [compile](https://github.com/tesseract-ocr/tesseract/wiki/Compiling) it.
+* [MediaInfo](https://mediaarea.net/en/MediaInfo)
+    * You can install it on Mac OSX with `brew install mediainfo`.
+    * On Ubuntu, use `sudo apt-get install mediainfo`.
 
 ## Simple Tiles
 

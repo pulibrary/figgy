@@ -16,4 +16,10 @@ class Resource < Valkyrie::Resource
   def self.model_name
     ::ActiveModel::Name.new(self)
   end
+
+  # Determines if this is a media resource
+  # @return [TrueClass, FalseClass]
+  def media_resource?
+    false
+  end
 end
