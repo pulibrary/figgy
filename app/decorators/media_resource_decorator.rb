@@ -16,7 +16,7 @@ class MediaResourceDecorator < Valkyrie::ResourceDecorator
     false
   end
 
-  delegate :members, :parents, to: :wayfinder
+  delegate :members, :parents, :audio_file_sets, to: :wayfinder
 
   # TODO: Rename to decorated_file_sets
   def file_sets
