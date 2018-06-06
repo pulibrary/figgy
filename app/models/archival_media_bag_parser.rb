@@ -4,7 +4,7 @@ class ArchivalMediaBagParser
   class InvalidBagError < StandardError; end
 
   BARCODE_WITH_PART_REGEX = /(\d{14}_\d+)_.*/
-  attr_reader :path, :audio_files, :file_groups, :component_groups, :component_dict
+  attr_reader :path, :audio_files, :file_groups, :component_groups, :component_dict, :pbcore_parsers
 
   def initialize(path:, component_id:)
     @path = path
@@ -35,7 +35,20 @@ class ArchivalMediaBagParser
     @component_groups
   end
 
+  def pbcore_parser_for_barcode(barcode)
+    pbcore_parsers.find { |pbcore| pbcore.barcode == barcode }
+  end
+
   private
+
+    # pbcore parsers by barcode
+    # @return [Array] of PbcoreParser objects
+    def pbcore_parsers
+      @pbcore_parsers ||=
+        begin
+          path.join("data").each_child.select { |file| [".xml"].include? file.extname }.map { |file| PbcoreParser.new(path: file) }
+        end
+    end
 
     # create an AudioPath object for each audio file
     def audio_files
@@ -104,4 +117,29 @@ class BarcodeComponentDict
     def get_barcode_with_part(node)
       ArchivalMediaBagParser::BARCODE_WITH_PART_REGEX.match(node.content)[1]
     end
+end
+
+class PbcoreParser
+  attr_reader :path, :barcode, :transfer_notes, :xml, :original_filename
+  def initialize(path:)
+    @path = path
+  end
+
+  def original_filename
+    @original_filename ||= path.basename.to_s
+  end
+
+  def barcode
+    @barcode ||= path.basename(".xml").to_s
+  end
+
+  def transfer_notes
+    @transfer_notes ||= xml.xpath('//instantiationAnnotation[@annotationType="Transfer Comments"]').first.text
+  end
+
+  # Parses XML from the pbcore file
+  # @return [Nokogiri::XML::Element] the root element of the XML Document
+  def xml
+    @xml ||= Nokogiri::XML(path).remove_namespaces!
+  end
 end

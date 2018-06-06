@@ -5,7 +5,6 @@ RSpec.describe IngestArchivalMediaBagJob do
   describe "lae bag" do
     with_queue_adapter :inline
     let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag") }
-    let(:xml) { File.open(Rails.root.join("spec", "fixtures", "av", "C0652.xml"), "r") }
     let(:user) { FactoryBot.create(:admin) }
 
     let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
@@ -31,21 +30,27 @@ RSpec.describe IngestArchivalMediaBagJob do
       end
 
       it "creates one FileSet per barcode (with part, e.g., 32101047382401_1)" do
-        expect(query_service.find_all_of_model(model: FileSet).size).to eq 2
+        expect(query_service.find_all_of_model(model: FileSet).map(&:title)).to include ["32101047382401_1"], ["32101047382401_2"]
+      end
+
+      it "creates one FileSet for the pbcore xml file" do
+        expect(query_service.find_all_of_model(model: FileSet).map(&:title).to_a).to include ["32101047382401"]
+        expect(query_service.find_all_of_model(model: FileSet).map(&:mime_type).to_a).to include ["application/xml; schema=pbcore"]
       end
 
       it "adds all 3 file types to the file set" do
-        file_set = query_service.find_all_of_model(model: FileSet).first
+        file_set = query_service.find_all_of_model(model: FileSet).find { |fs| fs.title.include? "32101047382401_1" }
         expect(file_set.file_metadata.count).to eq 3
         expect(file_set.file_metadata.map { |file| file.use.first.to_s }).to contain_exactly(
           "http://pcdm.org/use#PreservationMasterFile", "http://pcdm.org/use#ServiceFile", "http://pcdm.org/use#IntermediateFile"
         )
       end
 
-      it "puts barcode and part metadata on the file_set model" do
-        file_set = query_service.find_all_of_model(model: FileSet).select { |fs| fs.part.include? "1" }.first
+      it "puts barcode, part, and transfer notes metadata on the file_set model" do
+        file_set = query_service.find_all_of_model(model: FileSet).find { |fs| fs.part&.include? "1" }
         expect(file_set.barcode).to contain_exactly "32101047382401"
         expect(file_set.part).to contain_exactly "1"
+        expect(file_set.transfer_notes.first).to start_with "Side A"
       end
 
       it "creates one MediaResource per component id" do

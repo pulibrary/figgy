@@ -13,7 +13,10 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
           :camera_model,
           :software,
           :geometry,
-          :processing_note
+          :processing_note,
+          :barcode,
+          :part,
+          :transfer_notes
 
   delegate :collections, to: :wayfinder
 
