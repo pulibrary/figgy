@@ -74,6 +74,20 @@ RSpec.describe Jp2DerivativeService do
     end
   end
 
+  context "compressed tiff source", run_real_derivatives: true do
+    let(:file) { fixture_file_upload("files/compressed_example.tif", "image/tiff") }
+    it "creates a JP2 and attaches it to the fileset" do
+      derivative_service.new(valid_change_set).create_derivatives
+
+      reloaded = query_service.find_by(id: valid_resource.id)
+      derivative = reloaded.derivative_file
+
+      expect(derivative).to be_present
+      derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
+      expect(derivative_file.read).not_to be_blank
+    end
+  end
+
   context "jpeg source" do
     let(:file) { fixture_file_upload("files/large-jpg-test.jpg", "image/jpeg") }
     it "creates a JP2 and attaches it to the fileset" do

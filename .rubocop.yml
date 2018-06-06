@@ -60,6 +60,7 @@ Metrics/ClassLength:
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/decorators/valkyrie/resource_decorator.rb'
     - 'app/controllers/ephemera_folders_controller.rb'
+    - 'app/derivative-services/jp2_derivative_service.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/models/concerns/linked_data/linked_resource_factory.rb'
@@ -137,6 +138,10 @@ Style/FileName:
     - 'Gemfile'
     - '**/*.rake'
     - 'Capfile'
+Lint/Void:
+  Enabled: true
+  Exclude:
+    - 'app/derivative-services/jp2_derivative_service.rb'
 Style/PredicateName:
   Exclude:
     - 'app/controllers/catalog_controller.rb'

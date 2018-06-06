@@ -68,6 +68,12 @@ class Jp2DerivativeService
   end
 
   def run_tiff_derivatives
+    create_tiff_derivative(filename)
+  rescue RuntimeError # Rescue if there's a compression error.
+    create_tiff_derivative(clean_filename)
+  end
+
+  def create_tiff_derivative(filename)
     Hydra::Derivatives::Jpeg2kImageDerivatives.create(
       filename,
       outputs: [
@@ -114,7 +120,28 @@ class Jp2DerivativeService
   end
 
   def filename
-    return Pathname.new(file_object.io.path) if file_object.io.respond_to?(:path) && File.exist?(file_object.io.path)
+    Pathname.new(file_object.disk_path)
+  end
+
+  def clean_filename
+    @filename ||=
+      begin
+        Pathname.new(cleaned_file.path)
+      end
+  end
+
+  # Remove compression from given TIFF file, just in case.
+  def cleaned_file
+    @cleaned_file ||=
+      begin
+        t = Tempfile.new
+        MiniMagick::Tool::Convert.new do |convert|
+          convert << file_object.disk_path.to_s
+          convert.compress.+
+          convert << t.path.to_s
+        end
+        t
+      end
   end
 
   def file_object
