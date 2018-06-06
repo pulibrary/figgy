@@ -97,7 +97,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
         def create_pbcore_file_set(barcode)
           file_set = FileSet.new(title: barcode)
           pbcore = bag.pbcore_parsers.find { |pbcore_parser| pbcore_parser.barcode == barcode }
-          file = IngestableFile.new(file_path: pbcore.path, mime_type: "application/xml; schema=pbcore", original_filename: pbcore.path.basename)
+          file = IngestableFile.new(file_path: pbcore.path, mime_type: "application/xml; schema=pbcore", original_filename: pbcore.original_filename)
           node = create_node(file)
           file_set.file_metadata += Array.wrap(node)
           changeset_persister.save(change_set: FileSetChangeSet.new(file_set))

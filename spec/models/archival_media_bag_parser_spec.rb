@@ -26,12 +26,17 @@ RSpec.describe ArchivalMediaBagParser do
     describe "#barcode" do
       it { expect(amb_parser.pbcore_parsers.map(&:barcode)).to contain_exactly "32101047382401" }
     end
+
     describe "#transfer_notes" do
       let(:expected) do
         "Side A: Program in silence from approximately 00:12 until 04:06, speed fluctuates throughout program on tape; " \
           "Side B: Feedback heard throughout program on tape, gradual increass in speed throughout program on tape; "
       end
       it { expect(amb_parser.pbcore_parsers.first.transfer_notes).to eq expected }
+    end
+
+    describe "#original_filename" do
+      it { expect(amb_parser.pbcore_parsers.map(&:original_filename)).to contain_exactly "32101047382401.xml" }
     end
   end
 end

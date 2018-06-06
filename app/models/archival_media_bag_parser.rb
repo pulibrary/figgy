@@ -116,9 +116,13 @@ class BarcodeComponentDict
 end
 
 class PbcoreParser
-  attr_reader :path, :barcode, :transfer_notes, :xml
+  attr_reader :path, :barcode, :transfer_notes, :xml, :original_filename
   def initialize(path:)
     @path = path
+  end
+
+  def original_filename
+    @original_filename ||= path.basename.to_s
   end
 
   def barcode
