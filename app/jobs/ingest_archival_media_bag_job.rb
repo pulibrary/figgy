@@ -68,7 +68,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
           media_resource_change_set = MediaResourceChangeSet.new(media_resource, source_metadata_identifier: media_resource.source_metadata_identifier.first)
           add_av(media_resource_change_set, sides)
           add_pbcore(media_resource_change_set, sides)
-          media_resource_change_set.member_of_collection_ids += Array.wrap(collection.id)
+          media_resource_change_set.member_of_collection_ids += [collection.id]
           changeset_persister.save(change_set: media_resource_change_set)
         end
       end
@@ -78,7 +78,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
         def add_av(media_resource_change_set, sides)
           sides.each do |side|
             file_set = create_av_file_set(side)
-            media_resource_change_set.member_ids += Array.wrap(file_set.id)
+            media_resource_change_set.member_ids += [file_set.id]
             media_resource_change_set.sync
           end
         end
@@ -86,7 +86,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
         def add_pbcore(media_resource_change_set, sides)
           sides.map { |side| side.split("_").first }.uniq.each do |barcode|
             file_set = create_pbcore_file_set(barcode)
-            media_resource_change_set.member_ids += Array.wrap(file_set.id)
+            media_resource_change_set.member_ids += [file_set.id]
             media_resource_change_set.sync
           end
         end
@@ -99,7 +99,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
           pbcore = bag.pbcore_parser_for_barcode(barcode)
           file = IngestableFile.new(file_path: pbcore.path, mime_type: "application/xml; schema=pbcore", original_filename: pbcore.original_filename)
           node = create_node(file)
-          file_set.file_metadata += Array.wrap(node)
+          file_set.file_metadata += [node]
           changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
         end
 
@@ -113,7 +113,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
             file_set.barcode = file.barcode
             file_set.part = file.part
             file_set.transfer_notes = bag.pbcore_parser_for_barcode(file.barcode).transfer_notes
-            file_set.file_metadata += Array.wrap(node)
+            file_set.file_metadata += [node]
           end
           file_set = changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
         end
