@@ -21,7 +21,7 @@ class BulkIngestController < ApplicationController
 
     def attributes
       {
-        member_of_collection_ids: params[:collections],
+        member_of_collection_ids: collections_param,
         state: params[:workflow][:state],
         visibility: params[:visibility]
       }
@@ -30,6 +30,10 @@ class BulkIngestController < ApplicationController
     def collections
       collection_decorators = query_service.find_all_of_model(model: Collection).map(&:decorate)
       collection_decorators.to_a.collect { |c| [c.title, c.id.to_s] }
+    end
+
+    def collections_param
+      params[:collections] || []
     end
 
     def file_paths

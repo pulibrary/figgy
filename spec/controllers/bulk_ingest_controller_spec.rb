@@ -64,7 +64,6 @@ RSpec.describe BulkIngestController do
       let(:attributes) do
         {
           workflow: { state: "pending" },
-          collections: ["1234567"],
           visibility: "open",
           mvw: false,
           selected_files: selected_files
@@ -79,7 +78,7 @@ RSpec.describe BulkIngestController do
 
       it "ingests the parent as two resources" do
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-        expect(IngestFoldersJob).to have_received(:perform_later).with(hash_including(directory: "/base", state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
+        expect(IngestFoldersJob).to have_received(:perform_later).with(hash_including(directory: "/base", state: "pending", visibility: "open", member_of_collection_ids: []))
       end
     end
 
@@ -110,7 +109,6 @@ RSpec.describe BulkIngestController do
       let(:attributes) do
         {
           workflow: { state: "pending" },
-          collections: ["1234567"],
           visibility: "open",
           mvw: true,
           selected_files: selected_files
@@ -127,7 +125,7 @@ RSpec.describe BulkIngestController do
 
       it "ingests the parent as two resources" do
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-        expect(IngestFoldersJob).to have_received(:perform_later).with(hash_including(directory: "/base", state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
+        expect(IngestFoldersJob).to have_received(:perform_later).with(hash_including(directory: "/base", state: "pending", visibility: "open", member_of_collection_ids: []))
       end
     end
   end
