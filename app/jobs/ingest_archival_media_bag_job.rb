@@ -77,7 +77,6 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
         def add_av(media_resource_change_set, sides)
           sides.each do |side|
-            # TODO: pass also a parsed pbcore object to create_av_file_sets
             file_set = create_av_file_set(side)
             media_resource_change_set.member_ids += Array.wrap(file_set.id)
             media_resource_change_set.sync
