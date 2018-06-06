@@ -183,6 +183,65 @@ RSpec.describe ScannedResourcesController do
           expect(reloaded.member_ids.length).to eq 0
         end
       end
+
+      context "when a server-side error is encountered while downloading a file" do
+        let(:expiry_time) { (Time.current + 3600).xmlschema }
+        let(:params) do
+          {
+            "selected_files" => {
+              "0" => {
+                "url" => "https://retrieve.cloud.example.com/some/dir/file.pdf",
+                "auth_header" => { "Authorization" => "Bearer ya29.kQCEAHj1bwFXr2AuGQJmSGRWQXpacmmYZs4kzCiXns3d6H1ZpIDWmdM8" },
+                "expires" => expiry_time,
+                "file_name" => "file.pdf",
+                "file_size" => "1874822"
+              }
+            }
+          }
+        end
+
+        let(:http_request) { instance_double(HTTParty::Request) }
+        let(:http_response) { instance_double(Net::HTTPResponse) }
+        let(:parsed_block) { instance_double(Proc) }
+        let(:cloud_response) { HTTParty::Response.new(http_request, http_response, parsed_block) }
+        let(:error) do
+          {
+            "error" =>
+            {
+              "errors" => [
+                {
+                  "domain" => "usageLimits",
+                  "reason" => "dailyLimitExceededUnreg",
+                  "message" => "Daily Limit for Unauthenticated Use Exceeded. Continued use requires signup.",
+                  "extendedHelp" => "https://code.google.com/apis/console"
+                }
+              ],
+              "code" => 403,
+              "message" => "Daily Limit for Unauthenticated Use Exceeded. Continued use requires signup."
+            }
+          }
+        end
+
+        before do
+          allow(http_request).to receive(:options).and_return({})
+          allow(http_response).to receive(:body).and_return(nil)
+          allow(http_response).to receive(:to_hash).and_return(nil)
+
+          allow(cloud_response).to receive(:code).and_return(403)
+          allow(cloud_response).to receive(:body).and_return(error)
+          allow(HTTParty).to receive(:get).and_return(cloud_response)
+        end
+
+        it "does not persist any files" do
+          resource = FactoryBot.create_for_repository(:scanned_resource)
+
+          post :browse_everything_files, params: { id: resource.id, selected_files: params["selected_files"] }
+          reloaded = adapter.query_service.find_by(id: resource.id)
+
+          expect(response).to be_redirect
+          expect(reloaded.member_ids).to be_empty
+        end
+      end
       it "uploads files" do
         resource = FactoryBot.create_for_repository(:scanned_resource)
         # Ensure that indexing is always safe and done at the end.
