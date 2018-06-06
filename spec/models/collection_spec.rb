@@ -24,4 +24,9 @@ RSpec.describe Collection do
     collection.local_identifier = "test"
     expect(collection.local_identifier).to eq ["test"]
   end
+  it "has owners" do
+    expect(collection.owners).to eq []
+    collection.owners = "test"
+    expect(collection.owners).to eq ["test"]
+  end
 end

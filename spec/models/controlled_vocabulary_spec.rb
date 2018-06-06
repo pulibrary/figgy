@@ -18,4 +18,17 @@ RSpec.describe ControlledVocabulary do
       end
     end
   end
+
+  describe "owners" do
+    let(:vocabulary) { described_class.for(:owners) }
+    describe "#all" do
+      it "returns all user netids" do
+        user1 = FactoryBot.create(:user, uid: "one")
+        user2 = FactoryBot.create(:user, uid: "two")
+
+        expect(vocabulary.all).to include ControlledVocabulary::Term.new(label: user1.uid, value: user1.uid)
+        expect(vocabulary.all).to include ControlledVocabulary::Term.new(label: user2.uid, value: user2.uid)
+      end
+    end
+  end
 end

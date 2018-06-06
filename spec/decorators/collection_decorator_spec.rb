@@ -12,4 +12,14 @@ RSpec.describe CollectionDecorator do
       expect(decorator.title).to eq "Title"
     end
   end
+
+  describe "#owners" do
+    let(:collection) do
+      FactoryBot.build(:collection,
+                       owners: ["owner"])
+    end
+    it "displays the owners" do
+      expect(decorator.display_attributes[:owners]).to eq ["owner"]
+    end
+  end
 end

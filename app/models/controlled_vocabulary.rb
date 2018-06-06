@@ -334,4 +334,17 @@ class ControlledVocabulary
         end
     end
   end
+
+  # Controlled vocabulary for users
+  class Users < ControlledVocabulary
+    ControlledVocabulary.register(:users, self)
+    ControlledVocabulary.register(:owners, self)
+    # @return [Array<Term>] the Term Objects modeling every User.
+    def all(_scope = nil)
+      @all ||=
+        User.all.map do |user|
+          Term.new(label: user.uid, value: user.uid)
+        end
+    end
+  end
 end
