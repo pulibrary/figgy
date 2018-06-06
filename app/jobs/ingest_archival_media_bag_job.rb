@@ -96,7 +96,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
         # @return [FileSet] the persisted FileSet containing the binary and file metadata
         def create_pbcore_file_set(barcode)
           file_set = FileSet.new(title: barcode)
-          pbcore = bag.pbcore_parsers.find { |pbcore_parser| pbcore_parser.barcode == barcode }
+          pbcore = bag.pbcore_parser_for_barcode(barcode)
           file = IngestableFile.new(file_path: pbcore.path, mime_type: "application/xml; schema=pbcore", original_filename: pbcore.original_filename)
           node = create_node(file)
           file_set.file_metadata += Array.wrap(node)
@@ -112,7 +112,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
             node = create_node(file)
             file_set.barcode = file.barcode
             file_set.part = file.part
-            file_set.transfer_notes = bag.pbcore_parsers.find { |pbcore| pbcore.barcode == file.barcode }.transfer_notes
+            file_set.transfer_notes = bag.pbcore_parser_for_barcode(file.barcode).transfer_notes
             file_set.file_metadata += Array.wrap(node)
           end
           file_set = changeset_persister.save(change_set: FileSetChangeSet.new(file_set))

@@ -35,16 +35,20 @@ class ArchivalMediaBagParser
     @component_groups
   end
 
-  # pbcore parsers by barcode
-  # @return [Array] of PbcoreParser objects
-  def pbcore_parsers
-    @pbcore_parsers ||=
-      begin
-        path.join("data").each_child.select { |file| [".xml"].include? file.extname }.map { |file| PbcoreParser.new(path: file) }
-      end
+  def pbcore_parser_for_barcode(barcode)
+    pbcore_parsers.find { |pbcore| pbcore.barcode == barcode }
   end
 
   private
+
+    # pbcore parsers by barcode
+    # @return [Array] of PbcoreParser objects
+    def pbcore_parsers
+      @pbcore_parsers ||=
+        begin
+          path.join("data").each_child.select { |file| [".xml"].include? file.extname }.map { |file| PbcoreParser.new(path: file) }
+        end
+    end
 
     # create an AudioPath object for each audio file
     def audio_files
