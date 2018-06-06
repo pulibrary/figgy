@@ -127,8 +127,6 @@ class Jp2DerivativeService
     @filename ||=
       begin
         Pathname.new(cleaned_file.path)
-      rescue MiniMagick::Error
-        filename
       end
   end
 
