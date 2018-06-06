@@ -31,6 +31,7 @@ RSpec.describe IngestArchivalMediaBagJob do
 
       it "creates one FileSet per barcode (with part, e.g., 32101047382401_1)" do
         expect(query_service.find_all_of_model(model: FileSet).map(&:title)).to include ["32101047382401_1"], ["32101047382401_2"]
+        expect(query_service.find_all_of_model(model: FileSet).map(&:mime_type).to_a).to include ["audio/wav"]
       end
 
       it "creates one FileSet for the pbcore xml file" do
