@@ -13,7 +13,7 @@ class FileSet < Resource
   attribute :part, Valkyrie::Types::Set
   attribute :transfer_notes
 
-  delegate :width, :height, :x_resolution, :y_resolution, :bits_per_sample, :mime_type, :size, :camera_model, :software, :geometry, :run_fixity, :processing_note, to: :original_file, allow_nil: true
+  delegate :width, :height, :x_resolution, :y_resolution, :bits_per_sample, :size, :camera_model, :software, :geometry, :run_fixity, :processing_note, to: :original_file, allow_nil: true
   delegate :md5, :sha1, :sha256, to: :original_file_checksum, allow_nil: true
 
   def thumbnail_id
@@ -40,12 +40,24 @@ class FileSet < Resource
     file_metadata.select(&:thumbnail_file?)
   end
 
+  def preservation_file
+    file_metadata.find(&:preservation_file?)
+  end
+
   def preservation_files
     file_metadata.select(&:preservation_file?)
   end
 
   def intermediate_files
     file_metadata.select(&:intermediate_file?)
+  end
+
+  def mime_type
+    if original_file
+      original_file.mime_type
+    elsif preservation_file
+      preservation_file.mime_type
+    end
   end
 
   private
