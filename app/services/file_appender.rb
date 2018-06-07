@@ -63,17 +63,18 @@ class FileAppender
         # Uses the UploadDecorator to abstract the interface for the File Object during persistence by the storage_adapter
         file_wrapper = UploadDecorator.new(file.values.first, node.original_filename.first)
 
-        node.label = file.values.first.original_filename
-        node.mime_type = file.values.first.content_type
-
         # Ensure that errors for one file are logged but do not block updates for others
         begin
           storage_adapter.upload(file: file_wrapper, original_filename: file_wrapper.original_filename, resource: node)
+          node.label = file.values.first.original_filename
+          node.mime_type = file.values.first.content_type
+          node
         rescue StandardError => error
           Valkyrie.logger.error "#{self.class}: Failed to update the file #{file_wrapper.original_filename} for #{node.id}: #{error}"
-          return nil
+          # Ensure that this file is not created instead of updated
+          @files.delete_if { |updated_file| updated_file.values.first.original_filename == file_wrapper.original_filename }
+          nil
         end
-        node
       end
 
       updated.compact
@@ -114,11 +115,12 @@ class FileAppender
         file.try(:node_attributes) || {}
       )
       node = FileMetadata.for(file: file).new(attributes)
-      file = storage_adapter.upload(file: file, resource: node, original_filename: file.original_filename)
+      original_filename = file.original_filename
+      file = storage_adapter.upload(file: file, resource: node, original_filename: original_filename)
       node.file_identifiers = node.file_identifiers + [file.id]
       node
     rescue StandardError => error
-      Valkyrie.logger.error "#{self.class}: Failed to append the new file #{file.original_filename} for #{node.id}: #{error}"
+      Valkyrie.logger.error "#{self.class}: Failed to append the new file #{original_filename} for #{node.id}: #{error}"
       nil
     end
 
