@@ -27,5 +27,13 @@ FactoryBot.define do
     factory :geo_vector_file_set do
       file_metadata FileMetadata.new(mime_type: ControlledVocabulary.for(:geo_vector_format).all.first.value, use: Valkyrie::Vocab::PCDMUse.OriginalFile)
     end
+
+    factory :audio_file_set do
+      file_metadata [
+        FileMetadata.new(mime_type: "audio/wav", use: Valkyrie::Vocab::PCDMUse.PreservationMasterFile, id: "original"),
+        FileMetadata.new(mime_type: "audio/mp3", use: Valkyrie::Vocab::PCDMUse.ServiceFile, id: "derivative"),
+        FileMetadata.new(mime_type: "audio/wav", use: Valkyrie::Vocab::PCDMUse.IntermediateFile, id: "intermediate")
+      ]
+    end
   end
 end

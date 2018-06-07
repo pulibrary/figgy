@@ -565,11 +565,12 @@ RSpec.describe CatalogController do
         expect(response.body).to have_link "Create New Folder Template"
       end
       it "renders for a MediaResource" do
-        resource = persister.save(resource: FactoryBot.build(:media_resource))
+        resource = persister.save(resource: FactoryBot.create_for_repository(:media_resource_with_audio_file))
 
         get :show, params: { id: resource.id.to_s }
 
         expect(response.body).to have_selector "h1", text: resource.title.first
+        expect(response.body).to have_selector "audio[src='/downloads/#{resource.member_ids.first}/file/derivative']"
       end
     end
     context "when rendered for a user" do

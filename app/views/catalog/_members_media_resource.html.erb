@@ -14,6 +14,7 @@
             <tr>
              <th>Title</th>
              <th>Date Uploaded</th>
+             <th>Player</th>
            </tr>
           </thead>
           <tbody>
@@ -23,6 +24,7 @@
                 <tr data-resource-id="<%= file_set.id.to_s %>">
                   <td><%= link_to file_set.first_title, file_set_url %></td>
                   <td><%= file_set.created_at %></td>
+                  <td><%= render "catalog/media_html5_player_default", file_set: file_set %></td>
                 </tr>
               <% end %>
             <% else %>
