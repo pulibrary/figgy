@@ -48,7 +48,6 @@ class CatalogController < ApplicationController
     config.add_show_tools_partial(:admin_controls, partial: "admin_controls", if: :can_edit?)
     config.show.partials = config.show.partials.insert(1, :parent_breadcrumb)
     config.show.partials += [:universal_viewer]
-    config.show.partials += [:media_html5_player]
     config.show.partials += [:resource_attributes]
     config.show.partials += [:workflow_controls]
     config.show.partials += [:vocabulary_nav]

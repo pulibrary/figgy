@@ -60,6 +60,10 @@ class FileSet < Resource
     end
   end
 
+  def audio?
+    Array.wrap(mime_type).first.to_s.include?("audio/")
+  end
+
   private
 
     def original_file_checksum
