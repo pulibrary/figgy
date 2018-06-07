@@ -1,6 +1,7 @@
 <% if resource.is_a?(MediaResource) && decorated_resource.audio_file_sets.present?%>
-  <% audio_file = decorated_resource.audio_file_sets.first %>
-  <% if can?(:download, audio_file) %>
-    <%= audio_tag download_path(audio_file.id, audio_file.derivative_file.id), controls: true %>
+  <% decorated_resource.audio_file_sets.each do |audio_file| %>
+    <% if can?(:download, audio_file) %>
+      <%= audio_tag download_path(audio_file.id, audio_file.derivative_file.id), controls: true %>
+    <% end %>
   <% end %>
 <% end %>
