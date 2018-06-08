@@ -2,9 +2,18 @@
 
 # Class for ImageMagick based file characterization service
 # defines the ImageMagick based characterization service a ValkyrieFileCharacterization service
-# @since 0.1.0
 class ImagemagickCharacterizationService
+  # Retrieve the supported media types specified in the config.
+  # @return [Array<String>]
+  def self.supported_formats
+    Figgy.config[:characterization][:imagemagick][:supported_mime_types]
+  end
+
   attr_reader :file_set, :persister
+
+  # Constructor
+  # @param file_set [FileSet] FileSet being characterized
+  # @param persister [ChangeSetPersister] persister for the ChangeSet
   def initialize(file_set:, persister:)
     @file_set = file_set
     @persister = persister
@@ -39,6 +48,8 @@ class ImagemagickCharacterizationService
     return Pathname.new(file_object.io.path) if file_object.io.respond_to?(:path) && File.exist?(file_object.io.path)
   end
 
+  # Retrieve the image handler from MiniMagick
+  # @return [MiniMagick::Image]
   def image
     @image ||= MiniMagick::Image.open(filename)
   end
@@ -49,12 +60,34 @@ class ImagemagickCharacterizationService
     @file_object ||= Valkyrie::StorageAdapter.find_by(id: original_file.file_identifiers[0])
   end
 
+  # Retrieve the master file from the FileSet
+  # @return [FileMetadata]
   def original_file
     @file_set.original_file
   end
 
+  # Retrieve the Resource to which the FileSet is attached
+  # @return [Resource]
+  def parent
+    @file_set.decorate.parent
+  end
+
+  # Determine whether or not this FileSet belongs to an image resource
+  # @return [TrueClass, FalseClass]
+  def image_resource?
+    parent.respond_to?(:image_resource?) && parent.image_resource?
+  end
+
+  # Determine whether or not the media type of the FileSet is supported for characterization
+  # @return [TrueClass, FalseClass]
+  def supported_format?
+    !(@file_set.mime_type & self.class.supported_formats).empty?
+  end
+
+  # Determine whether or not this FileSet is valid for this characterization
+  # @return [TrueClass, FalseClass]
   def valid?
-    true
+    image_resource? && supported_format?
   end
 
   # Class for updating characterization attributes on the FileNode

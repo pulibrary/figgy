@@ -93,6 +93,10 @@ defaults: &defaults
     authenticated:
       workspace: <%= ENV['RESTRICTED_GEOSERVER_WS'] || "restricted-figgy" %>
   characterization:
+    imagemagick:
+      supported_mime_types:
+        - 'image/tiff'
+        - 'image/jpeg'
     mediainfo:
       supported_mime_types:
         - 'audio/wav'

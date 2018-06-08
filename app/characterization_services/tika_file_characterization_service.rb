@@ -2,7 +2,6 @@
 
 # Class for Apache Tika based file characterization service
 # defines the Apache Tika based characterization service a ValkyrieFileCharacterization service
-# @since 0.1.0
 class TikaFileCharacterizationService
   attr_reader :file_set, :persister
   def initialize(file_set:, persister:)

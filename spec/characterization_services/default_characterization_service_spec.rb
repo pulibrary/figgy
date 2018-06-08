@@ -22,7 +22,24 @@ RSpec.describe DefaultCharacterizationService do
     file_set = valid_file_set
     file_set.original_file.height = nil
     new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
-    expect(new_file_set.original_file.height).not_to be_empty
+
+    expect(new_file_set.original_file.height).to include "287"
+    expect(new_file_set.original_file.width).to include "200"
+    expect(new_file_set.original_file.bits_per_sample).to include "8"
+    expect(new_file_set.original_file.x_resolution).to include "1120.0"
+    expect(new_file_set.original_file.y_resolution).to include "1120.0"
+    expect(new_file_set.original_file.camera_model).to include "P65+"
+    expect(new_file_set.original_file.software).to include "Adobe Photoshop CS5.1 Macintosh"
+  end
+
+  let(:tika_file_characterization_service) { instance_double(TikaFileCharacterizationService) }
+  it "characterizes using Tika" do
+    allow(tika_file_characterization_service).to receive(:characterize)
+    allow(TikaFileCharacterizationService).to receive(:new).and_return(tika_file_characterization_service)
+    file_set = valid_file_set
+
+    described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+    expect(tika_file_characterization_service).to have_received(:characterize)
   end
 
   describe "#valid?" do
@@ -32,10 +49,24 @@ RSpec.describe DefaultCharacterizationService do
       allow(valid_file_set).to receive(:decorate).and_return(decorator)
     end
 
+    context "with a scanned resource parent" do
+      let(:parent) { ScannedResource.new }
+      it "is valid" do
+        expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true
+      end
+    end
+
     context "with a scanned map parent" do
       let(:parent) { ScannedMap.new }
-      it "isn't valid" do
-        expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be false
+      it "is valid" do
+        expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true
+      end
+    end
+
+    context "with a media resource parent" do
+      let(:parent) { MediaResource.new }
+      it "is valid" do
+        expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true
       end
     end
   end

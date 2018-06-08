@@ -30,4 +30,10 @@ class SimpleResource < Resource
       file.mime_type == ["application/pdf"]
     end
   end
+
+  # Determines if this is an image resource
+  # @return [TrueClass, FalseClass]
+  def image_resource?
+    true
+  end
 end

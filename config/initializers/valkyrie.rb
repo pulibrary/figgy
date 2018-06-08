@@ -220,12 +220,14 @@ Rails.application.config.to_prepare do
     )
   )
 
-  # Register service objects for file characterization
-  Valkyrie::Derivatives::FileCharacterizationService.services << DefaultCharacterizationService
-  # Register service objects for geospatial asset file characterization
+  # Register the service class for image asset characterization
+  Valkyrie::Derivatives::FileCharacterizationService.services << ImagemagickCharacterizationService
+  # Register the service class for geospatial asset characterization
   Valkyrie::Derivatives::FileCharacterizationService.services << GeoCharacterizationService
-  # Register service objects for audiovisual asset file characterization
+  # Register the service class for audiovisual asset characterization
   Valkyrie::Derivatives::FileCharacterizationService.services << MediainfoCharacterizationService
+  # Register the service class for the default asset characterization
+  Valkyrie::Derivatives::FileCharacterizationService.services << DefaultCharacterizationService
 
   # Register custom queries for the default Valkyrie metadata adapter
   # (see Valkyrie::Persistence::CustomQueryContainer)
