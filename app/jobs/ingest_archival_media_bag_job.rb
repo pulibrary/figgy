@@ -64,8 +64,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
       # These sides are logically modeled using a barcode-based identifier
       def ingest
         component_groups.each do |cid, sides|
-          media_resource = find_or_create_media_resource(cid)
-          media_resource_change_set = MediaResourceChangeSet.new(media_resource, source_metadata_identifier: media_resource.source_metadata_identifier.first)
+          media_resource_change_set = find_or_create_media_resource(cid)
           add_av(media_resource_change_set, sides)
           add_pbcore(media_resource_change_set, sides)
           media_resource_change_set.member_of_collection_ids += [collection.id]
@@ -131,11 +130,11 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
         # Creates or finds an existing MediaResource Object using an EAD Component ID
         # @param component_id [String]
-        # @return [MediaResource]
+        # @return [MediaResourceChangeSet]
         def find_or_create_media_resource(component_id)
           results = query_service.custom_queries.find_by_string_property(property: :source_metadata_identifier, value: component_id)
-          return results.first unless results.size.zero?
-          MediaResource.new(source_metadata_identifier: component_id)
+          media_resource = results.size.zero? ? MediaResource.new : results.first
+          MediaResourceChangeSet.new(media_resource, source_metadata_identifier: component_id)
         end
 
         # Retrieve a Hash of EAD Component IDs/Barcodes for file barcodes specified in a given Bag
