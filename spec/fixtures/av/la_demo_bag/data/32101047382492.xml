@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pbcoreCollection xmlns="http://www.pbcore.org/PBCore/PBCoreNamespace.html" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.pbcore.org/PBCore/PBCoreNamespace.html http://pbcore.org/xsd/pbcore-2.0.xsd">
+   <pbcoreDescriptionDocument>
+      <pbcoreAssetType>Media Object</pbcoreAssetType>
+      <pbcoreAssetDate dateType="Created">undated</pbcoreAssetDate>
+      <pbcoreIdentifier source="University of Chicago Booth School of Business" annotation="Object Identifier">32101047382492</pbcoreIdentifier>
+      <pbcoreTitle titleType="Main">Interview: Fitas / ERM, Tape 2 (A8)</pbcoreTitle>
+      <pbcoreDescription descriptionType="Content Summary"/>
+      <pbcorePart>
+         <pbcoreIdentifier source="University of Chicago Booth School of Business" annotation="Object Identifier">32101047382492</pbcoreIdentifier>
+         <pbcoreTitle titleType="Main">32101047382492</pbcoreTitle>
+         <pbcoreDescription/>
+         <pbcoreInstantiation><!--Physical Asset-->
+            <instantiationIdentifier source="University of Chicago Booth School of Business" annotation="Object Identifier">32101047382492</instantiationIdentifier>
+            <instantiationDate>undated</instantiationDate>
+            <instantiationPhysical>Cassette</instantiationPhysical>
+            <instantiationStandard>NAB</instantiationStandard>
+            <instantiationLocation><!--For institutional reference--></instantiationLocation>
+            <instantiationDuration>00:28:00</instantiationDuration>
+            <instantiationTracks>Quarter-Track</instantiationTracks>
+            <instantiationChannelConfiguration>Stereo</instantiationChannelConfiguration>
+            <instantiationAnnotation annotationType="Stock Manufacturer">Ampex</instantiationAnnotation>
+            <instantiationAnnotation annotationType="Transfer Comments">Side B is Blank; High Amount of Hiss on Tape; High Background Noise on Tape; </instantiationAnnotation>
+            <instantiationPart>
+               <instantiationIdentifier source="University of Chicago Booth School of Business" annotation="Object Identifier"/>
+               <instantiationLocation><!--University of Chicago Booth School of Business--></instantiationLocation>
+               <instantiationDuration>00:28:00</instantiationDuration>
+               <instantiationEssenceTrack>
+                  <essenceTrackType>Audio</essenceTrackType>
+                  <essenceTrackPlaybackSpeed unitsOfMeasure="ips">1.875</essenceTrackPlaybackSpeed>
+               </instantiationEssenceTrack>
+            </instantiationPart>
+         </pbcoreInstantiation>
+         <pbcoreInstantiation><!--Preservation Master-->
+            <instantiationIdentifier source="The MediaPreserve" annotation="Object Identifier">32101047382492_prsv</instantiationIdentifier>
+            <instantiationDate>UTC 2017-05-16 12:21:29</instantiationDate>
+            <instantiationDigital source="PRONOM Technical Registry">audio/x-wav</instantiationDigital>
+            <instantiationStandard>Linear PCM Audio</instantiationStandard>
+            <instantiationLocation><!--Required Field--></instantiationLocation>
+            <instantiationMediaType>Sound</instantiationMediaType>
+            <instantiationGenerations>Preservation Master</instantiationGenerations>
+            <instantiationRelation>
+               <instantiationRelationType source="PBCore relationType">Derived from</instantiationRelationType>
+               <instantiationRelationIdentifier annotation="Object Identifier">32101047382492</instantiationRelationIdentifier>
+            </instantiationRelation>
+            <instantiationAnnotation annotationType="Creating Application">WaveLab</instantiationAnnotation>
+            <instantiationAnnotation annotationType="Source Deck">Tascam  122mkIII; Audio Cassette Deck</instantiationAnnotation>
+            <instantiationAnnotation annotationType="Digitizer">Antelope; Orion 32; A/D Converter</instantiationAnnotation>
+            <instantiationAnnotation annotationType="Quality Control">Quality Control was performed by MediaPreserve engineers, with Cube-Tec Dobbin Audio File Inspector and engineer spot-check.</instantiationAnnotation>
+            <instantiationPart>
+               <instantiationIdentifier source="The MediaPreserve" annotation="File Name">32101047382492_1_pm.wav</instantiationIdentifier>
+               <instantiationIdentifier source="The MediaPreserve" annotation="checksum">8755d5940c893abfffaaaf2971be578ce8ec1f104c367b4a985c48005fd60df1</instantiationIdentifier>
+               <instantiationLocation><!--Required Field--></instantiationLocation>
+               <instantiationFileSize unitsOfMeasure="KB">945283.6</instantiationFileSize>
+               <instantiationDuration>00:28:00</instantiationDuration>
+               <instantiationEssenceTrack>
+                  <essenceTrackType>Audio</essenceTrackType>
+                  <essenceTrackEncoding>WAV</essenceTrackEncoding>
+                  <essenceTrackSamplingRate unitsOfMeasure="kHz">96.0</essenceTrackSamplingRate>
+                  <essenceTrackBitDepth>24</essenceTrackBitDepth>
+               </instantiationEssenceTrack>
+            </instantiationPart>
+         </pbcoreInstantiation>
+         <pbcoreInstantiation><!--Access Copy-->
+            <instantiationIdentifier source="The MediaPreserve" annotation="Object Identifier">32101047382492_access</instantiationIdentifier>
+            <instantiationDate>UTC 2017-05-16 12:21:09</instantiationDate>
+            <instantiationDigital source="PRONOM Technical Registry">audio/mpeg</instantiationDigital>
+            <instantiationStandard>MP3</instantiationStandard>
+            <instantiationLocation><!--Required Field--></instantiationLocation>
+            <instantiationMediaType>Sound</instantiationMediaType>
+            <instantiationGenerations>Access Copy</instantiationGenerations>
+            <instantiationRelation>
+               <instantiationRelationType source="PBCore relationType">Derived from</instantiationRelationType>
+               <instantiationRelationIdentifier annotation="Object Identifier">32101047382492_prsv</instantiationRelationIdentifier>
+            </instantiationRelation>
+            <instantiationAnnotation annotationType="Creating Application">WaveLab</instantiationAnnotation>
+            <instantiationAnnotation annotationType="Quality Control">Quality Control was performed by MediaPreserve engineers, with Cube-Tec Dobbin Audio File Inspector and engineer spot-check.</instantiationAnnotation>
+            <instantiationPart>
+               <instantiationIdentifier source="The MediaPreserve" annotation="File Name">32101047382492_1_a.mp3</instantiationIdentifier>
+               <instantiationIdentifier source="The MediaPreserve" annotation="checksum">7617b6285de89ebc99183f40b1c17d8b690a63b1b6a40328ace2277d77bb6032</instantiationIdentifier>
+               <instantiationLocation><!--Required Field--></instantiationLocation>
+               <instantiationFileSize unitsOfMeasure="KB">26257.96</instantiationFileSize>
+               <instantiationDuration>00:28:04</instantiationDuration>
+               <instantiationEssenceTrack>
+                  <essenceTrackType>Audio</essenceTrackType>
+                  <essenceTrackEncoding>MP3</essenceTrackEncoding>
+                  <essenceTrackDataRate>320</essenceTrackDataRate>
+                  <essenceTrackBitDepth>24</essenceTrackBitDepth>
+               </instantiationEssenceTrack>
+            </instantiationPart>
+         </pbcoreInstantiation>
+      </pbcorePart>
+   </pbcoreDescriptionDocument>
+</pbcoreCollection>

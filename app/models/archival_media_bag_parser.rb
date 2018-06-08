@@ -8,8 +8,6 @@ class ArchivalMediaBagParser
 
   def initialize(path:, component_id:)
     @path = path
-    @file_groups = {}
-    @component_groups = {}
     @component_dict = BarcodeComponentDict.new(component_id)
     raise InvalidBagError, "Bag at #{@path} is an invalid bag" unless valid?
   end
@@ -17,22 +15,21 @@ class ArchivalMediaBagParser
   # group all the files in the bag by barcode_with_part
   # @return [Hash] mapping string barcode_with_part to an array of IngestableAudioFiles
   def file_groups
-    return @file_groups unless @file_groups.empty?
-    audio_files.each do |audio_file|
-      @file_groups[audio_file.barcode_with_part] = @file_groups.fetch(audio_file.barcode_with_part, []).append(audio_file)
-    end
-    @file_groups
+    @file_groups ||= audio_files.group_by(&:barcode_with_part)
   end
 
   # file_groups in groups by component id
   # @return [Hash] map keying EAD component IDs to file barcodes (with part qualifier, e.g. "32101047382401_1")
   def component_groups
-    return @component_groups unless @component_groups.empty?
-    file_groups.keys.each do |barcode_with_part|
-      cid = component_dict.lookup(barcode_with_part)
-      @component_groups[cid] = @component_groups.fetch(cid, []).append(barcode_with_part)
-    end
-    @component_groups
+    @component_groups ||=
+      begin
+        h = {}
+        file_groups.keys.each do |barcode_with_part|
+          cid = component_dict.lookup(barcode_with_part)
+          h[cid] = h.fetch(cid, []).append(barcode_with_part)
+        end
+        h
+      end
   end
 
   def pbcore_parser_for_barcode(barcode)

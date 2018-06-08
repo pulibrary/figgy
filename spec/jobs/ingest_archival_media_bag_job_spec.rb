@@ -102,5 +102,24 @@ RSpec.describe IngestArchivalMediaBagJob do
         )
       end
     end
+
+    context "ingesting a more complicated bag" do
+      let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_demo_bag") }
+      let(:collection_cid) { "C0652" }
+
+      before do
+        stub_pulfa(pulfa_id: "C0652_c0383")
+        stub_pulfa(pulfa_id: "C0652_c0389")
+        described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
+      end
+
+      it "collects multiple barcodes with the same component id onto a single MediaResource" do
+        expect(query_service.find_all_of_model(model: MediaResource).size).to eq 2
+        expect(query_service.find_all_of_model(model: MediaResource).map(&:title)).to contain_exactly(
+          ["Series 5: Audio Recordings - Readings: Pablo Neruda III (C3)"],
+          ["Series 5: Audio Recordings - Interview: Fitas / ERM, Tape 1-2 (A8)"]
+        )
+      end
+    end
   end
 end

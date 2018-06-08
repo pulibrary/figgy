@@ -1,0 +1,14 @@
+Source-Organization: The MediaPreserve
+Organization-Address: 111 Thomson Park Drive - Cranberry Township, PA 16066
+Contact-Name: Robert Strauss
+Contact-Phone: 724-779-2111
+Contact-Email: strauss@ptlp.com
+External-Description: 32101047382617, 32101047382492, 32101047382484,
+External-Identifier: 2022 - PRUN2017032301
+Bag-Count: 10
+Internal-Sender-Identifier: Princeton University - Latin American Collections
+Internal-Sender-Description: Emir Rodrigues Monegal papers (C0652)
+Payload-Oxum: 125941036269.572
+Payload-Oxum: 6894824258.36
+Bagging-Date: 2017-05-30
+Bag-Size: 6.5 GB
