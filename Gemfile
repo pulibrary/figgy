@@ -108,4 +108,4 @@ gem "json-schema"
 gem "leaflet-rails", "~> 0.7"
 gem "prawn"
 
-gem 'graphiql-rails', group: :development
+gem "graphiql-rails", group: :development
