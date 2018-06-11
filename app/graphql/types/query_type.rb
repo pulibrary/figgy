@@ -3,7 +3,7 @@ class Types::QueryType < Types::BaseObject
   description "The query root of this schema"
 
   # First describe the field signature:
-  field :scanned_resource, ScannedResourceType, null: true do
+  field :scanned_resource, Types::ScannedResourceType, null: true do
     description "Find a Scanned Resource by ID"
     argument :id, ID, required: true
   end
