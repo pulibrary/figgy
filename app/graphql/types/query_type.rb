@@ -17,7 +17,5 @@ class Types::QueryType < Types::BaseObject
     Valkyrie::MetadataAdapter.find(:indexing_persister)
   end
 
-  def query_service
-    metadata_adapter.query_service
-  end
+  delegate :query_service, to: :metadata_adapter
 end

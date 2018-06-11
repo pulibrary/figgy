@@ -2,9 +2,8 @@
 require "rails_helper"
 
 RSpec.describe Types::ScannedResourceType do
-  let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, viewing_hint: "individuals", title: ["I'm a little teapot", "short and stout"]) }
   subject(:type) { described_class.new(scanned_resource, {}) }
-
+  let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, viewing_hint: "individuals", title: ["I'm a little teapot", "short and stout"]) }
   describe "class methods" do
     subject { described_class }
 

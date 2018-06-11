@@ -102,11 +102,11 @@ gem "capistrano-rails"
 gem "capistrano-rails-console"
 gem "faker"
 gem "graphql"
-gem "rspec-graphql_matchers"
 gem "iso-639"
 gem "jquery-datatables-rails", "~> 3.4.0"
 gem "json-schema"
 gem "leaflet-rails", "~> 0.7"
 gem "prawn"
+gem "rspec-graphql_matchers"
 
 gem "graphiql-rails", group: :development
