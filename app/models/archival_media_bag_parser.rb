@@ -85,7 +85,8 @@ class BarcodeComponentDict
     def parse_dict!
       @dict = {}
       barcode_nodes.each do |node|
-        @dict[get_barcode_with_part(node)] = get_id(node)
+        barcode = get_barcode_with_part(node)
+        @dict[barcode] = get_id(node) unless barcode.nil?
       end
     end
 
@@ -110,9 +111,11 @@ class BarcodeComponentDict
 
     # Extracts the barcode using the XML Element content and a regexp
     # @param node [Nokogiri::XML::Node]
-    # @return [String] the captured string content
+    # @return [String, nil] the captured string content
     def get_barcode_with_part(node)
-      ArchivalMediaBagParser::BARCODE_WITH_PART_REGEX.match(node.content)[1]
+      match = ArchivalMediaBagParser::BARCODE_WITH_PART_REGEX.match(node.content)
+      return if match.nil?
+      match[1]
     end
 end
 

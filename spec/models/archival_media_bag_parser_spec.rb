@@ -40,4 +40,21 @@ RSpec.describe ArchivalMediaBagParser do
       it { expect(amb_parser.pbcore_parser_for_barcode(barcode).original_filename).to eq "32101047382401.xml" }
     end
   end
+
+  context "when the finding aid has other 'altformavailable' materials" do
+    before do
+      stub_request(:get, "https://findingaids.princeton.edu/collections/C0652.xml")
+        .to_return(
+          body: file_fixture("pulfa/C0652_modified.xml").read,
+          headers: {
+            "Content-Type" => "application/json+ld"
+          }
+        )
+    end
+    describe "#file_groups" do
+      it "skips them in the xml parsing" do
+        expect(amb_parser.file_groups.keys).to contain_exactly "32101047382401_2", "32101047382401_1"
+      end
+    end
+  end
 end
