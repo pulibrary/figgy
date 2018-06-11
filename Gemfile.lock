@@ -635,6 +635,8 @@ GEM
     rspec-expectations (3.6.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.6.0)
+    rspec-graphql_matchers (0.7.1)
+      graphql (>= 0.9, < 2)
     rspec-mocks (3.6.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.6.0)
@@ -874,6 +876,7 @@ DEPENDENCIES
   redis-namespace
   riiif
   rsolr (>= 1.0)
+  rspec-graphql_matchers
   rspec-rails (~> 3.5)
   ruby_tika_app
   sass-rails (~> 5.0)
