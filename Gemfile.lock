@@ -369,6 +369,9 @@ GEM
       multi_json (~> 1.11)
       os (~> 0.9)
       signet (~> 0.7)
+    graphiql-rails (1.4.10)
+      railties
+      sprockets-rails
     graphql (1.8.2)
     hamster (3.0.0)
       concurrent-ruby (~> 1.0)
@@ -830,6 +833,7 @@ DEPENDENCIES
   foreman
   formulaic
   geo_works-derivatives!
+  graphiql-rails
   graphql
   honeybadger
   hydra-access-controls
