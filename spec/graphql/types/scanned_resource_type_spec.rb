@@ -23,4 +23,17 @@ RSpec.describe Types::ScannedResourceType do
       expect(type.label).to eq "I'm a little teapot"
     end
   end
+
+  describe "#orderable_members" do
+    it "returns all members which are image file sets or scanned resources" do
+      child_resource = FactoryBot.create_for_repository(:scanned_resource)
+      metadata_file_set = FactoryBot.create_for_repository(:geo_metadata_file_set)
+      image_file_set = FactoryBot.create_for_repository(:geo_image_file_set)
+      scanned_resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: [metadata_file_set.id, image_file_set.id, child_resource.id])
+
+      type = described_class.new(scanned_resource, {})
+
+      expect(type.orderable_members.map(&:id)).to eq [image_file_set.id, child_resource.id]
+    end
+  end
 end

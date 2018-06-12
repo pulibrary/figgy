@@ -23,4 +23,10 @@ RSpec.describe Types::FileSetType do
       expect(type.label).to eq "I'm a label."
     end
   end
+
+  describe "#orderable_members" do
+    it "returns an empty array" do
+      expect(type.orderable_members).to eq []
+    end
+  end
 end
