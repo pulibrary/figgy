@@ -15,6 +15,11 @@ RSpec.describe Types::QueryType do
         type = described_class.new(nil, {})
         expect(type.resource(id: scanned_resource.id.to_s)).to be_a ScannedResource
       end
+      it "can return a FileSet" do
+        file_set = FactoryBot.create_for_repository(:file_set)
+        type = described_class.new(nil, {})
+        expect(type.resource(id: file_set.id.to_s)).to be_a FileSet
+      end
     end
   end
 end
