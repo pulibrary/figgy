@@ -8,6 +8,8 @@ class PDFGenerator
       @quality = quality
     end
 
+    # Download the PDF by opening the stream with OpenURI using the read-only and binary modes
+    # @return [File]
     def download
       open(canvas_url, "rb")
     end

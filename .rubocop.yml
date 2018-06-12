@@ -82,6 +82,7 @@ Metrics/MethodLength:
     - 'app/models/controlled_vocabulary.rb'
     - 'app/change_sets/simple_resource_change_set.rb'
     - 'app/controllers/base_resource_controller.rb'
+    - 'app/services/pdf_generator.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
