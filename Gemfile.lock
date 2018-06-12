@@ -1,23 +1,4 @@
 GIT
-  remote: git://github.com/jrgriffiniii/browse-everything.git
-  revision: cbcb6103721f0f8768b3a950c1199d26fd3a0e65
-  branch: hotfix-gdrive-unauthz
-  specs:
-    browse-everything (0.15.1)
-      addressable (~> 2.5)
-      aws-sdk-s3
-      bootstrap-sass (~> 3.2)
-      dropbox_api (>= 0.1.10)
-      font-awesome-rails
-      google-api-client (~> 0.21)
-      google_drive (~> 2.1)
-      httparty (~> 0.15)
-      rails (>= 4.2)
-      ruby-box
-      sass-rails
-      signet (~> 0.8)
-
-GIT
   remote: git://github.com/pulibrary/geo_works-derivatives.git
   revision: 2b683bb587bf13c58c5e1ff4060910e5d915a71e
   tag: v0.3.1
@@ -51,6 +32,24 @@ GIT
   specs:
     iiif_manifest (0.3.0)
       activesupport (>= 4)
+
+GIT
+  remote: git://github.com/samvera/browse-everything.git
+  revision: 83b5ad09b3f60022b324af5e12b694d9c28582b4
+  specs:
+    browse-everything (0.15.1)
+      addressable (~> 2.5)
+      aws-sdk-s3
+      bootstrap-sass (~> 3.2)
+      dropbox_api (>= 0.1.10)
+      font-awesome-rails
+      google-api-client (~> 0.21)
+      google_drive (~> 2.1)
+      httparty (~> 0.15)
+      rails (>= 4.2)
+      ruby-box
+      sass-rails
+      signet (~> 0.8)
 
 GIT
   remote: git://github.com/yob/pdf-reader.git
