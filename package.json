@@ -45,7 +45,7 @@
     "ajv": "^6.2.1",
     "axios": "^0.17.1",
     "babel-polyfill": "^6.26.0",
-    "lux-design-system": "file:../lux",
+    "lux-design-system": "^0.0.1",
     "manifesto.js": "^2.2.0",
     "npm": "^6.0.0",
     "openseadragon": "^2.3.1",
