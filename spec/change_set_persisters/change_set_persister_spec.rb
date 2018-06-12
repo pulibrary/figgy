@@ -12,7 +12,7 @@ RSpec.describe ChangeSetPersister do
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:persister) { adapter.persister }
   let(:query_service) { adapter.query_service }
-  let(:storage_adapter) { Valkyrie.config.storage_adapter }
+  let(:storage_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
   let(:change_set_class) { ScannedResourceChangeSet }
   let(:shoulder) { "99999/fk4" }
   let(:blade) { "123456" }
@@ -358,7 +358,7 @@ RSpec.describe ChangeSetPersister do
     context "with an audiovisual media file" do
       with_queue_adapter :inline
       let(:change_set_class) { MediaResourceChangeSet }
-      let(:file) { fixture_file_upload("files/sample.ogg", "audio/ogg") }
+      let(:file) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "audio/wav") }
       let(:change_set_persister) do
         described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: true)
       end
@@ -383,6 +383,10 @@ RSpec.describe ChangeSetPersister do
         resource = FactoryBot.build(:media_resource)
         change_set = change_set_class.new(resource, characterize: true)
         change_set.files = [file]
+
+        attributes = { id: SecureRandom.uuid, use: [Valkyrie::Vocab::PCDMUse.OriginalFile, Valkyrie::Vocab::PCDMUse.PreservationMasterFile] }
+        file_metadata_node = FileMetadata.for(file: file).new(attributes)
+        allow(FileMetadata).to receive(:for).and_return(file_metadata_node)
 
         output = change_set_persister.save(change_set: change_set)
         members = query_service.find_members(resource: output)

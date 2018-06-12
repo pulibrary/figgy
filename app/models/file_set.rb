@@ -24,12 +24,10 @@ class FileSet < Resource
            :geometry,
            :run_fixity,
            :processing_note,
-           :date_of_digitization,
-           :producer,
-           :source_media_type,
-           :duration,
            to: :original_file,
            allow_nil: true
+
+  delegate :date_of_digitization, :producer, :source_media_type, :duration, to: :preservation_file, allow_nil: true
 
   delegate :md5, :sha1, :sha256, to: :original_file_checksum, allow_nil: true
 

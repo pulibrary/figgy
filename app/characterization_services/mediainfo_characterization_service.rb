@@ -2,6 +2,12 @@
 
 # Implements a service for characterizing audiovisual media resources
 class MediainfoCharacterizationService
+  # Retrieve the supported media types specified in the config.
+  # @return [Array<String>]
+  def self.supported_formats
+    Figgy.config[:characterization][:mediainfo][:supported_mime_types]
+  end
+
   attr_reader :file_set, :persister
 
   # Constructor
@@ -24,7 +30,7 @@ class MediainfoCharacterizationService
       source_media_type: media.originalsourceform,
       duration: media.duration.to_s # Floats are not supported as Valkyrie::Types
     }
-    new_file = original_file.new(@file_characterization_attributes.to_h)
+    new_file = preservation_file.new(@file_characterization_attributes.to_h)
     @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
     @persister.save(resource: @file_set) if save
     @file_set
@@ -33,7 +39,7 @@ class MediainfoCharacterizationService
   # Determines if the parent of the FileSet is a MediaResource
   # @return [TrueClass, FalseClass]
   def valid?
-    parent.respond_to?(:media_resource?) && parent.media_resource?
+    parent.respond_to?(:media_resource?) && parent.media_resource? && supported_format?
   end
 
   private
@@ -53,12 +59,12 @@ class MediainfoCharacterizationService
       # Returns only a track of the type "null"
       # @return [Array<String>]
       def track_types
-        ["null"]
+        ["null_track"]
       end
 
       # Implements the accessor for the sole "null" track
       # @return [NullTracks::Attributes]
-      def null
+      def null_track
         Attributes.new
       end
 
@@ -81,6 +87,12 @@ class MediainfoCharacterizationService
         # @return [nil]
         def duration; end
       end
+    end
+
+    # Determine if the media type for the FileSet is supported
+    # @return [TrueClass, FalseClass]
+    def supported_format?
+      !(@file_set.mime_type & self.class.supported_formats).empty?
     end
 
     # Retrieve the parent resource of the FileSet
@@ -123,12 +135,12 @@ class MediainfoCharacterizationService
     # Provides the file attached to the file_set
     # @return Valkyrie::StorageAdapter::File
     def file_object
-      @file_object ||= Valkyrie::StorageAdapter.find_by(id: original_file.file_identifiers[0])
+      @file_object ||= Valkyrie::StorageAdapter.find_by(id: preservation_file.file_identifiers[0])
     end
 
     # Retrieves the master binary file in this FileSet
     # @return [FileNode]
-    def original_file
-      @file_set.original_file
+    def preservation_file
+      @file_set.preservation_file
     end
 end

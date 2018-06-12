@@ -12,6 +12,10 @@ RSpec.describe MediainfoCharacterizationService do
   let(:query_service) { adapter.query_service }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
   let(:resource) do
+    attributes = { id: SecureRandom.uuid, use: [Valkyrie::Vocab::PCDMUse.OriginalFile, Valkyrie::Vocab::PCDMUse.PreservationMasterFile] }
+    file_metadata_node = FileMetadata.for(file: file).new(attributes)
+    allow(FileMetadata).to receive(:for).and_return(file_metadata_node)
+
     change_set_persister.save(change_set: MediaResourceChangeSet.new(MediaResource.new, files: [file]))
   end
   let(:members) { query_service.find_members(resource: resource) }
@@ -37,8 +41,7 @@ RSpec.describe MediainfoCharacterizationService do
   end
 
   it "extracts empty and valid technical metadata attributes using the general track" do
-    file_set = valid_file_set
-    new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+    new_file_set = described_class.new(file_set: valid_file_set, persister: persister).characterize(save: false)
 
     expect(new_file_set.original_file.mime_type).to eq ["audio/ogg"]
     expect(new_file_set.original_file.date_of_digitization).to be_empty
@@ -54,8 +57,7 @@ RSpec.describe MediainfoCharacterizationService do
     end
 
     it "sets technical metadata attributes empty" do
-      file_set = valid_file_set
-      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      new_file_set = described_class.new(file_set: valid_file_set, persister: persister).characterize(save: false)
 
       expect(Valkyrie.logger).to have_received(:warn).at_least(:once).with(/MediainfoCharacterizationService\: Failed to characterize/)
       expect(new_file_set.original_file.mime_type).to eq ["audio/ogg"]
@@ -67,7 +69,7 @@ RSpec.describe MediainfoCharacterizationService do
   end
 
   context "with an audio file" do
-    let(:file) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_i.wav", "audio/mpeg") }
+    let(:file) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "audio/wav") }
     let(:audio_track_attributes) { double }
     before do
       allow(audio_track_attributes).to receive(:encoded_date).and_return Time.zone.parse("UTC 2009-03-30 19:49:13")
@@ -84,10 +86,9 @@ RSpec.describe MediainfoCharacterizationService do
     end
 
     it "extracts the technical metadata from the audio track" do
-      file_set = valid_file_set
-      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      new_file_set = described_class.new(file_set: valid_file_set, persister: persister).characterize(save: false)
 
-      expect(new_file_set.original_file.mime_type).to eq ["audio/mpeg"]
+      expect(new_file_set.original_file.mime_type).to eq ["audio/wav"]
       expect(new_file_set.original_file.date_of_digitization).to eq [Time.zone.parse("UTC 2009-03-30 19:49:13")]
       expect(new_file_set.original_file.producer).to eq ["Test Producer"]
       expect(new_file_set.original_file.source_media_type).to eq ["cassette"]
@@ -120,8 +121,7 @@ RSpec.describe MediainfoCharacterizationService do
     end
 
     it "extracts the technical metadata from the video track" do
-      file_set = valid_file_set
-      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      new_file_set = described_class.new(file_set: valid_file_set, persister: persister).characterize(save: false)
 
       expect(new_file_set.original_file.mime_type).to eq ["video/mp4"]
       expect(new_file_set.original_file.date_of_digitization).to eq [Time.zone.parse("UTC 2010-02-12 13:45:09")]
@@ -138,14 +138,22 @@ RSpec.describe MediainfoCharacterizationService do
       allow(valid_file_set).to receive(:decorate).and_return(decorator)
     end
 
-    it "is valid" do
-      expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true
+    it "is invalid without a media resource parent and supported media type" do
+      expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be false
     end
 
-    context "without a media resource parent" do
-      let(:parent) { ScannedResource.new }
-      it "is invalid" do
+    context "with a media resource parent" do
+      let(:parent) { MediaResource.new }
+      it "is invalid without a supported media type" do
         expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be false
+      end
+    end
+
+    context "with a supported media type" do
+      let(:file) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "audio/wav") }
+
+      it "is valid" do
+        expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true
       end
     end
   end
