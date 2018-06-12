@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe GraphqlController do
   describe "#execute" do
-    let(:query_string) { %|{ scannedResource(id: "#{id}") { viewingHint } }| }
+    let(:query_string) { %|{ resource(id: "#{id}") { viewingHint } }| }
     let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, viewing_hint: "individuals") }
     let(:id) { scanned_resource.id }
     it "can run a graphql query" do
@@ -12,7 +12,7 @@ RSpec.describe GraphqlController do
       expect(response).to be_success
       json_response = JSON.parse(response.body)
       expect(json_response["data"]).to eq(
-        "scannedResource" => { "viewingHint" => "individuals" }
+        "resource" => { "viewingHint" => "individuals" }
       )
     end
     it "can support variables set as a JSON string" do

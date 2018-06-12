@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe Mutations::UpdateScannedResource do
+RSpec.describe Mutations::UpdateResource do
   describe "schema" do
     subject { described_class }
-    it { is_expected.to have_field(:scannedResource) }
+    it { is_expected.to have_field(:resource) }
     it { is_expected.to have_field(:errors) }
     it { is_expected.to accept_arguments(id: "ID!", viewingHint: "String") }
   end
@@ -25,7 +25,7 @@ RSpec.describe Mutations::UpdateScannedResource do
         mutation = described_class.new(object: nil, context: {})
 
         output = mutation.resolve(id: resource.id, viewing_hint: "individuals")
-        expect(output[:scanned_resource].viewing_hint).to eq ["individuals"]
+        expect(output[:resource].viewing_hint).to eq ["individuals"]
       end
     end
   end

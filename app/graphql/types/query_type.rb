@@ -2,14 +2,12 @@
 class Types::QueryType < Types::BaseObject
   description "The query root of this schema"
 
-  # First describe the field signature:
-  field :scanned_resource, Types::ScannedResourceType, null: true do
-    description "Find a Scanned Resource by ID"
+  field :resource, Types::Resource, null: true do
+    description "Find a resource by ID"
     argument :id, ID, required: true
   end
 
-  # Then provide an implementation:
-  def scanned_resource(id:)
+  def resource(id:)
     query_service.find_by(id: id)
   end
 
