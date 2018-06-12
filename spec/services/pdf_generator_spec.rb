@@ -25,6 +25,17 @@ RSpec.describe PDFGenerator do
   let(:persister) { Valkyrie.config.metadata_adapter.persister }
   let(:storage_adapter) { Valkyrie::StorageAdapter.find(:derivatives) }
   describe "#render" do
+    context "when an error is encountered while downloading" do
+      before do
+        stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/gray.jpg").to_return(status: 500)
+        allow(Valkyrie.logger).to receive(:error)
+      end
+      it "raises a PDFGeneratorError and logs an error for each attempted download" do
+        expect { generator.render }.to raise_error(PDFGenerator::Error)
+        expect(Valkyrie.logger).to have_received(:error).exactly(5).times.with(/PDFGenerator\: Failed to download a PDF using the following URI as a base/)
+      end
+    end
+
     context "when set to gray" do
       before do
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/287,/0/gray.jpg")

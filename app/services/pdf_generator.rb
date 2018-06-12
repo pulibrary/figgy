@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class PDFGenerator
+  class Error < StandardError; end
+
   attr_reader :resource, :storage_adapter
   def initialize(resource:, storage_adapter:)
     @resource = resource
@@ -12,8 +14,18 @@ class PDFGenerator
       prawn_document.start_new_page layout: downloader.layout
       page_size = [Canvas::LETTER_WIDTH, Canvas::LETTER_HEIGHT]
       page_size.reverse! unless downloader.portrait?
-      prawn_document.image downloader.download, width: page_size.first, height: page_size.last, fit: page_size
+      # Handle errors where the download fails for a CanvasDownloader
+      download_attempts = 0
+      begin
+        prawn_document.image downloader.download, width: page_size.first, height: page_size.last, fit: page_size
+      rescue OpenURI::HTTPError => uri_error
+        Valkyrie.logger.error "#{self.class}: Failed to download a PDF using the following URI as a base: #{downloader.canvas.url}: #{uri_error}"
+        download_attempts += 1
+        retry unless download_attempts > 4
+        raise Error
+      end
     end
+
     prawn_document.render_file(tmp_file.path)
     build_node
   end
