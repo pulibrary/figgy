@@ -36,7 +36,44 @@ class ArchivalMediaBagParser
     pbcore_parsers.find { |pbcore| pbcore.barcode == barcode }
   end
 
+  def image_file(barcode:)
+    image_files.find { |image| image.barcode == barcode }
+  end
+
   private
+
+    # Class modeling asset images
+    class ImageFile
+      attr_reader :path, :original_filename, :barcode
+
+      # Provide the MIME type used for all image files
+      # @return [String]
+      def self.mime_type
+        "image/jpeg"
+      end
+
+      # Constructor
+      # @param path [Pathname] path to the image file
+      def initialize(path:)
+        @path = path
+      end
+
+      # Retrieve the original filename
+      def original_filename
+        @original_filename ||= path.basename.to_s
+      end
+
+      # Retrieve the barcode
+      def barcode
+        @barcode ||= path.basename.to_s.split("_").first
+      end
+
+      # Generate the MIME type
+      # @return [String]
+      def mime_type
+        self.class.mime_type
+      end
+    end
 
     # pbcore parsers by barcode
     # @return [Array] of PbcoreParser objects
@@ -50,6 +87,15 @@ class ArchivalMediaBagParser
     # create an AudioPath object for each audio file
     def audio_files
       @audio_files ||= path.join("data").each_child.select { |file| [".wav", ".mp3"].include? file.extname }.map { |file| IngestableAudioFile.new(path: file) }
+    end
+
+    # Retrieve the JPEGs for the assets
+    # @return [Array<Image>]
+    def image_files
+      @image_files ||=
+        begin
+          path.join("data").each_child.select { |file| [".jpg"].include? file.extname }.map { |file| ImageFile.new(path: file) }
+        end
     end
 
     # Validates that this is in compliance with the BagIt specification
