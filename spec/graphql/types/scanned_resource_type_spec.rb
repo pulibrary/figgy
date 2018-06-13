@@ -25,6 +25,12 @@ RSpec.describe Types::ScannedResourceType do
     end
   end
 
+  describe "#url" do
+    it "links to the catalog URL" do
+      expect(type.url).to eq "http://www.example.com/catalog/#{scanned_resource.id}"
+    end
+  end
+
   describe "#members" do
     it "returns all members" do
       child_resource = FactoryBot.create_for_repository(:scanned_resource)

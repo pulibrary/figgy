@@ -4,6 +4,8 @@ require "rails_helper"
 RSpec.describe Types::Resource do
   describe "fields" do
     subject { described_class }
+    it { is_expected.to have_field(:id).of_type(String) }
+    it { is_expected.to have_field(:url).of_type(String) }
     it { is_expected.to have_field(:label).of_type(String) }
     it { is_expected.to have_field(:viewingHint).of_type(String) }
     it { is_expected.to have_field(:members) }
