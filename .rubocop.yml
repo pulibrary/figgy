@@ -143,6 +143,9 @@ Lint/Void:
   Enabled: true
   Exclude:
     - 'app/derivative-services/jp2_derivative_service.rb'
+Style/MethodMissing:
+  Exclude:
+    - 'app/decorators/media_info_tracks_decorator.rb'
 Style/PredicateName:
   Exclude:
     - 'app/controllers/catalog_controller.rb'

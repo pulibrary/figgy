@@ -23,8 +23,16 @@ class DefaultCharacterizationService
     ImagemagickCharacterizationService.new(file_set: file_set, persister: persister).characterize
   end
 
+  def geo_resource?
+    parent.respond_to?(:geo_resource?) && parent.geo_resource?
+  end
+
+  def media_resource?
+    parent.respond_to?(:media_resource?) && parent.media_resource?
+  end
+
   def valid?
-    !parent.respond_to?(:geo_resource?) || !parent.geo_resource?
+    !geo_resource? && !media_resource?
   end
 
   def parent

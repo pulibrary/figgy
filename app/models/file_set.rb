@@ -13,7 +13,22 @@ class FileSet < Resource
   attribute :part, Valkyrie::Types::Set
   attribute :transfer_notes
 
-  delegate :width, :height, :x_resolution, :y_resolution, :bits_per_sample, :size, :camera_model, :software, :geometry, :run_fixity, :processing_note, to: :original_file, allow_nil: true
+  delegate :width,
+           :height,
+           :x_resolution,
+           :y_resolution,
+           :bits_per_sample,
+           :size,
+           :camera_model,
+           :software,
+           :geometry,
+           :run_fixity,
+           :processing_note,
+           to: :original_file,
+           allow_nil: true
+
+  delegate :date_of_digitization, :producer, :source_media_type, :duration, to: :preservation_file, allow_nil: true
+
   delegate :md5, :sha1, :sha256, to: :original_file_checksum, allow_nil: true
 
   def thumbnail_id

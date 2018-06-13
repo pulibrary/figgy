@@ -18,7 +18,7 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get update
-      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev
+      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev mediainfo
       - run: sudo sh bin/ci_simple_tiles_install.sh
       # Restore Cached Dependencies
       - type: cache-restore
@@ -60,6 +60,7 @@ jobs:
           FIGGY_DB_HOST: localhost
           FIGGY_DB_USERNAME: figgy
           FIGGY_DB_PASSWORD:  ""
+          MEDIAINFO_PATH: /usr/bin/mediainfo
       - image: postgres:10.3
         environment:
           POSTGRES_USER: figgy
@@ -69,7 +70,7 @@ jobs:
       - attach_workspace:
           at: '~/figgy'
       - run: sudo apt-get update
-      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev tesseract-ocr tesseract-ocr-ita tesseract-ocr-eng
+      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev tesseract-ocr tesseract-ocr-ita tesseract-ocr-eng mediainfo
       - run: sudo sh bin/ci_simple_tiles_install.sh
       # Wait for DB
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
@@ -112,7 +113,7 @@ jobs:
       - attach_workspace:
           at: '~/figgy'
       - run: sudo apt-get update
-      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev
+      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev mediainfo
       - run: sudo sh bin/ci_simple_tiles_install.sh
       # Remove cached simpler-tiles - needs to be reinstalled every time.
       - run: rm vendor/bundle/ruby/2.3.0/specifications/simpler-tiles-0.3.1.gemspec || true

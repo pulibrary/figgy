@@ -19,6 +19,11 @@ class FileMetadata < Valkyrie::Resource
   attribute :geometry, Valkyrie::Types::Set
   attribute :processing_note, Valkyrie::Types::Set
 
+  attribute :date_of_digitization, Valkyrie::Types::Set # Encoded_date
+  attribute :producer, Valkyrie::Types::Set # Producer
+  attribute :source_media_type, Valkyrie::Types::Set # OriginalSourceForm
+  attribute :duration, Valkyrie::Types::Set # Duration
+
   # fixity attributes
   attribute :fixity_actual_checksum, Valkyrie::Types::Set
   attribute :fixity_success, Valkyrie::Types::Int

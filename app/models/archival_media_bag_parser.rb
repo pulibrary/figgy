@@ -47,7 +47,8 @@ class ArchivalMediaBagParser
         end
     end
 
-    # create an AudioPath object for each audio file
+    # Constructs IngestableAudioFile objects for each wav/mp3 file in the Bag
+    # @return [Array<IngestableAudioFile>]
     def audio_files
       @audio_files ||= path.join("data").each_child.select { |file| [".wav", ".mp3"].include? file.extname }.map { |file| IngestableAudioFile.new(path: file) }
     end

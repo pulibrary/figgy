@@ -107,25 +107,25 @@ class IngestArchivalMediaBagJob < ApplicationJob
         # @return [FileSet] the persisted FileSet containing the binary and file metadata
         def create_av_file_set(barcode_with_side)
           file_set = FileSet.new(title: barcode_with_side)
-          bag.file_groups[barcode_with_side].each do |file| # this is an IngestableAudioFile object
-            node = create_node(file)
-            file_set.barcode = file.barcode
-            file_set.part = file.part
-            file_set.transfer_notes = bag.pbcore_parser_for_barcode(file.barcode).transfer_notes
-            file_set.file_metadata += [node]
+          bag.file_groups[barcode_with_side].each do |ingestable_audio_file| # this is an IngestableAudioFile object
+            file_metadata_node = create_node(ingestable_audio_file)
+            file_set.barcode = ingestable_audio_file.barcode
+            file_set.part = ingestable_audio_file.part
+            file_set.transfer_notes = bag.pbcore_parser_for_barcode(ingestable_audio_file.barcode).transfer_notes
+            file_set.file_metadata += [file_metadata_node]
           end
           file_set = changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
         end
 
         # Creates file metadata and uploads a binary file
-        # @param file [File] the file being uploaded
+        # @param file [IngestableAudioFile] the audio file being uploaded
         # @return [FileMetadata]
-        def create_node(file)
+        def create_node(ingestable_audio_file)
           attributes = { id: SecureRandom.uuid }
-          node = FileMetadata.for(file: file).new(attributes)
-          file = storage_adapter.upload(file: file, resource: node, original_filename: file.original_filename)
-          node.file_identifiers = node.file_identifiers + [file.id]
-          node
+          file_metadata_node = FileMetadata.for(file: ingestable_audio_file).new(attributes)
+          file = storage_adapter.upload(file: ingestable_audio_file, resource: file_metadata_node, original_filename: ingestable_audio_file.original_filename)
+          file_metadata_node.file_identifiers = file_metadata_node.file_identifiers + [file.id]
+          file_metadata_node
         end
 
         # Creates or finds an existing MediaResource Object using an EAD Component ID
