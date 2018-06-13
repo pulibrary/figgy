@@ -6,7 +6,7 @@ RSpec.describe Mutations::UpdateResource do
     subject { described_class }
     it { is_expected.to have_field(:resource) }
     it { is_expected.to have_field(:errors) }
-    it { is_expected.to accept_arguments(id: "ID!", viewingHint: "String") }
+    it { is_expected.to accept_arguments(id: "ID!", viewingHint: "String", label: "String") }
   end
 
   context "when given permission" do
@@ -21,11 +21,12 @@ RSpec.describe Mutations::UpdateResource do
     end
     context "when given good data" do
       it "updates the record" do
-        resource = FactoryBot.create_for_repository(:scanned_resource, viewing_hint: "paged")
+        resource = FactoryBot.create_for_repository(:scanned_resource, viewing_hint: "paged", title: "label")
         mutation = create_mutation
 
-        output = mutation.resolve(id: resource.id, viewing_hint: "individuals")
+        output = mutation.resolve(id: resource.id, viewing_hint: "individuals", label: "label2")
         expect(output[:resource].viewing_hint).to eq ["individuals"]
+        expect(output[:resource].title).to eq ["label2"]
       end
     end
   end

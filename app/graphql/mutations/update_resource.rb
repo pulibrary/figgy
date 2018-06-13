@@ -5,12 +5,14 @@ class Mutations::UpdateResource < Mutations::BaseMutation
 
   argument :id, ID, required: true
   argument :viewing_hint, String, required: false
+  argument :label, String, required: false
 
   field :resource, Types::Resource, null: false
   field :errors, [String], null: true
 
-  def resolve(id:, **attributes)
+  def resolve(id:, **type_attributes)
     resource = query_service.find_by(id: id)
+    attributes = self.attributes(type_attributes)
     if ability.can?(:update, resource)
       update_resource(resource, attributes)
     else
@@ -19,6 +21,11 @@ class Mutations::UpdateResource < Mutations::BaseMutation
         errors: ["You do not have permissions on this resource."]
       }
     end
+  end
+
+  def attributes(type_attributes)
+    type_attributes[:title] = type_attributes[:label] if type_attributes[:label].present?
+    type_attributes
   end
 
   def update_resource(resource, attributes)
