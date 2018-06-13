@@ -16,6 +16,8 @@ class VectorResource < Resource
     "#{human_readable_type}: #{title.to_sentence}"
   end
 
+  # Determines if this is a geospatial resource
+  # @return [TrueClass, FalseClass]
   def geo_resource?
     true
   end

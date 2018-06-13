@@ -17,6 +17,18 @@ class Resource < Valkyrie::Resource
     ::ActiveModel::Name.new(self)
   end
 
+  # Determines if this is an image resource
+  # @return [TrueClass, FalseClass]
+  def image_resource?
+    false
+  end
+
+  # Determines if this is a geospatial resource
+  # @return [TrueClass, FalseClass]
+  def geo_resource?
+    false
+  end
+
   # Determines if this is a media resource
   # @return [TrueClass, FalseClass]
   def media_resource?

@@ -27,6 +27,8 @@ class ScannedMap < Resource
     Array.wrap(imported_metadata).first || ImportedMetadata.new
   end
 
+  # Determines if this is a geospatial resource
+  # @return [TrueClass, FalseClass]
   def geo_resource?
     true
   end
