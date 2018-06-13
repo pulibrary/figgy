@@ -24,9 +24,9 @@ RSpec.describe Types::FileSetType do
     end
   end
 
-  describe "#orderable_members" do
+  describe "#members" do
     it "returns an empty array" do
-      expect(type.orderable_members).to eq []
+      expect(type.members).to eq []
     end
   end
 end

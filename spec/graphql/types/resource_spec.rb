@@ -6,7 +6,7 @@ RSpec.describe Types::Resource do
     subject { described_class }
     it { is_expected.to have_field(:label).of_type(String) }
     it { is_expected.to have_field(:viewingHint).of_type(String) }
-    it { is_expected.to have_field(:orderableMembers) }
+    it { is_expected.to have_field(:members) }
   end
   describe ".resolve_type" do
     it "returns a ScannedResourceType for a ScannedResource" do

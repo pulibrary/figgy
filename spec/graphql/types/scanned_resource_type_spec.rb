@@ -10,6 +10,7 @@ RSpec.describe Types::ScannedResourceType do
     # Note! These field names use a javascript-y camel-case variable style
     it { is_expected.to have_field(:viewingHint).of_type(String) }
     it { is_expected.to have_field(:label).of_type(String) }
+    it { is_expected.to have_field(:members) }
   end
 
   describe "#viewing_hint" do
@@ -24,8 +25,8 @@ RSpec.describe Types::ScannedResourceType do
     end
   end
 
-  describe "#orderable_members" do
-    it "returns all members which are image file sets or scanned resources" do
+  describe "#members" do
+    it "returns all members" do
       child_resource = FactoryBot.create_for_repository(:scanned_resource)
       metadata_file_set = FactoryBot.create_for_repository(:geo_metadata_file_set)
       image_file_set = FactoryBot.create_for_repository(:geo_image_file_set)
@@ -33,7 +34,7 @@ RSpec.describe Types::ScannedResourceType do
 
       type = described_class.new(scanned_resource, {})
 
-      expect(type.orderable_members.map(&:id)).to eq [image_file_set.id, child_resource.id]
+      expect(type.members.map(&:id)).to eq [metadata_file_set.id, image_file_set.id, child_resource.id]
     end
   end
 end
