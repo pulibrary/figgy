@@ -23,6 +23,11 @@ RSpec.describe ArchivalMediaBagParser do
     it { expect(amb_parser.pbcore_parser_for_barcode(barcode)).to be_a PbcoreParser }
   end
 
+  describe "#image_file" do
+    subject(:image_file) { amb_parser.image_file(barcode: barcode) }
+    it { expect(image_file).to be_a ArchivalMediaBagParser::ImageFile }
+  end
+
   describe "PbcoreParser" do
     describe "#barcode" do
       it { expect(amb_parser.pbcore_parser_for_barcode(barcode).barcode).to eq barcode }

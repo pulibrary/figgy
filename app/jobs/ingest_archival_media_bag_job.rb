@@ -67,12 +67,36 @@ class IngestArchivalMediaBagJob < ApplicationJob
           media_resource_change_set = find_or_create_media_resource(cid)
           add_av(media_resource_change_set, sides)
           add_pbcore(media_resource_change_set, sides)
+          add_images(media_resource_change_set, sides)
           media_resource_change_set.member_of_collection_ids += [collection.id]
           changeset_persister.save(change_set: media_resource_change_set)
         end
       end
 
       private
+
+        # Constructs and persists the FileSet for the associated image
+        # @param barcode [String] the component ID for an asset in the Bag
+        # @return [FileSet] the newly persisted FileSet
+        def create_image_file_set(barcode)
+          file_set = FileSet.new(title: barcode)
+          image = bag.image_file(barcode: barcode)
+          file = IngestableFile.new(file_path: image.path, mime_type: image.mime_type, original_filename: image.original_filename)
+          node = create_node(file)
+          file_set.file_metadata += [node]
+          changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
+        end
+
+        # Adds any images related to the item as member FileSets
+        # @param media_resource_change_set [MediaResourceChangeSet]
+        # @param sides [Array<String>] the component IDs for the logical sides of an asset
+        def add_images(media_resource_change_set, sides)
+          sides.map { |side| side.split("_").first }.uniq.each do |barcode|
+            file_set = create_image_file_set(barcode)
+            media_resource_change_set.member_ids += [file_set.id]
+            media_resource_change_set.sync
+          end
+        end
 
         def add_av(media_resource_change_set, sides)
           sides.each do |side|

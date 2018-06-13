@@ -39,6 +39,11 @@ RSpec.describe IngestArchivalMediaBagJob do
         expect(query_service.find_all_of_model(model: FileSet).map(&:mime_type).to_a).to include ["application/xml; schema=pbcore"]
       end
 
+      it "creates one FileSet for image JPEG file" do
+        expect(query_service.find_all_of_model(model: FileSet).map(&:title).to_a).to include ["32101047382401"]
+        expect(query_service.find_all_of_model(model: FileSet).map(&:mime_type).to_a).to include ["image/jpeg"]
+      end
+
       it "adds all 3 file types to the file set" do
         file_set = query_service.find_all_of_model(model: FileSet).find { |fs| fs.title.include? "32101047382401_1" }
         expect(file_set.file_metadata.count).to eq 3
