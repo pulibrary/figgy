@@ -28,6 +28,7 @@ class Ability
     can [:destroy], curation_concerns do |obj|
       obj.depositor == [current_user.uid]
     end
+    can [:read], :graphql
   end
 
   def anonymous_permissions

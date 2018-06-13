@@ -101,6 +101,7 @@ describe Ability do
       is_expected.to be_able_to(:destroy, flagged_scanned_resource)
       is_expected.to be_able_to(:manifest, open_scanned_resource)
       is_expected.to be_able_to(:manifest, pending_scanned_resource)
+      is_expected.to be_able_to(:read, :graphql)
     }
   end
 
@@ -137,6 +138,7 @@ describe Ability do
       is_expected.to be_able_to(:manifest, open_scanned_resource)
       is_expected.to be_able_to(:read, pending_scanned_resource)
       is_expected.to be_able_to(:manifest, pending_scanned_resource)
+      is_expected.to be_able_to(:read, :graphql)
     }
   end
 
@@ -175,6 +177,7 @@ describe Ability do
       is_expected.not_to be_able_to(:destroy, role)
       is_expected.not_to be_able_to(:complete, pending_scanned_resource)
       is_expected.not_to be_able_to(:destroy, admin_file)
+      is_expected.not_to be_able_to(:read, :graphql)
     }
   end
 
@@ -239,6 +242,7 @@ describe Ability do
       is_expected.not_to be_able_to(:destroy, role)
       is_expected.not_to be_able_to(:complete, pending_scanned_resource)
       is_expected.not_to be_able_to(:destroy, admin_file)
+      is_expected.not_to be_able_to(:read, :graphql)
     }
 
     context "with an open vector resource" do

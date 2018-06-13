@@ -2,6 +2,7 @@
 class GraphqlController < ApplicationController
   protect_from_forgery with: :null_session
   def execute
+    authorize! :read, :graphql
     variables = ensure_hash(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]

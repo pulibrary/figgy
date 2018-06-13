@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
   end
 
-  post "/graphql", to: "graphql#execute"
+  post "/graphql", to: "graphql#execute", defaults: { format: :json }
   get "dashboard/fixity", to: "fixity_dashboard#show", as: "fixity_dashboard"
 
   resources :auth_tokens
