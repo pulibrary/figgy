@@ -4,7 +4,7 @@ require "rails_helper"
 RSpec.describe FiggySchema do
   # You can override `context` or `variables` in
   # more specific scopes
-  let(:context) { {} }
+  let(:context) { { ability: instance_double(Ability, can?: true) } }
   let(:variables) { {} }
   # Call `result` to execute the query
   let(:result) do

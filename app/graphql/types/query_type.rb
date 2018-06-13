@@ -8,7 +8,13 @@ class Types::QueryType < Types::BaseObject
   end
 
   def resource(id:)
-    query_service.find_by(id: id)
+    resource = query_service.find_by(id: id)
+    return unless ability.can? :read, resource
+    resource
+  end
+
+  def ability
+    context[:ability]
   end
 
   def metadata_adapter
