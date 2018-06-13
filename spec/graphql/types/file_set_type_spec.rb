@@ -24,6 +24,12 @@ RSpec.describe Types::FileSetType do
     end
   end
 
+  describe "#url" do
+    it "links to the catalog URL" do
+      expect(type.url).to eq "http://www.example.com/catalog/#{resource.id}"
+    end
+  end
+
   describe "#members" do
     it "returns an empty array" do
       expect(type.members).to eq []
