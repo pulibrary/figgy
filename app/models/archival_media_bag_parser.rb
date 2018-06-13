@@ -1,15 +1,12 @@
 # frozen_string_literal: true
 # get all the data files, provide lookups based on component and barcode
 class ArchivalMediaBagParser
-  class InvalidBagError < StandardError; end
-
   BARCODE_WITH_PART_REGEX = /(\d{14}_\d+)_.*/
   attr_reader :path, :audio_files, :file_groups, :component_groups, :component_dict, :pbcore_parsers
 
   def initialize(path:, component_id:)
     @path = path
     @component_dict = BarcodeComponentDict.new(component_id)
-    raise InvalidBagError, "Bag at #{@path} is an invalid bag" unless valid?
   end
 
   # group all the files in the bag by barcode_with_part
@@ -38,6 +35,14 @@ class ArchivalMediaBagParser
 
   def image_file(barcode:)
     image_files.find { |image| image.barcode == barcode }
+  end
+
+  # Validates that this is in compliance with the BagIt specification
+  # @see https://tools.ietf.org/html/draft-kunze-bagit-14 BagIt File Packaging Format
+  # @return [TrueClass, FalseClass]
+  def valid?
+    bag = BagIt::Bag.new @path
+    bag.valid?
   end
 
   private
@@ -97,14 +102,6 @@ class ArchivalMediaBagParser
         begin
           path.join("data").each_child.select { |file| [".jpg"].include? file.extname }.map { |file| ImageFile.new(path: file) }
         end
-    end
-
-    # Validates that this is in compliance with the BagIt specification
-    # @see https://tools.ietf.org/html/draft-kunze-bagit-14 BagIt File Packaging Format
-    # @return [TrueClass, FalseClass]
-    def valid?
-      bag = BagIt::Bag.new @path
-      bag.valid?
     end
 end
 

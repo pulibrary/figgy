@@ -103,7 +103,7 @@ RSpec.describe IngestArchivalMediaBagJob do
 
       it "raises an error" do
         expect { described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user) }.to raise_error(
-          ArchivalMediaBagParser::InvalidBagError, "Bag at #{bag_path} is an invalid bag"
+          IngestArchivalMediaBagJob::InvalidBagError, "Bag at #{bag_path} is an invalid bag"
         )
       end
     end
