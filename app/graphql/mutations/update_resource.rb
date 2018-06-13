@@ -9,13 +9,24 @@ class Mutations::UpdateResource < Mutations::BaseMutation
   field :resource, Types::Resource, null: false
   field :errors, [String], null: true
 
-  def resolve(id:, viewing_hint:)
+  def resolve(id:, **attributes)
     resource = query_service.find_by(id: id)
-    change_set = DynamicChangeSet.new(resource).prepopulate!
-    if change_set.validate(viewing_hint: viewing_hint)
-      saved_resource = change_set_persister.save(change_set: change_set)
+    if ability.can?(:update, resource)
+      update_resource(resource, attributes)
+    else
       {
-        resource: saved_resource
+        resource: ability.can?(:read, resource) ? resource : nil,
+        errors: ["You do not have permissions on this resource."]
+      }
+    end
+  end
+
+  def update_resource(resource, attributes)
+    change_set = DynamicChangeSet.new(resource).prepopulate!
+    change_set.validate(attributes)
+    if change_set.valid?
+      {
+        resource: change_set_persister.save(change_set: change_set)
       }
     else
       {
@@ -23,6 +34,10 @@ class Mutations::UpdateResource < Mutations::BaseMutation
         errors: change_set.errors.full_messages
       }
     end
+  end
+
+  def ability
+    context[:ability]
   end
 
   def metadata_adapter
