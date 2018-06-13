@@ -21,6 +21,7 @@ Metrics/AbcSize:
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
     - 'app/models/ability.rb'
+    - 'app/services/file_appender.rb'
 Metrics/BlockLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
@@ -61,6 +62,7 @@ Metrics/ClassLength:
     - 'app/decorators/valkyrie/resource_decorator.rb'
     - 'app/controllers/ephemera_folders_controller.rb'
     - 'app/derivative-services/jp2_derivative_service.rb'
+    - 'app/services/file_appender.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/models/concerns/linked_data/linked_resource_factory.rb'
@@ -83,6 +85,7 @@ Metrics/MethodLength:
     - 'app/change_sets/simple_resource_change_set.rb'
     - 'app/controllers/base_resource_controller.rb'
     - 'app/services/pdf_generator.rb'
+    - 'app/services/file_appender.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'

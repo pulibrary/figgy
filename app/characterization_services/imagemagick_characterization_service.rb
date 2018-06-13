@@ -20,6 +20,7 @@ class ImagemagickCharacterizationService
   # @example characterize a file and do not persist the changes
   #   Valkyrie::Derivatives::FileCharacterizationService.for(file_set, persister).characterize(save: false)
   def characterize(save: true)
+    return unless image_valid?
     @file_characterization_attributes = {
       width: image.width.to_s,
       height: image.height.to_s,
@@ -41,6 +42,10 @@ class ImagemagickCharacterizationService
 
   def image
     @image ||= MiniMagick::Image.open(filename)
+  end
+
+  def image_valid?
+    File.size(filename).positive? && image.present?
   end
 
   # Provides the file attached to the file_set

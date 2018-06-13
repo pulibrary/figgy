@@ -269,6 +269,62 @@ RSpec.describe ChangeSetPersister do
       described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: true)
     end
 
+    context "when uploading files from the cloud" do
+      let(:file) do
+        PendingUpload.new(
+          id: SecureRandom.uuid,
+          created_at: Time.current.utc.iso8601,
+          auth_header: "{\"Authorization\":\"Bearer ya29.kQCEAHj1bwFXr2AuGQJmSGRWQXpacmmYZs4kzCiXns3d6H1ZpIDWmdM8\"}",
+          expires: "2018-06-06T22:12:11Z",
+          file_name: "file.pdf",
+          file_size: "1874822",
+          url: "https://retrieve.cloud.example.com/some/dir/file.pdf"
+        )
+      end
+      let(:http_request) { instance_double(HTTParty::Request) }
+      let(:http_response) { instance_double(Net::HTTPResponse) }
+      let(:parsed_block) { instance_double(Proc) }
+      let(:cloud_response) { HTTParty::Response.new(http_request, http_response, parsed_block) }
+      let(:error) do
+        {
+          "error" =>
+          {
+            "errors" => [
+              {
+                "domain" => "usageLimits",
+                "reason" => "dailyLimitExceededUnreg",
+                "message" => "Daily Limit for Unauthenticated Use Exceeded. Continued use requires signup.",
+                "extendedHelp" => "https://code.google.com/apis/console"
+              }
+            ],
+            "code" => 403,
+            "message" => "Daily Limit for Unauthenticated Use Exceeded. Continued use requires signup."
+          }
+        }
+      end
+
+      before do
+        allow(http_request).to receive(:options).and_return({})
+        allow(http_response).to receive(:body).and_return(nil)
+        allow(http_response).to receive(:to_hash).and_return(nil)
+
+        allow(cloud_response).to receive(:code).and_return(403)
+        allow(cloud_response).to receive(:body).and_return(error)
+        allow(HTTParty).to receive(:get).and_return(cloud_response)
+      end
+
+      it "does not append files when the upload fails", run_real_derivatives: true do
+        resource = FactoryBot.build(:scanned_resource)
+        change_set = change_set_class.new(resource, characterize: false, ocr_language: ["eng"])
+        change_set.files = [file]
+
+        output = change_set_persister.save(change_set: change_set)
+        members = query_service.find_members(resource: output)
+
+        expect(members.to_a.length).to eq 0
+      end
+    end
+
     it "can append files as FileSets", run_real_derivatives: true do
       resource = FactoryBot.build(:scanned_resource)
       change_set = change_set_class.new(resource, characterize: false, ocr_language: ["eng"])
@@ -433,6 +489,7 @@ RSpec.describe ChangeSetPersister do
       change_set_persister.save(change_set: change_set)
       updated_file_set = query_service.find_by(id: file_set.id)
       updated_file_node = updated_file_set.file_metadata.find { |x| x.id == file_node.id }
+      expect(updated_file_node.label).to include file2.original_filename
       updated_file = storage_adapter.find_by(id: updated_file_node.file_identifiers.first)
       expect(updated_file.size).to eq 5600
       expect(updated_file_node.updated_at).to be > updated_file_node.created_at
@@ -638,6 +695,33 @@ RSpec.describe ChangeSetPersister do
         }
 
         expect(rabbit_connection).to have_received(:publish).once.with(expected_result.to_json)
+      end
+    end
+
+    context "when an error occurs during the update" do
+      let(:upload_decorator) { double }
+
+      it "does not append files when the update fails", run_real_derivatives: true do
+        # upload a file
+        resource = FactoryBot.build(:scanned_resource)
+        change_set = change_set_class.new(resource, characterize: false)
+        change_set.files = [file1]
+        output = change_set_persister.save(change_set: change_set)
+        file_set = query_service.find_members(resource: output).first
+        file_node = file_set.file_metadata.find { |x| x.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }
+        file = storage_adapter.find_by(id: file_node.file_identifiers.first)
+        expect(file.size).to eq 196_882
+
+        # update the file
+        allow(upload_decorator).to receive(:path).and_return("invalid")
+        allow(upload_decorator).to receive(:original_filename).and_return(file2.original_filename)
+        allow(UploadDecorator).to receive(:new).and_return(upload_decorator)
+
+        change_set = FileSetChangeSet.new(file_set)
+        change_set.files = [{ file_node.id.to_s => file2 }]
+        change_set_persister.save(change_set: change_set)
+        updated_file_set = query_service.find_by(id: file_set.id)
+        expect(updated_file_set.file_metadata.find { |x| x.label == file2.original_filename }).to be nil
       end
     end
   end
