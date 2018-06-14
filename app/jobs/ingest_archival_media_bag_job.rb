@@ -69,7 +69,6 @@ class IngestArchivalMediaBagJob < ApplicationJob
         component_groups.each do |cid, sides|
           media_resource_change_set = find_or_create_media_resource(cid)
           add_av(media_resource_change_set, sides)
-          media_resource_change_set.files = [] if media_resource_change_set.files.nil?
           add_pbcore(media_resource_change_set, sides)
           add_images(media_resource_change_set, sides)
           media_resource_change_set.member_of_collection_ids += [collection.id]
@@ -154,7 +153,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
         def find_or_create_media_resource(component_id)
           results = query_service.custom_queries.find_by_string_property(property: :source_metadata_identifier, value: component_id)
           media_resource = results.size.zero? ? MediaResource.new : results.first
-          MediaResourceChangeSet.new(media_resource, source_metadata_identifier: component_id)
+          MediaResourceChangeSet.new(media_resource, source_metadata_identifier: component_id, files: [])
         end
 
         # Retrieve a Hash of EAD Component IDs/Barcodes for file barcodes specified in a given Bag
