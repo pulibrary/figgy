@@ -6,11 +6,14 @@ require "bagit"
 # Please note that this is typically invoked when any given ArchivalMediaCollection is persisted
 # (see ChangeSetPersister.registered_handlers and ChangeSetPersister::IngestBag)
 class IngestArchivalMediaBagJob < ApplicationJob
+  class InvalidBagError < StandardError; end
+
   BARCODE_WITH_PART_REGEX = /(\d{14}_\d+)_.*/
 
   def perform(collection_component:, bag_path:, user:)
     bag_path = Pathname.new(bag_path.to_s)
     bag = ArchivalMediaBagParser.new(path: bag_path, component_id: collection_component)
+    raise InvalidBagError, "Bag at #{bag_path} is an invalid bag" unless bag.valid?
     changeset_persister.buffer_into_index do |buffered_persister|
       amc = find_or_create_amc(collection_component)
       Ingester.new(collection: amc, bag: bag, user: user, changeset_persister: buffered_persister).ingest

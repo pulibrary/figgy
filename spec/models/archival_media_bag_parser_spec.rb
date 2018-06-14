@@ -46,6 +46,21 @@ RSpec.describe ArchivalMediaBagParser do
     end
   end
 
+  describe "#valid?" do
+    context "with a valid bag" do
+      it "returns true" do
+        expect(amb_parser.valid?).to eq true
+      end
+    end
+
+    context "with a path to an invalid bag" do
+      let(:bag_path) { Rails.root.join("spec", "fixtures", "bags", "invalid_bag") }
+      it "returns false" do
+        expect(amb_parser.valid?).to eq false
+      end
+    end
+  end
+
   context "when the finding aid has other 'altformavailable' materials" do
     before do
       stub_request(:get, "https://findingaids.princeton.edu/collections/C0652.xml")
