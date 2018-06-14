@@ -6,6 +6,7 @@ class Mutations::UpdateResource < Mutations::BaseMutation
   argument :id, ID, required: true
   argument :viewing_hint, String, required: false
   argument :label, String, required: false
+  argument :member_ids, [String], required: false
 
   field :resource, Types::Resource, null: false
   field :errors, [String], null: true
@@ -25,13 +26,13 @@ class Mutations::UpdateResource < Mutations::BaseMutation
 
   def attributes(type_attributes)
     type_attributes[:title] = type_attributes[:label] if type_attributes[:label].present?
-    type_attributes
+    type_attributes.compact
   end
 
   def update_resource(resource, attributes)
     change_set = DynamicChangeSet.new(resource).prepopulate!
     change_set.validate(attributes)
-    if change_set.valid?
+    if change_set.valid? && valid_member_ids?(change_set, attributes)
       {
         resource: change_set_persister.save(change_set: change_set)
       }
@@ -41,6 +42,15 @@ class Mutations::UpdateResource < Mutations::BaseMutation
         errors: change_set.errors.full_messages
       }
     end
+  end
+
+  def valid_member_ids?(change_set, attributes)
+    return true unless attributes[:member_ids].present?
+    change_set_ids = change_set.resource.member_ids.map(&:to_s)
+    member_ids = attributes[:member_ids].map(&:to_s)
+    return true if change_set_ids.sort == member_ids.sort
+    change_set.errors.add(:member_ids, "can only be used to re-order.")
+    false
   end
 
   def ability

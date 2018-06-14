@@ -6,7 +6,7 @@ RSpec.describe Mutations::UpdateResource do
     subject { described_class }
     it { is_expected.to have_field(:resource) }
     it { is_expected.to have_field(:errors) }
-    it { is_expected.to accept_arguments(id: "ID!", viewingHint: "String", label: "String") }
+    it { is_expected.to accept_arguments(id: "ID!", viewingHint: "String", label: "String", memberIds: "[String!]") }
   end
 
   context "when given permission" do
@@ -27,6 +27,37 @@ RSpec.describe Mutations::UpdateResource do
         output = mutation.resolve(id: resource.id, viewing_hint: "individuals", label: "label2")
         expect(output[:resource].viewing_hint).to eq ["individuals"]
         expect(output[:resource].title).to eq ["label2"]
+      end
+    end
+    context "when reordering" do
+      it "errors when missing some IDs" do
+        member1 = FactoryBot.create_for_repository(:file_set)
+        member2 = FactoryBot.create_for_repository(:file_set)
+        resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: [member1.id, member2.id])
+        mutation = create_mutation
+
+        output = mutation.resolve(id: resource.id, member_ids: [member1.id.to_s])
+        expect(output[:errors]).to eq ["Member ids can only be used to re-order."]
+      end
+      it "errors when there are additional IDs" do
+        member1 = FactoryBot.create_for_repository(:file_set)
+        member2 = FactoryBot.create_for_repository(:file_set)
+        member3 = FactoryBot.create_for_repository(:file_set)
+        resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: [member1.id, member2.id])
+        mutation = create_mutation
+
+        output = mutation.resolve(id: resource.id, member_ids: [member1.id.to_s, member2.id.to_s, member3.id.to_s])
+        expect(output[:errors]).to eq ["Member ids can only be used to re-order."]
+      end
+      it "works for re-ordering" do
+        member1 = FactoryBot.create_for_repository(:file_set)
+        member2 = FactoryBot.create_for_repository(:file_set)
+        resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: [member1.id, member2.id])
+        mutation = create_mutation
+
+        output = mutation.resolve(id: resource.id, member_ids: [member2.id.to_s, member1.id.to_s])
+        expect(output[:errors]).to be_nil
+        expect(output[:resource].member_ids).to eq [member2.id, member1.id]
       end
     end
   end
