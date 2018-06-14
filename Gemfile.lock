@@ -20,13 +20,6 @@ GIT
       nokogiri (~> 1.6)
 
 GIT
-  remote: git://github.com/pulibrary/pul_uv_rails.git
-  revision: ce493942cfdbfd398f686c34324312df03cf6bf2
-  branch: master
-  specs:
-    pul_uv_rails (2.0.1)
-
-GIT
   remote: git://github.com/samvera-labs/iiif_manifest.git
   revision: 38d169ed9f12370875199713d755a8711251c317
   specs:
@@ -857,7 +850,6 @@ DEPENDENCIES
   pry-byebug
   pry-rails
   pul_metadata_services!
-  pul_uv_rails!
   puma
   rack-mini-profiler
   rails (= 5.1.6)
