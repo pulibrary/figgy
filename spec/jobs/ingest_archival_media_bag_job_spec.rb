@@ -34,16 +34,6 @@ RSpec.describe IngestArchivalMediaBagJob do
         expect(query_service.find_all_of_model(model: FileSet).map(&:mime_type).to_a).to include ["audio/wav"]
       end
 
-      it "creates one FileSet for the pbcore xml file" do
-        expect(query_service.find_all_of_model(model: FileSet).map(&:title).to_a).to include ["32101047382401"]
-        expect(query_service.find_all_of_model(model: FileSet).map(&:mime_type).to_a).to include ["application/xml; schema=pbcore"]
-      end
-
-      it "creates one FileSet for image JPEG file" do
-        expect(query_service.find_all_of_model(model: FileSet).map(&:title).to_a).to include ["32101047382401"]
-        expect(query_service.find_all_of_model(model: FileSet).map(&:mime_type).to_a).to include ["image/jpeg"]
-      end
-
       it "adds all 3 file types to the file set" do
         file_set = query_service.find_all_of_model(model: FileSet).find { |fs| fs.title.include? "32101047382401_1" }
         expect(file_set.file_metadata.count).to eq 3
@@ -65,6 +55,36 @@ RSpec.describe IngestArchivalMediaBagJob do
 
       it "for each component id-based MediaRsource, puts it on the collection" do
         expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
+      end
+    end
+
+    context "when the collection already exists and the bag contains a PBCore XML file" do
+      let(:tika_output) { tika_xml_pbcore_output }
+
+      before do
+        described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
+      end
+
+      it "creates one FileSet with the filename as the title and the correct MIME type" do
+        expect(query_service.find_all_of_model(model: FileSet).map(&:title).to_a).to include ["32101047382401.xml"]
+        expect(query_service.find_all_of_model(model: FileSet).map(&:mime_type).to_a).to include ["application/xml; schema=pbcore"]
+      end
+    end
+
+    context "when the collection already exists and the bag contains a JPEG image file" do
+      let(:tika_output) { tika_jpeg_output }
+
+      before do
+        ruby_tika = instance_double(RubyTikaApp)
+        allow(ruby_tika).to receive(:to_json).and_return(tika_xml_pbcore_output, tika_jpeg_output)
+        allow(RubyTikaApp).to receive(:new).and_return(ruby_tika)
+
+        described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
+      end
+
+      it "creates one FileSet with the filename as the title and the correct MIME type" do
+        expect(query_service.find_all_of_model(model: FileSet).map(&:title).to_a).to include ["32101047382401_AssetFront.jpg"]
+        expect(query_service.find_all_of_model(model: FileSet).map(&:mime_type).to_a).to include ["image/jpeg"]
       end
     end
 
