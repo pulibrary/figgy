@@ -875,6 +875,24 @@ RSpec.describe ChangeSetPersister do
         expect(members.first.state).to eq ["pending"]
       end
     end
+
+    context "with archival media collection and media resource members" do
+      let(:amc) { FactoryBot.create_for_repository(:archival_media_collection, state: "draft") }
+      it "propagates the workflow state" do
+        FactoryBot.create_for_repository(:media_resource, state: "draft", member_of_collection_ids: amc.id)
+
+        members = Wayfinder.for(amc).members
+        expect(members.first.state).to eq ["draft"]
+
+        change_set = DynamicChangeSet.new(amc)
+        change_set.validate(state: "published")
+        output = change_set_persister.save(change_set: change_set)
+
+        members = Wayfinder.for(output).members
+        expect(members.first.state).to eq ["published"]
+      end
+    end
+
     context "with boxes and folders" do
       let(:change_set_class) { EphemeraBoxChangeSet }
       it "doesn't overwrite the folder workflow state" do
