@@ -391,6 +391,10 @@ class ManifestBuilder
       manifest_url(resource).gsub("manifest", "pdf")
     end
 
+    def show_url(resource)
+      "#{protocol}://#{host}/catalog/#{resource.id}"
+    end
+
     def host
       default_url_options[:host]
     end
