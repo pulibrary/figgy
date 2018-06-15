@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class Mutations::UpdateResource < Mutations::BaseMutation
-  delegate :query_service, :persister, to: :metadata_adapter
   null true
 
   argument :id, ID, required: true
@@ -57,14 +56,10 @@ class Mutations::UpdateResource < Mutations::BaseMutation
     context[:ability]
   end
 
-  def metadata_adapter
-    Valkyrie::MetadataAdapter.find(:indexing_persister)
+  def change_set_persister
+    context[:change_set_persister]
   end
 
-  def change_set_persister
-    @change_set_persister ||= ChangeSetPersister.new(
-      storage_adapter: Valkyrie::StorageAdapter.find(:disk),
-      metadata_adapter: metadata_adapter
-    )
-  end
+  delegate :metadata_adapter, to: :change_set_persister
+  delegate :query_service, to: :metadata_adapter
 end

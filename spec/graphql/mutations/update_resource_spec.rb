@@ -88,6 +88,6 @@ RSpec.describe Mutations::UpdateResource do
     ability = instance_double(Ability)
     allow(ability).to receive(:can?).with(:update, anything).and_return(update_permission)
     allow(ability).to receive(:can?).with(:read, anything).and_return(read_permission)
-    described_class.new(object: nil, context: { ability: ability })
+    described_class.new(object: nil, context: { ability: ability, change_set_persister: GraphqlController.change_set_persister })
   end
 end

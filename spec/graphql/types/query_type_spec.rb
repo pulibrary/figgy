@@ -2,8 +2,9 @@
 require "rails_helper"
 
 RSpec.describe Types::QueryType do
-  let(:context) { { ability: ability } }
+  let(:context) { { ability: ability, change_set_persister: change_set_persister } }
   let(:ability) { instance_double(Ability) }
+  let(:change_set_persister) { GraphqlController.change_set_persister }
 
   describe "field definitions" do
     subject { described_class }

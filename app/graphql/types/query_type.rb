@@ -17,9 +17,10 @@ class Types::QueryType < Types::BaseObject
     context[:ability]
   end
 
-  def metadata_adapter
-    Valkyrie::MetadataAdapter.find(:indexing_persister)
+  def change_set_persister
+    context[:change_set_persister]
   end
 
+  delegate :metadata_adapter, to: :change_set_persister
   delegate :query_service, to: :metadata_adapter
 end
