@@ -83,13 +83,13 @@ describe GeoDiscovery::DocumentBuilder do
 
       # references
       refs = JSON.parse(document["dct_references_s"])
-      expect(refs["http://schema.org/url"]).to match(/concern\/vector_resources/)
       expect(refs["http://www.isotc211.org/schemas/2005/gmd/"]).to match(/downloads/)
       expect(refs["http://schema.org/downloadUrl"]).to match(/downloads/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wms"]).to match(/geoserver\/public-figgy\/wms/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wfs"]).to match(/geoserver\/public-figgy\/wfs/)
       expect(refs["http://iiif.io/api/image"]).to be nil
       expect(refs["http://iiif.io/api/presentation#manifest"]).to be nil
+      expect(refs["http://schema.org/url"]).to be nil
     end
   end
 
@@ -120,6 +120,11 @@ describe GeoDiscovery::DocumentBuilder do
         expect(document["dc_subject_sm"]).to eq ["Mount Holly (N.J.)—Maps", "Sanborn"]
         expect(document["dc_identifier_s"]).to eq "ark:/99999/fk4"
         expect(document["layer_slug_s"]).to eq "princeton-fk4"
+      end
+
+      it "has url reference to the catalog record" do
+        refs = JSON.parse(document["dct_references_s"])
+        expect(refs["http://schema.org/url"]).to match(/catalog\/5144620/)
       end
     end
 
@@ -156,7 +161,6 @@ describe GeoDiscovery::DocumentBuilder do
 
       it "returns a document with reduced references and restricted access" do
         refs = JSON.parse(document["dct_references_s"])
-        expect(refs).to have_key "http://schema.org/url"
         expect(refs).to have_key "http://schema.org/thumbnailUrl"
         expect(refs).not_to have_key "http://schema.org/downloadUrl"
         expect(refs).not_to have_key "http://iiif.io/api/image"
@@ -171,7 +175,6 @@ describe GeoDiscovery::DocumentBuilder do
 
       it "returns a document with reduced references and restricted access" do
         refs = JSON.parse(document["dct_references_s"])
-        expect(refs).to have_key "http://schema.org/url"
         expect(refs).to have_key "http://schema.org/thumbnailUrl"
         expect(refs).not_to have_key "http://schema.org/downloadUrl"
         expect(refs).not_to have_key "http://iiif.io/api/image"
