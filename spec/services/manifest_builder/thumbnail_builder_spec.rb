@@ -49,5 +49,29 @@ describe ManifestBuilder::ThumbnailBuilder do
         expect(output["thumbnail"]).to be_blank
       end
     end
+
+    context "when viewing a Multi-Volume Work" do
+      let(:persisted_volume) do
+        change_set_persister.save(change_set: change_set)
+      end
+      let(:parent_change_set) { ScannedResourceChangeSet.new(scanned_resource, member_ids: [persisted_volume.id]) }
+      let(:persisted) do
+        change_set_persister.save(change_set: parent_change_set)
+      end
+
+      before do
+        persisted
+      end
+
+      it "appends the transformed metadata to the Manifest" do
+        expect(output["thumbnail"]).not_to be_blank
+        expect(output["thumbnail"]).to include "@id"
+        expect(output["thumbnail"]["@id"]).to eq "http://www.example.com/image-service/#{persisted_volume.member_ids.first}/full/!200,150/0/default.jpg"
+
+        expect(output["thumbnail"]).to include "service"
+        expect(output["thumbnail"]["service"]).to include "@id"
+        expect(output["thumbnail"]["service"]["@id"]).to eq "http://www.example.com/image-service/#{persisted_volume.member_ids.first}"
+      end
+    end
   end
 end
