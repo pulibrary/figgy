@@ -72,7 +72,12 @@ class ChangeSetPersister
       # Propagate or set the state for a related resource (e. g. a member or parent resource)
       # @param resource [Valkyrie::Resource] the related resource
       def propagate_state_for_related(resource)
-        resource.state = translated_state_for(resource) if should_set_state_for?(resource)
+        return unless should_set_state_for?(resource)
+        resource.state = translated_state_for(resource)
+        # save it through the change set persister so it can mint an ark if needed, emit rabbitmq messages, etc
+        resource_change_set = DynamicChangeSet.new(resource)
+        resource_change_set.validate(state: translated_state_for(resource))
+        change_set_persister.save(change_set: resource_change_set)
       end
 
       # Retrieve the member resource for the resource in the ChangeSet

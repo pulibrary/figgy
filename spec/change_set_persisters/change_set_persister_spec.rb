@@ -887,9 +887,11 @@ RSpec.describe ChangeSetPersister do
         change_set = DynamicChangeSet.new(amc)
         change_set.validate(state: "published")
         output = change_set_persister.save(change_set: change_set)
+        expect(output.identifier.first).to eq "ark:/#{shoulder}#{blade}"
 
         members = Wayfinder.for(output).members
         expect(members.first.state).to eq ["published"]
+        expect(members.first.identifier.first).to eq "ark:/#{shoulder}#{blade}"
       end
     end
 
@@ -929,7 +931,10 @@ RSpec.describe ChangeSetPersister do
           "manifest_url" => "http://www.example.com/concern/ephemera_folders/#{folder.id}/manifest",
           "collection_slugs" => []
         }
-        expect(rabbit_connection).to have_received(:publish).once.with(expected_result.to_json)
+        # the object currently reindexes twice; once from the behavior tested here, and once because we're propagating state
+        # to the child and saving it through the change set persister pipeline so it can get an ark, emit this message, etc.
+        # this reindexing behavior should be cleaned up as part of 1405
+        expect(rabbit_connection).to have_received(:publish).twice.with(expected_result.to_json)
       end
     end
   end
