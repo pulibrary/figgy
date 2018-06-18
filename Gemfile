@@ -65,6 +65,7 @@ group :test do
   gem "chromedriver-helper"
   gem "database_cleaner"
   gem "formulaic"
+  gem "rspec-graphql_matchers"
   gem "selenium-webdriver"
   gem "simplecov", require: false
   gem "timecop"
@@ -106,6 +107,5 @@ gem "jquery-datatables-rails", "~> 3.4.0"
 gem "json-schema"
 gem "leaflet-rails", "~> 0.7"
 gem "prawn"
-gem "rspec-graphql_matchers"
 
 gem "graphiql-rails", group: :development
