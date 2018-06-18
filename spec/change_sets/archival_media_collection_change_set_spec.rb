@@ -25,9 +25,9 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
   end
 
   describe "#visibility" do
-    it "is single-valued and optional" do
+    it "is single-valued and required" do
       expect(change_set.multiple?(:visibility)).to eq false
-      expect(change_set.required?(:visibility)).to eq false
+      expect(change_set.required?(:visibility)).to eq true
     end
   end
 

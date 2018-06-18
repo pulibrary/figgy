@@ -6,7 +6,8 @@ class ArchivalMediaCollectionChangeSet < ChangeSet
   include RemoteMetadataProperty
   property :source_metadata_identifier, multiple: false, required: true
   property :bag_path, multiple: false, required: false, virtual: true
-  property :visibility, multiple: false, required: false
+  # require visibility so imported resources can inherit
+  property :visibility, multiple: false, required: true
   property :depositor, multiple: false, required: false, virtual: true
   property :read_groups, multiple: true, required: false
 
