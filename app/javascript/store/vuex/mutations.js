@@ -61,7 +61,10 @@ const mutations = {
   },
   UPDATE_VIEWHINT (state, viewHint) {
     state.viewingHint = viewHint
-  }
+  },
+  increment(state) {
+    state.count++
+  },
 }
 
 export default mutations
