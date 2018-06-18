@@ -18,9 +18,9 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
   end
 
   describe "#bag_path" do
-    it "is single-valued and required" do
+    it "is single-valued and not required" do
       expect(change_set.multiple?(:bag_path)).to eq false
-      expect(change_set.required?(:bag_path)).to eq true
+      expect(change_set.required?(:bag_path)).to eq false
     end
   end
 
@@ -110,6 +110,14 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
         expect(change_set).to be_valid
       end
     end
+
+    context "when no bag path is set" do
+      let(:change_set) { described_class.new(collection) }
+
+      it "is valid" do
+        expect(change_set).to be_valid
+      end
+    end
   end
 
   describe "UniqueArchivalMediaBarcodeValidator" do
@@ -132,6 +140,19 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
         collection = query_service.find_by(id: collection.id)
         change_set = described_class.new(collection, bag_path: av_fixture_bag).prepopulate!
         expect(change_set).not_to be_valid
+      end
+    end
+
+    context "when bag_path is empty" do
+      let(:collection_cid) { "C0652" }
+      before do
+        allow_any_instance_of(SourceMetadataIdentifierValidator).to receive(:validate).and_return(true)
+      end
+
+      it "is valid" do
+        collection = FactoryBot.create_for_repository(:archival_media_collection)
+        change_set = described_class.new(collection, source_metadata_identifier: collection_cid, bag_path: "")
+        expect(change_set).to be_valid
       end
     end
   end
