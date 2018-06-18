@@ -24,6 +24,7 @@ module GeoDiscovery
           document.description = description
           document.identifier = identifier
           document.title = title
+          document.subject = subject
         end
 
         # Builds simple metadata attributes.
@@ -55,15 +56,27 @@ module GeoDiscovery
         end
 
         # Returns an array of attributes to add to document.
-        # @return [Array] attributes
+        # @return Array<Symbol> attributes
         def simple_attributes
-          [:creator, :subject, :spatial, :temporal,
+          [:creator, :spatial, :temporal,
            :provenance, :language, :publisher]
+        end
+
+        # Returns an array of subject strings. For Vector and Raster Resources,
+        # non ISO 19115 topic category subjects are filtered out.
+        # @return Array<String> subjects
+        def subject
+          return resource_decorator.subject if resource_decorator.model.is_a?(ScannedMap)
+          resource_decorator.subject.select { |v| topic_categories.value?(v) }
         end
 
         def title
           titles = resource_decorator.title
           titles&.first.to_s
+        end
+
+        def topic_categories
+          GeoMetadataExtractor::Fgdc::TOPIC_CATEGORIES
         end
     end
   end

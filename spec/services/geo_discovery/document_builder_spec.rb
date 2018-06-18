@@ -16,7 +16,7 @@ describe GeoDiscovery::DocumentBuilder do
                                      issued: issued,
                                      spatial: "Micronesia",
                                      temporal: "2011",
-                                     subject: "Human settlements",
+                                     subject: ["Human settlements", "Society"],
                                      language: "Esperanto",
                                      visibility: visibility,
                                      identifier: "ark:/99999/fk4")
@@ -61,7 +61,7 @@ describe GeoDiscovery::DocumentBuilder do
       # optional metadata
       expect(document["dc_description_s"]).to eq("This is a Geo Work")
       expect(document["dc_creator_sm"]).to eq(["Yosiwo George"])
-      expect(document["dc_subject_sm"]).to eq(["Human settlements"])
+      expect(document["dc_subject_sm"]).to eq(["Society"])
       expect(document["dct_spatial_sm"]).to eq(["Micronesia"])
       expect(document["dct_temporal_sm"]).to eq(["2011"])
       expect(document["dc_language_s"]).to eq("Esperanto")
