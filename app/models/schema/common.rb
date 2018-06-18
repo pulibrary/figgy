@@ -30,6 +30,7 @@ module Schema
           :replaces, # http://purl.org/dc/terms/replaces
           :resource_type, # http://purl.org/dc/terms/type
           :title, # http://purl.org/dc/terms/title
+          :uniform_title, # http://purl.org/dc/elements/1.1/title
           :type, # http://purl.org/dc/terms/type
 
           :contributor, # http://purl.org/dc/elements/1.1/contributor
