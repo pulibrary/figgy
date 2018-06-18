@@ -8,6 +8,7 @@ class ArchivalMediaCollectionChangeSet < ChangeSet
   property :bag_path, multiple: false, required: true, virtual: true
   property :visibility, multiple: false, required: false
   property :depositor, multiple: false, required: false, virtual: true
+  property :read_groups, multiple: true, required: false
 
   validates :source_metadata_identifier, presence: true
   validates_with BagPathValidator

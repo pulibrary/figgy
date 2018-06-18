@@ -17,14 +17,20 @@ class ChangeSetPersister
 
     # Execute the handler
     def run
+      return if new_collection_record
       members.each do |member|
-        member.read_groups = change_set.read_groups if change_set.read_groups
+        propagate_read_groups(member)
         propagate_state_for_related(member)
         persister.save(resource: member)
       end
     end
 
     private
+
+      def propagate_read_groups(member)
+        return unless change_set.respond_to?(:read_groups) && change_set.read_groups
+        member.read_groups = change_set.read_groups
+      end
 
       # Construct the workflow for a related resource
       # @param related_resource [Valkyrie::Resource] resource related to the ChangeSet resource
@@ -60,23 +66,35 @@ class ChangeSetPersister
       # @param resource [Valkyrie::Resource]
       # @return [TrueClass, FalseClass]
       def should_set_state_for?(resource)
-        change_set.state && resource.respond_to?(:state) && valid_states(resource).include?(translated_state_for(resource))
+        change_set.respond_to?(:state) && change_set.state && resource.respond_to?(:state) && valid_states(resource).include?(translated_state_for(resource))
       end
 
       # Propagate or set the state for a related resource (e. g. a member or parent resource)
       # @param resource [Valkyrie::Resource] the related resource
       def propagate_state_for_related(resource)
-        resource.state = translated_state_for(resource) if should_set_state_for?(resource)
+        return unless should_set_state_for?(resource)
+        resource.state = translated_state_for(resource)
+        # save it through the change set persister so it can mint an ark if needed, emit rabbitmq messages, etc
+        resource_change_set = DynamicChangeSet.new(resource)
+        resource_change_set.validate(state: translated_state_for(resource))
+        change_set_persister.save(change_set: resource_change_set)
       end
 
       # Retrieve the member resource for the resource in the ChangeSet
       # (This excludes FileSets)
       # @return [Array<Valkyrie::Resource>]
       def members
-        found = query_service.find_members(resource: change_set.resource) || []
-        found.select do |x|
-          !x.is_a?(FileSet)
+        wayfinder = Wayfinder.for(change_set.resource)
+        if wayfinder.respond_to?(:members)
+          wayfinder.members.select { |x| !x.is_a?(FileSet) }
+        else
+          []
         end
+      end
+
+      # it doesn't have members yet if it is just now being created
+      def new_collection_record
+        change_set.model.is_a?(Collection) && change_set.model.id.nil?
       end
   end
 end
