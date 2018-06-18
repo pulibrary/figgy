@@ -7,6 +7,12 @@ module GeoDiscovery
         @resource_decorator = resource_decorator
       end
 
+      def catalog_record
+        bib_id = resource_decorator.source_metadata_identifier.first
+        return nil unless bib_id
+        "https://catalog.princeton.edu/catalog/#{bib_id}"
+      end
+
       # Returns url for downloading the original file.
       # @return [String] original file download url
       def file_download
@@ -40,25 +46,12 @@ module GeoDiscovery
         "#{protocol}://#{host}#{path}"
       end
 
-      # Returns url for geo concern show page.
-      # @return [String] geo concern show page url
-      def to_s
-        document_helper.polymorphic_url(resource_decorator, host: host, protocol: protocol)
-      end
-
       private
 
         # Retrieve the default options for URL's
         # @return [Hash]
         def default_url_options
           Figgy.default_url_options
-        end
-
-        # Instantiates a DocumentHelper object.
-        # Used for access to rails url_helpers and poymorphic routes.
-        # @return [DocumentHelper] document helper
-        def document_helper
-          @helper ||= DocumentHelper.new
         end
 
         # Returns the first geo file set decorator attached to work.
