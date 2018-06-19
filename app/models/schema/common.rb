@@ -59,6 +59,7 @@ module Schema
           :source_metadata, # Local
           :source_jsonld, # Local
           :call_number, # Local
+          :location, # Local
           :barcode, # Local
           :series, # Local
           :ocr_language, # Local
