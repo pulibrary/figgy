@@ -30,7 +30,8 @@ RSpec.describe ScannedResourceDecorator do
                        imported_metadata: [{
                          creator: "test creator",
                          subject: "test subject",
-                         language: "eng"
+                         language: "eng",
+                         location: ["RCPPA BL980.G7 B66 1982"]
                        }])
     end
     describe "#iiif_manifest_attributes" do
@@ -39,6 +40,7 @@ RSpec.describe ScannedResourceDecorator do
         expect(decorator.iiif_manifest_attributes).to include author: ["test author"]
         expect(decorator.iiif_manifest_attributes).to include creator: ["test creator"]
         expect(decorator.iiif_manifest_attributes).to include subject: ["test subject"]
+        expect(decorator.iiif_manifest_attributes).to include location: ["RCPPA BL980.G7 B66 1982"]
       end
     end
     describe "#display_imported_language" do

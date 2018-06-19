@@ -19,7 +19,8 @@ RSpec.describe ManifestBuilder do
                                      identifier: "ark:/88435/abc1234de",
                                      source_metadata_identifier: "123456",
                                      imported_metadata: [{
-                                       description: "Test Description"
+                                       description: "Test Description",
+                                       location: ["RCPPA BL980.G7 B66 1982"]
                                      }],
                                      viewing_direction: ["right-to-left"])
   end
@@ -207,7 +208,7 @@ RSpec.describe ManifestBuilder do
       expect(output).to include "metadata"
       metadata = output["metadata"]
       expect(metadata).to be_kind_of Array
-      expect(metadata.length).to eq(12)
+      expect(metadata.length).to eq(13)
 
       metadata_object = metadata.find { |h| h["label"] == "Created At" }
       metadata_values = metadata_object["value"]
@@ -225,6 +226,11 @@ RSpec.describe ManifestBuilder do
       metadata_values = metadata_object["value"]
       expect(metadata_values).to be_kind_of Array
       expect(metadata_values).to include "test value1"
+
+      metadata_object = metadata.find { |h| h["label"] == "Location" }
+      metadata_values = metadata_object["value"]
+      expect(metadata_values).to be_kind_of Array
+      expect(metadata_values).to include "RCPPA BL980.G7 B66 1982"
     end
 
     context "when the resource has linked vocabulary terms" do
