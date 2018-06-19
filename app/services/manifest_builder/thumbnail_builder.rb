@@ -27,19 +27,40 @@ class ManifestBuilder
         @helper ||= ManifestHelper.new
       end
 
-      # Generate the value Hash modeling the thumbnail resource for the Manifest
+      # Retrieve the member resources (for multi-volume works)
+      # @return [Array<Valkyrie::Resource>]
+      def nearest_member_thumbnail_uri
+        members = query_service.find_members(resource: resource, model: resource.class)
+        members.find { |member| !member.thumbnail_id.empty? }
+      end
+
+      # Generate the Hash for structuring thumbnail URIs
       # @see http://iiif.io/api/presentation/2.1/#resource-structure
-      # @return [Hash, nil]
-      def thumbnail
-        return nil unless thumbnail_id && file_set && file_set.derivative_file
+      # @param member [FileSet, Valkyrie::Resource]
+      # @return [Hash]
+      def build_thumbnail_values(member)
         {
-          "@id" => helper.manifest_image_thumbnail_path(file_set.id),
+          "@id" => helper.manifest_image_thumbnail_path(member.id),
           "service" => {
             "@context" => "http://iiiif.io/api/image/2/context.json",
-            "@id" => helper.manifest_image_path(file_set),
+            "@id" => helper.manifest_image_path(member),
             "profile" => "http;//iiiif.io/api/image/2/level2.json"
           }
         }
+      end
+
+      # Determine whether or not the Resource has a FileSet (with a derivative file) referenced as a thumbnail
+      # @return [TrueClass, FalseClass]
+      def resource_has_thumbnail_file_set?
+        thumbnail_id && file_set && file_set.derivative_file
+      end
+
+      # Generate the value Hash modeling the thumbnail resource for the Manifest
+      # @return [Hash, nil]
+      def thumbnail
+        member = resource_has_thumbnail_file_set? ? file_set : nearest_member_thumbnail_uri
+        return nil unless member
+        build_thumbnail_values(member)
       end
 
       # Retrieve the FileSet Resource for the thumbnail
