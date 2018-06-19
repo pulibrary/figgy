@@ -49,10 +49,16 @@ class ManifestBuilder
         }
       end
 
+      # Determine whether or not the Resource has a FileSet (with a derivative file) referenced as a thumbnail
+      # @return [TrueClass, FalseClass]
+      def resource_has_thumbnail_file_set?
+        thumbnail_id && file_set && file_set.derivative_file
+      end
+
       # Generate the value Hash modeling the thumbnail resource for the Manifest
       # @return [Hash, nil]
       def thumbnail
-        member = thumbnail_id && file_set && file_set.derivative_file ? file_set : nearest_member_thumbnail_uri
+        member = resource_has_thumbnail_file_set? ? file_set : nearest_member_thumbnail_uri
         return nil unless member
         build_thumbnail_values(member)
       end
