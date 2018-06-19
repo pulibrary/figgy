@@ -90,6 +90,7 @@ Remember you'll need to run `bundle install` and `npm install` on an ongoing bas
    - `rake db:setup`
    - `rake figgy:development`
    - In a separate terminal: `foreman start`
+     - Or run services separately as shown in [[https://github.com/pulibrary/figgy/blob/master/Procfile]]
    - Access Figgy at http://localhost:3000/
 
 ## Load sample development data
