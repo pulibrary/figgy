@@ -15,7 +15,7 @@ RSpec.describe IngestArchivalMediaBagJob do
     # We need to actually save it with persister to get the imported metadata
     let(:collection) do
       cs = DynamicChangeSet.new(ArchivalMediaCollection.new)
-      cs.validate(source_metadata_identifier: "C0652")
+      cs.validate(source_metadata_identifier: "C0652", visibility: "registered")
       change_set_persister.save(change_set: cs)
     end
 
@@ -55,6 +55,13 @@ RSpec.describe IngestArchivalMediaBagJob do
 
       it "for each component id-based MediaRsource, puts it on the collection" do
         expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
+      end
+
+      it "assigns correct visibility and read_groups access control to each resource and file_set" do
+        expect(query_service.find_all_of_model(model: MediaResource).map(&:visibility)).to contain_exactly ["registered"]
+
+        file_sets = query_service.find_all_of_model(model: FileSet)
+        expect(file_sets.map(&:read_groups).to_a).to eq [["registered"], ["registered"], ["registered"], ["registered"]]
       end
     end
 
