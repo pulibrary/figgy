@@ -20,7 +20,7 @@ class ChangeSetPersister
       return if new_collection_record
       members.each do |member|
         resource_change_set = DynamicChangeSet.new(member)
-        resource_change_set = propagate_visibility(resource_change_set) || propagate_read_groups(resource_change_set)
+        resource_change_set = propagate_visibility(resource_change_set)
         resource_change_set = propagate_state_for_related(resource_change_set)
         # we need to save these through the change set persister so the member
         #   can mint an ark, emit rabbitmq messages, copy access to read_groups, etc.
@@ -36,13 +36,6 @@ class ChangeSetPersister
       def propagate_visibility(member_change_set)
         return member_change_set unless change_set.respond_to?(:visibility) && change_set.visibility && member_change_set.respond_to?(:visibility=)
         member_change_set.validate(visibility: change_set.visibility)
-        member_change_set
-      end
-
-      # file set objects don't have a visibility property; read groups should be set directly.
-      def propagate_read_groups(member_change_set)
-        return member_change_set unless change_set.respond_to?(:read_groups) && change_set.read_groups
-        member_change_set.validate(read_groups: change_set.read_groups)
         member_change_set
       end
 
