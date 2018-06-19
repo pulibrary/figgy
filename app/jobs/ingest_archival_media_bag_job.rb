@@ -83,7 +83,12 @@ class IngestArchivalMediaBagJob < ApplicationJob
         # @return [IngestableFile] the file used to create the FileSet upon persistence (by the FileAppender)
         def create_image_file(barcode)
           image = bag.image_file(barcode: barcode)
-          IngestableFile.new(file_path: image.path, mime_type: image.mime_type, original_filename: image.original_filename)
+          IngestableFile.new(
+            file_path: image.path,
+            mime_type: image.mime_type,
+            original_filename: image.original_filename,
+            container_attributes: { read_groups: file_set_read_groups }
+          )
         end
 
         # Adds any images related to the item as member FileSets
@@ -118,7 +123,12 @@ class IngestArchivalMediaBagJob < ApplicationJob
         # @return [IngestableFile] the file used to create the FileSet upon persistence (by the FileAppender)
         def create_pbcore_file(barcode)
           pbcore = bag.pbcore_parser_for_barcode(barcode)
-          IngestableFile.new(file_path: pbcore.path, mime_type: "application/xml; schema=pbcore", original_filename: pbcore.original_filename)
+          IngestableFile.new(
+            file_path: pbcore.path,
+            mime_type: "application/xml; schema=pbcore",
+            original_filename: pbcore.original_filename,
+            container_attributes: { read_groups: file_set_read_groups }
+          )
         end
 
         # Creates and persists a FileSet for a media object
@@ -132,8 +142,18 @@ class IngestArchivalMediaBagJob < ApplicationJob
             file_set.part = ingestable_audio_file.part
             file_set.transfer_notes = bag.pbcore_parser_for_barcode(ingestable_audio_file.barcode).transfer_notes
             file_set.file_metadata += [file_metadata_node]
+            file_set.read_groups = file_set_read_groups
           end
           file_set = changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
+        end
+
+        # get the correct read groups based on the collection visibility
+        def file_set_read_groups
+          if collection.visibility.include? Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+            []
+          else
+            collection.visibility
+          end
         end
 
         # Creates file metadata and uploads a binary file
@@ -153,7 +173,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
         def find_or_create_media_resource(component_id)
           results = query_service.custom_queries.find_by_string_property(property: :source_metadata_identifier, value: component_id)
           media_resource = results.size.zero? ? MediaResource.new : results.first
-          MediaResourceChangeSet.new(media_resource, source_metadata_identifier: component_id, files: [])
+          MediaResourceChangeSet.new(media_resource, source_metadata_identifier: component_id, files: [], visibility: collection.visibility.first)
         end
 
         # Retrieve a Hash of EAD Component IDs/Barcodes for file barcodes specified in a given Bag
