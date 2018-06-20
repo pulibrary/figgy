@@ -2,12 +2,11 @@
 # frozen_string_literal: true
 module GeoDiscovery
   class AbstractDocument
-    attr_accessor :identifier, :provenance, :creator, :subject, :spatial, :temporal,
-                  :title, :description, :access_rights, :language, :issued,
-                  :publisher, :slug, :solr_coverage, :layer_year,
-                  :layer_modified, :geom_type, :format, :resource_type, :wxs_identifier,
-                  :dct_references, :fgdc, :iso19139, :mods, :download, :url, :thumbnail,
-                  :wxs_identifier, :wms_path, :wfs_path, :iiif, :iiif_manifest, :source, :suppressed, :call_number
+    attr_accessor :access_rights, :call_number, :creator, :dct_references, :description, :download,
+                  :fgdc, :format, :geom_type, :identifier, :iiif, :iiif_manifest, :iso19139,
+                  :issued, :language, :layer_modified, :layer_year, :mods, :provenance, :publisher,
+                  :resource_type, :slug, :solr_coverage, :source, :spatial, :subject, :suppressed,
+                  :temporal, :thumbnail, :title, :url, :wfs_path, :wms_path, :wxs_identifier
 
     # Cleans the document hash by removing unused fields.
     # @param [Hash] document hash
