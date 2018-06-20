@@ -21,6 +21,7 @@ module GeoDiscovery
         # @param [AbstractDocument] discovery document
         def build_complex_attributes(document)
           document.access_rights = resource_decorator.model.visibility.first
+          document.call_number = call_number
           document.description = description
           document.identifier = identifier
           document.title = title
@@ -35,6 +36,12 @@ module GeoDiscovery
             next if value.nil? || value.empty?
             document.send("#{a}=", value)
           end
+        end
+
+        def call_number
+          return unless resource_decorator.call_number
+          call_numbers = resource_decorator.call_number.reject { |c| c == "Electronic Resource" }
+          call_numbers.try(:first)
         end
 
         # Returns the work description. If none is available,
