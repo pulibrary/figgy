@@ -149,10 +149,13 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
         # get the correct read groups based on the collection visibility
         def file_set_read_groups
-          if collection.visibility.include? Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+          case collection.visibility.first
+          when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+            [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
+          when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+            [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED]
+          when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
             []
-          else
-            collection.visibility
           end
         end
 
