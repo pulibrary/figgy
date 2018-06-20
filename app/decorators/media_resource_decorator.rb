@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class MediaResourceDecorator < Valkyrie::ResourceDecorator
-  display Schema::Common.attributes
+  display Schema::Common.attributes, :member_of_collections
   suppress :title,
            :thumbnail_id,
            :imported_author,
