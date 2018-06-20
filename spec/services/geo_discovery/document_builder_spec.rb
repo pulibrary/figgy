@@ -112,7 +112,11 @@ describe GeoDiscovery::DocumentBuilder do
                                          identifier: "ark:/99999/fk4",
                                          imported_metadata: [{
                                            subject: ["Mount Holly (N.J.)—Maps"],
-                                           identifier: "http://arks.princeton.edu/ark:/99999/fk4"
+                                           identifier: "http://arks.princeton.edu/ark:/99999/fk4",
+                                           call_number: [
+                                             "HMC04 (Mount Holly)",
+                                             "Electronic Resource"
+                                           ]
                                          }])
       end
 
@@ -122,9 +126,10 @@ describe GeoDiscovery::DocumentBuilder do
         expect(document["layer_slug_s"]).to eq "princeton-fk4"
       end
 
-      it "has url reference to the catalog record" do
+      it "has url reference to the catalog record and a call number field" do
         refs = JSON.parse(document["dct_references_s"])
         expect(refs["http://schema.org/url"]).to match(/catalog\/5144620/)
+        expect(document["call_number_s"]).to eq("HMC04 (Mount Holly)")
       end
     end
 
