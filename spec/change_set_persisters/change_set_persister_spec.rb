@@ -848,12 +848,14 @@ RSpec.describe ChangeSetPersister do
         resource = adapter.persister.save(resource: resource)
 
         change_set = change_set_class.new(resource)
-        change_set.validate(visibility: Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC)
+        change_set.validate(visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
 
         updated = change_set_persister.save(change_set: change_set)
         members = query_service.find_members(resource: updated)
         expect(members.first.read_groups).to eq resource1.read_groups
-        expect(members.to_a.last.read_groups).to eq [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
+        resource_member = members.to_a.last
+        expect(resource_member.visibility).to eq [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC]
+        expect(resource_member.read_groups).to eq [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
       end
     end
   end
@@ -908,6 +910,7 @@ RSpec.describe ChangeSetPersister do
         members = query_service.find_members(resource: output)
         expect(members.first.state).not_to eq ["ready_to_ship"]
       end
+
       let(:rabbit_connection) { instance_double(MessagingClient, publish: true) }
       before do
         allow(Figgy).to receive(:messaging_client).and_return(rabbit_connection)

@@ -19,17 +19,24 @@ class ChangeSetPersister
     def run
       return if new_collection_record
       members.each do |member|
-        propagate_read_groups(member)
-        propagate_state_for_related(member)
-        persister.save(resource: member)
+        resource_change_set = DynamicChangeSet.new(member)
+        resource_change_set = propagate_visibility(resource_change_set)
+        resource_change_set = propagate_state_for_related(resource_change_set)
+        # we need to save these through the change set persister so the member
+        #   can mint an ark, emit rabbitmq messages, copy access to read_groups, etc.
+        if resource_change_set.changed?
+          change_set_persister.save(change_set: resource_change_set)
+        end
       end
     end
 
     private
 
-      def propagate_read_groups(member)
-        return unless change_set.respond_to?(:read_groups) && change_set.read_groups
-        member.read_groups = change_set.read_groups
+      # set visibility on most resources; VisibilityProperty concern will make necessary changes on read_groups
+      def propagate_visibility(member_change_set)
+        return member_change_set unless change_set.respond_to?(:visibility) && change_set.visibility && member_change_set.respond_to?(:visibility=)
+        member_change_set.validate(visibility: change_set.visibility)
+        member_change_set
       end
 
       # Construct the workflow for a related resource
@@ -71,13 +78,10 @@ class ChangeSetPersister
 
       # Propagate or set the state for a related resource (e. g. a member or parent resource)
       # @param resource [Valkyrie::Resource] the related resource
-      def propagate_state_for_related(resource)
-        return unless should_set_state_for?(resource)
-        resource.state = translated_state_for(resource)
-        # save it through the change set persister so it can mint an ark if needed, emit rabbitmq messages, etc
-        resource_change_set = DynamicChangeSet.new(resource)
-        resource_change_set.validate(state: translated_state_for(resource))
-        change_set_persister.save(change_set: resource_change_set)
+      def propagate_state_for_related(member_change_set)
+        return member_change_set unless should_set_state_for?(member_change_set.resource)
+        member_change_set.validate(state: translated_state_for(member_change_set.resource))
+        member_change_set
       end
 
       # Retrieve the member resource for the resource in the ChangeSet
