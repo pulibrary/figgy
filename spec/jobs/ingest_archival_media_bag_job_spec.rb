@@ -10,15 +10,7 @@ RSpec.describe IngestArchivalMediaBagJob do
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
   let(:query_service) { adapter.query_service }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
-  let(:collection_cid) { collection.source_metadata_identifier.first }
-  let(:vis_auth) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
-  let(:read_auth) { Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED }
-  # We need to actually save it with persister to get the imported metadata
-  let(:collection) do
-    cs = DynamicChangeSet.new(ArchivalMediaCollection.new)
-    cs.validate(source_metadata_identifier: "C0652", visibility: vis_auth)
-    change_set_persister.save(change_set: cs)
-  end
+  let(:collection_cid) { "C0652" }
 
   before do
     stub_pulfa(pulfa_id: "C0652")
@@ -55,19 +47,35 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
 
     it "for each component id-based MediaRsource, puts it on the collection" do
+      collection = query_service.find_all_of_model(model: ArchivalMediaCollection).first
       expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
     end
+  end
 
-    it "assigns correct visibility and read_groups access control to each resource and file_set" do
-      expect(query_service.find_all_of_model(model: MediaResource).map(&:visibility)).to contain_exactly [vis_auth]
-
-      file_sets = query_service.find_all_of_model(model: FileSet)
-      expect(file_sets.map(&:read_groups).to_a).to eq [[read_auth], [read_auth], [read_auth], [read_auth]]
+  describe "visibility settings" do
+    before do
+      cs = DynamicChangeSet.new(ArchivalMediaCollection.new)
+      cs.validate(source_metadata_identifier: collection_cid, visibility: vis_auth)
+      change_set_persister.save(change_set: cs)
+      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
     end
 
-    context "with some other permissions" do
+    context "when collection is set to authenticated" do
+      let(:vis_auth) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
+      let(:read_auth) { Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED }
+
+      it "assigns correct visibility and read_groups access control to each resource and file_set" do
+        expect(query_service.find_all_of_model(model: MediaResource).map(&:visibility)).to contain_exactly [vis_auth]
+
+        file_sets = query_service.find_all_of_model(model: FileSet)
+        expect(file_sets.map(&:read_groups).to_a).to eq [[read_auth], [read_auth], [read_auth], [read_auth]]
+      end
+    end
+
+    context "when collection is set to public" do
       let(:vis_auth) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
       let(:read_auth) { Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC }
+
       it "assigns correct visibility and read_groups access control to each resource and file_set" do
         expect(query_service.find_all_of_model(model: MediaResource).map(&:visibility)).to contain_exactly [vis_auth]
 
@@ -77,7 +85,7 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
   end
 
-  context "when the collection already exists and the bag contains a PBCore XML file" do
+  context "when the bag contains a PBCore XML file" do
     let(:tika_output) { tika_xml_pbcore_output }
 
     before do
@@ -90,7 +98,7 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
   end
 
-  context "when the collection already exists and the bag contains a JPEG image file" do
+  context "when the bag contains a JPEG image file" do
     let(:tika_output) { tika_jpeg_output }
 
     before do
@@ -107,8 +115,22 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
   end
 
+  context "when you're ingesting to a collection you've already created" do
+    before do
+      # create the collection
+      cs = DynamicChangeSet.new(ArchivalMediaCollection.new)
+      cs.validate(source_metadata_identifier: collection_cid)
+      change_set_persister.save(change_set: cs)
+      # ingest to the same collection_cid
+      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
+    end
+
+    it "uses the existing collection" do
+      expect(query_service.find_all_of_model(model: ArchivalMediaCollection).size).to eq 1
+    end
+  end
+
   context "when the collection doesn't exist yet" do
-    let(:collection_cid) { "C0652" }
     before do
       described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
     end
@@ -122,11 +144,18 @@ RSpec.describe IngestArchivalMediaBagJob do
 
   context "when another type of resource references the component ID" do
     before do
+      # create the collection
+      cs = DynamicChangeSet.new(ArchivalMediaCollection.new)
+      cs.validate(source_metadata_identifier: collection_cid)
+      change_set_persister.save(change_set: cs)
+      # create another resource with the same component id
       FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: collection_cid)
+      # ingest to the collection id
       described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
     end
 
     it "doesn't try to use that other resource as an archival media collection" do
+      collection = query_service.find_all_of_model(model: ArchivalMediaCollection).first
       expect(query_service.find_all_of_model(model: ScannedResource).first.source_metadata_identifier.first).to eq collection_cid
       expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
     end
@@ -149,7 +178,6 @@ RSpec.describe IngestArchivalMediaBagJob do
 
   context "ingesting a more complicated bag" do
     let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_demo_bag") }
-    let(:collection_cid) { "C0652" }
 
     before do
       stub_pulfa(pulfa_id: "C0652_c0383")
