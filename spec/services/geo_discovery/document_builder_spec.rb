@@ -105,12 +105,15 @@ describe GeoDiscovery::DocumentBuilder do
     context "with remote metadata" do
       let(:geo_work) do
         FactoryBot.create_for_repository(:scanned_map,
+                                         title: [],
                                          source_metadata_identifier: "5144620",
                                          coverage: coverage.to_s,
                                          subject: ["Sanborn", "Mount Holly (N.J.)—Maps"],
                                          visibility: visibility,
                                          identifier: "ark:/99999/fk4",
+                                         portion_note: "Sheet 1",
                                          imported_metadata: [{
+                                           title: ["Mount Holly, N.J."],
                                            subject: ["Mount Holly (N.J.)—Maps"],
                                            identifier: "http://arks.princeton.edu/ark:/99999/fk4",
                                            call_number: [
@@ -124,6 +127,7 @@ describe GeoDiscovery::DocumentBuilder do
         expect(document["dc_subject_sm"]).to eq ["Mount Holly (N.J.)—Maps", "Sanborn"]
         expect(document["dc_identifier_s"]).to eq "ark:/99999/fk4"
         expect(document["layer_slug_s"]).to eq "princeton-fk4"
+        expect(document["dc_title_s"]).to eq "Mount Holly, N.J. (Sheet 1)"
       end
 
       it "has url reference to the catalog record and a call number field" do
