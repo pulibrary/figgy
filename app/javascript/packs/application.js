@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await this.$apollo.query({
         query: gql`
         query Resource {
-          resource(id: "aea40813-e0ed-4307-aae9-aec53b26bdda") {
+          resource(id: "e8e8c06c-ca78-46c6-9981-ef7f974c3c06") {
             id,
             label
           }
