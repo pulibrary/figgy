@@ -27,23 +27,34 @@ class ManifestBuilder
         @helper ||= ManifestHelper.new
       end
 
-      # Retrieve the member resources (for multi-volume works)
-      # @return [Array<Valkyrie::Resource>]
-      def nearest_member_thumbnail_uri
-        members = query_service.find_members(resource: resource, model: resource.class)
-        members.find { |member| !member.thumbnail_id.empty? }
+      def nearest_member
+        members = query_service.find_members(resource: resource, model: resource.resource.class)
+        members.find { |member| member.thumbnail_id.present? }
+      end
+
+      def nearest_member_thumbnail_id
+        return unless nearest_member
+        @nearest_member_thumbnail_id ||= Array.wrap(nearest_member.thumbnail_id).first
+      end
+
+      def nearest_member_file_set
+        member_file_set = find_thumbnail_file_set(nearest_member_thumbnail_id)
+        return unless member_file_set && member_file_set.derivative_file
+        member_file_set
+      rescue Valkyrie::Persistence::ObjectNotFoundError
+        nil
       end
 
       # Generate the Hash for structuring thumbnail URIs
       # @see http://iiif.io/api/presentation/2.1/#resource-structure
-      # @param member [FileSet, Valkyrie::Resource]
+      # @param file_set [FileSet]
       # @return [Hash]
-      def build_thumbnail_values(member)
+      def build_thumbnail_values(file_set)
         {
-          "@id" => helper.manifest_image_thumbnail_path(member.id),
+          "@id" => helper.manifest_image_thumbnail_path(file_set.id),
           "service" => {
             "@context" => "http://iiiif.io/api/image/2/context.json",
-            "@id" => helper.manifest_image_path(member),
+            "@id" => helper.manifest_image_path(file_set),
             "profile" => "http;//iiiif.io/api/image/2/level2.json"
           }
         }
@@ -58,7 +69,7 @@ class ManifestBuilder
       # Generate the value Hash modeling the thumbnail resource for the Manifest
       # @return [Hash, nil]
       def thumbnail
-        member = resource_has_thumbnail_file_set? ? file_set : nearest_member_thumbnail_uri
+        member = resource_has_thumbnail_file_set? ? file_set : nearest_member_file_set
         return nil unless member
         build_thumbnail_values(member)
       end
