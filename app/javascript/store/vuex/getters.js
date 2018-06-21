@@ -1,8 +1,5 @@
 // getters
 const getters = {
-  count: state => {
-    return state.count
-  },
   imageIdList: state => {
     return state.images.map(image => image.id)
   },

@@ -4,14 +4,17 @@ import state from './vuex/state'
 import mutations from './vuex/mutations'
 import actions from './vuex/actions'
 import getters from './vuex/getters'
-
+import {modules} from 'lux-design-system'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state,
   mutations,
   actions,
-  getters
+  getters,
+  modules: {
+    counter: modules.counterModule,
+  }
 })
 
 export default store

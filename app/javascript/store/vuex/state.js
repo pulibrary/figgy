@@ -14,8 +14,7 @@ const state = {
   changeList: [],
   ogState: {},
   manifestLoadState: 'NOT_LOADED',
-  cut: [],
-  count: 10
+  cut: []
 }
 
 export default state
