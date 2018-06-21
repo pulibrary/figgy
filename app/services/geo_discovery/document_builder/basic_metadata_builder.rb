@@ -63,7 +63,7 @@ module GeoDiscovery
         end
 
         # Returns an array of attributes to add to document.
-        # @return Array<Symbol> attributes
+        # @return [Array<Symbol>] attributes
         def simple_attributes
           [:creator, :spatial, :temporal,
            :provenance, :language, :publisher]
@@ -71,15 +71,16 @@ module GeoDiscovery
 
         # Returns an array of subject strings. For Vector and Raster Resources,
         # non ISO 19115 topic category subjects are filtered out.
-        # @return Array<String> subjects
+        # @return [Array<String>] subjects
         def subject
           return resource_decorator.subject if resource_decorator.model.is_a?(ScannedMap)
           resource_decorator.subject.select { |v| topic_categories.value?(v) }
         end
 
+        # Use the standard resource decorator to retreive title.
+        # @return [String] title
         def title
-          titles = resource_decorator.title
-          titles&.first.to_s
+          resource_decorator.model.decorate.title.try(:first)
         end
 
         def topic_categories
