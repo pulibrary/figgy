@@ -31,6 +31,7 @@ class ManifestBuilder
           child_manifest_builder_factory,
           see_also_builder,
           license_builder,
+          thumbnail_builder,
           rendering_builder,
           composite_builder: composite_builder
         )
