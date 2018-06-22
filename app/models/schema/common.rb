@@ -17,7 +17,9 @@ module Schema
           :abstract, # http://purl.org/dc/terms/abstract
           :alternative, # http://purl.org/dc/terms/alternative
           :alternative_title, # http://purl.org/dc/terms/alternative
-          :bibliographic_citation, # http://purl.org/dc/terms/bibliographicCitation
+          :references, # http://purl.org/dc/terms/bibliographicCitation,
+          :bibliographic_citation,
+          :indexed_by, # http://purl.org/dc/terms/isReferencedBy
           :contents, # http://purl.org/dc/terms/tableOfContents
           :created, # http://purl.org/dc/terms/created
           :date_created, # http://purl.org/dc/terms/created
