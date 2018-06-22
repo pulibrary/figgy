@@ -14,6 +14,7 @@ const store = new Vuex.Store({
   getters,
   modules: {
     counter: modules.counterModule,
+    ordermanager: modules.resourceModule
   }
 })
 
