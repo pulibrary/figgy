@@ -20,7 +20,7 @@ class ChangeSetPersister
 
       def apply(attributes)
         change_set.model.imported_metadata = ImportedMetadata.new(attributes)
-        return unless attributes[:identifier] && attributes[:identifier].start_with?(Ark.new(attributes[:identifier]).uri)
+        return unless change_set.model.identifier.blank? && attributes[:identifier] && attributes[:identifier].start_with?(Ark.new(attributes[:identifier]).uri)
         change_set.model.identifier = Ark.new(attributes[:identifier]).identifier
       end
   end

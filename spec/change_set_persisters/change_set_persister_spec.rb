@@ -57,6 +57,14 @@ RSpec.describe ChangeSetPersister do
       expect(output.primary_imported_metadata.coverage).to eq ["northlimit=12.500000; eastlimit=014.620000; southlimit=03.890000; westlimit=008.550000; units=degrees; projection=EPSG:4326"]
       expect(output.identifier).to eq(["ark:/88435/jq085p05h"])
     end
+    it "doesn't override an existing identifier" do
+      resource = FactoryBot.build(:scanned_map, title: [], identifier: ["something"])
+      change_set = change_set_class.new(resource)
+      change_set.validate(source_metadata_identifier: "10001789")
+      output = change_set_persister.save(change_set: change_set)
+
+      expect(output.identifier).to eq ["something"]
+    end
   end
 
   context "when a source_metadata_identifier is set for the first time on a vector resource" do
