@@ -389,6 +389,17 @@ RSpec.describe EphemeraFoldersController do
 
         expect(response).to render_template "base/edit"
       end
+
+      it "can change from having a project as a parent to having a box as a parent" do
+        folder = FactoryBot.create_for_repository(:ephemera_folder)
+        box = FactoryBot.create_for_repository(:ephemera_box)
+        FactoryBot.create_for_repository(:ephemera_project, member_ids: [folder.id])
+        patch :update, params: { id: folder.id.to_s, ephemera_folder: { append_id: box.id } }
+
+        parents = Wayfinder.for(find_resource(folder.id)).parents
+        expect(parents.count).to eq 1
+        expect(parents.first.id).to eq box.id
+      end
     end
   end
 

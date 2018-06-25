@@ -11,15 +11,35 @@ class ChangeSetPersister
 
     def run
       return unless append_id.present?
-      parent.thumbnail_id = post_save_resource.id if parent.respond_to?(:thumbnail_id) && parent.member_ids.blank?
-      parent.member_ids = parent.member_ids + [post_save_resource.id]
-      persister.save(resource: parent)
+      remove_from_old_parent
+      add_to_new_parent
       # Re-save to solr unless it's going to be done by save_all
       persister.save(resource: post_save_resource) unless transaction?
     end
 
-    def parent
-      @parent ||= query_service.find_by(id: append_id)
+    def new_parent
+      @new_parent ||= query_service.find_by(id: append_id)
+    end
+
+    def add_to_new_parent
+      new_parent.thumbnail_id = post_save_resource.id if new_parent.respond_to?(:thumbnail_id) && new_parent.member_ids.blank?
+      new_parent.member_ids = new_parent.member_ids + [post_save_resource.id]
+      persister.save(resource: new_parent)
+    end
+
+    def old_parent
+      @old_parent ||=
+        begin
+          wayfinder = Wayfinder.for(post_save_resource)
+          wayfinder.parent if wayfinder.respond_to? :parent
+        end
+    end
+
+    def remove_from_old_parent
+      return unless old_parent
+      old_parent.thumbnail_id = nil if old_parent.respond_to?(:thumbnail_id) && (old_parent.thumbnail_id == post_save_resource.id)
+      old_parent.member_ids = old_parent.member_ids - [post_save_resource.id]
+      persister.save(resource: old_parent)
     end
 
     delegate :append_id, to: :change_set
