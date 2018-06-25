@@ -10,5 +10,8 @@
               input_html: { multiple: f.object.multiple?(key) },
               required: f.object.required?(key) %>
 <% else %>
+  <% if @parent_box_number %>
+    <p>In Ephemera Box <%= @parent_box_number %></p>
+  <% end %>
   <%= f.input :append_id, as: :hidden %>
 <% end %>

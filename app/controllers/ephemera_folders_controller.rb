@@ -82,6 +82,7 @@ class EphemeraFoldersController < BaseResourceController
   #   e.g. array of decorated EphemeraTerms at
   #   app/views/records/edit_fields/_language.html.erb
   def load_fields
+    @parent_box_number = ephemera_box.box_number.first if ephemera_box
     fields.each do |field|
       case field.attribute_name
       when "subject"
