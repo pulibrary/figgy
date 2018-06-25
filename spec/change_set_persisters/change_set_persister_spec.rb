@@ -965,6 +965,21 @@ RSpec.describe ChangeSetPersister do
       expect(solr_record["member_of_ssim"]).to eq ["id-#{parent.id}"]
     end
 
+    it "will not append to the same parent twice" do
+      resource = FactoryBot.create_for_repository(:scanned_resource)
+      parent = FactoryBot.create_for_repository(:scanned_resource, member_ids: resource.id)
+      change_set = change_set_class.new(resource)
+      change_set.validate(append_id: parent.id.to_s)
+
+      output = change_set_persister.save(change_set: change_set)
+      reloaded = query_service.find_by(id: parent.id)
+
+      expect(reloaded.member_ids).to eq [output.id]
+      expect(reloaded.thumbnail_id).to eq [output.id]
+      solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "id:#{output.id}" })["response"]["docs"][0]
+      expect(solr_record["member_of_ssim"]).to eq ["id-#{parent.id}"]
+    end
+
     it "moves a child from another parent via #append_id" do
       resource = FactoryBot.create_for_repository(:scanned_resource)
       old_parent = FactoryBot.create_for_repository(:scanned_resource, member_ids: resource.id)
