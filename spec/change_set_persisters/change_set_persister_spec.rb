@@ -849,7 +849,7 @@ RSpec.describe ChangeSetPersister do
     context "with existing member resources and file sets" do
       let(:resource1) { FactoryBot.create_for_repository(:file_set) }
       let(:resource2) { FactoryBot.create_for_repository(:complete_private_scanned_resource) }
-      it "propagates the access control policies, but not to FileSets" do
+      it "propagates the access control policies to resources and FileSets" do
         resource = FactoryBot.build(:scanned_resource, read_groups: [])
         resource.member_ids = [resource1.id, resource2.id]
         adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
@@ -857,10 +857,10 @@ RSpec.describe ChangeSetPersister do
 
         change_set = change_set_class.new(resource)
         change_set.validate(visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
-
         updated = change_set_persister.save(change_set: change_set)
+
         members = query_service.find_members(resource: updated)
-        expect(members.first.read_groups).to eq resource1.read_groups
+        expect(members.first.read_groups).to eq updated.read_groups
         resource_member = members.to_a.last
         expect(resource_member.visibility).to eq [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC]
         expect(resource_member.read_groups).to eq [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
