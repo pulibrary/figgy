@@ -78,6 +78,13 @@ RSpec.describe EphemeraFoldersController do
         expect(assigns(:available_boxes)).to be_nil
         expect(assigns(:selected_box)).to be_nil
       end
+      it "sets @parent_box_number" do
+        box = FactoryBot.create_for_repository(:ephemera_box)
+        FactoryBot.create_for_repository(:ephemera_project, member_ids: box.id)
+
+        get :new, params: { parent_id: box.id.to_s }
+        expect(assigns(:parent_box_number)).to eq "1"
+      end
     end
     context "when created within a folder" do
       it "sets @available_boxes and @selected_box" do
@@ -88,6 +95,13 @@ RSpec.describe EphemeraFoldersController do
 
         expect(assigns(:available_boxes)).to be_nil
         expect(assigns(:selected_box)).to be_nil
+      end
+      it "doesn't set @parent_box_number" do
+        box = FactoryBot.create_for_repository(:ephemera_box)
+        project = FactoryBot.create_for_repository(:ephemera_project, member_ids: box.id)
+
+        get :new, params: { parent_id: project.id.to_s }
+        expect(assigns(:parent_box_number)).to be_nil
       end
     end
   end
