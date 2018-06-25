@@ -5,6 +5,7 @@ class FileSetChangeSet < Valkyrie::ChangeSet
   property :viewing_hint, multiple: false, required: false
   property :hocr_content, multiple: false, required: false
   property :ocr_content, multiple: false, required: false
+  property :read_groups, multiple: true, required: false
   delegate :thumbnail_id, to: :model
 
   def primary_terms

@@ -34,8 +34,15 @@ class ChangeSetPersister
 
       # set visibility on most resources; VisibilityProperty concern will make necessary changes on read_groups
       def propagate_visibility(member_change_set)
-        return member_change_set unless change_set.respond_to?(:visibility) && change_set.visibility && member_change_set.respond_to?(:visibility=)
+        return propagate_read_groups(member_change_set) unless change_set.respond_to?(:visibility) && change_set.visibility && member_change_set.respond_to?(:visibility=)
         member_change_set.validate(visibility: change_set.visibility)
+        member_change_set
+      end
+
+      # when there's no visiblity property (e.g. for a FileSet), set directly on read groups
+      def propagate_read_groups(member_change_set)
+        return member_change_set unless member_change_set.respond_to?(:read_groups) && change_set.read_groups
+        member_change_set.validate(read_groups: change_set.read_groups)
         member_change_set
       end
 
@@ -85,12 +92,11 @@ class ChangeSetPersister
       end
 
       # Retrieve the member resource for the resource in the ChangeSet
-      # (This excludes FileSets)
       # @return [Array<Valkyrie::Resource>]
       def members
         wayfinder = Wayfinder.for(change_set.resource)
         if wayfinder.respond_to?(:members)
-          wayfinder.members.select { |x| !x.is_a?(FileSet) }
+          wayfinder.members
         else
           []
         end
