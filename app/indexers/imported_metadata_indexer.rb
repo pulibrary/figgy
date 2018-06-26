@@ -8,7 +8,8 @@ class ImportedMetadataIndexer
   def to_solr
     return {} unless resource.try(:primary_imported_metadata)
     {
-      local_identifier_ssim: imported_or_existing(attribute: :local_identifier)
+      local_identifier_ssim: imported_or_existing(attribute: :local_identifier),
+      call_number_tsim: imported_or_existing(attribute: :call_number)
     }
   end
 
