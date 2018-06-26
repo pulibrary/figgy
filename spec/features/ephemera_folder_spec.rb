@@ -120,6 +120,7 @@ RSpec.feature "Ephemera Folders", js: true do
       page.click_on "Save and Duplicate Metadata"
 
       expect(page).to have_content "Folder 4 Saved, Creating Another..."
+      expect(page).not_to have_css "input[name=\"_method\"][value=\"patch\"]", visible: false
     end
   end
 

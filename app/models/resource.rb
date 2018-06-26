@@ -34,10 +34,4 @@ class Resource < Valkyrie::Resource
   def media_resource?
     false
   end
-
-  # Ensures that the state of the model is properly returned
-  # @return [TrueClass, FalseClass]
-  def persisted?
-    !id.nil? && super
-  end
 end

@@ -33,10 +33,4 @@ RSpec.describe EphemeraFolder do
     folder.provenance = ["Donated by The Mario Bros"]
     expect(folder.provenance.first).to eq "Donated by The Mario Bros"
   end
-  it "identifies that it has not been persisted if it does not have an ID attribute" do
-    persisted_folder = FactoryBot.create_for_repository(:ephemera_folder)
-    expect(persisted_folder.persisted?).to be true
-    persisted_folder.id = nil
-    expect(persisted_folder.persisted?).to be false
-  end
 end
