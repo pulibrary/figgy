@@ -7,7 +7,7 @@ describe BoundingBoxHelper do
 
   describe "#bbox_input" do
     it "builds bounding box selector" do
-      expect(helper.bbox_input(property, change_set)).to include("{inputId: scanned_map_coverage})")
+      expect(helper.bbox_input(property, change_set)).to include("data-input-id='scanned_map_coverage'")
     end
   end
 

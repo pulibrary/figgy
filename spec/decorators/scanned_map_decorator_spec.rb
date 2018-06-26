@@ -35,7 +35,6 @@ RSpec.describe ScannedMapDecorator do
     expect(resource.decorate.rendered_holding_location.first).to eq("Lewis Library")
   end
   it "exposes markup for rendered coverage" do
-    expect(resource.decorate.rendered_coverage).to match(/#{Regexp.escape('boundingBoxSelector')}/)
     expect(resource.decorate.rendered_coverage).to match(/#{Regexp.escape('Toggle Map')}/)
   end
   it "exposes markup for rendered links" do
