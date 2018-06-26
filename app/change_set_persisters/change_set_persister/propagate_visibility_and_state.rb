@@ -41,7 +41,7 @@ class ChangeSetPersister
 
       # when there's no visiblity property (e.g. for a FileSet), set directly on read groups
       def propagate_read_groups(member_change_set)
-        return member_change_set unless member_change_set.respond_to?(:read_groups) && change_set.read_groups
+        return member_change_set unless member_change_set.respond_to?(:read_groups) && change_set.respond_to?(:read_groups) && change_set.read_groups
         member_change_set.validate(read_groups: change_set.read_groups)
         member_change_set
       end

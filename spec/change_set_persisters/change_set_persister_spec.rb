@@ -905,6 +905,31 @@ RSpec.describe ChangeSetPersister do
       end
     end
 
+    context "with a collection" do
+      let(:collection) { FactoryBot.create_for_repository(:collection) }
+      it "propagates visibility" do
+        FactoryBot.create_for_repository(:pending_private_scanned_resource, member_of_collection_ids: collection.id)
+
+        change_set = DynamicChangeSet.new(collection)
+        change_set.validate(title: "new title")
+        output = change_set_persister.save(change_set: change_set)
+
+        members = Wayfinder.for(output).members
+        expect(members.first.visibility).to eq [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC]
+      end
+      it "doesn't propagate read groups or state, having neither of these fields" do
+        FactoryBot.create_for_repository(:pending_private_scanned_resource, member_of_collection_ids: collection.id)
+
+        change_set = DynamicChangeSet.new(collection)
+        change_set.validate(title: "new title", visibility: nil)
+        output = change_set_persister.save(change_set: change_set)
+
+        members = Wayfinder.for(output).members
+        expect(members.first.state).to eq ["pending"]
+        expect(members.first.read_groups).to eq []
+      end
+    end
+
     context "with boxes and folders" do
       let(:change_set_class) { EphemeraBoxChangeSet }
       it "doesn't overwrite the folder workflow state" do
