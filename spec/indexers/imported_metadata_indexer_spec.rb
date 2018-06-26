@@ -18,10 +18,9 @@ RSpec.describe ImportedMetadataIndexer do
       change_set = ScannedMapChangeSet.new(resource)
       change_set.validate(source_metadata_identifier: "10001789")
       resource = change_set_persister.save(change_set: change_set)
-#      resource = FactoryBot.create_for_repository(:scanned_map, title: [], source_metadata_identifier: source_id)
       output = described_class.new(resource: resource).to_solr
 
-      expect(output[:call_number_ssim]).to eq ["G8731.F7 1949 .C6 (b)"]
+      expect(output[:call_number_tsim]).to eq ["G8731.F7 1949 .C6 (b)"]
     end
   end
 end
