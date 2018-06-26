@@ -11,12 +11,14 @@ import SaveAndIngestHandler from "save_and_ingest_handler"
 import MemberResourcesTables from "relationships/member_resources_table"
 import ParentResourcesTables from "relationships/parent_resources_table"
 import BulkLabeler from "bulk_labeler/bulk_label"
+import BoundingBoxSelector from "bounding_box_selector"
 
 export default class Initializer {
   constructor() {
     this.server_uploader = new ServerUploader
     this.initialize_form()
     this.initialize_timepicker()
+    this.initialize_bbox()
     this.structure_manager = new StructureManager
     this.modal_viewer = new ModalViewer
     this.derivative_form = new DerivativeForm
@@ -73,6 +75,13 @@ export default class Initializer {
       const $element = $(element)
       const $form = $element.parent('form')
       new ParentResourcesTables($element, $form)
+    })
+  }
+
+  initialize_bbox() {
+    $("#bbox").each((_i, element) => {
+      const $element = $(element)
+      new BoundingBoxSelector($element)
     })
   }
 

@@ -5,18 +5,16 @@ module BoundingBoxHelper
   # rubocop:disable Rails/OutputSafety
   def bbox_input(property, change_set)
     markup = ""
-    markup << %(<div id='bbox'></div>)
+    markup << %(<div id='bbox' data-input-id='#{bbox_input_id(property, change_set)}'></div>)
     markup << bbox_display_inputs
-    markup << bbox_edit_script_tag(property, change_set)
     markup.html_safe
   end
 
   def bbox_display(coverage)
     markup = ""
     markup << %(<tr><th></th>\n<td id='accordion'><ul class='tabular'>)
-    markup << %(<div id='bbox' class='collapse in'></div>)
+    markup << %(<div id='bbox' data-coverage='#{coverage}' data-read-only='true' class='collapse in'></div>)
     markup << bbox_display_inputs
-    markup << bbox_display_script_tag(coverage)
     markup << toggle_button
     markup << %(</ul></td></tr>)
     markup.html_safe
@@ -28,26 +26,6 @@ module BoundingBoxHelper
       <a data-toggle='collapse' data-parent='accordion' href='#bbox' class='btn btn-default'>
        Toggle Map</a>
       )
-  end
-
-  ##
-  # Returns script tag markup for loading the bounding box selector.
-  # @param[Symbol] name of property that holds bounding box string
-  # @return[String] script tag
-  def bbox_edit_script_tag(property, change_set)
-    %(
-      <script>
-        boundingBoxSelector({inputId: #{bbox_input_id(property, change_set)}});
-      </script>
-    )
-  end
-
-  def bbox_display_script_tag(coverage)
-    %(
-      <script>
-        boundingBoxSelector({coverage: '#{coverage}', readonly: true});
-      </script>
-    )
   end
 
   def bbox_input_id(property, change_set)
