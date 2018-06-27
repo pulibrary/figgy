@@ -57,7 +57,6 @@ Metrics/ClassLength:
     - 'app/decorators/scanned_resource_decorator.rb'
     - 'app/decorators/scanned_map_decorator.rb'
     - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
-    - 'app/controllers/catalog_controller.rb'
     - 'app/services/manifest_builder/manifest_service_locator.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/decorators/valkyrie/resource_decorator.rb'
