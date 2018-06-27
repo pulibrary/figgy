@@ -39,7 +39,7 @@ RSpec.describe ScannedMapsController do
         expect(response.body).to have_field "Rights Note"
         expect(response.body).to have_field "Local identifier"
         expect(response.body).to have_selector "#scanned_map_append_id[value='#{parent.id}']", visible: false
-        expect(response.body).to have_select "Collections", name: "scanned_map[member_of_collection_ids][]", options: [collection.title.first]
+        expect(response.body).not_to have_select "Collections", name: "scanned_map[member_of_collection_ids][]", options: [collection.title.first]
         expect(response.body).to have_field "Place Name"
         expect(response.body).to have_field "Temporal"
         expect(response.body).to have_select "Rights Statement", name: "scanned_map[rights_statement]", options: [""] + ControlledVocabulary.for(:rights_statement).all.map(&:label)

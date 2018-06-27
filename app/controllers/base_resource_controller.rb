@@ -88,12 +88,15 @@ class BaseResourceController < ApplicationController
     after_update_error e
   end
 
-  # Determine whether or not a resource
+  # Determine whether or not a resource has parents
   # @param resource [Valkyrie::Resource]
   # @return [TrueClass, FalseClass]
   def resource_has_parents?(resource)
-    return false unless resource.persisted?
-    resource.decorate.respond_to?(:decorated_parent_resource) && !resource.decorate.decorated_parent_resource.nil?
+    if !resource.persisted?
+      params[:parent_id]
+    else
+      resource.decorate.respond_to?(:decorated_parent_resource) && !resource.decorate.decorated_parent_resource.nil?
+    end
   end
 
   private
