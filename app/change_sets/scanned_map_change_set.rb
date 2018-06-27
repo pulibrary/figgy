@@ -27,7 +27,8 @@ class ScannedMapChangeSet < ScannedResourceChangeSet
       :issued,
       :creator,
       :language,
-      :cartographic_scale
+      :cartographic_scale,
+      :coverage
     ]
   end
   # rubocop:enable Metrics/MethodLength

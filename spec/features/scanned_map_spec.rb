@@ -19,7 +19,7 @@ RSpec.feature "ScannedMaps", js: true do
     expect(page).to have_field "Local identifier"
     expect(page).to have_css ".select[for='scanned_map_holding_location']", text: "Holding Location"
     expect(page).to have_css ".select[for='scanned_map_member_of_collection_ids']", text: "Collections"
-    expect(page).not_to have_css ".control-label[for='scanned_map_coverage']", text: "Coverage"
+    expect(page).to have_css ".control-label[for='scanned_map_coverage']", text: "Coverage"
     expect(page).to have_field "Description"
     expect(page).to have_field "Subject"
     expect(page).to have_field "Place Name"
