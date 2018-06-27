@@ -37,6 +37,8 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/derivatives', 'tmp/up
 # set :keep_releases, 5
 set :passenger_restart_with_touch, true
 
+set :whenever_update_flags, "--update-crontab #{fetch :whenever_identifier} --set #{fetch :whenever_variables} --user deploy"
+
 desc "Write the current version to public/version.txt"
 task :write_version do
   on roles(:app), in: :sequence do
@@ -74,4 +76,3 @@ namespace :deploy do
     end
   end
 end
-

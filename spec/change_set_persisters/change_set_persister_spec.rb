@@ -55,7 +55,7 @@ RSpec.describe ChangeSetPersister do
       expect(output.primary_imported_metadata.subject).to include "Administrative and political divisions—Maps"
       expect(output.primary_imported_metadata.spatial).to eq ["Cameroon", "Nigeria"]
       expect(output.primary_imported_metadata.coverage).to eq ["northlimit=12.500000; eastlimit=014.620000; southlimit=03.890000; westlimit=008.550000; units=degrees; projection=EPSG:4326"]
-      expect(output.identifier).to eq(["ark:/88435/jq085p05h"])
+      expect(output.identifier).to be nil
     end
     it "doesn't override an existing identifier" do
       resource = FactoryBot.build(:scanned_map, title: [], identifier: ["something"])

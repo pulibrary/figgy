@@ -107,5 +107,6 @@ gem "jquery-datatables-rails", "~> 3.4.0"
 gem "json-schema"
 gem "leaflet-rails", "~> 0.7"
 gem "prawn"
+gem "whenever", "~> 0.10"
 
 gem "graphiql-rails", group: :development
