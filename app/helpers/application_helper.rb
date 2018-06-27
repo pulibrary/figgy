@@ -85,4 +85,9 @@ module ApplicationHelper
   def visibility_badge(value)
     PermissionBadge.new(value).render
   end
+
+  def facet_search_url(field:, value:)
+    query = { "f[#{field}][]" => value }.to_param
+    "#{root_path}?#{query}"
+  end
 end
