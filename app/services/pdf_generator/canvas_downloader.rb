@@ -51,7 +51,7 @@ class PDFGenerator
       end
 
       def scale_factor
-        3.0
+        2.0
       end
 
       def bitonal?
