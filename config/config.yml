@@ -79,7 +79,7 @@ defaults: &defaults
       plum: "plum_events"
       geoblacklight: "gbl_events"
       geoserver: "geoserver_events"
-  vocabulary_namespace: <%= ENV.fetch('FIGGY_VOCAB_NS', 'https://plum.princeton.edu/ns/') %>
+  vocabulary_namespace: <%= ENV.fetch('FIGGY_VOCAB_NS', 'https://figgy.princeton.edu/ns/') %>
   devise:
     omniauth:
       cas:

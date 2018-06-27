@@ -119,7 +119,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
           "@type" => "skos:Concept",
           "pref_label" => ephemera_child_term.label.first,
           "in_scheme" => {
-            "@id" => "https://plum.princeton.edu/ns/testVocabulary/testVocabulary",
+            "@id" => "https://figgy.princeton.edu/ns/testVocabulary/testVocabulary",
             "@type" => "skos:ConceptScheme",
             "pref_label" => ephemera_vocabulary.label.first,
             "exact_match" => { "@id" => ephemera_vocabulary.uri.first }

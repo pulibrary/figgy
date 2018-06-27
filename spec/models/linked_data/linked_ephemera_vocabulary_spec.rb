@@ -10,7 +10,7 @@ RSpec.describe LinkedData::LinkedEphemeraVocabulary do
   describe "#as_jsonld" do
     it "exposes the attributes for serialization into JSON-LD" do
       expect(linked_ephemera_vocabulary.as_jsonld).not_to be_empty
-      expect(linked_ephemera_vocabulary.as_jsonld["@id"].to_s).to eq "https://plum.princeton.edu/ns/testVocabulary"
+      expect(linked_ephemera_vocabulary.as_jsonld["@id"].to_s).to eq "https://figgy.princeton.edu/ns/testVocabulary"
       expect(linked_ephemera_vocabulary.as_jsonld["@type"]).to eq "skos:ConceptScheme"
       expect(linked_ephemera_vocabulary.as_jsonld["pref_label"]).to eq "test vocabulary"
     end

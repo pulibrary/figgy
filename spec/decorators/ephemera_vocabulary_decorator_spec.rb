@@ -38,7 +38,7 @@ RSpec.describe EphemeraVocabularyDecorator do
 
     it "features the URI of the vocabulary in the internal URL" do
       expect(resource.decorate.internal_url).to be_a URI
-      expect(resource.decorate.internal_url.to_s).to eq "https://plum.princeton.edu/ns/testParentVocabulary/testVocabulary"
+      expect(resource.decorate.internal_url.to_s).to eq "https://figgy.princeton.edu/ns/testParentVocabulary/testVocabulary"
     end
   end
 
