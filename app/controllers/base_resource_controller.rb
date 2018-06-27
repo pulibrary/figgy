@@ -5,6 +5,7 @@ class BaseResourceController < ApplicationController
   include ResourceController
   include TokenAuth
   before_action :load_collections, only: [:new, :edit]
+  helper_method :resource_has_parents?
 
   def load_collections
     @collections = query_service.find_all_of_model(model: Collection).map(&:decorate)
@@ -85,6 +86,17 @@ class BaseResourceController < ApplicationController
     after_update_failure
   rescue Valkyrie::Persistence::ObjectNotFoundError => e
     after_update_error e
+  end
+
+  # Determine whether or not a resource has parents
+  # @param resource [Valkyrie::Resource]
+  # @return [TrueClass, FalseClass]
+  def resource_has_parents?(resource)
+    if !resource.persisted?
+      params[:parent_id]
+    else
+      resource.decorate.respond_to?(:decorated_parent_resource) && !resource.decorate.decorated_parent_resource.nil?
+    end
   end
 
   private

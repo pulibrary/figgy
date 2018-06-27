@@ -11,14 +11,36 @@ namespace :migrate do
     end
   end
 
-  desc "Migrated Ephemera Folders in Ephemera Boxes published in production to a completed workflow state"
+  desc "Migrates Ephemera Folders in Ephemera Boxes published in production to a completed workflow state"
   task ephemera_folders: :environment do
-    # Ensures that all member EphemeraFolders have their state properly updated
-    resources.each do |resource|
+    resources(model: EphemeraFolder).each do |resource|
       cs = DynamicChangeSet.new(resource)
       cs.prepopulate!
       logger.info "Migrating folders within the box #{resource.id}..."
       change_set_persister.save(change_set: cs)
+    end
+  end
+
+  desc "Migrates Collection members with children who have values in the member_of_collection_ids attribute"
+  task collection_members_with_children: :environment do
+    resources(model: Collection).each do |collection|
+      logger.info "Migrating Collection members for #{collection.id}..."
+
+      change_set_persister.buffer_into_index do |buffered_change_set_persister|
+        collection.decorate.members.each do |collection_member|
+          collection_member.decorate.members.each do |child|
+            next if !child.respond_to?(:member_of_collection_ids) || child.member_of_collection_ids.empty?
+
+            logger.info "Migrating the collections for member resource #{child.id}..."
+
+            child_change_set = DynamicChangeSet.new(child)
+            child_change_set.prepopulate!
+            child_change_set.validate(member_of_collection_ids: [])
+
+            buffered_change_set_persister.save(change_set: child_change_set)
+          end
+        end
+      end
     end
   end
 
@@ -34,7 +56,7 @@ namespace :migrate do
     # @return [ChangeSetPersister]
     def change_set_persister
       ChangeSetPersister.new(
-        metadata_adapter: Valkyrie.config.metadata_adapter,
+        metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
         storage_adapter: Valkyrie.config.storage_adapter
       )
     end
@@ -45,15 +67,9 @@ namespace :migrate do
       Valkyrie.config.metadata_adapter.query_service
     end
 
-    # Retrieves the model for the resource being updated during the migration
-    # @return [Class]
-    def model
-      EphemeraBox
-    end
-
     # Retrieves all of the resources being updated during the migration
     # @return [Enumerable<Valkyrie::Resource>]
-    def resources
+    def resources(model:)
       query_service.find_all_of_model(model: model)
     end
 end

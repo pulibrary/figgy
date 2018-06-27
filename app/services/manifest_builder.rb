@@ -176,15 +176,22 @@ class ManifestBuilder
       end
   end
 
+  # Wraps a Collection Resource for building Manifests
   class CollectionNode < RootNode
+    # Collections should not have FileSets as members
+    # @return [Array]
     def file_set_presenters
       []
     end
 
+    # Attempt to delegate the description to the CollectionDecorator
+    # @return [String]
     def description
       decorate.try(:description)
     end
 
+    # Collections should not have viewing hints
+    # @return [nil]
     def viewing_hint; end
   end
 
