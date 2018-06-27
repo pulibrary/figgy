@@ -44,8 +44,9 @@ class EphemeraFoldersController < BaseResourceController
       template.nested_properties.first
     elsif params[:create_another]
       resource = find_resource(params[:create_another])
-      # Setting new_record to false ensures that this is not treated as a persisted Resource
-      # https://github.com/samvera-labs/valkyrie/blob/master/lib/valkyrie/resource.rb#L83
+      # Setting new_record to true ensures that this is not treated as a persisted Resource
+      # @see Valkyrie::Resource#persisted?
+      # @see https://github.com/samvera-labs/valkyrie/blob/master/lib/valkyrie/resource.rb#L83
       resource.new(id: nil, new_record: true, created_at: nil, updated_at: nil, barcode: nil, folder_number: nil)
     else
       resource_class.new
