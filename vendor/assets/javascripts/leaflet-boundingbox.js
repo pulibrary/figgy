@@ -87,8 +87,8 @@ L.Control.ButtonContainer = L.Control.extend({
     }
 });
 
-L.BoundingBox = L.Class.extend({
-    includes: L.Mixin.Events,
+L.BoundingBox = L.Layer.extend({
+    includes: L.Evented,
 
     options: {
         adjustButton: {
