@@ -28,7 +28,7 @@ describe VoyagerUpdater::Event do
   end
 
   after do
-    ActiveJob::Base.queue_adapter.enqueued_jobs = []
+    ActiveJob::Base.queue_adapter.enqueued_jobs = [] if ActiveJob::Base.queue_adapter.respond_to?(:enqueued_jobs)
   end
 
   describe ".new" do
@@ -45,6 +45,12 @@ describe VoyagerUpdater::Event do
     end
     it "determines if a processing job has been enqueued" do
       expect(event.enqueued?).to be true
+    end
+    context "when the queue adapter does not support searching for enqueued jobs" do
+      with_queue_adapter :inline
+      it "assumes that the processing job has not been enqueued" do
+        expect(event.enqueued?).to be false
+      end
     end
   end
 

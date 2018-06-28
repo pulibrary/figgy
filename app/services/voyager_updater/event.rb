@@ -17,6 +17,8 @@ module VoyagerUpdater
     # Determine whether or not the Event has been processed
     # @return [Boolean]
     def enqueued?
+      return false unless ActiveJob::Base.queue_adapter.respond_to?(:enqueued_jobs)
+
       !ActiveJob::Base.queue_adapter.enqueued_jobs.find do |enqueued|
         enqueued[:job] == job_klass && enqueued[:args].first.include?(id.to_s)
       end.nil?
