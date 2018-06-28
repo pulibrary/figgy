@@ -44,6 +44,7 @@ exports[`ResourceForm.vue has the expected html structure 1`] = `
                 class="viewDirInput"
                 name="viewDir"
                 type="radio"
+                value="left-to-right"
               />
               
               left-to-right
@@ -60,6 +61,7 @@ exports[`ResourceForm.vue has the expected html structure 1`] = `
                 class="viewDirInput"
                 name="viewDir"
                 type="radio"
+                value="right-to-left"
               />
               
               right-to-left
@@ -76,6 +78,7 @@ exports[`ResourceForm.vue has the expected html structure 1`] = `
                 class="viewDirInput"
                 name="viewDir"
                 type="radio"
+                value="top-to-bottom"
               />
               
               top-to-bottom
@@ -92,6 +95,7 @@ exports[`ResourceForm.vue has the expected html structure 1`] = `
                 class="viewDirInput"
                 name="viewDir"
                 type="radio"
+                value="bottom-to-top"
               />
               
               bottom-to-top
@@ -119,6 +123,7 @@ exports[`ResourceForm.vue has the expected html structure 1`] = `
                 class="viewHintInput"
                 name="viewHint"
                 type="radio"
+                value="individuals"
               />
               
               individuals
@@ -135,6 +140,7 @@ exports[`ResourceForm.vue has the expected html structure 1`] = `
                 class="viewHintInput"
                 name="viewHint"
                 type="radio"
+                value="paged"
               />
               
               paged
@@ -151,6 +157,7 @@ exports[`ResourceForm.vue has the expected html structure 1`] = `
                 class="viewHintInput"
                 name="viewHint"
                 type="radio"
+                value="continuous"
               />
               
               continuous
