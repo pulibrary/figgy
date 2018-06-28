@@ -84,6 +84,7 @@ exports[`FilesetForm.vue has the expected html structure 1`] = `
                 <input
                   id="isThumbnail"
                   type="checkbox"
+                  value="50b5e49b-ade7-4278-8265-4f72081f26a5"
                 />
                 
                 Set as Thumbnail
@@ -97,6 +98,7 @@ exports[`FilesetForm.vue has the expected html structure 1`] = `
                 <input
                   id="isStartPage"
                   type="checkbox"
+                  value="50b5e49b-ade7-4278-8265-4f72081f26a5"
                 />
                 
                 Set as Start Page
