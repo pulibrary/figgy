@@ -45,12 +45,10 @@ describe VoyagerUpdateJob do
       allow(logger).to receive(:info)
       allow(logger).to receive(:warn)
       allow(Rails).to receive(:logger).and_return(logger)
-
-      described_class.perform_now([ids.first])
     end
 
     it "logs a warning" do
-      expect(logger).to have_received(:warn).with("VoyagerUpdateJob: Unable to process the changed Voyager record 123456: persistence error message")
+      expect { described_class.perform_now([ids.first]) }.to output("VoyagerUpdateJob: Unable to process the changed Voyager record 123456: persistence error message\n").to_stderr
     end
   end
 end

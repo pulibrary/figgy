@@ -4,7 +4,7 @@ class VoyagerUpdateJob < ApplicationJob
   # Update all resources with Voyager metadata
   # @param ids [Array<String>]
   def perform(ids)
-    Rails.logger.info "Processing updates for IDs: #{ids.join(', ')}" unless ids.empty?
+    logger.info "Processing updates for IDs: #{ids.join(', ')}" unless ids.empty?
 
     change_set_persister.buffer_into_index do |buffered_change_set_persister|
       ids.each do |id|
@@ -19,9 +19,10 @@ class VoyagerUpdateJob < ApplicationJob
           change_set.prepopulate!
           change_set.validate(refresh_remote_metadata: true)
 
+          logger.info "Processing updates for Voyager record #{id} imported into resource #{resource.id}..."
           buffered_change_set_persister.save(change_set: change_set)
         rescue StandardError => error
-          Rails.logger.warn "#{self.class}: Unable to process the changed Voyager record #{id}: #{error}"
+          warn "#{self.class}: Unable to process the changed Voyager record #{id}: #{error}"
         end
       end
     end
