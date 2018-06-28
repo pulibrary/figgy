@@ -6,8 +6,9 @@
 
 set :output, "/tmp/figgy_update_bib_ids.log"
 set :job_template, "bash -l -c 'export PATH=\"/usr/local/bin/:$PATH\" && :job'"
+job_type :logging_rake, "cd :path && :environment_variable=:environment bundle exec rake :task :output"
 every :day, at: "2:00 am", roles: [:db] do
-  rake "figgy:update_bib_ids"
+  logging_rake "figgy:update_bib_ids"
 end
 
 # Example:
