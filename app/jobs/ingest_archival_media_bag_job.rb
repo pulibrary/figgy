@@ -102,6 +102,9 @@ class IngestArchivalMediaBagJob < ApplicationJob
           end
         end
 
+        # @param media_resource_change_set [MediaResourceChangeSet]
+        # @param sides [Array<String>]
+        # @return [Array<MediaResourceChangeSet>]
         def add_av(media_resource_change_set, sides)
           sides.each do |side|
             file_set = create_av_file_set(side)
@@ -110,6 +113,9 @@ class IngestArchivalMediaBagJob < ApplicationJob
           end
         end
 
+        # @param media_resource_change_set [MediaResourceChangeSet]
+        # @param sides [Array<String>]
+        # @return [Array<MediaResourceChangeSet>]
         def add_pbcore(media_resource_change_set, sides)
           sides.map { |side| side.split("_").first }.uniq.each do |barcode|
             file = create_pbcore_file(barcode)

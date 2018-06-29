@@ -18,13 +18,34 @@ class RemoteRecord
   end
 
   class PulfaRecord
+    BREADCRUMBS_TITLE = "breadcrumbs_title"
+    SIMPLE_TITLE = "simple_title"
+
     attr_reader :source_metadata_identifier
     def initialize(source_metadata_identifier)
       @source_metadata_identifier = source_metadata_identifier
     end
 
-    def attributes
-      @attributes ||= client_result.attributes.merge(source_metadata: client_result.full_source)
+    def attributes(title_type: BREADCRUMBS_TITLE)
+      case title_type
+      when SIMPLE_TITLE
+        # Work-around for https://github.com/pulibrary/figgy/issues/1444
+        return @attributes if @attributes
+
+        values = client_result.attributes.merge(source_metadata: client_result.full_source)
+        doc = Nokogiri::XML(client_result.source)
+        doc.remove_namespaces!
+        collection_values = PulMetadataServices::PulfaRecord::CollectionAttributes.new(doc)
+        if collection_values.unittitle_element
+          values[:title] = collection_values.unittitle_element.text
+        end
+
+        @attributes = values
+      when BREADCRUMBS_TITLE
+        @attributes ||= client_result.attributes.merge(source_metadata: client_result.full_source)
+      else
+        raise NotImplementedError, "#{self.class}: #{title_type} not supported for retrieving titles"
+      end
     end
 
     def success?

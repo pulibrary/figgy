@@ -11,7 +11,11 @@ class ChangeSetPersister
       return unless change_set.respond_to?(:apply_remote_metadata?)
       return unless change_set.respond_to?(:source_metadata_identifier)
       return unless change_set.apply_remote_metadata?
-      attributes = RemoteRecord.retrieve(change_set.source_metadata_identifier).attributes
+      attributes = if change_set.model.media_resource?
+                     RemoteRecord.retrieve(change_set.source_metadata_identifier).attributes(title_type: RemoteRecord::PulfaRecord::SIMPLE_TITLE)
+                   else
+                     RemoteRecord.retrieve(change_set.source_metadata_identifier).attributes
+                   end
       apply(attributes)
       change_set
     end

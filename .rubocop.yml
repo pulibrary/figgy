@@ -95,6 +95,7 @@ Metrics/MethodLength:
     - 'app/services/file_appender.rb'
     - 'app/jobs/voyager_update_job.rb'
     - 'app/models/mets_document.rb'
+    - 'app/models/remote_record.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
