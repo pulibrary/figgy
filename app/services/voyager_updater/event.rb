@@ -17,7 +17,7 @@ module VoyagerUpdater
     # Determine whether or not the Event has been processed
     # @return [Boolean]
     def processed?
-      ProcessedEvent.where(event_id: id).count.positive?
+      !processed_events(event_id: id).empty?
     end
 
     # Construct the data Dump object (using values retrieved from the endpoint)
@@ -37,7 +37,10 @@ module VoyagerUpdater
     def process!
       return if processed? || unprocessable?
       job_klass.perform_later(ids_needing_updated)
-      ProcessedEvent.create!(event_id: id)
+      processed_event = ProcessedEvent.new
+      change_set = ProcessedEventChangeSet.new(processed_event)
+      change_set.validate(event_id: id)
+      change_set_persister.save(change_set: change_set)
     end
 
     private
@@ -46,6 +49,25 @@ module VoyagerUpdater
       # @return [Class]
       def job_klass
         VoyagerUpdateJob
+      end
+
+      # Retrieves the persisted ProcessedEvent Resources
+      # @param event_id [String] the ID for the Voyager update event
+      # @return [Array<ProcessedEvent>]
+      def processed_events(event_id:)
+        query_service.custom_queries.find_by_string_property(property: "event_id", value: event_id).to_a
+      end
+
+      # Retrieves the query service from the metadata adapter
+      # @return [Valkyrie::Persistence::Postgres::QueryService]
+      def query_service
+        Valkyrie.config.metadata_adapter.query_service
+      end
+
+      # Retrieve the change set persister for repository resources
+      # @return [ChangeSetPersister]
+      def change_set_persister
+        ChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter)
       end
   end
 end

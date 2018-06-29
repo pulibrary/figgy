@@ -38,7 +38,7 @@ describe VoyagerUpdater::Event do
   describe "#processed?" do
     context "with an existing processed event" do
       before do
-        ProcessedEvent.create(event_id: id.to_i)
+        FactoryBot.create_for_repository(:processed_event, event_id: id)
       end
       it "determines if a processing job has been enqueued" do
         expect(event.processed?).to be true
@@ -108,7 +108,7 @@ describe VoyagerUpdater::Event do
   context "when the job has been enqueued" do
     describe "#process!" do
       before do
-        ProcessedEvent.create(event_id: id.to_i)
+        FactoryBot.create_for_repository(:processed_event, event_id: id)
         allow(VoyagerUpdateJob).to receive(:perform_later)
 
         event.process!
