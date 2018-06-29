@@ -18,6 +18,7 @@ class FileMetadata < Valkyrie::Resource
   attribute :size, Valkyrie::Types::Set
   attribute :geometry, Valkyrie::Types::Set
   attribute :processing_note, Valkyrie::Types::Set
+  attribute :error_message, Valkyrie::Types::Set
 
   attribute :date_of_digitization, Valkyrie::Types::Set # Encoded_date
   attribute :producer, Valkyrie::Types::Set # Producer

@@ -24,4 +24,14 @@ RSpec.describe "base/file_manager.html.erb", type: :view do
     expect(rendered).to have_selector(".gallery form", count: 2)
     expect(rendered).to have_selector("img[src='#{ManifestBuilder::ManifestHelper.new.manifest_image_path(member.thumbnail_id)}/full/!200,150/0/default.jpg']")
   end
+
+  context "when a FileSet has errors" do
+    let(:original_file) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], error_message: ["errors"]) }
+    let(:file_set) { FactoryBot.build(:file_set, file_metadata: [original_file]) }
+    let(:member) { FileSetChangeSet.new(file_set) }
+
+    it "displays an error message" do
+      expect(rendered).to include "<span>Error generating derivatives</span>"
+    end
+  end
 end

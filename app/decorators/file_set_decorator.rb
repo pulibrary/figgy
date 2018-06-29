@@ -16,7 +16,8 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
           :processing_note,
           :barcode,
           :part,
-          :transfer_notes
+          :transfer_notes,
+          :error_message
 
   delegate :collections, to: :wayfinder
 

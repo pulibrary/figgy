@@ -39,15 +39,27 @@ RSpec.describe VectorResourceDerivativeService do
     allow(UpdateFgdcOnlinkJob).to receive(:perform_later)
   end
 
-  it "creates a zipped display vector intermediate file and a thumbnail in the geo derivatives directory" do
-    resource = query_service.find_by(id: valid_resource.id)
-    shapefiles = resource.file_metadata.find_all { |f| f.label == ["display_vector.zip"] }
-    thumbnails = resource.file_metadata.find_all { |f| f.label == ["thumbnail.png"] }
-    shapefile_file = Valkyrie::StorageAdapter.find_by(id: shapefiles.first.file_identifiers.first)
-    thumbnail_file = Valkyrie::StorageAdapter.find_by(id: thumbnails.first.file_identifiers.first)
-    expect(shapefile_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
-    expect(thumbnail_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
-    expect(UpdateFgdcOnlinkJob).to have_received(:perform_later)
+  context "with a valid shapefile" do
+    it "creates a zipped display vector intermediate file and a thumbnail in the geo derivatives directory" do
+      resource = query_service.find_by(id: valid_resource.id)
+      shapefiles = resource.file_metadata.find_all { |f| f.label == ["display_vector.zip"] }
+      thumbnails = resource.file_metadata.find_all { |f| f.label == ["thumbnail.png"] }
+      shapefile_file = Valkyrie::StorageAdapter.find_by(id: shapefiles.first.file_identifiers.first)
+      thumbnail_file = Valkyrie::StorageAdapter.find_by(id: thumbnails.first.file_identifiers.first)
+      expect(shapefile_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
+      expect(thumbnail_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
+      expect(UpdateFgdcOnlinkJob).to have_received(:perform_later)
+    end
+  end
+
+  context "with an invalid shapefile" do
+    let(:file) { fixture_file_upload("files/vector/shapefile-no-crs.zip", "application/zip") }
+
+    it "stores an error message on the fileset" do
+      expect { valid_resource }.to raise_error(RuntimeError)
+      file_set = query_service.find_all_of_model(model: FileSet).first
+      expect(file_set.original_file.error_message).to include(/ogr2ogr/)
+    end
   end
 
   describe "#cleanup_derivatives" do
