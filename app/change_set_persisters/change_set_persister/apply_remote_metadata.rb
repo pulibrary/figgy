@@ -18,9 +18,30 @@ class ChangeSetPersister
 
     private
 
+      # Determines whether or not the resource in the ChangeSet is a geospatial resource
+      # @return [Boolean]
+      def geo_resource?
+        change_set.model.respond_to?(:geo_resource?) && change_set.model.geo_resource?
+      end
+
+      # Determines whether or not an identifier value is an ARK identifier
+      # @param identifier [String]
+      # @return [Boolean]
+      def ark?(identifier)
+        identifier.start_with?(Ark.new(identifier).uri)
+      end
+
+      # Determines whether or not an identifier has been modified in the ChangeSet
+      # @return [Boolean]
+      def identifier_exists?
+        change_set.model.identifier.present?
+      end
+
+      # Sets the remote metadata for the resource in the ChangeSet
+      # @param attributes [Hash]
       def apply(attributes)
         change_set.model.imported_metadata = ImportedMetadata.new(attributes)
-        return unless change_set.model.identifier.blank? && attributes[:identifier] && attributes[:identifier].start_with?(Ark.new(attributes[:identifier]).uri)
+        return unless attributes[:identifier] && !geo_resource? && !identifier_exists? && ark?(attributes[:identifier])
         change_set.model.identifier = Ark.new(attributes[:identifier]).identifier
       end
   end
