@@ -157,10 +157,11 @@ Rails.application.routes.draw do
     resources :scanned_maps do
       member do
         get :file_manager
-        get :order_manager
-        get :structure
-        get :manifest, defaults: { format: :json }
         get :geoblacklight, defaults: { format: :json }
+        get :manifest, defaults: { format: :json }
+        get :order_manager
+        get :pdf
+        get :structure
         post :browse_everything_files
       end
     end
