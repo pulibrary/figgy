@@ -12,6 +12,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
   def perform(collection_component:, bag_path:, user:)
     bag_path = Pathname.new(bag_path.to_s)
+    # This requires a resource
     bag = ArchivalMediaBagParser.new(path: bag_path, component_id: collection_component)
     raise InvalidBagError, "Bag at #{bag_path} is an invalid bag" unless bag.valid?
     changeset_persister.buffer_into_index do |buffered_persister|

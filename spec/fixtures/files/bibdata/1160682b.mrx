@@ -1,0 +1,104 @@
+<record type="Bibliographic" xmlns="http://www.loc.gov/MARC21/slim" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+    <leader>00623cam a22002055  4500</leader>
+    <controlfield tag="001">1160682</controlfield>
+    <controlfield tag="005">20100812121323.0</controlfield>
+    <controlfield tag="008">911212s1899    sp            000 0 spa d</controlfield>
+    <datafield tag="035" ind1=" " ind2=" ">
+        <subfield code="a">(OCoLC)ocm24943424</subfield>
+    </datafield>
+    <datafield tag="035" ind1=" " ind2=" ">
+        <subfield code="9">CCR0879TS</subfield>
+    </datafield>
+    <datafield tag="040" ind1=" " ind2=" ">
+        <subfield code="a">RQR</subfield>
+        <subfield code="c">RQR</subfield>
+        <subfield code="d">PUL</subfield>
+    </datafield>
+    <datafield tag="092" ind1=" " ind2=" ">
+        <subfield code="a">972.9105</subfield>
+        <subfield code="b">C84d</subfield>
+    </datafield>
+    <datafield tag="100" ind1="1" ind2=" ">
+        <subfield code="a">Moffat, Steven.</subfield>
+    </datafield>
+    <datafield tag="240" ind1="0" ind2="3">
+        <subfield code="a">Angels</subfield>
+        <subfield code="b">take Manhattan</subfield>
+    </datafield>
+    <datafield tag="240" ind1="0" ind2="3">
+        <subfield code="6">880-03</subfield>
+    </datafield>
+    <datafield tag="245" ind1="0" ind2="4">
+        <subfield code="a">The weeping angels</subfield>
+    </datafield>
+    <datafield tag="246" ind1="0" ind2="3">
+        <subfield code="6">880-01</subfield>
+        <subfield code="a">Flesh and stone</subfield>
+    </datafield>
+    <datafield tag="260" ind1=" " ind2=" ">
+        <subfield code="a">Barceloa,</subfield>
+        <subfield code="b">A. Martínez,</subfield>
+        <subfield code="c">1899.</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+        <subfield code="a">236, [3] p.</subfield>
+        <subfield code="c">19 cm.</subfield>
+    </datafield>
+    <datafield tag="505" ind1="0" ind2=" ">
+        <subfield code="6">880-02</subfield>
+        <subfield code="a">Contents / foo.</subfield>
+    </datafield>
+    <datafield tag="520" ind1=" " ind2=" ">
+        <subfield code="a">Fish fingers and custard!</subfield>
+    </datafield>
+    <datafield tag="521" ind1="0" ind2=" ">
+        <subfield code="a">7 & up.</subfield>
+    </datafield>
+    <datafield tag="651" ind1=" " ind2="0">
+        <subfield code="a">Cuba</subfield>
+        <subfield code="x">History</subfield>
+        <subfield code="y">Revolution, 1895-1898.</subfield>
+    </datafield>
+    <datafield tag="852" ind1="0" ind2=" ">
+        <subfield code="b">f</subfield>
+        <subfield code="h">F1786</subfield>
+        <subfield code="i">.C677 1899</subfield>
+        <subfield code="p">1329236</subfield>
+        <subfield code="x">reclassed from: 1333.268</subfield>
+    </datafield>
+    <datafield tag="880" ind1="1" ind2=" ">
+        <subfield code="6">100-01/(2/r</subfield>
+        <subfield code="a">פסין, אהרן יהושע.</subfield>
+    </datafield>
+    <datafield tag="880" ind1="2" ind2=" ">
+        <subfield code="a">test linked contents</subfield>
+    </datafield>
+    <datafield tag="880" ind1="3" ind2=" ">
+        <subfield code="a">test uniform title</subfield>
+    </datafield>
+    <datafield tag="947" ind1=" " ind2=" ">
+        <subfield code="a">CCR0879</subfield>
+    </datafield>
+    <datafield tag="911" ind1=" " ind2=" ">
+        <subfield code="a">20000402</subfield>
+    </datafield>
+</record>
+<record type="Holdings">
+    <leader>00235cx  a2200109z  4500</leader>
+    <controlfield tag="001">1329236</controlfield>
+    <controlfield tag="004">1160682</controlfield>
+    <controlfield tag="005">20111012073950.0</controlfield>
+    <controlfield tag="008">0006122u    0   1001uu   0000000</controlfield>
+    <datafield tag="014" ind1="1" ind2=" ">
+        <subfield code="a">CCR0879TS001</subfield>
+    </datafield>
+    <datafield tag="014" ind1="0" ind2=" ">
+        <subfield code="9">001329236</subfield>
+    </datafield>
+    <datafield tag="852" ind1="0" ind2="0">
+        <subfield code="b">f</subfield>
+        <subfield code="t">1</subfield>
+        <subfield code="h">F1786</subfield>
+        <subfield code="i">.C677 1899</subfield>
+    </datafield>
+</record>

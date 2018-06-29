@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 class RemoteRecord
-  def self.retrieve(source_metadata_identifier)
+  # Factory method for PulMetadataServices objects
+  # @param source_metadata_identifier [String]
+  # @param resource [Resource]
+  # @return [RemoteRecord, RemoteRecord::PulfaRecord]
+  def self.retrieve(source_metadata_identifier, resource_klass: nil)
     if PulMetadataServices::Client.bibdata?(source_metadata_identifier)
       new(source_metadata_identifier)
     else
-      PulfaRecord.new(source_metadata_identifier)
+      PulfaRecord.new(source_metadata_identifier, resource_klass)
     end
   end
 
@@ -18,34 +22,18 @@ class RemoteRecord
   end
 
   class PulfaRecord
-    BREADCRUMBS_TITLE = "breadcrumbs_title"
-    SIMPLE_TITLE = "simple_title"
-
     attr_reader :source_metadata_identifier
-    def initialize(source_metadata_identifier)
+
+    # Constructor
+    # @param source_metadata_identifier [String]
+    # @param resource [Resource]
+    def initialize(source_metadata_identifier, resource = nil)
       @source_metadata_identifier = source_metadata_identifier
+      @resource = resource
     end
 
-    def attributes(title_type: BREADCRUMBS_TITLE)
-      case title_type
-      when SIMPLE_TITLE
-        # Work-around for https://github.com/pulibrary/figgy/issues/1444
-        return @attributes if @attributes
-
-        values = client_result.attributes.merge(source_metadata: client_result.full_source)
-        doc = Nokogiri::XML(client_result.source)
-        doc.remove_namespaces!
-        collection_values = PulMetadataServices::PulfaRecord::CollectionAttributes.new(doc)
-        if collection_values.unittitle_element
-          values[:title] = collection_values.unittitle_element.text
-        end
-
-        @attributes = values
-      when BREADCRUMBS_TITLE
-        @attributes ||= client_result.attributes.merge(source_metadata: client_result.full_source)
-      else
-        raise NotImplementedError, "#{self.class}: #{title_type} not supported for retrieving titles"
-      end
+    def attributes
+      @attributes ||= client_result.attributes.merge(source_metadata: client_result.full_source)
     end
 
     def success?
@@ -53,7 +41,7 @@ class RemoteRecord
     end
 
     def client_result
-      @client_result ||= PulMetadataServices::Client.retrieve(source_metadata_identifier)
+      @client_result ||= PulMetadataServices::Client.retrieve(source_metadata_identifier, @resource)
     end
   end
 

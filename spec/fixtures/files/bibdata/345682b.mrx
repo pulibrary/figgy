@@ -1,0 +1,103 @@
+<collection xmlns="http://www.loc.gov/MARC21/slim" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+    <record type="Bibliographic">
+        <leader>00731cam a2200229 a 4500</leader>
+        <controlfield tag="001">345682</controlfield>
+        <controlfield tag="005">20120521194311.0</controlfield>
+        <controlfield tag="008">861209s1985    enk           00010 mul d</controlfield>
+        <datafield tag="020" ind1=" " ind2=" ">
+            <subfield code="a">0947752196</subfield>
+        </datafield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)13154067</subfield>
+        </datafield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(CStRLIN)NJPG86-B55361</subfield>
+        </datafield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="9">ABS1044TS</subfield>
+        </datafield>
+        <datafield tag="040" ind1=" " ind2=" ">
+            <subfield code="a">NBiSU</subfield>
+            <subfield code="c">NBiSU</subfield>
+            <subfield code="d">NjP</subfield>
+        </datafield>
+        <datafield tag="041" ind1=" " ind2=" ">
+            <subfield code="a">eng</subfield>
+            <subfield code="a">dut</subfield>
+        </datafield>
+        <datafield tag="100" ind1="1" ind2=" ">
+            <subfield code="a">White, Michael M.</subfield>
+        </datafield>
+        <datafield tag="245" ind1="1" ind2="0">
+            <subfield code="a">Opportunity in crisis :</subfield>
+            <subfield code="b">money and power in world politics 1986-88 /</subfield>
+            <subfield code="c">Michael M. White.</subfield>
+        </datafield>
+        <datafield tag="260" ind1=" " ind2=" ">
+            <subfield code="a">London :</subfield>
+            <subfield code="b">Firethorn Press,</subfield>
+            <subfield code="c">1985.</subfield>
+        </datafield>
+        <datafield tag="300" ind1=" " ind2=" ">
+            <subfield code="a">341 p. ;</subfield>
+            <subfield code="c">24 cm.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">International relations.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">World politics</subfield>
+            <subfield code="y">1985-1995.</subfield>
+        </datafield>
+        <datafield tag="700" ind1="1" ind2=" ">
+            <subfield code="6">880-01</subfield>
+        </datafield>
+        <datafield tag="700" ind1="1" ind2="2">
+            <subfield code="a">Jones, Martha.</subfield>
+            <subfield code="t">The doctor's daughter.</subfield>
+        </datafield>
+        <datafield tag="730" ind1="1" ind2="2">
+            <subfield code="a">Test Part</subfield>
+        </datafield>
+        <datafield tag="880" ind1="1" ind2=" ">
+            <subfield code="a">test linked contributor</subfield>
+        </datafield>
+        <datafield tag="998" ind1=" " ind2=" ">
+            <subfield code="a">12/09/86</subfield>
+            <subfield code="s">9114</subfield>
+            <subfield code="n">NjP</subfield>
+            <subfield code="w">NYBG86B26358</subfield>
+            <subfield code="d">12/09/86</subfield>
+            <subfield code="c">DF</subfield>
+            <subfield code="b">LDP</subfield>
+            <subfield code="i">861209</subfield>
+            <subfield code="l">NJPG</subfield>
+        </datafield>
+        <datafield tag="911" ind1=" " ind2=" ">
+            <subfield code="a">19921028</subfield>
+        </datafield>
+        <datafield tag="912" ind1=" " ind2=" ">
+            <subfield code="a">19900827000000.0</subfield>
+        </datafield>
+    </record>
+    <record type="Holdings">
+        <leader>00244cx  a2200109z  4500</leader>
+        <controlfield tag="001">377678</controlfield>
+        <controlfield tag="004">345682</controlfield>
+        <controlfield tag="005">20020701101040.0</controlfield>
+        <controlfield tag="008">0006122u    0   1001uu   0000000</controlfield>
+        <datafield tag="014" ind1="1" ind2=" ">
+            <subfield code="a">ABS1044TS001</subfield>
+        </datafield>
+        <datafield tag="014" ind1="0" ind2=" ">
+            <subfield code="9">000377677</subfield>
+        </datafield>
+        <datafield tag="852" ind1="0" ind2="0">
+            <subfield code="b">rcppa</subfield>
+            <subfield code="t">1</subfield>
+            <subfield code="h">JX1395</subfield>
+            <subfield code="i">.W44</subfield>
+            <subfield code="x">tr fr pitn</subfield>
+        </datafield>
+    </record>
+</collection>

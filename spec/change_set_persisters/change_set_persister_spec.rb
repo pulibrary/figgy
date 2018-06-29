@@ -1126,7 +1126,7 @@ RSpec.describe ChangeSetPersister do
   describe "#save" do
     context "when persisting a bag of audiovisual resources in an existing collection" do
       let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag") }
-      let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "C0652") }
+      let(:collection) { FactoryBot.build(:archival_media_collection) }
       let(:change_set) { ArchivalMediaCollectionChangeSet.new(collection, source_metadata_identifier: "C0652", bag_path: bag_path) }
 
       before do

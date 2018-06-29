@@ -28,11 +28,6 @@ describe RemoteRecord::PulfaRecord, type: :model do
       expect(pulfa_record.attributes).to include :source_metadata
       expect(pulfa_record.attributes[:source_metadata]).not_to be_empty
     end
-    context "with an unsupported title_type argument" do
-      it "raises an error" do
-        expect { pulfa_record.attributes(title_type: "invalid") }.to raise_error(NotImplementedError, "RemoteRecord::PulfaRecord: invalid not supported for retrieving titles")
-      end
-    end
   end
 
   describe "#success?" do

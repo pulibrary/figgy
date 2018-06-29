@@ -1,0 +1,104 @@
+<collection xmlns="http://www.loc.gov/MARC21/slim" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+    <record type="Bibliographic">
+        <leader>01283cam a2200289Ia 4500</leader>
+        <controlfield tag="001">7214786</controlfield>
+        <controlfield tag="005">20130528142317.0</controlfield>
+        <controlfield tag="008">120716s2012    is            001 0 heb d</controlfield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)ocn844774599</subfield>
+        </datafield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)ocn804105669</subfield>
+        </datafield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)804105669</subfield>
+        </datafield>
+        <datafield tag="040" ind1=" " ind2=" ">
+            <subfield code="a">HLS</subfield>
+            <subfield code="c">PUL</subfield>
+            <subfield code="d">WEINB</subfield>
+            <subfield code="d">OCLCO</subfield>
+            <subfield code="d">PUL</subfield>
+        </datafield>
+        <datafield tag="066" ind1=" " ind2=" ">
+            <subfield code="c">(2</subfield>
+        </datafield>
+        <datafield tag="035" ind1=" " ind2=" ">
+            <subfield code="a">(OCoLC)844774599</subfield>
+        </datafield>
+        <datafield tag="079" ind1=" " ind2=" ">
+            <subfield code="a">ocn804105669</subfield>
+        </datafield>
+        <datafield tag="090" ind1=" " ind2=" ">
+            <subfield code="a">BM700</subfield>
+            <subfield code="b">.P474 2012</subfield>
+        </datafield>
+        <datafield tag="100" ind1="1" ind2=" ">
+            <subfield code="6">880-01</subfield>
+            <subfield code="a">Pesin, Aharon Yehoshuʻa.</subfield>
+        </datafield>
+        <datafield tag="245" ind1="1" ind2="0">
+            <subfield code="6">880-02</subfield>
+            <subfield code="a">Be-darkhe avot</subfield>
+        </datafield>
+        <datafield tag="260" ind1=" " ind2=" ">
+            <subfield code="a">[Jerusalem?] :</subfield>
+            <subfield code="b">A.Y. Pesin,</subfield>
+            <subfield code="c">[772, i.e., 2012]</subfield>
+        </datafield>
+        <datafield tag="300" ind1=" " ind2=" ">
+            <subfield code="a">314 p. ;</subfield>
+            <subfield code="c">25 cm.</subfield>
+        </datafield>
+        <datafield tag="500" ind1=" " ind2=" ">
+            <subfield code="a">Includes index.</subfield>
+        </datafield>
+        <datafield tag="650" ind1=" " ind2="0">
+            <subfield code="a">Judaism</subfield>
+            <subfield code="x">Customs and practices</subfield>
+            <subfield code="x">History.</subfield>
+        </datafield>
+        <datafield tag="880" ind1="1" ind2=" ">
+            <subfield code="6">100-01/(2/r</subfield>
+            <subfield code="a">פסין, אהרן יהושע.</subfield>
+        </datafield>
+        <datafield tag="880" ind1="1" ind2="0">
+            <subfield code="6">245-02/(2/r</subfield>
+            <subfield code="a">בדרכי אבות</subfield>
+        </datafield>
+        <datafield tag="880" ind1=" " ind2=" ">
+            <subfield code="6">260-00/(2/r</subfield>
+            <subfield code="a">[ירושלים?] :</subfield>
+            <subfield code="b">א.י.פסין,</subfield>
+            <subfield code="c">תשע״ב.</subfield>
+        </datafield>
+        <datafield tag="904" ind1=" " ind2=" ">
+            <subfield code="a">mis</subfield>
+            <subfield code="b">a</subfield>
+            <subfield code="h">m</subfield>
+            <subfield code="c">b</subfield>
+            <subfield code="e">20121024</subfield>
+        </datafield>
+        <datafield tag="902" ind1=" " ind2=" ">
+            <subfield code="a">rs</subfield>
+            <subfield code="b">m</subfield>
+            <subfield code="6">a</subfield>
+            <subfield code="7">m</subfield>
+            <subfield code="d">v</subfield>
+            <subfield code="f">1</subfield>
+            <subfield code="e">20130528</subfield>
+        </datafield>
+    </record>
+    <record type="Holdings">
+        <leader>00181cx  a22000854  4500</leader>
+        <controlfield tag="001">7069367</controlfield>
+        <controlfield tag="004">7214786</controlfield>
+        <controlfield tag="005">20130528140704.0</controlfield>
+        <controlfield tag="008">1210240p    8   1001uu   0000000</controlfield>
+        <datafield tag="852" ind1="0" ind2=" ">
+            <subfield code="b">rcppa</subfield>
+            <subfield code="h">BM700</subfield>
+            <subfield code="i">.P474 2012</subfield>
+        </datafield>
+    </record>
+</collection>
