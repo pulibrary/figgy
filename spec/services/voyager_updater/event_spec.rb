@@ -27,10 +27,6 @@ describe VoyagerUpdater::Event do
     }
   end
 
-  after do
-    ActiveJob::Base.queue_adapter.enqueued_jobs = [] if ActiveJob::Base.queue_adapter.respond_to?(:enqueued_jobs)
-  end
-
   describe ".new" do
     it "constructs the Event with a Hash" do
       expect(event.id).to eq(1_234_56)
@@ -39,18 +35,18 @@ describe VoyagerUpdater::Event do
     end
   end
 
-  describe "#enqueued?" do
-    before do
-      VoyagerUpdateJob.perform_later([id])
-    end
-    it "determines if a processing job has been enqueued" do
-      expect(event.enqueued?).to be true
-    end
-    context "when the queue adapter does not support searching for enqueued jobs" do
-      with_queue_adapter :inline
-      it "assumes that the processing job has not been enqueued" do
-        expect(event.enqueued?).to be false
+  describe "#processed?" do
+    context "with an existing processed event" do
+      before do
+        ProcessedEvent.create(event_id: id.to_i)
       end
+      it "determines if a processing job has been enqueued" do
+        expect(event.processed?).to be true
+      end
+    end
+
+    it "determines if a processing job has been enqueued" do
+      expect(event.processed?).to be false
     end
   end
 
@@ -112,7 +108,7 @@ describe VoyagerUpdater::Event do
   context "when the job has been enqueued" do
     describe "#process!" do
       before do
-        VoyagerUpdateJob.perform_later([id])
+        ProcessedEvent.create(event_id: id.to_i)
         allow(VoyagerUpdateJob).to receive(:perform_later)
 
         event.process!
