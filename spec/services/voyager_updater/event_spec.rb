@@ -105,7 +105,7 @@ describe VoyagerUpdater::Event do
     end
   end
 
-  context "when the job has been enqueued" do
+  context "when the job has been processed" do
     describe "#process!" do
       before do
         FactoryBot.create_for_repository(:processed_event, event_id: id)
