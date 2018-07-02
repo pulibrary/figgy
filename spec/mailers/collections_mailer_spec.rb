@@ -16,7 +16,7 @@ RSpec.describe CollectionsMailer, type: :mailer do
       email = described_class.with(collection: collection).owner_report
 
       # Test the body of the sent email contains what we expect it to
-      expect(email.from).to contain_exactly "no-reply@princeton.edu"
+      expect(email.from).to contain_exactly "no-reply@www.example.com"
       expect(email.to).to contain_exactly user.email, user2.email
       expect(email.subject).to eq "Weekly collection report for The Important Person's Things"
       expect(email.body.to_s).to eq expected_body(ids: [r1.id, r2.id, r3.id])
