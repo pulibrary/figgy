@@ -1,4 +1,23 @@
 GIT
+  remote: git://github.com/jrgriffiniii/browse-everything.git
+  revision: 470eb72dcbebee03fe4d09f4bee4cda5a1ef2560
+  branch: hotfix-gdrive-scope
+  specs:
+    browse-everything (0.15.1)
+      addressable (~> 2.5)
+      aws-sdk-s3
+      bootstrap-sass (~> 3.2)
+      dropbox_api (>= 0.1.10)
+      font-awesome-rails
+      google-api-client (~> 0.21)
+      google_drive (~> 2.1)
+      httparty (~> 0.15)
+      rails (>= 4.2)
+      ruby-box
+      sass-rails
+      signet (~> 0.8)
+
+GIT
   remote: git://github.com/pulibrary/geo_works-derivatives.git
   revision: 2b683bb587bf13c58c5e1ff4060910e5d915a71e
   tag: v0.3.1
@@ -25,24 +44,6 @@ GIT
   specs:
     iiif_manifest (0.3.0)
       activesupport (>= 4)
-
-GIT
-  remote: git://github.com/samvera/browse-everything.git
-  revision: 83b5ad09b3f60022b324af5e12b694d9c28582b4
-  specs:
-    browse-everything (0.15.1)
-      addressable (~> 2.5)
-      aws-sdk-s3
-      bootstrap-sass (~> 3.2)
-      dropbox_api (>= 0.1.10)
-      font-awesome-rails
-      google-api-client (~> 0.21)
-      google_drive (~> 2.1)
-      httparty (~> 0.15)
-      rails (>= 4.2)
-      ruby-box
-      sass-rails
-      signet (~> 0.8)
 
 GIT
   remote: git://github.com/yob/pdf-reader.git
@@ -148,21 +149,21 @@ GEM
     autoprefixer-rails (8.6.0)
       execjs
     awesome_print (1.8.0)
-    aws-eventstream (1.0.0)
-    aws-partitions (1.91.0)
-    aws-sdk-core (3.21.2)
+    aws-eventstream (1.0.1)
+    aws-partitions (1.94.0)
+    aws-sdk-core (3.22.1)
       aws-eventstream (~> 1.0)
       aws-partitions (~> 1.0)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
-    aws-sdk-kms (1.5.0)
+    aws-sdk-kms (1.6.0)
       aws-sdk-core (~> 3)
       aws-sigv4 (~> 1.0)
-    aws-sdk-s3 (1.13.0)
+    aws-sdk-s3 (1.16.0)
       aws-sdk-core (~> 3, >= 3.21.2)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.0)
-    aws-sigv4 (1.0.2)
+    aws-sigv4 (1.0.3)
     babel-source (5.8.35)
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
@@ -288,7 +289,7 @@ GEM
       activemodel-serializers-xml (~> 1.0)
       activesupport (~> 5.0)
       request_store (~> 1.0)
-    dropbox_api (0.1.10)
+    dropbox_api (0.1.11)
       faraday (~> 0.9, ~> 0.8)
       oauth2 (~> 1.1)
     dry-configurable (0.7.0)
