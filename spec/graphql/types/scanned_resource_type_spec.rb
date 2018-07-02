@@ -3,7 +3,14 @@ require "rails_helper"
 
 RSpec.describe Types::ScannedResourceType do
   subject(:type) { described_class.new(scanned_resource, {}) }
-  let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, viewing_hint: "individuals", title: ["I'm a little teapot", "short and stout"]) }
+  let(:scanned_resource) do
+    FactoryBot.create_for_repository(
+      :scanned_resource,
+      viewing_hint: "individuals",
+      title: ["I'm a little teapot", "short and stout"]
+    )
+  end
+
   describe "class methods" do
     subject { described_class }
 
@@ -28,6 +35,23 @@ RSpec.describe Types::ScannedResourceType do
   describe "#url" do
     it "links to the catalog URL" do
       expect(type.url).to eq "http://www.example.com/catalog/#{scanned_resource.id}"
+    end
+  end
+
+  describe "#source_metadata_identifier" do
+    let(:bibid) { "123456" }
+    let(:scanned_resource) do
+      FactoryBot.create_for_repository(
+        :scanned_resource,
+        source_metadata_identifier: [bibid]
+      )
+    end
+    before do
+      stub_bibdata(bib_id: bibid)
+    end
+
+    it "returns bibids" do
+      expect(type.source_metadata_identifier).to eq [bibid]
     end
   end
 

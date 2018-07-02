@@ -9,6 +9,7 @@ module Types::Resource
   field :viewing_hint, String, null: true
   field :url, String, null: true
   field :members, [Types::Resource], null: true
+  field :source_metadata_identifier, String, null: true
 
   definition_methods do
     def resolve_type(object, _context)
