@@ -2,6 +2,12 @@
 require "rails_helper"
 
 RSpec.describe Types::ScannedResourceType do
+  describe "fields" do
+    it "has startPage" do
+      expect(described_class).to have_field(:startPage)
+    end
+  end
+
   subject(:type) { described_class.new(scanned_resource, {}) }
   let(:scanned_resource) do
     FactoryBot.create_for_repository(
@@ -23,6 +29,16 @@ RSpec.describe Types::ScannedResourceType do
   describe "#viewing_hint" do
     it "returns a singular value" do
       expect(type.viewing_hint).to eq "individuals"
+    end
+  end
+
+  describe "#start_page" do
+    let(:scanned_resource) do
+      FactoryBot.create_for_repository(:scanned_resource, start_canvas: file_set_id)
+    end
+    let(:file_set_id) { "i_am_a_file_set" }
+    it "returns a resource's first start_canvas" do
+      expect(type.start_page).to eq file_set_id.to_s
     end
   end
 
