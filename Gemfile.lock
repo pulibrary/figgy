@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/jrgriffiniii/browse-everything.git
-  revision: 470eb72dcbebee03fe4d09f4bee4cda5a1ef2560
+  revision: d577ef589a50bd777f0b54652b79a4b342afeac6
   branch: hotfix-gdrive-scope
   specs:
     browse-everything (0.15.1)
