@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h2>Weekly collection report for <%= @collection_title %></h2>
+    <% @resources.each.group_by(&:state).each do |state, objects| %>
+    <p>Resources in workflow state "<%= Array.wrap(state).first %>"</p>
+    <ul>
+      <% objects.each do |resource| %>
+      <li>
+        <%= link_to Array.wrap(resource.title).first,
+          Rails.application.routes.url_helpers.solr_document_url(resource, host: Figgy.default_url_options[:host]) %>
+      </li>
+      <% end %>
+    </ul>
+    <% end %>
+  </body>
+</html>

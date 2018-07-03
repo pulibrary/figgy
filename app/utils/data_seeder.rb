@@ -12,6 +12,7 @@ class DataSeeder
     @logger = logger
   end
 
+  # This method should probably be phased out; new methods tested independently and called directly
   def generate_dev_data(many_files:, mvw_volumes:, sammel_files:, sammel_vols:)
     generate_resource_with_files(n: many_files)
     generate_multi_volume_work(n: mvw_volumes)
@@ -22,6 +23,25 @@ class DataSeeder
     generate_scanned_map_with_raster_child
     generate_map_set(n: 2)
     object_count_report
+  end
+
+  def generate_collection
+    collection = Collection.new
+    collection_change_set = CollectionChangeSet.new(collection)
+    collection_change_set.validate(title: "The Important Person's Things", slug: "important-persons-things", owners: User.first.uid)
+    output = change_set_persister.save(change_set: collection_change_set)
+    resource = ScannedResource.new
+    resource_change_set = ScannedResourceChangeSet.new(resource)
+    resource_change_set.validate(title: "Historically Significant Resource", state: "pending", member_of_collection_ids: [output.id])
+    change_set_persister.save(change_set: resource_change_set)
+    resource = ScannedResource.new
+    resource_change_set = ScannedResourceChangeSet.new(resource)
+    resource_change_set.validate(title: "Culturally Significant Resource", state: "pending", member_of_collection_ids: [output.id])
+    change_set_persister.save(change_set: resource_change_set)
+    resource = ScannedResource.new
+    resource_change_set = ScannedResourceChangeSet.new(resource)
+    resource_change_set.validate(title: "Curious Resource", state: "complete", member_of_collection_ids: [output.id])
+    change_set_persister.save(change_set: resource_change_set)
   end
 
   def generate_ephemera_project(project: EphemeraProject.new(title: "An Ephemera Project", slug: "test-project"), n_folders: 3, n_boxes: 1)

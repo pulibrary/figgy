@@ -97,7 +97,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     true
   end
 
-  # Is this resource publicly viewable?
+  # Does the state allow this resource to be publicly viewable (regardless of actual visibility setting)
   # @return [TrueClass, FalseClass]
   def public_readable_state?
     WorkflowRegistry.workflow_for(model.class).public_read_states.include? Array.wrap(state).first.underscore
