@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 require "rails_helper"
+include ActionDispatch::TestProcess
 
 RSpec.describe Mutations::UpdateResource do
   describe "schema" do
     subject { described_class }
     it { is_expected.to have_field(:resource) }
     it { is_expected.to have_field(:errors) }
-    it { is_expected.to accept_arguments(id: "ID!", viewingHint: "String", label: "String", memberIds: "[String!]") }
+    it { is_expected.to accept_arguments(id: "ID!", viewingHint: "String", label: "String", memberIds: "[String!]", startPage: "String") }
   end
 
   context "when given permission" do
@@ -21,12 +22,15 @@ RSpec.describe Mutations::UpdateResource do
     end
     context "when given good data" do
       it "updates the record" do
-        resource = FactoryBot.create_for_repository(:scanned_resource, viewing_hint: "paged", title: "label")
+        file1 = fixture_file_upload("files/abstract.tiff", "image/tiff")
+        resource = FactoryBot.create_for_repository(:scanned_resource, viewing_hint: "paged", title: "label", files: [file1])
+        file_set1 = resource.decorate.members.first
         mutation = create_mutation
 
-        output = mutation.resolve(id: resource.id, viewing_hint: "individuals", label: "label2")
+        output = mutation.resolve(id: resource.id, viewing_hint: "individuals", label: "label2", start_page: file_set1.id.to_s)
         expect(output[:resource].viewing_hint).to eq ["individuals"]
         expect(output[:resource].title).to eq ["label2"]
+        expect(output[:resource].start_canvas).to eq [file_set1.id]
       end
     end
     context "when reordering" do
