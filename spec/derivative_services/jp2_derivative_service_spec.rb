@@ -88,7 +88,7 @@ RSpec.describe Jp2DerivativeService do
     end
   end
 
-  context "jpeg source" do
+  context "jpeg source", run_real_derivatives: true do
     let(:file) { fixture_file_upload("files/large-jpg-test.jpg", "image/jpeg") }
     it "creates a JP2 and attaches it to the fileset" do
       derivative_service.new(valid_change_set).create_derivatives
