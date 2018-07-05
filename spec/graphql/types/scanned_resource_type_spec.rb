@@ -2,8 +2,21 @@
 require "rails_helper"
 
 RSpec.describe Types::ScannedResourceType do
+  describe "fields" do
+    it "has startPage" do
+      expect(described_class).to have_field(:startPage)
+    end
+  end
+
   subject(:type) { described_class.new(scanned_resource, {}) }
-  let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, viewing_hint: "individuals", title: ["I'm a little teapot", "short and stout"]) }
+  let(:scanned_resource) do
+    FactoryBot.create_for_repository(
+      :scanned_resource,
+      viewing_hint: "individuals",
+      title: ["I'm a little teapot", "short and stout"]
+    )
+  end
+
   describe "class methods" do
     subject { described_class }
 
@@ -19,6 +32,16 @@ RSpec.describe Types::ScannedResourceType do
     end
   end
 
+  describe "#start_page" do
+    let(:scanned_resource) do
+      FactoryBot.create_for_repository(:scanned_resource, start_canvas: file_set_id)
+    end
+    let(:file_set_id) { "i_am_a_file_set" }
+    it "returns a resource's first start_canvas" do
+      expect(type.start_page).to eq file_set_id.to_s
+    end
+  end
+
   describe "#label" do
     it "maps to a resource's first title" do
       expect(type.label).to eq "I'm a little teapot"
@@ -28,6 +51,23 @@ RSpec.describe Types::ScannedResourceType do
   describe "#url" do
     it "links to the catalog URL" do
       expect(type.url).to eq "http://www.example.com/catalog/#{scanned_resource.id}"
+    end
+  end
+
+  describe "#source_metadata_identifier" do
+    let(:bibid) { "123456" }
+    let(:scanned_resource) do
+      FactoryBot.create_for_repository(
+        :scanned_resource,
+        source_metadata_identifier: [bibid]
+      )
+    end
+    before do
+      stub_bibdata(bib_id: bibid)
+    end
+
+    it "returns bibids" do
+      expect(type.source_metadata_identifier).to eq [bibid]
     end
   end
 
