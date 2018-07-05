@@ -8,6 +8,7 @@ export default class BoundingBoxSelector {
 
   initialize_map() {
     let initialBounds;
+    let that = this;
     if (!this.$coverage && this.$inputId ) {
       this.$coverage = $(this.$inputId).val()
     }
@@ -33,12 +34,12 @@ export default class BoundingBoxSelector {
     if (this.$readOnly) {
       new L.Rectangle(initialBounds, { color: 'blue', weight: 2, opacity: 0.9 }).addTo(map)
     } else {
-      boundingBox = new L.BoundingBox({ bounds: initialBounds,
+      let boundingBox = new L.BoundingBox({ bounds: initialBounds,
                                      buttonPosition: 'topright', }).addTo(map)
 
       boundingBox.on('change', function() {
-        $(this.$inputId).val(this.boundsToCoverage(this.getBounds()))
-        this.updateBboxInputs(this.getBounds())
+        $(this.$inputId).val(that.boundsToCoverage(this.getBounds()))
+        that.updateBboxInputs(this.getBounds())
       })
 
       boundingBox.enable()
