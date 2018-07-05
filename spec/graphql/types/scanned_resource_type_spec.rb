@@ -13,7 +13,8 @@ RSpec.describe Types::ScannedResourceType do
     FactoryBot.create_for_repository(
       :scanned_resource,
       viewing_hint: "individuals",
-      title: ["I'm a little teapot", "short and stout"]
+      title: ["I'm a little teapot", "short and stout"],
+      viewing_direction: "left-to-right"
     )
   end
 
@@ -22,6 +23,7 @@ RSpec.describe Types::ScannedResourceType do
 
     # Note! These field names use a javascript-y camel-case variable style
     it { is_expected.to have_field(:viewingHint).of_type(String) }
+    it { is_expected.to have_field(:viewingDirection).of_type(Types::ViewingDirectionEnum) }
     it { is_expected.to have_field(:label).of_type(String) }
     it { is_expected.to have_field(:members) }
   end
@@ -29,6 +31,12 @@ RSpec.describe Types::ScannedResourceType do
   describe "#viewing_hint" do
     it "returns a singular value" do
       expect(type.viewing_hint).to eq "individuals"
+    end
+  end
+
+  describe "#viewing_direction" do
+    it "returns a singular value" do
+      expect(type.viewing_direction).to eq "left-to-right"
     end
   end
 

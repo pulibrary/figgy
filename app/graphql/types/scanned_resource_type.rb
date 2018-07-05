@@ -3,8 +3,13 @@ class Types::ScannedResourceType < Types::BaseObject
   implements Types::Resource
 
   field :start_page, String, null: true
+  field :viewing_direction, Types::ViewingDirectionEnum, null: true
 
   def viewing_hint
+    Array.wrap(super).first
+  end
+
+  def viewing_direction
     Array.wrap(super).first
   end
 
