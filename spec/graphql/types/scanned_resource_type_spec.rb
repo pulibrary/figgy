@@ -40,6 +40,48 @@ RSpec.describe Types::ScannedResourceType do
     end
   end
 
+  describe "#thumbnail" do
+    context "when a thumbnail is not set" do
+      it "returns nil" do
+        expect(type.thumbnail).to eq nil
+      end
+    end
+    context "when a thumbnail is set" do
+      let(:scanned_resource) do
+        FactoryBot.create_for_repository(
+          :scanned_resource,
+          viewing_hint: "individuals",
+          title: ["I'm a little teapot", "short and stout"],
+          viewing_direction: "left-to-right",
+          member_ids: file_set.id,
+          thumbnail_id: file_set.id
+        )
+      end
+      let(:file_set) { FactoryBot.create_for_repository(:file_set) }
+      it "returns a thumbnail service url, image, and ID for the file set" do
+        expect(type.thumbnail).to eq(
+          iiif_service_url: "http://www.example.com/image-service/#{file_set.id}",
+          thumbnail_url: "http://www.example.com/image-service/#{file_set.id}/full/!200,150/0/default.jpg",
+          id: file_set.id.to_s
+        )
+      end
+    end
+    context "when a bad thumbnail is set" do
+      let(:scanned_resource) do
+        FactoryBot.create_for_repository(
+          :scanned_resource,
+          viewing_hint: "individuals",
+          title: ["I'm a little teapot", "short and stout"],
+          viewing_direction: "left-to-right",
+          thumbnail_id: "bla"
+        )
+      end
+      it "returns nil" do
+        expect(type.thumbnail).to be_nil
+      end
+    end
+  end
+
   describe "#start_page" do
     let(:scanned_resource) do
       FactoryBot.create_for_repository(:scanned_resource, start_canvas: file_set_id)

@@ -10,6 +10,7 @@ RSpec.describe Types::Resource do
     it { is_expected.to have_field(:viewingHint).of_type(String) }
     it { is_expected.to have_field(:members) }
     it { is_expected.to have_field(:sourceMetadataIdentifier) }
+    it { is_expected.to have_field(:thumbnail).of_type("Types::Thumbnail") }
   end
   describe ".resolve_type" do
     it "returns a ScannedResourceType for a ScannedResource" do

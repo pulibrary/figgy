@@ -10,6 +10,7 @@ module Types::Resource
   field :url, String, null: true
   field :members, [Types::Resource], null: true
   field :source_metadata_identifier, String, null: true
+  field :thumbnail, Types::Thumbnail, null: true
 
   definition_methods do
     def resolve_type(object, _context)
@@ -27,5 +28,24 @@ module Types::Resource
 
   def helper
     @helper ||= ManifestBuilder::ManifestHelper.new
+  end
+
+  def thumbnail
+    return if object.try(:thumbnail_id).blank? || thumbnail_resource.blank?
+    {
+      id: thumbnail_resource.id.to_s,
+      thumbnail_url: helper.manifest_image_thumbnail_path(thumbnail_resource.id.to_s),
+      iiif_service_url: helper.manifest_image_path(thumbnail_resource)
+    }
+  end
+
+  def thumbnail_resource
+    @thumbnail_resource ||= query_service.find_by(id: object.try(:thumbnail_id).first)
+  rescue Valkyrie::Persistence::ObjectNotFoundError
+    nil
+  end
+
+  def query_service
+    Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
   end
 end
