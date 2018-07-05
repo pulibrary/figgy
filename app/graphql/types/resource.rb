@@ -26,16 +26,27 @@ module Types::Resource
     @url ||= helper.show_url(object)
   end
 
+  # We need to centralize logic for navigating a MVW's members to find a
+  # thumbnail file set. This is a hack to use the helper's logic for doing that.
+  # @TODO: Fix this.
   def helper
-    @helper ||= ManifestBuilder::ManifestHelper.new
+    @helper ||= ManifestBuilder::ManifestHelper.new.tap do |helper|
+      helper.singleton_class.include(ThumbnailHelper)
+      helper.define_singleton_method(:image_tag) do |url, _opts|
+        url
+      end
+      helper.define_singleton_method(:image_path) do |url|
+        url
+      end
+    end
   end
 
   def thumbnail
     return if object.try(:thumbnail_id).blank? || thumbnail_resource.blank?
     {
       id: thumbnail_resource.id.to_s,
-      thumbnail_url: helper.manifest_image_thumbnail_path(thumbnail_resource.id.to_s),
-      iiif_service_url: helper.manifest_image_path(thumbnail_resource)
+      thumbnail_url: helper.figgy_thumbnail_path(thumbnail_resource),
+      iiif_service_url: helper.figgy_thumbnail_path(thumbnail_resource).gsub("/full/!200,150/0/default.jpg", "")
     }
   end
 

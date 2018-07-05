@@ -80,6 +80,24 @@ RSpec.describe Types::ScannedResourceType do
         expect(type.thumbnail).to be_nil
       end
     end
+    context "when it's a MVW" do
+      let(:scanned_resource) do
+        FactoryBot.create_for_repository(:scanned_resource, thumbnail_id: volume.id)
+      end
+      let(:volume) do
+        FactoryBot.create_for_repository(:scanned_resource, thumbnail_id: file_set.id)
+      end
+      let(:file_set) do
+        FactoryBot.create_for_repository(:file_set)
+      end
+      it "returns a thumbnail service url/image for the file set, but ID of the volume" do
+        expect(type.thumbnail).to eq(
+          iiif_service_url: "http://www.example.com/image-service/#{file_set.id}",
+          thumbnail_url: "http://www.example.com/image-service/#{file_set.id}/full/!200,150/0/default.jpg",
+          id: volume.id.to_s
+        )
+      end
+    end
   end
 
   describe "#start_page" do
