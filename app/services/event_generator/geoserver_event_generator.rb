@@ -23,14 +23,22 @@ class EventGenerator
 
     def record_deleted(record); end
 
-    def record_updated(record); end
+    def record_updated(record)
+      # Iterate through all geo members of parent resource.
+      geo_members = record.decorate.try(:geo_members) || []
+      geo_members.each do |member|
+        next unless member.derivative_file
+        publish_message(
+          message("UPDATED", member)
+        )
+      end
+    end
 
     def record_member_updated(record); end
 
     def valid?(record)
-      return false unless record.is_a?(FileSet)
-      return false unless geo_file_set?(record)
-      return true if record.derivative_file
+      return true if record.try(:geo_resource?)
+      return true if geo_file_set?(record)
       false
     end
 
@@ -41,7 +49,9 @@ class EventGenerator
       end
 
       def geo_file_set?(record)
-        vector_file_set?(record) || raster_file_set?(record)
+        return false unless record.is_a?(FileSet)
+        return false unless vector_file_set?(record) || raster_file_set?(record)
+        return true if record.derivative_file
       end
 
       def message(type, record)
@@ -57,11 +67,11 @@ class EventGenerator
       end
 
       def raster_file_set?(record)
-        ControlledVocabulary.for(:geo_raster_format).include?(record.mime_type.first)
+        ControlledVocabulary.for(:geo_raster_format).include?(record.mime_type.try(:first))
       end
 
       def vector_file_set?(record)
-        ControlledVocabulary.for(:geo_vector_format).include?(record.mime_type.first)
+        ControlledVocabulary.for(:geo_vector_format).include?(record.mime_type.try(:first))
       end
   end
 end
