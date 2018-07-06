@@ -29,6 +29,13 @@ RSpec.describe EventGenerator::GeoserverEventGenerator do
     end
   end
 
+  describe "#record_updated" do
+    it "publishes a persistent JSON message" do
+      event_generator.record_updated(resource)
+      expect(rabbit_connection).to have_received(:publish)
+    end
+  end
+
   describe "#valid?" do
     context "with a raster file set with a derivative" do
       let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tif") }
@@ -36,6 +43,14 @@ RSpec.describe EventGenerator::GeoserverEventGenerator do
       let(:resource) { FactoryBot.create_for_repository(:raster_resource, files: [file]) }
 
       it "publishes a persistent JSON message" do
+        expect(event_generator.valid?(record)).to be true
+      end
+    end
+
+    context "with a geo resource" do
+      let(:record) { FactoryBot.create_for_repository(:vector_resource) }
+
+      it "is valid" do
         expect(event_generator.valid?(record)).to be true
       end
     end

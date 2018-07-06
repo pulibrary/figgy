@@ -33,10 +33,12 @@ class EventGenerator
 
     private
 
-      # Send method with record argument to first valid generator
+      # Send method with record argument to all valid generators
       def delegate_to_generator(method_name, record)
-        generator = generators.find { |g| g.valid?(record) }
-        generator.send(method_name, record) if generator
+        valid_generators = generators.select { |g| g.valid?(record) }
+        valid_generators.each do |generator|
+          generator.send(method_name, record)
+        end
       end
   end
 end
