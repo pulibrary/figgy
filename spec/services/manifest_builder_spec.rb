@@ -108,7 +108,8 @@ RSpec.describe ManifestBuilder do
       structure_canvas_id = output["structures"][2]["canvases"][0]
       expect(canvas_id).to eq structure_canvas_id
       first_image = output["sequences"][0]["canvases"][0]["images"][0]
-      expect(first_image["resource"]["@id"]).to eq scanned_resource.member_ids.first.to_s
+
+      expect(first_image["resource"]["@id"]).to eq "http://www.example.com/image-service/#{scanned_resource.member_ids.first}/full/!1000,/0/default.jpg"
       expect(output["sequences"][0]["canvases"][0]["local_identifier"]).to eq "p79409x97p"
 
       canvas_renderings = output["sequences"][0]["canvases"][0]["rendering"]
