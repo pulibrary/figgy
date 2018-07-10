@@ -327,11 +327,17 @@ class ManifestBuilder
     # Retrieve an instance of the IIIFManifest::DisplayImage for the image
     # @return [IIIFManifest::DisplayImage]
     def display_image
-      @display_image ||= IIIFManifest::DisplayImage.new(helper.manifest_image_medium_path(id),
-                                                        width: width,
-                                                        height: height,
+      @display_image ||= IIIFManifest::DisplayImage.new(display_image_url,
+                                                        width: width.to_i,
+                                                        height: height.to_i,
                                                         format: "image/jpeg",
                                                         iiif_endpoint: endpoint)
+    end
+
+    def display_image_url
+      helper.manifest_image_medium_path(id)
+    rescue
+      ""
     end
 
     private

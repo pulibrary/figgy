@@ -107,6 +107,7 @@ RSpec.describe ManifestBuilder do
       expect(output["structures"].length).to eq 3
       structure_canvas_id = output["structures"][2]["canvases"][0]
       expect(canvas_id).to eq structure_canvas_id
+      expect(output["sequences"][0]["canvases"][0]["width"]).to be_a Integer
       first_image = output["sequences"][0]["canvases"][0]["images"][0]
 
       expect(first_image["resource"]["@id"]).to eq "http://www.example.com/image-service/#{scanned_resource.member_ids.first}/full/!1000,/0/default.jpg"
