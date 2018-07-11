@@ -43,9 +43,12 @@
   "dependencies": {
     "@rails/webpacker": "^3.3.1",
     "ajv": "^6.2.1",
+    "apollo-boost": "^0.1.10",
     "axios": "^0.17.1",
     "babel-polyfill": "^6.26.0",
-    "lux-design-system": "file:../lux",
+    "graphql": "^0.13.2",
+    "graphql-tag": "^2.9.2",
+    "lux-design-system": "0.0.4",
     "manifesto.js": "^2.2.24",
     "npm": "^6.0.0",
     "openseadragon": "^2.3.1",
