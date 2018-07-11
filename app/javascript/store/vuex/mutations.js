@@ -61,7 +61,7 @@ const mutations = {
   },
   UPDATE_VIEWHINT (state, viewHint) {
     state.viewingHint = viewHint
-  }
+  },
 }
 
 export default mutations
