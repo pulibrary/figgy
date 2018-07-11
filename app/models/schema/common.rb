@@ -17,7 +17,9 @@ module Schema
           :abstract, # http://purl.org/dc/terms/abstract
           :alternative, # http://purl.org/dc/terms/alternative
           :alternative_title, # http://purl.org/dc/terms/alternative
-          :bibliographic_citation, # http://purl.org/dc/terms/bibliographicCitation
+          :references, # http://purl.org/dc/terms/bibliographicCitation,
+          :bibliographic_citation,
+          :indexed_by, # http://purl.org/dc/terms/isReferencedBy
           :contents, # http://purl.org/dc/terms/tableOfContents
           :created, # http://purl.org/dc/terms/created
           :date_created, # http://purl.org/dc/terms/created
@@ -30,7 +32,9 @@ module Schema
           :replaces, # http://purl.org/dc/terms/replaces
           :resource_type, # http://purl.org/dc/terms/type
           :title, # http://purl.org/dc/terms/title
+          :uniform_title, # http://purl.org/dc/elements/1.1/title
           :type, # http://purl.org/dc/terms/type
+          :provenance, # http://purl.org/dc/terms/provenance
 
           :contributor, # http://purl.org/dc/elements/1.1/contributor
           :coverage, # http://purl.org/dc/elements/1.1/coverage
@@ -39,6 +43,7 @@ module Schema
           :description, # http://purl.org/dc/elements/1.1/description
           :keyword, # http://purl.org/dc/elements/1.1/relation
           :language, # http://purl.org/dc/elements/1.1/language
+          :text_language, # http://purl.org/dc/terms/language
           :local_identifier, # http://purl.org/dc/elements/1.1/identifier
           :publisher, # http://purl.org/dc/elements/1.1/publisher
           :rights_note, # http://purl.org/dc/elements/1.1/rights
@@ -48,16 +53,19 @@ module Schema
           :sort_title, # http://opaquenamespace.org/ns/mods/titleForSort
           :rights_statement, # http://www.europeana.eu/schemas/edm/rights
           :portion_note, # http://www.w3.org/2004/02/skos/core#scopeNote
+          :binding_note, # http://www.w3.org/2004/02/skos/core#note
 
           :cartographic_scale, # http://bibframe.org/vocab/cartographicScale
           :edition, # http://id.loc.gov/ontologies/bibframe/editionStatement
           :geographic_origin, # http://id.loc.gov/ontologies/bibframe/originPlace
           :holding_location, # http://bibframe.org/vocab/heldBy
+          :source_acquisition, # http://bibframe.org/vocab/immediateAcquisition
 
           :source_metadata_identifier, # Local
           :source_metadata, # Local
           :source_jsonld, # Local
           :call_number, # Local
+          :location, # Local
           :barcode, # Local
           :series, # Local
           :ocr_language, # Local

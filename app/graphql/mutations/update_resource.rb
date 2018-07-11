@@ -6,6 +6,9 @@ class Mutations::UpdateResource < Mutations::BaseMutation
   argument :viewing_hint, String, required: false
   argument :label, String, required: false
   argument :member_ids, [String], required: false
+  argument :start_page, String, required: false
+  argument :viewing_direction, Types::ViewingDirectionEnum, required: false
+  argument :thumbnail_id, String, required: false
 
   field :resource, Types::Resource, null: false
   field :errors, [String], null: true
@@ -25,6 +28,7 @@ class Mutations::UpdateResource < Mutations::BaseMutation
 
   def attributes(type_attributes)
     type_attributes[:title] = type_attributes[:label] if type_attributes[:label].present?
+    type_attributes[:start_canvas] = type_attributes[:start_page] if type_attributes[:start_page].present?
     type_attributes.compact
   end
 

@@ -103,6 +103,34 @@ RSpec.describe ScannedResourcesController do
     end
   end
 
+  describe "edit" do
+    let(:user) { FactoryBot.create(:admin) }
+    let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource) }
+
+    render_views
+
+    it "does not render a collections form field" do
+      get :edit, params: { id: scanned_resource.id.to_s }
+
+      expect(response.body).to have_select "Collections", name: "scanned_resource[member_of_collection_ids][]"
+    end
+
+    context "when it has a member resource" do
+      let(:member_resource) { FactoryBot.create_for_repository(:scanned_resource) }
+      let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [member_resource.id]) }
+
+      before do
+        scanned_resource
+      end
+
+      it "does not render a collections form field" do
+        get :edit, params: { id: member_resource.id.to_s }
+
+        expect(response.body).not_to have_select "Collections", name: "scanned_resource[member_of_collection_ids][]"
+      end
+    end
+  end
+
   describe "html update" do
     let(:user) { FactoryBot.create(:admin) }
 

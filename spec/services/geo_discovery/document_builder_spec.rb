@@ -16,7 +16,7 @@ describe GeoDiscovery::DocumentBuilder do
                                      issued: issued,
                                      spatial: "Micronesia",
                                      temporal: "2011",
-                                     subject: "Human settlements",
+                                     subject: ["Human settlements", "Society"],
                                      language: "Esperanto",
                                      visibility: visibility,
                                      identifier: "ark:/99999/fk4")
@@ -61,7 +61,7 @@ describe GeoDiscovery::DocumentBuilder do
       # optional metadata
       expect(document["dc_description_s"]).to eq("This is a Geo Work")
       expect(document["dc_creator_sm"]).to eq(["Yosiwo George"])
-      expect(document["dc_subject_sm"]).to eq(["Human settlements"])
+      expect(document["dc_subject_sm"]).to eq(["Society"])
       expect(document["dct_spatial_sm"]).to eq(["Micronesia"])
       expect(document["dct_temporal_sm"]).to eq(["2011"])
       expect(document["dc_language_s"]).to eq("Esperanto")
@@ -83,13 +83,13 @@ describe GeoDiscovery::DocumentBuilder do
 
       # references
       refs = JSON.parse(document["dct_references_s"])
-      expect(refs["http://schema.org/url"]).to match(/concern\/vector_resources/)
       expect(refs["http://www.isotc211.org/schemas/2005/gmd/"]).to match(/downloads/)
       expect(refs["http://schema.org/downloadUrl"]).to match(/downloads/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wms"]).to match(/geoserver\/public-figgy\/wms/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wfs"]).to match(/geoserver\/public-figgy\/wfs/)
       expect(refs["http://iiif.io/api/image"]).to be nil
       expect(refs["http://iiif.io/api/presentation#manifest"]).to be nil
+      expect(refs["http://schema.org/url"]).to be nil
     end
   end
 
@@ -105,14 +105,21 @@ describe GeoDiscovery::DocumentBuilder do
     context "with remote metadata" do
       let(:geo_work) do
         FactoryBot.create_for_repository(:scanned_map,
+                                         title: [],
                                          source_metadata_identifier: "5144620",
                                          coverage: coverage.to_s,
                                          subject: ["Sanborn", "Mount Holly (N.J.)—Maps"],
                                          visibility: visibility,
                                          identifier: "ark:/99999/fk4",
+                                         portion_note: "Sheet 1",
                                          imported_metadata: [{
+                                           title: ["Mount Holly, N.J."],
                                            subject: ["Mount Holly (N.J.)—Maps"],
-                                           identifier: "http://arks.princeton.edu/ark:/99999/fk4"
+                                           identifier: "http://arks.princeton.edu/ark:/99999/fk4",
+                                           call_number: [
+                                             "HMC04 (Mount Holly)",
+                                             "Electronic Resource"
+                                           ]
                                          }])
       end
 
@@ -120,6 +127,13 @@ describe GeoDiscovery::DocumentBuilder do
         expect(document["dc_subject_sm"]).to eq ["Mount Holly (N.J.)—Maps", "Sanborn"]
         expect(document["dc_identifier_s"]).to eq "ark:/99999/fk4"
         expect(document["layer_slug_s"]).to eq "princeton-fk4"
+        expect(document["dc_title_s"]).to eq "Mount Holly, N.J. (Sheet 1)"
+      end
+
+      it "has url reference to the catalog record and a call number field" do
+        refs = JSON.parse(document["dct_references_s"])
+        expect(refs["http://schema.org/url"]).to match(/catalog\/5144620/)
+        expect(document["call_number_s"]).to eq("HMC04 (Mount Holly)")
       end
     end
 
@@ -156,7 +170,6 @@ describe GeoDiscovery::DocumentBuilder do
 
       it "returns a document with reduced references and restricted access" do
         refs = JSON.parse(document["dct_references_s"])
-        expect(refs).to have_key "http://schema.org/url"
         expect(refs).to have_key "http://schema.org/thumbnailUrl"
         expect(refs).not_to have_key "http://schema.org/downloadUrl"
         expect(refs).not_to have_key "http://iiif.io/api/image"
@@ -171,7 +184,6 @@ describe GeoDiscovery::DocumentBuilder do
 
       it "returns a document with reduced references and restricted access" do
         refs = JSON.parse(document["dct_references_s"])
-        expect(refs).to have_key "http://schema.org/url"
         expect(refs).to have_key "http://schema.org/thumbnailUrl"
         expect(refs).not_to have_key "http://schema.org/downloadUrl"
         expect(refs).not_to have_key "http://iiif.io/api/image"

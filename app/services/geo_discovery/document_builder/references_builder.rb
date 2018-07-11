@@ -69,9 +69,9 @@ module GeoDiscovery
         end
 
         # Returns a url to access further descriptive information.
-        # @return [String] work show page url
+        # @return [String] link to related record in catalog
         def url
-          path.to_s
+          path.catalog_record
         end
 
         def wxs

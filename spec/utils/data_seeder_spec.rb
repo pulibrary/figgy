@@ -73,4 +73,19 @@ RSpec.describe DataSeeder do
       expect(d.members.select { |m| m.is_a? EphemeraFolder }.size).to eq 3
     end
   end
+
+  describe "#generate_collection" do
+    before do
+      stub_ezid(shoulder: "99999/fk4", blade: "123456")
+    end
+    it "adds a collection containing 3 scanned resources, 1 complete and 2 pending" do
+      FactoryBot.create(:admin) # collection assigns an owner
+      seeder.generate_collection
+
+      expect(query_service.find_all_of_model(model: Collection).count).to eq 1
+      resources = query_service.find_all_of_model(model: ScannedResource)
+      expect(resources.count).to eq 3
+      expect(resources.map(&:state)).to contain_exactly ["pending"], ["pending"], ["complete"]
+    end
+  end
 end

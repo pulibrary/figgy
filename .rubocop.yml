@@ -57,7 +57,6 @@ Metrics/ClassLength:
     - 'app/decorators/scanned_resource_decorator.rb'
     - 'app/decorators/scanned_map_decorator.rb'
     - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
-    - 'app/controllers/catalog_controller.rb'
     - 'app/services/manifest_builder/manifest_service_locator.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/decorators/valkyrie/resource_decorator.rb'
@@ -87,6 +86,7 @@ Metrics/MethodLength:
     - 'app/controllers/base_resource_controller.rb'
     - 'app/services/pdf_generator.rb'
     - 'app/services/file_appender.rb'
+    - 'app/jobs/voyager_update_job.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
@@ -108,6 +108,8 @@ RSpec/AnyInstance:
     - 'spec/jobs/check_fixity_recursive_job_spec.rb'
     - 'spec/controllers/fixity_dashboard_controller_spec.rb'
     - 'spec/change_sets/archival_media_collection_change_set_spec.rb'
+    - 'spec/services/voyager_updater/event_spec.rb'
+    - 'spec/jobs/voyager_update_job_spec.rb'
 RSpec/DescribeClass:
   Exclude:
     - 'spec/abilities/**/*'

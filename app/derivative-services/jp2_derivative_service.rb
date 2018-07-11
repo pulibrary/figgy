@@ -88,14 +88,26 @@ class Jp2DerivativeService
   end
 
   def run_jpg_derivatives
-    Hydra::Derivatives::ImageDerivatives.create(
-      filename,
-      outputs: [
-        label: "intermediate_file",
-        url: URI("file://#{temporary_output.path}"),
-        format: "jp2"
-      ]
-    )
+    create_tiff_derivative(jpg_tiff_filename)
+  end
+
+  def jpg_tiff_filename
+    @jpg_tiff_filename ||=
+      begin
+        Hydra::Derivatives::ImageDerivatives.create(
+          filename,
+          outputs: [
+            label: "intermediate_file",
+            url: URI("file://#{temporary_jpg_tiff.path}"),
+            format: "tiff"
+          ]
+        )
+        temporary_jpg_tiff
+      end
+  end
+
+  def temporary_jpg_tiff
+    @temporary_jpg_tiff ||= Tempfile.new(["temporary_jpg", ".tiff"])
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)

@@ -7,7 +7,6 @@ module Schema
 
     def self.attributes
       Common.attributes + [
-        :provenance, #  http://purl.org/dc/terms/provenance
         :spatial, # http://purl.org/dc/terms/spatial
         :temporal, # http://purl.org/dc/terms/temporal
         :issued, # http://purl.org/dc/terms/issued

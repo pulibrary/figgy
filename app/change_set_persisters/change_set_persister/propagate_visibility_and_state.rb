@@ -17,14 +17,34 @@ class ChangeSetPersister
 
     # Execute the handler
     def run
+      return if new_collection_record
       members.each do |member|
-        member.read_groups = change_set.read_groups if change_set.read_groups
-        propagate_state_for_related(member)
-        persister.save(resource: member)
+        resource_change_set = DynamicChangeSet.new(member)
+        resource_change_set = propagate_visibility(resource_change_set)
+        resource_change_set = propagate_state_for_related(resource_change_set)
+        # we need to save these through the change set persister so the member
+        #   can mint an ark, emit rabbitmq messages, copy access to read_groups, etc.
+        if resource_change_set.changed?
+          change_set_persister.save(change_set: resource_change_set)
+        end
       end
     end
 
     private
+
+      # set visibility on most resources; VisibilityProperty concern will make necessary changes on read_groups
+      def propagate_visibility(member_change_set)
+        return propagate_read_groups(member_change_set) unless change_set.respond_to?(:visibility) && change_set.visibility && member_change_set.respond_to?(:visibility=)
+        member_change_set.validate(visibility: change_set.visibility)
+        member_change_set
+      end
+
+      # when there's no visiblity property (e.g. for a FileSet), set directly on read groups
+      def propagate_read_groups(member_change_set)
+        return member_change_set unless member_change_set.respond_to?(:read_groups) && change_set.respond_to?(:read_groups) && change_set.read_groups
+        member_change_set.validate(read_groups: change_set.read_groups)
+        member_change_set
+      end
 
       # Construct the workflow for a related resource
       # @param related_resource [Valkyrie::Resource] resource related to the ChangeSet resource
@@ -60,23 +80,31 @@ class ChangeSetPersister
       # @param resource [Valkyrie::Resource]
       # @return [TrueClass, FalseClass]
       def should_set_state_for?(resource)
-        change_set.state && resource.respond_to?(:state) && valid_states(resource).include?(translated_state_for(resource))
+        change_set.respond_to?(:state) && change_set.state && resource.respond_to?(:state) && valid_states(resource).include?(translated_state_for(resource))
       end
 
       # Propagate or set the state for a related resource (e. g. a member or parent resource)
       # @param resource [Valkyrie::Resource] the related resource
-      def propagate_state_for_related(resource)
-        resource.state = translated_state_for(resource) if should_set_state_for?(resource)
+      def propagate_state_for_related(member_change_set)
+        return member_change_set unless should_set_state_for?(member_change_set.resource)
+        member_change_set.validate(state: translated_state_for(member_change_set.resource))
+        member_change_set
       end
 
       # Retrieve the member resource for the resource in the ChangeSet
-      # (This excludes FileSets)
       # @return [Array<Valkyrie::Resource>]
       def members
-        found = query_service.find_members(resource: change_set.resource) || []
-        found.select do |x|
-          !x.is_a?(FileSet)
+        wayfinder = Wayfinder.for(change_set.resource)
+        if wayfinder.respond_to?(:members)
+          wayfinder.members
+        else
+          []
         end
+      end
+
+      # it doesn't have members yet if it is just now being created
+      def new_collection_record
+        change_set.model.is_a?(Collection) && change_set.model.id.nil?
       end
   end
 end

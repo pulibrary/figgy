@@ -12,7 +12,6 @@ class ScannedMap < Resource
   attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
   attribute :file_metadata, Valkyrie::Types::Set.member(FileMetadata.optional)
   attribute :relation
-  attribute :references
 
   def self.can_have_manifests?
     true
@@ -21,6 +20,12 @@ class ScannedMap < Resource
   # How is this used?
   def to_s
     "#{human_readable_type}: #{title.to_sentence}"
+  end
+
+  def pdf_file
+    file_metadata.find do |file|
+      file.mime_type == ["application/pdf"]
+    end
   end
 
   def primary_imported_metadata

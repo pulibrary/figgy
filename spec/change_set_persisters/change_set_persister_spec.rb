@@ -55,7 +55,15 @@ RSpec.describe ChangeSetPersister do
       expect(output.primary_imported_metadata.subject).to include "Administrative and political divisions—Maps"
       expect(output.primary_imported_metadata.spatial).to eq ["Cameroon", "Nigeria"]
       expect(output.primary_imported_metadata.coverage).to eq ["northlimit=12.500000; eastlimit=014.620000; southlimit=03.890000; westlimit=008.550000; units=degrees; projection=EPSG:4326"]
-      expect(output.identifier).to eq(["ark:/88435/jq085p05h"])
+      expect(output.identifier).to be nil
+    end
+    it "doesn't override an existing identifier" do
+      resource = FactoryBot.build(:scanned_map, title: [], identifier: ["something"])
+      change_set = change_set_class.new(resource)
+      change_set.validate(source_metadata_identifier: "10001789")
+      output = change_set_persister.save(change_set: change_set)
+
+      expect(output.identifier).to eq ["something"]
     end
   end
 
@@ -841,19 +849,21 @@ RSpec.describe ChangeSetPersister do
     context "with existing member resources and file sets" do
       let(:resource1) { FactoryBot.create_for_repository(:file_set) }
       let(:resource2) { FactoryBot.create_for_repository(:complete_private_scanned_resource) }
-      it "propagates the access control policies, but not to FileSets" do
+      it "propagates the access control policies to resources and FileSets" do
         resource = FactoryBot.build(:scanned_resource, read_groups: [])
         resource.member_ids = [resource1.id, resource2.id]
         adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
         resource = adapter.persister.save(resource: resource)
 
         change_set = change_set_class.new(resource)
-        change_set.validate(visibility: Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC)
-
+        change_set.validate(visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
         updated = change_set_persister.save(change_set: change_set)
+
         members = query_service.find_members(resource: updated)
-        expect(members.first.read_groups).to eq resource1.read_groups
-        expect(members.to_a.last.read_groups).to eq [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
+        expect(members.first.read_groups).to eq updated.read_groups
+        resource_member = members.to_a.last
+        expect(resource_member.visibility).to eq [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC]
+        expect(resource_member.read_groups).to eq [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
       end
     end
   end
@@ -875,6 +885,51 @@ RSpec.describe ChangeSetPersister do
         expect(members.first.state).to eq ["pending"]
       end
     end
+
+    context "with archival media collection and media resource members" do
+      let(:amc) { FactoryBot.create_for_repository(:archival_media_collection, state: "draft") }
+      it "propagates the workflow state" do
+        FactoryBot.create_for_repository(:media_resource, state: "draft", member_of_collection_ids: amc.id)
+
+        members = Wayfinder.for(amc).members
+        expect(members.first.state).to eq ["draft"]
+
+        change_set = DynamicChangeSet.new(amc)
+        change_set.validate(state: "published")
+        output = change_set_persister.save(change_set: change_set)
+        expect(output.identifier.first).to eq "ark:/#{shoulder}#{blade}"
+
+        members = Wayfinder.for(output).members
+        expect(members.first.state).to eq ["published"]
+        expect(members.first.identifier.first).to eq "ark:/#{shoulder}#{blade}"
+      end
+    end
+
+    context "with a collection" do
+      let(:collection) { FactoryBot.create_for_repository(:collection) }
+      it "propagates visibility" do
+        FactoryBot.create_for_repository(:pending_private_scanned_resource, member_of_collection_ids: collection.id)
+
+        change_set = DynamicChangeSet.new(collection)
+        change_set.validate(title: "new title")
+        output = change_set_persister.save(change_set: change_set)
+
+        members = Wayfinder.for(output).members
+        expect(members.first.visibility).to eq [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC]
+      end
+      it "doesn't propagate read groups or state, having neither of these fields" do
+        FactoryBot.create_for_repository(:pending_private_scanned_resource, member_of_collection_ids: collection.id)
+
+        change_set = DynamicChangeSet.new(collection)
+        change_set.validate(title: "new title", visibility: nil)
+        output = change_set_persister.save(change_set: change_set)
+
+        members = Wayfinder.for(output).members
+        expect(members.first.state).to eq ["pending"]
+        expect(members.first.read_groups).to eq []
+      end
+    end
+
     context "with boxes and folders" do
       let(:change_set_class) { EphemeraBoxChangeSet }
       it "doesn't overwrite the folder workflow state" do
@@ -888,6 +943,7 @@ RSpec.describe ChangeSetPersister do
         members = query_service.find_members(resource: output)
         expect(members.first.state).not_to eq ["ready_to_ship"]
       end
+
       let(:rabbit_connection) { instance_double(MessagingClient, publish: true) }
       before do
         allow(Figgy).to receive(:messaging_client).and_return(rabbit_connection)
@@ -911,7 +967,10 @@ RSpec.describe ChangeSetPersister do
           "manifest_url" => "http://www.example.com/concern/ephemera_folders/#{folder.id}/manifest",
           "collection_slugs" => []
         }
-        expect(rabbit_connection).to have_received(:publish).once.with(expected_result.to_json)
+        # the object currently reindexes twice; once from the behavior tested here, and once because we're propagating state
+        # to the child and saving it through the change set persister pipeline so it can get an ark, emit this message, etc.
+        # this reindexing behavior should be cleaned up as part of 1405
+        expect(rabbit_connection).to have_received(:publish).twice.with(expected_result.to_json)
       end
     end
   end
@@ -929,6 +988,43 @@ RSpec.describe ChangeSetPersister do
       expect(reloaded.thumbnail_id).to eq [output.id]
       solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "id:#{output.id}" })["response"]["docs"][0]
       expect(solr_record["member_of_ssim"]).to eq ["id-#{parent.id}"]
+    end
+
+    it "will not append to the same parent twice" do
+      resource = FactoryBot.create_for_repository(:scanned_resource)
+      parent = FactoryBot.create_for_repository(:scanned_resource, member_ids: resource.id)
+      change_set = change_set_class.new(resource)
+      change_set.validate(append_id: parent.id.to_s)
+
+      output = change_set_persister.save(change_set: change_set)
+      reloaded = query_service.find_by(id: parent.id)
+
+      expect(reloaded.member_ids).to eq [output.id]
+      expect(reloaded.thumbnail_id).to eq [output.id]
+      solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "id:#{output.id}" })["response"]["docs"][0]
+      expect(solr_record["member_of_ssim"]).to eq ["id-#{parent.id}"]
+    end
+
+    it "moves a child from another parent via #append_id" do
+      resource = FactoryBot.create_for_repository(:scanned_resource)
+      old_parent = FactoryBot.create_for_repository(:scanned_resource, member_ids: resource.id)
+      new_parent = FactoryBot.create_for_repository(:scanned_resource)
+
+      change_set = change_set_class.new(resource)
+      change_set.validate(append_id: new_parent.id.to_s)
+      output = change_set_persister.save(change_set: change_set)
+
+      new_reloaded = query_service.find_by(id: new_parent.id)
+      old_reloaded = query_service.find_by(id: old_parent.id)
+
+      expect(new_reloaded.member_ids).to eq [output.id]
+      expect(new_reloaded.thumbnail_id).to eq [output.id]
+
+      expect(old_reloaded.member_ids).to eq []
+      expect(old_reloaded.thumbnail_id).to be_blank
+
+      solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "id:#{output.id}" })["response"]["docs"][0]
+      expect(solr_record["member_of_ssim"]).to eq ["id-#{new_parent.id}"]
     end
   end
 

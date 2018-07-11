@@ -4,10 +4,14 @@ class ArchivalMediaCollectionChangeSet < ChangeSet
   delegate :human_readable_type, to: :model
 
   include RemoteMetadataProperty
+  include VisibilityProperty
+
   property :source_metadata_identifier, multiple: false, required: true
-  property :bag_path, multiple: false, required: true, virtual: true
-  property :visibility, multiple: false, required: false
+  property :bag_path, multiple: false, required: false, virtual: true
+  # require visibility so imported resources can inherit
+  property :visibility, multiple: false, required: true, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
   property :depositor, multiple: false, required: false, virtual: true
+  property :read_groups, multiple: true, required: false
 
   validates :source_metadata_identifier, presence: true
   validates_with BagPathValidator

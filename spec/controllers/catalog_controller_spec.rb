@@ -51,8 +51,14 @@ RSpec.describe CatalogController do
         stub_bibdata(bib_id: "8543429")
         stub_ezid(shoulder: "99999/fk4", blade: "8543429")
         persister.save(resource: FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "8543429", import_metadata: true))
-
         get :index, params: { q: "cico:xjt" }
+        expect(assigns(:document_list).length).to eq 1
+      end
+      it "can search by call number" do
+        stub_bibdata(bib_id: "10001789")
+        stub_ezid(shoulder: "99999/fk4", blade: "8543429")
+        persister.save(resource: FactoryBot.create_for_repository(:scanned_map, state: "complete", title: [], source_metadata_identifier: "10001789", import_metadata: true))
+        get :index, params: { q: "g8731" }
         expect(assigns(:document_list).length).to eq 1
       end
     end

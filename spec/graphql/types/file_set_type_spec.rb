@@ -4,6 +4,7 @@ require "rails_helper"
 RSpec.describe Types::FileSetType do
   subject(:type) { described_class.new(resource, {}) }
   let(:resource) { FactoryBot.create_for_repository(:file_set, viewing_hint: "individuals", title: ["I'm a label."]) }
+  let(:parent) { FactoryBot.create_for_repository(:scanned_resource, member_ids: resource.id) }
   describe "class methods" do
     subject { described_class }
 
@@ -33,6 +34,17 @@ RSpec.describe Types::FileSetType do
   describe "#members" do
     it "returns an empty array" do
       expect(type.members).to eq []
+    end
+  end
+
+  describe "#thumbnail" do
+    it "returns information for itself" do
+      parent
+      expect(type.thumbnail).to eq(
+        iiif_service_url: "http://www.example.com/image-service/#{resource.id}",
+        thumbnail_url: "http://www.example.com/image-service/#{resource.id}/full/!200,150/0/default.jpg",
+        id: resource.id.to_s
+      )
     end
   end
 end

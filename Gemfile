@@ -65,6 +65,7 @@ group :test do
   gem "chromedriver-helper"
   gem "database_cleaner"
   gem "formulaic"
+  gem "rspec-graphql_matchers"
   gem "selenium-webdriver"
   gem "simplecov", require: false
   gem "timecop"
@@ -74,7 +75,7 @@ end
 gem "rsolr", ">= 1.0"
 
 gem "aasm"
-gem "browse-everything", github: "samvera/browse-everything"
+gem "browse-everything", github: "jrgriffiniii/browse-everything", branch: "hotfix-gdrive-scope"
 gem "coffee-rails"
 gem "devise"
 gem "ezid-client"
@@ -104,8 +105,8 @@ gem "graphql"
 gem "iso-639"
 gem "jquery-datatables-rails", "~> 3.4.0"
 gem "json-schema"
-gem "leaflet-rails", "~> 0.7"
+gem "leaflet-rails", "~> 1.3.1"
 gem "prawn"
-gem "rspec-graphql_matchers"
+gem "whenever", "~> 0.10"
 
 gem "graphiql-rails", group: :development

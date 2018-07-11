@@ -78,6 +78,13 @@ RSpec.describe EphemeraFoldersController do
         expect(assigns(:available_boxes)).to be_nil
         expect(assigns(:selected_box)).to be_nil
       end
+      it "sets @parent_box_number" do
+        box = FactoryBot.create_for_repository(:ephemera_box)
+        FactoryBot.create_for_repository(:ephemera_project, member_ids: box.id)
+
+        get :new, params: { parent_id: box.id.to_s }
+        expect(assigns(:parent_box_number)).to eq "1"
+      end
     end
     context "when created within a folder" do
       it "sets @available_boxes and @selected_box" do
@@ -88,6 +95,13 @@ RSpec.describe EphemeraFoldersController do
 
         expect(assigns(:available_boxes)).to be_nil
         expect(assigns(:selected_box)).to be_nil
+      end
+      it "doesn't set @parent_box_number" do
+        box = FactoryBot.create_for_repository(:ephemera_box)
+        project = FactoryBot.create_for_repository(:ephemera_project, member_ids: box.id)
+
+        get :new, params: { parent_id: project.id.to_s }
+        expect(assigns(:parent_box_number)).to be_nil
       end
     end
   end
@@ -388,6 +402,17 @@ RSpec.describe EphemeraFoldersController do
         patch :update, params: { id: ephemera_folder.id.to_s, ephemera_folder: invalid_params }
 
         expect(response).to render_template "base/edit"
+      end
+
+      it "can change from having a project as a parent to having a box as a parent" do
+        folder = FactoryBot.create_for_repository(:ephemera_folder)
+        box = FactoryBot.create_for_repository(:ephemera_box)
+        FactoryBot.create_for_repository(:ephemera_project, member_ids: [folder.id])
+        patch :update, params: { id: folder.id.to_s, ephemera_folder: { append_id: box.id } }
+
+        parents = Wayfinder.for(find_resource(folder.id)).parents
+        expect(parents.count).to eq 1
+        expect(parents.first.id).to eq box.id
       end
     end
   end
