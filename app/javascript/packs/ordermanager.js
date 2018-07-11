@@ -1,8 +1,12 @@
 import 'babel-polyfill'
 import Vue from 'vue/dist/vue.esm'
+import system from 'lux-design-system'
+import 'lux-design-system/lib/system/system.css'
 import App from '../app.vue'
 import store from '../store'
 import Flash from 'vue-flash'
+
+Vue.use(system)
 
 // global flash messaging component
 Vue.component('flash', Flash);
@@ -25,6 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
         this.resource.class_name = this.$el.attributes['data-class-name'].value
         this.$store.dispatch('loadImageCollection', this.resource)
         this.$store.dispatch('changeManifestLoadState', 'LOADING')
+
+        this.$store.dispatch('loadImageCollectionGql', this.resource)
     },
   })
 })

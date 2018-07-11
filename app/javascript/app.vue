@@ -1,5 +1,6 @@
 <template>
   <div id="order-manager">
+    <order-manager></order-manager>
     <transition name="fade">
       <div v-if="manifestLoading" class="overlay">
           <div class="loader"/>

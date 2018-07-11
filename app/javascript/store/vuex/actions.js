@@ -3,8 +3,43 @@ import axios from 'axios'
 import manifesto from 'manifesto.js'
 import mixins from '../../mixins/manifesto-filemanager-mixins'
 import Pluralize from 'pluralize'
+import apollo from '../../helpers/apolloClient'
+import gql from 'graphql-tag'
 
 const actions = {
+  async loadImageCollectionGql (context, resource) {
+      let id = resource.id
+      console.time(`getResourceById ${id}`)
+
+      const query = gql`
+        query GetResource($id: ID!) {
+          resource(id: $id) {
+            id,
+            label,
+            __typename,
+            members {
+              id,
+              __typename
+            }
+          }
+        }`
+
+      const variables = {
+        id: id
+      }
+
+      try {
+        const response = await apollo.query({
+          query, variables
+        })
+        context.commit('SET_RESOURCE', response.data.resource)
+      } catch(err) {
+        console.error(err)
+      }
+
+      console.timeEnd(`getResourceById ${resource.id}`)
+
+  },
   loadImageCollection (context, resource) {
     const manifest_uri = '/concern/'+ resource.class_name + '/' + resource.id + '/manifest'
     return axios.get(manifest_uri).then((response) => {
