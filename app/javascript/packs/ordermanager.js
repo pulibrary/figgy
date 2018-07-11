@@ -16,21 +16,21 @@ window.flash = function(message, type) {
 };
 
 // mount the filemanager app
-document.addEventListener('DOMContentLoaded', () => {
-  const app = new Vue({
-    el: '#order-manager',
-    template: '<App/>',
-    components: { App },
-    store,
-    data: {resource: null},
-    beforeMount: function () {
-        this.resource = {}
-        this.resource.id = this.$el.attributes['data-resource'].value
-        this.resource.class_name = this.$el.attributes['data-class-name'].value
-        this.$store.dispatch('loadImageCollection', this.resource)
-        this.$store.dispatch('changeManifestLoadState', 'LOADING')
-
-        this.$store.dispatch('loadImageCollectionGql', this.resource)
-    },
-  })
-})
+// document.addEventListener('DOMContentLoaded', () => {
+//   const app = new Vue({
+//     el: '#order-manager',
+//     template: '<App/>',
+//     components: { App },
+//     store,
+//     data: {resource: null},
+//     beforeMount: function () {
+//         this.resource = {}
+//         this.resource.id = this.$el.attributes['data-resource'].value
+//         this.resource.class_name = this.$el.attributes['data-class-name'].value
+//         this.$store.dispatch('loadImageCollection', this.resource)
+//         this.$store.dispatch('changeManifestLoadState', 'LOADING')
+//
+//         this.$store.dispatch('loadImageCollectionGql', this.resource)
+//     },
+//   })
+// })

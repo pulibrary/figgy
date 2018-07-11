@@ -16,9 +16,12 @@ const actions = {
           resource(id: $id) {
             id,
             label,
+            viewingHint,
             __typename,
             members {
               id,
+              label,
+              viewingHint,
               __typename
             }
           }
@@ -34,6 +37,7 @@ const actions = {
         })
         context.commit('SET_RESOURCE', response.data.resource)
       } catch(err) {
+        context.commit('CHANGE_MANIFEST_LOAD_STATE', 'LOADING_ERROR')
         console.error(err)
       }
 
