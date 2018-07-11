@@ -48,7 +48,7 @@
     "babel-polyfill": "^6.26.0",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
-    "lux-design-system": "0.0.4",
+    "lux-design-system": "^0.0.6",
     "manifesto.js": "^2.2.24",
     "npm": "^6.0.0",
     "openseadragon": "^2.3.1",
