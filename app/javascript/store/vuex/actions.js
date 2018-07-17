@@ -14,16 +14,24 @@ const actions = {
       const query = gql`
         query GetResource($id: ID!) {
           resource(id: $id) {
-            id,
-            label,
-            viewingHint,
-            __typename,
-            members {
-              id,
-              label,
-              viewingHint,
-              __typename
-            }
+             id,
+             label,
+             viewingHint,
+             ... on ScannedResource {
+               viewingDirection
+             },
+             __typename,
+             members {
+               id,
+               label,
+               thumbnail {
+                id,
+               	thumbnailUrl,
+                iiifServiceUrl
+               },
+               viewingHint,
+               __typename
+             }
           }
         }`
 
@@ -67,6 +75,58 @@ const actions = {
   },
   handlePaste (context, imgArray) {
     context.commit('PASTE', imgArray)
+  },
+  async saveStateGql (context, resource) {
+    window.resource = resource
+    console.log('save clicked!')
+    let newResource = resource
+
+    const mutation = gql`
+      mutation UpdateResource($input: UpdateResourceInput!) {
+        updateResource(input: $input) {
+          resource {
+            id,
+            thumbnail {
+              id,
+              iiifServiceUrl,
+              thumbnailUrl
+            },
+            ... on ScannedResource {
+              startPage,
+              viewingHint,
+              viewingDirection,
+              members {
+                id,
+                label,
+                thumbnail {
+                 id,
+                 thumbnailUrl,
+                 iiifServiceUrl
+                },
+                viewingHint
+              }
+            }
+          },
+          errors
+          }
+        }`
+
+    const variables = {
+      input: newResource
+    }
+
+    try {
+      const response = await apollo.mutate({
+        mutation, variables
+      })
+      console.log(response.data.updateResource.resource)
+      context.commit('SET_RESOURCE', response.data.updateResource.resource)
+    } catch(err) {
+      // context.commit('CHANGE_MANIFEST_LOAD_STATE', 'LOADING_ERROR')
+      console.error(err)
+    }
+
+    console.timeEnd(`getResourceById ${resource.id}`)
   },
   saveState (context, body) {
     window.body = body
