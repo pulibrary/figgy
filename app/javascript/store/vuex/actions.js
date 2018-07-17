@@ -78,7 +78,6 @@ const actions = {
   },
   async saveStateGql (context, resource) {
     window.resource = resource
-    console.log('save clicked!')
     let newResource = resource
 
     const mutation = gql`
@@ -126,7 +125,6 @@ const actions = {
       console.error(err)
     }
 
-    console.timeEnd(`getResourceById ${resource.id}`)
   },
   saveState (context, body) {
     window.body = body
