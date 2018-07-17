@@ -74,9 +74,7 @@ const ManifestoFilemanagerMixins = {
   getResourceId: function (canvas) {
     const images = canvas.getImages()
     const r = images[0].getResource()
-    // the double id property is due to a bug in our manifests ...
-    // see https://github.com/pulibrary/figgy/issues/598
-    return r.id.id
+    return r.id
   },
 
   getEnglishTitle: function (manifest) {
