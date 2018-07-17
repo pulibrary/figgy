@@ -59,6 +59,11 @@
       position: relative;
       min-height: 40px;
       width: 100%;
+
+      &.order-error-message {
+        background-color: #33B7B2;
+        color: white;
+      }
     }
   }
 }

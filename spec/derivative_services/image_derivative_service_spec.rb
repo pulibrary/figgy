@@ -30,15 +30,27 @@ RSpec.describe ImageDerivativeService do
     end
   end
 
-  it "creates a JPEG thumbnail and attaches it to the fileset" do
-    derivative_service.new(valid_change_set).create_derivatives
-    reloaded = query_service.find_by(id: valid_resource.id)
-    thumbnail = reloaded.thumbnail_files.first
-    expect(thumbnail).to be_present
-    thumbnail_file = Valkyrie::StorageAdapter.find_by(id: thumbnail.file_identifiers.first)
-    image = MiniMagick::Image.open(thumbnail_file.disk_path)
-    expect(image.width).to eq 200
-    expect(image.height).to eq 287
+  context "with a scanned map tif" do
+    it "creates a JPEG thumbnail and attaches it to the fileset" do
+      derivative_service.new(valid_change_set).create_derivatives
+      reloaded = query_service.find_by(id: valid_resource.id)
+      thumbnail = reloaded.thumbnail_files.first
+      expect(thumbnail).to be_present
+      thumbnail_file = Valkyrie::StorageAdapter.find_by(id: thumbnail.file_identifiers.first)
+      image = MiniMagick::Image.open(thumbnail_file.disk_path)
+      expect(image.width).to eq 200
+      expect(image.height).to eq 287
+    end
+  end
+
+  context "with a malformed scanned map tiff" do
+    let(:file) { fixture_file_upload("files/bad.tif", "image/tiff") }
+
+    it "stores an error message on the fileset" do
+      expect { derivative_service.new(valid_change_set).create_derivatives }.to raise_error(MiniMagick::Invalid)
+      file_set = query_service.find_all_of_model(model: FileSet).first
+      expect(file_set.original_file.error_message).to include(/bad magic number/)
+    end
   end
 
   describe "#cleanup_derivatives" do
