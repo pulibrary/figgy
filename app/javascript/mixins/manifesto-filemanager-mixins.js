@@ -71,10 +71,11 @@ const ManifestoFilemanagerMixins = {
     return id
   },
 
-  getResourceId: function (canvas) {
-    const images = canvas.getImages()
-    const r = images[0].getResource()
-    return r.id
+  getResourceId: function (service_id) {
+    // this "string hack" will parse a IIIF service @id to get the Figgy Resource id
+    let uriArray = service_id.split('/')
+    let id = uriArray[uriArray.length-1]
+    return id
   },
 
   getEnglishTitle: function (manifest) {
@@ -164,7 +165,7 @@ const ManifestoFilemanagerMixins = {
         imageCollection.startPage = this.getStartCanvasId(s)
         imageCollection.images = canvases.map(canvas => ({
           label: this.getEnglishLabel(canvas),
-          id: this.getResourceId(canvas),
+          id: this.getResourceId(this.getCanvasMainService(canvas)),
           page_type: "single",
           url: this.getCanvasMainThumb(canvas),
           service: this.getCanvasMainService(canvas)
