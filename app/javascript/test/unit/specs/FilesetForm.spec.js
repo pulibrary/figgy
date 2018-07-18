@@ -1,5 +1,5 @@
 import Vuex from 'vuex'
-import { mount, createLocalVue } from 'vue-test-utils'
+import { shallow, mount, createLocalVue } from 'vue-test-utils'
 import FilesetForm from '@/components/FilesetForm'
 import Fixtures from '@/test/fixtures/image-collection'
 const localVue = createLocalVue()
@@ -11,6 +11,7 @@ describe('FilesetForm.vue', () => {
   let actions
   let state
   let store
+  let cmp
 
   beforeEach(() => {
     actions = {
@@ -51,7 +52,7 @@ describe('FilesetForm.vue', () => {
           return {
             label: state.selected[0].label,
             id: state.selected[0].id,
-            pageType: state.selected[0].pageType,
+            page_type: state.selected[0].page_type,
             url: state.selected[0].url,
             editLink: '/catalog/parent/' + state.id + '/' + state.selected[0].id
           }
@@ -84,6 +85,15 @@ describe('FilesetForm.vue', () => {
     wrapper.find('#label').trigger('input')
     expect(actions.updateChanges).toHaveBeenCalled()
     expect(actions.updateImages).toHaveBeenCalled()
+  })
+
+  it('has a singleForm function that conforms to the images data structure', () => {
+    cmp = shallow(FilesetForm, { options, store, localVue })
+    for (var key in state.selected[0]) {
+      if (state.selected[0].hasOwnProperty(key)) {
+        expect(cmp.vm.singleForm.hasOwnProperty(key)).toBeTruthy()
+      }
+    }
   })
 
   it('has the expected html structure', () => {
