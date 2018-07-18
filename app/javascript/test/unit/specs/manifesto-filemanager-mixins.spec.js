@@ -30,7 +30,7 @@ describe('mixins', () => {
     it('getResourceId', () => {
       const s = manifestation.mainSequence()
       const canvases = s.getCanvases()
-      const resource = manifestation.getResourceId(manifestation.getCanvasMainService(canvases[1]))
+      const resource = manifestation.getResourceId(canvases[1])
       expect(resource).toBe('acb1c188-57c4-41cb-88e0-f44aca12e565')
     })
 
