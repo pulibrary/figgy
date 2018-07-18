@@ -12,48 +12,39 @@ describe('mixins', () => {
       const ic = manifestation.imageCollection(resource)
       expect(ic.id).toBe('9a25e0ce-4f64-4995-bae5-29140a453fa3')
       expect(ic.viewingDirection).toBe('left-to-right')
-      expect(ic.images[0].label).toBe('foo')
-    })
-
-    it('ImageCollection', () => {
-      const resource = {"id":"9a25e0ce-4f64-4995-bae5-29140a453fa3","class_name":"ephemera_folders"}
-      const ic = manifestation.imageCollection(resource)
-      expect(ic.id).toBe('9a25e0ce-4f64-4995-bae5-29140a453fa3')
-      expect(ic.viewingDirection).toBe('left-to-right')
-      expect(ic.images[0].label).toBe('foo')
+      expect(ic.images[0].label).toBe('example.tif')
     })
 
     it('mainSequence', () => {
-      const resource = {"id":"9a25e0ce-4f64-4995-bae5-29140a453fa3","class_name":"ephemera_folders"}
       const seq = manifestation.mainSequence()
-      expect(seq.id).toBe('bar')
+      expect(seq.id).toBe('http://localhost:3000/concern/scanned_resources/4f9e91e1-2e9c-404d-a8ca-30b8c9d01d0d/manifest/sequence/normal')
     })
 
     it('getCanvasMainThumb', () => {
       const s = manifestation.mainSequence()
       const canvases = s.getCanvases()
       const thumb = manifestation.getCanvasMainThumb(canvases[1])
-      expect(thumb).toBe('http://localhost:3000/image-service/50b5e49b-ade7-4278-8265-4f72081f26a5/full/400,/0/default.jpg')
+      expect(thumb).toBe('http://localhost:3000/image-service/acb1c188-57c4-41cb-88e0-f44aca12e565/full/400,/0/default.jpg')
     })
 
     it('getResourceId', () => {
       const s = manifestation.mainSequence()
       const canvases = s.getCanvases()
       const resource = manifestation.getResourceId(canvases[1])
-      expect(resource).toBe('50b5e49b-ade7-4278-8265-4f72081f26a5')
+      expect(resource).toBe('acb1c188-57c4-41cb-88e0-f44aca12e565')
     })
 
     it('getEnglishLabel', () => {
       const s = manifestation.mainSequence()
       const canvases = s.getCanvases()
       const label = manifestation.getEnglishLabel(canvases[1])
-      expect(label).toBe('[p. i (verso)]')
+      expect(label).toBe('example.tif')
     })
 
     it('getEnglishLabel when label is blank', () => {
       const s = manifestation.mainSequence()
       const canvases = s.getCanvases()
-      const label = manifestation.getEnglishLabel(canvases[6])
+      const label = manifestation.getEnglishLabel(canvases[2])
       expect(label).toBe('')
     })
 
@@ -65,7 +56,7 @@ describe('mixins', () => {
     it('getStartCanvasId', () => {
       const s = manifestation.mainSequence()
       const sc = manifestation.getStartCanvasId(s)
-      expect(sc).toBe('b8a003bd-cddb-4b01-9acc-4ac3086efc3a')
+      expect(sc).toBe('291b467b-36af-4d1e-80f1-dc76e8e250b9')
     })
 
     it('getBibId', () => {
@@ -77,7 +68,7 @@ describe('mixins', () => {
       const s = manifestation.mainSequence()
       const canvases = s.getCanvases()
       const service = manifestation.getCanvasMainService(canvases[1])
-      expect(service).toBe('http://localhost:3000/image-service/50b5e49b-ade7-4278-8265-4f72081f26a5')
+      expect(service).toBe('http://localhost:3000/image-service/acb1c188-57c4-41cb-88e0-f44aca12e565')
     })
 
   })

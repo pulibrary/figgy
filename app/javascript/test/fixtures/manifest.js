@@ -1,229 +1,196 @@
 export const manifest = {
   "@context": "http://iiif.io/api/presentation/2/context.json",
   "@type": "sc:Manifest",
-  "@id": "http://localhost:3000/concern/ephemera_folders/9a25e0ce-4f64-4995-bae5-29140a453fa3/manifest",
-  "label": "Teriyaki Chicken donburi",
-  "description": "Man is driven to create; I know I really love to create things. And while I'm not good at painting, drawing, or music, I can write software.",
-  "viewingHint": "individuals",
+  "@id": "http://localhost:3000/concern/scanned_resources/4f9e91e1-2e9c-404d-a8ca-30b8c9d01d0d/manifest",
+  "label": [
+    "Resource with 3 files"
+  ],
+  "description": "Plant a memory, plant a tree, do it today for tomorrow.",
+  "viewingHint": "paged",
+  "viewingDirection": "left-to-right",
   "metadata": [
     {
-      "label": "Title",
+      "label": "Created At",
       "value": [
-        "Teriyaki Chicken donburi"
+        "07/09/18 05:20:06 PM UTC"
       ]
     },
     {
-      "label": "Sort Title",
+      "label": "Updated At",
       "value": [
-        "foo"
+        "07/17/18 02:34:06 PM UTC"
+      ]
+    },
+    {
+      "label": "Identifier",
+      "value": [
+        "ark:/99999/fk4wq16k1g"
+      ]
+    },
+    {
+      "label": "Title",
+      "value": [
+        "Resource with 3 files"
+      ]
+    },
+    {
+      "label": "Description",
+      "value": [
+        "Plant a memory, plant a tree, do it today for tomorrow."
+      ]
+    },
+    {
+      "label": "PDF Type",
+      "value": [
+        "gray"
       ]
     },
     {
       "label": "Source Metadata Identifier",
       "value": [
-      "4609321"
+        "4609321"
       ]
-    }
+    },
   ],
-  "viewingDirection": "left-to-right",
   "sequences": [
     {
       "@type": "sc:Sequence",
-      "@id": "bar",
+      "@id": "http://localhost:3000/concern/scanned_resources/4f9e91e1-2e9c-404d-a8ca-30b8c9d01d0d/manifest/sequence/normal",
       "rendering": [
-
+        {
+          "@id": "http://localhost:3000/concern/scanned_resources/4f9e91e1-2e9c-404d-a8ca-30b8c9d01d0d/pdf",
+          "label": "Download as PDF",
+          "format": "application/pdf"
+        }
       ],
-      "startCanvas": "http://localhost:3000/concern/scanned_resources/9f2f6a73-05aa-4e57-ae1f-84c085211224/manifest/canvas/b8a003bd-cddb-4b01-9acc-4ac3086efc3a",
       "canvases": [
         {
           "@type": "sc:Canvas",
-          "@id": "http://localhost:3000/concern/ephemera_folders/9a25e0ce-4f64-4995-bae5-29140a453fa3/manifest/canvas/e7208ea3-21f3-43d4-9b14-489e15e9791e",
-          "label": "foo",
-          "width": "1200",
-          "height": "1192",
-          "images": [
+          "@id": "http://localhost:3000/concern/scanned_resources/4f9e91e1-2e9c-404d-a8ca-30b8c9d01d0d/manifest/canvas/291b467b-36af-4d1e-80f1-dc76e8e250b9",
+          "label": "example.tif",
+          "rendering": [
             {
-              "@type": "oa:Annotation",
-              "motivation": "sc:painting",
-              "resource": {
-                "@type": "dctypes:Image",
-                "@id":
-                  "e7208ea3-21f3-43d4-9b14-489e15e9791e"
-                ,
-                "height": "1192",
-                "width": "1200",
-                "format": "image/jpeg"
-              },
-              "on": "http://localhost:3000/concern/ephemera_folders/9a25e0ce-4f64-4995-bae5-29140a453fa3/manifest/canvas/e7208ea3-21f3-43d4-9b14-489e15e9791e"
+              "@id": "http://localhost:3000/downloads/291b467b-36af-4d1e-80f1-dc76e8e250b9/file/03c0e5bf-6a45-46a8-84c4-c82116be7d1b",
+              "label": "Download the original file",
+              "format": "image/tiff"
             }
-          ]
-        },
-        {
-          "@type": "sc:Canvas",
-          "@id": "http://localhost:3000/concern/ephemera_folders/9a25e0ce-4f64-4995-bae5-29140a453fa3/manifest/canvas/50b5e49b-ade7-4278-8265-4f72081f26a5",
-          "label": "[p. i (verso)]",
-          "width": "200",
-          "height": "287",
+          ],
+          "width": 200,
+          "height": 287,
           "images": [
             {
               "@type": "oa:Annotation",
               "motivation": "sc:painting",
               "resource": {
                 "@type": "dctypes:Image",
-                "@id":
-                  "50b5e49b-ade7-4278-8265-4f72081f26a5"
-                ,
-                "height": "287",
-                "width": "200",
+                "@id": "http://localhost:3000/image-service/291b467b-36af-4d1e-80f1-dc76e8e250b9/full/!1000,/0/default.jpg",
+                "height": 287,
+                "width": 200,
                 "format": "image/jpeg",
                 "service": {
                   "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "http://localhost:3000/image-service/50b5e49b-ade7-4278-8265-4f72081f26a5",
+                  "@id": "http://localhost:3000/image-service/291b467b-36af-4d1e-80f1-dc76e8e250b9",
                   "profile": "http://iiif.io/api/image/2/level2.json"
                 }
               },
-              "on": "http://localhost:3000/concern/ephemera_folders/9a25e0ce-4f64-4995-bae5-29140a453fa3/manifest/canvas/50b5e49b-ade7-4278-8265-4f72081f26a5"
+              "on": "http://localhost:3000/concern/scanned_resources/4f9e91e1-2e9c-404d-a8ca-30b8c9d01d0d/manifest/canvas/291b467b-36af-4d1e-80f1-dc76e8e250b9"
             }
           ]
         },
         {
           "@type": "sc:Canvas",
-          "@id": "http://localhost:3000/concern/ephemera_folders/9a25e0ce-4f64-4995-bae5-29140a453fa3/manifest/canvas/dae7619f-16a7-4306-93e4-70b4b192955c",
-          "label": "[p. ii (recto)]",
-          "width": "3884",
-          "height": "2596",
+          "@id": "http://localhost:3000/concern/scanned_resources/4f9e91e1-2e9c-404d-a8ca-30b8c9d01d0d/manifest/canvas/acb1c188-57c4-41cb-88e0-f44aca12e565",
+          "label": "example.tif",
+          "rendering": [
+            {
+              "@id": "http://localhost:3000/downloads/acb1c188-57c4-41cb-88e0-f44aca12e565/file/eb3d4f51-13c2-4ae6-9c20-41cb02ecb169",
+              "label": "Download the original file",
+              "format": "image/tiff"
+            }
+          ],
+          "width": 200,
+          "height": 287,
           "images": [
             {
               "@type": "oa:Annotation",
               "motivation": "sc:painting",
               "resource": {
                 "@type": "dctypes:Image",
-                "@id":
-                  "dae7619f-16a7-4306-93e4-70b4b192955c"
-                ,
-                "height": "2596",
-                "width": "3884",
+                "@id": "http://localhost:3000/image-service/acb1c188-57c4-41cb-88e0-f44aca12e565/full/!1000,/0/default.jpg",
+                "height": 287,
+                "width": 200,
                 "format": "image/jpeg",
                 "service": {
                   "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "http://localhost:3000/image-service/dae7619f-16a7-4306-93e4-70b4b192955c",
+                  "@id": "http://localhost:3000/image-service/acb1c188-57c4-41cb-88e0-f44aca12e565",
                   "profile": "http://iiif.io/api/image/2/level2.json"
                 }
               },
-              "on": "http://localhost:3000/concern/ephemera_folders/9a25e0ce-4f64-4995-bae5-29140a453fa3/manifest/canvas/dae7619f-16a7-4306-93e4-70b4b192955c"
+              "on": "http://localhost:3000/concern/scanned_resources/4f9e91e1-2e9c-404d-a8ca-30b8c9d01d0d/manifest/canvas/acb1c188-57c4-41cb-88e0-f44aca12e565"
             }
           ]
         },
         {
           "@type": "sc:Canvas",
-          "@id": "http://localhost:3000/concern/ephemera_folders/9a25e0ce-4f64-4995-bae5-29140a453fa3/manifest/canvas/b484cd88-fdf2-477c-afe9-d46a49d8822b",
-          "label": "[p. ii (verso)]",
-          "width": "3884",
-          "height": "2596",
+          "@id": "http://localhost:3000/concern/scanned_resources/4f9e91e1-2e9c-404d-a8ca-30b8c9d01d0d/manifest/canvas/c8376fd6-306c-4aed-b6a8-4eacbd2ca1ab",
+          "rendering": [
+            {
+              "@id": "http://localhost:3000/downloads/c8376fd6-306c-4aed-b6a8-4eacbd2ca1ab/file/49dbdca5-5c9e-450b-a67b-dfa97cd85e52",
+              "label": "Download the original file",
+              "format": "image/tiff"
+            }
+          ],
+          "width": 200,
+          "height": 287,
           "images": [
             {
               "@type": "oa:Annotation",
               "motivation": "sc:painting",
               "resource": {
                 "@type": "dctypes:Image",
-                "@id":
-                  "b484cd88-fdf2-477c-afe9-d46a49d8822b"
-                ,
-                "height": "2596",
-                "width": "3884",
+                "@id": "http://localhost:3000/image-service/c8376fd6-306c-4aed-b6a8-4eacbd2ca1ab/full/!1000,/0/default.jpg",
+                "height": 287,
+                "width": 200,
                 "format": "image/jpeg",
                 "service": {
                   "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "http://localhost:3000/image-service/b484cd88-fdf2-477c-afe9-d46a49d8822b",
+                  "@id": "http://localhost:3000/image-service/c8376fd6-306c-4aed-b6a8-4eacbd2ca1ab",
                   "profile": "http://iiif.io/api/image/2/level2.json"
                 }
               },
-              "on": "http://localhost:3000/concern/ephemera_folders/9a25e0ce-4f64-4995-bae5-29140a453fa3/manifest/canvas/b484cd88-fdf2-477c-afe9-d46a49d8822b"
-            }
-          ]
-        },
-        {
-          "@type": "sc:Canvas",
-          "@id": "http://localhost:3000/concern/ephemera_folders/9a25e0ce-4f64-4995-bae5-29140a453fa3/manifest/canvas/80b02791-4bd9-4566-9a9f-4b3062ba2e0d",
-          "label": "foo",
-          "width": "3884",
-          "height": "2596",
-          "images": [
-            {
-              "@type": "oa:Annotation",
-              "motivation": "sc:painting",
-              "resource": {
-                "@type": "dctypes:Image",
-                "@id":
-                  "80b02791-4bd9-4566-9a9f-4b3062ba2e0d"
-                ,
-                "height": "2596",
-                "width": "3884",
-                "format": "image/jpeg",
-                "service": {
-                  "@context": "http://iiif.io/api/image/2/context.json",
-                  "@id": "http://localhost:3000/image-service/80b02791-4bd9-4566-9a9f-4b3062ba2e0d",
-                  "profile": "http://iiif.io/api/image/2/level2.json"
-                }
-              },
-              "on": "http://localhost:3000/concern/ephemera_folders/9a25e0ce-4f64-4995-bae5-29140a453fa3/manifest/canvas/80b02791-4bd9-4566-9a9f-4b3062ba2e0d"
-            }
-          ]
-        },
-        {
-          "@type": "sc:Canvas",
-          "@id": "http://localhost:3000/concern/ephemera_folders/9a25e0ce-4f64-4995-bae5-29140a453fa3/manifest/canvas/0a3e268f-5872-444e-bdbd-b1a7b01dcb57",
-          "label": "[p. iii (verso)]",
-          "width": "1202",
-          "height": "1200",
-          "images": [
-            {
-              "@type": "oa:Annotation",
-              "motivation": "sc:painting",
-              "resource": {
-                "@type": "dctypes:Image",
-                "@id":
-                  "0a3e268f-5872-444e-bdbd-b1a7b01dcb57"
-                ,
-                "height": "1200",
-                "width": "1202",
-                "format": "image/jpeg"
-              },
-              "on": "http://localhost:3000/concern/ephemera_folders/9a25e0ce-4f64-4995-bae5-29140a453fa3/manifest/canvas/0a3e268f-5872-444e-bdbd-b1a7b01dcb57"
-            }
-          ]
-        },
-        {
-          "@type": "sc:Canvas",
-          "@id": "http://localhost:3000/concern/ephemera_folders/9a25e0ce-4f64-4995-bae5-29140a453fa3/manifest/canvas/foo",
-          "label": "",
-          "width": "1202",
-          "height": "1200",
-          "images": [
-            {
-              "@type": "oa:Annotation",
-              "motivation": "sc:painting",
-              "resource": {
-                "@type": "dctypes:Image",
-                "@id":
-                  "foo"
-                ,
-                "height": "1200",
-                "width": "1202",
-                "format": "image/jpeg"
-              },
-              "on": "http://localhost:3000/concern/ephemera_folders/9a25e0ce-4f64-4995-bae5-29140a453fa3/manifest/canvas/foo"
+              "on": "http://localhost:3000/concern/scanned_resources/4f9e91e1-2e9c-404d-a8ca-30b8c9d01d0d/manifest/canvas/c8376fd6-306c-4aed-b6a8-4eacbd2ca1ab"
             }
           ]
         }
+      ],
+      "viewingHint": "paged",
+      "startCanvas": "http://localhost:3000/concern/scanned_resources/4f9e91e1-2e9c-404d-a8ca-30b8c9d01d0d/manifest/canvas/291b467b-36af-4d1e-80f1-dc76e8e250b9"
+    }
+  ],
+  "structures": [
+    {
+      "@type": "sc:Range",
+      "@id": "http://localhost:3000/concern/scanned_resources/4f9e91e1-2e9c-404d-a8ca-30b8c9d01d0d/manifest/range/r704aaa5a-dc37-473b-a4c6-234bc28ea46d",
+      "label": "Logical",
+      "viewingHint": "top",
+      "ranges": [
+
+      ],
+      "canvases": [
+
       ]
     }
   ],
   "seeAlso": {
-    "@id": "http://localhost:3000/catalog/9a25e0ce-4f64-4995-bae5-29140a453fa3.jsonld",
+    "@id": "http://localhost:3000/catalog/4f9e91e1-2e9c-404d-a8ca-30b8c9d01d0d.jsonld",
     "format": "application/ld+json"
   },
-  "license": "http://rightsstatements.org/vocab/CNE/1.0/",
+  "license": "http://rightsstatements.org/vocab/InC-NC/1.0/",
+  "rendering": {
+    "@id": "http://arks.princeton.edu/ark:/99999/fk4wq16k1g",
+    "format": "text/html"
+  },
+  "logo": "http://localhost:3000/assets/pul_logo_icon-7b5f9384dfa5ca04f4851c6ee9e44e2d6953e55f893472a3e205e1591d3b2ca6.png",
   "thumbnail": {
     "@id": "http://localhost:3000/image-service/80b02791-4bd9-4566-9a9f-4b3062ba2e0d/full/!200,150/0/default.jpg",
     "service": {
