@@ -36,7 +36,8 @@ export const selected = [
     "label":"baz",
     "id":"50b5e49b-ade7-4278-8265-4f72081f26a5",
     "page_type":"single",
-    "url":"http://example.com"
+    "service":"http://localhost:3000/image-service/03a1cabe-e599-4df8-899b-ceb71f8db669",
+    "url":"http://localhost:3000/image-service/03a1cabe-e599-4df8-899b-ceb71f8db669/full/400,/0/default.jpg"
   }]
 
 export const sortedImages = [

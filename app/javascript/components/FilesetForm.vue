@@ -11,7 +11,7 @@
           <div v-if="!isMultiVolume">
             <div class="form-group">
               <label class="control-label" for="pageType">Page Type</label>
-              <select @change="updateSingle()" v-model="singleForm.pageType" id="pageType" class="form-control">
+              <select @change="updateSingle()" v-model="singleForm.page_type" id="pageType" class="form-control">
                 <option value="single">Single Page (Default)</option>
                 <option value="non-paged">Non-Paged</option>
                 <option value="facing">Facing Pages</option>
@@ -76,7 +76,7 @@ export default {
       return {
         label: this.$store.state.selected[0].label,
         id: this.$store.state.selected[0].id,
-        pageType: this.$store.state.selected[0].pageType,
+        page_type: this.$store.state.selected[0].page_type,
         service: this.$store.state.selected[0].service,
         url: this.$store.state.selected[0].url
       }
