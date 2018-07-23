@@ -43,6 +43,7 @@ class ScannedResourceChangeSet < ChangeSet
     [
       :title,
       :source_metadata_identifier,
+      :member_of_collection_ids,
       :rights_statement,
       :rights_note,
       :local_identifier,
@@ -51,7 +52,6 @@ class ScannedResourceChangeSet < ChangeSet
       :ocr_language,
       :portion_note,
       :nav_date,
-      :member_of_collection_ids,
       :append_id
     ]
   end
