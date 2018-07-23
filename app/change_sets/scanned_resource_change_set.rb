@@ -10,7 +10,7 @@ class ScannedResourceChangeSet < ChangeSet
   property :rights_statement, multiple: false, required: true, default: "http://rightsstatements.org/vocab/NKC/1.0/", type: ::Types::URI
   property :rights_note, multiple: false, required: false
   property :viewing_hint, multiple: false, required: false, default: "individuals"
-  property :pdf_type, multiple: false, required: false, default: "gray"
+  property :pdf_type, multiple: false, required: false, default: "color"
   property :holding_location, multiple: false, required: false, type: ::Types::URI
   property :viewing_direction, multiple: false, required: false
   property :portion_note, multiple: false, required: false
