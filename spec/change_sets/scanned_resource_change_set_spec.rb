@@ -114,4 +114,10 @@ RSpec.describe ScannedResourceChangeSet do
       expect(members.first.state).to include "metadata_review"
     end
   end
+
+  describe "#pdf_type" do
+    it "defaults to color" do
+      expect(change_set.pdf_type).to eq "color"
+    end
+  end
 end

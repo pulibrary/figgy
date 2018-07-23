@@ -97,10 +97,10 @@ RSpec.shared_examples "a ChangeSet" do
 
     describe "#pdf_type" do
       let(:form_resource) { resource_klass.new }
-      it "has a default of 'gray'" do
+      it "has a default of 'color'" do
         change_set.prepopulate!
 
-        expect(change_set.pdf_type).to eq "gray"
+        expect(change_set.pdf_type).to eq "color"
       end
     end
 
