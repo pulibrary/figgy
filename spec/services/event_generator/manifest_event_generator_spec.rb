@@ -74,8 +74,8 @@ RSpec.describe EventGenerator::ManifestEventGenerator do
     context "with a scanned map" do
       let(:record) { FactoryBot.create_for_repository(:scanned_map) }
 
-      it "is not valid" do
-        expect(event_generator.valid?(record)).to be false
+      it "is valid" do
+        expect(event_generator.valid?(record)).to be true
       end
     end
   end
