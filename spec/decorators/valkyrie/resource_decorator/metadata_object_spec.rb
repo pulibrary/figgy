@@ -55,6 +55,14 @@ RSpec.describe Valkyrie::ResourceDecorator::MetadataObject do
       end
     end
 
+    context "with a conventional US-formatted date" do
+      subject(:metadata_object) { described_class.new("created", ["01/01/1970"]) }
+
+      it "returns the initial value" do
+        expect(metadata_object.value).to eq ["01/01/1970"]
+      end
+    end
+
     context "with an invalid date" do
       subject(:metadata_object) { described_class.new("created", ["1970-13-05T00:00:00Z"]) }
 
