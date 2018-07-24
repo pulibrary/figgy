@@ -135,6 +135,18 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
       end
     end
 
+    # Attempts to use an overridden method for transforming metadata values
+    # @return [Array<Object>] the array of metadata values
+    def value
+      Array.wrap(
+        if respond_to?("#{@attribute}_value".to_sym)
+          send("#{@attribute}_value".to_sym)
+        else
+          @value
+        end
+      )
+    end
+
     # Overrides the label for the attribute :pdf_type
     # @return [String] the label
     def pdf_type_label
@@ -142,6 +154,8 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     end
 
     # Parses and formats date-string values
+    #   It it can't parse the string, returns it
+    #   Date fields may hold programmatically- or human-created date strings.
     # @return [Array<String>] the formatted date strings
     def date_value
       @value.map do |date|
@@ -206,18 +220,6 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     # @return [Array<String>] the collection titles
     def member_of_collections_value
       @value.map(&:title)
-    end
-
-    # Attempts to use an overridden method for transforming metadata values
-    # @return [Array<Object>] the array of metadata values
-    def value
-      Array.wrap(
-        if respond_to?("#{@attribute}_value".to_sym)
-          send("#{@attribute}_value".to_sym)
-        else
-          @value
-        end
-      )
     end
 
     # Provides a Hash representation of the metadata attribute name/value mapping
