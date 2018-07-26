@@ -39,12 +39,8 @@ class EventGenerator
       )
     end
 
-    def valid?(record)
-      if record.is_a?(FileSet)
-        record.decorate.parent.try(:geo_resource?) ? false : true
-      else
-        record.try(:geo_resource?) ? false : true
-      end
+    def valid?(_record)
+      true
     end
 
     private
