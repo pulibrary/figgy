@@ -26,8 +26,10 @@ class DuplicateResourceDetector {
   }
 
   removeWarning() {
-    this.$warning.remove()
-    delete this.$warning
+    if ( this.$warning ) {
+      this.$warning.remove()
+      delete this.$warning
+    }
   }
 
   query() {
