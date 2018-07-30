@@ -17,8 +17,14 @@ const actions = {
              id,
              label,
              viewingHint,
+             thumbnail {
+               id,
+               thumbnailUrl,
+               iiifServiceUrl
+             },
              ... on ScannedResource {
-               viewingDirection
+               viewingDirection,
+               startPage
              },
              __typename,
              members {

@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
     beforeMount: function () {
         this.resource = {}
         this.resource.id = '4f9e91e1-2e9c-404d-a8ca-30b8c9d01d0d'
+        // console.log(this.$el.attributes['data-resource'].value)
+        // this.resource.id = this.$el.attributes['data-resource'].value
         this.$store.dispatch('loadImageCollectionGql', this.resource)
     },
   })
