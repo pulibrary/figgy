@@ -1,5 +1,23 @@
 # frozen_string_literal: true
 class ReportsController < ApplicationController
+  def ephemera_data
+    authorize! :show, Report
+    if params[:project_id]
+      @ephemera_project = find_resource(params[:project_id]).decorate
+      @resources = @ephemera_project.boxes.map(&:folders).flatten
+    end
+    @ephemera_projects = query_service.find_all_of_model(model: EphemeraProject).map(&:decorate) unless @ephemera_project
+
+    respond_to do |format|
+      format.html
+      format.csv do
+        send_data to_csv(@resources, fields: { id: "id", title: "title", creator: "creator",
+                                               contributor: "contributor", publisher: "publisher" }),
+                  filename: "ephemera-authority-data-#{Time.zone.today}.csv"
+      end
+    end
+  end
+
   def identifiers_to_reconcile
     authorize! :show, Report
     @resources = Valkyrie.config.metadata_adapter.query_service.custom_queries.find_identifiers_to_reconcile
@@ -18,8 +36,16 @@ class ReportsController < ApplicationController
       CSV.generate(headers: true) do |csv|
         csv << fields.map { |_k, v| v }
         records.each do |record|
-          csv << fields.map { |k, _v| Array.wrap(record.send(k)).first }
+          csv << fields.map { |k, _v| Array.wrap(record.send(k)).join(";") }
         end
       end
+    end
+
+    def find_resource(id)
+      query_service.find_by(id: Valkyrie::ID.new(id))
+    end
+
+    def query_service
+      Valkyrie.config.metadata_adapter.query_service
     end
 end
