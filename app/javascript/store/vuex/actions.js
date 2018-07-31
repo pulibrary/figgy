@@ -6,6 +6,40 @@ import Pluralize from 'pluralize'
 import apollo from '../../helpers/apolloClient'
 import gql from 'graphql-tag'
 
+function MutationBuilder(resource, filesets) {
+  this.filesetNum = filesets.length
+  this.query_template = 'mutation UpdateResource(__inputs__: UpdateResourceInput!) { __mutations__ }'
+  this.inputs = function() {
+    let inputs = ['$input']
+    for (let i=0; i < this.filesetNum; i++ ) {
+      inputs.push('$fileset_' + i)
+    }
+    return inputs
+  }
+  this.mutations = function() {
+    let mutations = []
+    let mutation_template = '__mname__: updateResource(input: $__mname__) { resource { id, thumbnail { id, iiifServiceUrl, thumbnailUrl }, ... on ScannedResource { startPage, viewingHint, viewingDirection, members { id, label, thumbnail { id, thumbnailUrl, iiifServiceUrl } } } }, errors }'
+    let inputs = this.inputs()
+    let mutationNum = inputs.length
+    for (let i=0; i < mutationNum; i++ ) {
+      mutations.push(mutation_template.replace(/__mname__/g, inputs[i]).substr(1))
+    }
+    return mutations
+  }
+  this.variables = function() {
+    let variables = {}
+    variables.input = resource
+    for (let i=0; i < this.filesetNum; i++ ) {
+      variables['fileset_' + i] = filesets[i]
+    }
+    return variables
+  }
+  this.build = function() {
+      let request = this.query_template.replace('__inputs__', this.inputs().join(': UpdateResourceInput!,'))
+      return request.replace('__mutations__', this.mutations().join())
+  }
+}
+
 const actions = {
   async loadImageCollectionGql (context, resource) {
       let id = resource.id
@@ -84,41 +118,14 @@ const actions = {
   },
   async saveStateGql (context, resource) {
     window.resource = resource
-    let newResource = resource
+    let newResource = resource.body
+    let newFilesets = resource.filesets
 
-    const mutation = gql`
-      mutation UpdateResource($input: UpdateResourceInput!) {
-        updateResource(input: $input) {
-          resource {
-            id,
-            thumbnail {
-              id,
-              iiifServiceUrl,
-              thumbnailUrl
-            },
-            ... on ScannedResource {
-              startPage,
-              viewingHint,
-              viewingDirection,
-              members {
-                id,
-                label,
-                thumbnail {
-                 id,
-                 thumbnailUrl,
-                 iiifServiceUrl
-                },
-                viewingHint
-              }
-            }
-          },
-          errors
-          }
-        }`
+    let mb = new MutationBuilder(newResource, newFilesets)
 
-    const variables = {
-      input: newResource
-    }
+    const template = mb.build()
+    const mutation = gql`${template}`
+    const variables = mb.variables()
 
     try {
       const response = await apollo.mutate({
@@ -127,9 +134,120 @@ const actions = {
       console.log(response.data.updateResource.resource)
       context.commit('SET_RESOURCE', response.data.updateResource.resource)
     } catch(err) {
-      // context.commit('CHANGE_MANIFEST_LOAD_STATE', 'LOADING_ERROR')
       console.error(err)
     }
+
+    // const mutation = gql`
+    //   mutation UpdateResource($input: UpdateResourceInput!) {
+    //     updateResource(input: $input) {
+    //       resource {
+    //         id,
+    //         thumbnail {
+    //           id,
+    //           iiifServiceUrl,
+    //           thumbnailUrl
+    //         },
+    //         ... on ScannedResource {
+    //           startPage,
+    //           viewingHint,
+    //           viewingDirection,
+    //           members {
+    //             id,
+    //             label,
+    //             thumbnail {
+    //              id,
+    //              thumbnailUrl,
+    //              iiifServiceUrl
+    //             },
+    //             viewingHint
+    //           }
+    //         }
+    //       },
+    //       errors
+    //       }
+    //     }`
+
+    //   const filesetMutation = gql`
+    //     mutation UpdateResource($input: UpdateResourceInput!) {
+    //       updateResource(input: $input) {
+    //         resource {
+    //           id,
+    //           label,
+    //           ... on ScannedResource {
+    //             viewingHint
+    //           }
+    //         },
+    //         errors
+    //         }
+    //       }`
+        // mutation UpdateResource($input: UpdateResourceInput!, $fileset: UpdateResourceInput!) {
+        //   one: updateResource(input: $input) {
+        //     resource {
+        //       id,
+        //       thumbnail {
+        //         id,
+        //         iiifServiceUrl,
+        //         thumbnailUrl
+        //       },
+        //       ... on ScannedResource {
+        //         startPage,
+        //         viewingHint,
+        //         viewingDirection,
+        //         members {
+        //           id,
+        //           label,
+        //           thumbnail {
+        //            id,
+        //            thumbnailUrl,
+        //            iiifServiceUrl
+        //           }
+        //         }
+        //       }
+        //     },
+        //     errors
+        //   },
+        //   two: updateResource(input: $fileset) {
+        //     resource {
+        //       id,
+        //       thumbnail {
+        //         id,
+        //         iiifServiceUrl,
+        //         thumbnailUrl
+        //       },
+        //       ... on ScannedResource {
+        //         startPage,
+        //         viewingHint,
+        //         viewingDirection,
+        //         members {
+        //           id,
+        //           label,
+        //           thumbnail {
+        //            id,
+        //            thumbnailUrl,
+        //            iiifServiceUrl
+        //           }
+        //         }
+        //       }
+        //     },
+        //     errors
+        //   }
+        // }
+
+        // {
+        //     "one": {
+        //         "id": "4f9e91e1-2e9c-404d-a8ca-30b8c9d01d0d",
+        //         "viewingDirection": "LEFTTORIGHT",
+        //         "viewingHint": "paged",
+        //         "startPage": "291b467b-36af-4d1e-80f1-dc76e8e250b9",
+        //         "thumbnailId": "c8376fd6-306c-4aed-b6a8-4eacbd2ca1ab",
+        //         "memberIds": ["acb1c188-57c4-41cb-88e0-f44aca12e565", "c8376fd6-306c-4aed-b6a8-4eacbd2ca1ab", "291b467b-36af-4d1e-80f1-dc76e8e250b9"]
+        //     },
+        //     "two": {
+        //         "id": "acb1c188-57c4-41cb-88e0-f44aca12e565",
+        //         "label": "p. i",
+        //         "viewingHint": "facing"
+        //     }
+        // }
 
   },
   saveState (context, body) {
