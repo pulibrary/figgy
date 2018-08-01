@@ -99,8 +99,8 @@ const actions = {
         mutation, variables
       })
       console.log(response.data)
-      // reset the OG state
-      // context.commit('SET_RESOURCE', response.data.input.resource)
+      // reset the state to reflect applied changes
+      context.commit('APPLY_STATE')
     } catch(err) {
       console.error(err)
     }
