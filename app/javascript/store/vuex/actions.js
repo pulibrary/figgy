@@ -131,124 +131,12 @@ const actions = {
       const response = await apollo.mutate({
         mutation, variables
       })
-      console.log(response.data.updateResource.resource)
-      context.commit('SET_RESOURCE', response.data.updateResource.resource)
+      console.log(response.data)
+      // reset the OG state
+      // context.commit('SET_RESOURCE', response.data.input.resource)
     } catch(err) {
       console.error(err)
     }
-
-    // const mutation = gql`
-    //   mutation UpdateResource($input: UpdateResourceInput!) {
-    //     updateResource(input: $input) {
-    //       resource {
-    //         id,
-    //         thumbnail {
-    //           id,
-    //           iiifServiceUrl,
-    //           thumbnailUrl
-    //         },
-    //         ... on ScannedResource {
-    //           startPage,
-    //           viewingHint,
-    //           viewingDirection,
-    //           members {
-    //             id,
-    //             label,
-    //             thumbnail {
-    //              id,
-    //              thumbnailUrl,
-    //              iiifServiceUrl
-    //             },
-    //             viewingHint
-    //           }
-    //         }
-    //       },
-    //       errors
-    //       }
-    //     }`
-
-    //   const filesetMutation = gql`
-    //     mutation UpdateResource($input: UpdateResourceInput!) {
-    //       updateResource(input: $input) {
-    //         resource {
-    //           id,
-    //           label,
-    //           ... on ScannedResource {
-    //             viewingHint
-    //           }
-    //         },
-    //         errors
-    //         }
-    //       }`
-        // mutation UpdateResource($input: UpdateResourceInput!, $fileset: UpdateResourceInput!) {
-        //   one: updateResource(input: $input) {
-        //     resource {
-        //       id,
-        //       thumbnail {
-        //         id,
-        //         iiifServiceUrl,
-        //         thumbnailUrl
-        //       },
-        //       ... on ScannedResource {
-        //         startPage,
-        //         viewingHint,
-        //         viewingDirection,
-        //         members {
-        //           id,
-        //           label,
-        //           thumbnail {
-        //            id,
-        //            thumbnailUrl,
-        //            iiifServiceUrl
-        //           }
-        //         }
-        //       }
-        //     },
-        //     errors
-        //   },
-        //   two: updateResource(input: $fileset) {
-        //     resource {
-        //       id,
-        //       thumbnail {
-        //         id,
-        //         iiifServiceUrl,
-        //         thumbnailUrl
-        //       },
-        //       ... on ScannedResource {
-        //         startPage,
-        //         viewingHint,
-        //         viewingDirection,
-        //         members {
-        //           id,
-        //           label,
-        //           thumbnail {
-        //            id,
-        //            thumbnailUrl,
-        //            iiifServiceUrl
-        //           }
-        //         }
-        //       }
-        //     },
-        //     errors
-        //   }
-        // }
-
-        // {
-        //     "one": {
-        //         "id": "4f9e91e1-2e9c-404d-a8ca-30b8c9d01d0d",
-        //         "viewingDirection": "LEFTTORIGHT",
-        //         "viewingHint": "paged",
-        //         "startPage": "291b467b-36af-4d1e-80f1-dc76e8e250b9",
-        //         "thumbnailId": "c8376fd6-306c-4aed-b6a8-4eacbd2ca1ab",
-        //         "memberIds": ["acb1c188-57c4-41cb-88e0-f44aca12e565", "c8376fd6-306c-4aed-b6a8-4eacbd2ca1ab", "291b467b-36af-4d1e-80f1-dc76e8e250b9"]
-        //     },
-        //     "two": {
-        //         "id": "acb1c188-57c4-41cb-88e0-f44aca12e565",
-        //         "label": "p. i",
-        //         "viewingHint": "facing"
-        //     }
-        // }
-
   },
   saveState (context, body) {
     window.body = body
