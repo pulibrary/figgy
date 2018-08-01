@@ -208,6 +208,7 @@ Rails.application.routes.draw do
   get "/catalog/parent/:parent_id/:id", to: "catalog#show", as: :parent_solr_document
   get "/iiif/lookup/:prefix/:naan/:arkid", to: "catalog#lookup_manifest", as: :lookup_manifest
 
+  get "/reports/ephemera_data/(:project_id)", to: "reports#ephemera_data", as: :ephemera_data
   get "/reports/identifiers_to_reconcile", to: "reports#identifiers_to_reconcile", as: :identifiers_to_reconcile
 
   get "bulk_ingest/:resource_type", to: "bulk_ingest#show", as: "bulk_ingest_show"

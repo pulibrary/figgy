@@ -1,0 +1,40 @@
+<h2>Ephemera Data</h2>
+<% if @resources %>
+  <ol class="breadcrumb">
+    <li><%= link_to "Ephemera Data", ephemera_data_path %></li>
+    <li><%= @ephemera_project.title %></li>
+  </ol>
+  <p>
+    <%= link_to "Download CSV", ephemera_data_path(format: :csv) %>
+  </p>
+  <table class="table table-striped datatable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Creator</th>
+        <th>Contributor</th>
+        <th>Publisher</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @resources.each do |r| %>
+        <tr>
+          <td><%= link_to r.title.first, solr_document_path(r) %></td>
+          <td><%= r.creator.to_sentence %></td>
+          <td><%= r.contributor.to_sentence %></td>
+          <td><%= r.publisher.to_sentence %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <ol class="breadcrumb">
+    <li>Select an ephemera project</li>
+  </ol>
+  <ul>
+    <% @ephemera_projects.each do |project| %>
+      <li><%= link_to project.title, ephemera_data_path(project.id) %></li>
+    <% end %>
+  </ul>
+<% end %>
+
