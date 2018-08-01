@@ -4,41 +4,8 @@ import manifesto from 'manifesto.js'
 import mixins from '../../mixins/manifesto-filemanager-mixins'
 import Pluralize from 'pluralize'
 import apollo from '../../helpers/apolloClient'
+import MutationBuilder from '../../helpers/mutationBuilder'
 import gql from 'graphql-tag'
-
-function MutationBuilder(resource, filesets) {
-  this.filesetNum = filesets.length
-  this.query_template = 'mutation UpdateResource(__inputs__: UpdateResourceInput!) { __mutations__ }'
-  this.inputs = function() {
-    let inputs = ['$input']
-    for (let i=0; i < this.filesetNum; i++ ) {
-      inputs.push('$fileset_' + i)
-    }
-    return inputs
-  }
-  this.mutations = function() {
-    let mutations = []
-    let mutation_template = '__mname__: updateResource(input: $__mname__) { resource { id, thumbnail { id, iiifServiceUrl, thumbnailUrl }, ... on ScannedResource { startPage, viewingHint, viewingDirection, members { id, label, thumbnail { id, thumbnailUrl, iiifServiceUrl } } } }, errors }'
-    let inputs = this.inputs()
-    let mutationNum = inputs.length
-    for (let i=0; i < mutationNum; i++ ) {
-      mutations.push(mutation_template.replace(/__mname__/g, inputs[i]).substr(1))
-    }
-    return mutations
-  }
-  this.variables = function() {
-    let variables = {}
-    variables.input = resource
-    for (let i=0; i < this.filesetNum; i++ ) {
-      variables['fileset_' + i] = filesets[i]
-    }
-    return variables
-  }
-  this.build = function() {
-      let request = this.query_template.replace('__inputs__', this.inputs().join(': UpdateResourceInput!,'))
-      return request.replace('__mutations__', this.mutations().join())
-  }
-}
 
 const actions = {
   async loadImageCollectionGql (context, resource) {
