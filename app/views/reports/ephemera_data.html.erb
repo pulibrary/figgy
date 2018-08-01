@@ -1,5 +1,9 @@
-<h2>Ephemera Authority Data</h2>
+<h2>Ephemera Data</h2>
 <% if @resources %>
+  <ol class="breadcrumb">
+    <li><%= link_to "Ephemera Data", ephemera_data_path %></li>
+    <li><%= @ephemera_project.title %></li>
+  </ol>
   <p>
     <%= link_to "Download CSV", ephemera_data_path(format: :csv) %>
   </p>
@@ -24,7 +28,9 @@
     </tbody>
   </table>
 <% else %>
-  <h3>Select an ephemera project</h3>
+  <ol class="breadcrumb">
+    <li>Select an ephemera project</li>
+  </ol>
   <ul>
     <% @ephemera_projects.each do |project| %>
       <li><%= link_to project.title, ephemera_data_path(project.id) %></li>

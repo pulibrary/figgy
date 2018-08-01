@@ -13,7 +13,7 @@ class ReportsController < ApplicationController
       format.csv do
         send_data to_csv(@resources, fields: { id: "id", title: "title", creator: "creator",
                                                contributor: "contributor", publisher: "publisher" }),
-                  filename: "ephemera-authority-data-#{Time.zone.today}.csv"
+                  filename: "#{@ephemera_project.title.parameterize}-data-#{Time.zone.today}.csv"
       end
     end
   end

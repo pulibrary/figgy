@@ -23,6 +23,7 @@ RSpec.describe ReportsController, type: :controller do
     it "allows downloading a CSV file" do
       get :ephemera_data, params: { project_id: project.id }, format: "csv"
       expect(response.body).to eq(data)
+      expect(response.headers["Content-Disposition"]).to eq("attachment; filename=\"test-project-data-#{Time.zone.today}.csv\"")
     end
     context "when no project is specified" do
       render_views
