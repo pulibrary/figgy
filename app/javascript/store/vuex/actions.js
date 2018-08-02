@@ -98,10 +98,11 @@ const actions = {
       const response = await apollo.mutate({
         mutation, variables
       })
-      console.log(response.data)
       // reset the state to reflect applied changes
-      context.commit('APPLY_STATE')
+      context.commit('SAVED_STATE', 'SAVED')
+      setTimeout(function(){ context.commit('APPLY_STATE') }, 1000);
     } catch(err) {
+      context.commit('SAVED_STATE', 'ERROR')
       console.error(err)
     }
   },
