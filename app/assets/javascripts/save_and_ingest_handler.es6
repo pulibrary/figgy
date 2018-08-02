@@ -7,7 +7,7 @@ export default class SaveAndIngestHandler {
     this.field_element.change((e) => {
       this.reset_button()
       this.button_element.val('Searching...')
-      $.getJSON(`/concern/scanned_resources/save_and_ingest/${this.encode_periods(this.field_element.val())}.json`)
+      $.getJSON(`/concern/scanned_resources/save_and_ingest/${this.field_element.val()}.json`)
         .done((data) => {
           if(data.exists == true) {
             this.reset_button()
@@ -27,10 +27,6 @@ export default class SaveAndIngestHandler {
     this.button_element.attr('disabled', true)
     this.button_element.val('Save and Ingest')
     this.info_element.text('')
-  }
-
-  encode_periods(id) {
-    return id.replace(/\./g, '%2E')
   }
 
   get button_selector() {
