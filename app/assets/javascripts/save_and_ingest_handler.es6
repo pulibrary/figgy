@@ -7,7 +7,7 @@ export default class SaveAndIngestHandler {
     this.field_element.change((e) => {
       this.reset_button()
       this.button_element.val('Searching...')
-      $.getJSON(`/concern/scanned_resources/save_and_ingest/${this.field_element.val()}.json`)
+      $.getJSON(`/concern/scanned_resources/save_and_ingest/${this.field_element.val()}`)
         .done((data) => {
           if(data.exists == true) {
             this.reset_button()
