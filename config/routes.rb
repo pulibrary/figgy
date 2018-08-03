@@ -85,7 +85,7 @@ Rails.application.routes.draw do
         get :pdf
       end
       collection do
-        get "save_and_ingest/:id", action: :save_and_ingest
+        get "save_and_ingest/:id", action: :save_and_ingest, constraints: { id: /[^\/]+/ }, defaults: { format: :json }
       end
     end
     resources :media_resources
