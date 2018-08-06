@@ -2,6 +2,9 @@
 class ScannedMap < Resource
   include Valkyrie::Resource::AccessControls
   include Schema::Geo
+
+  enable_optimistic_locking
+
   attribute :id, Valkyrie::Types::ID.optional
   attribute :member_ids, Valkyrie::Types::Array
   attribute :member_of_collection_ids
