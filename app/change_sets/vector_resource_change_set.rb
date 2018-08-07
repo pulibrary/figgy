@@ -12,9 +12,9 @@ class VectorResourceChangeSet < ChangeSet
   property :rights_note, multiple: false, required: false
   property :holding_location, multiple: false, required: false, type: ::Types::URI
   property :local_identifier, multiple: true, required: false, default: []
-  property :member_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID.optional)
+  property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID.optional)
   property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID.optional
-  property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID.optional)
+  property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID.optional)
   property :read_groups, multiple: true, required: false
   property :file_metadata, multiple: true, required: false, default: []
   property :depositor, multiple: false, require: false

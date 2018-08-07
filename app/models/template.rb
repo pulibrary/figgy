@@ -5,6 +5,6 @@ class Template < Resource
   attribute :id, Valkyrie::Types::ID.optional
   attribute :title
   attribute :parent_id
-  attribute :nested_properties, Valkyrie::Types::Array.member(Valkyrie::Types::Anything.optional).optional
+  attribute :nested_properties, Valkyrie::Types::Array.of(Valkyrie::Types::Anything.optional).optional
   attribute :model_class
 end

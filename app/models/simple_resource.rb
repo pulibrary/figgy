@@ -8,9 +8,9 @@ class SimpleResource < Resource
   attribute :member_of_collection_ids
 
   attribute :state
-  attribute :pending_uploads, Valkyrie::Types::Array.member(PendingUpload)
-  attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
-  attribute :file_metadata, Valkyrie::Types::Set.member(FileMetadata.optional)
+  attribute :pending_uploads, Valkyrie::Types::Array.of(PendingUpload)
+  attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
+  attribute :file_metadata, Valkyrie::Types::Set.of(FileMetadata.optional)
 
   # Does this generate IIIF Manifests
   # @return [TrueClass, FalseClass]
