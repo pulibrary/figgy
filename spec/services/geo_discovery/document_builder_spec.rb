@@ -231,7 +231,7 @@ describe GeoDiscovery::DocumentBuilder do
 
     context "with a child resouce" do
       subject(:document_builder) { described_class.new(query_service.find_by(id: child.id), document_class) }
-      let(:child_change_set) { ScannedMapChangeSet.new(child, files: []) }
+      let(:child_change_set) { ScannedMapChangeSet.new(query_service.find_by(id: child.id), files: []) }
       it "returns a suppressed document with a source field" do
         expect(document["suppressed_b"]).to eq true
         expect(document["dct_source_sm"]).to eq ["princeton-fk4"]
