@@ -54,7 +54,7 @@ describe ManifestBuilder::ThumbnailBuilder do
       let(:persisted_volume) do
         change_set_persister.save(change_set: change_set)
       end
-      let(:parent_change_set) { ScannedResourceChangeSet.new(scanned_resource, member_ids: [persisted_volume.id]) }
+      let(:parent_change_set) { ScannedResourceChangeSet.new(FactoryBot.create_for_repository(:scanned_resource), member_ids: [persisted_volume.id]) }
       let(:persisted) do
         change_set_persister.save(change_set: parent_change_set)
       end
