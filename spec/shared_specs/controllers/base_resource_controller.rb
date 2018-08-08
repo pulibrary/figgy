@@ -240,6 +240,15 @@ RSpec.shared_examples "a BaseResourceController" do |*flags|
 
           expect(response).to render_template "base/edit"
         end
+        it "renders an error if the lock token is out of date" do
+          resource = FactoryBot.create_for_repository(factory)
+          # Re-save to get a new lock token
+          persister.save(resource: resource)
+          patch :update, params: { id: resource.id.to_s, param_key => { title: ["Two"], optimistic_lock_token: resource.optimistic_lock_token.first.serialize } }
+
+          expect(response).to render_template "base/edit"
+          expect(flash[:alert]).to eq "Sorry, another user or process updated this resource simultaneously.  Please resubmit your changes."
+        end
       end
     end
     context "when it does exist" do
