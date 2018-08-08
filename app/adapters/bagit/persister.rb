@@ -53,6 +53,8 @@ module Bagit
 
         cached_value = cached_resource[Valkyrie::Persistence::Attributes::OPTIMISTIC_LOCK].first
         cached_value == resource_value
+      rescue Valkyrie::Persistence::ObjectNotFoundError
+        true
       end
 
       def generate_id(resource)
