@@ -1,1 +1,1 @@
-<%= f.input :optimistic_lock_token, as: :hidden, input_html: { :value => f.object.optimistic_lock_token.first } %>
+<%= f.input :optimistic_lock_token, as: :hidden, input_html: { value: f.object.optimistic_lock_token, multiple: f.object.multiple?(key) } %>

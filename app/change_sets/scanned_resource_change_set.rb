@@ -25,7 +25,7 @@ class ScannedResourceChangeSet < ChangeSet
   property :file_metadata, multiple: true, required: false, default: []
   property :depositor, multiple: false, require: false
   property :ocr_language, multiple: true, require: false, default: []
-  property :optimistic_lock_token, multiple: true, require: false
+  property :optimistic_lock_token, multiple: true, require: false, type: Valkyrie::Types::Set.of(Valkyrie::Types::OptimisticLockToken)
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
