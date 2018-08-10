@@ -29,4 +29,13 @@ RSpec.describe ScannedResource do
       expect(scanned_resource.primary_imported_metadata.location).to include "RCPPA BL980.G7 B66 1982"
     end
   end
+
+  describe "Using valkyrie's ordered properties feature" do
+    let(:scanned_resource) { FactoryBot.create_for_repository(:pending_scanned_resource) }
+
+    it "applies to title, subject" do
+      expect(scanned_resource.class.schema[:title].meta.try(:[], :ordered)).to be true
+      expect(scanned_resource.class.schema[:subject].meta.try(:[], :ordered)).to be true
+    end
+  end
 end
