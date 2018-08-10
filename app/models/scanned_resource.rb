@@ -3,7 +3,6 @@
 class ScannedResource < Resource
   include Valkyrie::Resource::AccessControls
   include Schema::Common
-  attribute :id, Valkyrie::Types::ID.optional
   attribute :member_ids, Valkyrie::Types::Array
   attribute :member_of_collection_ids
   attribute :imported_metadata, Valkyrie::Types::Set.of(ImportedMetadata).optional

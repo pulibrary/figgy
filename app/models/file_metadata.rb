@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class FileMetadata < Valkyrie::Resource
   include Valkyrie::Resource::AccessControls
-  attribute :id, Valkyrie::Types::ID.optional
   attribute :label, Valkyrie::Types::Set
   attribute :mime_type, Valkyrie::Types::Set
   attribute :height, Valkyrie::Types::Set

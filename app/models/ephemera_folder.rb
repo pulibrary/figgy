@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class EphemeraFolder < Resource
   include Valkyrie::Resource::AccessControls
-  attribute :id, Valkyrie::Types::ID.optional
   attribute :member_ids, Valkyrie::Types::Array
   attribute :barcode, Valkyrie::Types::Set
   attribute :folder_number, Valkyrie::Types::Set

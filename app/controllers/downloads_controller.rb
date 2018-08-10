@@ -43,7 +43,6 @@ class DownloadsController < ApplicationController
 
   class FileWithMetadata < Dry::Struct
     delegate :size, :read, :stream, to: :file
-    attribute :id, Valkyrie::Types::Any
     attribute :file, Valkyrie::Types::Any
     attribute :mime_type, Valkyrie::Types::SingleValuedString
     attribute :original_name, Valkyrie::Types::SingleValuedString

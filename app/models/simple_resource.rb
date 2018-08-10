@@ -3,7 +3,6 @@
 class SimpleResource < Resource
   include Valkyrie::Resource::AccessControls
   include Schema::Common
-  attribute :id, Valkyrie::Types::ID.optional
   attribute :member_ids, Valkyrie::Types::Array
   attribute :member_of_collection_ids
 
