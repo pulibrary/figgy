@@ -138,7 +138,7 @@ class DataSeeder
   private
 
     def add_child_resource(child:, parent_id:)
-      change_set = DynamicChangeSet.new(child)
+      change_set = DynamicChangeSet.new(query_service.find_by(id: child.id))
       change_set.prepopulate!
       change_set.append_id = parent_id
       change_set_persister.save(change_set: change_set)
@@ -194,7 +194,7 @@ class DataSeeder
 
     def add_file(resource:, file: nil)
       ingestable_file = file || IngestableFile.new(file_path: Rails.root.join("spec", "fixtures", "files", "example.tif"), mime_type: "image/tiff", original_filename: "example.tif")
-      change_set = DynamicChangeSet.new(resource)
+      change_set = DynamicChangeSet.new(query_service.find_by(id: resource.id))
       change_set.prepopulate!
       change_set.files = [ingestable_file]
       change_set_persister.save(change_set: change_set)

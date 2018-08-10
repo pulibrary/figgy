@@ -62,17 +62,24 @@ module ResourceController
     @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
     authorize! :update, @change_set.resource
     if @change_set.validate(resource_params)
-      @change_set.sync
-      obj = nil
-      change_set_persister.buffer_into_index do |persist|
-        obj = persist.save(change_set: @change_set)
-      end
-      after_update_success(obj, @change_set)
+      persist_change_set
     else
       after_update_failure
     end
+  rescue Valkyrie::Persistence::StaleObjectError
+    flash[:alert] = "This record has changed since you started working on it. Your changes are below; please open this form in a new window and re enter your data there."
+    render "edit"
   rescue Valkyrie::Persistence::ObjectNotFoundError => e
     after_update_error e
+  end
+
+  def persist_change_set
+    @change_set.sync
+    obj = nil
+    change_set_persister.buffer_into_index do |persist|
+      obj = persist.save(change_set: @change_set)
+    end
+    after_update_success(obj, @change_set)
   end
 
   def after_update_success(obj, change_set)

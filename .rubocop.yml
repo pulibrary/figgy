@@ -88,6 +88,7 @@ Metrics/MethodLength:
     - 'app/services/pdf_generator.rb'
     - 'app/services/file_appender.rb'
     - 'app/jobs/voyager_update_job.rb'
+    - 'app/change_sets/scanned_resource_change_set.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'

@@ -226,12 +226,13 @@ describe GeoDiscovery::DocumentBuilder do
 
     before do
       change_set_persister.save(change_set: parent_change_set)
-      change_set_persister.save(change_set: child_change_set)
+      reloaded_child_change_set = ScannedMapChangeSet.new(query_service.find_by(id: child.id), files: child_change_set.files)
+      change_set_persister.save(change_set: reloaded_child_change_set)
     end
 
     context "with a child resouce" do
       subject(:document_builder) { described_class.new(query_service.find_by(id: child.id), document_class) }
-      let(:child_change_set) { ScannedMapChangeSet.new(child, files: []) }
+      let(:child_change_set) { ScannedMapChangeSet.new(query_service.find_by(id: child.id), files: []) }
       it "returns a suppressed document with a source field" do
         expect(document["suppressed_b"]).to eq true
         expect(document["dct_source_sm"]).to eq ["princeton-fk4"]
@@ -239,12 +240,12 @@ describe GeoDiscovery::DocumentBuilder do
     end
 
     context "with a parent resource" do
-      let(:child_change_set) { ScannedMapChangeSet.new(child, files: [file]) }
+      let(:child_change_set) { ScannedMapChangeSet.new(query_service.find_by(id: child.id), files: [file]) }
       let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
 
       before do
-        change_set = ScannedMapChangeSet.new(geo_work)
-        change_set.validate(thumbnail_id: child.member_ids[0])
+        change_set = ScannedMapChangeSet.new(query_service.find_by(id: geo_work.id))
+        change_set.validate(thumbnail_id: query_service.find_by(id: child.id).member_ids[0])
         change_set_persister.save(change_set: change_set)
       end
 

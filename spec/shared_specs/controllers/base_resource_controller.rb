@@ -212,6 +212,16 @@ RSpec.shared_examples "a BaseResourceController" do
 
           expect(response).to render_template "base/edit"
         end
+        it "renders an error if the lock token is out of date" do
+          resource = FactoryBot.create_for_repository(factory)
+          skip unless resource.optimistic_locking_enabled?
+          # Re-save to get a new lock token
+          persister.save(resource: resource)
+          patch :update, params: { id: resource.id.to_s, param_key => { title: ["Two"], optimistic_lock_token: resource.optimistic_lock_token.map(&:serialize) } }
+
+          expect(response).to render_template "base/edit"
+          expect(flash[:alert]).to eq "This record has changed since you started working on it. Your changes are below; please open this form in a new window and re enter your data there."
+        end
       end
     end
     context "when it does exist" do

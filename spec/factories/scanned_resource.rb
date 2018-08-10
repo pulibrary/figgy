@@ -30,10 +30,11 @@ FactoryBot.define do
         import_metadata = "1" if evaluator.import_metadata
         change_set = ScannedResourceChangeSet.new(resource, files: evaluator.files, refresh_remote_metadata: import_metadata)
         change_set.prepopulate!
-        ::ChangeSetPersister.new(
+        output = ::ChangeSetPersister.new(
           metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
           storage_adapter: Valkyrie.config.storage_adapter
         ).save(change_set: change_set)
+        resource.try(:optimistic_lock_token=, output.try(:optimistic_lock_token))
       end
     end
     factory :open_scanned_resource do
