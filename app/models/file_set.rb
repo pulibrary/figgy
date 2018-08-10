@@ -3,7 +3,7 @@ class FileSet < Resource
   include Valkyrie::Resource::AccessControls
   attribute :id, Valkyrie::Types::ID.optional
   attribute :title, Valkyrie::Types::Set
-  attribute :file_metadata, Valkyrie::Types::Set.member(FileMetadata.optional)
+  attribute :file_metadata, Valkyrie::Types::Set.of(FileMetadata.optional)
   attribute :viewing_hint
   attribute :depositor
   attribute :local_identifier

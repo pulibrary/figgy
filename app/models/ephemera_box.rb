@@ -16,7 +16,7 @@ class EphemeraBox < Resource
   attribute :rights_statement
   attribute :rights_note
   attribute :state
-  attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
+  attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
   attribute :thumbnail_id
   attribute :local_identifier
 
