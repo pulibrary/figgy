@@ -9,7 +9,7 @@ module Bagit
 
     def save(resource:)
       # save
-      raise Valkyrie::Persistence::StaleObjectError, resource.id unless valid_lock?(resource)
+      raise Valkyrie::Persistence::StaleObjectError, "The object #{resource.id} has been updated by another process." unless valid_lock?(resource)
       internal_resource = resource.dup
 
       internal_resource = generate_id(internal_resource) if internal_resource.id.blank?
@@ -27,7 +27,7 @@ module Bagit
       end
     rescue Valkyrie::Persistence::StaleObjectError
       # Re-raising with no error message to prevent confusion
-      raise Valkyrie::Persistence::StaleObjectError
+      raise Valkyrie::Persistence::StaleObjectError, "One or more resources have been updated by another process."
     end
 
     def delete(resource:)
