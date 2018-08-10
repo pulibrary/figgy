@@ -73,8 +73,8 @@ GIT
 
 GIT
   remote: https://github.com/samvera-labs/valkyrie.git
-  revision: 382f018980e4485f7b5fb0168b2489b3d99ac105
-  branch: master
+  revision: e3d31d9351cb63c4c80252b366fd21b1a5aa94fa
+  branch: ordered-properties-rebased
   specs:
     valkyrie (1.2.0.rc1)
       active-fedora

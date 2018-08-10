@@ -29,7 +29,7 @@ gem "simple_form"
 gem "sprockets", ">= 3.0.0"
 gem "title"
 gem "uglifier"
-gem "valkyrie", git: "https://github.com/samvera-labs/valkyrie.git", branch: "master"
+gem "valkyrie", git: "https://github.com/samvera-labs/valkyrie.git", branch: "ordered-properties-rebased"
 gem "valkyrie-derivatives", git: "https://github.com/samvera-labs/valkyrie-derivatives.git"
 gem "webpacker", "~> 3.3"
 

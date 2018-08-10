@@ -79,7 +79,7 @@ module Schema
 
     included do
       Common.attributes.each do |common_attribute|
-        attribute common_attribute
+        attribute common_attribute, Valkyrie::Types::Set.optional.meta(ordered: true)
       end
     end
   end
