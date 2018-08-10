@@ -73,10 +73,10 @@ GIT
 
 GIT
   remote: https://github.com/samvera-labs/valkyrie.git
-  revision: 3a28a82b4c30dcfd3fc8ee63922b6357c42c7114
+  revision: 382f018980e4485f7b5fb0168b2489b3d99ac105
   branch: master
   specs:
-    valkyrie (1.1.2)
+    valkyrie (1.2.0.rc1)
       active-fedora
       active-triples
       activemodel
