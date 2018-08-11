@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class IngestableFile < Valkyrie::Resource
-  attribute :id, Valkyrie::Types::String
   attribute :file_path, Valkyrie::Types::String
   attribute :mime_type, Valkyrie::Types::String
   attribute :original_filename, Valkyrie::Types::String

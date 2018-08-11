@@ -52,7 +52,7 @@ class IngestMETSJob < ApplicationJob
       resource.member_of_collection_ids = [slug_to_id(mets.collection_slug)] if mets.respond_to?(:collection_slug)
       output = changeset_persister.save(change_set: resource)
       files.each_with_index do |file, index|
-        mets_to_repo_map[file.id] = output.member_ids[index]
+        mets_to_repo_map[file.id.to_s] = output.member_ids[index]
       end
       assign_logical_structure(output)
     end

@@ -76,7 +76,11 @@ module Bagit
         end
 
         def resource_metadata
-          resource.to_h.except(:imported_metadata).compact
+          output = resource.to_h.except(:imported_metadata).compact
+          if output[:optimistic_lock_token]
+            output[:optimistic_lock_token] = Array.wrap(output[:optimistic_lock_token]).map(&:serialize)
+          end
+          output
         end
 
         def render_template_to_file(template:, file:)

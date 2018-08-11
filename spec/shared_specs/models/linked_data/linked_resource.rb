@@ -20,7 +20,6 @@ RSpec.shared_examples "LinkedData::Resource" do
   describe ".new" do
     before do
       class MyCustomResource < Valkyrie::Resource
-        attribute :id, Valkyrie::Types::ID.optional
         attribute :title, Valkyrie::Types::Set
       end
     end

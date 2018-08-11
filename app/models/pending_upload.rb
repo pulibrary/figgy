@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 class PendingUpload < Valkyrie::Resource
-  attribute :id, Valkyrie::Types::ID.optional
   attribute :file_name
   attribute :url
-  attribute :file_size, Valkyrie::Types::Set.member(Valkyrie::Types::Coercible::Int)
+  attribute :file_size, Valkyrie::Types::Set.of(Valkyrie::Types::Coercible::Int)
   attribute :auth_header
 
   def original_filename

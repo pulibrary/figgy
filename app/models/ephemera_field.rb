@@ -4,7 +4,6 @@
 # Also note that :field_name was used (as opposed to :name) for the purposes of disambiguation
 class EphemeraField < Resource
   include Valkyrie::Resource::AccessControls
-  attribute :id, Valkyrie::Types::ID.optional
   attribute :field_name # Please note that this stores an index for a Term within ControlledVocabulary::EphemeraField
   attribute :member_of_vocabulary_id, Valkyrie::Types::Set
 end

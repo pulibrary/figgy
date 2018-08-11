@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class EphemeraBox < Resource
   include Valkyrie::Resource::AccessControls
-  attribute :id, Valkyrie::Types::ID.optional
   attribute :member_ids, Valkyrie::Types::Array
   # member_of_collection_ids is no longer in use for boxes, see #1204
   attribute :member_of_collection_ids
@@ -16,7 +15,7 @@ class EphemeraBox < Resource
   attribute :rights_statement
   attribute :rights_note
   attribute :state
-  attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
+  attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
   attribute :thumbnail_id
   attribute :local_identifier
 
