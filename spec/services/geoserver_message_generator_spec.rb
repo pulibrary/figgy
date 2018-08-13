@@ -40,6 +40,24 @@ RSpec.describe GeoserverMessageGenerator do
       end
     end
 
+    context "without a valid parent resource" do
+      let(:file_metadata) { instance_double(FileMetadata) }
+      let(:file_set_decorator) { instance_double(FileSetDecorator) }
+      let(:file_set) { instance_double(FileSet) }
+
+      before do
+        allow(file_metadata).to receive(:file_identifiers).and_return([])
+        allow(file_set_decorator).to receive(:parent)
+        allow(file_set).to receive(:derivative_file).and_return(file_metadata)
+        allow(file_set).to receive(:decorate).and_return(file_set_decorator)
+        allow(file_set).to receive(:id).and_return("test-id")
+      end
+
+      it "raises an error" do
+        expect { generator.generate }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError, "Failed to retrieve the parent resource for the FileSet test-id")
+      end
+    end
+
     context "with a restricted raster resource derivative" do
       let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tif") }
       let(:tika_output) { tika_geotiff_output }
