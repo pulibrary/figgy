@@ -13,7 +13,7 @@ module GeoDiscovery
       def identifier
         return unless file_set
         return file_set.id.to_s unless @config && visibility
-        "#{@config[visibility][:workspace]}:#{file_set.id}" if @config[visibility][:workspace]
+        "#{@config[visibility][:workspace]}:p-#{file_set.id}" if @config[visibility][:workspace]
       end
 
       # Returns the wms server url.
