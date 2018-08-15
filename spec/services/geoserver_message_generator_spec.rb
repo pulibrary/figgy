@@ -28,11 +28,11 @@ RSpec.describe GeoserverMessageGenerator do
           visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
         )
       end
-      let(:shapefile_name) { "display_vector/#{file_set.id}.shp" }
+      let(:shapefile_name) { "display_vector/p-#{file_set.id}.shp" }
 
       it "returns a valid message hash" do
         output = generator.generate
-        expect(output["id"]).to eq(file_set.id.to_s)
+        expect(output["id"]).to eq("p-#{file_set.id}")
         expect(output["layer_type"]).to eq(:shapefile)
         expect(output["workspace"]).to eq(Figgy.config["geoserver"]["open"]["workspace"])
         expect(output["path"]).to include(shapefile_name, geoserver_derivatives_path)
@@ -55,7 +55,7 @@ RSpec.describe GeoserverMessageGenerator do
 
       it "returns a valid message hash" do
         output = generator.generate
-        expect(output["id"]).to eq(file_set.id.to_s)
+        expect(output["id"]).to eq("p-#{file_set.id}")
         expect(output["layer_type"]).to eq(:geotiff)
         expect(output["workspace"]).to eq(Figgy.config["geoserver"]["authenticated"]["workspace"])
         expect(output["path"]).to include(geo_tiff_name, geoserver_derivatives_path)

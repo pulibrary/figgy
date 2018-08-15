@@ -31,8 +31,10 @@ class GeoserverMessageGenerator
       Figgy.config["geoserver"]["derivatives_path"]
     end
 
+    # Resource id prefixed with letter to avoid restrictions on
+    # numbers in QNames from GeoServer generated WFS GML.
     def id
-      resource.id.to_s
+      "p-#{resource.id}"
     end
 
     def layer_type

@@ -27,7 +27,7 @@ describe GeoDiscovery::DocumentBuilder::Wxs do
     context "public document" do
       it "returns a public identifier" do
         file_set_id = geo_work.member_ids[0]
-        expect(wxs_builder.identifier).to eq "public-figgy:#{file_set_id}"
+        expect(wxs_builder.identifier).to eq "public-figgy:p-#{file_set_id}"
       end
     end
 

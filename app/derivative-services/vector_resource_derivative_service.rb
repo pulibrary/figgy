@@ -87,9 +87,9 @@ class VectorResourceDerivativeService
     {
       input_format: original_file.mime_type.first,
       label: :display_vector,
-      id: resource.id,
+      id: prefixed_id,
       format: "zip",
-      srid: "EPSG:3857",
+      srid: "EPSG:4326",
       url: URI("file://#{temporary_display_output.path}")
     }
   end
@@ -108,6 +108,12 @@ class VectorResourceDerivativeService
   def parent
     decorator = FileSetDecorator.new(change_set)
     decorator.parent
+  end
+
+  # Resource id prefixed with letter to avoid restrictions on
+  # numbers in QNames from GeoServer generated WFS GML.
+  def prefixed_id
+    "p-#{resource.id}"
   end
 
   def run_derivatives
