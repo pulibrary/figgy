@@ -89,7 +89,7 @@ class VectorResourceDerivativeService
       label: :display_vector,
       id: resource.id,
       format: "zip",
-      srid: "EPSG:3857",
+      srid: "EPSG:4326",
       url: URI("file://#{temporary_display_output.path}")
     }
   end
