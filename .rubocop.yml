@@ -22,6 +22,7 @@ Metrics/AbcSize:
     - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
     - 'app/models/ability.rb'
     - 'app/services/file_appender.rb'
+    - 'app/services/pdf_generator.rb'
 Metrics/BlockLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
@@ -68,6 +69,7 @@ Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/models/concerns/linked_data/linked_resource_factory.rb'
     - 'app/services/file_appender.rb'
+    - 'app/services/pdf_generator/canvas.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
@@ -95,6 +97,9 @@ Metrics/ModuleLength:
 Metrics/ParameterLists:
   Exclude:
     - 'app/change_set_persisters/change_set_persister.rb'
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'app/services/pdf_generator/canvas.rb'
 Rails/OutputSafety:
   Exclude:
     - 'app/decorators/**/*'
