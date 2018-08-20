@@ -8,8 +8,13 @@ class PDFGenerator
     @storage_adapter = storage_adapter
   end
 
+  # Use Prawn to capture the data downloaded from the Document in the PDF
+  #   served from the IIIF Image Server
+  # @return [FileMetadata] the FileMetadata Object node linked to the PDF
+  # @raise [PDFGenerator::Error]
   def render
     CoverPageGenerator.new(self).apply(prawn_document)
+
     canvas_downloaders.each_with_index do |downloader, _index|
       prawn_document.start_new_page layout: downloader.layout
       page_size = [Canvas::LETTER_WIDTH, Canvas::LETTER_HEIGHT]
@@ -28,6 +33,9 @@ class PDFGenerator
 
     prawn_document.render_file(tmp_file.path)
     build_node
+  rescue PDFGenerator::Canvas::InvalidIIIFManifestError => manifest_error
+    Valkyrie.logger.error "#{self.class}: Failed to generate a PDF for the resource #{resource.id}: #{manifest_error}"
+    raise Error
   end
 
   def build_node
@@ -48,14 +56,31 @@ class PDFGenerator
     default_options
   end
 
-  def canvas_images
-    @canvas_images ||= manifest["sequences"][0]["canvases"].map { |x| x["images"][0] }.map do |x|
-      Canvas.new(x)
-    end
-  end
-
+  # Construct the IIIF Manifest Object using the Figgy Resource
+  # @return [Hash]
   def manifest
     @manifest ||= ManifestBuilder.new(resource).build
+  end
+
+  # Retrieve the fist IIIF Manifest Sequence in the Manifest
+  # @return [Hash]
+  def first_manifest_sequence
+    manifest["sequences"][0]
+  end
+
+  # Retrieve all of the IIIF Manifest Canvases in the first Sequence
+  # @return [Hash]
+  def manifest_canvases
+    first_manifest_sequence["canvases"]
+  end
+
+  # For each IIIF Manifest Canvas in the first Sequence, retrieve the first
+  #   Image and use it to construct a Canvas Object
+  # @return [Array<Canvas>]
+  def canvas_images
+    @canvas_images ||= manifest_canvases.map { |x| x["images"].first }.map do |x|
+      Canvas.new(x)
+    end
   end
 
   def canvas_downloaders
