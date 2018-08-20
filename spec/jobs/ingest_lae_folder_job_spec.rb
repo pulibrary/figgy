@@ -14,6 +14,8 @@ RSpec.describe IngestLaeFolderJob do
       before do
         folder1
         folder2
+        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/32101075851400/jsonld").and_return(status: 404)
+        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/32101075851418/jsonld").and_return(status: 404)
       end
 
       it "attaches the files" do
