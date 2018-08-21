@@ -23,9 +23,9 @@ RSpec.describe EventGenerator::GeoserverEventGenerator do
   end
 
   describe "#derivatives_deleted" do
-    it "publishes a persistent JSON message" do
+    it "publishes two persistent JSON messages, one for each workspace" do
       event_generator.derivatives_deleted(record)
-      expect(rabbit_connection).to have_received(:publish)
+      expect(rabbit_connection).to have_received(:publish).twice
     end
   end
 
