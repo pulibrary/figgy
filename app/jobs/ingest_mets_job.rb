@@ -49,7 +49,7 @@ class IngestMETSJob < ApplicationJob
       resource.source_metadata_identifier = mets.bib_id
       resource.title = mets.label
       resource.files = files.to_a
-      resource.member_of_collection_ids = [slug_to_id(mets.collection_slug)] if mets.respond_to?(:collection_slug)
+      resource.member_of_collection_ids = [find_or_create_collection(mets.collection_slug)] if mets.respond_to?(:collection_slug)
       output = changeset_persister.save(change_set: resource)
       files.each_with_index do |file, index|
         mets_to_repo_map[file.id.to_s] = output.member_ids[index]
@@ -69,8 +69,13 @@ class IngestMETSJob < ApplicationJob
       end
     end
 
-    def slug_to_id(slug)
-      query_service.custom_queries.find_by_string_property(property: :slug, value: slug).first&.id
+    # @param [String] slug
+    # @return [Valkyrie::ID]
+    def find_or_create_collection(slug)
+      collection =
+        query_service.custom_queries.find_by_string_property(property: :slug, value: slug).first ||
+        changeset_persister.save(change_set: CollectionChangeSet.new(Collection.new(title: slug, slug: slug)))
+      collection.id
     end
 
     def resource
