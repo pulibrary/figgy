@@ -72,7 +72,7 @@ class ControlledVocabulary
     ControlledVocabulary.register(:state_book_workflow, self)
     ControlledVocabulary.register(:state_folder_workflow, self)
     ControlledVocabulary.register(:state_box_workflow, self)
-    ControlledVocabulary.register(:state_draft_publish_workflow, self)
+    ControlledVocabulary.register(:state_draft_complete_workflow, self)
     ControlledVocabulary.register(:state_geo_workflow, self)
 
     # Access all of the terms within this vocabulary

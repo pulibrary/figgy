@@ -8,7 +8,7 @@ class FolderWorkflow < BaseWorkflow
     state :complete
 
     # ingest workflow
-    event :complete do
+    event :make_complete do
       transitions from: :needs_qa, to: :complete
     end
     event :submit_for_qa do

@@ -12,7 +12,7 @@ RSpec.describe SimpleResourceChangeSet do
   describe "#workflow" do
     it "has a workflow" do
       change_set.prepopulate!
-      expect(change_set.workflow).to be_a(DraftPublishWorkflow)
+      expect(change_set.workflow).to be_a(DraftCompleteWorkflow)
       expect(change_set.workflow.draft?).to be true
     end
   end

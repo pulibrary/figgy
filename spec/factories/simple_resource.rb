@@ -37,8 +37,8 @@ FactoryBot.define do
     factory :draft_simple_resource do
       state "draft"
     end
-    factory :published_simple_resource do
-      state "published"
+    factory :complete_simple_resource do
+      state "complete"
     end
   end
 end

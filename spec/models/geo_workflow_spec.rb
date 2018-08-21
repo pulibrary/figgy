@@ -9,7 +9,7 @@ describe GeoWorkflow do
       # initial state: pending
       expect(workflow.pending?).to be true
       expect(workflow.may_finalize_digitization?).to be true
-      expect(workflow.may_complete?).to be false
+      expect(workflow.may_make_complete?).to be false
       expect(workflow.may_takedown?).to be false
       expect(workflow.may_flag?).to be false
 
@@ -17,15 +17,15 @@ describe GeoWorkflow do
       expect(workflow.finalize_digitization).to be true
       expect(workflow.final_review?).to be true
       expect(workflow.may_finalize_digitization?).to be false
-      expect(workflow.may_complete?).to be true
+      expect(workflow.may_make_complete?).to be true
       expect(workflow.may_takedown?).to be false
       expect(workflow.may_flag?).to be false
 
       # final signoff moves to complete
-      expect(workflow.complete).to be true
+      expect(workflow.make_complete).to be true
       expect(workflow.complete?).to be true
       expect(workflow.may_finalize_digitization?).to be false
-      expect(workflow.may_complete?).to be false
+      expect(workflow.may_make_complete?).to be false
       expect(workflow.may_takedown?).to be true
       expect(workflow.may_flag?).to be true
     end

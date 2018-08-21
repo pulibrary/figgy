@@ -151,8 +151,8 @@ RSpec.describe Valkyrie::ResourceDecorator do
   end
 
   describe "#ark_mintable_state?" do
-    context "with a published SimpleResource" do
-      let(:resource) { FactoryBot.build(:published_simple_resource) }
+    context "with a completed SimpleResource" do
+      let(:resource) { FactoryBot.build(:complete_simple_resource) }
       it "returns true" do
         expect(resource.decorate.ark_mintable_state?).to eq true
       end

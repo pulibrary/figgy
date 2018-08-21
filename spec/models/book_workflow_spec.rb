@@ -10,7 +10,7 @@ describe BookWorkflow do
       expect(workflow.pending?).to be true
       expect(workflow.may_finalize_digitization?).to be true
       expect(workflow.may_finalize_metadata?).to be false
-      expect(workflow.may_complete?).to be false
+      expect(workflow.may_make_complete?).to be false
       expect(workflow.may_takedown?).to be false
       expect(workflow.may_flag?).to be false
 
@@ -19,7 +19,7 @@ describe BookWorkflow do
       expect(workflow.metadata_review?).to be true
       expect(workflow.may_finalize_digitization?).to be false
       expect(workflow.may_finalize_metadata?).to be true
-      expect(workflow.may_complete?).to be false
+      expect(workflow.may_make_complete?).to be false
       expect(workflow.may_takedown?).to be false
       expect(workflow.may_flag?).to be false
 
@@ -28,16 +28,16 @@ describe BookWorkflow do
       expect(workflow.final_review?).to be true
       expect(workflow.may_finalize_digitization?).to be false
       expect(workflow.may_finalize_metadata?).to be false
-      expect(workflow.may_complete?).to be true
+      expect(workflow.may_make_complete?).to be true
       expect(workflow.may_takedown?).to be false
       expect(workflow.may_flag?).to be false
 
       # final signoff moves to complete
-      expect(workflow.complete).to be true
+      expect(workflow.make_complete).to be true
       expect(workflow.complete?).to be true
       expect(workflow.may_finalize_digitization?).to be false
       expect(workflow.may_finalize_metadata?).to be false
-      expect(workflow.may_complete?).to be false
+      expect(workflow.may_make_complete?).to be false
       expect(workflow.may_takedown?).to be true
       expect(workflow.may_flag?).to be true
     end
