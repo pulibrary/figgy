@@ -14,8 +14,14 @@ class EventGenerator
     end
 
     def derivatives_deleted(record)
+      # Attempt to delete from both public and restricted
+      # workspaces to make sure all traces of the file
+      # are cleaned up on GeoServer.
       publish_message(
-        message("DELETED", record)
+        message("DELETED", record, public_workspace)
+      )
+      publish_message(
+        message("DELETED", record, authenticated_workspace)
       )
     end
 
@@ -44,6 +50,10 @@ class EventGenerator
 
     private
 
+      def authenticated_workspace
+        Figgy.config["geoserver"]["authenticated"]["workspace"]
+      end
+
       def base_message(record)
         message_generator.new(resource: record).generate
       end
@@ -54,12 +64,24 @@ class EventGenerator
         return true if record.derivative_file
       end
 
-      def message(type, record)
-        base_message(record).merge("event" => type)
+      def merged_values(type, workspace)
+        {
+          "event" => type,
+          "workspace" => workspace
+        }
+      end
+
+      def message(type, record, workspace = nil)
+        values = merged_values(type, workspace).delete_if { |_k, v| v.nil? }
+        base_message(record).merge(values)
       end
 
       def message_generator
         GeoserverMessageGenerator
+      end
+
+      def public_workspace
+        Figgy.config["geoserver"]["open"]["workspace"]
       end
 
       def publish_message(message)

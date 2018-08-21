@@ -41,20 +41,52 @@ RSpec.describe GeoserverMessageGenerator do
     end
 
     context "without a valid parent resource" do
-      let(:file_metadata) { instance_double(FileMetadata) }
+      let(:file) { fixture_file_upload("files/vector/shapefile.zip", "application/zip") }
+      let(:tika_output) { tika_shapefile_output }
+      let(:resource) do
+        FactoryBot.create_for_repository(
+          :vector_resource,
+          files: [file],
+          title: RDF::Literal.new(resource_title, language: :en),
+          visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+        )
+      end
       let(:file_set_decorator) { instance_double(FileSetDecorator) }
-      let(:file_set) { instance_double(FileSet) }
 
       before do
-        allow(file_metadata).to receive(:file_identifiers).and_return([])
-        allow(file_set_decorator).to receive(:parent)
-        allow(file_set).to receive(:derivative_file).and_return(file_metadata)
         allow(file_set).to receive(:decorate).and_return(file_set_decorator)
-        allow(file_set).to receive(:id).and_return("test-id")
+        allow(file_set_decorator).to receive(:parent)
       end
 
-      it "raises an error" do
-        expect { generator.generate }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError, "Failed to retrieve the parent resource for the FileSet test-id")
+      it "returns a valid delete message hash with default values" do
+        output = generator.generate
+        expect(output["id"]).to eq("p-#{file_set.id}")
+        expect(output["layer_type"]).to eq(:shapefile)
+        expect(output["workspace"]).to eq(Figgy.config["geoserver"]["authenticated"]["workspace"])
+        expect(output["title"]).to eq("")
+      end
+    end
+
+    context "with a missing file" do
+      let(:file) { fixture_file_upload("files/vector/shapefile.zip", "application/zip") }
+      let(:tika_output) { tika_shapefile_output }
+      let(:resource) do
+        FactoryBot.create_for_repository(
+          :vector_resource,
+          files: [file],
+          title: RDF::Literal.new(resource_title, language: :en),
+          visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+        )
+      end
+
+      before do
+        derivative_id = file_set.derivative_file.file_identifiers.first
+        allow(Valkyrie::StorageAdapter).to receive(:find_by).with(id: derivative_id).and_raise(Valkyrie::StorageAdapter::FileNotFound)
+      end
+
+      it "returns a valid delete message hash with a default derivate file path" do
+        output = generator.generate
+        expect(output["path"]).to include("file://.//")
       end
     end
 
