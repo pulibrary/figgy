@@ -10,19 +10,32 @@ namespace :bulk do
     local_id = ENV["LOCAL_ID"]
     replaces = ENV["REPLACES"]
     background = ENV["BACKGROUND"]
+    model = ENV["MODEL"]
 
-    abort "usage: rake bulk:ingest DIR=/path/to/files BIB=1234567 COLL=collid LOCAL_ID=local_id REPLACES=replaces" unless dir && Dir.exist?(dir)
+    abort "usage: rake bulk:ingest DIR=/path/to/files BIB=1234567 COLL=collid LOCAL_ID=local_id REPLACES=replaces MODEL=ResourceClass" unless dir && Dir.exist?(dir)
 
     @logger = Logger.new(STDOUT)
     @logger.warn "No BIB id specified" unless bib
     @logger.info "ingesting files from: #{dir}"
     @logger.info "ingesting as: #{user.user_key} (override with USER=foo)"
     @logger.info "adding item to collection #{coll}" if coll
+    if model
+      begin
+        model.constantize
+        class_name = model
+      rescue
+        @logger.error "Invalid model specified: #{model}.  Using ScannedResource as the default."
+        class_name = "ScannedResource"
+      end
+    else
+      class_name = "ScannedResource"
+    end
 
     begin
       if background
         IngestFolderJob.set(queue: :low).perform_later(
           directory: dir,
+          class_name: class_name,
           member_of_collection_ids: [coll],
           source_metadata_identifier: bib,
           local_identifier: local_id,
@@ -31,6 +44,7 @@ namespace :bulk do
       else
         IngestFolderJob.perform_now(
           directory: dir,
+          class_name: class_name,
           member_of_collection_ids: [coll],
           source_metadata_identifier: bib,
           local_identifier: local_id,
@@ -112,24 +126,38 @@ namespace :bulk do
     field = ENV["FIELD"]
     filter = ENV["FILTER"]
     background = ENV["BACKGROUND"]
+    model = ENV["MODEL"]
 
-    abort "usage: rake bulk:attach_each_dir DIR=/path/to/files FIELD=barcode FILTER=filter" unless field && dir && Dir.exist?(dir)
+    abort "usage: rake bulk:attach_each_dir DIR=/path/to/files FIELD=barcode FILTER=filter MODEL=ResourceClass" unless field && dir && Dir.exist?(dir)
 
     @logger = Logger.new(STDOUT)
     @logger.info "attaching files from: #{dir}"
     @logger.info "attaching as: #{user.user_key} (override with USER=foo)"
     @logger.info "filtering to files ending with #{filter}" if filter
+    if model
+      begin
+        model.constantize
+        class_name = model
+      rescue
+        @logger.error "Invalid model specified: #{model}.  Using ScannedResource as the default."
+        class_name = "ScannedResource"
+      end
+    else
+      class_name = "ScannedResource"
+    end
 
     begin
       if background
         IngestFoldersJob.set(queue: :low).perform_later(
           directory: dir,
+          class_name: class_name,
           property: field,
           file_filter: filter
         )
       else
         IngestFoldersJob.perform_now(
           directory: dir,
+          class_name: class_name,
           property: field,
           file_filter: filter
         )
