@@ -21,6 +21,14 @@ class BulkIngestService
     end
   end
 
+  # Determines whether or not the string encodes a bib. ID or a PULFA ID
+  # See SourceMetadataIdentifierValidator#validate
+  # @param [String] value
+  # @return [Boolean]
+  def valid_remote_identifier?(value)
+    RemoteRecord.retrieve(value).success?
+  end
+
   # Attach files within a directory
   # This may attach to existing resources (such as EphemeraFolder objects) using a property (e. g. "barcode")
   # This may also create new resources (such as ScannedResource objects)
@@ -33,7 +41,7 @@ class BulkIngestService
     base_name = File.basename(base_directory)
     file_name = attributes[:id] || base_name
     # Assign a bibid to from the base directory name
-    attributes[:source_metadata_identifier] = base_name if attributes.fetch(:source_metadata_identifier, []).blank? && RemoteRecord.bibdata?(base_name)
+    attributes[:source_metadata_identifier] = base_name if attributes.fetch(:source_metadata_identifier, []).blank? && valid_remote_identifier?(base_name)
     # Assign a title if source_metadata_identifier is not set
     title = [directory_path.basename]
     attributes[:title] = title if attributes.fetch(:title, []).blank? && attributes.fetch(:source_metadata_identifier, []).blank?
