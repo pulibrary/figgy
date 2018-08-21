@@ -4,12 +4,12 @@ require "rails_helper"
 RSpec.describe IngestMETSJob do
   describe "integration test" do
     with_queue_adapter :inline
+    let(:adapter) { Valkyrie.config.metadata_adapter }
     let(:user) { FactoryBot.build(:admin) }
     let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-4612596.mets") }
     let(:tiff_file) { Rails.root.join("spec", "fixtures", "files", "example.tif") }
     let(:mime_type) { "image/tiff" }
     let(:file) { IoDecorator.new(File.new(tiff_file), mime_type, File.basename(tiff_file)) }
-    let(:pudl0001) { FactoryBot.build(:collection, id: Valkyrie::ID.new("pudl0001"), slug: "pudl0001") }
     let(:order) do
       {
         nodes: [{
@@ -30,31 +30,47 @@ RSpec.describe IngestMETSJob do
       allow(File).to receive(:open).with("/users/escowles/downloads/tmp/00000658.tif").and_return(File.open(tiff_file))
       allow(File).to receive(:open).with("/users/escowles/downloads/tmp/00000659.tif").and_return(File.open(tiff_file))
       allow_any_instance_of(IngestableFile).to receive(:path).and_return(tiff_file)
-      allow(Valkyrie.config.metadata_adapter.query_service.custom_queries).to receive(:find_by_string_property).and_return([pudl0001])
-      allow(Valkyrie.config.metadata_adapter.query_service).to receive(:find_references_by).and_return([pudl0001])
       stub_bibdata(bib_id: "4612596")
       stub_bibdata(bib_id: "4609321")
     end
 
-    let(:adapter) { Valkyrie.config.metadata_adapter }
-    it "ingests a METS file" do
-      described_class.perform_now(mets_file, user)
-      allow(FileUtils).to receive(:mv).and_call_original
+    context "when ingesting to an existing collection" do
+      let(:pudl0001) { FactoryBot.build(:collection, id: Valkyrie::ID.new("pudl0001"), slug: "pudl0001") }
+      before do
+        allow(Valkyrie.config.metadata_adapter.query_service.custom_queries).to receive(:find_by_string_property).and_return([pudl0001])
+        allow(Valkyrie.config.metadata_adapter.query_service).to receive(:find_references_by).and_return([pudl0001])
+      end
 
-      book = adapter.query_service.find_all_of_model(model: ScannedResource).first
-      expect(book).not_to be_nil
-      expect(book.source_metadata_identifier).to eq ["4612596"]
-      expect(book.logical_structure[0].nodes.length).to eq 1
-      expect(book.logical_structure[0].nodes[0].label).to contain_exactly "leaf 1"
-      expect(book.logical_structure[0].nodes[0].nodes[0].label).to contain_exactly "leaf 1. recto"
-      expect(book.member_ids).not_to be_blank
-      file_sets = adapter.query_service.find_members(resource: book)
-      expect(book.logical_structure[0].nodes[0].nodes[0].proxy).to eq [file_sets.first.id]
-      expect(file_sets.first.title).to eq ["leaf 1. recto"]
-      expect(file_sets.first.derivative_file).not_to be_blank
-      expect(FileUtils).not_to have_received(:mv)
-      expect(book.member_of_collection_ids).to eq [pudl0001.id]
+      it "ingests a METS file" do
+        described_class.perform_now(mets_file, user)
+        allow(FileUtils).to receive(:mv).and_call_original
+
+        book = adapter.query_service.find_all_of_model(model: ScannedResource).first
+        expect(book).not_to be_nil
+        expect(book.source_metadata_identifier).to eq ["4612596"]
+        expect(book.logical_structure[0].nodes.length).to eq 1
+        expect(book.logical_structure[0].nodes[0].label).to contain_exactly "leaf 1"
+        expect(book.logical_structure[0].nodes[0].nodes[0].label).to contain_exactly "leaf 1. recto"
+        expect(book.member_ids).not_to be_blank
+        file_sets = adapter.query_service.find_members(resource: book)
+        expect(book.logical_structure[0].nodes[0].nodes[0].proxy).to eq [file_sets.first.id]
+        expect(file_sets.first.title).to eq ["leaf 1. recto"]
+        expect(file_sets.first.derivative_file).not_to be_blank
+        expect(FileUtils).not_to have_received(:mv)
+        expect(book.member_of_collection_ids).to eq [pudl0001.id]
+      end
     end
+
+    context "When there wasn't collection yet" do
+      it "creates a collection" do
+        described_class.perform_now(mets_file, user)
+        allow(FileUtils).to receive(:mv).and_call_original
+
+        book = adapter.query_service.find_all_of_model(model: ScannedResource).first
+        expect(book.member_of_collection_ids.size).to eq 1 # create the collection as part of ingest
+      end
+    end
+
     context "when given a work with volumes" do
       let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-4609321-s42.mets") }
       it "ingests it" do
