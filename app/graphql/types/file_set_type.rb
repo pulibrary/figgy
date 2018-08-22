@@ -8,4 +8,8 @@ class Types::FileSetType < Types::BaseObject
   def label
     object.title.try(:first)
   end
+
+  def thumbnail_resource
+    object
+  end
 end

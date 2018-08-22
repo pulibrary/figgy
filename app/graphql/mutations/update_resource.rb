@@ -7,6 +7,8 @@ class Mutations::UpdateResource < Mutations::BaseMutation
   argument :label, String, required: false
   argument :member_ids, [String], required: false
   argument :start_page, String, required: false
+  argument :viewing_direction, Types::ViewingDirectionEnum, required: false
+  argument :thumbnail_id, String, required: false
 
   field :resource, Types::Resource, null: false
   field :errors, [String], null: true

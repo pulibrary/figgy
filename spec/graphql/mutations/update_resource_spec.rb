@@ -7,7 +7,17 @@ RSpec.describe Mutations::UpdateResource do
     subject { described_class }
     it { is_expected.to have_field(:resource) }
     it { is_expected.to have_field(:errors) }
-    it { is_expected.to accept_arguments(id: "ID!", viewingHint: "String", label: "String", memberIds: "[String!]", startPage: "String") }
+    it {
+      is_expected.to accept_arguments(
+        id: "ID!",
+        viewingHint: "String",
+        label: "String",
+        memberIds: "[String!]",
+        startPage: "String",
+        viewingDirection: "Types::ViewingDirectionEnum",
+        thumbnailId: "String"
+      )
+    }
   end
 
   context "when given permission" do
@@ -23,7 +33,7 @@ RSpec.describe Mutations::UpdateResource do
     context "when given good data" do
       it "updates the record" do
         file1 = fixture_file_upload("files/abstract.tiff", "image/tiff")
-        resource = FactoryBot.create_for_repository(:scanned_resource, viewing_hint: "paged", title: "label", files: [file1])
+        resource = FactoryBot.create_for_repository(:scanned_resource, viewing_hint: "paged", title: "label", files: [file1], viewing_direction: "left-to-right", thumbnail_id: "bla")
         file_set1 = resource.decorate.members.first
         mutation = create_mutation
 
@@ -31,6 +41,17 @@ RSpec.describe Mutations::UpdateResource do
         expect(output[:resource].viewing_hint).to eq ["individuals"]
         expect(output[:resource].title).to eq ["label2"]
         expect(output[:resource].start_canvas).to eq [file_set1.id]
+        expect(output[:resource].viewing_direction).to eq ["left-to-right"]
+        expect(output[:resource].thumbnail_id).to eq [Valkyrie::ID.new("bla")]
+      end
+    end
+    context "when given an invalid viewing direction" do
+      it "returns an error" do
+        resource = FactoryBot.create_for_repository(:scanned_resource)
+        mutation = create_mutation
+
+        output = mutation.resolve(id: resource.id, viewing_direction: "bad")
+        expect(output[:errors]).to eq ["Viewing direction is not included in the list"]
       end
     end
     context "when reordering" do

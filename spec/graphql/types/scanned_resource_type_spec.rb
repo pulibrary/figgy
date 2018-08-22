@@ -13,7 +13,8 @@ RSpec.describe Types::ScannedResourceType do
     FactoryBot.create_for_repository(
       :scanned_resource,
       viewing_hint: "individuals",
-      title: ["I'm a little teapot", "short and stout"]
+      title: ["I'm a little teapot", "short and stout"],
+      viewing_direction: "left-to-right"
     )
   end
 
@@ -22,6 +23,7 @@ RSpec.describe Types::ScannedResourceType do
 
     # Note! These field names use a javascript-y camel-case variable style
     it { is_expected.to have_field(:viewingHint).of_type(String) }
+    it { is_expected.to have_field(:viewingDirection).of_type(Types::ViewingDirectionEnum) }
     it { is_expected.to have_field(:label).of_type(String) }
     it { is_expected.to have_field(:members) }
   end
@@ -29,6 +31,72 @@ RSpec.describe Types::ScannedResourceType do
   describe "#viewing_hint" do
     it "returns a singular value" do
       expect(type.viewing_hint).to eq "individuals"
+    end
+  end
+
+  describe "#viewing_direction" do
+    it "returns a singular value" do
+      expect(type.viewing_direction).to eq "left-to-right"
+    end
+  end
+
+  describe "#thumbnail" do
+    context "when a thumbnail is not set" do
+      it "returns nil" do
+        expect(type.thumbnail).to eq nil
+      end
+    end
+    context "when a thumbnail is set" do
+      let(:scanned_resource) do
+        FactoryBot.create_for_repository(
+          :scanned_resource,
+          viewing_hint: "individuals",
+          title: ["I'm a little teapot", "short and stout"],
+          viewing_direction: "left-to-right",
+          member_ids: file_set.id,
+          thumbnail_id: file_set.id
+        )
+      end
+      let(:file_set) { FactoryBot.create_for_repository(:file_set) }
+      it "returns a thumbnail service url, image, and ID for the file set" do
+        expect(type.thumbnail).to eq(
+          iiif_service_url: "http://www.example.com/image-service/#{file_set.id}",
+          thumbnail_url: "http://www.example.com/image-service/#{file_set.id}/full/!200,150/0/default.jpg",
+          id: file_set.id.to_s
+        )
+      end
+    end
+    context "when a bad thumbnail is set" do
+      let(:scanned_resource) do
+        FactoryBot.create_for_repository(
+          :scanned_resource,
+          viewing_hint: "individuals",
+          title: ["I'm a little teapot", "short and stout"],
+          viewing_direction: "left-to-right",
+          thumbnail_id: "bla"
+        )
+      end
+      it "returns nil" do
+        expect(type.thumbnail).to be_nil
+      end
+    end
+    context "when it's a MVW" do
+      let(:scanned_resource) do
+        FactoryBot.create_for_repository(:scanned_resource, thumbnail_id: volume.id)
+      end
+      let(:volume) do
+        FactoryBot.create_for_repository(:scanned_resource, thumbnail_id: file_set.id)
+      end
+      let(:file_set) do
+        FactoryBot.create_for_repository(:file_set)
+      end
+      it "returns a thumbnail service url/image for the file set, but ID of the volume" do
+        expect(type.thumbnail).to eq(
+          iiif_service_url: "http://www.example.com/image-service/#{file_set.id}",
+          thumbnail_url: "http://www.example.com/image-service/#{file_set.id}/full/!200,150/0/default.jpg",
+          id: volume.id.to_s
+        )
+      end
     end
   end
 
