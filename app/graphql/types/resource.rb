@@ -28,7 +28,7 @@ module Types::Resource
 
   # We need to centralize logic for navigating a MVW's members to find a
   # thumbnail file set. This is a hack to use the helper's logic for doing that.
-  # @TODO: Fix this.
+  # refactor ticketed as https://github.com/pulibrary/figgy/issues/1708
   def helper
     @helper ||= ManifestBuilder::ManifestHelper.new.tap do |helper|
       helper.singleton_class.include(ThumbnailHelper)
