@@ -1,0 +1,2162 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OBJID="ark:/88435/jw827c96v" TYPE="CompiledDigitalObject" xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd">
+<mets:metsHdr CREATEDATE="2018-08-04T11:56:26.015-04:00" LASTMODDATE="2018-08-04T11:56:26.015-04:00">
+<mets:metsDocumentID TYPE="PUDL">pudl0044/831958/tsop_typed.mets</mets:metsDocumentID>
+</mets:metsHdr>
+<mets:dmdSec ID="xvh3r">
+<mets:mdWrap MDTYPE="MODS">
+<mets:xmlData>
+<mods xmlns="http://www.loc.gov/mods/v3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods//v3/mods-3-3.xsd">
+   
+   <titleInfo>
+      
+      <title>This side of paradise</title>
+      
+   </titleInfo>
+   <name authority="naf" type="personal">
+      
+      <namePart type="family">Fitzgerald</namePart>
+      <namePart type="given">F. Scott (Francis Scott)</namePart>
+      <namePart type="date">1896-1940</namePart>
+      <role>
+         <roleTerm authority="marcrelator" type="code">aut</roleTerm>
+      </role>
+   </name>
+   <typeOfResource manuscript="yes">text</typeOfResource>
+   <originInfo>
+      <dateCreated encoding="w3cdtf" keyDate="yes">1918</dateCreated>
+    
+   </originInfo>
+   <language>
+      <languageTerm authority="iso639-2b" type="code">eng</languageTerm>
+   </language>
+   <physicalDescription>
+      <extent>224 typescript pages</extent>
+   </physicalDescription>
+   <abstract>F. Scott Fitzgerald, This Side of Paradise, autograph manuscripts and corrected typescripts (1917-1919). Fitzgerald began writing This Side of Paradise at Princeton, continued in November 1917 at Fort Leavenworth, Kansas, with the working title "The Romantic Egoist," and completed a first draft of the novel at Cottage Club in March 1918. After this draft had been twice rejected by the New York publisher Charles Scribner's Sons, Fitzgerald returned to his parents' home at 599 Summit Avenue in his native St. Paul, Minnesota, and added five new chapters to the four he had written the previous year. He changed the second title of the novel from "The Education of a Personage" to "This Side of Paradise" and sent the novel to Maxwell Perkins at Scribner's. The publisher accepted the novel on September 16, 1919, and published it on March 26, 1920. The author's corrected galleys and page proofs do not survive.
+      
+      F. Scott Fitzgerald, "The Romantic Egotist," chapters 1, 2, 5, 12, and 14. Fitzgerald corrected the five chapters in this early typescript version and sent them to Charles W. Donahoe in October 1918. Donahoe donated the typescript to Princeton in 1948. .</abstract>
+   <note>Typed manuscript</note>
+   <subject authority="lcsh">
+      <name authority="naf" type="personal">
+         <namePart type="family">Fitzgerald</namePart>
+         <namePart type="given">F. Scott (Francis Scott)</namePart>
+         <namePart type="date">1896-1940</namePart>
+      </name>
+      <genre>Manuscripts</genre>
+   </subject>
+   <relatedItem type="host">
+      <typeOfResource collection="yes">text</typeOfResource>
+      <titleInfo>
+         <title>F. Scott Fitzgerald papers, 1897-1944</title>
+      </titleInfo>
+      <!--<location>
+         <url note="Digital Collection">http://pudl.princeton.edu/collections/pudl0044</url>
+      </location>-->
+   </relatedItem>
+   <location>
+      <physicalLocation type="text">Princeton University Library. Department of Rare Books and Special Collections</physicalLocation>
+      <physicalLocation authority="marcorg" type="code">NjP</physicalLocation>
+      <holdingSimple>
+         <copyInformation>
+            <subLocation>mss</subLocation>
+            <shelfLocator>C0187</shelfLocator>
+         </copyInformation>
+      </holdingSimple>
+   </location>
+   <accessCondition type="useAndReproduction">Not to be published, reproduced, or broadcast without the written permission of the Princeton University Library.  Selected items in the F. Scott Fitzgerald Papers can
+      be photoduplicated at the expense of the researcher requesting photoduplication. Advanced
+      estimates and payment are required. For general information on photoduplication and
+      permissions, go to http://www.princeton.edu/~rbsc Requests to to reproduce, publish, or
+      broadcast material from the F. Scott Fitzgerald Papers should be addressed Public Services
+      staff, rbsc@princeton.edu The correct form of citation includes the name of the collection,
+      box and folder numbers, and an indication that the originals are in the "Manuscripts Division,
+      Department of Rare Books and Special Collections, Princeton University Library." The
+      manuscript of The Great Gatsby and other writings of F. Scott Fitzgerald are not to be quoted,
+      published, reproduced, or broadcast without the written permission of the Princeton University
+      Library as owner of the physical object, and of the Fitzgerald Literary Trust (copyright
+      holder), c/o Harold Ober Associates, 425 Madison Avenue, New York, New York 10017 (Telephone:
+      212-759-8600; FAX: 212-759-9428). The Library is not responsible for copyright infringement or
+      other legal problems resulting from unauthorized publication of the words of F. Scott
+      Fitzgerald.</accessCondition>
+   <accessCondition type="restrictionOnAccess">For legal and conservation reasons, access to F.
+      Scott Fitzgerald’s original manuscripts (including corrected galleys and scrapbooks) is
+      strictly restricted. Scottie Fitzgerald Lanahan, daughter of F. Scott Fitzgerald and Zelda
+      Fitzgerald, donated the Fitzgerald Papers to the Princeton University Library in 1950,
+      stipulating that surrogates of the original manuscripts were to be made available to
+      researchers instead of the originals. This was done to preserve the originals, which are not
+      on good paper. Originally, the surrogates were in the form of microfilm. Facsimiles editions of This Side of Paradise and 
+      other manuscripts of books and short
+      stories followed a multi-volume series: F. Scott Fitzgerald Manuscripts, edited by Matthew J.
+      Bruccoli and Alan Margolies (New York: Garland Publishing Company, 1990). Complete sets of the
+      facsimile edition are available at more than 50 research libraries (including Firestone
+      Library). </accessCondition>
+   
+   
+   <recordInfo>
+      <recordContentSource authority="marcorg">NjP</recordContentSource>
+     <!-- <recordOrigin>http://catalog.princeton.edu/cgi-bin/Pwebrecon.cgi?BBID=</recordOrigin>-->
+      <recordIdentifier>http://diglib.princeton.edu/mdata/pudl0044/831958/tsop_typed.mods</recordIdentifier>
+      <languageOfCataloging>
+         <languageTerm authority="iso639-2b" type="code">eng</languageTerm>
+      </languageOfCataloging>
+   </recordInfo>
+</mods>
+</mets:xmlData>
+</mets:mdWrap>
+</mets:dmdSec>
+<mets:fileSec>
+<mets:fileGrp USE="thumbnail">
+<mets:file ID="d962c" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000001.tif"/>
+</mets:file>
+</mets:fileGrp>
+<mets:fileGrp USE="masters">
+<mets:file CHECKSUM="985b3106065f5bce06178212cdd5ea74" CHECKSUMTYPE="MD5" ID="afoc8" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000001.tif"/>
+</mets:file>
+<mets:file CHECKSUM="22434a0afda4d00d3af79ccb74966632" CHECKSUMTYPE="MD5" ID="o3cu9" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000002.tif"/>
+</mets:file>
+<mets:file CHECKSUM="b3a9612019a7c4e399cc8360142d4e40" CHECKSUMTYPE="MD5" ID="mfxyv" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000003.tif"/>
+</mets:file>
+<mets:file CHECKSUM="37fd5fd88be0388e4c0af5d473717d12" CHECKSUMTYPE="MD5" ID="hiyq3" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000004.tif"/>
+</mets:file>
+<mets:file CHECKSUM="9fc5f49ab0df97c0e057dbebdbfdfb1a" CHECKSUMTYPE="MD5" ID="rt7cu" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000005.tif"/>
+</mets:file>
+<mets:file CHECKSUM="581913800c5bc6dd634b0354354487ec" CHECKSUMTYPE="MD5" ID="wpdaz" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000006.tif"/>
+</mets:file>
+<mets:file CHECKSUM="486f176ea825f4f89ba173a457c8e3f1" CHECKSUMTYPE="MD5" ID="vd770" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000007.tif"/>
+</mets:file>
+<mets:file CHECKSUM="e49639fbbc0021afc3fac74c5427ed03" CHECKSUMTYPE="MD5" ID="p5bz8" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000008.tif"/>
+</mets:file>
+<mets:file CHECKSUM="2af46704e1db6072bf0ec665ec519f67" CHECKSUMTYPE="MD5" ID="a2l99" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000009.tif"/>
+</mets:file>
+<mets:file CHECKSUM="652b0c645571fe17f069d9a6cdae5725" CHECKSUMTYPE="MD5" ID="i7d75" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000010.tif"/>
+</mets:file>
+<mets:file CHECKSUM="e23adcad92c03a9f624055669973b4d5" CHECKSUMTYPE="MD5" ID="qidbi" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000011.tif"/>
+</mets:file>
+<mets:file CHECKSUM="cc977b0b4d39a18c25e9b7a3890105e6" CHECKSUMTYPE="MD5" ID="hu641" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000012.tif"/>
+</mets:file>
+<mets:file CHECKSUM="80568f134c89b5f0cbd1fa318eb51e06" CHECKSUMTYPE="MD5" ID="ud5zj" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000013.tif"/>
+</mets:file>
+<mets:file CHECKSUM="d1f4945bfb29954f33c0f9b032fae248" CHECKSUMTYPE="MD5" ID="b6ths" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000014.tif"/>
+</mets:file>
+<mets:file CHECKSUM="6430df0128065c27c5eddcfbf3569458" CHECKSUMTYPE="MD5" ID="vo8he" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000015.tif"/>
+</mets:file>
+<mets:file CHECKSUM="3763dfe5d8cdb71c35eb5d5241781136" CHECKSUMTYPE="MD5" ID="qza75" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000016.tif"/>
+</mets:file>
+<mets:file CHECKSUM="9e8de9401f86ae2048c59168fe66aef" CHECKSUMTYPE="MD5" ID="blhlc" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000017.tif"/>
+</mets:file>
+<mets:file CHECKSUM="661ebb074b1195193fba30d34dc6c867" CHECKSUMTYPE="MD5" ID="ygym9" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000018.tif"/>
+</mets:file>
+<mets:file CHECKSUM="94ccf5b98bc7eb7108598d197cc1aa1b" CHECKSUMTYPE="MD5" ID="w4uem" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000019.tif"/>
+</mets:file>
+<mets:file CHECKSUM="1ac8a79886dfa4dabea934be99b6dad3" CHECKSUMTYPE="MD5" ID="zrpn3" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000020.tif"/>
+</mets:file>
+<mets:file CHECKSUM="68e53dbc05bae258ce4bc166389ec04d" CHECKSUMTYPE="MD5" ID="vqvnx" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000021.tif"/>
+</mets:file>
+<mets:file CHECKSUM="bc4c0f5b42623c054b9bb0f634b55d68" CHECKSUMTYPE="MD5" ID="twyb2" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000022.tif"/>
+</mets:file>
+<mets:file CHECKSUM="f29b503a080b6278102b797e30755514" CHECKSUMTYPE="MD5" ID="bhg7z" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000023.tif"/>
+</mets:file>
+<mets:file CHECKSUM="810e68cc5097d7a4f2ac2261093e6fda" CHECKSUMTYPE="MD5" ID="kq6f4" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000024.tif"/>
+</mets:file>
+<mets:file CHECKSUM="77d12e4bef70cb70ff0e2b60228762a0" CHECKSUMTYPE="MD5" ID="dfcw8" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000025.tif"/>
+</mets:file>
+<mets:file CHECKSUM="809ac62fc35ee4435e00da7da478ddb2" CHECKSUMTYPE="MD5" ID="wyggp" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000026.tif"/>
+</mets:file>
+<mets:file CHECKSUM="831f7786885ce9cbe6c9e7a3e1a6eb55" CHECKSUMTYPE="MD5" ID="a4goe" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000027.tif"/>
+</mets:file>
+<mets:file CHECKSUM="875490aac0d0794881f904639215aef1" CHECKSUMTYPE="MD5" ID="php7d" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000028.tif"/>
+</mets:file>
+<mets:file CHECKSUM="59623d18c35c535d48db84449e767310" CHECKSUMTYPE="MD5" ID="mob7q" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000029.tif"/>
+</mets:file>
+<mets:file CHECKSUM="2648bfad662266d3c5efcf277af80624" CHECKSUMTYPE="MD5" ID="hesd2" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000030.tif"/>
+</mets:file>
+<mets:file CHECKSUM="e47b4d883e6f475970f6f587d90a628c" CHECKSUMTYPE="MD5" ID="s0rwi" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000031.tif"/>
+</mets:file>
+<mets:file CHECKSUM="58b1feb6c32959951da67d3d9e843152" CHECKSUMTYPE="MD5" ID="sgl8m" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000032.tif"/>
+</mets:file>
+<mets:file CHECKSUM="538b00e519cda418e10e5d03d1187242" CHECKSUMTYPE="MD5" ID="fcijz" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000033.tif"/>
+</mets:file>
+<mets:file CHECKSUM="a8da6b4e5c6760df87cccb94b09e9750" CHECKSUMTYPE="MD5" ID="ymggl" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000034.tif"/>
+</mets:file>
+<mets:file CHECKSUM="e65fca6cc9d4bfd13a0704d4f12b0399" CHECKSUMTYPE="MD5" ID="ngzxk" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000035.tif"/>
+</mets:file>
+<mets:file CHECKSUM="f0c3b4f77b172a361f2f05e8f61000d" CHECKSUMTYPE="MD5" ID="rbxh3" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000036.tif"/>
+</mets:file>
+<mets:file CHECKSUM="e1c5f0571a751d4c890afb57364d6d0" CHECKSUMTYPE="MD5" ID="mgpg5" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000037.tif"/>
+</mets:file>
+<mets:file CHECKSUM="f730551c16ee150e77092f6c491796a0" CHECKSUMTYPE="MD5" ID="l2v4a" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000038.tif"/>
+</mets:file>
+<mets:file CHECKSUM="9e5cdeb1698657bc2fce22184a936a56" CHECKSUMTYPE="MD5" ID="ra2jr" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000039.tif"/>
+</mets:file>
+<mets:file CHECKSUM="10709e70eac89c5fc5768c664c1dd1fc" CHECKSUMTYPE="MD5" ID="y4aaj" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000040.tif"/>
+</mets:file>
+<mets:file CHECKSUM="2f10bd6ed96933efa8782956fdaf4564" CHECKSUMTYPE="MD5" ID="ug9dc" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000041.tif"/>
+</mets:file>
+<mets:file CHECKSUM="f3aba1260fdc0d93e950ad7f9e44dde6" CHECKSUMTYPE="MD5" ID="ex2dy" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000042.tif"/>
+</mets:file>
+<mets:file CHECKSUM="328b134e99ee0fc39e17154415729bbd" CHECKSUMTYPE="MD5" ID="ec5az" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000043.tif"/>
+</mets:file>
+<mets:file CHECKSUM="a0da6e464344fa6908c9122f956d19e8" CHECKSUMTYPE="MD5" ID="o52xb" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000044.tif"/>
+</mets:file>
+<mets:file CHECKSUM="649d593422c676ceb9c446e3010748f3" CHECKSUMTYPE="MD5" ID="xn55y" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000045.tif"/>
+</mets:file>
+<mets:file CHECKSUM="cd3b0c260008c1e289929549c6a8b404" CHECKSUMTYPE="MD5" ID="i6924" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000046.tif"/>
+</mets:file>
+<mets:file CHECKSUM="1b1c32bdd73432d585163e11bd30a2bb" CHECKSUMTYPE="MD5" ID="fe2la" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000047.tif"/>
+</mets:file>
+<mets:file CHECKSUM="3c051063f56477927863b0d51efddd2b" CHECKSUMTYPE="MD5" ID="dk09i" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000048.tif"/>
+</mets:file>
+<mets:file CHECKSUM="5d9da732b35bfa170560c38282865f1a" CHECKSUMTYPE="MD5" ID="ejo95" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000049.tif"/>
+</mets:file>
+<mets:file CHECKSUM="4e423b833fdcf69afd6c9b247d1964d7" CHECKSUMTYPE="MD5" ID="v196l" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000050.tif"/>
+</mets:file>
+<mets:file CHECKSUM="bcf31402c37f6774607ec7b6deb20254" CHECKSUMTYPE="MD5" ID="l46jl" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000051.tif"/>
+</mets:file>
+<mets:file CHECKSUM="99ba75564ffcd5abbf72743c20a02883" CHECKSUMTYPE="MD5" ID="x00po" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000052.tif"/>
+</mets:file>
+<mets:file CHECKSUM="8f45a09559038d9bc1b3227d16b5186a" CHECKSUMTYPE="MD5" ID="yg5az" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000053.tif"/>
+</mets:file>
+<mets:file CHECKSUM="34e63d5c0fb1f88eff536dacbddca0b0" CHECKSUMTYPE="MD5" ID="pe1ka" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000054.tif"/>
+</mets:file>
+<mets:file CHECKSUM="2d6e92e9bba12f6352e4c628aa395847" CHECKSUMTYPE="MD5" ID="if3y3" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000055.tif"/>
+</mets:file>
+<mets:file CHECKSUM="bb7b0046596f11fa12108a70f63925f5" CHECKSUMTYPE="MD5" ID="b2vy6" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000056.tif"/>
+</mets:file>
+<mets:file CHECKSUM="2cd19f64b6bdf1f749f36cf69e793b2f" CHECKSUMTYPE="MD5" ID="fko5d" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000057.tif"/>
+</mets:file>
+<mets:file CHECKSUM="8d4f2a9e56ac16029c8520afe97bc578" CHECKSUMTYPE="MD5" ID="l2gru" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000058.tif"/>
+</mets:file>
+<mets:file CHECKSUM="e799af33a0e6cd27d37c47c4d9cca4f4" CHECKSUMTYPE="MD5" ID="rpe0i" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000059.tif"/>
+</mets:file>
+<mets:file CHECKSUM="2f0e075ba2050d6d0138e1fb7f117b93" CHECKSUMTYPE="MD5" ID="c7hio" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000060.tif"/>
+</mets:file>
+<mets:file CHECKSUM="e1938e22d2c4bba1963c89de57de07a3" CHECKSUMTYPE="MD5" ID="axjgl" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000061.tif"/>
+</mets:file>
+<mets:file CHECKSUM="17a723d3cd722f346204ad5b5c2aed6b" CHECKSUMTYPE="MD5" ID="snpyg" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000062.tif"/>
+</mets:file>
+<mets:file CHECKSUM="ff9dcaedc741ae4a43b050236da5aafa" CHECKSUMTYPE="MD5" ID="rb9s7" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000063.tif"/>
+</mets:file>
+<mets:file CHECKSUM="d12210f076c898a29e1e4daf9d99a0df" CHECKSUMTYPE="MD5" ID="n6xea" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000064.tif"/>
+</mets:file>
+<mets:file CHECKSUM="53910e08f11fd46d29f219231facf66a" CHECKSUMTYPE="MD5" ID="gcy3x" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000065.tif"/>
+</mets:file>
+<mets:file CHECKSUM="caf3e83a161cd08a4517fd8a425ef2d8" CHECKSUMTYPE="MD5" ID="rqbx5" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000066.tif"/>
+</mets:file>
+<mets:file CHECKSUM="3ca8e4da957d55cd83e15cd36738632d" CHECKSUMTYPE="MD5" ID="b0ms9" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000067.tif"/>
+</mets:file>
+<mets:file CHECKSUM="78045afd59a5511f72cdab980ac5ac4e" CHECKSUMTYPE="MD5" ID="mokxy" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000068.tif"/>
+</mets:file>
+<mets:file CHECKSUM="fad5d40d77032c6896ad99b6c8603ffe" CHECKSUMTYPE="MD5" ID="xihxy" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000069.tif"/>
+</mets:file>
+<mets:file CHECKSUM="1cd376c7dbdb87e0a8db5fc4139f622a" CHECKSUMTYPE="MD5" ID="pc8zn" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000070.tif"/>
+</mets:file>
+<mets:file CHECKSUM="90fbf57e4413dab4da3752ac774e7b90" CHECKSUMTYPE="MD5" ID="l01my" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000071.tif"/>
+</mets:file>
+<mets:file CHECKSUM="bd0d07c5c7803fc2b81009c84a4b1057" CHECKSUMTYPE="MD5" ID="a9itj" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000072.tif"/>
+</mets:file>
+<mets:file CHECKSUM="a040882927ce83572d7ec4409c8ab607" CHECKSUMTYPE="MD5" ID="pzueq" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000073.tif"/>
+</mets:file>
+<mets:file CHECKSUM="76aaf597952a0125f97ebdd1cccc60f3" CHECKSUMTYPE="MD5" ID="grlin" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000074.tif"/>
+</mets:file>
+<mets:file CHECKSUM="ae4e0026a5d6125185d84dc0c604151d" CHECKSUMTYPE="MD5" ID="nod0x" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000075.tif"/>
+</mets:file>
+<mets:file CHECKSUM="4ada33543f63d211ae3f312d08c6161b" CHECKSUMTYPE="MD5" ID="i6qef" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000076.tif"/>
+</mets:file>
+<mets:file CHECKSUM="bc548ecc0af7478cd001338fcc7563b8" CHECKSUMTYPE="MD5" ID="hgw98" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000077.tif"/>
+</mets:file>
+<mets:file CHECKSUM="32a686b3eec6fba45a6f24369aeaaeac" CHECKSUMTYPE="MD5" ID="jzjq4" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000078.tif"/>
+</mets:file>
+<mets:file CHECKSUM="ab402aa37ad42acdbc623e9d21007b3c" CHECKSUMTYPE="MD5" ID="ays1e" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000079.tif"/>
+</mets:file>
+<mets:file CHECKSUM="8c16c8b074763eba3f315247c1d7a664" CHECKSUMTYPE="MD5" ID="oflvx" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000080.tif"/>
+</mets:file>
+<mets:file CHECKSUM="9daedbec72353cbd170a9cfdad32c1b" CHECKSUMTYPE="MD5" ID="c6cxg" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000081.tif"/>
+</mets:file>
+<mets:file CHECKSUM="28f4f131d1f12e220038b4592d21c399" CHECKSUMTYPE="MD5" ID="lwzw0" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000082.tif"/>
+</mets:file>
+<mets:file CHECKSUM="6a28ec1962a6b4d6c90080a5820f0f21" CHECKSUMTYPE="MD5" ID="hbuz1" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000083.tif"/>
+</mets:file>
+<mets:file CHECKSUM="9a57f6660355afb4fc13a1da45a9ccfe" CHECKSUMTYPE="MD5" ID="aw0mz" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000084.tif"/>
+</mets:file>
+<mets:file CHECKSUM="c0d323f3ebe90bf100ce541bb6b1b44f" CHECKSUMTYPE="MD5" ID="oqjao" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000085.tif"/>
+</mets:file>
+<mets:file CHECKSUM="ce919113b676fe1c5f52c01b6d5ff87" CHECKSUMTYPE="MD5" ID="s8b2e" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000086.tif"/>
+</mets:file>
+<mets:file CHECKSUM="c1087a05349216e826b5e173846e9789" CHECKSUMTYPE="MD5" ID="f229i" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000087.tif"/>
+</mets:file>
+<mets:file CHECKSUM="a53f864db3936c9a56f6bc616487758f" CHECKSUMTYPE="MD5" ID="pqh2y" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000088.tif"/>
+</mets:file>
+<mets:file CHECKSUM="78519730c7b18fc4c9ecbc217c865e3" CHECKSUMTYPE="MD5" ID="u8yq0" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000089.tif"/>
+</mets:file>
+<mets:file CHECKSUM="38f7691d08a71d49b2101b7faf48109f" CHECKSUMTYPE="MD5" ID="cfjxe" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000090.tif"/>
+</mets:file>
+<mets:file CHECKSUM="5de61a7ada392d7bd3b1e2e8b09d9235" CHECKSUMTYPE="MD5" ID="qgwgu" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000091.tif"/>
+</mets:file>
+<mets:file CHECKSUM="b57b2173144adc38266275565c5cc892" CHECKSUMTYPE="MD5" ID="yneio" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000092.tif"/>
+</mets:file>
+<mets:file CHECKSUM="4c4e0e5f00b9ec68a968d8b892f80397" CHECKSUMTYPE="MD5" ID="i7gam" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000093.tif"/>
+</mets:file>
+<mets:file CHECKSUM="eea5ae641ca86967c47852737e1f9c98" CHECKSUMTYPE="MD5" ID="bk0dm" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000094.tif"/>
+</mets:file>
+<mets:file CHECKSUM="c7563d6c2075ef8c8361a7338af5819c" CHECKSUMTYPE="MD5" ID="bkfso" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000095.tif"/>
+</mets:file>
+<mets:file CHECKSUM="ff110829d4b5af546d098fe9dcb482ac" CHECKSUMTYPE="MD5" ID="zb9go" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000096.tif"/>
+</mets:file>
+<mets:file CHECKSUM="a3651fc1d5fdc9034defa9fd1b43c487" CHECKSUMTYPE="MD5" ID="wlzwm" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000097.tif"/>
+</mets:file>
+<mets:file CHECKSUM="ba6f52ea1a8ee7607e73c11fa9cb21fb" CHECKSUMTYPE="MD5" ID="w3ccg" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000098.tif"/>
+</mets:file>
+<mets:file CHECKSUM="c110f75434fb50c2c967dcba63bfa87f" CHECKSUMTYPE="MD5" ID="n6kt4" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000099.tif"/>
+</mets:file>
+<mets:file CHECKSUM="ea8995e84a8f978cea07332231e7508e" CHECKSUMTYPE="MD5" ID="dsokl" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000100.tif"/>
+</mets:file>
+<mets:file CHECKSUM="8f870b24b609f7b437076fe589ea194b" CHECKSUMTYPE="MD5" ID="wgzsm" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000101.tif"/>
+</mets:file>
+<mets:file CHECKSUM="735141118294fe38a3db7250525ad822" CHECKSUMTYPE="MD5" ID="l7zhp" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000102.tif"/>
+</mets:file>
+<mets:file CHECKSUM="4a2fd4d6101d025bfe2861553c9dfe01" CHECKSUMTYPE="MD5" ID="n5goz" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000103.tif"/>
+</mets:file>
+<mets:file CHECKSUM="f70d3b7181c400a238c00288185daee4" CHECKSUMTYPE="MD5" ID="tem01" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000104.tif"/>
+</mets:file>
+<mets:file CHECKSUM="76eaf5a9d3dcc10d397b42198c2c0abb" CHECKSUMTYPE="MD5" ID="m58ti" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000105.tif"/>
+</mets:file>
+<mets:file CHECKSUM="bc335bd6ecfafb3ab41bb197363d1d40" CHECKSUMTYPE="MD5" ID="qmewn" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000106.tif"/>
+</mets:file>
+<mets:file CHECKSUM="1245437429cc4af1d6fde39dc72c2762" CHECKSUMTYPE="MD5" ID="ladt3" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000107.tif"/>
+</mets:file>
+<mets:file CHECKSUM="2704bc220ad75f784afdea673fc37f4e" CHECKSUMTYPE="MD5" ID="izjco" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000108.tif"/>
+</mets:file>
+<mets:file CHECKSUM="1a3f45fd947986699d4c8dafa89f79e0" CHECKSUMTYPE="MD5" ID="gq0i5" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000109.tif"/>
+</mets:file>
+<mets:file CHECKSUM="e8db1642daffb1d54d1d701cd8a439ce" CHECKSUMTYPE="MD5" ID="bmwhn" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000110.tif"/>
+</mets:file>
+<mets:file CHECKSUM="4100fcc91e044350a7257dd9f4268bfe" CHECKSUMTYPE="MD5" ID="pcakz" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000111.tif"/>
+</mets:file>
+<mets:file CHECKSUM="39139801b0a17968853ec6bb8665a7d5" CHECKSUMTYPE="MD5" ID="g6892" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000112.tif"/>
+</mets:file>
+<mets:file CHECKSUM="fa6cf70ea69a12a25342f0192fe3f728" CHECKSUMTYPE="MD5" ID="i92zq" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000113.tif"/>
+</mets:file>
+<mets:file CHECKSUM="ec8474e627db90cd04f60bd434de1ab9" CHECKSUMTYPE="MD5" ID="lnoon" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000114.tif"/>
+</mets:file>
+<mets:file CHECKSUM="c463972006888cc42faa22dd9ba140dc" CHECKSUMTYPE="MD5" ID="hsmma" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000115.tif"/>
+</mets:file>
+<mets:file CHECKSUM="9c314264ecae927e384ed55bbd8ba602" CHECKSUMTYPE="MD5" ID="pjgz4" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000116.tif"/>
+</mets:file>
+<mets:file CHECKSUM="fbca9db2e04cf3055ffbc26547260620" CHECKSUMTYPE="MD5" ID="ftwjs" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000117.tif"/>
+</mets:file>
+<mets:file CHECKSUM="9c2bdeecf6099a3bb5f6527c152983b9" CHECKSUMTYPE="MD5" ID="j8o3x" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000118.tif"/>
+</mets:file>
+<mets:file CHECKSUM="980a32c7472812f46460d765a65529bb" CHECKSUMTYPE="MD5" ID="b48bz" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000119.tif"/>
+</mets:file>
+<mets:file CHECKSUM="b706b47db59ba8e2f0a7a0d0a6b6ac00" CHECKSUMTYPE="MD5" ID="x4ohz" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000120.tif"/>
+</mets:file>
+<mets:file CHECKSUM="c02a11ba6a6d2d1ab6bd1a400ed3635d" CHECKSUMTYPE="MD5" ID="yppll" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000121.tif"/>
+</mets:file>
+<mets:file CHECKSUM="cc93f246d994ad3ff33a77101177f184" CHECKSUMTYPE="MD5" ID="alope" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000122.tif"/>
+</mets:file>
+<mets:file CHECKSUM="173bbafa4f7ffa8cd9fd6af92f8bf1fa" CHECKSUMTYPE="MD5" ID="f22r2" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000123.tif"/>
+</mets:file>
+<mets:file CHECKSUM="5ddb48f889bf8aef59cc6c1e067b4fc1" CHECKSUMTYPE="MD5" ID="uor1e" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000124.tif"/>
+</mets:file>
+<mets:file CHECKSUM="50116520e6929052e61dadb8eea364f4" CHECKSUMTYPE="MD5" ID="h8jxm" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000125.tif"/>
+</mets:file>
+<mets:file CHECKSUM="b633e20664bee8265ad47bf9c1ddfb27" CHECKSUMTYPE="MD5" ID="friyb" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000126.tif"/>
+</mets:file>
+<mets:file CHECKSUM="a1e8c4e57ddcf9b518f8e5606dd71b7f" CHECKSUMTYPE="MD5" ID="absax" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000127.tif"/>
+</mets:file>
+<mets:file CHECKSUM="774df6e074a7ab6b003e324f74f28f07" CHECKSUMTYPE="MD5" ID="xniio" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000128.tif"/>
+</mets:file>
+<mets:file CHECKSUM="e6124234c5762908f15354a972ef8931" CHECKSUMTYPE="MD5" ID="nm6ih" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000129.tif"/>
+</mets:file>
+<mets:file CHECKSUM="97e16fab0d23443d97f3b12eb99cbcb" CHECKSUMTYPE="MD5" ID="p93ab" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000130.tif"/>
+</mets:file>
+<mets:file CHECKSUM="503d79065acad9692a65495340ed7061" CHECKSUMTYPE="MD5" ID="fm9yz" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000131.tif"/>
+</mets:file>
+<mets:file CHECKSUM="9133425d3270bf9d327682faa96445d" CHECKSUMTYPE="MD5" ID="cqh0n" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000132.tif"/>
+</mets:file>
+<mets:file CHECKSUM="c9f1893a6ac4c7362f3556e552bc738b" CHECKSUMTYPE="MD5" ID="jfan1" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000133.tif"/>
+</mets:file>
+<mets:file CHECKSUM="d8b717823dc0d8b0c8baa9a21217e804" CHECKSUMTYPE="MD5" ID="v7lgq" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000134.tif"/>
+</mets:file>
+<mets:file CHECKSUM="6f82b0842390ced4697af316bcff6046" CHECKSUMTYPE="MD5" ID="ro2hf" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000135.tif"/>
+</mets:file>
+<mets:file CHECKSUM="d43044f0f12425c7ecb44784a9c1d8bf" CHECKSUMTYPE="MD5" ID="dez4h" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000136.tif"/>
+</mets:file>
+<mets:file CHECKSUM="78aa4a9d59be5856ce1abb890f4f00af" CHECKSUMTYPE="MD5" ID="w88g9" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000137.tif"/>
+</mets:file>
+<mets:file CHECKSUM="e1cc1e374ba35c2adff7f4ac7d8f27dd" CHECKSUMTYPE="MD5" ID="n7bt3" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000138.tif"/>
+</mets:file>
+<mets:file CHECKSUM="988b4e565b1d53b0804f0744449bca41" CHECKSUMTYPE="MD5" ID="lnphz" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000139.tif"/>
+</mets:file>
+<mets:file CHECKSUM="c28c943be0c7cfa1cf1c2ca1c1904a44" CHECKSUMTYPE="MD5" ID="ey5yv" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000140.tif"/>
+</mets:file>
+<mets:file CHECKSUM="875fa0794b1d5d2e66947ed8c917657f" CHECKSUMTYPE="MD5" ID="ljqsl" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000141.tif"/>
+</mets:file>
+<mets:file CHECKSUM="e8d3a041d6adc96932d5ba65a9232769" CHECKSUMTYPE="MD5" ID="k139m" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000142.tif"/>
+</mets:file>
+<mets:file CHECKSUM="f734b27852d210d80f40675012aa27ac" CHECKSUMTYPE="MD5" ID="x9zut" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000143.tif"/>
+</mets:file>
+<mets:file CHECKSUM="5b4e1f66fd150eb10cdc2191b6cf32c8" CHECKSUMTYPE="MD5" ID="mkzs0" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000144.tif"/>
+</mets:file>
+<mets:file CHECKSUM="fb78c8993739bec24202776994b00b83" CHECKSUMTYPE="MD5" ID="tc62e" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000145.tif"/>
+</mets:file>
+<mets:file CHECKSUM="b6335b88cbe9baa6fb22e83ddc644b01" CHECKSUMTYPE="MD5" ID="kwjaa" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000146.tif"/>
+</mets:file>
+<mets:file CHECKSUM="9a7cfa2319eaa69d829d45bf49b2df54" CHECKSUMTYPE="MD5" ID="vzxsf" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000147.tif"/>
+</mets:file>
+<mets:file CHECKSUM="20f49ef147e33e40b27363081a28058c" CHECKSUMTYPE="MD5" ID="tuppq" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000148.tif"/>
+</mets:file>
+<mets:file CHECKSUM="7a698e96aac8abbd726bbf2ed692b093" CHECKSUMTYPE="MD5" ID="ijml2" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000149.tif"/>
+</mets:file>
+<mets:file CHECKSUM="61fb9206e83ec564eaa8c1401b28a2a" CHECKSUMTYPE="MD5" ID="psbyo" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000150.tif"/>
+</mets:file>
+<mets:file CHECKSUM="51688d3e60be88aa31235ec264579c43" CHECKSUMTYPE="MD5" ID="kwy70" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000151.tif"/>
+</mets:file>
+<mets:file CHECKSUM="598a445ad40bbebfd5cd6697cb020c96" CHECKSUMTYPE="MD5" ID="deb4x" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000152.tif"/>
+</mets:file>
+<mets:file CHECKSUM="bcb67f1f9f5ae0b9ab913ff118a09055" CHECKSUMTYPE="MD5" ID="yeed1" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000153.tif"/>
+</mets:file>
+<mets:file CHECKSUM="5c49de2e36d2f5fd5bac3920c5686517" CHECKSUMTYPE="MD5" ID="ugzuq" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000154.tif"/>
+</mets:file>
+<mets:file CHECKSUM="e68ae02215a4ba8b668d21939933b32" CHECKSUMTYPE="MD5" ID="mpf98" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000155.tif"/>
+</mets:file>
+<mets:file CHECKSUM="a0ec5e01886a6df70ebde6eb93b9ed0" CHECKSUMTYPE="MD5" ID="d3phu" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000156.tif"/>
+</mets:file>
+<mets:file CHECKSUM="1264ea85b95e1d834adc82c9270c4236" CHECKSUMTYPE="MD5" ID="yy415" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000157.tif"/>
+</mets:file>
+<mets:file CHECKSUM="ba151b69103351dfb902e0b0af92d1b5" CHECKSUMTYPE="MD5" ID="z3bhc" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000158.tif"/>
+</mets:file>
+<mets:file CHECKSUM="54793c95ae8950d656530bc0aef4e2f5" CHECKSUMTYPE="MD5" ID="x5pkc" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000159.tif"/>
+</mets:file>
+<mets:file CHECKSUM="cdd304c1f41ffd5c683f5dd466f73056" CHECKSUMTYPE="MD5" ID="brz9h" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000160.tif"/>
+</mets:file>
+<mets:file CHECKSUM="9594d2d3db09a4b98fac12cb60ebe67c" CHECKSUMTYPE="MD5" ID="cz2li" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000161.tif"/>
+</mets:file>
+<mets:file CHECKSUM="8d282f3d47f8f2c171d09450b482b60a" CHECKSUMTYPE="MD5" ID="pp6t5" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000162.tif"/>
+</mets:file>
+<mets:file CHECKSUM="54d19981fed4979cd0d7620428f7b656" CHECKSUMTYPE="MD5" ID="ps2t6" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000163.tif"/>
+</mets:file>
+<mets:file CHECKSUM="2cec35cb7df7f930283ecdb5d9a9b82c" CHECKSUMTYPE="MD5" ID="so6ka" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000164.tif"/>
+</mets:file>
+<mets:file CHECKSUM="4311c6c12de453c57edb51fdea29a020" CHECKSUMTYPE="MD5" ID="girge" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000165.tif"/>
+</mets:file>
+<mets:file CHECKSUM="7b274b01675ea2b111f9b237ffd6c5a5" CHECKSUMTYPE="MD5" ID="oct27" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000166.tif"/>
+</mets:file>
+<mets:file CHECKSUM="2e592fa823978e15de77457560835e20" CHECKSUMTYPE="MD5" ID="fx8xd" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000167.tif"/>
+</mets:file>
+<mets:file CHECKSUM="b24bbd5255c65dd1a295d18c28ff5fb" CHECKSUMTYPE="MD5" ID="oi977" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000168.tif"/>
+</mets:file>
+<mets:file CHECKSUM="267b45ec9b77f4d38c92c3423b795b9e" CHECKSUMTYPE="MD5" ID="qbqha" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000169.tif"/>
+</mets:file>
+<mets:file CHECKSUM="da6ff7ce8db8af8f10d81c98e6d1df8b" CHECKSUMTYPE="MD5" ID="ikysu" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000170.tif"/>
+</mets:file>
+<mets:file CHECKSUM="b41498c1bc3a2e486574120b51edad1" CHECKSUMTYPE="MD5" ID="gx0h2" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000171.tif"/>
+</mets:file>
+<mets:file CHECKSUM="1efebafaed9f118691b1218ddf00eb29" CHECKSUMTYPE="MD5" ID="f9czr" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000172.tif"/>
+</mets:file>
+<mets:file CHECKSUM="c33cb0023fb69c492082a162e1cfe00a" CHECKSUMTYPE="MD5" ID="d1pb3" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000173.tif"/>
+</mets:file>
+<mets:file CHECKSUM="e017d2336060889c53f88717ed2a0c3f" CHECKSUMTYPE="MD5" ID="bidz9" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000174.tif"/>
+</mets:file>
+<mets:file CHECKSUM="318e98a5b4d448ecafb43a4c67b7c49d" CHECKSUMTYPE="MD5" ID="wz4fg" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000175.tif"/>
+</mets:file>
+<mets:file CHECKSUM="76eecf81b35f88eebe0c18186cfb72ab" CHECKSUMTYPE="MD5" ID="vl32k" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000176.tif"/>
+</mets:file>
+<mets:file CHECKSUM="d404779ecb6cc9d6679a19163f3c5499" CHECKSUMTYPE="MD5" ID="nf3yt" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000177.tif"/>
+</mets:file>
+<mets:file CHECKSUM="908978cb43f8797b60d35d9ad0468b33" CHECKSUMTYPE="MD5" ID="cmo6l" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000178.tif"/>
+</mets:file>
+<mets:file CHECKSUM="e15b14401d70bfb1b2803583b816ec6a" CHECKSUMTYPE="MD5" ID="hssp1" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000179.tif"/>
+</mets:file>
+<mets:file CHECKSUM="ce9774cd52e6de93be3a2a92cf904ffa" CHECKSUMTYPE="MD5" ID="rzjze" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000180.tif"/>
+</mets:file>
+<mets:file CHECKSUM="d38183eef44b233a524629c040760412" CHECKSUMTYPE="MD5" ID="u6igm" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000181.tif"/>
+</mets:file>
+<mets:file CHECKSUM="b159919b6b1f1bcd2c80718b7d5ae92e" CHECKSUMTYPE="MD5" ID="cuo6u" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000182.tif"/>
+</mets:file>
+<mets:file CHECKSUM="375b8946d5d5f94e6d53b7f4732ea696" CHECKSUMTYPE="MD5" ID="ragf6" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000183.tif"/>
+</mets:file>
+<mets:file CHECKSUM="1a935ceb52b5f4fc093ef87323f63299" CHECKSUMTYPE="MD5" ID="mibsi" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000184.tif"/>
+</mets:file>
+<mets:file CHECKSUM="fe03b0aca42bdc6b7f8e1cb5409743c1" CHECKSUMTYPE="MD5" ID="pfda4" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000185.tif"/>
+</mets:file>
+<mets:file CHECKSUM="21e8fd24a257e3212c89c0bbc6f0a41b" CHECKSUMTYPE="MD5" ID="uc6y9" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000186.tif"/>
+</mets:file>
+<mets:file CHECKSUM="66cfee8305c8ed274e8cbc8f4877db47" CHECKSUMTYPE="MD5" ID="v7kq6" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000187.tif"/>
+</mets:file>
+<mets:file CHECKSUM="b4271a515fded02c9904840fda8abb1" CHECKSUMTYPE="MD5" ID="ol01v" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000188.tif"/>
+</mets:file>
+<mets:file CHECKSUM="1920e518161df141c463324b77e18b5a" CHECKSUMTYPE="MD5" ID="ucuj2" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000189.tif"/>
+</mets:file>
+<mets:file CHECKSUM="43f83b43358783bb0257b5aa7abdab60" CHECKSUMTYPE="MD5" ID="rse38" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000190.tif"/>
+</mets:file>
+<mets:file CHECKSUM="5ec6e1ec9212466afffc09fd5f39da02" CHECKSUMTYPE="MD5" ID="b4qs6" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000191.tif"/>
+</mets:file>
+<mets:file CHECKSUM="347bf78c0c3f130b4894dd5541f7d344" CHECKSUMTYPE="MD5" ID="kli7f" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000192.tif"/>
+</mets:file>
+<mets:file CHECKSUM="38897442a4a1a08fc761f8b50e639130" CHECKSUMTYPE="MD5" ID="iscqr" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000193.tif"/>
+</mets:file>
+<mets:file CHECKSUM="cce4211f7c8dd67b856af85ce531e239" CHECKSUMTYPE="MD5" ID="dpju4" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000194.tif"/>
+</mets:file>
+<mets:file CHECKSUM="77089b5fa7682a911a03b3d47f4d6782" CHECKSUMTYPE="MD5" ID="d8fou" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000195.tif"/>
+</mets:file>
+<mets:file CHECKSUM="26f6687ec9dfc9224f11a2f7ff840f94" CHECKSUMTYPE="MD5" ID="kmobn" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000196.tif"/>
+</mets:file>
+<mets:file CHECKSUM="fb4ed30d8bd1e6dfbee4636cef945e50" CHECKSUMTYPE="MD5" ID="eweae" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000197.tif"/>
+</mets:file>
+<mets:file CHECKSUM="741d69edd7a51f15852ac7025de198cf" CHECKSUMTYPE="MD5" ID="l7kmv" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000198.tif"/>
+</mets:file>
+<mets:file CHECKSUM="a7c0b2e750368b81cb6216a6d6157950" CHECKSUMTYPE="MD5" ID="twypr" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000199.tif"/>
+</mets:file>
+<mets:file CHECKSUM="6cd77f9efab9da173859068217454743" CHECKSUMTYPE="MD5" ID="d43ze" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000200.tif"/>
+</mets:file>
+<mets:file CHECKSUM="6608e83b21778e3167b399a48f274cf3" CHECKSUMTYPE="MD5" ID="ze2y2" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000201.tif"/>
+</mets:file>
+<mets:file CHECKSUM="2ff50a1d413458803db263631878928f" CHECKSUMTYPE="MD5" ID="a7vph" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000202.tif"/>
+</mets:file>
+<mets:file CHECKSUM="9e75867070c7e8809fc959cf4196e1bb" CHECKSUMTYPE="MD5" ID="wq3bv" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000203.tif"/>
+</mets:file>
+<mets:file CHECKSUM="696b1cf92818ef93a6d24d728bc5d7a9" CHECKSUMTYPE="MD5" ID="ivfxt" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000204.tif"/>
+</mets:file>
+<mets:file CHECKSUM="bc738de88066cb00ee0262f753f67425" CHECKSUMTYPE="MD5" ID="nzivf" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000205.tif"/>
+</mets:file>
+<mets:file CHECKSUM="1681eb88b33b045603aa9d286f702538" CHECKSUMTYPE="MD5" ID="hrywv" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000206.tif"/>
+</mets:file>
+<mets:file CHECKSUM="dbdb8794fbd54d761727f2319edb6dfc" CHECKSUMTYPE="MD5" ID="dcg37" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000207.tif"/>
+</mets:file>
+<mets:file CHECKSUM="8c944e683ce9f9fc5f977bd81f522421" CHECKSUMTYPE="MD5" ID="opv56" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000208.tif"/>
+</mets:file>
+<mets:file CHECKSUM="b71e46b900eac1f00841a9bab89b4006" CHECKSUMTYPE="MD5" ID="f2e3b" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000209.tif"/>
+</mets:file>
+<mets:file CHECKSUM="8d629ba816adbb16107936be235fe42d" CHECKSUMTYPE="MD5" ID="ilgdr" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000210.tif"/>
+</mets:file>
+<mets:file CHECKSUM="6ca51cb8d34cdc014653fbfc46ac1124" CHECKSUMTYPE="MD5" ID="hzrin" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000211.tif"/>
+</mets:file>
+<mets:file CHECKSUM="fba0cecc64d2543c13efcc8316432daf" CHECKSUMTYPE="MD5" ID="v0h9w" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000212.tif"/>
+</mets:file>
+<mets:file CHECKSUM="b1ccbe38572dea223f5e005b1ef0819f" CHECKSUMTYPE="MD5" ID="udbcm" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000213.tif"/>
+</mets:file>
+<mets:file CHECKSUM="57e29aa972257aab29afef7300f17475" CHECKSUMTYPE="MD5" ID="xhtpp" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000214.tif"/>
+</mets:file>
+<mets:file CHECKSUM="a0b8d7836ea71c9c32647aaacdae169e" CHECKSUMTYPE="MD5" ID="nuhuc" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000215.tif"/>
+</mets:file>
+<mets:file CHECKSUM="6827ec1ce83fdde7c61827dccf7183a1" CHECKSUMTYPE="MD5" ID="x6s0g" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000216.tif"/>
+</mets:file>
+<mets:file CHECKSUM="1f5da1b9887ad4e8d29b317e68c496a6" CHECKSUMTYPE="MD5" ID="eo95l" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000217.tif"/>
+</mets:file>
+<mets:file CHECKSUM="fb570ad45e371356fe02c4189c9b2716" CHECKSUMTYPE="MD5" ID="z2fw0" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000218.tif"/>
+</mets:file>
+<mets:file CHECKSUM="3ab46dd5c4ec02da696cc97c34eea617" CHECKSUMTYPE="MD5" ID="ci0as" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000219.tif"/>
+</mets:file>
+<mets:file CHECKSUM="27737cf734c8bc9b87e62382332d923f" CHECKSUMTYPE="MD5" ID="fr8ty" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000220.tif"/>
+</mets:file>
+<mets:file CHECKSUM="313845bd85bc0274fd64d1a1f8107ef4" CHECKSUMTYPE="MD5" ID="pqeuy" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000221.tif"/>
+</mets:file>
+<mets:file CHECKSUM="e8a1eb4cf72903395ff82d9532651c4a" CHECKSUMTYPE="MD5" ID="gb4yk" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000222.tif"/>
+</mets:file>
+<mets:file CHECKSUM="ef725ea2ec566dfced59d00e50d9ba8" CHECKSUMTYPE="MD5" ID="haasu" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000223.tif"/>
+</mets:file>
+<mets:file CHECKSUM="c2c1805903f63cfb0ac3e60cb22823f9" CHECKSUMTYPE="MD5" ID="nf4a0" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000224.tif"/>
+</mets:file>
+<mets:file CHECKSUM="555fcd6072036b27475fa7410d75040b" CHECKSUMTYPE="MD5" ID="qp0f6" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000225.tif"/>
+</mets:file>
+<mets:file CHECKSUM="8e9616842158df56dabf66bf488d00e" CHECKSUMTYPE="MD5" ID="xvqq1" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0044/831958/tsop_typed/00000226.tif"/>
+</mets:file>
+</mets:fileGrp>
+</mets:fileSec>
+<mets:structMap TYPE="RelatedObjects">
+<mets:div DMDID="xvh3r xvh3r" ID="vxm2n" LABEL="Default">
+<mets:div CONTENTIDS="pudl0044" TYPE="IsPartOf"/>
+<mets:div ID="aggregates" TYPE="OrderedList">
+<mets:div ID="q4udb" LABEL="image 1" ORDER="225" TYPE="Static">
+<mets:fptr FILEID="afoc8"/>
+</mets:div>
+<mets:div ID="qmu2r" LABEL="image 2" ORDER="226" TYPE="Static">
+<mets:fptr FILEID="o3cu9"/>
+</mets:div>
+<mets:div ID="xxq9z" LABEL="image 3" ORDER="1" TYPE="Static">
+<mets:fptr FILEID="mfxyv"/>
+</mets:div>
+<mets:div ID="a14tx" LABEL="image 4" ORDER="2" TYPE="Static">
+<mets:fptr FILEID="hiyq3"/>
+</mets:div>
+<mets:div ID="d7sk7" LABEL="image 5" ORDER="3" TYPE="Static">
+<mets:fptr FILEID="rt7cu"/>
+</mets:div>
+<mets:div ID="salr4" LABEL="image 6" ORDER="4" TYPE="Static">
+<mets:fptr FILEID="wpdaz"/>
+</mets:div>
+<mets:div ID="pszrm" LABEL="image 7" ORDER="5" TYPE="Static">
+<mets:fptr FILEID="vd770"/>
+</mets:div>
+<mets:div ID="r2yve" LABEL="image 8" ORDER="6" TYPE="Static">
+<mets:fptr FILEID="p5bz8"/>
+</mets:div>
+<mets:div ID="d5fmx" LABEL="image 9" ORDER="7" TYPE="Static">
+<mets:fptr FILEID="a2l99"/>
+</mets:div>
+<mets:div ID="jjbsi" LABEL="image 10" ORDER="8" TYPE="Static">
+<mets:fptr FILEID="i7d75"/>
+</mets:div>
+<mets:div ID="rprva" LABEL="image 11" ORDER="9" TYPE="Static">
+<mets:fptr FILEID="qidbi"/>
+</mets:div>
+<mets:div ID="gibma" LABEL="image 12" ORDER="10" TYPE="Static">
+<mets:fptr FILEID="hu641"/>
+</mets:div>
+<mets:div ID="joc4i" LABEL="image 13" ORDER="11" TYPE="Static">
+<mets:fptr FILEID="ud5zj"/>
+</mets:div>
+<mets:div ID="p6bkt" LABEL="image 14" ORDER="12" TYPE="Static">
+<mets:fptr FILEID="b6ths"/>
+</mets:div>
+<mets:div ID="g5gat" LABEL="image 15" ORDER="13" TYPE="Static">
+<mets:fptr FILEID="vo8he"/>
+</mets:div>
+<mets:div ID="ysmy1" LABEL="image 16" ORDER="14" TYPE="Static">
+<mets:fptr FILEID="qza75"/>
+</mets:div>
+<mets:div ID="ls9wx" LABEL="image 17" ORDER="15" TYPE="Static">
+<mets:fptr FILEID="blhlc"/>
+</mets:div>
+<mets:div ID="samn7" LABEL="image 18" ORDER="16" TYPE="Static">
+<mets:fptr FILEID="ygym9"/>
+</mets:div>
+<mets:div ID="sup9e" LABEL="image 19" ORDER="17" TYPE="Static">
+<mets:fptr FILEID="w4uem"/>
+</mets:div>
+<mets:div ID="h5qm4" LABEL="image 20" ORDER="18" TYPE="Static">
+<mets:fptr FILEID="zrpn3"/>
+</mets:div>
+<mets:div ID="a03no" LABEL="image 21" ORDER="19" TYPE="Static">
+<mets:fptr FILEID="vqvnx"/>
+</mets:div>
+<mets:div ID="qih64" LABEL="image 22" ORDER="20" TYPE="Static">
+<mets:fptr FILEID="twyb2"/>
+</mets:div>
+<mets:div ID="oy55h" LABEL="image 23" ORDER="21" TYPE="Static">
+<mets:fptr FILEID="bhg7z"/>
+</mets:div>
+<mets:div ID="kajg2" LABEL="image 24" ORDER="22" TYPE="Static">
+<mets:fptr FILEID="kq6f4"/>
+</mets:div>
+<mets:div ID="fydom" LABEL="image 25" ORDER="23" TYPE="Static">
+<mets:fptr FILEID="dfcw8"/>
+</mets:div>
+<mets:div ID="hs39m" LABEL="image 26" ORDER="24" TYPE="Static">
+<mets:fptr FILEID="wyggp"/>
+</mets:div>
+<mets:div ID="r03l9" LABEL="image 27" ORDER="25" TYPE="Static">
+<mets:fptr FILEID="a4goe"/>
+</mets:div>
+<mets:div ID="lnbpi" LABEL="image 28" ORDER="26" TYPE="Static">
+<mets:fptr FILEID="php7d"/>
+</mets:div>
+<mets:div ID="huc61" LABEL="image 29" ORDER="27" TYPE="Static">
+<mets:fptr FILEID="mob7q"/>
+</mets:div>
+<mets:div ID="vctz8" LABEL="image 30" ORDER="28" TYPE="Static">
+<mets:fptr FILEID="hesd2"/>
+</mets:div>
+<mets:div ID="m65f4" LABEL="image 31" ORDER="29" TYPE="Static">
+<mets:fptr FILEID="s0rwi"/>
+</mets:div>
+<mets:div ID="f9ca2" LABEL="image 32" ORDER="30" TYPE="Static">
+<mets:fptr FILEID="sgl8m"/>
+</mets:div>
+<mets:div ID="jfvdr" LABEL="image 33" ORDER="31" TYPE="Static">
+<mets:fptr FILEID="fcijz"/>
+</mets:div>
+<mets:div ID="ac8hd" LABEL="image 34" ORDER="32" TYPE="Static">
+<mets:fptr FILEID="ymggl"/>
+</mets:div>
+<mets:div ID="f97b8" LABEL="image 35" ORDER="33" TYPE="Static">
+<mets:fptr FILEID="ngzxk"/>
+</mets:div>
+<mets:div ID="agyko" LABEL="image 36" ORDER="34" TYPE="Static">
+<mets:fptr FILEID="rbxh3"/>
+</mets:div>
+<mets:div ID="yrf6m" LABEL="image 37" ORDER="35" TYPE="Static">
+<mets:fptr FILEID="mgpg5"/>
+</mets:div>
+<mets:div ID="tru3v" LABEL="image 38" ORDER="36" TYPE="Static">
+<mets:fptr FILEID="l2v4a"/>
+</mets:div>
+<mets:div ID="l8zqu" LABEL="image 39" ORDER="37" TYPE="Static">
+<mets:fptr FILEID="ra2jr"/>
+</mets:div>
+<mets:div ID="n5ok4" LABEL="image 40" ORDER="38" TYPE="Static">
+<mets:fptr FILEID="y4aaj"/>
+</mets:div>
+<mets:div ID="mvipx" LABEL="image 41" ORDER="39" TYPE="Static">
+<mets:fptr FILEID="ug9dc"/>
+</mets:div>
+<mets:div ID="s9mpu" LABEL="image 42" ORDER="40" TYPE="Static">
+<mets:fptr FILEID="ex2dy"/>
+</mets:div>
+<mets:div ID="jc4gj" LABEL="image 43" ORDER="41" TYPE="Static">
+<mets:fptr FILEID="ec5az"/>
+</mets:div>
+<mets:div ID="zap7e" LABEL="image 44" ORDER="42" TYPE="Static">
+<mets:fptr FILEID="o52xb"/>
+</mets:div>
+<mets:div ID="m0xha" LABEL="image 45" ORDER="43" TYPE="Static">
+<mets:fptr FILEID="xn55y"/>
+</mets:div>
+<mets:div ID="pojbg" LABEL="image 46" ORDER="44" TYPE="Static">
+<mets:fptr FILEID="i6924"/>
+</mets:div>
+<mets:div ID="wg8e9" LABEL="image 47" ORDER="45" TYPE="Static">
+<mets:fptr FILEID="fe2la"/>
+</mets:div>
+<mets:div ID="mgkb6" LABEL="image 48" ORDER="46" TYPE="Static">
+<mets:fptr FILEID="dk09i"/>
+</mets:div>
+<mets:div ID="bbaow" LABEL="image 49" ORDER="47" TYPE="Static">
+<mets:fptr FILEID="ejo95"/>
+</mets:div>
+<mets:div ID="oeiwc" LABEL="image 50" ORDER="48" TYPE="Static">
+<mets:fptr FILEID="v196l"/>
+</mets:div>
+<mets:div ID="pyg8k" LABEL="image 51" ORDER="49" TYPE="Static">
+<mets:fptr FILEID="l46jl"/>
+</mets:div>
+<mets:div ID="qjjb0" LABEL="image 52" ORDER="50" TYPE="Static">
+<mets:fptr FILEID="x00po"/>
+</mets:div>
+<mets:div ID="tt0vo" LABEL="image 53" ORDER="51" TYPE="Static">
+<mets:fptr FILEID="yg5az"/>
+</mets:div>
+<mets:div ID="hsmme" LABEL="image 54" ORDER="52" TYPE="Static">
+<mets:fptr FILEID="pe1ka"/>
+</mets:div>
+<mets:div ID="p84vn" LABEL="image 55" ORDER="53" TYPE="Static">
+<mets:fptr FILEID="if3y3"/>
+</mets:div>
+<mets:div ID="gq97z" LABEL="image 56" ORDER="54" TYPE="Static">
+<mets:fptr FILEID="b2vy6"/>
+</mets:div>
+<mets:div ID="pbpry" LABEL="image 57" ORDER="55" TYPE="Static">
+<mets:fptr FILEID="fko5d"/>
+</mets:div>
+<mets:div ID="uz9s6" LABEL="image 58" ORDER="56" TYPE="Static">
+<mets:fptr FILEID="l2gru"/>
+</mets:div>
+<mets:div ID="w7y8q" LABEL="image 59" ORDER="57" TYPE="Static">
+<mets:fptr FILEID="rpe0i"/>
+</mets:div>
+<mets:div ID="ypl9w" LABEL="image 60" ORDER="58" TYPE="Static">
+<mets:fptr FILEID="c7hio"/>
+</mets:div>
+<mets:div ID="hjk1a" LABEL="image 61" ORDER="59" TYPE="Static">
+<mets:fptr FILEID="axjgl"/>
+</mets:div>
+<mets:div ID="ouhz6" LABEL="image 62" ORDER="60" TYPE="Static">
+<mets:fptr FILEID="snpyg"/>
+</mets:div>
+<mets:div ID="lb2ur" LABEL="image 63" ORDER="61" TYPE="Static">
+<mets:fptr FILEID="rb9s7"/>
+</mets:div>
+<mets:div ID="v23g6" LABEL="image 64" ORDER="62" TYPE="Static">
+<mets:fptr FILEID="n6xea"/>
+</mets:div>
+<mets:div ID="k9mlx" LABEL="image 65" ORDER="63" TYPE="Static">
+<mets:fptr FILEID="gcy3x"/>
+</mets:div>
+<mets:div ID="lqx52" LABEL="image 66" ORDER="64" TYPE="Static">
+<mets:fptr FILEID="rqbx5"/>
+</mets:div>
+<mets:div ID="nd0v3" LABEL="image 67" ORDER="65" TYPE="Static">
+<mets:fptr FILEID="b0ms9"/>
+</mets:div>
+<mets:div ID="xxqhw" LABEL="image 68" ORDER="66" TYPE="Static">
+<mets:fptr FILEID="mokxy"/>
+</mets:div>
+<mets:div ID="dyzj7" LABEL="image 69" ORDER="67" TYPE="Static">
+<mets:fptr FILEID="xihxy"/>
+</mets:div>
+<mets:div ID="ekn4v" LABEL="image 70" ORDER="68" TYPE="Static">
+<mets:fptr FILEID="pc8zn"/>
+</mets:div>
+<mets:div ID="y3yo3" LABEL="image 71" ORDER="69" TYPE="Static">
+<mets:fptr FILEID="l01my"/>
+</mets:div>
+<mets:div ID="k6qg4" LABEL="image 72" ORDER="70" TYPE="Static">
+<mets:fptr FILEID="a9itj"/>
+</mets:div>
+<mets:div ID="pfmo0" LABEL="image 73" ORDER="71" TYPE="Static">
+<mets:fptr FILEID="pzueq"/>
+</mets:div>
+<mets:div ID="lad3j" LABEL="image 74" ORDER="72" TYPE="Static">
+<mets:fptr FILEID="grlin"/>
+</mets:div>
+<mets:div ID="rr189" LABEL="image 75" ORDER="73" TYPE="Static">
+<mets:fptr FILEID="nod0x"/>
+</mets:div>
+<mets:div ID="pbl7g" LABEL="image 76" ORDER="74" TYPE="Static">
+<mets:fptr FILEID="i6qef"/>
+</mets:div>
+<mets:div ID="nbwet" LABEL="image 77" ORDER="75" TYPE="Static">
+<mets:fptr FILEID="hgw98"/>
+</mets:div>
+<mets:div ID="fab2c" LABEL="image 78" ORDER="76" TYPE="Static">
+<mets:fptr FILEID="jzjq4"/>
+</mets:div>
+<mets:div ID="uwhoa" LABEL="image 79" ORDER="77" TYPE="Static">
+<mets:fptr FILEID="ays1e"/>
+</mets:div>
+<mets:div ID="je4z1" LABEL="image 80" ORDER="78" TYPE="Static">
+<mets:fptr FILEID="oflvx"/>
+</mets:div>
+<mets:div ID="qonge" LABEL="image 81" ORDER="79" TYPE="Static">
+<mets:fptr FILEID="c6cxg"/>
+</mets:div>
+<mets:div ID="uhtqa" LABEL="image 82" ORDER="80" TYPE="Static">
+<mets:fptr FILEID="lwzw0"/>
+</mets:div>
+<mets:div ID="v6bl7" LABEL="image 83" ORDER="81" TYPE="Static">
+<mets:fptr FILEID="hbuz1"/>
+</mets:div>
+<mets:div ID="r7xoq" LABEL="image 84" ORDER="82" TYPE="Static">
+<mets:fptr FILEID="aw0mz"/>
+</mets:div>
+<mets:div ID="ze01v" LABEL="image 85" ORDER="83" TYPE="Static">
+<mets:fptr FILEID="oqjao"/>
+</mets:div>
+<mets:div ID="h1a78" LABEL="image 86" ORDER="84" TYPE="Static">
+<mets:fptr FILEID="s8b2e"/>
+</mets:div>
+<mets:div ID="hego7" LABEL="image 87" ORDER="85" TYPE="Static">
+<mets:fptr FILEID="f229i"/>
+</mets:div>
+<mets:div ID="i784b" LABEL="image 88" ORDER="86" TYPE="Static">
+<mets:fptr FILEID="pqh2y"/>
+</mets:div>
+<mets:div ID="or25w" LABEL="image 89" ORDER="87" TYPE="Static">
+<mets:fptr FILEID="u8yq0"/>
+</mets:div>
+<mets:div ID="imdsf" LABEL="image 90" ORDER="88" TYPE="Static">
+<mets:fptr FILEID="cfjxe"/>
+</mets:div>
+<mets:div ID="fj9g8" LABEL="image 91" ORDER="89" TYPE="Static">
+<mets:fptr FILEID="qgwgu"/>
+</mets:div>
+<mets:div ID="atvwj" LABEL="image 92" ORDER="90" TYPE="Static">
+<mets:fptr FILEID="yneio"/>
+</mets:div>
+<mets:div ID="uficr" LABEL="image 93" ORDER="91" TYPE="Static">
+<mets:fptr FILEID="i7gam"/>
+</mets:div>
+<mets:div ID="pcoys" LABEL="image 94" ORDER="92" TYPE="Static">
+<mets:fptr FILEID="bk0dm"/>
+</mets:div>
+<mets:div ID="nmi3b" LABEL="image 95" ORDER="93" TYPE="Static">
+<mets:fptr FILEID="bkfso"/>
+</mets:div>
+<mets:div ID="ddkhs" LABEL="image 96" ORDER="94" TYPE="Static">
+<mets:fptr FILEID="zb9go"/>
+</mets:div>
+<mets:div ID="h979a" LABEL="image 97" ORDER="95" TYPE="Static">
+<mets:fptr FILEID="wlzwm"/>
+</mets:div>
+<mets:div ID="c3l1k" LABEL="image 98" ORDER="96" TYPE="Static">
+<mets:fptr FILEID="w3ccg"/>
+</mets:div>
+<mets:div ID="lu95m" LABEL="image 99" ORDER="97" TYPE="Static">
+<mets:fptr FILEID="n6kt4"/>
+</mets:div>
+<mets:div ID="sofon" LABEL="image 100" ORDER="98" TYPE="Static">
+<mets:fptr FILEID="dsokl"/>
+</mets:div>
+<mets:div ID="hkqzg" LABEL="image 101" ORDER="99" TYPE="Static">
+<mets:fptr FILEID="wgzsm"/>
+</mets:div>
+<mets:div ID="xhrdb" LABEL="image 102" ORDER="100" TYPE="Static">
+<mets:fptr FILEID="l7zhp"/>
+</mets:div>
+<mets:div ID="nsa3h" LABEL="image 103" ORDER="101" TYPE="Static">
+<mets:fptr FILEID="n5goz"/>
+</mets:div>
+<mets:div ID="q5yfz" LABEL="image 104" ORDER="102" TYPE="Static">
+<mets:fptr FILEID="tem01"/>
+</mets:div>
+<mets:div ID="zzd3u" LABEL="image 105" ORDER="103" TYPE="Static">
+<mets:fptr FILEID="m58ti"/>
+</mets:div>
+<mets:div ID="g3vdj" LABEL="image 106" ORDER="104" TYPE="Static">
+<mets:fptr FILEID="qmewn"/>
+</mets:div>
+<mets:div ID="nry0g" LABEL="image 107" ORDER="105" TYPE="Static">
+<mets:fptr FILEID="ladt3"/>
+</mets:div>
+<mets:div ID="b2a99" LABEL="image 108" ORDER="106" TYPE="Static">
+<mets:fptr FILEID="izjco"/>
+</mets:div>
+<mets:div ID="kstj0" LABEL="image 109" ORDER="107" TYPE="Static">
+<mets:fptr FILEID="gq0i5"/>
+</mets:div>
+<mets:div ID="moh3w" LABEL="image 110" ORDER="108" TYPE="Static">
+<mets:fptr FILEID="bmwhn"/>
+</mets:div>
+<mets:div ID="asq7x" LABEL="image 111" ORDER="109" TYPE="Static">
+<mets:fptr FILEID="pcakz"/>
+</mets:div>
+<mets:div ID="lylpy" LABEL="image 112" ORDER="110" TYPE="Static">
+<mets:fptr FILEID="g6892"/>
+</mets:div>
+<mets:div ID="e4dz3" LABEL="image 113" ORDER="111" TYPE="Static">
+<mets:fptr FILEID="i92zq"/>
+</mets:div>
+<mets:div ID="y4mpk" LABEL="image 114" ORDER="112" TYPE="Static">
+<mets:fptr FILEID="lnoon"/>
+</mets:div>
+<mets:div ID="u8mz4" LABEL="image 115" ORDER="113" TYPE="Static">
+<mets:fptr FILEID="hsmma"/>
+</mets:div>
+<mets:div ID="g4gnm" LABEL="image 116" ORDER="114" TYPE="Static">
+<mets:fptr FILEID="pjgz4"/>
+</mets:div>
+<mets:div ID="slm85" LABEL="image 117" ORDER="115" TYPE="Static">
+<mets:fptr FILEID="ftwjs"/>
+</mets:div>
+<mets:div ID="j5m5y" LABEL="image 118" ORDER="116" TYPE="Static">
+<mets:fptr FILEID="j8o3x"/>
+</mets:div>
+<mets:div ID="e14tr" LABEL="image 119" ORDER="117" TYPE="Static">
+<mets:fptr FILEID="b48bz"/>
+</mets:div>
+<mets:div ID="v2wgg" LABEL="image 120" ORDER="118" TYPE="Static">
+<mets:fptr FILEID="x4ohz"/>
+</mets:div>
+<mets:div ID="lu2k2" LABEL="image 121" ORDER="119" TYPE="Static">
+<mets:fptr FILEID="yppll"/>
+</mets:div>
+<mets:div ID="axhtc" LABEL="image 122" ORDER="120" TYPE="Static">
+<mets:fptr FILEID="alope"/>
+</mets:div>
+<mets:div ID="nwoas" LABEL="image 123" ORDER="121" TYPE="Static">
+<mets:fptr FILEID="f22r2"/>
+</mets:div>
+<mets:div ID="x73qp" LABEL="image 124" ORDER="122" TYPE="Static">
+<mets:fptr FILEID="uor1e"/>
+</mets:div>
+<mets:div ID="u6zn3" LABEL="image 125" ORDER="123" TYPE="Static">
+<mets:fptr FILEID="h8jxm"/>
+</mets:div>
+<mets:div ID="zyybq" LABEL="image 126" ORDER="124" TYPE="Static">
+<mets:fptr FILEID="friyb"/>
+</mets:div>
+<mets:div ID="mobpg" LABEL="image 127" ORDER="125" TYPE="Static">
+<mets:fptr FILEID="absax"/>
+</mets:div>
+<mets:div ID="kaxxc" LABEL="image 128" ORDER="126" TYPE="Static">
+<mets:fptr FILEID="xniio"/>
+</mets:div>
+<mets:div ID="cgfgj" LABEL="image 129" ORDER="127" TYPE="Static">
+<mets:fptr FILEID="nm6ih"/>
+</mets:div>
+<mets:div ID="vsp6u" LABEL="image 130" ORDER="128" TYPE="Static">
+<mets:fptr FILEID="p93ab"/>
+</mets:div>
+<mets:div ID="skaon" LABEL="image 131" ORDER="129" TYPE="Static">
+<mets:fptr FILEID="fm9yz"/>
+</mets:div>
+<mets:div ID="qslz0" LABEL="image 132" ORDER="130" TYPE="Static">
+<mets:fptr FILEID="cqh0n"/>
+</mets:div>
+<mets:div ID="rgj0n" LABEL="image 133" ORDER="131" TYPE="Static">
+<mets:fptr FILEID="jfan1"/>
+</mets:div>
+<mets:div ID="kaemf" LABEL="image 134" ORDER="132" TYPE="Static">
+<mets:fptr FILEID="v7lgq"/>
+</mets:div>
+<mets:div ID="ut23l" LABEL="image 135" ORDER="133" TYPE="Static">
+<mets:fptr FILEID="ro2hf"/>
+</mets:div>
+<mets:div ID="gtfoj" LABEL="image 136" ORDER="134" TYPE="Static">
+<mets:fptr FILEID="dez4h"/>
+</mets:div>
+<mets:div ID="ycidc" LABEL="image 137" ORDER="135" TYPE="Static">
+<mets:fptr FILEID="w88g9"/>
+</mets:div>
+<mets:div ID="sc984" LABEL="image 138" ORDER="136" TYPE="Static">
+<mets:fptr FILEID="n7bt3"/>
+</mets:div>
+<mets:div ID="tcf7s" LABEL="image 139" ORDER="137" TYPE="Static">
+<mets:fptr FILEID="lnphz"/>
+</mets:div>
+<mets:div ID="g2pi7" LABEL="image 140" ORDER="138" TYPE="Static">
+<mets:fptr FILEID="ey5yv"/>
+</mets:div>
+<mets:div ID="fco7t" LABEL="image 141" ORDER="139" TYPE="Static">
+<mets:fptr FILEID="ljqsl"/>
+</mets:div>
+<mets:div ID="ct3o8" LABEL="image 142" ORDER="140" TYPE="Static">
+<mets:fptr FILEID="k139m"/>
+</mets:div>
+<mets:div ID="ger8w" LABEL="image 143" ORDER="141" TYPE="Static">
+<mets:fptr FILEID="x9zut"/>
+</mets:div>
+<mets:div ID="r4nyx" LABEL="image 144" ORDER="142" TYPE="Static">
+<mets:fptr FILEID="mkzs0"/>
+</mets:div>
+<mets:div ID="bilu3" LABEL="image 145" ORDER="143" TYPE="Static">
+<mets:fptr FILEID="tc62e"/>
+</mets:div>
+<mets:div ID="evzc5" LABEL="image 146" ORDER="144" TYPE="Static">
+<mets:fptr FILEID="kwjaa"/>
+</mets:div>
+<mets:div ID="xehvt" LABEL="image 147" ORDER="145" TYPE="Static">
+<mets:fptr FILEID="vzxsf"/>
+</mets:div>
+<mets:div ID="nrl8k" LABEL="image 148" ORDER="146" TYPE="Static">
+<mets:fptr FILEID="tuppq"/>
+</mets:div>
+<mets:div ID="ou9qy" LABEL="image 149" ORDER="147" TYPE="Static">
+<mets:fptr FILEID="ijml2"/>
+</mets:div>
+<mets:div ID="jyofs" LABEL="image 150" ORDER="148" TYPE="Static">
+<mets:fptr FILEID="psbyo"/>
+</mets:div>
+<mets:div ID="zo85l" LABEL="image 151" ORDER="149" TYPE="Static">
+<mets:fptr FILEID="kwy70"/>
+</mets:div>
+<mets:div ID="pzdbs" LABEL="image 152" ORDER="150" TYPE="Static">
+<mets:fptr FILEID="deb4x"/>
+</mets:div>
+<mets:div ID="kbw1n" LABEL="image 153" ORDER="151" TYPE="Static">
+<mets:fptr FILEID="yeed1"/>
+</mets:div>
+<mets:div ID="rwf6c" LABEL="image 154" ORDER="152" TYPE="Static">
+<mets:fptr FILEID="ugzuq"/>
+</mets:div>
+<mets:div ID="w179d" LABEL="image 155" ORDER="153" TYPE="Static">
+<mets:fptr FILEID="mpf98"/>
+</mets:div>
+<mets:div ID="fioyc" LABEL="image 156" ORDER="154" TYPE="Static">
+<mets:fptr FILEID="d3phu"/>
+</mets:div>
+<mets:div ID="mr9pq" LABEL="image 157" ORDER="155" TYPE="Static">
+<mets:fptr FILEID="yy415"/>
+</mets:div>
+<mets:div ID="e3scc" LABEL="image 158" ORDER="156" TYPE="Static">
+<mets:fptr FILEID="z3bhc"/>
+</mets:div>
+<mets:div ID="ikcxe" LABEL="image 159" ORDER="157" TYPE="Static">
+<mets:fptr FILEID="x5pkc"/>
+</mets:div>
+<mets:div ID="ekw7m" LABEL="image 160" ORDER="158" TYPE="Static">
+<mets:fptr FILEID="brz9h"/>
+</mets:div>
+<mets:div ID="jiorb" LABEL="image 161" ORDER="159" TYPE="Static">
+<mets:fptr FILEID="cz2li"/>
+</mets:div>
+<mets:div ID="ac7zz" LABEL="image 162" ORDER="160" TYPE="Static">
+<mets:fptr FILEID="pp6t5"/>
+</mets:div>
+<mets:div ID="fi7th" LABEL="image 163" ORDER="161" TYPE="Static">
+<mets:fptr FILEID="ps2t6"/>
+</mets:div>
+<mets:div ID="blc3g" LABEL="image 164" ORDER="162" TYPE="Static">
+<mets:fptr FILEID="so6ka"/>
+</mets:div>
+<mets:div ID="zj2ky" LABEL="image 165" ORDER="163" TYPE="Static">
+<mets:fptr FILEID="girge"/>
+</mets:div>
+<mets:div ID="x6ot7" LABEL="image 166" ORDER="164" TYPE="Static">
+<mets:fptr FILEID="oct27"/>
+</mets:div>
+<mets:div ID="qaqyd" LABEL="image 167" ORDER="165" TYPE="Static">
+<mets:fptr FILEID="fx8xd"/>
+</mets:div>
+<mets:div ID="lado6" LABEL="image 168" ORDER="166" TYPE="Static">
+<mets:fptr FILEID="oi977"/>
+</mets:div>
+<mets:div ID="ylc68" LABEL="image 169" ORDER="167" TYPE="Static">
+<mets:fptr FILEID="qbqha"/>
+</mets:div>
+<mets:div ID="fkxg5" LABEL="image 170" ORDER="168" TYPE="Static">
+<mets:fptr FILEID="ikysu"/>
+</mets:div>
+<mets:div ID="jq07h" LABEL="image 171" ORDER="169" TYPE="Static">
+<mets:fptr FILEID="gx0h2"/>
+</mets:div>
+<mets:div ID="o8098" LABEL="image 172" ORDER="170" TYPE="Static">
+<mets:fptr FILEID="f9czr"/>
+</mets:div>
+<mets:div ID="hai32" LABEL="image 173" ORDER="171" TYPE="Static">
+<mets:fptr FILEID="d1pb3"/>
+</mets:div>
+<mets:div ID="daol8" LABEL="image 174" ORDER="172" TYPE="Static">
+<mets:fptr FILEID="bidz9"/>
+</mets:div>
+<mets:div ID="krcfp" LABEL="image 175" ORDER="173" TYPE="Static">
+<mets:fptr FILEID="wz4fg"/>
+</mets:div>
+<mets:div ID="ujamu" LABEL="image 176" ORDER="174" TYPE="Static">
+<mets:fptr FILEID="vl32k"/>
+</mets:div>
+<mets:div ID="h8cta" LABEL="image 177" ORDER="175" TYPE="Static">
+<mets:fptr FILEID="nf3yt"/>
+</mets:div>
+<mets:div ID="clz0n" LABEL="image 178" ORDER="176" TYPE="Static">
+<mets:fptr FILEID="cmo6l"/>
+</mets:div>
+<mets:div ID="goxd0" LABEL="image 179" ORDER="177" TYPE="Static">
+<mets:fptr FILEID="hssp1"/>
+</mets:div>
+<mets:div ID="rbqks" LABEL="image 180" ORDER="178" TYPE="Static">
+<mets:fptr FILEID="rzjze"/>
+</mets:div>
+<mets:div ID="f2bsb" LABEL="image 181" ORDER="179" TYPE="Static">
+<mets:fptr FILEID="u6igm"/>
+</mets:div>
+<mets:div ID="r6e92" LABEL="image 182" ORDER="180" TYPE="Static">
+<mets:fptr FILEID="cuo6u"/>
+</mets:div>
+<mets:div ID="uo064" LABEL="image 183" ORDER="181" TYPE="Static">
+<mets:fptr FILEID="ragf6"/>
+</mets:div>
+<mets:div ID="umksi" LABEL="image 184" ORDER="182" TYPE="Static">
+<mets:fptr FILEID="mibsi"/>
+</mets:div>
+<mets:div ID="lzo7j" LABEL="image 185" ORDER="183" TYPE="Static">
+<mets:fptr FILEID="pfda4"/>
+</mets:div>
+<mets:div ID="aep4p" LABEL="image 186" ORDER="184" TYPE="Static">
+<mets:fptr FILEID="uc6y9"/>
+</mets:div>
+<mets:div ID="u7jyi" LABEL="image 187" ORDER="185" TYPE="Static">
+<mets:fptr FILEID="v7kq6"/>
+</mets:div>
+<mets:div ID="vfy9a" LABEL="image 188" ORDER="186" TYPE="Static">
+<mets:fptr FILEID="ol01v"/>
+</mets:div>
+<mets:div ID="i3224" LABEL="image 189" ORDER="187" TYPE="Static">
+<mets:fptr FILEID="ucuj2"/>
+</mets:div>
+<mets:div ID="ygs6u" LABEL="image 190" ORDER="188" TYPE="Static">
+<mets:fptr FILEID="rse38"/>
+</mets:div>
+<mets:div ID="bg26x" LABEL="image 191" ORDER="189" TYPE="Static">
+<mets:fptr FILEID="b4qs6"/>
+</mets:div>
+<mets:div ID="z0r0a" LABEL="image 192" ORDER="190" TYPE="Static">
+<mets:fptr FILEID="kli7f"/>
+</mets:div>
+<mets:div ID="qj0lh" LABEL="image 193" ORDER="191" TYPE="Static">
+<mets:fptr FILEID="iscqr"/>
+</mets:div>
+<mets:div ID="rw99x" LABEL="image 194" ORDER="192" TYPE="Static">
+<mets:fptr FILEID="dpju4"/>
+</mets:div>
+<mets:div ID="odhvc" LABEL="image 195" ORDER="193" TYPE="Static">
+<mets:fptr FILEID="d8fou"/>
+</mets:div>
+<mets:div ID="ad4rp" LABEL="image 196" ORDER="194" TYPE="Static">
+<mets:fptr FILEID="kmobn"/>
+</mets:div>
+<mets:div ID="vkvjk" LABEL="image 197" ORDER="195" TYPE="Static">
+<mets:fptr FILEID="eweae"/>
+</mets:div>
+<mets:div ID="kdukf" LABEL="image 198" ORDER="196" TYPE="Static">
+<mets:fptr FILEID="l7kmv"/>
+</mets:div>
+<mets:div ID="p4mte" LABEL="image 199" ORDER="197" TYPE="Static">
+<mets:fptr FILEID="twypr"/>
+</mets:div>
+<mets:div ID="sd0nv" LABEL="image 200" ORDER="198" TYPE="Static">
+<mets:fptr FILEID="d43ze"/>
+</mets:div>
+<mets:div ID="fcezs" LABEL="image 201" ORDER="199" TYPE="Static">
+<mets:fptr FILEID="ze2y2"/>
+</mets:div>
+<mets:div ID="b844a" LABEL="image 202" ORDER="200" TYPE="Static">
+<mets:fptr FILEID="a7vph"/>
+</mets:div>
+<mets:div ID="vcmpc" LABEL="image 203" ORDER="201" TYPE="Static">
+<mets:fptr FILEID="wq3bv"/>
+</mets:div>
+<mets:div ID="k80on" LABEL="image 204" ORDER="202" TYPE="Static">
+<mets:fptr FILEID="ivfxt"/>
+</mets:div>
+<mets:div ID="yc979" LABEL="image 205" ORDER="203" TYPE="Static">
+<mets:fptr FILEID="nzivf"/>
+</mets:div>
+<mets:div ID="arojp" LABEL="image 206" ORDER="204" TYPE="Static">
+<mets:fptr FILEID="hrywv"/>
+</mets:div>
+<mets:div ID="fy5rv" LABEL="image 207" ORDER="205" TYPE="Static">
+<mets:fptr FILEID="dcg37"/>
+</mets:div>
+<mets:div ID="xzv0y" LABEL="image 208" ORDER="206" TYPE="Static">
+<mets:fptr FILEID="opv56"/>
+</mets:div>
+<mets:div ID="p343h" LABEL="image 209" ORDER="207" TYPE="Static">
+<mets:fptr FILEID="f2e3b"/>
+</mets:div>
+<mets:div ID="sbfg5" LABEL="image 210" ORDER="208" TYPE="Static">
+<mets:fptr FILEID="ilgdr"/>
+</mets:div>
+<mets:div ID="xwkkn" LABEL="image 211" ORDER="209" TYPE="Static">
+<mets:fptr FILEID="hzrin"/>
+</mets:div>
+<mets:div ID="s1hze" LABEL="image 212" ORDER="210" TYPE="Static">
+<mets:fptr FILEID="v0h9w"/>
+</mets:div>
+<mets:div ID="htjha" LABEL="image 213" ORDER="211" TYPE="Static">
+<mets:fptr FILEID="udbcm"/>
+</mets:div>
+<mets:div ID="dpzog" LABEL="image 214" ORDER="212" TYPE="Static">
+<mets:fptr FILEID="xhtpp"/>
+</mets:div>
+<mets:div ID="z0990" LABEL="image 215" ORDER="213" TYPE="Static">
+<mets:fptr FILEID="nuhuc"/>
+</mets:div>
+<mets:div ID="uu08i" LABEL="image 216" ORDER="214" TYPE="Static">
+<mets:fptr FILEID="x6s0g"/>
+</mets:div>
+<mets:div ID="sdu4q" LABEL="image 217" ORDER="215" TYPE="Static">
+<mets:fptr FILEID="eo95l"/>
+</mets:div>
+<mets:div ID="m8i7a" LABEL="image 218" ORDER="216" TYPE="Static">
+<mets:fptr FILEID="z2fw0"/>
+</mets:div>
+<mets:div ID="ihi11" LABEL="image 219" ORDER="217" TYPE="Static">
+<mets:fptr FILEID="ci0as"/>
+</mets:div>
+<mets:div ID="iidm2" LABEL="image 220" ORDER="218" TYPE="Static">
+<mets:fptr FILEID="fr8ty"/>
+</mets:div>
+<mets:div ID="e5oki" LABEL="image 221" ORDER="219" TYPE="Static">
+<mets:fptr FILEID="pqeuy"/>
+</mets:div>
+<mets:div ID="mcksg" LABEL="image 222" ORDER="220" TYPE="Static">
+<mets:fptr FILEID="gb4yk"/>
+</mets:div>
+<mets:div ID="yx3et" LABEL="image 223" ORDER="221" TYPE="Static">
+<mets:fptr FILEID="haasu"/>
+</mets:div>
+<mets:div ID="yx8wx" LABEL="image 224" ORDER="222" TYPE="Static">
+<mets:fptr FILEID="nf4a0"/>
+</mets:div>
+<mets:div ID="sqpnj" LABEL="image 225" ORDER="223" TYPE="Static">
+<mets:fptr FILEID="qp0f6"/>
+</mets:div>
+<mets:div ID="n81kc" LABEL="image 226" ORDER="224" TYPE="Static">
+<mets:fptr FILEID="xvqq1"/>
+</mets:div>
+</mets:div>
+</mets:div>
+</mets:structMap>
+<mets:structMap TYPE="Physical">
+<mets:div DMDID="xvh3r xvh3r" ID="lkvjk" TYPE="BoundVolume">
+<mets:div ID="ryzqr" LABEL="image 1" ORDER="1" TYPE="Static">
+<mets:fptr FILEID="afoc8"/>
+</mets:div>
+<mets:div ID="mahlc" LABEL="image 2" ORDER="2" TYPE="Static">
+<mets:fptr FILEID="o3cu9"/>
+</mets:div>
+<mets:div ID="kurfx" LABEL="image 3" ORDER="3" TYPE="Static">
+<mets:fptr FILEID="mfxyv"/>
+</mets:div>
+<mets:div ID="go6ux" LABEL="image 4" ORDER="4" TYPE="Static">
+<mets:fptr FILEID="hiyq3"/>
+</mets:div>
+<mets:div ID="lbeld" LABEL="image 5" ORDER="5" TYPE="Static">
+<mets:fptr FILEID="rt7cu"/>
+</mets:div>
+<mets:div ID="pdi7c" LABEL="image 6" ORDER="6" TYPE="Static">
+<mets:fptr FILEID="wpdaz"/>
+</mets:div>
+<mets:div ID="myqcb" LABEL="image 7" ORDER="7" TYPE="Static">
+<mets:fptr FILEID="vd770"/>
+</mets:div>
+<mets:div ID="ejrnl" LABEL="image 8" ORDER="8" TYPE="Static">
+<mets:fptr FILEID="p5bz8"/>
+</mets:div>
+<mets:div ID="mtjr9" LABEL="image 9" ORDER="9" TYPE="Static">
+<mets:fptr FILEID="a2l99"/>
+</mets:div>
+<mets:div ID="omcki" LABEL="image 10" ORDER="10" TYPE="Static">
+<mets:fptr FILEID="i7d75"/>
+</mets:div>
+<mets:div ID="e9mzv" LABEL="image 11" ORDER="11" TYPE="Static">
+<mets:fptr FILEID="qidbi"/>
+</mets:div>
+<mets:div ID="tmhgz" LABEL="image 12" ORDER="12" TYPE="Static">
+<mets:fptr FILEID="hu641"/>
+</mets:div>
+<mets:div ID="j57h1" LABEL="image 13" ORDER="13" TYPE="Static">
+<mets:fptr FILEID="ud5zj"/>
+</mets:div>
+<mets:div ID="z0ft3" LABEL="image 14" ORDER="14" TYPE="Static">
+<mets:fptr FILEID="b6ths"/>
+</mets:div>
+<mets:div ID="qbwks" LABEL="image 15" ORDER="15" TYPE="Static">
+<mets:fptr FILEID="vo8he"/>
+</mets:div>
+<mets:div ID="iqs0f" LABEL="image 16" ORDER="16" TYPE="Static">
+<mets:fptr FILEID="qza75"/>
+</mets:div>
+<mets:div ID="ilptr" LABEL="image 17" ORDER="17" TYPE="Static">
+<mets:fptr FILEID="blhlc"/>
+</mets:div>
+<mets:div ID="ftqgk" LABEL="image 18" ORDER="18" TYPE="Static">
+<mets:fptr FILEID="ygym9"/>
+</mets:div>
+<mets:div ID="yovrt" LABEL="image 19" ORDER="19" TYPE="Static">
+<mets:fptr FILEID="w4uem"/>
+</mets:div>
+<mets:div ID="gj7qk" LABEL="image 20" ORDER="20" TYPE="Static">
+<mets:fptr FILEID="zrpn3"/>
+</mets:div>
+<mets:div ID="ql5k3" LABEL="image 21" ORDER="21" TYPE="Static">
+<mets:fptr FILEID="vqvnx"/>
+</mets:div>
+<mets:div ID="vv3e9" LABEL="image 22" ORDER="22" TYPE="Static">
+<mets:fptr FILEID="twyb2"/>
+</mets:div>
+<mets:div ID="fulih" LABEL="image 23" ORDER="23" TYPE="Static">
+<mets:fptr FILEID="bhg7z"/>
+</mets:div>
+<mets:div ID="x5b59" LABEL="image 24" ORDER="24" TYPE="Static">
+<mets:fptr FILEID="kq6f4"/>
+</mets:div>
+<mets:div ID="zfkvb" LABEL="image 25" ORDER="25" TYPE="Static">
+<mets:fptr FILEID="dfcw8"/>
+</mets:div>
+<mets:div ID="t64pn" LABEL="image 26" ORDER="26" TYPE="Static">
+<mets:fptr FILEID="wyggp"/>
+</mets:div>
+<mets:div ID="dskb9" LABEL="image 27" ORDER="27" TYPE="Static">
+<mets:fptr FILEID="a4goe"/>
+</mets:div>
+<mets:div ID="ry3tm" LABEL="image 28" ORDER="28" TYPE="Static">
+<mets:fptr FILEID="php7d"/>
+</mets:div>
+<mets:div ID="mpbtz" LABEL="image 29" ORDER="29" TYPE="Static">
+<mets:fptr FILEID="mob7q"/>
+</mets:div>
+<mets:div ID="eod1s" LABEL="image 30" ORDER="30" TYPE="Static">
+<mets:fptr FILEID="hesd2"/>
+</mets:div>
+<mets:div ID="vl35o" LABEL="image 31" ORDER="31" TYPE="Static">
+<mets:fptr FILEID="s0rwi"/>
+</mets:div>
+<mets:div ID="sf09g" LABEL="image 32" ORDER="32" TYPE="Static">
+<mets:fptr FILEID="sgl8m"/>
+</mets:div>
+<mets:div ID="ro5h2" LABEL="image 33" ORDER="33" TYPE="Static">
+<mets:fptr FILEID="fcijz"/>
+</mets:div>
+<mets:div ID="q91t7" LABEL="image 34" ORDER="34" TYPE="Static">
+<mets:fptr FILEID="ymggl"/>
+</mets:div>
+<mets:div ID="kwg33" LABEL="image 35" ORDER="35" TYPE="Static">
+<mets:fptr FILEID="ngzxk"/>
+</mets:div>
+<mets:div ID="jeeq9" LABEL="image 36" ORDER="36" TYPE="Static">
+<mets:fptr FILEID="rbxh3"/>
+</mets:div>
+<mets:div ID="l8i6c" LABEL="image 37" ORDER="37" TYPE="Static">
+<mets:fptr FILEID="mgpg5"/>
+</mets:div>
+<mets:div ID="i8jkn" LABEL="image 38" ORDER="38" TYPE="Static">
+<mets:fptr FILEID="l2v4a"/>
+</mets:div>
+<mets:div ID="x14eu" LABEL="image 39" ORDER="39" TYPE="Static">
+<mets:fptr FILEID="ra2jr"/>
+</mets:div>
+<mets:div ID="jp1tt" LABEL="image 40" ORDER="40" TYPE="Static">
+<mets:fptr FILEID="y4aaj"/>
+</mets:div>
+<mets:div ID="jdy8j" LABEL="image 41" ORDER="41" TYPE="Static">
+<mets:fptr FILEID="ug9dc"/>
+</mets:div>
+<mets:div ID="r3cy4" LABEL="image 42" ORDER="42" TYPE="Static">
+<mets:fptr FILEID="ex2dy"/>
+</mets:div>
+<mets:div ID="ihxn7" LABEL="image 43" ORDER="43" TYPE="Static">
+<mets:fptr FILEID="ec5az"/>
+</mets:div>
+<mets:div ID="zqyp5" LABEL="image 44" ORDER="44" TYPE="Static">
+<mets:fptr FILEID="o52xb"/>
+</mets:div>
+<mets:div ID="kirol" LABEL="image 45" ORDER="45" TYPE="Static">
+<mets:fptr FILEID="xn55y"/>
+</mets:div>
+<mets:div ID="xpau0" LABEL="image 46" ORDER="46" TYPE="Static">
+<mets:fptr FILEID="i6924"/>
+</mets:div>
+<mets:div ID="sg6gq" LABEL="image 47" ORDER="47" TYPE="Static">
+<mets:fptr FILEID="fe2la"/>
+</mets:div>
+<mets:div ID="u469t" LABEL="image 48" ORDER="48" TYPE="Static">
+<mets:fptr FILEID="dk09i"/>
+</mets:div>
+<mets:div ID="z8sxs" LABEL="image 49" ORDER="49" TYPE="Static">
+<mets:fptr FILEID="ejo95"/>
+</mets:div>
+<mets:div ID="em56w" LABEL="image 50" ORDER="50" TYPE="Static">
+<mets:fptr FILEID="v196l"/>
+</mets:div>
+<mets:div ID="zv4x6" LABEL="image 51" ORDER="51" TYPE="Static">
+<mets:fptr FILEID="l46jl"/>
+</mets:div>
+<mets:div ID="qe912" LABEL="image 52" ORDER="52" TYPE="Static">
+<mets:fptr FILEID="x00po"/>
+</mets:div>
+<mets:div ID="qwf5t" LABEL="image 53" ORDER="53" TYPE="Static">
+<mets:fptr FILEID="yg5az"/>
+</mets:div>
+<mets:div ID="o0fzj" LABEL="image 54" ORDER="54" TYPE="Static">
+<mets:fptr FILEID="pe1ka"/>
+</mets:div>
+<mets:div ID="retgg" LABEL="image 55" ORDER="55" TYPE="Static">
+<mets:fptr FILEID="if3y3"/>
+</mets:div>
+<mets:div ID="f6guv" LABEL="image 56" ORDER="56" TYPE="Static">
+<mets:fptr FILEID="b2vy6"/>
+</mets:div>
+<mets:div ID="ga676" LABEL="image 57" ORDER="57" TYPE="Static">
+<mets:fptr FILEID="fko5d"/>
+</mets:div>
+<mets:div ID="iwuud" LABEL="image 58" ORDER="58" TYPE="Static">
+<mets:fptr FILEID="l2gru"/>
+</mets:div>
+<mets:div ID="x001a" LABEL="image 59" ORDER="59" TYPE="Static">
+<mets:fptr FILEID="rpe0i"/>
+</mets:div>
+<mets:div ID="v7h5t" LABEL="image 60" ORDER="60" TYPE="Static">
+<mets:fptr FILEID="c7hio"/>
+</mets:div>
+<mets:div ID="hmuqs" LABEL="image 61" ORDER="61" TYPE="Static">
+<mets:fptr FILEID="axjgl"/>
+</mets:div>
+<mets:div ID="yz1ou" LABEL="image 62" ORDER="62" TYPE="Static">
+<mets:fptr FILEID="snpyg"/>
+</mets:div>
+<mets:div ID="ots7n" LABEL="image 63" ORDER="63" TYPE="Static">
+<mets:fptr FILEID="rb9s7"/>
+</mets:div>
+<mets:div ID="w0k12" LABEL="image 64" ORDER="64" TYPE="Static">
+<mets:fptr FILEID="n6xea"/>
+</mets:div>
+<mets:div ID="larn4" LABEL="image 65" ORDER="65" TYPE="Static">
+<mets:fptr FILEID="gcy3x"/>
+</mets:div>
+<mets:div ID="hckii" LABEL="image 66" ORDER="66" TYPE="Static">
+<mets:fptr FILEID="rqbx5"/>
+</mets:div>
+<mets:div ID="vpao5" LABEL="image 67" ORDER="67" TYPE="Static">
+<mets:fptr FILEID="b0ms9"/>
+</mets:div>
+<mets:div ID="g73d2" LABEL="image 68" ORDER="68" TYPE="Static">
+<mets:fptr FILEID="mokxy"/>
+</mets:div>
+<mets:div ID="n285i" LABEL="image 69" ORDER="69" TYPE="Static">
+<mets:fptr FILEID="xihxy"/>
+</mets:div>
+<mets:div ID="zka80" LABEL="image 70" ORDER="70" TYPE="Static">
+<mets:fptr FILEID="pc8zn"/>
+</mets:div>
+<mets:div ID="w36ov" LABEL="image 71" ORDER="71" TYPE="Static">
+<mets:fptr FILEID="l01my"/>
+</mets:div>
+<mets:div ID="bbzy9" LABEL="image 72" ORDER="72" TYPE="Static">
+<mets:fptr FILEID="a9itj"/>
+</mets:div>
+<mets:div ID="gl0h8" LABEL="image 73" ORDER="73" TYPE="Static">
+<mets:fptr FILEID="pzueq"/>
+</mets:div>
+<mets:div ID="t118z" LABEL="image 74" ORDER="74" TYPE="Static">
+<mets:fptr FILEID="grlin"/>
+</mets:div>
+<mets:div ID="mudid" LABEL="image 75" ORDER="75" TYPE="Static">
+<mets:fptr FILEID="nod0x"/>
+</mets:div>
+<mets:div ID="kqihs" LABEL="image 76" ORDER="76" TYPE="Static">
+<mets:fptr FILEID="i6qef"/>
+</mets:div>
+<mets:div ID="h5ud2" LABEL="image 77" ORDER="77" TYPE="Static">
+<mets:fptr FILEID="hgw98"/>
+</mets:div>
+<mets:div ID="drxi8" LABEL="image 78" ORDER="78" TYPE="Static">
+<mets:fptr FILEID="jzjq4"/>
+</mets:div>
+<mets:div ID="q0mdm" LABEL="image 79" ORDER="79" TYPE="Static">
+<mets:fptr FILEID="ays1e"/>
+</mets:div>
+<mets:div ID="oapqw" LABEL="image 80" ORDER="80" TYPE="Static">
+<mets:fptr FILEID="oflvx"/>
+</mets:div>
+<mets:div ID="r9jmh" LABEL="image 81" ORDER="81" TYPE="Static">
+<mets:fptr FILEID="c6cxg"/>
+</mets:div>
+<mets:div ID="copsb" LABEL="image 82" ORDER="82" TYPE="Static">
+<mets:fptr FILEID="lwzw0"/>
+</mets:div>
+<mets:div ID="ycn1q" LABEL="image 83" ORDER="83" TYPE="Static">
+<mets:fptr FILEID="hbuz1"/>
+</mets:div>
+<mets:div ID="xi30y" LABEL="image 84" ORDER="84" TYPE="Static">
+<mets:fptr FILEID="aw0mz"/>
+</mets:div>
+<mets:div ID="tjlm5" LABEL="image 85" ORDER="85" TYPE="Static">
+<mets:fptr FILEID="oqjao"/>
+</mets:div>
+<mets:div ID="ejepe" LABEL="image 86" ORDER="86" TYPE="Static">
+<mets:fptr FILEID="s8b2e"/>
+</mets:div>
+<mets:div ID="zmnfi" LABEL="image 87" ORDER="87" TYPE="Static">
+<mets:fptr FILEID="f229i"/>
+</mets:div>
+<mets:div ID="sk0dl" LABEL="image 88" ORDER="88" TYPE="Static">
+<mets:fptr FILEID="pqh2y"/>
+</mets:div>
+<mets:div ID="lcc17" LABEL="image 89" ORDER="89" TYPE="Static">
+<mets:fptr FILEID="u8yq0"/>
+</mets:div>
+<mets:div ID="qhj4n" LABEL="image 90" ORDER="90" TYPE="Static">
+<mets:fptr FILEID="cfjxe"/>
+</mets:div>
+<mets:div ID="nu2ee" LABEL="image 91" ORDER="91" TYPE="Static">
+<mets:fptr FILEID="qgwgu"/>
+</mets:div>
+<mets:div ID="rfsiv" LABEL="image 92" ORDER="92" TYPE="Static">
+<mets:fptr FILEID="yneio"/>
+</mets:div>
+<mets:div ID="rgdgu" LABEL="image 93" ORDER="93" TYPE="Static">
+<mets:fptr FILEID="i7gam"/>
+</mets:div>
+<mets:div ID="jxv7i" LABEL="image 94" ORDER="94" TYPE="Static">
+<mets:fptr FILEID="bk0dm"/>
+</mets:div>
+<mets:div ID="dvt4d" LABEL="image 95" ORDER="95" TYPE="Static">
+<mets:fptr FILEID="bkfso"/>
+</mets:div>
+<mets:div ID="ls4b6" LABEL="image 96" ORDER="96" TYPE="Static">
+<mets:fptr FILEID="zb9go"/>
+</mets:div>
+<mets:div ID="bkvom" LABEL="image 97" ORDER="97" TYPE="Static">
+<mets:fptr FILEID="wlzwm"/>
+</mets:div>
+<mets:div ID="dqqte" LABEL="image 98" ORDER="98" TYPE="Static">
+<mets:fptr FILEID="w3ccg"/>
+</mets:div>
+<mets:div ID="rvcpr" LABEL="image 99" ORDER="99" TYPE="Static">
+<mets:fptr FILEID="n6kt4"/>
+</mets:div>
+<mets:div ID="njqb7" LABEL="image 100" ORDER="100" TYPE="Static">
+<mets:fptr FILEID="dsokl"/>
+</mets:div>
+<mets:div ID="rz3ls" LABEL="image 101" ORDER="101" TYPE="Static">
+<mets:fptr FILEID="wgzsm"/>
+</mets:div>
+<mets:div ID="wzadp" LABEL="image 102" ORDER="102" TYPE="Static">
+<mets:fptr FILEID="l7zhp"/>
+</mets:div>
+<mets:div ID="avxuc" LABEL="image 103" ORDER="103" TYPE="Static">
+<mets:fptr FILEID="n5goz"/>
+</mets:div>
+<mets:div ID="irivv" LABEL="image 104" ORDER="104" TYPE="Static">
+<mets:fptr FILEID="tem01"/>
+</mets:div>
+<mets:div ID="c9zei" LABEL="image 105" ORDER="105" TYPE="Static">
+<mets:fptr FILEID="m58ti"/>
+</mets:div>
+<mets:div ID="yvqsw" LABEL="image 106" ORDER="106" TYPE="Static">
+<mets:fptr FILEID="qmewn"/>
+</mets:div>
+<mets:div ID="wjzns" LABEL="image 107" ORDER="107" TYPE="Static">
+<mets:fptr FILEID="ladt3"/>
+</mets:div>
+<mets:div ID="l6cxa" LABEL="image 108" ORDER="108" TYPE="Static">
+<mets:fptr FILEID="izjco"/>
+</mets:div>
+<mets:div ID="obv9k" LABEL="image 109" ORDER="109" TYPE="Static">
+<mets:fptr FILEID="gq0i5"/>
+</mets:div>
+<mets:div ID="iqa2p" LABEL="image 110" ORDER="110" TYPE="Static">
+<mets:fptr FILEID="bmwhn"/>
+</mets:div>
+<mets:div ID="v0s7o" LABEL="image 111" ORDER="111" TYPE="Static">
+<mets:fptr FILEID="pcakz"/>
+</mets:div>
+<mets:div ID="s0irv" LABEL="image 112" ORDER="112" TYPE="Static">
+<mets:fptr FILEID="g6892"/>
+</mets:div>
+<mets:div ID="hw4gc" LABEL="image 113" ORDER="113" TYPE="Static">
+<mets:fptr FILEID="i92zq"/>
+</mets:div>
+<mets:div ID="pkqts" LABEL="image 114" ORDER="114" TYPE="Static">
+<mets:fptr FILEID="lnoon"/>
+</mets:div>
+<mets:div ID="bvg99" LABEL="image 115" ORDER="115" TYPE="Static">
+<mets:fptr FILEID="hsmma"/>
+</mets:div>
+<mets:div ID="ai49e" LABEL="image 116" ORDER="116" TYPE="Static">
+<mets:fptr FILEID="pjgz4"/>
+</mets:div>
+<mets:div ID="gq2e2" LABEL="image 117" ORDER="117" TYPE="Static">
+<mets:fptr FILEID="ftwjs"/>
+</mets:div>
+<mets:div ID="ywt7d" LABEL="image 118" ORDER="118" TYPE="Static">
+<mets:fptr FILEID="j8o3x"/>
+</mets:div>
+<mets:div ID="h6wo3" LABEL="image 119" ORDER="119" TYPE="Static">
+<mets:fptr FILEID="b48bz"/>
+</mets:div>
+<mets:div ID="ooad1" LABEL="image 120" ORDER="120" TYPE="Static">
+<mets:fptr FILEID="x4ohz"/>
+</mets:div>
+<mets:div ID="ms5pn" LABEL="image 121" ORDER="121" TYPE="Static">
+<mets:fptr FILEID="yppll"/>
+</mets:div>
+<mets:div ID="ttyr0" LABEL="image 122" ORDER="122" TYPE="Static">
+<mets:fptr FILEID="alope"/>
+</mets:div>
+<mets:div ID="sjowt" LABEL="image 123" ORDER="123" TYPE="Static">
+<mets:fptr FILEID="f22r2"/>
+</mets:div>
+<mets:div ID="kgj6h" LABEL="image 124" ORDER="124" TYPE="Static">
+<mets:fptr FILEID="uor1e"/>
+</mets:div>
+<mets:div ID="rb5q8" LABEL="image 125" ORDER="125" TYPE="Static">
+<mets:fptr FILEID="h8jxm"/>
+</mets:div>
+<mets:div ID="qmgsg" LABEL="image 126" ORDER="126" TYPE="Static">
+<mets:fptr FILEID="friyb"/>
+</mets:div>
+<mets:div ID="xdpbk" LABEL="image 127" ORDER="127" TYPE="Static">
+<mets:fptr FILEID="absax"/>
+</mets:div>
+<mets:div ID="c1m8s" LABEL="image 128" ORDER="128" TYPE="Static">
+<mets:fptr FILEID="xniio"/>
+</mets:div>
+<mets:div ID="uxrf6" LABEL="image 129" ORDER="129" TYPE="Static">
+<mets:fptr FILEID="nm6ih"/>
+</mets:div>
+<mets:div ID="f87xm" LABEL="image 130" ORDER="130" TYPE="Static">
+<mets:fptr FILEID="p93ab"/>
+</mets:div>
+<mets:div ID="ko6ce" LABEL="image 131" ORDER="131" TYPE="Static">
+<mets:fptr FILEID="fm9yz"/>
+</mets:div>
+<mets:div ID="xha4t" LABEL="image 132" ORDER="132" TYPE="Static">
+<mets:fptr FILEID="cqh0n"/>
+</mets:div>
+<mets:div ID="pmzei" LABEL="image 133" ORDER="133" TYPE="Static">
+<mets:fptr FILEID="jfan1"/>
+</mets:div>
+<mets:div ID="ma0wh" LABEL="image 134" ORDER="134" TYPE="Static">
+<mets:fptr FILEID="v7lgq"/>
+</mets:div>
+<mets:div ID="a5h7i" LABEL="image 135" ORDER="135" TYPE="Static">
+<mets:fptr FILEID="ro2hf"/>
+</mets:div>
+<mets:div ID="tns7q" LABEL="image 136" ORDER="136" TYPE="Static">
+<mets:fptr FILEID="dez4h"/>
+</mets:div>
+<mets:div ID="hqo6o" LABEL="image 137" ORDER="137" TYPE="Static">
+<mets:fptr FILEID="w88g9"/>
+</mets:div>
+<mets:div ID="clj6q" LABEL="image 138" ORDER="138" TYPE="Static">
+<mets:fptr FILEID="n7bt3"/>
+</mets:div>
+<mets:div ID="wx1id" LABEL="image 139" ORDER="139" TYPE="Static">
+<mets:fptr FILEID="lnphz"/>
+</mets:div>
+<mets:div ID="l9l9d" LABEL="image 140" ORDER="140" TYPE="Static">
+<mets:fptr FILEID="ey5yv"/>
+</mets:div>
+<mets:div ID="coqai" LABEL="image 141" ORDER="141" TYPE="Static">
+<mets:fptr FILEID="ljqsl"/>
+</mets:div>
+<mets:div ID="l2dpi" LABEL="image 142" ORDER="142" TYPE="Static">
+<mets:fptr FILEID="k139m"/>
+</mets:div>
+<mets:div ID="destk" LABEL="image 143" ORDER="143" TYPE="Static">
+<mets:fptr FILEID="x9zut"/>
+</mets:div>
+<mets:div ID="virga" LABEL="image 144" ORDER="144" TYPE="Static">
+<mets:fptr FILEID="mkzs0"/>
+</mets:div>
+<mets:div ID="bk0er" LABEL="image 145" ORDER="145" TYPE="Static">
+<mets:fptr FILEID="tc62e"/>
+</mets:div>
+<mets:div ID="s50ag" LABEL="image 146" ORDER="146" TYPE="Static">
+<mets:fptr FILEID="kwjaa"/>
+</mets:div>
+<mets:div ID="ucckd" LABEL="image 147" ORDER="147" TYPE="Static">
+<mets:fptr FILEID="vzxsf"/>
+</mets:div>
+<mets:div ID="wb4nn" LABEL="image 148" ORDER="148" TYPE="Static">
+<mets:fptr FILEID="tuppq"/>
+</mets:div>
+<mets:div ID="gljul" LABEL="image 149" ORDER="149" TYPE="Static">
+<mets:fptr FILEID="ijml2"/>
+</mets:div>
+<mets:div ID="l3zhy" LABEL="image 150" ORDER="150" TYPE="Static">
+<mets:fptr FILEID="psbyo"/>
+</mets:div>
+<mets:div ID="ovgib" LABEL="image 151" ORDER="151" TYPE="Static">
+<mets:fptr FILEID="kwy70"/>
+</mets:div>
+<mets:div ID="z5qav" LABEL="image 152" ORDER="152" TYPE="Static">
+<mets:fptr FILEID="deb4x"/>
+</mets:div>
+<mets:div ID="aj3z4" LABEL="image 153" ORDER="153" TYPE="Static">
+<mets:fptr FILEID="yeed1"/>
+</mets:div>
+<mets:div ID="hvze1" LABEL="image 154" ORDER="154" TYPE="Static">
+<mets:fptr FILEID="ugzuq"/>
+</mets:div>
+<mets:div ID="dw0xc" LABEL="image 155" ORDER="155" TYPE="Static">
+<mets:fptr FILEID="mpf98"/>
+</mets:div>
+<mets:div ID="u6zbi" LABEL="image 156" ORDER="156" TYPE="Static">
+<mets:fptr FILEID="d3phu"/>
+</mets:div>
+<mets:div ID="pgps0" LABEL="image 157" ORDER="157" TYPE="Static">
+<mets:fptr FILEID="yy415"/>
+</mets:div>
+<mets:div ID="wqnxs" LABEL="image 158" ORDER="158" TYPE="Static">
+<mets:fptr FILEID="z3bhc"/>
+</mets:div>
+<mets:div ID="txp9u" LABEL="image 159" ORDER="159" TYPE="Static">
+<mets:fptr FILEID="x5pkc"/>
+</mets:div>
+<mets:div ID="xpkv5" LABEL="image 160" ORDER="160" TYPE="Static">
+<mets:fptr FILEID="brz9h"/>
+</mets:div>
+<mets:div ID="qhceq" LABEL="image 161" ORDER="161" TYPE="Static">
+<mets:fptr FILEID="cz2li"/>
+</mets:div>
+<mets:div ID="rhsju" LABEL="image 162" ORDER="162" TYPE="Static">
+<mets:fptr FILEID="pp6t5"/>
+</mets:div>
+<mets:div ID="gd8jy" LABEL="image 163" ORDER="163" TYPE="Static">
+<mets:fptr FILEID="ps2t6"/>
+</mets:div>
+<mets:div ID="tls3o" LABEL="image 164" ORDER="164" TYPE="Static">
+<mets:fptr FILEID="so6ka"/>
+</mets:div>
+<mets:div ID="pq5ov" LABEL="image 165" ORDER="165" TYPE="Static">
+<mets:fptr FILEID="girge"/>
+</mets:div>
+<mets:div ID="txsu8" LABEL="image 166" ORDER="166" TYPE="Static">
+<mets:fptr FILEID="oct27"/>
+</mets:div>
+<mets:div ID="a9xrx" LABEL="image 167" ORDER="167" TYPE="Static">
+<mets:fptr FILEID="fx8xd"/>
+</mets:div>
+<mets:div ID="cmmib" LABEL="image 168" ORDER="168" TYPE="Static">
+<mets:fptr FILEID="oi977"/>
+</mets:div>
+<mets:div ID="a4jqm" LABEL="image 169" ORDER="169" TYPE="Static">
+<mets:fptr FILEID="qbqha"/>
+</mets:div>
+<mets:div ID="zgtze" LABEL="image 170" ORDER="170" TYPE="Static">
+<mets:fptr FILEID="ikysu"/>
+</mets:div>
+<mets:div ID="oo53b" LABEL="image 171" ORDER="171" TYPE="Static">
+<mets:fptr FILEID="gx0h2"/>
+</mets:div>
+<mets:div ID="qkt1b" LABEL="image 172" ORDER="172" TYPE="Static">
+<mets:fptr FILEID="f9czr"/>
+</mets:div>
+<mets:div ID="mcsa1" LABEL="image 173" ORDER="173" TYPE="Static">
+<mets:fptr FILEID="d1pb3"/>
+</mets:div>
+<mets:div ID="o20ib" LABEL="image 174" ORDER="174" TYPE="Static">
+<mets:fptr FILEID="bidz9"/>
+</mets:div>
+<mets:div ID="jwl7u" LABEL="image 175" ORDER="175" TYPE="Static">
+<mets:fptr FILEID="wz4fg"/>
+</mets:div>
+<mets:div ID="sg2mx" LABEL="image 176" ORDER="176" TYPE="Static">
+<mets:fptr FILEID="vl32k"/>
+</mets:div>
+<mets:div ID="yiztw" LABEL="image 177" ORDER="177" TYPE="Static">
+<mets:fptr FILEID="nf3yt"/>
+</mets:div>
+<mets:div ID="qzoer" LABEL="image 178" ORDER="178" TYPE="Static">
+<mets:fptr FILEID="cmo6l"/>
+</mets:div>
+<mets:div ID="luyp4" LABEL="image 179" ORDER="179" TYPE="Static">
+<mets:fptr FILEID="hssp1"/>
+</mets:div>
+<mets:div ID="xchlg" LABEL="image 180" ORDER="180" TYPE="Static">
+<mets:fptr FILEID="rzjze"/>
+</mets:div>
+<mets:div ID="zgnwi" LABEL="image 181" ORDER="181" TYPE="Static">
+<mets:fptr FILEID="u6igm"/>
+</mets:div>
+<mets:div ID="k7unc" LABEL="image 182" ORDER="182" TYPE="Static">
+<mets:fptr FILEID="cuo6u"/>
+</mets:div>
+<mets:div ID="toe92" LABEL="image 183" ORDER="183" TYPE="Static">
+<mets:fptr FILEID="ragf6"/>
+</mets:div>
+<mets:div ID="i6ohp" LABEL="image 184" ORDER="184" TYPE="Static">
+<mets:fptr FILEID="mibsi"/>
+</mets:div>
+<mets:div ID="gsoqg" LABEL="image 185" ORDER="185" TYPE="Static">
+<mets:fptr FILEID="pfda4"/>
+</mets:div>
+<mets:div ID="vvumd" LABEL="image 186" ORDER="186" TYPE="Static">
+<mets:fptr FILEID="uc6y9"/>
+</mets:div>
+<mets:div ID="v2cbz" LABEL="image 187" ORDER="187" TYPE="Static">
+<mets:fptr FILEID="v7kq6"/>
+</mets:div>
+<mets:div ID="rmbrg" LABEL="image 188" ORDER="188" TYPE="Static">
+<mets:fptr FILEID="ol01v"/>
+</mets:div>
+<mets:div ID="plh3n" LABEL="image 189" ORDER="189" TYPE="Static">
+<mets:fptr FILEID="ucuj2"/>
+</mets:div>
+<mets:div ID="r8jwb" LABEL="image 190" ORDER="190" TYPE="Static">
+<mets:fptr FILEID="rse38"/>
+</mets:div>
+<mets:div ID="catx0" LABEL="image 191" ORDER="191" TYPE="Static">
+<mets:fptr FILEID="b4qs6"/>
+</mets:div>
+<mets:div ID="inwxw" LABEL="image 192" ORDER="192" TYPE="Static">
+<mets:fptr FILEID="kli7f"/>
+</mets:div>
+<mets:div ID="b6yfl" LABEL="image 193" ORDER="193" TYPE="Static">
+<mets:fptr FILEID="iscqr"/>
+</mets:div>
+<mets:div ID="deorz" LABEL="image 194" ORDER="194" TYPE="Static">
+<mets:fptr FILEID="dpju4"/>
+</mets:div>
+<mets:div ID="wpagm" LABEL="image 195" ORDER="195" TYPE="Static">
+<mets:fptr FILEID="d8fou"/>
+</mets:div>
+<mets:div ID="n1g67" LABEL="image 196" ORDER="196" TYPE="Static">
+<mets:fptr FILEID="kmobn"/>
+</mets:div>
+<mets:div ID="j5ks9" LABEL="image 197" ORDER="197" TYPE="Static">
+<mets:fptr FILEID="eweae"/>
+</mets:div>
+<mets:div ID="e1qi6" LABEL="image 198" ORDER="198" TYPE="Static">
+<mets:fptr FILEID="l7kmv"/>
+</mets:div>
+<mets:div ID="z76vp" LABEL="image 199" ORDER="199" TYPE="Static">
+<mets:fptr FILEID="twypr"/>
+</mets:div>
+<mets:div ID="fglxo" LABEL="image 200" ORDER="200" TYPE="Static">
+<mets:fptr FILEID="d43ze"/>
+</mets:div>
+<mets:div ID="m64ed" LABEL="image 201" ORDER="201" TYPE="Static">
+<mets:fptr FILEID="ze2y2"/>
+</mets:div>
+<mets:div ID="jvvrb" LABEL="image 202" ORDER="202" TYPE="Static">
+<mets:fptr FILEID="a7vph"/>
+</mets:div>
+<mets:div ID="ykybj" LABEL="image 203" ORDER="203" TYPE="Static">
+<mets:fptr FILEID="wq3bv"/>
+</mets:div>
+<mets:div ID="pzv9l" LABEL="image 204" ORDER="204" TYPE="Static">
+<mets:fptr FILEID="ivfxt"/>
+</mets:div>
+<mets:div ID="h0op1" LABEL="image 205" ORDER="205" TYPE="Static">
+<mets:fptr FILEID="nzivf"/>
+</mets:div>
+<mets:div ID="tkhvf" LABEL="image 206" ORDER="206" TYPE="Static">
+<mets:fptr FILEID="hrywv"/>
+</mets:div>
+<mets:div ID="e602m" LABEL="image 207" ORDER="207" TYPE="Static">
+<mets:fptr FILEID="dcg37"/>
+</mets:div>
+<mets:div ID="ze5xw" LABEL="image 208" ORDER="208" TYPE="Static">
+<mets:fptr FILEID="opv56"/>
+</mets:div>
+<mets:div ID="dyylq" LABEL="image 209" ORDER="209" TYPE="Static">
+<mets:fptr FILEID="f2e3b"/>
+</mets:div>
+<mets:div ID="pjhqb" LABEL="image 210" ORDER="210" TYPE="Static">
+<mets:fptr FILEID="ilgdr"/>
+</mets:div>
+<mets:div ID="nu96q" LABEL="image 211" ORDER="211" TYPE="Static">
+<mets:fptr FILEID="hzrin"/>
+</mets:div>
+<mets:div ID="lm9lo" LABEL="image 212" ORDER="212" TYPE="Static">
+<mets:fptr FILEID="v0h9w"/>
+</mets:div>
+<mets:div ID="nzqu0" LABEL="image 213" ORDER="213" TYPE="Static">
+<mets:fptr FILEID="udbcm"/>
+</mets:div>
+<mets:div ID="mu0e7" LABEL="image 214" ORDER="214" TYPE="Static">
+<mets:fptr FILEID="xhtpp"/>
+</mets:div>
+<mets:div ID="p5fb0" LABEL="image 215" ORDER="215" TYPE="Static">
+<mets:fptr FILEID="nuhuc"/>
+</mets:div>
+<mets:div ID="sh0p9" LABEL="image 216" ORDER="216" TYPE="Static">
+<mets:fptr FILEID="x6s0g"/>
+</mets:div>
+<mets:div ID="ywqn2" LABEL="image 217" ORDER="217" TYPE="Static">
+<mets:fptr FILEID="eo95l"/>
+</mets:div>
+<mets:div ID="jy7nc" LABEL="image 218" ORDER="218" TYPE="Static">
+<mets:fptr FILEID="z2fw0"/>
+</mets:div>
+<mets:div ID="ckn90" LABEL="image 219" ORDER="219" TYPE="Static">
+<mets:fptr FILEID="ci0as"/>
+</mets:div>
+<mets:div ID="hgs49" LABEL="image 220" ORDER="220" TYPE="Static">
+<mets:fptr FILEID="fr8ty"/>
+</mets:div>
+<mets:div ID="anu6w" LABEL="image 221" ORDER="221" TYPE="Static">
+<mets:fptr FILEID="pqeuy"/>
+</mets:div>
+<mets:div ID="cy3wj" LABEL="image 222" ORDER="222" TYPE="Static">
+<mets:fptr FILEID="gb4yk"/>
+</mets:div>
+<mets:div ID="mh4wj" LABEL="image 223" ORDER="223" TYPE="Static">
+<mets:fptr FILEID="haasu"/>
+</mets:div>
+<mets:div ID="qvcx9" LABEL="image 224" ORDER="224" TYPE="Static">
+<mets:fptr FILEID="nf4a0"/>
+</mets:div>
+<mets:div ID="cd1f3" LABEL="image 225" ORDER="225" TYPE="Static">
+<mets:fptr FILEID="qp0f6"/>
+</mets:div>
+<mets:div ID="zq3dx" LABEL="image 226" ORDER="226" TYPE="Static">
+<mets:fptr FILEID="xvqq1"/>
+</mets:div>
+</mets:div>
+</mets:structMap>
+</mets:mets>
