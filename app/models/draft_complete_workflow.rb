@@ -12,7 +12,7 @@ class DraftCompleteWorkflow < BaseWorkflow
     event :make_complete do
       transitions from: :draft, to: :complete
     end
-    event :draft do
+    event :make_draft do
       transitions from: :complete, to: :draft
     end
   end

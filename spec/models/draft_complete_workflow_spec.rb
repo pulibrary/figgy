@@ -14,11 +14,11 @@ describe DraftCompleteWorkflow do
 
       expect(workflow.make_complete).to be true
       expect(workflow.complete?).to be true
-      expect(workflow.may_draft?).to eq true
+      expect(workflow.may_make_draft?).to eq true
       expect(workflow.draft?).to eq false
       expect(workflow.valid_transitions).to contain_exactly "draft"
 
-      expect(workflow.draft).to eq true
+      expect(workflow.make_draft).to eq true
       expect(workflow.draft?).to eq true
       expect(workflow.complete?).to eq false
       expect(workflow.may_make_complete?).to eq true

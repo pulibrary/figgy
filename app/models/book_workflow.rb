@@ -25,7 +25,7 @@ class BookWorkflow < BaseWorkflow
     end
 
     # takedown/restore workflow
-    event :takedown do
+    event :mark_for_takedown do
       transitions from: :complete, to: :takedown
     end
     event :restore do
