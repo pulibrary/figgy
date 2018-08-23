@@ -13,13 +13,14 @@ namespace :import do
     file = ENV["FILE"]
     user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
     user = User.all.select(&:admin?).first unless user
+    import_mods = ENV["IMPORT_MODS"] && ENV["IMPORT_MODS"].capitalize == "TRUE"
 
-    abort "usage: rake import:mets FILE=/path/to/file.mets [USER=aperson]" unless file && File.file?(file)
+    abort "usage: rake import:mets FILE=/path/to/file.mets [USER=aperson] [IMPORT_MODS=TRUE]" unless file && File.file?(file)
 
     @logger = Logger.new(STDOUT)
     @logger.info "ingesting as: #{user.user_key} (override with USER=foo)"
     @logger.info "queuing job to ingest file: #{file}"
 
-    IngestMETSJob.set(queue: :low).perform_later(file, user)
+    IngestMETSJob.set(queue: :low).perform_later(file, user, import_mods)
   end
 end

@@ -61,6 +61,19 @@ RSpec.describe IngestMETSJob do
       end
     end
 
+    context "when extracting metadata from the MODS Document" do
+      let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "tsop_typed_no_files.mets") }
+
+      it "ingests the METS file and extracts MODS metadata" do
+        described_class.perform_now(mets_file, user, true)
+        allow(FileUtils).to receive(:mv).and_call_original
+
+        book = adapter.query_service.find_all_of_model(model: ScannedResource).first
+        expect(book).not_to be_nil
+        expect(book.title).to include "This side of paradise"
+      end
+    end
+
     context "When there wasn't collection yet" do
       it "creates a collection" do
         described_class.perform_now(mets_file, user)
@@ -86,6 +99,47 @@ RSpec.describe IngestMETSJob do
         expect(child_books[1].title).to eq ["second volume"]
       end
     end
+
+    context "when extracting metadata from the MODS Document for a work with volumes" do
+      let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "tsop_typed_mvw_no_files.mets") }
+
+      it "ingests the METS file with child volumes and extracts MODS metadata" do
+        described_class.perform_now(mets_file, user, true)
+        allow(FileUtils).to receive(:mv).and_call_original
+
+        books = adapter.query_service.find_all_of_model(model: ScannedResource).to_a
+        parent_book = books.sort_by(&:created_at).last
+        child_books = adapter.query_service.find_members(resource: parent_book).to_a
+
+        expect(parent_book.member_ids.length).to eq 2
+        expect(child_books.first.logical_structure[0].label).to eq ["Main Structure"]
+        expect(child_books.first.title).to eq ["first volume"]
+
+        expect(child_books.first.rights_note).not_to be_empty
+        expect(child_books.first.rights_note.first).to include "For legal and conservation reasons, access to F."
+
+        expect(child_books.last.title).to eq ["second volume"]
+        expect(child_books.last.rights_note).not_to be_empty
+        expect(child_books.last.rights_note.first).to include "For legal and conservation reasons, access to F."
+      end
+    end
+
+    context "when given a work with volumes" do
+      let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-4609321-s42.mets") }
+      it "ingests it" do
+        described_class.perform_now(mets_file, user)
+
+        books = adapter.query_service.find_all_of_model(model: ScannedResource).to_a
+        parent_book = books.find { |x| x.source_metadata_identifier.present? }
+        child_books = adapter.query_service.find_members(resource: parent_book).to_a
+
+        expect(parent_book.member_ids.length).to eq 2
+        expect(child_books[0].logical_structure[0].label).to eq ["Main Structure"]
+        expect(child_books[0].title).to eq ["first volume"]
+        expect(child_books[1].title).to eq ["second volume"]
+      end
+    end
+
     context "when given a pudl0003 MVW with no structmap" do
       let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0003-tc85_2621.mets") }
       before do

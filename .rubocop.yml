@@ -23,6 +23,7 @@ Metrics/AbcSize:
     - 'app/models/ability.rb'
     - 'app/services/file_appender.rb'
     - 'app/services/pdf_generator.rb'
+    - 'app/jobs/ingest_mets_job.rb'
 Metrics/BlockLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
@@ -65,6 +66,7 @@ Metrics/ClassLength:
     - 'app/controllers/ephemera_folders_controller.rb'
     - 'app/derivative-services/jp2_derivative_service.rb'
     - 'app/services/file_appender.rb'
+    - 'app/models/mets_document.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/models/concerns/linked_data/linked_resource_factory.rb'
@@ -90,6 +92,7 @@ Metrics/MethodLength:
     - 'app/services/pdf_generator.rb'
     - 'app/services/file_appender.rb'
     - 'app/jobs/voyager_update_job.rb'
+    - 'app/models/mets_document.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
