@@ -70,10 +70,13 @@ module GeoDiscovery
         # Returns a map set's thumbnail file set decorator.
         # @return [FileSetDecorator] thumbnail file set decorator
         def map_set_file_set
-          member_id = Array.wrap(resource_decorator.thumbnail_id).first
-          return unless member_id
-          file_set = query_service.find_by(id: member_id)
-          file_set.decorate if file_set && file_set.is_a?(FileSet)
+          @map_set_file_set ||= begin
+            member_id = Array.wrap(resource_decorator.thumbnail_id).first
+            return unless member_id
+            member = query_service.find_by(id: member_id)
+            return member.decorate if member && member.is_a?(FileSet)
+            member.decorate.geo_members.try(:first)
+          end
         rescue Valkyrie::Persistence::ObjectNotFoundError
           nil
         end
