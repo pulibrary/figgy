@@ -308,7 +308,7 @@ RSpec.describe CatalogController do
       expect(assigns(:document_list).length).to eq 0
     end
     it "does display a Simple Resource in published state" do
-      persister.save(resource: FactoryBot.build(:simple_resource, state: "published"))
+      persister.save(resource: FactoryBot.build(:simple_resource, state: "complete"))
 
       get :index, params: { q: "" }
 

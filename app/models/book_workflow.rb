@@ -20,12 +20,12 @@ class BookWorkflow < BaseWorkflow
     event :finalize_metadata do
       transitions from: :metadata_review, to: :final_review
     end
-    event :complete do
+    event :make_complete do
       transitions from: :final_review, to: :complete
     end
 
     # takedown/restore workflow
-    event :takedown do
+    event :mark_for_takedown do
       transitions from: :complete, to: :takedown
     end
     event :restore do

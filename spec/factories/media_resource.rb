@@ -23,8 +23,8 @@ FactoryBot.define do
       end
       resource
     end
-    factory :published_media_resource do
-      state "published"
+    factory :complete_media_resource do
+      state "complete"
     end
     factory :media_resource_with_audio_file do
       after(:build) do |resource, _evaluator|

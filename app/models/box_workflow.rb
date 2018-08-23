@@ -9,16 +9,16 @@ class BoxWorkflow < BaseWorkflow
     state :all_in_production
 
     # ingest workflow
-    event :ready_to_ship do
+    event :prepare_to_ship do
       transitions from: :new, to: :ready_to_ship
     end
-    event :shipped do
+    event :ship do
       transitions from: :ready_to_ship, to: :shipped
     end
-    event :received do
+    event :mark_as_received do
       transitions from: :shipped, to: :received
     end
-    event :all_in_production do
+    event :release_into_production do
       transitions from: :received, to: :all_in_production
     end
   end

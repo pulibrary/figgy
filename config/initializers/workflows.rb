@@ -3,7 +3,7 @@
 Rails.application.config.to_prepare do
   WorkflowRegistry.register(
     resource_class: ArchivalMediaCollection,
-    workflow_class: DraftPublishWorkflow
+    workflow_class: DraftCompleteWorkflow
   )
 
   WorkflowRegistry.register(
@@ -18,7 +18,7 @@ Rails.application.config.to_prepare do
 
   WorkflowRegistry.register(
     resource_class: MediaResource,
-    workflow_class: DraftPublishWorkflow
+    workflow_class: DraftCompleteWorkflow
   )
 
   WorkflowRegistry.register(
@@ -38,7 +38,7 @@ Rails.application.config.to_prepare do
 
   WorkflowRegistry.register(
     resource_class: SimpleResource,
-    workflow_class: DraftPublishWorkflow
+    workflow_class: DraftCompleteWorkflow
   )
 
   WorkflowRegistry.register(

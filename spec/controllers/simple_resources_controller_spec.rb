@@ -9,7 +9,7 @@ RSpec.describe SimpleResourcesController do
   let(:persister) { adapter.persister }
   let(:query_service) { adapter.query_service }
   let(:resource_klass) { SimpleResource }
-  let(:manifestable_factory) { :published_simple_resource }
+  let(:manifestable_factory) { :complete_simple_resource }
 
   it_behaves_like "a BaseResourceController"
 

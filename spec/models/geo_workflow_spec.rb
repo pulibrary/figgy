@@ -9,24 +9,24 @@ describe GeoWorkflow do
       # initial state: pending
       expect(workflow.pending?).to be true
       expect(workflow.may_finalize_digitization?).to be true
-      expect(workflow.may_complete?).to be false
-      expect(workflow.may_takedown?).to be false
+      expect(workflow.may_make_complete?).to be false
+      expect(workflow.may_mark_for_takedown?).to be false
       expect(workflow.may_flag?).to be false
 
       # digitization signoff moves to final review
       expect(workflow.finalize_digitization).to be true
       expect(workflow.final_review?).to be true
       expect(workflow.may_finalize_digitization?).to be false
-      expect(workflow.may_complete?).to be true
-      expect(workflow.may_takedown?).to be false
+      expect(workflow.may_make_complete?).to be true
+      expect(workflow.may_mark_for_takedown?).to be false
       expect(workflow.may_flag?).to be false
 
       # final signoff moves to complete
-      expect(workflow.complete).to be true
+      expect(workflow.make_complete).to be true
       expect(workflow.complete?).to be true
       expect(workflow.may_finalize_digitization?).to be false
-      expect(workflow.may_complete?).to be false
-      expect(workflow.may_takedown?).to be true
+      expect(workflow.may_make_complete?).to be false
+      expect(workflow.may_mark_for_takedown?).to be true
       expect(workflow.may_flag?).to be true
     end
   end
@@ -36,17 +36,17 @@ describe GeoWorkflow do
     it "goes back and forth between complete and takedown" do
       expect(workflow.complete?).to be true
       expect(workflow.may_restore?).to be false
-      expect(workflow.may_takedown?).to be true
+      expect(workflow.may_mark_for_takedown?).to be true
 
-      expect(workflow.takedown).to be true
+      expect(workflow.mark_for_takedown).to be true
       expect(workflow.takedown?).to be true
       expect(workflow.may_restore?).to be true
-      expect(workflow.may_takedown?).to be false
+      expect(workflow.may_mark_for_takedown?).to be false
 
       expect(workflow.restore).to be true
       expect(workflow.complete?).to be true
       expect(workflow.may_restore?).to be false
-      expect(workflow.may_takedown?).to be true
+      expect(workflow.may_mark_for_takedown?).to be true
     end
   end
 

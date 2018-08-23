@@ -121,7 +121,7 @@ RSpec.describe ChangeSetPersister do
       resource = FactoryBot.create(:draft_simple_resource)
       change_set = change_set_class.new(resource)
       change_set.prepopulate!
-      change_set.validate(state: "published")
+      change_set.validate(state: "complete")
       output = change_set_persister.save(change_set: change_set)
       expect(output.identifier.first).to eq "ark:/#{shoulder}#{blade}"
     end
@@ -895,12 +895,12 @@ RSpec.describe ChangeSetPersister do
         expect(members.first.state).to eq ["draft"]
 
         change_set = DynamicChangeSet.new(amc)
-        change_set.validate(state: "published")
+        change_set.validate(state: "complete")
         output = change_set_persister.save(change_set: change_set)
         expect(output.identifier.first).to eq "ark:/#{shoulder}#{blade}"
 
         members = Wayfinder.for(output).members
-        expect(members.first.state).to eq ["published"]
+        expect(members.first.state).to eq ["complete"]
         expect(members.first.identifier.first).to eq "ark:/#{shoulder}#{blade}"
       end
     end
