@@ -72,6 +72,34 @@ RSpec.describe BulkIngestService do
       end
     end
 
+    context "when using the SimpleResource Class" do
+      subject(:ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger, klass: SimpleResource) }
+
+      before do
+        # Used for checking whether or not the PULFA record exists
+        stub_request(:get, "https://findingaids.princeton.edu/collections/ingest/single.xml?scope=record")
+        stub_request(:get, "https://findingaids.princeton.edu/collections/ingest/single.xml")
+      end
+
+      it "ingests the resources as SimpleResource objects" do
+        ingester.attach_dir(
+          base_directory: single_dir,
+          file_filter: ".tif",
+          local_identifier: local_id,
+          collection: coll
+        )
+
+        updated_collection = query_service.find_by(id: coll.id)
+        decorated_collection = updated_collection.decorate
+        expect(decorated_collection.members.to_a.length).to eq 1
+        expect(decorated_collection.members.first.member_ids.length).to eq 2
+
+        resource = decorated_collection.members.to_a.first
+        expect(resource).to be_a SimpleResource
+        expect(resource.local_identifier).to include(local_id)
+      end
+    end
+
     context "when a directory has a bibid as a name" do
       let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_bibid", "4609321") }
       it "assigns the bibid to the source metada identifier" do
