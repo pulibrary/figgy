@@ -24,6 +24,7 @@ Metrics/AbcSize:
     - 'app/services/file_appender.rb'
     - 'app/services/pdf_generator.rb'
     - 'app/jobs/ingest_mets_job.rb'
+    - 'app/jobs/ingest_intermediate_file_job.rb'
 Metrics/BlockLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
@@ -74,6 +75,7 @@ Metrics/CyclomaticComplexity:
     - 'app/models/concerns/linked_data/linked_resource_factory.rb'
     - 'app/services/file_appender.rb'
     - 'app/services/pdf_generator/canvas.rb'
+    - 'app/jobs/ingest_intermediate_file_job.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
@@ -95,6 +97,7 @@ Metrics/MethodLength:
     - 'app/services/file_appender.rb'
     - 'app/jobs/voyager_update_job.rb'
     - 'app/models/mets_document.rb'
+    - 'app/jobs/ingest_intermediate_file_job.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
@@ -107,6 +110,7 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Exclude:
     - 'app/services/pdf_generator/canvas.rb'
+    - 'app/jobs/ingest_intermediate_file_job.rb'
 Rails/OutputSafety:
   Exclude:
     - 'app/decorators/**/*'
