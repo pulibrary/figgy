@@ -2,6 +2,8 @@
 class IngestMETSJob < ApplicationJob
   attr_reader :mets
 
+  class CollectionNotFoundError < StandardError; end
+
   # @param [String] mets_file Filename of a METS file to ingest
   # @param [User] user User to ingest as
   def perform(mets_file, user, import_mods = false)
@@ -62,7 +64,7 @@ class IngestMETSJob < ApplicationJob
       change_set.source_metadata_identifier = mets.bib_id unless mets.bib_id.blank?
       change_set.title = mets.label
       change_set.files = files.to_a
-      change_set.member_of_collection_ids = [find_or_create_collection(mets.collection_slug)] if mets.respond_to?(:collection_slug)
+      change_set.member_of_collection_ids = [slug_to_id(mets.collection_slug)] if mets.respond_to?(:collection_slug)
       persisted = change_set_persister.save(change_set: change_set)
       files.each_with_index do |file, index|
         mets_to_repo_map[file.id.to_s] = persisted.member_ids[index]
@@ -102,17 +104,14 @@ class IngestMETSJob < ApplicationJob
       end
     end
 
-    # Finds an existing or creates a new Collection for the imported Resource
+    # Finds a collection for the slug or raises
     # @param [String] slug
     # @return [Valkyrie::ID]
-    def find_or_create_collection(slug)
+    # @raise [IngestMETSJob::CollectionNotFoundError] if the collection is not found
+    def slug_to_id(slug)
       existing_collections = query_service.custom_queries.find_by_string_property(property: :slug, value: slug)
-      return existing_collections.first.id unless existing_collections.to_a.empty?
-
-      new_collection = Collection.new(title: slug, slug: slug)
-      new_collection_change_set = CollectionChangeSet.new(new_collection)
-      collection = change_set_persister.save(change_set: new_collection_change_set)
-      collection.id
+      raise CollectionNotFoundError, "No collection exists with slug #{slug}; please create one and allow this job to retry" if existing_collections.to_a.empty?
+      existing_collections.first.id
     end
 
     # Provide the resource class used for ingesting Resources using a METS Document

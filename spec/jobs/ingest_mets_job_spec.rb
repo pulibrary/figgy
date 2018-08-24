@@ -65,6 +65,7 @@ RSpec.describe IngestMETSJob do
       let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "tsop_typed_no_files.mets") }
 
       it "ingests the METS file and extracts MODS metadata" do
+        FactoryBot.create_for_repository(:collection, id: Valkyrie::ID.new("pudl0044"), slug: "pudl0044")
         described_class.perform_now(mets_file, user, true)
         allow(FileUtils).to receive(:mv).and_call_original
 
@@ -75,12 +76,8 @@ RSpec.describe IngestMETSJob do
     end
 
     context "When there wasn't collection yet" do
-      it "creates a collection" do
-        described_class.perform_now(mets_file, user)
-        allow(FileUtils).to receive(:mv).and_call_original
-
-        book = adapter.query_service.find_all_of_model(model: ScannedResource).first
-        expect(book.member_of_collection_ids.size).to eq 1 # create the collection as part of ingest
+      it "raises a CollectionNotFoundError" do
+        expect { described_class.perform_now(mets_file, user) }.to raise_error IngestMETSJob::CollectionNotFoundError
       end
     end
 
