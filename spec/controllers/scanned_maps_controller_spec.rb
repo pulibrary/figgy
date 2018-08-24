@@ -122,6 +122,31 @@ RSpec.describe ScannedMapsController do
         expect(Valkyrie::MetadataAdapter.find(:index_solr).query_service.find_all.to_a.length).to eq 0
       end
     end
+    context "when importing remote metadata" do
+      let(:coverage) { GeoCoverage.new(43.039, -69.856, 42.943, -71.032) }
+      let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
+      let(:params) do
+        {
+          source_metadata_identifier: "5144620",
+          coverage: coverage.to_s,
+          rights_statement: "Test Statement",
+          visibility: visibility
+        }
+      end
+
+      before do
+        stub_bibdata(bib_id: "5144620")
+      end
+
+      it "generates a resource with a valid geoblacklight document" do
+        post :create, params: { scanned_map: params }
+
+        id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/")
+        resource = find_resource(id)
+        builder = GeoDiscovery::DocumentBuilder.new(resource, GeoDiscovery::GeoblacklightDocument.new)
+        expect(builder.to_hash[:dc_title_s]).to eq "Mount Holly, N.J."
+      end
+    end
     it "renders the form if it doesn't create a map image" do
       post :create, params: { scanned_map: invalid_params }
       expect(response).to render_template "base/new"
