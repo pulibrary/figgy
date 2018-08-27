@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.feature "Ephemera Boxes", js: true do
+RSpec.feature "Ephemera Boxes" do
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:ephemera_box) do
@@ -39,7 +39,7 @@ RSpec.feature "Ephemera Boxes", js: true do
 
   context "when a user creates a new ephemera box" do
     context "with ephemera boxes already created" do
-      scenario "users see a warning if they try to use duplicate barcodes" do
+      scenario "users see a warning if they try to use duplicate barcodes", js: true do
         visit ephemera_project_add_box_path(parent_id: ephemera_project.id)
         page.fill_in "ephemera_box_barcode", with: "00000000000000"
         page.fill_in "ephemera_box_box_number", with: "1"
@@ -70,7 +70,7 @@ RSpec.feature "Ephemera Boxes", js: true do
         change_set_persister.save(change_set: change_set)
       end
 
-      scenario "users see a warning if they try to use duplicate barcodes" do
+      scenario "users see a warning if they try to use duplicate barcodes", js: true do
         visit polymorphic_path [:edit, ephemera_box]
         page.fill_in "ephemera_box_barcode", with: "11111111111110"
         page.fill_in "ephemera_box_box_number", with: "1"

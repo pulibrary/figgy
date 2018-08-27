@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.feature "Ephemera Vocabularies", js: true do
+RSpec.feature "Ephemera Vocabularies" do
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:ephemera_project) do
@@ -24,12 +24,9 @@ RSpec.feature "Ephemera Vocabularies", js: true do
       visit ContextualPath.new(child: ephemera_project).show
       click_link "Add Field"
 
-      page.find(:css, '[data-id="ephemera_field_field_name"]').click
-      page.all(:css, ".dropdown-menu.open").first.all(:css, "a:last-child").last.click
-
-      page.find(:css, '[data-id="ephemera_field_member_of_vocabulary_id"]').click
-      page.all(:css, ".dropdown-menu.open").last.all(:css, "a:last-child").last.click
-      page.find(:css, 'input[value="Save"]').click
+      page.select "EphemeraFolder.subject", from: "Name"
+      page.select ephemera_vocabulary.label.first, from: "Vocabulary"
+      page.click_button "Save"
 
       visit ContextualPath.new(child: ephemera_project).show
 
@@ -63,12 +60,11 @@ RSpec.feature "Ephemera Vocabularies", js: true do
       scenario "users can add folder metadata using controlled vocabularies" do
         visit parent_new_ephemera_box_path(parent_id: ephemera_box.id)
 
-        expect(page).to have_selector(".ephemera_folder_language button.dropdown-toggle")
-        page.find(:css, '[data-id="ephemera_folder_language"]').click
-        expect(page.all(:css, ".dropdown-menu.open").first.all(:css, "a:last-child").last).to have_content "test term"
+        expect(page).to have_select "Language", with_options: ["test term"]
       end
 
-      scenario "users can edit folder metadata with controlled vocabularies" do
+      # Leaving this one as JS true just to ensure that the dropdown JS works.
+      scenario "users can edit folder metadata with controlled vocabularies", js: true do
         folder = FactoryBot.create_for_repository(:ephemera_folder, language: ephemera_term.id)
         adapter.persister.save(resource: folder)
 
@@ -100,9 +96,7 @@ RSpec.feature "Ephemera Vocabularies", js: true do
       scenario "users can add folder metadata using controlled vocabularies" do
         visit boxless_new_ephemera_folder_path(parent_id: ephemera_project.id)
 
-        expect(page).to have_selector(".ephemera_folder_language button.dropdown-toggle")
-        page.find(:css, '[data-id="ephemera_folder_language"]').click
-        expect(page.all(:css, ".dropdown-menu.open").first.all(:css, "a:last-child").last).to have_content "test term"
+        expect(page).to have_select "Language", with_options: ["test term"]
       end
     end
   end
@@ -112,7 +106,7 @@ RSpec.feature "Ephemera Vocabularies", js: true do
 
     expect(page).to have_selector("h1", text: "New Vocabulary")
     page.fill_in "ephemera_vocabulary_label", with: "test creating a vocabulary"
-    page.find("form.new_ephemera_vocabulary").native.submit
+    page.click_button "Save"
 
     expect(page).to have_content "test creating a vocabulary"
   end
@@ -140,7 +134,7 @@ RSpec.feature "Ephemera Vocabularies", js: true do
       visit polymorphic_path [:edit, ephemera_vocabulary]
 
       page.fill_in "ephemera_vocabulary_label", with: "updated label"
-      page.find("form.edit_ephemera_vocabulary").native.submit
+      page.click_button "Save"
 
       visit polymorphic_path [:edit, ephemera_vocabulary]
 
@@ -150,9 +144,7 @@ RSpec.feature "Ephemera Vocabularies", js: true do
     scenario "users can delete controlled vocabularies" do
       visit ContextualPath.new(child: ephemera_vocabulary).show
 
-      page.accept_confirm do
-        click_link "Delete This Ephemera Vocabulary"
-      end
+      click_link "Delete This Ephemera Vocabulary"
 
       expect(page.find(:css, ".alert-info")).to have_content "Deleted EphemeraVocabulary"
     end
@@ -163,7 +155,7 @@ RSpec.feature "Ephemera Vocabularies", js: true do
 
       expect(page).to have_selector("h1", text: "New Category")
       page.fill_in "ephemera_vocabulary_label", with: "test category"
-      page.find("form.new_ephemera_vocabulary").native.submit
+      page.click_button "Save"
 
       expect(page).to have_content "test category"
       visit ContextualPath.new(child: ephemera_vocabulary).show
@@ -175,7 +167,7 @@ RSpec.feature "Ephemera Vocabularies", js: true do
       click_link "Add Term"
 
       page.fill_in "ephemera_term_label", with: "test term"
-      page.find("form.new_ephemera_term").native.submit
+      page.click_button "Save"
 
       expect(page).to have_content "test term"
       visit ContextualPath.new(child: ephemera_vocabulary).show

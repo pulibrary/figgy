@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.feature "RasterResources", js: true do
+RSpec.feature "RasterResources" do
   let(:user) { FactoryBot.create(:admin) }
 
   before do
