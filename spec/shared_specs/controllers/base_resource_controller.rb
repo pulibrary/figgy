@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.shared_examples "a BaseResourceController" do
+RSpec.shared_examples "a BaseResourceController" do |*flags|
   include ActionDispatch::Routing::PolymorphicRoutes
   include Rails.application.routes.url_helpers
 
@@ -160,6 +160,9 @@ RSpec.shared_examples "a BaseResourceController" do
   end
 
   describe "edit" do
+    before do
+      skip "no edit functionality" if flags.include?(:skip_edit)
+    end
     let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       it_behaves_like "an access controlled edit request"
