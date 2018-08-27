@@ -39,6 +39,13 @@ GIT
       nokogiri (~> 1.6)
 
 GIT
+  remote: git://github.com/pulibrary/ruby_tika_app.git
+  revision: 19085f492790aee875d407221ffd0e85609cc250
+  specs:
+    ruby_tika_app (1.6.0)
+      open4
+
+GIT
   remote: git://github.com/samvera-labs/iiif_manifest.git
   revision: 38d169ed9f12370875199713d755a8711251c317
   specs:
@@ -657,8 +664,6 @@ GEM
     ruby-progressbar (1.9.0)
     ruby-rc4 (0.1.5)
     ruby_dep (1.5.0)
-    ruby_tika_app (1.5.0)
-      open4
     rubyzip (1.2.1)
     safe_yaml (1.0.4)
     sass (3.5.6)
@@ -868,7 +873,7 @@ DEPENDENCIES
   rsolr (>= 1.0)
   rspec-graphql_matchers
   rspec-rails (~> 3.5)
-  ruby_tika_app
+  ruby_tika_app!
   sass-rails (~> 5.0)
   selenium-webdriver
   sidekiq
