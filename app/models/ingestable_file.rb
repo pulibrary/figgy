@@ -9,8 +9,18 @@ class IngestableFile < Valkyrie::Resource
   # file.
   attribute :node_attributes, Valkyrie::Types::Hash
   attribute :use
-  # Whether or not the file is being copied by the storage adapter - will create
-  # a duplicate of file_path on disk to use otherwise.
+  # On true: Makes `path` return the file_path directly of the file. Usually for when the
+  #   storage adapter is configured to copy a file instead of `mv`. It's more
+  #   efficient, but if the storage adapter is configured to use `mv` then the
+  #   file will dissapear from its old location.
+  # On false: `path` will return a copied version of this file, so if a storage
+  #   adapter is configured to use `mv` it won't move this file from its original
+  #   location.
+  # Default is false.
+  # This will usually be set to false, it's only set to true in cases where
+  #   we're importing files from disk and the import task is using the
+  #   `lae_storage` or `disk_via_copy` storage adapter, which is the case for the
+  #   various bulk ingest jobs.
   attribute :copyable, Valkyrie::Types::Bool
 
   def content_type
