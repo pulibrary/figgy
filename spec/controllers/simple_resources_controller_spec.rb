@@ -11,7 +11,7 @@ RSpec.describe SimpleResourcesController do
   let(:resource_klass) { SimpleResource }
   let(:manifestable_factory) { :complete_simple_resource }
 
-  it_behaves_like "a BaseResourceController"
+  it_behaves_like "a BaseResourceController", :skip_edit
 
   # Helper method just for the test suite
   def find_resource(id)

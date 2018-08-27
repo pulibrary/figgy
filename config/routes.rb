@@ -99,7 +99,7 @@ Rails.application.routes.draw do
 
     get "/scanned_resources/:parent_id/new", to: "scanned_resources#new", as: :parent_new_scanned_resource
 
-    resources :simple_resources do
+    resources :simple_resources, only: [:update, :create, :new, :destroy] do
       member do
         get :file_manager
         get :order_manager
