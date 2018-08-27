@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.feature "SimpleResources", js: true do
+RSpec.feature "SimpleResources" do
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:persister) { adapter.persister }
@@ -25,7 +25,6 @@ RSpec.feature "SimpleResources", js: true do
 
   scenario "creating a new resource" do
     visit new_simple_resource_path
-    page.save_screenshot("screenshot.png")
 
     expect(page).to have_field "Title"
     expect(page).to have_css '.select[for="simple_resource_rights_statement"]', text: "Rights Statement"

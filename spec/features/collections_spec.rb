@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.feature "Refresh", js: true do
+RSpec.feature "Refresh" do
   let(:user) { FactoryBot.create(:admin) }
   let(:persister) { Valkyrie::MetadataAdapter.find(:indexing_persister).persister }
   before do
@@ -9,7 +9,7 @@ RSpec.feature "Refresh", js: true do
   end
 
   context "collection with members" do
-    it "selects the sort_by field and sort members", js: true do
+    it "selects the sort_by field and sort members" do
       collection = persister.save(resource: FactoryBot.build(:collection))
       persister.save(resource: FactoryBot.build(:scanned_resource, member_of_collection_ids: [collection.id]))
 

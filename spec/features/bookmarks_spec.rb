@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe "Bookmarks", js: true do
+RSpec.describe "Bookmarks" do
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:title) { "Fear and Trembling" }

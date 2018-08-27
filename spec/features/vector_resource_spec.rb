@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.feature "VectorResources", js: true do
+RSpec.feature "VectorResources" do
   let(:user) { FactoryBot.create(:admin) }
 
   before do

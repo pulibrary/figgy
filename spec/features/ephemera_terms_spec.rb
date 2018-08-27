@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.feature "Ephemera Terms", js: true do
+RSpec.feature "Ephemera Terms" do
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:ephemera_project) do
@@ -35,12 +35,12 @@ RSpec.feature "Ephemera Terms", js: true do
       scenario "users can edit existing terms" do
         visit polymorphic_path [:edit, ephemera_term]
         page.fill_in "ephemera_term_label", with: "updated label"
-        page.find("form.edit_ephemera_term").native.submit
+        page.click_button "Save"
 
         expect(page).to have_content "updated label"
       end
 
-      scenario "users can delete existing terms" do
+      scenario "users can delete existing terms", js: true do
         visit ContextualPath.new(child: ephemera_term).show
 
         page.accept_confirm do

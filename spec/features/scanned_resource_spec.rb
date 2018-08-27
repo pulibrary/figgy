@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.feature "Scanned Resources", js: true do
+RSpec.feature "Scanned Resources" do
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:scanned_resource) do
@@ -23,7 +23,7 @@ RSpec.feature "Scanned Resources", js: true do
 
   context "when a user creates a new scanned resource" do
     context "with scanned resources already created" do
-      scenario "users see a warning if they try to use duplicate barcodes" do
+      scenario "users see a warning if they try to use duplicate barcodes", js: true do
         visit new_scanned_resource_path
         page.fill_in "scanned_resource_source_metadata_identifier", with: "4612596"
         find("#scanned_resource_portion_note").click

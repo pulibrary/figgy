@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.feature "Home Page", js: true do
+RSpec.feature "Home Page" do
   let(:user) { FactoryBot.create(:admin) }
   before do
     FactoryBot.create_for_repository(:ephemera_project)

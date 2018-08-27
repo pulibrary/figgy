@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.feature "File Manager", js: true do
+RSpec.feature "File Manager" do
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:file_set) { FactoryBot.create_for_repository(:file_set) }
@@ -82,7 +82,7 @@ RSpec.feature "File Manager", js: true do
       allow(extractor).to receive(:extract).and_return(true)
     end
 
-    scenario "users extract metadata from an fgdc metadata file" do
+    scenario "users extract metadata from an fgdc metadata file", js: true do
       visit polymorphic_path [:file_manager, resource]
       expect(page).to have_selector("form.extract_metadata button")
       click_button "Extract"
