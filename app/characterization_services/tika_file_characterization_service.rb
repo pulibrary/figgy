@@ -26,7 +26,7 @@ class TikaFileCharacterizationService
   end
 
   def json_output
-    "[#{RubyTikaApp.new(filename.to_s).to_json.gsub('}{', '},{')}]"
+    "[#{RubyTikaApp.new(filename.to_s, tika_config).to_json.gsub('}{', '},{')}]"
   end
 
   def file_characterization_attributes
@@ -59,6 +59,10 @@ class TikaFileCharacterizationService
 
   def original_file
     @file_set.original_file
+  end
+
+  def tika_config
+    Rails.root.join("config", "tika-config.xml").to_s
   end
 
   def valid?
