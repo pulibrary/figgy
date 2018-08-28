@@ -29,6 +29,9 @@ RSpec.describe IngestMETSJob do
       allow(File).to receive(:open).with("/users/escowles/downloads/tmp/00000657.tif").and_return(File.open(tiff_file))
       allow(File).to receive(:open).with("/users/escowles/downloads/tmp/00000658.tif").and_return(File.open(tiff_file))
       allow(File).to receive(:open).with("/users/escowles/downloads/tmp/00000659.tif").and_return(File.open(tiff_file))
+      # this is doing something in a characterization / derivative job
+      #   it looks like this could also be achieved by having :copyable return false
+      #   if something more general is needed
       allow_any_instance_of(IngestableFile).to receive(:path).and_return(tiff_file)
       stub_bibdata(bib_id: "4612596")
       stub_bibdata(bib_id: "4609321")
@@ -58,6 +61,8 @@ RSpec.describe IngestMETSJob do
         expect(file_sets.first.derivative_file).not_to be_blank
         expect(FileUtils).not_to have_received(:mv)
         expect(book.member_of_collection_ids).to eq [pudl0001.id]
+        expect(file_sets.map(&:title).to_a).to include ["pudl0001-4612596.mets"]
+        expect(file_sets.map(&:mime_type).to_a).to include ["application/xml; schema=mets"]
       end
     end
 
@@ -90,10 +95,14 @@ RSpec.describe IngestMETSJob do
         parent_book = books.find { |x| x.source_metadata_identifier.present? }
         child_books = adapter.query_service.find_members(resource: parent_book).to_a
 
-        expect(parent_book.member_ids.length).to eq 2
+        expect(parent_book.member_ids.length).to eq 3
         expect(child_books[0].logical_structure[0].label).to eq ["Main Structure"]
         expect(child_books[0].title).to eq ["first volume"]
         expect(child_books[1].title).to eq ["second volume"]
+        file_sets = adapter.query_service.find_members(resource: child_books[0])
+        expect(file_sets.map(&:title)).not_to include "pudl0001-4609321-s42.mets"
+        file_sets = adapter.query_service.find_members(resource: child_books[1])
+        expect(file_sets.map(&:title)).not_to include "pudl0001-4609321-s42.mets"
       end
     end
 
@@ -108,16 +117,16 @@ RSpec.describe IngestMETSJob do
         parent_book = books.sort_by(&:created_at).last
         child_books = adapter.query_service.find_members(resource: parent_book).to_a
 
-        expect(parent_book.member_ids.length).to eq 2
-        expect(child_books.first.logical_structure[0].label).to eq ["Main Structure"]
-        expect(child_books.first.title).to eq ["first volume"]
+        expect(parent_book.member_ids.length).to eq 3
+        expect(child_books[0].logical_structure[0].label).to eq ["Main Structure"]
+        expect(child_books[0].title).to eq ["first volume"]
 
-        expect(child_books.first.rights_note).not_to be_empty
-        expect(child_books.first.rights_note.first).to include "For legal and conservation reasons, access to F."
+        expect(child_books[0].rights_note).not_to be_empty
+        expect(child_books[0].rights_note.first).to include "For legal and conservation reasons, access to F."
 
-        expect(child_books.last.title).to eq ["second volume"]
-        expect(child_books.last.rights_note).not_to be_empty
-        expect(child_books.last.rights_note.first).to include "For legal and conservation reasons, access to F."
+        expect(child_books[1].title).to eq ["second volume"]
+        expect(child_books[1].rights_note).not_to be_empty
+        expect(child_books[1].rights_note.first).to include "For legal and conservation reasons, access to F."
       end
     end
 
@@ -130,7 +139,7 @@ RSpec.describe IngestMETSJob do
         parent_book = books.find { |x| x.source_metadata_identifier.present? }
         child_books = adapter.query_service.find_members(resource: parent_book).to_a
 
-        expect(parent_book.member_ids.length).to eq 2
+        expect(parent_book.member_ids.length).to eq 3
         expect(child_books[0].logical_structure[0].label).to eq ["Main Structure"]
         expect(child_books[0].title).to eq ["first volume"]
         expect(child_books[1].title).to eq ["second volume"]
@@ -153,7 +162,7 @@ RSpec.describe IngestMETSJob do
         expect(parent_book.member_ids).not_to be_blank
         children = adapter.query_service.find_members(resource: parent_book).to_a
 
-        expect(children.map(&:class)).to eq [ScannedResource, ScannedResource]
+        expect(children.map(&:class)).to eq [ScannedResource, ScannedResource, FileSet]
         expect(children[0].member_ids.length).to eq 2
         expect(children[1].member_ids.length).to eq 1
       end

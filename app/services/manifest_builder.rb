@@ -158,7 +158,15 @@ class ManifestBuilder
       # Retrieve the leaf nodes for the Manifest
       # @return [FileSet]
       def leaf_nodes
-        @leaf_nodes ||= members.select { |x| x.instance_of?(FileSet) }
+        @leaf_nodes ||= members.select { |x| x.instance_of?(FileSet) && leaf_node_mime_type?(x.mime_type) }
+      end
+
+      ##
+      # Checks a mime_type against a blacklist
+      # @return [TrueClass, FalseClass]
+      def leaf_node_mime_type?(mime_type)
+        blacklist = ["application/xml; schema=mets"]
+        (blacklist & Array.wrap(mime_type)).empty?
       end
 
       ##

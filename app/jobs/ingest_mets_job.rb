@@ -45,11 +45,12 @@ class IngestMETSJob < ApplicationJob
     # @param [METSDocument] mets
     # @param [User] user
     # @param [ChangeSetPersister] change_set_persister
-    def initialize(mets:, user:, change_set_persister:, import_mods: false)
+    def initialize(mets:, user:, change_set_persister:, import_mods: false, attach_mets_file: true)
       @mets = mets
       @user = user
       @change_set_persister = change_set_persister
       @import_mods = import_mods
+      @attach_mets_file = attach_mets_file
     end
 
     def import_mods?
@@ -64,6 +65,7 @@ class IngestMETSJob < ApplicationJob
       change_set.source_metadata_identifier = mets.bib_id unless mets.bib_id.blank?
       change_set.title = mets.label
       change_set.files = files.to_a
+      change_set.files << ingestable_mets_file if @attach_mets_file
       change_set.member_of_collection_ids = [slug_to_id(mets.collection_slug)] if mets.respond_to?(:collection_slug)
       persisted = change_set_persister.save(change_set: change_set)
       files.each_with_index do |file, index|
@@ -95,9 +97,9 @@ class IngestMETSJob < ApplicationJob
       change_set_persister.save(change_set: new_change_set)
     end
 
-    # Generate Hashes for each file linked to the described resource in the
-    #   METS Document
-    # @return [Array<Hash>]
+    # Generate IngestableFile objects for each file linked to the described
+    #   resource in the METS Document
+    # @return [Enumerator::Lazy<IngestableFile>]
     def files
       mets.files.lazy.map do |file|
         mets.decorated_file(file)
@@ -144,6 +146,18 @@ class IngestMETSJob < ApplicationJob
     def mets_to_repo_map
       @mets_to_repo_map ||= {}
     end
+
+    private
+
+      # IngestableFile for the mets file
+      def ingestable_mets_file
+        IngestableFile.new(
+          file_path: mets.source_file,
+          mime_type: "application/xml; schema=mets",
+          original_filename: File.basename(mets.source_file),
+          copyable: true
+        )
+      end
   end
 
   class HierarchicalIngester < Ingester
@@ -151,9 +165,10 @@ class IngestMETSJob < ApplicationJob
       change_set.source_metadata_identifier = mets.bib_id
       mets.volume_ids.each do |volume_id|
         volume_mets = VolumeMets.new(parent_mets: mets, volume_id: volume_id)
-        volume = Ingester.new(mets: volume_mets, user: user, change_set_persister: change_set_persister, import_mods: import_mods?).ingest
+        volume = Ingester.new(mets: volume_mets, user: user, change_set_persister: change_set_persister, import_mods: import_mods?, attach_mets_file: false).ingest
         change_set.member_ids = change_set.member_ids + [volume.id]
       end
+      change_set.files = [ingestable_mets_file] if @attach_mets_file
       change_set_persister.save(change_set: change_set)
     end
   end

@@ -372,6 +372,25 @@ RSpec.describe ManifestBuilder do
     end
   end
 
+  context "when given a scanned resource which was ingested with its mets file as an attached member" do
+    let(:file) { fixture_file_upload("mets/pudl0001-4612596.mets", "application/xml; schema=mets") }
+    before do
+      stub_bibdata(bib_id: "123456")
+      # attach the file set
+      output = change_set_persister.save(change_set: change_set)
+      # get the correct mime_type onto the file set
+      file_set_id = output.member_ids[0]
+      file_set = query_service.find_by(id: file_set_id)
+      file_set.original_file.mime_type = "application/xml; schema=mets"
+      metadata_adapter.persister.save(resource: file_set)
+    end
+
+    it "builds a IIIF document without the mets file" do
+      output = manifest_builder.build
+      expect(output["sequences"]).to be_nil
+    end
+  end
+
   context "when given an ephemera project" do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: ephemera_project.id)) }
     let(:ephemera_project) do

@@ -47,7 +47,7 @@
     "babel-polyfill": "^6.26.0",
     "lux-design-system": "^0.0.1",
     "manifesto.js": "^2.2.24",
-    "npm": "^6.0.0",
+    "npm": "^6.4.0",
     "openseadragon": "^2.3.1",
     "page-label-generator": "^1.0.4",
     "pluralize": "^7.0.0",
