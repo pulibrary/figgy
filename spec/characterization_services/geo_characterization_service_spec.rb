@@ -12,11 +12,11 @@ RSpec.describe GeoCharacterizationService do
   let(:query_service) { adapter.query_service }
   let(:file) { fixture_file_upload("files/geo_metadata/fgdc.xml", "application/xml") }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
-  let(:map) do
+  let(:resource) do
     change_set_persister.save(change_set: ScannedMapChangeSet.new(ScannedMap.new, files: [file]))
   end
-  let(:map_members) { query_service.find_members(resource: map) }
-  let(:valid_file_set) { map_members.first }
+  let(:resource_members) { query_service.find_members(resource: resource) }
+  let(:valid_file_set) { resource_members.first }
   # Shared output context for stubbing tika
   let(:tika_output) { tika_xml_output }
 
@@ -24,6 +24,22 @@ RSpec.describe GeoCharacterizationService do
     file_set = valid_file_set
     new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
     expect(new_file_set.original_file.mime_type).to eq ["application/xml; schema=fgdc"]
+  end
+
+  context "with a shapefile that contains documentation" do
+    let(:file) { fixture_file_upload("files/vector/shapefile_with_documentation.zip", "application/zip") }
+    let(:resource) do
+      change_set_persister.save(change_set: VectorResourceChangeSet.new(VectorResource.new, files: [file]))
+    end
+
+    it "sets the correct mime_type on the file_set on characterize", run_real_characterization: true do
+      file_set = valid_file_set
+      Timeout.timeout(20) do
+        new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+        expect(new_file_set.original_file.mime_type).to eq ['application/zip; ogr-format="ESRI Shapefile"']
+        expect(new_file_set.original_file.geometry).to eq ["Polygon"]
+      end
+    end
   end
 
   describe "#valid?" do

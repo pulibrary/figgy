@@ -23,6 +23,7 @@ class GeoCharacterizationService
     vector_characterization_service.characterize if vector_characterization_service.valid?
     raster_characterization_service.characterize if raster_characterization_service.valid?
     external_metadata_service.characterize if external_metadata_service.valid?
+    @file_set
   end
 
   def valid?
