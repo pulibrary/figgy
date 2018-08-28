@@ -8,9 +8,24 @@ class IdentifierService
     end
   end
 
+  def self.get_ark_result(ark:)
+    return "" unless ark.present?
+    initial_result = Faraday.head("http://arks.princeton.edu/#{ark}")
+    return "" unless initial_result.status == 301
+    final_result = Faraday.head(initial_result.headers["location"])
+    return "" unless final_result.status == 302
+    final_result.headers["location"]
+  end
+
+  class RestrictedArkError < StandardError; end
+
   private_class_method def self.update_metadata(resource)
     return if minter_user == "apitest"
-    minter.modify(Array.wrap(resource.identifier).first, metadata(resource))
+    ark = Array.wrap(resource.identifier).first
+    if get_ark_result(ark: ark).to_s.include?("findingaids")
+      raise RestrictedArkError, "Unable to update ARK #{ark}: it points to a Finding Aid URL. Change the identifier before marking this item complete."
+    end
+    minter.modify(ark, metadata(resource))
   end
 
   private_class_method def self.mint_identifier(resource)

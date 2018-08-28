@@ -2,11 +2,14 @@
 require "rails_helper"
 
 RSpec.describe IdentifierService do
-  let(:ark) { "ark:88435/x1234567" }
+  let(:ark) { "ark:/88435/x1234567" }
   let(:minter) { class_double("Ezid::Identifier") }
   let(:identifier) { instance_double("Ezid::Identifier") }
   let(:base_metadata) { { dc_publisher: "Princeton University Library", dc_title: "Title", dc_type: "Text" } }
   let(:persister) { Valkyrie.config.metadata_adapter.persister }
+  before do
+    stub_ezid(shoulder: "88435", blade: "x1234567")
+  end
 
   context "when there is an existing identifier" do
     let(:metadata) { base_metadata.merge(target: "https://catalog.princeton.edu/catalog/123456#{obj.id}#view") }
@@ -23,6 +26,17 @@ RSpec.describe IdentifierService do
       described_class.mint_or_update(resource: obj)
       expect(minter).to have_received(:modify).with(ark, metadata)
       expect(obj.identifier.first).to eq(ark)
+    end
+
+    context "and the identifier currently points at PULFA" do
+      let(:ark) { "ark:/88435/47429918s" }
+      before do
+        stub_ezid(shoulder: "88435", blade: "47429918s", location: "https://findingaids.princeton.edu/bla")
+      end
+      it "doesn't update the ark" do
+        expect { described_class.mint_or_update(resource: obj) }.to raise_error IdentifierService::RestrictedArkError
+        expect(minter).not_to have_received(:modify)
+      end
     end
   end
 
@@ -45,6 +59,7 @@ RSpec.describe IdentifierService do
 
     before do
       stub_bibdata(bib_id: "10001789")
+      stub_ezid(shoulder: "88435", blade: "jq085p05h")
       allow(described_class).to receive(:minter).and_return(minter)
       allow(described_class).to receive(:minter_user).and_return("pudiglib")
       allow(minter).to receive(:modify)
