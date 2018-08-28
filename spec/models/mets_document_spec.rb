@@ -48,7 +48,7 @@ RSpec.describe METSDocument do
     subject(:mets_document) { described_class.new mets_file }
 
     it "has an ark id" do
-      expect(mets_document.ark_id).to eq("ark:/88435/5m60qr98h")
+      expect(mets_document.ark_id).to eq("ark:/88435/5m60qr98htest")
     end
 
     it "has a bib id" do

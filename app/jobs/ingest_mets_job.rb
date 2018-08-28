@@ -63,6 +63,7 @@ class IngestMETSJob < ApplicationJob
       # Only import the MODS metadata from the METS Document if a MARC record is
       #   not provided
       change_set.source_metadata_identifier = mets.bib_id unless mets.bib_id.blank?
+      change_set.resource.identifier = mets.ark_id unless mets.ark_id.blank?
       change_set.title = mets.label
       change_set.files = files.to_a
       change_set.files << ingestable_mets_file if @attach_mets_file
@@ -192,6 +193,13 @@ class IngestMETSJob < ApplicationJob
     #   parent resource)
     # @return [nil]
     def bib_id
+      nil
+    end
+
+    # @see METSDocument#ark_id
+    # Volumes don't have ARKs.
+    # @return nil
+    def ark_id
       nil
     end
 
