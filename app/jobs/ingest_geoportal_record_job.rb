@@ -98,7 +98,7 @@ class IngestGeoportalRecordJob < ApplicationJob
 
     def complete_record(output)
       new_resource = DynamicChangeSet.new(output)
-      new_resource.state = "complete"
+      new_resource.validate(state: "complete")
       changeset_persister.save(change_set: new_resource)
     end
 

@@ -20,11 +20,22 @@ RSpec.describe ChangeSetPersister::MintIdentifier do
 
     it "mints a new ARK for published SimpleResources" do
       change_set.prepopulate!
+      change_set.validate(state: :complete)
 
       hook.run
 
       expect(change_set.model.identifier).not_to be_empty
       expect(change_set.model.identifier).to include new_ark
+    end
+    context "when none of the relevant metadata has changed" do
+      let(:simple_resource) { FactoryBot.create(:complete_simple_resource, identifier: new_ark) }
+      it "does not run the hook" do
+        change_set.prepopulate!
+
+        hook.run
+
+        expect(hook.run).to be nil
+      end
     end
     context "with an unpublished SimpleResource" do
       let(:simple_resource) { FactoryBot.create(:draft_simple_resource) }
