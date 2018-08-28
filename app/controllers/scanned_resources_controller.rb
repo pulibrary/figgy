@@ -44,9 +44,11 @@ class ScannedResourcesController < BaseResourceController
   def pdf
     change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
     authorize! :pdf, change_set.resource
-    pdf_file = change_set.resource.pdf_file || PDFGenerator.new(resource: change_set.resource, storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)).render do |f|
+    pdf_file = change_set.resource.pdf_file
+    unless pdf_file
+      pdf_file = PDFGenerator.new(resource: change_set.resource, storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)).render
       change_set_persister.buffer_into_index do |buffered_changeset_persister|
-        change_set.validate(file_metadata: [f])
+        change_set.validate(file_metadata: [pdf_file])
         buffered_changeset_persister.save(change_set: change_set)
       end
     end
