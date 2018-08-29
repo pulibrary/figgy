@@ -69,6 +69,10 @@ class VectorResourceDerivativeService
     # Attempt to insert the file_set download path into an FGDC onlink
     # element now that derivates have been successfully created.
     UpdateFgdcOnlinkJob.perform_later(parent.id.to_s)
+    update_error_message(message: nil) if original_file.error_message.present?
+  rescue StandardError => error
+    update_error_message(message: error.message)
+    raise error
   end
 
   def file_object
@@ -142,15 +146,24 @@ class VectorResourceDerivativeService
 
   private
 
-    def storage_adapter
-      @storage_adapter ||= Valkyrie::StorageAdapter.find(:geo_derivatives)
-    end
-
     # This removes all Valkyrie::StorageAdapter::File member Objects from a given Resource (usually a FileSet)
     # Resources consistently store the membership using #file_metadata
     # A ChangeSet for the purged members is created and persisted
     def cleanup_derivative_metadata(derivatives:)
       resource.file_metadata = resource.file_metadata.reject { |file| derivatives.include?(file.id) }
+      updated_change_set = DynamicChangeSet.new(resource)
+      change_set_persister.buffer_into_index do |buffered_persister|
+        buffered_persister.save(change_set: updated_change_set)
+      end
+    end
+
+    def storage_adapter
+      @storage_adapter ||= Valkyrie::StorageAdapter.find(:geo_derivatives)
+    end
+
+    # Updates error message property on the original file.
+    def update_error_message(message:)
+      original_file.error_message = [message]
       updated_change_set = DynamicChangeSet.new(resource)
       change_set_persister.buffer_into_index do |buffered_persister|
         buffered_persister.save(change_set: updated_change_set)

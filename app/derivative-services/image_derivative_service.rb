@@ -53,6 +53,10 @@ class ImageDerivativeService
     run_derivatives
     change_set.files = [build_file]
     change_set_persister.save(change_set: change_set)
+    update_error_message(message: nil) if original_file.error_message.present?
+  rescue StandardError => error
+    update_error_message(message: error.message)
+    raise error
   end
 
   def run_derivatives
@@ -116,15 +120,24 @@ class ImageDerivativeService
 
   private
 
-    def storage_adapter
-      @storage_adapter ||= Valkyrie::StorageAdapter.find(:derivatives)
-    end
-
     # This removes all Valkyrie::StorageAdapter::File member Objects from a given Resource (usually a FileSet)
     # Resources consistently store the membership using #file_metadata
     # A ChangeSet for the purged members is created and persisted
     def cleanup_derivative_metadata(derivatives:)
       resource.file_metadata = resource.file_metadata.reject { |file| derivatives.include?(file.id) }
+      updated_change_set = DynamicChangeSet.new(resource)
+      change_set_persister.buffer_into_index do |buffered_persister|
+        buffered_persister.save(change_set: updated_change_set)
+      end
+    end
+
+    def storage_adapter
+      @storage_adapter ||= Valkyrie::StorageAdapter.find(:derivatives)
+    end
+
+    # Updates error message property on the original file.
+    def update_error_message(message:)
+      original_file.error_message = [message]
       updated_change_set = DynamicChangeSet.new(resource)
       change_set_persister.buffer_into_index do |buffered_persister|
         buffered_persister.save(change_set: updated_change_set)

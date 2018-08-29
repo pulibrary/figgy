@@ -47,9 +47,9 @@ export const manifest = {
               "motivation": "sc:painting",
               "resource": {
                 "@type": "dctypes:Image",
-                "@id": {
-                  "id": "e7208ea3-21f3-43d4-9b14-489e15e9791e"
-                },
+                "@id":
+                  "e7208ea3-21f3-43d4-9b14-489e15e9791e"
+                ,
                 "height": "1192",
                 "width": "1200",
                 "format": "image/jpeg"
@@ -70,9 +70,9 @@ export const manifest = {
               "motivation": "sc:painting",
               "resource": {
                 "@type": "dctypes:Image",
-                "@id": {
-                  "id": "50b5e49b-ade7-4278-8265-4f72081f26a5"
-                },
+                "@id":
+                  "50b5e49b-ade7-4278-8265-4f72081f26a5"
+                ,
                 "height": "287",
                 "width": "200",
                 "format": "image/jpeg",
@@ -98,9 +98,9 @@ export const manifest = {
               "motivation": "sc:painting",
               "resource": {
                 "@type": "dctypes:Image",
-                "@id": {
-                  "id": "dae7619f-16a7-4306-93e4-70b4b192955c"
-                },
+                "@id":
+                  "dae7619f-16a7-4306-93e4-70b4b192955c"
+                ,
                 "height": "2596",
                 "width": "3884",
                 "format": "image/jpeg",
@@ -126,9 +126,9 @@ export const manifest = {
               "motivation": "sc:painting",
               "resource": {
                 "@type": "dctypes:Image",
-                "@id": {
-                  "id": "b484cd88-fdf2-477c-afe9-d46a49d8822b"
-                },
+                "@id":
+                  "b484cd88-fdf2-477c-afe9-d46a49d8822b"
+                ,
                 "height": "2596",
                 "width": "3884",
                 "format": "image/jpeg",
@@ -154,9 +154,9 @@ export const manifest = {
               "motivation": "sc:painting",
               "resource": {
                 "@type": "dctypes:Image",
-                "@id": {
-                  "id": "80b02791-4bd9-4566-9a9f-4b3062ba2e0d"
-                },
+                "@id":
+                  "80b02791-4bd9-4566-9a9f-4b3062ba2e0d"
+                ,
                 "height": "2596",
                 "width": "3884",
                 "format": "image/jpeg",
@@ -182,9 +182,9 @@ export const manifest = {
               "motivation": "sc:painting",
               "resource": {
                 "@type": "dctypes:Image",
-                "@id": {
-                  "id": "0a3e268f-5872-444e-bdbd-b1a7b01dcb57"
-                },
+                "@id":
+                  "0a3e268f-5872-444e-bdbd-b1a7b01dcb57"
+                ,
                 "height": "1200",
                 "width": "1202",
                 "format": "image/jpeg"
@@ -205,9 +205,9 @@ export const manifest = {
               "motivation": "sc:painting",
               "resource": {
                 "@type": "dctypes:Image",
-                "@id": {
-                  "id": "foo"
-                },
+                "@id":
+                  "foo"
+                ,
                 "height": "1200",
                 "width": "1202",
                 "format": "image/jpeg"

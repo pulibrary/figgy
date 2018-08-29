@@ -24,6 +24,7 @@ class FileSet < Resource
            :geometry,
            :run_fixity,
            :processing_note,
+           :error_message,
            to: :original_file,
            allow_nil: true
 

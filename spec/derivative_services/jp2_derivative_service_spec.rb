@@ -101,4 +101,14 @@ RSpec.describe Jp2DerivativeService do
       expect(derivative_file.read).not_to be_blank
     end
   end
+
+  context "malformed tiff source", run_real_derivatives: true do
+    let(:file) { fixture_file_upload("files/bad.tif", "image/tiff") }
+
+    it "stores an error message on the fileset" do
+      expect { derivative_service.new(valid_change_set).create_derivatives }.to raise_error(MiniMagick::Invalid)
+      file_set = query_service.find_all_of_model(model: FileSet).first
+      expect(file_set.original_file.error_message).to include(/bad magic number/)
+    end
+  end
 end

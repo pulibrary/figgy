@@ -17,7 +17,7 @@ RSpec.describe Reindexer do
         output = postgres_adapter.persister.save(resource: resource)
         expect { solr_adapter.query_service.find_by(id: output.id) }.to raise_error Valkyrie::Persistence::ObjectNotFoundError
 
-        described_class.reindex_all(logger: logger)
+        described_class.reindex_all(logger: logger, wipe: true)
 
         expect { solr_adapter.query_service.find_by(id: output.id) }.not_to raise_error
       end
@@ -27,9 +27,17 @@ RSpec.describe Reindexer do
         resource = FactoryBot.build(:scanned_resource)
         output = solr_adapter.persister.save(resource: resource)
 
-        described_class.reindex_all(logger: logger)
+        described_class.reindex_all(logger: logger, wipe: true)
 
         expect { solr_adapter.query_service.find_by(id: output.id) }.to raise_error Valkyrie::Persistence::ObjectNotFoundError
+      end
+      it "doesn't get rid of them if you tell it not to wipe" do
+        resource = FactoryBot.build(:scanned_resource)
+        output = solr_adapter.persister.save(resource: resource)
+
+        described_class.reindex_all(logger: logger, wipe: false)
+
+        expect { solr_adapter.query_service.find_by(id: output.id) }.not_to raise_error Valkyrie::Persistence::ObjectNotFoundError
       end
     end
   end
