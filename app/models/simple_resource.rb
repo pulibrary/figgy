@@ -10,6 +10,7 @@ class SimpleResource < Resource
   attribute :pending_uploads, Valkyrie::Types::Array.of(PendingUpload)
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
   attribute :file_metadata, Valkyrie::Types::Set.of(FileMetadata.optional)
+  attribute :logical_structure, Valkyrie::Types::Array.of(Structure.optional).optional
 
   # Does this generate IIIF Manifests
   # @return [TrueClass, FalseClass]
