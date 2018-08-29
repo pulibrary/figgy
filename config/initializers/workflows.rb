@@ -3,7 +3,11 @@
 Rails.application.config.to_prepare do
   WorkflowRegistry.register(
     resource_class: ArchivalMediaCollection,
+<<<<<<< HEAD
     workflow_class: DraftCompleteWorkflow
+=======
+    workflow_class: DraftPublishWorkflow
+>>>>>>> d8616123... adds lux order manager to figgy
   )
 
   WorkflowRegistry.register(
@@ -18,7 +22,11 @@ Rails.application.config.to_prepare do
 
   WorkflowRegistry.register(
     resource_class: MediaResource,
+<<<<<<< HEAD
     workflow_class: DraftCompleteWorkflow
+=======
+    workflow_class: DraftPublishWorkflow
+>>>>>>> d8616123... adds lux order manager to figgy
   )
 
   WorkflowRegistry.register(
@@ -38,7 +46,11 @@ Rails.application.config.to_prepare do
 
   WorkflowRegistry.register(
     resource_class: SimpleResource,
+<<<<<<< HEAD
     workflow_class: DraftCompleteWorkflow
+=======
+    workflow_class: DraftPublishWorkflow
+>>>>>>> d8616123... adds lux order manager to figgy
   )
 
   WorkflowRegistry.register(

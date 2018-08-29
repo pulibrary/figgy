@@ -80,10 +80,14 @@ module GeoDiscovery
         # Use the standard resource decorator to retreive title.
         # @return [String] title
         def title
+<<<<<<< HEAD
           # This convoluted set ot method calls is required because, in this case, we need the
           # actual model decorator rather than the geoblacklight metadata decorator.
           decorated_title = resource_decorator.model.decorate.title.try(:first)
           decorated_title.to_s if decorated_title
+=======
+          resource_decorator.model.decorate.title.try(:first)
+>>>>>>> d8616123... adds lux order manager to figgy
         end
 
         def topic_categories

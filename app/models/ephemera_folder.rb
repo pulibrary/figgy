@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 class EphemeraFolder < Resource
   include Valkyrie::Resource::AccessControls
+<<<<<<< HEAD
+=======
+  attribute :id, Valkyrie::Types::ID.optional
+>>>>>>> d8616123... adds lux order manager to figgy
   attribute :member_ids, Valkyrie::Types::Array
   attribute :barcode, Valkyrie::Types::Set
   attribute :folder_number, Valkyrie::Types::Set
@@ -16,8 +20,13 @@ class EphemeraFolder < Resource
   attribute :rights_statement
   attribute :rights_note, Valkyrie::Types::Set
   attribute :member_of_collection_ids
+<<<<<<< HEAD
   attribute :logical_structure, Valkyrie::Types::Array.of(Structure.optional).optional
   attribute :pending_uploads, Valkyrie::Types::Array.of(PendingUpload)
+=======
+  attribute :logical_structure, Valkyrie::Types::Array.member(Structure.optional).optional
+  attribute :pending_uploads, Valkyrie::Types::Array.member(PendingUpload)
+>>>>>>> d8616123... adds lux order manager to figgy
   attribute :series, Valkyrie::Types::Set
   attribute :creator, Valkyrie::Types::Set
   attribute :contributor, Valkyrie::Types::Set
@@ -45,7 +54,11 @@ class EphemeraFolder < Resource
   attribute :identifier
 
   attribute :state
+<<<<<<< HEAD
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
+=======
+  attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
+>>>>>>> d8616123... adds lux order manager to figgy
 
   def self.can_have_manifests?
     true

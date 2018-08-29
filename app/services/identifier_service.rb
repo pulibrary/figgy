@@ -8,6 +8,7 @@ class IdentifierService
     end
   end
 
+<<<<<<< HEAD
   def self.get_ark_result(ark:)
     return "" unless ark.present?
     initial_result = Faraday.head("http://arks.princeton.edu/#{ark}")
@@ -26,6 +27,11 @@ class IdentifierService
       raise RestrictedArkError, "Unable to update ARK #{ark}: it points to a Finding Aid URL. Change the identifier before marking this item complete."
     end
     minter.modify(ark, metadata(resource))
+=======
+  private_class_method def self.update_metadata(resource)
+    return if minter_user == "apitest"
+    minter.modify(Array.wrap(resource.identifier).first, metadata(resource))
+>>>>>>> d8616123... adds lux order manager to figgy
   end
 
   private_class_method def self.mint_identifier(resource)

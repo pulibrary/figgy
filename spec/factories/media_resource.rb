@@ -23,8 +23,13 @@ FactoryBot.define do
       end
       resource
     end
+<<<<<<< HEAD
     factory :complete_media_resource do
       state "complete"
+=======
+    factory :published_media_resource do
+      state "published"
+>>>>>>> d8616123... adds lux order manager to figgy
     end
     factory :media_resource_with_audio_file do
       after(:build) do |resource, _evaluator|

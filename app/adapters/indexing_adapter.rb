@@ -19,7 +19,11 @@ class IndexingAdapter
     IndexingAdapter::Persister.new(metadata_adapter: self)
   end
 
+<<<<<<< HEAD
   delegate :query_service, :id, to: :metadata_adapter
+=======
+  delegate :query_service, to: :metadata_adapter
+>>>>>>> d8616123... adds lux order manager to figgy
 
   class Persister
     attr_reader :metadata_adapter

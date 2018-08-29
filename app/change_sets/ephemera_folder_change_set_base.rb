@@ -28,8 +28,13 @@ class EphemeraFolderChangeSetBase < ChangeSet
   property :rights_statement, multiple: false, required: true, default: "http://rightsstatements.org/vocab/CNE/1.0/", type: ::Types::URI
   property :rights_note, multiple: false, required: false
   property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID
+<<<<<<< HEAD
   property :member_of_collection_ids, multiple: true, required: false, default: [], type: Types::Strict::Array.of(Valkyrie::Types::ID.optional)
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID.optional)
+=======
+  property :member_of_collection_ids, multiple: true, required: false, default: [], type: Types::Strict::Array.member(Valkyrie::Types::ID.optional)
+  property :member_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID.optional)
+>>>>>>> d8616123... adds lux order manager to figgy
   property :read_groups, multiple: true, required: false
   property :depositor, multiple: false, require: false
   property :ocr_language, multiple: true, require: false, default: []

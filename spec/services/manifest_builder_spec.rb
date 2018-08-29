@@ -85,7 +85,10 @@ RSpec.describe ManifestBuilder do
       file_set_id = output.member_ids.first
       file_set = query_service.find_by(id: file_set_id)
       file_set.local_identifier = "p79409x97p"
+<<<<<<< HEAD
       file_set.viewing_hint = ["non-paged"]
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
       metadata_adapter.persister.save(resource: file_set)
       change_set = ScannedResourceChangeSet.new(output)
       change_set.validate(logical_structure: logical_structure(file_set_id), start_canvas: start_canvas || file_set_id)
@@ -106,7 +109,10 @@ RSpec.describe ManifestBuilder do
       expect(output["sequences"][0]["viewingHint"]).to eq "individuals"
       canvas_id = output["sequences"][0]["canvases"][0]["@id"]
       expect(output["structures"].length).to eq 3
+<<<<<<< HEAD
       expect(output["sequences"][0]["canvases"][0]["viewingHint"]).to eq "non-paged"
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
       structure_canvas_id = output["structures"][2]["canvases"][0]
       expect(canvas_id).to eq structure_canvas_id
       expect(output["sequences"][0]["canvases"][0]["width"]).to be_a Integer
@@ -372,6 +378,7 @@ RSpec.describe ManifestBuilder do
     end
   end
 
+<<<<<<< HEAD
   context "when given a scanned resource which was ingested with its mets file as an attached member" do
     let(:file) { fixture_file_upload("mets/pudl0001-4612596.mets", "application/xml; schema=mets") }
     before do
@@ -391,6 +398,8 @@ RSpec.describe ManifestBuilder do
     end
   end
 
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   context "when given an ephemera project" do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: ephemera_project.id)) }
     let(:ephemera_project) do

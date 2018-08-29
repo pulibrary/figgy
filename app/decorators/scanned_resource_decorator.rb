@@ -126,8 +126,11 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
     return if output.blank?
     output.map { |value| Date.parse(value.to_s).strftime("%B %-d, %Y") }
   end
+<<<<<<< HEAD
 
   def pdf_file
     file_metadata.find { |x| x.mime_type == ["application/pdf"] }
   end
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
 end

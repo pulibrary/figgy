@@ -7,7 +7,11 @@ export default class SaveAndIngestHandler {
     this.field_element.change((e) => {
       this.reset_button()
       this.button_element.val('Searching...')
+<<<<<<< HEAD
       $.getJSON(`/concern/scanned_resources/save_and_ingest/${this.field_element.val()}`)
+=======
+      $.getJSON(`/concern/scanned_resources/save_and_ingest/${this.encode_periods(this.field_element.val())}.json`)
+>>>>>>> d8616123... adds lux order manager to figgy
         .done((data) => {
           if(data.exists == true) {
             this.reset_button()
@@ -29,6 +33,13 @@ export default class SaveAndIngestHandler {
     this.info_element.text('')
   }
 
+<<<<<<< HEAD
+=======
+  encode_periods(id) {
+    return id.replace(/\./g, '%2E')
+  }
+
+>>>>>>> d8616123... adds lux order manager to figgy
   get button_selector() {
     return "*[data-save-and-ingest]"
   }

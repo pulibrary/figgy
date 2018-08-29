@@ -122,6 +122,7 @@ RSpec.describe ScannedMapsController do
         expect(Valkyrie::MetadataAdapter.find(:index_solr).query_service.find_all.to_a.length).to eq 0
       end
     end
+<<<<<<< HEAD
     context "when importing remote metadata" do
       let(:coverage) { GeoCoverage.new(43.039, -69.856, 42.943, -71.032) }
       let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
@@ -147,6 +148,8 @@ RSpec.describe ScannedMapsController do
         expect(builder.to_hash[:dc_title_s]).to eq "Mount Holly, N.J."
       end
     end
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
     it "renders the form if it doesn't create a map image" do
       post :create, params: { scanned_map: invalid_params }
       expect(response).to render_template "base/new"

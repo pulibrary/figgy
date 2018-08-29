@@ -55,6 +55,7 @@ RSpec.describe Valkyrie::ResourceDecorator::MetadataObject do
       end
     end
 
+<<<<<<< HEAD
     context "with a conventional US-formatted date" do
       subject(:metadata_object) { described_class.new("created", ["01/01/1970"]) }
 
@@ -63,6 +64,8 @@ RSpec.describe Valkyrie::ResourceDecorator::MetadataObject do
       end
     end
 
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
     context "with an invalid date" do
       subject(:metadata_object) { described_class.new("created", ["1970-13-05T00:00:00Z"]) }
 

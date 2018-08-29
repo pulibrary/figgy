@@ -2,7 +2,11 @@
 require "rails_helper"
 include ActionDispatch::TestProcess
 
+<<<<<<< HEAD
 RSpec.feature "Ephemera Folders" do
+=======
+RSpec.feature "Ephemera Folders", js: true do
+>>>>>>> d8616123... adds lux order manager to figgy
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:ephemera_project) do
@@ -37,7 +41,12 @@ RSpec.feature "Ephemera Folders" do
       page.fill_in "ephemera_folder_height", with: "test height"
       page.fill_in "ephemera_folder_page_count", with: "test page count"
       page.fill_in "ephemera_folder_subject", with: "test subject"
+<<<<<<< HEAD
       page.select "Copyright Not Evaluated", from: "Rights Statement"
+=======
+      page.find(:css, '[data-id="ephemera_folder_rights_statement"]').click
+      page.all(:css, ".dropdown-menu.open").first.all(:css, "a:last-child").last.click
+>>>>>>> d8616123... adds lux order manager to figgy
 
       page.click_on "Save"
 
@@ -57,7 +66,12 @@ RSpec.feature "Ephemera Folders" do
       page.fill_in "ephemera_folder_height", with: "test height"
       page.fill_in "ephemera_folder_page_count", with: "test page count"
       page.fill_in "ephemera_folder_subject", with: "test subject"
+<<<<<<< HEAD
       page.select "Copyright Not Evaluated", from: "Rights Statement"
+=======
+      page.find(:css, '[data-id="ephemera_folder_rights_statement"]').click
+      page.all(:css, ".dropdown-menu.open").first.all(:css, "a:last-child").last.click
+>>>>>>> d8616123... adds lux order manager to figgy
 
       page.click_on "Save and Duplicate Metadata"
 
@@ -79,7 +93,12 @@ RSpec.feature "Ephemera Folders" do
       page.fill_in "ephemera_folder_height", with: "test height"
       page.fill_in "ephemera_folder_page_count", with: "test page count"
       page.fill_in "ephemera_folder_subject", with: "test subject"
+<<<<<<< HEAD
       page.select "Copyright Not Evaluated", from: "Rights Statement"
+=======
+      page.find(:css, '[data-id="ephemera_folder_rights_statement"]').click
+      page.all(:css, ".dropdown-menu.open").first.all(:css, "a:last-child").last.click
+>>>>>>> d8616123... adds lux order manager to figgy
 
       page.click_on "Save"
 
@@ -88,7 +107,11 @@ RSpec.feature "Ephemera Folders" do
       expect(page).to have_content "EphemeraFolder"
     end
 
+<<<<<<< HEAD
     scenario "users see a warning if they try to use duplicate barcodes", js: true do
+=======
+    scenario "users see a warning if they try to use duplicate barcodes" do
+>>>>>>> d8616123... adds lux order manager to figgy
       visit parent_new_ephemera_box_path(parent_id: ephemera_box.id)
       page.fill_in "ephemera_folder_barcode", with: "00000000000000"
       page.fill_in "ephemera_folder_folder_number", with: "1"
@@ -111,7 +134,12 @@ RSpec.feature "Ephemera Folders" do
       page.fill_in "ephemera_folder_height", with: "test height"
       page.fill_in "ephemera_folder_page_count", with: "test page count"
       page.fill_in "ephemera_folder_subject", with: "test subject"
+<<<<<<< HEAD
       page.select "Copyright Not Evaluated", from: "Rights Statement"
+=======
+      page.find(:css, '[data-id="ephemera_folder_rights_statement"]').click
+      page.all(:css, ".dropdown-menu.open").first.all(:css, "a:last-child").last.click
+>>>>>>> d8616123... adds lux order manager to figgy
 
       page.click_on "Save and Duplicate Metadata"
 
@@ -129,7 +157,11 @@ RSpec.feature "Ephemera Folders" do
     scenario "users can edit existing folders" do
       visit polymorphic_path [:edit, ephemera_folder]
       page.fill_in "ephemera_folder_title", with: "updated folder title"
+<<<<<<< HEAD
       page.click_button "Save"
+=======
+      page.find("form.edit_ephemera_folder").native.submit
+>>>>>>> d8616123... adds lux order manager to figgy
 
       expect(page).to have_content "updated folder title"
     end
@@ -166,7 +198,11 @@ RSpec.feature "Ephemera Folders" do
 
     context "while editing existing folders" do
       context "boxed folder" do
+<<<<<<< HEAD
         scenario "users can delete existing folders", js: true do
+=======
+        scenario "users can delete existing folders" do
+>>>>>>> d8616123... adds lux order manager to figgy
           visit polymorphic_path [:edit, ephemera_folder]
 
           page.accept_confirm do
@@ -176,6 +212,20 @@ RSpec.feature "Ephemera Folders" do
           expect(page.find(:css, ".alert-info")).to have_content "Deleted EphemeraFolder"
         end
 
+<<<<<<< HEAD
+=======
+        scenario "users see a warning if they try to use duplicate barcodes" do
+          visit polymorphic_path [:edit, ephemera_folder]
+          page.fill_in "ephemera_folder_barcode", with: "00000000000000"
+          page.fill_in "ephemera_folder_folder_number", with: "1"
+          expect(page).to have_content "This barcode is already in use"
+
+          page.fill_in "ephemera_folder_barcode", with: "11111111111110"
+          page.fill_in "ephemera_folder_folder_number", with: "2"
+          expect(page).not_to have_content "This barcode is already in use"
+        end
+
+>>>>>>> d8616123... adds lux order manager to figgy
         scenario "form doesn't allow changing the box" do
           visit polymorphic_path [:edit, ephemera_folder]
 
@@ -202,7 +252,11 @@ RSpec.feature "Ephemera Folders" do
       end
     end
 
+<<<<<<< HEAD
     scenario "users can delete existing folders", js: true do
+=======
+    scenario "users can delete existing folders" do
+>>>>>>> d8616123... adds lux order manager to figgy
       visit ContextualPath.new(child: ephemera_folder).show
 
       page.accept_confirm do

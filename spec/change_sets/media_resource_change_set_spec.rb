@@ -66,7 +66,11 @@ RSpec.describe MediaResourceChangeSet do
   describe "#workflow" do
     it "has a workflow" do
       change_set.prepopulate!
+<<<<<<< HEAD
       expect(change_set.workflow).to be_a(DraftCompleteWorkflow)
+=======
+      expect(change_set.workflow).to be_a(DraftPublishWorkflow)
+>>>>>>> d8616123... adds lux order manager to figgy
       expect(change_set.workflow.draft?).to be true
     end
   end

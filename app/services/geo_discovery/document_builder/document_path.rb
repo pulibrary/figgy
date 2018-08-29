@@ -70,6 +70,7 @@ module GeoDiscovery
         # Returns a map set's thumbnail file set decorator.
         # @return [FileSetDecorator] thumbnail file set decorator
         def map_set_file_set
+<<<<<<< HEAD
           @map_set_file_set ||= begin
             member_id = Array.wrap(resource_decorator.thumbnail_id).first
             return unless member_id
@@ -77,6 +78,12 @@ module GeoDiscovery
             return member.decorate if member && member.is_a?(FileSet)
             member.decorate.geo_members.try(:first)
           end
+=======
+          member_id = Array.wrap(resource_decorator.thumbnail_id).first
+          return unless member_id
+          file_set = query_service.find_by(id: member_id)
+          file_set.decorate if file_set && file_set.is_a?(FileSet)
+>>>>>>> d8616123... adds lux order manager to figgy
         rescue Valkyrie::Persistence::ObjectNotFoundError
           nil
         end

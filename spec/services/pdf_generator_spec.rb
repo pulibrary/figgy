@@ -36,6 +36,7 @@ RSpec.describe PDFGenerator do
       end
     end
 
+<<<<<<< HEAD
     context "when a IIIF Manifest does not have a canvas image service referenced" do
       let(:manifest) do
         {
@@ -257,6 +258,8 @@ RSpec.describe PDFGenerator do
       end
     end
 
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
     context "when set to gray" do
       before do
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/287,/0/gray.jpg")

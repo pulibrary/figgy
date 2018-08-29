@@ -8,6 +8,7 @@ class PDFGenerator
     @storage_adapter = storage_adapter
   end
 
+<<<<<<< HEAD
   # Use Prawn to capture the data downloaded from the Document in the PDF
   #   served from the IIIF Image Server
   # @return [FileMetadata] the FileMetadata Object node linked to the PDF
@@ -15,6 +16,10 @@ class PDFGenerator
   def render
     CoverPageGenerator.new(self).apply(prawn_document)
 
+=======
+  def render
+    CoverPageGenerator.new(self).apply(prawn_document)
+>>>>>>> d8616123... adds lux order manager to figgy
     canvas_downloaders.each_with_index do |downloader, _index|
       prawn_document.start_new_page layout: downloader.layout
       page_size = [Canvas::LETTER_WIDTH, Canvas::LETTER_HEIGHT]
@@ -33,9 +38,12 @@ class PDFGenerator
 
     prawn_document.render_file(tmp_file.path)
     build_node
+<<<<<<< HEAD
   rescue PDFGenerator::Canvas::InvalidIIIFManifestError => manifest_error
     Valkyrie.logger.error "#{self.class}: Failed to generate a PDF for the resource #{resource.id}: #{manifest_error}"
     raise Error
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   end
 
   def build_node
@@ -56,6 +64,7 @@ class PDFGenerator
     default_options
   end
 
+<<<<<<< HEAD
   # Construct the IIIF Manifest Object using the Figgy Resource
   # @return [Hash]
   def manifest
@@ -79,10 +88,21 @@ class PDFGenerator
   # @return [Array<Canvas>]
   def canvas_images
     @canvas_images ||= manifest_canvases.map { |x| x["images"].first }.map do |x|
+=======
+  def canvas_images
+    @canvas_images ||= manifest["sequences"][0]["canvases"].map { |x| x["images"][0] }.map do |x|
+>>>>>>> d8616123... adds lux order manager to figgy
       Canvas.new(x)
     end
   end
 
+<<<<<<< HEAD
+=======
+  def manifest
+    @manifest ||= ManifestBuilder.new(resource).build
+  end
+
+>>>>>>> d8616123... adds lux order manager to figgy
   def canvas_downloaders
     @canvas_images ||= canvas_images.map do |image|
       CanvasDownloader.new(image, quality: resource.pdf_type.first)

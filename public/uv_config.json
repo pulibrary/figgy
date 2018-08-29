@@ -13,7 +13,10 @@
     {
       "options":
       {
+<<<<<<< HEAD
         "branchNodesSelectable": true,
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
         "defaultToTreeEnabled": true
       }
     }

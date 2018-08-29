@@ -21,6 +21,7 @@ class BulkIngestService
     end
   end
 
+<<<<<<< HEAD
   # Determines whether or not the string encodes a bib. ID or a PULFA ID
   # See SourceMetadataIdentifierValidator#validate
   # @param [String] value
@@ -29,6 +30,8 @@ class BulkIngestService
     RemoteRecord.retrieve(value).success?
   end
 
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   # Attach files within a directory
   # This may attach to existing resources (such as EphemeraFolder objects) using a property (e. g. "barcode")
   # This may also create new resources (such as ScannedResource objects)
@@ -41,7 +44,11 @@ class BulkIngestService
     base_name = File.basename(base_directory)
     file_name = attributes[:id] || base_name
     # Assign a bibid to from the base directory name
+<<<<<<< HEAD
     attributes[:source_metadata_identifier] = base_name if attributes.fetch(:source_metadata_identifier, []).blank? && valid_remote_identifier?(base_name)
+=======
+    attributes[:source_metadata_identifier] = base_name if attributes.fetch(:source_metadata_identifier, []).blank? && RemoteRecord.bibdata?(base_name)
+>>>>>>> d8616123... adds lux order manager to figgy
     # Assign a title if source_metadata_identifier is not set
     title = [directory_path.basename]
     attributes[:title] = title if attributes.fetch(:title, []).blank? && attributes.fetch(:source_metadata_identifier, []).blank?

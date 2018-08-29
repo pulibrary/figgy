@@ -4,7 +4,10 @@ class ManifestBuilder
     def apply_record_properties
       super
       canvas["local_identifier"] = record.local_identifier.first if record.try(:local_identifier).present?
+<<<<<<< HEAD
       canvas["viewingHint"] = record.viewing_hint.first if record.try(:viewing_hint).present?
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
       rendering_builder.new(record).apply(canvas)
     end
 

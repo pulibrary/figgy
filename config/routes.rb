@@ -85,7 +85,11 @@ Rails.application.routes.draw do
         get :pdf
       end
       collection do
+<<<<<<< HEAD
         get "save_and_ingest/:id", action: :save_and_ingest, constraints: { id: /[^\/]+/ }, defaults: { format: :json }
+=======
+        get "save_and_ingest/:id", action: :save_and_ingest
+>>>>>>> d8616123... adds lux order manager to figgy
       end
     end
     resources :media_resources
@@ -99,7 +103,11 @@ Rails.application.routes.draw do
 
     get "/scanned_resources/:parent_id/new", to: "scanned_resources#new", as: :parent_new_scanned_resource
 
+<<<<<<< HEAD
     resources :simple_resources, only: [:update, :create, :new, :destroy] do
+=======
+    resources :simple_resources do
+>>>>>>> d8616123... adds lux order manager to figgy
       member do
         get :file_manager
         get :order_manager
@@ -208,7 +216,10 @@ Rails.application.routes.draw do
   get "/catalog/parent/:parent_id/:id", to: "catalog#show", as: :parent_solr_document
   get "/iiif/lookup/:prefix/:naan/:arkid", to: "catalog#lookup_manifest", as: :lookup_manifest
 
+<<<<<<< HEAD
   get "/reports/ephemera_data/(:project_id)", to: "reports#ephemera_data", as: :ephemera_data
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   get "/reports/identifiers_to_reconcile", to: "reports#identifiers_to_reconcile", as: :identifiers_to_reconcile
 
   get "bulk_ingest/:resource_type", to: "bulk_ingest#show", as: "bulk_ingest_show"

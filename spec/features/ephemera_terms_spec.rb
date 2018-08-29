@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 require "rails_helper"
 
+<<<<<<< HEAD
 RSpec.feature "Ephemera Terms" do
+=======
+RSpec.feature "Ephemera Terms", js: true do
+>>>>>>> d8616123... adds lux order manager to figgy
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:ephemera_project) do
@@ -35,12 +39,20 @@ RSpec.feature "Ephemera Terms" do
       scenario "users can edit existing terms" do
         visit polymorphic_path [:edit, ephemera_term]
         page.fill_in "ephemera_term_label", with: "updated label"
+<<<<<<< HEAD
         page.click_button "Save"
+=======
+        page.find("form.edit_ephemera_term").native.submit
+>>>>>>> d8616123... adds lux order manager to figgy
 
         expect(page).to have_content "updated label"
       end
 
+<<<<<<< HEAD
       scenario "users can delete existing terms", js: true do
+=======
+      scenario "users can delete existing terms" do
+>>>>>>> d8616123... adds lux order manager to figgy
         visit ContextualPath.new(child: ephemera_term).show
 
         page.accept_confirm do

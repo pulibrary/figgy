@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 class EphemeraProjectChangeSet < Valkyrie::ChangeSet
   property :title, multiple: false
+<<<<<<< HEAD
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
+=======
+  property :member_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
+>>>>>>> d8616123... adds lux order manager to figgy
   property :slug, multiple: false, required: true
   property :top_language, multiple: true, required: false
 

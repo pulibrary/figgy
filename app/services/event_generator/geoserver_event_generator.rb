@@ -14,6 +14,7 @@ class EventGenerator
     end
 
     def derivatives_deleted(record)
+<<<<<<< HEAD
       # Attempt to delete from both public and restricted
       # workspaces to make sure all traces of the file
       # are cleaned up on GeoServer.
@@ -22,6 +23,10 @@ class EventGenerator
       )
       publish_message(
         message("DELETED", record, authenticated_workspace)
+=======
+      publish_message(
+        message("DELETED", record)
+>>>>>>> d8616123... adds lux order manager to figgy
       )
     end
 
@@ -50,10 +55,13 @@ class EventGenerator
 
     private
 
+<<<<<<< HEAD
       def authenticated_workspace
         Figgy.config["geoserver"]["authenticated"]["workspace"]
       end
 
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
       def base_message(record)
         message_generator.new(resource: record).generate
       end
@@ -64,6 +72,7 @@ class EventGenerator
         return true if record.derivative_file
       end
 
+<<<<<<< HEAD
       def merged_values(type, workspace)
         {
           "event" => type,
@@ -74,16 +83,23 @@ class EventGenerator
       def message(type, record, workspace = nil)
         values = merged_values(type, workspace).delete_if { |_k, v| v.nil? }
         base_message(record).merge(values)
+=======
+      def message(type, record)
+        base_message(record).merge("event" => type)
+>>>>>>> d8616123... adds lux order manager to figgy
       end
 
       def message_generator
         GeoserverMessageGenerator
       end
 
+<<<<<<< HEAD
       def public_workspace
         Figgy.config["geoserver"]["open"]["workspace"]
       end
 
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
       def publish_message(message)
         rabbit_exchange.publish(message.to_json)
       end

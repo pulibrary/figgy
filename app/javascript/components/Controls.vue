@@ -111,6 +111,7 @@ export default {
   },
   methods: {
     initOSD: function () {
+<<<<<<< HEAD
         if (this.viewer) {
           this.viewer.destroy()
           this.viewer = null
@@ -120,6 +121,17 @@ export default {
           showNavigationControl: false,
           tileSources: [ this.selected[0].service + "/info.json" ]
         })
+=======
+      if (this.viewer) {
+        this.viewer.destroy()
+        this.viewer = null
+      }
+      this.viewer = OpenSeadragon({
+        id: this.viewerId,
+        showNavigationControl: false,
+        tileSources: [ this.selected[0].service + "/info.json" ]
+      })
+>>>>>>> d8616123... adds lux order manager to figgy
     },
     saveHandler: function () {
       if (this.isMultiVolume) {

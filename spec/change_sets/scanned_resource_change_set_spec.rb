@@ -114,10 +114,13 @@ RSpec.describe ScannedResourceChangeSet do
       expect(members.first.state).to include "metadata_review"
     end
   end
+<<<<<<< HEAD
 
   describe "#pdf_type" do
     it "defaults to color" do
       expect(change_set.pdf_type).to eq "color"
     end
   end
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
 end

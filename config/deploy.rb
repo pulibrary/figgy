@@ -41,7 +41,11 @@ desc "Write the current version to public/version.txt"
 task :write_version do
   on roles(:app), in: :sequence do
     within repo_path do
+<<<<<<< HEAD
       execute :echo, "figgy `git describe --all --always --long --abbrev=40 HEAD` `date +\"%F %T %Z\"` > #{release_path}/public/version.txt"
+=======
+      execute :echo, "figgy `git describe --all --always --long --abbrev=40 HEAD` `date +\"%F %T %Z\"`" > "#{release_path}/public/version.txt"
+>>>>>>> d8616123... adds lux order manager to figgy
     end
   end
 end

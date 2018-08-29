@@ -9,7 +9,10 @@ class ChangeSetPersister
 
     def run
       return unless change_set.resource.decorate.ark_mintable_state?
+<<<<<<< HEAD
       return unless needs_updating?(change_set)
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
 
       mint_identifier
       change_set
@@ -21,11 +24,14 @@ class ChangeSetPersister
         identifier_service.mint_or_update(resource: change_set.model)
       end
 
+<<<<<<< HEAD
       def needs_updating?(change_set)
         return true unless change_set.resource.identifier
         change_set.state_changed? || change_set.changed?(:title) || change_set.changed?(:source_metadata_identifier)
       end
 
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
       def identifier_service
         IdentifierService
       end

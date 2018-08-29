@@ -1,8 +1,14 @@
 # frozen_string_literal: true
 class FileSet < Resource
   include Valkyrie::Resource::AccessControls
+<<<<<<< HEAD
   attribute :title, Valkyrie::Types::Set
   attribute :file_metadata, Valkyrie::Types::Set.of(FileMetadata.optional)
+=======
+  attribute :id, Valkyrie::Types::ID.optional
+  attribute :title, Valkyrie::Types::Set
+  attribute :file_metadata, Valkyrie::Types::Set.member(FileMetadata.optional)
+>>>>>>> d8616123... adds lux order manager to figgy
   attribute :viewing_hint
   attribute :depositor
   attribute :local_identifier

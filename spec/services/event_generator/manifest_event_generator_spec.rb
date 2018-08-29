@@ -74,8 +74,13 @@ RSpec.describe EventGenerator::ManifestEventGenerator do
     context "with a scanned map" do
       let(:record) { FactoryBot.create_for_repository(:scanned_map) }
 
+<<<<<<< HEAD
       it "is valid" do
         expect(event_generator.valid?(record)).to be true
+=======
+      it "is not valid" do
+        expect(event_generator.valid?(record)).to be false
+>>>>>>> d8616123... adds lux order manager to figgy
       end
     end
   end

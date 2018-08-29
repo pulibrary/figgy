@@ -1,7 +1,10 @@
+<<<<<<< HEAD
 <% content_for :head do %>
   <%= stylesheet_pack_tag 'ordermanager' %>
   <%= javascript_pack_tag 'ordermanager' %>
 <% end %>
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
 <div class="container">
 <ul class="breadcrumb">
   <% if decorated_change_set_resource.try(:decorated_parent_resource).present? %>
@@ -11,4 +14,8 @@
   <li class="active">Order Manager</li>
 </ul>
 </div>
+<<<<<<< HEAD
 <div id="order-manager" data-class-name="<%= @change_set.model_name.plural %>" data-resource="<%= @change_set.id %>"></div>
+=======
+<order-manager resource-id="<%= @change_set.id %>"></order-manager>
+>>>>>>> d8616123... adds lux order manager to figgy

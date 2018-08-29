@@ -48,7 +48,11 @@ RSpec.describe METSDocument do
     subject(:mets_document) { described_class.new mets_file }
 
     it "has an ark id" do
+<<<<<<< HEAD
       expect(mets_document.ark_id).to eq("ark:/88435/5m60qr98htest")
+=======
+      expect(mets_document.ark_id).to eq("ark:/88435/5m60qr98h")
+>>>>>>> d8616123... adds lux order manager to figgy
     end
 
     it "has a bib id" do

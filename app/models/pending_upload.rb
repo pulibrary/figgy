@@ -1,8 +1,15 @@
 # frozen_string_literal: true
 class PendingUpload < Valkyrie::Resource
+<<<<<<< HEAD
   attribute :file_name
   attribute :url
   attribute :file_size, Valkyrie::Types::Set.of(Valkyrie::Types::Coercible::Int)
+=======
+  attribute :id, Valkyrie::Types::ID.optional
+  attribute :file_name
+  attribute :url
+  attribute :file_size, Valkyrie::Types::Set.member(Valkyrie::Types::Coercible::Int)
+>>>>>>> d8616123... adds lux order manager to figgy
   attribute :auth_header
 
   def original_filename

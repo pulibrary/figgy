@@ -8,7 +8,11 @@ class FolderWorkflow < BaseWorkflow
     state :complete
 
     # ingest workflow
+<<<<<<< HEAD
     event :make_complete do
+=======
+    event :complete do
+>>>>>>> d8616123... adds lux order manager to figgy
       transitions from: :needs_qa, to: :complete
     end
     event :submit_for_qa do

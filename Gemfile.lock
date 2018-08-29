@@ -39,6 +39,7 @@ GIT
       nokogiri (~> 1.6)
 
 GIT
+<<<<<<< HEAD
   remote: git://github.com/pulibrary/ruby_tika_app.git
   revision: 19085f492790aee875d407221ffd0e85609cc250
   specs:
@@ -46,6 +47,8 @@ GIT
       open4
 
 GIT
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   remote: git://github.com/samvera-labs/iiif_manifest.git
   revision: 38d169ed9f12370875199713d755a8711251c317
   specs:
@@ -277,7 +280,11 @@ GEM
       responders
       warden (~> 1.2.3)
     diff-lcs (1.3)
+<<<<<<< HEAD
     disposable (0.4.4)
+=======
+    disposable (0.4.3)
+>>>>>>> d8616123... adds lux order manager to figgy
       declarative (>= 0.0.9, < 1.0.0)
       declarative-builder (< 0.2.0)
       declarative-option (< 0.2.0)
@@ -303,7 +310,11 @@ GEM
     dry-container (0.6.0)
       concurrent-ruby (~> 1.0)
       dry-configurable (~> 0.1, >= 0.1.3)
+<<<<<<< HEAD
     dry-core (0.4.7)
+=======
+    dry-core (0.4.6)
+>>>>>>> d8616123... adds lux order manager to figgy
       concurrent-ruby (~> 1.0)
     dry-equalizer (0.2.1)
     dry-logic (0.4.2)
@@ -315,7 +326,11 @@ GEM
       dry-equalizer (~> 0.2)
       dry-types (~> 0.12, >= 0.12.2)
       ice_nine (~> 0.11)
+<<<<<<< HEAD
     dry-types (0.12.3)
+=======
+    dry-types (0.12.2)
+>>>>>>> d8616123... adds lux order manager to figgy
       concurrent-ruby (~> 1.0)
       dry-configurable (~> 0.1)
       dry-container (~> 0.3)
@@ -664,6 +679,11 @@ GEM
     ruby-progressbar (1.9.0)
     ruby-rc4 (0.1.5)
     ruby_dep (1.5.0)
+<<<<<<< HEAD
+=======
+    ruby_tika_app (1.5.0)
+      open4
+>>>>>>> d8616123... adds lux order manager to figgy
     rubyzip (1.2.1)
     safe_yaml (1.0.4)
     sass (3.5.6)
@@ -759,7 +779,11 @@ GEM
     unicode-display_width (1.3.0)
     uniform_notifier (1.10.0)
     validatable (1.6.7)
+<<<<<<< HEAD
     valkyrie (1.2.0)
+=======
+    valkyrie (1.1.2)
+>>>>>>> d8616123... adds lux order manager to figgy
       active-fedora
       active-triples
       activemodel
@@ -873,7 +897,11 @@ DEPENDENCIES
   rsolr (>= 1.0)
   rspec-graphql_matchers
   rspec-rails (~> 3.5)
+<<<<<<< HEAD
   ruby_tika_app!
+=======
+  ruby_tika_app
+>>>>>>> d8616123... adds lux order manager to figgy
   sass-rails (~> 5.0)
   selenium-webdriver
   sidekiq
@@ -887,7 +915,11 @@ DEPENDENCIES
   timecop
   title
   uglifier
+<<<<<<< HEAD
   valkyrie (= 1.2.0)
+=======
+  valkyrie (= 1.1.2)
+>>>>>>> d8616123... adds lux order manager to figgy
   valkyrie-derivatives!
   web-console
   webmock

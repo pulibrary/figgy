@@ -36,6 +36,7 @@ RSpec.describe IngestFolderJob do
         )
       end
     end
+<<<<<<< HEAD
 
     context "with a SimpleResource model" do
       let(:logger) { Logger.new(nil) }
@@ -74,5 +75,7 @@ RSpec.describe IngestFolderJob do
         )
       end
     end
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   end
 end

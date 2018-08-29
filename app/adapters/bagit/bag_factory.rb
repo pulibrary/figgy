@@ -76,11 +76,15 @@ module Bagit
         end
 
         def resource_metadata
+<<<<<<< HEAD
           output = resource.to_h.except(:imported_metadata).compact
           if output[:optimistic_lock_token]
             output[:optimistic_lock_token] = Array.wrap(output[:optimistic_lock_token]).map(&:serialize)
           end
           output
+=======
+          resource.to_h.except(:imported_metadata).compact
+>>>>>>> d8616123... adds lux order manager to figgy
         end
 
         def render_template_to_file(template:, file:)

@@ -20,6 +20,10 @@
           <td><%= member.visibility.first.html_safe %></td>
           <td>
             <%= link_to 'View', member_url, class: 'btn btn-default' %>
+<<<<<<< HEAD
+=======
+            <%= link_to 'Edit', main_app.polymorphic_path([:edit, member]), class: 'btn btn-default' %>
+>>>>>>> d8616123... adds lux order manager to figgy
             <%= link_to "Delete", main_app.polymorphic_path([member]), class: 'btn btn-danger',
                                   data: { confirm: "Delete this #{resource.human_readable_type}?" },
                                   method: :delete %>

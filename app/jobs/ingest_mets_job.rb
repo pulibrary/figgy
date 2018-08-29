@@ -2,6 +2,7 @@
 class IngestMETSJob < ApplicationJob
   attr_reader :mets
 
+<<<<<<< HEAD
   class CollectionNotFoundError < StandardError; end
 
   # @param [String] mets_file Filename of a METS file to ingest
@@ -20,6 +21,23 @@ class IngestMETSJob < ApplicationJob
     @change_set_persister ||= ChangeSetPersister.new(metadata_adapter: metadata_adapter,
                                                      storage_adapter: storage_adapter,
                                                      queue: queue_name)
+=======
+  # @param [String] mets_file Filename of a METS file to ingest
+  # @param [String] user User to ingest as
+  def perform(mets_file, user)
+    logger.info "Ingesting METS #{mets_file}"
+    @mets = METSDocument::Factory.new(mets_file).new
+    @user = user
+    changeset_persister.buffer_into_index do |buffered_persister|
+      Ingester.for(mets: @mets, user: @user, changeset_persister: buffered_persister).ingest
+    end
+  end
+
+  def changeset_persister
+    @changeset_persister ||= ChangeSetPersister.new(metadata_adapter: metadata_adapter,
+                                                    storage_adapter: storage_adapter,
+                                                    queue: queue_name)
+>>>>>>> d8616123... adds lux order manager to figgy
   end
 
   def metadata_adapter
@@ -31,6 +49,7 @@ class IngestMETSJob < ApplicationJob
   end
 
   class Ingester
+<<<<<<< HEAD
     delegate :metadata_adapter, to: :change_set_persister
     delegate :query_service, to: :metadata_adapter
     def self.for(mets:, user:, change_set_persister:, import_mods:)
@@ -101,12 +120,50 @@ class IngestMETSJob < ApplicationJob
     # Generate IngestableFile objects for each file linked to the described
     #   resource in the METS Document
     # @return [Enumerator::Lazy<IngestableFile>]
+=======
+    delegate :metadata_adapter, to: :changeset_persister
+    delegate :query_service, to: :metadata_adapter
+    def self.for(mets:, user:, changeset_persister:)
+      if mets.multi_volume?
+        HierarchicalIngester.new(mets: mets, user: user, changeset_persister: changeset_persister)
+      else
+        new(mets: mets, user: user, changeset_persister: changeset_persister)
+      end
+    end
+
+    attr_reader :mets, :user, :changeset_persister
+    def initialize(mets:, user:, changeset_persister:)
+      @mets = mets
+      @user = user
+      @changeset_persister = changeset_persister
+    end
+
+    def ingest
+      resource.source_metadata_identifier = mets.bib_id
+      resource.title = mets.label
+      resource.files = files.to_a
+      resource.member_of_collection_ids = [slug_to_id(mets.collection_slug)] if mets.respond_to?(:collection_slug)
+      output = changeset_persister.save(change_set: resource)
+      files.each_with_index do |file, index|
+        mets_to_repo_map[file.id] = output.member_ids[index]
+      end
+      assign_logical_structure(output)
+    end
+
+    def assign_logical_structure(output)
+      new_resource = DynamicChangeSet.new(output)
+      new_resource.logical_structure = [{ label: "Main Structure", nodes: map_fileids(mets.structure)[:nodes] }]
+      changeset_persister.save(change_set: new_resource)
+    end
+
+>>>>>>> d8616123... adds lux order manager to figgy
     def files
       mets.files.lazy.map do |file|
         mets.decorated_file(file)
       end
     end
 
+<<<<<<< HEAD
     # Finds a collection for the slug or raises
     # @param [String] slug
     # @return [Valkyrie::ID]
@@ -135,6 +192,19 @@ class IngestMETSJob < ApplicationJob
     # Map a Hash recursively keyed to each FileSet ID
     # @param [Hash] hsh source of Hash values (usually generated from METSDocument#structure)
     # @return [Hash]
+=======
+    def slug_to_id(slug)
+      query_service.custom_queries.find_by_string_property(property: :slug, value: slug).first&.id
+    end
+
+    def resource
+      @resource ||=
+        begin
+          DynamicChangeSet.new(ScannedResource.new)
+        end
+    end
+
+>>>>>>> d8616123... adds lux order manager to figgy
     def map_fileids(hsh)
       hsh.each do |k, v|
         hsh[k] = v.each { |node| map_fileids(node) } if k == :nodes
@@ -142,6 +212,7 @@ class IngestMETSJob < ApplicationJob
       end
     end
 
+<<<<<<< HEAD
     # Generate the internal Hash used to store the mapping
     # @return [Hash]
     def mets_to_repo_map
@@ -159,10 +230,16 @@ class IngestMETSJob < ApplicationJob
           copyable: true
         )
       end
+=======
+    def mets_to_repo_map
+      @mets_to_repo_map ||= {}
+    end
+>>>>>>> d8616123... adds lux order manager to figgy
   end
 
   class HierarchicalIngester < Ingester
     def ingest
+<<<<<<< HEAD
       change_set.source_metadata_identifier = mets.bib_id
       mets.volume_ids.each do |volume_id|
         volume_mets = VolumeMets.new(parent_mets: mets, volume_id: volume_id)
@@ -182,20 +259,39 @@ class IngestMETSJob < ApplicationJob
 
     # @param [METS::Document] parent_mets
     # @param [String] volume_id
+=======
+      resource.source_metadata_identifier = mets.bib_id
+      mets.volume_ids.each do |volume_id|
+        volume_mets = VolumeMets.new(parent_mets: mets, volume_id: volume_id)
+        volume = Ingester.new(mets: volume_mets, user: user, changeset_persister: changeset_persister).ingest
+        resource.member_ids = resource.member_ids + [volume.id]
+      end
+      changeset_persister.save(change_set: resource)
+    end
+  end
+
+  class VolumeMets
+    attr_reader :parent_mets, :volume_id
+    delegate :decorated_file, to: :parent_mets
+>>>>>>> d8616123... adds lux order manager to figgy
     def initialize(parent_mets:, volume_id:)
       @parent_mets = parent_mets
       @volume_id = volume_id
     end
 
+<<<<<<< HEAD
     # Access the bib. ID
     # @see METSDocument#bib_id
     # (There are no bib. IDs for child volumes, these are retrieved from the
     #   parent resource)
     # @return [nil]
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
     def bib_id
       nil
     end
 
+<<<<<<< HEAD
     # @see METSDocument#ark_id
     # Volumes don't have ARKs.
     # @return nil
@@ -207,17 +303,23 @@ class IngestMETSJob < ApplicationJob
     #   resource
     # @see METSDocument#files
     # @return [Hash<Array>]
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
     def files
       parent_mets.files_for_volume(volume_id)
     end
 
+<<<<<<< HEAD
     # Retrieve the structure from the METS for the parent resource
     # @see MetsStructure#structure_for_volume
     # @return [Hash]
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
     def structure
       parent_mets.structure_for_volume(volume_id)
     end
 
+<<<<<<< HEAD
     # Retrieve the label for the volume
     # @see METSDocument#label_for_volume
     # @return [String]
@@ -231,5 +333,10 @@ class IngestMETSJob < ApplicationJob
     def attributes
       parent_mets.attributes.merge(title: [label])
     end
+=======
+    def label
+      parent_mets.label_for_volume(volume_id)
+    end
+>>>>>>> d8616123... adds lux order manager to figgy
   end
 end

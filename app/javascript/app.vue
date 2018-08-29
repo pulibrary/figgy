@@ -1,5 +1,10 @@
 <template>
   <div id="order-manager">
+<<<<<<< HEAD
+=======
+    <heading level="h1">The quick brown fox</heading>
+    <order-manager></order-manager>
+>>>>>>> d8616123... adds lux order manager to figgy
     <transition name="fade">
       <div v-if="manifestLoading" class="overlay">
           <div class="loader"/>
@@ -31,6 +36,7 @@ export default {
 </script>
 
 <style scoped>
+<<<<<<< HEAD
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -161,5 +167,8 @@ for details
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
+=======
+
+>>>>>>> d8616123... adds lux order manager to figgy
 
 </style>

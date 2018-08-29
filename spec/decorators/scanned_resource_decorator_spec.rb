@@ -112,6 +112,7 @@ RSpec.describe ScannedResourceDecorator do
       expect(parent.class).to eq described_class
     end
   end
+<<<<<<< HEAD
 
   describe "#pdf_file" do
     context "when there is a pdf" do
@@ -129,4 +130,6 @@ RSpec.describe ScannedResourceDecorator do
       end
     end
   end
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
 end

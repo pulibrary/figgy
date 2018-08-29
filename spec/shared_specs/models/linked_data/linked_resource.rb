@@ -20,6 +20,10 @@ RSpec.shared_examples "LinkedData::Resource" do
   describe ".new" do
     before do
       class MyCustomResource < Valkyrie::Resource
+<<<<<<< HEAD
+=======
+        attribute :id, Valkyrie::Types::ID.optional
+>>>>>>> d8616123... adds lux order manager to figgy
         attribute :title, Valkyrie::Types::Set
       end
     end

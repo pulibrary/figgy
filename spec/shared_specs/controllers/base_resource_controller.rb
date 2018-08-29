@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 require "rails_helper"
 
+<<<<<<< HEAD
 RSpec.shared_examples "a BaseResourceController" do |*flags|
+=======
+RSpec.shared_examples "a BaseResourceController" do
+>>>>>>> d8616123... adds lux order manager to figgy
   include ActionDispatch::Routing::PolymorphicRoutes
   include Rails.application.routes.url_helpers
 
@@ -160,9 +164,12 @@ RSpec.shared_examples "a BaseResourceController" do |*flags|
   end
 
   describe "edit" do
+<<<<<<< HEAD
     before do
       skip "no edit functionality" if flags.include?(:skip_edit)
     end
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
     let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       it_behaves_like "an access controlled edit request"

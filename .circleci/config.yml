@@ -87,19 +87,6 @@ jobs:
       - run: bin/jetty_wait
       - run: bundle exec rake db:setup
       - run: bundle exec rspec spec
-  npm_test:
-    working_directory: ~/figgy
-    docker:
-      - image: circleci/ruby:2.3.6-node-browsers
-        environment:
-          RAILS_ENV: test
-          FIGGY_DB_HOST: localhost
-          FIGGY_DB_USERNAME: figgy
-          FIGGY_DB_PASSWORD:  ""
-    steps:
-      - attach_workspace:
-          at: '~/figgy'
-      - run: npm test
   rubocop:
     working_directory: ~/figgy
     docker:

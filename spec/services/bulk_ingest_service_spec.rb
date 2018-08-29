@@ -24,8 +24,11 @@ RSpec.describe BulkIngestService do
       before do
         folder1
         folder2
+<<<<<<< HEAD
         stub_request(:get, "https://bibdata.princeton.edu/bibliographic/32101075851400/jsonld").and_return(status: 404)
         stub_request(:get, "https://bibdata.princeton.edu/bibliographic/32101075851418/jsonld").and_return(status: 404)
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
       end
 
       it "attaches the files" do
@@ -72,6 +75,7 @@ RSpec.describe BulkIngestService do
       end
     end
 
+<<<<<<< HEAD
     context "when using the SimpleResource Class" do
       subject(:ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger, klass: SimpleResource) }
 
@@ -100,6 +104,8 @@ RSpec.describe BulkIngestService do
       end
     end
 
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
     context "when a directory has a bibid as a name" do
       let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_bibid", "4609321") }
       it "assigns the bibid to the source metada identifier" do

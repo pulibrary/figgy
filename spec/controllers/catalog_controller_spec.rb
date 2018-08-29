@@ -308,7 +308,11 @@ RSpec.describe CatalogController do
       expect(assigns(:document_list).length).to eq 0
     end
     it "does display a Simple Resource in published state" do
+<<<<<<< HEAD
       persister.save(resource: FactoryBot.build(:simple_resource, state: "complete"))
+=======
+      persister.save(resource: FactoryBot.build(:simple_resource, state: "published"))
+>>>>>>> d8616123... adds lux order manager to figgy
 
       get :index, params: { q: "" }
 
