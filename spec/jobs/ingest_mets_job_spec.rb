@@ -121,13 +121,7 @@ RSpec.describe IngestMETSJob do
         expect(parent_book.member_ids.length).to eq 3
         expect(child_books[0].logical_structure[0].label).to eq ["Main Structure"]
         expect(child_books[0].title).to eq ["first volume"]
-
-        expect(child_books[0].rights_note).not_to be_empty
-        expect(child_books[0].rights_note.first).to include "For legal and conservation reasons, access to F."
-
         expect(child_books[1].title).to eq ["second volume"]
-        expect(child_books[1].rights_note).not_to be_empty
-        expect(child_books[1].rights_note.first).to include "For legal and conservation reasons, access to F."
       end
     end
 

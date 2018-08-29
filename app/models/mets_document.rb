@@ -197,7 +197,6 @@ class METSDocument
       license: mods.access_condition,
       resource_type: mods.type_of_resource,
       subject: mods.subject,
-      rights_note: mods.restriction_on_access,
       description: mods.note,
       abstract: mods.abstract,
       contents: mods.table_of_contents
