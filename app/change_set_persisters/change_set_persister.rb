@@ -18,7 +18,8 @@ class ChangeSetPersister
         ApplyRemoteMetadata,
         ApplyVisibilityByDate,
         CreateFile::Factory.new(file_appender: FileAppender),
-        PropagateVisibilityAndState
+        PropagateVisibilityAndState,
+        CleanupPdfs
       ],
       after_save: [
         AppendToParent

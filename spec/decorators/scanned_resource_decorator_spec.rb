@@ -112,4 +112,21 @@ RSpec.describe ScannedResourceDecorator do
       expect(parent.class).to eq described_class
     end
   end
+
+  describe "#pdf_file" do
+    context "when there is a pdf" do
+      let(:pdf_file) { FileMetadata.new mime_type: "application/pdf" }
+      let(:resource) { FactoryBot.create_for_repository(:scanned_resource, file_metadata: [pdf_file]) }
+      it "finds the pdf file" do
+        expect(decorator.pdf_file).to eq pdf_file
+      end
+    end
+
+    context "when there is no pdf file" do
+      let(:resource) { FactoryBot.create_for_repository(:scanned_resource) }
+      it "returns nil" do
+        expect(decorator.pdf_file).to be nil
+      end
+    end
+  end
 end
