@@ -75,7 +75,7 @@ RSpec.describe IngestMETSJob do
         described_class.perform_now(mets_file, user, true)
         allow(FileUtils).to receive(:mv).and_call_original
 
-        book = adapter.query_service.find_all_of_model(model: ScannedResource).first
+        book = adapter.query_service.find_all_of_model(model: SimpleResource).first
         expect(book).not_to be_nil
         expect(book.title).to include "This side of paradise"
       end
@@ -114,7 +114,7 @@ RSpec.describe IngestMETSJob do
         described_class.perform_now(mets_file, user, true)
         allow(FileUtils).to receive(:mv).and_call_original
 
-        books = adapter.query_service.find_all_of_model(model: ScannedResource).to_a
+        books = adapter.query_service.find_all_of_model(model: SimpleResource).to_a
         parent_book = books.sort_by(&:created_at).last
         child_books = adapter.query_service.find_members(resource: parent_book).to_a
 

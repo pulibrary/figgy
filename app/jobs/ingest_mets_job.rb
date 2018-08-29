@@ -62,7 +62,7 @@ class IngestMETSJob < ApplicationJob
     def ingest
       # Only import the MODS metadata from the METS Document if a MARC record is
       #   not provided
-      change_set.source_metadata_identifier = mets.bib_id unless mets.bib_id.blank?
+      change_set.source_metadata_identifier = mets.bib_id if mets.bib_id.present?
       change_set.resource.identifier = mets.ark_id unless mets.ark_id.blank?
       change_set.title = mets.label
       change_set.files = files.to_a
@@ -120,7 +120,11 @@ class IngestMETSJob < ApplicationJob
     # Provide the resource class used for ingesting Resources using a METS Document
     # @return [Class]
     def resource_klass
-      ScannedResource
+      if import_mods?
+        SimpleResource
+      else
+        ScannedResource
+      end
     end
 
     # Construct the ChangeSet object for the new resource
@@ -163,7 +167,7 @@ class IngestMETSJob < ApplicationJob
 
   class HierarchicalIngester < Ingester
     def ingest
-      change_set.source_metadata_identifier = mets.bib_id
+      change_set.source_metadata_identifier = mets.bib_id if mets.bib_id.present?
       mets.volume_ids.each do |volume_id|
         volume_mets = VolumeMets.new(parent_mets: mets, volume_id: volume_id)
         volume = Ingester.new(mets: volume_mets, user: user, change_set_persister: change_set_persister, import_mods: import_mods?, attach_mets_file: false).ingest
