@@ -31,8 +31,8 @@
     <meta name="google-site-verification" content="ahsnadaG77nHGY5J1JM9ZBi9yIjK8HkHUtGLRbKjkTc" />
     <%= stylesheet_link_tag 'application' %>
     <%= javascript_include_tag 'application' %>
+    <%= stylesheet_pack_tag 'application' %>
     <%= javascript_pack_tag 'application' %>
-    <%= yield :head %>
   </head>
   <body>
     <%= content_for?(:body) ? yield(:body) : yield %>

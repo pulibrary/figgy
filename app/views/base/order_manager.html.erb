@@ -1,7 +1,3 @@
-<% content_for :head do %>
-  <%= stylesheet_pack_tag 'ordermanager' %>
-  <%= javascript_pack_tag 'ordermanager' %>
-<% end %>
 <div class="container">
 <ul class="breadcrumb">
   <% if decorated_change_set_resource.try(:decorated_parent_resource).present? %>

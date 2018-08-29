@@ -36,7 +36,7 @@
       "app/javascript/store/vuex/**/*.{js,vue}",
       "app/javascript/mixins/**/*.{js,vue}",
       "!app/javascript/app.vue",
-      "!app/javascript/packs/ordermanager.js",
+      "!app/javascript/packs/application.js",
       "!**/node_modules/**"
     ]
   },
