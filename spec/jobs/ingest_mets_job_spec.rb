@@ -79,6 +79,38 @@ RSpec.describe IngestMETSJob do
         expect(book).not_to be_nil
         expect(book.title).to include "This side of paradise"
       end
+
+      context "when populating rights statement" do
+        let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0038-7350.mets") }
+
+        it "defaults to copyright not evaluated" do
+          FactoryBot.create_for_repository(:collection, id: Valkyrie::ID.new("pudl0038"), slug: "pudl0038")
+          described_class.perform_now(mets_file, user, true)
+
+          book = adapter.query_service.find_all_of_model(model: ScannedResource).first
+          expect(book.rights_statement).to contain_exactly "http://rightsstatements.org/vocab/CNE/1.0/"
+        end
+      end
+
+      context "when populating locations" do
+        let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0038-7350.mets") }
+
+        it "maps holding_simple_sublocation to controlled vocab term for holding_location" do
+          FactoryBot.create_for_repository(:collection, id: Valkyrie::ID.new("pudl0038"), slug: "pudl0038")
+          described_class.perform_now(mets_file, user, true)
+
+          book = adapter.query_service.find_all_of_model(model: ScannedResource).first
+          expect(book.holding_location).to contain_exactly("https://bibdata.princeton.edu/locations/delivery_locations/9")
+        end
+
+        it "pulls shelf_locator into location attribute" do
+          FactoryBot.create_for_repository(:collection, id: Valkyrie::ID.new("pudl0038"), slug: "pudl0038")
+          described_class.perform_now(mets_file, user, true)
+
+          book = adapter.query_service.find_all_of_model(model: ScannedResource).first
+          expect(book.location).to contain_exactly("Box AD01, Item 7350")
+        end
+      end
     end
 
     context "When there wasn't collection yet" do

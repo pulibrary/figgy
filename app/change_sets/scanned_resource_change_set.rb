@@ -12,6 +12,7 @@ class ScannedResourceChangeSet < ChangeSet
   property :viewing_hint, multiple: false, required: false, default: "individuals"
   property :pdf_type, multiple: false, required: false, default: "color"
   property :holding_location, multiple: false, required: false, type: ::Types::URI
+  property :location, multiple: true, required: false, default: []
   property :viewing_direction, multiple: false, required: false
   property :portion_note, multiple: false, required: false
   property :nav_date, multiple: false, required: false
