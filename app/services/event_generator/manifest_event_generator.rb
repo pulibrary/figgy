@@ -39,8 +39,17 @@ class EventGenerator
       )
     end
 
+<<<<<<< HEAD
     def valid?(_record)
       true
+=======
+    def valid?(record)
+      if record.is_a?(FileSet)
+        record.decorate.parent.try(:geo_resource?) ? false : true
+      else
+        record.try(:geo_resource?) ? false : true
+      end
+>>>>>>> d8616123... adds lux order manager to figgy
     end
 
     private

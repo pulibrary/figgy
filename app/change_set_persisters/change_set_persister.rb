@@ -18,8 +18,12 @@ class ChangeSetPersister
         ApplyRemoteMetadata,
         ApplyVisibilityByDate,
         CreateFile::Factory.new(file_appender: FileAppender),
+<<<<<<< HEAD
         PropagateVisibilityAndState,
         CleanupPdfs
+=======
+        PropagateVisibilityAndState
+>>>>>>> d8616123... adds lux order manager to figgy
       ],
       after_save: [
         AppendToParent

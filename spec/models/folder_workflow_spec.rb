@@ -8,10 +8,17 @@ describe FolderWorkflow do
     it "proceeds through ingest workflow" do
       # initial state: needs_qa
       expect(workflow.needs_qa?).to be true
+<<<<<<< HEAD
       expect(workflow.may_make_complete?).to be true
       expect(workflow.complete?).to be false
 
       expect(workflow.make_complete).to be true
+=======
+      expect(workflow.may_complete?).to be true
+      expect(workflow.complete?).to be false
+
+      expect(workflow.complete).to be true
+>>>>>>> d8616123... adds lux order manager to figgy
       expect(workflow.complete?).to be true
       expect(workflow.may_submit_for_qa?).to eq true
       expect(workflow.needs_qa?).to eq false
@@ -19,7 +26,11 @@ describe FolderWorkflow do
       expect(workflow.submit_for_qa).to eq true
       expect(workflow.needs_qa?).to eq true
       expect(workflow.complete?).to eq false
+<<<<<<< HEAD
       expect(workflow.may_make_complete?).to eq true
+=======
+      expect(workflow.may_complete?).to eq true
+>>>>>>> d8616123... adds lux order manager to figgy
     end
   end
 

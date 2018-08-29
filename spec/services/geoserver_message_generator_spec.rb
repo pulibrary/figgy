@@ -28,11 +28,19 @@ RSpec.describe GeoserverMessageGenerator do
           visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
         )
       end
+<<<<<<< HEAD
       let(:shapefile_name) { "display_vector/p-#{file_set.id}.shp" }
 
       it "returns a valid message hash" do
         output = generator.generate
         expect(output["id"]).to eq("p-#{file_set.id}")
+=======
+      let(:shapefile_name) { "display_vector/#{file_set.id}.shp" }
+
+      it "returns a valid message hash" do
+        output = generator.generate
+        expect(output["id"]).to eq(file_set.id.to_s)
+>>>>>>> d8616123... adds lux order manager to figgy
         expect(output["layer_type"]).to eq(:shapefile)
         expect(output["workspace"]).to eq(Figgy.config["geoserver"]["open"]["workspace"])
         expect(output["path"]).to include(shapefile_name, geoserver_derivatives_path)
@@ -40,6 +48,7 @@ RSpec.describe GeoserverMessageGenerator do
       end
     end
 
+<<<<<<< HEAD
     context "without a valid parent resource" do
       let(:file) { fixture_file_upload("files/vector/shapefile.zip", "application/zip") }
       let(:tika_output) { tika_shapefile_output }
@@ -90,6 +99,8 @@ RSpec.describe GeoserverMessageGenerator do
       end
     end
 
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
     context "with a restricted raster resource derivative" do
       let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tif") }
       let(:tika_output) { tika_geotiff_output }
@@ -105,7 +116,11 @@ RSpec.describe GeoserverMessageGenerator do
 
       it "returns a valid message hash" do
         output = generator.generate
+<<<<<<< HEAD
         expect(output["id"]).to eq("p-#{file_set.id}")
+=======
+        expect(output["id"]).to eq(file_set.id.to_s)
+>>>>>>> d8616123... adds lux order manager to figgy
         expect(output["layer_type"]).to eq(:geotiff)
         expect(output["workspace"]).to eq(Figgy.config["geoserver"]["authenticated"]["workspace"])
         expect(output["path"]).to include(geo_tiff_name, geoserver_derivatives_path)

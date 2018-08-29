@@ -18,3 +18,7 @@ end
 
 Capybara.javascript_driver = :headless_chrome
 Capybara.default_max_wait_time = 15
+<<<<<<< HEAD
+=======
+Capybara.default_driver = :selenium
+>>>>>>> d8616123... adds lux order manager to figgy

@@ -23,13 +23,21 @@ gem "puma"
 gem "rails", "5.1.6"
 gem "recipient_interceptor"
 gem "redis-namespace"
+<<<<<<< HEAD
 gem "ruby_tika_app", github: "pulibrary/ruby_tika_app"
+=======
+gem "ruby_tika_app"
+>>>>>>> d8616123... adds lux order manager to figgy
 gem "sass-rails", "~> 5.0"
 gem "simple_form"
 gem "sprockets", ">= 3.0.0"
 gem "title"
 gem "uglifier"
+<<<<<<< HEAD
 gem "valkyrie", "1.2.0"
+=======
+gem "valkyrie", "1.1.2"
+>>>>>>> d8616123... adds lux order manager to figgy
 gem "valkyrie-derivatives", git: "https://github.com/samvera-labs/valkyrie-derivatives.git"
 gem "webpacker", "~> 3.3"
 

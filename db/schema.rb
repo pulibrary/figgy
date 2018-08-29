@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20180810215750) do
+=======
+ActiveRecord::Schema.define(version: 20180306193020) do
+>>>>>>> d8616123... adds lux order manager to figgy
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,7 +60,10 @@ ActiveRecord::Schema.define(version: 20180810215750) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "internal_resource"
+<<<<<<< HEAD
     t.integer "lock_version"
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
     t.index "metadata jsonb_path_ops", name: "index_orm_resources_on_metadata_jsonb_path_ops", using: :gin
     t.index ["internal_resource"], name: "index_orm_resources_on_internal_resource"
     t.index ["metadata"], name: "index_orm_resources_on_metadata", using: :gin

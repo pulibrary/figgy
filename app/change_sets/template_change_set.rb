@@ -3,7 +3,11 @@ class TemplateChangeSet < ChangeSet
   self.fields = [:title]
   property :title, required: true, multiple: false
   property :model_class, multiple: false, required: true
+<<<<<<< HEAD
   property :nested_properties, type: Types::Strict::Array.of(Types::Strict::Hash), default: [{}]
+=======
+  property :nested_properties, type: Types::Strict::Array.member(Types::Strict::Hash), default: [{}]
+>>>>>>> d8616123... adds lux order manager to figgy
   property :child_change_set_attributes, virtual: true
   property :parent_id, multiple: false, type: Valkyrie::Types::ID.optional
   validates :title, presence: true

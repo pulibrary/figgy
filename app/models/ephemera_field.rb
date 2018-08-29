@@ -4,6 +4,10 @@
 # Also note that :field_name was used (as opposed to :name) for the purposes of disambiguation
 class EphemeraField < Resource
   include Valkyrie::Resource::AccessControls
+<<<<<<< HEAD
+=======
+  attribute :id, Valkyrie::Types::ID.optional
+>>>>>>> d8616123... adds lux order manager to figgy
   attribute :field_name # Please note that this stores an index for a Term within ControlledVocabulary::EphemeraField
   attribute :member_of_vocabulary_id, Valkyrie::Types::Set
 end

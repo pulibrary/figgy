@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 require "rails_helper"
 
+<<<<<<< HEAD
 RSpec.feature "RasterResources" do
+=======
+RSpec.feature "RasterResources", js: true do
+>>>>>>> d8616123... adds lux order manager to figgy
   let(:user) { FactoryBot.create(:admin) }
 
   before do

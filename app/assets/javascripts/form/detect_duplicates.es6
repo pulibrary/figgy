@@ -26,10 +26,15 @@ class DuplicateResourceDetector {
   }
 
   removeWarning() {
+<<<<<<< HEAD
     if ( this.$warning ) {
       this.$warning.remove()
       delete this.$warning
     }
+=======
+    this.$warning.remove()
+    delete this.$warning
+>>>>>>> d8616123... adds lux order manager to figgy
   }
 
   query() {

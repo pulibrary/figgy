@@ -10,6 +10,10 @@ RSpec.describe Report do
   end
 
   it "has a list of available reports" do
+<<<<<<< HEAD
     expect(described_class.all).to eq [:ephemera_data, :identifiers_to_reconcile]
+=======
+    expect(described_class.all).to eq [:identifiers_to_reconcile]
+>>>>>>> d8616123... adds lux order manager to figgy
   end
 end

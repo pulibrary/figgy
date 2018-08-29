@@ -9,15 +9,26 @@ class SimpleResourceChangeSet < ChangeSet
   property :rights_statement, multiple: false, required: true, default: "http://rightsstatements.org/vocab/NKC/1.0/", type: ::Types::URI
   property :rights_note, multiple: false, required: false
   property :viewing_hint, multiple: false, required: false, default: "individuals"
+<<<<<<< HEAD
   property :pdf_type, multiple: false, required: false, default: "color"
+=======
+  property :pdf_type, multiple: false, required: false, default: "gray"
+>>>>>>> d8616123... adds lux order manager to figgy
   property :viewing_direction, multiple: false, required: false
   property :portion_note, multiple: false, required: false
   property :nav_date, multiple: false, required: false
   property :local_identifier, multiple: true, required: false, default: []
+<<<<<<< HEAD
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID.optional
   property :start_canvas, multiple: false, type: Valkyrie::Types::ID.optional
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
+=======
+  property :member_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
+  property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID.optional
+  property :start_canvas, multiple: false, type: Valkyrie::Types::ID.optional
+  property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
+>>>>>>> d8616123... adds lux order manager to figgy
   property :read_groups, multiple: true, required: false
   property :file_metadata, multiple: true, required: false, default: []
   property :depositor, multiple: false, require: false

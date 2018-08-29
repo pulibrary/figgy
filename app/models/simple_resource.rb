@@ -3,13 +3,23 @@
 class SimpleResource < Resource
   include Valkyrie::Resource::AccessControls
   include Schema::Common
+<<<<<<< HEAD
+=======
+  attribute :id, Valkyrie::Types::ID.optional
+>>>>>>> d8616123... adds lux order manager to figgy
   attribute :member_ids, Valkyrie::Types::Array
   attribute :member_of_collection_ids
 
   attribute :state
+<<<<<<< HEAD
   attribute :pending_uploads, Valkyrie::Types::Array.of(PendingUpload)
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
   attribute :file_metadata, Valkyrie::Types::Set.of(FileMetadata.optional)
+=======
+  attribute :pending_uploads, Valkyrie::Types::Array.member(PendingUpload)
+  attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
+  attribute :file_metadata, Valkyrie::Types::Set.member(FileMetadata.optional)
+>>>>>>> d8616123... adds lux order manager to figgy
 
   # Does this generate IIIF Manifests
   # @return [TrueClass, FalseClass]

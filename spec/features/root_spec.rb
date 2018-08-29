@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 require "rails_helper"
 
+<<<<<<< HEAD
 RSpec.feature "Home Page" do
+=======
+RSpec.feature "Home Page", js: true do
+>>>>>>> d8616123... adds lux order manager to figgy
   let(:user) { FactoryBot.create(:admin) }
   before do
     FactoryBot.create_for_repository(:ephemera_project)

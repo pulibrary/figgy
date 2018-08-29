@@ -81,7 +81,11 @@ class RasterResourceDerivativeService
     {
       input_format: original_file.mime_type.first,
       label: :display_raster,
+<<<<<<< HEAD
       id: prefixed_id,
+=======
+      id: resource.id,
+>>>>>>> d8616123... adds lux order manager to figgy
       format: "tif",
       srid: "EPSG:3857",
       url: URI("file://#{temporary_display_output.path}")
@@ -104,12 +108,15 @@ class RasterResourceDerivativeService
     decorator.parent
   end
 
+<<<<<<< HEAD
   # Resource id prefixed with letter to avoid restrictions on
   # numbers in QNames from GeoServer generated WFS GML.
   def prefixed_id
     "p-#{resource.id}"
   end
 
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   def run_derivatives
     GeoWorks::Derivatives::Runners::RasterDerivatives.create(
       filename, outputs: [instructions_for_display, instructions_for_thumbnail]

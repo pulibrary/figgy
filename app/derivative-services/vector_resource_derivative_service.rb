@@ -87,9 +87,15 @@ class VectorResourceDerivativeService
     {
       input_format: original_file.mime_type.first,
       label: :display_vector,
+<<<<<<< HEAD
       id: prefixed_id,
       format: "zip",
       srid: "EPSG:4326",
+=======
+      id: resource.id,
+      format: "zip",
+      srid: "EPSG:3857",
+>>>>>>> d8616123... adds lux order manager to figgy
       url: URI("file://#{temporary_display_output.path}")
     }
   end
@@ -110,12 +116,15 @@ class VectorResourceDerivativeService
     decorator.parent
   end
 
+<<<<<<< HEAD
   # Resource id prefixed with letter to avoid restrictions on
   # numbers in QNames from GeoServer generated WFS GML.
   def prefixed_id
     "p-#{resource.id}"
   end
 
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   def run_derivatives
     GeoWorks::Derivatives::Runners::VectorDerivatives.create(
       filename, outputs: [instructions_for_display, instructions_for_thumbnail]

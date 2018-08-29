@@ -5,6 +5,7 @@ class PDFGenerator
     LETTER_WIDTH = PDF::Core::PageGeometry::SIZES["LETTER"].first
     LETTER_HEIGHT = PDF::Core::PageGeometry::SIZES["LETTER"].last
     BITONAL_SIZE = 2000
+<<<<<<< HEAD
 
     # Error raised when IIIF Manifests have an invalid structure
     class InvalidIIIFManifestError < StandardError; end
@@ -28,18 +29,31 @@ class PDFGenerator
 
     # Access the width for the canvas
     # @return [Integer]
+=======
+    attr_reader :canvas
+    def initialize(canvas)
+      @canvas = canvas
+    end
+
+>>>>>>> d8616123... adds lux order manager to figgy
     def width
       canvas["resource"]["width"].to_i
     end
 
+<<<<<<< HEAD
     # Access the height for the canvas
     # @return [Integer]
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
     def height
       canvas["resource"]["height"].to_i
     end
 
+<<<<<<< HEAD
     # Access the URL for the IIIF image server
     # @return [String]
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
     def url
       canvas["resource"]["service"]["@id"]
     end

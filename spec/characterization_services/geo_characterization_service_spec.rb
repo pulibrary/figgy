@@ -12,11 +12,19 @@ RSpec.describe GeoCharacterizationService do
   let(:query_service) { adapter.query_service }
   let(:file) { fixture_file_upload("files/geo_metadata/fgdc.xml", "application/xml") }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
+<<<<<<< HEAD
   let(:resource) do
     change_set_persister.save(change_set: ScannedMapChangeSet.new(ScannedMap.new, files: [file]))
   end
   let(:resource_members) { query_service.find_members(resource: resource) }
   let(:valid_file_set) { resource_members.first }
+=======
+  let(:map) do
+    change_set_persister.save(change_set: ScannedMapChangeSet.new(ScannedMap.new, files: [file]))
+  end
+  let(:map_members) { query_service.find_members(resource: map) }
+  let(:valid_file_set) { map_members.first }
+>>>>>>> d8616123... adds lux order manager to figgy
   # Shared output context for stubbing tika
   let(:tika_output) { tika_xml_output }
 
@@ -26,6 +34,7 @@ RSpec.describe GeoCharacterizationService do
     expect(new_file_set.original_file.mime_type).to eq ["application/xml; schema=fgdc"]
   end
 
+<<<<<<< HEAD
   context "with a shapefile that contains documentation" do
     let(:file) { fixture_file_upload("files/vector/shapefile_with_documentation.zip", "application/zip") }
     let(:resource) do
@@ -42,6 +51,8 @@ RSpec.describe GeoCharacterizationService do
     end
   end
 
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   describe "#valid?" do
     let(:decorator) { instance_double(FileSetDecorator, parent: parent) }
 

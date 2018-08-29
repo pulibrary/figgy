@@ -43,6 +43,10 @@ class DownloadsController < ApplicationController
 
   class FileWithMetadata < Dry::Struct
     delegate :size, :read, :stream, to: :file
+<<<<<<< HEAD
+=======
+    attribute :id, Valkyrie::Types::Any
+>>>>>>> d8616123... adds lux order manager to figgy
     attribute :file, Valkyrie::Types::Any
     attribute :mime_type, Valkyrie::Types::SingleValuedString
     attribute :original_name, Valkyrie::Types::SingleValuedString

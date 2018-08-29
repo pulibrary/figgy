@@ -34,12 +34,15 @@ module Bagit
       base_path.join(id.to_s)
     end
 
+<<<<<<< HEAD
     def id
       @id ||= begin
         Valkyrie::ID.new(Digest::MD5.hexdigest("bagit://#{base_path}"))
       end
     end
 
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
     class NestedMetadataAdapter < Bagit::MetadataAdapter
       attr_reader :base_path, :bag_id
       def initialize(base_path:, bag_id:)

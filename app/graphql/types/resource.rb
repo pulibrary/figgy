@@ -28,7 +28,11 @@ module Types::Resource
 
   # We need to centralize logic for navigating a MVW's members to find a
   # thumbnail file set. This is a hack to use the helper's logic for doing that.
+<<<<<<< HEAD
   # refactor ticketed as https://github.com/pulibrary/figgy/issues/1708
+=======
+  # @TODO: Fix this.
+>>>>>>> d8616123... adds lux order manager to figgy
   def helper
     @helper ||= ManifestBuilder::ManifestHelper.new.tap do |helper|
       helper.singleton_class.include(ThumbnailHelper)

@@ -98,7 +98,11 @@ class IngestGeoportalRecordJob < ApplicationJob
 
     def complete_record(output)
       new_resource = DynamicChangeSet.new(output)
+<<<<<<< HEAD
       new_resource.validate(state: "complete")
+=======
+      new_resource.state = "complete"
+>>>>>>> d8616123... adds lux order manager to figgy
       changeset_persister.save(change_set: new_resource)
     end
 

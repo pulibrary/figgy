@@ -2,14 +2,20 @@
 class GeoserverMessageGenerator
   attr_reader :resource
 
+<<<<<<< HEAD
   # @param resource [Valkyrie::Resource]
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   def initialize(resource:)
     @resource = resource
   end
 
+<<<<<<< HEAD
   # Generate the (RabbitMQ) message propagated in response to a new geospatial
   #   asset being ingested or updated
   # @return [Hash]
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   def generate
     {
       "id" => id,
@@ -22,6 +28,7 @@ class GeoserverMessageGenerator
 
   private
 
+<<<<<<< HEAD
     # GeoServer workspace for restricted content that requires authentication
     # @return [String]
     def authenticated_workspace
@@ -39,16 +46,27 @@ class GeoserverMessageGenerator
 
     # Access the path used for GeoServer derivatives
     # @return [String]
+=======
+    def derivative_file_path
+      derivative_id = resource.derivative_file.file_identifiers[0]
+      Valkyrie::StorageAdapter.find_by(id: derivative_id).io.path
+    end
+
+>>>>>>> d8616123... adds lux order manager to figgy
     def geotiff_path
       derivative_file_path.gsub(Figgy.config["geo_derivative_path"], geoserver_base_path)
     end
 
+<<<<<<< HEAD
     # Access the currently configured path for GeoServer derivative files
     # @return [String]
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
     def geoserver_base_path
       Figgy.config["geoserver"]["derivatives_path"]
     end
 
+<<<<<<< HEAD
     # Resource id prefixed with letter to avoid restrictions on
     # numbers in QNames from GeoServer generated WFS GML.
     # @return [String]
@@ -65,10 +83,22 @@ class GeoserverMessageGenerator
 
     # Retrieve the parent resource
     # @return [Valkyrie::Resource]
+=======
+    def id
+      resource.id.to_s
+    end
+
+    def layer_type
+      return :shapefile if vector_resource_parent?
+      :geotiff
+    end
+
+>>>>>>> d8616123... adds lux order manager to figgy
     def parent
       @parent ||= resource.decorate.parent
     end
 
+<<<<<<< HEAD
     # Generate the file system path for the vector shapefile binary or raster
     #   GeoTiff
     # @return [String]
@@ -85,17 +115,28 @@ class GeoserverMessageGenerator
 
     # Provide the default public visibility value for the resource
     # @return [String]
+=======
+    def path
+      return shapefile_path if vector_resource_parent?
+      geotiff_path
+    end
+
+>>>>>>> d8616123... adds lux order manager to figgy
     def public_visibility
       Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
 
+<<<<<<< HEAD
     # Generate the file system path for the Shapefile (comprising a vector
     #   dataset)
     # @return [String]
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
     def shapefile_path
       "file://#{File.dirname(geotiff_path)}/#{File.basename(geotiff_path, '.zip')}/#{id}.shp"
     end
 
+<<<<<<< HEAD
     # Retrieve the title from the parent resource
     # @return [String]
     def title
@@ -118,5 +159,19 @@ class GeoserverMessageGenerator
       # Generate a workspace value from the visibility of the parent resource
       visibility = parent.model.visibility.try(:first)
       visibility == public_visibility ? public_workspace : authenticated_workspace
+=======
+    def title
+      Array(resource.decorate.parent.title).first.to_s
+    end
+
+    def vector_resource_parent?
+      parent.is_a?(VectorResource)
+    end
+
+    def workspace
+      visibility = parent.model.visibility.try(:first)
+      return Figgy.config["geoserver"]["open"]["workspace"] if visibility == public_visibility
+      Figgy.config["geoserver"]["authenticated"]["workspace"]
+>>>>>>> d8616123... adds lux order manager to figgy
     end
 end

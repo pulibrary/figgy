@@ -9,6 +9,7 @@ class BoxWorkflow < BaseWorkflow
     state :all_in_production
 
     # ingest workflow
+<<<<<<< HEAD
     event :prepare_to_ship do
       transitions from: :new, to: :ready_to_ship
     end
@@ -19,6 +20,18 @@ class BoxWorkflow < BaseWorkflow
       transitions from: :shipped, to: :received
     end
     event :release_into_production do
+=======
+    event :ready_to_ship do
+      transitions from: :new, to: :ready_to_ship
+    end
+    event :shipped do
+      transitions from: :ready_to_ship, to: :shipped
+    end
+    event :received do
+      transitions from: :shipped, to: :received
+    end
+    event :all_in_production do
+>>>>>>> d8616123... adds lux order manager to figgy
       transitions from: :received, to: :all_in_production
     end
   end

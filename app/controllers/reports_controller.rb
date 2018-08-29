@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class ReportsController < ApplicationController
+<<<<<<< HEAD
   def ephemera_data
     authorize! :show, Report
     if params[:project_id]
@@ -18,6 +19,8 @@ class ReportsController < ApplicationController
     end
   end
 
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   def identifiers_to_reconcile
     authorize! :show, Report
     @resources = Valkyrie.config.metadata_adapter.query_service.custom_queries.find_identifiers_to_reconcile
@@ -36,6 +39,7 @@ class ReportsController < ApplicationController
       CSV.generate(headers: true) do |csv|
         csv << fields.map { |_k, v| v }
         records.each do |record|
+<<<<<<< HEAD
           csv << fields.map { |k, _v| Array.wrap(record.send(k)).join(";") }
         end
       end
@@ -48,4 +52,10 @@ class ReportsController < ApplicationController
     def query_service
       Valkyrie.config.metadata_adapter.query_service
     end
+=======
+          csv << fields.map { |k, _v| Array.wrap(record.send(k)).first }
+        end
+      end
+    end
+>>>>>>> d8616123... adds lux order manager to figgy
 end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+<<<<<<< HEAD
 
 # Class modeling METS Documents
 # @see https://www.loc.gov/standards/mets/
@@ -9,11 +10,18 @@ class METSDocument
   attr_reader :source_file, :mets
 
   # @param [String] mets_file
+=======
+class METSDocument
+  include MetsStructure
+  attr_reader :source_file, :mets
+
+>>>>>>> d8616123... adds lux order manager to figgy
   def initialize(mets_file)
     @source_file = mets_file
     @mets = File.open(@source_file) { |f| Nokogiri::XML(f) }
   end
 
+<<<<<<< HEAD
   # Access the ARK ID
   # @return [String]
   def ark_id
@@ -57,10 +65,34 @@ class METSDocument
   # Determine whether or not the resource described by the METS is
   #   right-to-left or left-to-right in viewing direction
   # @return [Boolean]
+=======
+  def ark_id
+    @mets.xpath("/mets:mets/@OBJID").to_s
+  end
+
+  def bib_id
+    @mets.xpath("/mets:mets/mets:dmdSec/mets:mdRef/@xlink:href").to_s.gsub(/.*\//, "")
+  end
+
+  def collection_slug
+    @mets.xpath("/mets:mets/mets:structMap[@TYPE='RelatedObjects']//mets:div[@TYPE='IsPartOf']/@CONTENTIDS").to_s
+  end
+
+  def pudl_id
+    @mets.xpath("/mets:mets/mets:metsHdr/mets:metsDocumentID").first.content.gsub(/\.mets/, "")
+  end
+
+  def thumbnail_path
+    xp = "/mets:mets/mets:fileSec/mets:fileGrp[@USE='thumbnail']/mets:file/mets:FLocat/@xlink:href"
+    @mets.xpath(xp).to_s.gsub(/file:\/\//, "")
+  end
+
+>>>>>>> d8616123... adds lux order manager to figgy
   def viewing_direction
     right_to_left ? "right-to-left" : "left-to-right"
   end
 
+<<<<<<< HEAD
   # Determine whether or not the viewing direction for the described resource
   #   is right-to-left in viewing direction
   # @return [Boolean]
@@ -75,57 +107,84 @@ class METSDocument
   def viewing_hint
     attribute = @mets.xpath("/mets:mets/mets:structMap[@TYPE='Physical']/mets:div/@TYPE")
     type = attribute.to_s
+=======
+  def right_to_left
+    @mets.xpath("/mets:mets/mets:structMap[@TYPE='Physical']/mets:div/@TYPE").to_s.start_with? "RTL"
+  end
+
+  def viewing_hint
+    type = @mets.xpath("/mets:mets/mets:structMap[@TYPE='Physical']/mets:div/@TYPE").to_s
+>>>>>>> d8616123... adds lux order manager to figgy
     return if ["TightBoundManuscript", "ScrollSet", "BoundArt"].any? { |w| type.include?(w) }
     "paged"
   end
 
+<<<<<<< HEAD
   # Determine if the described resource is a multi-volume work
   # @return [Boolean]
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   def multi_volume?
     volume_nodes.length > 1
   end
 
+<<<<<<< HEAD
   # Retrieve the IDs for the volumes encoded in the METS Document
   # @return [Array<String>]
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   def volume_ids
     volume_nodes.map do |vol|
       vol.attribute("ID").value
     end
   end
 
+<<<<<<< HEAD
   # Provide the label for the described resource
   # (This defaults to an empty array)
   # @return [Array]
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   def label
     []
   end
 
+<<<<<<< HEAD
   # For a given volume ID, retrieve the label for that volume
   # @param [String] volume_id ID for the volume
   # @return [String]
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   def label_for_volume(volume_id)
     volume_node = volume_nodes.find { |vol| vol.attribute("ID").value == volume_id }
     return volume_node.attribute("LABEL").value if volume_node
   end
 
+<<<<<<< HEAD
   # For a given volume ID, retrieve the information for each file associated
   #   with the volume
   # @param [String] volume_id ID for the volume
   # @return [Array<Hash>]
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   def files_for_volume(volume_id)
     @mets.xpath("//mets:div[@ID='#{volume_id}']//mets:fptr/@FILEID").map(&:value).uniq.map do |file_id|
       file_info(@mets.xpath("//mets:file[@ID='#{file_id}']"), volume_id)
     end
   end
 
+<<<<<<< HEAD
   # Retrieve all information for files encoded in the METS
   # @return [Hash<Array>]
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   def files
     @mets.xpath("/mets:mets/mets:fileSec/mets:fileGrp[@USE='masters']/mets:file").map do |f|
       file_info(f)
     end
   end
 
+<<<<<<< HEAD
   # For a given XML element encoding a file description (and an optional ID for
   #   a volume), construct a Hash containing information about the file
   # @param [Nokogiri::XML::Node] file the file XML element
@@ -135,6 +194,10 @@ class METSDocument
     element = file.xpath("mets:FLocat/@xlink:href")
     content = element.to_s
     path = content.gsub(/file:\/\//, "")
+=======
+  def file_info(file, volume_id = nil)
+    path = file.xpath("mets:FLocat/@xlink:href").to_s.gsub(/file:\/\//, "")
+>>>>>>> d8616123... adds lux order manager to figgy
     replaces = volume_id ? "#{volume_id}/" : ""
     replaces += File.basename(path, File.extname(path))
     {
@@ -146,17 +209,23 @@ class METSDocument
     }
   end
 
+<<<<<<< HEAD
   # Retrieve options relating to the encoded file
   # @param [Nokogiri::XML::Node] file the file XML element
   # @return [Hash]
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   def file_opts(file)
     return {} if @mets.xpath("count(//mets:div/mets:fptr[@FILEID='#{file[:id]}'])").positive?
     { viewing_hint: "non-paged" }
   end
 
+<<<<<<< HEAD
   # Construct an IngestableFile object given a Hash containing file attributes
   # @param [Hash] f file attributes
   # @return [IngestableFile]
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   def decorated_file(f)
     IngestableFile.new(
       file_path: f[:path],
@@ -168,16 +237,20 @@ class METSDocument
     )
   end
 
+<<<<<<< HEAD
   # Generate the attributes for the container resource given a Hash of file
   #   attributes
   # @param [Hash] file file attributes
   # @param [Hash]
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   def container_attributes(file)
     {
       title: file_label(file[:id])
     }
   end
 
+<<<<<<< HEAD
   # Construct the MODS Document object using the METS XML Document and an XPath
   # @return [MODSDocument]
   def mods
@@ -209,14 +282,21 @@ class METSDocument
     # Access the XML elements encoding information about volumes in the METS
     #   Document
     # @return [Nokogiri::XML::NodeSet]
+=======
+  private
+
+>>>>>>> d8616123... adds lux order manager to figgy
     def volume_nodes
       xp = "/mets:mets/mets:structMap[@TYPE='Physical']/mets:div[@TYPE='MultiVolumeSet']/mets:div"
       @volume_nodes ||= logical_volumes || @mets.xpath(xp)
     end
 
+<<<<<<< HEAD
     # Access the XML elements encoding information about volumes in the METS
     #   Document if they are encoded as a logical structural map (structMap)
     # @return [Nokogiri::XML::NodeSet]
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
     def logical_volumes
       xp = "/mets:mets/mets:structMap[@TYPE='Logical']/mets:div/mets:div[starts-with(@TYPE, 'Bound')]"
       log = @mets.xpath(xp)

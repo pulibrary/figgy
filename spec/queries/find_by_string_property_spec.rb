@@ -11,6 +11,7 @@ RSpec.describe FindByStringProperty do
       output = query.find_by_string_property(property: :barcode, value: box.barcode.first).first
       expect(output.id).to eq box.id
     end
+<<<<<<< HEAD
 
     context "when no objects have the string in that property" do
       it "returns no results" do
@@ -18,5 +19,7 @@ RSpec.describe FindByStringProperty do
         expect(output.to_a).to be_empty
       end
     end
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   end
 end

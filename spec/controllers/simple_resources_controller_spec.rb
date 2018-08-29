@@ -9,9 +9,15 @@ RSpec.describe SimpleResourcesController do
   let(:persister) { adapter.persister }
   let(:query_service) { adapter.query_service }
   let(:resource_klass) { SimpleResource }
+<<<<<<< HEAD
   let(:manifestable_factory) { :complete_simple_resource }
 
   it_behaves_like "a BaseResourceController", :skip_edit
+=======
+  let(:manifestable_factory) { :published_simple_resource }
+
+  it_behaves_like "a BaseResourceController"
+>>>>>>> d8616123... adds lux order manager to figgy
 
   # Helper method just for the test suite
   def find_resource(id)

@@ -72,10 +72,16 @@ const ManifestoFilemanagerMixins = {
   },
 
   getResourceId: function (canvas) {
+<<<<<<< HEAD
     // this "string hack" will parse a IIIF service @id to get the Figgy Resource id
     let uriArray = canvas.id.split('/')
     let id = uriArray[uriArray.length-1]
     return id
+=======
+    const images = canvas.getImages()
+    const r = images[0].getResource()
+    return r.id
+>>>>>>> d8616123... adds lux order manager to figgy
   },
 
   getEnglishTitle: function (manifest) {

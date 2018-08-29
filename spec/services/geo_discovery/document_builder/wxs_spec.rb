@@ -27,7 +27,11 @@ describe GeoDiscovery::DocumentBuilder::Wxs do
     context "public document" do
       it "returns a public identifier" do
         file_set_id = geo_work.member_ids[0]
+<<<<<<< HEAD
         expect(wxs_builder.identifier).to eq "public-figgy:p-#{file_set_id}"
+=======
+        expect(wxs_builder.identifier).to eq "public-figgy:#{file_set_id}"
+>>>>>>> d8616123... adds lux order manager to figgy
       end
     end
 

@@ -10,15 +10,21 @@ namespace :bulk do
     local_id = ENV["LOCAL_ID"]
     replaces = ENV["REPLACES"]
     background = ENV["BACKGROUND"]
+<<<<<<< HEAD
     model = ENV["MODEL"]
 
     abort "usage: rake bulk:ingest DIR=/path/to/files BIB=1234567 COLL=collid LOCAL_ID=local_id REPLACES=replaces MODEL=ResourceClass" unless dir && Dir.exist?(dir)
+=======
+
+    abort "usage: rake bulk:ingest DIR=/path/to/files BIB=1234567 COLL=collid LOCAL_ID=local_id REPLACES=replaces" unless dir && Dir.exist?(dir)
+>>>>>>> d8616123... adds lux order manager to figgy
 
     @logger = Logger.new(STDOUT)
     @logger.warn "No BIB id specified" unless bib
     @logger.info "ingesting files from: #{dir}"
     @logger.info "ingesting as: #{user.user_key} (override with USER=foo)"
     @logger.info "adding item to collection #{coll}" if coll
+<<<<<<< HEAD
     if model
       begin
         model.constantize
@@ -30,12 +36,17 @@ namespace :bulk do
     else
       class_name = "ScannedResource"
     end
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
 
     begin
       if background
         IngestFolderJob.set(queue: :low).perform_later(
           directory: dir,
+<<<<<<< HEAD
           class_name: class_name,
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
           member_of_collection_ids: [coll],
           source_metadata_identifier: bib,
           local_identifier: local_id,
@@ -44,7 +55,10 @@ namespace :bulk do
       else
         IngestFolderJob.perform_now(
           directory: dir,
+<<<<<<< HEAD
           class_name: class_name,
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
           member_of_collection_ids: [coll],
           source_metadata_identifier: bib,
           local_identifier: local_id,
@@ -126,14 +140,20 @@ namespace :bulk do
     field = ENV["FIELD"]
     filter = ENV["FILTER"]
     background = ENV["BACKGROUND"]
+<<<<<<< HEAD
     model = ENV["MODEL"]
 
     abort "usage: rake bulk:attach_each_dir DIR=/path/to/files FIELD=barcode FILTER=filter MODEL=ResourceClass" unless field && dir && Dir.exist?(dir)
+=======
+
+    abort "usage: rake bulk:attach_each_dir DIR=/path/to/files FIELD=barcode FILTER=filter" unless field && dir && Dir.exist?(dir)
+>>>>>>> d8616123... adds lux order manager to figgy
 
     @logger = Logger.new(STDOUT)
     @logger.info "attaching files from: #{dir}"
     @logger.info "attaching as: #{user.user_key} (override with USER=foo)"
     @logger.info "filtering to files ending with #{filter}" if filter
+<<<<<<< HEAD
     if model
       begin
         model.constantize
@@ -145,19 +165,27 @@ namespace :bulk do
     else
       class_name = "ScannedResource"
     end
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
 
     begin
       if background
         IngestFoldersJob.set(queue: :low).perform_later(
           directory: dir,
+<<<<<<< HEAD
           class_name: class_name,
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
           property: field,
           file_filter: filter
         )
       else
         IngestFoldersJob.perform_now(
           directory: dir,
+<<<<<<< HEAD
           class_name: class_name,
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
           property: field,
           file_filter: filter
         )

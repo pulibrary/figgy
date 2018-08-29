@@ -26,7 +26,11 @@ class TikaFileCharacterizationService
   end
 
   def json_output
+<<<<<<< HEAD
     "[#{RubyTikaApp.new(filename.to_s, tika_config).to_json.gsub('}{', '},{')}]"
+=======
+    "[#{RubyTikaApp.new(filename.to_s).to_json.gsub('}{', '},{')}]"
+>>>>>>> d8616123... adds lux order manager to figgy
   end
 
   def file_characterization_attributes
@@ -61,10 +65,13 @@ class TikaFileCharacterizationService
     @file_set.original_file
   end
 
+<<<<<<< HEAD
   def tika_config
     Rails.root.join("config", "tika-config.xml").to_s
   end
 
+=======
+>>>>>>> d8616123... adds lux order manager to figgy
   def valid?
     true
   end

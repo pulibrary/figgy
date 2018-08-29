@@ -121,7 +121,11 @@ RSpec.describe ChangeSetPersister do
       resource = FactoryBot.create(:draft_simple_resource)
       change_set = change_set_class.new(resource)
       change_set.prepopulate!
+<<<<<<< HEAD
       change_set.validate(state: "complete")
+=======
+      change_set.validate(state: "published")
+>>>>>>> d8616123... adds lux order manager to figgy
       output = change_set_persister.save(change_set: change_set)
       expect(output.identifier.first).to eq "ark:/#{shoulder}#{blade}"
     end
@@ -895,12 +899,20 @@ RSpec.describe ChangeSetPersister do
         expect(members.first.state).to eq ["draft"]
 
         change_set = DynamicChangeSet.new(amc)
+<<<<<<< HEAD
         change_set.validate(state: "complete")
+=======
+        change_set.validate(state: "published")
+>>>>>>> d8616123... adds lux order manager to figgy
         output = change_set_persister.save(change_set: change_set)
         expect(output.identifier.first).to eq "ark:/#{shoulder}#{blade}"
 
         members = Wayfinder.for(output).members
+<<<<<<< HEAD
         expect(members.first.state).to eq ["complete"]
+=======
+        expect(members.first.state).to eq ["published"]
+>>>>>>> d8616123... adds lux order manager to figgy
         expect(members.first.identifier.first).to eq "ark:/#{shoulder}#{blade}"
       end
     end

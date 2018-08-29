@@ -44,6 +44,7 @@ class ScannedResourcesController < BaseResourceController
   def pdf
     change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
     authorize! :pdf, change_set.resource
+<<<<<<< HEAD
     pdf_file = change_set.resource.pdf_file
     unless pdf_file
       pdf_file = PDFGenerator.new(resource: change_set.resource, storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)).render
@@ -51,6 +52,12 @@ class ScannedResourcesController < BaseResourceController
         change_set.validate(file_metadata: [pdf_file])
         buffered_changeset_persister.save(change_set: change_set)
       end
+=======
+    pdf_file = PDFGenerator.new(resource: change_set.resource, storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)).render
+    change_set_persister.buffer_into_index do |buffered_changeset_persister|
+      change_set.validate(file_metadata: [pdf_file])
+      buffered_changeset_persister.save(change_set: change_set)
+>>>>>>> d8616123... adds lux order manager to figgy
     end
     redirect_to download_path(resource_id: change_set.id, id: pdf_file.id)
   end

@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 require "rails_helper"
 
+<<<<<<< HEAD
 RSpec.feature "SimpleResources" do
+=======
+RSpec.feature "SimpleResources", js: true do
+>>>>>>> d8616123... adds lux order manager to figgy
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:persister) { adapter.persister }
@@ -25,6 +29,10 @@ RSpec.feature "SimpleResources" do
 
   scenario "creating a new resource" do
     visit new_simple_resource_path
+<<<<<<< HEAD
+=======
+    page.save_screenshot("screenshot.png")
+>>>>>>> d8616123... adds lux order manager to figgy
 
     expect(page).to have_field "Title"
     expect(page).to have_css '.select[for="simple_resource_rights_statement"]', text: "Rights Statement"

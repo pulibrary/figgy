@@ -97,10 +97,17 @@ RSpec.shared_examples "a ChangeSet" do
 
     describe "#pdf_type" do
       let(:form_resource) { resource_klass.new }
+<<<<<<< HEAD
       it "has a default of 'color'" do
         change_set.prepopulate!
 
         expect(change_set.pdf_type).to eq "color"
+=======
+      it "has a default of 'gray'" do
+        change_set.prepopulate!
+
+        expect(change_set.pdf_type).to eq "gray"
+>>>>>>> d8616123... adds lux order manager to figgy
       end
     end
 

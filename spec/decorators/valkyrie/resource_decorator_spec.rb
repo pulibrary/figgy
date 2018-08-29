@@ -151,8 +151,13 @@ RSpec.describe Valkyrie::ResourceDecorator do
   end
 
   describe "#ark_mintable_state?" do
+<<<<<<< HEAD
     context "with a completed SimpleResource" do
       let(:resource) { FactoryBot.build(:complete_simple_resource) }
+=======
+    context "with a published SimpleResource" do
+      let(:resource) { FactoryBot.build(:published_simple_resource) }
+>>>>>>> d8616123... adds lux order manager to figgy
       it "returns true" do
         expect(resource.decorate.ark_mintable_state?).to eq true
       end

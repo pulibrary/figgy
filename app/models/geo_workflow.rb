@@ -12,12 +12,20 @@ class GeoWorkflow < BaseWorkflow
     event :finalize_digitization do
       transitions from: :pending, to: :final_review
     end
+<<<<<<< HEAD
     event :make_complete do
+=======
+    event :complete do
+>>>>>>> d8616123... adds lux order manager to figgy
       transitions from: :final_review, to: :complete
     end
 
     # takedown/restore workflow
+<<<<<<< HEAD
     event :mark_for_takedown do
+=======
+    event :takedown do
+>>>>>>> d8616123... adds lux order manager to figgy
       transitions from: :complete, to: :takedown
     end
     event :restore do

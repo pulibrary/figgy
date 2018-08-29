@@ -8,7 +8,11 @@ class BaseResourceController < ApplicationController
   helper_method :resource_has_parents?
 
   def load_collections
+<<<<<<< HEAD
     @collections = query_service.find_all_of_model(model: Collection).map(&:decorate) || []
+=======
+    @collections = query_service.find_all_of_model(model: Collection).map(&:decorate)
+>>>>>>> d8616123... adds lux order manager to figgy
   end
 
   def resource

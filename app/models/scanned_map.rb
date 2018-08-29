@@ -2,6 +2,7 @@
 class ScannedMap < Resource
   include Valkyrie::Resource::AccessControls
   include Schema::Geo
+<<<<<<< HEAD
   attribute :member_ids, Valkyrie::Types::Array
   attribute :member_of_collection_ids
   attribute :imported_metadata, Valkyrie::Types::Set.of(ImportedMetadata).optional
@@ -10,6 +11,17 @@ class ScannedMap < Resource
   attribute :pending_uploads, Valkyrie::Types::Array.of(PendingUpload)
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
   attribute :file_metadata, Valkyrie::Types::Set.of(FileMetadata.optional)
+=======
+  attribute :id, Valkyrie::Types::ID.optional
+  attribute :member_ids, Valkyrie::Types::Array
+  attribute :member_of_collection_ids
+  attribute :imported_metadata, Valkyrie::Types::Set.member(ImportedMetadata).optional
+  attribute :state
+  attribute :logical_structure, Valkyrie::Types::Array.member(Structure.optional).optional
+  attribute :pending_uploads, Valkyrie::Types::Array.member(PendingUpload)
+  attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
+  attribute :file_metadata, Valkyrie::Types::Set.member(FileMetadata.optional)
+>>>>>>> d8616123... adds lux order manager to figgy
   attribute :relation
 
   def self.can_have_manifests?

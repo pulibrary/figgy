@@ -158,6 +158,7 @@ class ManifestBuilder
       # Retrieve the leaf nodes for the Manifest
       # @return [FileSet]
       def leaf_nodes
+<<<<<<< HEAD
         @leaf_nodes ||= members.select { |x| x.instance_of?(FileSet) && leaf_node_mime_type?(x.mime_type) }
       end
 
@@ -167,6 +168,9 @@ class ManifestBuilder
       def leaf_node_mime_type?(mime_type)
         blacklist = ["application/xml; schema=mets"]
         (blacklist & Array.wrap(mime_type)).empty?
+=======
+        @leaf_nodes ||= members.select { |x| x.instance_of?(FileSet) }
+>>>>>>> d8616123... adds lux order manager to figgy
       end
 
       ##
@@ -318,7 +322,11 @@ class ManifestBuilder
       @parent_node = parent_node
     end
 
+<<<<<<< HEAD
     delegate :local_identifier, :viewing_hint, :ocr_content, :to_model, to: :resource
+=======
+    delegate :local_identifier, :ocr_content, :to_model, to: :resource
+>>>>>>> d8616123... adds lux order manager to figgy
 
     def id
       resource.id.to_s

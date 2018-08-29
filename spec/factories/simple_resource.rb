@@ -37,8 +37,13 @@ FactoryBot.define do
     factory :draft_simple_resource do
       state "draft"
     end
+<<<<<<< HEAD
     factory :complete_simple_resource do
       state "complete"
+=======
+    factory :published_simple_resource do
+      state "published"
+>>>>>>> d8616123... adds lux order manager to figgy
     end
   end
 end

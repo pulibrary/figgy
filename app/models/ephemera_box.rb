@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 class EphemeraBox < Resource
   include Valkyrie::Resource::AccessControls
+<<<<<<< HEAD
+=======
+  attribute :id, Valkyrie::Types::ID.optional
+>>>>>>> d8616123... adds lux order manager to figgy
   attribute :member_ids, Valkyrie::Types::Array
   # member_of_collection_ids is no longer in use for boxes, see #1204
   attribute :member_of_collection_ids
@@ -15,7 +19,11 @@ class EphemeraBox < Resource
   attribute :rights_statement
   attribute :rights_note
   attribute :state
+<<<<<<< HEAD
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
+=======
+  attribute :workflow_note, Valkyrie::Types::Array.member(WorkflowNote).optional
+>>>>>>> d8616123... adds lux order manager to figgy
   attribute :thumbnail_id
   attribute :local_identifier
 

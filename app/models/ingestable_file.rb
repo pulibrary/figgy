@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 class IngestableFile < Valkyrie::Resource
+<<<<<<< HEAD
+=======
+  attribute :id, Valkyrie::Types::String
+>>>>>>> d8616123... adds lux order manager to figgy
   attribute :file_path, Valkyrie::Types::String
   attribute :mime_type, Valkyrie::Types::String
   attribute :original_filename, Valkyrie::Types::String
@@ -9,6 +13,7 @@ class IngestableFile < Valkyrie::Resource
   # file.
   attribute :node_attributes, Valkyrie::Types::Hash
   attribute :use
+<<<<<<< HEAD
   # On true: Makes `path` return the file_path directly of the file. Usually for when the
   #   storage adapter is configured to copy a file instead of `mv`. It's more
   #   efficient, but if the storage adapter is configured to use `mv` then the
@@ -21,6 +26,10 @@ class IngestableFile < Valkyrie::Resource
   #   we're importing files from disk and the import task is using the
   #   `lae_storage` or `disk_via_copy` storage adapter, which is the case for the
   #   various bulk ingest jobs.
+=======
+  # Whether or not the file is being copied by the storage adapter - will create
+  # a duplicate of file_path on disk to use otherwise.
+>>>>>>> d8616123... adds lux order manager to figgy
   attribute :copyable, Valkyrie::Types::Bool
 
   def content_type

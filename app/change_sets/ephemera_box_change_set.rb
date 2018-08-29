@@ -9,8 +9,13 @@ class EphemeraBoxChangeSet < ChangeSet
   property :received_date, multiple: false, required: false
   property :tracking_number, multiple: false, required: false
   property :drive_barcode, multiple: false, required: false
+<<<<<<< HEAD
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
+=======
+  property :member_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
+  property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.member(Valkyrie::Types::ID)
+>>>>>>> d8616123... adds lux order manager to figgy
   # override the default value defined in VisibilityProperty
   property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
   property :read_groups, multiple: true, required: false
