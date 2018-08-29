@@ -36,16 +36,19 @@
       "app/javascript/store/vuex/**/*.{js,vue}",
       "app/javascript/mixins/**/*.{js,vue}",
       "!app/javascript/app.vue",
-      "!app/javascript/packs/ordermanager.js",
+      "!app/javascript/packs/application.js",
       "!**/node_modules/**"
     ]
   },
   "dependencies": {
     "@rails/webpacker": "^3.3.1",
     "ajv": "^6.2.1",
+    "apollo-boost": "^0.1.10",
     "axios": "^0.17.1",
     "babel-polyfill": "^6.26.0",
-    "lux-design-system": "^0.0.1",
+    "graphql": "^0.13.2",
+    "graphql-tag": "^2.9.2",
+    "lux-design-system": "^0.0.19",
     "manifesto.js": "^2.2.24",
     "npm": "^6.4.0",
     "openseadragon": "^2.3.1",
