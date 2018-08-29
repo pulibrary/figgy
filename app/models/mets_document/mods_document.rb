@@ -58,6 +58,7 @@ class METSDocument
       value_from xpath: "mods:accessCondition[@type=\"useAndReproduction\"]"
     end
 
+    # in general we won't import this because it serves the same purpose as visibility
     def restriction_on_access
       uris = value_from xpath: "mods:accessCondition[@type=\"restrictionOnAccess\"]/@xlink:href"
       return uris unless uris.empty?
@@ -72,6 +73,22 @@ class METSDocument
       value_from xpath: "mods:tableOfContents"
     end
 
+    def genre
+      value_from xpath: "mods:genre"
+    end
+
+    def physical_location
+      normalize_whitespace(value_from(xpath: "mods:location/mods:physicalLocation[@type=\"text\"]"))
+    end
+
+    def holding_simple_sublocation
+      value_from(xpath: "mods:location/mods:holdingSimple/mods:copyInformation/mods:subLocation")
+    end
+
+    def shelf_locator
+      value_from(xpath: "mods:location/mods:holdingSimple/mods:copyInformation/mods:shelfLocator")
+    end
+
     private
 
       def find_elements(xpath)
@@ -82,6 +99,7 @@ class METSDocument
         elements.map(&:content)
       end
 
+      # @return Array<String>
       def value_from(xpath:)
         elements = find_elements(xpath)
         content(elements)
@@ -89,6 +107,10 @@ class METSDocument
 
       def subject_names
         value_from xpath: "mods:subject/mods:name/mods:namePart"
+      end
+
+      def normalize_whitespace(entries)
+        entries.map { |s| s.gsub(/\s+/, " ") }
       end
   end
 end

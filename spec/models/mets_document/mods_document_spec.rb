@@ -116,4 +116,38 @@ RSpec.describe METSDocument::MODSDocument do
       expect(mods_document.table_of_contents).to include "I. This Side of Paradise (1920)."
     end
   end
+
+  describe "#genre" do
+    let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0038-7350.mets") }
+
+    it "accesses genre fields" do
+      expect(mods_document.genre).to contain_exactly "photographic prints"
+    end
+  end
+
+  describe "#physical_location" do
+    let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0038-7350.mets") }
+
+    it "accesses holding location from physicalLocation where type=text and holdingSimple > copyInformation > subLocation" do
+      expect(mods_document.physical_location).to contain_exactly(
+        "Princeton University Library. Department of Rare Books and Special Collections. Seeley G. Mudd Manuscript Library."
+      )
+    end
+  end
+
+  describe "#holding_simple_sublocation" do
+    let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0038-7350.mets") }
+
+    it "accesses holding location from physicalLocation where type=text and holdingSimple > copyInformation > subLocation" do
+      expect(mods_document.holding_simple_sublocation).to contain_exactly "Mudd"
+    end
+  end
+
+  describe "#shelf_locator" do
+    let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0038-7350.mets") }
+
+    it "accesses the shelfLocator field" do
+      expect(mods_document.shelf_locator).to contain_exactly "Box AD01, Item 7350"
+    end
+  end
 end
