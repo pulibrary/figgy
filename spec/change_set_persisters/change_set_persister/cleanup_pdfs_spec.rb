@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe ChangeSetPersister::CleanupDerivatives do
+RSpec.describe ChangeSetPersister::CleanupPdfs do
   subject(:hook) { described_class.new(change_set_persister: change_set_persister, change_set: change_set) }
   let(:change_set_persister) { instance_double(ChangeSetPersister::Basic, query_service: query_service) }
   let(:change_set) { DynamicChangeSet.new(resource) }

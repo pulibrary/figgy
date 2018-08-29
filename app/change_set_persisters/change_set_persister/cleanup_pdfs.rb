@@ -2,7 +2,7 @@
 
 # Remove stale PDFs from ScannedResources when the resource has changed
 class ChangeSetPersister
-  class CleanupDerivatives
+  class CleanupPdfs
     attr_reader :resource, :change_set
     def initialize(change_set_persister: nil, change_set:, post_save_resource: nil)
       @change_set = change_set

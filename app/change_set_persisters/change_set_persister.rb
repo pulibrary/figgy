@@ -19,7 +19,7 @@ class ChangeSetPersister
         ApplyVisibilityByDate,
         CreateFile::Factory.new(file_appender: FileAppender),
         PropagateVisibilityAndState,
-        CleanupDerivatives
+        CleanupPdfs
       ],
       after_save: [
         AppendToParent
