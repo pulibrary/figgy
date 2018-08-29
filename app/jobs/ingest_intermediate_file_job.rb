@@ -24,19 +24,16 @@ class IngestIntermediateFileJob < ApplicationJob
       end
 
       file_sets = resource.decorate.file_sets
+      file_sets.each do |file_set|
+        change_set = FileSetChangeSet.new(file_set)
+        change_set.prepopulate!
 
-      # Select the first FileSet to append the file to
-      break if file_sets.empty?
-      file_set = file_sets.first
+        break unless change_set.validate(files: [build_file])
+        change_set.sync
+        buffered_persister.save(change_set: change_set)
 
-      change_set = FileSetChangeSet.new(file_set)
-      change_set.prepopulate!
-
-      break unless change_set.validate(files: [build_file])
-      change_set.sync
-      buffered_persister.save(change_set: change_set)
-
-      Valkyrie.logger.info "Ingested #{file_path} as an intermediate file for #{resource.id}"
+        Valkyrie.logger.info "Ingested #{file_path} as an intermediate file for #{resource.id}"
+      end
     end
   rescue Valkyrie::Persistence::ObjectNotFoundError => not_found_error
     Valkyrie.logger.error "#{self.class}: Resource not found using ID: #{id}, property: #{property}, and value: #{value}"
