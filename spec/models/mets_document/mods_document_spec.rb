@@ -21,8 +21,8 @@ RSpec.describe METSDocument::MODSDocument do
   end
 
   describe "#alternative_title" do
-    it "accesses the alternative title within the MODS-encoded metadata" do
-      expect(mods_document.alternative_title).to include "Gutenberg Bible"
+    it "accesses the alternative titles within the MODS-encoded metadata" do
+      expect(mods_document.alternative_title).to contain_exactly "Gutenberg Bible", "Mazarin Bible", "Mazarine Bible"
     end
   end
 
