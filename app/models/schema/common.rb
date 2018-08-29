@@ -65,7 +65,7 @@ module Schema
           :source_metadata, # Local
           :source_jsonld, # Local
           :call_number, # Local
-          :location, # Local
+          :location, # Local; call number or shelf location
           :barcode, # Local
           :series, # Local
           :ocr_language, # Local
