@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OBJID="ark:/88435/2v23vv02b" TYPE="CompiledDigitalObject" xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd">
+<mets:metsHdr CREATEDATE="2018-08-04T11:56:12.837-04:00" LASTMODDATE="2018-08-04T11:56:12.837-04:00">
+<mets:metsDocumentID TYPE="PUDL">pudl0038/ad001/001/7350.mets</mets:metsDocumentID>
+</mets:metsHdr>
+<mets:dmdSec ID="kj6ul">
+<mets:mdWrap MDTYPE="MODS">
+<mets:xmlData>
+<mods xmlns="http://www.loc.gov/mods/v3" version="3.4">
+   <typeOfResource>still image</typeOfResource>
+   <titleInfo>
+      <title>Aaron Burr Hall</title>
+   </titleInfo>
+   <originInfo>
+      <dateCreated encoding="w3cdtf" keyDate="yes" qualifier="approximate">1891</dateCreated>
+   </originInfo>
+   <physicalDescription>
+      <extent>1 photograph</extent>
+   </physicalDescription>
+   <genre authority="aat">photographic prints</genre>
+   <subject authority="lcsh">
+      <name type="corporate">
+         <namePart>Aaron Burr Hall (Princeton, N.J.)</namePart>
+      </name>
+   </subject>
+   <note>Affixed to cardboard backing, written on back "179"</note>
+   <location>
+      <physicalLocation type="text">Princeton University Library. Department of Rare Books and Special Collections. Seeley G. Mudd Manuscript
+            Library.</physicalLocation>
+      <physicalLocation authority="marcorg" type="code">NjP</physicalLocation>
+      <holdingSimple>
+         <copyInformation>
+            <subLocation>Mudd</subLocation>
+            <shelfLocator>Box AD01, Item 7350</shelfLocator>
+         </copyInformation>
+      </holdingSimple>
+   </location>
+   <accessCondition type="useAndReproduction">Single photocopies may be made for research purposes. Permission to publish materials from the collection
+               must be requested from the Curator of the Public Policy Papers. Researchers are responsible for determining any copyright
+               questions</accessCondition>
+   <accessCondition type="restrictionOnAccess">The collection is open for research</accessCondition>
+   <relatedItem type="host">
+      <titleInfo>
+         <title>Historical Photograph Collection, Grounds and Buildings Series, circa 1850-1980</title>
+      </titleInfo>
+      <location>
+         <url note="Finding Aid">http://arks.princeton.edu/ark:/88435/ww72bb49w</url>
+      </location>
+   </relatedItem>
+   <relatedItem type="host">
+      <titleInfo>
+         <title>Princeton Univeristy: Historical Photograph Collection, Grounds and Buildings</title>
+      </titleInfo>
+      <location>
+         <url note="Digital Collection">http://pudl.princeton.edu/collections/pudl0038</url>
+      </location>
+   </relatedItem>
+   <recordInfo>
+      <recordContentSource>NjP</recordContentSource>
+      <recordIdentifier>http://diglib.princeton.edu/mdata/pudl0038/ad001/001/7350.mods</recordIdentifier>
+      <recordCreationDate>Derived from HPC db dump on 2011-07-26T16:21:12</recordCreationDate>
+      <recordOrigin>Record converted via XSLT from legacy data</recordOrigin>
+      <recordOrigin>Content adheres to that prescribed by Describing Archives: A Content Standard and practices local to Princeton University
+                  Library.</recordOrigin>
+      <languageOfCataloging>
+         <languageTerm authority="rfc3066" type="code">eng</languageTerm>
+      </languageOfCataloging>
+   </recordInfo>
+</mods>
+</mets:xmlData>
+</mets:mdWrap>
+</mets:dmdSec>
+<mets:fileSec>
+<mets:fileGrp USE="thumbnail">
+<mets:file ID="wpsft" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0038/ad001/001/7350/00000001.tif"/>
+</mets:file>
+</mets:fileGrp>
+<mets:fileGrp USE="masters">
+<mets:file CHECKSUM="9f41206d9b2a972186b2f928f54d124c" CHECKSUMTYPE="MD5" ID="ml6tz" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///Users/headleya/diglibdata/pudl/pudl0038/ad001/001/7350/00000001.tif"/>
+</mets:file>
+</mets:fileGrp>
+</mets:fileSec>
+<mets:structMap TYPE="RelatedObjects">
+<mets:div DMDID="kj6ul kj6ul" ID="w8e36" LABEL="Default">
+<mets:div CONTENTIDS="pudl0038" TYPE="IsPartOf"/>
+<mets:div ID="aggregates" TYPE="OrderedList">
+<mets:div ID="mry3n" LABEL="recto" ORDER="1" TYPE="Static">
+<mets:fptr FILEID="ml6tz"/>
+</mets:div>
+</mets:div>
+</mets:div>
+</mets:structMap>
+</mets:mets>

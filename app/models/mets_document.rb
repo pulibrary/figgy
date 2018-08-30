@@ -186,6 +186,7 @@ class METSDocument
 
   # Generate the metadata attributes for the resource being described
   # @return [Hash]
+  # rubocop:disable Metrics/AbcSize
   def attributes
     return {} if mods.nil?
     {
@@ -194,17 +195,29 @@ class METSDocument
       uniform_title: mods.uniform_title,
       date_created: mods.date_created,
       extent: mods.extent,
-      license: mods.access_condition,
       resource_type: mods.type_of_resource,
       subject: mods.subject,
-      rights_note: mods.restriction_on_access,
       description: mods.note,
       abstract: mods.abstract,
-      contents: mods.table_of_contents
+      contents: mods.table_of_contents,
+      rights_statement: map_to_rights_statement(mods.access_condition),
+      genre: mods.genre,
+      holding_location: map_to_holding_location(mods.holding_simple_sublocation),
+      location: mods.shelf_locator
     }
   end
+  # rubocop:enable Metrics/AbcSize
 
   private
+
+    # currently this just returns the default, but can be adjusted to do actual mapping as needed
+    def map_to_rights_statement(_access_condition)
+      "http://rightsstatements.org/vocab/CNE/1.0/"
+    end
+
+    def map_to_holding_location(locations)
+      ControlledVocabulary.for(:holding_location).all.find { |term| term.label.include? locations.first }&.value
+    end
 
     # Access the XML elements encoding information about volumes in the METS
     #   Document
