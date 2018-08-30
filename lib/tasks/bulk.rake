@@ -217,7 +217,7 @@ namespace :bulk do
     begin
       dir = ENV["DIR"]
       property = ENV["PROPERTY"] ? ENV["PROPERTY"].to_sym : :source_metadata_identifier
-      background = ENV["BACKGROUND"].capitalize == "TRUE"
+      background = ENV["BACKGROUND"].casecmp("true").zero? if ENV["BACKGROUND"]
 
       abort "usage: rake bulk:ingest_intermediate_files DIR=/path/to/files [PROPERTY=source_metadata_identifier] [BACKGROUND=TRUE]" unless dir && Dir.exist?(dir)
 

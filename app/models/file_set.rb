@@ -36,7 +36,7 @@ class FileSet < Resource
   end
 
   def derivative_file
-    file_metadata.find(&:derivative?)
+    derivative_files.last
   end
 
   def derivative_files

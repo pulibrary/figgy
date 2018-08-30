@@ -5,39 +5,36 @@
 class IngestIntermediateFileJob < ApplicationJob
   # Execute the job
   # @param [String] file_path the path to the file being ingested
-  # @param [String, Valkyrie::ID] id the ID for the resource having the intermediate file appended
-  # @param [Symbol] property the metadata property used to query for the existing resource
-  # @param [String] value the metadata value used to query for the existing resource
-  # @raise [Valkyrie::Persistence::ObjectNotFoundError]
-  def perform(file_path:, id: nil, property: nil, value: nil)
-    Valkyrie.logger.info "Ingesting #{file_path} as an intermediate file..."
+  # @param [String] file_set_id the ID of the resource having the intermediate file appended
+  # @param [Logger] logger
+  def perform(file_path:, file_set_id:, logger: Valkyrie.logger)
+    file_set = query_service.find_by(id: Valkyrie::ID.new(file_set_id))
+    logger.info "Ingesting #{file_path} as an intermediate file..."
 
     @file_path = file_path
+
     change_set_persister.buffer_into_index do |buffered_persister|
-      if !id.nil?
-        resource = metadata_adapter.query_service.find_by(id: id)
-      elsif !property.nil? && !value.nil?
-        results = metadata_adapter.query_service.custom_queries.find_by_string_property(property: property, value: value)
-        resources = results.to_a
-        break if resources.empty?
-        resource = resources.first
+      change_set = FileSetChangeSet.new(file_set)
+      change_set.prepopulate!
+
+      unless change_set.validate(files: [build_file])
+        logger.error "#{self.class}: Failed to validate the file built for #{@file_path}: #{change_set.errors}"
+        next
       end
 
-      file_sets = resource.decorate.file_sets
-      file_sets.each do |file_set|
-        change_set = FileSetChangeSet.new(file_set)
-        change_set.prepopulate!
+      change_set.sync
+      buffered_persister.save(change_set: change_set)
 
-        break unless change_set.validate(files: [build_file])
-        change_set.sync
-        buffered_persister.save(change_set: change_set)
+      logger.info "Ingested #{@file_path} as an intermediate file for #{file_set.id}"
 
-        Valkyrie.logger.info "Ingested #{file_path} as an intermediate file for #{resource.id}"
-      end
+      # Delete all existing derivatives
+      derivative_file_ids = file_set.derivative_files.map do |derivative_file|
+        derivative_file.file_identifiers.first
+      end.compact
+
+      CleanupFilesJob.set(queue: change_set_persister.queue).perform_now(file_identifiers: derivative_file_ids)
+      CreateDerivativesJob.set(queue: change_set_persister.queue).perform_now(file_set.id.to_s)
     end
-  rescue Valkyrie::Persistence::ObjectNotFoundError => not_found_error
-    Valkyrie.logger.error "#{self.class}: Resource not found using ID: #{id}, property: #{property}, and value: #{value}"
-    raise not_found_error
   end
 
   private
@@ -93,13 +90,13 @@ class IngestIntermediateFileJob < ApplicationJob
     # Generate the use URIs for the intermediate resource
     # @return [Array<RDF::URI>]
     def use
-      [Valkyrie::Vocab::PCDMUse.ServiceFile]
+      [Valkyrie::Vocab::PCDMUse.IntermediateFile]
     end
 
     # Accesses the original filename for the file being ingested
     # @return [String]
     def original_filename
-      @file_path.basename.to_s
+      File.basename(@file_path)
     end
 
     # Determine the content type for the file being ingested

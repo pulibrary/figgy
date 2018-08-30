@@ -8,7 +8,8 @@ class FileAppender
 
     # Retrieve the file metadata for all elements in the set
     def file_metadata
-      map { |file_node| file_resource(file_node).file_metadata }
+      values = map { |file_node| file_resource(file_node).file_metadata }
+      values.flatten
     end
 
     # Retrieve the ID's for the set

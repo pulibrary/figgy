@@ -7,116 +7,76 @@ RSpec.describe IngestIntermediateFileJob do
     let(:master_file) { fixture_file_upload("files/example.tif", "image/tiff") }
     let(:file_path) { Rails.root.join("spec", "fixtures", "files", "abstract.tiff") }
     let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [master_file]) }
-    let(:adapter) { Valkyrie.config.metadata_adapter }
+    let(:file_set) { resource.decorate.file_sets.first }
+    let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
+    let(:storage_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
+    let(:change_set_persister) do
+      ChangeSetPersister.new(
+        metadata_adapter: metadata_adapter,
+        storage_adapter: storage_adapter
+      )
+    end
 
     it "ingests a file and appends it to an existing resource as an intermediate file" do
-      described_class.perform_now(file_path: file_path, id: resource.id)
-      updated_resource = adapter.query_service.find_by(id: resource.id)
+      described_class.perform_now(file_path: file_path, file_set_id: file_set.id)
+      updated_file_set = metadata_adapter.query_service.find_by(id: file_set.id)
 
-      file_sets = updated_resource.decorate.file_sets
-      expect(file_sets).not_to be_empty
-      file_set = file_sets.first
+      expect(updated_file_set.file_metadata).not_to be_empty
 
-      expect(file_set.file_metadata).not_to be_empty
-
-      intermed_file_metadata = file_set.file_metadata.find { |metadata| metadata.use.include? Valkyrie::Vocab::PCDMUse.ServiceFile }
+      intermed_file_metadata = updated_file_set.file_metadata.find { |metadata| metadata.use.include? Valkyrie::Vocab::PCDMUse.IntermediateFile }
       expect(intermed_file_metadata).not_to be_nil
 
       expect(intermed_file_metadata.original_filename).to include "abstract.tiff"
-      expect(intermed_file_metadata.use).to eq [Valkyrie::Vocab::PCDMUse.ServiceFile]
+      expect(intermed_file_metadata.use).to eq [Valkyrie::Vocab::PCDMUse.IntermediateFile]
       expect(intermed_file_metadata.label).to include "abstract.tiff"
     end
 
-    context "when the resource cannot be found" do
-      let(:logger) { instance_double(ActiveSupport::Logger) }
+    context "when the existing resource has FileSets" do
+      let(:second_file) { double("File") }
+      let(:cleanup_files_job) { class_double("CleanupFilesJob").as_stubbed_const(transfer_nested_constants: true) }
 
       before do
-        allow(logger).to receive(:info)
-        allow(logger).to receive(:error)
-        allow(Valkyrie).to receive(:logger).and_return(logger)
+        allow(second_file).to receive(:original_filename).and_return("example.tif")
+        allow(second_file).to receive(:content_type).and_return("image/tiff")
+        allow(second_file).to receive(:use).and_return(Valkyrie::Vocab::PCDMUse.ServiceFile)
+        allow(second_file).to receive(:path).and_return(
+          Rails.root.join("spec", "fixtures", "files", "example.tif")
+        )
+
+        allow(cleanup_files_job).to receive(:set).and_return(cleanup_files_job)
+        allow(cleanup_files_job).to receive(:perform_now)
       end
 
-      it "logs and raises an error" do
-        expect { described_class.perform_now(file_path: file_path, id: "invalid") }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
-        expect(logger).to have_received(:error).with(/IngestIntermediateFileJob\: Resource not found using ID\: invalid/)
+      it "deletes the existing derivatives" do
+        change_set = FileSetChangeSet.new(file_set)
+        change_set.prepopulate!
+        change_set.validate(files: [second_file])
+        change_set.sync
+        change_set_persister.save(change_set: change_set)
+        updated_file_set = metadata_adapter.query_service.find_by(id: file_set.id)
+        file_identifiers = updated_file_set.derivative_files.map { |derivative_file| derivative_file.file_identifiers.first }
+
+        described_class.perform_now(file_path: file_path, file_set_id: file_set.id)
+
+        expect(cleanup_files_job).to have_received(:perform_now).with(file_identifiers: file_identifiers)
       end
     end
 
-    context "when using a bib. ID to retrieve the ingested resource" do
-      let(:bib_id) { "123456" }
-      let(:resource) do
-        FactoryBot.create_for_repository(:scanned_resource,
-                                         source_metadata_identifier: [bib_id],
-                                         files: [master_file])
-      end
+    context "when the ChangeSet does not validate when persisting" do
+      let(:file_change_set) { instance_double(FileSetChangeSet) }
 
       before do
-        stub_bibdata(bib_id: bib_id)
-        resource
-        described_class.perform_now(file_path: file_path, property: :source_metadata_identifier, value: bib_id)
+        allow(file_change_set).to receive(:prepopulate!)
+        allow(file_change_set).to receive(:validate).and_return(false)
+        allow(file_change_set).to receive(:errors).and_return(test: "error")
+        allow(FileSetChangeSet).to receive(:new).and_return(file_change_set)
       end
 
       it "ingests a file and appends it to an existing resource as an intermediate file" do
-        updated_resource = adapter.query_service.find_by(id: resource.id)
+        described_class.perform_now(file_path: file_path, file_set_id: file_set.id)
+        updated_file_set = metadata_adapter.query_service.find_by(id: file_set.id)
 
-        file_sets = updated_resource.decorate.file_sets
-        expect(file_sets).not_to be_empty
-        file_set = file_sets.first
-
-        expect(file_set.file_metadata).not_to be_empty
-
-        intermed_file_metadata = file_set.file_metadata.find { |metadata| metadata.use.include? Valkyrie::Vocab::PCDMUse.ServiceFile }
-        expect(intermed_file_metadata).not_to be_nil
-
-        expect(intermed_file_metadata.original_filename).to include "abstract.tiff"
-        expect(intermed_file_metadata.use).to eq [Valkyrie::Vocab::PCDMUse.ServiceFile]
-        expect(intermed_file_metadata.label).to include "abstract.tiff"
-      end
-    end
-
-    context "when appending an intermediate file to a multi-volume work" do
-      let(:bib_id) { "123456" }
-      let(:member_resource1) do
-        FactoryBot.create_for_repository(:scanned_resource,
-                                         source_metadata_identifier: [bib_id],
-                                         files: [master_file])
-      end
-
-      let(:member_resource2) do
-        FactoryBot.create_for_repository(:scanned_resource,
-                                         source_metadata_identifier: [bib_id],
-                                         files: [master_file])
-      end
-
-      let(:resource) do
-        FactoryBot.create_for_repository(:scanned_resource,
-                                         source_metadata_identifier: [bib_id],
-                                         member_ids: [member_resource1.id, member_resource2.id])
-      end
-
-      before do
-        stub_bibdata(bib_id: bib_id)
-        resource
-        described_class.perform_now(file_path: file_path, property: :source_metadata_identifier, value: bib_id)
-      end
-
-      it "ingests a file and appends it to each member of an existing resource as an intermediate file" do
-        updated_resource = adapter.query_service.find_by(id: resource.id)
-
-        updated_resource.decorate.volumes do |volume|
-          file_sets = volume.decorate.file_sets
-          expect(file_sets).not_to be_empty
-          file_set = file_sets.first
-
-          expect(file_set.file_metadata).not_to be_empty
-
-          intermed_file_metadata = file_set.file_metadata.find { |metadata| metadata.use.include? Valkyrie::Vocab::PCDMUse.ServiceFile }
-          expect(intermed_file_metadata).not_to be_nil
-
-          expect(intermed_file_metadata.original_filename).to include "abstract.tiff"
-          expect(intermed_file_metadata.use).to eq [Valkyrie::Vocab::PCDMUse.ServiceFile]
-          expect(intermed_file_metadata.label).to include "abstract.tiff"
-        end
+        expect(updated_file_set.file_metadata.length).to eq(1)
       end
     end
   end

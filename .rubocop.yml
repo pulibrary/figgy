@@ -98,6 +98,7 @@ Metrics/MethodLength:
     - 'app/jobs/voyager_update_job.rb'
     - 'app/models/mets_document.rb'
     - 'app/jobs/ingest_intermediate_file_job.rb'
+    - 'app/services/bulk_ingest_intermediate_service.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
@@ -156,6 +157,9 @@ RSpec/VerifiedDoubles:
     - 'spec/validators/viewing_hint_validator_spec.rb'
     - 'spec/validators/viewing_direction_validator_spec.rb'
     - 'spec/models/user_spec.rb'
+    - 'spec/derivative_services/image_derivative_service_spec.rb'
+    - 'spec/derivative_services/jp2_derivative_service_spec.rb'
+    - 'spec/jobs/ingest_intermediate_file_job_spec.rb'
 Style/FileName:
   Enabled: true
   Exclude:
