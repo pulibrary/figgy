@@ -111,15 +111,15 @@ export default {
   },
   methods: {
     initOSD: function () {
-        if (this.viewer) {
-          this.viewer.destroy()
-          this.viewer = null
-        }
-        this.viewer = OpenSeadragon({
-          id: this.viewerId,
-          showNavigationControl: false,
-          tileSources: [ this.selected[0].service + "/info.json" ]
-        })
+      if (this.viewer) {
+        this.viewer.destroy()
+        this.viewer = null
+      }
+      this.viewer = OpenSeadragon({
+        id: this.viewerId,
+        showNavigationControl: false,
+        tileSources: [ this.selected[0].service + "/info.json" ]
+      })
     },
     saveHandler: function () {
       if (this.isMultiVolume) {

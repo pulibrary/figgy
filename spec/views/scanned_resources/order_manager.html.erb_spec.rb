@@ -17,7 +17,7 @@ RSpec.describe "base/order_manager.html.erb", type: :view do
   end
 
   it "renders correctly" do
-    expect(rendered).to include "<div id=\"order-manager\" data-class-name=\"#{parent.model_name.plural}\" data-resource=\"#{parent.id}\"></div>"
+    expect(rendered).to include "<order-manager resource-id=\"#{parent.id}\"></order-manager>"
   end
   context "when given a MVW" do
     let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, title: "Test Title", member_ids: [child.id]) }

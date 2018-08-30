@@ -18,6 +18,5 @@ RSpec.feature "Order Manager", js: true do
   scenario "users visit the order manager interface" do
     visit polymorphic_path [:order_manager, resource]
     expect(page).to have_css "#main.container-fluid"
-    expect(page).to have_css "#order-manager"
   end
 end
