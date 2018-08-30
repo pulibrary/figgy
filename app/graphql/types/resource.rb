@@ -2,7 +2,7 @@
 module Types::Resource
   include Types::BaseInterface
   description "A resource in the system."
-  orphan_types Types::ScannedResourceType, Types::FileSetType
+  orphan_types Types::ScannedResourceType, Types::FileSetType, Types::ScannedMapType
 
   field :id, String, null: true
   field :label, String, null: true
