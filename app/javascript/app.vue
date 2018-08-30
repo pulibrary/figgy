@@ -1,6 +1,5 @@
 <template>
   <div id="order-manager">
-    <heading level="h1">The quick brown fox</heading>
     <order-manager></order-manager>
     <transition name="fade">
       <div v-if="manifestLoading" class="overlay">
