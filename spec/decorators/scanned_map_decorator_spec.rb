@@ -124,6 +124,19 @@ RSpec.describe ScannedMapDecorator do
     end
   end
 
+  describe "#collection_slugs" do
+    let(:parent_collection) { FactoryBot.create_for_repository(:collection) }
+    let(:resource) { FactoryBot.create_for_repository(:scanned_map, member_of_collection_ids: [parent_collection.id]) }
+
+    before do
+      parent_collection
+    end
+
+    it "retrieves collection slugs" do
+      expect(decorator.collection_slugs).to contain_exactly parent_collection.slug.first
+    end
+  end
+
   describe "#file_sets" do
     it "retrieves all file sets" do
       expect(decorator.file_sets).to be_empty
