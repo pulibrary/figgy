@@ -37,7 +37,7 @@ jobs:
       # Only necessary if app uses webpacker or yarn in some other way
       - restore_cache:
           keys:
-            - figgy-npm-{{ checksum "package-lock.json" }}
+            - figgy-npm-{{ checksum "package.json" }}-cc732be
             - figgy-npm-
       - run:
           name: NPM install
@@ -115,9 +115,6 @@ workflows:
       - test:
           requires:
             - build
-      - npm_test:
-          requires:
-            - build
       - rubocop:
           requires:
             - build
@@ -132,9 +129,6 @@ workflows:
     jobs:
       - build
       - test:
-          requires:
-            - build
-      - npm_test:
           requires:
             - build
       - rubocop:
