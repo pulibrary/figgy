@@ -36,6 +36,12 @@ FactoryBot.define do
         ).save(change_set: change_set)
       end
     end
+    factory :simple_resource do
+      change_set "simple"
+      factory :draft_simple_resource do
+        state "draft"
+      end
+    end
     factory :open_scanned_resource do
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
@@ -71,6 +77,9 @@ FactoryBot.define do
     end
     factory :complete_scanned_resource do
       state "complete"
+      factory :complete_simple_resource do
+        change_set "simple"
+      end
     end
   end
 end

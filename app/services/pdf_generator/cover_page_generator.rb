@@ -61,7 +61,7 @@ class PDFGenerator
         prawn_document.move_down 20
 
         header(prawn_document, "Citation Information")
-        if resource.respond_to? :primary_imported_metadata
+        if resource.respond_to?(:primary_imported_metadata) && resource.try(:change_set) != "simple"
           creator = resource.primary_imported_metadata.creator
           edition = resource.primary_imported_metadata.edition
           extent = resource.primary_imported_metadata.extent

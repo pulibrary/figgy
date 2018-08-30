@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class EphemeraFolderChangeSetBase < ChangeSet
-  apply_workflow(WorkflowRegistry.workflow_for(EphemeraFolder))
+  apply_workflow(FolderWorkflow)
   validate :date_range_validity
   validate :subject_present
   validates_with StateValidator

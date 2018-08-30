@@ -40,7 +40,7 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
   # Whether this box has a workflow state that grants access to its contents
   # @return [TrueClass, FalseClass]
   def grant_access_state?
-    WorkflowRegistry.workflow_for(model.class).grant_access_states.include? Array.wrap(state).first.underscore
+    workflow_class.grant_access_states.include? Array.wrap(state).first.underscore
   end
 
   class NullProject

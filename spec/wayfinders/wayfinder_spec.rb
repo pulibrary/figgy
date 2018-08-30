@@ -577,51 +577,6 @@ RSpec.describe Wayfinder do
     end
   end
 
-  context "when given a simple resource" do
-    describe "#members" do
-      it "returns all members" do
-        child = FactoryBot.create_for_repository(:file_set)
-        child_resource = FactoryBot.create_for_repository(:simple_resource)
-        resource = FactoryBot.create_for_repository(:simple_resource, member_ids: [child.id, child_resource.id])
-
-        wayfinder = described_class.for(resource)
-
-        expect(wayfinder.members.map(&:id)).to eq [child.id, child_resource.id]
-        expect(wayfinder.members.map(&:class)).to eq [FileSet, SimpleResource]
-        expect(wayfinder.decorated_members.map(&:id)).to eq [child.id, child_resource.id]
-        expect(wayfinder.decorated_members.map(&:class)).to eq [FileSetDecorator, SimpleResourceDecorator]
-      end
-    end
-    describe "#file_sets" do
-      it "returns all file sets" do
-        child = FactoryBot.create_for_repository(:file_set)
-        child_resource = FactoryBot.create_for_repository(:simple_resource)
-        resource = FactoryBot.create_for_repository(:simple_resource, member_ids: [child.id, child_resource.id])
-
-        wayfinder = described_class.for(resource)
-
-        expect(wayfinder.file_sets.map(&:id)).to eq [child.id]
-        expect(wayfinder.file_sets.map(&:class)).to eq [FileSet]
-        expect(wayfinder.decorated_file_sets.map(&:id)).to eq [child.id]
-        expect(wayfinder.decorated_file_sets.map(&:class)).to eq [FileSetDecorator]
-      end
-    end
-    describe "#simple_resources" do
-      it "returns all simple resource members" do
-        child = FactoryBot.create_for_repository(:file_set)
-        child_resource = FactoryBot.create_for_repository(:simple_resource)
-        resource = FactoryBot.create_for_repository(:simple_resource, member_ids: [child.id, child_resource.id])
-
-        wayfinder = described_class.for(resource)
-
-        expect(wayfinder.simple_resources.map(&:id)).to eq [child_resource.id]
-        expect(wayfinder.simple_resources.map(&:class)).to eq [SimpleResource]
-        expect(wayfinder.decorated_simple_resources.map(&:id)).to eq [child_resource.id]
-        expect(wayfinder.decorated_simple_resources.map(&:class)).to eq [SimpleResourceDecorator]
-      end
-    end
-  end
-
   context "when given a vector resource" do
     describe "#collections" do
       it "returns all collections it's a member of" do

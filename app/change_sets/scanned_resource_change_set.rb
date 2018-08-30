@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class ScannedResourceChangeSet < ChangeSet
-  apply_workflow(WorkflowRegistry.workflow_for(ScannedResource))
+  apply_workflow(BookWorkflow)
   delegate :human_readable_type, to: :model
 
   include VisibilityProperty

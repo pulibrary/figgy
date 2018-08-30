@@ -124,7 +124,7 @@ module ResourceController
   end
 
   def resource_params
-    params[resource_class.to_s.underscore.to_sym].to_unsafe_h
+    params[resource_class.to_s.underscore.to_sym]&.to_unsafe_h
   end
 
   def find_resource(id)

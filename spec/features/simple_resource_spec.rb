@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.feature "SimpleResources" do
+RSpec.feature "SimpleResourceChangeSets" do
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:persister) { adapter.persister }
   let(:simple_resource) do
-    res = FactoryBot.create_for_repository(:simple_resource)
+    res = FactoryBot.create_for_repository(:scanned_resource)
     persister.save(resource: res)
   end
   let(:change_set) do
@@ -24,16 +24,16 @@ RSpec.feature "SimpleResources" do
   end
 
   scenario "creating a new resource" do
-    visit new_simple_resource_path
+    visit new_simple_scanned_resources_path
 
     expect(page).to have_field "Title"
-    expect(page).to have_css '.select[for="simple_resource_rights_statement"]', text: "Rights Statement"
+    expect(page).to have_css '.select[for="scanned_resource_rights_statement"]', text: "Rights Statement"
     expect(page).to have_field "Rights Note"
     expect(page).to have_field "Local identifier"
-    expect(page).to have_css '.select[for="simple_resource_pdf_type"]', text: "PDF Type"
+    expect(page).to have_css '.select[for="scanned_resource_pdf_type"]', text: "PDF Type"
     expect(page).to have_field "Portion Note"
     expect(page).to have_field "Navigation Date"
-    expect(page).to have_css '.select[for="simple_resource_member_of_collection_ids"]', text: "Collections"
+    expect(page).to have_css '.select[for="scanned_resource_member_of_collection_ids"]', text: "Collections"
 
     expect(page).to have_field "Abstract"
     expect(page).to have_field "Alternative"
@@ -48,7 +48,7 @@ RSpec.feature "SimpleResources" do
     expect(page).to have_field "Replaces"
     expect(page).to have_field "Type"
     expect(page).to have_field "Contributor"
-    expect(page).to have_css '.control-label[for="simple_resource_coverage"]', text: "Coverage"
+    expect(page).to have_css '.control-label[for="scanned_resource_coverage"]', text: "Coverage"
     expect(page).to have_field "Creator"
     expect(page).to have_field "Date"
     expect(page).to have_field "Description"
@@ -57,6 +57,21 @@ RSpec.feature "SimpleResources" do
     expect(page).to have_field "Publisher"
     expect(page).to have_field "Source"
     expect(page).to have_field "Subject"
+    expect(page.find("#scanned_resource_change_set", visible: false).value).to eq "simple"
+
+    fill_in "Title", with: "Test"
+    fill_in "Contributor", with: "Test Contributor"
+    click_button "Save"
+
+    expect(page).to have_content "Test Contributor"
+  end
+
+  scenario "creating an invalid resource" do
+    visit new_simple_scanned_resources_path
+    click_button "Save"
+
+    expect(page).to have_content "You must provide a title"
+    expect(page.find("#scanned_resource_change_set", visible: false).value).to eq "simple"
   end
 
   context "when a user creates a new simple resource" do
@@ -97,11 +112,18 @@ RSpec.feature "SimpleResources" do
       )
     end
 
+    scenario "editing a resource" do
+      visit edit_scanned_resource_path(simple_resource)
+
+      expect(page).to have_field "Language", "test value"
+      expect(page.find("#scanned_resource_change_set", visible: false).value).to eq "simple"
+    end
+
     scenario "viewing a resource" do
       visit solr_document_path simple_resource
 
       expect(page).to have_css ".attribute.title", text: "new simple resource"
-      expect(page).to have_css ".attribute.rights_statement", text: "http://rightsstatements.org/vocab/CNE/1.0/"
+      expect(page).to have_css ".attribute.rendered_rights_statement", text: "Copyright Not Evaluated"
       expect(page).to have_css ".attribute.rights_note", text: "test rights note"
       expect(page).to have_css ".attribute.viewing_hint", text: "individuals"
       expect(page).to have_css ".attribute.visibility", text: "open"

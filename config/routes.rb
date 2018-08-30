@@ -85,6 +85,9 @@ Rails.application.routes.draw do
         get :pdf
       end
       collection do
+        get "new/simple", action: :new, change_set: "simple", as: :new_simple
+      end
+      collection do
         get "save_and_ingest/:id", action: :save_and_ingest, constraints: { id: /[^\/]+/ }, defaults: { format: :json }
       end
     end
@@ -98,18 +101,6 @@ Rails.application.routes.draw do
     end
 
     get "/scanned_resources/:parent_id/new", to: "scanned_resources#new", as: :parent_new_scanned_resource
-
-    resources :simple_resources, only: [:update, :create, :new, :destroy] do
-      member do
-        get :file_manager
-        get :order_manager
-        get :manifest, defaults: { format: :json }
-        post :browse_everything_files
-        get :pdf
-      end
-    end
-
-    get "/simple_resources/:parent_id/new", to: "simple_resources#new", as: :parent_new_simple_resource
 
     resources :ephemera_projects do
       resources :templates, only: [:new, :create, :destroy]

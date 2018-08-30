@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class ArchivalMediaCollectionChangeSet < ChangeSet
-  apply_workflow(WorkflowRegistry.workflow_for(ArchivalMediaCollection))
+  apply_workflow(DraftCompleteWorkflow)
   delegate :human_readable_type, to: :model
 
   include RemoteMetadataProperty

@@ -2,7 +2,7 @@
 class SimpleResourceChangeSet < ChangeSet
   delegate :human_readable_type, to: :model
 
-  apply_workflow(WorkflowRegistry.workflow_for(SimpleResource))
+  apply_workflow(DraftCompleteWorkflow)
 
   include VisibilityProperty
   property :title, multiple: true, required: true, default: []
@@ -45,6 +45,10 @@ class SimpleResourceChangeSet < ChangeSet
   property :source, multiple: true, required: false, default: []
   property :subject, multiple: true, required: false, default: []
   property :ocr_language, multiple: true, require: false, default: []
+  property :logical_structure, multiple: true, required: false, type: Types::Strict::Array.of(Structure), default: [Structure.new(label: "Logical", nodes: [])]
+  property :holding_location, multiple: false, required: false, type: ::Types::URI
+  property :location, multiple: true, required: false, default: []
+  property :change_set, require: true, default: "simple"
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
@@ -90,7 +94,9 @@ class SimpleResourceChangeSet < ChangeSet
       :language,
       :publisher,
       :source,
-      :subject
+      :subject,
+      :holding_location,
+      :change_set
     ]
   end
 end

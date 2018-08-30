@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class EphemeraBoxChangeSet < ChangeSet
-  apply_workflow(WorkflowRegistry.workflow_for(EphemeraBox))
+  apply_workflow(BoxWorkflow)
 
   include VisibilityProperty
   property :barcode, multiple: false, required: true

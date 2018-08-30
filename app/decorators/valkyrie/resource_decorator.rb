@@ -91,7 +91,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   # Should this resource have a manifest?
   # @return [TrueClass, FalseClass]
   def manifestable_state?
-    WorkflowRegistry.workflow_for(model.class).manifest_states.include? Array.wrap(state).first.underscore
+    workflow_class.manifest_states.include? Array.wrap(state).first.underscore
   rescue WorkflowRegistry::EntryNotFound
     # if there's no workflow, default to true
     true
@@ -100,7 +100,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   # Does the state allow this resource to be publicly viewable (regardless of actual visibility setting)
   # @return [TrueClass, FalseClass]
   def public_readable_state?
-    WorkflowRegistry.workflow_for(model.class).public_read_states.include? Array.wrap(state).first.underscore
+    workflow_class.public_read_states.include? Array.wrap(state).first.underscore
   rescue WorkflowRegistry::EntryNotFound
     # if there's no workflow, default to true
     true
@@ -109,10 +109,21 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   # Should this simple resource have an ARK minted?
   # @return [TrueClass, FalseClass]
   def ark_mintable_state?
-    WorkflowRegistry.workflow_for(model.class).ark_mint_states.include? Array.wrap(state).first&.underscore
+    workflow_class.ark_mint_states.include? Array.wrap(state).first&.underscore
   rescue WorkflowRegistry::EntryNotFound
     # if there's no workflow, default to false
     false
+  end
+
+  def workflow_class
+    @workflow_class ||=
+      begin
+        change_set = DynamicChangeSet.new(model)
+        change_set.try(:workflow_class) || raise(WorkflowRegistry::EntryNotFound)
+      end
+  # If there's no change set for the model, raise an entry not found.
+  rescue NameError
+    raise WorkflowRegistry::EntryNotFound
   end
 
   # Models metadata values within a manifest

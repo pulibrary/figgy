@@ -4,7 +4,7 @@
 class BaseResourceController < ApplicationController
   include ResourceController
   include TokenAuth
-  before_action :load_collections, only: [:new, :edit]
+  before_action :load_collections, only: [:new, :edit, :update, :create]
   helper_method :resource_has_parents?
 
   def load_collections

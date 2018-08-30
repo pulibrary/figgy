@@ -12,6 +12,14 @@ class ScannedResourcesController < BaseResourceController
     handle_save_and_ingest(obj)
   end
 
+  def change_set_class
+    if params[:change_set] == "simple" || (resource_params && resource_params[:change_set] == "simple")
+      SimpleResourceChangeSet
+    else
+      DynamicChangeSet
+    end
+  end
+
   def handle_save_and_ingest(obj)
     return unless params[:commit] == "Save and Ingest"
     locator = IngestFolderLocator.new(id: params[:scanned_resource][:source_metadata_identifier])

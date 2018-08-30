@@ -71,11 +71,11 @@ class BulkIngestController < ApplicationController
       params[:selected_files].to_unsafe_h
     end
 
-    def workflow
-      WorkflowRegistry.workflow_for(resource_class)
+    def workflow_states
+      workflow_class.aasm.states.map { |s| s.name.to_s }
     end
 
-    def workflow_states
-      workflow.aasm.states.map { |s| s.name.to_s }
+    def workflow_class
+      @workflow_class ||= DynamicChangeSet.new(resource_class.new).workflow_class
     end
 end
