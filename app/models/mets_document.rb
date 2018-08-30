@@ -186,6 +186,7 @@ class METSDocument
 
   # Generate the metadata attributes for the resource being described
   # @return [Hash]
+  # rubocop:disable Metrics/AbcSize
   def attributes
     return {} if mods.nil?
     {
@@ -205,6 +206,7 @@ class METSDocument
       location: mods.shelf_locator
     }
   end
+  # rubocop:enable Metrics/AbcSize
 
   private
 
