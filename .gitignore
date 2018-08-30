@@ -19,3 +19,4 @@
 /app/javascript/test/unit/coverage/*
 /yarn.lock
 dump.rdb
+package-lock.json
