@@ -37,6 +37,22 @@ RSpec.describe EventGenerator::ManifestEventGenerator do
         expect(rabbit_connection).to have_received(:publish).with(expected_result.to_json)
       end
     end
+
+    context "with a scanned map record in a collection" do
+      let(:record_in_collection) { FactoryBot.create_for_repository(:scanned_map, member_of_collection_ids: [collection.id]) }
+      it "embeds collection memberships" do
+        expected_result = {
+          "id" => record_in_collection.id.to_s,
+          "event" => "CREATED",
+          "manifest_url" => "http://www.example.com/concern/scanned_maps/#{record_in_collection.id}/manifest",
+          "collection_slugs" => collection.slug
+        }
+
+        event_generator.record_created(record_in_collection)
+
+        expect(rabbit_connection).to have_received(:publish).with(expected_result.to_json)
+      end
+    end
   end
 
   describe "#record_deleted" do

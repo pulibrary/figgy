@@ -32,6 +32,10 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
 
   delegate :collections, :geo_metadata_members, :members, :parents, to: :wayfinder
 
+  def collection_slugs
+    @collection_slugs ||= collections.flat_map(&:slug)
+  end
+
   # TODO: Rename to decorated_file_sets
   def file_sets
     wayfinder.decorated_file_sets
