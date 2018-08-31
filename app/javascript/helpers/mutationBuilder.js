@@ -20,7 +20,7 @@
        "id": "c8376fd6-306c-4aed-b6a8-4eacbd2ca1ab",
        "label": "p. ii",
        "viewingHint": "single"
-    }]  
+    }]
  *
 */
 export default function MutationBuilder(resource, filesets) {
@@ -35,7 +35,7 @@ export default function MutationBuilder(resource, filesets) {
   }
   this.mutations = function() {
     let mutations = []
-    let mutation_template = '__mname__: updateResource(input: $__mname__) { resource { id, thumbnail { id, iiifServiceUrl, thumbnailUrl }, ... on ScannedResource { startPage, viewingHint, viewingDirection, members { id, label, thumbnail { id, thumbnailUrl, iiifServiceUrl } } } }, errors }'
+    let mutation_template = '__mname__: updateResource(input: $__mname__) { resource { id, thumbnail { id, iiifServiceUrl, thumbnailUrl }, ... on ScannedResource { startPage, viewingHint, viewingDirection, members { id, label, thumbnail { id, thumbnailUrl, iiifServiceUrl } } }, ... on ScannedMap { startPage, viewingHint, viewingDirection, members { id, label, thumbnail { id, thumbnailUrl, iiifServiceUrl } } } }, errors }'
     let inputs = this.inputs()
     let mutationNum = inputs.length
     for (let i=0; i < mutationNum; i++ ) {

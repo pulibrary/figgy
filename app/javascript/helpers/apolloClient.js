@@ -20,6 +20,7 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
           possibleTypes: [
             { name: "FileSet" },
             { name: "ScannedResource" },
+            { name: "ScannedMap" },
           ],
         },
       ],

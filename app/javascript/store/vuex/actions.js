@@ -23,6 +23,10 @@ const actions = {
                viewingDirection,
                startPage
              },
+             ... on ScannedMap {
+               viewingDirection,
+               startPage
+             },
              __typename,
              members {
                id,
