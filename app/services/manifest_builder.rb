@@ -232,16 +232,25 @@ class ManifestBuilder
   end
 
   class ScannedMapNode < RootNode
+    def manifestable_members
+      @manifestable ||= decorate.members.reject { |x| x.is_a?(RasterResource) }
+    end
+
     def members
-      @members ||= decorate.members.reject { |x| x.is_a?(RasterResource) }.to_a
+      @members ||= begin
+        manifestable_members.map do |member|
+          decorator = member.decorate
+          if decorator.respond_to?(:scanned_map_members) && decorator.scanned_map_members.empty?
+            member.decorate.geo_members.first
+          else
+            member
+          end
+        end.compact
+      end
     end
 
     def leaf_nodes
       @leaf_nodes ||= members.select { |x| x.instance_of?(FileSet) && geo_image?(x) }
-    end
-
-    def sammelband?
-      true
     end
 
     private
