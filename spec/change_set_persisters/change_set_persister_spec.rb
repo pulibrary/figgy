@@ -731,7 +731,7 @@ RSpec.describe ChangeSetPersister do
     let(:change_set_persister) do
       described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: true)
     end
-    it "cleans up derivatives", run_real_derivatives: true do
+    it "cleans up derivatives and original files", run_real_derivatives: true do
       allow(CharacterizationJob).to receive(:set).and_call_original
       allow(CreateDerivativesJob).to receive(:set).and_call_original
 
@@ -742,6 +742,7 @@ RSpec.describe ChangeSetPersister do
       output = change_set_persister.save(change_set: change_set)
       file_set = query_service.find_members(resource: output).first
       expect(file_set.file_metadata.select(&:derivative?)).not_to be_empty
+      expect(file_set.original_file).to be_a FileMetadata
       expect(CharacterizationJob).to have_received(:set).with(queue: "low")
       expect(CreateDerivativesJob).to have_received(:set).with(queue: "low")
 
@@ -752,6 +753,9 @@ RSpec.describe ChangeSetPersister do
       derivative = file_set.file_metadata.select(&:derivative?).first
       derivative_path = derivative.file_identifiers.first.to_s.gsub("disk://", "")
       expect(File.exist?(derivative_path)).to be false
+      original = file_set.original_file
+      original_path = original.file_identifiers.first.to_s.gsub("disk://", "")
+      expect(File.exist?(original_path)).to be false
     end
   end
 
