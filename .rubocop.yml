@@ -67,6 +67,7 @@ Metrics/ClassLength:
     - 'app/derivative-services/jp2_derivative_service.rb'
     - 'app/services/file_appender.rb'
     - 'app/models/mets_document.rb'
+    - 'app/services/bulk_ingest_service.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/models/concerns/linked_data/linked_resource_factory.rb'
@@ -100,6 +101,8 @@ Metrics/ModuleLength:
 Metrics/ParameterLists:
   Exclude:
     - 'app/change_set_persisters/change_set_persister.rb'
+    - 'app/jobs/ingest_folders_job.rb'
+    - 'app/jobs/ingest_folder_job.rb'
 Metrics/PerceivedComplexity:
   Exclude:
     - 'app/services/pdf_generator/canvas.rb'

@@ -20,7 +20,6 @@ class Wayfinder < BaseWayfinder
     MediaResource => MediaResourceWayfinder,
     RasterResource => RasterResourceWayfinder,
     ScannedMap => ScannedMapWayfinder,
-    SimpleResource => SimpleResourceWayfinder,
     VectorResource => VectorResourceWayfinder
   }
 

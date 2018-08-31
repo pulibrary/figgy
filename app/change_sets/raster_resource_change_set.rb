@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class RasterResourceChangeSet < ChangeSet
-  apply_workflow(WorkflowRegistry.workflow_for(RasterResource))
+  apply_workflow(GeoWorkflow)
   delegate :human_readable_type, to: :model
 
   include GeoChangeSetProperties

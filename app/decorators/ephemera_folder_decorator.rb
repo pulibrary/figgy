@@ -198,7 +198,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   private
 
     def index_read_group_state?
-      WorkflowRegistry.workflow_for(model.class).index_read_groups_states.include? Array.wrap(state).first.underscore
+      workflow_class.index_read_groups_states.include? Array.wrap(state).first.underscore
     end
 
     def find_resource(resource_id)

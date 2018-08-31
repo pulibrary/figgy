@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 class BulkIngestService
-  attr_reader :change_set_persister, :logger
+  attr_reader :change_set_persister, :logger, :change_set_class
   delegate :metadata_adapter, to: :change_set_persister
   delegate :query_service, to: :metadata_adapter
-  def initialize(change_set_persister:, klass: ScannedResource, logger: Valkyrie.logger)
+  def initialize(change_set_persister:, klass: ScannedResource, change_set_class: DynamicChangeSet, logger: Valkyrie.logger)
     @change_set_persister = change_set_persister
     @klass = klass
+    @change_set_class = change_set_class
     @logger = logger
   end
 
@@ -78,7 +79,7 @@ class BulkIngestService
       end
       child_files = files(path: path, file_filter: file_filter)
 
-      change_set = DynamicChangeSet.new(resource)
+      change_set = change_set_class.new(resource)
       change_set.validate(member_ids: child_resources.map(&:id), files: child_files)
       change_set_persister.save(change_set: change_set)
     end
@@ -97,7 +98,7 @@ class BulkIngestService
 
       resource = klass.new
 
-      change_set = DynamicChangeSet.new(resource)
+      change_set = change_set_class.new(resource)
       change_set.prepopulate!
       return unless change_set.validate(**attributes)
       change_set.member_of_collection_ids = [collection.id] if collection.try(:id)

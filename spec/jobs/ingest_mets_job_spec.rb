@@ -77,6 +77,7 @@ RSpec.describe IngestMETSJob do
       book = adapter.query_service.find_all_of_model(model: ScannedResource).first
       expect(book).not_to be_nil
       expect(book.title).to include "This side of paradise"
+      expect(book.change_set).to eq "simple"
     end
 
     describe "rights statement" do

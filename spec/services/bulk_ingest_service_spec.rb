@@ -72,8 +72,8 @@ RSpec.describe BulkIngestService do
       end
     end
 
-    context "when using the SimpleResource Class" do
-      subject(:ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger, klass: SimpleResource) }
+    context "when using the SimpleResourceChangeSet" do
+      subject(:ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger, change_set_class: SimpleResourceChangeSet) }
 
       before do
         # Used for checking whether or not the PULFA record exists
@@ -95,8 +95,9 @@ RSpec.describe BulkIngestService do
         expect(decorated_collection.members.first.member_ids.length).to eq 2
 
         resource = decorated_collection.members.to_a.first
-        expect(resource).to be_a SimpleResource
+        expect(resource).to be_a ScannedResource
         expect(resource.local_identifier).to include(local_id)
+        expect(resource.change_set).to eq "simple"
       end
     end
 

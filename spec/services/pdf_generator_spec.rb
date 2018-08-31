@@ -300,5 +300,17 @@ RSpec.describe PDFGenerator do
         expect(File.exist?(file.io.path)).to eq true
       end
     end
+    context "when it's a simple resource" do
+      let(:resource) { FactoryBot.create_for_repository(:simple_resource, files: [file], pdf_type: ["color"]) }
+      before do
+        stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/default.jpg")
+          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
+      end
+      it "renders" do
+        file_node = generator.render
+        file = Valkyrie::StorageAdapter.find_by(id: file_node.file_identifiers.first)
+        expect(File.exist?(file.io.path)).to eq true
+      end
+    end
   end
 end

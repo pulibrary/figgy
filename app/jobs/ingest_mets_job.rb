@@ -128,8 +128,25 @@ class IngestMETSJob < ApplicationJob
     def change_set
       @change_set ||=
         begin
-          DynamicChangeSet.new(resource_klass.new)
+          change_set_class.new(resource_klass.new)
         end
+    end
+
+    # METS comes in two forms: with a bib-id and without.
+    #
+    # If a record has a bib-ID, don't bother migrating any of the MODS, and
+    # likely use the ScannedResourceChangeSet.
+    #
+    # If no bib-id, use a SimpleResourceChangeSet to migrate the MODS metadata.
+    # Items which have PULFA metadata don't have a bib-id in the METS,
+    # they just have a link to the ARK for the PULFA collection they're a part of,
+    # so this path will happen for those items. This is intended.
+    def change_set_class
+      if mets.bib_id.present?
+        DynamicChangeSet
+      else
+        SimpleResourceChangeSet
+      end
     end
 
     # Map a Hash recursively keyed to each FileSet ID
@@ -163,7 +180,7 @@ class IngestMETSJob < ApplicationJob
 
   class HierarchicalIngester < Ingester
     def ingest
-      change_set.source_metadata_identifier = mets.bib_id
+      change_set.source_metadata_identifier = mets.bib_id if mets.bib_id.present?
       mets.volume_ids.each do |volume_id|
         volume_mets = VolumeMets.new(parent_mets: mets, volume_id: volume_id)
         volume = Ingester.new(mets: volume_mets, user: user, change_set_persister: change_set_persister, import_mods: import_mods?, attach_mets_file: false).ingest

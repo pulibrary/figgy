@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe SimpleResourceChangeSet do
   subject(:change_set) { described_class.new(form_resource) }
-  let(:resource_klass) { SimpleResource }
+  let(:resource_klass) { ScannedResource }
   let(:resource) { resource_klass.new(title: "Test", rights_statement: "Stuff", visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: "draft") }
   let(:form_resource) { resource }
 

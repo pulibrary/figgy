@@ -58,7 +58,7 @@ class Ability
   end
 
   def curation_concerns
-    [ScannedResource, EphemeraFolder, ScannedMap, VectorResource, RasterResource, SimpleResource]
+    [ScannedResource, EphemeraFolder, ScannedMap, VectorResource, RasterResource]
   end
 
   def current_user

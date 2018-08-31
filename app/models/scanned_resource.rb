@@ -11,6 +11,7 @@ class ScannedResource < Resource
   attribute :pending_uploads, Valkyrie::Types::Array.of(PendingUpload)
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
   attribute :file_metadata, Valkyrie::Types::Set.of(FileMetadata.optional)
+  attribute :change_set, Valkyrie::Types::String
 
   def self.can_have_manifests?
     true
