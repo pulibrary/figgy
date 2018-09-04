@@ -18,7 +18,9 @@ class METSDocument
   # @return [String]
   def ark_id
     element = @mets.xpath("/mets:mets/@OBJID")
-    element.to_s
+    element = element.to_s
+    return nil unless element.include?("ark")
+    element
   end
 
   # Access the bib. ID
@@ -208,7 +210,8 @@ class METSDocument
       geographic_origin: mods.geographic_origin,
       language: mods.language,
       series: mods.series,
-      part_of: mods.finding_aid_identifier
+      part_of: mods.finding_aid_identifier,
+      replaces: mods.replaces
     }
   end
   # rubocop:enable Metrics/AbcSize

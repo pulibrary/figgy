@@ -122,6 +122,12 @@ class METSDocument
       end
     end
 
+    def replaces
+      element = @element.xpath("/mets:mets/@OBJID").to_s
+      return nil if element.include?("ark")
+      "http://pudl.princeton.edu/objects/#{element}"
+    end
+
     private
 
       def find_elements(xpath)
