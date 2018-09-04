@@ -115,8 +115,10 @@ RSpec.feature "SimpleResourceChangeSets" do
     scenario "editing a resource" do
       visit edit_scanned_resource_path(simple_resource)
 
-      expect(page).to have_field "Language", "test value"
-      expect(page.find("#scanned_resource_change_set", visible: false).value).to eq "simple"
+      expect(page).to have_content "Editing resources without imported metadata has been disabled while features are being added to support metadata from PUDL. " \
+        "Please contact us on Slack if you need help."
+
+      expect(current_path).to eq "/catalog/#{simple_resource.id}"
     end
 
     scenario "viewing a resource" do
