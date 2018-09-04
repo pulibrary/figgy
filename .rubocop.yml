@@ -68,6 +68,7 @@ Metrics/ClassLength:
     - 'app/services/file_appender.rb'
     - 'app/models/mets_document.rb'
     - 'app/services/bulk_ingest_service.rb'
+    - 'app/models/mets_document/mods_document.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/models/concerns/linked_data/linked_resource_factory.rb'
