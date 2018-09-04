@@ -324,6 +324,27 @@ RSpec.describe ManifestBuilder do
     end
   end
 
+  context "when given a sammelband" do
+    let(:scanned_resource) do
+      FactoryBot.create_for_repository(:scanned_resource, files: [file])
+    end
+    let(:child) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
+
+    before do
+      change_set = ScannedResourceChangeSet.new(scanned_resource)
+      change_set.member_ids << child.id
+      change_set_persister.save(change_set: change_set)
+    end
+
+    it "builds a sammelband IIIF document" do
+      output = manifest_builder.build
+      expect(output).to be_kind_of Hash
+      expect(output["@type"]).to eq "sc:Manifest"
+      expect(output["manifests"]).to eq nil
+      expect(output["sequences"].first["canvases"].length).to eq 1
+    end
+  end
+
   context "when given a scanned map" do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_map.id)) }
     let(:scanned_map) do
@@ -349,13 +370,34 @@ RSpec.describe ManifestBuilder do
       FactoryBot.create_for_repository(:scanned_map, description: "Test Description", member_ids: child.id)
     end
     let(:child) { FactoryBot.create_for_repository(:scanned_map, files: [file]) }
-    it "builds a sammelband IIIF document" do
+    it "builds a IIIF document" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
       expect(output["description"]).to eq "Test Description"
       expect(output["@type"]).to eq "sc:Manifest"
       expect(output["manifests"]).to eq nil
       expect(output["sequences"].first["canvases"].length).to eq 1
+    end
+  end
+
+  context "when given a multi-volume map set" do
+    subject(:manifest_builder) { described_class.new(query_service.find_by(id: map_set.id)) }
+    let(:map_set) do
+      FactoryBot.create_for_repository(:scanned_map, description: "Test Description", member_ids: volume1.id)
+    end
+    let(:volume1) { FactoryBot.create_for_repository(:scanned_map, member_ids: child.id) }
+    let(:child) { FactoryBot.create_for_repository(:scanned_map, files: [file]) }
+
+    it "builds a IIIF collection" do
+      output = manifest_builder.build
+      expect(output).to be_kind_of Hash
+      expect(output["description"]).to eq "Test Description"
+      expect(output["@type"]).to eq "sc:Collection"
+      expect(output["viewingHint"]).to eq "multi-part"
+      expect(output["manifests"].length).to eq 1
+      expect(output["manifests"][0]["@id"]).to eq "http://www.example.com/concern/scanned_maps/#{volume1.id}/manifest"
+      expect(output["manifests"][0]["viewingHint"]).to be_nil
+      expect(output["manifests"][0]["metadata"]).to be_nil
     end
   end
 

@@ -18,6 +18,7 @@ class DataSeeder
     generate_multi_volume_work(n: mvw_volumes)
     generate_sammelband(file_count: sammel_files, volume_count: sammel_vols)
     generate_scanned_map
+    generate_multi_volume_map_set(n: 2)
     generate_raster_resource
     generate_vector_resource
     generate_scanned_map_with_raster_child
@@ -90,6 +91,26 @@ class DataSeeder
     add_file(resource: sm)
     logger.info "Created scanned map #{sm.id}: #{sm.title}"
     sm
+  end
+
+  def generate_scanned_map_with_no_file(attrs = {})
+    sm = ScannedMap.new(attributes_hash.merge(geo_attributes).merge(attrs))
+    sm = persister.save(resource: sm)
+    logger.info "Created scanned map #{sm.id}: #{sm.title}"
+    sm
+  end
+
+  def generate_multi_volume_map_set(n:)
+    parent = generate_scanned_map_with_no_file(title: "Multi volume map set")
+    volume1 = generate_scanned_map(title: "Volume 1")
+    volume2 = generate_scanned_map(title: "Volume 2")
+    add_child_resource(child: volume1, parent_id: parent.id)
+    add_child_resource(child: volume2, parent_id: parent.id)
+
+    n.times do
+      add_child_resource(child: generate_scanned_map, parent_id: volume1.id)
+      add_child_resource(child: generate_scanned_map, parent_id: volume2.id)
+    end
   end
 
   def generate_scanned_map_with_raster_child
