@@ -203,7 +203,12 @@ class METSDocument
       rights_statement: map_to_rights_statement(mods.access_condition),
       genre: mods.genre,
       holding_location: map_to_holding_location(mods.holding_simple_sublocation),
-      location: mods.shelf_locator
+      location: mods.shelf_locator,
+      creator: mods.creator,
+      geographic_origin: mods.geographic_origin,
+      language: mods.language,
+      series: mods.series,
+      part_of: mods.finding_aid_identifier
     }
   end
   # rubocop:enable Metrics/AbcSize

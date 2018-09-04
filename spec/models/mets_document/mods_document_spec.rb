@@ -8,6 +8,33 @@ RSpec.describe METSDocument::MODSDocument do
   let(:mets) { File.open(mets_file) { |f| Nokogiri::XML(f) } }
   let(:xpath) { "/mets:mets/mets:dmdSec/mets:mdWrap/mets:xmlData/mods:mods" }
 
+  context "pudl0036" do
+    let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0036-135-01.mets") }
+    describe "attributes" do
+      it "returns known values for each attribute" do
+        expect(mods_document.title).to eq ["Our \"Surplus\" is not in Cash"]
+        expect(mods_document.creator).to eq ["Interborough Rapid Transit Company"]
+        expect(mods_document.type_of_resource).to eq ["still image"]
+        expect(mods_document.genre).to eq ["posters"]
+        expect(mods_document.geographic_origin).to eq ["New York (N.Y.)"]
+        expect(mods_document.date_created).to eq ["1920-02"]
+        expect(mods_document.language).to eq ["eng"]
+        expect(mods_document.extent).to eq ["1 poster; approximately 21 × 16 inches"]
+        expect(mods_document.abstract).to eq [
+          "Advertising poster for the Interborough Rapid Transit Company of New York City, discussing the three different ways in which the fare \"surplus\" is allocated. No illustration"
+        ]
+        expect(mods_document.subject).to contain_exactly "Advertising", "Subways", "Posters", "Lee, Ivy L. (Ivy Ledbetter), 1877-1934", "New York (N.Y.)"
+        expect(mods_document.series).to eq ["The Subway Sun. Volume 3. Number 6"]
+        expect(mods_document.access_condition).not_to be_blank
+        expect(mods_document.holding_simple_sublocation).to eq ["Mudd"]
+        expect(mods_document.shelf_locator).to eq ["MC085. Box 135"]
+        finding_aid_identifier = mods_document.finding_aid_identifier.first
+        expect(finding_aid_identifier.identifier).to eq "http://arks.princeton.edu/ark:/88435/m039k489x"
+        expect(finding_aid_identifier.title).to eq "Ivy Ledbetter Lee Papers, 1881-1989 (bulk 1915-1946)"
+      end
+    end
+  end
+
   describe ".from" do
     it "constructs a MODSDocument from a METSDocument and an XPath" do
       expect(mods_document).to be_a described_class
@@ -96,7 +123,7 @@ RSpec.describe METSDocument::MODSDocument do
     let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "tsop_typed.mets") }
 
     it "accesses the title within the MODS-encoded metadata" do
-      expect(mods_document.subject).to include "F. Scott (Francis Scott)"
+      expect(mods_document.subject).to include "Fitzgerald, F. Scott (Francis Scott), 1896-1940"
     end
   end
 

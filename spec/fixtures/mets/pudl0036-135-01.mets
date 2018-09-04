@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OBJID="4d52d496-f15e-405d-863b-32fb880f13d8" TYPE="CompiledDigitalObject" xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd">
+<mets:metsHdr CREATEDATE="2018-08-04T11:56:12.211-04:00" LASTMODDATE="2018-08-04T11:56:12.211-04:00">
+<mets:metsDocumentID TYPE="PUDL">pudl0036/135/001.mets</mets:metsDocumentID>
+</mets:metsHdr>
+<mets:dmdSec ID="mufu9">
+<mets:mdWrap MDTYPE="MODS">
+<mets:xmlData>
+<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+   <mods:titleInfo>
+      <mods:title>Our "Surplus" is not in Cash</mods:title>
+   </mods:titleInfo>
+   <mods:name authority="naf" type="corporate">
+      <mods:namePart>Interborough Rapid Transit Company</mods:namePart>
+      <mods:role>
+         <mods:roleTerm authority="marcrelator" type="code">cre</mods:roleTerm>
+      </mods:role>
+   </mods:name>
+   <mods:typeOfResource>still image</mods:typeOfResource>
+   <mods:genre authority="aat">posters</mods:genre>
+   <mods:originInfo>
+      <mods:place>
+         <mods:placeTerm type="text">New York (N.Y.)</mods:placeTerm>
+      </mods:place>
+      <mods:dateCreated encoding="w3cdtf" keyDate="yes">1920-02</mods:dateCreated>
+   </mods:originInfo>
+   <mods:language>
+      <mods:languageTerm authority="iso639-2b" type="code">eng</mods:languageTerm>
+   </mods:language>
+   <mods:physicalDescription>
+      <mods:extent>1 poster; approximately 21 × 16 inches</mods:extent>
+   </mods:physicalDescription>
+   <mods:abstract type="abstract">Advertising poster for the Interborough Rapid Transit Company of New York City, discussing the three different
+      ways in which the fare "surplus" is allocated. No illustration</mods:abstract>
+   <mods:subject authority="lcsh">
+      <mods:topic>Advertising</mods:topic>
+   </mods:subject>
+   <mods:subject authority="lcsh">
+      <mods:topic>Subways</mods:topic>
+   </mods:subject>
+   <mods:subject authority="lcsh">
+      <mods:geographic>New York (N.Y.)</mods:geographic>
+   </mods:subject>
+   <mods:subject authority="aat">
+      <mods:genre>Posters</mods:genre>
+   </mods:subject>
+   <mods:subject authority="lcsh">
+      <mods:name type="personal">
+         <mods:namePart type="family">Lee</mods:namePart>
+         <mods:namePart type="given">Ivy L. (Ivy Ledbetter)</mods:namePart>
+         <mods:namePart type="date">1877-1934</mods:namePart>
+      </mods:name>
+   </mods:subject>
+   <mods:relatedItem type="host">
+      <mods:titleInfo>
+         <mods:title>Ivy Ledbetter Lee Papers, 1881-1989 (bulk 1915-1946)</mods:title>
+      </mods:titleInfo>
+      <mods:location>
+         <mods:url note="Finding Aid">http://arks.princeton.edu/ark:/88435/m039k489x</mods:url>
+      </mods:location>
+   </mods:relatedItem>
+   <mods:relatedItem type="host">
+      <mods:titleInfo>
+         <mods:title>Interborough Rapid Transit Company Subway Posters</mods:title>
+      </mods:titleInfo>
+      <mods:location>
+         <mods:url note="Digital Collection">http://arks.princeton.edu/ark:/88435/ns064606d</mods:url>
+      </mods:location>
+   </mods:relatedItem>
+   <mods:relatedItem type="series">
+      <mods:titleInfo>
+         <mods:nonSort>The</mods:nonSort>
+         <mods:title>Subway Sun</mods:title>
+         <mods:partNumber>Volume 3</mods:partNumber>
+         <mods:partNumber>Number 6</mods:partNumber>
+      </mods:titleInfo>
+   </mods:relatedItem>
+   <mods:location>
+      <mods:physicalLocation type="text">Princeton University Library. Department of Rare Books and Special Collections. Seeley G. Mudd Manuscript Library.
+         Public Policy Papers.</mods:physicalLocation>
+      <mods:physicalLocation authority="marcorg" type="code">NjP</mods:physicalLocation>
+      <mods:holdingSimple>
+         <mods:copyInformation>
+            <mods:subLocation>Mudd</mods:subLocation>
+            <mods:shelfLocator>MC085. Box 135</mods:shelfLocator>
+         </mods:copyInformation>
+      </mods:holdingSimple>
+   </mods:location>
+   <mods:accessCondition type="useAndReproduction">Single photocopies may be made for research purposes. Permission to publish materials from
+      the collection must be requested from the Curator of the Public Policy Papers. Researchers are responsible for determining any copyright
+      questions</mods:accessCondition>
+   <mods:accessCondition type="restrictionOnAccess">The collection is open for research</mods:accessCondition>
+   <mods:recordInfo>
+      <mods:recordContentSource>NjP</mods:recordContentSource>
+      <mods:recordCreationDate encoding="iso8601">2008-05-13</mods:recordCreationDate>
+      <mods:recordOrigin>Content adheres to that prescribed by Describing Archives: A Content Standard</mods:recordOrigin>
+      <mods:languageOfCataloging>
+         <mods:languageTerm authority="rfc3066" type="code">eng</mods:languageTerm>
+      </mods:languageOfCataloging> 
+      <mods:recordIdentifier>http://diglib.princeton.edu/mdata/pudl0036/135/001.mods</mods:recordIdentifier>
+   </mods:recordInfo>
+</mods:mods>
+</mets:xmlData>
+</mets:mdWrap>
+</mets:dmdSec>
+<mets:fileSec>
+<mets:fileGrp USE="thumbnail">
+<mets:file ID="hxqgp" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0036/135/001/00000001.tif"/>
+</mets:file>
+</mets:fileGrp>
+<mets:fileGrp USE="masters">
+<mets:file CHECKSUM="b80c17f77ed4addaf9ff823da5157fde" CHECKSUMTYPE="MD5" ID="xctd7" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0036/135/001/00000001.tif"/>
+</mets:file>
+</mets:fileGrp>
+</mets:fileSec>
+<mets:structMap TYPE="RelatedObjects">
+<mets:div DMDID="mufu9 mufu9" ID="z0aw1">
+<mets:div CONTENTIDS="pudl0036" TYPE="IsPartOf"/>
+<mets:div ID="aggregates" TYPE="OrderedList">
+<mets:div ID="hlfs1" LABEL="recto" ORDER="1" TYPE="Static">
+<mets:fptr FILEID="xctd7"/>
+</mets:div>
+</mets:div>
+</mets:div>
+</mets:structMap>
+<mets:structMap TYPE="Physical">
+<mets:div DMDID="mufu9 mufu9" ID="g1g7n" LABEL="recto" ORDER="1" TYPE="Side">
+<mets:fptr FILEID="xctd7"/>
+</mets:div>
+</mets:structMap>
+</mets:mets>
