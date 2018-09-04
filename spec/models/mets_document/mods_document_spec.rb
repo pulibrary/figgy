@@ -31,6 +31,7 @@ RSpec.describe METSDocument::MODSDocument do
         finding_aid_identifier = mods_document.finding_aid_identifier.first
         expect(finding_aid_identifier.identifier).to eq "http://arks.princeton.edu/ark:/88435/m039k489x"
         expect(finding_aid_identifier.title).to eq "Ivy Ledbetter Lee Papers, 1881-1989 (bulk 1915-1946)"
+        expect(mods_document.replaces).to eq "http://pudl.princeton.edu/objects/4d52d496-f15e-405d-863b-32fb880f13d8"
       end
     end
   end

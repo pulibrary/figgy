@@ -47,6 +47,13 @@ RSpec.describe METSDocument do
   describe "identifiers" do
     subject(:mets_document) { described_class.new mets_file }
 
+    context "with a UUID identifier" do
+      let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0036-135-01.mets") }
+      it "doesn't have an ark id" do
+        expect(mets_document.ark_id).to be_blank
+      end
+    end
+
     it "has an ark id" do
       expect(mets_document.ark_id).to eq("ark:/88435/5m60qr98htest")
     end
