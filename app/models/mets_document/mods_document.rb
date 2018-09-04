@@ -114,7 +114,12 @@ class METSDocument
     end
 
     def finding_aid_identifier
-      value_from(xpath: "mods:relatedItem[@type=\"host\"]/mods:location/mods:url[@note=\"Finding Aid\"]")
+      identifiers = find_elements("mods:relatedItem[@type=\"host\"][./mods:location/mods:url[@note='Finding Aid']]")
+      identifiers.map do |identifier|
+        title = identifier.xpath("mods:titleInfo/mods:title", mods: MODS_XML_NAMESPACE).first.content
+        identifier = identifier.xpath("mods:location/mods:url", mods: MODS_XML_NAMESPACE).first.content
+        ArkWithTitle.new(title: title, identifier: identifier)
+      end
     end
 
     private
