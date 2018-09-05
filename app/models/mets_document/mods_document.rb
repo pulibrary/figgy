@@ -94,7 +94,7 @@ class METSDocument
     end
 
     def holding_simple_sublocation
-      value_from(xpath: "mods:location/mods:holdingSimple/mods:copyInformation/mods:subLocation")
+      value_from(xpath: "mods:location/mods:holdingSimple/mods:copyInformation/mods:subLocation").map(&:downcase)
     end
 
     def shelf_locator
