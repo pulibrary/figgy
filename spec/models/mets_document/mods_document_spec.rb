@@ -36,6 +36,31 @@ RSpec.describe METSDocument::MODSDocument do
     end
   end
 
+  context "pudl0017" do
+    let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0017-wc064.mets") }
+    describe "attributes" do
+      it "returns known values for each attribute" do
+        expect(mods_document.title).to eq ["City Hall after the earthquake, San Francisco, California"]
+        expect(mods_document.type_of_resource).to eq ["still image"]
+        expect(mods_document.photographer).to eq ["Underwood & Underwood"]
+        expect(mods_document.genre).to eq ["Lantern slides", "Cityscape photographs"]
+        expect(mods_document.geographic_origin).to eq ["California", "San Francisco (Calif.)"]
+        expect(mods_document.date_created).to eq ["1906"]
+        expect(mods_document.extent).to eq ["7 × 7.5 cm."]
+        expect(mods_document.note).to eq [
+          "Typescript notation on the recto reads \"284--8189 - After the earthquake, San Francisco, Cal.\" In a mount measuring 8 × 10 cm." \
+          " Title supplied by cataloger and derived from caption; attribution from printed caption."
+        ]
+        expect(mods_document.subject).to eq ["San Francisco Earthquake and Fire, Calif., 1906", "Natural disasters", "Architecture"]
+        expect(mods_document.local_identifier).to eq ["WA 1998:223"]
+        expect(mods_document.holding_simple_sublocation).to eq ["WA"]
+        expect(mods_document.shelf_locator).to eq ["(WA) WC064, H0030"]
+        expect(mods_document.finding_aid_identifier).to eq []
+        expect(mods_document.replaces).to eq nil
+      end
+    end
+  end
+
   describe ".from" do
     it "constructs a MODSDocument from a METSDocument and an XPath" do
       expect(mods_document).to be_a described_class
