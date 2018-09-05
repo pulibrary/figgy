@@ -34,6 +34,10 @@ class METSDocument
       value_from xpath: "mods:name[mods:role/mods:roleTerm[@type=\"code\"] = 'cre']/mods:namePart"
     end
 
+    def photographer
+      value_from xpath: "mods:name[mods:role/mods:roleTerm[@type=\"code\"] = 'pht']/mods:namePart"
+    end
+
     def date_created
       values = value_from xpath: "mods:originInfo/mods:dateCreated"
       joined = values.join(" - ")
@@ -49,7 +53,7 @@ class METSDocument
     end
 
     def note
-      value_from xpath: "mods:note"
+      normalize_whitespace(value_from(xpath: "mods:note"))
     end
 
     def subject
@@ -126,6 +130,10 @@ class METSDocument
       element = @element.xpath("/mets:mets/@OBJID").to_s
       return nil if element.include?("ark")
       "http://pudl.princeton.edu/objects/#{element}"
+    end
+
+    def local_identifier
+      value_from(xpath: "mods:identifier[@type=\"localAccession\"]")
     end
 
     private

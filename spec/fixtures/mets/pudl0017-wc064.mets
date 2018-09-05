@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OBJID="ark:/88435/6q182k87k" TYPE="CompiledDigitalObject" xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd">
+<mets:metsHdr CREATEDATE="2018-08-04T11:56:02.698-04:00" LASTMODDATE="2018-08-04T11:56:02.698-04:00">
+<mets:metsDocumentID TYPE="PUDL">pudl0017/wc064/H/H0030.mets</mets:metsDocumentID>
+</mets:metsHdr>
+<mets:dmdSec ID="hls6n">
+<mets:mdWrap MDTYPE="MODS">
+<mets:xmlData>
+<mods xmlns="http://www.loc.gov/mods/v3">
+  <titleInfo>
+      <title>City Hall after the earthquake, San Francisco, California</title>
+  </titleInfo>
+  <typeOfResource>still image</typeOfResource>
+  <name authority="naf" type="corporate">
+      <namePart>Underwood &amp; Underwood</namePart>
+      <role>
+         <roleTerm authority="marcrelator" type="code">pht</roleTerm>
+      </role>
+  </name>
+  <genre authority="lctgm">Lantern slides</genre>
+  <genre authority="lctgm">Cityscape photographs</genre>
+  <originInfo>
+      <place>
+         <placeTerm type="text">California</placeTerm>
+      </place>
+      <place>
+         <placeTerm type="text">San Francisco (Calif.)</placeTerm>
+      </place>
+      <!--Date 1: 1906-->
+   <!--Date 2: -->
+   <dateOther>1906</dateOther>
+      <dateCreated encoding="w3cdtf" keyDate="yes">1906</dateCreated>
+  </originInfo>
+  <physicalDescription>
+      <extent>7 × 7.5 cm.</extent>
+  </physicalDescription>
+  <note>Typescript notation on the recto reads "284--8189 - After the earthquake, San Francisco, Cal." In a mount measuring 8 × 10 cm.
+   Title supplied by cataloger and derived from caption; attribution from printed caption.</note>
+  <subject authority="lcsh">
+      <topic>San Francisco Earthquake and Fire, Calif., 1906</topic>
+  </subject>
+  <subject authority="lcsh">
+      <topic>Natural disasters</topic>
+  </subject>
+  <subject authority="lcsh">
+      <topic>Architecture</topic>
+  </subject>
+  <identifier type="localAccession">WA 1998:223</identifier>
+  <location>
+      <physicalLocation type="text">Princeton University Library. Department of Rare Books and Special Collections.</physicalLocation>
+      <physicalLocation authority="marcorg" type="code">NjP</physicalLocation>
+      <holdingSimple>
+         <copyInformation>
+            <subLocation>WA</subLocation>
+            <shelfLocator>(WA) WC064, H0030</shelfLocator>
+         </copyInformation>
+      </holdingSimple>
+  </location>
+  <relatedItem type="host">
+      <titleInfo>
+         <title>Western Americana Collection</title>
+      </titleInfo>
+      <location>
+         <url note="Digital collection">http://arks.princeton.edu/ark:/88435/sb3978254</url>
+      </location>
+  </relatedItem>
+  <relatedItem type="host">
+      <titleInfo>
+         <title>Western Americana Photographs Collection, 1800s-1900s</title>
+      </titleInfo>
+      <location>
+         <url>http://catalog.princeton.edu/cgi-bin/Pwebrecon.cgi?BBID=1149579</url>
+      </location>
+  </relatedItem>
+  <accessCondition type="useAndReproduction" xlink:href="http://www.princeton.edu/~rbsc/research/rights.html"/>
+  <accessCondition type="restrictionOnAccess" xlink:href="http://www.princeton.edu/~rbsc/research/rules.html"/>
+  <recordInfo>
+      <recordIdentifier>http://diglib.princeton.edu/mdata/pudl0017/wc064/H/H0030.mods</recordIdentifier>
+  </recordInfo>
+ </mods>
+</mets:xmlData>
+</mets:mdWrap>
+</mets:dmdSec>
+<mets:fileSec>
+<mets:fileGrp USE="thumbnail">
+<mets:file ID="um9c0" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0017/wc064/H/H0030/00000001.tif"/>
+</mets:file>
+</mets:fileGrp>
+<mets:fileGrp USE="masters">
+<mets:file CHECKSUM="5cf8dcd2a2c7a9bf0c6b4f07a514447d" CHECKSUMTYPE="MD5" ID="ndgz8" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0017/wc064/H/H0030/00000001.tif"/>
+</mets:file>
+</mets:fileGrp>
+</mets:fileSec>
+<mets:structMap TYPE="RelatedObjects">
+<mets:div DMDID="hls6n hls6n" ID="jk8sf" LABEL="Default">
+<mets:div CONTENTIDS="pudl0017" TYPE="IsPartOf"/>
+<mets:div ID="aggregates" TYPE="OrderedList">
+<mets:div ID="zd25u" LABEL="image 1" ORDER="1" TYPE="Static">
+<mets:fptr FILEID="ndgz8"/>
+</mets:div>
+</mets:div>
+</mets:div>
+</mets:structMap>
+</mets:mets>
