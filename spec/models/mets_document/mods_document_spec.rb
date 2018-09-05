@@ -53,7 +53,7 @@ RSpec.describe METSDocument::MODSDocument do
         ]
         expect(mods_document.subject).to eq ["San Francisco Earthquake and Fire, Calif., 1906", "Natural disasters", "Architecture"]
         expect(mods_document.local_identifier).to eq ["WA 1998:223"]
-        expect(mods_document.holding_simple_sublocation).to eq ["WA"]
+        expect(mods_document.holding_simple_sublocation).to eq ["wa"]
         expect(mods_document.shelf_locator).to eq ["(WA) WC064, H0030"]
         expect(mods_document.finding_aid_identifier).to eq []
         expect(mods_document.replaces).to eq nil
