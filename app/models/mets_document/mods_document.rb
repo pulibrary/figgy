@@ -19,7 +19,16 @@ class METSDocument
     end
 
     def title
-      value_from xpath: "mods:titleInfo/mods:title"
+      element = find_elements("mods:titleInfo")
+      element.entries.map do |entry|
+        extract_element_children(entry, xpath: "mods:title")
+      end
+    end
+
+    def extract_element_children(entry, xpath:)
+      content = content(find_elements(xpath, element: entry)).join(", ")
+      return content unless entry.attributes["lang"] || entry.attributes["script"]
+      RDF::Literal.new(content, language: :"#{entry.attributes["lang"]}-#{entry.attributes["script"]}")
     end
 
     def alternative_title
@@ -36,6 +45,25 @@ class METSDocument
 
     def photographer
       value_from xpath: "mods:name[mods:role/mods:roleTerm[@type=\"code\"] = 'pht']/mods:namePart"
+    end
+
+    def actor
+      find_elements("mods:name[mods:role/mods:roleTerm[@type=\"code\"] = 'act']").entries.group_by { |x| x.attributes["altRepGroup"]&.value || SecureRandom.uuid }.map do |_group, entries|
+        elements = entries.map do |entry|
+          extract_element_children(entry, xpath: "mods:namePart")
+        end
+        if entries.length > 1
+          Grouping.new(elements: elements)
+        else
+          elements.first
+        end
+      end
+    end
+
+    def director
+      find_elements("mods:name[mods:role/mods:roleTerm[@type=\"code\"] = 'drt']").entries.map do |entry|
+        extract_element_children(entry, xpath: "mods:namePart")
+      end
     end
 
     def date_created
@@ -98,7 +126,9 @@ class METSDocument
     end
 
     def shelf_locator
-      value_from(xpath: "mods:location/mods:holdingSimple/mods:copyInformation/mods:shelfLocator")
+      find_elements("mods:location/mods:holdingSimple/mods:copyInformation").entries.map do |entry|
+        entry.children.select { |x| x.is_a?(Nokogiri::XML::Element) }.map(&:content).join(", ")
+      end
     end
 
     def geographic_origin
@@ -134,13 +164,13 @@ class METSDocument
     end
 
     def local_identifier
-      value_from(xpath: "mods:identifier[@type=\"localAccession\"]")
+      value_from(xpath: "mods:identifier[@type=\"localAccession\"]") + value_from(xpath: "mods:identifier[@type=\"local\"]")
     end
 
     private
 
-      def find_elements(xpath)
-        @element.xpath(xpath, mods: MODS_XML_NAMESPACE, xlink: XLINK_XML_NAMESPACE)
+      def find_elements(xpath, element: @element)
+        element.xpath(xpath, mods: MODS_XML_NAMESPACE, xlink: XLINK_XML_NAMESPACE)
       end
 
       def content(elements)

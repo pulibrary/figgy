@@ -27,11 +27,53 @@ RSpec.describe METSDocument::MODSDocument do
         expect(mods_document.series).to eq ["The Subway Sun. Volume 3. Number 6"]
         expect(mods_document.access_condition).not_to be_blank
         expect(mods_document.holding_simple_sublocation).to eq ["Mudd"]
-        expect(mods_document.shelf_locator).to eq ["MC085. Box 135"]
+        expect(mods_document.shelf_locator).to eq ["Mudd, MC085. Box 135"]
         finding_aid_identifier = mods_document.finding_aid_identifier.first
         expect(finding_aid_identifier.identifier).to eq "http://arks.princeton.edu/ark:/88435/m039k489x"
         expect(finding_aid_identifier.title).to eq "Ivy Ledbetter Lee Papers, 1881-1989 (bulk 1915-1946)"
         expect(mods_document.replaces).to eq "http://pudl.princeton.edu/objects/4d52d496-f15e-405d-863b-32fb880f13d8"
+      end
+    end
+  end
+
+  context "pudl0100" do
+    let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0100-lc-egx_0003.mets") }
+    describe "attributes" do
+      it "returns known values for each attribute" do
+        expect(mods_document.title).to eq [RDF::Literal.new("الاختيار", language: "ara-Arab")]
+        expect(mods_document.actor).to contain_exactly(
+          Grouping.new(
+            elements: [
+              RDF::Literal.new("Ḥusnī, Suʻād", language: "ara-Latn"),
+              RDF::Literal.new("سعاد حسني", language: "ara-Arab")
+            ]
+          ),
+          Grouping.new(
+            elements: [
+              RDF::Literal.new("ʻAlāyilī, ʻIzzat, 1934-", language: "ara-Latn"),
+              RDF::Literal.new("عزت العلايلي", language: "ara-Arab")
+            ]
+          ),
+          RDF::Literal.new("هدى سلطان", language: "ara-Arab"),
+          Grouping.new(
+            elements: [
+              RDF::Literal.new("Milījī, Maḥmūd", language: "ara-Latn"),
+              RDF::Literal.new("محمود المليجي", language: "ara-Arab")
+            ]
+          ),
+          "Test"
+        )
+        expect(mods_document.director).to contain_exactly(
+          RDF::Literal.new("يوسف شاهين", language: "ara-Arab")
+        )
+        expect(mods_document.type_of_resource).to eq ["still image"]
+        expect(mods_document.genre).to eq ["Lobby Cards"]
+        expect(mods_document.geographic_origin).to eq ["Egypt"]
+        expect(mods_document.language).to eq ["ara"]
+        expect(mods_document.extent).to eq ["4 pieces ; approximately 50 x 37 cm."]
+        expect(mods_document.local_identifier).to eq ["egx-0003"]
+        expect(mods_document.date_created).to eq ["1901 - 2000"]
+        expect(mods_document.shelf_locator).to eq ["Curator's office, Cabinet 11/06"]
       end
     end
   end
@@ -54,7 +96,7 @@ RSpec.describe METSDocument::MODSDocument do
         expect(mods_document.subject).to eq ["San Francisco Earthquake and Fire, Calif., 1906", "Natural disasters", "Architecture"]
         expect(mods_document.local_identifier).to eq ["WA 1998:223"]
         expect(mods_document.holding_simple_sublocation).to eq ["WA"]
-        expect(mods_document.shelf_locator).to eq ["(WA) WC064, H0030"]
+        expect(mods_document.shelf_locator).to eq ["WA, (WA) WC064, H0030"]
         expect(mods_document.finding_aid_identifier).to eq []
         expect(mods_document.replaces).to eq nil
       end
@@ -200,7 +242,7 @@ RSpec.describe METSDocument::MODSDocument do
     let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0038-7350.mets") }
 
     it "accesses the shelfLocator field" do
-      expect(mods_document.shelf_locator).to contain_exactly "Box AD01, Item 7350"
+      expect(mods_document.shelf_locator).to contain_exactly "Mudd, Box AD01, Item 7350"
     end
   end
 end

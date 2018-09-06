@@ -108,7 +108,7 @@ RSpec.describe IngestMETSJob do
         described_class.perform_now(mets_file, user, true)
 
         book = adapter.query_service.find_all_of_model(model: ScannedResource).first
-        expect(book.location).to contain_exactly("Box AD01, Item 7350")
+        expect(book.location).to contain_exactly("Mudd, Box AD01, Item 7350")
       end
     end
   end

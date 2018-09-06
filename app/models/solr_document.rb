@@ -19,7 +19,7 @@ class SolrDocument
   use_extension(LinkedData)
 
   def resource
-    @resource ||= Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.to_resource(object: to_h)
+    @resource ||= Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_by(id: id)
   end
 
   def decorated_resource
