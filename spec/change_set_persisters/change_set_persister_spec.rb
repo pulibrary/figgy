@@ -376,29 +376,6 @@ RSpec.describe ChangeSetPersister do
       expect(members.first.hocr_content).not_to be_blank
     end
 
-    it "cleans up derivatives", run_real_derivatives: true do
-      allow(CharacterizationJob).to receive(:set).and_call_original
-      allow(CreateDerivativesJob).to receive(:set).and_call_original
-
-      resource = FactoryBot.build(:scanned_resource)
-      change_set = change_set_class.new(resource, characterize: true, ocr_language: ["eng"])
-      change_set.files = [file]
-      change_set_persister.queue = "low"
-      output = change_set_persister.save(change_set: change_set)
-      file_set = query_service.find_members(resource: output).first
-      expect(file_set.file_metadata.select(&:derivative?)).not_to be_empty
-      expect(CharacterizationJob).to have_received(:set).with(queue: "low")
-      expect(CreateDerivativesJob).to have_received(:set).with(queue: "low")
-
-      updated_change_set = change_set_class.new(output)
-      change_set_persister.delete(change_set: updated_change_set)
-
-      query_service.find_members(resource: output).first
-      derivative = file_set.file_metadata.select(&:derivative?).first
-      derivative_path = derivative.file_identifiers.first.to_s.gsub("disk://", "")
-      expect(File.exist?(derivative_path)).to be false
-    end
-
     context "with an xml file" do
       let(:file) { fixture_file_upload("files/geo_metadata/fgdc.xml", "text/xml") }
       let(:change_set_persister) do
@@ -746,6 +723,39 @@ RSpec.describe ChangeSetPersister do
 
         expect(reloaded.member_of_collection_ids).to eq []
       end
+    end
+  end
+
+  describe "deleting a resource" do
+    let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+    let(:change_set_persister) do
+      described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: true)
+    end
+    it "cleans up derivatives and original files", run_real_derivatives: true do
+      allow(CharacterizationJob).to receive(:set).and_call_original
+      allow(CreateDerivativesJob).to receive(:set).and_call_original
+
+      resource = FactoryBot.build(:scanned_resource)
+      change_set = change_set_class.new(resource, characterize: true, ocr_language: ["eng"])
+      change_set.files = [file]
+      change_set_persister.queue = "low"
+      output = change_set_persister.save(change_set: change_set)
+      file_set = query_service.find_members(resource: output).first
+      expect(file_set.file_metadata.select(&:derivative?)).not_to be_empty
+      expect(file_set.original_file).to be_a FileMetadata
+      expect(CharacterizationJob).to have_received(:set).with(queue: "low")
+      expect(CreateDerivativesJob).to have_received(:set).with(queue: "low")
+
+      updated_change_set = change_set_class.new(output)
+      change_set_persister.delete(change_set: updated_change_set)
+
+      query_service.find_members(resource: output).first
+      derivative = file_set.file_metadata.select(&:derivative?).first
+      derivative_path = derivative.file_identifiers.first.to_s.gsub("disk://", "")
+      expect(File.exist?(derivative_path)).to be false
+      original = file_set.original_file
+      original_path = original.file_identifiers.first.to_s.gsub("disk://", "")
+      expect(File.exist?(original_path)).to be false
     end
   end
 
