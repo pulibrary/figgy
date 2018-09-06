@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OBJID="ark:/88435/2514nk81c" TYPE="CompiledDigitalObject" xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd">
+<mets:metsHdr CREATEDATE="2018-08-04T11:56:12.015-04:00" LASTMODDATE="2018-08-04T11:56:12.015-04:00">
+<mets:metsDocumentID TYPE="PUDL">pudl0017/wc064/S/S2687.mets</mets:metsDocumentID>
+</mets:metsHdr>
+<mets:dmdSec ID="r1tv0">
+<mets:mdWrap MDTYPE="MODS">
+<mets:xmlData>
+<mods xmlns="http://www.loc.gov/mods/v3">
+  <titleInfo>
+      <title>Mormon Tabernacle, Salt Lake City.</title>
+  </titleInfo>
+  <typeOfResource>still image</typeOfResource>
+  <genre authority="lctgm">Albumen prints</genre>
+  <genre authority="lctgm">Stereographs</genre>
+  <genre authority="lctgm">Cityscape photographs</genre>
+  <originInfo>
+   <!--Date 1: 1880-->
+   <!--Date 2: -->
+   <dateOther>[ca. 1880]</dateOther>
+      <dateCreated encoding="w3cdtf" keyDate="yes" qualifier="approximate">1880</dateCreated>
+  </originInfo>
+  <physicalDescription>
+      <extent>9 × 18 cm.</extent>
+  </physicalDescription>
+  <subject authority="lcsh">
+      <name authority="naf" type="corporate">
+         <namePart>Tabernacle (Salt Lake City, Utah)</namePart>
+      </name>
+  </subject>
+  <subject authority="lcsh">
+      <topic>Mormons</topic>
+  </subject>
+  <subject authority="lcsh">
+      <topic>Buildings</topic>
+  </subject>
+  <subject authority="naf">
+      <geographic>Utah</geographic>
+  </subject>
+  <subject authority="naf">
+      <geographic>Salt Lake City (Utah)</geographic>
+  </subject>
+  <relatedItem type="series">
+      <titleInfo>
+         <title>American views</title>
+      </titleInfo>
+  </relatedItem>
+  <location>
+      <physicalLocation type="text">Princeton University Library. Department of Rare Books and Special Collections.</physicalLocation>
+      <physicalLocation authority="marcorg" type="code">NjP</physicalLocation>
+      <holdingSimple>
+         <copyInformation>
+            <subLocation>WA</subLocation>
+            <shelfLocator>(WA) WC064, S2687</shelfLocator>
+         </copyInformation>
+      </holdingSimple>
+  </location>
+  <relatedItem type="host">
+      <titleInfo>
+         <title>Western Americana Collection</title>
+      </titleInfo>
+      <location>
+         <url note="Digital collection">http://arks.princeton.edu/ark:/88435/sb3978254</url>
+      </location>
+  </relatedItem>
+  <relatedItem type="host">
+      <titleInfo>
+         <title>Western Americana Photographs Collection, 1800s-1900s</title>
+      </titleInfo>
+      <location>
+         <url>http://catalog.princeton.edu/cgi-bin/Pwebrecon.cgi?BBID=1149579</url>
+      </location>
+  </relatedItem>
+  <accessCondition type="useAndReproduction" xlink:href="http://www.princeton.edu/~rbsc/research/rights.html"/>
+  <accessCondition type="restrictionOnAccess" xlink:href="http://www.princeton.edu/~rbsc/research/rules.html"/>
+  <recordInfo>
+      <recordIdentifier>http://diglib.princeton.edu/mdata/pudl0017/wc064/S/S2687.mods</recordIdentifier>
+  </recordInfo>
+ </mods>
+</mets:xmlData>
+</mets:mdWrap>
+</mets:dmdSec>
+<mets:fileSec>
+<mets:fileGrp USE="thumbnail">
+<mets:file ID="jbw35" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0017/wc064/S/S2687/00000001.tif"/>
+</mets:file>
+</mets:fileGrp>
+<mets:fileGrp USE="masters">
+<mets:file CHECKSUM="2d16d71ef136f8faae2e1ec40dec56e" CHECKSUMTYPE="MD5" ID="o6ck1" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0017/wc064/S/S2687/00000001.tif"/>
+</mets:file>
+<mets:file CHECKSUM="e8f69fee868b2b134c1441832e8c9bbd" CHECKSUMTYPE="MD5" ID="ky2sm" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0017/wc064/S/S2687/00000002.tif"/>
+</mets:file>
+</mets:fileGrp>
+</mets:fileSec>
+<mets:structMap TYPE="RelatedObjects">
+<mets:div DMDID="r1tv0 r1tv0" ID="t365s" LABEL="Default">
+<mets:div CONTENTIDS="pudl0017" TYPE="IsPartOf"/>
+<mets:div ID="aggregates" TYPE="OrderedList">
+<mets:div ID="zotef" LABEL="recto" ORDER="1" TYPE="Static">
+<mets:fptr FILEID="o6ck1"/>
+</mets:div>
+<mets:div ID="xpgjv" LABEL="verso" ORDER="2" TYPE="Static">
+<mets:fptr FILEID="ky2sm"/>
+</mets:div>
+</mets:div>
+</mets:div>
+</mets:structMap>
+<mets:structMap TYPE="Physical">
+<mets:div ID="g1238" TYPE="Sheet">
+<mets:div ID="mtvlm" LABEL="recto" ORDER="1" TYPE="Side">
+<mets:fptr FILEID="o6ck1"/>
+</mets:div>
+<mets:div ID="j2564" LABEL="verso" ORDER="2" TYPE="Side">
+<mets:fptr FILEID="ky2sm"/>
+</mets:div>
+</mets:div>
+</mets:structMap>
+</mets:mets>

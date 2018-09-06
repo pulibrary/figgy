@@ -113,7 +113,8 @@ class METSDocument
       series_entries = find_elements("mods:relatedItem[@type=\"series\"]/mods:titleInfo")
       series_entries.map do |series|
         title = series.elements[0..1].map(&:content).join(" ")
-        title + ". " + series.elements[2..-1].map(&:content).join(". ")
+        extra_elements = (series.elements[2..-1] || []).map(&:content).join(". ")
+        [title, extra_elements].select(&:present?).join(". ")
       end
     end
 
