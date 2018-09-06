@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class ScannedResourceDecorator < Valkyrie::ResourceDecorator
-  display Schema::Common.attributes, :rendered_ocr_language, :rendered_holding_location, :member_of_collections
-  suppress :thumbnail_id, :imported_author, :source_jsonld, :source_metadata, :sort_title, :ocr_language, :rights_statement
+  display Schema::Common.attributes, :rendered_ocr_language, :rendered_holding_location, :member_of_collections, :rendered_actors
+  suppress :thumbnail_id, :imported_author, :source_jsonld, :source_metadata, :sort_title, :ocr_language, :rights_statement, :actor
 
   display_in_manifest displayed_attributes, :location
   suppress_from_manifest Schema::IIIF.attributes,
@@ -129,5 +129,17 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
 
   def pdf_file
     file_metadata.find { |x| x.mime_type == ["application/pdf"] }
+  end
+
+  def rendered_actors
+    Array.wrap(actor).flat_map do |actor|
+      if actor.is_a?(String)
+        actor
+      elsif actor.is_a?(Grouping)
+        actor.elements.map(&:to_s)
+      else
+        actor.to_s
+      end
+    end
   end
 end
