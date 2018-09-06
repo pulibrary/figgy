@@ -38,6 +38,8 @@ class SimpleResourceChangeSet < ChangeSet
   property :coverage, multiple: true, required: false, default: []
   property :creator, multiple: true, required: false, default: []
   property :photographer, multiple: true, required: false, default: []
+  property :actor, multiple: true, required: false, default: []
+  property :director, multiple: true, required: false, default: []
   property :date, multiple: true, required: false, default: []
   property :description, multiple: true, required: false, default: []
   property :keyword, multiple: true, required: false, default: []
