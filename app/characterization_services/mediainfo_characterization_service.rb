@@ -28,7 +28,7 @@ class MediainfoCharacterizationService
       date_of_digitization: media_encoded_date,
       producer: media.producer,
       source_media_type: media.originalsourceform,
-      duration: media.duration.to_s # Floats are not supported as Valkyrie::Types
+      duration: media.duration.to_s # Floats are not supported as Valkyrie::Types (update: now they are)
     }
     new_file = preservation_file.new(@file_characterization_attributes.to_h)
     @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
