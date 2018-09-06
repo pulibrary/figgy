@@ -73,7 +73,8 @@ module Schema
           :container, # Local
           :thumbnail_id, # Local
           :imported_author, # Local
-          :rendered_rights_statement # Local
+          :rendered_rights_statement, # Local
+          :coverage_point, # local, used for latitude / longitude
         ]
     end
 
