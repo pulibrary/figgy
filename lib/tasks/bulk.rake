@@ -209,4 +209,29 @@ namespace :bulk do
     logger = Logger.new(STDOUT)
     UpdateState.perform(collection_id: Valkyrie::ID.new(coll), state: state, metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), logger: logger)
   end
+
+  desc "Ingest a directory of TIFFs as intermediate files for existing ScannedResources"
+  task ingest_intermediate_files: :environment do
+    logger = Logger.new(STDOUT)
+
+    begin
+      dir = ENV["DIR"]
+      property = ENV["PROPERTY"] ? ENV["PROPERTY"].to_sym : :source_metadata_identifier
+      background = ENV["BACKGROUND"].casecmp("true").zero? if ENV["BACKGROUND"]
+
+      abort "usage: rake bulk:ingest_intermediate_files DIR=/path/to/files [PROPERTY=source_metadata_identifier] [BACKGROUND=TRUE]" unless dir && Dir.exist?(dir)
+
+      logger.info "ingesting files from: #{dir}"
+
+      service = BulkIngestIntermediateService.new(
+        property: property,
+        background: background,
+        logger: logger
+      )
+      service.ingest(dir)
+    rescue => e
+      logger.error "Error: #{e.message}"
+      logger.error e.backtrace
+    end
+  end
 end

@@ -9,11 +9,22 @@ class Jp2DerivativeService
     end
 
     def new(change_set)
-      Jp2DerivativeService.new(change_set: change_set, change_set_persister: change_set_persister, original_file: original_file(change_set.resource))
+      Jp2DerivativeService.new(change_set: change_set, change_set_persister: change_set_persister, target_file: target_file(change_set.resource))
     end
 
-    def original_file(resource)
-      resource.original_file
+    # If there are intermediate files with the supported format attached to the
+    #   resource, select the first of these
+    # @param [Valkyrie::Resource] resource
+    # @return [FileMetadata]
+    def intermediate_target_files(resource)
+      supported = resource.intermediate_files.select do |intermed|
+        ["image/tiff", "image/jpeg"].include?(intermed.mime_type.first)
+      end
+      supported.empty? ? nil : supported.first
+    end
+
+    def target_file(resource)
+      intermediate_target_files(resource) || resource.original_file
     end
   end
 
@@ -27,13 +38,13 @@ class Jp2DerivativeService
     end
   end
 
-  attr_reader :change_set, :change_set_persister, :original_file
-  delegate :mime_type, to: :original_file
+  attr_reader :change_set, :change_set_persister, :target_file
+  delegate :mime_type, to: :target_file
   delegate :resource, to: :change_set
-  def initialize(change_set:, change_set_persister:, original_file:)
+  def initialize(change_set:, change_set_persister:, target_file:)
     @change_set = change_set
     @change_set_persister = change_set_persister
-    @original_file = original_file
+    @target_file = target_file
   end
 
   def valid?
@@ -46,7 +57,7 @@ class Jp2DerivativeService
     change_set_persister.buffer_into_index do |buffered_persister|
       buffered_persister.save(change_set: change_set)
     end
-    update_error_message(message: nil) if original_file.error_message.present?
+    update_error_message(message: nil) if target_file.error_message.present?
   rescue StandardError => error
     update_error_message(message: error.message)
     raise error
@@ -161,7 +172,7 @@ class Jp2DerivativeService
   end
 
   def file_object
-    @file_object ||= Valkyrie::StorageAdapter.find_by(id: original_file.file_identifiers[0])
+    @file_object ||= Valkyrie::StorageAdapter.find_by(id: target_file.file_identifiers[0])
   end
 
   def temporary_output
@@ -187,7 +198,7 @@ class Jp2DerivativeService
 
     # Updates error message property on the original file.
     def update_error_message(message:)
-      original_file.error_message = [message]
+      target_file.error_message = [message]
       updated_change_set = DynamicChangeSet.new(resource)
       change_set_persister.buffer_into_index do |buffered_persister|
         buffered_persister.save(change_set: updated_change_set)

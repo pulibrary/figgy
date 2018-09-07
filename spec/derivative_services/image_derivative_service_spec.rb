@@ -30,6 +30,42 @@ RSpec.describe ImageDerivativeService do
     end
   end
 
+  context "with an existing TIFF intermediate file", run_real_derivatives: true do
+    let(:storage_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
+    let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
+    let(:valid_resource) { scanned_resource.decorate.members.first }
+    let(:valid_change_set) { DynamicChangeSet.new(valid_resource) }
+    let(:intermediate_file) { double("File") }
+
+    before do
+      allow(intermediate_file).to receive(:original_filename).and_return("00000001.tif")
+      allow(intermediate_file).to receive(:content_type).and_return("image/tiff")
+      allow(intermediate_file).to receive(:use).and_return(Valkyrie::Vocab::PCDMUse.IntermediateFile)
+      allow(intermediate_file).to receive(:path).and_return(
+        Rails.root.join("spec", "fixtures", "files", "abstract.tiff")
+      )
+
+      file_set = scanned_resource.decorate.members.first
+      change_set = FileSetChangeSet.new(file_set)
+      change_set.validate(files: [intermediate_file])
+      change_set_persister.save(change_set: change_set)
+    end
+
+    it "creates a JPEG thumbnail and attaches it to the fileset" do
+      derivative_service.new(valid_change_set).create_derivatives
+
+      reloaded = query_service.find_by(id: valid_resource.id)
+      expect(reloaded.file_metadata.length).to eq(3)
+
+      expect(reloaded.thumbnail_files).not_to be_empty
+      thumbnail = reloaded.thumbnail_files.first
+
+      thumbnail_file = Valkyrie::StorageAdapter.find_by(id: thumbnail.file_identifiers.first)
+
+      expect(thumbnail_file.read).not_to be_blank
+    end
+  end
+
   context "with a scanned map tif" do
     it "creates a JPEG thumbnail and attaches it to the fileset" do
       derivative_service.new(valid_change_set).create_derivatives

@@ -24,6 +24,7 @@ Metrics/AbcSize:
     - 'app/services/file_appender.rb'
     - 'app/services/pdf_generator.rb'
     - 'app/jobs/ingest_mets_job.rb'
+    - 'app/jobs/ingest_intermediate_file_job.rb'
     - 'app/services/pul_metadata_services/bib_record.rb'
 Metrics/BlockLength:
   Exclude:
@@ -76,6 +77,7 @@ Metrics/CyclomaticComplexity:
     - 'app/models/concerns/linked_data/linked_resource_factory.rb'
     - 'app/services/file_appender.rb'
     - 'app/services/pdf_generator/canvas.rb'
+    - 'app/jobs/ingest_intermediate_file_job.rb'
     - 'app/services/pul_metadata_services/bib_record.rb'
 Metrics/MethodLength:
   Exclude:
@@ -98,6 +100,8 @@ Metrics/MethodLength:
     - 'app/services/file_appender.rb'
     - 'app/jobs/voyager_update_job.rb'
     - 'app/models/mets_document.rb'
+    - 'app/jobs/ingest_intermediate_file_job.rb'
+    - 'app/services/bulk_ingest_intermediate_service.rb'
     - 'app/models/remote_record.rb'
     - 'app/services/pul_metadata_services/bib_record.rb'
 Metrics/ModuleLength:
@@ -112,6 +116,7 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Exclude:
     - 'app/services/pdf_generator/canvas.rb'
+    - 'app/jobs/ingest_intermediate_file_job.rb'
     - 'app/services/pul_metadata_services/bib_record.rb'
 Rails/OutputSafety:
   Exclude:
@@ -158,6 +163,9 @@ RSpec/VerifiedDoubles:
     - 'spec/validators/viewing_hint_validator_spec.rb'
     - 'spec/validators/viewing_direction_validator_spec.rb'
     - 'spec/models/user_spec.rb'
+    - 'spec/derivative_services/image_derivative_service_spec.rb'
+    - 'spec/derivative_services/jp2_derivative_service_spec.rb'
+    - 'spec/jobs/ingest_intermediate_file_job_spec.rb'
 Style/FileName:
   Enabled: true
   Exclude:
