@@ -188,8 +188,8 @@ RSpec.describe IngestArchivalMediaBagJob do
     it "collects multiple barcodes with the same component id onto a single MediaResource" do
       expect(query_service.find_all_of_model(model: MediaResource).size).to eq 2
       expect(query_service.find_all_of_model(model: MediaResource).map(&:title)).to contain_exactly(
-        ["Series 5: Audio Recordings - Readings: Pablo Neruda III (C3)"],
-        ["Series 5: Audio Recordings - Interview: Fitas / ERM, Tape 1-2 (A8)"]
+        ["Readings: Pablo Neruda III (C3)"],
+        ["Interview: Fitas / ERM, Tape 1-2 (A8)"]
       )
     end
   end

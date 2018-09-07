@@ -134,10 +134,22 @@ class BarcodeComponentDict
       end
     end
 
+    def remote_record
+      @remote_record ||= RemoteRecord.retrieve(@component_id, resource_klass: MediaResource)
+    end
+
+    def remote_record_attributes
+      remote_record.attributes
+    end
+
+    def remote_record_source_metadata
+      remote_record_attributes[:source_metadata]
+    end
+
     # Parses XML from Collection Resource metadata
     # @return [Nokogiri::XML::Element] the root element of the XML Document
     def xml
-      @xml ||= Nokogiri::XML(RemoteRecord.retrieve(@component_id).attributes[:source_metadata]).remove_namespaces!
+      @xml ||= Nokogiri::XML(remote_record_source_metadata).remove_namespaces!
     end
 
     # Retrieves the set of XML Elements containing barcodes within the EAD

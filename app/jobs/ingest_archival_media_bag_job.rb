@@ -12,6 +12,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
   def perform(collection_component:, bag_path:, user:)
     bag_path = Pathname.new(bag_path.to_s)
+    # This requires a resource
     bag = ArchivalMediaBagParser.new(path: bag_path, component_id: collection_component)
     raise InvalidBagError, "Bag at #{bag_path} is an invalid bag" unless bag.valid?
     changeset_persister.buffer_into_index do |buffered_persister|
@@ -102,6 +103,9 @@ class IngestArchivalMediaBagJob < ApplicationJob
           end
         end
 
+        # @param media_resource_change_set [MediaResourceChangeSet]
+        # @param sides [Array<String>]
+        # @return [Array<MediaResourceChangeSet>]
         def add_av(media_resource_change_set, sides)
           sides.each do |side|
             file_set = create_av_file_set(side)
@@ -110,6 +114,9 @@ class IngestArchivalMediaBagJob < ApplicationJob
           end
         end
 
+        # @param media_resource_change_set [MediaResourceChangeSet]
+        # @param sides [Array<String>]
+        # @return [Array<MediaResourceChangeSet>]
         def add_pbcore(media_resource_change_set, sides)
           sides.map { |side| side.split("_").first }.uniq.each do |barcode|
             file = create_pbcore_file(barcode)
