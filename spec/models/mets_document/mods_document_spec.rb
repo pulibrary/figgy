@@ -103,6 +103,20 @@ RSpec.describe METSDocument::MODSDocument do
     end
   end
 
+  context "pudl0038" do
+    let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0038-mp090-0894.mets") }
+    describe "attributes" do
+      it "returns coordinates as a CoveragePoint and TitleWithSubtitle" do
+        expect(mods_document.title.first).to be_a TitleWithSubtitle
+        expect(mods_document.title.first.to_s).to eq "Henry Hall: Rendering"
+        expect(mods_document.subject).not_to include "40.345827/-74.660627"
+        expect(mods_document.coverage_point.first).to be_a CoveragePoint
+        expect(mods_document.coverage_point.first.lat).to eq 40.345827
+        expect(mods_document.coverage_point.first.lon).to eq(-74.660627)
+      end
+    end
+  end
+
   describe ".from" do
     it "constructs a MODSDocument from a METSDocument and an XPath" do
       expect(mods_document).to be_a described_class
