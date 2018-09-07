@@ -213,7 +213,9 @@ class METSDocument
       part_of: mods.finding_aid_identifier,
       replaces: mods.replaces,
       photographer: mods.photographer,
-      local_identifier: mods.local_identifier
+      local_identifier: mods.local_identifier,
+      actor: mods.actor,
+      director: mods.director
     }
   end
   # rubocop:enable Metrics/AbcSize

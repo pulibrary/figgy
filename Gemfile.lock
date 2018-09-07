@@ -28,17 +28,6 @@ GIT
       simpler-tiles
 
 GIT
-  remote: git://github.com/pulibrary/pul_metadata_services.git
-  revision: 3fe0b661abf3a43aae4a3c7e2a6a5de1174d834b
-  branch: master
-  specs:
-    pul_metadata_services (0.0.1)
-      activesupport (>= 4.2.7.1)
-      faraday (~> 0.9.1)
-      marc (~> 1.0.0)
-      nokogiri (~> 1.6)
-
-GIT
   remote: git://github.com/pulibrary/ruby_tika_app.git
   revision: 19085f492790aee875d407221ffd0e85609cc250
   specs:
@@ -664,7 +653,7 @@ GEM
     ruby-progressbar (1.9.0)
     ruby-rc4 (0.1.5)
     ruby_dep (1.5.0)
-    rubyzip (1.2.1)
+    rubyzip (1.2.2)
     safe_yaml (1.0.4)
     sass (3.5.6)
       sass-listen (~> 4.0.0)
@@ -851,6 +840,7 @@ DEPENDENCIES
   listen
   lograge
   logstash-event
+  marc (~> 1.0.0)
   mediainfo (~> 1.0)
   mini_magick
   modernizr-rails
@@ -862,7 +852,6 @@ DEPENDENCIES
   prawn
   pry-byebug
   pry-rails
-  pul_metadata_services!
   puma
   rack-mini-profiler
   rails (= 5.1.6)
@@ -874,6 +863,7 @@ DEPENDENCIES
   rspec-graphql_matchers
   rspec-rails (~> 3.5)
   ruby_tika_app!
+  rubyzip (>= 1.2.2)
   sass-rails (~> 5.0)
   selenium-webdriver
   sidekiq
@@ -895,4 +885,4 @@ DEPENDENCIES
   whenever (~> 0.10)
 
 BUNDLED WITH
-   1.16.2
+   1.16.4

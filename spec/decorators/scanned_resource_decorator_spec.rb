@@ -129,4 +129,28 @@ RSpec.describe ScannedResourceDecorator do
       end
     end
   end
+
+  describe "#rendered_actors" do
+    context "when given groupings of actors along with RDF literals" do
+      let(:resource) do
+        FactoryBot.create_for_repository(
+          :scanned_resource,
+          actor: [
+            RDF::Literal.new("Test", language: "eng-Latn"),
+            Grouping.new(
+              elements: [
+                "Test",
+                "Test2"
+              ]
+            )
+          ]
+        )
+      end
+      it "returns all elements in order for rendering as strings" do
+        expect(decorator.rendered_actors).to eq [
+          "Test", "Test", "Test2"
+        ]
+      end
+    end
+  end
 end

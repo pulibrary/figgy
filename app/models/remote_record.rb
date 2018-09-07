@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 class RemoteRecord
-  def self.retrieve(source_metadata_identifier)
+  # Factory method for PulMetadataServices objects
+  # @param source_metadata_identifier [String]
+  # @param resource [Resource]
+  # @return [RemoteRecord, RemoteRecord::PulfaRecord]
+  def self.retrieve(source_metadata_identifier, resource_klass: nil)
     if PulMetadataServices::Client.bibdata?(source_metadata_identifier)
       new(source_metadata_identifier)
     else
-      PulfaRecord.new(source_metadata_identifier)
+      PulfaRecord.new(source_metadata_identifier, resource_klass)
     end
   end
 
@@ -19,8 +23,13 @@ class RemoteRecord
 
   class PulfaRecord
     attr_reader :source_metadata_identifier
-    def initialize(source_metadata_identifier)
+
+    # Constructor
+    # @param source_metadata_identifier [String]
+    # @param resource [Resource]
+    def initialize(source_metadata_identifier, resource = nil)
       @source_metadata_identifier = source_metadata_identifier
+      @resource = resource
     end
 
     def attributes
@@ -32,7 +41,7 @@ class RemoteRecord
     end
 
     def client_result
-      @client_result ||= PulMetadataServices::Client.retrieve(source_metadata_identifier)
+      @client_result ||= PulMetadataServices::Client.retrieve(source_metadata_identifier, @resource)
     end
   end
 

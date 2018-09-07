@@ -11,8 +11,6 @@ class EphemeraVocabularyDecorator < Valkyrie::ResourceDecorator
   # TODO: Rename to decorated_vocabularies
   def categories
     @categories ||= wayfinder.decorated_vocabularies.sort_by(&:label)
-  rescue
-    @categories ||= []
   end
 
   # TODO: Rename to decorated_ephemera_terms

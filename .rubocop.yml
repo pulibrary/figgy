@@ -25,6 +25,7 @@ Metrics/AbcSize:
     - 'app/services/pdf_generator.rb'
     - 'app/jobs/ingest_mets_job.rb'
     - 'app/jobs/ingest_intermediate_file_job.rb'
+    - 'app/services/pul_metadata_services/bib_record.rb'
 Metrics/BlockLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
@@ -70,12 +71,14 @@ Metrics/ClassLength:
     - 'app/models/mets_document.rb'
     - 'app/services/bulk_ingest_service.rb'
     - 'app/models/mets_document/mods_document.rb'
+    - 'app/services/pul_metadata_services/bib_record.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/models/concerns/linked_data/linked_resource_factory.rb'
     - 'app/services/file_appender.rb'
     - 'app/services/pdf_generator/canvas.rb'
     - 'app/jobs/ingest_intermediate_file_job.rb'
+    - 'app/services/pul_metadata_services/bib_record.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
@@ -99,6 +102,8 @@ Metrics/MethodLength:
     - 'app/models/mets_document.rb'
     - 'app/jobs/ingest_intermediate_file_job.rb'
     - 'app/services/bulk_ingest_intermediate_service.rb'
+    - 'app/models/remote_record.rb'
+    - 'app/services/pul_metadata_services/bib_record.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
@@ -112,6 +117,7 @@ Metrics/PerceivedComplexity:
   Exclude:
     - 'app/services/pdf_generator/canvas.rb'
     - 'app/jobs/ingest_intermediate_file_job.rb'
+    - 'app/services/pul_metadata_services/bib_record.rb'
 Rails/OutputSafety:
   Exclude:
     - 'app/decorators/**/*'
