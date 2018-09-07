@@ -293,4 +293,15 @@ RSpec.describe METSDocument do
       end
     end
   end
+  describe "pudl0038" do
+    context "when given a mods file" do
+      subject(:mets_document) { described_class.new(mets_file) }
+      let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0038-mp090-0894.mets") }
+      it "can get the MODS metadata" do
+        expect(mets_document.attributes).not_to be_blank
+        expect(mets_document.attributes[:title].first).to be_a TitleWithSubtitle
+        expect(mets_document.attributes[:coverage_point].first).to be_a CoveragePoint
+      end
+    end
+  end
 end

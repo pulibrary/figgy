@@ -215,7 +215,8 @@ class METSDocument
       photographer: mods.photographer,
       local_identifier: mods.local_identifier,
       actor: mods.actor,
-      director: mods.director
+      director: mods.director,
+      coverage_point: mods.coverage_point
     }
   end
   # rubocop:enable Metrics/AbcSize
