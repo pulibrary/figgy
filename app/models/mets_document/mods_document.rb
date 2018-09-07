@@ -20,7 +20,7 @@ class METSDocument
 
     def title
       element = find_elements("mods:titleInfo")
-      element.entries.map do |entry|
+      title_value = element.entries.map do |entry|
         title = extract_element_children(entry, xpath: "mods:title")
         subtitle = extract_element_children(entry, xpath: "mods:subtitle")
         if subtitle.present?
@@ -29,6 +29,33 @@ class METSDocument
           title
         end
       end
+      return "#{non_sort} #{title_value}".gsub(/["\[\]]/, "") unless non_sort.empty?
+      title_value
+    end
+
+    def sort_title
+      return normalize_whitespace(value_from(xpath: "mods:titleInfo/mods:title")).join(",") unless non_sort.empty?
+    end
+
+    def non_sort
+      normalize_whitespace(value_from(xpath: "mods:titleInfo/mods:nonSort")).join(",")
+    end
+
+    def publisher
+      values = value_from(xpath: "mods:originInfo/mods:publisher")
+      values.join(" - ")
+    end
+
+    def date_published
+      normalize_whitespace(value_from(xpath: "mods:originInfo/mods:dateOther")).join(",")
+    end
+
+    def date_issued
+      normalize_whitespace(value_from(xpath: "mods:originInfo/mods:dateIssued")).join(",")
+    end
+
+    def date_copyright
+      normalize_whitespace(value_from(xpath: "mods:originInfo/mods:copyrightDate")).join(",")
     end
 
     def extract_element_children(entry, xpath:)

@@ -78,6 +78,13 @@ RSpec.describe METSDocument::MODSDocument do
     end
   end
 
+  context "pudl0001" do
+    let("mets_file") { Rails.root.join("spec", "fixtures", "mets", "pudl0001-4612596.mets") }
+    it "returns date issued" do
+      expect(mods_document.date_issued).to eq "1470,1475"
+    end
+  end
+
   context "pudl0017" do
     let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0017-wc064.mets") }
     describe "attributes" do
@@ -113,6 +120,38 @@ RSpec.describe METSDocument::MODSDocument do
         expect(mods_document.coverage_point.first).to be_a CoveragePoint
         expect(mods_document.coverage_point.first.lat).to eq 40.345827
         expect(mods_document.coverage_point.first.lon).to eq(-74.660627)
+      end
+    end
+  end
+
+  context "pudl0009" do
+    describe "attributes" do
+      let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0009-1-0001.mets") }
+      it "returns title with the nonSort value" do
+        expect(mods_document.title).to eq("The Chapel, Princeton University")
+      end
+      it "returns sort title without the non_sort value" do
+        expect(mods_document.sort_title).to eq("Chapel, Princeton University")
+      end
+
+      it "returns the publisher" do
+        expect(mods_document.publisher).to include "Published by H. M. Hinkson, Stationer, Princeton, N. J. - The Albertype Co.,"
+      end
+      it "returns date published" do
+        expect(mods_document.date_published).to eq "1941,1950"
+      end
+    end
+
+    describe "attributes" do
+      let("mets_file") { Rails.root.join("spec", "fixtures", "mets", "pudl0009-1-0144.mets") }
+      it "returns copyright date" do
+        expect(mods_document.date_copyright).to eq "1903"
+      end
+      it "will not return sort_title" do
+        expect(mods_document.sort_title).to eq nil
+      end
+      it "will return title" do
+        expect(mods_document.title).to eq ["Prospect President's Residence, Princeton University"]
       end
     end
   end

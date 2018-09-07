@@ -193,9 +193,13 @@ class METSDocument
     return {} if mods.nil?
     {
       title: mods.title,
+      sort_title: mods.sort_title,
       alternative_title: mods.alternative_title,
       uniform_title: mods.uniform_title,
       date_created: mods.date_created,
+      date_issued: mods.date_issued,
+      date_copyright: mods.date_copyright,
+      date_published: mods.date_published,
       extent: mods.extent,
       resource_type: mods.type_of_resource,
       subject: mods.subject,
@@ -216,7 +220,8 @@ class METSDocument
       local_identifier: mods.local_identifier,
       actor: mods.actor,
       director: mods.director,
-      coverage_point: mods.coverage_point
+      coverage_point: mods.coverage_point,
+      publisher: mods.publisher
     }
   end
   # rubocop:enable Metrics/AbcSize

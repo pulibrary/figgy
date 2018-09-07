@@ -46,6 +46,9 @@ module Schema
           :text_language, # http://purl.org/dc/terms/language
           :local_identifier, # http://purl.org/dc/elements/1.1/identifier
           :publisher, # http://purl.org/dc/elements/1.1/publisher
+          :date_published, # http://purl.org/dc/elements/1.1/date_published
+          :date_copyright, # http://purl.org/dc/elements/1.1/date_copyright
+          :date_issued, # http://purl.org/dc/elements/1.1/date_issued
           :rights_note, # http://purl.org/dc/elements/1.1/rights
           :source, # http://purl.org/dc/elements/1.1/source
           :subject, # http://purl.org/dc/elements/1.1/subject
