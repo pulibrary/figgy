@@ -21,13 +21,19 @@ class METSDocument
     def title
       element = find_elements("mods:titleInfo")
       element.entries.map do |entry|
-        extract_element_children(entry, xpath: "mods:title")
+        title = extract_element_children(entry, xpath: "mods:title")
+        subtitle = extract_element_children(entry, xpath: "mods:subtitle")
+        if subtitle.present?
+          TitleWithSubtitle.new(title: title, subtitle: subtitle)
+        else
+          title
+        end
       end
     end
 
     def extract_element_children(entry, xpath:)
       content = content(find_elements(xpath, element: entry)).join(", ")
-      return content unless entry.attributes["lang"] || entry.attributes["script"]
+      return content unless (entry.attributes["lang"] || entry.attributes["script"]) && content.present?
       RDF::Literal.new(content, language: :"#{entry.attributes["lang"]}-#{entry.attributes["script"]}")
     end
 
@@ -89,7 +95,17 @@ class METSDocument
     end
 
     def non_name_subjects
-      normalize_whitespace(value_from(xpath: "mods:subject[not(./mods:name)]")).map(&:strip)
+      normalize_whitespace(value_from(xpath: "mods:subject[not(./mods:name) and not(./mods:cartographics)]")).map(&:strip)
+    end
+
+    def coverage_point
+      cartographics = find_elements("mods:subject/mods:cartographics")
+      cartographics.flat_map do |cartographic|
+        cartographic.xpath("mods:coordinates", mods: MODS_XML_NAMESPACE).map(&:content).map do |coord|
+          lat, lon = coord.split("/")
+          CoveragePoint.new(lat: lat.to_f, lon: lon.to_f)
+        end
+      end
     end
 
     def access_condition
