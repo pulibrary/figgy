@@ -28,7 +28,6 @@ class Ability
     can [:destroy], curation_concerns do |obj|
       obj.depositor == [current_user.uid]
     end
-    can [:read], :graphql
   end
 
   def anonymous_permissions
@@ -50,6 +49,7 @@ class Ability
     can :read, FileSet do |resource|
       can?(:read, resource.decorate.parent.object)
     end
+    can [:read], :graphql
   end
 
   # Abilities that should be granted to institutional patron

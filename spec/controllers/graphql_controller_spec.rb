@@ -34,10 +34,15 @@ RSpec.describe GraphqlController do
       end
     end
     context "when not logged in" do
-      it "returns 403" do
+      let(:scanned_resource) { FactoryBot.create_for_repository(:complete_open_scanned_resource, viewing_hint: "individuals") }
+      it "can run a graphql query for a public scanned resource" do
         post :execute, params: { query: query_string, format: :json }
 
-        expect(response).to be_forbidden
+        expect(response).to be_success
+        json_response = JSON.parse(response.body)
+        expect(json_response["data"]).to eq(
+          "resource" => { "viewingHint" => "individuals" }
+        )
       end
     end
   end

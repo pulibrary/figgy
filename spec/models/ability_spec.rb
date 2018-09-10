@@ -159,6 +159,7 @@ describe Ability do
       is_expected.to be_able_to(:pdf, campus_only_scanned_resource)
       is_expected.to be_able_to(:pdf, complete_scanned_resource)
       is_expected.to be_able_to(:pdf, flagged_scanned_resource)
+      is_expected.to be_able_to(:read, :graphql)
 
       is_expected.not_to be_able_to(:read, private_scanned_resource)
       is_expected.not_to be_able_to(:read, pending_scanned_resource)
@@ -177,7 +178,6 @@ describe Ability do
       is_expected.not_to be_able_to(:destroy, role)
       is_expected.not_to be_able_to(:complete, pending_scanned_resource)
       is_expected.not_to be_able_to(:destroy, admin_file)
-      is_expected.not_to be_able_to(:read, :graphql)
     }
   end
 
@@ -221,6 +221,7 @@ describe Ability do
       is_expected.to be_able_to(:read, flagged_scanned_resource)
       is_expected.to be_able_to(:manifest, flagged_scanned_resource)
       is_expected.to be_able_to(:color_pdf, color_enabled_resource)
+      is_expected.to be_able_to(:read, :graphql)
       is_expected.not_to be_able_to(:pdf, no_pdf_scanned_resource)
       is_expected.not_to be_able_to(:flag, open_scanned_resource)
       is_expected.not_to be_able_to(:read, campus_only_scanned_resource)
@@ -242,7 +243,6 @@ describe Ability do
       is_expected.not_to be_able_to(:destroy, role)
       is_expected.not_to be_able_to(:complete, pending_scanned_resource)
       is_expected.not_to be_able_to(:destroy, admin_file)
-      is_expected.not_to be_able_to(:read, :graphql)
     }
 
     context "with an open vector resource" do
