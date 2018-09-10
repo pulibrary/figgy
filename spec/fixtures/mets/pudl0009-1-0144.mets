@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OBJID="ark:/88435/4q77fr46k" TYPE="CompiledDigitalObject" xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd">
+<mets:metsHdr CREATEDATE="2018-08-04T11:55:54.620-04:00" LASTMODDATE="2018-08-04T11:55:54.620-04:00">
+<mets:metsDocumentID TYPE="PUDL">pudl0009/1/0144.mets</mets:metsDocumentID>
+</mets:metsHdr>
+<mets:dmdSec ID="mlfjn">
+<mets:mdWrap MDTYPE="MODS">
+<mets:xmlData>
+<mods xmlns="http://www.loc.gov/mods/v3" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+   <typeOfResource>still image</typeOfResource>
+   <titleInfo>
+      <title>Prospect President's Residence, Princeton University</title>
+   </titleInfo>
+   <relatedItem type="host">
+      <titleInfo>
+         <title>Princeton University Historical postcard collection</title>
+         <subTitle>Series 1</subTitle>
+         <subTitle>Buildings, circa 1900-1960</subTitle>
+      </titleInfo>
+      <location>
+         <url note="Digital Collection">http://arks.princeton.edu/ark:/88435/d217qp492</url>
+      </location>
+   </relatedItem>
+   <relatedItem type="host">
+      <titleInfo>
+         <title>Historical Postcard Collection, circa 1900-1960</title>
+      </titleInfo>
+      <location>
+         <url note="Finding Aid">http://arks.princeton.edu/ark:/88435/qn59q398k</url>
+      </location>
+   </relatedItem>
+   <originInfo>
+      <publisher>Detroit Photographic Co.</publisher>
+      <copyrightDate>1903</copyrightDate>
+   </originInfo>
+   <language>
+      <languageTerm authority="iso639-2b">eng</languageTerm>
+   </language>
+   <abstract>Exterior view of Prospect in color with message on front. Undivided back postcard with addressee,
+      stamp and postmark.</abstract>
+   <genre authority="aat">Picture postcards</genre>
+   <subject authority="aat">
+      <topic>Eye-level views</topic>
+   </subject>
+   <subject authority="aat">
+      <topic>Exterior views</topic>
+   </subject>
+   <subject authority="lcsh">
+      <name type="corporate">
+         <namePart>Princeton University</namePart>
+      </name>
+      <topic>Buildings</topic>
+   </subject>
+   <subject authority="lcsh">
+      <name type="corporate">
+         <namePart>Prospect House (Princeton, N.J.)</namePart>
+      </name>
+   </subject>
+   <location>
+      <physicalLocation type="text">Princeton University Library. Department of Rare Books and Special Collections.
+         Seeley G. Mudd Manuscript Library.</physicalLocation>
+      <physicalLocation authority="marcorg" type="code">NjP</physicalLocation>
+      <holdingSimple>
+         <copyInformation>
+            <subLocation>Mudd</subLocation>
+            <shelfLocator>AC045</shelfLocator>
+         </copyInformation>
+      </holdingSimple>
+   </location>
+   <recordInfo>
+      <recordIdentifier>http://diglib.princeton.edu/mdata/pudl0009/1/0144.mods</recordIdentifier>
+   </recordInfo>
+</mods>
+</mets:xmlData>
+</mets:mdWrap>
+</mets:dmdSec>
+<mets:fileSec>
+<mets:fileGrp USE="thumbnail">
+<mets:file ID="cugrq" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0009/1/0144/00000001.tif"/>
+</mets:file>
+</mets:fileGrp>
+<mets:fileGrp USE="masters">
+<mets:file CHECKSUM="a3b751f2afe8f703b57d3846e4fb766f" CHECKSUMTYPE="MD5" ID="h14rn" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0009/1/0144/00000001.tif"/>
+</mets:file>
+<mets:file CHECKSUM="c64b8ab1b3eb6ef55faee41e372365e1" CHECKSUMTYPE="MD5" ID="ygz2m" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0009/1/0144/00000002.tif"/>
+</mets:file>
+</mets:fileGrp>
+</mets:fileSec>
+<mets:structMap TYPE="RelatedObjects">
+<mets:div DMDID="mlfjn mlfjn" ID="jcd5q">
+<mets:div CONTENTIDS="pudl0009" TYPE="IsPartOf"/>
+<mets:div ID="aggregates" TYPE="OrderedList">
+<mets:div ID="bd0kr" LABEL="recto" ORDER="1" TYPE="Static">
+<mets:fptr FILEID="h14rn"/>
+</mets:div>
+<mets:div ID="hcdsz" LABEL="verso" ORDER="2" TYPE="Static">
+<mets:fptr FILEID="ygz2m"/>
+</mets:div>
+</mets:div>
+</mets:div>
+</mets:structMap>
+<mets:structMap TYPE="Physical">
+<mets:div DMDID="mlfjn mlfjn" ID="iypfm" TYPE="Sheet">
+<mets:div ID="tj1qw" LABEL="recto" ORDER="1" TYPE="Side">
+<mets:fptr FILEID="h14rn"/>
+</mets:div>
+<mets:div ID="lo27e" LABEL="verso" ORDER="2" TYPE="Side">
+<mets:fptr FILEID="ygz2m"/>
+</mets:div>
+</mets:div>
+</mets:structMap>
+</mets:mets>

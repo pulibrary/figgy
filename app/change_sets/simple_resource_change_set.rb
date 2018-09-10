@@ -6,6 +6,7 @@ class SimpleResourceChangeSet < ChangeSet
 
   include VisibilityProperty
   property :title, multiple: true, required: true, default: []
+  property :sort_title, multiple: true, required: true, default: []
   property :rights_statement, multiple: false, required: true, default: "http://rightsstatements.org/vocab/NKC/1.0/", type: ::Types::URI
   property :rights_note, multiple: false, required: false
   property :viewing_hint, multiple: false, required: false, default: "individuals"
@@ -46,6 +47,9 @@ class SimpleResourceChangeSet < ChangeSet
   property :keyword, multiple: true, required: false, default: []
   property :language, multiple: true, required: false, default: []
   property :publisher, multiple: true, required: false, default: []
+  property :date_published, multiple: true, required: false, default: []
+  property :date_issued, multiple: true, required: false, default: []
+  property :date_copyright, multiple: true, required: false, default: []
   property :source, multiple: true, required: false, default: []
   property :subject, multiple: true, required: false, default: []
   property :ocr_language, multiple: true, require: false, default: []
@@ -68,6 +72,7 @@ class SimpleResourceChangeSet < ChangeSet
   def primary_terms
     [
       :title,
+      :sort_title,
       :rights_statement,
       :rights_note,
       :local_identifier,
@@ -97,6 +102,9 @@ class SimpleResourceChangeSet < ChangeSet
       :keyword,
       :language,
       :publisher,
+      :date_published,
+      :date_issued,
+      :date_copyright,
       :source,
       :subject,
       :holding_location,
