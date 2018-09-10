@@ -22,6 +22,10 @@ module Types::Resource
     @members ||= Wayfinder.for(object).members
   end
 
+  def manifest_url
+    helper.polymorphic_url([:manifest, object])
+  end
+
   def url
     @url ||= helper.show_url(object)
   end
