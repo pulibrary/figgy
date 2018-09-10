@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OBJID="ark:/88435/pc289j82b" TYPE="CompiledDigitalObject" xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd">
+<mets:metsHdr CREATEDATE="2018-08-04T11:56:27.391-04:00" LASTMODDATE="2018-08-04T11:56:27.391-04:00">
+<mets:metsDocumentID TYPE="PUDL">pudl0100/lc/egx_0003.mets</mets:metsDocumentID>
+</mets:metsHdr>
+<mets:dmdSec ID="imny5">
+<mets:mdWrap MDTYPE="MODS">
+<mets:xmlData>
+<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" version="3.4" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd">
+   <mods:titleInfo lang="ara" script="Arab">
+      <mods:title>الاختيار</mods:title>
+   </mods:titleInfo>
+   <mods:name altRepGroup="01" authority="naf" lang="ara" script="Latn" type="personal">
+      <mods:namePart type="family">Ḥusnī</mods:namePart>
+      <mods:namePart type="given">Suʻād</mods:namePart>
+      <mods:role>
+         <mods:roleTerm authority="marcrelator" type="code">act</mods:roleTerm>
+      </mods:role>
+   </mods:name>
+   <mods:name altRepGroup="01" authority="local" lang="ara" script="Arab" type="personal">
+      <mods:namePart type="family">سعاد حسني</mods:namePart>
+      <mods:role>
+         <mods:roleTerm authority="marcrelator" type="code">act</mods:roleTerm>
+      </mods:role>
+   </mods:name>
+   <mods:name altRepGroup="02" authority="naf" lang="ara" script="Latn" type="personal">
+      <mods:namePart type="family">ʻAlāyilī</mods:namePart>
+      <mods:namePart type="given">ʻIzzat</mods:namePart>
+      <mods:namePart type="date">1934-</mods:namePart>
+      <mods:role>
+         <mods:roleTerm authority="marcrelator" type="code">act</mods:roleTerm>
+      </mods:role>
+   </mods:name>
+   <mods:name altRepGroup="02" authority="local" lang="ara" script="Arab" type="personal">
+      <mods:namePart type="family">عزت العلايلي</mods:namePart>
+      <mods:role>
+         <mods:roleTerm authority="marcrelator" type="code">act</mods:roleTerm>
+      </mods:role>
+   </mods:name>
+   <mods:name authority="local" lang="ara" script="Arab" type="personal">
+      <mods:namePart type="family">هدى سلطان</mods:namePart>
+      <mods:role>
+         <mods:roleTerm authority="marcrelator" type="code">act</mods:roleTerm>
+      </mods:role>
+   </mods:name>
+   <mods:name altRepGroup="04" authority="naf" lang="ara" script="Latn" type="personal">
+      <mods:namePart type="family">Milījī</mods:namePart>
+      <mods:namePart type="given">Maḥmūd</mods:namePart>
+      <mods:role>
+         <mods:roleTerm authority="marcrelator" type="code">act</mods:roleTerm>
+      </mods:role>
+   </mods:name>
+   <mods:name altRepGroup="04" authority="local" lang="ara" script="Arab" type="personal">
+      <mods:namePart type="family">محمود المليجي</mods:namePart>
+      <mods:role>
+         <mods:roleTerm authority="marcrelator" type="code">act</mods:roleTerm>
+      </mods:role>
+   </mods:name>
+   <mods:name authority="local" type="personal">
+      <mods:namePart type="family">Test</mods:namePart>
+      <mods:role>
+         <mods:roleTerm authority="marcrelator" type="code">act</mods:roleTerm>
+      </mods:role>
+   </mods:name>
+   <mods:name authority="local" lang="ara" script="Arab" type="personal">
+      <mods:namePart type="family">يوسف شاهين</mods:namePart>
+      <mods:role>
+         <mods:roleTerm authority="marcrelator" type="code">drt</mods:roleTerm>
+      </mods:role>
+   </mods:name>
+   <mods:typeOfResource>still image</mods:typeOfResource>
+   <mods:genre authority="aat">Lobby Cards</mods:genre>
+   <mods:originInfo>
+      <mods:place>
+         <mods:placeTerm type="text">Egypt</mods:placeTerm>
+      </mods:place>
+      <mods:dateCreated encoding="w3cdtf" keyDate="yes" point="start" qualifier="approximate">1901</mods:dateCreated>
+      <mods:dateCreated encoding="w3cdtf" point="end" qualifier="approximate">2000</mods:dateCreated>
+   </mods:originInfo>
+   <mods:language>
+      <mods:languageTerm authority="iso639-2b" type="code">ara</mods:languageTerm>
+   </mods:language>
+   <mods:physicalDescription>
+      <mods:extent>4 pieces ; approximately 50 x 37 cm.</mods:extent>
+   </mods:physicalDescription>
+   <mods:relatedItem type="host">
+      <mods:typeOfResource>still image</mods:typeOfResource>
+      <mods:titleInfo>
+         <mods:title>Middle Eastern Film Posters Digitization Initiative</mods:title>
+      </mods:titleInfo>
+      <mods:location>
+         <mods:url>http://pudl.princeton.edu/collections/pudl0100</mods:url>
+      </mods:location>
+   </mods:relatedItem>
+   <mods:relatedItem type="host">
+      <mods:typeOfResource collection="yes" manuscript="yes">still image</mods:typeOfResource>
+      <mods:location>
+         <mods:url>http://arks.princeton.edu/ark:/</mods:url>
+      </mods:location>
+   </mods:relatedItem>
+   <mods:identifier type="local">egx-0003</mods:identifier>
+   <mods:location>
+      <mods:physicalLocation type="text">Princeton University Library. Firestone Library.</mods:physicalLocation>
+      <mods:physicalLocation authority="marcorg" type="code">NjP</mods:physicalLocation>
+   </mods:location>
+   <mods:accessCondition type="useAndReproduction" xlink:href="http://www.princeton.edu/~rbsc/research/rights.html">Use and reproduction</mods:accessCondition>
+   <mods:accessCondition type="restrictionOnAccess" xlink:href="http://www.princeton.edu/~rbsc/research/rules.html">Restrictions on access</mods:accessCondition>  
+   <mods:recordInfo>
+      <mods:recordContentSource authority="marcorg">NjP</mods:recordContentSource>
+      <mods:recordIdentifier>http://diglib.princeton.edu/mdata/pudl0100/lc/egx_0003.mods</mods:recordIdentifier>
+      <mods:languageOfCataloging>
+         <mods:languageTerm authority="iso639-2b" type="code">ara</mods:languageTerm>
+      </mods:languageOfCataloging>
+   </mods:recordInfo>
+</mods:mods>
+</mets:xmlData>
+</mets:mdWrap>
+</mets:dmdSec>
+<mets:fileSec>
+<mets:fileGrp USE="thumbnail">
+<mets:file ID="t0qiq" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0100/lc/egx_0003/00000001.tif"/>
+</mets:file>
+</mets:fileGrp>
+<mets:fileGrp USE="masters">
+<mets:file CHECKSUM="8208c6d4b76dd48c2d7777731371b80" CHECKSUMTYPE="MD5" ID="m14m2" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0100/lc/egx_0003/00000001.tif"/>
+</mets:file>
+<mets:file CHECKSUM="de880bfca762958916bddd9c8ef3169e" CHECKSUMTYPE="MD5" ID="qtcor" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0100/lc/egx_0003/00000002.tif"/>
+</mets:file>
+<mets:file CHECKSUM="be566dcd022cbc36b58e8e95bb4f5943" CHECKSUMTYPE="MD5" ID="t9sfn" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0100/lc/egx_0003/00000003.tif"/>
+</mets:file>
+<mets:file CHECKSUM="f276ac2568fa32ac8cd9bbafa613b5ca" CHECKSUMTYPE="MD5" ID="dixia" MIMETYPE="image/tiff">
+<mets:FLocat LOCTYPE="URL" xlink:href="file:///mnt/diglibdata/pudl/pudl0100/lc/egx_0003/00000004.tif"/>
+</mets:file>
+</mets:fileGrp>
+</mets:fileSec>
+<mets:structMap TYPE="RelatedObjects">
+<mets:div DMDID="imny5 imny5" ID="lmsty" LABEL="Default">
+<mets:div CONTENTIDS="pudl0100" TYPE="IsPartOf"/>
+<mets:div ID="aggregates" TYPE="OrderedList">
+<mets:div ID="nbrpg" LABEL="image 1" ORDER="1" TYPE="Static">
+<mets:fptr FILEID="m14m2"/>
+</mets:div>
+<mets:div ID="dvzk1" LABEL="image 2" ORDER="2" TYPE="Static">
+<mets:fptr FILEID="qtcor"/>
+</mets:div>
+<mets:div ID="ghu69" LABEL="image 3" ORDER="3" TYPE="Static">
+<mets:fptr FILEID="t9sfn"/>
+</mets:div>
+<mets:div ID="b1ixo" LABEL="image 4" ORDER="4" TYPE="Static">
+<mets:fptr FILEID="dixia"/>
+</mets:div>
+</mets:div>
+</mets:div>
+</mets:structMap>
+<mets:structMap LABEL="Pagination" TYPE="Physical">
+<mets:div DMDID="imny5 imny5" ID="qwlrx" LABEL="" TYPE="BoundArt"/>
+</mets:structMap>
+<mets:structMap LABEL="Contents" TYPE="Logical">
+<mets:div DMDID="imny5 imny5" ID="vxnbp" LABEL="" TYPE="BoundArt">
+<mets:div ID="vo7z2" ORDER="1" TYPE="LogicalMember">
+<mets:fptr FILEID="m14m2"/>
+</mets:div>
+<mets:div ID="lnn8v" ORDER="2" TYPE="LogicalMember">
+<mets:fptr FILEID="qtcor"/>
+</mets:div>
+<mets:div ID="kcy9z" ORDER="3" TYPE="LogicalMember">
+<mets:fptr FILEID="t9sfn"/>
+</mets:div>
+<mets:div ID="eyofs" ORDER="4" TYPE="LogicalMember">
+<mets:fptr FILEID="dixia"/>
+</mets:div>
+</mets:div>
+</mets:structMap>
+</mets:mets>
