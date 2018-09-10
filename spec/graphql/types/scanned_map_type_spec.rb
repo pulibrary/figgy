@@ -27,6 +27,7 @@ RSpec.describe Types::ScannedMapType do
     it { is_expected.to have_field(:viewingDirection).of_type(Types::ViewingDirectionEnum) }
     it { is_expected.to have_field(:label).of_type(String) }
     it { is_expected.to have_field(:members) }
+    it { is_expected.to have_field(:manifestUrl).of_type(String) }
   end
 
   describe "#viewing_hint" do
@@ -38,6 +39,12 @@ RSpec.describe Types::ScannedMapType do
   describe "#viewing_direction" do
     it "returns a singular value" do
       expect(type.viewing_direction).to eq "left-to-right"
+    end
+  end
+
+  describe "#manifest_url" do
+    it "links to the manifest URL" do
+      expect(type.manifest_url).to eq "http://www.example.com/concern/scanned_maps/#{scanned_map.id}/manifest"
     end
   end
 

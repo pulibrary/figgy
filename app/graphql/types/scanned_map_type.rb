@@ -4,6 +4,7 @@ class Types::ScannedMapType < Types::BaseObject
 
   field :start_page, String, null: true
   field :viewing_direction, Types::ViewingDirectionEnum, null: true
+  field :manifest_url, String, null: true
 
   def viewing_hint
     Array.wrap(super).first

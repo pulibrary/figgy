@@ -23,6 +23,7 @@ RSpec.describe Types::ScannedResourceType do
 
     # Note! These field names use a javascript-y camel-case variable style
     it { is_expected.to have_field(:viewingHint).of_type(String) }
+    it { is_expected.to have_field(:manifestUrl).of_type(String) }
     it { is_expected.to have_field(:viewingDirection).of_type(Types::ViewingDirectionEnum) }
     it { is_expected.to have_field(:label).of_type(String) }
     it { is_expected.to have_field(:members) }
@@ -119,6 +120,12 @@ RSpec.describe Types::ScannedResourceType do
   describe "#url" do
     it "links to the catalog URL" do
       expect(type.url).to eq "http://www.example.com/catalog/#{scanned_resource.id}"
+    end
+  end
+
+  describe "#manifest_url" do
+    it "links to the manifest URL" do
+      expect(type.manifest_url).to eq "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest"
     end
   end
 
