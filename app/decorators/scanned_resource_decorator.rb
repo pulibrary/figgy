@@ -128,7 +128,10 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
   end
 
   def pdf_file
-    file_metadata.find { |x| x.mime_type == ["application/pdf"] }
+    pdf = file_metadata.find { |x| x.mime_type == ["application/pdf"] }
+    pdf if pdf && Valkyrie::StorageAdapter.find(:derivatives).find_by(id: pdf.file_identifiers.first)
+  rescue Valkyrie::StorageAdapter::FileNotFound
+    nil
   end
 
   def rendered_actors
