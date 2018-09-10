@@ -229,6 +229,7 @@ class METSDocument
     end
 
     def map_to_holding_location(locations)
+      return unless locations.present?
       ControlledVocabulary.for(:holding_location).all.find { |term| term.label.include? locations.first }&.value
     end
 

@@ -304,4 +304,13 @@ RSpec.describe METSDocument do
       end
     end
   end
+  describe "#pudl0100" do
+    context "when given a mods file without a holding location" do
+      subject(:mets_document) { described_class.new(mets_file) }
+      let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0100-lc-egx_0003-nolocation.mets") }
+      it "can get the MODS metadata" do
+        expect(mets_document.attributes[:holding_location]).to be_blank
+      end
+    end
+  end
 end
