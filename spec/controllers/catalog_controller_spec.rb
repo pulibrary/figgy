@@ -526,6 +526,13 @@ RSpec.describe CatalogController do
         expect(response).to be_success
         json_body = MultiJson.load(response.body, symbolize_keys: true)
         expect(json_body[:local_identifier][0]).to eq "xyz1"
+
+        simple_resource = persister.save(resource: FactoryBot.build(:simple_resource, author: "Test Author"))
+        get :show, params: { id: simple_resource.id.to_s, format: :jsonld }
+        expect(response).to be_success
+        json_body = MultiJson.load(response.body, symbolize_keys: true)
+        expect(json_body[:author]).not_to be_blank
+        expect(json_body[:pdf_type]).to be_blank
       end
 
       it "renders for a FileSet" do
