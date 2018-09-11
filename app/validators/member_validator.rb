@@ -6,28 +6,26 @@ class MemberValidator < ActiveModel::Validator
 
   private
 
-    def find_resource(id:)
-      Valkyrie.config.metadata_adapter.query_service.find_by(id: Valkyrie::ID.new(id))
-    end
-
     def valid_uuid?(value)
       /^[A-F\d]{8}-[A-F\d]{4}-4[A-F\d]{3}-[89AB][A-F\d]{3}-[A-F\d]{12}$/i.match? value
     end
 
-    def resource_exists?(uuid:, record:)
-      unless valid_uuid? uuid.to_s
-        record.errors.add(:member_ids, "#{uuid} is not a valid UUID")
-        return false
-      end
-      resource = find_resource(id: uuid)
-      resource.present?
-    rescue Valkyrie::Persistence::ObjectNotFoundError
-      record.errors.add(:member_ids, "#{uuid} does not resolve to a resource")
-      false
+    def nonexistent_ids(ids)
+      ids - query_service.custom_queries.find_saved_ids(ids: ids)
+    end
+
+    def query_service
+      Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
     end
 
     def validate_member(record)
       return true unless Array.wrap(record.member_ids).first.present?
-      record.member_ids.map { |member_id| resource_exists?(uuid: member_id, record: record) }.reduce(:|)
+      valid_ids = record.member_ids.select { |id| valid_uuid?(id.to_s) }
+      (record.member_ids - valid_ids).each do |member_id|
+        record.errors.add(:member_ids, "#{member_id} is not a valid UUID")
+      end
+      nonexistent_ids(valid_ids).each do |id|
+        record.errors.add(:member_ids, "#{id} does not resolve to a resource")
+      end
     end
 end
