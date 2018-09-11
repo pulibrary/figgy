@@ -54,7 +54,8 @@ module LinkedData
 
       def ignored_attributes
         [
-          :pdf_type
+          :pdf_type,
+          :thumbnail_id
         ]
       end
   end
