@@ -28,7 +28,22 @@ module LinkedData
       def properties
         {
           '@type': "pcdm:Object"
-        }.merge(schema_properties)
+        }.merge(schema_properties).merge(overwritten_properties)
+      end
+
+      def overwritten_properties
+        {
+          part_of: part_of
+        }
+      end
+
+      def part_of
+        Array.wrap(resource.part_of).map do |part_of|
+          {
+            "@id" => part_of.identifier,
+            "title" => part_of.title
+          }
+        end
       end
 
       def schema_properties
