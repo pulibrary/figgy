@@ -3,14 +3,20 @@ require "rails_helper"
 
 RSpec.describe RasterResourceDecorator do
   subject(:decorator) { described_class.new(resource) }
+  let(:coverage) { "northlimit=07.033333; eastlimit=011.583333; southlimit=03.917778; westlimit=008.497222; units=degrees; projection=EPSG:4326" }
+  let(:imported_coverage) { "northlimit=-00.500000; eastlimit=040.841667; southlimit=-12.000000; westlimit=028.666667; units=degrees; projection=EPSG:4326" }
   let(:resource) do
     FactoryBot.build(:raster_resource,
                      title: "test title",
                      author: "test author",
                      creator: "test creator",
+                     coverage: coverage,
                      subject: "test subject",
                      identifier: "ark:/99999/fk4",
-                     holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/14")
+                     holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/14",
+                     imported_metadata: [{
+                       coverage: imported_coverage
+                     }])
   end
   it "exposes markup for rights statement" do
     expect(resource.decorate.rendered_rights_statement).not_to be_empty
@@ -21,6 +27,8 @@ RSpec.describe RasterResourceDecorator do
   end
   it "exposes markup for rendered coverage" do
     expect(resource.decorate.rendered_coverage).to match(/#{Regexp.escape('Toggle Map')}/)
+    expect(resource.decorate.rendered_coverage).to include(coverage)
+    expect(resource.decorate.rendered_coverage).not_to include(imported_coverage)
   end
   it "renders the identifier as an ark" do
     expect(resource.decorate.ark).to eq("http://arks.princeton.edu/ark:/99999/fk4")

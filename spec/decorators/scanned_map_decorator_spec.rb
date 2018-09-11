@@ -3,15 +3,20 @@ require "rails_helper"
 
 RSpec.describe ScannedMapDecorator do
   subject(:decorator) { described_class.new(resource) }
+  let(:imported_coverage) { "northlimit=07.033333; eastlimit=011.583333; southlimit=03.917778; westlimit=008.497222; units=degrees; projection=EPSG:4326" }
   let(:resource) do
     FactoryBot.build(:scanned_map,
                      title: "test title",
+                     coverage: [],
                      author: "test author",
                      creator: "test creator",
                      references: links.to_json,
                      subject: "test subject",
                      identifier: "ark:/99999/fk4",
-                     holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/14")
+                     holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/14",
+                     imported_metadata: [{
+                       coverage: imported_coverage
+                     }])
   end
   let(:links) do
     {
@@ -36,6 +41,7 @@ RSpec.describe ScannedMapDecorator do
   end
   it "exposes markup for rendered coverage" do
     expect(resource.decorate.rendered_coverage).to match(/#{Regexp.escape('Toggle Map')}/)
+    expect(resource.decorate.rendered_coverage).to include(imported_coverage)
   end
   it "exposes markup for rendered links" do
     expect(resource.decorate.rendered_links).to include(/www.jstor.org/)

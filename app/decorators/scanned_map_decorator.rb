@@ -111,7 +111,7 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   end
 
   def rendered_coverage
-    display_coverage = coverage || imported_metadata.try(:first).try(:coverage)
+    display_coverage = Array.wrap(coverage).first || imported_metadata.try(:first).try(:coverage)
     h.bbox_display(display_coverage)
   end
 
