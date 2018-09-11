@@ -8,6 +8,7 @@ module LinkedData
     end
 
     def new
+      return LinkedSimpleResource.new(resource: resource_node) if resource_node.try(:change_set) == "simple"
       case resource_node
       when EphemeraFolder
         LinkedEphemeraFolder.new(resource: resource_node)

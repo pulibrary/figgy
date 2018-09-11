@@ -105,6 +105,7 @@ Metrics/MethodLength:
     - 'app/services/bulk_ingest_intermediate_service.rb'
     - 'app/models/remote_record.rb'
     - 'app/services/pul_metadata_services/bib_record.rb'
+    - 'app/models/concerns/linked_data/linked_resource_factory.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
