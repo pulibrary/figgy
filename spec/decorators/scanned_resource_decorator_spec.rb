@@ -114,11 +114,29 @@ RSpec.describe ScannedResourceDecorator do
   end
 
   describe "#pdf_file" do
-    context "when there is a pdf" do
-      let(:pdf_file) { FileMetadata.new mime_type: "application/pdf" }
+    context "when there is a pdf and it exists" do
+      before do
+        allow(derivs).to receive(:find_by).with(id: file_id).and_return(file_id)
+      end
+      let(:derivs)   { Valkyrie::StorageAdapter.find(:derivatives) }
+      let(:file_id)  { Valkyrie::ID.new("disk:///tmp/stubbed.tif") }
+      let(:pdf_file) { FileMetadata.new mime_type: "application/pdf", file_identifiers: [file_id] }
       let(:resource) { FactoryBot.create_for_repository(:scanned_resource, file_metadata: [pdf_file]) }
       it "finds the pdf file" do
         expect(decorator.pdf_file).to eq pdf_file
+      end
+    end
+
+    context "when there is a pdf but it does not exist" do
+      before do
+        allow(derivs).to receive(:find_by).with(id: file_id).and_raise(Valkyrie::StorageAdapter::FileNotFound)
+      end
+      let(:derivs)   { Valkyrie::StorageAdapter.find(:derivatives) }
+      let(:file_id)  { Valkyrie::ID.new("disk:///tmp/stubbed.tif") }
+      let(:pdf_file) { FileMetadata.new mime_type: "application/pdf", file_identifiers: [file_id] }
+      let(:resource) { FactoryBot.create_for_repository(:scanned_resource, file_metadata: [pdf_file]) }
+      it "does not return the bogus pdf file" do
+        expect(decorator.pdf_file).to be nil
       end
     end
 
