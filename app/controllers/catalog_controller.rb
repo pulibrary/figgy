@@ -5,7 +5,15 @@ class CatalogController < ApplicationController
   layout "application"
   def self.search_config
     {
-      "qf" => %w[identifier_tesim title_ssim title_tesim transliterated_title_ssim transliterated_title_tesim source_metadata_identifier_ssim local_identifier_ssim barcode_ssim call_number_tsim],
+      "qf" => %w[identifier_tesim
+                 figgy_title_ssim
+                 figgy_title_tesim
+                 transliterated_title_ssim
+                 transliterated_title_tesim
+                 source_metadata_identifier_ssim
+                 local_identifier_ssim
+                 barcode_ssim
+                 call_number_tsim],
       "qt" => "search",
       "rows" => 10
     }
@@ -21,7 +29,7 @@ class CatalogController < ApplicationController
       rows: search_config["rows"]
     }
 
-    config.index.title_field = "title_ssim"
+    config.index.title_field = "figgy_title_ssim"
     config.index.display_type_field = "human_readable_type_ssim"
     config.add_facet_field "member_of_collection_titles_ssim", label: "Collections", limit: 5
     config.add_facet_field "human_readable_type_ssim", label: "Type of Work", limit: 5
