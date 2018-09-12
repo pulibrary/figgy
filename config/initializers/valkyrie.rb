@@ -161,7 +161,8 @@ Rails.application.config.to_prepare do
           ProjectIndexer,
           HumanReadableTypeIndexer,
           SortingIndexer,
-          ImportedMetadataIndexer
+          ImportedMetadataIndexer,
+          TitleIndexer
         )
       ),
       tracer: Datadog.tracer
