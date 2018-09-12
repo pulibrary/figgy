@@ -56,6 +56,9 @@ class SimpleResourceChangeSet < ChangeSet
   property :logical_structure, multiple: true, required: false, type: Types::Strict::Array.of(Structure), default: [Structure.new(label: "Logical", nodes: [])]
   property :holding_location, multiple: false, required: false, type: ::Types::URI
   property :location, multiple: true, required: false, default: []
+  property :date_created, multiple: false, required: false, default: []
+  property :geographic_origin, multiple: false, required: false, default: []
+  property :resource_type, multiple: false, required: false, default: []
   property :change_set, require: true, default: "simple"
 
   # Virtual Attributes
