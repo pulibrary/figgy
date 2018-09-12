@@ -1,5 +1,13 @@
 # frozen_string_literal: true
 namespace :bulk do
+  desc "Re-apply METS metadata to objects in a collection"
+  task reprocess_mets: :environment do
+    collection_id = ENV["COLL"]
+
+    abort "usage: rake bulk:reprocess_mets COLL=collid" unless collection_id
+    ReprocessMetsJob.set(queue: :low).perform_later(collection_id: collection_id)
+  end
+
   desc "Ingest a directory of TIFFs as a ScannedResource, or a directory of directories as a MultiVolumeWork"
   task ingest: :environment do
     user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
