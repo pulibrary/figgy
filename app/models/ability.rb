@@ -15,19 +15,14 @@ class Ability
 
   # Abilities that should only be granted to admin users
   def admin_permissions
-    can [:manage], :all
+    can [:read, :color_pdf, :manifest], :all
+    anonymous_permissions
   end
 
   # Staff can do anything except delete someone else's stuff
   def staff_permissions
-    can [:create, :read, :update, :manifest], :all
-    can [:destroy], Template
-    can [:destroy], FileSet do |obj|
-      obj.depositor == [current_user.uid]
-    end
-    can [:destroy], curation_concerns do |obj|
-      obj.depositor == [current_user.uid]
-    end
+    can [:read, :color_pdf, :manifest], :all
+    anonymous_permissions
   end
 
   def anonymous_permissions
