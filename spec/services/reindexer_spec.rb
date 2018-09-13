@@ -22,6 +22,16 @@ RSpec.describe Reindexer do
         expect { solr_adapter.query_service.find_by(id: output.id) }.not_to raise_error
       end
     end
+    context "when given ProcessedEvents" do
+      it "doesn't index them" do
+        resource = FactoryBot.build(:processed_event)
+        output = postgres_adapter.persister.save(resource: resource)
+
+        described_class.reindex_all(logger: logger, wipe: true)
+
+        expect { solr_adapter.query_service.find_by(id: output.id) }.to raise_error Valkyrie::Persistence::ObjectNotFoundError
+      end
+    end
     context "when there are records in solr which are no longer in postgres" do
       it "gets rid of them" do
         resource = FactoryBot.build(:scanned_resource)

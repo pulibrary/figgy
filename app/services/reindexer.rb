@@ -23,10 +23,16 @@ class Reindexer
       solr_adapter.persister.wipe!
     end
     logger.info "Reindexing all records"
-    query_service.custom_queries.memory_efficient_all.each_slice(1000) do |records|
+    query_service.custom_queries.memory_efficient_all(except_models: blacklisted_models).each_slice(1000) do |records|
       logger.info "Indexing #{records.count} records"
       solr_adapter.persister.save_all(resources: records)
     end
     logger.info "Done"
+  end
+
+  def blacklisted_models
+    [
+      ProcessedEvent
+    ]
   end
 end
