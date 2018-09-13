@@ -19,7 +19,14 @@ RSpec.describe CollectionsMailer, type: :mailer do
       expect(email.from).to contain_exactly "no-reply@www.example.com"
       expect(email.to).to contain_exactly user.email, user2.email
       expect(email.subject).to eq "Weekly collection report for The Important Person's Things"
-      expect(email.body.to_s).to eq expected_body(ids: [r1.id, r2.id, r3.id])
+      # the final review section contains exactly the one final review object
+      expect(email.body.to_s).to include expected_final(id: r3.id)
+      # the pending section is there, as are its two objects.
+      # since they're not in the final review section they must be in the right place
+      # thus the spec is less vulnerable to order fluctations
+      expect(email.body.to_s).to include "<p>Resources in workflow state \"pending\"</p>"
+      expect(email.body.to_s).to include expected_pending(resource: r1)
+      expect(email.body.to_s).to include expected_pending(resource: r2)
       email.deliver
       expect(ActionMailer::Base.deliveries).not_to be_empty
     end
@@ -41,45 +48,22 @@ RSpec.describe CollectionsMailer, type: :mailer do
     end
   end
 
-  def expected_body(ids:)
+  def expected_final(id:)
     <<-FIXTURE
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <style>
-      /* Email styles need to be inline */
-    </style>
-  </head>
-
-  <body>
-    <!DOCTYPE html>
-<html>
-  <head>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
-  </head>
-  <body>
-    <h2>Weekly collection report for The Important Person&#39;s Things</h2>
-    <p>Resources in workflow state "pending"</p>
-    <ul>
-      <li>
-        <a href="http://www.example.com/catalog/#{ids.shift}">Historically Significant Resource</a>
-      </li>
-      <li>
-        <a href="http://www.example.com/catalog/#{ids.shift}">Culturally Significant Resource</a>
-      </li>
-    </ul>
     <p>Resources in workflow state "final review"</p>
     <ul>
       <li>
-        <a href="http://www.example.com/catalog/#{ids.shift}">Pretty Resource</a>
+        <a href="http://www.example.com/catalog/#{id}">Pretty Resource</a>
       </li>
     </ul>
-  </body>
-</html>
+FIXTURE
+  end
 
-  </body>
-</html>
+  def expected_pending(resource:)
+    <<-FIXTURE
+      <li>
+        <a href="http://www.example.com/catalog/#{resource.id}">#{resource.title.first}</a>
+      </li>
 FIXTURE
   end
 end
