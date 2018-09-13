@@ -42,5 +42,15 @@ RSpec.describe DownloadsController do
         expect(response).to redirect_to("/users/auth/cas")
       end
     end
+
+    context "with an auth token" do
+      it "allows downloading the file" do
+        token = AuthToken.create!(group: ["admin"], label: "admin_token")
+        get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s, auth_token: token.token }
+        expect(response.content_length).to eq(196_882)
+        expect(response.content_type).to eq("image/tiff")
+        expect(response.body).to eq(sample_file.read)
+      end
+    end
   end
 end
