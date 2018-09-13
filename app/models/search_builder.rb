@@ -33,8 +33,9 @@ class SearchBuilder < Blacklight::SearchBuilder
     WorkflowRegistry.all_states - unreadable_states
   end
 
+  # This is a blacklist of models that should not be presented in search results
   def models_to_solr_clause
-    [FileSet, EphemeraProject, EphemeraVocabulary, EphemeraTerm, FileMetadata, EphemeraField].join(",")
+    [FileSet, EphemeraProject, EphemeraVocabulary, EphemeraTerm, FileMetadata, EphemeraField, Template].join(",")
   end
 
   def add_access_controls_to_solr_params(*args)

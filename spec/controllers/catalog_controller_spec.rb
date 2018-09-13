@@ -415,6 +415,20 @@ RSpec.describe CatalogController do
     end
   end
 
+  describe "Template behavior" do
+    before do
+      sign_in FactoryBot.create(:admin)
+    end
+
+    it "does not display Templates" do
+      persister.save(resource: FactoryBot.build(:template))
+
+      get :index, params: { q: "" }
+
+      expect(assigns(:document_list).length).to eq 0
+    end
+  end
+
   describe "nested catalog file_set paths" do
     context "when you have permission to view file sets" do
       before do
