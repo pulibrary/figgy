@@ -29,7 +29,8 @@ class VectorResourceChangeSet < ChangeSet
   validates_with SourceMetadataIdentifierOrTitleValidator
   validates_with MemberValidator
   validates_with CollectionValidator
-  validates :visibility, :rights_statement, presence: true
+  validates_with RightsStatementValidator
+  validates :visibility, presence: true
 
   # rubocop:disable Metrics/MethodLength
   def primary_terms

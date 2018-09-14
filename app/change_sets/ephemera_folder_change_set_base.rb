@@ -4,6 +4,9 @@ class EphemeraFolderChangeSetBase < ChangeSet
   validate :date_range_validity
   validate :subject_present
   validates_with StateValidator
+  validates_with RightsStatementValidator
+  validates_with MemberValidator
+  validates_with CollectionValidator
 
   include VisibilityProperty
   property :title, multiple: false, required: true
@@ -47,9 +50,6 @@ class EphemeraFolderChangeSetBase < ChangeSet
   property :date_range, multiple: false, required: false
   property :date_range_form_attributes, virtual: true
   delegate :human_readable_type, to: :model
-
-  validates_with MemberValidator
-  validates_with CollectionValidator
 
   def date_range_form_attributes=(attributes)
     return unless date_range_form.validate(attributes)

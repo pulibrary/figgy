@@ -17,12 +17,13 @@ class EphemeraBoxChangeSet < ChangeSet
   property :rights_statement, multiple: false, required: true, default: "http://rightsstatements.org/vocab/NKC/1.0/", type: ::Types::URI
   property :rights_note, multiple: false, required: false
   delegate :human_readable_type, to: :model
-  validates :barcode, :box_number, :visibility, :rights_statement, presence: true
+  validates :barcode, :box_number, :visibility, presence: true
   validate :barcode_valid?
   validate :drive_barcode_valid?
   validates_with StateValidator
   validates_with MemberValidator
   validates_with CollectionValidator
+  validates_with RightsStatementValidator
 
   def barcode_valid?
     return if Barcode.new(Array.wrap(barcode).first).valid?
