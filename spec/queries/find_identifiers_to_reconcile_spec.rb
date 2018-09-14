@@ -6,6 +6,7 @@ RSpec.describe FindIdentifiersToReconcile do
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
   let(:resource) { FactoryBot.build(:complete_scanned_resource, title: []) }
   let(:resource2) { FactoryBot.create_for_repository(:scanned_resource, title: []) }
+  let(:resource3) { FactoryBot.create_for_repository(:scanned_resource, title: []) }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
 
   before do
@@ -19,10 +20,15 @@ RSpec.describe FindIdentifiersToReconcile do
       change_set.validate(source_metadata_identifier: "123456")
       saved_resource = change_set_persister.save(change_set: change_set)
 
+      change_set = ScannedResourceChangeSet.new(resource3)
+      change_set.validate(source_metadata_identifier: "123456")
+      change_set_persister.save(change_set: change_set)
+
       output = query.find_identifiers_to_reconcile
       ids = output.map(&:id)
       expect(ids).to include saved_resource.id
       expect(ids).not_to include resource2.id
+      expect(ids).not_to include resource3.id
     end
   end
 end

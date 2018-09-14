@@ -38,6 +38,7 @@ RSpec.describe ReportsController, type: :controller do
 
   describe "GET #identifiers_to_reconcile" do
     let(:resource) { FactoryBot.build(:complete_scanned_resource, title: []) }
+    let(:resource2) { FactoryBot.build(:complete_scanned_resource, title: []) }
     let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
     let(:data) { "bibid,ark,title\n123456,ark:/99999/fk48675309,Earth rites : fertility rites in pre-industrial Britain\n" }
     before do
@@ -45,7 +46,12 @@ RSpec.describe ReportsController, type: :controller do
       stub_bibdata(bib_id: "123456")
       stub_ezid(shoulder: "99999/fk4", blade: "8675309")
       change_set = ScannedResourceChangeSet.new(resource)
-      change_set.validate(source_metadata_identifier: "123456")
+      change_set.validate(source_metadata_identifier: "123456", state: ["complete"])
+      change_set_persister.save(change_set: change_set)
+
+      stub_pulfa(pulfa_id: "MC016_c9616")
+      change_set = ScannedResourceChangeSet.new(resource2)
+      change_set.validate(source_metadata_identifier: "MC016_c9616")
       change_set_persister.save(change_set: change_set)
     end
 

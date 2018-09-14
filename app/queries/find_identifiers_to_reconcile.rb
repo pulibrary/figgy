@@ -19,6 +19,7 @@ class FindIdentifiersToReconcile
     <<-SQL
       SELECT * FROM orm_resources
       WHERE internal_resource='ScannedResource'
+      AND orm_resources.metadata @> '{"state": ["complete"]}'
       AND orm_resources.metadata @> '{"identifier": []}'
       AND orm_resources.metadata @> '{"source_metadata_identifier": []}'
       AND NOT orm_resources.metadata @> '{"imported_metadata":[{"identifier": []}]}'
