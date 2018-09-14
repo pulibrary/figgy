@@ -20,7 +20,7 @@ class ReportsController < ApplicationController
 
   def identifiers_to_reconcile
     authorize! :show, Report
-    @resources = Valkyrie.config.metadata_adapter.query_service.custom_queries.find_identifiers_to_reconcile
+    @resources = find_identifiers_to_reconcile
     respond_to do |format|
       format.html
       format.csv do
@@ -31,6 +31,12 @@ class ReportsController < ApplicationController
   end
 
   private
+
+    def find_identifiers_to_reconcile
+      @identifiers_to_reconcile ||= query_service.custom_queries.find_identifiers_to_reconcile.select do |r|
+        PulMetadataServices::Client.bibdata?(r.source_metadata_identifier.first)
+      end
+    end
 
     def to_csv(records, fields:)
       CSV.generate(headers: true) do |csv|
