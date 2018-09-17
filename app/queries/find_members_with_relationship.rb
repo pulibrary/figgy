@@ -39,7 +39,7 @@ class FindMembersWithRelationship
 
   def populate_members(relationship, members, relationship_objects)
     members.map do |member|
-      member.loaded[relationship] = member.__send__(relationship).map do |id|
+      member.loaded[relationship] = (member.try(relationship) || []).map do |id|
         relationship_objects.find { |x| x.id == id }
       end.compact
       member
