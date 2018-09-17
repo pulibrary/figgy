@@ -37,9 +37,9 @@ RSpec.describe StateValidator do
 
     context "when transition is not acceptable" do
       it "adds errors" do
-        record = build_record(old_state: "pending", new_state: "complete")
+        record = build_record(old_state: "pending", new_state: "takedown")
         validator.validate(record)
-        expect(errors).to have_received(:add).with(:state, "Cannot transition from pending to complete")
+        expect(errors).to have_received(:add).with(:state, "Cannot transition from pending to takedown")
       end
     end
   end

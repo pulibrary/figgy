@@ -22,6 +22,8 @@ class BookWorkflow < BaseWorkflow
     end
     event :make_complete do
       transitions from: :final_review, to: :complete
+      transitions from: :pending, to: :complete
+      transitions from: :metadata_review, to: :complete
     end
 
     # takedown/restore workflow
