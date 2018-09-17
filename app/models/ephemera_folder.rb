@@ -47,12 +47,6 @@ class EphemeraFolder < Resource
   attribute :state
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
 
-  # Virtual property used for stashing pre-loaded objects. Populated by a query.
-  attr_accessor :loaded
-  def loaded
-    @loaded ||= {}
-  end
-
   def self.can_have_manifests?
     true
   end
