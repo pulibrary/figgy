@@ -12,7 +12,7 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
     "Box #{box_number.first}"
   end
 
-  delegate :members, to: :wayfinder
+  delegate :members, :decorated_folders_with_genres, to: :wayfinder
 
   # TODO: Rename to decorated_ephemera_folders
   def folders

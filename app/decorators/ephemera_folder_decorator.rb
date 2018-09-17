@@ -201,11 +201,17 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
       workflow_class.index_read_groups_states.include? Array.wrap(state).first.underscore
     end
 
+    # Try to find pre-loaded resources from FindMembersWithRelationship first,
+    # fall back to loading otherwise.
     def find_resource(resource_id)
-      query_service.find_by(id: resource_id).decorate
+      loaded_resources[resource_id]&.decorate || query_service.find_by(id: resource_id).decorate
     rescue Valkyrie::Persistence::ObjectNotFoundError
       Rails.logger.warn "Failed to find the resource #{resource_id}"
       resource_id
+    end
+
+    def loaded_resources
+      @loaded_resources ||= object.try(:loaded)&.values&.inject(&:merge) || {}
     end
 
     # Unsure if I should move this to wayfinder.
