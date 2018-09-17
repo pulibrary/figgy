@@ -31,26 +31,24 @@ class FindMembersWithRelationship
       orm_class.find_by_sql(
         [relationship_query] +
         [{ id: resource.id.to_s, relation: relationship, relation_query: { relationship => [] }.to_json }]
-      )
-               .group_by { |x| x.attributes["parent_id"] }
+      ).map do |x|
+        resource_factory.to_resource(object: x)
+      end
     populate_members(relationship, members, relationship_objects)
   end
 
   def populate_members(relationship, members, relationship_objects)
     members.map do |member|
-      member.loaded[relationship] =
-        Hash[
-          Array.wrap(relationship_objects[member.id.to_s])
-               .map { |x| resource_factory.to_resource(object: x) }
-               .group_by(&:id).map { |k, v| [k, v.first] }
-        ]
+      member.loaded[relationship] = member.__send__(relationship).map do |id|
+        relationship_objects.find { |x| x.id == id }
+      end.compact
       member
     end
   end
 
   def relationship_query
     <<-SQL
-        SELECT genre.*, member.id AS parent_id FROM orm_resources a,
+        SELECT DISTINCT genre.* FROM orm_resources a,
         jsonb_array_elements(a.metadata->'member_ids') AS b(member),
         orm_resources member,
         jsonb_array_elements(member.metadata->:relation) AS c(genre_id),

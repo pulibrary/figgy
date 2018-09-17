@@ -10,11 +10,13 @@ RSpec.describe FindMembersWithRelationship do
       genre = FactoryBot.create_for_repository(:ephemera_term, label: "Genre")
       genre2 = FactoryBot.create_for_repository(:ephemera_term, label: "Genre2")
       folder = FactoryBot.create_for_repository(:ephemera_folder, genre: [genre.id, genre2.id])
-      project = FactoryBot.create_for_repository(:ephemera_project, member_ids: folder.id)
+      folder2 = FactoryBot.create_for_repository(:ephemera_folder, genre: [genre.id])
+      project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [folder.id, folder2.id])
 
-      output = query.find_members_with_relationship(resource: project, relationship: :genre)
-      expect(output.first.loaded[:genre][genre.id].label).to eq ["Genre"]
-      expect(output.first.loaded[:genre][genre2.id].label).to eq ["Genre2"]
+      output = query.find_members_with_relationship(resource: project, relationship: :genre).to_a
+      expect(output.first.loaded[:genre][0].label).to eq ["Genre"]
+      expect(output.first.loaded[:genre][1].label).to eq ["Genre2"]
+      expect(output.last.loaded[:genre][0].label).to eq ["Genre"]
     end
   end
 end
