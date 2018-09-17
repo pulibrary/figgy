@@ -38,7 +38,7 @@ export default class BoundingBoxSelector {
                                      buttonPosition: 'topright', }).addTo(map)
 
       boundingBox.on('change', function() {
-        $(this.$inputId).val(that.boundsToCoverage(this.getBounds()))
+        $("#" + that.$inputId).val(that.boundsToCoverage(this.getBounds()))
         that.updateBboxInputs(this.getBounds())
       })
 
