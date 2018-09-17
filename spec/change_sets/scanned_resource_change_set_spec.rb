@@ -4,7 +4,8 @@ require "rails_helper"
 RSpec.describe ScannedResourceChangeSet do
   subject(:change_set) { described_class.new(form_resource) }
   let(:resource_klass) { ScannedResource }
-  let(:scanned_resource) { resource_klass.new(title: "Test", rights_statement: "Stuff", visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: "pending") }
+  let(:scanned_resource) { resource_klass.new(title: "Test", rights_statement: rights_statement, visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: "pending") }
+  let(:rights_statement) { RDF::URI.new("http://rightsstatements.org/vocab/NKC/1.0/") }
   let(:form_resource) { scanned_resource }
 
   before do
@@ -17,17 +18,20 @@ RSpec.describe ScannedResourceChangeSet do
     context "when neither title or metadata identifier is set" do
       let(:form_resource) { scanned_resource.new(title: "", source_metadata_identifier: "") }
       it "is invalid" do
+        change_set.prepopulate!
         expect(change_set).not_to be_valid
       end
     end
     context "when only metadata_identifier is set" do
       let(:form_resource) { scanned_resource.new(title: "", source_metadata_identifier: "123456") }
       it "is valid" do
+        change_set.prepopulate!
         expect(change_set).to be_valid
       end
     end
     context "when given a valid state transition" do
       it "is valid" do
+        change_set.prepopulate!
         change_set.validate(state: "metadata_review")
         expect(change_set).to be_valid
       end

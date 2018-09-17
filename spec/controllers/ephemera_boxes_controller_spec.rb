@@ -65,7 +65,7 @@ RSpec.describe EphemeraBoxesController do
       {
         barcode: ["00000000000000"],
         box_number: ["1"],
-        rights_statement: "Test Statement",
+        rights_statement: "http://rightsstatements.org/vocab/NKC/1.0/",
         visibility: "restricted"
       }
     end
