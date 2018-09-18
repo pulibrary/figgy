@@ -42,7 +42,7 @@ RSpec.describe ScannedResourcesController do
     let(:valid_params) do
       {
         title: ["Title 1", "Title 2"],
-        rights_statement: "Test Statement",
+        rights_statement: "http://rightsstatements.org/vocab/CNE/1.0/",
         visibility: "restricted"
       }
     end
@@ -67,7 +67,7 @@ RSpec.describe ScannedResourcesController do
         post :create, params: {
           scanned_resource: {
             source_metadata_identifier: "123456",
-            rights_statement: "Test Statement",
+            rights_statement: "http://rightsstatements.org/vocab/CNE/1.0/",
             visibility: "restricted"
           },
           commit: "Save and Ingest"
@@ -85,7 +85,7 @@ RSpec.describe ScannedResourcesController do
         post :create, params: {
           scanned_resource: {
             source_metadata_identifier: "4609321",
-            rights_statement: "Test Statement",
+            rights_statement: "http://rightsstatements.org/vocab/CNE/1.0/",
             visibility: "restricted"
           },
           commit: "Save and Ingest"

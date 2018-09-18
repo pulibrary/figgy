@@ -3,7 +3,9 @@ require "rails_helper"
 
 RSpec.describe MediaResourceChangeSet do
   subject(:change_set) { described_class.new(form_resource) }
-  let(:media_resource) { MediaResource.new(title: "Test", rights_statement: "Stuff", visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: "draft") }
+  let(:rights_statement) { "http://rightsstatements.org/vocab/NKC/1.0/" }
+  let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
+  let(:media_resource) { MediaResource.new(title: "Test", rights_statement: rights_statement, visibility: visibility, state: "draft") }
   let(:form_resource) { media_resource }
   describe "#prepopulate!" do
     it "doesn't make it look changed" do
@@ -13,6 +15,9 @@ RSpec.describe MediaResourceChangeSet do
     end
   end
   describe "validations" do
+    before do
+      change_set.prepopulate!
+    end
     it "is valid by default" do
       expect(change_set).to be_valid
     end
@@ -43,14 +48,14 @@ RSpec.describe MediaResourceChangeSet do
   end
 
   describe "#rights_statement" do
-    let(:form_resource) { MediaResource.new(rights_statement: RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")) }
+    let(:form_resource) { MediaResource.new(rights_statement: RDF::URI(rights_statement)) }
     it "is singular, required, and converts to an RDF::URI" do
       change_set.prepopulate!
 
-      expect(change_set.rights_statement).to eq RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")
+      expect(change_set.rights_statement).to eq RDF::URI(rights_statement)
       change_set.validate(rights_statement: "")
       expect(change_set).not_to be_valid
-      change_set.validate(rights_statement: "http://rightsstatements.org/vocab/NKC/1.0/")
+      change_set.validate(rights_statement: rights_statement)
       expect(change_set.rights_statement).to be_instance_of RDF::URI
     end
     context "when given a blank MediaResource" do
@@ -58,7 +63,7 @@ RSpec.describe MediaResourceChangeSet do
       it "sets a default Rights Statement" do
         change_set.prepopulate!
 
-        expect(change_set.rights_statement).to eq RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")
+        expect(change_set.rights_statement).to eq RDF::URI(rights_statement)
       end
     end
   end
@@ -83,7 +88,7 @@ RSpec.describe MediaResourceChangeSet do
     let(:media_resource) do
       MediaResource.new(
         source_metadata_identifier: "C0652_c0377",
-        rights_statement: "Stuff",
+        rights_statement: rights_statement,
         visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE,
         state: "draft"
       )
@@ -95,6 +100,7 @@ RSpec.describe MediaResourceChangeSet do
 
     describe "#valid?" do
       it "is a valid change set" do
+        change_set.prepopulate!
         expect(change_set).to be_valid
       end
     end

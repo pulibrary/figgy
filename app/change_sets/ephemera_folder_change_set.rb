@@ -5,7 +5,7 @@ class EphemeraFolderChangeSet < EphemeraFolderChangeSetBase
     super
   end
 
-  validates :barcode, :folder_number, :title, :language, :genre, :width, :height, :page_count, :visibility, :rights_statement, presence: true
+  validates :barcode, :folder_number, :title, :language, :genre, :width, :height, :page_count, :visibility, presence: true
 
   property :barcode, multiple: false, required: true
   property :folder_number, multiple: false, required: true

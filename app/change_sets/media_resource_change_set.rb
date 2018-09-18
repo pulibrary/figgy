@@ -22,7 +22,8 @@ class MediaResourceChangeSet < ChangeSet
   validates_with MemberValidator
   validates_with CollectionValidator
   validates_with SourceMetadataIdentifierOrTitleValidator
-  validates :visibility, :rights_statement, presence: true
+  validates_with RightsStatementValidator
+  validates :visibility, presence: true
 
   def primary_terms
     [

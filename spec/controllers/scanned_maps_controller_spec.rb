@@ -52,17 +52,18 @@ RSpec.describe ScannedMapsController do
 
   describe "create" do
     let(:user) { FactoryBot.create(:admin) }
+    let(:rights_statement) { RDF::URI.new("http://rightsstatements.org/vocab/NKC/1.0/") }
     let(:valid_params) do
       {
         title: ["Title 1", "Title 2"],
-        rights_statement: "Test Statement",
+        rights_statement: rights_statement,
         visibility: "restricted"
       }
     end
     let(:invalid_params) do
       {
         title: [""],
-        rights_statement: "Test Statement",
+        rights_statement: rights_statement,
         visibility: "restricted"
       }
     end
@@ -82,7 +83,7 @@ RSpec.describe ScannedMapsController do
       let(:valid_params) do
         {
           title: ["Title 1", "Title 2"],
-          rights_statement: "Test Statement",
+          rights_statement: rights_statement,
           visibility: "restricted",
           member_of_collection_ids: [collection.id.to_s]
         }
@@ -129,7 +130,7 @@ RSpec.describe ScannedMapsController do
         {
           source_metadata_identifier: "5144620",
           coverage: coverage.to_s,
-          rights_statement: "Test Statement",
+          rights_statement: rights_statement,
           visibility: visibility
         }
       end

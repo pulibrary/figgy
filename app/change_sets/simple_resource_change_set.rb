@@ -70,7 +70,8 @@ class SimpleResourceChangeSet < ChangeSet
   validates_with TitleValidator
   validates_with MemberValidator
   validates_with CollectionValidator
-  validates :visibility, :rights_statement, presence: true
+  validates_with RightsStatementValidator
+  validates :visibility, presence: true
 
   def primary_terms
     [
