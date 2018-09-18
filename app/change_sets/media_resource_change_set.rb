@@ -13,6 +13,7 @@ class MediaResourceChangeSet < ChangeSet
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :read_groups, multiple: true, required: false
   property :depositor, multiple: false, require: false
+  property :upload_set_id, multiple: false, require: false, type: Valkyrie::Types::ID
   property :source_metadata_identifier, multiple: false, required: false
 
   # Virtual Attributes

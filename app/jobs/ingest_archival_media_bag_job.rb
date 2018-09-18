@@ -49,7 +49,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
     # Service Class for ingesting the bag as a procedure
     class Ingester
-      attr_reader :collection, :bag, :user, :changeset_persister
+      attr_reader :collection, :bag, :user, :changeset_persister, :upload_set_id
 
       # Constructor
       # @param collection [ArchivalMediaCollection]
@@ -61,6 +61,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
         @bag = bag
         @user = user
         @changeset_persister = changeset_persister
+        @upload_set_id = Valkyrie::ID.new(SecureRandom.uuid)
       end
 
       # Method for procedurally ingesting the bag
@@ -183,7 +184,13 @@ class IngestArchivalMediaBagJob < ApplicationJob
         def find_or_create_media_resource(component_id)
           results = query_service.custom_queries.find_by_string_property(property: :source_metadata_identifier, value: component_id)
           media_resource = results.size.zero? ? MediaResource.new : results.first
-          MediaResourceChangeSet.new(media_resource, source_metadata_identifier: component_id, files: [], visibility: collection.visibility.first)
+          MediaResourceChangeSet.new(
+            media_resource,
+            source_metadata_identifier: component_id,
+            files: [],
+            visibility: collection.visibility.first,
+            upload_set_id: upload_set_id
+          )
         end
 
         # Retrieve a Hash of EAD Component IDs/Barcodes for file barcodes specified in a given Bag

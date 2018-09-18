@@ -46,6 +46,10 @@ RSpec.describe IngestArchivalMediaBagJob do
       expect(query_service.find_all_of_model(model: MediaResource).size).to eq 1
     end
 
+    it "adds an upload set id to the MediaResource" do
+      expect(query_service.find_all_of_model(model: MediaResource).first.upload_set_id).to be_present
+    end
+
     it "for each component id-based MediaRsource, puts it on the collection" do
       collection = query_service.find_all_of_model(model: ArchivalMediaCollection).first
       expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
@@ -191,6 +195,10 @@ RSpec.describe IngestArchivalMediaBagJob do
         ["Readings: Pablo Neruda III (C3)"],
         ["Interview: Fitas / ERM, Tape 1-2 (A8)"]
       )
+    end
+
+    it "gives all MediaResources the same upload set id" do
+      expect(query_service.find_all_of_model(model: MediaResource).map(&:upload_set_id).to_a.uniq.size).to eq 1
     end
   end
 end
