@@ -13,15 +13,22 @@ RSpec.describe ScannedResourceDecorator do
       FactoryBot.build(:scanned_resource,
                        title: "test title",
                        created: "01/01/1970",
-                       imported_metadata: [{
-                         creator: "test creator",
-                         created: Date.parse("01/01/1970")
-                       }])
+                       imported_metadata: imported_metadata)
     end
-    it "exposes a formatted string for the created date" do
-      expect(decorator.imported_created).to eq ["January 1, 1970"]
+    context "with a single date" do
+      let(:imported_metadata) { [{ created: Date.parse("01/01/1970") }] }
+      it "exposes a formatted string for the created date" do
+        expect(decorator.imported_created).to eq ["January 1, 1970"]
+      end
+    end
+    context "with a date range" do
+      let(:imported_metadata) { [{ created: "1941-01-01T00:00:00Z/1985-12-31T23:59:59Z" }] }
+      it "maps date to readable string" do
+        expect(decorator.imported_created).to eq ["1941 - 1985"]
+      end
     end
   end
+
   context "with imported metadata" do
     let(:resource) do
       FactoryBot.build(:scanned_resource,

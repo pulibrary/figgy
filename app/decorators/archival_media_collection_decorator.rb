@@ -27,6 +27,8 @@ class ArchivalMediaCollectionDecorator < CollectionDecorator
   def imported_created
     output = imported_attribute(:created)
     return if output.blank?
+    # we know these will always be iso8601 so if there's a slash it's a range
+    return output.map { |entry| display_date_range(entry) } if output.to_s.include? "/"
     output.map { |value| Date.parse(value.to_s).strftime("%B %-d, %Y") }
   end
 
@@ -36,4 +38,12 @@ class ArchivalMediaCollectionDecorator < CollectionDecorator
     end
   end
   alias display_imported_language imported_language
+
+  private
+
+    def display_date_range(date_value)
+      dates = date_value.to_s.split("/")
+      dates.map! { |date| Date.parse(date).year }
+      dates.join " - "
+    end
 end
