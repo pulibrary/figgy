@@ -91,6 +91,7 @@ module PulMetadataServices
         end
 
         # Retrieve the normalized date for the resource
+        # expect our EADs to use dateencoding="iso8601"
         # @return [String]
         def normalized_date
           text(data.at_xpath("#{data_root}/did/unitdate/@normal"))
