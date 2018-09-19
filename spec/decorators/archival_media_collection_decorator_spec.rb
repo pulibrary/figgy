@@ -28,7 +28,7 @@ RSpec.describe ArchivalMediaCollectionDecorator do
     context "with a date range" do
       let(:imported_metadata) { [{ created: "1941-01-01T00:00:00Z/1985-12-31T23:59:59Z" }] }
       it "maps date to readable string" do
-        expect(decorator.imported_created).to eq ["1941 - 1985"]
+        expect(decorator.imported_created).to eq ["1941-1985"]
       end
     end
   end
