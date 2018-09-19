@@ -31,6 +31,7 @@ class ChangeSetPersister
       ],
       after_update_commit: [
         CheckFixity,
+        ReindexCollectionMembers,
         UpdateOCR
       ],
       before_delete: [

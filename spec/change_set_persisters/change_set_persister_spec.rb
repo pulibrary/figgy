@@ -1158,4 +1158,40 @@ RSpec.describe ChangeSetPersister do
       end
     end
   end
+
+  describe "reindex collection memberes" do
+    let(:solr) { Blacklight.default_index.connection }
+    let(:collection) { FactoryBot.create_for_repository(:collection, title: "Old Title") }
+
+    it "reindexes members of that collection on title change" do
+      resource = FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id])
+
+      change_set = DynamicChangeSet.new(collection)
+      change_set.prepopulate!
+      change_set.validate(title: "New Title")
+
+      change_set_persister.save(change_set: change_set)
+
+      doc = solr.get("select", params: { q: "id:#{resource.id}", fl: "member_of_collection_titles_ssim", rows: 1 })["response"]["docs"].first
+      expect(doc["member_of_collection_titles_ssim"]).to eq ["New Title"]
+    end
+
+    it "reindexes ephemera folders and boxes if their project is renamed" do
+      folder = FactoryBot.create_for_repository(:ephemera_folder)
+      box = FactoryBot.create_for_repository(:ephemera_box, member_ids: [folder.id])
+      project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [box.id], title: "Old Title")
+
+      change_set = DynamicChangeSet.new(project)
+      change_set.prepopulate!
+      change_set.validate(title: "New Title")
+
+      change_set_persister.save(change_set: change_set)
+
+      folder_doc = solr.get("select", params: { q: "id:#{folder.id}", fl: "ephemera_project_ssim", rows: 1 })["response"]["docs"].first
+      expect(folder_doc["ephemera_project_ssim"]).to eq ["New Title"]
+
+      box_doc = solr.get("select", params: { q: "id:#{box.id}", fl: "ephemera_project_ssim", rows: 1 })["response"]["docs"].first
+      expect(box_doc["ephemera_project_ssim"]).to eq ["New Title"]
+    end
+  end
 end
