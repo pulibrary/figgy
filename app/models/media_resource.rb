@@ -8,6 +8,7 @@ class MediaResource < Resource
   attribute :imported_metadata, Valkyrie::Types::Set.of(ImportedMetadata).optional
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
   attribute :state
+  attribute :upload_set_id, Valkyrie::Types::ID
 
   def primary_imported_metadata
     Array.wrap(imported_metadata).first || ImportedMetadata.new
