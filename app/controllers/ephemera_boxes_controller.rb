@@ -16,7 +16,7 @@ class EphemeraBoxesController < BaseResourceController
   end
 
   def datatables_folders
-    FolderDataSource.new(resource: resource.decorate, helper: self).data
+    FolderDataSource.new(resource: resource.decorate, helper: helper).data
   end
 
   def attach_drive
@@ -32,6 +32,10 @@ class EphemeraBoxesController < BaseResourceController
   end
 
   private
+
+    def helper
+      EphemeraBoxDecorator.new(nil).h
+    end
 
     def load_collections
       @collections = query_service.find_all_of_model(model: Collection).map(&:decorate)

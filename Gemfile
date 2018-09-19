@@ -46,7 +46,6 @@ end
 group :development, :test do
   gem "awesome_print"
   gem "bixby"
-  gem "bullet"
   gem "bundler-audit", ">= 0.5.0", require: false
   gem "coveralls"
   gem "dotenv-rails"
