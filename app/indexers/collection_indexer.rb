@@ -6,6 +6,7 @@ class CollectionIndexer
     @resource = resource
   end
 
+  # Adds a collection title index entry to a resource's index document for each collection that resource belongs to
   def to_solr
     return {} unless collection_titles.any?
     {
