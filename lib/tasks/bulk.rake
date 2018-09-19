@@ -208,14 +208,18 @@ namespace :bulk do
     end
   end
 
-  desc "Update all members of a Collection to the specified state"
-  task update_state: :environment do
+  desc "Update all members of a Collection to the specified state and/or rights statement"
+  task update_attrs: :environment do
     coll = ENV["COLL"]
     state = ENV["STATE"]
+    rights = ENV["RIGHTS"]
 
-    abort "usage: rake bulk:update_sate COLL=[collection id] STATE=[state]" unless coll
+    abort "usage: rake bulk:update_attrs COLL=[collection id] STATE=[state] RIGHTS=[rights]" unless coll
     logger = Logger.new(STDOUT)
-    UpdateState.perform(collection_id: Valkyrie::ID.new(coll), state: state, metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), logger: logger)
+    attrs = {}
+    attrs[:state] = state if state
+    attrs[:rights_statement] = rights if rights
+    BulkEditService.perform(collection_id: Valkyrie::ID.new(coll), attributes: attrs, metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), logger: logger)
   end
 
   desc "Ingest a directory of TIFFs as intermediate files for existing ScannedResources"
