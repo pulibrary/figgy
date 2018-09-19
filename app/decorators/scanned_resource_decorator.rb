@@ -153,6 +153,6 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
     def display_date_range(date_value)
       dates = date_value.to_s.split("/")
       dates.map! { |date| Date.parse(date).year }
-      dates.join " - "
+      dates.join "-"
     end
 end
