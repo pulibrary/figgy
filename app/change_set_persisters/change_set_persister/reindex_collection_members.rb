@@ -9,8 +9,8 @@ class ChangeSetPersister
     end
 
     def run
-      return unless change_set.model.is_a?(Collection) && change_set.changed?(:title)
-      children.each do |resource|
+      return unless collection_change_set? && change_set.changed?(:title)
+      descendants.each do |resource|
         cs = DynamicChangeSet.new(resource)
         change_set_persister.save(change_set: cs)
       end
@@ -18,8 +18,23 @@ class ChangeSetPersister
 
     private
 
-      def children
-        @children ||= Wayfinder.for(change_set.model).members
+      def descendants
+        @descendants ||= begin
+          wayfinder = Wayfinder.for(change_set.model)
+          if wayfinder.respond_to? :ephemera_folders
+            wayfinder.ephemera_boxes + wayfinder.ephemera_folders + folders_in_boxes(wayfinder)
+          else
+            wayfinder.members
+          end
+        end
+      end
+
+      def folders_in_boxes(wayfinder)
+        wayfinder.ephemera_boxes.flat_map { |box| Wayfinder.for(box).members }
+      end
+
+      def collection_change_set?
+        change_set.model.is_a?(Collection) || change_set.model.is_a?(EphemeraProject)
       end
   end
 end
