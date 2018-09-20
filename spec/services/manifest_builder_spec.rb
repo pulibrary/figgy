@@ -92,6 +92,16 @@ RSpec.describe ManifestBuilder do
       change_set_persister.save(change_set: change_set)
     end
 
+    it "only runs two find_by queries" do
+      manifest_builder # Cache the instance which has a `find_by` to instantiate
+      allow(query_service).to receive(:find_by).and_call_original
+
+      manifest_builder.build
+
+      # Two queries: One for thumbnail and one for start canvas
+      expect(query_service).to have_received(:find_by).exactly(2).times
+    end
+
     it "generates a IIIF document" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
