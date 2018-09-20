@@ -201,4 +201,23 @@ RSpec.describe IngestArchivalMediaBagJob do
       expect(query_service.find_all_of_model(model: MediaResource).map(&:upload_set_id).to_a.uniq.size).to eq 1
     end
   end
+
+  context "ingesting a bag, then another bag" do
+    let(:bag_path1) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag") }
+    let(:bag_path2) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag2") }
+
+    before do
+      stub_pulfa(pulfa_id: "C0652_c0383")
+      stub_pulfa(pulfa_id: "C0652_c0389")
+      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path1, user: user)
+      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path2, user: user)
+    end
+
+    it "uploads all resources to the same collection, giving them different upload set ids" do
+      collection = query_service.find_all_of_model(model: ArchivalMediaCollection).first
+      resources = query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids)
+      expect(resources.size).to eq 2
+      expect(resources.map(&:upload_set_id).to_a.uniq.size).to eq 2
+    end
+  end
 end
