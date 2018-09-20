@@ -51,7 +51,7 @@ class ManifestBuilder
       # @return [Hash]
       def build_thumbnail_values(file_set)
         {
-          "@id" => helper.manifest_image_thumbnail_path(file_set.id),
+          "@id" => helper.manifest_image_thumbnail_path(file_set),
           "service" => {
             "@context" => "http://iiiif.io/api/image/2/context.json",
             "@id" => helper.manifest_image_path(file_set),
