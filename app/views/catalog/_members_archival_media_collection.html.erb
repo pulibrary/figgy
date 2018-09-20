@@ -1,2 +1,2 @@
-<%= link_to "View Members List", facet_search_url(field: "member_of_collection_titles_ssim", value: decorated_resource.title), class: "btn btn-default" %>
+<%= link_to "View all #{decorated_resource.members.count} items in this collection", facet_search_url(field: "member_of_collection_titles_ssim", value: decorated_resource.title), class: "btn btn-default" %>
 <%= link_to "View ARK / Component ID report", archival_media_collections_ark_report_path, class: 'btn btn-default' %>

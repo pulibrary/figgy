@@ -14,7 +14,7 @@ RSpec.feature "Refresh" do
       persister.save(resource: FactoryBot.build(:scanned_resource, member_of_collection_ids: [collection.id]))
 
       visit "catalog/#{collection.id}"
-      expect(page).to have_link "View Members List"
+      expect(page).to have_link "View all 1 items in this collection"
       expect(page).to have_link "Edit This Collection", href: edit_collection_path(collection)
       expect(page).to have_link "Delete This Collection", href: collection_path(collection)
       expect(page).not_to have_link "File Manager"
