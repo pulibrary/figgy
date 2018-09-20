@@ -10,7 +10,8 @@ class CollectionIndexer
   def to_solr
     return {} unless collection_titles.any?
     {
-      "member_of_collection_titles_ssim" => collection_titles
+      "member_of_collection_titles_ssim" => collection_titles,
+      "member_of_collection_titles_tesim" => collection_titles
     }
   end
 
