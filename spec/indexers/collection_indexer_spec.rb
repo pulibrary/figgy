@@ -9,6 +9,7 @@ RSpec.describe CollectionIndexer do
       output = described_class.new(resource: resource).to_solr
 
       expect(output["member_of_collection_titles_ssim"]).to eq [collection.title.first]
+      expect(output["member_of_collection_titles_tesim"]).to eq [collection.title.first]
     end
 
     it "indexes collection titles of the ephemera boxes a folder is in" do
@@ -18,6 +19,7 @@ RSpec.describe CollectionIndexer do
 
       output = described_class.new(resource: folder).to_solr
       expect(output["member_of_collection_titles_ssim"]).to eq [collection.title.first]
+      expect(output["member_of_collection_titles_tesim"]).to eq [collection.title.first]
     end
   end
 end
