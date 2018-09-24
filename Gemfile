@@ -78,7 +78,7 @@ gem "rsolr", ">= 1.0"
 
 gem "aasm"
 gem "arabic-letter-connector"
-gem "browse-everything", github: "jrgriffiniii/browse-everything", branch: "hotfix-gdrive-scope"
+gem "browse-everything", github: "jrgriffiniii/browse-everything", branch: "hotfix-gdrive-paging-jrgriffiniii-stable"
 gem "capistrano", "~> 3.7.1"
 gem "capistrano-passenger"
 gem "capistrano-rails"
