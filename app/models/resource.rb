@@ -34,4 +34,10 @@ class Resource < Valkyrie::Resource
   def media_resource?
     false
   end
+
+  # Virtual property used for stashing pre-loaded objects. Populated by a query.
+  attr_accessor :loaded
+  def loaded
+    @loaded ||= {}
+  end
 end

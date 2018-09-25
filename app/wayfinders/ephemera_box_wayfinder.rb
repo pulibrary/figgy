@@ -9,4 +9,12 @@ class EphemeraBoxWayfinder < BaseWayfinder
   def ephemera_folders_count
     @ephemera_folders_count ||= query_service.custom_queries.count_members(resource: resource, model: EphemeraFolder)
   end
+
+  def folders_with_genres
+    @folders_with_genres ||= query_service.custom_queries.find_members_with_relationship(resource: resource, relationship: :genre).select { |x| x.is_a?(EphemeraFolder) }
+  end
+
+  def decorated_folders_with_genres
+    @decorated_folders_with_genres ||= folders_with_genres.map(&:decorate)
+  end
 end

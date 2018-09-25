@@ -103,8 +103,11 @@ RSpec.describe EphemeraProjectsController do
       let(:user) { FactoryBot.create(:admin) }
       render_views
       it "renders a JSON list of a project's folders" do
-        folder = FactoryBot.create_for_repository(:ephemera_folder)
+        genre = FactoryBot.create_for_repository(:ephemera_term, label: "Testing")
+        folder = FactoryBot.create_for_repository(:ephemera_folder, genre: genre.id)
         project = FactoryBot.create_for_repository(:ephemera_project, member_ids: folder.id)
+        query_service = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
+        allow(query_service).to receive(:find_by).and_call_original
 
         get :folders, params: { id: project.id.to_s, formats: :json }
 
@@ -114,8 +117,10 @@ RSpec.describe EphemeraProjectsController do
         expect(json["data"][0]["workflow_state"]).to eq "<span class=\"label label-info\">Needs QA</span>"
         expect(json["data"][0]["title"]).to eq folder.title
         expect(json["data"][0]["barcode"]).to eq folder.barcode.first
-        expect(json["data"][0]["genre"]).to eq folder.genre.first
+        expect(json["data"][0]["genre"]).to eq "Testing"
         expect(json["data"][0]["actions"]).not_to be_blank
+        expect(query_service).to have_received(:find_by).with(id: project.id).exactly(1).times
+        expect(query_service).not_to have_received(:find_by).with(id: genre.id)
       end
     end
   end

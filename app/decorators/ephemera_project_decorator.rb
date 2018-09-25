@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
   display :title
-  delegate :members, :query_service, to: :wayfinder
+  delegate :members, :query_service, :decorated_folders_with_genres, to: :wayfinder
 
   # TODO: Rename to decorated_ephemera_boxes
   def boxes

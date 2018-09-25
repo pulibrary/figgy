@@ -15,11 +15,11 @@ class EphemeraProjectsController < BaseResourceController
   end
 
   def folders
-    render json: { data: datatables_folders }
+    render json: JSON.dump(data: datatables_folders.to_a)
   end
 
   def datatables_folders
-    FolderDataSource.new(resource: resource.decorate, helper: self).data
+    FolderDataSource.new(resource: resource.decorate, helper: helper).data
   end
 
   def manifest
@@ -32,6 +32,10 @@ class EphemeraProjectsController < BaseResourceController
   end
 
   private
+
+    def helper
+      EphemeraProjectDecorator.new(nil).h
+    end
 
     def load_ephemera_projects
       @ephemera_projects = query_service.find_all_of_model(model: EphemeraProject).map(&:decorate)
