@@ -13,28 +13,32 @@ class IngestIntermediateFileJob < ApplicationJob
 
     @file_path = file_path
 
-    change_set_persister.buffer_into_index do |buffered_persister|
-      change_set = FileSetChangeSet.new(file_set)
-      change_set.prepopulate!
+    change_set = FileSetChangeSet.new(file_set)
+    change_set.prepopulate!
 
-      unless change_set.validate(files: [build_file])
-        logger.error "#{self.class}: Failed to validate the file built for #{@file_path}: #{change_set.errors}"
-        next
-      end
-
-      change_set.sync
-      buffered_persister.save(change_set: change_set)
-
-      logger.info "Ingested #{@file_path} as an intermediate file for #{file_set.id}"
-
-      # Delete all existing derivatives
-      derivative_file_ids = file_set.derivative_files.map do |derivative_file|
-        derivative_file.file_identifiers.first
-      end.compact
-
-      CleanupFilesJob.set(queue: change_set_persister.queue).perform_now(file_identifiers: derivative_file_ids)
-      CreateDerivativesJob.set(queue: change_set_persister.queue).perform_now(file_set.id.to_s)
+    # Delete all existing derivatives
+    derivative_file_ids = []
+    file_set.derivative_files.each do |derivative_file|
+      derivative_file_ids << derivative_file.file_identifiers.first
     end
+    derivative_file_ids.compact!
+
+    unless change_set.validate(files: [build_file])
+      logger.error "#{self.class}: Failed to validate the file built for #{@file_path}: #{change_set.errors}"
+      return
+    end
+
+    change_set.sync
+
+    updated_file_metadata = file_set.file_metadata.delete_if(&:derivative?)
+    change_set.resource.file_metadata = updated_file_metadata
+
+    change_set_persister.save(change_set: change_set)
+
+    logger.info "Ingested #{@file_path} as an intermediate file for #{file_set.id}"
+
+    CleanupFilesJob.set(queue: change_set_persister.queue).perform_now(file_identifiers: derivative_file_ids) unless derivative_file_ids.empty?
+    CreateDerivativesJob.set(queue: change_set_persister.queue).perform_now(file_set.id.to_s)
   end
 
   private
