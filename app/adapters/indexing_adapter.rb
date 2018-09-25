@@ -73,7 +73,7 @@ class IndexingAdapter
     #   solr_index.query_service.find_all # => [book1, book2]
     def buffer_into_index
       buffered_persister.with_buffer do |persist, buffer|
-        Valkyrie::Persistence::Postgres::ORM::Resource.transaction do
+        primary_adapter.connection.transaction(savepoint: true) do
           yield Valkyrie::AdapterContainer.new(persister: persist, query_service: metadata_adapter.query_service)
           buffer.persister.deletes.uniq(&:id).each do |delete|
             index_persister.delete(resource: delete)

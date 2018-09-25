@@ -12,26 +12,8 @@ class FileSetsSortedByUpdated
   end
 
   def file_sets_sorted_by_updated(sort: "asc", limit: 50)
-    run_query("#{query} #{order(sort)} #{number(limit)}")
-  end
-
-  def query
-    <<-SQL
-      select * FROM orm_resources WHERE
-      internal_resource='FileSet'
-    SQL
-  end
-
-  def order(sort)
-    "order by updated_at #{sort}"
-  end
-
-  def number(limit)
-    "limit #{limit}"
-  end
-
-  def run_query(query)
-    orm_class.find_by_sql([query]).lazy.map do |object|
+    order_field = sort == "asc" ? :updated_at : Sequel.desc(:updated_at)
+    orm_class.where(internal_resource: "FileSet").order(order_field).limit(limit).lazy.map do |object|
       resource_factory.to_resource(object: object)
     end
   end
