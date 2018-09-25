@@ -289,36 +289,13 @@ RSpec.describe ChangeSetPersister do
           url: "https://retrieve.cloud.example.com/some/dir/file.pdf"
         )
       end
-      let(:http_request) { instance_double(HTTParty::Request) }
-      let(:http_response) { instance_double(Net::HTTPResponse) }
-      let(:parsed_block) { instance_double(Proc) }
-      let(:cloud_response) { HTTParty::Response.new(http_request, http_response, parsed_block) }
-      let(:error) do
-        {
-          "error" =>
-          {
-            "errors" => [
-              {
-                "domain" => "usageLimits",
-                "reason" => "dailyLimitExceededUnreg",
-                "message" => "Daily Limit for Unauthenticated Use Exceeded. Continued use requires signup.",
-                "extendedHelp" => "https://code.google.com/apis/console"
-              }
-            ],
-            "code" => 403,
-            "message" => "Daily Limit for Unauthenticated Use Exceeded. Continued use requires signup."
-          }
-        }
-      end
+      let(:http_request) { instance_double(Typhoeus::Request) }
+      let(:cloud_response) { Typhoeus::Response.new }
 
       before do
-        allow(http_request).to receive(:options).and_return({})
-        allow(http_response).to receive(:body).and_return(nil)
-        allow(http_response).to receive(:to_hash).and_return(nil)
-
         allow(cloud_response).to receive(:code).and_return(403)
-        allow(cloud_response).to receive(:body).and_return(error)
-        allow(HTTParty).to receive(:get).and_return(cloud_response)
+        allow(http_request).to receive(:on_headers).and_yield(cloud_response)
+        allow(Typhoeus::Request).to receive(:new).and_return(http_request)
       end
 
       it "does not append files when the upload fails", run_real_derivatives: true do
