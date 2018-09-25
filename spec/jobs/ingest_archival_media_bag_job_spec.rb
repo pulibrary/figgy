@@ -119,6 +119,29 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
   end
 
+  context "when the bag does not contain an image file" do
+    let(:tika_output) { tika_jpeg_output }
+    let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag3") }
+
+    before do
+      ruby_tika = instance_double(RubyTikaApp)
+      allow(ruby_tika).to receive(:to_json).and_return(tika_xml_pbcore_output, tika_jpeg_output)
+      allow(RubyTikaApp).to receive(:new).and_return(ruby_tika)
+
+      stub_pulfa(pulfa_id: "C0652_c0383")
+
+      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
+    end
+
+    it "does not have an image FileSet" do
+      file_set_mime_types = query_service.find_all_of_model(model: FileSet).map(&:mime_type).to_a
+
+      expect(file_set_mime_types).not_to include ["image/jpeg"]
+      expect(file_set_mime_types).to include ["application/xml; schema=pbcore"]
+      expect(file_set_mime_types).to include ["audio/wav"]
+    end
+  end
+
   context "when you're ingesting to a collection you've already created" do
     before do
       # create the collection

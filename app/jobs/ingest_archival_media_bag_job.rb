@@ -85,6 +85,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
         # @return [IngestableFile] the file used to create the FileSet upon persistence (by the FileAppender)
         def create_image_file(barcode)
           image = bag.image_file(barcode: barcode)
+          return if image.nil?
           IngestableFile.new(
             file_path: image.path,
             mime_type: image.mime_type,
@@ -99,6 +100,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
         def add_images(media_resource_change_set, sides)
           sides.map { |side| side.split("_").first }.uniq.each do |barcode|
             file = create_image_file(barcode)
+            next if file.nil?
             media_resource_change_set.files << file
             media_resource_change_set.sync
           end
