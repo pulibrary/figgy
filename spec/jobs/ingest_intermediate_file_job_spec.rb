@@ -34,6 +34,7 @@ RSpec.describe IngestIntermediateFileJob do
     context "when the existing resource has FileSets" do
       let(:second_file) { double("File") }
       let(:cleanup_files_job) { class_double("CleanupFilesJob").as_stubbed_const(transfer_nested_constants: true) }
+      let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [master_file]) }
 
       before do
         allow(second_file).to receive(:original_filename).and_return("example.tif")
@@ -59,6 +60,8 @@ RSpec.describe IngestIntermediateFileJob do
         described_class.perform_now(file_path: file_path, file_set_id: file_set.id)
 
         expect(cleanup_files_job).to have_received(:perform_now).with(file_identifiers: file_identifiers)
+        file_set_with_intermediates = metadata_adapter.query_service.find_by(id: file_set.id)
+        expect(file_set_with_intermediates.derivative_files.length).to eq(1)
       end
     end
 
