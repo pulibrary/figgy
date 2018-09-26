@@ -6,8 +6,6 @@ class UpdateFgdcOnlinkJob < ApplicationJob
     @resource = query_service.find_by(id: Valkyrie::ID.new(id)).decorate
     return unless fgdc_file_set && geo_member_file_set
     FgdcUpdateService.new(file_set: fgdc_file_set).insert_onlink(url: download_url)
-    # Check fixity since we altered the original file
-    CheckFixityJob.set(queue: queue_name).perform_later(fgdc_file_set.id.to_s)
   end
 
   private

@@ -34,10 +34,15 @@ RSpec.describe UpdateFgdcOnlinkJob do
     let(:saved_file) { storage_adapter.find_by(id: fgdc_file_set.original_file.file_identifiers[0]) }
     let(:doc) { Nokogiri::XML(saved_file.read) }
 
-    it "inserts the vector file download url into the FGDC onlink element and enqueues check fixity job" do
+    it "inserts the vector file download url into the FGDC onlink element and updates checksum" do
+      # Save checksum of fgdc file before running job
+      parent_decorator = parent_resource.decorate
+      initial_fgdc = parent_decorator.geo_metadata_members[0]
+      initial_checksum = initial_fgdc.original_file.checksum[0]
+
       described_class.perform_now(parent_resource.id.to_s)
       expect(doc.at_xpath("//idinfo/citation/citeinfo/onlink").text).to match(/#{vector_file_set.id}\/file\/#{vector_file_id}/)
-      expect(CheckFixityJob).to have_received(:perform_later).with(fgdc_file_set.id.to_s).twice
+      expect(fgdc_file_set.original_file.checksum[0]).not_to eq(initial_checksum)
     end
   end
 end
