@@ -2,7 +2,7 @@
 source "https://rubygems.org"
 
 gem "autoprefixer-rails"
-gem "bagit"
+gem "bagit", "~> 0.4"
 gem "blacklight"
 gem "bunny"
 gem "ddtrace"
