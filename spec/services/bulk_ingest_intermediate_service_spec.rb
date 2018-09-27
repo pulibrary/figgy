@@ -55,7 +55,7 @@ RSpec.describe BulkIngestIntermediateService do
       it "performs jobs for ingesting the intermediate file for each TIFF file in a directory" do
         service.ingest(base_directory)
 
-        expect(ingest_intermediate_file_job).to have_received(:perform_now).with(file_path: tiff_path, file_set_id: file_set.id.to_s, logger: logger)
+        expect(ingest_intermediate_file_job).to have_received(:perform_now).with(file_path: tiff_path, file_set_id: file_set.id.to_s)
       end
     end
 
@@ -74,7 +74,7 @@ RSpec.describe BulkIngestIntermediateService do
         service.ingest(base_directory)
 
         expect(ingest_intermediate_file_job).to have_received(:set).with(queue: :low)
-        expect(ingest_intermediate_file_job).to have_received(:perform_later).with(file_path: tiff_path, file_set_id: file_set.id.to_s, logger: logger)
+        expect(ingest_intermediate_file_job).to have_received(:perform_later).with(file_path: tiff_path, file_set_id: file_set.id.to_s)
       end
     end
 
