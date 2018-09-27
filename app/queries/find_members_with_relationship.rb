@@ -20,7 +20,7 @@ class FindMembersWithRelationship
 
   attr_reader :query_service
   delegate :resource_factory, to: :query_service
-  delegate :orm_class, to: :resource_factory
+  delegate :run_query, to: :query_service
   def initialize(query_service:)
     @query_service = query_service
   end
@@ -28,12 +28,7 @@ class FindMembersWithRelationship
   def find_members_with_relationship(resource:, relationship:)
     members = query_service.find_members(resource: resource)
     relationship_objects =
-      orm_class.find_by_sql(
-        [relationship_query] +
-        [{ id: resource.id.to_s, relation: relationship, relation_query: { relationship => [] }.to_json }]
-      ).map do |x|
-        resource_factory.to_resource(object: x)
-      end
+      run_query(relationship_query, id: resource.id.to_s, relation: relationship.to_s, relation_query: { relationship => [] }.to_json)
     populate_members(relationship, members, relationship_objects)
   end
 
