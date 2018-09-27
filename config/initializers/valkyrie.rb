@@ -128,11 +128,26 @@ Rails.application.config.to_prepare do
     :bags
   )
 
+  database_configuration = Rails.configuration.database_configuration[Rails.env]
+  connection = Sequel.connect(
+    user: database_configuration["username"],
+    password: database_configuration["password"],
+    host: database_configuration["host"],
+    port: database_configuration["port"],
+    database: database_configuration["database"],
+    logger: Rails.logger,
+    max_connections: database_configuration["pool"],
+    pool_timeout: database_configuration["timeout"],
+    adapter: :postgres
+  )
   # Registers a metadata adapter for storing resource metadata into PostgreSQL as JSON
   # (see Valkyrie::Persistence::Postgres::MetadataAdapter)
   Valkyrie::MetadataAdapter.register(
     InstrumentedAdapter.new(
-      metadata_adapter: Valkyrie::Persistence::Postgres::MetadataAdapter.new,
+      metadata_adapter:
+        Valkyrie::Sequel::MetadataAdapter.new(
+          connection: connection
+        ),
       tracer: Datadog.tracer
     ),
     :postgres

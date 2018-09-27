@@ -12,7 +12,10 @@ class FindSavedIds
   end
 
   def find_saved_ids(ids:)
-    orm_class.where(id: ids.map(&:to_s)).pluck(:id).map do |id|
+    ids = ids.map(&:to_s).select do |id|
+      Valkyrie::Sequel::QueryService::ACCEPTABLE_UUID.match?(id)
+    end
+    orm_class.where(id: ids).pluck(:id).map do |id|
       Valkyrie::ID.new(id)
     end
   end

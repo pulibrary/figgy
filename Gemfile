@@ -104,6 +104,7 @@ gem "prawn"
 gem "riiif"
 gem "sidekiq"
 gem "string_rtl"
+gem "valkyrie-sequel", github: "samvera-labs/valkyrie-sequel"
 gem "whenever", "~> 0.10"
 
 gem "graphiql-rails", group: :development

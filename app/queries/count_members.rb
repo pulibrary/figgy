@@ -6,6 +6,8 @@ class CountMembers
 
   attr_reader :query_service
   delegate :orm_class, to: :resource_factory
+  delegate :adapter, to: :query_service
+  delegate :connection, to: :adapter
   delegate :resource_factory, to: :query_service
   def initialize(query_service:)
     @query_service = query_service
@@ -15,9 +17,9 @@ class CountMembers
   # @param model [Symbol] (default nil) if specified, only members of given model will be counted
   def count_members(resource:, model: nil)
     if model
-      orm_class.connection.execute(find_members_with_resource_query(resource, model)).first["count"]
+      adapter.connection[find_members_with_resource_query(resource, model)].first[:count]
     else
-      orm_class.connection.execute(find_members_query(resource)).first["count"]
+      adapter.connection[find_members_query(resource)].first[:count]
     end
   end
 
@@ -39,6 +41,6 @@ class CountMembers
   end
 
   def id_type
-    @id_type ||= orm_class.columns_hash["id"].type
+    :uuid
   end
 end

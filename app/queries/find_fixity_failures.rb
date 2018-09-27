@@ -7,6 +7,7 @@ class FindFixityFailures
   attr_reader :query_service
   delegate :resource_factory, to: :query_service
   delegate :orm_class, to: :resource_factory
+  delegate :run_query, to: :query_service
   def initialize(query_service:)
     @query_service = query_service
   end
@@ -21,11 +22,5 @@ class FindFixityFailures
       select * FROM orm_resources WHERE
       metadata @> ?
     SQL
-  end
-
-  def run_query(query, *args)
-    orm_class.find_by_sql(([query] + args)).lazy.map do |object|
-      resource_factory.to_resource(object: object)
-    end
   end
 end

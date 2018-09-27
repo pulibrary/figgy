@@ -9,19 +9,22 @@ RSpec.describe Valkyrie1Migrator do
       resource_factory = adapter.metadata_adapter.resource_factory
       vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary)
       term = FactoryBot.create_for_repository(:ephemera_term)
+      resources = adapter.metadata_adapter.resources
       orm_vocabulary = resource_factory.from_resource(resource: vocabulary)
       orm_term = resource_factory.from_resource(resource: term)
-      orm_vocabulary.metadata[:label] = Array.wrap(orm_vocabulary.metadata[:label]).first
-      orm_term.metadata[:label] = Array.wrap(orm_term.metadata[:label]).first
-      orm_vocabulary.save!
-      orm_term.save!
+      orm_vocabulary[:metadata][:label] = Array.wrap(orm_vocabulary[:metadata][:label]).first
+      orm_term[:metadata][:label] = Array.wrap(orm_term[:metadata][:label]).first
+      resources.where(id: orm_vocabulary[:id]).update(orm_vocabulary)
+      resources.where(id: orm_term[:id]).update(orm_term)
 
       # Run migrator
       described_class.call
 
       # Ensure it's stored as an array now
-      expect(orm_vocabulary.reload.metadata["label"]).to eq ["test vocabulary"]
-      expect(orm_term.reload.metadata["label"]).to eq ["test term"]
+      orm_vocabulary = resources.first(id: orm_vocabulary[:id])
+      orm_term = resources.first(id: orm_term[:id])
+      expect(orm_vocabulary[:metadata]["label"]).to eq ["test vocabulary"]
+      expect(orm_term[:metadata]["label"]).to eq ["test term"]
     end
   end
 end
