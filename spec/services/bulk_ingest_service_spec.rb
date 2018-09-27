@@ -38,6 +38,25 @@ RSpec.describe BulkIngestService do
         expect(reloaded2.member_ids.length).to eq 2
       end
     end
+
+    context "with a path to a non-existent directory" do
+      it "raises an error" do
+        expect { ingester.attach_each_dir(base_directory: "no/exist") }.to raise_error(ArgumentError, "BulkIngestService: Directory does not exist: no/exist")
+      end
+    end
+
+    context "with a path to an empty directory" do
+      let(:empty_dir) { Rails.root.join("spec", "fixtures", "empty") }
+      before do
+        Dir.mkdir(empty_dir)
+      end
+      after do
+        Dir.rmdir(empty_dir)
+      end
+      it "raises an error" do
+        expect { ingester.attach_each_dir(base_directory: empty_dir) }.to raise_error(ArgumentError, "BulkIngestService: Directory is empty: #{empty_dir}")
+      end
+    end
   end
 
   describe "#attach_dir" do
@@ -205,6 +224,25 @@ RSpec.describe BulkIngestService do
 
         expect(logger).to have_received(:warn).with("Failed to find the resource for noexist:ingest_single")
         expect(logger).to have_received(:info).with(/Created the resource/)
+      end
+    end
+
+    context "with a path to a non-existent directory" do
+      it "raises an error" do
+        expect { ingester.attach_each_dir(base_directory: "no/exist") }.to raise_error(ArgumentError, "BulkIngestService: Directory does not exist: no/exist")
+      end
+    end
+
+    context "with a path to an empty directory" do
+      let(:empty_dir) { Rails.root.join("spec", "fixtures", "empty") }
+      before do
+        Dir.mkdir(empty_dir)
+      end
+      after do
+        Dir.rmdir(empty_dir)
+      end
+      it "raises an error" do
+        expect { ingester.attach_each_dir(base_directory: empty_dir) }.to raise_error(ArgumentError, "BulkIngestService: Directory is empty: #{empty_dir}")
       end
     end
   end
