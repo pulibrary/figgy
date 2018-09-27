@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require_relative "figgy"
 Datadog.configure do |c|
   c.tracer(enabled: false) unless Rails.env.production?
   # Rails
@@ -15,4 +16,7 @@ Datadog.configure do |c|
 
   # Faraday
   c.use :faraday
+
+  # Sequel
+  c.use :sequel
 end
