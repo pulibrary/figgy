@@ -40,4 +40,12 @@ RSpec.describe IndexingAdapter do
     expect(query_service.find_all.to_a.length).to eq 0
     expect(index_solr.query_service.find_all.to_a.length).to eq 0
   end
+
+  it "doesn't try to persist if nothing happens" do
+    allow(adapter.index_adapter.persister).to receive(:save_all)
+    persister.buffer_into_index do |buffered_adapter|
+    end
+
+    expect(adapter.index_adapter.persister).not_to have_received(:save_all)
+  end
 end

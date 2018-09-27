@@ -78,7 +78,8 @@ class IndexingAdapter
           buffer.persister.deletes.uniq(&:id).each do |delete|
             index_persister.delete(resource: delete)
           end
-          index_persister.save_all(resources: buffer.query_service.find_all)
+          buffered_resources = buffer.query_service.find_all.to_a
+          index_persister.save_all(resources: buffered_resources) unless buffered_resources.empty?
         end
       end
     end
