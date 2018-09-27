@@ -36,16 +36,28 @@ RSpec.describe IngestableAudioFile do
       it { expect(audio_file.access?).to eq false }
     end
 
-    describe "#barcode_with_part" do
-      it { expect(audio_file.barcode_with_part).to eq "32101047382401_1" }
+    describe "#barcode_with_side" do
+      it { expect(audio_file.barcode_with_side).to eq "32101047382401_1" }
+    end
+
+    describe "#is_a_part?" do
+      it { expect(audio_file.is_a_part?).to be false }
+    end
+
+    describe "#barcode_with_side_and_part" do
+      it { expect(audio_file.barcode_with_side_and_part).to eq "32101047382401_1" }
     end
 
     describe "#barcode" do
       it { expect(audio_file.barcode).to eq "32101047382401" }
     end
 
+    describe "#side" do
+      it { expect(audio_file.side).to eq "1" }
+    end
+
     describe "#part" do
-      it { expect(audio_file.part).to eq "1" }
+      it { expect(audio_file.part).to be nil }
     end
   end
 
@@ -80,8 +92,8 @@ RSpec.describe IngestableAudioFile do
       it { expect(audio_file.access?).to eq false }
     end
 
-    describe "#barcode_with_part" do
-      it { expect(audio_file.barcode_with_part).to eq "32101047382401_1" }
+    describe "#barcode_with_side" do
+      it { expect(audio_file.barcode_with_side).to eq "32101047382401_1" }
     end
   end
   context "with an access file" do
@@ -115,8 +127,32 @@ RSpec.describe IngestableAudioFile do
       it { expect(audio_file.access?).to eq true }
     end
 
-    describe "#barcode_with_part" do
-      it { expect(audio_file.barcode_with_part).to eq "32101047382401_2" }
+    describe "#barcode_with_side" do
+      it { expect(audio_file.barcode_with_side).to eq "32101047382401_2" }
+    end
+  end
+
+  context "when preservation master files have separate parts" do
+    let(:file_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag4", "data", "32101047382492_1_p1_pm.wav") }
+
+    describe "#barcode_with_side" do
+      it { expect(audio_file.barcode_with_side).to eq "32101047382492_1" }
+    end
+
+    describe "#is_a_part?" do
+      it { expect(audio_file.is_a_part?).to be true }
+    end
+
+    describe "#barcode_with_side_and_part" do
+      it { expect(audio_file.barcode_with_side_and_part).to eq "32101047382492_1_p1" }
+    end
+
+    describe "#side" do
+      it { expect(audio_file.side).to eq("1") }
+    end
+
+    describe "#part" do
+      it { expect(audio_file.side).to eq("1") }
     end
   end
 end

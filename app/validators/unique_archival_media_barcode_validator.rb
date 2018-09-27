@@ -34,7 +34,10 @@ class UniqueArchivalMediaBarcodeValidator < ActiveModel::Validator
 
       def previously_imported
         return [] if record.model.id.nil? # it's a new resource
-        decorator.media_resources.map { |resource| resource.decorate.file_sets }.flatten.map { |file_set| "#{file_set.barcode.first}_#{file_set.part.first}" }
+        decorated = decorator.media_resources.map { |resource| resource.decorate.file_sets }.flatten
+        decorated.map do |file_set|
+          "#{file_set.barcode.first}_#{file_set.side.first}" + (file_set.part.empty? ? "" : "_#{file_set.part.first}")
+        end
       end
 
       def decorator

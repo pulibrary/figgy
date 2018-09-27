@@ -185,5 +185,6 @@ Style/MethodMissing:
 Style/PredicateName:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
+    - 'app/models/ingestable_audio_file.rb'
 Style/StringLiterals:
   EnforcedStyle: double_quotes

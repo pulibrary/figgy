@@ -8,7 +8,7 @@ require "bagit"
 class IngestArchivalMediaBagJob < ApplicationJob
   class InvalidBagError < StandardError; end
 
-  BARCODE_WITH_PART_REGEX = /(\d{14}_\d+)_.*/
+  BARCODE_WITH_SIDE_REGEX = /(\d{14}_\d+)_.*/
 
   def perform(collection_component:, bag_path:, user:)
     bag_path = Pathname.new(bag_path.to_s)
@@ -62,6 +62,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
         @user = user
         @changeset_persister = changeset_persister
         @upload_set_id = Valkyrie::ID.new(SecureRandom.uuid)
+        @av_file_sets = {}
       end
 
       # Method for procedurally ingesting the bag
@@ -111,8 +112,8 @@ class IngestArchivalMediaBagJob < ApplicationJob
         # @return [Array<MediaResourceChangeSet>]
         def add_av(media_resource_change_set, sides)
           sides.each do |side|
-            file_set = create_av_file_set(side)
-            media_resource_change_set.member_ids += [file_set.id]
+            file_sets = create_av_file_sets(side)
+            media_resource_change_set.member_ids += file_sets.map(&:id)
             media_resource_change_set.sync
           end
         end
@@ -123,6 +124,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
         def add_pbcore(media_resource_change_set, sides)
           sides.map { |side| side.split("_").first }.uniq.each do |barcode|
             file = create_pbcore_file(barcode)
+            next if file.nil?
             media_resource_change_set.files << file
             media_resource_change_set.sync
           end
@@ -133,6 +135,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
         # @return [IngestableFile] the file used to create the FileSet upon persistence (by the FileAppender)
         def create_pbcore_file(barcode)
           pbcore = bag.pbcore_parser_for_barcode(barcode)
+          return if pbcore.nil?
           IngestableFile.new(
             file_path: pbcore.path,
             mime_type: "application/xml; schema=pbcore",
@@ -141,20 +144,34 @@ class IngestArchivalMediaBagJob < ApplicationJob
           )
         end
 
+        def av_file_set_for(ingestable_audio_file)
+          return @av_file_sets[ingestable_audio_file.barcode_with_side_and_part] if @av_file_sets.key?(ingestable_audio_file.barcode_with_side_and_part)
+
+          file_set = FileSet.new(title: ingestable_audio_file.barcode_with_side_and_part)
+
+          file_set.barcode = ingestable_audio_file.barcode
+          file_set.side = ingestable_audio_file.side
+          file_set.part = ingestable_audio_file.part unless ingestable_audio_file.part.nil?
+          pbcore_parser = bag.pbcore_parser_for_barcode(ingestable_audio_file.barcode)
+          file_set.transfer_notes = pbcore_parser.transfer_notes unless pbcore_parser.nil?
+
+          file_set.read_groups = file_set_read_groups
+
+          @av_file_sets[ingestable_audio_file.barcode_with_side_and_part] = file_set
+        end
+
         # Creates and persists a FileSet for a media object
         # @param barcode_with_side [String] barcode_side for a given media object
         # @return [FileSet] the persisted FileSet containing the binary and file metadata
-        def create_av_file_set(barcode_with_side)
-          file_set = FileSet.new(title: barcode_with_side)
-          bag.file_groups[barcode_with_side].each do |ingestable_audio_file| # this is an IngestableAudioFile object
+        def create_av_file_sets(barcode_with_side)
+          bag.file_groups[barcode_with_side].map do |ingestable_audio_file| # this is an IngestableAudioFile object
+            file_set = av_file_set_for(ingestable_audio_file)
+
             file_metadata_node = create_node(ingestable_audio_file)
-            file_set.barcode = ingestable_audio_file.barcode
-            file_set.part = ingestable_audio_file.part
-            file_set.transfer_notes = bag.pbcore_parser_for_barcode(ingestable_audio_file.barcode).transfer_notes
             file_set.file_metadata += [file_metadata_node]
-            file_set.read_groups = file_set_read_groups
+
+            changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
           end
-          file_set = changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
         end
 
         # get the correct read groups based on the collection visibility
