@@ -36,3 +36,4 @@ RSpec.configure do |config|
 end
 
 WebMock.disable_net_connect!(allow_localhost: true)
+ENV["NO_PROXY"] = nil
