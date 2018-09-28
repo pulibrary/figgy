@@ -7,8 +7,11 @@ Vue.use(system)
 
 // mount the filemanager app
 document.addEventListener('DOMContentLoaded', () => {
-  const app = new Vue({
-    el: '[data-behavior="vue"]',
-    store,
-  })
+  var elements = document.getElementsByClassName('lux')
+  for(var i = 0; i < elements.length; i++){
+    new Vue({
+      el: elements[i],
+      store,
+    })
+  }
 })
