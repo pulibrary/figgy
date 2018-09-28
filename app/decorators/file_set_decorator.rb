@@ -27,7 +27,7 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
 
   # TODO: Rename to decorated_parent
   def parent
-    wayfinder.decorated_parent
+    object.try(:loaded)&.[](:parents)&.first || wayfinder.decorated_parent
   rescue ArgumentError
     nil
   end

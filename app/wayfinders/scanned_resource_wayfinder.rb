@@ -10,4 +10,8 @@ class ScannedResourceWayfinder < BaseWayfinder
   def scanned_resources_count
     @scanned_resources_count ||= query_service.custom_queries.count_members(resource: resource, model: ScannedResource)
   end
+
+  def members_with_parents
+    @members_with_parents ||= query_service.custom_queries.find_members_with_inverse_relationship(resource: resource, relationship: :member_ids, key: :parents)
+  end
 end

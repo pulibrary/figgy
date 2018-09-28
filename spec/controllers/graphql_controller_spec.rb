@@ -21,6 +21,20 @@ RSpec.describe GraphqlController do
           "resource" => { "viewingHint" => "individuals" }
         )
       end
+      it "doesn't query for parents of FileSets" do
+        adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
+
+        child = FactoryBot.create_for_repository(:file_set)
+        parent = FactoryBot.create_for_repository(:scanned_resource, member_ids: child.id, thumbnail_id: child.id)
+        allow(adapter.query_service).to receive(:find_inverse_references_by).and_return([parent])
+        child_query_string = %|{ resource(id: "#{parent.id}") { members { id }, thumbnail { id, thumbnailUrl, iiifServiceUrl } } }|
+
+        post :execute, params: { query: child_query_string, format: :json }
+
+        expect(response).to be_success
+        expect(JSON.parse(response.body)["errors"]).to be_blank
+        expect(adapter.query_service).not_to have_received(:find_inverse_references_by)
+      end
       it "can support variables set as a JSON string" do
         post :execute, params: { query: query_string, variables: { episode: "bla" }.to_json }
         expect(response).to be_success

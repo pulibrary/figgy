@@ -19,7 +19,7 @@ module Types::Resource
   end
 
   def members
-    @members ||= Wayfinder.for(object).members
+    @members ||= Wayfinder.for(object).members_with_parents
   end
 
   def manifest_url
@@ -55,7 +55,12 @@ module Types::Resource
   end
 
   def thumbnail_resource
-    @thumbnail_resource ||= query_service.find_by(id: object.try(:thumbnail_id).first)
+    @thumbnail_resource ||=
+      begin
+        members.find do |member|
+          member.id == object.try(:thumbnail_id).first
+        end || query_service.find_by(id: object.try(:thumbnail_id).first)
+      end
   rescue Valkyrie::Persistence::ObjectNotFoundError
     nil
   end
