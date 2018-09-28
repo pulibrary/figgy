@@ -5,6 +5,12 @@ import gql from 'graphql-tag'
 
 const actions = {
   async loadImageCollectionGql (context, resource) {
+      if (resource == null) {
+        context.commit('CHANGE_MANIFEST_LOAD_STATE', 'LOADING_ERROR')
+        console.error('Failed to retrieve the resource')
+        return
+      }
+
       let id = resource.id
       console.time(`getResourceById ${id}`)
 
