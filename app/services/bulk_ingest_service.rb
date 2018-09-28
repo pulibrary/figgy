@@ -15,7 +15,11 @@ class BulkIngestService
   # @param property [String, nil] the resource property (when attaching files to existing resources)
   # @param file_filter [String, nil] the filter used for matching against the filename extension
   def attach_each_dir(base_directory:, property: nil, file_filter: nil, **attributes)
-    Dir["#{base_directory}/*"].sort.each do |subdir|
+    raise ArgumentError, "#{self.class}: Directory does not exist: #{base_directory}" unless File.exist?(base_directory)
+
+    entries = Dir["#{base_directory}/*"]
+    raise ArgumentError, "#{self.class}: Directory is empty: #{base_directory}" if entries.empty?
+    entries.sort.each do |subdir|
       next unless File.directory?(subdir)
       logger.info "Attaching #{subdir}"
       attach_dir(base_directory: subdir, property: property, file_filter: file_filter, **attributes)
@@ -37,6 +41,10 @@ class BulkIngestService
   # @param property [String, nil] the resource property (when attaching files to existing resources)
   # @param file_filter [String, nil] the filter used for matching against the filename extension
   def attach_dir(base_directory:, property: nil, file_filter: nil, **attributes)
+    raise ArgumentError, "#{self.class}: Directory does not exist: #{base_directory}" unless File.exist?(base_directory)
+
+    entries = Dir["#{base_directory}/*"]
+    raise ArgumentError, "#{self.class}: Directory is empty: #{base_directory}" if entries.empty?
     directory_path = absolute_path(base_directory)
 
     base_name = File.basename(base_directory)

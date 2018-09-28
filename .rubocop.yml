@@ -81,6 +81,7 @@ Metrics/CyclomaticComplexity:
     - 'app/services/pdf_generator/canvas.rb'
     - 'app/jobs/ingest_intermediate_file_job.rb'
     - 'app/services/pul_metadata_services/bib_record.rb'
+    - 'app/services/bulk_ingest_service.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
@@ -121,6 +122,7 @@ Metrics/PerceivedComplexity:
     - 'app/services/pdf_generator/canvas.rb'
     - 'app/jobs/ingest_intermediate_file_job.rb'
     - 'app/services/pul_metadata_services/bib_record.rb'
+    - 'app/services/bulk_ingest_service.rb'
 Rails/OutputSafety:
   Exclude:
     - 'app/decorators/**/*'
