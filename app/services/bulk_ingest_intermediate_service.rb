@@ -97,9 +97,9 @@ class BulkIngestIntermediateService
         end
 
         if background?
-          IngestIntermediateFileJob.set(queue: :low).perform_later(file_path: tiff_path, file_set_id: file_set.id.to_s, logger: @logger)
+          IngestIntermediateFileJob.set(queue: :low).perform_later(file_path: tiff_path, file_set_id: file_set.id.to_s)
         else
-          IngestIntermediateFileJob.perform_now(file_path: tiff_path, file_set_id: file_set.id.to_s, logger: @logger)
+          IngestIntermediateFileJob.perform_now(file_path: tiff_path, file_set_id: file_set.id.to_s)
         end
       end
     end
