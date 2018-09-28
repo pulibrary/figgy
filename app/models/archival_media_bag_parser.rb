@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 # get all the data files, provide lookups based on component and barcode
 class ArchivalMediaBagParser
-  BARCODE_WITH_PART_REGEX = /(\d{14}_\d+)_.*/
+  BARCODE_WITH_SIDE_REGEX = /(\d{14}_\d+)_.*/
+  BARCODE_WITH_SIDE_AND_PART_REGEX = /(\d{14}_\d+?_p\d+).*/
   attr_reader :path, :audio_files, :file_groups, :component_groups, :component_dict, :pbcore_parsers
 
   def initialize(path:, component_id:)
@@ -9,10 +10,10 @@ class ArchivalMediaBagParser
     @component_dict = BarcodeComponentDict.new(component_id)
   end
 
-  # group all the files in the bag by barcode_with_part
-  # @return [Hash] mapping string barcode_with_part to an array of IngestableAudioFiles
+  # group all the files in the bag by barcode_with_side
+  # @return [Hash] mapping string barcode_with_side to an array of IngestableAudioFiles
   def file_groups
-    @file_groups ||= audio_files.group_by(&:barcode_with_part)
+    @file_groups ||= audio_files.group_by(&:barcode_with_side_and_part)
   end
 
   # file_groups in groups by component id
@@ -21,9 +22,9 @@ class ArchivalMediaBagParser
     @component_groups ||=
       begin
         h = {}
-        file_groups.keys.each do |barcode_with_part|
-          cid = component_dict.lookup(barcode_with_part)
-          h[cid] = h.fetch(cid, []).append(barcode_with_part)
+        file_groups.keys.each do |barcode_with_side|
+          cid = component_dict.lookup(barcode_with_side)
+          h[cid] = h.fetch(cid, []).append(barcode_with_side)
         end
         h
       end
@@ -106,7 +107,7 @@ class ArchivalMediaBagParser
 end
 
 # Dictionary implemented using a wrapper for a Hash
-# Wraps a hash of component_id => barcode_with_part
+# Wraps a hash of component_id => barcode_with_side
 class BarcodeComponentDict
   attr_reader :dict
   # Constructor
@@ -117,10 +118,10 @@ class BarcodeComponentDict
   end
 
   # Retrieve an EAD component ID for any given barcode
-  # @param barcode_with_part [String] the barcode
+  # @param barcode_with_side [String] the barcode
   # @param [String] the EAD component ID
-  def lookup(barcode_with_part)
-    @dict[barcode_with_part]
+  def lookup(barcode_with_side)
+    @dict[barcode_with_side]
   end
 
   private
@@ -129,7 +130,7 @@ class BarcodeComponentDict
     def parse_dict!
       @dict = {}
       barcode_nodes.each do |node|
-        barcode = get_barcode_with_part(node)
+        barcode = get_barcode_with_side(node)
         @dict[barcode] = get_id(node) unless barcode.nil?
       end
     end
@@ -168,8 +169,8 @@ class BarcodeComponentDict
     # Extracts the barcode using the XML Element content and a regexp
     # @param node [Nokogiri::XML::Node]
     # @return [String, nil] the captured string content
-    def get_barcode_with_part(node)
-      match = ArchivalMediaBagParser::BARCODE_WITH_PART_REGEX.match(node.content)
+    def get_barcode_with_side(node)
+      match = ArchivalMediaBagParser::BARCODE_WITH_SIDE_REGEX.match(node.content)
       return if match.nil?
       match[1]
     end

@@ -155,6 +155,28 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
         expect(change_set).to be_valid
       end
     end
+
+    context "when the collection already has files with that barcode, side, and part" do
+      let(:av_fixture_bag) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag4") }
+      let(:collection_cid) { "C0652" }
+      let(:query_service) { Valkyrie::MetadataAdapter.find(:indexing_persister).query_service }
+      with_queue_adapter :inline
+      before do
+        stub_pulfa(pulfa_id: "C0652")
+        stub_pulfa(pulfa_id: "C0652_c0377")
+      end
+
+      it "is invalid" do
+        # create the collection so we know its id
+        collection = FactoryBot.create_for_repository(:archival_media_collection, source_metadata_identifier: collection_cid)
+        # ingest the bag so it has the barcodes
+        IngestArchivalMediaBagJob.perform_now(collection_component: collection_cid, bag_path: av_fixture_bag, user: nil)
+        # retrieve the collection via the query service and put it in a change set with the bag
+        collection = query_service.find_by(id: collection.id)
+        change_set = described_class.new(collection, bag_path: av_fixture_bag).prepopulate!
+        expect(change_set).not_to be_valid
+      end
+    end
   end
 
   describe "#primary_terms" do

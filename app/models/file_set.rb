@@ -9,6 +9,7 @@ class FileSet < Resource
   attribute :hocr_content
   attribute :ocr_content
   attribute :barcode, Valkyrie::Types::Set
+  attribute :side, Valkyrie::Types::Set
   attribute :part, Valkyrie::Types::Set
   attribute :transfer_notes
 
