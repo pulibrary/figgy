@@ -2,7 +2,7 @@
 <%= render 'shared/header' %>
 <%= render 'shared/flash_message' %>
 <main>
-  <div data-behavior="vue" id="main" role="main" class="<%= container_type %> <%= yield(:page_class) if content_for?(:page_class)%>">
+  <div id="main" role="main" class="<%= container_type %> <%= yield(:page_class) if content_for?(:page_class)%> lux">
   <% if content_for?(:page_header) %>
     <div class="row">
       <div class="col-md-12 main-header ">
