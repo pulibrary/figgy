@@ -18,6 +18,7 @@ RSpec.describe IngestArchivalMediaBagJob do
   end
 
   context "general functionality" do
+    let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag") }
     before do
       described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
     end
