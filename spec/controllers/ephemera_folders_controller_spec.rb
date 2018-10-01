@@ -267,6 +267,16 @@ RSpec.describe EphemeraFoldersController do
         expect(response.body).to have_button "Save"
       end
     end
+    context "when it has filesets" do
+      render_views
+      it "renders the viewer" do
+        file_set = FactoryBot.create_for_repository(:file_set)
+        ephemera_folder = FactoryBot.create_for_repository(:ephemera_folder, member_ids: file_set.id)
+        get :edit, params: { id: ephemera_folder.id.to_s }
+
+        expect(response.body).to have_selector ".uv-container"
+      end
+    end
 
     context "when inside a box" do
       it "sets @available_boxes and @selected_box" do
@@ -401,7 +411,7 @@ RSpec.describe EphemeraFoldersController do
         ephemera_folder = FactoryBot.create_for_repository(:ephemera_folder)
         patch :update, params: { id: ephemera_folder.id.to_s, ephemera_folder: invalid_params }
 
-        expect(response).to render_template "base/edit"
+        expect(response).to render_template "ephemera_folders/edit"
       end
 
       it "can change from having a project as a parent to having a box as a parent" do
