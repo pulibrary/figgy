@@ -250,6 +250,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
         height: "test height",
         page_count: "test page count",
         series: "test series",
+        provenance: "test provenance",
         creator: "test creator",
         contributor: ["test contributor"],
         publisher: ["test publisher"],
@@ -277,6 +278,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       expect(linked_ephemera_folder.as_jsonld["contributor"]).to eq ["test contributor"]
       expect(linked_ephemera_folder.as_jsonld["publisher"]).to eq ["test publisher"]
       expect(linked_ephemera_folder.as_jsonld["description"]).to eq ["test description"]
+      expect(linked_ephemera_folder.as_jsonld["provenance"]).to eq "test provenance"
     end
     context "with the title of a series specified" do
       it "exposes the attribute in JSON-LD", series: true do

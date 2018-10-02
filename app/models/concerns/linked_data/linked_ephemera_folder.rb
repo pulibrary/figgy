@@ -81,6 +81,10 @@ module LinkedData
       Array.wrap(decorated_resource.series).first
     end
 
+    def provenance
+      Array.wrap(decorated_resource.provenance).first
+    end
+
     private
 
       def linked_collections
@@ -124,7 +128,8 @@ module LinkedData
           folder_number: try(:folder_number),
           date_range: try(:date_range),
           date_created: try(:date_created),
-          series: try(:series)
+          series: try(:series),
+          provenance: try(:provenance)
         }
       end
   end

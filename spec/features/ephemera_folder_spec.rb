@@ -36,12 +36,16 @@ RSpec.feature "Ephemera Folders" do
       page.fill_in "ephemera_folder_width", with: "test width"
       page.fill_in "ephemera_folder_height", with: "test height"
       page.fill_in "ephemera_folder_page_count", with: "test page count"
+      page.fill_in "ephemera_folder_provenance", with: "test provenance"
+      page.fill_in "ephemera_folder_series", with: "test series"
       page.fill_in "ephemera_folder_subject", with: "test subject"
       page.select "Copyright Not Evaluated", from: "Rights Statement"
 
       page.click_on "Save"
 
       expect(page).to have_content "test new ephemera folder"
+      expect(page).to have_content "test provenance"
+      expect(page).to have_content "test series"
       expect(page).to have_content "Attributes"
       expect(page).to have_content "EphemeraFolder"
     end
