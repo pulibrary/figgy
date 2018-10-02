@@ -265,7 +265,7 @@ RSpec.describe ManifestBuilder do
         expect(output).to include "metadata"
         metadata = output["metadata"]
         expect(metadata).to be_kind_of Array
-        expect(metadata.length).to eq(20)
+        expect(metadata.length).to eq(21)
 
         metadata_object = metadata.find { |h| h["label"] == "Subject" }
         metadata_values = metadata_object["value"]
