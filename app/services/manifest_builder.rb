@@ -451,25 +451,15 @@ class ManifestBuilder
 
     ##
     # Retrieve the URL path for an image served over the Riiif
-    # @param [String, Valkyrie::Resource] id_or_resource Either a Valkyrie::ID
-    #   for a resource to generate a thumbnail with, or the resource itself.
+    # @param [FileSet] resource A FileSet to generate a
+    #   thumbnail URL from.
     # @return [String]
-    def manifest_image_thumbnail_path(id_or_resource)
-      file_set = find_file_set(id_or_resource)
-      "#{manifest_image_path(file_set)}/full/!200,150/0/default.jpg"
+    def manifest_image_thumbnail_path(resource)
+      "#{manifest_image_path(resource)}/full/!200,150/0/default.jpg"
     end
 
-    def manifest_image_medium_path(id_or_resource)
-      file_set = find_file_set(id_or_resource)
-      "#{manifest_image_path(file_set)}/full/!1000,/0/default.jpg"
-    end
-
-    def find_file_set(id_or_resource)
-      if id_or_resource.is_a?(Valkyrie::Resource)
-        id_or_resource
-      else
-        query_service.find_by(id: Valkyrie::ID.new(id_or_resource))
-      end
+    def manifest_image_medium_path(resource)
+      "#{manifest_image_path(resource)}/full/!1000,/0/default.jpg"
     end
 
     def query_service
