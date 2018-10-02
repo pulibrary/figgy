@@ -6,8 +6,8 @@ module ThumbnailHelper
     image_tag "default.png", class: "thumbnail-inner"
   end
 
-  def build_iiif_thumbnail_path(id, image_options = {})
-    url = ManifestBuilder::ManifestHelper.new.manifest_image_thumbnail_path(id)
+  def build_iiif_thumbnail_path(document, image_options = {})
+    url = ManifestBuilder::ManifestHelper.new.manifest_image_thumbnail_path(document)
     image_tag url, image_options.merge(onerror: default_icon_fallback) if url.present?
   rescue
     default_path
@@ -60,7 +60,7 @@ module ThumbnailHelper
   def iiif_thumbnail_path(document, image_options = {})
     return unless document.thumbnail_id
     id = Array(document.thumbnail_id).first
-    return build_iiif_thumbnail_path(id, image_options) if id == document.id
+    return build_iiif_thumbnail_path(document, image_options) if id == document.id
     return if id.blank?
     thumbnail_document = Valkyrie.config.metadata_adapter.query_service.find_by(id: id)
     iiif_thumbnail_path(thumbnail_document, image_options)
