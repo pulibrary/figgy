@@ -27,4 +27,8 @@ class ScannedMapWayfinder < BaseWayfinder
         end
       end
   end
+
+  def members_with_parents
+    @members_with_parents ||= query_service.custom_queries.find_members_with_inverse_relationship(resource: resource, relationship: :member_ids, key: :parents)
+  end
 end
