@@ -4,9 +4,6 @@ defaults: &defaults
   geo_derivative_path: <%= Rails.root.join("tmp", "geo_derivatives") %>
   repository_path: <%= Rails.root.join("tmp", "files") %>
   cantaloupe_url: <%= ENV.fetch('CANTALOUPE_URL', 'http://localhost:8182/iiif/2/') %>
-  plum_solr_url: <%= "http://127.0.0.1:#{ENV['TEST_JETTY_PORT'] || 8984}/solr/figgy-core-test" %>
-  plum_binary_path: "/mnt/diglibdata/hydra_binaries"
-  plum_derivative_path: "/mnt/libimages1/data/jp2s/plum_prod"
   bag_path: <%= Rails.root.join("tmp", "bags") %>
   pudl_root: <%= Rails.root.join("tmp", "pudl_root") %>
   scanned_map_processing_note: <%= ENV.fetch('SCANNED_MAP_PROCESSING_NOTE', 'Scanned with an HD Ultra i4290s scanner using Nextimage 4.5.2 software') %>
@@ -76,10 +73,10 @@ defaults: &defaults
   events:
     server: 'amqp://localhost:5672'
     exchange:
-      plum: "plum_events"
+      figgy: "figgy_events"
       geoblacklight: "gbl_events"
       geoserver: "geoserver_events"
-  vocabulary_namespace: <%= ENV.fetch('FIGGY_VOCAB_NS', 'https://plum.princeton.edu/ns/') %>
+  vocabulary_namespace: <%= ENV.fetch('FIGGY_VOCAB_NS', 'https://figgy.princeton.edu/ns/') %>
   devise:
     omniauth:
       cas:
@@ -108,8 +105,6 @@ development:
 
 test:
   <<: *defaults
-  plum_binary_path: <%= Rails.root.join("spec", "fixtures", "plum_binaries") %>
-  plum_derivative_path: <%= Rails.root.join("spec", "fixtures", "plum_derivatives") %>
   repository_path: <%= Rails.root.join("tmp", "test_files") %>
   derivative_path: <%= Rails.root.join("tmp", "test_derivatives") %>
   geo_derivative_path: <%= Rails.root.join("tmp", "test_geo_derivatives") %>
@@ -135,15 +130,12 @@ production:
   repository_path: "/opt/repository/files"
   derivative_path: "/opt/repository/derivatives"
   geo_derivative_path: "/opt/repository/geo_derivatives"
-  plum_solr_url: <%= ENV["PLUM_SOLR_URL"] %>
-  plum_binary_path: <%= ENV["PLUM_BINARY_PATH"] || "/mnt/diglibdata/hydra_binaries" %>
-  plum_derivative_path: <%= ENV["PLUM_DERIVATIVE_PATH"] || "/mnt/libimages1/data/jp2s/plum_prod" %>
   bag_path: <%= ENV["FIGGY_BAG_PATH"] || Rails.root.join("tmp", "bags") %>
   pudl_root: <%= ENV["FIGGY_PUDL_ROOT"]  %>
   events:
     server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
     exchange:
-      plum: "plum_events"
+      figgy: "figgy_events"
       geoblacklight: "gbl_events"
       geoserver: "geoserver_events"
 
@@ -152,15 +144,12 @@ staging:
   repository_path: "/opt/repository/files"
   derivative_path: "/opt/repository/derivatives"
   geo_derivative_path: "/opt/repository/geo_derivatives"
-  plum_solr_url: <%= ENV["PLUM_SOLR_URL"] %>
-  plum_binary_path: <%= ENV["PLUM_BINARY_PATH"] || "/mnt/diglibdata/hydra_binaries" %>
-  plum_derivative_path: <%= ENV["PLUM_DERIVATIVE_PATH"] || "/mnt/libimages1/data/jp2s/plum_prod" %>
   bag_path: <%= ENV["FIGGY_BAG_PATH"] || Rails.root.join("tmp", "bags") %>
   pudl_root: <%= ENV["FIGGY_PUDL_ROOT"]  %>
   events:
     server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
     exchange:
-      plum: "plum_events"
+      figgy: "figgy_events"
       geoblacklight: "gbl_events"
       geoserver: "geoserver_events"
   geoserver:

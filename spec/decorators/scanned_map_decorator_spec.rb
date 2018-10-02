@@ -21,7 +21,7 @@ RSpec.describe ScannedMapDecorator do
   let(:links) do
     {
       "http://www.jstor.org/stable/1797655": ["www.jstor.org"],
-      "iiif_manifest_paths": "https://plum.princeton.edu/concern/image_works/pb8518582r/manifest"
+      "iiif_manifest_paths": "https://figgy.princeton.edu/concern/scanned_maps/pb8518582r/manifest"
     }
   end
   describe "#iiif_manifest_attributes" do

@@ -3,7 +3,7 @@ namespace :import do
   desc "Re-run characterization for an object"
   task recharacterize: :environment do
     id = ENV["ID"]
-    abort "usage: rake import:recharacterize ID=plumid" unless id
+    abort "usage: rake import:recharacterize ID=figgyid" unless id
 
     RecharacterizeJob.set(queue: :low).perform_later(id)
   end
