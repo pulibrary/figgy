@@ -45,7 +45,7 @@ GIT
 
 GIT
   remote: git://github.com/samvera-labs/valkyrie-sequel.git
-  revision: 7fee37642d7c9a26c25342631758e098b8b8f812
+  revision: c9a4a2457e2e457a635daa7572b01f0da4e2a60a
   specs:
     valkyrie-sequel (0.1.0)
       oj
@@ -679,7 +679,7 @@ GEM
     selenium-webdriver (3.4.4)
       childprocess (~> 0.5)
       rubyzip (~> 1.0)
-    sequel (5.12.0)
+    sequel (5.13.0)
     sequel_pg (1.11.0)
       pg (>= 0.18.0)
       sequel (>= 4.38.0)
