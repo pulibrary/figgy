@@ -27,6 +27,7 @@ RSpec.describe GraphqlController do
         child = FactoryBot.create_for_repository(:file_set)
         parent = FactoryBot.create_for_repository(:scanned_resource, member_ids: child.id, thumbnail_id: child.id)
         allow(adapter.query_service).to receive(:find_inverse_references_by).and_return([parent])
+        allow(adapter.query_service).to receive(:find_by).with(id: parent.id.to_s).and_call_original
         child_query_string = %|{ resource(id: "#{parent.id}") { members { id }, thumbnail { id, thumbnailUrl, iiifServiceUrl } } }|
 
         post :execute, params: { query: child_query_string, format: :json }
@@ -34,6 +35,7 @@ RSpec.describe GraphqlController do
         expect(response).to be_success
         expect(JSON.parse(response.body)["errors"]).to be_blank
         expect(adapter.query_service).not_to have_received(:find_inverse_references_by)
+        expect(adapter.query_service).to have_received(:find_by).exactly(1).times
       end
       it "can support variables set as a JSON string" do
         post :execute, params: { query: query_string, variables: { episode: "bla" }.to_json }
