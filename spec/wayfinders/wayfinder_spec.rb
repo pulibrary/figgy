@@ -305,6 +305,20 @@ RSpec.describe Wayfinder do
       end
     end
 
+    describe "#favorite_terms" do
+      it "returns all associated favorites" do
+        term = FactoryBot.create_for_repository(:ephemera_term)
+        field = FactoryBot.create_for_repository(:ephemera_field, favorite_term_ids: term.id)
+
+        wayfinder = described_class.for(field)
+
+        expect(wayfinder.favorite_terms.map(&:id)).to eq [term.id]
+        expect(wayfinder.decorated_favorite_terms.map(&:id)).to eq [term.id]
+        expect(wayfinder.decorated_favorite_terms.map(&:class)).to eq [EphemeraTermDecorator]
+        expect(wayfinder.favorite_terms.map(&:class)).to eq [EphemeraTerm]
+      end
+    end
+
     describe "#decorated_ephemera_vocabulary" do
       it "returns the vocabulary for an ephemera field decorated" do
         vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary)

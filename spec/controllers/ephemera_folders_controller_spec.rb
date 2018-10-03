@@ -365,8 +365,9 @@ RSpec.describe EphemeraFoldersController do
         get :edit, params: { id: ephemera_folder.id.to_s, parent_id: box.id }
 
         expect(assigns(:subject)).not_to be_empty
-        expect(assigns(:subject).first).to be_an EphemeraVocabularyDecorator
-        expect(assigns(:subject).first.label).to eq "test child vocabulary"
+        expect(assigns(:subject).first.label).to eq "Favorites"
+        expect(assigns(:subject).second).to be_an EphemeraVocabularyDecorator
+        expect(assigns(:subject).second.label).to eq "test child vocabulary"
       end
     end
   end
