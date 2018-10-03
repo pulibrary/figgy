@@ -89,11 +89,24 @@ class EphemeraFoldersController < BaseResourceController
     fields.each do |field|
       case field.attribute_name
       when "subject"
-        @subject = field.vocabulary.categories
+        @subject = [favorite_category(field)] + field.vocabulary.categories
       else
-        instance_variable_set("@#{field.attribute_name}", field.vocabulary.terms)
+        instance_variable_set("@#{field.attribute_name}", sorted_terms(field))
       end
     end
+  end
+
+  def sorted_terms(field)
+    favorite_terms = field.favorite_terms
+    non_favorite_terms = field.vocabulary.terms.select { |x| !field.favorite_term_ids.include?(x.id) }
+    favorite_terms + non_favorite_terms
+  end
+
+  def favorite_category(field)
+    OpenStruct.new(
+      label: "Favorites",
+      terms: field.favorite_terms
+    )
   end
 
   # provides instance variables needed to populate collection and selected for append_id

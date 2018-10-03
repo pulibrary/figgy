@@ -6,4 +6,5 @@ class EphemeraField < Resource
   include Valkyrie::Resource::AccessControls
   attribute :field_name # Please note that this stores an index for a Term within ControlledVocabulary::EphemeraField
   attribute :member_of_vocabulary_id, Valkyrie::Types::Set
+  attribute :favorite_term_ids, Valkyrie::Types::Set
 end

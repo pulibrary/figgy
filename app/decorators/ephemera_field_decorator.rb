@@ -17,6 +17,10 @@ class EphemeraFieldDecorator < Valkyrie::ResourceDecorator
     wayfinder.decorated_ephemera_vocabulary
   end
 
+  def favorite_terms
+    wayfinder.decorated_favorite_terms
+  end
+
   # Retrieves the label for the field name
   # @return [String]
   def name_label

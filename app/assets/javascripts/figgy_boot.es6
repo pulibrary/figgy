@@ -31,7 +31,7 @@ export default class Initializer {
     // Incompatibility in Blacklight with newer versions of jQuery seem to be
     // causing this to not run. Manually calling it so facet more links work.
     Blacklight.ajaxModal.setup_modal()
-    $("optgroup").addClass("closed")
+    $("optgroup:not([label=Favorites])").addClass("closed")
     $("select").selectpicker({'liveSearch': true})
     $(".datatable").DataTable()
   }

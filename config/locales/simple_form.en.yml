@@ -45,6 +45,7 @@ en:
         portion_note: "Portion Note"
         nav_date: "Navigation Date"
         member_of_collection_ids: "Collections"
+        favorite_term_ids: "Favorite Terms"
         ocr_language: "OCR Language"
     required:
       html: '<span class="label label-info required-tag">required</span>'

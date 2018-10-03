@@ -9,6 +9,7 @@ RSpec.describe EphemeraFieldsController do
   let(:query_service) { adapter.query_service }
   let(:ephemera_vocabulary) { FactoryBot.create_for_repository(:ephemera_vocabulary) }
   let(:ephemera_field) { FactoryBot.create_for_repository(:ephemera_field, member_of_vocabulary_id: ephemera_vocabulary.id) }
+  let(:ephemera_term) { FactoryBot.create_for_repository(:ephemera_term, member_of_vocabulary_id: ephemera_vocabulary.id) }
   before do
     sign_in user if user
   end
@@ -20,10 +21,12 @@ RSpec.describe EphemeraFieldsController do
       let(:user) { FactoryBot.create(:admin) }
       render_views
       it "has a form for creating ephemera fields" do
+        ephemera_term
         FactoryBot.create_for_repository(:ephemera_field)
 
         get :new
         expect(response.body).to have_field "Name"
+        expect(response.body).not_to have_field "Favorite Terms"
         expect(response.body).to have_button "Save"
       end
     end
@@ -114,9 +117,26 @@ RSpec.describe EphemeraFieldsController do
     context "when it does exist" do
       render_views
       it "renders a form" do
+        ephemera_term
         get :edit, params: { id: ephemera_field.id.to_s }
 
         expect(response.body).to have_field "Name", with: "1"
+        expect(response.body).to have_field "Favorite Terms"
+        expect(response.body).to have_button "Save"
+      end
+    end
+    context "when it has nested categories (like subjects)" do
+      let(:ephemera_vocabulary) { FactoryBot.create_for_repository(:ephemera_vocabulary) }
+      let(:category) { FactoryBot.create_for_repository(:ephemera_vocabulary, member_of_vocabulary_id: ephemera_vocabulary.id) }
+      let(:ephemera_field) { FactoryBot.create_for_repository(:ephemera_field, member_of_vocabulary_id: ephemera_vocabulary.id) }
+      let(:ephemera_term) { FactoryBot.create_for_repository(:ephemera_term, member_of_vocabulary_id: category.id) }
+      render_views
+      it "renders a form with the subject" do
+        ephemera_term
+        get :edit, params: { id: ephemera_field.id.to_s }
+
+        expect(response.body).to have_field "Name", with: "1"
+        expect(response.body).to have_field "Favorite Terms"
         expect(response.body).to have_button "Save"
       end
     end
