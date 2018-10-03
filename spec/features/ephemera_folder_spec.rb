@@ -180,10 +180,10 @@ RSpec.feature "Ephemera Folders" do
           expect(page.find(:css, ".alert-info")).to have_content "Deleted EphemeraFolder"
         end
 
-        scenario "form doesn't allow changing the box" do
+        scenario "form does allow changing the box" do
           visit polymorphic_path [:edit, ephemera_folder]
 
-          expect(page).not_to have_content "Add to Box"
+          expect(page).to have_content "Add to Box"
         end
       end
 
