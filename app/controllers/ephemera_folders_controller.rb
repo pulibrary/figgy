@@ -101,7 +101,7 @@ class EphemeraFoldersController < BaseResourceController
   def load_boxes
     @available_boxes = available_boxes
     @selected_box = ephemera_box&.id.to_s
-    @add_to_box = ephemera_box.nil?
+    @add_to_box = true
   end
 
   # returns decorators
