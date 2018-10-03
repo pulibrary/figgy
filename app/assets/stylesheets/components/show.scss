@@ -14,6 +14,10 @@ ul.tabular {
   padding-left: 0;
 }
 
+.attribute.description {
+  white-space: pre-wrap;
+}
+
 table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after,
 table.dataTable thead .sorting_desc:after {
     left: 0px;
