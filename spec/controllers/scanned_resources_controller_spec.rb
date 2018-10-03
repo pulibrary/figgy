@@ -164,16 +164,21 @@ RSpec.describe ScannedResourcesController do
         scanned_resource = FactoryBot.create_for_repository(
           :scanned_resource,
           member_ids: file_set.id,
+          thumbnail_id: file_set.id,
           logical_structure: [
             { label: "testing", nodes: [{ label: "Chapter 1", nodes: [{ proxy: file_set.id }] }] }
           ]
         )
 
+        query_service = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
+        allow(query_service).to receive(:find_by).with(id: scanned_resource.id).and_call_original
+        allow(query_service).to receive(:find_inverse_references_by)
         get :structure, params: { id: scanned_resource.id.to_s }
 
         expect(response.body).to have_selector "li[data-proxy='#{file_set.id}']"
         expect(response.body).to have_field("label", with: "Chapter 1")
         expect(response.body).to have_link scanned_resource.title.first, href: solr_document_path(id: scanned_resource.id)
+        expect(query_service).not_to have_received(:find_inverse_references_by)
       end
     end
   end
