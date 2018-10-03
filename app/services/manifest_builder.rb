@@ -461,10 +461,6 @@ class ManifestBuilder
     def manifest_image_medium_path(resource)
       "#{manifest_image_path(resource)}/full/!1000,/0/default.jpg"
     end
-
-    def query_service
-      Valkyrie.config.metadata_adapter.query_service
-    end
   end
 
   class CantaloupeHelper
