@@ -90,4 +90,17 @@ module ApplicationHelper
     query = { "f[#{field}][]" => value }.to_param
     "#{root_path}?#{query}"
   end
+
+  # Renders an attribute value based on attribute name.
+  # For display in attribute values table on resource show page.
+  # @param attribute [Symbol] the attribute name
+  # @param value [String] the value of the attribute
+  # @return [String]
+  def resource_attribute_value(attribute, value)
+    if attribute == :member_of_collections
+      link_to value.title, solr_document_path(id: value.id)
+    else
+      value
+    end
+  end
 end

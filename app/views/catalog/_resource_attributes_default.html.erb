@@ -20,13 +20,7 @@
             <td>
               <ul class="tabular">
                 <% values.each do |value| %>
-                  <li class="attribute <%= attribute %>" dir="<%= value.to_s.dir %>">
-                  <% if (attribute == :member_of_collections) %>
-                    <%= link_to value.title, solr_document_path(id: value.id) %>
-                  <% else %>
-                    <%= value %>        
-                  <% end %>
-                </li>
+                  <li class="attribute <%= attribute %>" dir="<%= value.to_s.dir %>"><%= resource_attribute_value(attribute, value) %></li>
                 <% end %>
               </ul>
             </td>

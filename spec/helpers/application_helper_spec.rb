@@ -10,4 +10,22 @@ RSpec.describe ApplicationHelper, type: :helper do
       expect(helper.facet_search_url(field: field, value: value)).to eq result
     end
   end
+
+  describe "#resource_attribute_value" do
+    context "with a regular attribute value" do
+      it "returns the value" do
+        expect(helper.resource_attribute_value(:description, "A description")).to eq("A description")
+      end
+    end
+
+    context "with a member_of_collections attribute" do
+      let(:title) { "My Collection" }
+      let(:collection) { FactoryBot.create_for_repository(:collection, title: title) }
+
+      it "returns a link to the collection" do
+        value = helper.resource_attribute_value(:member_of_collections, collection.decorate)
+        expect(value).to include("href", collection.id.to_s, title)
+      end
+    end
+  end
 end
