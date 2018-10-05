@@ -86,40 +86,5 @@ RSpec.describe CollectionsController do
         expect(manifest_response[:collections][0][:@id]).to eq "http://www.example.com/collections/#{collection.id}/manifest"
       end
     end
-
-    context "with ephemera projects" do
-      let(:collection) { FactoryBot.create_for_repository(:collection) }
-      let(:collection2) { FactoryBot.create_for_repository(:collection) }
-      let(:ephemera_box1) { FactoryBot.create_for_repository(:ephemera_box, member_of_collection_ids: [collection.id]) }
-      let(:ephemera_box2) { FactoryBot.create_for_repository(:ephemera_box, member_of_collection_ids: [collection2.id]) }
-      let(:ephemera_project1) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_box1.id]) }
-      let(:ephemera_project2) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_box2.id]) }
-      before do
-        collection
-        collection2
-        ephemera_box1
-        ephemera_box2
-        ephemera_project1
-        ephemera_project2
-      end
-      it "exposes collections containing these projects" do
-        get :index_manifest, params: { format: :json }
-        manifest_response = MultiJson.load(response.body, symbolize_keys: true)
-
-        expect(manifest_response[:@id]).to eq "http://www.example.com/iiif/collections"
-        expect(manifest_response[:@type]).to eq "sc:Collection"
-        expect(manifest_response[:label]).to eq "Figgy Collections"
-        expect(manifest_response[:collections].length).to eq 4
-        ids = manifest_response[:collections].map { |x| x[:@id] }
-        expect(ids).to contain_exactly(
-          "http://www.example.com/collections/#{collection.id}/manifest",
-          "http://www.example.com/collections/#{collection2.id}/manifest",
-          "http://www.example.com/concern/ephemera_projects/#{ephemera_project1.id}/manifest",
-          "http://www.example.com/concern/ephemera_projects/#{ephemera_project2.id}/manifest"
-        )
-        expect(manifest_response[:collections][3][:metadata][0][:value]).to eq ephemera_project2.slug
-        expect(manifest_response[:collections][3][:viewingHint]).to be_blank
-      end
-    end
   end
 end
