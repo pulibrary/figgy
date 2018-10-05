@@ -29,7 +29,7 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
 
     it "adds all 3 file types to the file set" do
-      file_set = query_service.find_all_of_model(model: FileSet).find { |fs| fs.title.include? "32101047382401_1" }
+      file_set = query_service.find_all_of_model(model: FileSet).select { |fs| fs.title.include? "32101047382401_1" }.sort_by(&:created_at).last
       expect(file_set.file_metadata.count).to eq 3
       expect(file_set.file_metadata.map { |file| file.use.first.to_s }).to contain_exactly(
         "http://pcdm.org/use#PreservationMasterFile", "http://pcdm.org/use#ServiceFile", "http://pcdm.org/use#IntermediateFile"
@@ -150,11 +150,8 @@ RSpec.describe IngestArchivalMediaBagJob do
   end
 
   context "when the bag does has files with multiple part names" do
+    let(:collection_cid) { "C0652" }
     let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag4") }
-    let(:file_sets) do
-      results = query_service.find_all_of_model(model: FileSet)
-      results.to_a
-    end
 
     before do
       stub_pulfa(pulfa_id: "C0652_c0383")
@@ -162,16 +159,17 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
 
     it "add FileSets for each part" do
+      file_sets = query_service.find_all_of_model(model: FileSet)
       expect(file_sets.map(&:title)).to include ["32101047382492_1_p1"], ["32101047382492_1_p2"]
       expect(file_sets.map(&:mime_type).to_a).to include ["audio/wav"]
 
-      file_set = file_sets.find { |fs| fs.title.include? "32101047382492_1_p1" }
+      file_set = file_sets.select { |fs| fs.title.include? "32101047382492_1_p1" }.sort_by(&:created_at).last
       expect(file_set.file_metadata.count).to eq 3
       expect(file_set.file_metadata.map { |file| file.use.first.to_s }).to contain_exactly(
         "http://pcdm.org/use#PreservationMasterFile", "http://pcdm.org/use#ServiceFile", "http://pcdm.org/use#IntermediateFile"
       )
 
-      file_set = file_sets.find { |fs| fs.title.include? "32101047382492_1_p2" }
+      file_set = file_sets.select { |fs| fs.title.include? "32101047382492_1_p2" }.sort_by(&:created_at).last
       expect(file_set.file_metadata.count).to eq 3
       expect(file_set.file_metadata.map { |file| file.use.first.to_s }).to contain_exactly(
         "http://pcdm.org/use#PreservationMasterFile", "http://pcdm.org/use#ServiceFile", "http://pcdm.org/use#IntermediateFile"
