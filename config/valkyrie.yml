@@ -1,15 +1,19 @@
 development:
   metadata_adapter: postgres
   storage_adapter: disk
+  standardize_query_result: true
 
 test:
   metadata_adapter: postgres
   storage_adapter: disk
+  standardize_query_result: true
 
 production:
   metadata_adapter: postgres
   storage_adapter: disk
+  standardize_query_result: true
 
 staging:
   metadata_adapter: postgres
   storage_adapter: disk
+  standardize_query_result: true
