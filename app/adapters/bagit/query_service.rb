@@ -26,7 +26,7 @@ module Bagit
     end
 
     def find_many_by_ids(ids:)
-      ids.map do |id|
+      ids.uniq.map do |id|
         begin
           find_by(id: id)
         rescue ::Valkyrie::Persistence::ObjectNotFoundError
@@ -53,6 +53,7 @@ module Bagit
 
     def find_references_by(resource:, property:)
       ids = (resource.try(property) || []).select { |id| id.is_a?(Valkyrie::ID) }
+      ids.uniq! unless resource.class.schema[property] && resource.class.schema[property].meta[:ordered]
       ids.lazy.map do |id|
         find_by(id: id)
       end
