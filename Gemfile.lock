@@ -886,7 +886,7 @@ DEPENDENCIES
   solr_wrapper (>= 0.3)
   spring
   spring-commands-rspec
-  sprockets (>= 3.0.0)
+  sprockets (>= 3.7.2)
   string_rtl
   timecop
   title
