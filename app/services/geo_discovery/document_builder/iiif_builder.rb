@@ -38,7 +38,7 @@ module GeoDiscovery
 
         # Get IIIF image path for file set
         def iiif
-          return unless manifestable? && file_set
+          return unless manifestable? && file_set && iiif_path
           "#{iiif_path}/info.json"
         end
 
@@ -50,6 +50,8 @@ module GeoDiscovery
 
         def iiif_path
           helper.manifest_image_path(file_set)
+        rescue Valkyrie::Persistence::ObjectNotFoundError
+          nil
         end
 
         def manifest_path
