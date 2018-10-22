@@ -13,7 +13,8 @@ class CatalogController < ApplicationController
                  source_metadata_identifier_ssim
                  local_identifier_ssim
                  barcode_ssim
-                 call_number_tsim],
+                 call_number_tsim
+                 no_case],
       "qt" => "search",
       "rows" => 10
     }

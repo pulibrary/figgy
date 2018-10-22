@@ -58,8 +58,8 @@
      -->
 
   <types>
-    <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
-    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>    
+    <fieldType name="string" class="solr.StrField" sortMissingLast="true"/>
+    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
     <fieldType name="rand" class="solr.RandomSortField" omitNorms="true"/>
     
     <!-- Default numeric field types.  -->
@@ -120,8 +120,17 @@
         <filter class="solr.TrimFilterFactory"/>
       </analyzer>
     </fieldType>
-        
-    <!-- single token analyzed text, for sorting.  Punctuation is significant. -->
+
+    <!-- A text field for case-insensitive search results -->
+    <fieldType name="text_no_case" class="solr.TextField" omitNorms="true">
+      <analyzer>
+	<tokenizer class="solr.ICUTokenizerFactory"/>
+        <filter class="solr.ICUFoldingFilterFactory"/>  <!-- NFKC, case folding, diacritics removed -->
+        <filter class="solr.TrimFilterFactory"/>
+	<filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
     <fieldtype name="alphaSort" class="solr.TextField" sortMissingLast="true" omitNorms="true">
       <analyzer>
         <tokenizer class="solr.KeywordTokenizerFactory" />
@@ -322,6 +331,7 @@
     <dynamicField name="*_llsim" type="location" stored="true" indexed="true" multiValued="true"/>
 
     <dynamicField name="*suggest" type="textSuggest" indexed="true" stored="false" multiValued="true" />
+    <dynamicField name="*no_case" type="text_no_case" indexed="true" stored="false" multiValued="true" />
 
     <!-- you must define copyField source and dest fields explicity or schemaBrowser doesn't work -->
     <field name="all_text_timv" type="text" stored="false" indexed="true" multiValued="true" termVectors="true" termPositions="true" termOffsets="true"/>
@@ -351,6 +361,8 @@
    <!-- for suggestions -->
    <copyField source="*_tesim" dest="suggest"/>
    <copyField source="*_ssim" dest="suggest"/>
+
+   <copyField source="*_tesim" dest="no_case"/>
 
  <!-- Similarity is the scoring routine for each document vs. a query.
       A custom similarity may be specified here, but the default is fine
