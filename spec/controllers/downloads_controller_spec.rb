@@ -34,6 +34,25 @@ RSpec.describe DownloadsController do
         get :show, params: { resource_id: "bogus", id: "bogus" }
         expect(response.status).to eq(404)
       end
+
+      context "when an error is encountered in retrieving a file with metadata" do
+        let(:adapter) { instance_double(InstrumentedStorageAdapter) }
+        let(:config) { instance_double(Valkyrie::Config) }
+
+        it "logs the error and responds with a not found status code" do
+          file_set_id = file_set.id.to_s
+          file_node_id = file_node.id.to_s
+          allow(adapter).to receive(:find_by).and_raise(Valkyrie::StorageAdapter::FileNotFound)
+          allow(config).to receive(:metadata_adapter).and_return(Valkyrie.config.metadata_adapter)
+          allow(config).to receive(:storage_adapter).and_return(adapter)
+          allow(Valkyrie).to receive(:config).and_return(config)
+          allow(Valkyrie.logger).to receive(:error)
+
+          get :show, params: { resource_id: file_set_id, id: file_node_id }
+          expect(response.status).to eq(404)
+          expect(Valkyrie.logger).to have_received(:error).at_least(:once).with(/Failed to retrieve the binary file when requesting to download/)
+        end
+      end
     end
 
     context "when not logged in" do

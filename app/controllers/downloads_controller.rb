@@ -39,7 +39,11 @@ class DownloadsController < ApplicationController
 
   def binary_file
     return unless file_desc
+    # binding.pry
     @binary_file ||= storage_adapter.find_by(id: file_desc.file_identifiers.first)
+  rescue Valkyrie::StorageAdapter::FileNotFound => not_found_error
+    Valkyrie.logger.error "Failed to retrieve the binary file when requesting to download #{params[:id]}: #{not_found_error}"
+    return nil
   end
 
   class FileWithMetadata < Dry::Struct
