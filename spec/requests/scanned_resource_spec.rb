@@ -31,6 +31,43 @@ RSpec.describe "ScannedResource requests", type: :request do
     expect(response.headers["Content-Disposition"]).to eq 'inline; filename="derivative_pdf.pdf"'
   end
 
+  context "when the PDF has already been generated once" do
+    before do
+      get "/concern/scanned_resources/#{scanned_resource.id}/pdf"
+    end
+    it "uses the same generated PDF" do
+      reloaded = adapter.query_service.find_by(id: scanned_resource.id)
+
+      get "/concern/scanned_resources/#{scanned_resource.id}/pdf"
+      twice_reloaded = adapter.query_service.find_by(id: scanned_resource.id)
+      expect(twice_reloaded.pdf_file.file_identifiers.first).to eq(reloaded.pdf_file.file_identifiers.first)
+    end
+  end
+
+  context "when the file metadata for the PDF exists but the file binary cannot be retrieved" do
+    let(:missing_pdf_file) do
+      FileMetadata.new(
+        id: SecureRandom.uuid,
+        original_filename: "derivative_pdf.pdf",
+        mime_type: "application/pdf",
+        use: [Valkyrie::Vocab::PCDMUse.OriginalFile],
+        created_at: Time.current,
+        updated_at: Time.current
+      )
+    end
+    let(:scanned_resource) { FactoryBot.create_for_repository(:complete_scanned_resource, files: [sample_file], file_metadata: [missing_pdf_file]) }
+    before do
+      allow(Valkyrie.logger).to receive(:error)
+    end
+    it "generates a new PDF and logs an error" do
+      get "/concern/scanned_resources/#{scanned_resource.id}/pdf"
+
+      reloaded = adapter.query_service.find_by(id: scanned_resource.id)
+      expect(reloaded.pdf_file.file_identifiers).not_to include(missing_pdf_file.file_identifiers.first)
+      expect(Valkyrie.logger).to have_received(:error).with(/Failed to locate the file for the PDF FileMetadata/)
+    end
+  end
+
   context "when other derivatives are requested" do
     let(:download_path) { Rails.application.routes.url_helpers.download_path(resource_id: scanned_resource.id.to_s, id: file_set.id.to_s) }
 
