@@ -124,7 +124,7 @@ RSpec.describe ScannedResourcesController do
           expect(file_set.file_metadata.length).to eq 1
           expect(file_set.original_file).not_to be nil
           expect(file_set.original_file.label).to eq ["1791261_0701.wav"]
-          expect(file_set.original_file.mime_type).to eq ["audio/vnd.wave"]
+          expect(file_set.original_file.mime_type).to eq ["audio/x-wav"]
         end
       end
     end
