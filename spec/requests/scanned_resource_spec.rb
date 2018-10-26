@@ -45,25 +45,23 @@ RSpec.describe "ScannedResource requests", type: :request do
   end
 
   context "when the file metadata for the PDF exists but the file binary cannot be retrieved" do
-    let(:missing_pdf_file) do
-      FileMetadata.new(
-        id: SecureRandom.uuid,
-        original_filename: "derivative_pdf.pdf",
-        mime_type: "application/pdf",
-        use: [Valkyrie::Vocab::PCDMUse.OriginalFile],
-        created_at: Time.current,
-        updated_at: Time.current
-      )
-    end
-    let(:scanned_resource) { FactoryBot.create_for_repository(:complete_scanned_resource, files: [sample_file], file_metadata: [missing_pdf_file]) }
     before do
       allow(Valkyrie.logger).to receive(:error)
+      get "/concern/scanned_resources/#{scanned_resource.id}/pdf"
     end
+
     it "generates a new PDF and logs an error" do
+      reloaded = adapter.query_service.find_by(id: scanned_resource.id)
+      original_pdf_file_identifier = reloaded.pdf_file.file_identifiers.first
+      reloaded.pdf_file.file_identifiers = []
+
+      adapter.persister.save(resource: reloaded)
+
       get "/concern/scanned_resources/#{scanned_resource.id}/pdf"
 
       reloaded = adapter.query_service.find_by(id: scanned_resource.id)
-      expect(reloaded.pdf_file.file_identifiers).not_to include(missing_pdf_file.file_identifiers.first)
+      expect(reloaded.pdf_file.file_identifiers).not_to be_empty
+      expect(reloaded.pdf_file.file_identifiers).not_to include(original_pdf_file_identifier)
       expect(Valkyrie.logger).to have_received(:error).with(/Failed to locate the file for the PDF FileMetadata/)
     end
   end

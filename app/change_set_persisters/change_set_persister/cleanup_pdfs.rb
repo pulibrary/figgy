@@ -11,15 +11,38 @@ class ChangeSetPersister
 
     def run
       return unless resource.is_a?(ScannedResource) && pdf_file
-      return if change_set.changed.except("file_metadata").empty?
-      CleanupFilesJob.perform_later(file_identifiers: [pdf_file.file_identifiers.first.to_s])
+
+      # Return if the only update is that file metadata is being updated
+      if change_set.changed.except("file_metadata").empty?
+        # Delete the file metadata if the files cannot be located
+        resource.file_metadata.delete(pdf_file) unless pdf_file_exists?
+        return
+      end
+
       resource.file_metadata.delete(pdf_file)
+      CleanupFilesJob.perform_later(file_identifiers: [pdf_file_identifier.to_s]) unless pdf_file_identifier.nil?
     end
 
     private
 
       def pdf_file
         @pdf_file ||= resource.pdf_file
+      end
+
+      def pdf_file_identifier
+        @pdf_file_identifier ||= pdf_file.file_identifiers.first
+      end
+
+      def storage_adapter
+        Valkyrie.config.storage_adapter
+      end
+
+      def pdf_file_exists?
+        pdf_file_binary = storage_adapter.find_by(id: pdf_file_identifier)
+        !pdf_file_binary.nil?
+      rescue Valkyrie::StorageAdapter::FileNotFound => error
+        Valkyrie.logger.error("Failed to locate the file for the PDF FileMetadata: #{pdf_file_identifier}: #{error}")
+        false
       end
   end
 end
