@@ -160,6 +160,7 @@ RSpec/NestedGroups:
     - 'spec/controllers/scanned_resources_controller_spec.rb'
     - 'spec/controllers/catalog_controller_spec.rb'
     - 'spec/controllers/simple_resources_controller_spec.rb'
+    - 'spec/jobs/ingest_folders_job_spec.rb'
 RSpec/VerifiedDoubles:
   Exclude:
     - 'spec/models/search_builder_spec.rb'

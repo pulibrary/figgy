@@ -13,8 +13,8 @@ class BulkIngestService
   # Iterate through a list of directories and attach the files within each
   # @param base_directory [String] the path to the parent directory
   # @param property [String, nil] the resource property (when attaching files to existing resources)
-  # @param file_filter [String, nil] the filter used for matching against the filename extension
-  def attach_each_dir(base_directory:, property: nil, file_filter: nil, **attributes)
+  # @param file_filters [Array] the filter used for matching against the filename extension
+  def attach_each_dir(base_directory:, property: nil, file_filters: [], **attributes)
     raise ArgumentError, "#{self.class}: Directory does not exist: #{base_directory}" unless File.exist?(base_directory)
 
     entries = Dir["#{base_directory}/*"]
@@ -22,7 +22,7 @@ class BulkIngestService
     entries.sort.each do |subdir|
       next unless File.directory?(subdir)
       logger.info "Attaching #{subdir}"
-      attach_dir(base_directory: subdir, property: property, file_filter: file_filter, **attributes)
+      attach_dir(base_directory: subdir, property: property, file_filters: file_filters, **attributes)
     end
   end
 
@@ -39,8 +39,8 @@ class BulkIngestService
   # This may also create new resources (such as ScannedResource objects)
   # @param base_directory [String] the path to the base directory
   # @param property [String, nil] the resource property (when attaching files to existing resources)
-  # @param file_filter [String, nil] the filter used for matching against the filename extension
-  def attach_dir(base_directory:, property: nil, file_filter: nil, **attributes)
+  # @param file_filters [Array] the filter used for matching against the filename extension
+  def attach_dir(base_directory:, property: nil, file_filters: [], **attributes)
     raise ArgumentError, "#{self.class}: Directory does not exist: #{base_directory}" unless File.exist?(base_directory)
 
     entries = Dir["#{base_directory}/*"]
@@ -56,7 +56,7 @@ class BulkIngestService
     attributes[:title] = title if attributes.fetch(:title, []).blank? && attributes.fetch(:source_metadata_identifier, []).blank?
     resource = find_or_create_by(property: property, value: file_name, **attributes)
     child_attributes = attributes.reject { |k, _v| k == :source_metadata_identifier }
-    attach_children(path: directory_path, resource: resource, file_filter: file_filter, **child_attributes)
+    attach_children(path: directory_path, resource: resource, file_filters: file_filters, **child_attributes)
   end
 
   private
@@ -74,18 +74,18 @@ class BulkIngestService
     # If a file is found, append this to the parent resource
     # @param path [Pathname] the path to the directory containing the child directories
     # @param resource [Resource] the resource being used to construct child resources
-    # @param file_filter [String, nil] the filter used for matching against the filename extension
-    def attach_children(path:, resource:, file_filter: nil, **attributes)
+    # @param file_filters [Array] the filter used for matching against the filename extension
+    def attach_children(path:, resource:, file_filters: [], **attributes)
       child_attributes = attributes.except(:collection)
 
       child_resources = dirs(path: path).map do |subdir_path|
         attach_children(
           path: subdir_path,
           resource: new_resource(klass: resource.class, **child_attributes.merge(title: [subdir_path.basename])),
-          file_filter: file_filter
+          file_filters: file_filters
         )
       end
-      child_files = files(path: path, file_filter: file_filter)
+      child_files = files(path: path, file_filters: file_filters)
 
       change_set = change_set_class.new(resource)
       change_set.validate(member_ids: child_resources.map(&:id), files: child_files)
@@ -146,17 +146,25 @@ class BulkIngestService
     # @param path [Pathname] the path to the directory containing the files
     # @param file_filter [String] the filter used for matching against the filename extension
     # @return [Array<Pathname>] the paths to any files
-    def files(path:, file_filter: nil)
+    def files(path:, file_filters: [])
       file_paths = path.children.select(&:file?)
-      file_paths = file_paths.select { |file| file.extname.ends_with?(file_filter) } if file_filter.present?
+      if file_filters.present?
+        file_paths = file_paths.select do |file|
+          results = file_filters.map { |file_filter| file.extname.ends_with?(file_filter) }
+          results.reduce(:|)
+        end
+      end
       file_paths.reject! { |x| x.basename.to_s.start_with?(".") }
 
       nodes = []
       file_paths.sort.each_with_index do |f, idx|
+        basename = File.basename(f)
+        mime_types = MIME::Types.type_for(basename)
+        mime_type = mime_types.first
         nodes << IngestableFile.new(
           file_path: f,
-          mime_type: "image/tiff",
-          original_filename: File.basename(f),
+          mime_type: mime_type.content_type,
+          original_filename: basename,
           copyable: true,
           container_attributes: {
             title: (idx + 1).to_s

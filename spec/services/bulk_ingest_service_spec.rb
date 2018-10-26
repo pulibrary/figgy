@@ -29,7 +29,7 @@ RSpec.describe BulkIngestService do
       end
 
       it "attaches the files" do
-        ingester.attach_each_dir(base_directory: lae_dir, property: :barcode, file_filter: ".tif")
+        ingester.attach_each_dir(base_directory: lae_dir, property: :barcode, file_filters: [".tif"])
 
         reloaded1 = query_service.find_by(id: folder1.id)
         reloaded2 = query_service.find_by(id: folder2.id)
@@ -74,7 +74,7 @@ RSpec.describe BulkIngestService do
       it "ingests the resources, ignoring dotfiles" do
         ingester.attach_dir(
           base_directory: single_dir,
-          file_filter: ".tif",
+          file_filters: [".tif"],
           source_metadata_identifier: bib,
           local_identifier: local_id,
           collection: coll
@@ -103,7 +103,7 @@ RSpec.describe BulkIngestService do
       it "ingests the resources as SimpleResource objects" do
         ingester.attach_dir(
           base_directory: single_dir,
-          file_filter: ".tif",
+          file_filters: [".tif"],
           local_identifier: local_id,
           collection: coll
         )
@@ -125,7 +125,7 @@ RSpec.describe BulkIngestService do
       it "assigns the bibid to the source metada identifier" do
         ingester.attach_dir(
           base_directory: single_dir,
-          file_filter: ".tif",
+          file_filters: [".tif"],
           collection: coll
         )
 
@@ -145,7 +145,7 @@ RSpec.describe BulkIngestService do
       it "attaches directories using an absolute path" do
         bulk_ingester.attach_dir(
           base_directory: single_dir,
-          file_filter: ".tif",
+          file_filters: [".tif"],
           source_metadata_identifier: bib,
           local_identifier: local_id,
           collection: coll
@@ -175,7 +175,7 @@ RSpec.describe BulkIngestService do
 
         ingester.attach_dir(
           base_directory: multi_dir,
-          file_filter: ".tif",
+          file_filters: [".tif"],
           source_metadata_identifier: bib,
           local_identifier: local_id,
           collection: coll
@@ -218,7 +218,7 @@ RSpec.describe BulkIngestService do
         ingester.attach_dir(
           base_directory: single_dir,
           property: "noexist",
-          file_filter: ".tif",
+          file_filters: [".tif"],
           source_metadata_identifier: bib
         )
 
