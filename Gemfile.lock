@@ -37,13 +37,6 @@ GIT
       open4
 
 GIT
-  remote: git://github.com/samvera-labs/iiif_manifest.git
-  revision: 38d169ed9f12370875199713d755a8711251c317
-  specs:
-    iiif_manifest (0.3.0)
-      activesupport (>= 4)
-
-GIT
   remote: git://github.com/samvera-labs/valkyrie-sequel.git
   revision: 5abdfff792216ebc8c611dc6bc6122e3bac3aca8
   specs:
@@ -417,6 +410,8 @@ GEM
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
+    iiif_manifest (0.5.0)
+      activesupport (>= 4)
     inflecto (0.0.2)
     io-like (0.3.0)
     iso-639 (0.2.8)
@@ -842,7 +837,7 @@ DEPENDENCIES
   hydra-editor
   hydra-head
   hydra-role-management
-  iiif_manifest!
+  iiif_manifest (= 0.5.0)
   iso-639
   jbuilder
   jquery-datatables-rails (~> 3.4.0)
