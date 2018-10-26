@@ -31,6 +31,7 @@ RSpec.describe MediainfoCharacterizationService do
     allow(track_attributes).to receive(:originalsourceform).and_return(nil)
     allow(track_attributes).to receive(:duration).and_return(23.123)
     allow(track_attributes).to receive(:count).and_return 1
+    allow(track_attributes).to receive(:filesize).and_return 1
     allow(tracks).to receive(:track_types).and_return(["general"])
 
     allow(tracks).to receive(:general).and_return(track_attributes)
@@ -77,6 +78,7 @@ RSpec.describe MediainfoCharacterizationService do
       allow(audio_track_attributes).to receive(:originalsourceform).and_return("cassette")
       allow(audio_track_attributes).to receive(:duration).and_return(0.261)
       allow(audio_track_attributes).to receive(:count).and_return 1
+      allow(audio_track_attributes).to receive(:filesize).and_return 1
 
       allow(tracks).to receive(:track_types).and_return(["audio"])
       allow(tracks).to receive(:audio).and_return(audio_track_attributes)
@@ -88,7 +90,7 @@ RSpec.describe MediainfoCharacterizationService do
     it "extracts the technical metadata from the audio track" do
       new_file_set = described_class.new(file_set: valid_file_set, persister: persister).characterize(save: false)
 
-      expect(new_file_set.original_file.mime_type).to eq ["audio/wav"]
+      expect(new_file_set.original_file.mime_type).to eq ["audio/x-wav"]
       expect(new_file_set.original_file.date_of_digitization).to eq [Time.zone.parse("UTC 2009-03-30 19:49:13")]
       expect(new_file_set.original_file.producer).to eq ["Test Producer"]
       expect(new_file_set.original_file.source_media_type).to eq ["cassette"]
@@ -106,12 +108,14 @@ RSpec.describe MediainfoCharacterizationService do
       allow(video_track_attributes).to receive(:originalsourceform).and_return("DAV")
       allow(video_track_attributes).to receive(:duration).and_return(0.984)
       allow(video_track_attributes).to receive(:count).and_return 1
+      allow(video_track_attributes).to receive(:filesize).and_return 1
 
       allow(audio_track_attributes).to receive(:encoded_date).and_return Time.zone.parse("UTC 2009-03-30 19:49:13")
       allow(audio_track_attributes).to receive(:producer).and_return("Test Producer")
       allow(audio_track_attributes).to receive(:originalsourceform).and_return("cassette")
       allow(audio_track_attributes).to receive(:duration).and_return(0.261)
       allow(audio_track_attributes).to receive(:count).and_return 1
+      allow(audio_track_attributes).to receive(:filesize).and_return 1
       allow(tracks).to receive(:track_types).and_return(["video", "audio"])
 
       allow(tracks).to receive(:video).and_return(video_track_attributes)

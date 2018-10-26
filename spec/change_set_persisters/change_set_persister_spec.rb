@@ -389,6 +389,7 @@ RSpec.describe ChangeSetPersister do
         allow(audio_track_attributes).to receive(:originalsourceform).and_return("cassette")
         allow(audio_track_attributes).to receive(:duration).and_return(23.123)
         allow(audio_track_attributes).to receive(:count).and_return 1
+        allow(audio_track_attributes).to receive(:filesize).and_return 100
 
         allow(tracks).to receive(:track_types).and_return(["audio"])
         allow(tracks).to receive(:audio).and_return(audio_track_attributes)
@@ -418,6 +419,19 @@ RSpec.describe ChangeSetPersister do
         expect(members.first.producer).to eq ["PULibrary"]
         expect(members.first.source_media_type).to eq ["cassette"]
         expect(members.first.duration).to eq ["23.123"]
+      end
+      it "works when attached to a ScannedResource", run_real_characterization: true, run_real_derivatives: true do
+        file = fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "text/plain")
+        resource = FactoryBot.build(:scanned_resource)
+        change_set = ScannedResourceChangeSet.new(resource, characterize: true)
+        change_set.files = [file]
+
+        output = change_set_persister.save(change_set: change_set)
+        members = query_service.find_members(resource: output)
+
+        expect(members.first.original_file.duration).not_to be_blank
+        expect(members.first.original_file.mime_type).to eq ["audio/x-wav"]
+        expect(members.first.original_file.checksum).not_to be_blank
       end
     end
   end

@@ -28,7 +28,10 @@ class MediainfoCharacterizationService
       date_of_digitization: media_encoded_date,
       producer: media.producer,
       source_media_type: media.originalsourceform,
-      duration: media.duration.to_s # Floats are not supported as Valkyrie::Types (update: now they are)
+      duration: media.duration.to_s, # Floats are not supported as Valkyrie::Types (update: now they are),
+      checksum: MultiChecksum.for(file_object),
+      size: media.filesize,
+      mime_type: mime_type
     }
     new_file = preservation_file.new(@file_characterization_attributes.to_h)
     @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
@@ -36,10 +39,14 @@ class MediainfoCharacterizationService
     @file_set
   end
 
+  def mime_type
+    `file --b --mime-type '#{filename}'`.strip
+  end
+
   # Determines if the parent of the FileSet is a MediaResource
   # @return [TrueClass, FalseClass]
   def valid?
-    parent.respond_to?(:media_resource?) && parent.media_resource? && supported_format?
+    (parent.try(:media_resource?) || parent.try(:image_resource?)) && supported_format?
   end
 
   private
@@ -86,19 +93,23 @@ class MediainfoCharacterizationService
         # Implements the accessor for the duration element
         # @return [nil]
         def duration; end
+
+        # Implements the accessor for the filesize element
+        # @return [nil]
+        def filesize; end
       end
     end
 
     # Determine if the media type for the FileSet is supported
     # @return [TrueClass, FalseClass]
     def supported_format?
-      !(@file_set.mime_type & self.class.supported_formats).empty?
+      !(@file_set.mime_type & self.class.supported_formats).empty? || preservation_file&.original_filename&.first&.downcase&.include?(".wav")
     end
 
     # Retrieve the parent resource of the FileSet
     # @return [Resource]
     def parent
-      file_set.decorate.parent
+      @parent ||= file_set.decorate.parent
     end
 
     # Determines the location of the file on disk for the file_set
@@ -141,6 +152,10 @@ class MediainfoCharacterizationService
     # Retrieves the master binary file in this FileSet
     # @return [FileNode]
     def preservation_file
-      @file_set.preservation_file
+      if parent.try(:image_resource?)
+        @file_set.original_file
+      else
+        @file_set.preservation_file
+      end
     end
 end
