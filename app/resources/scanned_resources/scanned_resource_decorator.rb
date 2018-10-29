@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class ScannedResourceDecorator < Valkyrie::ResourceDecorator
-  display Schema::Common.attributes, :rendered_ocr_language, :rendered_holding_location, :member_of_collections, :rendered_actors
+  display Schema::Common.attributes, :rendered_ocr_language, :rendered_holding_location, :member_of_collections, :rendered_actors, :authorized_link
   suppress :thumbnail_id, :imported_author, :source_jsonld, :source_metadata, :sort_title, :ocr_language, :rights_statement, :actor
 
   display_in_manifest displayed_attributes, :location
@@ -11,7 +11,8 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
                          :rendered_rights_statement,
                          :rendered_ocr_language,
                          :ocr_language,
-                         :thumbnail_id
+                         :thumbnail_id,
+                         :authorized_link
 
   delegate(*Schema::Common.attributes, to: :primary_imported_metadata, prefix: :imported)
   delegate :members, :collections, :playlists, to: :wayfinder
@@ -66,6 +67,12 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
     ocr_language.map do |language|
       vocabulary.find(language).label
     end
+  end
+
+  # Provide the authorization token to build the authorized link at the Controller layer
+  # @return [String]
+  def authorized_link
+    auth_token
   end
 
   def manageable_structure?

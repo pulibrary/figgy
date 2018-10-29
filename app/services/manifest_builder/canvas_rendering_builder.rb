@@ -74,8 +74,18 @@ class ManifestBuilder
       def download_hash
         original_file = resource.original_file
         original_file_id = original_file.id.to_s
+        download_url_args = { resource_id: resource.id.to_s, id: original_file_id, protocol: protocol, host: host }
+
+        auth_resource = if record.is_a?(FileSet)
+                          record.decorate.parent
+                        else
+                          record.parent_node
+                        end
+        download_url_args[:auth_token] = auth_resource.auth_token if auth_resource.respond_to?(:auth_token) && auth_resource.auth_token
+        download_url = url_helpers.download_url(download_url_args)
+
         {
-          "@id" => url_helpers.download_url(resource_id: resource.id.to_s, id: original_file_id, protocol: protocol, host: host),
+          "@id" => download_url,
           "label" => "Download the original file",
           "format" => original_file.mime_type.first
         }

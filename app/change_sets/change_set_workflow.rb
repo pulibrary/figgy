@@ -19,7 +19,7 @@ module ChangeSetWorkflow
     end
 
     def workflow
-      workflow_class.new(state)
+      workflow_class.new(Array.wrap(state).first)
     end
 
     def workflow_class

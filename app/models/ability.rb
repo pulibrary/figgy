@@ -30,18 +30,36 @@ class Ability
     end
   end
 
+  # Retrieve a Resource using an identifier
+  # @param id [String] the ID for the Resource
+  # @return [Resource]
+  def find_by(id:)
+    query_service.find_by(id: id)
+  end
+
+  # Overrides the default permissions for SolrDocument
+  # @param id [String] the ID for the Solr Document
+  # @return [Boolean]
+  def test_read(id)
+    return super if auth_token.nil?
+
+    obj = find_by(id: id)
+    token_readable?(obj) || super
+  end
+
   def anonymous_permissions
     can :pdf, curation_concerns do |resource|
       ["color", "gray"].include?(Array(resource.pdf_type).first)
     end
     can :download, curation_concerns do |resource|
-      resource.respond_to?(:visibility) && resource.visibility.include?(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
+      token_readable?(resource) || (resource.respond_to?(:visibility) && resource.visibility.include?(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC))
     end
     can :download, DownloadsController::FileWithMetadata do |resource|
       download_file_with_metadata?(resource)
     end
     can :download, FileSet do |resource|
-      geo_file_set?(resource)
+      authorized = geo_file_set?(resource)
+      token_readable?(resource.decorate.parent) || authorized if auth_token
     end
     can :color_pdf, curation_concerns do |resource|
       resource.pdf_type == ["color"]
@@ -65,12 +83,14 @@ class Ability
     TokenizedUser.new(super, auth_token)
   end
 
+  # Construct the AuthToken object from the parameter value in the HTTP request
+  # @return [AuthToken]
   def auth_token
     @auth_token ||= options[:auth_token].nil? ? NilToken : (AuthToken.find_by(token: options[:auth_token]) || NilToken)
   end
 
   def download_file_with_metadata?(resource)
-    pdf_file?(resource) || geo_thumbnail?(resource) || geo_metadata?(resource) || geo_public_file?(resource)
+    token_readable_for_file_metadata?(resource) || pdf_file?(resource) || geo_thumbnail?(resource) || geo_metadata?(resource) || geo_public_file?(resource)
   end
 
   # Geo metadata is always downloadable
@@ -141,17 +161,38 @@ class Ability
   end
 
   def valkyrie_test_manifest(obj)
-    return false unless group_readable?(obj) || user_readable?(obj) || universal_reader?
+    return false unless token_readable?(obj) || group_readable?(obj) || user_readable?(obj) || universal_reader?
     # any group with :all permissions never hits this method
     #   other groups can only read published manifests, even if they have permissions indexed
     obj.decorate.manifestable_state?
   end
 
   def valkyrie_test_read(obj)
-    return false unless group_readable?(obj) || user_readable?(obj) || universal_reader?
+    return false unless token_readable?(obj) || group_readable?(obj) || user_readable?(obj) || universal_reader?
     # any group with :all permissions never hits this method
     #   other groups can only read published manifests, even if they have permissions indexed
     obj.decorate.public_readable_state?
+  end
+
+  # Determines whether or not an auth token grants access to a given resource
+  # @param obj [Resource]
+  # @return [Boolean]
+  def token_readable?(obj)
+    return false unless !auth_token.nil? && obj.respond_to?(:auth_token)
+    obj.auth_token == auth_token.token
+  end
+
+  # Determines whether or not an auth token grants access to the parent of a given resource
+  # @param obj [Resource]
+  # @return [Boolean]
+  def token_readable_for_file_metadata?(obj)
+    return false unless auth_token && obj.respond_to?(:file_set_id)
+    # This is not always a FileSet, as PDFs are attached directly to ScannedResources
+    attaching_resource = find_by(id: obj.file_set_id)
+
+    return if attaching_resource.nil?
+    return token_readable?(attaching_resource) unless attaching_resource.is_a?(FileSet)
+    token_readable?(attaching_resource.decorate.parent)
   end
 
   def group_readable?(obj)
@@ -174,9 +215,16 @@ class Ability
     obj.edit_users.include?(current_user.user_key)
   end
 
+  # Null object pattern for auth. tokens
   class NilToken
+    # No groups exist for these
     def self.group
       []
+    end
+
+    # These behave like nil Objects
+    def self.nil?
+      true
     end
   end
 

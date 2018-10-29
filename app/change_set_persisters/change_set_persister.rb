@@ -24,7 +24,8 @@ class ChangeSetPersister
       ],
       after_save: [
         AppendToParent,
-        AppendCitationToParent
+        AppendCitationToParent,
+        LinkAuthToken
       ],
       after_save_commit: [
         PublishMessage::Factory.new(operation: :update),
@@ -45,6 +46,7 @@ class ChangeSetPersister
         PublishMessage::Factory.new(operation: :derivatives_delete)
       ],
       after_delete_commit: [
+        RevokeAuthToken,
         DeleteMembers::Factory.new(property: :member_ids),
         PublishMessage::Factory.new(operation: :delete)
       ],

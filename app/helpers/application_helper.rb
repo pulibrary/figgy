@@ -121,6 +121,9 @@ module ApplicationHelper
   def resource_attribute_value(attribute, value)
     if attribute == :member_of_collections
       link_to value.title, solr_document_path(id: value.id)
+    elsif attribute == :authorized_link
+      # Build the authorized link attribute
+      link_to(request.base_url + solr_document_path(id: resource.id, auth_token: value), solr_document_path(id: resource.id, auth_token: value))
     else
       value
     end
@@ -137,5 +140,26 @@ module ApplicationHelper
   # @return [String]
   def visibility_badge(value)
     PermissionBadge.new(value).render
+  end
+
+  # Retrieve the authorization token from the request parameters
+  # @return [String]
+  def auth_token_param
+    params[:auth_token]
+  end
+
+  # Generate the path for the IIIF manifest generated for resources
+  # @param [Resource]
+  # @return [String]
+  def manifest_path(resource)
+    path_args = [[:manifest, resource]]
+    path_args << { auth_token: auth_token_param } if auth_token_param
+    polymorphic_path(*path_args)
+  end
+
+  # Generate the path for the Universal Viewer iframe @src attribute
+  # @return [String]
+  def universal_viewer_path(resource)
+    "/uv/uv#?manifest=#{request.base_url}#{manifest_path(resource)}"
   end
 end
