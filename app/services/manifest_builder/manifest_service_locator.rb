@@ -84,7 +84,11 @@ class ManifestBuilder
       ##
       # Overridden to support setting viewing_direction.
       def record_property_builder
-        ManifestBuilder::RecordPropertyBuilder
+        IIIFManifest::ManifestServiceLocator::InjectedFactory.new(
+          ManifestBuilder::RecordPropertyBuilder,
+          iiif_search_service_factory: IIIFManifest::ManifestBuilder::IIIFManifest::SearchService,
+          iiif_autocomplete_service_factory: IIIFManifest::ManifestBuilder::IIIFManifest::AutocompleteService
+        )
       end
 
       def start_canvas_builder

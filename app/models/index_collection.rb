@@ -10,4 +10,9 @@ class IndexCollection
   def logical_structure
     []
   end
+
+  # @note Added for Valkyrie::Resource compatibility
+  def to_model
+    self
+  end
 end

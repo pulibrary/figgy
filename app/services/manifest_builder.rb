@@ -500,6 +500,20 @@ class ManifestBuilder
     # Instantiate the Manifest
     # @return [IIIFManifest]
     def manifest
-      @manifest ||= IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocator).to_h
+      @manifest ||= begin
+        # note this assumes audio resources use flat modeling
+        if audio_files(Wayfinder.for(@resource.to_model).try(:file_sets)).empty?
+          IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocator).to_h
+        else
+          IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocatorV3).to_h
+        end
+      end
+    end
+
+    def audio_files(file_sets)
+      return [] unless file_sets
+      file_sets.select do |fs|
+        fs.mime_type.any? { |str| str.starts_with? "audio" }
+      end
     end
 end
