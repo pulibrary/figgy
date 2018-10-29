@@ -81,4 +81,14 @@ RSpec.describe ImagemagickCharacterizationService do
       expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true
     end
   end
+
+  context "when provided with a file which is not a valid image file" do
+    let(:file) { fixture_file_upload("files/invalid.tif", "image/tiff") }
+    let(:invalid_file_set) { book_members.first }
+    describe "#image_valid?" do
+      it "returns false" do
+        expect(described_class.new(file_set: invalid_file_set, persister: persister).image_valid?).to be false
+      end
+    end
+  end
 end

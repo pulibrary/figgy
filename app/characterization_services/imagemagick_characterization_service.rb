@@ -53,6 +53,9 @@ class ImagemagickCharacterizationService
   # @return [MiniMagick::Image]
   def image
     @image ||= MiniMagick::Image.open(filename)
+  rescue MiniMagick::Invalid
+    # Proceed as if this is not an image
+    nil
   end
 
   def image_valid?

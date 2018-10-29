@@ -22,7 +22,7 @@ RSpec.describe IngestMapFolderJob do
 
         expect(ingest_service).to have_received(:attach_dir).with(
           base_directory: scanned_maps_dir,
-          file_filter: ".tif",
+          file_filters: [".tif"],
           source_metadata_identifier: bib
         )
       end

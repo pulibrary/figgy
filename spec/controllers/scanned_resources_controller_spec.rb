@@ -62,6 +62,7 @@ RSpec.describe ScannedResourcesController do
         )
         stub_bibdata(bib_id: "123456")
         stub_bibdata(bib_id: "4609321")
+        stub_bibdata(bib_id: "1791261")
       end
       it "can create and import at once" do
         post :create, params: {
@@ -99,6 +100,32 @@ RSpec.describe ScannedResourcesController do
         expect(resource.member_ids.length).to eq 2
         members = query_service.find_members(resource: resource)
         expect(members.flat_map(&:title)).to contain_exactly "Vol 1", "Vol 2"
+      end
+
+      context "when ingesting a directory with WAV files" do
+        let(:tika_output) { tika_wav_output }
+        it "can create and import audio reserves" do
+          post :create, params: {
+            scanned_resource: {
+              source_metadata_identifier: "1791261",
+              rights_statement: "http://rightsstatements.org/vocab/CNE/1.0/",
+              visibility: "restricted"
+            },
+            commit: "Save and Ingest"
+          }
+
+          expect(response).to be_redirect
+          expect(response.location).to start_with "http://test.host/catalog/"
+          id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/")
+          resource = find_resource(id)
+
+          expect(resource.member_ids.length).to eq 1
+          file_set = find_resource(resource.member_ids.first)
+          expect(file_set.file_metadata.length).to eq 1
+          expect(file_set.original_file).not_to be nil
+          expect(file_set.original_file.label).to eq ["1791261_0701.wav"]
+          expect(file_set.original_file.mime_type).to eq ["audio/x-wav"]
+        end
       end
     end
   end
