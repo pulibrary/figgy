@@ -70,7 +70,7 @@ jobs:
       - attach_workspace:
           at: '~/figgy'
       - run: sudo apt-get update
-      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev tesseract-ocr tesseract-ocr-ita tesseract-ocr-eng mediainfo
+      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev tesseract-ocr tesseract-ocr-ita tesseract-ocr-eng mediainfo ffmpeg
       - run: sudo sh bin/ci_simple_tiles_install.sh
       # Wait for DB
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
