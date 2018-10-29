@@ -1,4 +1,8 @@
 # frozen_string_literal: true
+# Generates MP3s from uploaded WAV files.
+# @note This will not generate files for MediaResources, but ONLY because
+# MediaResource stores its primary file as a PreservationMaster instead of an
+# OriginalFile. If that changes, this will have to be updated in some way.
 class AudioDerivativeService
   class Factory
     attr_reader :change_set_persister
@@ -12,6 +16,8 @@ class AudioDerivativeService
       AudioDerivativeService.new(change_set: change_set, change_set_persister: change_set_persister, target_file: target_file(change_set.resource))
     end
 
+    # Only ever checks original_file, if this were to check preservation_master
+    # it would override derivatives for MediaResources. Take care!
     def target_file(resource)
       resource.original_file
     end
