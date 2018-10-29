@@ -72,6 +72,7 @@ Metrics/ClassLength:
     - 'app/services/pul_metadata_services/bib_record.rb'
     - 'app/change_sets/simple_resource_change_set.rb'
     - 'app/jobs/ingest_archival_media_bag_job.rb'
+    - 'app/services/manifest_builder/manifest_service_locator_v3.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/models/concerns/linked_data/linked_resource_factory.rb'
