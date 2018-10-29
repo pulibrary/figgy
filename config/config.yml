@@ -2,6 +2,7 @@ defaults: &defaults
   locations_url: https://bibdata.princeton.edu/locations/digital_locations.json
   derivative_path: <%= Rails.root.join("tmp", "derivatives") %>
   geo_derivative_path: <%= Rails.root.join("tmp", "geo_derivatives") %>
+  stream_derivatives_path: <%= Rails.root.join("tmp", "stream_derivatives") %>
   repository_path: <%= Rails.root.join("tmp", "files") %>
   cantaloupe_url: <%= ENV.fetch('CANTALOUPE_URL', 'http://localhost:8182/iiif/2/') %>
   bag_path: <%= Rails.root.join("tmp", "bags") %>
@@ -130,6 +131,7 @@ production:
   repository_path: "/opt/repository/files"
   derivative_path: "/opt/repository/derivatives"
   geo_derivative_path: "/opt/repository/geo_derivatives"
+  stream_derivatives_path: "/opt/repository/stream_derivatives"
   bag_path: <%= ENV["FIGGY_BAG_PATH"] || Rails.root.join("tmp", "bags") %>
   pudl_root: <%= ENV["FIGGY_PUDL_ROOT"]  %>
   events:
@@ -144,6 +146,7 @@ staging:
   repository_path: "/opt/repository/files"
   derivative_path: "/opt/repository/derivatives"
   geo_derivative_path: "/opt/repository/geo_derivatives"
+  stream_derivatives_path: "/opt/repository/stream_derivatives"
   bag_path: <%= ENV["FIGGY_BAG_PATH"] || Rails.root.join("tmp", "bags") %>
   pudl_root: <%= ENV["FIGGY_PUDL_ROOT"]  %>
   events:
