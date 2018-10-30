@@ -1,5 +1,5 @@
 <% if resource.class.can_have_manifests? && resource.try(:member_ids).present? %>
   <div class="intrinsic-container intrinsic-container-16x9 uv-container">
-    <iframe src="/uv#?manifest=<%= request.base_url + main_app.polymorphic_path([main_app,:manifest,resource]) %>" allowfullscreen="true"></iframe>
+    <iframe src="/uv/uv#?manifest=<%= request.base_url + main_app.polymorphic_path([main_app,:manifest,resource]) %>" allowfullscreen="true"></iframe>
   </div>
 <% end %>
