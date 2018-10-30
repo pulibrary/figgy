@@ -17,12 +17,7 @@ describe VoyagerUpdater::Event do
   let(:dump_data) do
     {
       "ids" => {
-        "update_ids" => [
-          { "id" => "123456" }
-        ],
-        "create_ids" => [
-          { "id" => "4609321" }
-        ]
+        "update_ids" => ["123456", "4609321"]
       }
     }
   end

@@ -12,13 +12,7 @@ module VoyagerUpdater
     # Retrieve the bib. IDs from the Voyager data dump marked as updated
     # @return [Array<String>]
     def update_ids
-      parsed_json["ids"]["update_ids"].map { |x| x["id"] }
-    end
-
-    # Retrieve the bib. IDs from the Voyager data dump marked as created
-    # @return [Array<String>]
-    def create_ids
-      parsed_json["ids"]["create_ids"].map { |x| x["id"] }
+      parsed_json["ids"]["update_ids"]
     end
 
     # Retrieve the resource IDs for those resources marked for update
@@ -37,7 +31,7 @@ module VoyagerUpdater
       # Retrieve the bib. IDs used for the resource updates
       # @return [Array<String>]
       def relevant_ids
-        update_ids + create_ids
+        update_ids
       end
 
       # Retrieve the JSON from Voyager and parse the values into a Hash
