@@ -4,9 +4,6 @@ class CoinDecorator < Valkyrie::ResourceDecorator
           :size,
           :die_axis,
           :weight,
-          :donor,
-          :deposit_of,
-          :seller,
           :references,
           :visibility
 

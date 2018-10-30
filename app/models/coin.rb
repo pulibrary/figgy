@@ -8,9 +8,6 @@ class Coin < Resource
   attribute :size
   attribute :die_axis
   attribute :weight
-  attribute :donor
-  attribute :deposit_of
-  attribute :seller
   attribute :references
 
   # administrative metadata

@@ -8,9 +8,6 @@ class CoinChangeSet < ChangeSet
   property :size, multiple: false, required: false
   property :die_axis, multiple: false, required: false
   property :weight, multiple: false, required: false
-  property :donor, multiple: false, required: false
-  property :deposit_of, multiple: false, required: false
-  property :seller, multiple: false, required: false
   property :references, multiple: false, required: false
 
   property :read_groups, multiple: true, required: false
