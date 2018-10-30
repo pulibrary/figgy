@@ -112,6 +112,7 @@ Rails.application.routes.draw do
       member do
         get :file_manager
         get :order_manager
+        get :manifest, defaults: { format: :json }
         post :browse_everything_files
       end
     end

@@ -32,6 +32,10 @@ class Coin < Resource
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
   attribute :pending_uploads, Valkyrie::Types::Array.of(PendingUpload)
 
+  def self.can_have_manifests?
+    true
+  end
+
   # Placeholder title.
   # TODO: Add more descriptive title when we have more information.
   def title

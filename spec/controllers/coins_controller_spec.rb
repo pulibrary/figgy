@@ -66,4 +66,20 @@ RSpec.describe CoinsController do
       it_behaves_like "an access controlled update request"
     end
   end
+  describe "GET /concern/coins/:id/manifest" do
+    let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+    before do
+      stub_ezid(shoulder: "99999/fk4", blade: "123456")
+    end
+    it "returns a IIIF manifest for a resource with a file" do
+      coin = FactoryBot.create_for_repository(:complete_open_coin, files: [file])
+
+      get :manifest, params: { id: coin.id.to_s, format: :json }
+      manifest_response = MultiJson.load(response.body, symbolize_keys: true)
+
+      expect(response.headers["Content-Type"]).to include "application/json"
+      expect(manifest_response[:sequences].length).to eq 1
+      expect(manifest_response[:viewingHint]).to eq "individuals"
+    end
+  end
 end
