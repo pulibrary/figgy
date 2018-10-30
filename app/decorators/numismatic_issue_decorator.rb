@@ -42,7 +42,7 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
                          :rendered_rights_statement,
                          :thumbnail_id
 
-  delegate :members, :decorated_coins, :coin_count, to: :wayfinder
+  delegate :members, :decorated_file_sets, :decorated_coins, :coin_count, to: :wayfinder
 
   def attachable_objects
     [Coin]

@@ -39,6 +39,7 @@ class NumismaticIssueChangeSet < ChangeSet
   property :depositor, multiple: false, required: false
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
+  property :pending_uploads, multiple: true, required: false
 
   property :start_canvas, required: false
   property :viewing_direction, required: false
@@ -46,6 +47,9 @@ class NumismaticIssueChangeSet < ChangeSet
 
   property :rights_statement, multiple: false, required: true, default: "http://rightsstatements.org/vocab/NKC/1.0/", type: ::Types::URI
   property :rights_note, multiple: false, required: false
+
+  # Virtual Attributes
+  property :files, virtual: true, multiple: true, required: false
 
   validates_with CollectionValidator
   validates_with MemberValidator
