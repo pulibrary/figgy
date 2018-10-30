@@ -4,7 +4,7 @@ jobs:
   build:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.3.7-node-browsers
+      - image: circleci/ruby:2.4-node-browsers
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
@@ -54,7 +54,7 @@ jobs:
   test:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.3.6-node-browsers
+      - image: circleci/ruby:2.4-node-browsers
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
@@ -90,7 +90,7 @@ jobs:
   rubocop:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.3.6-node-browsers
+      - image: circleci/ruby:2.4-node-browsers
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
