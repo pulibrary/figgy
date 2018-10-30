@@ -5,7 +5,19 @@ class CoinDecorator < Valkyrie::ResourceDecorator
           :die_axis,
           :weight,
           :references,
-          :visibility
+          :visibility,
+          :accession,
+          :analysis,
+          :counter_stamp,
+          :find,
+          :find_date,
+          :holding_location,
+          :loan,
+          :object_type,
+          :place,
+          :private_note,
+          :provenance,
+          :technique
 
   delegate :members, :decorated_file_sets, :decorated_parent, to: :wayfinder
 

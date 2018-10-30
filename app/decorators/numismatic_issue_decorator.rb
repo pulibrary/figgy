@@ -16,7 +16,21 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
           :master,
           :description,
           :references,
-          :visibility
+          :visibility,
+          :artist,
+          :color,
+          :department,
+          :edge,
+          :era,
+          :figure,
+          :note,
+          :orientation,
+          :part,
+          :place,
+          :series,
+          :shape,
+          :subject,
+          :symbol
 
   delegate :members, :decorated_coins, :coin_count, to: :wayfinder
 

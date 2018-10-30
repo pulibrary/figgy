@@ -9,6 +9,18 @@ class Coin < Resource
   attribute :die_axis
   attribute :weight
   attribute :references
+  attribute :accession
+  attribute :analysis
+  attribute :counter_stamp
+  attribute :find
+  attribute :find_date
+  attribute :holding_location
+  attribute :loan
+  attribute :object_type
+  attribute :place
+  attribute :private_note
+  attribute :provenance
+  attribute :technique
 
   # administrative metadata
   attribute :depositor

@@ -20,6 +20,20 @@ class NumismaticIssue < Resource
   attribute :master
   attribute :description
   attribute :references
+  attribute :artist
+  attribute :color
+  attribute :department
+  attribute :edge
+  attribute :era
+  attribute :figure
+  attribute :note
+  attribute :orientation
+  attribute :part
+  attribute :place
+  attribute :series
+  attribute :shape
+  attribute :subject
+  attribute :symbol
 
   # adminstrative metadata
   attribute :depositor

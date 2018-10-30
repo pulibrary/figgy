@@ -20,6 +20,20 @@ class NumismaticIssueChangeSet < ChangeSet
   property :master, multiple: false, required: false
   property :description, multiple: false, required: false
   property :references, multiple: true, required: false
+  property :artist, multiple: true, required: false
+  property :color, multiple: false, required: false
+  property :department, multiple: false, required: false
+  property :edge, multiple: false, required: false
+  property :era, multiple: false, required: false
+  property :figure, multiple: false, required: false
+  property :note, multiple: true, required: false
+  property :orientation, multiple: false, required: false
+  property :part, multiple: true, required: false
+  property :place, multiple: false, required: false
+  property :series, multiple: false, required: false
+  property :shape, multiple: false, required: false
+  property :subject, multiple: true, required: false
+  property :symbol, multiple: false, required: false
 
   property :read_groups, multiple: true, required: false
   property :depositor, multiple: false, required: false
@@ -51,7 +65,21 @@ class NumismaticIssueChangeSet < ChangeSet
       :description,
       :references,
       :rights_statement,
-      :rights_note
+      :rights_note,
+      :artist,
+      :color,
+      :department,
+      :edge,
+      :era,
+      :figure,
+      :note,
+      :orientation,
+      :part,
+      :place,
+      :series,
+      :shape,
+      :subject,
+      :symbol
     ]
   end
 end
