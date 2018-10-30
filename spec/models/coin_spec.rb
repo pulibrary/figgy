@@ -12,4 +12,8 @@ describe Coin do
     coin.member_ids = [1, 2, 3, 3]
     expect(coin.member_ids).to eq [1, 2, 3, 3]
   end
+
+  it "has a title" do
+    expect(coin.title).to include "Coin: "
+  end
 end

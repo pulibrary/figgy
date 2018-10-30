@@ -26,7 +26,15 @@ class Coin < Resource
   attribute :depositor
   attribute :replaces
   attribute :state
+  attribute :thumbnail_id
+  attribute :title
   attribute :visibility
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
   attribute :pending_uploads, Valkyrie::Types::Array.of(PendingUpload)
+
+  # Placeholder title.
+  # TODO: Add more descriptive title when we have more information.
+  def title
+    ["Coin: #{id}"]
+  end
 end

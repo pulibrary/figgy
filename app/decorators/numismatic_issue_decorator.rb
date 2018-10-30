@@ -29,10 +29,24 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
           :shape,
           :subject,
           :symbol,
+          :workshop,
           :visibility,
-          :workshop
+          :member_of_collections,
+          :rendered_rights_statement
+
+  display_in_manifest displayed_attributes
+  suppress_from_manifest Schema::IIIF.attributes,
+                         :visibility,
+                         :internal_resource,
+                         :rights_statement,
+                         :rendered_rights_statement,
+                         :thumbnail_id
 
   delegate :members, :decorated_coins, :coin_count, to: :wayfinder
+
+  def attachable_objects
+    [Coin]
+  end
 
   # Whether this box has a workflow state that grants access to its contents
   # @return [TrueClass, FalseClass]
@@ -48,8 +62,19 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
     false
   end
 
-  def attachable_objects
-    [Coin]
+  def rendered_rights_statement
+    rights_statement.map do |rights_statement|
+      term = ControlledVocabulary.for(:rights_statement).find(rights_statement)
+      next unless term
+      h.link_to(term.label, term.value) +
+        h.content_tag("br") +
+        h.content_tag("p") do
+          term.definition.html_safe
+        end +
+        h.content_tag("p") do
+          I18n.t("works.show.attributes.rights_statement.boilerplate").html_safe
+        end
+    end
   end
 
   def state

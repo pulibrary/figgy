@@ -15,8 +15,8 @@ class CoinChangeSet < ChangeSet
   property :loan, multiple: false, required: false
   property :object_type, multiple: false, required: false
   property :place, multiple: false, required: false
-  property :private_note, multiple: true, required: false
-  property :provenance, multiple: true, required: false
+  property :private_note, multiple: true, required: false, default: []
+  property :provenance, multiple: true, required: false, default: []
   property :references, multiple: false, required: false
   property :size, multiple: false, required: false
   property :technique, multiple: false, required: false
@@ -31,6 +31,7 @@ class CoinChangeSet < ChangeSet
   property :pending_uploads, multiple: true, required: false
 
   validates_with MemberValidator
+  validates_with StateValidator
   validates :visibility, presence: true
 
   def primary_terms

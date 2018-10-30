@@ -115,7 +115,7 @@ Rails.application.routes.draw do
         post :browse_everything_files
       end
     end
-    get "/numismatic_issues/:parent_id/coin" => "coins#new", as: "numismatic_issue_add_coin"
+    get "/numismatic_issues/:parent_id/coin" => "coins#new", as: :parent_new_coin
 
     resources :ephemera_projects do
       resources :templates, only: [:new, :create, :destroy]

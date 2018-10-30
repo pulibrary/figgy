@@ -4,7 +4,7 @@ class NumismaticIssueChangeSet < ChangeSet
   apply_workflow(DraftCompleteWorkflow)
 
   include VisibilityProperty
-  property :artist, multiple: true, required: false
+  property :artist, multiple: true, required: false, default: []
   property :color, multiple: false, required: false
   property :date_range, multiple: false, required: false
   property :denomination, multiple: false, required: false
@@ -16,38 +16,50 @@ class NumismaticIssueChangeSet < ChangeSet
   property :geographic_origin, multiple: false, required: false
   property :master, multiple: false, required: false
   property :metal, multiple: false, required: false
-  property :note, multiple: true, required: false
+  property :note, multiple: true, required: false, default: []
   property :object_type, multiple: false, required: false
-  property :obverse_attributes, multiple: true, required: false
+  property :obverse_attributes, multiple: true, required: false, default: []
   property :obverse_legend, multiple: false, required: false
   property :obverse_type, multiple: false, required: false
   property :orientation, multiple: false, required: false
-  property :part, multiple: true, required: false
-  property :place, multiple: false, required: false
-  property :references, multiple: true, required: false
-  property :reverse_attributes, multiple: true, required: false
+  property :part, multiple: true, required: false, default: []
+  property :place, multiple: false, required: false, default: []
+  property :references, multiple: true, required: false, default: []
+  property :reverse_attributes, multiple: true, required: false, default: []
   property :reverse_legend, multiple: false, required: false
   property :reverse_type, multiple: false, required: false
   property :ruler, multiple: false, required: false
   property :series, multiple: false, required: false
   property :shape, multiple: false, required: false
-  property :subject, multiple: true, required: false
+  property :subject, multiple: true, required: false, default: []
   property :symbol, multiple: false, required: false
   property :workshop, multiple: false, required: false
 
   property :read_groups, multiple: true, required: false
   property :depositor, multiple: false, required: false
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
+  property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
+
+  property :start_canvas, required: false
+  property :viewing_direction, required: false
+  property :viewing_hint, multiple: false, required: false, default: "individuals"
 
   property :rights_statement, multiple: false, required: true, default: "http://rightsstatements.org/vocab/NKC/1.0/", type: ::Types::URI
   property :rights_note, multiple: false, required: false
 
+  validates_with CollectionValidator
   validates_with MemberValidator
   validates_with RightsStatementValidator
+  validates_with StateValidator
+  validates_with ViewingDirectionValidator
+  validates_with ViewingHintValidator
   validates :visibility, presence: true
 
   def primary_terms
     [
+      :rights_statement,
+      :rights_note,
+      :member_of_collection_ids,
       :artist,
       :color,
       :date_range,
@@ -72,8 +84,6 @@ class NumismaticIssueChangeSet < ChangeSet
       :reverse_attributes,
       :reverse_legend,
       :reverse_type,
-      :rights_note,
-      :rights_statement,
       :ruler,
       :series,
       :shape,
