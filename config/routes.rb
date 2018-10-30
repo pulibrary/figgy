@@ -73,6 +73,7 @@ Rails.application.routes.draw do
       member do
         put :derivatives
         get :text
+        get :manifest
       end
     end
     resources :scanned_resources do

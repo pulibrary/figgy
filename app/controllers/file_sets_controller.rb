@@ -53,6 +53,21 @@ class FileSetsController < ApplicationController
     after_update_error error
   end
 
+  # Render the IIIF presentation manifest for a given repository resource
+  def manifest
+    @resource = find_resource(params[:id])
+    authorize! :manifest, @resource
+    respond_to do |f|
+      f.json do
+        render json: ManifestBuilder.new(@resource).build
+      end
+    end
+  rescue Valkyrie::Persistence::ObjectNotFoundError
+    @resource = query_service.custom_queries.find_by_local_identifier(local_identifier: params[:id]).first
+    raise Valkyrie::Persistence::ObjectNotFoundError unless @resource
+    redirect_to manifest_scanned_resource_path(id: @resource.id.to_s)
+  end
+
   private
 
     def filtered_file_params(file_filter:)

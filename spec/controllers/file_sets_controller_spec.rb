@@ -80,6 +80,28 @@ RSpec.describe FileSetsController do
     end
   end
 
+  describe "GET /concern/file_sets/:id/manifest" do
+    # get around the stubbing in earlier test setup; we need to test actual manifest behavior
+    let(:manifest_helper_class) { ManifestBuilder::ManifestHelper }
+    before do
+      allow(manifest_helper_class).to receive(:new).and_call_original
+    end
+
+    render_views
+    it "renders the manifest as json" do
+      file = fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "audio/x-wav")
+      change_set_persister = ChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter)
+
+      file_set = FactoryBot.create_for_repository(:file_set)
+      change_set = FileSetChangeSet.new(file_set, files: [file])
+      change_set_persister.save(change_set: change_set)
+
+      get :manifest, params: { id: file_set.id.to_s }, format: :json
+      expect(JSON.parse(response.body)["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
+      expect(response.content_type).to eq "application/json"
+    end
+  end
+
   describe "PUT /file_sets/id" do
     context "with a derivative service for images in the TIFF" do
       let(:create_derivatives_class) { class_double(RegenerateDerivativesJob).as_stubbed_const(transfer_nested_constants: true) }

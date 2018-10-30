@@ -536,7 +536,9 @@ class ManifestBuilder
 
     # get the file sets
     def file_sets
-      return [@resource.to_model] if @resource.try(:to_model).is_a? FileSet
-      Wayfinder.for(@resource.to_model).try(:file_sets)
+      @file_sets ||= begin
+        return [@resource.to_model] if @resource.try(:to_model).is_a? FileSet
+        Wayfinder.for(@resource.to_model).try(:file_sets)
+      end
     end
 end
