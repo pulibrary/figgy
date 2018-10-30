@@ -481,6 +481,25 @@ RSpec.describe ManifestBuilder do
     end
   end
 
+  context "when given an audio file set" do
+    let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file]) }
+    let(:file) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "") }
+    before do
+      stub_bibdata(bib_id: "123456")
+      change_set_persister.save(change_set: change_set)
+    end
+    it "builds a presentation 3 manifest", run_real_characterization: true do
+      resource = query_service.find_by(id: scanned_resource.id)
+      file_set = Wayfinder.for(resource).file_sets.first
+      manifest_builder = described_class.new(file_set)
+      output = manifest_builder.build
+      # pres 3 context is always an array
+      expect(output["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
+    end
+    xit "has some metadata from the resource" do
+    end
+  end
+
   context "when given a collection" do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: collection.id)) }
     let(:collection) { FactoryBot.create_for_repository(:collection) }

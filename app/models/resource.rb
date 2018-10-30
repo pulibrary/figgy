@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# This is a base class for valkyrie resources in figgy
 class Resource < Valkyrie::Resource
   def self.human_readable_type
     default = @_human_readable_type || name.demodulize.titleize

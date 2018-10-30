@@ -21,6 +21,8 @@ class ManifestBuilder
         )
       end
 
+      def file_set_builders; end
+
       ##
       # Class accessor for the "see also" builder
       # @return [Class]
