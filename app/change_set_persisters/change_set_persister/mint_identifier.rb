@@ -22,7 +22,7 @@ class ChangeSetPersister
       end
 
       def needs_updating?(change_set)
-        return true unless change_set.resource.identifier
+        return true unless change_set.resource.try(:identifier)
         change_set.state_changed? || change_set.changed?(:title) || change_set.changed?(:source_metadata_identifier)
       end
 

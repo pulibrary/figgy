@@ -102,6 +102,21 @@ Rails.application.routes.draw do
 
     get "/scanned_resources/:parent_id/new", to: "scanned_resources#new", as: :parent_new_scanned_resource
 
+    resources :numismatic_issues do
+      member do
+        get :file_manager
+        get :order_manager
+      end
+    end
+    resources :coins do
+      member do
+        get :file_manager
+        get :order_manager
+        post :browse_everything_files
+      end
+    end
+    get "/numismatic_issues/:parent_id/coin" => "coins#new", as: "numismatic_issue_add_coin"
+
     resources :ephemera_projects do
       resources :templates, only: [:new, :create, :destroy]
       resources :ephemera_fields

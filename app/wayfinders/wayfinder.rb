@@ -18,6 +18,8 @@ class Wayfinder < BaseWayfinder
     FileSetChangeSet => FileSetWayfinder,
     EphemeraVocabulary => EphemeraVocabularyWayfinder,
     MediaResource => MediaResourceWayfinder,
+    Coin => CoinWayfinder,
+    NumismaticIssue => NumismaticIssueWayfinder,
     RasterResource => RasterResourceWayfinder,
     ScannedMap => ScannedMapWayfinder,
     VectorResource => VectorResourceWayfinder
