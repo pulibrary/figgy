@@ -4,36 +4,36 @@ class NumismaticIssue < Resource
   attribute :member_ids, Valkyrie::Types::Array
 
   # descriptive metadata
-  attribute :object_type
-  attribute :denomination
-  attribute :metal
-  attribute :geographic_origin
-  attribute :workshop, Valkyrie::Types::SingleValuedString
-  attribute :ruler
-  attribute :date_range
-  attribute :obverse_type, Valkyrie::Types::SingleValuedString
-  attribute :obverse_legend, Valkyrie::Types::SingleValuedString
-  attribute :obverse_attributes
-  attribute :reverse_type, Valkyrie::Types::SingleValuedString
-  attribute :reverse_legend, Valkyrie::Types::SingleValuedString
-  attribute :reverse_attributes
-  attribute :master
-  attribute :description
-  attribute :references
   attribute :artist
   attribute :color
+  attribute :date_range
+  attribute :denomination
   attribute :department
+  attribute :description
   attribute :edge
   attribute :era
   attribute :figure
+  attribute :geographic_origin
+  attribute :master
+  attribute :metal
   attribute :note
+  attribute :object_type
+  attribute :obverse_attributes
+  attribute :obverse_legend, Valkyrie::Types::SingleValuedString
+  attribute :obverse_type, Valkyrie::Types::SingleValuedString
   attribute :orientation
   attribute :part
   attribute :place
+  attribute :references
+  attribute :reverse_attributes
+  attribute :reverse_legend, Valkyrie::Types::SingleValuedString
+  attribute :reverse_type, Valkyrie::Types::SingleValuedString
+  attribute :ruler
   attribute :series
   attribute :shape
   attribute :subject
   attribute :symbol
+  attribute :workshop, Valkyrie::Types::SingleValuedString
 
   # adminstrative metadata
   attribute :depositor

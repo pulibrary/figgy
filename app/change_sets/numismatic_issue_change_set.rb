@@ -4,36 +4,36 @@ class NumismaticIssueChangeSet < ChangeSet
   apply_workflow(DraftCompleteWorkflow)
 
   include VisibilityProperty
-  property :object_type, multiple: false, required: false
-  property :denomination, multiple: false, required: false
-  property :metal, multiple: false, required: false
-  property :geographic_origin, multiple: false, required: false
-  property :workshop, multiple: false, required: false
-  property :ruler, multiple: false, required: false
-  property :date_range, multiple: false, required: false
-  property :obverse_type, multiple: false, required: false
-  property :obverse_legend, multiple: false, required: false
-  property :obverse_attributes, multiple: true, required: false
-  property :reverse_type, multiple: false, required: false
-  property :reverse_legend, multiple: false, required: false
-  property :reverse_attributes, multiple: true, required: false
-  property :master, multiple: false, required: false
-  property :description, multiple: false, required: false
-  property :references, multiple: true, required: false
   property :artist, multiple: true, required: false
   property :color, multiple: false, required: false
+  property :date_range, multiple: false, required: false
+  property :denomination, multiple: false, required: false
   property :department, multiple: false, required: false
+  property :description, multiple: false, required: false
   property :edge, multiple: false, required: false
   property :era, multiple: false, required: false
   property :figure, multiple: false, required: false
+  property :geographic_origin, multiple: false, required: false
+  property :master, multiple: false, required: false
+  property :metal, multiple: false, required: false
   property :note, multiple: true, required: false
+  property :object_type, multiple: false, required: false
+  property :obverse_attributes, multiple: true, required: false
+  property :obverse_legend, multiple: false, required: false
+  property :obverse_type, multiple: false, required: false
   property :orientation, multiple: false, required: false
   property :part, multiple: true, required: false
   property :place, multiple: false, required: false
+  property :references, multiple: true, required: false
+  property :reverse_attributes, multiple: true, required: false
+  property :reverse_legend, multiple: false, required: false
+  property :reverse_type, multiple: false, required: false
+  property :ruler, multiple: false, required: false
   property :series, multiple: false, required: false
   property :shape, multiple: false, required: false
   property :subject, multiple: true, required: false
   property :symbol, multiple: false, required: false
+  property :workshop, multiple: false, required: false
 
   property :read_groups, multiple: true, required: false
   property :depositor, multiple: false, required: false
@@ -48,38 +48,38 @@ class NumismaticIssueChangeSet < ChangeSet
 
   def primary_terms
     [
-      :object_type,
-      :denomination,
-      :metal,
-      :geographic_origin,
-      :workshop,
-      :ruler,
-      :date_range,
-      :obverse_type,
-      :obverse_legend,
-      :obverse_attributes,
-      :reverse_type,
-      :reverse_legend,
-      :reverse_attributes,
-      :master,
-      :description,
-      :references,
-      :rights_statement,
-      :rights_note,
       :artist,
       :color,
+      :date_range,
+      :denomination,
       :department,
+      :description,
       :edge,
       :era,
       :figure,
+      :geographic_origin,
+      :master,
+      :metal,
       :note,
+      :object_type,
+      :obverse_attributes,
+      :obverse_legend,
+      :obverse_type,
       :orientation,
       :part,
       :place,
+      :references,
+      :reverse_attributes,
+      :reverse_legend,
+      :reverse_type,
+      :rights_note,
+      :rights_statement,
+      :ruler,
       :series,
       :shape,
       :subject,
-      :symbol
+      :symbol,
+      :workshop
     ]
   end
 end

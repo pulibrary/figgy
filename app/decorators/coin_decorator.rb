@@ -1,14 +1,10 @@
 # frozen_string_literal: true
 class CoinDecorator < Valkyrie::ResourceDecorator
-  display :department,
-          :size,
-          :die_axis,
-          :weight,
-          :references,
-          :visibility,
-          :accession,
+  display :accession,
           :analysis,
           :counter_stamp,
+          :department,
+          :die_axis,
           :find,
           :find_date,
           :holding_location,
@@ -17,7 +13,11 @@ class CoinDecorator < Valkyrie::ResourceDecorator
           :place,
           :private_note,
           :provenance,
-          :technique
+          :references,
+          :size,
+          :technique,
+          :visibility,
+          :weight
 
   delegate :members, :decorated_file_sets, :decorated_parent, to: :wayfinder
 
