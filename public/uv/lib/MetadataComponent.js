@@ -1,9 +1,20 @@
-// iiif-metadata-component v1.1.6 https://github.com/iiif-commons/iiif-metadata-component#readme
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifMetadataComponent = f()}})(function(){var define,module,exports;return (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(require,module,exports){
-(function (global){
-
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var MetadataGroup = Manifold.MetadataGroup;
 var IIIFComponents;
 (function (IIIFComponents) {
+    // todo: use string enums
     var StringValue = /** @class */ (function () {
         function StringValue(value) {
             this.value = "";
@@ -17,55 +28,22 @@ var IIIFComponents;
         return StringValue;
     }());
     IIIFComponents.StringValue = StringValue;
-})(IIIFComponents || (IIIFComponents = {}));
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var IIIFComponents;
-(function (IIIFComponents) {
-    var MetadataComponentOptions;
-    (function (MetadataComponentOptions) {
-        var LimitType = /** @class */ (function (_super) {
-            __extends(LimitType, _super);
-            function LimitType() {
-                return _super !== null && _super.apply(this, arguments) || this;
-            }
-            LimitType.LINES = new LimitType("lines");
-            LimitType.CHARS = new LimitType("chars");
-            return LimitType;
-        }(IIIFComponents.StringValue));
-        MetadataComponentOptions.LimitType = LimitType;
-    })(MetadataComponentOptions = IIIFComponents.MetadataComponentOptions || (IIIFComponents.MetadataComponentOptions = {}));
-})(IIIFComponents || (IIIFComponents = {}));
-
-
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var MetadataGroup = Manifold.MetadataGroup;
-var IIIFComponents;
-(function (IIIFComponents) {
+    var LimitType = /** @class */ (function (_super) {
+        __extends(LimitType, _super);
+        function LimitType() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        LimitType.LINES = new LimitType("lines");
+        LimitType.CHARS = new LimitType("chars");
+        return LimitType;
+    }(StringValue));
+    IIIFComponents.LimitType = LimitType;
     var MetadataComponent = /** @class */ (function (_super) {
         __extends(MetadataComponent, _super);
         function MetadataComponent(options) {
             var _this = _super.call(this, options) || this;
             _this._data = _this.data();
+            _this._data = _this.options.data;
             _this._init();
             _this._resize();
             return _this;
@@ -85,12 +63,12 @@ var IIIFComponents;
                                                </div>');
             this._$metadataItemValueTemplate = $('<div class="value"></div>');
             this._$metadataItemURIValueTemplate = $('<a class="value" href="" target="_blank"></a>');
-            this._$copyTextTemplate = $('<div class="copyText" alt="' + this._data.content.copyToClipboard + '" title="' + this._data.content.copyToClipboard + '">\
-                                                   <div class="copiedText">' + this._data.content.copiedToClipboard + ' </div>\
+            this._$copyTextTemplate = $('<div class="copyText" alt="' + this.options.data.content.copyToClipboard + '" title="' + this.options.data.content.copyToClipboard + '">\
+                                                   <div class="copiedText">' + this.options.data.content.copiedToClipboard + ' </div>\
                                                </div>');
             this._$metadataGroups = $('<div class="groups"></div>');
             this._$element.append(this._$metadataGroups);
-            this._$noData = $('<div class="noData">' + this._data.content.noData + '</div>');
+            this._$noData = $('<div class="noData">' + this.options.data.content.noData + '</div>');
             this._$element.append(this._$noData);
             return success;
         };
@@ -123,7 +101,8 @@ var IIIFComponents;
                 helper: null,
                 licenseFormatter: null,
                 limit: 4,
-                limitType: IIIFComponents.MetadataComponentOptions.LimitType.LINES,
+                limitType: LimitType.LINES,
+                limitToRange: false,
                 manifestDisplayOrder: "",
                 manifestExclude: "",
                 range: null,
@@ -140,7 +119,7 @@ var IIIFComponents;
         };
         MetadataComponent.prototype.set = function (data) {
             var _this = this;
-            $.extend(this._data, data);
+            this._data = Object.assign(this._data, data);
             if (!this._data || !this._data.helper) {
                 return;
             }
@@ -175,6 +154,17 @@ var IIIFComponents;
                 canvasGroups.forEach(function (canvasGroup, index) {
                     canvasGroup.items = _this._exclude(canvasGroup.items, _this._readCSV(_this._data.canvasExclude));
                 });
+            }
+            if (this._data.limitToRange) {
+                var newGroups_1 = [];
+                this._metadataGroups.forEach(function (group, index) {
+                    if (group.resource.isRange()) {
+                        newGroups_1.push(group);
+                    }
+                });
+                if (newGroups_1.length) {
+                    this._metadataGroups = newGroups_1;
+                }
             }
             this._render();
         };
@@ -278,33 +268,49 @@ var IIIFComponents;
             this._metadataGroups.forEach(function (metadataGroup, index) {
                 var $metadataGroup = _this._buildMetadataGroup(metadataGroup);
                 _this._$metadataGroups.append($metadataGroup);
-                if (_this._data.limitType === IIIFComponents.MetadataComponentOptions.LimitType.LINES) {
-                    $metadataGroup.find('.value').toggleExpandTextByLines(_this._data.limit, _this._data.content.less, _this._data.content.more, function () { });
-                }
-                else if (_this._data.limitType === IIIFComponents.MetadataComponentOptions.LimitType.CHARS) {
-                    $metadataGroup.find('.value').ellipsisHtmlFixed(_this._data.limit, function () { });
+                if (_this._data.limit && _this._data.content) {
+                    if (_this._data.limitType === LimitType.LINES) {
+                        $metadataGroup.find('.value').toggleExpandTextByLines(_this._data.limit, _this._data.content.less, _this._data.content.more, function () { });
+                    }
+                    else if (_this._data.limitType === LimitType.CHARS) {
+                        $metadataGroup.find('.value').ellipsisHtmlFixed(_this._data.limit, function () { });
+                    }
                 }
             });
         };
         MetadataComponent.prototype._buildMetadataGroup = function (metadataGroup) {
             var $metadataGroup = this._$metadataGroupTemplate.clone();
             var $header = $metadataGroup.find('>.header');
-            // add group header
-            if (metadataGroup.resource.isManifest() && this._data.content.manifestHeader) {
-                $header.html(this._sanitize(this._data.content.manifestHeader));
-            }
-            else if (metadataGroup.resource.isSequence() && this._data.content.sequenceHeader) {
-                $header.html(this._sanitize(this._data.content.sequenceHeader));
-            }
-            else if (metadataGroup.resource.isRange() && this._data.content.rangeHeader) {
-                $header.html(this._sanitize(this._data.content.rangeHeader));
-            }
-            else if (metadataGroup.resource.isCanvas() && (metadataGroup.label || this._data.content.canvasHeader)) {
-                var header = metadataGroup.label || this._data.content.canvasHeader;
-                $header.html(this._sanitize(header));
-            }
-            else if (metadataGroup.resource.isAnnotation() && this._data.content.imageHeader) {
-                $header.html(this._sanitize(this._data.content.imageHeader));
+            if (this._data.content) {
+                // add group header
+                if (metadataGroup.resource.isManifest() && this._data.content.manifestHeader) {
+                    var text = this._sanitize(this._data.content.manifestHeader);
+                    if (text) {
+                        $header.html(text);
+                    }
+                }
+                else if (metadataGroup.resource.isSequence() && this._data.content.sequenceHeader) {
+                    var text = this._sanitize(this._data.content.sequenceHeader);
+                    if (text) {
+                        $header.html(text);
+                    }
+                }
+                else if (metadataGroup.resource.isRange() && this._data.content.rangeHeader) {
+                    var text = this._sanitize(this._data.content.rangeHeader);
+                    if (text) {
+                        $header.html(text);
+                    }
+                }
+                else if (metadataGroup.resource.isCanvas() && (metadataGroup.label || this._data.content.canvasHeader)) {
+                    var header = metadataGroup.label || this._data.content.canvasHeader;
+                    $header.html(this._sanitize(header));
+                }
+                else if (metadataGroup.resource.isAnnotation() && this._data.content.imageHeader) {
+                    var text = this._sanitize(this._data.content.imageHeader);
+                    if (text) {
+                        $header.html(text);
+                    }
+                }
             }
             if (!$header.text()) {
                 $header.hide();
@@ -324,7 +330,7 @@ var IIIFComponents;
             var originalLabel = item.getLabel();
             var label = originalLabel;
             var urlPattern = new RegExp("/\w+:(\/?\/?)[^\s]+/gm", "i");
-            if (label && item.isRootLevel) {
+            if (this._data.content && label && item.isRootLevel) {
                 switch (label.toLowerCase()) {
                     case "attribution":
                         label = this._data.content.attribution;
@@ -385,6 +391,13 @@ var IIIFComponents;
             if (this._data.copyToClipboardEnabled && Utils.Clipboard.supportsCopy() && $label.text()) {
                 this._addCopyButton($metadataItem, $label, $values);
             }
+            var that = this;
+            $metadataItem.on('click', 'a.iiif-viewer-link', function (e) {
+                e.preventDefault();
+                var $a = $(e.target);
+                var href = $a.prop('href');
+                that.fire(MetadataComponent.Events.IIIF_VIEWER_LINK_CLICKED, href);
+            });
             return $metadataItem;
         };
         MetadataComponent.prototype._getLabelLocale = function (item) {
@@ -418,7 +431,14 @@ var IIIFComponents;
             value = value.replace('\n', '<br>'); // replace \n with <br>
             var $value = this._$metadataItemValueTemplate.clone();
             $value.html(value);
-            $value.targetBlank();
+            // loop through values looking for links with iiif-viewer-link class
+            // if found, add click handler
+            $value.find('a').each(function () {
+                var $a = $(this);
+                if (!$a.hasClass('iiif-viewer-link')) {
+                    $a.prop('target', '_blank');
+                }
+            });
             // rtl?
             if (locale) {
                 this._addReadingDirection($value, locale);
@@ -487,7 +507,10 @@ var IIIFComponents;
             return csv;
         };
         MetadataComponent.prototype._sanitize = function (html) {
-            return this._data.sanitizer(html);
+            if (this._data.sanitizer) {
+                return this._data.sanitizer(html);
+            }
+            return null;
         };
         MetadataComponent.prototype._resize = function () {
         };
@@ -501,6 +524,7 @@ var IIIFComponents;
         var Events = /** @class */ (function () {
             function Events() {
             }
+            Events.IIIF_VIEWER_LINK_CLICKED = 'iiifViewerLinkClicked';
             return Events;
         }());
         MetadataComponent.Events = Events;
@@ -512,10 +536,5 @@ var IIIFComponents;
     }
     else {
         g.IIIFComponents.MetadataComponent = IIIFComponents.MetadataComponent;
-        g.IIIFComponents.MetadataComponentOptions = IIIFComponents.MetadataComponentOptions;
     }
-})(global);
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}]},{},[1])(1)
-});
+})(window);

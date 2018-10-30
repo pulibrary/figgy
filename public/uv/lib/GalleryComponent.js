@@ -1,11 +1,10 @@
-// iiif-gallery-component v1.1.4 https://github.com/iiif-commons/iiif-gallery-component#readme
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.iiifGalleryComponent = f()}})(function(){var define,module,exports;return (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(require,module,exports){
-(function (global){
-
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -18,6 +17,8 @@ var IIIFComponents;
         __extends(GalleryComponent, _super);
         function GalleryComponent(options) {
             var _this = _super.call(this, options) || this;
+            _this._data = _this.data();
+            _this._data = _this.options.data;
             _this._init();
             _this._resize();
             return _this;
@@ -51,7 +52,6 @@ var IIIFComponents;
             this._$element.append(this._$main);
             this._$thumbs = $('<div class="thumbs"></div>');
             this._$main.append(this._$thumbs);
-            this._$thumbs.addClass(this.options.data.helper.getViewingDirection().toString()); // defaults to "left-to-right"
             this._$sizeDownButton.on('click', function () {
                 var val = Number(_this._$sizeRange.val()) - 1;
                 if (val >= Number(_this._$sizeRange.attr('min'))) {
@@ -73,19 +73,25 @@ var IIIFComponents;
                 _this._scrollToThumb(_this._getSelectedThumbIndex());
             });
             this._$selectAllButton.checkboxButton(function (checked) {
-                if (checked) {
-                    _this._getMultiSelectState().selectAll(true);
+                var multiSelectState = _this._getMultiSelectState();
+                if (multiSelectState) {
+                    if (checked) {
+                        multiSelectState.selectAll(true);
+                    }
+                    else {
+                        multiSelectState.selectAll(false);
+                    }
                 }
-                else {
-                    _this._getMultiSelectState().selectAll(false);
-                }
-                _this.set();
+                _this.set(_this.options.data);
             });
             this._$selectButton.on('click', function () {
-                var ids = _this._getMultiSelectState().getAllSelectedCanvases().map(function (canvas) {
-                    return canvas.id;
-                });
-                _this.fire(GalleryComponent.Events.MULTISELECTION_MADE, ids);
+                var multiSelectState = _this._getMultiSelectState();
+                if (multiSelectState) {
+                    var ids = multiSelectState.getAllSelectedCanvases().map(function (canvas) {
+                        return canvas.id;
+                    });
+                    _this.fire(GalleryComponent.Events.MULTISELECTION_MADE, ids);
+                }
             });
             this._setRange();
             $.templates({
@@ -159,27 +165,35 @@ var IIIFComponents;
                 viewingDirection: manifesto.ViewingDirection.leftToRight()
             };
         };
-        GalleryComponent.prototype.set = function () {
-            this._thumbs = this.options.data.helper.getThumbs(this.options.data.thumbWidth, this.options.data.thumbHeight);
-            if (this.options.data.viewingDirection.toString() === manifesto.ViewingDirection.bottomToTop().toString()) {
-                this._thumbs.reverse();
+        GalleryComponent.prototype.set = function (data) {
+            this._data = Object.assign(this._data, data);
+            if (this._data.helper && this._data.thumbWidth !== undefined && this._data.thumbHeight !== undefined) {
+                this._thumbs = this._data.helper.getThumbs(this._data.thumbWidth, this._data.thumbHeight);
             }
-            if (this.options.data.searchResults && this.options.data.searchResults.length) {
-                for (var i = 0; i < this.options.data.searchResults.length; i++) {
-                    var searchResult = this.options.data.searchResults[i];
+            if (this._data.viewingDirection) {
+                if (this._data.viewingDirection.toString() === manifesto.ViewingDirection.bottomToTop().toString()) {
+                    this._thumbs.reverse();
+                }
+                this._$thumbs.addClass(this._data.viewingDirection.toString()); // defaults to "left-to-right"
+            }
+            if (this._data.searchResults && this._data.searchResults.length) {
+                for (var i = 0; i < this._data.searchResults.length; i++) {
+                    var searchResult = this._data.searchResults[i];
                     // find the thumb with the same canvasIndex and add the searchResult
                     var thumb = this._thumbs.en().where(function (t) { return t.index === searchResult.canvasIndex; }).first();
                     // clone the data so searchResults isn't persisted on the canvas.
-                    var data = $.extend(true, {}, thumb.data);
-                    data.searchResults = searchResult.rects.length;
-                    thumb.data = data;
+                    var data_1 = $.extend(true, {}, thumb.data);
+                    data_1.searchResults = searchResult.rects.length;
+                    thumb.data = data_1;
                 }
             }
             this._thumbsCache = null; // delete cache
             this._createThumbs();
-            this.selectIndex(this.options.data.helper.canvasIndex);
+            if (this._data.helper) {
+                this.selectIndex(this._data.helper.canvasIndex);
+            }
             var multiSelectState = this._getMultiSelectState();
-            if (multiSelectState.isEnabled) {
+            if (multiSelectState && multiSelectState.isEnabled) {
                 this._$multiSelectOptions.show();
                 this._$thumbs.addClass("multiSelect");
                 for (var i = 0; i < multiSelectState.canvases.length; i++) {
@@ -205,7 +219,7 @@ var IIIFComponents;
         };
         GalleryComponent.prototype._update = function () {
             var multiSelectState = this._getMultiSelectState();
-            if (multiSelectState.isEnabled) {
+            if (multiSelectState && multiSelectState.isEnabled) {
                 // check/uncheck Select All checkbox
                 this._$selectAllButtonCheckbox.prop("checked", multiSelectState.allSelected());
                 var anySelected = multiSelectState.getAll().en().where(function (t) { return t.multiSelected; }).toArray().length > 0;
@@ -218,7 +232,10 @@ var IIIFComponents;
             }
         };
         GalleryComponent.prototype._getMultiSelectState = function () {
-            return this.options.data.helper.getMultiSelectState();
+            if (this._data.helper) {
+                return this._data.helper.getMultiSelectState();
+            }
+            return null;
         };
         GalleryComponent.prototype._createThumbs = function () {
             var that = this;
@@ -236,7 +253,7 @@ var IIIFComponents;
                 thumb.initialWidth = initialWidth;
                 //thumb.initialHeight = initialHeight;
                 heights.push(initialHeight);
-                thumb.multiSelectEnabled = multiSelectState.isEnabled;
+                thumb.multiSelectEnabled = (multiSelectState) ? multiSelectState.isEnabled : false;
             }
             var medianHeight = Utils.Maths.median(heights);
             for (var i_3 = 0; i_3 < this._thumbs.length; i_3++) {
@@ -244,12 +261,11 @@ var IIIFComponents;
                 thumb.initialHeight = medianHeight;
             }
             this._$thumbs.link($.templates.galleryThumbsTemplate, this._thumbs);
-            if (!multiSelectState.isEnabled) {
+            if (multiSelectState && !multiSelectState.isEnabled) {
                 // add a selection click event to all thumbs
                 this._$thumbs.delegate('.thumb', 'click', function (e) {
                     e.preventDefault();
                     var thumb = $.view(this).data;
-                    that._lastThumbClickedIndex = thumb.index;
                     that.fire(GalleryComponent.Events.THUMB_SELECTED, thumb);
                 });
             }
@@ -264,11 +280,13 @@ var IIIFComponents;
                         that_1._setThumbMultiSelected(thumb, !thumb.multiSelected);
                         var range = that_1.options.data.helper.getCanvasRange(thumb.data);
                         var multiSelectState = that_1._getMultiSelectState();
-                        if (range) {
-                            multiSelectState.selectRange(range, thumb.multiSelected);
-                        }
-                        else {
-                            multiSelectState.selectCanvas(thumb.data, thumb.multiSelected);
+                        if (multiSelectState) {
+                            if (range) {
+                                multiSelectState.selectRange(range, thumb.multiSelected);
+                            }
+                            else {
+                                multiSelectState.selectCanvas(thumb.data, thumb.multiSelected);
+                            }
                         }
                         that_1._update();
                         that_1.fire(GalleryComponent.Events.THUMB_MULTISELECTED, thumb);
@@ -297,10 +315,10 @@ var IIIFComponents;
             var newLabelWidth = newWidth;
             // if search results are visible, size index/label to accommodate it.
             // if the resulting size is below options.minLabelWidth, hide search results.
-            if (this.options.data.searchResults && this.options.data.searchResults.length) {
+            if (this._data.searchResults && this._data.searchResults.length) {
                 $searchResults.show();
                 newLabelWidth = newWidth - $searchResults.outerWidth();
-                if (newLabelWidth < this.options.data.minLabelWidth) {
+                if (this._data.minLabelWidth !== undefined && newLabelWidth < this._data.minLabelWidth) {
                     $searchResults.hide();
                     newLabelWidth = newWidth;
                 }
@@ -308,7 +326,7 @@ var IIIFComponents;
                     $searchResults.show();
                 }
             }
-            if (this.options.data.pageModeEnabled) {
+            if (this._data.pageModeEnabled) {
                 $index.hide();
                 $label.show();
             }
@@ -328,15 +346,16 @@ var IIIFComponents;
             $thumb.removeClass('preLoad');
             // if no img has been added yet
             var visible = $thumb.attr('data-visible');
-            var fadeDuration = this.options.data.imageFadeInDuration;
-            if (visible !== "false") {
+            var fadeDuration = this._data.imageFadeInDuration || 0;
+            if (visible !== 'false') {
                 $wrap.addClass('loading');
                 var src = $thumb.attr('data-src');
                 var $img = $('<img class="thumbImage" src="' + src + '" />');
                 // fade in on load.
-                $img.hide().load(function () {
+                $img.hide();
+                $img.on('load', function () {
                     $(this).fadeIn(fadeDuration, function () {
-                        $(this).parent().swapClass('loading', 'loaded');
+                        $(this).parent().switchClass('loading', 'loaded');
                     });
                 });
                 $wrap.prepend($img);
@@ -349,10 +368,13 @@ var IIIFComponents;
         };
         GalleryComponent.prototype._getThumbsByRange = function (range) {
             var thumbs = [];
+            if (!this._data.helper) {
+                return thumbs;
+            }
             for (var i = 0; i < this._thumbs.length; i++) {
                 var thumb = this._thumbs[i];
                 var canvas = thumb.data;
-                var r = this.options.data.helper.getCanvasRange(canvas, range.path);
+                var r = this._data.helper.getCanvasRange(canvas, range.path);
                 if (r && r.id === range.id) {
                     thumbs.push(thumb);
                 }
@@ -360,7 +382,7 @@ var IIIFComponents;
             return thumbs;
         };
         GalleryComponent.prototype._updateThumbs = function () {
-            var debug = this.options.data.debug;
+            var debug = !!this._data.debug;
             // cache range size
             this._setRange();
             var scrollTop = this._$main.scrollTop();
@@ -377,7 +399,7 @@ var IIIFComponents;
                 var thumbTop = $thumb.position().top;
                 var thumbHeight = $thumb.outerHeight();
                 var thumbBottom = thumbTop + thumbHeight;
-                var padding = thumbHeight * this.options.data.thumbLoadPadding;
+                var padding = thumbHeight * this._data.thumbLoadPadding;
                 // check all thumbs to see if they are within the scroll area plus padding
                 if (thumbTop <= scrollBottom + padding && thumbBottom >= scrollTop - padding) {
                     numToUpdate += 1;
@@ -429,7 +451,7 @@ var IIIFComponents;
         //     $thumb.addClass('searchpreview');
         // }
         // public searchPreviewFinish(): void {
-        //     this._scrollToThumb(this.options.data.helper.canvasIndex);
+        //     this._scrollToThumb(this._data.helper.canvasIndex);
         //     this._getAllThumbs().removeClass('searchpreview');
         // }
         GalleryComponent.prototype.selectIndex = function (index) {
@@ -478,10 +500,4 @@ var IIIFComponents;
     else {
         g.IIIFComponents.GalleryComponent = IIIFComponents.GalleryComponent;
     }
-})(global);
-
-
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}]},{},[1])(1)
-});
+})(window);
