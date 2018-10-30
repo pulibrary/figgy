@@ -26,6 +26,20 @@ Rails.application.config.to_prepare do
     :disk
   )
 
+  Valkyrie::StorageAdapter.register(
+    InstrumentedStorageAdapter.new(
+      storage_adapter: Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config["stream_derivatives_path"],
+        file_mover: lambda { |old_path, new_path|
+                      FileUtils.mv(old_path, new_path)
+                      FileUtils.chmod(0o644, new_path)
+                    }
+      ),
+      tracer: Datadog.tracer
+    ),
+    :stream_derivatives
+  )
+
   # Registers a storage adapter for a *NIX file system
   # Binaries are persisted by invoking "cp" (duplicating the file)
   # NOTE: This doubles the size of binaries being persisted if the repository
@@ -233,6 +247,14 @@ Rails.application.config.to_prepare do
     change_set_persister: ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
       storage_adapter: Valkyrie::StorageAdapter.find(:geo_derivatives)
+    )
+  )
+
+  Valkyrie::Derivatives::DerivativeService.services << AudioDerivativeService::Factory.new(
+    change_set_persister: ::ChangeSetPersister.new(
+      metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
+      storage_adapter: Valkyrie::StorageAdapter.find(:stream_derivatives),
+      characterize: false
     )
   )
 
