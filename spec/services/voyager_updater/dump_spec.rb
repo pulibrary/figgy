@@ -7,12 +7,7 @@ describe VoyagerUpdater::Dump do
   let(:data) do
     {
       "ids" => {
-        "update_ids" => [
-          { "id" => "123456" }
-        ],
-        "create_ids" => [
-          { "id" => "4609321" }
-        ]
+        "update_ids" => ["123456", "4609321"]
       }
     }
   end
@@ -30,13 +25,7 @@ describe VoyagerUpdater::Dump do
 
   describe "#update_ids" do
     it "retrieves the bib. IDs for records which Voyager marked as updated" do
-      expect(dump.update_ids).to eq(["123456"])
-    end
-  end
-
-  describe "#create_ids" do
-    it "retrieves the bib. IDs for records which Voyager marked as created" do
-      expect(dump.create_ids).to eq(["4609321"])
+      expect(dump.update_ids).to eq(["123456", "4609321"])
     end
   end
 
