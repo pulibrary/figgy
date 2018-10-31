@@ -55,7 +55,7 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
   end
 
   def manageable_files?
-    false
+    true
   end
 
   def manageable_structure?

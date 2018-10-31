@@ -8,4 +8,11 @@ class NumismaticIssueWayfinder < BaseWayfinder
   def coin_count
     @coin_count ||= query_service.custom_queries.count_members(resource: resource, model: Coin)
   end
+
+  def members_with_parents
+    @members_with_parents ||= members.map do |member|
+      member.loaded[:parents] = [resource]
+      member
+    end
+  end
 end

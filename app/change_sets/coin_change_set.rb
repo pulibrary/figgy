@@ -26,12 +26,18 @@ class CoinChangeSet < ChangeSet
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :read_groups, multiple: true, required: false
 
+  property :start_canvas, required: false
+  property :viewing_direction, required: false
+  property :viewing_hint, multiple: false, required: false, default: "individuals"
+
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
   property :pending_uploads, multiple: true, required: false
 
   validates_with MemberValidator
   validates_with StateValidator
+  validates_with ViewingDirectionValidator
+  validates_with ViewingHintValidator
   validates :visibility, presence: true
 
   def primary_terms

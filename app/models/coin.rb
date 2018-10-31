@@ -32,6 +32,11 @@ class Coin < Resource
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
   attribute :pending_uploads, Valkyrie::Types::Array.of(PendingUpload)
 
+  # manifest metadata
+  attribute :start_canvas
+  attribute :viewing_direction
+  attribute :viewing_hint
+
   def self.can_have_manifests?
     true
   end
