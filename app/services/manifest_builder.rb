@@ -90,7 +90,7 @@ class ManifestBuilder
     # @return [TopStructure]
     def ranges
       logical_structure.map do |top_structure|
-        TopStructure.new(top_structure)
+        TopStructure.new(top_structure, root: self)
       end
     end
 
@@ -128,7 +128,30 @@ class ManifestBuilder
       resource.respond_to?(:viewing_direction) ? Array(resource.viewing_direction).first : []
     end
 
-    def sequence_rendering
+    # Determines whether or not a resource is FileSet containing at least one audio file
+    # @param resource [Resource]
+    # @return [Boolean]
+    def audio_file_set?(resource)
+      resource.is_a?(FileSet) && resource.mime_type.any? { |str| str.starts_with? "audio" }
+    end
+
+    def audio_scanned_resource?(resource)
+      resource.is_a?(ScannedResource) && resource.decorate.file_sets.present? && resource.decorate.file_sets.any? { |file_set| audio_file_set?(file_set) }
+    end
+
+    def audio_sequence_rendering
+      audio_url = helper.audio_url(resource)
+      return unless audio_url
+      [
+        {
+          "@id" => audio_url,
+          "label" => { "en" => ["Download as MP3"] },
+          "format" => "audio/mp3"
+        }
+      ]
+    end
+
+    def pdf_sequence_rendering
       [
         {
           "@id" => helper.pdf_url(resource),
@@ -136,6 +159,11 @@ class ManifestBuilder
           format: "application/pdf"
         }
       ]
+    end
+
+    def sequence_rendering
+      return audio_sequence_rendering if audio_file_set?(resource) || audio_scanned_resource?(resource)
+      pdf_sequence_rendering
     end
 
     private
@@ -263,12 +291,13 @@ class ManifestBuilder
   ##
   # Presenter modeling the top node of nested structure resource trees
   class TopStructure
-    attr_reader :structure
+    attr_reader :structure, :root
 
     ##
     # @param [Hash] structure the top structure node
-    def initialize(structure)
+    def initialize(structure, root: nil)
       @structure = structure
+      @root = root
     end
 
     ##
@@ -283,6 +312,7 @@ class ManifestBuilder
     # @return [TopStructure]
     def ranges
       @ranges ||= structure.nodes.select { |x| x.proxy.blank? }.map do |node|
+        # Structure child nodes one step away from the root TopStructure do not contain proxies
         TopStructure.new(node)
       end
     end
@@ -438,7 +468,22 @@ class ManifestBuilder
     end
 
     def pdf_url(resource)
-      manifest_url(resource).gsub("manifest", "pdf")
+      "#{protocol}://#{host}/concern/#{resource.model_name.plural}/#{resource.id}/pdf"
+    end
+
+    def audio_derivative_file(resource)
+      audio_derivatives = resource.derivative_files.select { |file| file.mime_type.first.starts_with?("audio") }
+      audio_derivatives.first
+    end
+
+    # This assumes that the first FileSet of a ScannedResource contains the audio files
+    # @param resource [Resource]
+    # @return [String]
+    def audio_url(resource)
+      file_set = resource.is_a?(FileSet) ? resource : resource.decorate.file_sets.first
+      file = audio_derivative_file(file_set)
+      return unless file
+      "#{protocol}://#{host}/downloads/#{file_set.id}/file/#{file.id}"
     end
 
     def show_url(resource)

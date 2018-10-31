@@ -22,6 +22,18 @@ class ManifestBuilder
         )
       end
 
+      def structure_builder_class
+        IIIFManifest::ManifestBuilder::StructureBuilder
+      end
+
+      def structure_builder
+        IIIFManifest::ManifestServiceLocator::InjectedFactory.new(
+          structure_builder_class,
+          canvas_builder_factory: canvas_builder,
+          iiif_range_factory: iiif_range_factory
+        )
+      end
+
       # Provides the builders injected into the factory for manifests of collections
       # @see IIIFManifest::ManifestServiceLocator#collection_manifest_builder
       # @return [IIIFManifest::ManifestBuilder::CompositeBuilderFactory] the factory of multiple builders

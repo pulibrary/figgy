@@ -80,25 +80,52 @@ RSpec.describe FileSetsController do
     end
   end
 
-  describe "GET /concern/file_sets/:id/manifest" do
+  describe "GET /concern/file_sets/:id/manifest", run_real_derivatives: true do
+    with_queue_adapter :inline
     # get around the stubbing in earlier test setup; we need to test actual manifest behavior
     let(:manifest_helper_class) { ManifestBuilder::ManifestHelper }
+    let(:file) do
+      fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "audio/x-wav")
+    end
+    let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
+    let(:scanned_resource) do
+      sr = ScannedResource.new(title: "Test Title", rights_statement: "http://rightsstatements.org/vocab/CNE/1.0/", visibility: "public")
+      cs = ScannedResourceChangeSet.new(sr, files: [file])
+      change_set_persister.save(change_set: cs)
+    end
+    let(:file_set) { scanned_resource.decorate.members.first }
+
     before do
       allow(manifest_helper_class).to receive(:new).and_call_original
+      scanned_resource
     end
 
     render_views
     it "renders the manifest as json" do
-      file = fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "audio/x-wav")
-      change_set_persister = ChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter)
-
-      file_set = FactoryBot.create_for_repository(:file_set)
-      change_set = FileSetChangeSet.new(file_set, files: [file])
-      change_set_persister.save(change_set: change_set)
-
       get :manifest, params: { id: file_set.id.to_s }, format: :json
-      expect(JSON.parse(response.body)["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
+
       expect(response.content_type).to eq "application/json"
+      manifest_values = JSON.parse(response.body)
+
+      expect(manifest_values["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
+      expect(manifest_values["rendering"]).not_to be_empty
+      expect(manifest_values["rendering"].first).to include("id" => "http://www.example.com/downloads/#{file_set.id}/file/#{file_set.derivative_files.first.id}")
+      expect(manifest_values["rendering"].first).to include("label" => { "en" => ["Download as MP3"] })
+      expect(manifest_values["rendering"].first).to include("format" => "audio/mp3")
+    end
+    context "when an invalid FileSet ID is requested" do
+      before do
+        allow(Valkyrie.logger).to receive(:error)
+      end
+      it "raises an error" do
+        get :manifest, params: { id: "invalid" }, format: :json
+        expect(response.status).to eq(404)
+        expect(Valkyrie.logger).to have_received(:error).with("FileSetsController: Failed to load the FileSet for the ID invalid")
+
+        expect(response.content_type).to eq "application/json"
+        manifest_values = JSON.parse(response.body)
+        expect(manifest_values).to include("message" => "No manifest found for invalid")
+      end
     end
   end
 

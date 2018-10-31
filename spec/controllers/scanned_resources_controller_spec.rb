@@ -352,4 +352,157 @@ RSpec.describe ScannedResourcesController do
       end
     end
   end
+
+  describe "GET /concern/scanned_resources/:id/manifest", run_real_derivatives: true do
+    with_queue_adapter :inline
+    let(:user) { FactoryBot.create(:admin) }
+    let(:file) do
+      fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "audio/x-wav")
+    end
+    let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
+    let(:file_set_id) { scanned_resource.decorate.file_sets.first.id }
+    let(:file_id) { scanned_resource.decorate.file_sets.first.derivative_files.first.id }
+    let(:rendering_download) do
+      "http://www.example.com/downloads/#{file_set_id}/file/#{file_id}"
+    end
+
+    before do
+      sign_in user
+    end
+
+    context "when a ScannedResource has a FileSet containing audio files" do
+      it "generates a manifest with all FileSets as ranges" do
+        get :manifest, params: { format: :json, id: scanned_resource.id }
+
+        expect(response.status).to eq 200
+        expect(response.body).not_to be_empty
+        manifest_values = JSON.parse(response.body)
+        expect(manifest_values["rendering"]).not_to be_empty
+        expect(manifest_values["rendering"].first).to include("id" => rendering_download)
+        expect(manifest_values["rendering"].first).to include("label" => { "en" => ["Download as MP3"] })
+        expect(manifest_values["rendering"].first).to include("format" => "audio/mp3")
+      end
+
+      context "with a structure" do
+        let(:file2) do
+          fixture_file_upload("files/audio_file.wav")
+        end
+        let(:scanned_resource) do
+          FactoryBot.create_for_repository(:scanned_resource, files: [file, file2])
+        end
+        let(:file_set_2_id) { scanned_resource.decorate.file_sets.last.id }
+        let(:logical_structure) do
+          [
+            {
+              label: "Album 1",
+              nodes: [
+                {
+                  label: "Track 1",
+                  nodes: [{ proxy: file_set_id }]
+                },
+                {
+                  label: "Track 2",
+                  nodes: [{ proxy: file_set_2_id }]
+                }
+              ]
+            }
+          ]
+        end
+        let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
+        let(:range_id) { file_set_id }
+        before do
+          cs = ScannedResourceChangeSet.new(scanned_resource, logical_structure: logical_structure)
+          change_set_persister.save(change_set: cs)
+        end
+        describe "GET /concern/scanned_resources/:id/manifest" do
+          it "generates a manifest with a ranges for FileSets" do
+            get :manifest, params: { format: :json, id: scanned_resource.id }
+
+            expect(response.status).to eq 200
+            expect(response.body).not_to be_empty
+            manifest_values = JSON.parse(response.body)
+            manifest_renderings = manifest_values["rendering"]
+
+            expect(manifest_renderings).not_to be_empty
+            expect(manifest_renderings.first).to include("id" => rendering_download)
+            expect(manifest_renderings.first).to include("label" => { "en" => ["Download as MP3"] })
+            expect(manifest_renderings.first).to include("format" => "audio/mp3")
+
+            manifest_structures = manifest_values["structures"]
+            expect(manifest_structures).not_to be_empty
+            top_range = manifest_structures.first
+
+            expect(top_range).to include("items")
+            child_ranges = top_range["items"]
+
+            expect(child_ranges).not_to be_empty
+            expect(child_ranges.length).to eq(2)
+            expect(child_ranges.first["id"]).to eq("http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest/range/r#{file_set_id}")
+            expect(child_ranges.last["id"]).to eq("http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest/range/r#{file_set_2_id}")
+          end
+        end
+        context "with a logical structure which is incomplete" do
+          let(:logical_structure) do
+            [
+              {
+                label: "Album 1",
+                nodes: [
+                  {
+                    label: "Track 1",
+                    nodes: []
+                  }
+                ]
+              }
+            ]
+          end
+          it "generates random URIs for the child Ranges containing the FileSets" do
+            get :manifest, params: { format: :json, id: scanned_resource.id }
+
+            expect(response.status).to eq 200
+            expect(response.body).not_to be_empty
+            manifest_values = JSON.parse(response.body)
+
+            manifest_structures = manifest_values["structures"]
+            expect(manifest_structures).not_to be_empty
+            top_range = manifest_structures.first
+
+            expect(top_range).to include("items")
+            child_ranges = top_range["items"]
+
+            expect(child_ranges).not_to be_empty
+            expect(child_ranges.length).to eq(1)
+
+            expect(child_ranges.first["id"]).not_to eq("http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest/range/r#{file_set_id}")
+            expect(child_ranges.first["id"]).to include("http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest/range/r")
+          end
+        end
+        describe "GET /concern/scanned_resources/:id/manifest?range_id=" do
+          xit "generates a manifest with only a range for the requested FileSet" do
+            get :manifest, params: { format: :json, id: scanned_resource.id, param: { range_id: range_id } }
+
+            expect(response.status).to eq 200
+            expect(response.body).not_to be_empty
+            manifest_values = JSON.parse(response.body)
+            manifest_renderings = manifest_values["rendering"]
+
+            expect(manifest_renderings).not_to be_empty
+            expect(manifest_renderings.first).to include("id" => rendering_download)
+            expect(manifest_renderings.first).to include("label" => { "en" => ["Download as MP3"] })
+            expect(manifest_renderings.first).to include("format" => "audio/mp3")
+
+            manifest_structures = manifest_values["structures"]
+            expect(manifest_structures).not_to be_empty
+            top_range = manifest_structures.first
+
+            expect(top_range).to include("items")
+            child_ranges = top_range["items"]
+
+            expect(child_ranges).not_to be_empty
+            expect(child_ranges.length).to eq(1)
+            expect(child_ranges.first["id"]).to eq("http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest/range/r#{file_set_id}")
+          end
+        end
+      end
+    end
+  end
 end

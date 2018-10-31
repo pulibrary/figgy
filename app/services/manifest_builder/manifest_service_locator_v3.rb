@@ -21,6 +21,18 @@ class ManifestBuilder
         )
       end
 
+      def structure_builder_class
+        ManifestBuilder::StructureBuilder
+      end
+
+      def structure_builder
+        IIIFManifest::ManifestServiceLocator::InjectedFactory.new(
+          structure_builder_class,
+          canvas_builder_factory: canvas_builder,
+          iiif_range_factory: iiif_range_factory
+        )
+      end
+
       def file_set_builders; end
 
       ##
