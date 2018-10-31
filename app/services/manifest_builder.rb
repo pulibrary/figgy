@@ -344,11 +344,23 @@ class ManifestBuilder
     # Retrieve an instance of the IIIFManifest::DisplayImage for the image
     # @return [IIIFManifest::DisplayImage]
     def display_image
+      return if file.mime_type.first.include?("audio")
       @display_image ||= IIIFManifest::DisplayImage.new(display_image_url,
                                                         width: width.to_i,
                                                         height: height.to_i,
                                                         format: "image/jpeg",
                                                         iiif_endpoint: endpoint)
+    end
+
+    def display_content
+      return unless file.mime_type.first.include?("audio")
+      @display_content ||= IIIFManifest::V3::DisplayContent.new(
+        helper.download_url(resource.id, derivative.id),
+        format: "audio/mp3",
+        label: resource.title.first,
+        duration: file.duration.first.to_f,
+        type: "Video" # required for the viewer to play audio correctly
+      )
     end
 
     def display_image_url
@@ -378,6 +390,10 @@ class ManifestBuilder
       # @return [File]
       def file
         resource.original_file
+      end
+
+      def derivative
+        resource.derivative_file
       end
 
       ##
