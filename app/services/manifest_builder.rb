@@ -359,7 +359,7 @@ class ManifestBuilder
         format: "audio/mp3",
         label: resource.title.first,
         duration: file.duration.first.to_f,
-        type: "Video"
+        type: "Video" # required for the viewer to play audio correctly
       )
     end
 
