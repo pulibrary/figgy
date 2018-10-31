@@ -144,4 +144,23 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.workshop", text: "test value"
     end
   end
+
+  context "with child Coin resources" do
+    let(:member) do
+      persister.save(resource: FactoryBot.create_for_repository(:coin))
+    end
+    let(:parent) do
+      persister.save(resource: FactoryBot.create_for_repository(:numismatic_issue, member_ids: [member.id]))
+    end
+    before do
+      parent
+    end
+
+    scenario "saved Coins are displayed as members" do
+      visit solr_document_path(parent)
+
+      expect(page).to have_selector "h2", text: "Members"
+      expect(page).to have_selector "td", text: "Coin: #{member.id}"
+    end
+  end
 end
