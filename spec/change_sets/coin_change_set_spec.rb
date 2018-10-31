@@ -7,7 +7,7 @@ RSpec.describe CoinChangeSet do
 
   describe "#primary_terms" do
     it "includes displayed fields" do
-      expect(change_set.primary_terms).to include(:department, :size, :weight, :seller)
+      expect(change_set.primary_terms).to include(:department, :die_axis, :size, :weight)
     end
   end
 

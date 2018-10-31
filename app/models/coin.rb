@@ -4,11 +4,23 @@ class Coin < Resource
   attribute :member_ids, Valkyrie::Types::Array
 
   # descriptive metadata
+  attribute :accession
+  attribute :analysis
+  attribute :counter_stamp
   attribute :department
-  attribute :size
   attribute :die_axis
-  attribute :weight
+  attribute :find
+  attribute :find_date
+  attribute :holding_location
+  attribute :loan
+  attribute :object_type
+  attribute :place
+  attribute :private_note
+  attribute :provenance
   attribute :references
+  attribute :size
+  attribute :technique
+  attribute :weight
 
   # administrative metadata
   attribute :depositor
