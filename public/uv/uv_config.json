@@ -16,6 +16,13 @@
         "branchNodesSelectable": true,
         "defaultToTreeEnabled": true
       }
+    },
+    "footerPanel":
+    {
+      "options":
+      {
+        "shareEnabled": false
+      }
     }
   }
 }
