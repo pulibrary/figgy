@@ -281,4 +281,30 @@ describe Ability do
       }
     end
   end
+
+  describe "token auth" do
+    subject(:ability) { described_class.new(nil, auth_token: token) }
+
+    context "with an auth token" do
+      let(:token) { AuthToken.create(label: "Test", group: ["admin"]).token }
+
+      it "uses the auth token" do
+        expect(ability.current_user.admin?).to be true
+      end
+    end
+
+    context "without an auth token" do
+      let(:token) {}
+
+      before do
+        allow(AuthToken).to receive(:find_by).and_call_original
+      end
+
+      it "is anonymous" do
+        expect(ability.current_user.admin?).to be false
+        expect(ability.current_user.anonymous?).to be true
+        expect(AuthToken).not_to have_received(:find_by)
+      end
+    end
+  end
 end
