@@ -66,7 +66,7 @@ class Ability
   end
 
   def auth_token
-    @auth_token ||= AuthToken.find_by(token: options[:auth_token]) || NilToken
+    @auth_token ||= options[:auth_token].nil? ? NilToken : (AuthToken.find_by(token: options[:auth_token]) || NilToken)
   end
 
   def download_file_with_metadata?(resource)
