@@ -7,17 +7,21 @@
   accessible to our community and the world for generations.
 </p>
 
-<%= render partial: 'catalog/work_types', locals: { label: 'Books, Manuscripts, and Scanned Documents',
+<%= render partial: 'catalog/work_types', locals: { label: 'Books, Manuscripts, Scanned Documents, and CDs',
                                                     types: [ScannedResource],
                                                     bulk: [ScannedResource] } %>
 
-<%= render partial: 'catalog/work_types', locals: { label: 'Audio and Video',
+<%= render partial: 'catalog/work_types', locals: { label: 'Archival Audio and Video',
                                                     types: [MediaResource],
                                                     bulk: [MediaResource]} %>
 
 <%= render partial: 'catalog/work_types', locals: { label: 'Maps and Geospatial Data',
                                                     types: [ScannedMap, RasterResource, VectorResource],
                                                     bulk: [ScannedMap, RasterResource, VectorResource] } %>
+
+<%= render partial: 'catalog/work_types', locals: { label: 'Numismatics',
+                                                    types: [NumismaticIssue],
+                                                    bulk: [] } %>
 
 <%= render partial: 'catalog/work_types', locals: { label: 'Collections',
                                                     types: [Collection, ArchivalMediaCollection],
