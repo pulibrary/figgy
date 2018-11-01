@@ -9,9 +9,9 @@ class BookWorkflow < BaseWorkflow
     state :pending, initial: true
     state :metadata_review
     state :final_review
+    state :complete
     state :takedown
     state :flagged
-    state :complete
 
     # ingest workflow
     event :finalize_digitization do

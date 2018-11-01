@@ -21,12 +21,8 @@ class ChangeSetPersister
 
     private
 
-      def workflow
-        @workflow ||= change_set.workflow
-      end
-
       def change_set_final_state?
-        workflow.final_state?
+        change_set.resource.decorate.public_readable_state?
       end
 
       def change_set_incomplete_state?
@@ -40,7 +36,6 @@ class ChangeSetPersister
       end
 
       def remove_auth_token
-        # current_auth_token.destroy
         change_set.resource.auth_token = nil
       end
 

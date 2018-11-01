@@ -17,9 +17,10 @@ class ChangeSetPersister
 
     private
 
+      # Retrieves the auth token for a given Resource
+      # @return [AuthToken]
       def auth_token
-        token = change_set.resource.auth_token
-        AuthToken.find_by(token: token)
+        AuthToken.find_by(resource_id: change_set.resource.id.to_s)
       end
   end
 end

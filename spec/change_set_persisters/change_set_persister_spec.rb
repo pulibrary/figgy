@@ -829,7 +829,7 @@ RSpec.describe ChangeSetPersister do
       original_path = original.file_identifiers.first.to_s.gsub("disk://", "")
       expect(File.exist?(original_path)).to be false
     end
-    it "destroys any linked authorization tokens" do
+    it "destroys any active authorization tokens" do
       resource = FactoryBot.create(:scanned_resource, state: "complete")
       change_set = change_set_class.new(resource)
       change_set.prepopulate!
@@ -842,6 +842,37 @@ RSpec.describe ChangeSetPersister do
       change_set_persister.delete(change_set: deleted_change_set)
 
       expect(AuthToken.find_by(token: auth_token.token)).to be nil
+    end
+    context "when the ScannedResource is and completed and taken down before deletion" do
+      let(:resource) { FactoryBot.create(:scanned_resource, state: "complete") }
+      let(:change_set) { change_set_class.new(resource) }
+      let(:completed) do
+        change_set.prepopulate!
+        change_set.validate(state: "complete")
+        change_set_persister.save(change_set: change_set)
+      end
+      let(:taken_down) do
+        takedown_cs = change_set_class.new(completed)
+        takedown_cs.validate(state: "takedown")
+        change_set_persister.save(change_set: takedown_cs)
+      end
+
+      before do
+        auth_token = AuthToken.find_by(token: completed.auth_token)
+        expect(auth_token).not_to be nil
+
+        expect(taken_down.auth_token).to be nil
+        auth_token = AuthToken.find_by(resource_id: taken_down.id.to_s)
+        expect(auth_token).not_to be nil
+
+        deleted_change_set = change_set_class.new(taken_down)
+        change_set_persister.delete(change_set: deleted_change_set)
+      end
+
+      it "destroys any inactive authorization tokens" do
+        expect(AuthToken.find_by(token: completed.auth_token)).to be nil
+        expect(AuthToken.find_by(resource_id: taken_down.id.to_s)).to be nil
+      end
     end
   end
 
