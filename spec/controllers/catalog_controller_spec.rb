@@ -347,17 +347,35 @@ RSpec.describe CatalogController do
     before do
       sign_in FactoryBot.create(:admin)
     end
-    it "doesn't display children of parented resources" do
-      child = persister.save(resource: FactoryBot.build(:complete_scanned_resource))
-      parent = persister.save(resource: FactoryBot.build(:complete_scanned_resource, member_ids: child.id))
-      # Re-save to get member_of to index, not necessary if going through
-      #   ChangeSetPersister.
-      persister.save(resource: child)
 
-      get :index, params: { q: "" }
+    context "with a scanned resource" do
+      it "doesn't display children of parented resources" do
+        child = persister.save(resource: FactoryBot.build(:complete_scanned_resource))
+        parent = persister.save(resource: FactoryBot.build(:complete_scanned_resource, member_ids: child.id))
+        # Re-save to get member_of to index, not necessary if going through
+        #   ChangeSetPersister.
+        persister.save(resource: child)
 
-      expect(assigns(:document_list).length).to eq 1
-      expect(assigns(:document_list).first.resource.id).to eq parent.id
+        get :index, params: { q: "" }
+
+        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:document_list).first.resource.id).to eq parent.id
+      end
+    end
+
+    context "with a numismatic issue" do
+      it "doesn't display children of parented resources" do
+        child = persister.save(resource: FactoryBot.build(:complete_open_coin))
+        parent = persister.save(resource: FactoryBot.build(:complete_open_numismatic_issue, member_ids: child.id))
+        # Re-save to get member_of to index, not necessary if going through
+        #   ChangeSetPersister.
+        persister.save(resource: child)
+
+        get :index, params: { q: "" }
+
+        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:document_list).first.resource.id).to eq parent.id
+      end
     end
   end
 

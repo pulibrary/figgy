@@ -28,5 +28,8 @@ FactoryBot.define do
     factory :campus_only_numismatic_issue do
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
     end
+    factory :complete_open_numismatic_issue do
+      state "complete"
+    end
   end
 end

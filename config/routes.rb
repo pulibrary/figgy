@@ -106,16 +106,19 @@ Rails.application.routes.draw do
       member do
         get :file_manager
         get :order_manager
+        get :manifest, defaults: { format: :json }
+        post :browse_everything_files
       end
     end
     resources :coins do
       member do
         get :file_manager
         get :order_manager
+        get :manifest, defaults: { format: :json }
         post :browse_everything_files
       end
     end
-    get "/numismatic_issues/:parent_id/coin" => "coins#new", as: "numismatic_issue_add_coin"
+    get "/numismatic_issues/:parent_id/coin" => "coins#new", as: :parent_new_coin
 
     resources :ephemera_projects do
       resources :templates, only: [:new, :create, :destroy]

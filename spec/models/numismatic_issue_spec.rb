@@ -12,4 +12,8 @@ describe NumismaticIssue do
     issue.member_ids = [1, 2, 3, 3]
     expect(issue.member_ids).to eq [1, 2, 3, 3]
   end
+
+  it "has a title" do
+    expect(issue.title).to include "Issue: "
+  end
 end

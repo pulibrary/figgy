@@ -2,6 +2,7 @@
 class NumismaticIssue < Resource
   include Valkyrie::Resource::AccessControls
   attribute :member_ids, Valkyrie::Types::Array
+  attribute :member_of_collection_ids
 
   # descriptive metadata
   attribute :artist
@@ -42,11 +43,23 @@ class NumismaticIssue < Resource
   attribute :rights_statement
   attribute :rights_note, Valkyrie::Types::Set
   attribute :state
+  attribute :thumbnail_id
   attribute :visibility
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
+  attribute :pending_uploads, Valkyrie::Types::Array.of(PendingUpload)
 
-  # for ark minting
+  # manifest metadata
+  attribute :start_canvas
+  attribute :viewing_direction
+  attribute :viewing_hint
+
+  def self.can_have_manifests?
+    true
+  end
+
+  # Placeholder title.
+  # TODO: Add more descriptive title when we have more information.
   def title
-    denomination
+    ["Issue: #{id}"]
   end
 end
