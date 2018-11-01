@@ -710,4 +710,90 @@ RSpec.describe CatalogController do
       end
     end
   end
+
+  describe "numismatics" do
+    let(:issue_metadata) do
+      {
+        artist: "issue-artist",
+        color: "issue-color",
+        date_range: "issue-date",
+        denomination: "issue-denomination",
+        department: "issue-department",
+        description: "issue-description",
+        depositor: "issue-depositor",
+        edge: "issue-edge",
+        era: "issue-era",
+        figure: "issue-figure",
+        geographic_origin: "issue-origin",
+        identifier: "issue-identifier",
+        master: "issue-master",
+        metal: "issue-metal",
+        note: "issue-note",
+        object_type: "issue-type",
+        obverse_attributes: "issue-obv-attributes",
+        obverse_legend: "issue-obv-legend",
+        obverse_type: "issue-obv-type",
+        orientation: "issue-orientation",
+        part: "issue-part",
+        place: "issue-place",
+        references: "issue-references",
+        replaces: "issue-replaces",
+        reverse_attributes: "issue-rev-attributes",
+        reverse_legend: "issue-rev-legend",
+        reverse_type: "issue-rev-type",
+        rights_note: "issue-rights-note",
+        rights_statement: "issue-rights-statement",
+        ruler: "issue-ruler",
+        series: "issue-series",
+        shape: "issue-series",
+        subject: "issue-subject",
+        symbol: "issue-symbol",
+        workshop: "issue-workshop"
+      }
+    end
+
+    let(:coin_metadata) do
+      {
+        accession: "coin-accession",
+        analysis: "coin-analysis",
+        counter_stamp: "coin-counter-stamp",
+        department: "coin-department",
+        depositor: "coin-depositor",
+        die_axis: "coin-die-axis",
+        find: "coin-find",
+        find_date: "coin-find-date",
+        holding_location: "coin-holding-location",
+        loan: "coin-loan",
+        object_type: "coin-type",
+        place: "coin-place",
+        private_note: "coin-private-note",
+        provenance: "coin-provenance",
+        references: "coin-references",
+        replaces: "coin-replaces",
+        size: "coin-size",
+        technique: "coin-technique",
+        weight: "coin-weight"
+      }
+    end
+
+    before do
+      coin = persister.save(resource: FactoryBot.build(:complete_open_coin, coin_metadata))
+      issue_attr = issue_metadata.merge(member_ids: [coin.id])
+      persister.save(resource: FactoryBot.build(:complete_open_numismatic_issue, issue_attr))
+    end
+
+    it "finds the issue by issue metadata fields" do
+      issue_metadata.values.each do |val|
+        get :index, params: { q: val }
+        expect(assigns(:document_list)).not_to be_empty
+      end
+    end
+
+    it "finds the issue by coin metadata fields" do
+      coin_metadata.values.each do |val|
+        get :index, params: { q: val }
+        expect(assigns(:document_list)).not_to be_empty
+      end
+    end
+  end
 end
