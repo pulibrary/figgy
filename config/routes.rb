@@ -86,6 +86,7 @@ Rails.application.routes.draw do
       end
       collection do
         get "new/simple", action: :new, change_set: "simple", as: :new_simple
+        get "new/media_reserve", action: :new, change_set: "media_reserve", as: :new_media_reserve
       end
       collection do
         get "save_and_ingest/:id", action: :save_and_ingest, constraints: { id: /[^\/]+/ }, defaults: { format: :json }
