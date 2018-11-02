@@ -61,9 +61,9 @@ export default class RelatedResourcesTable {
    * Handle click events by the "Add" button in the table, setting a warning
    * message if the input is empty or calling the server to handle the request
    */
-  bindAddButton() {
+  bindAddButton(event) {
     const $this = this;
-    $this.element.find('.btn-add-row').click(() => {
+    $this.element.find('.btn-add-row').click((event) => {
       const $element = $(event.target)
       const $row = $this.element.find('.member-actions')
       const attachedId = $this.$select.val()
@@ -97,9 +97,9 @@ export default class RelatedResourcesTable {
   * Handle click events by the "Remove" buttons in the table, and calling the
   * server to handle the request
   */
-  bindRemoveButton() {
+  bindRemoveButton(event) {
     const $this = this;
-    $this.element.find('.btn-remove-row').click(() => {
+    $this.element.find('.btn-remove-row').click((event) => {
       const $element = $(event.target)
       const $row = $element.parents('tr:first');
       const memberId = $row.data('resource-id');
