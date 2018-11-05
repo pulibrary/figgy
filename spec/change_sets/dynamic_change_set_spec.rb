@@ -12,7 +12,7 @@ RSpec.describe DynamicChangeSet do
       end
     end
     context "if change_set is media_reserves" do
-      resource = FactoryBot.build(:scanned_resource, change_set: "media_reserves")
+      resource = FactoryBot.build(:scanned_resource, change_set: "media_reserve")
       it "returns a MediaReserveChangeSet" do
         expect(change_set_class.new(resource).class).to eq MediaReserveChangeSet
       end
