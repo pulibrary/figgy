@@ -37,6 +37,19 @@ RSpec.describe ScannedResourcesController do
     end
   end
 
+  describe "change_set_class" do
+    context "when params change_set" do
+      it "is simple, creates a new SimpleResourceChangeSet" do
+        get :new, params: { change_set: "simple" }
+        expect(assigns(:change_set)).to be_a SimpleResourceChangeSet
+      end
+      it "is media_reserve, creates a new MediaReserveChangeSet" do
+        get :new, params: { change_set: "media_reserve" }
+        expect(assigns(:change_set)).to be_a MediaReserveChangeSet
+      end
+    end
+  end
+
   describe "create" do
     let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do

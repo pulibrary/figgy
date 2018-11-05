@@ -81,6 +81,7 @@ Metrics/CyclomaticComplexity:
     - 'app/jobs/ingest_intermediate_file_job.rb'
     - 'app/services/pul_metadata_services/bib_record.rb'
     - 'app/services/bulk_ingest_service.rb'
+    - 'app/controllers/scanned_resources_controller.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
@@ -124,6 +125,7 @@ Metrics/PerceivedComplexity:
     - 'app/jobs/ingest_intermediate_file_job.rb'
     - 'app/services/pul_metadata_services/bib_record.rb'
     - 'app/services/bulk_ingest_service.rb'
+    - 'app/controllers/scanned_resources_controller.rb'
 Rails/OutputSafety:
   Exclude:
     - 'app/decorators/**/*'
