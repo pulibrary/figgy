@@ -34,6 +34,7 @@ RSpec.feature "Coins" do
     expect(page).to have_field "Find"
     expect(page).to have_field "Find date"
     expect(page).to have_field "Holding Location"
+    expect(page).not_to have_css '.select[for="coin_holding_location"]', text: "Holding Location"
     expect(page).to have_field "Loan"
     expect(page).to have_field "Object type"
     expect(page).to have_field "Place"
