@@ -45,14 +45,12 @@ RSpec.feature "NumismaticIssues" do
     expect(page).to have_field "Object type"
     expect(page).to have_field "Obverse attributes"
     expect(page).to have_field "Obverse legend"
-    expect(page).to have_field "Obverse type"
     expect(page).to have_field "Orientation"
     expect(page).to have_field "Part"
     expect(page).to have_field "Place"
     expect(page).to have_field "References"
     expect(page).to have_field "Reverse attributes"
     expect(page).to have_field "Reverse legend"
-    expect(page).to have_field "Reverse type"
     expect(page).to have_field "Ruler"
     expect(page).to have_field "Series"
     expect(page).to have_field "Shape"
@@ -89,14 +87,12 @@ RSpec.feature "NumismaticIssues" do
         object_type: "test value",
         obverse_attributes: "test value",
         obverse_legend: "test value",
-        obverse_type: "test value",
         orientation: "test value",
         part: "test value",
         place: "test value",
         references: "test value",
         reverse_attributes: "test value",
         reverse_legend: "test value",
-        reverse_type: "test value",
         ruler: "test value",
         series: "test value",
         shape: "test value",
@@ -128,14 +124,12 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.object_type", text: "test value"
       expect(page).to have_css ".attribute.obverse_attributes", text: "test value"
       expect(page).to have_css ".attribute.obverse_legend", text: "test value"
-      expect(page).to have_css ".attribute.obverse_type", text: "test value"
       expect(page).to have_css ".attribute.orientation", text: "test value"
       expect(page).to have_css ".attribute.part", text: "test value"
       expect(page).to have_css ".attribute.place", text: "test value"
       expect(page).to have_css ".attribute.references", text: "test value"
       expect(page).to have_css ".attribute.reverse_attributes", text: "test value"
       expect(page).to have_css ".attribute.reverse_legend", text: "test value"
-      expect(page).to have_css ".attribute.reverse_type", text: "test value"
       expect(page).to have_css ".attribute.ruler", text: "test value"
       expect(page).to have_css ".attribute.series", text: "test value"
       expect(page).to have_css ".attribute.shape", text: "test value"

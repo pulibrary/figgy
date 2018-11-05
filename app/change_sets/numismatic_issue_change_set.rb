@@ -20,14 +20,12 @@ class NumismaticIssueChangeSet < ChangeSet
   property :object_type, multiple: false, required: false
   property :obverse_attributes, multiple: true, required: false, default: []
   property :obverse_legend, multiple: false, required: false
-  property :obverse_type, multiple: false, required: false
   property :orientation, multiple: false, required: false
   property :part, multiple: true, required: false, default: []
   property :place, multiple: false, required: false, default: []
   property :references, multiple: true, required: false, default: []
   property :reverse_attributes, multiple: true, required: false, default: []
   property :reverse_legend, multiple: false, required: false
-  property :reverse_type, multiple: false, required: false
   property :ruler, multiple: false, required: false
   property :series, multiple: false, required: false
   property :shape, multiple: false, required: false
@@ -80,14 +78,12 @@ class NumismaticIssueChangeSet < ChangeSet
       :object_type,
       :obverse_attributes,
       :obverse_legend,
-      :obverse_type,
       :orientation,
       :part,
       :place,
       :references,
       :reverse_attributes,
       :reverse_legend,
-      :reverse_type,
       :ruler,
       :series,
       :shape,

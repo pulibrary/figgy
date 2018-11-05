@@ -21,14 +21,12 @@ class NumismaticIssue < Resource
   attribute :object_type
   attribute :obverse_attributes
   attribute :obverse_legend, Valkyrie::Types::SingleValuedString
-  attribute :obverse_type, Valkyrie::Types::SingleValuedString
   attribute :orientation
   attribute :part
   attribute :place
   attribute :references
   attribute :reverse_attributes
   attribute :reverse_legend, Valkyrie::Types::SingleValuedString
-  attribute :reverse_type, Valkyrie::Types::SingleValuedString
   attribute :ruler
   attribute :series
   attribute :shape
