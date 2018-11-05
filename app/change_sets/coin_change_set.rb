@@ -17,7 +17,7 @@ class CoinChangeSet < ChangeSet
   property :place, multiple: false, required: false
   property :private_note, multiple: true, required: false, default: []
   property :provenance, multiple: true, required: false, default: []
-  property :references, multiple: false, required: false
+  property :references, multiple: true, required: false, default: []
   property :size, multiple: false, required: false
   property :technique, multiple: false, required: false
   property :weight, multiple: false, required: false
