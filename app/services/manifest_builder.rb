@@ -89,9 +89,39 @@ class ManifestBuilder
     # Retrieves the presenter for each Range (sc:Range) instance
     # @return [TopStructure]
     def ranges
+      return audio_ranges if audio_manifest?
       logical_structure.map do |top_structure|
         TopStructure.new(top_structure)
       end
+    end
+
+    def audio_manifest?
+      file_set_presenters.find do |fs_presenter|
+        fs_presenter.display_content.present?
+      end.present?
+    end
+
+    def audio_ranges
+      logical_structure.flat_map do |top_structure|
+        top_structure.nodes.map do |node|
+          if node.proxy.present?
+            TopStructure.new(
+              Structure.new(
+                label: label(node),
+                nodes: node
+              )
+            )
+          else
+            TopStructure.new(node)
+          end
+        end
+      end
+    end
+
+    def label(structure_node)
+      proxy_id = structure_node.proxy.first
+      file_set_presenter = file_set_presenters.find { |x| x.id == proxy_id.to_s }
+      file_set_presenter&.display_content&.label
     end
 
     ##
@@ -359,7 +389,7 @@ class ManifestBuilder
         format: "audio/mp3",
         label: resource.title.first,
         duration: file.duration.first.to_f,
-        type: "Video" # required for the viewer to play audio correctly
+        type: "Audio" # required for the viewer to play audio correctly
       )
     end
 

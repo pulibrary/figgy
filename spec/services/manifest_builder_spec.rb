@@ -472,12 +472,18 @@ RSpec.describe ManifestBuilder do
     let(:file) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "") }
     before do
       stub_bibdata(bib_id: "123456")
-      change_set_persister.save(change_set: change_set)
+      output = change_set_persister.save(change_set: change_set)
+      output.logical_structure = [{ label: "Logical", nodes: [{ proxy: output.member_ids.last }, { label: "Bla", nodes: [{ proxy: output.member_ids.first }] }] }]
+      change_set_persister.persister.save(resource: output)
     end
     it "builds a presentation 3 manifest", run_real_characterization: true do
       output = manifest_builder.build
       # pres 3 context is always an array
       expect(output["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
+      # Logical structure should be able to have nested and un-nested members.
+      expect(output["structures"][0]["items"][0]["id"]).to include "#t="
+      expect(output["structures"][1]["items"][0]["items"][0]["id"]).to include "#t="
+      expect(output["behavior"]).to eq ["auto-advance"]
     end
   end
 

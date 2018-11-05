@@ -14,10 +14,16 @@ class ManifestBuilder
           structure_builder,
           see_also_builder,
           license_builder,
-          thumbnail_builder,
-          rendering_builder,
           logo_builder,
           composite_builder: composite_builder
+        )
+      end
+
+      def structure_builder
+        IIIFManifest::ManifestServiceLocator::InjectedFactory.new(
+          ManifestBuilder::StructureBuilderV3,
+          canvas_builder_factory: canvas_builder,
+          iiif_range_factory: iiif_range_factory
         )
       end
 
@@ -36,13 +42,6 @@ class ManifestBuilder
       end
 
       ##
-      # Class accessor for the rendering builder
-      # @return [Class]
-      def rendering_builder
-        ManifestBuilder::RenderingBuilder
-      end
-
-      ##
       # Class accessor for the logo builder
       # @return [Class]
       def logo_builder
@@ -58,12 +57,6 @@ class ManifestBuilder
           iiif_autocomplete_service_factory: IIIFManifest::ManifestBuilder::IIIFManifest::AutocompleteService,
           canvas_builder_factory: canvas_builder_factory
         )
-      end
-
-      ##
-      # Builder to add thumbnails to manifests.
-      def thumbnail_builder
-        ::ManifestBuilder::ThumbnailBuilder
       end
 
       ##
