@@ -6,6 +6,7 @@ class NumismaticIssueChangeSet < ChangeSet
   include VisibilityProperty
   property :artist, multiple: true, required: false, default: []
   property :color, multiple: false, required: false
+  property :date_object, multiple: false, required: false
   property :date_range, multiple: false, required: false
   property :denomination, multiple: false, required: false
   property :department, multiple: false, required: false
@@ -19,14 +20,19 @@ class NumismaticIssueChangeSet < ChangeSet
   property :object_type, multiple: false, required: false
   property :obverse_attributes, multiple: true, required: false, default: []
   property :obverse_figure, multiple: false, required: false
+  property :obverse_figure_relationship, multiple: false, required: false
+  property :obverse_figure_description, multiple: false, required: false
   property :obverse_legend, multiple: false, required: false
   property :obverse_orientation, multiple: false, required: false
   property :obverse_part, multiple: false, required: false
   property :obverse_symbol, multiple: false, required: false
   property :place, multiple: false, required: false, default: []
   property :references, multiple: true, required: false, default: []
+  property :replaces, multiple: true, required: false, default: []
   property :reverse_attributes, multiple: true, required: false, default: []
   property :reverse_figure, multiple: false, required: false
+  property :reverse_figure_description, multiple: false, required: false
+  property :reverse_figure_relationship, multiple: false, required: false
   property :reverse_legend, multiple: false, required: false
   property :reverse_orientation, multiple: false, required: false
   property :reverse_part, multiple: false, required: false
@@ -68,6 +74,7 @@ class NumismaticIssueChangeSet < ChangeSet
       :member_of_collection_ids,
       :artist,
       :color,
+      :date_object,
       :date_range,
       :denomination,
       :department,
@@ -81,6 +88,8 @@ class NumismaticIssueChangeSet < ChangeSet
       :object_type,
       :obverse_attributes,
       :obverse_figure,
+      :obverse_figure_description,
+      :obverse_figure_relationship,
       :obverse_legend,
       :obverse_orientation,
       :obverse_part,
@@ -89,6 +98,8 @@ class NumismaticIssueChangeSet < ChangeSet
       :references,
       :reverse_attributes,
       :reverse_figure,
+      :reverse_figure_description,
+      :reverse_figure_relationship,
       :reverse_legend,
       :reverse_orientation,
       :reverse_part,

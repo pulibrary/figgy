@@ -7,6 +7,7 @@ class NumismaticIssue < Resource
   # descriptive metadata
   attribute :artist
   attribute :color
+  attribute :date_object
   attribute :date_range
   attribute :denomination
   attribute :department
@@ -20,6 +21,8 @@ class NumismaticIssue < Resource
   attribute :object_type
   attribute :obverse_attributes
   attribute :obverse_figure
+  attribute :obverse_figure_description
+  attribute :obverse_figure_relationship
   attribute :obverse_legend, Valkyrie::Types::SingleValuedString
   attribute :obverse_orientation
   attribute :obverse_part
@@ -28,6 +31,8 @@ class NumismaticIssue < Resource
   attribute :references
   attribute :reverse_attributes
   attribute :reverse_figure
+  attribute :reverse_figure_description
+  attribute :reverse_figure_relationship
   attribute :reverse_legend, Valkyrie::Types::SingleValuedString
   attribute :reverse_orientation
   attribute :reverse_part

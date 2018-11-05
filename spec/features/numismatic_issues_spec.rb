@@ -31,6 +31,7 @@ RSpec.feature "NumismaticIssues" do
     expect(page).to have_css '.select[for="numismatic_issue_member_of_collection_ids"]', text: "Collections"
     expect(page).to have_field "Artist"
     expect(page).to have_field "Color"
+    expect(page).to have_field "Date object"
     expect(page).to have_field "Date range"
     expect(page).to have_field "Denomination"
     expect(page).to have_field "Department"
@@ -44,6 +45,8 @@ RSpec.feature "NumismaticIssues" do
     expect(page).to have_field "Object type"
     expect(page).to have_field "Obverse attributes"
     expect(page).to have_field "Obverse figure"
+    expect(page).to have_field "Obverse figure description"
+    expect(page).to have_field "Obverse figure relationship"
     expect(page).to have_field "Obverse legend"
     expect(page).to have_field "Obverse orientation"
     expect(page).to have_field "Obverse part"
@@ -52,6 +55,8 @@ RSpec.feature "NumismaticIssues" do
     expect(page).to have_field "References"
     expect(page).to have_field "Reverse attributes"
     expect(page).to have_field "Reverse figure"
+    expect(page).to have_field "Obverse figure description"
+    expect(page).to have_field "Reverse figure relationship"
     expect(page).to have_field "Reverse legend"
     expect(page).to have_field "Reverse orientation"
     expect(page).to have_field "Reverse part"
@@ -77,6 +82,7 @@ RSpec.feature "NumismaticIssues" do
         member_of_collection_ids: [collection.id],
         artist: "test value",
         color: "test value",
+        date_object: "test value",
         date_range: "test value",
         denomination: "test value",
         department: "test value",
@@ -90,14 +96,19 @@ RSpec.feature "NumismaticIssues" do
         object_type: "test value",
         obverse_attributes: "test value",
         obverse_figure: "test value",
+        obverse_figure_description: "test value",
+        obverse_figure_relationship: "test value",
         obverse_legend: "test value",
         obverse_orientation: "test value",
         obverse_part: "test value",
         obverse_symbol: "test value",
         place: "test value",
         references: "test value",
+        replaces: "test value",
         reverse_attributes: "test value",
         reverse_figure: "test value",
+        reverse_figure_description: "test value",
+        reverse_figure_relationship: "test value",
         reverse_legend: "test value",
         reverse_orientation: "test value",
         reverse_part: "test value",
@@ -118,6 +129,7 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.member_of_collections", text: "Title"
       expect(page).to have_css ".attribute.artist", text: "test value"
       expect(page).to have_css ".attribute.color", text: "test value"
+      expect(page).to have_css ".attribute.date_object", text: "test value"
       expect(page).to have_css ".attribute.date_range", text: "test value"
       expect(page).to have_css ".attribute.denomination", text: "test value"
       expect(page).to have_css ".attribute.department", text: "test value"
@@ -131,14 +143,19 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.object_type", text: "test value"
       expect(page).to have_css ".attribute.obverse_attributes", text: "test value"
       expect(page).to have_css ".attribute.obverse_figure", text: "test value"
+      expect(page).to have_css ".attribute.obverse_figure_relationship", text: "test value"
+      expect(page).to have_css ".attribute.obverse_figure_description", text: "test value"
       expect(page).to have_css ".attribute.obverse_legend", text: "test value"
       expect(page).to have_css ".attribute.obverse_orientation", text: "test value"
       expect(page).to have_css ".attribute.obverse_part", text: "test value"
       expect(page).to have_css ".attribute.obverse_symbol", text: "test value"
       expect(page).to have_css ".attribute.place", text: "test value"
       expect(page).to have_css ".attribute.references", text: "test value"
+      expect(page).to have_css ".attribute.replaces", text: "test value"
       expect(page).to have_css ".attribute.reverse_attributes", text: "test value"
       expect(page).to have_css ".attribute.reverse_figure", text: "test value"
+      expect(page).to have_css ".attribute.reverse_figure_relationship", text: "test value"
+      expect(page).to have_css ".attribute.reverse_figure_description", text: "test value"
       expect(page).to have_css ".attribute.reverse_legend", text: "test value"
       expect(page).to have_css ".attribute.reverse_orientation", text: "test value"
       expect(page).to have_css ".attribute.reverse_part", text: "test value"

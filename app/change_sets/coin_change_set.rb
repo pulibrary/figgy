@@ -9,8 +9,12 @@ class CoinChangeSet < ChangeSet
   property :counter_stamp, multiple: false, required: false
   property :department, multiple: false, required: false
   property :die_axis, multiple: false, required: false
-  property :find, multiple: false, required: false
   property :find_date, multiple: false, required: false
+  property :find_description, multiple: false, required: false
+  property :find_feature, multiple: false, required: false
+  property :find_locus, multiple: false, required: false
+  property :find_number, multiple: false, required: false
+  property :find_place, multiple: false, required: false
   property :holding_location, multiple: false, required: false
   property :loan, multiple: false, required: false
   property :object_type, multiple: false, required: false
@@ -18,6 +22,7 @@ class CoinChangeSet < ChangeSet
   property :private_note, multiple: true, required: false, default: []
   property :provenance, multiple: true, required: false, default: []
   property :references, multiple: true, required: false, default: []
+  property :replaces, multiple: true, required: false, default: []
   property :size, multiple: false, required: false
   property :technique, multiple: false, required: false
   property :weight, multiple: false, required: false
@@ -48,8 +53,12 @@ class CoinChangeSet < ChangeSet
       :counter_stamp,
       :department,
       :die_axis,
-      :find,
       :find_date,
+      :find_description,
+      :find_feature,
+      :find_locus,
+      :find_number,
+      :find_place,
       :holding_location,
       :loan,
       :object_type,
