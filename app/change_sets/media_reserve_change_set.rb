@@ -5,6 +5,7 @@ class MediaReserveChangeSet < ChangeSet
 
   include VisibilityProperty
   include RemoteMetadataProperty
+  property :visibility, multiple: false, required: true, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
   property :title, multiple: true, required: true, default: []
   property :rights_statement, multiple: false, required: true, default: "http://rightsstatements.org/vocab/NKC/1.0/", type: ::Types::URI
   property :local_identifier, multiple: true, required: false, default: []
