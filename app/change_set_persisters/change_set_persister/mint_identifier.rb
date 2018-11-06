@@ -8,6 +8,7 @@ class ChangeSetPersister
     end
 
     def run
+      return unless change_set.resource.respond_to?(:identifier)
       return unless change_set.resource.decorate.ark_mintable_state?
       return unless needs_updating?(change_set)
 

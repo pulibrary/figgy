@@ -11,7 +11,6 @@ class ScannedMap < Resource
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
   attribute :file_metadata, Valkyrie::Types::Set.of(FileMetadata.optional)
   attribute :relation
-  attribute :auth_token, Valkyrie::Types::String # This is necessary given that ScannedMapChangeSet inherits from ScannedResourceChangeSet
 
   def self.can_have_manifests?
     true

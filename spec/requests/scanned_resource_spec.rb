@@ -89,12 +89,7 @@ RSpec.describe "ScannedResource requests", type: :request do
     end
 
     context "when the client passes an authorization token" do
-      let(:auth_token) { scanned_resource.auth_token }
-      it "is granted read-only access to the catalog resource" do
-        get "/catalog/#{scanned_resource.id}?auth_token=#{auth_token}"
-
-        expect(response.status).to eq 200
-      end
+      let(:auth_token) { AuthToken.create!(group: ["admin"], label: "Admin Token").token }
       it "is granted read-only access to the PDF derivatives for the resource" do
         get "/concern/scanned_resources/#{scanned_resource.id}/pdf?auth_token=#{auth_token}"
 
@@ -111,17 +106,17 @@ RSpec.describe "ScannedResource requests", type: :request do
         sequences = manifest_values["sequences"]
         renderings = sequences.first["rendering"]
 
-        expect(renderings.first).to include("@id" => "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/pdf?auth_token=#{scanned_resource.auth_token}")
+        expect(renderings.first).to include("@id" => "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/pdf")
 
         canvases = sequences.first["canvases"]
         canvas_renderings = canvases.first["rendering"]
         file_set = scanned_resource.decorate.file_sets.first
 
-        expect(canvas_renderings.first).to include("@id" => "http://www.example.com/downloads/#{file_set.id}/file/#{file_set.original_file.id}?auth_token=#{scanned_resource.auth_token}")
+        expect(canvas_renderings.first).to include("@id" => "http://www.example.com/downloads/#{file_set.id}/file/#{file_set.original_file.id}")
       end
       it "is granted access to file downloads" do
         file_set = scanned_resource.decorate.file_sets.first
-        get "/downloads/#{file_set.id}/file/#{file_set.original_file.id}?auth_token=#{scanned_resource.auth_token}"
+        get "/downloads/#{file_set.id}/file/#{file_set.original_file.id}?auth_token=#{auth_token}"
 
         expect(response.status).to eq 200
       end

@@ -186,4 +186,21 @@ RSpec.describe Valkyrie::ResourceDecorator do
       end
     end
   end
+
+  describe "#workflow_class" do
+    context "when no ChangeSet can be found" do
+      let(:resource) { MyResource.new }
+
+      before do
+        class MyResource < Resource
+        end
+      end
+      it "raises an error" do
+        expect { decorator.workflow_class }.to raise_error(WorkflowRegistry::EntryNotFound)
+      end
+      after do
+        Object.send(:remove_const, :MyResource)
+      end
+    end
+  end
 end

@@ -20,12 +20,13 @@ class ChangeSetPersister
         CreateFile::Factory.new(file_appender: FileAppender),
         PropagateVisibilityAndState,
         CleanupPdfs,
-        CreateProxyFileSets
+        CreateProxyFileSets,
+        ApplyAuthToken
       ],
       after_save: [
         AppendToParent,
         AppendCitationToParent,
-        LinkAuthToken
+        UpdateAuthToken
       ],
       after_save_commit: [
         PublishMessage::Factory.new(operation: :update),
@@ -46,7 +47,7 @@ class ChangeSetPersister
         PublishMessage::Factory.new(operation: :derivatives_delete)
       ],
       after_delete_commit: [
-        RevokeAuthToken,
+        DeleteAuthToken,
         DeleteMembers::Factory.new(property: :member_ids),
         PublishMessage::Factory.new(operation: :delete)
       ],

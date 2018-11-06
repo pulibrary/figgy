@@ -12,15 +12,8 @@ class ScannedResource < Resource
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
   attribute :file_metadata, Valkyrie::Types::Set.of(FileMetadata.optional)
   attribute :change_set, Valkyrie::Types::String
-  attribute :auth_token, Valkyrie::Types::String
 
   def self.can_have_manifests?
-    true
-  end
-
-  # Ensure that resources of this class cannot be accessed with an access token
-  # @return [Boolean]
-  def self.tokenized_access?
     true
   end
 

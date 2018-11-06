@@ -115,8 +115,8 @@ RSpec.describe ChangeSetPersister do
     end
 
     it "mints an authorization token" do
-      resource = FactoryBot.create(:scanned_resource, title: [], source_metadata_identifier: "123456", state: "final_review")
-      change_set = change_set_class.new(resource)
+      resource = FactoryBot.create(:playlist, title: ["test playlist"], state: "draft")
+      change_set = PlaylistChangeSet.new(resource)
       change_set.prepopulate!
       change_set.validate(state: "complete")
       output = change_set_persister.save(change_set: change_set)
@@ -129,13 +129,14 @@ RSpec.describe ChangeSetPersister do
     end
   end
 
-  context "when a scanned resource is taken down" do
+  context "when a playlist is taken down" do
     before do
       stub_bibdata(bib_id: "123456")
     end
 
     context "with an authorization token" do
-      let(:resource) { FactoryBot.create(:scanned_resource, title: [], source_metadata_identifier: "123456", state: "final_review") }
+      let(:resource) { FactoryBot.create(:playlist) }
+      let(:change_set_class) { PlaylistChangeSet }
       let(:change_set) { change_set_class.new(resource) }
       let(:persisted) do
         change_set.prepopulate!
@@ -146,13 +147,14 @@ RSpec.describe ChangeSetPersister do
         persisted
       end
       it "clears the attribute on the model but preserves the token" do
-        takedown_change_set = change_set_class.new(resource)
+        persisted_auth_token = persisted.auth_token
+        takedown_change_set = change_set_class.new(persisted)
         takedown_change_set.prepopulate!
-        takedown_change_set.validate(state: "takedown")
+        takedown_change_set.validate(state: "draft")
         output = change_set_persister.save(change_set: takedown_change_set)
 
         expect(output.auth_token).to be nil
-        auth_token = AuthToken.find_by(token: persisted.auth_token)
+        auth_token = AuthToken.find_by(token: persisted_auth_token)
 
         expect(auth_token).not_to be nil
         expect(auth_token.resource_id).to eq persisted.id.to_s
@@ -176,7 +178,8 @@ RSpec.describe ChangeSetPersister do
     end
 
     context "after having been taken down" do
-      let(:resource) { FactoryBot.create(:scanned_resource, title: [], source_metadata_identifier: "123456", state: "final_review") }
+      let(:resource) { FactoryBot.create(:playlist) }
+      let(:change_set_class) { PlaylistChangeSet }
       let(:change_set) { change_set_class.new(resource) }
       let(:persisted) do
         change_set.prepopulate!
@@ -186,7 +189,7 @@ RSpec.describe ChangeSetPersister do
       let(:take_down) do
         takedown_change_set = change_set_class.new(persisted)
         takedown_change_set.prepopulate!
-        takedown_change_set.validate(state: "takedown")
+        takedown_change_set.validate(state: "draft")
         change_set_persister.save(change_set: takedown_change_set)
       end
       let(:completed) do
@@ -196,9 +199,15 @@ RSpec.describe ChangeSetPersister do
         change_set_persister.save(change_set: complete_change_set)
       end
       it "uses the same authorization token" do
+        # persisted
+
         expect(persisted.auth_token).not_to be nil
         auth_token = AuthToken.find_by(token: persisted.auth_token)
         expect(auth_token).not_to be nil
+
+        expect(take_down.auth_token).to be nil
+
+        # completed
 
         completed_auth_token = completed.auth_token
         expect(completed_auth_token).not_to be nil
@@ -830,21 +839,22 @@ RSpec.describe ChangeSetPersister do
       expect(File.exist?(original_path)).to be false
     end
     it "destroys any active authorization tokens" do
-      resource = FactoryBot.create(:scanned_resource, state: "complete")
-      change_set = change_set_class.new(resource)
+      resource = FactoryBot.create(:playlist)
+      change_set = PlaylistChangeSet.new(resource)
       change_set.prepopulate!
       change_set.validate(state: "complete")
       output = change_set_persister.save(change_set: change_set)
 
       auth_token = AuthToken.find_by(token: output.auth_token)
       expect(auth_token).not_to be nil
-      deleted_change_set = change_set_class.new(output)
+      deleted_change_set = PlaylistChangeSet.new(output)
       change_set_persister.delete(change_set: deleted_change_set)
 
       expect(AuthToken.find_by(token: auth_token.token)).to be nil
     end
-    context "when the ScannedResource is and completed and taken down before deletion" do
-      let(:resource) { FactoryBot.create(:scanned_resource, state: "complete") }
+    context "when the Playlist is and completed and taken down before deletion" do
+      let(:resource) { FactoryBot.create(:playlist) }
+      let(:change_set_class) { PlaylistChangeSet }
       let(:change_set) { change_set_class.new(resource) }
       let(:completed) do
         change_set.prepopulate!
@@ -1283,7 +1293,7 @@ RSpec.describe ChangeSetPersister do
       let(:change_set) do
         cs = PlaylistChangeSet.new(resource)
         cs.prepopulate!
-        cs.validate(label: ["test label"], file_set_ids: [file_set.id])
+        cs.validate(title: ["test label"], file_set_ids: [file_set.id])
         cs
       end
       let(:persisted) { change_set_persister.save(change_set: change_set) }
@@ -1332,7 +1342,7 @@ RSpec.describe ChangeSetPersister do
       let(:change_set) do
         cs = PlaylistChangeSet.new(resource)
         cs.prepopulate!
-        cs.validate(label: ["test label"], member_ids: [proxy_file_set.id])
+        cs.validate(title: ["test label"], member_ids: [proxy_file_set.id])
         cs
       end
       let(:persisted) { change_set_persister.save(change_set: change_set) }
@@ -1403,7 +1413,7 @@ RSpec.describe ChangeSetPersister do
 
       change_set = DynamicChangeSet.new(playlist)
       change_set.prepopulate!
-      change_set.validate(label: "Test Label", file_set_ids: file_set.id.to_s)
+      change_set.validate(title: "Test Title", file_set_ids: file_set.id.to_s)
       expect(change_set.file_set_ids).to eq [file_set.id]
 
       output = change_set_persister.save(change_set: change_set)

@@ -87,6 +87,7 @@ Metrics/CyclomaticComplexity:
     - 'app/services/pul_metadata_services/bib_record.rb'
     - 'app/services/bulk_ingest_service.rb'
     - 'app/resources/scanned_resources/scanned_resources_controller.rb'
+    - 'app/change_set_persisters/change_set_persister/apply_auth_token.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
@@ -132,9 +133,10 @@ Metrics/PerceivedComplexity:
     - 'app/services/pul_metadata_services/bib_record.rb'
     - 'app/services/bulk_ingest_service.rb'
     - 'app/resources/scanned_resources/scanned_resources_controller.rb'
+    - 'app/change_set_persisters/change_set_persister/update_auth_token.rb'
+    - 'app/change_set_persisters/change_set_persister/apply_auth_token.rb'
 Rails/OutputSafety:
   Exclude:
-    - 'app/decorators/**/*'
     - 'app/resources/**/*_decorator*'
     - 'app/validators/unique_archival_media_component_id_validator.rb'
 RSpec/AnyInstance:

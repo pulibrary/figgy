@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 class ChangeSetPersister
-  class RevokeAuthToken
+  class DeleteAuthToken
     attr_reader :change_set_persister, :change_set
-    delegate :query_service, :persister, :transaction?, to: :change_set_persister
     def initialize(change_set_persister:, change_set:)
       @change_set = change_set
       @change_set_persister = change_set_persister
