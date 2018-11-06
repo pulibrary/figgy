@@ -94,6 +94,12 @@ Rails.application.routes.draw do
     end
     resources :media_resources
 
+    resources :playlists do
+      member do
+        get :order_manager
+      end
+    end
+
     # Added for redirects for IIIF Manifests.
     resources :multi_volume_works, controller: "scanned_resources", only: [] do
       member do
