@@ -11,6 +11,11 @@ class Coin < Resource
   attribute :die_axis
   attribute :find
   attribute :find_date
+  attribute :find_description
+  attribute :find_feature
+  attribute :find_locus
+  attribute :find_number
+  attribute :find_place
   attribute :holding_location
   attribute :loan
   attribute :object_type

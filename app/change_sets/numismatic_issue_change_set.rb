@@ -6,33 +6,41 @@ class NumismaticIssueChangeSet < ChangeSet
   include VisibilityProperty
   property :artist, multiple: true, required: false, default: []
   property :color, multiple: false, required: false
+  property :date_object, multiple: false, required: false
   property :date_range, multiple: false, required: false
   property :denomination, multiple: false, required: false
   property :department, multiple: false, required: false
   property :description, multiple: false, required: false
   property :edge, multiple: false, required: false
   property :era, multiple: false, required: false
-  property :figure, multiple: false, required: false
   property :geographic_origin, multiple: false, required: false
   property :master, multiple: false, required: false
   property :metal, multiple: false, required: false
   property :note, multiple: true, required: false, default: []
   property :object_type, multiple: false, required: false
   property :obverse_attributes, multiple: true, required: false, default: []
+  property :obverse_figure, multiple: false, required: false
+  property :obverse_figure_relationship, multiple: false, required: false
+  property :obverse_figure_description, multiple: false, required: false
   property :obverse_legend, multiple: false, required: false
-  property :obverse_type, multiple: false, required: false
-  property :orientation, multiple: false, required: false
-  property :part, multiple: true, required: false, default: []
+  property :obverse_orientation, multiple: false, required: false
+  property :obverse_part, multiple: false, required: false
+  property :obverse_symbol, multiple: false, required: false
   property :place, multiple: false, required: false, default: []
   property :references, multiple: true, required: false, default: []
+  property :replaces, multiple: true, required: false, default: []
   property :reverse_attributes, multiple: true, required: false, default: []
+  property :reverse_figure, multiple: false, required: false
+  property :reverse_figure_description, multiple: false, required: false
+  property :reverse_figure_relationship, multiple: false, required: false
   property :reverse_legend, multiple: false, required: false
-  property :reverse_type, multiple: false, required: false
+  property :reverse_orientation, multiple: false, required: false
+  property :reverse_part, multiple: false, required: false
+  property :reverse_symbol, multiple: false, required: false
   property :ruler, multiple: false, required: false
   property :series, multiple: false, required: false
   property :shape, multiple: false, required: false
   property :subject, multiple: true, required: false, default: []
-  property :symbol, multiple: false, required: false
   property :workshop, multiple: false, required: false
 
   property :read_groups, multiple: true, required: false
@@ -66,33 +74,40 @@ class NumismaticIssueChangeSet < ChangeSet
       :member_of_collection_ids,
       :artist,
       :color,
+      :date_object,
       :date_range,
       :denomination,
       :department,
       :description,
       :edge,
       :era,
-      :figure,
       :geographic_origin,
       :master,
       :metal,
       :note,
       :object_type,
       :obverse_attributes,
+      :obverse_figure,
+      :obverse_figure_description,
+      :obverse_figure_relationship,
       :obverse_legend,
-      :obverse_type,
-      :orientation,
-      :part,
+      :obverse_orientation,
+      :obverse_part,
+      :obverse_symbol,
       :place,
       :references,
       :reverse_attributes,
+      :reverse_figure,
+      :reverse_figure_description,
+      :reverse_figure_relationship,
       :reverse_legend,
-      :reverse_type,
+      :reverse_orientation,
+      :reverse_part,
+      :reverse_symbol,
       :ruler,
       :series,
       :shape,
       :subject,
-      :symbol,
       :workshop
     ]
   end

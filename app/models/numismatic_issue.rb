@@ -7,33 +7,40 @@ class NumismaticIssue < Resource
   # descriptive metadata
   attribute :artist
   attribute :color
+  attribute :date_object
   attribute :date_range
   attribute :denomination
   attribute :department
   attribute :description
   attribute :edge
   attribute :era
-  attribute :figure
   attribute :geographic_origin
   attribute :master
   attribute :metal
   attribute :note
   attribute :object_type
   attribute :obverse_attributes
+  attribute :obverse_figure
+  attribute :obverse_figure_description
+  attribute :obverse_figure_relationship
   attribute :obverse_legend, Valkyrie::Types::SingleValuedString
-  attribute :obverse_type, Valkyrie::Types::SingleValuedString
-  attribute :orientation
-  attribute :part
+  attribute :obverse_orientation
+  attribute :obverse_part
+  attribute :obverse_symbol
   attribute :place
   attribute :references
   attribute :reverse_attributes
+  attribute :reverse_figure
+  attribute :reverse_figure_description
+  attribute :reverse_figure_relationship
   attribute :reverse_legend, Valkyrie::Types::SingleValuedString
-  attribute :reverse_type, Valkyrie::Types::SingleValuedString
+  attribute :reverse_orientation
+  attribute :reverse_part
+  attribute :reverse_symbol
   attribute :ruler
   attribute :series
   attribute :shape
   attribute :subject
-  attribute :symbol
   attribute :workshop, Valkyrie::Types::SingleValuedString
 
   # adminstrative metadata

@@ -31,9 +31,14 @@ RSpec.feature "Coins" do
     expect(page).to have_field "Counter stamp"
     expect(page).to have_field "Department"
     expect(page).to have_field "Die axis"
-    expect(page).to have_field "Find"
     expect(page).to have_field "Find date"
+    expect(page).to have_field "Find description"
+    expect(page).to have_field "Find feature"
+    expect(page).to have_field "Find locus"
+    expect(page).to have_field "Find number"
+    expect(page).to have_field "Find place"
     expect(page).to have_field "Holding Location"
+    expect(page).not_to have_css '.select[for="coin_holding_location"]', text: "Holding Location"
     expect(page).to have_field "Loan"
     expect(page).to have_field "Object type"
     expect(page).to have_field "Place"
@@ -59,8 +64,12 @@ RSpec.feature "Coins" do
         counter_stamp: "test value",
         department: "test value",
         die_axis: "test value",
-        find: "test value",
         find_date: "test value",
+        find_description: "test value",
+        find_feature: "test value",
+        find_locus: "test value",
+        find_number: "test value",
+        find_place: "test value",
         holding_location: "test value",
         loan: "test value",
         object_type: "test value",
@@ -68,6 +77,7 @@ RSpec.feature "Coins" do
         private_note: "test value",
         provenance: "test value",
         references: "test value",
+        replaces: "test value",
         size: "test value",
         technique: "test value",
         weight: "test value"
@@ -83,8 +93,12 @@ RSpec.feature "Coins" do
       expect(page).to have_css ".attribute.counter_stamp", text: "test value"
       expect(page).to have_css ".attribute.department", text: "test value"
       expect(page).to have_css ".attribute.die_axis", text: "test value"
-      expect(page).to have_css ".attribute.find", text: "test value"
       expect(page).to have_css ".attribute.find_date", text: "test value"
+      expect(page).to have_css ".attribute.find_description", text: "test value"
+      expect(page).to have_css ".attribute.find_feature", text: "test value"
+      expect(page).to have_css ".attribute.find_locus", text: "test value"
+      expect(page).to have_css ".attribute.find_number", text: "test value"
+      expect(page).to have_css ".attribute.find_place", text: "test value"
       expect(page).to have_css ".attribute.holding_location", text: "test value"
       expect(page).to have_css ".attribute.loan", text: "test value"
       expect(page).to have_css ".attribute.object_type", text: "test value"
@@ -92,6 +106,7 @@ RSpec.feature "Coins" do
       expect(page).to have_css ".attribute.private_note", text: "test value"
       expect(page).to have_css ".attribute.provenance", text: "test value"
       expect(page).to have_css ".attribute.references", text: "test value"
+      expect(page).to have_css ".attribute.replaces", text: "test value"
       expect(page).to have_css ".attribute.size", text: "test value"
       expect(page).to have_css ".attribute.technique", text: "test value"
       expect(page).to have_css ".attribute.weight", text: "test value"
