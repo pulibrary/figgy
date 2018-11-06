@@ -8,6 +8,10 @@ class PlaylistDecorator < Valkyrie::ResourceDecorator
   delegate :members, to: :wayfinder
 
   def manageable_files?
+    false
+  end
+
+  def orderable_files?
     true
   end
 

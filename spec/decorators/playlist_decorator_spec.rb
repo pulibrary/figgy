@@ -9,8 +9,12 @@ RSpec.describe PlaylistDecorator do
     expect(decorator.manageable_structure?).to be false
   end
 
-  it "does manage files" do
-    expect(decorator.manageable_files?).to be true
+  it "does not manage files" do
+    expect(decorator.manageable_files?).to be false
+  end
+
+  it "does order files" do
+    expect(decorator.orderable_files?).to be true
   end
 
   it "delegates members to wayfinder" do

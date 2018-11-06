@@ -12,4 +12,8 @@ RSpec.describe ProxyFileDecorator do
   it "does not manage files" do
     expect(decorator.manageable_files?).to be false
   end
+
+  it "does not order files" do
+    expect(decorator.orderable_files?).to be false
+  end
 end
