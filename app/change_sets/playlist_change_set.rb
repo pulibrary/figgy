@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class PlaylistChangeSet < ChangeSet
   delegate :human_readable_type, to: :resource
+  apply_workflow(DraftCompleteWorkflow)
 
   include VisibilityProperty
   property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE

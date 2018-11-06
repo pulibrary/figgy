@@ -14,4 +14,8 @@ class PlaylistDecorator < Valkyrie::ResourceDecorator
   def manageable_structure?
     false
   end
+
+  def title
+    label
+  end
 end
