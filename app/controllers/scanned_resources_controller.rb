@@ -80,19 +80,9 @@ class ScannedResourcesController < BaseResourceController
     authorize! :create, resource_class
     respond_to do |f|
       f.json do
-        render json: save_and_ingest_response
+        render json: IngestFolderLocator.new(id: params[:id]).to_h
       end
     end
-  end
-
-  def save_and_ingest_response
-    locator = IngestFolderLocator.new(id: params[:id])
-    {
-      exists: locator.exists?,
-      location: locator.location,
-      file_count: locator.file_count,
-      volume_count: locator.volume_count
-    }
   end
 
   private
