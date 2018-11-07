@@ -28,6 +28,8 @@ class ManifestBuilder
         IndexCollectionNode.new(resource)
       when ScannedMap
         ScannedMapNode.new(resource)
+      when Playlist
+        PlaylistNode.new(resource)
       else
         new(resource)
       end
@@ -159,6 +161,7 @@ class ManifestBuilder
     end
 
     def sequence_rendering
+      return [] if audio_manifest?
       [
         {
           "@id" => helper.pdf_url(resource),
@@ -288,6 +291,16 @@ class ManifestBuilder
       def geo_image?(member)
         ControlledVocabulary.for(:geo_image_format).include?(member.mime_type.first)
       end
+  end
+
+  class PlaylistNode < RootNode
+    ##
+    # Returns representation of the object as an array of strings - often the
+    #   title.
+    # @return [Array<String>]
+    def to_s
+      resource.label.map(&:to_s)
+    end
   end
 
   ##

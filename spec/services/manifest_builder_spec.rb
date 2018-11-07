@@ -163,6 +163,80 @@ RSpec.describe ManifestBuilder do
       end
     end
 
+    context "when it is a Playlist" do
+      subject(:manifest_builder) { described_class.new(query_service.find_by(id: resource.id)) }
+
+      let(:resource) do
+        FactoryBot.create_for_repository(:playlist)
+      end
+      let(:output) do
+        manifest_builder.build
+      end
+      it "generates the Manifest" do
+        expect(output).not_to be_empty
+        expect(output).to include("label" => resource.label)
+      end
+
+      context "with proxies to FileSets" do
+        with_queue_adapter :inline
+
+        let(:tika_output) { tika_wav_output }
+
+        let(:file1) { fixture_file_upload("files/audio_file.wav") }
+        let(:file2) { fixture_file_upload("av/la_demo_bag/data/32101047382484_1_pm.wav") }
+        let(:media_reserve) { FactoryBot.create_for_repository(:scanned_resource, files: [file1, file2]) }
+        let(:file_set1) do
+          media_reserve.decorate.file_sets.first
+        end
+        let(:file_set2) do
+          media_reserve.decorate.file_sets.last
+        end
+        let(:proxy1) do
+          res = ProxyFile.new(proxied_file_id: file_set1.id)
+          cs = ProxyFileChangeSet.new(res)
+          cs.prepopulate!
+          change_set_persister.save(change_set: cs)
+        end
+        let(:proxy2) do
+          res = ProxyFile.new(proxied_file_id: file_set2.id)
+          cs = ProxyFileChangeSet.new(res)
+          cs.prepopulate!
+          change_set_persister.save(change_set: cs)
+        end
+        let(:resource) do
+          FactoryBot.create_for_repository(:playlist, member_ids: [proxy1.id, proxy2.id])
+        end
+
+        it "generates the Canvases for the FileSets", run_real_characterization: true do
+          expect(output).not_to be_empty
+
+          expect(output).to include("items")
+          expect(output["items"].length).to eq(2)
+
+          first_canvas = output["items"].first
+
+          expect(first_canvas).to include("items")
+          expect(first_canvas["items"].length).to eq(1)
+          anno_page = first_canvas["items"].first
+          expect(anno_page).to include("items")
+          expect(anno_page["items"].length).to eq(1)
+          first_annotation = anno_page["items"].first
+          expect(first_annotation).to include("body")
+          expect(first_annotation["body"]).to include("format" => "audio/mp3")
+
+          last_canvas = output["items"].last
+          expect(last_canvas).to include("items")
+          expect(last_canvas["items"].length).to eq(1)
+          anno_page = last_canvas["items"].first
+          expect(anno_page).to include("items")
+          expect(anno_page["items"].length).to eq(1)
+          last_annotation = anno_page["items"].first
+          expect(last_annotation).to include("body")
+          expect(last_annotation["body"]).to include("format" => "audio/mp3")
+        end
+      end
+    end
+
     context "when there's no derivative_file" do
       it "doesn't generate a IIIF endpoint" do
         allow_any_instance_of(FileSet).to receive(:derivative_file).and_return(nil)

@@ -18,6 +18,7 @@ class Wayfinder < BaseWayfinder
     FileSetChangeSet => FileSetWayfinder,
     EphemeraVocabulary => EphemeraVocabularyWayfinder,
     MediaResource => MediaResourceWayfinder,
+    Playlist => PlaylistWayfinder,
     Coin => CoinWayfinder,
     NumismaticIssue => NumismaticIssueWayfinder,
     RasterResource => RasterResourceWayfinder,
