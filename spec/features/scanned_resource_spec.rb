@@ -70,4 +70,15 @@ RSpec.feature "Scanned Resources" do
       expect(page).to have_link "File Manager", href: file_manager_scanned_resource_path(scanned_resource)
     end
   end
+
+  context "when a media reserve" do
+    let(:scanned_resource) do
+      res = FactoryBot.create_for_repository(:media_reserve)
+      adapter.persister.save(resource: res)
+    end
+    it "displays a Create Playlist button" do
+      visit solr_document_path(scanned_resource)
+      expect(page).to have_link "Create Playlist"
+    end
+  end
 end

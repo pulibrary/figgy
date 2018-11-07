@@ -1185,4 +1185,23 @@ RSpec.describe ChangeSetPersister do
       expect(box_doc["ephemera_project_ssim"]).to eq ["New Title"]
     end
   end
+
+  context "when saving a playlist with file_set_ids" do
+    it "creates ProxyFiles" do
+      playlist = Playlist.new
+      file_set = FactoryBot.create_for_repository(:file_set)
+
+      change_set = DynamicChangeSet.new(playlist)
+      change_set.prepopulate!
+      change_set.validate(label: "Test Label", file_set_ids: file_set.id.to_s)
+      expect(change_set.file_set_ids).to eq [file_set.id]
+
+      output = change_set_persister.save(change_set: change_set)
+      members = query_service.find_members(resource: output)
+      proxy_file = members.first
+      expect(proxy_file).to be_a ProxyFile
+      expect(proxy_file.proxied_file_id).to eq file_set.id
+      expect(proxy_file.label).to eq file_set.title
+    end
+  end
 end

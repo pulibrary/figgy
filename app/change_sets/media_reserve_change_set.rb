@@ -13,6 +13,7 @@ class MediaReserveChangeSet < ChangeSet
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :source_metadata_identifier, multiple: false, required: false
   property :read_groups, multiple: true, required: false
+  property :change_set, require: true, default: "media_reserve"
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
@@ -30,7 +31,8 @@ class MediaReserveChangeSet < ChangeSet
       :rights_statement,
       :member_of_collection_ids,
       :local_identifier,
-      :append_id
+      :append_id,
+      :change_set
     ]
   end
 end

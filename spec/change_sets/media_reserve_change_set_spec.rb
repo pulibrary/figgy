@@ -70,6 +70,13 @@ RSpec.describe MediaReserveChangeSet do
     end
   end
 
+  describe "#change_set" do
+    it "sets a media_reserve default" do
+      change_set.prepopulate!
+      expect(change_set.change_set).to eq "media_reserve"
+    end
+  end
+
   describe "#primary_terms" do
     it "includes basic metadata" do
       expect(change_set.primary_terms).to include :local_identifier
@@ -77,6 +84,7 @@ RSpec.describe MediaReserveChangeSet do
       expect(change_set.primary_terms).to include :title
       expect(change_set.primary_terms).to include :member_of_collection_ids
       expect(change_set.primary_terms).to include :source_metadata_identifier
+      expect(change_set.primary_terms).to include :change_set
     end
   end
 
