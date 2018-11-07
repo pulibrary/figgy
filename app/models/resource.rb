@@ -35,6 +35,12 @@ class Resource < Valkyrie::Resource
     false
   end
 
+  # Determines whether or not this resource has proxies for member resources
+  # @return [Boolean]
+  def proxies_membership?
+    false
+  end
+
   # Virtual property used for stashing pre-loaded objects. Populated by a query.
   attr_accessor :loaded
   def loaded

@@ -6,6 +6,7 @@ RSpec.describe PlaylistsController do
   with_queue_adapter :inline
   let(:user) { nil }
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
+  let(:query_service) { metadata_adapter.query_service }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter) }
 
@@ -71,8 +72,55 @@ RSpec.describe PlaylistsController do
 
     context "html access control" do
       let(:factory) { :playlist }
-      let(:extra_params) { { playlist: { title: ["My Playlist"] } } }
+      let(:extra_params) { { playlist: { label: ["My Playlist"] } } }
       it_behaves_like "an access controlled update request"
+
+      context "when a Playlist has been created" do
+      let(:resource) { FactoryBot.create_for_repository(:playlist) }
+      let(:proxy_file) do
+        proxy = ProxyFile.new
+        cs = ProxyFileChangeSet.new(proxy)
+        cs.prepopulate!
+        change_set_persister.save(change_set: cs)
+      end
+
+      it "adds member IDs for proxies" do
+        patch :update, params: { id: resource.id.to_s, playlist: { member_ids: [proxy_file.id] } }
+
+        expect(response).to be_redirect
+        expect(response.location).to eq "http://test.host/catalog/#{resource.id}"
+        id = response.location.gsub("http://test.host/catalog/", "")
+        reloaded = query_service.find_by(id: id)
+
+        expect(reloaded.member_ids).to eq [proxy_file.id]
+      end
+    end
+
+    context "when a Playlist has been linked to ProxyFiles" do
+      let(:proxy_file) do
+        proxy = ProxyFile.new
+        cs = ProxyFileChangeSet.new(proxy)
+        cs.prepopulate!
+        change_set_persister.save(change_set: cs)
+      end
+      let(:proxy_file2) do
+        proxy = ProxyFile.new
+        cs = ProxyFileChangeSet.new(proxy)
+        cs.prepopulate!
+        change_set_persister.save(change_set: cs)
+      end
+      let(:resource) { FactoryBot.create_for_repository(:playlist, member_ids: [proxy_file.id]) }
+
+      it "replaces member IDs for proxies" do
+        patch :update, params: { id: resource.id.to_s, playlist: { member_ids: [proxy_file2.id] } }
+
+        expect(response).to be_redirect
+        expect(response.location).to eq "http://test.host/catalog/#{resource.id}"
+        id = response.location.gsub("http://test.host/catalog/", "")
+        reloaded = query_service.find_by(id: id)
+
+        expect(reloaded.member_ids).to eq [proxy_file2.id]
+      end
     end
   end
 

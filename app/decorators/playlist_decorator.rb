@@ -19,7 +19,8 @@ class PlaylistDecorator < Valkyrie::ResourceDecorator
     false
   end
 
-  def title
-    label
+  def titles
+    Array.wrap(label)
   end
+  alias title titles
 end
