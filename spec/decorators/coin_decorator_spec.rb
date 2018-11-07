@@ -15,6 +15,9 @@ RSpec.describe CoinDecorator do
     it "manages files" do
       expect(decorator.manageable_files?).to be true
     end
+    it "orders files" do
+      expect(decorator.orderable_files?).to be true
+    end
     it "does not manage structure" do
       expect(decorator.manageable_structure?).to be false
     end

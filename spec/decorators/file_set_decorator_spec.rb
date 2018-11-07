@@ -10,6 +10,10 @@ RSpec.describe FileSetDecorator do
     expect(decorator.manageable_files?).to be false
   end
 
+  it "has no files to be ordered" do
+    expect(decorator.orderable_files?).to be false
+  end
+
   describe "#collections" do
     it "exposes parent collections" do
       expect(decorator.collections).to eq []

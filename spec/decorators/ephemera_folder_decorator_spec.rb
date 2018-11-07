@@ -15,6 +15,10 @@ RSpec.describe EphemeraFolderDecorator do
     expect(decorator.manageable_files?).to be true
   end
 
+  it "orders files" do
+    expect(decorator.orderable_files?).to be true
+  end
+
   it "does not manage structures" do
     expect(decorator.manageable_structure?).to be false
   end
