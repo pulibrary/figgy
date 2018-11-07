@@ -13,11 +13,11 @@ RSpec.describe IngestableAudioFile do
     end
 
     describe "#mime_type" do
-      it { expect(audio_file.mime_type).to eq "audio/wav" }
+      it { expect(audio_file.mime_type).to eq "audio/x-wav" }
     end
 
     describe "#content_type" do
-      it { expect(audio_file.content_type).to eq "audio/wav" }
+      it { expect(audio_file.content_type).to eq "audio/x-wav" }
     end
 
     describe "#use" do
@@ -69,11 +69,11 @@ RSpec.describe IngestableAudioFile do
     end
 
     describe "#mime_type" do
-      it { expect(audio_file.mime_type).to eq "audio/wav" }
+      it { expect(audio_file.mime_type).to eq "audio/x-wav" }
     end
 
     describe "#content_type" do
-      it { expect(audio_file.content_type).to eq "audio/wav" }
+      it { expect(audio_file.content_type).to eq "audio/x-wav" }
     end
 
     describe "#use" do

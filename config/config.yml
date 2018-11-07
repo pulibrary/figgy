@@ -97,7 +97,7 @@ defaults: &defaults
         - 'image/jpeg'
     mediainfo:
       supported_mime_types:
-        - 'audio/wav'
+        - 'audio/x-wav'
         - 'audio/mpeg'
 
 development:
