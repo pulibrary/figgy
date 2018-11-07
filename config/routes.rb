@@ -97,6 +97,7 @@ Rails.application.routes.draw do
     resources :playlists do
       member do
         get :order_manager
+        get :file_manager
       end
     end
 

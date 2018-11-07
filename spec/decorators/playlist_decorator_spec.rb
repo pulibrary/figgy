@@ -20,4 +20,10 @@ RSpec.describe PlaylistDecorator do
   it "delegates members to wayfinder" do
     expect(decorator.members).to be_empty
   end
+
+  describe "#title" do
+    it "uses the label" do
+      expect(decorator.title).to eq playlist.label
+    end
+  end
 end
