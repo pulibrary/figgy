@@ -70,15 +70,6 @@ class ManifestBuilder
           iiif_annotation_page_factory: iiif_annotation_page_factory
         )
       end
-
-      def choice_builder
-        IIIFManifest::ManifestServiceLocator::InjectedFactory.new(
-          ManifestBuilder::ChoiceBuilder,
-          iiif_annotation_factory: iiif_annotation_factory,
-          body_builder_factory: body_builder_factory,
-          iiif_choice_factory: iiif_choice_factory
-        )
-      end
     end
   end
 end

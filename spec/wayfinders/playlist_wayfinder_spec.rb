@@ -49,8 +49,18 @@ describe PlaylistWayfinder do
 
     it "retrieves the FileSets for a given Playlist" do
       expect(file_sets.length).to eq(2)
-      expect(file_sets.first).to eq(file_set1)
-      expect(file_sets.last).to eq(file_set2)
+      expect(file_sets).to include(file_set1)
+      expect(file_sets).to include(file_set2)
+    end
+  end
+
+  describe "#members" do
+    let(:file_sets) { playlist_wayfinder.file_sets }
+
+    it "retrieves the FileSets for a given Playlist" do
+      expect(file_sets.length).to eq(2)
+      expect(file_sets).to include(file_set1)
+      expect(file_sets).to include(file_set2)
     end
   end
 end

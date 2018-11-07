@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # Generated with `rails generate valkyrie:model Playlist`
-class Playlist < Valkyrie::Resource
+class Playlist < Resource
   include Valkyrie::Resource::AccessControls
 
   attribute :member_ids, Valkyrie::Types::Array
@@ -13,6 +13,6 @@ class Playlist < Valkyrie::Resource
   alias title label
 
   def self.can_have_manifests?
-    false
+    true
   end
 end

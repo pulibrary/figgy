@@ -6,8 +6,10 @@ class PlaylistWayfinder < BaseWayfinder
   # Resolves the proxied relationships with FileSets
   # @return [Array<FileSet>]
   def file_sets
+    return @file_sets unless @file_sets.nil?
+
     valid_proxies = proxies.reject { |proxy| proxy.proxied_file_id.nil? }
-    query_service.find_many_by_ids(ids: valid_proxies.map(&:proxied_file_id))
+    @file_sets = query_service.find_many_by_ids(ids: valid_proxies.map(&:proxied_file_id))
   end
   alias members file_sets
 end
