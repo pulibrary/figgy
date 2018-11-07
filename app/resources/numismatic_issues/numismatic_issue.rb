@@ -29,7 +29,6 @@ class NumismaticIssue < Resource
   attribute :obverse_part
   attribute :obverse_symbol
   attribute :place
-  attribute :references
   attribute :reverse_attributes
   attribute :reverse_figure
   attribute :reverse_figure_description
