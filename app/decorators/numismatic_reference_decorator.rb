@@ -20,4 +20,12 @@ class NumismaticReferenceDecorator < Valkyrie::ResourceDecorator
   def manageable_structure?
     false
   end
+
+  def short_title
+    Array.wrap(super).first
+  end
+
+  def title
+    Array.wrap(super).first
+  end
 end

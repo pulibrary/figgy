@@ -22,13 +22,13 @@ class CoinChangeSet < ChangeSet
   property :place, multiple: false, required: false
   property :private_note, multiple: true, required: false, default: []
   property :provenance, multiple: true, required: false, default: []
-  property :references, multiple: true, required: false, default: []
   property :replaces, multiple: true, required: false, default: []
   property :size, multiple: false, required: false
   property :technique, multiple: false, required: false
   property :weight, multiple: false, required: false
 
   property :depositor, multiple: false, required: false
+  property :numismatic_citation_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :read_groups, multiple: true, required: false
 
@@ -68,7 +68,6 @@ class CoinChangeSet < ChangeSet
       :place,
       :private_note,
       :provenance,
-      :references,
       :size,
       :technique,
       :weight
