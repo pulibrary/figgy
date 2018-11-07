@@ -12,8 +12,8 @@
       <% @numismatic_references.each do |numismatic_reference| %>
         <% numismatic_reference_url = solr_document_path("#{numismatic_reference.id}") %>
         <tr>
-          <td><%= numismatic_reference.title.first %></td></td>
-          <td><%= numismatic_reference.short_title.first %></td></td>
+          <td><%= numismatic_reference.title %></td></td>
+          <td><%= numismatic_reference.short_title %></td></td>
           <td>
             <%= link_to 'View', numismatic_reference_url, class: 'btn btn-default' %>
             <%= link_to 'Edit', main_app.polymorphic_path([:edit, numismatic_reference]), class: 'btn btn-default' %>

@@ -44,7 +44,6 @@ RSpec.feature "Coins" do
     expect(page).to have_field "Place"
     expect(page).to have_field "Private note"
     expect(page).to have_field "Provenance"
-    expect(page).to have_field "References"
     expect(page).to have_field "Size"
     expect(page).to have_field "Technique"
     expect(page).to have_field "Weight"
@@ -76,7 +75,6 @@ RSpec.feature "Coins" do
         place: "test value",
         private_note: "test value",
         provenance: "test value",
-        references: "test value",
         replaces: "test value",
         size: "test value",
         technique: "test value",
@@ -105,7 +103,6 @@ RSpec.feature "Coins" do
       expect(page).to have_css ".attribute.place", text: "test value"
       expect(page).to have_css ".attribute.private_note", text: "test value"
       expect(page).to have_css ".attribute.provenance", text: "test value"
-      expect(page).to have_css ".attribute.references", text: "test value"
       expect(page).to have_css ".attribute.replaces", text: "test value"
       expect(page).to have_css ".attribute.size", text: "test value"
       expect(page).to have_css ".attribute.technique", text: "test value"
