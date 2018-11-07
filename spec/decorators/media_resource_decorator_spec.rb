@@ -16,7 +16,7 @@ RSpec.describe MediaResourceDecorator do
 
   describe "#audio_file_sets" do
     it "returns all audio file sets" do
-      file_set = FactoryBot.create_for_repository(:file_set, file_metadata: [FileMetadata.new(mime_type: "audio/wav", use: Valkyrie::Vocab::PCDMUse.OriginalFile)])
+      file_set = FactoryBot.create_for_repository(:file_set, file_metadata: [FileMetadata.new(mime_type: "audio/x-wav", use: Valkyrie::Vocab::PCDMUse.OriginalFile)])
       non_audio = FactoryBot.create_for_repository(:file_set, file_metadata: [FileMetadata.new(mime_type: "notaudio", use: Valkyrie::Vocab::PCDMUse.OriginalFile)])
       media_resource = FactoryBot.create_for_repository(:media_resource, member_ids: [non_audio.id, file_set.id])
 

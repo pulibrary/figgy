@@ -70,7 +70,7 @@ RSpec.describe MediainfoCharacterizationService do
   end
 
   context "with an audio file" do
-    let(:file) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "audio/wav") }
+    let(:file) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "audio/x-wav") }
     let(:audio_track_attributes) { double }
     before do
       allow(audio_track_attributes).to receive(:encoded_date).and_return Time.zone.parse("UTC 2009-03-30 19:49:13")
@@ -154,7 +154,7 @@ RSpec.describe MediainfoCharacterizationService do
     end
 
     context "with a supported media type" do
-      let(:file) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "audio/wav") }
+      let(:file) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "audio/x-wav") }
 
       it "is valid" do
         expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true

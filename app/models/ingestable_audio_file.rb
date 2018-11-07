@@ -14,7 +14,7 @@ class IngestableAudioFile
 
   def mime_type
     if master? || intermediate?
-      "audio/wav"
+      "audio/x-wav"
     else
       "audio/mpeg"
     end

@@ -25,7 +25,7 @@ RSpec.describe IngestArchivalMediaBagJob do
 
     it "creates one FileSet per barcode (with part, e.g., 32101047382401_1)" do
       expect(query_service.find_all_of_model(model: FileSet).map(&:title)).to include ["32101047382401_1"], ["32101047382401_2"]
-      expect(query_service.find_all_of_model(model: FileSet).map(&:mime_type).to_a).to include ["audio/wav"]
+      expect(query_service.find_all_of_model(model: FileSet).map(&:mime_type).to_a).to include ["audio/x-wav"]
     end
 
     it "adds all 3 file types to the file set" do
@@ -145,7 +145,7 @@ RSpec.describe IngestArchivalMediaBagJob do
 
       expect(file_set_mime_types).not_to include ["image/jpeg"]
       expect(file_set_mime_types).to include ["application/xml; schema=pbcore"]
-      expect(file_set_mime_types).to include ["audio/wav"]
+      expect(file_set_mime_types).to include ["audio/x-wav"]
     end
   end
 
@@ -161,7 +161,7 @@ RSpec.describe IngestArchivalMediaBagJob do
     it "add FileSets for each part" do
       file_sets = query_service.find_all_of_model(model: FileSet)
       expect(file_sets.map(&:title)).to include ["32101047382492_1_p1"], ["32101047382492_1_p2"]
-      expect(file_sets.map(&:mime_type).to_a).to include ["audio/wav"]
+      expect(file_sets.map(&:mime_type).to_a).to include ["audio/x-wav"]
 
       file_set = file_sets.select { |fs| fs.title.include? "32101047382492_1_p1" }.sort_by(&:created_at).last
       expect(file_set.file_metadata.count).to eq 3
