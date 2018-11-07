@@ -66,4 +66,14 @@ describe IngestFolderLocator do
       end
     end
   end
+
+  describe "#to_h" do
+    subject(:hsh) { locator.to_h }
+    it "generates a hash with the relevant values" do
+      expect(hsh[:exists]).to be true
+      expect(hsh[:location].to_s).to eq("DPUL/Santa/ready/123456")
+      expect(hsh[:file_count]).to eq(2)
+      expect(hsh[:volume_count]).to eq(0)
+    end
+  end
 end

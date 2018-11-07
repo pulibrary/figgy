@@ -8,6 +8,7 @@ import MetadataForm from "metadata_form"
 import UniversalViewer from "universal_viewer"
 import FileSetForm from "file_set_form"
 import SaveAndIngestHandler from "save_and_ingest_handler"
+import AutoIngestHandler from "auto_ingest_handler"
 import MemberResourcesTables from "relationships/member_resources_table"
 import ParentResourcesTables from "relationships/parent_resources_table"
 import BulkLabeler from "bulk_labeler/bulk_label"
@@ -25,6 +26,7 @@ export default class Initializer {
     this.metadata_form = new MetadataForm
     this.universal_viewer = new UniversalViewer
     this.save_and_ingest_handler = new SaveAndIngestHandler
+    this.auto_ingest_handler = new AutoIngestHandler
     this.bulk_labeler = new BulkLabeler
     this.sortable_placeholder()
 
