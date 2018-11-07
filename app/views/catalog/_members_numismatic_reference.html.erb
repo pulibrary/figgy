@@ -1,0 +1,24 @@
+  <h2>Child References</h2>
+  <table id="members" class="table table-striped">
+    <tr>
+     <th>Title</th>
+     <th>Actions</th>
+    </tr>
+    <% unless decorated_resource.members.empty? %>
+      <% decorated_resource.members.each do |reference| %>
+        <% reference_url = parent_solr_document_path("#{resource.id}", "#{reference.id}") %>
+        <tr>
+          <td><%= reference.title.first %></td>
+          <td>
+            <%= link_to 'View', reference_url, class: 'btn btn-default' %>
+            <%= link_to 'Edit', main_app.polymorphic_path([:edit, reference]), class: 'btn btn-default' %>
+            <%= link_to "Delete", main_app.polymorphic_path([reference]), class: 'btn btn-danger',
+                                  data: { confirm: "Delete this #{resource.human_readable_type}?" },
+                                  method: :delete %>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <td>This work has no child references attached.  Click "Attach Child" to attach references.</td>
+    <% end %>
+  </table>
