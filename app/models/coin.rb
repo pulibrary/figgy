@@ -6,6 +6,7 @@ class Coin < Resource
   # descriptive metadata
   attribute :accession
   attribute :analysis
+  attribute :coin_number, Valkyrie::Types::Anything
   attribute :counter_stamp
   attribute :department
   attribute :die_axis
@@ -49,6 +50,6 @@ class Coin < Resource
   # Placeholder title.
   # TODO: Add more descriptive title when we have more information.
   def title
-    ["Coin: #{id}"]
+    ["Coin: #{coin_number}"]
   end
 end

@@ -183,7 +183,7 @@ RSpec.feature "NumismaticIssues" do
       visit solr_document_path(parent)
 
       expect(page).to have_selector "h2", text: "Coins"
-      expect(page).to have_selector "td", text: "Coin: #{member.id}"
+      expect(page).to have_selector "td", text: "Coin: #{member.coin_number}"
     end
   end
 end
