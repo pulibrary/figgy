@@ -9,6 +9,8 @@ class PlaylistChangeSet < ChangeSet
   property :label, multiple: true, required: true, default: []
   property :read_groups, multiple: true, required: false
 
+  property :file_set_ids, virtual: true, type: Valkyrie::Types::Array.of(Valkyrie::Types::ID)
+
   validates_with MemberValidator
   validates :visibility, :label, presence: true
 

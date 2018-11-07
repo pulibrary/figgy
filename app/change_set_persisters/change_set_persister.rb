@@ -19,7 +19,8 @@ class ChangeSetPersister
         ApplyVisibilityByDate,
         CreateFile::Factory.new(file_appender: FileAppender),
         PropagateVisibilityAndState,
-        CleanupPdfs
+        CleanupPdfs,
+        CreateProxyFiles
       ],
       after_save: [
         AppendToParent

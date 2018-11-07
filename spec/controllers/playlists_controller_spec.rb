@@ -27,6 +27,27 @@ RSpec.describe PlaylistsController do
       let(:params) { valid_params }
       it_behaves_like "an access controlled create request"
     end
+    context "it creates a playlist with the media reserve filesets" do
+      let(:user) { FactoryBot.create(:admin) }
+      let(:params) { { media_reserve_id: resource.id } }
+      let(:audio_file) { FactoryBot.create_for_repository(:file_set) }
+      let(:resource) { FactoryBot.create_for_repository(:media_reserve, member_ids: audio_file.id) }
+      let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
+
+      it "creates a playlist with a media reserve file sets" do
+        post :create, params: params
+        expect(response).to be_redirect
+        expect(response.location).to start_with "http://test.host/catalog/"
+        id = response.location.split("/").last
+        playlist = query_service.find_by(id: id)
+        expect(playlist.label).to eq ["Playlist: #{resource.title.first}"]
+        members = query_service.find_members(resource: playlist)
+        expect(members.first).to be_a ProxyFile
+        expect(members.first.label).to eq audio_file.title
+        expect(members.first.proxied_file_id).to eq audio_file.id
+        expect(playlist.member_ids.length).to eq 1
+      end
+    end
   end
   describe "destroy" do
     context "access control" do

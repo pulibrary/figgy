@@ -42,6 +42,12 @@ FactoryBot.define do
         state "draft"
       end
     end
+    factory :media_reserve do
+      change_set "media_reserve"
+      factory :draft_media_reserve do
+        state "draft"
+      end
+    end
     factory :open_scanned_resource do
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
