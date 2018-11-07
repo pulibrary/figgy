@@ -17,4 +17,10 @@ RSpec.describe Playlist do
     playlist.visibility = ["restricted"]
     expect(playlist.visibility).to eq ["restricted"]
   end
+
+  describe ".can_have_manifests?" do
+    it "returns false" do
+      expect(described_class.can_have_manifests?).to eq false
+    end
+  end
 end
