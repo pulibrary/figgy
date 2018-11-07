@@ -23,7 +23,8 @@ class ChangeSetPersister
         CreateProxyFileSets
       ],
       after_save: [
-        AppendToParent
+        AppendToParent,
+        AppendCitationToParent
       ],
       after_save_commit: [
         PublishMessage::Factory.new(operation: :update),

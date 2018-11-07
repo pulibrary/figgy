@@ -17,17 +17,20 @@ class CoinDecorator < Valkyrie::ResourceDecorator
           :place,
           :private_note,
           :provenance,
-          :references,
           :replaces,
           :size,
           :technique,
           :visibility,
           :weight
 
-  delegate :members, :decorated_file_sets, :decorated_parent, to: :wayfinder
+  delegate :members, :decorated_file_sets, :decorated_parent, :decorated_numismatic_citations, to: :wayfinder
 
   def ark_mintable_state?
     false
+  end
+
+  def citations
+    decorated_numismatic_citations.map(&:title)
   end
 
   def manageable_files?

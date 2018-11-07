@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+# An abstraction of coins that were minted at the same time, similar to an edition of a book.  Includes
+# metadata about properties that are shared between all coins that are minted together, such as their place
+# of origin, denomination, composition, design, creator, etc.
 class NumismaticIssue < Resource
   include Valkyrie::Resource::AccessControls
   attribute :member_ids, Valkyrie::Types::Array

@@ -771,4 +771,18 @@ RSpec.describe Wayfinder do
       end
     end
   end
+  context "when given a NumismaticReferemce" do
+    describe "#members_with_parents" do
+      it "returns undecorated members with parents pre-loaded" do
+        member = FactoryBot.create_for_repository(:numismatic_reference)
+        resource = FactoryBot.create_for_repository(:numismatic_reference, member_ids: member.id)
+
+        wayfinder = described_class.for(resource)
+
+        expect(wayfinder.members_with_parents.map(&:id)).to eq [member.id]
+        found_member = wayfinder.members_with_parents.first
+        expect(found_member.loaded[:parents].map(&:id)).to eq [resource.id]
+      end
+    end
+  end
 end

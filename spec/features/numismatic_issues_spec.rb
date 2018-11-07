@@ -52,7 +52,6 @@ RSpec.feature "NumismaticIssues" do
     expect(page).to have_field "Obverse part"
     expect(page).to have_field "Obverse symbol"
     expect(page).to have_field "Place"
-    expect(page).to have_field "References"
     expect(page).to have_field "Reverse attributes"
     expect(page).to have_field "Reverse figure"
     expect(page).to have_field "Obverse figure description"
@@ -103,7 +102,6 @@ RSpec.feature "NumismaticIssues" do
         obverse_part: "test value",
         obverse_symbol: "test value",
         place: "test value",
-        references: "test value",
         replaces: "test value",
         reverse_attributes: "test value",
         reverse_figure: "test value",
@@ -150,7 +148,6 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.obverse_part", text: "test value"
       expect(page).to have_css ".attribute.obverse_symbol", text: "test value"
       expect(page).to have_css ".attribute.place", text: "test value"
-      expect(page).to have_css ".attribute.references", text: "test value"
       expect(page).to have_css ".attribute.replaces", text: "test value"
       expect(page).to have_css ".attribute.reverse_attributes", text: "test value"
       expect(page).to have_css ".attribute.reverse_figure", text: "test value"

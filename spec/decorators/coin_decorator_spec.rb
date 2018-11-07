@@ -3,11 +3,19 @@ require "rails_helper"
 
 RSpec.describe CoinDecorator do
   subject(:decorator) { described_class.new(coin) }
-  let(:coin) { FactoryBot.create_for_repository(:coin, state: "complete") }
+  let(:coin) { FactoryBot.create_for_repository(:coin, numismatic_citation_ids: [citation.id]) }
+  let(:citation) { FactoryBot.create_for_repository(:numismatic_citation, numismatic_reference_id: [reference.id]) }
+  let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
 
   describe "state" do
     it "does not allow minting arks" do
       expect(decorator.ark_mintable_state?).to be false
+    end
+  end
+
+  describe "#citations" do
+    it "renders the linked citations" do
+      expect(decorator.citations).to eq(["short-title citation part citation number"])
     end
   end
 

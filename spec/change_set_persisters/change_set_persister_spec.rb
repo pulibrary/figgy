@@ -1275,4 +1275,19 @@ RSpec.describe ChangeSetPersister do
       expect(proxy_file_set.label).to eq file_set.title
     end
   end
+
+  describe "appending citation" do
+    let(:change_set_class) { NumismaticCitationChangeSet }
+
+    it "appends a citation via #citation_parent_id" do
+      parent = FactoryBot.create_for_repository(:coin)
+      citation = FactoryBot.build(:numismatic_citation)
+      change_set = change_set_class.new(citation)
+      change_set.validate(citation_parent_id: parent.id.to_s)
+
+      output = change_set_persister.save(change_set: change_set)
+      reloaded = query_service.find_by(id: parent.id)
+      expect(reloaded.numismatic_citation_ids).to eq [output.id]
+    end
+  end
 end
