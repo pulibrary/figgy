@@ -28,7 +28,6 @@ class NumismaticIssueChangeSet < ChangeSet
   property :obverse_part, multiple: false, required: false
   property :obverse_symbol, multiple: false, required: false
   property :place, multiple: false, required: false, default: []
-  property :references, multiple: true, required: false, default: []
   property :replaces, multiple: true, required: false, default: []
   property :reverse_attributes, multiple: true, required: false, default: []
   property :reverse_figure, multiple: false, required: false
@@ -98,7 +97,6 @@ class NumismaticIssueChangeSet < ChangeSet
       :obverse_part,
       :obverse_symbol,
       :place,
-      :references,
       :reverse_attributes,
       :reverse_figure,
       :reverse_figure_description,
