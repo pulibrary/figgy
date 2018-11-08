@@ -84,7 +84,7 @@ RSpec.describe Types::NumismaticIssueType do
 
   describe "#label" do
     it "maps to a resource's title" do
-      expect(type.label).to eq "Issue: #{numismatic_issue.id}"
+      expect(type.label).to eq "Issue: #{numismatic_issue.issue_number}"
     end
   end
 

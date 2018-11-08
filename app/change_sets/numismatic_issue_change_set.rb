@@ -14,6 +14,7 @@ class NumismaticIssueChangeSet < ChangeSet
   property :edge, multiple: false, required: false
   property :era, multiple: false, required: false
   property :geographic_origin, multiple: false, required: false
+  property :issue_number, multiple: false, required: false
   property :master, multiple: false, required: false
   property :metal, multiple: false, required: false
   property :note, multiple: true, required: false, default: []
@@ -59,6 +60,7 @@ class NumismaticIssueChangeSet < ChangeSet
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
 
+  validates_with AutoIncrementValidator, property: :issue_number
   validates_with CollectionValidator
   validates_with MemberValidator
   validates_with RightsStatementValidator
@@ -82,6 +84,7 @@ class NumismaticIssueChangeSet < ChangeSet
       :edge,
       :era,
       :geographic_origin,
+      :issue_number,
       :master,
       :metal,
       :note,

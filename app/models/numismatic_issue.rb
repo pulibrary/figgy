@@ -15,6 +15,7 @@ class NumismaticIssue < Resource
   attribute :edge
   attribute :era
   attribute :geographic_origin
+  attribute :issue_number, Valkyrie::Types::Anything
   attribute :master
   attribute :metal
   attribute :note
@@ -67,6 +68,6 @@ class NumismaticIssue < Resource
   # Placeholder title.
   # TODO: Add more descriptive title when we have more information.
   def title
-    ["Issue: #{id}"]
+    ["Issue: #{issue_number}"]
   end
 end

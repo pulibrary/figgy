@@ -6,6 +6,7 @@ class CoinChangeSet < ChangeSet
   include VisibilityProperty
   property :accession, multiple: false, required: false
   property :analysis, multiple: false, required: false
+  property :coin_number, multiple: false, required: false
   property :counter_stamp, multiple: false, required: false
   property :department, multiple: false, required: false
   property :die_axis, multiple: false, required: false
@@ -39,6 +40,7 @@ class CoinChangeSet < ChangeSet
   property :files, virtual: true, multiple: true, required: false
   property :pending_uploads, multiple: true, required: false
 
+  validates_with AutoIncrementValidator, property: :coin_number
   validates_with MemberValidator
   validates_with StateValidator
   validates_with ViewingDirectionValidator
@@ -50,6 +52,7 @@ class CoinChangeSet < ChangeSet
       :accession,
       :analysis,
       :append_id,
+      :coin_number,
       :counter_stamp,
       :department,
       :die_axis,
