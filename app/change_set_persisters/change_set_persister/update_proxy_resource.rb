@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ChangeSetPersister
-  class UpdateProxiedResource
+  class UpdateProxyResource
     def initialize(change_set_persister: nil, change_set:, post_save_resource: nil)
       @change_set_persister = change_set_persister
       @change_set = change_set
