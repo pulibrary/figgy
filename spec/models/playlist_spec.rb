@@ -18,6 +18,11 @@ RSpec.describe Playlist do
     expect(playlist.visibility).to eq ["restricted"]
   end
 
+  # this is needed by the title_indexer for search results listings
+  it "uses label as its title" do
+    expect(playlist.title).to eq ["My Playlist"]
+  end
+
   describe ".can_have_manifests?" do
     it "returns false" do
       expect(described_class.can_have_manifests?).to eq false
