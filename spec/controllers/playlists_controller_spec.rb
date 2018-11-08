@@ -5,6 +5,10 @@ include ActionDispatch::TestProcess
 RSpec.describe PlaylistsController do
   with_queue_adapter :inline
   let(:user) { nil }
+  let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
+  let(:storage_adapter) { Valkyrie.config.storage_adapter }
+  let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter) }
+
   before do
     sign_in user if user
   end
@@ -69,6 +73,84 @@ RSpec.describe PlaylistsController do
       let(:factory) { :playlist }
       let(:extra_params) { { playlist: { title: ["My Playlist"] } } }
       it_behaves_like "an access controlled update request"
+    end
+  end
+
+  describe "#manifest" do
+    context "with a Playlist proxying to audio FileSets", run_real_characterization: true do
+      with_queue_adapter :inline
+
+      let(:tika_output) { tika_wav_output }
+
+      let(:file1) { fixture_file_upload("files/audio_file.wav") }
+      let(:file2) { fixture_file_upload("av/la_demo_bag/data/32101047382484_1_pm.wav") }
+      let(:media_reserve) { FactoryBot.create_for_repository(:scanned_resource, files: [file1, file2]) }
+      let(:file_set1) do
+        media_reserve.decorate.file_sets.first
+      end
+      let(:file_set2) do
+        media_reserve.decorate.file_sets.last
+      end
+      let(:proxy1) do
+        res = ProxyFile.new(proxied_file_id: file_set1.id)
+        cs = ProxyFileChangeSet.new(res)
+        cs.prepopulate!
+        change_set_persister.save(change_set: cs)
+      end
+      let(:proxy2) do
+        res = ProxyFile.new(proxied_file_id: file_set2.id)
+        cs = ProxyFileChangeSet.new(res)
+        cs.prepopulate!
+        change_set_persister.save(change_set: cs)
+      end
+      let(:resource) do
+        FactoryBot.create_for_repository(:playlist, member_ids: [proxy1.id, proxy2.id])
+      end
+      let(:user) { FactoryBot.create(:admin) }
+
+      it "generates the IIIF Manifest" do
+        get :manifest, params: { id: resource.id, format: :json }
+
+        expect(response.status).to eq(200)
+        expect(response.body).not_to be_empty
+        manifest_values = JSON.parse(response.body)
+
+        expect(manifest_values).to include("items")
+        expect(manifest_values["items"].length).to eq(2)
+
+        first_canvas = manifest_values["items"].first
+
+        expect(first_canvas).to include("items")
+        expect(first_canvas["items"].length).to eq(1)
+        anno_page = first_canvas["items"].first
+        expect(anno_page).to include("items")
+        expect(anno_page["items"].length).to eq(1)
+        first_annotation = anno_page["items"].first
+        expect(first_annotation).to include("body")
+        expect(first_annotation["body"]).to include("format" => "audio/mp3")
+
+        last_canvas = manifest_values["items"].last
+        expect(last_canvas).to include("items")
+        expect(last_canvas["items"].length).to eq(1)
+        anno_page = last_canvas["items"].first
+        expect(anno_page).to include("items")
+        expect(anno_page["items"].length).to eq(1)
+        last_annotation = anno_page["items"].first
+        expect(last_annotation).to include("body")
+        expect(last_annotation["body"]).to include("format" => "audio/mp3")
+      end
+    end
+
+    context "when an invalid resource ID is requested" do
+      it "returns a not found status response" do
+        get :manifest, params: { id: "invalid", format: :json }
+
+        expect(response.status).to eq(200)
+        expect(response.body).not_to be_empty
+        response_message = JSON.parse(response.body)
+
+        expect(response_message).to include("message" => "No manifest found for invalid")
+      end
     end
   end
 end

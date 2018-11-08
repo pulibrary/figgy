@@ -8,6 +8,12 @@ RSpec.describe Playlist do
   let(:playlist) { FactoryBot.build(:playlist) }
   it_behaves_like "a Valkyrie::Resource"
 
+  describe ".can_have_manifests?" do
+    it "can be used to generate IIIF Manifests" do
+      expect(described_class.can_have_manifests?).to be true
+    end
+  end
+
   it "has a label" do
     playlist.label = ["Woodstock"]
     expect(playlist.label).to eq ["Woodstock"]
@@ -21,11 +27,5 @@ RSpec.describe Playlist do
   # this is needed by the title_indexer for search results listings
   it "uses label as its title" do
     expect(playlist.title).to eq ["My Playlist"]
-  end
-
-  describe ".can_have_manifests?" do
-    it "returns false" do
-      expect(described_class.can_have_manifests?).to eq false
-    end
   end
 end
