@@ -169,6 +169,7 @@ RSpec/NestedGroups:
     - 'spec/controllers/simple_resources_controller_spec.rb'
     - 'spec/jobs/ingest_folders_job_spec.rb'
     - 'spec/services/manifest_builder_spec.rb'
+    - 'spec/controllers/playlists_controller_spec.rb'
 RSpec/VerifiedDoubles:
   Exclude:
     - 'spec/models/search_builder_spec.rb'

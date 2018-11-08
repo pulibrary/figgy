@@ -20,7 +20,6 @@ class ChangeSetPersister
         CreateFile::Factory.new(file_appender: FileAppender),
         PropagateVisibilityAndState,
         CleanupPdfs,
-        UpdateProxyResource,
         CreateProxyFiles
       ],
       after_save: [

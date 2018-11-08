@@ -76,116 +76,116 @@ RSpec.describe PlaylistsController do
       it_behaves_like "an access controlled update request"
 
       context "when a Playlist has been created" do
-      let(:resource) { FactoryBot.create_for_repository(:playlist) }
-      let(:proxy_file) do
-        proxy = ProxyFile.new
-        cs = ProxyFileChangeSet.new(proxy)
-        cs.prepopulate!
-        change_set_persister.save(change_set: cs)
+        let(:resource) { FactoryBot.create_for_repository(:playlist) }
+        let(:proxy_file) do
+          proxy = ProxyFile.new
+          cs = ProxyFileChangeSet.new(proxy)
+          cs.prepopulate!
+          change_set_persister.save(change_set: cs)
+        end
+
+        it "adds member IDs for proxies" do
+          patch :update, params: { id: resource.id.to_s, playlist: { member_ids: [proxy_file.id] } }
+
+          expect(response).to be_redirect
+          expect(response.location).to eq "http://test.host/catalog/#{resource.id}"
+          id = response.location.gsub("http://test.host/catalog/", "")
+          reloaded = query_service.find_by(id: id)
+
+          expect(reloaded.member_ids).to eq [proxy_file.id]
+        end
       end
 
-      it "adds member IDs for proxies" do
-        patch :update, params: { id: resource.id.to_s, playlist: { member_ids: [proxy_file.id] } }
+      context "when a Playlist has been linked to ProxyFiles" do
+        let(:proxy_file) do
+          proxy = ProxyFile.new
+          cs = ProxyFileChangeSet.new(proxy)
+          cs.prepopulate!
+          change_set_persister.save(change_set: cs)
+        end
+        let(:proxy_file2) do
+          proxy = ProxyFile.new
+          cs = ProxyFileChangeSet.new(proxy)
+          cs.prepopulate!
+          change_set_persister.save(change_set: cs)
+        end
+        let(:resource) { FactoryBot.create_for_repository(:playlist, member_ids: [proxy_file.id]) }
 
-        expect(response).to be_redirect
-        expect(response.location).to eq "http://test.host/catalog/#{resource.id}"
-        id = response.location.gsub("http://test.host/catalog/", "")
-        reloaded = query_service.find_by(id: id)
+        it "replaces member IDs for proxies" do
+          patch :update, params: { id: resource.id.to_s, playlist: { member_ids: [proxy_file2.id] } }
 
-        expect(reloaded.member_ids).to eq [proxy_file.id]
+          expect(response).to be_redirect
+          expect(response.location).to eq "http://test.host/catalog/#{resource.id}"
+          id = response.location.gsub("http://test.host/catalog/", "")
+          reloaded = query_service.find_by(id: id)
+
+          expect(reloaded.member_ids).to eq [proxy_file2.id]
+        end
       end
     end
+    describe "#manifest" do
+      context "with a Playlist proxying to audio FileSets", run_real_characterization: true do
+        with_queue_adapter :inline
 
-    context "when a Playlist has been linked to ProxyFiles" do
-      let(:proxy_file) do
-        proxy = ProxyFile.new
-        cs = ProxyFileChangeSet.new(proxy)
-        cs.prepopulate!
-        change_set_persister.save(change_set: cs)
-      end
-      let(:proxy_file2) do
-        proxy = ProxyFile.new
-        cs = ProxyFileChangeSet.new(proxy)
-        cs.prepopulate!
-        change_set_persister.save(change_set: cs)
-      end
-      let(:resource) { FactoryBot.create_for_repository(:playlist, member_ids: [proxy_file.id]) }
+        let(:tika_output) { tika_wav_output }
 
-      it "replaces member IDs for proxies" do
-        patch :update, params: { id: resource.id.to_s, playlist: { member_ids: [proxy_file2.id] } }
+        let(:file1) { fixture_file_upload("files/audio_file.wav") }
+        let(:file2) { fixture_file_upload("av/la_demo_bag/data/32101047382484_1_pm.wav") }
+        let(:media_reserve) { FactoryBot.create_for_repository(:scanned_resource, files: [file1, file2]) }
+        let(:file_set1) do
+          media_reserve.decorate.file_sets.first
+        end
+        let(:file_set2) do
+          media_reserve.decorate.file_sets.last
+        end
+        let(:proxy1) do
+          res = ProxyFile.new(proxied_file_id: file_set1.id)
+          cs = ProxyFileChangeSet.new(res)
+          cs.prepopulate!
+          change_set_persister.save(change_set: cs)
+        end
+        let(:proxy2) do
+          res = ProxyFile.new(proxied_file_id: file_set2.id)
+          cs = ProxyFileChangeSet.new(res)
+          cs.prepopulate!
+          change_set_persister.save(change_set: cs)
+        end
+        let(:resource) do
+          FactoryBot.create_for_repository(:playlist, member_ids: [proxy1.id, proxy2.id])
+        end
+        let(:user) { FactoryBot.create(:admin) }
 
-        expect(response).to be_redirect
-        expect(response.location).to eq "http://test.host/catalog/#{resource.id}"
-        id = response.location.gsub("http://test.host/catalog/", "")
-        reloaded = query_service.find_by(id: id)
+        it "generates the IIIF Manifest" do
+          get :manifest, params: { id: resource.id, format: :json }
 
-        expect(reloaded.member_ids).to eq [proxy_file2.id]
-      end
-    end
-  end
+          expect(response.status).to eq(200)
+          expect(response.body).not_to be_empty
+          manifest_values = JSON.parse(response.body)
 
-  describe "#manifest" do
-    context "with a Playlist proxying to audio FileSets", run_real_characterization: true do
-      with_queue_adapter :inline
+          expect(manifest_values).to include("items")
+          expect(manifest_values["items"].length).to eq(2)
 
-      let(:tika_output) { tika_wav_output }
+          first_canvas = manifest_values["items"].first
 
-      let(:file1) { fixture_file_upload("files/audio_file.wav") }
-      let(:file2) { fixture_file_upload("av/la_demo_bag/data/32101047382484_1_pm.wav") }
-      let(:media_reserve) { FactoryBot.create_for_repository(:scanned_resource, files: [file1, file2]) }
-      let(:file_set1) do
-        media_reserve.decorate.file_sets.first
-      end
-      let(:file_set2) do
-        media_reserve.decorate.file_sets.last
-      end
-      let(:proxy1) do
-        res = ProxyFile.new(proxied_file_id: file_set1.id)
-        cs = ProxyFileChangeSet.new(res)
-        cs.prepopulate!
-        change_set_persister.save(change_set: cs)
-      end
-      let(:proxy2) do
-        res = ProxyFile.new(proxied_file_id: file_set2.id)
-        cs = ProxyFileChangeSet.new(res)
-        cs.prepopulate!
-        change_set_persister.save(change_set: cs)
-      end
-      let(:resource) do
-        FactoryBot.create_for_repository(:playlist, member_ids: [proxy1.id, proxy2.id])
-      end
-      let(:user) { FactoryBot.create(:admin) }
+          expect(first_canvas).to include("items")
+          expect(first_canvas["items"].length).to eq(1)
+          anno_page = first_canvas["items"].first
+          expect(anno_page).to include("items")
+          expect(anno_page["items"].length).to eq(1)
+          first_annotation = anno_page["items"].first
+          expect(first_annotation).to include("body")
+          expect(first_annotation["body"]).to include("format" => "audio/mp3")
 
-      it "generates the IIIF Manifest" do
-        get :manifest, params: { id: resource.id, format: :json }
-
-        expect(response.status).to eq(200)
-        expect(response.body).not_to be_empty
-        manifest_values = JSON.parse(response.body)
-
-        expect(manifest_values).to include("items")
-        expect(manifest_values["items"].length).to eq(2)
-
-        first_canvas = manifest_values["items"].first
-
-        expect(first_canvas).to include("items")
-        expect(first_canvas["items"].length).to eq(1)
-        anno_page = first_canvas["items"].first
-        expect(anno_page).to include("items")
-        expect(anno_page["items"].length).to eq(1)
-        first_annotation = anno_page["items"].first
-        expect(first_annotation).to include("body")
-        expect(first_annotation["body"]).to include("format" => "audio/mp3")
-
-        last_canvas = manifest_values["items"].last
-        expect(last_canvas).to include("items")
-        expect(last_canvas["items"].length).to eq(1)
-        anno_page = last_canvas["items"].first
-        expect(anno_page).to include("items")
-        expect(anno_page["items"].length).to eq(1)
-        last_annotation = anno_page["items"].first
-        expect(last_annotation).to include("body")
-        expect(last_annotation["body"]).to include("format" => "audio/mp3")
+          last_canvas = manifest_values["items"].last
+          expect(last_canvas).to include("items")
+          expect(last_canvas["items"].length).to eq(1)
+          anno_page = last_canvas["items"].first
+          expect(anno_page).to include("items")
+          expect(anno_page["items"].length).to eq(1)
+          last_annotation = anno_page["items"].first
+          expect(last_annotation).to include("body")
+          expect(last_annotation["body"]).to include("format" => "audio/mp3")
+        end
       end
     end
 

@@ -1154,17 +1154,10 @@ RSpec.describe ChangeSetPersister do
       let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
       let(:file_set) { scanned_resource.decorate.file_sets.first }
       let(:resource) { Playlist.new }
-      let(:proxy_file) do
-        proxy_file = ProxyFile.new
-        cs = ProxyFileChangeSet.new(proxy_file)
-        cs.prepopulate!
-        cs.validate(proxied_file_id: file_set.id)
-        change_set_persister.save(change_set: cs)
-      end
       let(:change_set) do
         cs = PlaylistChangeSet.new(resource)
         cs.prepopulate!
-        cs.validate(label: ["test label"], member_ids: [proxy_file.id])
+        cs.validate(label: ["test label"], file_set_ids: [file_set.id])
         cs
       end
       let(:persisted) { change_set_persister.save(change_set: change_set) }
@@ -1176,7 +1169,6 @@ RSpec.describe ChangeSetPersister do
       end
       before do
         scanned_resource
-        proxy_file
         persisted
       end
       it "ensures that ProxyFile members are updated to use the label from their proxied resources" do
