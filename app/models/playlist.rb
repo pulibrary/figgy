@@ -10,6 +10,8 @@ class Playlist < Valkyrie::Resource
   attribute :state
   attribute :workflow_note
 
+  alias title label
+
   def self.can_have_manifests?
     false
   end
