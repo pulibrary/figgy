@@ -22,6 +22,7 @@ class Wayfinder < BaseWayfinder
     Coin => CoinWayfinder,
     NumismaticIssue => NumismaticIssueWayfinder,
     NumismaticReference => NumismaticReferenceWayfinder,
+    ProxyNumismaticReference => ProxyNumismaticReferenceWayfinder,
     RasterResource => RasterResourceWayfinder,
     ScannedMap => ScannedMapWayfinder,
     VectorResource => VectorResourceWayfinder
