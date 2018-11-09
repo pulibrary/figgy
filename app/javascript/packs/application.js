@@ -2,6 +2,7 @@ import Vue from 'vue/dist/vue.esm'
 import system from 'lux-design-system'
 import 'lux-design-system/lib/system/system.css'
 import store from '../store'
+import DocumentAdder from '../components/document_adder'
 
 Vue.use(system)
 
@@ -12,6 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     new Vue({
       el: elements[i],
       store,
+      components: {
+        'document-adder': DocumentAdder
+      }
     })
   }
 })
