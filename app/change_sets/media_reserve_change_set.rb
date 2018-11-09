@@ -17,6 +17,7 @@ class MediaReserveChangeSet < ChangeSet
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
+  property :pending_uploads, multiple: true, required: false
 
   validates_with StateValidator
   validates_with MemberValidator
