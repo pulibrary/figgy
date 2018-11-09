@@ -364,7 +364,7 @@ RSpec.describe CatalogController do
     end
 
     context "with a numismatic issue" do
-      it "doesn't display children of parented resources" do
+      it "retrieves both issues and coins" do
         child = persister.save(resource: FactoryBot.build(:complete_open_coin))
         parent = persister.save(resource: FactoryBot.build(:complete_open_numismatic_issue, member_ids: child.id))
         # Re-save to get member_of to index, not necessary if going through
@@ -373,8 +373,8 @@ RSpec.describe CatalogController do
 
         get :index, params: { q: "" }
 
-        expect(assigns(:document_list).length).to eq 1
-        expect(assigns(:document_list).first.resource.id).to eq parent.id
+        expect(assigns(:document_list).length).to eq 2
+        expect(assigns(:document_list).map(&:id)).to contain_exactly(parent.id.to_s, child.id.to_s)
       end
     end
   end
@@ -712,6 +712,9 @@ RSpec.describe CatalogController do
   end
 
   describe "numismatics" do
+    let(:coin) { persister.save(resource: FactoryBot.build(:complete_open_coin, coin_metadata)) }
+    let(:issue_attr) { issue_metadata.merge(member_ids: [coin.id]) }
+    let(:issue) { persister.save(resource: FactoryBot.build(:complete_open_numismatic_issue, issue_attr)) }
     let(:issue_metadata) do
       {
         artist: "issue-artist",
@@ -788,22 +791,23 @@ RSpec.describe CatalogController do
     end
 
     before do
-      coin = persister.save(resource: FactoryBot.build(:complete_open_coin, coin_metadata))
-      issue_attr = issue_metadata.merge(member_ids: [coin.id])
-      persister.save(resource: FactoryBot.build(:complete_open_numismatic_issue, issue_attr))
+      issue
+      persister.save(resource: coin) # re-save coin to index parent (normally happens in change_set_persister)
     end
 
-    it "finds the issue by issue metadata fields" do
+    it "finds coins by issue metadata fields" do
       issue_metadata.values.each do |val|
         get :index, params: { q: val }
         expect(assigns(:document_list)).not_to be_empty
+        expect(assigns(:document_list).map(&:id)).to include(coin.id.to_s)
       end
     end
 
-    it "finds the issue by coin metadata fields" do
+    it "finds coins by coin metadata fields" do
       coin_metadata.values.each do |val|
         get :index, params: { q: val }
         expect(assigns(:document_list)).not_to be_empty
+        expect(assigns(:document_list).map(&:id)).to include(coin.id.to_s)
       end
     end
   end
