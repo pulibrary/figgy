@@ -35,7 +35,7 @@ class SearchBuilder < Blacklight::SearchBuilder
 
   # This is a blacklist of models that should not be presented in search results
   def models_to_solr_clause
-    [FileSet, EphemeraProject, EphemeraVocabulary, EphemeraTerm, FileMetadata, EphemeraField, Template].join(",")
+    [FileSet, EphemeraProject, EphemeraVocabulary, EphemeraTerm, FileMetadata, EphemeraField, Template, ProxyFile].join(",")
   end
 
   def add_access_controls_to_solr_params(*args)
