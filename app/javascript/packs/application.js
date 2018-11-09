@@ -3,11 +3,14 @@ import system from 'lux-design-system'
 import 'lux-design-system/lib/system/system.css'
 import store from '../store'
 import DocumentAdder from '../components/document_adder'
+import axios from 'axios'
 
 Vue.use(system)
 
 // mount the filemanager app
 document.addEventListener('DOMContentLoaded', () => {
+  // Set CSRF token for axios requests.
+  axios.defaults.headers.common['X-CSRF-Token'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
   var elements = document.getElementsByClassName('lux')
   for(var i = 0; i < elements.length; i++){
     new Vue({

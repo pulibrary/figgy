@@ -19,8 +19,7 @@
           <tr v-for="recording in recordings">
             <td><a v-bind:href="'/catalog/' + recording.id">{{ recording.title }}</a></td>
             <td>
-              <a rel="nofollow" data-method="put"
-                v-bind:href="addTracksUrl(recording)" class="btn btn-primary">Add Tracks</a>
+              <button v-on:click="addTracks(recording)" class="btn btn-primary" :disabled=addingTracks>Add Tracks</button>
             </td>
           </tr>
         </tbody>
@@ -29,23 +28,35 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
   props: ['resource_id'],
   data() {
     return {
       recordings: [
       ],
-      recording_query: ""
+      recording_query: "",
+      addingTracks: false
     }
   },
   methods: {
-    addTracksUrl(recording) {
-      return `/concern/playlists/${this.resource_id}?${this.playlist_params(recording)}`
+    fileSetFormData(recording) {
+      let form = new FormData
+      form.append('_method', 'patch')
+      for(var id of recording.file_set_ids) {
+        form.append('playlist[file_set_ids][]', id)
+      }
+      return form
     },
-    playlist_params(recording) {
-      return recording.file_set_ids.map((x) => {
-        return `playlist[file_set_ids][]=${x}`
-      }).join("&")
+    addTracks(recording) {
+      this.addingTracks = true
+      let vm = this
+      axios.post(`/concern/playlists/${this.resource_id}`,
+        this.fileSetFormData(recording)
+      )
+        .then(function(response) {
+          window.location = response.request.responseURL
+        })
     },
     search(event) {
       if(this.recording_query.trim() == '') {
