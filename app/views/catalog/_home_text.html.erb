@@ -27,6 +27,10 @@
                                                     types: [Collection, ArchivalMediaCollection],
                                                     bulk: [] } %>
 
+<%= render partial: 'catalog/work_types_media_reserves', locals: { label: 'Media Reserves',
+                                                    types: [ScannedResource],
+                                                    bulk: [] } %>
+
 <%= render partial: 'catalog/ephemera_box_home' %>
 
 <%= render partial: 'catalog/report_home' %>
