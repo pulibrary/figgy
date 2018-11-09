@@ -24,8 +24,8 @@ class ScannedResourcesController < BaseResourceController
   def change_set_class
     if params[:change_set] == "simple" || (resource_params && resource_params[:change_set] == "simple")
       SimpleResourceChangeSet
-    elsif params[:change_set] == "media_reserve" || (resource_params && resource_params[:change_set] == "media_reserve")
-      MediaReserveChangeSet
+    elsif params[:change_set] == "recording" || (resource_params && resource_params[:change_set] == "recording")
+      RecordingChangeSet
     else
       DynamicChangeSet
     end

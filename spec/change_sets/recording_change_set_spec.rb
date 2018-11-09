@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe MediaReserveChangeSet do
+RSpec.describe RecordingChangeSet do
   subject(:change_set) { described_class.new(form_resource) }
   let(:rights_statement) { "http://rightsstatements.org/vocab/NKC/1.0/" }
   let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
@@ -71,9 +71,9 @@ RSpec.describe MediaReserveChangeSet do
   end
 
   describe "#change_set" do
-    it "sets a media_reserve default" do
+    it "sets a recording default" do
       change_set.prepopulate!
-      expect(change_set.change_set).to eq "media_reserve"
+      expect(change_set.change_set).to eq "recording"
     end
   end
 

@@ -43,9 +43,9 @@ RSpec.describe ScannedResourcesController do
         get :new, params: { change_set: "simple" }
         expect(assigns(:change_set)).to be_a SimpleResourceChangeSet
       end
-      it "is media_reserve, creates a new MediaReserveChangeSet" do
-        get :new, params: { change_set: "media_reserve" }
-        expect(assigns(:change_set)).to be_a MediaReserveChangeSet
+      it "is recording, creates a new RecordingChangeSet" do
+        get :new, params: { change_set: "recording" }
+        expect(assigns(:change_set)).to be_a RecordingChangeSet
       end
     end
   end

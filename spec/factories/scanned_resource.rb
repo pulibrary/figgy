@@ -42,9 +42,9 @@ FactoryBot.define do
         state "draft"
       end
     end
-    factory :media_reserve do
-      change_set "media_reserve"
-      factory :draft_media_reserve do
+    factory :recording do
+      change_set "recording"
+      factory :draft_recording do
         state "draft"
       end
     end

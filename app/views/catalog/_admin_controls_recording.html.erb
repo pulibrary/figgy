@@ -18,7 +18,7 @@
       <% end %>
     <% end %>
     <% if can?(:update, resource) %>
-      <%= link_to "Create Playlist", main_app.playlists_path(media_reserve_id: resource.id), method: :post, class: 'btn btn-primary' %>
+      <%= link_to "Create Playlist", main_app.playlists_path(recording_id: resource.id), method: :post, class: 'btn btn-primary' %>
     <% end %>
 
     <% if can?(:destroy, resource) %>

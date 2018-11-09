@@ -1,5 +1,5 @@
-<% if DynamicChangeSet.new(resource).is_a?(MediaReserveChangeSet) %>
-  <%= render "admin_controls_media_reserve", resource: resource %>
+<% if DynamicChangeSet.new(resource).is_a?(RecordingChangeSet) %>
+  <%= render "admin_controls_recording", resource: resource %>
 <% else %>
   <%= render "admin_controls_default", resource: resource %>
 <% end %>

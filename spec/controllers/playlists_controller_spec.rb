@@ -34,9 +34,9 @@ RSpec.describe PlaylistsController do
     end
     context "it creates a playlist with the media reserve filesets" do
       let(:user) { FactoryBot.create(:admin) }
-      let(:params) { { media_reserve_id: resource.id } }
+      let(:params) { { recording_id: resource.id } }
       let(:audio_file) { FactoryBot.create_for_repository(:file_set) }
-      let(:resource) { FactoryBot.create_for_repository(:media_reserve, member_ids: audio_file.id) }
+      let(:resource) { FactoryBot.create_for_repository(:recording, member_ids: audio_file.id) }
       let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
 
       it "creates a playlist with a media reserve file sets" do
@@ -131,12 +131,12 @@ RSpec.describe PlaylistsController do
 
         let(:file1) { fixture_file_upload("files/audio_file.wav") }
         let(:file2) { fixture_file_upload("av/la_demo_bag/data/32101047382484_1_pm.wav") }
-        let(:media_reserve) { FactoryBot.create_for_repository(:scanned_resource, files: [file1, file2]) }
+        let(:recording) { FactoryBot.create_for_repository(:scanned_resource, files: [file1, file2]) }
         let(:file_set1) do
-          media_reserve.decorate.file_sets.first
+          recording.decorate.file_sets.first
         end
         let(:file_set2) do
-          media_reserve.decorate.file_sets.last
+          recording.decorate.file_sets.last
         end
         let(:proxy1) do
           res = ProxyFile.new(proxied_file_id: file_set1.id)

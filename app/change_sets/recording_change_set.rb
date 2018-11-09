@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class MediaReserveChangeSet < ChangeSet
+class RecordingChangeSet < ChangeSet
   apply_workflow(DraftCompleteWorkflow)
   delegate :human_readable_type, to: :resource
 
@@ -13,7 +13,7 @@ class MediaReserveChangeSet < ChangeSet
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :source_metadata_identifier, multiple: false, required: false
   property :read_groups, multiple: true, required: false
-  property :change_set, require: true, default: "media_reserve"
+  property :change_set, require: true, default: "recording"
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false

@@ -68,7 +68,7 @@ export default {
         return
       }
       let vm = this
-      fetch(`/catalog.json?f[internal_resource_ssim][]=ScannedResource&f[change_set_ssim][]=media_reserve&q=${this.recording_query}`)
+      fetch(`/catalog.json?f[internal_resource_ssim][]=ScannedResource&f[change_set_ssim][]=recording&q=${this.recording_query}`)
         .then(function(response) {
           return response.json()
         })

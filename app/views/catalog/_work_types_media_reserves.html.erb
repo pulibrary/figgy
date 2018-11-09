@@ -8,9 +8,9 @@
           <% types.each do |klass| %>
             <% if can? :create, klass %>
               <li class="work-type work-type-<%= klass %>">
-                <h4 class="title">Media Reserve</h4>
+                <h4 class="title">Recording</h4>
                 <%= content_tag(:div, nil, class: ['work-icon', "icon-#{klass.human_readable_type.downcase.gsub(' ','-')}"]) %>
-                <%= link_to 'Add New', new_polymorphic_path([:media_reserve, :scanned_resources]),
+                <%= link_to 'Add New', new_polymorphic_path([:recording, :scanned_resources]),
                     class: "add-button btn btn-primary #{dom_class(klass, 'add_new')}" %>
               </li>
             <% end %>
