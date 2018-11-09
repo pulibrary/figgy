@@ -1148,6 +1148,77 @@ RSpec.describe ChangeSetPersister do
         expect(members.first.source_metadata_identifier).to include "C0652_c0377"
       end
     end
+
+    context "when persisting a Playlist with ProxyFile members" do
+      let(:file) { fixture_file_upload("files/audio_file.wav") }
+      let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
+      let(:file_set) { scanned_resource.decorate.file_sets.first }
+      let(:resource) { Playlist.new }
+      let(:change_set) do
+        cs = PlaylistChangeSet.new(resource)
+        cs.prepopulate!
+        cs.validate(label: ["test label"], file_set_ids: [file_set.id])
+        cs
+      end
+      let(:persisted) { change_set_persister.save(change_set: change_set) }
+      let(:proxy) do
+        query_service.find_by(id: persisted.member_ids.first)
+      end
+      let(:proxied) do
+        query_service.find_by(id: proxy.proxied_file_id)
+      end
+      before do
+        scanned_resource
+        persisted
+      end
+      it "ensures that ProxyFile members are updated to use the label from their proxied resources" do
+        expect(proxy.label).to eq(proxied.title)
+      end
+    end
+  end
+
+  describe "#delete" do
+    context "when persisting a Playlist with ProxyFile members" do
+      let(:file) { fixture_file_upload("files/audio_file.wav") }
+      let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
+      let(:file_set) { scanned_resource.decorate.file_sets.first }
+      let(:resource) { Playlist.new }
+      let(:proxy_file) do
+        proxy_file = ProxyFile.new
+        cs = ProxyFileChangeSet.new(proxy_file)
+        cs.prepopulate!
+        cs.validate(proxied_file_id: file_set.id)
+        change_set_persister.save(change_set: cs)
+      end
+      let(:change_set) do
+        cs = PlaylistChangeSet.new(resource)
+        cs.prepopulate!
+        cs.validate(label: ["test label"], member_ids: [proxy_file.id])
+        cs
+      end
+      let(:persisted) { change_set_persister.save(change_set: change_set) }
+      let(:proxy) do
+        query_service.find_by(id: persisted.member_ids.first)
+      end
+      let(:proxied) do
+        query_service.find_by(id: proxy.proxied_file_id)
+      end
+      before do
+        scanned_resource
+        proxy_file
+        persisted
+      end
+      it "deletes ProxyFile members when Playlists are deleted, but keeps the FileSets" do
+        expect(proxy.persisted?).to be true
+
+        cs = PlaylistChangeSet.new(persisted)
+        change_set_persister.delete(change_set: cs)
+
+        expect { query_service.find_by(id: proxy.id) }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+        reloaded = query_service.find_by(id: file_set.id)
+        expect(reloaded.persisted?).to be true
+      end
+    end
   end
 
   describe "reindex collection memberes" do

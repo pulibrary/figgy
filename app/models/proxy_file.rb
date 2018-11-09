@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # Generated with `rails generate valkyrie:model ProxyResource`
-class ProxyFile < Valkyrie::Resource
+class ProxyFile < Resource
   include Valkyrie::Resource::AccessControls
 
   attribute :label, Valkyrie::Types::Set
