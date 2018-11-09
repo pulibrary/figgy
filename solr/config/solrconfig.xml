@@ -6,9 +6,7 @@
  The ASF licenses this file to You under the Apache License, Version 2.0
  (the "License"); you may not use this file except in compliance with
  the License.  You may obtain a copy of the License at
-
      http://www.apache.org/licenses/LICENSE-2.0
-
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,7 +26,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>5.0.0</luceneMatchVersion>
+  <luceneMatchVersion>7.0.0</luceneMatchVersion>
   
   <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lib" />
   <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lucene-libs" />
@@ -45,7 +43,7 @@
 
 
   <dataDir>${solr.figgy-core.data.dir:}</dataDir>
-  
+
   <requestDispatcher handleSelect="true" >
     <requestParsers enableRemoteStreaming="false" multipartUploadLimitInKB="2048000" />
   </requestDispatcher>
@@ -73,9 +71,7 @@
   </updateHandler>
 
   <!-- SearchHandler
-
        http://wiki.apache.org/solr/SearchHandler
-
        For processing Search Queries, the primary Request Handler
        provided with Solr is "SearchHandler" It delegates to a sequent
        of SearchComponents (see below) and supports distributed
@@ -199,10 +195,8 @@
   </requestHandler>
 
 <!-- Spell Check
-
         The spell check component can return a list of alternative spelling
         suggestions.  
-
         http://wiki.apache.org/solr/SpellCheckComponent
      -->
   <searchComponent name="spellcheck" class="solr.SpellCheckComponent">
@@ -257,7 +251,6 @@
      -->
 
     <!-- a spellchecker that use an alternate comparator 
-
          comparatorClass be one of:
           1. score (default)
           2. freq (Frequency first, then score)
@@ -298,4 +291,3 @@
     <!-- </lst> -->
   </requestHandler>
 </config>
-
