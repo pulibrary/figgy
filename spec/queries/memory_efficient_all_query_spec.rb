@@ -11,6 +11,13 @@ describe MemoryEfficientAllQuery do
         resource = FactoryBot.create_for_repository(:scanned_resource)
         expect(query.memory_efficient_all.map(&:id).to_a).to eq [resource.id]
       end
+      it "will only parse as many objects as is necessary" do
+        5.times { FactoryBot.create_for_repository(:scanned_resource) }
+        allow(query_service.resource_factory).to receive(:to_resource).and_call_original
+
+        expect(query.memory_efficient_all.first(2).length).to eq 2
+        expect(query_service.resource_factory).to have_received(:to_resource).exactly(2).times
+      end
     end
     context "when given except_models argument" do
       it "finds everything that isn't one of those models" do
