@@ -23,6 +23,7 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
           :obverse_part,
           :obverse_symbol,
           :place,
+          :references,
           :replaces,
           :reverse_attributes,
           :reverse_figure,

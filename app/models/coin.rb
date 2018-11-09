@@ -2,7 +2,6 @@
 class Coin < Resource
   include Valkyrie::Resource::AccessControls
   attribute :member_ids, Valkyrie::Types::Array
-  attribute :numismatic_citation_ids, Valkyrie::Types::Array
 
   # descriptive metadata
   attribute :accession
@@ -24,6 +23,7 @@ class Coin < Resource
   attribute :place
   attribute :private_note
   attribute :provenance
+  attribute :references, Valkyrie::Types::Set.of(ProxyNumismaticReference)
   attribute :size
   attribute :technique
   attribute :weight

@@ -20,7 +20,6 @@ class Wayfinder < BaseWayfinder
     MediaResource => MediaResourceWayfinder,
     Playlist => PlaylistWayfinder,
     Coin => CoinWayfinder,
-    NumismaticCitation => NumismaticCitationWayfinder,
     NumismaticIssue => NumismaticIssueWayfinder,
     NumismaticReference => NumismaticReferenceWayfinder,
     RasterResource => RasterResourceWayfinder,

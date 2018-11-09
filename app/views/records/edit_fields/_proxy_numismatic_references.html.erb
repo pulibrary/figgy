@@ -1,0 +1,13 @@
+<div class="row">
+<%= f.simple_fields_for :proxy_numismatic_references, wrapper: :inline_form do |g| %>
+  <div class="col-md-4">
+    <%= g.input :numismatic_reference_id, required: g.object.required?(:numismatic_reference_id) %>
+  </div>
+  <div class="col-md-4">
+    <%= g.input :part, required: g.object.required?(:part) %>
+  </div>
+  <div class="col-md-4">
+    <%= g.input :number, required: g.object.required?(:number) %>
+  </div>
+<% end %>
+</div>

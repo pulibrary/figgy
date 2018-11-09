@@ -28,7 +28,6 @@ class CoinChangeSet < ChangeSet
   property :weight, multiple: false, required: false
 
   property :depositor, multiple: false, required: false
-  property :numismatic_citation_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :read_groups, multiple: true, required: false
 
@@ -39,6 +38,22 @@ class CoinChangeSet < ChangeSet
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
   property :pending_uploads, multiple: true, required: false
+
+  # references
+  property :references, multiple: true, required: false, default: []
+  property :proxy_numismatic_references, virtual: true
+
+  def reference_change_sets
+    @reference_change_sets ||= references.map { |ref| DynamicChangeSet.new(ref).prepopulate! }
+  end
+
+  def proxy_numismatic_references_attributes=(attributes)
+    attributes.each_with_index do |attr, idx|
+      return false unless reference_change_sets[idx].validate(attr)
+      reference_change_sets[idx].sync
+    end
+    self.references = reference_change_sets.map(&:model)
+  end
 
   validates_with AutoIncrementValidator, property: :coin_number
   validates_with MemberValidator
@@ -68,6 +83,7 @@ class CoinChangeSet < ChangeSet
       :place,
       :private_note,
       :provenance,
+      :proxy_numismatic_references,
       :size,
       :technique,
       :weight
