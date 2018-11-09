@@ -19,7 +19,8 @@
           <tr v-for="recording in recordings">
             <td><a v-bind:href="'/catalog/' + recording.id">{{ recording.title }}</a></td>
             <td>
-              <button v-on:click="addTracks(recording)" class="btn btn-primary" :disabled=addingTracks>Add Tracks</button>
+              <button v-on:click="addTracks(recording)" class="btn btn-primary"
+                :disabled="addingTracks || recording.file_set_ids.length == 0">Add Tracks</button>
             </td>
           </tr>
         </tbody>
@@ -49,6 +50,9 @@ export default {
       return form
     },
     addTracks(recording) {
+      if (recording.file_set_ids.length < 1) {
+        return
+      }
       this.addingTracks = true
       let vm = this
       axios.post(`/concern/playlists/${this.resource_id}`,
@@ -74,7 +78,7 @@ export default {
               return {
                 id: recording_document["id"],
                 title: recording_document["title_ssim"][0],
-                file_set_ids: recording_document["member_ids_ssim"].map((x) =>
+                file_set_ids: (recording_document["member_ids_ssim"] || []).map((x) =>
                   { return x.replace(/^id-/,"") })
               }
             }
