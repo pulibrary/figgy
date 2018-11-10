@@ -192,14 +192,14 @@ RSpec.describe ManifestBuilder do
           recording.decorate.file_sets.last
         end
         let(:proxy1) do
-          res = ProxyFile.new(proxied_file_id: file_set1.id)
-          cs = ProxyFileChangeSet.new(res)
+          res = ProxyFileSet.new(proxied_file_id: file_set1.id)
+          cs = ProxyFileSetChangeSet.new(res)
           cs.prepopulate!
           change_set_persister.save(change_set: cs)
         end
         let(:proxy2) do
-          res = ProxyFile.new(proxied_file_id: file_set2.id)
-          cs = ProxyFileChangeSet.new(res)
+          res = ProxyFileSet.new(proxied_file_id: file_set2.id)
+          cs = ProxyFileSetChangeSet.new(res)
           cs.prepopulate!
           change_set_persister.save(change_set: cs)
         end

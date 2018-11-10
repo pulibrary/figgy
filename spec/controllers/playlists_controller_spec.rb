@@ -47,7 +47,7 @@ RSpec.describe PlaylistsController do
         playlist = query_service.find_by(id: id)
         expect(playlist.label).to eq ["Playlist: #{resource.title.first}"]
         members = query_service.find_members(resource: playlist)
-        expect(members.first).to be_a ProxyFile
+        expect(members.first).to be_a ProxyFileSet
         expect(members.first.label).to eq audio_file.title
         expect(members.first.proxied_file_id).to eq audio_file.id
         expect(playlist.member_ids.length).to eq 1
@@ -77,49 +77,49 @@ RSpec.describe PlaylistsController do
 
       context "when a Playlist has been created" do
         let(:resource) { FactoryBot.create_for_repository(:playlist) }
-        let(:proxy_file) do
-          proxy = ProxyFile.new
-          cs = ProxyFileChangeSet.new(proxy)
+        let(:proxy_file_set) do
+          proxy = ProxyFileSet.new
+          cs = ProxyFileSetChangeSet.new(proxy)
           cs.prepopulate!
           change_set_persister.save(change_set: cs)
         end
 
         it "adds member IDs for proxies" do
-          patch :update, params: { id: resource.id.to_s, playlist: { member_ids: [proxy_file.id] } }
+          patch :update, params: { id: resource.id.to_s, playlist: { member_ids: [proxy_file_set.id] } }
 
           expect(response).to be_redirect
           expect(response.location).to eq "http://test.host/catalog/#{resource.id}"
           id = response.location.gsub("http://test.host/catalog/", "")
           reloaded = query_service.find_by(id: id)
 
-          expect(reloaded.member_ids).to eq [proxy_file.id]
+          expect(reloaded.member_ids).to eq [proxy_file_set.id]
         end
       end
 
-      context "when a Playlist has been linked to ProxyFiles" do
-        let(:proxy_file) do
-          proxy = ProxyFile.new
-          cs = ProxyFileChangeSet.new(proxy)
+      context "when a Playlist has been linked to ProxyFileSets" do
+        let(:proxy_file_set) do
+          proxy = ProxyFileSet.new
+          cs = ProxyFileSetChangeSet.new(proxy)
           cs.prepopulate!
           change_set_persister.save(change_set: cs)
         end
-        let(:proxy_file2) do
-          proxy = ProxyFile.new
-          cs = ProxyFileChangeSet.new(proxy)
+        let(:proxy_file_set2) do
+          proxy = ProxyFileSet.new
+          cs = ProxyFileSetChangeSet.new(proxy)
           cs.prepopulate!
           change_set_persister.save(change_set: cs)
         end
-        let(:resource) { FactoryBot.create_for_repository(:playlist, member_ids: [proxy_file.id]) }
+        let(:resource) { FactoryBot.create_for_repository(:playlist, member_ids: [proxy_file_set.id]) }
 
         it "replaces member IDs for proxies" do
-          patch :update, params: { id: resource.id.to_s, playlist: { member_ids: [proxy_file2.id] } }
+          patch :update, params: { id: resource.id.to_s, playlist: { member_ids: [proxy_file_set2.id] } }
 
           expect(response).to be_redirect
           expect(response.location).to eq "http://test.host/catalog/#{resource.id}"
           id = response.location.gsub("http://test.host/catalog/", "")
           reloaded = query_service.find_by(id: id)
 
-          expect(reloaded.member_ids).to eq [proxy_file2.id]
+          expect(reloaded.member_ids).to eq [proxy_file_set2.id]
         end
       end
     end
@@ -139,14 +139,14 @@ RSpec.describe PlaylistsController do
           recording.decorate.file_sets.last
         end
         let(:proxy1) do
-          res = ProxyFile.new(proxied_file_id: file_set1.id)
-          cs = ProxyFileChangeSet.new(res)
+          res = ProxyFileSet.new(proxied_file_id: file_set1.id)
+          cs = ProxyFileSetChangeSet.new(res)
           cs.prepopulate!
           change_set_persister.save(change_set: cs)
         end
         let(:proxy2) do
-          res = ProxyFile.new(proxied_file_id: file_set2.id)
-          cs = ProxyFileChangeSet.new(res)
+          res = ProxyFileSet.new(proxied_file_id: file_set2.id)
+          cs = ProxyFileSetChangeSet.new(res)
           cs.prepopulate!
           change_set_persister.save(change_set: cs)
         end

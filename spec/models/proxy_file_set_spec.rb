@@ -1,9 +1,9 @@
 # frozen_string_literal: true
-# Generated with `rails generate valkyrie:model ProxyFile`
+# Generated with `rails generate valkyrie:model ProxyFileSet`
 require "rails_helper"
 require "valkyrie/specs/shared_specs"
 
-RSpec.describe ProxyFile do
+RSpec.describe ProxyFileSet do
   let(:resource_klass) { described_class }
   let(:proxy) { described_class.new }
   let(:proxied_id) { Valkyrie::ID.new("some_id") }

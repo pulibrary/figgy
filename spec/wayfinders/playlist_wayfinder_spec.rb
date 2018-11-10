@@ -19,14 +19,14 @@ describe PlaylistWayfinder do
     change_set_persister.save(change_set: cs)
   end
   let(:proxy1) do
-    res = ProxyFile.new(proxied_file_id: file_set1.id)
-    cs = ProxyFileChangeSet.new(res)
+    res = ProxyFileSet.new(proxied_file_id: file_set1.id)
+    cs = ProxyFileSetChangeSet.new(res)
     cs.prepopulate!
     change_set_persister.save(change_set: cs)
   end
   let(:proxy2) do
-    res = ProxyFile.new(proxied_file_id: file_set2.id)
-    cs = ProxyFileChangeSet.new(res)
+    res = ProxyFileSet.new(proxied_file_id: file_set2.id)
+    cs = ProxyFileSetChangeSet.new(res)
     cs.prepopulate!
     change_set_persister.save(change_set: cs)
   end
@@ -37,7 +37,7 @@ describe PlaylistWayfinder do
   describe "#proxies" do
     let(:proxies) { playlist_wayfinder.proxies }
 
-    it "retrieves the ProxyFiles for a given Playlist" do
+    it "retrieves the ProxyFileSets for a given Playlist" do
       expect(proxies.length).to eq(2)
       expect(proxies.first).to eq(proxy1)
       expect(proxies.last).to eq(proxy2)

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe ProxyFileChangeSet do
+RSpec.describe ProxyFileSetChangeSet do
   subject(:change_set) { described_class.new(form_resource) }
   let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
-  let(:proxy_file) { ProxyFile.new }
-  let(:form_resource) { proxy_file }
+  let(:proxy_file_set) { ProxyFileSet.new }
+  let(:form_resource) { proxy_file_set }
 
   describe "#prepopulate!" do
     it "sets default private visibility" do
@@ -20,7 +20,7 @@ RSpec.describe ProxyFileChangeSet do
     end
 
     context "label" do
-      let(:proxy_file) { ProxyFile.new }
+      let(:proxy_file_set) { ProxyFileSet.new }
       it "is required" do
         change_set.validate(proxied_file_id: Valkyrie::ID.new("my_id"))
         expect(change_set).not_to be_valid
@@ -30,7 +30,7 @@ RSpec.describe ProxyFileChangeSet do
     end
 
     context "proxied_file_id" do
-      let(:proxy_file) { ProxyFile.new }
+      let(:proxy_file_set) { ProxyFileSet.new }
       it "is required" do
         change_set.validate(label: "Some Songs")
         expect(change_set).not_to be_valid
