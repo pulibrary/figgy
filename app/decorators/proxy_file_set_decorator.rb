@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class ProxyFileDecorator < Valkyrie::ResourceDecorator
+class ProxyFileSetDecorator < Valkyrie::ResourceDecorator
   display :label,
           :visibility,
           :proxied_file_id

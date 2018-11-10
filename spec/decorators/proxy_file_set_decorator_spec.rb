@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe ProxyFileDecorator do
-  subject(:decorator) { described_class.new(proxy_file) }
-  let(:proxy_file) { ProxyFile.new }
+RSpec.describe ProxyFileSetDecorator do
+  subject(:decorator) { described_class.new(proxy_file_set) }
+  let(:proxy_file_set) { ProxyFileSet.new }
 
   it "does not manage structure" do
     expect(decorator.manageable_structure?).to be false

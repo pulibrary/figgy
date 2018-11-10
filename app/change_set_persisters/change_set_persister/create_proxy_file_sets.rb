@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class ChangeSetPersister
-  class CreateProxyFiles
+  class CreateProxyFileSets
     attr_reader :change_set_persister, :change_set
 
     def initialize(change_set_persister:, change_set:)
@@ -10,19 +10,19 @@ class ChangeSetPersister
 
     def run
       return unless file_set_ids.present?
-      change_set.member_ids += proxy_file_ids
+      change_set.member_ids += proxy_file_set_ids
       change_set.sync
     end
 
-    def proxy_file_ids
-      proxy_files.map(&:id)
+    def proxy_file_set_ids
+      proxy_file_sets.map(&:id)
     end
 
-    def proxy_files
-      @proxy_files ||=
+    def proxy_file_sets
+      @proxy_file_sets ||=
         begin
           file_sets.map do |file_set|
-            persister.save(resource: ProxyFile.new(proxied_file_id: file_set.id, label: file_set.title))
+            persister.save(resource: ProxyFileSet.new(proxied_file_id: file_set.id, label: file_set.title))
           end
         end
     end
