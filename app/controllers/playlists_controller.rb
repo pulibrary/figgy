@@ -8,15 +8,15 @@ class PlaylistsController < BaseResourceController
   )
 
   def resource_params
-    return super unless params[:media_reserve_id]
+    return super unless params[:recording_id]
     {
-      label: "Playlist: #{media_reserve.title.first}",
-      file_set_ids: media_reserve.member_ids
+      label: "Playlist: #{recording.title.first}",
+      file_set_ids: recording.member_ids
     }
   end
 
-  def media_reserve
-    @media_reserve ||= query_service.find_by(id: params[:media_reserve_id])
+  def recording
+    @recording ||= query_service.find_by(id: params[:recording_id])
   end
 
   # Render the IIIF presentation manifest for a given repository resource
