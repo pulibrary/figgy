@@ -192,13 +192,13 @@ RSpec.describe ManifestBuilder do
           recording.decorate.file_sets.last
         end
         let(:proxy1) do
-          res = ProxyFileSet.new(proxied_file_id: file_set1.id)
+          res = ProxyFileSet.new(proxied_file_id: file_set1.id, label: "Proxy Title")
           cs = ProxyFileSetChangeSet.new(res)
           cs.prepopulate!
           change_set_persister.save(change_set: cs)
         end
         let(:proxy2) do
-          res = ProxyFileSet.new(proxied_file_id: file_set2.id)
+          res = ProxyFileSet.new(proxied_file_id: file_set2.id, label: "Proxy Title2")
           cs = ProxyFileSetChangeSet.new(res)
           cs.prepopulate!
           change_set_persister.save(change_set: cs)
@@ -214,6 +214,7 @@ RSpec.describe ManifestBuilder do
           expect(output["items"].length).to eq(2)
 
           first_canvas = output["items"].first
+          expect(first_canvas["label"]["@none"]).to eq ["Proxy Title"]
 
           expect(first_canvas).to include("items")
           expect(first_canvas["items"].length).to eq(1)
