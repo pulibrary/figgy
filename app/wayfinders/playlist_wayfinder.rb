@@ -12,4 +12,11 @@ class PlaylistWayfinder < BaseWayfinder
     @file_sets = query_service.find_many_by_ids(ids: valid_proxies.map(&:proxied_file_id))
   end
   alias members file_sets
+
+  def members_with_parents
+    @members_with_parents ||= query_service.find_members(resource: resource).map do |member|
+      member.loaded[:parents] = [resource]
+      member
+    end
+  end
 end
