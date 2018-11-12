@@ -22,6 +22,14 @@ RSpec.describe Reindexer do
         expect { solr_adapter.query_service.find_by(id: output.id) }.not_to raise_error
       end
     end
+    it "reindexes multiple records" do
+      5.times do
+        postgres_adapter.persister.save(resource: FactoryBot.build(:scanned_resource))
+      end
+
+      described_class.reindex_all(logger: logger, wipe: true, batch_size: 2)
+      expect(solr_adapter.query_service.find_all.to_a.length).to eq 5
+    end
     context "when given ProcessedEvents" do
       it "doesn't index them" do
         resource = FactoryBot.build(:processed_event)
