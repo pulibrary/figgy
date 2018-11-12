@@ -38,7 +38,7 @@ GIT
 
 GIT
   remote: git://github.com/samvera-labs/valkyrie-sequel.git
-  revision: 5abdfff792216ebc8c611dc6bc6122e3bac3aca8
+  revision: b3e9a09f2599d8f6ce22533e5192e9ef37c1711b
   specs:
     valkyrie-sequel (0.1.0)
       oj
@@ -508,7 +508,7 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
-    oj (3.6.11)
+    oj (3.7.1)
     omniauth (1.6.1)
       hashie (>= 3.4.6, < 3.6.0)
       rack (>= 1.6.2, < 3)
@@ -674,7 +674,7 @@ GEM
     selenium-webdriver (3.4.4)
       childprocess (~> 0.5)
       rubyzip (~> 1.0)
-    sequel (5.13.0)
+    sequel (5.14.0)
     sequel_pg (1.11.0)
       pg (>= 0.18.0)
       sequel (>= 4.38.0)
