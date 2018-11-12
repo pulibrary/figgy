@@ -17,7 +17,7 @@ class MemoryEfficientAllQuery
     connection.transaction(savepoint: true) do
       relation = orm_class
       relation = relation.exclude(internal_resource: Array(except_models).map(&:to_s)) if except_models.present?
-      relation.stream.map do |object|
+      relation.stream.lazy.map do |object|
         resource_factory.to_resource(object: object)
       end
     end
