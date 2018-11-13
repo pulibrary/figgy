@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 class PlaylistDecorator < Valkyrie::ResourceDecorator
   display :title,
-          :visibility
+          :visibility,
+          :members
 
   display_in_manifest [:title]
 
@@ -17,5 +18,13 @@ class PlaylistDecorator < Valkyrie::ResourceDecorator
 
   def manageable_structure?
     false
+  end
+
+  def proxies
+    wayfinder.proxies.map(&:decorate)
+  end
+
+  def file_set_ids
+    wayfinder.file_sets.map(&:id)
   end
 end

@@ -3,9 +3,16 @@ import system from 'lux-design-system'
 import 'lux-design-system/lib/system/system.css'
 import store from '../store'
 import DocumentAdder from '../components/document_adder'
+import PlaylistMember from '../components/playlist_member'
+import PlaylistMembers from '../components/playlist_members'
 import axios from 'axios'
 
 Vue.use(system)
+
+// Load components globally here for nesting
+Vue.component('playlist-member', PlaylistMember, {
+    name: 'playlist-member'
+})
 
 // mount the filemanager app
 document.addEventListener('DOMContentLoaded', () => {
@@ -17,7 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
       el: elements[i],
       store,
       components: {
-        'document-adder': DocumentAdder
+          'document-adder': DocumentAdder,
+	  'playlistMembers': PlaylistMembers
       }
     })
   }

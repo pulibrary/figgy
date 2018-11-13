@@ -1,2 +1,2 @@
-<document-adder resource_id='<%= resource.id %>'></document-adder>
+<document-adder resource_id='<%= resource.id %>' :resource_member_ids="<%= resource.decorate.file_set_ids.to_json %>" ></document-adder>
 <%= render "admin_controls_default", resource: resource %>

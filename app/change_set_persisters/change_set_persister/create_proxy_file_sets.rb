@@ -2,6 +2,8 @@
 class ChangeSetPersister
   class CreateProxyFileSets
     attr_reader :change_set_persister, :change_set
+    delegate :query_service, to: :change_set_persister
+    delegate :resource, to: :change_set
 
     def initialize(change_set_persister:, change_set:)
       @change_set = change_set
@@ -9,9 +11,35 @@ class ChangeSetPersister
     end
 
     def run
-      return unless file_set_ids.present?
-      change_set.member_ids += proxy_file_set_ids
+      if detached_proxy_file_set_ids.present?
+        delete_detached_proxy_file_sets
+        change_set.member_ids = attached_proxy_file_set_ids
+      else
+        return if file_set_ids.nil?
+        change_set.member_ids += proxy_file_set_ids
+      end
+
       change_set.sync
+    end
+
+    def detached_proxy_file_set_ids
+      change_set.try(:detached_member_ids)
+    end
+
+    def detached_proxy_file_sets
+      @detached_proxy_file_sets ||= query_service.find_many_by_ids(ids: detached_proxy_file_set_ids)
+    end
+
+    def attached_proxy_file_set_ids
+      resource.member_ids - detached_proxy_file_set_ids
+    end
+
+    def delete_detached_proxy_file_sets
+      detached_proxy_file_sets.each do |proxy_file_set|
+        cs = ProxyFileSetChangeSet.new(proxy_file_set)
+        cs.prepopulate!
+        change_set_persister.delete(change_set: cs)
+      end
     end
 
     def proxy_file_set_ids
