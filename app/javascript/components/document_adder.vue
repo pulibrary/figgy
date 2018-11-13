@@ -31,16 +31,12 @@
 <script>
 import axios from 'axios'
 export default {
-  props: ['resource_id', 'resource_member_ids'],
+  props: ['resource_id'],
   data() {
-    // This is due to the fact that Valkyrie::ID objects are not serialized as strings
-    const member_file_set_ids = this.resource_member_ids.map( member_id => member_id.id )
-
     return {
       recordings: [],
       recording_query: "",
-      addingTracks: false,
-      member_file_set_ids: member_file_set_ids
+      addingTracks: false
     }
   },
   methods: {
@@ -56,14 +52,6 @@ export default {
       if (recording.file_set_ids.length < 1) {
         return
       }
-	// Ensure that the new FileSet IDs are unique
-	const new_file_set_ids = recording.file_set_ids.filter( file_set_id => !this.member_file_set_ids.includes(file_set_id) )
-	if (new_file_set_ids.length < 1) {
-	    window.location.reload()
-	    return
-	}
-	this.member_file_set_ids = this.member_file_set_ids.concat(new_file_set_ids)
-
       this.addingTracks = true
       let vm = this
       axios.post(`/concern/playlists/${this.resource_id}`,

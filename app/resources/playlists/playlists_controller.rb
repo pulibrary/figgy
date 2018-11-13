@@ -8,7 +8,13 @@ class PlaylistsController < BaseResourceController
   )
 
   def resource_params
-    return super unless params[:recording_id]
+    values = super
+    if !values.nil? && values[:file_set_ids]
+      file_set_ids = values[:file_set_ids]
+      values[:file_set_ids] = file_set_ids.uniq
+    end
+
+    return values unless params[:recording_id]
     {
       title: "Playlist: #{recording.title.first}",
       file_set_ids: recording.member_ids

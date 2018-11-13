@@ -20,8 +20,8 @@ class PlaylistDecorator < Valkyrie::ResourceDecorator
     false
   end
 
-  def proxies
-    wayfinder.proxies.map(&:decorate)
+  def decorated_proxies
+    members.map(&:decorate)
   end
 
   def file_set_ids

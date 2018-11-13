@@ -93,6 +93,7 @@ Rails.application.routes.draw do
       end
     end
     resources :media_resources
+    resources :proxy_file_sets
 
     resources :playlists do
       member do

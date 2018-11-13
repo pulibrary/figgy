@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
       el: elements[i],
       store,
       components: {
-          'document-adder': DocumentAdder,
-	  'playlistMembers': PlaylistMembers
+        'document-adder': DocumentAdder,
+	'playlistMembers': PlaylistMembers
       }
     })
   }

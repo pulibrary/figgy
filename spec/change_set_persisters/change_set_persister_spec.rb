@@ -1175,22 +1175,16 @@ RSpec.describe ChangeSetPersister do
         expect(proxy.label).to eq(proxied.title)
       end
 
-      context "when persisting a Playlist with detached ProxyFileSets" do
-        let(:updated_change_set) do
-          cs = PlaylistChangeSet.new(persisted)
-          cs.prepopulate!
-          cs.validate(detached_member_ids: [proxy.id])
-          cs
-        end
-        let(:updated) do
-          change_set_persister.save(change_set: updated_change_set)
-        end
+      context "when deleting ProxyFileSet members of a Playlist" do
         before do
-          updated
+          cs = ProxyFileSetChangeSet.new(proxy)
+          cs.prepopulate!
+          change_set_persister.delete(change_set: cs)
         end
         it "deletes the proxies and removes them as members of the Playlist" do
           expect { query_service.find_by(id: proxy.id) }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
-          expect(updated.member_ids).to be_empty
+          reloaded = query_service.find_by(id: persisted.id)
+          expect(reloaded.member_ids).to be_empty
         end
       end
     end

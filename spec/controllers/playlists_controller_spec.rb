@@ -122,6 +122,21 @@ RSpec.describe PlaylistsController do
           expect(reloaded.member_ids).to eq [proxy_file_set2.id]
         end
       end
+
+      context "when duplicate member FileSet IDs are passed" do
+        let(:resource) { FactoryBot.create_for_repository(:playlist) }
+        let(:file) { fixture_file_upload("files/audio_file.wav") }
+        let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
+        let(:file_set) { scanned_resource.decorate.members.first }
+        before do
+          patch :update, params: { id: resource.id.to_s, playlist: { file_set_ids: [file_set.id, file_set.id] } }
+        end
+        it "filters the duplicate FileSet IDs" do
+          reloaded = query_service.find_by(id: resource.id)
+          expect(reloaded.member_ids.length).to eq(1)
+          expect(reloaded.decorate.decorated_proxies.first.proxied_file_id).to eq(file_set.id)
+        end
+      end
     end
     describe "#manifest" do
       context "with a Playlist proxying to audio FileSets", run_real_characterization: true do
