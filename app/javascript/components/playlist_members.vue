@@ -24,10 +24,14 @@
 </template>
 <script>
 import axios from 'axios'
+import PlaylistMember from './playlist_member'
 
 export default {
     name: 'playlistMembers',
     props: ['resource_id', 'members'],
+    components: {
+	'playlist-member': PlaylistMember
+    },
     data() {
 	return {
 	    detached_member_ids: []

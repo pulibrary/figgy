@@ -10,6 +10,7 @@
 import axios from 'axios'
 
 export default {
+    name: 'playlist-member',
     props: ['resource'],
     data() {
 	// This is due to the fact that Valkyrie::ID objects are not serialized as strings

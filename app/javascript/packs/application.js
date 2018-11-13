@@ -9,11 +9,6 @@ import axios from 'axios'
 
 Vue.use(system)
 
-// Load components globally here for nesting
-Vue.component('playlist-member', PlaylistMember, {
-    name: 'playlist-member'
-})
-
 // mount the filemanager app
 document.addEventListener('DOMContentLoaded', () => {
   // Set CSRF token for axios requests.
