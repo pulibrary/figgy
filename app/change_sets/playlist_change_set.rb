@@ -6,19 +6,17 @@ class PlaylistChangeSet < ChangeSet
 
   include VisibilityProperty
   property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
-
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
-  property :label, multiple: true, required: true, default: []
+  property :title, multiple: true, required: true, default: []
   property :read_groups, multiple: true, required: false
-
   property :file_set_ids, virtual: true, type: Valkyrie::Types::Array.of(Valkyrie::Types::ID)
 
   validates_with MemberValidator
-  validates :visibility, :label, presence: true
+  validates :visibility, :title, presence: true
 
   def primary_terms
     [
-      :label
+      :title
     ]
   end
 end

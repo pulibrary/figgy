@@ -38,19 +38,19 @@ RSpec.describe PlaylistChangeSet do
       end
     end
 
-    context "label" do
+    context "title" do
       let(:playlist) { Playlist.new }
       it "is required" do
         expect(change_set).not_to be_valid
-        change_set.validate(label: "Some Songs")
+        change_set.validate(title: "Some Songs")
         expect(change_set).to be_valid
       end
     end
   end
 
   describe "#primary_terms" do
-    it "contains label" do
-      expect(change_set.primary_terms).to eq [:label]
+    it "contains title" do
+      expect(change_set.primary_terms).to eq [:title]
     end
   end
 end

@@ -19,7 +19,7 @@ RSpec.describe PlaylistsController do
   describe "create" do
     let(:valid_params) do
       {
-        label: ["Test Playlist"],
+        title: ["Test Playlist"],
         visibility: "restricted"
       }
     end
@@ -45,7 +45,7 @@ RSpec.describe PlaylistsController do
         expect(response.location).to start_with "http://test.host/catalog/"
         id = response.location.split("/").last
         playlist = query_service.find_by(id: id)
-        expect(playlist.label).to eq ["Playlist: #{resource.title.first}"]
+        expect(playlist.title).to eq ["Playlist: #{resource.title.first}"]
         members = query_service.find_members(resource: playlist)
         expect(members.first).to be_a ProxyFileSet
         expect(members.first.label).to eq audio_file.title
@@ -72,7 +72,7 @@ RSpec.describe PlaylistsController do
 
     context "html access control" do
       let(:factory) { :playlist }
-      let(:extra_params) { { playlist: { label: ["My Playlist"] } } }
+      let(:extra_params) { { playlist: { title: ["My Playlist"] } } }
       it_behaves_like "an access controlled update request"
 
       context "when a Playlist has been created" do
