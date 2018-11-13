@@ -301,6 +301,24 @@ class ManifestBuilder
     def to_s
       resource.label.map(&:to_s)
     end
+
+    # Get all FileSets for a playlist, but decorate the label so that it's the
+    # proxy's label instead.
+    def leaf_nodes
+      @leaf_nodes ||= wayfinder.file_sets.map do |member|
+        ProxiedMember.new(member)
+      end
+    end
+
+    def wayfinder
+      @wayfinder ||= Wayfinder.for(resource)
+    end
+
+    class ProxiedMember < SimpleDelegator
+      def title
+        loaded[:proxy_parent].label
+      end
+    end
   end
 
   ##

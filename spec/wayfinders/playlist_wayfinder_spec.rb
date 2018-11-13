@@ -34,8 +34,8 @@ describe PlaylistWayfinder do
     FactoryBot.create_for_repository(:playlist, member_ids: [proxy1.id, proxy2.id])
   end
 
-  describe "#proxies" do
-    let(:proxies) { playlist_wayfinder.proxies }
+  describe "#members" do
+    let(:proxies) { playlist_wayfinder.members }
 
     it "retrieves the ProxyFileSets for a given Playlist" do
       expect(proxies.length).to eq(2)
