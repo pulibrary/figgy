@@ -15,6 +15,9 @@ AllCops:
     - 'tmp/**/*'
 Lint/UnusedMethodArgument:
   AllowUnusedKeywordArguments: true
+Lint/ParenthesesAsGroupedExpression:
+  Exclude:
+    - 'spec/services/manifest_builder_spec.rb'
 Metrics/AbcSize:
   Exclude:
     - 'app/services/ingest_ephemera_service.rb'
