@@ -25,9 +25,10 @@ class Reindexer
       solr_adapter.persister.wipe!
     end
     logger.info "Reindexing all records"
+    progress_bar
     query_service.custom_queries.memory_efficient_all(except_models: blacklisted_models).each_slice(batch_size) do |records|
-      logger.info "Indexing #{records.count} records"
       solr_adapter.persister.save_all(resources: records)
+      progress_bar.progress += records.count
     end
     logger.info "Done"
   end
@@ -36,5 +37,13 @@ class Reindexer
     [
       ProcessedEvent
     ]
+  end
+
+  def progress_bar
+    @progress_bar ||= ProgressBar.create format: "%a %e %P% Processed: %c from %C", total: total
+  end
+
+  def total
+    query_service.resources.all.size
   end
 end
