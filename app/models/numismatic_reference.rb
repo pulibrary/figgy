@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+# A reference work that contains information about coins and issues, such as reference works, auction
+# catalogs, etc.
 class NumismaticReference < Resource
   include Valkyrie::Resource::AccessControls
   attribute :member_ids, Valkyrie::Types::Array

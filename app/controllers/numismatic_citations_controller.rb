@@ -9,9 +9,11 @@ class NumismaticCitationsController < BaseResourceController
   before_action :load_numismatic_references, only: [:new, :edit]
 
   def create
-    # Save append_id and then remove from resource params
-    @parent_id = resource_params[:append_id]
-    params[resource_class.to_s.underscore.to_sym].delete(:append_id)
+    # Save append_id and then remove from resource params. The new citation id is added to
+    # to the parent numismatic_citation_ids property in the add_citation_to_parent method below.
+    # The append_id param is then removed so the citation won't be added as a member of the parent.
+    @parent_id = resource_params&.[](:append_id)
+    params[resource_class.to_s.underscore.to_sym].delete(:append_id) if @parent_id
     super
   end
 
@@ -29,8 +31,8 @@ class NumismaticCitationsController < BaseResourceController
     def add_citation_to_parent(obj)
       parent_change_set = DynamicChangeSet.new(parent_resource).prepopulate!
       return unless parent_change_set.respond_to?(:numismatic_citation_ids)
-      current_ids = parent_resource.numismatic_citation_ids
-      parent_change_set.numismatic_citation_ids = current_ids + [obj.id]
+      citations = (parent_resource.numismatic_citation_ids || []) + [obj.id]
+      parent_change_set.validate(numismatic_citation_ids: citations)
       change_set_persister.buffer_into_index do |persist|
         persist.save(change_set: parent_change_set)
       end
