@@ -25,8 +25,14 @@ RSpec.describe DownloadsController do
         expect(response.headers["Content-Disposition"]).to eq('inline; filename="example.tif"')
       end
 
-      it "returns an appropriate error when the file doesn't exist" do
+      it "returns an 404 when the file_set doesn't exist" do
         get :show, params: { resource_id: file_set.id.to_s, id: "bogus" }
+        expect(response.status).to eq(404)
+      end
+
+      it "returns an 404 when the file is not found on disk" do
+        allow(disk).to receive(:find_by).and_raise(Valkyrie::StorageAdapter::FileNotFound)
+        get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s }
         expect(response.status).to eq(404)
       end
 
