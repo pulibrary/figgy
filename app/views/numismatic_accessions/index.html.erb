@@ -1,0 +1,38 @@
+<h1>Numismatic Accessions</h1>
+
+<table id="members" class="table table-striped datatable">
+  <thead>
+    <tr>
+      <th>Accession #</th>
+      <th>Date</th>
+      <th>Person</th>
+      <th>Firm</th>
+      <th>Type</th>
+      <th>Cost</th>
+      <th>Account</th>
+    </tr>
+  </thead>
+  <tbody>
+      <% @numismatic_accessions.each do |numismatic_accession| %>
+        <tr>
+          <td><%= numismatic_accession.accession_number %></td>
+          <td><%= numismatic_accession.date %></td>
+          <td><%= numismatic_accession.person %></td>
+          <td><%= numismatic_accession.firm %></td>
+          <td><%= numismatic_accession.type %></td>
+          <td><%= numismatic_accession.cost %></td>
+          <td><%= numismatic_accession.account %></td>
+          <td>
+            <%= link_to 'View', solr_document_path(numismatic_accession), class: 'btn btn-default' %>
+            <%= link_to 'Edit', main_app.polymorphic_path([:edit, numismatic_accession]), class: 'btn btn-default' %>
+          </td>
+        </tr>
+      <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<% if can?(:create, NumismaticAccession) %>
+  <%= link_to 'New Numismatic Accession', new_numismatic_accession_path, class: 'btn btn-primary' %>
+<% end %>

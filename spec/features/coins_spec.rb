@@ -58,7 +58,7 @@ RSpec.feature "Coins" do
     let(:coin) do
       FactoryBot.create_for_repository(
         :coin,
-        accession: "test value",
+        accession_number: "test value",
         analysis: "test value",
         counter_stamp: "test value",
         department: "test value",
@@ -86,7 +86,7 @@ RSpec.feature "Coins" do
       visit solr_document_path coin
 
       expect(page).to have_css ".attribute.visibility", text: "open"
-      expect(page).to have_css ".attribute.accession", text: "test value"
+      expect(page).to have_css ".attribute.accession_number", text: "test value"
       expect(page).to have_css ".attribute.analysis", text: "test value"
       expect(page).to have_css ".attribute.counter_stamp", text: "test value"
       expect(page).to have_css ".attribute.department", text: "test value"

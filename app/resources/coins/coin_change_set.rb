@@ -4,7 +4,7 @@ class CoinChangeSet < ChangeSet
   apply_workflow(DraftCompleteWorkflow)
 
   include VisibilityProperty
-  property :accession, multiple: false, required: false
+  property :accession_number, multiple: false, required: false
   property :analysis, multiple: false, required: false
   property :coin_number, multiple: false, required: false
   property :counter_stamp, multiple: false, required: false
@@ -49,7 +49,7 @@ class CoinChangeSet < ChangeSet
 
   def primary_terms
     [
-      :accession,
+      :accession_number,
       :analysis,
       :append_id,
       :coin_number,
