@@ -10,7 +10,7 @@ class ParentIssueIndexer
     return {} unless resource.is_a?(Coin)
     return {} unless parents.first
 
-    parent_attributes.map { |k, v| ["#{k}_tesim", v] }.to_h
+    parent_attributes.map { |k, v| ["issue_#{k}_tesim", v] }.to_h
   end
 
   def parent_attributes
