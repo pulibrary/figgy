@@ -46,7 +46,7 @@ class HocrDerivativeService
     private
 
       def run_derivatives
-        system("tesseract", file_path.to_s, temporary_output.path.to_s, "-l","#{ocr_language.join('+')}", "hocr", out: File::NULL, err: File::NULL)
+        system("tesseract", file_path.to_s, temporary_output.path.to_s, "-l", ocr_language.join("+").to_s, "hocr", out: File::NULL, err: File::NULL)
       end
 
       def temporary_output
