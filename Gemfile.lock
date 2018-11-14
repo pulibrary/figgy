@@ -38,7 +38,7 @@ GIT
 
 GIT
   remote: git://github.com/samvera-labs/valkyrie-sequel.git
-  revision: b3e9a09f2599d8f6ce22533e5192e9ef37c1711b
+  revision: c4b6b8963db83433447148a2e0fb926535964892
   specs:
     valkyrie-sequel (0.1.0)
       oj
