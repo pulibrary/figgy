@@ -18,8 +18,4 @@ class PlaylistDecorator < Valkyrie::ResourceDecorator
   def manageable_structure?
     false
   end
-
-  def titles
-    Array.wrap(title)
-  end
 end
