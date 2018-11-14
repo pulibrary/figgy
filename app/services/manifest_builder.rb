@@ -294,14 +294,6 @@ class ManifestBuilder
   end
 
   class PlaylistNode < RootNode
-    ##
-    # Returns representation of the object as an array of strings - often the
-    #   title.
-    # @return [Array<String>]
-    def to_s
-      resource.label.map(&:to_s)
-    end
-
     # Get all FileSets for a playlist, but decorate the label so that it's the
     # proxy's label instead.
     def leaf_nodes

@@ -10,7 +10,7 @@ class PlaylistsController < BaseResourceController
   def resource_params
     return super unless params[:recording_id]
     {
-      label: "Playlist: #{recording.title.first}",
+      title: "Playlist: #{recording.title.first}",
       file_set_ids: recording.member_ids
     }
   end

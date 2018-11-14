@@ -14,18 +14,13 @@ RSpec.describe Playlist do
     end
   end
 
-  it "has a label" do
-    playlist.label = ["Woodstock"]
-    expect(playlist.label).to eq ["Woodstock"]
+  it "has a title" do
+    playlist.title = ["Woodstock"]
+    expect(playlist.title).to eq ["Woodstock"]
   end
 
   it "has visibility" do
     playlist.visibility = ["restricted"]
     expect(playlist.visibility).to eq ["restricted"]
-  end
-
-  # this is needed by the title_indexer for search results listings
-  it "uses label as its title" do
-    expect(playlist.title).to eq ["My Playlist"]
   end
 end

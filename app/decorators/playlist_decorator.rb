@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 class PlaylistDecorator < Valkyrie::ResourceDecorator
-  display :label,
+  display :title,
           :visibility
 
-  display_in_manifest [:label]
+  display_in_manifest [:title]
 
   delegate :members, to: :wayfinder
 
@@ -18,9 +18,4 @@ class PlaylistDecorator < Valkyrie::ResourceDecorator
   def manageable_structure?
     false
   end
-
-  def titles
-    Array.wrap(label)
-  end
-  alias title titles
 end

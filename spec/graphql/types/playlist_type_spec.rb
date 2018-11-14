@@ -6,7 +6,7 @@ RSpec.describe Types::PlaylistType do
   let(:playlist) do
     FactoryBot.create_for_repository(
       :playlist,
-      label: ["Playlist Label"]
+      title: ["Playlist Title"]
     )
   end
 
@@ -14,7 +14,7 @@ RSpec.describe Types::PlaylistType do
     subject { described_class }
 
     # Note! These field names use a javascript-y camel-case variable style
-    it { is_expected.to have_field(:label).of_type(String) }
+    it { is_expected.to have_field(:title).of_type(String) }
     it { is_expected.to have_field(:members) }
     it { is_expected.to have_field(:manifestUrl).of_type(String) }
   end
@@ -31,9 +31,9 @@ RSpec.describe Types::PlaylistType do
     end
   end
 
-  describe "#label" do
+  describe "#title" do
     it "maps to a resource's first title" do
-      expect(type.label).to eq "Playlist Label"
+      expect(type.title).to eq "Playlist Title"
     end
   end
 

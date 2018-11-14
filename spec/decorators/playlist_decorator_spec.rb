@@ -22,14 +22,8 @@ RSpec.describe PlaylistDecorator do
   end
 
   describe "#title" do
-    it "uses the label" do
-      expect(decorator.title).to eq playlist.label
-    end
-  end
-
-  describe "#titles" do
-    it "delegates to the label of the Playlist" do
-      expect(decorator.label).to eq(["My Playlist"])
+    it "uses the title" do
+      expect(decorator.title).to eq playlist.title
     end
   end
 end

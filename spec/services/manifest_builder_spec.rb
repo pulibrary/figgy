@@ -174,7 +174,7 @@ RSpec.describe ManifestBuilder do
       end
       it "generates the Manifest" do
         expect(output).not_to be_empty
-        expect(output).to include("label" => resource.label)
+        expect(output).to include("label" => resource.title)
       end
 
       context "with proxies to FileSets" do
