@@ -2,8 +2,8 @@
 class ChangeSetPersister
   class CreateProxyFileSets
     attr_reader :change_set_persister, :change_set
-    delegate :query_service, to: :change_set_persister
-    delegate :resource, to: :change_set
+    delegate :query_service, :metadata_adapter, to: :change_set_persister
+    delegate :persister, to: :metadata_adapter
 
     def initialize(change_set_persister:, change_set:)
       @change_set = change_set
@@ -35,14 +35,6 @@ class ChangeSetPersister
 
     def file_sets
       @file_sets ||= query_service.find_many_by_ids(ids: file_set_ids)
-    end
-
-    def query_service
-      change_set_persister.metadata_adapter.query_service
-    end
-
-    def persister
-      change_set_persister.metadata_adapter.persister
     end
   end
 end

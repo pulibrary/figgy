@@ -42,8 +42,25 @@ table.dataTable thead > tr > th {
   }
 }
 
-.member-resources-attach, .parent-resources-attach {
-  .form-group.select {
-    width: 232px;
+.member-resources {
+  &-attach, .parent-resources-attach {
+    .form-group.select {
+      width: 232px;
+    }
+  }
+  td {
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+    padding-top: 0.4rem;
+    padding-bottom: 0.6rem;
+    vertical-align: middle;
+
+    &:first-child {
+      width: percentage(11 / 12);
+    }
+
+    &:last-child {
+      width: percentage(1 / 12);
+    }
   }
 }

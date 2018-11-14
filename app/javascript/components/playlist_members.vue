@@ -4,7 +4,7 @@
     <h2 class="panel-title">Recordings</h2>
   </div>
   <div class="row panel-body">
-    <form v-on:submit.prevent="true">
+    <form v-on:submit.prevent="submit">
       <table class="table table-striped member-resources member-recordings">
 	<thead>
 	  <tr>
@@ -36,22 +36,22 @@ export default {
 	return { submitting: false }
     },
     methods: {
-	submit() {},
 	buildFormData() {
 	    let form = new FormData
 	    form.append('_method', 'delete')
 
 	    return form
 	},
+	submit() { return false },
 	detach(proxy_id) {
 	    let vm = this
 	    this.submitting = true
 
 	    axios.post(`/concern/playlists/${proxy_id}`,
-		       this.buildFormData()
+		        this.buildFormData()
 		      ).then(function(response) {
-			  vm.submitting = false
-			  window.location.reload()
+		        vm.submitting = false
+			window.location.reload()
 		      })
 	}
     }

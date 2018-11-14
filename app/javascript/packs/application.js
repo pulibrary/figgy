@@ -3,7 +3,6 @@ import system from 'lux-design-system'
 import 'lux-design-system/lib/system/system.css'
 import store from '../store'
 import DocumentAdder from '../components/document_adder'
-import PlaylistMember from '../components/playlist_member'
 import PlaylistMembers from '../components/playlist_members'
 import axios from 'axios'
 

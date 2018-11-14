@@ -9,10 +9,10 @@ class PlaylistsController < BaseResourceController
 
   def resource_params
     values = super
-    if !values.nil? && values[:file_set_ids]
-      file_set_ids = values[:file_set_ids]
-      values[:file_set_ids] = file_set_ids.uniq
-    end
+
+    # Under certain conditions, PATCH requests transmitted using the DocumentAdder Vue Component may contain duplicate FileSet IDs
+    # This ensures that duplicated FileSet IDs are removed
+    values[:file_set_ids] = unique_file_set_ids if params[:file_set_ids]
 
     return values unless params[:recording_id]
     {
@@ -37,4 +37,11 @@ class PlaylistsController < BaseResourceController
   rescue Valkyrie::Persistence::ObjectNotFoundError
     render json: { message: "No manifest found for #{params[:id]}" }
   end
+
+  private
+
+    def unique_file_set_ids
+      file_set_ids = params[:file_set_ids]
+      file_set_ids.uniq
+    end
 end
