@@ -18,7 +18,7 @@ class PlaylistWayfinder < BaseWayfinder
         end
         # Find_many_by_ids doesn't guaruntee order. This sorts the returned file
         # sets by the members they were queried from.
-        file_sets.sort_by { |x| proxy_ids.index(x) }
+        file_sets.sort_by { |x| proxy_ids.index(x.id) }
       end
   end
 
