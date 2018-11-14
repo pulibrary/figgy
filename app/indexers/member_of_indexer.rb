@@ -7,7 +7,7 @@ class MemberOfIndexer
   end
 
   def to_solr
-    return {} unless resource.is_a?(ScannedResource) || resource.is_a?(ScannedMap) || resource.is_a?(Coin)
+    return {} unless resource.is_a?(ScannedResource) || resource.is_a?(ScannedMap)
     {
       "member_of_ssim" => parents.map { |x| "id-#{x.id}" }.to_a
     }
