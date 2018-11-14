@@ -559,6 +559,7 @@ RSpec.describe ManifestBuilder do
       expect(output["structures"][0]["items"][0]["id"]).to include "#t="
       expect(output["structures"][1]["items"][0]["items"][0]["id"]).to include "#t="
       expect(output["behavior"]).to eq ["auto-advance"]
+      expect(output["service"][0]).to eq ({ "@context" => "http://universalviewer.io/context.json", "profile" => "http://universalviewer.io/ui-extensions-profile", "disableUI" => ["mediaDownload"] })
     end
   end
 
