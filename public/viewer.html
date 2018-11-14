@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="uv/uv.css">
+    <script type="text/javascript" src="uv/lib/offline.js"></script>
+    <script type="text/javascript" src="uv/helpers.js"></script>
+    <script type="text/javascript">
+      window.addEventListener('uvLoaded', function(e) { 
+        urlDataProvider = new UV.URLDataProvider(false);
+        uv = createUV('#uv', {
+          root: 'uv',
+          iiifResourceUri: urlDataProvider.get('manifest'),
+          configUri: 'uv/uv_config.json',
+          collectionIndex: Number(urlDataProvider.get('c', 0)),
+          manifestIndex: Number(urlDataProvider.get('m', 0)),
+          sequenceIndex: Number(urlDataProvider.get('s', 0)),
+          canvasIndex: Number(urlDataProvider.get('cv', 0)),
+          rangeId: urlDataProvider.get('rid', 0),
+          rotation: Number(urlDataProvider.get('r', 0)),
+          xywh: urlDataProvider.get('xywh', ''),
+          embedded: false
+        }, urlDataProvider);
+      }, false);
+
+    </script>
+  </head>
+  <body>
+    <div id="uv" class="uv"></div>
+    <script>
+      $(function() {
+        var $UV = $('#uv');
+        function resize() {
+          var windowWidth = window.innerWidth;
+          var windowHeight = window.innerHeight;
+          $UV.width(windowWidth);
+          $UV.height(windowHeight);
+        }
+        $(window).on('resize' ,function() {
+          resize();
+        });
+        resize();
+      });
+    </script>
+    <script type="text/javascript" src="uv/uv.js"></script>
+  </body>
+</html>
