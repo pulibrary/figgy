@@ -30,5 +30,6 @@ module Figgy
         resource "/graphql", headers: :any, methods: [:post]
       end
     end
+    config.autoload_paths += Dir[Rails.root.join("app", "resources", "*")]
   end
 end
