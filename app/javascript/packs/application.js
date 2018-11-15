@@ -1,6 +1,6 @@
 import Vue from 'vue/dist/vue.esm'
 import system from 'lux-design-system'
-import 'lux-design-system/lib/system/system.css'
+import 'lux-design-system/dist/system/system.css'
 import store from '../store'
 import DocumentAdder from '../components/document_adder'
 import PlaylistMembers from '../components/playlist_members'

@@ -25,3 +25,8 @@
 dump.rdb
 package-lock.json
 /encodes
+/public/packs
+/public/packs-test
+/node_modules
+yarn-debug.log*
+.yarn-integrity

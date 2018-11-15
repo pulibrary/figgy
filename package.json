@@ -2,23 +2,24 @@
   "name": "lux-rails",
   "private": true,
   "dependencies": {
-    "@rails/webpacker": "^3.3.1",
+    "@rails/webpacker": "https://github.com/rails/webpacker",
     "ajv": "^6.2.1",
     "apollo-boost": "^0.1.10",
     "axios": "^0.18.0",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
-    "lux-design-system": "^1.0.2",
+    "lux-design-system": "^2.0.0",
     "npm": "^6.4.0",
     "openseadragon": "^2.3.1",
     "postcss-smart-import": "^0.7.6",
+    "unfetch": "^4.0.1",
     "vue": "^2.5.17",
-    "vue-loader": "^14.2.2",
+    "vue-loader": "^15.4.2",
     "vue-template-compiler": "^2.5.17",
     "vuex": "^2.4.1"
   },
   "devDependencies": {
-    "webpack-dev-server": "^2.11.2",
+    "webpack-dev-server": "^3.1.10",
     "webpack-merge": "^4.1.0"
   }
 }
