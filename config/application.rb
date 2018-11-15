@@ -31,5 +31,6 @@ module Figgy
       end
     end
     config.autoload_paths += Dir[Rails.root.join("app", "resources", "*")]
+    config.active_record.schema_format = :sql
   end
 end
