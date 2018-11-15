@@ -3,6 +3,7 @@ import system from 'lux-design-system'
 import 'lux-design-system/lib/system/system.css'
 import store from '../store'
 import DocumentAdder from '../components/document_adder'
+import PlaylistMembers from '../components/playlist_members'
 import axios from 'axios'
 
 Vue.use(system)
@@ -17,7 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
       el: elements[i],
       store,
       components: {
-        'document-adder': DocumentAdder
+        'document-adder': DocumentAdder,
+	'playlistMembers': PlaylistMembers
       }
     })
   }

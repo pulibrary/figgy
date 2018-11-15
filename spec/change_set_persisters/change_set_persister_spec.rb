@@ -1174,6 +1174,19 @@ RSpec.describe ChangeSetPersister do
       it "ensures that ProxyFileSet members are updated to use the label from their proxied resources" do
         expect(proxy.label).to eq(proxied.title)
       end
+
+      context "when deleting ProxyFileSet members of a Playlist" do
+        before do
+          cs = ProxyFileSetChangeSet.new(proxy)
+          cs.prepopulate!
+          change_set_persister.delete(change_set: cs)
+        end
+        it "deletes the proxies and removes them as members of the Playlist" do
+          expect { query_service.find_by(id: proxy.id) }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+          reloaded = query_service.find_by(id: persisted.id)
+          expect(reloaded.member_ids).to be_empty
+        end
+      end
     end
   end
 

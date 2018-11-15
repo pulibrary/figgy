@@ -34,8 +34,7 @@ export default {
   props: ['resource_id'],
   data() {
     return {
-      recordings: [
-      ],
+      recordings: [],
       recording_query: "",
       addingTracks: false
     }
@@ -58,9 +57,9 @@ export default {
       axios.post(`/concern/playlists/${this.resource_id}`,
         this.fileSetFormData(recording)
       )
-        .then(function(response) {
-          window.location = response.request.responseURL
-        })
+      .then(function(response) {
+        window.location = response.request.responseURL
+      })
     },
     search(event) {
       if(this.recording_query.trim() == '') {
