@@ -1,3 +1,14 @@
-  <% (@change_set.primary_terms).each do |field| %>
-    <%= render_edit_field_partial(field, f: f) %>
+  <% if @change_set.primary_terms.is_a?(Array) %>
+    <div class="panel panel-default">
+      <%= render partial: 'form_metadata_inner', locals: { fields: @change_set.primary_terms, f: f } %>
+    </div>
+  <% elsif @change_set.primary_terms.is_a?(Hash) %>
+    <% @change_set.primary_terms.each_pair do |label, fields| %>
+      <div class="panel panel-default">
+        <% unless label.empty? %>
+          <div class="panel-heading"><%= label %></div>
+        <% end %>
+        <%= render partial: 'form_metadata_inner', locals: { fields: fields, f: f } %>
+      </div>
+    <% end %>
   <% end %>
