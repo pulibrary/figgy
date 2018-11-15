@@ -55,6 +55,12 @@ RSpec.describe ArchivalMediaBagParser do
 
     context "with a path to an invalid bag" do
       let(:bag_path) { Rails.root.join("spec", "fixtures", "bags", "invalid_bag") }
+      let(:logger) { instance_double(Logger) }
+      before do
+        allow(logger).to receive(:error)
+        allow(Logger).to receive(:new).and_return(logger)
+      end
+
       it "returns false" do
         expect(amb_parser.valid?).to eq false
       end
