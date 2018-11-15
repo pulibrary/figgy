@@ -5,8 +5,11 @@ import store from '../store'
 import DocumentAdder from '../components/document_adder'
 import PlaylistMembers from '../components/playlist_members'
 import axios from 'axios'
+import OrderManager from '../components/OrderManager.vue'
 
 Vue.use(system)
+
+Vue.component('order-manager', OrderManager)
 
 // mount the filemanager app
 document.addEventListener('DOMContentLoaded', () => {
