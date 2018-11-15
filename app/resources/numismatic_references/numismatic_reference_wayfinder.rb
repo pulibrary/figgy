@@ -1,8 +1,7 @@
 # frozen_string_literal: true
-class CoinWayfinder < BaseWayfinder
+class NumismaticReferenceWayfinder < BaseWayfinder
   relationship_by_property :members, property: :member_ids
-  relationship_by_property :numismatic_citations, property: :numismatic_citation_ids, singular: false
-  relationship_by_property :file_sets, property: :member_ids, model: FileSet
+  relationship_by_property :numismatic_references, property: :member_ids, model: NumismaticReference
   inverse_relationship_by_property :parents, property: :member_ids, singular: true
 
   def members_with_parents

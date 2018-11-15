@@ -27,6 +27,10 @@
           <li><%= link_to 'Manage Ephemera Vocabularies', main_app.ephemera_vocabularies_path, class: 'menu-heading manage-ephemera-vocabularies', role: 'menuitem' %></li>
         <% end %>
       <% end %>
+      <% if can?(:create, ::NumismaticReference) %>
+        <li class="divider"></li>
+        <li><%= link_to 'Manage Numismatic References', main_app.numismatic_references_path, class: 'menu-heading manage-numismatic-references', role: 'menuitem' %></li>
+      <% end %>
       <% if can?(:create, AuthToken) %>
         <li class="divider"></li>
         <li><%= link_to 'Manage Auth Tokens', main_app.auth_tokens_path, class: 'menu-heading manage-auth-tokens', role: 'menuitem' %></li>

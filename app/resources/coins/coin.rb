@@ -1,7 +1,10 @@
 # frozen_string_literal: true
+# A physical coin in our collections, modeling things that are unique to the physical item, such as its
+# weight, purchase/acquisition, where it was found, etc.
 class Coin < Resource
   include Valkyrie::Resource::AccessControls
   attribute :member_ids, Valkyrie::Types::Array
+  attribute :numismatic_citation_ids, Valkyrie::Types::Array
 
   # descriptive metadata
   attribute :accession
@@ -23,7 +26,6 @@ class Coin < Resource
   attribute :place
   attribute :private_note
   attribute :provenance
-  attribute :references
   attribute :size
   attribute :technique
   attribute :weight

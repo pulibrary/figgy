@@ -111,6 +111,11 @@ Rails.application.routes.draw do
 
     get "/scanned_resources/:parent_id/new", to: "scanned_resources#new", as: :parent_new_scanned_resource
 
+    resources :numismatic_references
+    get "/numismatic_references/:parent_id/new", to: "numismatic_references#new", as: :parent_new_numismatic_reference
+
+    resources :numismatic_citations
+
     resources :numismatic_issues do
       member do
         get :file_manager
@@ -119,6 +124,7 @@ Rails.application.routes.draw do
         post :browse_everything_files
       end
     end
+
     resources :coins do
       member do
         get :file_manager
@@ -128,6 +134,7 @@ Rails.application.routes.draw do
       end
     end
     get "/numismatic_issues/:parent_id/coin" => "coins#new", as: :parent_new_coin
+    get "/coins/:parent_id/numismatic_citation" => "numismatic_citations#new", as: :coin_add_numismatic_citation
 
     resources :ephemera_projects do
       resources :templates, only: [:new, :create, :destroy]
