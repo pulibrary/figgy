@@ -3,8 +3,10 @@ require "rails_helper"
 
 RSpec.describe NumismaticIssueDecorator do
   subject(:decorator) { described_class.new(issue) }
-  let(:issue) { FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id], state: "complete") }
+  let(:issue) { FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id], state: "complete", numismatic_citation_ids: [citation.id]) }
   let(:coin) { FactoryBot.create_for_repository(:coin) }
+  let(:citation) { FactoryBot.create_for_repository(:numismatic_citation, numismatic_reference_id: [reference.id]) }
+  let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
 
   describe "#decorated_coins" do
     it "returns decorated member coins" do
@@ -18,6 +20,12 @@ RSpec.describe NumismaticIssueDecorator do
   describe "#attachable_objects" do
     it "allows attaching coins" do
       expect(decorator.attachable_objects).to eq([Coin])
+    end
+  end
+
+  describe "#citations" do
+    it "renders the linked citations" do
+      expect(decorator.citations).to eq(["short-title citation part citation number"])
     end
   end
 

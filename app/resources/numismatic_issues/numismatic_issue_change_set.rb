@@ -47,6 +47,7 @@ class NumismaticIssueChangeSet < ChangeSet
   property :depositor, multiple: false, required: false
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
+  property :numismatic_citation_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :pending_uploads, multiple: true, required: false
 
   property :start_canvas, required: false

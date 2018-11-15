@@ -44,6 +44,18 @@ RSpec.describe NumismaticCitationsController do
         expect(response).to redirect_to("http://test.host/catalog/#{coin.id}")
       end
     end
+    context "adding to a parent numismatic issue" do
+      let(:user) { FactoryBot.create(:admin) }
+      let(:issue) { FactoryBot.create_for_repository(:numismatic_issue) }
+
+      it "adds the id to the coin's citation ids and redirects to parent coin" do
+        post :create, params: { numismatic_citation: valid_params.merge(citation_parent_id: issue.id) }
+
+        updated = Valkyrie.config.metadata_adapter.query_service.find_by(id: issue.id)
+        expect(updated.numismatic_citation_ids).not_to be_empty
+        expect(response).to redirect_to("http://test.host/catalog/#{issue.id}")
+      end
+    end
   end
   describe "destroy" do
     context "access control" do
