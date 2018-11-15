@@ -70,47 +70,55 @@ class NumismaticIssueChangeSet < ChangeSet
   validates :visibility, presence: true
 
   def primary_terms
-    [
-      :rights_statement,
-      :rights_note,
-      :member_of_collection_ids,
-      :artist,
-      :color,
-      :date_object,
-      :date_range,
-      :denomination,
-      :department,
-      :description,
-      :edge,
-      :era,
-      :geographic_origin,
-      :issue_number,
-      :master,
-      :metal,
-      :note,
-      :object_type,
-      :obverse_attributes,
-      :obverse_figure,
-      :obverse_figure_description,
-      :obverse_figure_relationship,
-      :obverse_legend,
-      :obverse_orientation,
-      :obverse_part,
-      :obverse_symbol,
-      :place,
-      :reverse_attributes,
-      :reverse_figure,
-      :reverse_figure_description,
-      :reverse_figure_relationship,
-      :reverse_legend,
-      :reverse_orientation,
-      :reverse_part,
-      :reverse_symbol,
-      :ruler,
-      :series,
-      :shape,
-      :subject,
-      :workshop
-    ]
+    {
+      "" => [
+        :issue_number,
+        :department,
+        :object_type,
+        :denomination,
+        :metal,
+        :shape,
+        :color,
+        :edge,
+        :date_range,
+        :date_object,
+        :ruler,
+        :place,
+        :geographic_origin,
+        :artist,
+        :master,
+        :workshop,
+        :description,
+        :era,
+        :series,
+        :subject
+      ],
+      "Obverse" => [
+        :obverse_figure,
+        :obverse_symbol,
+        :obverse_part,
+        :obverse_orientation,
+        :obverse_figure_description,
+        :obverse_figure_relationship,
+        :obverse_legend,
+        :obverse_attributes
+      ],
+      "Reverse" => [
+        :reverse_figure,
+        :reverse_symbol,
+        :reverse_part,
+        :reverse_orientation,
+        :reverse_figure_description,
+        :reverse_figure_relationship,
+        :reverse_legend,
+        :reverse_attributes
+      ],
+      "Rights and Notes" => [
+        :note,
+        :member_of_collection_ids,
+        :rights_statement,
+        :rights_note
+      ]
+    }
   end
 end
