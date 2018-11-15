@@ -1,3 +1,9 @@
+version: 7.1.0
 url: https://archive.apache.org/dist/lucene/solr/7.1.0/solr-7.1.0.zip
 validate: false
 tmp_save_dir: tmp/solr
+instance_directory: tmp/figgy-core-dev
+collection:
+  persist: true
+  name: figgy-core-dev
+  dir: solr/config
