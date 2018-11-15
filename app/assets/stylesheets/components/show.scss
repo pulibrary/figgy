@@ -48,7 +48,8 @@ table.dataTable thead > tr > th {
       width: 232px;
     }
   }
-  td {
+  // Overrides the Boostrap selector .table > tbody > tr > td
+  & > tbody > tr > td {
     padding-left: 0.8rem;
     padding-right: 0.8rem;
     padding-top: 0.4rem;

@@ -128,10 +128,10 @@ RSpec.describe PlaylistsController do
         let(:file) { fixture_file_upload("files/audio_file.wav") }
         let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
         let(:file_set) { scanned_resource.decorate.members.first }
-        before do
-          patch :update, params: { id: resource.id.to_s, playlist: { file_set_ids: [file_set.id, file_set.id] } }
-        end
         it "filters the duplicate FileSet IDs" do
+          expect(resource.member_ids).to be_empty
+          patch :update, params: { id: resource.id.to_s, playlist: { file_set_ids: [file_set.id, file_set.id] } }
+
           reloaded = query_service.find_by(id: resource.id)
           expect(reloaded.member_ids.length).to eq(1)
           expect(reloaded.decorate.decorated_proxies.first.proxied_file_id).to eq(file_set.id)

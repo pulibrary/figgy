@@ -23,8 +23,4 @@ class PlaylistDecorator < Valkyrie::ResourceDecorator
   def decorated_proxies
     members.map(&:decorate)
   end
-
-  def file_set_ids
-    wayfinder.file_sets.map(&:id)
-  end
 end
