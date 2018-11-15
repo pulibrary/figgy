@@ -55,7 +55,7 @@ RSpec.describe Reindexer do
 
         described_class.reindex_all(logger: logger, wipe: false)
 
-        expect { solr_adapter.query_service.find_by(id: output.id) }.not_to raise_error Valkyrie::Persistence::ObjectNotFoundError
+        expect { solr_adapter.query_service.find_by(id: output.id) }.not_to raise_error
       end
     end
   end
