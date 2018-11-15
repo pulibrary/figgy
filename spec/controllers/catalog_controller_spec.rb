@@ -619,6 +619,16 @@ RSpec.describe CatalogController do
         expect(response.body).to have_selector "h1", text: resource.title.first
         expect(response.body).to have_selector "audio[src='/downloads/#{resource.member_ids.first}/file/derivative']"
       end
+      it "renders for a Recording" do
+        file_set = FactoryBot.create_for_repository(:file_set)
+        resource = persister.save(resource: FactoryBot.create_for_repository(:recording, member_ids: file_set.id))
+        playlist = FactoryBot.create_for_repository(:playlist, member_ids: FactoryBot.create_for_repository(:proxy_file_set, proxied_file_id: file_set.id).id)
+
+        get :show, params: { id: resource.id.to_s }
+
+        expect(response.body).to have_selector "h2", text: "Playlists"
+        expect(response.body).to have_link playlist.title.first, href: "/catalog/#{playlist.id}"
+      end
     end
     context "when rendered for a user" do
       render_views

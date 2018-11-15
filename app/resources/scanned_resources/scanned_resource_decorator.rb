@@ -14,7 +14,7 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
                          :thumbnail_id
 
   delegate(*Schema::Common.attributes, to: :primary_imported_metadata, prefix: :imported)
-  delegate :members, :collections, to: :wayfinder
+  delegate :members, :collections, :playlists, to: :wayfinder
 
   # TODO: Rename this to decorated_scanned_resources
   def volumes
