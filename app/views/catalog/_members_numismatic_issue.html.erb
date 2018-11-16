@@ -1,5 +1,43 @@
   <div class="panel panel-default">
     <div class="panel-heading">
+      <h2 class="panel-title">Citations</h2>
+    </div>
+    <div class="row panel-body">
+      <table id="members" class="table table-striped">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% unless decorated_resource.decorated_numismatic_citations.empty? %>
+            <% decorated_resource.decorated_numismatic_citations.each do |citation| %>
+              <% citation_url = solr_document_path("#{citation.id}") %>
+              <tr>
+                <td><%= citation.title %></td>
+                <td>
+                  <%= link_to 'View', citation_url, class: 'btn btn-default' %>
+                  <%= link_to 'Edit', main_app.polymorphic_path([:edit, citation]), class: 'btn btn-default' %>
+                  <%= link_to "Delete", main_app.polymorphic_path([citation]), class: 'btn btn-danger',
+                                        data: { confirm: "Delete this #{citation.human_readable_type}?" },
+                                        method: :delete %>
+                </td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+      <div class="col-sm-1">
+        <% if can?(:create, NumismaticCitation) %>
+          <%= link_to 'Add Citation', coin_add_numismatic_citation_path(resource, parent_id: resource.id), class: 'btn btn-primary' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
       <h2 class="panel-title">Coins</h2>
     </div>
     <div class="row panel-body">

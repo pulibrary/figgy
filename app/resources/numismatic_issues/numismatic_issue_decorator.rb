@@ -49,10 +49,14 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
                          :rendered_rights_statement,
                          :thumbnail_id
 
-  delegate :members, :decorated_file_sets, :decorated_coins, :coin_count, to: :wayfinder
+  delegate :members, :decorated_file_sets, :decorated_coins, :coin_count, :decorated_numismatic_citations, to: :wayfinder
 
   def attachable_objects
     [Coin]
+  end
+
+  def citations
+    decorated_numismatic_citations.map(&:title)
   end
 
   # Whether this box has a workflow state that grants access to its contents
