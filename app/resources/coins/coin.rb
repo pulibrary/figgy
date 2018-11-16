@@ -7,7 +7,7 @@ class Coin < Resource
   attribute :numismatic_citation_ids, Valkyrie::Types::Array
 
   # descriptive metadata
-  attribute :accession
+  attribute :accession_number
   attribute :analysis
   attribute :coin_number, Valkyrie::Types::Anything
   attribute :counter_stamp

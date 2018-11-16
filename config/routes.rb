@@ -115,6 +115,8 @@ Rails.application.routes.draw do
     resources :numismatic_references
     get "/numismatic_references/:parent_id/new", to: "numismatic_references#new", as: :parent_new_numismatic_reference
 
+    resources :numismatic_accessions
+
     resources :numismatic_citations
 
     resources :numismatic_issues do

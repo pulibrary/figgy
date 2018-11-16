@@ -29,6 +29,7 @@
       <% end %>
       <% if can?(:create, ::NumismaticReference) %>
         <li class="divider"></li>
+        <li><%= link_to 'Manage Numismatic Accessions', main_app.numismatic_accessions_path, class: 'menu-heading manage-numismatic-accessions', role: 'menuitem' %></li>
         <li><%= link_to 'Manage Numismatic References', main_app.numismatic_references_path, class: 'menu-heading manage-numismatic-references', role: 'menuitem' %></li>
       <% end %>
       <% if can?(:create, AuthToken) %>

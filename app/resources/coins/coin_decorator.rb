@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class CoinDecorator < Valkyrie::ResourceDecorator
-  display :accession,
+  display :accession_number,
           :analysis,
           :counter_stamp,
           :department,
