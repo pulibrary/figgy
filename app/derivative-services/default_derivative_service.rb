@@ -35,22 +35,26 @@ class DefaultDerivativeService
   end
 
   def create_derivatives
-    hocr_derivative_service.create_derivatives if parent.try(:ocr_language).present? && hocr_derivative_service.valid?
-    jp2_derivative_service.create_derivatives if jp2_derivative_service.valid?
+    change_set_persister.buffer_into_index do |buffered_changeset_persister|
+      hocr_derivative_service(buffered_changeset_persister).create_derivatives if parent.try(:ocr_language).present? && hocr_derivative_service(buffered_changeset_persister).valid?
+      jp2_derivative_service(buffered_changeset_persister).create_derivatives if jp2_derivative_service(buffered_changeset_persister).valid?
+    end
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
   # (see Jp2DerivativeService#cleanup_derivatives)
   def cleanup_derivatives
-    hocr_derivative_service.cleanup_derivatives if parent.try(:ocr_language).present? && hocr_derivative_service.valid?
-    jp2_derivative_service.cleanup_derivatives if jp2_derivative_service.valid?
+    change_set_persister.buffer_into_index do |buffered_changeset_persister|
+      hocr_derivative_service(buffered_changeset_persister).cleanup_derivatives if parent.try(:ocr_language).present? && hocr_derivative_service(buffered_changeset_persister).valid?
+      jp2_derivative_service(buffered_changeset_persister).cleanup_derivatives if jp2_derivative_service(buffered_changeset_persister).valid?
+    end
   end
 
-  def jp2_derivative_service
+  def jp2_derivative_service(change_set_persister = self.change_set_persister)
     Jp2DerivativeService::Factory.new(change_set_persister: change_set_persister).new(change_set)
   end
 
-  def hocr_derivative_service
+  def hocr_derivative_service(change_set_persister = self.change_set_persister)
     HocrDerivativeService::Factory.new(change_set_persister: change_set_persister).new(change_set)
   end
 end
