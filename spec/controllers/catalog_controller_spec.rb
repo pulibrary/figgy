@@ -729,7 +729,6 @@ RSpec.describe CatalogController do
       {
         artist: "issue-artist",
         color: "issue-color",
-        date_object: "issue-date-object",
         date_range: "issue-date",
         denomination: "issue-denomination",
         department: "issue-department",
@@ -742,6 +741,7 @@ RSpec.describe CatalogController do
         master: "issue-master",
         metal: "issue-metal",
         note: "issue-note",
+        object_date: "issue-object-date",
         object_type: "issue-type",
         obverse_attributes: "issue-obv-attributes",
         obverse_figure: "issue-obverse-figure",

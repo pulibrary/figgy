@@ -31,7 +31,7 @@ RSpec.feature "NumismaticIssues" do
     expect(page).to have_css '.select[for="numismatic_issue_member_of_collection_ids"]', text: "Collections"
     expect(page).to have_field "Artist"
     expect(page).to have_field "Color"
-    expect(page).to have_field "Date object"
+    expect(page).to have_field "Date of object"
     expect(page).to have_field "Date range"
     expect(page).to have_field "Denomination"
     expect(page).to have_field "Department"
@@ -81,7 +81,6 @@ RSpec.feature "NumismaticIssues" do
         member_of_collection_ids: [collection.id],
         artist: "test value",
         color: "test value",
-        date_object: "test value",
         date_range: "test value",
         denomination: "test value",
         department: "test value",
@@ -92,6 +91,7 @@ RSpec.feature "NumismaticIssues" do
         master: "test value",
         metal: "test value",
         note: "test value",
+        object_date: "test value",
         object_type: "test value",
         obverse_attributes: "test value",
         obverse_figure: "test value",
@@ -127,7 +127,6 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.member_of_collections", text: "Title"
       expect(page).to have_css ".attribute.artist", text: "test value"
       expect(page).to have_css ".attribute.color", text: "test value"
-      expect(page).to have_css ".attribute.date_object", text: "test value"
       expect(page).to have_css ".attribute.date_range", text: "test value"
       expect(page).to have_css ".attribute.denomination", text: "test value"
       expect(page).to have_css ".attribute.department", text: "test value"
@@ -138,6 +137,7 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.master", text: "test value"
       expect(page).to have_css ".attribute.metal", text: "test value"
       expect(page).to have_css ".attribute.note", text: "test value"
+      expect(page).to have_css ".attribute.object_date", text: "test value"
       expect(page).to have_css ".attribute.object_type", text: "test value"
       expect(page).to have_css ".attribute.obverse_attributes", text: "test value"
       expect(page).to have_css ".attribute.obverse_figure", text: "test value"

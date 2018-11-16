@@ -11,7 +11,6 @@ class NumismaticIssue < Resource
   # descriptive metadata
   attribute :artist
   attribute :color
-  attribute :date_object
   attribute :date_range
   attribute :denomination
   attribute :department
@@ -23,6 +22,7 @@ class NumismaticIssue < Resource
   attribute :master
   attribute :metal
   attribute :note
+  attribute :object_date
   attribute :object_type
   attribute :obverse_attributes
   attribute :obverse_figure

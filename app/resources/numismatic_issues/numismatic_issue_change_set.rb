@@ -6,7 +6,6 @@ class NumismaticIssueChangeSet < ChangeSet
   include VisibilityProperty
   property :artist, multiple: true, required: false, default: []
   property :color, multiple: false, required: false
-  property :date_object, multiple: false, required: false
   property :date_range, multiple: false, required: false
   property :denomination, multiple: false, required: false
   property :department, multiple: false, required: false
@@ -18,6 +17,7 @@ class NumismaticIssueChangeSet < ChangeSet
   property :master, multiple: false, required: false
   property :metal, multiple: false, required: false
   property :note, multiple: true, required: false, default: []
+  property :object_date, multiple: false, required: false
   property :object_type, multiple: false, required: false
   property :obverse_attributes, multiple: true, required: false, default: []
   property :obverse_figure, multiple: false, required: false
@@ -72,7 +72,6 @@ class NumismaticIssueChangeSet < ChangeSet
   def primary_terms
     {
       "" => [
-        :issue_number,
         :department,
         :object_type,
         :denomination,
@@ -81,17 +80,14 @@ class NumismaticIssueChangeSet < ChangeSet
         :color,
         :edge,
         :date_range,
-        :date_object,
+        :object_date,
+        :era,
         :ruler,
-        :place,
-        :geographic_origin,
-        :artist,
         :master,
         :workshop,
-        :description,
-        :era,
         :series,
-        :subject
+        :place,
+        :geographic_origin
       ],
       "Obverse" => [
         :obverse_figure,
@@ -118,6 +114,11 @@ class NumismaticIssueChangeSet < ChangeSet
         :member_of_collection_ids,
         :rights_statement,
         :rights_note
+      ],
+      "Artists and Subjects" => [
+        :artist,
+        :subject,
+        :description
       ]
     }
   end

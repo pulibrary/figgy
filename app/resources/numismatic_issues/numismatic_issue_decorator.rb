@@ -2,7 +2,6 @@
 class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
   display :artist,
           :color,
-          :date_object,
           :date_range,
           :denomination,
           :department,
@@ -13,6 +12,7 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
           :master,
           :metal,
           :note,
+          :object_date,
           :object_type,
           :obverse_attributes,
           :obverse_figure,
