@@ -99,11 +99,11 @@ class ChangeSetPersister
     end
 
     def buffer_into_index
+      delayed_queue = nil
       metadata_adapter.persister.buffer_into_index do |buffered_adapter|
         with(metadata_adapter: buffered_adapter) do |buffered_changeset_persister|
           yield(buffered_changeset_persister)
-          @created_file_sets = buffered_changeset_persister.created_file_sets
-          @delayed_queue = buffered_changeset_persister.delayed_queue
+          delayed_queue = buffered_changeset_persister.delayed_queue
         end
       end
       delayed_queue.run
