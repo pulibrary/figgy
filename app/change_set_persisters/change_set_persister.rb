@@ -99,6 +99,10 @@ class ChangeSetPersister
     end
 
     def buffer_into_index
+      if transaction?
+        yield self
+        return
+      end
       metadata_adapter.persister.buffer_into_index do |buffered_adapter|
         with(metadata_adapter: buffered_adapter) do |buffered_changeset_persister|
           yield(buffered_changeset_persister)

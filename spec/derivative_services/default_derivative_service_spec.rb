@@ -17,7 +17,7 @@ RSpec.describe DefaultDerivativeService do
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
   let(:scanned_resource) do
-    change_set_persister.save(change_set: ScannedResourceChangeSet.new(ScannedResource.new, files: [file]))
+    change_set_persister.save(change_set: ScannedResourceChangeSet.new(ScannedResource.new, files: [file], ocr_language: "eng"))
   end
   let(:book_members) { query_service.find_members(resource: scanned_resource) }
   let(:valid_resource) { book_members.first }
@@ -38,6 +38,8 @@ RSpec.describe DefaultDerivativeService do
   end
 
   it "creates a JP2 and attaches it to the fileset" do
+    # Stub so we can ensure only one transaction is used.
+    allow(adapter.metadata_adapter.connection).to receive(:transaction).and_call_original
     derivative_service.new(valid_change_set).create_derivatives
 
     reloaded = query_service.find_by(id: valid_resource.id)
@@ -46,6 +48,8 @@ RSpec.describe DefaultDerivativeService do
     expect(derivative).to be_present
     derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
     expect(derivative_file.read).not_to be_blank
+    # Ensure only one transaction is used
+    expect(adapter.metadata_adapter.connection).to have_received(:transaction).exactly(1).times
   end
 
   describe "#cleanup_derivatives" do
