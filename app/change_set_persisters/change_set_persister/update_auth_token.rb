@@ -12,13 +12,17 @@ class ChangeSetPersister
 
     def run
       # Ensures that this model provides access using authorization tokens
-      return unless change_set.resource.respond_to?(:auth_token) && change_set.resource.class.tokenized_access?
+      return unless tokenized_access?
 
       return if change_set.resource.auth_token.nil?
       update
     end
 
     private
+
+      def tokenized_access?
+        change_set.resource.class.respond_to?(:tokenized_access?) && change_set.resource.class.tokenized_access?
+      end
 
       def update
         token = AuthToken.find_by(token: change_set.resource.auth_token)

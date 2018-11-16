@@ -30,23 +30,6 @@ class Ability
     end
   end
 
-  # Retrieve a Resource using an identifier
-  # @param id [String] the ID for the Resource
-  # @return [Resource]
-  def find_by(id:)
-    query_service.find_by(id: id)
-  end
-
-  # Overrides the default permissions for SolrDocument
-  # @param id [String] the ID for the Solr Document
-  # @return [Boolean]
-  def test_read(id)
-    return super if auth_token.nil?
-
-    obj = find_by(id: id)
-    token_readable?(obj) || super
-  end
-
   def anonymous_permissions
     can :pdf, curation_concerns do |resource|
       ["color", "gray"].include?(Array(resource.pdf_type).first)
@@ -174,27 +157,6 @@ class Ability
     obj.decorate.public_readable_state?
   end
 
-  # Determines whether or not an auth token grants access to a given resource
-  # @param obj [Resource]
-  # @return [Boolean]
-  def token_readable?(obj)
-    return false unless !auth_token.nil? && obj.respond_to?(:auth_token)
-    obj.auth_token == auth_token.token
-  end
-
-  # Determines whether or not an auth token grants access to the parent of a given resource
-  # @param obj [Resource]
-  # @return [Boolean]
-  def token_readable_for_file_metadata?(obj)
-    return false unless auth_token && obj.respond_to?(:file_set_id)
-    # This is not always a FileSet, as PDFs are attached directly to ScannedResources
-    attaching_resource = find_by(id: obj.file_set_id)
-
-    return if attaching_resource.nil?
-    return token_readable?(attaching_resource) unless attaching_resource.is_a?(FileSet)
-    token_readable?(attaching_resource.decorate.parent)
-  end
-
   def group_readable?(obj)
     (user_groups & obj.read_groups).any?
   end
@@ -249,4 +211,55 @@ class Ability
       groups.include?("admin")
     end
   end
+
+  private
+
+    # Retrieve a Resource using an identifier
+    # @param id [String] the ID for the Resource
+    # @return [Resource]
+    def find_by(id:)
+      query_service.find_by(id: id)
+    end
+
+    # Overrides the default permissions for SolrDocument
+    # @param id [String] the ID for the Solr Document
+    # @return [Boolean]
+    def test_read(id)
+      return super if auth_token.nil?
+
+      obj = find_by(id: id)
+      token_readable?(obj) || super
+    end
+
+    def tokenized_access?(obj)
+      obj.class.respond_to?(:tokenized_access?) && obj.class.tokenized_access?
+    end
+
+    # Determines whether or not a Resource is in its final workflow state
+    # @param obj [Resource]
+    # @return [Boolean]
+    def final_state?(obj)
+      obj.decorate.public_readable_state?
+    end
+
+    # Determines whether or not an auth token grants access to a given resource
+    # @param obj [Resource]
+    # @return [Boolean]
+    def token_readable?(obj)
+      return false unless auth_token && tokenized_access?(obj)
+      final_state?(obj) && obj.auth_token == auth_token.token
+    end
+
+    # Determines whether or not an auth token grants access to the parent of a given resource
+    # @param obj [Resource]
+    # @return [Boolean]
+    def token_readable_for_file_metadata?(obj)
+      return false unless auth_token && obj.respond_to?(:file_set_id)
+      # This is not always a FileSet, as PDFs are attached directly to ScannedResources
+      attaching_resource = find_by(id: obj.file_set_id)
+
+      return if attaching_resource.nil?
+      return token_readable?(attaching_resource) unless attaching_resource.is_a?(FileSet)
+      token_readable?(attaching_resource.decorate.parent)
+    end
 end

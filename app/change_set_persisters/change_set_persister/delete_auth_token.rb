@@ -8,13 +8,17 @@ class ChangeSetPersister
     end
 
     def run
-      return unless change_set.resource.respond_to?(:auth_token) && change_set.resource.class.tokenized_access?
+      return unless tokenized_access?
       return unless auth_token
 
       auth_token.destroy
     end
 
     private
+
+      def tokenized_access?
+        change_set.resource.class.respond_to?(:tokenized_access?) && change_set.resource.class.tokenized_access?
+      end
 
       # Retrieves the auth token for a given Resource
       # @return [AuthToken]

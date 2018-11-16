@@ -151,9 +151,8 @@ RSpec.describe ChangeSetPersister do
         takedown_change_set = change_set_class.new(persisted)
         takedown_change_set.prepopulate!
         takedown_change_set.validate(state: "draft")
-        output = change_set_persister.save(change_set: takedown_change_set)
+        change_set_persister.save(change_set: takedown_change_set)
 
-        expect(output.auth_token).to be nil
         auth_token = AuthToken.find_by(token: persisted_auth_token)
 
         expect(auth_token).not_to be nil
@@ -199,15 +198,9 @@ RSpec.describe ChangeSetPersister do
         change_set_persister.save(change_set: complete_change_set)
       end
       it "uses the same authorization token" do
-        # persisted
-
         expect(persisted.auth_token).not_to be nil
         auth_token = AuthToken.find_by(token: persisted.auth_token)
         expect(auth_token).not_to be nil
-
-        expect(take_down.auth_token).to be nil
-
-        # completed
 
         completed_auth_token = completed.auth_token
         expect(completed_auth_token).not_to be nil
@@ -867,19 +860,16 @@ RSpec.describe ChangeSetPersister do
         change_set_persister.save(change_set: takedown_cs)
       end
 
-      before do
+      it "destroys any inactive authorization tokens" do
         auth_token = AuthToken.find_by(token: completed.auth_token)
         expect(auth_token).not_to be nil
 
-        expect(taken_down.auth_token).to be nil
         auth_token = AuthToken.find_by(resource_id: taken_down.id.to_s)
         expect(auth_token).not_to be nil
 
         deleted_change_set = change_set_class.new(taken_down)
         change_set_persister.delete(change_set: deleted_change_set)
-      end
 
-      it "destroys any inactive authorization tokens" do
         expect(AuthToken.find_by(token: completed.auth_token)).to be nil
         expect(AuthToken.find_by(resource_id: taken_down.id.to_s)).to be nil
       end
