@@ -1,0 +1,12 @@
+<% if @change_set.is_a?(RecordingChangeSet) %>
+  <% if decorated_resource.playlists.length > 0 %>
+    <h2>Playlists</h2>
+    <ul>
+    <% decorated_resource.playlists.each do |playlist| %>
+      <li>
+        <%= link_to playlist.title.first, solr_document_path(id: playlist.id.to_s) %>
+      </li>
+    <% end %>
+    </ul>
+  <% end %>
+<% end %>

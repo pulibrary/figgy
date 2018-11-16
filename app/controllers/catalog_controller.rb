@@ -55,6 +55,7 @@ class CatalogController < ApplicationController
     config.show.partials += [:universal_viewer]
     config.show.partials += [:resource_attributes]
     config.show.partials += [:workflow_controls]
+    config.show.partials += [:playlists]
     config.show.partials += [:vocabulary_nav]
     config.show.partials += [:members]
     config.show.partials += [:categories]

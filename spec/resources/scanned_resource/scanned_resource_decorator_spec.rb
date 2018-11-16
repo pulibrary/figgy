@@ -178,4 +178,17 @@ RSpec.describe ScannedResourceDecorator do
       end
     end
   end
+
+  describe "#playlists" do
+    it "returns all playlists that come from a recording" do
+      file_set = FactoryBot.create_for_repository(:file_set)
+      proxy_file_set = FactoryBot.create_for_repository(:proxy_file_set, proxied_file_id: file_set.id)
+      recording = FactoryBot.create_for_repository(:recording, member_ids: file_set.id)
+      playlist = FactoryBot.create_for_repository(:playlist, member_ids: proxy_file_set.id)
+
+      decorator = described_class.new(recording)
+
+      expect(decorator.playlists.map(&:id)).to eq [playlist.id]
+    end
+  end
 end
