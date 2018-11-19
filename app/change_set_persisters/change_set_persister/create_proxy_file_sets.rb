@@ -30,7 +30,12 @@ class ChangeSetPersister
     end
 
     def file_set_ids
-      change_set.try(:file_set_ids)
+      @file_set_ids ||= (change_set.try(:file_set_ids) || []) - current_member_ids
+    end
+
+    def current_member_ids
+      return [] unless change_set.try(:file_set_ids).present?
+      @current_members ||= Wayfinder.for(change_set.resource).members.map(&:proxied_file_id)
     end
 
     def file_sets
