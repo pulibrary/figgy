@@ -13,7 +13,6 @@ class NumismaticAccessionChangeSet < Valkyrie::ChangeSet
   property :private_note, multiple: false, required: false
 
   validates_with AutoIncrementValidator, property: :accession_number
-  validates_with MemberValidator
 
   def primary_terms
     [

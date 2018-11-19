@@ -2,7 +2,7 @@
 require "rails_helper"
 include ActionDispatch::TestProcess
 
-RSpec.describe NumismaticAccessionsController do
+RSpec.describe NumismaticAccessionsController, type: :controller do
   with_queue_adapter :inline
   let(:user) { nil }
   before do
