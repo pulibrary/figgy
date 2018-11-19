@@ -2,7 +2,6 @@
 class PlaylistDecorator < Valkyrie::ResourceDecorator
   display :title,
           :visibility,
-          :members,
           :authorized_link
 
   display_in_manifest [:title]
