@@ -9,6 +9,10 @@ class Resource < Valkyrie::Resource
     false
   end
 
+  def self.tokenized_access?
+    false
+  end
+
   def human_readable_type
     self.class.human_readable_type
   end

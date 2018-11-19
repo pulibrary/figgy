@@ -1,3 +1,4 @@
+# coding: utf-8
 # frozen_string_literal: true
 require "rails_helper"
 require "valkyrie/specs/shared_specs"
@@ -112,10 +113,59 @@ RSpec.describe ChangeSetPersister do
       output = change_set_persister.save(change_set: change_set)
       expect(output.identifier.first).to eq "ark:/#{shoulder}#{blade}"
     end
+
+    it "mints an authorization token" do
+      resource = FactoryBot.create(:playlist, title: ["test playlist"], state: "draft")
+      change_set = PlaylistChangeSet.new(resource)
+      change_set.prepopulate!
+      change_set.validate(state: "complete")
+      output = change_set_persister.save(change_set: change_set)
+
+      expect(output.auth_token).not_to be nil
+      auth_token = AuthToken.find_by(token: output.auth_token)
+      expect(auth_token).not_to be nil
+      expect(auth_token.label).to eq "Anonymous Token"
+      expect(auth_token.group).to eq ["anonymous"]
+    end
+  end
+
+  context "when a playlist is taken down" do
+    before do
+      stub_bibdata(bib_id: "123456")
+    end
+
+    context "with an authorization token" do
+      let(:resource) { FactoryBot.create(:playlist) }
+      let(:change_set_class) { PlaylistChangeSet }
+      let(:change_set) { change_set_class.new(resource) }
+      let(:persisted) do
+        change_set.prepopulate!
+        change_set.validate(state: "complete")
+        change_set_persister.save(change_set: change_set)
+      end
+      before do
+        persisted
+      end
+      it "clears the attribute on the model but preserves the token" do
+        persisted_auth_token = persisted.auth_token
+        takedown_change_set = change_set_class.new(persisted)
+        takedown_change_set.prepopulate!
+        takedown_change_set.validate(state: "draft")
+        change_set_persister.save(change_set: takedown_change_set)
+
+        auth_token = AuthToken.find_by(token: persisted_auth_token)
+
+        expect(auth_token).not_to be nil
+        expect(auth_token.resource_id).to eq persisted.id.to_s
+      end
+    end
   end
 
   context "when a simple resource is completed" do
     let(:change_set_class) { SimpleResourceChangeSet }
+    before do
+      stub_bibdata(bib_id: "123456")
+    end
 
     it "mints an ARK" do
       resource = FactoryBot.create(:draft_simple_resource)
@@ -124,6 +174,39 @@ RSpec.describe ChangeSetPersister do
       change_set.validate(state: "complete")
       output = change_set_persister.save(change_set: change_set)
       expect(output.identifier.first).to eq "ark:/#{shoulder}#{blade}"
+    end
+
+    context "after having been taken down" do
+      let(:resource) { FactoryBot.create(:playlist) }
+      let(:change_set_class) { PlaylistChangeSet }
+      let(:change_set) { change_set_class.new(resource) }
+      let(:persisted) do
+        change_set.prepopulate!
+        change_set.validate(state: "complete")
+        change_set_persister.save(change_set: change_set)
+      end
+      let(:take_down) do
+        takedown_change_set = change_set_class.new(persisted)
+        takedown_change_set.prepopulate!
+        takedown_change_set.validate(state: "draft")
+        change_set_persister.save(change_set: takedown_change_set)
+      end
+      let(:completed) do
+        complete_change_set = change_set_class.new(take_down)
+        complete_change_set.prepopulate!
+        complete_change_set.validate(state: "complete")
+        change_set_persister.save(change_set: complete_change_set)
+      end
+      it "uses the same authorization token" do
+        expect(persisted.auth_token).not_to be nil
+        auth_token = AuthToken.find_by(token: persisted.auth_token)
+        expect(auth_token).not_to be nil
+
+        completed_auth_token = completed.auth_token
+        expect(completed_auth_token).not_to be nil
+        expect(completed_auth_token).to eq auth_token.token
+        expect(AuthToken.find_by(resource_id: completed.id.to_s)).to eq(auth_token.reload)
+      end
     end
   end
 
@@ -748,6 +831,49 @@ RSpec.describe ChangeSetPersister do
       original_path = original.file_identifiers.first.to_s.gsub("disk://", "")
       expect(File.exist?(original_path)).to be false
     end
+    it "destroys any active authorization tokens" do
+      resource = FactoryBot.create(:playlist)
+      change_set = PlaylistChangeSet.new(resource)
+      change_set.prepopulate!
+      change_set.validate(state: "complete")
+      output = change_set_persister.save(change_set: change_set)
+
+      auth_token = AuthToken.find_by(token: output.auth_token)
+      expect(auth_token).not_to be nil
+      deleted_change_set = PlaylistChangeSet.new(output)
+      change_set_persister.delete(change_set: deleted_change_set)
+
+      expect(AuthToken.find_by(token: auth_token.token)).to be nil
+    end
+    context "when the Playlist is and completed and taken down before deletion" do
+      let(:resource) { FactoryBot.create(:playlist) }
+      let(:change_set_class) { PlaylistChangeSet }
+      let(:change_set) { change_set_class.new(resource) }
+      let(:completed) do
+        change_set.prepopulate!
+        change_set.validate(state: "complete")
+        change_set_persister.save(change_set: change_set)
+      end
+      let(:taken_down) do
+        takedown_cs = change_set_class.new(completed)
+        takedown_cs.validate(state: "takedown")
+        change_set_persister.save(change_set: takedown_cs)
+      end
+
+      it "destroys any inactive authorization tokens" do
+        auth_token = AuthToken.find_by(token: completed.auth_token)
+        expect(auth_token).not_to be nil
+
+        auth_token = AuthToken.find_by(resource_id: taken_down.id.to_s)
+        expect(auth_token).not_to be nil
+
+        deleted_change_set = change_set_class.new(taken_down)
+        change_set_persister.delete(change_set: deleted_change_set)
+
+        expect(AuthToken.find_by(token: completed.auth_token)).to be nil
+        expect(AuthToken.find_by(resource_id: taken_down.id.to_s)).to be nil
+      end
+    end
   end
 
   describe "deleting child SRs" do
@@ -1157,7 +1283,7 @@ RSpec.describe ChangeSetPersister do
       let(:change_set) do
         cs = PlaylistChangeSet.new(resource)
         cs.prepopulate!
-        cs.validate(label: ["test label"], file_set_ids: [file_set.id])
+        cs.validate(title: ["test label"], file_set_ids: [file_set.id])
         cs
       end
       let(:persisted) { change_set_persister.save(change_set: change_set) }
@@ -1206,7 +1332,7 @@ RSpec.describe ChangeSetPersister do
       let(:change_set) do
         cs = PlaylistChangeSet.new(resource)
         cs.prepopulate!
-        cs.validate(label: ["test label"], member_ids: [proxy_file_set.id])
+        cs.validate(title: ["test label"], member_ids: [proxy_file_set.id])
         cs
       end
       let(:persisted) { change_set_persister.save(change_set: change_set) }
@@ -1277,7 +1403,7 @@ RSpec.describe ChangeSetPersister do
 
       change_set = DynamicChangeSet.new(playlist)
       change_set.prepopulate!
-      change_set.validate(label: "Test Label", file_set_ids: file_set.id.to_s)
+      change_set.validate(title: "Test Title", file_set_ids: file_set.id.to_s)
       expect(change_set.file_set_ids).to eq [file_set.id]
 
       output = change_set_persister.save(change_set: change_set)

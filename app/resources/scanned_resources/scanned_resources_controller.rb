@@ -52,7 +52,7 @@ class ScannedResourcesController < BaseResourceController
     authorize! :manifest, @resource
     respond_to do |f|
       f.json do
-        render json: ManifestBuilder.new(@resource).build
+        render json: ManifestBuilder.new(@resource, auth_token_param).build
       end
     end
   rescue Valkyrie::Persistence::ObjectNotFoundError
@@ -73,7 +73,10 @@ class ScannedResourcesController < BaseResourceController
         buffered_changeset_persister.save(change_set: change_set)
       end
     end
-    redirect_to download_path(resource_id: change_set.id, id: pdf_file.id)
+
+    redirect_path_args = { resource_id: change_set.id, id: pdf_file.id }
+    redirect_path_args[:auth_token] = auth_token_param if auth_token_param
+    redirect_to download_path(redirect_path_args)
   end
 
   def save_and_ingest
@@ -107,5 +110,9 @@ class ScannedResourcesController < BaseResourceController
     rescue Valkyrie::StorageAdapter::FileNotFound => error
       Valkyrie.logger.error("Failed to locate the file for the PDF FileMetadata: #{file_desc.file_identifiers.first}: #{error}")
       false
+    end
+
+    def auth_token_param
+      params[:auth_token]
     end
 end

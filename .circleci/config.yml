@@ -4,13 +4,13 @@ jobs:
   build:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.3.7-node-browsers
+      - image: circleci/ruby:2.4.5-node-browsers
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
           FIGGY_DB_USERNAME: figgy
           FIGGY_DB_PASSWORD:  ""
-      - image: postgres:10.3-alpine
+      - image: postgres:10.6-alpine
         environment:
           POSTGRES_USER: figgy
           POSTGRES_DB: figgy_test
@@ -54,14 +54,14 @@ jobs:
   test:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.3.6-node-browsers
+      - image: circleci/ruby:2.4.5-node-browsers
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
           FIGGY_DB_USERNAME: figgy
           FIGGY_DB_PASSWORD:  ""
           MEDIAINFO_PATH: /usr/bin/mediainfo
-      - image: postgres:10.3
+      - image: postgres:9.6-alpine
         environment:
           POSTGRES_USER: figgy
           POSTGRES_DB: figgy_test
@@ -79,18 +79,16 @@ jobs:
       - run: rm vendor/bundle/ruby/2.3.0/specifications/simpler-tiles-0.3.1.gemspec || true
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
-      # Downgrade chromedriver to prevent incompatibility with installed chrome
-      - run: chromedriver-update 2.37
       - run:
           command: bundle exec rake figgy:test
           background: true
       - run: bin/jetty_wait
-      - run: bundle exec rake db:setup
+      - run: bundle exec rake db:migrate
       - run: bundle exec rspec spec
   rubocop:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.3.6-node-browsers
+      - image: circleci/ruby:2.4.5-node-browsers
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost

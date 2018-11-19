@@ -48,4 +48,20 @@ RSpec.describe PlaylistDecorator do
       expect(decorator.decorated_proxies.first).to be_a ProxyFileSetDecorator
     end
   end
+
+  describe "#authorized_link" do
+    let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
+    let(:storage_adapter) { Valkyrie.config.storage_adapter }
+    let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter) }
+    let(:playlist) do
+      res = Playlist.new
+      cs = PlaylistChangeSet.new(res)
+      cs.prepopulate!
+      cs.validate(label: ["my playlist"], state: "complete")
+      change_set_persister.save(change_set: cs)
+    end
+    it "accesses the authorization token" do
+      expect(decorator.authorized_link).to eq decorator.auth_token
+    end
+  end
 end

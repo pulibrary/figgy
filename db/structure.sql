@@ -86,7 +86,8 @@ CREATE TABLE public.auth_tokens (
     "group" character varying,
     token character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    resource_id character varying
 );
 
 
@@ -584,6 +585,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180212161728'),
 ('20180306193020'),
 ('20180810215750'),
+('20181030210350'),
 ('20181115195544');
 
 

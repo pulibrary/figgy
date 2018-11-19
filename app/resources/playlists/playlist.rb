@@ -9,8 +9,15 @@ class Playlist < Resource
   attribute :thumbnail_id
   attribute :state
   attribute :workflow_note
+  attribute :auth_token, Valkyrie::Types::String
 
   def self.can_have_manifests?
+    true
+  end
+
+  # Ensure that resources of this class cannot be accessed with an access token
+  # @return [Boolean]
+  def self.tokenized_access?
     true
   end
 end

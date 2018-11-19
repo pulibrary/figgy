@@ -4,8 +4,8 @@ class ManifestBuilder
 
   ##
   # @param [Resource] resource the Resource subject
-  def initialize(resource)
-    @resource = RootNode.for(resource)
+  def initialize(resource, auth_token = nil)
+    @resource = RootNode.for(resource, auth_token)
   end
 
   ##
@@ -18,7 +18,7 @@ class ManifestBuilder
   ##
   # Presenter modeling the Resource subjects as root nodes
   class RootNode
-    def self.for(resource)
+    def self.for(resource, auth_token = nil)
       case resource
       when Collection
         CollectionNode.new(resource)
@@ -31,10 +31,10 @@ class ManifestBuilder
       when Playlist
         PlaylistNode.new(resource)
       else
-        new(resource)
+        new(resource, auth_token)
       end
     end
-    attr_reader :resource
+    attr_reader :resource, :auth_token
     delegate :query_service, to: :metadata_adapter
     delegate :decorate, :to_model, :id, to: :resource
 
@@ -44,8 +44,9 @@ class ManifestBuilder
 
     ##
     # @param [Resource] resource the Resource being modeled as the root
-    def initialize(resource)
+    def initialize(resource, auth_token = nil)
       @resource = resource
+      @auth_token = auth_token
     end
 
     ##
@@ -490,8 +491,14 @@ class ManifestBuilder
       end
     end
 
+    def token_authorizable?(resource)
+      resource.respond_to?(:auth_token) && !resource.auth_token.nil?
+    end
+
     def pdf_url(resource)
-      manifest_url(resource).gsub("manifest", "pdf")
+      url = manifest_url(resource).gsub("manifest", "pdf")
+      return url + "?auth_token=#{resource.auth_token}" if token_authorizable?(resource)
+      url
     end
 
     def show_url(resource)

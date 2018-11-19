@@ -87,5 +87,39 @@ RSpec.describe "ScannedResource requests", type: :request do
       follow_redirect!
       expect(response).to redirect_to user_cas_omniauth_authorize_path
     end
+
+    context "when the client passes an authorization token" do
+      let(:auth_token) { AuthToken.create!(group: ["admin"], label: "Admin Token").token }
+      it "is granted read-only access to the PDF derivatives for the resource" do
+        get "/concern/scanned_resources/#{scanned_resource.id}/pdf?auth_token=#{auth_token}"
+
+        expect(response.status).to eq 302 # This redirects to the downloads controller
+        follow_redirect!
+        expect(response.status).to eq 200
+      end
+      it "is granted access to the IIIF presentation manifest" do
+        get "/concern/scanned_resources/#{scanned_resource.id}/manifest?auth_token=#{auth_token}"
+
+        expect(response.status).to eq 200
+
+        manifest_values = JSON.parse(response.body)
+        sequences = manifest_values["sequences"]
+        renderings = sequences.first["rendering"]
+
+        expect(renderings.first).to include("@id" => "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/pdf")
+
+        canvases = sequences.first["canvases"]
+        canvas_renderings = canvases.first["rendering"]
+        file_set = scanned_resource.decorate.file_sets.first
+
+        expect(canvas_renderings.first).to include("@id" => "http://www.example.com/downloads/#{file_set.id}/file/#{file_set.original_file.id}")
+      end
+      it "is granted access to file downloads" do
+        file_set = scanned_resource.decorate.file_sets.first
+        get "/downloads/#{file_set.id}/file/#{file_set.original_file.id}?auth_token=#{auth_token}"
+
+        expect(response.status).to eq 200
+      end
+    end
   end
 end
