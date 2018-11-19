@@ -4,31 +4,37 @@
 class Coin < Resource
   include Valkyrie::Resource::AccessControls
   attribute :member_ids, Valkyrie::Types::Array
+  attribute :member_of_collection_ids
   attribute :numismatic_citation_ids, Valkyrie::Types::Array
 
   # descriptive metadata
-  attribute :accession_number
-  attribute :analysis
   attribute :coin_number, Valkyrie::Types::Anything
+  attribute :holding_location
+  attribute :issue_number, Valkyrie::Types::Anything
   attribute :counter_stamp
-  attribute :department
-  attribute :die_axis
-  attribute :find
+  attribute :analysis
+  attribute :public_note
+  attribute :private_note
+  attribute :place
   attribute :find_date
-  attribute :find_description
   attribute :find_feature
   attribute :find_locus
-  attribute :find_number
-  attribute :find_place
-  attribute :holding_location
+  attribute :find_description
+  attribute :images
+  attribute :accession_number
+  attribute :department
+  attribute :provenance
+  attribute :reference
+  attribute :die_axis
+  attribute :append_id
+  attribute :find
   attribute :loan
   attribute :object_type
-  attribute :place
-  attribute :private_note
-  attribute :provenance
   attribute :size
   attribute :technique
   attribute :weight
+  attribute :find_number
+  attribute :find_place
 
   # administrative metadata
   attribute :depositor
