@@ -57,7 +57,7 @@ RSpec.describe MusicImportService do
     end
   end
 
-  context "call number starting with 'x-'" do
+  context "call number containing single quote" do
     describe "#process_recordings" do
       let(:bad_call) { "'T LIKE -CRANE.MP3" }
       let(:escaped_call) { "''T LIKE -CRANE.MP3" }
