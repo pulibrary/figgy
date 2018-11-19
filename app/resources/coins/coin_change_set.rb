@@ -52,7 +52,6 @@ class CoinChangeSet < ChangeSet
       :accession_number,
       :analysis,
       :append_id,
-      :coin_number,
       :counter_stamp,
       :department,
       :die_axis,
