@@ -22,7 +22,6 @@ class CoinChangeSet < ChangeSet
   property :accession_number, multiple: false, required: false
   property :department, multiple: false, required: false
   property :provenance, multiple: true, required: false, default: []
-  property :reference, multiple: true, required: false, default: []
   property :die_axis, multiple: false, required: false
   property :loan, multiple: false, required: false
   property :object_type, multiple: false, required: false
@@ -72,7 +71,6 @@ class CoinChangeSet < ChangeSet
       :accession_number,
       :department,
       :provenance,
-      :reference,
       :die_axis,
       :append_id,
       :loan,

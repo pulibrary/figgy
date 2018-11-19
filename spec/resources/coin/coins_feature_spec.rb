@@ -75,7 +75,6 @@ RSpec.feature "Coins" do
         place: "test value",
         private_note: "test value",
         provenance: "test value",
-        reference: "test value",
         replaces: "test value",
         size: "test value",
         technique: "test value",

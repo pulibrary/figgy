@@ -24,7 +24,6 @@ class Coin < Resource
   attribute :accession_number
   attribute :department
   attribute :provenance
-  attribute :reference
   attribute :die_axis
   attribute :append_id
   attribute :find

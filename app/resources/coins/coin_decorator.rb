@@ -16,7 +16,6 @@ class CoinDecorator < Valkyrie::ResourceDecorator
           :accession_number,
           :department,
           :provenance,
-          :reference,
           :die_axis,
           :append_id,
           :find,
