@@ -47,6 +47,8 @@ en:
         member_of_collection_ids: "Collections"
         favorite_term_ids: "Favorite Terms"
         ocr_language: "OCR Language"
+      numismatic_issue:
+        object_date: "Date of object"
     required:
       html: '<span class="label label-info required-tag">required</span>'
   helpers:

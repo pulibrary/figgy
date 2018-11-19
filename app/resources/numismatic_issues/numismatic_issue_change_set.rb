@@ -6,7 +6,6 @@ class NumismaticIssueChangeSet < ChangeSet
   include VisibilityProperty
   property :artist, multiple: true, required: false, default: []
   property :color, multiple: false, required: false
-  property :date_object, multiple: false, required: false
   property :date_range, multiple: false, required: false
   property :denomination, multiple: false, required: false
   property :department, multiple: false, required: false
@@ -18,6 +17,7 @@ class NumismaticIssueChangeSet < ChangeSet
   property :master, multiple: false, required: false
   property :metal, multiple: false, required: false
   property :note, multiple: true, required: false, default: []
+  property :object_date, multiple: false, required: false
   property :object_type, multiple: false, required: false
   property :obverse_attributes, multiple: true, required: false, default: []
   property :obverse_figure, multiple: false, required: false
@@ -70,47 +70,56 @@ class NumismaticIssueChangeSet < ChangeSet
   validates :visibility, presence: true
 
   def primary_terms
-    [
-      :rights_statement,
-      :rights_note,
-      :member_of_collection_ids,
-      :artist,
-      :color,
-      :date_object,
-      :date_range,
-      :denomination,
-      :department,
-      :description,
-      :edge,
-      :era,
-      :geographic_origin,
-      :issue_number,
-      :master,
-      :metal,
-      :note,
-      :object_type,
-      :obverse_attributes,
-      :obverse_figure,
-      :obverse_figure_description,
-      :obverse_figure_relationship,
-      :obverse_legend,
-      :obverse_orientation,
-      :obverse_part,
-      :obverse_symbol,
-      :place,
-      :reverse_attributes,
-      :reverse_figure,
-      :reverse_figure_description,
-      :reverse_figure_relationship,
-      :reverse_legend,
-      :reverse_orientation,
-      :reverse_part,
-      :reverse_symbol,
-      :ruler,
-      :series,
-      :shape,
-      :subject,
-      :workshop
-    ]
+    {
+      "" => [
+        :department,
+        :object_type,
+        :denomination,
+        :metal,
+        :shape,
+        :color,
+        :edge,
+        :date_range,
+        :object_date,
+        :era,
+        :ruler,
+        :master,
+        :workshop,
+        :series,
+        :place,
+        :geographic_origin
+      ],
+      "Obverse" => [
+        :obverse_figure,
+        :obverse_symbol,
+        :obverse_part,
+        :obverse_orientation,
+        :obverse_figure_description,
+        :obverse_figure_relationship,
+        :obverse_legend,
+        :obverse_attributes
+      ],
+      "Reverse" => [
+        :reverse_figure,
+        :reverse_symbol,
+        :reverse_part,
+        :reverse_orientation,
+        :reverse_figure_description,
+        :reverse_figure_relationship,
+        :reverse_legend,
+        :reverse_attributes
+      ],
+      "Rights and Notes" => [
+        :note,
+        :member_of_collection_ids,
+        :rights_statement,
+        :rights_note
+      ],
+      "Artists and Subjects" => [
+        :artist,
+        :subject,
+        :description
+      ]
+    }
   end
 end
