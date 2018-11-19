@@ -11,7 +11,7 @@ class PDFGenerator
     # Download the PDF by opening the stream with OpenURI using the read-only and binary modes
     # @return [File]
     def download
-      open(canvas_url, "rb")
+      open(download_url, "rb")
     end
 
     def layout
@@ -31,11 +31,11 @@ class PDFGenerator
       canvas.width <= canvas.height
     end
 
-    private
+    def download_url
+      "#{canvas.url}/full/#{max_width},/0/#{quality}.#{format}"
+    end
 
-      def canvas_url
-        "#{canvas.url}/full/#{max_width},/0/#{quality}.#{format}"
-      end
+    private
 
       def format
         bitonal? ? "png" : "jpg"

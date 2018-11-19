@@ -24,7 +24,7 @@ class PDFGenerator
       begin
         prawn_document.image downloader.download, width: page_size.first, height: page_size.last, fit: page_size
       rescue OpenURI::HTTPError => uri_error
-        Valkyrie.logger.error "#{self.class}: Failed to download a PDF using the following URI as a base: #{downloader.canvas.url}: #{uri_error}"
+        Valkyrie.logger.error "#{self.class}: Failed to download a PDF using the following URI as a base: #{downloader.download_url}: #{uri_error}"
         download_attempts += 1
         retry unless download_attempts > 4
         raise Error
