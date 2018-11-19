@@ -10,6 +10,7 @@ RSpec.describe NumismaticIssueChangeSet do
       expect(change_set.primary_terms).to be_a(Hash)
       expect(change_set.primary_terms.keys).to eq(["", "Obverse", "Reverse", "Rights and Notes", "Artists and Subjects"])
       expect(change_set.primary_terms[""]).to include(:object_type, :denomination, :metal, :workshop)
+      expect(change_set.primary_terms.values.flatten).not_to include(:issue_number)
     end
   end
 
