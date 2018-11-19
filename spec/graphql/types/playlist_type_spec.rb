@@ -14,7 +14,6 @@ RSpec.describe Types::PlaylistType do
     subject { described_class }
 
     # Note! These field names use a javascript-y camel-case variable style
-    it { is_expected.to have_field(:title).of_type(String) }
     it { is_expected.to have_field(:members) }
     it { is_expected.to have_field(:manifestUrl).of_type(String) }
   end
@@ -28,12 +27,6 @@ RSpec.describe Types::PlaylistType do
   describe "#thumbnail" do
     it "always returns nil" do
       expect(type.thumbnail).to eq nil
-    end
-  end
-
-  describe "#title" do
-    it "maps to a resource's first title" do
-      expect(type.title).to eq "Playlist Title"
     end
   end
 
@@ -63,6 +56,12 @@ RSpec.describe Types::PlaylistType do
   describe "#viewing_hint" do
     it "returns nil" do
       expect(type.viewing_hint).to eq nil
+    end
+  end
+
+  describe "#label" do
+    it "returns the label" do
+      expect(type.label).to eq "Playlist Title"
     end
   end
 end
