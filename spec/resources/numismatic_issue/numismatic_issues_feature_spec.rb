@@ -34,7 +34,6 @@ RSpec.feature "NumismaticIssues" do
     expect(page).to have_field "Date of object"
     expect(page).to have_field "Date range"
     expect(page).to have_field "Denomination"
-    expect(page).to have_field "Department"
     expect(page).to have_field "Description"
     expect(page).to have_field "Edge"
     expect(page).to have_field "Era"

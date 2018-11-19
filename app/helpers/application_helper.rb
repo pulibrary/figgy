@@ -124,6 +124,8 @@ module ApplicationHelper
     elsif attribute == :authorized_link
       # Build the authorized link attribute
       link_to(request.base_url + solr_document_path(id: resource.id, auth_token: value), solr_document_path(id: resource.id, auth_token: value))
+    elsif attribute == :accession_number && @document.decorated_resource.is_a?(CoinDecorator) && @document.decorated_resource.accession
+      link_to(@document.decorated_resource.accession_label, solr_document_path(id: @document.decorated_resource.accession_id))
     else
       value
     end

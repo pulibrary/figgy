@@ -4,6 +4,7 @@ FactoryBot.define do
     accession_number 1
     date "01/01/2001"
     type "gift"
+    person "Alice"
     cost "$99.00"
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)

@@ -12,4 +12,20 @@ class CoinWayfinder < BaseWayfinder
       member
     end
   end
+
+  def accession
+    @accession ||= accessions.first&.decorate
+  end
+
+  private
+
+    def accessions
+      query_service.custom_queries
+                   .find_by_numeric_property(property: :accession_number, value: accession_number)
+                   .select { |o| o.is_a?(NumismaticAccession) }
+    end
+
+    def accession_number
+      Array.wrap(resource.accession_number).first
+    end
 end

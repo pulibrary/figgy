@@ -27,11 +27,13 @@ class CoinDecorator < Valkyrie::ResourceDecorator
           :replaces,
           :visibility
 
-  delegate :members, :decorated_file_sets, :decorated_parent, :decorated_numismatic_citations, to: :wayfinder
+  delegate :members, :decorated_file_sets, :decorated_parent, :decorated_numismatic_citations, :accession, to: :wayfinder
 
   def ark_mintable_state?
     false
   end
+
+  delegate :id, :label, to: :accession, prefix: true
 
   def citations
     decorated_numismatic_citations.map(&:title)
