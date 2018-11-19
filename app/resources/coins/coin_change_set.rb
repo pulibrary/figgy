@@ -4,29 +4,30 @@ class CoinChangeSet < ChangeSet
   apply_workflow(DraftCompleteWorkflow)
 
   include VisibilityProperty
-  property :accession_number, multiple: false, required: false
-  property :analysis, multiple: false, required: false
   property :coin_number, multiple: false, required: false
+  property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
+  property :holding_location, multiple: false, required: false
   property :counter_stamp, multiple: false, required: false
-  property :department, multiple: false, required: false
-  property :die_axis, multiple: false, required: false
+  property :analysis, multiple: false, required: false
+  property :public_note, multiple: true, required: false, default: []
+  property :private_note, multiple: true, required: false, default: []
+  property :place, multiple: false, required: false
   property :find_date, multiple: false, required: false
-  property :find_description, multiple: false, required: false
   property :find_feature, multiple: false, required: false
   property :find_locus, multiple: false, required: false
   property :find_number, multiple: false, required: false
-  property :find_place, multiple: false, required: false
-  property :holding_location, multiple: false, required: false
+  property :find_description, multiple: false, required: false
+  property :accession_number, multiple: false, required: false
+  property :department, multiple: false, required: false
+  property :provenance, multiple: true, required: false, default: []
+  property :die_axis, multiple: false, required: false
   property :loan, multiple: false, required: false
   property :object_type, multiple: false, required: false
-  property :place, multiple: false, required: false
-  property :private_note, multiple: true, required: false, default: []
-  property :provenance, multiple: true, required: false, default: []
-  property :replaces, multiple: true, required: false, default: []
   property :size, multiple: false, required: false
   property :technique, multiple: false, required: false
   property :weight, multiple: false, required: false
-
+  property :find_place, multiple: false, required: false
+  property :replaces, multiple: true, required: false, default: []
   property :depositor, multiple: false, required: false
   property :numismatic_citation_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
@@ -41,6 +42,7 @@ class CoinChangeSet < ChangeSet
   property :pending_uploads, multiple: true, required: false
 
   validates_with AutoIncrementValidator, property: :coin_number
+  validates_with CollectionValidator
   validates_with MemberValidator
   validates_with StateValidator
   validates_with ViewingDirectionValidator
@@ -49,24 +51,26 @@ class CoinChangeSet < ChangeSet
 
   def primary_terms
     [
-      :accession_number,
-      :analysis,
-      :append_id,
+      :member_of_collection_ids,
+      :holding_location,
       :counter_stamp,
-      :department,
-      :die_axis,
+      :analysis,
+      :public_note,
+      :private_note,
+      :place,
+      :find_place,
       :find_date,
-      :find_description,
       :find_feature,
       :find_locus,
       :find_number,
-      :find_place,
-      :holding_location,
+      :find_description,
+      :accession_number,
+      :department,
+      :provenance,
+      :die_axis,
+      :append_id,
       :loan,
       :object_type,
-      :place,
-      :private_note,
-      :provenance,
       :size,
       :technique,
       :weight
