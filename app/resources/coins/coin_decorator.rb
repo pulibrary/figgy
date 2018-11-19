@@ -2,7 +2,6 @@
 class CoinDecorator < Valkyrie::ResourceDecorator
   display :coin_number,
           :holding_location,
-          :issue_number,
           :counter_stamp,
           :analysis,
           :public_note,

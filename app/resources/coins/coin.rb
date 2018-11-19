@@ -10,7 +10,6 @@ class Coin < Resource
   # descriptive metadata
   attribute :coin_number, Valkyrie::Types::Anything
   attribute :holding_location
-  attribute :issue_number, Valkyrie::Types::Anything
   attribute :counter_stamp
   attribute :analysis
   attribute :public_note

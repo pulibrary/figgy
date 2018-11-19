@@ -7,7 +7,6 @@ class CoinChangeSet < ChangeSet
   property :coin_number, multiple: false, required: false
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :holding_location, multiple: false, required: false
-  property :issue_number, multiple: false, required: false
   property :counter_stamp, multiple: false, required: false
   property :analysis, multiple: false, required: false
   property :public_note, multiple: true, required: false, default: []
@@ -53,10 +52,8 @@ class CoinChangeSet < ChangeSet
 
   def primary_terms
     [
-      :coin_number,
       :member_of_collection_ids,
       :holding_location,
-      :issue_number,
       :counter_stamp,
       :analysis,
       :public_note,
