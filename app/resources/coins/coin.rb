@@ -19,7 +19,6 @@ class Coin < Resource
   attribute :find_feature
   attribute :find_locus
   attribute :find_description
-  attribute :images
   attribute :accession_number
   attribute :department
   attribute :provenance

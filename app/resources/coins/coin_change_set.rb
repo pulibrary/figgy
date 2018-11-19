@@ -17,7 +17,6 @@ class CoinChangeSet < ChangeSet
   property :find_locus, multiple: false, required: false
   property :find_number, multiple: false, required: false
   property :find_description, multiple: false, required: false
-  property :images, multiple: false, required: false
   property :accession_number, multiple: false, required: false
   property :department, multiple: false, required: false
   property :provenance, multiple: true, required: false, default: []

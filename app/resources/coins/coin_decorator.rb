@@ -11,7 +11,6 @@ class CoinDecorator < Valkyrie::ResourceDecorator
           :find_feature,
           :find_locus,
           :find_description,
-          :images,
           :accession_number,
           :department,
           :provenance,
