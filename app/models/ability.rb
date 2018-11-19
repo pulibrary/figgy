@@ -42,7 +42,9 @@ class Ability
     end
     can :download, FileSet do |resource|
       authorized = geo_file_set?(resource)
-      token_readable?(resource.decorate.parent) || authorized if auth_token
+      authorized_by_token = proxy_parent_readable?(resource) || token_readable?(resource.decorate.parent) if auth_token
+
+      authorized_by_token || authorized
     end
     can :color_pdf, curation_concerns do |resource|
       resource.pdf_type == ["color"]
@@ -221,12 +223,24 @@ class Ability
       query_service.find_by(id: id)
     end
 
+    def find_proxy_file_sets(resource)
+      query_service.find_inverse_references_by(resource: resource, property: :proxied_file_id)
+    end
+
+    def proxy_parent_readable?(resource)
+      proxies = find_proxy_file_sets(resource)
+      return if proxies.empty?
+
+      proxy = proxies.first
+      proxy_parent = proxy.decorate.parents.first
+      token_readable?(proxy_parent)
+    end
+
     # Overrides the default permissions for SolrDocument
     # @param id [String] the ID for the Solr Document
     # @return [Boolean]
     def test_read(id)
       return super if auth_token.nil?
-
       obj = find_by(id: id)
       token_readable?(obj) || super
     end
@@ -260,6 +274,8 @@ class Ability
 
       return if attaching_resource.nil?
       return token_readable?(attaching_resource) unless attaching_resource.is_a?(FileSet)
-      token_readable?(attaching_resource.decorate.parent)
+
+      # Retrieve the Playlist
+      proxy_parent_readable?(attaching_resource) || token_readable?(attaching_resource)
     end
 end

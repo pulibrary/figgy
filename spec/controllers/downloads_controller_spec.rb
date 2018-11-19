@@ -58,5 +58,26 @@ RSpec.describe DownloadsController do
         expect(response.body).to eq(sample_file.read)
       end
     end
+
+    context "with a FileSet proxied as a member of a Playlist" do
+      let(:sample_file) { fixture_file_upload("files/audio_file.wav", "audio/x-wav") }
+      let(:playlist) do
+        playlist = Playlist.new
+        cs = PlaylistChangeSet.new(playlist)
+        cs.prepopulate!
+        cs.validate(file_set_ids: [file_set.id], state: ["complete"])
+        change_set_persister.save(change_set: cs)
+      end
+
+      it "allow clients to download the file with an auth. token" do
+        persisted_playlist = meta.query_service.find_by(id: playlist.id)
+
+        get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s, auth_token: persisted_playlist.auth_token }
+
+        expect(response.content_length).to eq(147_550)
+        expect(response.content_type).to eq("audio/x-wav")
+        expect(response.body).to eq(sample_file.read)
+      end
+    end
   end
 end

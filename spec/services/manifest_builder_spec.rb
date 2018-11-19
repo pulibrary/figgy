@@ -177,7 +177,7 @@ RSpec.describe ManifestBuilder do
         expect(output).to include("label" => resource.title)
       end
 
-      context "with proxies to FileSets" do
+      context "with proxies to FileSets", run_real_characterization: true do
         with_queue_adapter :inline
 
         let(:tika_output) { tika_wav_output }
@@ -207,7 +207,7 @@ RSpec.describe ManifestBuilder do
           FactoryBot.create_for_repository(:playlist, member_ids: [proxy1.id, proxy2.id])
         end
 
-        it "generates the Canvases for the FileSets", run_real_characterization: true do
+        it "generates the Canvases for the FileSets" do
           expect(output).not_to be_empty
 
           expect(output).to include("items")
@@ -234,6 +234,29 @@ RSpec.describe ManifestBuilder do
           last_annotation = anno_page["items"].first
           expect(last_annotation).to include("body")
           expect(last_annotation["body"]).to include("format" => "audio/mp3")
+        end
+
+        context "when an authorization token is used to access the Playlist Manifest" do
+          subject(:manifest_builder) { described_class.new(persisted, persisted.auth_token) }
+
+          let(:persisted) do
+            change_set = PlaylistChangeSet.new(resource)
+            change_set.prepopulate!
+            change_set.validate(state: ["complete"])
+            change_set_persister.save(change_set: change_set)
+          end
+
+          it "generates links with the auth. token" do
+            expect(output).not_to be_empty
+            expect(output).to include("items")
+            expect(output["items"].length).to eq(2)
+
+            first_canvas = output["items"].first
+            first_annotation_page = first_canvas["items"].first
+            first_annotation = first_annotation_page["items"].first
+            file_node1 = file_set1.file_metadata.select(&:derivative?).first
+            expect(first_annotation["body"]).to include("id" => "http://www.example.com/downloads/#{file_set1.id}/file/#{file_node1.id}?auth_token=#{persisted.auth_token}")
+          end
         end
       end
     end
