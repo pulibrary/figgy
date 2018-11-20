@@ -5,7 +5,7 @@
       <input-text v-on:input="updateSingle()" v-model="singleForm.caption" id="itemLabel" label="Label" placeholder="e.g., example.tif" />
 
       <input-select v-if="!isMultiVolume" v-on:change="updateViewHint($event)"
-        label="Page Type" id="pageType"
+        label="Page Type" id="pageType" value="single"
         :options="viewHintOpts"></input-select>
 
       <input-checkbox
@@ -130,9 +130,10 @@ export default {
       this.$store.commit("UPDATE_THUMBNAIL", thumbnail)
     },
     updateViewHint(event) {
+      console.log(event)
       let viewHint = this.gallery.selected[0].viewingHint
-      if (event.target.value) {
-        viewHint = event.target.value
+      if (event) {
+        viewHint = event
       }
       this.singleForm.viewingHint = viewHint
       this.updateSingle()
