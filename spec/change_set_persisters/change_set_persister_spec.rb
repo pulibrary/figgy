@@ -129,6 +129,38 @@ RSpec.describe ChangeSetPersister do
     end
   end
 
+  context "when a client requests that an auth. token be renewed" do
+    let(:resource) { FactoryBot.create(:playlist) }
+    let(:change_set_class) { PlaylistChangeSet }
+    let(:change_set) { change_set_class.new(resource) }
+    let(:persisted) do
+      change_set.prepopulate!
+      change_set.validate(state: "complete")
+      change_set_persister.save(change_set: change_set)
+    end
+
+    before do
+      persisted
+    end
+
+    it "replaces an existing auth. token" do
+      token = persisted.auth_token
+      auth_token = AuthToken.find_by(token: token)
+      expect(auth_token).not_to be nil
+
+      cs = PlaylistChangeSet.new(persisted)
+      cs.prepopulate!
+      cs.validate(mint_auth_token: true)
+
+      updated = change_set_persister.save(change_set: cs)
+
+      expect(updated.auth_token).not_to be nil
+      expect(updated.auth_token).not_to eq token
+
+      expect(AuthToken.find_by(token: token)).to be nil
+    end
+  end
+
   context "when a playlist is taken down" do
     before do
       stub_bibdata(bib_id: "123456")

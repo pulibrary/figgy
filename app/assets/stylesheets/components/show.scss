@@ -10,12 +10,41 @@
 ul.tabular {
   list-style: none;
 }
-.attribute.visibility {
-  padding-left: 0;
+
+.attribute {
+  .visibility {
+    padding-left: 0;
+  }
+
+  .description {
+    white-space: pre-wrap;
+  }
 }
 
-.attribute.description {
-  white-space: pre-wrap;
+.auth-link {
+  form {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    text-align: center;
+      @media (min-width: $bp-small) {
+        padding-top: inherit;
+	padding-bottom: inherit;
+      }
+
+      .submit {
+        @media (min-width: $bp-medium) {
+        float: right;
+      }
+    }
+  }
+
+  .summary {
+    float: right;
+    p {
+      color: #888888;
+      font-style: italic;
+    }
+  }
 }
 
 table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after,
