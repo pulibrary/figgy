@@ -64,4 +64,10 @@ RSpec.describe PlaylistDecorator do
       expect(decorator.authorized_link).to eq decorator.auth_token
     end
   end
+
+  describe "#displayed_attributes" do
+    it "renders only the title, visibility, and authorized link" do
+      expect(decorator.displayed_attributes).to eq([:internal_resource, :created_at, :updated_at, :title, :visibility, :authorized_link])
+    end
+  end
 end
