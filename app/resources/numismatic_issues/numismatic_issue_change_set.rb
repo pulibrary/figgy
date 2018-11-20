@@ -47,7 +47,6 @@ class NumismaticIssueChangeSet < ChangeSet
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :numismatic_citation_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
-  property :numismatic_monogram_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :pending_uploads, multiple: true, required: false
 
   property :start_canvas, required: false
@@ -117,8 +116,7 @@ class NumismaticIssueChangeSet < ChangeSet
       "Artists and Subjects" => [
         :artist,
         :subject,
-        :description,
-        :numismatic_monogram_ids
+        :description
       ]
     }
   end
