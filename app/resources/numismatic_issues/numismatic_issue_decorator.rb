@@ -37,7 +37,6 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
           :subject,
           :workshop,
           :visibility,
-          :numismatic_monograms,
           :member_of_collections,
           :rendered_rights_statement
 
@@ -49,7 +48,7 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
                          :rendered_rights_statement,
                          :thumbnail_id
 
-  delegate :members, :decorated_file_sets, :decorated_coins, :coin_count, :decorated_numismatic_citations, :decorated_numismatic_monograms, to: :wayfinder
+  delegate :members, :decorated_file_sets, :decorated_coins, :coin_count, :decorated_numismatic_citations, to: :wayfinder
 
   def attachable_objects
     [Coin]
@@ -57,10 +56,6 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
 
   def citations
     decorated_numismatic_citations.map(&:title)
-  end
-
-  def monograms
-    decorated_numismatic_monograms.map(&:title)
   end
 
   # Whether this box has a workflow state that grants access to its contents

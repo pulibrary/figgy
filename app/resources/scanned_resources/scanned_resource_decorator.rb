@@ -14,11 +14,16 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
                          :thumbnail_id
 
   delegate(*Schema::Common.attributes, to: :primary_imported_metadata, prefix: :imported)
-  delegate :members, :collections, :playlists, :decorated_file_sets, to: :wayfinder
+  delegate :members, :collections, :playlists, to: :wayfinder
 
   # TODO: Rename this to decorated_scanned_resources
   def volumes
     wayfinder.decorated_scanned_resources
+  end
+
+  # TODO: Rename this to decorated_file_sets
+  def file_sets
+    wayfinder.decorated_file_sets
   end
 
   # TODO: Remove this. Parents should be parent resources.
