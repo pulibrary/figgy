@@ -95,7 +95,7 @@ class BaseResourceController < ApplicationController
     if !resource.persisted?
       params[:parent_id]
     else
-      resource.decorate.respond_to?(:decorated_parent_resource) && !resource.decorate.decorated_parent_resource.nil?
+      resource.decorate.respond_to?(:decorated_parent) && !resource.decorate.decorated_parent.nil?
     end
   end
 

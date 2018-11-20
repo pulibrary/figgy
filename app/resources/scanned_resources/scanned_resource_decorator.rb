@@ -31,9 +31,8 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
     collections
   end
 
-  # TODO: Rename this to decorated_parent
-  def decorated_parent_resource
-    @decorated_parent_resource ||= wayfinder.decorated_parent
+  def decorated_parent
+    @decorated_parent ||= wayfinder.decorated_parent
   end
 
   def rendered_rights_statement
