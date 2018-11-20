@@ -136,6 +136,8 @@ Rails.application.routes.draw do
         get :order_manager
         get :manifest, defaults: { format: :json }
         post :browse_everything_files
+        get :discover_files
+        post :auto_ingest
       end
     end
     get "/numismatic_issues/:parent_id/coin" => "coins#new", as: :parent_new_coin

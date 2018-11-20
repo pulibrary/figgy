@@ -82,4 +82,45 @@ RSpec.describe CoinsController, type: :controller do
       expect(manifest_response[:viewingHint]).to eq "individuals"
     end
   end
+  describe "auto ingest" do
+    let(:user) { FactoryBot.create(:admin) }
+    let(:coin) { FactoryBot.create_for_repository(:complete_open_coin, coin_number: coin_number) }
+    let(:staged_files) { Rails.root.join("spec", "fixtures", "staged_files") }
+    before do
+      allow(BrowseEverything).to receive(:config).and_return(file_system: { home: staged_files.to_s })
+      allow(IngestFolderJob).to receive(:perform_later)
+    end
+
+    context "when a folder exists" do
+      let(:coin_number) { 1234 }
+      let(:ingest_dir) { staged_files.join("numismatics", "1234") }
+      let(:args) { { directory: ingest_dir.to_s, property: "id", id: coin.id.to_s } }
+
+      it "returns JSON for whether a directory exists" do
+        get :discover_files, params: { format: :json, id: coin.id }
+
+        output = JSON.parse(response.body, symbolize_keys: true)
+
+        expect(output["exists"]).to eq true
+        expect(output["location"]).to eq "1234"
+        expect(output["file_count"]).to eq 2
+      end
+      it "spawns a background job to ingest the files" do
+        post :auto_ingest, params: { id: coin.id }
+        expect(IngestFolderJob).to have_received(:perform_later).with(args)
+      end
+    end
+    context "when a folder doesn't exist" do
+      let(:coin_number) { 6789 }
+      it "returns JSON appropriately" do
+        get :discover_files, params: { format: :json, id: coin.id }
+
+        output = JSON.parse(response.body, symbolize_keys: true)
+
+        expect(output["exists"]).to eq false
+        expect(output["location"]).to be_nil
+        expect(output["file_count"]).to be_nil
+      end
+    end
+  end
 end

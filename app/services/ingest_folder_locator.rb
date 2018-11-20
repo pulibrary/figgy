@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 # Class for locating folders using for file ingestion
 class IngestFolderLocator
-  attr_reader :id
+  attr_reader :id, :search_directory
   # Constructor
   # @param id [String] identifier for the directory
-  def initialize(id:)
+  def initialize(id:, search_directory: nil)
     @id = id
+    @search_directory = search_directory || default_search_directory
   end
 
   # Access the upload directory path from the BrowseEverything file system provider configuration
@@ -18,7 +19,7 @@ class IngestFolderLocator
   # Generate the path to the studio directory used for ingestion
   # @return [Pathname]
   def root_path
-    Pathname.new(upload_path_value).join("studio_new")
+    Pathname.new(upload_path_value).join(search_directory)
   end
 
   # Determines whether or not the directory exists
@@ -59,11 +60,26 @@ class IngestFolderLocator
     @folder_pathname ||= Pathname.new(folder_location)
   end
 
+  # Hash representation of locator status
+  def to_h
+    {
+      exists: exists?,
+      location: location,
+      file_count: file_count,
+      volume_count: volume_count
+    }
+  end
+
   private
 
     # Construct or retrieve the memoized file system path for the directory whose name matches the ID
     # @return [String]
     def folder_location
       @folder_location ||= Dir.glob(root_path.join("**/#{id}")).first
+    end
+
+    # Default sub-directory to search if not specified
+    def default_search_directory
+      Figgy.config["default_search_directory"]
     end
 end
