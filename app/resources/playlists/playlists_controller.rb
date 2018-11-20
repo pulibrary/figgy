@@ -35,10 +35,6 @@ class PlaylistsController < BaseResourceController
   private
 
     def manifest_builder
-      if params[:auth_token]
-        ManifestBuilder.new(@resource, params[:auth_token])
-      else
-        ManifestBuilder.new(@resource)
-      end
+      ManifestBuilder.new(@resource, params[:auth_token])
     end
 end

@@ -231,9 +231,9 @@ class Ability
       proxies = find_proxy_file_sets(resource)
       return if proxies.empty?
 
-      proxy = proxies.first
-      proxy_parent = proxy.decorate.parents.first
-      token_readable?(proxy_parent)
+      proxy_parents = proxies.map { |proxy| proxy.decorate.parents.first }
+      values = proxy_parents.map { |parent| token_readable?(parent) }
+      values.reduce(:|)
     end
 
     # Overrides the default permissions for SolrDocument
