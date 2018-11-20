@@ -1,5 +1,8 @@
 <h1>File Manager</h1>
 <ul class="breadcrumb">
+  <% if decorated_change_set_resource.try(:decorated_parent).present? %>
+    <li><%= link_to decorated_change_set_resource.decorated_parent.first_title, solr_document_path(id: decorated_change_set_resource.decorated_parent.id.to_s) %></li>
+  <% end %>
   <li><%= link_to decorated_change_set_resource.first_title, solr_document_path(id: "#{@change_set.id}") %></li>
   <li class="active">File Manager</li>
 </ul>

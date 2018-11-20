@@ -109,12 +109,12 @@ RSpec.describe ScannedResourceDecorator do
     end
   end
 
-  describe "#decorated_parent_resource" do
+  describe "#decorated_parent" do
     let(:member) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [resource.id]) }
     let(:resource) { FactoryBot.create_for_repository(:scanned_resource) }
     it "retrieves the parent, decorated" do
       member
-      parent = decorator.decorated_parent_resource
+      parent = decorator.decorated_parent
       expect(parent.id).to eq member.id
       expect(parent.class).to eq described_class
     end
