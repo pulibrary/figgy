@@ -124,6 +124,11 @@ module ApplicationHelper
     elsif attribute == :authorized_link
       # Build the authorized link attribute
       link_to(request.base_url + solr_document_path(id: resource.id, auth_token: value), solr_document_path(id: resource.id, auth_token: value))
+    elsif attribute == :numismatic_monogram_ids
+      return if value.try(:id).to_s.blank?
+      monogram = @document.decorated_resource.try(:decorated_numismatic_monograms).select { |m| m.id.to_s == value.id.to_s }
+      link_to(monogram.title, solr_document_path(id: monogram.id)) if monogram
+      end
     elsif attribute == :accession_number && @document.decorated_resource.is_a?(CoinDecorator) && @document.decorated_resource.accession
       link_to(@document.decorated_resource.accession_label, solr_document_path(id: @document.decorated_resource.accession_id))
     else

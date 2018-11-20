@@ -1,0 +1,22 @@
+# frozen_string_literal: true
+class NumismaticMonogramDecorator < Valkyrie::ResourceDecorator
+  display :title
+
+  delegate :decorated_file_sets, to: :wayfinder
+
+  def manageable_files?
+    true
+  end
+
+  def orderable_files?
+    false
+  end
+
+  def manageable_structure?
+    false
+  end
+
+  def title
+    Array.wrap(super).first
+  end
+end

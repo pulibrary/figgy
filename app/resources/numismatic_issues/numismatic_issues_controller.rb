@@ -7,6 +7,12 @@ class NumismaticIssuesController < BaseResourceController
     storage_adapter: Valkyrie.config.storage_adapter
   )
 
+  before_action :load_monograms, only: [:new, :edit]
+
+  def load_monograms
+    @numismatic_monograms = query_service.find_all_of_model(model: NumismaticMonogram).map(&:decorate)
+  end
+
   def manifest
     authorize! :manifest, resource
     respond_to do |f|
@@ -15,4 +21,5 @@ class NumismaticIssuesController < BaseResourceController
       end
     end
   end
+
 end

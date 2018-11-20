@@ -60,6 +60,8 @@ en:
           label: "Collections"
         md5:
           label: "MD5"
+        numismatic_monogram_ids:
+          label: "Monogram"
         sha1:
           label: "SHA-1"
         sha256:
