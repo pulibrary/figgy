@@ -512,7 +512,6 @@ RSpec.describe CatalogController do
         expect(response.body).to have_link "File Manager", href: file_manager_scanned_resource_path(resource)
         expect(response.body).to have_link "Order Manager", href: order_manager_scanned_resource_path(resource)
         expect(response.body).to have_link "Structure Manager", href: structure_scanned_resource_path(resource)
-        expect(response.body).to have_button "Attach Child"
         expect(response.body).to have_link "Attach Scanned Resource", href: parent_new_scanned_resource_path(resource)
         expect(response.body).to have_content "Review and Approval"
         expect(response.body).to have_content "Shakespeare"

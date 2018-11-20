@@ -17,22 +17,7 @@
         <%= link_to "Structure Manager", main_app.polymorphic_path([:structure, resource]), class: 'btn btn-default' %>
       <% end %>
     <% end %>
-    <% if can?(:update, resource) %>
-      <% if decorated_resource.attachable_objects.length > 0 %>
-          <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Attach Child <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-              <% decorated_resource.attachable_objects.each do |concern| %>
-                <li>
-                  <%= link_to "Attach #{concern.human_readable_type}", polymorphic_path([:parent, :new, ActiveModel::Naming.param_key(concern)], parent_id: resource.id) %>
-                </li>
-              <% end %>
-            </ul>
-          </div>
-      <% end %>
-    <% end %>
+    <%= render "attach_child_default", resource: resource %>
 
     <% if can?(:destroy, resource) %>
       <%= link_to "Delete This #{resource.human_readable_type}", main_app.polymorphic_path([resource]), class: 'btn btn-danger pull-right', data: { confirm: "Delete this #{resource.human_readable_type}?" }, method: :delete %>

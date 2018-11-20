@@ -55,7 +55,7 @@ RSpec.describe "catalog/_admin_controls_default" do
     end
 
     it "renders links for attaching child resources" do
-      expect(rendered).to have_button "Attach Child"
+      expect(rendered).to have_link "Attach Scanned Resource", href: parent_new_scanned_resource_path(scanned_resource)
     end
 
     it "renders the delete link for resources" do
