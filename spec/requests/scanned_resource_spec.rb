@@ -110,12 +110,12 @@ RSpec.describe "ScannedResource requests", type: :request do
 
         canvases = sequences.first["canvases"]
         canvas_renderings = canvases.first["rendering"]
-        file_set = scanned_resource.decorate.file_sets.first
+        file_set = scanned_resource.decorate.decorated_file_sets.first
 
         expect(canvas_renderings.first).to include("@id" => "http://www.example.com/downloads/#{file_set.id}/file/#{file_set.original_file.id}")
       end
       it "is granted access to file downloads" do
-        file_set = scanned_resource.decorate.file_sets.first
+        file_set = scanned_resource.decorate.decorated_file_sets.first
         get "/downloads/#{file_set.id}/file/#{file_set.original_file.id}?auth_token=#{auth_token}"
 
         expect(response.status).to eq 200

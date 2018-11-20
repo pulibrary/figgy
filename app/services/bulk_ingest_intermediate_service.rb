@@ -89,7 +89,7 @@ class BulkIngestIntermediateService
         tiff_index = extract_index(tiff_path)
         next if tiff_index.nil?
 
-        file_set = decorated.file_sets[tiff_index]
+        file_set = decorated.decorated_file_sets[tiff_index]
 
         if file_set.nil?
           @logger.warn "Failed to map #{tiff_path} to a FileSet for the Resource #{resource.id}"

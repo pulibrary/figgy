@@ -148,10 +148,10 @@ RSpec.describe PlaylistsController, type: :controller do
         let(:file2) { fixture_file_upload("av/la_demo_bag/data/32101047382484_1_pm.wav") }
         let(:recording) { FactoryBot.create_for_repository(:scanned_resource, files: [file1, file2]) }
         let(:file_set1) do
-          recording.decorate.file_sets.first
+          recording.decorate.decorated_file_sets.first
         end
         let(:file_set2) do
-          recording.decorate.file_sets.last
+          recording.decorate.decorated_file_sets.last
         end
         let(:proxy1) do
           res = ProxyFileSet.new(proxied_file_id: file_set1.id)

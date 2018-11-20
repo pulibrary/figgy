@@ -37,7 +37,7 @@ RSpec.describe BulkIngestIntermediateService do
   context "when a resource exists" do
     let(:master_file) { fixture_file_upload("files/example.tif", "image/tiff") }
     let(:resource) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: bib_id, files: [master_file]) }
-    let(:file_set) { resource.decorate.file_sets.first }
+    let(:file_set) { resource.decorate.decorated_file_sets.first }
 
     before do
       stub_bibdata(bib_id: "123456")

@@ -1278,7 +1278,7 @@ RSpec.describe ChangeSetPersister do
     context "when persisting a Playlist with ProxyFileSet members" do
       let(:file) { fixture_file_upload("files/audio_file.wav") }
       let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
-      let(:file_set) { scanned_resource.decorate.file_sets.first }
+      let(:file_set) { scanned_resource.decorate.decorated_file_sets.first }
       let(:resource) { Playlist.new }
       let(:change_set) do
         cs = PlaylistChangeSet.new(resource)
@@ -1320,7 +1320,7 @@ RSpec.describe ChangeSetPersister do
     context "when persisting a Playlist with ProxyFileSet members" do
       let(:file) { fixture_file_upload("files/audio_file.wav") }
       let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
-      let(:file_set) { scanned_resource.decorate.file_sets.first }
+      let(:file_set) { scanned_resource.decorate.decorated_file_sets.first }
       let(:resource) { Playlist.new }
       let(:proxy_file_set) do
         proxy_file_set = ProxyFileSet.new

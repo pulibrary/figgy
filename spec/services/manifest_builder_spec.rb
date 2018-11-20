@@ -134,7 +134,7 @@ RSpec.describe ManifestBuilder do
       expect(canvas_rendering["label"]).to eq "Download page text"
 
       canvas_rendering = canvas_renderings.last
-      expect(canvas_rendering["@id"]).to eq "http://www.example.com/downloads/#{scanned_resource.member_ids.first}/file/#{scanned_resource.decorate.file_sets.first.original_file.id}"
+      expect(canvas_rendering["@id"]).to eq "http://www.example.com/downloads/#{scanned_resource.member_ids.first}/file/#{scanned_resource.decorate.decorated_file_sets.first.original_file.id}"
       expect(canvas_rendering["format"]).to eq "image/tiff"
       expect(canvas_rendering["label"]).to eq "Download the original file"
 
@@ -186,10 +186,10 @@ RSpec.describe ManifestBuilder do
         let(:file2) { fixture_file_upload("av/la_demo_bag/data/32101047382484_1_pm.wav") }
         let(:recording) { FactoryBot.create_for_repository(:recording, files: [file1, file2]) }
         let(:file_set1) do
-          recording.decorate.file_sets.first
+          recording.decorate.decorated_file_sets.first
         end
         let(:file_set2) do
-          recording.decorate.file_sets.last
+          recording.decorate.decorated_file_sets.last
         end
         let(:proxy1) do
           res = ProxyFileSet.new(proxied_file_id: file_set1.id, label: "Proxy Title")

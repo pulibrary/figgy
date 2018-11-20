@@ -23,6 +23,7 @@ class Wayfinder < BaseWayfinder
     NumismaticAccession => NumismaticAccessionWayfinder,
     NumismaticCitation => NumismaticCitationWayfinder,
     NumismaticIssue => NumismaticIssueWayfinder,
+    NumismaticMonogram => NumismaticMonogramWayfinder,
     NumismaticReference => NumismaticReferenceWayfinder,
     RasterResource => RasterResourceWayfinder,
     ScannedMap => ScannedMapWayfinder,
