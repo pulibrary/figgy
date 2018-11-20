@@ -8,7 +8,6 @@ class NumismaticIssueChangeSet < ChangeSet
   property :color, multiple: false, required: false
   property :date_range, multiple: false, required: false
   property :denomination, multiple: false, required: false
-  property :department, multiple: false, required: false
   property :description, multiple: false, required: false
   property :edge, multiple: false, required: false
   property :era, multiple: false, required: false
@@ -72,7 +71,6 @@ class NumismaticIssueChangeSet < ChangeSet
   def primary_terms
     {
       "" => [
-        :department,
         :object_type,
         :denomination,
         :metal,

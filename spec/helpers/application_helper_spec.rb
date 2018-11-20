@@ -50,5 +50,21 @@ RSpec.describe ApplicationHelper, type: :helper do
         expect(value).to eq "<a href=\"/catalog/#{resource.id}?auth_token=#{resource.auth_token}\">http://test.host/catalog/#{resource.id}?auth_token=#{resource.auth_token}</a>"
       end
     end
+
+    context "with an accession number" do
+      let(:accession) { FactoryBot.create_for_repository(:numismatic_accession, accession_number: 123) }
+      let(:coin) { FactoryBot.create_for_repository(:coin, accession_number: accession.accession_number) }
+      let(:doc) { instance_double("SolrDocument") }
+
+      before do
+        allow(doc).to receive(:decorated_resource).and_return(coin.decorate)
+        assign(:document, doc)
+      end
+
+      it "returns a link to the accession" do
+        value = helper.resource_attribute_value(:accession_number, accession.accession_number)
+        expect(value).to include("href", accession.decorate.label)
+      end
+    end
   end
 end

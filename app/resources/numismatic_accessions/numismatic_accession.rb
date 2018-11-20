@@ -5,7 +5,7 @@ class NumismaticAccession < Resource
   attribute :date
   attribute :person
   attribute :firm
-  attribute :accession_number, Valkyrie::Types::Anything
+  attribute :accession_number, Valkyrie::Types::Int
   attribute :type
   attribute :cost
   attribute :account

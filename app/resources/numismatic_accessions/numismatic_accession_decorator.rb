@@ -41,4 +41,18 @@ class NumismaticAccessionDecorator < Valkyrie::ResourceDecorator
   def manageable_structure?
     false
   end
+
+  def label
+    "#{accession_number}: #{date} #{type} #{from_label} #{cost_label}"
+  end
+
+  def from_label
+    divider = "/" if person && firm
+    "#{person}#{divider}#{firm}"
+  end
+
+  def cost_label
+    "" unless cost
+    "(#{cost})"
+  end
 end

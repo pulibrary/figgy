@@ -11,4 +11,10 @@ RSpec.describe NumismaticAccessionDecorator do
       expect(decorator.manageable_structure?).to be false
     end
   end
+
+  describe "#label" do
+    it "generates a label" do
+      expect(decorator.label).to eq("1: 01/01/2001 gift Alice ($99.00)")
+    end
+  end
 end
