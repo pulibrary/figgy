@@ -28,29 +28,6 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
     end
 
-    context "with an authorized_link attribute" do
-      let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
-      let(:storage_adapter) { Valkyrie.config.storage_adapter }
-      let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter) }
-      let(:resource) do
-        res = Playlist.new
-        cs = PlaylistChangeSet.new(res)
-        cs.prepopulate!
-        cs.validate(label: ["my playlist"], state: "complete")
-        change_set_persister.save(change_set: cs)
-      end
-      let(:decorated) { resource.decorate }
-      let(:value) { helper.resource_attribute_value(:authorized_link, decorated.authorized_link) }
-
-      before do
-        allow(helper).to receive(:resource).and_return(resource)
-      end
-
-      it "generates a link with an authorization token to the Resource" do
-        expect(value).to eq "<a href=\"/catalog/#{resource.id}?auth_token=#{resource.auth_token}\">http://test.host/catalog/#{resource.id}?auth_token=#{resource.auth_token}</a>"
-      end
-    end
-
     context "with an accession number" do
       let(:accession) { FactoryBot.create_for_repository(:numismatic_accession, accession_number: 123) }
       let(:coin) { FactoryBot.create_for_repository(:coin, accession_number: accession.accession_number) }
