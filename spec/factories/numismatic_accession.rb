@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :numismatic_accession do
-    number 5277
+    number_in_accession 5277
     accession_number 1
     date "01/01/2001"
     items_number 102

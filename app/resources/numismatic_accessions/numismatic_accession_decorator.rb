@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class NumismaticAccessionDecorator < Valkyrie::ResourceDecorator
   display :accession_number,
-          :number,
+          :number_in_accession,
           :date,
           :items_number,
           :type,
