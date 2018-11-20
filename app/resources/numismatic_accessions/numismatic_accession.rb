@@ -2,13 +2,13 @@
 class NumismaticAccession < Resource
   include Valkyrie::Resource::AccessControls
 
-  attribute :date
-  attribute :person
-  attribute :firm
   attribute :accession_number, Valkyrie::Types::Int
+  attribute :date
   attribute :type
   attribute :cost
   attribute :account
+  attribute :person
+  attribute :firm
   attribute :note
   attribute :private_note
   attribute :thumbnail_id
