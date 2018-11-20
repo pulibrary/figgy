@@ -1,7 +1,7 @@
 <template>
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h2 class="panel-title">Recordings</h2>
+    <h2 class="panel-title">Tracks</h2>
   </div>
   <div class="row panel-body">
     <form v-on:submit.prevent="submit">
