@@ -29,5 +29,10 @@ RSpec.describe FileSetDecorator do
       expect(decorator.parent).to be_a parent.class
       expect(decorator.parent.id).to eq parent.id
     end
+    context "when a parent resource cannot be resolved" do
+      it "provides nil" do
+        expect(decorator.parent).to be nil
+      end
+    end
   end
 end
