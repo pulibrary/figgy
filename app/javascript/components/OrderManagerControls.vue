@@ -157,6 +157,7 @@ export default {
         resource.filesets.push(membersBody[i])
       }
       window.resource = resource
+      console.log('saveStateGql Called!')
       this.$store.dispatch("saveStateGql", resource)
     },
     saveMVW: function() {
@@ -170,7 +171,7 @@ export default {
         thumbnail_id: this.thumbnail,
         id: this.id,
       }
-      this.$store.dispatch("saveState", body)
+      this.$store.dispatch("saveStateGql", body)
     },
   },
   updated: function() {

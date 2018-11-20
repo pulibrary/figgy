@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OrderManagerControls.vue has the expected html structure 1`] = `
+<wrapper-stub
+  class="lux-bg"
+>
+  <div
+    class="lux-controls"
+  >
+    <!---->
+     
+    <input-button-stub
+      disabled="true"
+      id="save_btn"
+      size="medium"
+      variation="solid"
+    >
+      
+      Apply Changes
+    
+    </input-button-stub>
+     
+    <!---->
+  </div>
+   
+  <heading-stub
+    level="h2"
+  >
+    Zoom 
+    <small>
+      on the selected item
+    </small>
+  </heading-stub>
+   
+  <div
+    class="lux-osd-wrapper"
+  >
+    <div
+      class="lux-osd"
+    >
+      <div
+        class="lux-viewport"
+        id="viewer"
+      />
+    </div>
+  </div>
+</wrapper-stub>
+`;
