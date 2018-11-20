@@ -3,7 +3,9 @@ class NumismaticAccessionChangeSet < Valkyrie::ChangeSet
   delegate :human_readable_type, to: :model
 
   property :accession_number, multiple: false, required: false
+  property :number, multiple: false, required: false
   property :date, multiple: false, required: false
+  property :items_number, multiple: false, required: false
   property :type, multiple: false, required: false
   property :cost, multiple: false, required: false
   property :account, multiple: false, required: false
@@ -16,7 +18,9 @@ class NumismaticAccessionChangeSet < Valkyrie::ChangeSet
 
   def primary_terms
     [
+      :number,
       :date,
+      :items_number,
       :type,
       :cost,
       :account,

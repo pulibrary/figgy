@@ -3,7 +3,9 @@ class NumismaticAccession < Resource
   include Valkyrie::Resource::AccessControls
 
   attribute :accession_number, Valkyrie::Types::Int
+  attribute :number
   attribute :date
+  attribute :items_number
   attribute :type
   attribute :cost
   attribute :account
