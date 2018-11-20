@@ -48,7 +48,7 @@ RSpec.describe NumismaticCitationsController, type: :controller do
       let(:user) { FactoryBot.create(:admin) }
       let(:issue) { FactoryBot.create_for_repository(:numismatic_issue) }
 
-      it "adds the id to the coin's citation ids and redirects to parent coin" do
+      it "adds the id to the issue's citation ids and redirects to parent issue" do
         post :create, params: { numismatic_citation: valid_params.merge(citation_parent_id: issue.id) }
 
         updated = Valkyrie.config.metadata_adapter.query_service.find_by(id: issue.id)

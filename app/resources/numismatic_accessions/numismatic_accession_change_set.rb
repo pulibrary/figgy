@@ -11,6 +11,7 @@ class NumismaticAccessionChangeSet < Valkyrie::ChangeSet
   property :account, multiple: false, required: false
   property :note, multiple: false, required: false
   property :private_note, multiple: false, required: false
+  property :numismatic_citation_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
 
   validates_with AutoIncrementValidator, property: :accession_number
 

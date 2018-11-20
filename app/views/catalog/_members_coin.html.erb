@@ -26,5 +26,5 @@
   </table>
 
   <% if can?(:create, NumismaticCitation) %>
-    <%= link_to 'Add Citation', coin_add_numismatic_citation_path(resource, parent_id: resource.id), class: 'btn btn-primary' %>
+    <%= link_to 'Add Citation', parent_add_numismatic_citation_path(resource, parent_id: resource.id), class: 'btn btn-primary' %>
   <% end %>
