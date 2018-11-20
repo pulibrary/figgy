@@ -27,6 +27,7 @@ class PlaylistDecorator < Valkyrie::ResourceDecorator
   # Provide the authorization token to build the authorized link at the Controller layer
   # @return [String]
   def authorized_link
-    auth_token
+    viewer_url = "#{h.root_url}viewer#?manifest=#{h.polymorphic_url([:manifest, object], auth_token: auth_token)}"
+    h.link_to viewer_url, viewer_url
   end
 end

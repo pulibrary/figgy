@@ -61,7 +61,10 @@ RSpec.describe PlaylistDecorator do
       change_set_persister.save(change_set: cs)
     end
     it "accesses the authorization token" do
-      expect(decorator.authorized_link).to eq decorator.auth_token
+      url = "http://test.host/viewer#?manifest=http://test.host/concern/playlists/#{playlist.id}/manifest?auth_token=#{decorator.auth_token}"
+      expect(decorator.authorized_link).to eq(
+        %(<a href="#{url}">#{url}</a>)
+      )
     end
   end
 
