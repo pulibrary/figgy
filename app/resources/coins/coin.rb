@@ -20,7 +20,6 @@ class Coin < Resource
   attribute :find_locus
   attribute :find_description
   attribute :accession_number
-  attribute :department
   attribute :provenance
   attribute :die_axis
   attribute :append_id

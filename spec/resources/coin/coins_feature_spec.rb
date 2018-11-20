@@ -60,7 +60,6 @@ RSpec.feature "Coins" do
         accession_number: 123,
         analysis: "test value",
         counter_stamp: "test value",
-        department: "test value",
         die_axis: "test value",
         find_date: "test value",
         find_description: "test value",
@@ -88,7 +87,6 @@ RSpec.feature "Coins" do
       expect(page).to have_css ".attribute.accession_number", text: 123
       expect(page).to have_css ".attribute.analysis", text: "test value"
       expect(page).to have_css ".attribute.counter_stamp", text: "test value"
-      expect(page).to have_css ".attribute.department", text: "test value"
       expect(page).to have_css ".attribute.die_axis", text: "test value"
       expect(page).to have_css ".attribute.find_date", text: "test value"
       expect(page).to have_css ".attribute.find_description", text: "test value"

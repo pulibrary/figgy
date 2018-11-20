@@ -82,7 +82,6 @@ RSpec.feature "NumismaticIssues" do
         color: "test value",
         date_range: "test value",
         denomination: "test value",
-        department: "test value",
         description: "test value",
         edge: "test value",
         era: "test value",
@@ -128,7 +127,6 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.color", text: "test value"
       expect(page).to have_css ".attribute.date_range", text: "test value"
       expect(page).to have_css ".attribute.denomination", text: "test value"
-      expect(page).to have_css ".attribute.department", text: "test value"
       expect(page).to have_css ".attribute.description", text: "test value"
       expect(page).to have_css ".attribute.edge", text: "test value"
       expect(page).to have_css ".attribute.era", text: "test value"

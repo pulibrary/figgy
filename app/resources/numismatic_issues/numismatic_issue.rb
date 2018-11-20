@@ -13,7 +13,6 @@ class NumismaticIssue < Resource
   attribute :color
   attribute :date_range
   attribute :denomination
-  attribute :department
   attribute :description
   attribute :edge
   attribute :era
