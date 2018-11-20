@@ -1415,6 +1415,29 @@ RSpec.describe ChangeSetPersister do
     end
   end
 
+  context "when saving a playlist with duplicate file_set_ids" do
+    it "only creates non-duplicates" do
+      # Create two file sets
+      file_set1 = FactoryBot.create_for_repository(:file_set)
+      file_set2 = FactoryBot.create_for_repository(:file_set)
+      # Create a Playlist with a pre-existing Proxy pointing to file_set1.
+      proxy = FactoryBot.create_for_repository(:proxy_file_set, proxied_file_id: file_set1.id)
+      playlist = FactoryBot.create_for_repository(:playlist, member_ids: proxy.id)
+
+      # Attempt to create new proxies for both file_set1 and file_set2 using
+      # `file_set_ids` on the ChangeSet. file_set1 is already attached through
+      # `proxy`.
+      change_set = DynamicChangeSet.new(playlist)
+      change_set.prepopulate!
+      change_set.validate(title: "Test Title", file_set_ids: [file_set1.id.to_s, file_set2.id.to_s])
+      output = change_set_persister.save(change_set: change_set)
+      members = query_service.find_members(resource: output)
+
+      expect(members.length).to eq 2
+      expect(members.map(&:proxied_file_id)).to eq [file_set1.id, file_set2.id]
+    end
+  end
+
   describe "appending citation" do
     let(:change_set_class) { NumismaticCitationChangeSet }
 
