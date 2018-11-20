@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class NumismaticAccession < Resource
   include Valkyrie::Resource::AccessControls
-  attribute :member_ids, Valkyrie::Types::Array
 
   attribute :date
   attribute :person
