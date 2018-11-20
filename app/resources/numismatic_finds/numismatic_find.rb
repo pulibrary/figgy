@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 class NumismaticFind < Resource
   include Valkyrie::Resource::AccessControls
-  attribute :member_ids, Valkyrie::Types::Array
 
   attribute :place
   attribute :date
-  attribute :find_number, Valkyrie::Types::Anything
+  attribute :find_number, Valkyrie::Types::Int
   attribute :feature
   attribute :locus
   attribute :description

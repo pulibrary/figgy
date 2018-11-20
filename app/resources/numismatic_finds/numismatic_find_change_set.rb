@@ -15,7 +15,6 @@ class NumismaticFindChangeSet < Valkyrie::ChangeSet
     [
       :place,
       :date,
-      :find_number,
       :feature,
       :locus,
       :description

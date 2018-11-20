@@ -7,7 +7,8 @@ RSpec.describe NumismaticFindChangeSet do
 
   describe "#primary_terms" do
     it "includes displayed fields" do
-      expect(change_set.primary_terms).to include(:date, :place, :feature, :find_number, :description)
+      expect(change_set.primary_terms).to include(:date, :place, :feature, :description)
+      expect(change_set.primary_terms).not_to include(:find_number)
     end
   end
 end
