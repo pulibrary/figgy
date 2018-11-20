@@ -3,7 +3,6 @@ class NumismaticAccession < Resource
   include Valkyrie::Resource::AccessControls
 
   attribute :accession_number, Valkyrie::Types::Int
-  attribute :number_in_accession, Valkyrie::Types::Int
   attribute :date
   attribute :items_number, Valkyrie::Types::Int
   attribute :type
