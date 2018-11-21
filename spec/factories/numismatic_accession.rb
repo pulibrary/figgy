@@ -3,6 +3,7 @@ FactoryBot.define do
   factory :numismatic_accession do
     accession_number 1
     date "01/01/2001"
+    items_number 102
     type "gift"
     person "Alice"
     cost "$99.00"

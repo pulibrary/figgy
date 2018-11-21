@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 class NumismaticAccessionDecorator < Valkyrie::ResourceDecorator
-  display :date,
-          :person,
-          :firm,
-          :accession_number,
+  display :accession_number,
+          :date,
+          :items_number,
           :type,
           :cost,
           :account,
+          :person,
+          :firm,
           :note,
           :private_note
 
