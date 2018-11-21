@@ -5,14 +5,16 @@
       <input-text v-on:input="updateSingle()" v-model="singleForm.caption" id="itemLabel" label="Label" placeholder="e.g., example.tif" />
 
       <input-select v-if="!isMultiVolume" v-on:change="updateViewHint($event)"
-        label="Page Type" id="pageType" value="single"
+        label="Page Type" id="pageType" :value="singleForm.viewingHint"
         :options="viewHintOpts"></input-select>
 
       <input-checkbox
+          id="startCanvasCheckbox"
           v-if="!isMultiVolume"
           v-on:change="updateStartCanvas($event)"
           :options="startCanvasOpts" />
       <input-checkbox
+          id="thumbnailCheckbox"
           v-on:change="updateThumbnail($event)"
           :options="thumbnailOpts" />
     </form>
@@ -120,17 +122,16 @@ export default {
       if (checked) {
         startCanvas = this.gallery.selected[0].id
       }
-      this.$store.commit("UPDATE_STARTCANVAS", startCanvas)
+      this.$store.dispatch("updateStartCanvas", startCanvas)
     },
     updateThumbnail(checked) {
       let thumbnail = null
       if (checked) {
         thumbnail = this.gallery.selected[0].id
       }
-      this.$store.commit("UPDATE_THUMBNAIL", thumbnail)
+      this.$store.dispatch("updateThumbnail", thumbnail)
     },
     updateViewHint(event) {
-      console.log(event)
       let viewHint = this.gallery.selected[0].viewingHint
       if (event) {
         viewHint = event
@@ -152,8 +153,8 @@ export default {
         changeList.push(this.gallery.selected[0].id)
       }
 
-      this.$store.commit("UPDATE_CHANGES", changeList)
-      this.$store.commit("UPDATE_ITEMS", items)
+      this.$store.dispatch("updateChanges", changeList)
+      this.$store.dispatch("updateItems", items)
     },
   },
 }

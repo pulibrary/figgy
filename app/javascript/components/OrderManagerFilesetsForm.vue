@@ -123,8 +123,9 @@ export default {
           changeList.push(this.gallery.selected[i].id)
         }
       }
-      this.$store.commit("UPDATE_CHANGES", changeList)
-      this.$store.commit("UPDATE_ITEMS", items)
+
+      this.$store.dispatch("updateChanges", changeList)
+      this.$store.dispatch("updateItems", items)
     },
   },
 }

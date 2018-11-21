@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     cutSelected: function() {
-      this.$store.commit("CUT", this.gallery.selected)
+      this.$store.dispatch("cut", this.gallery.selected)
       this.selectNone()
     },
     getItemIndexById: function(id) {
@@ -78,12 +78,12 @@ export default {
       let pasteAfterIndex =
         this.getItemIndexById(this.gallery.selected[this.gallery.selected.length - 1].id) + indexModifier
       items.splice(pasteAfterIndex, 0, ...this.gallery.cut)
-      this.$store.commit("PASTE", items)
+      this.$store.dispatch("paste", items)
       this.resetCut()
       this.selectNone()
     },
     resetCut: function() {
-      this.$store.commit("CUT", [])
+      this.$store.dispatch("cut", [])
     },
     resizeCards: function(event) {
       this.$emit("cards-resized", event)
@@ -114,7 +114,7 @@ export default {
       }
     },
     selectAll: function() {
-      this.$store.commit("SELECT", this.gallery.items)
+      this.$store.dispatch("select", this.gallery.items)
     },
     selectAlternate: function() {
       let selected = []
@@ -122,7 +122,7 @@ export default {
       for (let i = 0; i < itemTotal; i = i + 2) {
         selected.push(this.gallery.items[i])
       }
-      this.$store.commit("SELECT", selected)
+      this.$store.dispatch("select", selected)
     },
     selectInverse: function() {
       let selected = []
@@ -130,10 +130,10 @@ export default {
       for (let i = 1; i < itemTotal; i = i + 2) {
         selected.push(this.gallery.items[i])
       }
-      this.$store.commit("SELECT", selected)
+      this.$store.dispatch("select", selected)
     },
     selectNone: function() {
-      this.$store.commit("SELECT", [])
+      this.$store.dispatch("select", [])
     },
   },
 }

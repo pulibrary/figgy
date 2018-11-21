@@ -147,11 +147,23 @@ describe("OrderManagerControls.vue", () => {
   })
 
   it('shows the openseadragon div when a single fileset is selected', () => {
-    expect(wrapper.find('.lux-osd').exists()).toBeTruthy()
+    expect(wrapper.find('heading-stub').exists()).toBe(true)
+    expect(wrapper.find('.lux-osd-wrapper').exists()).toBe(true)
   })
 
-  // make sure saveState button can be tested
-  it('allows save once something has changed', () => {
+  it('displays the Manage Page Files button when one item is selected', () => {
+    expect(wrapper.vm.hidden()).toBe(false)
+  })
+
+  it('isMultiVolume is false when it is not multi-volume', () => {
+    expect(wrapper.vm.isMultiVolume).toBe(false)
+  })
+
+  it('maps gallery items to resource, to prepare data for save', () => {
+    expect(wrapper.vm.galleryToResource(items)).toEqual(["a", "b", "c"])
+  })
+
+  it('tests a number of scenarios once something has changed', () => {
     actions = {
       loadImageCollectionGql: jest.fn(),
       saveStateGql: jest.fn()
@@ -162,9 +174,15 @@ describe("OrderManagerControls.vue", () => {
       stateChanged: () => true
     }
 
+    let changedItems = [
+      { id: "c", title: "C", caption: "c", mediaUrl: "https://picsum.photos/600/300/?random" },
+      { id: "a", title: "A", caption: "a", mediaUrl: "https://picsum.photos/600/300/?random" },
+      { id: "b", title: "B", caption: "b", mediaUrl: "https://picsum.photos/600/300/?random" },
+    ]
+
     const changedGallery = {
       state: {
-        items: items,
+        items: changedItems,
         selected: [items[0]],
         cut: [],
         changeList: [],
@@ -229,6 +247,102 @@ describe("OrderManagerControls.vue", () => {
       stubs: ["alert", "heading", "input-button", "wrapper"],
     })
 
+    // orderChanged should be true when items and ogItems don't match
+    expect(wrapper.vm.orderChanged).toBe(true)
+
+    // displays an alert when page order has changed
+    expect(wrapper.find('alert-stub').exists()).toBe(true)
+
+    // calls the appropriate action on save
+    wrapper.vm.saveHandler()
+    expect(actions.saveStateGql).toHaveBeenCalled()
+  })
+
+  it('assures saveStateGql is called for MVWs', () => {
+    actions = {
+      loadImageCollectionGql: jest.fn(),
+      saveStateGql: jest.fn()
+    }
+
+    const changedGetters = {
+      orderChanged: () => true,
+      stateChanged: () => true
+    }
+
+    let changedItems = [
+      { id: "c", title: "C", caption: "c", mediaUrl: "https://picsum.photos/600/300/?random" },
+      { id: "a", title: "A", caption: "a", mediaUrl: "https://picsum.photos/600/300/?random" },
+      { id: "b", title: "B", caption: "b", mediaUrl: "https://picsum.photos/600/300/?random" },
+    ]
+
+    const changedGallery = {
+      state: {
+        items: changedItems,
+        selected: [items[0]],
+        cut: [],
+        changeList: [],
+        // changeList: ["2"],
+        ogItems: items,
+      },
+      mutations: modules.galleryModule.mutations,
+    }
+
+    const changedResource = {
+      state: {
+        resource: {
+          id: "",
+          resourceClassName: "",
+          bibId: "",
+          label: "Resource not available.",
+          thumbnail: "",
+          startCanvas: "",
+          isMultiVolume: true,
+          viewingHint: null,
+          viewingDirection: null,
+          members: [],
+          loadState: "NOT_LOADED",
+          saveState: "NOT_SAVED",
+          ogState: {},
+        },
+      },
+      mutations: resourceMutations,
+      getters: changedGetters,
+      actions: actions,
+      modules: {
+        gallery: changedGallery,
+      },
+    }
+
+    store = new Vuex.Store({
+      modules: {
+        ordermanager: changedResource,
+        gallery: changedGallery,
+      },
+    })
+
+    options = {
+      computed: {
+        orderChanged: function () {
+          return getters.orderChanged
+        },
+        isDisabled: function () {
+          if (getters.stateChanged) {
+            return false
+          } else {
+            return true
+          }
+        }
+      }
+    }
+
+    wrapper = mount(OrderManagerControls, {
+      options,
+      localVue,
+      store,
+      stubs: ["alert", "heading", "input-button", "wrapper"],
+    })
+
+    // calls the appropriate action on save
     wrapper.vm.saveHandler()
     expect(actions.saveStateGql).toHaveBeenCalled()
   })

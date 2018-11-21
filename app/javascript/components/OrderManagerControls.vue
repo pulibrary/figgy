@@ -157,7 +157,6 @@ export default {
         resource.filesets.push(membersBody[i])
       }
       window.resource = resource
-      console.log('saveStateGql Called!')
       this.$store.dispatch("saveStateGql", resource)
     },
     saveMVW: function() {

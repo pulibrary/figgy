@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OrderManagerFilesetForm.vue has the expected html structure 1`] = `
+<div>
+  <heading-stub
+    level="h2"
+  >
+    Edit 
+    <small>
+      the selected item
+    </small>
+  </heading-stub>
+   
+  <form
+    id="app"
+    novalidate="novalidate"
+  >
+    <input-text-stub
+      id="itemLabel"
+      label="Label"
+      placeholder="e.g., example.tif"
+    />
+     
+    <input-select-stub
+      id="pageType"
+      label="Page Type"
+      options="[object Object],[object Object],[object Object]"
+      value="single"
+    />
+     
+    <input-checkbox-stub
+      id="startCanvasCheckbox"
+      options="[object Object]"
+    />
+     
+    <input-checkbox-stub
+      id="thumbnailCheckbox"
+      options="[object Object]"
+    />
+  </form>
+</div>
+`;

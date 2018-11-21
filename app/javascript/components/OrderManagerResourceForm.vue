@@ -138,10 +138,10 @@ export default {
       return this.resource.viewingHint === "continuous"
     },
     updateViewDir(value) {
-      this.$store.commit("UPDATE_VIEWDIR", value)
+      this.$store.dispatch("updateViewDir", value)
     },
     updateViewHint(value) {
-      this.$store.commit("UPDATE_VIEWHINT", value)
+      this.$store.dispatch("updateViewHint", value)
     },
   },
 }

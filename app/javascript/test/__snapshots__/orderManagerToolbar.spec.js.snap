@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OrderManagerToolbar.vue has the expected html structure 1`] = `
+<div
+  class="lux-toolbar"
+>
+  <dropdown-menu-stub
+    buttonlabel="Selection Options"
+    menu-items="[object Object],[object Object],[object Object],[object Object]"
+  />
+   
+  <dropdown-menu-stub
+    buttonlabel="With Selected..."
+    menu-items="[object Object],[object Object],[object Object]"
+  />
+   
+  <spacer-stub />
+   
+  <div
+    class="lux-zoom-slider"
+  >
+    <lux-icon-base-stub
+      class="lux-svg-icon"
+      height="12"
+      icon-color="rgb(0,0,0)"
+      icon-name="shrink"
+      width="12"
+    >
+      <lux-icon-picture-stub />
+    </lux-icon-base-stub>
+     
+    <label
+      for="img_zoom"
+    >
+      Image zoom
+    </label>
+     
+    <input
+      id="img_zoom"
+      max="500"
+      min="40"
+      type="range"
+      value="300"
+    />
+     
+    <lux-icon-base-stub
+      class="lux-svg-icon"
+      height="24"
+      icon-color="rgb(0,0,0)"
+      icon-name="grow"
+      width="24"
+    >
+      <lux-icon-picture-stub />
+    </lux-icon-base-stub>
+  </div>
+</div>
+`;

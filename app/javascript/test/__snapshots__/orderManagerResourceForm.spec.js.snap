@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OrderManagerResourceForm.vue has the expected html structure 1`] = `
+<div>
+  <heading-stub
+    level="h2"
+  >
+    Set Properties 
+    <small>
+      for this 
+      <!---->
+       resource
+    </small>
+  </heading-stub>
+   
+  <span
+    class="lux-file_count"
+  >
+    <text-style-stub
+      variation="emphasis"
+    >
+      Total files: 3
+    </text-style-stub>
+  </span>
+   
+  <span
+    class="lux-bibid"
+  >
+     | BibId: 4609321
+  </span>
+   
+  <form
+    id="app"
+    novalidate="novalidate"
+  >
+    <input-radio-stub
+      grouplabel="Viewing Direction"
+      id="viewDir"
+      options="[object Object],[object Object],[object Object],[object Object]"
+      vertical=""
+    />
+     
+    <input-radio-stub
+      grouplabel="Viewing Hint"
+      id="viewHint"
+      options="[object Object],[object Object],[object Object]"
+      vertical=""
+    />
+  </form>
+</div>
+`;

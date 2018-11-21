@@ -60,7 +60,6 @@
     ],
     "setupFiles": [
       "jest-canvas-mock"
-    ],
-    "mapCoverage": true
+    ]
   }
 }

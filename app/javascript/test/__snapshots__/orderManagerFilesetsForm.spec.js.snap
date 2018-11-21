@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OrderManagerFilesetsForm.vue has the expected html structure 1`] = `
+<div>
+  <heading-stub
+    level="h2"
+  >
+    Generate Labels 
+    <small>
+      for selected items
+    </small>
+  </heading-stub>
+   
+  <form
+    id="app"
+    novalidate="novalidate"
+  >
+    <input-text-stub
+      id="unitLabel"
+      label="Label"
+      placeholder="e.g., p."
+    />
+     
+    <input-text-stub
+      id="startNum"
+      label="Starting Numeral"
+      placeholder="e.g., 10"
+    />
+     
+    <input-checkbox-stub
+      options="[object Object]"
+    />
+     
+    <input-select-stub
+      id="labelMethod"
+      label="Labeling Method"
+      options="[object Object],[object Object]"
+    />
+     
+    <!---->
+  </form>
+</div>
+`;
