@@ -141,7 +141,7 @@ Rails.application.routes.draw do
       end
     end
     get "/numismatic_issues/:parent_id/coin" => "coins#new", as: :parent_new_coin
-    get "/coins/:parent_id/numismatic_citation" => "numismatic_citations#new", as: :coin_add_numismatic_citation
+    get "/parent/:parent_id/numismatic_citation" => "numismatic_citations#new", as: :parent_add_numismatic_citation
 
     resources :ephemera_projects do
       resources :templates, only: [:new, :create, :destroy]
