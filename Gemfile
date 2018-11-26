@@ -34,7 +34,7 @@ gem "title"
 gem "uglifier"
 gem "valkyrie", "1.2.2"
 gem "valkyrie-derivatives", git: "https://github.com/samvera-labs/valkyrie-derivatives.git"
-gem 'webpacker', '>= 4.0.x'
+gem "webpacker", ">= 4.0.x"
 
 group :development do
   gem "foreman"
