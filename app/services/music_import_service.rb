@@ -14,7 +14,7 @@ class MusicImportService
   def bibid_report
     process_recordings
     suspected_playlists, real_recordings = recordings.partition { |rec| rec.call&.starts_with? "x-" }
-    numbered_courses, rest = real_recordings.partition { |rec| rec.courses.any? { |course| course.match?(/^[a-zA-Z]{3}\d+$/) } }
+    numbered_courses, rest = real_recordings.partition { |rec| rec.courses.any? { |course| course.match?(/^[a-zA-Z]{3}\d+.*$/) } }
     empty_courses, other_courses = rest.partition { |rec| rec.courses.empty? }
 
     log_multiple_bibs(real_recordings)
@@ -49,7 +49,7 @@ class MusicImportService
 
   # SQL QUERIES
   def recordings_query
-    "select R.idRecording, R.CallNo, C.CourseNo from Recordings R " \
+    "select R.idRecording, R.CallNo, R.RecTitle, C.CourseNo from Recordings R " \
       "left join Selections S on S.idRecording=R.idRecording " \
       "left join jSelections jS on S.idSelection=jS.idSelection " \
       "left join Courses C on jS.idCourse=C.idCourse"
@@ -67,7 +67,8 @@ class MusicImportService
       @recordings = results.map do |result|
         MRRecording.new(result.first,
                         result.second.first["CallNo"], # call number comes from recording so is same for each entry
-                        result.second.map { |t| t["CourseNo"] }.uniq.compact) # comes from joins
+                        result.second.map { |t| t["CourseNo"] }.uniq.compact, # comes from joins
+                        result.second.map { |t| t["RecTitle"] }.uniq.compact)
       end
     end
 
@@ -241,6 +242,7 @@ class MusicImportService
       # course number of the course which links to this recording
       #   needed for splitting the report out along course number characteristics
       :courses, # an array
+      :titles, # an array
       :bibs, # an array
       # id of Recording for which this is recording represents a playlist
       :duplicate
