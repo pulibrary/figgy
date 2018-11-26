@@ -36,8 +36,15 @@ class MusicImportService
   end
 
   def process_recordings
-    load_recordings
-    reconcile_call_numbers
+    if File.exist?("tmp/recordings_cache.dump")
+      @recordings = Marshal.load(File.open("tmp/recordings_cache.dump"))
+    else
+      load_recordings
+      reconcile_call_numbers
+      File.open("tmp/recordings_cache.dump", "wb") do |f|
+        f.puts Marshal.dump(recordings)
+      end
+    end
   end
 
   # SQL QUERIES
