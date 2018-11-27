@@ -54,6 +54,7 @@ class CatalogController < ApplicationController
     config.show.partials = config.show.partials.insert(1, :parent_breadcrumb)
     config.show.partials += [:universal_viewer]
     config.show.partials += [:resource_attributes]
+    config.show.partials += [:auth_link]
     config.show.partials += [:workflow_controls]
     config.show.partials += [:playlists]
     config.show.partials += [:vocabulary_nav]

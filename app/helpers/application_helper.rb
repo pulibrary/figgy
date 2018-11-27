@@ -114,6 +114,10 @@ module ApplicationHelper
     @document.resource
   end
 
+  def build_authorized_link
+    link_to(request.base_url + solr_document_path(id: resource.id, auth_token: resource.auth_token), solr_document_path(id: resource.id, auth_token: resource.auth_token))
+  end
+
   # Renders an attribute value based on attribute name
   # @param attribute [Symbol] the attribute name
   # @param value [String] the value of the attribute

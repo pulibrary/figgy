@@ -12,6 +12,7 @@ class PlaylistChangeSet < ChangeSet
   property :auth_token, multiple: false, require: false
 
   property :file_set_ids, virtual: true, type: Valkyrie::Types::Array.of(Valkyrie::Types::ID)
+  property :mint_auth_token, virtual: true, multiple: false, type: Valkyrie::Types::Array.of(Valkyrie::Types::Bool), default: false
 
   validates_with MemberValidator
   validates_with StateValidator

@@ -78,6 +78,7 @@ Metrics/ClassLength:
     - 'app/jobs/ingest_archival_media_bag_job.rb'
     - 'app/services/manifest_builder/manifest_service_locator_v3.rb'
     - 'app/services/manifest_builder.rb'
+    - 'app/controllers/catalog_controller.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/models/concerns/linked_data/linked_resource_factory.rb'

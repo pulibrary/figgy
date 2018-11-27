@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class ChangeSetPersister
-  # This either mints a new auth. token for a resource which has just been completed...
-  # ...or revokes it for a Resource which has been updated as incomplete
+  # Updates any AuthTokens by storing the ID for the related Resource
   class UpdateAuthToken
     attr_reader :change_set_persister, :change_set
     def initialize(change_set_persister:, change_set:, post_save_resource:)
