@@ -21,7 +21,6 @@
 /tags
 /tmp/*
 /app/javascript/test/coverage/*
-/yarn.lock
 dump.rdb
 package-lock.json
 /encodes
