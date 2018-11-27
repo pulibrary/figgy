@@ -1,6 +1,0 @@
-<%= value %><% if can?(:edit, resource) %>
-  <%= simple_form_for @change_set do |f| %>
-    <%= f.input :mint_auth_token, as: :hidden, input_html: { value: "1" } %>
-    <%= f.submit "Regenerate", class: ["submit", "btn", "btn-warning"] %>
-  <% end %>
-<% end %>
