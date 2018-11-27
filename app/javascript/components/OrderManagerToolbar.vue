@@ -45,9 +45,6 @@ export default {
       resource: state => state.ordermanager.resource,
       gallery: state => state.gallery,
     }),
-    // selectedTotal() {
-    //   return this.gallery.selected.length
-    // },
     cut: {
       get() {
         return this.gallery.cut

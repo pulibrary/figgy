@@ -34,7 +34,6 @@
     <%= stylesheet_pack_tag 'application' %>
     <%= javascript_pack_tag 'application' %>
     <%= yield :head %>
-    <script src="//cdn.polyfill.io/v1/polyfill.min.js" async defer></script>
   </head>
   <body>
     <%= content_for?(:body) ? yield(:body) : yield %>

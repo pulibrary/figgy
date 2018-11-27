@@ -99,32 +99,6 @@ export default {
           checked: this.resource.viewingDirection === "BOTTOMTOTOP",
         },
       ]
-      // return [
-      //   {
-      //     name: "viewDir",
-      //     value: "left-to-right",
-      //     id: "left-to-right",
-      //     checked: this.resource.viewingDirection === "LEFTTORIGHT",
-      //   },
-      //   {
-      //     name: "viewDir",
-      //     value: "right-to-left",
-      //     id: "right-to-left",
-      //     checked: this.resource.viewingDirection === "RIGHTTOLEFT",
-      //   },
-      //   {
-      //     name: "viewDir",
-      //     value: "top-to-bottom",
-      //     id: "top-to-bottom",
-      //     checked: this.resource.viewingDirection === "TOPTOBOTTOM",
-      //   },
-      //   {
-      //     name: "viewDir",
-      //     value: "bottom-to-top",
-      //     id: "bottom-to-top",
-      //     checked: this.resource.viewingDirection === "BOTTOMTOTOP",
-      //   },
-      // ]
     },
   },
   methods: {

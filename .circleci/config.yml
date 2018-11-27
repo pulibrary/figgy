@@ -40,8 +40,8 @@ jobs:
             - figgy-npm-{{ checksum "package.json" }}-cc732be
             - figgy-npm-
       - run:
-          name: NPM install
-          command: npm install
+          name: Yarn install
+          command: yarn install
       # Store yarn / webpacker cache
       - save_cache:
           key: figgy-npm-{{ checksum "package-lock.json" }}
