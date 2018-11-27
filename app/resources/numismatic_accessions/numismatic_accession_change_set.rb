@@ -12,12 +12,12 @@ class NumismaticAccessionChangeSet < Valkyrie::ChangeSet
   property :note, multiple: false, required: false
   property :private_note, multiple: false, required: false
   property :numismatic_citation_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
+  property :accession_number, multiple: false, required: false
 
   validates_with AutoIncrementValidator, property: :accession_number
 
   def primary_terms
     [
-      :number_in_accession,
       :date,
       :items_number,
       :type,
