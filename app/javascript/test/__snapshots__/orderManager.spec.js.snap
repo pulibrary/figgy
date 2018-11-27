@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OrderManager.vue has the expected html structure 1`] = `
+<div
+  class="lux-orderManager"
+>
+  <!---->
+   
+  <!---->
+   
+  <!---->
+   
+  <wrapper-stub
+    class="lux-galleryPanel"
+    full-width="true"
+    type="div"
+  >
+    <toolbar-stub
+      type="div"
+    />
+     
+    <gallery-stub
+      cardpixelwidth="300"
+      class="lux-galleryWrapper"
+      galleryitems="[object Object],[object Object],[object Object]"
+    />
+  </wrapper-stub>
+   
+  <wrapper-stub
+    class="lux-sidePanel"
+    type="div"
+  >
+    <!---->
+     
+    <!---->
+     
+    <fileset-form-stub
+      type="div"
+    />
+     
+    <controls-stub
+      type="div"
+      viewerid="viewer"
+    />
+  </wrapper-stub>
+</div>
+`;

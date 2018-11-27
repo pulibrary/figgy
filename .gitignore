@@ -20,8 +20,12 @@
 /staged_files/*
 /tags
 /tmp/*
-/app/javascript/test/unit/coverage/*
-/yarn.lock
+/app/javascript/test/coverage/*
 dump.rdb
 package-lock.json
 /encodes
+/public/packs
+/public/packs-test
+/node_modules
+yarn-debug.log*
+.yarn-integrity

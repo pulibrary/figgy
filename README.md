@@ -73,10 +73,10 @@ Linux:
 git clone https://github.com/pulibrary/figgy.git
 cd figgy
 bundle install
-npm install
+yarn install
 ```
 
-Remember you'll need to run `bundle install` and `npm install` on an ongoing basis as dependencies are updated.
+Remember you'll need to run `bundle install` and `yarn install` on an ongoing basis as dependencies are updated.
 
 ## Setup server
 

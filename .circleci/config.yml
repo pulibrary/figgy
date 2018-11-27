@@ -36,17 +36,19 @@ jobs:
           - vendor/bundle
       # Only necessary if app uses webpacker or yarn in some other way
       - restore_cache:
+          name: Restore Yarn Package Cache
           keys:
-            - figgy-npm-{{ checksum "package.json" }}-cc732be
-            - figgy-npm-
+            - figgy-yarn-{{ checksum "yarn.lock" }}-cc732be
+            - figgy-yarn-
       - run:
-          name: NPM install
-          command: npm install
+          name: Install NPM Dependencies via Yarn
+          command: yarn install --frozen-lockfile
       # Store yarn / webpacker cache
       - save_cache:
-          key: figgy-npm-{{ checksum "package-lock.json" }}
+          name: Save Yarn Package Cache
+          key: figgy-yarn-{{ checksum "yarn.lock" }}
           paths:
-            - npm_modules
+            - ~/.cache/yarn
       - run: NODE_ENV=test bundle exec rails webpacker:compile
       - persist_to_workspace:
           root: '~/figgy'

@@ -4,6 +4,33 @@ import MutationBuilder from '../../helpers/mutationBuilder'
 import gql from 'graphql-tag'
 
 const actions = {
+  cut (context, items) {
+    context.commit("CUT", items)
+  },
+  paste (context, items) {
+    context.commit("PASTE", items)
+  },
+  select (context, selectList) {
+    context.commit("SELECT", selectList)
+  },
+  updateChanges (context, changeList) {
+    context.commit("UPDATE_CHANGES", changeList)
+  },
+  updateItems (context, items) {
+    context.commit("UPDATE_ITEMS", items)
+  },
+  updateStartCanvas (context, startCanvas) {
+    context.commit('UPDATE_STARTCANVAS', startCanvas)
+  },
+  updateThumbnail (context, thumbnail) {
+    context.commit('UPDATE_THUMBNAIL', thumbnail)
+  },
+  updateViewHint (context, value) {
+    context.commit('UPDATE_VIEWHINT', value)
+  },
+  updateViewDir (context, value) {
+    context.commit('UPDATE_VIEWDIR', value)
+  },
   async loadImageCollectionGql (context, resource) {
       if (resource == null) {
         context.commit('CHANGE_RESOURCE_LOAD_STATE', 'LOADING_ERROR')
