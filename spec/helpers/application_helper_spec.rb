@@ -18,6 +18,15 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
     end
 
+    context "with a monogram reference" do
+      let(:monogram) { FactoryBot.create_for_repository(:numismatic_monogram) }
+
+      it "returns a link to the monogram" do
+        value = helper.resource_attribute_value(:decorated_numismatic_monograms, monogram.decorate)
+        expect(value).to include("href", monogram.id.to_s, monogram.title.first)
+      end
+    end
+
     context "with a member_of_collections attribute" do
       let(:title) { "My Collection" }
       let(:collection) { FactoryBot.create_for_repository(:collection, title: title) }

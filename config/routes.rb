@@ -130,6 +130,15 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :numismatic_monograms do
+      member do
+        get :file_manager
+        get :order_manager
+        get :manifest, defaults: { format: :json }
+        post :browse_everything_files
+      end
+    end
+
     resources :coins do
       member do
         get :file_manager

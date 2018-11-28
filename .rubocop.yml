@@ -81,6 +81,7 @@ Metrics/ClassLength:
     - 'app/controllers/catalog_controller.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
+    - 'app/helpers/application_helper.rb'
     - 'app/models/concerns/linked_data/linked_resource_factory.rb'
     - 'app/services/file_appender.rb'
     - 'app/services/pdf_generator/canvas.rb'

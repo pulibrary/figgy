@@ -103,7 +103,7 @@ RSpec.describe ScannedResourceDecorator do
     let(:member) { FactoryBot.create_for_repository(:scanned_resource) }
     let(:member2) { FactoryBot.create_for_repository(:file_set) }
     it "returns all FileSet members, decorated" do
-      file_sets = decorator.file_sets
+      file_sets = decorator.decorated_file_sets
       expect(file_sets.map(&:id)).to eq [member2.id]
       expect(file_sets.map(&:class)).to eq [FileSetDecorator]
     end

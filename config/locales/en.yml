@@ -54,6 +54,8 @@ en:
           label: "Model"
         created_at:
           label: "Date Uploaded"
+        decorated_numismatic_monograms:
+          label: "Monogram"
         updated_at:
           label: "Date Modified"
         member_of_collections:

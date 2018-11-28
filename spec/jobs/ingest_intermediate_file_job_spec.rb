@@ -7,7 +7,7 @@ RSpec.describe IngestIntermediateFileJob do
     let(:master_file) { fixture_file_upload("files/example.tif", "image/tiff") }
     let(:file_path) { Rails.root.join("spec", "fixtures", "files", "abstract.tiff") }
     let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [master_file]) }
-    let(:file_set) { resource.decorate.file_sets.first }
+    let(:file_set) { resource.decorate.decorated_file_sets.first }
     let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
     let(:storage_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
     let(:change_set_persister) do
