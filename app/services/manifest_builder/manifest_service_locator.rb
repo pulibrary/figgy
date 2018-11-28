@@ -123,6 +123,14 @@ class ManifestBuilder
         )
       end
 
+      def image_builder
+        IIIFManifest::ManifestServiceLocator::InjectedFactory.new(
+          ::ManifestBuilder::ImageBuilder,
+          iiif_annotation_factory: iiif_annotation_factory,
+          resource_builder_factory: resource_builder_factory
+        )
+      end
+
       ##
       # Override sequence builder to support adding viewingHint.
       def sequence_builder
