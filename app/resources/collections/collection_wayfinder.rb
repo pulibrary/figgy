@@ -9,4 +9,8 @@ class CollectionWayfinder < BaseWayfinder
   end
 
   alias collections parents
+
+  def members_count
+    @members_count ||= query_service.custom_queries.count_inverse_relationship(resource: resource, property: :member_of_collection_ids)
+  end
 end

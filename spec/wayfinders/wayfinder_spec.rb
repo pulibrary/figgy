@@ -785,4 +785,18 @@ RSpec.describe Wayfinder do
       end
     end
   end
+  context "when given a Collection" do
+    describe "#members_count" do
+      it "returns the number of members" do
+        collection = FactoryBot.create_for_repository(:collection)
+        2.times do
+          FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id)
+        end
+
+        wayfinder = described_class.for(collection)
+
+        expect(wayfinder.members_count).to eq 2
+      end
+    end
+  end
 end
