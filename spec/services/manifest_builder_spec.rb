@@ -122,6 +122,7 @@ RSpec.describe ManifestBuilder do
       expect(output["sequences"][0]["canvases"][0]["width"]).to be_a Integer
       first_image = output["sequences"][0]["canvases"][0]["images"][0]
 
+      expect(first_image["@id"]).to eq "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest/image/#{scanned_resource.member_ids.first}"
       expect(first_image["resource"]["@id"]).to eq "http://www.example.com/image-service/#{scanned_resource.member_ids.first}/full/!1000,/0/default.jpg"
       expect(output["sequences"][0]["canvases"][0]["local_identifier"]).to eq "p79409x97p"
 
