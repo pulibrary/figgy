@@ -22,4 +22,17 @@ RSpec.describe CollectionDecorator do
       expect(decorator.display_attributes[:owners]).to eq ["owner"]
     end
   end
+
+  describe "#members_count" do
+    it "returns the number of members it has" do
+      collection = FactoryBot.create_for_repository(:collection)
+      2.times do
+        FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id)
+      end
+
+      decorator = described_class.new(collection)
+
+      expect(decorator.members_count).to eq 2
+    end
+  end
 end

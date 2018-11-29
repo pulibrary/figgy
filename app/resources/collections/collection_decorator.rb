@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class CollectionDecorator < Valkyrie::ResourceDecorator
-  delegate :members, :parents, :collections, to: :wayfinder
+  delegate :members, :parents, :collections, :members_count, to: :wayfinder
   display :owners
 
   def title
