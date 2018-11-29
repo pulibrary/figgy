@@ -10,9 +10,68 @@ class MusicImportService
     @logger = logger
   end
 
+  def bib_records_from_recording(recording)
+    logger.info "getting recommended bib for #{recording.call}"
+    records = recording.bibs.map do |bib_id|
+      output = cached_bib(bib_id)
+      bib_title = Array.wrap(output["title"]).map do |title|
+        if title.is_a?(Hash)
+          title["@value"]
+        else
+          title
+        end
+      end.first
+      next {} if bib_title.blank? || recording.titles.first.blank?
+      {
+        id: bib_id,
+        title: bib_title,
+        title_distance: distance(bib_title, recording.titles.first)
+      }
+    end
+    records.sort_by { |x| x[:title_distance] || 3000 }
+  end
+
+  def distance(string1, string2)
+    string1.downcase.include?(string2.downcase) ? 5 : DamerauLevenshtein.distance(string1, string2)
+  end
+
+  def cached_bib(bib_id)
+    cached_bibs.fetch(bib_id) do
+      begin
+        cached_bibs[bib_id] = JSON.parse(open("https://bibdata.princeton.edu/bibliographic/#{bib_id}/jsonld").read)
+      rescue
+        cached_bibs[bib_id] = {}
+      end
+      cached_bibs[bib_id]
+    end
+  end
+
+  def store_cached_bibs
+    File.open("tmp/cached_bibs.dump", "wb") do |file|
+      file.puts Marshal.dump(cached_bibs)
+    end
+  end
+
+  def cached_bibs
+    @cached_bibs ||=
+      begin
+        if File.exist?("tmp/cached_bibs.dump")
+          Marshal.load(File.open("tmp/cached_bibs.dump"))
+        else
+          {}
+        end
+      end
+  end
+
   # yes there will be a #run method but the first step is the call number report
   def bibid_report
     process_recordings
+    populate_missing_recordings_from_ol
+    recordings.select { |x| x.bibs.length > 1 }.each do |recording|
+      bib_records = bib_records_from_recording(recording).select(&:present?)
+      recording.recommended_bib = bib_records.find { |x| x[:title_distance] <= 6 }.try(:[], :id)
+    end
+    store_cached_bibs
     suspected_playlists, real_recordings = recordings.partition { |rec| rec.call&.starts_with? "x-" }
     numbered_courses, rest = real_recordings.partition { |rec| rec.courses.any? { |course| course.match?(/^[a-zA-Z]{3}\d+.*$/) } }
     empty_courses, other_courses = rest.partition { |rec| rec.courses.empty? }
@@ -29,10 +88,37 @@ class MusicImportService
     logger.info "Removed suspected playlists from remaining stats"
     logger.info "--------------"
     logger.info "Bib ids found in #{number_empty(real_recordings)} of #{real_recordings.count} recordings (#{percent_empty(real_recordings)}%)"
+    bad_recordings = recordings.select { |x| x.bibs.length > 1 }
+    found_ids = bad_recordings.select { |x| x.recommended_bib.present? }
+    logger.info "Found recommended bib for #{found_ids.length} of #{bad_recordings.length} records with multiple bib ids"
     logger.info "--------------"
     logger.info "Bib ids found in #{number_empty(numbered_courses)} of #{numbered_courses.count} recordings with numbered course names (#{percent_empty(numbered_courses)}%)"
     logger.info "Bib ids found in #{number_empty(other_courses)} of #{other_courses.count} recordings with other course names (#{percent_empty(other_courses)}%)"
     logger.info "#{empty_courses.count} recordings not in any course"
+  end
+
+  def populate_missing_recordings_from_ol
+    @found_bibs = 0
+    recordings.select { |x| x.bibs.empty? }.each do |recording|
+      populate_bib_from_title(recording)
+    end
+    logger.info "Found #{@found_bibs} bibs from searching"
+  end
+
+  def populate_bib_from_title(recording)
+    logger.info "populating bib from title for #{recording.titles.first}"
+    ol_response = JSON.parse(open("https://catalog-staging.princeton.edu/catalog.json?f[access_facet][]=In+the+Library&f[format][]=Audio&f[location][]=Mendel+Music+Library&search_field=title&rows=100&q=#{CGI.escape(recording.titles.first)}").read)
+    docs = ol_response["response"]["docs"]
+    docs.map do |doc|
+      doc["distance"] = distance(doc["title_display"], recording.titles.first)
+    end
+    matching_docs = docs.select { |x| x["distance"] <= 6 }
+    return if matching_docs.length != 1
+    recording.bibs = [matching_docs[0]["id"]]
+    logger.info "found id from title for #{recording.titles.first} - matched with #{matching_docs.first['title_display']}"
+    @found_bibs += 1
+    rescue StandardError => e
+      logger.info "Errored trying to populate bib."
   end
 
   def process_recordings
@@ -98,7 +184,9 @@ class MusicImportService
         space_replace_hyphen: "label",
         space_after_hyphen_lc: "sort",
         space_replace_hyphen_lc: "sort",
-        just_lc: "sort" }
+        just_lc: "sort",
+        volume_expansion: "label",
+        volume_space_expansion: "label" }
     end
 
     # check the call numbers database for the call number given
@@ -111,7 +199,7 @@ class MusicImportService
         logger.info "  trying ol"
         bib_numbers = query_ol_api(call_number: call_number)
       else
-        bib_numbers = result.map { |h| h["bibid"] }
+        bib_numbers = result.map { |h| h["bibid"] }.uniq
       end
       bib_numbers
     end
@@ -142,6 +230,26 @@ class MusicImportService
         end
         cn
       end
+    end
+
+    def volume_expansion(call_number)
+      return unless call_number
+      call_number = call_number.upcase
+      if call_number.match?(/^((CD)||(DAT)||(CASS)||(LS)||(VCASS)||(DVD))-/)
+        call_number = call_number.sub("-", "- ").sub("V", " vol.")
+      end
+      call_number = call_number.gsub(/'/, "''")
+      call_number
+    end
+
+    def volume_space_expansion(call_number)
+      return unless call_number
+      call_number = call_number.upcase
+      if call_number.match?(/^((CD)||(DAT)||(CASS)||(LS)||(VCASS)||(DVD))-/)
+        call_number = call_number.sub("-", "- ").sub("V", " vol. ")
+      end
+      call_number = call_number.gsub(/'/, "''")
+      call_number
     end
 
     # apply normalization which adds a space after a hyphen
@@ -232,7 +340,7 @@ class MusicImportService
     def log_missing_bibs(recordings:, prefix:)
       missing, _present = recordings.partition { |rec| rec.bibs.empty? }
       missing.each do |rec|
-        logger.info "#{prefix} id: #{rec.id}, call: #{rec.call}, courses: #{rec.courses}"
+        logger.info "#{prefix} id: #{rec.id}, call: #{rec.call}, title: #{rec.titles.first}, courses: #{rec.courses}"
       end
     end
 
@@ -247,4 +355,8 @@ class MusicImportService
       # id of Recording for which this is recording represents a playlist
       :duplicate
     )
+
+    class MRRecording
+      attr_accessor :recommended_bib
+    end
 end
