@@ -102,6 +102,15 @@ RSpec.describe ManifestBuilder do
       expect(query_service).to have_received(:find_by).exactly(2).times
     end
 
+    it "only runs one find_members query" do
+      manifest_builder
+      allow(query_service).to receive(:find_members).and_call_original
+
+      manifest_builder.build
+
+      expect(query_service).to have_received(:find_members).exactly(1).times
+    end
+
     it "generates a IIIF document" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
