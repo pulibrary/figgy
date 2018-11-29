@@ -172,6 +172,20 @@ class ManifestBuilder
       ]
     end
 
+    ##
+    # Retrieve the child members for the subject resource of the Manifest
+    # @return [Resource]
+    def members
+      @members ||= decorate.members.to_a
+    end
+
+    ##
+    # Retrieve the leaf nodes for the Manifest
+    # @return [FileSet]
+    def leaf_nodes
+      @leaf_nodes ||= members.select { |x| x.instance_of?(FileSet) && leaf_node_mime_type?(x.mime_type) }
+    end
+
     private
 
       ##
@@ -179,20 +193,6 @@ class ManifestBuilder
       # @return [ManifestHelper]
       def helper
         @helper ||= ManifestHelper.new
-      end
-
-      ##
-      # Retrieve the child members for the subject resource of the Manifest
-      # @return [Resource]
-      def members
-        @members ||= decorate.members.to_a
-      end
-
-      ##
-      # Retrieve the leaf nodes for the Manifest
-      # @return [FileSet]
-      def leaf_nodes
-        @leaf_nodes ||= members.select { |x| x.instance_of?(FileSet) && leaf_node_mime_type?(x.mime_type) }
       end
 
       ##
@@ -578,7 +578,7 @@ class ManifestBuilder
     def manifest
       @manifest ||= begin
         # note this assumes audio resources use flat modeling
-        if audio_files(Wayfinder.for(@resource.to_model).try(:file_sets)).empty?
+        if audio_files(resource.try(:leaf_nodes)).empty?
           IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocator).to_h
         else
           IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocatorV3).to_h
