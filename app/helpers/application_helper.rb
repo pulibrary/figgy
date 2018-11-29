@@ -125,14 +125,9 @@ module ApplicationHelper
   def resource_attribute_value(attribute, value)
     linked_attributes = [:member_of_collections, :decorated_numismatic_monograms]
     return link_to(value.title, solr_document_path(id: value.id)) if linked_attributes.include?(attribute)
-    return authorized_link_value(resource.id, value) if attribute == :authorized_link
     return accession_link(attribute, value) if attribute == :accession_number && @document.decorated_resource.is_a?(CoinDecorator) && @document.decorated_resource.accession
 
     value
-  end
-
-  def authorized_link_value(id, value)
-    link_to(request.base_url + solr_document_path(id: id, auth_token: value), solr_document_path(id: id, auth_token: value))
   end
 
   def accession_link(_attribute, _value)
