@@ -8,6 +8,14 @@ namespace :export do
     ExportBagJob.perform_now(id)
   end
 
+  desc "Exports an object to disk in a Hathi SIP"
+  task hathi: :environment do
+    id = ENV["ID"]
+    abort "usage: rake export:hathi ID=[object id]" unless id
+
+    ExportHathiSipJob.perform_now(id)
+  end
+
   desc "Exports an object to files on disk"
   task files: :environment do
     ids = ENV["ID"]

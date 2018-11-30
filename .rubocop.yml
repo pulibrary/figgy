@@ -37,6 +37,7 @@ Metrics/AbcSize:
     - 'app/services/preserver.rb'
     - 'app/jobs/ingest_archival_media_bag_job.rb'
     - 'app/utils/data_seeder.rb'
+    - 'app/exporters/hathi/submission_information_package.rb'
 Metrics/BlockLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
@@ -178,6 +179,7 @@ Metrics/MethodLength:
     - 'app/controllers/application_controller.rb'
     - 'app/services/ingest_ephemera_mods.rb'
     - 'app/helpers/thumbnail_helper.rb'
+    - 'app/exporters/hathi/submission_information_package.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'

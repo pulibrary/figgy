@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-09-24
+
+## Added
+
+* Adding HathiTrust submission-information-package creator to exporters.
+
 # 2019-09-16
 
 ## Added
