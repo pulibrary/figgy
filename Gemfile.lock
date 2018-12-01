@@ -48,7 +48,7 @@ GIT
 
 GIT
   remote: git://github.com/samvera-labs/valkyrie.git
-  revision: 38b5fea032c6db6bd6d4d20e2a8d540e12647c49
+  revision: 8f28f1bb8e1f826ce278a377c91915526f7692b1
   branch: prepare_for_2
   specs:
     valkyrie (1.2.2)
