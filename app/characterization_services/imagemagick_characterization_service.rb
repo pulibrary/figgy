@@ -100,8 +100,8 @@ class ImagemagickCharacterizationService
 
   # Class for updating characterization attributes on the FileNode
   class FileCharacterizationAttributes < Dry::Struct
-    attribute :width, Valkyrie::Types::Int
-    attribute :height, Valkyrie::Types::Int
+    attribute :width, Valkyrie::Types::Integer
+    attribute :height, Valkyrie::Types::Integer
     attribute :mime_type, Valkyrie::Types::String
     attribute :checksum, Valkyrie::Types::String
   end
