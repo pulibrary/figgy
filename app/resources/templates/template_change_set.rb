@@ -10,7 +10,7 @@ class TemplateChangeSet < ChangeSet
   validates_with ParentValidator
 
   def child_change_set_attributes=(attributes)
-    self.nested_properties = [attributes.to_unsafe_h.merge(internal_resource: model_class)]
+    self.nested_properties = [attributes.to_unsafe_h.symbolize_keys.merge(internal_resource: model_class)]
     @child_change_set = nil
     @child_record = nil
     true
@@ -21,7 +21,7 @@ class TemplateChangeSet < ChangeSet
   end
 
   def child_record
-    @child_record ||= model_class.constantize.new(nested_properties.first.to_h || {})
+    @child_record ||= model_class.constantize.new(nested_properties.first.to_h.symbolize_keys || {})
   end
 
   class TemplateChangeSetDecorator < SimpleDelegator
