@@ -3,64 +3,12 @@
 # A service class to run an import of music reserves and performance recording
 #   objects from a sql server database into figgy
 class MusicImportService
-  attr_reader :recordings, :sql_server_adapter, :postgres_adapter, :logger
-  def initialize(sql_server_adapter:, postgres_adapter:, logger:)
+  attr_reader :recordings, :sql_server_adapter, :postgres_adapter, :logger, :cache
+  def initialize(sql_server_adapter:, postgres_adapter:, logger:, cache: true)
     @sql_server_adapter = sql_server_adapter
     @postgres_adapter = postgres_adapter
     @logger = logger
-  end
-
-  def bib_records_from_recording(recording)
-    logger.info "getting recommended bib for #{recording.call}"
-    records = recording.bibs.map do |bib_id|
-      output = cached_bib(bib_id)
-      bib_title = Array.wrap(output["title"]).map do |title|
-        if title.is_a?(Hash)
-          title["@value"]
-        else
-          title
-        end
-      end.first
-      next {} if bib_title.blank? || recording.titles.first.blank?
-      {
-        id: bib_id,
-        title: bib_title,
-        title_distance: distance(bib_title, recording.titles.first)
-      }
-    end
-    records.sort_by { |x| x[:title_distance] || 3000 }
-  end
-
-  def distance(string1, string2)
-    string1.downcase.include?(string2.downcase) ? 5 : DamerauLevenshtein.distance(string1, string2)
-  end
-
-  def cached_bib(bib_id)
-    cached_bibs.fetch(bib_id) do
-      begin
-        cached_bibs[bib_id] = JSON.parse(open("https://bibdata.princeton.edu/bibliographic/#{bib_id}/jsonld").read)
-      rescue
-        cached_bibs[bib_id] = {}
-      end
-      cached_bibs[bib_id]
-    end
-  end
-
-  def store_cached_bibs
-    File.open("tmp/cached_bibs.dump", "wb") do |file|
-      file.puts Marshal.dump(cached_bibs)
-    end
-  end
-
-  def cached_bibs
-    @cached_bibs ||=
-      begin
-        if File.exist?("tmp/cached_bibs.dump")
-          Marshal.load(File.open("tmp/cached_bibs.dump"))
-        else
-          {}
-        end
-      end
+    @cache = cache
   end
 
   # yes there will be a #run method but the first step is the call number report
@@ -127,11 +75,12 @@ class MusicImportService
   end
 
   def process_recordings
-    if File.exist?("tmp/recordings_cache.dump")
+    if cache && File.exist?("tmp/recordings_cache.dump")
       @recordings = Marshal.load(File.open("tmp/recordings_cache.dump"))
     else
       load_recordings
       reconcile_call_numbers
+      return recordings unless cache
       File.open("tmp/recordings_cache.dump", "wb") do |f|
         f.puts Marshal.dump(recordings)
       end
@@ -347,6 +296,60 @@ class MusicImportService
       missing.each do |rec|
         logger.info "#{prefix} id: #{rec.id}, call: #{rec.call}, title: #{rec.titles.first}, courses: #{rec.courses}"
       end
+    end
+
+    def bib_records_from_recording(recording)
+      logger.info "getting recommended bib for #{recording.call}"
+      records = recording.bibs.map do |bib_id|
+        output = cached_bib(bib_id)
+        bib_title = Array.wrap(output["title"]).map do |title|
+          if title.is_a?(Hash)
+            title["@value"]
+          else
+            title
+          end
+        end.first
+        next {} if bib_title.blank? || recording.titles.first.blank?
+        {
+          id: bib_id,
+          title: bib_title,
+          title_distance: distance(bib_title, recording.titles.first)
+        }
+      end
+      records.sort_by { |x| x[:title_distance] || 3000 }
+    end
+
+    def distance(string1, string2)
+      string1.downcase.include?(string2.downcase) ? 5 : DamerauLevenshtein.distance(string1, string2)
+    end
+
+    def cached_bib(bib_id)
+      cached_bibs.fetch(bib_id) do
+        begin
+          cached_bibs[bib_id] = JSON.parse(open("https://bibdata.princeton.edu/bibliographic/#{bib_id}/jsonld").read)
+        rescue
+          cached_bibs[bib_id] = {}
+        end
+        cached_bibs[bib_id]
+      end
+    end
+
+    def store_cached_bibs
+      return unless cache
+      File.open("tmp/cached_bibs.dump", "wb") do |file|
+        file.puts Marshal.dump(cached_bibs)
+      end
+    end
+
+    def cached_bibs
+      @cached_bibs ||=
+        begin
+          if cache && File.exist?("tmp/cached_bibs.dump")
+            Marshal.load(File.open("tmp/cached_bibs.dump"))
+          else
+            {}
+          end
+        end
     end
 
     MRRecording = Struct.new(
