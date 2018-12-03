@@ -212,3 +212,6 @@ Style/PredicateName:
     - 'app/models/ingestable_audio_file.rb'
 Style/StringLiterals:
   EnforcedStyle: double_quotes
+Security/MarshalLoad:
+  Exclude:
+    - 'app/services/music_import_service.rb'

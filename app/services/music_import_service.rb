@@ -107,7 +107,12 @@ class MusicImportService
 
   def populate_bib_from_title(recording)
     logger.info "populating bib from title for #{recording.titles.first}"
-    ol_response = JSON.parse(open("https://catalog-staging.princeton.edu/catalog.json?f[access_facet][]=In+the+Library&f[format][]=Audio&f[location][]=Mendel+Music+Library&search_field=title&rows=100&q=#{CGI.escape(recording.titles.first)}").read)
+    ol_response = JSON.parse(
+      open(
+        "https://catalog-staging.princeton.edu/catalog.json?f[access_facet][]=In+the+Library&f[format][]=Audio&f[location][]=Mendel+Music+Library" \
+        "&search_field=title&rows=100&q=#{CGI.escape(recording.titles.first)}"
+      ).read
+    )
     docs = ol_response["response"]["docs"]
     docs.map do |doc|
       doc["distance"] = distance(doc["title_display"], recording.titles.first)
@@ -117,8 +122,8 @@ class MusicImportService
     recording.bibs = [matching_docs[0]["id"]]
     logger.info "found id from title for #{recording.titles.first} - matched with #{matching_docs.first['title_display']}"
     @found_bibs += 1
-    rescue StandardError => e
-      logger.info "Errored trying to populate bib."
+  rescue StandardError
+    logger.info "Errored trying to populate bib."
   end
 
   def process_recordings
