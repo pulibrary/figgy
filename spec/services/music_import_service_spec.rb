@@ -2,7 +2,7 @@
 require "rails_helper"
 
 RSpec.describe MusicImportService do
-  let(:importer) { described_class.new(sql_server_adapter: sql_server_adapter, postgres_adapter: postgres_adapter, logger: logger) }
+  let(:importer) { described_class.new(sql_server_adapter: sql_server_adapter, postgres_adapter: postgres_adapter, logger: logger, cache: false) }
   let(:sql_server_adapter) { instance_double MusicImportService::TinyTdsAdapter }
   let(:postgres_adapter) { instance_double MusicImportService::PgAdapter }
   let(:logger) { instance_double Logger }
@@ -20,6 +20,8 @@ RSpec.describe MusicImportService do
     allow(postgres_adapter).to receive(:execute).with(query: importer.bib_query(column: "sort", call_num: "X-MUS257RAKHA")).and_return []
     stub_request(:get, "https://catalog.princeton.edu/catalog.json?f%5Bcall_number_browse_s%5D%5B0%5D=CD-%20431&search_field=all_fields")
       .to_return(status: 200, body: ol_fixture.to_json, headers: {})
+    stub_request(:get, /https:\/\/bibdata.princeton.edu\/bibliographic\/.*/)
+      .to_return(status: 404)
   end
 
   describe "#process_recordings" do
@@ -69,7 +71,7 @@ RSpec.describe MusicImportService do
       end
       it "escapes the quote for the query" do
         importer.process_recordings
-        expect(postgres_adapter).to have_received(:execute).with(query: importer.bib_query(column: "label", call_num: escaped_call)).exactly(2).times
+        expect(postgres_adapter).to have_received(:execute).with(query: importer.bib_query(column: "label", call_num: escaped_call)).exactly(4).times
         expect(postgres_adapter).not_to have_received(:execute).with(query: importer.bib_query(column: "label", call_num: bad_call))
       end
     end
