@@ -30,6 +30,7 @@ Metrics/AbcSize:
     - 'app/jobs/ingest_intermediate_file_job.rb'
     - 'app/services/pul_metadata_services/bib_record.rb'
     - 'app/services/music_import_service.rb'
+    - 'app/services/music_import_service/recording_collector.rb'
 Metrics/BlockLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
@@ -81,6 +82,7 @@ Metrics/ClassLength:
     - 'app/services/manifest_builder.rb'
     - 'app/controllers/catalog_controller.rb'
     - 'app/services/music_import_service.rb'
+    - 'app/services/music_import_service/recording_collector.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/helpers/application_helper.rb'
@@ -122,6 +124,7 @@ Metrics/MethodLength:
     - 'app/models/concerns/linked_data/linked_resource_factory.rb'
     - 'app/services/manifest_builder/canvas_rendering_builder.rb'
     - 'app/services/music_import_service.rb'
+    - 'app/services/music_import_service/recording_collector.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
@@ -215,3 +218,4 @@ Style/StringLiterals:
 Security/MarshalLoad:
   Exclude:
     - 'app/services/music_import_service.rb'
+    - 'app/services/music_import_service/recording_collector.rb'

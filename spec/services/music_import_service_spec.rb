@@ -9,15 +9,15 @@ RSpec.describe MusicImportService do
 
   before do
     allow(logger).to receive(:info)
-    allow(sql_server_adapter).to receive(:execute).with(query: importer.recordings_query).and_return music_fixtures
-    allow(postgres_adapter).to receive(:execute).with(query: importer.bib_query(column: "label", call_num: "CD- 9455")).and_return(
+    allow(sql_server_adapter).to receive(:execute).with(query: importer.recordings_collector.recordings_query).and_return music_fixtures
+    allow(postgres_adapter).to receive(:execute).with(query: importer.recordings_collector.bib_query(column: "label", call_num: "CD- 9455")).and_return(
       [{ "title" => "Piano sonatas [sound recording] / Beethoven.", "bibid" => "1791261" }]
     )
-    allow(postgres_adapter).to receive(:execute).with(query: importer.bib_query(column: "label", call_num: "CD- 431")).and_return(
+    allow(postgres_adapter).to receive(:execute).with(query: importer.recordings_collector.bib_query(column: "label", call_num: "CD- 431")).and_return(
       [{ "title" => "4 titles with this call number", "bibid" => "?f[call_number_browse_s][]=CD-+9221" }]
     )
-    allow(postgres_adapter).to receive(:execute).with(query: importer.bib_query(column: "label", call_num: "X-MUS257RAKHA")).and_return []
-    allow(postgres_adapter).to receive(:execute).with(query: importer.bib_query(column: "sort", call_num: "X-MUS257RAKHA")).and_return []
+    allow(postgres_adapter).to receive(:execute).with(query: importer.recordings_collector.bib_query(column: "label", call_num: "X-MUS257RAKHA")).and_return []
+    allow(postgres_adapter).to receive(:execute).with(query: importer.recordings_collector.bib_query(column: "sort", call_num: "X-MUS257RAKHA")).and_return []
     stub_request(:get, "https://catalog.princeton.edu/catalog.json?f%5Bcall_number_browse_s%5D%5B0%5D=CD-%20431&search_field=all_fields")
       .to_return(status: 200, body: ol_fixture.to_json, headers: {})
     stub_request(:get, /https:\/\/bibdata.princeton.edu\/bibliographic\/.*/)
@@ -26,7 +26,7 @@ RSpec.describe MusicImportService do
 
   describe "#process_recordings" do
     it "returns recordings with course numbers and bib ids" do
-      recordings = importer.process_recordings
+      recordings = importer.recordings
       expect(recordings.map(&:id)).to include(14, 15)
       expect(recordings.map(&:call)).to include("cd-9455", "cd-431v1")
       expect(recordings.map(&:courses)).to include(["mus204", "mus549sb"], [], ["borris"])
@@ -48,10 +48,10 @@ RSpec.describe MusicImportService do
   context "a recording with no call number or bib number" do
     describe "#process_recordings" do
       before do
-        allow(sql_server_adapter).to receive(:execute).with(query: importer.recordings_query).and_return [{ "idRecording" => 15, "CallNo" => nil, "CourseNo" => "mus204" }]
+        allow(sql_server_adapter).to receive(:execute).with(query: importer.recordings_collector.recordings_query).and_return [{ "idRecording" => 15, "CallNo" => nil, "CourseNo" => "mus204" }]
       end
       it "returns a recording with no call number" do
-        recording = importer.process_recordings.first
+        recording = importer.recordings.first
         expect(recording.call).to be_nil
         expect(recording.courses).to include("mus204")
         expect(recording.bibs).to eq []
@@ -65,14 +65,14 @@ RSpec.describe MusicImportService do
       let(:escaped_call) { "''T LIKE -CRANE.MP3" }
       let(:escaped_call2) { "''T LIKE -CRANE.MP0000003" }
       before do
-        allow(sql_server_adapter).to receive(:execute).with(query: importer.recordings_query).and_return [{ "idRecording" => 15, "CallNo" => "'t Like -Crane.mp3" }]
-        allow(postgres_adapter).to receive(:execute).with(query: importer.bib_query(column: "label", call_num: escaped_call)).and_return []
-        allow(postgres_adapter).to receive(:execute).with(query: importer.bib_query(column: "sort", call_num: escaped_call2)).and_return []
+        allow(sql_server_adapter).to receive(:execute).with(query: importer.recordings_collector.recordings_query).and_return [{ "idRecording" => 15, "CallNo" => "'t Like -Crane.mp3" }]
+        allow(postgres_adapter).to receive(:execute).with(query: importer.recordings_collector.bib_query(column: "label", call_num: escaped_call)).and_return []
+        allow(postgres_adapter).to receive(:execute).with(query: importer.recordings_collector.bib_query(column: "sort", call_num: escaped_call2)).and_return []
       end
       it "escapes the quote for the query" do
-        importer.process_recordings
-        expect(postgres_adapter).to have_received(:execute).with(query: importer.bib_query(column: "label", call_num: escaped_call)).exactly(4).times
-        expect(postgres_adapter).not_to have_received(:execute).with(query: importer.bib_query(column: "label", call_num: bad_call))
+        importer.recordings
+        expect(postgres_adapter).to have_received(:execute).with(query: importer.recordings_collector.bib_query(column: "label", call_num: escaped_call)).exactly(4).times
+        expect(postgres_adapter).not_to have_received(:execute).with(query: importer.recordings_collector.bib_query(column: "label", call_num: bad_call))
       end
     end
   end
@@ -80,14 +80,14 @@ RSpec.describe MusicImportService do
   context "a call number that never hits a bib" do
     describe "#process_recordings" do
       before do
-        allow(sql_server_adapter).to receive(:execute).with(query: importer.recordings_query).and_return [{ "idRecording" => 3014, "CallNo" => "cd-123", "CourseNo" => nil }]
-        allow(postgres_adapter).to receive(:execute).with(query: importer.bib_query(column: "label", call_num: "CD- 123")).and_return []
-        allow(postgres_adapter).to receive(:execute).with(query: importer.bib_query(column: "label", call_num: "CD 123")).and_return []
-        allow(postgres_adapter).to receive(:execute).with(query: importer.bib_query(column: "sort", call_num: "CD 0000123")).and_return []
-        allow(postgres_adapter).to receive(:execute).with(query: importer.bib_query(column: "sort", call_num: "CD0000123")).and_return []
+        allow(sql_server_adapter).to receive(:execute).with(query: importer.recordings_collector.recordings_query).and_return [{ "idRecording" => 3014, "CallNo" => "cd-123", "CourseNo" => nil }]
+        allow(postgres_adapter).to receive(:execute).with(query: importer.recordings_collector.bib_query(column: "label", call_num: "CD- 123")).and_return []
+        allow(postgres_adapter).to receive(:execute).with(query: importer.recordings_collector.bib_query(column: "label", call_num: "CD 123")).and_return []
+        allow(postgres_adapter).to receive(:execute).with(query: importer.recordings_collector.bib_query(column: "sort", call_num: "CD 0000123")).and_return []
+        allow(postgres_adapter).to receive(:execute).with(query: importer.recordings_collector.bib_query(column: "sort", call_num: "CD0000123")).and_return []
       end
       it "checks every kind of normalization and gets []" do
-        recordings = importer.process_recordings
+        recordings = importer.recordings
         expect(recordings.first.bibs).to eq []
       end
     end
