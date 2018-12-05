@@ -24,6 +24,29 @@ RSpec.describe MusicImportService do
       .to_return(status: 404)
   end
 
+  describe "caching" do
+    let(:importer) { described_class.new(sql_server_adapter: sql_server_adapter, postgres_adapter: postgres_adapter, logger: logger, cache: true) }
+    let(:importer_args) do
+      {
+        sql_server_adapter: sql_server_adapter, postgres_adapter: postgres_adapter, logger: logger, cache: MusicImportService::RecordingCollector::MarshalCache.new("tmp/test")
+      }
+    end
+    before do
+      FileUtils.rm_f("tmp/test/recordings_cache.dump")
+      FileUtils.rm_f("tmp/test/cached_bibs.dump")
+    end
+    it "caches everything to a file" do
+      described_class.new(importer_args).recordings
+      described_class.new(importer_args).recordings
+      described_class.new(importer_args).recordings
+
+      expect(File.exist?("tmp/test/recordings_cache.dump")).to eq true
+      expect(File.exist?("tmp/test/cached_bibs.dump")).to eq true
+      expect(sql_server_adapter).to have_received(:execute).exactly(1).times
+      expect(a_request(:get, /https:\/\/bibdata.princeton.edu\/bibliographic\/.*/)).to have_been_made.times(2)
+    end
+  end
+
   describe "#process_recordings" do
     it "returns recordings with course numbers and bib ids" do
       recordings = importer.recordings
