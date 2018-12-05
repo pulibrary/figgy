@@ -49,6 +49,7 @@ Metrics/BlockLength:
     - 'app/resources/scanned_resources/simple_resource_change_set.rb'
     - 'app/controllers/concerns/resource_relations.rb'
     - 'lib/tasks/migrate.rake'
+    - 'lib/tasks/music_reserves.rake'
 Metrics/ClassLength:
   Exclude:
     - 'app/change_set_persisters/change_set_persister.rb'
