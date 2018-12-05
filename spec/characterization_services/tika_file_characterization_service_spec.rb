@@ -33,6 +33,13 @@ RSpec.describe TikaFileCharacterizationService do
     described_class.new(file_set: valid_file_set, persister: persister).characterize
   end
 
+  context "when given a file with an apostrophe", run_real_characterization: true do
+    let(:file) { fixture_file_upload("files/w'eird.tif", "image/tiff") }
+    it "works" do
+      described_class.new(file_set: valid_file_set, persister: persister).characterize
+    end
+  end
+
   it "sets the height attribute for a file_set on characterize " do
     t_file_set = valid_file_set
     t_file_set.original_file.height = nil
