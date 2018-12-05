@@ -97,6 +97,14 @@ RSpec.describe MusicImportService do
     end
   end
 
+  describe "#extra_bibs_csv" do
+    it "populates the fields of the csv, one row per recording" do
+      csv = importer.extra_bibs_csv
+      expect(csv).to eq("id,call,courses,titles,bibs,duplicate,recommended_bib,final_bib\n" \
+        "15,cd-431v1,\"[\"\"mus204\"\", \"\"mus549sb\"\"]\",\"[\"\"Symphonies nos. 55-69\"\"]\",\"[\"\"2547641\"\", \"\"2686069\"\"]\",,\n")
+    end
+  end
+
   context "a recording with no call number or bib number" do
     describe "#process_recordings" do
       before do

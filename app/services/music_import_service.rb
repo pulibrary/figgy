@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require "csv"
 
 # A service class to run an import of music reserves and performance recording
 #   objects from a sql server database into figgy
@@ -41,6 +42,20 @@ class MusicImportService
     logger.info "Bib ids found in #{number_empty(numbered_courses)} of #{numbered_courses.count} recordings with numbered course names (#{percent_empty(numbered_courses)}%)"
     logger.info "Bib ids found in #{number_empty(other_courses)} of #{other_courses.count} recordings with other course names (#{percent_empty(other_courses)}%)"
     logger.info "#{empty_courses.count} recordings not in any course"
+  end
+
+  # return a CSV of recordings where we got more than one bib and no recommended_bib
+  def extra_bibs_csv
+    records = recordings.select { |x| x.bibs.length > 1 && x.recommended_bib.blank? }
+    return if records.empty?
+
+    CSV.generate(headers: true) do |csv|
+      headings = MusicImportService::RecordingCollector::MRRecording.members.map(&:to_s) << "final_bib"
+      csv << headings
+      records.each do |record|
+        csv << record.entries
+      end
+    end
   end
 
   private
