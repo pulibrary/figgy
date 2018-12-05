@@ -13,8 +13,10 @@ namespace :music do
       pg_pass = ENV["PG_PASS"]
       pg_host = "localhost"
       pg_port = 9900
-      pg_dbname = "orangelight_staging"
-      abort "usage: rake music:report:bibids SQL_SERV_USER=username SQL_SERV_PASS=password PG_USER=username PG_PASS=password" unless sql_serv_user && sql_serv_pass && pg_user && pg_pass
+      pg_dbname = ENV["PG_DB_NAME"] || "orangelight_staging"
+      unless sql_serv_user && sql_serv_pass && pg_user && pg_pass
+        abort "usage: rake music:report:bibids SQL_SERV_USER=username SQL_SERV_PASS=password PG_USER=username PG_PASS=password [PG_DB_NAME=orangelight_staging]"
+      end
 
       MusicImportService.new(
         sql_server_adapter: MusicImportService::TinyTdsAdapter.new(dbhost: sql_serv_host, dbport: sql_serv_port, dbuser: sql_serv_user, dbpass: sql_serv_pass),
