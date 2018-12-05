@@ -1,19 +1,57 @@
 # frozen_string_literal: true
 class MusicImportService::RecordingCollector
   attr_reader :recordings, :sql_server_adapter, :postgres_adapter, :logger, :cache
-  def initialize(sql_server_adapter:, postgres_adapter:, logger:, cache: true)
+  def initialize(sql_server_adapter:, postgres_adapter:, logger:, cache: MarshalCache.new("tmp"))
     @sql_server_adapter = sql_server_adapter
     @postgres_adapter = postgres_adapter
     @logger = logger
-    @cache = cache
+    @cache = cache || NullCache
+  end
+
+  class MarshalCache
+    attr_reader :location
+    def initialize(location)
+      @location = Pathname.new(location)
+    end
+
+    def fetch(file, default = nil)
+      if File.exist?(location.join(file))
+        Marshal.load(File.open(location.join(file)))
+      elsif block_given?
+        results = yield
+        store(file, results)
+      else
+        default
+      end
+    end
+
+    def store(file, value)
+      FileUtils.mkdir_p(location)
+      File.open(location.join(file), "wb") do |f|
+        f.puts Marshal.dump(value)
+      end
+      value
+    end
+  end
+
+  class NullCache
+    def self.fetch(_file, default = nil)
+      if block_given?
+        yield
+      else
+        default
+      end
+    end
+
+    def self.store(_file, value)
+      value
+    end
   end
 
   def recordings
     @recordings ||=
       begin
-        if cache && File.exist?("tmp/recordings_cache.dump")
-          Marshal.load(File.open("tmp/recordings_cache.dump"))
-        else
+        cache.fetch("recordings_cache.dump") do
           logger.info "loading recordings"
           results = sql_server_adapter.execute(query: recordings_query).group_by { |result| result["idRecording"] }
           results = results.map do |result|
@@ -40,11 +78,6 @@ class MusicImportService::RecordingCollector
           end
           store_cached_bibs
           logger.info "Found #{@found_bibs} bibs from searching"
-          if cache
-            File.open("tmp/recordings_cache.dump", "wb") do |f|
-              f.puts Marshal.dump(recordings)
-            end
-          end
           results
         end
       end
@@ -276,20 +309,13 @@ class MusicImportService::RecordingCollector
   end
 
   def store_cached_bibs
-    return unless cache
-    File.open("tmp/cached_bibs.dump", "wb") do |file|
-      file.puts Marshal.dump(cached_bibs)
-    end
+    cache.store("cached_bibs.dump", cached_bibs)
   end
 
   def cached_bibs
     @cached_bibs ||=
       begin
-        if cache && File.exist?("tmp/cached_bibs.dump")
-          Marshal.load(File.open("tmp/cached_bibs.dump"))
-        else
-          {}
-        end
+        cache.fetch("cached_bibs.dump", {})
       end
   end
 
