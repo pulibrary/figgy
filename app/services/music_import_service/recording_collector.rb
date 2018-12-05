@@ -88,7 +88,7 @@ class MusicImportService::RecordingCollector
     ol_response = JSON.parse(
       open(
         "https://catalog-staging.princeton.edu/catalog.json?f[access_facet][]=In+the+Library&f[format][]=Audio&f[location][]=Mendel+Music+Library" \
-        "&search_field=title&rows=100&q=#{CGI.escape(recording.titles.first)}"
+        "&search_field=title&rows=100&q=#{CGI.escape(recording.titles.first.to_s)}"
       ).read
     )
     docs = ol_response["response"]["docs"]

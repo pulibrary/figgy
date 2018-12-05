@@ -22,6 +22,8 @@ RSpec.describe MusicImportService do
       .to_return(status: 200, body: ol_fixture.to_json, headers: {})
     stub_request(:get, /https:\/\/bibdata.princeton.edu\/bibliographic\/.*/)
       .to_return(status: 404)
+    stub_request(:get, /.*catalog.json.*&search_field=title/)
+      .to_return(status: 200, body: { response: { docs: [] } }.to_json)
   end
 
   describe "caching" do
@@ -54,6 +56,34 @@ RSpec.describe MusicImportService do
       expect(recordings.map(&:call)).to include("cd-9455", "cd-431v1")
       expect(recordings.map(&:courses)).to include(["mus204", "mus549sb"], [], ["borris"])
       expect(recordings.map(&:bibs)).to include(["1791261"], ["2547641", "2686069"])
+    end
+  end
+
+  describe "finding ids from titles" do
+    it "can find an id from a title if there's multiple matching bibs" do
+      stub_request(:get, "https://bibdata.princeton.edu/bibliographic/2547641/jsonld")
+        .to_return(
+          status: 200,
+          body:
+            {
+              "@context": "http://bibdata.princeton.edu/context.json",
+              "@id": "http://bibdata.princeton.edu/bibliographic/2547641",
+              "title": "Symphonies nos. 55-69"
+            }.to_json
+        )
+      stub_request(:get, "https://bibdata.princeton.edu/bibliographic/2686069/jsonld")
+        .to_return(
+          status: 200,
+          body:
+            {
+              "@context": "http://bibdata.princeton.edu/context.json",
+              "@id": "http://bibdata.princeton.edu/bibliographic/2547641",
+              "title": [{ "@value" => "Wrong" }]
+            }.to_json
+        )
+      recordings = importer.recordings
+
+      expect(recordings[1].recommended_bib).to eq "2547641"
     end
   end
 
@@ -103,7 +133,9 @@ RSpec.describe MusicImportService do
   context "a call number that never hits a bib" do
     describe "#process_recordings" do
       before do
-        allow(sql_server_adapter).to receive(:execute).with(query: importer.recordings_collector.recordings_query).and_return [{ "idRecording" => 3014, "CallNo" => "cd-123", "CourseNo" => nil }]
+        allow(sql_server_adapter).to receive(:execute).with(query: importer.recordings_collector.recordings_query).and_return [
+          { "idRecording" => 3014, "CallNo" => "cd-123", "CourseNo" => nil, "RecTitle" => "Find Me" }
+        ]
         allow(postgres_adapter).to receive(:execute).with(query: importer.recordings_collector.bib_query(column: "label", call_num: "CD- 123")).and_return []
         allow(postgres_adapter).to receive(:execute).with(query: importer.recordings_collector.bib_query(column: "label", call_num: "CD 123")).and_return []
         allow(postgres_adapter).to receive(:execute).with(query: importer.recordings_collector.bib_query(column: "sort", call_num: "CD 0000123")).and_return []
@@ -113,12 +145,32 @@ RSpec.describe MusicImportService do
         recordings = importer.recordings
         expect(recordings.first.bibs).to eq []
       end
+      it "will not crash if it can't search for a bib" do
+        stub_request(:get, /.*catalog.json.*&q=Find%20Me.*&search_field=title/)
+          .to_return(status: 404, body: "")
+
+        recordings = importer.recordings
+
+        expect(recordings.first.bibs).to eq []
+      end
+      it "can find it by searching by title" do
+        doc = {
+          id: "123456",
+          title_display: "Find Me"
+        }
+        stub_request(:get, /.*catalog.json.*&q=Find%20Me.*&search_field=title/)
+          .to_return(status: 200, body: { response: { docs: [doc] } }.to_json)
+
+        recordings = importer.recordings
+
+        expect(recordings.first.bibs).to eq ["123456"]
+      end
     end
   end
 
   def music_fixtures
     [{ "idRecording" => 14, "CallNo" => "cd-9455", "CourseNo" => "borris" },
-     { "idRecording" => 15, "CallNo" => "cd-431v1", "CourseNo" => "mus204" },
+     { "idRecording" => 15, "CallNo" => "cd-431v1", "CourseNo" => "mus204", "RecTitle" => "Symphonies nos. 55-69" },
      { "idRecording" => 15, "CallNo" => "cd-431v1", "CourseNo" => "mus549sb" },
      { "idRecording" => 3223, "CallNo" => "x-mus257rakha", "CourseNo" => nil },
      { "idRecording" => 3014, "CallNo" => nil, "CourseNo" => nil }]
