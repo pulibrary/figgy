@@ -174,9 +174,7 @@ class MusicImportService::RecordingCollector
     general_normalization(call_number) do |cn|
       # dashes should be followed by spaces e.g. cd-10994
       # ls, cass, dat, cd, vcass, dvd
-      if cn.match?(/^((CD)||(DAT)||(CASS)||(LS)||(VCASS)||(DVD))-/)
-        cn = cn.sub("-", "- ")
-      end
+      cn = cn.sub("-", "- ") if format_prefix?(cn)
       cn
     end
   end
@@ -184,7 +182,7 @@ class MusicImportService::RecordingCollector
   def volume_expansion(call_number)
     return unless call_number
     call_number = call_number.upcase
-    if call_number.match?(/^((CD)||(DAT)||(CASS)||(LS)||(VCASS)||(DVD))-/)
+    if format_prefix?(call_number)
       call_number = call_number.sub("-", "- ").sub("V", " vol.")
     end
     call_number = call_number.gsub(/'/, "''")
@@ -194,7 +192,7 @@ class MusicImportService::RecordingCollector
   def volume_space_expansion(call_number)
     return unless call_number
     call_number = call_number.upcase
-    if call_number.match?(/^((CD)||(DAT)||(CASS)||(LS)||(VCASS)||(DVD))-/)
+    if format_prefix?(call_number)
       call_number = call_number.sub("-", "- ").sub("V", " vol. ")
     end
     call_number = call_number.gsub(/'/, "''")
@@ -207,9 +205,7 @@ class MusicImportService::RecordingCollector
     general_normalization(call_number) do |cn|
       # dashes should be followed by spaces e.g. cd-10994
       # ls, cass, dat, cd, vcass, dvd
-      if cn.match?(/^((CD)||(DAT)||(CASS)||(LS)||(VCASS)||(DVD))-/)
-        cn = cn.sub("-", " ")
-      end
+      cn = cn.sub("-", " ") if format_prefix?(cn)
       cn
     end
   end
@@ -219,9 +215,7 @@ class MusicImportService::RecordingCollector
     general_normalization(call_number) do |cn|
       # dashes should be followed by spaces e.g. cd-10994
       # ls, cass, dat, cd, vcass, dvd
-      if cn.match?(/^((CD)||(DAT)||(CASS)||(LS)||(VCASS)||(DVD))-/)
-        cn = cn.sub("-", "- ")
-      end
+      cn = cn.sub("-", "- ") if format_prefix?(cn)
       cn = ol_cn_normalize(cn)
       cn
     end
@@ -232,12 +226,14 @@ class MusicImportService::RecordingCollector
     general_normalization(call_number) do |cn|
       # dashes should be followed by spaces e.g. cd-10994
       # ls, cass, dat, cd, vcass, dvd
-      if cn.match?(/^((CD)||(DAT)||(CASS)||(LS)||(VCASS)||(DVD))-/)
-        cn = cn.sub("-", " ")
-      end
+      cn = cn.sub("-", " ") if format_prefix?(cn)
       cn = ol_cn_normalize(cn)
       cn
     end
+  end
+
+  def format_prefix?(cn)
+    cn.match?(/^((CD)||(DAT)||(CASS)||(LS)||(VCASS)||(DVD))-/)
   end
 
   def just_lc(call_number)
