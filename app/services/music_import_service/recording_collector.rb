@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 class MusicImportService::RecordingCollector
-  attr_reader :recordings, :sql_server_adapter, :postgres_adapter, :logger, :cache
-  def initialize(sql_server_adapter:, postgres_adapter:, logger:, cache: MarshalCache.new("tmp"))
+  attr_reader :recordings, :sql_server_adapter, :postgres_adapter, :logger, :cache, :catalog_host
+  def initialize(sql_server_adapter:, postgres_adapter:, logger:, cache: MarshalCache.new("tmp"), catalog_host: "https://catalog.princeton.edu")
     @sql_server_adapter = sql_server_adapter
     @postgres_adapter = postgres_adapter
     @logger = logger
     @cache = cache || NullCache
+    @catalog_host = catalog_host
   end
 
   class MarshalCache
@@ -87,7 +88,7 @@ class MusicImportService::RecordingCollector
     logger.info "populating bib from title for #{recording.titles.first}"
     ol_response = JSON.parse(
       open(
-        "https://catalog-staging.princeton.edu/catalog.json?f[access_facet][]=In+the+Library&f[format][]=Audio&f[location][]=Mendel+Music+Library" \
+        "#{catalog_host}/catalog.json?f[access_facet][]=In+the+Library&f[format][]=Audio&f[location][]=Mendel+Music+Library" \
         "&search_field=title&rows=100&q=#{CGI.escape(recording.titles.first.to_s)}"
       ).read
     )
@@ -157,7 +158,7 @@ class MusicImportService::RecordingCollector
   #   "label"=>"CD- 9221",
   #   e.g. "?f[call_number_browse_s][]=CD-+9221"
   def query_ol_api(call_number:)
-    conn = Faraday.new(url: "https://catalog.princeton.edu/catalog.json")
+    conn = Faraday.new(url: "#{catalog_host}/catalog.json")
     result = conn.get do |req|
       req.params["search_field"] = "all_fields"
       req.params["f[call_number_browse_s][]"] = call_number
