@@ -50,6 +50,11 @@ class MusicImportService
     generate_csv(records)
   end
 
+  def zero_bibs_csv
+    records = recordings.select { |x| x.bibs.length.zero? }
+    generate_csv(records)
+  end
+
   private
 
     def generate_csv(records)

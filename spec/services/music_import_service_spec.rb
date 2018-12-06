@@ -105,6 +105,13 @@ RSpec.describe MusicImportService do
     end
   end
 
+  describe "#zero_bibs_csv" do
+    it "populates the fields of the csv, one row per recording" do
+      csv = importer.zero_bibs_csv
+      expect(csv).to eq "id,call,courses,titles,bibs,duplicate,recommended_bib,final_bib\n3223,x-mus257rakha,[],[],[],,\n3014,,[],[],[],,\n"
+    end
+  end
+
   context "a recording with no call number or bib number" do
     describe "#process_recordings" do
       before do

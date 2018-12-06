@@ -27,6 +27,9 @@ namespace :music do
       File.open("recordings-extra-bibs-#{Time.zone.today}.csv", "w") do |f|
         f << reporter.extra_bibs_csv
       end
+      File.open("recordings-zero-bibs-#{Time.zone.today}.csv", "w") do |f|
+        f << reporter.zero_bibs_csv
+      end
     end
   end
 end
