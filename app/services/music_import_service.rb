@@ -47,18 +47,22 @@ class MusicImportService
   # return a CSV of recordings where we got more than one bib and no recommended_bib
   def extra_bibs_csv
     records = recordings.select { |x| x.bibs.length > 1 && x.recommended_bib.blank? }
-    return if records.empty?
-
-    CSV.generate(headers: true) do |csv|
-      headings = MusicImportService::RecordingCollector::MRRecording.members.map(&:to_s) << "final_bib"
-      csv << headings
-      records.each do |record|
-        csv << record.entries
-      end
-    end
+    generate_csv(records)
   end
 
   private
+
+    def generate_csv(records)
+      return if records.empty?
+
+      CSV.generate(headers: true) do |csv|
+        headings = MusicImportService::RecordingCollector::MRRecording.members.map(&:to_s) << "final_bib"
+        csv << headings
+        records.each do |record|
+          csv << record.entries
+        end
+      end
+    end
 
     def number_empty(recordings)
       recordings.reject { |rec| rec.bibs.empty? }.count
