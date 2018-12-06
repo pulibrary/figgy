@@ -328,7 +328,6 @@ class MusicImportService::RecordingCollector
     :titles, # an array
     :bibs, # an array
     # id of Recording for which this is recording represents a playlist
-    :duplicate,
     :recommended_bib
   )
 end
