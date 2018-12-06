@@ -27,7 +27,6 @@ RSpec.describe MusicImportService do
   end
 
   describe "caching" do
-    let(:importer) { described_class.new(sql_server_adapter: sql_server_adapter, postgres_adapter: postgres_adapter, logger: logger, cache: true) }
     let(:importer_args) do
       {
         sql_server_adapter: sql_server_adapter, postgres_adapter: postgres_adapter, logger: logger, cache: MusicImportService::RecordingCollector::MarshalCache.new("tmp/test")

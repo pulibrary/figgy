@@ -5,7 +5,7 @@
 class MusicImportService
   attr_reader :recordings, :sql_server_adapter, :postgres_adapter, :logger, :cache
   delegate :recordings, to: :recordings_collector
-  def initialize(sql_server_adapter:, postgres_adapter:, logger:, cache: true)
+  def initialize(sql_server_adapter:, postgres_adapter:, logger:, cache: MusicImportService::RecordingCollector::MarshalCache.new("tmp"))
     @sql_server_adapter = sql_server_adapter
     @postgres_adapter = postgres_adapter
     @logger = logger
