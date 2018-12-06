@@ -112,6 +112,12 @@ RSpec.describe MusicImportService do
     end
   end
 
+  describe "#course_names_csv" do
+    it "has 2 columns, populates the first with course names that we don't recognize as actual courses" do
+      expect(importer.course_names_csv).to eq "course_name,collection_name\nborris,\n"
+    end
+  end
+
   context "a recording with no call number or bib number" do
     describe "#process_recordings" do
       before do

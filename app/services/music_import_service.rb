@@ -20,7 +20,7 @@ class MusicImportService
   # yes there will be a #run method but the first step is the call number report
   def bibid_report
     suspected_playlists, real_recordings = recordings.partition { |rec| rec.call&.starts_with? "x-" }
-    numbered_courses, rest = real_recordings.partition { |rec| rec.courses.any? { |course| course.match?(/^[a-zA-Z]{3}\d+.*$/) } }
+    numbered_courses, rest = real_recordings.partition { |rec| rec.courses.any? { |course| numbered_course_name?(course) } }
     empty_courses, other_courses = rest.partition { |rec| rec.courses.empty? }
 
     log_multiple_bibs(real_recordings)
@@ -55,6 +55,18 @@ class MusicImportService
     generate_csv(records)
   end
 
+  def course_names_csv
+    course_names = recordings.map(&:courses).flatten.uniq.reject { |x| numbered_course_name?(x) }
+    return if course_names.empty?
+
+    CSV.generate(headers: true) do |csv|
+      csv << %w[course_name collection_name]
+      course_names.each do |cn|
+        csv << { "course_name" => cn }
+      end
+    end
+  end
+
   private
 
     def generate_csv(records)
@@ -67,6 +79,10 @@ class MusicImportService
           csv << record.entries
         end
       end
+    end
+
+    def numbered_course_name?(cn)
+      cn.match?(/^[a-zA-Z]{3}\d+.*$/)
     end
 
     def number_empty(recordings)
