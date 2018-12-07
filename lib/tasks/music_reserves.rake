@@ -18,11 +18,21 @@ namespace :music do
         abort "usage: rake music:report:bibids SQL_SERV_USER=username SQL_SERV_PASS=password PG_USER=username PG_PASS=password [PG_DB_NAME=orangelight_staging]"
       end
 
-      MusicImportService.new(
+      reporter = MusicImportService.new(
         sql_server_adapter: MusicImportService::TinyTdsAdapter.new(dbhost: sql_serv_host, dbport: sql_serv_port, dbuser: sql_serv_user, dbpass: sql_serv_pass),
         postgres_adapter: MusicImportService::PgAdapter.new(dbhost: pg_host, dbport: pg_port, dbname: pg_dbname, dbuser: pg_user, dbpass: pg_pass),
         logger: Logger.new(STDOUT)
-      ).bibid_report
+      )
+      reporter.bibid_report
+      File.open("recordings-extra-bibs-#{Time.zone.today}.csv", "w") do |f|
+        f << reporter.extra_bibs_csv
+      end
+      File.open("recordings-zero-bibs-#{Time.zone.today}.csv", "w") do |f|
+        f << reporter.zero_bibs_csv
+      end
+      File.open("recordings-course-names-#{Time.zone.today}.csv", "w") do |f|
+        f << reporter.course_names_csv
+      end
     end
   end
 end

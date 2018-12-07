@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require "csv"
 
 # A service class to run an import of music reserves and performance recording
 #   objects from a sql server database into figgy
@@ -19,7 +20,7 @@ class MusicImportService
   # yes there will be a #run method but the first step is the call number report
   def bibid_report
     suspected_playlists, real_recordings = recordings.partition { |rec| rec.call&.starts_with? "x-" }
-    numbered_courses, rest = real_recordings.partition { |rec| rec.courses.any? { |course| course.match?(/^[a-zA-Z]{3}\d+.*$/) } }
+    numbered_courses, rest = real_recordings.partition { |rec| rec.courses.any? { |course| numbered_course_name?(course) } }
     empty_courses, other_courses = rest.partition { |rec| rec.courses.empty? }
 
     log_multiple_bibs(real_recordings)
@@ -43,7 +44,46 @@ class MusicImportService
     logger.info "#{empty_courses.count} recordings not in any course"
   end
 
+  # return a CSV of recordings where we got more than one bib and no recommended_bib
+  def extra_bibs_csv
+    records = recordings.select { |x| x.bibs.length > 1 && x.recommended_bib.blank? }
+    generate_csv(records)
+  end
+
+  def zero_bibs_csv
+    records = recordings.select { |x| x.bibs.length.zero? }
+    generate_csv(records)
+  end
+
+  def course_names_csv
+    course_names = recordings.map(&:courses).flatten.uniq.reject { |x| numbered_course_name?(x) }
+    return if course_names.empty?
+
+    CSV.generate(headers: true) do |csv|
+      csv << %w[course_name collection_name]
+      course_names.each do |cn|
+        csv << { "course_name" => cn }
+      end
+    end
+  end
+
   private
+
+    def generate_csv(records)
+      return if records.empty?
+
+      CSV.generate(headers: true) do |csv|
+        headings = MusicImportService::RecordingCollector::MRRecording.members.map(&:to_s) << "final_bib"
+        csv << headings
+        records.each do |record|
+          csv << record.entries
+        end
+      end
+    end
+
+    def numbered_course_name?(cn)
+      cn.match?(/^[a-zA-Z]{3}\d+.*$/)
+    end
 
     def number_empty(recordings)
       recordings.reject { |rec| rec.bibs.empty? }.count
