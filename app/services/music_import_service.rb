@@ -4,17 +4,11 @@ require "csv"
 # A service class to run an import of music reserves and performance recording
 #   objects from a sql server database into figgy
 class MusicImportService
-  attr_reader :recordings, :sql_server_adapter, :postgres_adapter, :logger, :cache
-  delegate :recordings, to: :recordings_collector
-  def initialize(sql_server_adapter:, postgres_adapter:, logger:, cache: MusicImportService::RecordingCollector::MarshalCache.new("tmp"))
-    @sql_server_adapter = sql_server_adapter
-    @postgres_adapter = postgres_adapter
+  attr_reader :recording_collector, :logger
+  delegate :recordings, to: :recording_collector
+  def initialize(recording_collector:, logger:)
+    @recording_collector = recording_collector
     @logger = logger
-    @cache = cache
-  end
-
-  def recordings_collector
-    @recordings_collector ||= RecordingCollector.new(sql_server_adapter: sql_server_adapter, postgres_adapter: postgres_adapter, logger: logger, cache: cache)
   end
 
   # yes there will be a #run method but the first step is the call number report
