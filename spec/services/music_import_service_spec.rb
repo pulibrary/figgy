@@ -48,7 +48,7 @@ RSpec.describe MusicImportService do
     end
   end
 
-  describe "#process_recordings" do
+  describe "#recordings" do
     it "returns recordings with course numbers and bib ids" do
       recordings = importer.recordings
       expect(recordings.map(&:id)).to include(14, 15)
@@ -119,7 +119,7 @@ RSpec.describe MusicImportService do
   end
 
   context "a recording with no call number or bib number" do
-    describe "#process_recordings" do
+    describe "#recordings" do
       before do
         allow(sql_server_adapter).to receive(:execute).with(query: importer.recordings_collector.recordings_query).and_return [{ "idRecording" => 15, "CallNo" => nil, "CourseNo" => "mus204" }]
       end
@@ -133,7 +133,7 @@ RSpec.describe MusicImportService do
   end
 
   context "call number containing single quote" do
-    describe "#process_recordings" do
+    describe "#recordings" do
       let(:bad_call) { "'T LIKE -CRANE.MP3" }
       let(:escaped_call) { "''T LIKE -CRANE.MP3" }
       let(:escaped_call2) { "''T LIKE -CRANE.MP0000003" }
@@ -151,7 +151,7 @@ RSpec.describe MusicImportService do
   end
 
   context "a call number that never hits a bib" do
-    describe "#process_recordings" do
+    describe "#recordings" do
       before do
         allow(sql_server_adapter).to receive(:execute).with(query: importer.recordings_collector.recordings_query).and_return [
           { "idRecording" => 3014, "CallNo" => "cd-123", "CourseNo" => nil, "RecTitle" => "Find Me" }
