@@ -1,12 +1,15 @@
 # frozen_string_literal: true
+require "csv"
+
 class MusicImportService::RecordingCollector
-  attr_reader :recordings, :sql_server_adapter, :postgres_adapter, :logger, :cache, :catalog_host
-  def initialize(sql_server_adapter:, postgres_adapter:, logger:, cache: MarshalCache.new("tmp"), catalog_host: "https://catalog.princeton.edu")
+  attr_reader :recordings, :sql_server_adapter, :postgres_adapter, :logger, :cache, :catalog_host, :csv_input_dir
+  def initialize(sql_server_adapter:, postgres_adapter:, logger:, cache: MarshalCache.new("tmp"), catalog_host: "https://catalog.princeton.edu", csv_input_dir: "tmp")
     @sql_server_adapter = sql_server_adapter
     @postgres_adapter = postgres_adapter
     @logger = logger
     @cache = cache || NullCache
     @catalog_host = catalog_host
+    @csv_input_dir = Pathname.new(csv_input_dir)
   end
 
   class MarshalCache
@@ -119,7 +122,7 @@ class MusicImportService::RecordingCollector
 
   def bib_numbers_for(call_number:)
     return [] unless call_number
-    bib_numbers = []
+    bib_numbers = user_provided_bib(call_number) || []
     normalization_strategies.each_pair do |strategy, column|
       next unless bib_numbers.empty?
       normalized = send(strategy, call_number)
@@ -127,6 +130,26 @@ class MusicImportService::RecordingCollector
       logger.info "Found bib with #{strategy} for #{call_number}" unless bib_numbers.empty?
     end
     bib_numbers
+  end
+
+  def user_provided_bib(call_number)
+    user_bib_table[call_number]
+  end
+
+  def user_bib_table
+    @user_bib_table ||=
+      begin
+        lookup_table = {}
+        csv_files = csv_input_dir.find.select { |path| path.file? && (path.basename.fnmatch?("recordings-extra-bibs*") || path.basename.fnmatch?("recordings-zero-bibs*")) }
+        csv_files.map! { |f| CSV.open f, headers: true }
+        csv_files.each do |f|
+          f.each do |row|
+            h = row.to_h
+            lookup_table[h["call"]] = [h["final_bib"]]
+          end
+        end
+        lookup_table
+      end
   end
 
   def normalization_strategies
