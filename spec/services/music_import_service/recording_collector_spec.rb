@@ -2,7 +2,15 @@
 require "rails_helper"
 
 RSpec.describe MusicImportService::RecordingCollector do
-  let(:collector) { described_class.new(sql_server_adapter: sql_server_adapter, postgres_adapter: postgres_adapter, logger: logger, cache: false) }
+  let(:collector) do
+    described_class.new(
+      sql_server_adapter: sql_server_adapter,
+      postgres_adapter: postgres_adapter,
+      logger: logger,
+      cache: false,
+      csv_input_dir: Rails.root.join("spec", "fixtures", "music_import_service")
+    )
+  end
   let(:sql_server_adapter) { instance_double MusicImportService::TinyTdsAdapter }
   let(:postgres_adapter) { instance_double MusicImportService::PgAdapter }
   let(:logger) { instance_double Logger }
@@ -83,6 +91,22 @@ RSpec.describe MusicImportService::RecordingCollector do
       recordings = collector.recordings
 
       expect(recordings[1].recommended_bib).to eq "2547641"
+    end
+  end
+
+  describe "overriding bib number lookup with user-provided csv data" do
+    before do
+      allow(sql_server_adapter).to receive(:execute).with(query: collector.recordings_query).and_return [
+        { "idRecording" => 834, "CallNo" => "DVD-18", "CourseNo" => "frs144", "RecTitle" => "Streetgar named desire" },
+        { "idRecording" => 5609, "CallNo" => "cd-2009-12-06", "CourseNo" => "chapel", "RecTitle" => "And was Incarnate" },
+        { "idRecording" => 230, "CallNo" => "cd-11656v6", "CourseNo" => nil, "RecTitle" => "Piano concertos" }
+      ]
+    end
+
+    it "takes the bib from the csv and does not query the ol db" do
+      collector.recordings
+      expect(collector.recordings.map(&:bibs)).to include(["3411063"], ["6074439"], ["test_bib"])
+      expect(postgres_adapter).not_to have_received(:execute)
     end
   end
 

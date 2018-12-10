@@ -135,6 +135,7 @@ Metrics/ParameterLists:
     - 'app/change_set_persisters/change_set_persister.rb'
     - 'app/jobs/ingest_folders_job.rb'
     - 'app/jobs/ingest_folder_job.rb'
+    - 'app/services/music_import_service/recording_collector.rb'
 Metrics/PerceivedComplexity:
   Exclude:
     - 'app/services/pdf_generator/canvas.rb'
