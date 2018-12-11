@@ -102,6 +102,7 @@ Metrics/CyclomaticComplexity:
 Metrics/LineLength:
   Exclude:
     - 'spec/views/scanned_resources/order_manager.html.erb_spec.rb'
+    - 'lib/tasks/music_reserves.rake'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
@@ -231,5 +232,4 @@ Style/StringLiterals:
   EnforcedStyle: double_quotes
 Security/MarshalLoad:
   Exclude:
-    - 'app/services/music_import_service.rb'
-    - 'app/services/music_import_service/recording_collector.rb'
+    - 'app/services/music_import_service/recording_collector/marshal_cache.rb'

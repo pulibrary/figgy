@@ -10,6 +10,7 @@ class Playlist < Resource
   attribute :state
   attribute :workflow_note
   attribute :auth_token, Valkyrie::Types::String
+  attribute :local_identifier
 
   def self.can_have_manifests?
     true

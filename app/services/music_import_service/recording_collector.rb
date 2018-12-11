@@ -3,53 +3,27 @@ require "csv"
 
 class MusicImportService::RecordingCollector
   attr_reader :recordings, :sql_server_adapter, :postgres_adapter, :logger, :cache, :catalog_host, :csv_input_dir
-  def initialize(sql_server_adapter:, postgres_adapter:, logger:, cache: MarshalCache.new("tmp"), catalog_host: "https://catalog.princeton.edu", csv_input_dir: "tmp")
+  attr_writer :recordings_query
+  def initialize(sql_server_adapter:, postgres_adapter:, logger:, cache: MarshalCache.new("tmp"), catalog_host: "https://catalog.princeton.edu", csv_input_dir: "tmp", recordings_query: nil)
     @sql_server_adapter = sql_server_adapter
     @postgres_adapter = postgres_adapter
     @logger = logger
     @cache = cache || NullCache
     @catalog_host = catalog_host
     @csv_input_dir = Pathname.new(csv_input_dir)
+    @recordings_query = recordings_query
   end
 
-  class MarshalCache
-    attr_reader :location
-    def initialize(location)
-      @location = Pathname.new(location)
-    end
-
-    def fetch(file, default = nil)
-      if File.exist?(location.join(file))
-        Marshal.load(File.open(location.join(file)))
-      elsif block_given?
-        results = yield
-        store(file, results)
-      else
-        default
-      end
-    end
-
-    def store(file, value)
-      FileUtils.mkdir_p(location)
-      File.open(location.join(file), "wb") do |f|
-        f.puts Marshal.dump(value)
-      end
-      value
-    end
-  end
-
-  class NullCache
-    def self.fetch(_file, default = nil)
-      if block_given?
-        yield
-      else
-        default
-      end
-    end
-
-    def self.store(_file, value)
-      value
-    end
+  def with_recordings_query(query)
+    self.class.new(
+      sql_server_adapter: sql_server_adapter,
+      postgres_adapter: postgres_adapter,
+      logger: logger,
+      cache: cache,
+      catalog_host: catalog_host,
+      csv_input_dir: csv_input_dir,
+      recordings_query: query
+    )
   end
 
   def recordings
@@ -110,10 +84,13 @@ class MusicImportService::RecordingCollector
 
   # SQL QUERIES
   def recordings_query
-    "select R.idRecording, R.CallNo, R.RecTitle, C.CourseNo from Recordings R " \
-      "left join Selections S on S.idRecording=R.idRecording " \
-      "left join jSelections jS on S.idSelection=jS.idSelection " \
-      "left join Courses C on jS.idCourse=C.idCourse"
+    @recordings_query ||=
+      begin
+        "select R.idRecording, R.CallNo, R.RecTitle, C.CourseNo from Recordings R " \
+          "left join Selections S on S.idRecording=R.idRecording " \
+          "left join jSelections jS on S.idSelection=jS.idSelection " \
+          "left join Courses C on jS.idCourse=C.idCourse"
+      end
   end
 
   def bib_query(column:, call_num:)
@@ -339,6 +316,38 @@ class MusicImportService::RecordingCollector
       end
   end
 
+  def audio_files(recording)
+    results = sql_server_adapter.execute(query: audio_file_query(recording))
+    results.map do |result|
+      AudioFile.new(
+        id: result["idFile"],
+        selection_id: result["idSelection"],
+        file_path: result["FilePath"],
+        file_name: result["FileName"],
+        file_note: result["FileNote"],
+        entry_id: result["entryid"],
+        selection_title: result["Title"],
+        selection_alt_title: result["AltTitle"],
+        selection_note: result["SelNote"]
+      )
+    end
+  end
+
+  def audio_file_query(recording)
+    <<-SQL
+      select a.idFile, a.idSelection, a.FilePath, a.FileName, a.FileNote,
+      a.entryid, Selections.Title, Selections.AltTitle, Selections.SelNote from
+      AudioFiles a JOIN Selections ON a.idSelection = Selections.idSelection WHERE
+      a.idSelection IN (select idSelection from Selections WHERE idRecording=#{recording.id})
+      AND a.FilePath IS NOT NULL
+    SQL
+  end
+
+  class AudioFile < Valkyrie::Resource
+    [:selection_id, :file_path, :file_name, :file_note, :entry_id, :selection_title, :selection_alt_title, :selection_note].each do |attr|
+      attribute attr, Valkyrie::Types::String
+    end
+  end
   MRRecording = Struct.new(
     :id,
     :call,

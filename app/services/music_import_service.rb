@@ -4,11 +4,12 @@ require "csv"
 # A service class to run an import of music reserves and performance recording
 #   objects from a sql server database into figgy
 class MusicImportService
-  attr_reader :recording_collector, :logger
+  attr_reader :recording_collector, :logger, :file_root
   delegate :recordings, to: :recording_collector
-  def initialize(recording_collector:, logger:)
+  def initialize(recording_collector:, logger:, file_root:)
     @recording_collector = recording_collector
     @logger = logger
+    @file_root = file_root
   end
 
   # yes there will be a #run method but the first step is the call number report
@@ -57,6 +58,115 @@ class MusicImportService
       csv << %w[course_name collection_name]
       course_names.each do |cn|
         csv << { "course_name" => cn }
+      end
+    end
+  end
+
+  def ingest_course(course)
+    temp_recording_collector = recording_collector.with_recordings_query(course_recordings_query(course))
+    temp_recording_collector.recordings.map do |recording|
+      ingest_recording(recording)
+    end
+  end
+
+  def course_recordings_query(course)
+    "select R.idRecording, R.CallNo, R.RecTitle, C.CourseNo from Recordings R " \
+      "left join Selections S on S.idRecording=R.idRecording " \
+      "left join jSelections jS on S.idSelection=jS.idSelection " \
+      "left join Courses C on jS.idCourse=C.idCourse " \
+      "WHERE C.CourseNo = '#{course}'"
+  end
+
+  def ingest_recording(recording)
+    Importer.new(recording_collector: recording_collector, recording: recording, file_root: file_root, logger: logger).import!
+  end
+
+  class Importer
+    attr_reader :recording_collector, :recording, :file_root, :logger
+    delegate :id, to: :recording, prefix: true
+    def initialize(recording_collector:, recording:, file_root:, logger:)
+      @recording_collector = recording_collector
+      @recording = recording
+      @file_root = Pathname.new(file_root.to_s)
+      @logger = logger
+    end
+
+    def import!
+      if files.empty?
+        logger.warn "Unable to ingest recording #{recording.id} - there are no files associated or the files are missing from disk."
+        return nil
+      end
+      change_set.files = files
+      output = nil
+      change_set_persister.buffer_into_index do |buffered_change_set_persister|
+        output = buffered_change_set_persister.save(change_set: change_set)
+        members = Wayfinder.for(output).members
+        audio_files.group_by(&:selection_id).each do |selection_id, selection_files|
+          next if selection_files.empty?
+          file_set_members = members.select do |member|
+            selection_files.map(&:id).map(&:to_s).include?(member.local_identifier.first)
+          end
+          ids = file_set_members.map(&:id)
+          playlist = Playlist.new(title: selection_files.first.selection_title, local_identifier: selection_id.to_s)
+          change_set = DynamicChangeSet.new(playlist).prepopulate!
+          change_set.file_set_ids = ids
+          buffered_change_set_persister.save(change_set: change_set)
+        end
+      end
+      output
+    end
+
+    def change_set_persister
+      ScannedResourcesController.change_set_persister
+    end
+
+    def resource
+      @resource ||= ScannedResource.new(source_metadata_identifier: identifier, local_identifier: recording_id)
+    end
+
+    def change_set
+      @change_set ||= RecordingChangeSet.new(resource).prepopulate!
+    end
+
+    def identifier
+      recording.bibs.first
+    end
+
+    def audio_files
+      @audio_files ||= recording_collector.audio_files(recording)
+    end
+
+    def files
+      @files ||=
+        begin
+          new_files = []
+          audio_files.each do |file|
+            if file_path(file)
+              new_files << file
+            else
+              logger.warn("Unable to find AudioFile #{file.id} at location #{file_root.join(file.file_path).join("#{file.file_name}.*")}")
+            end
+          end
+          new_files.map do |file|
+            file_path = file_path(file)
+            IngestableFile.new(
+              file_path: file_path,
+              mime_type: "audio/x-wav",
+              original_filename: File.basename(file_path),
+              container_attributes: {
+                title: file.file_note,
+                local_identifier: file.id.to_s
+              }
+            )
+          end
+        end
+    end
+
+    def file_path(file)
+      path = file_root.join(file.file_path)
+      file_name = File.basename(file.file_name, File.extname(file.file_name))
+      Dir.glob(path.join("*")).find do |inner_path|
+        File.basename(inner_path, ".*") == file_name
       end
     end
   end
