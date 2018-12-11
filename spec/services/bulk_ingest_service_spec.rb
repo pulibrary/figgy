@@ -71,7 +71,7 @@ RSpec.describe BulkIngestService do
       stub_ezid(shoulder: "99999/fk4", blade: "4609321")
     end
     context "with a directory of Scanned TIFFs" do
-      it "ingests the resources, ignoring dotfiles" do
+      it "ingests the resources, ignoring dotfiles and blacklisted files" do
         ingester.attach_dir(
           base_directory: single_dir,
           file_filters: [".tif"],
