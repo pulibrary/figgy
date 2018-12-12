@@ -155,6 +155,7 @@ class BulkIngestService
         end
       end
       file_paths.reject! { |x| x.basename.to_s.start_with?(".") }
+      file_paths.reject! { |x| blacklisted_file_names.include?(x.basename.to_s) }
 
       nodes = []
       file_paths.sort.each_with_index do |f, idx|
@@ -172,5 +173,9 @@ class BulkIngestService
         )
       end
       nodes
+    end
+
+    def blacklisted_file_names
+      ["Thumbs.db"]
     end
 end
