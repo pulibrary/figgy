@@ -33,7 +33,7 @@ class ScannedResourcesController < BaseResourceController
 
   def handle_save_and_ingest(obj)
     return unless params[:commit] == "Save and Ingest"
-    locator = IngestFolderLocator.new(id: params[:scanned_resource][:source_metadata_identifier])
+    locator = IngestFolderLocator.new(id: params[:scanned_resource][:source_metadata_identifier], search_directory: ingest_folder)
     IngestFolderJob.perform_later(directory: locator.folder_pathname.to_s, property: "id", id: obj.id.to_s)
   end
 
@@ -83,7 +83,7 @@ class ScannedResourcesController < BaseResourceController
     authorize! :create, resource_class
     respond_to do |f|
       f.json do
-        render json: IngestFolderLocator.new(id: params[:id]).to_h
+        render json: IngestFolderLocator.new(id: params[:id], search_directory: ingest_folder).to_h
       end
     end
   end
@@ -104,5 +104,13 @@ class ScannedResourcesController < BaseResourceController
 
     def auth_token_param
       params[:auth_token]
+    end
+
+    def ingest_folder
+      if change_set_class.eql? RecordingChangeSet
+        "music"
+      else
+        "studio_new"
+      end
     end
 end
