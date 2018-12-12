@@ -32,6 +32,9 @@ A digital repository application in use at Princeton University Library for stor
 * [MediaInfo](https://mediaarea.net/en/MediaInfo)
     * You can install it on Mac OSX with `brew install mediainfo`.
     * On Ubuntu, use `sudo apt-get install mediainfo`.
+* [FreeTDS]
+    * Needed for migration of music reserve data; we'll likely remove this dependency once that's all done
+    * `brew install FreeTDS`
 
 ## Simple Tiles
 
