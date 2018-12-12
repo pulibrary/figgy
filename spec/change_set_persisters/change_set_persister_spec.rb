@@ -505,6 +505,7 @@ RSpec.describe ChangeSetPersister do
         allow(audio_track_attributes).to receive(:duration).and_return(23.123)
         allow(audio_track_attributes).to receive(:count).and_return 1
         allow(audio_track_attributes).to receive(:filesize).and_return 100
+        allow(audio_track_attributes).to receive(:title).and_return nil
 
         allow(tracks).to receive(:track_types).and_return(["audio"])
         allow(tracks).to receive(:audio).and_return(audio_track_attributes)
