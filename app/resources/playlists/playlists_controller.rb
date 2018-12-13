@@ -25,10 +25,16 @@ class PlaylistsController < BaseResourceController
     authorize! :manifest, @resource
     respond_to do |f|
       f.json do
-        render json: ManifestBuilder.new(@resource).build
+        render json: manifest_builder.build
       end
     end
   rescue Valkyrie::Persistence::ObjectNotFoundError
     render json: { message: "No manifest found for #{params[:id]}" }
   end
+
+  private
+
+    def manifest_builder
+      ManifestBuilder.new(@resource, params[:auth_token])
+    end
 end

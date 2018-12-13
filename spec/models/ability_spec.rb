@@ -62,8 +62,13 @@ describe Ability do
     FactoryBot.create(:complete_scanned_resource, user: staff_user, identifier: ["ark:/99999/fk4445wg45"])
   end
 
+  let(:file) { fixture_file_upload("files/example.tif") }
+  let(:other_staff_scanned_resource) do
+    FactoryBot.create_for_repository(:complete_scanned_resource, user: other_staff_user, identifier: ["ark:/99999/fk4445wg45"], files: [file])
+  end
+
   let(:staff_file) { FactoryBot.build(:file_set, user: staff_user) }
-  let(:other_staff_file) { FactoryBot.build(:file_set, user: other_staff_user) }
+  let(:other_staff_file) { other_staff_scanned_resource.decorate.members.first }
   let(:admin_file) { FactoryBot.build(:file_set, user: admin_user) }
 
   let(:admin_user) { FactoryBot.create(:admin) }

@@ -29,7 +29,7 @@ class ManifestBuilder
       when ScannedMap
         ScannedMapNode.new(resource)
       when Playlist
-        PlaylistNode.new(resource)
+        PlaylistNode.new(resource, auth_token)
       else
         new(resource, auth_token)
       end
@@ -406,10 +406,18 @@ class ManifestBuilder
                                                         iiif_endpoint: endpoint)
     end
 
+    def download_url
+      if helper.token_authorizable?(parent_node.resource)
+        helper.download_url(resource.id, derivative.id, auth_token: parent_node.resource.auth_token)
+      else
+        helper.download_url(resource.id, derivative.id)
+      end
+    end
+
     def display_content
       return unless file.mime_type.first.include?("audio")
       @display_content ||= IIIFManifest::V3::DisplayContent.new(
-        helper.download_url(resource.id, derivative.id),
+        download_url,
         format: "audio/mp3",
         label: resource.title.first,
         duration: file.duration.first.to_f,
