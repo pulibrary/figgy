@@ -115,7 +115,8 @@ module ApplicationHelper
   end
 
   def build_authorized_link
-    link_to(request.base_url + solr_document_path(id: resource.id, auth_token: resource.auth_token), solr_document_path(id: resource.id, auth_token: resource.auth_token))
+    viewer_url = "#{root_url}viewer#?manifest=#{polymorphic_url([:manifest, resource], auth_token: resource.auth_token)}"
+    link_to viewer_url, viewer_url
   end
 
   # Renders an attribute value based on attribute name
