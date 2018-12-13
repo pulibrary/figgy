@@ -43,7 +43,8 @@ export const resourceMutations = {
     state.resource.viewingDirection = resource.viewingDirection
     state.resource.thumbnail = resource.thumbnail != null ? resource.thumbnail.id : null
     state.resource.members = resource.members
-    const items = resource.members.map(member => ({
+    const validMembers = resource.members.filter(member => typeof(member.id) != "undefined" && member["thumbnail"])
+    const items = validMembers.map(member => ({
       id: member.id,
       viewingHint: member.viewingHint != null ? member.viewingHint : "single",
       caption: member.label, // member.__typename + " : " + member.id,

@@ -60,7 +60,8 @@ export default {
   },
   computed: {
     galleryItems() {
-      return this.resource.members.map(member => ({
+      const validMembers = this.resource.members.filter(member => typeof(member.id) != "undefined" && member["thumbnail"])
+      return validMembers.map(member => ({
         id: member.id,
         caption: member.label,
         service:
