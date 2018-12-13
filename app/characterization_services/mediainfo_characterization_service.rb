@@ -25,10 +25,7 @@ class MediainfoCharacterizationService
   # @return [FileNode]
   def characterize(save: true)
     new_file = preservation_file.new(file_characterization_attributes)
-    if media.title # use embedded title metadata
-      new_file.label = media.title
-      @file_set.title = media.title
-    end
+    @file_set.title = media.title if media.title # use embedded title metadata
     @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
     @persister.save(resource: @file_set) if save
     @file_set
