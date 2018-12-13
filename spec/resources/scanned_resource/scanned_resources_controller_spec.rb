@@ -353,6 +353,17 @@ RSpec.describe ScannedResourcesController, type: :controller do
       expect(output["file_count"]).to eq 0
       expect(output["volume_count"]).to eq 2
     end
+    context "when ingesting a music reserve" do
+      it "uses the music directory" do
+        get :save_and_ingest, params: { change_set: "recording", format: :json, id: "1182238" }
+
+        output = JSON.parse(response.body, symbolize_keys: true)
+
+        expect(output["exists"]).to eq true
+        expect(output["location"]).to eq "cd-14000-14999/1182238"
+        expect(output["file_count"]).to eq 2
+      end
+    end
     context "when a folder doesn't exist" do
       it "returns JSON appropriately" do
         get :save_and_ingest, params: { format: :json, id: "1234" }
