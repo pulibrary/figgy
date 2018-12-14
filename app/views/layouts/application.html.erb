@@ -32,6 +32,11 @@
     <%= stylesheet_link_tag 'application' %>
     <%= javascript_include_tag 'application' %>
     <%= stylesheet_pack_tag 'application' %>
+    <%= javascript_tag do %>
+      window.Global = {
+        figgy: { resource: { defaultThumbnail: "<%= image_url('default_thumbnail.png') %>" } }
+      };
+    <% end %>
     <%= javascript_pack_tag 'application' %>
     <%= yield :head %>
   </head>

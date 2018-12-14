@@ -60,18 +60,17 @@ export default {
   },
   computed: {
     galleryItems() {
-      const validMembers = this.resource.members.filter(member => typeof(member.id) != "undefined" && member["thumbnail"])
-      return validMembers.map(member => ({
+      return this.resource.members.map(member => ({
         id: member.id,
         caption: member.label,
         service:
-          typeof member.thumbnail.iiifServiceUrl != "undefined"
+          member["thumbnail"] && typeof(member.thumbnail.iiifServiceUrl) != "undefined"
             ? member.thumbnail.iiifServiceUrl
-            : "https://picsum.photos/600/300/?random",
+            : this.defaultThumbnail,
         mediaUrl:
-          typeof member.thumbnail.iiifServiceUrl != "undefined"
+          member["thumbnail"] && typeof(member.thumbnail.iiifServiceUrl) != "undefined"
             ? member.thumbnail.iiifServiceUrl + "/full/300,/0/default.jpg"
-            : "https://picsum.photos/600/300/?random",
+            : this.defaultThumbnail,
         viewingHint: member.viewingHint,
       }))
     },
@@ -109,6 +108,10 @@ export default {
     resourceId: {
       type: String,
       default: null,
+    },
+    defaultThumbnail: {
+      type: String,
+      default: "https://picsum.photos/600/300/?random",
     },
   },
   methods: {

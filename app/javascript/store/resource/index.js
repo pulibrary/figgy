@@ -43,19 +43,19 @@ export const resourceMutations = {
     state.resource.viewingDirection = resource.viewingDirection
     state.resource.thumbnail = resource.thumbnail != null ? resource.thumbnail.id : null
     state.resource.members = resource.members
-    const validMembers = resource.members.filter(member => typeof(member.id) != "undefined" && member["thumbnail"])
-    const items = validMembers.map(member => ({
+
+    const items = resource.members.map(member => ({
       id: member.id,
       viewingHint: member.viewingHint != null ? member.viewingHint : "single",
       caption: member.label, // member.__typename + " : " + member.id,
       service:
-        typeof member.thumbnail.iiifServiceUrl != "undefined"
+        member["thumbnail"] && typeof(member.thumbnail.iiifServiceUrl) != "undefined"
           ? member.thumbnail.iiifServiceUrl
-          : "https://picsum.photos/600/300/?random",
+          : Global.figgy.resource.defaultThumbnail,
       mediaUrl:
-        typeof member.thumbnail.iiifServiceUrl != "undefined"
+        member["thumbnail"] && typeof(member.thumbnail.iiifServiceUrl) != "undefined"
           ? member.thumbnail.iiifServiceUrl + "/full/300,/0/default.jpg"
-          : "https://picsum.photos/600/300/?random",
+          : Global.figgy.resource.defaultThumbnail,
     }))
     state.gallery.items = items
     state.gallery.ogItems = items
