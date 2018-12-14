@@ -7,7 +7,10 @@ export default class SaveAndIngestHandler {
     this.field_element.change((e) => {
       this.reset_button()
       this.button_element.val('Searching...')
-      $.getJSON(`/concern/scanned_resources/save_and_ingest/${this.field_element.val()}`)
+      // this will pass a value 'new' when  it's just a regular scanned resource,
+      //   but code on the other side will ignore that.
+      let qs = { 'change_set': window.location.pathname.split('/').pop() }
+      $.getJSON(`/concern/scanned_resources/save_and_ingest/${this.field_element.val()}`, qs)
         .done((data) => {
           if(data.exists == true) {
             this.reset_button()
