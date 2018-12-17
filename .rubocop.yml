@@ -31,6 +31,7 @@ Metrics/AbcSize:
     - 'app/services/pul_metadata_services/bib_record.rb'
     - 'app/services/music_import_service.rb'
     - 'app/services/music_import_service/recording_collector.rb'
+    - 'app/controllers/bulk_ingest_controller.rb'
 Metrics/BlockLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'

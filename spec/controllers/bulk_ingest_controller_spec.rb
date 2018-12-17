@@ -2,9 +2,10 @@
 require "rails_helper"
 
 RSpec.describe BulkIngestController do
+  let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+
   describe "GET #show" do
     let(:user) { FactoryBot.create(:admin) }
-    let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
     let(:persister) { adapter.persister }
 
     context "when logged in" do
@@ -79,6 +80,38 @@ RSpec.describe BulkIngestController do
       it "ingests the parent as two resources" do
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
         expect(IngestFoldersJob).to have_received(:perform_later).with(hash_including(directory: "/base", state: "pending", visibility: "open", member_of_collection_ids: []))
+      end
+    end
+
+    context "with files hosted on a cloud-storage provider" do
+      let(:selected_files) do
+        {
+          "0" => { "url" => "https://www.cloud.com/files/1.tif?alt=media", "file_name" => "1.tif", "file_size" => "100", "auth_header" => { "Authorization" => "Bearer secret" } },
+          "1" => { "url" => "https://www.cloud.com/files/2.tif?alt=media", "file_name" => "2.tif", "file_size" => "100", "auth_header" => { "Authorization" => "Bearer secret" } }
+        }
+      end
+
+      let(:attributes) do
+        {
+          workflow: { state: "pending" },
+          visibility: "open",
+          mvw: false,
+          selected_files: selected_files
+        }
+      end
+
+      let(:resources) do
+        adapter.query_service.find_all_of_model(model: ScannedResource)
+      end
+
+      before do
+        allow(BrowseEverythingIngestJob).to receive(:perform_later)
+      end
+
+      it "ingests the parent as two resources" do
+        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+        expect(BrowseEverythingIngestJob).to have_received(:perform_later).with(resources.first.id.to_s, "BulkIngestController", resources.first.pending_uploads.first.id.to_s)
+        expect(BrowseEverythingIngestJob).to have_received(:perform_later).with(resources.last.id.to_s, "BulkIngestController", resources.last.pending_uploads.first.id.to_s)
       end
     end
 
