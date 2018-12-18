@@ -4,6 +4,32 @@ require "rails_helper"
 RSpec.describe BulkIngestController do
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
 
+  describe ".metadata_adapter" do
+    it "returns an adapter" do
+      expect(described_class.metadata_adapter).to be_an IndexingAdapter
+    end
+  end
+
+  describe ".storage_adapter" do
+    it "returns an adapter" do
+      expect(described_class.storage_adapter).to be_an InstrumentedStorageAdapter
+    end
+  end
+
+  describe ".change_set_persister" do
+    it "accesses the ChangeSetPersister" do
+      expect(described_class.change_set_persister).to be_a ChangeSetPersister::Basic
+      expect(described_class.change_set_persister.metadata_adapter).to be described_class.metadata_adapter
+      expect(described_class.change_set_persister.storage_adapter).to be described_class.storage_adapter
+    end
+  end
+
+  describe ".change_set_class" do
+    it "accesses the ChangeSet Class used for persisting resources" do
+      expect(described_class.change_set_class).to eq DynamicChangeSet
+    end
+  end
+
   describe "GET #show" do
     let(:user) { FactoryBot.create(:admin) }
     let(:persister) { adapter.persister }
@@ -110,8 +136,39 @@ RSpec.describe BulkIngestController do
 
       it "ingests the parent as two resources" do
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-        expect(BrowseEverythingIngestJob).to have_received(:perform_later).with(resources.first.id.to_s, "BulkIngestController", resources.first.pending_uploads.first.id.to_s)
-        expect(BrowseEverythingIngestJob).to have_received(:perform_later).with(resources.last.id.to_s, "BulkIngestController", resources.last.pending_uploads.first.id.to_s)
+        expect(BrowseEverythingIngestJob).to have_received(:perform_later).with(resources.first.id.to_s, "BulkIngestController", [resources.first.pending_uploads.first.id.to_s])
+        expect(BrowseEverythingIngestJob).to have_received(:perform_later).with(resources.last.id.to_s, "BulkIngestController", [resources.last.pending_uploads.first.id.to_s])
+      end
+
+      context "when bulk ingesting multi-volume works" do
+        let(:attributes) do
+          {
+            workflow: { state: "pending" },
+            visibility: "open",
+            mvw: true,
+            selected_files: selected_files
+          }
+        end
+
+        let(:resources) do
+          adapter.query_service.find_all_of_model(model: ScannedResource)
+        end
+        let(:resource) do
+          resources.reject { |res| res.member_ids.empty? }.first
+        end
+        let(:member_resources) { resource.decorate.members }
+
+        before do
+          allow(BrowseEverythingIngestJob).to receive(:perform_later)
+          post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+        end
+
+        it "ingests the file as FileSets on a new member resource for a new parent resource" do
+          expect(member_resources.length).to eq(2)
+
+          expect(BrowseEverythingIngestJob).to have_received(:perform_later).with(member_resources.first.id.to_s, "BulkIngestController", member_resources.first.pending_uploads.map(&:id).map(&:to_s))
+          expect(BrowseEverythingIngestJob).to have_received(:perform_later).with(member_resources.last.id.to_s, "BulkIngestController", member_resources.last.pending_uploads.map(&:id).map(&:to_s))
+        end
       end
     end
 

@@ -85,6 +85,7 @@ Metrics/ClassLength:
     - 'app/controllers/catalog_controller.rb'
     - 'app/services/music_import_service.rb'
     - 'app/services/music_import_service/recording_collector.rb'
+    - 'app/controllers/bulk_ingest_controller.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/helpers/application_helper.rb'
@@ -130,6 +131,7 @@ Metrics/MethodLength:
     - 'app/services/manifest_builder/canvas_rendering_builder.rb'
     - 'app/services/music_import_service.rb'
     - 'app/services/music_import_service/recording_collector.rb'
+    - 'app/controllers/bulk_ingest_controller.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
