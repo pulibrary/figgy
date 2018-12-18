@@ -261,7 +261,9 @@ class Ability
     # @return [Boolean]
     def token_readable?(obj)
       return false unless auth_token && tokenized_access?(obj)
-      final_state?(obj) && obj.auth_token == auth_token.token
+      final_state = final_state?(obj)
+      return final_state if auth_token.nil?
+      final_state && obj.auth_token == auth_token.token
     end
 
     # Determines whether or not an auth token grants access to the parent of a given resource
