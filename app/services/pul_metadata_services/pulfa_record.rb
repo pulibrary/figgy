@@ -71,9 +71,16 @@ module PulMetadataServices
           }
         end
 
-        # Retrieve the title for the resource concatenated with other information in the breadcrumbs
+        # Retrieve the title for the resource
         # @return [Array<String>]
         def title
+          return [] unless unittitle_element
+          [unittitle_element.text.gsub(/\s+/, " ")]
+        end
+
+        # Retrieve the title for the resource concatenated with other information in the breadcrumbs
+        # @return [Array<String>]
+        def title_with_breadcrumbs
           return [] unless unittitle_element
           [[breadcrumbs, unittitle_element.text].reject(&:empty?).join(" - ")].map { |s| s.gsub(/\s+/, " ") }
         end
@@ -209,13 +216,6 @@ module PulMetadataServices
       end
 
       class MediaResourceAttributes < Attributes
-        # Retrieve the title for the resource
-        # @return [Array<String>]
-        def title
-          return [] unless unittitle_element
-          [unittitle_element.text.gsub(/\s+/, " ")]
-        end
-
         def collection_data_root
           "/archdesc"
         end

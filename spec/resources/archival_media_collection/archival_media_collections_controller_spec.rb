@@ -43,7 +43,7 @@ RSpec.describe ArchivalMediaCollectionsController, type: :controller do
         collection = query_service.find_all_of_model(model: ArchivalMediaCollection).first
         expect(collection.source_metadata_identifier).to eq ["AC044_c0003"]
         expect(collection.primary_imported_metadata).to be_a ImportedMetadata
-        expect(collection.title).to contain_exactly "Series 1: Committee Administration - Alumni Council: Proposals for Electing Young Alumni Trustees"
+        expect(collection.title).to contain_exactly "Alumni Council: Proposals for Electing Young Alumni Trustees"
       end
 
       it "enqueues the ingest job" do
