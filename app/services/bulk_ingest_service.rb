@@ -32,6 +32,8 @@ class BulkIngestService
   # @return [Boolean]
   def valid_remote_identifier?(value)
     RemoteRecord.retrieve(value).success?
+  rescue URI::InvalidURIError
+    false
   end
 
   # Attach files within a directory

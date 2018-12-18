@@ -246,4 +246,14 @@ RSpec.describe BulkIngestService do
       end
     end
   end
+
+  describe "#valid_remote_identifier?" do
+    context "with a PULFA-like identifier that contains invalid characters" do
+      let(:value) { "June 31" }
+
+      it "returns false" do
+        expect(ingester.valid_remote_identifier?(value)).to be false
+      end
+    end
+  end
 end
