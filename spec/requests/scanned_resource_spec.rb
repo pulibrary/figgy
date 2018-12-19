@@ -90,6 +90,7 @@ RSpec.describe "ScannedResource requests", type: :request do
 
     context "when the client passes an authorization token" do
       let(:auth_token) { AuthToken.create!(group: ["admin"], label: "Admin Token").token }
+
       it "is granted read-only access to the PDF derivatives for the resource" do
         get "/concern/scanned_resources/#{scanned_resource.id}/pdf?auth_token=#{auth_token}"
 
@@ -97,6 +98,7 @@ RSpec.describe "ScannedResource requests", type: :request do
         follow_redirect!
         expect(response.status).to eq 200
       end
+
       it "is granted access to the IIIF presentation manifest" do
         get "/concern/scanned_resources/#{scanned_resource.id}/manifest?auth_token=#{auth_token}"
 
@@ -114,11 +116,29 @@ RSpec.describe "ScannedResource requests", type: :request do
 
         expect(canvas_renderings.first).to include("@id" => "http://www.example.com/downloads/#{file_set.id}/file/#{file_set.original_file.id}")
       end
+
       it "is granted access to file downloads" do
         file_set = scanned_resource.decorate.decorated_file_sets.first
         get "/downloads/#{file_set.id}/file/#{file_set.original_file.id}?auth_token=#{auth_token}"
 
         expect(response.status).to eq 200
+      end
+
+      context "when the auth. token is nil or invalid" do
+        let(:auth_token) { nil }
+
+        it "prevents the client from accessing the catalog show view" do
+          get "/catalog/#{scanned_resource.id}?auth_token=#{auth_token}"
+
+          expect(response.status).to eq 302
+          expect(response).to redirect_to("/users/auth/cas")
+        end
+
+        it "prevents the client from accessing the IIIF manifest for the resource" do
+          get "/concern/scanned_resources/#{scanned_resource.id}/manifest?auth_token=#{auth_token}"
+
+          expect(response.status).to eq 403
+        end
       end
     end
   end
