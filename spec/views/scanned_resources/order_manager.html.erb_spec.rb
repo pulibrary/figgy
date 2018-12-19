@@ -17,7 +17,7 @@ RSpec.describe "base/order_manager.html.erb", type: :view do
   end
 
   it "renders correctly" do
-    expect(rendered).to include "<order-manager resource-id=\"#{parent.id}\"></order-manager>"
+    expect(rendered).to match(/#{Regexp.escape("<order-manager resource-id=\"") + parent.id.to_s + Regexp.escape("\" default-thumbnail=\"")}.+?default_thumbnail.+?\.png#{Regexp.escape("\"></order-manager>")}/)
   end
   context "when given a MVW" do
     let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, title: "Test Title", member_ids: [child.id]) }

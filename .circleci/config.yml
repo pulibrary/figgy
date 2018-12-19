@@ -85,6 +85,7 @@ jobs:
       - run: rm vendor/bundle/ruby/2.3.0/specifications/simpler-tiles-0.3.1.gemspec || true
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
+      - run: yarn exec jest --coverage
       - run:
           command: bundle exec rake figgy:test
           background: true

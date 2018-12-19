@@ -8,9 +8,17 @@ import { modules } from 'lux-design-system'
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
+// Work-around in order to ensure that the Global object is accessible from the component
+const Global = {
+  figgy: {
+    resource: {
+      defaultThumbnail: "https://institution.edu/repository/assets/random.png"
+    }
+  }
+}
+window.Global = Global
+
 let wrapper
-let store
-let actions
 let items = [
   { id: "a", title: "A", caption: "a", mediaUrl: "https://picsum.photos/600/300/?random" },
   { id: "b", title: "B", caption: "b", mediaUrl: "https://picsum.photos/600/300/?random" },
@@ -60,55 +68,56 @@ let resourceObject = {
   ],
 }
 
+const gallery = {
+  state: {
+    items: items,
+    selected: [items[0]],
+    cut: [],
+    changeList: ["2"],
+    ogItems: items,
+  },
+  mutations: modules.galleryModule.mutations,
+}
+
+const actions = {
+  loadImageCollectionGql: jest.fn()
+}
+
+let resource = {
+  state: {
+    resource: {
+      id: "",
+      resourceClassName: "",
+      bibId: "",
+      label: "Resource not available.",
+      thumbnail: "",
+      startCanvas: "",
+      isMultiVolume: false,
+      viewingHint: null,
+      viewingDirection: null,
+      members: [],
+      loadState: "NOT_LOADED",
+      saveState: "NOT_SAVED",
+      ogState: {},
+    },
+  },
+  mutations: resourceMutations,
+  getters: resourceGetters,
+  actions: actions,
+  modules: {
+    gallery: gallery,
+  },
+}
+
+let store = new Vuex.Store({
+  modules: {
+    ordermanager: resource,
+    gallery: gallery,
+  },
+})
+
 describe("OrderManager.vue", () => {
   beforeEach(() => {
-    actions = {
-      loadImageCollectionGql: jest.fn(),
-    }
-
-    const gallery = {
-      state: {
-        items: items,
-        selected: [items[0]],
-        cut: [],
-        changeList: ["2"],
-        ogItems: items,
-      },
-      mutations: modules.galleryModule.mutations,
-    }
-
-    const resource = {
-      state: {
-        resource: {
-          id: "",
-          resourceClassName: "",
-          bibId: "",
-          label: "Resource not available.",
-          thumbnail: "",
-          startCanvas: "",
-          isMultiVolume: false,
-          viewingHint: null,
-          viewingDirection: null,
-          members: [],
-          loadState: "NOT_LOADED",
-          saveState: "NOT_SAVED",
-          ogState: {},
-        },
-      },
-      mutations: resourceMutations,
-      getters: resourceGetters,
-      actions: actions,
-      modules: {
-        gallery: gallery,
-      },
-    }
-
-    store = new Vuex.Store({
-      modules: {
-        ordermanager: resource,
-        gallery: gallery,
-      },
-    })
 
     wrapper = mount(OrderManager, {
       localVue,
@@ -174,5 +183,70 @@ describe("OrderManager.vue", () => {
 
   it("has the expected html structure", () => {
     expect(wrapper.element).toMatchSnapshot()
+  })
+
+  it("renders the links thumbnail", () => {
+    expect(wrapper.vm.galleryItems.length).toEqual(3)
+    expect(wrapper.vm.galleryItems[0]['mediaUrl']).toEqual('https://libimages1.princeton.edu/loris/figgy_prod/f7%2F67%2Ffe%2Ff767fe4247524c5f96e16eba2ff93301%2Fintermediate_file.jp2/full/300,/0/default.jpg')
+  })
+
+  describe('when the resources do not have IIIF service URLs', () => {
+
+    let resourceObject = {
+      id: "example2-id",
+      label: "Resource with 1 files",
+      viewingHint: "individuals",
+      viewingDirection: "LEFTTORIGHT",
+      startPage: "8ffd7a03-ec0e-46c1-a347-e4b19cb7839f",
+      thumbnail: null,
+      __typename: "ScannedResource",
+      members: [
+        {
+	  id: "8ffd7a03-ec0e-46c1-a347-e4b19cb7839f",
+	  label: "a",
+	  viewingHint: null,
+	  thumbnail: null,
+	  __typename: "FileSet",
+	}
+      ],
+      loadState: "LOADED",
+      saveState: "NOT_SAVED",
+      ogState: {}
+    }
+
+    resource = {
+      state: {
+        resource: resourceObject
+      },
+      mutations: resourceMutations,
+      getters: resourceGetters,
+      actions: actions,
+      modules: {
+        gallery: gallery,
+      }
+    }
+
+    let store = new Vuex.Store({
+      modules: {
+        ordermanager: resource,
+	gallery: gallery,
+      }
+    })
+
+    let wrapper = mount(OrderManager, {
+      localVue,
+      store: store,
+      propsData: {
+        resourceObject: resourceObject,
+	defaultThumbnail: Global.figgy.resource.defaultThumbnail
+      },
+      stubs: ["toolbar", "gallery", "text-style", "wrapper", "fileset-form", "controls", "loader", "resource-form"],
+    })
+
+    it("renders the default Figgy thumbnail", () => {
+      expect(wrapper.vm.defaultThumbnail).toEqual(Global.figgy.resource.defaultThumbnail)
+      expect(wrapper.vm.galleryItems.length).toEqual(1)
+      expect(wrapper.vm.galleryItems[0]['mediaUrl']).toEqual("https://institution.edu/repository/assets/random.png")
+    })
   })
 })
