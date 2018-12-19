@@ -290,16 +290,30 @@ describe Ability do
   describe "token auth" do
     subject(:ability) { described_class.new(nil, auth_token: token) }
 
+    let(:creating_user) { admin_user }
+    let(:private_vector_resource) { FactoryBot.create(:complete_private_vector_resource, user: creating_user) }
+    let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+    let(:storage_adapter) { Valkyrie.config.storage_adapter }
+    let(:file) { fixture_file_upload("files/vector/geo.json", "application/vnd.geo+json") }
+    let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
+    let(:vector_resource) do
+      change_set_persister.save(change_set: VectorResourceChangeSet.new(private_vector_resource, files: [file]))
+    end
+
     context "with an auth token" do
       let(:token) { AuthToken.create(label: "Test", group: ["admin"]).token }
 
       it "uses the auth token" do
         expect(ability.current_user.admin?).to be true
       end
+
+      it "provides access to a resource" do
+        is_expected.to be_able_to(:read, vector_resource)
+      end
     end
 
     context "without an auth token" do
-      let(:token) {}
+      let(:token) { nil }
 
       before do
         allow(AuthToken).to receive(:find_by).and_call_original
@@ -309,6 +323,10 @@ describe Ability do
         expect(ability.current_user.admin?).to be false
         expect(ability.current_user.anonymous?).to be true
         expect(AuthToken).not_to have_received(:find_by)
+      end
+
+      it "preserves the access controls to a resource" do
+        is_expected.not_to be_able_to(:read, vector_resource)
       end
     end
   end
