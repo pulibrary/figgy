@@ -20,6 +20,24 @@ RSpec.describe HumanReadableTypeIndexer do
       end
     end
 
+    context "when a scanned resource is a recording" do
+      let(:scanned_resource) { FactoryBot.create(:recording) }
+      it "indexes human readeable type name for a recording" do
+        output = described_class.new(resource: scanned_resource).to_solr
+
+        expect(output[:human_readable_type_ssim]).to eq "Recording"
+      end
+    end
+
+    context "when a scanned resource is a simple resource" do
+      let(:scanned_resource) { FactoryBot.create(:simple_resource) }
+      it "indexes human readeable type name for a simple resource" do
+        output = described_class.new(resource: scanned_resource).to_solr
+
+        expect(output[:human_readable_type_ssim]).to eq "Simple Resource"
+      end
+    end
+
     context "when a scanned map has scanned map members" do
       let(:child_member) { FactoryBot.create_for_repository(:scanned_map) }
       let(:scanned_map) { FactoryBot.create_for_repository(:scanned_map, member_ids: [child_member.id]) }
