@@ -24,7 +24,7 @@ RSpec.describe ChangeSetPersister do
     stub_ezid(shoulder: shoulder, blade: blade)
   end
 
-  context "when a source_metadata_identifier is set for the first time on a scanned resource" do
+  context "when a bibid source_metadata_identifier is set for the first time on a scanned resource" do
     before do
       stub_bibdata(bib_id: "123456")
     end
@@ -40,6 +40,7 @@ RSpec.describe ChangeSetPersister do
       expect(output.primary_imported_metadata.source_jsonld).not_to be_blank
     end
   end
+
   context "when a source_metadata_identifier is set for the first time on a scanned map" do
     let(:change_set_class) { ScannedMapChangeSet }
     before do
@@ -253,7 +254,7 @@ RSpec.describe ChangeSetPersister do
       change_set.validate(source_metadata_identifier: "MC016_c9616")
       output = change_set_persister.save(change_set: change_set)
 
-      expect(output.primary_imported_metadata.title).to eq ['Series 5: Speeches, Statements, Press Conferences, Etc - 1953 - Speech: "... Results of the Eleventh Meeting of the Council of NATO"']
+      expect(output.primary_imported_metadata.title).to eq ['Speech: "... Results of the Eleventh Meeting of the Council of NATO"']
       expect(output.primary_imported_metadata.source_metadata).not_to be_blank
     end
   end

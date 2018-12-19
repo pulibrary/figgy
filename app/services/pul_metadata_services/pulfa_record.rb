@@ -71,11 +71,11 @@ module PulMetadataServices
           }
         end
 
-        # Retrieve the title for the resource concatenated with other information in the breadcrumbs
+        # Retrieve the title for the resource
         # @return [Array<String>]
         def title
           return [] unless unittitle_element
-          [[breadcrumbs, unittitle_element.text].reject(&:empty?).join(" - ")].map { |s| s.gsub(/\s+/, " ") }
+          [unittitle_element.text.gsub(/\s+/, " ")]
         end
 
         # Retrieve the IETF language tag for the resource
@@ -149,13 +149,6 @@ module PulMetadataServices
 
         private
 
-          # Retrieve additional information about the title encoded for the resource
-          # @return [String]
-          def breadcrumbs
-            crumbs = data.xpath("#{data_root}/context/breadcrumbs/crumb")
-            crumbs.map(&:text).compact.join(" - ")
-          end
-
           # Generate the XPath used in the Document for retrieving structural metadata
           # @return [String]
           def data_root
@@ -209,13 +202,6 @@ module PulMetadataServices
       end
 
       class MediaResourceAttributes < Attributes
-        # Retrieve the title for the resource
-        # @return [Array<String>]
-        def title
-          return [] unless unittitle_element
-          [unittitle_element.text.gsub(/\s+/, " ")]
-        end
-
         def collection_data_root
           "/archdesc"
         end

@@ -10,7 +10,7 @@ describe PulMetadataServices::PulfaRecord do
   describe "#attributes" do
     it "works" do
       expected = {
-        title: ["Series 1: University Librarian Records - Subseries 1A, Frederic Vinton - Correspondence - 19th Century Catalog and Correspondence, Pre-Vinton, 1811-"],
+        title: ["19th Century Catalog and Correspondence, Pre-Vinton, 1811-"],
         created: ["1865-01-01T00:00:00Z/1865-12-31T23:59:59Z"],
         creator: ["Princeton University. Library. Dept. of Rare Books and Special Collections"],
         publisher: ["Princeton University. Library. Dept. of Rare Books and Special Collections"],
