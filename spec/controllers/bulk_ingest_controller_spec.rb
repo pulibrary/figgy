@@ -112,8 +112,8 @@ RSpec.describe BulkIngestController do
     context "with files hosted on a cloud-storage provider" do
       let(:selected_files) do
         {
-          "0" => { "url" => "https://www.cloud.com/files/1.tif?alt=media", "file_name" => "1.tif", "file_size" => "100", "auth_header" => { "Authorization" => "Bearer secret" } },
-          "1" => { "url" => "https://www.cloud.com/files/2.tif?alt=media", "file_name" => "2.tif", "file_size" => "100", "auth_header" => { "Authorization" => "Bearer secret" } }
+          "0" => { "url" => "https://www.example.com/files/1.tif?alt=media", "file_name" => "1.tif", "file_size" => "100", "auth_header" => { "Authorization" => "Bearer secret" } },
+          "1" => { "url" => "https://www.example.com/files/2.tif?alt=media", "file_name" => "2.tif", "file_size" => "100", "auth_header" => { "Authorization" => "Bearer secret" } }
         }
       end
 
