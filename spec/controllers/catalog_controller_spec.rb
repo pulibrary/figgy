@@ -725,7 +725,7 @@ RSpec.describe CatalogController do
       end
     end
 
-    context "when the manifeset is not found" do
+    context "when the manifest is not found" do
       it "sends a 404 error" do
         get :lookup_manifest, params: { prefix: "ark:", naan: "99999", arkid: "99999" }
         expect(response.status).to be 404

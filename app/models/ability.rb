@@ -68,10 +68,19 @@ class Ability
     TokenizedUser.new(super, auth_token)
   end
 
+  def token_param
+    options[:auth_token]
+  end
+
+  def stored_token
+    @auth_token ||= AuthToken.find_by(token: token_param)
+  end
+
   # Construct the AuthToken object from the parameter value in the HTTP request
   # @return [AuthToken]
   def auth_token
-    @auth_token ||= options[:auth_token].nil? ? NilToken : (AuthToken.find_by(token: options[:auth_token]) || NilToken)
+    return NilToken if token_param.nil? || stored_token.nil?
+    stored_token
   end
 
   def download_file_with_metadata?(resource)
@@ -260,10 +269,8 @@ class Ability
     # @param obj [Resource]
     # @return [Boolean]
     def token_readable?(obj)
-      return false unless auth_token && tokenized_access?(obj)
-      final_state = final_state?(obj)
-      return final_state if auth_token.nil?
-      final_state && obj.auth_token == auth_token.token
+      return false unless !auth_token.nil? && tokenized_access?(obj)
+      final_state?(obj) && obj.auth_token == auth_token.token
     end
 
     # Determines whether or not an auth token grants access to the parent of a given resource

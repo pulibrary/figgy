@@ -23,7 +23,21 @@ RSpec.describe "Playlist requests", type: :request do
   before do
     stub_ezid(shoulder: "99999/fk4", blade: "123456")
     playlist
-    auth_token
+  end
+
+  describe "accessing the catalog show view" do
+    it "prevents the client from accessing the playlist show view" do
+      get "/catalog/#{playlist.id}"
+      expect(response.status).to eq 302
+      expect(response).to redirect_to("/users/auth/cas")
+    end
+  end
+
+  describe "accessing the IIIF manifest" do
+    it "prevents the client from accessing the playlist manifest" do
+      get "/concern/playlists/#{playlist.id}/manifest"
+      expect(response.status).to eq 403
+    end
   end
 
   context "when the client passes an authorization token" do
@@ -47,6 +61,21 @@ RSpec.describe "Playlist requests", type: :request do
       expect(manifest_values).to include("items")
       expect(manifest_values["items"]).not_to be_empty
       expect(manifest_values["items"].first).to include("label" => { "@none" => ["Interview: ERM / Jose Donoso (A2)"] })
+    end
+
+    context "when the auth. token is nil or invalid" do
+      let(:auth_token) { nil }
+
+      it "prevents the client from accessing the playlist show view" do
+        get "/catalog/#{playlist.id}?auth_token=#{auth_token}"
+        expect(response.status).to eq 302
+        expect(response).to redirect_to("/users/auth/cas")
+      end
+
+      it "prevents the client from accessing the playlist manifest" do
+        get "/concern/playlists/#{playlist.id}/manifest?auth_token=#{auth_token}"
+        expect(response.status).to eq 403
+      end
     end
   end
 end
