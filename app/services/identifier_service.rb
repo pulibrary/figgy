@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 class IdentifierService
   def self.mint_or_update(resource:)
-    if resource.identifier.present?
+    if resource.respond_to?(:geo_resource?) && resource.geo_resource?
+      mint_or_update_geo_resource(resource)
+    elsif resource.identifier.present?
       update_metadata resource
     else
       mint_identifier resource
@@ -45,6 +47,22 @@ class IdentifierService
     return Rails.application.routes.url_helpers.solr_document_url(resource, host: Figgy.default_url_options[:host]) if resource.try(:source_metadata_identifier).blank?
     return "https://catalog.princeton.edu/catalog/#{resource.source_metadata_identifier.first}#view" if PulMetadataServices::Client.bibdata?(resource.source_metadata_identifier.first)
     "http://findingaids.princeton.edu/collections/#{resource.source_metadata_identifier.first.tr('_', '/')}"
+  end
+
+  private_class_method def self.geo_metadata(resource)
+    slug = "princeton-#{resource.identifier.first.gsub(%r(ark:/\d{5}/), '')}"
+    metadata(resource).merge(target: "https://maps.princeton.edu/catalog/#{slug}")
+  end
+
+  private_class_method def self.mint_or_update_geo_resource(resource)
+    mint_identifier(resource) unless resource.identifier.present?
+    update_geo_metadata resource
+  end
+
+  private_class_method def self.update_geo_metadata(resource)
+    return if minter_user == "apitest"
+    ark = Array.wrap(resource.identifier).first
+    minter.modify(ark, geo_metadata(resource))
   end
 
   private_class_method def self.minter_user

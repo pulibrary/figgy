@@ -120,6 +120,38 @@ RSpec.describe IdentifierService do
     end
   end
 
+  context "with a geospatial resource" do
+    let(:metadata) { base_metadata.merge(target: "https://maps.princeton.edu/catalog/princeton-x1234567") }
+
+    before do
+      allow(described_class).to receive(:minter).and_return(minter)
+      allow(minter).to receive(:mint).and_return(identifier)
+      allow(minter).to receive(:modify)
+      allow(identifier).to receive(:id).and_return(ark)
+      allow(described_class).to receive(:minter_user).and_return("pudiglib")
+    end
+
+    context "with a blank identifier" do
+      let(:obj) { FactoryBot.create :scanned_map, id: "1234567" }
+
+      it "mints an ARK then modifies the metadata with a link to Pulmap" do
+        described_class.mint_or_update(resource: obj)
+        expect(minter).to have_received(:mint)
+        expect(minter).to have_received(:modify).with(ark, metadata)
+      end
+    end
+
+    context "with an existing identifier" do
+      let(:obj) { FactoryBot.create :scanned_map, id: "1234567", identifier: ark }
+
+      it "udpates the ARK metadata " do
+        described_class.mint_or_update(resource: obj)
+        expect(minter).not_to have_received(:mint)
+        expect(minter).to have_received(:modify).with(ark, metadata)
+      end
+    end
+  end
+
   context "integration test" do
     let(:metadata) { base_metadata.merge(target: "http://example.com/catalog/#{obj.id}") }
     let(:obj) { FactoryBot.create :scanned_resource, id: "1234567", source_metadata_identifier: nil }
