@@ -38,6 +38,8 @@ RSpec.describe ChangeSetPersister do
       expect(output.primary_imported_metadata.creator).to eq ["Bord, Janet, 1945-"]
       expect(output.primary_imported_metadata.call_number).to eq ["BL980.G7 B66 1982"]
       expect(output.primary_imported_metadata.source_jsonld).not_to be_blank
+      # doesn't populate an archival_collection_code field
+      expect(output.archival_collection_code).to be_nil
     end
   end
 
@@ -256,6 +258,8 @@ RSpec.describe ChangeSetPersister do
 
       expect(output.primary_imported_metadata.title).to eq ['Speech: "... Results of the Eleventh Meeting of the Council of NATO"']
       expect(output.primary_imported_metadata.source_metadata).not_to be_blank
+      # populates an archival_collection_code field
+      expect(output.archival_collection_code).to eq "MC016"
     end
   end
 
@@ -307,6 +311,7 @@ RSpec.describe ChangeSetPersister do
       expect(change_set.validate(source_metadata_identifier: "MC016_c9616")).to eq false
     end
   end
+
   context "when a source_metadata_identifier is set afterwards and refresh_remote_metadata is set" do
     before do
       stub_bibdata(bib_id: "123456")

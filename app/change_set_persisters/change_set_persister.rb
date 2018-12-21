@@ -16,6 +16,7 @@ class ChangeSetPersister
         SyncResource,
         MintIdentifier,
         ApplyRemoteMetadata,
+        ExtractArchivalCollectionCode,
         ApplyVisibilityByDate,
         CreateFile::Factory.new(file_appender: FileAppender),
         PropagateVisibilityAndState,
