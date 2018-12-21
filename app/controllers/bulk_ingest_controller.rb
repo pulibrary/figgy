@@ -1,5 +1,21 @@
 # frozen_string_literal: true
 class BulkIngestController < ApplicationController
+  def self.metadata_adapter
+    Valkyrie::MetadataAdapter.find(:indexing_persister)
+  end
+
+  def self.storage_adapter
+    Valkyrie.config.storage_adapter
+  end
+
+  def self.change_set_persister
+    @change_set_persister ||= ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter)
+  end
+
+  def self.change_set_class
+    DynamicChangeSet
+  end
+
   def show
     authorize! :create, resource_class
     @collections = collections
@@ -8,7 +24,40 @@ class BulkIngestController < ApplicationController
   end
 
   def browse_everything_files
-    if file_paths.max_parent_path_depth == 1
+    if selected_cloud_files?
+      persisted_ids = {}
+      file_paths
+
+      if multi_volume_work?
+        self.class.change_set_persister.buffer_into_index do |buffered_changeset_persister|
+          persisted_members = []
+
+          # Only append one file as a FileSet to one member of one parent until browse-everything can provide links to parent resource IDs
+          selected_files.each do |selected_file|
+            member_change_set = build_change_set(title: selected_file.file_name, pending_uploads: [selected_file])
+            persisted_members << buffered_changeset_persister.save(change_set: member_change_set)
+            persisted_ids[persisted_members.last.id.to_s] = [selected_file.id.to_s]
+          end
+
+          parent_change_set = build_change_set(title: selected_files.first.file_name, member_ids: persisted_members.map(&:id))
+          buffered_changeset_persister.save(change_set: parent_change_set)
+        end
+      else
+        # Only append one file as a FileSet to one resource until browse-everything can provide links to parent resource IDs
+        self.class.change_set_persister.buffer_into_index do |buffered_changeset_persister|
+          selected_files.each do |selected_file|
+            change_set = build_change_set(title: selected_file.file_name, pending_uploads: [selected_file])
+            persisted = buffered_changeset_persister.save(change_set: change_set)
+            persisted_ids[persisted.id.to_s] = [selected_file.id.to_s]
+          end
+        end
+      end
+
+      # Use the IDs of the newly-persisted resources to attached the cloud files as FileSets
+      persisted_ids.each do |persisted_id, selected_file_ids|
+        BrowseEverythingIngestJob.perform_later(persisted_id, self.class.to_s, selected_file_ids)
+      end
+    elsif file_paths.max_parent_path_depth == 1
       IngestFolderJob.perform_later(directory: parent_path.to_s, file_filter: nil, class_name: resource_class_name, **attributes)
     else
       IngestFoldersJob.perform_later(directory: parent_path.to_s, file_filter: nil, class_name: resource_class_name, **attributes)
@@ -67,8 +116,32 @@ class BulkIngestController < ApplicationController
       params[:resource_type].classify
     end
 
+    def build_resource
+      resource_class.new
+    end
+
+    def build_change_set(attrs)
+      change_set = DynamicChangeSet.new(build_resource)
+      change_set.prepopulate!
+      change_set.validate(**attrs)
+      change_set
+    end
+
     def selected_files_param
       params[:selected_files].to_unsafe_h
+    end
+
+    def selected_cloud_files?
+      values = selected_files_param.map { |_index, file| /^https?\:/ =~ file["url"] }
+      values.reduce(:|)
+    end
+
+    def selected_files
+      @selected_files ||= selected_files_param.values.map do |x|
+        auth_header_values = x.delete("auth_header")
+        auth_header = JSON.generate(auth_header_values)
+        PendingUpload.new(x.symbolize_keys.merge(id: SecureRandom.uuid, created_at: Time.current.utc.iso8601, auth_header: auth_header))
+      end
     end
 
     def workflow_states
