@@ -473,6 +473,9 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
+    lograge-sql (0.3.0)
+      activerecord (>= 4, < 6.0)
+      lograge (~> 0.4)
     logstash-event (1.2.02)
     loofah (2.2.3)
       crass (~> 1.0.2)
@@ -852,6 +855,7 @@ DEPENDENCIES
   leaflet-rails (~> 1.3.1)
   listen
   lograge
+  lograge-sql
   logstash-event
   loofah (~> 2.2.3)
   marc (~> 1.0.0)
@@ -903,4 +907,4 @@ DEPENDENCIES
   whenever (~> 0.10)
 
 BUNDLED WITH
-   1.16.6
+   1.17.1

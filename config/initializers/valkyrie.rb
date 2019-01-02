@@ -149,7 +149,7 @@ Rails.application.config.to_prepare do
     host: database_configuration["host"],
     port: database_configuration["port"],
     database: database_configuration["database"],
-    logger: Rails.logger,
+    logger: nil,
     max_connections: database_configuration["pool"],
     pool_timeout: database_configuration["timeout"],
     adapter: :postgres
