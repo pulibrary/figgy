@@ -5,6 +5,7 @@ class GraphqlController < ApplicationController
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
     storage_adapter: Valkyrie.config.storage_adapter
   )
+  skip_before_action :verify_authenticity_token
   protect_from_forgery with: :null_session
   def execute
     authorize! :read, :graphql
