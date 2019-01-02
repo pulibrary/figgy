@@ -6,7 +6,6 @@ class GraphqlController < ApplicationController
     storage_adapter: Valkyrie.config.storage_adapter
   )
   skip_before_action :verify_authenticity_token
-  protect_from_forgery with: :null_session
   def execute
     authorize! :read, :graphql
     variables = ensure_hash(params[:variables])
