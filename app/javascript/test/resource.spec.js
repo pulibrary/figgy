@@ -113,7 +113,7 @@ it("updates start canvas when UPDATE_STARTCANVAS is commited", () => {
   expect(store.state.resource.startCanvas).toBe("foo")
 })
 
-it("updates thumbnail when UPDATE_THUMBNAIL is commited", () => {
+it("updates thumbnail when UPDATE_THUMBNAIL is committed", () => {
   const localVue = createLocalVue()
   localVue.use(Vuex)
   const store = new Vuex.Store(cloneDeep(storeConfig))
@@ -124,6 +124,19 @@ it("updates thumbnail when UPDATE_THUMBNAIL is commited", () => {
   expect(store.state.resource.thumbnail).toBe("bar")
   expect(store.getters.stateChanged).toBe(true)
 })
+
+it("nullifies the thumbnail when UPDATE_THUMBNAIL is committed without an ID", () => {
+    const localVue = createLocalVue()
+    localVue.use(Vuex)
+    const store = new Vuex.Store(cloneDeep(storeConfig))
+    store.commit("SET_RESOURCE", resourceObject)
+    expect(store.state.resource.thumbnail).toBe("8ffd7a03-ec0e-46c1-a347-e4b19cb7839f")
+    expect(store.getters.stateChanged).toBe(false)
+    store.commit("UPDATE_THUMBNAIL", null)
+    expect(store.state.resource.thumbnail).toBe(null)
+    expect(store.getters.stateChanged).toBe(true)
+})
+
 
 it("updates viewing direction when UPDATE_VIEWDIR is commited", () => {
   const localVue = createLocalVue()
