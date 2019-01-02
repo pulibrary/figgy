@@ -24,9 +24,10 @@ RSpec.describe CollectionsMailer, type: :mailer do
       # the pending section is there, as are its two objects.
       # since they're not in the final review section they must be in the right place
       # thus the spec is less vulnerable to order fluctations
-      expect(email.body.to_s).to include "<p>Resources in workflow state \"pending\"</p>"
+      expect(email.body.to_s).to include "<p>2 Resource(s) in workflow state \"pending\"</p>"
       expect(email.body.to_s).to include expected_pending(resource: r1)
       expect(email.body.to_s).to include expected_pending(resource: r2)
+      expect(email.body.to_s).to include expected_collection(collection: collection)
       email.deliver
       expect(ActionMailer::Base.deliveries).not_to be_empty
     end
@@ -50,7 +51,7 @@ RSpec.describe CollectionsMailer, type: :mailer do
 
   def expected_final(id:)
     <<-FIXTURE
-    <p>Resources in workflow state "final review"</p>
+    <p>1 Resource(s) in workflow state "final review"</p>
     <ul>
       <li>
         <a href="http://www.example.com/catalog/#{id}">Pretty Resource</a>
@@ -65,5 +66,9 @@ FIXTURE
         <a href="http://www.example.com/catalog/#{resource.id}">#{resource.title.first}</a>
       </li>
 FIXTURE
+  end
+
+  def expected_collection(collection:)
+    "<p>You received this email because you are a collection owner of <a href=\"http://www.example.com/catalog/#{collection.id}\">#{collection.title.first}</a>"
   end
 end
