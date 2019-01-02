@@ -24,7 +24,7 @@ class FindHighestValue
     <<-SQL
       select metadata->'#{property}'->0 as highest
       from orm_resources
-      where metadata->'#{property}' is not null
+      where metadata->'#{property}'->0 is not null
       order by metadata->'#{property}'->0 desc limit 1
     SQL
   end
