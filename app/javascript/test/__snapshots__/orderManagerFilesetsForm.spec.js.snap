@@ -5,6 +5,7 @@ exports[`OrderManagerFilesetsForm.vue has the expected html structure 1`] = `
   <heading-stub
     level="h2"
   >
+    
     Generate Labels 
     <small>
       for selected items
