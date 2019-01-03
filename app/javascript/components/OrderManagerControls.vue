@@ -46,7 +46,7 @@
 
 <script>
 import OpenSeadragon from 'openseadragon'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 /**
  * This is the Persistence and Deep Zoom pieces of the Order Manager interface.
  * Note: use `yarn add openseadragon` for deep zoom to work.
@@ -60,6 +60,19 @@ export default {
     title: 'OrderManager Controls',
     htmlAttrs: {
       lang: 'en'
+    }
+  },
+  props: {
+    /**
+     * The html element name used for the component.
+     */
+    type: {
+      type: String,
+      default: 'div'
+    },
+    viewerId: {
+      type: String,
+      default: 'viewer'
     }
   },
   data: function () {
@@ -114,19 +127,6 @@ export default {
       return this.gallery.selected.length
     }
   },
-  props: {
-    /**
-     * The html element name used for the component.
-     */
-    type: {
-      type: String,
-      default: 'div'
-    },
-    viewerId: {
-      type: String,
-      default: 'viewer'
-    }
-  },
   updated: function () {
     if (this.selectedTotal === 1) {
       this.initOSD()
@@ -145,7 +145,7 @@ export default {
       })
     },
     hidden: function () {
-      if (this.selectedTotal != 1) {
+      if (this.selectedTotal !== 1) {
         return true
       } else {
         return false

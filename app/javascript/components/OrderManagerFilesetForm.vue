@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 /**
  * This is the Fileset Form for the Order Manager in Figgy.
  * The only reason you can currently see this pattern is because hiding it causes an OpenSeadragon bug in the Order Manager.
@@ -57,6 +57,15 @@ export default {
       lang: 'en'
     }
   },
+  props: {
+    /**
+     * The html element name used for the component.
+     */
+    type: {
+      type: String,
+      default: 'div'
+    }
+  },
   computed: {
     ...mapState({
       resource: state => state.ordermanager.resource,
@@ -64,7 +73,7 @@ export default {
     }),
     memberViewHint: function () {
       let id = this.gallery.selected[0].id
-      let selectedMember = resource.members.find(member => member.id === id)
+      let selectedMember = this.resource.members.find(member => member.id === id)
       return selectedMember.viewingHint
     },
     startCanvas: function () {
@@ -120,15 +129,6 @@ export default {
         title: this.gallery.selected[0].title,
         viewingHint: this.gallery.selected[0].viewingHint
       }
-    }
-  },
-  props: {
-    /**
-     * The html element name used for the component.
-     */
-    type: {
-      type: String,
-      default: 'div'
     }
   },
   methods: {
