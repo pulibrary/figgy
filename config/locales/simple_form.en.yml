@@ -47,6 +47,8 @@ en:
         member_of_collection_ids: "Collections"
         favorite_term_ids: "Favorite Terms"
         ocr_language: "OCR Language"
+        start: "Date start"
+        end: "Date end"
       numismatic_issue:
         numismatic_monogram_ids: "Monogram"
         object_date: "Date of object"
