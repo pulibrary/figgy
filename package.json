@@ -69,6 +69,7 @@
     ],
     "setupFiles": [
       "jest-canvas-mock"
-    ]
+    ],
+    "setupTestFrameworkScriptFile": "./app/javascript/test/setup.js"
   }
 }
