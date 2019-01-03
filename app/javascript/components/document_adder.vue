@@ -79,7 +79,7 @@ export default {
         return
       }
       this.addingTracks = true
-      axios.post(`/concern/playlists/${this.resource_id}`,
+      axios.post(`/concern/playlists/${this.resourceId}`,
         this.fileSetFormData(recording)
       )
         .then(function (response) {

@@ -17,7 +17,7 @@
           <tbody>
             <template v-for="member in members">
               <playlist-member
-                :key="member.id"
+                :key="member.id.id"
                 :resource="member"
                 @update="detach"
               />
