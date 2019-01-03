@@ -45,17 +45,17 @@ RSpec.describe "catalog/_admin_controls_file_set" do
 
   context "as an admin. user" do
     let(:user) { FactoryBot.create(:admin) }
-    it "renders an upload form field for original files" do
-      expect(rendered).to have_css "input.file[name='file_set[files[][#{original_file.id}]]']"
+    it "does not render an upload form field for original files" do
+      expect(rendered).not_to have_css "input.file[name='file_set[files[][#{original_file.id}]]']"
     end
-    it "renders an upload form field for derivative files" do
-      expect(rendered).to have_css "input.file[name='file_set[derivative_files[][#{derivative_file.id}]]']"
+    it "does not render an upload form field for derivative files" do
+      expect(rendered).not_to have_css "input.file[name='file_set[derivative_files[][#{derivative_file.id}]]']"
     end
-    it "renders an upload form field for thumbnail files" do
-      expect(rendered).to have_css "input.file[name='file_set[thumbnail_files[][#{thumbnail_file.id}]]']"
+    it "does not render an upload form field for thumbnail files" do
+      expect(rendered).not_to have_css "input.file[name='file_set[thumbnail_files[][#{thumbnail_file.id}]]']"
     end
-    it "renders the submit button for updating files" do
-      expect(rendered).to have_css "input[type='submit'][value='Update Files']"
+    it "does not render the submit button for updating files" do
+      expect(rendered).not_to have_css "input[type='submit'][value='Update Files']"
     end
 
     it "renders the download link for original files" do

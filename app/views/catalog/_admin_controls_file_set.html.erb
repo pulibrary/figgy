@@ -5,7 +5,6 @@
       <tr>
         <th>Label</th>
         <th>Download</th>
-        <th>Update</th>
       </tr>
     </thead>
     <tbody>
@@ -14,11 +13,6 @@
         <td><span class="label label-success">Original File</span>&nbsp;<%= file.label.first %></td>
         <% if can?(:download, resource) %>
           <td><%= link_to "Download", download_path(resource.id, file.id) %></td>
-        <% else %>
-          <td></td>
-        <% end %>
-        <% if can?(:update, resource) %>
-          <td><%= f.input "files[][#{file.id}]", as: :file, label: false, required: false %></td>
         <% else %>
           <td></td>
         <% end %>
@@ -32,11 +26,6 @@
         <% else %>
           <td></td>
         <% end %>
-        <% if can?(:update, resource) %>
-          <td><%= f.input "derivative_files[][#{file.id}]", as: :file, label: false, required: false %></td>
-        <% else %>
-          <td></td>
-        <% end %>
       </tr>
     <% end %>
     <% resource.intermediate_files.each do |file| %>
@@ -44,11 +33,6 @@
         <td><span class="label label-info">Intermediate File</span>&nbsp;<%= file.label.first %></td>
         <% if can?(:download, resource) %>
           <td><%= link_to "Download", download_path(resource.id, file.id) %></td>
-        <% else %>
-          <td></td>
-        <% end %>
-        <% if can?(:update, resource) %>
-          <td><%= f.input "intermediate_files[][#{file.id}]", as: :file, label: false, required: false %></td>
         <% else %>
           <td></td>
         <% end %>
@@ -62,11 +46,6 @@
         <% else %>
           <td></td>
         <% end %>
-        <% if can?(:update, resource) %>
-          <td><%= f.input "preservation_files[][#{file.id}]", as: :file, label: false, required: false %></td>
-        <% else %>
-          <td></td>
-        <% end %>
       </tr>
     <% end %>
     <% resource.thumbnail_files.each do |file| %>
@@ -77,22 +56,12 @@
         <% else %>
           <td></td>
         <% end %>
-        <% if can?(:update, resource) %>
-          <td><%= f.input "thumbnail_files[][#{file.id}]", as: :file, label: false, required: false %></td>
-        <% else %>
-          <td></td>
-        <% end %>
       </tr>
     <% end %>
     </tbody>
     <tfoot>
       <tr>
         <td colspan="2"></td>
-        <% if can?(:update, resource) %>
-          <td><%= f.submit 'Update Files', class: 'btn btn-primary', disabled: true %></td>
-        <% else %>
-          <td></td>
-        <% end %>
       </tr>
     </tfoot>
   </table>
