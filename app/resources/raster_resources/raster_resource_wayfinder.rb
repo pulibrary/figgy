@@ -28,4 +28,11 @@ class RasterResourceWayfinder < BaseWayfinder
         end
       end
   end
+
+  def members_with_parents
+    @members_with_parents ||= members.map do |member|
+      member.loaded[:parents] = [resource]
+      member
+    end
+  end
 end
