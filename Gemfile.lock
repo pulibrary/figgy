@@ -47,28 +47,6 @@ GIT
       valkyrie
 
 GIT
-  remote: git://github.com/samvera-labs/valkyrie.git
-  revision: 8f28f1bb8e1f826ce278a377c91915526f7692b1
-  branch: prepare_for_2
-  specs:
-    valkyrie (1.2.2)
-      active-fedora
-      active-triples
-      activemodel
-      activerecord
-      activesupport
-      draper
-      dry-struct
-      dry-types (~> 0.12.0)
-      json
-      json-ld
-      pg
-      railties
-      rdf
-      reform
-      reform-rails
-
-GIT
   remote: git://github.com/yob/pdf-reader.git
   revision: bb7747a3cb4279ecd963185f357dbd718f9d20f3
   specs:
@@ -785,6 +763,22 @@ GEM
     unf_ext (0.0.7.5)
     unicode-display_width (1.3.0)
     validatable (1.6.7)
+    valkyrie (1.3.0)
+      active-fedora
+      active-triples
+      activemodel
+      activerecord
+      activesupport
+      draper
+      dry-struct
+      dry-types (~> 0.12.0)
+      json
+      json-ld
+      pg
+      railties
+      rdf
+      reform
+      reform-rails
     warden (1.2.7)
       rack (>= 1.0)
     web-console (3.5.1)
@@ -904,7 +898,7 @@ DEPENDENCIES
   tiny_tds
   title
   uglifier
-  valkyrie (= 1.2.2)!
+  valkyrie (= 1.3.0)
   valkyrie-derivatives!
   valkyrie-sequel!
   web-console
