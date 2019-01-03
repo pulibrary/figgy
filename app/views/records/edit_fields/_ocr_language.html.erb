@@ -3,6 +3,7 @@
               collection: ControlledVocabulary.for(key).all,
               label_method: :label,
               value_method: :value,
+              hint: "Set this field to trigger OCR generation",
               include_blank: true,
               input_html: { class: 'form-control rights-statement' },
               required: f.object.required?(key) %>
