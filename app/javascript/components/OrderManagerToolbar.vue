@@ -1,138 +1,174 @@
 <template>
-  <component :is="type" :class="['lux-toolbar']">
-    <dropdown-menu v-on:menu-item-clicked="menuSelection($event)" buttonLabel="Selection Options" :menu-items="[
-      {name: 'All', component: 'All'},
-      {name: 'None', component: 'None'},
-      {name: 'Alternate', component: 'Alternate', disabled: true},
-      {name: 'Inverse', component: 'Inverse'}
-    ]"/>
-    <dropdown-menu v-on:menu-item-clicked="menuSelection($event)" buttonLabel="With Selected..." :menu-items="[
-      {name: 'Cut', component: 'Cut', disabled: isCutDisabled()},
-      {name: 'Paste Before', component: 'Paste Before', disabled: isPasteDisabled()},
-      {name: 'Paste After', component: 'Paste After', disabled: isPasteDisabled()}
-    ]"/>
-    <spacer></spacer>
+  <component
+    :is="type"
+    :class="['lux-toolbar']"
+  >
+    <dropdown-menu
+      button-label="Selection Options"
+      :menu-items="[
+        {name: 'All', component: 'All'},
+        {name: 'None', component: 'None'},
+        {name: 'Alternate', component: 'Alternate', disabled: true},
+        {name: 'Inverse', component: 'Inverse'}
+      ]"
+      @menu-item-clicked="menuSelection($event)"
+    />
+    <dropdown-menu
+      button-label="With Selected..."
+      :menu-items="[
+        {name: 'Cut', component: 'Cut', disabled: isCutDisabled()},
+        {name: 'Paste Before', component: 'Paste Before', disabled: isPasteDisabled()},
+        {name: 'Paste After', component: 'Paste After', disabled: isPasteDisabled()}
+      ]"
+      @menu-item-clicked="menuSelection($event)"
+    />
+    <spacer />
     <div class="lux-zoom-slider">
-      <lux-icon-base class="lux-svg-icon" icon-name="shrink" icon-color="rgb(0,0,0)" width="12" height="12"><lux-icon-picture/></lux-icon-base>
-      <label for="img_zoom">Image zoom</label>
-      <input @input="resizeCards($event)" type="range" id="img_zoom" min="40" max="500" value="300">
-      <lux-icon-base class="lux-svg-icon" icon-name="grow" icon-color="rgb(0,0,0)" width="24" height="24"><lux-icon-picture/></lux-icon-base>
+      <lux-icon-base
+        class="lux-svg-icon"
+        icon-name="shrink"
+        icon-color="rgb(0,0,0)"
+        width="12"
+        height="12"
+      >
+        <lux-icon-picture />
+      </lux-icon-base>
+      <label for="img_zoom">
+        Image zoom
+      </label>
+      <input
+        id="img_zoom"
+        type="range"
+        min="40"
+        max="500"
+        value="300"
+        @input="resizeCards($event)"
+      >
+      <lux-icon-base
+        class="lux-svg-icon"
+        icon-name="grow"
+        icon-color="rgb(0,0,0)"
+        width="24"
+        height="24"
+      >
+        <lux-icon-picture />
+      </lux-icon-base>
     </div>
   </component>
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex"
+import { mapState } from 'vuex'
 /**
  * Toolbars allows a user to select a value from a series of options.
  */
 export default {
-  name: "Toolbar",
-  status: "ready",
-  release: "1.0.0",
-  type: "Pattern",
+  name: 'Toolbar',
+  status: 'ready',
+  release: '1.0.0',
+  type: 'Pattern',
   props: {
     /**
      * The html element name used for the container
      */
     type: {
       type: String,
-      default: "div",
-    },
+      default: 'div'
+    }
   },
   computed: {
     ...mapState({
       resource: state => state.ordermanager.resource,
-      gallery: state => state.gallery,
+      gallery: state => state.gallery
     }),
     cut: {
-      get() {
+      get () {
         return this.gallery.cut
-      },
-    },
+      }
+    }
   },
   methods: {
-    cutSelected: function() {
-      this.$store.dispatch("cut", this.gallery.selected)
+    cutSelected: function () {
+      this.$store.dispatch('cut', this.gallery.selected)
       this.selectNone()
     },
-    getItemIndexById: function(id) {
+    getItemIndexById: function (id) {
       return this.gallery.items
-        .map(function(item) {
+        .map(function (item) {
           return item.id
         })
         .indexOf(id)
     },
-    isCutDisabled: function() {
+    isCutDisabled: function () {
       return !!this.gallery.cut.length
     },
-    isPasteDisabled: function() {
+    isPasteDisabled: function () {
       return !(this.gallery.cut.length && this.gallery.selected.length)
     },
-    paste: function(indexModifier) {
+    paste: function (indexModifier) {
       let items = this.gallery.items
       items = items.filter(val => !this.gallery.cut.includes(val))
       let pasteAfterIndex =
         this.getItemIndexById(this.gallery.selected[this.gallery.selected.length - 1].id) + indexModifier
       items.splice(pasteAfterIndex, 0, ...this.gallery.cut)
-      this.$store.dispatch("paste", items)
+      this.$store.dispatch('paste', items)
       this.resetCut()
       this.selectNone()
     },
-    resetCut: function() {
-      this.$store.dispatch("cut", [])
+    resetCut: function () {
+      this.$store.dispatch('cut', [])
     },
-    resizeCards: function(event) {
-      this.$emit("cards-resized", event)
+    resizeCards: function (event) {
+      this.$emit('cards-resized', event)
     },
-    menuSelection(value) {
+    menuSelection (value) {
       switch (value.target.innerText) {
-        case "All":
+        case 'All':
           this.selectAll()
           break
-        case "None":
+        case 'None':
           this.selectNone()
           break
-        case "Alternate":
+        case 'Alternate':
           this.selectAlternate()
           break
-        case "Inverse":
+        case 'Inverse':
           this.selectInverse()
           break
-        case "Cut":
+        case 'Cut':
           this.cutSelected()
           break
-        case "Paste Before":
+        case 'Paste Before':
           this.paste(-1)
           break
-        case "Paste After":
+        case 'Paste After':
           this.paste(1)
           break
       }
     },
-    selectAll: function() {
-      this.$store.dispatch("select", this.gallery.items)
+    selectAll: function () {
+      this.$store.dispatch('select', this.gallery.items)
     },
-    selectAlternate: function() {
+    selectAlternate: function () {
       let selected = []
       let itemTotal = this.gallery.items.length
       for (let i = 0; i < itemTotal; i = i + 2) {
         selected.push(this.gallery.items[i])
       }
-      this.$store.dispatch("select", selected)
+      this.$store.dispatch('select', selected)
     },
-    selectInverse: function() {
+    selectInverse: function () {
       let selected = []
       let itemTotal = this.gallery.items.length
       for (let i = 1; i < itemTotal; i = i + 2) {
         selected.push(this.gallery.items[i])
       }
-      this.$store.dispatch("select", selected)
+      this.$store.dispatch('select', selected)
     },
-    selectNone: function() {
-      this.$store.dispatch("select", [])
-    },
-  },
+    selectNone: function () {
+      this.$store.dispatch('select', [])
+    }
+  }
 }
 </script>
 

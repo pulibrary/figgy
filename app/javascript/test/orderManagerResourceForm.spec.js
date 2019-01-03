@@ -106,14 +106,14 @@ describe("OrderManagerResourceForm.vue", () => {
 
   it('displays the correct image (aka, fileset) count', () => {
     const expanded = wrapper.find('.lux-file_count')
-    const fileCount = expanded.html()
-    expect(fileCount).toEqual('<span class=\"lux-file_count\"><text-style-stub variation=\"emphasis\">Total files: 3</text-style-stub></span>')
+    const fileCount = expanded.text()
+    expect(fileCount).toEqual('Total files: 3')
   })
 
   it('displays the bibid, if it has one', () => {
     const expanded = wrapper.find('.lux-bibid')
-    const bibid = expanded.html()
-    expect(bibid).toEqual('<span class="lux-bibid"> | BibId: 4609321</span>')
+    const bibid = expanded.text()
+    expect(bibid).toEqual('| BibId: 4609321')
   })
 
   it("has the expected html structure", () => {

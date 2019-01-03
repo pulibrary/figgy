@@ -5,6 +5,7 @@ exports[`OrderManagerFilesetForm.vue has the expected html structure 1`] = `
   <heading-stub
     level="h2"
   >
+    
     Edit 
     <small>
       the selected item

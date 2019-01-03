@@ -114,6 +114,7 @@ jobs:
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
       - run: bundle exec rake rubocop
+      - run: yarn lint
 workflows:
   version: 2
   build_accept_deploy:

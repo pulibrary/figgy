@@ -1,30 +1,61 @@
 <template>
-<div class="lux-orderManager">
-  <transition name="fade">
-    <div v-if="loading" class="lux-overlay">
-      <loader size="medium"></loader>
-    </div>
-  </transition>
-  <alert v-if="saved" status="success" type="alert" autoclear dismissible>Your work has been saved!</alert>
-  <alert v-if="saveError" status="error" type="alert" autoclear dismissible>Sorry, there was a problem saving your work!</alert>
-  <wrapper full-width="true" class="lux-galleryPanel" type="div">
-    <toolbar v-on:cards-resized="resizeCards($event)"></toolbar>
-    <gallery class="lux-galleryWrapper" :cardPixelWidth="cardPixelWidth" :galleryItems="galleryItems"></gallery>
-  </wrapper>
-  <wrapper class="lux-sidePanel" type="div" :fullWidth="false">
-    <!-- Resource Form-->
-    <resource-form v-if="selectedTotal === 0"></resource-form>
-    <!-- Multiple Selected Form-->
-    <filesets-form v-if="selectedTotal > 1"></filesets-form>
-    <!-- Single Selected Form-->
-    <fileset-form v-if="selectedTotal === 1"></fileset-form>
-    <controls viewerId="viewer"></controls>
-  </wrapper>
-</div>
+  <div class="lux-orderManager">
+    <transition name="fade">
+      <div
+        v-if="loading"
+        class="lux-overlay"
+      >
+        <loader size="medium" />
+      </div>
+    </transition>
+    <alert
+      v-if="saved"
+      status="success"
+      type="alert"
+      autoclear
+      dismissible
+    >
+      Your work has been saved!
+    </alert>
+    <alert
+      v-if="saveError"
+      status="error"
+      type="alert"
+      autoclear
+      dismissible
+    >
+      Sorry, there was a problem saving your work!
+    </alert>
+    <wrapper
+      full-width="true"
+      class="lux-galleryPanel"
+      type="div"
+    >
+      <toolbar @cards-resized="resizeCards($event)" />
+      <gallery
+        class="lux-galleryWrapper"
+        :card-pixel-width="cardPixelWidth"
+        :gallery-items="galleryItems"
+      />
+    </wrapper>
+    <wrapper
+      class="lux-sidePanel"
+      type="div"
+      :full-width="false"
+    >
+      <!-- Resource Form-->
+      <resource-form v-if="selectedTotal === 0" />
+      <!-- Multiple Selected Form-->
+      <filesets-form v-if="selectedTotal > 1" />
+      <!-- Single Selected Form-->
+      <fileset-form v-if="selectedTotal === 1" />
+      <controls viewer-id="viewer" />
+    </wrapper>
+  </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex"
+import { mapState } from 'vuex'
 import Controls from './OrderManagerControls'
 import Toolbar from './OrderManagerToolbar'
 import FilesetForm from './OrderManagerFilesetForm'
@@ -41,58 +72,16 @@ import ResourceForm from './OrderManagerResourceForm'
  * Vuex module, *resourceModule*. Please see [the state management documentation](/#!/State%20Management) for how to manage state in complex patterns.
  */
 export default {
-  name: "OrderManager",
-  status: "ready",
-  release: "1.0.0",
-  type: "Pattern",
+  name: 'OrderManager',
+  status: 'ready',
+  release: '1.0.0',
+  type: 'Pattern',
   components: {
     'toolbar': Toolbar,
     'resource-form': ResourceForm,
     'filesets-form': FilesetsForm,
     'fileset-form': FilesetForm,
-    'controls': Controls,
-  },
-  data: function() {
-    return {
-      cardPixelWidth: 300,
-      captionPixelPadding: 9,
-    }
-  },
-  computed: {
-    galleryItems() {
-      return this.resource.members.map(member => ({
-        id: member.id,
-        caption: member.label,
-        service:
-          member["thumbnail"] && typeof(member.thumbnail.iiifServiceUrl) != "undefined"
-            ? member.thumbnail.iiifServiceUrl
-            : this.defaultThumbnail,
-        mediaUrl:
-          member["thumbnail"] && typeof(member.thumbnail.iiifServiceUrl) != "undefined"
-            ? member.thumbnail.iiifServiceUrl + "/full/300,/0/default.jpg"
-            : this.defaultThumbnail,
-        viewingHint: member.viewingHint,
-      }))
-    },
-    selectedTotal() {
-      return this.gallery.selected.length
-    },
-    isMultiVolume() {
-      return this.$store.getters.isMultiVolume
-    },
-    ...mapState({
-      resource: state => state.ordermanager.resource,
-      gallery: state => state.gallery,
-    }),
-    loading: function() {
-      return this.resource.loadState !== "LOADED" ? true : false
-    },
-    saved() {
-      return this.resource.saveState === "SAVED" ? true : false
-    },
-    saveError() {
-      return this.resource.saveState === "ERROR" ? true : false
-    },
+    'controls': Controls
   },
   props: {
     /**
@@ -100,40 +89,82 @@ export default {
      */
     resourceObject: {
       type: Object,
-      default: null,
+      default: null
     },
     /**
      * The resource id. Requires host app to have async lookup of resource.
      */
     resourceId: {
       type: String,
-      default: null,
+      default: null
     },
     defaultThumbnail: {
       type: String,
-      default: "https://picsum.photos/600/300/?random",
+      default: 'https://picsum.photos/600/300/?random'
+    }
+  },
+  data: function () {
+    return {
+      cardPixelWidth: 300,
+      captionPixelPadding: 9
+    }
+  },
+  computed: {
+    galleryItems () {
+      return this.resource.members.map(member => ({
+        id: member.id,
+        caption: member.label,
+        service:
+          member['thumbnail'] && typeof (member.thumbnail.iiifServiceUrl) !== 'undefined'
+            ? member.thumbnail.iiifServiceUrl
+            : this.defaultThumbnail,
+        mediaUrl:
+          member['thumbnail'] && typeof (member.thumbnail.iiifServiceUrl) !== 'undefined'
+            ? member.thumbnail.iiifServiceUrl + '/full/300,/0/default.jpg'
+            : this.defaultThumbnail,
+        viewingHint: member.viewingHint
+      }))
     },
+    selectedTotal () {
+      return this.gallery.selected.length
+    },
+    isMultiVolume () {
+      return this.$store.getters.isMultiVolume
+    },
+    ...mapState({
+      resource: state => state.ordermanager.resource,
+      gallery: state => state.gallery
+    }),
+    loading: function () {
+      return this.resource.loadState !== 'LOADED'
+    },
+    saved () {
+      return this.resource.saveState === 'SAVED'
+    },
+    saveError () {
+      return this.resource.saveState === 'ERROR'
+    }
+  },
+  beforeMount: function () {
+    if (this.resourceObject) {
+      // if props are passed in set the resource on mount
+      this.$store.commit('SET_RESOURCE', this.resourceObject)
+    } else {
+      let resource = { id: this.resourceId }
+      this.$store.commit('CHANGE_RESOURCE_LOAD_STATE', 'LOADING')
+      this.$store.dispatch('loadImageCollectionGql', resource)
+    }
   },
   methods: {
-    resizeCards: function(event) {
+    resizeCards: function (event) {
       this.cardPixelWidth = event.target.value
       if (this.cardPixelWidth < 75) {
         this.captionPixelPadding = 0
       } else {
         this.captionPixelPadding = 9
       }
-    },
-  },
-  beforeMount: function() {
-    if (this.resourceObject) {
-      // if props are passed in set the resource on mount
-      this.$store.commit("SET_RESOURCE", this.resourceObject)
-    } else {
-      let resource = { id: this.resourceId }
-      this.$store.commit("CHANGE_RESOURCE_LOAD_STATE", "LOADING")
-      this.$store.dispatch("loadImageCollectionGql", resource)
     }
-  },
+  }
 }
 </script>
 <style lang="scss" scoped>

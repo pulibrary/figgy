@@ -20,9 +20,9 @@ exports[`OrderManager.vue has the expected html structure 1`] = `
     />
      
     <gallery-stub
-      cardpixelwidth="300"
+      card-pixel-width="300"
       class="lux-galleryWrapper"
-      galleryitems="[object Object],[object Object],[object Object]"
+      gallery-items="[object Object],[object Object],[object Object]"
     />
   </wrapper-stub>
    

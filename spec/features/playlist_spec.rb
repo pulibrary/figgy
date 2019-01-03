@@ -47,7 +47,7 @@ RSpec.feature "PlaylistChangeSets" do
       # This cannot be tested any further due to the errors related to Webpack on headless-chrome
       doc = Nokogiri::HTML(page.body)
       expect(doc.xpath("//playlist-members")).not_to be_empty
-      playlist_members_elements = doc.xpath("//playlist-members[@resource_id='#{resource.id}']")
+      playlist_members_elements = doc.xpath("//playlist-members[@resource-id='#{resource.id}']")
       expect(playlist_members_elements).not_to be_empty
       playlist_members_element = playlist_members_elements.first
       expect(playlist_members_element.attributes[":members"].value).to eq(resource.decorate.decorated_proxies.to_json)

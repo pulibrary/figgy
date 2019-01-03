@@ -26,6 +26,7 @@ exports[`OrderManagerControls.vue has the expected html structure 1`] = `
   <heading-stub
     level="h2"
   >
+    
     Zoom 
     <small>
       on the selected item

@@ -5,12 +5,12 @@ exports[`OrderManagerToolbar.vue has the expected html structure 1`] = `
   class="lux-toolbar"
 >
   <dropdown-menu-stub
-    buttonlabel="Selection Options"
+    button-label="Selection Options"
     menu-items="[object Object],[object Object],[object Object],[object Object]"
   />
    
   <dropdown-menu-stub
-    buttonlabel="With Selected..."
+    button-label="With Selected..."
     menu-items="[object Object],[object Object],[object Object]"
   />
    
@@ -32,7 +32,9 @@ exports[`OrderManagerToolbar.vue has the expected html structure 1`] = `
     <label
       for="img_zoom"
     >
+      
       Image zoom
+    
     </label>
      
     <input
