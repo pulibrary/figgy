@@ -103,5 +103,13 @@ RSpec.feature "File Manager" do
       expect(page).to have_selector("form[data-type='json']", count: 1)
       expect(page).not_to have_selector("form[data-type='json']", text: "Child Resource")
     end
+
+    it "uses cached parents for thumbnails" do
+      allow(adapter.query_service).to receive(:find_inverse_references_by).and_call_original
+
+      visit polymorphic_path [:file_manager, resource]
+
+      expect(adapter.query_service).to have_received(:find_inverse_references_by).exactly(1).times
+    end
   end
 end
