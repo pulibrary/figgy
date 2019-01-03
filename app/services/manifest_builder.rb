@@ -58,12 +58,11 @@ class ManifestBuilder
     end
 
     def description
-      value = if resource.respond_to?(:primary_imported_metadata) && resource.primary_imported_metadata.description.present?
-                resource.primary_imported_metadata.description
-              else
-                decorate.try(:description)
-              end
-      Array.wrap(value).first
+      if resource.respond_to?(:primary_imported_metadata) && resource.primary_imported_metadata.description.present?
+        resource.primary_imported_metadata.description
+      else
+        decorate.try(:description)
+      end
     end
 
     def thumbnail_id

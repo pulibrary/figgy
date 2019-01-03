@@ -115,7 +115,7 @@ RSpec.describe ManifestBuilder do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
       expect(output["label"]).to eq ["test title1"]
-      expect(output["description"]).to eq "Test Description"
+      expect(output["description"]).to eq ["Test Description"]
       expect(output["viewingHint"]).to eq "individuals"
       expect(output["viewingDirection"]).to eq "right-to-left"
       expect(output["rendering"]).to include "@id" => "http://arks.princeton.edu/ark:/88435/abc1234de", "format" => "text/html"
@@ -331,29 +331,12 @@ RSpec.describe ManifestBuilder do
       expect(output).to include "metadata"
       metadata = output["metadata"]
       expect(metadata).to be_kind_of Array
-      expect(metadata.length).to eq(13)
-
-      metadata_object = metadata.find { |h| h["label"] == "Created At" }
-      metadata_values = metadata_object["value"]
-      expect(metadata_values).to be_kind_of Array
-      metadata_value = metadata_values.shift
-      expect { Date.strptime(metadata_value, "%m/%d/%y") }.not_to raise_error
-
-      metadata_object = metadata.find { |h| h["label"] == "Updated At" }
-      metadata_values = metadata_object["value"]
-      expect(metadata_values).to be_kind_of Array
-      metadata_value = metadata_values.shift
-      expect { Date.strptime(metadata_value, "%m/%d/%y") }.not_to raise_error
+      expect(metadata.length).to eq(8)
 
       metadata_object = metadata.find { |h| h["label"] == "Portion Note" }
       metadata_values = metadata_object["value"]
       expect(metadata_values).to be_kind_of Array
       expect(metadata_values).to include "test value1"
-
-      metadata_object = metadata.find { |h| h["label"] == "Location" }
-      metadata_values = metadata_object["value"]
-      expect(metadata_values).to be_kind_of Array
-      expect(metadata_values).to include "RCPPA BL980.G7 B66 1982"
     end
 
     context "when the resource has linked vocabulary terms" do
@@ -373,7 +356,7 @@ RSpec.describe ManifestBuilder do
         expect(output).to include "metadata"
         metadata = output["metadata"]
         expect(metadata).to be_kind_of Array
-        expect(metadata.length).to eq(21)
+        expect(metadata.length).to eq(20)
 
         metadata_object = metadata.find { |h| h["label"] == "Subject" }
         metadata_values = metadata_object["value"]
@@ -477,7 +460,7 @@ RSpec.describe ManifestBuilder do
     it "builds a IIIF document" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
-      expect(output["description"]).to eq "Test Description"
+      expect(output["description"]).to eq ["Test Description"]
       expect(output["sequences"][0]["canvases"][0]["images"].length).to eq 1
     end
   end
@@ -491,7 +474,7 @@ RSpec.describe ManifestBuilder do
     it "builds a IIIF document" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
-      expect(output["description"]).to eq "Test Description"
+      expect(output["description"]).to eq ["Test Description"]
       expect(output["@type"]).to eq "sc:Manifest"
       expect(output["manifests"]).to eq nil
       expect(output["sequences"].first["canvases"].length).to eq 1
@@ -509,7 +492,7 @@ RSpec.describe ManifestBuilder do
     it "builds a IIIF collection" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
-      expect(output["description"]).to eq "Test Description"
+      expect(output["description"]).to eq ["Test Description"]
       expect(output["@type"]).to eq "sc:Collection"
       expect(output["viewingHint"]).to eq "multi-part"
       expect(output["manifests"].length).to eq 1
