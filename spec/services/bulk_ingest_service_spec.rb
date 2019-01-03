@@ -248,7 +248,8 @@ RSpec.describe BulkIngestService do
   end
 
   describe "#valid_remote_identifier?" do
-    context "with a PULFA-like identifier that contains invalid characters" do
+    context "with a non-bibid identifier that contains invalid characters" do
+      # We might see a value like this in a directory tree, and therefore check it as a source metadata id
       let(:value) { "June 31" }
 
       it "returns false" do
