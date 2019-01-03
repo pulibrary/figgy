@@ -7,6 +7,7 @@ class CollectionChangeSet < Valkyrie::ChangeSet
   property :visibility, multiple: false, required: false
   property :owners, multiple: true, required: false
   validates :title, :slug, presence: true
+  validates_with UniqueSlugValidator
 
   def primary_terms
     [:title, :slug, :description, :owners]
