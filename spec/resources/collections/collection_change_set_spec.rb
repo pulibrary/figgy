@@ -21,6 +21,16 @@ RSpec.describe CollectionChangeSet do
       expect(change_set.required?(:slug)).to eq true
       expect(change_set.validate(slug: "")).to eq false
     end
+
+    context "when the slug is already used" do
+      before do
+        FactoryBot.create_for_repository(:collection, slug: "existing")
+      end
+
+      it "is single-valued and required" do
+        expect(change_set.validate(slug: "existing")).to eq false
+      end
+    end
   end
 
   describe "#description" do
