@@ -25,7 +25,10 @@
           <th>Actions</th>
         </thead>
         <tbody>
-          <tr v-for="recording in recordings">
+          <tr
+            v-for="recording in recordings"
+            :key="recording.id"
+          >
             <td>
               <a :href="'/catalog/' + recording.id">
                 {{ recording.title }}
@@ -49,7 +52,12 @@
 <script>
 import axios from 'axios'
 export default {
-  props: ['resourceId'],
+  props: {
+    resourceId: {
+      type: String,
+      required: true
+    }
+  },
   data () {
     return {
       recordings: [],
@@ -71,7 +79,6 @@ export default {
         return
       }
       this.addingTracks = true
-      let vm = this
       axios.post(`/concern/playlists/${this.resource_id}`,
         this.fileSetFormData(recording)
       )
@@ -80,7 +87,7 @@ export default {
         })
     },
     search (event) {
-      if (this.recording_query.trim() == '') {
+      if (this.recording_query.trim() === '') {
         this.recordings = []
         return
       }
@@ -91,11 +98,11 @@ export default {
         })
         .then(function (data) {
           vm.recordings = data['response']['docs'].map(
-            function (recording_document) {
+            function (recordingDocument) {
               return {
-                id: recording_document['id'],
-                title: recording_document['title_ssim'][0],
-                file_set_ids: (recording_document['member_ids_ssim'] || []).map((x) => { return x.replace(/^id-/, '') })
+                id: recordingDocument['id'],
+                title: recordingDocument['title_ssim'][0],
+                file_set_ids: (recordingDocument['member_ids_ssim'] || []).map((x) => { return x.replace(/^id-/, '') })
               }
             }
           )
