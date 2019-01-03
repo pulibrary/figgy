@@ -87,9 +87,22 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   # as required by samvera-labs/iiif_manifest
   # @return [Array<MetadataObject>] an array of objects modeling the metadata values
   def iiif_metadata
-    iiif_manifest_attributes.select { |_, value| value.present? }.map do |u, v|
+    iiif_manifest_attributes.select { |k, v| !iiif_suppressed_metadata.include?(k) && v.present? }.map do |u, v|
       MetadataObject.new(u, v).to_h
     end
+  end
+
+  def iiif_suppressed_metadata
+    @suppressed_metadata ||= [
+      :created,
+      :created_at,
+      :depositor,
+      :description, # this is included in the manifest builder
+      :location,
+      :pdf_type,
+      :references,
+      :updated_at
+    ]
   end
 
   # Should this resource have a manifest?

@@ -42,8 +42,6 @@ RSpec.describe Valkyrie::ResourceDecorator do
         expect(metadata).to include("label" => "Title", "value" => ["test title"])
         expect(metadata).to include("label" => "Identifier", "value" => \
           ["<a href='http://arks.princeton.edu/ark:/88435/5m60qr98h' alt='Identifier'>http://arks.princeton.edu/ark:/88435/5m60qr98h</a>"])
-        expect(metadata).to include("label" => "PDF Type", "value" => ["Gray"])
-        expect(metadata).to include("label" => "Created", "value" => ["01/01/1970"])
       end
     end
 
