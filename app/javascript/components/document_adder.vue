@@ -1,12 +1,21 @@
 <template>
   <div>
     <h2>Search for Recordings to Add Tracks</h2>
-    <form v-on:submit.prevent="search">
+    <form @submit.prevent="search">
       <div class="input-group">
-        <input v-model="recording_query" placeholder="Search" class="form-control">
-          <span class="input-group-btn">
-            <button v-on:click="search" class="btn btn-primary">Search</button>
-          </span>
+        <input
+          v-model="recording_query"
+          placeholder="Search"
+          class="form-control"
+        >
+        <span class="input-group-btn">
+          <button
+            class="btn btn-primary"
+            @click="search"
+          >
+            Search
+          </button>
+        </span>
       </div>
     </form>
     <div>
@@ -17,10 +26,19 @@
         </thead>
         <tbody>
           <tr v-for="recording in recordings">
-            <td><a v-bind:href="'/catalog/' + recording.id">{{ recording.title }}</a></td>
             <td>
-              <button v-on:click="addTracks(recording)" class="btn btn-primary"
-                :disabled="addingTracks || recording.file_set_ids.length == 0">Add Tracks</button>
+              <a :href="'/catalog/' + recording.id">
+                {{ recording.title }}
+              </a>
+            </td>
+            <td>
+              <button
+                class="btn btn-primary"
+                :disabled="addingTracks || recording.file_set_ids.length == 0"
+                @click="addTracks(recording)"
+              >
+                Add Tracks
+              </button>
             </td>
           </tr>
         </tbody>
@@ -31,24 +49,24 @@
 <script>
 import axios from 'axios'
 export default {
-  props: ['resource_id'],
-  data() {
+  props: ['resourceId'],
+  data () {
     return {
       recordings: [],
-      recording_query: "",
+      recording_query: '',
       addingTracks: false
     }
   },
   methods: {
-    fileSetFormData(recording) {
-      let form = new FormData
+    fileSetFormData (recording) {
+      let form = new FormData()
       form.append('_method', 'patch')
-      for(var id of recording.file_set_ids) {
+      for (var id of recording.file_set_ids) {
         form.append('playlist[file_set_ids][]', id)
       }
       return form
     },
-    addTracks(recording) {
+    addTracks (recording) {
       if (recording.file_set_ids.length < 1) {
         return
       }
@@ -57,28 +75,27 @@ export default {
       axios.post(`/concern/playlists/${this.resource_id}`,
         this.fileSetFormData(recording)
       )
-      .then(function(response) {
-        window.location = response.request.responseURL
-      })
+        .then(function (response) {
+          window.location = response.request.responseURL
+        })
     },
-    search(event) {
-      if(this.recording_query.trim() == '') {
+    search (event) {
+      if (this.recording_query.trim() == '') {
         this.recordings = []
         return
       }
       let vm = this
       fetch(`/catalog.json?f[internal_resource_ssim][]=ScannedResource&f[change_set_ssim][]=recording&q=${this.recording_query}`)
-        .then(function(response) {
+        .then(function (response) {
           return response.json()
         })
-        .then(function(data) {
-          vm.recordings = data["response"]["docs"].map(
-            function(recording_document) {
+        .then(function (data) {
+          vm.recordings = data['response']['docs'].map(
+            function (recording_document) {
               return {
-                id: recording_document["id"],
-                title: recording_document["title_ssim"][0],
-                file_set_ids: (recording_document["member_ids_ssim"] || []).map((x) =>
-                  { return x.replace(/^id-/,"") })
+                id: recording_document['id'],
+                title: recording_document['title_ssim'][0],
+                file_set_ids: (recording_document['member_ids_ssim'] || []).map((x) => { return x.replace(/^id-/, '') })
               }
             }
           )

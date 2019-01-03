@@ -1,90 +1,118 @@
 <template>
   <wrapper class="lux-bg">
     <div class="lux-controls">
-      <alert v-if="orderChanged" status="info">Page order has changed.</alert>
-      <input-button @button-clicked="saveHandler($event)" id="save_btn" variation="solid" size="medium" :disabled="isDisabled">
+      <alert
+        v-if="orderChanged"
+        status="info"
+      >
+        Page order has changed.
+      </alert>
+      <input-button
+        id="save_btn"
+        variation="solid"
+        size="medium"
+        :disabled="isDisabled"
+        @button-clicked="saveHandler($event)"
+      >
         Apply Changes
       </input-button>
-      <a v-if="!hidden" :href="editLink" id="replace-file-button">Manage Page Files</a>
+      <a
+        v-if="!hidden"
+        id="replace-file-button"
+        :href="editLink"
+      >
+        Manage Page Files
+      </a>
     </div>
-    <heading v-if="selectedTotal === 1" level="h2">Zoom <small>on the selected item</small></heading>
-    <div v-if="selectedTotal === 1" class="lux-osd-wrapper">
+    <heading
+      v-if="selectedTotal === 1"
+      level="h2"
+    >
+      Zoom <small>on the selected item</small>
+    </heading>
+    <div
+      v-if="selectedTotal === 1"
+      class="lux-osd-wrapper"
+    >
       <div class="lux-osd">
-        <div class="lux-viewport" :id="viewerId"></div>
+        <div
+          :id="viewerId"
+          class="lux-viewport"
+        />
       </div>
     </div>
   </wrapper>
 </template>
 
 <script>
-import OpenSeadragon from "openseadragon"
-import { mapState, mapGetters } from "vuex"
+import OpenSeadragon from 'openseadragon'
+import { mapState, mapGetters } from 'vuex'
 /**
  * This is the Persistence and Deep Zoom pieces of the Order Manager interface.
  * Note: use `yarn add openseadragon` for deep zoom to work.
  */
 export default {
-  name: "Controls",
-  status: "ready",
-  release: "1.0.0",
-  type: "Pattern",
+  name: 'Controls',
+  status: 'ready',
+  release: '1.0.0',
+  type: 'Pattern',
   metaInfo: {
-    title: "OrderManager Controls",
+    title: 'OrderManager Controls',
     htmlAttrs: {
-      lang: "en",
-    },
+      lang: 'en'
+    }
   },
-  data: function() {
+  data: function () {
     return {
       viewer: null,
-      osdId: this.viewerId,
+      osdId: this.viewerId
     }
   },
   computed: {
     ...mapState({
       resource: state => state.ordermanager.resource,
-      gallery: state => state.gallery,
+      gallery: state => state.gallery
     }),
-    editLink: function() {
-      let link = ""
+    editLink: function () {
+      let link = ''
       if (!this.hidden) {
-        link = "/catalog/parent/" + this.resource.id + "/" + this.gallery.selected[0].id
+        link = '/catalog/parent/' + this.resource.id + '/' + this.gallery.selected[0].id
       }
       return link
     },
-    isMultiVolume: function() {
+    isMultiVolume: function () {
       return this.resource.isMultiVolume
     },
-    isDisabled: function() {
+    isDisabled: function () {
       if (this.$store.getters.stateChanged) {
         return false
       } else {
         return true
       }
     },
-    orderChanged: function() {
+    orderChanged: function () {
       return this.$store.getters.orderChanged
     },
-    payloadFileset: function() {
+    payloadFileset: function () {
       let changed = this.gallery.items.filter(item => this.gallery.changeList.indexOf(item.id) !== -1)
       let payload = changed.map(file => {
         return { id: file.id, title: file.title, page_type: file.viewingHint }
       })
       return payload
     },
-    payloadVolume: function() {
+    payloadVolume: function () {
       var changed = this.gallery.items.filter(item => this.gallery.changeList.indexOf(item.id) !== -1)
       var payload = changed.map(file => {
         return { id: file.id, title: file.title }
       })
       return payload
     },
-    resourceClassName: function() {
+    resourceClassName: function () {
       return this.resource.resourceClassName
     },
-    selectedTotal() {
+    selectedTotal () {
       return this.gallery.selected.length
-    },
+    }
   },
   props: {
     /**
@@ -92,15 +120,20 @@ export default {
      */
     type: {
       type: String,
-      default: "div",
+      default: 'div'
     },
     viewerId: {
       type: String,
-      default: "viewer",
-    },
+      default: 'viewer'
+    }
+  },
+  updated: function () {
+    if (this.selectedTotal === 1) {
+      this.initOSD()
+    }
   },
   methods: {
-    initOSD: function() {
+    initOSD: function () {
       if (this.viewer) {
         this.viewer.destroy()
         this.viewer = null
@@ -108,46 +141,46 @@ export default {
       this.viewer = OpenSeadragon({
         id: this.osdId,
         showNavigationControl: false,
-        tileSources: [this.gallery.selected[0].service + "/info.json"],
+        tileSources: [this.gallery.selected[0].service + '/info.json']
       })
     },
-    hidden: function() {
+    hidden: function () {
       if (this.selectedTotal != 1) {
         return true
       } else {
         return false
       }
     },
-    galleryToFileset: function(items) {
+    galleryToFileset: function (items) {
       var members = items.filter(item => this.gallery.changeList.indexOf(item.id) > -1).map(item => {
         return { id: item.id, label: item.caption, viewingHint: item.viewingHint }
       })
       return members
     },
-    galleryToResource: function(items) {
+    galleryToResource: function (items) {
       var members = items.map(item => {
         return item.id
       })
       return members
     },
-    saveHandler: function(event) {
+    saveHandler: function (event) {
       if (this.isMultiVolume) {
         this.saveMVW()
       } else {
         this.save()
       }
     },
-    save: function() {
+    save: function () {
       let resource = {}
       resource.body = {
         id: this.resource.id,
         viewingDirection: this.resource.viewingDirection
-          ? this.resource.viewingDirection.replace(/-/g, "").toUpperCase()
+          ? this.resource.viewingDirection.replace(/-/g, '').toUpperCase()
           : this.resource.viewingDirection,
         viewingHint: this.resource.viewingHint,
         startPage: this.resource.startCanvas,
         thumbnailId: this.resource.thumbnail,
-        memberIds: this.galleryToResource(this.gallery.items),
+        memberIds: this.galleryToResource(this.gallery.items)
       }
       resource.filesets = []
       let membersBody = this.galleryToFileset(this.gallery.items)
@@ -156,27 +189,22 @@ export default {
         resource.filesets.push(membersBody[i])
       }
       window.resource = resource
-      this.$store.dispatch("saveStateGql", resource)
+      this.$store.dispatch('saveStateGql', resource)
     },
-    saveMVW: function() {
+    saveMVW: function () {
       let body = {
         resource: {},
-        volumes: this.payloadVolume,
+        volumes: this.payloadVolume
       }
       body.resource[this.resourceClassName] = {
         member_ids: this.imageIdList,
         viewing_direction: this.viewingDirection,
         thumbnail_id: this.thumbnail,
-        id: this.id,
+        id: this.id
       }
-      this.$store.dispatch("saveStateGql", body)
-    },
-  },
-  updated: function() {
-    if (this.selectedTotal === 1) {
-      this.initOSD()
+      this.$store.dispatch('saveStateGql', body)
     }
-  },
+  }
 }
 </script>
 
