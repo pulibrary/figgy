@@ -12,16 +12,20 @@
   </tr>
 </template>
 <script>
-import axios from 'axios'
 
 export default {
   name: 'PlaylistMember',
-  props: ['resource'],
+  props: {
+    resource: {
+      type: Object,
+      default: null
+    }
+  },
   data () {
     // This is due to the fact that Valkyrie::ID objects are not serialized as strings
-    const resource_id = this.resource.id
+    const resourceId = this.resource.id
     return {
-	    id: resource_id.id
+      id: resourceId.id
     }
   }
 }

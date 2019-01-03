@@ -17,6 +17,7 @@
           <tbody>
             <template v-for="member in members">
               <playlist-member
+                :key="member.id"
                 :resource="member"
                 @update="detach"
               />
@@ -36,28 +37,37 @@ export default {
   components: {
     'playlist-member': PlaylistMember
   },
-  props: ['resourceId', 'members'],
+  props: {
+    resourceId: {
+      type: String,
+      required: true
+    },
+    members: {
+      type: Array,
+      default: function () { return [] }
+    }
+  },
   data () {
     return { submitting: false }
   },
   methods: {
     buildFormData () {
-	    let form = new FormData()
-	    form.append('_method', 'delete')
+      let form = new FormData()
+      form.append('_method', 'delete')
 
-	    return form
+      return form
     },
     submit () { return false },
-    detach (proxy_id) {
-	    let vm = this
-	    this.submitting = true
+    detach (proxyId) {
+      let vm = this
+      this.submitting = true
 
-	    axios.post(`/concern/playlists/${proxy_id}`,
-		        this.buildFormData()
-		      ).then(function (response) {
-		        vm.submitting = false
+      axios.post(`/concern/playlists/${proxyId}`,
+        this.buildFormData()
+      ).then(function (response) {
+        vm.submitting = false
         window.location.reload()
-		      })
+      })
     }
   }
 }

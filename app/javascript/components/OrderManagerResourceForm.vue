@@ -47,7 +47,7 @@
 /**
  * This is the Resource Form for the Order Manager in Figgy
  */
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   name: 'ResourceForm',
   status: 'ready',

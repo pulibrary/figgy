@@ -72,7 +72,7 @@
 // import Lablr from "../utils/lablr"
 // const Lablr = require('../utils/lablr').default
 import Lablr from 'page-label-generator'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 /**
  * This is the Filesets Form for the Order Manager in Figgy
  */

@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 /**
  * Toolbars allows a user to select a value from a series of options.
  */
