@@ -33,6 +33,7 @@ RSpec.describe ManifestBuilder::LicenseBuilder do
 
       it "appends the transformed metadata to the Manifest" do
         expect(manifest["license"]).to be nil
+        expect(manifest).not_to have_key("license")
       end
     end
   end
