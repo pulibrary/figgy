@@ -13,4 +13,11 @@ class EphemeraFolderWayfinder < BaseWayfinder
   def ephemera_projects
     @delegated_ephemera_projects ||= ephemera_box.present? ? Wayfinder.for(ephemera_box).ephemera_projects : original_ephemera_projects
   end
+
+  def members_with_parents
+    @members_with_parents ||= members.map do |member|
+      member.loaded[:parents] = [resource]
+      member
+    end
+  end
 end

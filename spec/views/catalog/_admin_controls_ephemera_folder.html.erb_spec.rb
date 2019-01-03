@@ -40,6 +40,14 @@ RSpec.describe "catalog/_admin_controls_ephemera_folder" do
       it "has a button to attach a new folder to the box " do
         expect(rendered).to have_link "Attach Another Folder", href: new_ephemera_folder_path(parent_id: parent.id)
       end
+
+      it "has a button to manage files" do
+        expect(rendered).to have_link "File Manager", href: file_manager_ephemera_folder_path(folder.id)
+      end
+
+      it "has a button to manage order" do
+        expect(rendered).to have_link "Order Manager", href: order_manager_ephemera_folder_path(folder.id)
+      end
     end
 
     context "when the parent is a project" do
