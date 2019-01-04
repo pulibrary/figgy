@@ -245,18 +245,24 @@ RSpec.describe ScannedMapsController, type: :controller do
     context "when it does exist" do
       render_views
       it "renders a structure editor form" do
-        file_set = FactoryBot.create_for_repository(:file_set)
+        file_set1 = FactoryBot.create_for_repository(:file_set)
+        file_set2 = FactoryBot.create_for_repository(:geo_image_file_set)
+        child_scanned_map = FactoryBot.create_for_repository(
+          :scanned_map,
+          member_ids: file_set2.id
+        )
         scanned_map = FactoryBot.create_for_repository(
           :scanned_map,
-          member_ids: file_set.id,
+          member_ids: [file_set1.id, child_scanned_map.id],
           logical_structure: [
-            { label: "testing", nodes: [{ label: "Chapter 1", nodes: [{ proxy: file_set.id }] }] }
+            { label: "testing", nodes: [{ label: "Chapter 1", nodes: [{ proxy: file_set1.id }] }] }
           ]
         )
 
         get :structure, params: { id: scanned_map.id.to_s }
 
-        expect(response.body).to have_selector "li[data-proxy='#{file_set.id}']"
+        expect(response.body).to have_selector "li[data-proxy='#{file_set1.id}']"
+        expect(response.body).to have_selector "li[data-proxy='#{file_set2.id}']"
         expect(response.body).to have_field("label", with: "Chapter 1")
         expect(response.body).to have_link scanned_map.title.first, href: solr_document_path(id: scanned_map.id)
       end
