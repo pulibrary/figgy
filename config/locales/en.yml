@@ -62,6 +62,8 @@ en:
           label: "Monogram"
         updated_at:
           label: "Date Modified"
+        items_number:
+          label: "Number of items"
         member_of_collections:
           label: "Collections"
         md5:

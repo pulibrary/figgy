@@ -49,6 +49,8 @@ en:
         ocr_language: "OCR Language"
         start: "Date start"
         end: "Date end"
+      numismatic_accession:
+        items_number: "Number of items"
       numismatic_issue:
         numismatic_monogram_ids: "Monogram"
         object_date: "Date of object"
