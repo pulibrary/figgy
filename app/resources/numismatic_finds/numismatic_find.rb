@@ -4,7 +4,7 @@ class NumismaticFind < Resource
 
   attribute :place
   attribute :date
-  attribute :find_number, Valkyrie::Types::Int
+  attribute :find_number, Valkyrie::Types::Integer
   attribute :feature
   attribute :locus
   attribute :description

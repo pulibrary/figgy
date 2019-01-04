@@ -29,8 +29,8 @@ class ImageDerivativeService
     end
 
     class ImageConfig < Dry::Struct
-      attribute :width, Valkyrie::Types::Int
-      attribute :height, Valkyrie::Types::Int
+      attribute :width, Valkyrie::Types::Integer
+      attribute :height, Valkyrie::Types::Integer
       attribute :format, Valkyrie::Types::String
       attribute :mime_type, Valkyrie::Types::String
       attribute :output_name, Valkyrie::Types::String

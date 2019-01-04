@@ -14,7 +14,7 @@ class ParentIssueIndexer
   end
 
   def parent_attributes
-    parents.first.attributes.delete_if { |k, _| parent_keys_suppress.include?(k) }
+    parents.first.attributes.dup.delete_if { |k, _| parent_keys_suppress.include?(k) }
   end
 
   def parent_keys_suppress

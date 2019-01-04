@@ -26,7 +26,7 @@ class FileMetadata < Valkyrie::Resource
 
   # fixity attributes
   attribute :fixity_actual_checksum, Valkyrie::Types::Set
-  attribute :fixity_success, Valkyrie::Types::Int
+  attribute :fixity_success, Valkyrie::Types::Integer
   attribute :fixity_last_success_date, Valkyrie::Types::DateTime.optional
 
   def self.for(file:)
