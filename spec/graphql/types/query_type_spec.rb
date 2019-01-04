@@ -74,4 +74,16 @@ RSpec.describe Types::QueryType do
       expect(type.resource(id: scanned_resource.id.to_s)).to be_nil
     end
   end
+
+  context "when the resource cannot be retrieved" do
+    before do
+      allow(Valkyrie.logger).to receive(:error)
+    end
+
+    it "returns nothing" do
+      type = described_class.new(nil, context)
+      expect(type.resource(id: "non-existent")).to be_nil
+      expect(Valkyrie.logger).to have_received(:error).with("Failed to retrieve the resource non-existent for a GraphQL query")
+    end
+  end
 end
