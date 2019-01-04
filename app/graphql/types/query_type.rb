@@ -16,6 +16,9 @@ class Types::QueryType < Types::BaseObject
     resource = query_service.find_by(id: id)
     return unless ability.can? :read, resource
     resource
+  rescue Valkyrie::Persistence::ObjectNotFoundError
+    Valkyrie.logger.error("Failed to retrieve the resource #{id} for a GraphQL query")
+    nil
   end
 
   def resources_by_bibid(bib_id:)
