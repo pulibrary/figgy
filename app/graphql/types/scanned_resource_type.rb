@@ -5,6 +5,7 @@ class Types::ScannedResourceType < Types::BaseObject
   field :start_page, String, null: true
   field :viewing_direction, Types::ViewingDirectionEnum, null: true
   field :manifest_url, String, null: true
+  field :source_metadata_identifier, String, null: true
 
   def viewing_hint
     Array.wrap(super).first
@@ -20,5 +21,9 @@ class Types::ScannedResourceType < Types::BaseObject
 
   def start_page
     Array.wrap(object.start_canvas).first
+  end
+
+  def source_metadata_identifier
+    Array.wrap(object.source_metadata_identifier).first
   end
 end

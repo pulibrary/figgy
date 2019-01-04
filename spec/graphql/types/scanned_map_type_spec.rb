@@ -9,14 +9,20 @@ RSpec.describe Types::ScannedMapType do
   end
 
   subject(:type) { described_class.new(scanned_map, {}) }
+  let(:bibid) { "5144620" }
   let(:scanned_map) do
     FactoryBot.create_for_repository(
       :scanned_map,
       viewing_hint: "individuals",
       title: ["I'm a map", "of null island"],
       viewing_direction: "left-to-right",
-      portion_note: "page 1"
+      portion_note: "page 1",
+      source_metadata_identifier: [bibid]
     )
+  end
+
+  before do
+    stub_bibdata(bib_id: bibid)
   end
 
   describe "class methods" do
@@ -28,6 +34,7 @@ RSpec.describe Types::ScannedMapType do
     it { is_expected.to have_field(:label).of_type(String) }
     it { is_expected.to have_field(:members) }
     it { is_expected.to have_field(:manifestUrl).of_type(String) }
+    it { is_expected.to have_field(:sourceMetadataIdentifier).of_type(String) }
   end
 
   describe "#viewing_hint" do
@@ -131,19 +138,8 @@ RSpec.describe Types::ScannedMapType do
   end
 
   describe "#source_metadata_identifier" do
-    let(:bibid) { "5144620" }
-    let(:scanned_map) do
-      FactoryBot.create_for_repository(
-        :scanned_map,
-        source_metadata_identifier: [bibid]
-      )
-    end
-    before do
-      stub_bibdata(bib_id: bibid)
-    end
-
-    it "returns bibids" do
-      expect(type.source_metadata_identifier).to eq [bibid]
+    it "returns the bib. ID" do
+      expect(type.source_metadata_identifier).to eq bibid
     end
   end
 
