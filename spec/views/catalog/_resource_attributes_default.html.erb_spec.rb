@@ -61,6 +61,8 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
                                          }
                                        ],
                                        member_of_collection_ids: [collection.id],
+                                       source_metadata_identifier: "123456",
+                                       visibility: false,
                                        holding_location: RDF::URI("https://bibdata.princeton.edu/locations/delivery_locations/1"))
     end
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: scanned_resource) }
@@ -77,6 +79,10 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
     after { Timecop.return }
     it "renders all available attributes" do
       expect(rendered).to have_selector "#attributes h2", text: "Attributes"
+
+      # Source Metadata Identifier
+      expect(rendered).to have_selector "th", text: "Source Metadata Identifier"
+      expect(rendered).to have_link "123456", href: "https://catalog.princeton.edu/catalog/123456"
 
       # Language
       expect(rendered).to have_selector "th", text: "Language"
