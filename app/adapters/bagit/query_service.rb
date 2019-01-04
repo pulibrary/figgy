@@ -54,7 +54,7 @@ module Bagit
 
     def find_references_by(resource:, property:)
       ids = (resource.try(property) || []).select { |id| id.is_a?(Valkyrie::ID) }
-      ids.uniq! unless resource.class.schema[property] && resource.class.schema[property].meta[:ordered]
+      ids.uniq! unless resource.class.fields.include?(property) && resource.ordered_attribute?(property)
       ids.lazy.map do |id|
         find_by(id: id)
       end

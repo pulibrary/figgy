@@ -10,10 +10,10 @@ RSpec.shared_examples "a Resource" do
   it_behaves_like "a Valkyrie::Resource"
 
   it "has a viewing_hint" do
-    expect(described_class.schema.keys).to include :viewing_hint
+    expect(described_class.fields).to include :viewing_hint
   end
   it "has a viewing direction" do
-    expect(described_class.schema.keys).to include :viewing_direction
+    expect(described_class.fields).to include :viewing_direction
   end
 
   it "has ordered member_ids" do

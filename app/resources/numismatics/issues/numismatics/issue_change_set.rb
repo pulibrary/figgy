@@ -137,27 +137,27 @@ module Numismatics
     end
 
     def build_numismatic_artist
-      schema["numismatic_artist"][:nested].new(model.class.schema[:numismatic_artist][[{}]].first)
+      schema["numismatic_artist"][:nested].new(model_type_for(property: :numismatic_artist)[[{}]].first)
     end
 
     def build_numismatic_citation
-      schema["numismatic_citation"][:nested].new(model.class.schema[:numismatic_citation][[{}]].first)
+      schema["numismatic_citation"][:nested].new(model_type_for(property: :numismatic_citation)[[{}]].first)
     end
 
     def build_numismatic_note
-      schema["numismatic_note"][:nested].new(model.class.schema[:numismatic_note][[{}]].first)
+      schema["numismatic_note"][:nested].new(model_type_for(property: :numismatic_note)[[{}]].first)
     end
 
     def build_numismatic_subject
-      schema["numismatic_subject"][:nested].new(model.class.schema[:numismatic_subject][[{}]].first)
+      schema["numismatic_subject"][:nested].new(model_type_for(property: :numismatic_subject)[[{}]].first)
     end
 
     def build_obverse_attribute
-      schema["obverse_attribute"][:nested].new(model.class.schema[:obverse_attribute][[{}]].first)
+      schema["obverse_attribute"][:nested].new(model_type_for(property: :obverse_attribute)[[{}]].first)
     end
 
     def build_reverse_attribute
-      schema["reverse_attribute"][:nested].new(model.class.schema[:reverse_attribute][[{}]].first)
+      schema["reverse_attribute"][:nested].new(model_type_for(property: :reverse_attribute)[[{}]].first)
     end
   end
 end

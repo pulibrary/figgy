@@ -71,13 +71,13 @@ class FileSetsController < ApplicationController
       filtered = resource_params
       files = filtered.fetch(file_filter, [])
       return {} if files.empty?
-      filtered["files"] = files
+      filtered[:files] = files
       filtered.delete(file_filter)
       filtered
     end
 
     def derivative_resource_params
-      @derivative_resource_params ||= filtered_file_params(file_filter: "derivative_files")
+      @derivative_resource_params ||= filtered_file_params(file_filter: :derivative_files)
     end
 
     def update_derivatives(obj)

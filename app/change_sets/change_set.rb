@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 require "reform/form/active_model/form_builder_methods"
 class ChangeSet < Valkyrie::ChangeSet
-  def self.reflect_on_association(*_args); end
-  include Reform::Form::ActiveModel
-  include Reform::Form::ActiveModel::FormBuilderMethods
   class_attribute :workflow_class
   class_attribute :feature_terms
 
@@ -97,7 +94,7 @@ class ChangeSet < Valkyrie::ChangeSet
   end
 
   def populate_nested_collection(fragment:, as:, collection:, index:, **)
-    property_klass = model.class.schema[as.to_sym]
+    property_klass = model_type_for(property: as)
     item = collection.find { |x| x.id.to_s == fragment["id"] }
     if item
       if delete_fragment?(fragment)
@@ -109,8 +106,12 @@ class ChangeSet < Valkyrie::ChangeSet
     elsif delete_fragment?(fragment)
       skip!
     else
-      collection.append(property_klass[[{ id: SecureRandom.uuid }]].first)
+      collection.append(property_klass.call_unsafe([{ id: SecureRandom.uuid }]).first)
     end
+  end
+
+  def model_type_for(property:)
+    model.class.schema.key(property.to_sym).type
   end
 
   def delete_fragment?(fragment)
@@ -122,7 +123,7 @@ class ChangeSet < Valkyrie::ChangeSet
     # Applying the twin filter to schema finds all nested properties
     schema.each(twin: true) do |property|
       property_name = property[:name]
-      property_klass = model.class.schema[property_name.to_sym]
+      property_klass = model_type_for(property: property_name)
       next if send(property_name).present?
       if property_klass.respond_to?(:primitive) && property_klass.primitive == Array
         send(:"#{property_name}=", property_klass[[{}]])

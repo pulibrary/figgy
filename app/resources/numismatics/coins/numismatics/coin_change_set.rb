@@ -102,15 +102,15 @@ module Numismatics
     end
 
     def build_numismatic_citation
-      schema["numismatic_citation"][:nested].new(model.class.schema[:numismatic_citation][[{}]].first)
+      schema["numismatic_citation"][:nested].new(model_type_for(property: :numismatic_citation)[[{}]].first)
     end
 
     def build_loan
-      schema["loan"][:nested].new(model.class.schema[:loan][[{}]].first)
+      schema["loan"][:nested].new(model_type_for(property: :loan)[[{}]].first)
     end
 
     def build_provenance
-      schema["provenance"][:nested].new(model.class.schema[:provenance][[{}]].first)
+      schema["provenance"][:nested].new(model_type_for(property: :provenance)[[{}]].first)
     end
   end
 end

@@ -22,10 +22,10 @@ class LetterChangeSet < ChangeSet
   end
 
   def build_recipient
-    schema["recipient"][:nested].new(model.class.schema[:recipient][[{}]].first)
+    schema["recipient"][:nested].new(model_type_for(property: :recipient)[[{}]].first)
   end
 
   def build_sender
-    schema["sender"][:nested].new(model.class.schema[:sender][[{}]].first)
+    schema["sender"][:nested].new(model_type_for(property: :sender)[[{}]].first)
   end
 end

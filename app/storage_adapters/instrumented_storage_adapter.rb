@@ -6,14 +6,11 @@ class InstrumentedStorageAdapter
     @tracer = tracer
   end
 
-  # Uploads a file node
-  # @param file [File]
-  # @param original_filename [String]
-  def upload(file:, original_filename:, resource: nil, **extra_arguments)
+  def upload(file:, original_filename:, resource: nil, **extra_args)
     trace("valkyrie.storage.upload") do |span|
       span.set_tag("param.original_filename", original_filename)
       span.set_tag("param.resource", resource.try(:id).to_s)
-      storage_adapter.upload(file: file, original_filename: original_filename, resource: resource, **extra_arguments)
+      storage_adapter.upload(file: file, original_filename: original_filename, resource: resource, **extra_args)
     end
   end
 
