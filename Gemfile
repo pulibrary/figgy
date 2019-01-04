@@ -34,7 +34,7 @@ gem "simple_form"
 gem "sprockets", ">= 3.7.2"
 gem "title"
 gem "uglifier"
-gem "valkyrie", "1.5.1"
+gem "valkyrie", "2.0.0.RC1", github: "samvera-labs/valkyrie", branch: "update_dry_struct_again"
 gem "valkyrie-derivatives", git: "https://github.com/samvera-labs/valkyrie-derivatives.git"
 gem "webpacker", ">= 4.0.x"
 

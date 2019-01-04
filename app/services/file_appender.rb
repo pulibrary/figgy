@@ -58,7 +58,7 @@ class FileAppender
     # @return [Array<File>]
     def update_files(resource)
       updated = files.select { |file| file.is_a?(Hash) }.map do |file|
-        node = resource.file_metadata.select { |x| x.id.to_s == file.keys.first }.first
+        node = resource.file_metadata.select { |x| x.id.to_s == file.keys.first.to_s }.first
         node.updated_at = Time.current
         # Uses the UploadDecorator to abstract the interface for the File Object during persistence by the storage_adapter
         file_wrapper = UploadDecorator.new(file.values.first, node.original_filename.first)

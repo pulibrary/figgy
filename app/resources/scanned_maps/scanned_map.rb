@@ -39,6 +39,6 @@ class ScannedMap < Resource
 
   def title
     imported_title = primary_imported_metadata.title.present? ? primary_imported_metadata.title : []
-    @title.present? ? @title : imported_title
+    attributes[:title].present? ? attributes[:title] : imported_title
   end
 end

@@ -6,7 +6,7 @@ class PendingUpload < Valkyrie::Resource
   attribute :auth_header
 
   def original_filename
-    @file_name.first
+    file_name.first
   end
 
   def content_type
