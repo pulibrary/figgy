@@ -59,6 +59,7 @@ class NumismaticIssueChangeSet < ChangeSet
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
+  property :date_range_form_attributes, virtual: true
 
   validates_with AutoIncrementValidator, property: :issue_number
   validates_with CollectionValidator
@@ -68,6 +69,26 @@ class NumismaticIssueChangeSet < ChangeSet
   validates_with ViewingDirectionValidator
   validates_with ViewingHintValidator
   validates :visibility, presence: true
+  validate :date_range_validity
+
+  def date_range_form_attributes=(attributes)
+    return unless date_range_form.validate(attributes)
+    date_range_form.sync
+    self.date_range = date_range_form.model
+  end
+
+  def date_range_validity
+    return if date_range_form.valid?
+    errors.add(:date_range_form, "is not valid.")
+  end
+
+  def date_range_form
+    @date_range_form ||= DynamicChangeSet.new(date_range_value || DateRange.new).tap(&:prepopulate!)
+  end
+
+  def date_range_value
+    Array.wrap(date_range).first
+  end
 
   def primary_terms
     {
@@ -78,8 +99,8 @@ class NumismaticIssueChangeSet < ChangeSet
         :shape,
         :color,
         :edge,
-        :date_range,
         :object_date,
+        :date_range_form,
         :era,
         :ruler,
         :master,

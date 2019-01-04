@@ -2,7 +2,7 @@
 class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
   display :artist,
           :color,
-          :date_range,
+          :rendered_date_range,
           :denomination,
           :description,
           :edge,
@@ -53,6 +53,15 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
 
   def attachable_objects
     [Coin]
+  end
+
+  def first_range
+    @first_range ||= Array.wrap(date_range).map(&:decorate).first
+  end
+
+  def rendered_date_range
+    return unless first_range.present?
+    first_range.range_string
   end
 
   def citations

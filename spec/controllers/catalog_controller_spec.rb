@@ -741,7 +741,7 @@ RSpec.describe CatalogController do
       {
         artist: "issue-artist",
         color: "issue-color",
-        date_range: "issue-date",
+        date_range: DateRange.new(start: "2017", end: "2018"),
         denomination: "issue-denomination",
         description: "issue-description",
         depositor: "issue-depositor",
