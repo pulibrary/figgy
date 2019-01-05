@@ -52,7 +52,7 @@ RSpec.describe IngestEphemeraService, :admin_set do
         expect(ingested.read_groups).to eq []
         expect(ingested.pdf_type).to eq ["none"]
         expect(ingested.member_ids.length).to eq 2
-        expect(ingested.rights_statement).to eq [RDF::URI("http://rightsstatements.org/vocab/CNE/1.0/")]
+        expect(ingested.rights_statement).to eq [RightsStatements.copyright_not_evaluated]
         expect(ingested.state).to eq ["complete"]
         expect(ingested.local_identifier).to eq ["0003d"]
         expect(ingested.folder_number).to eq ["2"]
@@ -109,7 +109,7 @@ RSpec.describe IngestEphemeraService, :admin_set do
         expect(ingested.title).to eq(["Se firmó el convenio para terminar el Edificio Único de Sociales. El cambio se hace desde abajo: La Vallese."])
         expect(ingested.barcode).to eq ["32101089002131"]
         expect(ingested.member_ids.length).to eq 0
-        expect(ingested.rights_statement).to eq [RDF::URI("http://rightsstatements.org/vocab/CNE/1.0/")]
+        expect(ingested.rights_statement).to eq [RightsStatements.copyright_not_evaluated]
         expect(ingested.state).to eq ["complete"]
         expect(ingested.local_identifier).to eq ["012g6"]
         expect(ingested.folder_number).to eq ["7"]

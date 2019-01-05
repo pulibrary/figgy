@@ -79,7 +79,7 @@ class IngestEphemeraService
   def default_attributes
     {
       pdf_type: "none",
-      rights_statement: RightsStatement.copyright_not_evaluated.to_s,
+      rights_statement: RightsStatements.copyright_not_evaluated.to_s,
       files: files,
       local_identifier: local_identifier
     }

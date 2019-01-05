@@ -6,7 +6,7 @@ RSpec.describe BulkEditService do
   let(:collection) { FactoryBot.create_for_repository(:collection) }
   let(:logger) { Logger.new(nil) }
   let(:initial_rights) { RightsStatements.no_known_copyright }
-  let(:new_rights) { RDF::URI("http://rightsstatements.org/vocab/CNE/1.0/") }
+  let(:new_rights) { RightsStatements.copyright_not_evaluated }
   let(:bad_rights) { RDF::URI("http://rightsstatements.org/vocab/BAD/1.0/") }
 
   describe "#perform" do

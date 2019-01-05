@@ -88,7 +88,7 @@ RSpec.describe IngestMETSJob do
         described_class.perform_now(mets_file, user, true)
 
         book = adapter.query_service.find_all_of_model(model: ScannedResource).first
-        expect(book.rights_statement).to contain_exactly "http://rightsstatements.org/vocab/CNE/1.0/"
+        expect(book.rights_statement).to contain_exactly RightsStatements.copyright_not_evaluated.to_s
       end
     end
 
