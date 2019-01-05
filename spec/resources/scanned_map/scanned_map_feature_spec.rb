@@ -50,7 +50,7 @@ RSpec.feature "ScannedMaps" do
         language: "test value",
         local_identifier: "test ID",
         rights_note: "test rights note",
-        rights_statement: "http://rightsstatements.org/vocab/CNE/1.0/",
+        rights_statement: RightsStatements.copyright_not_evaluated.to_s,
         subject: "test value",
         portion_note: "test portion note",
         cartographic_scale: "test value",
@@ -77,7 +77,7 @@ RSpec.feature "ScannedMaps" do
       expect(page).to have_css ".attribute.language", text: "test value"
       expect(page).to have_css ".attribute.local_identifier", text: "test ID"
       expect(page).to have_css ".attribute.rights_note", text: "test rights note"
-      expect(page).to have_css ".attribute.rights_statement", text: "http://rightsstatements.org/vocab/CNE/1.0/"
+      expect(page).to have_css ".attribute.rights_statement", text: RightsStatements.copyright_not_evaluated.to_s
       expect(page).to have_css ".attribute.subject", text: "test value"
       expect(page).to have_css ".attribute.portion_note", text: "test portion note"
       expect(page).to have_css ".attribute.cartographic_scale", text: "test value"

@@ -2,7 +2,7 @@
 FactoryBot.define do
   factory :scanned_resource do
     title "Title"
-    rights_statement RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")
+    rights_statement RightsStatements.no_known_copyright
     read_groups "public"
     pdf_type ["gray"]
     state "pending"

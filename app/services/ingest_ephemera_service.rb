@@ -79,7 +79,7 @@ class IngestEphemeraService
   def default_attributes
     {
       pdf_type: "none",
-      rights_statement: "http://rightsstatements.org/vocab/CNE/1.0/",
+      rights_statement: RightsStatements.copyright_not_evaluated.to_s,
       files: files,
       local_identifier: local_identifier
     }

@@ -4,7 +4,7 @@ require "rails_helper"
 RSpec.describe VectorResourceChangeSet do
   subject(:change_set) { described_class.new(form_resource) }
   let(:vector_resource) { VectorResource.new(title: "Test", rights_statement: rights_statement, visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: "pending") }
-  let(:rights_statement) { RDF::URI.new("http://rightsstatements.org/vocab/NKC/1.0/") }
+  let(:rights_statement) { RightsStatements.no_known_copyright }
   let(:form_resource) { vector_resource }
   before do
     stub_bibdata(bib_id: "6592452")
@@ -110,14 +110,14 @@ RSpec.describe VectorResourceChangeSet do
   end
 
   describe "#rights_statement" do
-    let(:form_resource) { VectorResource.new(rights_statement: RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")) }
+    let(:form_resource) { VectorResource.new(rights_statement: RightsStatements.no_known_copyright) }
     it "is singular, required, and converts to an RDF::URI" do
       change_set.prepopulate!
 
-      expect(change_set.rights_statement).to eq RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")
+      expect(change_set.rights_statement).to eq RightsStatements.no_known_copyright
       change_set.validate(rights_statement: "")
       expect(change_set).not_to be_valid
-      change_set.validate(rights_statement: "http://rightsstatements.org/vocab/NKC/1.0/")
+      change_set.validate(rights_statement: RightsStatements.no_known_copyright.to_s)
       expect(change_set.rights_statement).to be_instance_of RDF::URI
     end
     context "when given a blank VectorResource" do
@@ -125,7 +125,7 @@ RSpec.describe VectorResourceChangeSet do
       it "sets a default Rights Statement" do
         change_set.prepopulate!
 
-        expect(change_set.rights_statement).to eq RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")
+        expect(change_set.rights_statement).to eq RightsStatements.no_known_copyright
       end
     end
   end

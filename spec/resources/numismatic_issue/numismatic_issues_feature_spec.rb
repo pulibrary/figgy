@@ -77,7 +77,7 @@ RSpec.feature "NumismaticIssues" do
     let(:numismatic_issue) do
       FactoryBot.create_for_repository(
         :numismatic_issue,
-        rights_statement: "http://rightsstatements.org/vocab/CNE/1.0/",
+        rights_statement: RightsStatements.copyright_not_evaluated.to_s,
         member_of_collection_ids: [collection.id],
         artist: "test value",
         color: "test value",

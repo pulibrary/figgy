@@ -230,7 +230,7 @@ class METSDocument
 
     # currently this just returns the default, but can be adjusted to do actual mapping as needed
     def map_to_rights_statement(_access_condition)
-      "http://rightsstatements.org/vocab/CNE/1.0/"
+      RightsStatements.copyright_not_evaluated.to_s
     end
 
     def map_to_holding_location(locations)

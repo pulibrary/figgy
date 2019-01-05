@@ -5,7 +5,7 @@ RSpec.describe SimpleResourceChangeSet do
   subject(:change_set) { described_class.new(form_resource) }
   let(:resource_klass) { ScannedResource }
   let(:resource) { resource_klass.new(title: "Test", rights_statement: rights_statement, visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: "draft") }
-  let(:rights_statement) { RDF::URI.new("http://rightsstatements.org/vocab/NKC/1.0/") }
+  let(:rights_statement) { RightsStatements.no_known_copyright }
   let(:form_resource) { resource }
 
   it_behaves_like "a ChangeSet"

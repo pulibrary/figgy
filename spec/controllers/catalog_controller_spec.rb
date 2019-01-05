@@ -543,7 +543,7 @@ RSpec.describe CatalogController do
         expect(json_body[:identifier]).not_to be_blank
         expect(json_body[:scopeNote]).not_to be_blank
         expect(json_body[:navDate]).not_to be_blank
-        expect(json_body[:edm_rights][:@id]).to eq "http://rightsstatements.org/vocab/NKC/1.0/"
+        expect(json_body[:edm_rights][:@id]).to eq RightsStatements.no_known_copyright.to_s
         expect(json_body[:edm_rights][:@type]).to eq "dcterms:RightsStatement"
         expect(json_body[:edm_rights][:pref_label]).to eq "No Known Copyright"
         expect(json_body[:memberOf][0][:@id]).to eq "http://www.example.com/catalog/#{collection.id}"

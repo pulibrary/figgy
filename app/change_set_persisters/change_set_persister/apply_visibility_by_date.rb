@@ -47,9 +47,9 @@ class ChangeSetPersister
 
       def calculated_rights_statement
         if public_access?
-          "http://rightsstatements.org/vocab/NKC/1.0/"
+          RightsStatements.no_known_copyright.to_s
         else
-          "http://rightsstatements.org/vocab/InC/1.0/"
+          RightsStatements.in_copyright.to_s
         end
       end
   end
