@@ -407,7 +407,7 @@ RSpec.describe ManifestBuilder do
       expect(output["manifests"][0]["metadata"]).to be_nil
       expect(output["seeAlso"]).to include "@id" => "http://www.example.com/catalog/#{scanned_resource.id}.jsonld", "format" => "application/ld+json"
       expect(output["rendering"]).to include "@id" => "http://arks.princeton.edu/ark:/88435/5m60qr98h", "format" => "text/html"
-      expect(output["license"]).to eq "http://rightsstatements.org/vocab/NKC/1.0/"
+      expect(output["license"]).to eq RightsStatements.no_known_copyright.to_s
       # not allowed in collections until iiif presentation api v3
       expect(output["viewingDirection"]).to eq nil
       expect(output["manifests"][0]["thumbnail"]["@id"]).to eq "http://www.example.com/image-service/#{child.member_ids.first}/full/!200,150/0/default.jpg"

@@ -52,7 +52,7 @@ RSpec.describe ScannedMapsController, type: :controller do
 
   describe "create" do
     let(:user) { FactoryBot.create(:admin) }
-    let(:rights_statement) { RDF::URI.new("http://rightsstatements.org/vocab/NKC/1.0/") }
+    let(:rights_statement) { RightsStatements.no_known_copyright }
     let(:valid_params) do
       {
         title: ["Title 1", "Title 2"],

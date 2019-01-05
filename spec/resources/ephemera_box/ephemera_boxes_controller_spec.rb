@@ -65,7 +65,7 @@ RSpec.describe EphemeraBoxesController, type: :controller do
       {
         barcode: ["00000000000000"],
         box_number: ["1"],
-        rights_statement: "http://rightsstatements.org/vocab/NKC/1.0/",
+        rights_statement: RightsStatements.no_known_copyright.to_s,
         visibility: "restricted"
       }
     end
