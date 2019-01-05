@@ -28,7 +28,7 @@ RSpec.feature "RasterResources" do
         language: "test value",
         local_identifier: "test ID",
         rights_note: "test rights note",
-        rights_statement: "http://rightsstatements.org/vocab/CNE/1.0/",
+        rights_statement: RightsStatements.copyright_not_evaluated.to_s,
         subject: "test value",
         portion_note: "test portion note",
         cartographic_scale: "test value",
