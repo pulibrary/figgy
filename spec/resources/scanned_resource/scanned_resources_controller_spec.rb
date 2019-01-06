@@ -55,7 +55,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
     let(:valid_params) do
       {
         title: ["Title 1", "Title 2"],
-        rights_statement: "http://rightsstatements.org/vocab/CNE/1.0/",
+        rights_statement: RightsStatements.copyright_not_evaluated.to_s,
         visibility: "restricted"
       }
     end
@@ -81,7 +81,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
         post :create, params: {
           scanned_resource: {
             source_metadata_identifier: "123456",
-            rights_statement: "http://rightsstatements.org/vocab/CNE/1.0/",
+            rights_statement: RightsStatements.copyright_not_evaluated.to_s,
             visibility: "restricted"
           },
           commit: "Save and Ingest"
@@ -99,7 +99,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
         post :create, params: {
           scanned_resource: {
             source_metadata_identifier: "4609321",
-            rights_statement: "http://rightsstatements.org/vocab/CNE/1.0/",
+            rights_statement: RightsStatements.copyright_not_evaluated.to_s,
             visibility: "restricted"
           },
           commit: "Save and Ingest"
@@ -121,7 +121,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
           post :create, params: {
             scanned_resource: {
               source_metadata_identifier: "1791261",
-              rights_statement: "http://rightsstatements.org/vocab/CNE/1.0/",
+              rights_statement: RightsStatements.copyright_not_evaluated.to_s,
               visibility: "restricted"
             },
             commit: "Save and Ingest"

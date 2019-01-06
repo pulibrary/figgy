@@ -80,7 +80,7 @@ RSpec.feature "SimpleResourceChangeSets" do
       FactoryBot.create_for_repository(
         :simple_resource,
         title: "new simple resource",
-        rights_statement: "http://rightsstatements.org/vocab/CNE/1.0/",
+        rights_statement: RightsStatements.copyright_not_evaluated.to_s,
         rights_note: "test rights note",
         local_identifier: "test ID",
         portion_note: "test portion note",

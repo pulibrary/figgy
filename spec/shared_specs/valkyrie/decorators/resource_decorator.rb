@@ -16,7 +16,7 @@ RSpec.shared_examples "a Valkyrie::ResourceDecorator" do
       expect(decorator.rendered_rights_statement.length).to eq 1
       expect(decorator.rendered_rights_statement.first).to include term.definition
       expect(decorator.rendered_rights_statement.first).to include I18n.t("works.show.attributes.rights_statement.boilerplate")
-      expect(decorator.rendered_rights_statement.first).to include '<a href="http://rightsstatements.org/vocab/NKC/1.0/">No Known Copyright</a>'
+      expect(decorator.rendered_rights_statement.first).to include "<a href=\"#{RightsStatements.no_known_copyright}\">No Known Copyright</a>"
     end
   end
   describe "#created" do

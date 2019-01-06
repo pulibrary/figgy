@@ -17,7 +17,7 @@ RSpec.describe EphemeraFoldersController, type: :controller do
       width: ["10"],
       height: ["20"],
       page_count: ["30"],
-      rights_statement: "http://rightsstatements.org/vocab/NKC/1.0/",
+      rights_statement: RightsStatements.no_known_copyright.to_s,
       visibility: "restricted",
       subject: ["stuff"]
     }

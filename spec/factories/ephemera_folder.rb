@@ -21,7 +21,7 @@ FactoryBot.define do
     provenance ["Donated by the Mario Bros."]
     source_url "http://example.com"
     dspace_url "http://example.com"
-    rights_statement RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")
+    rights_statement RightsStatements.no_known_copyright
     read_groups "public"
     state "needs_qa"
     member_of_collection_ids []

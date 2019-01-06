@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe RasterResourceChangeSet do
   subject(:change_set) { described_class.new(form_resource) }
-  let(:rights_statement) { "http://rightsstatements.org/vocab/NKC/1.0/" }
+  let(:rights_statement) { RightsStatements.no_known_copyright.to_s }
   let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
   let(:raster_resource) { RasterResource.new(title: "Test", rights_statement: rights_statement, visibility: visibility, state: "pending") }
   let(:form_resource) { raster_resource }

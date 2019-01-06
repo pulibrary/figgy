@@ -20,7 +20,7 @@ RSpec.describe RasterResourceDecorator do
   end
   it "exposes markup for rights statement" do
     expect(resource.decorate.rendered_rights_statement).not_to be_empty
-    expect(resource.decorate.rendered_rights_statement.first).to match(/#{Regexp.escape('http://rightsstatements.org/vocab/NKC/1.0/')}/)
+    expect(resource.decorate.rendered_rights_statement.first).to match(/#{Regexp.escape(RightsStatements.no_known_copyright.to_s)}/)
   end
   it "exposes markup for rendered holding_location" do
     expect(resource.decorate.rendered_holding_location.first).to eq("Lewis Library")

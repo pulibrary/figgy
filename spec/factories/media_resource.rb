@@ -2,7 +2,7 @@
 FactoryBot.define do
   factory :media_resource do
     title "Title"
-    rights_statement RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")
+    rights_statement RightsStatements.no_known_copyright
     read_groups "public"
     state "draft"
     to_create do |instance|

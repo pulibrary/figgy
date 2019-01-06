@@ -7,7 +7,7 @@ RSpec.describe RightsStatementValidator do
   describe "#validate" do
     context "when rights_statement is valid" do
       it "does not add errors" do
-        rights_statement = RDF::URI.new("http://rightsstatements.org/vocab/NKC/1.0/")
+        rights_statement = RightsStatements.no_known_copyright
         resource = FactoryBot.build(:scanned_resource)
         change_set = DynamicChangeSet.new(resource, rights_statement: rights_statement)
 

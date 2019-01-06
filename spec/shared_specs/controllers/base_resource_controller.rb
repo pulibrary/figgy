@@ -54,7 +54,7 @@ RSpec.shared_examples "a BaseResourceController" do |*flags|
     let(:valid_params) do
       {
         title: ["Title 1", "Title 2"],
-        rights_statement: "http://rightsstatements.org/vocab/CNE/1.0/",
+        rights_statement: RightsStatements.copyright_not_evaluated,
         visibility: "restricted"
       }
     end
@@ -85,7 +85,7 @@ RSpec.shared_examples "a BaseResourceController" do |*flags|
       let(:valid_params) do
         {
           title: ["Title 1", "Title 2"],
-          rights_statement: "http://rightsstatements.org/vocab/CNE/1.0/",
+          rights_statement: RightsStatements.copyright_not_evaluated,
           visibility: "restricted",
           member_of_collection_ids: [collection.id.to_s]
         }

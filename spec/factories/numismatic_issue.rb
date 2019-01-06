@@ -2,7 +2,7 @@
 FactoryBot.define do
   factory :numismatic_issue do
     denomination ["$1"]
-    rights_statement RDF::URI("http://rightsstatements.org/vocab/NKC/1.0/")
+    rights_statement RightsStatements.no_known_copyright
     read_groups "public"
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)

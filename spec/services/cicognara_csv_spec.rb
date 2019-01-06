@@ -28,7 +28,7 @@ RSpec.describe CicognaraCSV do
       let(:values) do
         [["cico:qgb", "Princeton University Library", manifest_url, "Princeton University Library",
           "Oversize NA2810 .H75f", "2068747", "ark:/99999/fk44609321", nil, "Amsterdam: J. Jeansson, 1620",
-          "1620", nil, nil, "39 . 30 plates. 30 x 40 cm.", "http://rightsstatements.org/vocab/NKC/1.0/",
+          "1620", nil, nil, "39 . 30 plates. 30 x 40 cm.", RightsStatements.no_known_copyright.to_s,
           false]]
       end
       let(:obj) do

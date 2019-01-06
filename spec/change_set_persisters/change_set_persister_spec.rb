@@ -1207,7 +1207,7 @@ RSpec.describe ChangeSetPersister do
         reloaded = query_service.find_by(id: output.id)
         expect(reloaded.visibility).to eq [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC]
         expect(reloaded.read_groups).to eq ["public"]
-        expect(reloaded.rights_statement).to eq [RDF::URI.new("http://rightsstatements.org/vocab/NKC/1.0/")]
+        expect(reloaded.rights_statement).to eq [RightsStatements.no_known_copyright]
       end
     end
     context "when date is after 1924" do
@@ -1222,7 +1222,7 @@ RSpec.describe ChangeSetPersister do
         reloaded = query_service.find_by(id: output.id)
         expect(reloaded.visibility).to eq [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE]
         expect(reloaded.read_groups).to eq []
-        expect(reloaded.rights_statement).to eq [RDF::URI.new("http://rightsstatements.org/vocab/InC/1.0/")]
+        expect(reloaded.rights_statement).to eq [RightsStatements.in_copyright]
       end
     end
     context "when given a bad date" do
@@ -1237,7 +1237,7 @@ RSpec.describe ChangeSetPersister do
         reloaded = query_service.find_by(id: output.id)
         expect(reloaded.visibility).to eq [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC]
         expect(reloaded.read_groups).to eq ["public"]
-        expect(reloaded.rights_statement).to eq [RDF::URI.new("http://rightsstatements.org/vocab/NKC/1.0/")]
+        expect(reloaded.rights_statement).to eq [RightsStatements.no_known_copyright]
       end
     end
     context "when not told to set visibility by date" do
@@ -1252,7 +1252,7 @@ RSpec.describe ChangeSetPersister do
         reloaded = query_service.find_by(id: output.id)
         expect(reloaded.visibility).to eq [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC]
         expect(reloaded.read_groups).to eq ["public"]
-        expect(reloaded.rights_statement).to eq [RDF::URI.new("http://rightsstatements.org/vocab/NKC/1.0/")]
+        expect(reloaded.rights_statement).to eq [RightsStatements.no_known_copyright]
       end
     end
   end
