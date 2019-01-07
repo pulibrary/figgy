@@ -180,6 +180,57 @@ RSpec.describe MusicImportService::RecordingCollector do
     end
   end
 
+  describe "#audio_files" do
+    context "when given a recording" do
+      it " returns all audio files associated with that recording along with selection info" do
+        recording = MusicImportService::RecordingCollector::MRRecording.new(
+          14,
+          "cd-431v1",
+          ["mus204", "mus549sb"],
+          ["Symphonies nos. 55-69"],
+          ["123456"]
+        )
+        allow(sql_server_adapter).to receive(:execute).with(query: collector.audio_file_query(recording)).and_return(audio_file_fixtures)
+
+        audio_files = collector.audio_files(recording)
+
+        expect(audio_files.length).to eq 1
+        audio_file = audio_files.first
+        expect(audio_file.id.to_s).to eq "1"
+        expect(audio_file.selection_id).to eq 2
+        expect(audio_file.file_path).to eq "cd-1"
+        expect(audio_file.file_name).to eq "cd-1-1"
+        expect(audio_file.file_note).to eq "Note"
+        expect(audio_file.entry_id).to eq "bla"
+        expect(audio_file.selection_title).to eq "Title"
+        expect(audio_file.selection_alt_title).to eq "Alternate"
+        expect(audio_file.selection_note).to eq "Note"
+      end
+    end
+  end
+
+  describe "#with_recordings_query" do
+    it "returns a new instance with the new query" do
+      expect(collector.with_recordings_query("bla").recordings_query).to eq "bla"
+    end
+  end
+
+  def audio_file_fixtures
+    [
+      {
+        "idFile" => 1,
+        "idSelection" => 2,
+        "FilePath" => "cd-1",
+        "FileName" => "cd-1-1",
+        "FileNote" => "Note",
+        "entryid" => "bla",
+        "Title" => "Title",
+        "AltTitle" => "Alternate",
+        "SelNote" => "Note"
+      }
+    ]
+  end
+
   def music_fixtures
     [{ "idRecording" => 14, "CallNo" => "cd-9455", "CourseNo" => "borris" },
      { "idRecording" => 15, "CallNo" => "cd-431v1", "CourseNo" => "mus204", "RecTitle" => "Symphonies nos. 55-69" },
