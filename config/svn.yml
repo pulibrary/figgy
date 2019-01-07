@@ -1,0 +1,15 @@
+production: &defaults
+  user: <%= ENV["SVN_USER"] %>
+  pass: <%= ENV["SVN_PASS"] %>
+  url: <%= ENV["SVN_URL"] %>
+
+staging:
+  <<: *defaults
+
+development:
+  <<: *defaults
+
+test:
+  user: "tester"
+  pass: "testing"
+  url: "http://example.com/svn"
