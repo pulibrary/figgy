@@ -209,10 +209,31 @@ RSpec.describe MusicImportService::RecordingCollector do
     end
   end
 
+  describe "#courses_for_selections" do
+    context "when given ids" do
+      it "returns selections with all associated course numbers" do
+        allow(sql_server_adapter).to receive(:execute).with(query: collector.courses_for_selections_query([1])).and_return(selection_fixtures)
+
+        selections = collector.courses_for_selections([1])
+        expect(selections.length).to eq 1
+        expect(selections.first.id.to_s.to_i).to eq 1
+        expect(selections.first.course_nums).to eq ["mus234"]
+      end
+    end
+  end
+
   describe "#with_recordings_query" do
     it "returns a new instance with the new query" do
       expect(collector.with_recordings_query("bla").recordings_query).to eq "bla"
     end
+  end
+
+  def selection_fixtures
+    [
+      "idCourse" => 1,
+      "idSelection" => 1,
+      "CourseNo" => "mus234"
+    ]
   end
 
   def audio_file_fixtures

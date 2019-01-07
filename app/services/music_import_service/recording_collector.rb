@@ -343,6 +343,23 @@ class MusicImportService::RecordingCollector
     SQL
   end
 
+  def courses_for_selections(selection_ids)
+    results = sql_server_adapter.execute(query: courses_for_selections_query(selection_ids))
+    results.group_by { |x| x["idSelection"] }.map do |selection_id, values|
+      Selection.new(id: selection_id, course_nums: values.flat_map { |x| x["CourseNo"] })
+    end
+  end
+
+  def courses_for_selections_query(selection_ids)
+    <<-SQL
+      select jSelections.idCourse, jSelections.idSelection, Courses.CourseNo FROM jSelections JOIN Courses ON jSelections.idCourse = Courses.idCourse WHERE idSelection IN (#{selection_ids.join(', ')})
+    SQL
+  end
+
+  class Selection < Valkyrie::Resource
+    attribute :course_nums
+  end
+
   class AudioFile < Valkyrie::Resource
     [:selection_id, :file_path, :file_name, :file_note, :entry_id, :selection_title, :selection_alt_title, :selection_note].each do |attr|
       attribute attr, Valkyrie::Types::String
