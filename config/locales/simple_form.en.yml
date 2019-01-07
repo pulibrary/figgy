@@ -54,6 +54,8 @@ en:
       numismatic_issue:
         numismatic_monogram_ids: "Monogram"
         object_date: "Date of object"
+      template:
+        title: "Template Name"
     required:
       html: '<span class="label label-info required-tag">required</span>'
   helpers:
