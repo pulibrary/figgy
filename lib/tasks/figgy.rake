@@ -27,18 +27,12 @@ namespace :figgy do
     namespace :finding_aids do
       desc "updates remote metadata from finding aids changed yesterday"
       task yesterday: :environment do
-        if defined?(Rails) && (Rails.env == "development")
-          Rails.logger = Logger.new(STDOUT)
-        end
-        FindingAidsUpdater.new.yesterday
+        FindingAidsUpdater.new(logger: Logger.new(STDOUT)).yesterday
       end
 
       desc "updates remote metadata from all finding aids"
       task all: :environment do
-        if defined?(Rails) && (Rails.env == "development")
-          Rails.logger = Logger.new(STDOUT)
-        end
-        FindingAidsUpdater.new.all
+        FindingAidsUpdater.new(logger: Logger.new(STDOUT)).all
       end
     end
   end

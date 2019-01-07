@@ -7,7 +7,6 @@ class FindingAidsUpdateJob < ApplicationJob
     resource = query_service.find_by(id: id)
     change_set = DynamicChangeSet.new(resource)
     change_set.validate(refresh_remote_metadata: true)
-    logger.info "Refreshing pulfa metadata for #{resource.id}, #{resource.source_metadata_identifier}"
     persister.save(change_set: change_set)
   end
 

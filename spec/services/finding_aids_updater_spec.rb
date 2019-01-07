@@ -4,7 +4,7 @@ require "rails_helper"
 describe FindingAidsUpdater do
   with_queue_adapter :inline
 
-  let(:updater) { described_class.new }
+  let(:updater) { described_class.new(logger: Logger.new(nil)) }
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
   let(:success) { instance_double Process::Status }
   let(:logger) { instance_double Logger }
