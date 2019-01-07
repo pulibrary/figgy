@@ -276,6 +276,7 @@ Rails.application.config.to_prepare do
     FindByLocalIdentifier,
     FindByNumericProperty,
     FindByStringProperty,
+    FindManyByStringProperty,
     FindEphemeraTermByLabel,
     FindEphemeraVocabularyByLabel,
     MemoryEfficientAllQuery,

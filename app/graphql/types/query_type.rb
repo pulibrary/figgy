@@ -12,6 +12,11 @@ class Types::QueryType < Types::BaseObject
     argument :bib_id, String, required: true
   end
 
+  field :resources_by_bibids, [Types::Resource], null: true do
+    description "Find resources by BibIDs"
+    argument :bib_ids, [String], required: true
+  end
+
   def resource(id:)
     resource = query_service.find_by(id: id)
     return unless ability.can? :read, resource
@@ -24,6 +29,12 @@ class Types::QueryType < Types::BaseObject
   def resources_by_bibid(bib_id:)
     resources = query_service.custom_queries.find_by_string_property(property: :source_metadata_identifier, value: bib_id).select { |resource| ability.can? :read, resource }.to_a
     resources
+  end
+
+  def resources_by_bibids(bib_ids:)
+    resources = query_service.custom_queries.find_many_by_string_property(property: :source_metadata_identifier, values: bib_ids)
+    readable_resources = resources.select { |resource| ability.can? :read, resource }
+    readable_resources.to_a
   end
 
   def ability

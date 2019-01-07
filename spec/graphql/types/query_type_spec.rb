@@ -63,6 +63,37 @@ RSpec.describe Types::QueryType do
     end
   end
 
+  describe "#resources_by_bibids" do
+    subject { described_class.fields["resourcesByBibids"] }
+    it { is_expected.to accept_arguments(bibIds: "[String!]!") }
+    context "when a user can read the resource" do
+      before do
+        allow(ability).to receive(:can?).with(:read, anything).and_return(true)
+      end
+      it "can return resources by its bibid" do
+        stub_bibdata(bib_id: "7214786")
+        stub_bibdata(bib_id: "8543429")
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
+        scanned_resource2 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "8543429")
+        type = described_class.new(nil, context)
+        expect(type.resources_by_bibids(bib_ids: ["7214786", "8543429"]).map(&:id)).to eq [scanned_resource.id, scanned_resource2.id]
+      end
+    end
+    context "when the user can't read the resource" do
+      before do
+        allow(ability).to receive(:can?).with(:read, anything).and_return(false)
+      end
+      it "returns nothing" do
+        stub_bibdata(bib_id: "7214786")
+        stub_bibdata(bib_id: "8543429")
+        FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
+        FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "8543429")
+        type = described_class.new(nil, context)
+        expect(type.resources_by_bibids(bib_ids: ["7214786", "8543429"])).to eq []
+      end
+    end
+  end
+
   context "when the user cannot read the resource" do
     before do
       allow(ability).to receive(:can?).with(:read, anything).and_return(false)
