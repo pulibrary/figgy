@@ -148,4 +148,10 @@ RSpec.describe ScannedMapDecorator do
       expect(decorator.file_sets).to be_empty
     end
   end
+
+  describe "#gbl_suppressed_override" do
+    it "converts a bool to a string" do
+      expect(decorator.gbl_suppressed_override).to eq "False"
+    end
+  end
 end
