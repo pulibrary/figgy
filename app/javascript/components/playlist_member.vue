@@ -1,6 +1,6 @@
 <template>
   <tr>
-    <td>{{ resource.label[0] }}</td>
+    <td>{{ resource.label[0] }} (<a :href="`${resource.recording_url}`">{{ resource.recording_title }}</a>)</td>
     <td>
       <button
         class="btn btn-danger"

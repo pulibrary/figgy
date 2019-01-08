@@ -1,3 +1,3 @@
 <% if !resource.member_ids.empty? %>
-  <playlist-members resource-id="<%= resource.id %>" :members="<%= resource.decorate.decorated_proxies.to_json %>"></playlist-members>
+  <playlist-members resource-id="<%= resource.id %>" :members="<%= proxies_with_recording_data(resource).to_json %>"></playlist-members>
 <% end %>
