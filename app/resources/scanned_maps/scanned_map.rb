@@ -12,9 +12,6 @@ class ScannedMap < Resource
   attribute :file_metadata, Valkyrie::Types::Set.of(FileMetadata.optional)
   attribute :relation
 
-  # Can be used to override business logic about whether a record is discoverable in GeoBlacklight
-  attribute :gbl_suppressed_override, Valkyrie::Types::Bool
-
   def self.can_have_manifests?
     true
   end
