@@ -29,6 +29,8 @@ default: &default
     - .jpeg
     - .jpg
 
+  dev_tool: source-map
+
 development:
   <<: *default
   compile: true
