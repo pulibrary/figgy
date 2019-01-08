@@ -1436,21 +1436,22 @@ RSpec.describe ChangeSetPersister do
   end
 
   context "when saving a playlist with file_set_ids" do
-    it "creates ProxyFileSets" do
+    it "creates ProxyFileSets, maintaining order of the files" do
       playlist = Playlist.new
       file_set = FactoryBot.create_for_repository(:file_set)
+      file_set2 = FactoryBot.create_for_repository(:file_set)
 
       change_set = DynamicChangeSet.new(playlist)
       change_set.prepopulate!
-      change_set.validate(title: "Test Title", file_set_ids: file_set.id.to_s)
-      expect(change_set.file_set_ids).to eq [file_set.id]
+      change_set.validate(title: "Test Title", file_set_ids: [file_set2.id.to_s, file_set.id.to_s])
+      expect(change_set.file_set_ids).to eq [file_set2.id, file_set.id]
 
       output = change_set_persister.save(change_set: change_set)
       members = query_service.find_members(resource: output)
       proxy_file_set = members.first
       expect(proxy_file_set).to be_a ProxyFileSet
-      expect(proxy_file_set.proxied_file_id).to eq file_set.id
-      expect(proxy_file_set.label).to eq file_set.title
+      expect(proxy_file_set.proxied_file_id).to eq file_set2.id
+      expect(proxy_file_set.label).to eq file_set2.title
     end
   end
 
