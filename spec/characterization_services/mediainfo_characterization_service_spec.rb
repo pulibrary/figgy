@@ -32,7 +32,6 @@ RSpec.describe MediainfoCharacterizationService do
     allow(track_attributes).to receive(:duration).and_return(23.123)
     allow(track_attributes).to receive(:count).and_return 1
     allow(track_attributes).to receive(:filesize).and_return 1
-    allow(track_attributes).to receive(:title).and_return nil
     allow(tracks).to receive(:track_types).and_return(["general"])
 
     allow(tracks).to receive(:general).and_return(track_attributes)
@@ -80,9 +79,8 @@ RSpec.describe MediainfoCharacterizationService do
       allow(audio_track_attributes).to receive(:duration).and_return(0.261)
       allow(audio_track_attributes).to receive(:count).and_return 1
       allow(audio_track_attributes).to receive(:filesize).and_return 1
-      allow(audio_track_attributes).to receive(:title).and_return nil
 
-      allow(tracks).to receive(:track_types).and_return(["audio", "general"])
+      allow(tracks).to receive(:track_types).and_return(["audio"])
       allow(tracks).to receive(:audio).and_return(audio_track_attributes)
       allow(tracks).to receive(:video).and_return(nil)
 
@@ -100,30 +98,6 @@ RSpec.describe MediainfoCharacterizationService do
     end
   end
 
-  describe "title metadata extraction" do
-    context "when the audio file has a title metadata tag" do
-      let(:file) { fixture_file_upload("files/audio_file.wav", "audio/x-wav") }
-      let(:title) { "Interview: ERM / Jose Donoso (A2)" }
-      before do
-        allow(track_attributes).to receive(:title).and_return title
-      end
-      it "extracts the title and sets it as the FileSet title" do
-        new_file_set = described_class.new(file_set: valid_file_set, persister: persister).characterize(save: false)
-        expect(new_file_set.original_file.label).to eq new_file_set.original_file.original_filename
-        expect(new_file_set.title).to eq [title]
-      end
-    end
-
-    context "when the audio file does not have a title metadata tag" do
-      let(:file) { fixture_file_upload("files/audio_file_no_tags.wav", "audio/x-wav") }
-      it "uses the original_filename as the file_metadata label and FileSet title" do
-        new_file_set = described_class.new(file_set: valid_file_set, persister: persister).characterize(save: false)
-        expect(new_file_set.original_file.label).to eq new_file_set.original_file.original_filename
-        expect(new_file_set.title).to eq new_file_set.original_file.original_filename
-      end
-    end
-  end
-
   context "with a video file" do
     let(:file) { fixture_file_upload("files/city.mp4", "video/mp4") }
     let(:audio_track_attributes) { double }
@@ -135,7 +109,6 @@ RSpec.describe MediainfoCharacterizationService do
       allow(video_track_attributes).to receive(:duration).and_return(0.984)
       allow(video_track_attributes).to receive(:count).and_return 1
       allow(video_track_attributes).to receive(:filesize).and_return 1
-      allow(video_track_attributes).to receive(:title).and_return nil
 
       allow(audio_track_attributes).to receive(:encoded_date).and_return Time.zone.parse("UTC 2009-03-30 19:49:13")
       allow(audio_track_attributes).to receive(:producer).and_return("Test Producer")
@@ -143,12 +116,10 @@ RSpec.describe MediainfoCharacterizationService do
       allow(audio_track_attributes).to receive(:duration).and_return(0.261)
       allow(audio_track_attributes).to receive(:count).and_return 1
       allow(audio_track_attributes).to receive(:filesize).and_return 1
-      allow(audio_track_attributes).to receive(:title).and_return nil
-      allow(tracks).to receive(:track_types).and_return(["video", "audio", "general"])
+      allow(tracks).to receive(:track_types).and_return(["video", "audio"])
 
       allow(tracks).to receive(:video).and_return(video_track_attributes)
       allow(tracks).to receive(:audio).and_return(audio_track_attributes)
-      allow(tracks).to receive(:general).and_return(track_attributes)
 
       allow(MediaInfo).to receive(:from).and_return(tracks)
     end
