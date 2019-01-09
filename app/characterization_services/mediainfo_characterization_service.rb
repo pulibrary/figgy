@@ -24,11 +24,16 @@ class MediainfoCharacterizationService
   # @param save [Boolean] should the persister save the file_set after Characterization
   # @return [FileNode]
   def characterize(save: true)
-    new_file = preservation_file.new(file_characterization_attributes)
-    if media.title # use embedded title metadata
-      new_file.label = media.title
-      @file_set.title = media.title
-    end
+    @file_characterization_attributes = {
+      date_of_digitization: media_encoded_date,
+      producer: media.producer,
+      source_media_type: media.originalsourceform,
+      duration: media.duration.to_s, # Floats are not supported as Valkyrie::Types (update: now they are),
+      checksum: MultiChecksum.for(file_object),
+      size: media.filesize,
+      mime_type: mime_type
+    }
+    new_file = preservation_file.new(@file_characterization_attributes.to_h)
     @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
     @persister.save(resource: @file_set) if save
     @file_set
@@ -45,19 +50,6 @@ class MediainfoCharacterizationService
   end
 
   private
-
-    def file_characterization_attributes
-      @file_characterization_attributes ||=
-        {
-          date_of_digitization: media_encoded_date,
-          producer: media.producer,
-          source_media_type: media.originalsourceform,
-          duration: media.duration.to_s, # Floats are not supported as Valkyrie::Types (update: now they are),
-          checksum: MultiChecksum.for(file_object),
-          size: media.filesize,
-          mime_type: mime_type
-        }
-    end
 
     # Null Object modeling metadata values from MediaInfo.from
     # @see MediaInfo::Tracks
@@ -105,10 +97,6 @@ class MediainfoCharacterizationService
         # Implements the accessor for the filesize element
         # @return [nil]
         def filesize; end
-
-        # Implements the accessor for the title metadata
-        # @return [nil]
-        def title; end
       end
     end
 
