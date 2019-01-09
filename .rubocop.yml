@@ -103,6 +103,7 @@ Metrics/LineLength:
   Exclude:
     - 'spec/views/scanned_resources/order_manager.html.erb_spec.rb'
     - 'lib/tasks/music_reserves.rake'
+    - 'spec/features/playlist_spec.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
