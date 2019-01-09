@@ -19,7 +19,7 @@ class MusicImportService::RecordingCollector
       sql_server_adapter: sql_server_adapter,
       postgres_adapter: postgres_adapter,
       logger: logger,
-      cache: cache,
+      cache: NullCache,
       catalog_host: catalog_host,
       csv_input_dir: csv_input_dir,
       recordings_query: query
@@ -328,18 +328,28 @@ class MusicImportService::RecordingCollector
         entry_id: result["entryid"],
         selection_title: result["Title"],
         selection_alt_title: result["AltTitle"],
-        selection_note: result["SelNote"]
+        selection_note: result["SelNote"],
+        recording_id: result["idRecording"]
       )
     end
   end
 
   def audio_file_query(recording)
     <<-SQL
-      select a.idFile, a.idSelection, a.FilePath, a.FileName, a.FileNote,
-      a.entryid, Selections.Title, Selections.AltTitle, Selections.SelNote from
-      AudioFiles a JOIN Selections ON a.idSelection = Selections.idSelection WHERE
-      a.idSelection IN (select idSelection from Selections WHERE idRecording=#{recording.id})
+      select DISTINCT a.idFile, a.idSelection, a.FilePath, a.FileName, a.FileNote,
+      a.entryid, Selections.Title, Selections.AltTitle, Selections.SelNote,
+      Recordings.idRecording, jAudioFiles.SortOrder FROM AudioFiles a
+      JOIN Selections on a.idSelection = Selections.idSelection
+      LEFT OUTER JOIN jAudioFiles ON a.idFile = jAudioFiles.idFile
+      JOIN Recordings ON Recordings.idRecording = Selections.idRecording WHERE a.entryId IN (
+        select a.entryId from
+        AudioFiles a JOIN Selections ON a.idSelection = Selections.idSelection WHERE
+        a.idSelection IN (select idSelection from Selections WHERE idRecording=#{recording.id})
+        AND a.FilePath IS NOT NULL
+      )
       AND a.FilePath IS NOT NULL
+      AND a.entryid IS NOT NULL
+      ORDER BY jAudioFiles.SortOrder, idFile
     SQL
   end
 
@@ -356,12 +366,20 @@ class MusicImportService::RecordingCollector
     SQL
   end
 
+  def prerequisite_recordings_query(recording_ids)
+    "select R.idRecording, R.CallNo, R.RecTitle, C.CourseNo from Recordings R " \
+      "left join Selections S on S.idRecording=R.idRecording " \
+      "left join jSelections jS on S.idSelection=jS.idSelection " \
+      "left join Courses C on jS.idCourse=C.idCourse " \
+      "WHERE R.idRecording IN (#{recording_ids.join(', ')})"
+  end
+
   class Selection < Valkyrie::Resource
     attribute :course_nums
   end
 
   class AudioFile < Valkyrie::Resource
-    [:selection_id, :file_path, :file_name, :file_note, :entry_id, :selection_title, :selection_alt_title, :selection_note].each do |attr|
+    [:selection_id, :file_path, :file_name, :file_note, :entry_id, :selection_title, :selection_alt_title, :selection_note, :recording_id].each do |attr|
       attribute attr, Valkyrie::Types::String
     end
   end

@@ -82,22 +82,95 @@ class MusicImportService
   end
 
   class Importer
-    attr_reader :recording_collector, :recording, :file_root, :logger
+    attr_reader :recording_collector, :recording, :file_root, :logger, :nested
     delegate :id, to: :recording, prefix: true
-    def initialize(recording_collector:, recording:, file_root:, logger:)
+    def initialize(recording_collector:, recording:, file_root:, logger:, change_set_persister: nil, nested: false)
       @recording_collector = recording_collector
       @recording = recording
       @file_root = Pathname.new(file_root.to_s)
       @logger = logger
+      @change_set_persister = change_set_persister
+      @nested = nested
     end
 
     def import!
+      if (found_recording = find_recording)
+        logger.warn "Recording #{recording.id} is already ingested - skipping"
+        return found_recording
+      end
       if files.empty?
         logger.warn "Unable to ingest recording #{recording.id} - there are no files associated or the files are missing from disk."
         return nil
       end
-      change_set.files = files
+      # Currently trying to ingest a fake playlist.
+      if recording_is_fake?
+        ingest_fake_playlist
+      else
+        ingest_recording
+      end
+    end
+
+    def recording_is_fake?
+      return false unless all_audio_files.length != audio_files.length
+      return false unless identifier.blank?
+      return false if recording.call.downcase.start_with?("cd")
+      Array.wrap(recording.titles).first.downcase.include?("playlist") || recording.call.downcase.include?("playlist")
+    end
+
+    def find_recording
+      change_set_persister.query_service.custom_queries.find_by_string_property(property: :local_identifier, value: recording.id.to_s).find do |x|
+        DynamicChangeSet.new(x).is_a?(RecordingChangeSet)
+      end
+    end
+
+    def ingest_fake_playlist
+      logger.info "Detected that recording #{recording.id} is a fake playlist. Ingesting it appropriately."
+      if nested
+        logger.info "Refusing to ingest #{recording.id} while ingesting another fake playlist."
+        return
+      end
+      change_set_persister.buffer_into_index do |buffered_change_set_persister|
+        # Import prerequisites
+        recording_collector.with_recordings_query(recording_collector.prerequisite_recordings_query(prerequisite_ids)).recordings.each do |rec|
+          self.class.new(recording_collector: recording_collector, recording: rec, file_root: file_root, logger: logger, change_set_persister: buffered_change_set_persister, nested: true).import!
+        end
+        # Create a playlist for each selection
+        selections_to_courses = recording_collector.courses_for_selections(audio_files.flat_map(&:selection_id).uniq).group_by { |x| x.id.to_s.to_i }
+        audio_files.group_by(&:selection_id).each do |selection_id, selection_files|
+          next if selection_files.empty?
+          playlist = Playlist.new(title: selection_files.first.selection_title, local_identifier: selection_id.to_s, part_of: selections_to_courses[selection_id]&.first&.course_nums)
+          # Find previously imported prerequisite file sets
+          file_set_ids = selection_files.map do |file|
+            buffered_change_set_persister.query_service.custom_queries.find_by_string_property(property: :local_identifier, value: file.entry_id.to_s).first&.id
+          end.compact
+          change_set = DynamicChangeSet.new(playlist).prepopulate!
+          change_set.file_set_ids = file_set_ids
+          output = buffered_change_set_persister.save(change_set: change_set)
+          # Fix labels
+          members = Wayfinder.for(output).members
+          members.each_with_index do |member, idx|
+            change_set = DynamicChangeSet.new(member).prepopulate!
+            change_set.label = selection_files[idx].file_note
+            change_set.local_identifier = selection_files[idx].id.to_s
+            buffered_change_set_persister.save(change_set: change_set)
+          end
+        end
+      end
+    end
+
+    def prerequisite_ids
+      @prerequisite_ids ||=
+        begin
+          all_audio_files.select do |audio_file|
+            audio_file.recording_id != recording.id && audio_file.entry_id.present?
+          end.map(&:recording_id)
+        end
+    end
+
+    def ingest_recording
+      logger.info "Ingesting #{recording.titles}"
       output = nil
+      change_set.files = files
       selections_to_courses = recording_collector.courses_for_selections(audio_files.flat_map(&:selection_id).uniq).group_by { |x| x.id.to_s.to_i }
       change_set_persister.buffer_into_index do |buffered_change_set_persister|
         output = buffered_change_set_persister.save(change_set: change_set)
@@ -118,11 +191,11 @@ class MusicImportService
     end
 
     def change_set_persister
-      ScannedResourcesController.change_set_persister
+      @change_set_persister ||= ScannedResourcesController.change_set_persister
     end
 
     def resource
-      @resource ||= ScannedResource.new(source_metadata_identifier: identifier, local_identifier: recording_id, part_of: recording.courses)
+      @resource ||= ScannedResource.new(source_metadata_identifier: identifier, local_identifier: recording_id.to_s, part_of: recording.courses, title: Array.wrap(recording.titles).first)
     end
 
     def change_set
@@ -130,11 +203,17 @@ class MusicImportService
     end
 
     def identifier
-      recording.bibs.first
+      recording.bibs.first || recording.recommended_bib
+    end
+
+    def all_audio_files
+      @all_audio_files = recording_collector.audio_files(recording)
     end
 
     def audio_files
-      @audio_files ||= recording_collector.audio_files(recording)
+      @audio_files ||= all_audio_files.select do |file|
+        file.recording_id.to_s == recording.id.to_s
+      end.uniq(&:id)
     end
 
     def files
@@ -156,7 +235,7 @@ class MusicImportService
               original_filename: File.basename(file_path),
               container_attributes: {
                 title: file.file_note,
-                local_identifier: file.id.to_s
+                local_identifier: [file.id.to_s, file.entry_id.to_s]
               }
             )
           end

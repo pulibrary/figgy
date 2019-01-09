@@ -205,6 +205,7 @@ RSpec.describe MusicImportService::RecordingCollector do
         expect(audio_file.selection_title).to eq "Title"
         expect(audio_file.selection_alt_title).to eq "Alternate"
         expect(audio_file.selection_note).to eq "Note"
+        expect(audio_file.recording_id.to_s).to eq "14"
       end
     end
   end
@@ -219,6 +220,14 @@ RSpec.describe MusicImportService::RecordingCollector do
         expect(selections.first.id.to_s.to_i).to eq 1
         expect(selections.first.course_nums).to eq ["mus234"]
       end
+    end
+  end
+
+  describe "#prerequisite_recordings_query" do
+    # It's hard to test this without a real database connection, so this
+    # just makes sure it returns a query.
+    it "accepts an array of IDs" do
+      expect { collector.prerequisite_recordings_query([4]) }.not_to raise_error
     end
   end
 
@@ -247,7 +256,8 @@ RSpec.describe MusicImportService::RecordingCollector do
         "entryid" => "bla",
         "Title" => "Title",
         "AltTitle" => "Alternate",
-        "SelNote" => "Note"
+        "SelNote" => "Note",
+        "idRecording" => 14
       }
     ]
   end

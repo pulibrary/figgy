@@ -78,7 +78,8 @@ RSpec.describe MusicImportService do
           entry_id: "blabla",
           selection_title: "My Selection",
           selection_alt_title: nil,
-          selection_note: "Paul Jacobs, piano"
+          selection_note: "Paul Jacobs, piano",
+          recording_id: 14
         )
       ]
       allow(new_collector).to receive(:recordings).and_return([recording])
@@ -109,7 +110,8 @@ RSpec.describe MusicImportService do
           entry_id: "blabla",
           selection_title: "My Selection",
           selection_alt_title: nil,
-          selection_note: "Paul Jacobs, piano"
+          selection_note: "Paul Jacobs, piano",
+          recording_id: 14
         )
       ]
       selections = [
@@ -123,13 +125,14 @@ RSpec.describe MusicImportService do
 
       output = importer.ingest_recording(recording)
       expect(output).to be_a ScannedResource
-      expect(output.local_identifier).to eq [14]
+      expect(output.local_identifier).to eq ["14"]
       expect(output.part_of).to eq ["mus204", "mus549sb"]
       members = Wayfinder.for(output).members
 
       expect(members.length).to eq 1
       expect(members.first.title).to eq ["First File"]
       expect(members.first.original_file.original_filename).to eq ["cd-1_1.wav"]
+      expect(members.first.local_identifier).to eq ["54204", "blabla"]
 
       playlists = Wayfinder.for(output).playlists
 
@@ -137,6 +140,163 @@ RSpec.describe MusicImportService do
       expect(playlists.first.member_ids.length).to eq 1
       expect(playlists.first.title).to eq ["My Selection"]
       expect(playlists.first.part_of).to eq ["mus204"]
+    end
+    context "when a recording is a faux-playlist" do
+      it "ingests the actual recording and just creates selections" do
+        stub_bibdata(bib_id: "123456")
+        recording = MusicImportService::RecordingCollector::MRRecording.new(
+          14,
+          "playlist-call-no",
+          ["mus204", "mus549sb"],
+          ["Playlist Which is Fake"],
+          []
+        )
+        recording2 = MusicImportService::RecordingCollector::MRRecording.new(
+          15,
+          "cd-431v1",
+          [],
+          ["Symphonies nos. 55-69"],
+          ["123456"]
+        )
+        audio_files = [
+          MusicImportService::RecordingCollector::AudioFile.new(
+            id: 54_205,
+            selection_id: 15_930,
+            file_path: "cd-1",
+            file_name: "cd-1_1.ra",
+            file_note: "A different file",
+            entry_id: "blabla",
+            selection_title: "My Selection",
+            selection_alt_title: nil,
+            selection_note: "Paul Jacobs, piano",
+            recording_id: 15
+          ),
+          MusicImportService::RecordingCollector::AudioFile.new(
+            id: 54_204,
+            selection_id: 15_929,
+            file_path: "cd-1",
+            file_name: "cd-1_1.ra",
+            file_note: "First File",
+            entry_id: "blabla",
+            selection_title: "Week 1",
+            selection_alt_title: nil,
+            selection_note: "Paul Jacobs, piano",
+            recording_id: 14
+          )
+        ]
+        selections = [
+          MusicImportService::RecordingCollector::Selection.new(
+            id: 15_929,
+            course_nums: ["mus204"]
+          )
+        ]
+        allow(importer.recording_collector).to receive(:audio_files).with(recording).and_return(audio_files)
+        allow(importer.recording_collector).to receive(:courses_for_selections).with([15_929]).and_return(selections)
+        allow(importer.recording_collector).to receive(:courses_for_selections).with([15_930]).and_return([])
+        prerequisite_collector = instance_double(MusicImportService::RecordingCollector)
+        allow(importer.recording_collector).to receive(:with_recordings_query).and_return(prerequisite_collector)
+        allow(importer.recording_collector).to receive(:audio_files).with(recording2).and_return(audio_files)
+        allow(importer.recording_collector).to receive(:prerequisite_recordings_query).with([15])
+        allow(prerequisite_collector).to receive(:recordings).and_return([recording2])
+
+        importer.ingest_recording(recording)
+        recording = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_all_of_model(model: ScannedResource)
+        expect(recording.length).to eq 1
+        expect(recording.first.member_ids.length).to eq 1
+        expect(recording.first.local_identifier).to eq ["15"]
+        members = Wayfinder.for(recording.first).members
+
+        expect(members.length).to eq 1
+        expect(members.first.title).to eq ["A different file"]
+        expect(members.first.original_file.original_filename).to eq ["cd-1_1.wav"]
+
+        playlists = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_all_of_model(model: Playlist)
+        expect(playlists.length).to eq 2
+        expect(playlists.flat_map(&:title)).to contain_exactly "Week 1", "My Selection"
+        playlist = playlists.find { |x| x.title.first == "Week 1" }
+        members = Wayfinder.for(playlist).members
+        expect(members.first.label).to eq ["First File"]
+        expect(members.first.local_identifier).to eq ["54204"]
+      end
+    end
+    context "when a dependent is a fake playlist" do
+      it "refuses to ingest it" do
+        stub_bibdata(bib_id: "123456")
+        recording = MusicImportService::RecordingCollector::MRRecording.new(
+          14,
+          "playlist-call-no",
+          ["mus204", "mus549sb"],
+          ["Playlist Which is Fake"],
+          []
+        )
+        recording2 = MusicImportService::RecordingCollector::MRRecording.new(
+          15,
+          "playlist-call-no-2",
+          [],
+          ["Symphonies nos. 55-69"],
+          []
+        )
+        audio_files = [
+          MusicImportService::RecordingCollector::AudioFile.new(
+            id: 54_205,
+            selection_id: 15_930,
+            file_path: "cd-1",
+            file_name: "cd-1_1.ra",
+            file_note: "A different file",
+            entry_id: "blabla",
+            selection_title: "My Selection",
+            selection_alt_title: nil,
+            selection_note: "Paul Jacobs, piano",
+            recording_id: 15
+          ),
+          MusicImportService::RecordingCollector::AudioFile.new(
+            id: 54_204,
+            selection_id: 15_929,
+            file_path: "cd-1",
+            file_name: "cd-1_1.ra",
+            file_note: "First File",
+            entry_id: "blabla",
+            selection_title: "Week 1",
+            selection_alt_title: nil,
+            selection_note: "Paul Jacobs, piano",
+            recording_id: 14
+          )
+        ]
+        selections = [
+          MusicImportService::RecordingCollector::Selection.new(
+            id: 15_929,
+            course_nums: ["mus204"]
+          )
+        ]
+        allow(importer.recording_collector).to receive(:audio_files).with(recording).and_return(audio_files)
+        allow(importer.recording_collector).to receive(:courses_for_selections).with([15_929]).and_return(selections)
+        allow(importer.recording_collector).to receive(:courses_for_selections).with([15_930]).and_return([])
+        prerequisite_collector = instance_double(MusicImportService::RecordingCollector)
+        allow(importer.recording_collector).to receive(:with_recordings_query).and_return(prerequisite_collector)
+        allow(importer.recording_collector).to receive(:audio_files).with(recording2).and_return(audio_files)
+        allow(importer.recording_collector).to receive(:prerequisite_recordings_query).with([15])
+        allow(prerequisite_collector).to receive(:recordings).and_return([recording2])
+
+        importer.ingest_recording(recording)
+        expect(logger).to have_received(:info).with("Refusing to ingest 15 while ingesting another fake playlist.")
+      end
+    end
+    context "when the recording exists already" do
+      it "skips it" do
+        stub_bibdata(bib_id: "123456")
+        recording = MusicImportService::RecordingCollector::MRRecording.new(
+          14,
+          "cd-431v1",
+          ["mus204", "mus549sb"],
+          ["Symphonies nos. 55-69"],
+          ["123456"]
+        )
+        FactoryBot.create_for_repository(:scanned_resource, local_identifier: ["14"], change_set: "recording")
+
+        output = importer.ingest_recording(recording)
+        expect(output).to be_a ScannedResource
+        expect(logger).to have_received(:warn).with("Recording 14 is already ingested - skipping")
+      end
     end
     context "when the files are missing" do
       it "doesn't create it and logs an error" do
@@ -158,7 +318,8 @@ RSpec.describe MusicImportService do
             entry_id: "blabla",
             selection_title: "My Selection",
             selection_alt_title: nil,
-            selection_note: "Paul Jacobs, piano"
+            selection_note: "Paul Jacobs, piano",
+            recording_id: 14
           )
         ]
         allow(importer.recording_collector).to receive(:audio_files).with(recording).and_return(audio_files)
@@ -195,7 +356,8 @@ RSpec.describe MusicImportService do
             entry_id: "blabla",
             selection_title: "My Selection",
             selection_alt_title: nil,
-            selection_note: "Paul Jacobs, piano"
+            selection_note: "Paul Jacobs, piano",
+            recording_id: 14
           ),
           MusicImportService::RecordingCollector::AudioFile.new(
             id: 54_205,
@@ -206,7 +368,8 @@ RSpec.describe MusicImportService do
             entry_id: "blabla",
             selection_title: "My Selection",
             selection_alt_title: nil,
-            selection_note: "Paul Jacobs, piano"
+            selection_note: "Paul Jacobs, piano",
+            recording_id: 14
           )
         ]
         allow(importer.recording_collector).to receive(:audio_files).with(recording).and_return(audio_files)

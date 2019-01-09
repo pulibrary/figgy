@@ -99,6 +99,7 @@ Metrics/CyclomaticComplexity:
     - 'app/resources/scanned_resources/scanned_resources_controller.rb'
     - 'app/change_set_persisters/change_set_persister/apply_auth_token.rb'
     - 'config/initializers/sequel_active_support_notification.rb'
+    - 'app/services/music_import_service.rb'
 Metrics/LineLength:
   Exclude:
     - 'spec/views/scanned_resources/order_manager.html.erb_spec.rb'
@@ -149,6 +150,7 @@ Metrics/ParameterLists:
     - 'app/jobs/ingest_folders_job.rb'
     - 'app/jobs/ingest_folder_job.rb'
     - 'app/services/music_import_service/recording_collector.rb'
+    - 'app/services/music_import_service.rb'
 Metrics/PerceivedComplexity:
   Exclude:
     - 'app/services/pdf_generator/canvas.rb'
@@ -159,6 +161,7 @@ Metrics/PerceivedComplexity:
     - 'app/change_set_persisters/change_set_persister/update_auth_token.rb'
     - 'app/change_set_persisters/change_set_persister/apply_auth_token.rb'
     - 'config/initializers/sequel_active_support_notification.rb'
+    - 'app/services/music_import_service.rb'
 Rails/OutputSafety:
   Exclude:
     - 'app/resources/**/*_decorator*'
