@@ -1,7 +1,15 @@
 # frozen_string_literal: true
 class ScannedResourceDecorator < Valkyrie::ResourceDecorator
   display Schema::Common.attributes, :rendered_ocr_language, :rendered_holding_location, :member_of_collections, :rendered_actors
-  suppress :thumbnail_id, :imported_author, :source_jsonld, :source_metadata, :sort_title, :ocr_language, :rights_statement, :actor
+  suppress :thumbnail_id,
+           :imported_author,
+           :source_jsonld,
+           :source_metadata,
+           :sort_title,
+           :ocr_language,
+           :rights_statement,
+           :actor,
+           :holding_location # suppressed in superclass, but added back in with Schema::Common
 
   display_in_manifest displayed_attributes, :location
   suppress_from_manifest Schema::IIIF.attributes,

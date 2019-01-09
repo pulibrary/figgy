@@ -158,8 +158,10 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       expect(rendered).to have_link collection.title.first, href: "/catalog/#{collection.id}"
 
       # Holding Location
-      expect(rendered).to have_selector "th", text: "Holding Location"
       expect(rendered).to have_selector ".rendered_holding_location", text: "Plasma Physics Library"
+      expect(rendered).to have_selector "th", text: "Holding Location"
+      expect(rendered).not_to have_selector ".holding_location"
+      expect(rendered).not_to have_selector "th", text: "Rendered Holding Location"
     end
   end
   context "when given a ScannedMap solr document" do

@@ -78,6 +78,8 @@ en:
           label: "Place Name"
         rendered_date_range:
           label: "Date Range"
+        rendered_holding_location:
+          label: "Holding Location"
         rendered_subject:
           label: "Subject"
         rendered_rights_statement:
