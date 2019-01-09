@@ -107,9 +107,9 @@ RSpec.describe MediainfoCharacterizationService do
       before do
         allow(track_attributes).to receive(:title).and_return title
       end
-      it "extracts the title and sets it as the FileSet title" do
+      it "extracts the title, saves it as the file_metadata label, and sets it as the FileSet title" do
         new_file_set = described_class.new(file_set: valid_file_set, persister: persister).characterize(save: false)
-        expect(new_file_set.original_file.label).to eq new_file_set.original_file.original_filename
+        expect(new_file_set.original_file.label).to eq [title]
         expect(new_file_set.title).to eq [title]
       end
     end
