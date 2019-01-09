@@ -28,6 +28,7 @@ RSpec.feature "ScannedMaps" do
     expect(page).to have_field "Creator"
     expect(page).to have_field "Language"
     expect(page).to have_field "Cartographic scale"
+    expect(page).to have_field "Always show in Pulmap search results"
   end
 
   context "when a user creates a new scanned map" do
@@ -57,6 +58,7 @@ RSpec.feature "ScannedMaps" do
         spatial: "test value",
         temporal: "test value",
         issued: "test value",
+        gbl_suppressed_override: true,
         imported_metadata: [{
           extent: "test extent"
         }]
@@ -71,6 +73,7 @@ RSpec.feature "ScannedMaps" do
       visit solr_document_path scanned_map
 
       expect(page).to have_css ".attribute.visibility", text: "open"
+      expect(page).to have_css ".attribute.gbl_suppressed_override", text: "True"
       expect(page).to have_css ".attribute.title", text: "new scanned map"
       expect(page).to have_css ".attribute.creator", text: "test value"
       expect(page).to have_css ".attribute.description", text: "test value"

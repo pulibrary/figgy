@@ -18,6 +18,9 @@ module Schema
       Geo.attributes.each do |field|
         attribute field
       end
+
+      # Can be used to override business logic about whether a record is discoverable in GeoBlacklight
+      attribute :gbl_suppressed_override, Valkyrie::Types::Bool
     end
   end
 end

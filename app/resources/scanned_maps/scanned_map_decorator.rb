@@ -2,6 +2,7 @@
 class ScannedMapDecorator < Valkyrie::ResourceDecorator
   display Schema::Geo.attributes,
           :ark,
+          :gbl_suppressed_override,
           :rendered_holding_location,
           :rendered_coverage,
           :member_of_collections,
@@ -65,6 +66,10 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   # @return [Hash] a Hash of all of the resource attributes
   def display_attributes
     super.reject { |k, v| imported_attributes.fetch(k, nil) == v }
+  end
+
+  def gbl_suppressed_override
+    super ? "True" : "False"
   end
 
   def human_readable_type

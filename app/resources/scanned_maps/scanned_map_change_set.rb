@@ -7,12 +7,14 @@ class ScannedMapChangeSet < ScannedResourceChangeSet
 
   property :relation, multiple: false, required: false
   property :references, multiple: false, required: false
+  property :gbl_suppressed_override, multiple: false, required: false
 
   # rubocop:disable Metrics/MethodLength
   def primary_terms
     [
       :title,
       :source_metadata_identifier,
+      :gbl_suppressed_override,
       :rights_statement,
       :rights_note,
       :portion_note,

@@ -54,6 +54,8 @@ en:
         metadata: 'Metadata'
     show:
       attributes:
+        gbl_suppressed_override:
+          label: "Always show in Pulmap search results"
         internal_resource:
           label: "Model"
         created_at:
