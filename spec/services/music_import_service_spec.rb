@@ -53,6 +53,13 @@ RSpec.describe MusicImportService do
     it "ingests all recordings that are a member of a course" do
       new_collector = instance_double(MusicImportService::RecordingCollector)
       allow(importer.recording_collector).to receive(:with_recordings_query).and_return(new_collector)
+      selections = [
+        MusicImportService::RecordingCollector::Selection.new(
+          id: 15_929,
+          course_nums: ["mus204"]
+        )
+      ]
+      allow(importer.recording_collector).to receive(:courses_for_selections).with([15_929]).and_return(selections)
       stub_bibdata(bib_id: "123456")
       recording = MusicImportService::RecordingCollector::MRRecording.new(
         14,
@@ -105,11 +112,19 @@ RSpec.describe MusicImportService do
           selection_note: "Paul Jacobs, piano"
         )
       ]
+      selections = [
+        MusicImportService::RecordingCollector::Selection.new(
+          id: 15_929,
+          course_nums: ["mus204"]
+        )
+      ]
       allow(importer.recording_collector).to receive(:audio_files).with(recording).and_return(audio_files)
+      allow(importer.recording_collector).to receive(:courses_for_selections).with([15_929]).and_return(selections)
 
       output = importer.ingest_recording(recording)
       expect(output).to be_a ScannedResource
       expect(output.local_identifier).to eq [14]
+      expect(output.part_of).to eq ["mus204", "mus549sb"]
       members = Wayfinder.for(output).members
 
       expect(members.length).to eq 1
@@ -121,6 +136,7 @@ RSpec.describe MusicImportService do
       expect(playlists.length).to eq 1
       expect(playlists.first.member_ids.length).to eq 1
       expect(playlists.first.title).to eq ["My Selection"]
+      expect(playlists.first.part_of).to eq ["mus204"]
     end
     context "when the files are missing" do
       it "doesn't create it and logs an error" do
@@ -146,6 +162,13 @@ RSpec.describe MusicImportService do
           )
         ]
         allow(importer.recording_collector).to receive(:audio_files).with(recording).and_return(audio_files)
+        selections = [
+          MusicImportService::RecordingCollector::Selection.new(
+            id: 15_929,
+            course_nums: ["mus204"]
+          )
+        ]
+        allow(importer.recording_collector).to receive(:courses_for_selections).with([15_929]).and_return(selections)
 
         output = importer.ingest_recording(recording)
         expect(output).to eq nil
@@ -187,6 +210,13 @@ RSpec.describe MusicImportService do
           )
         ]
         allow(importer.recording_collector).to receive(:audio_files).with(recording).and_return(audio_files)
+        selections = [
+          MusicImportService::RecordingCollector::Selection.new(
+            id: 15_929,
+            course_nums: ["mus204"]
+          )
+        ]
+        allow(importer.recording_collector).to receive(:courses_for_selections).with([15_929]).and_return(selections)
 
         output = importer.ingest_recording(recording)
         expect(output).to be_a ScannedResource

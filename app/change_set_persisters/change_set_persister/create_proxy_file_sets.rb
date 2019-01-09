@@ -39,7 +39,7 @@ class ChangeSetPersister
     end
 
     def file_sets
-      @file_sets ||= query_service.find_many_by_ids(ids: file_set_ids)
+      @file_sets ||= query_service.find_many_by_ids(ids: file_set_ids).sort_by { |x| file_set_ids.index(x.id) }
     end
   end
 end

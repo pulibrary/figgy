@@ -98,6 +98,7 @@ class MusicImportService
       end
       change_set.files = files
       output = nil
+      selections_to_courses = recording_collector.courses_for_selections(audio_files.flat_map(&:selection_id).uniq).group_by { |x| x.id.to_s.to_i }
       change_set_persister.buffer_into_index do |buffered_change_set_persister|
         output = buffered_change_set_persister.save(change_set: change_set)
         members = Wayfinder.for(output).members
@@ -107,7 +108,7 @@ class MusicImportService
             selection_files.map(&:id).map(&:to_s).include?(member.local_identifier.first)
           end
           ids = file_set_members.map(&:id)
-          playlist = Playlist.new(title: selection_files.first.selection_title, local_identifier: selection_id.to_s)
+          playlist = Playlist.new(title: selection_files.first.selection_title, local_identifier: selection_id.to_s, part_of: selections_to_courses[selection_id]&.first&.course_nums)
           change_set = DynamicChangeSet.new(playlist).prepopulate!
           change_set.file_set_ids = ids
           buffered_change_set_persister.save(change_set: change_set)
@@ -121,7 +122,7 @@ class MusicImportService
     end
 
     def resource
-      @resource ||= ScannedResource.new(source_metadata_identifier: identifier, local_identifier: recording_id)
+      @resource ||= ScannedResource.new(source_metadata_identifier: identifier, local_identifier: recording_id, part_of: recording.courses)
     end
 
     def change_set
