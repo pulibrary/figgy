@@ -15,5 +15,16 @@ RSpec.describe FileProxyHelper do
       expect(h.map { |p| p["recording_url"] }).to eq [recording_url, recording_url]
       expect(h.first["recording_title"]).to eq recording.title.first
     end
+
+    it "maps RDF::Literal titles to strings" do
+      title = "Winelight"
+      file_set = FactoryBot.create_for_repository(:file_set)
+      FactoryBot.create_for_repository(:recording, member_ids: [file_set.id], title: RDF::Literal.new(title, language: :en))
+      proxy_file_set = FactoryBot.create_for_repository(:proxy_file_set, proxied_file_id: file_set.id)
+      playlist = FactoryBot.create_for_repository(:playlist, member_ids: [proxy_file_set.id])
+
+      h = helper.proxies_with_recording_data(playlist)
+      expect(h.first["recording_title"]).to eq title
+    end
   end
 end

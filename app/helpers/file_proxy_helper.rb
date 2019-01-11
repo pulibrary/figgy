@@ -8,7 +8,7 @@ module FileProxyHelper
     proxy_data.map do |proxy|
       file_set = Valkyrie.config.metadata_adapter.query_service.find_by(id: Valkyrie::ID.new(proxy["proxied_file_id"]["id"]))
       recording = Wayfinder.for(file_set).parent
-      proxy.merge! "recording_url" => solr_document_url(recording), "recording_title" => recording.decorate.first_title
+      proxy.merge! "recording_url" => solr_document_url(recording), "recording_title" => recording.decorate.first_title.to_s
     end
   end
 end
