@@ -739,18 +739,19 @@ var IIIFComponents;
             var $mediaElement;
             var type = data.type.toString().toLowerCase();
             switch (type) {
-                case 'image':
-                    $mediaElement = $('<img class="anno" src="' + data.source + '" />');
-                    break;
                 case 'video':
                     $mediaElement = $('<video class="anno" />');
                     break;
+                case 'sound':
                 case 'audio':
                     $mediaElement = $('<audio class="anno" />');
                     break;
-                case 'textualbody':
-                    $mediaElement = $('<div class="anno">' + data.source + '</div>');
-                    break;
+                // case 'textualbody':
+                //     $mediaElement = $('<div class="anno">' + data.source + '</div>');
+                //     break;
+                // case 'image':
+                //     $mediaElement = $('<img class="anno" src="' + data.source + '" />');
+                //     break;
                 default:
                     return;
             }
@@ -807,64 +808,60 @@ var IIIFComponents;
                 height: data.height + '%'
             }).hide();
             data.element = $mediaElement;
-            if (type === 'video' || type === 'audio') {
-                data.timeout = null;
-                var that_2 = this;
-                data.checkForStall = function () {
-                    var self = this;
-                    if (this.active) {
-                        that_2._checkMediaSynchronization();
-                        if (this.element.get(0).readyState > 0 && !this.outOfSync) {
-                            that_2._playbackStalled(false, self);
-                        }
-                        else {
-                            that_2._playbackStalled(true, self);
-                            if (this.timeout) {
-                                window.clearTimeout(this.timeout);
-                            }
-                            this.timeout = window.setTimeout(function () {
-                                self.checkForStall();
-                            }, 1000);
-                        }
+            data.timeout = null;
+            var that = this;
+            data.checkForStall = function () {
+                var self = this;
+                if (this.active) {
+                    that._checkMediaSynchronization();
+                    if (this.element.get(0).readyState > 0 && !this.outOfSync) {
+                        that._playbackStalled(false, self);
                     }
                     else {
-                        that_2._playbackStalled(false, self);
+                        that._playbackStalled(true, self);
+                        if (this.timeout) {
+                            window.clearTimeout(this.timeout);
+                        }
+                        this.timeout = window.setTimeout(function () {
+                            self.checkForStall();
+                        }, 1000);
                     }
-                };
-            }
+                }
+                else {
+                    that._playbackStalled(false, self);
+                }
+            };
             this._contentAnnotations.push(data);
             if (this.$playerElement) {
                 this._$canvasContainer.append($mediaElement);
             }
-            if (type === 'video' || type === 'audio') {
-                $mediaElement.on('loadstart', function () {
-                    //console.log('loadstart');
-                    //data.checkForStall();
-                });
-                $mediaElement.on('waiting', function () {
-                    //console.log('waiting');
-                    //data.checkForStall();
-                });
-                $mediaElement.on('seeking', function () {
-                    //console.log('seeking');
-                    //data.checkForStall();
-                });
-                $mediaElement.on('loadedmetadata', function () {
-                    _this._readyMediaCount++;
-                    if (_this._readyMediaCount === _this._contentAnnotations.length) {
-                        //if (!this._data.range) {
-                        _this._setCurrentTime(0);
-                        //}                        
-                        if (_this._data.autoPlay) {
-                            _this.play();
-                        }
-                        _this._updateDurationDisplay();
-                        _this.fire(AVComponent.Events.MEDIA_READY);
+            $mediaElement.on('loadstart', function () {
+                //console.log('loadstart');
+                //data.checkForStall();
+            });
+            $mediaElement.on('waiting', function () {
+                //console.log('waiting');
+                //data.checkForStall();
+            });
+            $mediaElement.on('seeking', function () {
+                //console.log('seeking');
+                //data.checkForStall();
+            });
+            $mediaElement.on('loadedmetadata', function () {
+                _this._readyMediaCount++;
+                if (_this._readyMediaCount === _this._contentAnnotations.length) {
+                    //if (!this._data.range) {
+                    _this._setCurrentTime(0);
+                    //}                        
+                    if (_this._data.autoPlay) {
+                        _this.play();
                     }
-                });
-                $mediaElement.attr('preload', 'auto');
-                $mediaElement.get(0).load();
-            }
+                    _this._updateDurationDisplay();
+                    _this.fire(AVComponent.Events.MEDIA_READY);
+                }
+            });
+            $mediaElement.attr('preload', 'auto');
+            $mediaElement.get(0).load();
             this._renderSyncIndicator(data);
         };
         CanvasInstance.prototype._getWaveformData = function (url) {
@@ -1150,7 +1147,6 @@ var IIIFComponents;
             var contentAnnotation;
             for (var i = 0; i < this._contentAnnotations.length; i++) {
                 contentAnnotation = this._contentAnnotations[i];
-                var type = contentAnnotation.type.toString().toLowerCase();
                 if (contentAnnotation.start <= this._canvasClockTime && contentAnnotation.end >= this._canvasClockTime) {
                     this._checkMediaSynchronization();
                     if (!contentAnnotation.active) {
@@ -1159,10 +1155,8 @@ var IIIFComponents;
                         contentAnnotation.element.show();
                         contentAnnotation.timelineElement.addClass('active');
                     }
-                    if (type === 'video' || type === 'audio') {
-                        if (contentAnnotation.element[0].currentTime > contentAnnotation.element[0].duration - contentAnnotation.endOffset) {
-                            this._pauseMedia(contentAnnotation.element[0]);
-                        }
+                    if (contentAnnotation.element[0].currentTime > contentAnnotation.element[0].duration - contentAnnotation.endOffset) {
+                        this._pauseMedia(contentAnnotation.element[0]);
                     }
                 }
                 else {
@@ -1170,9 +1164,7 @@ var IIIFComponents;
                         contentAnnotation.active = false;
                         contentAnnotation.element.hide();
                         contentAnnotation.timelineElement.removeClass('active');
-                        if (type === 'video' || type === 'audio') {
-                            this._pauseMedia(contentAnnotation.element[0]);
-                        }
+                        this._pauseMedia(contentAnnotation.element[0]);
                     }
                 }
             }
@@ -1199,28 +1191,25 @@ var IIIFComponents;
             var contentAnnotation;
             for (var i = 0; i < this._contentAnnotations.length; i++) {
                 contentAnnotation = this._contentAnnotations[i];
-                var type = contentAnnotation.type.toString().toLowerCase();
-                if (type === 'video' || type === 'audio') {
-                    this._setMediaCurrentTime(contentAnnotation.element[0], this._canvasClockTime - contentAnnotation.start + contentAnnotation.startOffset);
-                    if (contentAnnotation.start <= this._canvasClockTime && contentAnnotation.end >= this._canvasClockTime) {
-                        if (this._isPlaying) {
-                            if (contentAnnotation.element[0].paused) {
-                                var promise = contentAnnotation.element[0].play();
-                                if (promise) {
-                                    promise["catch"](function () { });
-                                }
+                this._setMediaCurrentTime(contentAnnotation.element[0], this._canvasClockTime - contentAnnotation.start + contentAnnotation.startOffset);
+                if (contentAnnotation.start <= this._canvasClockTime && contentAnnotation.end >= this._canvasClockTime) {
+                    if (this._isPlaying) {
+                        if (contentAnnotation.element[0].paused) {
+                            var promise = contentAnnotation.element[0].play();
+                            if (promise) {
+                                promise["catch"](function () { });
                             }
-                        }
-                        else {
-                            this._pauseMedia(contentAnnotation.element[0]);
                         }
                     }
                     else {
                         this._pauseMedia(contentAnnotation.element[0]);
                     }
-                    if (contentAnnotation.element[0].currentTime > contentAnnotation.element[0].duration - contentAnnotation.endOffset) {
-                        this._pauseMedia(contentAnnotation.element[0]);
-                    }
+                }
+                else {
+                    this._pauseMedia(contentAnnotation.element[0]);
+                }
+                if (contentAnnotation.element[0].currentTime > contentAnnotation.element[0].duration - contentAnnotation.endOffset) {
+                    this._pauseMedia(contentAnnotation.element[0]);
                 }
             }
             this.logMessage('SYNC MEDIA at: ' + this._canvasClockTime + ' seconds.');
@@ -1229,9 +1218,7 @@ var IIIFComponents;
             var contentAnnotation;
             for (var i = 0, l = this._contentAnnotations.length; i < l; i++) {
                 contentAnnotation = this._contentAnnotations[i];
-                var type = contentAnnotation.type.toString().toLowerCase();
-                if ((type === 'video' || type === 'audio') &&
-                    (contentAnnotation.start <= this._canvasClockTime && contentAnnotation.end >= this._canvasClockTime)) {
+                if ((contentAnnotation.start <= this._canvasClockTime && contentAnnotation.end >= this._canvasClockTime)) {
                     var correctTime = (this._canvasClockTime - contentAnnotation.start + contentAnnotation.startOffset);
                     var factualTime = contentAnnotation.element[0].currentTime;
                     // off by 0.2 seconds

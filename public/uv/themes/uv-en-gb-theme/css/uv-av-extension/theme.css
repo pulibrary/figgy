@@ -1947,7 +1947,7 @@ a.ui-button:active,
   }
 }
 .uv .centerPanel .iiif-av-component .controls-container .volume .volume-slider {
-  margin-top: 16px;
+  margin-top: 16px !important;
 }
 .uv.mobile .centerPanel .iiif-av-component .controls-container .volume {
   display: none;
