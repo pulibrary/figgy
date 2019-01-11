@@ -298,6 +298,7 @@ RSpec.describe METSDocument do
       subject(:mets_document) { described_class.new(mets_file) }
       let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0038-mp090-0894.mets") }
       it "can get the MODS metadata" do
+        stub_ezid(shoulder: "88435", blade: "ww72bb49w", location: "http://findingaids.princeton.edu/collections/AC111")
         expect(mets_document.attributes).not_to be_blank
         expect(mets_document.attributes[:title].first).to be_a TitleWithSubtitle
         expect(mets_document.attributes[:coverage_point].first).to be_a CoveragePoint

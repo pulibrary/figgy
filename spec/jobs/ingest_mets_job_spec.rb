@@ -84,6 +84,7 @@ RSpec.describe IngestMETSJob do
       let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0038-7350.mets") }
 
       it "defaults to copyright not evaluated" do
+        stub_ezid(shoulder: "88435", blade: "ww72bb49w", location: "http://findingaids.princeton.edu/collections/AC111")
         FactoryBot.create_for_repository(:collection, id: Valkyrie::ID.new("pudl0038"), slug: "pudl0038")
         described_class.perform_now(mets_file, user, true)
 
@@ -93,6 +94,9 @@ RSpec.describe IngestMETSJob do
     end
 
     describe "locations" do
+      before do
+        stub_ezid(shoulder: "88435", blade: "ww72bb49w", location: "http://findingaids.princeton.edu/collections/AC111")
+      end
       let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0038-7350.mets") }
 
       it "maps holding_simple_sublocation to controlled vocab term for holding_location" do
@@ -109,6 +113,14 @@ RSpec.describe IngestMETSJob do
 
         book = adapter.query_service.find_all_of_model(model: ScannedResource).first
         expect(book.location).to contain_exactly("Mudd, Box AD01, Item 7350")
+      end
+
+      it "puts collection_code into archival_collection_code" do
+        FactoryBot.create_for_repository(:collection, id: Valkyrie::ID.new("pudl0038"), slug: "pudl0038")
+        described_class.perform_now(mets_file, user, true)
+
+        book = adapter.query_service.find_all_of_model(model: ScannedResource).first
+        expect(book.archival_collection_code).to eq "AC111"
       end
     end
   end

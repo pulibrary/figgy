@@ -174,6 +174,16 @@ class METSDocument
       end
     end
 
+    # @return [String] the collection code if it was found, otherwise ""
+    def collection_code
+      return "" if finding_aid_identifier.empty?
+      @collection_code ||= begin
+        ark = Ark.new(finding_aid_identifier.first.identifier).ark
+        result = IdentifierService.get_ark_result ark: ark
+        result.rpartition("/").last
+      end
+    end
+
     def geographic_origin
       normalize_whitespace(value_from(xpath: "mods:originInfo/mods:place")).map(&:strip)
     end
@@ -192,11 +202,13 @@ class METSDocument
     end
 
     def finding_aid_identifier
-      identifiers = find_elements("mods:relatedItem[@type=\"host\"][./mods:location/mods:url[@note='Finding Aid']]")
-      identifiers.map do |identifier|
-        title = identifier.xpath("mods:titleInfo/mods:title", mods: MODS_XML_NAMESPACE).first.content
-        identifier = identifier.xpath("mods:location/mods:url", mods: MODS_XML_NAMESPACE).first.content
-        ArkWithTitle.new(title: title, identifier: identifier)
+      @finding_aid_identifiers ||= begin
+        identifiers = find_elements("mods:relatedItem[@type=\"host\"][./mods:location/mods:url[@note='Finding Aid']]")
+        identifiers.map do |identifier|
+          title = identifier.xpath("mods:titleInfo/mods:title", mods: MODS_XML_NAMESPACE).first.content
+          identifier = identifier.xpath("mods:location/mods:url", mods: MODS_XML_NAMESPACE).first.content
+          ArkWithTitle.new(title: title, identifier: identifier)
+        end
       end
     end
 
