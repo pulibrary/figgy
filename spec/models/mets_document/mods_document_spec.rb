@@ -298,4 +298,12 @@ RSpec.describe METSDocument::MODSDocument do
       expect(mods_document.shelf_locator).to contain_exactly "Mudd, Box AD01, Item 7350"
     end
   end
+
+  describe "#collection_code" do
+    before { stub_ezid(shoulder: "88435", blade: "ww72bb49w", location: "http://findingaids.princeton.edu/collections/AC111") }
+    let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0038-7350.mets") }
+    it "accesses the extracts the collection number from the ark" do
+      expect(mods_document.collection_code).to eq "AC111"
+    end
+  end
 end

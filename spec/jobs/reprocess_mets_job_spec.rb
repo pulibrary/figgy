@@ -5,6 +5,7 @@ RSpec.describe ReprocessMetsJob do
   context "when given a collection with objects that have METS files" do
     let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0038-7350.mets") }
     it "regenerates properties into those objects" do
+      stub_ezid(shoulder: "88435", blade: "ww72bb49w", location: "http://findingaids.princeton.edu/collections/AC111")
       file = IngestableFile.new(
         file_path: mets_file,
         mime_type: "application/xml; schema=mets",

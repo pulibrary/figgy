@@ -26,6 +26,7 @@ class SimpleResourceChangeSet < ChangeSet
   property :abstract, multiple: true, required: false, default: []
   property :alternative, multiple: true, required: false, default: []
   property :alternative_title, multiple: true, required: false, default: []
+  property :archival_collection_code, multiple: false, required: false
   property :bibliographic_citation, multiple: true, required: false, default: []
   property :contents, multiple: true, required: false, default: []
   property :extent, multiple: true, required: false, default: []

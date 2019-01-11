@@ -196,6 +196,7 @@ class METSDocument
       sort_title: mods.sort_title,
       alternative_title: mods.alternative_title,
       uniform_title: mods.uniform_title,
+      archival_collection_code: mods.collection_code,
       date_created: mods.date_created,
       date_issued: mods.date_issued,
       date_copyright: mods.date_copyright,

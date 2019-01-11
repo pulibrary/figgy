@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 class ScannedResourceDecorator < Valkyrie::ResourceDecorator
-  display Schema::Common.attributes, :rendered_ocr_language, :rendered_holding_location, :member_of_collections, :rendered_actors
+  display Schema::Common.attributes,
+          :rendered_ocr_language,
+          :rendered_holding_location,
+          :member_of_collections,
+          :rendered_actors,
+          :archival_collection_code
   suppress :thumbnail_id,
            :imported_author,
            :source_jsonld,
