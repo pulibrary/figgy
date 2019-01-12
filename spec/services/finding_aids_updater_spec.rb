@@ -67,7 +67,7 @@ describe FindingAidsUpdater do
     allow(Rails).to receive(:logger).and_return(logger)
     allow(success).to receive(:success?).and_return(true)
     allow(Open3).to receive(:capture2)
-      .with("svn diff --summarize -r {#{Time.zone.yesterday.to_formatted_s(:iso8601)}}:HEAD --username tester --password testing http://example.com/svn/pulfa/trunk/eads")
+      .with("svn --username tester --password testing diff --summarize -r {#{Time.zone.yesterday.to_formatted_s(:iso8601)}}:HEAD http://example.com/svn/pulfa/trunk/eads")
       .and_return([svn_fixture, success])
   end
 
