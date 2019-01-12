@@ -76,7 +76,7 @@ RSpec.describe Types::QueryType do
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
         scanned_resource2 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "8543429")
         type = described_class.new(nil, context)
-        expect(type.resources_by_bibids(bib_ids: ["7214786", "8543429"]).map(&:id)).to eq [scanned_resource.id, scanned_resource2.id]
+        expect(type.resources_by_bibids(bib_ids: ["7214786", "8543429"]).map(&:id)).to contain_exactly(scanned_resource.id, scanned_resource2.id)
       end
     end
     context "when the user can't read the resource" do
