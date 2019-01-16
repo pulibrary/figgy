@@ -153,7 +153,10 @@ Rails.application.config.to_prepare do
     max_connections: database_configuration["pool"],
     pool_timeout: database_configuration["timeout"],
     adapter: :postgres
-  )
+  ).tap do |conn|
+    conn.extension(:connection_validator)
+    conn.pool.connection_validation_timeout = -1
+  end
   # Registers a metadata adapter for storing resource metadata into PostgreSQL as JSON
   # (see Valkyrie::Persistence::Postgres::MetadataAdapter)
   Valkyrie::MetadataAdapter.register(
