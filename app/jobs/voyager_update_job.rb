@@ -9,10 +9,9 @@ class VoyagerUpdateJob < ApplicationJob
     change_set_persister.buffer_into_index do |buffered_change_set_persister|
       ids.each do |id|
         begin
-          results = query_service.custom_queries.find_by_string_property(property: "source_metadata_identifier", value: id).to_a
-          next if results.empty?
+          resource = query_service.find_by(id: id)
+          next if resource.blank?
 
-          resource = results.first
           change_set = DynamicChangeSet.new(resource)
           next unless change_set.respond_to?(:apply_remote_metadata?) && change_set.respond_to?(:source_metadata_identifier)
 
