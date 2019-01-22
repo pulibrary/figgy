@@ -110,7 +110,7 @@ class ScannedResourcesController < BaseResourceController
       if change_set_class.eql? RecordingChangeSet
         "music"
       else
-        "studio_new"
+        Figgy.config["default_search_directory"]
       end
     end
 end

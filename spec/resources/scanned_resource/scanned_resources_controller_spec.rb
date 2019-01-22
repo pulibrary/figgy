@@ -340,7 +340,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
       output = JSON.parse(response.body, symbolize_keys: true)
 
       expect(output["exists"]).to eq true
-      expect(output["location"]).to eq "DPUL/Santa/ready/123456"
+      expect(output["location"]).to eq "Santa/ready/123456"
       expect(output["file_count"]).to eq 2
     end
     it "returns JSON for when it's a MVW" do
@@ -349,7 +349,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
       output = JSON.parse(response.body, symbolize_keys: true)
 
       expect(output["exists"]).to eq true
-      expect(output["location"]).to eq "DPUL/Santa/ready/4609321"
+      expect(output["location"]).to eq "Santa/ready/4609321"
       expect(output["file_count"]).to eq 0
       expect(output["volume_count"]).to eq 2
     end
