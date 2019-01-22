@@ -19,7 +19,7 @@ describe IngestFolderLocator do
   end
 
   describe "#root_path" do
-    let(:root_path) { Pathname.new(upload_path_value).join("studio_new") }
+    let(:root_path) { Pathname.new(upload_path_value).join("studio_new/DPUL") }
     it "generates the root path from the upload directory" do
       expect(locator.root_path).to eq root_path
     end
@@ -34,7 +34,7 @@ describe IngestFolderLocator do
   describe "#location" do
     it "retrieves relative root" do
       expect(locator.location).to be_a Pathname
-      expect(locator.location.to_s).to eq "DPUL/Santa/ready/123456"
+      expect(locator.location.to_s).to eq "Santa/ready/123456"
     end
   end
 
@@ -71,7 +71,7 @@ describe IngestFolderLocator do
     subject(:hsh) { locator.to_h }
     it "generates a hash with the relevant values" do
       expect(hsh[:exists]).to be true
-      expect(hsh[:location].to_s).to eq("DPUL/Santa/ready/123456")
+      expect(hsh[:location].to_s).to eq("Santa/ready/123456")
       expect(hsh[:file_count]).to eq(2)
       expect(hsh[:volume_count]).to eq(0)
     end
