@@ -27,8 +27,8 @@ class RecordingChangeSet < ChangeSet
 
   def primary_terms
     [
-      :title,
       :source_metadata_identifier,
+      :title,
       :rights_statement,
       :member_of_collection_ids,
       :local_identifier,
