@@ -21,7 +21,7 @@ class CoinWayfinder < BaseWayfinder
 
     def accessions
       query_service.custom_queries
-                   .find_by_numeric_property(property: :accession_number, value: accession_number)
+                   .find_by_property(property: :accession_number, value: accession_number)
                    .select { |o| o.is_a?(NumismaticAccession) }
     end
 
