@@ -93,6 +93,8 @@ RSpec.describe ScannedResourcesController, type: :controller do
         resource = find_resource(id)
 
         expect(resource.member_ids.length).to eq 2
+        members = query_service.find_members(resource: resource)
+        expect(members.flat_map(&:title)).to eq ["1", "2"]
       end
 
       it "can create and import a MVW" do
