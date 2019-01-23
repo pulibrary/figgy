@@ -4,22 +4,24 @@
       <h2 class="panel-title">Authorized Link</h2>
     </div>
     <div class="row panel-body">
-        <div class="col-sm-9">
-	  <%= build_authorized_link %>
-        </div>
-        <div class="col-sm-3">
-	  <% if can?(:edit, resource) %>
-	    <%= simple_form_for @change_set do |f| %>
-	      <%= f.input :mint_auth_token, as: :hidden, input_html: { value: "1" } %>
-	      <%= f.submit "Regenerate", class: ["submit", "btn", "btn-warning"] %>
-	    <% end %>
-	  <% end %>
-        </div>
+      <div class="col-sm-9">
+        <%= build_authorized_link %>
+      </div>
+      <div class="col-sm-3">
+        <% if can?(:edit, resource) %>
+          <%= simple_form_for @change_set do |f| %>
+            <%= f.input :mint_auth_token, as: :hidden, input_html: { value: "1" } %>
+            <%= f.submit "Regenerate",
+              class: ["submit", "btn", "btn-warning"],
+              data: { confirm: "Are you sure you want to deactivate the existing Authorized Link and create a new one?" } %>
+          <% end %>
+        <% end %>
+      </div>
     </div>
     <% if can?(:edit, resource) %>
       <div class="row panel-body">
         <div class="col-sm-6 summary">
-	  <p>Authorized links provide anonymous, public users with the ability to view playlists and play tracks.  Each link is unique, and one may generate only a single link for any given playlist.  Regeneration replaces the current link, rendering any previous links invalid.</p>
+          <p>Authorized links provide anonymous, public users with the ability to view playlists and play tracks.  Each link is unique, and one may generate only a single link for any given playlist.  Regeneration replaces the current link, rendering any previous links invalid.</p>
         </div>
       </div>
     <% end %>
