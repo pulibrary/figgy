@@ -55,7 +55,7 @@ module VoyagerUpdater
       # @param event_id [String] the ID for the Voyager update event
       # @return [Array<ProcessedEvent>]
       def processed_events(event_id:)
-        query_service.custom_queries.find_by_string_property(property: "event_id", value: event_id).to_a
+        query_service.custom_queries.find_by_property(property: "event_id", value: event_id).to_a
       end
 
       # Retrieves the query service from the metadata adapter

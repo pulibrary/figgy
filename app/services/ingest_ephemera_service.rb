@@ -35,7 +35,7 @@ class IngestEphemeraService
   end
 
   def project_resource
-    @project_resource ||= query_service.custom_queries.find_by_string_property(property: :title, value: project).first
+    @project_resource ||= query_service.custom_queries.find_by_property(property: :title, value: project).first
   end
 
   def find_box(id)

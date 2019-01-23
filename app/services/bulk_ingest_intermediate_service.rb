@@ -38,7 +38,7 @@ class BulkIngestIntermediateService
     # @return [Valkyrie::Resource]
     # @raise [Valkyrie::Persistence::ObjectNotFoundError]
     def find_resource(value)
-      results = metadata_adapter.query_service.custom_queries.find_by_string_property(property: @property, value: value)
+      results = metadata_adapter.query_service.custom_queries.find_by_property(property: @property, value: value)
       resources = results.to_a
       raise Valkyrie::Persistence::ObjectNotFoundError if resources.empty?
       resources.first

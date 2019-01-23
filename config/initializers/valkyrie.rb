@@ -277,8 +277,7 @@ Rails.application.config.to_prepare do
   # (see Valkyrie::Persistence::CustomQueryContainer)
   [
     FindByLocalIdentifier,
-    FindByNumericProperty,
-    FindByStringProperty,
+    FindByProperty,
     FindManyByStringProperty,
     FindEphemeraTermByLabel,
     FindEphemeraVocabularyByLabel,

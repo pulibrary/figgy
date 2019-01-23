@@ -10,7 +10,7 @@ class UniqueArchivalMediaComponentIdValidator < ActiveModel::Validator
   private
 
     def find_duplicates(record)
-      query_service.custom_queries.find_by_string_property(
+      query_service.custom_queries.find_by_property(
         property: :source_metadata_identifier,
         value: record.source_metadata_identifier
       ).select do |resource|

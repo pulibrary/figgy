@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-class FindByStringProperty
+class FindByProperty
   def self.queries
-    [:find_by_string_property]
+    [:find_by_property]
   end
 
   attr_reader :query_service
@@ -12,9 +12,9 @@ class FindByStringProperty
     @query_service = query_service
   end
 
-  def find_by_string_property(property:, value:)
-    internal_array = "{\"#{property}\": [\"#{value}\"]}"
-    run_query(query, internal_array)
+  def find_by_property(property:, value:)
+    internal_array = { property => Array.wrap(value) }
+    run_query(query, internal_array.to_json)
   end
 
   def query

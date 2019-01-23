@@ -25,7 +25,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
     def find_or_create_amc(component_id)
       existing_amc = metadata_adapter.query_service.custom_queries
-                                     .find_by_string_property(property: :source_metadata_identifier, value: component_id)
+                                     .find_by_property(property: :source_metadata_identifier, value: component_id)
                                      .select { |r| r.is_a? ArchivalMediaCollection }.first
       return existing_amc unless existing_amc.nil?
       change_set = DynamicChangeSet.new(ArchivalMediaCollection.new)
@@ -201,7 +201,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
         # @param component_id [String]
         # @return [MediaResourceChangeSet]
         def find_or_create_media_resource(component_id)
-          results = query_service.custom_queries.find_by_string_property(property: :source_metadata_identifier, value: component_id)
+          results = component_id.nil? ? [] : query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: component_id)
           media_resource = results.size.zero? ? MediaResource.new : results.first
           MediaResourceChangeSet.new(
             media_resource,

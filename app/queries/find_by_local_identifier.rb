@@ -12,13 +12,13 @@ class FindByLocalIdentifier
   end
 
   def find_by_local_identifier(local_identifier:)
-    string_property_query.find_by_string_property(
+    property_query.find_by_property(
       property: :local_identifier,
       value: local_identifier
     )
   end
 
-  def string_property_query
-    @string_property_query ||= FindByStringProperty.new(query_service: query_service)
+  def property_query
+    @property_query ||= FindByProperty.new(query_service: query_service)
   end
 end
