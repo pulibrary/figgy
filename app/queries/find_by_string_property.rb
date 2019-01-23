@@ -13,8 +13,8 @@ class FindByStringProperty
   end
 
   def find_by_string_property(property:, value:)
-    internal_array = "{\"#{property}\": [\"#{value}\"]}"
-    run_query(query, internal_array)
+    internal_array = { property => Array.wrap(value) }
+    run_query(query, internal_array.to_json)
   end
 
   def query
