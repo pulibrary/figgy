@@ -13,7 +13,7 @@ class UniqueSlugValidator < ActiveModel::Validator
 
     def find_duplicates(record)
       slug = Array.wrap(record.slug).first
-      query_service.custom_queries.find_by_string_property(property: :slug, value: slug).select { |r| r.id != record.id }
+      query_service.custom_queries.find_by_property(property: :slug, value: slug).select { |r| r.id != record.id }
     end
 
     def query_service

@@ -44,7 +44,7 @@ module VoyagerUpdater
       # @param bib_id [String]
       # @return [Resource, nil]
       def resource(bib_id)
-        results = query_service.custom_queries.find_by_string_property(property: "source_metadata_identifier", value: bib_id).to_a
+        results = query_service.custom_queries.find_by_property(property: "source_metadata_identifier", value: bib_id).to_a
         return if results.empty?
         results.first
       end

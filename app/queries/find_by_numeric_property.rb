@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class FindByNumericProperty < FindByStringProperty
+class FindByNumericProperty < FindByProperty
   def self.queries
     [:find_by_numeric_property]
   end

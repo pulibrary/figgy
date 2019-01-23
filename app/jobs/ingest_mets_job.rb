@@ -112,7 +112,7 @@ class IngestMETSJob < ApplicationJob
     # @return [Valkyrie::ID]
     # @raise [IngestMETSJob::CollectionNotFoundError] if the collection is not found
     def slug_to_id(slug)
-      existing_collections = query_service.custom_queries.find_by_string_property(property: :slug, value: slug)
+      existing_collections = query_service.custom_queries.find_by_property(property: :slug, value: slug)
       raise CollectionNotFoundError, "No collection exists with slug #{slug}; please create one and allow this job to retry" if existing_collections.to_a.empty?
       existing_collections.first.id
     end

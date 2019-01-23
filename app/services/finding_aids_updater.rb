@@ -9,7 +9,7 @@ class FindingAidsUpdater
   def yesterday
     yesterdays_date = Time.zone.yesterday
     SvnParser.new.updated_collection_codes(yesterdays_date).each do |code|
-      resources = query_service.custom_queries.find_by_string_property(property: :archival_collection_code, value: code)
+      resources = query_service.custom_queries.find_by_property(property: :archival_collection_code, value: code)
       # there might be multiple resources with the same collection code
       resources.each do |resource|
         logger.info "Refreshing pulfa metadata for #{resource.id}, #{resource.source_metadata_identifier}"

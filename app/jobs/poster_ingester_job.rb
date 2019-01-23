@@ -13,7 +13,7 @@ class PosterIngesterJob < ApplicationJob
   end
 
   def find_project(label:)
-    metadata_adapter.query_service.custom_queries.find_by_string_property(property: :title, value: label).first
+    metadata_adapter.query_service.custom_queries.find_by_property(property: :title, value: label).first
   end
 
   def metadata_adapter

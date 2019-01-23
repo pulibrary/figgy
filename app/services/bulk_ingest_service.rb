@@ -95,9 +95,9 @@ class BulkIngestService
     end
 
     # Accesses the query service for finding repository resources using a metadata property
-    # @return [FindByStringProperty] the query service
+    # @return [FindByProperty] the query service
     def property_query_service
-      @query_service ||= FindByStringProperty.new(query_service: query_service)
+      @query_service ||= FindByProperty.new(query_service: query_service)
     end
 
     # Create a new repository resource
@@ -122,7 +122,7 @@ class BulkIngestService
       results = if property.to_sym == :id
                   [query_service.find_by(id: Valkyrie::ID.new(value.to_s))]
                 else
-                  property_query_service.find_by_string_property(property: property, value: value).to_a
+                  property_query_service.find_by_property(property: property, value: value).to_a
                 end
       raise "Failed to find the resource for #{property}:#{value}" if results.empty?
       results.first
