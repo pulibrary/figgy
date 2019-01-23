@@ -169,9 +169,16 @@ module ApplicationHelper
     polymorphic_path(*path_args)
   end
 
+  # Generate the url for the IIIF manifest generated for resources
+  # @param [Resource]
+  # @return [String]
+  def manifest_url(resource)
+    "#{request.base_url}#{manifest_path(resource)}"
+  end
+
   # Generate the path for the Universal Viewer iframe @src attribute
   # @return [String]
   def universal_viewer_path(resource)
-    "/uv/uv#?manifest=#{request.base_url}#{manifest_path(resource)}"
+    "/uv/uv#?manifest=#{manifest_url(resource)}"
   end
 end

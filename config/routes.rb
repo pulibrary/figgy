@@ -92,7 +92,11 @@ Rails.application.routes.draw do
         get "save_and_ingest/:id", action: :save_and_ingest, constraints: { id: /[^\/]+/ }, defaults: { format: :json }
       end
     end
-    resources :media_resources
+    resources :media_resources do
+      member do
+        get :manifest, defaults: { format: :json }
+      end
+    end
     resources :proxy_file_sets
 
     resources :playlists do
@@ -242,9 +246,9 @@ Rails.application.routes.draw do
     end
   end
   get "/iiif/collections", defaults: { format: :json }, to: "collections#index_manifest", as: :index_manifest
+  get "collections/:id/ark_report", to: "collections#ark_report", as: :collections_ark_report
 
   resources :archival_media_collections
-  get "archival_media_collections/:id/ark_report", to: "archival_media_collections#ark_report", as: :archival_media_collections_ark_report
 
   get "/catalog/parent/:parent_id/:id", to: "catalog#show", as: :parent_solr_document
   get "/iiif/lookup/:prefix/:naan/:arkid", to: "catalog#lookup_manifest", as: :lookup_manifest

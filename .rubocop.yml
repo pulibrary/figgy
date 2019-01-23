@@ -141,6 +141,7 @@ Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
     - 'app/controllers/concerns/resource_controller.rb'
+    - 'app/helpers/application_helper.rb'
 Metrics/ParameterLists:
   Exclude:
     - 'app/change_set_persisters/change_set_persister.rb'
