@@ -79,6 +79,7 @@ class ScannedResourcesController < BaseResourceController
     redirect_to download_path(redirect_path_args)
   end
 
+  # API endpoint for asking where a folder to save and ingest from is located.
   def save_and_ingest
     authorize! :create, resource_class
     respond_to do |f|
