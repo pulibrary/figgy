@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class EphemeraFolderChangeSetBase < ChangeSet
   apply_workflow(FolderWorkflow)
-  validate :date_range_validity
   validate :subject_present
   validates_with StateValidator
   validates_with RightsStatementValidator
@@ -9,6 +8,7 @@ class EphemeraFolderChangeSetBase < ChangeSet
   validates_with CollectionValidator
 
   include VisibilityProperty
+  include DateRangeProperty
   property :title, multiple: false, required: true
   property :sort_title, required: false
   property :alternative_title, multiple: true, required: false
@@ -47,24 +47,7 @@ class EphemeraFolderChangeSetBase < ChangeSet
   property :pdf_type, multiple: false, required: false
   property :local_identifier, multiple: false, required: false
 
-  property :date_range, multiple: false, required: false
-  property :date_range_form_attributes, virtual: true
   delegate :human_readable_type, to: :model
-
-  def date_range_form_attributes=(attributes)
-    return unless date_range_form.validate(attributes)
-    date_range_form.sync
-    self.date_range = date_range_form.model
-  end
-
-  def date_range_validity
-    return if date_range_form.valid?
-    errors.add(:date_range_form, "is not valid.")
-  end
-
-  def date_range_form
-    @date_range_form ||= DynamicChangeSet.new(date_range_value || DateRange.new).tap(&:prepopulate!)
-  end
 
   def primary_terms
     [
@@ -143,10 +126,6 @@ class EphemeraFolderChangeSetBase < ChangeSet
       else
         value
       end
-    end
-
-    def date_range_value
-      Array.wrap(date_range).first
     end
 
     def subject_present
