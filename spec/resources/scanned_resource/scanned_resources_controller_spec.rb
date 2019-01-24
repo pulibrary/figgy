@@ -93,6 +93,8 @@ RSpec.describe ScannedResourcesController, type: :controller do
         resource = find_resource(id)
 
         expect(resource.member_ids.length).to eq 2
+        members = query_service.find_members(resource: resource)
+        expect(members.flat_map(&:title)).to eq ["1", "2"]
       end
 
       it "can create and import a MVW" do
@@ -135,6 +137,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
           expect(resource.member_ids.length).to eq 1
           file_set = find_resource(resource.member_ids.first)
           expect(file_set.file_metadata.length).to eq 2
+          expect(file_set.title).to eq ["1791261_0701.wav"]
           expect(file_set.original_file).not_to be nil
           expect(file_set.original_file.label).to eq ["1791261_0701.wav"]
           expect(file_set.original_file.mime_type).to eq ["audio/x-wav"]

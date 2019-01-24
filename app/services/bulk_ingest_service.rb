@@ -159,22 +159,42 @@ class BulkIngestService
       file_paths.reject! { |x| x.basename.to_s.start_with?(".") }
       file_paths.reject! { |x| blacklisted_file_names.include?(x.basename.to_s) }
 
-      nodes = []
-      file_paths.sort.each_with_index do |f, idx|
-        basename = File.basename(f)
-        mime_types = MIME::Types.type_for(basename)
-        mime_type = mime_types.first
-        nodes << IngestableFile.new(
-          file_path: f,
-          mime_type: mime_type.content_type,
-          original_filename: basename,
-          copyable: true,
-          container_attributes: {
-            title: (idx + 1).to_s
-          }
-        )
+      BulkFilePathConverter.new(file_paths: file_paths).to_a
+    end
+
+    class BulkFilePathConverter
+      attr_reader :file_paths
+      def initialize(file_paths:)
+        @file_paths = file_paths.sort
       end
-      nodes
+
+      def to_a
+        nodes = []
+        file_paths.each_with_index do |f, idx|
+          basename = File.basename(f)
+          mime_types = MIME::Types.type_for(basename)
+          mime_type = mime_types.first
+          title = if preserved_file_name_mime_types.include?(mime_type.content_type)
+                    basename
+                  else
+                    (idx + 1).to_s
+                  end
+          nodes << IngestableFile.new(
+            file_path: f,
+            mime_type: mime_type.content_type,
+            original_filename: basename,
+            copyable: true,
+            container_attributes: {
+              title: title
+            }
+          )
+        end
+        nodes
+      end
+
+      def preserved_file_name_mime_types
+        ["audio/x-wav"]
+      end
     end
 
     def blacklisted_file_names
