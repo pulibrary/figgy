@@ -5,6 +5,7 @@ class DateRangeChangeSet < ChangeSet
   validate :start_and_end_set
   property :start, multiple: false, required: false
   property :end, multiple: false, required: false
+  property :approximate, multiple: false, required: false, type: Valkyrie::Types::Bool
 
   def start_before_end
     return if start.blank? && self.end.blank?

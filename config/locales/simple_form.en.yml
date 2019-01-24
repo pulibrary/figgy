@@ -47,8 +47,9 @@ en:
         member_of_collection_ids: "Collections"
         favorite_term_ids: "Favorite Terms"
         ocr_language: "OCR Language"
-        start: "Date start"
-        end: "Date end"
+        start: "Date range start"
+        end: "Date range end"
+        approximate: "Date range is approximate"
       numismatic_accession:
         items_number: "Number of items"
       numismatic_issue:
