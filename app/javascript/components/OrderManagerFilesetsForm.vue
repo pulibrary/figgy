@@ -101,8 +101,8 @@ export default {
       labelerOpts: {
         start: '1',
         method: 'paginate',
-        frontLabel: '',
-        backLabel: '',
+        frontLabel: 'r. ',
+        backLabel: 'v. ',
         startWith: 'front',
         unitLabel: 'p. ',
         bracket: false
