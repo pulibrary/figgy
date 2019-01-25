@@ -147,11 +147,12 @@ module ApplicationHelper
     "col-xs-12"
   end
 
-  # Renders a span tag based on resource visibility value
+  # Renders a span tag based on resource visibility value and workflow state
   # @param [String] visibility value
+  # @param [Boolean] whether the workflow state is publicly readable
   # @return [String]
-  def visibility_badge(value)
-    PermissionBadge.new(value).render
+  def visibility_badge(value, public_readable_state = nil)
+    PermissionBadge.new(value, public_readable_state).render
   end
 
   # Retrieve the authorization token from the request parameters

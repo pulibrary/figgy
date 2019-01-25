@@ -34,6 +34,19 @@ en:
       note_html: Only privileged users of this application can see the work.
       warning_html: ''
       class: "label-danger"
+  computed_visibility:
+    public:
+      class: "alert-success"
+      note_html: "This item will sync to the Catalog, DPUL, Maps Portal, and/or LAE."
+    suppressed_visibility:
+      class: "alert-warning"
+      note_html: "This item will not sync to the Catalog, DPUL, Maps Portal, or LAE due to the visiblity setting."
+    suppressed_workflow:
+      class: "alert-warning"
+      note_html: "This item will not sync to the Catalog, DPUL, Maps Portal, or LAE due to the workflow status."
+    suppressed_both:
+      class: "alert-warning"
+      note_html: "This item will not sync to the Catalog, DPUL, Maps Portal, or LAE due to the visibility setting and workflow status."
   base:
     form_progress:
       requirements: 'Requirements'

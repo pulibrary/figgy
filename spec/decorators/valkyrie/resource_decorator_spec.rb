@@ -201,4 +201,55 @@ RSpec.describe Valkyrie::ResourceDecorator do
       end
     end
   end
+
+  describe "#manages_state?" do
+    context "scanned resources" do
+      it "do manage state" do
+        expect(decorator.manages_state?).to be true
+      end
+    end
+
+    context "ephemera terms" do
+      let(:resource) { FactoryBot.build(:ephemera_term) }
+
+      it "do not manage state" do
+        expect(decorator.manages_state?).to be false
+      end
+    end
+  end
+
+  describe "#visibility" do
+    context "complete open resource" do
+      let(:resource) { FactoryBot.build(:complete_scanned_resource) }
+
+      it "has a public notice" do
+        expect(decorator.visibility.first).to have_selector("div.alert-success", text: "This item will sync to the Catalog, DPUL, Maps Portal, and/or LAE.")
+      end
+    end
+
+    context "pending open resource" do
+      let(:resource) { FactoryBot.build(:pending_scanned_resource) }
+
+      it "has a warning about the workflow" do
+        expect(decorator.visibility.first).to have_selector("div.alert-warning", text: "This item will not sync to the Catalog, DPUL, Maps Portal, or LAE due to the workflow status.")
+      end
+    end
+
+    context "complete private resource" do
+      let(:resource) { FactoryBot.build(:complete_scanned_resource, visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE) }
+
+      it "has a warning about the workflow" do
+        expect(decorator.visibility.first).to have_selector("div.alert-warning", text: "This item will not sync to the Catalog, DPUL, Maps Portal, or LAE due to the visiblity setting.")
+      end
+    end
+
+    context "pending private resource" do
+      let(:resource) { FactoryBot.build(:pending_scanned_resource, visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE) }
+
+      it "has a warning about the visibility and workflow" do
+        note = "This item will not sync to the Catalog, DPUL, Maps Portal, or LAE due to the visibility setting and workflow status."
+        expect(decorator.visibility.first).to have_selector("div.alert-warning", text: note)
+      end
+    end
+  end
 end

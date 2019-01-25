@@ -5,17 +5,44 @@ class PermissionBadge
 
   # Constructor
   # @param visibility [String] the current visibility
-  def initialize(visibility)
+  def initialize(visibility, public_readable_state = nil)
     @visibility = visibility
+    @public_readable_state = public_readable_state
   end
 
-  # Draws a span tag with styles for a bootstrap label
+  # Draws div tags with bootstrap labels representing the items visibility
   # @return [String] the span markup
   def render
-    content_tag(:div, children, class: "label #{label_class}")
+    content_tag(:div, children, class: "label #{label_class}") + computed_visibility_notice
   end
 
   private
+
+    # Draw a notice representing the computed visibility status
+    def computed_visibility_notice
+      return if @public_readable_state.nil?
+      content_tag(:div, computed_visibility_note, class: "alert alert-inline #{computed_visibility_class}")
+    end
+
+    # Generate a note of the final visibility, including both the visibility property and workflow state
+    def computed_visibility
+      return "public" if @visibility == "open" && @public_readable_state
+      return "suppressed_both" if @visibility != "open" && !@public_readable_state
+      return "suppressed_visibility" if @visibility != "open"
+      "suppressed_workflow"
+    end
+
+    # Retrieve the text description for the computed visibility
+    # @return [String] the html text
+    def computed_visibility_note
+      I18n.t("computed_visibility.#{computed_visibility}.note_html")
+    end
+
+    # Retrieve the class for the badge elements
+    # @return [String] the class name
+    def computed_visibility_class
+      I18n.t("computed_visibility.#{computed_visibility}.class")
+    end
 
     # Retrieve the class for the badge elements
     # @return [String] the class name
