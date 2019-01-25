@@ -104,6 +104,7 @@ class ManifestBuilder
     end
 
     def audio_ranges
+      return default_audio_ranges if logical_structure.blank? || logical_structure.flat_map(&:nodes).blank?
       logical_structure.flat_map do |top_structure|
         top_structure.nodes.map do |node|
           if node.proxy.present?
@@ -117,6 +118,20 @@ class ManifestBuilder
             TopStructure.new(node)
           end
         end
+      end
+    end
+
+    def default_audio_ranges
+      file_set_presenters.map do |file_set|
+        TopStructure.new(
+          Structure.new(
+            label: file_set&.display_content&.label,
+            nodes: StructureNode.new(
+              label: file_set&.display_content&.label,
+              proxy: file_set.id
+            )
+          )
+        )
       end
     end
 

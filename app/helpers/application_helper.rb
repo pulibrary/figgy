@@ -180,6 +180,6 @@ module ApplicationHelper
   # Generate the path for the Universal Viewer iframe @src attribute
   # @return [String]
   def universal_viewer_path(resource)
-    "/uv/uv#?manifest=#{manifest_url(resource)}"
+    "/uv/uv#?manifest=#{manifest_url(resource)}&config=#{root_url}/uv/uv_config.json"
   end
 end

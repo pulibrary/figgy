@@ -561,13 +561,17 @@ RSpec.describe ManifestBuilder do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_resource.id)) }
     let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file]) }
     let(:file) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "") }
+    let(:logical_structure) { nil }
     before do
       stub_bibdata(bib_id: "123456")
-      output = change_set_persister.save(change_set: change_set)
-      output.logical_structure = [{ label: "Logical", nodes: [{ proxy: output.member_ids.last }, { label: "Bla", nodes: [{ proxy: output.member_ids.first }] }] }]
-      change_set_persister.persister.save(resource: output)
     end
     it "builds a presentation 3 manifest", run_real_characterization: true do
+      output = change_set_persister.save(change_set: change_set)
+      output.logical_structure = [
+        { label: "Logical", nodes: [{ proxy: output.member_ids.last }, { label: "Bla", nodes: [{ proxy: output.member_ids.first }] }] }
+      ]
+
+      change_set_persister.persister.save(resource: output)
       output = manifest_builder.build
       # pres 3 context is always an array
       expect(output["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
@@ -576,6 +580,16 @@ RSpec.describe ManifestBuilder do
       expect(output["structures"][1]["items"][0]["items"][0]["id"]).to include "#t="
       expect(output["behavior"]).to eq ["auto-advance"]
       expect(output["service"][0]).to eq ({ "@context" => "http://universalviewer.io/context.json", "profile" => "http://universalviewer.io/ui-extensions-profile", "disableUI" => ["mediaDownload"] })
+    end
+    context "with no logical structure", run_real_characterization: true do
+      let(:logical_structure) { nil }
+      it "builds a presentation 3 manifest with a default table of contents" do
+        change_set_persister.save(change_set: change_set)
+        output = manifest_builder.build
+        # A default table of contents should display
+        expect(output["structures"][0]["items"][0]["id"]).to include "#t="
+        expect(output["structures"][0]["label"]["@none"]).to eq ["32101047382401_1_pm.wav"]
+      end
     end
   end
 
