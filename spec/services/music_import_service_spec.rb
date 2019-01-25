@@ -112,6 +112,18 @@ RSpec.describe MusicImportService do
           selection_alt_title: nil,
           selection_note: "Paul Jacobs, piano",
           recording_id: 14
+        ),
+        MusicImportService::RecordingCollector::AudioFile.new(
+          id: 54_205,
+          selection_id: 15_929,
+          file_path: "cd-1",
+          file_name: "cd-1_1.ra",
+          file_note: "Second File",
+          entry_id: "blabla2",
+          selection_title: "My Selection",
+          selection_alt_title: nil,
+          selection_note: "Paul Jacobs, piano",
+          recording_id: 14
         )
       ]
       selections = [
@@ -129,7 +141,7 @@ RSpec.describe MusicImportService do
       expect(output.part_of).to eq ["mus204", "mus549sb"]
       members = Wayfinder.for(output).members
 
-      expect(members.length).to eq 1
+      expect(members.length).to eq 2
       expect(members.first.title).to eq ["First File"]
       expect(members.first.original_file.original_filename).to eq ["cd-1_1.wav"]
       expect(members.first.local_identifier).to eq ["54204", "blabla"]
@@ -137,7 +149,7 @@ RSpec.describe MusicImportService do
       playlists = Wayfinder.for(output).playlists
 
       expect(playlists.length).to eq 1
-      expect(playlists.first.member_ids.length).to eq 1
+      expect(playlists.first.member_ids.length).to eq 2
       expect(playlists.first.title).to eq ["My Selection"]
       expect(playlists.first.part_of).to eq ["mus204"]
     end
@@ -211,8 +223,8 @@ RSpec.describe MusicImportService do
         expect(members.first.original_file.original_filename).to eq ["cd-1_1.wav"]
 
         playlists = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_all_of_model(model: Playlist)
-        expect(playlists.length).to eq 2
-        expect(playlists.flat_map(&:title)).to contain_exactly "Week 1", "My Selection"
+        expect(playlists.length).to eq 1
+        expect(playlists.flat_map(&:title)).to contain_exactly "Week 1"
         playlist = playlists.find { |x| x.title.first == "Week 1" }
         members = Wayfinder.for(playlist).members
         expect(members.first.label).to eq ["First File"]

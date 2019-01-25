@@ -180,7 +180,7 @@ class MusicImportService
         output = buffered_change_set_persister.save(change_set: change_set)
         members = Wayfinder.for(output).members
         audio_files.group_by(&:selection_id).each do |selection_id, selection_files|
-          next if selection_files.empty?
+          next if selection_files.empty? || selection_files.length < 2
           file_set_members = members.select do |member|
             selection_files.map(&:id).map(&:to_s).include?(member.local_identifier.first)
           end
