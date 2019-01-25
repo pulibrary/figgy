@@ -118,7 +118,7 @@ class MusicImportService
     end
 
     def find_recording
-      change_set_persister.query_service.custom_queries.find_by_string_property(property: :local_identifier, value: recording.id.to_s).find do |x|
+      change_set_persister.query_service.custom_queries.find_by_property(property: :local_identifier, value: recording.id.to_s).find do |x|
         DynamicChangeSet.new(x).is_a?(RecordingChangeSet)
       end
     end
@@ -162,7 +162,7 @@ class MusicImportService
           # Find previously imported dependent file sets
           file_set_ids = selection_files.map do |file|
             {
-              buffered_change_set_persister.query_service.custom_queries.find_by_string_property(property: :local_identifier, value: file.entry_id.to_s).first&.id => file.id
+              buffered_change_set_persister.query_service.custom_queries.find_by_property(property: :local_identifier, value: file.entry_id.to_s).first&.id => file.id
             }
           end.inject(&:merge).compact
           change_set = DynamicChangeSet.new(playlist).prepopulate!
