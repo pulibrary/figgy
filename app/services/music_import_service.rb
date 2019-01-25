@@ -134,8 +134,17 @@ class MusicImportService
       )
     end
 
+    # "Fake" playlists are Recordings which contain duplicated AudioFiles for
+    # the purpose of providing week-by-week playlists from multiple recordings
+    # in the old system, which wasn't possible, but is now.
     def ingest_fake_playlist
       logger.info "Detected that recording #{recording.id} is a fake playlist. Ingesting it appropriately."
+      # Sometimes an audio file for a fake playlist is also in another fake
+      # playlist (in addition to the real recording), so the system sees it as a
+      # "dependent." If it tries to ingest that second fake playlist it'll get
+      # into an infinite loop of trying to import fake playlists. So, just skip
+      # the second fake playlist-as-dependent, and ingest it on its own if it's
+      # part of a course.
       if processing_dependents
         logger.info "Refusing to ingest #{recording.id} while ingesting another fake playlist."
         return
