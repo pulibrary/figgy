@@ -82,15 +82,15 @@ class MusicImportService
   end
 
   class Importer
-    attr_reader :recording_collector, :recording, :file_root, :logger, :nested
+    attr_reader :recording_collector, :recording, :file_root, :logger, :processing_dependents
     delegate :id, to: :recording, prefix: true
-    def initialize(recording_collector:, recording:, file_root:, logger:, change_set_persister: nil, nested: false)
+    def initialize(recording_collector:, recording:, file_root:, logger:, change_set_persister: nil, processing_dependents: false)
       @recording_collector = recording_collector
       @recording = recording
       @file_root = Pathname.new(file_root.to_s)
       @logger = logger
       @change_set_persister = change_set_persister
-      @nested = nested
+      @processing_dependents = processing_dependents
     end
 
     def import!
@@ -123,23 +123,34 @@ class MusicImportService
       end
     end
 
+    def dependent_importer(dependent, change_set_persister)
+      self.class.new(
+        recording_collector: recording_collector,
+        recording: dependent,
+        file_root: file_root,
+        logger: logger,
+        change_set_persister: change_set_persister,
+        processing_dependents: true
+      )
+    end
+
     def ingest_fake_playlist
       logger.info "Detected that recording #{recording.id} is a fake playlist. Ingesting it appropriately."
-      if nested
+      if processing_dependents
         logger.info "Refusing to ingest #{recording.id} while ingesting another fake playlist."
         return
       end
       change_set_persister.buffer_into_index do |buffered_change_set_persister|
-        # Import prerequisites
-        recording_collector.with_recordings_query(recording_collector.prerequisite_recordings_query(prerequisite_ids)).recordings.each do |rec|
-          self.class.new(recording_collector: recording_collector, recording: rec, file_root: file_root, logger: logger, change_set_persister: buffered_change_set_persister, nested: true).import!
+        # Import dependents
+        recording_collector.with_recordings_query(recording_collector.dependent_recordings_query(dependent_ids)).recordings.each do |rec|
+          dependent_importer(rec, buffered_change_set_persister).import!
         end
         # Create a playlist for each selection
         selections_to_courses = recording_collector.courses_for_selections(audio_files.flat_map(&:selection_id).uniq).group_by { |x| x.id.to_s.to_i }
         audio_files.group_by(&:selection_id).each do |selection_id, selection_files|
           next if selection_files.empty?
           playlist = Playlist.new(title: selection_files.first.selection_title, local_identifier: selection_id.to_s, part_of: selections_to_courses[selection_id]&.first&.course_nums)
-          # Find previously imported prerequisite file sets
+          # Find previously imported dependent file sets
           file_set_ids = selection_files.map do |file|
             {
               buffered_change_set_persister.query_service.custom_queries.find_by_string_property(property: :local_identifier, value: file.entry_id.to_s).first&.id => file.id
@@ -162,8 +173,8 @@ class MusicImportService
       end
     end
 
-    def prerequisite_ids
-      @prerequisite_ids ||=
+    def dependent_ids
+      @dependent_ids ||=
         begin
           all_audio_files.select do |audio_file|
             audio_file.recording_id != recording.id && audio_file.entry_id.present?

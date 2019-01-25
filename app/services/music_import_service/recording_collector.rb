@@ -366,7 +366,7 @@ class MusicImportService::RecordingCollector
     SQL
   end
 
-  def prerequisite_recordings_query(recording_ids)
+  def dependent_recordings_query(recording_ids)
     "select R.idRecording, R.CallNo, R.RecTitle, C.CourseNo from Recordings R " \
       "left join Selections S on S.idRecording=R.idRecording " \
       "left join jSelections jS on S.idSelection=jS.idSelection " \

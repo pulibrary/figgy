@@ -223,11 +223,11 @@ RSpec.describe MusicImportService::RecordingCollector do
     end
   end
 
-  describe "#prerequisite_recordings_query" do
+  describe "#dependent_recordings_query" do
     # It's hard to test this without a real database connection, so this
     # just makes sure it returns a query.
     it "accepts an array of IDs" do
-      expect { collector.prerequisite_recordings_query([4]) }.not_to raise_error
+      expect { collector.dependent_recordings_query([4]) }.not_to raise_error
     end
   end
 
