@@ -10,7 +10,11 @@ module LinkedData
           "@type" => "edm:TimeSpan",
           "begin" => resource.start,
           "end" => resource.end
-        }
+        }.tap do |props|
+          props["skos:prefLabel"] = resource.decorate.range_string if resource.approximate
+          props["crm:P79_beginning_is_qualified_by"] = "approximate" if resource.approximate
+          props["crm:P80_end_is_qualified_by"] = "approximate" if resource.approximate
+        end
       end
   end
 end

@@ -201,7 +201,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
     end
   end
 
-  describe "date_range" do
+  describe "date and date_range" do
     let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, date_created: "2012", date_range: [DateRange.new(start: "2013", end: "2017")]) }
     let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: resource.id) }
 
@@ -211,12 +211,6 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
 
     it "exposes the values as a nested date range" do
       expect(linked_ephemera_folder.date_range.first).to be_a Hash
-      expect(linked_ephemera_folder.date_range.first).to eq(
-        "@type" => "edm:TimeSpan",
-        "begin" => ["2013"],
-        "end" => ["2017"]
-      )
-
       expect(linked_ephemera_folder.date_created.first).to eq "2012"
       expect(linked_ephemera_folder.as_jsonld["date_range"]).to eq linked_ephemera_folder.date_range
       expect(linked_ephemera_folder.as_jsonld["date_created"]).to eq linked_ephemera_folder.date_created
