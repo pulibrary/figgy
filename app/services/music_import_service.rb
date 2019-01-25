@@ -231,7 +231,7 @@ class MusicImportService
     end
 
     def all_audio_files
-      @all_audio_files = recording_collector.audio_files(recording)
+      @all_audio_files ||= recording_collector.audio_files(recording)
     end
 
     def audio_files
