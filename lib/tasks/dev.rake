@@ -44,6 +44,14 @@ if Rails.env.development? || Rails.env.test?
         end
       end
     end
+
+    desc "Promote last created user to admin"
+    task set_admin_user: :environment do
+      u = User.last
+      puts "Making #{u} an admin"
+      u.roles << Role.find_or_create_by(name: "admin")
+      u.save
+    end
   end
 
   namespace :clean do
