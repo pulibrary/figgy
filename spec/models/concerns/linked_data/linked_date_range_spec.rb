@@ -26,7 +26,7 @@ RSpec.describe LinkedData::LinkedDateRange do
         "end" => ["2017"],
         "crm:P79_beginning_is_qualified_by" => "approximate",
         "crm:P80_end_is_qualified_by" => "approximate",
-        "skos:prefLabel" => "approximately 2013-2017",
+        "skos:prefLabel" => "approximately 2013-2017"
       )
     end
   end
