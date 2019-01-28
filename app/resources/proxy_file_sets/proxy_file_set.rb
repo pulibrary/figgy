@@ -6,4 +6,5 @@ class ProxyFileSet < Resource
   attribute :label, Valkyrie::Types::Set
   attribute :visibility, Valkyrie::Types::Set.optional
   attribute :proxied_file_id, Valkyrie::Types::ID.optional
+  attribute :local_identifier
 end

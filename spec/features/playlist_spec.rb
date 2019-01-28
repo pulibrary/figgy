@@ -55,6 +55,6 @@ RSpec.feature "PlaylistChangeSets" do
   end
 
   def json_fixture(decorated_resource, recording)
-    "[{\"id\":{\"id\":\"#{decorated_resource.id}\"},\"internal_resource\":\"ProxyFileSet\",\"created_at\":\"#{decorated_resource.created_at}\",\"updated_at\":\"#{decorated_resource.updated_at}\",\"new_record\":false,\"read_groups\":[],\"read_users\":[],\"edit_users\":[],\"edit_groups\":[],\"label\":[\"audio_file.wav\"],\"visibility\":[],\"proxied_file_id\":{\"id\":\"#{decorated_resource.proxied_file_id}\"},\"recording_url\":\"http://www.example.com/catalog/#{recording.id}\",\"recording_title\":\"#{recording.title.first}\"}]"
+    "[{\"id\":{\"id\":\"#{decorated_resource.id}\"},\"internal_resource\":\"ProxyFileSet\",\"created_at\":\"#{decorated_resource.created_at}\",\"updated_at\":\"#{decorated_resource.updated_at}\",\"new_record\":false,\"read_groups\":[],\"read_users\":[],\"edit_users\":[],\"edit_groups\":[],\"label\":[\"audio_file.wav\"],\"visibility\":[],\"proxied_file_id\":{\"id\":\"#{decorated_resource.proxied_file_id}\"},\"local_identifier\":null,\"recording_url\":\"http://www.example.com/catalog/#{recording.id}\",\"recording_title\":\"#{recording.title.first}\"}]"
   end
 end

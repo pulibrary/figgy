@@ -2,7 +2,7 @@
 
 class MusicImportService::TinyTdsAdapter
   def initialize(dbhost:, dbport:, dbuser:, dbpass:)
-    @client = TinyTds::Client.new username: dbuser, password: dbpass, host: dbhost, port: dbport
+    @client = TinyTds::Client.new username: dbuser, password: dbpass, host: dbhost, port: dbport, timeout: 60
   end
 
   # @param query [string]

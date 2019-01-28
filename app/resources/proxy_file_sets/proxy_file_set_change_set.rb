@@ -8,6 +8,7 @@ class ProxyFileSetChangeSet < ChangeSet
 
   property :label, multiple: true, required: true, default: []
   property :proxied_file_id, multiple: false, required: true
+  property :local_identifier, multiple: true, required: false, default: []
 
   validates :visibility, :label, :proxied_file_id, presence: true
 
