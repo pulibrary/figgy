@@ -201,7 +201,8 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
     end
   end
 
-  describe "date_range" do
+  describe "date_created and date_range" do
+    let(:resource_factory) { :ephemera_folder }
     let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, date_created: "2012", date_range: [DateRange.new(start: "2013", end: "2017")]) }
     let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: resource.id) }
 
@@ -209,31 +210,11 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       box
     end
 
-    it "exposes the values as a nested date range" do
-      expect(linked_ephemera_folder.date_range.first).to be_a Hash
-      expect(linked_ephemera_folder.date_range.first).to eq(
-        "@type" => "edm:TimeSpan",
-        "begin" => ["2013"],
-        "end" => ["2017"]
-      )
+    it_behaves_like "LinkedData::Resource::WithDateRange"
 
+    it "exposes date_created values" do
       expect(linked_ephemera_folder.date_created.first).to eq "2012"
-      expect(linked_ephemera_folder.as_jsonld["date_range"]).to eq linked_ephemera_folder.date_range
       expect(linked_ephemera_folder.as_jsonld["date_created"]).to eq linked_ephemera_folder.date_created
-    end
-
-    context "when there's no date range" do
-      let(:resource) { FactoryBot.create_for_repository(:ephemera_folder) }
-      it "doesn't add the field" do
-        expect(linked_ephemera_folder.as_jsonld["date_range"]).to be_blank
-      end
-    end
-
-    context "when there's a blank date range" do
-      let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, date_range: [DateRange.new]) }
-      it "doesn't add the field" do
-        expect(linked_ephemera_folder.as_jsonld["date_range"]).to be_blank
-      end
     end
   end
 

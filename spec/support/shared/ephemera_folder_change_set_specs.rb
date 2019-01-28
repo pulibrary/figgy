@@ -25,44 +25,9 @@ RSpec.shared_examples "an ephemera folder change set" do |change_set_class|
     end
   end
 
-  describe "#date_range" do
-    it "can set it" do
-      change_set.prepopulate!
-      change_set.validate(date_range_form_attributes: { start: "2017", end: "2018" })
-      change_set.sync
-      expect(change_set.model.date_range.first.start).to eq ["2017"]
-    end
-    it "validates" do
-      change_set.prepopulate!
-      result = change_set.validate(date_range_form_attributes: { start: "abcd", end: "2018" })
-      expect(result).to eq false
-    end
-    it "validates that the start is before the end" do
-      change_set.prepopulate!
-      result = change_set.validate(date_range_form_attributes: { start: "2018", end: "2017" })
-      expect(result).to eq false
-    end
-    it "is invalid if only start is given" do
-      change_set.prepopulate!
-      result = change_set.validate(date_range_form_attributes: { start: "2018", end: "" })
-      expect(result).to eq false
-    end
-    it "is invalid if only end is given" do
-      change_set.prepopulate!
-      result = change_set.validate(date_range_form_attributes: { start: "", end: "2018" })
-      expect(result).to eq false
-    end
-    it "has a default" do
-      change_set.prepopulate!
-      expect(change_set.date_range_form.start).to be_nil
-      expect(change_set.date_range_form.required?(:start)).to eq false
-    end
-    context "when there's a date range set" do
-      it "sets it single-valued appropriately" do
-        change_set = described_class.new(FactoryBot.build(:ephemera_folder, date_range: DateRange.new(start: "2017", end: "2018")))
-        change_set.prepopulate!
-        expect(change_set.date_range_form.start).to eq "2017"
-      end
+  describe "date_range mixin" do
+    it "is included" do
+      expect { change_set.date_range }.not_to raise_error NoMethodError
     end
   end
 

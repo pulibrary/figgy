@@ -32,8 +32,8 @@ RSpec.feature "NumismaticIssues" do
     expect(page).to have_field "Artist"
     expect(page).to have_field "Color"
     expect(page).to have_field "Date of object"
-    expect(page).to have_field "Date start" # For the date range sequence
-    expect(page).to have_field "Date end" # For the date range
+    expect(page).to have_field "Date range start" # For the date range sequence
+    expect(page).to have_field "Date range end" # For the date range
     expect(page).to have_field "Denomination"
     expect(page).to have_field "Description"
     expect(page).to have_field "Edge"

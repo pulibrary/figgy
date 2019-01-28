@@ -5,6 +5,7 @@ class SimpleResourceChangeSet < ChangeSet
   apply_workflow(DraftCompleteWorkflow)
 
   include VisibilityProperty
+  include DateRangeProperty
   property :title, multiple: true, required: true, default: []
   property :sort_title, multiple: true, required: true, default: []
   property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
@@ -110,6 +111,7 @@ class SimpleResourceChangeSet < ChangeSet
       :date_published,
       :date_issued,
       :date_copyright,
+      :date_range_form,
       :source,
       :subject,
       :holding_location,

@@ -17,4 +17,10 @@ RSpec.describe SimpleResourceChangeSet do
       expect(change_set.workflow.draft?).to be true
     end
   end
+
+  describe "date_range mixin" do
+    it "is included" do
+      expect { change_set.date_range }.not_to raise_error NoMethodError
+    end
+  end
 end

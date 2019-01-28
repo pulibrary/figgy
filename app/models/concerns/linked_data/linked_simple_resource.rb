@@ -23,11 +23,16 @@ module LinkedData
       to: :decorated_resource
     )
 
+    def date_range
+      Array.wrap(decorated_resource.date_range).map { |r| LinkedDateRange.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
+    end
+
     private
 
       def properties
         {
-          '@type': "pcdm:Object"
+          '@type': "pcdm:Object",
+          date_range: try(:date_range)
         }.merge(schema_properties).merge(overwritten_properties)
       end
 

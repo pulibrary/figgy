@@ -179,6 +179,18 @@ RSpec.describe ScannedResourceDecorator do
     end
   end
 
+  describe "#rendered_date_range" do
+    let(:resource) do
+      FactoryBot.create_for_repository(
+        :scanned_resource,
+        date_range: DateRange.new(start: "1902", end: "1927")
+      )
+    end
+    it "renders the date range as per the date range decorator" do
+      expect(decorator.rendered_date_range).to eq "1902-1927"
+    end
+  end
+
   describe "#playlists" do
     it "returns all playlists that come from a recording" do
       file_set = FactoryBot.create_for_repository(:file_set)

@@ -13,6 +13,7 @@ class ScannedResource < Resource
   attribute :file_metadata, Valkyrie::Types::Set.of(FileMetadata.optional)
   attribute :change_set, Valkyrie::Types::String
   attribute :archival_collection_code, Valkyrie::Types::String
+  attribute :date_range
 
   def self.can_have_manifests?
     true

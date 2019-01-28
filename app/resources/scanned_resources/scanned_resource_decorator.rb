@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 class ScannedResourceDecorator < Valkyrie::ResourceDecorator
   display Schema::Common.attributes,
+          :rendered_date_range,
           :rendered_ocr_language,
           :rendered_holding_location,
           :member_of_collections,
           :rendered_actors,
           :archival_collection_code
+
   suppress :thumbnail_id,
            :imported_author,
            :source_jsonld,
@@ -24,7 +26,8 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
                          :rendered_rights_statement,
                          :rendered_ocr_language,
                          :ocr_language,
-                         :thumbnail_id
+                         :thumbnail_id,
+                         :rendered_date_range
 
   delegate(*Schema::Common.attributes, to: :primary_imported_metadata, prefix: :imported)
   delegate :members, :file_sets, :collections, :playlists, :decorated_file_sets, to: :wayfinder
@@ -139,6 +142,15 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
     # we know these will always be iso8601 so if there's a slash it's a range
     return output.map { |entry| display_date_range(entry) } if output.to_s.include? "/"
     output.map { |value| Date.parse(value.to_s).strftime("%B %-d, %Y") }
+  end
+
+  def rendered_date_range
+    return unless first_range.present?
+    first_range.range_string
+  end
+
+  def first_range
+    @first_range ||= Array.wrap(date_range).map(&:decorate).first
   end
 
   def pdf_file
