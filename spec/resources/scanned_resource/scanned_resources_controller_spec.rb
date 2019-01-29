@@ -38,6 +38,9 @@ RSpec.describe ScannedResourcesController, type: :controller do
   end
 
   describe "change_set_class" do
+    let(:user) { FactoryBot.create(:admin) }
+    render_views
+
     context "when params change_set" do
       it "is simple, creates a new SimpleResourceChangeSet" do
         get :new, params: { change_set: "simple" }
@@ -46,6 +49,9 @@ RSpec.describe ScannedResourcesController, type: :controller do
       it "is recording, creates a new RecordingChangeSet" do
         get :new, params: { change_set: "recording" }
         expect(assigns(:change_set)).to be_a RecordingChangeSet
+        expect(response.body).to have_field "Source Metadata ID"
+        expect(response.body).to have_field "Title"
+        expect(response.body).to have_selector "p.help-block", text: "Required if Source Metadata ID is blank"
       end
     end
   end

@@ -57,6 +57,9 @@ en:
         object_date: "Date of object"
       template:
         title: "Template Name"
+    hints:
+      scanned_resource:
+        title: 'Required if Source Metadata ID is blank'
     required:
       html: '<span class="label label-info required-tag">required</span>'
   helpers:
