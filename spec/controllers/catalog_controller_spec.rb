@@ -62,6 +62,26 @@ RSpec.describe CatalogController do
         expect(assigns(:document_list).length).to eq 1
       end
     end
+    context "recordings with imported metadata" do
+      let(:recording_properties) { { member_ids: track.id, state: "complete", source_metadata_identifier: "3515072", import_metadata: true } }
+      let(:recording) { persister.save(resource: FactoryBot.create_for_repository(:recording, **recording_properties)) }
+      let(:track) { FactoryBot.create_for_repository(:file_set, title: "Title not in imported metadata") }
+      before do
+        stub_bibdata(bib_id: "3515072")
+        stub_ezid(shoulder: "99999/fk4", blade: "1234567")
+        recording
+      end
+
+      it "can find by imported metadata" do
+        get :index, params: { q: "Sheena is a punk rocker" }
+        expect(assigns(:document_list).length).to eq 1
+      end
+
+      it "can find by track name" do
+        get :index, params: { q: "Title not in imported metadata?" }
+        expect(assigns(:document_list).length).to eq 1
+      end
+    end
     it "can search by ARK" do
       stub_bibdata(bib_id: "123456")
       stub_ezid(shoulder: "99999/fk4", blade: "123456")
