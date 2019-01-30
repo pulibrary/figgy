@@ -1,0 +1,7 @@
+#EXTM3U
+#EXT-X-VERSION:3
+#EXT-X-TARGETDURATION:1
+#EXT-X-MEDIA-SEQUENCE:0
+#EXTINF:0.278767,
+http://www.example.com/downloads/e2d792da-b06b-492a-9508-eba878fa84b2/file/c2c0923a-af45-49a8-bcdb-fea893f1ba21
+#EXT-X-ENDLIST

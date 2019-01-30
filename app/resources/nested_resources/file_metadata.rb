@@ -42,6 +42,10 @@ class FileMetadata < Valkyrie::Resource
     use.include?(Valkyrie::Vocab::PCDMUse.ServiceFile)
   end
 
+  def derivative_partial?
+    use.include?(Valkyrie::Vocab::PCDMUse.ServiceFilePartial)
+  end
+
   def original_file?
     use.include?(Valkyrie::Vocab::PCDMUse.OriginalFile)
   end

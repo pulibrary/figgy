@@ -480,6 +480,7 @@ GEM
     loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
+    m3u8 (0.8.2)
     mail (2.7.0)
       mini_mime (>= 0.1.1)
     marc (1.0.2)
@@ -858,6 +859,7 @@ DEPENDENCIES
   lograge-sql
   logstash-event
   loofah (~> 2.2.3)
+  m3u8
   marc (~> 1.0.0)
   mediainfo (~> 1.0)
   mini_magick

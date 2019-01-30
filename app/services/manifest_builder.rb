@@ -432,7 +432,7 @@ class ManifestBuilder
       return unless file.mime_type.first.include?("audio")
       @display_content ||= IIIFManifest::V3::DisplayContent.new(
         download_url,
-        format: "audio/mp3",
+        format: "application/vnd.apple.mpegurl",
         label: resource.title.first,
         duration: file.duration.first.to_f,
         type: "Audio" # required for the viewer to play audio correctly

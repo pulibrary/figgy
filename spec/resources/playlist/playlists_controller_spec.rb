@@ -189,7 +189,7 @@ RSpec.describe PlaylistsController, type: :controller do
           expect(anno_page["items"].length).to eq(1)
           first_annotation = anno_page["items"].first
           expect(first_annotation).to include("body")
-          expect(first_annotation["body"]).to include("format" => "audio/mp3")
+          expect(first_annotation["body"]).to include("format" => "application/vnd.apple.mpegurl")
 
           last_canvas = manifest_values["items"].last
           expect(last_canvas).to include("items")
@@ -199,7 +199,7 @@ RSpec.describe PlaylistsController, type: :controller do
           expect(anno_page["items"].length).to eq(1)
           last_annotation = anno_page["items"].first
           expect(last_annotation).to include("body")
-          expect(last_annotation["body"]).to include("format" => "audio/mp3")
+          expect(last_annotation["body"]).to include("format" => "application/vnd.apple.mpegurl")
         end
       end
     end
