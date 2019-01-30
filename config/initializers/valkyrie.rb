@@ -195,7 +195,8 @@ Rails.application.config.to_prepare do
           SortingIndexer,
           ImportedMetadataIndexer,
           TitleIndexer,
-          ParentIssueIndexer
+          ParentIssueIndexer,
+          TrackIndexer
         )
       ),
       tracer: Datadog.tracer
