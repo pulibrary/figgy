@@ -49,6 +49,12 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     end
   end
 
+  def visibility_badge
+    Array(attributes[:visibility]).map do |visibility|
+      h.visibility_badge(visibility)
+    end
+  end
+
   def header
     merged_titles
   end
