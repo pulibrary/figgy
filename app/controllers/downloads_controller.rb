@@ -13,6 +13,8 @@ class DownloadsController < ApplicationController
   end
 
   def send_content
+    # Only append auth tokens to HLS if necessary, otherwise let normal behavior
+    # take care of sending it.
     return send_hls if file_desc.mime_type.first.to_s == "application/x-mpegURL" && params[:auth_token].present?
     prepare_file_headers
     # Necessary until a Rack version is released which allows for multiple

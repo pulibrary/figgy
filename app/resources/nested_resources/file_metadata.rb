@@ -42,6 +42,7 @@ class FileMetadata < Valkyrie::Resource
     use.include?(Valkyrie::Vocab::PCDMUse.ServiceFile)
   end
 
+  # ServiceFilePartial isn't part of the PCDMUse vocabulary - this is made up
   def derivative_partial?
     use.include?(Valkyrie::Vocab::PCDMUse.ServiceFilePartial)
   end
