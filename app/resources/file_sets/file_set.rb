@@ -44,6 +44,10 @@ class FileSet < Resource
     file_metadata.select(&:derivative?)
   end
 
+  def derivative_partial_files
+    file_metadata.select(&:derivative_partial?)
+  end
+
   def original_file
     file_metadata.find(&:original_file?)
   end

@@ -1506,10 +1506,7 @@ var IIIFComponents;
             return format.toString() === 'application/dash+xml';
         };
         AVComponentUtils.canPlayHls = function () {
-            var doc = typeof document === 'object' && document, videoelem = doc && doc.createElement('video'), isvideosupport = Boolean(videoelem && videoelem.canPlayType);
-            return isvideosupport && this.hlsMimeTypes.some(function (canItPlay) {
-                return /maybe|probably/i.test(videoelem.canPlayType(canItPlay));
-            });
+          return Hls.isSupported();
         };
         AVComponentUtils.hlsMimeTypes = [
             // Apple santioned

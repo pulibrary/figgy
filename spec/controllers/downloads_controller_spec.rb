@@ -80,6 +80,41 @@ RSpec.describe DownloadsController do
       end
     end
 
+    context "with an HLS playlist FileSet and an auth token" do
+      it "modifies the playlist to include auth tokens" do
+        token = AuthToken.create!(group: ["admin"], label: "admin_token")
+        change_set_persister = ScannedResourcesController.change_set_persister
+        file_set = FactoryBot.create_for_repository(:file_set)
+        file = fixture_file_upload("files/hls_playlist.m3u8", "application/x-mpegURL")
+        change_set = DynamicChangeSet.new(file_set).prepopulate!
+        change_set.files = [file]
+        output = change_set_persister.save(change_set: change_set)
+
+        get :show, params: { resource_id: output.id.to_s, id: output.file_metadata.first.id.to_s, auth_token: token.token }
+
+        expect(response).to be_success
+        expect(M3u8::Playlist.read(response.body).items[0].segment).to end_with "?auth_token=#{token.token}"
+      end
+    end
+
+    context "with an HLS playlist FileSet and no auth token" do
+      let(:user) { FactoryBot.create(:admin) }
+      it "doesn't modify the playlist" do
+        sign_in(user)
+        change_set_persister = ScannedResourcesController.change_set_persister
+        file_set = FactoryBot.create_for_repository(:file_set)
+        file = fixture_file_upload("files/hls_playlist.m3u8", "application/x-mpegURL")
+        change_set = DynamicChangeSet.new(file_set).prepopulate!
+        change_set.files = [file]
+        output = change_set_persister.save(change_set: change_set)
+
+        get :show, params: { resource_id: output.id.to_s, id: output.file_metadata.first.id.to_s }
+
+        expect(response).to be_success
+        expect(M3u8::Playlist.read(response.body).items[0].segment).not_to include "?auth_token"
+      end
+    end
+
     context "with a FileSet proxied as member of multiple Playlists" do
       let(:sample_file) { fixture_file_upload("files/audio_file.wav", "audio/x-wav") }
       let(:playlist) do

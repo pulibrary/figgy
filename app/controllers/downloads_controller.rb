@@ -13,6 +13,9 @@ class DownloadsController < ApplicationController
   end
 
   def send_content
+    # Only append auth tokens to HLS if necessary, otherwise let normal behavior
+    # take care of sending it.
+    return send_hls if file_desc.mime_type.first.to_s == "application/x-mpegURL" && params[:auth_token].present?
     prepare_file_headers
     # Necessary until a Rack version is released which allows for multiple
     # HTTP_X_ACCEL_MAPPING. When this commit is in a released version:
@@ -20,6 +23,14 @@ class DownloadsController < ApplicationController
     # remove this line and move it to the nginx configuration.
     request.env["HTTP_X_ACCEL_MAPPING"] = "/opt/repository/=/restricted_repository/"
     send_file(load_file.file.disk_path, filename: load_file.original_name, type: load_file.mime_type, disposition: :inline)
+  end
+
+  def send_hls
+    playlist = M3u8::Playlist.read(File.open(binary_file.disk_path))
+    playlist.items.each do |item|
+      item.segment = "#{item.segment}?auth_token=#{params[:auth_token]}"
+    end
+    render plain: playlist.to_s
   end
 
   def resource

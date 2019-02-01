@@ -39,16 +39,20 @@ RSpec.describe AudioDerivativeService do
   end
 
   describe "#create_derivatives" do
-    it "creates an MP3 and attaches it to the fileset" do
+    it "creates HLS partials and a playlist and attaches it to the fileset" do
       derivative_service.new(valid_change_set).create_derivatives
 
       reloaded = query_service.find_by(id: valid_resource.id)
       derivative = reloaded.derivative_file
 
       expect(derivative).to be_present
-      expect(derivative.mime_type).to eq ["audio/mp3"]
+      expect(derivative.mime_type).to eq ["application/x-mpegURL"]
       derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
       expect(derivative_file.read).not_to be_blank
+
+      derivative_partials = reloaded.derivative_partial_files
+      expect(derivative_partials.length).to eq 1
+      expect(derivative_partials[0].mime_type).to eq ["video/MP2T"]
     end
   end
 
@@ -61,6 +65,7 @@ RSpec.describe AudioDerivativeService do
       derivative_service.new(valid_change_set).cleanup_derivatives
       reloaded = query_service.find_by(id: valid_resource.id)
       expect(reloaded.file_metadata.select(&:derivative?)).to be_empty
+      expect(reloaded.file_metadata.select(&:derivative_partial?)).to be_empty
     end
   end
 end
