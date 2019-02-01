@@ -30,7 +30,7 @@
                   <td><%= link_to figgy_thumbnail_path(raster_resource, { class: 'thumbnail-inner', onerror: default_icon_fallback }), raster_resource_url %></td>
                   <td><%= raster_resource.first_title %></td>
                   <td><%= raster_resource.created_at %></td>
-                  <td><%= raster_resource.visibility.first.html_safe %></td>
+                  <td><%= raster_resource.visibility_badge.first.html_safe %></td>
                   <td>
                     <%= link_to 'View', raster_resource_url, class: 'btn btn-default' %>
                     <%= link_to 'Edit', main_app.polymorphic_path([:edit, raster_resource]), class: 'btn btn-default' %>

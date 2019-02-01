@@ -30,7 +30,7 @@
                   <td><%= link_to figgy_thumbnail_path(vector_resource, { class: 'thumbnail-inner', onerror: default_icon_fallback }), vector_resource_url %></td>
                   <td><%= vector_resource.first_title %></td>
                   <td><%= vector_resource.created_at %></td>
-                  <td><%= vector_resource.visibility.first.html_safe %></td>
+                  <td><%= vector_resource.visibility_badge.first.html_safe %></td>
                   <td>
                     <%= link_to 'View', vector_resource_url, class: 'btn btn-default' %>
                     <%= link_to 'Edit', main_app.polymorphic_path([:edit, vector_resource]), class: 'btn btn-default' %>

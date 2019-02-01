@@ -30,7 +30,7 @@
                   <td><%= link_to figgy_thumbnail_path(scanned_map, { class: 'thumbnail-inner', onerror: default_icon_fallback }), scanned_map_url %></td>
                   <td><%= scanned_map.first_title %></td>
                   <td><%= scanned_map.created_at %></td>
-                  <td><%= scanned_map.visibility.first.html_safe %></td>
+                  <td><%= scanned_map.visibility_badge.first.html_safe %></td>
                   <td>
                     <%= link_to 'View', scanned_map_url, class: 'btn btn-default' %>
                     <%= link_to 'Edit', main_app.polymorphic_path([:edit, scanned_map]), class: 'btn btn-default' %>
