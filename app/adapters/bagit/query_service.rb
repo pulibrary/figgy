@@ -19,6 +19,7 @@ module Bagit
       Valkyrie.logger.warn("Bagit Query Service has been asked to find a resource by its alternate identifier. This will require iterating over the metadata of every bag - AVOID.")
       alternate_identifier = Valkyrie::ID.new(alternate_identifier.to_s)
       output = find_all.find do |resource|
+        next unless resource.respond_to?(:alternate_ids)
         resource.alternate_ids.include?(alternate_identifier)
       end
       raise Valkyrie::Persistence::ObjectNotFoundError unless output.present?
@@ -66,11 +67,13 @@ module Bagit
       end
     end
 
-    def find_inverse_references_by(resource:, property:)
-      raise ArgumentError, "resource is not saved" unless resource.persisted?
+    def find_inverse_references_by(resource: nil, id: nil, property:)
+      raise ArgumentError, "Provide resource or id" unless resource || id
+      raise ArgumentError, "resource is not saved" unless !resource || resource.persisted?
       Valkyrie.logger.warn("Bagit Query Service has been asked to find inverse references. This will require iterating over the metadata of every bag - AVOID.")
+      id ||= resource.id
       find_all.select do |potential_inverse_reference|
-        (potential_inverse_reference.try(property) || []).include?(resource.id)
+        (potential_inverse_reference.try(property) || []).include?(id)
       end
     end
 

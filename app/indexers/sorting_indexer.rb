@@ -7,8 +7,7 @@ class SortingIndexer
 
   def to_solr
     {
-      title_ssort: sort_title,
-      updated_at_dtsi: resource.updated_at
+      title_ssort: sort_title
     }
   end
 
