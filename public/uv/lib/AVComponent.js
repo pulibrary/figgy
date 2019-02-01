@@ -769,16 +769,34 @@ var IIIFComponents;
             else if (data.format && data.format.toString() === 'application/vnd.apple.mpegurl') {
                 // hls
                 if (Hls.isSupported()) {
-                    var hls = new Hls();
+                    var hls = new Hls(
+                      {
+                        manifestLoadingTimeOut: 1200000,
+                        manifestLoadingMaxRetry: 5,
+                        levelLoadingTimeOut: 60000,
+                        fragLoadingTimeOut: 1200000
+                      }
+                    );
                     if (this._data.adaptiveAuthEnabled) {
                         hls = new Hls({
+                            manifestLoadingTimeOut: 1200000,
+                            manifestLoadingMaxRetry: 5,
+                            levelLoadingTimeOut: 60000,
+                            fragLoadingTimeOut: 1200000,
                             xhrSetup: function (xhr) {
                                 xhr.withCredentials = true; // send cookies
                             }
                         });
                     }
                     else {
-                        hls = new Hls();
+                        hls = new Hls(
+                          {
+                            manifestLoadingTimeOut: 1200000,
+                            manifestLoadingMaxRetry: 5,
+                            levelLoadingTimeOut: 60000,
+                            fragLoadingTimeOut: 1200000
+                          }
+                        );
                     }
                     if (this._data.adaptiveAuthEnabled) {
                     }
