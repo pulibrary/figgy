@@ -14,6 +14,7 @@ class RecordingChangeSet < ChangeSet
   property :source_metadata_identifier, multiple: false, required: false
   property :read_groups, multiple: true, required: false
   property :change_set, require: true, default: "recording"
+  property :part_of, require: false, default: []
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
@@ -32,6 +33,7 @@ class RecordingChangeSet < ChangeSet
       :rights_statement,
       :member_of_collection_ids,
       :local_identifier,
+      :part_of,
       :append_id,
       :change_set
     ]
