@@ -42,10 +42,38 @@ RSpec.describe DownloadsController do
       end
     end
 
-    context "when not logged in" do
+    context "when not logged in and the parent is pending" do
       it "redirects to login" do
         get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s }
         expect(response).to redirect_to("/users/auth/cas")
+      end
+    end
+
+    context "when not logged in and the parent is private" do
+      let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource, visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, files: [sample_file]) }
+
+      before do
+        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+      end
+
+      it "redirects to login" do
+        get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s }
+        expect(response).to redirect_to("/users/auth/cas")
+      end
+    end
+
+    context "when not logged in and the parent is complete and open" do
+      let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource, visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC, files: [sample_file]) }
+
+      before do
+        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+      end
+
+      it "allows downloading the file" do
+        get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s }
+        expect(response.content_length).to eq(196_882)
+        expect(response.content_type).to eq("image/tiff")
+        expect(response.body).to eq(sample_file.read)
       end
     end
 
