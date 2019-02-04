@@ -342,11 +342,6 @@ var IIIFComponents;
                     mediaSource = body.id.split('#')[0];
                 }
                 /*
-                var targetFragment = (item.target.indexOf('#') != -1) ? item.target.split('#t=')[1] : '0, '+ canvasClockDuration,
-                    fragmentTimings = targetFragment.split(','),
-                    startTime = parseFloat(fragmentTimings[0]),
-                    endTime = parseFloat(fragmentTimings[1]);
-
                 //TODO: Check format (in "target" as MFID or in "body" as "width", "height" etc.)
                 var fragmentPosition = [0, 0, 100, 100],
                     positionTop = fragmentPosition[1],
@@ -367,7 +362,7 @@ var IIIFComponents;
                 if (!t) {
                     t = [0, this._getDuration()];
                 }
-                var positionLeft = parseInt(String(xywh[0])), positionTop = parseInt(String(xywh[1])), mediaWidth = parseInt(String(xywh[2])), mediaHeight = parseInt(String(xywh[3])), startTime = parseInt(String(t[0])), endTime = parseInt(String(t[1]));
+                var positionLeft = parseInt(String(xywh[0])), positionTop = parseInt(String(xywh[1])), mediaWidth = parseInt(String(xywh[2])), mediaHeight = parseInt(String(xywh[3])), startTime = parseFloat(String(t[0])), endTime = parseFloat(String(t[1]));
                 var percentageTop = this._convertToPercentage(positionTop, this._canvasHeight), percentageLeft = this._convertToPercentage(positionLeft, this._canvasWidth), percentageWidth = this._convertToPercentage(mediaWidth, this._canvasWidth), percentageHeight = this._convertToPercentage(mediaHeight, this._canvasHeight);
                 var temporalOffsets = /t=([^&]+)/g.exec(body.id);
                 var ot = void 0;
@@ -1033,11 +1028,11 @@ var IIIFComponents;
             }
         };
         CanvasInstance.prototype._setCurrentTime = function (seconds) {
-            // const secondsAsFloat: number = parseFloat(seconds.toString());
-            // if (isNaN(secondsAsFloat)) {
-            //     return;
-            // }
-            this._canvasClockTime = seconds; //secondsAsFloat;
+            var secondsAsFloat = parseFloat(seconds.toString());
+            if (isNaN(secondsAsFloat)) {
+                return;
+            }
+            this._canvasClockTime = secondsAsFloat;
             this._canvasClockStartDate = Date.now() - (this._canvasClockTime * 1000);
             this.logMessage('SET CURRENT TIME to: ' + this._canvasClockTime + ' seconds.');
             this._canvasClockUpdater();
