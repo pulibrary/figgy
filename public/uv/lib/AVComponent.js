@@ -989,7 +989,12 @@ var IIIFComponents;
                 this._$canvasTime.text(AVComponentUtils.formatTime(rangeClockTime));
             }
             else {
-                this._$canvasTime.text(AVComponentUtils.formatTime(this._canvasClockTime));
+                if(duration) {
+                  var rangeClockTime = this._canvasClockTime - duration.start;
+                  this._$canvasTime.text(AVComponentUtils.formatTime(rangeClockTime));
+                } else {
+                  this._$canvasTime.text(AVComponentUtils.formatTime(this._canvasClockTime));
+                }
             }
         };
         CanvasInstance.prototype._updateDurationDisplay = function () {
@@ -1001,7 +1006,11 @@ var IIIFComponents;
                 this._$canvasDuration.text(AVComponentUtils.formatTime(duration.getLength()));
             }
             else {
-                this._$canvasDuration.text(AVComponentUtils.formatTime(this._getDuration()));
+                if(duration) {
+                  this._$canvasDuration.text(AVComponentUtils.formatTime(duration.getLength()));
+                } else {
+                  this._$canvasDuration.text(AVComponentUtils.formatTime(this._getDuration()));
+                }
             }
         };
         // public setVolume(value: number): void {
