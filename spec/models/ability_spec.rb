@@ -18,6 +18,8 @@ describe Ability do
     FactoryBot.create_for_repository(:complete_open_scanned_resource, user: creating_user, title: "Open", files: [page_file])
   end
 
+  let(:open_file) { open_scanned_resource.decorate.members.first }
+
   let(:open_file_set) do
     query_service.find_by(id: open_scanned_resource.member_ids.first)
   end
@@ -228,7 +230,7 @@ describe Ability do
       is_expected.to be_able_to(:manifest, flagged_scanned_resource)
       is_expected.to be_able_to(:color_pdf, color_enabled_resource)
       is_expected.to be_able_to(:read, :graphql)
-      is_expected.to be_able_to(:download, other_staff_file)
+      is_expected.to be_able_to(:download, open_file)
       is_expected.not_to be_able_to(:pdf, no_pdf_scanned_resource)
       is_expected.not_to be_able_to(:flag, open_scanned_resource)
       is_expected.not_to be_able_to(:read, campus_only_scanned_resource)
