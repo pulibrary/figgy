@@ -20,7 +20,7 @@ class Ability
 
   # Staff can do anything except delete someone else's stuff
   def staff_permissions
-    can [:create, :read, :update, :manifest], :all
+    can [:create, :read, :download, :update, :manifest], :all
     can [:destroy], Template
     can [:destroy], FileSet do |obj|
       obj.depositor == [current_user.uid]
@@ -41,10 +41,7 @@ class Ability
       download_file_with_metadata?(resource)
     end
     can :download, FileSet do |resource|
-      authorized = geo_file_set?(resource)
-      authorized_by_token = proxy_parent_readable?(resource) || token_readable?(resource.decorate.parent) if auth_token
-
-      authorized_by_token || authorized
+      authorized_by_token?(resource) || geo_file_set?(resource) || can_read_parent?(resource)
     end
     can :color_pdf, curation_concerns do |resource|
       resource.pdf_type == ["color"]
@@ -273,6 +270,20 @@ class Ability
       final_state?(obj) && obj.auth_token == auth_token.token
     end
 
+    # Determines whether a resource's parent is readable because of an auth token
+    # @param obj [Resource]
+    # @return [Boolean]
+    def authorized_by_token?(resource)
+      proxy_parent_readable?(resource) || token_readable?(resource.decorate.parent) if auth_token
+    end
+
+    # Determines whether a resource's parent is readable
+    # @param obj [Resource]
+    # @return [Boolean]
+    def can_read_parent?(resource)
+      can?(:read, resource.decorate.parent&.object)
+    end
+
     # Determines whether or not an auth token grants access to the parent of a given resource
     # @param obj [Resource]
     # @return [Boolean]
@@ -285,6 +296,6 @@ class Ability
       return token_readable?(attaching_resource) unless attaching_resource.is_a?(FileSet)
 
       # Retrieve the Playlist
-      proxy_parent_readable?(attaching_resource) || token_readable?(attaching_resource)
+      authorized_by_token?(attaching_resource)
     end
 end
