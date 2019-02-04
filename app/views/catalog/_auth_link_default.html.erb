@@ -1,13 +1,16 @@
+<%= javascript_pack_tag 'auth_link_clipboard' %>
 <% if @change_set.respond_to?(:auth_token) && @change_set.resource.decorate.public_readable_state? %>
   <div id="auth_link" class="panel panel-default auth-link">
     <div class="panel-heading">
       <h2 class="panel-title">Authorized Link</h2>
     </div>
     <div class="row panel-body">
-      <div class="col-sm-9">
+      <div class="col-sm-8" id="authorized-link">
         <%= build_authorized_link %>
       </div>
-      <div class="col-sm-3">
+      <div class="col-sm-2" id="clipboard-trigger-holder">
+      </div>
+      <div class="col-sm-2">
         <% if can?(:edit, resource) %>
           <%= simple_form_for @change_set do |f| %>
             <%= f.input :mint_auth_token, as: :hidden, input_html: { value: "1" } %>
