@@ -35,7 +35,14 @@ export default {
   },
   methods: {
     detach: function (event) {
+      // add spinner to button that was clicked
       this.detachClicked = true
+      // disable all detach buttons
+      let buttons = document.getElementsByClassName('detach-btn')
+      for (let b of buttons) {
+        b.disabled = true
+      }
+      // do the detach
       this.$emit('update', this.id)
     }
   }
