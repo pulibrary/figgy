@@ -124,7 +124,7 @@ var IIIFComponents;
             //private _lastCanvasWidth: number | undefined;
             _this._lowPriorityFrequency = 250;
             _this._mediaSyncMarginSecs = 1;
-            _this._rangeSpanPadding = 0.25;
+            _this._rangeSpanPadding = 0.0;
             _this._readyMediaCount = 0;
             _this._stallRequestedBy = []; //todo: type
             _this._wasPlaying = false;
