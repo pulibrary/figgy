@@ -520,8 +520,12 @@ var IIIFComponents;
             }
         };
         CanvasInstance.prototype._hasRangeChanged = function () {
+            this._checkMediaSynchronization();
             var range = this._getRangeForCurrentTime();
             if (range && !this._data.limitToRange && (!this._data.range || (this._data.range && range.id !== this._data.range.id))) {
+              if(this._canvasClockTime <= this._data.range.getDuration().end && this._canvasClockTime >= this._data.range.getDuration().start) {
+                return
+              }
                 this.set({
                     range: jQuery.extend(true, { autoChanged: true }, range)
                 });
@@ -1255,7 +1259,7 @@ var IIIFComponents;
                         var lag = Math.abs(factualTime - correctTime);
                         this.logMessage('DETECTED synchronization lag: ' + Math.abs(lag));
                         this._setMediaCurrentTime(contentAnnotation.element[0], correctTime);
-                        //this.synchronizeMedia();
+                        this._synchronizeMedia();
                     }
                     else {
                         contentAnnotation.outOfSync = false;
