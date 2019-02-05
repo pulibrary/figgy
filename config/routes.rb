@@ -259,6 +259,9 @@ Rails.application.routes.draw do
   get "bulk_ingest/:resource_type", to: "bulk_ingest#show", as: "bulk_ingest_show"
   post "bulk_ingest/:resource_type/browse_everything_files", to: "bulk_ingest#browse_everything_files", as: "browse_everything_files_bulk_ingest"
 
+  get "bulk_edit", to: "bulk_edit#resources_edit", as: "bulk_edit_resources_edit"
+  post "bulk_edit", to: "bulk_edit#resources_update", as: "bulk_edit_resources_update"
+
   mount BrowseEverything::Engine => "/browse"
 
   if Rails.env.development? || Rails.env.test?
