@@ -1,4 +1,3 @@
-<%= javascript_pack_tag 'auth_link_clipboard' %>
 <% if @change_set.respond_to?(:auth_token) && @change_set.resource.decorate.public_readable_state? %>
   <div id="auth_link" class="panel panel-default auth-link">
     <div class="panel-heading">
