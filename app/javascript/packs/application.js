@@ -7,6 +7,7 @@ import DocumentAdder from '../components/document_adder'
 import PlaylistMembers from '../components/playlist_members'
 import axios from 'axios'
 import OrderManager from '../components/OrderManager.vue'
+import setupAuthLinkClipboard from '../packs/auth_link_clipboard.js'
 
 Vue.use(system)
 
@@ -26,4 +27,5 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     })
   }
+  setupAuthLinkClipboard()
 })

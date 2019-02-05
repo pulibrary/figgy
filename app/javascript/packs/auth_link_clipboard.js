@@ -1,6 +1,6 @@
 import Clipboard from 'clipboard'
 
-document.addEventListener('DOMContentLoaded', () => {
+export default function setupAuthLinkClipboard () {
   let div = document.getElementById('clipboard-trigger-holder')
   div.innerHTML = '<button class="btn btn-primary" id="clipboard-trigger">Copy link to clipboard</button>'
   new Clipboard('#clipboard-trigger', {
@@ -9,4 +9,4 @@ document.addEventListener('DOMContentLoaded', () => {
       return url
     }
   })
-})
+}
