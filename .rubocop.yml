@@ -139,6 +139,7 @@ Metrics/MethodLength:
     - 'app/controllers/bulk_ingest_controller.rb'
     - 'config/initializers/sequel_active_support_notification.rb'
     - 'app/services/manifest_builder.rb'
+    - 'app/indexers/imported_metadata_indexer.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'

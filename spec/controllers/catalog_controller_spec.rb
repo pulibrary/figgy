@@ -61,6 +61,16 @@ RSpec.describe CatalogController do
         get :index, params: { q: "g8731" }
         expect(assigns(:document_list).length).to eq 1
       end
+      it "can search by various imported fields" do
+        stub_bibdata(bib_id: "10001789")
+        stub_ezid(shoulder: "99999/fk4", blade: "8543429")
+        persister.save(resource: FactoryBot.create_for_repository(:scanned_map, state: "complete", title: [], source_metadata_identifier: "10001789", import_metadata: true))
+        get :index, params: { q: "Stationery" }
+        expect(assigns(:document_list).length).to eq 1
+
+        get :index, params: { q: "lighthouses" }
+        expect(assigns(:document_list).length).to eq 1
+      end
     end
     context "recordings with imported metadata" do
       let(:recording_properties) { { member_ids: track.id, state: "complete", source_metadata_identifier: "3515072", import_metadata: true } }
