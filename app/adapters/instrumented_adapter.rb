@@ -178,11 +178,12 @@ class InstrumentedAdapter < SimpleDelegator
     # Traces "find_inverse_references_by" operations delegated to the QueryService
     # @param resource [Valkyrie::Resource] resource to which resources referencing are being queried
     # @param property [Symbol] the resource property for the relation
-    def find_inverse_references_by(resource:, property:)
+    def find_inverse_references_by(resource: nil, id: nil, property:)
       trace("valkyrie.find_inverse_references_by") do |span|
-        span.set_tag("param.resource", resource.id.to_s)
+        span.set_tag("param.resource", resource.id.to_s) if resource
+        span.set_tag("param.id", id.to_s) if id
         span.set_tag("param.property", property.to_s)
-        __getobj__.find_inverse_references_by(resource: resource, property: property)
+        __getobj__.find_inverse_references_by(resource: resource, id: id, property: property)
       end
     end
 

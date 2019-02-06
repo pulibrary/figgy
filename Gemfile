@@ -34,7 +34,7 @@ gem "simple_form"
 gem "sprockets", ">= 3.7.2"
 gem "title"
 gem "uglifier"
-gem "valkyrie", "1.3.0"
+gem "valkyrie", "1.5.0"
 gem "valkyrie-derivatives", git: "https://github.com/samvera-labs/valkyrie-derivatives.git"
 gem "webpacker", ">= 4.0.x"
 
@@ -111,7 +111,7 @@ gem "riiif"
 gem "sidekiq"
 gem "string_rtl"
 gem "tiny_tds"
-gem "valkyrie-sequel", github: "samvera-labs/valkyrie-sequel"
+gem "valkyrie-sequel", github: "samvera-labs/valkyrie-sequel", branch: "valkyrie_1.5"
 gem "whenever", "~> 0.10"
 
 gem "graphiql-rails", group: :development
