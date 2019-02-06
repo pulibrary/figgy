@@ -73,6 +73,10 @@ RSpec.describe Types::ScannedResourceType do
           id: file_set.id.to_s
         )
       end
+      it "returns nil if the helper fails to return a thumbnail path" do
+        allow(type.helper).to receive(:figgy_thumbnail_path).and_return(nil)
+        expect(type.thumbnail).to be_nil
+      end
     end
     context "when a bad thumbnail is set" do
       let(:scanned_resource) do
