@@ -59,7 +59,7 @@ module Types::Resource
   end
 
   def thumbnail
-    return if object.try(:thumbnail_id).blank? || thumbnail_resource.blank?
+    return if object.try(:thumbnail_id).blank? || thumbnail_resource.blank? || helper.figgy_thumbnail_path(thumbnail_resource).blank?
     {
       id: thumbnail_resource.id.to_s,
       thumbnail_url: helper.figgy_thumbnail_path(thumbnail_resource),
