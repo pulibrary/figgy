@@ -195,23 +195,27 @@ class MusicImportService
       logger.info "Ingesting #{recording.titles}"
       output = nil
       recording_change_set.files = files
-      selections_to_courses = recording_collector.courses_for_selections(audio_files.flat_map(&:selection_id).uniq).group_by { |x| x.id.to_s.to_i }
       change_set_persister.buffer_into_index do |buffered_change_set_persister|
         output = buffered_change_set_persister.save(change_set: recording_change_set)
-        members = Wayfinder.for(output).members
-        audio_files.group_by(&:selection_id).each do |selection_id, selection_files|
-          next if selection_files.empty? || selection_files.length < 2
-          file_set_members = members.select do |member|
-            selection_files.map(&:id).map(&:to_s).include?(member.local_identifier.first)
-          end
-          ids = file_set_members.map(&:id)
-          playlist = Playlist.new(title: selection_files.first.selection_title, local_identifier: selection_id.to_s, part_of: selections_to_courses[selection_id]&.first&.course_nums)
-          change_set = DynamicChangeSet.new(playlist).prepopulate!
-          change_set.file_set_ids = ids
-          buffered_change_set_persister.save(change_set: change_set)
-        end
+        create_playlists(output, buffered_change_set_persister)
       end
       output
+    end
+
+    def create_playlists(output, buffered_change_set_persister)
+      selections_to_courses = recording_collector.courses_for_selections(audio_files.flat_map(&:selection_id).uniq).group_by { |x| x.id.to_s.to_i }
+      members = Wayfinder.for(output).members
+      audio_files.group_by(&:selection_id).each do |selection_id, selection_files|
+        next if selection_files.empty? || selection_files.length < 2
+        file_set_members = members.select do |member|
+          selection_files.map(&:id).map(&:to_s).include?(member.local_identifier.first)
+        end
+        ids = file_set_members.map(&:id)
+        playlist = Playlist.new(title: selection_files.first.selection_title, local_identifier: selection_id.to_s, part_of: selections_to_courses[selection_id]&.first&.course_nums)
+        change_set = DynamicChangeSet.new(playlist).prepopulate!
+        change_set.file_set_ids = ids
+        buffered_change_set_persister.save(change_set: change_set)
+      end
     end
 
     def change_set_persister
