@@ -194,10 +194,10 @@ class MusicImportService
     def ingest_recording
       logger.info "Ingesting #{recording.titles}"
       output = nil
-      change_set.files = files
+      recording_change_set.files = files
       selections_to_courses = recording_collector.courses_for_selections(audio_files.flat_map(&:selection_id).uniq).group_by { |x| x.id.to_s.to_i }
       change_set_persister.buffer_into_index do |buffered_change_set_persister|
-        output = buffered_change_set_persister.save(change_set: change_set)
+        output = buffered_change_set_persister.save(change_set: recording_change_set)
         members = Wayfinder.for(output).members
         audio_files.group_by(&:selection_id).each do |selection_id, selection_files|
           next if selection_files.empty? || selection_files.length < 2
@@ -222,8 +222,8 @@ class MusicImportService
       @resource ||= ScannedResource.new(source_metadata_identifier: identifier, local_identifier: recording_id.to_s, part_of: recording.courses, title: Array.wrap(recording.titles).first)
     end
 
-    def change_set
-      @change_set ||= RecordingChangeSet.new(resource).prepopulate!
+    def recording_change_set
+      @recording_change_set ||= RecordingChangeSet.new(resource).prepopulate!
     end
 
     def identifier
