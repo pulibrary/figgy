@@ -30,18 +30,18 @@
     <%= csrf_meta_tag %>
     <meta name="google-site-verification" content="ahsnadaG77nHGY5J1JM9ZBi9yIjK8HkHUtGLRbKjkTc" />
     <%= stylesheet_link_tag 'application' %>
-    <%= javascript_include_tag 'application' %>
     <%= stylesheet_pack_tag 'application' %>
+    <%= yield :head %>
+  </head>
+  <body>
+    <%= content_for?(:body) ? yield(:body) : yield %>
+    <%= render 'shared/ajax_modal' %>
+    <%= javascript_include_tag 'application' %>
     <%= javascript_tag do %>
       window.Global = {
         figgy: { resource: { defaultThumbnail: "<%= image_url('default_thumbnail.png') %>" } }
       };
     <% end %>
     <%= javascript_pack_tag 'application' %>
-    <%= yield :head %>
-  </head>
-  <body>
-    <%= content_for?(:body) ? yield(:body) : yield %>
-    <%= render 'shared/ajax_modal' %>
   </body>
 </html>
