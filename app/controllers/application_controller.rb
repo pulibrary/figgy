@@ -32,6 +32,16 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  rescue_from Valkyrie::Persistence::ObjectNotFoundError, with: :resource_not_found
+  def resource_not_found(_exception)
+    respond_to do |format|
+      format.json { head :not_found }
+      format.html do
+        redirect_to root_url, alert: "The requested resource does not exist."
+      end
+    end
+  end
+
   # Figgy has no use cases for having unique shared searches, and this prevents
   # the user list from growing out of control.
   def guest_user

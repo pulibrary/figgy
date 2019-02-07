@@ -26,7 +26,8 @@ RSpec.describe FileSetsController, type: :controller do
 
     context "with an invalid FileSet ID" do
       it "displays an error" do
-        expect { patch :update, params: { id: "no-exist", file_set: { title: ["Second"] } } }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+        patch :update, params: { id: "no-exist", file_set: { title: ["Second"] } }
+        expect(response).to redirect_to_not_found
       end
     end
 
