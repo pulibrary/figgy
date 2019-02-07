@@ -4,7 +4,7 @@ class CheckFixityRecursiveJob < ApplicationJob
 
   def perform
     CheckFixityJob.perform_now(next_file_set.id)
-    CheckFixityRecursiveJob.set(queue: queue_name).perform_later
+    CheckFixityRecursiveJob.set(queue: :super_low).perform_later
   end
 
   private
