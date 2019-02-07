@@ -14,7 +14,7 @@ class ChangeSetPersister
       # Don't run if a file has been updated; fixity will run after characterization on the new file
       new_file_scenarios = ["files", "pending_uploads"]
       return unless (change_set.changed.keys & new_file_scenarios).empty?
-      ::CheckFixityJob.set(queue: change_set_persister.queue).perform_later(change_set.resource.id.to_s)
+      ::CheckFixityJob.perform_later(change_set.resource.id.to_s)
     end
   end
 end
