@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 class CheckFixityRecursiveJob < ApplicationJob
+  queue_as :super_low
   delegate :query_service, to: :metadata_adapter
 
   def perform
     CheckFixityJob.perform_now(next_file_set.id)
-    CheckFixityRecursiveJob.set(queue: :super_low).perform_later
+    CheckFixityRecursiveJob.perform_later
   end
 
   private

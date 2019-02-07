@@ -7,7 +7,7 @@ class CreateDerivativesJob < ApplicationJob
     file_set = query_service.find_by(id: Valkyrie::ID.new(file_set_id))
     Valkyrie::Derivatives::DerivativeService.for(FileSetChangeSet.new(file_set)).create_derivatives
     messenger.derivatives_created(file_set)
-    CheckFixityJob.set(queue: queue_name).perform_later(file_set_id)
+    CheckFixityJob.perform_later(file_set_id)
   rescue Valkyrie::Persistence::ObjectNotFoundError => error
     Valkyrie.logger.warn "#{self.class}: #{error}: Failed to find the resource #{file_set_id}"
   end
