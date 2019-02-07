@@ -70,6 +70,12 @@ jobs:
           POSTGRES_USER: figgy
           POSTGRES_DB: figgy_test
           POSTGRES_PASSWORD: ""
+      - image: solr:7.1-alpine
+        command: bin/solr -cloud -noprompt -f -p 8984
+    parallelism: 4
+    environment:
+      SPEC_OPTS: --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
+      COVERALLS_PARALLEL: true
     steps:
       - attach_workspace:
           at: '~/figgy'
@@ -87,11 +93,38 @@ jobs:
       - run: bundle install --path vendor/bundle
       - run: yarn exec jest --coverage
       - run:
-          command: bundle exec rake figgy:test
-          background: true
-      - run: bin/jetty_wait
+          name: Load config into solr
+          command: |
+            cd solr/config
+            zip -1 -r solr_config.zip ./*
+            curl -H "Content-type:application/octet-stream" --data-binary @solr_config.zip "http://localhost:8984/solr/admin/configs?action=UPLOAD&name=figgy"
+            curl -H 'Content-type: application/json' http://localhost:8984/api/collections/ -d '{create: {name: figgy-core-test, config: figgy, numShards: 1}}'
       - run: bundle exec rake db:migrate
-      - run: bundle exec rspec spec
+      - run:
+          name: Run rspec in parallel
+          command: |
+            mkdir /tmp/test-results
+            bundle exec rspec $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+      - run: echo $CIRCLE_BUILD_NUM > test-build-num
+      - persist_to_workspace:
+          root: '~/figgy'
+          paths: 'test-build-num'
+      # collect reports
+      - store_test_results:
+          path: /tmp/test-results
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: test-results
+  notify_coveralls:
+    working_directory: ~/figgy
+    docker:
+      - image: circleci/ruby:2.4.5-node-browsers
+    steps:
+      - attach_workspace:
+          at: '~/figgy'
+      - run:
+          command: curl -k https://coveralls.io/webhook?repo_token=$COVERALLS_REPO_TOKEN -d "payload[build_num]=`cat test-build-num`&payload[status]=done"
+          name: "Notify Coveralls of Completion"
   rubocop:
     working_directory: ~/figgy
     docker:
@@ -126,6 +159,9 @@ workflows:
       - rubocop:
           requires:
             - build
+      - notify_coveralls:
+          requires:
+            - test
   nightly:
     triggers:
       - schedule:
@@ -142,3 +178,6 @@ workflows:
       - rubocop:
           requires:
             - build
+      - notify_coveralls:
+          requires:
+            - test
