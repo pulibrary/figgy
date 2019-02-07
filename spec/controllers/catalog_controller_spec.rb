@@ -46,7 +46,7 @@ RSpec.describe CatalogController do
       get :index, params: { q: "p3b593k91p" }
       expect(assigns(:document_list).length).to eq 1
     end
-    context "with imported metadata" do
+    context "with metadata imported from voyager" do
       it "can search by imported local identifiers" do
         stub_bibdata(bib_id: "8543429")
         stub_ezid(shoulder: "99999/fk4", blade: "8543429")
@@ -69,6 +69,15 @@ RSpec.describe CatalogController do
         expect(assigns(:document_list).length).to eq 1
 
         get :index, params: { q: "lighthouses" }
+        expect(assigns(:document_list).length).to eq 1
+      end
+    end
+    context "with metadata imported from pulfa" do
+      it "can search by box and folder numbers" do
+        stub_pulfa(pulfa_id: "AC044/c0003")
+        stub_ezid(shoulder: "99999/fk4", blade: "8543429")
+        persister.save(resource: FactoryBot.create_for_repository(:complete_scanned_resource, title: [], source_metadata_identifier: "AC044/c0003", import_metadata: true))
+        get :index, params: { q: "Box 1 Folder 2" }
         expect(assigns(:document_list).length).to eq 1
       end
     end
