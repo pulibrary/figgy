@@ -50,11 +50,11 @@ RSpec.feature "PlaylistChangeSets" do
       playlist_members_elements = doc.xpath("//playlist-members[@resource-id='#{resource.id}']")
       expect(playlist_members_elements).not_to be_empty
       playlist_members_element = playlist_members_elements.first
-      expect(playlist_members_element.attributes[":members"].value).to eq json_fixture(resource.decorate.decorated_proxies.first, recording)
+      expect(JSON.parse(playlist_members_element.attributes[":members"].value)).to eq JSON.parse(json_fixture(resource.decorate.decorated_proxies.first, recording))
     end
   end
 
   def json_fixture(decorated_resource, recording)
-    "[{\"id\":{\"id\":\"#{decorated_resource.id}\"},\"internal_resource\":\"ProxyFileSet\",\"created_at\":\"#{decorated_resource.created_at}\",\"updated_at\":\"#{decorated_resource.updated_at}\",\"new_record\":false,\"read_groups\":[],\"read_users\":[],\"edit_users\":[],\"edit_groups\":[],\"label\":[\"audio_file.wav\"],\"visibility\":[],\"proxied_file_id\":{\"id\":\"#{decorated_resource.proxied_file_id}\"},\"local_identifier\":null,\"recording_url\":\"http://www.example.com/catalog/#{recording.id}\",\"recording_title\":\"#{recording.title.first}\"}]"
+    "[{\"id\":{\"id\":\"#{decorated_resource.id}\"},\"created_at\":\"#{decorated_resource.created_at}\",\"updated_at\":\"#{decorated_resource.updated_at}\",\"internal_resource\":\"ProxyFileSet\",\"new_record\":false,\"read_groups\":[],\"read_users\":[],\"edit_users\":[],\"edit_groups\":[],\"label\":[\"audio_file.wav\"],\"visibility\":[],\"proxied_file_id\":{\"id\":\"#{decorated_resource.proxied_file_id}\"},\"local_identifier\":null,\"recording_url\":\"http://www.example.com/catalog/#{recording.id}\",\"recording_title\":\"#{recording.title.first}\"}]"
   end
 end
