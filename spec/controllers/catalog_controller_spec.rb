@@ -46,7 +46,7 @@ RSpec.describe CatalogController do
       get :index, params: { q: "p3b593k91p" }
       expect(assigns(:document_list).length).to eq 1
     end
-    context "with imported metadata" do
+    context "with metadata imported from voyager" do
       it "can search by imported local identifiers" do
         stub_bibdata(bib_id: "8543429")
         stub_ezid(shoulder: "99999/fk4", blade: "8543429")
@@ -59,6 +59,25 @@ RSpec.describe CatalogController do
         stub_ezid(shoulder: "99999/fk4", blade: "8543429")
         persister.save(resource: FactoryBot.create_for_repository(:scanned_map, state: "complete", title: [], source_metadata_identifier: "10001789", import_metadata: true))
         get :index, params: { q: "g8731" }
+        expect(assigns(:document_list).length).to eq 1
+      end
+      it "can search by various imported fields" do
+        stub_bibdata(bib_id: "10001789")
+        stub_ezid(shoulder: "99999/fk4", blade: "8543429")
+        persister.save(resource: FactoryBot.create_for_repository(:scanned_map, state: "complete", title: [], source_metadata_identifier: "10001789", import_metadata: true))
+        get :index, params: { q: "Stationery" }
+        expect(assigns(:document_list).length).to eq 1
+
+        get :index, params: { q: "lighthouses" }
+        expect(assigns(:document_list).length).to eq 1
+      end
+    end
+    context "with metadata imported from pulfa" do
+      it "can search by box and folder numbers" do
+        stub_pulfa(pulfa_id: "AC044/c0003")
+        stub_ezid(shoulder: "99999/fk4", blade: "8543429")
+        persister.save(resource: FactoryBot.create_for_repository(:complete_scanned_resource, title: [], source_metadata_identifier: "AC044/c0003", import_metadata: true))
+        get :index, params: { q: "Box 1 Folder 2" }
         expect(assigns(:document_list).length).to eq 1
       end
     end
@@ -103,9 +122,18 @@ RSpec.describe CatalogController do
     end
 
     context "with indexed completed ephemera folders" do
+      before do
+        persister.save(resource: FactoryBot.build(:ephemera_folder, folder_number: "24", barcode: "123456789abcde", state: "complete"))
+      end
+
       it "can search by barcode" do
-        persister.save(resource: FactoryBot.build(:ephemera_folder, barcode: "123456789abcde", state: "complete"))
         get :index, params: { q: "123456789abcde" }
+
+        expect(assigns(:document_list).length).to eq 1
+      end
+
+      it "can search by folder label" do
+        get :index, params: { q: "folder 24" }
 
         expect(assigns(:document_list).length).to eq 1
       end
@@ -259,8 +287,8 @@ RSpec.describe CatalogController do
     end
 
     context "within a complete EphemeraBox" do
-      let(:ephemera_folder) { FactoryBot.build(:ephemera_folder, state: "complete") }
-      let(:ephemera_box) { FactoryBot.build(:ephemera_box, state: "all_in_production") }
+      let(:ephemera_folder) { FactoryBot.build(:ephemera_folder, folder_number: "99", state: "complete") }
+      let(:ephemera_box) { FactoryBot.build(:ephemera_box, box_number: "42", state: "all_in_production") }
       before do
         box = persister.save(resource: ephemera_box)
         folder = persister.save(resource: ephemera_folder)
@@ -270,6 +298,12 @@ RSpec.describe CatalogController do
       end
       it "does display complete EphemeraFolders" do
         get :index, params: { q: "" }
+
+        expect(assigns(:document_list).length).to eq 1
+      end
+
+      it "retrieves folders by box/folder label" do
+        get :index, params: { q: "box 42 folder 99" }
 
         expect(assigns(:document_list).length).to eq 1
       end
