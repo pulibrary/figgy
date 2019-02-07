@@ -125,7 +125,8 @@ RSpec.describe EphemeraVocabulariesController, type: :controller do
     end
     context "when a ephemera vocabulary doesn't exist" do
       it "raises an error" do
-        expect { get :edit, params: { id: "test" } }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+        get :edit, params: { id: "test" }
+        expect(response).to redirect_to_not_found
       end
     end
     context "when it does exist" do
@@ -149,7 +150,8 @@ RSpec.describe EphemeraVocabulariesController, type: :controller do
     end
     context "when a ephemera vocabulary doesn't exist" do
       it "raises an error" do
-        expect { patch :update, params: { id: "test" } }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+        patch :update, params: { id: "test" }
+        expect(response).to redirect_to_not_found
       end
     end
     context "when it does exist" do

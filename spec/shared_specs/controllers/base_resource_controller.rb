@@ -4,7 +4,6 @@ require "rails_helper"
 RSpec.shared_examples "a BaseResourceController" do |*flags|
   include ActionDispatch::Routing::PolymorphicRoutes
   include Rails.application.routes.url_helpers
-
   with_queue_adapter :inline
   let(:user) { nil }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
@@ -157,6 +156,11 @@ RSpec.shared_examples "a BaseResourceController" do |*flags|
       expect(response).to redirect_to root_path
       expect { query_service.find_by(id: resource.id) }.to raise_error ::Valkyrie::Persistence::ObjectNotFoundError
     end
+    it "returns a 404 when given a bad resource ID" do
+      delete :destroy, params: { id: SecureRandom.uuid }
+
+      expect(response).to redirect_to_not_found
+    end
   end
 
   describe "edit" do
@@ -168,8 +172,9 @@ RSpec.shared_examples "a BaseResourceController" do |*flags|
       it_behaves_like "an access controlled edit request"
     end
     context "when a resource doesn't exist" do
-      it "raises an error" do
-        expect { get :edit, params: { id: "test" } }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+      it "redirects" do
+        get :edit, params: { id: "test" }
+        expect(response).to redirect_to_not_found
       end
     end
     context "when it does exist" do
@@ -194,7 +199,8 @@ RSpec.shared_examples "a BaseResourceController" do |*flags|
       end
       context "when a resource doesn't exist" do
         it "raises an error" do
-          expect { patch :update, params: { id: "test" } }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+          patch :update, params: { id: "test" }
+          expect(response).to redirect_to_not_found
         end
       end
       context "when it does exist" do

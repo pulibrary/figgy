@@ -203,7 +203,8 @@ RSpec.describe ScannedResourcesController, type: :controller do
     end
     context "when a scanned resource doesn't exist" do
       it "raises an error" do
-        expect { get :structure, params: { id: "banana" } }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+        get :structure, params: { id: "banana" }
+        expect(response).to redirect_to_not_found
       end
     end
     context "when it does exist" do
