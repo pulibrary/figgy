@@ -14,6 +14,6 @@ class SortingIndexer
   def sort_title
     return resource.sort_title if resource.try(:sort_title)
     return resource.title.first.to_s.downcase if resource.try(:title) && resource.title.first
-    resource.id
+    resource.id.to_s
   end
 end
