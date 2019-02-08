@@ -140,7 +140,7 @@ jobs:
       - run:
           name: Merge and check coverage
           command: |
-            bundle exec rake simplecov:report_coverage
+            RAILS_ENV=test bundle exec rake simplecov:report_coverage
       - store_artifacts:
           path: ~/figgy/coverage
           destination: coverage
