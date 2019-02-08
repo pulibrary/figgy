@@ -2,7 +2,9 @@ import Clipboard from 'clipboard'
 
 export default function setupAuthLinkClipboard () {
   let div = document.getElementById('clipboard-trigger-holder')
-  div.innerHTML = '<button class="btn btn-primary" id="clipboard-trigger">Copy link to clipboard</button>'
+  if (div) {
+    div.innerHTML = '<button class="btn btn-primary" id="clipboard-trigger">Copy link to clipboard</button>'
+  }
   new Clipboard('#clipboard-trigger', {
     text: function (trigger) {
       let url = document.getElementById('authorized-link').children[0].getAttribute('href')
