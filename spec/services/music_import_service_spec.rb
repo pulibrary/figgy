@@ -399,6 +399,159 @@ RSpec.describe MusicImportService do
         expect(logger).to have_received(:warn).with("Unable to find AudioFile 54205 at location #{importer.file_root}/cd-1/cd-1_2.*")
       end
     end
+
+    context "when the recording is part of a course representing a performance collection" do
+      let(:recording) do
+        MusicImportService::RecordingCollector::MRRecording.new(
+          14,
+          "cd-431v1",
+          ["students"],
+          ["Symphonies nos. 55-69"],
+          ["123456"]
+        )
+      end
+
+      let(:audio_files) do
+        [
+          MusicImportService::RecordingCollector::AudioFile.new(
+            id: 54_204,
+            file_path: "cd-1",
+            file_name: "cd-1_1.ra",
+            entry_id: "blabla",
+            recording_id: 14
+          )
+        ]
+      end
+
+      before do
+        stub_bibdata(bib_id: "123456")
+        allow(importer.recording_collector).to receive(:audio_files).with(recording).and_return(audio_files)
+      end
+
+      it "does not create any playlists" do
+        output = importer.ingest_recording(recording)
+        wayfinder = Wayfinder.for(output)
+        expect(wayfinder.playlists.length).to eq 0
+      end
+
+      it "adds the recording to a new collection" do
+        output = importer.ingest_recording(recording)
+        expect(output.part_of).to eq ["students"]
+        collections = Wayfinder.for(output).collections
+        expect(collections.length).to eq 1
+        expect(collections.first.title).to eq ["Performance Ensembles"]
+      end
+
+      it "adds the recording to an existing collection" do
+        collection = FactoryBot.create_for_repository(:collection, title: "Performance Ensembles")
+        output = importer.ingest_recording(recording)
+        expect(output.member_of_collection_ids).to eq [collection.id]
+      end
+    end
+
+    context "when the recording is part of two performance courses mapped to the same collection" do
+      let(:recording) do
+        MusicImportService::RecordingCollector::MRRecording.new(
+          14,
+          "cd-431v1",
+          ["students", "glee"],
+          ["Symphonies nos. 55-69"],
+          ["123456"]
+        )
+      end
+
+      let(:audio_files) do
+        [
+          MusicImportService::RecordingCollector::AudioFile.new(
+            id: 54_204,
+            file_path: "cd-1",
+            file_name: "cd-1_1.ra",
+            entry_id: "blabla",
+            recording_id: 14
+          )
+        ]
+      end
+
+      before do
+        stub_bibdata(bib_id: "123456")
+        allow(importer.recording_collector).to receive(:audio_files).with(recording).and_return(audio_files)
+      end
+
+      it "adds the recording to one collection" do
+        output = importer.ingest_recording(recording)
+        expect(output.part_of).to eq ["students", "glee"]
+        collections = Wayfinder.for(output).collections
+        expect(collections.length).to eq 1
+        expect(collections.first.title).to eq ["Performance Ensembles"]
+      end
+    end
+
+    context "when the recording is part of one performance course and one other course" do
+      let(:recording) do
+        MusicImportService::RecordingCollector::MRRecording.new(
+          14,
+          "cd-431v1",
+          ["students", "mus204"],
+          ["Symphonies nos. 55-69"],
+          ["123456"]
+        )
+      end
+
+      let(:audio_files) do
+        [
+          MusicImportService::RecordingCollector::AudioFile.new(
+            id: 54_204,
+            selection_id: 15_929,
+            file_path: "cd-1",
+            file_name: "cd-1_1.ra",
+            file_note: "First File",
+            entry_id: "blabla",
+            selection_title: "My Selection",
+            selection_alt_title: nil,
+            selection_note: "Paul Jacobs, piano",
+            recording_id: 14
+          ),
+          MusicImportService::RecordingCollector::AudioFile.new(
+            id: 54_205,
+            selection_id: 15_929,
+            file_path: "cd-1",
+            file_name: "cd-1_1.ra",
+            file_note: "Second File",
+            entry_id: "blabla2",
+            selection_title: "My Selection",
+            selection_alt_title: nil,
+            selection_note: "Paul Jacobs, piano",
+            recording_id: 14
+          )
+        ]
+      end
+      let(:selections) do
+        [
+          MusicImportService::RecordingCollector::Selection.new(
+            id: 15_929,
+            course_nums: ["mus204"]
+          )
+        ]
+      end
+
+      before do
+        stub_bibdata(bib_id: "123456")
+        allow(importer.recording_collector).to receive(:audio_files).with(recording).and_return(audio_files)
+        allow(importer.recording_collector).to receive(:courses_for_selections).with([15_929]).and_return(selections)
+      end
+
+      it "adds the recording to one collection and creates a playlist" do
+        output = importer.ingest_recording(recording)
+        expect(output.part_of).to eq ["students", "mus204"]
+        wayfinder = Wayfinder.for(output)
+        collections = wayfinder.collections
+        expect(collections.length).to eq 1
+        expect(collections.first.title).to eq ["Performance Ensembles"]
+
+        playlists = wayfinder.playlists
+        expect(playlists.length).to eq 1
+      end
+    end
   end
 
   def music_fixtures

@@ -118,7 +118,7 @@ class MusicImportService
     end
 
     def find_recording
-      change_set_persister.query_service.custom_queries.find_by_property(property: :local_identifier, value: recording.id.to_s).find do |x|
+      query_service.custom_queries.find_by_property(property: :local_identifier, value: recording.id.to_s).find do |x|
         DynamicChangeSet.new(x).is_a?(RecordingChangeSet)
       end
     end
@@ -162,7 +162,7 @@ class MusicImportService
           # Find previously imported dependent file sets
           file_set_ids = selection_files.map do |file|
             {
-              buffered_change_set_persister.query_service.custom_queries.find_by_property(property: :local_identifier, value: file.entry_id.to_s).first&.id => file.id
+              query_service.custom_queries.find_by_property(property: :local_identifier, value: file.entry_id.to_s).first&.id => file.id
             }
           end.inject(&:merge).compact
           change_set = DynamicChangeSet.new(playlist).prepopulate!
@@ -194,36 +194,88 @@ class MusicImportService
     def ingest_recording
       logger.info "Ingesting #{recording.titles}"
       output = nil
-      change_set.files = files
-      selections_to_courses = recording_collector.courses_for_selections(audio_files.flat_map(&:selection_id).uniq).group_by { |x| x.id.to_s.to_i }
+      recording_change_set.files = files
+      if in_performance_course?
+        collections = find_or_create_collections
+        recording_change_set.member_of_collection_ids = collections.map(&:id)
+      end
       change_set_persister.buffer_into_index do |buffered_change_set_persister|
-        output = buffered_change_set_persister.save(change_set: change_set)
-        members = Wayfinder.for(output).members
-        audio_files.group_by(&:selection_id).each do |selection_id, selection_files|
-          next if selection_files.empty? || selection_files.length < 2
-          file_set_members = members.select do |member|
-            selection_files.map(&:id).map(&:to_s).include?(member.local_identifier.first)
-          end
-          ids = file_set_members.map(&:id)
-          playlist = Playlist.new(title: selection_files.first.selection_title, local_identifier: selection_id.to_s, part_of: selections_to_courses[selection_id]&.first&.course_nums)
-          change_set = DynamicChangeSet.new(playlist).prepopulate!
-          change_set.file_set_ids = ids
-          buffered_change_set_persister.save(change_set: change_set)
-        end
+        output = buffered_change_set_persister.save(change_set: recording_change_set)
+        create_playlists(output, buffered_change_set_persister) if in_non_performance_course?
       end
       output
+    end
+
+    def in_performance_course?
+      # check intersection
+      (recording.courses & course_names_table.keys).present?
+    end
+
+    def in_non_performance_course?
+      recording.courses.each do |course|
+        return true unless course_names_table.keys.include?(course)
+      end
+      false
+    end
+
+    def course_names_table
+      @course_names_table ||=
+        begin
+          lookup_table = {}
+          file = Rails.root.join("config", "audio_reserves", "recordings_course_names_massaged.csv")
+          CSV.open(file, headers: true).each do |row|
+            h = row.to_h
+            lookup_table[h["course_name"]] = h["collection_name"]
+          end
+          lookup_table
+        end
+    end
+
+    def find_or_create_collections
+      performance_courses = recording.courses.map do |course|
+        [course, course_names_table[course]] if course_names_table[course]
+      end.compact
+      performance_courses.map do |pair|
+        existing = query_service.custom_queries.find_by_property(property: :title, value: pair[1]).select { |c| c.is_a? Collection }
+        if existing.present?
+          existing.first
+        else
+          collection = Collection.new(slug: pair[0], title: pair[1])
+          change_set_persister.save(change_set: DynamicChangeSet.new(collection))
+        end
+      end
+    end
+
+    def create_playlists(output, buffered_change_set_persister)
+      selections_to_courses = recording_collector.courses_for_selections(audio_files.flat_map(&:selection_id).uniq).group_by { |x| x.id.to_s.to_i }
+      members = Wayfinder.for(output).members
+      audio_files.group_by(&:selection_id).each do |selection_id, selection_files|
+        next if selection_files.empty? || selection_files.length < 2
+        file_set_members = members.select do |member|
+          selection_files.map(&:id).map(&:to_s).include?(member.local_identifier.first)
+        end
+        ids = file_set_members.map(&:id)
+        playlist = Playlist.new(title: selection_files.first.selection_title, local_identifier: selection_id.to_s, part_of: selections_to_courses[selection_id]&.first&.course_nums)
+        change_set = DynamicChangeSet.new(playlist).prepopulate!
+        change_set.file_set_ids = ids
+        buffered_change_set_persister.save(change_set: change_set)
+      end
     end
 
     def change_set_persister
       @change_set_persister ||= ScannedResourcesController.change_set_persister
     end
 
+    def query_service
+      @query_service ||= change_set_persister.query_service
+    end
+
     def resource
       @resource ||= ScannedResource.new(source_metadata_identifier: identifier, local_identifier: recording_id.to_s, part_of: recording.courses, title: Array.wrap(recording.titles).first)
     end
 
-    def change_set
-      @change_set ||= RecordingChangeSet.new(resource).prepopulate!
+    def recording_change_set
+      @recording_change_set ||= RecordingChangeSet.new(resource).prepopulate!
     end
 
     def identifier
