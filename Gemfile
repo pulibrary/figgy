@@ -70,6 +70,7 @@ group :test do
   gem "database_cleaner"
   gem "formulaic"
   gem "rspec-graphql_matchers"
+  gem "rspec_junit_formatter"
   gem "selenium-webdriver"
   gem "simplecov", require: false
   gem "timecop"
