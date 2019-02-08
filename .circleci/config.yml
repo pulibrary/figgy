@@ -105,26 +105,36 @@ jobs:
           command: |
             mkdir /tmp/test-results
             bundle exec rspec $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
-      - run: echo $CIRCLE_BUILD_NUM > test-build-num
+      - run:
+          name: Stash Coverage Results
+          command: |
+            mkdir coverage_results
+            cp -R coverage/.resultset.json coverage_results/.resultset-${CIRCLE_NODE_INDEX}.json
       - persist_to_workspace:
           root: '~/figgy'
-          paths: 'test-build-num'
+          paths: 'coverage_results'
       # collect reports
       - store_test_results:
           path: /tmp/test-results
       - store_artifacts:
           path: /tmp/test-results
           destination: test-results
-  notify_coveralls:
+  coverage_report:
     working_directory: ~/figgy
     docker:
       - image: circleci/ruby:2.4.5-node-browsers
     steps:
       - attach_workspace:
           at: '~/figgy'
+      - run: gem install simplecov
+      - run: gem install activesupport
       - run:
-          command: curl -k https://coveralls.io/webhook?repo_token=$COVERALLS_REPO_TOKEN -d "payload[build_num]=`cat test-build-num`&payload[status]=done"
-          name: "Notify Coveralls of Completion"
+          name: Merge and check coverage
+          command: |
+            RAILS_ENV=test ruby ./scripts/combine_coverage.rb
+      - store_artifacts:
+          path: ~/figgy/coverage
+          destination: coverage
   rubocop:
     working_directory: ~/figgy
     docker:
@@ -159,7 +169,7 @@ workflows:
       - rubocop:
           requires:
             - build
-      - notify_coveralls:
+      - coverage_report:
           requires:
             - test
   nightly:
@@ -178,6 +188,6 @@ workflows:
       - rubocop:
           requires:
             - build
-      - notify_coveralls:
+      - coverage_report:
           requires:
             - test
