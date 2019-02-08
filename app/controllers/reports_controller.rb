@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require "csv"
 class ReportsController < ApplicationController
   def ephemera_data
     authorize! :show, Report
