@@ -195,11 +195,55 @@ class MusicImportService
       logger.info "Ingesting #{recording.titles}"
       output = nil
       recording_change_set.files = files
+      if in_performance_course?
+        collections = find_or_create_collections
+        recording_change_set.member_of_collection_ids = collections.map(&:id)
+      end
       change_set_persister.buffer_into_index do |buffered_change_set_persister|
         output = buffered_change_set_persister.save(change_set: recording_change_set)
-        create_playlists(output, buffered_change_set_persister)
+        create_playlists(output, buffered_change_set_persister) if in_non_performance_course?
       end
       output
+    end
+
+    def in_performance_course?
+      # check intersection
+      (recording.courses & course_names_table.keys).present?
+    end
+
+    def in_non_performance_course?
+      recording.courses.each do |course|
+        return true unless course_names_table.keys.include?(course)
+      end
+      false
+    end
+
+    def course_names_table
+      @course_names_table ||=
+        begin
+          lookup_table = {}
+          file = Rails.root.join("config", "audio_reserves", "recordings_course_names_massaged.csv")
+          CSV.open(file, headers: true).each do |row|
+            h = row.to_h
+            lookup_table[h["course_name"]] = h["collection_name"]
+          end
+          lookup_table
+        end
+    end
+
+    def find_or_create_collections
+      performance_courses = recording.courses.map do |course|
+        [course, course_names_table[course]] if course_names_table[course]
+      end.compact
+      performance_courses.map do |pair|
+        existing = query_service.custom_queries.find_by_property(property: :title, value: pair[1]).select { |c| c.is_a? Collection }
+        if existing.present?
+          existing.first
+        else
+          collection = Collection.new(slug: pair[0], title: pair[1])
+          change_set_persister.save(change_set: DynamicChangeSet.new(collection))
+        end
+      end
     end
 
     def create_playlists(output, buffered_change_set_persister)
@@ -220,6 +264,10 @@ class MusicImportService
 
     def change_set_persister
       @change_set_persister ||= ScannedResourcesController.change_set_persister
+    end
+
+    def query_service
+      @query_service ||= change_set_persister.query_service
     end
 
     def resource
