@@ -50,7 +50,6 @@ group :development, :test do
   gem "awesome_print"
   gem "bixby"
   gem "bundler-audit", ">= 0.5.0", require: false
-  gem "coveralls"
   gem "dotenv-rails"
   gem "factory_bot_rails"
   gem "pdf-reader", github: "yob/pdf-reader"
