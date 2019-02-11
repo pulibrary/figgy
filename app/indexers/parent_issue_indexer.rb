@@ -10,11 +10,11 @@ class ParentIssueIndexer
     return {} unless resource.is_a?(Coin)
     return {} unless parents.first
 
-    parent_attributes.map { |k, v| ["issue_#{k}_tesim", v] }.to_h
+    parent_attributes.map { |k, v| ["issue_#{k}_tesim", Array.wrap(v).map(&:to_s)] }.to_h
   end
 
   def parent_attributes
-    parents.first.attributes.dup.delete_if { |k, _| parent_keys_suppress.include?(k) }
+    parents.first.attributes.dup.delete_if { |k, v| parent_keys_suppress.include?(k) || v.blank? }
   end
 
   def parent_keys_suppress
