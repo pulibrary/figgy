@@ -23,13 +23,14 @@ describe VoyagerUpdateJob do
 
     before do
       resources
-      allow(buffered_change_set_persister).to receive(:save)
-      allow_any_instance_of(ChangeSetPersister::Basic).to receive(:buffer_into_index).and_yield(buffered_change_set_persister)
       described_class.perform_now(ids)
     end
 
     it "queries for all resources and updates them asynchronously" do
-      expect(buffered_change_set_persister).to have_received(:save).exactly(2).times
+      resource1 = find_resource(resources.first.id)
+      resource2 = find_resource(resources.last.id)
+      expect(resource1.title.first.to_s).to eq("Earth rites : fertility rites in pre-industrial Britain")
+      expect(resource2.title.first.to_s).to eq("Bible, Latin")
     end
   end
 
@@ -48,5 +49,9 @@ describe VoyagerUpdateJob do
     it "logs a warning" do
       expect { described_class.perform_now(["3"]) }.to output("VoyagerUpdateJob: Unable to process the changed Voyager record 3: Valkyrie::Persistence::ObjectNotFoundError\n").to_stderr
     end
+  end
+
+  def find_resource(id)
+    Valkyrie.config.metadata_adapter.query_service.find_by(id: id)
   end
 end
