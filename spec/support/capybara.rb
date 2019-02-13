@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require 'capybara/rails'
 require 'capybara/rspec'
+require 'capybara-screenshot/rspec'
 RSpec.configure do |config|
   config.include Capybara::RSpecMatchers, type: :request
 end
