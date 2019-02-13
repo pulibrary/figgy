@@ -18,6 +18,7 @@ module Types::Resource
   field :members, [Types::Resource], null: true
   field :source_metadata_identifier, String, null: true
   field :thumbnail, Types::Thumbnail, null: true
+  field :ocr_content, [String], null: true
 
   definition_methods do
     def resolve_type(object, _context)
@@ -41,6 +42,12 @@ module Types::Resource
 
   def url
     @url ||= helper.show_url(object)
+  end
+
+  def ocr_content
+    @ocr_content ||= Wayfinder.for(object).file_sets.select do |file_set|
+      file_set.ocr_content.present?
+    end.flat_map(&:ocr_content)
   end
 
   # We need to centralize logic for navigating a MVW's members to find a

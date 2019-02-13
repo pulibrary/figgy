@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe Types::FileSetType do
   subject(:type) { described_class.new(resource, {}) }
-  let(:resource) { FactoryBot.create_for_repository(:file_set, viewing_hint: "individuals", title: ["I'm a label."]) }
+  let(:resource) { FactoryBot.create_for_repository(:file_set, viewing_hint: "individuals", title: ["I'm a label."], ocr_content: ["My Content"]) }
   let(:parent) { FactoryBot.create_for_repository(:scanned_resource, member_ids: resource.id) }
   describe "class methods" do
     subject { described_class }
@@ -16,6 +16,12 @@ RSpec.describe Types::FileSetType do
   describe "#viewing_hint" do
     it "returns a singular value" do
       expect(type.viewing_hint).to eq "individuals"
+    end
+  end
+
+  describe "#ocr_content" do
+    it "returns an array" do
+      expect(type.ocr_content).to eq ["My Content"]
     end
   end
 

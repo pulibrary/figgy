@@ -12,4 +12,6 @@ class Types::FileSetType < Types::BaseObject
   def thumbnail_resource
     object
   end
+
+  delegate :ocr_content, to: :object
 end
