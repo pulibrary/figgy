@@ -56,6 +56,7 @@ RSpec.feature "Bulk edit", js: true do
     end
     it "updates the object" do
       visit bulk_edit_resources_edit_path("q" => "", "f[member_of_collection_titles_ssim][]" => "My Collection")
+      expect(page).to have_content "You searched for"
       page.check("mark_complete")
       accept_alert do
         click_button("Apply Edits")

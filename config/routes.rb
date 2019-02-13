@@ -261,6 +261,7 @@ Rails.application.routes.draw do
 
   get "bulk_edit", to: "bulk_edit#resources_edit", as: "bulk_edit_resources_edit"
   post "bulk_edit(/:batch_size)", to: "bulk_edit#resources_update", as: "bulk_edit_resources_update"
+  get "bulk_edit", to: "bulk_edit#index"
 
   mount BrowseEverything::Engine => "/browse"
 

@@ -1,15 +1,24 @@
-<h2>Bulk edit <%= @resources_count %> resources</h2>
-<%= form_tag bulk_edit_resources_update_url(search_params: search_state.params_for_search) do %>
-
-  <h3>Workflow State</h3>
-  <%= check_box_tag "mark_complete" %>
-  <%= label_tag "mark_complete", "Mark all complete" %>
-
-  <div>
-    <%= submit_tag "Apply Edits",
-      id: 'bulk-edit-submit',
-      class: 'btn btn-primary',
-      data: {confirm: "Are you sure you want to bulk edit #{@resources_count} resources?"}
-    %>
+<div id="content" class="col-sm-12">
+  <div id="bulk-edit-constraints">
+    <%= render partial: "catalog/constraints" %>
   </div>
-<% end %>
+  <div class="panel panel-default">
+    <div class="panel-heading">Bulk edit <%= @resources_count %> resources</div>
+    <div class="panel-body">
+      <%= form_tag bulk_edit_resources_update_url(search_params: search_state.params_for_search), id: "bulk-edit-form", class: "form-group" do %>
+        <label>Workflow State</label>
+        <div class="checkbox">
+          <%= check_box_tag "mark_complete" %>
+          <%= label_tag "mark_complete", "Mark all complete" %>
+        </div>
+        <div class="panel-footer panel-save-controls pull-right">
+          <%= submit_tag "Apply Edits",
+            id: 'bulk-edit-submit',
+            class: 'btn btn-primary',
+            data: {confirm: "Are you sure you want to bulk edit #{@resources_count} resources?"}
+          %>
+        </div>
+      <% end %>
+    </div>  
+  </div>
+</div>
