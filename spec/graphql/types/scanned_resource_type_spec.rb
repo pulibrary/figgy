@@ -33,6 +33,7 @@ RSpec.describe Types::ScannedResourceType do
     it { is_expected.to have_field(:viewingDirection).of_type(Types::ViewingDirectionEnum) }
     it { is_expected.to have_field(:label).of_type(String) }
     it { is_expected.to have_field(:members) }
+    it { is_expected.to have_field(:ocrContent) }
     it { is_expected.to have_field(:sourceMetadataIdentifier).of_type(String) }
   end
 
@@ -156,6 +157,17 @@ RSpec.describe Types::ScannedResourceType do
       type = described_class.new(scanned_resource, {})
 
       expect(type.members.map(&:id)).to eq [metadata_file_set.id, image_file_set.id, child_resource.id]
+    end
+  end
+
+  describe "#ocr_content" do
+    it "returns all FileSet ocr_content" do
+      child_resource = FactoryBot.create_for_repository(:file_set, ocr_content: "test")
+      scanned_resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: child_resource.id)
+
+      type = described_class.new(scanned_resource, {})
+
+      expect(type.ocr_content).to eq ["test"]
     end
   end
 end
