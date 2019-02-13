@@ -57,6 +57,10 @@ class ManifestBuilder
       resource.title.map(&:to_s)
     end
 
+    def search_enabled?
+      resource.try(:ocr_language).present?
+    end
+
     def description
       if resource.respond_to?(:primary_imported_metadata) && resource.primary_imported_metadata.description.present?
         resource.primary_imported_metadata.description

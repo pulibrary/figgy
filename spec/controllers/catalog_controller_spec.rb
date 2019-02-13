@@ -19,6 +19,49 @@ RSpec.describe CatalogController do
     end
   end
 
+  describe "#iiif_search" do
+    render_views
+    context "when given a private document" do
+      it "doesn't work" do
+        child = FactoryBot.create_for_repository(:file_set, ocr_content: "Content", hocr_content: "<html></html>")
+        parent = FactoryBot.create_for_repository(:pending_scanned_resource, member_ids: child.id, ocr_language: :eng)
+
+        persister.save_all(resources: [child, parent])
+
+        get :iiif_search, params: { solr_document_id: parent.id, q: "Content" }
+
+        expect(response).not_to be_success
+        expect(response).to redirect_to "http://test.host/users/auth/cas"
+      end
+    end
+    it "finds OCR documents" do
+      child = FactoryBot.create_for_repository(:file_set, ocr_content: "Content", hocr_content: "<html></html>")
+      parent = FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: child.id, ocr_language: :eng)
+
+      persister.save_all(resources: [child, parent])
+
+      get :iiif_search, params: { solr_document_id: parent.id, q: "Content" }
+
+      expect(response).to be_success
+      json_response = JSON.parse(response.body)
+      expect(json_response["resources"].length).to eq 1
+      expect(json_response["resources"][0]["on"]).to eq "http://www.example.com/concern/scanned_resources/#{parent.id}/manifest/canvas/#{child.id}#xywh=0,0,0,0"
+    end
+    it "can perform hit highlighting" do
+      child = FactoryBot.create_for_repository(:file_set, ocr_content: "Content", hocr_content: "<html><body><span class='ocrx_word' title='bbox 1 2 3 4'>Content</span></body></html>")
+      parent = FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: child.id, ocr_language: :eng)
+
+      persister.save_all(resources: [child, parent])
+
+      get :iiif_search, params: { solr_document_id: parent.id, q: "Content" }
+
+      expect(response).to be_success
+      json_response = JSON.parse(response.body)
+      expect(json_response["resources"].length).to eq 1
+      expect(json_response["resources"][0]["on"]).to eq "http://www.example.com/concern/scanned_resources/#{parent.id}/manifest/canvas/#{child.id}#xywh=1,2,2,2"
+    end
+  end
+
   describe "#index" do
     it "can search by source metadata identifier" do
       stub_bibdata(bib_id: "123456")

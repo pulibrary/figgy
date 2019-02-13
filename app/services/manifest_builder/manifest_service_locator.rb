@@ -18,6 +18,7 @@ class ManifestBuilder
           thumbnail_builder,
           rendering_builder,
           logo_builder,
+          iiif_search_builder,
           composite_builder: composite_builder
         )
       end
@@ -79,6 +80,10 @@ class ManifestBuilder
       # @return [Class]
       def logo_builder
         ManifestBuilder::LogoBuilder
+      end
+
+      def iiif_search_builder
+        ManifestBuilder::IIIFSearchBuilder
       end
 
       ##

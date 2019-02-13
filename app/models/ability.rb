@@ -6,7 +6,7 @@ class Ability
   self.ability_logic += [:manifest_permissions]
 
   def custom_permissions
-    alias_action :show, to: :read
+    alias_action :show, :iiif_search, to: :read
     alias_action :color_pdf, :pdf, :edit, :browse_everything_files, :structure, :file_manager, :order_manager, to: :update
     roles.each do |role|
       send "#{role}_permissions" if current_user.send "#{role}?"

@@ -1,4 +1,13 @@
 GIT
+  remote: git://github.com/boston-library/blacklight_iiif_search.git
+  revision: 51bca59b67620a0a0236cef812dd561f0928913d
+  specs:
+    blacklight_iiif_search (0.0.2.pre.alpha)
+      blacklight (~> 6.0)
+      iiif-presentation
+      rails (>= 4.2, < 6)
+
+GIT
   remote: git://github.com/jrgriffiniii/browse-everything.git
   revision: 0d44d330ac230aec915ace60f1885a523dfca105
   branch: hotfix-gdrive-paging-jrgriffiniii-stable
@@ -410,6 +419,10 @@ GEM
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
+    iiif-presentation (0.2.0)
+      activesupport (>= 3.2.18)
+      faraday (>= 0.9)
+      json
     iiif_manifest (0.5.0)
       activesupport (>= 4)
     inflecto (0.0.2)
@@ -815,6 +828,7 @@ DEPENDENCIES
   bagit (~> 0.4)
   bixby
   blacklight
+  blacklight_iiif_search!
   browse-everything!
   bundler-audit (>= 0.5.0)
   bunny
