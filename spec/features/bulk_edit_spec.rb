@@ -61,6 +61,7 @@ RSpec.feature "Bulk edit", js: true do
         click_button("Apply Edits")
       end
       expect(current_path).to eq root_path
+      expect(page).to have_content "1 resources were queued for bulk update."
       expect(adapter.query_service.find_by(id: member_scanned_resource.id).state).to eq ["complete"]
     end
   end

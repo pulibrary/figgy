@@ -38,6 +38,7 @@ RSpec.describe BulkEditController, type: :controller do
     it "updates the resources" do
       expect { post :resources_update, params: params }.to have_enqueued_job(BulkUpdateJob).with([resource2.id.to_s, resource1.id.to_s], mark_complete: true)
       expect(response.body).to redirect_to root_path
+      expect(flash[:notice]).to eq "2 resources were queued for bulk update."
     end
 
     context "when there are multiple pages of results" do

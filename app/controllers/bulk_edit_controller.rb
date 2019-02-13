@@ -15,19 +15,23 @@ class BulkEditController < ApplicationController
     builder_params = { q: params["search_params"]["q"], f: params["search_params"]["f"] }
     builder = search_builder.with(builder_params)
     builder.rows = batch_size
-    spawn_update_jobs(builder, args)
+    resources_count = spawn_update_jobs(builder, args)
+    flash[:notice] = "#{resources_count} resources were queued for bulk update."
     redirect_to root_url
   end
 
   private
 
     def spawn_update_jobs(builder, args)
+      num_results = 0
       loop do
         response = repository.search(builder)
+        num_results = response["response"]["numFound"]
         ids = response.documents.map(&:id)
         BulkUpdateJob.perform_later(ids, args)
-        break if (builder.page * builder.rows) >= response["response"]["numFound"]
+        break if (builder.page * builder.rows) >= num_results
         builder.page += 1
       end
+      num_results
     end
 end
