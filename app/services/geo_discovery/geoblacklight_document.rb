@@ -60,7 +60,7 @@ module GeoDiscovery
           dc_format_s: format,
           dct_issued_dt: issued,
           suppressed_b: suppressed,
-          dct_source_sm: source,
+          dc_source_sm: source,
           call_number_s: call_number
         }
       end
