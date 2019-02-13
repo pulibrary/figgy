@@ -39,5 +39,16 @@ RSpec.describe BulkEditController, type: :controller do
       expect { post :resources_update, params: params }.to have_enqueued_job(BulkUpdateJob).with([resource2.id.to_s, resource1.id.to_s], mark_complete: true)
       expect(response.body).to redirect_to root_path
     end
+
+    context "when there are multiple pages of results" do
+      let(:params) { { batch_size: 2, mark_complete: "1", search_params: { f: { member_of_collection_titles_ssim: collection_title, state_ssim: state }, q: "" } } }
+      before do
+        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        change_set_persister.save(change_set: DynamicChangeSet.new(resource3))
+      end
+      it "enqueues one update job per page of results" do
+        expect { post :resources_update, params: params }.to have_enqueued_job(BulkUpdateJob).exactly(2).times
+      end
+    end
   end
 end
