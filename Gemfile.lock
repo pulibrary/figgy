@@ -228,6 +228,9 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    capybara-screenshot (1.0.22)
+      capybara (>= 1.0, < 4)
+      launchy
     childprocess (0.7.1)
       ffi (~> 1.0, >= 1.0.11)
     chromedriver-helper (1.1.0)
@@ -446,6 +449,8 @@ GEM
       activerecord
       kaminari-core (= 1.0.1)
     kaminari-core (1.0.1)
+    launchy (2.4.3)
+      addressable (~> 2.3)
     lcsort (0.9.1)
     ldp (0.7.0)
       deprecation
@@ -817,6 +822,7 @@ DEPENDENCIES
   capistrano-passenger
   capistrano-rails
   capistrano-rails-console
+  capybara-screenshot
   chromedriver-helper
   coffee-rails
   damerau-levenshtein

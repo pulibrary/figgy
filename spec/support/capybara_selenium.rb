@@ -2,7 +2,9 @@
 require 'capybara/rspec'
 require 'selenium-webdriver'
 
-Capybara.register_driver(:headless_chrome) do |app|
+# there's a bug in capybara-screenshot that requires us to name
+#   the driver ":selenium" so we changed it from :headless_chrome"
+Capybara.register_driver(:selenium) do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
     chromeOptions: { args: %w(headless disable-gpu disable-setuid-sandbox window-size=7680,4320) }
   )
@@ -16,5 +18,5 @@ Capybara.register_driver(:headless_chrome) do |app|
                                  http_client: http_client)
 end
 
-Capybara.javascript_driver = :headless_chrome
+Capybara.javascript_driver = :selenium
 Capybara.default_max_wait_time = 15

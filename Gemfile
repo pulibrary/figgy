@@ -65,6 +65,7 @@ group :development, :staging do
 end
 
 group :test do
+  gem "capybara-screenshot"
   gem "chromedriver-helper"
   gem "database_cleaner"
   gem "formulaic"
