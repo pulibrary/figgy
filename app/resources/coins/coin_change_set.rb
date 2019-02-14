@@ -50,28 +50,28 @@ class CoinChangeSet < ChangeSet
 
   def primary_terms
     [
-      :member_of_collection_ids,
-      :holding_location,
+      :weight,
+      :size,
+      :die_axis,
+      :technique,
       :counter_stamp,
       :analysis,
       :public_note,
       :private_note,
-      :place,
       :find_place,
-      :find_date,
-      :find_feature,
-      :find_locus,
       :find_number,
+      :find_date,
+      :find_locus,
+      :find_feature,
       :find_description,
+      :holding_location,
+      :member_of_collection_ids,
       :accession_number,
       :provenance,
-      :die_axis,
-      :append_id,
       :loan,
-      :object_type,
-      :size,
-      :technique,
-      :weight
+      :append_id,
+      :place,
+      :object_type
     ]
   end
 end
