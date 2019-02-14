@@ -39,6 +39,7 @@ RSpec.feature "Coins" do
     expect(page).to have_field "Holding Location"
     expect(page).not_to have_css '.select[for="coin_holding_location"]', text: "Holding Location"
     expect(page).to have_field "Loan"
+    expect(page).to have_field "Numismatic collection"
     expect(page).to have_field "Private note"
     expect(page).to have_field "Provenance"
     expect(page).to have_field "Size"
@@ -68,6 +69,7 @@ RSpec.feature "Coins" do
         holding_location: "test value",
         loan: "test value",
         private_note: "test value",
+        numismatic_collection: "test value",
         provenance: "test value",
         replaces: "test value",
         size: "test value",
@@ -92,6 +94,7 @@ RSpec.feature "Coins" do
       expect(page).to have_css ".attribute.find_place", text: "test value"
       expect(page).to have_css ".attribute.holding_location", text: "test value"
       expect(page).to have_css ".attribute.loan", text: "test value"
+      expect(page).to have_css ".attribute.numismatic_collection", text: "test value"
       expect(page).to have_css ".attribute.private_note", text: "test value"
       expect(page).to have_css ".attribute.provenance", text: "test value"
       expect(page).to have_css ".attribute.replaces", text: "test value"

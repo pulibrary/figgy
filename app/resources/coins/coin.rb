@@ -30,6 +30,7 @@ class Coin < Resource
   attribute :weight
   attribute :find_number
   attribute :find_place
+  attribute :numismatic_collection
 
   # administrative metadata
   attribute :depositor

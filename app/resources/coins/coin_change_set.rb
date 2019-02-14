@@ -24,6 +24,7 @@ class CoinChangeSet < ChangeSet
   property :technique, multiple: false, required: false
   property :weight, multiple: false, required: false
   property :find_place, multiple: false, required: false
+  property :numismatic_collection, multiple: false, required: false
   property :replaces, multiple: true, required: false, default: []
   property :depositor, multiple: false, required: false
   property :numismatic_citation_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
@@ -63,11 +64,12 @@ class CoinChangeSet < ChangeSet
       :find_feature,
       :find_description,
       :holding_location,
-      :member_of_collection_ids,
+      :numismatic_collection,
       :accession_number,
       :provenance,
       :loan,
-      :append_id
+      :append_id,
+      :member_of_collection_ids
     ]
   end
 end
