@@ -7,7 +7,6 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
           :description,
           :edge,
           :era,
-          :geographic_origin,
           :master,
           :metal,
           :note,

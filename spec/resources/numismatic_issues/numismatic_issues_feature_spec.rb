@@ -38,7 +38,6 @@ RSpec.feature "NumismaticIssues" do
     expect(page).to have_field "Description"
     expect(page).to have_field "Edge"
     expect(page).to have_field "Era"
-    expect(page).to have_field "Geographic origin"
     expect(page).to have_field "Master"
     expect(page).to have_field "Metal"
     expect(page).to have_field "Note"
@@ -86,7 +85,6 @@ RSpec.feature "NumismaticIssues" do
         description: "test value",
         edge: "test value",
         era: "test value",
-        geographic_origin: "test value",
         master: "test value",
         metal: "test value",
         note: "test value",
@@ -131,7 +129,6 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.description", text: "test value"
       expect(page).to have_css ".attribute.edge", text: "test value"
       expect(page).to have_css ".attribute.era", text: "test value"
-      expect(page).to have_css ".attribute.geographic_origin", text: "test value"
       expect(page).to have_css ".attribute.master", text: "test value"
       expect(page).to have_css ".attribute.metal", text: "test value"
       expect(page).to have_css ".attribute.note", text: "test value"

@@ -17,7 +17,6 @@ class NumismaticIssue < Resource
   attribute :description
   attribute :edge
   attribute :era
-  attribute :geographic_origin
   attribute :issue_number, Valkyrie::Types::Anything
   attribute :master
   attribute :metal

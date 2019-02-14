@@ -11,7 +11,6 @@ class NumismaticIssueChangeSet < ChangeSet
   property :description, multiple: false, required: false
   property :edge, multiple: false, required: false
   property :era, multiple: false, required: false
-  property :geographic_origin, multiple: false, required: false
   property :issue_number, multiple: false, required: false
   property :master, multiple: false, required: false
   property :metal, multiple: false, required: false
@@ -85,8 +84,7 @@ class NumismaticIssueChangeSet < ChangeSet
         :master,
         :workshop,
         :series,
-        :place,
-        :geographic_origin
+        :place
       ],
       "Obverse" => [
         :obverse_figure,
