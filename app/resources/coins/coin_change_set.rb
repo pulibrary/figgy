@@ -67,7 +67,7 @@ class CoinChangeSet < ChangeSet
       :accession_number,
       :provenance,
       :loan,
-      :append_id,
+      :append_id
     ]
   end
 end

@@ -4,7 +4,6 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
           :color,
           :rendered_date_range,
           :denomination,
-          :description,
           :edge,
           :era,
           :master,

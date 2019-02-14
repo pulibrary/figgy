@@ -8,7 +8,6 @@ class NumismaticIssueChangeSet < ChangeSet
   property :artist, multiple: true, required: false, default: []
   property :color, multiple: false, required: false
   property :denomination, multiple: false, required: false
-  property :description, multiple: false, required: false
   property :edge, multiple: false, required: false
   property :era, multiple: false, required: false
   property :issue_number, multiple: false, required: false
@@ -115,7 +114,6 @@ class NumismaticIssueChangeSet < ChangeSet
       "Artists and Subjects" => [
         :artist,
         :subject,
-        :description,
         :numismatic_monogram_ids
       ]
     }

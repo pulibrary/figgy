@@ -14,7 +14,6 @@ class NumismaticIssue < Resource
   attribute :color
   attribute :date_range
   attribute :denomination
-  attribute :description
   attribute :edge
   attribute :era
   attribute :issue_number, Valkyrie::Types::Anything
