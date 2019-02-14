@@ -234,7 +234,7 @@ describe GeoDiscovery::DocumentBuilder do
       let(:child_change_set) { ScannedMapChangeSet.new(child, files: []) }
       it "returns a suppressed document with a source field" do
         expect(document["suppressed_b"]).to eq true
-        expect(document["dct_source_sm"]).to eq ["princeton-fk4"]
+        expect(document["dc_source_sm"]).to eq ["princeton-fk4"]
       end
     end
 
@@ -259,7 +259,7 @@ describe GeoDiscovery::DocumentBuilder do
 
       it "returns an un-suppressed document with a thumbnail ref and no source field" do
         expect(document["suppressed_b"]).to be_nil
-        expect(document["dct_source_sm"]).to be_nil
+        expect(document["dc_source_sm"]).to be_nil
       end
 
       it "returns document with thumbnail and iiif refs" do
