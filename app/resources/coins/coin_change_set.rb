@@ -11,7 +11,6 @@ class CoinChangeSet < ChangeSet
   property :analysis, multiple: false, required: false
   property :public_note, multiple: true, required: false, default: []
   property :private_note, multiple: true, required: false, default: []
-  property :place, multiple: false, required: false
   property :find_date, multiple: false, required: false
   property :find_feature, multiple: false, required: false
   property :find_locus, multiple: false, required: false
@@ -21,7 +20,6 @@ class CoinChangeSet < ChangeSet
   property :provenance, multiple: true, required: false, default: []
   property :die_axis, multiple: false, required: false
   property :loan, multiple: false, required: false
-  property :object_type, multiple: false, required: false
   property :size, multiple: false, required: false
   property :technique, multiple: false, required: false
   property :weight, multiple: false, required: false
@@ -70,8 +68,6 @@ class CoinChangeSet < ChangeSet
       :provenance,
       :loan,
       :append_id,
-      :place,
-      :object_type
     ]
   end
 end
