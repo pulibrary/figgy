@@ -23,7 +23,6 @@ class Coin < Resource
   attribute :provenance
   attribute :die_axis
   attribute :append_id
-  attribute :find
   attribute :loan
   attribute :size
   attribute :technique

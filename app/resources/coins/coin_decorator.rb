@@ -21,7 +21,6 @@ class CoinDecorator < Valkyrie::ResourceDecorator
           :accession_number,
           :provenance,
           :loan,
-          :find,
           :replaces,
           :visibility,
           :append_id
