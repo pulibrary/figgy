@@ -81,30 +81,30 @@ class NumismaticIssueChangeSet < ChangeSet
         :date_range_form,
         :era,
         :ruler,
+        :place,
         :master,
         :workshop,
-        :series,
-        :place
+        :series
       ],
       "Obverse" => [
         :obverse_figure,
-        :obverse_symbol,
         :obverse_part,
         :obverse_orientation,
         :obverse_figure_description,
         :obverse_figure_relationship,
-        :obverse_legend,
-        :obverse_attributes
+        :obverse_symbol,
+        :obverse_attributes,
+        :obverse_legend
       ],
       "Reverse" => [
         :reverse_figure,
-        :reverse_symbol,
         :reverse_part,
         :reverse_orientation,
         :reverse_figure_description,
         :reverse_figure_relationship,
-        :reverse_legend,
-        :reverse_attributes
+        :reverse_symbol,
+        :reverse_attributes,
+        :reverse_legend
       ],
       "Rights and Notes" => [
         :note,
