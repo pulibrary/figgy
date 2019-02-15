@@ -425,6 +425,7 @@ class ManifestBuilder
     end
 
     def download_url
+      return if derivative.nil?
       if helper.token_authorizable?(parent_node.resource)
         helper.download_url(resource.id, derivative.id, auth_token: parent_node.resource.auth_token)
       else
