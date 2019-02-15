@@ -56,8 +56,17 @@ class EventGenerator
       def base_message(type, record)
         {
           "id" => record.id.to_s,
-          "event" => type
+          "event" => type,
+          "bulk" => bulk_value
         }
+      end
+
+      def bulk_value
+        if ENV["BULK"]
+          "true"
+        else
+          "false"
+        end
       end
 
       def generate_document(record)

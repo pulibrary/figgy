@@ -14,7 +14,8 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
       slug = GeoDiscovery::DocumentBuilder::SlugBuilder.new(record).slug
       expected_result = {
         "id" => slug,
-        "event" => "DELETED"
+        "event" => "DELETED",
+        "bulk" => "false"
       }
 
       event_generator.record_deleted(record)
@@ -30,6 +31,7 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
         expected_result = {
           "id" => record.id.to_s,
           "event" => "UPDATED",
+          "bulk" => "false",
           "doc" => gbl_doc
         }
 
@@ -38,7 +40,25 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
         expect(rabbit_connection).to have_received(:publish).with(expected_result.to_json)
       end
     end
+    context "with a record updated as part of a bulk  operation" do
+      before do
+        allow(ENV).to receive(:[]).with("BULK").and_return("true")
+      end
 
+      it "publishes a persistent JSON updated message with a bulk flag set to true" do
+        gbl_doc = GeoDiscovery::DocumentBuilder.new(record, GeoDiscovery::GeoblacklightDocument.new)
+        expected_result = {
+          "id" => record.id.to_s,
+          "event" => "UPDATED",
+          "bulk" => "true",
+          "doc" => gbl_doc
+        }
+
+        event_generator.record_updated(record)
+
+        expect(rabbit_connection).to have_received(:publish).with(expected_result.to_json)
+      end
+    end
     context "with a record in a takedown state" do
       let(:record) { FactoryBot.create_for_repository(:scanned_map, state: "takedown") }
 
@@ -46,7 +66,8 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
         slug = GeoDiscovery::DocumentBuilder::SlugBuilder.new(record).slug
         expected_result = {
           "id" => slug,
-          "event" => "DELETED"
+          "event" => "DELETED",
+          "bulk" => "false"
         }
 
         event_generator.record_updated(record)
@@ -73,6 +94,7 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
         expected_result = {
           "id" => record.id.to_s,
           "event" => "UPDATED",
+          "bulk" => "false",
           "doc" => gbl_doc
         }
 
@@ -89,7 +111,8 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
         slug = GeoDiscovery::DocumentBuilder::SlugBuilder.new(record).slug
         expected_result = {
           "id" => slug,
-          "event" => "DELETED"
+          "event" => "DELETED",
+          "bulk" => "false"
         }
 
         event_generator.record_member_updated(record)
