@@ -1,30 +1,29 @@
 # frozen_string_literal: true
 class CoinDecorator < Valkyrie::ResourceDecorator
   display :coin_number,
+          :weight,
           :holding_location,
+          :size,
+          :die_axis,
+          :technique,
           :counter_stamp,
           :analysis,
           :public_note,
           :private_note,
-          :place,
+          :find_place,
+          :find_number,
           :find_date,
-          :find_feature,
           :find_locus,
+          :find_feature,
           :find_description,
+          :holding_location,
+          :numismatic_collection,
           :accession_number,
           :provenance,
-          :die_axis,
-          :append_id,
-          :find,
           :loan,
-          :object_type,
-          :size,
-          :technique,
-          :weight,
-          :find_number,
-          :find_place,
           :replaces,
-          :visibility
+          :visibility,
+          :append_id
 
   delegate :members, :decorated_file_sets, :decorated_parent, :decorated_numismatic_citations, :accession, to: :wayfinder
 

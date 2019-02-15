@@ -11,7 +11,6 @@ class CoinChangeSet < ChangeSet
   property :analysis, multiple: false, required: false
   property :public_note, multiple: true, required: false, default: []
   property :private_note, multiple: true, required: false, default: []
-  property :place, multiple: false, required: false
   property :find_date, multiple: false, required: false
   property :find_feature, multiple: false, required: false
   property :find_locus, multiple: false, required: false
@@ -21,11 +20,11 @@ class CoinChangeSet < ChangeSet
   property :provenance, multiple: true, required: false, default: []
   property :die_axis, multiple: false, required: false
   property :loan, multiple: false, required: false
-  property :object_type, multiple: false, required: false
   property :size, multiple: false, required: false
   property :technique, multiple: false, required: false
   property :weight, multiple: false, required: false
   property :find_place, multiple: false, required: false
+  property :numismatic_collection, multiple: false, required: false
   property :replaces, multiple: true, required: false, default: []
   property :depositor, multiple: false, required: false
   property :numismatic_citation_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
@@ -50,28 +49,27 @@ class CoinChangeSet < ChangeSet
 
   def primary_terms
     [
-      :member_of_collection_ids,
-      :holding_location,
+      :weight,
+      :size,
+      :die_axis,
+      :technique,
       :counter_stamp,
       :analysis,
       :public_note,
       :private_note,
-      :place,
       :find_place,
-      :find_date,
-      :find_feature,
-      :find_locus,
       :find_number,
+      :find_date,
+      :find_locus,
+      :find_feature,
       :find_description,
+      :holding_location,
+      :numismatic_collection,
       :accession_number,
       :provenance,
-      :die_axis,
-      :append_id,
       :loan,
-      :object_type,
-      :size,
-      :technique,
-      :weight
+      :append_id,
+      :member_of_collection_ids
     ]
   end
 end

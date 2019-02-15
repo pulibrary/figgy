@@ -15,7 +15,6 @@ class Coin < Resource
   attribute :analysis
   attribute :public_note
   attribute :private_note
-  attribute :place
   attribute :find_date
   attribute :find_feature
   attribute :find_locus
@@ -24,14 +23,13 @@ class Coin < Resource
   attribute :provenance
   attribute :die_axis
   attribute :append_id
-  attribute :find
   attribute :loan
-  attribute :object_type
   attribute :size
   attribute :technique
   attribute :weight
   attribute :find_number
   attribute :find_place
+  attribute :numismatic_collection
 
   # administrative metadata
   attribute :depositor

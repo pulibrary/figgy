@@ -8,10 +8,8 @@ class NumismaticIssueChangeSet < ChangeSet
   property :artist, multiple: true, required: false, default: []
   property :color, multiple: false, required: false
   property :denomination, multiple: false, required: false
-  property :description, multiple: false, required: false
   property :edge, multiple: false, required: false
   property :era, multiple: false, required: false
-  property :geographic_origin, multiple: false, required: false
   property :issue_number, multiple: false, required: false
   property :master, multiple: false, required: false
   property :metal, multiple: false, required: false
@@ -82,31 +80,30 @@ class NumismaticIssueChangeSet < ChangeSet
         :date_range_form,
         :era,
         :ruler,
+        :place,
         :master,
         :workshop,
-        :series,
-        :place,
-        :geographic_origin
+        :series
       ],
       "Obverse" => [
         :obverse_figure,
-        :obverse_symbol,
         :obverse_part,
         :obverse_orientation,
         :obverse_figure_description,
         :obverse_figure_relationship,
-        :obverse_legend,
-        :obverse_attributes
+        :obverse_symbol,
+        :obverse_attributes,
+        :obverse_legend
       ],
       "Reverse" => [
         :reverse_figure,
-        :reverse_symbol,
         :reverse_part,
         :reverse_orientation,
         :reverse_figure_description,
         :reverse_figure_relationship,
-        :reverse_legend,
-        :reverse_attributes
+        :reverse_symbol,
+        :reverse_attributes,
+        :reverse_legend
       ],
       "Rights and Notes" => [
         :note,
@@ -117,7 +114,6 @@ class NumismaticIssueChangeSet < ChangeSet
       "Artists and Subjects" => [
         :artist,
         :subject,
-        :description,
         :numismatic_monogram_ids
       ]
     }
