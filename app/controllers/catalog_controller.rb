@@ -21,9 +21,32 @@ class CatalogController < ApplicationController
   end
 
   # enforce hydra access controls
-  before_action :enforce_show_permissions, only: :show
+  before_action :set_id, only: :iiif_search
+  before_action :enforce_show_permissions, only: [:show, :iiif_search]
+
+  # CatalogController-scope behavior and configuration for BlacklightIiifSearch
+  include BlacklightIiifSearch::Controller
+
+  def set_id
+    params["id"] = params["solr_document_id"]
+  end
+
+  def iiif_search
+    _, @document = fetch(params[:solr_document_id])
+    authorize! :iiif_search, resource
+    super
+  end
 
   configure_blacklight do |config|
+    # configuration for Blacklight IIIF Content Search
+    config.iiif_search = {
+      full_text_field: "ocr_content_tsim",
+      object_relation_field: "is_page_of_s",
+      supported_params: %w[q page],
+      autocomplete_handler: "iiif_suggest",
+      suggester_name: "iiifSuggester"
+    }
+
     config.default_solr_params = {
       qf: search_config["qf"],
       qt: search_config["qt"],

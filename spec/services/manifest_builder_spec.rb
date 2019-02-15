@@ -78,9 +78,10 @@ RSpec.describe ManifestBuilder do
   end
 
   describe "#build" do
+    let(:ocr_language) { "eng" }
     before do
       stub_bibdata(bib_id: "123456")
-      change_set.validate(ocr_language: "eng")
+      change_set.validate(ocr_language: ocr_language)
       output = change_set_persister.save(change_set: change_set)
       file_set_id = output.member_ids.first
       file_set = query_service.find_by(id: file_set_id)
@@ -90,6 +91,16 @@ RSpec.describe ManifestBuilder do
       change_set = ScannedResourceChangeSet.new(output)
       change_set.validate(logical_structure: logical_structure(file_set_id), start_canvas: start_canvas || file_set_id)
       change_set_persister.save(change_set: change_set)
+    end
+
+    context "when there's no ocr_language set" do
+      let(:ocr_language) { nil }
+      it "doesn't add a search-within service" do
+        change_set
+
+        output = manifest_builder.build
+        expect(output["service"]).to eq nil
+      end
     end
 
     it "only runs two find_by queries" do
@@ -160,6 +171,9 @@ RSpec.describe ManifestBuilder do
       expect(output["logo"]).to eq("https://www.example.com/assets/pul_logo_icon-7b5f9384dfa5ca04f4851c6ee9e44e2d6953e55f893472a3e205e1591d3b2ca6.png")
       expect(output["seeAlso"].length).to eq 2
       expect(output["seeAlso"].last).to include "@id" => "https://bibdata.princeton.edu/bibliographic/123456", "format" => "text/xml"
+
+      expect(output["service"].length).to eq 1
+      expect(output["service"][0]["label"]).to eq "Search within this item"
     end
 
     context "when it's a cicognara item" do

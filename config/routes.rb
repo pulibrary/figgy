@@ -9,10 +9,12 @@ Rails.application.routes.draw do
 
   resources :auth_tokens
   default_url_options Rails.application.config.action_mailer.default_url_options
+  concern :iiif_search, BlacklightIiifSearch::Routes.new
   concern :exportable, Blacklight::Routes::Exportable.new
 
   resources :solr_documents, only: [:show], path: "/catalog", controller: "catalog" do
     concerns :exportable
+    concerns :iiif_search
   end
 
   resources :bookmarks do
