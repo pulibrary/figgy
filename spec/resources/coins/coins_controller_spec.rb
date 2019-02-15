@@ -123,4 +123,15 @@ RSpec.describe CoinsController, type: :controller do
       end
     end
   end
+  describe "GET /coins/:id/orangelight" do
+    let(:user) { FactoryBot.create(:admin) }
+
+    it "renders an orangelight document" do
+      coin = FactoryBot.create_for_repository(:coin)
+      FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id])
+      get :orangelight, params: { id: coin.id, format: :json }
+      doc = JSON.parse(response.body)
+      expect(doc["id"]).to eq "coin-#{coin.coin_number}"
+    end
+  end
 end

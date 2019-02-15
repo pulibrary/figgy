@@ -26,7 +26,7 @@ class NumismaticIssue < Resource
   attribute :obverse_figure
   attribute :obverse_figure_description
   attribute :obverse_figure_relationship
-  attribute :obverse_legend, Valkyrie::Types::SingleValuedString
+  attribute :obverse_legend
   attribute :obverse_orientation
   attribute :obverse_part
   attribute :obverse_symbol
@@ -35,7 +35,7 @@ class NumismaticIssue < Resource
   attribute :reverse_figure
   attribute :reverse_figure_description
   attribute :reverse_figure_relationship
-  attribute :reverse_legend, Valkyrie::Types::SingleValuedString
+  attribute :reverse_legend
   attribute :reverse_orientation
   attribute :reverse_part
   attribute :reverse_symbol
@@ -43,7 +43,7 @@ class NumismaticIssue < Resource
   attribute :series
   attribute :shape
   attribute :subject
-  attribute :workshop, Valkyrie::Types::SingleValuedString
+  attribute :workshop
 
   # adminstrative metadata
   attribute :depositor
