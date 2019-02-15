@@ -71,6 +71,9 @@ module ResourceController
     else
       after_update_failure
     end
+  rescue IdentifierService::RestrictedArkError => ark_error
+    flash[:alert] = ark_error.message
+    after_update_failure
   rescue Valkyrie::Persistence::ObjectNotFoundError => e
     after_update_error e
   end
