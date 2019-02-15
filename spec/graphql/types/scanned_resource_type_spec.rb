@@ -78,6 +78,14 @@ RSpec.describe Types::ScannedResourceType do
         allow(type.helper).to receive(:figgy_thumbnail_path).and_return(nil)
         expect(type.thumbnail).to be_nil
       end
+      it "returns nil for the iiif_service_url if the URL cannot be parsed" do
+        allow(type.helper).to receive(:figgy_thumbnail_path).and_return("https://images.institution.edu/invalid")
+        expect(type.thumbnail).to eq(
+          iiif_service_url: nil,
+          thumbnail_url: "https://images.institution.edu/invalid",
+          id: file_set.id.to_s
+        )
+      end
     end
     context "when a bad thumbnail is set" do
       let(:scanned_resource) do
