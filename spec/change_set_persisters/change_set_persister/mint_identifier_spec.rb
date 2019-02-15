@@ -55,7 +55,19 @@ RSpec.describe ChangeSetPersister::MintIdentifier do
         expect(change_set.model.identifier).to eq [existing_ark]
       end
     end
-
+    context "when an already published SimpleResource is added to a collection" do
+      let(:existing_ark) { "ark:/#{shoulder}234567" }
+      let(:simple_resource) { FactoryBot.create(:complete_simple_resource, identifier: existing_ark) }
+      let(:collection) { FactoryBot.create_for_repository(:collection) }
+      before do
+        change_set.prepopulate!
+        change_set.validate(member_of_collection_ids: [collection.id])
+      end
+      it "does not mint a new ARK" do
+        expect(hook.run).to be nil
+        expect(change_set.model.identifier).to eq [existing_ark]
+      end
+    end
     context "when none of the relevant metadata has changed" do
       let(:simple_resource) { FactoryBot.create(:complete_simple_resource, identifier: new_ark) }
       it "does not run the hook" do
