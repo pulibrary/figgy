@@ -188,6 +188,36 @@ RSpec.describe ScannedResourcesController, type: :controller do
         it_behaves_like "a workflow controller", :scanned_resource
       end
     end
+
+    context "when a published resource has its title updated" do
+      let(:existing_ark) { ["ark:/99999/fk4234567"] }
+      let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource, identifier: existing_ark) }
+      let(:params) do
+        {
+          title: ["Updated title"]
+        }
+      end
+      before do
+        sign_in user
+      end
+
+      context "when the resource has a PULFA ARK" do
+        before do
+          allow(IdentifierService).to receive(:update_metadata).and_raise(IdentifierService::RestrictedArkError, "Unable to update ARK #{existing_ark.first}: it points to a Finding Aid URL. Change the identifier before marking this item complete.")
+        end
+
+        it "raises an error" do
+          patch :update, params: { id: resource.id.to_s, scanned_resource: params }
+
+          expect(flash[:alert]).to eq "Unable to update ARK #{existing_ark.first}: it points to a Finding Aid URL. Change the identifier before marking this item complete."
+          expect(response).to render_template "base/edit"
+
+          reloaded = find_resource(resource.id)
+          expect(reloaded.identifier).to eq existing_ark
+          expect(reloaded.title).to eq resource.title
+        end
+      end
+    end
   end
 
   describe "structure" do
