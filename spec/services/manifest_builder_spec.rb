@@ -268,6 +268,25 @@ RSpec.describe ManifestBuilder do
             expect(first_annotation["body"]).to include("id" => "http://www.example.com/downloads/#{file_set1.id}/file/#{file_node1.id}?auth_token=#{persisted.auth_token}")
           end
         end
+
+        context "when the derivative cannot be retrieved for the FileSet" do
+          before do
+            allow_any_instance_of(FileSet).to receive(:derivative_file).and_return(nil)
+          end
+          it "generates the Canvases for the FileSets" do
+            expect(output).not_to be_empty
+
+            first_canvas = output["items"].first
+            first_annotation_page = first_canvas["items"].first
+            first_annotation = first_annotation_page["items"].first
+            expect(first_annotation["body"]["id"]).to be nil
+
+            last_canvas = output["items"].last
+            first_annotation_page = last_canvas["items"].first
+            first_annotation = first_annotation_page["items"].first
+            expect(first_annotation["body"]["id"]).to be nil
+          end
+        end
       end
     end
 
