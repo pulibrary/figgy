@@ -66,11 +66,21 @@ module Types::Resource
   end
 
   def thumbnail
-    return if object.try(:thumbnail_id).blank? || thumbnail_resource.blank? || helper.figgy_thumbnail_path(thumbnail_resource).blank?
+    return if object.try(:thumbnail_id).blank? || thumbnail_resource.blank?
+
+    figgy_thumbnail_path = helper.figgy_thumbnail_path(thumbnail_resource)
+    return if figgy_thumbnail_path.nil?
+
+    # Explicitly set this nil if the service URL cannot be parsed
+    iiif_service_url = nil
+    service_substr = "/full/!200,150/0/default.jpg"
+    if figgy_thumbnail_path.include?(service_substr)
+      iiif_service_url = figgy_thumbnail_path.gsub(service_substr, "")
+    end
     {
       id: thumbnail_resource.id.to_s,
-      thumbnail_url: helper.figgy_thumbnail_path(thumbnail_resource),
-      iiif_service_url: helper.figgy_thumbnail_path(thumbnail_resource).gsub("/full/!200,150/0/default.jpg", "")
+      thumbnail_url: figgy_thumbnail_path,
+      iiif_service_url: iiif_service_url
     }
   end
 
