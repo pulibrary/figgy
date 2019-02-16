@@ -85,6 +85,22 @@ RSpec.describe BulkIngestController do
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
         expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: "/base/resource1", state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
       end
+
+      context "when no files have been selected" do
+        let(:selected_files) do
+          {}
+        end
+
+        before do
+          post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+        end
+
+        it "does not enqueue an ingest folder job and alerts the client" do
+          expect(IngestFolderJob).not_to have_received(:perform_later)
+          expect(flash[:alert]).to eq("Please select some files to ingest.")
+          expect(response).to redirect_to(bulk_ingest_show_path)
+        end
+      end
     end
 
     context "with two single-volume resources" do

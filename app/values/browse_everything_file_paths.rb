@@ -10,6 +10,7 @@ class BrowseEverythingFilePaths
   # for an array of Pathname objects.
   # @return [Pathname]
   def parent_path
+    return if file_paths.empty?
     return file_paths.first.dirname if file_paths.count == 1
     @parent_path ||= begin
       out_path = file_paths.first

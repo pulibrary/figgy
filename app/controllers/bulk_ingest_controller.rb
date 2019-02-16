@@ -24,6 +24,11 @@ class BulkIngestController < ApplicationController
   end
 
   def browse_everything_files
+    if selected_files.empty?
+      flash[:alert] = "Please select some files to ingest."
+      return redirect_to bulk_ingest_show_path
+    end
+
     if selected_cloud_files?
       persisted_ids = {}
       file_paths
@@ -59,6 +64,7 @@ class BulkIngestController < ApplicationController
       end
     elsif file_paths.max_parent_path_depth == 1
       IngestFolderJob.perform_later(directory: parent_path.to_s, file_filter: nil, class_name: resource_class_name, **attributes)
+
     else
       IngestFoldersJob.perform_later(directory: parent_path.to_s, file_filter: nil, class_name: resource_class_name, **attributes)
     end
@@ -128,6 +134,7 @@ class BulkIngestController < ApplicationController
     end
 
     def selected_files_param
+      return {} unless params.key?(:selected_files) && !params[:selected_files].empty?
       params[:selected_files].to_unsafe_h
     end
 
