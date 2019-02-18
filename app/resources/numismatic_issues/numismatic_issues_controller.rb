@@ -11,6 +11,7 @@ class NumismaticIssuesController < BaseResourceController
 
   def load_monograms
     @numismatic_monograms = query_service.find_all_of_model(model: NumismaticMonogram).map(&:decorate)
+    return [] if @numismatic_monograms.to_a.blank?
   end
 
   def manifest

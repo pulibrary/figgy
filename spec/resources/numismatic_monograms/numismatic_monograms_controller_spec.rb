@@ -59,6 +59,21 @@ RSpec.describe NumismaticMonogramsController, type: :controller do
         get :index
         expect(response.body).to have_content "Test Monogram"
       end
+      it "retrieves all of the persisted numismatic monograms" do
+        monogram1 = FactoryBot.create_for_repository(:numismatic_monogram)
+        monogram2 = FactoryBot.create_for_repository(:numismatic_monogram)
+
+        get :index
+        numismatic_monograms = assigns(:numismatic_monograms)
+        expect(numismatic_monograms.map(&:id)).to include(monogram1.id)
+        expect(numismatic_monograms.map(&:id)).to include(monogram2.id)
+      end
+      context "when no numismatic monograms have been persisted" do
+        it "retrieves an empty array" do
+          get :index
+          expect(assigns(:numismatic_monograms)).to eq([])
+        end
+      end
     end
   end
   describe "manifest" do

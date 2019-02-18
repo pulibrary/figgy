@@ -211,6 +211,7 @@ RSpec/NestedGroups:
     - 'spec/change_set_persisters/change_set_persister_spec.rb'
     - 'spec/requests/scanned_resource_spec.rb'
     - 'spec/controllers/bulk_ingest_controller_spec.rb'
+    - 'spec/resources/numismatic_monograms/numismatic_monograms_controller_spec.rb'
 RSpec/VerifiedDoubles:
   Exclude:
     - 'spec/models/search_builder_spec.rb'
