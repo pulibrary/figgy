@@ -206,15 +206,15 @@ RSpec.describe ScannedResourcesController, type: :controller do
           allow(IdentifierService).to receive(:update_metadata).and_raise(IdentifierService::RestrictedArkError, "Unable to update ARK #{existing_ark.first}: it points to a Finding Aid URL. Change the identifier before marking this item complete.")
         end
 
-        it "raises an error" do
+        it "alerts the client to an ARK update error but persists the other updates" do
           patch :update, params: { id: resource.id.to_s, scanned_resource: params }
 
-          expect(flash[:alert]).to eq "Unable to update ARK #{existing_ark.first}: it points to a Finding Aid URL. Change the identifier before marking this item complete."
-          expect(response).to render_template "base/edit"
+          expect(flash[:alert]).to eq "Unable to update ARK #{existing_ark.first}: it points to a Finding Aid URL. Please update the identifier."
+          expect(response).to redirect_to(solr_document_path(resource.id))
 
           reloaded = find_resource(resource.id)
-          expect(reloaded.identifier).to eq existing_ark
-          expect(reloaded.title).to eq resource.title
+          # expect(reloaded.identifier).to eq existing_ark
+          expect(reloaded.title).to eq ["Updated title"]
         end
       end
     end

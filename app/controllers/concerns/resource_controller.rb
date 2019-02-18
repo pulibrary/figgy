@@ -58,22 +58,43 @@ module ResourceController
     @change_set.validate({})
   end
 
-  def update
-    @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
-    authorize! :update, @change_set.resource
-    if @change_set.validate(resource_params)
-      @change_set.sync
+  def resource
+    @resource ||= find_resource(params[:id])
+  end
+
+  def new_change_set
+    change_set_class.new(resource)
+  end
+
+  def change_set
+    @change_set = new_change_set.prepopulate!
+  end
+
+  # Using @change_set, persist the changes proposed in an update
+  def persist_updates(change_set)
+    if change_set.validate(resource_params)
+      change_set.sync
       obj = nil
       change_set_persister.buffer_into_index do |persist|
-        obj = persist.save(change_set: @change_set)
+        obj = persist.save(change_set: change_set)
       end
-      after_update_success(obj, @change_set)
+      obj
     else
       after_update_failure
     end
+  end
+
+  def update
+    @change_set = new_change_set.prepopulate!
+    authorize! :update, @change_set.resource
+    obj = persist_updates(@change_set)
+    after_update_success(obj, @change_set)
   rescue IdentifierService::RestrictedArkError => ark_error
     flash[:alert] = ark_error.message
-    after_update_failure
+    # This does not assume that the change set was valid, modify change set
+    @change_set.resource.identifier = nil
+    obj = persist_updates(@change_set)
+    after_update_success(obj, @change_set)
   rescue Valkyrie::Persistence::ObjectNotFoundError => e
     after_update_error e
   end
