@@ -32,6 +32,7 @@ class BulkEditController < ApplicationController
           response = repository.search(builder)
           batches << response.documents.map(&:id)
           break if (builder.page * builder.rows) >= response["response"]["numFound"]
+          builder.start = builder.rows * builder.page
           builder.page += 1
         end
       end

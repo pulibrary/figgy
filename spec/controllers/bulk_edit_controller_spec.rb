@@ -6,12 +6,10 @@ RSpec.describe BulkEditController, type: :controller do
   let(:metadata_adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter) }
-  let(:query_service) { metadata_adapter.query_service }
   let(:collection) { FactoryBot.create_for_repository(:collection, title: ["The Important Person's Things"]) }
   let(:collection_title) { ["The Important Person's Things"] }
   let(:resource1) { FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id, title: "Resource 1 - Significant") }
   let(:resource2) { FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id, title: "Resource 2 - Significant") }
-  let(:resource3) { FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id, title: "Resource 3") }
   let(:state) { ["pending"] }
   let(:params) { { f: { member_of_collection_titles_ssim: collection_title, state_ssim: state }, q: "significant" } }
   before do
@@ -24,7 +22,6 @@ RSpec.describe BulkEditController, type: :controller do
     render_views
     it "renders the selected " do
       get :resources_edit, params: params
-      puts request.original_url
       expect(response.body).to have_content("Bulk edit 2 resources")
       expect(response.body).to have_field("mark_complete")
     end
@@ -42,13 +39,11 @@ RSpec.describe BulkEditController, type: :controller do
     end
 
     context "when there are multiple pages of results" do
-      let(:params) { { batch_size: 2, mark_complete: "1", search_params: { f: { member_of_collection_titles_ssim: collection_title, state_ssim: state }, q: "" } } }
-      before do
-        stub_ezid(shoulder: "99999/fk4", blade: "123456")
-        change_set_persister.save(change_set: DynamicChangeSet.new(resource3))
-      end
+      let(:params) { { batch_size: 1, mark_complete: "1", search_params: { f: { member_of_collection_titles_ssim: collection_title, state_ssim: state }, q: "" } } }
       it "enqueues one update job per page of results" do
-        expect { post :resources_update, params: params }.to have_enqueued_job(BulkUpdateJob).exactly(2).times
+        post :resources_update, params: params
+        expect(BulkUpdateJob).to have_been_enqueued.with(ids: [resource1.id.to_s], args: { mark_complete: true })
+        expect(BulkUpdateJob).to have_been_enqueued.with(ids: [resource2.id.to_s], args: { mark_complete: true })
       end
     end
   end
