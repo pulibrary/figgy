@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class BulkUpdateJob < ApplicationJob
-  def perform(ids, args)
+  def perform(ids:, args:)
     return unless args[:mark_complete]
     change_set_persister.buffer_into_index do |buffered_change_set_persister|
       ids.each do |id|

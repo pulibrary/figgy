@@ -22,15 +22,19 @@ class BulkEditController < ApplicationController
 
   private
 
+    # collects batches of ids then enqueues jobs
     def spawn_update_jobs(builder, args)
+      batches = []
       num_results = 0
       loop do
         response = repository.search(builder)
         num_results = response["response"]["numFound"]
-        ids = response.documents.map(&:id)
-        BulkUpdateJob.perform_later(ids, args)
+        batches << response.documents.map(&:id)
         break if (builder.page * builder.rows) >= num_results
         builder.page += 1
+      end
+      batches.each do |ids|
+        BulkUpdateJob.perform_later(ids: ids, args: args)
       end
       num_results
     end

@@ -36,7 +36,7 @@ RSpec.describe BulkEditController, type: :controller do
       stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "updates the resources" do
-      expect { post :resources_update, params: params }.to have_enqueued_job(BulkUpdateJob).with([resource2.id.to_s, resource1.id.to_s], mark_complete: true)
+      expect { post :resources_update, params: params }.to have_enqueued_job(BulkUpdateJob).with(ids: [resource2.id.to_s, resource1.id.to_s], args: { mark_complete: true })
       expect(response.body).to redirect_to root_path
       expect(flash[:notice]).to eq "2 resources were queued for bulk update."
     end

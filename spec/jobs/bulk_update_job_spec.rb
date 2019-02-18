@@ -15,7 +15,7 @@ describe BulkUpdateJob do
       resource1
       resource2
       stub_ezid(shoulder: "99999/fk4", blade: "123456")
-      described_class.perform_now(ids, args)
+      described_class.perform_now(ids: ids, args: args)
     end
 
     it "updates the resource state" do
