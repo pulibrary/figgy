@@ -1,0 +1,38 @@
+<h2>Pulfa Ark Report</h2>
+<% if @resources %>
+  <ol class="breadcrumb">
+    <li><%= link_to "Pulfa Ark Report", pulfa_ark_report_path %></li>
+    <li><%= params[:since_date] %></li>
+  </ol>
+  <p>
+    <%= link_to "Download CSV", pulfa_ark_report_path(params[:since_date], format: :csv) %>
+  </p>
+  <table class="table table-striped datatable">
+    <thead>
+      <tr>
+        <th>Figgy ID</th>
+        <th>Component ID</th>
+        <th>Identifier</th>
+        <th>Manifest</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @resources.each do |r| %>
+        <tr>
+          <td><%= link_to r.id, solr_document_path(r) %></td>
+          <td><%= r.source_metadata_identifier.first %></td>
+          <td><%= r.identifier.first %></td>
+          <td><%= manifest_url(r) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <ol class="breadcrumb">
+    <li>View Pulfa Ark Report for objects updated since</li>
+  </ol>
+  <%= form_with(url: pulfa_ark_report_path, method: :get, local: true) do |f| %>
+    <%= f.text_field :since_date %>
+    <%= f.submit("View") %>
+  <% end %>
+<% end %>

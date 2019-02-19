@@ -31,7 +31,60 @@ class ReportsController < ApplicationController
     end
   end
 
+  def pulfa_ark_report
+    authorize! :show, Report
+    if params[:since_date]
+      @resources = ark_report_resources(params[:since_date]) || []
+    end
+
+    respond_to do |format|
+      format.html
+      format.csv do
+        send_data hashes_to_csv(["id", "component_id", "ark", "url"], @resources.map { |r| resource_hash(r) }),
+                  filename: "pulfa-ark-report-#{params[:since_date]}-to-#{Time.zone.today}.csv"
+      end
+    end
+  end
+
   private
+
+    def ark_report_resources(since_date)
+      updated = []
+      query_service.custom_queries.memory_efficient_all(except_models: excluded).each_slice(100) do |records|
+        updated << updated_archival_resources(records, since_date)
+      end
+      updated.flatten!
+    end
+
+    def excluded
+      [Collection, EphemeraBox, EphemeraFolder, EphemeraProject, EphemeraTerm, EphemeraVocabulary, FileSet]
+    end
+
+    def updated_archival_resources(records, since_date)
+      records.select do |r|
+        metadata_id = Array.wrap(r.source_metadata_identifier).first
+        updated = Array.wrap(r.source_metadata_identifier).first
+        metadata_id.present? && !PulMetadataServices::Client.bibdata?(metadata_id) && updated > since_date
+      end
+    end
+
+    def resource_hash(resource)
+      {
+        id: resource.id.to_s,
+        component_id: resource.source_metadata_identifier&.first,
+        ark: resource.identifier&.first,
+        url: helpers.manifest_url(resource)
+      }
+    end
+
+    def hashes_to_csv(fields, resources)
+      CSV.generate(headers: true) do |csv|
+        csv << fields
+        resources.each do |h|
+          csv << fields.map { |field| h[field.to_sym] }
+        end
+      end
+    end
 
     def find_identifiers_to_reconcile
       @identifiers_to_reconcile ||= query_service.custom_queries.find_identifiers_to_reconcile.select do |r|

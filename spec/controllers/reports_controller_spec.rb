@@ -64,4 +64,40 @@ RSpec.describe ReportsController, type: :controller do
       expect(response.body).to eq(data)
     end
   end
+
+  describe "GET #ark_report" do
+    let(:bibdata_resource) do
+      r = FactoryBot.build(:complete_scanned_resource, title: [])
+      change_set = ScannedResourceChangeSet.new(r)
+      change_set.validate(source_metadata_identifier: "123456", state: ["complete"])
+      change_set_persister.save(change_set: change_set)
+    end
+    let(:pulfa_resource) do
+      r = FactoryBot.build(:complete_scanned_resource, title: [])
+      change_set = ScannedResourceChangeSet.new(r)
+      change_set.validate(source_metadata_identifier: "MC016_c9616", state: ["complete"])
+      change_set_persister.save(change_set: change_set)
+    end
+
+    let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), storage_adapter: Valkyrie.config.storage_adapter) }
+    let(:data) { "id,component_id,ark,url\n#{pulfa_resource.id},MC016_c9616,ark:/99999/fk48675309,http://test.host/concern/scanned_resources/#{pulfa_resource.id}/manifest\n" }
+
+    before do
+      sign_in user
+      stub_bibdata(bib_id: "123456")
+      stub_pulfa(pulfa_id: "MC016_c9616")
+      stub_ezid(shoulder: "99999/fk4", blade: "8675309")
+      bibdata_resource
+      pulfa_resource
+    end
+
+    it "displays a html view" do
+      get :pulfa_ark_report
+      expect(response).to render_template :pulfa_ark_report
+    end
+    it "allows downloading a CSV file" do
+      get :pulfa_ark_report, params: { since_date: "2018-01-01" }, format: "csv"
+      expect(response.body).to eq(data)
+    end
+  end
 end
