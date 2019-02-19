@@ -5,7 +5,7 @@ class BulkUpdateJob < ApplicationJob
     change_set_persister.buffer_into_index do |buffered_change_set_persister|
       ids.each do |id|
         resource = query_service.find_by(id: id)
-        change_set = DynamicChangeSet.new(resource)
+        change_set = DynamicChangeSet.new(resource).prepopulate!
         change_set.validate(state: "complete") unless resource.state.include?("complete")
         buffered_change_set_persister.save(change_set: change_set) if change_set.changed?
       end
