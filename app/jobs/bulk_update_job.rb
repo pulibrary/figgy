@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 class BulkUpdateJob < ApplicationJob
   def perform(ids:, args:)
-    return unless args[:mark_complete]
     change_set_persister.buffer_into_index do |buffered_change_set_persister|
       ids.each do |id|
         resource = query_service.find_by(id: id)
         change_set = DynamicChangeSet.new(resource).prepopulate!
-        change_set.validate(state: "complete") unless resource.state.include?("complete")
+        attributes = {}.tap do |attrs|
+          attrs[:state] = "complete" if args[:mark_complete] && !resource.state.include?("complete")
+        end
+        change_set.validate(attributes)
         buffered_change_set_persister.save(change_set: change_set) if change_set.changed?
       end
     end

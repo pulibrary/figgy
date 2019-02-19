@@ -11,7 +11,6 @@ class BulkEditController < ApplicationController
     args = {}.tap do |hash|
       hash[:mark_complete] = (params["mark_complete"] == "1")
     end
-    batches = prepare_batches
     batches.each do |ids|
       BulkUpdateJob.perform_later(ids: ids, args: args)
     end
@@ -23,18 +22,25 @@ class BulkEditController < ApplicationController
   private
 
     # Prepare / execute the search and process into id arrays
-    def prepare_batches
+    def batches
+      @batches ||= begin
+        builder = initial_builder
+        [].tap do |arr|
+          loop do
+            response = repository.search(builder)
+            arr << response.documents.map(&:id)
+            break if (builder.page * builder.rows) >= response["response"]["numFound"]
+            builder.start = builder.rows * builder.page
+            builder.page += 1
+          end
+        end
+      end
+    end
+
+    def initial_builder
       builder_params = { q: params["search_params"]["q"], f: params["search_params"]["f"] }
       builder = search_builder.with(builder_params)
       builder.rows = params["batch_size"] || 50
-      [].tap do |batches|
-        loop do
-          response = repository.search(builder)
-          batches << response.documents.map(&:id)
-          break if (builder.page * builder.rows) >= response["response"]["numFound"]
-          builder.start = builder.rows * builder.page
-          builder.page += 1
-        end
-      end
+      builder
     end
 end
