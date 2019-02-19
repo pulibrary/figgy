@@ -28,17 +28,23 @@ class Types::QueryType < Types::BaseObject
 
   def resources_by_bibid(bib_id:)
     resources = query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: bib_id).select { |resource| ability.can? :read, resource }.to_a
-    resources
+    resources.select { |r| type_defined?(r) }
   end
 
   def resources_by_bibids(bib_ids:)
     resources = query_service.custom_queries.find_many_by_string_property(property: :source_metadata_identifier, values: bib_ids)
     readable_resources = resources.select { |resource| ability.can? :read, resource }
-    readable_resources.to_a
+    readable_resources.select { |r| type_defined?(r) }.to_a
   end
 
   def ability
     context[:ability]
+  end
+
+  def type_defined?(resource)
+    "Types::#{resource.class}Type".constantize
+  rescue NameError
+    false
   end
 
   def change_set_persister
