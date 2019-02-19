@@ -61,6 +61,17 @@ RSpec.describe Types::QueryType do
         expect(type.resources_by_bibid(bib_id: "7214786")).to eq []
       end
     end
+    context "when the resource does not have a defined graphql type" do
+      before do
+        allow(ability).to receive(:can?).with(:read, anything).and_return(true)
+      end
+      it "returns nothing" do
+        stub_bibdata(bib_id: "7214786")
+        FactoryBot.create_for_repository(:raster_resource, source_metadata_identifier: "7214786")
+        type = described_class.new(nil, context)
+        expect(type.resources_by_bibid(bib_id: "7214786")).to eq []
+      end
+    end
   end
 
   describe "#resources_by_bibids" do
@@ -90,6 +101,19 @@ RSpec.describe Types::QueryType do
         FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "8543429")
         type = described_class.new(nil, context)
         expect(type.resources_by_bibids(bib_ids: ["7214786", "8543429"])).to eq []
+      end
+    end
+    context "when one resource does not have a defined graphql type" do
+      before do
+        allow(ability).to receive(:can?).with(:read, anything).and_return(true)
+      end
+      it "returns the resource with the defined type only" do
+        stub_bibdata(bib_id: "7214786")
+        stub_bibdata(bib_id: "8543429")
+        scanned_map = FactoryBot.create_for_repository(:scanned_map, source_metadata_identifier: "7214786")
+        FactoryBot.create_for_repository(:vector_resource, source_metadata_identifier: "8543429")
+        type = described_class.new(nil, context)
+        expect(type.resources_by_bibids(bib_ids: ["7214786", "8543429"]).map(&:id)).to contain_exactly(scanned_map.id)
       end
     end
   end
