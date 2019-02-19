@@ -6,7 +6,7 @@ class IdentifierService
     elsif resource.identifier.present?
       update_metadata resource
     else
-      mint_identifier resource
+      assign_new_identifier(resource)
     end
   end
 
@@ -19,19 +19,20 @@ class IdentifierService
     final_result.headers["location"]
   end
 
-  class RestrictedArkError < StandardError; end
+  private_class_method def self.mint_identifier(resource)
+    resource_metadata = metadata(resource)
+    minted = minter.mint(resource_metadata)
+    minted.id
+  end
+
+  private_class_method def self.assign_new_identifier(resource)
+    resource.identifier = mint_identifier(resource)
+  end
 
   private_class_method def self.update_metadata(resource)
     return if minter_user == "apitest"
     ark = Array.wrap(resource.identifier).first
-    if get_ark_result(ark: ark).to_s.include?("findingaids")
-      raise RestrictedArkError, "Unable to update ARK #{ark}: it points to a Finding Aid URL. Change the identifier before marking this item complete."
-    end
-    minter.modify(ark, metadata(resource))
-  end
-
-  private_class_method def self.mint_identifier(resource)
-    resource.identifier = minter.mint(metadata(resource)).id
+    minter.modify(ark, metadata(resource)) unless get_ark_result(ark: ark).to_s.include?("findingaids")
   end
 
   private_class_method def self.metadata(resource)
@@ -55,7 +56,7 @@ class IdentifierService
   end
 
   private_class_method def self.mint_or_update_geo_resource(resource)
-    mint_identifier(resource) unless resource.identifier.present?
+    assign_new_identifier(resource) unless resource.identifier.present?
     update_geo_metadata resource
   end
 

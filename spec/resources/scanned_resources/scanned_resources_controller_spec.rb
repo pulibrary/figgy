@@ -189,12 +189,12 @@ RSpec.describe ScannedResourcesController, type: :controller do
       end
     end
 
-    context "when a published resource has its title updated" do
+    context "when a published scanned resource has its title updated" do
       let(:existing_ark) { ["ark:/99999/fk4234567"] }
       let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource, identifier: existing_ark) }
       let(:params) do
         {
-          title: ["Updated title"]
+          title: ["Updated scanned resource title"]
         }
       end
       before do
@@ -202,19 +202,51 @@ RSpec.describe ScannedResourcesController, type: :controller do
       end
 
       context "when the resource has a PULFA ARK" do
+        let(:minter) { class_double(Ezid::Identifier) }
+        let(:minted_id) { instance_double(Ezid::Identifier) }
+        let(:new_ark) { "ark:/99999/fk4345678" }
         before do
-          allow(IdentifierService).to receive(:update_metadata).and_raise(IdentifierService::RestrictedArkError, "Unable to update ARK #{existing_ark.first}: it points to a Finding Aid URL. Change the identifier before marking this item complete.")
-        end
+          allow(minted_id).to receive(:id).and_return(new_ark)
+          allow(minter).to receive(:mint).and_return(minted_id)
+          stub_request(:head, "http://n2t.institution.edu/path").to_return(status: 302, headers: { "location" => "http://findingaids.princeton.edu/path" })
+          stub_request(:head, "http://arks.princeton.edu/ark:/99999/fk4234567").to_return(status: 301, headers: { "location" => "http://n2t.institution.edu/path" })
 
-        it "raises an error" do
+          allow(IdentifierService).to receive(:minter).and_return(minter)
+          allow(IdentifierService).to receive(:minter_user).and_return("spec")
+        end
+        it "does not update the ARK and persists the other updates" do
           patch :update, params: { id: resource.id.to_s, scanned_resource: params }
 
-          expect(flash[:alert]).to eq "Unable to update ARK #{existing_ark.first}: it points to a Finding Aid URL. Change the identifier before marking this item complete."
-          expect(response).to render_template "base/edit"
+          expect(response).to redirect_to(solr_document_path(resource.id))
 
           reloaded = find_resource(resource.id)
           expect(reloaded.identifier).to eq existing_ark
-          expect(reloaded.title).to eq resource.title
+          expect(reloaded.title).to eq ["Updated scanned resource title"]
+        end
+      end
+    end
+
+    context "when a published simple resource has its title updated" do
+      let(:existing_ark) { ["ark:/99999/fk4234567"] }
+      let(:resource) { FactoryBot.create_for_repository(:complete_simple_resource, identifier: existing_ark) }
+      let(:params) do
+        {
+          title: ["Updated simple resource title"]
+        }
+      end
+      before do
+        sign_in user
+      end
+
+      context "when the resource has a PULFA ARK" do
+        it "alerts the client to an ARK update error but persists the other updates" do
+          patch :update, params: { id: resource.id.to_s, scanned_resource: params }
+
+          expect(response).to redirect_to(solr_document_path(resource.id))
+
+          reloaded = find_resource(resource.id)
+          expect(reloaded.identifier).to eq existing_ark
+          expect(reloaded.title).to eq ["Updated simple resource title"]
         end
       end
     end

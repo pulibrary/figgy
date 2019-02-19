@@ -71,9 +71,6 @@ module ResourceController
     else
       after_update_failure
     end
-  rescue IdentifierService::RestrictedArkError => ark_error
-    flash[:alert] = ark_error.message
-    after_update_failure
   rescue Valkyrie::Persistence::ObjectNotFoundError => e
     after_update_error e
   end
@@ -115,19 +112,21 @@ module ResourceController
     authorize! :order_manager, @change_set.resource
   end
 
-  def contextual_path(obj, change_set)
-    ContextualPath.new(child: obj.id, parent_id: change_set.append_id)
-  end
+  private
 
-  def _prefixes
-    @_prefixes ||= super + ["base"]
-  end
+    def contextual_path(obj, change_set)
+      ContextualPath.new(child: obj.id, parent_id: change_set.append_id)
+    end
 
-  def resource_params
-    params[resource_class.to_s.underscore.to_sym]&.to_unsafe_h
-  end
+    def _prefixes
+      @_prefixes ||= super + ["base"]
+    end
 
-  def find_resource(id)
-    query_service.find_by(id: Valkyrie::ID.new(id))
-  end
+    def resource_params
+      params[resource_class.to_s.underscore.to_sym]&.to_unsafe_h
+    end
+
+    def find_resource(id)
+      query_service.find_by(id: Valkyrie::ID.new(id))
+    end
 end

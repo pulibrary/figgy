@@ -30,12 +30,20 @@ RSpec.describe IdentifierService do
 
     context "and the identifier currently points at PULFA" do
       let(:ark) { "ark:/88435/47429918s" }
+      let(:minter) { class_double(Ezid::Identifier) }
+      let(:minted_id) { instance_double(Ezid::Identifier) }
+      let(:new_ark) { "ark:/99999/fk4345678" }
+      let(:metadata) { base_metadata.merge(target: "http://findingaids.princeton.edu/collections/#{cid}") }
       before do
         stub_ezid(shoulder: "88435", blade: "47429918s", location: "https://findingaids.princeton.edu/bla")
+        allow(minted_id).to receive(:id).and_return(new_ark)
+        allow(minter).to receive(:mint).and_return(minted_id)
+        described_class.mint_or_update(resource: obj)
       end
-      it "doesn't update the ark" do
-        expect { described_class.mint_or_update(resource: obj) }.to raise_error IdentifierService::RestrictedArkError
+      it "does not update the ARK" do
         expect(minter).not_to have_received(:modify)
+        expect(minter).not_to have_received(:mint)
+        expect(obj.identifier).to eq([ark])
       end
     end
   end
