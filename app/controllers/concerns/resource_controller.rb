@@ -59,9 +59,18 @@ module ResourceController
   end
 
   def update
-    @change_set = new_change_set.prepopulate!
+    @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
     authorize! :update, @change_set.resource
-    persist_updates(@change_set)
+    if @change_set.validate(resource_params)
+      @change_set.sync
+      obj = nil
+      change_set_persister.buffer_into_index do |persist|
+        obj = persist.save(change_set: @change_set)
+      end
+      after_update_success(obj, @change_set)
+    else
+      after_update_failure
+    end
   rescue Valkyrie::Persistence::ObjectNotFoundError => e
     after_update_error e
   end
@@ -119,32 +128,5 @@ module ResourceController
 
     def find_resource(id)
       query_service.find_by(id: Valkyrie::ID.new(id))
-    end
-
-    def resource
-      @resource ||= find_resource(params[:id])
-    end
-
-    def new_change_set
-      change_set_class.new(resource)
-    end
-
-    def change_set
-      @change_set = new_change_set.prepopulate!
-    end
-
-    # Using @change_set, persist the changes proposed in an update
-    def persist_updates(change_set)
-      if change_set.validate(resource_params)
-        change_set.sync
-        obj = nil
-        change_set_persister.buffer_into_index do |persist|
-          obj = persist.save(change_set: change_set)
-        end
-
-        after_update_success(obj, change_set)
-      else
-        after_update_failure
-      end
     end
 end
