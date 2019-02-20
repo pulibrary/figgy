@@ -9,7 +9,10 @@ class BulkUpdateJob < ApplicationJob
           attrs[:state] = "complete" if args[:mark_complete] && !resource.state.include?("complete")
         end
         change_set.validate(attributes)
-        buffered_change_set_persister.save(change_set: change_set) if change_set.changed?
+        if change_set.changed?
+          raise "Bulk update failed for batch #{ids} with args #{args} due to invalid change set on resource #{id}" unless change_set.valid?
+          buffered_change_set_persister.save(change_set: change_set)
+        end
       end
     end
   end
