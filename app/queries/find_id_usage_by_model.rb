@@ -15,7 +15,7 @@ class FindIdUsageByModel
   def find_id_usage_by_model(model:, id:)
     output = connection[query, model.to_s, [id].to_json].to_a
     output_hash = massage_output(output)
-    return if output_hash.keys.empty?
+    return [] if output_hash.keys.empty?
     objects = query_service.find_many_by_ids(ids: output_hash.keys)
     objects.map do |object|
       { object => output_hash[object.id.to_s] }
