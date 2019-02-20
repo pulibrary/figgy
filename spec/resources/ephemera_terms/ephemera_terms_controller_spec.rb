@@ -91,12 +91,16 @@ RSpec.describe EphemeraTermsController, type: :controller do
       let(:factory) { :ephemera_term }
       it_behaves_like "an access controlled destroy request"
     end
-    it "can delete a book" do
+    it "can delete a term" do
       ephemera_term = FactoryBot.create_for_repository(:ephemera_term)
+      resource = FactoryBot.create_for_repository(:ephemera_folder, subject: ephemera_term.id, geographic_origin: ephemera_term.id)
       delete :destroy, params: { id: ephemera_term.id.to_s }
 
       expect(response).to redirect_to root_path
       expect { query_service.find_by(id: ephemera_term.id) }.to raise_error ::Valkyrie::Persistence::ObjectNotFoundError
+      resource = query_service.find_by(id: resource.id)
+      expect(resource.subject).to be_blank
+      expect(resource.geographic_origin).to be_blank
     end
   end
 
