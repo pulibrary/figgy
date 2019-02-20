@@ -292,7 +292,8 @@ Rails.application.config.to_prepare do
     FindMembersWithRelationship,
     FindHighestValue,
     PlaylistsFromRecording,
-    CountInverseRelationship
+    CountInverseRelationship,
+    FindIdUsageByModel
   ].each do |query_handler|
     Valkyrie.config.metadata_adapter.query_service.custom_queries.register_query_handler(query_handler)
   end
