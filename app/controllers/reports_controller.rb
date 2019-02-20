@@ -63,7 +63,7 @@ class ReportsController < ApplicationController
     def updated_archival_resources(records, since_date)
       records.select do |r|
         metadata_id = Array.wrap(r.source_metadata_identifier).first
-        updated = Array.wrap(r.source_metadata_identifier).first
+        updated = r.updated_at
         metadata_id.present? && !PulMetadataServices::Client.bibdata?(metadata_id) && updated > since_date
       end
     end
