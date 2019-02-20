@@ -1030,6 +1030,21 @@ RSpec.describe ChangeSetPersister do
         expect(resource_member.visibility).to eq [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC]
         expect(resource_member.read_groups).to eq [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
       end
+      it "doesn't propagate if there's been no change" do
+        child = FactoryBot.create_for_repository(:scanned_resource, read_groups: [])
+        resource = FactoryBot.build(:scanned_resource, read_groups: [])
+        resource.member_ids = [child.id]
+        change_set = DynamicChangeSet.new(resource).prepopulate!
+        resource = change_set_persister.save(change_set: change_set)
+        adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
+        child = adapter.query_service.find_by(id: child.id)
+
+        change_set = change_set_class.new(resource).prepopulate!
+        updated = change_set_persister.save(change_set: change_set)
+
+        members = query_service.find_members(resource: updated)
+        expect(members.first.updated_at).to eq child.updated_at
+      end
     end
   end
 
