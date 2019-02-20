@@ -2,7 +2,7 @@
 class CollectionsMailer < ApplicationMailer
   def owner_report
     collection = params[:collection]
-    owners = collection.owners.map { |uid| User.find_by(uid: uid).email }
+    owners = collection.owners.map { |uid| User.find_by(uid: uid) }.compact.map(&:email)
     @collection_title = collection.decorate.title
     @resources = Wayfinder.for(collection).decorated_members.select do |member|
       !member.public_readable_state?

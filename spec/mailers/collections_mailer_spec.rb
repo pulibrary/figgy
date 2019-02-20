@@ -32,20 +32,34 @@ RSpec.describe CollectionsMailer, type: :mailer do
       expect(ActionMailer::Base.deliveries).not_to be_empty
     end
 
-    it "does nothing when there's no owner" do
-      collection = FactoryBot.create_for_repository(:collection, title: "The Important Person's Things", slug: "important-persons-things", owners: [])
-      FactoryBot.create_for_repository(:scanned_resource, title: "Historically Significant Resource", state: "pending", member_of_collection_ids: [collection.id])
-      email = described_class.with(collection: collection).owner_report
-      email.deliver
-      expect(ActionMailer::Base.deliveries).to be_empty
+    context "when there's no owner" do
+      it "does nothing" do
+        collection = FactoryBot.create_for_repository(:collection, title: "The Important Person's Things", slug: "important-persons-things", owners: [])
+        FactoryBot.create_for_repository(:scanned_resource, title: "Historically Significant Resource", state: "pending", member_of_collection_ids: [collection.id])
+        email = described_class.with(collection: collection).owner_report
+        email.deliver
+        expect(ActionMailer::Base.deliveries).to be_empty
+      end
     end
 
-    it "does nothing when all resources are complete" do
-      collection = FactoryBot.create_for_repository(:collection, title: "The Important Person's Things", slug: "important-persons-things", owners: [user.uid, user2.uid])
-      FactoryBot.create_for_repository(:scanned_resource, title: "Historically Significant Resource", state: "complete", member_of_collection_ids: [collection.id])
-      email = described_class.with(collection: collection).owner_report
-      email.deliver
-      expect(ActionMailer::Base.deliveries).to be_empty
+    context "when all resources are complete" do
+      it "does nothing" do
+        collection = FactoryBot.create_for_repository(:collection, title: "The Important Person's Things", slug: "important-persons-things", owners: [user.uid, user2.uid])
+        FactoryBot.create_for_repository(:scanned_resource, title: "Historically Significant Resource", state: "complete", member_of_collection_ids: [collection.id])
+        email = described_class.with(collection: collection).owner_report
+        email.deliver
+        expect(ActionMailer::Base.deliveries).to be_empty
+      end
+    end
+
+    context "when there's an owner who is not in the database" do
+      let(:user2) { "some_rando" }
+      it "sends the report to the owner it could find" do
+        collection = FactoryBot.create_for_repository(:collection, title: "The Important Person's Things", slug: "important-persons-things", owners: [user.uid, user2])
+        FactoryBot.create_for_repository(:scanned_resource, title: "Historically Significant Resource", state: "pending", member_of_collection_ids: [collection.id])
+        email = described_class.with(collection: collection).owner_report
+        expect(email.to).to contain_exactly user.email
+      end
     end
   end
 
