@@ -81,6 +81,12 @@ RSpec.describe ReportsController, type: :controller do
     let(:pulfa_resource2) do
       r = FactoryBot.build(:complete_scanned_resource, title: [])
       change_set = ScannedResourceChangeSet.new(r)
+      change_set.validate(source_metadata_identifier: "C0652_c0377", state: ["pending"])
+      change_set_persister.save(change_set: change_set)
+    end
+    let(:pulfa_resource3) do
+      r = FactoryBot.build(:complete_scanned_resource, title: [])
+      change_set = ScannedResourceChangeSet.new(r)
       change_set.validate(source_metadata_identifier: "RBD1_c13076", state: ["complete"])
       change_set_persister.save(change_set: change_set)
     end
@@ -92,14 +98,16 @@ RSpec.describe ReportsController, type: :controller do
       sign_in user
       stub_bibdata(bib_id: "123456")
       stub_pulfa(pulfa_id: "MC016_c9616")
+      stub_pulfa(pulfa_id: "C0652_c0377")
       stub_pulfa(pulfa_id: "RBD1_c13076")
       stub_ezid(shoulder: "99999/fk4", blade: "8675309")
       bibdata_resource
       pulfa_resource
+      pulfa_resource2
 
       # create another resource before the since_date
       Timecop.freeze(Time.zone.local(2000))
-      pulfa_resource2
+      pulfa_resource3
       Timecop.return
     end
 
