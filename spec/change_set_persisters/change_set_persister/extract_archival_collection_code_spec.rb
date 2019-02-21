@@ -2,7 +2,7 @@
 require "rails_helper"
 
 RSpec.describe ChangeSetPersister::ExtractArchivalCollectionCode do
-  subject(:hook) { described_class.new(change_set_persister: nil, change_set: nil) }
+  subject(:hook) { described_class }
 
   describe "#extract_collection_code" do
     it "can handle lots of variants" do
