@@ -13,13 +13,13 @@ class UpdatedArchivalResources
   end
 
   def updated_archival_resources(since_date:)
-    run_query(query(since_date))
+    run_query(query, since_date.to_s)
   end
 
-  def query(since_date)
+  def query
     <<-SQL
       select * FROM orm_resources
-      WHERE metadata->>'archival_collection_code' is not null AND updated_at > '#{since_date}'
+      WHERE metadata @> '{"archival_collection_code": []}' AND updated_at > ?
     SQL
   end
 end
