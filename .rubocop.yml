@@ -217,6 +217,7 @@ RSpec/VerifiedDoubles:
     - 'spec/models/search_builder_spec.rb'
     - 'spec/validators/viewing_hint_validator_spec.rb'
     - 'spec/validators/viewing_direction_validator_spec.rb'
+    - 'spec/validators/year_validator_spec.rb'
     - 'spec/models/user_spec.rb'
     - 'spec/derivative_services/image_derivative_service_spec.rb'
     - 'spec/derivative_services/jp2_derivative_service_spec.rb'
