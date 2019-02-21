@@ -182,4 +182,8 @@ module ApplicationHelper
   def universal_viewer_path(resource)
     "/uv/uv#?manifest=#{manifest_url(resource)}&config=#{root_url}/uv/uv_config.json"
   end
+
+  def collection_present?
+    params[:f] && params[:f]["member_of_collection_titles_ssim"].present?
+  end
 end
