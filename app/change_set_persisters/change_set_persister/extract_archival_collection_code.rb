@@ -17,7 +17,7 @@ class ChangeSetPersister
     end
 
     def self.extract_collection_code(pulfa_id)
-      m = pulfa_id.match(/^([a-zA-Z0-9.-]+)[_\/].*/)
+      m = pulfa_id.match(/^([a-zA-Z0-9.-]+)[_\/]?.*/)
       m[1] if m
     end
 

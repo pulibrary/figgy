@@ -12,6 +12,7 @@ RSpec.describe ChangeSetPersister::ExtractArchivalCollectionCode do
       expect(hook.extract_collection_code("C0723.306e_c013")).to eq "C0723.306e"
       expect(hook.extract_collection_code("MC001.03.03_c0171")).to eq "MC001.03.03"
       expect(hook.extract_collection_code("MC016/c11318")).to eq "MC016"
+      expect(hook.extract_collection_code("MC001")).to eq "MC001"
     end
   end
 end
