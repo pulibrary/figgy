@@ -12,11 +12,11 @@ class ChangeSetPersister
       return unless change_set.model.respond_to?(:archival_collection_code)
       return unless updated_values?
       return if PulMetadataServices::Client.bibdata?(change_set.source_metadata_identifier)
-      change_set.model.archival_collection_code = extract_collection_code(change_set.source_metadata_identifier)
+      change_set.model.archival_collection_code = self.class.extract_collection_code(change_set.source_metadata_identifier)
       change_set
     end
 
-    def extract_collection_code(pulfa_id)
+    def self.extract_collection_code(pulfa_id)
       m = pulfa_id.match(/^([a-zA-Z0-9.-]+)_.*/)
       m[1] if m
     end

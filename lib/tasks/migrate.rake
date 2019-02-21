@@ -46,19 +46,7 @@ namespace :migrate do
 
   desc "populate archival_collection_code field from source_metadata_identifier"
   task archival_collection_code: :environment do
-    resources(model: ScannedResource).each do |sr|
-      change_set_persister.buffer_into_index do |buffered_change_set_persister|
-        next unless sr.source_metadata_identifier.present?
-        next if PulMetadataServices::Client.bibdata?(sr.source_metadata_identifier.first)
-
-        change_set = DynamicChangeSet.new(sr)
-        change_set.prepopulate!
-        change_set.validate(refresh_remote_metadata: true)
-
-        logger.info "extracting archival collection code for #{sr.id}"
-        buffered_change_set_persister.save(change_set: change_set)
-      end
-    end
+    ExtractArchivalCollectionCodeJob.perform_now
   end
 
   private
