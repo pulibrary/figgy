@@ -19,7 +19,9 @@ class UpdatedArchivalResources
   def query
     <<-SQL
       select * FROM orm_resources
-      WHERE metadata @> '{"archival_collection_code": []}' AND updated_at > ?
+      WHERE metadata @> '{"archival_collection_code": []}'
+        AND metadata @> '{"identifier": []}'
+        AND updated_at > ?
     SQL
   end
 end
