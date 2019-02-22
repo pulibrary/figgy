@@ -10,7 +10,8 @@ module Types::Resource
                Types::ProxyFileSetType,
                Types::ScannedMapType,
                Types::ScannedResourceType,
-               Types::RasterResourceType
+               Types::RasterResourceType,
+               Types::VectorResourceType
 
   field :id, String, null: true
   field :label, String, null: true
