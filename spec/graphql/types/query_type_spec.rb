@@ -49,6 +49,12 @@ RSpec.describe Types::QueryType do
         type = described_class.new(nil, context)
         expect(type.resources_by_bibid(bib_id: "7214786").map(&:id)).to eq [scanned_resource.id]
       end
+      it "can return a raster resource by its bibid" do
+        stub_bibdata(bib_id: "7214786")
+        raster_resource = FactoryBot.create_for_repository(:raster_resource, source_metadata_identifier: "7214786")
+        type = described_class.new(nil, context)
+        expect(type.resources_by_bibid(bib_id: "7214786").map(&:id)).to eq [raster_resource.id]
+      end
     end
     context "when the user can't read the resource" do
       before do
@@ -67,7 +73,7 @@ RSpec.describe Types::QueryType do
       end
       it "returns nothing" do
         stub_bibdata(bib_id: "7214786")
-        FactoryBot.create_for_repository(:raster_resource, source_metadata_identifier: "7214786")
+        FactoryBot.create_for_repository(:media_resource, source_metadata_identifier: "7214786")
         type = described_class.new(nil, context)
         expect(type.resources_by_bibid(bib_id: "7214786")).to eq []
       end
@@ -111,7 +117,7 @@ RSpec.describe Types::QueryType do
         stub_bibdata(bib_id: "7214786")
         stub_bibdata(bib_id: "8543429")
         scanned_map = FactoryBot.create_for_repository(:scanned_map, source_metadata_identifier: "7214786")
-        FactoryBot.create_for_repository(:vector_resource, source_metadata_identifier: "8543429")
+        FactoryBot.create_for_repository(:media_resource, source_metadata_identifier: "8543429")
         type = described_class.new(nil, context)
         expect(type.resources_by_bibids(bib_ids: ["7214786", "8543429"]).map(&:id)).to contain_exactly(scanned_map.id)
       end
