@@ -87,6 +87,12 @@ RSpec.describe ReportsController, type: :controller do
     let(:pulfa_resource3) do
       r = FactoryBot.build(:complete_scanned_resource, title: [])
       change_set = ScannedResourceChangeSet.new(r)
+      change_set.validate(source_metadata_identifier: "C0652_c0377", state: ["complete"], visibility: ["restricted"])
+      change_set_persister.save(change_set: change_set)
+    end
+    let(:pulfa_resource4) do
+      r = FactoryBot.build(:complete_scanned_resource, title: [])
+      change_set = ScannedResourceChangeSet.new(r)
       change_set.validate(source_metadata_identifier: "RBD1_c13076", state: ["complete"])
       change_set_persister.save(change_set: change_set)
     end
@@ -104,10 +110,11 @@ RSpec.describe ReportsController, type: :controller do
       bibdata_resource
       pulfa_resource
       pulfa_resource2
+      pulfa_resource3
 
       # create another resource before the since_date
       Timecop.freeze(Time.zone.local(2000))
-      pulfa_resource3
+      pulfa_resource4
       Timecop.return
     end
 
@@ -115,7 +122,7 @@ RSpec.describe ReportsController, type: :controller do
       get :pulfa_ark_report
       expect(response).to render_template :pulfa_ark_report
     end
-    it "allows downloading a CSV file" do
+    it "allows downloading a CSV file with only the open, complete, pulfa resource included" do
       get :pulfa_ark_report, params: { since_date: "2018-01-01" }, format: "csv"
       expect(response.body).to eq(data)
     end

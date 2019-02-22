@@ -13,7 +13,7 @@ class UpdatedArchivalResources
   end
 
   def updated_archival_resources(since_date:)
-    run_query(query, since_date.to_s)
+    run_query(query, since_date.to_s, { visibility: ["open"] }.to_json)
   end
 
   def query
@@ -22,6 +22,7 @@ class UpdatedArchivalResources
       WHERE metadata @> '{"archival_collection_code": []}'
         AND metadata @> '{"identifier": []}'
         AND updated_at > ?
+        AND metadata @> ?
     SQL
   end
 end
