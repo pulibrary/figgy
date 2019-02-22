@@ -33,7 +33,17 @@ module Types::Resource
     # decorator takes advantage of if it exists (FileSetDecorator#parent). This
     # way the parent is pre-loaded and it won't run N+1 queries to determine the
     # FileSet's parent type.
-    @members ||= Wayfinder.for(object).members_with_parents
+    #
+    # members are filtered out if they share a bibid with their parent, to
+    # account for map set use cases
+    @members ||= begin
+      wayfinder = Wayfinder.for(object)
+      wayfinder.members_with_parents.reject do |m|
+        if m.try(:source_metadata_identifier) && object.try(:source_metadata_identifier)
+          m.source_metadata_identifier == object.source_metadata_identifier
+        end
+      end
+    end
   end
 
   def manifest_url

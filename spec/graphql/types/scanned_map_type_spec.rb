@@ -154,5 +154,22 @@ RSpec.describe Types::ScannedMapType do
 
       expect(type.members.map(&:id)).to eq [metadata_file_set.id, image_file_set.id, child_resource.id]
     end
+
+    context "when the members have the same bibid as the parent" do
+      # Note: this is how map sets work
+      it "doesn't return those members" do
+        bib_id = "123456"
+        other_bib_id = "4609321"
+        stub_bibdata(bib_id: bib_id)
+        stub_bibdata(bib_id: other_bib_id)
+        child_resource = FactoryBot.create_for_repository(:scanned_map, source_metadata_identifier: bib_id)
+        child_resource2 = FactoryBot.create_for_repository(:scanned_map, source_metadata_identifier: other_bib_id)
+        scanned_map = FactoryBot.create_for_repository(:scanned_map, source_metadata_identifier: bib_id, member_ids: [child_resource.id, child_resource2.id])
+
+        type = described_class.new(scanned_map, {})
+
+        expect(type.members.map(&:id)).to eq [child_resource2.id]
+      end
+    end
   end
 end
