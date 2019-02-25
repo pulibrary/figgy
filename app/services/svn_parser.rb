@@ -3,13 +3,14 @@ class SvnParser
   # List IDs of collections that have been modified since a given date
   # @param [Date] date
   def updated_collection_codes(date)
-    date = date.to_formatted_s(:iso8601)
-    parse_collection_ids(exec("diff --summarize -r {#{date}}:HEAD #{svn_root}"))
+    parse_collection_ids(updated_since(date))
   end
 
-  # List the paths of all collections
-  def all_collection_paths
-    parse_collection_paths(exec("list --recursive #{svn_root}"))
+  # List paths of collections that have been modified since a given date
+  # The output is suitable for retrieving the collections using `get_collection`.
+  # @param [Date] date
+  def updated_collection_paths(date)
+    parse_collection_paths(updated_since(date))
   end
 
   # Get the EAD XML for a collection
@@ -32,7 +33,9 @@ class SvnParser
     end
 
     def parse_collection_paths(svn_output)
-      svn_output.split("\n").select { |s| s.end_with?(".EAD.xml") }
+      svn_output.split("\n").map do |line|
+        line.gsub(/.*#{svn_root}\//, "")
+      end
     end
 
     def svn_auth
@@ -45,5 +48,10 @@ class SvnParser
 
     def svn_root
       File.join(svn_config["url"], "pulfa/trunk/eads")
+    end
+
+    def updated_since(date)
+      date = date.to_formatted_s(:iso8601) if date.is_a?(Date)
+      exec("diff --summarize -r {#{date}}:HEAD #{svn_root}")
     end
 end

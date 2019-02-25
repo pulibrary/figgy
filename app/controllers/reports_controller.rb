@@ -46,6 +46,20 @@ class ReportsController < ApplicationController
     end
   end
 
+  def ead_to_marc
+    authorize! :show, Report
+    if params[:since_date]
+      # find EADs and convert to MARC XML
+      zipline(updated_eads_to_marcxml(params[:since_date]),
+              "ead-to-marc-#{params[:since_date]}-to-#{Time.zone.today}.zip")
+    else
+      # display form for entering date
+      respond_to do |format|
+        format.html
+      end
+    end
+  end
+
   private
 
     def resource_hash(resource)
@@ -79,6 +93,18 @@ class ReportsController < ApplicationController
           csv << fields.map { |k, _v| Array.wrap(record.send(k)).join(";") }
         end
       end
+    end
+
+    def updated_eads_to_marcxml(since_date)
+      xsl = Nokogiri::XSLT(File.read(Rails.root.join("app", "assets", "xsl", "ead-to-marc.xsl")))
+      svn_client.updated_collection_paths(since_date).map do |ead_path|
+        ead_xml = svn_client.get_collection(ead_path)
+        [xsl.transform(Nokogiri::XML(ead_xml)), ead_path.gsub(/EAD.xml/, "MARC.xml")]
+      end
+    end
+
+    def svn_client
+      @svn_client ||= SvnParser.new
     end
 
     def find_resource(id)

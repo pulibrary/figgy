@@ -127,4 +127,35 @@ RSpec.describe ReportsController, type: :controller do
       expect(response.body).to eq(data)
     end
   end
+
+  describe "GET #ead_to_marc" do
+    let(:updated_resp) { "M       http://example.com/svn/pulfa/trunk/eads/mss/C0652.EAD.xml" }
+    let(:fixture_file) { file_fixture("pulfa/svn/C0652.EAD.xml") }
+    let(:success) { instance_double Process::Status }
+
+    before do
+      sign_in user
+      allow(success).to receive(:success?).and_return(true)
+
+      # show a single collection as updated
+      allow(Open3).to receive(:capture2)
+        .with("svn --username tester --password testing diff --summarize -r {#{Time.zone.yesterday.to_formatted_s(:iso8601)}}:HEAD http://example.com/svn/pulfa/trunk/eads")
+        .and_return([updated_resp, success])
+
+      # stub retrieving the collection EAD
+      allow(Open3).to receive(:capture2)
+        .with("svn --username tester --password testing cat http://example.com/svn/pulfa/trunk/eads/mss/C0652.EAD.xml")
+        .and_return([fixture_file.read, success])
+    end
+
+    it "displays a html view" do
+      get :ead_to_marc
+      expect(response).to render_template :ead_to_marc
+    end
+    it "allows downloading a zip file with updated EADs converted to MARC XML" do
+      get :ead_to_marc, params: { since_date: Time.zone.yesterday }
+      expect(response.content_type).to eq("application/zip")
+      expect(response.content_length).to be_greater_than(1024)
+    end
+  end
 end

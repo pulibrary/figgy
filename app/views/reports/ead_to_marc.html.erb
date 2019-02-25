@@ -1,0 +1,8 @@
+<h2>EAD to MARC</h2>
+<ol class="breadcrumb">
+  <li>Download MARC records for collections updated since</li>
+</ol>
+<%= form_with(url: ead_to_marc_path, method: :get, local: true) do |f| %>
+  <%= f.text_field :since_date %>
+  <%= f.submit("View") %>
+<% end %>

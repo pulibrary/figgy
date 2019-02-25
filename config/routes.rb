@@ -260,6 +260,7 @@ Rails.application.routes.draw do
   get "/iiif/lookup/:prefix/:naan/:arkid", to: "catalog#lookup_manifest", as: :lookup_manifest
 
   get "/reports/pulfa_ark_report/(:since_date)", to: "reports#pulfa_ark_report", as: :pulfa_ark_report
+  get "/reports/ead_to_marc/(:since_date)", to: "reports#ead_to_marc", as: :ead_to_marc
   get "/reports/ephemera_data/(:project_id)", to: "reports#ephemera_data", as: :ephemera_data
   get "/reports/identifiers_to_reconcile", to: "reports#identifiers_to_reconcile", as: :identifiers_to_reconcile
 

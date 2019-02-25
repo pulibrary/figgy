@@ -259,6 +259,7 @@ GEM
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.4)
+    curb (0.9.8)
     damerau-levenshtein (1.3.1)
     database_cleaner (1.6.1)
     ddtrace (0.16.0)
@@ -819,6 +820,11 @@ GEM
     xml-simple (1.1.5)
     xpath (2.1.0)
       nokogiri (~> 1.3)
+    zip_tricks (4.7.1)
+    zipline (1.1.0)
+      curb (>= 0.8.0, < 0.10)
+      rails (>= 3.2.1, < 6.1)
+      zip_tricks (>= 4.2.1, <= 5.0.0)
 
 PLATFORMS
   ruby
@@ -926,6 +932,7 @@ DEPENDENCIES
   webmock
   webpacker (>= 4.0.x)
   whenever (~> 0.10)
+  zipline
 
 BUNDLED WITH
    1.17.3

@@ -115,6 +115,7 @@ gem "string_rtl"
 gem "tiny_tds"
 gem "valkyrie-sequel", github: "samvera-labs/valkyrie-sequel", branch: "valkyrie_1.5"
 gem "whenever", "~> 0.10"
+gem "zipline"
 
 gem "blacklight_iiif_search", github: "boston-library/blacklight_iiif_search"
 gem "graphiql-rails", group: :development
