@@ -100,7 +100,7 @@ describe OrangelightDocument do
         expect(output[:find_description_t]).to eq ["at join of carcares and w. cavea surface"]
         expect(output[:die_axis_t]).to eq ["6"]
         expect(output[:size_t]).to eq ["27"]
-        expect(output[:technique]).to eq ["Cast"]
+        expect(output[:technique_t]).to eq ["Cast"]
         expect(output[:weight_t]).to eq ["8.26"]
         expect(output[:pub_date_start_sort]).to eq(-91)
         expect(output[:pub_date_end_sort]).to eq(-41)
