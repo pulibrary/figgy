@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# frozen_string_literal: true
 module GeoDiscovery
   class DocumentBuilder
     class_attribute :services, :root_path_class

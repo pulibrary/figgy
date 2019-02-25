@@ -1,5 +1,5 @@
 <%= f.input :numismatic_monogram_ids,
-            collection: @numismatic_monograms.sort_by(&:title),
+            collection: @numismatic_monograms&.sort_by(&:title),
             label_method: :title,
             value_method: :id,
             input_html: { multiple: f.object.multiple?(key) },

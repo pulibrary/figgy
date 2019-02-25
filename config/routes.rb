@@ -150,6 +150,7 @@ Rails.application.routes.draw do
         get :file_manager
         get :order_manager
         get :manifest, defaults: { format: :json }
+        get :orangelight, defaults: { format: :json }
         post :browse_everything_files
         get :discover_files
         post :auto_ingest
