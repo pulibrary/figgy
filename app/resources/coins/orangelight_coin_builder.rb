@@ -40,7 +40,7 @@ class OrangelightCoinBuilder
         find_description_t: decorator.find_description,
         die_axis_t: decorator.die_axis,
         size_t: decorator.size,
-        technique: decorator.technique,
+        technique_t: decorator.technique,
         weight_t: decorator.weight,
         pub_date_start_sort: parent.first_range&.start&.first.to_i,
         pub_date_end_sort: parent.first_range&.end&.first.to_i,
