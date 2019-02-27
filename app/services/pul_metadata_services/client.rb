@@ -25,6 +25,15 @@ module PulMetadataServices
         source_metadata_id =~ /\A\d+\z/
       end
 
+      # Retrieves a MARC record (serialized in XML) from Voyager using an ID
+      # @param id [String]
+      # @return [String] string-serialized XML for the MARC record
+      def retrieve_from_bibdata(id)
+        conn = Faraday.new(url: "https://bibdata.princeton.edu/bibliographic/")
+        response = conn.get(id)
+        response.body
+      end
+
       private
 
         # Retrieves information about archival records in the Princeton University Library Finding Aids (PULFA) service using an ID
@@ -43,15 +52,6 @@ module PulMetadataServices
           conn = Faraday.new(url: "https://findingaids.princeton.edu/collections/")
           response = conn.get("#{id.tr('_', '/')}.xml")
           response.body.force_encoding("UTF-8")
-        end
-
-        # Retrieves a MARC record (serialized in XML) from Voyager using an ID
-        # @param id [String]
-        # @return [String] string-serialized XML for the MARC record
-        def retrieve_from_bibdata(id)
-          conn = Faraday.new(url: "https://bibdata.princeton.edu/bibliographic/")
-          response = conn.get(id)
-          response.body
         end
     end
   end

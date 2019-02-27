@@ -38,4 +38,12 @@ describe PulMetadataServices::Client do
       end
     end
   end
+
+  describe ".retrieve_from_bibdata" do
+    let(:id) { "4609321" }
+    let(:source) { file_fixture("bibdata/4609321.mrx").read }
+    it "makes requests to Voyager" do
+      expect(described_class.retrieve_from_bibdata(id)).to eq source
+    end
+  end
 end
