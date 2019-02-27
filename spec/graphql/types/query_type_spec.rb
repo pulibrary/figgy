@@ -138,6 +138,134 @@ RSpec.describe Types::QueryType do
     end
   end
 
+  describe "#resources_by_coin_number" do
+    subject { described_class.fields["resourcesByCoinNumber"] }
+    context "when a user can read the resource" do
+      before do
+        allow(ability).to receive(:can?).with(:read, anything).and_return(true)
+      end
+
+      it "can return a resource by its coin number" do
+        coin = FactoryBot.create_for_repository(:coin, coin_number: 1)
+        type = described_class.new(nil, context)
+        expect(type.resources_by_coin_number(coin_number: "1").map(&:id)).to eq [coin.id]
+      end
+    end
+
+    context "when the user can't read the resource" do
+      before do
+        allow(ability).to receive(:can?).with(:read, anything).and_return(false)
+      end
+
+      it "returns nothing" do
+        FactoryBot.create_for_repository(:coin, coin_number: 1)
+        type = described_class.new(nil, context)
+        expect(type.resources_by_coin_number(coin_number: "1").map(&:id)).to eq []
+      end
+    end
+  end
+
+  describe "#resources_by_coin_numbers" do
+    subject { described_class.fields["resourcesByCoinNumbers"] }
+    context "when a user can read the resource" do
+      before do
+        allow(ability).to receive(:can?).with(:read, anything).and_return(true)
+      end
+
+      it "can return resources by coin numbers" do
+        coin = FactoryBot.create_for_repository(:coin, coin_number: 1)
+        coin2 = FactoryBot.create_for_repository(:coin, coin_number: 2)
+        type = described_class.new(nil, context)
+        expect(type.resources_by_coin_numbers(coin_numbers: ["1", "2"]).map(&:id)).to contain_exactly(coin.id, coin2.id)
+      end
+    end
+
+    context "when the user can't read the resource" do
+      before do
+        allow(ability).to receive(:can?).with(:read, anything).and_return(false)
+      end
+
+      it "returns nothing" do
+        stub_bibdata(bib_id: "7214786")
+        FactoryBot.create_for_repository(:coin, coin_number: 1)
+        FactoryBot.create_for_repository(:coin, coin_number: 2)
+        type = described_class.new(nil, context)
+        expect(type.resources_by_coin_numbers(coin_numbers: ["1", "2"]).map(&:id)).to eq []
+      end
+    end
+  end
+
+  describe "#resources_by_orangelight_id" do
+    subject { described_class.fields["resourcesByOrangelightId"] }
+    it { is_expected.to accept_arguments(id: "String!") }
+
+    context "when the user can read the resource" do
+      before do
+        allow(ability).to receive(:can?).with(:read, anything).and_return(true)
+      end
+
+      it "can return a resource by its bibid" do
+        stub_bibdata(bib_id: "7214786")
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
+        type = described_class.new(nil, context)
+        expect(type.resources_by_orangelight_id(id: "7214786").map(&:id)).to eq [scanned_resource.id]
+      end
+
+      it "can return a resource by its coin id" do
+        coin = FactoryBot.create_for_repository(:coin, coin_number: 1)
+        type = described_class.new(nil, context)
+        expect(type.resources_by_orangelight_id(id: "coin-1").map(&:id)).to eq [coin.id]
+      end
+    end
+  end
+
+  describe "#resources_by_orangelight_ids" do
+    subject { described_class.fields["resourcesByOrangelightIds"] }
+    it { is_expected.to accept_arguments(ids: "[String!]!") }
+    context "when a user can read the resource" do
+      before do
+        allow(ability).to receive(:can?).with(:read, anything).and_return(true)
+      end
+      it "can return resources by bibids" do
+        stub_bibdata(bib_id: "7214786")
+        stub_bibdata(bib_id: "8543429")
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
+        scanned_resource2 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "8543429")
+        type = described_class.new(nil, context)
+        expect(type.resources_by_orangelight_ids(ids: ["7214786", "8543429"]).map(&:id)).to contain_exactly(scanned_resource.id, scanned_resource2.id)
+      end
+
+      it "can return resources by coin_ids" do
+        coin = FactoryBot.create_for_repository(:coin, coin_number: 43)
+        coin2 = FactoryBot.create_for_repository(:coin, coin_number: 42)
+        type = described_class.new(nil, context)
+        expect(type.resources_by_orangelight_ids(ids: ["coin-43", "coin-42"]).map(&:id)).to contain_exactly(coin.id, coin2.id)
+      end
+
+      it "can return resources by bibid and coin_id" do
+        stub_bibdata(bib_id: "7214786")
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
+        coin = FactoryBot.create_for_repository(:coin, coin_number: 45)
+        type = described_class.new(nil, context)
+        expect(type.resources_by_orangelight_ids(ids: ["7214786", "coin-45"]).map(&:id)).to contain_exactly(scanned_resource.id, coin.id)
+      end
+    end
+
+    context "when the user can't read the resource" do
+      before do
+        allow(ability).to receive(:can?).with(:read, anything).and_return(false)
+      end
+      it "returns nothing" do
+        stub_bibdata(bib_id: "7214786")
+        stub_bibdata(bib_id: "8543429")
+        FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
+        FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "8543429")
+        type = described_class.new(nil, context)
+        expect(type.resources_by_orangelight_ids(ids: ["7214786", "8543429"])).to eq []
+      end
+    end
+  end
+
   context "when the user cannot read the resource" do
     before do
       allow(ability).to receive(:can?).with(:read, anything).and_return(false)
