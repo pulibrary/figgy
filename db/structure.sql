@@ -3,7 +3,6 @@ SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
@@ -36,11 +35,13 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
 COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
 
 
+SET search_path = public, pg_catalog;
+
 --
 -- Name: get_ids(jsonb, text); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION public.get_ids(jsonb, text) RETURNS jsonb
+CREATE FUNCTION get_ids(jsonb, text) RETURNS jsonb
     LANGUAGE sql IMMUTABLE
     AS $_$
       select jsonb_agg(x) from
@@ -52,7 +53,7 @@ CREATE FUNCTION public.get_ids(jsonb, text) RETURNS jsonb
 -- Name: get_ids_array(jsonb, text); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION public.get_ids_array(jsonb, text) RETURNS text[]
+CREATE FUNCTION get_ids_array(jsonb, text) RETURNS text[]
     LANGUAGE sql IMMUTABLE
     AS $_$
       select array_agg(x) from
@@ -68,7 +69,7 @@ SET default_with_oids = false;
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.ar_internal_metadata (
+CREATE TABLE ar_internal_metadata (
     key character varying NOT NULL,
     value character varying,
     created_at timestamp without time zone NOT NULL,
@@ -80,7 +81,7 @@ CREATE TABLE public.ar_internal_metadata (
 -- Name: auth_tokens; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.auth_tokens (
+CREATE TABLE auth_tokens (
     id bigint NOT NULL,
     label character varying,
     "group" character varying,
@@ -95,7 +96,7 @@ CREATE TABLE public.auth_tokens (
 -- Name: auth_tokens_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.auth_tokens_id_seq
+CREATE SEQUENCE auth_tokens_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -107,14 +108,14 @@ CREATE SEQUENCE public.auth_tokens_id_seq
 -- Name: auth_tokens_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.auth_tokens_id_seq OWNED BY public.auth_tokens.id;
+ALTER SEQUENCE auth_tokens_id_seq OWNED BY auth_tokens.id;
 
 
 --
 -- Name: bookmarks; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.bookmarks (
+CREATE TABLE bookmarks (
     id integer NOT NULL,
     user_id integer NOT NULL,
     user_type character varying,
@@ -130,8 +131,7 @@ CREATE TABLE public.bookmarks (
 -- Name: bookmarks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.bookmarks_id_seq
-    AS integer
+CREATE SEQUENCE bookmarks_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -143,14 +143,14 @@ CREATE SEQUENCE public.bookmarks_id_seq
 -- Name: bookmarks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.bookmarks_id_seq OWNED BY public.bookmarks.id;
+ALTER SEQUENCE bookmarks_id_seq OWNED BY bookmarks.id;
 
 
 --
 -- Name: delayed_jobs; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.delayed_jobs (
+CREATE TABLE delayed_jobs (
     id integer NOT NULL,
     priority integer DEFAULT 0 NOT NULL,
     attempts integer DEFAULT 0 NOT NULL,
@@ -170,8 +170,7 @@ CREATE TABLE public.delayed_jobs (
 -- Name: delayed_jobs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.delayed_jobs_id_seq
-    AS integer
+CREATE SEQUENCE delayed_jobs_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -183,15 +182,15 @@ CREATE SEQUENCE public.delayed_jobs_id_seq
 -- Name: delayed_jobs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.delayed_jobs_id_seq OWNED BY public.delayed_jobs.id;
+ALTER SEQUENCE delayed_jobs_id_seq OWNED BY delayed_jobs.id;
 
 
 --
 -- Name: orm_resources; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.orm_resources (
-    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+CREATE TABLE orm_resources (
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     metadata jsonb DEFAULT '{}'::jsonb NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -204,7 +203,7 @@ CREATE TABLE public.orm_resources (
 -- Name: roles; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.roles (
+CREATE TABLE roles (
     id integer NOT NULL,
     name character varying
 );
@@ -214,8 +213,7 @@ CREATE TABLE public.roles (
 -- Name: roles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.roles_id_seq
-    AS integer
+CREATE SEQUENCE roles_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -227,14 +225,14 @@ CREATE SEQUENCE public.roles_id_seq
 -- Name: roles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.roles_id_seq OWNED BY public.roles.id;
+ALTER SEQUENCE roles_id_seq OWNED BY roles.id;
 
 
 --
 -- Name: roles_users; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.roles_users (
+CREATE TABLE roles_users (
     role_id integer,
     user_id integer
 );
@@ -244,7 +242,7 @@ CREATE TABLE public.roles_users (
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.schema_migrations (
+CREATE TABLE schema_migrations (
     version character varying NOT NULL
 );
 
@@ -253,7 +251,7 @@ CREATE TABLE public.schema_migrations (
 -- Name: searches; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.searches (
+CREATE TABLE searches (
     id integer NOT NULL,
     query_params bytea,
     user_id integer,
@@ -267,8 +265,7 @@ CREATE TABLE public.searches (
 -- Name: searches_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.searches_id_seq
-    AS integer
+CREATE SEQUENCE searches_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -280,14 +277,14 @@ CREATE SEQUENCE public.searches_id_seq
 -- Name: searches_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.searches_id_seq OWNED BY public.searches.id;
+ALTER SEQUENCE searches_id_seq OWNED BY searches.id;
 
 
 --
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.users (
+CREATE TABLE users (
     id bigint NOT NULL,
     email character varying DEFAULT ''::character varying NOT NULL,
     encrypted_password character varying DEFAULT ''::character varying NOT NULL,
@@ -311,7 +308,7 @@ CREATE TABLE public.users (
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.users_id_seq
+CREATE SEQUENCE users_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -323,56 +320,56 @@ CREATE SEQUENCE public.users_id_seq
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
 -- Name: auth_tokens id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.auth_tokens ALTER COLUMN id SET DEFAULT nextval('public.auth_tokens_id_seq'::regclass);
+ALTER TABLE ONLY auth_tokens ALTER COLUMN id SET DEFAULT nextval('auth_tokens_id_seq'::regclass);
 
 
 --
 -- Name: bookmarks id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.bookmarks ALTER COLUMN id SET DEFAULT nextval('public.bookmarks_id_seq'::regclass);
+ALTER TABLE ONLY bookmarks ALTER COLUMN id SET DEFAULT nextval('bookmarks_id_seq'::regclass);
 
 
 --
 -- Name: delayed_jobs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.delayed_jobs ALTER COLUMN id SET DEFAULT nextval('public.delayed_jobs_id_seq'::regclass);
+ALTER TABLE ONLY delayed_jobs ALTER COLUMN id SET DEFAULT nextval('delayed_jobs_id_seq'::regclass);
 
 
 --
 -- Name: roles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.roles ALTER COLUMN id SET DEFAULT nextval('public.roles_id_seq'::regclass);
+ALTER TABLE ONLY roles ALTER COLUMN id SET DEFAULT nextval('roles_id_seq'::regclass);
 
 
 --
 -- Name: searches id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.searches ALTER COLUMN id SET DEFAULT nextval('public.searches_id_seq'::regclass);
+ALTER TABLE ONLY searches ALTER COLUMN id SET DEFAULT nextval('searches_id_seq'::regclass);
 
 
 --
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 
 
 --
 -- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.ar_internal_metadata
+ALTER TABLE ONLY ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
 
 
@@ -380,7 +377,7 @@ ALTER TABLE ONLY public.ar_internal_metadata
 -- Name: auth_tokens auth_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.auth_tokens
+ALTER TABLE ONLY auth_tokens
     ADD CONSTRAINT auth_tokens_pkey PRIMARY KEY (id);
 
 
@@ -388,7 +385,7 @@ ALTER TABLE ONLY public.auth_tokens
 -- Name: bookmarks bookmarks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.bookmarks
+ALTER TABLE ONLY bookmarks
     ADD CONSTRAINT bookmarks_pkey PRIMARY KEY (id);
 
 
@@ -396,7 +393,7 @@ ALTER TABLE ONLY public.bookmarks
 -- Name: delayed_jobs delayed_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.delayed_jobs
+ALTER TABLE ONLY delayed_jobs
     ADD CONSTRAINT delayed_jobs_pkey PRIMARY KEY (id);
 
 
@@ -404,7 +401,7 @@ ALTER TABLE ONLY public.delayed_jobs
 -- Name: orm_resources orm_resources_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.orm_resources
+ALTER TABLE ONLY orm_resources
     ADD CONSTRAINT orm_resources_pkey PRIMARY KEY (id);
 
 
@@ -412,7 +409,7 @@ ALTER TABLE ONLY public.orm_resources
 -- Name: roles roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.roles
+ALTER TABLE ONLY roles
     ADD CONSTRAINT roles_pkey PRIMARY KEY (id);
 
 
@@ -420,7 +417,7 @@ ALTER TABLE ONLY public.roles
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.schema_migrations
+ALTER TABLE ONLY schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
 
 
@@ -428,7 +425,7 @@ ALTER TABLE ONLY public.schema_migrations
 -- Name: searches searches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.searches
+ALTER TABLE ONLY searches
     ADD CONSTRAINT searches_pkey PRIMARY KEY (id);
 
 
@@ -436,7 +433,7 @@ ALTER TABLE ONLY public.searches
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.users
+ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
 
@@ -444,147 +441,147 @@ ALTER TABLE ONLY public.users
 -- Name: delayed_jobs_priority; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX delayed_jobs_priority ON public.delayed_jobs USING btree (priority, run_at);
+CREATE INDEX delayed_jobs_priority ON delayed_jobs USING btree (priority, run_at);
 
 
 --
 -- Name: flat_member_ids_array_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX flat_member_ids_array_idx ON public.orm_resources USING gin (public.get_ids_array(metadata, 'member_ids'::text));
+CREATE INDEX flat_member_ids_array_idx ON orm_resources USING gin (get_ids_array(metadata, 'member_ids'::text));
 
 
 --
 -- Name: flat_member_ids_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX flat_member_ids_idx ON public.orm_resources USING gin (public.get_ids(metadata, 'member_ids'::text));
+CREATE INDEX flat_member_ids_idx ON orm_resources USING gin (get_ids(metadata, 'member_ids'::text));
 
 
 --
 -- Name: flat_proxied_file_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX flat_proxied_file_id_idx ON public.orm_resources USING gin (public.get_ids_array(metadata, 'proxied_file_id'::text));
+CREATE INDEX flat_proxied_file_id_idx ON orm_resources USING gin (get_ids_array(metadata, 'proxied_file_id'::text));
 
 
 --
 -- Name: index_bookmarks_on_document_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_bookmarks_on_document_id ON public.bookmarks USING btree (document_id);
+CREATE INDEX index_bookmarks_on_document_id ON bookmarks USING btree (document_id);
 
 
 --
 -- Name: index_bookmarks_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_bookmarks_on_user_id ON public.bookmarks USING btree (user_id);
+CREATE INDEX index_bookmarks_on_user_id ON bookmarks USING btree (user_id);
 
 
 --
 -- Name: index_orm_resources_on_internal_resource; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_orm_resources_on_internal_resource ON public.orm_resources USING btree (internal_resource);
+CREATE INDEX index_orm_resources_on_internal_resource ON orm_resources USING btree (internal_resource);
 
 
 --
 -- Name: index_orm_resources_on_metadata; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_orm_resources_on_metadata ON public.orm_resources USING gin (metadata);
+CREATE INDEX index_orm_resources_on_metadata ON orm_resources USING gin (metadata);
 
 
 --
 -- Name: index_orm_resources_on_metadata_jsonb_path_ops; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_orm_resources_on_metadata_jsonb_path_ops ON public.orm_resources USING gin (metadata jsonb_path_ops);
+CREATE INDEX index_orm_resources_on_metadata_jsonb_path_ops ON orm_resources USING gin (metadata jsonb_path_ops);
 
 
 --
 -- Name: index_orm_resources_on_updated_at; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_orm_resources_on_updated_at ON public.orm_resources USING btree (updated_at);
+CREATE INDEX index_orm_resources_on_updated_at ON orm_resources USING btree (updated_at);
 
 
 --
 -- Name: index_roles_users_on_role_id_and_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_roles_users_on_role_id_and_user_id ON public.roles_users USING btree (role_id, user_id);
+CREATE INDEX index_roles_users_on_role_id_and_user_id ON roles_users USING btree (role_id, user_id);
 
 
 --
 -- Name: index_roles_users_on_user_id_and_role_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_roles_users_on_user_id_and_role_id ON public.roles_users USING btree (user_id, role_id);
+CREATE INDEX index_roles_users_on_user_id_and_role_id ON roles_users USING btree (user_id, role_id);
 
 
 --
 -- Name: index_searches_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_searches_on_user_id ON public.searches USING btree (user_id);
+CREATE INDEX index_searches_on_user_id ON searches USING btree (user_id);
 
 
 --
 -- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_users_on_email ON public.users USING btree (email);
+CREATE INDEX index_users_on_email ON users USING btree (email);
 
 
 --
 -- Name: index_users_on_provider; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_users_on_provider ON public.users USING btree (provider);
+CREATE INDEX index_users_on_provider ON users USING btree (provider);
 
 
 --
 -- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING btree (reset_password_token);
+CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (reset_password_token);
 
 
 --
 -- Name: index_users_on_uid; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_users_on_uid ON public.users USING btree (uid);
+CREATE INDEX index_users_on_uid ON users USING btree (uid);
 
 
 --
 -- Name: orm_resources_first_accession_number_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX orm_resources_first_accession_number_idx ON public.orm_resources USING btree ((((metadata -> 'accession_number'::text) -> 0)));
+CREATE INDEX orm_resources_first_accession_number_idx ON orm_resources USING btree ((((metadata -> 'accession_number'::text) -> 0)));
 
 
 --
 -- Name: orm_resources_first_coin_number_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX orm_resources_first_coin_number_idx ON public.orm_resources USING btree ((((metadata -> 'coin_number'::text) -> 0)));
+CREATE INDEX orm_resources_first_coin_number_idx ON orm_resources USING btree ((((metadata -> 'coin_number'::text) -> 0)));
 
 
 --
 -- Name: orm_resources_first_find_number_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX orm_resources_first_find_number_idx ON public.orm_resources USING btree ((((metadata -> 'find_number'::text) -> 0)));
+CREATE INDEX orm_resources_first_find_number_idx ON orm_resources USING btree ((((metadata -> 'find_number'::text) -> 0)));
 
 
 --
 -- Name: orm_resources_first_issue_number_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX orm_resources_first_issue_number_idx ON public.orm_resources USING btree ((((metadata -> 'issue_number'::text) -> 0)));
+CREATE INDEX orm_resources_first_issue_number_idx ON orm_resources USING btree ((((metadata -> 'issue_number'::text) -> 0)));
 
 
 --

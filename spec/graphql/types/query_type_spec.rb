@@ -36,6 +36,29 @@ RSpec.describe Types::QueryType do
     end
   end
 
+  describe "#resources_by_ark" do
+    subject { described_class.fields["resourcesByArk"] }
+    it { is_expected.to accept_arguments(ark: "String!") }
+
+    context "when a user can read the resource" do
+      before do
+        allow(ability).to receive(:can?).with(:read, anything).and_return(true)
+      end
+
+      it "can return a resource by its ark" do
+        coin = FactoryBot.create_for_repository(:coin, identifier: "ark:/99999/fk4")
+        type = described_class.new(nil, context)
+        expect(type.resources_by_ark(ark: "ark:/99999/fk4").map(&:id)).to eq [coin.id]
+      end
+
+      it "can return a raster resource by its ark" do
+        raster_resource = FactoryBot.create_for_repository(:raster_resource, identifier: "ark:/99999/fk4")
+        type = described_class.new(nil, context)
+        expect(type.resources_by_ark(ark: "ark:/99999/fk4").map(&:id)).to eq [raster_resource.id]
+      end
+    end
+  end
+
   describe "#resources_by_bibid" do
     subject { described_class.fields["resourcesByBibid"] }
     it { is_expected.to accept_arguments(bibId: "String!") }
