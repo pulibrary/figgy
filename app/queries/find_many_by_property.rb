@@ -1,8 +1,7 @@
-
 # frozen_string_literal: true
-class FindManyByStringProperty
+class FindManyByProperty
   def self.queries
-    [:find_many_by_string_property]
+    [:find_many_by_property]
   end
 
   attr_reader :query_service
@@ -13,7 +12,7 @@ class FindManyByStringProperty
     @query_service = query_service
   end
 
-  def find_many_by_string_property(property:, values:)
+  def find_many_by_property(property:, values:)
     query = build_query(property, values)
     run_query(query)
   end
@@ -22,7 +21,8 @@ class FindManyByStringProperty
 
     def build_conditions(property, values)
       conditions = values.map do |value|
-        "metadata @> '{\"#{property}\": [\"#{value}\"]}'"
+        internal_array = { property => Array.wrap(value) }
+        "metadata @> '#{internal_array.to_json}'"
       end
 
       conditions.join(" OR ")
