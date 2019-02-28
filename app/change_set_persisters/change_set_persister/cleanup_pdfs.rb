@@ -13,7 +13,7 @@ class ChangeSetPersister
       return unless resource.is_a?(ScannedResource) && pdf_file
 
       # Return if the only update is that file metadata is being updated
-      if change_set.changed.except("file_metadata").empty?
+      if change_set.changed.except("file_metadata", "created_file_sets").empty?
         # Delete the file metadata if the files cannot be located
         resource.file_metadata.delete(pdf_file) unless pdf_file_exists?
         return

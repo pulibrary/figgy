@@ -1,4 +1,4 @@
-<% if can?(:edit, resource) && @change_set.respond_to?(:workflow_class) %>
+<% if can?(:edit, resource) && @change_set.respond_to?(:workflow_class) && @change_set.respond_to?(:state) %>
   <div id="workflow_controls"class="panel panel-default workflow-affix">
     <div class="panel-heading">
       <h2 class="panel-title">Review and Approval</h2>

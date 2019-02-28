@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class FileSetChangeSet < Valkyrie::ChangeSet
+class FileSetChangeSet < ChangeSet
   self.fields = [:title]
   property :files, virtual: true, multiple: true, required: false
   property :viewing_hint, multiple: false, required: false

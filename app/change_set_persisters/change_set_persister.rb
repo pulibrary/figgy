@@ -62,8 +62,8 @@ class ChangeSetPersister
   # rubocop:enable Metrics/MethodLength
 
   class Basic
-    attr_reader :metadata_adapter, :storage_adapter, :created_file_sets, :handlers
-    attr_accessor :created_file_sets, :queue
+    attr_reader :metadata_adapter, :storage_adapter, :handlers
+    attr_accessor :queue
     delegate :persister, :query_service, to: :metadata_adapter
     def initialize(metadata_adapter:, storage_adapter:, transaction: false, characterize: true, queue: :default, handlers: {})
       @metadata_adapter = metadata_adapter
@@ -86,7 +86,7 @@ class ChangeSetPersister
         after_update_commit(change_set: change_set) if change_set.persisted?
 
         after_save_commit(change_set: change_set, updated_resource: output)
-        after_commit
+        after_commit(change_set: change_set)
       end
     end
 
@@ -214,14 +214,13 @@ class ChangeSetPersister
         end
       end
 
-      def after_commit
+      def after_commit(change_set:)
         registered_handlers.fetch(:after_commit, []).each do |handler|
-          instance = handler.new(change_set_persister: self, change_set: nil, created_file_sets: @created_file_sets)
+          instance = handler.new(change_set_persister: self, change_set: change_set)
           delayed_queue.add do
             instance.run
           end
         end
-        self.created_file_sets = []
       end
   end
 end

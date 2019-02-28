@@ -11,4 +11,10 @@ class ChangeSet < Valkyrie::ChangeSet
       @_changes = Disposable::Twin::Changed::Changes.new
     end
   end
+
+  # This property is set by ChangeSetPersister::CreateFile and is used to keep
+  # track of which FileSets were created by the ChangeSetPersister as part of
+  # saving this change_set. We may want to look into passing some sort of scope
+  # around with the change_set in ChangeSetPersister instead, at some point.
+  property :created_file_sets, virtual: true, multiple: true, required: false, default: []
 end
