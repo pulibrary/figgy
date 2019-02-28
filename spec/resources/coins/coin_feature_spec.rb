@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.feature "Coins", js: true do
+RSpec.feature "Coins" do
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:persister) { adapter.persister }
@@ -37,6 +37,7 @@ RSpec.feature "Coins", js: true do
       visit solr_document_path(coin)
       expect(page).to have_css ".breadcrumb", text: "#{numismatic_issue.title.join} #{coin.title.join}"
       expect(page).to have_selector("#doc_#{coin.id} > ol > li:nth-child(1) > a")
+      expect(page).to have_link "Issue: 1", href: solr_document_path(numismatic_issue)
     end
   end
 
