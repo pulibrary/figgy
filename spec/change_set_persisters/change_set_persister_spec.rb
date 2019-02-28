@@ -431,6 +431,30 @@ RSpec.describe ChangeSetPersister do
       end
     end
 
+    it "runs characterization for all files when added in sequence with the same persister", run_real_derivatives: true do
+      resource = FactoryBot.create_for_repository(:scanned_resource)
+      change_set = change_set_class.new(resource)
+      change_set.prepopulate!
+      change_set.validate(files: [file])
+      output = change_set_persister.save(change_set: change_set)
+
+      change_set_persister.buffer_into_index do |buffered_change_set_persister|
+        change_set = change_set_class.new(output)
+        change_set.prepopulate!
+        change_set.validate(ocr_language: "eng")
+        output = buffered_change_set_persister.save(change_set: change_set)
+      end
+
+      change_set_persister.buffer_into_index do |buffered_change_set_persister|
+        change_set = change_set_class.new(output)
+        change_set.prepopulate!
+        change_set.validate(files: [file])
+        output = buffered_change_set_persister.save(change_set: change_set)
+      end
+      members = Wayfinder.for(output).members
+      expect(members[1].original_file.height).to be_present
+    end
+
     it "can append files as FileSets", run_real_derivatives: true do
       resource = FactoryBot.build(:scanned_resource)
       change_set = change_set_class.new(resource, characterize: false, ocr_language: ["eng"])

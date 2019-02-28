@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class NumismaticMonogramChangeSet < Valkyrie::ChangeSet
+class NumismaticMonogramChangeSet < ChangeSet
   delegate :human_readable_type, to: :model
 
   property :title, multiple: false, required: true

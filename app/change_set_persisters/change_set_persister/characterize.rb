@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 class ChangeSetPersister
   class Characterize
-    attr_reader :change_set_persister, :change_set, :post_save_resource, :created_file_sets
+    attr_reader :change_set_persister, :change_set, :post_save_resource
     delegate :characterize?, to: :change_set_persister
-    def initialize(change_set_persister:, change_set:, created_file_sets:, post_save_resource: nil)
+    def initialize(change_set_persister:, change_set:, post_save_resource: nil)
       @change_set = change_set
       @change_set_persister = change_set_persister
-      @created_file_sets = created_file_sets
       @post_save_resource = post_save_resource
     end
 
@@ -16,6 +15,10 @@ class ChangeSetPersister
         next unless file_set.instance_of?(FileSet) && characterize?
         ::CharacterizationJob.set(queue: change_set_persister.queue).perform_later(file_set.id.to_s)
       end
+    end
+
+    def created_file_sets
+      change_set.try(:created_file_sets) || []
     end
   end
 end

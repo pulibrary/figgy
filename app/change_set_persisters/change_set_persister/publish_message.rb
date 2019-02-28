@@ -26,14 +26,15 @@ class ChangeSetPersister
   end
 
   class PublishCreatedMessage
-    attr_reader :change_set_persister, :change_set, :created_file_sets
-    def initialize(change_set_persister:, change_set: nil, created_file_sets: nil)
+    attr_reader :change_set_persister, :change_set
+    delegate :created_file_sets, to: :change_set
+    def initialize(change_set_persister:, change_set: nil)
       @change_set = change_set
       @change_set_persister = change_set_persister
-      @created_file_sets = created_file_sets
     end
 
     def run
+      return unless change_set.respond_to?(:created_file_sets)
       created_file_sets.each { |created_file_set| messenger.record_created(created_file_set) } unless created_file_sets.blank?
     end
 

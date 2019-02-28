@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CollectionChangeSet < Valkyrie::ChangeSet
+class CollectionChangeSet < ChangeSet
   delegate :human_readable_type, to: :model
   property :title, multiple: false, required: true
   property :slug, multiple: false, required: true
