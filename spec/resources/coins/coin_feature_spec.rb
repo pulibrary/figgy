@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.feature "Coins" do
+RSpec.feature "Coins", js: true do
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:persister) { adapter.persister }
@@ -9,8 +9,13 @@ RSpec.feature "Coins" do
     res = FactoryBot.create_for_repository(:coin)
     persister.save(resource: res)
   end
+  let(:numismatic_issue) do
+    res = FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id])
+    persister.save(resource: res)
+  end
   let(:change_set) do
     CoinChangeSet.new(coin)
+    NumismaticIssueChangeSet.new(numismatic_issue)
   end
   let(:change_set_persister) do
     ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: Valkyrie.config.storage_adapter)
@@ -21,6 +26,18 @@ RSpec.feature "Coins" do
 
     change_set_persister.save(change_set: change_set)
     sign_in user
+  end
+
+  describe "breadcrumbs" do
+    before do
+      coin
+      sign_in(user)
+    end
+    it "shows parent when there is no parent param in the url" do
+      visit solr_document_path(coin)
+      expect(page).to have_css ".breadcrumb", text: "#{numismatic_issue.title.join} #{coin.title.join}"
+      expect(page).to have_selector("#doc_#{coin.id} > ol > li:nth-child(1) > a")
+    end
   end
 
   scenario "creating a new resource" do

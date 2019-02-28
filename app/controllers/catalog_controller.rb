@@ -132,7 +132,15 @@ class CatalogController < ApplicationController
       query = "member_ids_ssim:id-#{params['id']}"
       _, result = search_results(q: query, rows: 1)
       @parent_document = result.first if result.first
+    elsif params[:parent_id].nil? && @document.decorated_resource.is_a?(CoinDecorator)
+      set_coin_parent
     end
+  end
+
+  def set_coin_parent
+    return unless CoinDecorator.new(resource).decorated_parent
+    params[:parent_id] = @document.decorated_resource.decorated_parent["id"].id
+    _, @parent_document = fetch(params[:parent_id])
   end
 
   def lookup_manifest
