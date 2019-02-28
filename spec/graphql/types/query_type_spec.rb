@@ -23,11 +23,13 @@ RSpec.describe Types::QueryType do
     describe "resource field" do
       subject { described_class.fields["resource"] }
       it { is_expected.to accept_arguments(id: "ID!") }
+
       it "can return a resource by ID" do
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource)
         type = described_class.new(nil, context)
         expect(type.resource(id: scanned_resource.id.to_s)).to be_a ScannedResource
       end
+
       it "can return a FileSet" do
         file_set = FactoryBot.create_for_repository(:file_set)
         type = described_class.new(nil, context)
@@ -97,10 +99,12 @@ RSpec.describe Types::QueryType do
   describe "#resources_by_bibids" do
     subject { described_class.fields["resourcesByBibids"] }
     it { is_expected.to accept_arguments(bibIds: "[String!]!") }
+
     context "when a user can read the resource" do
       before do
         allow(ability).to receive(:can?).with(:read, anything).and_return(true)
       end
+
       it "can return resources by its bibid" do
         stub_bibdata(bib_id: "7214786")
         stub_bibdata(bib_id: "8543429")
@@ -110,10 +114,12 @@ RSpec.describe Types::QueryType do
         expect(type.resources_by_bibids(bib_ids: ["7214786", "8543429"]).map(&:id)).to contain_exactly(scanned_resource.id, scanned_resource2.id)
       end
     end
+
     context "when the user can't read the resource" do
       before do
         allow(ability).to receive(:can?).with(:read, anything).and_return(false)
       end
+
       it "returns nothing" do
         stub_bibdata(bib_id: "7214786")
         stub_bibdata(bib_id: "8543429")
@@ -123,10 +129,12 @@ RSpec.describe Types::QueryType do
         expect(type.resources_by_bibids(bib_ids: ["7214786", "8543429"])).to eq []
       end
     end
+
     context "when one resource does not have a defined graphql type" do
       before do
         allow(ability).to receive(:can?).with(:read, anything).and_return(true)
       end
+
       it "returns the resource with the defined type only" do
         stub_bibdata(bib_id: "7214786")
         stub_bibdata(bib_id: "8543429")
@@ -139,7 +147,6 @@ RSpec.describe Types::QueryType do
   end
 
   describe "#resources_by_coin_number" do
-    subject { described_class.fields["resourcesByCoinNumber"] }
     context "when a user can read the resource" do
       before do
         allow(ability).to receive(:can?).with(:read, anything).and_return(true)
@@ -166,7 +173,6 @@ RSpec.describe Types::QueryType do
   end
 
   describe "#resources_by_coin_numbers" do
-    subject { described_class.fields["resourcesByCoinNumbers"] }
     context "when a user can read the resource" do
       before do
         allow(ability).to receive(:can?).with(:read, anything).and_return(true)
@@ -222,10 +228,12 @@ RSpec.describe Types::QueryType do
   describe "#resources_by_orangelight_ids" do
     subject { described_class.fields["resourcesByOrangelightIds"] }
     it { is_expected.to accept_arguments(ids: "[String!]!") }
+
     context "when a user can read the resource" do
       before do
         allow(ability).to receive(:can?).with(:read, anything).and_return(true)
       end
+
       it "can return resources by bibids" do
         stub_bibdata(bib_id: "7214786")
         stub_bibdata(bib_id: "8543429")
@@ -255,6 +263,7 @@ RSpec.describe Types::QueryType do
       before do
         allow(ability).to receive(:can?).with(:read, anything).and_return(false)
       end
+
       it "returns nothing" do
         stub_bibdata(bib_id: "7214786")
         stub_bibdata(bib_id: "8543429")

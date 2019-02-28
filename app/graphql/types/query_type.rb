@@ -59,7 +59,7 @@ class Types::QueryType < Types::BaseObject
   end
 
   def resources_by_orangelight_id(id:)
-    if id.start_with?("coin-")
+    if coin_id?(id)
       resources_by_coin_number(coin_number: id.gsub("coin-", ""))
     else
       resources_by_bibid(bib_id: id)
@@ -67,27 +67,33 @@ class Types::QueryType < Types::BaseObject
   end
 
   def resources_by_orangelight_ids(ids:)
-    coin_ids = ids.select { |id| id.start_with?("coin-") }.map { |id| id.gsub("coin-", "") }
+    coin_ids = ids.select { |id| coin_id?(id) }.map { |id| id.gsub("coin-", "") }
     bib_ids = ids - coin_ids
-    coin_resources = resources_by_coin_numbers(coin_numbers: coin_ids) unless coin_ids.empty?
-    bib_resources = resources_by_bibids(bib_ids: bib_ids) unless bib_ids.empty?
-    (coin_resources || []) + (bib_resources || [])
+    coin_resources = coin_ids.empty? ? [] : resources_by_coin_numbers(coin_numbers: coin_ids)
+    bib_resources = bib_ids.empty? ? [] : resources_by_bibids(bib_ids: bib_ids)
+    coin_resources + bib_resources
   end
 
-  def ability
-    context[:ability]
-  end
+  private
 
-  def type_defined?(resource)
-    "Types::#{resource.class}Type".constantize
-  rescue NameError
-    false
-  end
+    def ability
+      context[:ability]
+    end
 
-  def change_set_persister
-    context[:change_set_persister]
-  end
+    def change_set_persister
+      context[:change_set_persister]
+    end
 
-  delegate :metadata_adapter, to: :change_set_persister
-  delegate :query_service, to: :metadata_adapter
+    def coin_id?(id)
+      id.start_with?("coin-")
+    end
+
+    def type_defined?(resource)
+      "Types::#{resource.class}Type".constantize
+    rescue NameError
+      false
+    end
+
+    delegate :metadata_adapter, to: :change_set_persister
+    delegate :query_service, to: :metadata_adapter
 end
