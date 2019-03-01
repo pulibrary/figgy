@@ -43,7 +43,7 @@ RSpec.describe CoinChangeSet do
       end
     end
     context "when not given a coin number" do
-      it "is gives it a coin number" do
+      it "gives it a coin number" do
         change_set.prepopulate!
         change_set.validate(coin_number: nil)
         expect(change_set).to be_valid
@@ -51,7 +51,7 @@ RSpec.describe CoinChangeSet do
       end
     end
     context "when given a coin number" do
-      it "is uses the given coin number" do
+      it "uses the given coin number" do
         change_set.prepopulate!
         change_set.validate(coin_number: 5)
         expect(change_set).to be_valid

@@ -44,6 +44,7 @@ class SearchBuilder < Blacklight::SearchBuilder
       EphemeraVocabulary,
       NumismaticAccession,
       NumismaticCitation,
+      NumismaticArtist,
       NumismaticMonogram,
       NumismaticReference,
       ProxyFileSet,

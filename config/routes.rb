@@ -127,6 +127,8 @@ Rails.application.routes.draw do
 
     resources :numismatic_finds
 
+    resources :numismatic_artists
+
     resources :numismatic_issues do
       member do
         get :file_manager
@@ -158,7 +160,7 @@ Rails.application.routes.draw do
     end
     get "/numismatic_issues/:parent_id/coin" => "coins#new", as: :parent_new_coin
     get "/parent/:parent_id/numismatic_citation" => "numismatic_citations#new", as: :parent_add_numismatic_citation
-
+    get "/parent/:parent_id/numismatic_artist" => "numismatic_artists#new", as: :parent_add_numismatic_artist
     resources :ephemera_projects do
       resources :templates, only: [:new, :create, :destroy]
       resources :ephemera_fields

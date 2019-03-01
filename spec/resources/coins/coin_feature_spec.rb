@@ -121,4 +121,23 @@ RSpec.feature "Coins" do
       expect(page).to have_css ".attribute.weight", text: "test value"
     end
   end
+
+  context "when a coin has citation and artist" do
+    let(:coin) { FactoryBot.create_for_repository(:coin, numismatic_artist_ids: [artist.id]) }
+    let(:artist) { FactoryBot.create_for_repository(:numismatic_artist) }
+
+    before do
+      visit solr_document_path coin
+    end
+
+    it "displays Add Citation button" do
+      expect(page).to have_css("#doc_#{coin.id} > a", text: "Add Citation")
+      expect(page).to have_link "Add Citation", href: parent_add_numismatic_citation_path(coin, parent_id: coin.id)
+    end
+
+    it "displays Add Artist button" do
+      expect(page).to have_css("#doc_#{coin.id} > a", text: "Add Artist")
+      expect(page).to have_link "Add Artist", href: parent_add_numismatic_artist_path(coin, parent_id: coin.id)
+    end
+  end
 end
