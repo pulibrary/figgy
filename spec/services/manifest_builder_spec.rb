@@ -172,8 +172,7 @@ RSpec.describe ManifestBuilder do
       expect(output["seeAlso"].length).to eq 2
       expect(output["seeAlso"].last).to include "@id" => "https://bibdata.princeton.edu/bibliographic/123456", "format" => "text/xml"
 
-      expect(output["service"].length).to eq 1
-      expect(output["service"][0]["label"]).to eq "Search within this item"
+      expect(output["service"]["label"]).to eq "Search within this item"
     end
 
     context "when it's a cicognara item" do

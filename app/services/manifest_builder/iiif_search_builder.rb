@@ -11,8 +11,7 @@ class ManifestBuilder
 
     def apply(manifest)
       return manifest unless resource.try(:search_enabled?)
-      manifest["service"] ||= []
-      manifest["service"] << search_service
+      manifest["service"] = search_service
       manifest
     end
 
