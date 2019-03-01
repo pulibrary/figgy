@@ -12,6 +12,7 @@ RSpec.describe Types::CoinType do
   let(:coin) do
     FactoryBot.create_for_repository(
       :coin,
+      coin_number: 55,
       viewing_hint: "individuals",
       viewing_direction: "left-to-right"
     )
@@ -43,6 +44,12 @@ RSpec.describe Types::CoinType do
   describe "#manifest_url" do
     it "links to the manifest URL" do
       expect(type.manifest_url).to eq "http://www.example.com/concern/coins/#{coin.id}/manifest"
+    end
+  end
+
+  describe "#orangelight_id" do
+    it "returns the orangelight coin id" do
+      expect(type.orangelight_id).to eq "coin-55"
     end
   end
 

@@ -149,6 +149,12 @@ RSpec.describe Types::ScannedResourceType do
     end
   end
 
+  describe "#orangelight_id" do
+    it "returns the bib. ID" do
+      expect(type.orangelight_id).to eq bibid
+    end
+  end
+
   describe "#source_metadata_identifier" do
     it "returns the bib. ID" do
       expect(type.source_metadata_identifier).to eq bibid

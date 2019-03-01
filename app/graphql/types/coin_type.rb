@@ -6,6 +6,10 @@ class Types::CoinType < Types::BaseObject
   field :viewing_direction, Types::ViewingDirectionEnum, null: true
   field :manifest_url, String, null: true
 
+  def orangelight_id
+    "coin-#{object.coin_number}"
+  end
+
   def viewing_hint
     Array.wrap(super).first
   end

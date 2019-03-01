@@ -18,6 +18,7 @@ module Types::Resource
   field :viewing_hint, String, null: true
   field :url, String, null: true
   field :members, [Types::Resource], null: true
+  field :orangelight_id, String, null: true
   field :source_metadata_identifier, String, null: true
   field :thumbnail, Types::Thumbnail, null: true
   field :ocr_content, [String], null: true
@@ -40,6 +41,10 @@ module Types::Resource
 
   def manifest_url
     helper.polymorphic_url([:manifest, object])
+  end
+
+  def orangelight_id
+    Array.wrap(object.try(:source_metadata_identifier)).first
   end
 
   def url
