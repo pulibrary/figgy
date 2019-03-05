@@ -9,23 +9,8 @@ class ImageDerivativeService
       @image_config = image_config
     end
 
-    def new(change_set)
-      ImageDerivativeService.new(change_set: change_set, target_file: target_file(change_set.resource), change_set_persister: change_set_persister, image_config: image_config)
-    end
-
-    # If there are intermediate files with the supported format attached to the
-    #   resource, select the first of these
-    # @param [Valkyrie::Resource] resource
-    # @return [FileMetadata]
-    def intermediate_target_files(resource)
-      supported = resource.intermediate_files.select do |intermed|
-        ["image/tiff", "image/jpeg"].include?(intermed.mime_type.first)
-      end
-      supported.empty? ? nil : supported.first
-    end
-
-    def target_file(resource)
-      intermediate_target_files(resource) || resource.original_file
+    def new(id:)
+      ImageDerivativeService.new(id: id, change_set_persister: change_set_persister, image_config: image_config)
     end
 
     class ImageConfig < Dry::Struct
@@ -45,19 +30,41 @@ class ImageDerivativeService
       super(io)
     end
   end
-  attr_reader :change_set, :target_file, :image_config, :use, :change_set_persister
+  attr_reader :image_config, :use, :change_set_persister, :id
   delegate :width, :height, :format, :output_name, to: :image_config
   delegate :mime_type, to: :target_file
-  delegate :resource, to: :change_set
-  def initialize(change_set:, target_file:, change_set_persister:, image_config:)
-    @change_set = change_set
-    @target_file = target_file
+  delegate :query_service, :storage_adapter, to: :change_set_persister
+  def initialize(id:, change_set_persister:, image_config:)
+    @id = id
     @change_set_persister = change_set_persister
     @image_config = image_config
   end
 
   def image_mime_type
     image_config.mime_type
+  end
+
+  def resource
+    @resource ||= query_service.find_by(id: id)
+  end
+
+  def change_set
+    @change_set ||= DynamicChangeSet.new(resource).prepopulate!
+  end
+
+  # If there are intermediate files with the supported format attached to the
+  #   resource, select the first of these
+  # @param [Valkyrie::Resource] resource
+  # @return [FileMetadata]
+  def intermediate_target_files
+    supported = resource.intermediate_files.select do |intermed|
+      ["image/tiff", "image/jpeg"].include?(intermed.mime_type.first)
+    end
+    supported.empty? ? nil : supported.first
+  end
+
+  def target_file
+    @target_file ||= intermediate_target_files || resource.original_file
   end
 
   def create_derivatives
@@ -140,10 +147,6 @@ class ImageDerivativeService
       change_set_persister.buffer_into_index do |buffered_persister|
         buffered_persister.save(change_set: updated_change_set)
       end
-    end
-
-    def storage_adapter
-      @storage_adapter ||= Valkyrie::StorageAdapter.find(:derivatives)
     end
 
     # Updates error message property on the original file.

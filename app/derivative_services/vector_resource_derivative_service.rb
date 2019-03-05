@@ -8,12 +8,8 @@ class VectorResourceDerivativeService
       @change_set_persister = change_set_persister
     end
 
-    def new(change_set)
-      VectorResourceDerivativeService.new(change_set: change_set, change_set_persister: change_set_persister, original_file: original_file(change_set.resource))
-    end
-
-    def original_file(resource)
-      resource.original_file
+    def new(id:)
+      VectorResourceDerivativeService.new(id: id, change_set_persister: change_set_persister)
     end
   end
 
@@ -27,13 +23,21 @@ class VectorResourceDerivativeService
     end
   end
 
-  attr_reader :change_set, :change_set_persister, :original_file
+  attr_reader :id, :change_set_persister
   delegate :mime_type, to: :original_file
-  delegate :resource, to: :change_set
-  def initialize(change_set:, change_set_persister:, original_file:)
-    @change_set = change_set
+  delegate :query_service, to: :change_set_persister
+  delegate :original_file, to: :resource
+  def initialize(id:, change_set_persister:)
+    @id = id
     @change_set_persister = change_set_persister
-    @original_file = original_file
+  end
+
+  def resource
+    @resource ||= query_service.find_by(id: id)
+  end
+
+  def change_set
+    @change_set ||= DynamicChangeSet.new(resource).prepopulate!
   end
 
   def build_display_file

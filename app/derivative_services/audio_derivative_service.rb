@@ -12,25 +12,31 @@ class AudioDerivativeService
       @change_set_persister = change_set_persister
     end
 
-    def new(change_set)
-      AudioDerivativeService.new(change_set: change_set, change_set_persister: change_set_persister, target_file: target_file(change_set.resource))
-    end
-
-    # Only ever checks original_file, if this were to check preservation_master
-    # it would override derivatives for MediaResources. Take care!
-    def target_file(resource)
-      resource.original_file
+    def new(id:)
+      AudioDerivativeService.new(id: id, change_set_persister: change_set_persister)
     end
   end
 
-  attr_reader :change_set, :change_set_persister, :target_file
+  attr_reader :change_set, :change_set_persister, :id
   delegate :mime_type, to: :target_file
-  delegate :resource, to: :change_set
-  delegate :storage_adapter, to: :change_set_persister
-  def initialize(change_set:, change_set_persister:, target_file:)
-    @change_set = change_set
+  delegate :storage_adapter, :query_service, to: :change_set_persister
+  def initialize(id:, change_set_persister:)
+    @id = id
     @change_set_persister = change_set_persister
-    @target_file = target_file
+  end
+
+  def resource
+    @resource ||= query_service.find_by(id: id)
+  end
+
+  # Only ever checks original_file, if this were to check preservation_master
+  # it would override derivatives for MediaResources. Take care!
+  def target_file
+    resource.original_file
+  end
+
+  def change_set
+    @change_set ||= DynamicChangeSet.new(resource).prepopulate!
   end
 
   def valid?

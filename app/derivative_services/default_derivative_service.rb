@@ -8,21 +8,26 @@ class DefaultDerivativeService
       @change_set_persister = change_set_persister
     end
 
-    def new(change_set)
-      DefaultDerivativeService.new(change_set: change_set, change_set_persister: change_set_persister, original_file: original_file(change_set.resource))
-    end
-
-    def original_file(resource)
-      resource.original_file
+    def new(id:)
+      DefaultDerivativeService.new(id: id, change_set_persister: change_set_persister)
     end
   end
 
-  attr_reader :change_set, :change_set_persister, :original_file
+  attr_reader :change_set_persister, :id
+  delegate :original_file, to: :resource
   delegate :mime_type, to: :original_file
-  def initialize(change_set:, change_set_persister:, original_file:)
-    @change_set = change_set
+  delegate :query_service, to: :change_set_persister
+  def initialize(id:, change_set_persister:)
+    @id = id
     @change_set_persister = change_set_persister
-    @original_file = original_file
+  end
+
+  def resource
+    @resource ||= query_service.find_by(id: id)
+  end
+
+  def change_set
+    @change_set ||= DynamicChangeSet.new(resource).prepopulate!
   end
 
   def valid?
@@ -51,10 +56,10 @@ class DefaultDerivativeService
   end
 
   def jp2_derivative_service(change_set_persister = self.change_set_persister)
-    Jp2DerivativeService::Factory.new(change_set_persister: change_set_persister).new(change_set)
+    Jp2DerivativeService::Factory.new(change_set_persister: change_set_persister).new(id: id)
   end
 
   def hocr_derivative_service(change_set_persister = self.change_set_persister)
-    HocrDerivativeService::Factory.new(change_set_persister: change_set_persister).new(change_set)
+    HocrDerivativeService::Factory.new(change_set_persister: change_set_persister).new(id: id)
   end
 end
