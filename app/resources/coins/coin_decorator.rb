@@ -25,7 +25,7 @@ class CoinDecorator < Valkyrie::ResourceDecorator
           :visibility,
           :append_id
 
-  delegate :members, :decorated_file_sets, :decorated_parent, :decorated_numismatic_citations, :accession, to: :wayfinder
+  delegate :members, :decorated_file_sets, :decorated_parent, :decorated_numismatic_citations, :decorated_numismatic_artists, :accession, to: :wayfinder
 
   def ark_mintable_state?
     false
@@ -35,6 +35,10 @@ class CoinDecorator < Valkyrie::ResourceDecorator
 
   def citations
     decorated_numismatic_citations.map(&:title)
+  end
+
+  def artists
+    decorated_numismatic_artists.map(&:title)
   end
 
   def manageable_files?

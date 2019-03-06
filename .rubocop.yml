@@ -106,6 +106,7 @@ Metrics/LineLength:
     - 'lib/tasks/music_reserves.rake'
     - 'spec/features/playlist_spec.rb'
     - 'spec/resources/scanned_resources/scanned_resources_controller_spec.rb'
+    - 'spec/views/catalog/_members_coin.html.erb_spec.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
@@ -142,6 +143,7 @@ Metrics/MethodLength:
     - 'app/services/manifest_builder.rb'
     - 'app/indexers/imported_metadata_indexer.rb'
     - 'app/controllers/concerns/resource_controller.rb'
+    - 'app/models/search_builder.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
