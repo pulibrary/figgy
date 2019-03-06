@@ -9,6 +9,7 @@ RSpec.describe Types::Resource do
     it { is_expected.to have_field(:label).of_type(String) }
     it { is_expected.to have_field(:viewingHint).of_type(String) }
     it { is_expected.to have_field(:members) }
+    it { is_expected.to have_field(:orangelightId).of_type(String) }
     it { is_expected.to have_field(:sourceMetadataIdentifier) }
     it { is_expected.to have_field(:thumbnail).of_type("Types::Thumbnail") }
   end
