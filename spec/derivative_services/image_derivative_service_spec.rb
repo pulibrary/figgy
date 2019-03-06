@@ -4,7 +4,9 @@ require "valkyrie/derivatives/specs/shared_specs"
 include ActionDispatch::TestProcess
 
 RSpec.describe ImageDerivativeService do
-  # it_behaves_like "a Valkyrie::Derivatives::DerivativeService"
+  it_behaves_like "a Valkyrie::Derivatives::DerivativeService" do
+    before { pending }
+  end
 
   let(:derivative_service) do
     ImageDerivativeService::Factory.new(change_set_persister: change_set_persister)

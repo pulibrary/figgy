@@ -5,7 +5,9 @@ include ActionDispatch::TestProcess
 
 RSpec.describe ScannedMapDerivativeService do
   with_queue_adapter :inline
-  # it_behaves_like "a Valkyrie::Derivatives::DerivativeService"
+  it_behaves_like "a Valkyrie::Derivatives::DerivativeService" do
+    before { pending }
+  end
 
   let(:derivative_service) do
     ScannedMapDerivativeService::Factory.new(change_set_persister: change_set_persister)

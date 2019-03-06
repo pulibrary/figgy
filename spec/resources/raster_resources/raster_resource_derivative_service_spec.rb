@@ -5,7 +5,9 @@ include ActionDispatch::TestProcess
 
 RSpec.describe RasterResourceDerivativeService do
   with_queue_adapter :inline
-  # it_behaves_like "a Valkyrie::Derivatives::DerivativeService"
+  it_behaves_like "a Valkyrie::Derivatives::DerivativeService" do
+    before { pending }
+  end
 
   let(:derivative_service) do
     RasterResourceDerivativeService::Factory.new(change_set_persister: change_set_persister)

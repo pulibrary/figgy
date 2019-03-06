@@ -4,7 +4,9 @@ require "valkyrie/derivatives/specs/shared_specs"
 include ActionDispatch::TestProcess
 
 RSpec.describe Jp2DerivativeService do
-  # it_behaves_like "a Valkyrie::Derivatives::DerivativeService"
+  it_behaves_like "a Valkyrie::Derivatives::DerivativeService" do
+    before { pending }
+  end
 
   let(:thumbnail) { Valkyrie::Vocab::PCDMUse.ThumbnailImage }
   let(:derivative_service) do
