@@ -3,9 +3,7 @@ class RunOCRJob < ApplicationJob
   delegate :query_service, to: :metadata_adapter
 
   def perform(file_set_id)
-    file_set = query_service.find_by(id: Valkyrie::ID.new(file_set_id))
-    change_set = DynamicChangeSet.new(file_set)
-    derivative_service_factory.new(change_set).create_derivatives
+    derivative_service_factory.new(id: file_set_id).create_derivatives
   end
 
   private
@@ -19,9 +17,5 @@ class RunOCRJob < ApplicationJob
         metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
         storage_adapter: Valkyrie.config.storage_adapter
       )
-    end
-
-    def metadata_adapter
-      Valkyrie::MetadataAdapter.find(:indexing_persister)
     end
 end

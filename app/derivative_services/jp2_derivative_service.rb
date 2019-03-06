@@ -8,23 +8,8 @@ class Jp2DerivativeService
       @change_set_persister = change_set_persister
     end
 
-    def new(change_set)
-      Jp2DerivativeService.new(change_set: change_set, change_set_persister: change_set_persister, target_file: target_file(change_set.resource))
-    end
-
-    # If there are intermediate files with the supported format attached to the
-    #   resource, select the first of these
-    # @param [Valkyrie::Resource] resource
-    # @return [FileMetadata]
-    def intermediate_target_files(resource)
-      supported = resource.intermediate_files.select do |intermed|
-        ["image/tiff", "image/jpeg"].include?(intermed.mime_type.first)
-      end
-      supported.empty? ? nil : supported.first
-    end
-
-    def target_file(resource)
-      intermediate_target_files(resource) || resource.original_file
+    def new(id:)
+      Jp2DerivativeService.new(id: id, change_set_persister: change_set_persister)
     end
   end
 
@@ -38,13 +23,31 @@ class Jp2DerivativeService
     end
   end
 
-  attr_reader :change_set, :change_set_persister, :target_file
+  attr_reader :change_set_persister, :id
   delegate :mime_type, to: :target_file
-  delegate :resource, to: :change_set
-  def initialize(change_set:, change_set_persister:, target_file:)
-    @change_set = change_set
+  delegate :query_service, to: :change_set_persister
+  def initialize(id:, change_set_persister:)
+    @id = id
     @change_set_persister = change_set_persister
-    @target_file = target_file
+  end
+
+  def resource
+    @resource ||= query_service.find_by(id: id)
+  end
+
+  def target_file
+    @target_file ||= intermediate_target_files(resource) || resource.original_file
+  end
+
+  # If there are intermediate files with the supported format attached to the
+  #   resource, select the first of these
+  # @param [Valkyrie::Resource] resource
+  # @return [FileMetadata]
+  def intermediate_target_files(resource)
+    supported = resource.intermediate_files.select do |intermed|
+      ["image/tiff", "image/jpeg"].include?(intermed.mime_type.first)
+    end
+    supported.empty? ? nil : supported.first
   end
 
   def valid?
@@ -61,6 +64,10 @@ class Jp2DerivativeService
   rescue StandardError => error
     update_error_message(message: error.message)
     raise error
+  end
+
+  def change_set
+    @change_set ||= DynamicChangeSet.new(resource).prepopulate!
   end
 
   def parent

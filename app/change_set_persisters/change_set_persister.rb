@@ -36,7 +36,6 @@ class ChangeSetPersister
         IngestBag
       ],
       after_update_commit: [
-        CheckFixity,
         ReindexCollectionMembers,
         UpdateOCR
       ],
