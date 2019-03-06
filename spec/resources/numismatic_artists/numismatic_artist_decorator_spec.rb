@@ -14,7 +14,7 @@ RSpec.describe NumismaticArtistDecorator do
 
   describe "#title" do
     it "renders the artist title" do
-      expect(decorator.title).to eq("artist person artist role")
+      expect(decorator.title).to eq("artist person, artist role")
     end
   end
 end

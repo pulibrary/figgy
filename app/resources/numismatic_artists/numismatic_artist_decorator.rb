@@ -22,6 +22,6 @@ class NumismaticArtistDecorator < Valkyrie::ResourceDecorator
   end
 
   def title
-    "#{person} #{role}"
+    "#{person}, #{role}"
   end
 end

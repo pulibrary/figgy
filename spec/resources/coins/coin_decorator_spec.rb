@@ -23,7 +23,7 @@ RSpec.describe CoinDecorator do
 
   describe "#artists" do
     it "renders the linked artists" do
-      expect(decorator.artists).to eq(["artist person artist role"])
+      expect(decorator.artists).to eq(["artist person, artist role"])
     end
   end
 

@@ -21,14 +21,14 @@ RSpec.describe "catalog/_members_coin" do
 
     it "shows Citation table" do
       expect(rendered).to have_selector "h2", text: "Citations"
-      expect(rendered).to have_link "View"
-      expect(rendered).to have_link "Edit"
+      expect(rendered).to have_link "View", href: solr_document_path(citation)
+      expect(rendered).to have_link "Edit", href: edit_numismatic_citation_path(citation)
     end
 
     it "shows Artist table" do
       expect(rendered).to have_selector "h2", text: "Artists"
-      expect(rendered).to have_link "View"
-      expect(rendered).to have_link "Edit"
+      expect(rendered).to have_link "View", href: solr_document_path(artist)
+      expect(rendered).to have_link "Edit", href: edit_numismatic_artist_path(artist)
     end
   end
 end
