@@ -20,4 +20,14 @@ namespace :export do
       end
     end
   end
+
+  desc "Exports Cicognara resource metadata to MARC"
+  task cicognara_marc: :environment do
+    coll = ENV["COLL"]
+    abort "usage: rake export:cicognara_marc COLL=[collection id]" unless coll
+    output_dir = Rails.root.join("tmp", "cicognara_marc_output")
+    Dir.mkdir output_dir unless File.directory? output_dir
+    exporter = CicognaraMarc.new(cico_collection_id: coll, out_dir: output_dir)
+    exporter.run
+  end
 end
