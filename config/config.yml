@@ -78,6 +78,7 @@ defaults: &defaults
       figgy: "figgy_events"
       geoblacklight: "gbl_events"
       geoserver: "geoserver_events"
+      orangelight: "orangelight_events"
   vocabulary_namespace: <%= ENV.fetch('FIGGY_VOCAB_NS', 'https://figgy.princeton.edu/ns/') %>
   devise:
     omniauth:
@@ -141,6 +142,7 @@ production:
       figgy: "figgy_events"
       geoblacklight: "gbl_events"
       geoserver: "geoserver_events"
+      orangelight: "orangelight_events"
 
 staging:
   <<: *defaults
@@ -156,6 +158,7 @@ staging:
       figgy: "figgy_events"
       geoblacklight: "gbl_events"
       geoserver: "geoserver_events"
+      orangelight: "orangelight_events"
   geoserver:
     url: <%= ENV['GEOSERVER_URL'] || "http://localhost:8080/geoserver" %>
     derivatives_path: <%= ENV['GEOSERVER_DERIVATIVES_PATH'] || Rails.root.join("tmp", "geo_derivatives") %>

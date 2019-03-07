@@ -178,6 +178,7 @@ RSpec/AnyInstance:
     - 'spec/services/geoblacklight_messaging_client_spec.rb'
     - 'spec/services/geoserver_messaging_client_spec.rb'
     - 'spec/services/messaging_client_spec.rb'
+    - 'spec/services/orangelight_messaging_client_spec.rb'
     - 'spec/jobs/check_fixity_recursive_job_spec.rb'
     - 'spec/controllers/fixity_dashboard_controller_spec.rb'
     - 'spec/resources/archival_media_collections/archival_media_collection_change_set_spec.rb'
