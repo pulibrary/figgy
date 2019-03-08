@@ -83,7 +83,7 @@ describe OrangelightDocument do
 
       it "returns an Orangelight document" do
         output = MultiJson.load(builder.to_json, symbolize_keys: true)
-        expect(output[:id]).to eq "coin-#{coin.coin_number}"
+        expect(output[:id]).to eq coin.decorate.orangelight_id
         expect(output[:title_display]).to eq "Coin: #{coin.coin_number}"
         expect(output[:access_facet]).to eq ["Online", "In the Library"]
         expect(output[:location]).to eq ["Firestone"]

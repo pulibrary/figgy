@@ -23,7 +23,7 @@ class OrangelightCoinBuilder
     # rubocop:disable Metrics/MethodLength
     def document_hash
       {
-        id: "coin-#{decorator.coin_number}",
+        id: decorator.orangelight_id,
         title_display: "Coin: #{decorator.coin_number}",
         access_facet: ["Online", "In the Library"],
         location: decorator.holding_location,

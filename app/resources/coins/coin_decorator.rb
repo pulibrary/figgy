@@ -49,6 +49,10 @@ class CoinDecorator < Valkyrie::ResourceDecorator
     false
   end
 
+  def orangelight_id
+    "coin-#{coin_number}"
+  end
+
   def state
     super.first
   end
