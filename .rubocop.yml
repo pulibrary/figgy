@@ -52,6 +52,7 @@ Metrics/BlockLength:
     - 'lib/tasks/migrate.rake'
     - 'lib/tasks/music_reserves.rake'
     - 'lib/tasks/figgy.rake'
+    - 'lib/tasks/export.rake'
 Metrics/ClassLength:
   Exclude:
     - 'app/change_set_persisters/change_set_persister.rb'
