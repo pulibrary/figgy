@@ -49,6 +49,13 @@ namespace :migrate do
     ExtractArchivalCollectionCodeJob.perform_now
   end
 
+  desc "update all local identifiers starting with `cico:` to start with `dcl:`"
+  task cico_ids: :environment do
+    coll = ENV["COLL"]
+    abort "usage: rake migrate:cico_ids COLL=[collection id]" unless coll
+    UpdateCicoIdsJob.perform_now(collection_id: coll)
+  end
+
   private
 
     # Construct or retrieve the memoized logger for STDOUT
