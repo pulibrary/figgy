@@ -46,7 +46,7 @@ class EventGenerator
       end
 
       def delete_message(type, record)
-        base_message(type, record).merge("id" => orangelight_id(record))
+        base_message(type, record).merge("id" => record.decorate.orangelight_id)
       end
 
       def base_message(type, record)
@@ -67,10 +67,6 @@ class EventGenerator
 
       def generate_document(record)
         OrangelightDocument.new(record).to_json
-      end
-
-      def orangelight_id(record)
-        "coin-#{record.coin_number}"
       end
   end
 end

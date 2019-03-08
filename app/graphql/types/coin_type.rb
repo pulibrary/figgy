@@ -7,7 +7,7 @@ class Types::CoinType < Types::BaseObject
   field :manifest_url, String, null: true
 
   def orangelight_id
-    "coin-#{object.coin_number}"
+    object.decorate.orangelight_id
   end
 
   def viewing_hint

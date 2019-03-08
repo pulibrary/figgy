@@ -17,9 +17,8 @@ RSpec.describe EventGenerator::OrangelightEventGenerator do
 
   describe "#record_deleted" do
     it "publishes a persistent JSON delete message with the orangelight id as the id" do
-      orangelight_id = "coin-#{record.coin_number}"
       expected_result = {
-        "id" => orangelight_id,
+        "id" => record.decorate.orangelight_id,
         "event" => "DELETED",
         "bulk" => "false"
       }
