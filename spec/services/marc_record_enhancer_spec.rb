@@ -277,4 +277,36 @@ RSpec.describe MarcRecordEnhancer do
       end
     end
   end
+
+  context "when the record has a 510, but the cico number has a suffix" do
+    let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+    let(:storage_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
+    let(:change_set_persister) do
+      ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter)
+    end
+    let(:resource) do
+      r = FactoryBot.build(:scanned_resource, source_metadata_identifier: "2085282")
+      change_set_persister.save(change_set: ScannedResourceChangeSet.new(r).prepopulate!)
+    end
+    let(:marc_record) { MARC::Record.new }
+    let(:enhancer) { described_class.new(marc: marc_record, resource: resource) }
+    before do
+      stub_bibdata(bib_id: "2085282")
+      stub_bibdata(bib_id: "2085282", content_type: BibdataStubbing::CONTENT_TYPE_MARC_XML)
+    end
+
+    context "when the record had the cico number in a 510 but with a suffix" do
+      it "replaces that 510" do
+        references = enhancer.enhance_cicognara.fields("510").select do |field|
+          field.indicator1 == "4" &&
+            field.indicator2 == " " &&
+            field.subfields.select { |subfield| subfield.code == "a" }.first.value.starts_with?("Cicognara,") &&
+            field.subfields.select { |subfield| subfield.code == "c" }.count == 1
+        end
+        expect(references.count).to eq 1
+        subfield_c = references.first.subfields.select { |s| s.code == "c" }.first
+        expect(subfield_c.value).to eq "2196"
+      end
+    end
+  end
 end
