@@ -9,21 +9,21 @@
     >
       <input-text
         id="unitLabel"
-        v-model="labelerOpts.unitLabel"
+        v-model="unitLabel"
         label="Label"
         placeholder="e.g., p."
         @input="updateMultiLabels()"
       />
       <input-text
         id="startNum"
-        v-model="labelerOpts.start"
+        v-model="start"
         label="Starting Numeral"
         placeholder="e.g., 10"
         @input="updateMultiLabels()"
       />
       <input-checkbox
         v-if="!isMultiVolume"
-        v-model="labelerOpts.bracket"
+        v-model="bracket"
         :options="addBracketOpts"
         @change="updateMultiLabels()"
       />
@@ -31,26 +31,26 @@
       <input-select
         v-if="!isMultiVolume"
         id="labelMethod"
-        v-model="labelerOpts.method"
+        v-model="method"
         label="Labeling Method"
         :options="methodOpts"
         @change="updateMultiLabels()"
       />
 
       <div
-        v-if="labelerOpts.method === 'foliate'"
+        v-if="method === 'foliate'"
         class="lux-row"
       >
         <input-text
           id="frontLabel"
-          v-model="labelerOpts.frontLabel"
+          v-model="frontLabel"
           label="Front Label"
           placeholder="(recto)"
           @input="updateMultiLabels()"
         />
         <input-text
           id="backLabel"
-          v-model="labelerOpts.backLabel"
+          v-model="backLabel"
           label="Back Label"
           placeholder="(verso)"
           @input="updateMultiLabels()"
@@ -58,7 +58,7 @@
         <input-select
           v-if="!isMultiVolume"
           id="startWith"
-          v-model="labelerOpts.startWith"
+          v-model="startWith"
           label="Start With"
           :options="startWithOpts"
           @change="updateMultiLabels()"
@@ -98,15 +98,13 @@ export default {
   },
   data: function () {
     return {
-      labelerOpts: {
-        start: '1',
-        method: 'paginate',
-        frontLabel: 'r. ',
-        backLabel: 'v. ',
-        startWith: 'front',
-        unitLabel: 'p. ',
-        bracket: false
-      }
+      start: '1',
+      method: 'paginate',
+      frontLabel: 'r. ',
+      backLabel: 'v. ',
+      startsWith: 'front',
+      unitLabel: 'p. ',
+      bracket: false
     }
   },
   computed: {
@@ -114,6 +112,29 @@ export default {
       resource: state => state.ordermanager.resource,
       gallery: state => state.gallery
     }),
+    labelerOpts () {
+      if (this.method === 'paginate') {
+        return {
+          start: this.start,
+          method: this.method,
+          frontLabel: '',
+          backLabel: '',
+          startsWith: this.startsWith,
+          unitLabel: this.unitLabel,
+          bracket: this.bracket
+        }
+      } else {
+        return {
+          start: this.start,
+          method: this.method,
+          frontLabel: this.frontLabel,
+          backLabel: this.backLabel,
+          startsWith: this.startsWith,
+          unitLabel: this.unitLabel,
+          bracket: this.bracket
+        }
+      }
+    },
     isMultiVolume () {
       return this.$store.getters.isMultiVolume
     },
@@ -144,9 +165,9 @@ export default {
     updateMultiLabels () {
       let changeList = this.gallery.changeList
       let items = this.gallery.items
-      this.labelerOpts.start = this.isNormalInteger(this.labelerOpts.start)
-        ? this.labelerOpts.start - 0
-        : this.labelerOpts.start
+      this.start = this.isNormalInteger(this.start)
+        ? this.start - 0
+        : this.start
       let generator = Lablr.pageLabelGenerator(this.labelerOpts)
       for (let i = 0; i < this.selectedTotal; i++) {
         let index = this.gallery.items
