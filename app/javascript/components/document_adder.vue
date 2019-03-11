@@ -147,8 +147,11 @@ export default {
         return
       }
       let vm = this
-      // Get all recording titles and IDs from a catalog search (solr).
-      fetch(`/catalog.json?f[internal_resource_ssim][]=ScannedResource&f[change_set_ssim][]=recording&q=${this.recording_query}`)
+
+      // Get all recording titles and IDs from a catalog search (Solr).
+      // Ensure that this AJAX request does not trigger the caching of query
+      // parameters (this is the default behavior for Blacklight 6 Controllers)
+      fetch(`/catalog.json?f[internal_resource_ssim][]=ScannedResource&f[change_set_ssim][]=recording&q=${this.recording_query}&async=true`)
         .then(function (response) {
           return response.json()
         })
