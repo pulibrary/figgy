@@ -103,6 +103,19 @@ describe("OrderManagerFilesetsForm.vue", () => {
     expect(actions.updateItems).toHaveBeenCalled()
   })
 
+  it('does not set frontLabel/backLabel by default', () => {
+    expect(wrapper.vm.labelerOpts.frontLabel).toEqual('')
+    expect(wrapper.vm.labelerOpts.backLabel).toEqual('')
+
+    wrapper.vm.method = 'foliate'
+    expect(wrapper.vm.labelerOpts.frontLabel).toEqual('r. ')
+    expect(wrapper.vm.labelerOpts.backLabel).toEqual('v. ')
+
+    wrapper.vm.method = 'paginate'
+    expect(wrapper.vm.labelerOpts.frontLabel).toEqual('')
+    expect(wrapper.vm.labelerOpts.backLabel).toEqual('')
+  })
+
 
   it("has the expected html structure", () => {
     expect(wrapper.element).toMatchSnapshot()
