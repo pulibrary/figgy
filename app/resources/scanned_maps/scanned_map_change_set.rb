@@ -17,6 +17,7 @@ class ScannedMapChangeSet < ScannedResourceChangeSet
       :gbl_suppressed_override,
       :rights_statement,
       :rights_note,
+      :pdf_type,
       :portion_note,
       :local_identifier,
       :holding_location,

@@ -15,6 +15,7 @@ RSpec.feature "ScannedMaps" do
     expect(page).to have_field "Source Metadata ID"
     expect(page).to have_css ".select[for='scanned_map_rights_statement']", text: "Rights Statement"
     expect(page).to have_field "Rights Note"
+    expect(page).to have_css ".select[for='scanned_map_pdf_type']", text: "PDF Type"
     expect(page).to have_field "Portion Note"
     expect(page).to have_field "Local identifier"
     expect(page).to have_css ".select[for='scanned_map_holding_location']", text: "Holding Location"
@@ -53,6 +54,7 @@ RSpec.feature "ScannedMaps" do
         rights_note: "test rights note",
         rights_statement: RightsStatements.copyright_not_evaluated.to_s,
         subject: "test value",
+        pdf_type: "color",
         portion_note: "test portion note",
         cartographic_scale: "test value",
         spatial: "test value",
@@ -81,6 +83,7 @@ RSpec.feature "ScannedMaps" do
       expect(page).to have_css ".attribute.local_identifier", text: "test ID"
       expect(page).to have_css ".attribute.rights_note", text: "test rights note"
       expect(page).to have_css ".attribute.rights_statement", text: RightsStatements.copyright_not_evaluated.to_s
+      expect(page).to have_css ".attribute.pdf_type", text: "color"
       expect(page).to have_css ".attribute.subject", text: "test value"
       expect(page).to have_css ".attribute.portion_note", text: "test portion note"
       expect(page).to have_css ".attribute.cartographic_scale", text: "test value"

@@ -10,7 +10,7 @@ class ChangeSetPersister
     end
 
     def run
-      return unless resource.is_a?(ScannedResource) && pdf_file
+      return unless clean_up?
 
       # Return if the only update is that file metadata is being updated
       if change_set.changed.except("file_metadata", "created_file_sets").empty?
@@ -24,6 +24,12 @@ class ChangeSetPersister
     end
 
     private
+
+      def clean_up?
+        return false unless resource.is_a?(ScannedResource) || resource.is_a?(ScannedMap)
+        return false unless pdf_file
+        true
+      end
 
       def pdf_file
         @pdf_file ||= resource.pdf_file
