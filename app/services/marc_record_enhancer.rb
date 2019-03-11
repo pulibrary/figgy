@@ -52,8 +52,8 @@ class MarcRecordEnhancer
     def add_510
       return unless resource.try(:imported_metadata)&.first&.references&.present?
       cico_reference = resource.imported_metadata.first.references.first
-      return unless cico_reference =~ /Cicognara/
-      cico_number = cico_reference.match(/(\d+$)/)[1]
+      return unless cico_reference =~ /Cicognara/ && cico_reference =~ /(\d+)[\[A-Za-z\]]*$/
+      cico_number = cico_reference.match(/(\d+)[\[A-Za-z\]]*$/)[1]
       return if references.include? cico_number
       marc.append(
         MARC::DataField.new(
