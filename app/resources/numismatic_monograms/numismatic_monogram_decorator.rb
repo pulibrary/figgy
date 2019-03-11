@@ -15,4 +15,8 @@ class NumismaticMonogramDecorator < Valkyrie::ResourceDecorator
   def title
     Array.wrap(super).first
   end
+
+  def manageable_order?
+    false
+  end
 end

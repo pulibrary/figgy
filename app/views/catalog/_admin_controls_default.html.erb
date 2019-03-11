@@ -1,25 +1,21 @@
-  <div class="form-actions">
-    <% if can?(:update, resource) %>
-      <%= link_to "Edit This #{resource.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-default' %>
+<div class="form-actions">
+  <% if can?(:update, resource) %>
+    <%= link_to "Edit This #{resource.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-default' %>
+  <% end %>
+  <% if can?(:file_manager, resource) %>
+    <% if decorated_resource.manageable_files? %>
+      <%= link_to "File Manager", main_app.polymorphic_path([:file_manager, resource]), class: 'btn btn-default' %>
     <% end %>
-    <% if can?(:file_manager, resource) %>
-      <% if decorated_resource.manageable_files? %>
-        <%= link_to "File Manager", main_app.polymorphic_path([:file_manager, resource]), class: 'btn btn-default' %>
-      <% end %>
+  <% end %>
+  <%= render "display_order_manager_button" %>
+  <% if can?(:structure, resource) %>
+    <% if decorated_resource.manageable_structure? %>
+      <%= link_to "Structure Manager", main_app.polymorphic_path([:structure, resource]), class: 'btn btn-default' %>
     <% end %>
-    <% if can?(:order_manager, resource) %>
-      <% if decorated_resource.orderable_files? %>
-        <%= link_to "Order Manager", main_app.polymorphic_path([:order_manager, resource]), class: 'btn btn-default' %>
-      <% end %>
-    <% end %>
-    <% if can?(:structure, resource) %>
-      <% if decorated_resource.manageable_structure? %>
-        <%= link_to "Structure Manager", main_app.polymorphic_path([:structure, resource]), class: 'btn btn-default' %>
-      <% end %>
-    <% end %>
-    <%= render "attach_child_default", resource: resource %>
+  <% end %>
+  <%= render "attach_child_default", resource: resource %>
 
-    <% if can?(:destroy, resource) %>
-      <%= link_to "Delete This #{resource.human_readable_type}", main_app.polymorphic_path([resource]), class: 'btn btn-danger pull-right', data: { confirm: "Delete this #{resource.human_readable_type}?" }, method: :delete %>
-    <% end %>
-  </div>
+  <% if can?(:destroy, resource) %>
+    <%= link_to "Delete This #{resource.human_readable_type}", main_app.polymorphic_path([resource]), class: 'btn btn-danger pull-right', data: { confirm: "Delete this #{resource.human_readable_type}?" }, method: :delete %>
+  <% end %>
+</div>

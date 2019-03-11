@@ -79,6 +79,10 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     manageable_files?
   end
 
+  def manageable_order?
+    true
+  end
+
   def manageable_structure?
     false
   end
