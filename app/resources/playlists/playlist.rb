@@ -12,6 +12,7 @@ class Playlist < Resource
   attribute :auth_token, Valkyrie::Types::String
   attribute :part_of
   attribute :local_identifier
+  attribute :logical_structure, Valkyrie::Types::Array.of(Structure.optional).optional
 
   def self.can_have_manifests?
     true

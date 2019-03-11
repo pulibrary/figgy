@@ -141,7 +141,7 @@ class ManifestBuilder
 
     def label(structure_node)
       proxy_id = structure_node.proxy.first
-      file_set_presenter = file_set_presenters.find { |x| x.id == proxy_id.to_s }
+      file_set_presenter = file_set_presenters.find { |x| x.resource.id == proxy_id }
       file_set_presenter&.display_content&.label
     end
 
@@ -326,6 +326,14 @@ class ManifestBuilder
     end
 
     class ProxiedMember < SimpleDelegator
+      def id
+        loaded[:proxy_parent].id
+      end
+
+      def proxied_object_id
+        __getobj__.id
+      end
+
       def title
         loaded[:proxy_parent].label
       end
@@ -427,9 +435,9 @@ class ManifestBuilder
     def download_url
       return if derivative.nil?
       if helper.token_authorizable?(parent_node.resource)
-        helper.download_url(resource.id, derivative.id, auth_token: parent_node.resource.auth_token)
+        helper.download_url(resource.try(:proxied_object_id) || resource.id, derivative.id, auth_token: parent_node.resource.auth_token)
       else
-        helper.download_url(resource.id, derivative.id)
+        helper.download_url(resource.try(:proxied_object_id) || resource.id, derivative.id)
       end
     end
 

@@ -7,7 +7,7 @@ RSpec.describe PlaylistDecorator do
   let(:playlist) { FactoryBot.create_for_repository(:playlist) }
 
   it "does not manage structure" do
-    expect(decorator.manageable_structure?).to be false
+    expect(decorator.manageable_structure?).to be true
   end
 
   it "does not manage files" do
