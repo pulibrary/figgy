@@ -36,7 +36,7 @@ RSpec.describe PlaylistsController, type: :controller do
       let(:user) { FactoryBot.create(:admin) }
       let(:params) { { recording_id: resource.id } }
       let(:audio_file) { FactoryBot.create_for_repository(:file_set) }
-      let(:resource) { FactoryBot.create_for_repository(:recording, member_ids: audio_file.id) }
+      let(:resource) { FactoryBot.create_for_repository(:recording, member_ids: audio_file.id, part_of: "mustest") }
       let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
 
       it "creates a playlist with a media reserve file sets" do
@@ -46,6 +46,7 @@ RSpec.describe PlaylistsController, type: :controller do
         id = response.location.split("/").last
         playlist = query_service.find_by(id: id)
         expect(playlist.title).to eq ["Playlist: #{resource.title.first}"]
+        expect(playlist.part_of).to eq ["mustest"]
         members = query_service.find_members(resource: playlist)
         expect(members.first).to be_a ProxyFileSet
         expect(members.first.label).to eq audio_file.title

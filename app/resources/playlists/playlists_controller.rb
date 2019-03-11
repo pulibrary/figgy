@@ -11,7 +11,8 @@ class PlaylistsController < BaseResourceController
     return super unless params[:recording_id]
     {
       title: "Playlist: #{recording.title.first}",
-      file_set_ids: recording.member_ids
+      file_set_ids: recording.member_ids,
+      part_of: recording.part_of
     }
   end
 
