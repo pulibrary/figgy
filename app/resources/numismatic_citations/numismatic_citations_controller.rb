@@ -7,6 +7,7 @@ class NumismaticCitationsController < BaseResourceController
     storage_adapter: Valkyrie.config.storage_adapter
   )
   before_action :load_numismatic_references, only: [:new, :edit]
+  before_action :load_citation_parent, only: :destroy
 
   def new
     @change_set = change_set_class.new(new_resource, citation_parent_id: params[:parent_id]).prepopulate!
@@ -19,6 +20,11 @@ class NumismaticCitationsController < BaseResourceController
     super
   end
 
+  def after_delete_success
+    flash[:alert] = "Citation was deleted successfully"
+    redirect_to solr_document_path(@parent)
+  end
+
   private
 
     def load_numismatic_references
@@ -27,5 +33,9 @@ class NumismaticCitationsController < BaseResourceController
 
     def parent_resource
       @parent_resource ||= find_resource(@change_set.citation_parent_id)
+    end
+
+    def load_citation_parent
+      @parent = Wayfinder.for(resource).numismatic_citation_parent
     end
 end

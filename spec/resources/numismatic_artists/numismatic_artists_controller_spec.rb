@@ -35,11 +35,24 @@ RSpec.describe NumismaticArtistsController, type: :controller do
     end
   end
   describe "destroy" do
+    let(:user) { FactoryBot.create(:admin) }
+    let(:numismatic_artist) { FactoryBot.create_for_repository(:numismatic_artist) }
+    let(:coin) { FactoryBot.create(:coin) }
+
     context "access control" do
       let(:factory) { :numismatic_artist }
       it_behaves_like "an access controlled destroy request"
     end
+
+    it "redirects to the parent coin" do
+      numismatic_artist = FactoryBot.create_for_repository(:numismatic_artist)
+      coin = FactoryBot.create_for_repository(:coin, numismatic_artist_ids: [numismatic_artist.id])
+
+      delete :destroy, params: { id: numismatic_artist.id }
+      expect(response).to redirect_to solr_document_path(coin)
+    end
   end
+
   describe "edit" do
     let(:user) { FactoryBot.create(:admin) }
     context "access control" do
