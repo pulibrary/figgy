@@ -16,7 +16,7 @@ class PlaylistDecorator < Valkyrie::ResourceDecorator
   end
 
   def manageable_structure?
-    false
+    true
   end
 
   def decorated_proxies

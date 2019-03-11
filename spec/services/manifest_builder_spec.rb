@@ -227,7 +227,23 @@ RSpec.describe ManifestBuilder do
           change_set_persister.save(change_set: cs)
         end
         let(:resource) do
-          FactoryBot.create_for_repository(:playlist, member_ids: [proxy1.id, proxy2.id])
+          FactoryBot.create_for_repository(
+            :playlist,
+            member_ids: [proxy1.id, proxy2.id],
+            logical_structure: [
+              { label: "Test",
+                nodes: [
+                  { label: "Chapter 1", nodes:
+                    [
+                      { proxy: proxy1.id },
+                      { label: "Chapter 1a", nodes:
+                        [
+                          { proxy: proxy2.id }
+                        ] }
+                    ] }
+                ] }
+            ]
+          )
         end
 
         it "generates the Canvases for the FileSets" do
@@ -257,6 +273,10 @@ RSpec.describe ManifestBuilder do
           last_annotation = anno_page["items"].first
           expect(last_annotation).to include("body")
           expect(last_annotation["body"]).to include("format" => "application/vnd.apple.mpegurl")
+
+          expect(output["structures"][0]["items"][0]["label"]).to eq("@none" => ["Proxy Title"])
+          expect(output["structures"][0]["items"][0]["items"][0]["id"].split("#").first).to eq first_canvas["id"]
+          expect(output["structures"][0]["items"][1]["items"][0]["label"]).to eq("@none" => ["Proxy Title2"])
         end
 
         context "when an authorization token is used to access the Playlist Manifest" do

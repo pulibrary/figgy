@@ -104,6 +104,7 @@ Rails.application.routes.draw do
     resources :playlists do
       member do
         get :order_manager
+        get :structure
         get :file_manager
         get :manifest, defaults: { format: :json }
       end

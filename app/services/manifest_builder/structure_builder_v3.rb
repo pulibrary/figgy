@@ -24,6 +24,18 @@ class ManifestBuilder
           end
       end
 
+      def sub_ranges
+        @sub_ranges ||= [] unless record.respond_to?(:ranges)
+        @sub_ranges ||= record.ranges.map do |sub_range|
+          RangeBuilder.new(
+            sub_range,
+            parent,
+            canvas_builder_factory: canvas_builder_factory,
+            iiif_range_factory: iiif_range_factory
+          )
+        end
+      end
+
       def wrapped_range(cb)
         return yield if record.structure.is_a?(Structure)
         {
@@ -42,13 +54,13 @@ class ManifestBuilder
 
       def duration(canvas_builder)
         proxy_id = canvas_builder.record.structure.proxy.first
-        file_set_presenter = parent.file_set_presenters.find { |x| x.id == proxy_id.to_s }
+        file_set_presenter = parent.file_set_presenters.find { |x| x.resource.id == proxy_id }
         file_set_presenter&.display_content&.duration
       end
 
       def label(canvas_builder)
         proxy_id = canvas_builder.record.structure.proxy.first
-        file_set_presenter = parent.file_set_presenters.find { |x| x.id == proxy_id.to_s }
+        file_set_presenter = parent.file_set_presenters.find { |x| x.resource.id == proxy_id }
         file_set_presenter&.display_content&.label
       end
     end
