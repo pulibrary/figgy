@@ -52,6 +52,14 @@ RSpec.feature "PlaylistChangeSets" do
       playlist_members_element = playlist_members_elements.first
       expect(playlist_members_element.attributes[":members"].value).to eq json_fixture(resource.decorate.decorated_proxies.first, recording)
     end
+
+    scenario "returning to search results" do
+      persisted = adapter.query_service.find_by(id: resource.id)
+      visit "/?f[human_readable_type_ssim][]=Playlist&q="
+      visit solr_document_path persisted
+
+      expect(page).to have_css('a[href="/?f%5Bhuman_readable_type_ssim%5D%5B%5D=Playlist&q="]', text: "Back to Search")
+    end
   end
 
   def json_fixture(decorated_resource, recording)

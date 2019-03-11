@@ -32,6 +32,7 @@ Metrics/AbcSize:
     - 'app/services/music_import_service.rb'
     - 'app/services/music_import_service/recording_collector.rb'
     - 'app/controllers/bulk_ingest_controller.rb'
+    - 'app/helpers/application_helper.rb'
 Metrics/BlockLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
@@ -145,6 +146,7 @@ Metrics/MethodLength:
     - 'app/indexers/imported_metadata_indexer.rb'
     - 'app/controllers/concerns/resource_controller.rb'
     - 'app/models/search_builder.rb'
+    - 'app/helpers/application_helper.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
@@ -168,6 +170,7 @@ Metrics/PerceivedComplexity:
     - 'app/change_set_persisters/change_set_persister/apply_auth_token.rb'
     - 'config/initializers/sequel_active_support_notification.rb'
     - 'app/services/music_import_service.rb'
+    - 'app/helpers/application_helper.rb'
 Rails/OutputSafety:
   Exclude:
     - 'app/resources/**/*_decorator*'

@@ -186,4 +186,54 @@ module ApplicationHelper
   def collection_present?
     params[:f] && params[:f]["member_of_collection_titles_ssim"].present?
   end
+
+  # Create a link back to the index screen, keeping the user's facet, query and paging choices intact by using session.
+  # @example
+  #   link_back_to_catalog(label: 'Back to Search')
+  #   link_back_to_catalog(label: 'Back to Search', route_set: my_engine)
+  # @see Blacklight::UrlHelperBehavior#link_back_to_catalog
+  def link_back_to_catalog(opts = { label: nil })
+    scope = opts.delete(:route_set) || self
+    # Filter for cases where the query params were cached by AJAX queries from
+    # the client
+    query_params = search_state.reset(current_query_params).to_hash unless current_query_async?
+
+    if search_session["counter"]
+      per_page = (search_session["per_page"] || default_per_page).to_i
+      counter = search_session["counter"].to_i
+
+      query_params[:per_page] = per_page unless search_session["per_page"].to_i == default_per_page
+      query_params[:page] = ((counter - 1) / per_page) + 1
+    end
+
+    link_url = if query_params.blank?
+                 search_action_path(only_path: true)
+               else
+                 # This handles cases where the previous query has been cleared
+                 query_params[:q] = "" unless query_params.key?("q")
+                 scope.url_for(query_params)
+               end
+    label = opts.delete(:label)
+
+    label ||= t("blacklight.back_to_bookmarks") if link_url =~ /bookmarks/
+
+    label ||= t("blacklight.back_to_search")
+
+    link_to label, link_url, opts
+  end
+
+  private
+
+    # Retrieve the current search query parameters from the HTTP request
+    # @return [Hash]
+    def current_query_params
+      values = current_search_session.try(:query_params)
+      values.to_h
+    end
+
+    # Determine whether or not the current query is asynchronous (i. e. AJAX)
+    # @return [Boolean]
+    def current_query_async?
+      current_query_params.fetch("async", nil) == "true"
+    end
 end

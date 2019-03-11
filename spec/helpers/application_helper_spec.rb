@@ -71,4 +71,52 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
     end
   end
+
+  describe "#link_back_to_catalog" do
+    let(:search_session) do
+      {}
+    end
+    let(:search_state) { instance_double(Blacklight::SearchState) }
+    let(:current_search_session) { instance_double(Search) }
+
+    before do
+      # This is required to generate the path for the catalog actions
+      allow(helper).to receive(:search_action_path).and_return(search_catalog_path)
+
+      allow(helper).to receive(:search_session).and_return(search_session)
+      allow(search_state).to receive(:to_hash).and_return({})
+      allow(search_state).to receive(:reset).and_return(search_state)
+      allow(helper).to receive(:search_state).and_return(search_state)
+      allow(current_search_session).to receive(:query_params).and_return({})
+      allow(helper).to receive(:current_search_session).and_return(current_search_session)
+    end
+
+    it "generates the search URL from a record" do
+      expect(helper.link_back_to_catalog).to eq '<a href="/catalog">Back to Search</a>'
+    end
+
+    context "when the search session contained parameters for per-page result limits" do
+      # Scope objects are just anonymous objects
+      let(:scope) { double }
+      let(:blacklight_config) { Blacklight::Configuration.new }
+      let(:search_session) do
+        {
+          "per_page" => 10,
+          "counter" => 1,
+          "page" => 1
+        }
+      end
+
+      before do
+        allow(helper).to receive(:url_for)
+        allow(helper).to receive(:blacklight_config).and_return(blacklight_config)
+
+        helper.link_back_to_catalog
+      end
+
+      it "generates the search URL with query parameters" do
+        expect(helper).to have_received(:url_for).with(page: 1, q: "")
+      end
+    end
+  end
 end
