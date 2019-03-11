@@ -5,11 +5,10 @@ class UpdateCicoIdsJob < ApplicationJob
     Wayfinder.for(collection).members.each do |resource|
       next unless resource.local_identifier.present?
       id_switcher = IdSwitcher.new(resource.local_identifier)
-      if id_switcher.updates?
-        logger.info "Updating #{resource.id}'s local_identifier from #{resource.local_identifier} to #{id_switcher.new_array}"
-        resource.local_identifier = id_switcher.new_array
-        metadata_adapter.persister.save(resource: resource)
-      end
+      next unless id_switcher.updates?
+      logger.info "Updating #{resource.id}'s local_identifier from #{resource.local_identifier} to #{id_switcher.new_array}"
+      resource.local_identifier = id_switcher.new_array
+      metadata_adapter.persister.save(resource: resource)
     end
   end
 
