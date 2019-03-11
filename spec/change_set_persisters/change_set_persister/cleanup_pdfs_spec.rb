@@ -14,7 +14,7 @@ RSpec.describe ChangeSetPersister::CleanupPdfs do
   end
 
   describe "#run" do
-    context "with a resource that isn't a ScannedResource" do
+    context "with a resource that isn't a ScannedResource or a ScannedMap" do
       let(:resource) { FactoryBot.create(:draft_simple_resource) }
       it "does nothing" do
         change_set.prepopulate!
@@ -73,6 +73,17 @@ RSpec.describe ChangeSetPersister::CleanupPdfs do
     context "with a ScannedResource with a PDF attached and changes" do
       let(:resource) { FactoryBot.create(:scanned_resource, file_metadata: [pdf_file]) }
       it "deletes the PDF and removes it from the ScannedResource" do
+        change_set.prepopulate!
+        change_set.validate(title: "Updated resource")
+        hook.run
+
+        expect(CleanupFilesJob).to have_received(:perform_later).with(file_identifiers: ["asdf"])
+        expect(resource.file_metadata).to eq []
+      end
+    end
+    context "with a ScannedMap with a PDF attached and changes" do
+      let(:resource) { FactoryBot.create(:scanned_map, file_metadata: [pdf_file]) }
+      it "deletes the PDF and removes it from the ScannedMap" do
         change_set.prepopulate!
         change_set.validate(title: "Updated resource")
         hook.run
