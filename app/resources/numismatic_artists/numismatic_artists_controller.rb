@@ -6,6 +6,7 @@ class NumismaticArtistsController < BaseResourceController
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
     storage_adapter: Valkyrie.config.storage_adapter
   )
+  before_action :load_artist_parent, only: :destroy
 
   def new
     @change_set = change_set_class.new(new_resource, artist_parent_id: params[:parent_id]).prepopulate!
@@ -17,9 +18,18 @@ class NumismaticArtistsController < BaseResourceController
     super
   end
 
+  def after_delete_success
+    flash[:alert] = "Artist was deleted successfully"
+    redirect_to solr_document_path(@parent)
+  end
+
   private
 
     def parent_resource
       @parent_resource ||= find_resource(@change_set.artist_parent_id)
+    end
+
+    def load_artist_parent
+      @parent = Wayfinder.for(resource).numismatic_artist_parent
     end
 end
