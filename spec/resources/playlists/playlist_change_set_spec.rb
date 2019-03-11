@@ -46,11 +46,21 @@ RSpec.describe PlaylistChangeSet do
         expect(change_set).to be_valid
       end
     end
+
+    context "part_of" do
+      it "is set" do
+        change_set.validate(part_of: "mustest")
+        expect(change_set.part_of).to eq "mustest"
+      end
+    end
   end
 
   describe "#primary_terms" do
     it "contains title" do
-      expect(change_set.primary_terms).to eq [:title]
+      expect(change_set.primary_terms).to include :title
+    end
+    it "contains part_of" do
+      expect(change_set.primary_terms).to include :part_of
     end
   end
 end

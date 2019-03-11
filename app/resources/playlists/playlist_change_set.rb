@@ -13,6 +13,7 @@ class PlaylistChangeSet < ChangeSet
 
   property :file_set_ids, virtual: true, type: Valkyrie::Types::Array.of(Valkyrie::Types::ID)
   property :mint_auth_token, virtual: true, multiple: false, type: Valkyrie::Types::Array.of(Valkyrie::Types::Bool), default: false
+  property :part_of, multiple: true, required: false, default: []
 
   validates_with MemberValidator
   validates_with StateValidator
@@ -20,7 +21,8 @@ class PlaylistChangeSet < ChangeSet
 
   def primary_terms
     [
-      :title
+      :title,
+      :part_of
     ]
   end
 end
