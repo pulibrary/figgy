@@ -37,4 +37,10 @@ RSpec.describe NumismaticMonogramDecorator do
       expect(decorator.title).to eq("Test Monogram")
     end
   end
+
+  describe "order manager" do
+    it "will not use order manager" do
+      expect(decorator.manageable_order?).to be false
+    end
+  end
 end
