@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe SimpleResourceChangeSet do
+RSpec.describe SimpleChangeSet do
   subject(:change_set) { described_class.new(form_resource) }
   let(:resource_klass) { ScannedResource }
   let(:resource) { resource_klass.new(title: "Test", rights_statement: rights_statement, visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: "draft") }

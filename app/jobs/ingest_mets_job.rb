@@ -137,7 +137,7 @@ class IngestMETSJob < ApplicationJob
     # If a record has a bib-ID, don't bother migrating any of the MODS, and
     # likely use the ScannedResourceChangeSet.
     #
-    # If no bib-id, use a SimpleResourceChangeSet to migrate the MODS metadata.
+    # If no bib-id, use a SimpleChangeSet to migrate the MODS metadata.
     # Items which have PULFA metadata don't have a bib-id in the METS,
     # they just have a link to the ARK for the PULFA collection they're a part of,
     # so this path will happen for those items. This is intended.
@@ -145,7 +145,7 @@ class IngestMETSJob < ApplicationJob
       if mets.bib_id.present?
         DynamicChangeSet
       else
-        SimpleResourceChangeSet
+        SimpleChangeSet
       end
     end
 

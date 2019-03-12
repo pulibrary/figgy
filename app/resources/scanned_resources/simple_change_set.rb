@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class SimpleResourceChangeSet < ChangeSet
+class SimpleChangeSet < ChangeSet
   delegate :human_readable_type, to: :model
 
   apply_workflow(DraftCompleteWorkflow)

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.feature "SimpleResourceChangeSets" do
+RSpec.feature "SimpleChangeSets" do
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:persister) { adapter.persister }
@@ -10,7 +10,7 @@ RSpec.feature "SimpleResourceChangeSets" do
     persister.save(resource: res)
   end
   let(:change_set) do
-    SimpleResourceChangeSet.new(simple_resource)
+    SimpleChangeSet.new(simple_resource)
   end
   let(:change_set_persister) do
     ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: Valkyrie.config.storage_adapter)

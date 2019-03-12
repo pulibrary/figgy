@@ -2,7 +2,7 @@
 class DynamicChangeSet
   def self.new(record, *args)
     if record.try(:change_set) == "simple"
-      SimpleResourceChangeSet.new(record, *args)
+      SimpleChangeSet.new(record, *args)
     elsif record.try(:change_set) == "recording"
       RecordingChangeSet.new(record, *args)
     else

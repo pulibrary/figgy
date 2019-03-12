@@ -42,9 +42,9 @@ RSpec.describe ScannedResourcesController, type: :controller do
     render_views
 
     context "when params change_set" do
-      it "is simple, creates a new SimpleResourceChangeSet" do
+      it "is simple, creates a new SimpleChangeSet" do
         get :new, params: { change_set: "simple" }
-        expect(assigns(:change_set)).to be_a SimpleResourceChangeSet
+        expect(assigns(:change_set)).to be_a SimpleChangeSet
       end
       it "is recording, creates a new RecordingChangeSet" do
         get :new, params: { change_set: "recording" }

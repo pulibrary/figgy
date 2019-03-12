@@ -7,8 +7,8 @@ RSpec.describe DynamicChangeSet do
   describe "dynamic change_set" do
     context "if change_set is simple" do
       resource = FactoryBot.build(:scanned_resource, change_set: "simple")
-      it "returns a SimpleResourceChangeSet" do
-        expect(change_set_class.new(resource).class).to eq SimpleResourceChangeSet
+      it "returns a SimpleChangeSet" do
+        expect(change_set_class.new(resource).class).to eq SimpleChangeSet
       end
     end
     context "if change_set is recording" do
