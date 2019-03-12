@@ -25,6 +25,20 @@ describe BulkUpdateJob do
       expect(r2.state).to eq ["complete"]
     end
 
+    context "one of the resources is taken down" do
+      let(:resource2) do
+        Timecop.freeze(Time.now.utc - 1.day) do
+          FactoryBot.create_for_repository(:scanned_resource, state: "takedown")
+        end
+      end
+      it "doesn't persist the one that was marked taken down" do
+        described_class.perform_now(ids: ids, args: args)
+        r2 = query_service.find_by(id: resource2.id)
+        expect(r2.updated_at.to_date).to be < Time.current.to_date
+        expect(r2.state).to eq ["takedown"]
+      end
+    end
+
     context "one of the resources was already complete" do
       let(:resource2) do
         Timecop.freeze(Time.now.utc - 1.day) do
