@@ -281,4 +281,6 @@ Rails.application.routes.draw do
   authenticate :user do
     mount Sidekiq::Web => "/sidekiq"
   end
+
+  get "/viewer/config/:id", to: "application#viewer_config", as: "viewer_config"
 end

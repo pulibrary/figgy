@@ -150,6 +150,7 @@ Metrics/MethodLength:
     - 'app/helpers/application_helper.rb'
     - 'app/change_sets/change_set.rb'
     - 'app/resources/scanned_resources/scanned_resource_change_set.rb'
+    - 'app/values/viewer_configuration.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
@@ -223,6 +224,7 @@ RSpec/NestedGroups:
     - 'spec/controllers/bulk_ingest_controller_spec.rb'
     - 'spec/resources/numismatic_monograms/numismatic_monograms_controller_spec.rb'
     - 'spec/helpers/application_helper_spec.rb'
+    - 'spec/requests/viewer_config_spec.rb'
 RSpec/VerifiedDoubles:
   Exclude:
     - 'spec/models/search_builder_spec.rb'

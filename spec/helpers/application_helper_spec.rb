@@ -124,39 +124,7 @@ RSpec.describe ApplicationHelper, type: :helper do
     let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource) }
 
     it "generates the path for the embedded UV partial" do
-      expect(helper.universal_viewer_path(resource)).to eq "/uv/uv#?manifest=http://test.host/concern/scanned_resources/#{resource.id}/manifest&config=http://test.host//uv/uv_config.json"
-    end
-
-    context "when downloads are disabled" do
-      let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource, downloadable: ["none"]) }
-
-      it "generates the path for the embedded UV partial with downloads disabled" do
-        expect(helper.universal_viewer_path(resource)).to eq "/uv/uv#?manifest=http://test.host/concern/scanned_resources/#{resource.id}/manifest&config=http://test.host//uv/uv_config_downloads_disabled.json"
-      end
-
-      context "when authenticated as an admin. user" do
-        let(:admin) { FactoryBot.create(:admin) }
-
-        before do
-          sign_in(admin)
-        end
-
-        it "generates the path for the embedded UV partial with downloads enabled" do
-          expect(helper.universal_viewer_path(resource)).to eq "/uv/uv#?manifest=http://test.host/concern/scanned_resources/#{resource.id}/manifest&config=http://test.host//uv/uv_config.json"
-        end
-      end
-
-      context "when authenticated as a staff user" do
-        let(:staff) { FactoryBot.create(:staff) }
-
-        before do
-          sign_in(staff)
-        end
-
-        it "generates the path for the embedded UV partial with downloads enabled" do
-          expect(helper.universal_viewer_path(resource)).to eq "/uv/uv#?manifest=http://test.host/concern/scanned_resources/#{resource.id}/manifest&config=http://test.host//uv/uv_config.json"
-        end
-      end
+      expect(helper.universal_viewer_path(resource)).to eq "/uv/uv#?manifest=http://test.host/concern/scanned_resources/#{resource.id}/manifest&config=http://test.host/viewer/config/#{resource.id}"
     end
   end
 end
