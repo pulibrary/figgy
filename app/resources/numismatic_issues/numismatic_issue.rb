@@ -7,6 +7,7 @@ class NumismaticIssue < Resource
   attribute :member_ids, Valkyrie::Types::Array
   attribute :member_of_collection_ids
   attribute :numismatic_citation_ids, Valkyrie::Types::Array
+  attribute :numismatic_artist_ids, Valkyrie::Types::Array
   attribute :numismatic_monogram_ids
 
   # descriptive metadata
