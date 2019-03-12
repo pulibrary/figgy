@@ -82,7 +82,8 @@ gem "rsolr", ">= 1.0"
 
 gem "aasm"
 gem "arabic-letter-connector"
-gem "browse-everything", github: "jrgriffiniii/browse-everything", branch: "figgy-issues-2465-jrgriffiniii"
+gem 'font-awesome-rails'
+gem "browse-everything", github: "jrgriffiniii/browse-everything", branch: "gdrive-paging-jrgriffiniii-rebased"
 gem "capistrano", "~> 3.7.1"
 gem "capistrano-passenger"
 gem "capistrano-rails"

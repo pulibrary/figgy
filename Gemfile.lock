@@ -9,10 +9,10 @@ GIT
 
 GIT
   remote: git://github.com/jrgriffiniii/browse-everything.git
-  revision: 556400e206e8bd04bad60ad82364d7df4edeb0c3
-  branch: figgy-issues-2465-jrgriffiniii
+  revision: d564730eae3caf3e34afb791db2155f721230eb8
+  branch: gdrive-paging-jrgriffiniii-rebased
   specs:
-    browse-everything (1.0.0)
+    browse-everything (1.0.0.rc2)
       addressable (~> 2.5)
       aws-sdk-s3
       dropbox_api (>= 0.1.10)
@@ -158,17 +158,17 @@ GEM
     awesome_print (1.8.0)
     aws-eventstream (1.0.2)
     aws-partitions (1.144.0)
-    aws-sdk-core (3.47.0)
-      aws-eventstream (~> 1.0, >= 1.0.2)
+    aws-sdk-core (3.46.2)
+      aws-eventstream (~> 1.0)
       aws-partitions (~> 1.0)
       aws-sigv4 (~> 1.1)
       http-2 (~> 0.10)
       jmespath (~> 1.0)
-    aws-sdk-kms (1.14.0)
-      aws-sdk-core (~> 3, >= 3.47.0)
-      aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.32.0)
-      aws-sdk-core (~> 3, >= 3.47.0)
+    aws-sdk-kms (1.13.0)
+      aws-sdk-core (~> 3, >= 3.39.0)
+      aws-sigv4 (~> 1.0)
+    aws-sdk-s3 (1.31.0)
+      aws-sdk-core (~> 3, >= 3.39.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.0)
     aws-sigv4 (1.1.0)
