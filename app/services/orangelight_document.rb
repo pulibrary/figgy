@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class OrangelightDocument
   attr_reader :resource
-  delegate :to_json, to: :document
+  delegate :to_json, :to_h, to: :document
 
   def initialize(resource)
     @resource = resource

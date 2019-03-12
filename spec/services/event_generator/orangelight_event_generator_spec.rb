@@ -32,7 +32,7 @@ RSpec.describe EventGenerator::OrangelightEventGenerator do
   describe "#record_updated" do
     context "with a record in a completed state" do
       it "publishes a persistent JSON updated message with an orangelight document" do
-        orangelight_doc = OrangelightDocument.new(record).to_json
+        orangelight_doc = OrangelightDocument.new(record).to_h
         expected_result = {
           "id" => record.id.to_s,
           "event" => "UPDATED",
@@ -51,7 +51,7 @@ RSpec.describe EventGenerator::OrangelightEventGenerator do
       end
 
       it "publishes a persistent JSON updated message with a bulk flag set to true" do
-        orangelight_doc = OrangelightDocument.new(record).to_json
+        orangelight_doc = OrangelightDocument.new(record).to_h
         expected_result = {
           "id" => record.id.to_s,
           "event" => "UPDATED",
@@ -79,7 +79,7 @@ RSpec.describe EventGenerator::OrangelightEventGenerator do
   describe "#record_member_updated" do
     context "with a record in a completed state" do
       it "publishes a persistent JSON updated message with geoblacklight document" do
-        orangelight_doc = OrangelightDocument.new(record).to_json
+        orangelight_doc = OrangelightDocument.new(record).to_h
         expected_result = {
           "id" => record.id.to_s,
           "event" => "UPDATED",
