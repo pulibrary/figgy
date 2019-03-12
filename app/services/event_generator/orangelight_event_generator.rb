@@ -66,7 +66,7 @@ class EventGenerator
       end
 
       def generate_document(record)
-        OrangelightDocument.new(record).to_json
+        OrangelightDocument.new(record).to_h
       end
   end
 end
