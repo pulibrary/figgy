@@ -8,7 +8,7 @@ class ScannedResourcesController < BaseResourceController
   )
 
   def edit
-    if change_set.class == SimpleResourceChangeSet
+    if change_set.class == SimpleChangeSet
       flash[:alert] = "Editing resources without imported metadata has been disabled while features are being added to support metadata from PUDL. Please contact us on Slack if you need help."
       redirect_to solr_document_path(params[:id])
     else
@@ -22,10 +22,8 @@ class ScannedResourcesController < BaseResourceController
   end
 
   def change_set_class
-    if params[:change_set] == "simple" || (resource_params && resource_params[:change_set] == "simple")
-      SimpleResourceChangeSet
-    elsif params[:change_set] == "recording" || (resource_params && resource_params[:change_set] == "recording")
-      RecordingChangeSet
+    if params[:change_set].present? || (resource_params && resource_params[:change_set].present?)
+      DynamicChangeSet.class_from_param(params[:change_set] || resource_params[:change_set])
     else
       DynamicChangeSet
     end

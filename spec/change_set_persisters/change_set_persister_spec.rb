@@ -197,7 +197,7 @@ RSpec.describe ChangeSetPersister do
   end
 
   context "when a simple resource is completed" do
-    let(:change_set_class) { SimpleResourceChangeSet }
+    let(:change_set_class) { SimpleChangeSet }
     before do
       stub_bibdata(bib_id: "123456")
     end

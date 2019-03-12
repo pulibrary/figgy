@@ -69,7 +69,7 @@ RSpec.describe IngestFolderJob do
       end
     end
 
-    context "with a SimpleResourceChangeSet" do
+    context "with a SimpleChangeSet" do
       let(:logger) { Logger.new(nil) }
       let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single") }
       let(:bib) { "4609321" }
@@ -78,7 +78,7 @@ RSpec.describe IngestFolderJob do
       let(:query_service) { metadata_adapter.query_service }
       let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
       let(:class_name) { "ScannedResource" }
-      let(:change_set_class) { "SimpleResourceChangeSet" }
+      let(:change_set_class) { "SimpleChangeSet" }
 
       it "ingest the files as SimpleResource objects" do
         coll = FactoryBot.create_for_repository(:collection)
@@ -96,7 +96,7 @@ RSpec.describe IngestFolderJob do
           member_of_collection_ids: [coll.id]
         )
 
-        expect(BulkIngestService).to have_received(:new).with(hash_including(klass: ScannedResource, change_set_class: SimpleResourceChangeSet))
+        expect(BulkIngestService).to have_received(:new).with(hash_including(klass: ScannedResource, change_set_class: SimpleChangeSet))
 
         expect(ingest_service).to have_received(:attach_dir).with(
           base_directory: single_dir,
