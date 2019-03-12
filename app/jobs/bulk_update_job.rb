@@ -6,7 +6,7 @@ class BulkUpdateJob < ApplicationJob
         resource = query_service.find_by(id: id)
         change_set = DynamicChangeSet.new(resource).prepopulate!
         attributes = {}.tap do |attrs|
-          attrs[:state] = "complete" if args[:mark_complete] && !resource.state.include?("complete")
+          attrs[:state] = "complete" if args[:mark_complete] && !blacklisted_states.include?(resource.state.first)
         end
         change_set.validate(attributes)
         if change_set.changed?
@@ -18,6 +18,13 @@ class BulkUpdateJob < ApplicationJob
   end
 
   private
+
+    def blacklisted_states
+      [
+        "complete",
+        "takedown"
+      ]
+    end
 
     def query_service
       metadata_adapter.query_service
