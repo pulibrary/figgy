@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 class DynamicChangeSet
   def self.new(record, *args)
-    if record.try(:change_set) == "simple"
-      SimpleChangeSet.new(record, *args)
-    elsif record.try(:change_set) == "recording"
-      RecordingChangeSet.new(record, *args)
+    if record.try(:change_set).present?
+      class_from_param(record.change_set).new(record, *args)
     else
-      "#{record.internal_resource}ChangeSet".constantize.new(record, *args)
+      class_from_param(record.internal_resource).new(record, *args)
     end
+  end
+
+  def self.class_from_param(param)
+    "#{param.camelize}ChangeSet".constantize
   end
 end

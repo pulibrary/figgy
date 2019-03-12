@@ -22,10 +22,8 @@ class ScannedResourcesController < BaseResourceController
   end
 
   def change_set_class
-    if params[:change_set] == "simple" || (resource_params && resource_params[:change_set] == "simple")
-      SimpleChangeSet
-    elsif params[:change_set] == "recording" || (resource_params && resource_params[:change_set] == "recording")
-      RecordingChangeSet
+    if params[:change_set].present? || (resource_params && resource_params[:change_set].present?)
+      DynamicChangeSet.class_from_param(params[:change_set] || resource_params[:change_set])
     else
       DynamicChangeSet
     end
