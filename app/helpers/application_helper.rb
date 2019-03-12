@@ -178,9 +178,12 @@ module ApplicationHelper
   end
 
   # Generate the path for the Universal Viewer iframe @src attribute
+  # @param [Valkyrie::Resource]
   # @return [String]
   def universal_viewer_path(resource)
-    "/uv/uv#?manifest=#{manifest_url(resource)}&config=#{root_url}/uv/uv_config.json"
+    config_path = resource.decorate.downloadable? ? "uv_config.json" : "uv_config_downloads_disabled.json"
+
+    "/uv/uv#?manifest=#{manifest_url(resource)}&config=#{root_url}/uv/#{config_path}"
   end
 
   def collection_present?

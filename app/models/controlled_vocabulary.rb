@@ -290,6 +290,21 @@ class ControlledVocabulary
     end
   end
 
+  # Controlled vocabularies for PDF types
+  # Unlike with other authorities, no YAML file is used for these values
+  class DownloadableState < ControlledVocabulary
+    ControlledVocabulary.register(:downloadable, self)
+
+    # Retrieve all Terms structuring the types of PDF's
+    # @return [Array<Term>] the Term Objects modeling each PDF type
+    def all(_scope = nil)
+      [
+        Term.new(label: "Public", value: "public"),
+        Term.new(label: "None", value: "none")
+      ]
+    end
+  end
+
   # Controlled vocabularies for holding locations for a given cataloged item
   # Values for this vocabulary are unique in that they are parsed from PULFA
   class HoldingLocation < ControlledVocabulary

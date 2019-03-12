@@ -16,4 +16,9 @@ describe NumismaticIssue do
   it "has a title" do
     expect(issue.title).to include "Issue: "
   end
+
+  it "has a downloadable attribute" do
+    issue.downloadable = ["public"]
+    expect(issue.downloadable).to eq ["public"]
+  end
 end

@@ -35,4 +35,16 @@ RSpec.describe FileSetDecorator do
       end
     end
   end
+
+  describe "#downloadable?" do
+    before do
+      res = FactoryBot.create_for_repository(:scanned_resource)
+      res.member_ids = [file_set.id]
+      adapter.persister.save(resource: res)
+    end
+
+    it "delegates to the parent resource" do
+      expect(decorator.downloadable?).to be true
+    end
+  end
 end

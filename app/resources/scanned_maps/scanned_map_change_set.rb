@@ -15,6 +15,7 @@ class ScannedMapChangeSet < ScannedResourceChangeSet
       :title,
       :source_metadata_identifier,
       :gbl_suppressed_override,
+      :downloadable,
       :rights_statement,
       :rights_note,
       :pdf_type,

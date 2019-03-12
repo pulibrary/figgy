@@ -203,4 +203,8 @@ RSpec.describe ScannedResourceDecorator do
       expect(decorator.playlists.map(&:id)).to eq [playlist.id]
     end
   end
+
+  it "has a downloadable attribute" do
+    expect(decorator.downloadable).to eq ["public"]
+  end
 end

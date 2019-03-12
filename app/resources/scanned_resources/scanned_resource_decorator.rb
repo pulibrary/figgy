@@ -16,7 +16,8 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
            :ocr_language,
            :rights_statement,
            :actor,
-           :holding_location # suppressed in superclass, but added back in with Schema::Common
+           :holding_location, # suppressed in superclass, but added back in with Schema::Common
+           :downloadable
 
   display_in_manifest displayed_attributes, :location
   suppress_from_manifest Schema::IIIF.attributes,
@@ -27,7 +28,8 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
                          :rendered_ocr_language,
                          :ocr_language,
                          :thumbnail_id,
-                         :rendered_date_range
+                         :rendered_date_range,
+                         :downloadable
 
   delegate(*Schema::Common.attributes, to: :primary_imported_metadata, prefix: :imported)
   delegate :members, :file_sets, :collections, :playlists, :decorated_file_sets, to: :wayfinder

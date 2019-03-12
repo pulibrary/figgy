@@ -23,4 +23,9 @@ RSpec.describe Playlist do
     playlist.visibility = ["restricted"]
     expect(playlist.visibility).to eq ["restricted"]
   end
+
+  it "has a downloadable attribute" do
+    playlist.downloadable = ["public"]
+    expect(playlist.downloadable).to eq ["public"]
+  end
 end

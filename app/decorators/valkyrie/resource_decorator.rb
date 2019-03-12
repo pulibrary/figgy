@@ -87,6 +87,12 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     false
   end
 
+  # Determine whether or not a resource can be downloaded
+  # @return [Boolean]
+  def downloadable?
+    respond_to?(:downloadable) && downloadable&.include?("public")
+  end
+
   def attachable_objects
     []
   end

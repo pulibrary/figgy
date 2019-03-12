@@ -13,6 +13,7 @@ class EphemeraBoxChangeSet < ChangeSet
   # override the default value defined in VisibilityProperty
   property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
   property :read_groups, multiple: true, required: false
+  property :downloadable, multiple: false, require: true, default: "public"
   property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
   property :rights_note, multiple: false, required: false
   delegate :human_readable_type, to: :model

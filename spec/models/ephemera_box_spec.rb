@@ -13,4 +13,8 @@ RSpec.describe EphemeraBox do
     box.member_ids = [1, 2, 3, 3]
     expect(box.member_ids).to eq [1, 2, 3, 3]
   end
+  it "has a downloadable attribute" do
+    box.downloadable = ["public"]
+    expect(box.downloadable).to eq ["public"]
+  end
 end

@@ -1,0 +1,10 @@
+  <%= f.input key,
+              as: :select,
+              collection: ControlledVocabulary.for(key).all,
+              label: 'User Downloads',
+              label_method: :label,
+              value_method: :value,
+              hint: "Set which users can download this resource",
+              include_blank: false,
+              input_html: { class: 'form-control rights-statement' },
+              required: f.object.required?(key) %>

@@ -148,6 +148,7 @@ Metrics/MethodLength:
     - 'app/models/search_builder.rb'
     - 'app/helpers/application_helper.rb'
     - 'app/change_sets/change_set.rb'
+    - 'app/resources/scanned_resources/scanned_resource_change_set.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
