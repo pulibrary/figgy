@@ -20,20 +20,32 @@ class MarcRecordEnhancer
   end
 
   def enhance_cicognara
-    add_856es
     add_024
     add_510
+    add_856_ark
+    add_856_manifest
     marc
   end
 
   private
 
-    def add_856es
+    def add_856_ark
       return unless resource.try(:identifier)&.present?
       ark = Ark.new(resource.identifier.first).uri
+      marc.append(MARC::DataField.new("856", "4", "1", MARC::Subfield.new("u", ark))) unless existing_856(ark)
+    end
+
+    def add_856_manifest
+      return unless resource.try(:identifier)&.present?
       manifest = Rails.application.routes.url_helpers.polymorphic_url([:manifest, resource])
-      marc.append(MARC::DataField.new("856", "4", "1", MARC::Subfield.new("u", manifest))) unless url_strings.include? manifest
-      marc.append(MARC::DataField.new("856", "4", "1", MARC::Subfield.new("u", ark))) unless url_strings.include? ark
+      manifest856 = existing_856(manifest)
+      unless manifest856
+        manifest856 = MARC::DataField.new("856", "4", "1", MARC::Subfield.new("u", manifest))
+        marc.append(manifest856)
+      end
+
+      manifest856_q = manifest856.subfields.select { |s| s.code == "q" }.first
+      manifest856.append(MARC::Subfield.new("q", "JSON (IIIF Manifest)")) unless manifest856_q
     end
 
     def add_024
@@ -64,14 +76,14 @@ class MarcRecordEnhancer
       )
     end
 
-    def url_strings
-      @url_strings ||= begin
-        url_fields = marc.fields("856").select do |field|
-          field.indicator1.eql? "4"
-          field.indicator2.eql? "1"
-        end
-        url_fields.flat_map(&:subfields).select { |s| s.code == "u" }.map(&:value)
-      end
+    def existing_856s
+      @existing_856s ||= marc.fields("856").select { |f| f.indicator1.eql?("4") && f.indicator2.eql?("1") }
+    end
+
+    def existing_856(uri)
+      existing_856s.select do |f|
+        f.subfields.select { |s| s.code == "u" }.first.value == uri
+      end.first
     end
 
     def standard_identifiers

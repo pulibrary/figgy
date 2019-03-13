@@ -175,10 +175,14 @@ RSpec.describe CicognaraMarc do
         MARC::DataField.new("856", "4", "1", MARC::Subfield.new("u", "http://arks.princeton.edu/ark:/88435/#{blade2}"))
       end
       let(:manifest_856_1) do
-        MARC::DataField.new("856", "4", "1", MARC::Subfield.new("u", manifest_url_1))
+        f = MARC::DataField.new("856", "4", "1", MARC::Subfield.new("u", manifest_url_1))
+        f.append(MARC::Subfield.new("q", "JSON (IIIF Manifest)"))
+        f
       end
       let(:manifest_856_2) do
-        MARC::DataField.new("856", "4", "1", MARC::Subfield.new("u", manifest_url_2))
+        f = MARC::DataField.new("856", "4", "1", MARC::Subfield.new("u", manifest_url_2))
+        f.append(MARC::Subfield.new("q", "JSON (IIIF Manifest)"))
+        f
       end
       let(:manifest_url_1) { Rails.application.routes.url_helpers.polymorphic_url([:manifest, resource1]) }
       let(:manifest_url_2) { Rails.application.routes.url_helpers.polymorphic_url([:manifest, resource2]) }

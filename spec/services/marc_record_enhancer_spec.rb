@@ -96,6 +96,7 @@ RSpec.describe MarcRecordEnhancer do
           "http://arks.princeton.edu/ark:/88435/jm214s442",
           manifest_url
         )
+        expect(urls.flat_map(&:subfields).select { |s| s.code == "q" }.map(&:value)).to eq(["JSON (IIIF Manifest)"])
       end
     end
 
