@@ -175,4 +175,27 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_selector "td", text: "Coin: #{member.coin_number}"
     end
   end
+
+  context "with citations and artists" do
+    let(:citation) do
+      persister.save(resource: FactoryBot.create_for_repository(:numismatic_citation))
+    end
+    let(:artist) do
+      persister.save(resource: FactoryBot.create_for_repository(:numismatic_artist))
+    end
+    let(:issue) do
+      persister.save(resource: FactoryBot.create_for_repository(:numismatic_issue))
+    end
+    before do
+      issue
+    end
+
+    it "displays citations and artists as members" do
+      visit solr_document_path(issue)
+      expect(page).to have_selector "h2", text: "Citations"
+      expect(page).to have_link "Add Citation", href: parent_add_numismatic_citation_path(issue, parent_id: issue.id)
+      expect(page).to have_selector "h2", text: "Artists"
+      expect(page).to have_link "Add Artist", href: parent_add_numismatic_artist_path(issue, parent_id: issue.id)
+    end
+  end
 end
