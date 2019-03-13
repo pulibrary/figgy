@@ -8,9 +8,11 @@ export default class SaveAndIngestHandler {
     this.field_element.change((e) => {
       this.resetButton()
       this.button_element.val('Searching...')
-      // this will pass a value 'new' when  it's just a regular scanned resource,
-      //   but code on the other side will ignore that.
-      let qs = { 'change_set': window.location.pathname.split('/').pop() }
+      let change_set = window.location.pathname.split('/').pop()
+      let qs = {}
+      if (change_set !== 'new') {
+        qs = { 'change_set': change_set }
+      }
       if (this.current_promise) {
         this.current_promise.abort()
       }
