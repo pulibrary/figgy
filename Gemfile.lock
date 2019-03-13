@@ -9,10 +9,10 @@ GIT
 
 GIT
   remote: git://github.com/jrgriffiniii/browse-everything.git
-  revision: d564730eae3caf3e34afb791db2155f721230eb8
-  branch: gdrive-paging-jrgriffiniii-rebased
+  revision: 29f806e3807ea55ab21a300a3aff45b615c89eea
+  branch: figgy-issues-1536-jrgriffiniii
   specs:
-    browse-everything (1.0.0.rc2)
+    browse-everything (1.0.0)
       addressable (~> 2.5)
       aws-sdk-s3
       dropbox_api (>= 0.1.10)
