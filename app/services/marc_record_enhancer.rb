@@ -54,6 +54,8 @@ class MarcRecordEnhancer
       dcl024 = existing_024s(dcl).first
       if dcl024
         dcl024.indicator1 = "8"
+        subfield2 = dcl024.subfields.select { |s| s.code == "2" }.first
+        dcl024.subfields.delete(subfield2) if subfield2
       else
         dcl024 = MARC::DataField.new("024", "8", " ", MARC::Subfield.new("a", dcl))
         marc.append(dcl024)
