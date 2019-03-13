@@ -51,14 +51,13 @@ class MarcRecordEnhancer
     def add_024
       return unless resource.try(:local_identifier)&.present?
       dcl = resource.local_identifier.first
-      return if standard_identifiers.include? dcl
-      marc.append(
-        MARC::DataField.new(
-          "024", "7", " ",
-          MARC::Subfield.new("a", dcl),
-          MARC::Subfield.new("2", "dclib")
-        )
-      )
+      dcl024 = existing_024s(dcl).first
+      if dcl024
+        dcl024.indicator1 = "8"
+      else
+        dcl024 = MARC::DataField.new("024", "8", " ", MARC::Subfield.new("a", dcl))
+        marc.append(dcl024)
+      end
     end
 
     def add_510
@@ -86,9 +85,9 @@ class MarcRecordEnhancer
       end.first
     end
 
-    def standard_identifiers
-      marc.fields("024").map do |field|
-        field.subfields.select { |s| s.code == "a" }.map(&:value).first
+    def existing_024s(id)
+      marc.fields("024").select do |f|
+        f.subfields.select { |s| s.code == "a" }.first.value == id
       end
     end
 

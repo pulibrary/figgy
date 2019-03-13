@@ -153,17 +153,15 @@ RSpec.describe MarcRecordEnhancer do
       end
       let(:dcl_024) do
         MARC::DataField.new(
-          "024", "7", " ",
-          MARC::Subfield.new("a", "dcl:xjt"),
-          MARC::Subfield.new("2", "dclib")
+          "024", "8", " ",
+          MARC::Subfield.new("a", "dcl:xjt")
         )
       end
       it "leaves that 024" do
         std_ids = enhancer.enhance_cicognara.fields("024").select do |field|
-          field.indicator1 == "7" &&
+          field.indicator1 == "8" &&
             field.indicator2 == " " &&
-            field.subfields.select { |subfield| subfield.code == "a" }.count == 1 &&
-            field.subfields.select { |subfield| subfield.code == "2" }.first.value == "dclib"
+            field.subfields.select { |subfield| subfield.code == "a" }.count == 1
         end
         expect(std_ids.count).to eq 1
         subfield_a = std_ids.first.subfields.select { |s| s.code == "a" }.first
@@ -186,14 +184,13 @@ RSpec.describe MarcRecordEnhancer do
       it "adds another 024 with our dcl #" do
         expect(enhancer.enhance_cicognara.fields("024").count).to eq 2
         std_ids = enhancer.marc.fields("024").select do |field|
-          field.indicator1 == "7" &&
+          field.indicator1 == "8" &&
             field.indicator2 == " " &&
-            field.subfields.select { |subfield| subfield.code == "a" }.count == 1 &&
-            field.subfields.select { |subfield| subfield.code == "2" }.first&.value == "dclib"
+            field.subfields.select { |subfield| subfield.code == "a" }.count == 1
         end
-        expect(std_ids.count).to eq 1
-        subfield_a = std_ids.first.subfields.select { |s| s.code == "a" }.first
-        expect(subfield_a.value).to eq "dcl:xjt"
+        expect(std_ids.count).to eq 2
+        id_values = std_ids.flat_map(&:subfields).select { |s| s.code == "a" }
+        expect(id_values.map(&:value)).to contain_exactly("dcl:xjt", "rando id")
       end
     end
 
@@ -201,10 +198,9 @@ RSpec.describe MarcRecordEnhancer do
       let(:marc_record) { MARC::Record.new }
       it "adds an 024 with our dcl #" do
         std_ids = enhancer.enhance_cicognara.fields("024").select do |field|
-          field.indicator1 == "7" &&
+          field.indicator1 == "8" &&
             field.indicator2 == " " &&
-            field.subfields.select { |subfield| subfield.code == "a" }.count == 1 &&
-            field.subfields.select { |subfield| subfield.code == "2" }.first.value == "dclib"
+            field.subfields.select { |subfield| subfield.code == "a" }.count == 1
         end
         expect(std_ids.count).to eq 1
         subfield_a = std_ids.first.subfields.select { |s| s.code == "a" }.first
