@@ -50,15 +50,17 @@ class MarcRecordEnhancer
 
     def add_024
       return unless resource.try(:local_identifier)&.present?
-      dcl = resource.local_identifier.first
-      dcl024 = existing_024s(dcl).first
-      if dcl024
-        dcl024.indicator1 = "8"
-        subfield2 = dcl024.subfields.select { |s| s.code == "2" }.first
-        dcl024.subfields.delete(subfield2) if subfield2
-      else
-        dcl024 = MARC::DataField.new("024", "8", " ", MARC::Subfield.new("a", dcl))
-        marc.append(dcl024)
+      dcl_numbers = resource.local_identifier.select { |s| s.start_with?("dcl:") }.uniq
+      dcl_numbers.each do |dcl|
+        dcl024 = existing_024s(dcl).first
+        if dcl024
+          dcl024.indicator1 = "8"
+          subfield2 = dcl024.subfields.select { |s| s.code == "2" }.first
+          dcl024.subfields.delete(subfield2) if subfield2
+        else
+          dcl024 = MARC::DataField.new("024", "8", " ", MARC::Subfield.new("a", dcl))
+          marc.append(dcl024)
+        end
       end
     end
 

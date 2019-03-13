@@ -192,8 +192,8 @@ RSpec.describe CicognaraMarc do
       let(:manifest_url_1) { Rails.application.routes.url_helpers.polymorphic_url([:manifest, resource1]) }
       let(:manifest_url_2) { Rails.application.routes.url_helpers.polymorphic_url([:manifest, resource2]) }
       let(:metadata_mock) { double }
-      let(:li1) { "dlc:li1" }
-      let(:li2) { "dlc:li2" }
+      let(:li1) { "dcl:li1" }
+      let(:li2) { "dcl:li2" }
       let(:ref1) { "123" }
       let(:ref2) { "456" }
       let(:blade1) { "jm214s442" }
