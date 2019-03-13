@@ -32,6 +32,7 @@ RSpec.describe CicognaraMarc do
         allow(enhancer2).to receive(:enhance_cicognara).and_return(minimal_record2)
         allow(MARC::XMLWriter).to receive(:new).and_return(writer)
         allow(writer).to receive(:write)
+        allow(writer).to receive(:close)
       end
 
       it "puts a marc file per bibid in a specified directory" do
@@ -48,6 +49,7 @@ RSpec.describe CicognaraMarc do
         FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429")
         allow(MARC::XMLWriter).to receive(:new).and_return(writer)
         allow(writer).to receive(:write)
+        allow(writer).to receive(:close)
         stub_bibdata(bib_id: "8543429", content_type: BibdataStubbing::CONTENT_TYPE_MARC_XML)
       end
 
@@ -71,6 +73,7 @@ RSpec.describe CicognaraMarc do
         allow(enhancer).to receive(:enhance_cicognara).and_return(minimal_record)
         allow(MARC::XMLWriter).to receive(:new).and_return(writer)
         allow(writer).to receive(:write)
+        allow(writer).to receive(:close)
       end
 
       it "writes just one marc record" do
@@ -97,6 +100,7 @@ RSpec.describe CicognaraMarc do
         allow(enhancer2).to receive(:enhance_cicognara).and_return(minimal_record2)
         allow(MARC::XMLWriter).to receive(:new).and_return(writer)
         allow(writer).to receive(:write)
+        allow(writer).to receive(:close)
       end
 
       it "writes just one marc record" do
@@ -123,6 +127,7 @@ RSpec.describe CicognaraMarc do
         allow(enhancer2).to receive(:enhance_cicognara).and_return(minimal_record2)
         allow(MARC::XMLWriter).to receive(:new).and_return(writer)
         allow(writer).to receive(:write)
+        allow(writer).to receive(:close)
       end
 
       it "writes just one marc record" do
