@@ -13,14 +13,12 @@ RSpec.shared_examples "an ephemera folder change set" do |change_set_class|
 
   describe "#state" do
     it "pre-populates" do
-      change_set.prepopulate!
       expect(change_set.state).to eq "needs_qa"
     end
   end
 
   describe "#provenance" do
     it "pre-populates as single-value" do
-      change_set.prepopulate!
       expect(change_set.provenance).to eq FactoryBot.build(:ephemera_folder).provenance.first
     end
   end

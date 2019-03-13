@@ -92,7 +92,6 @@ RSpec.describe DownloadsController do
       let(:playlist) do
         playlist = Playlist.new
         cs = PlaylistChangeSet.new(playlist)
-        cs.prepopulate!
         cs.validate(file_set_ids: [file_set.id], state: ["complete"])
         change_set_persister.save(change_set: cs)
       end
@@ -114,7 +113,7 @@ RSpec.describe DownloadsController do
         change_set_persister = ScannedResourcesController.change_set_persister
         file_set = FactoryBot.create_for_repository(:file_set)
         file = fixture_file_upload("files/hls_playlist.m3u8", "application/x-mpegURL")
-        change_set = DynamicChangeSet.new(file_set).prepopulate!
+        change_set = DynamicChangeSet.new(file_set)
         change_set.files = [file]
         output = change_set_persister.save(change_set: change_set)
 
@@ -132,7 +131,7 @@ RSpec.describe DownloadsController do
         change_set_persister = ScannedResourcesController.change_set_persister
         file_set = FactoryBot.create_for_repository(:file_set)
         file = fixture_file_upload("files/hls_playlist.m3u8", "application/x-mpegURL")
-        change_set = DynamicChangeSet.new(file_set).prepopulate!
+        change_set = DynamicChangeSet.new(file_set)
         change_set.files = [file]
         output = change_set_persister.save(change_set: change_set)
 
@@ -148,14 +147,12 @@ RSpec.describe DownloadsController do
       let(:playlist) do
         playlist = Playlist.new
         cs = PlaylistChangeSet.new(playlist)
-        cs.prepopulate!
         cs.validate(file_set_ids: [file_set.id], state: ["complete"])
         change_set_persister.save(change_set: cs)
       end
       let(:playlist2) do
         playlist = Playlist.new
         cs = PlaylistChangeSet.new(playlist)
-        cs.prepopulate!
         cs.validate(file_set_ids: [file_set.id], state: ["complete"])
         change_set_persister.save(change_set: cs)
       end

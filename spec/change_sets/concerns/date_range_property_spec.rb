@@ -19,7 +19,6 @@ RSpec.describe DateRangeProperty do
   let(:resource) { TestResource.new }
 
   it "can set date_range" do
-    change_set.prepopulate!
     change_set.validate(date_range_form_attributes: { start: "2017", end: "2018" })
     change_set.sync
     expect(change_set.model.date_range.first.end).to eq ["2018"]
@@ -28,7 +27,6 @@ RSpec.describe DateRangeProperty do
   end
 
   it "can set approximate date_range" do
-    change_set.prepopulate!
     change_set.validate(date_range_form_attributes: { start: "2017", end: "2018", approximate: true })
     change_set.sync
     expect(change_set.model.date_range.first.start).to eq ["2017"]
@@ -37,25 +35,21 @@ RSpec.describe DateRangeProperty do
   end
 
   it "validates" do
-    change_set.prepopulate!
     result = change_set.validate(date_range_form_attributes: { start: "abcd", end: "2018" })
     expect(result).to eq false
   end
 
   it "validates that the start is before the end" do
-    change_set.prepopulate!
     result = change_set.validate(date_range_form_attributes: { start: "2018", end: "2017" })
     expect(result).to eq false
   end
 
   it "is invalid if only start is given" do
-    change_set.prepopulate!
     result = change_set.validate(date_range_form_attributes: { start: "2018", end: "" })
     expect(result).to eq false
   end
 
   it "is invalid if only end is given" do
-    change_set.prepopulate!
     result = change_set.validate(date_range_form_attributes: { start: "", end: "2018" })
     expect(result).to eq false
   end

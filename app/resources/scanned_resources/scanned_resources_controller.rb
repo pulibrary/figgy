@@ -60,7 +60,7 @@ class ScannedResourcesController < BaseResourceController
   end
 
   def pdf
-    change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
+    change_set = change_set_class.new(find_resource(params[:id]))
     authorize! :pdf, change_set.resource
     pdf_file = change_set.resource.pdf_file
 

@@ -160,7 +160,6 @@ class DataSeeder
 
     def add_child_resource(child:, parent_id:)
       change_set = DynamicChangeSet.new(child)
-      change_set.prepopulate!
       change_set.append_id = parent_id
       change_set_persister.save(change_set: change_set)
     end
@@ -216,14 +215,12 @@ class DataSeeder
     def add_file(resource:, file: nil)
       ingestable_file = file || IngestableFile.new(file_path: Rails.root.join("spec", "fixtures", "files", "example.tif"), mime_type: "image/tiff", original_filename: "example.tif")
       change_set = DynamicChangeSet.new(resource)
-      change_set.prepopulate!
       change_set.files = [ingestable_file]
       change_set_persister.save(change_set: change_set)
     end
 
     def add_member(parent:, member:)
       member_change_set = DynamicChangeSet.new(member)
-      member_change_set.prepopulate!
       member_change_set.append_id = parent.id
       change_set_persister.save(change_set: member_change_set)
       logger.info "Added #{member.class} #{member.id} to #{parent.class} #{parent.title || parent.box_number}"

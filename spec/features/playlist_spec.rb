@@ -35,7 +35,6 @@ RSpec.feature "PlaylistChangeSets" do
     let(:file_set) { recording.decorate.members.first }
     let(:change_set) do
       cs = PlaylistChangeSet.new(resource)
-      cs.prepopulate!
       cs.validate(file_set_ids: [file_set.id])
       cs
     end

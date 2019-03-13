@@ -38,7 +38,6 @@ RSpec.describe PlaylistDecorator do
     let(:playlist) do
       res = Playlist.new
       cs = PlaylistChangeSet.new(res)
-      cs.prepopulate!
       cs.validate(file_set_ids: [file_set.id])
       change_set_persister.save(change_set: cs)
     end

@@ -13,17 +13,12 @@ RSpec.describe RasterResourceChangeSet do
 
   describe "#workflow" do
     it "has a workflow" do
-      change_set.prepopulate!
       expect(change_set.workflow).to be_a(GeoWorkflow)
       expect(change_set.workflow.pending?).to be true
     end
   end
 
   describe "validations" do
-    before do
-      change_set.prepopulate!
-    end
-
     it "is valid by default" do
       expect(change_set).to be_valid
     end
@@ -96,7 +91,6 @@ RSpec.describe RasterResourceChangeSet do
 
   describe "#holding_location" do
     it "converts values to RDF::URIs" do
-      change_set.prepopulate!
       change_set.validate(holding_location: "http://test.com/")
       expect(change_set.holding_location).to be_instance_of RDF::URI
     end
@@ -105,8 +99,6 @@ RSpec.describe RasterResourceChangeSet do
   describe "#rights_statement" do
     let(:form_resource) { RasterResource.new(rights_statement: RDF::URI(rights_statement)) }
     it "is singular, required, and converts to an RDF::URI" do
-      change_set.prepopulate!
-
       expect(change_set.rights_statement).to eq RDF::URI(rights_statement)
       change_set.validate(rights_statement: "")
       expect(change_set).not_to be_valid
@@ -116,8 +108,6 @@ RSpec.describe RasterResourceChangeSet do
     context "when given a blank RasterResource" do
       let(:form_resource) { RasterResource.new }
       it "sets a default Rights Statement" do
-        change_set.prepopulate!
-
         expect(change_set.rights_statement).to eq RDF::URI(rights_statement)
       end
     end

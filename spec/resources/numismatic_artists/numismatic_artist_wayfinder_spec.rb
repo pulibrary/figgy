@@ -9,13 +9,11 @@ describe NumismaticArtistWayfinder do
   let(:numismatic_artist) do
     res = NumismaticArtist.new(title: "artist unknown")
     ch = NumismaticArtistChangeSet.new(res)
-    ch.prepopulate!
     change_set_persister.save(change_set: ch)
   end
   let(:coin) do
     res = Coin.new(title: "hercules", weight: 5, numismatic_artist_ids: [numismatic_artist.id])
     ch = CoinChangeSet.new(res)
-    ch.prepopulate!
     change_set_persister.save(change_set: ch)
   end
 

@@ -18,20 +18,17 @@ RSpec.describe ScannedResourceChangeSet do
     context "when neither title or metadata identifier is set" do
       let(:form_resource) { scanned_resource.new(title: "", source_metadata_identifier: "") }
       it "is invalid" do
-        change_set.prepopulate!
         expect(change_set).not_to be_valid
       end
     end
     context "when only metadata_identifier is set" do
       let(:form_resource) { scanned_resource.new(title: "", source_metadata_identifier: "123456") }
       it "is valid" do
-        change_set.prepopulate!
         expect(change_set).to be_valid
       end
     end
     context "when given a valid state transition" do
       it "is valid" do
-        change_set.prepopulate!
         change_set.validate(state: "metadata_review")
         expect(change_set).to be_valid
       end
@@ -46,7 +43,6 @@ RSpec.describe ScannedResourceChangeSet do
 
   describe "#holding_location" do
     it "converts values to RDF::URIs" do
-      change_set.prepopulate!
       change_set.validate(holding_location: "http://test.com/")
       expect(change_set.holding_location).to be_instance_of RDF::URI
     end
@@ -54,7 +50,6 @@ RSpec.describe ScannedResourceChangeSet do
 
   describe "#workflow" do
     it "has a workflow" do
-      change_set.prepopulate!
       expect(change_set.workflow).to be_a(BookWorkflow)
       expect(change_set.workflow.pending?).to be true
     end
@@ -87,7 +82,6 @@ RSpec.describe ScannedResourceChangeSet do
     let(:resource1) { FactoryBot.create_for_repository(:file_set) }
     let(:resource2) { FactoryBot.create_for_repository(:file_set) }
     it "can set a whole structure all at once" do
-      change_set.prepopulate!
       expect(change_set.validate(logical_structure: [structure])).to eq true
 
       expect(change_set.logical_structure[0].label).to eq ["Top!"]
@@ -97,8 +91,6 @@ RSpec.describe ScannedResourceChangeSet do
       expect(change_set.logical_structure[0].nodes[1].nodes[0].proxy).to eq [resource2.id]
     end
     it "has a default label" do
-      change_set.prepopulate!
-
       expect(change_set.logical_structure[0].label).to eq ["Logical"]
     end
   end

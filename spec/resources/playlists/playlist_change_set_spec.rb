@@ -9,15 +9,11 @@ RSpec.describe PlaylistChangeSet do
 
   describe "#prepopulate!" do
     it "sets default private visibility" do
-      change_set.prepopulate!
       expect(change_set.visibility).to eq visibility
     end
   end
 
   describe "validations" do
-    before do
-      change_set.prepopulate!
-    end
     context "when given a non-UUID for a member resource" do
       it "is not valid" do
         change_set.validate(member_ids: ["not-valid"])

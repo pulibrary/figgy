@@ -19,13 +19,11 @@ RSpec.describe PlaylistsController do
   let(:proxy1) do
     res = ProxyFileSet.new(proxied_file_id: file_set1.id, label: "Proxy Title")
     cs = ProxyFileSetChangeSet.new(res)
-    cs.prepopulate!
     change_set_persister.save(change_set: cs)
   end
   let(:proxy2) do
     res = ProxyFileSet.new(proxied_file_id: file_set2.id, label: "Proxy Title2")
     cs = ProxyFileSetChangeSet.new(res)
-    cs.prepopulate!
     change_set_persister.save(change_set: cs)
   end
   let(:resource) do
@@ -33,7 +31,6 @@ RSpec.describe PlaylistsController do
   end
   let(:persisted) do
     change_set = PlaylistChangeSet.new(resource)
-    change_set.prepopulate!
     change_set.validate(state: ["complete"])
     change_set_persister.save(change_set: change_set)
   end

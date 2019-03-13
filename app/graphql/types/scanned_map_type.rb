@@ -21,7 +21,7 @@ class Types::ScannedMapType < Types::BaseObject
   end
 
   def start_page
-    Array.wrap(object.start_canvas).first
+    Array.wrap(object.start_canvas).first.to_s
   end
 
   def source_metadata_identifier

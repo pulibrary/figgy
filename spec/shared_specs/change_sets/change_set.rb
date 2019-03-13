@@ -9,99 +9,86 @@ RSpec.shared_examples "a ChangeSet" do
       defined? resource_klass
   end
 
-  describe "#prepopulate!" do
-    it "doesn't make it look changed" do
+  describe "#validate!" do
+    it "doesn't make it look changed if passed an empty hash" do
       expect(change_set).not_to be_changed
-      change_set.prepopulate!
+      change_set.validate({})
       expect(change_set).not_to be_changed
     end
   end
 
   describe "validations" do
     it "is valid by default" do
-      change_set.prepopulate!
       expect(change_set).to be_valid
     end
 
     context "when title is an empty array" do
       it "is invalid" do
-        change_set.prepopulate!
         expect(change_set.validate(title: [])).to eq false
       end
     end
     context "when rights_statement isn't set" do
       let(:form_resource) { resource_klass.new(rights_statement: [""]) }
       it "is invalid" do
-        change_set.prepopulate!
         expect(change_set).not_to be_valid
       end
     end
     context "when visibility isn't set" do
       let(:form_resource) { resource_klass.new(visibility: [""]) }
       it "is invalid" do
-        change_set.prepopulate!
         expect(change_set).not_to be_valid
       end
     end
     context "when visibility hasn't been set" do
       let(:form_resource) { resource_klass.new(visibility: nil) }
       it "has a default of public" do
-        change_set.prepopulate!
         expect(change_set.visibility).to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
       end
     end
     context "when given a bad viewing direction" do
       it "is invalid" do
-        change_set.prepopulate!
         change_set.validate(viewing_direction: "backwards-to-forwards")
         expect(change_set).not_to be_valid
       end
     end
     context "when given a good viewing direction" do
       it "is valid" do
-        change_set.prepopulate!
         change_set.validate(viewing_direction: "left-to-right")
         expect(change_set).to be_valid
       end
     end
     context "when given a bad viewing hint" do
       it "is invalid" do
-        change_set.prepopulate!
         change_set.validate(viewing_hint: "bananas")
         expect(change_set).not_to be_valid
       end
     end
     context "when given a good viewing direction" do
       it "is valid" do
-        change_set.prepopulate!
         change_set.validate(viewing_hint: "paged")
         expect(change_set).to be_valid
       end
     end
     context "when given a non-UUID for a collection" do
       it "is not valid" do
-        change_set.prepopulate!
         change_set.validate(member_of_collection_ids: ["not-valid"])
         expect(change_set).not_to be_valid
       end
     end
     context "when given a valid UUID for a collection which does not exist" do
       it "is not valid" do
-        change_set.prepopulate!
         change_set.validate(member_of_collection_ids: ["b8823acb-d42b-4e62-a5c9-de5f94cbd3f6"])
         expect(change_set).not_to be_valid
       end
     end
     context "when given a non-UUID for a member resource" do
       it "is not valid" do
-        change_set.prepopulate!
         change_set.validate(member_ids: ["not-valid"])
         expect(change_set).not_to be_valid
       end
     end
     context "when given a valid UUID for a member resource which does not exist" do
       it "is not valid" do
-        change_set.prepopulate!
         change_set.validate(member_ids: ["55a14e79-710d-42c1-86aa-3d8cdaa62930"])
         expect(change_set).not_to be_valid
       end
@@ -110,8 +97,6 @@ RSpec.shared_examples "a ChangeSet" do
     describe "#pdf_type" do
       let(:form_resource) { resource_klass.new }
       it "has a default of 'color'" do
-        change_set.prepopulate!
-
         expect(change_set.pdf_type).to eq "color"
       end
     end
@@ -119,8 +104,6 @@ RSpec.shared_examples "a ChangeSet" do
     describe "#rights_statement" do
       let(:form_resource) { resource_klass.new(rights_statement: RightsStatements.no_known_copyright) }
       it "is singular, required, and converts to an RDF::URI" do
-        change_set.prepopulate!
-
         expect(change_set.rights_statement).to eq RightsStatements.no_known_copyright
         change_set.validate(rights_statement: "")
         expect(change_set).not_to be_valid
@@ -130,8 +113,6 @@ RSpec.shared_examples "a ChangeSet" do
       context "when given a blank resource" do
         let(:form_resource) { resource_klass.new }
         it "sets a default Rights Statement" do
-          change_set.prepopulate!
-
           expect(change_set.rights_statement).to eq RightsStatements.no_known_copyright
         end
       end
@@ -140,7 +121,6 @@ RSpec.shared_examples "a ChangeSet" do
     describe "#viewing_hint" do
       it "is singular" do
         form_resource.viewing_hint = ["Test"]
-        change_set.prepopulate!
 
         expect(change_set.viewing_hint).to eq "Test"
       end
@@ -149,7 +129,6 @@ RSpec.shared_examples "a ChangeSet" do
     describe "#viewing_direction" do
       it "is singular" do
         form_resource.viewing_direction = ["Test"]
-        change_set.prepopulate!
 
         expect(change_set.viewing_direction).to eq "Test"
       end

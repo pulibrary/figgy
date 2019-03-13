@@ -111,7 +111,6 @@ RSpec.describe ChangeSetPersister do
     it "mints an ARK" do
       resource = FactoryBot.create(:scanned_resource, title: [], source_metadata_identifier: "123456", state: "final_review")
       change_set = change_set_class.new(resource)
-      change_set.prepopulate!
       change_set.validate(state: "complete")
       output = change_set_persister.save(change_set: change_set)
       expect(output.identifier.first).to eq "ark:/#{shoulder}#{blade}"
@@ -120,7 +119,6 @@ RSpec.describe ChangeSetPersister do
     it "mints an authorization token" do
       resource = FactoryBot.create(:playlist, title: ["test playlist"], state: "draft")
       change_set = PlaylistChangeSet.new(resource)
-      change_set.prepopulate!
       change_set.validate(state: "complete")
       output = change_set_persister.save(change_set: change_set)
 
@@ -137,7 +135,6 @@ RSpec.describe ChangeSetPersister do
     let(:change_set_class) { PlaylistChangeSet }
     let(:change_set) { change_set_class.new(resource) }
     let(:persisted) do
-      change_set.prepopulate!
       change_set.validate(state: "complete")
       change_set_persister.save(change_set: change_set)
     end
@@ -152,7 +149,6 @@ RSpec.describe ChangeSetPersister do
       expect(auth_token).not_to be nil
 
       cs = PlaylistChangeSet.new(persisted)
-      cs.prepopulate!
       cs.validate(mint_auth_token: true)
 
       updated = change_set_persister.save(change_set: cs)
@@ -174,7 +170,6 @@ RSpec.describe ChangeSetPersister do
       let(:change_set_class) { PlaylistChangeSet }
       let(:change_set) { change_set_class.new(resource) }
       let(:persisted) do
-        change_set.prepopulate!
         change_set.validate(state: "complete")
         change_set_persister.save(change_set: change_set)
       end
@@ -184,7 +179,6 @@ RSpec.describe ChangeSetPersister do
       it "clears the attribute on the model but preserves the token" do
         persisted_auth_token = persisted.auth_token
         takedown_change_set = change_set_class.new(persisted)
-        takedown_change_set.prepopulate!
         takedown_change_set.validate(state: "draft")
         change_set_persister.save(change_set: takedown_change_set)
 
@@ -205,7 +199,6 @@ RSpec.describe ChangeSetPersister do
     it "mints an ARK" do
       resource = FactoryBot.create(:draft_simple_resource)
       change_set = change_set_class.new(resource)
-      change_set.prepopulate!
       change_set.validate(state: "complete")
       output = change_set_persister.save(change_set: change_set)
       expect(output.identifier.first).to eq "ark:/#{shoulder}#{blade}"
@@ -216,19 +209,16 @@ RSpec.describe ChangeSetPersister do
       let(:change_set_class) { PlaylistChangeSet }
       let(:change_set) { change_set_class.new(resource) }
       let(:persisted) do
-        change_set.prepopulate!
         change_set.validate(state: "complete")
         change_set_persister.save(change_set: change_set)
       end
       let(:take_down) do
         takedown_change_set = change_set_class.new(persisted)
-        takedown_change_set.prepopulate!
         takedown_change_set.validate(state: "draft")
         change_set_persister.save(change_set: takedown_change_set)
       end
       let(:completed) do
         complete_change_set = change_set_class.new(take_down)
-        complete_change_set.prepopulate!
         complete_change_set.validate(state: "complete")
         change_set_persister.save(change_set: complete_change_set)
       end
@@ -434,20 +424,17 @@ RSpec.describe ChangeSetPersister do
     it "runs characterization for all files when added in sequence with the same persister", run_real_derivatives: true do
       resource = FactoryBot.create_for_repository(:scanned_resource)
       change_set = change_set_class.new(resource)
-      change_set.prepopulate!
       change_set.validate(files: [file])
       output = change_set_persister.save(change_set: change_set)
 
       change_set_persister.buffer_into_index do |buffered_change_set_persister|
         change_set = change_set_class.new(output)
-        change_set.prepopulate!
         change_set.validate(ocr_language: "eng")
         output = buffered_change_set_persister.save(change_set: change_set)
       end
 
       change_set_persister.buffer_into_index do |buffered_change_set_persister|
         change_set = change_set_class.new(output)
-        change_set.prepopulate!
         change_set.validate(files: [file])
         output = buffered_change_set_persister.save(change_set: change_set)
       end
@@ -896,7 +883,6 @@ RSpec.describe ChangeSetPersister do
     it "destroys any active authorization tokens" do
       resource = FactoryBot.create(:playlist)
       change_set = PlaylistChangeSet.new(resource)
-      change_set.prepopulate!
       change_set.validate(state: "complete")
       output = change_set_persister.save(change_set: change_set)
 
@@ -912,7 +898,6 @@ RSpec.describe ChangeSetPersister do
       let(:change_set_class) { PlaylistChangeSet }
       let(:change_set) { change_set_class.new(resource) }
       let(:completed) do
-        change_set.prepopulate!
         change_set.validate(state: "complete")
         change_set_persister.save(change_set: change_set)
       end
@@ -1058,12 +1043,12 @@ RSpec.describe ChangeSetPersister do
         child = FactoryBot.create_for_repository(:scanned_resource, read_groups: [])
         resource = FactoryBot.build(:scanned_resource, read_groups: [])
         resource.member_ids = [child.id]
-        change_set = DynamicChangeSet.new(resource).prepopulate!
+        change_set = DynamicChangeSet.new(resource)
         resource = change_set_persister.save(change_set: change_set)
         adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
         child = adapter.query_service.find_by(id: child.id)
 
-        change_set = change_set_class.new(resource).prepopulate!
+        change_set = change_set_class.new(resource)
         updated = change_set_persister.save(change_set: change_set)
 
         members = query_service.find_members(resource: updated)
@@ -1238,7 +1223,6 @@ RSpec.describe ChangeSetPersister do
         stub_bibdata(bib_id: "4609321")
         resource = FactoryBot.build(:pending_private_scanned_resource)
         change_set = change_set_class.new(resource)
-        change_set.prepopulate!
         change_set.validate(source_metadata_identifier: "4609321", set_visibility_by_date: "1")
 
         output = change_set_persister.save(change_set: change_set)
@@ -1253,7 +1237,6 @@ RSpec.describe ChangeSetPersister do
         stub_bibdata(bib_id: "123456")
         resource = FactoryBot.build(:pending_private_scanned_resource)
         change_set = change_set_class.new(resource)
-        change_set.prepopulate!
         change_set.validate(source_metadata_identifier: "123456", set_visibility_by_date: "1")
 
         output = change_set_persister.save(change_set: change_set)
@@ -1268,7 +1251,6 @@ RSpec.describe ChangeSetPersister do
         stub_bibdata(bib_id: "123456789")
         resource = FactoryBot.build(:pending_scanned_resource)
         change_set = change_set_class.new(resource)
-        change_set.prepopulate!
         change_set.validate(source_metadata_identifier: "123456789", set_visibility_by_date: "1")
 
         output = change_set_persister.save(change_set: change_set)
@@ -1283,7 +1265,6 @@ RSpec.describe ChangeSetPersister do
         stub_bibdata(bib_id: "123456")
         resource = FactoryBot.build(:pending_scanned_resource)
         change_set = change_set_class.new(resource)
-        change_set.prepopulate!
         change_set.validate(source_metadata_identifier: "123456")
 
         output = change_set_persister.save(change_set: change_set)
@@ -1303,7 +1284,6 @@ RSpec.describe ChangeSetPersister do
 
     before do
       stub_pulfa(pulfa_id: "C0652")
-      change_set.prepopulate!
       change_set.source_metadata_identifier = "C0652"
     end
 
@@ -1359,7 +1339,6 @@ RSpec.describe ChangeSetPersister do
       let(:resource) { Playlist.new }
       let(:change_set) do
         cs = PlaylistChangeSet.new(resource)
-        cs.prepopulate!
         cs.validate(title: ["test label"], file_set_ids: [file_set.id])
         cs
       end
@@ -1381,7 +1360,6 @@ RSpec.describe ChangeSetPersister do
       context "when deleting ProxyFileSet members of a Playlist" do
         before do
           cs = ProxyFileSetChangeSet.new(proxy)
-          cs.prepopulate!
           change_set_persister.delete(change_set: cs)
         end
         it "deletes the proxies and removes them as members of the Playlist" do
@@ -1402,13 +1380,11 @@ RSpec.describe ChangeSetPersister do
       let(:proxy_file_set) do
         proxy_file_set = ProxyFileSet.new
         cs = ProxyFileSetChangeSet.new(proxy_file_set)
-        cs.prepopulate!
         cs.validate(proxied_file_id: file_set.id)
         change_set_persister.save(change_set: cs)
       end
       let(:change_set) do
         cs = PlaylistChangeSet.new(resource)
-        cs.prepopulate!
         cs.validate(title: ["test label"], member_ids: [proxy_file_set.id])
         cs
       end
@@ -1445,7 +1421,6 @@ RSpec.describe ChangeSetPersister do
       resource = FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id])
 
       change_set = DynamicChangeSet.new(collection)
-      change_set.prepopulate!
       change_set.validate(title: "New Title")
 
       change_set_persister.save(change_set: change_set)
@@ -1460,7 +1435,6 @@ RSpec.describe ChangeSetPersister do
       project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [box.id], title: "Old Title")
 
       change_set = DynamicChangeSet.new(project)
-      change_set.prepopulate!
       change_set.validate(title: "New Title")
 
       change_set_persister.save(change_set: change_set)
@@ -1480,7 +1454,6 @@ RSpec.describe ChangeSetPersister do
       file_set2 = FactoryBot.create_for_repository(:file_set)
 
       change_set = DynamicChangeSet.new(playlist)
-      change_set.prepopulate!
       change_set.validate(title: "Test Title", file_set_ids: [file_set2.id.to_s, file_set.id.to_s])
       expect(change_set.file_set_ids).to eq [file_set2.id, file_set.id]
 
@@ -1506,7 +1479,6 @@ RSpec.describe ChangeSetPersister do
       # `file_set_ids` on the ChangeSet. file_set1 is already attached through
       # `proxy`.
       change_set = DynamicChangeSet.new(playlist)
-      change_set.prepopulate!
       change_set.validate(title: "Test Title", file_set_ids: [file_set1.id.to_s, file_set2.id.to_s])
       output = change_set_persister.save(change_set: change_set)
       members = query_service.find_members(resource: output)

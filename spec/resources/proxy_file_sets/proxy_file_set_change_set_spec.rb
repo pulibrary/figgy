@@ -9,16 +9,11 @@ RSpec.describe ProxyFileSetChangeSet do
 
   describe "#prepopulate!" do
     it "sets default private visibility" do
-      change_set.prepopulate!
       expect(change_set.visibility).to eq visibility
     end
   end
 
   describe "validations" do
-    before do
-      change_set.prepopulate!
-    end
-
     context "label" do
       let(:proxy_file_set) { ProxyFileSet.new }
       it "is required" do

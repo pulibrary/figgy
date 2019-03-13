@@ -92,7 +92,6 @@ class IngestMETSJob < ApplicationJob
     # @return [ScannedResource] the persisted resource with the logical structure assigned
     def assign_attributes(resource)
       new_change_set = DynamicChangeSet.new(resource)
-      new_change_set.prepopulate!
       return resource unless new_change_set.validate(mets.attributes)
       new_change_set.sync
       change_set_persister.save(change_set: new_change_set)

@@ -16,7 +16,6 @@ RSpec.describe EphemeraBoxChangeSet do
 
   describe "drive_barcode" do
     it "is invalid if the drive barcode is invalid" do
-      change_set.prepopulate!
       expect(change_set).to be_valid
 
       change_set.drive_barcode = ["11111111111111"]
@@ -24,7 +23,6 @@ RSpec.describe EphemeraBoxChangeSet do
     end
 
     it "is valid if the drive barcode is valid" do
-      change_set.prepopulate!
       expect(change_set).to be_valid
       change_set.drive_barcode = ["11111111111110"]
       expect(change_set).to be_valid
@@ -33,7 +31,6 @@ RSpec.describe EphemeraBoxChangeSet do
 
   describe "#state" do
     it "pre-populates" do
-      change_set.prepopulate!
       expect(change_set.state).to eq "new"
     end
 
@@ -45,9 +42,6 @@ RSpec.describe EphemeraBoxChangeSet do
       let(:storage_adapter) { Valkyrie.config.storage_adapter }
       let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
 
-      before do
-        change_set.prepopulate!
-      end
       it "propagates the state to member resources" do
         change_set.state = "all_in_production"
         persisted = change_set_persister.save(change_set: change_set)
@@ -61,14 +55,12 @@ RSpec.describe EphemeraBoxChangeSet do
   describe "validations" do
     context "when given a non-UUID for a member resource" do
       it "is not valid" do
-        change_set.prepopulate!
         change_set.validate(member_ids: ["not-valid"])
         expect(change_set).not_to be_valid
       end
     end
     context "when given a valid UUID for a member resource which does not exist" do
       it "is not valid" do
-        change_set.prepopulate!
         change_set.validate(member_ids: ["55a14e79-710d-42c1-86aa-3d8cdaa62930"])
         expect(change_set).not_to be_valid
       end

@@ -19,7 +19,7 @@ class ChangeSetPersister
     def run
       return if new_collection_record
       members.each do |member|
-        resource_change_set = DynamicChangeSet.new(member).prepopulate!
+        resource_change_set = DynamicChangeSet.new(member)
         resource_change_set = propagate_visibility(resource_change_set)
         resource_change_set = propagate_state_for_related(resource_change_set)
         # we need to save these through the change set persister so the member

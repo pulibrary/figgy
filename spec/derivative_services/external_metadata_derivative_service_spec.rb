@@ -57,6 +57,6 @@ RSpec.describe ExternalMetadataDerivativeService do
     parent = query_service.find_by(id: parent_resource.id)
     expect(parent.title).to eq ["China census data by county, 2000-2010"]
     expect(parent.visibility).to eq ["open"]
-    expect(event_generator).to have_received(:record_updated).twice
+    expect(event_generator).to have_received(:record_updated).exactly(3).times
   end
 end

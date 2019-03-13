@@ -14,7 +14,6 @@ class IngestIntermediateFileJob < ApplicationJob
     @file_path = file_path
 
     change_set = FileSetChangeSet.new(file_set)
-    change_set.prepopulate!
 
     # Delete all existing derivatives
     derivative_file_ids = []

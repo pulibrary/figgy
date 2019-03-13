@@ -36,7 +36,7 @@ class AudioDerivativeService
   end
 
   def change_set
-    @change_set ||= DynamicChangeSet.new(resource).prepopulate!
+    @change_set ||= DynamicChangeSet.new(resource)
   end
 
   def valid?
@@ -61,7 +61,7 @@ class AudioDerivativeService
     File.open(hls_file, "w") do |f|
       f.puts content
     end
-    change_set = DynamicChangeSet.new(output).prepopulate!
+    change_set = DynamicChangeSet.new(output)
     change_set.files = [build_file(hls_file, filename: "hls.m3u8")]
     change_set_persister.buffer_into_index do |buffered_persister|
       buffered_persister.save(change_set: change_set)

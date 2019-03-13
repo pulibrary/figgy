@@ -49,7 +49,7 @@ class ImageDerivativeService
   end
 
   def change_set
-    @change_set ||= DynamicChangeSet.new(resource).prepopulate!
+    @change_set ||= DynamicChangeSet.new(resource)
   end
 
   # If there are intermediate files with the supported format attached to the

@@ -8,7 +8,6 @@ class BulkEditService
     c.decorate.members.each do |member|
       logger.info "Updating attributes for #{member}"
       change_set = DynamicChangeSet.new(member)
-      change_set.prepopulate!
       if change_set.validate(attributes)
         change_set_persister.save(change_set: change_set)
       else

@@ -11,7 +11,6 @@ RSpec.describe ScannedMapChangeSet do
 
   describe "#workflow" do
     it "has a workflow" do
-      change_set.prepopulate!
       expect(change_set.workflow).to be_a(GeoWorkflow)
       expect(change_set.workflow.pending?).to be true
     end

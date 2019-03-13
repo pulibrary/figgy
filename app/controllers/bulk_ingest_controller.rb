@@ -128,7 +128,6 @@ class BulkIngestController < ApplicationController
 
     def build_change_set(attrs)
       change_set = DynamicChangeSet.new(build_resource)
-      change_set.prepopulate!
       change_set.validate(**attrs)
       change_set
     end

@@ -15,7 +15,6 @@ class VoyagerUpdateJob < ApplicationJob
           change_set = DynamicChangeSet.new(resource)
           next unless change_set.respond_to?(:apply_remote_metadata?) && change_set.respond_to?(:source_metadata_identifier)
 
-          change_set.prepopulate!
           change_set.validate(refresh_remote_metadata: "1")
 
           logger.info "Processing updates for Voyager record #{id} imported into resource #{resource.id}..."
