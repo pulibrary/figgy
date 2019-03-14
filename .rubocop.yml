@@ -147,6 +147,7 @@ Metrics/MethodLength:
     - 'app/controllers/concerns/resource_controller.rb'
     - 'app/models/search_builder.rb'
     - 'app/helpers/application_helper.rb'
+    - 'app/change_sets/change_set.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
