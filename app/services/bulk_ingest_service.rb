@@ -174,7 +174,7 @@ class BulkIngestService
           basename = File.basename(f)
           mime_types = MIME::Types.type_for(basename)
           mime_type = mime_types.first
-          title = if preserved_file_name_mime_types.include?(mime_type.content_type)
+          title = if mime_type && preserved_file_name_mime_types.include?(mime_type.content_type)
                     basename
                   else
                     (idx + 1).to_s
