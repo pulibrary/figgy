@@ -34,7 +34,6 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
           :note,
           :member_of_collections,
           :rendered_rights_statement,
-          :artist,
           :subject,
           :replaces,
           :visibility
