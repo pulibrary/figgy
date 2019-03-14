@@ -1,5 +1,8 @@
 # frozen_string_literal: true
+require "reform/form/active_model/form_builder_methods"
 class ChangeSet < Valkyrie::ChangeSet
+  include Reform::Form::ActiveModel
+  include Reform::Form::ActiveModel::FormBuilderMethods
   class_attribute :workflow_class
   class_attribute :feature_terms
   self.feature_terms = []
