@@ -10,7 +10,7 @@ export default class SaveAndIngestHandler {
       this.button_element.val('Searching...')
       let change_set = window.location.pathname.split('/').pop()
       let qs = {}
-      if (change_set !== 'new') {
+      if (change_set !== 'new' && change_set !== 'edit') {
         qs = { 'change_set': change_set }
       }
       if (this.current_promise) {
