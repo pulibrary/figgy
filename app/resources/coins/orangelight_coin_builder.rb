@@ -25,6 +25,7 @@ class OrangelightCoinBuilder
       {
         id: decorator.orangelight_id,
         title_display: "Coin: #{decorator.coin_number}",
+        pub_created_display: decorator.pub_created_display,
         access_facet: ["Online", "In the Library"],
         location: decorator.holding_location,
         format: ["Coin"],

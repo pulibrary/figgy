@@ -41,6 +41,10 @@ class CoinDecorator < Valkyrie::ResourceDecorator
     decorated_numismatic_artists.map(&:title)
   end
 
+  def pub_created_display
+    [decorated_parent.ruler, decorated_parent.denomination, decorated_parent.workshop].join(", ")
+  end
+
   def manageable_files?
     true
   end
