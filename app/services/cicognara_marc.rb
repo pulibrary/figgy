@@ -59,6 +59,7 @@ class CicognaraMarc
       bib_number = record["001"].value
       writer = MARC::XMLWriter.new(File.join(out_dir, "#{bib_number}_marc.xml"))
       writer.write(record)
+      writer.close
     end
 
     def wayfinder

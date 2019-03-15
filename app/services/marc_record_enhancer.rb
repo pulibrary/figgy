@@ -20,33 +20,48 @@ class MarcRecordEnhancer
   end
 
   def enhance_cicognara
-    add_856es
     add_024
     add_510
+    add_856_ark
+    add_856_manifest
     marc
   end
 
   private
 
-    def add_856es
+    def add_856_ark
       return unless resource.try(:identifier)&.present?
       ark = Ark.new(resource.identifier.first).uri
+      marc.append(MARC::DataField.new("856", "4", "1", MARC::Subfield.new("u", ark))) unless existing_856(ark)
+    end
+
+    def add_856_manifest
+      return unless resource.try(:identifier)&.present?
       manifest = Rails.application.routes.url_helpers.polymorphic_url([:manifest, resource])
-      marc.append(MARC::DataField.new("856", "4", "1", MARC::Subfield.new("u", manifest))) unless url_strings.include? manifest
-      marc.append(MARC::DataField.new("856", "4", "1", MARC::Subfield.new("u", ark))) unless url_strings.include? ark
+      manifest856 = existing_856(manifest)
+      unless manifest856
+        manifest856 = MARC::DataField.new("856", "4", "1", MARC::Subfield.new("u", manifest))
+        marc.append(manifest856)
+      end
+
+      manifest856_q = manifest856.subfields.select { |s| s.code == "q" }.first
+      manifest856.append(MARC::Subfield.new("q", "JSON (IIIF Manifest)")) unless manifest856_q
     end
 
     def add_024
       return unless resource.try(:local_identifier)&.present?
-      dcl = resource.local_identifier.first
-      return if standard_identifiers.include? dcl
-      marc.append(
-        MARC::DataField.new(
-          "024", "7", " ",
-          MARC::Subfield.new("a", dcl),
-          MARC::Subfield.new("2", "dclib")
-        )
-      )
+      dcl_numbers = resource.local_identifier.select { |s| s.start_with?("dcl:") }.uniq
+      dcl_numbers.each do |dcl|
+        dcl024 = existing_024s(dcl).first
+        if dcl024
+          dcl024.indicator1 = "8"
+          subfield2 = dcl024.subfields.select { |s| s.code == "2" }.first
+          dcl024.subfields.delete(subfield2) if subfield2
+        else
+          dcl024 = MARC::DataField.new("024", "8", " ", MARC::Subfield.new("a", dcl))
+          marc.append(dcl024)
+        end
+      end
     end
 
     def add_510
@@ -64,19 +79,19 @@ class MarcRecordEnhancer
       )
     end
 
-    def url_strings
-      @url_strings ||= begin
-        url_fields = marc.fields("856").select do |field|
-          field.indicator1.eql? "4"
-          field.indicator2.eql? "1"
-        end
-        url_fields.flat_map(&:subfields).select { |s| s.code == "u" }.map(&:value)
-      end
+    def existing_856s
+      @existing_856s ||= marc.fields("856").select { |f| f.indicator1.eql?("4") && f.indicator2.eql?("1") }
     end
 
-    def standard_identifiers
-      marc.fields("024").map do |field|
-        field.subfields.select { |s| s.code == "a" }.map(&:value).first
+    def existing_856(uri)
+      existing_856s.select do |f|
+        f.subfields.select { |s| s.code == "u" }.first.value == uri
+      end.first
+    end
+
+    def existing_024s(id)
+      marc.fields("024").select do |f|
+        f.subfields.select { |s| s.code == "a" }.first.value == id
       end
     end
 

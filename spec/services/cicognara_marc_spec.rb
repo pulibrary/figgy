@@ -32,6 +32,7 @@ RSpec.describe CicognaraMarc do
         allow(enhancer2).to receive(:enhance_cicognara).and_return(minimal_record2)
         allow(MARC::XMLWriter).to receive(:new).and_return(writer)
         allow(writer).to receive(:write)
+        allow(writer).to receive(:close)
       end
 
       it "puts a marc file per bibid in a specified directory" do
@@ -48,6 +49,7 @@ RSpec.describe CicognaraMarc do
         FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429")
         allow(MARC::XMLWriter).to receive(:new).and_return(writer)
         allow(writer).to receive(:write)
+        allow(writer).to receive(:close)
         stub_bibdata(bib_id: "8543429", content_type: BibdataStubbing::CONTENT_TYPE_MARC_XML)
       end
 
@@ -71,6 +73,7 @@ RSpec.describe CicognaraMarc do
         allow(enhancer).to receive(:enhance_cicognara).and_return(minimal_record)
         allow(MARC::XMLWriter).to receive(:new).and_return(writer)
         allow(writer).to receive(:write)
+        allow(writer).to receive(:close)
       end
 
       it "writes just one marc record" do
@@ -97,6 +100,7 @@ RSpec.describe CicognaraMarc do
         allow(enhancer2).to receive(:enhance_cicognara).and_return(minimal_record2)
         allow(MARC::XMLWriter).to receive(:new).and_return(writer)
         allow(writer).to receive(:write)
+        allow(writer).to receive(:close)
       end
 
       it "writes just one marc record" do
@@ -123,6 +127,7 @@ RSpec.describe CicognaraMarc do
         allow(enhancer2).to receive(:enhance_cicognara).and_return(minimal_record2)
         allow(MARC::XMLWriter).to receive(:new).and_return(writer)
         allow(writer).to receive(:write)
+        allow(writer).to receive(:close)
       end
 
       it "writes just one marc record" do
@@ -175,16 +180,20 @@ RSpec.describe CicognaraMarc do
         MARC::DataField.new("856", "4", "1", MARC::Subfield.new("u", "http://arks.princeton.edu/ark:/88435/#{blade2}"))
       end
       let(:manifest_856_1) do
-        MARC::DataField.new("856", "4", "1", MARC::Subfield.new("u", manifest_url_1))
+        f = MARC::DataField.new("856", "4", "1", MARC::Subfield.new("u", manifest_url_1))
+        f.append(MARC::Subfield.new("q", "JSON (IIIF Manifest)"))
+        f
       end
       let(:manifest_856_2) do
-        MARC::DataField.new("856", "4", "1", MARC::Subfield.new("u", manifest_url_2))
+        f = MARC::DataField.new("856", "4", "1", MARC::Subfield.new("u", manifest_url_2))
+        f.append(MARC::Subfield.new("q", "JSON (IIIF Manifest)"))
+        f
       end
       let(:manifest_url_1) { Rails.application.routes.url_helpers.polymorphic_url([:manifest, resource1]) }
       let(:manifest_url_2) { Rails.application.routes.url_helpers.polymorphic_url([:manifest, resource2]) }
       let(:metadata_mock) { double }
-      let(:li1) { "dlc:li1" }
-      let(:li2) { "dlc:li2" }
+      let(:li1) { "dcl:li1" }
+      let(:li2) { "dcl:li2" }
       let(:ref1) { "123" }
       let(:ref2) { "456" }
       let(:blade1) { "jm214s442" }
