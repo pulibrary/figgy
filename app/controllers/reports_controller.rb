@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 require "csv"
 class ReportsController < ApplicationController
+  include ActionController::Streaming
+  include Zipline
+
   def ephemera_data
     authorize! :show, Report
     if params[:project_id]
@@ -50,8 +53,11 @@ class ReportsController < ApplicationController
     authorize! :show, Report
     if params[:since_date]
       # find EADs and convert to MARC XML
-      zipline(updated_eads_to_marcxml(params[:since_date]),
-              "ead-to-marc-#{params[:since_date]}-to-#{Time.zone.today}.zip")
+      Dir.mktmpdir do |tmpdir|
+        convert_updated_eads_to_marcxml(params[:since_date], tmpdir)
+        marc_files = Dir["#{tmpdir}/*.MARC.xml"].map { |fn| [File.new(fn), fn.gsub("#{tmpdir}/", "")] }
+        zipline(marc_files, "ead-to-marc-#{params[:since_date]}-to-#{Time.zone.today}.zip")
+      end
     else
       # display form for entering date
       respond_to do |format|
@@ -95,11 +101,13 @@ class ReportsController < ApplicationController
       end
     end
 
-    def updated_eads_to_marcxml(since_date)
-      xsl = Nokogiri::XSLT(File.read(Rails.root.join("app", "assets", "xsl", "ead-to-marc.xsl")))
+    def convert_updated_eads_to_marcxml(since_date, tmpdir)
+      xsl = Rails.root.join("app", "assets", "xsl", "ead-to-marc.xsl")
       svn_client.updated_collection_paths(since_date).map do |ead_path|
-        ead_xml = svn_client.get_collection(ead_path)
-        [xsl.transform(Nokogiri::XML(ead_xml)), ead_path.gsub(/EAD.xml/, "MARC.xml")]
+        ead_fn = File.join(tmpdir, ead_path.tr("/", "-"))
+        marc_fn = ead_fn.gsub(/EAD.xml/, "MARC.xml")
+        File.open(ead_fn, "w") { |f| f.write(svn_client.get_collection(ead_path)) }
+        system(%(java -jar bin/saxon9he.jar -s:#{ead_fn} -xsl:#{xsl} > #{marc_fn}))
       end
     end
 
