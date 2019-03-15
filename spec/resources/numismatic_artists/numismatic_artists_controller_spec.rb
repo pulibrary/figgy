@@ -21,35 +21,35 @@ RSpec.describe NumismaticArtistsController, type: :controller do
     context "access control" do
       it_behaves_like "an access controlled create request"
     end
-    context "adding to a parent coin" do
+    context "adding to a parent issue" do
       let(:user) { FactoryBot.create(:admin) }
-      let(:coin) { FactoryBot.create_for_repository(:coin) }
+      let(:issue) { FactoryBot.create_for_repository(:numismatic_issue) }
 
-      it "adds the id to the coin's artist ids and redirects to parent coin" do
-        post :create, params: { numismatic_artist: params.merge(artist_parent_id: coin.id) }
+      it "adds the id to the issue's artist ids and redirects to parent issue" do
+        post :create, params: { numismatic_artist: params.merge(artist_parent_id: issue.id) }
 
-        updated = Valkyrie.config.metadata_adapter.query_service.find_by(id: coin.id)
+        updated = Valkyrie.config.metadata_adapter.query_service.find_by(id: issue.id)
         expect(updated.numismatic_artist_ids).not_to be_empty
-        expect(response).to redirect_to("http://test.host/catalog/#{coin.id}")
+        expect(response).to redirect_to("http://test.host/catalog/#{issue.id}")
       end
     end
   end
   describe "destroy" do
     let(:user) { FactoryBot.create(:admin) }
     let(:numismatic_artist) { FactoryBot.create_for_repository(:numismatic_artist) }
-    let(:coin) { FactoryBot.create(:coin) }
+    let(:issue) { FactoryBot.create(:numismatic_issue) }
 
     context "access control" do
       let(:factory) { :numismatic_artist }
       it_behaves_like "an access controlled destroy request"
     end
 
-    it "redirects to the parent coin" do
+    it "redirects to the parent issue" do
       numismatic_artist = FactoryBot.create_for_repository(:numismatic_artist)
-      coin = FactoryBot.create_for_repository(:coin, numismatic_artist_ids: [numismatic_artist.id])
+      issue = FactoryBot.create_for_repository(:numismatic_issue, numismatic_artist_ids: [numismatic_artist.id])
 
       delete :destroy, params: { id: numismatic_artist.id }
-      expect(response).to redirect_to solr_document_path(coin)
+      expect(response).to redirect_to solr_document_path(issue)
     end
   end
 

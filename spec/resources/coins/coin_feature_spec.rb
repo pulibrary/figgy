@@ -122,9 +122,8 @@ RSpec.feature "Coins" do
     end
   end
 
-  context "when a coin has citation and artist" do
-    let(:coin) { FactoryBot.create_for_repository(:coin, numismatic_artist_ids: [artist.id]) }
-    let(:artist) { FactoryBot.create_for_repository(:numismatic_artist) }
+  context "a coin has citation but no artist" do
+    let(:coin) { FactoryBot.create_for_repository(:coin) }
 
     before do
       visit solr_document_path coin
@@ -132,10 +131,7 @@ RSpec.feature "Coins" do
 
     it "displays Add Citation button" do
       expect(page).to have_link "Add Citation", href: parent_add_numismatic_citation_path(coin, parent_id: coin.id)
-    end
-
-    it "displays Add Artist button" do
-      expect(page).to have_link "Add Artist", href: parent_add_numismatic_artist_path(coin, parent_id: coin.id)
+      expect(page).not_to have_link "Add Artist", href: parent_add_numismatic_artist_path(coin, parent_id: coin.id)
     end
   end
 end
