@@ -11,7 +11,6 @@ class NumismaticIssue < Resource
   attribute :numismatic_monogram_ids
 
   # descriptive metadata
-  attribute :artist
   attribute :color
   attribute :date_range
   attribute :denomination

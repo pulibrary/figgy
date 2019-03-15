@@ -71,7 +71,6 @@ describe OrangelightDocument do
                                          reverse_figure_relationship: "corn-ear behind head",
                                          reverse_legend: "•HIBERNIA•1723•",
                                          reverse_attributes: ["above", "2 within Є"],
-                                         artist: ["André Galle"],
                                          subject: ["unicorn"])
       end
 

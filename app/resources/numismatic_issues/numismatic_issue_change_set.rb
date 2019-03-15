@@ -5,7 +5,6 @@ class NumismaticIssueChangeSet < ChangeSet
 
   include VisibilityProperty
   include DateRangeProperty
-  property :artist, multiple: true, required: false, default: []
   property :color, multiple: false, required: false
   property :denomination, multiple: false, required: false
   property :edge, multiple: false, required: false
@@ -113,7 +112,6 @@ class NumismaticIssueChangeSet < ChangeSet
         :rights_note
       ],
       "Artists and Subjects" => [
-        :artist,
         :subject,
         :numismatic_monogram_ids
       ]
