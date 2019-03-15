@@ -10,7 +10,6 @@ RSpec.describe BoxlessEphemeraFolderChangeSet do
     let(:valid_params) { { barcode: "", title: ["foo"], language: ["English"], page_count: [1], visibility: ["private"], rights_statement: RightsStatements.copyright_not_evaluated.to_s } }
 
     it "requires title, language, genre, page_count, visibility, and rights_statement" do
-      change_set.prepopulate!
       expect(change_set.validate(valid_params)).to eq true
     end
   end

@@ -5,7 +5,7 @@ module BoundingBoxHelper
   # rubocop:disable Rails/OutputSafety
   def bbox_input(property, change_set)
     markup = ""
-    markup << %(<div id='bbox' data-coverage='#{change_set.coverage}' data-input-id='#{bbox_input_id(property, change_set)}'></div>)
+    markup << %(<div id='bbox' data-coverage='#{change_set.resource.coverage}' data-input-id='#{bbox_input_id(property, change_set)}'></div>)
     markup << bbox_display_inputs
     markup.html_safe
   end

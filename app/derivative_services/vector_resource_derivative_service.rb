@@ -37,7 +37,7 @@ class VectorResourceDerivativeService
   end
 
   def change_set
-    @change_set ||= DynamicChangeSet.new(resource).prepopulate!
+    @change_set ||= DynamicChangeSet.new(resource)
   end
 
   def build_display_file

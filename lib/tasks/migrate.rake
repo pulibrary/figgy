@@ -15,7 +15,6 @@ namespace :migrate do
   task ephemera_folders: :environment do
     resources(model: EphemeraFolder).each do |resource|
       cs = DynamicChangeSet.new(resource)
-      cs.prepopulate!
       logger.info "Migrating folders within the box #{resource.id}..."
       change_set_persister.save(change_set: cs)
     end
@@ -34,7 +33,6 @@ namespace :migrate do
             logger.info "Migrating the collections for member resource #{child.id}..."
 
             child_change_set = DynamicChangeSet.new(child)
-            child_change_set.prepopulate!
             child_change_set.validate(member_of_collection_ids: [])
 
             buffered_change_set_persister.save(change_set: child_change_set)

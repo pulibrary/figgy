@@ -9,7 +9,6 @@ RSpec.describe MissingThumbnailJob do
       sr = FactoryBot.create_for_repository(:scanned_resource, files: [file])
       change_set = ScannedResourceChangeSet.new(sr)
       change_set.thumbnail_id = nil
-      change_set.prepopulate!
       change_set_persister.save(change_set: change_set)
     end
     let(:metadata_adapter) { Valkyrie.config.metadata_adapter }

@@ -11,7 +11,6 @@ FactoryBot.define do
     after(:create) do |resource, evaluator|
       if evaluator.files.present?
         change_set = NumismaticMonogramChangeSet.new(resource, files: evaluator.files)
-        change_set.prepopulate!
         ::ChangeSetPersister.new(
           metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
           storage_adapter: Valkyrie.config.storage_adapter

@@ -9,25 +9,21 @@ describe PlaylistWayfinder do
   let(:file_set1) do
     res = FileSet.new(title: "Symphony No. 14 in A major, K. 114")
     cs = FileSetChangeSet.new(res)
-    cs.prepopulate!
     change_set_persister.save(change_set: cs)
   end
   let(:file_set2) do
     res = FileSet.new(title: "Einleitung - I")
     cs = FileSetChangeSet.new(res)
-    cs.prepopulate!
     change_set_persister.save(change_set: cs)
   end
   let(:proxy1) do
     res = ProxyFileSet.new(proxied_file_id: file_set1.id)
     cs = ProxyFileSetChangeSet.new(res)
-    cs.prepopulate!
     change_set_persister.save(change_set: cs)
   end
   let(:proxy2) do
     res = ProxyFileSet.new(proxied_file_id: file_set2.id)
     cs = ProxyFileSetChangeSet.new(res)
-    cs.prepopulate!
     change_set_persister.save(change_set: cs)
   end
   let(:resource) do

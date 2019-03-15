@@ -17,7 +17,6 @@ class ChangeSetPersister
       parents.each do |parent|
         parent_change_set = DynamicChangeSet.new(parent)
         next unless parent_change_set.respond_to? :logical_structure
-        parent_change_set.prepopulate!
         parent_change_set.logical_structure.each do |structure|
           recursive_delete(structure.nodes, @change_set.id)
         end

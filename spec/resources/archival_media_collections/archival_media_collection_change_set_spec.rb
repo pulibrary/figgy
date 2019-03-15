@@ -6,10 +6,6 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
   let(:collection) { FactoryBot.build(:archival_media_collection, state: "draft") }
   let(:form_resource) { collection }
 
-  before do
-    change_set.prepopulate!
-  end
-
   describe "#source_metadata_identifier" do
     it "is single-valued and required" do
       expect(change_set.multiple?(:source_metadata_identifier)).to eq false
@@ -138,7 +134,7 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
         IngestArchivalMediaBagJob.perform_now(collection_component: collection_cid, bag_path: av_fixture_bag, user: nil)
         # retrieve the collection via the query service and put it in a change set with the bag
         collection = query_service.find_by(id: collection.id)
-        change_set = described_class.new(collection, bag_path: av_fixture_bag).prepopulate!
+        change_set = described_class.new(collection, bag_path: av_fixture_bag)
         expect(change_set).not_to be_valid
       end
     end
@@ -173,7 +169,7 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
         IngestArchivalMediaBagJob.perform_now(collection_component: collection_cid, bag_path: av_fixture_bag, user: nil)
         # retrieve the collection via the query service and put it in a change set with the bag
         collection = query_service.find_by(id: collection.id)
-        change_set = described_class.new(collection, bag_path: av_fixture_bag).prepopulate!
+        change_set = described_class.new(collection, bag_path: av_fixture_bag)
         expect(change_set).not_to be_valid
       end
     end
@@ -187,7 +183,6 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
 
   describe "#workflow" do
     it "has a workflow" do
-      change_set.prepopulate!
       expect(change_set.workflow).to be_a(DraftCompleteWorkflow)
       expect(change_set.workflow.draft?).to be true
     end

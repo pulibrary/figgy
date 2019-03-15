@@ -15,9 +15,6 @@ RSpec.describe MediaResourceChangeSet do
     end
   end
   describe "validations" do
-    before do
-      change_set.prepopulate!
-    end
     it "is valid by default" do
       expect(change_set).to be_valid
     end
@@ -50,8 +47,6 @@ RSpec.describe MediaResourceChangeSet do
   describe "#rights_statement" do
     let(:form_resource) { MediaResource.new(rights_statement: RDF::URI(rights_statement)) }
     it "is singular, required, and converts to an RDF::URI" do
-      change_set.prepopulate!
-
       expect(change_set.rights_statement).to eq RDF::URI(rights_statement)
       change_set.validate(rights_statement: "")
       expect(change_set).not_to be_valid
@@ -61,8 +56,6 @@ RSpec.describe MediaResourceChangeSet do
     context "when given a blank MediaResource" do
       let(:form_resource) { MediaResource.new }
       it "sets a default Rights Statement" do
-        change_set.prepopulate!
-
         expect(change_set.rights_statement).to eq RDF::URI(rights_statement)
       end
     end
@@ -70,7 +63,6 @@ RSpec.describe MediaResourceChangeSet do
 
   describe "#workflow" do
     it "has a workflow" do
-      change_set.prepopulate!
       expect(change_set.workflow).to be_a(DraftCompleteWorkflow)
       expect(change_set.workflow.draft?).to be true
     end
@@ -100,7 +92,6 @@ RSpec.describe MediaResourceChangeSet do
 
     describe "#valid?" do
       it "is a valid change set" do
-        change_set.prepopulate!
         expect(change_set).to be_valid
       end
     end

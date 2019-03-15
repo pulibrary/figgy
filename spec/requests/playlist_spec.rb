@@ -15,7 +15,6 @@ RSpec.describe "Playlist requests", type: :request do
   let(:playlist) do
     res = Playlist.new
     cs = PlaylistChangeSet.new(res)
-    cs.prepopulate!
     cs.validate(label: ["my playlist"], file_set_ids: [file_set.id], state: "complete")
     change_set_persister.save(change_set: cs)
   end

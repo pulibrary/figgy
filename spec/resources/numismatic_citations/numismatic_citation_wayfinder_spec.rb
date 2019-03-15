@@ -9,13 +9,11 @@ describe NumismaticCitationWayfinder do
   let(:numismatic_citation) do
     res = NumismaticCitation.new(title: "athens")
     ch = NumismaticCitationChangeSet.new(res)
-    ch.prepopulate!
     change_set_persister.save(change_set: ch)
   end
   let(:coin) do
     res = Coin.new(title: "hercules", weight: 5, numismatic_citation_ids: [numismatic_citation.id])
     ch = CoinChangeSet.new(res)
-    ch.prepopulate!
     change_set_persister.save(change_set: ch)
   end
 

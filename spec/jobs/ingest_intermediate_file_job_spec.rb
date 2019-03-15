@@ -50,7 +50,6 @@ RSpec.describe IngestIntermediateFileJob do
 
       it "deletes the existing derivatives" do
         change_set = FileSetChangeSet.new(file_set)
-        change_set.prepopulate!
         change_set.validate(files: [second_file])
         change_set.sync
         change_set_persister.save(change_set: change_set)

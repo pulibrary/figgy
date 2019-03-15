@@ -19,7 +19,6 @@ RSpec.describe ChangeSetPersister::MintIdentifier do
     end
 
     it "mints a new ARK for published SimpleResources" do
-      change_set.prepopulate!
       change_set.validate(state: :complete)
 
       hook.run
@@ -32,7 +31,6 @@ RSpec.describe ChangeSetPersister::MintIdentifier do
       let(:existing_ark) { "ark:/#{shoulder}234567" }
       let(:simple_resource) { FactoryBot.create(:complete_simple_resource, identifier: existing_ark) }
       before do
-        change_set.prepopulate!
         change_set.validate(creator: "Johann Georg Faust")
       end
 
@@ -46,7 +44,6 @@ RSpec.describe ChangeSetPersister::MintIdentifier do
       let(:existing_ark) { "ark:/#{shoulder}234567" }
       let(:simple_resource) { FactoryBot.create(:complete_simple_resource, identifier: existing_ark) }
       before do
-        change_set.prepopulate!
         change_set.validate(title: "Doctor Faustens dreyfacher Höllenzwang")
       end
 
@@ -60,7 +57,6 @@ RSpec.describe ChangeSetPersister::MintIdentifier do
       let(:simple_resource) { FactoryBot.create(:complete_simple_resource, identifier: existing_ark) }
       let(:collection) { FactoryBot.create_for_repository(:collection) }
       before do
-        change_set.prepopulate!
         change_set.validate(member_of_collection_ids: [collection.id])
       end
       it "does not mint a new ARK" do
@@ -71,8 +67,6 @@ RSpec.describe ChangeSetPersister::MintIdentifier do
     context "when none of the relevant metadata has changed" do
       let(:simple_resource) { FactoryBot.create(:complete_simple_resource, identifier: new_ark) }
       it "does not run the hook" do
-        change_set.prepopulate!
-
         hook.run
 
         expect(hook.run).to be nil
@@ -81,8 +75,6 @@ RSpec.describe ChangeSetPersister::MintIdentifier do
     context "with an unpublished SimpleResource" do
       let(:simple_resource) { FactoryBot.create(:draft_simple_resource) }
       it "does not run the hook" do
-        change_set.prepopulate!
-
         hook.run
 
         expect(hook.run).to be nil
@@ -91,8 +83,6 @@ RSpec.describe ChangeSetPersister::MintIdentifier do
     context "with an Object of an unsupported Class" do
       let(:change_set) { EphemeraTermChangeSet.new(EphemeraTerm.new) }
       it "does not run the hook" do
-        change_set.prepopulate!
-
         expect(hook.run).to be nil
       end
     end

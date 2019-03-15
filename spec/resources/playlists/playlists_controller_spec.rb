@@ -81,7 +81,6 @@ RSpec.describe PlaylistsController, type: :controller do
         let(:proxy_file_set) do
           proxy = ProxyFileSet.new
           cs = ProxyFileSetChangeSet.new(proxy)
-          cs.prepopulate!
           change_set_persister.save(change_set: cs)
         end
 
@@ -101,13 +100,11 @@ RSpec.describe PlaylistsController, type: :controller do
         let(:proxy_file_set) do
           proxy = ProxyFileSet.new
           cs = ProxyFileSetChangeSet.new(proxy)
-          cs.prepopulate!
           change_set_persister.save(change_set: cs)
         end
         let(:proxy_file_set2) do
           proxy = ProxyFileSet.new
           cs = ProxyFileSetChangeSet.new(proxy)
-          cs.prepopulate!
           change_set_persister.save(change_set: cs)
         end
         let(:resource) { FactoryBot.create_for_repository(:playlist, member_ids: [proxy_file_set.id]) }
@@ -157,13 +154,11 @@ RSpec.describe PlaylistsController, type: :controller do
         let(:proxy1) do
           res = ProxyFileSet.new(proxied_file_id: file_set1.id)
           cs = ProxyFileSetChangeSet.new(res)
-          cs.prepopulate!
           change_set_persister.save(change_set: cs)
         end
         let(:proxy2) do
           res = ProxyFileSet.new(proxied_file_id: file_set2.id)
           cs = ProxyFileSetChangeSet.new(res)
-          cs.prepopulate!
           change_set_persister.save(change_set: cs)
         end
         let(:resource) do

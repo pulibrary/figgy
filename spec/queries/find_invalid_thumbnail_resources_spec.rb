@@ -10,7 +10,6 @@ RSpec.describe FindInvalidThumbnailResources do
     sr = FactoryBot.create_for_repository(:scanned_resource)
     change_set = ScannedResourceChangeSet.new(sr)
     change_set.thumbnail_id = "https://libimages1.princeton.edu/loris/figgy_prod/d7%2F44%2F84%2Fd74484d965664f95a9ac2634bd583775%2Fintermediate_file.jp2/full/!200,150/0/default.jpg"
-    change_set.prepopulate!
     change_set_persister.save(change_set: change_set)
   end
   let(:file) { fixture_file_upload("files/color-landscape.tif", "image/tiff") }

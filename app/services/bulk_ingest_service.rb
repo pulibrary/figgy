@@ -109,7 +109,6 @@ class BulkIngestService
       resource = klass.new
 
       change_set = change_set_class.new(resource)
-      change_set.prepopulate!
       return unless change_set.validate(**attributes)
       change_set.member_of_collection_ids = [collection.id] if collection.try(:id)
 

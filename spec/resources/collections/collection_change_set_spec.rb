@@ -4,9 +4,6 @@ require "rails_helper"
 RSpec.describe CollectionChangeSet do
   subject(:change_set) { described_class.new(collection) }
   let(:collection) { FactoryBot.build(:collection) }
-  before do
-    change_set.prepopulate!
-  end
   describe "#title" do
     it "is single-valued and required" do
       expect(change_set.multiple?(:title)).to eq false

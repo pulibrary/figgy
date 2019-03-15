@@ -283,7 +283,7 @@ RSpec.describe MarcRecordEnhancer do
     end
     let(:resource) do
       r = FactoryBot.build(:scanned_resource, source_metadata_identifier: "2085282")
-      change_set_persister.save(change_set: ScannedResourceChangeSet.new(r).prepopulate!)
+      change_set_persister.save(change_set: ScannedResourceChangeSet.new(r))
     end
     let(:marc_record) { MARC::Record.new }
     let(:enhancer) { described_class.new(marc: marc_record, resource: resource) }

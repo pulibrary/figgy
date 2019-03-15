@@ -94,7 +94,7 @@ class IngestEphemeraService
   end
 
   def change_set
-    @change_set ||= EphemeraFolderChangeSet.new(resource).tap(&:prepopulate!)
+    @change_set ||= EphemeraFolderChangeSet.new(resource)
   end
 
   def prov_metadata

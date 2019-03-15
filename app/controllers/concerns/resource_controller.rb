@@ -55,11 +55,11 @@ module ResourceController
     @change_set = change_set_class.new(find_resource(params[:id]))
     authorize! :update, @change_set.resource
     @change_set.prepopulate!
-    @change_set.validate({})
+    @change_set.valid? # Run validations to display errors on first load.
   end
 
   def update
-    @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
+    @change_set = change_set_class.new(find_resource(params[:id]))
     authorize! :update, @change_set.resource
     if @change_set.validate(resource_params)
       @change_set.sync
