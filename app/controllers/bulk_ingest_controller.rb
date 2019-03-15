@@ -45,7 +45,7 @@ class BulkIngestController < ApplicationController
           end
 
           parent_change_set = build_change_set(title: new_pending_uploads.first.file_name, member_ids: persisted_members.map(&:id))
-          persisted_parent = buffered_changeset_persister.save(change_set: parent_change_set)
+          buffered_changeset_persister.save(change_set: parent_change_set)
         end
       else
         # Only append one file as a FileSet to one resource until browse-everything can provide links to parent resource IDs
@@ -60,7 +60,7 @@ class BulkIngestController < ApplicationController
 
       # Use the IDs of the newly-persisted resources to attached the cloud files as FileSets
       persisted_ids.each do |persisted_id, selected_file_ids|
-        BrowseEverythingIngestJob.perform_later(persisted_id, self.class.to_s, new_pending_upload_ids)
+        BrowseEverythingIngestJob.perform_later(persisted_id, self.class.to_s, selected_file_ids)
       end
     elsif file_paths.max_parent_path_depth == 1
       IngestFolderJob.perform_later(directory: parent_path.to_s, file_filter: nil, class_name: resource_class_name, **attributes)
@@ -134,47 +134,31 @@ class BulkIngestController < ApplicationController
       change_set
     end
 
-    # Access the selected_files parameters within the request
-    # @return [Hash]
-    def selected_files_param
-      return {} unless params.key?(:selected_files) && !params[:selected_files].empty?
-      params[:selected_files].to_unsafe_h
-    end
-
-    # Determine whether or not cloud service files are being uploaded
-    # @return [Boolean]
-    def selected_cloud_files?
-      values = selected_files_param.map { |_index, file| /^https?\:/ =~ file["url"] }
-      values.reduce(:|)
-    end
-
     # Retrieve the selected_files parameter from the request
     # @return [Hash]
     def selected_files_params
-      @selected_files_params ||= params[:selected_files]
+      @selected_files_params ||= params.fetch(:selected_files, {})
     end
 
     # Retrieve the browse_everything parameter from the request
     # @return [Hash]
     def browse_everything_params
-      @browse_everything_params ||= selected_files_params[:browse_everything]
-    end
-
-    # Retrieve the directories selected from browse-everything
-    # @return [BrowseEverything::Resource]
-    def selected_directories
-      return [] unless browse_everything_params[:provider] == 'file_system'
-      dirs = browse_everything_params[:selected_directories]
-
-      dirs.values.map { |value| BrowseEverything::Resource.new(value) }
+      @browse_everything_params ||= selected_files_params.fetch(:browse_everything, {})
     end
 
     # Retrieve the files selected from browse-everything
     # @return [BrowseEverything::Resource]
     def selected_files
-      files = browse_everything_params[:selected_files]
+      files = browse_everything_params.fetch(:selected_files, {})
 
       files.values.map { |value| BrowseEverything::Resource.new(value) }
+    end
+
+    # Determine whether or not cloud service files are being uploaded
+    # @return [Boolean]
+    def selected_cloud_files?
+      values = selected_files.map(&:cloud_file?)
+      values.reduce(:|)
     end
 
     # Construct the pending download objects
@@ -193,13 +177,6 @@ class BulkIngestController < ApplicationController
       end
 
       @new_pending_uploads
-    end
-
-    # Retrieve the new IDs from the pending uploads
-    # @return [Array<String>]
-    def new_pending_upload_ids
-      ids = new_pending_uploads.map(&:id)
-      ids.map(&:to_s)
     end
 
     def workflow_states

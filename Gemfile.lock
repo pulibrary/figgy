@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: git://github.com/jrgriffiniii/browse-everything.git
-  revision: 29f806e3807ea55ab21a300a3aff45b615c89eea
+  revision: c8927010007f6f3483982a2451e1fb9272797ad9
   branch: figgy-issues-1536-jrgriffiniii
   specs:
     browse-everything (1.0.0)
@@ -157,18 +157,18 @@ GEM
       execjs
     awesome_print (1.8.0)
     aws-eventstream (1.0.2)
-    aws-partitions (1.144.0)
-    aws-sdk-core (3.46.2)
-      aws-eventstream (~> 1.0)
+    aws-partitions (1.147.0)
+    aws-sdk-core (3.48.3)
+      aws-eventstream (~> 1.0, >= 1.0.2)
       aws-partitions (~> 1.0)
       aws-sigv4 (~> 1.1)
       http-2 (~> 0.10)
       jmespath (~> 1.0)
-    aws-sdk-kms (1.13.0)
-      aws-sdk-core (~> 3, >= 3.39.0)
-      aws-sigv4 (~> 1.0)
-    aws-sdk-s3 (1.31.0)
-      aws-sdk-core (~> 3, >= 3.39.0)
+    aws-sdk-kms (1.16.0)
+      aws-sdk-core (~> 3, >= 3.48.2)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-s3 (1.35.0)
+      aws-sdk-core (~> 3, >= 3.48.2)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.0)
     aws-sigv4 (1.1.0)
