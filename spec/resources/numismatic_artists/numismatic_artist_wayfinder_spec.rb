@@ -11,19 +11,20 @@ describe NumismaticArtistWayfinder do
     ch = NumismaticArtistChangeSet.new(res)
     change_set_persister.save(change_set: ch)
   end
-  let(:coin) do
-    res = Coin.new(title: "hercules", weight: 5, numismatic_artist_ids: [numismatic_artist.id])
-    ch = CoinChangeSet.new(res)
+
+  let(:issue) do
+    res = NumismaticIssue.new(title: "Issue", numismatic_artist_ids: [numismatic_artist.id])
+    ch = NumismaticIssueChangeSet.new(res)
     change_set_persister.save(change_set: ch)
   end
 
   before do
-    coin
+    issue
   end
 
   describe "#numismatic_artist_parent" do
-    it "returns the parent coin for artist" do
-      expect(numismatic_artist_wayfinder.numismatic_artist_parent).to eq coin
+    it "returns the parent issue for artist" do
+      expect(numismatic_artist_wayfinder.numismatic_artist_parent).to eq issue
     end
   end
 end

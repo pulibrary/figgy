@@ -1491,7 +1491,7 @@ RSpec.describe ChangeSetPersister do
   describe "appending citation" do
     let(:change_set_class) { NumismaticCitationChangeSet }
 
-    it "appends a citation via #citation_parent_id" do
+    it "appends a citation on a coin via #citation_parent_id" do
       parent = FactoryBot.create_for_repository(:coin)
       citation = FactoryBot.build(:numismatic_citation)
       change_set = change_set_class.new(citation)
@@ -1503,11 +1503,11 @@ RSpec.describe ChangeSetPersister do
     end
   end
 
-  describe "appending artist" do
+  describe "appending an artist" do
     let(:change_set_class) { NumismaticArtistChangeSet }
 
-    it "appends an artist via #artist_parent_id" do
-      parent = FactoryBot.create_for_repository(:coin)
+    it "appends an artist on an issue via #artist_parent_id" do
+      parent = FactoryBot.create_for_repository(:numismatic_issue)
       artist = FactoryBot.build(:numismatic_artist)
       change_set = change_set_class.new(artist)
       change_set.validate(artist_parent_id: parent.id.to_s)

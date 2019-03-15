@@ -28,7 +28,6 @@ class CoinChangeSet < ChangeSet
   property :replaces, multiple: true, required: false, default: []
   property :depositor, multiple: false, required: false
   property :numismatic_citation_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
-  property :numismatic_artist_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :read_groups, multiple: true, required: false
 
