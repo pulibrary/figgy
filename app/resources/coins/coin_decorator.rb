@@ -26,15 +26,18 @@ class CoinDecorator < Valkyrie::ResourceDecorator
           :append_id
 
   delegate :members, :decorated_file_sets, :decorated_parent, :decorated_numismatic_citations, :accession, to: :wayfinder
+  delegate :id, :label, to: :accession, prefix: true
 
   def ark_mintable_state?
     false
   end
 
-  delegate :id, :label, to: :accession, prefix: true
-
   def citations
     decorated_numismatic_citations.map(&:title)
+  end
+
+  def pub_created_display
+    [decorated_parent.ruler&.first, decorated_parent.denomination&.first, decorated_parent.place&.city].compact.join(", ")
   end
 
   def manageable_files?
