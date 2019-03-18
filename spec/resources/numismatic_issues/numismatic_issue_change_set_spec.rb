@@ -8,7 +8,7 @@ RSpec.describe NumismaticIssueChangeSet do
   describe "#primary_terms" do
     it "includes displayed fields" do
       expect(change_set.primary_terms).to be_a(Hash)
-      expect(change_set.primary_terms.keys).to eq(["", "Obverse", "Reverse", "Rights and Notes", "Artists and Subjects"])
+      expect(change_set.primary_terms.keys).to eq(["", "Place", "Obverse", "Reverse", "Rights and Notes", "Artists and Subjects"])
       expect(change_set.primary_terms[""]).to include(:object_type, :denomination, :metal, :workshop)
       expect(change_set.primary_terms.values.flatten).not_to include(:issue_number)
     end
@@ -73,6 +73,29 @@ RSpec.describe NumismaticIssueChangeSet do
   describe "#downloadable" do
     it "has a downloadable property" do
       expect(change_set.downloadable).to eq "public"
+    end
+  end
+
+  describe "#place" do
+    it "can be set with a ciy, state, and region" do
+      change_set.validate(place: { city: "City", state: "State", region: "Region" })
+      expect(change_set.place.city).to eq "City"
+      expect(change_set.place.state).to eq "State"
+      expect(change_set.place.region).to eq "Region"
+      # Ensure form builder works.
+      change_set.validate("place_attributes" => { city: "City2", state: "State", region: "Region" })
+      expect(change_set.place.city).to eq "City2"
+      # Ensure it doesn't result in an empty object if nothing is set
+      change_set.validate(place: { city: nil, state: nil, region: nil })
+      change_set.sync
+      expect(change_set.resource.place).to eq nil
+    end
+  end
+
+  describe "#prepopulate!" do
+    it "builds an empty numsimatic place" do
+      change_set.prepopulate!
+      expect(change_set.place).to be_a NumismaticPlaceChangeSet
     end
   end
 end

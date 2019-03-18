@@ -30,7 +30,7 @@ class NumismaticIssue < Resource
   attribute :obverse_orientation
   attribute :obverse_part
   attribute :obverse_symbol
-  attribute :place
+  attribute :place, NumismaticPlace
   attribute :reverse_attributes
   attribute :reverse_figure
   attribute :reverse_figure_description

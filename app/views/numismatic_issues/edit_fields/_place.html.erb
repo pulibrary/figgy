@@ -1,0 +1,13 @@
+<div class="row">
+<%= f.simple_fields_for :place, wrapper: :inline_form do |g| %>
+  <div class="col-md-6">
+    <%= g.input :city, required: g.object.required?(:city), label: "City" %>
+  </div>
+  <div class="col-md-6">
+    <%= g.input :state, required: g.object.required?(:state), label: "State" %>
+  </div>
+  <div class="col-md-6">
+    <%= g.input :region, required: g.object.required?(:region), label: "Region" %>
+  </div>
+<% end %>
+</div>
