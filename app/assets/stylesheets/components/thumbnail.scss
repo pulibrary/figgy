@@ -1,3 +1,9 @@
 .thumbnail-inner {
   width: 200px;
 }
+.document-thumbnail {
+  text-align: center;
+  img {
+    max-width: 100%;
+  }
+}
