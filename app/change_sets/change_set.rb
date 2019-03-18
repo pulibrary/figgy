@@ -1,9 +1,55 @@
 # frozen_string_literal: true
+require "reform/form/active_model/form_builder_methods"
 class ChangeSet < Valkyrie::ChangeSet
+  include Reform::Form::ActiveModel
+  include Reform::Form::ActiveModel::FormBuilderMethods
   class_attribute :workflow_class
+  class_attribute :feature_terms
+  self.feature_terms = []
   def self.apply_workflow(workflow)
     self.workflow_class = workflow
     include(ChangeSetWorkflow)
+  end
+
+  def self.core_resource(change_set: nil)
+    delegate :human_readable_type, to: :model
+    property :title, multiple: true, required: true, default: []
+    validates_with TitleValidator
+    # Rights
+    property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
+    property :rights_note, multiple: false, required: false
+    validates_with RightsStatementValidator
+    # Visibility
+    include VisibilityProperty
+    validates :visibility, presence: true
+    property :read_groups, multiple: true, required: false
+    # File Upload
+    property :files, virtual: true, multiple: true, required: false
+    property :pending_uploads, multiple: true, required: false
+    # Collections
+    property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
+    validates_with CollectionValidator
+    property(:change_set, require: true, default: change_set) if change_set
+    self.feature_terms += [:title, :rights_statement, :rights_note]
+    self.feature_terms += [:change_set] if change_set
+  end
+
+  def self.enable_order_manager
+    property :viewing_hint, multiple: false, required: false, default: "individuals"
+    property :viewing_direction, multiple: false, required: false
+    property :nav_date, multiple: false, required: false
+    property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
+    property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID.optional
+    property :start_canvas, multiple: false, type: Valkyrie::Types::ID.optional
+    validates_with ViewingDirectionValidator
+    validates_with ViewingHintValidator
+    validates_with MemberValidator
+  end
+
+  def self.enable_pdf_support
+    property :pdf_type, multiple: false, required: false, default: "color"
+    property :file_metadata, multiple: true, required: false, default: []
+    self.feature_terms += [:pdf_type]
   end
 
   # This property is set by ChangeSetPersister::CreateFile and is used to keep

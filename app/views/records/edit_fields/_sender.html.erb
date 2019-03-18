@@ -1,0 +1,10 @@
+<div class="row">
+<%= f.simple_fields_for :sender, wrapper: :inline_form do |g| %>
+  <div class="col-md-6">
+    <%= g.input :name, required: g.object.required?(:name), label: "Sender Name" %>
+  </div>
+  <div class="col-md-6">
+    <%= g.input :place, required: g.object.required?(:place), label: "Sender Place" %>
+  </div>
+<% end %>
+</div>
