@@ -54,6 +54,8 @@ class CatalogController < ApplicationController
       rows: search_config["rows"]
     }
 
+    config.default_per_page = 20
+
     config.index.title_field = "figgy_title_ssim"
     config.index.display_type_field = "human_readable_type_ssim"
     config.add_facet_field "member_of_collection_titles_ssim", label: "Collections", limit: 5

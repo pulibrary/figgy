@@ -19,6 +19,12 @@ RSpec.describe CatalogController do
     end
   end
 
+  describe "#blacklight_config" do
+    it "has a default per_page of 20" do
+      expect(controller.blacklight_config.default_per_page).to eq 20
+    end
+  end
+
   describe "#iiif_search" do
     render_views
     context "when given a private document" do
