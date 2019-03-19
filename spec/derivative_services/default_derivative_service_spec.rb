@@ -4,9 +4,7 @@ require "valkyrie/derivatives/specs/shared_specs"
 include ActionDispatch::TestProcess
 
 RSpec.describe DefaultDerivativeService do
-  it_behaves_like "a Valkyrie::Derivatives::DerivativeService" do
-    before { pending }
-  end
+  it_behaves_like "a Valkyrie::Derivatives::DerivativeService"
 
   let(:thumbnail) { Valkyrie::Vocab::PCDMUse.ThumbnailImage }
   let(:derivative_service) do
@@ -24,6 +22,7 @@ RSpec.describe DefaultDerivativeService do
   let(:book_members) { query_service.find_members(resource: scanned_resource) }
   let(:valid_resource) { book_members.first }
   let(:valid_change_set) { DynamicChangeSet.new(valid_resource) }
+  let(:valid_id) { valid_change_set.id }
 
   describe "#valid?" do
     subject(:valid_file) { derivative_service.new(id: valid_change_set.id) }

@@ -5,9 +5,7 @@ include ActionDispatch::TestProcess
 
 RSpec.describe ScannedMapDerivativeService do
   with_queue_adapter :inline
-  it_behaves_like "a Valkyrie::Derivatives::DerivativeService" do
-    before { pending }
-  end
+  it_behaves_like "a Valkyrie::Derivatives::DerivativeService"
 
   let(:derivative_service) do
     ScannedMapDerivativeService::Factory.new(change_set_persister: change_set_persister)
@@ -24,6 +22,7 @@ RSpec.describe ScannedMapDerivativeService do
   let(:scanned_map_members) { query_service.find_members(resource: scanned_map) }
   let(:valid_resource) { scanned_map_members.first }
   let(:valid_change_set) { DynamicChangeSet.new(valid_resource) }
+  let(:valid_id) { valid_change_set.id }
 
   describe "#valid?" do
     subject(:valid_file) { derivative_service.new(id: valid_change_set.id) }

@@ -9,7 +9,7 @@ RSpec.describe RegenerateDerivativesJob do
       let(:generator) { instance_double(EventGenerator, derivatives_deleted: nil, derivatives_created: nil) }
 
       before do
-        allow(Valkyrie::Derivatives::DerivativeService).to receive(:for).and_return(derivatives_service)
+        allow(Valkyrie::Derivatives::DerivativeService).to receive(:for).with(id: file_set.id).and_return(derivatives_service)
         allow(derivatives_service).to receive(:create_derivatives)
         allow(derivatives_service).to receive(:cleanup_derivatives)
         allow(EventGenerator).to receive(:new).and_return(generator)

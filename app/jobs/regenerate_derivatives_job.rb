@@ -5,8 +5,8 @@ class RegenerateDerivativesJob < ApplicationJob
   def perform(file_set_id)
     file_set = query_service.find_by(id: Valkyrie::ID.new(file_set_id))
     messenger.derivatives_deleted(file_set)
-    Valkyrie::Derivatives::DerivativeService.for(FileSetChangeSet.new(file_set)).cleanup_derivatives
-    Valkyrie::Derivatives::DerivativeService.for(FileSetChangeSet.new(file_set)).create_derivatives
+    Valkyrie::Derivatives::DerivativeService.for(id: file_set.id).cleanup_derivatives
+    Valkyrie::Derivatives::DerivativeService.for(id: file_set.id).create_derivatives
     messenger.derivatives_created(file_set)
   rescue Valkyrie::Persistence::ObjectNotFoundError
     Rails.logger.error "Unable to find FileSet #{file_set_id}"

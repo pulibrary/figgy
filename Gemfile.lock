@@ -73,7 +73,7 @@ GIT
 
 GIT
   remote: https://github.com/samvera-labs/valkyrie-derivatives.git
-  revision: e72d3429d5075c39eb5cb5ac24708bee0e460c75
+  revision: 5a5c941d46097f6c6f6ab20c7f1fdd28f1fc561f
   specs:
     valkyrie-derivatives (0.1.0)
       hydra-derivatives
