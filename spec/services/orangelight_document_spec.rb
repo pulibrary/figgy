@@ -20,6 +20,7 @@ describe OrangelightDocument do
       let(:citation) { FactoryBot.create_for_repository(:numismatic_citation, numismatic_reference_id: reference.id) }
       let(:artist) { FactoryBot.create_for_repository(:numismatic_artist) }
       let(:date_range) { DateRange.new(start: "-91", end: "-41", approximate: true) }
+      let(:numismatic_place) { NumismaticPlace.new(city: "City", state: "State", region: "Region") }
       let(:coin) do
         FactoryBot.create_for_repository(:coin,
                                          files: [file],
@@ -56,7 +57,7 @@ describe OrangelightDocument do
                                          master: "William Wood",
                                          workshop: "Bristol",
                                          series: "Hibernia",
-                                         place: "Great Britain",
+                                         place: numismatic_place,
                                          obverse_figure: "bust",
                                          obverse_symbol: "cornucopia",
                                          obverse_part: "standing",
@@ -123,9 +124,9 @@ describe OrangelightDocument do
         expect(output[:issue_master_t]).to eq ["William Wood"]
         expect(output[:issue_workshop_t]).to eq ["Bristol"]
         expect(output[:issue_series_t]).to eq ["Hibernia"]
-        expect(output[:issue_place_t]).to eq ["Great Britain"]
-        expect(output[:issue_place_sort]).to eq "Great Britain"
-        expect(output[:issue_place_facet]).to eq ["Great Britain"]
+        expect(output[:issue_place_t]).to eq ["City, State, Region"]
+        expect(output[:issue_place_sort]).to eq "City, State, Region"
+        expect(output[:issue_place_facet]).to eq ["City, State, Region"]
         expect(output[:issue_obverse_figure_t]).to eq ["bust"]
         expect(output[:issue_obverse_symbol_t]).to eq ["cornucopia"]
         expect(output[:issue_obverse_part_t]).to eq ["standing"]

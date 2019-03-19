@@ -840,6 +840,7 @@ RSpec.describe CatalogController do
   end
 
   describe "numismatics" do
+    let(:numismatic_place) { NumismaticPlace.new(city: "City", state: "State", region: "Region") }
     let(:coin) { persister.save(resource: FactoryBot.build(:complete_open_coin, coin_metadata)) }
     let(:issue_attr) { issue_metadata.merge(member_ids: [coin.id]) }
     let(:issue) { persister.save(resource: FactoryBot.build(:complete_open_numismatic_issue, issue_attr)) }
@@ -865,7 +866,7 @@ RSpec.describe CatalogController do
         obverse_orientation: "issue-obverse-orientation",
         obverse_part: "issue-obverse-part",
         obverse_symbol: "issue-obverse-symbol",
-        place: "issue-place",
+        place: numismatic_place,
         replaces: "issue-replaces",
         reverse_attributes: "issue-rev-attributes",
         reverse_figure: "issue-rev-figure",

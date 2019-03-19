@@ -76,4 +76,25 @@ class ChangeSet < Valkyrie::ChangeSet
     end
     @_changes = Disposable::Twin::Changed::Changes.new
   end
+
+  # Iterate through nested properties on a change set and call the defined
+  # populator method. The field values of the nested resource are passed to the
+  # populator as the fragment.
+  def populate_nested_properties
+    # Applying the twin filter to schema finds all nested properties.
+    schema.each(twin: true) do |property|
+      resource = send(property[:name])
+      next unless resource
+      fields = resource.fields
+      next if fields.select { |_k, v| v.present? }.blank?
+      send(property[:populator], fragment: fields, as: property[:name])
+    end
+  end
+
+  # Trigger population of nested properties when syncing changeset.
+  # Overrides {Disposable::Twin#sync}
+  def sync
+    populate_nested_properties
+    super
+  end
 end
