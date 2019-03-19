@@ -105,17 +105,21 @@ describe OrangelightDocument do
         expect(output[:pub_date_end_sort]).to eq(-41)
         expect(output[:issue_object_type_t]).to eq ["coin"]
         expect(output[:issue_denomination_t]).to eq ["1/2 Penny"]
+        expect(output[:issue_denomination_sort]).to eq "1/2 Penny"
         expect(output[:issue_number_s]).to eq "1"
         expect(output[:issue_metal_t]).to eq ["copper"]
+        expect(output[:issue_metal_sort]).to eq "copper"
         expect(output[:issue_shape_t]).to eq ["round"]
         expect(output[:issue_color_t]).to eq ["green"]
         expect(output[:issue_edge_t]).to eq ["GOTT MIT UNS"]
         expect(output[:issue_era_t]).to eq ["uncertain"]
         expect(output[:issue_ruler_t]).to eq ["George I"]
+        expect(output[:issue_ruler_sort]).to eq "George I"
         expect(output[:issue_master_t]).to eq ["William Wood"]
         expect(output[:issue_workshop_t]).to eq ["Bristol"]
         expect(output[:issue_series_t]).to eq ["Hibernia"]
         expect(output[:issue_place_t]).to eq ["Great Britain"]
+        expect(output[:issue_place_sort]).to eq "Great Britain"
         expect(output[:issue_obverse_figure_t]).to eq ["bust"]
         expect(output[:issue_obverse_symbol_t]).to eq ["cornucopia"]
         expect(output[:issue_obverse_part_t]).to eq ["standing"]
@@ -133,6 +137,7 @@ describe OrangelightDocument do
         expect(output[:issue_reverse_legend_t]).to eq ["•HIBERNIA•1723•"]
         expect(output[:issue_reverse_attributes_t]).to eq ["above", "2 within Є"]
         expect(output[:issue_references_t]).to eq ["short-title citation part citation number"]
+        expect(output[:issue_references_sort]).to eq "short-title citation part citation number"
       end
     end
   end
