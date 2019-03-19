@@ -92,7 +92,6 @@ class EphemeraFoldersController < BaseResourceController
     false
   end
 
-
   def auth_token_param
     params[:auth_token]
   end

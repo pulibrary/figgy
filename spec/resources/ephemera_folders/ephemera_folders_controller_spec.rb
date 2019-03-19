@@ -430,6 +430,22 @@ RSpec.describe EphemeraFoldersController, type: :controller do
     end
   end
 
+  describe "pdf" do
+    let(:user) { FactoryBot.create(:admin) }
+    let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, member_ids: [file_set.id]) }
+    let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: file_meta) }
+    let(:file_meta) { FileMetadata.new(mime_type: "image/tiff", use: Valkyrie::Vocab::PCDMUse.OriginalFile) }
+
+    it "generates a pdf, attaches it to the folder, and redirects the user to download it" do
+      get :pdf, params: { id: resource.id.to_s }
+      reloaded = adapter.query_service.find_by(id: resource.id)
+      expect(response).to redirect_to Rails.application.routes.url_helpers.download_path(resource_id: resource.id.to_s, id: reloaded.pdf_file.id.to_s)
+
+      expect(reloaded.file_metadata).not_to be_blank
+      expect(reloaded.pdf_file).not_to be_blank
+    end
+  end
+
   context "when an admin" do
     let(:user) { FactoryBot.create(:admin) }
     describe "GET /ephemera_folders/:id/file_manager" do
