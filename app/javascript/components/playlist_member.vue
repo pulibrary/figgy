@@ -1,5 +1,13 @@
 <template>
   <tr>
+    <td class="member-checkbox">
+      <input
+        id="checkbox"
+        v-model="checked"
+        type="checkbox"
+        @change="checkboxChanged"
+      >
+    </td>
     <td>
       {{ resource.label[0] }} (<a :href="`${resource.recording_url}`">
         {{ resource.recording_title }}
@@ -10,7 +18,11 @@
         class="btn btn-danger detach-btn"
         @click="detach($event)"
       >
-        <loader size="x-small" v-if="detachClicked" wrapper="span"></loader> Detach
+        <loader
+          v-if="detachClicked"
+          size="x-small"
+          wrapper="span"
+        /> Detach
       </button>
     </td>
   </tr>
@@ -30,7 +42,8 @@ export default {
     const resourceId = this.resource.id
     return {
       id: resourceId.id,
-      detachClicked: false
+      detachClicked: false,
+      checked: false
     }
   },
   methods: {
@@ -43,7 +56,14 @@ export default {
         b.disabled = true
       }
       // do the detach
-      this.$emit('update', this.id)
+      this.$emit('update', [this.id])
+    },
+    checkboxChanged: function (event) {
+      if (event.target.checked) {
+        this.$emit('idSelected', this.id)
+      } else {
+        this.$emit('idRemoved', this.id)
+      }
     }
   }
 }
