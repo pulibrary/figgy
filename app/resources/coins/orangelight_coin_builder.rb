@@ -33,6 +33,7 @@ class OrangelightCoinBuilder
         analysis_t: decorator.analysis,
         notes_display: decorator.public_note,
         find_place_t: decorator.find_place,
+        find_place_facet: decorator.find_place,
         find_date_t: decorator.find_date,
         find_feature_t: decorator.find_feature,
         find_locus_t: decorator.find_locus,
@@ -47,9 +48,11 @@ class OrangelightCoinBuilder
         issue_object_type_t: parent.object_type,
         issue_denomination_t: parent.denomination,
         issue_denomination_sort: parent.denomination&.first,
+        issue_denomination_facet: parent.denomination,
         issue_number_s: parent.issue_number.to_s,
         issue_metal_t: parent.metal,
         issue_metal_sort: parent.metal&.first,
+        issue_metal_facet: parent.metal,
         issue_shape_t: parent.shape,
         issue_color_t: parent.color,
         issue_edge_t: parent.edge,
@@ -61,6 +64,7 @@ class OrangelightCoinBuilder
         issue_series_t: parent.series,
         issue_place_t: parent.place,
         issue_place_sort: parent.place&.first,
+        issue_place_facet: parent.place,
         issue_obverse_figure_t: parent.obverse_figure,
         issue_obverse_symbol_t: parent.obverse_symbol,
         issue_obverse_part_t: parent.obverse_part,
@@ -78,7 +82,9 @@ class OrangelightCoinBuilder
         issue_reverse_legend_t: parent.reverse_legend,
         issue_reverse_attributes_t: parent.reverse_attributes,
         issue_references_t: parent.citations,
-        issue_references_sort: parent.citations&.first
+        issue_references_sort: parent.citations&.first,
+        issue_artists_facet: parent.artists,
+        issue_artists_t: parent.artists
       }
     end
   # rubocop:enable Metrics/MethodLength

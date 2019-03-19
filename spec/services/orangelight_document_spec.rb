@@ -18,6 +18,7 @@ describe OrangelightDocument do
       let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
       let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
       let(:citation) { FactoryBot.create_for_repository(:numismatic_citation, numismatic_reference_id: reference.id) }
+      let(:artist) { FactoryBot.create_for_repository(:numismatic_artist) }
       let(:date_range) { DateRange.new(start: "-91", end: "-41", approximate: true) }
       let(:coin) do
         FactoryBot.create_for_repository(:coin,
@@ -41,6 +42,7 @@ describe OrangelightDocument do
       let(:issue) do
         FactoryBot.create_for_repository(:numismatic_issue,
                                          numismatic_citation_ids: [citation.id],
+                                         numismatic_artist_ids: [artist.id],
                                          member_ids: [coin.id],
                                          object_type: "coin",
                                          date_range: date_range,
@@ -92,6 +94,7 @@ describe OrangelightDocument do
         expect(output[:analysis_t]).to eq ["holed at 12 o'clock, 16.73 grams"]
         expect(output[:notes_display]).to eq ["Abraham Usher| John Field| Charles Meredith.", "Black and red ink.", "Visible flecks of mica."]
         expect(output[:find_place_t]).to eq ["Antioch, Syria"]
+        expect(output[:find_place_facet]).to eq ["Antioch, Syria"]
         expect(output[:find_date_t]).to eq ["5/27/1939?"]
         expect(output[:find_feature_t]).to eq ["Hill A?"]
         expect(output[:find_locus_t]).to eq ["8-N 40"]
@@ -106,9 +109,11 @@ describe OrangelightDocument do
         expect(output[:issue_object_type_t]).to eq ["coin"]
         expect(output[:issue_denomination_t]).to eq ["1/2 Penny"]
         expect(output[:issue_denomination_sort]).to eq "1/2 Penny"
+        expect(output[:issue_denomination_facet]).to eq ["1/2 Penny"]
         expect(output[:issue_number_s]).to eq "1"
         expect(output[:issue_metal_t]).to eq ["copper"]
         expect(output[:issue_metal_sort]).to eq "copper"
+        expect(output[:issue_metal_facet]).to eq ["copper"]
         expect(output[:issue_shape_t]).to eq ["round"]
         expect(output[:issue_color_t]).to eq ["green"]
         expect(output[:issue_edge_t]).to eq ["GOTT MIT UNS"]
@@ -120,6 +125,7 @@ describe OrangelightDocument do
         expect(output[:issue_series_t]).to eq ["Hibernia"]
         expect(output[:issue_place_t]).to eq ["Great Britain"]
         expect(output[:issue_place_sort]).to eq "Great Britain"
+        expect(output[:issue_place_facet]).to eq ["Great Britain"]
         expect(output[:issue_obverse_figure_t]).to eq ["bust"]
         expect(output[:issue_obverse_symbol_t]).to eq ["cornucopia"]
         expect(output[:issue_obverse_part_t]).to eq ["standing"]
@@ -138,6 +144,8 @@ describe OrangelightDocument do
         expect(output[:issue_reverse_attributes_t]).to eq ["above", "2 within Є"]
         expect(output[:issue_references_t]).to eq ["short-title citation part citation number"]
         expect(output[:issue_references_sort]).to eq "short-title citation part citation number"
+        expect(output[:issue_artists_facet]).to eq ["artist person, artist role"]
+        expect(output[:issue_artists_t]).to eq ["artist person, artist role"]
       end
     end
   end
