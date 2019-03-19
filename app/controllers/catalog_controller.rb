@@ -100,6 +100,12 @@ class CatalogController < ApplicationController
     config.add_sort_field "created_at_dtsi asc", label: "date created \u25B2"
     config.add_sort_field "updated_at_dtsi desc", label: "date modified \u25BC"
     config.add_sort_field "updated_at_dtsi asc", label: "date modified \u25B2"
+
+    # index fields
+    config.add_index_field "source_metadata_identifier_ssim", label: "Source Metadata Identifier"
+    config.add_index_field "identifier_ssim", label: "Identifier"
+    config.add_index_field "state_ssim", label: "State"
+    config.add_index_field "part_of_ssim", label: "Part Of"
   end
 
   # Determine whether or not a user can edit the resource in the current context
