@@ -47,8 +47,21 @@ class EphemeraFolder < Resource
 
   attribute :state
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
+  attribute :holding_location
 
   def self.can_have_manifests?
     true
+  end
+
+  attribute :file_metadata, Valkyrie::Types::Set.of(FileMetadata.optional)
+
+  def pdf_file
+    file_metadata.find do |file|
+      file.mime_type == ["application/pdf"]
+    end
+  end
+
+  def extent
+    "#{Array.wrap(page_count).first} page(s)" unless page_count.empty?
   end
 end

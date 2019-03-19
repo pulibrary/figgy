@@ -45,7 +45,11 @@ class EphemeraFolderChangeSetBase < ChangeSet
   property :viewing_direction, required: false
   property :viewing_hint, multiple: false, required: false, default: "individuals"
 
-  property :pdf_type, multiple: false, required: false
+  # pdf properties
+  property :file_metadata, multiple: true, required: false, default: []
+  property :holding_location, multiple: false, required: false, type: ::Types::URI
+  property :pdf_type, multiple: false, required: false, default: "color"
+
   property :local_identifier, multiple: false, required: false
 
   delegate :human_readable_type, to: :model
@@ -79,6 +83,8 @@ class EphemeraFolderChangeSetBase < ChangeSet
       :dspace_url,
       :source_url,
       :downloadable,
+      :pdf_type,
+      :holding_location,
       :rights_statement
     ]
   end

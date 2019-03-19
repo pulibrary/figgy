@@ -37,4 +37,21 @@ RSpec.describe EphemeraFolder do
     folder.downloadable = ["public"]
     expect(folder.downloadable).to eq ["public"]
   end
+
+  it "has an extent display" do
+    folder.page_count = [1]
+    expect(folder.extent).to eq("1 page(s)")
+  end
+
+  describe "#pdf_file" do
+    let(:file_metadata) { FileMetadata.new mime_type: ["application/pdf"], use: [Valkyrie::Vocab::PCDMUse.OriginalFile] }
+
+    it "retrieves only PDF FileSets" do
+      adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
+      resource = adapter.persister.save(resource: described_class.new(file_metadata: [file_metadata], state: "complete"))
+
+      expect(resource.pdf_file).not_to be nil
+      expect(resource.pdf_file).to be_a FileMetadata
+    end
+  end
 end

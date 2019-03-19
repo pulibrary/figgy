@@ -28,7 +28,8 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
           :source_url,
           :visibility,
           :rendered_rights_statement,
-          :rendered_ocr_language
+          :rendered_ocr_language,
+          :rendered_holding_location
 
   display_in_manifest displayed_attributes, :subject, :categories
   suppress_from_manifest Schema::IIIF.attributes,
@@ -42,7 +43,8 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
                          :rendered_subject,
                          :created_at,
                          :updated_at,
-                         :sort_title
+                         :sort_title,
+                         :holding_location
 
   delegate :members, :parent, :query_service, to: :wayfinder
 
@@ -69,6 +71,22 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
 
   def first_range
     @first_range ||= Array.wrap(date_range).map(&:decorate).first
+  end
+
+  def pdf_file
+    pdf = file_metadata.find { |x| x.mime_type == ["application/pdf"] }
+    pdf if pdf && Valkyrie::StorageAdapter.find(:derivatives).find_by(id: pdf.file_identifiers.first)
+  rescue Valkyrie::StorageAdapter::FileNotFound
+    nil
+  end
+
+  def rendered_holding_location
+    value = holding_location
+    return unless value.present?
+    vocabulary = ControlledVocabulary.for(:holding_location)
+    value.map do |holding_location|
+      vocabulary.find(holding_location).label
+    end
   end
 
   def rendered_rights_statement
