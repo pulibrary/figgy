@@ -181,9 +181,7 @@ module ApplicationHelper
   # @param [Valkyrie::Resource]
   # @return [String]
   def universal_viewer_path(resource)
-    config_path = universal_viewer_config_path(resource)
-
-    "/uv/uv#?manifest=#{manifest_url(resource)}&config=#{root_url}/uv/#{config_path}"
+    "/uv/uv#?manifest=#{manifest_url(resource)}&config=#{viewer_config_url(resource.id)}"
   end
 
   def collection_present?
@@ -238,17 +236,5 @@ module ApplicationHelper
     # @return [Boolean]
     def current_query_async?
       current_query_params.fetch("async", nil) == "true"
-    end
-
-    # Generate the config. path for the Universal Viewer depending upon whether
-    # the resource should have downloads enabled for the user
-    # @param resource [Valkyrie::Resource] the resource being viewed
-    # @return [Boolean]
-    def universal_viewer_config_path(resource)
-      if resource.decorate.downloadable? || (!current_user.nil? && (current_user.staff? || current_user.admin?))
-        return "uv_config.json"
-      end
-
-      "uv_config_downloads_disabled.json"
     end
 end

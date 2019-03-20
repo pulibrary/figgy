@@ -47,4 +47,61 @@ class ApplicationController < ActionController::Base
   def guest_user
     @guest_user ||= User.where(guest: true).first || super
   end
+
+  # GET /viewer/config
+  # Retrieve the viewer configuration for a given resource
+  def viewer_config
+    resource = find_resource
+
+    config = if resource.decorate.downloadable? || (!current_user.nil? && (current_user.staff? || current_user.admin?))
+               default_uv_config
+             else
+               downloads_disabled_uv_config
+             end
+
+    respond_to do |format|
+      format.json { render json: config }
+    end
+  end
+
+  private
+
+    # Retrieve the ID of the resource from the parameters
+    # @return [String]
+    def resource_id
+      params[:id]
+    end
+
+    # Retrieve the metadata adapter using Valkyrie
+    # @return [Valkyrie::MetadataAdapter]
+    def metadata_adapter
+      Valkyrie.config.metadata_adapter
+    end
+    delegate :query_service, to: :metadata_adapter
+
+    # Retrieve the resource using the ID of the resource
+    # @return [Valkyrie::Resource]
+    def find_resource
+      query_service.find_by(id: Valkyrie::ID.new(resource_id))
+    end
+
+    # Construct a viewer configuration with the default options
+    # @return [ViewerConfiguration]
+    def default_uv_config
+      ViewerConfiguration.new
+    end
+
+    # Construct a viewer configuration with downloads disabled
+    # @return [ViewerConfiguration]
+    def downloads_disabled_uv_config
+      ViewerConfiguration.new(
+        modules: {
+          footerPanel: {
+            options: {
+              downloadEnabled: false
+            }
+          }
+        }
+      )
+    end
 end
