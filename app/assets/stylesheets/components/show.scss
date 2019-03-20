@@ -85,10 +85,6 @@ table.dataTable thead > tr > th {
     padding-bottom: 0.6rem;
     vertical-align: middle;
 
-    &:first-child {
-      width: percentage(11 / 12);
-    }
-
     &:last-child {
       width: percentage(1 / 12);
     }
