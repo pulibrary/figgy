@@ -4,9 +4,7 @@ require "valkyrie/derivatives/specs/shared_specs"
 include ActionDispatch::TestProcess
 
 RSpec.describe AudioDerivativeService do
-  it_behaves_like "a Valkyrie::Derivatives::DerivativeService" do
-    before { pending }
-  end
+  it_behaves_like "a Valkyrie::Derivatives::DerivativeService"
   let(:derivative_service) do
     AudioDerivativeService::Factory.new(change_set_persister: change_set_persister)
   end
@@ -22,6 +20,7 @@ RSpec.describe AudioDerivativeService do
   let(:book_members) { query_service.find_members(resource: scanned_resource) }
   let(:valid_resource) { book_members.first }
   let(:valid_change_set) { DynamicChangeSet.new(valid_resource) }
+  let(:valid_id) { valid_change_set.id }
 
   describe "#valid?" do
     subject(:valid_file) { derivative_service.new(id: valid_change_set.id) }

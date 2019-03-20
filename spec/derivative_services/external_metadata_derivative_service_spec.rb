@@ -5,9 +5,7 @@ include ActionDispatch::TestProcess
 
 RSpec.describe ExternalMetadataDerivativeService do
   with_queue_adapter :inline
-  it_behaves_like "a Valkyrie::Derivatives::DerivativeService" do
-    before { pending }
-  end
+  it_behaves_like "a Valkyrie::Derivatives::DerivativeService"
 
   let(:derivative_service) do
     ExternalMetadataDerivativeService::Factory.new(change_set_persister: change_set_persister)
@@ -26,6 +24,7 @@ RSpec.describe ExternalMetadataDerivativeService do
   let(:valid_resource) { parent_resource_members.first }
   let(:valid_change_set) { DynamicChangeSet.new(valid_resource) }
   let(:tika_output) { tika_xml_output }
+  let(:valid_id) { valid_change_set.id }
 
   describe "#valid?" do
     let(:valid_file) { derivative_service.new(id: valid_change_set.id) }
