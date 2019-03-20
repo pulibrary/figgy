@@ -77,18 +77,41 @@ class ChangeSet < Valkyrie::ChangeSet
     @_changes = Disposable::Twin::Changed::Changes.new
   end
 
+  # Defines the default populator for a nested single-valued changeset property
+  def populate_nested_property(fragment:, as:, **)
+    property_klass = model.class.schema[as.to_sym]
+    if fragment.values.select(&:present?).blank?
+      send(:"#{as}=", nil)
+      return skip!
+    end
+
+    send(:"#{as}=", property_klass.new(fragment))
+  end
+
   # Iterate through nested properties on a change set and call the defined
   # populator method. The field values of the nested resource are passed to the
   # populator as the fragment.
   def populate_nested_properties
-    # Applying the twin filter to schema finds all nested properties.
+    # Applying the twin filter to schema finds all nested properties
     schema.each(twin: true) do |property|
-      resource = send(property[:name])
-      next unless resource
-      fields = resource.fields
-      next if fields.select { |_k, v| v.present? }.blank?
-      send(property[:populator], fragment: fields, as: property[:name])
+      name = property[:name]
+      populator = property[:populator]
+      # Try calling fields method on the property value
+      fields = send(name).try(:fields)
+      next if fields.nil? || fields.values.select(&:present?).blank?
+      send(populator, fragment: fields, as: name)
     end
+  end
+
+  # Override prepopulate method to correctly populate nested properties.
+  def prepopulate!(_args = {})
+    schema.each(twin: true) do |property|
+      property_name = property[:name]
+      property_klass = model.class.schema[property_name.to_sym]
+      send(:"#{property_name}=", property_klass.new) unless send(property_name)
+    end
+
+    super
   end
 
   # Trigger population of nested properties when syncing changeset.

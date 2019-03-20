@@ -5,8 +5,8 @@ class LetterChangeSet < ChangeSet
   enable_order_manager
   enable_pdf_support
 
-  property :sender, multiple: false, required: false, form: NameWithPlaceChangeSet, populator: :populate_name_with_place
-  property :recipient, multiple: false, required: false, form: NameWithPlaceChangeSet, populator: :populate_name_with_place
+  property :sender, multiple: false, required: false, form: NameWithPlaceChangeSet, populator: :populate_nested_property
+  property :recipient, multiple: false, required: false, form: NameWithPlaceChangeSet, populator: :populate_nested_property
 
   def primary_terms
     feature_terms.dup.insert(
@@ -17,19 +17,5 @@ class LetterChangeSet < ChangeSet
         :member_of_collection_ids
       ]
     ).flatten
-  end
-
-  def prepopulate!(_args = {})
-    self.sender ||= NameWithPlace.new
-    self.recipient ||= NameWithPlace.new
-    super
-  end
-
-  def populate_name_with_place(fragment:, as:, **)
-    if fragment.values.select(&:present?).blank?
-      send(:"#{as}=", nil)
-      return skip!
-    end
-    send(:"#{as}=", NameWithPlace.new(fragment))
   end
 end

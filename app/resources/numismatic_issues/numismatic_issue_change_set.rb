@@ -23,7 +23,7 @@ class NumismaticIssueChangeSet < ChangeSet
   property :obverse_orientation, multiple: false, required: false
   property :obverse_part, multiple: false, required: false
   property :obverse_symbol, multiple: false, required: false
-  property :place, multiple: false, required: false, form: NumismaticPlaceChangeSet, populator: :populate_numismatic_place
+  property :place, multiple: false, required: false, form: NumismaticPlaceChangeSet, populator: :populate_nested_property
   property :replaces, multiple: true, required: false, default: []
   property :reverse_attributes, multiple: true, required: false, default: []
   property :reverse_figure, multiple: false, required: false
@@ -120,18 +120,5 @@ class NumismaticIssueChangeSet < ChangeSet
         :numismatic_monogram_ids
       ]
     }
-  end
-
-  def prepopulate!(_args = {})
-    self.place ||= NumismaticPlace.new
-    super
-  end
-
-  def populate_numismatic_place(fragment:, as:, **)
-    if fragment.values.select(&:present?).blank?
-      send(:"#{as}=", nil)
-      return skip!
-    end
-    send(:"#{as}=", NumismaticPlace.new(fragment))
   end
 end
