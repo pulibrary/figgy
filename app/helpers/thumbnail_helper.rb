@@ -8,7 +8,7 @@ module ThumbnailHelper
 
   def build_iiif_thumbnail_path(document, image_options = {})
     url = ManifestBuilder::ManifestHelper.new.manifest_image_thumbnail_path(document)
-    image_tag url, image_options.merge(onerror: default_icon_fallback) if url.present?
+    image_tag url, image_options.merge(onerror: "this.remove()") if url.present?
   rescue
     default_path
   end

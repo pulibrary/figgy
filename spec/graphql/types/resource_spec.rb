@@ -21,4 +21,12 @@ RSpec.describe Types::Resource do
       expect(described_class.resolve_type(FileSet.new, {})).to eq Types::FileSetType
     end
   end
+
+  describe ".helper" do
+    it "defines an overridden image_path to just return the given parameter back" do
+      type = Types::ScannedResourceType.new(ScannedResource.new, {})
+
+      expect(type.helper.image_path("test")).to eq "test"
+    end
+  end
 end
