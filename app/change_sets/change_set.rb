@@ -5,6 +5,10 @@ class ChangeSet < Valkyrie::ChangeSet
   include Reform::Form::ActiveModel::FormBuilderMethods
   class_attribute :workflow_class
   class_attribute :feature_terms
+
+  # Delegating the to_hash method to the resource is a workaround that allows
+  # syncing of the changeset. Reform does not appear to de-cast forms during sync.
+  delegate :to_hash, to: :resource
   self.feature_terms = []
   def self.apply_workflow(workflow)
     self.workflow_class = workflow
@@ -85,39 +89,18 @@ class ChangeSet < Valkyrie::ChangeSet
       return skip!
     end
 
-    send(:"#{as}=", property_klass.new(fragment))
-  end
-
-  # Iterate through nested properties on a change set and call the defined
-  # populator method. The field values of the nested resource are passed to the
-  # populator as the fragment.
-  def populate_nested_properties
-    # Applying the twin filter to schema finds all nested properties
-    schema.each(twin: true) do |property|
-      name = property[:name]
-      populator = property[:populator]
-      # Try calling fields method on the property value
-      fields = send(name).try(:fields)
-      next if fields.nil? || fields.values.select(&:present?).blank?
-      send(populator, fragment: fields, as: name)
-    end
+    send("#{as.to_sym}=", property_klass.new(fragment))
   end
 
   # Override prepopulate method to correctly populate nested properties.
   def prepopulate!(_args = {})
+    # Applying the twin filter to schema finds all nested properties
     schema.each(twin: true) do |property|
       property_name = property[:name]
       property_klass = model.class.schema[property_name.to_sym]
       send(:"#{property_name}=", property_klass.new) unless send(property_name)
     end
 
-    super
-  end
-
-  # Trigger population of nested properties when syncing changeset.
-  # Overrides {Disposable::Twin#sync}
-  def sync
-    populate_nested_properties
     super
   end
 end
