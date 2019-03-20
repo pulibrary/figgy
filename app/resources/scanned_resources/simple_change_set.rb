@@ -80,11 +80,11 @@ class SimpleChangeSet < ChangeSet
     [
       :title,
       :sort_title,
-      :downloadable,
       :rights_statement,
       :rights_note,
       :local_identifier,
       :pdf_type,
+      :downloadable,
       :ocr_language,
       :portion_note,
       :nav_date,
