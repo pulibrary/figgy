@@ -105,6 +105,7 @@ class CatalogController < ApplicationController
     config.add_index_field "source_metadata_identifier_ssim", label: "Source Metadata Identifier"
     config.add_index_field "identifier_ssim", label: "Identifier"
     config.add_index_field "state_ssim", label: "State"
+    config.add_index_field "call_number_tsim", label: "Call Number"
     config.add_index_field "part_of_ssim", label: "Part Of"
   end
 
