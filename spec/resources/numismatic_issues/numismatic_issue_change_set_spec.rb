@@ -69,4 +69,10 @@ RSpec.describe NumismaticIssueChangeSet do
       expect { change_set.date_range }.not_to raise_error NoMethodError
     end
   end
+
+  describe "#downloadable" do
+    it "has a downloadable property" do
+      expect(change_set.downloadable).to eq "public"
+    end
+  end
 end

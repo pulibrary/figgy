@@ -52,6 +52,7 @@ class NumismaticIssueChangeSet < ChangeSet
   property :viewing_direction, required: false
   property :viewing_hint, multiple: false, required: false, default: "individuals"
 
+  property :downloadable, multiple: false, require: true, default: "public"
   property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
   property :rights_note, multiple: false, required: false
 
@@ -108,6 +109,7 @@ class NumismaticIssueChangeSet < ChangeSet
       "Rights and Notes" => [
         :note,
         :member_of_collection_ids,
+        :downloadable,
         :rights_statement,
         :rights_note
       ],

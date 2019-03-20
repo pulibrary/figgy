@@ -43,6 +43,7 @@ class EphemeraFolder < Resource
   attribute :pdf_type
   attribute :local_identifier
   attribute :identifier
+  attribute :downloadable
 
   attribute :state
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional

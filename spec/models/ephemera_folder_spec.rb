@@ -33,4 +33,8 @@ RSpec.describe EphemeraFolder do
     folder.provenance = ["Donated by The Mario Bros"]
     expect(folder.provenance.first).to eq "Donated by The Mario Bros"
   end
+  it "has a downloadable attribute" do
+    folder.downloadable = ["public"]
+    expect(folder.downloadable).to eq ["public"]
+  end
 end

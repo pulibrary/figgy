@@ -112,4 +112,10 @@ RSpec.describe RasterResourceChangeSet do
       end
     end
   end
+
+  describe "#downloadable" do
+    it "has a downloadable property" do
+      expect(change_set.downloadable).to eq "public"
+    end
+  end
 end

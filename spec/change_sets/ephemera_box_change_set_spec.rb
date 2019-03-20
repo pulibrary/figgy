@@ -66,4 +66,10 @@ RSpec.describe EphemeraBoxChangeSet do
       end
     end
   end
+
+  describe "#downloads" do
+    it "permits public downloads by default" do
+      expect(change_set.downloadable).to eq "public"
+    end
+  end
 end

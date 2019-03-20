@@ -30,6 +30,9 @@ RSpec.describe EphemeraBoxDecorator do
   it "exposes a single barcode" do
     expect(decorator.barcode).to eq("00000000000000")
   end
+  it "permits public downloads" do
+    expect(decorator.downloadable?).to be true
+  end
   context "with folders" do
     let(:folder) do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)

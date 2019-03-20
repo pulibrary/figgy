@@ -6,6 +6,7 @@ class MediaResourceChangeSet < ChangeSet
   include VisibilityProperty
   include RemoteMetadataProperty
   property :title, multiple: true, required: true, default: []
+  property :downloadable, multiple: false, require: true, default: "public"
   property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
   property :rights_note, multiple: false, required: false
   property :local_identifier, multiple: true, required: false, default: []
@@ -34,6 +35,7 @@ class MediaResourceChangeSet < ChangeSet
       :local_identifier,
       :source_metadata_identifier,
       :member_of_collection_ids,
+      :downloadable,
       :append_id
     ]
   end

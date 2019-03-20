@@ -109,6 +109,7 @@ Metrics/LineLength:
     - 'spec/features/playlist_spec.rb'
     - 'spec/resources/scanned_resources/scanned_resources_controller_spec.rb'
     - 'spec/views/catalog/_members_coin.html.erb_spec.rb'
+    - 'spec/helpers/application_helper_spec.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
@@ -148,6 +149,7 @@ Metrics/MethodLength:
     - 'app/models/search_builder.rb'
     - 'app/helpers/application_helper.rb'
     - 'app/change_sets/change_set.rb'
+    - 'app/resources/scanned_resources/scanned_resource_change_set.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
@@ -220,6 +222,7 @@ RSpec/NestedGroups:
     - 'spec/requests/scanned_resource_spec.rb'
     - 'spec/controllers/bulk_ingest_controller_spec.rb'
     - 'spec/resources/numismatic_monograms/numismatic_monograms_controller_spec.rb'
+    - 'spec/helpers/application_helper_spec.rb'
 RSpec/VerifiedDoubles:
   Exclude:
     - 'spec/models/search_builder_spec.rb'

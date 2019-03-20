@@ -28,6 +28,7 @@ class EphemeraFolderChangeSetBase < ChangeSet
   property :provenance, multiple: false, required: false
   property :dspace_url, multiple: false, required: false
   property :source_url, multiple: false, required: false
+  property :downloadable, multiple: false, require: true, default: "public"
   property :rights_statement, multiple: false, required: true, default: RightsStatements.copyright_not_evaluated, type: ::Types::URI
   property :rights_note, multiple: false, required: false
   property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID
@@ -77,6 +78,7 @@ class EphemeraFolderChangeSetBase < ChangeSet
       :provenance,
       :dspace_url,
       :source_url,
+      :downloadable,
       :rights_statement
     ]
   end

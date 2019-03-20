@@ -19,6 +19,7 @@ class RasterResourceChangeSet < ChangeSet
   property :file_metadata, multiple: true, required: false, default: []
   property :depositor, multiple: false, require: false
   property :portion_note, multiple: false, required: false
+  property :downloadable, multiple: false, require: true, default: "public"
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
@@ -37,6 +38,7 @@ class RasterResourceChangeSet < ChangeSet
     [
       :title,
       :source_metadata_identifier,
+      :downloadable,
       :rights_statement,
       :rights_note,
       :thumbnail_id,

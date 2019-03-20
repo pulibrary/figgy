@@ -10,6 +10,7 @@ class EphemeraBox < Resource
   attribute :received_date, Valkyrie::Types::Set
   attribute :tracking_number, Valkyrie::Types::Set
   attribute :visibility
+  attribute :downloadable
   attribute :rights_statement
   attribute :rights_note
   attribute :state

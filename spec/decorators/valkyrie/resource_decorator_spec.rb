@@ -263,4 +263,9 @@ RSpec.describe Valkyrie::ResourceDecorator do
       expect(decorator.visibility_badge.first).not_to have_selector("div.alert")
     end
   end
+  describe "#downloadable?" do
+    it "determines whether or not a decorated resource can be downloaded" do
+      expect(decorator.downloadable?).to be true
+    end
+  end
 end

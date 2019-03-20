@@ -11,6 +11,7 @@ class PlaylistChangeSet < ChangeSet
   property :read_groups, multiple: true, required: false
   property :auth_token, multiple: false, require: false
 
+  property :downloadable, multiple: false, require: true, default: "public"
   property :file_set_ids, virtual: true, type: Valkyrie::Types::Array.of(Valkyrie::Types::ID)
   property :mint_auth_token, virtual: true, multiple: false, type: Valkyrie::Types::Array.of(Valkyrie::Types::Bool), default: false
   property :part_of, multiple: true, required: false, default: []
@@ -23,7 +24,8 @@ class PlaylistChangeSet < ChangeSet
   def primary_terms
     [
       :title,
-      :part_of
+      :part_of,
+      :downloadable
     ]
   end
 end

@@ -78,6 +78,7 @@ module Schema
           :imported_author, # Local
           :rendered_rights_statement, # Local
           :coverage_point, # local, used for latitude / longitude
+          :downloadable # Determines whether or not users can download a resource
         ]
     end
 
