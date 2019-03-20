@@ -29,6 +29,7 @@ RSpec.feature "NumismaticIssues" do
     expect(page).to have_css '.select[for="numismatic_issue_rights_statement"]', text: "Rights Statement"
     expect(page).to have_field "Rights Note"
     expect(page).to have_css '.select[for="numismatic_issue_member_of_collection_ids"]', text: "Collections"
+    expect(page).to have_field "City"
     expect(page).to have_field "Color"
     expect(page).to have_field "Date of object"
     expect(page).to have_field "Date range start" # For the date range sequence
@@ -48,10 +49,10 @@ RSpec.feature "NumismaticIssues" do
     expect(page).to have_field "Obverse orientation"
     expect(page).to have_field "Obverse part"
     expect(page).to have_field "Obverse symbol"
-    expect(page).to have_field "Place"
+    expect(page).to have_field "Region"
     expect(page).to have_field "Reverse attributes"
     expect(page).to have_field "Reverse figure"
-    expect(page).to have_field "Obverse figure description"
+    expect(page).to have_field "Reverse figure description"
     expect(page).to have_field "Reverse figure relationship"
     expect(page).to have_field "Reverse legend"
     expect(page).to have_field "Reverse orientation"
@@ -60,6 +61,7 @@ RSpec.feature "NumismaticIssues" do
     expect(page).to have_field "Ruler"
     expect(page).to have_field "Series"
     expect(page).to have_field "Shape"
+    expect(page).to have_field "State"
     expect(page).to have_field "Subject"
     expect(page).to have_field "Workshop"
 
@@ -71,6 +73,7 @@ RSpec.feature "NumismaticIssues" do
 
   context "when a user creates a new numismatic issue" do
     let(:collection) { FactoryBot.create_for_repository(:collection) }
+    let(:numismatic_place) { NumismaticPlace.new(city: "City", state: "State", region: "Region") }
     let(:numismatic_issue) do
       FactoryBot.create_for_repository(
         :numismatic_issue,
@@ -94,7 +97,7 @@ RSpec.feature "NumismaticIssues" do
         obverse_orientation: "test value",
         obverse_part: "test value",
         obverse_symbol: "test value",
-        place: "test value",
+        place: numismatic_place,
         replaces: "test value",
         reverse_attributes: "test value",
         reverse_figure: "test value",
@@ -136,7 +139,7 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.obverse_orientation", text: "test value"
       expect(page).to have_css ".attribute.obverse_part", text: "test value"
       expect(page).to have_css ".attribute.obverse_symbol", text: "test value"
-      expect(page).to have_css ".attribute.place", text: "test value"
+      expect(page).to have_css ".attribute.rendered_place", text: "City, State, Region"
       expect(page).to have_css ".attribute.replaces", text: "test value"
       expect(page).to have_css ".attribute.reverse_attributes", text: "test value"
       expect(page).to have_css ".attribute.reverse_figure", text: "test value"

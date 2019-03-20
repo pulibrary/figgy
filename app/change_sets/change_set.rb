@@ -5,6 +5,10 @@ class ChangeSet < Valkyrie::ChangeSet
   include Reform::Form::ActiveModel::FormBuilderMethods
   class_attribute :workflow_class
   class_attribute :feature_terms
+
+  # Delegating the to_hash method to the resource is a workaround that allows
+  # syncing of the changeset. Reform does not appear to de-cast forms during sync.
+  delegate :to_hash, to: :resource
   self.feature_terms = []
   def self.apply_workflow(workflow)
     self.workflow_class = workflow
@@ -75,5 +79,28 @@ class ChangeSet < Valkyrie::ChangeSet
       send("#{field}=", value)
     end
     @_changes = Disposable::Twin::Changed::Changes.new
+  end
+
+  # Defines the default populator for a nested single-valued changeset property
+  def populate_nested_property(fragment:, as:, **)
+    property_klass = model.class.schema[as.to_sym]
+    if fragment.values.select(&:present?).blank?
+      send(:"#{as}=", nil)
+      return skip!
+    end
+
+    send("#{as.to_sym}=", property_klass.new(fragment))
+  end
+
+  # Override prepopulate method to correctly populate nested properties.
+  def prepopulate!(_args = {})
+    # Applying the twin filter to schema finds all nested properties
+    schema.each(twin: true) do |property|
+      property_name = property[:name]
+      property_klass = model.class.schema[property_name.to_sym]
+      send(:"#{property_name}=", property_klass.new) unless send(property_name)
+    end
+
+    super
   end
 end

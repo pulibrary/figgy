@@ -23,7 +23,7 @@ class NumismaticIssueChangeSet < ChangeSet
   property :obverse_orientation, multiple: false, required: false
   property :obverse_part, multiple: false, required: false
   property :obverse_symbol, multiple: false, required: false
-  property :place, multiple: false, required: false, default: []
+  property :place, multiple: false, required: false, form: NumismaticPlaceChangeSet, populator: :populate_nested_property
   property :replaces, multiple: true, required: false, default: []
   property :reverse_attributes, multiple: true, required: false, default: []
   property :reverse_figure, multiple: false, required: false
@@ -81,10 +81,12 @@ class NumismaticIssueChangeSet < ChangeSet
         :date_range_form,
         :era,
         :ruler,
-        :place,
         :master,
         :workshop,
         :series
+      ],
+      "Place" => [
+        :place
       ],
       "Obverse" => [
         :obverse_figure,

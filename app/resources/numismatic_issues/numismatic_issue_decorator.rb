@@ -10,7 +10,7 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
           :era,
           :rendered_date_range,
           :ruler,
-          :place,
+          :rendered_place,
           :master,
           :workshop,
           :series,
@@ -81,6 +81,11 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
 
   def manageable_structure?
     false
+  end
+
+  def rendered_place
+    return unless place
+    place.decorate.rendered_place
   end
 
   def rendered_rights_statement
