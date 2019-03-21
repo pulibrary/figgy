@@ -283,4 +283,5 @@ Rails.application.routes.draw do
   end
 
   get "/viewer/config/:id", to: "application#viewer_config", as: "viewer_config"
+  get "/viewer/exhibit/config", to: "application#viewer_exhibit_config", as: "viewer_exhibit_config"
 end
