@@ -38,7 +38,7 @@ class ViewerConfiguration < ActiveSupport::HashWithIndifferentAccess
   # @param values [Hash] configuration options for the Universal Viewer
   # @see https://github.com/UniversalViewer/universalviewer/wiki/Configuration
   def initialize(values = {})
-    build_values = self.class.default_values.merge(values)
+    build_values = self.class.default_values.deep_merge(values.with_indifferent_access)
 
     super(build_values)
   end

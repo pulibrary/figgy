@@ -51,7 +51,7 @@ class ApplicationController < ActionController::Base
   # GET /viewer/config
   # Retrieve the viewer configuration for a given resource
   def viewer_config
-    resource = find_resource
+    resource = find_resource(resource_id_param)
 
     config = if resource.decorate.downloadable? || (!current_user.nil? && (current_user.staff? || current_user.admin?))
                default_uv_config
@@ -64,12 +64,37 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # GET /viewer/exhibit/config
+  # Retrieve the viewer configuration for a given resource in a digital exhibit
+  def viewer_exhibit_config
+    return head(:bad_request) unless manifest_url_param
+
+    resource = find_resource_from_manifest(manifest_url_param)
+
+    config = if resource.decorate.downloadable?
+               default_exhibit_uv_config
+             else
+               downloads_disabled_exhibit_uv_config
+             end
+
+    respond_to do |format|
+      format.json { render json: config }
+      format.html { render json: config }
+    end
+  end
+
   private
 
     # Retrieve the ID of the resource from the parameters
     # @return [String]
-    def resource_id
+    def resource_id_param
       params[:id]
+    end
+
+    # Retrieve the manifest URL from the request parameters
+    # @return [String]
+    def manifest_url_param
+      params[:manifest]
     end
 
     # Retrieve the metadata adapter using Valkyrie
@@ -80,9 +105,20 @@ class ApplicationController < ActionController::Base
     delegate :query_service, to: :metadata_adapter
 
     # Retrieve the resource using the ID of the resource
+    # @param resource_id [String]
     # @return [Valkyrie::Resource]
-    def find_resource
+    def find_resource(resource_id)
       query_service.find_by(id: Valkyrie::ID.new(resource_id))
+    end
+
+    # This needs to be opinionated about the structure of the URL
+    # @param url [String] the URL to the manifest
+    # @return [Valkyrie::Resource]
+    def find_resource_from_manifest(url)
+      components = url.split("/")
+      return unless !components.empty? && components.last == "manifest"
+      id = components[-2]
+      find_resource(id)
     end
 
     # Construct a viewer configuration with the default options
@@ -95,6 +131,22 @@ class ApplicationController < ActionController::Base
     # @return [ViewerConfiguration]
     def downloads_disabled_uv_config
       ViewerConfiguration.new(
+        modules: {
+          footerPanel: {
+            options: {
+              downloadEnabled: false
+            }
+          }
+        }
+      )
+    end
+
+    def default_exhibit_uv_config
+      ExhibitViewerConfiguration.new
+    end
+
+    def downloads_disabled_exhibit_uv_config
+      ExhibitViewerConfiguration.new(
         modules: {
           footerPanel: {
             options: {
