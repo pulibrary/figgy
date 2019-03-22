@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require "reform/form/active_model/form_builder_methods"
 class ChangeSet < Valkyrie::ChangeSet
+  def self.reflect_on_association(*_args); end
   include Reform::Form::ActiveModel
   include Reform::Form::ActiveModel::FormBuilderMethods
   class_attribute :workflow_class
@@ -82,14 +83,31 @@ class ChangeSet < Valkyrie::ChangeSet
   end
 
   # Defines the default populator for a nested single-valued changeset property
-  def populate_nested_property(fragment:, as:, **)
+  def populate_nested_property(fragment:, as:, collection: nil, index: nil, **)
     property_klass = model.class.schema[as.to_sym]
-    if fragment.values.select(&:present?).blank?
-      send(:"#{as}=", nil)
-      return skip!
+    if property_klass.respond_to?(:primitive) && property_klass.primitive == Array
+      item = collection.find { |x| x.id.to_s == fragment["id"] }
+      if item
+        if fragment["_destroy"] == "1" || fragment.values.select(&:present?).blank?
+          collection.delete_at(index)
+          return skip!
+        else
+          item
+        end
+      else
+        if fragment["_destroy"] == "1" || fragment.values.select(&:present?).blank?
+          skip!
+        else
+          collection.append(property_klass[[{id: SecureRandom.uuid}]].first)
+        end
+      end
+    else
+      if fragment.values.select(&:present?).blank?
+        send(:"#{as}=", nil)
+        return skip!
+      end
+      send("#{as.to_sym}=", property_klass.new(fragment))
     end
-
-    send("#{as.to_sym}=", property_klass.new(fragment))
   end
 
   # Override prepopulate method to correctly populate nested properties.
@@ -98,7 +116,12 @@ class ChangeSet < Valkyrie::ChangeSet
     schema.each(twin: true) do |property|
       property_name = property[:name]
       property_klass = model.class.schema[property_name.to_sym]
-      send(:"#{property_name}=", property_klass.new) unless send(property_name)
+      next if send(property_name).present?
+      if property_klass.respond_to?(:primitive) && property_klass.primitive == Array
+        send(:"#{property_name}=", property_klass[[{}]])
+      else
+        send(:"#{property_name}=", property_klass.new)
+      end
     end
 
     super

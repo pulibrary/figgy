@@ -5,7 +5,7 @@ class LetterChangeSet < ChangeSet
   enable_order_manager
   enable_pdf_support
 
-  property :sender, multiple: false, required: false, form: NameWithPlaceChangeSet, populator: :populate_nested_property
+  collection :sender, multiple: true, required: false, form: NameWithPlaceChangeSet, populator: :populate_nested_property, default: []
   property :recipient, multiple: false, required: false, form: NameWithPlaceChangeSet, populator: :populate_nested_property
 
   def primary_terms
@@ -17,5 +17,9 @@ class LetterChangeSet < ChangeSet
         :member_of_collection_ids
       ]
     ).flatten
+  end
+
+  def build_sender
+    schema["sender"][:nested].new(model.class.schema[:sender][[{}]].first)
   end
 end
