@@ -87,10 +87,19 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     false
   end
 
+  # Determine whether or not a resource is publicly visible
+  # @return [Boolean]
+  def visible?
+    model.respond_to?(:visibility) && model.visibility.include?(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
+  end
+
   # Determine whether or not a resource can be downloaded
   # @return [Boolean]
   def downloadable?
-    respond_to?(:downloadable) && downloadable&.include?("public")
+    return false unless respond_to?(:downloadable)
+    return visible? && public_readable_state? if downloadable.nil?
+
+    downloadable&.include?("public")
   end
 
   def attachable_objects
