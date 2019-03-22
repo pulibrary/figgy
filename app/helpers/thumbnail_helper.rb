@@ -17,10 +17,17 @@ module ThumbnailHelper
     "this.src='#{image_path('default.png')}'"
   end
 
+  # Generate the thumbnail path for a given SolrDocument
+  # @param document [SolrDocument]
+  # @param image_options [Hash]
+  # @return [String]
   def figgy_thumbnail_path(document, image_options = {})
     document = document.try(:resource) || document.try(:model) || document
     value = send(figgy_thumbnail_method(document), document, image_options)
     value
+  rescue TypeError # This error is raised by the QueryService
+    Rails.logger.error("Unable to retrieve the resource with the ID #{document.id}")
+    default_icon_fallback
   end
 
   def geo_thumbnail?(document)
