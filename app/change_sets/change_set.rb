@@ -86,28 +86,35 @@ class ChangeSet < Valkyrie::ChangeSet
   def populate_nested_property(fragment:, as:, collection: nil, index: nil, **)
     property_klass = model.class.schema[as.to_sym]
     if property_klass.respond_to?(:primitive) && property_klass.primitive == Array
-      item = collection.find { |x| x.id.to_s == fragment["id"] }
-      if item
-        if fragment["_destroy"] == "1" || fragment.values.select(&:present?).blank?
-          collection.delete_at(index)
-          return skip!
-        else
-          item
-        end
-      else
-        if fragment["_destroy"] == "1" || fragment.values.select(&:present?).blank?
-          skip!
-        else
-          collection.append(property_klass[[{id: SecureRandom.uuid}]].first)
-        end
-      end
+      populate_nested_collection(fragment: fragment, as: as, collection: collection, index: index)
     else
-      if fragment.values.select(&:present?).blank?
+      if delete_fragment?(fragment)
         send(:"#{as}=", nil)
         return skip!
       end
       send("#{as.to_sym}=", property_klass.new(fragment))
     end
+  end
+
+  def populate_nested_collection(fragment:, as:, collection:, index:, **)
+    property_klass = model.class.schema[as.to_sym]
+    item = collection.find { |x| x.id.to_s == fragment["id"] }
+    if item
+      if delete_fragment?(fragment)
+        collection.delete_at(index)
+        return skip!
+      else
+        item
+      end
+    elsif delete_fragment?(fragment)
+      skip!
+    else
+      collection.append(property_klass[[{ id: SecureRandom.uuid }]].first)
+    end
+  end
+
+  def delete_fragment?(fragment)
+    fragment["_destroy"] == "1" || fragment.values.select(&:present?).blank?
   end
 
   # Override prepopulate method to correctly populate nested properties.
