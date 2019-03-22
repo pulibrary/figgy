@@ -6,7 +6,10 @@
   </div>
   <div class="links">
     <%= link_to_add_association f, :sender, partial: 'sender_fields', force_non_association_create: true do %>
-      Add
+      <button type="button" class="btn btn-link add">
+        <span class="glyphicon glyphicon-plus"></span>
+        <span class="controls-add-text">Add another Sender</span>
+      </button>
     <% end %>
   </div>
 </div>
