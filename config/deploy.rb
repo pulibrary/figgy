@@ -83,4 +83,11 @@ namespace :deploy do
       end
     end
   end
+
+  namespace :geoblacklight do
+    desc "Reindex Geospatial Resources (for synchronized GeoBlacklight installations)"
+    task :reindex do
+      execute :rake, "geoblacklight:reindex"
+    end
+  end
 end
