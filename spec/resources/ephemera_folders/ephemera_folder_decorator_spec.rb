@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe EphemeraFolderDecorator do
   subject(:decorator) { described_class.new(resource) }
-  let(:resource) { FactoryBot.build(:ephemera_folder) }
+  let(:resource) { FactoryBot.build(:ephemera_folder, holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/15") }
 
   describe "decoration" do
     it "decorates an EphemeraFolder" do
@@ -238,6 +238,47 @@ RSpec.describe EphemeraFolderDecorator do
 
     it "generates markup for OCR languages" do
       expect(decorator.rendered_ocr_language).to be_empty
+    end
+  end
+
+  describe "#rendered_holding_location" do
+    it "renders the location label" do
+      expect(decorator.rendered_holding_location).to eq(["Firestone Library"])
+    end
+  end
+
+  describe "#pdf_file" do
+    context "when there is a pdf and it exists" do
+      before do
+        allow(derivs).to receive(:find_by).with(id: file_id).and_return(file_id)
+      end
+      let(:derivs)   { Valkyrie::StorageAdapter.find(:derivatives) }
+      let(:file_id)  { Valkyrie::ID.new("disk:///tmp/stubbed.tif") }
+      let(:pdf_file) { FileMetadata.new mime_type: "application/pdf", file_identifiers: [file_id] }
+      let(:resource) { FactoryBot.create_for_repository(:scanned_resource, file_metadata: [pdf_file]) }
+      it "finds the pdf file" do
+        expect(decorator.pdf_file).to eq pdf_file
+      end
+    end
+
+    context "when there is a pdf but it does not exist" do
+      before do
+        allow(derivs).to receive(:find_by).with(id: file_id).and_raise(Valkyrie::StorageAdapter::FileNotFound)
+      end
+      let(:derivs)   { Valkyrie::StorageAdapter.find(:derivatives) }
+      let(:file_id)  { Valkyrie::ID.new("disk:///tmp/stubbed.tif") }
+      let(:pdf_file) { FileMetadata.new mime_type: "application/pdf", file_identifiers: [file_id] }
+      let(:resource) { FactoryBot.create_for_repository(:scanned_resource, file_metadata: [pdf_file]) }
+      it "does not return the bogus pdf file" do
+        expect(decorator.pdf_file).to be nil
+      end
+    end
+
+    context "when there is no pdf file" do
+      let(:resource) { FactoryBot.create_for_repository(:scanned_resource) }
+      it "returns nil" do
+        expect(decorator.pdf_file).to be nil
+      end
     end
   end
 end

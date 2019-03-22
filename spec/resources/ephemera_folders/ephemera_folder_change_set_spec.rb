@@ -39,6 +39,19 @@ RSpec.describe EphemeraFolderChangeSet do
     end
   end
 
+  describe "#holding_location" do
+    it "converts values to RDF::URIs" do
+      change_set.validate(holding_location: "http://test.com/")
+      expect(change_set.holding_location).to be_instance_of RDF::URI
+    end
+  end
+
+  describe "#pdf_type" do
+    it "defaults to color" do
+      expect(change_set.pdf_type).to eq "color"
+    end
+  end
+
   describe "#series" do
     it "is multi-valued" do
       expect(change_set.multiple?(:series)).to be true

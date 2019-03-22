@@ -69,10 +69,10 @@ class PDFGenerator
           call_number = resource.primary_imported_metadata.call_number
         else
           creator = resource.creator
-          edition = resource.edition
+          edition = resource.edition if resource.respond_to?(:edition)
           extent = resource.extent
           description = resource.description
-          call_number = resource.call_number
+          call_number = resource.call_number if resource.respond_to?(:call_number)
         end
 
         text(prawn_document, creator)
