@@ -67,14 +67,15 @@ export default class RelatedResourcesTable {
       const $element = $(event.target)
       const $row = $this.element.find('.member-actions')
       const attachedId = $this.$select.val()
-      const dataMembers = this.table.data('members');
       if (attachedId === '') {
         $this.setWarningMessage($row, 'ID cannot be empty.');
-      } else if ($.inArray(attachedId, dataMembers) > -1) {
+      } else if ($.inArray(attachedId, $this.members) > -1) {
         $this.setWarningMessage($row, 'Resource is already related.');
       } else {
         $this.members.push(attachedId);
         $this.hideWarningMessage($row);
+        const dataAttrDisplay = $this.members;
+        $this.element.attr('data-members', $this.dataMemberAttr(dataAttrDisplay));
         $element.prop('disabled', true)
 
         $this.setLoading(true)
