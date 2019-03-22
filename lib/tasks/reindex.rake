@@ -7,3 +7,10 @@ desc "Reindexes everything without wiping Solr."
 task reindex: :environment do
   Reindexer.reindex_all(wipe: false)
 end
+
+namespace :geoblacklight do
+  desc "Reindex Geospatial Resources (for synchronized GeoBlacklight installations)"
+  task reindex: :environment do
+    GeoResourceReindexer.reindex_geoblacklight
+  end
+end
