@@ -27,9 +27,13 @@ class OrangelightCoinBuilder
         title_display: "Coin: #{decorator.coin_number}",
         pub_created_display: decorator.pub_created_display,
         access_facet: ["Online", "In the Library"],
-        location: decorator.holding_location,
+        call_number_display: [decorator.call_number],
+        call_number_browse_s: [decorator.call_number],
+        location_code_s: [coin_location_code],
+        location: [coin_library_location],
+        location_display: [coin_full_location],
         format: ["Coin"],
-        advanced_location_s: ["num"],
+        advanced_location_s: [coin_location_code],
         counter_stamp_s: decorator.counter_stamp,
         analysis_s: decorator.analysis,
         notes_display: decorator.public_note,
@@ -45,6 +49,7 @@ class OrangelightCoinBuilder
         weight_s: decorator.weight,
         pub_date_start_sort: parent.first_range&.start&.first.to_i,
         pub_date_end_sort: parent.first_range&.end&.first.to_i,
+        holdings_1display: holdings_hash,
         issue_object_type_s: parent.object_type,
         issue_denomination_s: parent.denomination,
         issue_denomination_sort: parent.denomination&.first,
@@ -82,6 +87,30 @@ class OrangelightCoinBuilder
         issue_references_sort: parent.citations&.first,
         issue_artists_s: parent.artists
       }
+    end
+
+    def holdings_hash
+      {
+        "numismatics" => {
+          "location" => coin_full_location,
+          "library" => coin_library_location,
+          "location_code" => coin_location_code,
+          "call_number" => decorator.call_number,
+          "call_number_browse" => decorator.call_number
+        }
+      }.to_json.to_s
+    end
+
+    def coin_location_code
+      "num"
+    end
+
+    def coin_library_location
+      "Rare Books and Special Collections"
+    end
+
+    def coin_full_location
+      "Rare Books and Special Collections - Numismatics Collection"
     end
   # rubocop:enable Metrics/MethodLength
   # rubocop:enable Metrics/AbcSize
