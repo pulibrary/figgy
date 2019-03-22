@@ -52,6 +52,10 @@ class CoinDecorator < Valkyrie::ResourceDecorator
     "coin-#{coin_number}"
   end
 
+  def call_number
+    "Coin #{coin_number}"
+  end
+
   def state
     super.first
   end

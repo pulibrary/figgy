@@ -68,6 +68,7 @@ Metrics/ClassLength:
     - 'app/services/geo_resource_reindexer.rb'
     - 'app/services/ingest_ephemera_service.rb'
     - 'app/utils/data_seeder.rb'
+    - 'app/resources/coins/orangelight_coin_builder.rb'
     - 'app/resources/scanned_resources/scanned_resource_decorator.rb'
     - 'app/resources/scanned_maps/scanned_map_decorator.rb'
     - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
