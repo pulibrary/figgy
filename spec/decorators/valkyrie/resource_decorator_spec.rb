@@ -263,9 +263,38 @@ RSpec.describe Valkyrie::ResourceDecorator do
       expect(decorator.visibility_badge.first).not_to have_selector("div.alert")
     end
   end
+  describe "#visible?" do
+    it "determines whether or not a resource is visible" do
+      expect(decorator.visible?).to be true
+    end
+
+    context "when a resource is set to private" do
+      let(:resource) { FactoryBot.build(:complete_private_scanned_resource) }
+
+      it "is not visible" do
+        expect(decorator.visible?).to be false
+      end
+    end
+  end
   describe "#downloadable?" do
     it "determines whether or not a decorated resource can be downloaded" do
       expect(decorator.downloadable?).to be true
+    end
+
+    context "when the resource has the downloadable attribute set to none" do
+      let(:resource) { FactoryBot.build(:complete_scanned_resource, downloadable: ["none"]) }
+
+      it "does not allow downloads" do
+        expect(decorator.downloadable?).to be false
+      end
+    end
+
+    context "when the resource has a nil downloadable attribute" do
+      let(:resource) { FactoryBot.build(:complete_scanned_resource, downloadable: nil) }
+
+      it "delegates to whether unauthenicated users can access the resource" do
+        expect(decorator.downloadable?).to eq(decorator.visible? && decorator.public_readable_state?)
+      end
     end
   end
 end
