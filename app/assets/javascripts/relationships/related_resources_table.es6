@@ -67,10 +67,10 @@ export default class RelatedResourcesTable {
       const $element = $(event.target)
       const $row = $this.element.find('.member-actions')
       const attachedId = $this.$select.val()
-
+      const dataMembers = this.table.data('members');
       if (attachedId === '') {
         $this.setWarningMessage($row, 'ID cannot be empty.');
-      } else if ($.inArray(attachedId, $this.members) > -1) {
+      } else if ($.inArray(attachedId, dataMembers) > -1) {
         $this.setWarningMessage($row, 'Resource is already related.');
       } else {
         $this.members.push(attachedId);
@@ -104,9 +104,10 @@ export default class RelatedResourcesTable {
       const $row = $element.parents('tr:first');
       const memberId = $row.data('resource-id');
       const index = $this.members.indexOf(memberId);
-
       $this.members.splice(index, 1);
+      const dataAttrDisplay = $this.members;
       $element.prop('disabled', true)
+      $this.element.attr('data-members', $this.dataMemberAttr(dataAttrDisplay));
       $this.setLoading(true)
       $this.callAjax({
         row: $row,
@@ -120,6 +121,16 @@ export default class RelatedResourcesTable {
         on_success: $this.reloadTable
       });
     });
+  }
+
+  // build the string to update the data-members attribute in the dom.
+  dataMemberAttr(dataAttrDisplay) {
+    var data_attr_value = "";
+    for(var i=0; i< dataAttrDisplay.length; i++) {
+      data_attr_value += '"'+dataAttrDisplay[i]+ '"' + ', ';
+    }
+    data_attr_value = "["+ data_attr_value.slice(0,-2) +"]";
+    return data_attr_value;
   }
 
   /**
@@ -182,7 +193,6 @@ export default class RelatedResourcesTable {
   */
   reloadTable() {
     const $this = this;
-
     $this.$tbody.load(`${$this.query_url} #${this.element[0].id} tbody > *`, () => {
       $this.setLoading(false)
       $this.bindButtons();
