@@ -85,7 +85,7 @@ class PDFGenerator
 
   def canvas_downloaders
     @canvas_images ||= canvas_images.map do |image|
-      CanvasDownloader.new(image, quality: resource.pdf_type.first)
+      CanvasDownloader.new(image, quality: (resource.pdf_type || ["color"]).first)
     end
   end
 
