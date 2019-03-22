@@ -142,6 +142,25 @@ RSpec.shared_examples "a BaseResourceController" do |*flags|
       post :create, params: { param_key => invalid_params }
       expect(response).to render_template "base/new"
     end
+
+    context "when an invalid source metadata ID is provided" do
+      let(:invalid_metadata_params) do
+        {
+          source_metadata_identifier: "CD- 34517q"
+        }
+      end
+      before do
+        allow(Rails.logger).to receive(:error)
+      end
+
+      it "renders the form for a new resource, and both logs and flashes an error message" do
+        post :create, params: { param_key => valid_params.merge(invalid_metadata_params) }
+
+        expect(response).to render_template "base/new"
+        expect(Rails.logger).to have_received(:error).with("Invalid source metadata ID: CD- 34517q")
+        expect(flash[:error]).to eq "Invalid source metadata ID: CD- 34517q"
+      end
+    end
   end
 
   describe "destroy" do

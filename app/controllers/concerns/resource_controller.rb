@@ -31,6 +31,10 @@ module ResourceController
       Rails.logger.warn(@change_set.errors.details)
       render :new
     end
+  rescue SourceMetadataIdentifierValidator::InvalidMetadataIdentifierError => invalid_metadata_id_error
+    Rails.logger.error(invalid_metadata_id_error.message)
+    flash[:error] = invalid_metadata_id_error.message
+    render :new
   end
 
   def after_create_success(obj, change_set)
