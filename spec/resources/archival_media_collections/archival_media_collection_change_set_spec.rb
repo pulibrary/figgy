@@ -43,7 +43,7 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
     context "when metadata identifier is set to a string that's not an id" do
       let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "not an id") }
       it "is invalid" do
-        expect(change_set).not_to be_valid
+        expect { change_set.valid? }.to raise_error(SourceMetadataIdentifierValidator::InvalidMetadataIdentifierError, "Invalid source metadata ID: not an id")
       end
     end
 
