@@ -203,6 +203,7 @@ RSpec/DescribeClass:
     - 'spec/inputs/**/*'
     - 'spec/requests/**/*'
     - 'spec/resources/**/*routes_spec.rb'
+    - 'spec/adapters/bagit/bag_roundtrip_spec.rb'
 RSpec/EmptyExampleGroup:
   Exclude:
     - 'spec/models/search_builder_spec.rb'
