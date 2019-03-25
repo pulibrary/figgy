@@ -41,7 +41,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
     let(:user) { FactoryBot.create(:admin) }
     render_views
 
-    context "when params change_set" do
+    context "when the params specify a change_set" do
       it "is simple, creates a new SimpleChangeSet" do
         get :new, params: { change_set: "simple" }
         expect(assigns(:change_set)).to be_a SimpleChangeSet
@@ -52,6 +52,18 @@ RSpec.describe ScannedResourcesController, type: :controller do
         expect(response.body).to have_field "Source Metadata ID"
         expect(response.body).to have_field "Title"
         expect(response.body).to have_selector "p.help-block", text: "Required if Source Metadata ID is blank"
+      end
+    end
+
+    context "when the params specify an invalid change_set" do
+      before do
+        allow(Rails.logger).to receive(:error)
+      end
+      it "creates a new ScannedResource and flashes a warning" do
+        get :new, params: { change_set: "invalid" }
+        expect(Rails.logger).to have_received(:error).with("ScannedResources do not support invalid as a ChangeSet.")
+        expect(response).to redirect_to new_scanned_resource_path
+        expect(flash[:error]).to eq("invalid is not a valid resource type.")
       end
     end
   end
