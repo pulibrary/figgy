@@ -54,15 +54,18 @@ module Schema
           :subject, # http://purl.org/dc/elements/1.1/subject
 
           :sort_title, # http://opaquenamespace.org/ns/mods/titleForSort
+
           :rights_statement, # http://www.europeana.eu/schemas/edm/rights
+
           :portion_note, # http://www.w3.org/2004/02/skos/core#scopeNote
           :binding_note, # http://www.w3.org/2004/02/skos/core#note
 
           :cartographic_scale, # http://bibframe.org/vocab/cartographicScale
-          :edition, # http://id.loc.gov/ontologies/bibframe/editionStatement
-          :geographic_origin, # http://id.loc.gov/ontologies/bibframe/originPlace
           :holding_location, # http://bibframe.org/vocab/heldBy
           :source_acquisition, # http://bibframe.org/vocab/immediateAcquisition
+
+          :edition, # http://id.loc.gov/ontologies/bibframe/editionStatement
+          :geographic_origin, # http://id.loc.gov/ontologies/bibframe/originPlace
 
           :source_metadata_identifier, # Local
           :source_metadata, # Local
@@ -77,8 +80,9 @@ module Schema
           :thumbnail_id, # Local
           :imported_author, # Local
           :rendered_rights_statement, # Local
-          :coverage_point, # local, used for latitude / longitude
-          :downloadable # Determines whether or not users can download a resource
+          :coverage_point, # Local, used for latitude / longitude
+          :downloadable, # Determines whether or not users can download a resource
+          :remote_checksum # Local
         ]
     end
 

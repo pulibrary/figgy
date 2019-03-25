@@ -101,6 +101,9 @@ defaults: &defaults
       supported_mime_types:
         - 'audio/x-wav'
         - 'audio/mpeg'
+  google_cloud_storage:
+    project_id: <%= ENV["GOOGLE_CLOUD_PROJECT_ID"] || "project-figgy" %>
+    bucket_name: <%= ENV["GOOGLE_CLOUD_BUCKET_NAME"] || "project-figgy-bucket" %>
 
 development:
   <<: *defaults
