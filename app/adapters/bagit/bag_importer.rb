@@ -77,7 +77,7 @@ module Bagit
       end
 
       def id_references
-        ids = bag_resource.to_h.except(:id).values.flat_map { |x| x }.select { |value| value.is_a?(Valkyrie::ID) }
+        ids = bag_resource.to_h.except(:id).values.flat_map { |x| x }.select { |value| value.is_a?(Valkyrie::ID) } - (bag_resource.try(:member_ids) || [])
         bag_metadata_adapter.query_service.find_many_by_ids(ids: ids)
       end
 
