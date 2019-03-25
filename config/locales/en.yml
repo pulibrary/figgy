@@ -95,10 +95,14 @@ en:
           label: "Holding Location"
         rendered_place:
           label: "Place"
-        rendered_subject:
-          label: "Subject"
+        rendered_recipient:
+          label: "Recipient"
         rendered_rights_statement:
           label: "Rights Statement"
+        rendered_sender:
+          label: "Sender"
+        rendered_subject:
+          label: "Subject"
         rendered_ocr_language:
           label: "OCR Language"
         rights_statement:

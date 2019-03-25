@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 class ScannedResourceDecorator < Valkyrie::ResourceDecorator
   display Schema::Common.attributes,
+          :rendered_sender,
+          :rendered_recipient,
           :rendered_date_range,
           :rendered_ocr_language,
           :rendered_holding_location,
@@ -77,6 +79,18 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
     vocabulary = ControlledVocabulary.for(:ocr_language)
     ocr_language.map do |language|
       vocabulary.find(language).label
+    end
+  end
+
+  def rendered_sender
+    sender.collect do |s|
+      [s.name, s.place].compact.join("; ")
+    end
+  end
+
+  def rendered_recipient
+    recipient.collect do |r|
+      [r.name, r.place].compact.join("; ")
     end
   end
 
