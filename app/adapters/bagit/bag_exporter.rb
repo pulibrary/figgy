@@ -33,6 +33,11 @@ module Bagit
           resource.original_file.file_identifiers = [bag_file.id]
         end
         metadata_adapter.persister.save(resource: resource)
+        export_members
+        export_references
+      end
+
+      def export_members
         members.each do |member|
           self.class.new(
             metadata_adapter: member_metadata_adapter,
@@ -41,6 +46,22 @@ module Bagit
             query_service: query_service
           ).export!
         end
+      end
+
+      def export_references
+        id_references.each do |reference|
+          self.class.new(
+            metadata_adapter: metadata_adapter,
+            storage_adapter: storage_adapter,
+            resource: reference,
+            query_service: query_service
+          ).export!
+        end
+      end
+
+      def id_references
+        ids = resource.to_h.except(:id).values.flat_map { |x| x }.select { |value| value.is_a?(Valkyrie::ID) }
+        query_service.find_many_by_ids(ids: ids)
       end
 
       def original_file

@@ -41,6 +41,7 @@ module Bagit
         end
         resource = metadata_adapter.persister.save(resource: bag_resource)
         import_members!
+        import_references!
         resource
       end
 
@@ -60,6 +61,23 @@ module Bagit
             id: member_id
           ).import!
         end
+      end
+
+      def import_references!
+        id_references.each do |reference|
+          ResourceImporter.new(
+            bag_storage_adapter: bag_storage_adapter,
+            bag_metadata_adapter: bag_metadata_adapter,
+            metadata_adapter: metadata_adapter,
+            storage_adapter: storage_adapter,
+            id: reference.id
+          ).import!
+        end
+      end
+
+      def id_references
+        ids = bag_resource.to_h.except(:id).values.flat_map { |x| x }.select { |value| value.is_a?(Valkyrie::ID) }
+        bag_metadata_adapter.query_service.find_many_by_ids(ids: ids)
       end
 
       def member_ids
