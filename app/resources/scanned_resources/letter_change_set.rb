@@ -5,8 +5,8 @@ class LetterChangeSet < ChangeSet
   enable_order_manager
   enable_pdf_support
 
-  collection :sender, multiple: true, required: false, form: NameWithPlaceChangeSet, populator: :populate_nested_property, default: []
-  collection :recipient, multiple: true, required: false, form: NameWithPlaceChangeSet, populator: :populate_nested_property, default: []
+  collection :sender, multiple: true, required: false, form: NameWithPlaceChangeSet, populator: :populate_nested_collection, default: []
+  collection :recipient, multiple: true, required: false, form: NameWithPlaceChangeSet, populator: :populate_nested_collection, default: []
   self.feature_terms += [:member_of_collection_ids]
 
   def primary_terms

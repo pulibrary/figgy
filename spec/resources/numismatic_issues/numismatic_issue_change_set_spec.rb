@@ -77,25 +77,27 @@ RSpec.describe NumismaticIssueChangeSet do
   end
 
   describe "#place" do
-    it "can be set with a ciy, state, and region" do
-      change_set.validate(place: { city: "City", state: "State", region: "Region" })
-      expect(change_set.place.city).to eq "City"
-      expect(change_set.place.state).to eq "State"
-      expect(change_set.place.region).to eq "Region"
+    it "can be set with a city, state, and region" do
+      change_set.validate(place: [{ city: "City", state: "State", region: "Region" }])
+      expect(change_set.place.first.city).to eq "City"
+      expect(change_set.place.first.state).to eq "State"
+      expect(change_set.place.first.region).to eq "Region"
       # Ensure form builder works.
-      change_set.validate("place_attributes" => { city: "City2", state: "State", region: "Region" })
-      expect(change_set.place.city).to eq "City2"
+      change_set.place = []
+      change_set.validate("place_attributes" => { "0" => { city: "City2", state: "State", region: "Region" } })
+      expect(change_set.place.first.city).to eq "City2"
       # Ensure it doesn't result in an empty object if nothing is set
-      change_set.validate(place: { city: nil, state: nil, region: nil })
+      change_set.place = []
+      change_set.validate(place: [{ city: nil, state: nil, region: nil }])
       change_set.sync
-      expect(change_set.resource.place).to eq nil
+      expect(change_set.resource.place).to be_empty
     end
   end
 
   describe "#prepopulate!" do
     it "builds an empty numsimatic place" do
       change_set.prepopulate!
-      expect(change_set.place).to be_a NumismaticPlaceChangeSet
+      expect(change_set.place.first).to be_a NumismaticPlaceChangeSet
     end
   end
 end

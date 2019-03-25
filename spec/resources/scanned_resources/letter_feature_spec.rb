@@ -42,15 +42,13 @@ RSpec.feature "Letter" do
     let(:collection) { FactoryBot.create_for_repository(:collection) }
     let(:sender1) { NameWithPlace.new(name: "Sender Name 1", place: "Sender Place 1") }
     let(:sender2) { NameWithPlace.new(name: "Sender Name 2", place: "Sender Place 2") }
-    let(:recipient) { NameWithPlace.new(name: "Recipient Name", place: "Recipient Place") }
     let(:letter) do
       FactoryBot.create_for_repository(
         :letter,
         title: "a letter",
         rights_statement: RightsStatements.copyright_not_evaluated.to_s,
         member_of_collection_ids: [collection.id],
-        sender: [sender1, sender2],
-        recipient: recipient
+        sender: [sender1, sender2]
       )
     end
 
@@ -63,15 +61,17 @@ RSpec.feature "Letter" do
       expect(page).to have_css ".attribute.title", text: "a letter"
       expect(page).to have_css ".attribute.rendered_sender", text: "Sender Name 1; Sender Place 1"
       expect(page).to have_css ".attribute.rendered_sender", text: "Sender Name 2; Sender Place 2"
-      expect(page).to have_css ".attribute.rendered_recipient", text: "Recipient Name; Recipient Place"
     end
 
-    scenario "user can edit a letter and remove a nested sender", js: true do
+    scenario "user can edit a letter to update sender and recipient", js: true do
       visit edit_scanned_resource_path letter
 
       within "#sender" do
         find(".remove_fields", match: :first).click
       end
+
+      fill_in "Recipient Name", with: "Recipient Name 1"
+      fill_in "Recipient Place", with: "Recipient Place 1"
 
       click_button "Save"
 
@@ -79,6 +79,7 @@ RSpec.feature "Letter" do
 
       expect(page).not_to have_css ".attribute.rendered_sender", text: "Sender Name 1; Sender Place 1"
       expect(page).to have_css ".attribute.rendered_sender", text: "Sender Name 2; Sender Place 2"
+      expect(page).to have_css ".attribute.rendered_recipient", text: "Recipient Name 1; Recipient Place 1"
     end
   end
 end

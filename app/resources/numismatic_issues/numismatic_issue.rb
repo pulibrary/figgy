@@ -30,7 +30,8 @@ class NumismaticIssue < Resource
   attribute :obverse_orientation
   attribute :obverse_part
   attribute :obverse_symbol
-  attribute :place, NumismaticPlace
+  attribute :place, Valkyrie::Types::Array.of(NumismaticPlace).meta(ordered: true)
+
   attribute :reverse_attributes
   attribute :reverse_figure
   attribute :reverse_figure_description

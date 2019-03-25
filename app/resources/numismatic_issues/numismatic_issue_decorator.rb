@@ -84,8 +84,8 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
   end
 
   def rendered_place
-    return unless place
-    place.decorate.rendered_place
+    return if place.empty?
+    place&.first&.decorate&.rendered_place
   end
 
   def rendered_rights_statement

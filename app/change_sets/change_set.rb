@@ -82,20 +82,6 @@ class ChangeSet < Valkyrie::ChangeSet
     @_changes = Disposable::Twin::Changed::Changes.new
   end
 
-  # Defines the default populator for a nested single-valued changeset property
-  def populate_nested_property(fragment:, as:, collection: nil, index: nil, **)
-    property_klass = model.class.schema[as.to_sym]
-    if property_klass.respond_to?(:primitive) && property_klass.primitive == Array
-      populate_nested_collection(fragment: fragment, as: as, collection: collection, index: index)
-    else
-      if delete_fragment?(fragment)
-        send(:"#{as}=", nil)
-        return skip!
-      end
-      send("#{as.to_sym}=", property_klass.new(fragment))
-    end
-  end
-
   def populate_nested_collection(fragment:, as:, collection:, index:, **)
     property_klass = model.class.schema[as.to_sym]
     item = collection.find { |x| x.id.to_s == fragment["id"] }
@@ -126,8 +112,6 @@ class ChangeSet < Valkyrie::ChangeSet
       next if send(property_name).present?
       if property_klass.respond_to?(:primitive) && property_klass.primitive == Array
         send(:"#{property_name}=", property_klass[[{}]])
-      else
-        send(:"#{property_name}=", property_klass.new)
       end
     end
 
