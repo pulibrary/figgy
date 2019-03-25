@@ -65,6 +65,7 @@ module Bagit
 
       def import_references!
         id_references.each do |reference|
+          next unless metadata_adapter.query_service.find_many_by_ids(ids: [reference.id]).empty?
           ResourceImporter.new(
             bag_storage_adapter: bag_storage_adapter,
             bag_metadata_adapter: bag_metadata_adapter,
