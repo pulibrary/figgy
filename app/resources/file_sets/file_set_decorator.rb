@@ -17,7 +17,8 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
           :barcode,
           :part,
           :transfer_notes,
-          :error_message
+          :error_message,
+          :remote_checksum
 
   delegate :collections, to: :wayfinder
 

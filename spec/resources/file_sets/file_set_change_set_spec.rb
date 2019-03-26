@@ -11,4 +11,12 @@ RSpec.describe FileSetChangeSet do
       expect(change_set.primary_terms).to eq [:title]
     end
   end
+
+  describe "#remote_checksum" do
+    let(:file_set) { FactoryBot.build(:file_set, remote_checksum: ["test"]) }
+
+    it "accesses the remote checksum" do
+      expect(change_set.remote_checksum).to eq "test"
+    end
+  end
 end

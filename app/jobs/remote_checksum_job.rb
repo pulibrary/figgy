@@ -11,10 +11,11 @@ class RemoteChecksumJob < ApplicationJob
     remote_file = cloud_storage_file
 
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
-      change_set.remote_checksum = remote_file.md5
-      binding.pry
+      change_set = DynamicChangeSet.new(resource)
 
-      buffered_changeset_persister.save(change_set: change_set)
+      if change_set.validate(remote_checksum: remote_file.md5)
+        buffered_changeset_persister.save(change_set: change_set)
+      end
     end
   end
 
@@ -39,12 +40,6 @@ class RemoteChecksumJob < ApplicationJob
     # @return [Resource]
     def resource
       query_service.find_by(id: @resource_id)
-    end
-
-    # Construct a ChangeSet for the resource
-    # @return [ChangeSet]
-    def change_set
-      DynamicChangeSet.new(resource)
     end
 
     # Generate the file name from the resource ID
