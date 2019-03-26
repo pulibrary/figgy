@@ -42,6 +42,7 @@ module Bagit
         resource = metadata_adapter.persister.save(resource: bag_resource)
         import_members!
         import_references!
+        RegenerateDerivativesJob.perform_now(resource.id.to_s) if resource.is_a?(FileSet)
         resource
       end
 
