@@ -5,17 +5,27 @@ class LetterChangeSet < ChangeSet
   enable_order_manager
   enable_pdf_support
 
-  property :sender, multiple: false, required: false, form: NameWithPlaceChangeSet, populator: :populate_nested_property
-  property :recipient, multiple: false, required: false, form: NameWithPlaceChangeSet, populator: :populate_nested_property
+  collection :sender, multiple: true, required: false, form: NameWithPlaceChangeSet, populator: :populate_nested_collection, default: []
+  collection :recipient, multiple: true, required: false, form: NameWithPlaceChangeSet, populator: :populate_nested_collection, default: []
+  self.feature_terms += [:member_of_collection_ids]
 
   def primary_terms
-    feature_terms.dup.insert(
-      2,
-      [
-        :sender,
-        :recipient,
-        :member_of_collection_ids
+    {
+      "" => feature_terms,
+      "Sender" => [
+        :sender
+      ],
+      "Recipient" => [
+        :recipient
       ]
-    ).flatten
+    }
+  end
+
+  def build_recipient
+    schema["recipient"][:nested].new(model.class.schema[:recipient][[{}]].first)
+  end
+
+  def build_sender
+    schema["sender"][:nested].new(model.class.schema[:sender][[{}]].first)
   end
 end

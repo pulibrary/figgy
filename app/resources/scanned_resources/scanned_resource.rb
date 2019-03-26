@@ -14,8 +14,8 @@ class ScannedResource < Resource
   attribute :change_set, Valkyrie::Types::String
   attribute :archival_collection_code, Valkyrie::Types::String
   attribute :date_range
-  attribute :sender, NameWithPlace
-  attribute :recipient, NameWithPlace
+  attribute :sender, Valkyrie::Types::Array.of(NameWithPlace).meta(ordered: true)
+  attribute :recipient, Valkyrie::Types::Array.of(NameWithPlace).meta(ordered: true)
 
   def self.can_have_manifests?
     true

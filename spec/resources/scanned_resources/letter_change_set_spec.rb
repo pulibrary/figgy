@@ -19,7 +19,8 @@ RSpec.describe LetterChangeSet do
 
   describe "#primary_terms" do
     it "has necessary terms" do
-      expect(change_set.primary_terms).to contain_exactly(
+      expect(change_set.primary_terms.keys).to eq(["", "Sender", "Recipient"])
+      expect(change_set.primary_terms.values.flatten).to include(
         :title,
         :rights_statement,
         :rights_note,
@@ -35,38 +36,42 @@ RSpec.describe LetterChangeSet do
   describe "#prepopulate!" do
     it "builds an empty sender/recipient" do
       change_set.prepopulate!
-      expect(change_set.sender).to be_a NameWithPlaceChangeSet
-      expect(change_set.recipient).to be_a NameWithPlaceChangeSet
+      expect(change_set.sender.first).to be_a NameWithPlaceChangeSet
+      expect(change_set.recipient.first).to be_a NameWithPlaceChangeSet
     end
   end
 
   describe "#sender" do
     it "can be set with a name and place" do
-      change_set.validate(sender: { name: "Test", place: "Place" })
-      expect(change_set.sender.name).to eq "Test"
-      expect(change_set.sender.place).to eq "Place"
+      change_set.validate(sender: [{ name: "Test", place: "Place" }])
+      expect(change_set.sender.first.name).to eq "Test"
+      expect(change_set.sender.first.place).to eq "Place"
       # Ensure form builder works.
-      change_set.validate("sender_attributes" => { name: "Test2", place: "Place" })
-      expect(change_set.sender.name).to eq "Test2"
+      change_set.sender = []
+      change_set.validate("sender_attributes" => { "0" => { name: "Test2", place: "Place" } })
+      expect(change_set.sender.first.name).to eq "Test2"
       # Ensure it doesn't result in an empty object if nothing is set
-      change_set.validate(sender: { name: "", place: "" })
+      change_set.sender = []
+      change_set.validate(sender: [{ name: "", place: "" }])
       change_set.sync
-      expect(change_set.resource.sender).to eq nil
+      expect(change_set.resource.sender).to be_empty
     end
   end
 
   describe "#recipient" do
     it "can be set with a name and place" do
-      change_set.validate(recipient: { name: "Test", place: "Place" })
-      expect(change_set.recipient.name).to eq "Test"
-      expect(change_set.recipient.place).to eq "Place"
+      change_set.validate(recipient: [{ name: "Test", place: "Place" }])
+      expect(change_set.recipient.first.name).to eq "Test"
+      expect(change_set.recipient.first.place).to eq "Place"
       # Ensure form builder works.
-      change_set.validate("recipient_attributes" => { name: "Test2", place: "Place" })
-      expect(change_set.recipient.name).to eq "Test2"
+      change_set.recipient = []
+      change_set.validate("recipient_attributes" => { "0" => { name: "Test2", place: "Place" } })
+      expect(change_set.recipient.first.name).to eq "Test2"
       # Ensure it doesn't result in an empty object if nothing is set
-      change_set.validate(recipient: { name: "", place: "" })
+      change_set.recipient = []
+      change_set.validate(recipient: [{ name: "", place: "" }])
       change_set.sync
-      expect(change_set.resource.recipient).to eq nil
+      expect(change_set.resource.recipient).to be_empty
     end
   end
 end

@@ -1,0 +1,22 @@
+<div class='nested-fields'>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :city, required: f.object.required?(:city), label: "City" %>
+    </div>
+    <div class="col-md-6">
+      <%= f.input :state, required: f.object.required?(:state), label: "State" %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :region, required: f.object.required?(:region), label: "Region" %>
+    </div>
+  </div>
+  <%= f.hidden_field :id %>
+  <%= link_to_remove_association f do %>
+    <button type="button" class="btn btn-link remove">
+      <span class="glyphicon glyphicon-remove"></span>
+      <span class="controls-remove-text">Remove</span>
+    </button>
+  <% end %>
+</div>

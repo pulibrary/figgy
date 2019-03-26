@@ -2,6 +2,15 @@
   .checkbox input[type='checkbox'] {
     margin-left: 0;
   }
+  .nested-fields {
+    border: 1px solid #ddd;
+    margin: 15px;
+    padding: 15px 5px;
+
+    .remove {
+      color: #d9534f;
+    }
+  }
   .required-tag {
     background-color: $dark-blue;
   }

@@ -35,6 +35,12 @@ FactoryBot.define do
         ).save(change_set: change_set)
       end
     end
+    factory :letter do
+      change_set "letter"
+      factory :draft_letter do
+        state "draft"
+      end
+    end
     factory :simple_resource do
       change_set "simple"
       factory :draft_simple_resource do

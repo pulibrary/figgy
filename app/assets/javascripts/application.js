@@ -38,6 +38,7 @@
 //= require bootstrap/affix
 //= require babel/polyfill
 //= require hydra-editor/hydra-editor
+//= require cocoon
 //= require_tree .
 $(document).ready(function() {
   Initializer = require('figgy_boot')
