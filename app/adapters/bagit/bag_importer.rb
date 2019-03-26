@@ -68,7 +68,7 @@ module Bagit
           next unless metadata_adapter.query_service.find_many_by_ids(ids: [reference.id]).empty?
           ResourceImporter.new(
             bag_storage_adapter: bag_storage_adapter,
-            bag_metadata_adapter: bag_metadata_adapter,
+            bag_metadata_adapter: member_bag_metadata_adapter,
             metadata_adapter: metadata_adapter,
             storage_adapter: storage_adapter,
             id: reference.id
@@ -78,7 +78,7 @@ module Bagit
 
       def id_references
         ids = bag_resource.to_h.except(:id).values.flat_map { |x| x }.select { |value| value.is_a?(Valkyrie::ID) } - (bag_resource.try(:member_ids) || [])
-        bag_metadata_adapter.query_service.find_many_by_ids(ids: ids)
+        member_bag_metadata_adapter.query_service.find_many_by_ids(ids: ids)
       end
 
       def member_ids

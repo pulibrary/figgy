@@ -51,7 +51,7 @@ module Bagit
       def export_references
         id_references.each do |reference|
           self.class.new(
-            metadata_adapter: metadata_adapter,
+            metadata_adapter: member_metadata_adapter,
             storage_adapter: storage_adapter,
             resource: reference,
             query_service: query_service
