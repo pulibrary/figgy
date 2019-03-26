@@ -33,14 +33,14 @@ RSpec.describe RemoteChecksumJob do
         "Content-Type" => "application/json; charset=utf-8"
       }
     )
-    stub_request(:get, "https://www.googleapis.com/storage/v1/b/figgy-test1").to_return(
+    stub_request(:get, "https://www.googleapis.com/storage/v1/b/project-figgy-bucket").to_return(
       status: 200,
       body: JSON.generate(
         "kind": "storage#bucket",
-        "id": "figgy-test1",
-        "selfLink": "https://www.googleapis.com/storage/v1/b/figgy-test1",
+        "id": "project-figgy-bucket",
+        "selfLink": "https://www.googleapis.com/storage/v1/b/project-figgy-bucket",
         "projectNumber": "2696948707",
-        "name": "figgy-test1",
+        "name": "project-figgy-bucket",
         "timeCreated": "2019-03-26T15:40:54.940Z",
         "updated": "2019-03-26T15:40:54.940Z",
         "metageneration": "1",
@@ -57,7 +57,7 @@ RSpec.describe RemoteChecksumJob do
         "Content-Type" => "application/json; charset=utf-8"
       }
     )
-    stub_request(:get, "https://www.googleapis.com/storage/v1/b/figgy-test1/o/#{file_set.original_file.id}").to_return(
+    stub_request(:get, "https://www.googleapis.com/storage/v1/b/project-figgy-bucket/o/#{file_set.original_file.id}").to_return(
       status: 404,
       body: JSON.generate(
         "error": {
@@ -65,24 +65,24 @@ RSpec.describe RemoteChecksumJob do
             {
               "domain": "global",
               "reason": "notFound",
-              "message": "No such object: figgy-test1/disk:///Users/griffinj/src/pulibrary/workspace6/figgy/tmp/test_files/e5/40/68/e540688ad28748ecb033dc27813459c6/example.tif"
+              "message": "No such object: project-figgy-bucket/e540688ad28748ecb033dc27813459c6/example.tif"
             }
           ],
           "code": 404,
-          "message": "No such object: figgy-test1/disk:///Users/griffinj/src/pulibrary/workspace6/figgy/tmp/test_files/e5/40/68/e540688ad28748ecb033dc27813459c6/example.tif"
+          "message": "No such object: project-figgy-bucket/e540688ad28748ecb033dc27813459c6/example.tif"
         }
       ),
       headers: {
         "Content-Type" => "application/json; charset=utf-8"
       }
     )
-    stub_request(:post, "https://www.googleapis.com/upload/storage/v1/b/figgy-test1/o?name=#{file_set.original_file.id}").to_return(
+    stub_request(:post, "https://www.googleapis.com/upload/storage/v1/b/project-figgy-bucket/o?name=#{file_set.original_file.id}").to_return(
       status: 200,
       headers: {
         "X-Guploader-Uploadid" => "AEnB2UqYKLowO6rkE3VBx-yntKGQHfUTSHzag-pK83Kqot1Ge_E85AJvX-GE6EDo8_x-QhyZ85bMmx2Xc_dAO-vL7WC9-69aIA",
         "X-Goog-Upload-Status" => "active",
-        "X-Goog-Upload-Url" => "https://www.googleapis.com/upload/storage/v1/b/figgy-test1/o?name=e540688a-d287-48ec-b033-dc27813459c6&upload_id=AEnB2UqYKLowO6rkE3VBx-yntKGQHfUTSHzag-pK83Kqot1Ge_E85AJvX-GE6EDo8_x-QhyZ85bMmx2Xc_dAO-vL7WC9-69aIA&upload_protocol=resumable",
-        "X-Goog-Upload-Control-Url" => "https://www.googleapis.com/upload/storage/v1/b/figgy-test1/o?name=e540688a-d287-48ec-b033-dc27813459c6&upload_id=AEnB2UqYKLowO6rkE3VBx-yntKGQHfUTSHzag-pK83Kqot1Ge_E85AJvX-GE6EDo8_x-QhyZ85bMmx2Xc_dAO-vL7WC9-69aIA&upload_protocol=resumable",
+        "X-Goog-Upload-Url" => "https://www.googleapis.com/upload/storage/v1/b/project-figgy-bucket/o?name=e540688a-d287-48ec-b033-dc27813459c6&upload_id=AEnB2UqYKLowO6rkE3VBx-yntKGQHfUTSHzag-pK83Kqot1Ge_E85AJvX-GE6EDo8_x-QhyZ85bMmx2Xc_dAO-vL7WC9-69aIA&upload_protocol=resumable",
+        "X-Goog-Upload-Control-Url" => "https://www.googleapis.com/upload/storage/v1/b/project-figgy-bucket/o?name=e540688a-d287-48ec-b033-dc27813459c6&upload_id=AEnB2UqYKLowO6rkE3VBx-yntKGQHfUTSHzag-pK83Kqot1Ge_E85AJvX-GE6EDo8_x-QhyZ85bMmx2Xc_dAO-vL7WC9-69aIA&upload_protocol=resumable",
         "X-Goog-Upload-Chunk-Granularity" => "262144",
         "X-Goog-Upload-Header-Vary" => ["Origin", "X-Origin"],
         "X-Goog-Upload-Header-X-Google-Backends" => "xhiadbar8:4152",
@@ -93,14 +93,14 @@ RSpec.describe RemoteChecksumJob do
         "X-Goog-Upload-Header-Date" => "Tue, 26 Mar 2019 18:53:07 GMT"
       }
     )
-    stub_request(:post, "https://www.googleapis.com/upload/storage/v1/b/figgy-test1/o?name=e540688a-d287-48ec-b033-dc27813459c6&upload_id=AEnB2UqYKLowO6rkE3VBx-yntKGQHfUTSHzag-pK83Kqot1Ge_E85AJvX-GE6EDo8_x-QhyZ85bMmx2Xc_dAO-vL7WC9-69aIA&upload_protocol=resumable").to_return(
+    stub_request(:post, "https://www.googleapis.com/upload/storage/v1/b/project-figgy-bucket/o?name=e540688a-d287-48ec-b033-dc27813459c6&upload_id=AEnB2UqYKLowO6rkE3VBx-yntKGQHfUTSHzag-pK83Kqot1Ge_E85AJvX-GE6EDo8_x-QhyZ85bMmx2Xc_dAO-vL7WC9-69aIA&upload_protocol=resumable").to_return(
       status: 200,
       body: JSON.generate(
         "kind": "storage#object",
-        "id": "figgy-test1/e540688a-d287-48ec-b033-dc27813459c6/1553626388194725",
-        "selfLink": "https://www.googleapis.com/storage/v1/b/figgy-test1/o/e540688a-d287-48ec-b033-dc27813459c6",
+        "id": "project-figgy-bucket/e540688a-d287-48ec-b033-dc27813459c6/1553626388194725",
+        "selfLink": "https://www.googleapis.com/storage/v1/b/project-figgy-bucket/o/e540688a-d287-48ec-b033-dc27813459c6",
         "name": "e540688a-d287-48ec-b033-dc27813459c6",
-        "bucket": "figgy-test1",
+        "bucket": "project-figgy-bucket",
         "generation": "1553626388194725",
         "metageneration": "1",
         "contentType": "application/octet-stream",
@@ -110,7 +110,7 @@ RSpec.describe RemoteChecksumJob do
         "timeStorageClassUpdated": "2019-03-26T18:53:08.194Z",
         "size": "196882",
         "md5Hash": "Kij7cCKGeCssvy7ZpQQasQ==",
-        "mediaLink": "https://www.googleapis.com/download/storage/v1/b/figgy-test1/o/e540688a-d287-48ec-b033-dc27813459c6?generation=1553626388194725&alt=media",
+        "mediaLink": "https://www.googleapis.com/download/storage/v1/b/project-figgy-bucket/o/e540688a-d287-48ec-b033-dc27813459c6?generation=1553626388194725&alt=media",
         "crc32c": "VWK9WA==",
         "etag": "CKXL7ae9oOECEAE="
       ),
