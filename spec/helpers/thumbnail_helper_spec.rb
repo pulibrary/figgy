@@ -93,6 +93,22 @@ RSpec.describe ThumbnailHelper do
         expect(helper.figgy_thumbnail_path(vector_resource)).to eq helper.image_tag "default.png", class: "thumbnail-inner"
       end
     end
+
+    context "when an error is raised by the QueryService while trying to retrieve the resource" do
+      let(:file_set) { FactoryBot.create_for_repository(:file_set) }
+      let(:book) { FactoryBot.create_for_repository(:scanned_resource, thumbnail_id: file_set.id) }
+
+      before do
+        allow(Rails.logger).to receive(:error)
+        book
+        allow(Valkyrie.config.metadata_adapter.query_service).to receive(:find_by).and_raise(TypeError, "can't convert String into Hash")
+      end
+
+      it "logs an error and generates the markup for the default thumbnail" do
+        expect(helper.figgy_thumbnail_path(book)).to eq helper.default_icon_fallback
+        expect(Rails.logger).to have_received(:error).with("Unable to retrieve the resource with the ID #{book.id}")
+      end
+    end
   end
 
   describe "#geo_file_set" do
