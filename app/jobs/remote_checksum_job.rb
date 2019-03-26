@@ -65,13 +65,19 @@ class RemoteChecksumJob < ApplicationJob
       RemoteChecksumService.cloud_storage_driver_class
     end
 
+    # Retrieve the Google Cloud Storage credentials from the configuration
+    # @return [Hash]
+    def credentials
+      Figgy.config["google_cloud_storage"]["credentials"]
+    end
+
     # Construct the storage driver with the necessary configuration for
     # retrieving the files
     # @return [RemoteChecksumService::GoogleCloudStorageDriver, Object]
     def driver
       return @driver unless @driver.nil?
 
-      @driver = cloud_storage_driver_class.new(Figgy.config["google_cloud_storage"]["project_id"])
+      @driver = cloud_storage_driver_class.new(Figgy.config["google_cloud_storage"]["project_id"], credentials)
       @driver.bucket(Figgy.config["google_cloud_storage"]["bucket_name"])
       @driver
     end

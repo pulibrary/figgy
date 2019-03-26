@@ -10,7 +10,9 @@ class RemoteChecksumService
   class GoogleCloudStorageDriver < CloudServiceDriver
     # Constructor
     # @param project_id [String] the ID for the Google Project
-    def initialize(project_id)
+    # @param credentials [Hash] the credentials for the Google Cloud Storage API
+    def initialize(project_id, _credentials)
+      # @storage = Google::Cloud::Storage.new(project_id: project_id, credentials: credentials)
       @storage = Google::Cloud::Storage.new(project_id: project_id)
       @buckets = {}
       @current_bucket = nil
@@ -29,17 +31,16 @@ class RemoteChecksumService
     end
 
     # Retrieve a cloud storage file resource from the API
-    # @param file [FileMetadata] 
+    # @param file [FileMetadata]
     # @return [Google::Cloud::Storage::File]
     def file(file)
       raise StandardError, "A bucket needs to be selected before a file can be downloaded." if @current_bucket.nil?
 
-      retrieved = @current_bucket.file(file.file_identifiers.first.to_s)
+      retrieved = @current_bucket.file(file.id.to_s)
+      return retrieved unless retrieved.nil?
 
-      if retrieved.nil?
-        file_node = Valkyrie.config.storage_adapter.find_by(id: file.file_identifiers.first)
-        retrieved = @current_bucket.create_file(file_node.disk_path.to_s, file.id.to_s)
-      end
+      file_node = Valkyrie.config.storage_adapter.find_by(id: file.file_identifiers.first)
+      @current_bucket.create_file(file_node.disk_path.to_s, file.id.to_s)
     end
   end
 

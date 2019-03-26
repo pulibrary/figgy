@@ -104,6 +104,17 @@ defaults: &defaults
   google_cloud_storage:
     project_id: <%= ENV["GOOGLE_CLOUD_PROJECT_ID"] || "project-figgy" %>
     bucket_name: <%= ENV["GOOGLE_CLOUD_BUCKET_NAME"] || "project-figgy-bucket" %>
+    credentials:
+      type: "service_account"
+      project_id: <%= ENV["GOOGLE_CLOUD_PROJECT_ID"] || "project-figgy" %>
+      private_key_id: <%= ENV["GOOGLE_CLOUD_PRIVATE_KEY_ID"] || "secret" %>
+      private_key: <%= ENV["GOOGLE_CLOUD_PRIVATE_KEY"] || "secret" %>
+      client_email: <%= ENV["GOOGLE_CLOUD_CLIENT_EMAIL"] || "account@project-figgy.iam.gserviceaccount.com" %>
+      client_id: <%= ENV["GOOGLE_CLOUD_CLIENT_ID"] || "1234567890" %>
+      auth_uri: "https://accounts.google.com/o/oauth2/auth"
+      token_uri: "https://oauth2.googleapis.com/token"
+      auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs"
+      client_x509_cert_url: <%= ENV["GOOGLE_CLOUD_CLIENT_CERT_URL"] || "https://www.googleapis.com/robot/v1/metadata/x509/account%40project-figgy.iam.gserviceaccount.com" %>
 
 development:
   <<: *defaults
