@@ -8,7 +8,21 @@ RSpec.describe RemoteChecksumJob do
   let(:file_set) { scanned_resource.decorate.file_sets.first }
 
   before do
+    stub_request(:get, "http://169.254.169.254/").to_return(
+      status: 200, body: "", headers: {}
+    )
     stub_request(:post, "https://www.googleapis.com/oauth2/v4/token").to_return(
+      status: 200,
+      body: JSON.generate(
+        "access_token": "ya29.c.ElnYBp7Es0M2VpXr2fJIz5oAYCNvxkapBXu0MRom2ceZA0e_1FIXc45IjrqRBsGYMYQUSm8Yp7SNqdFMCHCVdNGktpYW8Vx2K3C2Oo2E8mlkAS1DzLC8bDAW2g",
+        "expires_in": 3600,
+        "token_type": "Bearer"
+      ),
+      headers: {
+        "Content-Type" => "application/json; charset=utf-8"
+      }
+    )
+    stub_request(:post, "https://oauth2.googleapis.com/token").to_return(
       status: 200,
       body: JSON.generate(
         "access_token": "ya29.c.ElnYBp7Es0M2VpXr2fJIz5oAYCNvxkapBXu0MRom2ceZA0e_1FIXc45IjrqRBsGYMYQUSm8Yp7SNqdFMCHCVdNGktpYW8Vx2K3C2Oo2E8mlkAS1DzLC8bDAW2g",
@@ -110,6 +124,10 @@ RSpec.describe RemoteChecksumJob do
   end
 
   describe ".perform_now" do
+    before do
+      Figgy.config["google_cloud_storage"]["credentials"]["private_key"] = OpenSSL::PKey::RSA.new(2048).to_s
+    end
+
     it "triggers a derivatives_created message", rabbit_stubbed: true do
       described_class.perform_now(file_set.id.to_s)
       reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: file_set.id)
