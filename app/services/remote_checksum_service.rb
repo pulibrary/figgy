@@ -22,17 +22,24 @@ class RemoteChecksumService
     def bucket(name)
       return @buckets[name] if @buckets.key?(name)
 
-      @buckets[name] = @storage.bucket(name)
+      retrieved = @storage.bucket(name)
+      retrieved = @storage.create_bucket(name) if retrieved.nil?
+      @buckets[name] = retrieved
       @current_bucket = @buckets[name]
     end
 
     # Retrieve a cloud storage file resource from the API
-    # @param file_name [String] the name to resolve to the file resource
+    # @param file [FileMetadata] 
     # @return [Google::Cloud::Storage::File]
-    def file(file_name)
+    def file(file)
       raise StandardError, "A bucket needs to be selected before a file can be downloaded." if @current_bucket.nil?
 
-      @current_bucket.file(file_name)
+      retrieved = @current_bucket.file(file.file_identifiers.first.to_s)
+
+      if retrieved.nil?
+        file_node = Valkyrie.config.storage_adapter.find_by(id: file.file_identifiers.first)
+        retrieved = @current_bucket.create_file(file_node.disk_path.to_s, file.id.to_s)
+      end
     end
   end
 

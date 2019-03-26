@@ -12,6 +12,7 @@ class FileSet < Resource
   attribute :side, Valkyrie::Types::Set
   attribute :part, Valkyrie::Types::Set
   attribute :transfer_notes
+  attribute :remote_checksum
 
   delegate :width,
            :height,

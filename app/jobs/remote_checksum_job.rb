@@ -8,13 +8,13 @@ class RemoteChecksumJob < ApplicationJob
   # @param resource_id [String] the ID for the resource
   def perform(resource_id)
     @resource_id = resource_id
+    remote_file = cloud_storage_file
 
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
-      file = cloud_storage_file
-      change_set.populate! # I'm not supposed to do this?
-      change_set.remote_checksum = file.md5
+      change_set.remote_checksum = remote_file.md5
+      binding.pry
 
-      buffered_changeset_persister.persist(change_set: change_set)
+      buffered_changeset_persister.save(change_set: change_set)
     end
   end
 
@@ -53,10 +53,14 @@ class RemoteChecksumJob < ApplicationJob
       resource.id.to_s
     end
 
+    def original_file
+      resource.original_file
+    end
+
     # Retrieve the file resource from cloud storage
     # @return [Google::Cloud::Storage::File, Object]
     def cloud_storage_file
-      driver.file(file_name)
+      driver.file(original_file)
     end
 
     # Retrieve the class used for interfacing with the remote cloud storage
