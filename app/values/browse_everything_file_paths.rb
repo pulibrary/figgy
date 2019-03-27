@@ -64,8 +64,7 @@ class BrowseEverythingFilePaths
     # @return Array<Pathname>
     def file_paths
       @file_paths ||= begin
-        paths = @selected_files.values.map { |x| x["url"].gsub("file://", "") }
-        paths.map { |x| Pathname.new(x) }
+        @selected_files.map { |selected_file| Pathname.new(selected_file.path) }
       end
     end
 end

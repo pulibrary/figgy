@@ -92,6 +92,7 @@ Metrics/ClassLength:
     - 'app/services/music_import_service/recording_collector.rb'
     - 'app/controllers/bulk_ingest_controller.rb'
     - 'app/controllers/application_controller.rb'
+    - 'app/controllers/base_resource_controller.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/helpers/application_helper.rb'

@@ -38,22 +38,22 @@ class BulkIngestController < ApplicationController
           persisted_members = []
 
           # Only append one file as a FileSet to one member of one parent until browse-everything can provide links to parent resource IDs
-          selected_files.each do |selected_file|
-            member_change_set = build_change_set(title: selected_file.file_name, pending_uploads: [selected_file])
+          new_pending_uploads.each do |pending_upload|
+            member_change_set = build_change_set(title: pending_upload.file_name, pending_uploads: [pending_upload])
             persisted_members << buffered_changeset_persister.save(change_set: member_change_set)
-            persisted_ids[persisted_members.last.id.to_s] = [selected_file.id.to_s]
+            persisted_ids[persisted_members.last.id.to_s] = [pending_upload.id.to_s]
           end
 
-          parent_change_set = build_change_set(title: selected_files.first.file_name, member_ids: persisted_members.map(&:id))
+          parent_change_set = build_change_set(title: new_pending_uploads.first.file_name, member_ids: persisted_members.map(&:id))
           buffered_changeset_persister.save(change_set: parent_change_set)
         end
       else
         # Only append one file as a FileSet to one resource until browse-everything can provide links to parent resource IDs
         self.class.change_set_persister.buffer_into_index do |buffered_changeset_persister|
-          selected_files.each do |selected_file|
-            change_set = build_change_set(title: selected_file.file_name, pending_uploads: [selected_file])
+          new_pending_uploads.each do |pending_upload|
+            change_set = build_change_set(title: pending_upload.file_name, pending_uploads: [pending_upload])
             persisted = buffered_changeset_persister.save(change_set: change_set)
-            persisted_ids[persisted.id.to_s] = [selected_file.id.to_s]
+            persisted_ids[persisted.id.to_s] = [pending_upload.id.to_s]
           end
         end
       end
@@ -91,8 +91,10 @@ class BulkIngestController < ApplicationController
       params[:collections] || []
     end
 
+    # Construct the paths from the BrowseEverything resources
+    # @return [BrowseEverythingFilePaths]
     def file_paths
-      @file_paths ||= BrowseEverythingFilePaths.new(selected_files_param)
+      @file_paths ||= BrowseEverythingFilePaths.new(selected_files)
     end
 
     def multi_volume_work?
@@ -132,22 +134,49 @@ class BulkIngestController < ApplicationController
       change_set
     end
 
-    def selected_files_param
-      return {} unless params.key?(:selected_files) && !params[:selected_files].empty?
-      params[:selected_files].to_unsafe_h
+    # Retrieve the selected_files parameter from the request
+    # @return [Hash]
+    def selected_files_params
+      @selected_files_params ||= params.fetch(:selected_files, {})
     end
 
+    # Retrieve the browse_everything parameter from the request
+    # @return [Hash]
+    def browse_everything_params
+      @browse_everything_params ||= selected_files_params.fetch(:browse_everything, {})
+    end
+
+    # Retrieve the files selected from browse-everything
+    # @return [BrowseEverything::Resource]
+    def selected_files
+      files = browse_everything_params.fetch(:selected_files, {})
+
+      files.values.map { |value| BrowseEverything::Resource.new(value) }
+    end
+
+    # Determine whether or not cloud service files are being uploaded
+    # @return [Boolean]
     def selected_cloud_files?
-      values = selected_files_param.map { |_index, file| /^https?\:/ =~ file["url"] }
+      values = selected_files.map(&:cloud_file?)
       values.reduce(:|)
     end
 
-    def selected_files
-      @selected_files ||= selected_files_param.values.map do |x|
-        auth_header_values = x.delete("auth_header")
+    # Construct the pending download objects
+    # @return [Array<PendingUpload>]
+    def new_pending_uploads
+      return @new_pending_uploads unless @new_pending_uploads.nil?
+
+      @new_pending_uploads = []
+      # Use the new structure for the resources
+      selected_files.each do |selected_file|
+        file_attributes = selected_file.to_h
+        auth_header_values = file_attributes.delete("auth_header")
         auth_header = JSON.generate(auth_header_values)
-        PendingUpload.new(x.symbolize_keys.merge(id: SecureRandom.uuid, created_at: Time.current.utc.iso8601, auth_header: auth_header))
+
+        @new_pending_uploads << PendingUpload.new(file_attributes.merge(id: SecureRandom.uuid, created_at: Time.current.utc.iso8601, auth_header: auth_header))
       end
+
+      @new_pending_uploads
     end
 
     def workflow_states

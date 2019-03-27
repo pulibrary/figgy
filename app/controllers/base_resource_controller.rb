@@ -22,19 +22,56 @@ class BaseResourceController < ApplicationController
   # Resources that allow uploads will use these browse everything methods
   def browse_everything_files
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
-      change_set.validate(pending_uploads: change_set.pending_uploads + selected_files)
+      change_set.validate(pending_uploads: change_set.pending_uploads + new_pending_uploads)
       buffered_changeset_persister.save(change_set: change_set)
     end
-    BrowseEverythingIngestJob.perform_later(resource.id.to_s, self.class.to_s, selected_files.map(&:id).map(&:to_s))
+    BrowseEverythingIngestJob.perform_later(resource.id.to_s, self.class.to_s, new_pending_upload_ids)
     redirect_to ContextualPath.new(child: resource, parent_id: nil).file_manager
   end
 
+  # Retrieve the selected_files parameter from the request
+  # @return [Hash]
+  def selected_files_params
+    @selected_files_params ||= params.fetch(:selected_files, {})
+  end
+
+  # Retrieve the browse_everything parameter from the request
+  # @return [Hash]
+  def browse_everything_params
+    @browse_everything_params ||= selected_files_params.fetch(:browse_everything, {})
+  end
+
+  # Retrieve the files selected from browse-everything
+  # @return [BrowseEverything::Resource]
   def selected_files
-    @selected_files ||= selected_file_params.values.map do |x|
-      auth_header_values = x.delete("auth_header")
+    files = browse_everything_params.fetch(:selected_files, {})
+
+    files.values.map { |value| BrowseEverything::Resource.new(value) }
+  end
+
+  # Construct the pending download objects
+  # @return [Array<PendingUpload>]
+  def new_pending_uploads
+    return @new_pending_uploads unless @new_pending_uploads.nil?
+
+    @new_pending_uploads = []
+    # Use the new structure for the resources
+    selected_files.each do |selected_file|
+      file_attributes = selected_file.to_h
+      auth_header_values = file_attributes.delete("auth_header")
       auth_header = JSON.generate(auth_header_values)
-      PendingUpload.new(x.symbolize_keys.merge(id: SecureRandom.uuid, created_at: Time.current.utc.iso8601, auth_header: auth_header))
+
+      @new_pending_uploads << PendingUpload.new(file_attributes.merge(id: SecureRandom.uuid, created_at: Time.current.utc.iso8601, auth_header: auth_header))
     end
+
+    @new_pending_uploads
+  end
+
+  # Retrieve the new IDs from the pending uploads
+  # @return [Array<String>]
+  def new_pending_upload_ids
+    ids = new_pending_uploads.map(&:id)
+    ids.map(&:to_s)
   end
 
   # Attach a resource to a parent
@@ -100,10 +137,6 @@ class BaseResourceController < ApplicationController
   end
 
   private
-
-    def selected_file_params
-      params[:selected_files].try(:to_unsafe_h) || {}
-    end
 
     def parent_resource_params
       params[:parent_resource].to_unsafe_h

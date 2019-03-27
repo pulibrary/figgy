@@ -318,13 +318,20 @@ RSpec.describe ScannedResourcesController, type: :controller do
     #   Acts as a 'master spec' in this regard
     describe "POST /concern/scanned_resources/:id/browse_everything_files" do
       let(:file) { File.open(Rails.root.join("spec", "fixtures", "files", "example.tif")) }
+      let(:selected_files) do
+        {
+          "0" => {
+            "url" => "file://#{file.path}",
+            "file_name" => File.basename(file.path),
+            "file_size" => file.size
+          }
+        }
+      end
       let(:params) do
         {
           "selected_files" => {
-            "0" => {
-              "url" => "file://#{file.path}",
-              "file_name" => File.basename(file.path),
-              "file_size" => file.size
+            "browse_everything" => {
+              "selected_files" => selected_files
             }
           }
         }
@@ -343,15 +350,22 @@ RSpec.describe ScannedResourcesController, type: :controller do
 
       context "when a server-side error is encountered while downloading a file" do
         let(:expiry_time) { (Time.current + 3600).xmlschema }
+        let(:selected_files) do
+          {
+            "0" => {
+              "url" => "https://retrieve.cloud.example.com/some/dir/file.pdf",
+              "auth_header" => { "Authorization" => "Bearer ya29.kQCEAHj1bwFXr2AuGQJmSGRWQXpacmmYZs4kzCiXns3d6H1ZpIDWmdM8" },
+              "expires" => expiry_time,
+              "file_name" => "file.pdf",
+              "file_size" => "1874822"
+            }
+          }
+        end
         let(:params) do
           {
             "selected_files" => {
-              "0" => {
-                "url" => "https://retrieve.cloud.example.com/some/dir/file.pdf",
-                "auth_header" => { "Authorization" => "Bearer ya29.kQCEAHj1bwFXr2AuGQJmSGRWQXpacmmYZs4kzCiXns3d6H1ZpIDWmdM8" },
-                "expires" => expiry_time,
-                "file_name" => "file.pdf",
-                "file_size" => "1874822"
+              "browse_everything" => {
+                "selected_files" => selected_files
               }
             }
           }
