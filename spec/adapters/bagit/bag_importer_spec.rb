@@ -28,6 +28,7 @@ RSpec.describe Bagit::BagImporter do
   after do
     importer.bag_metadata_adapter.persister.wipe!
   end
+  with_queue_adapter :inline
   it "can import a given resource ID" do
     output = importer.import(id: resource.id)
     expect(output).to be_a ScannedResource
@@ -38,6 +39,8 @@ RSpec.describe Bagit::BagImporter do
     file_set = members.first
     expect(file_set.original_file.file_identifiers.first.to_s).to start_with "disk://"
     expect(importer.storage_adapter.find_by(id: file_set.original_file.file_identifiers.first)).not_to be_blank
+    # Ensure it generates derivatives
+    expect(file_set.derivative_file).to be_present
     # Make sure no extra objects are created.
     expect(importer.metadata_adapter.query_service.find_all.to_a.length).to eq 2
   end
