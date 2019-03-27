@@ -32,12 +32,12 @@ RSpec.describe RemoteBagChecksumJob do
     before do
       RemoteBagChecksumService::ZipCompressedBag.build(path: local_file.bag_path)
       stub_google_cloud_resource(id: scanned_resource.id, md5_hash: md5_hash, crc32c: crc32c, local_file_path: local_bag_path)
-      # described_class.compressed_bag_factory = RemoteBagChecksumService::ZipCompressedBag
+      Figgy.config["google_cloud_storage"]["bags"]["format"] = "application/zip"
     end
 
     describe ".perform_now" do
       it "triggers a derivatives_created message", rabbit_stubbed: true do
-        described_class.perform_now(scanned_resource.id.to_s, compressed_bag_factory: "RemoteBagChecksumService::ZipCompressedBag")
+        described_class.perform_now(scanned_resource.id.to_s)
         reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: scanned_resource.id)
 
         expect(reloaded.remote_checksum).not_to be_empty
@@ -50,7 +50,7 @@ RSpec.describe RemoteBagChecksumJob do
         end
 
         it "generates the checksum from a locally downloaded file" do
-          described_class.perform_now(scanned_resource.id.to_s, local_checksum: true, compressed_bag_factory: "RemoteBagChecksumService::ZipCompressedBag")
+          described_class.perform_now(scanned_resource.id.to_s, local_checksum: true)
           reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: scanned_resource.id)
 
           expect(reloaded.remote_checksum).not_to be_empty

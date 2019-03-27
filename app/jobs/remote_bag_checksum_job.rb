@@ -4,7 +4,7 @@ class RemoteBagChecksumJob < RemoteChecksumJob
   delegate :query_service, to: :metadata_adapter # Retrieve the checksum and update the resource
 
   # @param resource_id [String] the ID for the resource
-  def perform(resource_id, local_checksum: false, compressed_bag_factory: "RemoteBagChecksumService::TarCompressedBag")
+  def perform(resource_id, local_checksum: false)
     @resource_id = resource_id
     @compressed_bag_factory = compressed_bag_factory
     change_set = DynamicChangeSet.new(resource)
@@ -21,10 +21,25 @@ class RemoteBagChecksumJob < RemoteChecksumJob
     end
   end
 
+  def self.default_compressed_bag_factory
+    RemoteBagChecksumService::TarCompressedBag
+  end
+
   private
 
     def compressed_bag_factory
-      @compressed_bag_factory.constantize
+      config_option = Figgy.config["google_cloud_storage"]["bags"]["format"]
+      return self.class.default_compressed_bag_factory unless config_option
+
+      case config_option
+      when "application/gzip"
+        RemoteBagChecksumService::TarCompressedBag
+      when "application/zip"
+        RemoteBagChecksumService::ZipCompressedBag
+      else
+        Rails.logger.warn("Unsupported bag format provided: #{config_option}")
+        self.class.default_compressed_bag_factory
+      end
     end
 
     # Retrieve the file resource from cloud storage
