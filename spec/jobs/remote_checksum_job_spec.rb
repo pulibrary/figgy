@@ -6,6 +6,9 @@ RSpec.describe RemoteChecksumJob do
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
   let(:file_set) { scanned_resource.decorate.file_sets.first }
+  let(:local_file) { Valkyrie.config.storage_adapter.find_by(id: file_set.original_file.file_identifiers.first.id) }
+  let(:md5_hash) { Digest::MD5.file(local_file.disk_path).base64digest }
+  let(:crc32c) { Digest::CRC32c.file(local_file.disk_path).base64digest }
 
   before do
     stub_request(:get, "http://169.254.169.254/").to_return(
@@ -65,11 +68,11 @@ RSpec.describe RemoteChecksumJob do
             {
               "domain": "global",
               "reason": "notFound",
-              "message": "No such object: project-figgy-bucket/e540688ad28748ecb033dc27813459c6/example.tif"
+              "message": "No such object: project-figgy-bucket/#{file_set.original_file.id}/example.tif"
             }
           ],
           "code": 404,
-          "message": "No such object: project-figgy-bucket/e540688ad28748ecb033dc27813459c6/example.tif"
+          "message": "No such object: project-figgy-bucket/#{file_set.original_file.id}/example.tif"
         }
       ),
       headers: {
@@ -81,8 +84,8 @@ RSpec.describe RemoteChecksumJob do
       headers: {
         "X-Guploader-Uploadid" => "AEnB2UqYKLowO6rkE3VBx-yntKGQHfUTSHzag-pK83Kqot1Ge_E85AJvX-GE6EDo8_x-QhyZ85bMmx2Xc_dAO-vL7WC9-69aIA",
         "X-Goog-Upload-Status" => "active",
-        "X-Goog-Upload-Url" => "https://www.googleapis.com/upload/storage/v1/b/project-figgy-bucket/o?name=e540688a-d287-48ec-b033-dc27813459c6&upload_id=AEnB2UqYKLowO6rkE3VBx-yntKGQHfUTSHzag-pK83Kqot1Ge_E85AJvX-GE6EDo8_x-QhyZ85bMmx2Xc_dAO-vL7WC9-69aIA&upload_protocol=resumable",
-        "X-Goog-Upload-Control-Url" => "https://www.googleapis.com/upload/storage/v1/b/project-figgy-bucket/o?name=e540688a-d287-48ec-b033-dc27813459c6&upload_id=AEnB2UqYKLowO6rkE3VBx-yntKGQHfUTSHzag-pK83Kqot1Ge_E85AJvX-GE6EDo8_x-QhyZ85bMmx2Xc_dAO-vL7WC9-69aIA&upload_protocol=resumable",
+        "X-Goog-Upload-Url" => "https://www.googleapis.com/upload/storage/v1/b/project-figgy-bucket/o?name=#{file_set.original_file.id}&upload_id=AEnB2UqYKLowO6rkE3VBx-yntKGQHfUTSHzag-pK83Kqot1Ge_E85AJvX-GE6EDo8_x-QhyZ85bMmx2Xc_dAO-vL7WC9-69aIA&upload_protocol=resumable",
+        "X-Goog-Upload-Control-Url" => "https://www.googleapis.com/upload/storage/v1/b/project-figgy-bucket/o?name=#{file_set.original_file.id}&upload_id=AEnB2UqYKLowO6rkE3VBx-yntKGQHfUTSHzag-pK83Kqot1Ge_E85AJvX-GE6EDo8_x-QhyZ85bMmx2Xc_dAO-vL7WC9-69aIA&upload_protocol=resumable",
         "X-Goog-Upload-Chunk-Granularity" => "262144",
         "X-Goog-Upload-Header-Vary" => ["Origin", "X-Origin"],
         "X-Goog-Upload-Header-X-Google-Backends" => "xhiadbar8:4152",
@@ -93,13 +96,13 @@ RSpec.describe RemoteChecksumJob do
         "X-Goog-Upload-Header-Date" => "Tue, 26 Mar 2019 18:53:07 GMT"
       }
     )
-    stub_request(:post, "https://www.googleapis.com/upload/storage/v1/b/project-figgy-bucket/o?name=e540688a-d287-48ec-b033-dc27813459c6&upload_id=AEnB2UqYKLowO6rkE3VBx-yntKGQHfUTSHzag-pK83Kqot1Ge_E85AJvX-GE6EDo8_x-QhyZ85bMmx2Xc_dAO-vL7WC9-69aIA&upload_protocol=resumable").to_return(
+    stub_request(:post, "https://www.googleapis.com/upload/storage/v1/b/project-figgy-bucket/o?name=#{file_set.original_file.id}&upload_id=AEnB2UqYKLowO6rkE3VBx-yntKGQHfUTSHzag-pK83Kqot1Ge_E85AJvX-GE6EDo8_x-QhyZ85bMmx2Xc_dAO-vL7WC9-69aIA&upload_protocol=resumable").to_return(
       status: 200,
       body: JSON.generate(
         "kind": "storage#object",
-        "id": "project-figgy-bucket/e540688a-d287-48ec-b033-dc27813459c6/1553626388194725",
-        "selfLink": "https://www.googleapis.com/storage/v1/b/project-figgy-bucket/o/e540688a-d287-48ec-b033-dc27813459c6",
-        "name": "e540688a-d287-48ec-b033-dc27813459c6",
+        "id": "project-figgy-bucket/#{file_set.original_file.id}/1553626388194725",
+        "selfLink": "https://www.googleapis.com/storage/v1/b/project-figgy-bucket/o/#{file_set.original_file.id}",
+        "name": file_set.original_file.id.to_s,
         "bucket": "project-figgy-bucket",
         "generation": "1553626388194725",
         "metageneration": "1",
@@ -109,9 +112,9 @@ RSpec.describe RemoteChecksumJob do
         "storageClass": "STANDARD",
         "timeStorageClassUpdated": "2019-03-26T18:53:08.194Z",
         "size": "196882",
-        "md5Hash": "Kij7cCKGeCssvy7ZpQQasQ==",
-        "mediaLink": "https://www.googleapis.com/download/storage/v1/b/project-figgy-bucket/o/e540688a-d287-48ec-b033-dc27813459c6?generation=1553626388194725&alt=media",
-        "crc32c": "VWK9WA==",
+        "md5Hash": md5_hash,
+        "mediaLink": "https://www.googleapis.com/download/storage/v1/b/project-figgy-bucket/o/#{file_set.original_file.id}?generation=1553626388194725&alt=media",
+        "crc32c": crc32c,
         "etag": "CKXL7ae9oOECEAE="
       ),
       headers: {
@@ -119,6 +122,13 @@ RSpec.describe RemoteChecksumJob do
         "X-Guploader-Uploadid" => "AEnB2UqYKLowO6rkE3VBx-yntKGQHfUTSHzag-pK83Kqot1Ge_E85AJvX-GE6EDo8_x-QhyZ85bMmx2Xc_dAO-vL7WC9-69aIA",
         "X-Goog-Upload-Status" => "final",
         "Etag" => "CKXL7ae9oOECEAE="
+      }
+    )
+    stub_request(:get, "https://www.googleapis.com/storage/v1/b/project-figgy-bucket/o/#{file_set.original_file.id}?alt=media").to_return(
+      status: 200,
+      body: File.read(local_file.disk_path),
+      headers: {
+        "Content-Type" => "application/octet-stream"
       }
     )
   end
@@ -132,7 +142,7 @@ RSpec.describe RemoteChecksumJob do
       described_class.perform_now(file_set.id.to_s)
       reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: file_set.id)
 
-      expect(reloaded.remote_checksum).to eq ["Kij7cCKGeCssvy7ZpQQasQ=="]
+      expect(reloaded.remote_checksum).to eq [md5_hash]
     end
 
     context "when calculating the checksum locally" do
@@ -144,7 +154,7 @@ RSpec.describe RemoteChecksumJob do
         described_class.perform_now(file_set.id.to_s, local_checksum: true)
         reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: file_set.id)
 
-        expect(reloaded.remote_checksum).to eq ["Kij7cCKGeCssvy7ZpQQasQ=="]
+        expect(reloaded.remote_checksum).to eq [md5_hash]
         expect(Tempfile).to have_received(:new)
       end
     end

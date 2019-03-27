@@ -92,6 +92,6 @@ class RemoteChecksumJob < ApplicationJob
       cloud_storage_file.download(temp_file.path)
       local_md5 = Digest::MD5.file(temp_file.path)
       temp_file.unlink
-      local_md5.to_s
+      local_md5.base64digest
     end
 end
