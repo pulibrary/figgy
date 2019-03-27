@@ -128,11 +128,25 @@ RSpec.describe RemoteChecksumJob do
       Figgy.config["google_cloud_storage"]["credentials"]["private_key"] = OpenSSL::PKey::RSA.new(2048).to_s
     end
 
-    it "triggers a derivatives_created message", rabbit_stubbed: true do
+    it "uses a remote service to calculate the checksum", rabbit_stubbed: true do
       described_class.perform_now(file_set.id.to_s)
       reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: file_set.id)
 
       expect(reloaded.remote_checksum).to eq ["Kij7cCKGeCssvy7ZpQQasQ=="]
+    end
+
+    context "when calculating the checksum locally" do
+      before do
+        allow(Tempfile).to receive(:new).and_call_original
+      end
+
+      it "generates the checksum from a locally downloaded file" do
+        described_class.perform_now(file_set.id.to_s, local_checksum: true)
+        reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: file_set.id)
+
+        expect(reloaded.remote_checksum).to eq ["Kij7cCKGeCssvy7ZpQQasQ=="]
+        expect(Tempfile).to have_received(:new)
+      end
     end
   end
 end
