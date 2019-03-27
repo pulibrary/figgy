@@ -114,6 +114,7 @@ Metrics/LineLength:
     - 'spec/views/catalog/_members_coin.html.erb_spec.rb'
     - 'spec/helpers/application_helper_spec.rb'
     - 'spec/jobs/remote_checksum_job_spec.rb'
+    - 'spec/support/stub_google_cloud_storage.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
@@ -155,11 +156,13 @@ Metrics/MethodLength:
     - 'app/change_sets/change_set.rb'
     - 'app/resources/scanned_resources/scanned_resource_change_set.rb'
     - 'app/values/viewer_configuration.rb'
+    - 'spec/support/stub_google_cloud_storage.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
     - 'app/controllers/concerns/resource_controller.rb'
     - 'app/helpers/application_helper.rb'
+    - 'spec/support/stub_google_cloud_storage.rb'
 Metrics/ParameterLists:
   Exclude:
     - 'app/change_set_persisters/change_set_persister.rb'
