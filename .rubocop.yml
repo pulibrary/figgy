@@ -233,6 +233,7 @@ RSpec/NestedGroups:
     - 'spec/resources/numismatic_monograms/numismatic_monograms_controller_spec.rb'
     - 'spec/helpers/application_helper_spec.rb'
     - 'spec/requests/viewer_config_spec.rb'
+    - 'spec/jobs/remote_bag_checksum_job_spec.rb'
 RSpec/VerifiedDoubles:
   Exclude:
     - 'spec/models/search_builder_spec.rb'

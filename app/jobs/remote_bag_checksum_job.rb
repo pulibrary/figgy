@@ -4,8 +4,9 @@ class RemoteBagChecksumJob < RemoteChecksumJob
   delegate :query_service, to: :metadata_adapter # Retrieve the checksum and update the resource
 
   # @param resource_id [String] the ID for the resource
-  def perform(resource_id, local_checksum: false)
+  def perform(resource_id, local_checksum: false, compressed_bag_factory: "RemoteBagChecksumService::TarCompressedBag")
     @resource_id = resource_id
+    @compressed_bag_factory = compressed_bag_factory
     change_set = DynamicChangeSet.new(resource)
     checksum = if local_checksum
                  calculate_local_checksum
@@ -21,6 +22,10 @@ class RemoteBagChecksumJob < RemoteChecksumJob
   end
 
   private
+
+    def compressed_bag_factory
+      @compressed_bag_factory.constantize
+    end
 
     # Retrieve the file resource from cloud storage
     # @return [Google::Cloud::Storage::File, Object]
@@ -67,10 +72,6 @@ class RemoteBagChecksumJob < RemoteChecksumJob
         storage_adapter: bag_storage_adapter,
         query_service: indexing_persister_adapter.query_service
       )
-    end
-
-    def compressed_bag_factory
-      RemoteBagChecksumService::CompressedBag
     end
 
     def compressed_bag

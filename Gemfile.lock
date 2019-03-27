@@ -520,6 +520,7 @@ GEM
     mini_magick (4.8.0)
     mini_mime (1.0.1)
     mini_portile2 (2.4.0)
+    minitar (0.8)
     minitest (5.11.3)
     modernizr-rails (2.7.1)
     msgpack (1.2.4)
@@ -895,6 +896,7 @@ DEPENDENCIES
   marc (~> 1.0.0)
   mediainfo (~> 1.0)
   mini_magick
+  minitar
   modernizr-rails
   normalize-rails
   omniauth-cas

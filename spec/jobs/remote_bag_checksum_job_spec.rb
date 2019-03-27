@@ -24,31 +24,74 @@ RSpec.describe RemoteBagChecksumJob do
   before do
     Figgy.config["google_cloud_storage"]["credentials"]["private_key"] = OpenSSL::PKey::RSA.new(2048).to_s
     bag_exporter.export(resource: scanned_resource)
-    RemoteBagChecksumJob::CompressedBag.build(path: local_file.bag_path)
-    stub_google_cloud_resource(id: scanned_resource.id, md5_hash: md5_hash, crc32c: crc32c, local_file_path: local_bag_path)
   end
 
-  describe ".perform_now" do
-    it "triggers a derivatives_created message", rabbit_stubbed: true do
-      described_class.perform_now(scanned_resource.id.to_s)
-      reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: scanned_resource.id)
+  context "when compressing into a ZIP file" do
+    let(:local_bag_path) { "#{local_file.bag_path}.zip" }
 
-      expect(reloaded.remote_checksum).not_to be_empty
-      expect(reloaded.remote_checksum).to eq [md5_hash]
+    before do
+      RemoteBagChecksumService::ZipCompressedBag.build(path: local_file.bag_path)
+      stub_google_cloud_resource(id: scanned_resource.id, md5_hash: md5_hash, crc32c: crc32c, local_file_path: local_bag_path)
+      # described_class.compressed_bag_factory = RemoteBagChecksumService::ZipCompressedBag
     end
 
-    context "when calculating the checksum locally" do
-      before do
-        allow(Tempfile).to receive(:new).and_call_original
-      end
-
-      it "generates the checksum from a locally downloaded file" do
-        described_class.perform_now(scanned_resource.id.to_s, local_checksum: true)
+    describe ".perform_now" do
+      it "triggers a derivatives_created message", rabbit_stubbed: true do
+        described_class.perform_now(scanned_resource.id.to_s, compressed_bag_factory: "RemoteBagChecksumService::ZipCompressedBag")
         reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: scanned_resource.id)
 
         expect(reloaded.remote_checksum).not_to be_empty
         expect(reloaded.remote_checksum).to eq [md5_hash]
-        expect(Tempfile).to have_received(:new).with(scanned_resource.id.to_s)
+      end
+
+      context "when calculating the checksum locally" do
+        before do
+          allow(Tempfile).to receive(:new).and_call_original
+        end
+
+        it "generates the checksum from a locally downloaded file" do
+          described_class.perform_now(scanned_resource.id.to_s, local_checksum: true, compressed_bag_factory: "RemoteBagChecksumService::ZipCompressedBag")
+          reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: scanned_resource.id)
+
+          expect(reloaded.remote_checksum).not_to be_empty
+          expect(reloaded.remote_checksum).to eq [md5_hash]
+          expect(Tempfile).to have_received(:new).with(scanned_resource.id.to_s)
+        end
+      end
+    end
+  end
+
+  context "when compressing into a TAR file" do
+    let(:local_bag_path) { "#{local_file.bag_path}.tgz" }
+
+    before do
+      RemoteBagChecksumService::TarCompressedBag.build(path: local_file.bag_path)
+      stub_google_cloud_resource(id: scanned_resource.id, md5_hash: md5_hash, crc32c: crc32c, local_file_path: local_bag_path)
+      # described_class.compressed_bag_factory = RemoteBagChecksumService::TarCompressedBag
+    end
+
+    describe ".perform_now" do
+      it "triggers a derivatives_created message", rabbit_stubbed: true do
+        described_class.perform_now(scanned_resource.id.to_s)
+        reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: scanned_resource.id)
+
+        expect(reloaded.remote_checksum).not_to be_empty
+        expect(reloaded.remote_checksum).to eq [md5_hash]
+      end
+
+      context "when calculating the checksum locally" do
+        before do
+          allow(Tempfile).to receive(:new).and_call_original
+        end
+
+        it "generates the checksum from a locally downloaded file" do
+          described_class.perform_now(scanned_resource.id.to_s, local_checksum: true)
+          reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: scanned_resource.id)
+
+          expect(reloaded.remote_checksum).not_to be_empty
+          expect(reloaded.remote_checksum).to eq [md5_hash]
+          expect(Tempfile).to have_received(:new).with(scanned_resource.id.to_s)
+        end
       end
     end
   end
