@@ -42,12 +42,6 @@ class RemoteChecksumJob < ApplicationJob
       query_service.find_by(id: @resource_id)
     end
 
-    # Generate the file name from the resource ID
-    # @return [String]
-    def file_name
-      resource.id.to_s
-    end
-
     def original_file
       resource.original_file
     end

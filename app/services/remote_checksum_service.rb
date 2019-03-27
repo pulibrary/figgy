@@ -41,12 +41,27 @@ class RemoteChecksumService
       file_node = Valkyrie.config.storage_adapter.find_by(id: file.file_identifiers.first)
       @current_bucket.create_file(file_node.disk_path.to_s, file.id.to_s)
     end
+
+    def bag_file(local_file_path, remote_file_path)
+      raise StandardError, "A bucket needs to be selected before a file can be downloaded." if @current_bucket.nil?
+
+      retrieved = @current_bucket.file(remote_file_path)
+      return retrieved unless retrieved.nil?
+
+      @current_bucket.create_file(local_file_path, remote_file_path)
+    end
   end
 
   # Provide the default class for interfacing with cloud storage provider
   # @return [Class]
   def self.cloud_storage_driver_class
     GoogleCloudStorageDriver
+  end
+
+  # Retrieve the class used for asynchronous job
+  # @return [Class]
+  def self.remote_checksum_job_class
+    RemoteChecksumJob
   end
 
   # Constructor
@@ -61,14 +76,6 @@ class RemoteChecksumService
   def calculate
     return if @change_set.resource.id.nil?
 
-    remote_checksum_job.perform_later(id: @change_set.resource.id)
+    self.class.remote_checksum_job.perform_later(id: @change_set.resource.id)
   end
-
-  private
-
-    # Retrieve the class used for asynchronous job
-    # @return [Class]
-    def remote_checksum_job_class
-      RemoteChecksumJob
-    end
 end

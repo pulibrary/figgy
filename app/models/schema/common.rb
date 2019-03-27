@@ -81,7 +81,8 @@ module Schema
           :imported_author, # Local
           :rendered_rights_statement, # Local
           :coverage_point, # Local, used for latitude / longitude
-          :downloadable # Determines whether or not users can download a resource
+          :downloadable, # Determines whether or not users can download a resource
+          :remote_checksum # Calculating checksums for bagged resources in cloud services
         ]
     end
 
