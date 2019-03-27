@@ -54,4 +54,12 @@ RSpec.describe CoinChangeSet do
       end
     end
   end
+
+  describe "pdf_type" do
+    describe "#pdf_type" do
+      it "defaults to color" do
+        expect(change_set.pdf_type).to eq "color"
+      end
+    end
+  end
 end

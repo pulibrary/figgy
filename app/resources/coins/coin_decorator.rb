@@ -10,13 +10,13 @@ class CoinDecorator < Valkyrie::ResourceDecorator
           :analysis,
           :public_note,
           :private_note,
+          :rights_statement,
           :find_place,
           :find_number,
           :find_date,
           :find_locus,
           :find_feature,
           :find_description,
-          :holding_location,
           :numismatic_collection,
           :accession_number,
           :provenance,
@@ -58,5 +58,12 @@ class CoinDecorator < Valkyrie::ResourceDecorator
 
   def state
     super.first
+  end
+
+  def pdf_file
+    pdf = file_metadata.find { |x| x.mime_type == ["application/pdf"] }
+    pdf if pdf && Valkyrie::StorageAdapter.find(:derivatives).find_by(id: pdf.file_identifiers.first)
+  rescue Valkyrie::StorageAdapter::FileNotFound
+    nil
   end
 end

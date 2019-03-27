@@ -37,4 +37,39 @@ RSpec.describe CoinDecorator do
       expect(decorator.accession_label).to eq("234: 01/01/2001 gift Alice ($99.00)")
     end
   end
+
+  describe "#pdf_file" do
+    context "when there is a pdf and it exists" do
+      before do
+        allow(derivs).to receive(:find_by).with(id: file_id).and_return(file_id)
+      end
+      let(:derivs)   { Valkyrie::StorageAdapter.find(:derivatives) }
+      let(:file_id)  { Valkyrie::ID.new("disk:///tmp/stubbed.tif") }
+      let(:pdf_file) { FileMetadata.new mime_type: "application/pdf", file_identifiers: [file_id] }
+      let(:coin) { FactoryBot.create_for_repository(:coin, file_metadata: [pdf_file]) }
+      it "finds the pdf file" do
+        expect(decorator.pdf_file).to eq pdf_file
+      end
+    end
+
+    context "when there is a pdf but it does not exist" do
+      before do
+        allow(derivs).to receive(:find_by).with(id: file_id).and_raise(Valkyrie::StorageAdapter::FileNotFound)
+      end
+      let(:derivs)   { Valkyrie::StorageAdapter.find(:derivatives) }
+      let(:file_id)  { Valkyrie::ID.new("disk:///tmp/stubbed.tif") }
+      let(:pdf_file) { FileMetadata.new mime_type: "application/pdf", file_identifiers: [file_id] }
+      let(:coin) { FactoryBot.create_for_repository(:coin, file_metadata: [pdf_file]) }
+      it "does not return the bogus pdf file" do
+        expect(decorator.pdf_file).to be nil
+      end
+    end
+
+    context "when there is no pdf file" do
+      let(:coin) { FactoryBot.create_for_repository(:coin) }
+      it "returns nil" do
+        expect(decorator.pdf_file).to be nil
+      end
+    end
+  end
 end

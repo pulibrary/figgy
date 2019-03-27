@@ -158,6 +158,7 @@ Rails.application.routes.draw do
         post :browse_everything_files
         get :discover_files
         post :auto_ingest
+        get :pdf
       end
     end
     get "/numismatic_issues/:parent_id/coin" => "coins#new", as: :parent_new_coin
