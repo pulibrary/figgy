@@ -11,7 +11,8 @@ module Bagit
 
     def import(id:)
       output = nil
-      metadata_adapter.persister.buffer_into_index do |transaction_adapter|
+      file_sets = []
+      metadata_adapter.persister.buffer_into_index do |transaction_adapter, buffer|
         output = ResourceImporter.new(
           bag_storage_adapter: bag_storage_adapter.for(bag_id: id),
           bag_metadata_adapter: bag_metadata_adapter,
@@ -19,8 +20,17 @@ module Bagit
           storage_adapter: storage_adapter,
           id: id
         ).import!
+        file_sets = buffer.query_service.find_all_of_model(model: FileSet)
       end
+      regenerate_derivatives(file_sets)
       output
+    end
+
+    def regenerate_derivatives(file_sets)
+      # Ensure derivatives are queued for generation after the transaction closes.
+      file_sets.each do |file_set|
+        RegenerateDerivativesJob.perform_later(file_set.id.to_s)
+      end
     end
 
     class ResourceImporter
@@ -42,7 +52,6 @@ module Bagit
         resource = metadata_adapter.persister.save(resource: bag_resource)
         import_members!
         import_references!
-        RegenerateDerivativesJob.perform_now(resource.id.to_s) if resource.is_a?(FileSet)
         resource
       end
 

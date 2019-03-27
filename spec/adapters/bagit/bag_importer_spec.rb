@@ -28,6 +28,7 @@ RSpec.describe Bagit::BagImporter do
   after do
     importer.bag_metadata_adapter.persister.wipe!
   end
+  with_queue_adapter :inline
   it "can import a given resource ID" do
     output = importer.import(id: resource.id)
     expect(output).to be_a ScannedResource
