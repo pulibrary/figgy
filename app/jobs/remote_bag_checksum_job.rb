@@ -3,6 +3,37 @@
 class RemoteBagChecksumJob < RemoteChecksumJob
   delegate :query_service, to: :metadata_adapter # Retrieve the checksum and update the resource
 
+  def build_bag_file_sets
+    persisted_file_sets = []
+
+    cloud_storage_bag_files.each do |cloud_storage_bag_file|
+      file_set_change_set = FileSetChangeSet.new(FileSet.new)
+
+      change_set_persister.buffer_into_index do |buffered_changeset_persister|
+        next unless file_set_change_set.validate(title: cloud_storage_bag_file.original_filename, files: [cloud_storage_bag_file])
+        persisted_file_sets << buffered_changeset_persister.save(change_set: file_set_change_set)
+      end
+    end
+    persisted_file_sets
+  end
+
+  def build_compressed_bag_file_set
+    file_set_change_set = FileSetChangeSet.new(FileSet.new)
+
+    return unless file_set_change_set.validate(title: "Compressed Bag", files: [compressed_cloud_storage_file])
+    change_set_persister.buffer_into_index do |buffered_changeset_persister|
+      buffered_changeset_persister.save(change_set: file_set_change_set)
+    end
+  end
+
+  def compressed_bag_file_set
+    resource.decorate.compressed_bag_file_set
+  end
+
+  def bag_file_sets
+    resource.decorate.bag_file_sets
+  end
+
   # @param resource_id [String] the ID for the resource
   def perform(resource_id, local_checksum: false, compress_bag: true)
     @resource_id = resource_id
@@ -11,32 +42,33 @@ class RemoteBagChecksumJob < RemoteChecksumJob
 
     # If bags aren't being compressed, iterate through each of the bag files in
     # the cloud and append these as a new FileSet
-    if !compress_bag
-      file_set_change_set = FileSetChangeSet.new(FileSet.new)
-      change_set_persister.buffer_into_index do |buffered_changeset_persister|
-        if file_set_change_set.validate(title: "Bag Files", files: cloud_storage_bag_files)
-          persisted_file_set = buffered_changeset_persister.save(change_set: file_set_change_set)
+    if compress_bag
+      if compressed_bag_file_set.nil?
+        persisted_file_set = build_compressed_bag_file_set
+        change_set = DynamicChangeSet.new(resource)
+        if change_set.validate(member_ids: resource.member_ids + [persisted_file_set.id])
 
-          change_set = DynamicChangeSet.new(resource)
-          if change_set.validate(member_ids: resource.member_ids + [persisted_file_set.id])
+          change_set_persister.buffer_into_index do |buffered_changeset_persister|
             buffered_changeset_persister.save(change_set: change_set)
           end
         end
       end
-    else
-      # Otherwise, compress the bag, retrieve it from the cloud, and calculate the checksum
-      # @todo This should be refactored into a separate Job Class
-      change_set = DynamicChangeSet.new(resource)
-      checksum = if local_checksum
-                   calculate_local_checksum
-                 else
-                   cloud_storage_file.md5
-                 end
 
-      change_set_persister.buffer_into_index do |buffered_changeset_persister|
-        if change_set.validate(remote_checksum: checksum)
-          buffered_changeset_persister.save(change_set: change_set)
+      RemoteChecksumJob.perform_later(compressed_bag_file_set.id.to_s, local_checksum: local_checksum)
+    else
+
+      if bag_file_sets.empty?
+        persisted_file_sets = build_bag_file_sets
+        change_set = DynamicChangeSet.new(resource)
+        if change_set.validate(member_ids: resource.member_ids + persisted_file_sets.map(&:id))
+          change_set_persister.buffer_into_index do |buffered_changeset_persister|
+            buffered_changeset_persister.save(change_set: change_set)
+          end
         end
+      end
+
+      bag_file_sets.each do |bag_file_set|
+        RemoteChecksumJob.perform_later(bag_file_set.id.to_s, local_checksum: local_checksum)
       end
     end
   end
@@ -64,7 +96,7 @@ class RemoteBagChecksumJob < RemoteChecksumJob
 
     # Retrieve the file resource from cloud storage
     # @return [Google::Cloud::Storage::File, Object]
-    def cloud_storage_file
+    def compressed_cloud_storage_file
       driver.bag_file(compressed_bag.path.to_s, @resource_id)
     end
 

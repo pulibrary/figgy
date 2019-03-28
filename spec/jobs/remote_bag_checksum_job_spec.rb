@@ -36,7 +36,7 @@ RSpec.describe RemoteBagChecksumJob do
     end
 
     describe ".perform_now" do
-      it "triggers a derivatives_created message", rabbit_stubbed: true do
+      it "generates the checksum and appends it to the resource", rabbit_stubbed: true do
         described_class.perform_now(scanned_resource.id.to_s)
         reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: scanned_resource.id)
 
@@ -61,17 +61,31 @@ RSpec.describe RemoteBagChecksumJob do
     end
   end
 
+  context "when calculating the checksum for an uncompressed bag" do
+    describe ".perform_now" do
+      it "generates the checksum and appends it to the resource", rabbit_stubbed: true do
+        described_class.perform_now(scanned_resource.id.to_s, compress_bag: false)
+        reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: scanned_resource.id)
+
+        expect(reloaded.decorate.bag_file_sets.length).to eq 10
+        bag_file_set = reloaded.decorate.bag_file_sets.first
+
+        expect(bag_file_set.file_metadata.first.file_identifiers).not_to be_empty
+        expect(bag_file_set.file_metadata.first.file_identifiers.first.to_s).to include("https://www.googleapis.com/storage/v1/b/project-figgy-bucket/o/")
+      end
+    end
+  end
+
   context "when compressing into a TAR file" do
     let(:local_bag_path) { "#{local_file.bag_path}.tgz" }
 
     before do
       RemoteBagChecksumService::TarCompressedBag.build(path: local_file.bag_path)
       stub_google_cloud_resource(id: scanned_resource.id, md5_hash: md5_hash, crc32c: crc32c, local_file_path: local_bag_path)
-      # described_class.compressed_bag_factory = RemoteBagChecksumService::TarCompressedBag
     end
 
     describe ".perform_now" do
-      it "triggers a derivatives_created message", rabbit_stubbed: true do
+      it "generates the checksum and appends it to the resource", rabbit_stubbed: true do
         described_class.perform_now(scanned_resource.id.to_s)
         reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: scanned_resource.id)
 

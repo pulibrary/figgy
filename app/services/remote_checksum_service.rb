@@ -6,6 +6,10 @@ class RemoteChecksumService
   # Class providing an interface for the FileAppender service for appending
   # Google Cloud files
   class GoogleCloudStorageFileAdapter
+    def self.bag_uri
+      RDF::URI("http://figgy.princeton.edu/vocab#Bag")
+    end
+
     # Constructor
     def initialize(file)
       @file = file
@@ -20,7 +24,7 @@ class RemoteChecksumService
     end
 
     def use
-      [Valkyrie::Vocab::PCDMUse.ServiceFile]
+      [self.class.bag_uri]
     end
 
     def cloud_file?
@@ -41,8 +45,7 @@ class RemoteChecksumService
     # @param project_id [String] the ID for the Google Project
     # @param credentials [Hash] the credentials for the Google Cloud Storage API
     def initialize(project_id, _credentials)
-      # @storage = Google::Cloud::Storage.new(project_id: project_id, credentials: credentials)
-      @storage = Google::Cloud::Storage.new(project_id: project_id)
+      @storage = Google::Cloud::Storage.new(project_id: project_id, credentials: credentials)
       @buckets = {}
       @current_bucket = nil
     end

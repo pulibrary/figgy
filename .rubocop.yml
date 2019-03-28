@@ -33,6 +33,7 @@ Metrics/AbcSize:
     - 'app/services/music_import_service/recording_collector.rb'
     - 'app/controllers/bulk_ingest_controller.rb'
     - 'app/helpers/application_helper.rb'
+    - 'app/jobs/remote_bag_checksum_job.rb'
 Metrics/BlockLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
