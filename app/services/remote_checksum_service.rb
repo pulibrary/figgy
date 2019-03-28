@@ -22,6 +22,14 @@ class RemoteChecksumService
     def use
       [Valkyrie::Vocab::PCDMUse.ServiceFile]
     end
+
+    def cloud_file?
+      true
+    end
+
+    def id
+      Valkyrie::ID.new(@file.gapi.self_link)
+    end
   end
 
   # Base class for interfacing with cloud storage service APIs
