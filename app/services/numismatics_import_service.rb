@@ -36,7 +36,16 @@ class NumismaticsImportService
       resources.map(&:id)
     end
 
-    def create_issue(coin_ids:); end
+    def create_issue(coin_ids:)
+      attributes = issues.base_attributes(id: issue_number).to_h
+      resource = new_resource(klass: NumismaticIssue, **attributes)
+
+      change_set_persister.buffer_into_index do |buffered_change_set_persister|
+        change_set = DynamicChangeSet.new(resource)
+        change_set.member_ids = coin_ids
+        buffered_change_set_persister.save(change_set: change_set)
+      end
+    end
 
     def change_set_persister
       @change_set_persister ||= NumismaticIssuesController.change_set_persister

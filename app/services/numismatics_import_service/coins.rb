@@ -23,6 +23,7 @@ class NumismaticsImportService::Coins
       coin_number: id,
       accession_number: record["AccessionNumber"],
       analysis: record["Analysis"],
+      citation: nil, # nested
       counter_stamp: record["CounterStamp"],
       die_axis: record["Axis"],
       find_date: record["FindDate"],
@@ -30,7 +31,10 @@ class NumismaticsImportService::Coins
       find_feature: record["FindFeature"],
       find_locus: record["FindLocus"],
       find_number: record["FindNumber"],
+      find_place: nil, # nested place
+      loan: nil, # nested
       public_note: record["OtherInfo"],
+      provenance: nil, # nested
       private_note: record["PrivateInfo"],
       size: record["Size"],
       technique: record["Technique"],
