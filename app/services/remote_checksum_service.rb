@@ -3,6 +3,27 @@ require "google/cloud/storage"
 
 # Class for calculating checksums for resources managed in cloud storage
 class RemoteChecksumService
+  # Class providing an interface for the FileAppender service for appending
+  # Google Cloud files
+  class GoogleCloudStorageFileAdapter
+    # Constructor
+    def initialize(file)
+      @file = file
+    end
+
+    def original_filename
+      @file.name
+    end
+
+    def content_type
+      @file.content_type
+    end
+
+    def use
+      [Valkyrie::Vocab::PCDMUse.ServiceFile]
+    end
+  end
+
   # Base class for interfacing with cloud storage service APIs
   class CloudServiceDriver; end
 
@@ -11,9 +32,9 @@ class RemoteChecksumService
     # Constructor
     # @param project_id [String] the ID for the Google Project
     # @param credentials [Hash] the credentials for the Google Cloud Storage API
-    def initialize(project_id, credentials)
-      @storage = Google::Cloud::Storage.new(project_id: project_id, credentials: credentials)
-      # @storage = Google::Cloud::Storage.new(project_id: project_id)
+    def initialize(project_id, _credentials)
+      # @storage = Google::Cloud::Storage.new(project_id: project_id, credentials: credentials)
+      @storage = Google::Cloud::Storage.new(project_id: project_id)
       @buckets = {}
       @current_bucket = nil
     end
@@ -63,6 +84,35 @@ class RemoteChecksumService
   # @return [Class]
   def self.remote_checksum_job_class
     RemoteChecksumJob
+  end
+
+  def self.cloud_storage_file_adapter_class
+    GoogleCloudStorageFileAdapter
+  end
+
+  # Retrieve the Google Cloud Storage credentials from the configuration
+  # @return [Hash]
+  def self.cloud_storage_credentials
+    Figgy.config["google_cloud_storage"]["credentials"]
+  end
+
+  def self.cloud_storage_project_id
+    Figgy.config["google_cloud_storage"]["project_id"]
+  end
+
+  def self.cloud_storage_bucket
+    Figgy.config["google_cloud_storage"]["bucket_name"]
+  end
+
+  # Construct the storage driver with the necessary configuration for
+  # retrieving the files
+  # @return [RemoteChecksumService::GoogleCloudStorageDriver, Object]
+  def self.cloud_storage_driver
+    return @driver unless @driver.nil?
+
+    @driver = cloud_storage_driver_class.new(cloud_storage_project_id, cloud_storage_credentials)
+    @driver.bucket(cloud_storage_bucket)
+    @driver
   end
 
   # Constructor

@@ -92,6 +92,7 @@ Metrics/ClassLength:
     - 'app/services/music_import_service/recording_collector.rb'
     - 'app/controllers/bulk_ingest_controller.rb'
     - 'app/controllers/application_controller.rb'
+    - 'app/jobs/remote_bag_checksum_job.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/helpers/application_helper.rb'
@@ -157,6 +158,7 @@ Metrics/MethodLength:
     - 'app/resources/scanned_resources/scanned_resource_change_set.rb'
     - 'app/values/viewer_configuration.rb'
     - 'spec/support/stub_google_cloud_storage.rb'
+    - 'app/jobs/remote_bag_checksum_job.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
@@ -182,6 +184,7 @@ Metrics/PerceivedComplexity:
     - 'config/initializers/sequel_active_support_notification.rb'
     - 'app/services/music_import_service.rb'
     - 'app/helpers/application_helper.rb'
+    - 'app/jobs/remote_bag_checksum_job.rb'
 Rails/OutputSafety:
   Exclude:
     - 'app/resources/**/*_decorator*'

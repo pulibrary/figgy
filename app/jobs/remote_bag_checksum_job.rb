@@ -4,19 +4,39 @@ class RemoteBagChecksumJob < RemoteChecksumJob
   delegate :query_service, to: :metadata_adapter # Retrieve the checksum and update the resource
 
   # @param resource_id [String] the ID for the resource
-  def perform(resource_id, local_checksum: false)
+  def perform(resource_id, local_checksum: false, compress_bag: true)
     @resource_id = resource_id
-    @compressed_bag_factory = compressed_bag_factory
-    change_set = DynamicChangeSet.new(resource)
-    checksum = if local_checksum
-                 calculate_local_checksum
-               else
-                 cloud_storage_file.md5
-               end
+    @local_checksum = local_checksum
+    @compress_bag = compress_bag
 
-    change_set_persister.buffer_into_index do |buffered_changeset_persister|
-      if change_set.validate(remote_checksum: checksum)
-        buffered_changeset_persister.save(change_set: change_set)
+    # If bags aren't being compressed, iterate through each of the bag files in
+    # the cloud and append these as a new FileSet
+    if !compress_bag
+      file_set_change_set = FileSetChangeSet.new(FileSet.new)
+      change_set_persister.buffer_into_index do |buffered_changeset_persister|
+        if file_set_change_set.validate(title: "Bag Files", files: cloud_storage_bag_files)
+          persisted_file_set = buffered_changeset_persister.save(change_set: file_set_change_set)
+
+          change_set = DynamicChangeSet.new(resource)
+          if change_set.validate(member_ids: resource.member_ids + [persisted_file_set.id])
+            buffered_changeset_persister.save(change_set: change_set)
+          end
+        end
+      end
+    else
+      # Otherwise, compress the bag, retrieve it from the cloud, and calculate the checksum
+      # @todo This should be refactored into a separate Job Class
+      change_set = DynamicChangeSet.new(resource)
+      checksum = if local_checksum
+                   calculate_local_checksum
+                 else
+                   cloud_storage_file.md5
+                 end
+
+      change_set_persister.buffer_into_index do |buffered_changeset_persister|
+        if change_set.validate(remote_checksum: checksum)
+          buffered_changeset_persister.save(change_set: change_set)
+        end
       end
     end
   end
@@ -89,12 +109,53 @@ class RemoteBagChecksumJob < RemoteChecksumJob
       )
     end
 
-    def compressed_bag
-      return @compressed_bag unless @compressed_bag.nil?
+    def resource_bag_adapter
+      return @resource_bag_adapter unless @resource_bag_adapter.nil?
 
       bag_exporter.export(resource: resource)
-      resource_bag_adapter = bag_storage_adapter.for(bag_id: resource.id)
+      @resource_bag_adapter = bag_storage_adapter.for(bag_id: resource.id)
+    end
 
-      @compressed_bag = compressed_bag_factory.build(path: resource_bag_adapter.storage_adapter.bag_path)
+    def compressed_bag
+      @compressed_bag ||= compressed_bag_factory.build(path: resource_bag_adapter.storage_adapter.bag_path)
+    end
+
+    # Retrieve the file entries for the contents of the bag
+    # @return [Array<String>]
+    def resource_bag_entries
+      glob_pattern = File.join(resource_bag_adapter.storage_adapter.bag_path, "**", "*")
+      Dir.glob(glob_pattern)
+    end
+
+    def resource_bag_file_entries
+      resource_bag_entries.reject { |entry| File.directory?(entry) }
+    end
+
+    def relative_path(entry_path)
+      segments = []
+      root_segments = resource_bag_adapter.storage_adapter.bag_path.to_s.split("/")
+      entry_path.to_s.split("/").each do |entry_segment|
+        segments << entry_segment unless root_segments.include?(entry_segment)
+      end
+      File.join(*segments)
+    end
+
+    def cloud_storage_driver
+      RemoteChecksumService.cloud_storage_driver
+    end
+
+    def cloud_storage_file_adapter_class
+      RemoteChecksumService.cloud_storage_file_adapter_class
+    end
+
+    def cloud_storage_bag_files
+      cloud_files = []
+      resource_bag_file_entries.each do |entry_path|
+        relative_entry_path = relative_path(entry_path)
+        cloud_path = File.join(@resource_id, relative_entry_path)
+        cloud_file = cloud_storage_driver.bag_file(entry_path, cloud_path)
+        cloud_files << cloud_storage_file_adapter_class.new(cloud_file)
+      end
+      cloud_files
     end
 end
