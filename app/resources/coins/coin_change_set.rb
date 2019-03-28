@@ -35,6 +35,10 @@ class CoinChangeSet < ChangeSet
   property :viewing_direction, required: false
   property :viewing_hint, multiple: false, required: false, default: "individuals"
 
+  property :pdf_type, multiple: false, required: false, default: "color"
+  property :file_metadata, multiple: true, required: false, default: []
+  property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
+
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
   property :pending_uploads, multiple: true, required: false
@@ -45,6 +49,7 @@ class CoinChangeSet < ChangeSet
   validates_with StateValidator
   validates_with ViewingDirectionValidator
   validates_with ViewingHintValidator
+  validates_with RightsStatementValidator
   validates :visibility, presence: true
 
   def primary_terms
@@ -69,7 +74,9 @@ class CoinChangeSet < ChangeSet
       :provenance,
       :loan,
       :append_id,
-      :member_of_collection_ids
+      :member_of_collection_ids,
+      :rights_statement,
+      :pdf_type
     ]
   end
 end

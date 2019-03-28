@@ -30,6 +30,7 @@ class Coin < Resource
   attribute :find_number
   attribute :find_place
   attribute :numismatic_collection
+  attribute :rights_statement
 
   # administrative metadata
   attribute :depositor
@@ -40,6 +41,8 @@ class Coin < Resource
   attribute :visibility
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
   attribute :pending_uploads, Valkyrie::Types::Array.of(PendingUpload)
+  attribute :pdf_type
+  attribute :file_metadata, Valkyrie::Types::Set.of(FileMetadata.optional)
 
   # manifest metadata
   attribute :start_canvas
@@ -54,5 +57,11 @@ class Coin < Resource
   # TODO: Add more descriptive title when we have more information.
   def title
     ["Coin: #{coin_number}"]
+  end
+
+  def pdf_file
+    file_metadata.find do |file|
+      file.mime_type == ["application/pdf"]
+    end
   end
 end
