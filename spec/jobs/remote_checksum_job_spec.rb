@@ -23,7 +23,7 @@ RSpec.describe RemoteChecksumJob do
       described_class.perform_now(file_set.id.to_s)
       reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: file_set.id)
 
-      expect(reloaded.remote_checksum).to eq [md5_hash]
+      expect(reloaded.file_metadata.first.checksum).to eq [md5_hash]
     end
 
     context "when calculating the checksum locally" do
@@ -35,7 +35,7 @@ RSpec.describe RemoteChecksumJob do
         described_class.perform_now(file_set.id.to_s, local_checksum: true)
         reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: file_set.id)
 
-        expect(reloaded.remote_checksum).to eq [md5_hash]
+        expect(reloaded.file_metadata.first.checksum).to eq [md5_hash]
         expect(Tempfile).to have_received(:new)
       end
     end

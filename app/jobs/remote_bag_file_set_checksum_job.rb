@@ -1,7 +1,38 @@
 # frozen_string_literal: true
 # Class for an asynchronous job which retrieves the checksum for the file
-class RemoteBagChecksumJob < RemoteChecksumJob
+class RemoteBagFileSetChecksumJob < RemoteFileSetChecksumJob
   delegate :query_service, to: :metadata_adapter # Retrieve the checksum and update the resource
+
+  def build_bag_file_sets
+    persisted_file_sets = []
+
+    cloud_storage_bag_files.each do |cloud_storage_bag_file|
+      file_set_change_set = FileSetChangeSet.new(FileSet.new)
+
+      change_set_persister.buffer_into_index do |buffered_changeset_persister|
+        next unless file_set_change_set.validate(title: cloud_storage_bag_file.original_filename, files: [cloud_storage_bag_file])
+        persisted_file_sets << buffered_changeset_persister.save(change_set: file_set_change_set)
+      end
+    end
+    persisted_file_sets
+  end
+
+  def build_compressed_bag_file_set
+    file_set_change_set = FileSetChangeSet.new(FileSet.new)
+
+    return unless file_set_change_set.validate(title: "Compressed Bag", files: [compressed_cloud_storage_file])
+    change_set_persister.buffer_into_index do |buffered_changeset_persister|
+      buffered_changeset_persister.save(change_set: file_set_change_set)
+    end
+  end
+
+  def compressed_bag_file_set
+    resource.decorate.compressed_bag_file_set
+  end
+
+  def bag_file_sets
+    resource.decorate.bag_file_sets
+  end
 
   # @param resource_id [String] the ID for the resource
   def perform(resource_id, local_checksum: false, compress_bag: true)
@@ -16,6 +47,7 @@ class RemoteBagChecksumJob < RemoteChecksumJob
         persisted_file_set = build_compressed_bag_file_set
         change_set = DynamicChangeSet.new(resource)
         if change_set.validate(member_ids: resource.member_ids + [persisted_file_set.id])
+
           change_set_persister.buffer_into_index do |buffered_changeset_persister|
             buffered_changeset_persister.save(change_set: change_set)
           end
@@ -26,16 +58,18 @@ class RemoteBagChecksumJob < RemoteChecksumJob
     else
 
       if bag_file_sets.empty?
-        persisted_file_set = build_bag_file_set
+        persisted_file_sets = build_bag_file_sets
         change_set = DynamicChangeSet.new(resource)
-        if change_set.validate(member_ids: resource.member_ids + [persisted_file_set.id])
+        if change_set.validate(member_ids: resource.member_ids + persisted_file_sets.map(&:id))
           change_set_persister.buffer_into_index do |buffered_changeset_persister|
             buffered_changeset_persister.save(change_set: change_set)
           end
         end
       end
 
-      RemoteChecksumJob.perform_later(bag_file_set.id.to_s, local_checksum: local_checksum)
+      bag_file_sets.each do |bag_file_set|
+        RemoteChecksumJob.perform_later(bag_file_set.id.to_s, local_checksum: local_checksum)
+      end
     end
   end
 
@@ -155,40 +189,5 @@ class RemoteBagChecksumJob < RemoteChecksumJob
         cloud_files << cloud_storage_file_adapter_class.new(cloud_file)
       end
       cloud_files
-    end
-    def bag_file_metadata
-      cloud_storage_bag_files.map do |cloud_storage_bag_file|
-        FileMetadata.for(file: cloud_storage_bag_file).new(id: SecureRandom.uuid)
-      end
-    end
-
-    def build_bag_file_set
-      file_set_change_set = FileSetChangeSet.new(FileSet.new)
-
-      return unless file_set_change_set.validate(title: "Bag", file_metadata: bag_file_metadata)
-      change_set_persister.buffer_into_index do |buffered_changeset_persister|
-        buffered_changeset_persister.save(change_set: file_set_change_set)
-      end
-    end
-
-    def compressed_bag_file_metadata
-      FileMetadata.for(file: compressed_cloud_storage_file).new(id: SecureRandom.uuid)
-    end
-
-    def build_compressed_bag_file_set
-      file_set_change_set = FileSetChangeSet.new(FileSet.new)
-
-      return unless file_set_change_set.validate(title: "Compressed Bag", file_metadata: [compressed_bag_file_metadata])
-      change_set_persister.buffer_into_index do |buffered_changeset_persister|
-        buffered_changeset_persister.save(change_set: file_set_change_set)
-      end
-    end
-
-    def compressed_bag_file_set
-      resource.decorate.compressed_bag_file_set
-    end
-
-    def bag_file_set
-      resource.decorate.bag_file_sets.first
     end
 end
