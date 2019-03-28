@@ -37,7 +37,7 @@ class CoinDecorator < Valkyrie::ResourceDecorator
   end
 
   def pub_created_display
-    [decorated_parent.ruler&.first, decorated_parent.denomination&.first, decorated_parent.place&.first&.city].compact.join(", ")
+    [decorated_parent.ruler&.first, decorated_parent.denomination&.first, decorated_parent.place&.first&.city].compact.join(", ") if decorated_parent
   end
 
   def manageable_files?
