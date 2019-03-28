@@ -1,28 +1,22 @@
 # frozen_string_literal: true
 
 # Class for an asynchronous job which retrieves the checksum for the file
-class RemoteChecksumJob < ApplicationJob
+class RemoteFileSetChecksumJob < ApplicationJob
   delegate :query_service, to: :metadata_adapter
 
   # Retrieve the checksum and update the resource
   # @param resource_id [String] the ID for the resource
   def perform(resource_id, local_checksum: false)
     @resource_id = resource_id
-
-    cloud_file_metadata.each do |cloud_file_metadata|
-      cloud_storage_file = driver.file(cloud_file_metadata)
-
-      checksum = if local_checksum
-                   calculate_local_checksum(file: cloud_storage_file)
-                 else
-                   cloud_storage_file.md5
-                 end
-      cloud_storage_file.checksum = checksum
-    end
-
     change_set = DynamicChangeSet.new(resource)
+    checksum = if local_checksum
+                 calculate_local_checksum
+               else
+                 cloud_storage_file.md5
+               end
+
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
-      if change_set.validate(file_metadata: file_metadata)
+      if change_set.validate(remote_checksum: checksum)
         buffered_changeset_persister.save(change_set: change_set)
       end
     end
@@ -51,6 +45,12 @@ class RemoteChecksumJob < ApplicationJob
       query_service.find_by(id: @resource_id)
     end
 
+    # Retrieve the file metadata for the original file
+    # @return [FileMetadata]
+    def original_file
+      return resource.original_file if resource.respond_to?(:original_file)
+    end
+
     # Construct the storage driver with the necessary configuration for
     # retrieving the files
     # @return [RemoteChecksumService::GoogleCloudStorageDriver, Object]
@@ -59,23 +59,23 @@ class RemoteChecksumJob < ApplicationJob
       @driver = RemoteChecksumService.cloud_storage_driver
     end
 
+    # Retrieve the file resource from cloud storage
+    # @return [Google::Cloud::Storage::File, Object]
+    def cloud_storage_file
+      return if original_file.nil?
+
+      driver.file(original_file)
+    end
+
     # Calculate the MD5 checksum for the file locally
     # @return [String]
-    def calculate_local_checksum(file:)
-      return if file.nil?
+    def calculate_local_checksum
+      return if cloud_storage_file.nil?
 
-      temp_file = Tempfile.new
-      file.download(temp_file.path)
+      temp_file = Tempfile.new(@resource_id)
+      cloud_storage_file.download(temp_file.path)
       local_md5 = Digest::MD5.file(temp_file.path)
       temp_file.unlink
       local_md5.base64digest
-    end
-
-    def file_metadata
-      @file_metadata ||= resource.file_metadata
-    end
-
-    def cloud_file_metadata
-      file_metadata.select { |file_metadata| file_metadata.use.include?(RemoteChecksumService::GoogleCloudStorageFileAdapter.bag_uri) }
     end
 end
