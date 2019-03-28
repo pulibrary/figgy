@@ -40,6 +40,7 @@ class NumismaticsImportService
       attributes = issues.base_attributes(id: issue_number).to_h
       resource = new_resource(klass: NumismaticIssue, **attributes)
 
+      # Add child coins
       change_set_persister.buffer_into_index do |buffered_change_set_persister|
         change_set = DynamicChangeSet.new(resource)
         change_set.member_ids = coin_ids

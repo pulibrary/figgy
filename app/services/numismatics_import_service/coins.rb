@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Data access object for coins in numismatics database
 class NumismaticsImportService::Coins
   attr_reader :db_adapter
   def initialize(db_adapter:)
