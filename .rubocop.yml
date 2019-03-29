@@ -160,6 +160,7 @@ Metrics/MethodLength:
     - 'app/values/viewer_configuration.rb'
     - 'spec/support/stub_google_cloud_storage.rb'
     - 'app/jobs/remote_bag_checksum_job.rb'
+    - 'app/jobs/remote_checksum_job.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'

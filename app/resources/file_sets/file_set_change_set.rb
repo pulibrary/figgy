@@ -7,6 +7,7 @@ class FileSetChangeSet < ChangeSet
   property :ocr_content, multiple: false, required: false
   property :read_groups, multiple: true, required: false
   property :remote_checksum, multiple: false, required: false
+  property :file_metadata, multiple: true, required: false, type: Types::Strict::Array.of(FileMetadata)
   delegate :thumbnail_id, to: :model
 
   def primary_terms

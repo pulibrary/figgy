@@ -24,6 +24,7 @@ RSpec.describe RemoteBagChecksumJob do
   before do
     Figgy.config["google_cloud_storage"]["credentials"]["private_key"] = OpenSSL::PKey::RSA.new(2048).to_s
     bag_exporter.export(resource: scanned_resource)
+    allow(RemoteChecksumJob).to receive(:perform_later)
   end
 
   context "when compressing into a ZIP file" do
@@ -40,23 +41,11 @@ RSpec.describe RemoteBagChecksumJob do
         described_class.perform_now(scanned_resource.id.to_s)
         reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: scanned_resource.id)
 
-        expect(reloaded.remote_checksum).not_to be_empty
-        expect(reloaded.remote_checksum).to eq [md5_hash]
-      end
-
-      context "when calculating the checksum locally" do
-        before do
-          allow(Tempfile).to receive(:new).and_call_original
-        end
-
-        it "generates the checksum from a locally downloaded file" do
-          described_class.perform_now(scanned_resource.id.to_s, local_checksum: true)
-          reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: scanned_resource.id)
-
-          expect(reloaded.remote_checksum).not_to be_empty
-          expect(reloaded.remote_checksum).to eq [md5_hash]
-          expect(Tempfile).to have_received(:new).with(scanned_resource.id.to_s)
-        end
+        file_sets = reloaded.decorate.file_sets
+        expect(file_sets.length).to eq 2
+        expect(file_sets.last.file_metadata.length).to eq 1
+        expect(file_sets.last.file_metadata.last.file_identifiers).to eq ["https://www.googleapis.com/storage/v1/b/project-figgy-bucket/o/#{scanned_resource.id}"]
+        expect(RemoteChecksumJob).to have_received(:perform_later)
       end
     end
   end
@@ -66,12 +55,11 @@ RSpec.describe RemoteBagChecksumJob do
       it "generates the checksum and appends it to the resource", rabbit_stubbed: true do
         described_class.perform_now(scanned_resource.id.to_s, compress_bag: false)
         reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: scanned_resource.id)
-
-        expect(reloaded.decorate.bag_file_sets.length).to eq 10
-        bag_file_set = reloaded.decorate.bag_file_sets.first
-
-        expect(bag_file_set.file_metadata.first.file_identifiers).not_to be_empty
-        expect(bag_file_set.file_metadata.first.file_identifiers.first.to_s).to include("https://www.googleapis.com/storage/v1/b/project-figgy-bucket/o/")
+        file_sets = reloaded.decorate.file_sets
+        expect(file_sets.length).to eq 2
+        expect(file_sets.last.file_metadata.length).to eq 10
+        expect(file_sets.last.file_metadata.last.file_identifiers.last).to include "https://www.googleapis.com/storage/v1/b/project-figgy-bucket/o/#{scanned_resource.id}"
+        expect(RemoteChecksumJob).to have_received(:perform_later)
       end
     end
   end
@@ -88,24 +76,11 @@ RSpec.describe RemoteBagChecksumJob do
       it "generates the checksum and appends it to the resource", rabbit_stubbed: true do
         described_class.perform_now(scanned_resource.id.to_s)
         reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: scanned_resource.id)
-
-        expect(reloaded.remote_checksum).not_to be_empty
-        expect(reloaded.remote_checksum).to eq [md5_hash]
-      end
-
-      context "when calculating the checksum locally" do
-        before do
-          allow(Tempfile).to receive(:new).and_call_original
-        end
-
-        it "generates the checksum from a locally downloaded file" do
-          described_class.perform_now(scanned_resource.id.to_s, local_checksum: true)
-          reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: scanned_resource.id)
-
-          expect(reloaded.remote_checksum).not_to be_empty
-          expect(reloaded.remote_checksum).to eq [md5_hash]
-          expect(Tempfile).to have_received(:new).with(scanned_resource.id.to_s)
-        end
+        file_sets = reloaded.decorate.file_sets
+        expect(file_sets.length).to eq 2
+        expect(file_sets.last.file_metadata.length).to eq 1
+        expect(file_sets.last.file_metadata.last.file_identifiers).to eq ["https://www.googleapis.com/storage/v1/b/project-figgy-bucket/o/#{scanned_resource.id}"]
+        expect(RemoteChecksumJob).to have_received(:perform_later)
       end
     end
   end

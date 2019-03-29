@@ -10,7 +10,7 @@ class RemoteChecksumJob < ApplicationJob
     @resource_id = resource_id
 
     cloud_file_metadata.each do |cloud_file_metadata|
-      cloud_storage_file = driver.file(cloud_file_metadata)
+      cloud_storage_file = driver.file(file_metadata: cloud_file_metadata)
 
       checksum = if local_checksum
                    calculate_local_checksum(file: cloud_storage_file)

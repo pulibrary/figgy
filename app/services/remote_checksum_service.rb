@@ -31,8 +31,12 @@ class RemoteChecksumService
       true
     end
 
+    def uri
+      @file.gapi.self_link
+    end
+
     def id
-      Valkyrie::ID.new(@file.gapi.self_link)
+      Valkyrie::ID.new(uri)
     end
   end
 
@@ -44,8 +48,9 @@ class RemoteChecksumService
     # Constructor
     # @param project_id [String] the ID for the Google Project
     # @param credentials [Hash] the credentials for the Google Cloud Storage API
-    def initialize(project_id, credentials)
-      @storage = Google::Cloud::Storage.new(project_id: project_id, credentials: credentials)
+    def initialize(project_id, _credentials)
+      # @storage = Google::Cloud::Storage.new(project_id: project_id, credentials: credentials)
+      @storage = Google::Cloud::Storage.new(project_id: project_id)
       @buckets = {}
       @current_bucket = nil
     end
@@ -63,20 +68,16 @@ class RemoteChecksumService
     end
 
     # Retrieve a cloud storage file resource from the API
-    # @param file [FileMetadata]
+    # @param file_metadata [FileMetadata]
     # @return [Google::Cloud::Storage::File]
-    def file(file)
+    def file(local_file_path: nil, remote_file_path: nil, file_metadata: nil)
       raise StandardError, "A bucket needs to be selected before a file can be downloaded." if @current_bucket.nil?
 
-      retrieved = @current_bucket.file(file.id.to_s)
-      return retrieved unless retrieved.nil?
-
-      file_node = Valkyrie.config.storage_adapter.find_by(id: file.file_identifiers.first)
-      @current_bucket.create_file(file_node.disk_path.to_s, file.id.to_s)
-    end
-
-    def bag_file(local_file_path, remote_file_path)
-      raise StandardError, "A bucket needs to be selected before a file can be downloaded." if @current_bucket.nil?
+      unless file_metadata.nil?
+        remote_file_path = file_metadata.id.to_s
+        file_node = Valkyrie.config.storage_adapter.find_by(id: file_metadata.file_identifiers.first)
+        local_file_path = file_node.disk_path.to_s
+      end
 
       retrieved = @current_bucket.file(remote_file_path)
       return retrieved unless retrieved.nil?

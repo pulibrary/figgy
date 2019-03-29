@@ -20,23 +20,24 @@ class RemoteBagChecksumJob < RemoteChecksumJob
             buffered_changeset_persister.save(change_set: change_set)
           end
         end
+        resource_id = persisted_file_set.id.to_s
+      else
+        resource_id = compressed_bag_file_set.id.to_s
       end
-
-      RemoteChecksumJob.perform_later(compressed_bag_file_set.id.to_s, local_checksum: local_checksum)
-    else
-
-      if bag_file_sets.empty?
-        persisted_file_set = build_bag_file_set
-        change_set = DynamicChangeSet.new(resource)
-        if change_set.validate(member_ids: resource.member_ids + [persisted_file_set.id])
-          change_set_persister.buffer_into_index do |buffered_changeset_persister|
-            buffered_changeset_persister.save(change_set: change_set)
-          end
+    elsif bag_file_set.nil?
+      persisted_file_set = build_bag_file_set
+      change_set = DynamicChangeSet.new(resource)
+      if change_set.validate(member_ids: resource.member_ids + [persisted_file_set.id])
+        change_set_persister.buffer_into_index do |buffered_changeset_persister|
+          buffered_changeset_persister.save(change_set: change_set)
         end
       end
-
-      RemoteChecksumJob.perform_later(bag_file_set.id.to_s, local_checksum: local_checksum)
+      resource_id = persisted_file_set.id.to_s
+    else
+      resource_id = compressed_bag_file_set.id.to_s
     end
+
+    RemoteChecksumJob.perform_later(resource_id, local_checksum: local_checksum)
   end
 
   def self.default_compressed_bag_factory
@@ -63,7 +64,8 @@ class RemoteBagChecksumJob < RemoteChecksumJob
     # Retrieve the file resource from cloud storage
     # @return [Google::Cloud::Storage::File, Object]
     def compressed_cloud_storage_file
-      driver.bag_file(compressed_bag.path.to_s, @resource_id)
+      cloud_resource = driver.file(local_file_path: compressed_bag.path.to_s, remote_file_path: @resource_id)
+      RemoteChecksumService::GoogleCloudStorageFileAdapter.new(cloud_resource)
     end
 
     def indexing_persister_adapter
@@ -146,48 +148,76 @@ class RemoteBagChecksumJob < RemoteChecksumJob
       RemoteChecksumService.cloud_storage_file_adapter_class
     end
 
+    # Retrieve or upload the file within a Bag to a cloud service
+    # return [Array<RemoteChecksumService::GoogleCloudStorageFileAdapter>]
     def cloud_storage_bag_files
       cloud_files = []
       resource_bag_file_entries.each do |entry_path|
         relative_entry_path = relative_path(entry_path)
         cloud_path = File.join(@resource_id, relative_entry_path)
-        cloud_file = cloud_storage_driver.bag_file(entry_path, cloud_path)
+        cloud_file = cloud_storage_driver.file(local_file_path: entry_path, remote_file_path: cloud_path)
         cloud_files << cloud_storage_file_adapter_class.new(cloud_file)
       end
       cloud_files
     end
+
+    # Construct the FileMetadata objects for each file within a Bag stored the
+    #   a Cloud service
+    # @return [Array<FileMetadata>]
     def bag_file_metadata
       cloud_storage_bag_files.map do |cloud_storage_bag_file|
-        FileMetadata.for(file: cloud_storage_bag_file).new(id: SecureRandom.uuid)
+        metadata = FileMetadata.for(file: cloud_storage_bag_file).new(id: SecureRandom.uuid)
+
+        metadata.file_identifiers << cloud_storage_bag_file.uri
+        metadata
       end
     end
 
+    # Construct a FileSet object containing the file metadata for each bag file
+    # @return [FileSet]
     def build_bag_file_set
       file_set_change_set = FileSetChangeSet.new(FileSet.new)
 
       return unless file_set_change_set.validate(title: "Bag", file_metadata: bag_file_metadata)
+
+      persisted_file_set = nil
       change_set_persister.buffer_into_index do |buffered_changeset_persister|
-        buffered_changeset_persister.save(change_set: file_set_change_set)
+        persisted_file_set = buffered_changeset_persister.save(change_set: file_set_change_set)
       end
+      persisted_file_set
     end
 
+    # Construct a FileMetadata object using a cloud service file resource
+    # @return [FileMetadata]
     def compressed_bag_file_metadata
-      FileMetadata.for(file: compressed_cloud_storage_file).new(id: SecureRandom.uuid)
+      metadata = FileMetadata.for(file: compressed_cloud_storage_file).new(id: SecureRandom.uuid)
+      metadata.file_identifiers << compressed_cloud_storage_file.uri
+      metadata
     end
 
+    # Construct a FileSet object containing the file metadata for the compressed
+    #   Bag
+    # @return [FileSet]
     def build_compressed_bag_file_set
       file_set_change_set = FileSetChangeSet.new(FileSet.new)
 
       return unless file_set_change_set.validate(title: "Compressed Bag", file_metadata: [compressed_bag_file_metadata])
+
+      persisted_file_set = nil
       change_set_persister.buffer_into_index do |buffered_changeset_persister|
-        buffered_changeset_persister.save(change_set: file_set_change_set)
+        persisted_file_set = buffered_changeset_persister.save(change_set: file_set_change_set)
       end
+      persisted_file_set
     end
 
+    # Access the FileSet for the compressed Bag if it already exists
+    # @return [FileSet]
     def compressed_bag_file_set
       resource.decorate.compressed_bag_file_set
     end
 
+    # Access the FileSet for the Bag if it already exists
+    # @return [FileSet]
     def bag_file_set
       resource.decorate.bag_file_sets.first
     end
