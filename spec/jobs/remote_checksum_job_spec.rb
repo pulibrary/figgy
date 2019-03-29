@@ -9,9 +9,34 @@ RSpec.describe RemoteChecksumJob do
   let(:local_file) { Valkyrie.config.storage_adapter.find_by(id: file_set.original_file.file_identifiers.first.id) }
   let(:md5_hash) { Digest::MD5.file(local_file.disk_path).base64digest }
   let(:crc32c) { Digest::CRC32c.file(local_file.disk_path).base64digest }
+  let(:change_set_persister) do
+    ChangeSetPersister.new(
+      metadata_adapter: Valkyrie.config.metadata_adapter,
+      storage_adapter: Valkyrie.config.storage_adapter
+    )
+  end
+  let(:cloud_file_metadata) do
+    FileMetadata.new(
+      id: SecureRandom.uuid,
+      use: RemoteChecksumService::GoogleCloudStorageFileAdapter.bag_uri,
+      file_identifiers: [file_path]
+    )
+  end
+  let(:bag_file_set) do
+    fs = FileSet.new
+    cs = FileSetChangeSet.new(fs)
+    cs.validate(title: ["test bag"], file_metadata: [cloud_file_metadata])
+    change_set_persister.save(change_set: cs)
+  end
+  let(:file_path) { Rails.root.join("spec", "fixtures", "files", "example.tif") }
+  let(:md5_hash) { Digest::MD5.file(file_path).base64digest }
+  let(:crc32c) { Digest::CRC32c.file(file_path).base64digest }
 
   before do
-    stub_google_cloud_resource(id: file_set.original_file.id, md5_hash: md5_hash, crc32c: crc32c, local_file_path: local_file.disk_path)
+    cs = ScannedResourceChangeSet.new(scanned_resource)
+    cs.validate(member_ids: [bag_file_set.id])
+    change_set_persister.save(change_set: cs)
+    stub_google_cloud_resource(id: bag_file_set.file_metadata.first.id, md5_hash: md5_hash, crc32c: crc32c, local_file_path: file_path)
   end
 
   describe ".perform_now" do
@@ -20,9 +45,10 @@ RSpec.describe RemoteChecksumJob do
     end
 
     it "uses a remote service to calculate the checksum", rabbit_stubbed: true do
-      described_class.perform_now(file_set.id.to_s)
-      reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: file_set.id)
+      described_class.perform_now(bag_file_set.id.to_s)
+      reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: bag_file_set.id)
 
+      expect(reloaded.file_metadata).not_to be_empty
       expect(reloaded.file_metadata.first.checksum).to eq [md5_hash]
     end
 
@@ -35,8 +61,8 @@ RSpec.describe RemoteChecksumJob do
         described_class.perform_now(file_set.id.to_s, local_checksum: true)
         reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: file_set.id)
 
+        expect(reloaded.file_metadata).not_to be_empty
         expect(reloaded.file_metadata.first.checksum).to eq [md5_hash]
-        expect(Tempfile).to have_received(:new)
       end
     end
   end

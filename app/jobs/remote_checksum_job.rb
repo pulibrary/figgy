@@ -17,7 +17,7 @@ class RemoteChecksumJob < ApplicationJob
                  else
                    cloud_storage_file.md5
                  end
-      cloud_storage_file.checksum = checksum
+      cloud_file_metadata.checksum = [checksum]
     end
 
     change_set = DynamicChangeSet.new(resource)
