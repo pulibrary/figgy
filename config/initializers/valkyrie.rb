@@ -177,32 +177,47 @@ Rails.application.config.to_prepare do
     :memory
   )
 
+  indexer = CompositeIndexer.new(
+    Valkyrie::Indexers::AccessControlsIndexer,
+    CollectionIndexer,
+    EphemeraBoxIndexer,
+    EphemeraFolderIndexer,
+    FacetIndexer,
+    ProjectIndexer,
+    HumanReadableTypeIndexer,
+    ImportedMetadataIndexer,
+    MemberOfIndexer,
+    ParentIssueIndexer,
+    SortingIndexer,
+    TitleIndexer,
+    TrackIndexer
+  )
   # Registers a metadata adapter for storing and indexing resource metadata into Solr
   # (see Valkyrie::Persistence::Solr::MetadataAdapter)
   Valkyrie::MetadataAdapter.register(
     InstrumentedAdapter.new(
       metadata_adapter: Valkyrie::Persistence::Solr::MetadataAdapter.new(
         connection: Blacklight.default_index.connection,
-        resource_indexer: CompositeIndexer.new(
-          Valkyrie::Indexers::AccessControlsIndexer,
-          CollectionIndexer,
-          EphemeraBoxIndexer,
-          EphemeraFolderIndexer,
-          FacetIndexer,
-          ProjectIndexer,
-          HumanReadableTypeIndexer,
-          ImportedMetadataIndexer,
-          MemberOfIndexer,
-          ParentIssueIndexer,
-          SortingIndexer,
-          TitleIndexer,
-          TrackIndexer
-        )
+        resource_indexer: indexer
       ),
       tracer: Datadog.tracer
     ),
     :index_solr
   )
+
+  if ENV["CLEAN_REINDEX_SOLR_URL"]
+    # Register an indexer for a clean reindex.
+    Valkyrie::MetadataAdapter.register(
+      InstrumentedAdapter.new(
+        metadata_adapter: Valkyrie::Persistence::Solr::MetadataAdapter.new(
+          connection: RSolr.connect(url: ENV["CLEAN_REINDEX_SOLR_URL"]),
+          resource_indexer: indexer
+        ),
+        tracer: Datadog.tracer
+      ),
+      :clean_reindex_solr
+    )
+  end
 
   # Registers a metadata adapter for indexing resource metadata using a registered Solr adapter
   # (see IndexingAdapter)

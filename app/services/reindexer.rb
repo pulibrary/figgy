@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class Reindexer
-  def self.reindex_all(logger: Logger.new(STDOUT), wipe: false, batch_size: 1000)
+  def self.reindex_all(logger: Logger.new(STDOUT), wipe: false, batch_size: 1000, solr_adapter: :index_solr)
     new(
-      solr_adapter: Valkyrie::MetadataAdapter.find(:index_solr),
+      solr_adapter: Valkyrie::MetadataAdapter.find(solr_adapter),
       query_service: Valkyrie::MetadataAdapter.find(:postgres).query_service,
       logger: logger,
       wipe: wipe,
