@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module GoogleCloudStorageStubbing
-  def stub_google_cloud_resource(id:, md5_hash:, crc32c:, local_file_path:)
+  def stub_google_cloud_auth
     stub_request(:get, "http://169.254.169.254/").to_return(
       status: 200, body: "", headers: {}
     )
@@ -26,6 +26,9 @@ module GoogleCloudStorageStubbing
         "Content-Type" => "application/json; charset=utf-8"
       }
     )
+  end
+
+  def stub_google_cloud_bucket
     stub_request(:get, "https://www.googleapis.com/storage/v1/b/project-figgy-bucket").to_return(
       status: 200,
       body: JSON.generate(
@@ -50,6 +53,11 @@ module GoogleCloudStorageStubbing
         "Content-Type" => "application/json; charset=utf-8"
       }
     )
+  end
+
+  def stub_google_cloud_resource(id:, md5_hash:, crc32c:, local_file_path:)
+    stub_google_cloud_auth
+    stub_google_cloud_bucket
     stub_request(:get, "https://www.googleapis.com/storage/v1/b/project-figgy-bucket/o/#{id}").to_return(
       status: 404,
       body: JSON.generate(
@@ -121,6 +129,29 @@ module GoogleCloudStorageStubbing
         "Content-Type" => "application/octet-stream"
       }
     )
+  end
+
+  def bag_files
+    [
+      "bagit.txt",
+      "bagit"
+    ]
+  end
+
+  def bag_file_paths
+    [
+      Rails.root.join("spec", "fixtures", "files", "example.tif"),
+      Rails.root.join("spec", "fixtures", "files", "bo")
+    ]
+  end
+
+  def stub_google_cloud_bag
+    bag_file_paths.each do |bag_file_path|
+      md5_hash = Digest::MD5.file(bag_file_path).base64digest
+      crc32c = Digest::CRC32c.file(bag_file_path).base64digest
+      cloud_file_path = "#{scanned_resource.id}-bagit.txt"
+      stub_google_cloud_resource(id: cloud_file_path, md5_hash: md5_hash, crc32c: crc32c, local_file_path: bag_file_path)
+    end
   end
 end
 

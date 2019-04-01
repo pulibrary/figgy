@@ -137,7 +137,7 @@ class RemoteBagChecksumJob < RemoteChecksumJob
       entry_path.to_s.split("/").each do |entry_segment|
         segments << entry_segment unless root_segments.include?(entry_segment)
       end
-      File.join(*segments)
+      segments.join("-")
     end
 
     def cloud_storage_driver
@@ -154,7 +154,7 @@ class RemoteBagChecksumJob < RemoteChecksumJob
       cloud_files = []
       resource_bag_file_entries.each do |entry_path|
         relative_entry_path = relative_path(entry_path)
-        cloud_path = File.join(@resource_id, relative_entry_path)
+        cloud_path = [@resource_id, relative_entry_path].join("-")
         cloud_file = cloud_storage_driver.file(local_file_path: entry_path, remote_file_path: cloud_path)
         cloud_files << cloud_storage_file_adapter_class.new(cloud_file)
       end
@@ -166,7 +166,7 @@ class RemoteBagChecksumJob < RemoteChecksumJob
     # @return [Array<FileMetadata>]
     def bag_file_metadata
       cloud_storage_bag_files.map do |cloud_storage_bag_file|
-        metadata = FileMetadata.for(file: cloud_storage_bag_file).new(id: SecureRandom.uuid)
+        metadata = FileMetadata.for(file: cloud_storage_bag_file).new(id: cloud_storage_bag_file.id)
 
         metadata.file_identifiers << cloud_storage_bag_file.uri
         metadata
@@ -190,7 +190,7 @@ class RemoteBagChecksumJob < RemoteChecksumJob
     # Construct a FileMetadata object using a cloud service file resource
     # @return [FileMetadata]
     def compressed_bag_file_metadata
-      metadata = FileMetadata.for(file: compressed_cloud_storage_file).new(id: SecureRandom.uuid)
+      metadata = FileMetadata.for(file: compressed_cloud_storage_file).new(id: compressed_cloud_storage_file.id)
       metadata.file_identifiers << compressed_cloud_storage_file.uri
       metadata
     end

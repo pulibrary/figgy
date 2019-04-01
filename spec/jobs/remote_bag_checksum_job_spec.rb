@@ -2,6 +2,7 @@
 
 require "rails_helper"
 include ActionDispatch::TestProcess
+require "google/cloud/storage"
 
 RSpec.describe RemoteBagChecksumJob do
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
@@ -51,14 +52,30 @@ RSpec.describe RemoteBagChecksumJob do
   end
 
   context "when calculating the checksum for an uncompressed bag" do
+    let(:cloud_api_object1) { instance_double(Google::Apis::StorageV1::Object) }
+    let(:cloud_file1) { instance_double(Google::Cloud::Storage::File) }
+
+    before do
+      stub_google_cloud_auth
+      stub_google_cloud_bucket
+
+      allow(cloud_api_object1).to receive(:id).and_return("test-id-#{SecureRandom.uuid}")
+      allow(cloud_api_object1).to receive(:self_link).and_return("https://www.googleapis.com/storage/v1/b/project-figgy-bucket/o/test-id-#{SecureRandom.uuid}")
+
+      allow(cloud_file1).to receive(:name).and_return("bag_file_1")
+      allow(cloud_file1).to receive(:content_type).and_return("application/octet-stream")
+      allow(cloud_file1).to receive(:gapi).and_return(cloud_api_object1)
+      allow_any_instance_of(RemoteChecksumService::GoogleCloudStorageDriver).to receive(:file).and_return(cloud_file1)
+    end
+
     describe ".perform_now" do
       it "generates the checksum and appends it to the resource", rabbit_stubbed: true do
         described_class.perform_now(scanned_resource.id.to_s, compress_bag: false)
         reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: scanned_resource.id)
         file_sets = reloaded.decorate.file_sets
         expect(file_sets.length).to eq 2
-        expect(file_sets.last.file_metadata.length).to eq 10
-        expect(file_sets.last.file_metadata.last.file_identifiers.last).to include "https://www.googleapis.com/storage/v1/b/project-figgy-bucket/o/#{scanned_resource.id}"
+        expect(file_sets.last.file_metadata.length).to eq 1
+        expect(file_sets.last.file_metadata.last.file_identifiers).to eq [cloud_api_object1.self_link]
         expect(RemoteChecksumJob).to have_received(:perform_later)
       end
     end

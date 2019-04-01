@@ -36,7 +36,7 @@ class RemoteChecksumService
     end
 
     def id
-      Valkyrie::ID.new(uri)
+      Valkyrie::ID.new(@file.gapi.id)
     end
   end
 
@@ -48,9 +48,9 @@ class RemoteChecksumService
     # Constructor
     # @param project_id [String] the ID for the Google Project
     # @param credentials [Hash] the credentials for the Google Cloud Storage API
-    def initialize(project_id, _credentials)
-      # @storage = Google::Cloud::Storage.new(project_id: project_id, credentials: credentials)
-      @storage = Google::Cloud::Storage.new(project_id: project_id)
+    def initialize(project_id, credentials)
+      @storage = Google::Cloud::Storage.new(project_id: project_id, credentials: credentials)
+      # @storage = Google::Cloud::Storage.new(project_id: project_id)
       @buckets = {}
       @current_bucket = nil
     end
