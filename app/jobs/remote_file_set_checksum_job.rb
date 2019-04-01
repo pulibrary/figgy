@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Class for an asynchronous job which retrieves the checksum for the file
-class RemoteFileSetChecksumJob < ApplicationJob
+class RemoteFileSetChecksumJob < RemoteChecksumJob
   delegate :query_service, to: :metadata_adapter
 
   # Retrieve the checksum and update the resource
@@ -24,39 +24,10 @@ class RemoteFileSetChecksumJob < ApplicationJob
 
   private
 
-    # Construct a new ChangeSetPersister
-    # @return [ChangeSetPersister]
-    def change_set_persister
-      @change_set_persister ||= ChangeSetPersister.new(
-        metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
-        storage_adapter: Valkyrie.config.storage_adapter
-      )
-    end
-
-    # Retrieve the metadata adapter
-    # @return [Valkyrie::MetadataAdapter]
-    def metadata_adapter
-      Valkyrie.config.metadata_adapter
-    end
-
-    # Retrieve the resource
-    # @return [Resource]
-    def resource
-      query_service.find_by(id: @resource_id)
-    end
-
     # Retrieve the file metadata for the original file
     # @return [FileMetadata]
     def original_file
       return resource.original_file if resource.respond_to?(:original_file)
-    end
-
-    # Construct the storage driver with the necessary configuration for
-    # retrieving the files
-    # @return [RemoteChecksumService::GoogleCloudStorageDriver, Object]
-    def driver
-      return @driver unless @driver.nil?
-      @driver = RemoteChecksumService.cloud_storage_driver
     end
 
     # Retrieve the file resource from cloud storage
@@ -64,7 +35,7 @@ class RemoteFileSetChecksumJob < ApplicationJob
     def cloud_storage_file
       return if original_file.nil?
 
-      driver.file(original_file)
+      driver.file(file_metadata: original_file)
     end
 
     # Calculate the MD5 checksum for the file locally
