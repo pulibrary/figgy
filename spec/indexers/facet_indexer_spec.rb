@@ -30,4 +30,35 @@ RSpec.describe FacetIndexer do
       end
     end
   end
+
+  context "when the resource has structure" do
+    it "indexes its presence" do
+      file_set = FactoryBot.create_for_repository(:file_set)
+      scanned_resource = FactoryBot.create_for_repository(
+        :scanned_resource,
+        member_ids: file_set.id,
+        thumbnail_id: file_set.id,
+        logical_structure: [
+          { label: "testing", nodes: [{ label: "Chapter 1", nodes: [{ proxy: file_set.id }] }] }
+        ]
+      )
+
+      output = described_class.new(resource: scanned_resource).to_solr
+      expect(output[:has_structure_bsi]).to be true
+    end
+  end
+
+  context "when the resource does not have structure" do
+    it "indexes its absence" do
+      file_set = FactoryBot.create_for_repository(:file_set)
+      scanned_resource = FactoryBot.create_for_repository(
+        :scanned_resource,
+        member_ids: file_set.id,
+        thumbnail_id: file_set.id
+      )
+
+      output = described_class.new(resource: scanned_resource).to_solr
+      expect(output[:has_structure_bsi]).to be false
+    end
+  end
 end

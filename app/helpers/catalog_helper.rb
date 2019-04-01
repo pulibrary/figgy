@@ -2,6 +2,11 @@
 module CatalogHelper
   include Blacklight::CatalogHelperBehavior
 
+  # Convert boolean values to Yes/No
+  def display_boolean(value)
+    value == "true" ? "Yes" : "No"
+  end
+
   # Generates the markup for search result items
   # @param args [Array<Object>]
   # @return [String] the markup
