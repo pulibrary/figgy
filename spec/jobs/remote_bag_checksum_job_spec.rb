@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-include ActionDispatch::TestProcess
 require "google/cloud/storage"
+include ActionDispatch::TestProcess
 
 RSpec.describe RemoteBagChecksumJob do
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }

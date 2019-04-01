@@ -92,12 +92,6 @@ class RemoteChecksumService
     GoogleCloudStorageDriver
   end
 
-  # Retrieve the class used for asynchronous job
-  # @return [Class]
-  def self.remote_checksum_job_class
-    RemoteChecksumJob
-  end
-
   def self.cloud_storage_file_adapter_class
     GoogleCloudStorageFileAdapter
   end
@@ -127,6 +121,12 @@ class RemoteChecksumService
     @driver
   end
 
+  # Retrieve the class used for asynchronous job
+  # @return [Class]
+  def self.remote_checksum_job_class
+    RemoteChecksumJob
+  end
+
   # Constructor
   # @param change_set [Valkyrie::ChangeSet] ChangeSet for the resource being
   #   modified
@@ -139,6 +139,6 @@ class RemoteChecksumService
   def calculate
     return if @change_set.resource.id.nil?
 
-    self.class.remote_checksum_job.perform_later(id: @change_set.resource.id)
+    self.class.remote_checksum_job_class.perform_later(@change_set.resource.id.to_s)
   end
 end
