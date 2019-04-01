@@ -90,9 +90,9 @@ Remember you'll need to run `bundle install` and `yarn install` on an ongoing ba
 2. For development:
    - ``export SECRET_KEY_BASE=`rake secret` ``
    - `rake db:setup`
-   - `rake figgy:development`
    - In a separate terminal: `foreman start`
      - Or run services separately as shown in [[https://github.com/pulibrary/figgy/blob/master/Procfile]]
+     - If you run into problems with `solr_wrapper`, you can also start Solr with `rake figgy:development`
    - Access Figgy at http://localhost:3000/
 
 ## Load sample development data
