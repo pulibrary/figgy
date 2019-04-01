@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require "ruby-progressbar"
+
 desc "Wipes SOLR and reindexes everything."
 task wipe_and_reindex: :environment do
   Reindexer.reindex_all(wipe: true)
