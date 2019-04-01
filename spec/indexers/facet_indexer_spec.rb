@@ -54,8 +54,7 @@ RSpec.describe FacetIndexer do
       scanned_resource = FactoryBot.create_for_repository(
         :scanned_resource,
         member_ids: file_set.id,
-        thumbnail_id: file_set.id,
-        logical_structure: []
+        thumbnail_id: file_set.id
       )
 
       output = described_class.new(resource: scanned_resource).to_solr
