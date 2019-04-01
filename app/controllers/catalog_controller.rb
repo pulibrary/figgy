@@ -65,6 +65,7 @@ class CatalogController < ApplicationController
     config.add_facet_field "display_language_ssim", label: "Language", limit: 5
     config.add_facet_field "state_ssim", label: "State", limit: 5
     config.add_facet_field "part_of_ssim", label: "Part of", limit: 5
+    config.add_facet_field "has_structure_bsi", label: "Has Structure", helper_method: :display_boolean
     config.add_facet_fields_to_solr_request!
 
     config.add_search_field "all_fields", label: "All Fields"

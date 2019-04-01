@@ -9,12 +9,14 @@ class FacetIndexer
     if resource.try(:primary_imported_metadata)
       {
         display_subject_ssim: resource.primary_imported_metadata.subject,
-        display_language_ssim: imported_language
+        display_language_ssim: imported_language,
+        has_structure_bsi: structure?
       }
     else
       {
         display_subject_ssim: subject_terms,
-        display_language_ssim: language_terms
+        display_language_ssim: language_terms,
+        has_structure_bsi: structure?
       }
     end
   end
@@ -38,6 +40,12 @@ class FacetIndexer
     terms.map do |term|
       term.respond_to?(:label) ? Array.wrap(term.label).first : term
     end.uniq
+  end
+
+  def structure?
+    resource.logical_structure.first.nodes.length.positive?
+  rescue
+    false
   end
 
   def decorated_resource

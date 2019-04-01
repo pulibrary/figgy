@@ -188,14 +188,14 @@ Rails.application.config.to_prepare do
           CollectionIndexer,
           EphemeraBoxIndexer,
           EphemeraFolderIndexer,
-          MemberOfIndexer,
           FacetIndexer,
           ProjectIndexer,
           HumanReadableTypeIndexer,
-          SortingIndexer,
           ImportedMetadataIndexer,
-          TitleIndexer,
+          MemberOfIndexer,
           ParentIssueIndexer,
+          SortingIndexer,
+          TitleIndexer,
           TrackIndexer
         )
       ),
