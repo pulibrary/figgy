@@ -60,6 +60,7 @@ class NumismaticsImportService::Issues
       master: nil, # nested person
       metal: record["MetalName"],
       note: nil, # nested?
+      numismatic_place_id: record["PlaceID"].to_s, # map from place id to valkyrie id in importer
       place: nil, # nested
       object_date: record["DateObj"],
       object_type: record["ObjectType"],
