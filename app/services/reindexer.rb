@@ -44,6 +44,6 @@ class Reindexer
   end
 
   def total
-    query_service.resources.all.size
+    query_service.resources.count
   end
 end
