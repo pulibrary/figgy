@@ -59,6 +59,10 @@ class FileMetadata < Valkyrie::Resource
     use.include?(Valkyrie::Vocab::PCDMUse.PreservationMasterFile)
   end
 
+  def preservation_copy?
+    use.include?(Valkyrie::Vocab::PCDMUse.PreservationCopy)
+  end
+
   def intermediate_file?
     use.include?(Valkyrie::Vocab::PCDMUse.IntermediateFile)
   end

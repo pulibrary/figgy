@@ -59,4 +59,14 @@ class ScannedResourceChangeSet < ChangeSet
       :append_id
     ]
   end
+
+  def preserve?
+    return false unless persisted?
+    parent = Wayfinder.for(resource).try(:parent)
+    if parent.present? && parent.id != resource.id
+      DynamicChangeSet.new(parent).try(:preserve?)
+    else
+      Array.wrap(resource.preservation_policy).include?("cloud") && state == "complete"
+    end
+  end
 end

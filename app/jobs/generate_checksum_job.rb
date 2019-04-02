@@ -7,6 +7,7 @@ class GenerateChecksumJob < ApplicationJob
     file_set.original_file.checksum = file_set.original_file.file_identifiers.map do |id|
       MultiChecksum.for(Valkyrie::StorageAdapter.find_by(id: id))
     end
+    file_set.preservation_copy.checksum = file_set.original_file.checksum if file_set.preservation_copy.present?
     persister.save(resource: file_set)
   end
 

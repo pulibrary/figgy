@@ -1517,4 +1517,58 @@ RSpec.describe ChangeSetPersister do
       expect(reloaded.numismatic_artist_ids).to eq [output.id]
     end
   end
+
+  describe "preservation" do
+    context "when completing a `cloud` preservation_policy resource" do
+      it "saves to a backup location" do
+        file = fixture_file_upload("files/example.tif", "image/tiff")
+        resource = FactoryBot.create_for_repository(:pending_scanned_resource, preservation_policy: "cloud", files: [file])
+        change_set = DynamicChangeSet.new(resource)
+        change_set.validate(state: "complete")
+
+        output = change_set_persister.save(change_set: change_set)
+        expect(output.file_metadata[0].use).to eq [Valkyrie::Vocab::PCDMUse.PreservedMetadata]
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", resource.id.to_s, "#{resource.id}.json"))).to eq true
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", resource.id.to_s, "data", resource.member_ids.first.to_s, "#{resource.member_ids.first}.json"))).to eq true
+        file_set = Wayfinder.for(output).members.first
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.original_file.id}.tif"))).to eq true
+      end
+    end
+    context "when completing a `cloud` preservation_policy MVW" do
+      it "deeply nests file sets" do
+        file = fixture_file_upload("files/example.tif", "image/tiff")
+        volume = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
+        parent = FactoryBot.create_for_repository(:pending_scanned_resource, preservation_policy: "cloud", member_ids: volume.id)
+        change_set = DynamicChangeSet.new(parent)
+        change_set.validate(state: "complete")
+
+        output = change_set_persister.save(change_set: change_set)
+        expect(output.file_metadata[0].use).to eq [Valkyrie::Vocab::PCDMUse.PreservedMetadata]
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", parent.id.to_s, "#{parent.id}.json"))).to eq true
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", parent.id.to_s, "data", parent.member_ids.first.to_s, "#{parent.member_ids.first}.json"))).to eq true
+        file_set = Wayfinder.for(volume).members.first
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", parent.id.to_s, "data", volume.id.to_s, "data", file_set.id.to_s, "example-#{file_set.original_file.id}.tif"))).to eq true
+      end
+    end
+    context "when adding a file to a `cloud` preservation_policy resource" do
+      with_queue_adapter :inline
+      it "preserves it" do
+        resource = FactoryBot.create_for_repository(:complete_scanned_resource, preservation_policy: "cloud")
+        file = fixture_file_upload("files/example.tif", "image/tiff")
+        change_set = DynamicChangeSet.new(resource)
+        change_set_persister.save(change_set: change_set)
+        reloaded = change_set_persister.query_service.find_by(id: resource.id)
+        expect(reloaded.preservation_metadata).to be_present
+        change_set = DynamicChangeSet.new(reloaded)
+        change_set.validate(files: [file])
+
+        output = change_set_persister.save(change_set: change_set)
+        result = change_set_persister.query_service.find_by(id: output.id)
+
+        children = change_set_persister.query_service.find_members(resource: result)
+        expect(children.first.preservation_copy).to be_present
+        expect(children.first.preservation_copy.checksum).to eq children.first.original_file.checksum
+      end
+    end
+  end
 end

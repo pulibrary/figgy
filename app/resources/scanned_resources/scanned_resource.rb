@@ -35,6 +35,12 @@ class ScannedResource < Resource
     end
   end
 
+  def preservation_metadata
+    file_metadata.find do |file|
+      file.use.include?(Valkyrie::Vocab::PCDMUse.PreservedMetadata)
+    end
+  end
+
   def title
     primary_imported_metadata.title.present? ? primary_imported_metadata.title : @title
   end
