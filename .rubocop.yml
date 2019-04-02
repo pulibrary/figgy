@@ -33,6 +33,7 @@ Metrics/AbcSize:
     - 'app/services/music_import_service/recording_collector.rb'
     - 'app/controllers/bulk_ingest_controller.rb'
     - 'app/helpers/application_helper.rb'
+    - 'app/services/preserver.rb'
 Metrics/BlockLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
@@ -156,6 +157,7 @@ Metrics/MethodLength:
     - 'app/change_sets/change_set.rb'
     - 'app/resources/scanned_resources/scanned_resource_change_set.rb'
     - 'app/values/viewer_configuration.rb'
+    - 'app/preserver/preserve_resource.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'

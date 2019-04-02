@@ -74,6 +74,33 @@ Rails.application.config.to_prepare do
     :disk_via_copy
   )
 
+  class NestedStoragePath
+    attr_reader :base_path
+    def initialize(base_path:)
+      @base_path = base_path
+    end
+
+    def generate(resource:, file:, original_filename:)
+      raise ArgumentError, "original_filename must be provided" unless original_filename
+      Pathname.new(base_path).join(*nested_path(resource)).join(original_filename)
+    end
+
+    def nested_path(resource)
+      parent = Wayfinder.for(resource).try(:parent)
+      return(nested_path(parent) + ["data", resource.id.to_s]) if parent
+      [resource.id.to_s]
+    end
+  end
+
+  Valkyrie::StorageAdapter.register(
+    Valkyrie::Storage::Disk.new(
+      base_path: Rails.root.join("tmp", "cloud_backup"),
+      file_mover: FileUtils.method(:cp),
+      path_generator: NestedStoragePath
+    ),
+    :cloud_backup
+  )
+
   # Registers a storage adapter for a *NIX file system
   # Binaries are persisted by invoking "mv" with access limited to read/write for owning users, and read-only for all others
   # NOTE: "mv" may preserve the inode for the file system

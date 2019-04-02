@@ -1487,4 +1487,68 @@ RSpec.describe ChangeSetPersister do
       expect(members.map(&:proxied_file_id)).to eq [file_set1.id, file_set2.id]
     end
   end
+
+  describe "preservation" do
+    context "when completing a `cloud` preservation_policy resource" do
+      it "saves to a backup location" do
+        file = fixture_file_upload("files/example.tif", "image/tiff")
+        resource = FactoryBot.create_for_repository(:pending_scanned_resource, preservation_policy: "cloud", files: [file])
+        change_set = DynamicChangeSet.new(resource)
+        change_set.validate(state: "complete")
+
+        output = change_set_persister.save(change_set: change_set)
+        expect(Wayfinder.for(output).preservation_object.metadata_node).not_to be_blank
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", resource.id.to_s, "#{resource.id}.json"))).to eq true
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", resource.id.to_s, "data", resource.member_ids.first.to_s, "#{resource.member_ids.first}.json"))).to eq true
+        file_set = Wayfinder.for(output).members.first
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.original_file.id}.tif"))).to eq true
+        file_set_preservation = Wayfinder.for(file_set).preservation_object
+        expect(file_set_preservation.metadata_node).not_to be_blank
+        expect(file_set_preservation.binary_nodes).not_to be_blank
+      end
+    end
+    context "when completing a `cloud` preservation_policy MVW" do
+      it "deeply nests file sets" do
+        file = fixture_file_upload("files/example.tif", "image/tiff")
+        volume = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
+        parent = FactoryBot.create_for_repository(:pending_scanned_resource, preservation_policy: "cloud", member_ids: volume.id)
+        change_set = DynamicChangeSet.new(parent)
+        change_set.validate(state: "complete")
+
+        output = change_set_persister.save(change_set: change_set)
+        expect(Wayfinder.for(output).preservation_object.metadata_node.use).to eq [Valkyrie::Vocab::PCDMUse.PreservedMetadata]
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", parent.id.to_s, "#{parent.id}.json"))).to eq true
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", parent.id.to_s, "data", parent.member_ids.first.to_s, "#{parent.member_ids.first}.json"))).to eq true
+        file_set = Wayfinder.for(volume).members.first
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", parent.id.to_s, "data", volume.id.to_s, "data", file_set.id.to_s, "example-#{file_set.original_file.id}.tif"))).to eq true
+      end
+    end
+    context "when adding a file to a `cloud` preservation_policy resource" do
+      with_queue_adapter :inline
+      it "preserves it" do
+        resource = FactoryBot.create_for_repository(:complete_scanned_resource, preservation_policy: "cloud")
+        file = fixture_file_upload("files/example.tif", "image/tiff")
+        change_set_persister.buffer_into_index do |buffered_change_set_persister|
+          change_set = DynamicChangeSet.new(resource)
+          buffered_change_set_persister.save(change_set: change_set)
+        end
+        reloaded = change_set_persister.query_service.find_by(id: resource.id)
+        expect(Wayfinder.for(reloaded).preservation_object.metadata_node).to be_present
+        output = nil
+        change_set_persister.buffer_into_index do |buffered_change_set_persister|
+          change_set = DynamicChangeSet.new(reloaded)
+          change_set.validate(files: [file])
+
+          output = buffered_change_set_persister.save(change_set: change_set)
+        end
+        result = change_set_persister.query_service.find_by(id: output.id)
+
+        children = change_set_persister.query_service.find_members(resource: result)
+        preservation_object = Wayfinder.for(children.first).preservation_object
+        expect(preservation_object.binary_nodes).to be_present
+        expect(preservation_object.binary_nodes[0].checksum).to eq children.first.original_file.checksum
+        expect(preservation_object.binary_nodes[0].checksum).not_to be_blank
+      end
+    end
+  end
 end

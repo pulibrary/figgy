@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class ScannedResourceChangeSet < ChangeSet
   apply_workflow(BookWorkflow)
+  enable_preservation_support
   delegate :human_readable_type, to: :model
 
   include VisibilityProperty
@@ -56,7 +57,8 @@ class ScannedResourceChangeSet < ChangeSet
       :ocr_language,
       :portion_note,
       :nav_date,
-      :append_id
+      :append_id,
+      :preservation_policy
     ]
   end
 end
