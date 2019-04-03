@@ -7,7 +7,7 @@ class PreserveChildrenJob < ApplicationJob
     resource = query_service.find_by(id: id)
     query_service.find_members(resource: resource).each do |member|
       change_set = DynamicChangeSet.new(member)
-      ChangeSetPersister::PreserveResource.new(change_set_persister: change_set_persister, change_set: change_set, post_save_resource: member).run
+      Preserver.for(change_set: change_set, change_set_persister: change_set_persister).preserve!
     end
   end
 
