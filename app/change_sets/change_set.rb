@@ -66,7 +66,7 @@ class ChangeSet < Valkyrie::ChangeSet
       if parent.present? && parent.id != resource.id
         DynamicChangeSet.new(parent).try(:preserve?)
       else
-        Array.wrap(resource.preservation_policy).include?("cloud") && state == "complete"
+        resource.preservation_policy.present? && state == "complete"
       end
     end
   end
