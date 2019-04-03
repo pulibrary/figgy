@@ -44,4 +44,11 @@ class Resource < Valkyrie::Resource
   def loaded
     @loaded ||= {}
   end
+
+  def preservation_metadata
+    return unless respond_to?(:file_metadata)
+    file_metadata.find do |file|
+      file.use.include?(Valkyrie::Vocab::PCDMUse.PreservedMetadata)
+    end
+  end
 end
