@@ -21,6 +21,9 @@ class Preserver
 
   def preserve!
     preserve_original_file
+    # Don't preserve children unless this is the first time it's being
+    # preserved. After that point any updates to the children will trigger them
+    # to preserve themselves, because their parent is set up to be.
     preserve_children unless already_preserved?
     preserve_metadata
   end
@@ -71,6 +74,9 @@ class Preserver
       end
   end
 
+  # Don't preserve the PreservedMetadata FileMetadataNode, because it's
+  # impossible to provide an identifier for the file it's referencing until it's
+  # actually uploaded to the preservation backend.
   def preservation_metadata
     resource_hash = resource.to_h
     resource_hash[:file_metadata] = resource_hash[:file_metadata].select do |metadata|
