@@ -64,15 +64,31 @@ RSpec.describe Reindexer do
       end
     end
 
-    context "when rsolr raises RSolr::Error::ConnectionRefused" do
-      it "indexes the rest of the records, logging bad id" do
-        resources = Array.new(5) do
+    context "when rsolr raises errors" do
+      let(:resources) do
+        Array.new(5) do
           postgres_adapter.persister.save(resource: FactoryBot.build(:scanned_resource))
         end
+      end
+
+      before do
         allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save_all).and_call_original
-        allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save_all).with(resources: resources).and_raise RSolr::Error::ConnectionRefused
         allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save).and_call_original
+      end
+
+      it "tolerates RSolr::Error::ConnectionRefused, logging bad id" do
+        allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save_all).with(resources: resources).and_raise RSolr::Error::ConnectionRefused
         allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save).with(resource: resources[0]).and_raise RSolr::Error::ConnectionRefused
+
+        described_class.reindex_all(logger: logger, wipe: true)
+
+        expect(solr_adapter.query_service.find_all.to_a.length).to eq 4
+        expect(logger).to have_received(:error).with("Could not index #{resources[0].id}")
+      end
+
+      it "tolerates RSolr::Error::Http, logging bad id" do
+        allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save_all).with(resources: resources).and_raise RSolr::Error::Http.new({ uri: "http://example.com" }, nil)
+        allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save).with(resource: resources[0]).and_raise RSolr::Error::Http.new({ uri: "http://example.com" }, nil)
 
         described_class.reindex_all(logger: logger, wipe: true)
 

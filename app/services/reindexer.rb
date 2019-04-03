@@ -28,7 +28,7 @@ class Reindexer
       begin
         solr_adapter.persister.save_all(resources: records)
         progress_bar.progress += records.count
-      rescue RSolr::Error::ConnectionRefused
+      rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http
         index_individually += records
       end
     end
@@ -44,7 +44,7 @@ class Reindexer
   def single_index(record, progress_bar)
     solr_adapter.persister.save(resource: record)
     progress_bar.progress += 1
-  rescue RSolr::Error::ConnectionRefused
+  rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http
     logger.error("Could not index #{record.id}")
     Honeybadger.notify("Could not index #{record.id}")
   end
