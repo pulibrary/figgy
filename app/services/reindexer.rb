@@ -20,17 +20,33 @@ class Reindexer
   end
 
   def reindex_all
-    if wipe
-      logger.info "Clearing Solr"
-      solr_adapter.persister.wipe!
-    end
+    wipe_records if wipe
     logger.info "Reindexing all records"
     progress_bar
-    query_service.custom_queries.memory_efficient_all(except_models: blacklisted_models).each_slice(batch_size) do |records|
-      solr_adapter.persister.save_all(resources: records)
-      progress_bar.progress += records.count
+    index_individually = []
+    all_resources.each_slice(batch_size) do |records|
+      begin
+        solr_adapter.persister.save_all(resources: records)
+        progress_bar.progress += records.count
+      rescue RSolr::Error::ConnectionRefused
+        index_individually += records
+      end
     end
+    index_individually.each { |record| single_index(record, progress_bar) }
     logger.info "Done"
+  end
+
+  def wipe_records
+    logger.info "Clearing Solr"
+    solr_adapter.persister.wipe!
+  end
+
+  def single_index(record, progress_bar)
+    solr_adapter.persister.save(resource: record)
+    progress_bar.progress += 1
+  rescue RSolr::Error::ConnectionRefused
+    logger.error("Could not index #{record.id}")
+    Honeybadger.notify("Could not index #{record.id}")
   end
 
   def blacklisted_models
@@ -41,6 +57,10 @@ class Reindexer
 
   def progress_bar
     @progress_bar ||= ProgressBar.create format: "%a %e %P% Processed: %c from %C", total: total
+  end
+
+  def all_resources
+    query_service.custom_queries.memory_efficient_all(except_models: blacklisted_models)
   end
 
   def total

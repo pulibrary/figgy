@@ -30,6 +30,7 @@ RSpec.describe Reindexer do
       described_class.reindex_all(logger: logger, wipe: true, batch_size: 2)
       expect(solr_adapter.query_service.find_all.to_a.length).to eq 5
     end
+
     context "when given ProcessedEvents" do
       it "doesn't index them" do
         resource = FactoryBot.build(:processed_event)
@@ -40,6 +41,7 @@ RSpec.describe Reindexer do
         expect { solr_adapter.query_service.find_by(id: output.id) }.to raise_error Valkyrie::Persistence::ObjectNotFoundError
       end
     end
+
     context "when there are records in solr which are no longer in postgres" do
       it "gets rid of them" do
         resource = FactoryBot.build(:scanned_resource)
@@ -58,5 +60,24 @@ RSpec.describe Reindexer do
         expect { solr_adapter.query_service.find_by(id: output.id) }.not_to raise_error
       end
     end
+
+    # rubocop:disable RSpec/AnyInstance
+    context "when rsolr raises RSolr::Error::ConnectionRefused" do
+      it "indexes the rest of the records, logging bad id" do
+        resources = Array.new(5) do
+          postgres_adapter.persister.save(resource: FactoryBot.build(:scanned_resource))
+        end
+        allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save_all).and_call_original
+        allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save_all).with(resources: resources).and_raise RSolr::Error::ConnectionRefused
+        allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save).and_call_original
+        allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save).with(resource: resources[0]).and_raise RSolr::Error::ConnectionRefused
+
+        described_class.reindex_all(logger: logger, wipe: true)
+
+        expect(solr_adapter.query_service.find_all.to_a.length).to eq 4
+        expect(logger).to have_received(:error).with("Could not index #{resources[0].id}")
+      end
+    end
+    # rubocop:enable RSpec/AnyInstance
   end
 end
