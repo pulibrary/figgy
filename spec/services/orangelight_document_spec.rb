@@ -42,10 +42,10 @@ describe OrangelightDocument do
       end
       let(:issue) do
         FactoryBot.create_for_repository(:numismatic_issue,
-                                         numismatic_citation_ids: [citation.id],
                                          numismatic_artist_ids: [artist.id],
                                          member_ids: [coin.id],
                                          object_type: "coin",
+                                         citation: citation,
                                          date_range: date_range,
                                          denomination: "1/2 Penny",
                                          metal: "copper",

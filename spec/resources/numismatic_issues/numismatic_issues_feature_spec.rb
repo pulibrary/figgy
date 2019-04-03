@@ -40,6 +40,9 @@ RSpec.feature "NumismaticIssues" do
     expect(page).to have_field "Master"
     expect(page).to have_field "Metal"
     expect(page).to have_field "Note"
+    expect(page).to have_field "Number"
+    expect(page).to have_field "Numismatic Reference"
+    expect(page).to have_field "Part"
     expect(page).to have_field "Object type"
     expect(page).to have_field "Obverse attributes"
     expect(page).to have_field "Obverse figure"
@@ -73,12 +76,15 @@ RSpec.feature "NumismaticIssues" do
 
   context "when a user creates a new numismatic issue" do
     let(:collection) { FactoryBot.create_for_repository(:collection) }
+    let(:numismatic_reference) { FactoryBot.create_for_repository(:numismatic_reference) }
+    let(:numismatic_citation) { FactoryBot.create_for_repository(:numismatic_citation, part: "part", number: "number", numismatic_reference_id: numismatic_reference.id) }
     let(:numismatic_place) { NumismaticPlace.new(city: "City", state: "State", region: "Region") }
     let(:numismatic_issue) do
       FactoryBot.create_for_repository(
         :numismatic_issue,
         rights_statement: RightsStatements.copyright_not_evaluated.to_s,
         member_of_collection_ids: [collection.id],
+        citation: numismatic_citation,
         color: "test value",
         date_range: DateRange.new(start: "2017", end: "2018"),
         denomination: "test value",
@@ -117,10 +123,10 @@ RSpec.feature "NumismaticIssues" do
 
     scenario "viewing a resource" do
       visit solr_document_path numismatic_issue
-
       expect(page).to have_css ".attribute.rendered_rights_statement", text: "Copyright Not Evaluated"
       expect(page).to have_css ".attribute.visibility", text: "open"
       expect(page).to have_css ".attribute.member_of_collections", text: "Title"
+      expect(page).to have_css ".attribute.citations", text: "short-title part number"
       expect(page).to have_css ".attribute.color", text: "test value"
       expect(page).to have_css ".attribute.rendered_date_range", text: "2017-2018"
       expect(page).to have_css ".attribute.denomination", text: "test value"
@@ -176,10 +182,7 @@ RSpec.feature "NumismaticIssues" do
     end
   end
 
-  context "with citations and artists" do
-    let(:citation) do
-      persister.save(resource: FactoryBot.create_for_repository(:numismatic_citation))
-    end
+  context "with artists" do
     let(:artist) do
       persister.save(resource: FactoryBot.create_for_repository(:numismatic_artist))
     end
@@ -190,10 +193,8 @@ RSpec.feature "NumismaticIssues" do
       issue
     end
 
-    it "displays citations and artists as members" do
+    it "displays artists as members" do
       visit solr_document_path(issue)
-      expect(page).to have_selector "h2", text: "Citations"
-      expect(page).to have_link "Add Citation", href: parent_add_numismatic_citation_path(issue, parent_id: issue.id)
       expect(page).to have_selector "h2", text: "Artists"
       expect(page).to have_link "Add Artist", href: parent_add_numismatic_artist_path(issue, parent_id: issue.id)
     end
