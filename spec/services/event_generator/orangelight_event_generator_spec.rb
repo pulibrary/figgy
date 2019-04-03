@@ -105,11 +105,21 @@ RSpec.describe EventGenerator::OrangelightEventGenerator do
   end
 
   describe "#valid?" do
-    context "with a coin" do
+    context "with a coin and a parent issue" do
+      let(:parent_issue) { FactoryBot.create_for_repository(:numismatic_issue, member_ids: [record.id]) }
       let(:record) { FactoryBot.create_for_repository(:coin) }
 
       it "is valid" do
         expect(event_generator.valid?(record)).to be true
+      end
+    end
+
+    context "with a coin and no parent issue" do
+      let(:parent_issue) { FactoryBot.create_for_repository(:numismatic_issue, member_ids: []) }
+      let(:record) { FactoryBot.create_for_repository(:coin) }
+
+      it "is not valid" do
+        expect(event_generator.valid?(record)).to be false
       end
     end
 

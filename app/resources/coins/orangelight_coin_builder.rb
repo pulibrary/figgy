@@ -13,15 +13,27 @@ class OrangelightCoinBuilder
 
   private
 
+    def coin_builder_error
+      { error: "#{decorator.title.first} with id: #{decorator.id} has no parent numismatic issue and cannot build an OL document." }
+    end
+
     def clean_document(hash)
-      hash.delete_if do |_k, v|
-        v.nil? || v.try(:empty?)
+      if hash.nil?
+        coin_builder_error
+      else
+        hash.delete_if do |_k, v|
+          v.nil? || v.try(:empty?)
+        end
       end
     end
 
     # rubocop:disable Metrics/AbcSize
     # rubocop:disable Metrics/MethodLength
     def document_hash
+      document_coin_hash.merge(document_parent_hash) if document_parent_hash.present?
+    end
+
+    def document_coin_hash
       {
         id: decorator.orangelight_id,
         title_display: "Coin: #{decorator.coin_number}",
@@ -47,9 +59,15 @@ class OrangelightCoinBuilder
         size_s: decorator.size,
         technique_s: decorator.technique,
         weight_s: decorator.weight,
+        holdings_1display: holdings_hash
+      }
+    end
+
+    def document_parent_hash
+      return unless parent
+      {
         pub_date_start_sort: parent.first_range&.start&.first.to_i,
         pub_date_end_sort: parent.first_range&.end&.first.to_i,
-        holdings_1display: holdings_hash,
         issue_object_type_s: parent.object_type,
         issue_denomination_s: parent.denomination,
         issue_denomination_sort: parent.denomination&.first,
