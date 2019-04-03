@@ -4,6 +4,7 @@ class CoinChangeSet < ChangeSet
   apply_workflow(DraftCompleteWorkflow)
 
   include VisibilityProperty
+  collection :citation, multiple: true, required: false, form: NumismaticCitationChangeSet, populator: :populate_nested_collection, default: []
   property :coin_number, multiple: false, required: false
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :holding_location, multiple: false, required: false
@@ -27,7 +28,6 @@ class CoinChangeSet < ChangeSet
   property :numismatic_collection, multiple: false, required: false
   property :replaces, multiple: true, required: false, default: []
   property :depositor, multiple: false, required: false
-  property :numismatic_citation_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :read_groups, multiple: true, required: false
 
@@ -53,30 +53,39 @@ class CoinChangeSet < ChangeSet
   validates :visibility, presence: true
 
   def primary_terms
-    [
-      :weight,
-      :size,
-      :die_axis,
-      :technique,
-      :counter_stamp,
-      :analysis,
-      :public_note,
-      :private_note,
-      :find_place,
-      :find_number,
-      :find_date,
-      :find_locus,
-      :find_feature,
-      :find_description,
-      :holding_location,
-      :numismatic_collection,
-      :accession_number,
-      :provenance,
-      :loan,
-      :append_id,
-      :member_of_collection_ids,
-      :rights_statement,
-      :pdf_type
-    ]
+    {
+      "" => [
+        :weight,
+        :size,
+        :die_axis,
+        :technique,
+        :counter_stamp,
+        :analysis,
+        :public_note,
+        :private_note,
+        :find_place,
+        :find_number,
+        :find_date,
+        :find_locus,
+        :find_feature,
+        :find_description,
+        :holding_location,
+        :numismatic_collection,
+        :accession_number,
+        :provenance,
+        :loan,
+        :append_id,
+        :member_of_collection_ids,
+        :rights_statement,
+        :pdf_type
+      ],
+      "Citation" => [
+        :citation
+      ]
+    }
+  end
+
+  def build_citation
+    schema["citation"][:nested].new(model.class.schema[:citation][[{}]].first)
   end
 end

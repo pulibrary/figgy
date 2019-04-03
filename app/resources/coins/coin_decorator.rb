@@ -17,6 +17,7 @@ class CoinDecorator < Valkyrie::ResourceDecorator
           :find_locus,
           :find_feature,
           :find_description,
+          :citations,
           :numismatic_collection,
           :accession_number,
           :provenance,
@@ -25,7 +26,7 @@ class CoinDecorator < Valkyrie::ResourceDecorator
           :visibility,
           :append_id
 
-  delegate :members, :decorated_file_sets, :decorated_parent, :decorated_numismatic_citations, :accession, to: :wayfinder
+  delegate :members, :decorated_file_sets, :decorated_parent, :accession, to: :wayfinder
   delegate :id, :label, to: :accession, prefix: true
 
   def ark_mintable_state?
@@ -33,7 +34,7 @@ class CoinDecorator < Valkyrie::ResourceDecorator
   end
 
   def citations
-    decorated_numismatic_citations.map(&:title)
+    citation.map { |c| c.decorate.title }
   end
 
   def pub_created_display

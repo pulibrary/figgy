@@ -5,9 +5,9 @@ class Coin < Resource
   include Valkyrie::Resource::AccessControls
   attribute :member_ids, Valkyrie::Types::Array
   attribute :member_of_collection_ids
-  attribute :numismatic_citation_ids, Valkyrie::Types::Array
 
   # descriptive metadata
+  attribute :citation, Valkyrie::Types::Array.of(NumismaticCitation).meta(ordered: true)
   attribute :coin_number, Valkyrie::Types::Anything
   attribute :number_in_accession, Valkyrie::Types::Integer
   attribute :holding_location
