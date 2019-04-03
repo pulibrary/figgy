@@ -1,0 +1,38 @@
+<!--
+    This is what the embed iframe src links to. It doesn't need to communicate with the parent page, only fill the available space and look for #? parameters
+-->
+
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Mirador Digital Content Viewer - Princeton University Library</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="icon" href="favicon.ico">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+    <script type="text/javascript"></script>
+</head>
+<body>
+
+<div id="mirador" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mirador@3.0.0-alpha.2/dist/mirador.min.js"></script>
+<script>
+  var urlParams = new URLSearchParams(window.location.search);
+  var miradorInstance = Mirador.viewer({
+    id: 'mirador',
+    workspaceControlPanel: {
+       enabled: false
+     },
+    windows: [{
+      loadedManifest: urlParams.get('manifest'), // 'https://iiif.bodleian.ox.ac.uk/iiif/manifest/e32a277e-91e2-4a6d-8ba6-cc4bad230410.json',
+    }]
+  });
+</script>
+</body>
+</html>
