@@ -32,6 +32,7 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
           :reverse_legend,
           :decorated_numismatic_monograms,
           :note,
+          :citations,
           :member_of_collections,
           :rendered_rights_statement,
           :subject,
@@ -62,7 +63,7 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
   end
 
   def citations
-    decorated_numismatic_citations.map(&:title)
+    citation.map { |c| c.decorate.title }
   end
 
   def artists

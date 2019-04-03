@@ -5,6 +5,13 @@ RSpec.describe NumismaticCitationDecorator do
   subject(:decorator) { described_class.new(citation) }
   let(:citation) { FactoryBot.create_for_repository(:numismatic_citation, numismatic_reference_id: [reference.id]) }
   let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
+  let(:issue) { FactoryBot.create_for_repository(:numismatic_issue, citation: citation) }
+
+  before do
+    reference
+    citation
+    issue
+  end
 
   describe "manage files and structure" do
     it "does not manage files or structure" do

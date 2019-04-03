@@ -46,6 +46,30 @@ class BaseWayfinder
   end
 
   # Creates relationship methods `relationship` and `decorated_relationship`
+  # which accesses a given property on a nested resource and queries for all IDs contained within.
+  #
+  # @param relationship [Symbol] Name of the relationship, will become the
+  #   method name created.
+  # @param nested_property [Symbol] Name of the property which stores the nested
+  #   resource.
+  # @param property [Symbol] Name of the property on the nested resource which stores IDs for the
+  #   relationship.
+  # @param singular [Boolean] Creates singular methods as well if true (IE
+  #   ephemera_project if relationship is ephemera_projects)
+  # @param model [Class] Model to filter results by.
+  def self.nested_resource_relationship_by_property(relationship, nested_property:, property:, singular: false, model: nil)
+    define_method relationship do
+      return instance_variable_get(:"@#{relationship}") if instance_variable_get(:"@#{relationship}")
+      instance_variable_set(:"@#{relationship}", query_service.custom_queries.find_nested_references_by(resource: resource, nested_property: nested_property, property: property).to_a)
+    end
+    define_method "decorated_#{relationship}" do
+      return instance_variable_get(:"@decorated_#{relationship}") if instance_variable_get(:"@decorated_#{relationship}")
+      instance_variable_set(:"@decorated_#{relationship}", __send__(relationship).map(&:decorate))
+    end
+    define_singular_relation(relationship) if singular
+  end
+
+  # Creates relationship methods `relationship` and `decorated_relationship`
   # which queries for all records which reference this record by a given property.
   #
   # @param relationship [Symbol] Name of the relationship, will become the
