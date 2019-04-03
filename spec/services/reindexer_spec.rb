@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 require "rails_helper"
+require "ruby-progressbar/outputs/null"
 
 RSpec.describe Reindexer do
   let(:solr_adapter) { Valkyrie::MetadataAdapter.find(:index_solr) }
   let(:postgres_adapter) { Valkyrie::MetadataAdapter.find(:postgres) }
   let(:logger) { instance_double("Logger").as_null_object }
+  let(:progress_bar) { ProgressBar.create(output: ProgressBar::Outputs::Null) }
 
   before do
+    allow(ProgressBar).to receive(:create).and_return(progress_bar)
     Valkyrie.logger.level = Logger::ERROR
   end
 
@@ -61,7 +64,6 @@ RSpec.describe Reindexer do
       end
     end
 
-    # rubocop:disable RSpec/AnyInstance
     context "when rsolr raises RSolr::Error::ConnectionRefused" do
       it "indexes the rest of the records, logging bad id" do
         resources = Array.new(5) do
@@ -78,6 +80,5 @@ RSpec.describe Reindexer do
         expect(logger).to have_received(:error).with("Could not index #{resources[0].id}")
       end
     end
-    # rubocop:enable RSpec/AnyInstance
   end
 end
