@@ -2,8 +2,8 @@
 require "rails_helper"
 
 RSpec.describe NumismaticCitationChangeSet do
-  subject(:change_set) { described_class.new(citation) }
-  let(:citation) { FactoryBot.build(:numismatic_citation) }
+  subject(:change_set) { described_class.new(numismatic_citation) }
+  let(:numismatic_citation) { FactoryBot.build(:numismatic_citation) }
 
   describe "#primary_terms" do
     it "includes displayed fields" do

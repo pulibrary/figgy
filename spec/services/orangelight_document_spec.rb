@@ -17,7 +17,7 @@ describe OrangelightDocument do
       subject(:builder) { described_class.new(coin) }
       let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
       let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
-      let(:citation) { FactoryBot.create_for_repository(:numismatic_citation, numismatic_reference_id: reference.id) }
+      let(:numismatic_citation) { FactoryBot.create_for_repository(:numismatic_citation, numismatic_reference_id: reference.id) }
       let(:artist) { FactoryBot.create_for_repository(:numismatic_artist) }
       let(:date_range) { DateRange.new(start: "-91", end: "-41", approximate: true) }
       let(:numismatic_place) { NumismaticPlace.new(city: "City", state: "State", region: "Region") }
@@ -45,7 +45,7 @@ describe OrangelightDocument do
                                          numismatic_artist_ids: [artist.id],
                                          member_ids: [coin.id],
                                          object_type: "coin",
-                                         citation: citation,
+                                         numismatic_citation: numismatic_citation,
                                          date_range: date_range,
                                          denomination: "1/2 Penny",
                                          metal: "copper",

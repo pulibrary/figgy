@@ -4,7 +4,7 @@ class CoinChangeSet < ChangeSet
   apply_workflow(DraftCompleteWorkflow)
 
   include VisibilityProperty
-  collection :citation, multiple: true, required: false, form: NumismaticCitationChangeSet, populator: :populate_nested_collection, default: []
+  collection :numismatic_citation, multiple: true, required: false, form: NumismaticCitationChangeSet, populator: :populate_nested_collection, default: []
   property :coin_number, multiple: false, required: false
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :holding_location, multiple: false, required: false
@@ -80,12 +80,12 @@ class CoinChangeSet < ChangeSet
         :pdf_type
       ],
       "Citation" => [
-        :citation
+        :numismatic_citation
       ]
     }
   end
 
-  def build_citation
-    schema["citation"][:nested].new(model.class.schema[:citation][[{}]].first)
+  def build_numismatic_citation
+    schema["numismatic_citation"][:nested].new(model.class.schema[:numismatic_citation][[{}]].first)
   end
 end

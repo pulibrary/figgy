@@ -84,7 +84,7 @@ RSpec.feature "NumismaticIssues" do
         :numismatic_issue,
         rights_statement: RightsStatements.copyright_not_evaluated.to_s,
         member_of_collection_ids: [collection.id],
-        citation: numismatic_citation,
+        numismatic_citation: numismatic_citation,
         color: "test value",
         date_range: DateRange.new(start: "2017", end: "2018"),
         denomination: "test value",
@@ -126,7 +126,7 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.rendered_rights_statement", text: "Copyright Not Evaluated"
       expect(page).to have_css ".attribute.visibility", text: "open"
       expect(page).to have_css ".attribute.member_of_collections", text: "Title"
-      expect(page).to have_css ".attribute.citations", text: "short-title part number"
+      expect(page).to have_css ".attribute.numismatic_citations", text: "short-title part number"
       expect(page).to have_css ".attribute.color", text: "test value"
       expect(page).to have_css ".attribute.rendered_date_range", text: "2017-2018"
       expect(page).to have_css ".attribute.denomination", text: "test value"

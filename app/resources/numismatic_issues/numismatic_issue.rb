@@ -10,7 +10,7 @@ class NumismaticIssue < Resource
   attribute :numismatic_monogram_ids
 
   # descriptive metadata
-  attribute :citation, Valkyrie::Types::Array.of(NumismaticCitation).meta(ordered: true)
+  attribute :numismatic_citation, Valkyrie::Types::Array.of(NumismaticCitation).meta(ordered: true)
   attribute :color
   attribute :date_range
   attribute :denomination

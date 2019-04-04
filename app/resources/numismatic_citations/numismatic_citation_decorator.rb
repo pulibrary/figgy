@@ -27,6 +27,6 @@ class NumismaticCitationDecorator < Valkyrie::ResourceDecorator
   end
 
   def title
-    "#{decorated_numismatic_reference.short_title} #{part} #{number}"
+    "#{decorated_numismatic_reference&.short_title} #{part} #{number}"
   end
 end

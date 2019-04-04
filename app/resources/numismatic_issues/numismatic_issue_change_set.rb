@@ -5,7 +5,7 @@ class NumismaticIssueChangeSet < ChangeSet
 
   include VisibilityProperty
   include DateRangeProperty
-  collection :citation, multiple: true, required: false, form: NumismaticCitationChangeSet, populator: :populate_nested_collection, default: []
+  collection :numismatic_citation, multiple: true, required: false, form: NumismaticCitationChangeSet, populator: :populate_nested_collection, default: []
   property :color, multiple: false, required: false
   property :denomination, multiple: false, required: false
   property :edge, multiple: false, required: false
@@ -116,7 +116,7 @@ class NumismaticIssueChangeSet < ChangeSet
         :rights_note
       ],
       "Citation" => [
-        :citation
+        :numismatic_citation
       ],
       "Artists and Subjects" => [
         :subject,
@@ -125,7 +125,7 @@ class NumismaticIssueChangeSet < ChangeSet
     }
   end
 
-  def build_citation
-    schema["citation"][:nested].new(model.class.schema[:citation][[{}]].first)
+  def build_numismatic_citation
+    schema["numismatic_citation"][:nested].new(model.class.schema[:numismatic_citation][[{}]].first)
   end
 end

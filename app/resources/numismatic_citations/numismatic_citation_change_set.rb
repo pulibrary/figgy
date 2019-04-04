@@ -4,7 +4,7 @@ class NumismaticCitationChangeSet < ChangeSet
 
   property :part, multiple: false, required: false
   property :number, multiple: false, required: false
-  property :numismatic_reference_id, multiple: false, required: true, type: Valkyrie::Types::ID.optional
+  property :numismatic_reference_id, multiple: false, required: false, type: Valkyrie::Types::ID.optional
 
   # Virtual Attributes
   property :_destroy, virtual: true
