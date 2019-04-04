@@ -201,6 +201,21 @@ RSpec.describe ScannedResourcesController, type: :controller do
       end
     end
 
+    context "when an attribute has leading / trailing spaces" do
+      let(:resource) { FactoryBot.create_for_repository(:scanned_resource) }
+      let(:params) do
+        {
+          source_metadata_identifier: " AC044_c0003 "
+        }
+      end
+      it "strips them" do
+        patch :update, params: { id: resource.id.to_s, scanned_resource: params }
+
+        reloaded = find_resource(resource.id)
+        expect(reloaded.source_metadata_identifier.first).to eq "AC044_c0003"
+      end
+    end
+
     context "when a published scanned resource has its title updated" do
       let(:existing_ark) { ["ark:/99999/fk4234567"] }
       let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource, identifier: existing_ark) }

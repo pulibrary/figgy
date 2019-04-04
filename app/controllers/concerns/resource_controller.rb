@@ -131,7 +131,15 @@ module ResourceController
     end
 
     def resource_params
-      params[resource_class.to_s.underscore.to_sym]&.to_unsafe_h
+      h = params[resource_class.to_s.underscore.to_sym]&.to_unsafe_h
+      clean_params(h)
+    end
+
+    def clean_params(h)
+      return unless h
+      h.map do |k, v|
+        v.respond_to?(:strip) ? [k, v.strip] : [k, v]
+      end.to_h.with_indifferent_access
     end
 
     def find_resource(id)
