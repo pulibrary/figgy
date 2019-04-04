@@ -1507,6 +1507,24 @@ RSpec.describe ChangeSetPersister do
         expect(file_set_preservation.binary_nodes).not_to be_blank
       end
     end
+    context "when deleting a `cloud` preservation_policy resource" do
+      it "cleans up and deletes any related PreservationObjects" do
+        file = fixture_file_upload("files/example.tif", "image/tiff")
+        resource = FactoryBot.create_for_repository(:pending_scanned_resource, preservation_policy: "cloud", files: [file])
+        change_set = DynamicChangeSet.new(resource)
+        change_set.validate(state: "complete")
+
+        output = change_set_persister.save(change_set: change_set)
+        file_set = Wayfinder.for(output).members.first
+        change_set = DynamicChangeSet.new(output)
+        change_set_persister.delete(change_set: change_set)
+
+        expect(change_set_persister.query_service.find_all_of_model(model: PreservationObject).to_a.length).to eq 0
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", resource.id.to_s, "#{resource.id}.json"))).to eq false
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", resource.id.to_s, "data", resource.member_ids.first.to_s, "#{resource.member_ids.first}.json"))).to eq false
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.original_file.id}.tif"))).to eq false
+      end
+    end
     context "when completing a `cloud` preservation_policy MVW" do
       it "deeply nests file sets" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
