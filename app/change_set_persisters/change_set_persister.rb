@@ -26,7 +26,6 @@ class ChangeSetPersister
       ],
       after_save: [
         AppendToParent,
-        AppendCitationToParent,
         AppendArtistToParent,
         UpdateAuthToken
       ],

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class NumismaticAccessionChangeSet < Valkyrie::ChangeSet
+class NumismaticAccessionChangeSet < ChangeSet
   delegate :human_readable_type, to: :model
 
   property :date, multiple: false, required: false
@@ -11,22 +11,33 @@ class NumismaticAccessionChangeSet < Valkyrie::ChangeSet
   property :firm, multiple: false, required: false
   property :note, multiple: false, required: false
   property :private_note, multiple: false, required: false
-  property :numismatic_citation_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :accession_number, multiple: false, required: false
+  collection :numismatic_citation, multiple: true, required: false, form: NumismaticCitationChangeSet, populator: :populate_nested_collection, default: []
 
   validates_with AutoIncrementValidator, property: :accession_number
 
+  # rubocop:disable Metrics/MethodLength
   def primary_terms
-    [
-      :date,
-      :items_number,
-      :type,
-      :cost,
-      :account,
-      :person,
-      :firm,
-      :note,
-      :private_note
-    ]
+    {
+      "" => [
+        :date,
+        :items_number,
+        :type,
+        :cost,
+        :account,
+        :person,
+        :firm,
+        :note,
+        :private_note
+      ],
+      "Citation" => [
+        :numismatic_citation
+      ]
+    }
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  def build_numismatic_citation
+    schema["numismatic_citation"][:nested].new(model.class.schema[:numismatic_citation][[{}]].first)
   end
 end

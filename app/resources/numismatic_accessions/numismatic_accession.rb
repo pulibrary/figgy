@@ -3,17 +3,17 @@ class NumismaticAccession < Resource
   include Valkyrie::Resource::AccessControls
 
   attribute :accession_number, Valkyrie::Types::Integer
-  attribute :date
-  attribute :items_number, Valkyrie::Types::Integer
-  attribute :type
-  attribute :cost
   attribute :account
-  attribute :person
+  attribute :cost
+  attribute :date
   attribute :firm
+  attribute :items_number, Valkyrie::Types::Integer
   attribute :note
+  attribute :numismatic_citation, Valkyrie::Types::Array.of(NumismaticCitation).meta(ordered: true)
+  attribute :person
   attribute :private_note
   attribute :thumbnail_id
-  attribute :numismatic_citation_ids, Valkyrie::Types::Array
+  attribute :type
 
   def title
     ["Accession: #{accession_number}"]

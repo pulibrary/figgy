@@ -3,8 +3,8 @@ require "rails_helper"
 
 RSpec.describe NumismaticAccessionDecorator do
   subject(:decorator) { described_class.new(accession) }
-  let(:accession) { FactoryBot.create_for_repository(:numismatic_accession, numismatic_citation_ids: [citation.id]) }
-  let(:citation) { FactoryBot.create_for_repository(:numismatic_citation, numismatic_reference_id: [reference.id]) }
+  let(:accession) { FactoryBot.create_for_repository(:numismatic_accession, numismatic_citation: numismatic_citation) }
+  let(:numismatic_citation) { FactoryBot.create_for_repository(:numismatic_citation, numismatic_reference_id: [reference.id]) }
   let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
 
   describe "manage files and structure" do
@@ -20,9 +20,9 @@ RSpec.describe NumismaticAccessionDecorator do
     end
   end
 
-  describe "#citations" do
-    it "renders the linked citations" do
-      expect(decorator.citations).to eq(["short-title citation part citation number"])
+  describe "#numismatic_citations" do
+    it "renders the linked numismatic_citations" do
+      expect(decorator.numismatic_citations).to eq(["short-title citation part citation number"])
     end
   end
 end
