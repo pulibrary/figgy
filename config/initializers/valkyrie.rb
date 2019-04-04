@@ -92,14 +92,32 @@ Rails.application.config.to_prepare do
     end
   end
 
-  Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::Disk.new(
-      base_path: Rails.root.join("tmp", "cloud_backup"),
-      file_mover: FileUtils.method(:cp),
-      path_generator: NestedStoragePath
-    ),
-    :cloud_backup
-  )
+  require "shrine/storage/google_cloud_storage"
+
+  ENV["STORAGE_PROJECT"] = "pulibrary-figgy-storage-1"
+  ENV["STORAGE_CREDENTIALS"] = Rails.root.join("tmp", "pulibrary-staging-credentials.json").to_s
+  Shrine.storages = {
+    staging: Shrine::Storage::GoogleCloudStorage.new(bucket: "figgy-staging-preservation")
+  }
+  if Rails.env.test?
+    Valkyrie::StorageAdapter.register(
+      Valkyrie::Storage::Disk.new(
+        base_path: Rails.root.join("tmp", "cloud_backup"),
+        file_mover: FileUtils.method(:cp),
+        path_generator: NestedStoragePath
+      ),
+      :cloud_backup
+    )
+  else
+    Valkyrie::StorageAdapter.register(
+      Valkyrie::Storage::Shrine.new(
+        Shrine.storages[:staging],
+        nil,
+        NestedStoragePath
+      ),
+      :cloud_backup
+    )
+  end
 
   # Registers a storage adapter for a *NIX file system
   # Binaries are persisted by invoking "mv" with access limited to read/write for owning users, and read-only for all others
