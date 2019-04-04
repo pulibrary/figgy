@@ -32,8 +32,13 @@ class Reindexer
         index_individually += records
       end
     end
-    index_individually.each { |record| single_index(record, progress_bar) }
+    run_individual_retries(index_individually, progress_bar)
     logger.info "Done"
+  end
+
+  def run_individual_retries(records, progress_bar)
+    logger.info "Reindexing #{records.count} individually due to errors during batch indexing"
+    records.each { |record| single_index(record, progress_bar) }
   end
 
   def wipe_records
