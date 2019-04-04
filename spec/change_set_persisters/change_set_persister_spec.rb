@@ -1498,10 +1498,10 @@ RSpec.describe ChangeSetPersister do
 
         output = change_set_persister.save(change_set: change_set)
         expect(Wayfinder.for(output).preservation_object.metadata_node).not_to be_blank
-        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", resource.id.to_s, "#{resource.id}.json"))).to eq true
-        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", resource.id.to_s, "data", resource.member_ids.first.to_s, "#{resource.member_ids.first}.json"))).to eq true
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "#{resource.id}.json"))).to eq true
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "#{resource.member_ids.first}.json"))).to eq true
         file_set = Wayfinder.for(output).members.first
-        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.original_file.id}.tif"))).to eq true
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.original_file.id}.tif"))).to eq true
         file_set_preservation = Wayfinder.for(file_set).preservation_object
         expect(file_set_preservation.metadata_node).not_to be_blank
         expect(file_set_preservation.binary_nodes).not_to be_blank
@@ -1520,9 +1520,9 @@ RSpec.describe ChangeSetPersister do
         change_set_persister.delete(change_set: change_set)
 
         expect(change_set_persister.query_service.find_all_of_model(model: PreservationObject).to_a.length).to eq 0
-        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", resource.id.to_s, "#{resource.id}.json"))).to eq false
-        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", resource.id.to_s, "data", resource.member_ids.first.to_s, "#{resource.member_ids.first}.json"))).to eq false
-        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.original_file.id}.tif"))).to eq false
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "#{resource.id}.json"))).to eq false
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "#{resource.member_ids.first}.json"))).to eq false
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.original_file.id}.tif"))).to eq false
       end
     end
     context "when completing a `cloud` preservation_policy MVW" do
@@ -1535,10 +1535,10 @@ RSpec.describe ChangeSetPersister do
 
         output = change_set_persister.save(change_set: change_set)
         expect(Wayfinder.for(output).preservation_object.metadata_node.use).to eq [Valkyrie::Vocab::PCDMUse.PreservedMetadata]
-        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", parent.id.to_s, "#{parent.id}.json"))).to eq true
-        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", parent.id.to_s, "data", parent.member_ids.first.to_s, "#{parent.member_ids.first}.json"))).to eq true
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", parent.id.to_s, "#{parent.id}.json"))).to eq true
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", parent.id.to_s, "data", parent.member_ids.first.to_s, "#{parent.member_ids.first}.json"))).to eq true
         file_set = Wayfinder.for(volume).members.first
-        expect(File.exist?(Rails.root.join("tmp", "cloud_backup", parent.id.to_s, "data", volume.id.to_s, "data", file_set.id.to_s, "example-#{file_set.original_file.id}.tif"))).to eq true
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", parent.id.to_s, "data", volume.id.to_s, "data", file_set.id.to_s, "example-#{file_set.original_file.id}.tif"))).to eq true
       end
     end
     context "when adding a file to a `cloud` preservation_policy resource" do

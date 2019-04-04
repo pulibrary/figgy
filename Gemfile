@@ -121,3 +121,5 @@ gem "blacklight_iiif_search", github: "boston-library/blacklight_iiif_search"
 gem "graphiql-rails", group: :development
 
 gem "cocoon"
+gem "shrine-google_cloud_storage"
+gem "valkyrie-shrine"

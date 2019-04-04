@@ -24,8 +24,11 @@ class Preserver
     # Don't preserve children unless this is the first time it's being
     # preserved. After that point any updates to the children will trigger them
     # to preserve themselves, because their parent is set up to be.
-    preserve_children unless already_preserved?
-    preserve_metadata
+    if preservation_object.persisted?
+      preserve_metadata
+    else
+      preserve_metadata && preserve_children
+    end
   end
 
   def preserve_original_file
@@ -58,6 +61,7 @@ class Preserver
   end
 
   def preserve_children
+    return unless resource.try(:member_ids).present?
     PreserveChildrenJob.perform_later(id: resource.id.to_s)
   end
 
