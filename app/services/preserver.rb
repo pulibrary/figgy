@@ -29,11 +29,11 @@ class Preserver
   end
 
   def already_preserved?
-    resource.try(:preservation_metadata).present?
+    preservation_object.metadata_node.present?
   end
 
   def preserve_original_file
-    return unless resource.try(:original_file) && resource.try(:preservation_copy).blank?
+    return unless resource.try(:original_file) && preservation_object.binary_nodes.blank?
     file_metadata = FileMetadata.new(
       label: preservation_copy_label,
       use: Valkyrie::Vocab::PCDMUse.PreservationCopy,
@@ -46,7 +46,14 @@ class Preserver
       resource: resource
     )
     file_metadata.file_identifiers = uploaded_file.id
-    resource.file_metadata += [file_metadata]
+    preservation_object.binary_nodes = file_metadata
+  end
+
+  def preservation_object
+    @preservation_object ||=
+      begin
+        Wayfinder.for(resource).try(:preservation_object) || PreservationObject.new(preserved_object_id: resource.id)
+      end
   end
 
   def preservation_copy_label
@@ -62,8 +69,8 @@ class Preserver
     metadata_node = preserved_metadata_node || build_metadata_node
     uploaded_file = storage_adapter.upload(file: temp_metadata_file.io, original_filename: metadata_node.label.first, resource: resource)
     metadata_node.file_identifiers = uploaded_file.id
-    resource.file_metadata += [metadata_node]
-    change_set_persister.metadata_adapter.persister.save(resource: resource)
+    preservation_object.metadata_node = metadata_node
+    change_set_persister.metadata_adapter.persister.save(resource: preservation_object)
   end
 
   def metadata_checksum
@@ -78,17 +85,11 @@ class Preserver
   # impossible to provide an identifier for the file it's referencing until it's
   # actually uploaded to the preservation backend.
   def preservation_metadata
-    resource_hash = resource.to_h
-    resource_hash[:file_metadata] = resource_hash[:file_metadata].select do |metadata|
-      !metadata[:use].include?(Valkyrie::Vocab::PCDMUse.PreservedMetadata)
-    end
-    resource_hash.compact
+    resource.to_h.compact
   end
 
   def preserved_metadata_node
-    resource.file_metadata.find do |file_metadata|
-      file_metadata.use.include?(Valkyrie::Vocab::PCDMUse.PreservedMetadata)
-    end
+    preservation_object.metadata_node
   end
 
   def build_metadata_node

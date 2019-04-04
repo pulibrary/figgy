@@ -68,10 +68,6 @@ class FileSet < Resource
     file_metadata.select(&:preservation_file?)
   end
 
-  def preservation_copy
-    file_metadata.find(&:preservation_copy?)
-  end
-
   def intermediate_files
     file_metadata.select(&:intermediate_file?)
   end

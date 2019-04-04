@@ -55,8 +55,6 @@ class FgdcUpdateService
 
     def update_checksum
       original_file.checksum = MultiChecksum.for(file_object)
-      @file_set.preservation_copy.checksum = original_file.checksum if @file_set.preservation_copy.present?
-
       updated_change_set = DynamicChangeSet.new(@file_set)
       change_set_persister.buffer_into_index do |buffered_persister|
         buffered_persister.save(change_set: updated_change_set)
