@@ -131,5 +131,18 @@ By default, Figgy provides users with the ability to upload binaries from the lo
 
 Figgy may also be configured to upload files from hosted storage providers.  Support for users with Google Drive accounts has been tested and verified.  [Please reference the Browse Everything documentation for more details](https://github.com/pulibrary/figgy/blob/master/BROWSE_EVERYTHING.md).
 
+## Preservation Configuration in Development
+
+1. Download and save gcs_pulibrary-staging-credentials.json from Keybase into
+   the `tmp` directory.
+2. Create a `.env` file in the root with the following settings:
+   ```
+   STORAGE_PROJECT=pulibrary-figgy-storage-1
+   STORAGE_CREDENTIALS=tmp/gcs_pulibrary-staging-credentials.json
+   ```
+3. Restart the server. Now items marked with the `cloud` preservation policy
+   will save to a bucket you can view at `https://console.cloud.google.com/storage/browser`
+4. Items only last in this bucket for 2 days, and aren't versioned.
+
 ## More
 For links to helpful valkyrie documentation and troubleshooting tips, visit the [wiki pages](https://github.com/pulibrary/figgy/wiki).
