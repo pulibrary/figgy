@@ -25,6 +25,6 @@ class PendingUpload < Valkyrie::Resource
     end
 
     def copied_file_name
-      @copied_file_name ||= BrowseEverything::Retriever.new.download("file_name" => file_name.first, "file_size" => file_size.first, "url" => url.first, "auth_header" => headers)
+      @copied_file_name ||= BrowseEverything::Retriever.new.download("file_name" => file_name.first, "file_size" => file_size.first, "url" => url.first, "headers" => headers)
     end
 end
