@@ -133,7 +133,11 @@ Figgy may also be configured to upload files from hosted storage providers.  Sup
 
 ## Preservation Configuration in Development
 
-1. Download and save gcs_pulibrary-staging-credentials.json from Keybase into
+By default, in development, preserved objects will be stored in the directory
+"tmp/cloud_backup." If you'd like to configure and test Google Cloud storage
+instead, do the following:
+
+1. Download and save gcs_pulibrary-staging-credentials.json from LastPass into
    the `tmp` directory.
 2. Create a `.env` file in the root with the following settings:
    ```

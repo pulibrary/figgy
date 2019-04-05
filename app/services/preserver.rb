@@ -19,11 +19,11 @@ class Preserver
     @change_set_persister = change_set_persister
   end
 
+  # Don't preserve children unless this is the first time it's being
+  # preserved. After that point any updates to the children will trigger them
+  # to preserve themselves, because their parent is set up to be.
   def preserve!
-    preserve_original_file
-    # Don't preserve children unless this is the first time it's being
-    # preserved. After that point any updates to the children will trigger them
-    # to preserve themselves, because their parent is set up to be.
+    preserve_binary_content
     if preservation_object.persisted?
       preserve_metadata
     else
@@ -31,21 +31,24 @@ class Preserver
     end
   end
 
-  def preserve_original_file
-    return unless resource.try(:original_file) && preservation_object.binary_nodes.blank?
-    file_metadata = FileMetadata.new(
-      label: preservation_copy_label,
-      use: Valkyrie::Vocab::PCDMUse.PreservationCopy,
-      mime_type: resource.original_file.mime_type,
-      checksum: resource.original_file.checksum
-    )
-    uploaded_file = storage_adapter.upload(
-      file: File.open(Valkyrie::StorageAdapter.find_by(id: resource.original_file.file_identifiers.first).disk_path),
-      original_filename: file_metadata.label.first,
-      resource: resource
-    )
-    file_metadata.file_identifiers = uploaded_file.id
-    preservation_object.binary_nodes = file_metadata
+  def preserve_binary_content
+    resource_binary_nodes.each do |resource_binary_node|
+      next if !resource_binary_node.uploaded_content? || resource_binary_node.preserved?
+      file_metadata = resource_binary_node.preservation_node
+      uploaded_file = storage_adapter.upload(
+        file: File.open(Valkyrie::StorageAdapter.find_by(id: resource_binary_node.file_identifiers.first).disk_path),
+        original_filename: file_metadata.label.first,
+        resource: resource
+      )
+      file_metadata.file_identifiers = uploaded_file.id
+      preservation_object.binary_nodes += [file_metadata]
+    end
+  end
+
+  def resource_binary_nodes
+    [:original_files, :intermediate_files, :preservation_files].flat_map do |node_type|
+      Array(resource[node_type]).map { |x| PreservationIntermediaryNode.new(binary_node: x, preservation_object: preservation_object) }
+    end
   end
 
   def preservation_object
@@ -55,63 +58,42 @@ class Preserver
       end
   end
 
-  def preservation_copy_label
-    label, splitter, extension = resource.original_file.label.first.rpartition(".")
-    "#{label}-#{resource.original_file.id}#{splitter}#{extension}"
-  end
-
   def preserve_children
     return unless resource.try(:member_ids).present?
     PreserveChildrenJob.perform_later(id: resource.id.to_s)
   end
 
   def preserve_metadata
-    metadata_node = preserved_metadata_node || build_metadata_node
     uploaded_file = storage_adapter.upload(file: temp_metadata_file.io, original_filename: metadata_node.label.first, resource: resource)
     metadata_node.file_identifiers = uploaded_file.id
     preservation_object.metadata_node = metadata_node
     change_set_persister.metadata_adapter.persister.save(resource: preservation_object)
   end
 
-  def metadata_checksum
-    @metadata_checksum ||=
+  def metadata_node
+    @metadata_node ||=
       begin
-        io = StringIO.new(preservation_metadata.to_json)
-        MultiChecksum.for(Valkyrie::StorageAdapter::File.new(io: io, id: "tmp"))
+        preservation_object.metadata_node ||
+          FileMetadata.new(
+            label: "#{resource.id}.json",
+            mime_type: "application/json",
+            checksum: MultiChecksum.for(temp_metadata_file),
+            use: Valkyrie::Vocab::PCDMUse.PreservedMetadata
+          )
       end
-  end
-
-  # Don't preserve the PreservedMetadata FileMetadataNode, because it's
-  # impossible to provide an identifier for the file it's referencing until it's
-  # actually uploaded to the preservation backend.
-  def preservation_metadata
-    resource.to_h.compact
-  end
-
-  def preserved_metadata_node
-    preservation_object.metadata_node
-  end
-
-  def build_metadata_node
-    FileMetadata.new(
-      label: "#{resource.id}.json",
-      mime_type: "application/json",
-      checksum: metadata_checksum,
-      use: Valkyrie::Vocab::PCDMUse.PreservedMetadata
-    )
   end
 
   def temp_metadata_file
     @temp_metadata_file ||=
       begin
         file = Tempfile.new("#{resource.id}.json")
-        file.write(preservation_metadata.to_json)
+        file.write(resource.to_h.compact)
         file.rewind
         Valkyrie::StorageAdapter::File.new(io: file, id: "tmp")
       end
   end
 
   def default_storage_adapter
-    Valkyrie::StorageAdapter.find(:cloud_backup)
+    Valkyrie::StorageAdapter.find(:google_cloud_storage)
   end
 end

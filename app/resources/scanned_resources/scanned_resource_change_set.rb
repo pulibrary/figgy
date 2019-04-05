@@ -57,8 +57,7 @@ class ScannedResourceChangeSet < ChangeSet
       :ocr_language,
       :portion_note,
       :nav_date,
-      :append_id,
-      :preservation_policy
+      :append_id
     ]
   end
 end

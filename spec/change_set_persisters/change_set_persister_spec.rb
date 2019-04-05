@@ -1497,14 +1497,53 @@ RSpec.describe ChangeSetPersister do
         change_set.validate(state: "complete")
 
         output = change_set_persister.save(change_set: change_set)
-        expect(Wayfinder.for(output).preservation_object.metadata_node).not_to be_blank
+        expect(Wayfinder.for(output).preservation_object.metadata_node.use).to eq [Valkyrie::Vocab::PCDMUse.PreservedMetadata]
         expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "#{resource.id}.json"))).to eq true
         expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "#{resource.member_ids.first}.json"))).to eq true
         file_set = Wayfinder.for(output).members.first
         expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.original_file.id}.tif"))).to eq true
         file_set_preservation = Wayfinder.for(file_set).preservation_object
-        expect(file_set_preservation.metadata_node).not_to be_blank
-        expect(file_set_preservation.binary_nodes).not_to be_blank
+        expect(file_set_preservation.metadata_node.use).to eq [Valkyrie::Vocab::PCDMUse.PreservedMetadata]
+        expect(file_set_preservation.binary_nodes.length).to eq 1
+        expect(file_set_preservation.binary_nodes[0].use).to eq [Valkyrie::Vocab::PCDMUse.PreservationCopy]
+      end
+    end
+    context "when a preserved ScannedResource's metadata is updated" do
+      it "refreshes the preserved metadata" do
+        file = fixture_file_upload("files/example.tif", "image/tiff")
+        resource = FactoryBot.create_for_repository(:complete_scanned_resource, preservation_policy: "cloud", files: [file])
+        change_set_persister.save(change_set: DynamicChangeSet.new(resource))
+        file_set = Wayfinder.for(resource).members.first
+
+        modified = File.mtime(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "#{resource.id}.json"))
+        modified_file = File.mtime(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.original_file.id}.tif"))
+        VoyagerUpdateJob.perform_now([resource.id.to_s])
+        new_modified = File.mtime(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "#{resource.id}.json"))
+        new_modified_file = File.mtime(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.original_file.id}.tif"))
+
+        expect(new_modified).not_to eq modified
+        expect(modified_file).to eq new_modified_file
+      end
+    end
+    context "when preserving a FileSet with an intermediate/preservation file" do
+      it "preserves them" do
+        file_set = FactoryBot.create_for_repository(:audio_file_set)
+        file = fixture_file_upload("files/example.tif", "image/tiff")
+        storage_adapter = Valkyrie::StorageAdapter.find(:disk_via_copy)
+        intermediate = storage_adapter.upload(file: file, original_filename: "intermediate", resource: file_set.intermediate_files.first)
+        preservation = storage_adapter.upload(file: file, original_filename: "preservation", resource: file_set.preservation_file)
+        file_set.intermediate_files.first.file_identifiers = intermediate.id
+        file_set.intermediate_files.first.label = "example.tif"
+        file_set.preservation_file.file_identifiers = preservation.id
+        file_set.preservation_file.label = "example.tif"
+        change_set_persister.persister.save(resource: file_set)
+        resource = FactoryBot.create_for_repository(:complete_scanned_resource, preservation_policy: "cloud", member_ids: [file_set.id])
+
+        change_set = DynamicChangeSet.new(resource)
+        change_set_persister.save(change_set: change_set)
+
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.intermediate_files.first.id}.tif"))).to eq true
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.preservation_file.id}.tif"))).to eq true
       end
     end
     context "when deleting a `cloud` preservation_policy resource" do
@@ -1565,7 +1604,7 @@ RSpec.describe ChangeSetPersister do
         preservation_object = Wayfinder.for(children.first).preservation_object
         expect(preservation_object.binary_nodes).to be_present
         expect(preservation_object.binary_nodes[0].checksum).to eq children.first.original_file.checksum
-        expect(preservation_object.binary_nodes[0].checksum).not_to be_blank
+        expect(preservation_object.binary_nodes[0].checksum[0].md5).to eq "2a28fb702286782b2cbf2ed9a5041ab1"
       end
     end
   end
