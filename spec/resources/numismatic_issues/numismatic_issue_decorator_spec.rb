@@ -5,7 +5,7 @@ RSpec.describe NumismaticIssueDecorator do
   subject(:decorator) { described_class.new(issue) }
   let(:issue) { FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id], state: "complete", numismatic_citation: numismatic_citation, numismatic_artist_ids: [artist.id]) }
   let(:coin) { FactoryBot.create_for_repository(:coin) }
-  let(:numismatic_citation) { FactoryBot.create_for_repository(:numismatic_citation, numismatic_reference_id: [reference.id]) }
+  let(:numismatic_citation) { NumismaticCitation.new(part: "citation part", number: "citation number", numismatic_reference_id: [reference.id]) }
   let(:artist) { FactoryBot.create_for_repository(:numismatic_artist) }
   let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
 

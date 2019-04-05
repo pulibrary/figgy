@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe NumismaticCitationDecorator do
   subject(:decorator) { described_class.new(numismatic_citation) }
-  let(:numismatic_citation) { FactoryBot.create_for_repository(:numismatic_citation, numismatic_reference_id: [reference.id]) }
+  let(:numismatic_citation) { NumismaticCitation.new(part: "citation part", number: "citation number", numismatic_reference_id: [reference.id]) }
   let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
   let(:issue) { FactoryBot.create_for_repository(:numismatic_issue, numismatic_citation: numismatic_citation) }
 

@@ -77,7 +77,7 @@ RSpec.feature "NumismaticIssues" do
   context "when a user creates a new numismatic issue" do
     let(:collection) { FactoryBot.create_for_repository(:collection) }
     let(:numismatic_reference) { FactoryBot.create_for_repository(:numismatic_reference) }
-    let(:numismatic_citation) { FactoryBot.create_for_repository(:numismatic_citation, part: "part", number: "number", numismatic_reference_id: numismatic_reference.id) }
+    let(:numismatic_citation) { NumismaticCitation.new(part: "part", number: "number", numismatic_reference_id: numismatic_reference.id) }
     let(:numismatic_place) { NumismaticPlace.new(city: "City", state: "State", region: "Region") }
     let(:numismatic_issue) do
       FactoryBot.create_for_repository(

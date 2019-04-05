@@ -75,7 +75,7 @@ RSpec.feature "Coins" do
 
   context "when a user creates a new coin" do
     let(:numismatic_reference) { FactoryBot.create_for_repository(:numismatic_reference) }
-    let(:numismatic_citation) { FactoryBot.create_for_repository(:numismatic_citation, part: "part", number: "number", numismatic_reference_id: numismatic_reference.id) }
+    let(:numismatic_citation) { NumismaticCitation.new(part: "part", number: "number", numismatic_reference_id: numismatic_reference.id) }
     let(:coin) do
       FactoryBot.create_for_repository(
         :coin,

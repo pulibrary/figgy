@@ -4,7 +4,7 @@ require "rails_helper"
 RSpec.describe NumismaticAccessionDecorator do
   subject(:decorator) { described_class.new(accession) }
   let(:accession) { FactoryBot.create_for_repository(:numismatic_accession, numismatic_citation: numismatic_citation) }
-  let(:numismatic_citation) { FactoryBot.create_for_repository(:numismatic_citation, numismatic_reference_id: [reference.id]) }
+  let(:numismatic_citation) { NumismaticCitation.new(part: "citation part", number: "citation number", numismatic_reference_id: [reference.id]) }
   let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
 
   describe "manage files and structure" do

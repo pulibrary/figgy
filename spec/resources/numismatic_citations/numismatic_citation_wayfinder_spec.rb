@@ -22,9 +22,9 @@ describe NumismaticCitationWayfinder do
     coin
   end
 
-  describe "#decorated_numismatic_references" do
-    it "returns decorated numismatic references" do
-      expect(numismatic_citation_wayfinder.decorated_numismatic_references.first).to eq numismatic_reference.decorate
+  describe "#decorated_numismatic_reference" do
+    it "returns a decorated numismatic reference" do
+      expect(numismatic_citation_wayfinder.decorated_numismatic_reference).to eq numismatic_reference.decorate
     end
   end
 end
