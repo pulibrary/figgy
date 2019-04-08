@@ -21,7 +21,7 @@ describe OrangelightDocument do
       let(:numismatic_citation) { NumismaticCitation.new(part: "citation part", number: "citation number", numismatic_reference_id: reference.id) }
       let(:artist) { FactoryBot.create_for_repository(:numismatic_artist) }
       let(:date_range) { DateRange.new(start: "-91", end: "-41", approximate: true) }
-      let(:numismatic_place) { NumismaticPlace.new(city: "City", state: "State", region: "Region") }
+      let(:numismatic_place) { FactoryBot.create_for_repository(:numismatic_place) }
       let(:coin) do
         FactoryBot.create_for_repository(:coin,
                                          files: [file],
@@ -47,6 +47,7 @@ describe OrangelightDocument do
                                          object_type: "coin",
                                          numismatic_artist: numismatic_artist,
                                          numismatic_citation: numismatic_citation,
+                                         numismatic_place_id: numismatic_place.id,
                                          date_range: date_range,
                                          denomination: "1/2 Penny",
                                          metal: "copper",
@@ -58,7 +59,6 @@ describe OrangelightDocument do
                                          master: "William Wood",
                                          workshop: "Bristol",
                                          series: "Hibernia",
-                                         place: numismatic_place,
                                          obverse_figure: "bust",
                                          obverse_symbol: "cornucopia",
                                          obverse_part: "standing",
@@ -89,7 +89,7 @@ describe OrangelightDocument do
         holding = JSON.parse(output[:holdings_1display]).first.last
         expect(output[:id]).to eq coin.decorate.orangelight_id
         expect(output[:title_display]).to eq "Coin: #{coin.coin_number}"
-        expect(output[:pub_created_display]).to eq "George I, 1/2 Penny, City"
+        expect(output[:pub_created_display]).to eq "George I, 1/2 Penny, city"
         expect(output[:call_number_display]).to eq ["Coin #{coin.coin_number}"]
         expect(output[:call_number_browse_s]).to eq ["Coin #{coin.coin_number}"]
         expect(output[:access_facet]).to eq ["Online", "In the Library"]
@@ -133,8 +133,8 @@ describe OrangelightDocument do
         expect(output[:issue_master_s]).to eq ["William Wood"]
         expect(output[:issue_workshop_s]).to eq ["Bristol"]
         expect(output[:issue_series_s]).to eq ["Hibernia"]
-        expect(output[:issue_place_s]).to eq ["City, State, Region"]
-        expect(output[:issue_place_sort]).to eq "City, State, Region"
+        expect(output[:issue_place_s]).to eq ["city, state, region"]
+        expect(output[:issue_place_sort]).to eq "city, state, region"
         expect(output[:issue_obverse_figure_s]).to eq ["bust"]
         expect(output[:issue_obverse_symbol_s]).to eq ["cornucopia"]
         expect(output[:issue_obverse_part_s]).to eq ["standing"]

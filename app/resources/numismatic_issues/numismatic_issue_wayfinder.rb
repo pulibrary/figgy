@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class NumismaticIssueWayfinder < BaseWayfinder
   relationship_by_property :members, property: :member_ids
+  relationship_by_property :numismatic_places, property: :numismatic_place_id, singular: true
   relationship_by_property :numismatic_monograms, property: :numismatic_monogram_ids
   relationship_by_property :file_sets, property: :member_ids, model: FileSet
   relationship_by_property :coins, property: :member_ids, model: Coin

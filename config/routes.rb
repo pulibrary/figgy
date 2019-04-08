@@ -127,7 +127,7 @@ Rails.application.routes.draw do
 
     resources :numismatic_finds
 
-    resources :numismatic_artists
+    resources :numismatic_places
 
     resources :numismatic_issues do
       member do

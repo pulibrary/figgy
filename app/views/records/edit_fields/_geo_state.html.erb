@@ -1,0 +1,5 @@
+<% if f.object.multiple? :geo_state %>
+  <%= f.input key, as: :multi_value, input_html: { class: 'form-control' }, label: "State", required: f.object.required?(key) %>
+<% else %>
+  <%= f.input key, label: "State", required: f.object.required?(key) %>
+<% end %>
