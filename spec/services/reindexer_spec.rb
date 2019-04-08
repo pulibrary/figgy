@@ -65,7 +65,7 @@ RSpec.describe Reindexer do
     end
 
     context "when rsolr raises errors" do
-      let(:resources) do
+      let!(:resources) do
         Array.new(5) do
           postgres_adapter.persister.save(resource: FactoryBot.build(:scanned_resource))
         end
