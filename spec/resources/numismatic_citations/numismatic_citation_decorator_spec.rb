@@ -2,9 +2,16 @@
 require "rails_helper"
 
 RSpec.describe NumismaticCitationDecorator do
-  subject(:decorator) { described_class.new(citation) }
-  let(:citation) { FactoryBot.create_for_repository(:numismatic_citation, numismatic_reference_id: [reference.id]) }
+  subject(:decorator) { described_class.new(numismatic_citation) }
+  let(:numismatic_citation) { NumismaticCitation.new(part: "citation part", number: "citation number", numismatic_reference_id: [reference.id]) }
   let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
+  let(:issue) { FactoryBot.create_for_repository(:numismatic_issue, numismatic_citation: numismatic_citation) }
+
+  before do
+    reference
+    numismatic_citation
+    issue
+  end
 
   describe "manage files and structure" do
     it "does not manage files or structure" do
@@ -32,7 +39,7 @@ RSpec.describe NumismaticCitationDecorator do
   end
 
   describe "#title" do
-    it "renders the citation title" do
+    it "renders the numismatic_citation title" do
       expect(decorator.title).to eq("short-title citation part citation number")
     end
   end

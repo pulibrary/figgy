@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 class NumismaticCitationWayfinder < BaseWayfinder
-  relationship_by_property :numismatic_references, property: :numismatic_reference_id, singular: true
-  inverse_relationship_by_property :numismatic_citation_parents, singular: true, property: :numismatic_citation_ids
+  define_singular_relation(:numismatic_references)
+
+  def numismatic_references
+    resource.numismatic_reference_id.map do |id|
+      query_service.find_by(id: id)
+    end
+  end
 end

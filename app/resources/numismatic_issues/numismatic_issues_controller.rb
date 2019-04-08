@@ -7,7 +7,12 @@ class NumismaticIssuesController < BaseResourceController
     storage_adapter: Valkyrie.config.storage_adapter
   )
 
+  before_action :load_numismatic_references, only: [:new, :edit]
   before_action :load_monograms, only: [:new, :edit]
+
+  def load_numismatic_references
+    @numismatic_references = query_service.find_all_of_model(model: NumismaticReference).map(&:decorate).sort_by(&:short_title)
+  end
 
   def load_monograms
     @numismatic_monograms = query_service.find_all_of_model(model: NumismaticMonogram).map(&:decorate)

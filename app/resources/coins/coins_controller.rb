@@ -9,6 +9,12 @@ class CoinsController < BaseResourceController
     storage_adapter: Valkyrie.config.storage_adapter
   )
 
+  before_action :load_numismatic_references, only: [:new, :edit]
+
+  def load_numismatic_references
+    @numismatic_references = query_service.find_all_of_model(model: NumismaticReference).map(&:decorate).sort_by(&:short_title)
+  end
+
   def manifest
     authorize! :manifest, resource
     respond_to do |f|

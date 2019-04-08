@@ -6,13 +6,14 @@ describe NumismaticCitationWayfinder do
 
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
+  let(:numismatic_reference) { FactoryBot.create_for_repository(:numismatic_reference) }
   let(:numismatic_citation) do
-    res = NumismaticCitation.new(title: "athens")
+    res = NumismaticCitation.new(title: "athens", numismatic_reference_id: numismatic_reference.id)
     ch = NumismaticCitationChangeSet.new(res)
     change_set_persister.save(change_set: ch)
   end
   let(:coin) do
-    res = Coin.new(title: "hercules", weight: 5, numismatic_citation_ids: [numismatic_citation.id])
+    res = Coin.new(title: "hercules", weight: 5, numismatic_citation: [numismatic_citation])
     ch = CoinChangeSet.new(res)
     change_set_persister.save(change_set: ch)
   end
@@ -21,9 +22,9 @@ describe NumismaticCitationWayfinder do
     coin
   end
 
-  describe "#numismatic_citation_parent" do
-    it "returns the parent coin for citation" do
-      expect(numismatic_citation_wayfinder.numismatic_citation_parent).to eq coin
+  describe "#decorated_numismatic_reference" do
+    it "returns a decorated numismatic reference" do
+      expect(numismatic_citation_wayfinder.decorated_numismatic_reference).to eq numismatic_reference.decorate
     end
   end
 end

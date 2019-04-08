@@ -57,7 +57,10 @@ RSpec.feature "Coins" do
     expect(page).to have_field "Holding Location"
     expect(page).not_to have_css '.select[for="coin_holding_location"]', text: "Holding Location"
     expect(page).to have_field "Loan"
+    expect(page).to have_field "Number"
     expect(page).to have_field "Numismatic collection"
+    expect(page).to have_field "Numismatic Reference"
+    expect(page).to have_field "Part"
     expect(page).to have_field "Private note"
     expect(page).to have_field "Provenance"
     expect(page).to have_field "Size"
@@ -71,11 +74,14 @@ RSpec.feature "Coins" do
   end
 
   context "when a user creates a new coin" do
+    let(:numismatic_reference) { FactoryBot.create_for_repository(:numismatic_reference) }
+    let(:numismatic_citation) { NumismaticCitation.new(part: "part", number: "number", numismatic_reference_id: numismatic_reference.id) }
     let(:coin) do
       FactoryBot.create_for_repository(
         :coin,
         accession_number: 123,
         analysis: "test value",
+        numismatic_citation: numismatic_citation,
         counter_stamp: "test value",
         die_axis: "test value",
         find_date: "test value",
@@ -102,6 +108,7 @@ RSpec.feature "Coins" do
       expect(page).to have_css ".attribute.visibility", text: "open"
       expect(page).to have_css ".attribute.accession_number", text: 123
       expect(page).to have_css ".attribute.analysis", text: "test value"
+      expect(page).to have_css ".attribute.numismatic_citations", text: "short-title part number"
       expect(page).to have_css ".attribute.counter_stamp", text: "test value"
       expect(page).to have_css ".attribute.die_axis", text: "test value"
       expect(page).to have_css ".attribute.find_date", text: "test value"
@@ -119,19 +126,6 @@ RSpec.feature "Coins" do
       expect(page).to have_css ".attribute.size", text: "test value"
       expect(page).to have_css ".attribute.technique", text: "test value"
       expect(page).to have_css ".attribute.weight", text: "test value"
-    end
-  end
-
-  context "a coin has citation but no artist" do
-    let(:coin) { FactoryBot.create_for_repository(:coin) }
-
-    before do
-      visit solr_document_path coin
-    end
-
-    it "displays Add Citation button" do
-      expect(page).to have_link "Add Citation", href: parent_add_numismatic_citation_path(coin, parent_id: coin.id)
-      expect(page).not_to have_link "Add Artist", href: parent_add_numismatic_artist_path(coin, parent_id: coin.id)
     end
   end
 end

@@ -9,9 +9,8 @@ class NumismaticAccessionDecorator < Valkyrie::ResourceDecorator
           :person,
           :firm,
           :note,
-          :private_note
-
-  delegate :decorated_numismatic_citations, to: :wayfinder
+          :private_note,
+          :numismatic_citations
 
   def date
     Array.wrap(super).first
@@ -37,6 +36,10 @@ class NumismaticAccessionDecorator < Valkyrie::ResourceDecorator
     Array.wrap(super).first
   end
 
+  def numismatic_citations
+    numismatic_citation.map { |c| c.decorate.title }
+  end
+
   def manageable_files?
     false
   end
@@ -57,9 +60,5 @@ class NumismaticAccessionDecorator < Valkyrie::ResourceDecorator
   def cost_label
     "" unless cost
     "(#{cost})"
-  end
-
-  def citations
-    decorated_numismatic_citations.map(&:title)
   end
 end
