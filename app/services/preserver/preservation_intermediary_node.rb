@@ -3,7 +3,7 @@ class Preserver
   # Encapsulate logic for converting a binary node to a preservation node.
   class PreservationIntermediaryNode
     attr_reader :binary_node, :preservation_object
-    delegate :file_identifiers, to: :binary_node
+    delegate :file_identifiers, :checksum, to: :binary_node
     # @param binary_node [FileMetadata] Node to convert to a preservation
     #   node.
     # @param preservation_object [PreservationObject] Object the preservation
@@ -18,17 +18,32 @@ class Preserver
     end
 
     def preserved?
-      preservation_object.binary_nodes.find { |x| x.preservation_copy_of_id == binary_node.id }
+      preservation_object.binary_nodes.find { |x| x.preservation_copy_of_id == binary_node.id } &&
+        binary_node.checksum == preservation_node.checksum
+    end
+
+    def needs_updated?
+      preservation_node.persisted? && checksum.present? && preservation_node.checksum != checksum
     end
 
     def preservation_node
+      @preservation_node ||=
+        preservation_object.binary_nodes.find { |x| x.preservation_copy_of_id == binary_node.id } ||
+        build_preservation_node
+    end
+
+    def build_preservation_node
       FileMetadata.new(
         label: preservation_label,
         use: Valkyrie::Vocab::PCDMUse.PreservationCopy,
         mime_type: binary_node.mime_type,
-        checksum: binary_node.checksum,
+        checksum: calculate_checksum,
         preservation_copy_of_id: binary_node.id
       )
+    end
+
+    def calculate_checksum
+      @calculated_checksum ||= MultiChecksum.for(Valkyrie::StorageAdapter.find_by(id: file_identifiers.first))
     end
 
     # Creates the binary name for a preserved copy of a file by setting the

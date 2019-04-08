@@ -33,15 +33,18 @@ class Preserver
 
   def preserve_binary_content
     resource_binary_nodes.each do |resource_binary_node|
-      next if !resource_binary_node.uploaded_content? || resource_binary_node.preserved?
       file_metadata = resource_binary_node.preservation_node
+      next if !resource_binary_node.uploaded_content? || resource_binary_node.preserved?
+      next unless !file_metadata.persisted? || resource_binary_node.needs_updated?
       uploaded_file = storage_adapter.upload(
         file: File.open(Valkyrie::StorageAdapter.find_by(id: resource_binary_node.file_identifiers.first).disk_path),
         original_filename: file_metadata.label.first,
         resource: resource
       )
+      file_metadata.checksum = resource_binary_node.calculate_checksum
       file_metadata.file_identifiers = uploaded_file.id
-      preservation_object.binary_nodes += [file_metadata]
+      preservation_object.binary_nodes += [file_metadata] unless file_metadata.persisted?
+      file_metadata.new_record = false
     end
   end
 
@@ -73,13 +76,12 @@ class Preserver
   def metadata_node
     @metadata_node ||=
       begin
-        preservation_object.metadata_node ||
-          FileMetadata.new(
-            label: "#{resource.id}.json",
-            mime_type: "application/json",
-            checksum: MultiChecksum.for(temp_metadata_file),
-            use: Valkyrie::Vocab::PCDMUse.PreservedMetadata
-          )
+        FileMetadata.new(
+          label: "#{resource.id}.json",
+          mime_type: "application/json",
+          checksum: MultiChecksum.for(temp_metadata_file),
+          use: Valkyrie::Vocab::PCDMUse.PreservedMetadata
+        )
       end
   end
 

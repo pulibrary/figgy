@@ -1564,6 +1564,22 @@ RSpec.describe ChangeSetPersister do
         expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.original_file.id}.tif"))).to eq false
       end
     end
+    context "when adding FGDC metadata to a `cloud` preserved object", run_real_derivatives: true, run_real_characterization: true do
+      with_queue_adapter :inline
+      it "updates the binary content in the preservation store" do
+        file = fixture_file_upload("files/vector/shapefile.zip", "application/zip")
+        xml = fixture_file_upload("files/geo_metadata/fgdc.xml", "application/xml; schema=fgdc")
+        vector_resource = FactoryBot.create_for_repository(:complete_vector_resource, files: [file, xml], preservation_policy: "cloud")
+
+        output = change_set_persister.save(change_set: DynamicChangeSet.new(vector_resource))
+        preservation_object = Wayfinder.for(output).preservation_objects.first
+        expect(preservation_object).not_to eq nil
+
+        fgdc_file_set = Wayfinder.for(output).geo_metadata_members[0]
+        fgdc_preservation = Wayfinder.for(fgdc_file_set).preservation_objects.first
+        expect(fgdc_preservation.binary_nodes[0].checksum[0].md5).to eq fgdc_file_set.original_file.checksum[0].md5
+      end
+    end
     context "when completing a `cloud` preservation_policy MVW" do
       it "deeply nests file sets" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
@@ -1589,6 +1605,7 @@ RSpec.describe ChangeSetPersister do
           change_set = DynamicChangeSet.new(resource)
           buffered_change_set_persister.save(change_set: change_set)
         end
+        start_checksum = Wayfinder.for(resource).preservation_objects[0].metadata_node.checksum
         reloaded = change_set_persister.query_service.find_by(id: resource.id)
         expect(Wayfinder.for(reloaded).preservation_object.metadata_node).to be_present
         output = nil
@@ -1599,12 +1616,14 @@ RSpec.describe ChangeSetPersister do
           output = buffered_change_set_persister.save(change_set: change_set)
         end
         result = change_set_persister.query_service.find_by(id: output.id)
+        end_checksum = Wayfinder.for(resource).preservation_objects[0].metadata_node.checksum
 
         children = change_set_persister.query_service.find_members(resource: result)
         preservation_object = Wayfinder.for(children.first).preservation_object
         expect(preservation_object.binary_nodes).to be_present
         expect(preservation_object.binary_nodes[0].checksum).to eq children.first.original_file.checksum
         expect(preservation_object.binary_nodes[0].checksum[0].md5).to eq "2a28fb702286782b2cbf2ed9a5041ab1"
+        expect(start_checksum).not_to eq end_checksum
       end
     end
   end
