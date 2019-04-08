@@ -1487,19 +1487,4 @@ RSpec.describe ChangeSetPersister do
       expect(members.map(&:proxied_file_id)).to eq [file_set1.id, file_set2.id]
     end
   end
-
-  describe "appending an artist" do
-    let(:change_set_class) { NumismaticArtistChangeSet }
-
-    it "appends an artist on an issue via #artist_parent_id" do
-      parent = FactoryBot.create_for_repository(:numismatic_issue)
-      artist = FactoryBot.build(:numismatic_artist)
-      change_set = change_set_class.new(artist)
-      change_set.validate(artist_parent_id: parent.id.to_s)
-
-      output = change_set_persister.save(change_set: change_set)
-      reloaded = query_service.find_by(id: parent.id)
-      expect(reloaded.numismatic_artist_ids).to eq [output.id]
-    end
-  end
 end

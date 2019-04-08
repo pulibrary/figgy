@@ -6,6 +6,7 @@ class NumismaticIssueChangeSet < ChangeSet
   include VisibilityProperty
   include DateRangeProperty
   collection :numismatic_citation, multiple: true, required: false, form: NumismaticCitationChangeSet, populator: :populate_nested_collection, default: []
+  collection :numismatic_artist, multiple: true, required: false, form: NumismaticArtistChangeSet, populator: :populate_nested_collection, default: []
   property :color, multiple: false, required: false
   property :denomination, multiple: false, required: false
   property :edge, multiple: false, required: false
@@ -44,7 +45,6 @@ class NumismaticIssueChangeSet < ChangeSet
   property :depositor, multiple: false, required: false
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
-  property :numismatic_artist_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :numismatic_monogram_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :pending_uploads, multiple: true, required: false
 
@@ -83,7 +83,9 @@ class NumismaticIssueChangeSet < ChangeSet
         :ruler,
         :master,
         :workshop,
-        :series
+        :series,
+        :subject,
+        :numismatic_monogram_ids
       ],
       "Place" => [
         :place
@@ -118,14 +120,17 @@ class NumismaticIssueChangeSet < ChangeSet
       "Citation" => [
         :numismatic_citation
       ],
-      "Artists and Subjects" => [
-        :subject,
-        :numismatic_monogram_ids
+      "Artist" => [
+        :numismatic_artist
       ]
     }
   end
 
   def build_numismatic_citation
     schema["numismatic_citation"][:nested].new(model.class.schema[:numismatic_citation][[{}]].first)
+  end
+
+  def build_numismatic_artist
+    schema["numismatic_artist"][:nested].new(model.class.schema[:numismatic_artist][[{}]].first)
   end
 end

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class NumismaticArtistChangeSet < Valkyrie::ChangeSet
+class NumismaticArtistChangeSet < ChangeSet
   delegate :human_readable_type, to: :model
 
   property :person, multiple: false, required: false
@@ -8,15 +8,22 @@ class NumismaticArtistChangeSet < Valkyrie::ChangeSet
   property :side, multiple: false, required: false
 
   # Virtual Attributes
-  property :artist_parent_id, virtual: true, multiple: false, required: false
+  property :_destroy, virtual: true
+
+  def new_record?
+    false
+  end
+
+  def marked_for_destruction?
+    false
+  end
 
   def primary_terms
     [
       :person,
       :signature,
       :role,
-      :side,
-      :artist_parent_id
+      :side
     ]
   end
 end

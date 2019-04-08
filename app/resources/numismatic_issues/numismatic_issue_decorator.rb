@@ -33,6 +33,7 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
           :decorated_numismatic_monograms,
           :note,
           :numismatic_citations,
+          :numismatic_artists,
           :member_of_collections,
           :rendered_rights_statement,
           :subject,
@@ -47,7 +48,7 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
                          :rendered_rights_statement,
                          :thumbnail_id
 
-  delegate :members, :decorated_file_sets, :decorated_coins, :coin_count, :decorated_numismatic_artists, :decorated_numismatic_monograms, to: :wayfinder
+  delegate :members, :decorated_file_sets, :decorated_coins, :coin_count, :decorated_numismatic_monograms, to: :wayfinder
 
   def attachable_objects
     [Coin]
@@ -62,12 +63,12 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
     first_range.range_string
   end
 
-  def numismatic_citations
-    numismatic_citation.map { |c| c.decorate.title }
+  def numismatic_artists
+    numismatic_artist.map { |a| a.decorate.title }
   end
 
-  def artists
-    decorated_numismatic_artists.map(&:title)
+  def numismatic_citations
+    numismatic_citation.map { |c| c.decorate.title }
   end
 
   # Whether this box has a workflow state that grants access to its contents
