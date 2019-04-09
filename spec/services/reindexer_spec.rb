@@ -78,7 +78,11 @@ RSpec.describe Reindexer do
 
       it "tolerates RSolr::Error::ConnectionRefused, logging bad id" do
         allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save_all).with(resources: resources).and_raise RSolr::Error::ConnectionRefused
-        allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save).with(resource: resources[0]).and_raise RSolr::Error::ConnectionRefused
+        allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save).and_wrap_original do |m, *args|
+          error = RSolr::Error::ConnectionRefused
+          raise error if args.first[:resource].id == resources[0].id
+          m.call(*args)
+        end
 
         described_class.reindex_all(logger: logger, wipe: true)
 
@@ -88,7 +92,11 @@ RSpec.describe Reindexer do
 
       it "tolerates RSolr::Error::Http, logging bad id" do
         allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save_all).with(resources: resources).and_raise RSolr::Error::Http.new({ uri: "http://example.com" }, nil)
-        allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save).with(resource: resources[0]).and_raise RSolr::Error::Http.new({ uri: "http://example.com" }, nil)
+        allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save).and_wrap_original do |m, *args|
+          error = RSolr::Error::Http.new({ uri: "http://example.com" }, nil)
+          raise error if args.first[:resource].id == resources[0].id
+          m.call(*args)
+        end
 
         described_class.reindex_all(logger: logger, wipe: true)
 
