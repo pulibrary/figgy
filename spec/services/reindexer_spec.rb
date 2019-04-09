@@ -70,25 +70,35 @@ RSpec.describe Reindexer do
           postgres_adapter.persister.save(resource: FactoryBot.build(:scanned_resource))
         end
       end
+      let(:indexer) do
+        described_class.new(
+          solr_adapter: Valkyrie::MetadataAdapter.find(:index_solr),
+          query_service: Valkyrie::MetadataAdapter.find(:postgres).query_service,
+          logger: logger,
+          wipe: true
+        )
+      end
 
       before do
-        allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save_all).and_call_original
-        allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save).and_call_original
+        allow(indexer).to receive(:multi_index_persist).and_call_original
+        allow(indexer).to receive(:single_index_persist).and_call_original
       end
 
       it "tolerates RSolr::Error::ConnectionRefused, logging bad id" do
-        allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save_all).with(resources: resources).and_raise RSolr::Error::ConnectionRefused
-        allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save).with(resource: resources[0]).and_raise RSolr::Error::ConnectionRefused
+        error = RSolr::Error::ConnectionRefused
+        allow(indexer).to receive(:multi_index_persist).with(resources).and_raise error
+        allow(indexer).to receive(:single_index_persist).with(resources[0]).and_raise error
 
-        expect { described_class.reindex_all(logger: logger, wipe: true) }.to change { solr_adapter.query_service.find_all.to_a.length }.by(4)
+        expect { indexer.reindex_all }.to change { solr_adapter.query_service.find_all.to_a.length }.by(4)
         expect(logger).to have_received(:error).with("Could not index #{resources[0].id} due to RSolr::Error::ConnectionRefused")
       end
 
       it "tolerates RSolr::Error::Http, logging bad id" do
-        allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save_all).with(resources: resources).and_raise RSolr::Error::Http.new({ uri: "http://example.com" }, nil)
-        allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save).with(resource: resources[0]).and_raise RSolr::Error::Http.new({ uri: "http://example.com" }, nil)
+        error = RSolr::Error::Http.new({ uri: "http://example.com" }, nil)
+        allow(indexer).to receive(:multi_index_persist).with(resources).and_raise error
+        allow(indexer).to receive(:single_index_persist).with(resources[0]).and_raise error
 
-        expect { described_class.reindex_all(logger: logger, wipe: true) }.to change { solr_adapter.query_service.find_all.to_a.length }.by(4)
+        expect { indexer.reindex_all }.to change { solr_adapter.query_service.find_all.to_a.length }.by(4)
         expect(logger).to have_received(:error).with("Could not index #{resources[0].id} due to RSolr::Error::Http")
       end
     end
