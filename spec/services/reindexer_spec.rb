@@ -80,9 +80,7 @@ RSpec.describe Reindexer do
         allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save_all).with(resources: resources).and_raise RSolr::Error::ConnectionRefused
         allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save).with(resource: resources[0]).and_raise RSolr::Error::ConnectionRefused
 
-        described_class.reindex_all(logger: logger, wipe: true)
-
-        expect(solr_adapter.query_service.find_all.to_a.length).to eq 4
+        expect { described_class.reindex_all(logger: logger, wipe: true) }.to change { solr_adapter.query_service.find_all.to_a.length }.by(4)
         expect(logger).to have_received(:error).with("Could not index #{resources[0].id} due to RSolr::Error::ConnectionRefused")
       end
 
@@ -90,9 +88,7 @@ RSpec.describe Reindexer do
         allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save_all).with(resources: resources).and_raise RSolr::Error::Http.new({ uri: "http://example.com" }, nil)
         allow_any_instance_of(Valkyrie::Persistence::Solr::Persister).to receive(:save).with(resource: resources[0]).and_raise RSolr::Error::Http.new({ uri: "http://example.com" }, nil)
 
-        described_class.reindex_all(logger: logger, wipe: true)
-
-        expect(solr_adapter.query_service.find_all.to_a.length).to eq 4
+        expect { described_class.reindex_all(logger: logger, wipe: true) }.to change { solr_adapter.query_service.find_all.to_a.length }.by(4)
         expect(logger).to have_received(:error).with("Could not index #{resources[0].id} due to RSolr::Error::Http")
       end
     end
