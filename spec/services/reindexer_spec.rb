@@ -83,7 +83,7 @@ RSpec.describe Reindexer do
         described_class.reindex_all(logger: logger, wipe: true)
 
         expect(solr_adapter.query_service.find_all.to_a.length).to eq 4
-        expect(logger).to have_received(:error).with("Could not index #{resources[0].id}")
+        expect(logger).to have_received(:error).with("Could not index #{resources[0].id} due to RSolr::Error::ConnectionRefused")
       end
 
       it "tolerates RSolr::Error::Http, logging bad id" do
@@ -93,7 +93,7 @@ RSpec.describe Reindexer do
         described_class.reindex_all(logger: logger, wipe: true)
 
         expect(solr_adapter.query_service.find_all.to_a.length).to eq 4
-        expect(logger).to have_received(:error).with("Could not index #{resources[0].id}")
+        expect(logger).to have_received(:error).with("Could not index #{resources[0].id} due to RSolr::Error::Http")
       end
     end
   end
