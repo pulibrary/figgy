@@ -104,7 +104,7 @@ class Preserver
     @temp_metadata_file ||=
       begin
         file = Tempfile.new("#{resource.id}.json")
-        file.write(resource.to_h.compact)
+        file.write(resource.to_h.compact.to_json)
         file.rewind
         Valkyrie::StorageAdapter::File.new(io: file, id: "tmp")
       end

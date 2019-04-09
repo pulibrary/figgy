@@ -1499,6 +1499,12 @@ RSpec.describe ChangeSetPersister do
         output = change_set_persister.save(change_set: change_set)
         expect(Wayfinder.for(output).preservation_object.metadata_node.use).to eq [Valkyrie::Vocab::PCDMUse.PreservedMetadata]
         expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "#{resource.id}.json"))).to eq true
+        # Verify we can convert from the JSON back to an object.
+        attributes = JSON.parse(File.read(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "#{resource.id}.json")))
+        attributes = Valkyrie::Persistence::Postgres::ORMConverter::RDFMetadata.new(attributes).result.symbolize_keys
+        resource = Valkyrie::Types::Anything[attributes]
+        expect(resource).to be_a ScannedResource
+        # Verify files exist.
         expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "#{resource.member_ids.first}.json"))).to eq true
         file_set = Wayfinder.for(output).members.first
         expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.original_file.id}.tif"))).to eq true
