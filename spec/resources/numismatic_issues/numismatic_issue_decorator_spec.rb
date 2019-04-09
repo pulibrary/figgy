@@ -3,10 +3,10 @@ require "rails_helper"
 
 RSpec.describe NumismaticIssueDecorator do
   subject(:decorator) { described_class.new(issue) }
-  let(:issue) { FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id], state: "complete", numismatic_citation: numismatic_citation, numismatic_artist_ids: [artist.id]) }
+  let(:issue) { FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id], state: "complete", numismatic_citation: numismatic_citation, numismatic_artist: numismatic_artist) }
   let(:coin) { FactoryBot.create_for_repository(:coin) }
   let(:numismatic_citation) { NumismaticCitation.new(part: "citation part", number: "citation number", numismatic_reference_id: [reference.id]) }
-  let(:artist) { FactoryBot.create_for_repository(:numismatic_artist) }
+  let(:numismatic_artist) { NumismaticArtist.new(person: "artist person", role: "artist role") }
   let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
 
   describe "#decorated_coins" do
@@ -32,7 +32,7 @@ RSpec.describe NumismaticIssueDecorator do
 
   describe "#artists" do
     it "renders the linked artists" do
-      expect(decorator.artists).to eq(["artist person, artist role"])
+      expect(decorator.numismatic_artists).to eq(["artist person, artist role"])
     end
   end
 

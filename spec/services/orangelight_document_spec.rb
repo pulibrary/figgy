@@ -17,6 +17,7 @@ describe OrangelightDocument do
       subject(:builder) { described_class.new(coin) }
       let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
       let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
+      let(:numismatic_artist) { NumismaticArtist.new(person: "artist person", signature: "artist signature", role: "artist role", side: "artist side") }
       let(:numismatic_citation) { NumismaticCitation.new(part: "citation part", number: "citation number", numismatic_reference_id: reference.id) }
       let(:artist) { FactoryBot.create_for_repository(:numismatic_artist) }
       let(:date_range) { DateRange.new(start: "-91", end: "-41", approximate: true) }
@@ -42,9 +43,9 @@ describe OrangelightDocument do
       end
       let(:issue) do
         FactoryBot.create_for_repository(:numismatic_issue,
-                                         numismatic_artist_ids: [artist.id],
                                          member_ids: [coin.id],
                                          object_type: "coin",
+                                         numismatic_artist: numismatic_artist,
                                          numismatic_citation: numismatic_citation,
                                          date_range: date_range,
                                          denomination: "1/2 Penny",
@@ -153,6 +154,7 @@ describe OrangelightDocument do
         expect(output[:issue_references_s]).to eq ["short-title citation part citation number"]
         expect(output[:issue_references_sort]).to eq "short-title citation part citation number"
         expect(output[:issue_artists_s]).to eq ["artist person, artist role"]
+        expect(output[:issue_artists_sort]).to eq "artist person, artist role"
       end
     end
   end

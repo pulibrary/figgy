@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe NumismaticArtistDecorator do
   subject(:decorator) { described_class.new(artist) }
-  let(:artist) { FactoryBot.create_for_repository(:numismatic_artist) }
+  let(:artist) { NumismaticArtist.new(person: "artist person", role: "artist role") }
 
   describe "manage files and structure" do
     it "does not manage files or structure" do

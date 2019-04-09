@@ -26,7 +26,6 @@ class ChangeSetPersister
       ],
       after_save: [
         AppendToParent,
-        AppendArtistToParent,
         UpdateAuthToken
       ],
       after_save_commit: [

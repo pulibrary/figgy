@@ -43,6 +43,7 @@ RSpec.feature "NumismaticIssues" do
     expect(page).to have_field "Number"
     expect(page).to have_field "Numismatic Reference"
     expect(page).to have_field "Part"
+    expect(page).to have_field "Person"
     expect(page).to have_field "Object type"
     expect(page).to have_field "Obverse attributes"
     expect(page).to have_field "Obverse figure"
@@ -61,9 +62,12 @@ RSpec.feature "NumismaticIssues" do
     expect(page).to have_field "Reverse orientation"
     expect(page).to have_field "Reverse part"
     expect(page).to have_field "Reverse symbol"
+    expect(page).to have_field "Role"
     expect(page).to have_field "Ruler"
     expect(page).to have_field "Series"
     expect(page).to have_field "Shape"
+    expect(page).to have_field "Side"
+    expect(page).to have_field "Signature"
     expect(page).to have_field "State"
     expect(page).to have_field "Subject"
     expect(page).to have_field "Workshop"
@@ -77,6 +81,7 @@ RSpec.feature "NumismaticIssues" do
   context "when a user creates a new numismatic issue" do
     let(:collection) { FactoryBot.create_for_repository(:collection) }
     let(:numismatic_reference) { FactoryBot.create_for_repository(:numismatic_reference) }
+    let(:numismatic_artist) { NumismaticArtist.new(person: "artist person", role: "artist role") }
     let(:numismatic_citation) { NumismaticCitation.new(part: "part", number: "number", numismatic_reference_id: numismatic_reference.id) }
     let(:numismatic_place) { NumismaticPlace.new(city: "City", state: "State", region: "Region") }
     let(:numismatic_issue) do
@@ -84,6 +89,7 @@ RSpec.feature "NumismaticIssues" do
         :numismatic_issue,
         rights_statement: RightsStatements.copyright_not_evaluated.to_s,
         member_of_collection_ids: [collection.id],
+        numismatic_artist: numismatic_artist,
         numismatic_citation: numismatic_citation,
         color: "test value",
         date_range: DateRange.new(start: "2017", end: "2018"),
@@ -126,6 +132,7 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.rendered_rights_statement", text: "Copyright Not Evaluated"
       expect(page).to have_css ".attribute.visibility", text: "open"
       expect(page).to have_css ".attribute.member_of_collections", text: "Title"
+      expect(page).to have_css ".attribute.numismatic_artists", text: "artist person, artist role"
       expect(page).to have_css ".attribute.numismatic_citations", text: "short-title part number"
       expect(page).to have_css ".attribute.color", text: "test value"
       expect(page).to have_css ".attribute.rendered_date_range", text: "2017-2018"
@@ -179,24 +186,6 @@ RSpec.feature "NumismaticIssues" do
 
       expect(page).to have_selector "h2", text: "Coins"
       expect(page).to have_selector "td", text: "Coin: #{member.coin_number}"
-    end
-  end
-
-  context "with artists" do
-    let(:artist) do
-      persister.save(resource: FactoryBot.create_for_repository(:numismatic_artist))
-    end
-    let(:issue) do
-      persister.save(resource: FactoryBot.create_for_repository(:numismatic_issue))
-    end
-    before do
-      issue
-    end
-
-    it "displays artists as members" do
-      visit solr_document_path(issue)
-      expect(page).to have_selector "h2", text: "Artists"
-      expect(page).to have_link "Add Artist", href: parent_add_numismatic_artist_path(issue, parent_id: issue.id)
     end
   end
 end
