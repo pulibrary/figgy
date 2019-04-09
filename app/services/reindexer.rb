@@ -49,9 +49,9 @@ class Reindexer
   def single_index(record, progress_bar)
     solr_adapter.persister.save(resource: record)
     progress_bar.progress += 1
-  rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http
-    logger.error("Could not index #{record.id}")
-    Honeybadger.notify("Could not index #{record.id}")
+  rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http => e
+    logger.error("Could not index #{record.id} due to #{e.class}")
+    Honeybadger.notify(e, context: { record_id: record.id })
   end
 
   def blacklisted_models
