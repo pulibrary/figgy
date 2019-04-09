@@ -26,7 +26,7 @@ class Reindexer
     index_individually = []
     all_resources.each_slice(batch_size) do |records|
       begin
-        solr_adapter.persister.save_all(resources: records)
+        multi_index_persist(records)
         progress_bar.progress += records.count
       rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http
         index_individually += records
@@ -47,11 +47,19 @@ class Reindexer
   end
 
   def single_index(record, progress_bar)
-    solr_adapter.persister.save(resource: record)
+    single_index_persist(record)
     progress_bar.progress += 1
   rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http => e
     logger.error("Could not index #{record.id} due to #{e.class}")
     Honeybadger.notify(e, context: { record_id: record.id })
+  end
+
+  def multi_index_persist(records)
+    solr_adapter.persister.save_all(resources: records)
+  end
+
+  def single_index_persist(record)
+    solr_adapter.persister.save(resource: record)
   end
 
   def blacklisted_models
