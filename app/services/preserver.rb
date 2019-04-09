@@ -31,21 +31,30 @@ class Preserver
     end
   end
 
-  def preserve_binary_content
+  def preserve_binary_content(force: false)
     resource_binary_nodes.each do |resource_binary_node|
       file_metadata = resource_binary_node.preservation_node
-      next if !resource_binary_node.uploaded_content? || resource_binary_node.preserved?
+      next unless resource_binary_node.uploaded_content?
+      preserve_binary_node(resource_binary_node, file_metadata) if force
+      next if resource_binary_node.preserved?
       next unless !file_metadata.persisted? || resource_binary_node.needs_updated?
-      uploaded_file = storage_adapter.upload(
-        file: File.open(Valkyrie::StorageAdapter.find_by(id: resource_binary_node.file_identifiers.first).disk_path),
-        original_filename: file_metadata.label.first,
-        resource: resource
-      )
-      file_metadata.checksum = resource_binary_node.calculate_checksum
-      file_metadata.file_identifiers = uploaded_file.id
-      preservation_object.binary_nodes += [file_metadata] unless file_metadata.persisted?
-      file_metadata.new_record = false
+      preserve_binary_node(resource_binary_node, file_metadata)
     end
+  end
+
+  def preserve_binary_node(resource_binary_node, file_metadata)
+    uploaded_file = storage_adapter.upload(
+      file: File.open(Valkyrie::StorageAdapter.find_by(id: resource_binary_node.file_identifiers.first).disk_path),
+      original_filename: file_metadata.label.first,
+      resource: resource
+    )
+    file_metadata.checksum = resource_binary_node.calculate_checksum
+    unless file_metadata.file_identifiers.include?(uploaded_file.id)
+      CleanupFilesJob.perform_later(file_identifiers: file_metadata.file_identifiers.map(&:to_s))
+    end
+    file_metadata.file_identifiers = uploaded_file.id
+    preservation_object.binary_nodes += [file_metadata] unless file_metadata.persisted?
+    file_metadata.new_record = false
   end
 
   def resource_binary_nodes
@@ -69,6 +78,12 @@ class Preserver
   def preserve_metadata
     uploaded_file = storage_adapter.upload(file: temp_metadata_file.io, original_filename: metadata_node.label.first, resource: resource)
     metadata_node.file_identifiers = uploaded_file.id
+    if preservation_object.metadata_node&.file_identifiers.present? && preservation_object.metadata_node.file_identifiers[0] != uploaded_file.id
+      # Parent structure has changed, re-preserve children.
+      preserve_children
+      preserve_binary_content(force: true)
+      CleanupFilesJob.perform_later(file_identifiers: preservation_object.metadata_node.file_identifiers.map(&:to_s))
+    end
     preservation_object.metadata_node = metadata_node
     change_set_persister.metadata_adapter.persister.save(resource: preservation_object)
   end

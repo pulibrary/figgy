@@ -1580,6 +1580,41 @@ RSpec.describe ChangeSetPersister do
         expect(fgdc_preservation.binary_nodes[0].checksum[0].md5).to eq fgdc_file_set.original_file.checksum[0].md5
       end
     end
+    context "when a child is moved around" do
+      with_queue_adapter :inline
+      it "moves the preservation structure" do
+        file = fixture_file_upload("files/example.tif", "image/tiff")
+        resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
+        parent = FactoryBot.create_for_repository(:pending_scanned_resource, preservation_policy: "cloud", member_ids: resource.id)
+        change_set = DynamicChangeSet.new(parent)
+        change_set.validate(state: "complete")
+        other_parent = FactoryBot.create_for_repository(:complete_scanned_resource, preservation_policy: "cloud")
+        # Save in nested structure.
+        change_set_persister.save(change_set: change_set)
+        # Preserve `other_parent`
+        change_set_persister.save(change_set: DynamicChangeSet.new(other_parent))
+
+        reloaded = change_set_persister.query_service.find_by(id: resource.id)
+
+        # Move resource from parent to other_parent
+        change_set = DynamicChangeSet.new(reloaded)
+        change_set.append_id = other_parent.id
+        change_set_persister.save(change_set: change_set)
+
+        cloud_path = Rails.root.join("tmp", "cloud_backup_test")
+        # Ensure it's preserved in its new location
+        expect(File.exist?(cloud_path.join(other_parent.id.to_s, "data", reloaded.id.to_s, "#{reloaded.id}.json"))).to eq true
+        # Ensure it's removed from its old location
+        expect(File.exist?(cloud_path.join(parent.id.to_s, "data", reloaded.id.to_s, "#{reloaded.id}.json"))).to eq false
+        # Ensure children are preserved in its new location
+        expect(File.exist?(cloud_path.join(other_parent.id.to_s, "data", reloaded.id.to_s, "data", reloaded.member_ids.first.to_s, "#{reloaded.member_ids.first}.json"))).to eq true
+        expect(File.exist?(cloud_path.join(parent.id.to_s, "data", reloaded.id.to_s, "data", reloaded.member_ids.first.to_s, "#{reloaded.member_ids.first}.json"))).to eq false
+        # Ensure children binary content is preserved in new location
+        file_set = Wayfinder.for(resource).members.first
+        expect(File.exist?(cloud_path.join(other_parent.id.to_s, "data", resource.id.to_s, "data", file_set.id.to_s, "example-#{file_set.original_file.id}.tif"))).to eq true
+        expect(File.exist?(cloud_path.join(parent.id.to_s, "data", resource.id.to_s, "data", file_set.id.to_s, "example-#{file_set.original_file.id}.tif"))).to eq false
+      end
+    end
     context "when completing a `cloud` preservation_policy MVW" do
       it "deeply nests file sets" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
