@@ -140,20 +140,6 @@ class BulkIngestController < ApplicationController
       @selected_files_params ||= params.fetch(:selected_files, {})
     end
 
-    # Retrieve the browse_everything parameter from the request
-    # @return [Hash]
-    def browse_everything_params
-      @browse_everything_params ||= selected_files_params.fetch(:browse_everything, {})
-    end
-
-    # Retrieve the files selected from browse-everything
-    # @return [BrowseEverything::Resource]
-    def selected_files
-      files = browse_everything_params.fetch(:selected_files, {})
-
-      files.values.map { |value| BrowseEverything::Resource.new(value) }
-    end
-
     # Determine whether or not cloud service files are being uploaded
     # @return [Boolean]
     def selected_cloud_files?
