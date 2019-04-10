@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class BulkIngestController < ApplicationController
+  include BrowseEverything::Parameters
+
   def self.metadata_adapter
     Valkyrie::MetadataAdapter.find(:indexing_persister)
   end
@@ -134,42 +136,17 @@ class BulkIngestController < ApplicationController
       change_set
     end
 
-    # Retrieve the selected_files parameter from the request
-    # @return [Hash]
-    def selected_files_params
-      @selected_files_params ||= params.fetch(:selected_files, {})
-    end
-
-    # Retrieve the browse_everything parameter from the request
-    # @return [Hash]
-    def browse_everything_params
-      @browse_everything_params ||= selected_files_params.fetch(:browse_everything, {})
-    end
-
-    # Retrieve the files selected from browse-everything
-    # @return [BrowseEverything::Resource]
-    def selected_files
-      files = browse_everything_params.fetch(:selected_files, {})
-
-      files.values.map { |value| BrowseEverything::Resource.new(value) }
-    end
-
-    # Determine whether or not cloud service files are being uploaded
-    # @return [Boolean]
-    def selected_cloud_files?
-      values = selected_files.map(&:cloud_file?)
-      values.reduce(:|)
-    end
-
     # Construct the pending download objects
     # @return [Array<PendingUpload>]
     def new_pending_uploads
       return @new_pending_uploads unless @new_pending_uploads.nil?
 
       @new_pending_uploads = []
-      # Use the new structure for the resources
       selected_files.each do |selected_file|
         file_attributes = selected_file.to_h
+
+        # This is needed in order to ensure that files are authorized for the
+        # download from the Cloud Service provider
         auth_header_values = file_attributes.delete("auth_header")
         auth_header = JSON.generate(auth_header_values)
 
