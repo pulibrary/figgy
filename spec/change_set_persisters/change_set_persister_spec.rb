@@ -1489,6 +1489,24 @@ RSpec.describe ChangeSetPersister do
   end
 
   describe "preservation" do
+    context "when a completed resource is updated with a `cloud` preservation_policy outside of the change_set_persister" do
+      it "backgrounds any child preserving" do
+        allow(Preserver).to receive(:new).and_call_original
+        allow(PreserveChildrenJob).to receive(:perform_later).and_call_original
+        file = fixture_file_upload("files/example.tif", "image/tiff")
+        resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
+        file_set = Wayfinder.for(resource).members.first
+        file_set.read_groups = []
+        resource.preservation_policy = "cloud"
+        resource = change_set_persister.metadata_adapter.persister.save(resource: resource)
+        change_set_persister.metadata_adapter.persister.save(resource: file_set)
+        change_set = DynamicChangeSet.new(resource)
+
+        change_set_persister.save(change_set: change_set)
+        expect(PreserveChildrenJob).to have_received(:perform_later).exactly(1).times
+        expect(Preserver).to have_received(:new).exactly(2).times
+      end
+    end
     context "when completing a `cloud` preservation_policy resource" do
       it "saves to a backup location" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
