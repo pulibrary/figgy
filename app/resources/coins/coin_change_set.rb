@@ -6,7 +6,7 @@ class CoinChangeSet < ChangeSet
   include VisibilityProperty
   collection :numismatic_citation, multiple: true, required: false, form: NumismaticCitationChangeSet, populator: :populate_nested_collection, default: []
   property :coin_number, multiple: false, required: false
-  property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
+  property :number_in_accession, multiple: false, required: false
   property :holding_location, multiple: false, required: false
   property :counter_stamp, multiple: false, required: false
   property :analysis, multiple: false, required: false
@@ -17,7 +17,6 @@ class CoinChangeSet < ChangeSet
   property :find_locus, multiple: false, required: false
   property :find_number, multiple: false, required: false
   property :find_description, multiple: false, required: false
-  property :accession_number, multiple: false, required: false
   property :provenance, multiple: true, required: false, default: []
   property :die_axis, multiple: false, required: false
   property :loan, multiple: false, required: false
@@ -28,16 +27,21 @@ class CoinChangeSet < ChangeSet
   property :numismatic_collection, multiple: false, required: false
   property :replaces, multiple: true, required: false, default: []
   property :depositor, multiple: false, required: false
-  property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :read_groups, multiple: true, required: false
+  property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
 
+  # Resources linked by reference
+  property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
+  property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
+  property :numismatic_accession_id, multiple: false, required: false, type: Valkyrie::Types::ID
+
+  # Properties for IIIF
   property :start_canvas, required: false
   property :viewing_direction, required: false
   property :viewing_hint, multiple: false, required: false, default: "individuals"
 
   property :pdf_type, multiple: false, required: false, default: "color"
   property :file_metadata, multiple: true, required: false, default: []
-  property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
@@ -71,7 +75,6 @@ class CoinChangeSet < ChangeSet
         :find_description,
         :holding_location,
         :numismatic_collection,
-        :accession_number,
         :provenance,
         :loan,
         :append_id,
@@ -81,6 +84,10 @@ class CoinChangeSet < ChangeSet
       ],
       "Citation" => [
         :numismatic_citation
+      ],
+      "Accession" => [
+        :numismatic_accession_id,
+        :number_in_accession
       ]
     }
   end

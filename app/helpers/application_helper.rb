@@ -126,7 +126,6 @@ module ApplicationHelper
   def resource_attribute_value(attribute, value)
     linked_attributes = [:member_of_collections, :decorated_numismatic_monograms]
     return link_to(value.title, solr_document_path(id: value.id)) if linked_attributes.include?(attribute)
-    return accession_link(attribute, value) if attribute == :accession_number && @document.decorated_resource.is_a?(CoinDecorator) && @document.decorated_resource.accession
     return catalog_link(attribute, value) if attribute == :source_metadata_identifier
 
     value
@@ -135,10 +134,6 @@ module ApplicationHelper
   def catalog_link(_attribute, value)
     return value unless RemoteRecord.bibdata?(value)
     link_to value, "https://catalog.princeton.edu/catalog/#{value}"
-  end
-
-  def accession_link(_attribute, _value)
-    link_to(@document.decorated_resource.accession_label, solr_document_path(id: @document.decorated_resource.accession_id))
   end
 
   # Classes added to a document's sidebar div. Overrides blacklight helper.

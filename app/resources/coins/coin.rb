@@ -5,6 +5,7 @@ class Coin < Resource
   include Valkyrie::Resource::AccessControls
   attribute :member_ids, Valkyrie::Types::Array
   attribute :member_of_collection_ids
+  attribute :numismatic_accession_id
 
   # descriptive metadata
   attribute :numismatic_citation, Valkyrie::Types::Array.of(NumismaticCitation).meta(ordered: true)
@@ -19,7 +20,6 @@ class Coin < Resource
   attribute :find_feature
   attribute :find_locus
   attribute :find_description
-  attribute :accession_number
   attribute :provenance
   attribute :die_axis
   attribute :append_id

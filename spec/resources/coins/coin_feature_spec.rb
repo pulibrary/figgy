@@ -58,6 +58,7 @@ RSpec.feature "Coins" do
     expect(page).not_to have_css '.select[for="coin_holding_location"]', text: "Holding Location"
     expect(page).to have_field "Loan"
     expect(page).to have_field "Number"
+    expect(page).to have_field "Number in accession"
     expect(page).to have_field "Numismatic collection"
     expect(page).to have_field "Numismatic Reference"
     expect(page).to have_field "Part"
@@ -74,12 +75,14 @@ RSpec.feature "Coins" do
   end
 
   context "when a user creates a new coin" do
+    let(:numismatic_accession) { FactoryBot.create_for_repository(:numismatic_accession) }
     let(:numismatic_reference) { FactoryBot.create_for_repository(:numismatic_reference) }
     let(:numismatic_citation) { NumismaticCitation.new(part: "part", number: "number", numismatic_reference_id: numismatic_reference.id) }
     let(:coin) do
       FactoryBot.create_for_repository(
         :coin,
-        accession_number: 123,
+        numismatic_accession_id: numismatic_accession.id,
+        number_in_accession: 123,
         analysis: "test value",
         numismatic_citation: numismatic_citation,
         counter_stamp: "test value",
@@ -106,7 +109,7 @@ RSpec.feature "Coins" do
       visit solr_document_path coin
 
       expect(page).to have_css ".attribute.visibility", text: "open"
-      expect(page).to have_css ".attribute.accession_number", text: 123
+      expect(page).to have_css ".attribute.number_in_accession", text: 123
       expect(page).to have_css ".attribute.analysis", text: "test value"
       expect(page).to have_css ".attribute.numismatic_citations", text: "short-title part number"
       expect(page).to have_css ".attribute.counter_stamp", text: "test value"
@@ -123,6 +126,7 @@ RSpec.feature "Coins" do
       expect(page).to have_css ".attribute.private_note", text: "test value"
       expect(page).to have_css ".attribute.provenance", text: "test value"
       expect(page).to have_css ".attribute.replaces", text: "test value"
+      expect(page).to have_css ".attribute.rendered_accession", text: "1: 01/01/2001 gift Alice ($99.00)"
       expect(page).to have_css ".attribute.size", text: "test value"
       expect(page).to have_css ".attribute.technique", text: "test value"
       expect(page).to have_css ".attribute.weight", text: "test value"

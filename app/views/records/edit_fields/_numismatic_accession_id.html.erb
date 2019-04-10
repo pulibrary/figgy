@@ -1,0 +1,8 @@
+<%= f.input :numismatic_accession_id,
+            label: "Accession",
+            collection: @numismatic_accessions&.sort_by(&:label),
+            label_method: :label,
+            value_method: :id,
+            input_html: { multiple: f.object.multiple?(key) },
+            include_blank: true,
+            required: f.object.required?(key) %>
