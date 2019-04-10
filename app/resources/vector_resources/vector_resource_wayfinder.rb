@@ -7,6 +7,7 @@ class VectorResourceWayfinder < BaseWayfinder
   inverse_relationship_by_property :parents, property: :member_ids, singular: true
   inverse_relationship_by_property :raster_resource_parents, property: :member_ids, model: RasterResource
   inverse_relationship_by_property :vector_resource_parents, property: :member_ids, model: VectorResource
+  inverse_relationship_by_property :preservation_objects, property: :preserved_object_id, singular: true, model: PreservationObject
 
   def geo_vector_members
     @geo_vector_members ||=

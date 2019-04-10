@@ -11,4 +11,11 @@ class FileSetChangeSet < ChangeSet
   def primary_terms
     [:title]
   end
+
+  def preserve?
+    return false unless persisted?
+    parent = Wayfinder.for(self).parent
+    return false unless parent
+    DynamicChangeSet.new(parent).try(:preserve?)
+  end
 end

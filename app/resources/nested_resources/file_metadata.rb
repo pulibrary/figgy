@@ -29,6 +29,11 @@ class FileMetadata < Valkyrie::Resource
   attribute :fixity_success, Valkyrie::Types::Integer
   attribute :fixity_last_success_date, Valkyrie::Types::DateTime.optional
 
+  # preservation attributes
+  # ID of the object this node is a preservation copy of. Points to another
+  # FileMetadata ID, and used for checking if something is already preserved.
+  attribute :preservation_copy_of_id, Valkyrie::Types::ID.optional
+
   def self.for(file:)
     new(label: file.original_filename,
         original_filename: file.original_filename,
@@ -70,7 +75,7 @@ class FileMetadata < Valkyrie::Resource
     # probably best to create a new FileSet at that point.
     # also don't run if there's no existing checksum; characterization hasn't finished
     return self if fixity_success&.zero? || checksum.empty?
-    actual_file = Valkyrie.config.storage_adapter.find_by(id: file_identifiers.first)
+    actual_file = Valkyrie::StorageAdapter.find_by(id: file_identifiers.first)
     new_checksum = MultiChecksum.for(actual_file)
     if checksum.include? new_checksum
       self.fixity_success = 1

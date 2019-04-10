@@ -48,7 +48,8 @@ class SearchBuilder < Blacklight::SearchBuilder
       NumismaticMonogram,
       NumismaticReference,
       ProxyFileSet,
-      Template
+      Template,
+      PreservationObject
     ].join(",")
   end
 

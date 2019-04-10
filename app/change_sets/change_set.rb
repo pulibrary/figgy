@@ -57,6 +57,20 @@ class ChangeSet < Valkyrie::ChangeSet
     self.feature_terms += [:pdf_type]
   end
 
+  def self.enable_preservation_support
+    property :preservation_policy, multiple: false, required: false, default: nil
+    self.feature_terms += [:preservation_policy]
+    define_method :preserve? do
+      return false unless persisted? && resource.respond_to?(:preservation_policy)
+      parent = Wayfinder.for(resource).try(:parent)
+      if parent.present? && parent.id != resource.id
+        DynamicChangeSet.new(parent).try(:preserve?)
+      else
+        resource.preservation_policy.present? && state == "complete"
+      end
+    end
+  end
+
   # This property is set by ChangeSetPersister::CreateFile and is used to keep
   # track of which FileSets were created by the ChangeSetPersister as part of
   # saving this change_set. We may want to look into passing some sort of scope

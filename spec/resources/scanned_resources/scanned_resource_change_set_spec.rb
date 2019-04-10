@@ -122,4 +122,10 @@ RSpec.describe ScannedResourceChangeSet do
       expect(change_set.downloadable).to eq "public"
     end
   end
+
+  describe "#primary_terms" do
+    it "does not have preservation_policy" do
+      expect(change_set.primary_terms).not_to include :preservation_policy
+    end
+  end
 end

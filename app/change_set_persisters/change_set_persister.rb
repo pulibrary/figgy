@@ -31,7 +31,8 @@ class ChangeSetPersister
       after_save_commit: [
         PublishMessage::Factory.new(operation: :update),
         ReindexChildrenOnState::Factory.new(model: EphemeraBox, state: "all_in_production"),
-        IngestBag
+        IngestBag,
+        PreserveResource
       ],
       after_update_commit: [
         ReindexCollectionMembers,
@@ -44,12 +45,14 @@ class ChangeSetPersister
         CleanupMembership::Factory.new(property: :member_ids),
         CleanupMembership::Factory.new(property: :member_of_collection_ids),
         PublishMessage::Factory.new(operation: :derivatives_delete),
+        DeleteReferenced::Factory.new(property: :preserved_object_id),
         CleanupTerms
       ],
       after_delete_commit: [
         DeleteAuthToken,
         DeleteMembers::Factory.new(property: :member_ids),
-        PublishMessage::Factory.new(operation: :delete)
+        PublishMessage::Factory.new(operation: :delete),
+        CleanupPreservation
       ],
       after_commit: [
         Characterize,
