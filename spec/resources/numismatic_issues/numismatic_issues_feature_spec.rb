@@ -29,7 +29,6 @@ RSpec.feature "NumismaticIssues" do
     expect(page).to have_css '.select[for="numismatic_issue_rights_statement"]', text: "Rights Statement"
     expect(page).to have_field "Rights Note"
     expect(page).to have_css '.select[for="numismatic_issue_member_of_collection_ids"]', text: "Collections"
-    expect(page).to have_field "City"
     expect(page).to have_field "Color"
     expect(page).to have_field "Date of object"
     expect(page).to have_field "Date range start" # For the date range sequence
@@ -44,6 +43,7 @@ RSpec.feature "NumismaticIssues" do
     expect(page).to have_field "Numismatic Reference"
     expect(page).to have_field "Part"
     expect(page).to have_field "Person"
+    expect(page).to have_field "Place"
     expect(page).to have_field "Object type"
     expect(page).to have_field "Obverse attributes"
     expect(page).to have_field "Obverse figure"
@@ -53,7 +53,6 @@ RSpec.feature "NumismaticIssues" do
     expect(page).to have_field "Obverse orientation"
     expect(page).to have_field "Obverse part"
     expect(page).to have_field "Obverse symbol"
-    expect(page).to have_field "Region"
     expect(page).to have_field "Reverse attributes"
     expect(page).to have_field "Reverse figure"
     expect(page).to have_field "Reverse figure description"
@@ -83,12 +82,13 @@ RSpec.feature "NumismaticIssues" do
     let(:numismatic_reference) { FactoryBot.create_for_repository(:numismatic_reference) }
     let(:numismatic_artist) { NumismaticArtist.new(person: "artist person", role: "artist role") }
     let(:numismatic_citation) { NumismaticCitation.new(part: "part", number: "number", numismatic_reference_id: numismatic_reference.id) }
-    let(:numismatic_place) { NumismaticPlace.new(city: "City", state: "State", region: "Region") }
+    let(:numismatic_place) { FactoryBot.create_for_repository(:numismatic_place) }
     let(:numismatic_issue) do
       FactoryBot.create_for_repository(
         :numismatic_issue,
         rights_statement: RightsStatements.copyright_not_evaluated.to_s,
         member_of_collection_ids: [collection.id],
+        numismatic_place_id: numismatic_place.id,
         numismatic_artist: numismatic_artist,
         numismatic_citation: numismatic_citation,
         color: "test value",
@@ -109,7 +109,6 @@ RSpec.feature "NumismaticIssues" do
         obverse_orientation: "test value",
         obverse_part: "test value",
         obverse_symbol: "test value",
-        place: numismatic_place,
         replaces: "test value",
         reverse_attributes: "test value",
         reverse_figure: "test value",
@@ -152,7 +151,7 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.obverse_orientation", text: "test value"
       expect(page).to have_css ".attribute.obverse_part", text: "test value"
       expect(page).to have_css ".attribute.obverse_symbol", text: "test value"
-      expect(page).to have_css ".attribute.rendered_place", text: "City, State, Region"
+      expect(page).to have_css ".attribute.rendered_place", text: "city, state, region"
       expect(page).to have_css ".attribute.replaces", text: "test value"
       expect(page).to have_css ".attribute.reverse_attributes", text: "test value"
       expect(page).to have_css ".attribute.reverse_figure", text: "test value"

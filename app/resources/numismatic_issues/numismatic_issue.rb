@@ -8,6 +8,7 @@ class NumismaticIssue < Resource
   attribute :member_of_collection_ids
   attribute :numismatic_artist_ids, Valkyrie::Types::Array
   attribute :numismatic_monogram_ids
+  attribute :numismatic_place_id
 
   # descriptive metadata
   attribute :numismatic_artist, Valkyrie::Types::Array.of(NumismaticArtist).meta(ordered: true)
@@ -31,7 +32,6 @@ class NumismaticIssue < Resource
   attribute :obverse_orientation
   attribute :obverse_part
   attribute :obverse_symbol
-  attribute :place, Valkyrie::Types::Array.of(NumismaticPlace).meta(ordered: true)
 
   attribute :reverse_attributes
   attribute :reverse_figure

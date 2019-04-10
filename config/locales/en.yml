@@ -75,6 +75,8 @@ en:
           label: "Date Uploaded"
         decorated_numismatic_monograms:
           label: "Monogram"
+        geo_state:
+          label: "State"
         updated_at:
           label: "Date Modified"
         items_number:
