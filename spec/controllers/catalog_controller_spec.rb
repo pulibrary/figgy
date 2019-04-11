@@ -886,7 +886,7 @@ RSpec.describe CatalogController do
 
     let(:coin_metadata) do
       {
-        accession_number: "coin-accession",
+        number_in_accession: "coin-accession",
         analysis: "coin-analysis",
         counter_stamp: "coin-counter-stamp",
         depositor: "coin-depositor",

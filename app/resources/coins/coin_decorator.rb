@@ -19,14 +19,15 @@ class CoinDecorator < Valkyrie::ResourceDecorator
           :find_description,
           :numismatic_citations,
           :numismatic_collection,
-          :accession_number,
+          :rendered_accession,
+          :number_in_accession,
           :provenance,
           :loan,
           :replaces,
           :visibility,
           :append_id
 
-  delegate :members, :decorated_file_sets, :decorated_parent, :accession, to: :wayfinder
+  delegate :members, :decorated_file_sets, :decorated_parent, :decorated_numismatic_accession, to: :wayfinder
   delegate :id, :label, to: :accession, prefix: true
 
   def ark_mintable_state?
@@ -55,6 +56,10 @@ class CoinDecorator < Valkyrie::ResourceDecorator
 
   def call_number
     "Coin #{coin_number}"
+  end
+
+  def rendered_accession
+    decorated_numismatic_accession&.label
   end
 
   def state
