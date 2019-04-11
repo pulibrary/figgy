@@ -46,7 +46,7 @@ class BaseResourceController < ApplicationController
   def selected_files
     files = browse_everything_params.fetch(:selected_files, {})
 
-    files.values.map { |value| BrowseEverything::Resource.new(value) }
+    files.values.uniq.map { |value| BrowseEverything::Resource.new(value) }
   end
 
   # Construct the pending download objects

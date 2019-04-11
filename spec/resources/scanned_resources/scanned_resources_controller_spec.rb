@@ -422,6 +422,32 @@ RSpec.describe ScannedResourcesController, type: :controller do
         file_sets = Valkyrie.config.metadata_adapter.query_service.find_members(resource: reloaded)
         expect(file_sets.first.file_metadata.length).to eq 2
       end
+
+      context "when sent duplicate files" do
+        let(:selected_files) do
+          {
+            "0" => {
+              "url" => "file://#{file.path}",
+              "file_name" => File.basename(file.path),
+              "file_size" => file.size
+            },
+            "1" => {
+              "url" => "file://#{file.path}",
+              "file_name" => File.basename(file.path),
+              "file_size" => file.size
+            }
+          }
+        end
+
+        it "deduplicates them" do
+          resource = FactoryBot.create_for_repository(:scanned_resource)
+          post :browse_everything_files, params: { id: resource.id, selected_files: params["selected_files"] }
+          reloaded = adapter.query_service.find_by(id: resource.id)
+          expect(reloaded.member_ids.length).to eq 1
+          expect(reloaded.pending_uploads).to be_empty
+        end
+      end
+
       it "tracks pending uploads" do
         resource = FactoryBot.create_for_repository(:scanned_resource)
         allow(BrowseEverythingIngestJob).to receive(:perform_later).and_return(true)
