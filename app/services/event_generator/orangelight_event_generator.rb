@@ -32,7 +32,8 @@ class EventGenerator
     end
 
     def valid?(record)
-      record.is_a? Coin
+      return true if record.is_a?(Coin) && record.decorate.parents.present?
+      false
     end
 
     private
