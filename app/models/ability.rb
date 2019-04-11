@@ -3,6 +3,8 @@ class Ability
   include Hydra::Ability
   # Define any customized permissions here.
 
+  READ_ONLY_MODE = false
+
   self.ability_logic += [:manifest_permissions]
 
   def custom_permissions
@@ -11,6 +13,7 @@ class Ability
     roles.each do |role|
       send "#{role}_permissions" if current_user.send "#{role}?"
     end
+    cannot [:create, :update, :destroy], :all if READ_ONLY_MODE
   end
 
   # Abilities that should only be granted to admin users
