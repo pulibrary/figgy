@@ -17,6 +17,6 @@ class NumismaticPlaceDecorator < Valkyrie::ResourceDecorator
   end
 
   def title
-    [city, geo_state, region].join(", ")
+    [city, geo_state, region].compact.join(", ")
   end
 end

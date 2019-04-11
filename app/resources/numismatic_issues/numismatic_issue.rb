@@ -6,7 +6,6 @@ class NumismaticIssue < Resource
   include Valkyrie::Resource::AccessControls
   attribute :member_ids, Valkyrie::Types::Array
   attribute :member_of_collection_ids
-  attribute :numismatic_artist_ids, Valkyrie::Types::Array
   attribute :numismatic_monogram_ids
   attribute :numismatic_place_id
 

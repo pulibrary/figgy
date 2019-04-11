@@ -46,6 +46,7 @@ class SearchBuilder < Blacklight::SearchBuilder
       NumismaticCitation,
       NumismaticArtist,
       NumismaticMonogram,
+      NumismaticPlace,
       NumismaticReference,
       ProxyFileSet,
       Template,
