@@ -53,15 +53,14 @@ class NumismaticsImportService::Issues
       issue_number: id,
       artist: nil, # nested
       color: record["Color"],
-      date_range: nil, # nested?
+      date_range: DateRange.new(start: record["CE1"].to_s, end: record["CE2"].to_s, approximate: false),
       denomination: record["Denomination name"],
       edge: record["Edge"],
       era: record["EraName"],
-      master: nil, # nested person
+      master_id: master_id(record), # map from master id to valkyrie id in importer
       metal: record["MetalName"],
       note: nil, # nested?
       numismatic_place_id: record["PlaceID"].to_s, # map from place id to valkyrie id in importer
-      place: nil, # nested
       object_date: record["DateObj"],
       object_type: record["ObjectType"],
       obverse_attributes: nil, # nested. attr image is not displayed
@@ -80,7 +79,7 @@ class NumismaticsImportService::Issues
       reverse_orientation: record["ReverseOrientationName"],
       reverse_part: record["ReversePartName"],
       reverse_symbol: record["ReverseSymbolName"],
-      ruler: nil, # nested
+      ruler_id: ruler_id(record), # map from ruler id to valkyrie id in importer
       series: record["Series"],
       shape: record["Shape"],
       subject: nil, # nested
@@ -89,4 +88,16 @@ class NumismaticsImportService::Issues
   end
   # rubocop:enable Metrics/MethodLength
   # rubocop:enable Metrics/AbcSize
+
+  def master_id(record)
+    old_id = record["MasterID"]
+    return nil unless old_id
+    "person-#{old_id}"
+  end
+
+  def ruler_id(record)
+    old_id = record["RulerID"]
+    return nil unless old_id
+    "ruler-#{old_id}"
+  end
 end

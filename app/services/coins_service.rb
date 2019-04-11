@@ -5,6 +5,7 @@ class CoinsService
     clean_issues
     clean_coins
     clean_places
+    clean_people
   end
 
   def self.clean_coins
@@ -23,8 +24,15 @@ class CoinsService
 
   def self.clean_places
     query_service.find_all_of_model(model: NumismaticPlace).each do |place|
-      logger.info "Deleting NumismaticIssue: #{place.id}"
+      logger.info "Deleting NumismaticPlace: #{place.id}"
       delete(place)
+    end
+  end
+
+  def self.clean_people
+    query_service.find_all_of_model(model: NumismaticPerson).each do |person|
+      logger.info "Deleting NumismaticPerson: #{person.id}"
+      delete(person)
     end
   end
 

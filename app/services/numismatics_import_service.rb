@@ -16,6 +16,10 @@ class NumismaticsImportService
     PlacesImporter.new(db_adapter: db_adapter, logger: logger).import!
   end
 
+  def ingest_people
+    PeopleImporter.new(db_adapter: db_adapter, logger: logger).import!
+  end
+
   class PlacesImporter
     attr_reader :db_adapter, :logger
     def initialize(db_adapter:, logger:)
@@ -55,6 +59,48 @@ class NumismaticsImportService
 
     def places
       @places ||= Places.new(db_adapter: db_adapter)
+    end
+  end
+
+  class PeopleImporter
+    attr_reader :db_adapter, :logger
+    def initialize(db_adapter:, logger:)
+      @db_adapter = db_adapter
+      @logger = logger
+    end
+
+    def import!
+      create_people
+    end
+
+    def change_set_persister
+      @change_set_persister ||= NumismaticPeopleController.change_set_persister
+    end
+
+    def create_people
+      person_numbers = people.ids
+      person_numbers.each do |number|
+        attributes = people.base_attributes(id: number).to_h
+        new_resource(klass: NumismaticPerson, **attributes)
+      end
+    end
+
+    def new_resource(klass:, **attributes)
+      collection = attributes.delete(:collection)
+
+      resource = klass.new
+
+      change_set = DynamicChangeSet.new(resource)
+      return unless change_set.validate(**attributes)
+      change_set.member_of_collection_ids = [collection.id] if collection.try(:id)
+
+      persisted = change_set_persister.save(change_set: change_set)
+      logger.info "Created the resource #{persisted.id}"
+      persisted
+    end
+
+    def people
+      @people ||= People.new(db_adapter: db_adapter)
     end
   end
 
@@ -114,6 +160,8 @@ class NumismaticsImportService
 
       # Map place id from old database to the corresponding Valkyrie NumismaticPlace id
       attributes[:numismatic_place_id] = valkyrie_place_id(place_id: attributes[:numismatic_place_id])
+      attributes[:ruler_id] = valkyrie_id(value: attributes[:ruler_id], model: NumismaticPerson)
+      attributes[:master_id] = valkyrie_id(value: attributes[:master_id], model: NumismaticPerson)
       resource = new_resource(klass: NumismaticIssue, **attributes)
 
       # Add child coins
@@ -157,6 +205,12 @@ class NumismaticsImportService
     def valkyrie_place_id(place_id:)
       results = query_service.custom_queries.find_by_property(property: :replaces, value: place_id)
       results.select { |r| r.is_a? NumismaticPlace }.map(&:id)
+    end
+
+    def valkyrie_id(property: :replaces, value:, model:)
+      return nil unless value
+      results = query_service.custom_queries.find_by_property(property: property, value: value)
+      results.select { |r| r.is_a? model }.map(&:id)
     end
   end
 end
