@@ -21,10 +21,13 @@ class EventGenerator
 
     def record_updated(record)
       state = record.state.first
-      return unless state == "complete"
-      publish_message(
-        message("UPDATED", record)
-      )
+      if state == "draft"
+        record_deleted(record)
+      elsif state == "complete"
+        publish_message(
+          message("UPDATED", record)
+        )
+      end
     end
 
     def record_member_updated(record)
