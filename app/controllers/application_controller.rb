@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   before_action :notify_read_only
 
   def notify_read_only
-    return unless Ability::READ_ONLY_MODE
+    return unless Figgy.read_only_mode
     message = ["The site is currently in read-only mode."]
     message << flash[:notice] if flash[:notice]
     flash[:notice] = message.join(" ")

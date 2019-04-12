@@ -112,7 +112,7 @@ describe Ability do
     }
 
     context "when read-only mode is on" do
-      before { stub_const("Ability::READ_ONLY_MODE", true) }
+      before { allow(Figgy).to receive(:read_only_mode).and_return(true) }
 
       it {
         is_expected.not_to be_able_to(:create, ScannedResource.new)
@@ -181,7 +181,7 @@ describe Ability do
     }
 
     context "when read-only mode is on" do
-      before { stub_const("Ability::READ_ONLY_MODE", true) }
+      before { allow(Figgy).to receive(:read_only_mode).and_return(true) }
 
       it {
         is_expected.not_to be_able_to(:create, ScannedResource.new)
@@ -257,7 +257,7 @@ describe Ability do
     }
 
     context "when read-only mode is on" do
-      before { stub_const("Ability::READ_ONLY_MODE", true) }
+      before { allow(Figgy).to receive(:read_only_mode).and_return(true) }
 
       it {
         is_expected.to be_able_to(:read, open_scanned_resource)
@@ -360,7 +360,7 @@ describe Ability do
     }
 
     context "when read-only mode is on" do
-      before { stub_const("Ability::READ_ONLY_MODE", true) }
+      before { allow(Figgy).to receive(:read_only_mode).and_return(true) }
 
       it {
         is_expected.to be_able_to(:read, open_scanned_resource)
@@ -478,7 +478,7 @@ describe Ability do
     end
 
     context "when read-only mode is on" do
-      before { stub_const("Ability::READ_ONLY_MODE", true) }
+      before { allow(Figgy).to receive(:read_only_mode).and_return(true) }
       let(:token) { AuthToken.create(label: "Test", group: ["admin"]).token }
 
       it "provides access to a resource" do

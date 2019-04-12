@@ -10,8 +10,8 @@ development: &default
 test:
   <<: *default
   host: <%= ENV["FIGGY_DB_HOST"] %>
-  username: <%= ENV["FIGGY_DB_USERNAME"] %>
-  password: <%= ENV["FIGGY_DB_PASSWORD"] %>
+  username: <%= Figgy.read_only_mode ? ENV["FIGGY_DB_RO_USERNAME"] : ENV["FIGGY_DB_USERNAME"] %>
+  password: <%= Figgy.read_only_mode ? ENV["FIGGY_DB_RO_PASSWORD"] : ENV["FIGGY_DB_PASSWORD"] %>
   database: figgy_test
 
 production: &deploy
@@ -19,7 +19,7 @@ production: &deploy
   adapter: postgresql
   database: <%= ENV["FIGGY_DB"] %>
   host: <%= ENV["FIGGY_DB_HOST"] %>
-  username: <%= ENV["FIGGY_DB_USERNAME"] %>
-  password: <%= ENV["FIGGY_DB_PASSWORD"] %>
+  username: <%= Figgy.read_only_mode ? ENV["FIGGY_DB_RO_USERNAME"] : ENV["FIGGY_DB_USERNAME"] %>
+  password: <%= Figgy.read_only_mode ? ENV["FIGGY_DB_RO_PASSWORD"] : ENV["FIGGY_DB_PASSWORD"] %>
 
 staging: *deploy

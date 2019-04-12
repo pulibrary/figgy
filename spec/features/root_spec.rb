@@ -26,7 +26,7 @@ RSpec.feature "Home Page" do
 
   context "in read-only mode" do
     before do
-      stub_const("#{Ability}::READ_ONLY_MODE", true)
+      allow(Figgy).to receive(:read_only_mode).and_return(true)
       sign_in user
     end
 
