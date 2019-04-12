@@ -68,17 +68,22 @@ RSpec.describe EventGenerator::OrangelightEventGenerator do
     context "with a record in a draft state" do
       let(:record) { FactoryBot.create_for_repository(:coin, state: "draft") }
 
-      it "does not publish a JSON message" do
+      it "publishes a JSON delete message" do
+        expected_result = {
+          "id" => record.decorate.orangelight_id,
+          "event" => "DELETED",
+          "bulk" => "false"
+        }
         event_generator.record_updated(record)
 
-        expect(rabbit_connection).not_to have_received(:publish)
+        expect(rabbit_connection).to have_received(:publish).with(expected_result.to_json)
       end
     end
   end
 
   describe "#record_member_updated" do
     context "with a record in a completed state" do
-      it "publishes a persistent JSON updated message with geoblacklight document" do
+      it "publishes a persistent JSON updated message with an orangelight document" do
         orangelight_doc = OrangelightDocument.new(record).to_h
         expected_result = {
           "id" => record.id.to_s,
@@ -96,10 +101,15 @@ RSpec.describe EventGenerator::OrangelightEventGenerator do
     context "with a record in a draft state" do
       let(:record) { FactoryBot.create_for_repository(:coin, state: "draft") }
 
-      it "does not publish a JSON message" do
+      it "publishes a JSON delete message" do
+        expected_result = {
+          "id" => record.decorate.orangelight_id,
+          "event" => "DELETED",
+          "bulk" => "false"
+        }
         event_generator.record_member_updated(record)
 
-        expect(rabbit_connection).not_to have_received(:publish)
+        expect(rabbit_connection).to have_received(:publish).with(expected_result.to_json)
       end
     end
   end
