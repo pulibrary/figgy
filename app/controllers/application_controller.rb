@@ -7,6 +7,15 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
+  before_action :notify_read_only
+
+  def notify_read_only
+    return unless Ability::READ_ONLY_MODE
+    message = ["The site is currently in read-only mode."]
+    message << flash[:notice] if flash[:notice]
+    flash[:notice] = message.join(" ")
+  end
+
   def after_sign_in_path_for(_resource)
     request.env["omniauth.origin"] || root_path
   end

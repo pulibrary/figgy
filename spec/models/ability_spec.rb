@@ -110,6 +110,37 @@ describe Ability do
       is_expected.to be_able_to(:manifest, pending_scanned_resource)
       is_expected.to be_able_to(:read, :graphql)
     }
+
+    context "when read-only mode is on" do
+      before { stub_const("Ability::READ_ONLY_MODE", true) }
+
+      it {
+        is_expected.not_to be_able_to(:create, ScannedResource.new)
+        is_expected.not_to be_able_to(:create, FileSet.new)
+        is_expected.to be_able_to(:read, open_scanned_resource)
+        is_expected.to be_able_to(:read, private_scanned_resource)
+        is_expected.to be_able_to(:read, takedown_scanned_resource)
+        is_expected.to be_able_to(:read, flagged_scanned_resource)
+        is_expected.not_to be_able_to(:pdf, open_scanned_resource)
+        is_expected.not_to be_able_to(:color_pdf, open_scanned_resource)
+        is_expected.not_to be_able_to(:edit, open_scanned_resource)
+        is_expected.not_to be_able_to(:edit, private_scanned_resource)
+        is_expected.not_to be_able_to(:edit, takedown_scanned_resource)
+        is_expected.not_to be_able_to(:edit, flagged_scanned_resource)
+        is_expected.not_to be_able_to(:file_manager, open_scanned_resource)
+        is_expected.not_to be_able_to(:update, open_scanned_resource)
+        is_expected.not_to be_able_to(:update, private_scanned_resource)
+        is_expected.not_to be_able_to(:update, takedown_scanned_resource)
+        is_expected.not_to be_able_to(:update, flagged_scanned_resource)
+        is_expected.not_to be_able_to(:destroy, open_scanned_resource)
+        is_expected.not_to be_able_to(:destroy, private_scanned_resource)
+        is_expected.not_to be_able_to(:destroy, takedown_scanned_resource)
+        is_expected.not_to be_able_to(:destroy, flagged_scanned_resource)
+        is_expected.to be_able_to(:manifest, open_scanned_resource)
+        is_expected.to be_able_to(:manifest, pending_scanned_resource)
+        is_expected.to be_able_to(:read, :graphql)
+      }
+    end
   end
 
   describe "as a staff" do
@@ -148,6 +179,43 @@ describe Ability do
       is_expected.to be_able_to(:manifest, pending_scanned_resource)
       is_expected.to be_able_to(:read, :graphql)
     }
+
+    context "when read-only mode is on" do
+      before { stub_const("Ability::READ_ONLY_MODE", true) }
+
+      it {
+        is_expected.not_to be_able_to(:create, ScannedResource.new)
+        is_expected.not_to be_able_to(:create, FileSet.new)
+        is_expected.to be_able_to(:read, open_scanned_resource)
+        is_expected.to be_able_to(:read, private_scanned_resource)
+        is_expected.to be_able_to(:read, takedown_scanned_resource)
+        is_expected.to be_able_to(:read, flagged_scanned_resource)
+        is_expected.not_to be_able_to(:pdf, open_scanned_resource)
+        is_expected.not_to be_able_to(:color_pdf, open_scanned_resource)
+        is_expected.not_to be_able_to(:edit, open_scanned_resource)
+        is_expected.not_to be_able_to(:edit, private_scanned_resource)
+        is_expected.not_to be_able_to(:edit, takedown_scanned_resource)
+        is_expected.not_to be_able_to(:edit, flagged_scanned_resource)
+        is_expected.not_to be_able_to(:file_manager, open_scanned_resource)
+        is_expected.not_to be_able_to(:update, open_scanned_resource)
+        is_expected.not_to be_able_to(:update, private_scanned_resource)
+        is_expected.not_to be_able_to(:update, takedown_scanned_resource)
+        is_expected.not_to be_able_to(:update, flagged_scanned_resource)
+        is_expected.not_to be_able_to(:destroy, staff_scanned_resource)
+        is_expected.not_to be_able_to(:destroy, staff_file)
+        is_expected.to be_able_to(:download, staff_file)
+        is_expected.not_to be_able_to(:destroy, open_scanned_resource)
+        is_expected.not_to be_able_to(:destroy, private_scanned_resource)
+        is_expected.not_to be_able_to(:destroy, takedown_scanned_resource)
+        is_expected.not_to be_able_to(:destroy, flagged_scanned_resource)
+        is_expected.not_to be_able_to(:destroy, admin_file)
+        is_expected.not_to be_able_to(:destroy, other_staff_file)
+        is_expected.to be_able_to(:manifest, open_scanned_resource)
+        is_expected.to be_able_to(:read, pending_scanned_resource)
+        is_expected.to be_able_to(:manifest, pending_scanned_resource)
+        is_expected.to be_able_to(:read, :graphql)
+      }
+    end
   end
 
   describe "as a campus user" do
@@ -187,6 +255,44 @@ describe Ability do
       is_expected.not_to be_able_to(:complete, pending_scanned_resource)
       is_expected.not_to be_able_to(:destroy, admin_file)
     }
+
+    context "when read-only mode is on" do
+      before { stub_const("Ability::READ_ONLY_MODE", true) }
+
+      it {
+        is_expected.to be_able_to(:read, open_scanned_resource)
+        is_expected.to be_able_to(:read, campus_only_scanned_resource)
+        is_expected.to be_able_to(:read, complete_scanned_resource)
+        is_expected.to be_able_to(:read, flagged_scanned_resource)
+        is_expected.to be_able_to(:manifest, open_scanned_resource)
+        is_expected.to be_able_to(:manifest, campus_only_scanned_resource)
+        is_expected.to be_able_to(:manifest, complete_scanned_resource)
+        is_expected.to be_able_to(:manifest, flagged_scanned_resource)
+        is_expected.not_to be_able_to(:pdf, open_scanned_resource)
+        is_expected.not_to be_able_to(:pdf, campus_only_scanned_resource)
+        is_expected.not_to be_able_to(:pdf, complete_scanned_resource)
+        is_expected.not_to be_able_to(:pdf, flagged_scanned_resource)
+        is_expected.to be_able_to(:read, :graphql)
+        is_expected.to be_able_to(:download, other_staff_file)
+
+        is_expected.not_to be_able_to(:read, private_scanned_resource)
+        is_expected.not_to be_able_to(:read, pending_scanned_resource)
+        is_expected.not_to be_able_to(:read, metadata_review_scanned_resource)
+        is_expected.not_to be_able_to(:read, final_review_scanned_resource)
+        is_expected.not_to be_able_to(:read, takedown_scanned_resource)
+        is_expected.not_to be_able_to(:file_manager, open_scanned_resource)
+        is_expected.not_to be_able_to(:update, open_scanned_resource)
+        is_expected.not_to be_able_to(:create, ScannedResource.new)
+        is_expected.not_to be_able_to(:create, FileSet.new)
+        is_expected.not_to be_able_to(:destroy, other_staff_file)
+        is_expected.not_to be_able_to(:destroy, pending_scanned_resource)
+        is_expected.not_to be_able_to(:destroy, complete_scanned_resource)
+        is_expected.not_to be_able_to(:create, Role.new)
+        is_expected.not_to be_able_to(:destroy, role)
+        is_expected.not_to be_able_to(:complete, pending_scanned_resource)
+        is_expected.not_to be_able_to(:destroy, admin_file)
+      }
+    end
   end
 
   describe "as an anonymous user" do
@@ -252,6 +358,44 @@ describe Ability do
       is_expected.not_to be_able_to(:complete, pending_scanned_resource)
       is_expected.not_to be_able_to(:destroy, admin_file)
     }
+
+    context "when read-only mode is on" do
+      before { stub_const("Ability::READ_ONLY_MODE", true) }
+
+      it {
+        is_expected.to be_able_to(:read, open_scanned_resource)
+        is_expected.to be_able_to(:read, open_file_set)
+        is_expected.to be_able_to(:manifest, open_scanned_resource)
+        is_expected.not_to be_able_to(:pdf, open_scanned_resource)
+        is_expected.to be_able_to(:read, complete_scanned_resource)
+        is_expected.to be_able_to(:manifest, complete_scanned_resource)
+        is_expected.to be_able_to(:read, flagged_scanned_resource)
+        is_expected.to be_able_to(:manifest, flagged_scanned_resource)
+        is_expected.not_to be_able_to(:color_pdf, color_enabled_resource)
+        is_expected.to be_able_to(:read, :graphql)
+        is_expected.to be_able_to(:download, open_file)
+        is_expected.not_to be_able_to(:pdf, no_pdf_scanned_resource)
+        is_expected.not_to be_able_to(:flag, open_scanned_resource)
+        is_expected.not_to be_able_to(:read, campus_only_scanned_resource)
+        is_expected.not_to be_able_to(:read, private_scanned_resource)
+        is_expected.not_to be_able_to(:read, pending_scanned_resource)
+        is_expected.not_to be_able_to(:read, metadata_review_scanned_resource)
+        is_expected.not_to be_able_to(:read, final_review_scanned_resource)
+        is_expected.not_to be_able_to(:read, takedown_scanned_resource)
+        is_expected.not_to be_able_to(:manifest, ephemera_folder)
+        is_expected.not_to be_able_to(:file_manager, open_scanned_resource)
+        is_expected.not_to be_able_to(:update, open_scanned_resource)
+        is_expected.not_to be_able_to(:create, ScannedResource.new)
+        is_expected.not_to be_able_to(:create, FileSet.new)
+        is_expected.not_to be_able_to(:destroy, other_staff_file)
+        is_expected.not_to be_able_to(:destroy, pending_scanned_resource)
+        is_expected.not_to be_able_to(:destroy, complete_scanned_resource)
+        is_expected.not_to be_able_to(:create, Role.new)
+        is_expected.not_to be_able_to(:destroy, role)
+        is_expected.not_to be_able_to(:complete, pending_scanned_resource)
+        is_expected.not_to be_able_to(:destroy, admin_file)
+      }
+    end
 
     context "with an open vector resource" do
       let(:vector_resource) do
@@ -330,6 +474,21 @@ describe Ability do
 
       it "preserves the access controls to a resource" do
         is_expected.not_to be_able_to(:read, vector_resource)
+      end
+    end
+
+    context "when read-only mode is on" do
+      before { stub_const("Ability::READ_ONLY_MODE", true) }
+      let(:token) { AuthToken.create(label: "Test", group: ["admin"]).token }
+
+      it "provides access to a resource" do
+        is_expected.to be_able_to(:read, vector_resource)
+      end
+
+      it "prohibits write access to a resource" do
+        is_expected.not_to be_able_to(:update, vector_resource)
+        is_expected.not_to be_able_to(:create, vector_resource)
+        is_expected.not_to be_able_to(:destroy, vector_resource)
       end
     end
   end
