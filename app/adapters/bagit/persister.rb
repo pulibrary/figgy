@@ -44,12 +44,12 @@ module Bagit
         return true if resource.id.blank?
         return true unless resource.optimistic_locking_enabled?
 
-        cached_resource = adapter.query_service.find_by(id: resource.id)
-        return true if cached_resource.blank?
-
         resource_lock_tokens = resource[Valkyrie::Persistence::Attributes::OPTIMISTIC_LOCK]
         resource_value = resource_lock_tokens.find { |lock_token| lock_token.adapter_id == adapter.id }
         return true if resource_value.blank?
+
+        cached_resource = adapter.query_service.find_by(id: resource.id)
+        return true if cached_resource.blank?
 
         cached_value = cached_resource[Valkyrie::Persistence::Attributes::OPTIMISTIC_LOCK].first
         cached_value == resource_value

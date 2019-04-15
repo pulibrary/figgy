@@ -9,6 +9,11 @@ RSpec.describe FileSet do
     stub_ezid(shoulder: shoulder, blade: blade)
   end
 
+  describe "optimistic locking" do
+    it "is enabled" do
+      expect(described_class.optimistic_locking_enabled?).to eq true
+    end
+  end
   describe ".run_fixity" do
     let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
     let(:resource) { FactoryBot.build(:scanned_resource) }

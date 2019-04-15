@@ -45,7 +45,7 @@ class FileSetsController < ApplicationController
       change_set_persister.buffer_into_index do |persist|
         obj = persist.save(change_set: @change_set)
       end
-      update_derivatives unless derivative_resource_params.empty?
+      update_derivatives(obj) unless derivative_resource_params.empty?
 
       after_update_success(obj, @change_set)
     end
@@ -68,7 +68,8 @@ class FileSetsController < ApplicationController
       @derivative_resource_params ||= filtered_file_params(file_filter: "derivative_files")
     end
 
-    def update_derivatives
+    def update_derivatives(obj)
+      @change_set = DynamicChangeSet.new(obj)
       return unless @change_set.validate(derivative_resource_params)
       derivative_change_set_persister.buffer_into_index do |persist|
         persist.save(change_set: @change_set)

@@ -21,7 +21,7 @@ class TikaFileCharacterizationService
   def characterize(save: true)
     new_file = original_file.new(file_characterization_attributes.to_h)
     @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
-    @persister.save(resource: @file_set) if save
+    @file_set = @persister.save(resource: @file_set) if save
     @file_set
   end
 

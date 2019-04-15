@@ -20,7 +20,7 @@ class ExternalMetadataCharacterizationService
   #   Valkyrie::Derivatives::FileCharacterizationService.for(file_set, persister).characterize(save: false)
   def characterize(save: true)
     original_file.mime_type = geo_mime_type
-    @persister.save(resource: @file_set) if save
+    @file_set = @persister.save(resource: @file_set) if save
     @file_set
   end
 
