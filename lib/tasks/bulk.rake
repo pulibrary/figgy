@@ -213,12 +213,14 @@ namespace :bulk do
     coll = ENV["COLL"]
     state = ENV["STATE"]
     rights = ENV["RIGHTS"]
+    preservation_policy = ENV["PRESERVATION_POLICY"]
 
-    abort "usage: rake bulk:update_attrs COLL=[collection id] STATE=[state] RIGHTS=[rights]" unless coll
+    abort "usage: rake bulk:update_attrs COLL=[collection id] STATE=[state] RIGHTS=[rights] PRESERVATION_POLICY=[cloud]" unless coll
     logger = Logger.new(STDOUT)
     attrs = {}
     attrs[:state] = state if state
     attrs[:rights_statement] = rights if rights
+    attrs[:preservation_policy] = preservation_policy if preservation_policy
     BulkEditService.perform(collection_id: Valkyrie::ID.new(coll), attributes: attrs, metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), logger: logger)
   end
 
