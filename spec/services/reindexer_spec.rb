@@ -89,7 +89,7 @@ RSpec.describe Reindexer do
         allow(indexer).to receive(:multi_index_persist).with(resources).and_raise error
         allow(indexer).to receive(:single_index_persist).with(resources[0]).and_raise error
 
-        expect { indexer.reindex_all }.to change { solr_adapter.query_service.find_all.to_a.length }.by(4)
+        indexer.reindex_all
         expect(logger).to have_received(:error).with("Could not index #{resources[0].id} due to RSolr::Error::ConnectionRefused")
       end
 
@@ -98,7 +98,7 @@ RSpec.describe Reindexer do
         allow(indexer).to receive(:multi_index_persist).with(resources).and_raise error
         allow(indexer).to receive(:single_index_persist).with(resources[0]).and_raise error
 
-        expect { indexer.reindex_all }.to change { solr_adapter.query_service.find_all.to_a.length }.by(4)
+        indexer.reindex_all
         expect(logger).to have_received(:error).with("Could not index #{resources[0].id} due to RSolr::Error::Http")
       end
     end
