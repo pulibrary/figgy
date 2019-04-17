@@ -813,4 +813,16 @@ RSpec.describe Wayfinder do
       end
     end
   end
+  context "when given an Event" do
+    subject(:wayfinder) { described_class.for(event) }
+
+    let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource) }
+    let(:preservation_object) { FactoryBot.create_for_repository(:preservation_object, preserved_object_id: scanned_resource.id) }
+    let(:event) { FactoryBot.create_for_repository(:event, modified_resource_ids: preservation_object.id) }
+    describe "#modified_resources" do
+      it "returns the resources modified by an event in the system" do
+        expect(wayfinder.modified_resources).to eq [preservation_object]
+      end
+    end
+  end
 end

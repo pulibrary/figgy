@@ -27,7 +27,8 @@ class Wayfinder < BaseWayfinder
     NumismaticReference => NumismaticReferenceWayfinder,
     RasterResource => RasterResourceWayfinder,
     ScannedMap => ScannedMapWayfinder,
-    VectorResource => VectorResourceWayfinder
+    VectorResource => VectorResourceWayfinder,
+    Event => EventWayfinder
   }
 
   def self.for(resource)
