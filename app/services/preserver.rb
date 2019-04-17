@@ -49,7 +49,7 @@ class Preserver
       resource: resource
     )
     file_metadata.checksum = resource_binary_node.calculate_checksum
-    unless file_metadata.file_identifiers.include?(uploaded_file.id)
+    unless file_metadata.file_identifiers.empty? || file_metadata.file_identifiers.include?(uploaded_file.id)
       CleanupFilesJob.perform_later(file_identifiers: file_metadata.file_identifiers.map(&:to_s))
     end
     file_metadata.file_identifiers = uploaded_file.id

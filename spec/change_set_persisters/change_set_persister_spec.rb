@@ -1493,6 +1493,7 @@ RSpec.describe ChangeSetPersister do
       it "backgrounds any child preserving" do
         allow(Preserver).to receive(:new).and_call_original
         allow(PreserveChildrenJob).to receive(:perform_later).and_call_original
+        allow(CleanupFilesJob).to receive(:perform_later)
         file = fixture_file_upload("files/example.tif", "image/tiff")
         resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
         file_set = Wayfinder.for(resource).members.first
@@ -1505,6 +1506,7 @@ RSpec.describe ChangeSetPersister do
         change_set_persister.save(change_set: change_set)
         expect(PreserveChildrenJob).to have_received(:perform_later).exactly(1).times
         expect(Preserver).to have_received(:new).exactly(2).times
+        expect(CleanupFilesJob).not_to have_received(:perform_later)
       end
     end
     context "when completing a `cloud` preservation_policy resource" do
