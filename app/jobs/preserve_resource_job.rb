@@ -1,12 +1,14 @@
 # frozen_string_literal: true
-class PreserveChildrenJob < ApplicationJob
+class PreserveResourceJob < ApplicationJob
+  queue_as :low
   delegate :metadata_adapter, to: :change_set_persister
   delegate :query_service, to: :metadata_adapter
 
   def perform(id:)
     resource = query_service.find_by(id: id)
-    (resource.try(:member_ids) || []).each do |member_id|
-      PreserveResourceJob.perform_later(id: member_id.to_s)
+    change_set_persister.buffer_into_index do |buffered_change_set_persister|
+      change_set = DynamicChangeSet.new(resource)
+      Preserver.for(change_set: change_set, change_set_persister: buffered_change_set_persister).preserve!
     end
   end
 
