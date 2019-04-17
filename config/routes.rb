@@ -129,6 +129,8 @@ Rails.application.routes.draw do
 
     resources :numismatic_places
 
+    resources :numismatic_people
+
     resources :numismatic_issues do
       member do
         get :file_manager
