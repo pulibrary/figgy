@@ -74,12 +74,13 @@ RSpec.describe CoinDecorator do
   end
   describe "#pub_created_display" do
     context "when the coin is attached to a numismatic issue" do
-      let(:issue) { FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id], ruler: ["George I"], denomination: ["1/2 Penny"]) }
+      let(:numismatic_person) { FactoryBot.create_for_repository(:numismatic_person) }
+      let(:issue) { FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id], ruler_id: numismatic_person.id, denomination: ["1/2 Penny"]) }
       before do
         issue
       end
       it "returns a pub_created_display" do
-        expect(decorator.pub_created_display).to eq("George I, 1/2 Penny")
+        expect(decorator.pub_created_display).to eq("name1 name2 epithet (1868 - 1963), 1/2 Penny")
       end
     end
     context "when the coin is not attached to a numismatic issue" do

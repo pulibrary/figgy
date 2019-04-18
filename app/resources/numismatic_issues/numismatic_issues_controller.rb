@@ -10,9 +10,14 @@ class NumismaticIssuesController < BaseResourceController
   before_action :load_numismatic_references, only: [:new, :edit]
   before_action :load_monograms, only: [:new, :edit]
   before_action :load_numismatic_places, only: [:new, :edit]
+  before_action :load_numismatic_people, only: [:new, :edit]
 
   def load_numismatic_places
     @numismatic_places = query_service.find_all_of_model(model: NumismaticPlace).map(&:decorate)
+  end
+
+  def load_numismatic_people
+    @numismatic_people = query_service.find_all_of_model(model: NumismaticPerson).map(&:decorate)
   end
 
   def load_numismatic_references

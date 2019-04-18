@@ -8,6 +8,7 @@ class NumismaticIssue < Resource
   attribute :member_of_collection_ids
   attribute :numismatic_monogram_ids
   attribute :numismatic_place_id
+  attribute :ruler_id
 
   # descriptive metadata
   attribute :numismatic_artist, Valkyrie::Types::Array.of(NumismaticArtist).meta(ordered: true)
@@ -40,7 +41,6 @@ class NumismaticIssue < Resource
   attribute :reverse_orientation
   attribute :reverse_part
   attribute :reverse_symbol
-  attribute :ruler
   attribute :series
   attribute :shape
   attribute :subject

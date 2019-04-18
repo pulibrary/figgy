@@ -1,0 +1,8 @@
+<%= f.input :ruler_id,
+            label: "Ruler",
+            collection: @numismatic_people&.sort_by(&:title),
+            label_method: :title,
+            value_method: :id,
+            input_html: { multiple: f.object.multiple?(key) },
+            include_blank: true,
+            required: f.object.required?(key) %>
