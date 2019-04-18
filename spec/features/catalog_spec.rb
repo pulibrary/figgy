@@ -27,4 +27,21 @@ RSpec.feature "Scanned Resources" do
       expect(page).to have_content "New test work"
     end
   end
+
+  context "in read-only mode" do
+    let(:emsg) { "PG::InsufficientPrivilege: ERROR:  permission denied for relation searches" }
+    before do
+      allow(Figgy).to receive(:read_only_mode).and_return(true)
+      allow(Search).to receive(:create).and_raise ActiveRecord::StatementInvalid, emsg
+    end
+
+    scenario "users can search and view results" do
+      visit root_path
+      fill_in id: "catalog_search", with: "test123"
+      click_button id: "keyword-search-submit"
+      expect(page).to have_content "New test work"
+      click_link "New test work"
+      expect(page).to have_content "New test work"
+    end
+  end
 end

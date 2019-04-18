@@ -21,6 +21,12 @@ class CatalogController < ApplicationController
     }
   end
 
+  # turn off search history during read-only mode
+  def find_or_initialize_search_session_from_params(params)
+    return if Figgy.read_only_mode
+    super
+  end
+
   # enforce hydra access controls
   before_action :set_id, only: :iiif_search
   before_action :enforce_show_permissions, only: [:show, :iiif_search]
