@@ -80,13 +80,12 @@ RSpec.describe Reindexer do
       end
 
       before do
-        allow(indexer).to receive(:multi_index_persist).and_call_original
         allow(indexer).to receive(:single_index_persist).and_call_original
       end
 
       it "tolerates RSolr::Error::ConnectionRefused, logging bad id" do
         error = RSolr::Error::ConnectionRefused
-        allow(indexer).to receive(:multi_index_persist).with(resources).and_raise error
+        allow(indexer).to receive(:multi_index_persist).and_raise error
         allow(indexer).to receive(:single_index_persist).with(resources[0]).and_raise error
 
         indexer.reindex_all
@@ -95,7 +94,7 @@ RSpec.describe Reindexer do
 
       it "tolerates RSolr::Error::Http, logging bad id" do
         error = RSolr::Error::Http.new({ uri: "http://example.com" }, nil)
-        allow(indexer).to receive(:multi_index_persist).with(resources).and_raise error
+        allow(indexer).to receive(:multi_index_persist).and_raise error
         allow(indexer).to receive(:single_index_persist).with(resources[0]).and_raise error
 
         indexer.reindex_all
