@@ -84,6 +84,15 @@ namespace :deploy do
     end
   end
 
+  desc "Deploy Google Cloud Function"
+  task :google_cloud_function do
+    on roles(:db) do
+      run_locally do
+        execute "cd cloud_fixity && gcloud functions deploy checkFixity --runtime nodejs8 --set-env-vars BUCKET=#{fetch(:google_fixity_bucket)},FIXITY_STATUS_TOPIC=#{fetch(:google_fixity_status_topic)} --trigger-topic #{fetch(:google_fixity_request_topic)} --service-account #{fetch(:google_service_account)}"
+      end
+    end
+  end
+
   namespace :geoblacklight do
     desc "Reindex Geospatial Resources (for synchronized GeoBlacklight installations)"
     task :reindex do

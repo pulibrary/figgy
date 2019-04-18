@@ -1,0 +1,21 @@
+{
+  "name": "figgy_cloud_fixity",
+  "version": "1.0.0",
+  "description": "Fixity checker for Figgy Preservation Files",
+  "main": "index.js",
+  "repository": "https://github.com/pulibrary/figgy",
+  "author": "Us",
+  "license": "Apache2",
+  "private": false,
+  "devDependencies": {
+    "dotenv": "^7.0.0",
+    "jest": "^24.7.1"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "@google-cloud/pubsub": "^0.28.1",
+    "@google-cloud/storage": "^2.5.0"
+  }
+}
