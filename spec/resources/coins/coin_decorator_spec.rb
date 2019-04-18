@@ -5,7 +5,8 @@ RSpec.describe CoinDecorator do
   subject(:decorator) { described_class.new(coin) }
   let(:coin) { FactoryBot.create_for_repository(:coin, numismatic_citation: numismatic_citation, numismatic_accession_id: numismatic_accession.id) }
   let(:numismatic_citation) { NumismaticCitation.new(part: "citation part", number: "citation number", numismatic_reference_id: [reference.id]) }
-  let(:numismatic_accession) { FactoryBot.create_for_repository(:numismatic_accession, accession_number: 234) }
+  let(:numismatic_person) { FactoryBot.create_for_repository(:numismatic_person) }
+  let(:numismatic_accession) { FactoryBot.create_for_repository(:numismatic_accession, accession_number: 234, person_id: numismatic_person.id) }
   let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
 
   describe "state" do
@@ -34,7 +35,7 @@ RSpec.describe CoinDecorator do
 
   describe "#rendered_accession" do
     it "generates a label based on the accession's properties" do
-      expect(decorator.rendered_accession).to eq("234: 01/01/2001 gift Alice ($99.00)")
+      expect(decorator.rendered_accession).to eq("234: 01/01/2001 gift name1 name2 ($99.00)")
     end
   end
 

@@ -2,6 +2,10 @@
 class NumismaticAccession < Resource
   include Valkyrie::Resource::AccessControls
 
+  # resources linked by ID
+  attribute :person_id
+
+  # descriptive metadata
   attribute :accession_number, Valkyrie::Types::Integer
   attribute :account
   attribute :cost
@@ -10,7 +14,6 @@ class NumismaticAccession < Resource
   attribute :items_number, Valkyrie::Types::Integer
   attribute :note
   attribute :numismatic_citation, Valkyrie::Types::Array.of(NumismaticCitation).meta(ordered: true)
-  attribute :person
   attribute :private_note
   attribute :thumbnail_id
   attribute :type

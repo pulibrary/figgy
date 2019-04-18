@@ -7,7 +7,7 @@ class NumismaticAccessionChangeSet < ChangeSet
   property :type, multiple: false, required: false
   property :cost, multiple: false, required: false
   property :account, multiple: false, required: false
-  property :person, multiple: false, required: false
+  property :person_id, multiple: false, required: false, type: Valkyrie::Types::ID
   property :firm, multiple: false, required: false
   property :note, multiple: false, required: false
   property :private_note, multiple: false, required: false
@@ -25,7 +25,7 @@ class NumismaticAccessionChangeSet < ChangeSet
         :type,
         :cost,
         :account,
-        :person,
+        :person_id,
         :firm,
         :note,
         :private_note

@@ -8,7 +8,7 @@ RSpec.describe NumismaticAccessionChangeSet do
   describe "#primary_terms" do
     it "includes displayed fields" do
       expect(change_set.primary_terms.keys).to eq(["", "Citation"])
-      expect(change_set.primary_terms[""]).to include(:date, :items_number, :person, :firm, :type, :cost, :account)
+      expect(change_set.primary_terms[""]).to include(:date, :items_number, :person_id, :firm, :type, :cost, :account)
       expect(change_set.primary_terms[""]).not_to include(:accession_number)
     end
   end
