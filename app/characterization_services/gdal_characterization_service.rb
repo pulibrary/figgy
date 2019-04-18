@@ -21,7 +21,7 @@ class GdalCharacterizationService
     unzip_original_file if zip_file?
     new_file = original_file.new(file_characterization_attributes.to_h)
     @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
-    @persister.save(resource: @file_set) if save
+    @file_set = @persister.save(resource: @file_set) if save
     clean_up_zip_directory if zip_file?
     @file_set
   end
