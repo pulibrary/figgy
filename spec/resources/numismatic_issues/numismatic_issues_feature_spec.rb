@@ -69,6 +69,7 @@ RSpec.feature "NumismaticIssues" do
     expect(page).to have_field "Signature"
     expect(page).to have_field "State"
     expect(page).to have_field "Subject"
+    expect(page).to have_field "Type"
     expect(page).to have_field "Workshop"
 
     fill_in "Object type", with: "ancient coin"
@@ -84,6 +85,7 @@ RSpec.feature "NumismaticIssues" do
     let(:numismatic_citation) { NumismaticCitation.new(part: "part", number: "number", numismatic_reference_id: numismatic_reference.id) }
     let(:numismatic_place) { FactoryBot.create_for_repository(:numismatic_place) }
     let(:numismatic_person) { FactoryBot.create_for_repository(:numismatic_person) }
+    let(:numismatic_subject) { NumismaticSubject.new(type: "Animal", subject: "unicorn") }
     let(:numismatic_issue) do
       FactoryBot.create_for_repository(
         :numismatic_issue,
@@ -92,6 +94,7 @@ RSpec.feature "NumismaticIssues" do
         numismatic_place_id: numismatic_place.id,
         numismatic_artist: numismatic_artist,
         numismatic_citation: numismatic_citation,
+        numismatic_subject: numismatic_subject,
         ruler_id: numismatic_person.id,
         master_id: numismatic_person.id,
         color: "test value",
@@ -122,7 +125,6 @@ RSpec.feature "NumismaticIssues" do
         reverse_symbol: "test value",
         series: "test value",
         shape: "test value",
-        subject: "test value",
         workshop: "test value"
       )
     end
@@ -165,7 +167,7 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.ruler", text: "name1 name2 epithet (1868 - 1963)"
       expect(page).to have_css ".attribute.series", text: "test value"
       expect(page).to have_css ".attribute.shape", text: "test value"
-      expect(page).to have_css ".attribute.subject", text: "test value"
+      expect(page).to have_css ".attribute.numismatic_subjects", text: "Animal, unicorn"
       expect(page).to have_css ".attribute.workshop", text: "test value"
     end
   end

@@ -877,7 +877,6 @@ RSpec.describe CatalogController do
         rights_statement: "issue-rights-statement",
         series: "issue-series",
         shape: "issue-series",
-        subject: "issue-subject",
         workshop: "issue-workshop"
       }
     end

@@ -75,8 +75,7 @@ describe OrangelightDocument do
                                          reverse_figure_description: "Harp at right side, 11 strings. Right arm holding up a palm-branch",
                                          reverse_figure_relationship: "corn-ear behind head",
                                          reverse_legend: "•HIBERNIA•1723•",
-                                         reverse_attributes: ["above", "2 within Є"],
-                                         subject: ["unicorn"])
+                                         reverse_attributes: ["above", "2 within Є"])
       end
 
       before do

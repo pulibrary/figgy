@@ -36,7 +36,7 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
           :numismatic_artists,
           :member_of_collections,
           :rendered_rights_statement,
-          :subject,
+          :numismatic_subjects,
           :replaces,
           :visibility
 
@@ -81,6 +81,10 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
 
   def numismatic_citations
     numismatic_citation.map { |c| c.decorate.title }
+  end
+
+  def numismatic_subjects
+    numismatic_subject.map { |s| s.decorate.title }
   end
 
   # Whether this box has a workflow state that grants access to its contents
