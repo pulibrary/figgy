@@ -5,7 +5,8 @@ RSpec.describe CoinDecorator do
   subject(:decorator) { described_class.new(coin) }
   let(:coin) { FactoryBot.create_for_repository(:coin, numismatic_citation: numismatic_citation, numismatic_accession_id: numismatic_accession.id) }
   let(:numismatic_citation) { NumismaticCitation.new(part: "citation part", number: "citation number", numismatic_reference_id: [reference.id]) }
-  let(:numismatic_accession) { FactoryBot.create_for_repository(:numismatic_accession, accession_number: 234) }
+  let(:numismatic_person) { FactoryBot.create_for_repository(:numismatic_person) }
+  let(:numismatic_accession) { FactoryBot.create_for_repository(:numismatic_accession, accession_number: 234, person_id: numismatic_person.id) }
   let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
 
   describe "state" do
@@ -34,7 +35,7 @@ RSpec.describe CoinDecorator do
 
   describe "#rendered_accession" do
     it "generates a label based on the accession's properties" do
-      expect(decorator.rendered_accession).to eq("234: 01/01/2001 gift Alice ($99.00)")
+      expect(decorator.rendered_accession).to eq("234: 01/01/2001 gift name1 name2 ($99.00)")
     end
   end
 
@@ -74,12 +75,13 @@ RSpec.describe CoinDecorator do
   end
   describe "#pub_created_display" do
     context "when the coin is attached to a numismatic issue" do
-      let(:issue) { FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id], ruler: ["George I"], denomination: ["1/2 Penny"]) }
+      let(:numismatic_person) { FactoryBot.create_for_repository(:numismatic_person) }
+      let(:issue) { FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id], ruler_id: numismatic_person.id, denomination: ["1/2 Penny"]) }
       before do
         issue
       end
       it "returns a pub_created_display" do
-        expect(decorator.pub_created_display).to eq("George I, 1/2 Penny")
+        expect(decorator.pub_created_display).to eq("name1 name2 epithet (1868 - 1963), 1/2 Penny")
       end
     end
     context "when the coin is not attached to a numismatic issue" do

@@ -876,7 +876,6 @@ RSpec.describe CatalogController do
         reverse_symbol: "issue-rev-symbol",
         rights_note: "issue-rights-note",
         rights_statement: "issue-rights-statement",
-        ruler: "issue-ruler",
         series: "issue-series",
         shape: "issue-series",
         subject: "issue-subject",

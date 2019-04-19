@@ -48,7 +48,7 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
                          :rendered_rights_statement,
                          :thumbnail_id
 
-  delegate :members, :decorated_file_sets, :decorated_coins, :coin_count, :decorated_numismatic_place, :decorated_numismatic_monograms, to: :wayfinder
+  delegate :members, :decorated_file_sets, :decorated_coins, :coin_count, :decorated_numismatic_place, :decorated_ruler, :decorated_numismatic_monograms, to: :wayfinder
 
   def attachable_objects
     [Coin]
@@ -65,6 +65,10 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
 
   def rendered_place
     decorated_numismatic_place&.title
+  end
+
+  def ruler
+    decorated_ruler&.title
   end
 
   def numismatic_artists

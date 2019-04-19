@@ -34,7 +34,6 @@ class NumismaticIssueChangeSet < ChangeSet
   property :reverse_orientation, multiple: false, required: false
   property :reverse_part, multiple: false, required: false
   property :reverse_symbol, multiple: false, required: false
-  property :ruler, multiple: false, required: false
   property :series, multiple: false, required: false
   property :shape, multiple: false, required: false
   property :subject, multiple: true, required: false, default: []
@@ -46,6 +45,7 @@ class NumismaticIssueChangeSet < ChangeSet
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :numismatic_monogram_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :numismatic_place_id, multiple: false, required: false, type: Valkyrie::Types::ID
+  property :ruler_id, multiple: false, required: false, type: Valkyrie::Types::ID
   property :pending_uploads, multiple: true, required: false
 
   property :start_canvas, required: false
@@ -80,7 +80,7 @@ class NumismaticIssueChangeSet < ChangeSet
         :object_date,
         :date_range_form,
         :era,
-        :ruler,
+        :ruler_id,
         :master,
         :workshop,
         :series,

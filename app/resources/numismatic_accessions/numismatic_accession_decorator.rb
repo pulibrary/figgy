@@ -12,12 +12,15 @@ class NumismaticAccessionDecorator < Valkyrie::ResourceDecorator
           :private_note,
           :numismatic_citations
 
+  delegate :decorated_person, to: :wayfinder
+
   def date
     Array.wrap(super).first
   end
 
   def person
-    Array.wrap(super).first
+    return nil unless decorated_person
+    [decorated_person.name1, decorated_person.name2].compact.join(" ")
   end
 
   def firm
