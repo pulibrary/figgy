@@ -17,7 +17,7 @@ class CoinDecorator < Valkyrie::ResourceDecorator
           :find_locus,
           :find_feature,
           :find_description,
-          :numismatic_citations,
+          :citations,
           :numismatic_collection,
           :rendered_accession,
           :number_in_accession,
@@ -34,7 +34,7 @@ class CoinDecorator < Valkyrie::ResourceDecorator
     false
   end
 
-  def numismatic_citations
+  def citations
     numismatic_citation.map { |c| c.decorate.title }
   end
 

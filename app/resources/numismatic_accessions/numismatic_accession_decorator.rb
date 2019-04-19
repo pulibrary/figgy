@@ -10,7 +10,7 @@ class NumismaticAccessionDecorator < Valkyrie::ResourceDecorator
           :firm,
           :note,
           :private_note,
-          :numismatic_citations
+          :citations
 
   delegate :decorated_person, to: :wayfinder
 
@@ -39,7 +39,7 @@ class NumismaticAccessionDecorator < Valkyrie::ResourceDecorator
     Array.wrap(super).first
   end
 
-  def numismatic_citations
+  def citations
     numismatic_citation.map { |c| c.decorate.title }
   end
 
