@@ -62,6 +62,18 @@ RSpec.describe Mutations::ReportCloudFixity do
         expect(event.status).to eq [status]
       end
     end
+    context "when the FileMetadata ID cannot be resolved" do
+      it "returns an error and nothing in resource" do
+        mutation = create_mutation
+
+        output = mutation.resolve(preservation_object.id, Valkyrie::ID.new("no-exist"), status)
+        persisted = output[:resource]
+        expect(persisted).to be_a PreservationObject
+        events = query_service.find_inverse_references_by(property: :resource_id, id: persisted.id).first
+        expect(events).to be nil
+        expect(output[:errors]).to eq ["undefined method `preserved_metadata?' for nil:NilClass"]
+      end
+    end
   end
 
   context "without permission" do

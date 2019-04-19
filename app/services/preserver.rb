@@ -53,10 +53,7 @@ class Preserver
       CleanupFilesJob.perform_later(file_identifiers: file_metadata.file_identifiers.map(&:to_s))
     end
     file_metadata.file_identifiers = uploaded_file.id
-    unless file_metadata.persisted?
-      change_set_persister.metadata_adapter.persister.save(resource: file_metadata)
-      preservation_object.binary_nodes += [file_metadata] unless file_metadata.persisted?
-    end
+    preservation_object.binary_nodes += [file_metadata] unless file_metadata.persisted?
     file_metadata.new_record = false
   end
 
@@ -88,7 +85,6 @@ class Preserver
       CleanupFilesJob.perform_later(file_identifiers: preservation_object.metadata_node.file_identifiers.map(&:to_s))
     end
     preservation_object.metadata_node = metadata_node
-    change_set_persister.metadata_adapter.persister.save(resource: metadata_node)
     change_set_persister.metadata_adapter.persister.save(resource: preservation_object)
   end
 

@@ -11,7 +11,8 @@ class Mutations::ReportCloudFixity < Mutations::BaseMutation
 
   def resolve(preservation_object_id, file_metadata_node_id, status)
     preservation_object = query_service.find_by(id: preservation_object_id)
-    file_metadata_node = query_service.find_by(id: file_metadata_node_id)
+    preserved_nodes = preservation_object.binary_nodes + [preservation_object.metadata_node]
+    file_metadata_node = preserved_nodes.find { |node| node.id == file_metadata_node_id }
 
     if ability.can?(:update, preservation_object)
       create_event(preservation_object, file_metadata_node, status)
@@ -28,20 +29,21 @@ class Mutations::ReportCloudFixity < Mutations::BaseMutation
     def create_event(preservation_object, file_metadata_node, status)
       event = Event.new
       change_set = EventChangeSet.new(event)
-      child_property = if file_metadata_node.preserved_metadata?
-                         "metadata_node"
-                       else
-                         "binary_nodes"
-                       end
-      if change_set.validate(resource_id: preservation_object.id, child_property: child_property, child_id: file_metadata_node.id, status: status)
+      begin
+        child_property = if file_metadata_node.preserved_metadata?
+                           "metadata_node"
+                         else
+                           "binary_nodes"
+                         end
+        change_set.validate(resource_id: preservation_object.id, child_property: child_property, child_id: file_metadata_node.id, status: status)
         change_set_persister.save(change_set: change_set)
         {
           resource: preservation_object
         }
-      else
+      rescue StandardError => error
         {
           resource: preservation_object,
-          errors: change_set.errors.full_messages
+          errors: [error.message]
         }
       end
     end
