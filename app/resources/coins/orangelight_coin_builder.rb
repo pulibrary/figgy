@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class OrangelightCoinBuilder
+  include ThumbnailHelper
+
   attr_reader :decorator, :parent
   def initialize(decorator)
     @decorator = decorator
@@ -104,7 +106,9 @@ class OrangelightCoinBuilder
         issue_references_s: parent.citations,
         issue_references_sort: parent.citations&.first,
         issue_artists_s: parent.artists,
-        issue_artists_sort: parent.artists&.first
+        issue_artists_sort: parent.artists&.first,
+        issue_monogram_title_s: parent.decorated_numismatic_monograms.map(&:title),
+        issue_monogram_1display: parent.decorated_numismatic_monograms.map { |m| monogram_hash(m) }.to_json.to_s
       }
     end
 
@@ -118,6 +122,13 @@ class OrangelightCoinBuilder
           "call_number_browse" => decorator.call_number
         }
       }.to_json.to_s
+    end
+
+    def monogram_hash(monogram)
+      {
+        title: monogram.title,
+        document_id: monogram.id.to_s
+      }
     end
 
     def coin_location_code

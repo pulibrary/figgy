@@ -307,6 +307,7 @@ describe Ability do
     let(:ephemera_folder) { FactoryBot.create(:ephemera_folder, user: current_user) }
     let(:open_vector_resource) { FactoryBot.create(:complete_open_vector_resource, user: creating_user) }
     let(:private_vector_resource) { FactoryBot.create(:complete_private_vector_resource, user: creating_user) }
+    let(:monogram) { FactoryBot.create(:numismatic_monogram) }
     let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
     let(:storage_adapter) { Valkyrie.config.storage_adapter }
     let(:persister) { adapter.persister }
@@ -337,6 +338,7 @@ describe Ability do
       is_expected.to be_able_to(:color_pdf, color_enabled_resource)
       is_expected.to be_able_to(:read, :graphql)
       is_expected.to be_able_to(:download, open_file)
+      is_expected.to be_able_to(:read, monogram)
       is_expected.not_to be_able_to(:pdf, no_pdf_scanned_resource)
       is_expected.not_to be_able_to(:flag, open_scanned_resource)
       is_expected.not_to be_able_to(:read, campus_only_scanned_resource)

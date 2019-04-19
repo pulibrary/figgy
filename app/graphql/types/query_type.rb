@@ -7,6 +7,11 @@ class Types::QueryType < Types::BaseObject
     argument :id, ID, required: true
   end
 
+  field :resources_by_figgy_ids, [Types::Resource], null: true do
+    description "Find resources by IDs"
+    argument :ids, [ID], required: true
+  end
+
   field :resources_by_bibid, [Types::Resource], null: true do
     description "Find a resource by BibID"
     argument :bib_id, String, required: true
@@ -34,6 +39,12 @@ class Types::QueryType < Types::BaseObject
   rescue Valkyrie::Persistence::ObjectNotFoundError
     Valkyrie.logger.error("Failed to retrieve the resource #{id} for a GraphQL query")
     nil
+  end
+
+  def resources_by_figgy_ids(ids:)
+    resources = query_service.find_many_by_ids(ids: ids)
+    readable_resources = resources.select { |resource| ability.can? :read, resource }
+    readable_resources.select { |r| type_defined?(r) }.to_a
   end
 
   def resources_by_bibid(bib_id:)

@@ -21,6 +21,8 @@ describe OrangelightDocument do
       let(:numismatic_artist) { NumismaticArtist.new(person_id: person.id, signature: "artist signature", role: "artist role", side: "artist side") }
       let(:numismatic_attribute) { NumismaticAttribute.new(description: "attribute description", name: "attribute name") }
       let(:numismatic_citation) { NumismaticCitation.new(part: "citation part", number: "citation number", numismatic_reference_id: reference.id) }
+      let(:numismatic_monogram1) { FactoryBot.create_for_repository(:numismatic_monogram, title: "Alexander", thumbnail_id: "alexander-url") }
+      let(:numismatic_monogram2) { FactoryBot.create_for_repository(:numismatic_monogram, title: "Zeus", thumbnail_id: "zeus-url") }
       let(:artist) { FactoryBot.create_for_repository(:numismatic_artist) }
       let(:numismatic_place) { FactoryBot.create_for_repository(:numismatic_place) }
       let(:numismatic_person) { FactoryBot.create_for_repository(:numismatic_person) }
@@ -56,6 +58,7 @@ describe OrangelightDocument do
                                          master_id: numismatic_person.id,
                                          ce1: "-91",
                                          ce2: "-41",
+                                         numismatic_monogram_ids: [numismatic_monogram1.id, numismatic_monogram2.id],
                                          denomination: "1/2 Penny",
                                          metal: "copper",
                                          shape: "round",
@@ -157,6 +160,7 @@ describe OrangelightDocument do
         expect(output[:issue_references_sort]).to eq "short-title citation part citation number"
         expect(output[:issue_artists_s]).to eq ["name1 name2, artist signature"]
         expect(output[:issue_artists_sort]).to eq "name1 name2, artist signature"
+        expect(output[:issue_monogram_title_s]).to contain_exactly("Alexander", "Zeus")
       end
     end
 
