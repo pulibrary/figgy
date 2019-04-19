@@ -48,7 +48,7 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
                          :rendered_rights_statement,
                          :thumbnail_id
 
-  delegate :members, :decorated_file_sets, :decorated_coins, :coin_count, :decorated_numismatic_place, :decorated_ruler, :decorated_numismatic_monograms, to: :wayfinder
+  delegate :members, :decorated_file_sets, :decorated_coins, :coin_count, :decorated_master, :decorated_numismatic_place, :decorated_ruler, :decorated_numismatic_monograms, to: :wayfinder
 
   def attachable_objects
     [Coin]
@@ -56,6 +56,10 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
 
   def first_range
     @first_range ||= Array.wrap(date_range).map(&:decorate).first
+  end
+
+  def master
+    decorated_master&.title
   end
 
   def rendered_date_range

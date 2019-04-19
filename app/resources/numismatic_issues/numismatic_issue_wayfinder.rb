@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class NumismaticIssueWayfinder < BaseWayfinder
+  relationship_by_property :masters, property: :master_id, singular: true
   relationship_by_property :members, property: :member_ids
   relationship_by_property :numismatic_places, property: :numismatic_place_id, singular: true
   relationship_by_property :rulers, property: :ruler_id, singular: true

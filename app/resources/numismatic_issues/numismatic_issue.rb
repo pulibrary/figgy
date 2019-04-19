@@ -9,6 +9,7 @@ class NumismaticIssue < Resource
   attribute :numismatic_monogram_ids
   attribute :numismatic_place_id
   attribute :ruler_id
+  attribute :master_id
 
   # descriptive metadata
   attribute :numismatic_artist, Valkyrie::Types::Array.of(NumismaticArtist).meta(ordered: true)
@@ -19,7 +20,6 @@ class NumismaticIssue < Resource
   attribute :edge
   attribute :era
   attribute :issue_number, Valkyrie::Types::Anything
-  attribute :master
   attribute :metal
   attribute :note
   attribute :object_date

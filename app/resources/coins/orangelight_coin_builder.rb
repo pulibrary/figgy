@@ -80,7 +80,7 @@ class OrangelightCoinBuilder
         issue_era_s: parent.era,
         issue_ruler_s: [parent.ruler],
         issue_ruler_sort: parent.ruler,
-        issue_master_s: parent.master,
+        issue_master_s: [parent.master],
         issue_workshop_s: parent.workshop,
         issue_series_s: parent.series,
         issue_place_s: [parent.rendered_place],
