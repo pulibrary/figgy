@@ -134,8 +134,8 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.rendered_rights_statement", text: "Copyright Not Evaluated"
       expect(page).to have_css ".attribute.visibility", text: "open"
       expect(page).to have_css ".attribute.member_of_collections", text: "Title"
-      expect(page).to have_css ".attribute.numismatic_artists", text: "artist person, artist role"
-      expect(page).to have_css ".attribute.numismatic_citations", text: "short-title part number"
+      expect(page).to have_css ".attribute.artists", text: "artist person, artist role"
+      expect(page).to have_css ".attribute.citations", text: "short-title part number"
       expect(page).to have_css ".attribute.color", text: "test value"
       expect(page).to have_css ".attribute.rendered_date_range", text: "2017-2018"
       expect(page).to have_css ".attribute.denomination", text: "test value"
@@ -167,7 +167,7 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.ruler", text: "name1 name2 epithet (1868 - 1963)"
       expect(page).to have_css ".attribute.series", text: "test value"
       expect(page).to have_css ".attribute.shape", text: "test value"
-      expect(page).to have_css ".attribute.numismatic_subjects", text: "Animal, unicorn"
+      expect(page).to have_css ".attribute.subjects", text: "Animal, unicorn"
       expect(page).to have_css ".attribute.workshop", text: "test value"
     end
   end

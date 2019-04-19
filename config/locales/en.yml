@@ -85,10 +85,6 @@ en:
           label: "Collections"
         md5:
           label: "MD5"
-        numismatic_artists:
-          label: "Artists"
-        numismatic_citations:
-          label: "Citations"
         sha1:
           label: "SHA-1"
         sha256:

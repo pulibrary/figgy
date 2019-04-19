@@ -32,21 +32,21 @@ RSpec.describe NumismaticIssueDecorator do
     end
   end
 
-  describe "#numismatic_citations" do
-    it "renders the nested numismatic_citations" do
-      expect(decorator.numismatic_citations).to eq(["short-title citation part citation number"])
+  describe "#citations" do
+    it "renders the nested citations" do
+      expect(decorator.citations).to eq(["short-title citation part citation number"])
     end
   end
 
-  describe "#numismatic_artists" do
+  describe "#artists" do
     it "renders the nested artists" do
-      expect(decorator.numismatic_artists).to eq(["artist person, artist role"])
+      expect(decorator.artists).to eq(["artist person, artist role"])
     end
   end
 
-  describe "#numismatic_subjects" do
+  describe "#subjects" do
     it "renders the nested subjects" do
-      expect(decorator.numismatic_subjects).to eq(["Animal, unicorn"])
+      expect(decorator.subjects).to eq(["Animal, unicorn"])
     end
   end
 
