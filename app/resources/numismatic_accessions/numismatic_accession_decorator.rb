@@ -14,20 +14,7 @@ class NumismaticAccessionDecorator < Valkyrie::ResourceDecorator
 
   delegate :decorated_person, to: :wayfinder
 
-  def date
-    Array.wrap(super).first
-  end
-
-  def person
-    return nil unless decorated_person
-    [decorated_person.name1, decorated_person.name2].compact.join(" ")
-  end
-
-  def firm
-    Array.wrap(super).first
-  end
-
-  def type
+  def account
     Array.wrap(super).first
   end
 
@@ -35,12 +22,30 @@ class NumismaticAccessionDecorator < Valkyrie::ResourceDecorator
     Array.wrap(super).first
   end
 
-  def account
-    Array.wrap(super).first
+  def cost_label
+    "" unless cost
+    "(#{cost})"
   end
 
   def citations
     numismatic_citation.map { |c| c.decorate.title }
+  end
+
+  def date
+    Array.wrap(super).first
+  end
+
+  def firm
+    Array.wrap(super).first
+  end
+
+  def from_label
+    divider = "/" if person && firm
+    "#{person}#{divider}#{firm}"
+  end
+
+  def label
+    "#{accession_number}: #{date} #{type} #{from_label} #{cost_label}"
   end
 
   def manageable_files?
@@ -51,17 +56,12 @@ class NumismaticAccessionDecorator < Valkyrie::ResourceDecorator
     false
   end
 
-  def label
-    "#{accession_number}: #{date} #{type} #{from_label} #{cost_label}"
+  def person
+    return nil unless decorated_person
+    [decorated_person.name1, decorated_person.name2].compact.join(" ")
   end
 
-  def from_label
-    divider = "/" if person && firm
-    "#{person}#{divider}#{firm}"
-  end
-
-  def cost_label
-    "" unless cost
-    "(#{cost})"
+  def type
+    Array.wrap(super).first
   end
 end
