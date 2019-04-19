@@ -159,7 +159,6 @@ Metrics/MethodLength:
     - 'app/values/viewer_configuration.rb'
     - 'app/preserver/preserve_resource.rb'
     - 'app/services/preserver.rb'
-    - 'app/graphql/mutations/report_cloud_fixity.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
