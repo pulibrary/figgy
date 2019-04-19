@@ -20,17 +20,31 @@ RSpec.describe NumismaticPersonDecorator do
       end
     end
 
-    context "with only years_active start and end dates" do
+    context "with only a died date" do
+      let(:numismatic_person) do
+        FactoryBot.create_for_repository(:numismatic_person,
+                                         born: nil,
+                                         died: "1963",
+                                         years_active_start: nil,
+                                         years_active_end: nil)
+      end
+
+      it "generates a title" do
+        expect(decorator.title).to eq("name1 name2 epithet ( - 1963)")
+      end
+    end
+
+    context "with only a years_active_start date" do
       let(:numismatic_person) do
         FactoryBot.create_for_repository(:numismatic_person,
                                          born: nil,
                                          died: nil,
                                          years_active_start: "1894",
-                                         years_active_end: "1961")
+                                         years_active_end: nil)
       end
 
       it "generates a title" do
-        expect(decorator.title).to eq("name1 name2 epithet (1894 - 1961)")
+        expect(decorator.title).to eq("name1 name2 epithet (1894 - )")
       end
     end
   end
