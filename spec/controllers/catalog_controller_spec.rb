@@ -852,7 +852,6 @@ RSpec.describe CatalogController do
         edge: "issue-edge",
         era: "issue-era",
         identifier: "issue-identifier",
-        master: "issue-master",
         metal: "issue-metal",
         note: "issue-note",
         object_date: "issue-object-date",

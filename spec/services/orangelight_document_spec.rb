@@ -50,6 +50,7 @@ describe OrangelightDocument do
                                          numismatic_citation: numismatic_citation,
                                          numismatic_place_id: numismatic_place.id,
                                          ruler_id: numismatic_person.id,
+                                         master_id: numismatic_person.id,
                                          date_range: date_range,
                                          denomination: "1/2 Penny",
                                          metal: "copper",
@@ -57,7 +58,6 @@ describe OrangelightDocument do
                                          color: "green",
                                          edge: "GOTT MIT UNS",
                                          era: "uncertain",
-                                         master: "William Wood",
                                          workshop: "Bristol",
                                          series: "Hibernia",
                                          obverse_figure: "bust",
@@ -131,7 +131,7 @@ describe OrangelightDocument do
         expect(output[:issue_era_s]).to eq ["uncertain"]
         expect(output[:issue_ruler_s]).to eq ["name1 name2 epithet (1868 - 1963)"]
         expect(output[:issue_ruler_sort]).to eq "name1 name2 epithet (1868 - 1963)"
-        expect(output[:issue_master_s]).to eq ["William Wood"]
+        expect(output[:issue_master_s]).to eq ["name1 name2 epithet (1868 - 1963)"]
         expect(output[:issue_workshop_s]).to eq ["Bristol"]
         expect(output[:issue_series_s]).to eq ["Hibernia"]
         expect(output[:issue_place_s]).to eq ["city, state, region"]

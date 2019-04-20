@@ -93,12 +93,12 @@ RSpec.feature "NumismaticIssues" do
         numismatic_artist: numismatic_artist,
         numismatic_citation: numismatic_citation,
         ruler_id: numismatic_person.id,
+        master_id: numismatic_person.id,
         color: "test value",
         date_range: DateRange.new(start: "2017", end: "2018"),
         denomination: "test value",
         edge: "test value",
         era: "test value",
-        master: "test value",
         metal: "test value",
         note: "test value",
         object_date: "test value",
@@ -139,7 +139,7 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.denomination", text: "test value"
       expect(page).to have_css ".attribute.edge", text: "test value"
       expect(page).to have_css ".attribute.era", text: "test value"
-      expect(page).to have_css ".attribute.master", text: "test value"
+      expect(page).to have_css ".attribute.master", text: "name1 name2 epithet (1868 - 1963)"
       expect(page).to have_css ".attribute.metal", text: "test value"
       expect(page).to have_css ".attribute.note", text: "test value"
       expect(page).to have_css ".attribute.object_date", text: "test value"

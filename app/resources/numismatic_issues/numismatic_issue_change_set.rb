@@ -12,7 +12,6 @@ class NumismaticIssueChangeSet < ChangeSet
   property :edge, multiple: false, required: false
   property :era, multiple: false, required: false
   property :issue_number, multiple: false, required: false
-  property :master, multiple: false, required: false
   property :metal, multiple: false, required: false
   property :note, multiple: true, required: false, default: []
   property :object_date, multiple: false, required: false
@@ -41,6 +40,7 @@ class NumismaticIssueChangeSet < ChangeSet
 
   property :read_groups, multiple: true, required: false
   property :depositor, multiple: false, required: false
+  property :master_id, multiple: false, required: false, type: Valkyrie::Types::ID
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :numismatic_monogram_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
@@ -81,7 +81,7 @@ class NumismaticIssueChangeSet < ChangeSet
         :date_range_form,
         :era,
         :ruler_id,
-        :master,
+        :master_id,
         :workshop,
         :series,
         :subject,
