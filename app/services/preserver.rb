@@ -95,7 +95,8 @@ class Preserver
           label: "#{resource.id}.json",
           mime_type: "application/json",
           checksum: MultiChecksum.for(temp_metadata_file),
-          use: Valkyrie::Vocab::PCDMUse.PreservedMetadata
+          use: Valkyrie::Vocab::PCDMUse.PreservedMetadata,
+          id: SecureRandom.uuid
         )
       end
   end

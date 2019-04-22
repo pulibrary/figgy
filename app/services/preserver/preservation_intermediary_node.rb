@@ -38,7 +38,8 @@ class Preserver
         use: Valkyrie::Vocab::PCDMUse.PreservationCopy,
         mime_type: binary_node.mime_type,
         checksum: calculate_checksum,
-        preservation_copy_of_id: binary_node.id
+        preservation_copy_of_id: binary_node.id,
+        id: SecureRandom.uuid
       )
     end
 

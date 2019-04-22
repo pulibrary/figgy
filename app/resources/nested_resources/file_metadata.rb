@@ -40,7 +40,8 @@ class FileMetadata < Valkyrie::Resource
         mime_type: file.content_type,
         use: file.try(:use) || [Valkyrie::Vocab::PCDMUse.OriginalFile],
         created_at: Time.current,
-        updated_at: Time.current)
+        updated_at: Time.current,
+        id: SecureRandom.uuid)
   end
 
   def derivative?
@@ -62,6 +63,14 @@ class FileMetadata < Valkyrie::Resource
 
   def preservation_file?
     use.include?(Valkyrie::Vocab::PCDMUse.PreservationMasterFile)
+  end
+
+  def preserved_metadata?
+    use.include?(Valkyrie::Vocab::PCDMUse.PreservedMetadata)
+  end
+
+  def preservation_copy?
+    use.include?(Valkyrie::Vocab::PCDMUse.PreservationCopy)
   end
 
   def intermediate_file?
