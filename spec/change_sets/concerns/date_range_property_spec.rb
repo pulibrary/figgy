@@ -61,7 +61,7 @@ RSpec.describe DateRangeProperty do
   end
 
   context "when there's a date range set" do
-    let(:resource) { FactoryBot.build(:numismatic_issue, date_range: DateRange.new(start: "2017", end: "2018")) }
+    let(:resource) { FactoryBot.build(:scanned_resource, date_range: DateRange.new(start: "2017", end: "2018")) }
     it "sets it single-valued appropriately" do
       change_set.prepopulate!
       expect(change_set.date_range_form.start).to eq "2017"

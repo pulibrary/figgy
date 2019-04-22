@@ -8,7 +8,8 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
           :edge,
           :object_date,
           :era,
-          :rendered_date_range,
+          :ce1,
+          :ce2,
           :ruler,
           :rendered_place,
           :master,
@@ -70,10 +71,6 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
     numismatic_citation.map { |c| c.decorate.title }
   end
 
-  def first_range
-    @first_range ||= Array.wrap(date_range).map(&:decorate).first
-  end
-
   # Whether this box has a workflow state that grants access to its contents
   # @return [TrueClass, FalseClass]
   def grant_access_state?
@@ -90,11 +87,6 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
 
   def master
     decorated_master&.title
-  end
-
-  def rendered_date_range
-    return unless first_range.present?
-    first_range.range_string
   end
 
   def rendered_place

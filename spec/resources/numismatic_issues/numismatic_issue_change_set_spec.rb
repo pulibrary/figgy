@@ -62,11 +62,11 @@ RSpec.describe NumismaticIssueChangeSet do
         expect(change_set).not_to be_valid
       end
     end
-  end
-
-  describe "date_range mixin" do
-    it "is included" do
-      expect { change_set.date_range }.not_to raise_error NoMethodError
+    context "when ce1 or ce2 are not dates" do
+      it "is not valid" do
+        change_set.validate(ce1: "abcd", ce2: "1979")
+        expect(change_set).not_to be_valid
+      end
     end
   end
 

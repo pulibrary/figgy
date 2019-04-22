@@ -15,8 +15,9 @@ class NumismaticIssue < Resource
   attribute :numismatic_artist, Valkyrie::Types::Array.of(NumismaticArtist).meta(ordered: true)
   attribute :numismatic_citation, Valkyrie::Types::Array.of(NumismaticCitation).meta(ordered: true)
   attribute :numismatic_subject, Valkyrie::Types::Array.of(NumismaticSubject).meta(ordered: true)
+  attribute :ce1
+  attribute :ce2
   attribute :color
-  attribute :date_range
   attribute :denomination
   attribute :edge
   attribute :era

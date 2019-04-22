@@ -4,10 +4,11 @@ class NumismaticIssueChangeSet < ChangeSet
   apply_workflow(DraftCompleteWorkflow)
 
   include VisibilityProperty
-  include DateRangeProperty
   collection :numismatic_citation, multiple: true, required: false, form: NumismaticCitationChangeSet, populator: :populate_nested_collection, default: []
   collection :numismatic_artist, multiple: true, required: false, form: NumismaticArtistChangeSet, populator: :populate_nested_collection, default: []
   collection :numismatic_subject, multiple: true, required: false, form: NumismaticSubjectChangeSet, populator: :populate_nested_collection, default: []
+  property :ce1, multiple: false, required: false
+  property :ce2, multiple: false, required: false
   property :color, multiple: false, required: false
   property :denomination, multiple: false, required: false
   property :edge, multiple: false, required: false
@@ -67,6 +68,7 @@ class NumismaticIssueChangeSet < ChangeSet
   validates_with ViewingDirectionValidator
   validates_with ViewingHintValidator
   validates :visibility, presence: true
+  validates :ce1, :ce2, year: true
 
   def primary_terms
     {
@@ -78,7 +80,8 @@ class NumismaticIssueChangeSet < ChangeSet
         :color,
         :edge,
         :object_date,
-        :date_range_form,
+        :ce1,
+        :ce2,
         :era,
         :ruler_id,
         :master_id,

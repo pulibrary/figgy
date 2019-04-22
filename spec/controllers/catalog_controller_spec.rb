@@ -845,8 +845,9 @@ RSpec.describe CatalogController do
     let(:issue) { persister.save(resource: FactoryBot.build(:complete_open_numismatic_issue, issue_attr)) }
     let(:issue_metadata) do
       {
+        ce1: "2017",
+        ce2: "2018",
         color: "issue-color",
-        date_range: DateRange.new(start: "2017", end: "2018"),
         denomination: "issue-denomination",
         depositor: "issue-depositor",
         edge: "issue-edge",
