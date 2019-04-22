@@ -14,6 +14,7 @@ class NumismaticIssue < Resource
   # descriptive metadata
   attribute :numismatic_artist, Valkyrie::Types::Array.of(NumismaticArtist).meta(ordered: true)
   attribute :numismatic_citation, Valkyrie::Types::Array.of(NumismaticCitation).meta(ordered: true)
+  attribute :numismatic_subject, Valkyrie::Types::Array.of(NumismaticSubject).meta(ordered: true)
   attribute :color
   attribute :date_range
   attribute :denomination
@@ -43,7 +44,6 @@ class NumismaticIssue < Resource
   attribute :reverse_symbol
   attribute :series
   attribute :shape
-  attribute :subject
   attribute :workshop
 
   # adminstrative metadata

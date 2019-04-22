@@ -101,10 +101,10 @@ class OrangelightCoinBuilder
         issue_reverse_figure_relationship_s: parent.reverse_figure_relationship,
         issue_reverse_legend_s: parent.reverse_legend,
         issue_reverse_attributes_s: parent.reverse_attributes,
-        issue_references_s: parent.numismatic_citations,
-        issue_references_sort: parent.numismatic_citations&.first,
-        issue_artists_s: parent.numismatic_artists,
-        issue_artists_sort: parent.numismatic_artists&.first
+        issue_references_s: parent.citations,
+        issue_references_sort: parent.citations&.first,
+        issue_artists_s: parent.artists,
+        issue_artists_sort: parent.artists&.first
       }
     end
 

@@ -111,7 +111,7 @@ RSpec.feature "Coins" do
       expect(page).to have_css ".attribute.visibility", text: "open"
       expect(page).to have_css ".attribute.number_in_accession", text: 123
       expect(page).to have_css ".attribute.analysis", text: "test value"
-      expect(page).to have_css ".attribute.numismatic_citations", text: "short-title part number"
+      expect(page).to have_css ".attribute.citations", text: "short-title part number"
       expect(page).to have_css ".attribute.counter_stamp", text: "test value"
       expect(page).to have_css ".attribute.die_axis", text: "test value"
       expect(page).to have_css ".attribute.find_date", text: "test value"

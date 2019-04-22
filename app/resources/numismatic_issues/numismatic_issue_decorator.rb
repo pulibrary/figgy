@@ -32,11 +32,11 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
           :reverse_legend,
           :decorated_numismatic_monograms,
           :note,
-          :numismatic_citations,
-          :numismatic_artists,
+          :citations,
+          :artists,
+          :subjects,
           :member_of_collections,
           :rendered_rights_statement,
-          :subject,
           :replaces,
           :visibility
 
@@ -48,39 +48,30 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
                          :rendered_rights_statement,
                          :thumbnail_id
 
-  delegate :members, :decorated_file_sets, :decorated_coins, :coin_count, :decorated_master, :decorated_numismatic_place, :decorated_ruler, :decorated_numismatic_monograms, to: :wayfinder
+  delegate :coin_count,
+           :decorated_coins,
+           :decorated_file_sets,
+           :decorated_numismatic_monograms,
+           :decorated_numismatic_place,
+           :decorated_master,
+           :decorated_ruler,
+           :members,
+           to: :wayfinder
+
+  def artists
+    numismatic_artist.map { |a| a.decorate.title }
+  end
 
   def attachable_objects
     [Coin]
   end
 
+  def citations
+    numismatic_citation.map { |c| c.decorate.title }
+  end
+
   def first_range
     @first_range ||= Array.wrap(date_range).map(&:decorate).first
-  end
-
-  def master
-    decorated_master&.title
-  end
-
-  def rendered_date_range
-    return unless first_range.present?
-    first_range.range_string
-  end
-
-  def rendered_place
-    decorated_numismatic_place&.title
-  end
-
-  def ruler
-    decorated_ruler&.title
-  end
-
-  def numismatic_artists
-    numismatic_artist.map { |a| a.decorate.title }
-  end
-
-  def numismatic_citations
-    numismatic_citation.map { |c| c.decorate.title }
   end
 
   # Whether this box has a workflow state that grants access to its contents
@@ -95,6 +86,19 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
 
   def manageable_structure?
     false
+  end
+
+  def master
+    decorated_master&.title
+  end
+
+  def rendered_date_range
+    return unless first_range.present?
+    first_range.range_string
+  end
+
+  def rendered_place
+    decorated_numismatic_place&.title
   end
 
   def rendered_rights_statement
@@ -112,7 +116,15 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
     end
   end
 
+  def ruler
+    decorated_ruler&.title
+  end
+
   def state
     super.first
+  end
+
+  def subjects
+    numismatic_subject.map { |s| s.decorate.title }
   end
 end

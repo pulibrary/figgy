@@ -15,9 +15,9 @@ RSpec.describe CoinDecorator do
     end
   end
 
-  describe "#numismatic_citations" do
-    it "renders the linked numismatic_citations" do
-      expect(decorator.numismatic_citations).to eq(["short-title citation part citation number"])
+  describe "#citations" do
+    it "renders the linked citations" do
+      expect(decorator.citations).to eq(["short-title citation part citation number"])
     end
   end
 

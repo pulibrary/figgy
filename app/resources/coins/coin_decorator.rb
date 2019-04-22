@@ -17,7 +17,7 @@ class CoinDecorator < Valkyrie::ResourceDecorator
           :find_locus,
           :find_feature,
           :find_description,
-          :numismatic_citations,
+          :citations,
           :numismatic_collection,
           :rendered_accession,
           :number_in_accession,
@@ -27,19 +27,19 @@ class CoinDecorator < Valkyrie::ResourceDecorator
           :visibility,
           :append_id
 
-  delegate :members, :decorated_file_sets, :decorated_parent, :decorated_numismatic_accession, to: :wayfinder
+  delegate :decorated_file_sets, :decorated_numismatic_accession, :decorated_parent, :members, to: :wayfinder
   delegate :id, :label, to: :accession, prefix: true
 
   def ark_mintable_state?
     false
   end
 
-  def numismatic_citations
-    numismatic_citation.map { |c| c.decorate.title }
+  def call_number
+    "Coin #{coin_number}"
   end
 
-  def pub_created_display
-    [decorated_parent.ruler, decorated_parent.denomination&.first, decorated_parent.decorated_numismatic_place&.city].compact.join(", ") if decorated_parent
+  def citations
+    numismatic_citation.map { |c| c.decorate.title }
   end
 
   def manageable_files?
@@ -54,8 +54,15 @@ class CoinDecorator < Valkyrie::ResourceDecorator
     "coin-#{coin_number}"
   end
 
-  def call_number
-    "Coin #{coin_number}"
+  def pdf_file
+    pdf = file_metadata.find { |x| x.mime_type == ["application/pdf"] }
+    pdf if pdf && Valkyrie::StorageAdapter.find(:derivatives).find_by(id: pdf.file_identifiers.first)
+  rescue Valkyrie::StorageAdapter::FileNotFound
+    nil
+  end
+
+  def pub_created_display
+    [decorated_parent.ruler, decorated_parent.denomination&.first, decorated_parent.decorated_numismatic_place&.city].compact.join(", ") if decorated_parent
   end
 
   def rendered_accession
@@ -64,12 +71,5 @@ class CoinDecorator < Valkyrie::ResourceDecorator
 
   def state
     super.first
-  end
-
-  def pdf_file
-    pdf = file_metadata.find { |x| x.mime_type == ["application/pdf"] }
-    pdf if pdf && Valkyrie::StorageAdapter.find(:derivatives).find_by(id: pdf.file_identifiers.first)
-  rescue Valkyrie::StorageAdapter::FileNotFound
-    nil
   end
 end

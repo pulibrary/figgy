@@ -7,6 +7,7 @@ class NumismaticIssueChangeSet < ChangeSet
   include DateRangeProperty
   collection :numismatic_citation, multiple: true, required: false, form: NumismaticCitationChangeSet, populator: :populate_nested_collection, default: []
   collection :numismatic_artist, multiple: true, required: false, form: NumismaticArtistChangeSet, populator: :populate_nested_collection, default: []
+  collection :numismatic_subject, multiple: true, required: false, form: NumismaticSubjectChangeSet, populator: :populate_nested_collection, default: []
   property :color, multiple: false, required: false
   property :denomination, multiple: false, required: false
   property :edge, multiple: false, required: false
@@ -35,7 +36,6 @@ class NumismaticIssueChangeSet < ChangeSet
   property :reverse_symbol, multiple: false, required: false
   property :series, multiple: false, required: false
   property :shape, multiple: false, required: false
-  property :subject, multiple: true, required: false, default: []
   property :workshop, multiple: false, required: false
 
   property :read_groups, multiple: true, required: false
@@ -84,7 +84,6 @@ class NumismaticIssueChangeSet < ChangeSet
         :master_id,
         :workshop,
         :series,
-        :subject,
         :numismatic_monogram_ids,
         :numismatic_place_id
       ],
@@ -120,15 +119,22 @@ class NumismaticIssueChangeSet < ChangeSet
       ],
       "Artist" => [
         :numismatic_artist
+      ],
+      "Subject" => [
+        :numismatic_subject
       ]
     }
+  end
+
+  def build_numismatic_artist
+    schema["numismatic_artist"][:nested].new(model.class.schema[:numismatic_artist][[{}]].first)
   end
 
   def build_numismatic_citation
     schema["numismatic_citation"][:nested].new(model.class.schema[:numismatic_citation][[{}]].first)
   end
 
-  def build_numismatic_artist
-    schema["numismatic_artist"][:nested].new(model.class.schema[:numismatic_artist][[{}]].first)
+  def build_numismatic_subject
+    schema["numismatic_subject"][:nested].new(model.class.schema[:numismatic_subject][[{}]].first)
   end
 end
