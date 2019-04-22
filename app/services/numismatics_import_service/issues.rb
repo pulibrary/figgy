@@ -82,7 +82,6 @@ class NumismaticsImportService::Issues
       ruler_id: ruler_id(record), # map from ruler id to valkyrie id in importer
       series: record["Series"],
       shape: record["Shape"],
-      subject: nil, # nested
       workshop: record["Workshop"]
     )
   end

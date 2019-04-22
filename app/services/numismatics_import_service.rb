@@ -162,6 +162,10 @@ class NumismaticsImportService
       attributes[:numismatic_place_id] = valkyrie_place_id(place_id: attributes[:numismatic_place_id])
       attributes[:ruler_id] = valkyrie_id(value: attributes[:ruler_id], model: NumismaticPerson)
       attributes[:master_id] = valkyrie_id(value: attributes[:master_id], model: NumismaticPerson)
+
+      # Add nested properties
+      attributes[:numismatic_subject] = subjects.attributes_by_issue(issue_id: attributes[:issue_number]).map(&:to_h)
+
       resource = new_resource(klass: NumismaticIssue, **attributes)
 
       # Add child coins
@@ -186,6 +190,10 @@ class NumismaticsImportService
 
     def issues
       @issues ||= Issues.new(db_adapter: db_adapter)
+    end
+
+    def subjects
+      @subjects ||= Subjects.new(db_adapter: db_adapter)
     end
 
     def new_resource(klass:, **attributes)
