@@ -21,6 +21,7 @@ class Wayfinder < BaseWayfinder
     Playlist => PlaylistWayfinder,
     Coin => CoinWayfinder,
     NumismaticAccession => NumismaticAccessionWayfinder,
+    NumismaticArtist => NumismaticArtistWayfinder,
     NumismaticCitation => NumismaticCitationWayfinder,
     NumismaticIssue => NumismaticIssueWayfinder,
     NumismaticMonogram => NumismaticMonogramWayfinder,

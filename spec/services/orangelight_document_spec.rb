@@ -17,7 +17,8 @@ describe OrangelightDocument do
       subject(:builder) { described_class.new(coin) }
       let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
       let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
-      let(:numismatic_artist) { NumismaticArtist.new(person: "artist person", signature: "artist signature", role: "artist role", side: "artist side") }
+      let(:person) { FactoryBot.create_for_repository(:numismatic_person) }
+      let(:numismatic_artist) { NumismaticArtist.new(person_id: person.id, signature: "artist signature", role: "artist role", side: "artist side") }
       let(:numismatic_citation) { NumismaticCitation.new(part: "citation part", number: "citation number", numismatic_reference_id: reference.id) }
       let(:artist) { FactoryBot.create_for_repository(:numismatic_artist) }
       let(:numismatic_place) { FactoryBot.create_for_repository(:numismatic_place) }
@@ -153,8 +154,8 @@ describe OrangelightDocument do
         expect(output[:issue_reverse_attributes_s]).to eq ["above", "2 within Є"]
         expect(output[:issue_references_s]).to eq ["short-title citation part citation number"]
         expect(output[:issue_references_sort]).to eq "short-title citation part citation number"
-        expect(output[:issue_artists_s]).to eq ["artist person, artist role"]
-        expect(output[:issue_artists_sort]).to eq "artist person, artist role"
+        expect(output[:issue_artists_s]).to eq ["name1 name2, artist signature"]
+        expect(output[:issue_artists_sort]).to eq "name1 name2, artist signature"
       end
     end
 
