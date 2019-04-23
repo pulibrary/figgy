@@ -53,7 +53,8 @@ class NumismaticsImportService::Issues
       issue_number: id,
       artist: nil, # nested
       color: record["Color"],
-      date_range: DateRange.new(start: record["CE1"].to_s, end: record["CE2"].to_s, approximate: false),
+      ce1: record["CE1"].to_s,
+      ce2: record["CE2"].to_s,
       denomination: record["Denomination name"],
       edge: record["Edge"],
       era: record["EraName"],
