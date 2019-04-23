@@ -51,7 +51,6 @@ class NumismaticsImportService::Issues
 
     OpenStruct.new(
       issue_number: id,
-      artist: nil, # nested
       color: record["Color"],
       ce1: record["CE1"].to_s,
       ce2: record["CE2"].to_s,

@@ -165,6 +165,7 @@ class NumismaticsImportService
 
       # Add nested properties
       attributes[:numismatic_subject] = subjects.attributes_by_issue(issue_id: attributes[:issue_number]).map(&:to_h)
+      attributes[:numismatic_artist] = artist_attributes(issue_id: attributes[:issue_number])
 
       resource = new_resource(klass: NumismaticIssue, **attributes)
 
@@ -176,12 +177,24 @@ class NumismaticsImportService
       end
     end
 
+    def artist_attributes(issue_id:)
+      artists.attributes_by_issue(issue_id: issue_id).map do |record|
+        person = record[:person_id] ? "person-#{record[:person_id]}" : nil
+        record[:person_id] = valkyrie_id(value: person, model: NumismaticPerson)
+        record.to_h
+      end
+    end
+
     def change_set_persister
       @change_set_persister ||= NumismaticIssuesController.change_set_persister
     end
 
     def query_service
       @query_service ||= change_set_persister.query_service
+    end
+
+    def artists
+      @artists ||= Artists.new(db_adapter: db_adapter)
     end
 
     def coins
