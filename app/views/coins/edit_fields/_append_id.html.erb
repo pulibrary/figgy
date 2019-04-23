@@ -1,0 +1,9 @@
+<%= f.input :append_id,
+            label: "Issue",
+            as: :select,
+            collection: @available_issues,
+            selected: @selected_issue,
+            label_method: :title,
+            value_method: :id,
+            input_html: { multiple: f.object.multiple?(key) },
+            required: f.object.required?(key) %>

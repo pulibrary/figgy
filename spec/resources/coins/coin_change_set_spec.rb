@@ -4,10 +4,11 @@ require "rails_helper"
 RSpec.describe CoinChangeSet do
   subject(:change_set) { described_class.new(coin) }
   let(:coin) { FactoryBot.build(:coin) }
+  let(:issue) { FactoryBot.create_for_repository(member_ids: [coin.id]) }
 
   describe "#primary_terms" do
     it "includes displayed fields" do
-      expect(change_set.primary_terms.keys).to eq(["", "Citation", "Accession"])
+      expect(change_set.primary_terms.keys).to eq(["Numismatic Issue", "", "Citation", "Accession"])
       expect(change_set.primary_terms[""]).to include(:die_axis, :size, :weight)
       expect(change_set.primary_terms[""]).not_to include(:coin_number)
     end
