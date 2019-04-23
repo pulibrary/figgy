@@ -20,7 +20,6 @@ describe OrangelightDocument do
       let(:numismatic_artist) { NumismaticArtist.new(person: "artist person", signature: "artist signature", role: "artist role", side: "artist side") }
       let(:numismatic_citation) { NumismaticCitation.new(part: "citation part", number: "citation number", numismatic_reference_id: reference.id) }
       let(:artist) { FactoryBot.create_for_repository(:numismatic_artist) }
-      let(:date_range) { DateRange.new(start: "-91", end: "-41", approximate: true) }
       let(:numismatic_place) { FactoryBot.create_for_repository(:numismatic_place) }
       let(:numismatic_person) { FactoryBot.create_for_repository(:numismatic_person) }
       let(:coin) do
@@ -51,7 +50,8 @@ describe OrangelightDocument do
                                          numismatic_place_id: numismatic_place.id,
                                          ruler_id: numismatic_person.id,
                                          master_id: numismatic_person.id,
-                                         date_range: date_range,
+                                         ce1: "-91",
+                                         ce2: "-41",
                                          denomination: "1/2 Penny",
                                          metal: "copper",
                                          shape: "round",

@@ -31,8 +31,8 @@ RSpec.feature "NumismaticIssues" do
     expect(page).to have_css '.select[for="numismatic_issue_member_of_collection_ids"]', text: "Collections"
     expect(page).to have_field "Color"
     expect(page).to have_field "Date of object"
-    expect(page).to have_field "Date range start" # For the date range sequence
-    expect(page).to have_field "Date range end" # For the date range
+    expect(page).to have_field "Ce1" # For the date range sequence
+    expect(page).to have_field "Ce2" # For the date range
     expect(page).to have_field "Denomination"
     expect(page).to have_field "Edge"
     expect(page).to have_field "Era"
@@ -97,8 +97,9 @@ RSpec.feature "NumismaticIssues" do
         numismatic_subject: numismatic_subject,
         ruler_id: numismatic_person.id,
         master_id: numismatic_person.id,
+        ce1: "2017",
+        ce2: "2018",
         color: "test value",
-        date_range: DateRange.new(start: "2017", end: "2018"),
         denomination: "test value",
         edge: "test value",
         era: "test value",
@@ -135,9 +136,10 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.visibility", text: "open"
       expect(page).to have_css ".attribute.member_of_collections", text: "Title"
       expect(page).to have_css ".attribute.artists", text: "artist person, artist role"
+      expect(page).to have_css ".attribute.ce1", text: "2017"
+      expect(page).to have_css ".attribute.ce2", text: "2018"
       expect(page).to have_css ".attribute.citations", text: "short-title part number"
       expect(page).to have_css ".attribute.color", text: "test value"
-      expect(page).to have_css ".attribute.rendered_date_range", text: "2017-2018"
       expect(page).to have_css ".attribute.denomination", text: "test value"
       expect(page).to have_css ".attribute.edge", text: "test value"
       expect(page).to have_css ".attribute.era", text: "test value"
