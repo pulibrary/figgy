@@ -100,6 +100,7 @@ Metrics/ClassLength:
     - 'app/resources/numismatics/issues/numismatics/issue_decorator.rb'
     - 'app/resources/coins/coins_controller.rb'
     - 'app/services/preserver.rb'
+    - 'app/services/preserver/importer.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/helpers/application_helper.rb'
@@ -168,6 +169,7 @@ Metrics/MethodLength:
     - 'app/services/preserver.rb'
     - 'app/services/numismatics_import_service.rb'
     - 'app/jobs/ingest_archival_media_bag_job.rb'
+    - 'app/services/preserver/importer.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
