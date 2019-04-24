@@ -32,9 +32,9 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
           :reverse_attributes,
           :reverse_legend,
           :decorated_numismatic_monograms,
-          :note,
-          :citations,
           :artists,
+          :citations,
+          :notes,
           :subjects,
           :member_of_collections,
           :rendered_rights_statement,
@@ -87,6 +87,10 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
 
   def master
     decorated_master&.title
+  end
+
+  def notes
+    numismatic_note.map { |a| a.decorate.title }
   end
 
   def rendered_place

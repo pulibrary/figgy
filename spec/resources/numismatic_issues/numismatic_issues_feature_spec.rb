@@ -83,6 +83,7 @@ RSpec.feature "NumismaticIssues" do
     let(:numismatic_reference) { FactoryBot.create_for_repository(:numismatic_reference) }
     let(:person) { FactoryBot.create_for_repository(:numismatic_person) }
     let(:numismatic_artist) { NumismaticArtist.new(person_id: person.id, signature: "artist signature") }
+    let(:numismatic_note) { NumismaticNote.new(note: "note", type: "note type") }
     let(:numismatic_citation) { NumismaticCitation.new(part: "part", number: "number", numismatic_reference_id: numismatic_reference.id) }
     let(:numismatic_place) { FactoryBot.create_for_repository(:numismatic_place) }
     let(:numismatic_person) { FactoryBot.create_for_repository(:numismatic_person) }
@@ -95,6 +96,7 @@ RSpec.feature "NumismaticIssues" do
         numismatic_place_id: numismatic_place.id,
         numismatic_artist: numismatic_artist,
         numismatic_citation: numismatic_citation,
+        numismatic_note: numismatic_note,
         numismatic_subject: numismatic_subject,
         ruler_id: numismatic_person.id,
         master_id: numismatic_person.id,
@@ -105,7 +107,6 @@ RSpec.feature "NumismaticIssues" do
         edge: "test value",
         era: "test value",
         metal: "test value",
-        note: "test value",
         object_date: "test value",
         object_type: "test value",
         obverse_attributes: "test value",
@@ -146,7 +147,7 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.era", text: "test value"
       expect(page).to have_css ".attribute.master", text: "name1 name2 epithet (1868 - 1963)"
       expect(page).to have_css ".attribute.metal", text: "test value"
-      expect(page).to have_css ".attribute.note", text: "test value"
+      expect(page).to have_css ".attribute.notes", text: "note"
       expect(page).to have_css ".attribute.object_date", text: "test value"
       expect(page).to have_css ".attribute.object_type", text: "test value"
       expect(page).to have_css ".attribute.obverse_attributes", text: "test value"
