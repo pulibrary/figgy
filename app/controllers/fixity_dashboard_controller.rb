@@ -3,6 +3,10 @@ class FixityDashboardController < ApplicationController
   delegate :query_service, to: :metadata_adapter
 
   def show
+    @cloud_failures = query_service.custom_queries.find_cloud_fixity_failures.map(&:decorate)
+    @cloud_recent_checks = query_service.custom_queries.find_cloud_fixity_checked(sort: "desc", limit: 10).map(&:decorate)
+    @cloud_upcoming_checks = query_service.custom_queries.find_cloud_fixity_checked(limit: 20).map(&:decorate)
+
     @failures = query_service.custom_queries.find_fixity_failures.map(&:decorate)
     @recents = query_service.custom_queries.file_sets_sorted_by_updated(sort: "desc", limit: 10).map(&:decorate)
     @upcoming = query_service.custom_queries.file_sets_sorted_by_updated(limit: 20).map(&:decorate)
