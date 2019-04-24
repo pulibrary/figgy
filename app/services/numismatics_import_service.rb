@@ -165,6 +165,7 @@ class NumismaticsImportService
 
       # Add nested properties
       attributes[:numismatic_subject] = subjects.attributes_by_issue(issue_id: attributes[:issue_number]).map(&:to_h)
+      attributes[:numismatic_note] = notes.attributes_by_issue(issue_id: attributes[:issue_number]).map(&:to_h)
       attributes[:numismatic_artist] = artist_attributes(issue_id: attributes[:issue_number])
 
       resource = new_resource(klass: NumismaticIssue, **attributes)
@@ -203,6 +204,10 @@ class NumismaticsImportService
 
     def issues
       @issues ||= Issues.new(db_adapter: db_adapter)
+    end
+
+    def notes
+      @notes ||= Notes.new(db_adapter: db_adapter)
     end
 
     def subjects

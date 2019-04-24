@@ -91,6 +91,7 @@ Metrics/ClassLength:
     - 'app/controllers/catalog_controller.rb'
     - 'app/services/music_import_service.rb'
     - 'app/services/music_import_service/recording_collector.rb'
+    - 'app/services/numismatics_import_service.rb'
     - 'app/controllers/bulk_ingest_controller.rb'
     - 'app/controllers/application_controller.rb'
     - 'app/controllers/base_resource_controller.rb'

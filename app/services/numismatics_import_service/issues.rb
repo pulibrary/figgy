@@ -59,7 +59,6 @@ class NumismaticsImportService::Issues
       era: record["EraName"],
       master_id: master_id(record), # map from master id to valkyrie id in importer
       metal: record["MetalName"],
-      note: nil, # nested?
       numismatic_place_id: record["PlaceID"].to_s, # map from place id to valkyrie id in importer
       object_date: record["DateObj"],
       object_type: record["ObjectType"],
