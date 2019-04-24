@@ -4,8 +4,9 @@ class NumismaticIssueChangeSet < ChangeSet
   apply_workflow(DraftCompleteWorkflow)
 
   include VisibilityProperty
-  collection :numismatic_citation, multiple: true, required: false, form: NumismaticCitationChangeSet, populator: :populate_nested_collection, default: []
   collection :numismatic_artist, multiple: true, required: false, form: NumismaticArtistChangeSet, populator: :populate_nested_collection, default: []
+  collection :numismatic_citation, multiple: true, required: false, form: NumismaticCitationChangeSet, populator: :populate_nested_collection, default: []
+  collection :numismatic_note, multiple: true, required: false, form: NumismaticNoteChangeSet, populator: :populate_nested_collection, default: []
   collection :numismatic_subject, multiple: true, required: false, form: NumismaticSubjectChangeSet, populator: :populate_nested_collection, default: []
   property :ce1, multiple: false, required: false
   property :ce2, multiple: false, required: false
@@ -15,7 +16,6 @@ class NumismaticIssueChangeSet < ChangeSet
   property :era, multiple: false, required: false
   property :issue_number, multiple: false, required: false
   property :metal, multiple: false, required: false
-  property :note, multiple: true, required: false, default: []
   property :object_date, multiple: false, required: false
   property :object_type, multiple: false, required: false
   property :obverse_attributes, multiple: true, required: false, default: []
@@ -110,21 +110,23 @@ class NumismaticIssueChangeSet < ChangeSet
         :reverse_attributes,
         :reverse_legend
       ],
-      "Rights and Notes" => [
-        :note,
-        :member_of_collection_ids,
-        :downloadable,
-        :rights_statement,
-        :rights_note
+      "Artist" => [
+        :numismatic_artist
       ],
       "Citation" => [
         :numismatic_citation
       ],
-      "Artist" => [
-        :numismatic_artist
+      "Note" => [
+        :numismatic_note
       ],
       "Subject" => [
         :numismatic_subject
+      ],
+      "Rights and Notes" => [
+        :member_of_collection_ids,
+        :downloadable,
+        :rights_statement,
+        :rights_note
       ]
     }
   end
@@ -135,6 +137,10 @@ class NumismaticIssueChangeSet < ChangeSet
 
   def build_numismatic_citation
     schema["numismatic_citation"][:nested].new(model.class.schema[:numismatic_citation][[{}]].first)
+  end
+
+  def build_numismatic_note
+    schema["numismatic_note"][:nested].new(model.class.schema[:numismatic_note][[{}]].first)
   end
 
   def build_numismatic_subject

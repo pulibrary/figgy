@@ -4,6 +4,8 @@
 # of origin, denomination, composition, design, creator, etc.
 class NumismaticIssue < Resource
   include Valkyrie::Resource::AccessControls
+
+  # resources linked by ID
   attribute :member_ids, Valkyrie::Types::Array
   attribute :member_of_collection_ids
   attribute :numismatic_monogram_ids
@@ -11,10 +13,13 @@ class NumismaticIssue < Resource
   attribute :ruler_id
   attribute :master_id
 
-  # descriptive metadata
+  # nested resources
   attribute :numismatic_artist, Valkyrie::Types::Array.of(NumismaticArtist).meta(ordered: true)
   attribute :numismatic_citation, Valkyrie::Types::Array.of(NumismaticCitation).meta(ordered: true)
+  attribute :numismatic_note, Valkyrie::Types::Array.of(NumismaticNote).meta(ordered: true)
   attribute :numismatic_subject, Valkyrie::Types::Array.of(NumismaticSubject).meta(ordered: true)
+
+  # descriptive metadata
   attribute :ce1
   attribute :ce2
   attribute :color
@@ -23,7 +28,6 @@ class NumismaticIssue < Resource
   attribute :era
   attribute :issue_number, Valkyrie::Types::Anything
   attribute :metal
-  attribute :note
   attribute :object_date
   attribute :object_type
   attribute :obverse_attributes
@@ -34,7 +38,6 @@ class NumismaticIssue < Resource
   attribute :obverse_orientation
   attribute :obverse_part
   attribute :obverse_symbol
-
   attribute :reverse_attributes
   attribute :reverse_figure
   attribute :reverse_figure_description
@@ -69,8 +72,6 @@ class NumismaticIssue < Resource
     true
   end
 
-  # Placeholder title.
-  # TODO: Add more descriptive title when we have more information.
   def title
     ["Issue: #{issue_number}"]
   end

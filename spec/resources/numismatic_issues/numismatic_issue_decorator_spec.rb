@@ -9,12 +9,14 @@ RSpec.describe NumismaticIssueDecorator do
                                      state: "complete",
                                      numismatic_citation: numismatic_citation,
                                      numismatic_artist: numismatic_artist,
+                                     numismatic_note: numismatic_note,
                                      numismatic_subject: numismatic_subject)
   end
   let(:coin) { FactoryBot.create_for_repository(:coin) }
   let(:numismatic_citation) { NumismaticCitation.new(part: "citation part", number: "citation number", numismatic_reference_id: [reference.id]) }
   let(:person) { FactoryBot.create_for_repository(:numismatic_person) }
   let(:numismatic_artist) { NumismaticArtist.new(person_id: person.id, signature: "artist signature") }
+  let(:numismatic_note) { NumismaticNote.new(note: "note", type: "note type") }
   let(:numismatic_subject) { NumismaticSubject.new(type: "Animal", subject: "unicorn") }
   let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
 
@@ -48,6 +50,12 @@ RSpec.describe NumismaticIssueDecorator do
   describe "#subjects" do
     it "renders the nested subjects" do
       expect(decorator.subjects).to eq(["Animal, unicorn"])
+    end
+  end
+
+  describe "#notes" do
+    it "renders the nested notes" do
+      expect(decorator.notes).to eq(["note"])
     end
   end
 
