@@ -11,6 +11,8 @@ class CoinsController < BaseResourceController
 
   before_action :load_numismatic_accessions, only: [:new, :edit]
   before_action :load_numismatic_references, only: [:new, :edit]
+  before_action :load_available_issues, only: [:new, :edit]
+  before_action :selected_issue, only: [:new, :edit]
 
   def load_numismatic_accessions
     @numismatic_accessions = query_service.find_all_of_model(model: NumismaticAccession).map(&:decorate).sort_by(&:label)
@@ -18,6 +20,27 @@ class CoinsController < BaseResourceController
 
   def load_numismatic_references
     @numismatic_references = query_service.find_all_of_model(model: NumismaticReference).map(&:decorate).sort_by(&:short_title)
+  end
+
+  def load_available_issues
+    @available_issues = query_service.find_all_of_model(model: NumismaticIssue).map(&:decorate).sort_by(&:issue_number)
+  end
+
+  def parent_resource
+    @parent_resource ||=
+      if params[:id]
+        find_resource(params[:id]).decorate.parent
+      elsif params[:parent_id]
+        find_resource(params[:parent_id])
+      end
+  end
+
+  def numismatic_issue
+    parent_resource.is_a?(NumismaticIssue) ? parent_resource : nil
+  end
+
+  def selected_issue
+    @selected_issue = numismatic_issue&.id.to_s
   end
 
   def manifest
@@ -57,7 +80,6 @@ class CoinsController < BaseResourceController
         buffered_changeset_persister.save(change_set: change_set)
       end
     end
-
     redirect_path_args = { resource_id: change_set.id, id: pdf_file.id }
     redirect_path_args[:auth_token] = auth_token_param if auth_token_param
     redirect_to download_path(redirect_path_args)

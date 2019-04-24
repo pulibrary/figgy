@@ -27,7 +27,7 @@ class CoinDecorator < Valkyrie::ResourceDecorator
           :visibility,
           :append_id
 
-  delegate :decorated_file_sets, :decorated_numismatic_accession, :decorated_parent, :members, to: :wayfinder
+  delegate :decorated_file_sets, :decorated_numismatic_accession, :decorated_parent, :members, :parent, to: :wayfinder
   delegate :id, :label, to: :accession, prefix: true
 
   def ark_mintable_state?

@@ -34,9 +34,6 @@
                 <td>
                   <%= link_to 'View', coin_url, class: 'btn btn-default' %>
                   <%= link_to 'Edit', main_app.polymorphic_path([:edit, coin]), class: 'btn btn-default' %>
-                  <span class="input-group-btn">
-                    <%= f.button :button, "Detach", class: ["btn","btn-danger", 'btn-remove-row'] %>
-                  </span>
               </tr>
             <% end %>
           <% else %>
@@ -56,32 +53,6 @@
             <td class="alert-warning"></td>
           </tr>
         </tbody>
-        <tfoot>
-          <tr class="member-resources-attach">
-            <td>
-              <%= f.input :member_ids,
-                          placeholder: 'Attach an existing resource...',
-                          label: false,
-                          required: false,
-                          input_html: {
-                            class: [
-                              'related_resource_ids',
-                              'resource_member_ids',
-                              'form-control'
-                            ],
-                            value: nil
-                          } %>
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-              <span class="input-group-btn">
-                <%= f.button :button, "Attach", class: ["btn","btn-primary","btn-add-row"] %>
-              </span>
-            </td>
-          </tr>
-        </tfoot>
       </table>
     <% end %>
   </div>

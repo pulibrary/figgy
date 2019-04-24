@@ -29,6 +29,7 @@ class CoinChangeSet < ChangeSet
   property :depositor, multiple: false, required: false
   property :read_groups, multiple: true, required: false
   property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
+  property :append_id, virtual: true, multiple: false, required: true
 
   # Resources linked by reference
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
@@ -47,6 +48,7 @@ class CoinChangeSet < ChangeSet
   property :files, virtual: true, multiple: true, required: false
   property :pending_uploads, multiple: true, required: false
 
+  # validates_with ParentValidator
   validates_with AutoIncrementValidator, property: :coin_number
   validates_with CollectionValidator
   validates_with MemberValidator
@@ -77,7 +79,6 @@ class CoinChangeSet < ChangeSet
         :numismatic_collection,
         :provenance,
         :loan,
-        :append_id,
         :member_of_collection_ids,
         :rights_statement,
         :pdf_type
@@ -88,6 +89,9 @@ class CoinChangeSet < ChangeSet
       "Accession" => [
         :numismatic_accession_id,
         :number_in_accession
+      ],
+      "Numismatic Issue" => [
+        :append_id
       ]
     }
   end

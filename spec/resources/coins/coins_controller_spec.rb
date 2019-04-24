@@ -10,6 +10,14 @@ RSpec.describe CoinsController, type: :controller do
   end
   describe "new" do
     it_behaves_like "an access controlled new request"
+    render_views
+    it "is created in an issue" do
+      issue = FactoryBot.create_for_repository(:numismatic_issue)
+      get :new, params: { parent_id: issue.id.to_s }
+
+      expect(assigns(:selected_issue)).to be_truthy
+      expect(assigns(:available_issues)).to be_truthy
+    end
   end
   describe "create" do
     let(:valid_params) do
@@ -28,7 +36,7 @@ RSpec.describe CoinsController, type: :controller do
       it_behaves_like "an access controlled create request"
     end
 
-    context "creating a coin in the context of an issue" do
+    context "coin is created in the context of an issue" do
       let(:issue) { FactoryBot.create_for_repository(:numismatic_issue) }
       let(:user) { FactoryBot.create(:admin) }
 

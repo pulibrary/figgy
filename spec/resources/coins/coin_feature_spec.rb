@@ -44,6 +44,7 @@ RSpec.feature "Coins" do
   scenario "creating a new resource" do
     visit new_coin_path
 
+    expect(page).to have_field "Issue"
     expect(page).to have_field "Accession"
     expect(page).to have_field "Analysis"
     expect(page).to have_field "Counter stamp"
@@ -67,6 +68,7 @@ RSpec.feature "Coins" do
     expect(page).to have_field "Size"
     expect(page).to have_field "Technique"
     expect(page).to have_field "Weight"
+    expect(page).to have_content "Issue: 1"
 
     fill_in "Size", with: "3 cm"
     click_button "Save"
@@ -78,6 +80,7 @@ RSpec.feature "Coins" do
     let(:numismatic_accession) { FactoryBot.create_for_repository(:numismatic_accession) }
     let(:numismatic_reference) { FactoryBot.create_for_repository(:numismatic_reference) }
     let(:numismatic_citation) { NumismaticCitation.new(part: "part", number: "number", numismatic_reference_id: numismatic_reference.id) }
+    let(:numismatic_issue) { FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id]) }
     let(:coin) do
       FactoryBot.create_for_repository(
         :coin,
