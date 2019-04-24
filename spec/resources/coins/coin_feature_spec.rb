@@ -44,7 +44,6 @@ RSpec.feature "Coins" do
   scenario "creating a new resource" do
     visit new_coin_path
 
-    expect(page).to have_content ["Issue: 1"]
     expect(page).to have_field "Issue"
     expect(page).to have_field "Accession"
     expect(page).to have_field "Analysis"
@@ -69,6 +68,7 @@ RSpec.feature "Coins" do
     expect(page).to have_field "Size"
     expect(page).to have_field "Technique"
     expect(page).to have_field "Weight"
+    expect(page).to have_content "Issue: 1"
 
     fill_in "Size", with: "3 cm"
     click_button "Save"

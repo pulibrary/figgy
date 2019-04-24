@@ -23,7 +23,7 @@ class CoinsController < BaseResourceController
   end
 
   def load_available_issues
-    @available_issues = query_service.find_all_of_model(model: NumismaticIssue).map(&:decorate).sort_by(&:title)
+    @available_issues = query_service.find_all_of_model(model: NumismaticIssue).map(&:decorate).sort_by(&:issue_number)
   end
 
   def parent_resource

@@ -8,3 +8,11 @@ a span.check-mark {
   color: #5cb85c;
   position: relative !important;
 }
+
+.bootstrap-select.btn-group .dropdown-menu.open {
+	max-height: 300px !important;
+}
+
+.bootstrap-select.btn-group .dropdown-menu.inner {
+	max-height: 300px !important;
+}

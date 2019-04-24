@@ -8,7 +8,7 @@ RSpec.describe CoinChangeSet do
 
   describe "#primary_terms" do
     it "includes displayed fields" do
-      expect(change_set.primary_terms.keys).to eq(["Numismatic Issue", "", "Citation", "Accession"])
+      expect(change_set.primary_terms.keys).to eq(["", "Citation", "Accession", "Numismatic Issue"])
       expect(change_set.primary_terms[""]).to include(:die_axis, :size, :weight)
       expect(change_set.primary_terms[""]).not_to include(:coin_number)
     end

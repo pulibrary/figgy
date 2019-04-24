@@ -60,9 +60,6 @@ class CoinChangeSet < ChangeSet
 
   def primary_terms
     {
-      "Numismatic Issue" => [
-        :append_id
-      ],
       "" => [
         :weight,
         :size,
@@ -92,6 +89,9 @@ class CoinChangeSet < ChangeSet
       "Accession" => [
         :numismatic_accession_id,
         :number_in_accession
+      ],
+      "Numismatic Issue" => [
+        :append_id
       ]
     }
   end
