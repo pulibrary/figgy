@@ -5,6 +5,8 @@ class NumismaticArtistDecorator < Valkyrie::ResourceDecorator
           :role,
           :side
 
+  delegate :decorated_person, to: :wayfinder
+
   def manageable_files?
     false
   end
@@ -14,14 +16,11 @@ class NumismaticArtistDecorator < Valkyrie::ResourceDecorator
   end
 
   def person
-    Array.wrap(super).first
-  end
-
-  def role
-    Array.wrap(super).first
+    return nil unless decorated_person
+    [decorated_person.name1, decorated_person.name2].compact.join(" ")
   end
 
   def title
-    "#{person}, #{role}"
+    [person, signature].compact.join(", ")
   end
 end

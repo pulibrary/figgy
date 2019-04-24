@@ -13,7 +13,8 @@ RSpec.describe NumismaticIssueDecorator do
   end
   let(:coin) { FactoryBot.create_for_repository(:coin) }
   let(:numismatic_citation) { NumismaticCitation.new(part: "citation part", number: "citation number", numismatic_reference_id: [reference.id]) }
-  let(:numismatic_artist) { NumismaticArtist.new(person: "artist person", role: "artist role") }
+  let(:person) { FactoryBot.create_for_repository(:numismatic_person) }
+  let(:numismatic_artist) { NumismaticArtist.new(person_id: person.id, signature: "artist signature") }
   let(:numismatic_subject) { NumismaticSubject.new(type: "Animal", subject: "unicorn") }
   let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
 
@@ -40,7 +41,7 @@ RSpec.describe NumismaticIssueDecorator do
 
   describe "#artists" do
     it "renders the nested artists" do
-      expect(decorator.artists).to eq(["artist person, artist role"])
+      expect(decorator.artists).to eq(["name1 name2, artist signature"])
     end
   end
 

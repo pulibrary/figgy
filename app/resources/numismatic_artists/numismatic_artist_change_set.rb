@@ -2,7 +2,7 @@
 class NumismaticArtistChangeSet < ChangeSet
   delegate :human_readable_type, to: :model
 
-  property :person, multiple: false, required: false
+  property :person_id, multiple: false, required: false, type: Valkyrie::Types::ID
   property :signature, multiple: false, required: false
   property :role, multiple: false, required: false
   property :side, multiple: false, required: false
@@ -20,7 +20,7 @@ class NumismaticArtistChangeSet < ChangeSet
 
   def primary_terms
     [
-      :person,
+      :person_id,
       :signature,
       :role,
       :side

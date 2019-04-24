@@ -81,7 +81,8 @@ RSpec.feature "NumismaticIssues" do
   context "when a user creates a new numismatic issue" do
     let(:collection) { FactoryBot.create_for_repository(:collection) }
     let(:numismatic_reference) { FactoryBot.create_for_repository(:numismatic_reference) }
-    let(:numismatic_artist) { NumismaticArtist.new(person: "artist person", role: "artist role") }
+    let(:person) { FactoryBot.create_for_repository(:numismatic_person) }
+    let(:numismatic_artist) { NumismaticArtist.new(person_id: person.id, signature: "artist signature") }
     let(:numismatic_citation) { NumismaticCitation.new(part: "part", number: "number", numismatic_reference_id: numismatic_reference.id) }
     let(:numismatic_place) { FactoryBot.create_for_repository(:numismatic_place) }
     let(:numismatic_person) { FactoryBot.create_for_repository(:numismatic_person) }
@@ -135,7 +136,7 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.rendered_rights_statement", text: "Copyright Not Evaluated"
       expect(page).to have_css ".attribute.visibility", text: "open"
       expect(page).to have_css ".attribute.member_of_collections", text: "Title"
-      expect(page).to have_css ".attribute.artists", text: "artist person, artist role"
+      expect(page).to have_css ".attribute.artists", text: "name1 name2, artist signature"
       expect(page).to have_css ".attribute.ce1", text: "2017"
       expect(page).to have_css ".attribute.ce2", text: "2018"
       expect(page).to have_css ".attribute.citations", text: "short-title part number"

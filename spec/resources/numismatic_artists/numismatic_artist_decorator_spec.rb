@@ -3,7 +3,8 @@ require "rails_helper"
 
 RSpec.describe NumismaticArtistDecorator do
   subject(:decorator) { described_class.new(artist) }
-  let(:artist) { NumismaticArtist.new(person: "artist person", role: "artist role") }
+  let(:person) { FactoryBot.create_for_repository(:numismatic_person) }
+  let(:artist) { NumismaticArtist.new(person_id: person.id, signature: "artist signature") }
 
   describe "manage files and structure" do
     it "does not manage files or structure" do
@@ -14,7 +15,7 @@ RSpec.describe NumismaticArtistDecorator do
 
   describe "#title" do
     it "renders the artist title" do
-      expect(decorator.title).to eq("artist person, artist role")
+      expect(decorator.title).to eq("name1 name2, artist signature")
     end
   end
 end

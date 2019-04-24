@@ -7,7 +7,7 @@ RSpec.describe NumismaticArtistChangeSet do
 
   describe "#primary_terms" do
     it "includes displayed fields" do
-      expect(change_set.primary_terms).to include(:person, :signature, :role, :side)
+      expect(change_set.primary_terms).to include(:person_id, :signature, :role, :side)
     end
   end
 end
