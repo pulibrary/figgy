@@ -23,6 +23,7 @@ class NumismaticsImportService::Coins
     OpenStruct.new(
       coin_number: id,
       accession_number: record["AccessionNumber"],
+      numismatic_accession_id: nil, # link
       analysis: record["Analysis"],
       citation: nil, # nested
       counter_stamp: record["CounterStamp"],

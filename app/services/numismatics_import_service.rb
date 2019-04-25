@@ -8,6 +8,10 @@ class NumismaticsImportService
     @logger = logger || Logger.new(STDOUT)
   end
 
+  def ingest_references
+    ReferencesImporter.new(db_adapter: db_adapter, logger: logger).import!
+  end
+
   def ingest_issue(issue_number:)
     IssueImporter.new(issue_number: issue_number, db_adapter: db_adapter, file_root: file_root, logger: logger).import!
   end
@@ -18,6 +22,68 @@ class NumismaticsImportService
 
   def ingest_people
     PeopleImporter.new(db_adapter: db_adapter, logger: logger).import!
+  end
+
+  class ReferencesImporter
+    attr_reader :db_adapter, :logger
+    def initialize(db_adapter:, logger:)
+      @db_adapter = db_adapter
+      @logger = logger
+    end
+
+    def import!
+      create_references
+      link_members
+    end
+
+    def change_set_persister
+      @change_set_persister ||= NumismaticReferencesController.change_set_persister
+    end
+
+    def create_references
+      reference_numbers = references.ids
+      reference_numbers.each do |number|
+        attributes = references.base_attributes(id: number).to_h
+        attributes[:author_id] = link_authors(ids: attributes[:author_id])
+        new_resource(klass: NumismaticReference, **attributes)
+      end
+    end
+
+    def link_authors(ids:)
+      ids.map do |id|
+        valkyrie_id(value: id, model: NumismaticPerson).first
+      end
+    end
+
+    def link_members; end
+
+    def new_resource(klass:, **attributes)
+      collection = attributes.delete(:collection)
+
+      resource = klass.new
+
+      change_set = DynamicChangeSet.new(resource)
+      return unless change_set.validate(**attributes)
+      change_set.member_of_collection_ids = [collection.id] if collection.try(:id)
+
+      persisted = change_set_persister.save(change_set: change_set)
+      logger.info "Created the resource #{persisted.id}"
+      persisted
+    end
+
+    def references
+      @references ||= References.new(db_adapter: db_adapter)
+    end
+
+    def query_service
+      @query_service ||= change_set_persister.query_service
+    end
+
+    def valkyrie_id(property: :replaces, value:, model:)
+      return nil unless value
+      results = query_service.custom_queries.find_by_property(property: property, value: value)
+      results.select { |r| r.is_a? model }.map(&:id)
+    end
   end
 
   class PlacesImporter

@@ -36,6 +36,13 @@ class CoinsService
     end
   end
 
+  def self.clean_references
+    query_service.find_all_of_model(model: NumismaticReference).each do |reference|
+      logger.info "Deleting NumismaticReference: #{reference.id}"
+      delete(reference)
+    end
+  end
+
   def self.delete(resource)
     change_set_class = DynamicChangeSet
     change_set_persister = ::ChangeSetPersister.new(
