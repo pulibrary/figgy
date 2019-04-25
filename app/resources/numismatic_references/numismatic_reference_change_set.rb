@@ -2,7 +2,6 @@
 class NumismaticReferenceChangeSet < Valkyrie::ChangeSet
   delegate :human_readable_type, to: :model
 
-  property :author, multiple: true, required: false, default: []
   property :part_of_parent, multiple: false, required: false
   property :pub_info, multiple: false, required: false
   property :short_title, multiple: false, required: true
@@ -11,10 +10,11 @@ class NumismaticReferenceChangeSet < Valkyrie::ChangeSet
   property :replaces, multiple: true, required: false, default: []
 
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
+  property :author_id, multiple: false, required: false, type: Valkyrie::Types::ID
 
   def primary_terms
     [
-      :author,
+      :author_id,
       :part_of_parent,
       :pub_info,
       :short_title,

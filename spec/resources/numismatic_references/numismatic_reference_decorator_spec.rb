@@ -3,7 +3,8 @@ require "rails_helper"
 
 RSpec.describe NumismaticReferenceDecorator do
   subject(:decorator) { described_class.new(reference) }
-  let(:reference) { FactoryBot.create_for_repository(:numismatic_reference, member_ids: [child_reference.id]) }
+  let(:reference) { FactoryBot.create_for_repository(:numismatic_reference, author_id: numismatic_person.id, member_ids: [child_reference.id]) }
+  let(:numismatic_person) { FactoryBot.create_for_repository(:numismatic_person) }
   let(:child_reference) { FactoryBot.create_for_repository(:numismatic_reference) }
 
   describe "#attachable_objects" do
@@ -16,6 +17,12 @@ RSpec.describe NumismaticReferenceDecorator do
     it "does not manage files or structure" do
       expect(decorator.manageable_files?).to be false
       expect(decorator.manageable_structure?).to be false
+    end
+  end
+
+  describe "#author" do
+    it "renders short title as single value" do
+      expect(decorator.author).to eq("name1 name2 epithet (1868 - 1963)")
     end
   end
 

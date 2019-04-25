@@ -7,7 +7,7 @@ RSpec.describe NumismaticReferenceChangeSet do
 
   describe "#primary_terms" do
     it "includes displayed fields" do
-      expect(change_set.primary_terms).to include(:title, :short_title, :author, :part_of_parent)
+      expect(change_set.primary_terms).to include(:title, :short_title, :author_id, :part_of_parent)
     end
   end
 end

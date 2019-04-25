@@ -3,9 +3,12 @@
 # catalogs, etc.
 class NumismaticReference < Resource
   include Valkyrie::Resource::AccessControls
+
+  # resources linked by ID
+  attribute :author_id
   attribute :member_ids, Valkyrie::Types::Array
 
-  attribute :author
+  # descriptive metadata
   attribute :part_of_parent
   attribute :pub_info
   attribute :short_title

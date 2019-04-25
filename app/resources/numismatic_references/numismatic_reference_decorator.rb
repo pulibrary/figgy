@@ -7,10 +7,14 @@ class NumismaticReferenceDecorator < Valkyrie::ResourceDecorator
           :title,
           :year
 
-  delegate :members, :decorated_parent, to: :wayfinder
+  delegate :decorated_parent, :decorated_author, :members, to: :wayfinder
 
   def attachable_objects
     [NumismaticReference]
+  end
+
+  def author
+    decorated_author&.title
   end
 
   def manageable_files?

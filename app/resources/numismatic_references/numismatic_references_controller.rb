@@ -6,6 +6,7 @@ class NumismaticReferencesController < BaseResourceController
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
     storage_adapter: Valkyrie.config.storage_adapter
   )
+  before_action :load_numismatic_people, only: [:new, :edit]
   before_action :load_numismatic_references, only: :index
 
   def index
@@ -13,6 +14,10 @@ class NumismaticReferencesController < BaseResourceController
   end
 
   private
+
+    def load_numismatic_people
+      @numismatic_people = query_service.find_all_of_model(model: NumismaticPerson).map(&:decorate)
+    end
 
     def load_numismatic_references
       @numismatic_references = query_service.find_all_of_model(model: NumismaticReference).map(&:decorate)
