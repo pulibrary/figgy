@@ -10,7 +10,8 @@ RSpec.describe CloudFixity do
     {
       status: "SUCCESS",
       resource_id: "1",
-      child_id: "1"
+      child_id: "1",
+      child_property: :metadata_node
     }.to_json
   end
   let(:subscriber) { instance_double(Google::Cloud::Pubsub::Subscriber) }
@@ -28,7 +29,7 @@ RSpec.describe CloudFixity do
     it "works" do
       allow(UpdateFixityJob).to receive(:perform_later)
       CloudFixity::Worker.run!
-      expect(UpdateFixityJob).to have_received(:perform_later).with(status: "SUCCESS", resource_id: "1", child_id: "1")
+      expect(UpdateFixityJob).to have_received(:perform_later).with(status: "SUCCESS", resource_id: "1", child_id: "1", child_property: "metadata_node")
       expect(pubsub).to have_received(:topic).with("figgy-staging-fixity-status")
       expect(topic).to have_received(:subscription).with("figgy-staging-fixity-status")
     end

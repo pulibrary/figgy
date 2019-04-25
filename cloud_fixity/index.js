@@ -32,13 +32,15 @@ exports.checkFixity = (data, context) => {
       promise = topic.publishJSON({
         status: 'SUCCESS',
         resource_id: attributes.preservation_object_id,
-        child_id: attributes.file_metadata_node_id
+        child_id: attributes.file_metadata_node_id,
+        child_property: attributes.child_property
       })
     } else {
       promise = topic.publishJSON({
         status: 'FAILURE',
         resource_id: attributes.preservation_object_id,
-        child_id: attributes.file_metadata_node_id
+        child_id: attributes.file_metadata_node_id,
+        child_property: attributes.child_property
       })
     }
     return promise

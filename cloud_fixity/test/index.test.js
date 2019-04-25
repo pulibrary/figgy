@@ -26,7 +26,8 @@ test(`succeeds when given a good MD5`, async () => {
     preservation_object_id: '1',
     file_metadata_node_id: '1',
     cloudPath: 'example.tif',
-    md5: '2a28fb702286782b2cbf2ed9a5041ab1'
+    md5: '2a28fb702286782b2cbf2ed9a5041ab1',
+    child_property: 'bla'
   }
   const event = {
     data: Buffer.from(JSON.stringify(attributes)).toString('base64')
@@ -35,7 +36,8 @@ test(`succeeds when given a good MD5`, async () => {
   expect(publishJSON).toBeCalledWith({
     status: 'SUCCESS',
     resource_id: '1',
-    child_id: '1'
+    child_id: '1',
+    child_property: 'bla'
   })
 })
 
@@ -44,7 +46,8 @@ test(`fails when given a bad MD5`, async () => {
     preservation_object_id: '1',
     file_metadata_node_id: '1',
     cloudPath: 'example.tif',
-    md5: '123'
+    md5: '123',
+    child_property: 'bla'
   }
   const event = {
     data: Buffer.from(JSON.stringify(attributes)).toString('base64')
@@ -53,6 +56,7 @@ test(`fails when given a bad MD5`, async () => {
   expect(publishJSON).toBeCalledWith({
     status: 'FAILURE',
     resource_id: '1',
-    child_id: '1'
+    child_id: '1',
+    child_property: 'bla'
   })
 })
