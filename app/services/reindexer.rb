@@ -64,7 +64,8 @@ class Reindexer
 
   def blacklisted_models
     [
-      ProcessedEvent
+      ProcessedEvent,
+      Event
     ]
   end
 
