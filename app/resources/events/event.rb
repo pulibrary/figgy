@@ -2,10 +2,10 @@
 # Models events which modify resources
 
 class Event < Valkyrie::Resource
-  attribute :type
-  attribute :status
-  attribute :resource_id
-  attribute :child_property
-  attribute :child_id
-  attribute :message
+  attribute :type, Valkyrie::Types::String
+  attribute :status, Valkyrie::Types::String
+  attribute :resource_id, Valkyrie::Types::ID
+  attribute :child_property, Valkyrie::Types::String
+  attribute :child_id, Valkyrie::Types::ID
+  attribute :message, Valkyrie::Types::String
 end
