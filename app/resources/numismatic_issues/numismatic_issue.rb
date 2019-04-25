@@ -18,6 +18,8 @@ class NumismaticIssue < Resource
   attribute :numismatic_citation, Valkyrie::Types::Array.of(NumismaticCitation).meta(ordered: true)
   attribute :numismatic_note, Valkyrie::Types::Array.of(NumismaticNote).meta(ordered: true)
   attribute :numismatic_subject, Valkyrie::Types::Array.of(NumismaticSubject).meta(ordered: true)
+  attribute :obverse_attribute, Valkyrie::Types::Array.of(NumismaticAttribute).meta(ordered: true)
+  attribute :reverse_attribute, Valkyrie::Types::Array.of(NumismaticAttribute).meta(ordered: true)
 
   # descriptive metadata
   attribute :ce1
@@ -30,7 +32,6 @@ class NumismaticIssue < Resource
   attribute :metal
   attribute :object_date
   attribute :object_type
-  attribute :obverse_attributes
   attribute :obverse_figure
   attribute :obverse_figure_description
   attribute :obverse_figure_relationship
@@ -38,7 +39,6 @@ class NumismaticIssue < Resource
   attribute :obverse_orientation
   attribute :obverse_part
   attribute :obverse_symbol
-  attribute :reverse_attributes
   attribute :reverse_figure
   attribute :reverse_figure_description
   attribute :reverse_figure_relationship

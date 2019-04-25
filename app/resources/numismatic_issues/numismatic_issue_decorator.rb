@@ -93,6 +93,10 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
     numismatic_note.map { |a| a.decorate.title }
   end
 
+  def obverse_attributes
+    obverse_attribute.map { |a| a.decorate.title }
+  end
+
   def rendered_place
     decorated_numismatic_place&.title
   end
@@ -110,6 +114,10 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
           I18n.t("works.show.attributes.rights_statement.boilerplate").html_safe
         end
     end
+  end
+
+  def reverse_attributes
+    reverse_attribute.map { |a| a.decorate.title }
   end
 
   def ruler

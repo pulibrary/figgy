@@ -8,6 +8,8 @@ class NumismaticIssueChangeSet < ChangeSet
   collection :numismatic_citation, multiple: true, required: false, form: NumismaticCitationChangeSet, populator: :populate_nested_collection, default: []
   collection :numismatic_note, multiple: true, required: false, form: NumismaticNoteChangeSet, populator: :populate_nested_collection, default: []
   collection :numismatic_subject, multiple: true, required: false, form: NumismaticSubjectChangeSet, populator: :populate_nested_collection, default: []
+  collection :obverse_attribute, multiple: true, required: false, form: NumismaticAttributeChangeSet, populator: :populate_nested_collection, default: []
+  collection :reverse_attribute, multiple: true, required: false, form: NumismaticAttributeChangeSet, populator: :populate_nested_collection, default: []
   property :ce1, multiple: false, required: false
   property :ce2, multiple: false, required: false
   property :color, multiple: false, required: false
@@ -18,7 +20,6 @@ class NumismaticIssueChangeSet < ChangeSet
   property :metal, multiple: false, required: false
   property :object_date, multiple: false, required: false
   property :object_type, multiple: false, required: false
-  property :obverse_attributes, multiple: true, required: false, default: []
   property :obverse_figure, multiple: false, required: false
   property :obverse_figure_relationship, multiple: false, required: false
   property :obverse_figure_description, multiple: false, required: false
@@ -27,7 +28,6 @@ class NumismaticIssueChangeSet < ChangeSet
   property :obverse_part, multiple: false, required: false
   property :obverse_symbol, multiple: false, required: false
   property :replaces, multiple: true, required: false, default: []
-  property :reverse_attributes, multiple: true, required: false, default: []
   property :reverse_figure, multiple: false, required: false
   property :reverse_figure_description, multiple: false, required: false
   property :reverse_figure_relationship, multiple: false, required: false
@@ -97,8 +97,10 @@ class NumismaticIssueChangeSet < ChangeSet
         :obverse_figure_description,
         :obverse_figure_relationship,
         :obverse_symbol,
-        :obverse_attributes,
         :obverse_legend
+      ],
+      "Obverse Attributes" => [
+        :obverse_attribute
       ],
       "Reverse" => [
         :reverse_figure,
@@ -107,8 +109,10 @@ class NumismaticIssueChangeSet < ChangeSet
         :reverse_figure_description,
         :reverse_figure_relationship,
         :reverse_symbol,
-        :reverse_attributes,
         :reverse_legend
+      ],
+      "Reverse Attributes" => [
+        :reverse_attribute
       ],
       "Artist" => [
         :numismatic_artist
@@ -145,5 +149,13 @@ class NumismaticIssueChangeSet < ChangeSet
 
   def build_numismatic_subject
     schema["numismatic_subject"][:nested].new(model.class.schema[:numismatic_subject][[{}]].first)
+  end
+
+  def build_obverse_attribute
+    schema["obverse_attribute"][:nested].new(model.class.schema[:obverse_attribute][[{}]].first)
+  end
+
+  def build_reverse_attribute
+    schema["reverse_attribute"][:nested].new(model.class.schema[:reverse_attribute][[{}]].first)
   end
 end

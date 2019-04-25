@@ -19,6 +19,7 @@ describe OrangelightDocument do
       let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
       let(:person) { FactoryBot.create_for_repository(:numismatic_person) }
       let(:numismatic_artist) { NumismaticArtist.new(person_id: person.id, signature: "artist signature", role: "artist role", side: "artist side") }
+      let(:numismatic_attribute) { NumismaticAttribute.new(description: "attribute description", name: "attribute name") }
       let(:numismatic_citation) { NumismaticCitation.new(part: "citation part", number: "citation number", numismatic_reference_id: reference.id) }
       let(:artist) { FactoryBot.create_for_repository(:numismatic_artist) }
       let(:numismatic_place) { FactoryBot.create_for_repository(:numismatic_place) }
@@ -49,6 +50,8 @@ describe OrangelightDocument do
                                          numismatic_artist: numismatic_artist,
                                          numismatic_citation: numismatic_citation,
                                          numismatic_place_id: numismatic_place.id,
+                                         obverse_attribute: numismatic_attribute,
+                                         reverse_attribute: numismatic_attribute,
                                          ruler_id: numismatic_person.id,
                                          master_id: numismatic_person.id,
                                          ce1: "-91",
@@ -68,15 +71,13 @@ describe OrangelightDocument do
                                          obverse_figure_description: "Harp at left side, 5 strings.",
                                          obverse_figure_relationship: "Victory behind",
                                          obverse_legend: "GEORGIUS•DEI•GRATIA•REX•",
-                                         obverse_attributes: ["to left and right", "around edge"],
                                          reverse_figure: "Hibernia",
                                          reverse_symbol: "goat head",
                                          reverse_part: "seated",
                                          reverse_orientation: "left",
                                          reverse_figure_description: "Harp at right side, 11 strings. Right arm holding up a palm-branch",
                                          reverse_figure_relationship: "corn-ear behind head",
-                                         reverse_legend: "•HIBERNIA•1723•",
-                                         reverse_attributes: ["above", "2 within Є"])
+                                         reverse_legend: "•HIBERNIA•1723•")
       end
 
       before do
@@ -143,7 +144,7 @@ describe OrangelightDocument do
         expect(output[:issue_obverse_figure_description_s]).to eq ["Harp at left side, 5 strings."]
         expect(output[:issue_obverse_figure_relationship_s]).to eq ["Victory behind"]
         expect(output[:issue_obverse_legend_s]).to eq ["GEORGIUS•DEI•GRATIA•REX•"]
-        expect(output[:issue_obverse_attributes_s]).to eq ["to left and right", "around edge"]
+        expect(output[:issue_obverse_attributes_s]).to eq ["attribute name, attribute description"]
         expect(output[:issue_reverse_figure_s]).to eq ["Hibernia"]
         expect(output[:issue_reverse_symbol_s]).to eq ["goat head"]
         expect(output[:issue_reverse_part_s]).to eq ["seated"]
@@ -151,7 +152,7 @@ describe OrangelightDocument do
         expect(output[:issue_reverse_figure_description_s]).to eq ["Harp at right side, 11 strings. Right arm holding up a palm-branch"]
         expect(output[:issue_reverse_figure_relationship_s]).to eq ["corn-ear behind head"]
         expect(output[:issue_reverse_legend_s]).to eq ["•HIBERNIA•1723•"]
-        expect(output[:issue_reverse_attributes_s]).to eq ["above", "2 within Є"]
+        expect(output[:issue_reverse_attributes_s]).to eq ["attribute name, attribute description"]
         expect(output[:issue_references_s]).to eq ["short-title citation part citation number"]
         expect(output[:issue_references_sort]).to eq "short-title citation part citation number"
         expect(output[:issue_artists_s]).to eq ["name1 name2, artist signature"]
