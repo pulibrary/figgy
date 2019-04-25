@@ -155,6 +155,8 @@ class NumismaticsImportService
       resources.map(&:id)
     end
 
+    # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Metrics/AbcSize
     def create_issue(coin_ids:)
       attributes = issues.base_attributes(id: issue_number).to_h
 
@@ -167,6 +169,8 @@ class NumismaticsImportService
       attributes[:numismatic_subject] = subjects.attributes_by_issue(issue_id: attributes[:issue_number]).map(&:to_h)
       attributes[:numismatic_note] = notes.attributes_by_issue(issue_id: attributes[:issue_number]).map(&:to_h)
       attributes[:numismatic_artist] = artist_attributes(issue_id: attributes[:issue_number])
+      attributes[:obverse_attribute] = numismatic_atrributes.attributes_by_issue(issue_id: attributes[:issue_number], side: "obverse").map(&:to_h)
+      attributes[:reverse_attribute] = numismatic_atrributes.attributes_by_issue(issue_id: attributes[:issue_number], side: "reverse").map(&:to_h)
 
       resource = new_resource(klass: NumismaticIssue, **attributes)
 
@@ -177,6 +181,8 @@ class NumismaticsImportService
         buffered_change_set_persister.save(change_set: change_set)
       end
     end
+    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize
 
     def artist_attributes(issue_id:)
       artists.attributes_by_issue(issue_id: issue_id).map do |record|
@@ -196,6 +202,10 @@ class NumismaticsImportService
 
     def artists
       @artists ||= Artists.new(db_adapter: db_adapter)
+    end
+
+    def numismatic_atrributes
+      @numismatic_attributes ||= NumismaticAttributes.new(db_adapter: db_adapter)
     end
 
     def coins
