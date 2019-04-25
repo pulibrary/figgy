@@ -11,4 +11,5 @@ class NumismaticReference < Resource
   attribute :short_title
   attribute :title
   attribute :year
+  attribute :replaces
 end

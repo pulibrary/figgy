@@ -8,6 +8,7 @@ class NumismaticReferenceChangeSet < Valkyrie::ChangeSet
   property :short_title, multiple: false, required: true
   property :title, multiple: false, required: true
   property :year, multiple: false, required: false
+  property :replaces, multiple: true, required: false, default: []
 
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
 
