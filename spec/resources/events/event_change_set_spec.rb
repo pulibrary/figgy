@@ -22,37 +22,37 @@ RSpec.describe EventChangeSet do
 
   describe "#type" do
     it "access the type property" do
-      expect(event.type).to eq [type]
+      expect(change_set.type).to eq type
     end
   end
 
   describe "#status" do
     it "access the status property" do
-      expect(event.status).to eq [status]
+      expect(change_set.status).to eq status
     end
   end
 
   describe "#resource_id" do
     it "access the resource_id property" do
-      expect(event.resource_id).to eq [resource_id]
+      expect(change_set.resource_id).to eq resource_id
     end
   end
 
   describe "#child_property" do
     it "access the child_property property" do
-      expect(event.child_property).to eq [child_property]
+      expect(change_set.child_property).to eq child_property
     end
   end
 
   describe "#child_id" do
     it "access the child_id property" do
-      expect(event.child_id).to eq [child_id]
+      expect(change_set.child_id).to eq child_id
     end
   end
 
   describe "#message" do
     it "access the message property" do
-      expect(event.message).to eq [message]
+      expect(change_set.message).to eq message
     end
   end
 end
