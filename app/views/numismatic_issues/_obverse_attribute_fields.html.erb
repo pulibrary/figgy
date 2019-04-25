@@ -1,0 +1,17 @@
+<div class='nested-fields'>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :name, required: f.object.required?(:name), label: "Name" %>
+    </div>
+    <div class="col-md-6">
+      <%= f.input :description, required: f.object.required?(:description), label: "Description" %>
+    </div>
+  </div>
+  <%= f.hidden_field :id %>
+  <%= link_to_remove_association f do %>
+    <button type="button" class="btn btn-link remove">
+      <span class="glyphicon glyphicon-remove"></span>
+      <span class="controls-remove-text">Remove</span>
+    </button>
+  <% end %>
+</div>
