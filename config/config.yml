@@ -1,6 +1,7 @@
 defaults: &defaults
   preservation_bucket: "figgy-staging-preservation"
   fixity_status_topic: "figgy-staging-fixity-status"
+  fixity_request_topic: "figgy-staging-fixity-request"
   disk_preservation_path: <%= Rails.root.join("tmp", "cloud_backup") %>
   locations_url: https://bibdata.princeton.edu/locations/digital_locations.json
   derivative_path: <%= Rails.root.join("tmp", "derivatives") %>
@@ -142,6 +143,7 @@ production:
   pudl_root: <%= ENV["FIGGY_PUDL_ROOT"]  %>
   preservation_bucket: <%= ENV["FIGGY_PRESERVATION_BUCKET"] || "figgy-preservation" %>
   fixity_status_topic: "figgy-fixity-status"
+  fixity_request_topic: "figgy-fixity-request"
   events:
     server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
     exchange:
