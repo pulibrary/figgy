@@ -344,11 +344,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
       end
       let(:params) do
         {
-          "selected_files" => {
-            "browse_everything" => {
-              "selected_files" => selected_files
-            }
-          }
+          "selected_files" => selected_files
         }
       end
       context "when given an empty array of selected files" do
@@ -378,11 +374,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
         end
         let(:params) do
           {
-            "selected_files" => {
-              "browse_everything" => {
-                "selected_files" => selected_files
-              }
-            }
+            "selected_files" => selected_files
           }
         end
         let(:http_request) { instance_double(Typhoeus::Request) }

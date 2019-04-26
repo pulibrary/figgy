@@ -4,6 +4,7 @@
 class BaseResourceController < ApplicationController
   include ResourceController
   include TokenAuth
+  include BrowseEverything::Parameters
   before_action :load_collections, only: [:new, :edit, :update, :create]
   helper_method :resource_has_parents?
 
@@ -27,26 +28,6 @@ class BaseResourceController < ApplicationController
     end
     BrowseEverythingIngestJob.perform_later(resource.id.to_s, self.class.to_s, new_pending_upload_ids)
     redirect_to ContextualPath.new(child: resource, parent_id: nil).file_manager
-  end
-
-  # Retrieve the selected_files parameter from the request
-  # @return [Hash]
-  def selected_files_params
-    @selected_files_params ||= params.fetch(:selected_files, {})
-  end
-
-  # Retrieve the browse_everything parameter from the request
-  # @return [Hash]
-  def browse_everything_params
-    @browse_everything_params ||= selected_files_params.fetch(:browse_everything, {})
-  end
-
-  # Retrieve the files selected from browse-everything
-  # @return [BrowseEverything::Resource]
-  def selected_files
-    files = browse_everything_params.fetch(:selected_files, {})
-
-    files.values.uniq.map { |value| BrowseEverything::Resource.new(value) }
   end
 
   # Construct the pending download objects

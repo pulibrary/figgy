@@ -77,14 +77,10 @@ RSpec.describe BulkIngestController do
       end
       let(:selected_files) do
         {
-          browse_everything: {
-            selected_files: {
-              "0" => {
-                "url" => "file:///base/resource1/1.tif",
-                "file_name" => "1.tif",
-                "file_size" => "100"
-              }
-            }
+          "0" => {
+            "url" => "file:///base/resource1/1.tif",
+            "file_name" => "1.tif",
+            "file_size" => "100"
           }
         }
       end
@@ -122,19 +118,15 @@ RSpec.describe BulkIngestController do
       end
       let(:selected_files) do
         {
-          browse_everything: {
-            selected_files: {
-              "0" => {
-                "url" => "file:///base/resource1/1.tif",
-                "file_name" => "1.tif",
-                "file_size" => "100"
-              },
-              "1" => {
-                "url" => "file:///base/resource2/1.tif",
-                "file_name" => "1.tif",
-                "file_size" => "100"
-              }
-            }
+          "0" => {
+            "url" => "file:///base/resource1/1.tif",
+            "file_name" => "1.tif",
+            "file_size" => "100"
+          },
+          "1" => {
+            "url" => "file:///base/resource2/1.tif",
+            "file_name" => "1.tif",
+            "file_size" => "100"
           }
         }
       end
@@ -148,21 +140,17 @@ RSpec.describe BulkIngestController do
     context "with files hosted on a cloud-storage provider" do
       let(:selected_files) do
         {
-          browse_everything: {
-            selected_files: {
-              "0" => {
-                "url" => "https://www.example.com/files/1.tif?alt=media",
-                "file_name" => "1.tif",
-                "file_size" => "100",
-                "auth_header" => { "Authorization" => "Bearer secret" }
-              },
-              "1" => {
-                "url" => "https://www.example.com/files/2.tif?alt=media",
-                "file_name" => "2.tif",
-                "file_size" => "100",
-                "auth_header" => { "Authorization" => "Bearer secret" }
-              }
-            }
+          "0" => {
+            "url" => "https://www.example.com/files/1.tif?alt=media",
+            "file_name" => "1.tif",
+            "file_size" => "100",
+            "auth_header" => { "Authorization" => "Bearer secret" }
+          },
+          "1" => {
+            "url" => "https://www.example.com/files/2.tif?alt=media",
+            "file_name" => "2.tif",
+            "file_size" => "100",
+            "auth_header" => { "Authorization" => "Bearer secret" }
           }
         }
       end
@@ -235,19 +223,15 @@ RSpec.describe BulkIngestController do
       end
       let(:selected_files) do
         {
-          browse_everything: {
-            selected_files: {
-              "0" => {
-                "url" => "file:///base/resource1/vol1/1.tif",
-                "file_name" => "1.tif",
-                "file_size" => "100"
-              },
-              "1" => {
-                "url" => "file:///base/resource1/vol2/1.tif",
-                "file_name" => "1.tif",
-                "file_size" => "100"
-              }
-            }
+          "0" => {
+            "url" => "file:///base/resource1/vol1/1.tif",
+            "file_name" => "1.tif",
+            "file_size" => "100"
+          },
+          "1" => {
+            "url" => "file:///base/resource1/vol2/1.tif",
+            "file_name" => "1.tif",
+            "file_size" => "100"
           }
         }
       end
@@ -269,29 +253,25 @@ RSpec.describe BulkIngestController do
       end
       let(:selected_files) do
         {
-          browse_everything: {
-            selected_files: {
-              "0" => {
-                "url" => "file:///base/resource1/vol1/1.tif",
-                "file_name" => "1.tif",
-                "file_size" => "100"
-              },
-              "1" => {
-                "url" => "file:///base/resource1/vol2/1.tif",
-                "file_name" => "1.tif",
-                "file_size" => "100"
-              },
-              "2" => {
-                "url" => "file:///base/resource2/vol3/1.tif",
-                "file_name" => "1.tif",
-                "file_size" => "100"
-              },
-              "3" => {
-                "url" => "file:///base/resource2/vol4/1.tif",
-                "file_name" => "1.tif",
-                "file_size" => "100"
-              }
-            }
+          "0" => {
+            "url" => "file:///base/resource1/vol1/1.tif",
+            "file_name" => "1.tif",
+            "file_size" => "100"
+          },
+          "1" => {
+            "url" => "file:///base/resource1/vol2/1.tif",
+            "file_name" => "1.tif",
+            "file_size" => "100"
+          },
+          "2" => {
+            "url" => "file:///base/resource2/vol3/1.tif",
+            "file_name" => "1.tif",
+            "file_size" => "100"
+          },
+          "3" => {
+            "url" => "file:///base/resource2/vol4/1.tif",
+            "file_name" => "1.tif",
+            "file_size" => "100"
           }
         }
       end
