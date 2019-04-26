@@ -62,7 +62,6 @@ class NumismaticsImportService::Issues
       numismatic_place_id: record["PlaceID"].to_s, # map from place id to valkyrie id in importer
       object_date: record["DateObj"],
       object_type: record["ObjectType"],
-      obverse_attributes: nil, # nested. attr image is not displayed
       obverse_figure: record["ObverseFigureName"],
       obverse_figure_description: record["ObvFigureDescription"],
       obverse_figure_relationship: record["ObvFigureRelationship"],
@@ -70,7 +69,6 @@ class NumismaticsImportService::Issues
       obverse_orientation: record["ObverseOrientationName"],
       obverse_part: record["ObversePartName"],
       obverse_symbol: record["ObverseSymbolName"],
-      reverse_attributes: nil, # nested. attr image is not displayed
       reverse_figure: record["ReverseFigureName"],
       reverse_figure_description: record["RevFigureDescription"],
       reverse_figure_relationship: record["RevFigureRelationship"],

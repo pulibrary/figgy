@@ -8,23 +8,53 @@ class NumismaticsImportService
     @logger = logger || Logger.new(STDOUT)
   end
 
-  def ingest_references
-    ReferencesImporter.new(db_adapter: db_adapter, logger: logger).import!
-  end
-
   def ingest_issue(issue_number:)
     IssueImporter.new(issue_number: issue_number, db_adapter: db_adapter, file_root: file_root, logger: logger).import!
-  end
-
-  def ingest_places
-    PlacesImporter.new(db_adapter: db_adapter, logger: logger).import!
   end
 
   def ingest_people
     PeopleImporter.new(db_adapter: db_adapter, logger: logger).import!
   end
 
-  class ReferencesImporter
+  def ingest_places
+    PlacesImporter.new(db_adapter: db_adapter, logger: logger).import!
+  end
+
+  def ingest_references
+    ReferencesImporter.new(db_adapter: db_adapter, logger: logger).import!
+  end
+
+  class BaseImporter
+    def change_set_persister
+      @change_set_persister ||= NumismaticReferencesController.change_set_persister
+    end
+
+    def new_resource(klass:, **attributes)
+      collection = attributes.delete(:collection)
+
+      resource = klass.new
+
+      change_set = DynamicChangeSet.new(resource)
+      return unless change_set.validate(**attributes)
+      change_set.member_of_collection_ids = [collection.id] if collection.try(:id)
+
+      persisted = change_set_persister.save(change_set: change_set)
+      logger.info "Created the resource #{persisted.id}"
+      persisted
+    end
+
+    def query_service
+      @query_service ||= change_set_persister.query_service
+    end
+
+    def valkyrie_id(property: :replaces, value:, model:)
+      return nil unless value
+      results = query_service.custom_queries.find_by_property(property: property, value: value)
+      results.select { |r| r.is_a? model }.map(&:id)
+    end
+  end
+
+  class ReferencesImporter < BaseImporter
     attr_reader :db_adapter, :logger
     def initialize(db_adapter:, logger:)
       @db_adapter = db_adapter
@@ -36,8 +66,10 @@ class NumismaticsImportService
       link_members
     end
 
-    def change_set_persister
-      @change_set_persister ||= NumismaticReferencesController.change_set_persister
+    def child_reference_ids(parent_number:)
+      references.ids(column: "ParentRefID", value: parent_number).map do |child_id|
+        valkyrie_id(value: child_id.to_s, model: NumismaticReference).first
+      end.compact
     end
 
     def create_references
@@ -55,38 +87,25 @@ class NumismaticsImportService
       end
     end
 
-    def link_members; end
+    def link_members
+      query_service.find_all_of_model(model: NumismaticReference).each do |resource|
+        ids = child_reference_ids(parent_number: resource.replaces.first)
+        next if ids.empty?
 
-    def new_resource(klass:, **attributes)
-      collection = attributes.delete(:collection)
-
-      resource = klass.new
-
-      change_set = DynamicChangeSet.new(resource)
-      return unless change_set.validate(**attributes)
-      change_set.member_of_collection_ids = [collection.id] if collection.try(:id)
-
-      persisted = change_set_persister.save(change_set: change_set)
-      logger.info "Created the resource #{persisted.id}"
-      persisted
+        change_set_persister.buffer_into_index do |buffered_change_set_persister|
+          change_set = DynamicChangeSet.new(resource)
+          change_set.member_ids = ids
+          buffered_change_set_persister.save(change_set: change_set)
+        end
+      end
     end
 
     def references
       @references ||= References.new(db_adapter: db_adapter)
     end
-
-    def query_service
-      @query_service ||= change_set_persister.query_service
-    end
-
-    def valkyrie_id(property: :replaces, value:, model:)
-      return nil unless value
-      results = query_service.custom_queries.find_by_property(property: property, value: value)
-      results.select { |r| r.is_a? model }.map(&:id)
-    end
   end
 
-  class PlacesImporter
+  class PlacesImporter < BaseImporter
     attr_reader :db_adapter, :logger
     def initialize(db_adapter:, logger:)
       @db_adapter = db_adapter
@@ -97,10 +116,6 @@ class NumismaticsImportService
       create_places
     end
 
-    def change_set_persister
-      @change_set_persister ||= NumismaticPlacesController.change_set_persister
-    end
-
     def create_places
       place_numbers = places.ids
       place_numbers.each do |number|
@@ -109,26 +124,12 @@ class NumismaticsImportService
       end
     end
 
-    def new_resource(klass:, **attributes)
-      collection = attributes.delete(:collection)
-
-      resource = klass.new
-
-      change_set = DynamicChangeSet.new(resource)
-      return unless change_set.validate(**attributes)
-      change_set.member_of_collection_ids = [collection.id] if collection.try(:id)
-
-      persisted = change_set_persister.save(change_set: change_set)
-      logger.info "Created the resource #{persisted.id}"
-      persisted
-    end
-
     def places
       @places ||= Places.new(db_adapter: db_adapter)
     end
   end
 
-  class PeopleImporter
+  class PeopleImporter < BaseImporter
     attr_reader :db_adapter, :logger
     def initialize(db_adapter:, logger:)
       @db_adapter = db_adapter
@@ -139,10 +140,6 @@ class NumismaticsImportService
       create_people
     end
 
-    def change_set_persister
-      @change_set_persister ||= NumismaticPeopleController.change_set_persister
-    end
-
     def create_people
       person_numbers = people.ids
       person_numbers.each do |number|
@@ -151,26 +148,12 @@ class NumismaticsImportService
       end
     end
 
-    def new_resource(klass:, **attributes)
-      collection = attributes.delete(:collection)
-
-      resource = klass.new
-
-      change_set = DynamicChangeSet.new(resource)
-      return unless change_set.validate(**attributes)
-      change_set.member_of_collection_ids = [collection.id] if collection.try(:id)
-
-      persisted = change_set_persister.save(change_set: change_set)
-      logger.info "Created the resource #{persisted.id}"
-      persisted
-    end
-
     def people
       @people ||= People.new(db_adapter: db_adapter)
     end
   end
 
-  class IssueImporter
+  class IssueImporter < BaseImporter
     attr_reader :issue_number, :db_adapter, :file_root, :logger
     def initialize(issue_number:, db_adapter:, file_root:, logger:)
       @issue_number = issue_number
@@ -226,8 +209,8 @@ class NumismaticsImportService
     def create_issue(coin_ids:)
       attributes = issues.base_attributes(id: issue_number).to_h
 
-      # Map place id from old database to the corresponding Valkyrie NumismaticPlace id
-      attributes[:numismatic_place_id] = valkyrie_place_id(place_id: attributes[:numismatic_place_id])
+      # Map ids from old database to the corresponding Valkyrie resource ids
+      attributes[:numismatic_place_id] = valkyrie_id(value: attributes[:numismatic_place_id], model: NumismaticPlace)
       attributes[:ruler_id] = valkyrie_id(value: attributes[:ruler_id], model: NumismaticPerson)
       attributes[:master_id] = valkyrie_id(value: attributes[:master_id], model: NumismaticPerson)
 
@@ -235,8 +218,8 @@ class NumismaticsImportService
       attributes[:numismatic_subject] = subjects.attributes_by_issue(issue_id: attributes[:issue_number]).map(&:to_h)
       attributes[:numismatic_note] = notes.attributes_by_issue(issue_id: attributes[:issue_number]).map(&:to_h)
       attributes[:numismatic_artist] = artist_attributes(issue_id: attributes[:issue_number])
-      attributes[:obverse_attribute] = numismatic_atrributes.attributes_by_issue(issue_id: attributes[:issue_number], side: "obverse").map(&:to_h)
-      attributes[:reverse_attribute] = numismatic_atrributes.attributes_by_issue(issue_id: attributes[:issue_number], side: "reverse").map(&:to_h)
+      attributes[:obverse_attribute] = numismatic_attributes.attributes_by_issue(issue_id: attributes[:issue_number], side: "obverse").map(&:to_h)
+      attributes[:reverse_attribute] = numismatic_attributes.attributes_by_issue(issue_id: attributes[:issue_number], side: "reverse").map(&:to_h)
 
       resource = new_resource(klass: NumismaticIssue, **attributes)
 
@@ -258,20 +241,8 @@ class NumismaticsImportService
       end
     end
 
-    def change_set_persister
-      @change_set_persister ||= NumismaticIssuesController.change_set_persister
-    end
-
-    def query_service
-      @query_service ||= change_set_persister.query_service
-    end
-
     def artists
       @artists ||= Artists.new(db_adapter: db_adapter)
-    end
-
-    def numismatic_atrributes
-      @numismatic_attributes ||= NumismaticAttributes.new(db_adapter: db_adapter)
     end
 
     def coins
@@ -286,33 +257,12 @@ class NumismaticsImportService
       @notes ||= Notes.new(db_adapter: db_adapter)
     end
 
+    def numismatic_attributes
+      @numismatic_attributes ||= NumismaticAttributes.new(db_adapter: db_adapter)
+    end
+
     def subjects
       @subjects ||= Subjects.new(db_adapter: db_adapter)
-    end
-
-    def new_resource(klass:, **attributes)
-      collection = attributes.delete(:collection)
-
-      resource = klass.new
-
-      change_set = DynamicChangeSet.new(resource)
-      return unless change_set.validate(**attributes)
-      change_set.member_of_collection_ids = [collection.id] if collection.try(:id)
-
-      persisted = change_set_persister.save(change_set: change_set)
-      logger.info "Created the resource #{persisted.id}"
-      persisted
-    end
-
-    def valkyrie_place_id(place_id:)
-      results = query_service.custom_queries.find_by_property(property: :replaces, value: place_id)
-      results.select { |r| r.is_a? NumismaticPlace }.map(&:id)
-    end
-
-    def valkyrie_id(property: :replaces, value:, model:)
-      return nil unless value
-      results = query_service.custom_queries.find_by_property(property: property, value: value)
-      results.select { |r| r.is_a? model }.map(&:id)
     end
   end
 end

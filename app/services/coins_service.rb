@@ -6,6 +6,7 @@ class CoinsService
     clean_coins
     clean_places
     clean_people
+    clean_references
   end
 
   def self.clean_coins

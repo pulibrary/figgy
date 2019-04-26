@@ -9,19 +9,18 @@ class NumismaticsImportService::References
 
   def ids(column: nil, value: nil)
     query = if column
-              "SELECT ReferenceID from #{table_name} WHERE #{column} = '#{value}'"
+              "SELECT ReferenceID from #{table_name} WHERE (#{column} = '#{value}') AND (NOT ShortTitle IS NULL OR NOT Title IS NULL)"
             else
-              "SELECT ReferenceID from #{table_name}"
+              "SELECT ReferenceID from #{table_name} WHERE NOT ShortTitle IS NULL OR NOT Title IS NULL"
             end
     db_adapter.execute(query: query).map { |r| r["ReferenceID"] }
   end
 
   def base_query(id:)
     <<-SQL
-      SELECT Refs.*, RefAuthor.PersonID
+      SELECT *
       FROM #{table_name}
-      LEFT OUTER JOIN RefAuthor ON RefAuthor.ReferenceID = #{table_name}.ReferenceID
-      WHERE Refs.ReferenceID = '#{id}'
+      WHERE ReferenceID = '#{id}'
     SQL
   end
 
@@ -30,11 +29,11 @@ class NumismaticsImportService::References
 
     OpenStruct.new(
       author_id: authors(id: id),
-      parent_ids: record["ParentRefID"],
+      parent_id: record["ParentRefID"],
       part_of_parent: record["PartOfParent"],
       pub_info: record["PubInfo"],
-      short_title: record["ShortTitle"],
-      title: record["Title"],
+      short_title: record["ShortTitle"] || record["Title"],
+      title: record["Title"] || record["ShortTitle"],
       year: record["Year"].to_s,
       replaces: record["ReferenceID"].to_s
     )
