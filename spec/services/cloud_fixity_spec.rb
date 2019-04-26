@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 require "rails_helper"
+include ActionDispatch::TestProcess
 
 RSpec.describe CloudFixity do
+  with_queue_adapter :inline
+
   let(:pubsub) { instance_double(Google::Cloud::Pubsub::Project) }
   let(:topic) { instance_double(Google::Cloud::Pubsub::Topic) }
   let(:subscription) { instance_double(Google::Cloud::Pubsub::Subscription) }
@@ -16,7 +19,13 @@ RSpec.describe CloudFixity do
     }.to_json
   end
   let(:subscriber) { instance_double(Google::Cloud::Pubsub::Subscriber) }
+  let(:shoulder) { "99999/fk4" }
+  let(:blade) { "123456" }
+  let(:metadata_adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+  let(:query_service) { metadata_adapter.query_service }
+
   before do
+    stub_ezid(shoulder: shoulder, blade: blade)
     described_class.instance_variable_set(:@pubsub, nil)
     allow(Google::Cloud::Pubsub).to receive(:new).and_return(pubsub)
     allow(pubsub).to receive(:topic).and_return(topic)
@@ -29,13 +38,39 @@ RSpec.describe CloudFixity do
     allow(subscription).to receive(:listen).and_yield(message).and_return(subscriber)
     allow_any_instance_of(CloudFixity::Worker).to receive(:sleep)
   end
+
   describe ".run!" do
-    it "works" do
-      allow(UpdateFixityJob).to receive(:perform_later)
+    before do
+      allow(pubsub).to receive(:topic).and_return(topic)
+      allow(Google::Cloud::Pubsub).to receive(:new).and_return(pubsub)
       CloudFixity::Worker.run!
-      expect(UpdateFixityJob).to have_received(:perform_later).with(status: "SUCCESS", resource_id: "1", child_id: "1", child_property: "metadata_node")
-      expect(pubsub).to have_received(:topic).with("figgy-staging-fixity-status")
-      expect(topic).to have_received(:subscription).with("figgy-staging-fixity-status")
+    end
+
+    context "with a resource preserved in a cloud service" do
+      let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+      let(:scanned_resource) { FactoryBot.create_for_repository(:complete_scanned_resource, files: [file], preservation_policy: "cloud") }
+      let(:resource) { Wayfinder.for(scanned_resource).preservation_objects.first }
+      let(:file_metadata) { resource.metadata_node }
+      let(:json) do
+        {
+          status: "SUCCESS",
+          resource_id: resource.id.to_s,
+          child_id: file_metadata.id.to_s,
+          child_property: :metadata_node
+        }.to_json
+      end
+
+      it "generates Events in response to messages published with the subscribes to the figgy-staging-fixity-status topic" do
+        expect(pubsub).to have_received(:topic).with("figgy-staging-fixity-status")
+        expect(topic).to have_received(:subscription).with("figgy-staging-fixity-status")
+
+        results = query_service.find_all_of_model(model: Event)
+        expect(results).not_to be_empty
+        persisted_event = results.first
+        expect(persisted_event.resource_id).to eq resource.id
+        expect(persisted_event.child_property).to eq "metadata_node"
+        expect(persisted_event.child_id).to eq file_metadata.id
+      end
     end
     it "handles a SignalException" do
       allow(UpdateFixityJob).to receive(:perform_later).with(anything).and_raise(SignalException, "TERM")
@@ -45,6 +80,10 @@ RSpec.describe CloudFixity do
 
   describe ".queue_random!" do
     it "queues a random percent of the total" do
+      pubsub = instance_double(Google::Cloud::Pubsub::Project)
+      allow(pubsub).to receive(:topic).and_return(topic)
+
+      allow(Google::Cloud::Pubsub).to receive(:new).and_return(pubsub)
       id = SecureRandom.uuid
       id2 = SecureRandom.uuid
       resources = Array.new(10) do |_n|
