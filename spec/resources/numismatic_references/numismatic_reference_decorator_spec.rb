@@ -20,9 +20,9 @@ RSpec.describe NumismaticReferenceDecorator do
     end
   end
 
-  describe "#author" do
+  describe "#authors" do
     it "renders short title as single value" do
-      expect(decorator.author).to eq("name1 name2 epithet (1868 - 1963)")
+      expect(decorator.authors).to eq(["name1 name2 epithet (1868 - 1963)"])
     end
   end
 

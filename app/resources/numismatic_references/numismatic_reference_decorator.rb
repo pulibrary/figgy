@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 class NumismaticReferenceDecorator < Valkyrie::ResourceDecorator
-  display :author,
+  display :authors,
           :part_of_parent,
           :pub_info,
           :short_title,
           :title,
           :year
 
-  delegate :decorated_parent, :decorated_author, :members, to: :wayfinder
+  delegate :decorated_parent, :decorated_authors, :members, to: :wayfinder
 
   def attachable_objects
     [NumismaticReference]
   end
 
-  def author
-    decorated_author&.title
+  def authors
+    decorated_authors.map(&:title)
   end
 
   def manageable_files?
