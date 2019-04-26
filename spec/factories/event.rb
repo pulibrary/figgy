@@ -2,7 +2,7 @@
 FactoryBot.define do
   factory :event do
     type "Test type"
-    status "Test status"
+    status "SUCCESS"
     message "Test message"
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)

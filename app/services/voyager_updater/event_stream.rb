@@ -13,7 +13,7 @@ module VoyagerUpdater
     # @return [Array<Event>]
     def events
       @events ||= parsed_json.map do |json_record|
-        Event.new(json_record)
+        VoyagerUpdater::Event.new(json_record)
       end
     end
 
