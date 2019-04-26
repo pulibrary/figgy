@@ -2,6 +2,7 @@
 class NumismaticReferenceWayfinder < BaseWayfinder
   relationship_by_property :members, property: :member_ids
   relationship_by_property :numismatic_references, property: :member_ids, model: NumismaticReference
+  relationship_by_property :authors, property: :author_id, singular: true
   inverse_relationship_by_property :parents, property: :member_ids, singular: true
 
   def members_with_parents
