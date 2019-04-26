@@ -59,6 +59,7 @@ en:
     multi_volume_work: 'Multi Volume Work'
     simple: 'Simple Resource'
     recording: 'Recording'
+    letter: 'Letter'
   works:
     progress:
       header: 'Save Work'
