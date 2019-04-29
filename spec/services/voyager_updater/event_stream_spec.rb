@@ -30,7 +30,10 @@ describe VoyagerUpdater::EventStream do
   describe "#events" do
     it "constructs Event objects using the Voyager update data" do
       expect(event_stream.events).not_to be_empty
-      expect(event_stream.events.first).to be_a VoyagerUpdater::Event
+      received_events = event_stream.events
+      event_ids = received_events.map(&:id)
+      expect(event_ids.map(&:to_s)).to include id
+      expect(received_events.map(&:class)).to include VoyagerUpdater::Event
     end
   end
 
