@@ -23,7 +23,6 @@ class CoinChangeSet < ChangeSet
   property :size, multiple: false, required: false
   property :technique, multiple: false, required: false
   property :weight, multiple: false, required: false
-  property :find_place, multiple: false, required: false
   property :numismatic_collection, multiple: false, required: false
   property :replaces, multiple: true, required: false, default: []
   property :depositor, multiple: false, required: false
@@ -35,6 +34,7 @@ class CoinChangeSet < ChangeSet
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :numismatic_accession_id, multiple: false, required: false, type: Valkyrie::Types::ID
+  property :find_place_id, multiple: false, required: false, type: Valkyrie::Types::ID
 
   # Properties for IIIF
   property :start_canvas, required: false
@@ -69,7 +69,7 @@ class CoinChangeSet < ChangeSet
         :analysis,
         :public_note,
         :private_note,
-        :find_place,
+        :find_place_id,
         :find_number,
         :find_date,
         :find_locus,

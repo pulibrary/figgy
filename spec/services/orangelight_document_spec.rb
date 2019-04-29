@@ -32,7 +32,7 @@ describe OrangelightDocument do
                                          analysis: "holed at 12 o'clock, 16.73 grams",
                                          public_note: ["Abraham Usher| John Field| Charles Meredith.", "Black and red ink.", "Visible flecks of mica."],
                                          private_note: ["was in the same case as coin #8822"],
-                                         find_place: "Antioch, Syria",
+                                         find_place_id: numismatic_place.id,
                                          find_date: "5/27/1939?",
                                          find_feature: "Hill A?",
                                          find_locus: "8-N 40",
@@ -108,7 +108,7 @@ describe OrangelightDocument do
         expect(output[:counter_stamp_s]).to eq ["two small counter-stamps visible as small circles on reverse, without known parallel"]
         expect(output[:analysis_s]).to eq ["holed at 12 o'clock, 16.73 grams"]
         expect(output[:notes_display]).to eq ["Abraham Usher| John Field| Charles Meredith.", "Black and red ink.", "Visible flecks of mica."]
-        expect(output[:find_place_s]).to eq ["Antioch, Syria"]
+        expect(output[:find_place_s]).to eq ["city, state, region"]
         expect(output[:find_date_s]).to eq ["5/27/1939?"]
         expect(output[:find_feature_s]).to eq ["Hill A?"]
         expect(output[:find_locus_s]).to eq ["8-N 40"]
@@ -169,7 +169,6 @@ describe OrangelightDocument do
                                          analysis: "holed at 12 o'clock, 16.73 grams",
                                          public_note: ["Abraham Usher| John Field| Charles Meredith.", "Black and red ink.", "Visible flecks of mica."],
                                          private_note: ["was in the same case as coin #8822"],
-                                         find_place: "Antioch, Syria",
                                          find_date: "5/27/1939?",
                                          find_feature: "Hill A?",
                                          find_locus: "8-N 40",
