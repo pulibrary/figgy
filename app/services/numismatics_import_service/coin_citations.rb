@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Data access object for places in numismatics database
-class NumismaticsImportService::IssueCitations
+class NumismaticsImportService::CoinCitations
   attr_reader :db_adapter
   def initialize(db_adapter:)
     @db_adapter = db_adapter
@@ -9,18 +9,18 @@ class NumismaticsImportService::IssueCitations
 
   def ids(column: nil, value: nil)
     query = if column
-              "SELECT IssueRefID from IssueRefs WHERE #{column} = '#{value}'"
+              "SELECT CoinRefID from CoinRefs WHERE #{column} = '#{value}'"
             else
-              "SELECT IssueRefID from IssueRefs"
+              "SELECT CoinRefID from CoinRefs"
             end
-    db_adapter.execute(query: query).map { |r| r["IssueRefID"] }
+    db_adapter.execute(query: query).map { |r| r["CoinRefID"] }
   end
 
   def base_query(id:)
     <<-SQL
       SELECT *
-      FROM IssueRefs
-      WHERE IssueRefID = '#{id}'
+      FROM CoinRefs
+      WHERE CoinRefID = '#{id}'
     SQL
   end
 
@@ -34,16 +34,16 @@ class NumismaticsImportService::IssueCitations
     )
   end
 
-  def issue_query(issue_id:)
+  def coin_query(coin_id:)
     <<-SQL
       SELECT *
-      FROM IssueRefs
-      WHERE IssueID = '#{issue_id}'
+      FROM CoinRefs
+      WHERE CoinID = '#{coin_id}'
     SQL
   end
 
-  def attributes_by_issue(issue_id:)
-    records = db_adapter.execute(query: issue_query(issue_id: issue_id))
+  def attributes_by_coin(coin_id:)
+    records = db_adapter.execute(query: coin_query(coin_id: coin_id))
 
     records.map do |record|
       OpenStruct.new(

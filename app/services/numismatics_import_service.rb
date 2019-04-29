@@ -198,6 +198,7 @@ class NumismaticsImportService
         attributes = coins.base_attributes(id: number).to_h
         files = coin_files(coin_number: number)
         attributes[:files] = files
+        attributes[:numismatic_citation] = coin_citation_attributes(coin_id: attributes[:coin_number])
         resources << new_resource(klass: Coin, **attributes)
       end
 
@@ -244,6 +245,17 @@ class NumismaticsImportService
 
     def artists
       @artists ||= Artists.new(db_adapter: db_adapter)
+    end
+
+    def coin_citation_attributes(coin_id:)
+      coin_citations.attributes_by_coin(coin_id: coin_id).map do |record|
+        record[:numismatic_reference_id] = valkyrie_id(value: record[:numismatic_reference_id], model: NumismaticReference)
+        record.to_h
+      end
+    end
+
+    def coin_citations
+      @coin_citations ||= CoinCitations.new(db_adapter: db_adapter)
     end
 
     def coins

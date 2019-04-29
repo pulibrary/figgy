@@ -25,7 +25,6 @@ class NumismaticsImportService::Coins
       accession_number: record["AccessionNumber"],
       numismatic_accession_id: nil, # link
       analysis: record["Analysis"],
-      citation: nil, # nested
       counter_stamp: record["CounterStamp"],
       die_axis: record["Axis"],
       find_date: record["FindDate"],
