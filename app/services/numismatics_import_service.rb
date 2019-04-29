@@ -215,9 +215,10 @@ class NumismaticsImportService
       attributes[:master_id] = valkyrie_id(value: attributes[:master_id], model: NumismaticPerson)
 
       # Add nested properties
-      attributes[:numismatic_subject] = subjects.attributes_by_issue(issue_id: attributes[:issue_number]).map(&:to_h)
-      attributes[:numismatic_note] = notes.attributes_by_issue(issue_id: attributes[:issue_number]).map(&:to_h)
       attributes[:numismatic_artist] = artist_attributes(issue_id: attributes[:issue_number])
+      attributes[:numismatic_citation] = issue_citation_attributes(issue_id: attributes[:issue_number])
+      attributes[:numismatic_note] = notes.attributes_by_issue(issue_id: attributes[:issue_number]).map(&:to_h)
+      attributes[:numismatic_subject] = subjects.attributes_by_issue(issue_id: attributes[:issue_number]).map(&:to_h)
       attributes[:obverse_attribute] = numismatic_attributes.attributes_by_issue(issue_id: attributes[:issue_number], side: "obverse").map(&:to_h)
       attributes[:reverse_attribute] = numismatic_attributes.attributes_by_issue(issue_id: attributes[:issue_number], side: "reverse").map(&:to_h)
 
@@ -251,6 +252,17 @@ class NumismaticsImportService
 
     def issues
       @issues ||= Issues.new(db_adapter: db_adapter)
+    end
+
+    def issue_citation_attributes(issue_id:)
+      issue_citations.attributes_by_issue(issue_id: issue_id).map do |record|
+        record[:numismatic_reference_id] = valkyrie_id(value: record[:numismatic_reference_id], model: NumismaticReference)
+        record.to_h
+      end
+    end
+
+    def issue_citations
+      @issue_citations ||= IssueCitations.new(db_adapter: db_adapter)
     end
 
     def notes
