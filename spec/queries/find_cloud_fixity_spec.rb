@@ -2,7 +2,7 @@
 require "rails_helper"
 include ActionDispatch::TestProcess
 
-RSpec.describe FindCloudFixityChecked do
+RSpec.describe FindCloudFixity do
   with_queue_adapter :inline
   subject(:query) { described_class.new(query_service: query_service) }
 
@@ -25,12 +25,30 @@ RSpec.describe FindCloudFixityChecked do
   end
 
   describe "#find_cloud_fixity_checks" do
+    let(:status) { "SUCCESS" }
+
     it "can find file_sets for files stored in cloud services with successful fixity checks" do
-      output = query.find_cloud_fixity_checked
+      output = query.find_cloud_fixity(status: status)
       expect(output.length).to eq 2
       output_ids = output.map(&:id)
       expect(output_ids).to include event.id
       expect(output_ids).to include event2.id
+    end
+
+    context "when querying for failed fixity checks" do
+      let(:status) { "FAILURE" }
+      let(:event3) { FactoryBot.create_for_repository(:event, status: status, resource_id: file_set.id) }
+
+      before do
+        event3
+      end
+
+      it "can find file_sets for files stored in cloud services with failed fixity checks" do
+        output = query.find_cloud_fixity(status: status)
+        expect(output.length).to eq 1
+        output_ids = output.map(&:id)
+        expect(output_ids).to include event3.id
+      end
     end
 
     it "limits the number of results" do
@@ -38,7 +56,7 @@ RSpec.describe FindCloudFixityChecked do
         FactoryBot.create_for_repository(:event)
       end
 
-      output = query.find_cloud_fixity_checked(limit: 2)
+      output = query.find_cloud_fixity(limit: 2, status: status)
       expect(output.length).to eq 2
       output_ids = output.map(&:id)
       expect(output_ids).to include event.id
@@ -46,19 +64,19 @@ RSpec.describe FindCloudFixityChecked do
     end
 
     it "sorts by either ascending or descending order" do
-      output = query.find_cloud_fixity_checked
+      output = query.find_cloud_fixity(status: status)
       expect(output.length).to eq 2
       expect(output.first.id).to eq event.id
       expect(output.last.id).to eq event2.id
 
-      output = query.find_cloud_fixity_checked(sort: "DESC")
+      output = query.find_cloud_fixity(sort: "DESC", status: status)
       expect(output.length).to eq 2
       expect(output.first.id).to eq event2.id
       expect(output.last.id).to eq event.id
     end
 
     it "sorts by either the time of the last update or the resource creation" do
-      output = query.find_cloud_fixity_checked(order_by_property: "created_at")
+      output = query.find_cloud_fixity(order_by_property: "created_at", status: status)
       expect(output.length).to eq 2
       expect(output.first.id).to eq event.id
       expect(output.last.id).to eq event2.id
@@ -67,7 +85,7 @@ RSpec.describe FindCloudFixityChecked do
       cs.validate(message: "updated")
       change_set_persister.save(change_set: cs)
 
-      output2 = query.find_cloud_fixity_checked(sort: "DESC")
+      output2 = query.find_cloud_fixity(sort: "DESC", status: status)
       expect(output2.length).to eq 2
       expect(output2.first.id).to eq event2.id
       expect(output2.last.id).to eq event.id

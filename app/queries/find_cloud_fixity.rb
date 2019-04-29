@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-class FindCloudFixityChecked
+class FindCloudFixity
   def self.queries
-    [:find_cloud_fixity_checked]
+    [:find_cloud_fixity]
   end
 
   attr_reader :query_service
@@ -14,13 +14,13 @@ class FindCloudFixityChecked
   def query(order_by_property: "updated_at", order_by: "ASC")
     <<-SQL
       select * FROM orm_resources WHERE
-      metadata @> ?
+      metadata @> ? AND internal_resource = ?
       ORDER BY #{order_by_property} #{order_by} LIMIT ?
     SQL
   end
 
-  def find_cloud_fixity_checked(sort: "ASC", limit: 50, order_by_property: "updated_at")
-    internal_array = { "status" => Array.wrap("SUCCESS") }
-    run_query(query(order_by_property: order_by_property, order_by: sort), internal_array.to_json, limit)
+  def find_cloud_fixity(sort: "ASC", limit: 50, order_by_property: "updated_at", status:, model: Event)
+    internal_array = { "status" => [status] }
+    run_query(query(order_by_property: order_by_property, order_by: sort), internal_array.to_json, model.to_s, limit)
   end
 end
