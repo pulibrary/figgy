@@ -1,0 +1,20 @@
+<table class="table table-striped datatable">
+  <thead>
+    <tr>
+      <th>File Set Title</th>
+      <th>File Title</th>
+      <th>Last Fixity Check Status</th>
+      <th>Date Last Checked</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% resources.each do |event| %>
+      <tr>
+        <td><%= link_to(event.affected_resource.preserved_resource.title.first, solr_document_path(id: event.affected_resource.preserved_resource.id)) %></td>
+        <td><%= link_to(event.affected_child.label.first, solr_document_path(id: event.affected_resource.preserved_resource.id)) %></td>
+        <td><%= event.status %></td>
+        <td><%= event.updated_at %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
