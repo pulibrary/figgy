@@ -32,7 +32,7 @@ class NumismaticsImportService::Coins
       find_feature: record["FindFeature"],
       find_locus: record["FindLocus"],
       find_number: record["FindNumber"],
-      find_place: nil, # nested place
+      find_place_id: record["FindPlaceID"].to_s, # map from place id to valkyrie id in importer
       loan: nil, # nested
       public_note: record["OtherInfo"],
       provenance: nil, # nested

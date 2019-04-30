@@ -198,6 +198,7 @@ class NumismaticsImportService
         attributes = coins.base_attributes(id: number).to_h
         files = coin_files(coin_number: number)
         attributes[:files] = files
+        attributes[:find_place_id] = valkyrie_id(value: attributes[:find_place_id], model: NumismaticPlace)
         attributes[:numismatic_citation] = coin_citation_attributes(coin_id: attributes[:coin_number])
         resources << new_resource(klass: Coin, **attributes)
       end
