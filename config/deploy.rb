@@ -58,10 +58,18 @@ namespace :sidekiq do
     end
   end
 end
+namespace :pubsub do
+  task :restart do
+    on roles(:worker) do
+      execute :sudo, :service, "figgy-pubsub-worker", :restart
+    end
+  end
+end
 after 'deploy:starting', 'sidekiq:quiet'
 after 'deploy:reverted', 'sidekiq:restart'
 after 'deploy:published', 'sidekiq:restart'
 after 'deploy:published', 'write_version'
+after 'sidekiq:restart', 'pubsub:restart'
 before "deploy:assets:precompile", "deploy:yarn_install"
 before "deploy:assets:precompile", "deploy:whenever"
 
