@@ -36,6 +36,10 @@ RSpec.describe CloudFixity do
       expect(pubsub).to have_received(:topic).with("figgy-staging-fixity-status")
       expect(topic).to have_received(:subscription).with("figgy-staging-fixity-status")
     end
+    it "handles a SignalException" do
+      allow(UpdateFixityJob).to receive(:perform_later).with(anything).and_raise(SignalException, "TERM")
+      expect { CloudFixity::Worker.run! }.not_to raise_exception
+    end
   end
 
   describe ".queue_random!" do

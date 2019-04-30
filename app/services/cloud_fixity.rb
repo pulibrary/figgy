@@ -33,6 +33,8 @@ module CloudFixity
 
       # Fade into a deep sleep as worker will run indefinitely
       sleep
+    rescue SignalException
+      Rails.logger.info "Shutting down pubsub workers..."
     end
   end
 
