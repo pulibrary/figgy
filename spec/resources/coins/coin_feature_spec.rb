@@ -54,7 +54,7 @@ RSpec.feature "Coins" do
     expect(page).to have_field "Find feature"
     expect(page).to have_field "Find locus"
     expect(page).to have_field "Find number"
-    expect(page).to have_field "Find place"
+    expect(page).to have_field "Find Place"
     expect(page).to have_field "Holding Location"
     expect(page).not_to have_css '.select[for="coin_holding_location"]', text: "Holding Location"
     expect(page).to have_field "Loan"
@@ -77,6 +77,7 @@ RSpec.feature "Coins" do
   end
 
   context "when a user creates a new coin" do
+    let(:find_place) { FactoryBot.create_for_repository(:numismatic_place) }
     let(:numismatic_accession) { FactoryBot.create_for_repository(:numismatic_accession) }
     let(:numismatic_reference) { FactoryBot.create_for_repository(:numismatic_reference) }
     let(:numismatic_citation) { NumismaticCitation.new(part: "part", number: "number", numismatic_reference_id: numismatic_reference.id) }
@@ -95,7 +96,7 @@ RSpec.feature "Coins" do
         find_feature: "test value",
         find_locus: "test value",
         find_number: "test value",
-        find_place: "test value",
+        find_place_id: find_place.id,
         holding_location: "test value",
         loan: "test value",
         private_note: "test value",
@@ -122,7 +123,7 @@ RSpec.feature "Coins" do
       expect(page).to have_css ".attribute.find_feature", text: "test value"
       expect(page).to have_css ".attribute.find_locus", text: "test value"
       expect(page).to have_css ".attribute.find_number", text: "test value"
-      expect(page).to have_css ".attribute.find_place", text: "test value"
+      expect(page).to have_css ".attribute.find_place", text: "city, state, region"
       expect(page).to have_css ".attribute.holding_location", text: "test value"
       expect(page).to have_css ".attribute.loan", text: "test value"
       expect(page).to have_css ".attribute.numismatic_collection", text: "test value"

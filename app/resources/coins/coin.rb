@@ -6,6 +6,7 @@ class Coin < Resource
   attribute :member_ids, Valkyrie::Types::Array
   attribute :member_of_collection_ids
   attribute :numismatic_accession_id
+  attribute :find_place_id
 
   # descriptive metadata
   attribute :numismatic_citation, Valkyrie::Types::Array.of(NumismaticCitation).meta(ordered: true)
@@ -28,7 +29,6 @@ class Coin < Resource
   attribute :technique
   attribute :weight
   attribute :find_number
-  attribute :find_place
   attribute :numismatic_collection
   attribute :rights_statement
 

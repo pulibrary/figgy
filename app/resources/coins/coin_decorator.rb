@@ -27,7 +27,14 @@ class CoinDecorator < Valkyrie::ResourceDecorator
           :visibility,
           :append_id
 
-  delegate :decorated_file_sets, :decorated_numismatic_accession, :decorated_parent, :members, :parent, to: :wayfinder
+  delegate :decorated_file_sets,
+           :decorated_find_place,
+           :decorated_numismatic_accession,
+           :decorated_parent,
+           :members,
+           :parent,
+           to: :wayfinder
+
   delegate :id, :label, to: :accession, prefix: true
 
   def ark_mintable_state?
@@ -40,6 +47,10 @@ class CoinDecorator < Valkyrie::ResourceDecorator
 
   def citations
     numismatic_citation.map { |c| c.decorate.title }
+  end
+
+  def find_place
+    decorated_find_place&.title
   end
 
   def manageable_files?

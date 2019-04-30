@@ -49,7 +49,7 @@ class OrangelightCoinBuilder
         counter_stamp_s: decorator.counter_stamp,
         analysis_s: decorator.analysis,
         notes_display: decorator.public_note,
-        find_place_s: decorator.find_place,
+        find_place_s: [decorator.find_place],
         find_date_s: decorator.find_date,
         find_feature_s: decorator.find_feature,
         find_locus_s: decorator.find_locus,

@@ -9,10 +9,15 @@ class CoinsController < BaseResourceController
     storage_adapter: Valkyrie.config.storage_adapter
   )
 
+  before_action :load_find_places, only: [:new, :edit]
   before_action :load_numismatic_accessions, only: [:new, :edit]
   before_action :load_numismatic_references, only: [:new, :edit]
   before_action :load_available_issues, only: [:new, :edit]
   before_action :selected_issue, only: [:new, :edit]
+
+  def load_find_places
+    @find_places = query_service.find_all_of_model(model: NumismaticPlace).map(&:decorate)
+  end
 
   def load_numismatic_accessions
     @numismatic_accessions = query_service.find_all_of_model(model: NumismaticAccession).map(&:decorate).sort_by(&:label)
