@@ -59,12 +59,18 @@ module CloudFixity
       limit = limit <= 0 ? 1 : limit
       resources = query_service.custom_queries.find_random_resources_by_model(limit: limit, model: PreservationObject)
       topic = pubsub.topic(pubsub_topic)
-      topic.publish do |publisher|
-        resources.each do |resource|
-          publish_file_metadata(resource, resource.metadata_node, publisher, :metadata_node) if resource.metadata_node.present?
-          resource.binary_nodes.each do |binary_node|
-            publish_file_metadata(resource, binary_node, publisher, :binary_nodes)
-          end
+      resources.each_slice(100).each do |resource_slice|
+        topic.publish do |publisher|
+          queue_resources(resource_slice, publisher)
+        end
+      end
+    end
+
+    def self.queue_resources(resources, publisher)
+      resources.each do |resource|
+        publish_file_metadata(resource, resource.metadata_node, publisher, :metadata_node) if resource.metadata_node.present?
+        resource.binary_nodes.each do |binary_node|
+          publish_file_metadata(resource, binary_node, publisher, :binary_nodes)
         end
       end
     end
