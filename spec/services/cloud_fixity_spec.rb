@@ -17,6 +17,7 @@ RSpec.describe CloudFixity do
   end
   let(:subscriber) { instance_double(Google::Cloud::Pubsub::Subscriber) }
   before do
+    described_class.instance_variable_set(:@pubsub, nil)
     allow(Google::Cloud::Pubsub).to receive(:new).and_return(pubsub)
     allow(pubsub).to receive(:topic).and_return(topic)
     allow(topic).to receive(:subscription).and_return(subscription)
@@ -26,7 +27,7 @@ RSpec.describe CloudFixity do
     allow(message).to receive(:acknowledge!)
     allow(subscriber).to receive(:start)
     allow(subscription).to receive(:listen).and_yield(message).and_return(subscriber)
-    allow(CloudFixity::Worker).to receive(:sleep)
+    allow_any_instance_of(CloudFixity::Worker).to receive(:sleep)
   end
   describe ".run!" do
     it "works" do

@@ -2,12 +2,6 @@
 module CloudFixity
   require "google/cloud/pubsub"
   class Worker
-    def self.pubsub
-      @pubsub ||= begin
-                    Google::Cloud::Pubsub.new
-                  end
-    end
-
     def self.pubsub_topic
       @pubsub_topic ||= Figgy.config["fixity_status_topic"]
     end
@@ -19,8 +13,12 @@ module CloudFixity
     def self.run!
       Rails.logger.info "Running worker to check for fixity updating"
 
-      topic = pubsub.topic(pubsub_topic)
-      subscription = topic.subscription(pubsub_subscription)
+      new.run!
+    end
+
+    def run!
+      topic = pubsub.topic(self.class.pubsub_topic)
+      subscription = topic.subscription(self.class.pubsub_subscription)
 
       subscriber = subscription.listen do |message|
         message.acknowledge!
@@ -35,6 +33,12 @@ module CloudFixity
       sleep
     rescue SignalException
       Rails.logger.info "Shutting down pubsub workers..."
+    end
+
+    def pubsub
+      @pubsub ||= begin
+                    Google::Cloud::Pubsub.new
+                  end
     end
   end
 
