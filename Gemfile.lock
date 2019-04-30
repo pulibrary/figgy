@@ -148,8 +148,6 @@ GEM
       rails (>= 4.2, < 6)
     amq-protocol (2.2.0)
     arabic-letter-connector (0.1.1)
-    archive-zip (0.7.0)
-      io-like (~> 0.3.0)
     arel (8.0.0)
     ast (2.3.0)
     autoprefixer-rails (9.4.10.1)
@@ -239,9 +237,6 @@ GEM
       launchy
     childprocess (0.7.1)
       ffi (~> 1.0, >= 1.0.11)
-    chromedriver-helper (1.1.0)
-      archive-zip (~> 0.7.0)
-      nokogiri (~> 1.6)
     chronic (0.10.2)
     cocoon (1.2.12)
     coderay (1.1.1)
@@ -461,7 +456,6 @@ GEM
     iiif_manifest (0.5.0)
       activesupport (>= 4)
     inflecto (0.0.2)
-    io-like (0.3.0)
     iso-639 (0.2.8)
     jbuilder (2.7.0)
       activesupport (>= 4.2.0)
@@ -849,6 +843,10 @@ GEM
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
       railties (>= 5.0)
+    webdrivers (3.8.0)
+      nokogiri (~> 1.6)
+      rubyzip (~> 1.0)
+      selenium-webdriver (~> 3.0)
     webmock (3.0.1)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
@@ -887,7 +885,6 @@ DEPENDENCIES
   capistrano-rails
   capistrano-rails-console
   capybara-screenshot
-  chromedriver-helper
   cocoon
   coffee-rails
   damerau-levenshtein
@@ -974,6 +971,7 @@ DEPENDENCIES
   valkyrie-sequel!
   valkyrie-shrine
   web-console
+  webdrivers (~> 3.0)
   webmock
   webpacker (>= 4.0.x)
   whenever (~> 0.10)
