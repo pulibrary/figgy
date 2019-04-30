@@ -17,6 +17,7 @@ RSpec.describe CloudFixity do
   end
   let(:subscriber) { instance_double(Google::Cloud::Pubsub::Subscriber) }
   before do
+    described_class.instance_variable_set(:@pubsub, nil)
     allow(Google::Cloud::Pubsub).to receive(:new).and_return(pubsub)
     allow(pubsub).to receive(:topic).and_return(topic)
     allow(topic).to receive(:subscription).and_return(subscription)
@@ -26,7 +27,7 @@ RSpec.describe CloudFixity do
     allow(message).to receive(:acknowledge!)
     allow(subscriber).to receive(:start)
     allow(subscription).to receive(:listen).and_yield(message).and_return(subscriber)
-    allow(CloudFixity::Worker).to receive(:sleep)
+    allow_any_instance_of(CloudFixity::Worker).to receive(:sleep)
   end
   describe ".run!" do
     it "works" do
@@ -35,6 +36,10 @@ RSpec.describe CloudFixity do
       expect(UpdateFixityJob).to have_received(:perform_later).with(status: "SUCCESS", resource_id: "1", child_id: "1", child_property: "metadata_node")
       expect(pubsub).to have_received(:topic).with("figgy-staging-fixity-status")
       expect(topic).to have_received(:subscription).with("figgy-staging-fixity-status")
+    end
+    it "handles a SignalException" do
+      allow(UpdateFixityJob).to receive(:perform_later).with(anything).and_raise(SignalException, "TERM")
+      expect { CloudFixity::Worker.run! }.not_to raise_exception
     end
   end
 
