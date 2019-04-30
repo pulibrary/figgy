@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class UpdateFixityJob < ApplicationJob
+  queue_as :super_low
   def perform(status:, resource_id:, child_property:, child_id:)
     event_change_set = EventChangeSet.new(Event.new)
     event_change_set.validate(type: :cloud_fixity, status: status, resource_id: resource_id, child_property: child_property.to_sym, child_id: child_id)
