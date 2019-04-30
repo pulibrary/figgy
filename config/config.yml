@@ -142,8 +142,8 @@ production:
   bag_path: <%= ENV["FIGGY_BAG_PATH"] || Rails.root.join("tmp", "bags") %>
   pudl_root: <%= ENV["FIGGY_PUDL_ROOT"]  %>
   preservation_bucket: <%= ENV["FIGGY_PRESERVATION_BUCKET"] || "figgy-preservation" %>
-  fixity_status_topic: "figgy-fixity-status"
-  fixity_request_topic: "figgy-fixity-request"
+  fixity_status_topic: "figgy-production-fixity-status"
+  fixity_request_topic: "figgy-production-fixity-request"
   events:
     server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
     exchange:
