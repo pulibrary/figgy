@@ -127,6 +127,8 @@ Rails.application.routes.draw do
 
     resources :numismatic_finds
 
+    resources :numismatic_firms
+
     resources :numismatic_places
 
     resources :numismatic_people
