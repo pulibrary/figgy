@@ -67,7 +67,6 @@ end
 
 group :test do
   gem "capybara-screenshot"
-  gem "chromedriver-helper"
   gem "database_cleaner"
   gem "formulaic"
   gem "rspec-graphql_matchers"
@@ -75,6 +74,7 @@ group :test do
   gem "selenium-webdriver"
   gem "simplecov", require: false
   gem "timecop"
+  gem "webdrivers", "~> 3.0"
   gem "webmock"
 end
 
