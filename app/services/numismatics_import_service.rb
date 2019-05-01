@@ -226,8 +226,14 @@ class NumismaticsImportService
         attributes = coins.base_attributes(id: number).to_h
         files = coin_files(coin_number: number)
         attributes[:files] = files
+
+        # Map ids from old database to the corresponding Valkyrie resource ids
         attributes[:find_place_id] = valkyrie_id(value: attributes[:find_place_id], model: NumismaticPlace)
+
+        # Add nested properties
         attributes[:numismatic_citation] = coin_citation_attributes(coin_id: attributes[:coin_number])
+        attributes[:provenance] = provenance_attributes(coin_id: attributes[:coin_number])
+
         resources << new_resource(klass: Coin, **attributes)
       end
 
@@ -312,6 +318,19 @@ class NumismaticsImportService
 
     def numismatic_attributes
       @numismatic_attributes ||= NumismaticAttributes.new(db_adapter: db_adapter)
+    end
+
+    def provenance_attributes(coin_id:)
+      provenances.attributes_by_coin(coin_id: coin_id).map do |record|
+        person = record[:person_id] ? "person-#{record[:person_id]}" : nil
+        record[:person_id] = valkyrie_id(value: person, model: NumismaticPerson)
+        record[:firm_id] = valkyrie_id(value: record[:firm_id], model: NumismaticFirm)
+        record.to_h
+      end
+    end
+
+    def provenances
+      @provenances ||= Provenances.new(db_adapter: db_adapter)
     end
 
     def subjects
