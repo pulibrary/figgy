@@ -7,6 +7,7 @@ class NumismaticAccessionsController < BaseResourceController
     storage_adapter: Valkyrie.config.storage_adapter
   )
   before_action :load_numismatic_accessions, only: :index
+  before_action :load_numismatic_firms, only: [:new, :edit]
   before_action :load_numismatic_people, only: [:new, :edit]
   before_action :load_numismatic_references, only: [:new, :edit]
 
@@ -26,6 +27,10 @@ class NumismaticAccessionsController < BaseResourceController
 
     def load_numismatic_accessions
       @numismatic_accessions = query_service.find_all_of_model(model: NumismaticAccession).map(&:decorate)
+    end
+
+    def load_numismatic_firms
+      @numismatic_firms = query_service.find_all_of_model(model: NumismaticFirm).map(&:decorate)
     end
 
     def load_numismatic_people
