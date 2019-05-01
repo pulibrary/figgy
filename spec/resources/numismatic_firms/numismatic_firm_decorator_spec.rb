@@ -15,7 +15,7 @@ RSpec.describe NumismaticFirmDecorator do
 
   describe "#title" do
     it "generates a title" do
-      expect(decorator.title).to eq("name, city")
+      expect(decorator.title).to eq("firm name, firm city")
     end
   end
 end

@@ -12,7 +12,7 @@ class NumismaticAccessionDecorator < Valkyrie::ResourceDecorator
           :private_note,
           :citations
 
-  delegate :decorated_person, to: :wayfinder
+  delegate :decorated_firm, :decorated_person, to: :wayfinder
 
   def account
     Array.wrap(super).first
@@ -36,7 +36,7 @@ class NumismaticAccessionDecorator < Valkyrie::ResourceDecorator
   end
 
   def firm
-    Array.wrap(super).first
+    decorated_firm&.name
   end
 
   def from_label
