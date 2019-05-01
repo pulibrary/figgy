@@ -26,6 +26,6 @@ class NumismaticProvenanceDecorator < Valkyrie::ResourceDecorator
   end
 
   def title
-    [note, date].compact.join(", ")
+    [firm, person, date, note].compact.join("; ")
   end
 end

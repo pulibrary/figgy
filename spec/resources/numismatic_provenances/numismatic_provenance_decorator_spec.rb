@@ -28,7 +28,7 @@ RSpec.describe NumismaticProvenanceDecorator do
 
   describe "#title" do
     it "renders the provenance title" do
-      expect(decorator.title).to eq("note, 12/04/1999")
+      expect(decorator.title).to eq("name, city; name1 name2; 12/04/1999; note")
     end
   end
 end

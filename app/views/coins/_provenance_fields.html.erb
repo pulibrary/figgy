@@ -1,0 +1,39 @@
+<div class='nested-fields'>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :person_id,
+            label: "Person",
+            collection: @numismatic_people&.sort_by(&:title),
+            label_method: :title,
+            value_method: :id,
+            input_html: { multiple: f.object.multiple?(:person_id) },
+            include_blank: true,
+            required: f.object.required?(:person_id) %>
+    </div>
+    <div class="col-md-6">
+      <%= f.input :firm_id,
+            label: "Firm",
+            collection: @numismatic_firms&.sort_by(&:title),
+            label_method: :title,
+            value_method: :id,
+            input_html: { multiple: f.object.multiple?(:person_id) },
+            include_blank: true,
+            required: f.object.required?(:firm_id) %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :date, required: f.object.required?(:date), label: "Date" %>
+    </div>
+    <div class="col-md-6">
+      <%= f.input :note, required: f.object.required?(:note), label: "Note" %>
+    </div>
+  </div>
+  <%= f.hidden_field :id %>
+  <%= link_to_remove_association f do %>
+    <button type="button" class="btn btn-link remove">
+      <span class="glyphicon glyphicon-remove"></span>
+      <span class="controls-remove-text">Remove</span>
+    </button>
+  <% end %>
+</div>
