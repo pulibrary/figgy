@@ -1,59 +1,37 @@
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h2 class="panel-title">Coins</h2>
-  </div>
-  <div class="row panel-body">
-    <%= simple_form_for @change_set do |f| %>
-      <div class="loading-status hidden">Loading...</div>
-      <table id="members-coins"
-      class="table table-striped member-resources member-coins"
-      data-update-url="<%= polymorphic_url([resource]) %>"
-      data-query-url="<%= solr_document_path(id: resource.id) %>"
-      data-members="<%= decorated_resource.members.map { |member| member.id.to_s } %>"
-      data-resource-id="<%= resource.id.to_s %>"
-      data-param-key="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>">
-        <thead>
-          <tr>
-           <th>Thumbnail</th>
-           <th>Title</th>
-           <th>Date Uploaded</th>
-           <th>Visibility</th>
-           <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <% unless decorated_resource.decorated_coins.empty? %>
-            <% decorated_resource.decorated_coins.each do |coin| %>
-              <% coin_url = parent_solr_document_path(parent_id: resource.id, id: coin.id) %>
-              <tr data-resource-id="<%= coin.id.to_s %>">
-                <td><%= link_to figgy_thumbnail_path(coin, { class: 'thumbnail-inner', onerror: default_icon_fallback }), coin_url %></td>
-                <td><%= coin.first_title %></td>
-                <td><%= coin.created_at %></td>
-                <td><%= coin.visibility_badge.first.html_safe %></td>
-                <td>
-                  <%= link_to 'View', coin_url, class: 'btn btn-default' %>
-                  <%= link_to 'Edit', main_app.polymorphic_path([:edit, coin]), class: 'btn btn-default' %>
-              </tr>
-            <% end %>
-          <% else %>
-            <tr>
-              <td>This work has no coins attached.  Click "Attach Coin" button to create new coin.</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          <% end %>
-          <tr class="message has-warning hidden">
-            <td class="alert-warning"></td>
-            <td id="warning-message" class="alert-warning"></td>
-            <td class="alert-warning"></td>
-            <td class="alert-warning"></td>
-            <td class="alert-warning"></td>
-          </tr>
-        </tbody>
-      </table>
+<table class="table table-striped datatable">
+  <thead>
+    <tr><h3>Coins</h3><tr>
+    <tr>
+      <th>Thumbnail</th>
+      <th>Title</th>
+      <th>Date Uploaded</th>
+      <th>Visibility</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% unless decorated_resource.decorated_coins.empty? %>
+      <% decorated_resource.decorated_coins.each do |coin| %>
+        <% coin_url = parent_solr_document_path(parent_id: resource.id, id: coin.id) %>
+        <tr>
+          <td style="width: 30%"><%= link_to figgy_thumbnail_path(coin, { class: 'thumbnail-inner', onerror: default_icon_fallback }), coin_url %></td>
+          <td><%= coin.first_title %></td>
+          <td><%= coin.created_at %></td>
+          <td><%= coin.visibility_badge.first.html_safe %></td>
+          <td>
+              <%= link_to 'View', coin_url, class: 'btn btn-default' %>
+              <%= link_to 'Edit', main_app.polymorphic_path([:edit, coin]), class: 'btn btn-default' %>
+          </td>
+        </tr>
+      <% end %>  
+    <% else %>
+      <tr>
+        <td>This work has no coins attached.  Click "Attach Coin" button to create new coin.</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
     <% end %>
-  </div>
-</div>
+  </tbody>
+</table>
