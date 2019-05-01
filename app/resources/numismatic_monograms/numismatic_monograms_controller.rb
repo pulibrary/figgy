@@ -12,6 +12,14 @@ class NumismaticMonogramsController < BaseResourceController
     render "index"
   end
 
+  def after_create_success(_obj, _change_set)
+    redirect_to numismatic_monograms_path
+  end
+
+  def after_update_success(_obj, _change_set)
+    redirect_to numismatic_monograms_path
+  end
+
   def manifest
     @resource = find_resource(params[:id])
     authorize! :manifest, @resource

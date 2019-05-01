@@ -12,6 +12,7 @@ RSpec.describe NumismaticPeopleController, type: :controller do
     it_behaves_like "an access controlled new request"
   end
   describe "create" do
+    let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do
       {
         name1: "Marcus",
@@ -26,6 +27,12 @@ RSpec.describe NumismaticPeopleController, type: :controller do
     context "access control" do
       let(:params) { valid_params }
       it_behaves_like "an access controlled create request"
+    end
+    it "creates a person" do
+      FactoryBot.create_for_repository(:numismatic_person)
+      post :create, params: { numismatic_person: valid_params }
+      expect(response).to be_redirect
+      expect(response.location).to start_with "http://test.host/concern/numismatic_people"
     end
   end
   describe "destroy" do
@@ -46,8 +53,14 @@ RSpec.describe NumismaticPeopleController, type: :controller do
 
     context "html access control" do
       let(:factory) { :numismatic_person }
-      let(:extra_params) { { numismatic_person: { geo_state: "state" } } }
+      let(:extra_params) { { numismatic_person: { name1: ["Ceasar"] } } }
       it_behaves_like "an access controlled update request"
+    end
+    it "saves and redirects" do
+      numismatic_person = FactoryBot.create_for_repository(:numismatic_person)
+      patch :update, params: { id: numismatic_person.id.to_s, numismatic_person: { name1: ["Ceasar"] } }
+      expect(response).to be_redirect
+      expect(response.location).to start_with "http://test.host/concern/numismatic_people"
     end
   end
   describe "index" do
