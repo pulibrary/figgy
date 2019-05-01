@@ -46,6 +46,7 @@ class SearchBuilder < Blacklight::SearchBuilder
       NumismaticCitation,
       NumismaticArtist,
       NumismaticFirm,
+      NumismaticLoan,
       NumismaticMonogram,
       NumismaticPlace,
       NumismaticPerson,
