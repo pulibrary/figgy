@@ -72,6 +72,10 @@ class CoinDecorator < Valkyrie::ResourceDecorator
     nil
   end
 
+  def loan
+    super.map { |l| l.decorate.title }
+  end
+
   def provenance
     super.map { |p| p.decorate.title }
   end

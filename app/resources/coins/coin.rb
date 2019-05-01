@@ -12,6 +12,7 @@ class Coin < Resource
 
   # nested resources
   attribute :numismatic_citation, Valkyrie::Types::Array.of(NumismaticCitation).meta(ordered: true)
+  attribute :loan, Valkyrie::Types::Array.of(NumismaticLoan).meta(ordered: true)
   attribute :provenance, Valkyrie::Types::Array.of(NumismaticProvenance).meta(ordered: true)
 
   # descriptive metadata
@@ -28,7 +29,6 @@ class Coin < Resource
   attribute :find_description
   attribute :die_axis
   attribute :append_id
-  attribute :loan
   attribute :size
   attribute :technique
   attribute :weight

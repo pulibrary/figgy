@@ -4,8 +4,8 @@ class NumismaticLoanChangeSet < ChangeSet
 
   property :firm_id, multiple: false, required: false, type: Valkyrie::Types::ID
   property :person_id, multiple: false, required: false, type: Valkyrie::Types::ID
-  property :date_in, multiple: false, required: false, type: Valkyrie::Types::Date
-  property :date_out, multiple: false, required: false, type: Valkyrie::Types::Date
+  property :date_in, multiple: false, required: false
+  property :date_out, multiple: false, required: false
   property :exhibit_name, multiple: false, required: false
   property :note, multiple: false, required: false
   property :type, multiple: false, required: false

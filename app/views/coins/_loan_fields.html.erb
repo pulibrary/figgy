@@ -1,0 +1,52 @@
+<div class='nested-fields'>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :person_id,
+            label: "Person",
+            collection: @numismatic_people&.sort_by(&:title),
+            label_method: :title,
+            value_method: :id,
+            input_html: { multiple: f.object.multiple?(:person_id) },
+            include_blank: true,
+            required: f.object.required?(:person_id) %>
+    </div>
+    <div class="col-md-6">
+      <%= f.input :firm_id,
+            label: "Firm",
+            collection: @numismatic_firms&.sort_by(&:title),
+            label_method: :title,
+            value_method: :id,
+            input_html: { multiple: f.object.multiple?(:person_id) },
+            include_blank: true,
+            required: f.object.required?(:firm_id) %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :date_out, input_html: { class: 'timepicker' }, required: f.object.required?(:date_out), label: "Date out" %>
+    </div>
+    <div class="col-md-6">
+      <%= f.input :date_in, input_html: { class: 'timepicker' }, required: f.object.required?(:date_in), label: "Date in" %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :exhibit_name, required: f.object.required?(:exhibit_name), label: "Exhibit name" %>
+    </div>
+    <div class="col-md-6">
+      <%= f.input :note, required: f.object.required?(:note), label: "Note" %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :type, required: f.object.required?(:type), label: "Type" %>
+    </div>
+  </div>
+  <%= f.hidden_field :id %>
+  <%= link_to_remove_association f do %>
+    <button type="button" class="btn btn-link remove">
+      <span class="glyphicon glyphicon-remove"></span>
+      <span class="controls-remove-text">Remove</span>
+    </button>
+  <% end %>
+</div>

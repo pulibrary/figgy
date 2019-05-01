@@ -6,8 +6,8 @@ class NumismaticLoan < Resource
   attribute :person_id
 
   # descriptive metadata
-  attribute :date_in, Valkyrie::Types::Date
-  attribute :date_out, Valkyrie::Types::Date
+  attribute :date_in
+  attribute :date_out
   attribute :exhibit_name
   attribute :note
   attribute :type

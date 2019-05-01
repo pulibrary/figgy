@@ -1,0 +1,15 @@
+<div class="row">
+  <div id="loan">
+    <%= f.simple_fields_for :loan, wrapper: :inline_form do |g| %>
+      <%= render 'loan_fields', f: g %>
+    <% end %>
+  </div>
+  <div class="links">
+    <%= link_to_add_association f, :loan, partial: 'loan_fields', force_non_association_create: true do %>
+      <button type="button" class="btn btn-link add">
+        <span class="glyphicon glyphicon-plus"></span>
+        <span class="controls-add-text">Add another Loan</span>
+      </button>
+    <% end %>
+  </div>
+</div>
