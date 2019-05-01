@@ -5,6 +5,7 @@ class CoinChangeSet < ChangeSet
 
   include VisibilityProperty
   collection :numismatic_citation, multiple: true, required: false, form: NumismaticCitationChangeSet, populator: :populate_nested_collection, default: []
+  collection :provenance, multiple: true, required: false, form: NumismaticProvenanceChangeSet, populator: :populate_nested_collection, default: []
   property :coin_number, multiple: false, required: false
   property :number_in_accession, multiple: false, required: false
   property :holding_location, multiple: false, required: false
@@ -17,7 +18,6 @@ class CoinChangeSet < ChangeSet
   property :find_locus, multiple: false, required: false
   property :find_number, multiple: false, required: false
   property :find_description, multiple: false, required: false
-  property :provenance, multiple: true, required: false, default: []
   property :die_axis, multiple: false, required: false
   property :loan, multiple: false, required: false
   property :size, multiple: false, required: false
@@ -77,18 +77,20 @@ class CoinChangeSet < ChangeSet
         :find_description,
         :holding_location,
         :numismatic_collection,
-        :provenance,
         :loan,
         :member_of_collection_ids,
         :rights_statement,
         :pdf_type
       ],
-      "Citation" => [
-        :numismatic_citation
-      ],
       "Accession" => [
         :numismatic_accession_id,
         :number_in_accession
+      ],
+      "Citation" => [
+        :numismatic_citation
+      ],
+      "Provenance" => [
+        :provenance
       ],
       "Numismatic Issue" => [
         :append_id
@@ -98,5 +100,9 @@ class CoinChangeSet < ChangeSet
 
   def build_numismatic_citation
     schema["numismatic_citation"][:nested].new(model.class.schema[:numismatic_citation][[{}]].first)
+  end
+
+  def build_provenance
+    schema["provenance"][:nested].new(model.class.schema[:provenance][[{}]].first)
   end
 end

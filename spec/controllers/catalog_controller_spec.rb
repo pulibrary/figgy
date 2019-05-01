@@ -894,7 +894,6 @@ RSpec.describe CatalogController do
         holding_location: "coin-holding-location",
         loan: "coin-loan",
         private_note: "coin-private-note",
-        provenance: "coin-provenance",
         replaces: "coin-replaces",
         size: "coin-size",
         technique: "coin-technique",

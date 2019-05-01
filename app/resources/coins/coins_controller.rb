@@ -11,6 +11,8 @@ class CoinsController < BaseResourceController
 
   before_action :load_find_places, only: [:new, :edit]
   before_action :load_numismatic_accessions, only: [:new, :edit]
+  before_action :load_numismatic_firms, only: [:new, :edit]
+  before_action :load_numismatic_people, only: [:new, :edit]
   before_action :load_numismatic_references, only: [:new, :edit]
   before_action :load_available_issues, only: [:new, :edit]
   before_action :selected_issue, only: [:new, :edit]
@@ -21,6 +23,14 @@ class CoinsController < BaseResourceController
 
   def load_numismatic_accessions
     @numismatic_accessions = query_service.find_all_of_model(model: NumismaticAccession).map(&:decorate).sort_by(&:label)
+  end
+
+  def load_numismatic_firms
+    @numismatic_firms = query_service.find_all_of_model(model: NumismaticFirm).map(&:decorate)
+  end
+
+  def load_numismatic_people
+    @numismatic_people = query_service.find_all_of_model(model: NumismaticPerson).map(&:decorate)
   end
 
   def load_numismatic_references

@@ -3,13 +3,18 @@
 # weight, purchase/acquisition, where it was found, etc.
 class Coin < Resource
   include Valkyrie::Resource::AccessControls
+
+  # resources linked by ID
   attribute :member_ids, Valkyrie::Types::Array
   attribute :member_of_collection_ids
   attribute :numismatic_accession_id
   attribute :find_place_id
 
-  # descriptive metadata
+  # nested resources
   attribute :numismatic_citation, Valkyrie::Types::Array.of(NumismaticCitation).meta(ordered: true)
+  attribute :provenance, Valkyrie::Types::Array.of(NumismaticProvenance).meta(ordered: true)
+
+  # descriptive metadata
   attribute :coin_number, Valkyrie::Types::Anything
   attribute :number_in_accession, Valkyrie::Types::Integer
   attribute :holding_location
@@ -21,7 +26,6 @@ class Coin < Resource
   attribute :find_feature
   attribute :find_locus
   attribute :find_description
-  attribute :provenance
   attribute :die_axis
   attribute :append_id
   attribute :loan

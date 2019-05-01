@@ -72,6 +72,10 @@ class CoinDecorator < Valkyrie::ResourceDecorator
     nil
   end
 
+  def provenance
+    super.map { |p| p.decorate.title }
+  end
+
   def pub_created_display
     [decorated_parent.ruler, decorated_parent.denomination&.first, decorated_parent.decorated_numismatic_place&.city].compact.join(", ") if decorated_parent
   end
