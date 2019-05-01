@@ -15,7 +15,8 @@ class FindCloudFixityFailures
     <<-SQL
       SELECT res.* FROM orm_resources AS res WHERE NOT EXISTS (
         SELECT a.* FROM orm_resources AS a WHERE
-          a.metadata @> jsonb_build_object('status', ARRAY['SUCCESS']) AND
+          a.internal_resource = res.internal_resource AND
+          a.metadata @> '{"status": ["SUCCESS"]}' AND
           a.metadata->'resource_id' = res.metadata->'resource_id' AND
           a.metadata->'child_id' = res.metadata->'child_id' AND
           a.metadata->'child_property' = res.metadata->'child_property' AND
