@@ -14,6 +14,14 @@ class NumismaticAccessionsController < BaseResourceController
     render "index"
   end
 
+  def after_create_success(_obj, _change_set)
+    redirect_to numismatic_accessions_path
+  end
+
+  def after_update_success(_obj, _change_set)
+    redirect_to numismatic_accessions_path
+  end
+
   private
 
     def load_numismatic_accessions

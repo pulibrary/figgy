@@ -12,6 +12,7 @@ RSpec.describe NumismaticMonogramsController, type: :controller do
     it_behaves_like "an access controlled new request"
   end
   describe "create" do
+    let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do
       {
         title: ["Monogram 1"]
@@ -25,6 +26,12 @@ RSpec.describe NumismaticMonogramsController, type: :controller do
     context "access control" do
       let(:params) { valid_params }
       it_behaves_like "an access controlled create request"
+    end
+    it "creates a monogram" do
+      FactoryBot.create_for_repository(:numismatic_monogram)
+      post :create, params: { numismatic_monogram: valid_params }
+      expect(response).to be_redirect
+      expect(response.location).to start_with "http://test.host/concern/numismatic_monograms"
     end
   end
   describe "destroy" do
@@ -47,6 +54,12 @@ RSpec.describe NumismaticMonogramsController, type: :controller do
       let(:factory) { :numismatic_monogram }
       let(:extra_params) { { numismatic_monogram: { title: ["Monogram 2"] } } }
       it_behaves_like "an access controlled update request"
+    end
+    it "saves and redirects" do
+      numismatic_monogram = FactoryBot.create_for_repository(:numismatic_monogram)
+      patch :update, params: { id: numismatic_monogram.id.to_s, numismatic_monogram: { title: ["Monogram 45"] } }
+      expect(response).to be_redirect
+      expect(response.location).to start_with "http://test.host/concern/numismatic_monograms"
     end
   end
   describe "index" do
