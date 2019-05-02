@@ -12,6 +12,10 @@ class NumismaticsImportService
     IssueImporter.new(issue_number: issue_number, db_adapter: db_adapter, file_root: file_root, logger: logger).import!
   end
 
+  def ingest_firms
+    FirmsImporter.new(db_adapter: db_adapter, logger: logger).import!
+  end
+
   def ingest_people
     PeopleImporter.new(db_adapter: db_adapter, logger: logger).import!
   end
@@ -51,6 +55,30 @@ class NumismaticsImportService
       return nil unless value
       results = query_service.custom_queries.find_by_property(property: property, value: value)
       results.select { |r| r.is_a? model }.map(&:id)
+    end
+  end
+
+  class FirmsImporter < BaseImporter
+    attr_reader :db_adapter, :logger
+    def initialize(db_adapter:, logger:)
+      @db_adapter = db_adapter
+      @logger = logger
+    end
+
+    def import!
+      create_firms
+    end
+
+    def create_firms
+      firm_numbers = firms.ids
+      firm_numbers.each do |number|
+        attributes = firms.base_attributes(id: number).to_h
+        new_resource(klass: NumismaticFirm, **attributes)
+      end
+    end
+
+    def firms
+      @firms ||= Firms.new(db_adapter: db_adapter)
     end
   end
 
