@@ -99,6 +99,7 @@ Metrics/ClassLength:
     - 'app/controllers/base_resource_controller.rb'
     - 'app/resources/numismatics/issues/numismatics/issue_decorator.rb'
     - 'app/resources/coins/coins_controller.rb'
+    - 'app/services/preserver.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/helpers/application_helper.rb'
