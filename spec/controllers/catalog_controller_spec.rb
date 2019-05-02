@@ -892,7 +892,6 @@ RSpec.describe CatalogController do
         find_locus: "coin-find-locus",
         find_number: "coin-find-number",
         holding_location: "coin-holding-location",
-        loan: "coin-loan",
         private_note: "coin-private-note",
         replaces: "coin-replaces",
         size: "coin-size",

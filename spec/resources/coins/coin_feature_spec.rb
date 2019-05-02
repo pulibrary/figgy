@@ -49,7 +49,10 @@ RSpec.feature "Coins" do
     expect(page).to have_field "Analysis"
     expect(page).to have_field "Counter stamp"
     expect(page).to have_field "Date"
+    expect(page).to have_field "Date in"
+    expect(page).to have_field "Date out"
     expect(page).to have_field "Die axis"
+    expect(page).to have_field "Exhibit name"
     expect(page).to have_field "Find date"
     expect(page).to have_field "Find description"
     expect(page).to have_field "Find feature"
@@ -59,7 +62,6 @@ RSpec.feature "Coins" do
     expect(page).to have_field "Firm"
     expect(page).to have_field "Holding Location"
     expect(page).not_to have_css '.select[for="coin_holding_location"]', text: "Holding Location"
-    expect(page).to have_field "Loan"
     expect(page).to have_field "Note"
     expect(page).to have_field "Number"
     expect(page).to have_field "Number in accession"
@@ -70,6 +72,7 @@ RSpec.feature "Coins" do
     expect(page).to have_field "Private note"
     expect(page).to have_field "Size"
     expect(page).to have_field "Technique"
+    expect(page).to have_field "Type"
     expect(page).to have_field "Weight"
     expect(page).to have_content "Issue: 1"
 
@@ -85,6 +88,7 @@ RSpec.feature "Coins" do
     let(:numismatic_reference) { FactoryBot.create_for_repository(:numismatic_reference) }
     let(:numismatic_citation) { NumismaticCitation.new(part: "part", number: "number", numismatic_reference_id: numismatic_reference.id) }
     let(:numismatic_issue) { FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id]) }
+    let(:loan) { NumismaticLoan.new(exhibit_name: "exhibit", note: "note", type: "type") }
     let(:provenance) { NumismaticProvenance.new(date: "provenance date", note: "provenance note") }
     let(:coin) do
       FactoryBot.create_for_repository(
@@ -102,7 +106,7 @@ RSpec.feature "Coins" do
         find_number: "test value",
         find_place_id: find_place.id,
         holding_location: "test value",
-        loan: "test value",
+        loan: loan,
         private_note: "test value",
         numismatic_collection: "test value",
         provenance: provenance,
@@ -129,7 +133,7 @@ RSpec.feature "Coins" do
       expect(page).to have_css ".attribute.find_number", text: "test value"
       expect(page).to have_css ".attribute.find_place", text: "city, state, region"
       expect(page).to have_css ".attribute.holding_location", text: "test value"
-      expect(page).to have_css ".attribute.loan", text: "test value"
+      expect(page).to have_css ".attribute.loan", text: "type, exhibit, note"
       expect(page).to have_css ".attribute.numismatic_collection", text: "test value"
       expect(page).to have_css ".attribute.private_note", text: "test value"
       expect(page).to have_css ".attribute.provenance", text: "provenance date; provenance note"

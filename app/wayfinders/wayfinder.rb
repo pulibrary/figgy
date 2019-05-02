@@ -23,6 +23,7 @@ class Wayfinder < BaseWayfinder
     NumismaticAccession => NumismaticAccessionWayfinder,
     NumismaticArtist => NumismaticArtistWayfinder,
     NumismaticCitation => NumismaticCitationWayfinder,
+    NumismaticLoan => NumismaticLoanWayfinder,
     NumismaticIssue => NumismaticIssueWayfinder,
     NumismaticMonogram => NumismaticMonogramWayfinder,
     NumismaticProvenance => NumismaticProvenanceWayfinder,

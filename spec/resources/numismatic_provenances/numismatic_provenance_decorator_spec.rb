@@ -14,18 +14,6 @@ RSpec.describe NumismaticProvenanceDecorator do
     end
   end
 
-  describe "#firm" do
-    it "renders the provenance firm" do
-      expect(decorator.firm).to eq("firm name, firm city")
-    end
-  end
-
-  describe "#person" do
-    it "renders the provenance person" do
-      expect(decorator.person).to eq("name1 name2")
-    end
-  end
-
   describe "#title" do
     it "renders the provenance title" do
       expect(decorator.title).to eq("firm name, firm city; name1 name2; 12/04/1999; note")
