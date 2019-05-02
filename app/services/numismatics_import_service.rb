@@ -233,6 +233,7 @@ class NumismaticsImportService
         # Add nested properties
         attributes[:numismatic_citation] = coin_citation_attributes(coin_id: attributes[:coin_number])
         attributes[:provenance] = provenance_attributes(coin_id: attributes[:coin_number])
+        attributes[:loan] = loan_attributes(coin_id: attributes[:coin_number])
 
         resources << new_resource(klass: Coin, **attributes)
       end
@@ -314,6 +315,19 @@ class NumismaticsImportService
 
     def notes
       @notes ||= Notes.new(db_adapter: db_adapter)
+    end
+
+    def loan_attributes(coin_id:)
+      loans.attributes_by_coin(coin_id: coin_id).map do |record|
+        person = record[:person_id] ? "person-#{record[:person_id]}" : nil
+        record[:person_id] = valkyrie_id(value: person, model: NumismaticPerson)
+        record[:firm_id] = valkyrie_id(value: record[:firm_id], model: NumismaticFirm)
+        record.to_h
+      end
+    end
+
+    def loans
+      @loans ||= Loans.new(db_adapter: db_adapter)
     end
 
     def numismatic_attributes

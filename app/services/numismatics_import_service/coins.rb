@@ -35,7 +35,6 @@ class NumismaticsImportService::Coins
       find_place_id: record["FindPlaceID"].to_s, # map from place id to valkyrie id in importer
       loan: nil, # nested
       public_note: record["OtherInfo"],
-      provenance: nil, # nested
       private_note: record["PrivateInfo"],
       size: record["Size"],
       technique: record["Technique"],
