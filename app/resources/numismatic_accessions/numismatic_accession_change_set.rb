@@ -12,6 +12,7 @@ class NumismaticAccessionChangeSet < ChangeSet
   property :note, multiple: false, required: false
   property :person_id, multiple: false, required: false, type: Valkyrie::Types::ID
   property :private_note, multiple: false, required: false
+  property :replaces, multiple: true, required: false, default: []
   property :type, multiple: false, required: false
 
   validates_with AutoIncrementValidator, property: :accession_number

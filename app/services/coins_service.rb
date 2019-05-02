@@ -4,10 +4,18 @@ class CoinsService
   def self.clean
     clean_issues
     clean_coins
+    clean_accessions
     clean_firms
     clean_places
     clean_people
     clean_references
+  end
+
+  def self.clean_accessions
+    query_service.find_all_of_model(model: NumismaticAccession).each do |accesion|
+      logger.info "Deleting NumismaticAccession: #{accesion.id}"
+      delete(accesion)
+    end
   end
 
   def self.clean_coins

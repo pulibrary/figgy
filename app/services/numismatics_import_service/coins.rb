@@ -22,8 +22,8 @@ class NumismaticsImportService::Coins
 
     OpenStruct.new(
       coin_number: id,
-      accession_number: record["AccessionNumber"],
-      numismatic_accession_id: nil, # link
+      number_in_accession: record["AccessionNumber"],
+      numismatic_accession_id: record["AccessionID"].to_s,
       analysis: record["Analysis"],
       counter_stamp: record["CounterStamp"],
       die_axis: record["Axis"],
@@ -33,7 +33,6 @@ class NumismaticsImportService::Coins
       find_locus: record["FindLocus"],
       find_number: record["FindNumber"],
       find_place_id: record["FindPlaceID"].to_s, # map from place id to valkyrie id in importer
-      loan: nil, # nested
       public_note: record["OtherInfo"],
       private_note: record["PrivateInfo"],
       size: record["Size"],

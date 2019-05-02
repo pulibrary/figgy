@@ -8,6 +8,10 @@ class NumismaticsImportService
     @logger = logger || Logger.new(STDOUT)
   end
 
+  def ingest_accessions
+    AccessionsImporter.new(db_adapter: db_adapter, logger: logger).import!
+  end
+
   def ingest_issue(issue_number:)
     IssueImporter.new(issue_number: issue_number, db_adapter: db_adapter, file_root: file_root, logger: logger).import!
   end
@@ -55,6 +59,50 @@ class NumismaticsImportService
       return nil unless value
       results = query_service.custom_queries.find_by_property(property: property, value: value)
       results.select { |r| r.is_a? model }.map(&:id)
+    end
+  end
+
+  class AccessionsImporter < BaseImporter
+    attr_reader :db_adapter, :logger
+    def initialize(db_adapter:, logger:)
+      @db_adapter = db_adapter
+      @logger = logger
+    end
+
+    def import!
+      create_accessions
+    end
+
+    def create_accessions
+      accession_numbers = accessions.ids
+      accession_numbers.each do |number|
+        attributes = accessions.base_attributes(id: number).to_h
+
+        # Map ids from old database to the corresponding Valkyrie resource ids
+        person = attributes[:person_id] ? "person-#{attributes[:person_id]}" : nil
+        attributes[:person_id] = valkyrie_id(value: person, model: NumismaticPerson)
+        attributes[:firm_id] = valkyrie_id(value: attributes[:firm_id], model: NumismaticFirm)
+
+        # Add nested properties
+        attributes[:numismatic_citation] = accession_citation_attributes(accession_id: attributes[:accession_number])
+
+        new_resource(klass: NumismaticAccession, **attributes)
+      end
+    end
+
+    def accessions
+      @accessions ||= Accessions.new(db_adapter: db_adapter)
+    end
+
+    def accession_citations
+      @accession_citations ||= AccessionCitations.new(db_adapter: db_adapter)
+    end
+
+    def accession_citation_attributes(accession_id:)
+      accession_citations.attributes_by_accession(accession_id: accession_id).map do |record|
+        record[:numismatic_reference_id] = valkyrie_id(value: record[:numismatic_reference_id], model: NumismaticReference)
+        record.to_h
+      end
     end
   end
 
@@ -229,6 +277,7 @@ class NumismaticsImportService
 
         # Map ids from old database to the corresponding Valkyrie resource ids
         attributes[:find_place_id] = valkyrie_id(value: attributes[:find_place_id], model: NumismaticPlace)
+        attributes[:numismatic_accession_id] = valkyrie_id(value: attributes[:numismatic_accession_id], model: NumismaticAccession)
 
         # Add nested properties
         attributes[:numismatic_citation] = coin_citation_attributes(coin_id: attributes[:coin_number])
