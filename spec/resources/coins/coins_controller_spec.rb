@@ -53,11 +53,22 @@ RSpec.describe CoinsController, type: :controller do
     end
   end
   describe "destroy" do
+    let(:user) { FactoryBot.create(:admin) }
+    let(:coin) { FactoryBot.create_for_repository(:coin) }
+    let(:issue) { FactoryBot.create_for_repository(:numismatic_issue) }
     context "access control" do
       let(:factory) { :coin }
       it_behaves_like "an access controlled destroy request"
     end
+
+    it "redirects to the parent issue" do
+      coin = FactoryBot.create_for_repository(:coin)
+      issue = FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id])
+      delete :destroy, params: { id: coin.id }
+      expect(response).to redirect_to solr_document_path(issue)
+    end
   end
+
   describe "edit" do
     let(:user) { FactoryBot.create(:admin) }
     context "access control" do

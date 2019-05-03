@@ -15,7 +15,7 @@ class CoinsController < BaseResourceController
   before_action :load_numismatic_people, only: [:new, :edit]
   before_action :load_numismatic_references, only: [:new, :edit]
   before_action :load_available_issues, only: [:new, :edit]
-  before_action :selected_issue, only: [:new, :edit]
+  before_action :selected_issue, only: [:new, :edit, :destroy]
 
   def load_find_places
     @find_places = query_service.find_all_of_model(model: NumismaticPlace).map(&:decorate)
@@ -114,6 +114,11 @@ class CoinsController < BaseResourceController
 
   def auth_token_param
     params[:auth_token]
+  end
+
+  def after_delete_success
+    flash[:alert] = "Coin was deleted successfully"
+    redirect_to solr_document_path(@selected_issue)
   end
 
   private
