@@ -148,5 +148,8 @@ instead, do the following:
    will save to a bucket you can view at `https://console.cloud.google.com/storage/browser`
 4. Items only last in this bucket for 2 days, and aren't versioned.
 
+## Administering Figgy
+To put figgy in readonly mode, use the [ansible playbook](https://github.com/pulibrary/princeton_ansible/blob/master/playbooks/figgy_toggle_readonly.yml). Be mindful of the value of the `figgy_read_only_mode` variable when provisioning during readonly downtime. It defaults to false and could therefore turn off readonly mode prematurely if you don't override it.
+
 ## More
 For links to helpful valkyrie documentation and troubleshooting tips, visit the [wiki pages](https://github.com/pulibrary/figgy/wiki).
