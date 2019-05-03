@@ -1,74 +1,70 @@
 # frozen_string_literal: true
 
 class CoinsService
-  def self.clean
-    clean_issues
-    clean_coins
-    clean_accessions
-    clean_firms
-    clean_places
-    clean_people
-    clean_references
+  def self.clean(background: false)
+    clean_issues(background: background)
+    clean_coins(background: background)
+    clean_accessions(background: background)
+    clean_firms(background: background)
+    clean_places(background: background)
+    clean_people(background: background)
+    clean_references(background: background)
   end
 
-  def self.clean_accessions
-    query_service.find_all_of_model(model: NumismaticAccession).each do |accesion|
-      logger.info "Deleting NumismaticAccession: #{accesion.id}"
-      delete(accesion)
+  def self.clean_accessions(background: false)
+    query_service.find_all_of_model(model: NumismaticAccession).each do |accession|
+      logger.info "Deleting NumismaticAccession: #{accession.id}"
+      delete(id: accession.id, background: background)
     end
   end
 
-  def self.clean_coins
+  def self.clean_coins(background: false)
     query_service.find_all_of_model(model: Coin).each do |coin|
       logger.info "Deleting Coin: #{coin.id}"
-      delete(coin)
+      delete(id: coin.id, background: background)
     end
   end
 
-  def self.clean_firms
+  def self.clean_firms(background: false)
     query_service.find_all_of_model(model: NumismaticFirm).each do |firm|
       logger.info "Deleting NumismaticFirm: #{firm.id}"
-      delete(firm)
+      delete(id: firm.id, background: background)
     end
   end
 
-  def self.clean_issues
+  def self.clean_issues(background: false)
     query_service.find_all_of_model(model: NumismaticIssue).each do |issue|
       logger.info "Deleting NumismaticIssue: #{issue.id}"
-      delete(issue)
+      delete(id: issue.id, background: background)
     end
   end
 
-  def self.clean_places
+  def self.clean_places(background: false)
     query_service.find_all_of_model(model: NumismaticPlace).each do |place|
       logger.info "Deleting NumismaticPlace: #{place.id}"
-      delete(place)
+      delete(id: place.id, background: background)
     end
   end
 
-  def self.clean_people
+  def self.clean_people(background: false)
     query_service.find_all_of_model(model: NumismaticPerson).each do |person|
       logger.info "Deleting NumismaticPerson: #{person.id}"
-      delete(person)
+      delete(id: person.id, background: background)
     end
   end
 
-  def self.clean_references
+  def self.clean_references(background: false)
     query_service.find_all_of_model(model: NumismaticReference).each do |reference|
       logger.info "Deleting NumismaticReference: #{reference.id}"
-      delete(reference)
+      delete(id: reference.id, background: background)
     end
   end
 
-  def self.delete(resource)
-    change_set_class = DynamicChangeSet
-    change_set_persister = ::ChangeSetPersister.new(
-      metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
-      storage_adapter: Valkyrie.config.storage_adapter
-    )
-    change_set = change_set_class.new(resource)
-    change_set_persister.buffer_into_index do |persist|
-      persist.delete(change_set: change_set)
+  def self.delete(id:, background:)
+    if background
+      DeleteMemberJob.perform_later(id.to_s)
+    else
+      DeleteMemberJob.perform_now(id.to_s)
     end
   end
 
