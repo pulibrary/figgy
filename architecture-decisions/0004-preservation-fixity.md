@@ -27,11 +27,11 @@ Cloud Function.
       encoded in JSON:
       ```json
       {
-          md5: md5_of_file,
-          cloudPath: path_in_bucket_converted_from_file_identifier,
-          preservation_object_id: preservation_object_id,
-          file_metadata_node_id: file_metadata_id,
-          child_property: property_file_metadata_node_is_stored_in
+          "md5": "[md5_of_file]",
+          "cloudPath": "[path_in_bucket_converted_from_file_identifier]",
+          "preservation_object_id": "[preservation_object_id]",
+          "file_metadata_node_id": "[file_metadata_id]",
+          "child_property": "[property_file_metadata_node_is_stored_in]"
       }
       ```
       - Production Request Topic is configured with the following commands:
@@ -62,9 +62,9 @@ Cloud Function.
       ```json
       {
         "status": "[SUCCESS/FAILURE]",
-        "resource_id": preservation_object_id,
-        "child_id": file_metadata_id,
-        "child_property": property_file_metadata_node_is_stored_in
+        "resource_id": "[preservation_object_id]",
+        "child_id": "[file_metadata_id]",
+        "child_property": "[property_file_metadata_node_is_stored_in]"
       }
       ```
       - Production Status Topic is configured with the following commands:
