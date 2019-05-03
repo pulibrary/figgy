@@ -4,12 +4,12 @@ class NumismaticMonogram < Resource
   include Valkyrie::Resource::AccessControls
   attribute :member_ids, Valkyrie::Types::Array
   attribute :pending_uploads, Valkyrie::Types::Array.of(PendingUpload)
-  attribute :thumbnail_id
+  attribute :replaces
   attribute :start_canvas
+  attribute :thumbnail_id
+  attribute :title
   attribute :viewing_direction
   attribute :viewing_hint
-
-  attribute :title
 
   def self.can_have_manifests?
     true

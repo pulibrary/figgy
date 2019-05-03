@@ -12,12 +12,21 @@ class NumismaticsImportService
     AccessionsImporter.new(db_adapter: db_adapter, logger: logger).import!
   end
 
+  def ingest_firms
+    FirmsImporter.new(db_adapter: db_adapter, logger: logger).import!
+  end
+
   def ingest_issue(issue_number:)
     IssueImporter.new(issue_number: issue_number, db_adapter: db_adapter, file_root: file_root, logger: logger).import!
   end
 
-  def ingest_firms
-    FirmsImporter.new(db_adapter: db_adapter, logger: logger).import!
+  def ingest_monograms
+    MonogramsImporter.new(db_adapter: db_adapter, file_root: file_root, logger: logger).import!
+  end
+
+  def issue_numbers
+    issues = Issues.new(db_adapter: db_adapter)
+    issues.ids
   end
 
   def ingest_people
@@ -127,6 +136,48 @@ class NumismaticsImportService
 
     def firms
       @firms ||= Firms.new(db_adapter: db_adapter)
+    end
+  end
+
+  class MonogramsImporter < BaseImporter
+    attr_reader :db_adapter, :file_root, :logger
+    def initialize(db_adapter:, file_root:, logger:)
+      @db_adapter = db_adapter
+      @file_root = Pathname.new(file_root.to_s)
+      @logger = logger
+    end
+
+    def import!
+      create_monograms
+    end
+
+    def create_monograms
+      monogram_numbers = monograms.ids
+      monogram_numbers.each do |number|
+        attributes = monograms.base_attributes(id: number).to_h
+        attributes[:files] = monogram_files(filename: attributes[:filename])
+
+        new_resource(klass: NumismaticMonogram, **attributes)
+      end
+    end
+
+    def monograms
+      @monograms ||= Monograms.new(db_adapter: db_adapter)
+    end
+
+    def monogram_files(filename:)
+      files = Dir.glob(file_root.join("**/#{filename}"))
+      files.map do |file_path|
+        IngestableFile.new(
+          file_path: file_path,
+          mime_type: "image/jpeg",
+          original_filename: File.basename(file_path),
+          copyable: false,
+          container_attributes: {
+            title: filename
+          }
+        )
+      end
     end
   end
 

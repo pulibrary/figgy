@@ -6,6 +6,7 @@ class CoinsService
     clean_coins(background: background)
     clean_accessions(background: background)
     clean_firms(background: background)
+    clean_monograms(background: background)
     clean_places(background: background)
     clean_people(background: background)
     clean_references(background: background)
@@ -29,6 +30,13 @@ class CoinsService
     query_service.find_all_of_model(model: NumismaticFirm).each do |firm|
       logger.info "Deleting NumismaticFirm: #{firm.id}"
       delete(id: firm.id, background: background)
+    end
+  end
+
+  def self.clean_monograms(background: false)
+    query_service.find_all_of_model(model: NumismaticMonogram).each do |monogram|
+      logger.info "Deleting NumismaticMonogram: #{monogram.id}"
+      delete(id: monogram.id, background: background)
     end
   end
 

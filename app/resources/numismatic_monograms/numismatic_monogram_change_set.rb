@@ -7,6 +7,7 @@ class NumismaticMonogramChangeSet < ChangeSet
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :files, virtual: true, multiple: true, required: false
   property :pending_uploads, multiple: true, required: false
+  property :replaces, multiple: true, required: false, default: []
   property :start_canvas, required: false
   property :viewing_direction, required: false
   property :viewing_hint, multiple: false, required: false, default: "individuals"
