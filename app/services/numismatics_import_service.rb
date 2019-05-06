@@ -350,6 +350,7 @@ class NumismaticsImportService
       attributes[:numismatic_place_id] = valkyrie_id(value: attributes[:numismatic_place_id], model: NumismaticPlace)
       attributes[:ruler_id] = valkyrie_id(value: attributes[:ruler_id], model: NumismaticPerson)
       attributes[:master_id] = valkyrie_id(value: attributes[:master_id], model: NumismaticPerson)
+      attributes[:numismatic_monogram_ids] = issue_monogram_ids(issue_id: attributes[:issue_number])
 
       # Add nested properties
       attributes[:numismatic_artist] = artist_attributes(issue_id: attributes[:issue_number])
@@ -411,6 +412,16 @@ class NumismaticsImportService
 
     def issue_citations
       @issue_citations ||= IssueCitations.new(db_adapter: db_adapter)
+    end
+
+    def issue_monogram_ids(issue_id:)
+      issue_monograms.ids_by_issue(issue_id: issue_id).map do |id|
+        valkyrie_id(value: id.to_s, model: NumismaticMonogram)
+      end
+    end
+
+    def issue_monograms
+      @issue_monograms ||= IssueMonograms.new(db_adapter: db_adapter)
     end
 
     def notes
