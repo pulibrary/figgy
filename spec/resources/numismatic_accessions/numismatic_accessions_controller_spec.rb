@@ -68,7 +68,7 @@ RSpec.describe NumismaticAccessionsController, type: :controller do
     end
   end
   describe "index" do
-    let(:numismatic_accession) { FactoryBot.create_for_repository(:numismatic_accession, accession_number: 123) }
+    let(:numismatic_accession) { FactoryBot.create_for_repository(:numismatic_accession, accession_number: 123_123_123_123_123) }
     before do
       numismatic_accession
     end
@@ -77,7 +77,7 @@ RSpec.describe NumismaticAccessionsController, type: :controller do
       render_views
       it "lists all numismatic accessions" do
         get :index
-        expect(response.body).to have_content "123"
+        expect(response.body).to have_content "123123123123123"
       end
     end
     context "when they have staff permission" do
@@ -85,7 +85,7 @@ RSpec.describe NumismaticAccessionsController, type: :controller do
       render_views
       it "lists all numismatic accessions" do
         get :index
-        expect(response.body).to have_content "123"
+        expect(response.body).to have_content "123123123123123"
       end
     end
     context "when they are not staff nor admin" do
@@ -94,7 +94,7 @@ RSpec.describe NumismaticAccessionsController, type: :controller do
       it "doesn't list the numismatic accessions" do
         get :index
         expect(response.body).not_to have_content "Numismatic Accessions"
-        expect(response.body).not_to have_content "123"
+        expect(response.body).not_to have_content "123123123123123"
       end
     end
   end

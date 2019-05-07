@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   post "/graphql", to: "graphql#execute", defaults: { format: :json }
   get "dashboard/fixity", to: "fixity_dashboard#show", as: "fixity_dashboard"
+  get "dashboard/numismatics", to: "numismatics_dashboard#show", as: "numismatics_dashboard"
 
   resources :auth_tokens
   default_url_options Rails.application.config.action_mailer.default_url_options
