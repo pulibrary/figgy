@@ -61,7 +61,7 @@ RSpec.describe IngestFolderJob do
         expect(ingest_service).to have_received(:attach_dir).with(
           base_directory: single_dir,
           property: nil,
-          file_filters: [".tif", ".wav"],
+          file_filters: [".tif", ".wav", ".pdf"],
           source_metadata_identifier: bib,
           local_identifier: local_id,
           member_of_collection_ids: [coll.id]
@@ -101,7 +101,7 @@ RSpec.describe IngestFolderJob do
         expect(ingest_service).to have_received(:attach_dir).with(
           base_directory: single_dir,
           property: nil,
-          file_filters: [".tif", ".wav"],
+          file_filters: [".tif", ".wav", ".pdf"],
           source_metadata_identifier: bib,
           local_identifier: local_id,
           member_of_collection_ids: [coll.id]
