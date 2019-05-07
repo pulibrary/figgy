@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Data access object for places in numismatics database
+# Data access object for references in numismatics database
 class NumismaticsImportService::References
   attr_reader :db_adapter
   def initialize(db_adapter:)

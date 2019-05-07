@@ -7,12 +7,8 @@ class NumismaticsImportService::Monograms
     @db_adapter = db_adapter
   end
 
-  def ids(column: nil, value: nil)
-    query = if column
-              "SELECT ImagesID from Images WHERE #{column} = '#{value}'"
-            else
-              "SELECT ImagesID from Images"
-            end
+  def ids
+    query = "SELECT ImagesID from Images"
     db_adapter.execute(query: query).map { |r| r["ImagesID"] }
   end
 

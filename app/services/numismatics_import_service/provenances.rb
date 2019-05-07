@@ -1,38 +1,10 @@
 # frozen_string_literal: true
 
-# Data access object for places in numismatics database
+# Data access object for provenances in numismatics database
 class NumismaticsImportService::Provenances
   attr_reader :db_adapter
   def initialize(db_adapter:)
     @db_adapter = db_adapter
-  end
-
-  def ids(column: nil, value: nil)
-    query = if column
-              "SELECT ProvenanceID from Provenance WHERE #{column} = '#{value}'"
-            else
-              "SELECT ProvenanceID from Provenance"
-            end
-    db_adapter.execute(query: query).map { |r| r["ProvenanceID"] }
-  end
-
-  def base_query(id:)
-    <<-SQL
-      SELECT *
-      FROM Provenance
-      WHERE ProvenanceID = '#{id}'
-    SQL
-  end
-
-  def base_attributes(id:)
-    record = db_adapter.execute(query: base_query(id: id)).first
-
-    OpenStruct.new(
-      firm_id: record["FirmID"],
-      person_id: record["PersonID"],
-      date: record["Dates"],
-      note: record["Note"]
-    )
   end
 
   def coin_query(coin_id:)

@@ -1,18 +1,14 @@
 # frozen_string_literal: true
 
-# Data access object for accesions in numismatics database
+# Data access object for accessions in numismatics database
 class NumismaticsImportService::Accessions
   attr_reader :db_adapter
   def initialize(db_adapter:)
     @db_adapter = db_adapter
   end
 
-  def ids(column: nil, value: nil)
-    query = if column
-              "SELECT AccessionID from Accessions WHERE #{column} = '#{value}'"
-            else
-              "SELECT AccessionID from Accessions"
-            end
+  def ids
+    query = "SELECT AccessionID from Accessions"
     db_adapter.execute(query: query).map { |r| r["AccessionID"] }
   end
 

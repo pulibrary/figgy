@@ -1,18 +1,14 @@
 # frozen_string_literal: true
 
-# Data access object for places in numismatics database
+# Data access object for firms in numismatics database
 class NumismaticsImportService::Firms
   attr_reader :db_adapter
   def initialize(db_adapter:)
     @db_adapter = db_adapter
   end
 
-  def ids(column: nil, value: nil)
-    query = if column
-              "SELECT FirmID from Firms WHERE #{column} = '#{value}'"
-            else
-              "SELECT FirmID from Firms"
-            end
+  def ids
+    query = "SELECT FirmID from Firms"
     db_adapter.execute(query: query).map { |r| r["FirmID"] }
   end
 

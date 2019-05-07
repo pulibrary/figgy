@@ -8,11 +8,7 @@ class NumismaticsImportService::Coins
   end
 
   def ids(column: nil, value: nil)
-    query = if column
-              "SELECT CoinID from Coins WHERE #{column} = '#{value}'"
-            else
-              "SELECT CoinID from Coins"
-            end
+    query = "SELECT CoinID from Coins WHERE #{column} = '#{value}'"
     db_adapter.execute(query: query).map { |r| r["CoinID"] }
   end
 

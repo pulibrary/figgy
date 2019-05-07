@@ -8,12 +8,7 @@ class NumismaticsImportService::People
   end
 
   def ids(column: nil, value: nil)
-    query = if column
-              "#{combined_query} WHERE PersonRuler.#{column} = '#{value}'"
-            else
-              combined_query
-            end
-    db_adapter.execute(query: query).map { |r| r["PersonRulerID"] }
+    db_adapter.execute(query: combined_query).map { |r| r["PersonRulerID"] }
   end
 
   def combined_query

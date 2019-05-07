@@ -7,12 +7,8 @@ class NumismaticsImportService::Places
     @db_adapter = db_adapter
   end
 
-  def ids(column: nil, value: nil)
-    query = if column
-              "SELECT PlaceID from Place WHERE #{column} = '#{value}'"
-            else
-              "SELECT PlaceID from Place"
-            end
+  def ids
+    query = "SELECT PlaceID from Place"
     db_adapter.execute(query: query).map { |r| r["PlaceID"] }
   end
 

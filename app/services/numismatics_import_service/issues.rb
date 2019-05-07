@@ -1,18 +1,14 @@
 # frozen_string_literal: true
 
-# Data access object for uoins in numismatics database
+# Data access object for issues in numismatics database
 class NumismaticsImportService::Issues
   attr_reader :db_adapter
   def initialize(db_adapter:)
     @db_adapter = db_adapter
   end
 
-  def ids(column: nil, value: nil)
-    query = if column
-              "SELECT IssueID from Issue WHERE #{column} = '#{value}'"
-            else
-              "SELECT IssueID from Issue"
-            end
+  def ids
+    query = "SELECT IssueID from Issue"
     db_adapter.execute(query: query).map { |r| r["IssueID"] }
   end
 

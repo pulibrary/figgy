@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require "rails_helper"
-include ActionDispatch::TestProcess
 include ActiveJob::TestHelper
 
 RSpec.describe NumismaticImportJob do
