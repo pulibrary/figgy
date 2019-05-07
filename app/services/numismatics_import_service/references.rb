@@ -60,6 +60,6 @@ class NumismaticsImportService::References
   end
 
   def table_name
-    db_adapter.is_a?(NumismaticsImportService::SqliteAdapter) ? "Refs" : "References"
+    db_adapter.is_a?(NumismaticsImportService::SqliteAdapter) ? "Refs" : "[References]"
   end
 end

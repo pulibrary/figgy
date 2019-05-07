@@ -15,8 +15,8 @@ class NumismaticsImportService::Issues
   def base_query(id:)
     <<-SQL
       SELECT *,
-        obv_figure.`Figure Name` AS ObverseFigureName,
-        rev_figure.`Figure Name` AS ReverseFigureName,
+        obv_figure.#{figure_name} AS ObverseFigureName,
+        rev_figure.#{figure_name} AS ReverseFigureName,
         obv_orientation.OrientationName AS ObverseOrientationName,
         rev_orientation.OrientationName AS ReverseOrientationName,
         obv_part.PartName AS ObversePartName,
@@ -80,6 +80,15 @@ class NumismaticsImportService::Issues
   end
   # rubocop:enable Metrics/MethodLength
   # rubocop:enable Metrics/AbcSize
+
+  def figure_name
+    case db_adapter
+    when NumismaticsImportService::SqliteAdapter
+      "`Figure Name`"
+    else
+      "[Figure Name]"
+    end
+  end
 
   def master_id(record)
     old_id = record["MasterID"]

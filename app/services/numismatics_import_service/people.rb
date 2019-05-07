@@ -14,7 +14,7 @@ class NumismaticsImportService::People
   def combined_query
     <<-SQL
       SELECT *
-      FROM (SELECT 'person-' #{concat_operator} PersonID AS PersonRulerID,
+      FROM (SELECT #{person_concat} AS PersonRulerID,
               FirstName AS Name1,
               FamilyName AS Name2,
               NULL AS Epithet,
@@ -26,7 +26,7 @@ class NumismaticsImportService::People
               NULL AS YearsActiveEnd
             FROM Person
             UNION ALL
-            SELECT 'ruler-' #{concat_operator} RulerID AS PersonRulerID,
+            SELECT #{ruler_concat} AS PersonRulerID,
               RulerName1 AS Name1,
               RulerName2 AS Name2,
               RulerEpithet AS Epithet,
@@ -41,8 +41,22 @@ class NumismaticsImportService::People
     SQL
   end
 
-  def concat_operator
-    "||" if db_adapter.is_a? NumismaticsImportService::SqliteAdapter
+  def person_concat
+    case db_adapter
+    when NumismaticsImportService::SqliteAdapter
+      "'person-' || PersonID"
+    else
+      "'person-' + CAST(PersonID AS VARCHAR(16))"
+    end
+  end
+
+  def ruler_concat
+    case db_adapter
+    when NumismaticsImportService::SqliteAdapter
+      "'ruler-' || RulerID"
+    else
+      "'ruler-' + CAST(RulerID AS VARCHAR(16))"
+    end
   end
 
   def base_query(id:)
