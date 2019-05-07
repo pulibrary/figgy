@@ -8,6 +8,18 @@ namespace :export do
     ExportBagJob.perform_now(id)
   end
 
+  desc "Exports an object to files on disk"
+  task files: :environment do
+    ids = ENV["ID"]
+    abort "usage: rake export:files ID=[object ids, comma separated]" unless ids
+
+    @logger = Logger.new(STDOUT)
+    ids.split(",").each do |id|
+      logger.info "Exporting #{id} to disk"
+      ExportFilesJob.perform_now(id)
+    end
+  end
+
   desc "Exports Cicognara resource metadata to CSV"
   task cicognara: :environment do
     coll = ENV["COLL"]
