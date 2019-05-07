@@ -101,6 +101,7 @@ RSpec.describe NumismaticImportJob do
       expect(coin.technique).to eq ["technique"]
       expect(coin.weight).to eq [1.47]
       expect(coin.find_number).to eq ["find number"]
+      expect(coin.numismatic_collection).to eq ["collection name"]
       expect(coin.member_ids.count).to eq 2
 
       # nested citation
@@ -193,9 +194,6 @@ RSpec.describe NumismaticImportJob do
       rev_attr = issue.reverse_attribute.first
       expect(rev_attr.description).to eq ["description"]
       expect(rev_attr.name).to eq ["attribute name"]
-
-      # Missing numismatic collection
-      expect(coin.numismatic_collection).to eq ["collection name"]
     end
   end
 end
