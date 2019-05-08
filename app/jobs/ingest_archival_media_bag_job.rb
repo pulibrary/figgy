@@ -113,7 +113,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
         def add_av(media_resource_change_set, sides)
           sides.each do |side|
             file_sets = create_av_file_sets(side)
-            media_resource_change_set.member_ids += file_sets.map(&:id)
+            media_resource_change_set.member_ids += file_sets.map(&:id).uniq
             media_resource_change_set.sync
           end
         end
@@ -157,7 +157,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
           file_set.read_groups = file_set_read_groups
 
-          @av_file_sets[ingestable_audio_file.barcode_with_side_and_part] = file_set
+          file_set
         end
 
         # Creates and persists a FileSet for a media object
@@ -170,7 +170,8 @@ class IngestArchivalMediaBagJob < ApplicationJob
             file_metadata_node = create_node(ingestable_audio_file)
             file_set.file_metadata += [file_metadata_node]
 
-            changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
+            file_set = changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
+            @av_file_sets[ingestable_audio_file.barcode_with_side_and_part] = file_set
           end
         end
 

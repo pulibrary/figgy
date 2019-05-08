@@ -1,4 +1,4 @@
-<% if file_set.audio? %>
+<% if file_set.audio? && file_set.derivative_file %>
   <% if can?(:download, file_set) %>
     <%= audio_tag download_path(file_set.id, file_set.derivative_file.id), controls: true %>
   <% end %>
