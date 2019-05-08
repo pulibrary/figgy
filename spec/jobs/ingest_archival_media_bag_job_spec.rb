@@ -74,7 +74,6 @@ RSpec.describe IngestArchivalMediaBagJob do
 
         file_sets = query_service.find_all_of_model(model: FileSet)
         expect(file_sets.map(&:read_groups).to_a).to eq [
-          [read_auth], [read_auth], [read_auth], [read_auth],
           [read_auth], [read_auth], [read_auth], [read_auth]
         ]
       end
@@ -89,7 +88,6 @@ RSpec.describe IngestArchivalMediaBagJob do
 
         file_sets = query_service.find_all_of_model(model: FileSet)
         expect(file_sets.map(&:read_groups).to_a).to eq [
-          [read_auth], [read_auth], [read_auth], [read_auth],
           [read_auth], [read_auth], [read_auth], [read_auth]
         ]
       end
