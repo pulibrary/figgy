@@ -225,6 +225,35 @@ RSpec.describe Types::QueryType do
     end
   end
 
+  describe "#resources_by_figgy_ids" do
+    subject { described_class.fields["resourcesByFiggyIds"] }
+    it { is_expected.to accept_arguments(ids: "[ID!]!") }
+
+    context "when a user can read the resource" do
+      before do
+        allow(ability).to receive(:can?).with(:read, anything).and_return(true)
+      end
+      it "can return resources by figgy_id" do
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource)
+        monogram = FactoryBot.create_for_repository(:numismatic_monogram)
+        type = described_class.new(nil, context)
+        expect(type.resources_by_figgy_ids(ids: [scanned_resource.id, monogram.id]).map(&:id)).to contain_exactly(scanned_resource.id, monogram.id)
+      end
+    end
+    context "when the user can't read the resource" do
+      before do
+        allow(ability).to receive(:can?).with(:read, anything).and_return(false)
+      end
+
+      it "returns nothing" do
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource)
+        monogram = FactoryBot.create_for_repository(:numismatic_monogram)
+        type = described_class.new(nil, context)
+        expect(type.resources_by_figgy_ids(ids: [scanned_resource.id, monogram.id]).map(&:id)).to eq []
+      end
+    end
+  end
+
   describe "#resources_by_orangelight_ids" do
     subject { described_class.fields["resourcesByOrangelightIds"] }
     it { is_expected.to accept_arguments(ids: "[String!]!") }

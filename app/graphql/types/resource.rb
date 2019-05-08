@@ -6,6 +6,7 @@ module Types::Resource
                Types::EphemeraFolderType,
                Types::FileSetType,
                Types::NumismaticIssueType,
+               Types::NumismaticMonogramType,
                Types::PlaylistType,
                Types::ProxyFileSetType,
                Types::ScannedMapType,
