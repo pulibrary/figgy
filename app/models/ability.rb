@@ -57,6 +57,10 @@ class Ability
   # Abilities that should be granted to institutional patron
   def campus_patron_permissions
     anonymous_permissions
+
+    can :download, DownloadsController::FileWithMetadata do |resource|
+      download_file_with_metadata?(resource) || geo_campus_file?(resource)
+    end
   end
 
   def curation_concerns
@@ -83,7 +87,7 @@ class Ability
   end
 
   def download_file_with_metadata?(resource)
-    token_readable_for_file_metadata?(resource) || pdf_file?(resource) || geo_thumbnail?(resource) || geo_metadata?(resource) || geo_public_file?(resource)
+    token_readable_for_file_metadata?(resource) || pdf_file?(resource) || geo_thumbnail?(resource) || geo_metadata?(resource) || public_file?(resource)
   end
 
   # Geo metadata is always downloadable
@@ -91,11 +95,20 @@ class Ability
     ControlledVocabulary::GeoMetadataFormat.new.include?(resource.mime_type)
   end
 
-  # Find visibility of parent geo resource and return true if it's public
-  def geo_public_file?(resource)
+  # Find visibility of parent resource and return true if it's public
+  def public_file?(resource)
     file_set = query_service.find_by(id: resource.file_set_id)
     visibility = file_set.decorate.parent.model.visibility
     visibility.include?(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
+  end
+
+  # Find visibility of parent geo resource and return true if it's authenticated
+  def geo_campus_file?(resource)
+    file_set = query_service.find_by(id: resource.file_set_id)
+    parent = file_set.decorate.parent
+    return unless parent.try(:geo_resource?)
+    visibility = parent.model.visibility
+    visibility.include?(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED)
   end
 
   def geo_file_set?(resource)

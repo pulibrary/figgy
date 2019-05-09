@@ -293,6 +293,33 @@ describe Ability do
         is_expected.not_to be_able_to(:destroy, admin_file)
       }
     end
+
+    context "with a campus only vector resource" do
+      let(:campus_only_vector_resource) { FactoryBot.create(:complete_campus_only_vector_resource, user: creating_user) }
+      let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+      let(:storage_adapter) { Valkyrie.config.storage_adapter }
+      let(:persister) { adapter.persister }
+      let(:query_service) { adapter.query_service }
+      let(:file) { fixture_file_upload("files/vector/geo.json", "application/vnd.geo+json") }
+      let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
+      let(:vector_resource_members) { query_service.find_members(resource: vector_resource) }
+      let(:file_set) { vector_resource_members.first }
+      let(:vector_file) do
+        DownloadsController::FileWithMetadata.new(id: "1234", file: "", mime_type: "application/vnd.geo+json", original_name: "file.geosjon", file_set_id: file_set.id)
+      end
+      let(:vector_resource) do
+        change_set_persister.save(change_set: VectorResourceChangeSet.new(campus_only_vector_resource, files: [file]))
+      end
+      let(:shoulder) { "99999/fk4" }
+      let(:blade) { "123456" }
+      before do
+        stub_ezid(shoulder: shoulder, blade: blade)
+      end
+
+      it {
+        is_expected.to be_able_to(:download, vector_file)
+      }
+    end
   end
 
   describe "as an anonymous user" do
