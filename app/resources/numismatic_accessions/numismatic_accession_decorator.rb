@@ -23,8 +23,7 @@ class NumismaticAccessionDecorator < Valkyrie::ResourceDecorator
   end
 
   def cost_label
-    "" unless cost
-    "(#{cost})"
+    "(#{cost})" if cost
   end
 
   def citations

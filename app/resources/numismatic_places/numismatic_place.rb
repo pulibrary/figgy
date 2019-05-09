@@ -5,4 +5,5 @@ class NumismaticPlace < Resource
   attribute :city, Valkyrie::Types::String
   attribute :geo_state, Valkyrie::Types::String
   attribute :region, Valkyrie::Types::String
+  attribute :replaces
 end

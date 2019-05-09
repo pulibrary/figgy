@@ -17,6 +17,7 @@ class NumismaticAccession < Resource
   attribute :items_number, Valkyrie::Types::Integer
   attribute :note
   attribute :private_note
+  attribute :replaces
   attribute :thumbnail_id
   attribute :type
 

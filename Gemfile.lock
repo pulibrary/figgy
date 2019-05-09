@@ -783,6 +783,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    sqlite3 (1.4.0)
     sshkit (1.14.0)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
@@ -961,6 +962,7 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   sprockets (>= 3.7.2)
+  sqlite3
   string_rtl
   timecop
   tiny_tds
