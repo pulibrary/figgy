@@ -32,7 +32,7 @@
     <li>View Pulfa Ark Report for objects updated since</li>
   </ol>
   <%= form_with(url: pulfa_ark_report_path, method: :get, local: true) do |f| %>
-    <%= f.text_field :since_date %>
+    <%= f.text_field :since_date, class: 'timepicker', required: true, autocomplete: "off" %>
     <%= f.submit("View") %>
   <% end %>
 <% end %>
