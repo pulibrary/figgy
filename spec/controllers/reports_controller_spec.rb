@@ -126,5 +126,12 @@ RSpec.describe ReportsController, type: :controller do
       get :pulfa_ark_report, params: { since_date: "2018-01-01" }, format: "csv"
       expect(response.body).to eq(data)
     end
+
+    context "with an empty since_date" do
+      it "does not raise an error" do
+        get :pulfa_ark_report, params: { since_date: "" }
+        expect { response }.not_to raise_error
+      end
+    end
   end
 end
