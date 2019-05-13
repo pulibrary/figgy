@@ -14,7 +14,6 @@ RSpec.feature "Home Page" do
       click_link "Add"
       expect(page).to have_link "New Scanned Resource"
       expect(page).to have_link "New Recording", href: new_recording_scanned_resources_path
-      expect(page).to have_link "New Media Resource"
       expect(page).to have_link "Add a Collection", href: "/collections/new"
       expect(page).to have_link "Add an Archival Media Collection"
       expect(page).to have_link "Manage Roles"
