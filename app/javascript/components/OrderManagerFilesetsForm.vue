@@ -34,7 +34,6 @@
         v-model="method"
         label="Labeling Method"
         :options="methodOpts"
-        @change="updateMultiLabels()"
       />
 
       <div
@@ -156,6 +155,16 @@ export default {
     },
     startWithOpts: function () {
       return [{ label: 'Front (Default)', value: 'front' }, { label: 'Back', value: 'back' }]
+    }
+  },
+  watch: {
+    method: function (val) {
+      if (val === 'foliate') {
+        this.unitLabel = 'f. '
+      } else if (val === 'paginate') {
+        this.unitLabel = 'p. '
+      }
+      this.updateMultiLabels()
     }
   },
   methods: {
