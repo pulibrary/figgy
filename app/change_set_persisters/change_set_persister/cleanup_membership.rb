@@ -26,6 +26,11 @@ class ChangeSetPersister
     def run
       resources.each do |resource|
         resource.__send__("#{property}=", resource.__send__(property) - [change_set.id])
+        if resource.respond_to?(:thumbnail_id) && change_set.resource.decorate.respond_to?(:file_sets)
+          file_set_ids = change_set.resource.decorate.file_sets.map(&:id)
+          intersection = Array.wrap(resource.thumbnail_id) & file_set_ids
+          resource.thumbnail_id = resource.thumbnail_id - file_set_ids unless intersection.empty?
+        end
         persister.save(resource: resource)
       end
     end
