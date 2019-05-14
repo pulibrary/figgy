@@ -1,4 +1,4 @@
-  <div class="form-actions">
+  <div class="admin-controls">
     <% if can?(:update, resource) %>
       <%= link_to "Edit This #{resource.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-default' %>
     <% end %>
