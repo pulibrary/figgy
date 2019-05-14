@@ -15,12 +15,10 @@ class ManifestBuilder
         super
         range["items"] =
           canvas_builders.collect do |cb|
-            wrapped_range(cb) do
-              {
-                "type" => "Canvas",
-                "id" => "#{cb.path}#t=0,#{duration(cb)}"
-              }
-            end
+            {
+              "type" => "Canvas",
+              "id" => "#{cb.path}#t=0,#{duration(cb)}"
+            }
           end
       end
 
@@ -36,32 +34,10 @@ class ManifestBuilder
         end
       end
 
-      def wrapped_range(cb)
-        return yield if record.structure.is_a?(Structure)
-        {
-          "type" => "Range",
-          "label": {
-            "@none": [
-              label(cb)
-            ]
-          },
-          "id": "#{cb.path}/range",
-          "items": [
-            yield
-          ]
-        }
-      end
-
       def duration(canvas_builder)
         proxy_id = canvas_builder.record.structure.proxy.first
         file_set_presenter = parent.file_set_presenters.find { |x| x.resource.id == proxy_id }
         file_set_presenter&.display_content&.duration
-      end
-
-      def label(canvas_builder)
-        proxy_id = canvas_builder.record.structure.proxy.first
-        file_set_presenter = parent.file_set_presenters.find { |x| x.resource.id == proxy_id }
-        file_set_presenter&.display_content&.label
       end
     end
   end

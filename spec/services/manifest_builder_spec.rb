@@ -207,11 +207,15 @@ RSpec.describe ManifestBuilder do
 
         let(:file1) { fixture_file_upload("files/audio_file.wav") }
         let(:file2) { fixture_file_upload("av/la_demo_bag/data/32101047382484_1_pm.wav") }
-        let(:recording) { FactoryBot.create_for_repository(:recording, files: [file1, file2]) }
+        let(:file3) { fixture_file_upload("av/la_demo_bag/data/32101047382484_1_pm.wav") }
+        let(:recording) { FactoryBot.create_for_repository(:recording, files: [file1, file2, file3]) }
         let(:file_set1) do
           recording.decorate.decorated_file_sets.first
         end
         let(:file_set2) do
+          recording.decorate.decorated_file_sets.to_a[1]
+        end
+        let(:file_set3) do
           recording.decorate.decorated_file_sets.last
         end
         let(:proxy1) do
@@ -224,10 +228,15 @@ RSpec.describe ManifestBuilder do
           cs = ProxyFileSetChangeSet.new(res)
           change_set_persister.save(change_set: cs)
         end
+        let(:proxy3) do
+          res = ProxyFileSet.new(proxied_file_id: file_set3.id, label: "Proxy Title3")
+          cs = ProxyFileSetChangeSet.new(res)
+          change_set_persister.save(change_set: cs)
+        end
         let(:resource) do
           FactoryBot.create_for_repository(
             :playlist,
-            member_ids: [proxy1.id, proxy2.id],
+            member_ids: [proxy1.id, proxy2.id, proxy3.id],
             logical_structure: [
               { label: "Test",
                 nodes: [
@@ -237,7 +246,10 @@ RSpec.describe ManifestBuilder do
                       { label: "Chapter 1a", nodes:
                         [
                           { proxy: proxy2.id }
-                        ] }
+                        ] },
+                      {
+                        proxy: proxy3.id
+                      }
                     ] }
                 ] }
             ]
@@ -248,7 +260,7 @@ RSpec.describe ManifestBuilder do
           expect(output).not_to be_empty
 
           expect(output).to include("items")
-          expect(output["items"].length).to eq(2)
+          expect(output["items"].length).to eq(3)
 
           first_canvas = output["items"].first
           expect(first_canvas["label"]["@none"]).to eq ["Proxy Title"]
@@ -275,6 +287,7 @@ RSpec.describe ManifestBuilder do
           expect(output["structures"][0]["items"][0]["label"]).to eq("@none" => ["Proxy Title"])
           expect(output["structures"][0]["items"][0]["items"][0]["id"].split("#").first).to eq first_canvas["id"]
           expect(output["structures"][0]["items"][1]["items"][0]["label"]).to eq("@none" => ["Proxy Title2"])
+          expect(output["structures"][0]["items"][2]["label"]).to eq("@none" => ["Proxy Title3"])
         end
 
         context "when an authorization token is used to access the Playlist Manifest" do
@@ -289,7 +302,7 @@ RSpec.describe ManifestBuilder do
           it "generates links with the auth. token" do
             expect(output).not_to be_empty
             expect(output).to include("items")
-            expect(output["items"].length).to eq(2)
+            expect(output["items"].length).to eq(3)
 
             first_canvas = output["items"].first
             first_annotation_page = first_canvas["items"].first
