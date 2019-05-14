@@ -79,8 +79,11 @@ module ResourceController
     else
       after_update_failure
     end
-  rescue Valkyrie::Persistence::ObjectNotFoundError => e
-    after_update_error e
+  rescue Valkyrie::Persistence::ObjectNotFoundError => not_found_error
+    after_update_error not_found_error
+  rescue Valkyrie::Persistence::StaleObjectError
+    flash[:alert] = "Sorry, another user or process updated this resource simultaneously.  Please resubmit your changes."
+    after_update_failure
   end
 
   def after_update_success(obj, change_set)

@@ -199,6 +199,23 @@ RSpec.describe ScannedResourcesController, type: :controller do
       context "when it does exist" do
         it_behaves_like "a workflow controller", :scanned_resource
       end
+
+      context "when the resource is locked for updates" do
+        before do
+          change_set_persister_mock = instance_double(ChangeSetPersister::Basic)
+          allow(change_set_persister_mock).to receive(:metadata_adapter).and_return(described_class.change_set_persister.metadata_adapter)
+          allow(change_set_persister_mock).to receive(:buffer_into_index).and_raise(Valkyrie::Persistence::StaleObjectError)
+          allow(described_class).to receive(:change_set_persister).and_return(change_set_persister_mock)
+        end
+
+        it "notifies the user with an error and redirects them to the edit view" do
+          resource = FactoryBot.create_for_repository(:scanned_resource)
+          patch :update, params: { id: resource.id.to_s, scanned_resource: { title: ["Two"] } }
+
+          expect(response).to render_template "base/edit"
+          expect(flash[:alert]).to eq "Sorry, another user or process updated this resource simultaneously.  Please resubmit your changes."
+        end
+      end
     end
 
     context "when an attribute has leading / trailing spaces" do
