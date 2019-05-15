@@ -231,6 +231,7 @@ Rails.application.config.to_prepare do
     HumanReadableTypeIndexer,
     ImportedMetadataIndexer,
     MemberOfIndexer,
+    RightsLabelIndexer,
     ParentIssueIndexer,
     SortingIndexer,
     TitleIndexer,
