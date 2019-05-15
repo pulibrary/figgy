@@ -90,3 +90,14 @@ table.dataTable thead > tr > th {
     }
   }
 }
+
+.show-sidebar {
+  padding: 15px;
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 5px;
+  background: #f9f9f9;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  border-color: #ddd;
+}
