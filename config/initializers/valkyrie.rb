@@ -347,6 +347,7 @@ Rails.application.config.to_prepare do
     FileSetsSortedByUpdated,
     FindFixityFailures,
     FindCloudFixity,
+    FindCloudFixityFailures,
     CountMembers,
     FindSavedIds,
     FindMembersWithRelationship,
