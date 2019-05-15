@@ -111,17 +111,28 @@ class ManifestBuilder
       return default_audio_ranges if logical_structure.blank? || logical_structure.flat_map(&:nodes).blank?
       logical_structure.flat_map do |top_structure|
         top_structure.nodes.map do |node|
-          if node.proxy.present?
-            TopStructure.new(
-              Structure.new(
-                label: label(node),
-                nodes: node
-              )
-            )
-          else
-            TopStructure.new(node)
-          end
+          TopStructure.new(wrap_proxies(node))
         end
+      end
+    end
+
+    def wrap_proxies(node)
+      if !node.proxy.present?
+        StructureNode.new(
+          id: node.id,
+          label: node.label,
+          nodes: node.nodes.map { |x| wrap_proxies(x) }
+        )
+      else
+        StructureNode.new(
+          id: node.id,
+          label: label(node),
+          nodes: [
+            StructureNode.new(
+              proxy: node.proxy
+            )
+          ]
+        )
       end
     end
 
