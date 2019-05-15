@@ -6,13 +6,13 @@ exports[`OrderManagerResourceForm.vue has the expected html structure 1`] = `
     level="h2"
   >
     
-    Set Properties 
+      Set Properties 
     <small>
       
-      for this 
+        for this 
       <!---->
        resource
-    
+      
     </small>
   </heading-stub>
    
@@ -23,17 +23,19 @@ exports[`OrderManagerResourceForm.vue has the expected html structure 1`] = `
       variation="emphasis"
     >
       
-      Total files: 3
-    
+        Total files: 3
+      
     </text-style-stub>
+     
+    <!---->
   </span>
    
   <span
     class="lux-bibid"
   >
     
-    | BibId: 4609321
-  
+      | BibId: 4609321
+    
   </span>
    
   <form
