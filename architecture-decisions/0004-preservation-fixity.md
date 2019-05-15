@@ -16,15 +16,15 @@ Cloud Function.
 ## Decisions
 
 1. Fixity Checking Timeline
-   1. Once a year a random 10% of the repository's preserved materials will be queued up
+   1. Every week a random 0.2% of the repository's preserved materials will be queued up
       to have their integrity checked. This process can be executed via
       ```
-      RAILS_ENV=production PERCENT_OF_RESOURCES=10 bundle exec rake fixity:request_random_fixity
+      RAILS_ENV=production PERCENT_OF_RESOURCES=0.2 bundle exec rake fixity:request_random_fixity
       ```
+      It will be configured as a cron job on a single worker machine.
 2. Process
-   1. Each `PreservationObject`'s selected will have its `FileMetadata` nodes sent to a
-      Google Cloud Pub/Sub Request Queue with the following as a message,
-      encoded in JSON:
+   1. To verify a PreservationObject, each attached FileMetadata will generate a
+      message to a Google Cloud Pub/Sub Request Queue in the following format:
       ```json
       {
           "md5": "[md5_of_file]",
@@ -34,20 +34,6 @@ Cloud Function.
           "child_property": "[property_file_metadata_node_is_stored_in]"
       }
       ```
-      - Production Request Topic is configured with the following commands:
-        ```
-        gcloud beta pubsub topics create figgy-production-fixity-request
-        echo '{"bindings":[{"members":["serviceAccount:figgy-preservation-production@pulibrary-figgy-storage-1.iam.gserviceaccount.com"],"role":"roles/pubsub.editor"}],"etag":"ACAB"}' > permissions.json
-        gcloud beta pubsub topics set-iam-policy projects/pulibrary-figgy-storage-1/topics/figgy-production-fixity-request permissions.json
-        rm permissions.json
-        ```
-      - Staging Request Topic is configured with the following commands:
-        ```
-        gcloud beta pubsub topics create figgy-staging-fixity-request
-        echo '{"bindings":[{"members":["serviceAccount:figgy-staging@pulibrary-figgy-storage-1.iam.gserviceaccount.com"],"role":"roles/pubsub.editor"}],"etag":"ACAB"}' > permissions.json
-        gcloud beta pubsub topics set-iam-policy projects/pulibrary-figgy-storage-1/topics/figgy-staging-fixity-request permissions.json
-        rm permissions.json
-        ```
    1. A Google Cloud Function will listen for events on the request pub/sub
       topic, download the given cloudPath, and verify the MD5. The cloud
       function will be deployed via developers using the
@@ -67,24 +53,6 @@ Cloud Function.
         "child_property": "[property_file_metadata_node_is_stored_in]"
       }
       ```
-      - Production Status Topic is configured with the following commands:
-        ```
-        gcloud beta pubsub topics create figgy-production-fixity-status
-        echo '{"bindings":[{"members":["serviceAccount:figgy-preservation-production@pulibrary-figgy-storage-1.iam.gserviceaccount.com"],"role":"roles/pubsub.editor"}],"etag":"ACAB"}' > permissions.json
-        gcloud beta pubsub topics set-iam-policy projects/pulibrary-figgy-storage-1/topics/figgy-production-fixity-status permissions.json
-        gcloud beta pubsub subscriptions create figgy-production-fixity-status --topic figgy-production-fixity-status --expiration-period=never
-        gcloud beta pubsub subscriptions set-iam-policy projects/pulibrary-figgy-storage-1/subscriptions/figgy-production-fixity-status permissions.json
-        rm permissions.json
-        ```
-      - Staging Status Topic is configured with the following commands:
-        ```
-        gcloud beta pubsub topics create figgy-staging-fixity-status
-        echo '{"bindings":[{"members":["serviceAccount:figgy-staging@pulibrary-figgy-storage-1.iam.gserviceaccount.com"],"role":"roles/pubsub.editor"}],"etag":"ACAB"}' > permissions.json
-        gcloud beta pubsub topics set-iam-policy projects/pulibrary-figgy-storage-1/topics/figgy-staging-fixity-status permissions.json
-        gcloud beta pubsub subscriptions create figgy-staging-fixity-status --topic figgy-staging-fixity-status --expiration-period=never
-        gcloud beta pubsub subscriptions set-iam-policy projects/pulibrary-figgy-storage-1/subscriptions/figgy-staging-fixity-status permissions.json
-        rm permissions.json
-        ```
    1. A daemon will run on each Figgy worker machine which pulls these events
       and sends them to Sidekiq. This worker can be executed via
       `RAILS_ENV=production bundle exec rake fixity:run_worker`, but does not
@@ -98,7 +66,7 @@ Cloud Function.
 1. Cost
    1. Retrieval of resources from Google Coldline has a hefty cost associated
       with it. If we find that 10% per year is too expensive for the benefits of
-      manual fixity checking we may want to scale that down.
+      performing these checks we may want to scale that down.
 1. Random Checking
    1. 10% a year leaves a lot of room for some resources to never be checked.
       This is purely an investigative measure to ensure the reliability
@@ -109,3 +77,6 @@ Cloud Function.
    1. The above system has a few moving parts which may be difficult to explain.
       However, as we're dealing with many terabytes of data, it's the cheapest
       and most time-efficient method of fixity checking that amount of material.
+   2. The decisions above may change depending on how often and how much data we
+      end up pulling - if we end up pulling a lot more data, we may want to move
+      to Google Nearline over Coldline.

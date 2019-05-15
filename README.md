@@ -151,5 +151,10 @@ instead, do the following:
 ## Administering Figgy
 To put figgy in readonly mode, use the [ansible playbook](https://github.com/pulibrary/princeton_ansible/blob/master/playbooks/figgy_toggle_readonly.yml). Be mindful of the value of the `figgy_read_only_mode` variable when provisioning during readonly downtime. It defaults to false and could therefore turn off readonly mode prematurely if you don't override it.
 
+## Cloud Fixity Checking
+
+Documentation on setup for staging/production Fixity configuration can be found
+in [preservation_documentation.md](/preservation_documentation.md).
+
 ## More
 For links to helpful valkyrie documentation and troubleshooting tips, visit the [wiki pages](https://github.com/pulibrary/figgy/wiki).
