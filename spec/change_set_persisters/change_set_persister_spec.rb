@@ -965,6 +965,8 @@ RSpec.describe ChangeSetPersister do
   end
 
   describe "deleting multi-volume scanned resources" do
+    let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+
     it "deletes children" do
       child = FactoryBot.create_for_repository(:scanned_resource)
       parent = FactoryBot.create_for_repository(:scanned_resource, member_ids: child.id)
@@ -974,6 +976,22 @@ RSpec.describe ChangeSetPersister do
       change_set_persister.delete(change_set: change_set)
 
       expect { query_service.find_by(id: child.id) }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+    end
+
+    it "deletes the thumbnail_id" do
+      child = FactoryBot.create_for_repository(:scanned_resource, files: [file])
+      parent = FactoryBot.create_for_repository(:scanned_resource, member_ids: child.id)
+      change_set = ScannedResourceChangeSet.new(parent)
+      change_set.validate(thumbnail_id: child.decorate.file_sets.first.id)
+      persisted_parent = change_set_persister.save(change_set: change_set)
+      expect(persisted_parent.thumbnail_id).to eq [child.decorate.file_sets.first.id]
+
+      child_change_set = ScannedResourceChangeSet.new(child)
+      change_set_persister.delete(change_set: child_change_set)
+
+      reloaded = query_service.find_by(id: parent.id)
+      expect(reloaded).to be_a ScannedResource
+      expect(reloaded.thumbnail_id).to be_empty
     end
   end
 
