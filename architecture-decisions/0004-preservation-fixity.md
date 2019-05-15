@@ -1,4 +1,4 @@
-# 3. Preservation
+# 3. Preservation Fixity Checking
 
 Date: 2019-05-03
 
