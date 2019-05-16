@@ -38,8 +38,4 @@ class FindDeepChildrenWithProperty
         AND metadata @> :property_query
     SQL
   end
-
-  def id_type
-    "UUID"
-  end
 end
