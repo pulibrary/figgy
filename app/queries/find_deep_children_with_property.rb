@@ -11,11 +11,15 @@ class FindDeepChildrenWithProperty
     @query_service = query_service
   end
 
-  def find_deep_children_with_property(resource:, model:, property:, value:)
-    run_query(relationship_query, id: resource.id.to_s, model: model.to_s, property_query: { property => Array.wrap(value) }.to_json)
+  def find_deep_children_with_property(resource:, model:, property:, value:, count: false)
+    if count
+      query_service.connection[relationship_query(count), id: resource.id.to_s, model: model.to_s, property_query: { property => Array.wrap(value) }.to_json].first[:count]
+    else
+      run_query(relationship_query(count), id: resource.id.to_s, model: model.to_s, property_query: { property => Array.wrap(value) }.to_json)
+    end
   end
 
-  def relationship_query
+  def relationship_query(count = false)
     <<-SQL
         WITH RECURSIVE deep_members AS (
           select member.*
@@ -29,7 +33,7 @@ class FindDeepChildrenWithProperty
           jsonb_array_elements(f.metadata->'member_ids') AS g(member)
           JOIN orm_resources mem ON (g.member->>'id')::UUID = mem.id
         )
-        select * from deep_members
+        select #{count ? 'COUNT(*) AS count' : '*'} from deep_members
         WHERE internal_resource = :model
         AND metadata @> :property_query
     SQL
