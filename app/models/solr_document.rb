@@ -25,4 +25,8 @@ class SolrDocument
   def decorated_resource
     @decorated_resource ||= resource.decorate
   end
+
+  def wayfinder
+    @wayfinder ||= Wayfinder.for(resource)
+  end
 end

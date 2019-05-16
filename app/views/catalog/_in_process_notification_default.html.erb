@@ -1,0 +1,6 @@
+<% if @document.wayfinder.try(:in_process_file_sets_count).to_i > 0 %>
+  <div class="alert alert-warning" role="alert">Files currently processing: <%= @document.wayfinder.in_process_file_sets_count %></div>
+<% end %>
+<% if @document.resource.try(:pending_uploads).present? %>
+  <div class="alert alert-warning" role="alert">Files currently attaching: <%= @document.resource.pending_uploads.length %></div>
+<% end %>
