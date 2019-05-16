@@ -80,7 +80,7 @@ RSpec.describe NumismaticIssuesController, type: :controller do
 
       expect(response.headers["Content-Type"]).to include "application/json"
       expect(manifest_response[:manifests].length).to eq 1
-      expect(manifest_response[:viewingHint]).to eq "multi-part"
+      expect(manifest_response[:viewingHint]).to eq nil
     end
   end
 end

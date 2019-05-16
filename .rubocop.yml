@@ -111,6 +111,7 @@ Metrics/CyclomaticComplexity:
     - 'config/initializers/sequel_active_support_notification.rb'
     - 'app/services/music_import_service.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
+    - 'app/services/manifest_builder.rb'
 Metrics/LineLength:
   Exclude:
     - 'spec/views/scanned_resources/order_manager.html.erb_spec.rb'

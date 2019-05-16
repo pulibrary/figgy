@@ -28,6 +28,8 @@ class ManifestBuilder
         IndexCollectionNode.new(resource)
       when ScannedMap
         ScannedMapNode.new(resource)
+      when NumismaticIssue
+        NumismaticIssueNode.new(resource)
       when Playlist
         PlaylistNode.new(resource, auth_token)
       else
@@ -321,6 +323,14 @@ class ManifestBuilder
       def geo_image?(member)
         ControlledVocabulary.for(:geo_image_format).include?(member.mime_type.first)
       end
+  end
+
+  class NumismaticIssueNode < CollectionNode
+    # Only include coins which have file sets;
+    # otherwise there is no image for the viewer.
+    def members
+      @members ||= super.select { |coin| coin.member_ids.present? }
+    end
   end
 
   class PlaylistNode < RootNode
