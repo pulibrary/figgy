@@ -43,6 +43,9 @@ class ScannedMapDerivativeService
   def create_derivatives
     jp2_derivative_service.create_derivatives if jp2_derivative_service.valid?
     thumbnail_derivative_service.create_derivatives if thumbnail_derivative_service.valid?
+  rescue MiniMagick::Error => mini_magick_error
+    Rails.logger.error "Failed to generate JP2000 derivatives for #{id}: #{mini_magick_error.message}"
+    cleanup_derivatives
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
