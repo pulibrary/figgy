@@ -65,11 +65,10 @@ RSpec.describe ScannedMapDerivativeService do
       allow(jp2_derivative_service_factory).to receive(:new).and_return(jp2_derivative_service)
       allow(Jp2DerivativeService::Factory).to receive(:new).and_return(jp2_derivative_service_factory)
       allow(Rails.logger).to receive(:error)
-
-      derivative_service.new(id: valid_change_set.id).create_derivatives
     end
 
     it "logs the error and cleans up the derivatives" do
+      expect { derivative_service.new(id: valid_change_set.id).create_derivatives }.to raise_error(MiniMagick::Error)
       expect(jp2_derivative_service).to have_received(:cleanup_derivatives).once
       reloaded = query_service.find_by(id: valid_resource.id)
       expect(reloaded.thumbnail_files).to be_empty
