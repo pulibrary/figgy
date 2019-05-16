@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Reindexer
-  def self.reindex_all(logger: Logger.new(STDOUT), wipe: false, batch_size: 1000, solr_adapter: :index_solr)
+  def self.reindex_all(logger: Logger.new(STDOUT), wipe: false, batch_size: 500, solr_adapter: :index_solr)
     new(
       solr_adapter: Valkyrie::MetadataAdapter.find(solr_adapter),
       query_service: Valkyrie::MetadataAdapter.find(:postgres).query_service,
@@ -10,8 +10,18 @@ class Reindexer
     ).reindex_all
   end
 
+  def self.reindex_works(logger: Logger.new(STDOUT), wipe: false, batch_size: 500, solr_adapter: :index_solr)
+    new(
+      solr_adapter: Valkyrie::MetadataAdapter.find(solr_adapter),
+      query_service: Valkyrie::MetadataAdapter.find(:postgres).query_service,
+      logger: logger,
+      wipe: wipe,
+      batch_size: batch_size
+    ).reindex_works
+  end
+
   attr_reader :solr_adapter, :query_service, :logger, :wipe, :batch_size
-  def initialize(solr_adapter:, query_service:, logger:, wipe: false, batch_size: 1000)
+  def initialize(solr_adapter:, query_service:, logger:, wipe: false, batch_size: 500)
     @solr_adapter = solr_adapter
     @query_service = query_service
     @logger = logger
@@ -19,12 +29,12 @@ class Reindexer
     @batch_size = batch_size
   end
 
-  def reindex_all
+  def reindex_all(except_models: blacklisted_models)
     wipe_records if wipe
-    logger.info "Reindexing all records"
+    logger.info "Reindexing all records (except #{except_models.to_sentence})"
     progress_bar
     index_individually = []
-    all_resources.each_slice(batch_size) do |records|
+    all_resources(except_models).each_slice(batch_size) do |records|
       begin
         multi_index_persist(records)
         progress_bar.progress += records.count
@@ -34,6 +44,10 @@ class Reindexer
     end
     run_individual_retries(index_individually, progress_bar)
     logger.info "Done"
+  end
+
+  def reindex_works
+    reindex_all(except_models: blacklisted_models + ["FileSet"])
   end
 
   def run_individual_retries(records, progress_bar)
@@ -73,8 +87,8 @@ class Reindexer
     @progress_bar ||= ProgressBar.create format: "%a %e %P% Processed: %c from %C", total: total
   end
 
-  def all_resources
-    query_service.custom_queries.memory_efficient_all(except_models: blacklisted_models)
+  def all_resources(except_models)
+    query_service.custom_queries.memory_efficient_all(except_models: except_models)
   end
 
   def total
