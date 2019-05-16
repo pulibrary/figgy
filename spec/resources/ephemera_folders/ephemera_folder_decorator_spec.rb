@@ -245,6 +245,51 @@ RSpec.describe EphemeraFolderDecorator do
     it "renders the location label" do
       expect(decorator.rendered_holding_location).to eq(["Firestone Library"])
     end
+
+    context "when a holding location has multiple URLs" do
+      let(:holding_locations) do
+        [
+          {
+            label: "Firestone Library",
+            url: [
+              "https://bibdata.princeton.edu/locations/delivery_locations/15.json",
+              "https://bibdata.princeton.edu/locations/delivery_locations/16.json"
+            ]
+          }
+        ]
+      end
+
+      before do
+        allow(MultiJson).to receive(:load).and_return(holding_locations)
+      end
+
+      it "renders the location label for the selected location" do
+        expect(decorator.rendered_holding_location).to eq(["Firestone Library"])
+      end
+
+      after do
+        allow(MultiJson).to receive(:load).and_call_original
+      end
+    end
+
+    context "when a holding location has no URLs" do
+      let(:holding_locations) do
+        [
+          {
+            label: "Firestone Library",
+            url: []
+          }
+        ]
+      end
+
+      before do
+        allow(MultiJson).to receive(:load).and_return(holding_locations)
+      end
+
+      it "does not render the location" do
+        expect(decorator.rendered_holding_location).to eq([])
+      end
+    end
   end
 
   describe "#pdf_file" do

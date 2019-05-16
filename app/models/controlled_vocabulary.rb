@@ -323,9 +323,17 @@ class ControlledVocabulary
     # Retrieve all Terms within the vocabulary
     # @return [Array<Term>] the Term Objects capturing the most recently holding location for an item
     def all(_scope = nil)
-      json.map do |record|
-        Term.new(label: record[:label], value: record[:url].gsub(".json", ""))
+      values = json.map do |record|
+        label = record[:label]
+
+        values = Array.wrap(record[:url])
+        value = values.first
+        next if value.nil?
+
+        uri = value.gsub(".json", "")
+        Term.new(label: label, value: uri)
       end
+      values.compact
     end
 
     # Access the URL for the PULFA locations endpoint from the app. config.

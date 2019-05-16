@@ -84,9 +84,13 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     value = holding_location
     return unless value.present?
     vocabulary = ControlledVocabulary.for(:holding_location)
-    value.map do |holding_location|
-      vocabulary.find(holding_location).label
+    values = value.map do |holding_location|
+      term = vocabulary.find(holding_location)
+      next if term.nil?
+
+      term.label
     end
+    values.compact
   end
 
   def rendered_rights_statement
