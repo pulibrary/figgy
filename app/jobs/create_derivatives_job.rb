@@ -4,8 +4,10 @@ class CreateDerivativesJob < ApplicationJob
 
   # @param file_set_id [string] stringified Valkyrie id
   def perform(file_set_id)
-    file_set = query_service.find_by(id: Valkyrie::ID.new(file_set_id))
     Valkyrie::Derivatives::DerivativeService.for(id: file_set_id).create_derivatives
+    file_set = query_service.find_by(id: Valkyrie::ID.new(file_set_id))
+    file_set.processing_status = "processed"
+    metadata_adapter.persister.save(resource: file_set)
     messenger.derivatives_created(file_set)
     CheckFixityJob.perform_later(file_set_id)
   rescue Valkyrie::Persistence::ObjectNotFoundError => error

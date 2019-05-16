@@ -13,6 +13,7 @@ class FileSet < Resource
   attribute :side, Valkyrie::Types::Set
   attribute :part, Valkyrie::Types::Set
   attribute :transfer_notes
+  attribute :processing_status, Valkyrie::Types::String.optional
 
   delegate :width,
            :height,
