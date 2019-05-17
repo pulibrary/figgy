@@ -8,9 +8,9 @@ class FileSetsController < ApplicationController
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
     storage_adapter: Valkyrie::StorageAdapter.find(:disk)
   )
+  before_action :parent_resource, only: [:destroy]
 
   def derivatives
-    file_set = find_resource(params[:id])
     @change_set = change_set_class.new(file_set).prepopulate!
     authorize! :derive, @change_set.resource
     output = RegenerateDerivativesJob.perform_later(params[:id])
@@ -25,7 +25,7 @@ class FileSetsController < ApplicationController
   end
 
   def text
-    resource = find_resource(params[:id])
+    resource = file_set
     authorize! :read, resource
     render plain: resource.ocr_content.first
   end
@@ -38,7 +38,7 @@ class FileSetsController < ApplicationController
   end
 
   def update
-    @change_set = change_set_class.new(find_resource(params[:id]))
+    @change_set = change_set_class.new(file_set)
     authorize! :update, @change_set.resource
     if @change_set.validate(resource_params)
       obj = nil
@@ -51,6 +51,18 @@ class FileSetsController < ApplicationController
     end
   rescue Valkyrie::Persistence::ObjectNotFoundError => error
     after_update_error error
+  end
+
+  def after_delete_success
+    redirect_to solr_document_path(parent_resource)
+  end
+
+  def parent_resource
+    @parent_resource ||= Wayfinder.for(file_set).parents
+  end
+
+  def file_set
+    @file_set ||= find_resource(params[:id])
   end
 
   private
