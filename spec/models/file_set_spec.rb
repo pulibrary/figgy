@@ -14,6 +14,11 @@ RSpec.describe FileSet do
       expect(described_class.optimistic_locking_enabled?).to eq true
     end
   end
+  describe "processing_status" do
+    it "is a property" do
+      expect(described_class.schema.key?(:processing_status)).to eq true
+    end
+  end
   describe ".run_fixity" do
     let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
     let(:resource) { FactoryBot.build(:scanned_resource) }

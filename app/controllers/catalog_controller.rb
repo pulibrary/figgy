@@ -87,6 +87,7 @@ class CatalogController < ApplicationController
     config.show.document_actions.clear
     config.add_show_tools_partial(:admin_controls, partial: "admin_controls", if: :can_edit?)
     config.show.partials = config.show.partials.insert(1, :parent_breadcrumb)
+    config.show.partials = config.show.partials.insert(1, :in_process_notification)
     config.show.partials += [:universal_viewer]
     config.show.partials += [:resource_attributes]
     config.show.partials += [:auth_link]

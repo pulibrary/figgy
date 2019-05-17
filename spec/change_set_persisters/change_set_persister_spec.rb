@@ -442,6 +442,19 @@ RSpec.describe ChangeSetPersister do
       expect(members[1].original_file.height).to be_present
     end
 
+    context "when characterization/derivatives don't run" do
+      with_queue_adapter :test
+      it "marks files as in process before they're characterized" do
+        resource = FactoryBot.build(:scanned_resource)
+        change_set = change_set_class.new(resource)
+        change_set.files = [file]
+
+        output = change_set_persister.save(change_set: change_set)
+        members = Wayfinder.for(output).members
+
+        expect(members.first.processing_status).to eq "in process"
+      end
+    end
     it "can append files as FileSets", run_real_derivatives: true do
       resource = FactoryBot.build(:scanned_resource)
       change_set = change_set_class.new(resource, characterize: false, ocr_language: ["eng"])
@@ -483,6 +496,7 @@ RSpec.describe ChangeSetPersister do
       expect(query_service.find_all.to_a.map(&:class)).to contain_exactly ScannedResource, FileSet
 
       expect(members.first.hocr_content).not_to be_blank
+      expect(members.first.processing_status).to eq "processed"
     end
 
     context "with an xml file" do

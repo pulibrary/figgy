@@ -15,6 +15,23 @@ RSpec.describe Wayfinder do
       end
     end
 
+    describe "#in_process_file_sets_count" do
+      it "returns a count of all in process file sets, deep" do
+        fs1 = FactoryBot.create_for_repository(:file_set, processing_status: "in process")
+        fs2 = FactoryBot.create_for_repository(:file_set, processing_status: "in process")
+        fs3 = FactoryBot.create_for_repository(:file_set, processing_status: "in process")
+        ok_fs = FactoryBot.create_for_repository(:file_set, processing_status: "processed")
+        # Create unrelated FS
+        FactoryBot.create_for_repository(:file_set)
+        volume1 = FactoryBot.create_for_repository(:scanned_resource, member_ids: fs1.id)
+        volume2 = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs2.id, ok_fs.id])
+        mvw = FactoryBot.create_for_repository(:scanned_resource, member_ids: [volume1.id, volume2.id, fs3.id])
+
+        expect(described_class.for(mvw).in_process_file_sets_count).to eq 3
+        expect(described_class.for(mvw).processed_file_sets_count).to eq 1
+      end
+    end
+
     describe "#members_with_parents" do
       it "returns undecorated members with parents pre-loaded" do
         member = FactoryBot.create_for_repository(:scanned_resource)

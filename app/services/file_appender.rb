@@ -87,7 +87,8 @@ class FileAppender
     def create_file_set(file_node, file)
       attributes = {
         title: file_node.original_filename,
-        file_metadata: [file_node]
+        file_metadata: [file_node],
+        processing_status: "in process"
       }.merge(
         file.try(:container_attributes) || {}
       )
