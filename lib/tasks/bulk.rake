@@ -8,6 +8,15 @@ namespace :bulk do
     ReprocessMetsJob.set(queue: :low).perform_later(collection_id: collection_id)
   end
 
+  desc "Refreshes remote metadata for everything"
+  task refresh_remote_metadata: :environment do
+    batch_size = ENV["BATCH_SIZE"] || 50
+
+    @logger = Logger.new(STDOUT)
+    @logger.info "Generating background jobs to refresh remote metadata for everything:"
+    BulkUpdateRemoteMetadataService.call(batch_size: batch_size)
+  end
+
   desc "Ingest a directory of TIFFs as a ScannedResource, or a directory of directories as a MultiVolumeWork"
   task ingest: :environment do
     user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
