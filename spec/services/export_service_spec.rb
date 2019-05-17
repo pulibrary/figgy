@@ -44,4 +44,28 @@ RSpec.describe ExportService do
       end
     end
   end
+
+  describe "#export_pdf" do
+    with_queue_adapter :inline
+    context "with a scanned resource" do
+      let(:file1) { fixture_file_upload("files/abstract.tiff", "image/tiff") }
+      let(:file_set) { query_service.find_members(resource: scanned_resource).to_a.first }
+      let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456", files: [file1], pdf_type: ["gray"]) }
+
+      before do
+        stub_bibdata(bib_id: "123456")
+        stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/287,/0/gray.jpg")
+          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-landscape-pdf.jpg")), status: 200)
+        file_set.original_file.width = 287
+        file_set.original_file.height = 200
+        Valkyrie::MetadataAdapter.find(:indexing_persister).persister.save(resource: file_set)
+
+        described_class.export_pdf(scanned_resource)
+      end
+
+      it "exports a PDF" do
+        expect(File.exist?("#{export_path}/#{scanned_resource.id}.pdf")).to be true
+      end
+    end
+  end
 end

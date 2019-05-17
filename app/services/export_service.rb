@@ -4,6 +4,21 @@ class ExportService
     export_members(resource.decorate)
   end
 
+  def self.export_pdf(resource)
+    change_set = DynamicChangeSet.new(resource)
+    pdf_desc = PDFService.new(change_set_persister).find_or_generate(change_set)
+    file = Valkyrie.config.storage_adapter.find_by(id: pdf_desc.file_identifiers.first.id)
+    FileUtils.mkdir_p(export_base)
+    File.open("#{export_base}/#{resource.id}.pdf", "w") { |dest| IO.copy_stream(file, dest) }
+  end
+
+  def self.change_set_persister
+    @change_set_persister ||= ChangeSetPersister.new(
+      metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
+      storage_adapter: Valkyrie.config.storage_adapter
+    )
+  end
+
   def self.export_base
     Figgy.config["export_base"]
   end

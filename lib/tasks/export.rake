@@ -20,6 +20,18 @@ namespace :export do
     end
   end
 
+  desc "Exports an object to files on disk"
+  task pdf: :environment do
+    ids = ENV["ID"]
+    abort "usage: rake export:pdf ID=[object ids, comma separated]" unless ids
+
+    @logger = Logger.new(STDOUT)
+    ids.split(",").each do |id|
+      logger.info "Exporting #{id} to disk as PDF"
+      ExportPDFJob.perform_now(id)
+    end
+  end
+
   desc "Exports Cicognara resource metadata to CSV"
   task cicognara: :environment do
     coll = ENV["COLL"]

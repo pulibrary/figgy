@@ -182,7 +182,6 @@ RSpec.describe CoinsController, type: :controller do
       reloaded = adapter.query_service.find_by(id: resource.id)
       expect(response).to redirect_to Rails.application.routes.url_helpers.download_path(resource_id: resource.id.to_s, id: reloaded.pdf_file.id.to_s)
 
-      expect(@controller.binary_exists_for?(pdf_file)).to be true
       expect(reloaded.file_metadata).not_to be_blank
       expect(reloaded.pdf_file).not_to be_blank
     end
@@ -192,10 +191,6 @@ RSpec.describe CoinsController, type: :controller do
   context "coverage for lines skipped because of stubbing" do
     it "has a storage adapter" do
       expect(@controller.storage_adapter).to be_a(InstrumentedStorageAdapter)
-    end
-
-    it "checks for binaries" do
-      expect(@controller.binary_exists_for?(FileMetadata.new)).to be false
     end
   end
 end
