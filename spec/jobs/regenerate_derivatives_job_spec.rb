@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require "rails_helper"
+include ActionDispatch::TestProcess
 
 RSpec.describe RegenerateDerivativesJob do
   let(:file_set) { FactoryBot.create_for_repository(:file_set) }
@@ -56,6 +57,18 @@ RSpec.describe RegenerateDerivativesJob do
         expect(derivatives_service).to have_received(:create_derivatives).once
         expect(described_class).to have_received(:perform_later)
       end
+    end
+  end
+
+  context "with ImageMagick uninstalled on your MacBook" do
+    let(:file) { fixture_file_upload("files/abstract.tiff", "image/tiff") }
+    let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
+    let(:file_set) { scanned_resource.decorate.file_sets.first }
+    let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+    let(:query_service) { adapter.query_service }
+
+    it "propagates an ImageMagick error", run_real_derivatives: true do
+      expect { described_class.perform_now(file_set.id.to_s) }.to raise_error(MiniMagick::Invalid)
     end
   end
 end
