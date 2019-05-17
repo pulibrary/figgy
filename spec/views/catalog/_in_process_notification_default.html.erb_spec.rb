@@ -18,7 +18,7 @@ RSpec.describe "catalog/_in_process_notification_default" do
   end
   context "when there's file sets in process" do
     it "gives an alert" do
-      expect(rendered).to have_text "Files currently processing: 1"
+      expect(rendered).to have_text "Files Processed: 0/1"
     end
   end
   context "when there's pending uploads" do

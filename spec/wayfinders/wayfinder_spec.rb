@@ -28,6 +28,7 @@ RSpec.describe Wayfinder do
         mvw = FactoryBot.create_for_repository(:scanned_resource, member_ids: [volume1.id, volume2.id, fs3.id])
 
         expect(described_class.for(mvw).in_process_file_sets_count).to eq 3
+        expect(described_class.for(mvw).processed_file_sets_count).to eq 1
       end
     end
 
