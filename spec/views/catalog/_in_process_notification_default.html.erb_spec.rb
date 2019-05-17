@@ -24,7 +24,7 @@ RSpec.describe "catalog/_in_process_notification_default" do
   context "when there's pending uploads" do
     let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, pending_uploads: PendingUpload.new) }
     it "gives an alert" do
-      expect(rendered).to have_text "Files currently attaching: 1"
+      expect(rendered).to have_text "Pending Uploads: 1"
     end
   end
 end

@@ -2,5 +2,5 @@
   <div class="alert alert-warning" role="alert">Files Processed: <%= @document.wayfinder.processed_file_sets_count %> / <%= @document.wayfinder.processed_file_sets_count + @document.wayfinder.in_process_file_sets_count %></div>
 <% end %>
 <% if @document.resource.try(:pending_uploads).present? %>
-  <div class="alert alert-warning" role="alert">Files currently attaching: <%= @document.resource.pending_uploads.length %></div>
+  <div class="alert alert-warning" role="alert">Pending Uploads: <%= @document.resource.pending_uploads.length %></div>
 <% end %>
