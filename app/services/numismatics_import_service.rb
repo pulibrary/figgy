@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class NumismaticsImportService
-  attr_reader :db_adapter, :file_root, :logger
-  def initialize(db_adapter:, file_root:, logger: nil)
+  attr_reader :db_adapter, :collection_id, :file_root, :logger
+  def initialize(db_adapter:, collection_id:, file_root:, logger: nil)
     @db_adapter = db_adapter
+    @collection_id = collection_id
     @file_root = file_root
     @logger = logger || Logger.new(STDOUT)
   end
@@ -17,7 +18,7 @@ class NumismaticsImportService
   end
 
   def ingest_issue(issue_number:)
-    IssueImporter.new(issue_number: issue_number, db_adapter: db_adapter, file_root: file_root, logger: logger).import!
+    IssueImporter.new(issue_number: issue_number, collection_id: collection_id, db_adapter: db_adapter, file_root: file_root, logger: logger).import!
   end
 
   def ingest_monograms
@@ -281,9 +282,10 @@ class NumismaticsImportService
   end
 
   class IssueImporter < BaseImporter
-    attr_reader :issue_number, :db_adapter, :file_root, :logger
-    def initialize(issue_number:, db_adapter:, file_root:, logger:)
+    attr_reader :issue_number, :collection_id, :db_adapter, :file_root, :logger
+    def initialize(issue_number:, collection_id:, db_adapter:, file_root:, logger:)
       @issue_number = issue_number
+      @collection_id = collection_id
       @db_adapter = db_adapter
       @file_root = Pathname.new(file_root.to_s)
       @logger = logger
@@ -325,6 +327,8 @@ class NumismaticsImportService
         attributes = coins.base_attributes(id: number).to_h
         files = coin_files(coin_number: number)
         attributes[:files] = files
+        # Adds coin to collection
+        attributes[:member_of_collection_ids] = [collection_id]
 
         # Map ids from old database to the corresponding Valkyrie resource ids
         attributes[:find_place_id] = valkyrie_id(value: attributes[:find_place_id], model: NumismaticPlace)
@@ -341,10 +345,11 @@ class NumismaticsImportService
       resources.map(&:id)
     end
 
-    # rubocop:disable Metrics/MethodLength
     # rubocop:disable Metrics/AbcSize
     def create_issue(coin_ids:)
       attributes = issues.base_attributes(id: issue_number).to_h
+      # Adds coin to collection
+      attributes[:member_of_collection_ids] = [collection_id]
 
       # Map ids from old database to the corresponding Valkyrie resource ids
       attributes[:numismatic_place_id] = valkyrie_id(value: attributes[:numismatic_place_id], model: NumismaticPlace)

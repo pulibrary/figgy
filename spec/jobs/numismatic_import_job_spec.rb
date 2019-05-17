@@ -7,10 +7,11 @@ RSpec.describe NumismaticImportJob do
     let(:db_path) { "spec/fixtures/numismatics/numismatics.sqlite3" }
     let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
     let(:file_root) { "spec/fixtures/numismatics" }
+    let(:collection_id) { FactoryBot.create_for_repository(:collection).id.to_s }
 
     it "imports numismatic resources" do
       perform_enqueued_jobs do
-        described_class.perform_later(file_root: file_root, db_path: db_path)
+        described_class.perform_later(file_root: file_root, collection_id: collection_id, db_path: db_path)
       end
 
       # places
@@ -84,6 +85,7 @@ RSpec.describe NumismaticImportJob do
 
       # coins
       coin = query_service.find_all_of_model(model: Coin).first
+      expect(coin.member_of_collection_ids.first.to_s).to eq collection_id
       expect(coin.numismatic_accession_id).to eq [accession.id]
       expect(coin.find_place_id).to eq [place.id]
       expect(coin.coin_number).to eq 1
@@ -129,6 +131,7 @@ RSpec.describe NumismaticImportJob do
 
       # issues
       issue = query_service.find_all_of_model(model: NumismaticIssue).first
+      expect(issue.member_of_collection_ids.first.to_s).to eq collection_id
       expect(issue.member_ids).to eq [coin.id]
       expect(issue.numismatic_monogram_ids).to eq [monogram.id]
       expect(issue.numismatic_place_id).to eq [place.id]
