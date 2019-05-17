@@ -280,3 +280,6 @@ RSpec/ScatteredSetup:
   Exclude:
     - 'spec/resources/vector_resources/vector_resource_derivative_service_spec.rb'
     - 'spec/derivative_services/external_metadata_derivative_service_spec.rb'
+Style/PreferredHashMethods:
+  Exclude:
+    - 'app/queries/find_ids_with_property_not_empty.rb'
