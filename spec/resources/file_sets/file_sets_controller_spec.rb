@@ -116,5 +116,12 @@ RSpec.describe FileSetsController, type: :controller do
 
       expect { delete :destroy, params: { id: file_set.id.to_s } }.not_to raise_error
     end
+
+    it "redirects to the parent issue" do
+      file_set = FactoryBot.create_for_repository(:file_set)
+      parent = FactoryBot.create_for_repository(:scanned_resource, member_ids: [file_set.id])
+      delete :destroy, params: { id: file_set.id.to_s }
+      expect(response).to redirect_to solr_document_path(parent)
+    end
   end
 end
