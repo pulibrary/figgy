@@ -10,6 +10,9 @@ class RegenerateDerivativesJob < ApplicationJob
     messenger.derivatives_created(file_set)
   rescue Valkyrie::Persistence::ObjectNotFoundError
     Rails.logger.error "Unable to find FileSet #{file_set_id}"
+  rescue MiniMagick::Error => mini_magick_error
+    Rails.logger.error "Failed to regenerate the derivatives for #{file_set.id}: #{mini_magick_error.message}"
+    self.class.perform_later(file_set_id.to_s)
   end
 
   def metadata_adapter

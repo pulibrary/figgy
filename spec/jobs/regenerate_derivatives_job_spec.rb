@@ -2,10 +2,11 @@
 require "rails_helper"
 
 RSpec.describe RegenerateDerivativesJob do
+  let(:file_set) { FactoryBot.create_for_repository(:file_set) }
+
   describe "#perform" do
     context "with a valid file set id" do
       let(:derivatives_service) { instance_double(Valkyrie::Derivatives::DerivativeService) }
-      let(:file_set) { FactoryBot.create_for_repository(:file_set) }
       let(:generator) { instance_double(EventGenerator, derivatives_deleted: nil, derivatives_created: nil) }
 
       before do
@@ -33,6 +34,27 @@ RSpec.describe RegenerateDerivativesJob do
       it "logs the exception" do
         described_class.perform_now("bogus")
         expect(logger).to have_received(:error)
+      end
+    end
+
+    context "when an ImageMagick error is raised" do
+      let(:derivatives_service) { instance_double(Valkyrie::Derivatives::DerivativeService) }
+
+      before do
+        allow(Rails.logger).to receive(:error)
+        allow(derivatives_service).to receive(:create_derivatives).and_raise(MiniMagick::Error)
+        allow(derivatives_service).to receive(:cleanup_derivatives)
+        allow(Valkyrie::Derivatives::DerivativeService).to receive(:for).with(id: file_set.id).and_return(derivatives_service)
+        allow(described_class).to receive(:perform_later)
+      end
+
+      it "logs and error and retries the job" do
+        described_class.perform_now(file_set.id)
+        expect(Rails.logger).to have_received(:error).with("Failed to regenerate the derivatives for #{file_set.id}: MiniMagick::Error")
+
+        expect(derivatives_service).to have_received(:cleanup_derivatives).once
+        expect(derivatives_service).to have_received(:create_derivatives).once
+        expect(described_class).to have_received(:perform_later)
       end
     end
   end

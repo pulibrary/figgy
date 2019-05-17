@@ -28,5 +28,25 @@ RSpec.describe CreateDerivativesJob do
     it "does not error with a non-existent file_set_id" do
       expect { described_class.perform_now("blabla") }.not_to raise_error
     end
+
+    context "when an ImageMagick error is raised" do
+      let(:derivatives_service) { instance_double(Valkyrie::Derivatives::DerivativeService) }
+
+      before do
+        allow(Rails.logger).to receive(:error)
+        allow(derivatives_service).to receive(:create_derivatives).and_raise(MiniMagick::Error)
+        allow(derivatives_service).to receive(:cleanup_derivatives)
+        allow(Valkyrie::Derivatives::DerivativeService).to receive(:for).with(id: file_set.id).and_return(derivatives_service)
+        allow(described_class).to receive(:perform_later)
+      end
+
+      it "logs and error and retries the job" do
+        described_class.perform_now(file_set.id)
+        expect(Rails.logger).to have_received(:error).with("Failed to create the derivatives for #{file_set.id}: MiniMagick::Error")
+
+        expect(derivatives_service).to have_received(:create_derivatives).once
+        expect(described_class).to have_received(:perform_later)
+      end
+    end
   end
 end

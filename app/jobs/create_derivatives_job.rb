@@ -12,6 +12,9 @@ class CreateDerivativesJob < ApplicationJob
     CheckFixityJob.perform_later(file_set_id)
   rescue Valkyrie::Persistence::ObjectNotFoundError => error
     Valkyrie.logger.warn "#{self.class}: #{error}: Failed to find the resource #{file_set_id}"
+  rescue MiniMagick::Error => mini_magick_error
+    Rails.logger.error "Failed to create the derivatives for #{file_set.id}: #{mini_magick_error.message}"
+    self.class.perform_later(file_set_id.to_s)
   end
 
   def metadata_adapter
