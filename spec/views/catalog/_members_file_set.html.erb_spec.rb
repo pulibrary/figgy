@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe "catalog/_admin_controls_file_set" do
+RSpec.describe "catalog/_members_file_set" do
   let(:original_file) { FileMetadata.new(id: "test-original-file", use: [Valkyrie::Vocab::PCDMUse.OriginalFile]) }
   let(:derivative_file) { FileMetadata.new(id: "test-derivative-file", use: [Valkyrie::Vocab::PCDMUse.ServiceFile]) }
   let(:thumbnail_file) { FileMetadata.new(id: "test-thumbnail-file", use: [Valkyrie::Vocab::PCDMUse.ThumbnailImage]) }
