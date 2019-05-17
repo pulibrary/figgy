@@ -96,9 +96,11 @@ table.dataTable thead > tr > th {
   padding: 15px;
   position: -webkit-sticky;
   position: sticky;
-  bottom: 5px;
-  background: #f9f9f9;
+  bottom: -1px;
+  background: $color-grayscale-light;
   border: 1px solid transparent;
   border-radius: 4px;
   border-color: #ddd;
+  /* leaflet controls are 1000; this needs to scroll over them on map show pages */
+  z-index: 1000;
 }
