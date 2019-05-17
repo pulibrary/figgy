@@ -18,7 +18,6 @@ class NumismaticAccession < Resource
   attribute :note
   attribute :private_note
   attribute :replaces
-  attribute :thumbnail_id
   attribute :type
 
   def title
