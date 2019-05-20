@@ -78,10 +78,14 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
   end
 
   def manageable_files?
-    true
+    false
   end
 
   def manageable_structure?
+    false
+  end
+
+  def manageable_order?
     false
   end
 

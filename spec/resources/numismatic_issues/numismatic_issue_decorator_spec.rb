@@ -81,9 +81,22 @@ RSpec.describe NumismaticIssueDecorator do
     end
   end
 
-  describe "does not manage files or structure" do
+  describe "#manageable_structure" do
     it "does not manage structure" do
       expect(decorator.manageable_structure?).to be false
+    end
+  end
+
+  describe "#manageable_files" do
+    it "does not manage files" do
+      expect(decorator.manageable_files?).to be false
+    end
+  end
+
+  describe "#manageable_order" do
+    it "does support files order" do
+      expect(decorator.manageable_order?).to be false
+      expect(decorator.orderable_files?).to be false
     end
   end
 end

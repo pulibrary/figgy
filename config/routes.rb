@@ -135,8 +135,6 @@ Rails.application.routes.draw do
 
     resources :numismatic_issues do
       member do
-        get :file_manager
-        get :order_manager
         get :manifest, defaults: { format: :json }
         post :browse_everything_files
       end
