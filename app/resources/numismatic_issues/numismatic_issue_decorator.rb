@@ -86,7 +86,7 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
   end
 
   def manageable_order?
-    false
+    true
   end
 
   def master

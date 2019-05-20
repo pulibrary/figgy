@@ -94,9 +94,8 @@ RSpec.describe NumismaticIssueDecorator do
   end
 
   describe "#manageable_order" do
-    it "does not order files" do
-      expect(decorator.manageable_order?).to be false
-      expect(decorator.orderable_files?).to be false
+    it "manages order" do
+      expect(decorator.manageable_order?).to be true
     end
   end
 end
