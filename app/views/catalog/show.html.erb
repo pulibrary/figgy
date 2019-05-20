@@ -3,7 +3,10 @@
     <%= render_document_main_content_partial %>
   </div>
 
-  <div id="sidebar" class="show-sidebar <%= show_sidebar_classes %>">
-    <%= render_document_sidebar_partial %>
-  </div>
+  <%# this is action bar buttons; hide unless logged in %>
+  <% if current_user %>
+    <div id="sidebar" class="show-sidebar <%= show_sidebar_classes %>">
+      <%= render_document_sidebar_partial %>
+    </div>
+  <% end %>
 </div>
