@@ -30,6 +30,57 @@ RSpec.describe RemoteRecord, type: :model do
     end
   end
 
+  describe ".pulfa?" do
+    it "handles a lot of variants" do
+      expect(described_class.pulfa?("RCPXG-5830371.2_c0001")).to be true
+      expect(described_class.pulfa?("C0744.04_c0082")).to be true
+      expect(described_class.pulfa?("C0723.1-47_c0276")).to be true
+      expect(described_class.pulfa?("C0723.306e_c013")).to be true
+      expect(described_class.pulfa?("MC001.03.03_c0171")).to be true
+      expect(described_class.pulfa?("MC001")).to be true
+    end
+
+    it "does not allow slashes" do
+      expect(described_class.pulfa?("MC016/c11318")).to be false
+    end
+
+    it "is false for bib ids" do
+      expect(described_class.pulfa?("123456")).to be false
+    end
+  end
+
+  describe ".pulfa_collection" do
+    it "handles a lot of variants" do
+      expect(described_class.pulfa_collection("RCPXG-5830371.2_c0001")).to eq "RCPXG-5830371.2"
+      expect(described_class.pulfa_collection("C0744.04_c0082")).to eq "C0744.04"
+      expect(described_class.pulfa_collection("C0723.1-47_c0276")).to eq "C0723.1-47"
+      expect(described_class.pulfa_collection("C0723.306e_c013")).to eq "C0723.306e"
+      expect(described_class.pulfa_collection("MC001.03.03_c0171")).to eq "MC001.03.03"
+      expect(described_class.pulfa_collection("MC016_c11318")).to eq "MC016"
+      expect(described_class.pulfa_collection("MC001")).to eq "MC001"
+    end
+
+    it "does not allow slashes" do
+      expect(described_class.pulfa_collection("MC016/c11318")).to be nil
+    end
+  end
+
+  describe ".pulfa_component" do
+    it "handles a lot of variants" do
+      expect(described_class.pulfa_component("RCPXG-5830371.2_c0001")).to eq "c0001"
+      expect(described_class.pulfa_component("C0744.04_c0082")).to eq "c0082"
+      expect(described_class.pulfa_component("C0723.1-47_c0276")).to eq "c0276"
+      expect(described_class.pulfa_component("C0723.306e_c013")).to eq "c013"
+      expect(described_class.pulfa_component("MC001.03.03_c0171")).to eq "c0171"
+      expect(described_class.pulfa_component("MC016_c11318")).to eq "c11318"
+      expect(described_class.pulfa_component("MC001")).to eq nil
+    end
+
+    it "does not allow slashes" do
+      expect(described_class.pulfa_component("MC016/c11318")).to be nil
+    end
+  end
+
   describe ".source_metadata_url" do
     context "with a Voyager record ID" do
       it "validates that this is not a bib. ID" do

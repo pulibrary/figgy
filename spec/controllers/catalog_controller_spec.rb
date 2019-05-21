@@ -126,9 +126,9 @@ RSpec.describe CatalogController do
     end
     context "with metadata imported from pulfa" do
       it "can search by box and folder numbers" do
-        stub_pulfa(pulfa_id: "AC044/c0003")
+        stub_pulfa(pulfa_id: "AC044_c0003")
         stub_ezid(shoulder: "99999/fk4", blade: "8543429")
-        persister.save(resource: FactoryBot.create_for_repository(:complete_scanned_resource, title: [], source_metadata_identifier: "AC044/c0003", import_metadata: true))
+        persister.save(resource: FactoryBot.create_for_repository(:complete_scanned_resource, title: [], source_metadata_identifier: "AC044_c0003", import_metadata: true))
         get :index, params: { q: "Box 1 Folder 2" }
         expect(assigns(:document_list).length).to eq 1
       end

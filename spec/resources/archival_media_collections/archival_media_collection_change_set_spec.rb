@@ -52,7 +52,7 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
 
       it "is invalid" do
         FactoryBot.create_for_repository(:archival_media_collection, source_metadata_identifier: "AC044_c0003")
-        stub_pulfa(pulfa_id: "AC044/c0003")
+        stub_pulfa(pulfa_id: "AC044_c0003")
 
         expect(change_set).not_to be_valid
       end
@@ -62,7 +62,7 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
       let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "AC044_c0003") }
 
       it "is invalid" do
-        stub_pulfa(pulfa_id: "AC044/c0003")
+        stub_pulfa(pulfa_id: "AC044_c0003")
         FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "AC044_c0003")
 
         expect(change_set).to be_valid
@@ -72,7 +72,7 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
     context "when source_metadata_identifier is set" do
       let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "AC044_c0003") }
       it "is valid" do
-        stub_pulfa(pulfa_id: "AC044/c0003")
+        stub_pulfa(pulfa_id: "AC044_c0003")
         expect(change_set).to be_valid
       end
     end
