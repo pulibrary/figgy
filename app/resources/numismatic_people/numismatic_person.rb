@@ -12,4 +12,5 @@ class NumismaticPerson < Resource
   attribute :years_active_start
   attribute :years_active_end
   attribute :replaces
+  attribute :depositor
 end

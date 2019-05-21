@@ -1,5 +1,5 @@
+<% if can?(:create, NumismaticReference) %>
 <h1>Numismatic References</h1>
-
 <table id="members" class="table table-striped datatable">
   <thead>
     <tr>
@@ -22,9 +22,6 @@
       <% end %>
   </tbody>
 </table>
-
 <br>
-
-<% if can?(:create, NumismaticReference) %>
   <%= link_to 'New Numismatic Reference', new_numismatic_reference_path, class: 'btn btn-primary' %>
 <% end %>

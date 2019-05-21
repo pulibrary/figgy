@@ -14,6 +14,7 @@ class NumismaticAccessionChangeSet < ChangeSet
   property :private_note, multiple: false, required: false
   property :replaces, multiple: true, required: false, default: []
   property :type, multiple: false, required: false
+  property :depositor, multiple: false, required: false
 
   validates_with AutoIncrementValidator, property: :accession_number
 

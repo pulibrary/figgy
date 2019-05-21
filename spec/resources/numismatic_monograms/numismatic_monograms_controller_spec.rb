@@ -4,6 +4,8 @@ include ActionDispatch::TestProcess
 
 RSpec.describe NumismaticMonogramsController, type: :controller do
   with_queue_adapter :inline
+  let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+  let(:query_service) { adapter.query_service }
   let(:user) { nil }
   before do
     sign_in user if user
@@ -32,6 +34,8 @@ RSpec.describe NumismaticMonogramsController, type: :controller do
       post :create, params: { numismatic_monogram: valid_params }
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatic_monograms"
+      monogram = query_service.find_all_of_model(model: NumismaticMonogram).select { |n| n["title"] == ["Monogram 1"] }.first
+      expect(monogram.depositor).to eq [user.uid]
     end
   end
   describe "destroy" do
@@ -63,10 +67,10 @@ RSpec.describe NumismaticMonogramsController, type: :controller do
     end
   end
   describe "index" do
-    context "when they have permission" do
+    context "when they have admin permission" do
       let(:user) { FactoryBot.create(:admin) }
       render_views
-      it "has lists all numismatic monograms" do
+      it "lists all numismatic monograms" do
         FactoryBot.create_for_repository(:numismatic_monogram)
 
         get :index
@@ -86,6 +90,32 @@ RSpec.describe NumismaticMonogramsController, type: :controller do
           get :index
           expect(assigns(:numismatic_monograms)).to eq([])
         end
+      end
+    end
+    context "when they have staff permission" do
+      let(:user) { FactoryBot.create(:staff) }
+      let(:numismatic_monogram) { FactoryBot.create_for_repository(:numismatic_monogram, title: "Archaic Monogram") }
+      before do
+        numismatic_monogram
+      end
+      render_views
+      it "lists all numismatic monograms" do
+        get :index
+        expect(response.body).to have_content "Archaic Monogram"
+      end
+    end
+    context "when they are not staff nor admin" do
+      let(:numismatic_monogram) { FactoryBot.create_for_repository(:numismatic_monogram, title: "Archaic Monogram") }
+      before do
+        numismatic_monogram
+      end
+      render_views
+      it "doesn't list the numismatic monograms" do
+        FactoryBot.create(:campus_patron)
+
+        get :index
+        expect(response.body).not_to have_content "Monograms"
+        expect(response.body).not_to have_content "Archaic Monogram"
       end
     end
   end
@@ -111,5 +141,8 @@ RSpec.describe NumismaticMonogramsController, type: :controller do
       expect(response.headers["Content-Type"]).to include "application/json"
       expect(manifest_response[:message]).to eq "No manifest found for asdf"
     end
+  end
+  def find_resource(id)
+    query_service.find_by(id: Valkyrie::ID.new(id.to_s))
   end
 end

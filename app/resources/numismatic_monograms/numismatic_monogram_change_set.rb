@@ -11,6 +11,7 @@ class NumismaticMonogramChangeSet < ChangeSet
   property :start_canvas, required: false
   property :viewing_direction, required: false
   property :viewing_hint, multiple: false, required: false, default: "individuals"
+  property :depositor, multiple: false, required: false
 
   def primary_terms
     [

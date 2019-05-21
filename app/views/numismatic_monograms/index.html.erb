@@ -1,5 +1,5 @@
+<% if can?(:create, NumismaticMonogram) %>
 <h1>Numismatic Monograms</h1>
-
 <table id="members" class="table table-striped datatable">
   <thead>
     <tr>
@@ -21,9 +21,6 @@
       <% end %>
   </tbody>
 </table>
-
 <br>
-
-<% if can?(:create, NumismaticMonogram) %>
   <%= link_to 'New Numismatic Monogram', new_numismatic_monogram_path, class: 'btn btn-primary' %>
 <% end %>
