@@ -18,19 +18,19 @@ class RemoteRecord
 
   def self.pulfa?(source_metadata_identifier)
     return false if source_metadata_identifier.match?(/\//)
-    source_metadata_identifier.match?(/^([A-Z][a-zA-Z0-9\.-]+)(_[c0-9]+)?/)
+    source_metadata_identifier.match?(/^([A-Z][a-zA-Z0-9\.-]+)(_[a-z0-9]+)?/)
   end
 
   def self.pulfa_collection(source_metadata_identifier)
     return if source_metadata_identifier.match?(/\//)
-    m = source_metadata_identifier.match(/^([A-Z][a-zA-Z0-9.-]+)[_]?.*/)
+    m = source_metadata_identifier.match(/^([A-Z][a-zA-Z0-9.-]+)([_][a-z0-9]+)?/)
     m[1] if m
   end
 
   def self.pulfa_component(source_metadata_identifier)
     return if source_metadata_identifier.match?(/\//)
     return unless source_metadata_identifier.match?(/_/)
-    m = source_metadata_identifier.match(/^[A-Z][a-zA-Z0-9.-]+[_]?(.*)/)
+    m = source_metadata_identifier.match(/^[A-Z][a-zA-Z0-9.-]+_([a-z0-9]+)/)
     m[1] if m
   end
 
@@ -40,7 +40,7 @@ class RemoteRecord
 
   def self.source_metadata_url(id)
     return "https://bibdata.princeton.edu/bibliographic/#{id}" if bibdata?(id)
-    return "https://findingaids.princeton.edu/collections/#{id.tr('_', '/')}.xml?scope=record" if pulfa?(id)
+    "https://findingaids.princeton.edu/collections/#{id.tr('_', '/')}.xml?scope=record" if pulfa?(id)
   end
 
   class PulfaRecord

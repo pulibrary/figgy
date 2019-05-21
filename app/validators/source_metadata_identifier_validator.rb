@@ -10,6 +10,7 @@ class SourceMetadataIdentifierValidator < ActiveModel::Validator
     return unless record.apply_remote_metadata?
     metadata_id = Array(record.source_metadata_identifier).first
     raise URI::InvalidURIError unless RemoteRecord.valid?(metadata_id)
+    return if RemoteRecord.retrieve(metadata_id).success?
     record.errors.add(:source_metadata_identifier, "Error retrieving metadata")
   rescue URI::InvalidURIError
     error_message = "Invalid source metadata ID: #{metadata_id}"

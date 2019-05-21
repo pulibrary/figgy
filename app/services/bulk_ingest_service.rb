@@ -31,7 +31,7 @@ class BulkIngestService
   # @param [String] value
   # @return [Boolean]
   def valid_remote_identifier?(value)
-    RemoteRecord.valid?(value)
+    RemoteRecord.valid?(value) && RemoteRecord.retrieve(value).success?
   rescue URI::InvalidURIError
     false
   end
