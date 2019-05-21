@@ -105,7 +105,7 @@ RSpec.describe IdentifierService do
 
     context "with a pulfa source_metadata_identifier" do
       let(:cid) { "MC016_c9616" }
-      let(:metadata) { base_metadata.merge(target: "http://findingaids.princeton.edu/collections/#{cid.gsub("_", "/")}") }
+      let(:metadata) { base_metadata.merge(target: "http://findingaids.princeton.edu/collections/#{cid.tr('_', '/')}") }
       let(:obj) { FactoryBot.build :scanned_resource, source_metadata_identifier: cid }
 
       before do
