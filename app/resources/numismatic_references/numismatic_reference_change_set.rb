@@ -11,6 +11,7 @@ class NumismaticReferenceChangeSet < Valkyrie::ChangeSet
 
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :author_id, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
+  property :depositor, multiple: false, required: false
 
   def primary_terms
     [

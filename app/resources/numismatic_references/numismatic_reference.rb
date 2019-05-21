@@ -15,4 +15,5 @@ class NumismaticReference < Resource
   attribute :title
   attribute :year
   attribute :replaces
+  attribute :depositor
 end

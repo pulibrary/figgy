@@ -64,7 +64,8 @@ class Ability
   end
 
   def curation_concerns
-    [ScannedResource, EphemeraFolder, ScannedMap, VectorResource, RasterResource, Playlist]
+    [ScannedResource, EphemeraFolder, ScannedMap, VectorResource, RasterResource, Playlist, Coin,
+     NumismaticIssue, NumismaticAccession, NumismaticFirm, NumismaticMonogram, NumismaticPerson, NumismaticPlace, NumismaticReference]
   end
 
   def current_user

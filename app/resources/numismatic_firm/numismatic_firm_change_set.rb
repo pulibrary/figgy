@@ -5,6 +5,7 @@ class NumismaticFirmChangeSet < ChangeSet
   property :city, multiple: false, required: false
   property :name, multiple: false, required: false
   property :replaces, multiple: true, required: false, default: []
+  property :depositor, multiple: false, required: false
 
   def primary_terms
     [

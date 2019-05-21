@@ -12,6 +12,7 @@ class NumismaticPersonChangeSet < ChangeSet
   property :years_active_start, multiple: false, required: false
   property :years_active_end, multiple: false, required: false
   property :replaces, multiple: true, required: false, default: []
+  property :depositor, multiple: false, required: false
 
   def primary_terms
     [

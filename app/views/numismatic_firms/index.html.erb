@@ -1,5 +1,5 @@
+<% if can?(:create, NumismaticFirm) %>
 <h1>Numismatic Firms</h1>
-
 <table id="members" class="table table-striped datatable">
   <thead>
     <tr>
@@ -21,9 +21,6 @@
       <% end %>
   </tbody>
 </table>
-
 <br>
-
-<% if can?(:create, NumismaticFirm) %>
   <%= link_to 'New Numismatic Firm', new_numismatic_firm_path, class: 'btn btn-primary' %>
 <% end %>

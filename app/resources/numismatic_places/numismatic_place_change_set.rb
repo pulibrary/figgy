@@ -6,6 +6,7 @@ class NumismaticPlaceChangeSet < ChangeSet
   property :geo_state, multiple: false, required: false
   property :region, multiple: false, required: false
   property :replaces, multiple: true, required: false, default: []
+  property :depositor, multiple: false, required: false
 
   def primary_terms
     [

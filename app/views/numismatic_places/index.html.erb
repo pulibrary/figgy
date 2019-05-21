@@ -1,5 +1,5 @@
+<% if can?(:create, NumismaticPlace) %>
 <h1>Numismatic Places</h1>
-
 <table id="members" class="table table-striped datatable">
   <thead>
     <tr>
@@ -23,9 +23,6 @@
       <% end %>
   </tbody>
 </table>
-
 <br>
-
-<% if can?(:create, NumismaticPlace) %>
   <%= link_to 'New Numismatic Place', new_numismatic_place_path, class: 'btn btn-primary' %>
 <% end %>

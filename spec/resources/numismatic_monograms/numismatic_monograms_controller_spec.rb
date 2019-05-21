@@ -63,10 +63,10 @@ RSpec.describe NumismaticMonogramsController, type: :controller do
     end
   end
   describe "index" do
-    context "when they have permission" do
+    context "when they have admin permission" do
       let(:user) { FactoryBot.create(:admin) }
       render_views
-      it "has lists all numismatic monograms" do
+      it "lists all numismatic monograms" do
         FactoryBot.create_for_repository(:numismatic_monogram)
 
         get :index
@@ -86,6 +86,32 @@ RSpec.describe NumismaticMonogramsController, type: :controller do
           get :index
           expect(assigns(:numismatic_monograms)).to eq([])
         end
+      end
+    end
+    context "when they have staff permission" do
+      let(:user) { FactoryBot.create(:staff) }
+      let(:numismatic_monogram) { FactoryBot.create_for_repository(:numismatic_monogram, title: "Archaic Monogram") }
+      before do
+        numismatic_monogram
+      end
+      render_views
+      it "lists all numismatic monograms" do
+        get :index
+        expect(response.body).to have_content "Archaic Monogram"
+      end
+    end
+    context "when they are not staff nor admin" do
+      let(:numismatic_monogram) { FactoryBot.create_for_repository(:numismatic_monogram, title: "Archaic Monogram") }
+      before do
+        numismatic_monogram
+      end
+      render_views
+      it "doesn't list the numismatic monograms" do
+        FactoryBot.create(:campus_patron)
+
+        get :index
+        expect(response.body).not_to have_content "Monograms"
+        expect(response.body).not_to have_content "Archaic Monogram"
       end
     end
   end

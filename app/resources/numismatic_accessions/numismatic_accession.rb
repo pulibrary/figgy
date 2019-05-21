@@ -19,6 +19,7 @@ class NumismaticAccession < Resource
   attribute :private_note
   attribute :replaces
   attribute :type
+  attribute :depositor
 
   def title
     ["Accession: #{accession_number}"]

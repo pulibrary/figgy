@@ -64,14 +64,33 @@ RSpec.describe NumismaticFirmsController, type: :controller do
     end
   end
   describe "index" do
-    context "when they have permission" do
+    let(:numismatic_firm) { FactoryBot.create_for_repository(:numismatic_firm, city: "Boston") }
+    before do
+      numismatic_firm
+    end
+    context "when they have admin permission" do
       let(:user) { FactoryBot.create(:admin) }
       render_views
-      it "has lists all numismatic firms" do
-        FactoryBot.create_for_repository(:numismatic_firm)
-
+      it "lists all numismatic firms" do
         get :index
-        expect(response.body).to have_content "city"
+        expect(response.body).to have_content "Boston"
+      end
+    end
+    context "when they have staff permission" do
+      let(:user) { FactoryBot.create(:staff) }
+      render_views
+      it "lists all numismatic firms" do
+        get :index
+        expect(response.body).to have_content "Boston"
+      end
+    end
+    context "when they are not staff nor admin" do
+      let(:user) { FactoryBot.create(:campus_patron) }
+      render_views
+      it "doesn't list the numismatic firms" do
+        get :index
+        expect(response.body).not_to have_content "Numismatic Firms"
+        expect(response.body).not_to have_content "Boston"
       end
     end
   end

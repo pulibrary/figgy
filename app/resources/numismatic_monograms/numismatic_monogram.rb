@@ -10,6 +10,7 @@ class NumismaticMonogram < Resource
   attribute :title
   attribute :viewing_direction
   attribute :viewing_hint
+  attribute :depositor
 
   def self.can_have_manifests?
     true

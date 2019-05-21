@@ -4,7 +4,7 @@ include ActionDispatch::TestProcess
 
 RSpec.describe NumismaticReferencesController, type: :controller do
   with_queue_adapter :inline
-  let(:user) { nil }
+  let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   before do
     sign_in user if user
   end
@@ -72,6 +72,37 @@ RSpec.describe NumismaticReferencesController, type: :controller do
 
         get :index
         expect(response.body).to have_content "Test Reference"
+      end
+    end
+  end
+  describe "index" do
+    let(:numismatic_reference) { FactoryBot.create_for_repository(:numismatic_reference, title: "Reference 3") }
+    before do
+      numismatic_reference
+    end
+    context "when they have admin permission" do
+      let(:user) { FactoryBot.create(:admin) }
+      render_views
+      it "lists all numismatic references" do
+        get :index
+        expect(response.body).to have_content "Reference 3"
+      end
+    end
+    context "when they have staff permission" do
+      let(:user) { FactoryBot.create(:staff) }
+      render_views
+      it "lists all numismatic references" do
+        get :index
+        expect(response.body).to have_content "Reference 3"
+      end
+    end
+    context "when they are not staff nor admin" do
+      let(:user) { FactoryBot.create(:campus_patron) }
+      render_views
+      it "doesn't list the numismatic references" do
+        get :index
+        expect(response.body).not_to have_content "References"
+        expect(response.body).not_to have_content "Reference 3"
       end
     end
   end
