@@ -3,34 +3,52 @@
 class ArchivalMediaBagParser
   BARCODE_WITH_SIDE_REGEX = /(\d{14}_\d+)_.*/
   BARCODE_WITH_SIDE_AND_PART_REGEX = /(\d{14}_\d+?_p\d+).*/
-  attr_reader :path, :audio_files, :file_groups, :component_groups, :component_dict, :pbcore_parsers
+  attr_reader :path, :audio_files, :component_groups, :component_dict, :pbcore_parsers
 
   def initialize(path:, component_id:)
     @path = path
     @component_dict = BarcodeComponentDict.new(component_id)
   end
 
-  # group all the files in the bag by barcode_with_side
-  # @return [Hash] mapping string barcode_with_side to an array of IngestableAudioFiles
-  def file_groups
-    @file_groups ||= audio_files.group_by(&:barcode_with_side_and_part)
+  # Constructs IngestableAudioFile objects for each wav/mp3 file in the Bag
+  # @return [Array<IngestableAudioFile>]
+  def audio_files
+    @audio_files ||= path.join("data").each_child.select { |file| [".wav", ".mp3"].include? file.extname }.map { |file| IngestableAudioFile.new(path: file) }
   end
 
-  # file_groups in groups by component id
-  # @return [Hash] map keying EAD component IDs to file barcodes (with part qualifier, e.g. "32101047382401_1")
+  def barcodes
+    audio_files.map(&:barcode).uniq
+  end
+
+  def audio_files_by_barcode
+    @audio_files_by_barcode ||= audio_files.group_by(&:barcode)
+  end
+
+  def audio_files_for_barcode(barcode:)
+    audio_files_by_barcode[barcode].group_by(&:barcode_with_side_and_part)
+  end
+
+  # file in groups by component id
+  # @return [Hash] map keying EAD component IDs to array of barcodes
+  #   Array is ordered by location of barcodes in EAD
   def component_groups
     @component_groups ||=
       begin
         h = {}
-        file_groups.keys.each do |barcode_with_side|
-          cid = component_dict.lookup(barcode_with_side)
-          h[cid] = h.fetch(cid, []).append(barcode_with_side)
+        audio_files.map(&:barcode).uniq.each do |barcode|
+          cid = component_dict.component_id(barcode: barcode)
+          h[cid] = h.fetch(cid, []).append(barcode).uniq
+        end
+        h.each do |component_id, barcodes|
+          h[component_id] = barcodes.sort_by do |barcode|
+            component_dict.barcodes(cid: component_id).index(barcode)
+          end
         end
         h
       end
   end
 
-  def pbcore_parser_for_barcode(barcode)
+  def pbcore_parser(barcode:)
     pbcore_parsers.find { |pbcore| pbcore.barcode == barcode }
   end
 
@@ -48,39 +66,6 @@ class ArchivalMediaBagParser
 
   private
 
-    # Class modeling asset images
-    class ImageFile
-      attr_reader :path, :original_filename, :barcode
-
-      # Provide the MIME type used for all image files
-      # @return [String]
-      def self.mime_type
-        "image/jpeg"
-      end
-
-      # Constructor
-      # @param path [Pathname] path to the image file
-      def initialize(path:)
-        @path = path
-      end
-
-      # Retrieve the original filename
-      def original_filename
-        @original_filename ||= path.basename.to_s
-      end
-
-      # Retrieve the barcode
-      def barcode
-        @barcode ||= path.basename.to_s.split("_").first
-      end
-
-      # Generate the MIME type
-      # @return [String]
-      def mime_type
-        self.class.mime_type
-      end
-    end
-
     # pbcore parsers by barcode
     # @return [Array] of PbcoreParser objects
     def pbcore_parsers
@@ -88,12 +73,6 @@ class ArchivalMediaBagParser
         begin
           path.join("data").each_child.select { |file| [".xml"].include? file.extname }.map { |file| PbcoreParser.new(path: file) }
         end
-    end
-
-    # Constructs IngestableAudioFile objects for each wav/mp3 file in the Bag
-    # @return [Array<IngestableAudioFile>]
-    def audio_files
-      @audio_files ||= path.join("data").each_child.select { |file| [".wav", ".mp3"].include? file.extname }.map { |file| IngestableAudioFile.new(path: file) }
     end
 
     # Retrieve the JPEGs for the assets
@@ -106,33 +85,50 @@ class ArchivalMediaBagParser
     end
 end
 
-# Dictionary implemented using a wrapper for a Hash
-# Wraps a hash of component_id => barcode_with_side
+# A couple of hashes
+# look up a barcode, get a component id
+# look up a component id, get all its barcodes in order
 class BarcodeComponentDict
-  attr_reader :dict
+  attr_reader :cid_lookup, :barcode_lookup
   # Constructor
   # @param collection [ArchivalMediaCollection]
   def initialize(component_id)
     @component_id = component_id
-    parse_dict!
+    parse_cid_lookup
+    parse_barcode_lookup
+  end
+
+  def barcodes(cid:)
+    barcode_lookup[cid]
   end
 
   # Retrieve an EAD component ID for any given barcode
-  # @param barcode_with_side [String] the barcode
+  # @param barcode [String] the barcode
   # @param [String] the EAD component ID
-  def lookup(barcode_with_side)
-    @dict[barcode_with_side]
+  def component_id(barcode:)
+    @cid_lookup[barcode]
   end
 
   private
 
     # query the EAD for filenames, navigates back up to their component IDs
-    def parse_dict!
-      @dict = {}
+    def parse_cid_lookup
+      @cid_lookup = {}
       barcode_nodes.each do |node|
-        barcode = get_barcode_with_side(node)
-        @dict[barcode] = get_id(node) unless barcode.nil?
+        barcode = get_barcode(node)
+        @cid_lookup[barcode] = get_id(node) unless barcode.nil?
       end
+    end
+
+    def parse_barcode_lookup
+      @barcode_lookup = {}
+      id_nodes.each do |node|
+        @barcode_lookup[node.attributes["id"].value] = node_barcodes(node)
+      end
+    end
+
+    def node_barcodes(node)
+      node.xpath("altformavail/p").map { |barcode_node| get_barcode(barcode_node) }.uniq
     end
 
     def remote_record
@@ -159,6 +155,10 @@ class BarcodeComponentDict
       xml.xpath("//altformavail/p")
     end
 
+    def id_nodes
+      xml.xpath("//altformavail/parent::c")
+    end
+
     # Retrieves a "grandparent" ID attribute value for any given  XML Element
     # @param node [Nokogiri::XML::Node]
     # @return [String]
@@ -169,10 +169,8 @@ class BarcodeComponentDict
     # Extracts the barcode using the XML Element content and a regexp
     # @param node [Nokogiri::XML::Node]
     # @return [String, nil] the captured string content
-    def get_barcode_with_side(node)
-      match = ArchivalMediaBagParser::BARCODE_WITH_SIDE_REGEX.match(node.content)
-      return if match.nil?
-      match[1]
+    def get_barcode(node)
+      node.content.split("_").first
     end
 end
 
@@ -182,8 +180,16 @@ class PbcoreParser
     @path = path
   end
 
+  def mime_type
+    "application/xml; schema=pbcore"
+  end
+
   def original_filename
     @original_filename ||= path.basename.to_s
+  end
+
+  def main_title
+    @main_title ||= xml.xpath('//pbcoreTitle[@titleType="Main"]').first.text
   end
 
   def barcode
@@ -198,5 +204,38 @@ class PbcoreParser
   # @return [Nokogiri::XML::Element] the root element of the XML Document
   def xml
     @xml ||= Nokogiri::XML(path).remove_namespaces!
+  end
+end
+
+# Class modeling asset images
+class ImageFile
+  attr_reader :path, :original_filename, :barcode
+
+  # Provide the MIME type used for all image files
+  # @return [String]
+  def self.mime_type
+    "image/jpeg"
+  end
+
+  # Constructor
+  # @param path [Pathname] path to the image file
+  def initialize(path:)
+    @path = path
+  end
+
+  # Retrieve the original filename
+  def original_filename
+    @original_filename ||= path.basename.to_s
+  end
+
+  # Retrieve the barcode
+  def barcode
+    @barcode ||= path.basename.to_s.split("_").first
+  end
+
+  # Generate the MIME type
+  # @return [String]
+  def mime_type
+    self.class.mime_type
   end
 end
