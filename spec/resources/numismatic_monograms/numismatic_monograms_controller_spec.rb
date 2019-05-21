@@ -4,6 +4,8 @@ include ActionDispatch::TestProcess
 
 RSpec.describe NumismaticMonogramsController, type: :controller do
   with_queue_adapter :inline
+  let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+  let(:query_service) { adapter.query_service }
   let(:user) { nil }
   before do
     sign_in user if user
@@ -32,6 +34,8 @@ RSpec.describe NumismaticMonogramsController, type: :controller do
       post :create, params: { numismatic_monogram: valid_params }
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatic_monograms"
+      monogram = query_service.find_all_of_model(model: NumismaticMonogram).select { |n| n["title"] == ["Monogram 1"] }.first
+      expect(monogram.depositor).to eq [user.uid]
     end
   end
   describe "destroy" do
@@ -137,5 +141,8 @@ RSpec.describe NumismaticMonogramsController, type: :controller do
       expect(response.headers["Content-Type"]).to include "application/json"
       expect(manifest_response[:message]).to eq "No manifest found for asdf"
     end
+  end
+  def find_resource(id)
+    query_service.find_by(id: Valkyrie::ID.new(id.to_s))
   end
 end

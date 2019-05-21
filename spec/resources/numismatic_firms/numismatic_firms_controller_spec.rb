@@ -4,6 +4,8 @@ include ActionDispatch::TestProcess
 
 RSpec.describe NumismaticFirmsController, type: :controller do
   with_queue_adapter :inline
+  let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+  let(:query_service) { adapter.query_service }
   let(:user) { nil }
   before do
     sign_in user if user
@@ -33,6 +35,8 @@ RSpec.describe NumismaticFirmsController, type: :controller do
       post :create, params: { numismatic_firm: valid_params }
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatic_firms"
+      firm = query_service.find_all_of_model(model: NumismaticFirm).select { |n| n["city"] == "city" }.first
+      expect(firm.depositor).to eq [user.uid]
     end
   end
   describe "destroy" do
@@ -93,5 +97,8 @@ RSpec.describe NumismaticFirmsController, type: :controller do
         expect(response.body).not_to have_content "Boston"
       end
     end
+  end
+  def find_resource(id)
+    query_service.find_by(id: Valkyrie::ID.new(id.to_s))
   end
 end
