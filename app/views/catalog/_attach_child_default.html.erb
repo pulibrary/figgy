@@ -5,7 +5,7 @@
         <%= link_to "Attach #{concern.human_readable_type}", polymorphic_path([:parent, :new, ActiveModel::Naming.param_key(concern)], parent_id: resource.id), class: 'btn btn-default' %>
       <% end %>
       <% if decorated_resource.attachable_objects.length > 1 %>
-          <div class="btn-group">
+          <div class="btn-group dropup">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Attach Child <span class="caret"></span>
             </button>
