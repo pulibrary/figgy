@@ -191,6 +191,7 @@ Metrics/PerceivedComplexity:
     - 'app/services/pdf_generator/cover_page_generator.rb'
 Rails/OutputSafety:
   Exclude:
+    - 'app/helpers/fixity_dashboard_helper.rb'
     - 'app/resources/**/*_decorator*'
     - 'app/validators/unique_archival_media_component_id_validator.rb'
 RSpec/AnyInstance:
@@ -207,6 +208,8 @@ RSpec/AnyInstance:
     - 'spec/services/voyager_updater/event_spec.rb'
     - 'spec/jobs/voyager_update_job_spec.rb'
     - 'spec/services/cloud_fixity_spec.rb'
+    - 'spec/views/catalog/_members_multi_volume_work.html.erb_spec.rb'
+    - 'spec/views/catalog/_resource_attributes_default.html.erb_spec.rb'
 RSpec/DescribeClass:
   Exclude:
     - 'spec/abilities/**/*'

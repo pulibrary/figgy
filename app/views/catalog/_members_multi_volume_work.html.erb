@@ -5,6 +5,7 @@
      <th>Title</th>
      <th>Date Uploaded</th>
      <th>Visibility</th>
+     <th>Fixity</th>
      <th>Actions</th>
     </tr>
     <% unless decorated_resource.volumes.empty? %>
@@ -15,6 +16,7 @@
           <td><%= volume.first_title %></td>
           <td><%= volume.created_at %></td>
           <td><%= volume.visibility_badge.first.html_safe %></td>
+          <td><%= volume.fixity_badges.html_safe %></td>
           <td>
             <%= link_to 'View', volume_url, class: 'btn btn-default' %>
             <%= link_to 'Edit', main_app.polymorphic_path([:edit, volume]), class: 'btn btn-default' %>

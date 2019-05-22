@@ -27,6 +27,12 @@
           </tr>
         <% end %>
       <% end %>
+      <% if resource.decorate.respond_to?(:file_sets) && !resource.decorate.file_sets.empty? %>
+        <tr>
+          <th>Fixity</th>
+          <td><%= document.decorated_resource.fixity_summary.html_safe %></td>
+        </tr>
+      <% end %>
     </tbody>
   </table>
 </div>

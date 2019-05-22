@@ -55,6 +55,25 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     end
   end
 
+  # Calculate a histogram of child FileSet fixity status
+  def fixity_map
+    return [] unless respond_to?(:file_sets)
+    m = file_sets.map { |fs| fs.original_file&.fixity_success }
+    m.uniq.map { |s| [s, (m.select { |ss| ss == s }).size] }.to_h
+  end
+
+  def fixity_badges
+    fixity_map.map do |status, count|
+      h.format_fixity_count(status, count)
+    end.join(" ")
+  end
+
+  def fixity_summary
+    fixity_map.map do |status, count|
+      h.format_fixity_status(status, count)
+    end.join(" ")
+  end
+
   def header
     merged_titles
   end
