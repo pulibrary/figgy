@@ -3,6 +3,16 @@
 @import "variables/typography";
 @import "abstractions/mixins";
 
+header {
+  /*
+    these styles are needed to keep dropdown menus from falling underneath
+    sticky elements on page. Note it's not actually sticky because there's
+    no `top` or `bottom` assigned.
+   */
+  position: sticky;
+  z-index: 1001;
+}
+
 .l-branding__pul {
   background: $dark-gray;
   border-top: 3px solid $orange;
@@ -188,9 +198,9 @@
   }
 }
 
-
 // Copied over from Curation Concerns.
 .dropdown-menu {
+
   .item-with-options {
     display: block;
     padding:3px 20px;
