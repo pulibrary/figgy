@@ -17,7 +17,7 @@ RSpec.describe NumismaticPlacesController, type: :controller do
     let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do
       {
-        city: "city",
+        city: "Seattle",
         region: "region"
       }
     end
@@ -35,7 +35,7 @@ RSpec.describe NumismaticPlacesController, type: :controller do
       post :create, params: { numismatic_place: valid_params }
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatic_places"
-      place = query_service.find_all_of_model(model: NumismaticPlace).select { |n| n["city"] == "city" }.first
+      place = query_service.find_all_of_model(model: NumismaticPlace).select { |n| n["city"] == "Seattle" }.first
       expect(place.depositor).to eq [user.uid]
     end
   end
