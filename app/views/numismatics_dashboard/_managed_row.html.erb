@@ -1,0 +1,13 @@
+<div class="col-md-12">
+  <div class="panel-body">
+    <% label.each do |name| %>
+      <ul class="classify-work classify-<%= name.downcase %>">
+        <li class="work-type">
+          <%= instance_variable_get"@#{name.downcase}" %>
+          <h4 class="title"><%= name %></h4>
+          <%= link_to "Manage", send("numismatic_#{name.downcase}_path"), class: "btn btn-primary manage-#{name.downcase}" %>
+        </li>
+      </ul>
+    <% end %>
+  </div>
+</div>

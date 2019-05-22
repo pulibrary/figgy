@@ -9,4 +9,8 @@ class NumismaticMonogramWayfinder < BaseWayfinder
       member
     end
   end
+
+  def monograms_count
+    @monograms_count = query_service.custom_queries.count_all_of_model(model: NumismaticMonogram)
+  end
 end

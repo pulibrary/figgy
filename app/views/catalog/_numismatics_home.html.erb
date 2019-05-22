@@ -1,0 +1,12 @@
+<% if can?(:create, NumismaticIssue) %>
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-classify-work">
+      <div class="panel-heading">Numismatics</div>
+      <div class="panel-body">
+      	<%= link_to 'Manage Numismatics', numismatics_dashboard_path, class: "btn btn-primary"%>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
