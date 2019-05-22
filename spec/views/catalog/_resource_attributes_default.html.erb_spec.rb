@@ -63,8 +63,11 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
                                        member_of_collection_ids: [collection.id],
                                        source_metadata_identifier: "123456",
                                        visibility: false,
+                                       member_ids: [file_set.id],
                                        holding_location: RDF::URI("https://bibdata.princeton.edu/locations/delivery_locations/1"))
     end
+    let(:file_set) { FactoryBot.create_for_repository(:file_set) }
+    let(:original_file) { instance_double FileMetadata }
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: scanned_resource) }
     let(:collection) { FactoryBot.create_for_repository(:collection) }
     let(:solr_document) { SolrDocument.new(document) }
@@ -73,6 +76,8 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       assign :document, solr_document
       allow(view).to receive(:has_search_parameters?).and_return(false)
       allow(view).to receive(:document).and_return(solr_document)
+      allow_any_instance_of(FileSet).to receive(:original_file).and_return(original_file)
+      allow(original_file).to receive(:fixity_success).and_return(1)
       stub_blacklight_views
       render
     end
@@ -162,6 +167,10 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       expect(rendered).to have_selector "th", text: "Holding Location"
       expect(rendered).not_to have_selector ".holding_location"
       expect(rendered).not_to have_selector "th", text: "Rendered Holding Location"
+
+      # Fixity
+      expect(rendered).to have_selector "th", text: "Fixity"
+      expect(rendered).to have_selector "span.label-primary", text: "1"
     end
   end
   context "when given a ScannedMap solr document" do

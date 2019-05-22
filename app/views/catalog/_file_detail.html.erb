@@ -1,0 +1,8 @@
+      <td><%= file.updated_at %></td>
+      <td><%= format_fixity_success(file&.fixity_success) %></td>
+      <td><%= file&.fixity_last_success_date %></td>
+      <% if can?(:download, resource) %>
+        <td><%= link_to "Download", download_path(resource.id, file.id) %></td>
+      <% else %>
+        <td></td>
+      <% end %>

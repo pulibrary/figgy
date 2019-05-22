@@ -3,6 +3,9 @@
   <thead>
     <tr>
       <th>Label</th>
+      <th>Last Modified</th>
+      <th>Last Fixity Check Status</th>
+      <th>Date of Last Success</th>
       <th>Download</th>
     </tr>
   </thead>
@@ -10,67 +13,43 @@
   <% resource.original_files.each do |file| %>
     <tr>
       <td><span class="label label-success">Original File</span>&nbsp;<%= file.label.first %></td>
-      <% if can?(:download, resource) %>
-        <td><%= link_to "Download", download_path(resource.id, file.id) %></td>
-      <% else %>
-        <td></td>
-      <% end %>
+      <%= render partial: 'file_detail', locals: { file: file } %>
     </tr>
   <% end %>
   <% resource.derivative_files.each do |file| %>
     <tr>
       <td><span class="label label-info">Derivative File</span>&nbsp;<%= file.label.first %></td>
-      <% if can?(:download, resource) %>
-        <td><%= link_to "Download", download_path(resource.id, file.id) %></td>
-      <% else %>
-        <td></td>
-      <% end %>
+      <%= render partial: 'file_detail', locals: { file: file } %>
     </tr>
   <% end %>
   <% resource.derivative_partial_files.each do |file| %>
     <tr>
       <td><span class="label label-info">Derivative Partial File</span>&nbsp;<%= file.label.first %></td>
-      <% if can?(:download, resource) %>
-        <td><%= link_to "Download", download_path(resource.id, file.id) %></td>
-      <% else %>
-        <td></td>
-      <% end %>
+      <%= render partial: 'file_detail', locals: { file: file } %>
     </tr>
   <% end %>
   <% resource.intermediate_files.each do |file| %>
     <tr>
       <td><span class="label label-info">Intermediate File</span>&nbsp;<%= file.label.first %></td>
-      <% if can?(:download, resource) %>
-        <td><%= link_to "Download", download_path(resource.id, file.id) %></td>
-      <% else %>
-        <td></td>
-      <% end %>
+      <%= render partial: 'file_detail', locals: { file: file } %>
     </tr>
   <% end %>
   <% resource.preservation_files.each do |file| %>
     <tr>
       <td><span class="label label-info">Preservation Master</span>&nbsp;<%= file.label.first %></td>
-      <% if can?(:download, resource) %>
-        <td><%= link_to "Download", download_path(resource.id, file.id) %></td>
-      <% else %>
-        <td></td>
-      <% end %>
+      <%= render partial: 'file_detail', locals: { file: file } %>
     </tr>
   <% end %>
   <% resource.thumbnail_files.each do |file| %>
     <tr>
       <td><span class="label label-info">Thumbnail File</span>&nbsp;<%= file.label.first %></td>
-      <% if can?(:download, resource) %>
-        <td><%= link_to "Download", download_path(resource.id, file.id) %></td>
-      <% else %>
-        <td></td>
-      <% end %>
+      <%= render partial: 'file_detail', locals: { file: file } %>
     </tr>
   <% end %>
   </tbody>
   <tfoot>
     <tr>
-      <td colspan="2"></td>
+      <td colspan="5"></td>
     </tr>
   </tfoot>
 </table>
