@@ -101,7 +101,7 @@ RSpec.describe RecordingChangeSet do
   end
   describe "#downloadable" do
     it "has a downloadable property" do
-      expect(change_set.downloadable).to eq "public"
+      expect(change_set.downloadable).to eq "none"
     end
   end
 end
