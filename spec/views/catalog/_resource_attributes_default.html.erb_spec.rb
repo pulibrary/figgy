@@ -31,7 +31,7 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
   end
   context "when given a ScannedResource solr document" do
     let(:scanned_resource) do
-      FactoryBot.create_for_repository(:scanned_resource,
+      FactoryBot.create_for_repository(:complete_scanned_resource,
                                        imported_metadata: [
                                          {
                                            title: "Ars minor [fragment].",
@@ -67,6 +67,7 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
                                        holding_location: RDF::URI("https://bibdata.princeton.edu/locations/delivery_locations/1"))
     end
     let(:file_set) { FactoryBot.create_for_repository(:file_set) }
+    let(:preservation_object) { FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, metadata_node: FileMetadata.new(id: SecureRandom.uuid)) }
     let(:original_file) { instance_double FileMetadata }
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: scanned_resource) }
     let(:collection) { FactoryBot.create_for_repository(:collection) }
@@ -79,6 +80,7 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       allow_any_instance_of(FileSet).to receive(:original_file).and_return(original_file)
       allow(original_file).to receive(:fixity_success).and_return(1)
       stub_blacklight_views
+      FactoryBot.create_for_repository(:event, status: "SUCCESS", resource_id: preservation_object.id, child_id: file_set.id, child_property: "metadata_node")
       render
     end
     after { Timecop.return }
@@ -169,8 +171,12 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       expect(rendered).not_to have_selector "th", text: "Rendered Holding Location"
 
       # Fixity
-      expect(rendered).to have_selector "th", text: "Fixity"
-      expect(rendered).to have_selector "span.label-primary", text: "1"
+      expect(rendered).to have_selector "th", text: "Local Fixity"
+      expect(rendered).to have_selector "span.label-primary.fixity-count", text: "1"
+
+      # Cloud Fixity
+      expect(rendered).to have_selector "th", text: "Cloud Fixity"
+      expect(rendered).to have_selector "span.label-primary.cloud-fixity-count", text: "1"
     end
   end
   context "when given a ScannedMap solr document" do

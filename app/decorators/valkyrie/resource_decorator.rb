@@ -62,15 +62,34 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     m.uniq.map { |s| [s, (m.select { |ss| ss == s }).size] }.to_h
   end
 
+  # Calculate a histogram of child FileSet cloud fixity status
+  def cloud_fixity_map
+    return [] unless respond_to?(:file_sets)
+    m = file_sets.map { |fs| fs.decorate.cloud_fixity_status }
+    m.uniq.map { |s| [s, (m.select { |ss| ss == s }).size] }.to_h
+  end
+
   def fixity_badges
     fixity_map.map do |status, count|
       h.format_fixity_count(status, count)
     end.join(" ")
   end
 
+  def cloud_fixity_badges
+    cloud_fixity_map.map do |status, count|
+      h.format_cloud_fixity_count(status, count)
+    end.join(" ")
+  end
+
   def fixity_summary
     fixity_map.map do |status, count|
       h.format_fixity_status(status, count)
+    end.join(" ")
+  end
+
+  def cloud_fixity_summary
+    cloud_fixity_map.map do |status, count|
+      h.format_cloud_fixity_status(status, count)
     end.join(" ")
   end
 

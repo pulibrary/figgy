@@ -231,6 +231,9 @@ RSpec/FilePath:
 RSpec/InstanceVariable:
   Exclude:
     - 'spec/resources/coins/coins_controller_spec.rb'
+RSpec/MessageChain:
+  Exclude:
+    - 'spec/resources/file_sets/file_set_decorator_spec.rb'
 RSpec/MultipleExpectations:
   Enabled: false
 RSpec/NestedGroups:
