@@ -7,7 +7,7 @@ class RecordingChangeSet < ChangeSet
   include RemoteMetadataProperty
   property :visibility, multiple: false, required: true, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
   property :title, multiple: true, required: true, default: []
-  property :downloadable, multiple: false, require: true, default: "public"
+  property :downloadable, multiple: false, require: true, default: "none"
   property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
   property :local_identifier, multiple: true, required: false, default: []
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
