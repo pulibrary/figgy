@@ -46,7 +46,7 @@ class NumismaticIssueChangeSet < ChangeSet
   property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :numismatic_monogram_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :numismatic_place_id, multiple: false, required: false, type: Valkyrie::Types::ID
-  property :ruler_id, multiple: false, required: false, type: Valkyrie::Types::ID
+  property :ruler_id, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :pending_uploads, multiple: true, required: false
 
   property :start_canvas, required: false

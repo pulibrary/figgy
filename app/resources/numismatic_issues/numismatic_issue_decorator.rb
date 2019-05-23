@@ -10,7 +10,7 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
           :era,
           :ce1,
           :ce2,
-          :ruler,
+          :rulers,
           :rendered_place,
           :master,
           :workshop,
@@ -55,7 +55,7 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
            :decorated_numismatic_monograms,
            :decorated_numismatic_place,
            :decorated_master,
-           :decorated_ruler,
+           :decorated_rulers,
            :members,
            to: :wayfinder
 
@@ -124,8 +124,8 @@ class NumismaticIssueDecorator < Valkyrie::ResourceDecorator
     reverse_attribute.map { |a| a.decorate.title }
   end
 
-  def ruler
-    decorated_ruler&.title
+  def rulers
+    decorated_rulers.map(&:title)
   end
 
   def state

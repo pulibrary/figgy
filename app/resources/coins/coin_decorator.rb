@@ -81,7 +81,7 @@ class CoinDecorator < Valkyrie::ResourceDecorator
   end
 
   def pub_created_display
-    [decorated_parent.ruler, decorated_parent.denomination&.first, decorated_parent.decorated_numismatic_place&.city].compact.join(", ") if decorated_parent
+    [decorated_parent.rulers&.first, decorated_parent.denomination&.first, decorated_parent.decorated_numismatic_place&.city].compact.join(", ") if decorated_parent
   end
 
   def rendered_accession

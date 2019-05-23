@@ -169,7 +169,7 @@ RSpec.feature "NumismaticIssues" do
       expect(page).to have_css ".attribute.reverse_orientation", text: "test value"
       expect(page).to have_css ".attribute.reverse_part", text: "test value"
       expect(page).to have_css ".attribute.reverse_symbol", text: "test value"
-      expect(page).to have_css ".attribute.ruler", text: "name1 name2 epithet (1868 - 1963)"
+      expect(page).to have_css ".attribute.rulers", text: "name1 name2 epithet (1868 - 1963)"
       expect(page).to have_css ".attribute.series", text: "test value"
       expect(page).to have_css ".attribute.shape", text: "test value"
       expect(page).to have_css ".attribute.subjects", text: "Animal, unicorn"
