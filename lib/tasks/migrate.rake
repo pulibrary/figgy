@@ -54,6 +54,11 @@ namespace :migrate do
     UpdateCicoIdsJob.perform_now(collection_id: coll)
   end
 
+  desc "Update all Recordings to have downloadable: none"
+  task recordings_undownloadable: :environment do
+    RecordingDownloadableMigrator.call
+  end
+
   private
 
     # Construct or retrieve the memoized logger for STDOUT
