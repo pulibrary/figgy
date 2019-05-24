@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require "rails_helper"
+include ActionDispatch::TestProcess
 
 RSpec.describe Valkyrie::ResourceDecorator do
   subject(:decorator) { described_class.new(resource) }
@@ -294,6 +295,52 @@ RSpec.describe Valkyrie::ResourceDecorator do
 
       it "delegates to whether unauthenicated users can access the resource" do
         expect(decorator.downloadable?).to eq(decorator.visible? && decorator.public_readable_state?)
+      end
+    end
+  end
+
+  describe "#member_filesets" do
+    let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
+    let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
+
+    context "if the resource is a FileSet" do
+      let(:resource) { FactoryBot.build(:file_set) }
+      it "returns an empty array" do
+        expect(decorator.member_filesets).to be_empty
+      end
+    end
+
+    context "if the resource is a ProxyFileSet" do
+      let(:resource) { FactoryBot.build(:proxy_file_set) }
+      it "returns an empty array" do
+        expect(decorator.member_filesets).to be_empty
+      end
+    end
+
+    context "if the resource is not a FileSet or a ProxyFileSet and has members with no file_sets attached" do
+      let(:resource) { FactoryBot.create_for_repository(:numismatic_issue) }
+      let(:child_resource) { FactoryBot.create_for_repository(:coin) }
+      let(:change_set) { DynamicChangeSet.new(resource, member_ids: [child_resource.id]) }
+
+      before do
+        change_set_persister.save(change_set: change_set)
+      end
+      it "returns an empty array" do
+        expect(decorator.member_filesets).to be_empty
+      end
+    end
+
+    context "if the resource is not a FileSet or a ProxyFileSet and has members with file_sets attached" do
+      let(:resource) { FactoryBot.create_for_repository(:numismatic_issue) }
+      let(:change_set) { DynamicChangeSet.new(resource, member_ids: [coin1.id]) }
+      let(:coin1) { FactoryBot.create_for_repository(:coin, files: [file1]) }
+      let(:file1) { fixture_file_upload("files/abstract.tiff", "image/tiff") }
+
+      before do
+        change_set_persister.save(change_set: change_set)
+      end
+      it "does not return an empty array" do
+        expect(decorator.member_filesets).not_to be_empty
       end
     end
   end

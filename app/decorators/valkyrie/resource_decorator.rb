@@ -20,6 +20,11 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     @wayfinder ||= Wayfinder.for(object)
   end
 
+  # Do not display an empty viewer if the members have no file_sets
+  def member_filesets
+    wayfinder.members.select { |m| m.is_a?(FileSet) || m.is_a?(ProxyFileSet) ? m : m.member_ids.present? }
+  end
+
   # resource decorators will use this method if they define :member_of_collections
   #   in self.display_attributes
   def member_of_collections
