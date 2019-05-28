@@ -35,6 +35,7 @@ Metrics/AbcSize:
     - 'app/helpers/application_helper.rb'
     - 'app/services/preserver.rb'
     - 'app/jobs/ingest_archival_media_bag_job.rb'
+    - 'app/utils/data_seeder.rb'
 Metrics/BlockLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'

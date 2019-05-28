@@ -146,6 +146,35 @@ class DataSeeder
     vr
   end
 
+  def generate_archival_recording
+    recording = ScannedResource.new(title: "Archival Recording")
+    recording_change_set = RecordingChangeSet.new(recording)
+    recording = change_set_persister.save(change_set: recording_change_set)
+
+    path = Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag2")
+    bag = ArchivalMediaBagParser.new(path: path, component_id: "C0652")
+    audio_files = bag.send(:audio_files)
+
+    file_set_title = audio_files.first.barcode_with_side_and_part
+    file_set = FileSet.new(title: file_set_title, side: audio_files.first.side, part: audio_files.first.part, barcode: audio_files.first.barcode, read_groups: [])
+
+    storage_adapter = Valkyrie::StorageAdapter.find(:disk_via_copy)
+
+    audio_files.each do |ingestable_audio_file|
+      file_metadata_node = FileMetadata.for(file: ingestable_audio_file).new(id: SecureRandom.uuid)
+      file = storage_adapter.upload(file: ingestable_audio_file, resource: file_metadata_node, original_filename: ingestable_audio_file.original_filename)
+      file_metadata_node.file_identifiers = file_metadata_node.file_identifiers + [file.id]
+      file_set.file_metadata += [file_metadata_node]
+    end
+
+    file_set = change_set_persister.save(change_set: FileSetChangeSet.new(file_set))
+
+    recording = query_service.find_by(id: recording.id)
+    recording_change_set = RecordingChangeSet.new(recording)
+    recording_change_set.member_ids += [file_set.id]
+    change_set_persister.save(change_set: recording_change_set)
+  end
+
   def wipe_files!
     [Figgy.config["derivative_path"], Figgy.config["repository_path"]].each do |dir_path|
       Pathname.new(dir_path).children.each(&:rmtree) if Pathname.new(dir_path).exist?

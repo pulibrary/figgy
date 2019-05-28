@@ -88,4 +88,22 @@ RSpec.describe DataSeeder do
       expect(resources.map(&:state)).to contain_exactly ["pending"], ["pending"], ["complete"]
     end
   end
+
+  describe "#generate_archival_recording" do
+    before do
+      stub_pulfa(pulfa_id: "C0652")
+    end
+    it "adds a recording with a file set containing 3 files" do
+      seeder.generate_archival_recording
+      recordings = query_service.find_all_of_model(model: ScannedResource)
+      expect(recordings.count).to eq 1
+      expect(recordings.first.change_set).to eq "recording"
+      file_sets = Wayfinder.for(recordings.first).members
+      expect(file_sets.count).to eq 1
+      files = file_sets.first.file_metadata
+      expect(files.map(&:original_filename)).to contain_exactly(
+        ["32101047382492_1_a.mp3"], ["32101047382492_1_i.wav"], ["32101047382492_1_pm.wav"]
+      )
+    end
+  end
 end
