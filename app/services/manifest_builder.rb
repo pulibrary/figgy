@@ -33,7 +33,12 @@ class ManifestBuilder
       when Playlist
         PlaylistNode.new(resource, auth_token)
       else
-        new(resource, auth_token)
+        case DynamicChangeSet.new(resource)
+        when RecordingChangeSet
+          RecordingNode.new(resource)
+        else
+          new(resource, auth_token)
+        end
       end
     end
     attr_reader :resource, :auth_token
@@ -230,7 +235,7 @@ class ManifestBuilder
       # Checks a mime_type against a blacklist
       # @return [TrueClass, FalseClass]
       def leaf_node_mime_type?(mime_type)
-        blacklist = ["application/xml; schema=mets"]
+        blacklist = ["application/xml; schema=mets", "application/xml"]
         (blacklist & Array.wrap(mime_type)).empty?
       end
 
@@ -330,6 +335,12 @@ class ManifestBuilder
     # otherwise there is no image for the viewer.
     def members
       @members ||= super.select { |coin| coin.member_ids.present? }
+    end
+  end
+
+  class RecordingNode < RootNode
+    def leaf_nodes
+      @leaf_nodes ||= super.select { |x| x.mime_type.include?("audio/x-wav") }
     end
   end
 
@@ -499,7 +510,7 @@ class ManifestBuilder
       # Retrieve the File related to the image resource
       # @return [File]
       def file
-        resource.original_file
+        resource.original_file || resource.intermediate_files.first
       end
 
       def derivative
