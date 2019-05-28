@@ -43,8 +43,8 @@ RSpec.describe IngestArchivalMediaBagJob do
       expect(file_set.transfer_notes.first).to start_with "Side A"
     end
 
-    it "creates one MediaResource per component id" do
-      expect(query_service.find_all_of_model(model: MediaResource).size).to eq 1
+    it "creates one MediaResource for the barcode and one for the component ID" do
+      expect(query_service.find_all_of_model(model: MediaResource).size).to eq 2
     end
 
     it "adds an upload set id to the MediaResource" do
@@ -70,7 +70,7 @@ RSpec.describe IngestArchivalMediaBagJob do
       let(:read_auth) { Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED }
 
       it "assigns correct visibility and read_groups access control to each resource and file_set" do
-        expect(query_service.find_all_of_model(model: MediaResource).map(&:visibility)).to contain_exactly [vis_auth]
+        expect(query_service.find_all_of_model(model: MediaResource).map(&:visibility)).to contain_exactly [vis_auth], [vis_auth]
 
         file_sets = query_service.find_all_of_model(model: FileSet)
         expect(file_sets.map(&:read_groups).to_a).to eq [
@@ -84,7 +84,7 @@ RSpec.describe IngestArchivalMediaBagJob do
       let(:read_auth) { Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC }
 
       it "assigns correct visibility and read_groups access control to each resource and file_set" do
-        expect(query_service.find_all_of_model(model: MediaResource).map(&:visibility)).to contain_exactly [vis_auth]
+        expect(query_service.find_all_of_model(model: MediaResource).map(&:visibility)).to contain_exactly [vis_auth], [vis_auth]
 
         file_sets = query_service.find_all_of_model(model: FileSet)
         expect(file_sets.map(&:read_groups).to_a).to eq [
@@ -236,28 +236,6 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
   end
 
-  context "ingesting a more complicated bag" do
-    let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_demo_bag") }
-
-    before do
-      stub_pulfa(pulfa_id: "C0652_c0383")
-      stub_pulfa(pulfa_id: "C0652_c0389")
-      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
-    end
-
-    it "collects multiple barcodes with the same component id onto a single MediaResource" do
-      expect(query_service.find_all_of_model(model: MediaResource).size).to eq 2
-      expect(query_service.find_all_of_model(model: MediaResource).map(&:title)).to contain_exactly(
-        ["Readings: Pablo Neruda III (C3)"],
-        ["Interview: Fitas / ERM, Tape 1-2 (A8)"]
-      )
-    end
-
-    it "gives all MediaResources the same upload set id" do
-      expect(query_service.find_all_of_model(model: MediaResource).map(&:upload_set_id).to_a.uniq.size).to eq 1
-    end
-  end
-
   context "ingesting a bag, then another bag" do
     let(:bag_path1) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag") }
     let(:bag_path2) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag2") }
@@ -274,6 +252,120 @@ RSpec.describe IngestArchivalMediaBagJob do
       resources = query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids)
       expect(resources.size).to eq 2
       expect(resources.map(&:upload_set_id).to_a.uniq.size).to eq 2
+    end
+  end
+
+  describe "ingesting a bag and applying EAD modeling" do
+    context "a single cassette with 2 sides" do
+      it "Creates 2 audio FileSets, 1 image FileSet, 1 xml FileSet, and 2 Resources", run_real_characterization: true do
+        described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
+
+        collection = query_service.find_all_of_model(model: ArchivalMediaCollection).first
+        resources = query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids)
+
+        expect(resources.size).to eq 1
+        expect(resources.first.source_metadata_identifier).to eq ["C0652_c0377"]
+
+        member = Wayfinder.for(resources.first).members.first
+        expect(member).to be_a MediaResource
+        expect(member.local_identifier.first).to eq "32101047382401"
+        expect(member.title).to eq ["Interview: ERM / Jose Donoso (A2)"]
+
+        file_sets = Wayfinder.for(member).members
+        expect(file_sets.count).to eq 4
+        # TODO: assert order
+        expect(file_sets.flat_map(&:title)).to contain_exactly(
+          "32101047382401.xml",
+          "32101047382401_1",
+          "32101047382401_2",
+          "32101047382401_AssetFront.jpg"
+        )
+      end
+    end
+    context "3 cassettes in two components" do
+      let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_demo_bag") }
+
+      before do
+        stub_pulfa(pulfa_id: "C0652_c0383")
+        stub_pulfa(pulfa_id: "C0652_c0389")
+      end
+
+      it "Creates 3 Resources from barcodes, 2 Resources from component IDs" do
+        described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
+
+        # Ensure there are two descriptive resources.
+        collection = query_service.find_all_of_model(model: ArchivalMediaCollection).first
+        resources = Wayfinder.for(collection).members
+        expect(resources.size).to eq 2
+        expect(resources.flat_map(&:source_metadata_identifier)).to contain_exactly(
+          "C0652_c0383",
+          "C0652_c0389"
+        )
+
+        # c0383 has two barcodes associated with it in the EAD.
+        resource383 = resources.find { |x| x.source_metadata_identifier == ["C0652_c0383"] }
+        members383 = Wayfinder.for(resource383).members
+        expect(members383.count).to eq 2
+        expect(members383.map(&:class).uniq).to contain_exactly MediaResource
+        expect(members383.map(&:local_identifier)).to contain_exactly(
+          ["32101047382484"], ["32101047382492"]
+        )
+        # Usually you want tape 1 first, but we artificially arranged it this
+        # way to ensure we're testing order properly (given the barcode sort
+        # order of this set of files)
+        expect(members383.map(&:title)).to eq(
+          [
+            ["Interview: Fitas / ERM, Tape 2 (A8)"], ["Interview: Fitas / ERM, Tape 1 (A8)"]
+          ]
+        )
+
+        # Member resources have the appropriate FileSets for their barcode.
+        tape1 = members383.find { |x| x.local_identifier.include?("32101047382484") }
+        tape1_file_sets = Wayfinder.for(tape1).members
+        expect(tape1_file_sets.flat_map(&:title)).to contain_exactly(
+          "32101047382484.xml",
+          "32101047382484_1",
+          "32101047382484_2",
+          "32101047382484_AssetFront.jpg"
+        )
+        tape2 = members383.find { |x| x.local_identifier.include?("32101047382492") }
+        tape2_file_sets = Wayfinder.for(tape2).members
+        expect(tape2_file_sets.flat_map(&:title)).to contain_exactly(
+          "32101047382492.xml",
+          "32101047382492_1",
+          "32101047382492_AssetFront.jpg"
+        )
+
+        # c0389 has one barcode associated with it in the EAD.
+        resource389 = resources.find { |x| x.source_metadata_identifier == ["C0652_c0389"] }
+        members389 = Wayfinder.for(resource389).members
+        expect(members389.count).to eq 1
+        expect(members389.map(&:class).uniq).to contain_exactly MediaResource
+        expect(members389.map(&:local_identifier)).to contain_exactly(
+          ["32101047382617"]
+        )
+        expect(members389.map(&:title)).to eq(
+          [
+            ["Readings: Pablo Neruda III (C3)"]
+          ]
+        )
+
+        # Member resources have the appropriate FileSets for their barcode.
+        tape1 = members389.first
+        tape1_file_sets = Wayfinder.for(tape1).members
+        expect(tape1_file_sets.flat_map(&:title)).to contain_exactly(
+          "32101047382617.xml",
+          "32101047382617_1",
+          "32101047382617_2",
+          "32101047382617_AssetFront.jpg"
+        )
+      end
+
+      it "gives all MediaResources the same upload set id" do
+        described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
+
+        expect(query_service.find_all_of_model(model: MediaResource).map(&:upload_set_id).to_a.uniq.size).to eq 1
+      end
     end
   end
 end

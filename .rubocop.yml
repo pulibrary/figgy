@@ -34,6 +34,7 @@ Metrics/AbcSize:
     - 'app/controllers/bulk_ingest_controller.rb'
     - 'app/helpers/application_helper.rb'
     - 'app/services/preserver.rb'
+    - 'app/jobs/ingest_archival_media_bag_job.rb'
 Metrics/BlockLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
@@ -164,6 +165,7 @@ Metrics/MethodLength:
     - 'app/preserver/preserve_resource.rb'
     - 'app/services/preserver.rb'
     - 'app/services/numismatics_import_service.rb'
+    - 'app/jobs/ingest_archival_media_bag_job.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'

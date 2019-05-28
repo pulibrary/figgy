@@ -29,15 +29,17 @@ class UniqueArchivalMediaBarcodeValidator < ActiveModel::Validator
       def files_to_import
         # might be nil (in tests) or "" (coming from form)
         return [] unless record.bag_path.present?
-        bag.file_groups.keys
+        bag.barcodes
       end
 
       def previously_imported
         return [] if record.model.id.nil? # it's a new resource
-        decorated = decorator.media_resources.map { |resource| resource.decorate.file_sets }.flatten
-        decorated.map do |file_set|
-          "#{file_set.barcode.first}_#{file_set.side.first}" + (file_set.part.empty? ? "" : "_#{file_set.part.first}")
-        end
+        @previously_imported ||=
+          begin
+            decorator.media_resources.flat_map do |component_id_resource|
+              Wayfinder.for(component_id_resource).members.flat_map(&:local_identifier)
+            end
+          end
       end
 
       def decorator

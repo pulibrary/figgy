@@ -50,6 +50,9 @@ class IngestArchivalMediaBagJob < ApplicationJob
     # Service Class for ingesting the bag as a procedure
     class Ingester
       attr_reader :collection, :bag, :user, :changeset_persister, :upload_set_id
+      delegate :storage_adapter, :metadata_adapter, to: :changeset_persister
+      delegate :query_service, to: :metadata_adapter
+      delegate :barcode_groups, to: :bag
 
       # Constructor
       # @param collection [ArchivalMediaCollection]
@@ -62,118 +65,69 @@ class IngestArchivalMediaBagJob < ApplicationJob
         @user = user
         @changeset_persister = changeset_persister
         @upload_set_id = Valkyrie::ID.new(SecureRandom.uuid)
-        @av_file_sets = {}
       end
 
+      delegate :barcodes, to: :bag
       # Method for procedurally ingesting the bag
       # Each component ID may be mapped to one or many physical "sides" of a media object (e. g. an audio tape)
       # These sides are logically modeled using a barcode-based identifier
       def ingest
-        component_groups.each do |cid, sides|
-          media_resource_change_set = find_or_create_media_resource(cid)
-          add_av(media_resource_change_set, sides)
-          add_pbcore(media_resource_change_set, sides)
-          add_images(media_resource_change_set, sides)
-          media_resource_change_set.member_of_collection_ids += [collection.id]
-          changeset_persister.save(change_set: media_resource_change_set)
+        barcode_lookup = Hash.new([])
+        barcodes.each do |barcode|
+          media_resource_change_set = find_or_create_media_resource(:local_identifier, barcode)
+          pbcore = bag.pbcore_parser(barcode: barcode)
+          bag.audio_files_for_barcode(barcode: barcode).each do |file_set_title, audio_files|
+            file_set = FileSet.new(
+              title: file_set_title,
+              side: audio_files.first.side,
+              part: audio_files.first.part,
+              barcode: barcode,
+              transfer_notes: pbcore&.transfer_notes,
+              read_groups: file_set_read_groups
+            )
+
+            audio_files.each do |ingestable_audio_file|
+              file_metadata_node = create_node(ingestable_audio_file)
+              file_set.file_metadata += [file_metadata_node]
+            end
+
+            file_set = changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
+            media_resource_change_set.member_ids += [file_set.id]
+          end
+          create_and_attach_file(pbcore, media_resource_change_set) if pbcore
+          media_resource_change_set.title = pbcore&.main_title
+
+          image = bag.image_file(barcode: barcode)
+          create_and_attach_file(image, media_resource_change_set) if image
+
+          persisted = changeset_persister.save(change_set: media_resource_change_set)
+          barcode_lookup[barcode] += [persisted.id]
+        end
+        build_descriptive_proxies(barcode_lookup)
+      end
+
+      def create_and_attach_file(builder, media_resource_change_set)
+        file = IngestableFile.new(
+          file_path: builder.path,
+          mime_type: builder.mime_type,
+          original_filename: builder.original_filename,
+          container_attributes: { read_groups: file_set_read_groups }
+        )
+        media_resource_change_set.files << file
+      end
+
+      def build_descriptive_proxies(barcode_lookup)
+        component_groups.each do |component_id, barcodes|
+          component_change_set = find_or_create_media_resource(:source_metadata_identifier, component_id)
+          component_change_set.validate(
+            member_ids: barcodes.flat_map { |b| barcode_lookup[b] },
+            member_of_collection_ids: [collection.id]
+          )
+          changeset_persister.save(change_set: component_change_set)
         end
       end
 
       private
-
-        # Constructs an for IngestableFile the image associated with the asset
-        # @param barcode [String] the component ID for an asset in the Bag
-        # @return [IngestableFile] the file used to create the FileSet upon persistence (by the FileAppender)
-        def create_image_file(barcode)
-          image = bag.image_file(barcode: barcode)
-          return if image.nil?
-          IngestableFile.new(
-            file_path: image.path,
-            mime_type: image.mime_type,
-            original_filename: image.original_filename,
-            container_attributes: { read_groups: file_set_read_groups }
-          )
-        end
-
-        # Adds any images related to the item as member FileSets
-        # @param media_resource_change_set [MediaResourceChangeSet]
-        # @param sides [Array<String>] the component IDs for the logical sides of an asset
-        def add_images(media_resource_change_set, sides)
-          sides.map { |side| side.split("_").first }.uniq.each do |barcode|
-            file = create_image_file(barcode)
-            next if file.nil?
-            media_resource_change_set.files << file
-            media_resource_change_set.sync
-          end
-        end
-
-        # @param media_resource_change_set [MediaResourceChangeSet]
-        # @param sides [Array<String>]
-        # @return [Array<MediaResourceChangeSet>]
-        def add_av(media_resource_change_set, sides)
-          sides.each do |side|
-            file_sets = create_av_file_sets(side)
-            media_resource_change_set.member_ids += file_sets.map(&:id).uniq
-            media_resource_change_set.sync
-          end
-        end
-
-        # @param media_resource_change_set [MediaResourceChangeSet]
-        # @param sides [Array<String>]
-        # @return [Array<MediaResourceChangeSet>]
-        def add_pbcore(media_resource_change_set, sides)
-          sides.map { |side| side.split("_").first }.uniq.each do |barcode|
-            file = create_pbcore_file(barcode)
-            next if file.nil?
-            media_resource_change_set.files << file
-            media_resource_change_set.sync
-          end
-        end
-
-        # Creates and persists a FileSet for a pbcore xml file
-        # @param barcode [String] barcode_side for a given media object
-        # @return [IngestableFile] the file used to create the FileSet upon persistence (by the FileAppender)
-        def create_pbcore_file(barcode)
-          pbcore = bag.pbcore_parser_for_barcode(barcode)
-          return if pbcore.nil?
-          IngestableFile.new(
-            file_path: pbcore.path,
-            mime_type: "application/xml; schema=pbcore",
-            original_filename: pbcore.original_filename,
-            container_attributes: { read_groups: file_set_read_groups }
-          )
-        end
-
-        def av_file_set_for(ingestable_audio_file)
-          return @av_file_sets[ingestable_audio_file.barcode_with_side_and_part] if @av_file_sets.key?(ingestable_audio_file.barcode_with_side_and_part)
-
-          file_set = FileSet.new(title: ingestable_audio_file.barcode_with_side_and_part)
-
-          file_set.barcode = ingestable_audio_file.barcode
-          file_set.side = ingestable_audio_file.side
-          file_set.part = ingestable_audio_file.part unless ingestable_audio_file.part.nil?
-          pbcore_parser = bag.pbcore_parser_for_barcode(ingestable_audio_file.barcode)
-          file_set.transfer_notes = pbcore_parser.transfer_notes unless pbcore_parser.nil?
-
-          file_set.read_groups = file_set_read_groups
-
-          file_set
-        end
-
-        # Creates and persists a FileSet for a media object
-        # @param barcode_with_side [String] barcode_side for a given media object
-        # @return [FileSet] the persisted FileSet containing the binary and file metadata
-        def create_av_file_sets(barcode_with_side)
-          bag.file_groups[barcode_with_side].map do |ingestable_audio_file| # this is an IngestableAudioFile object
-            file_set = av_file_set_for(ingestable_audio_file)
-
-            file_metadata_node = create_node(ingestable_audio_file)
-            file_set.file_metadata += [file_metadata_node]
-
-            file_set = changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
-            @av_file_sets[ingestable_audio_file.barcode_with_side_and_part] = file_set
-          end
-        end
 
         # get the correct read groups based on the collection visibility
         def file_set_read_groups
@@ -201,12 +155,12 @@ class IngestArchivalMediaBagJob < ApplicationJob
         # Creates or finds an existing MediaResource Object using an EAD Component ID
         # @param component_id [String]
         # @return [MediaResourceChangeSet]
-        def find_or_create_media_resource(component_id)
-          results = component_id.nil? ? [] : query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: component_id)
+        def find_or_create_media_resource(property, value)
+          results = value.nil? ? [] : query_service.custom_queries.find_by_property(property: property, value: value)
           media_resource = results.size.zero? ? MediaResource.new : results.first
           MediaResourceChangeSet.new(
             media_resource,
-            source_metadata_identifier: component_id,
+            property => value,
             files: [],
             visibility: collection.visibility.first,
             upload_set_id: upload_set_id
@@ -218,15 +172,5 @@ class IngestArchivalMediaBagJob < ApplicationJob
         def component_groups
           @component_groups ||= bag.component_groups
         end
-
-        def storage_adapter
-          Valkyrie::StorageAdapter.find(:disk_via_copy)
-        end
-
-        def query_service
-          Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
-        end
     end
-
-  # end private
 end

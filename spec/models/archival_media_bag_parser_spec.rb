@@ -10,17 +10,12 @@ RSpec.describe ArchivalMediaBagParser do
     stub_pulfa(pulfa_id: "C0652")
   end
 
-  describe "#file_groups" do
-    it { expect(amb_parser.file_groups.keys).to contain_exactly "32101047382401_2", "32101047382401_1" }
-    it { expect(amb_parser.file_groups["32101047382401_2"].map(&:original_filename).map(&:to_s)).to contain_exactly "32101047382401_2_a.mp3", "32101047382401_2_i.wav", "32101047382401_2_pm.wav" }
-  end
-
   describe "#component_groups" do
     it { expect(amb_parser.component_groups.keys).to contain_exactly "C0652_c0377" }
   end
 
-  describe "#pbcore_parser_for_barcode" do
-    it { expect(amb_parser.pbcore_parser_for_barcode(barcode)).to be_a PbcoreParser }
+  describe "#pbcore_parser" do
+    it { expect(amb_parser.pbcore_parser(barcode: barcode)).to be_a PbcoreParser }
   end
 
   describe "#image_file" do
@@ -30,7 +25,7 @@ RSpec.describe ArchivalMediaBagParser do
 
   describe "PbcoreParser" do
     describe "#barcode" do
-      it { expect(amb_parser.pbcore_parser_for_barcode(barcode).barcode).to eq barcode }
+      it { expect(amb_parser.pbcore_parser(barcode: barcode).barcode).to eq barcode }
     end
 
     describe "#transfer_notes" do
@@ -38,11 +33,17 @@ RSpec.describe ArchivalMediaBagParser do
         "Side A: Program in silence from approximately 00:12 until 04:06, speed fluctuates throughout program on tape; " \
           "Side B: Feedback heard throughout program on tape, gradual increass in speed throughout program on tape; "
       end
-      it { expect(amb_parser.pbcore_parser_for_barcode(barcode).transfer_notes).to eq expected }
+      it { expect(amb_parser.pbcore_parser(barcode: barcode).transfer_notes).to eq expected }
     end
 
     describe "#original_filename" do
-      it { expect(amb_parser.pbcore_parser_for_barcode(barcode).original_filename).to eq "32101047382401.xml" }
+      it { expect(amb_parser.pbcore_parser(barcode: barcode).original_filename).to eq "32101047382401.xml" }
+    end
+
+    describe "#main_title" do
+      it "returns the title from pbcore" do
+        expect(amb_parser.pbcore_parser(barcode: barcode).main_title).to eq "Interview: ERM / Jose Donoso (A2)"
+      end
     end
   end
 
@@ -63,23 +64,6 @@ RSpec.describe ArchivalMediaBagParser do
 
       it "returns false" do
         expect(amb_parser.valid?).to eq false
-      end
-    end
-  end
-
-  context "when the finding aid has other 'altformavailable' materials" do
-    before do
-      stub_request(:get, "https://findingaids.princeton.edu/collections/C0652.xml")
-        .to_return(
-          body: file_fixture("pulfa/C0652_modified.xml").read,
-          headers: {
-            "Content-Type" => "application/json+ld"
-          }
-        )
-    end
-    describe "#file_groups" do
-      it "skips them in the xml parsing" do
-        expect(amb_parser.file_groups.keys).to contain_exactly "32101047382401_2", "32101047382401_1"
       end
     end
   end
