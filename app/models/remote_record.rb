@@ -5,9 +5,9 @@ class RemoteRecord
   # @param resource [Resource]
   # @return [RemoteRecord, RemoteRecord::PulfaRecord]
   def self.retrieve(source_metadata_identifier, resource_klass: nil)
-    if PulMetadataServices::Client.bibdata?(source_metadata_identifier)
+    if bibdata?(source_metadata_identifier)
       new(source_metadata_identifier)
-    else
+    elsif pulfa?(source_metadata_identifier)
       PulfaRecord.new(source_metadata_identifier, resource_klass)
     end
   end
@@ -16,9 +16,31 @@ class RemoteRecord
     PulMetadataServices::Client.bibdata?(source_metadata_identifier)
   end
 
+  def self.pulfa?(source_metadata_identifier)
+    return false if source_metadata_identifier.match?(/\//)
+    source_metadata_identifier.match?(/^([A-Z][a-zA-Z0-9\.-]+)(_[a-z0-9]+)?/)
+  end
+
+  def self.pulfa_collection(source_metadata_identifier)
+    return if source_metadata_identifier.match?(/\//)
+    m = source_metadata_identifier.match(/^([A-Z][a-zA-Z0-9.-]+)([_][a-z0-9]+)?/)
+    m[1] if m
+  end
+
+  def self.pulfa_component(source_metadata_identifier)
+    return if source_metadata_identifier.match?(/\//)
+    return unless source_metadata_identifier.match?(/_/)
+    m = source_metadata_identifier.match(/^[A-Z][a-zA-Z0-9.-]+_([a-z0-9]+)/)
+    m[1] if m
+  end
+
+  def self.valid?(source_metadata_identifier)
+    bibdata?(source_metadata_identifier) || pulfa?(source_metadata_identifier)
+  end
+
   def self.source_metadata_url(id)
     return "https://bibdata.princeton.edu/bibliographic/#{id}" if bibdata?(id)
-    "https://findingaids.princeton.edu/collections/#{id.tr('_', '/')}.xml?scope=record"
+    "https://findingaids.princeton.edu/collections/#{id.tr('_', '/')}.xml?scope=record" if pulfa?(id)
   end
 
   class PulfaRecord

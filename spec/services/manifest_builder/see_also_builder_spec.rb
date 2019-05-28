@@ -12,6 +12,7 @@ RSpec.describe ManifestBuilder::SeeAlsoBuilder do
     before do
       allow(remote_record_class).to receive(:source_metadata_url).with("4609321").and_return("https://bibdata.princeton.edu/bibliographic/4609321")
       allow(remote_record_class).to receive(:source_metadata_url).with("AC044_c0003").and_return("https://findingaids.princeton.edu/collections/AC044/c0003.xml?scope=record")
+      allow(remote_record_class).to receive(:valid?).and_return(true)
       allow(remote_record_class).to receive(:retrieve).and_return(remote_record_response)
       allow(remote_record_response).to receive(:success?).and_return(true)
       builder.apply(manifest)

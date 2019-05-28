@@ -59,6 +59,11 @@ namespace :migrate do
     RecordingDownloadableMigrator.call
   end
 
+  desc "Update source_metadata_identifier to always use underscores instead of slashes"
+  task source_metadata_identifiers: :environment do
+    SourceMetadataIdentifierMigrator.call
+  end
+
   private
 
     # Construct or retrieve the memoized logger for STDOUT
