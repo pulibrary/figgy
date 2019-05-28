@@ -40,6 +40,27 @@ RSpec.describe AudioDerivativeService do
   end
 
   describe "#create_derivatives" do
+    context "when given a resource with an intermediate WAV file", run_real_characterization: true do
+      let(:scanned_resource) do
+        DataSeeder.new.generate_archival_recording
+      end
+      it "creates HLS partials and attaches it to the fileset" do
+        stub_pulfa(pulfa_id: "C0652")
+
+        derivative_service.new(id: valid_change_set.id).create_derivatives
+        reloaded = query_service.find_by(id: valid_resource.id)
+        derivative = reloaded.derivative_file
+
+        expect(derivative).to be_present
+        expect(derivative.mime_type).to eq ["application/x-mpegURL"]
+        derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
+        expect(derivative_file.read).not_to be_blank
+
+        derivative_partials = reloaded.derivative_partial_files
+        expect(derivative_partials.length).to eq 1
+        expect(derivative_partials[0].mime_type).to eq ["video/MP2T"]
+      end
+    end
     it "creates HLS partials and a playlist and attaches it to the fileset" do
       derivative_service.new(id: valid_change_set.id).create_derivatives
 
