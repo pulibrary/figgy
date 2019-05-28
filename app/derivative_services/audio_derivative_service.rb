@@ -32,7 +32,7 @@ class AudioDerivativeService
   # Only ever checks original_file, if this were to check preservation_master
   # it would override derivatives for MediaResources. Take care!
   def target_file
-    resource.original_file
+    resource.original_file || resource.intermediate_files.first
   end
 
   def change_set
