@@ -621,11 +621,20 @@ RSpec.describe ManifestBuilder do
 
   context "when given a scanned resource with audio files" do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_resource.id)) }
-    let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file]) }
+    let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file], downloadable: "none") }
     let(:file) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "") }
     let(:logical_structure) { nil }
     before do
       stub_bibdata(bib_id: "123456")
+    end
+    context "when downloading is enabled" do
+      let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file], downloadable: "public") }
+      it "doesn't block download" do
+        change_set_persister.save(change_set: change_set)
+        output = manifest_builder.build
+
+        expect(output["service"]).to be_nil
+      end
     end
     it "builds a presentation 3 manifest", run_real_characterization: true do
       output = change_set_persister.save(change_set: change_set)
