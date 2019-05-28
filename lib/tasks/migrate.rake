@@ -54,7 +54,7 @@ namespace :migrate do
     UpdateCicoIdsJob.perform_now(collection_id: coll)
   end
 
-  desc "Update all Recordings to have downloadable: none"
+  desc "Update all Recordings and Playlists to have downloadable: none"
   task recordings_undownloadable: :environment do
     RecordingDownloadableMigrator.call
   end

@@ -3,12 +3,14 @@
 class RecordingDownloadableMigrator
   def self.call
     recordings = query_service.custom_queries.find_by_property(property: :change_set, value: "recording")
+    playlists = query_service.find_all_of_model(model: Playlist)
+    resources = recordings + playlists
     progress_bar = ProgressBar.create(
       format: "%a %e %P% Processed: %c from %C",
-      total: recordings.count
+      total: resources.count
     )
-    recordings.each do |recording|
-      change_set = DynamicChangeSet.new(recording)
+    resources.each do |resource|
+      change_set = DynamicChangeSet.new(resource)
       change_set.validate(downloadable: "none")
       change_set_persister.save(change_set: change_set)
       progress_bar.progress += 1
