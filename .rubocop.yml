@@ -179,6 +179,8 @@ Metrics/ParameterLists:
     - 'app/jobs/ingest_folder_job.rb'
     - 'app/services/music_import_service/recording_collector.rb'
     - 'app/services/music_import_service.rb'
+    - 'app/services/numismatics_import_service.rb'
+    - 'app/jobs/numismatic_issue_import_job.rb'
 Metrics/PerceivedComplexity:
   Exclude:
     - 'app/services/pdf_generator/canvas.rb'

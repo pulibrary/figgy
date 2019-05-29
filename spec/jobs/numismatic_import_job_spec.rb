@@ -8,10 +8,11 @@ RSpec.describe NumismaticImportJob do
     let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
     let(:file_root) { "spec/fixtures/numismatics" }
     let(:collection_id) { FactoryBot.create_for_repository(:collection).id.to_s }
+    let(:depositor) { FactoryBot.create(:admin).uid }
 
     it "imports numismatic resources" do
       perform_enqueued_jobs do
-        described_class.perform_later(file_root: file_root, collection_id: collection_id, db_path: db_path)
+        described_class.perform_later(file_root: file_root, collection_id: collection_id, depositor: depositor, db_path: db_path)
       end
 
       # places
@@ -20,6 +21,7 @@ RSpec.describe NumismaticImportJob do
       expect(place.geo_state).to eq "state"
       expect(place.region).to eq "region name"
       expect(place.replaces).to eq ["1"]
+      expect(place.depositor). to eq [depositor]
 
       # people
       person = query_service.custom_queries.find_by_property(property: :replaces, value: "person-1").select { |r| r.is_a? NumismaticPerson }.first
@@ -28,6 +30,7 @@ RSpec.describe NumismaticImportJob do
       expect(person.born).to eq ["born"]
       expect(person.died).to eq ["died"]
       expect(person.class_of).to eq ["class of"]
+      expect(person.depositor).to eq [depositor]
 
       # rulers
       ruler = query_service.custom_queries.find_by_property(property: :replaces, value: "ruler-1").select { |r| r.is_a? NumismaticPerson }.first
@@ -54,12 +57,14 @@ RSpec.describe NumismaticImportJob do
       expect(parent_reference.short_title).to eq ["parent short title"]
       expect(parent_reference.title).to eq ["parent title"]
       expect(parent_reference.year).to eq ["2001"]
+      expect(parent_reference.depositor). to eq [depositor]
 
       # firms
       firm = query_service.find_all_of_model(model: NumismaticFirm).first
       expect(firm.city).to eq "firm city"
       expect(firm.name).to eq "firm name"
       expect(firm.replaces).to eq ["1"]
+      expect(firm.depositor).to eq [depositor]
 
       # accessions
       accession = query_service.find_all_of_model(model: NumismaticAccession).first
@@ -73,6 +78,7 @@ RSpec.describe NumismaticImportJob do
       expect(accession.private_note).to eq ["private info"]
       expect(accession.replaces).to eq ["1"]
       expect(accession.type).to eq ["type"]
+      expect(accession.depositor). to eq [depositor]
       expect(accession_citation.numismatic_reference_id).to eq [parent_reference.id]
       expect(accession_citation.part).to eq ["part"]
       expect(accession_citation.number).to eq ["number"]
@@ -82,6 +88,7 @@ RSpec.describe NumismaticImportJob do
       expect(monogram.title).to eq ["description"]
       expect(monogram.replaces).to eq ["1"]
       expect(monogram.member_ids).not_to be_blank
+      expect(monogram.depositor). to eq [depositor]
 
       # coins
       coin = query_service.find_all_of_model(model: Coin).first
@@ -105,6 +112,7 @@ RSpec.describe NumismaticImportJob do
       expect(coin.find_number).to eq ["find number"]
       expect(coin.numismatic_collection).to eq ["collection name"]
       expect(coin.member_ids.count).to eq 2
+      expect(coin.depositor). to eq [depositor]
 
       # nested citation
       coin_citation = coin.numismatic_citation.first
@@ -164,6 +172,7 @@ RSpec.describe NumismaticImportJob do
       expect(issue.series).to eq ["series"]
       expect(issue.shape).to eq ["shape"]
       expect(issue.workshop).to eq ["workshop"]
+      expect(issue.depositor). to eq [depositor]
 
       # nested artist
       artist = issue.numismatic_artist.first
