@@ -19,7 +19,7 @@ class TikaFileCharacterizationService
   # @example characterize a file and do not persist the changes
   #   Valkyrie::Derivatives::FileCharacterizationService.for(file_set, persister).characterize(save: false)
   def characterize(save: true)
-    new_file = original_file.new(file_characterization_attributes.to_h)
+    new_file = target_file.new(file_characterization_attributes.to_h)
     @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
     @file_set = @persister.save(resource: @file_set) if save
     @file_set
@@ -54,11 +54,19 @@ class TikaFileCharacterizationService
   # Provides the file attached to the file_set
   # @return Valkyrie::StorageAdapter::File
   def file_object
-    @file_object ||= Valkyrie::StorageAdapter.find_by(id: original_file.file_identifiers[0])
+    @file_object ||= Valkyrie::StorageAdapter.find_by(id: target_file.file_identifiers[0])
   end
 
   def original_file
     @file_set.original_file
+  end
+
+  def intermediate_file
+    @file_set.intermediate_files.first
+  end
+
+  def target_file
+    original_file || intermediate_file
   end
 
   def tika_config

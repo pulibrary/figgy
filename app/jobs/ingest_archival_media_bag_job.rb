@@ -92,6 +92,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
             end
 
             file_set = changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
+            media_resource_change_set.created_file_sets += [file_set]
             media_resource_change_set.member_ids += [file_set.id]
           end
           create_and_attach_file(pbcore, media_resource_change_set) if pbcore

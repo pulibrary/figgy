@@ -17,6 +17,10 @@ class NullCharacterizationService
   end
 
   def valid?
-    @file_set.original_file.mime_type == ["application/xml; schema=mets"]
+    target_file.mime_type == ["application/xml; schema=mets"] || target_file.mime_type == ["application/xml; schema=pbcore"]
+  end
+
+  def target_file
+    @file_set.original_file || @file_set.intermediate_files.first
   end
 end

@@ -107,14 +107,10 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
   end
 
-  context "when the bag contains a JPEG image file" do
+  context "when the bag contains a JPEG image file", run_real_characterization: true do
     let(:tika_output) { tika_jpeg_output }
 
     before do
-      ruby_tika = instance_double(RubyTikaApp)
-      allow(ruby_tika).to receive(:to_json).and_return(tika_xml_pbcore_output, tika_jpeg_output)
-      allow(RubyTikaApp).to receive(:new).and_return(ruby_tika)
-
       described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
     end
 
@@ -124,15 +120,11 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
   end
 
-  context "when the bag does not contain an image file" do
+  context "when the bag does not contain an image file", run_real_characterization: true do
     let(:tika_output) { tika_jpeg_output }
     let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag3") }
 
     before do
-      ruby_tika = instance_double(RubyTikaApp)
-      allow(ruby_tika).to receive(:to_json).and_return(tika_xml_pbcore_output, tika_jpeg_output)
-      allow(RubyTikaApp).to receive(:new).and_return(ruby_tika)
-
       stub_pulfa(pulfa_id: "C0652_c0383")
 
       described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
@@ -291,7 +283,7 @@ RSpec.describe IngestArchivalMediaBagJob do
         stub_pulfa(pulfa_id: "C0652_c0389")
       end
 
-      it "Creates 3 Resources from barcodes, 2 Resources from component IDs" do
+      it "Creates 3 Resources from barcodes, 2 Resources from component IDs", run_real_characterization: true do
         described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
 
         # Ensure there are two descriptive resources.
@@ -361,6 +353,9 @@ RSpec.describe IngestArchivalMediaBagJob do
           "32101047382617_2",
           "32101047382617_AssetFront.jpg"
         )
+
+        tape1_side1 = tape1_file_sets.find { |x| x.title.first.include?("_1") }
+        expect(tape1_side1.derivative_partial_files).not_to be_blank
       end
 
       it "gives all Recordings the same upload set id" do
