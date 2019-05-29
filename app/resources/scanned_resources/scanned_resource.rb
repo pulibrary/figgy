@@ -16,6 +16,7 @@ class ScannedResource < Resource
   attribute :date_range
   attribute :sender, Valkyrie::Types::Array.of(NameWithPlace).meta(ordered: true)
   attribute :recipient, Valkyrie::Types::Array.of(NameWithPlace).meta(ordered: true)
+  attribute :upload_set_id, Valkyrie::Types::ID
 
   def self.can_have_manifests?
     true
@@ -42,6 +43,7 @@ class ScannedResource < Resource
   # Determines if this is an image resource
   # @return [TrueClass, FalseClass]
   def image_resource?
+    return false if change_set == "recording"
     true
   end
 end

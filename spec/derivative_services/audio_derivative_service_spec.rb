@@ -59,6 +59,8 @@ RSpec.describe AudioDerivativeService do
         derivative_partials = reloaded.derivative_partial_files
         expect(derivative_partials.length).to eq 1
         expect(derivative_partials[0].mime_type).to eq ["video/MP2T"]
+
+        expect(Valkyrie::Derivatives::DerivativeService.for(id: reloaded.id)).to be_a described_class
       end
     end
     it "creates HLS partials and a playlist and attaches it to the fileset" do

@@ -31,6 +31,7 @@ class ScannedMapDerivativeService
   end
 
   def valid?
+    return false unless original_file
     mime_type == ["image/tiff"] && parent.is_a?(ScannedMap)
   end
 

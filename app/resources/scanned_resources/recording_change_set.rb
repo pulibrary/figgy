@@ -16,6 +16,7 @@ class RecordingChangeSet < ChangeSet
   property :read_groups, multiple: true, required: false
   property :change_set, require: true, default: "recording"
   property :part_of, require: false, default: []
+  property :upload_set_id, multiple: false, require: false, type: Valkyrie::Types::ID
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false

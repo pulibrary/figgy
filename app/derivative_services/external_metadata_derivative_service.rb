@@ -45,6 +45,7 @@ class ExternalMetadataDerivativeService
   end
 
   def valid_mime_type?
+    return false unless original_file
     ["application/xml; schema=fgdc", "application/xml; schema=iso19139"].include? mime_type.first
   end
 

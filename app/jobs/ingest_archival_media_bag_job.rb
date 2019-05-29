@@ -152,13 +152,13 @@ class IngestArchivalMediaBagJob < ApplicationJob
           file_metadata_node
         end
 
-        # Creates or finds an existing MediaResource Object using an EAD Component ID
+        # Creates or finds an existing Recording Object using an EAD Component ID
         # @param component_id [String]
-        # @return [MediaResourceChangeSet]
+        # @return [RecordingChangeSet]
         def find_or_create_media_resource(property, value)
           results = value.nil? ? [] : query_service.custom_queries.find_by_property(property: property, value: value)
-          media_resource = results.size.zero? ? MediaResource.new : results.first
-          MediaResourceChangeSet.new(
+          media_resource = results.size.zero? ? ScannedResource.new : results.first
+          RecordingChangeSet.new(
             media_resource,
             property => value,
             files: [],

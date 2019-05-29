@@ -43,15 +43,15 @@ RSpec.describe IngestArchivalMediaBagJob do
       expect(file_set.transfer_notes.first).to start_with "Side A"
     end
 
-    it "creates one MediaResource for the barcode and one for the component ID" do
-      expect(query_service.find_all_of_model(model: MediaResource).size).to eq 2
+    it "creates one Recording for the barcode and one for the component ID" do
+      expect(query_service.find_all_of_model(model: ScannedResource).size).to eq 2
     end
 
-    it "adds an upload set id to the MediaResource" do
-      expect(query_service.find_all_of_model(model: MediaResource).first.upload_set_id).to be_present
+    it "adds an upload set id to the Recording" do
+      expect(query_service.find_all_of_model(model: ScannedResource).first.upload_set_id).to be_present
     end
 
-    it "for each component id-based MediaRsource, puts it on the collection" do
+    it "for each component id-based Recording puts it on the collection" do
       collection = query_service.find_all_of_model(model: ArchivalMediaCollection).first
       expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
     end
@@ -70,7 +70,7 @@ RSpec.describe IngestArchivalMediaBagJob do
       let(:read_auth) { Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED }
 
       it "assigns correct visibility and read_groups access control to each resource and file_set" do
-        expect(query_service.find_all_of_model(model: MediaResource).map(&:visibility)).to contain_exactly [vis_auth], [vis_auth]
+        expect(query_service.find_all_of_model(model: ScannedResource).map(&:visibility)).to contain_exactly [vis_auth], [vis_auth]
 
         file_sets = query_service.find_all_of_model(model: FileSet)
         expect(file_sets.map(&:read_groups).to_a).to eq [
@@ -84,7 +84,7 @@ RSpec.describe IngestArchivalMediaBagJob do
       let(:read_auth) { Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC }
 
       it "assigns correct visibility and read_groups access control to each resource and file_set" do
-        expect(query_service.find_all_of_model(model: MediaResource).map(&:visibility)).to contain_exactly [vis_auth], [vis_auth]
+        expect(query_service.find_all_of_model(model: ScannedResource).map(&:visibility)).to contain_exactly [vis_auth], [vis_auth]
 
         file_sets = query_service.find_all_of_model(model: FileSet)
         expect(file_sets.map(&:read_groups).to_a).to eq [
@@ -216,7 +216,7 @@ RSpec.describe IngestArchivalMediaBagJob do
 
     it "doesn't try to use that other resource as an archival media collection" do
       collection = query_service.find_all_of_model(model: ArchivalMediaCollection).first
-      expect(query_service.find_all_of_model(model: ScannedResource).first.source_metadata_identifier.first).to eq collection_cid
+
       expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
     end
   end
@@ -267,7 +267,8 @@ RSpec.describe IngestArchivalMediaBagJob do
         expect(resources.first.source_metadata_identifier).to eq ["C0652_c0377"]
 
         member = Wayfinder.for(resources.first).members.first
-        expect(member).to be_a MediaResource
+        expect(member).to be_a ScannedResource
+        expect(member.change_set).to eq "recording"
         expect(member.local_identifier.first).to eq "32101047382401"
         expect(member.title).to eq ["Interview: ERM / Jose Donoso (A2)"]
 
@@ -306,7 +307,8 @@ RSpec.describe IngestArchivalMediaBagJob do
         resource383 = resources.find { |x| x.source_metadata_identifier == ["C0652_c0383"] }
         members383 = Wayfinder.for(resource383).members
         expect(members383.count).to eq 2
-        expect(members383.map(&:class).uniq).to contain_exactly MediaResource
+        expect(members383.map(&:class).uniq).to contain_exactly ScannedResource
+        expect(members383.map(&:change_set).uniq).to contain_exactly "recording"
         expect(members383.map(&:local_identifier)).to contain_exactly(
           ["32101047382484"], ["32101047382492"]
         )
@@ -340,7 +342,7 @@ RSpec.describe IngestArchivalMediaBagJob do
         resource389 = resources.find { |x| x.source_metadata_identifier == ["C0652_c0389"] }
         members389 = Wayfinder.for(resource389).members
         expect(members389.count).to eq 1
-        expect(members389.map(&:class).uniq).to contain_exactly MediaResource
+        expect(members389.map(&:class).uniq).to contain_exactly ScannedResource
         expect(members389.map(&:local_identifier)).to contain_exactly(
           ["32101047382617"]
         )
@@ -361,10 +363,10 @@ RSpec.describe IngestArchivalMediaBagJob do
         )
       end
 
-      it "gives all MediaResources the same upload set id" do
+      it "gives all Recordings the same upload set id" do
         described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
 
-        expect(query_service.find_all_of_model(model: MediaResource).map(&:upload_set_id).to_a.uniq.size).to eq 1
+        expect(query_service.find_all_of_model(model: ScannedResource).map(&:upload_set_id).to_a.uniq.size).to eq 1
       end
     end
   end

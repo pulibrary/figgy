@@ -40,7 +40,7 @@ class AudioDerivativeService
   end
 
   def valid?
-    ["audio/x-wav"].include?(mime_type.first)
+    ["audio/x-wav", "audio/vnd.wave"].include?(mime_type.first)
   end
 
   def create_derivatives
