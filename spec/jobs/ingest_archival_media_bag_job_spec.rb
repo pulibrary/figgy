@@ -43,15 +43,15 @@ RSpec.describe IngestArchivalMediaBagJob do
       expect(file_set.transfer_notes.first).to start_with "Side A"
     end
 
-    it "creates one ScannedResource for the barcode and one for the component ID" do
+    it "creates one Recording for the barcode and one for the component ID" do
       expect(query_service.find_all_of_model(model: ScannedResource).size).to eq 2
     end
 
-    it "adds an upload set id to the MediaResource" do
+    it "adds an upload set id to the Recording" do
       expect(query_service.find_all_of_model(model: ScannedResource).first.upload_set_id).to be_present
     end
 
-    it "for each component id-based MediaRsource, puts it on the collection" do
+    it "for each component id-based Recording puts it on the collection" do
       collection = query_service.find_all_of_model(model: ArchivalMediaCollection).first
       expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
     end
@@ -268,6 +268,7 @@ RSpec.describe IngestArchivalMediaBagJob do
 
         member = Wayfinder.for(resources.first).members.first
         expect(member).to be_a ScannedResource
+        expect(member.change_set).to eq "recording"
         expect(member.local_identifier.first).to eq "32101047382401"
         expect(member.title).to eq ["Interview: ERM / Jose Donoso (A2)"]
 
@@ -307,6 +308,7 @@ RSpec.describe IngestArchivalMediaBagJob do
         members383 = Wayfinder.for(resource383).members
         expect(members383.count).to eq 2
         expect(members383.map(&:class).uniq).to contain_exactly ScannedResource
+        expect(members383.map(&:change_set).uniq).to contain_exactly "recording"
         expect(members383.map(&:local_identifier)).to contain_exactly(
           ["32101047382484"], ["32101047382492"]
         )
@@ -361,7 +363,7 @@ RSpec.describe IngestArchivalMediaBagJob do
         )
       end
 
-      it "gives all ScannedResources the same upload set id" do
+      it "gives all Recordings the same upload set id" do
         described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
 
         expect(query_service.find_all_of_model(model: ScannedResource).map(&:upload_set_id).to_a.uniq.size).to eq 1
