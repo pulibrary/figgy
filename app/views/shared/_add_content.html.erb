@@ -27,7 +27,7 @@
           <li><%= link_to 'Manage Ephemera Vocabularies', main_app.ephemera_vocabularies_path, class: 'menu-heading manage-ephemera-vocabularies', role: 'menuitem' %></li>
         <% end %>
       <% end %>
-      <% if can?(:create, ::NumismaticReference) %>
+      <% if can?(:create, ::Numismatics::Reference) %>
         <li class="divider"></li>
         <li><%= link_to 'Manage Numismatics', main_app.numismatics_dashboard_path, class: 'menu-heading manage-numismatic-accessions', role: 'menuitem' %></li>
       <% end %>

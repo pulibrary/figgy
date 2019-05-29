@@ -4,11 +4,11 @@ require "rails_helper"
 RSpec.describe CoinDecorator do
   subject(:decorator) { described_class.new(coin) }
   let(:coin) { FactoryBot.create_for_repository(:coin, numismatic_citation: numismatic_citation, numismatic_accession_id: numismatic_accession.id, loan: loan, provenance: provenance) }
-  let(:numismatic_citation) { NumismaticCitation.new(part: "citation part", number: "citation number", numismatic_reference_id: [reference.id]) }
+  let(:numismatic_citation) { Numismatics::Citation.new(part: "citation part", number: "citation number", numismatic_reference_id: [reference.id]) }
   let(:numismatic_person) { FactoryBot.create_for_repository(:numismatic_person) }
   let(:numismatic_accession) { FactoryBot.create_for_repository(:numismatic_accession, accession_number: 234, person_id: numismatic_person.id) }
-  let(:loan) { NumismaticLoan.new(exhibit_name: "exhibit", note: "note", type: "type") }
-  let(:provenance) { NumismaticProvenance.new(date: "provenance date", note: "provenance note") }
+  let(:loan) { Numismatics::Loan.new(exhibit_name: "exhibit", note: "note", type: "type") }
+  let(:provenance) { Numismatics::Provenance.new(date: "provenance date", note: "provenance note") }
   let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
 
   describe "state" do

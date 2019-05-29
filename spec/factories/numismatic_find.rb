@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :numismatic_find do
+  factory :numismatic_find, class: Numismatics::Find do
     place "Cyzicus"
     find_number 1
     feature "Kaoussie"

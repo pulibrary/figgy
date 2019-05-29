@@ -16,7 +16,7 @@ RSpec.describe NumismaticImportJob do
       end
 
       # places
-      place = query_service.find_all_of_model(model: NumismaticPlace).first
+      place = query_service.find_all_of_model(model: Numismatics::Place).first
       expect(place.city).to eq "city"
       expect(place.geo_state).to eq "state"
       expect(place.region).to eq "region name"
@@ -24,7 +24,7 @@ RSpec.describe NumismaticImportJob do
       expect(place.depositor). to eq [depositor]
 
       # people
-      person = query_service.custom_queries.find_by_property(property: :replaces, value: "person-1").select { |r| r.is_a? NumismaticPerson }.first
+      person = query_service.custom_queries.find_by_property(property: :replaces, value: "person-1").select { |r| r.is_a? Numismatics::Person }.first
       expect(person.name1).to eq ["first name"]
       expect(person.name2).to eq ["family name"]
       expect(person.born).to eq ["born"]
@@ -33,7 +33,7 @@ RSpec.describe NumismaticImportJob do
       expect(person.depositor).to eq [depositor]
 
       # rulers
-      ruler = query_service.custom_queries.find_by_property(property: :replaces, value: "ruler-1").select { |r| r.is_a? NumismaticPerson }.first
+      ruler = query_service.custom_queries.find_by_property(property: :replaces, value: "ruler-1").select { |r| r.is_a? Numismatics::Person }.first
       expect(ruler.name1).to eq ["ruler name 1"]
       expect(ruler.name2).to eq ["ruler name 2"]
       expect(ruler.epithet).to eq ["ruler epithet"]
@@ -42,7 +42,7 @@ RSpec.describe NumismaticImportJob do
       expect(ruler.years_active_end).to eq ["395"]
 
       # child references
-      child_reference = query_service.custom_queries.find_by_property(property: :replaces, value: "2").select { |r| r.is_a? NumismaticReference }.first
+      child_reference = query_service.custom_queries.find_by_property(property: :replaces, value: "2").select { |r| r.is_a? Numismatics::Reference }.first
       expect(child_reference.part_of_parent).to eq ["part of parent"]
       expect(child_reference.pub_info).to eq ["pub info"]
       expect(child_reference.short_title).to eq ["child short title"]
@@ -51,7 +51,7 @@ RSpec.describe NumismaticImportJob do
       expect(child_reference.replaces).to eq ["2"]
 
       # parent references
-      parent_reference = query_service.custom_queries.find_by_property(property: :replaces, value: "1").select { |r| r.is_a? NumismaticReference }.first
+      parent_reference = query_service.custom_queries.find_by_property(property: :replaces, value: "1").select { |r| r.is_a? Numismatics::Reference }.first
       expect(parent_reference.author_id).to eq [person.id]
       expect(parent_reference.pub_info).to eq ["pub info"]
       expect(parent_reference.short_title).to eq ["parent short title"]
@@ -60,14 +60,14 @@ RSpec.describe NumismaticImportJob do
       expect(parent_reference.depositor). to eq [depositor]
 
       # firms
-      firm = query_service.find_all_of_model(model: NumismaticFirm).first
+      firm = query_service.find_all_of_model(model: Numismatics::Firm).first
       expect(firm.city).to eq "firm city"
       expect(firm.name).to eq "firm name"
       expect(firm.replaces).to eq ["1"]
       expect(firm.depositor).to eq [depositor]
 
       # accessions
-      accession = query_service.find_all_of_model(model: NumismaticAccession).first
+      accession = query_service.find_all_of_model(model: Numismatics::Accession).first
       accession_citation = accession.numismatic_citation.first
       expect(accession.accession_number).to eq "1"
       expect(accession.account).to eq ["1"]
@@ -84,7 +84,7 @@ RSpec.describe NumismaticImportJob do
       expect(accession_citation.number).to eq ["number"]
 
       # monograms
-      monogram = query_service.find_all_of_model(model: NumismaticMonogram).first
+      monogram = query_service.find_all_of_model(model: Numismatics::Monogram).first
       expect(monogram.title).to eq ["description"]
       expect(monogram.replaces).to eq ["1"]
       expect(monogram.member_ids).not_to be_blank
@@ -138,7 +138,7 @@ RSpec.describe NumismaticImportJob do
       expect(provenance.note).to eq ["note"]
 
       # issues
-      issue = query_service.find_all_of_model(model: NumismaticIssue).first
+      issue = query_service.find_all_of_model(model: Numismatics::Issue).first
       expect(issue.member_of_collection_ids.first.to_s).to eq collection_id
       expect(issue.member_ids).to eq [coin.id]
       expect(issue.numismatic_monogram_ids).to eq [monogram.id]

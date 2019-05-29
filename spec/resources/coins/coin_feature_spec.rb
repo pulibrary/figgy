@@ -15,7 +15,7 @@ RSpec.feature "Coins" do
   end
   let(:change_set) do
     CoinChangeSet.new(coin)
-    NumismaticIssueChangeSet.new(numismatic_issue)
+    Numismatics::IssueChangeSet.new(numismatic_issue)
   end
   let(:change_set_persister) do
     ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: Valkyrie.config.storage_adapter)
@@ -86,10 +86,10 @@ RSpec.feature "Coins" do
     let(:find_place) { FactoryBot.create_for_repository(:numismatic_place) }
     let(:numismatic_accession) { FactoryBot.create_for_repository(:numismatic_accession) }
     let(:numismatic_reference) { FactoryBot.create_for_repository(:numismatic_reference) }
-    let(:numismatic_citation) { NumismaticCitation.new(part: "part", number: "number", numismatic_reference_id: numismatic_reference.id) }
+    let(:numismatic_citation) { Numismatics::Citation.new(part: "part", number: "number", numismatic_reference_id: numismatic_reference.id) }
     let(:numismatic_issue) { FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id]) }
-    let(:loan) { NumismaticLoan.new(exhibit_name: "exhibit", note: "note", type: "type") }
-    let(:provenance) { NumismaticProvenance.new(date: "provenance date", note: "provenance note") }
+    let(:loan) { Numismatics::Loan.new(exhibit_name: "exhibit", note: "note", type: "type") }
+    let(:provenance) { Numismatics::Provenance.new(date: "provenance date", note: "provenance note") }
     let(:coin) do
       FactoryBot.create_for_repository(
         :coin,

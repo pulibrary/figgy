@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :numismatic_place do
+  factory :numismatic_place, class: Numismatics::Place do
     city "city"
     geo_state "state"
     region "region"

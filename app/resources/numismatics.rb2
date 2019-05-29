@@ -1,0 +1,9 @@
+# frozen_string_literal: true
+module Numismatics
+
+  # Autoload each numismatics class individually to preserve nesting
+  # Dir[Rails.root.join("app", "resources", "numismatics", "*", "*.rb")].each do |f|
+  #   klass_name = File.basename(f, ".rb").classify
+  #   autoload(klass_name.to_sym, f)
+  # end
+end

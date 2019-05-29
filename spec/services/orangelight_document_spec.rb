@@ -18,9 +18,9 @@ describe OrangelightDocument do
       let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
       let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
       let(:person) { FactoryBot.create_for_repository(:numismatic_person) }
-      let(:numismatic_artist) { NumismaticArtist.new(person_id: person.id, signature: "artist signature", role: "artist role", side: "artist side") }
-      let(:numismatic_attribute) { NumismaticAttribute.new(description: "attribute description", name: "attribute name") }
-      let(:numismatic_citation) { NumismaticCitation.new(part: "citation part", number: "citation number", numismatic_reference_id: reference.id) }
+      let(:numismatic_artist) { Numismatics::Artist.new(person_id: person.id, signature: "artist signature", role: "artist role", side: "artist side") }
+      let(:numismatic_attribute) { Numismatics::Attribute.new(description: "attribute description", name: "attribute name") }
+      let(:numismatic_citation) { Numismatics::Citation.new(part: "citation part", number: "citation number", numismatic_reference_id: reference.id) }
       let(:numismatic_monogram1) { FactoryBot.create_for_repository(:numismatic_monogram, title: "Alexander", thumbnail_id: "alexander-url") }
       let(:numismatic_monogram2) { FactoryBot.create_for_repository(:numismatic_monogram, title: "Zeus", thumbnail_id: "zeus-url") }
       let(:artist) { FactoryBot.create_for_repository(:numismatic_artist) }

@@ -11,9 +11,9 @@ class Coin < Resource
   attribute :find_place_id
 
   # nested resources
-  attribute :numismatic_citation, Valkyrie::Types::Array.of(NumismaticCitation).meta(ordered: true)
-  attribute :loan, Valkyrie::Types::Array.of(NumismaticLoan).meta(ordered: true)
-  attribute :provenance, Valkyrie::Types::Array.of(NumismaticProvenance).meta(ordered: true)
+  attribute :numismatic_citation, Valkyrie::Types::Array.of(Numismatics::Citation).meta(ordered: true)
+  attribute :loan, Valkyrie::Types::Array.of(Numismatics::Loan).meta(ordered: true)
+  attribute :provenance, Valkyrie::Types::Array.of(Numismatics::Provenance).meta(ordered: true)
 
   # descriptive metadata
   attribute :coin_number, Valkyrie::Types::Anything

@@ -1,0 +1,24 @@
+<% if can?(:create, Numismatics::Person) %>
+<h1>Numismatic People</h1>
+<table id="members" class="table table-striped datatable">
+  <thead>
+    <tr>
+      <th>Person</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+      <% @numismatic_people.each do |numismatic_person| %>
+        <tr>
+          <td><%= numismatic_person.title %></td>
+          <td>
+            <%= link_to 'View', solr_document_path(numismatic_person), class: 'btn btn-default' %>
+            <%= link_to 'Edit', main_app.polymorphic_path([:edit, numismatic_person]), class: 'btn btn-default' %>
+          </td>
+        </tr>
+      <% end %>
+  </tbody>
+</table>
+<br>
+  <%= link_to 'New Numismatic Person', new_numismatics_person_path, class: 'btn btn-primary' %>
+<% end %>

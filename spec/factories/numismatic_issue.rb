@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :numismatic_issue do
+  factory :numismatic_issue, class: Numismatics::Issue do
     denomination ["$1"]
     rights_statement RightsStatements.no_known_copyright
     read_groups "public"
@@ -12,7 +12,7 @@ FactoryBot.define do
     end
     after(:build) do |resource, evaluator|
       if evaluator.visibility.present?
-        change_set = NumismaticIssueChangeSet.new(resource)
+        change_set = Numismatics::IssueChangeSet.new(resource)
         change_set.validate(visibility: Array(evaluator.visibility).first)
         change_set.sync
         resource = change_set.model

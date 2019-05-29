@@ -28,8 +28,8 @@ class ManifestBuilder
         IndexCollectionNode.new(resource)
       when ScannedMap
         ScannedMapNode.new(resource)
-      when NumismaticIssue
-        NumismaticIssueNode.new(resource)
+      when Numismatics::Issue
+        Numismatics::IssueNode.new(resource)
       when Playlist
         PlaylistNode.new(resource, auth_token)
       else
@@ -329,7 +329,7 @@ class ManifestBuilder
       end
   end
 
-  class NumismaticIssueNode < CollectionNode
+  class Numismatics::IssueNode < CollectionNode
     # Only include coins which have file sets;
     # otherwise there is no image for the viewer.
     def members

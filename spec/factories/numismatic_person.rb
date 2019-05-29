@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :numismatic_person do
+  factory :numismatic_person, class: Numismatics::Person do
     name1 "name1"
     name2 "name2"
     epithet "epithet"

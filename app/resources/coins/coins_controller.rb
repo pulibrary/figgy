@@ -18,27 +18,27 @@ class CoinsController < BaseResourceController
   before_action :selected_issue, only: [:new, :edit, :destroy]
 
   def load_find_places
-    @find_places = query_service.find_all_of_model(model: NumismaticPlace).map(&:decorate)
+    @find_places = query_service.find_all_of_model(model: Numismatics::Place).map(&:decorate)
   end
 
   def load_numismatic_accessions
-    @numismatic_accessions = query_service.find_all_of_model(model: NumismaticAccession).map(&:decorate).sort_by(&:label)
+    @numismatic_accessions = query_service.find_all_of_model(model: Numismatics::Accession).map(&:decorate).sort_by(&:label)
   end
 
   def load_numismatic_firms
-    @numismatic_firms = query_service.find_all_of_model(model: NumismaticFirm).map(&:decorate)
+    @numismatic_firms = query_service.find_all_of_model(model: Numismatics::Firm).map(&:decorate)
   end
 
   def load_numismatic_people
-    @numismatic_people = query_service.find_all_of_model(model: NumismaticPerson).map(&:decorate)
+    @numismatic_people = query_service.find_all_of_model(model: Numismatics::Person).map(&:decorate)
   end
 
   def load_numismatic_references
-    @numismatic_references = query_service.find_all_of_model(model: NumismaticReference).map(&:decorate).sort_by(&:short_title)
+    @numismatic_references = query_service.find_all_of_model(model: Numismatics::Reference).map(&:decorate).sort_by(&:short_title)
   end
 
   def load_available_issues
-    @available_issues = query_service.find_all_of_model(model: NumismaticIssue).map(&:decorate).sort_by(&:issue_number)
+    @available_issues = query_service.find_all_of_model(model: Numismatics::Issue).map(&:decorate).sort_by(&:issue_number)
   end
 
   def parent_resource
@@ -51,7 +51,7 @@ class CoinsController < BaseResourceController
   end
 
   def numismatic_issue
-    parent_resource.is_a?(NumismaticIssue) ? parent_resource : nil
+    parent_resource.is_a?(Numismatics::Issue) ? parent_resource : nil
   end
 
   def selected_issue

@@ -121,35 +121,32 @@ Rails.application.routes.draw do
 
     get "/scanned_resources/:parent_id/new", to: "scanned_resources#new", as: :parent_new_scanned_resource
 
-    resources :numismatic_references
-    get "/numismatic_references/:parent_id/new", to: "numismatic_references#new", as: :parent_new_numismatic_reference
-
-    resources :numismatic_accessions
-
-    resources :numismatic_finds
-
-    resources :numismatic_firms
-
-    resources :numismatic_places
-
-    resources :numismatic_people
-
-    resources :numismatic_issues do
-      member do
-        get :order_manager
-        get :manifest, defaults: { format: :json }
-        post :browse_everything_files
+    namespace :numismatics do
+      resources :accessions
+      resources :issues do
+        member do
+          get :order_manager
+          get :manifest, defaults: { format: :json }
+          post :browse_everything_files
+        end
       end
+      resources :finds
+      resources :firms
+      resources :people
+      resources :places
+      resources :monograms do
+        member do
+          get :file_manager
+          get :order_manager
+          get :manifest, defaults: { format: :json }
+          post :browse_everything_files
+        end
+      end
+      resources :references
     end
 
-    resources :numismatic_monograms do
-      member do
-        get :file_manager
-        get :order_manager
-        get :manifest, defaults: { format: :json }
-        post :browse_everything_files
-      end
-    end
+    get "/numismatics/issues/:parent_id/coin" => "coins#new", as: :parent_new_coin
+    get "/numismatics/references/:parent_id/new", to: "numismatics/references#new", as: :parent_new_numismatics_reference
 
     resources :coins do
       member do
@@ -163,8 +160,6 @@ Rails.application.routes.draw do
         get :pdf
       end
     end
-    get "/numismatic_issues/:parent_id/coin" => "coins#new", as: :parent_new_coin
-    get "/parent/:parent_id/numismatic_artist" => "numismatic_artists#new", as: :parent_add_numismatic_artist
     resources :ephemera_projects do
       resources :templates, only: [:new, :create, :destroy]
       resources :ephemera_fields

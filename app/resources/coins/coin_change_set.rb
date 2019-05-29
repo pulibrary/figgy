@@ -4,9 +4,9 @@ class CoinChangeSet < ChangeSet
   apply_workflow(DraftCompleteWorkflow)
 
   include VisibilityProperty
-  collection :numismatic_citation, multiple: true, required: false, form: NumismaticCitationChangeSet, populator: :populate_nested_collection, default: []
-  collection :loan, multiple: true, required: false, form: NumismaticLoanChangeSet, populator: :populate_nested_collection, default: []
-  collection :provenance, multiple: true, required: false, form: NumismaticProvenanceChangeSet, populator: :populate_nested_collection, default: []
+  collection :numismatic_citation, multiple: true, required: false, form: Numismatics::CitationChangeSet, populator: :populate_nested_collection, default: []
+  collection :loan, multiple: true, required: false, form: Numismatics::LoanChangeSet, populator: :populate_nested_collection, default: []
+  collection :provenance, multiple: true, required: false, form: Numismatics::ProvenanceChangeSet, populator: :populate_nested_collection, default: []
   property :coin_number, multiple: false, required: false
   property :number_in_accession, multiple: false, required: false
   property :holding_location, multiple: false, required: false
