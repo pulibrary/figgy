@@ -66,7 +66,7 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
                                        member_ids: [file_set.id],
                                        holding_location: RDF::URI("https://bibdata.princeton.edu/locations/delivery_locations/1"))
     end
-    let(:file_set) { FactoryBot.create_for_repository(:file_set) }
+    let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: { use: Valkyrie::Vocab::PCDMUse.OriginalFile, fixity_success: 1 }) }
     let(:preservation_object) { FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, metadata_node: FileMetadata.new(id: SecureRandom.uuid)) }
     let(:original_file) { instance_double FileMetadata }
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: scanned_resource) }
@@ -77,8 +77,6 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       assign :document, solr_document
       allow(view).to receive(:has_search_parameters?).and_return(false)
       allow(view).to receive(:document).and_return(solr_document)
-      allow_any_instance_of(FileSet).to receive(:original_file).and_return(original_file)
-      allow(original_file).to receive(:fixity_success).and_return(1)
       stub_blacklight_views
       FactoryBot.create_for_repository(:event, status: "SUCCESS", resource_id: preservation_object.id, child_id: file_set.id, child_property: "metadata_node")
       render

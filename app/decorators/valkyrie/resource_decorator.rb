@@ -58,8 +58,13 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   # Calculate a histogram of child FileSet fixity status
   def fixity_map
     return [] unless respond_to?(:file_sets)
-    m = file_sets.map { |fs| fs.original_file&.fixity_success }
-    m.uniq.map { |s| [s, (m.select { |ss| ss == s }).size] }.to_h
+    @fixity_map ||=
+      begin
+        m = {}
+        m[0] = wayfinder.deep_failed_local_fixity_count if wayfinder.deep_failed_local_fixity_count.positive?
+        m[1] = wayfinder.deep_succeeded_local_fixity_count if wayfinder.deep_succeeded_local_fixity_count.positive?
+        m
+      end
   end
 
   # Calculate a histogram of child FileSet cloud fixity status
