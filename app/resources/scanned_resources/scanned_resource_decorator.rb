@@ -125,10 +125,10 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
   end
 
   def human_readable_type
-    if model.id.present? && wayfinder.scanned_resources_count.positive?
-      I18n.translate("models.multi_volume_work", default: "Multi Volume Work")
-    elsif model.change_set
+    if model.change_set
       I18n.translate("models.#{model.change_set}")
+    elsif model.id.present? && wayfinder.scanned_resources_count.positive?
+      I18n.translate("models.multi_volume_work", default: "Multi Volume Work")
     else
       model.human_readable_type
     end
