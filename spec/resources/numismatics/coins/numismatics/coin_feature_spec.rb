@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.feature "Coins" do
+RSpec.feature "Numismatics::Coins" do
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:persister) { adapter.persister }
@@ -14,7 +14,7 @@ RSpec.feature "Coins" do
     persister.save(resource: res)
   end
   let(:change_set) do
-    CoinChangeSet.new(coin)
+    Numismatics::CoinChangeSet.new(coin)
     Numismatics::IssueChangeSet.new(numismatic_issue)
   end
   let(:change_set_persister) do
@@ -42,7 +42,7 @@ RSpec.feature "Coins" do
   end
 
   scenario "creating a new resource" do
-    visit new_coin_path
+    visit new_numismatics_coin_path
 
     expect(page).to have_field "Issue"
     expect(page).to have_field "Accession"

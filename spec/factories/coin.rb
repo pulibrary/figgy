@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :coin do
+  factory :coin, class: Numismatics::Coin do
     rights_statement RightsStatements.no_known_copyright
     read_groups "public"
     to_create do |instance|
@@ -13,7 +13,7 @@ FactoryBot.define do
     end
     after(:build) do |resource, evaluator|
       if evaluator.visibility.present?
-        change_set = CoinChangeSet.new(resource)
+        change_set = Numismatics::CoinChangeSet.new(resource)
         change_set.validate(visibility: Array(evaluator.visibility).first)
         change_set.sync
         resource = change_set.model
@@ -22,7 +22,7 @@ FactoryBot.define do
     end
     after(:create) do |resource, evaluator|
       if evaluator.files.present?
-        change_set = CoinChangeSet.new(resource, files: evaluator.files)
+        change_set = Numismatics::CoinChangeSet.new(resource, files: evaluator.files)
         ::ChangeSetPersister.new(
           metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
           storage_adapter: Valkyrie.config.storage_adapter

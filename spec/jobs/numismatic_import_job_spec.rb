@@ -91,7 +91,7 @@ RSpec.describe NumismaticImportJob do
       expect(monogram.depositor). to eq [depositor]
 
       # coins
-      coin = query_service.find_all_of_model(model: Coin).first
+      coin = query_service.find_all_of_model(model: Numismatics::Coin).first
       expect(coin.member_of_collection_ids.first.to_s).to eq collection_id
       expect(coin.numismatic_accession_id).to eq [accession.id]
       expect(coin.find_place_id).to eq [place.id]

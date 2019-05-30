@@ -13,8 +13,8 @@ describe Numismatics::CitationWayfinder do
     change_set_persister.save(change_set: ch)
   end
   let(:coin) do
-    res = Coin.new(title: "hercules", weight: 5, numismatic_citation: [numismatic_citation])
-    ch = CoinChangeSet.new(res)
+    res = Numismatics::Coin.new(title: "hercules", weight: 5, numismatic_citation: [numismatic_citation])
+    ch = Numismatics::CoinChangeSet.new(res)
     change_set_persister.save(change_set: ch)
   end
 

@@ -19,7 +19,7 @@ class Wayfinder < BaseWayfinder
     EphemeraVocabulary => EphemeraVocabularyWayfinder,
     MediaResource => MediaResourceWayfinder,
     Playlist => PlaylistWayfinder,
-    Coin => CoinWayfinder,
+    Numismatics::Coin => Numismatics::CoinWayfinder,
     Numismatics::Accession => Numismatics::AccessionWayfinder,
     Numismatics::Artist => Numismatics::ArtistWayfinder,
     Numismatics::Citation => Numismatics::CitationWayfinder,

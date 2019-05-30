@@ -123,6 +123,18 @@ Rails.application.routes.draw do
 
     namespace :numismatics do
       resources :accessions
+      resources :coins do
+        member do
+          get :file_manager
+          get :order_manager
+          get :manifest, defaults: { format: :json }
+          get :orangelight, defaults: { format: :json }
+          post :browse_everything_files
+          get :discover_files
+          post :auto_ingest
+          get :pdf
+        end
+      end
       resources :issues do
         member do
           get :order_manager
@@ -145,21 +157,9 @@ Rails.application.routes.draw do
       resources :references
     end
 
-    get "/numismatics/issues/:parent_id/coin" => "coins#new", as: :parent_new_coin
+    get "/numismatics/issues/:parent_id/coin" => "coins#new", as: :parent_new_numismatics_coin
     get "/numismatics/references/:parent_id/new", to: "numismatics/references#new", as: :parent_new_numismatics_reference
 
-    resources :coins do
-      member do
-        get :file_manager
-        get :order_manager
-        get :manifest, defaults: { format: :json }
-        get :orangelight, defaults: { format: :json }
-        post :browse_everything_files
-        get :discover_files
-        post :auto_ingest
-        get :pdf
-      end
-    end
     resources :ephemera_projects do
       resources :templates, only: [:new, :create, :destroy]
       resources :ephemera_fields

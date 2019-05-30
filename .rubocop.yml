@@ -72,7 +72,7 @@ Metrics/ClassLength:
     - 'app/services/geo_resource_reindexer.rb'
     - 'app/services/ingest_ephemera_service.rb'
     - 'app/utils/data_seeder.rb'
-    - 'app/resources/coins/orangelight_coin_builder.rb'
+    - 'app/resources/numismatics/coins/orangelight_coin_builder.rb'
     - 'app/resources/scanned_resources/scanned_resource_decorator.rb'
     - 'app/resources/scanned_maps/scanned_map_decorator.rb'
     - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
@@ -139,7 +139,7 @@ Metrics/MethodLength:
     - 'app/models/controlled_vocabulary.rb'
     - 'app/resources/scanned_resources/simple_change_set.rb'
     - 'app/resources/numismatics/issues/numismatics/issue_change_set.rb'
-    - 'app/resources/coins/coin_change_set.rb'
+    - 'app/resources/numismatics/coins/numismatics/coin_change_set.rb'
     - 'app/controllers/base_resource_controller.rb'
     - 'app/services/pdf_generator.rb'
     - 'app/services/file_appender.rb'
@@ -233,9 +233,6 @@ RSpec/ExampleLength:
 RSpec/FilePath:
   Exclude:
     - 'spec/registered_adapter_spec.rb'
-RSpec/InstanceVariable:
-  Exclude:
-    - 'spec/resources/coins/coins_controller_spec.rb'
 RSpec/MessageChain:
   Exclude:
     - 'spec/resources/file_sets/file_set_decorator_spec.rb'

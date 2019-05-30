@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe CoinChangeSet do
+RSpec.describe Numismatics::CoinChangeSet do
   subject(:change_set) { described_class.new(coin) }
   let(:coin) { FactoryBot.build(:coin) }
   let(:issue) { FactoryBot.create_for_repository(member_ids: [coin.id]) }

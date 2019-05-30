@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe Types::CoinType do
+RSpec.describe Types::Numismatics::CoinType do
   describe "fields" do
     it "has startPage" do
       expect(described_class).to have_field(:startPage)
@@ -43,7 +43,7 @@ RSpec.describe Types::CoinType do
 
   describe "#manifest_url" do
     it "links to the manifest URL" do
-      expect(type.manifest_url).to eq "http://www.example.com/concern/coins/#{coin.id}/manifest"
+      expect(type.manifest_url).to eq "http://www.example.com/concern/numismatics/coins/#{coin.id}/manifest"
     end
   end
 
@@ -105,7 +105,7 @@ RSpec.describe Types::CoinType do
 
   describe "#label" do
     it "maps to a resource's title" do
-      expect(type.label).to eq "Coin: #{coin.coin_number}"
+      expect(type.label).to eq "Numismatics::Coin: #{coin.coin_number}"
     end
   end
 

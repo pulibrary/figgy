@@ -7,7 +7,7 @@ class ParentIssueIndexer
   end
 
   def to_solr
-    return {} unless resource.is_a?(Coin)
+    return {} unless resource.is_a?(Numismatics::Coin)
     return {} unless parents.first
 
     parent_attributes.map { |k, v| ["issue_#{k}_tesim", Array.wrap(v).map(&:to_s)] }.to_h

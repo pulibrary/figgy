@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe CoinDecorator do
+RSpec.describe Numismatics::CoinDecorator do
   subject(:decorator) { described_class.new(coin) }
   let(:coin) { FactoryBot.create_for_repository(:coin, numismatic_citation: numismatic_citation, numismatic_accession_id: numismatic_accession.id, loan: loan, provenance: provenance) }
   let(:numismatic_citation) { Numismatics::Citation.new(part: "citation part", number: "citation number", numismatic_reference_id: [reference.id]) }

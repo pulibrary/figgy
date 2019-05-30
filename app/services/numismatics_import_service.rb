@@ -352,7 +352,7 @@ class NumismaticsImportService
         attributes[:provenance] = provenance_attributes(coin_id: attributes[:coin_number])
         attributes[:loan] = loan_attributes(coin_id: attributes[:coin_number])
 
-        resources << new_resource(klass: Coin, **attributes)
+        resources << new_resource(klass: Numismatics::Coin, **attributes)
       end
 
       resources.map(&:id)

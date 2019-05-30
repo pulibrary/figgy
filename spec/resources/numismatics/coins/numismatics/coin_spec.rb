@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe Coin do
+RSpec.describe Numismatics::Coin do
   let(:coin) { FactoryBot.create_for_repository(:coin, weight: 5, rights_statement: "No Known Copyright") }
 
   it "has properties" do
@@ -18,7 +18,7 @@ RSpec.describe Coin do
   end
 
   it "has a title" do
-    expect(coin.title).to include "Coin: 1"
+    expect(coin.title).to include "Numismatics::Coin: 1"
   end
 
   describe "#pdf_file" do

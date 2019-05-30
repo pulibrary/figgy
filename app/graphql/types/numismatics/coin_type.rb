@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Types::CoinType < Types::BaseObject
+class Types::Numismatics::CoinType < Types::BaseObject
   implements Types::Resource
 
   field :start_page, String, null: true

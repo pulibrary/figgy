@@ -2,7 +2,7 @@
 require "rails_helper"
 include ActionDispatch::TestProcess
 
-RSpec.describe CoinsController, type: :controller do
+RSpec.describe Numismatics::CoinsController, type: :controller do
   with_queue_adapter :inline
   let(:user) { nil }
   before do
@@ -45,7 +45,7 @@ RSpec.describe CoinsController, type: :controller do
       end
 
       it "adds the coin as a member of the issue" do
-        post :create, params: { coin: { append_id: issue.id.to_s, weight: 5 } }
+        post :create, params: { numismatics_coin: { append_id: issue.id.to_s, weight: 5 } }
 
         updated_issue = Valkyrie.config.metadata_adapter.query_service.find_by(id: issue.id)
         expect(updated_issue.member_ids).not_to be_empty
@@ -190,7 +190,7 @@ RSpec.describe CoinsController, type: :controller do
   # TODO: remove this block when stubbing above has been removed
   context "coverage for lines skipped because of stubbing" do
     it "has a storage adapter" do
-      expect(@controller.storage_adapter).to be_a(InstrumentedStorageAdapter)
+      expect(controller.storage_adapter).to be_a(InstrumentedStorageAdapter)
     end
   end
 end

@@ -65,7 +65,7 @@ module Numismatics
     end
 
     def attachable_objects
-      [Coin]
+      [Numismatics::Coin]
     end
 
     def citations

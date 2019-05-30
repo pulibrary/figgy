@@ -7,12 +7,12 @@ module Numismatics
     relationship_by_property :rulers, property: :ruler_id
     relationship_by_property :numismatic_monograms, property: :numismatic_monogram_ids
     relationship_by_property :file_sets, property: :member_ids, model: FileSet
-    relationship_by_property :coins, property: :member_ids, model: Coin
+    relationship_by_property :coins, property: :member_ids, model: Numismatics::Coin
     relationship_by_property :collections, property: :member_of_collection_ids
     inverse_relationship_by_property :parents, property: :member_ids, singular: true
 
     def coin_count
-      @coin_count ||= query_service.custom_queries.count_members(resource: resource, model: Coin)
+      @coin_count ||= query_service.custom_queries.count_members(resource: resource, model: Numismatics::Coin)
     end
 
     def issues_count

@@ -177,7 +177,7 @@ RSpec.feature "Numismatics::Issues" do
     end
   end
 
-  context "with child Coin resources" do
+  context "with child Numismatics::Coin resources" do
     let(:member) do
       persister.save(resource: FactoryBot.create_for_repository(:coin))
     end
@@ -188,11 +188,11 @@ RSpec.feature "Numismatics::Issues" do
       parent
     end
 
-    scenario "saved Coins are displayed as members" do
+    scenario "saved Numismatics::Coins are displayed as members" do
       visit solr_document_path(parent)
 
-      expect(page).to have_selector "h3", text: "Coins"
-      expect(page).to have_selector "td", text: "Coin: #{member.coin_number}"
+      expect(page).to have_selector "h3", text: "Numismatics::Coins"
+      expect(page).to have_selector "td", text: "Numismatics::Coin: #{member.coin_number}"
     end
   end
 end

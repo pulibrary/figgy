@@ -801,7 +801,7 @@ RSpec.describe Wayfinder do
       end
     end
   end
-  context "when given a Coin" do
+  context "when given a Numismatics::Coin" do
     describe "#members_with_parents" do
       it "returns undecorated members with parents pre-loaded" do
         member = FactoryBot.create_for_repository(:file_set)

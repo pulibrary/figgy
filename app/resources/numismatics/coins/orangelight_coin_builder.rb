@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 class OrangelightCoinBuilder
   include ThumbnailHelper
 
@@ -38,7 +37,7 @@ class OrangelightCoinBuilder
     def document_coin_hash
       {
         id: decorator.orangelight_id,
-        title_display: "Coin: #{decorator.coin_number}",
+        title_display: "Numismatics::Coin: #{decorator.coin_number}",
         pub_created_display: decorator.pub_created_display,
         access_facet: ["Online", "In the Library"],
         call_number_display: [decorator.call_number],
@@ -46,7 +45,7 @@ class OrangelightCoinBuilder
         location_code_s: [coin_location_code],
         location: [coin_library_location],
         location_display: [coin_full_location],
-        format: ["Coin"],
+        format: ["Numismatics::Coin"],
         advanced_location_s: [coin_location_code],
         counter_stamp_s: decorator.counter_stamp,
         analysis_s: decorator.analysis,

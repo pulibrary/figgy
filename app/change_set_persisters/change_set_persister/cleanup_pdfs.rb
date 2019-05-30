@@ -26,7 +26,7 @@ class ChangeSetPersister
     private
 
       def clean_up?
-        return false unless resource.is_a?(ScannedResource) || resource.is_a?(ScannedMap) || resource.is_a?(EphemeraFolder) || resource.is_a?(Coin)
+        return false unless resource.is_a?(ScannedResource) || resource.is_a?(ScannedMap) || resource.is_a?(EphemeraFolder) || resource.is_a?(Numismatics::Coin)
         return false unless pdf_file
         true
       end
