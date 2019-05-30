@@ -164,7 +164,8 @@ class IngestArchivalMediaBagJob < ApplicationJob
             property => value,
             files: [],
             visibility: collection.visibility.first,
-            upload_set_id: upload_set_id
+            upload_set_id: upload_set_id,
+            downloadable: "public"
           )
         end
 

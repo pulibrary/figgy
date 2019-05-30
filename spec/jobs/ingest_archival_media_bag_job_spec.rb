@@ -346,6 +346,7 @@ RSpec.describe IngestArchivalMediaBagJob do
 
         # Member resources have the appropriate FileSets for their barcode.
         tape1 = members389.first
+        expect(tape1.downloadable).to eq ["public"]
         tape1_file_sets = Wayfinder.for(tape1).members
         expect(tape1_file_sets.flat_map(&:title)).to contain_exactly(
           "32101047382617.xml",
