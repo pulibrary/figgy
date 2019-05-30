@@ -207,4 +207,39 @@ RSpec.describe ScannedResourceDecorator do
   it "has a downloadable attribute" do
     expect(decorator.downloadable).to eq ["public"]
   end
+
+  describe "#fixity_map" do
+    context "when there's a failed FileSet" do
+      it "returns 0 => 1" do
+        file_set = FactoryBot.create_for_repository(
+          :file_set,
+          file_metadata: {
+            fixity_success: 0,
+            use: Valkyrie::Vocab::PCDMUse.OriginalFile
+          }
+        )
+        resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: file_set.id)
+
+        decorator = described_class.new(resource)
+
+        expect(decorator.fixity_map).to eq(0 => 1)
+      end
+    end
+    context "when there's a successful file set" do
+      it "returns 1 => 1" do
+        file_set = FactoryBot.create_for_repository(
+          :file_set,
+          file_metadata: {
+            fixity_success: 1,
+            use: Valkyrie::Vocab::PCDMUse.OriginalFile
+          }
+        )
+        resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: file_set.id)
+
+        decorator = described_class.new(resource)
+
+        expect(decorator.fixity_map).to eq(1 => 1)
+      end
+    end
+  end
 end

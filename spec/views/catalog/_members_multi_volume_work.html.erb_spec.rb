@@ -3,8 +3,8 @@ require "rails_helper"
 
 RSpec.describe "catalog/_members_multi_volume_work" do
   context "when the ScannedResource has members" do
-    let(:file_set1) { FactoryBot.create_for_repository(:file_set) }
-    let(:file_set2) { FactoryBot.create_for_repository(:file_set) }
+    let(:file_set1) { FactoryBot.create_for_repository(:file_set, file_metadata: { use: Valkyrie::Vocab::PCDMUse.OriginalFile, fixity_success: 1 }) }
+    let(:file_set2) { FactoryBot.create_for_repository(:file_set, file_metadata: { use: Valkyrie::Vocab::PCDMUse.OriginalFile, fixity_success: 0 }) }
     let(:original_file) { instance_double FileMetadata }
     let(:child) { FactoryBot.create_for_repository(:scanned_resource, title: "vol1", rights_statement: "x", member_ids: [file_set1.id, file_set2.id]) }
     let(:parent) { FactoryBot.create_for_repository(:scanned_resource, title: "Mui", rights_statement: "y", member_ids: [child.id]) }
@@ -12,9 +12,6 @@ RSpec.describe "catalog/_members_multi_volume_work" do
     let(:solr_document) { SolrDocument.new(document) }
     before do
       assign :document, solr_document
-      allow_any_instance_of(FileSet).to receive(:original_file).and_return(original_file)
-      allow(original_file).to receive(:fixity_success).and_return(1, 0)
-      allow(original_file).to receive(:fixity_last_success_date).and_return(nil)
       FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set1.id, metadata_node: FileMetadata.new(id: SecureRandom.uuid))
       FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set2.id, metadata_node: FileMetadata.new(id: SecureRandom.uuid))
       render
