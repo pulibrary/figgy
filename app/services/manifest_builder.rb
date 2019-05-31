@@ -198,7 +198,6 @@ class ManifestBuilder
     end
 
     def sequence_rendering
-      return [] if audio_manifest?
       [
         {
           "@id" => helper.pdf_url(resource),
@@ -341,6 +340,10 @@ class ManifestBuilder
   class RecordingNode < RootNode
     def leaf_nodes
       @leaf_nodes ||= super.select { |x| x.mime_type.include?("audio/x-wav") }
+    end
+
+    def sequence_rendering
+      []
     end
   end
 
