@@ -33,4 +33,12 @@ RSpec.describe FixityDashboardHelper do
       expect(helper.cloud_fixity_success_level("succeeded")).to eq "primary"
     end
   end
+
+  describe "#fixity_success_level" do
+    it "translates fixity status label to match bootstrap level" do
+      expect(helper.fixity_success_level(nil)).to eq "info"
+      expect(helper.fixity_success_level(0)).to eq "warning"
+      expect(helper.fixity_success_level(1)).to eq "primary"
+    end
+  end
 end
