@@ -62,10 +62,6 @@ group :development, :test do
   gem "solr_wrapper", ">= 0.3"
 end
 
-group :development, :staging do
-  gem "rack-mini-profiler", require: false
-end
-
 group :test do
   gem "capybara-screenshot"
   gem "database_cleaner"
@@ -125,3 +121,7 @@ gem "cocoon"
 gem "google-cloud-pubsub"
 gem "shrine-google_cloud_storage"
 gem "valkyrie-shrine"
+
+group :development, :staging do
+  gem "rack-mini-profiler", require: false
+end
