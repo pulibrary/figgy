@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
+  before_action :authorize_mini_profiler
   before_action :notify_read_only
   before_action :store_user_location!, if: :storable_location?
 
@@ -179,5 +180,11 @@ class ApplicationController < ActionController::Base
     def store_user_location!
       # :user is the scope we are authenticating
       store_location_for(:user, request.fullpath)
+    end
+
+    def authorize_mini_profiler
+      return unless Rails.env.staging? || Rails.env.development?
+      return unless current_user && current_user.admin?
+      Rack::MiniProfiler.authorize_request
     end
 end
