@@ -182,9 +182,11 @@ class ApplicationController < ActionController::Base
       store_location_for(:user, request.fullpath)
     end
 
+    # :nocov:
     def authorize_mini_profiler
       return unless Rails.env.staging? || Rails.env.development?
       return unless current_user && current_user.admin?
       Rack::MiniProfiler.authorize_request
     end
+  # :nocov:
 end
