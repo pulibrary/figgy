@@ -72,7 +72,11 @@ class ManifestBuilder
       # Generate a download Hash for the FileSet and members
       # @return [Hash]
       def download_hash
-        original_file = resource.original_file
+        original_file_hash || mp3_file_hash || {}
+      end
+
+      def original_file_hash
+        return unless original_file
         original_file_id = original_file.id.to_s
         download_url_args = { resource_id: resource.id.to_s, id: original_file_id, protocol: protocol, host: host }
         download_url = url_helpers.download_url(download_url_args)
@@ -82,6 +86,30 @@ class ManifestBuilder
           "label" => "Download the original file",
           "format" => original_file.mime_type.first
         }
+      end
+
+      def mp3_file_hash
+        return unless mp3_file
+        download_url_args = { resource_id: resource.id.to_s,
+                              id: mp3_file.id.to_s,
+                              protocol: protocol,
+                              host: host }
+        download_url = url_helpers.download_url(download_url_args)
+
+        {
+          "id" => download_url,
+          "type" => "Audio",
+          "label" => "Download the mp3",
+          "format" => mp3_file.mime_type.first
+        }
+      end
+
+      def original_file
+        @original_file ||= resource.original_file
+      end
+
+      def mp3_file
+        @mp3_file ||= resource.file_metadata.find { |file| file.mime_type.include? "audio/mpeg" }
       end
   end
 end

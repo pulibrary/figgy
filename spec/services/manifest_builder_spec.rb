@@ -636,6 +636,7 @@ RSpec.describe ManifestBuilder do
         expect(output["service"]).to be_nil
       end
     end
+
     it "builds a manifest for an ArchivalMediaBag ingested Recording", run_real_characterization: true, run_real_derivatives: true do
       bag_path = Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag")
       user = User.first
@@ -645,8 +646,10 @@ RSpec.describe ManifestBuilder do
 
       recording = query_service.custom_queries.find_by_property(property: :local_identifier, value: "32101047382401").first
       manifest_builder = described_class.new(recording)
-      expect { manifest_builder.build }.not_to raise_error
+      output = manifest_builder.build
+      expect(output["items"].first["rendering"].map { |h| h["label"] }).to contain_exactly "Download the mp3"
     end
+
     it "builds a presentation 3 manifest", run_real_characterization: true do
       output = change_set_persister.save(change_set: change_set)
       output.logical_structure = [
@@ -661,6 +664,7 @@ RSpec.describe ManifestBuilder do
       expect(output["structures"][0]["items"][0]["id"]).to include "#t="
       expect(output["structures"][1]["items"][0]["items"][0]["id"]).to include "#t="
       expect(output["behavior"]).to eq ["auto-advance"]
+      # downloading is blocked
       expect(output["service"][0]).to eq ({ "@context" => "http://universalviewer.io/context.json", "profile" => "http://universalviewer.io/ui-extensions-profile", "disableUI" => ["mediaDownload"] })
     end
     context "with no logical structure", run_real_characterization: true do

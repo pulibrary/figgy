@@ -345,7 +345,6 @@ class ManifestBuilder
     def sequence_rendering
       []
     end
-
   end
 
   class PlaylistNode < RootNode
