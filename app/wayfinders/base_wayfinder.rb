@@ -100,4 +100,27 @@ class BaseWayfinder
   def metadata_adapter
     @metadata_adapter ||= Valkyrie::MetadataAdapter.find(:indexing_persister)
   end
+
+  def deep_failed_local_fixity_count
+    @deep_failed_local_fixity_count ||= deep_fixity_count(fixity_success: 0)
+  end
+
+  def deep_succeeded_local_fixity_count
+    @deep_succeeded_local_fixity_count ||= deep_fixity_count(fixity_success: 1)
+  end
+
+  private
+
+    def deep_fixity_count(fixity_success:)
+      query_service.custom_queries.find_deep_children_with_property(
+        resource: resource,
+        model: FileSet,
+        property: :file_metadata,
+        value: {
+          use: [Valkyrie::Vocab::PCDMUse.OriginalFile],
+          fixity_success: fixity_success
+        },
+        count: true
+      )
+    end
 end

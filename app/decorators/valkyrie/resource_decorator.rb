@@ -55,6 +55,30 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     end
   end
 
+  # Calculate a histogram of child FileSet fixity status
+  def fixity_map
+    return [] unless respond_to?(:file_sets)
+    @fixity_map ||=
+      begin
+        m = {}
+        m[0] = wayfinder.deep_failed_local_fixity_count if wayfinder.deep_failed_local_fixity_count.positive?
+        m[1] = wayfinder.deep_succeeded_local_fixity_count if wayfinder.deep_succeeded_local_fixity_count.positive?
+        m
+      end
+  end
+
+  def fixity_badges
+    fixity_map.map do |status, count|
+      h.format_fixity_count(status, count)
+    end.join(" ")
+  end
+
+  def fixity_summary
+    fixity_map.map do |status, count|
+      h.format_fixity_status(status, count)
+    end.join(" ")
+  end
+
   def header
     merged_titles
   end

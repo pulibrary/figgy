@@ -19,7 +19,7 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
           :transfer_notes,
           :error_message
 
-  delegate :collections, to: :wayfinder
+  delegate :collections, :preservation_objects, to: :wayfinder
 
   def manageable_files?
     false

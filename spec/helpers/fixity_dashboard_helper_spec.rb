@@ -17,4 +17,12 @@ RSpec.describe FixityDashboardHelper do
       expect(helper.format_fixity_success(1)).to eq "succeeded"
     end
   end
+
+  describe "#fixity_success_level" do
+    it "translates fixity status label to match bootstrap level" do
+      expect(helper.fixity_success_level(nil)).to eq "info"
+      expect(helper.fixity_success_level(0)).to eq "warning"
+      expect(helper.fixity_success_level(1)).to eq "primary"
+    end
+  end
 end

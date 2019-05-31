@@ -31,7 +31,7 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
   end
   context "when given a ScannedResource solr document" do
     let(:scanned_resource) do
-      FactoryBot.create_for_repository(:scanned_resource,
+      FactoryBot.create_for_repository(:complete_scanned_resource,
                                        imported_metadata: [
                                          {
                                            title: "Ars minor [fragment].",
@@ -63,8 +63,11 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
                                        member_of_collection_ids: [collection.id],
                                        source_metadata_identifier: "123456",
                                        visibility: false,
+                                       member_ids: [file_set.id],
                                        holding_location: RDF::URI("https://bibdata.princeton.edu/locations/delivery_locations/1"))
     end
+    let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: { use: Valkyrie::Vocab::PCDMUse.OriginalFile, fixity_success: 1 }) }
+    let(:original_file) { instance_double FileMetadata }
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: scanned_resource) }
     let(:collection) { FactoryBot.create_for_repository(:collection) }
     let(:solr_document) { SolrDocument.new(document) }
@@ -162,6 +165,10 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       expect(rendered).to have_selector "th", text: "Holding Location"
       expect(rendered).not_to have_selector ".holding_location"
       expect(rendered).not_to have_selector "th", text: "Rendered Holding Location"
+
+      # Fixity
+      expect(rendered).to have_selector "th", text: "Local Fixity"
+      expect(rendered).to have_selector "span.label-primary.fixity-count", text: "1"
     end
   end
   context "when given a ScannedMap solr document" do
