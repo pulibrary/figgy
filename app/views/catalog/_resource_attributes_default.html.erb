@@ -27,7 +27,7 @@
           </tr>
         <% end %>
       <% end %>
-      <% if resource.decorate.respond_to?(:file_sets) && !resource.decorate.file_sets.empty? %>
+      <% if resource.decorate.respond_to?(:file_sets) %>
         <tr>
           <th>Local Fixity</th>
           <td><%= document.decorated_resource.fixity_summary.html_safe %></td>
