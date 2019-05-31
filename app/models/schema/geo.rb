@@ -7,10 +7,11 @@ module Schema
 
     def self.attributes
       Common.attributes + [
-        :spatial, # http://purl.org/dc/terms/spatial
-        :temporal, # http://purl.org/dc/terms/temporal
+        :cartographic_projection, # http://bibframe.org/vocab/cartographicProjection
+        :held_by, # http://id.loc.gov/ontologies/bibframe/heldBy
         :issued, # http://purl.org/dc/terms/issued
-        :cartographic_projection # http://bibframe.org/vocab/cartographicProjection
+        :spatial, # http://purl.org/dc/terms/spatial
+        :temporal # http://purl.org/dc/terms/temporal
       ]
     end
 

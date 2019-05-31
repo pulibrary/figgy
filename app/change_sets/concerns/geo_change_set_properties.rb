@@ -6,6 +6,7 @@ module GeoChangeSetProperties
     property :coverage, multiple: false, required: false
     property :creator, multiple: false, required: false
     property :description, multiple: true, required: false, default: []
+    property :held_by, multiple: false, required: false
     property :identifier, multiple: false, required: false
     property :issued, multiple: false, required: false
     property :language, multiple: false, required: false

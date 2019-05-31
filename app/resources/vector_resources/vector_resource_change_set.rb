@@ -57,7 +57,8 @@ class VectorResourceChangeSet < ChangeSet
       :language,
       :cartographic_scale,
       :cartographic_projection,
-      :coverage
+      :coverage,
+      :held_by
     ]
   end
   # rubocop:enable Metrics/MethodLength

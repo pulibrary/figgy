@@ -34,6 +34,7 @@ RSpec.describe VectorResourcesController, type: :controller do
         expect(response.body).to have_select "Rights Statement", name: "vector_resource[rights_statement]", options: [""] + ControlledVocabulary.for(:rights_statement).all.map(&:label)
         expect(response.body).to have_field "Cartographic scale"
         expect(response.body).to have_field "Cartographic projection"
+        expect(response.body).to have_field "Held by"
         expect(response.body).to have_checked_field "Open"
         expect(response.body).to have_button "Save"
       end
