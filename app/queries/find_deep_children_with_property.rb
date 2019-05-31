@@ -32,6 +32,7 @@ class FindDeepChildrenWithProperty
           FROM deep_members f,
           jsonb_array_elements(f.metadata->'member_ids') AS g(member)
           JOIN orm_resources mem ON (g.member->>'id')::UUID = mem.id
+          WHERE f.metadata @> '{"member_ids": [{}]}'
         )
         select #{count ? 'COUNT(*) AS count' : '*'} from deep_members
         WHERE internal_resource = :model
