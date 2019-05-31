@@ -17,7 +17,7 @@ module GeoDiscovery
       def slug
         identifier = Array.wrap(ark || resource_decorator.id.to_s).first
         id = identifier.gsub(%r(ark:/\d{5}/), "")
-        "#{resource_decorator.provenance.first.parameterize}-#{id}"
+        "#{resource_decorator.held_by.first.parameterize}-#{id}"
       end
 
       private

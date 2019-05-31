@@ -87,7 +87,7 @@ RSpec.feature "ScannedMaps" do
       expect(page).to have_css ".attribute.subject", text: "test value"
       expect(page).to have_css ".attribute.portion_note", text: "test portion note"
       expect(page).to have_css ".attribute.cartographic_scale", text: "test value"
-      expect(page).to have_css ".attribute.provenance", text: "Princeton"
+      expect(page).to have_css ".attribute.held_by", text: "Princeton"
       expect(page).to have_css ".attribute.ark", text: "http://arks.princeton.edu/ark:/99999/fk4"
       expect(page).to have_css "th", text: "Place Name"
       expect(page).to have_css ".attribute.spatial", text: "test value"
