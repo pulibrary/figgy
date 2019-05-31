@@ -36,7 +36,7 @@ gem "sprockets", ">= 3.7.2"
 gem "sqlite3"
 gem "title"
 gem "uglifier"
-gem "valkyrie", "1.5.1"
+gem "valkyrie", "1.7.1"
 gem "valkyrie-derivatives", git: "https://github.com/samvera-labs/valkyrie-derivatives.git"
 gem "webpacker", ">= 4.0.x"
 
@@ -111,7 +111,7 @@ gem "riiif"
 gem "sidekiq"
 gem "string_rtl"
 gem "tiny_tds"
-gem "valkyrie-sequel", github: "samvera-labs/valkyrie-sequel"
+gem "valkyrie-sequel", '1.1.0'
 gem "whenever", "~> 0.10"
 
 gem "blacklight_iiif_search", github: "boston-library/blacklight_iiif_search"

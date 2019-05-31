@@ -17,7 +17,7 @@ module Bagit
         @bag_id = bag_id
       end
 
-      def upload(file:, original_filename:, resource: nil)
+      def upload(file:, original_filename:, resource: nil, **_extra_args)
         FileUtils.mkdir_p(data_path)
         new_path = data_path.join("#{generate_id}-#{original_filename}")
         old_path = file.try(:disk_path) || file.path
