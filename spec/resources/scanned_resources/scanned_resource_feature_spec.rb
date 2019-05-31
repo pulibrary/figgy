@@ -73,7 +73,8 @@ RSpec.feature "Scanned Resources" do
 
   context "when a media reserve" do
     let(:scanned_resource) do
-      res = FactoryBot.create_for_repository(:recording)
+      file_set = FactoryBot.create_for_repository(:file_set)
+      res = FactoryBot.create_for_repository(:recording, member_ids: file_set.id)
       adapter.persister.save(resource: res)
     end
     it "displays a Create Playlist button" do
