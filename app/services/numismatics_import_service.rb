@@ -1,28 +1,29 @@
 # frozen_string_literal: true
 
 class NumismaticsImportService
-  attr_reader :db_adapter, :collection_id, :file_root, :logger
-  def initialize(db_adapter:, collection_id:, file_root:, logger: nil)
+  attr_reader :db_adapter, :collection_id, :depositor, :file_root, :logger
+  def initialize(db_adapter:, collection_id:, depositor:, file_root:, logger: nil)
     @db_adapter = db_adapter
     @collection_id = collection_id
+    @depositor = depositor
     @file_root = file_root
     @logger = logger || Logger.new(STDOUT)
   end
 
   def ingest_accessions
-    AccessionsImporter.new(db_adapter: db_adapter, logger: logger).import!
+    AccessionsImporter.new(db_adapter: db_adapter, depositor: depositor, logger: logger).import!
   end
 
   def ingest_firms
-    FirmsImporter.new(db_adapter: db_adapter, logger: logger).import!
+    FirmsImporter.new(db_adapter: db_adapter, depositor: depositor, logger: logger).import!
   end
 
   def ingest_issue(issue_number:)
-    IssueImporter.new(issue_number: issue_number, collection_id: collection_id, db_adapter: db_adapter, file_root: file_root, logger: logger).import!
+    IssueImporter.new(issue_number: issue_number, collection_id: collection_id, depositor: depositor, db_adapter: db_adapter, file_root: file_root, logger: logger).import!
   end
 
   def ingest_monograms
-    MonogramsImporter.new(db_adapter: db_adapter, file_root: file_root, logger: logger).import!
+    MonogramsImporter.new(db_adapter: db_adapter, depositor: depositor, file_root: file_root, logger: logger).import!
   end
 
   def issue_numbers
@@ -31,15 +32,15 @@ class NumismaticsImportService
   end
 
   def ingest_people
-    PeopleImporter.new(db_adapter: db_adapter, logger: logger).import!
+    PeopleImporter.new(db_adapter: db_adapter, depositor: depositor, logger: logger).import!
   end
 
   def ingest_places
-    PlacesImporter.new(db_adapter: db_adapter, logger: logger).import!
+    PlacesImporter.new(db_adapter: db_adapter, depositor: depositor, logger: logger).import!
   end
 
   def ingest_references
-    ReferencesImporter.new(db_adapter: db_adapter, logger: logger).import!
+    ReferencesImporter.new(db_adapter: db_adapter, depositor: depositor, logger: logger).import!
   end
 
   class BaseImporter
@@ -73,9 +74,10 @@ class NumismaticsImportService
   end
 
   class AccessionsImporter < BaseImporter
-    attr_reader :db_adapter, :logger
-    def initialize(db_adapter:, logger:)
+    attr_reader :db_adapter, :depositor, :logger
+    def initialize(db_adapter:, depositor:, logger:)
       @db_adapter = db_adapter
+      @depositor = depositor
       @logger = logger
     end
 
@@ -95,7 +97,7 @@ class NumismaticsImportService
 
         # Add nested properties
         attributes[:numismatic_citation] = accession_citation_attributes(accession_id: attributes[:accession_number])
-
+        attributes[:depositor] = depositor
         new_resource(klass: NumismaticAccession, **attributes)
       end
     end
@@ -117,9 +119,10 @@ class NumismaticsImportService
   end
 
   class FirmsImporter < BaseImporter
-    attr_reader :db_adapter, :logger
-    def initialize(db_adapter:, logger:)
+    attr_reader :db_adapter, :depositor, :logger
+    def initialize(db_adapter:, depositor:, logger:)
       @db_adapter = db_adapter
+      @depositor = depositor
       @logger = logger
     end
 
@@ -131,6 +134,7 @@ class NumismaticsImportService
       firm_numbers = firms.ids
       firm_numbers.each do |number|
         attributes = firms.base_attributes(id: number).to_h
+        attributes[:depositor] = depositor
         new_resource(klass: NumismaticFirm, **attributes)
       end
     end
@@ -141,9 +145,10 @@ class NumismaticsImportService
   end
 
   class MonogramsImporter < BaseImporter
-    attr_reader :db_adapter, :file_root, :logger
-    def initialize(db_adapter:, file_root:, logger:)
+    attr_reader :db_adapter, :depositor, :file_root, :logger
+    def initialize(db_adapter:, depositor:, file_root:, logger:)
       @db_adapter = db_adapter
+      @depositor = depositor
       @file_root = Pathname.new(file_root.to_s)
       @logger = logger
     end
@@ -157,7 +162,7 @@ class NumismaticsImportService
       monogram_numbers.each do |number|
         attributes = monograms.base_attributes(id: number).to_h
         attributes[:files] = monogram_files(filename: attributes[:filename])
-
+        attributes[:depositor] = depositor
         new_resource(klass: NumismaticMonogram, **attributes)
       end
     end
@@ -183,9 +188,10 @@ class NumismaticsImportService
   end
 
   class ReferencesImporter < BaseImporter
-    attr_reader :db_adapter, :logger
-    def initialize(db_adapter:, logger:)
+    attr_reader :db_adapter, :depositor, :logger
+    def initialize(db_adapter:, depositor:, logger:)
       @db_adapter = db_adapter
+      @depositor = depositor
       @logger = logger
     end
 
@@ -205,6 +211,7 @@ class NumismaticsImportService
       reference_numbers.each do |number|
         attributes = references.base_attributes(id: number).to_h
         attributes[:author_id] = link_authors(ids: attributes[:author_id])
+        attributes[:depositor] = depositor
         new_resource(klass: NumismaticReference, **attributes)
       end
     end
@@ -234,9 +241,10 @@ class NumismaticsImportService
   end
 
   class PlacesImporter < BaseImporter
-    attr_reader :db_adapter, :logger
-    def initialize(db_adapter:, logger:)
+    attr_reader :db_adapter, :depositor, :logger
+    def initialize(db_adapter:, depositor:, logger:)
       @db_adapter = db_adapter
+      @depositor = depositor
       @logger = logger
     end
 
@@ -248,6 +256,7 @@ class NumismaticsImportService
       place_numbers = places.ids
       place_numbers.each do |number|
         attributes = places.base_attributes(id: number).to_h
+        attributes[:depositor] = depositor
         new_resource(klass: NumismaticPlace, **attributes)
       end
     end
@@ -258,9 +267,10 @@ class NumismaticsImportService
   end
 
   class PeopleImporter < BaseImporter
-    attr_reader :db_adapter, :logger
-    def initialize(db_adapter:, logger:)
+    attr_reader :db_adapter, :depositor, :logger
+    def initialize(db_adapter:, depositor:, logger:)
       @db_adapter = db_adapter
+      @depositor = depositor
       @logger = logger
     end
 
@@ -272,6 +282,7 @@ class NumismaticsImportService
       person_numbers = people.ids
       person_numbers.each do |number|
         attributes = people.base_attributes(id: number).to_h
+        attributes[:depositor] = depositor
         new_resource(klass: NumismaticPerson, **attributes)
       end
     end
@@ -282,10 +293,11 @@ class NumismaticsImportService
   end
 
   class IssueImporter < BaseImporter
-    attr_reader :issue_number, :collection_id, :db_adapter, :file_root, :logger
-    def initialize(issue_number:, collection_id:, db_adapter:, file_root:, logger:)
+    attr_reader :issue_number, :collection_id, :depositor, :db_adapter, :file_root, :logger
+    def initialize(issue_number:, collection_id:, depositor:, db_adapter:, file_root:, logger:)
       @issue_number = issue_number
       @collection_id = collection_id
+      @depositor = depositor
       @db_adapter = db_adapter
       @file_root = Pathname.new(file_root.to_s)
       @logger = logger
@@ -326,6 +338,7 @@ class NumismaticsImportService
       coin_numbers.each do |number|
         attributes = coins.base_attributes(id: number).to_h
         files = coin_files(coin_number: number)
+        attributes[:depositor] = depositor
         attributes[:files] = files
         # Adds coin to collection
         attributes[:member_of_collection_ids] = [collection_id]
@@ -348,6 +361,8 @@ class NumismaticsImportService
     # rubocop:disable Metrics/AbcSize
     def create_issue(coin_ids:)
       attributes = issues.base_attributes(id: issue_number).to_h
+      attributes[:depositor] = depositor
+
       # Adds coin to collection
       attributes[:member_of_collection_ids] = [collection_id]
 
