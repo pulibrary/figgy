@@ -294,6 +294,7 @@ RSpec.describe IngestArchivalMediaBagJob do
           "C0652_c0383",
           "C0652_c0389"
         )
+        expect(resources.map(&:change_set).uniq).to contain_exactly "recording"
 
         # c0383 has two barcodes associated with it in the EAD.
         resource383 = resources.find { |x| x.source_metadata_identifier == ["C0652_c0383"] }

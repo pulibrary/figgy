@@ -29,6 +29,22 @@ RSpec.describe ScannedResourceDecorator do
     end
   end
 
+  describe "#human_readable_type" do
+    context "with a Recording" do
+      let(:resource) { FactoryBot.build(:scanned_resource, change_set: "recording") }
+      it "returns Recording" do
+        expect(decorator.human_readable_type).to eq "Recording"
+      end
+    end
+    context "with a Recording descriptive proxy" do
+      let(:resource) { FactoryBot.create_for_repository(:scanned_resource, change_set: "recording", member_ids: [child.id]) }
+      let(:child) { FactoryBot.create_for_repository(:scanned_resource, change_set: "recording") }
+      it "returns Recording" do
+        expect(decorator.human_readable_type).to eq "Recording"
+      end
+    end
+  end
+
   context "with imported metadata" do
     let(:resource) do
       FactoryBot.build(:scanned_resource,

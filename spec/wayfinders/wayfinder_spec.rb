@@ -85,6 +85,19 @@ RSpec.describe Wayfinder do
       end
     end
 
+    describe "#file_sets_count" do
+      it "returns the count of file set members" do
+        member = FactoryBot.create_for_repository(:scanned_resource)
+        member2 = FactoryBot.create_for_repository(:file_set)
+        member3 = FactoryBot.create_for_repository(:scanned_resource)
+        parent = FactoryBot.create_for_repository(:scanned_resource, member_ids: [member.id, member2.id, member3.id])
+
+        wayfinder = described_class.for(parent)
+
+        expect(wayfinder.file_sets_count).to eq 1
+      end
+    end
+
     describe "#scanned_resources" do
       it "returns undecorated scanned_resource members" do
         member = FactoryBot.create_for_repository(:scanned_resource)

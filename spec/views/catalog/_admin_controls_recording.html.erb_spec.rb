@@ -20,5 +20,11 @@ RSpec.describe "catalog/_admin_controls_recording" do
     it "has a link to create a playlist" do
       expect(rendered).to have_selector "a[href='#{playlists_path(recording_id: recording.id.to_s)}'][data-method=post]", text: "Create Playlist"
     end
+    context "when it's a descriptive proxy" do
+      let(:file_set) { FactoryBot.create_for_repository(:recording) }
+      it "does not have a link to create a playlist" do
+        expect(rendered).not_to have_link "Create Playlist"
+      end
+    end
   end
 end
