@@ -67,7 +67,6 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
                                        holding_location: RDF::URI("https://bibdata.princeton.edu/locations/delivery_locations/1"))
     end
     let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: { use: Valkyrie::Vocab::PCDMUse.OriginalFile, fixity_success: 1 }) }
-    let(:preservation_object) { FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, metadata_node: FileMetadata.new(id: SecureRandom.uuid)) }
     let(:original_file) { instance_double FileMetadata }
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: scanned_resource) }
     let(:collection) { FactoryBot.create_for_repository(:collection) }
@@ -78,7 +77,6 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       allow(view).to receive(:has_search_parameters?).and_return(false)
       allow(view).to receive(:document).and_return(solr_document)
       stub_blacklight_views
-      FactoryBot.create_for_repository(:event, status: "SUCCESS", resource_id: preservation_object.id, child_id: file_set.id, child_property: "metadata_node")
       render
     end
     after { Timecop.return }
@@ -171,10 +169,6 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       # Fixity
       expect(rendered).to have_selector "th", text: "Local Fixity"
       expect(rendered).to have_selector "span.label-primary.fixity-count", text: "1"
-
-      # Cloud Fixity
-      expect(rendered).to have_selector "th", text: "Cloud Fixity"
-      expect(rendered).to have_selector "span.label-primary.cloud-fixity-count", text: "1"
     end
   end
   context "when given a ScannedMap solr document" do

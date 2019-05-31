@@ -15,17 +15,6 @@ module FixityDashboardHelper
     end
   end
 
-  def format_cloud_fixity_success(val)
-    case val
-    when nil
-      "in progress"
-    when "FAILURE"
-      "failed"
-    when "SUCCESS"
-      "succeeded"
-    end
-  end
-
   def fixity_success_level(val)
     case val
     when nil
@@ -37,30 +26,11 @@ module FixityDashboardHelper
     end
   end
 
-  def cloud_fixity_success_level(val)
-    case val
-    when "in progress"
-      "default"
-    when "failed"
-      "warning"
-    when "succeeded"
-      "primary"
-    end
-  end
-
   def format_fixity_status(val, count)
     content_tag :div, "#{format_fixity_success(val)} #{format_fixity_count(val, count)}".html_safe
   end
 
-  def format_cloud_fixity_status(val, count)
-    content_tag :div, "#{val} #{format_cloud_fixity_count(val, count)}".html_safe
-  end
-
   def format_fixity_count(val, count)
     content_tag :span, count, title: format_fixity_success(val), class: ["fixity-count", "label", "label-#{fixity_success_level(val)}"]
-  end
-
-  def format_cloud_fixity_count(val, count)
-    content_tag :span, count, title: val, class: ["cloud-fixity-count", "label", "label-#{cloud_fixity_success_level(val)}"]
   end
 end

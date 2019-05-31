@@ -47,29 +47,4 @@ RSpec.describe FileSetDecorator do
       expect(decorator.downloadable?).to be true
     end
   end
-
-  describe "#cloud_fixity_status" do
-    let(:event) { FactoryBot.build :event, status: event_status }
-    let(:preservation_obj) { instance_double("PreservationObject") }
-    before do
-      allow(decorator.wayfinder).to receive(:preservation_objects).and_return([preservation_obj])
-      allow(preservation_obj).to receive_message_chain(:decorate, :events).and_return([event])
-    end
-
-    context "failure" do
-      let(:event_status) { "FAILURE" }
-
-      it "converts to failed" do
-        expect(decorator.cloud_fixity_status).to eq("failed")
-      end
-    end
-
-    context "success" do
-      let(:event_status) { "SUCCESS" }
-
-      it "converts to failed" do
-        expect(decorator.cloud_fixity_status).to eq("succeeded")
-      end
-    end
-  end
 end

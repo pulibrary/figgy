@@ -12,8 +12,6 @@ RSpec.describe "catalog/_members_multi_volume_work" do
     let(:solr_document) { SolrDocument.new(document) }
     before do
       assign :document, solr_document
-      FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set1.id, metadata_node: FileMetadata.new(id: SecureRandom.uuid))
-      FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set2.id, metadata_node: FileMetadata.new(id: SecureRandom.uuid))
       render
     end
 
@@ -23,7 +21,6 @@ RSpec.describe "catalog/_members_multi_volume_work" do
       expect(rendered).to have_selector "div.label-success .text", text: "open"
       expect(rendered).to have_selector "span.label-primary.fixity-count", text: "1"
       expect(rendered).to have_selector "span.label-warning.fixity-count", text: "1"
-      expect(rendered).to have_selector "span.label-default.cloud-fixity-count", text: "2"
       expect(rendered).not_to have_link href: solr_document_path(child)
       expect(rendered).to have_link "View", href: parent_solr_document_path(parent, child.id)
       expect(rendered).to have_link "Edit", href: edit_scanned_resource_path(child.id)
