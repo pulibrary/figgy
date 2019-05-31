@@ -111,7 +111,7 @@ gem "riiif"
 gem "sidekiq"
 gem "string_rtl"
 gem "tiny_tds"
-gem "valkyrie-sequel", '1.1.0'
+gem "valkyrie-sequel", "1.1.0"
 gem "whenever", "~> 0.10"
 
 gem "blacklight_iiif_search", github: "boston-library/blacklight_iiif_search"
