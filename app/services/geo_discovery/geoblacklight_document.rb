@@ -74,7 +74,7 @@ module GeoDiscovery
           uuid: slug,
           dc_title_s: title,
           solr_geom: solr_coverage,
-          dct_provenance_s: provenance.first,
+          dct_provenance_s: held_by.first,
           dc_rights_s: rights
         }
       end

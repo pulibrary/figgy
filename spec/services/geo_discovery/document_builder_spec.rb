@@ -292,7 +292,8 @@ describe GeoDiscovery::DocumentBuilder do
 
   describe "raster resource" do
     let(:geo_work) { FactoryBot.create_for_repository(:raster_resource, coverage: coverage.to_s, visibility: visibility) }
-    let(:change_set) { RasterResourceChangeSet.new(geo_work, files: []) }
+    let(:change_set) { RasterResourceChangeSet.new(geo_work, files: [file]) }
+    let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tiff; gdal-format=GTiff") }
 
     before do
       output = change_set_persister.save(change_set: change_set)
@@ -302,13 +303,24 @@ describe GeoDiscovery::DocumentBuilder do
       metadata_adapter.persister.save(resource: file_set)
     end
 
-    context "with a geo-tiff file" do
-      let(:change_set) { RasterResourceChangeSet.new(geo_work, files: [file]) }
-      let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tiff; gdal-format=GTiff") }
+    it "has layer info fields" do
+      expect(document["layer_geom_type_s"]).to eq("Raster")
+      expect(document["dc_format_s"]).to eq("GeoTIFF")
+    end
 
-      it "has layer info fields" do
-        expect(document["layer_geom_type_s"]).to eq("Raster")
-        expect(document["dc_format_s"]).to eq("GeoTIFF")
+    context "with a non-Princeton value in the held_by property" do
+      let(:geo_work) do
+        FactoryBot.create_for_repository(:raster_resource,
+                                         coverage: coverage.to_s,
+                                         visibility: visibility,
+                                         identifier: "ark:/99999/fk4",
+                                         held_by: "Other Institution")
+      end
+
+      it "references the value in identifier fields" do
+        expect(document["dct_provenance_s"]).to eq("Other Institution")
+        expect(document["layer_slug_s"]).to eq("other-institution-fk4")
+        expect(document["uuid"]).to eq "other-institution-fk4"
       end
     end
   end

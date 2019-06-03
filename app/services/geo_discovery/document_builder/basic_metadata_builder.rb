@@ -66,7 +66,7 @@ module GeoDiscovery
         # @return [Array<Symbol>] attributes
         def simple_attributes
           [:creator, :spatial, :temporal,
-           :provenance, :language, :publisher]
+           :held_by, :language, :publisher]
         end
 
         # Returns an array of subject strings. For Vector and Raster Resources,
