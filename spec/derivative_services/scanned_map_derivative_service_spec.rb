@@ -53,27 +53,4 @@ RSpec.describe ScannedMapDerivativeService do
       expect(file_set.original_file.error_message).to include(/bad magic number/)
     end
   end
-
-  context "when the JP2000 derivative generation raises an error" do
-    let(:jp2_derivative_service) { instance_double(Jp2DerivativeService) }
-    let(:jp2_derivative_service_factory) { instance_double(Jp2DerivativeService::Factory) }
-
-    before do
-      allow(jp2_derivative_service).to receive(:cleanup_derivatives)
-      allow(jp2_derivative_service).to receive(:create_derivatives).and_raise(MiniMagick::Error)
-      allow(jp2_derivative_service).to receive(:valid?).and_return(true)
-      allow(jp2_derivative_service_factory).to receive(:new).and_return(jp2_derivative_service)
-      allow(Jp2DerivativeService::Factory).to receive(:new).and_return(jp2_derivative_service_factory)
-      allow(Rails.logger).to receive(:error)
-    end
-
-    it "logs the error and cleans up the derivatives" do
-      expect { derivative_service.new(id: valid_change_set.id).create_derivatives }.to raise_error(MiniMagick::Error)
-      expect(jp2_derivative_service).to have_received(:cleanup_derivatives).once
-      reloaded = query_service.find_by(id: valid_resource.id)
-      expect(reloaded.thumbnail_files).to be_empty
-
-      expect(Rails.logger).to have_received(:error).with("Failed to generate JP2000 derivatives for #{valid_resource.id}: MiniMagick::Error")
-    end
-  end
 end

@@ -133,6 +133,7 @@ Metrics/LineLength:
     - 'spec/views/catalog/_members_coin.html.erb_spec.rb'
     - 'spec/helpers/application_helper_spec.rb'
     - 'spec/resources/collections/collections_controller_spec.rb'
+    - 'spec/jobs/create_derivatives_job_spec.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
