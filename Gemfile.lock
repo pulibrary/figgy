@@ -61,6 +61,13 @@ GIT
       devise
 
 GIT
+  remote: https://github.com/samvera-labs/iiif_manifest
+  revision: 001983119e4d1f119cac817315861483057dab55
+  specs:
+    iiif_manifest (0.6.0)
+      activesupport (>= 4)
+
+GIT
   remote: https://github.com/samvera-labs/valkyrie-derivatives.git
   revision: 5a5c941d46097f6c6f6ab20c7f1fdd28f1fc561f
   specs:
@@ -443,8 +450,6 @@ GEM
       activesupport (>= 3.2.18)
       faraday (>= 0.9)
       json
-    iiif_manifest (0.5.0)
-      activesupport (>= 4)
     inflecto (0.0.2)
     iso-639 (0.2.8)
     jbuilder (2.7.0)
@@ -905,7 +910,7 @@ DEPENDENCIES
   hydra-editor
   hydra-head
   hydra-role-management
-  iiif_manifest (= 0.5.0)
+  iiif_manifest!
   iso-639
   jbuilder
   jquery-datatables-rails (~> 3.4.0)

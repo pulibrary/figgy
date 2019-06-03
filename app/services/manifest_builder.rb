@@ -339,11 +339,25 @@ class ManifestBuilder
 
   class RecordingNode < RootNode
     def leaf_nodes
-      @leaf_nodes ||= super.select { |x| x.mime_type.include?("audio/x-wav") }
+      @leaf_nodes ||= super.select { |x| x.mime_type.first.include?("audio/") }
     end
 
     def sequence_rendering
       []
+    end
+
+    ##
+    # Retrieves the presenters for each member FileSet as a leaf
+    # @return [LeafNode]
+    def file_set_presenters
+      return @file_set_presenters unless @file_set_presenters.nil?
+
+      values = leaf_nodes.map do |node|
+        next unless node.decorate.audio?
+
+        LeafNode.new(node, self)
+      end
+      @file_set_presenters = values.compact
     end
   end
 
@@ -478,6 +492,7 @@ class ManifestBuilder
 
     def display_content
       return unless file.mime_type.first.include?("audio")
+
       @display_content ||= IIIFManifest::V3::DisplayContent.new(
         download_url,
         format: "application/vnd.apple.mpegurl",
@@ -605,7 +620,7 @@ class ManifestBuilder
     end
 
     def manifest_image_medium_path(resource)
-      "#{manifest_image_path(resource)}/full/!1000,/0/default.jpg"
+      "#{manifest_image_path(resource)}/full/1000,/0/default.jpg"
     end
   end
 
