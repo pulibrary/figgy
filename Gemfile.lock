@@ -548,8 +548,8 @@ GEM
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
     oj (3.7.12)
-    omniauth (1.6.1)
-      hashie (>= 3.4.6, < 3.6.0)
+    omniauth (1.9.0)
+      hashie (>= 3.4.6, < 3.7.0)
       rack (>= 1.6.2, < 3)
     omniauth-cas (1.1.1)
       addressable (~> 2.3)
@@ -925,6 +925,7 @@ DEPENDENCIES
   mini_magick
   modernizr-rails
   normalize-rails
+  omniauth (~> 1.9)
   omniauth-cas
   openseadragon
   pdf-reader!
