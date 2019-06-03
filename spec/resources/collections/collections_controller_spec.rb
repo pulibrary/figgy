@@ -23,7 +23,21 @@ RSpec.describe CollectionsController, type: :controller do
         expect(collection.visibility).to eq ["open"]
         expect(collection.description).to eq []
       end
+
+      it "creates a collection and imports metadata" do
+        stub_pulfa(pulfa_id: "AC044_c0003")
+
+        post :create, params: { collection: { source_metadata_identifier: "AC044_c0003", slug: "slug" } }
+
+        expect(response).to be_redirect
+
+        collection = query_service.find_all_of_model(model: Collection).first
+        expect(collection.source_metadata_identifier).to eq ["AC044_c0003"]
+        expect(collection.primary_imported_metadata).to be_a ImportedMetadata
+        expect(collection.title).to contain_exactly "Alumni Council: Proposals for Electing Young Alumni Trustees"
+      end
     end
+
     describe "GET /collections/new" do
       render_views
       it "renders a new record" do

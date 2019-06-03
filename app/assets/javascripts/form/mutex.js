@@ -7,6 +7,8 @@ $(document).ready(function(){
       $("#mutex_field").val($(".mutex[value]").val());
       $(".mutex").change();
     })
+    // Set initial value for when form reloads after error
+    $(".mutex").change();
 });
 
 function mutex() {
