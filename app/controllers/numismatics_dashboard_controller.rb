@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 class NumismaticsDashboardController < ApplicationController
   def show
-    @issues = Wayfinder.for(NumismaticIssue.new).issues_count
-    @accessions = Wayfinder.for(NumismaticAccession.new).accessions_count
-    @firms = Wayfinder.for(NumismaticFirm.new).firms_count
-    @monograms = Wayfinder.for(NumismaticMonogram.new).monograms_count
-    @people = Wayfinder.for(NumismaticPerson.new).people_count
-    @places = Wayfinder.for(NumismaticPlace.new).places_count
-    @references = Wayfinder.for(NumismaticReference.new).references_count
+    @issues = Wayfinder.for(Numismatics::Issue.new).issues_count
+    @accessions = Wayfinder.for(Numismatics::Accession.new).accessions_count
+    @firms = Wayfinder.for(Numismatics::Firm.new).firms_count
+    @monograms = Wayfinder.for(Numismatics::Monogram.new).monograms_count
+    @people = Wayfinder.for(Numismatics::Person.new).people_count
+    @places = Wayfinder.for(Numismatics::Place.new).places_count
+    @references = Wayfinder.for(Numismatics::Reference.new).references_count
     authorize! :read, :numismatics
   end
 end

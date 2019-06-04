@@ -800,7 +800,7 @@ RSpec.describe Wayfinder do
       end
     end
   end
-  context "when given a NumismaticIssue" do
+  context "when given a Numismatics::Issue" do
     describe "#members_with_parents" do
       it "returns undecorated members with parents pre-loaded" do
         member = FactoryBot.create_for_repository(:coin)
@@ -814,7 +814,7 @@ RSpec.describe Wayfinder do
       end
     end
   end
-  context "when given a Coin" do
+  context "when given a Numismatics::Coin" do
     describe "#members_with_parents" do
       it "returns undecorated members with parents pre-loaded" do
         member = FactoryBot.create_for_repository(:file_set)
@@ -842,7 +842,7 @@ RSpec.describe Wayfinder do
       end
     end
   end
-  context "when given a NumismaticMonogram" do
+  context "when given a Numismatics::Monogram" do
     describe "#members_with_parents" do
       it "returns undecorated members with parents pre-loaded" do
         member = FactoryBot.create_for_repository(:numismatic_monogram)

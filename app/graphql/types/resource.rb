@@ -2,11 +2,11 @@
 module Types::Resource
   include Types::BaseInterface
   description "A resource in the system."
-  orphan_types Types::CoinType,
+  orphan_types Types::Numismatics::CoinType,
                Types::EphemeraFolderType,
                Types::FileSetType,
-               Types::NumismaticIssueType,
-               Types::NumismaticMonogramType,
+               Types::Numismatics::IssueType,
+               Types::Numismatics::MonogramType,
                Types::PlaylistType,
                Types::ProxyFileSetType,
                Types::ScannedMapType,

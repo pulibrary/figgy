@@ -50,7 +50,7 @@ class Ability
     can :read, FileSet do |resource|
       can?(:read, resource.decorate.parent.object)
     end
-    can [:read], NumismaticMonogram
+    can [:read], Numismatics::Monogram
     can [:read], :graphql
   end
 
@@ -64,8 +64,8 @@ class Ability
   end
 
   def curation_concerns
-    [ScannedResource, EphemeraFolder, ScannedMap, VectorResource, RasterResource, Playlist, Coin,
-     NumismaticIssue, NumismaticAccession, NumismaticFirm, NumismaticMonogram, NumismaticPerson, NumismaticPlace, NumismaticReference]
+    [ScannedResource, EphemeraFolder, ScannedMap, VectorResource, RasterResource, Playlist, Numismatics::Coin,
+     Numismatics::Issue, Numismatics::Accession, Numismatics::Firm, Numismatics::Monogram, Numismatics::Person, Numismatics::Place, Numismatics::Reference]
   end
 
   def current_user

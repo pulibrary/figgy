@@ -14,7 +14,7 @@ class NumismaticImportJob < ApplicationJob
     importer.ingest_accessions
     importer.ingest_monograms
     importer.issue_numbers.each do |number|
-      NumismaticIssueImportJob.perform_later(issue_number: number, collection_id: collection_id, depositor: depositor, file_root: file_root, db_adapter_name: db_adapter_name, **db_options)
+      IssueImportJob.perform_later(issue_number: number, collection_id: collection_id, depositor: depositor, file_root: file_root, db_adapter_name: db_adapter_name, **db_options)
     end
   end
 end

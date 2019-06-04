@@ -18,8 +18,8 @@ RSpec.describe "numismatics_dashboard/show" do
       expect(rendered).to have_css("ul.classify-work.classify-people > li > h4")
       expect(rendered).to have_css("ul.classify-work.classify-places > li > h4")
       expect(rendered).to have_css("ul.classify-work.classify-references > li > h4")
-      expect(rendered).to have_link("Manage", href: numismatic_references_path)
-      expect(rendered).to have_link "New Issue", href: new_numismatic_issue_path
+      expect(rendered).to have_link("Manage", href: numismatics_references_path)
+      expect(rendered).to have_link "New Issue", href: new_numismatics_issue_path
     end
   end
 end

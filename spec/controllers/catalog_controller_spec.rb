@@ -553,11 +553,11 @@ RSpec.describe CatalogController do
     end
   end
 
-  describe "NumismaticAccession behavior" do
+  describe "Numismatics::Accession behavior" do
     before do
       sign_in FactoryBot.create(:admin)
     end
-    it "doesn't display indexed NumismaticAccessions" do
+    it "doesn't display indexed Numismatics::Accessions" do
       persister.save(resource: FactoryBot.build(:numismatic_accession))
 
       get :index, params: { q: "" }

@@ -1,0 +1,26 @@
+<% if can?(:create, Numismatics::Firm) %>
+<h1>Numismatic Firms</h1>
+<table id="members" class="table table-striped datatable">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>City</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+      <% @numismatic_firms.each do |numismatic_firm| %>
+        <tr>
+          <td><%= numismatic_firm.name %></td>
+          <td><%= numismatic_firm.city %></td>
+          <td>
+            <%= link_to 'View', solr_document_path(numismatic_firm), class: 'btn btn-default' %>
+            <%= link_to 'Edit', main_app.polymorphic_path([:edit, numismatic_firm]), class: 'btn btn-default' %>
+          </td>
+        </tr>
+      <% end %>
+  </tbody>
+</table>
+<br>
+  <%= link_to 'New Numismatic Firm', new_numismatics_firm_path, class: 'btn btn-primary' %>
+<% end %>

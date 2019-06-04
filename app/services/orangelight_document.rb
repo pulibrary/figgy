@@ -14,7 +14,8 @@ class OrangelightDocument
     end
 
     def builder_klass
-      "Orangelight#{resource.class}Builder".constantize
+      name = resource.class.name.split("::").last
+      "Orangelight#{name}Builder".constantize
     rescue
       raise NotImplementedError, "Orangelight document builder for #{resource.class} not implemented."
     end

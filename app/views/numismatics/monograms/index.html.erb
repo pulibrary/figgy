@@ -1,0 +1,26 @@
+<% if can?(:create, Numismatics::Monogram) %>
+<h1>Numismatic Monograms</h1>
+<table id="members" class="table table-striped datatable">
+  <thead>
+    <tr>
+      <th>Thumbnail</th>
+      <th>Title</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+      <% @numismatic_monograms.each do |monogram| %>
+        <tr>
+          <td><%= render_thumbnail_tag monogram, { onerror: default_icon_fallback }, suppress_link: true %></td>
+          <td><%= monogram.title %></td></td>
+          <td>
+            <%= link_to 'View', solr_document_path(monogram.id.to_s), class: 'btn btn-default' %>
+            <%= link_to 'Edit', main_app.polymorphic_path([:edit, monogram]), class: 'btn btn-default' %>
+          </td>
+        </tr>
+      <% end %>
+  </tbody>
+</table>
+<br>
+  <%= link_to 'New Numismatic Monogram', new_numismatics_monogram_path, class: 'btn btn-primary' %>
+<% end %>

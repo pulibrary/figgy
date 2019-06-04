@@ -50,9 +50,9 @@ en:
         start: "Date range start"
         end: "Date range end"
         approximate: "Date range is approximate"
-      numismatic_accession:
+      numismatics_accession:
         items_number: "Number of items"
-      numismatic_issue:
+      numismatics_issue:
         numismatic_monogram_ids: "Monogram"
         object_date: "Date of object"
       template:

@@ -1,0 +1,37 @@
+<h1>Numismatic Finds</h1>
+
+<table id="members" class="table table-striped datatable">
+  <thead>
+    <tr>
+      <th>Find #</th>
+      <th>Place</th>
+      <th>Date</th>
+      <th>Feature</th>
+      <th>Locus</th>
+      <th>Description</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+      <% @numismatic_finds.each do |numismatic_find| %>
+        <tr>
+          <td><%= numismatic_find.find_number %></td>
+          <td><%= numismatic_find.place %></td>
+          <td><%= numismatic_find.date %></td>
+          <td><%= numismatic_find.feature %></td>
+          <td><%= numismatic_find.locus %></td>
+          <td><%= numismatic_find.description %></td>
+          <td>
+            <%= link_to 'View', solr_document_path(numismatic_find), class: 'btn btn-default' %>
+            <%= link_to 'Edit', main_app.polymorphic_path([:edit, numismatic_find]), class: 'btn btn-default' %>
+          </td>
+        </tr>
+      <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<% if can?(:create, Numismatics::Find) %>
+  <%= link_to 'New Numismatic Fccession', new_numismatics_find_path, class: 'btn btn-primary' %>
+<% end %>

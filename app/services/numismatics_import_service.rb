@@ -45,7 +45,7 @@ class NumismaticsImportService
 
   class BaseImporter
     def change_set_persister
-      @change_set_persister ||= NumismaticReferencesController.change_set_persister
+      @change_set_persister ||= Numismatics::ReferencesController.change_set_persister
     end
 
     def new_resource(klass:, **attributes)
@@ -89,16 +89,16 @@ class NumismaticsImportService
       accession_numbers = accessions.ids
       accession_numbers.each do |number|
         attributes = accessions.base_attributes(id: number).to_h
+        attributes[:depositor] = depositor
 
         # Map ids from old database to the corresponding Valkyrie resource ids
         person = attributes[:person_id] ? "person-#{attributes[:person_id]}" : nil
-        attributes[:person_id] = valkyrie_id(value: person, model: NumismaticPerson)
-        attributes[:firm_id] = valkyrie_id(value: attributes[:firm_id], model: NumismaticFirm)
+        attributes[:person_id] = valkyrie_id(value: person, model: Numismatics::Person)
+        attributes[:firm_id] = valkyrie_id(value: attributes[:firm_id], model: Numismatics::Firm)
 
         # Add nested properties
         attributes[:numismatic_citation] = accession_citation_attributes(accession_id: attributes[:accession_number])
-        attributes[:depositor] = depositor
-        new_resource(klass: NumismaticAccession, **attributes)
+        new_resource(klass: Numismatics::Accession, **attributes)
       end
     end
 
@@ -112,7 +112,7 @@ class NumismaticsImportService
 
     def accession_citation_attributes(accession_id:)
       accession_citations.attributes_by_accession(accession_id: accession_id).map do |record|
-        record[:numismatic_reference_id] = valkyrie_id(value: record[:numismatic_reference_id], model: NumismaticReference)
+        record[:numismatic_reference_id] = valkyrie_id(value: record[:numismatic_reference_id], model: Numismatics::Reference)
         record.to_h
       end
     end
@@ -135,7 +135,7 @@ class NumismaticsImportService
       firm_numbers.each do |number|
         attributes = firms.base_attributes(id: number).to_h
         attributes[:depositor] = depositor
-        new_resource(klass: NumismaticFirm, **attributes)
+        new_resource(klass: Numismatics::Firm, **attributes)
       end
     end
 
@@ -163,7 +163,7 @@ class NumismaticsImportService
         attributes = monograms.base_attributes(id: number).to_h
         attributes[:files] = monogram_files(filename: attributes[:filename])
         attributes[:depositor] = depositor
-        new_resource(klass: NumismaticMonogram, **attributes)
+        new_resource(klass: Numismatics::Monogram, **attributes)
       end
     end
 
@@ -202,7 +202,7 @@ class NumismaticsImportService
 
     def child_reference_ids(parent_number:)
       references.ids(column: "ParentRefID", value: parent_number).map do |child_id|
-        valkyrie_id(value: child_id.to_s, model: NumismaticReference).first
+        valkyrie_id(value: child_id.to_s, model: Numismatics::Reference).first
       end.compact
     end
 
@@ -212,18 +212,18 @@ class NumismaticsImportService
         attributes = references.base_attributes(id: number).to_h
         attributes[:author_id] = link_authors(ids: attributes[:author_id])
         attributes[:depositor] = depositor
-        new_resource(klass: NumismaticReference, **attributes)
+        new_resource(klass: Numismatics::Reference, **attributes)
       end
     end
 
     def link_authors(ids:)
       ids.map do |id|
-        valkyrie_id(value: id, model: NumismaticPerson).first
+        valkyrie_id(value: id, model: Numismatics::Person).first
       end
     end
 
     def link_members
-      query_service.find_all_of_model(model: NumismaticReference).each do |resource|
+      query_service.find_all_of_model(model: Numismatics::Reference).each do |resource|
         ids = child_reference_ids(parent_number: resource.replaces.first)
         next if ids.empty?
 
@@ -257,7 +257,7 @@ class NumismaticsImportService
       place_numbers.each do |number|
         attributes = places.base_attributes(id: number).to_h
         attributes[:depositor] = depositor
-        new_resource(klass: NumismaticPlace, **attributes)
+        new_resource(klass: Numismatics::Place, **attributes)
       end
     end
 
@@ -283,7 +283,7 @@ class NumismaticsImportService
       person_numbers.each do |number|
         attributes = people.base_attributes(id: number).to_h
         attributes[:depositor] = depositor
-        new_resource(klass: NumismaticPerson, **attributes)
+        new_resource(klass: Numismatics::Person, **attributes)
       end
     end
 
@@ -344,15 +344,15 @@ class NumismaticsImportService
         attributes[:member_of_collection_ids] = [collection_id]
 
         # Map ids from old database to the corresponding Valkyrie resource ids
-        attributes[:find_place_id] = valkyrie_id(value: attributes[:find_place_id], model: NumismaticPlace)
-        attributes[:numismatic_accession_id] = valkyrie_id(value: attributes[:numismatic_accession_id], model: NumismaticAccession)
+        attributes[:find_place_id] = valkyrie_id(value: attributes[:find_place_id], model: Numismatics::Place)
+        attributes[:numismatic_accession_id] = valkyrie_id(value: attributes[:numismatic_accession_id], model: Numismatics::Accession)
 
         # Add nested properties
         attributes[:numismatic_citation] = coin_citation_attributes(coin_id: attributes[:coin_number])
         attributes[:provenance] = provenance_attributes(coin_id: attributes[:coin_number])
         attributes[:loan] = loan_attributes(coin_id: attributes[:coin_number])
 
-        resources << new_resource(klass: Coin, **attributes)
+        resources << new_resource(klass: Numismatics::Coin, **attributes)
       end
 
       resources.map(&:id)
@@ -367,9 +367,9 @@ class NumismaticsImportService
       attributes[:member_of_collection_ids] = [collection_id]
 
       # Map ids from old database to the corresponding Valkyrie resource ids
-      attributes[:numismatic_place_id] = valkyrie_id(value: attributes[:numismatic_place_id], model: NumismaticPlace)
-      attributes[:ruler_id] = valkyrie_id(value: attributes[:ruler_id], model: NumismaticPerson)
-      attributes[:master_id] = valkyrie_id(value: attributes[:master_id], model: NumismaticPerson)
+      attributes[:numismatic_place_id] = valkyrie_id(value: attributes[:numismatic_place_id], model: Numismatics::Place)
+      attributes[:ruler_id] = valkyrie_id(value: attributes[:ruler_id], model: Numismatics::Person)
+      attributes[:master_id] = valkyrie_id(value: attributes[:master_id], model: Numismatics::Person)
       attributes[:numismatic_monogram_ids] = issue_monogram_ids(issue_id: attributes[:issue_number])
 
       # Add nested properties
@@ -380,7 +380,7 @@ class NumismaticsImportService
       attributes[:obverse_attribute] = numismatic_attributes.attributes_by_issue(issue_id: attributes[:issue_number], side: "obverse").map(&:to_h)
       attributes[:reverse_attribute] = numismatic_attributes.attributes_by_issue(issue_id: attributes[:issue_number], side: "reverse").map(&:to_h)
 
-      resource = new_resource(klass: NumismaticIssue, **attributes)
+      resource = new_resource(klass: Numismatics::Issue, **attributes)
 
       # Add child coins
       change_set_persister.buffer_into_index do |buffered_change_set_persister|
@@ -395,7 +395,7 @@ class NumismaticsImportService
     def artist_attributes(issue_id:)
       artists.attributes_by_issue(issue_id: issue_id).map do |record|
         person = record[:person_id] ? "person-#{record[:person_id]}" : nil
-        record[:person_id] = valkyrie_id(value: person, model: NumismaticPerson)
+        record[:person_id] = valkyrie_id(value: person, model: Numismatics::Person)
         record.to_h
       end
     end
@@ -406,7 +406,7 @@ class NumismaticsImportService
 
     def coin_citation_attributes(coin_id:)
       coin_citations.attributes_by_coin(coin_id: coin_id).map do |record|
-        record[:numismatic_reference_id] = valkyrie_id(value: record[:numismatic_reference_id], model: NumismaticReference)
+        record[:numismatic_reference_id] = valkyrie_id(value: record[:numismatic_reference_id], model: Numismatics::Reference)
         record.to_h
       end
     end
@@ -425,7 +425,7 @@ class NumismaticsImportService
 
     def issue_citation_attributes(issue_id:)
       issue_citations.attributes_by_issue(issue_id: issue_id).map do |record|
-        record[:numismatic_reference_id] = valkyrie_id(value: record[:numismatic_reference_id], model: NumismaticReference)
+        record[:numismatic_reference_id] = valkyrie_id(value: record[:numismatic_reference_id], model: Numismatics::Reference)
         record.to_h
       end
     end
@@ -436,7 +436,7 @@ class NumismaticsImportService
 
     def issue_monogram_ids(issue_id:)
       issue_monograms.ids_by_issue(issue_id: issue_id).map do |id|
-        valkyrie_id(value: id.to_s, model: NumismaticMonogram)
+        valkyrie_id(value: id.to_s, model: Numismatics::Monogram)
       end
     end
 
@@ -451,8 +451,8 @@ class NumismaticsImportService
     def loan_attributes(coin_id:)
       loans.attributes_by_coin(coin_id: coin_id).map do |record|
         person = record[:person_id] ? "person-#{record[:person_id]}" : nil
-        record[:person_id] = valkyrie_id(value: person, model: NumismaticPerson)
-        record[:firm_id] = valkyrie_id(value: record[:firm_id], model: NumismaticFirm)
+        record[:person_id] = valkyrie_id(value: person, model: Numismatics::Person)
+        record[:firm_id] = valkyrie_id(value: record[:firm_id], model: Numismatics::Firm)
         record.to_h
       end
     end
@@ -462,14 +462,14 @@ class NumismaticsImportService
     end
 
     def numismatic_attributes
-      @numismatic_attributes ||= NumismaticAttributes.new(db_adapter: db_adapter)
+      @numismatic_attributes ||= Attributes.new(db_adapter: db_adapter)
     end
 
     def provenance_attributes(coin_id:)
       provenances.attributes_by_coin(coin_id: coin_id).map do |record|
         person = record[:person_id] ? "person-#{record[:person_id]}" : nil
-        record[:person_id] = valkyrie_id(value: person, model: NumismaticPerson)
-        record[:firm_id] = valkyrie_id(value: record[:firm_id], model: NumismaticFirm)
+        record[:person_id] = valkyrie_id(value: person, model: Numismatics::Person)
+        record[:firm_id] = valkyrie_id(value: record[:firm_id], model: Numismatics::Firm)
         record.to_h
       end
     end

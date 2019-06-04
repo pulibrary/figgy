@@ -709,7 +709,7 @@ RSpec.describe ManifestBuilder do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: numismatic_issue.id)) }
     let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
     let(:numismatic_issue) { FactoryBot.create_for_repository(:numismatic_issue) }
-    let(:change_set) { NumismaticIssueChangeSet.new(numismatic_issue, member_ids: [coin1.id, coin2.id, coin3.id]) }
+    let(:change_set) { Numismatics::IssueChangeSet.new(numismatic_issue, member_ids: [coin1.id, coin2.id, coin3.id]) }
     let(:coin1) { FactoryBot.create_for_repository(:coin, files: [file1]) }
     let(:coin2) { FactoryBot.create_for_repository(:coin, files: [file2]) }
     let(:coin3) { FactoryBot.create_for_repository(:coin) }
@@ -723,8 +723,8 @@ RSpec.describe ManifestBuilder do
       output = manifest_builder.build
       expect(output["@type"]).to eq "sc:Collection"
       expect(output["manifests"].length).to eq 2
-      expect(output["manifests"][0]["label"]).to eq ["Coin: 1"]
-      expect(output["manifests"][1]["label"]).to eq ["Coin: 2"]
+      expect(output["manifests"][0]["label"]).to eq ["Numismatics::Coin: 1"]
+      expect(output["manifests"][1]["label"]).to eq ["Numismatics::Coin: 2"]
     end
   end
 end

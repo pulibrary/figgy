@@ -6,7 +6,7 @@ module ApplicationHelper
   # Figgy resource types that can be created in the UI
   # @return [Array<Resource>]
   def all_works
-    [ScannedResource, ScannedMap, RasterResource, VectorResource, NumismaticIssue, Playlist]
+    [ScannedResource, ScannedMap, RasterResource, VectorResource, Numismatics::Issue, Playlist]
   end
 
   # Localized application name

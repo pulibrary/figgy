@@ -62,7 +62,7 @@ Metrics/ClassLength:
     - 'app/change_sets/change_set.rb'
     - 'app/change_set_persisters/change_set_persister.rb'
     - 'app/resources/ephemera_folders/ephemera_folder_change_set_base.rb'
-    - 'app/resources/numismatic_issues/numismatic_issue_change_set.rb'
+    - 'app/resources/numismatics/issues/numismatics/issue_change_set.rb'
     - 'app/change_sets/scanned_resource_change_set.rb'
     - 'app/models/ability.rb'
     - 'app/resources/ephemera_folders/ephemera_folder_decorator.rb'
@@ -72,7 +72,7 @@ Metrics/ClassLength:
     - 'app/services/geo_resource_reindexer.rb'
     - 'app/services/ingest_ephemera_service.rb'
     - 'app/utils/data_seeder.rb'
-    - 'app/resources/coins/orangelight_coin_builder.rb'
+    - 'app/resources/numismatics/coins/orangelight_coin_builder.rb'
     - 'app/resources/scanned_resources/scanned_resource_decorator.rb'
     - 'app/resources/scanned_maps/scanned_map_decorator.rb'
     - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
@@ -97,7 +97,7 @@ Metrics/ClassLength:
     - 'app/controllers/bulk_ingest_controller.rb'
     - 'app/controllers/application_controller.rb'
     - 'app/controllers/base_resource_controller.rb'
-    - 'app/resources/numismatic_issues/numismatic_issue_decorator.rb'
+    - 'app/resources/numismatics/issues/numismatics/issue_decorator.rb'
     - 'app/resources/coins/coins_controller.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
@@ -138,8 +138,8 @@ Metrics/MethodLength:
     - 'app/models/ability.rb'
     - 'app/models/controlled_vocabulary.rb'
     - 'app/resources/scanned_resources/simple_change_set.rb'
-    - 'app/resources/numismatic_issues/numismatic_issue_change_set.rb'
-    - 'app/resources/coins/coin_change_set.rb'
+    - 'app/resources/numismatics/issues/numismatics/issue_change_set.rb'
+    - 'app/resources/numismatics/coins/numismatics/coin_change_set.rb'
     - 'app/controllers/base_resource_controller.rb'
     - 'app/services/pdf_generator.rb'
     - 'app/services/file_appender.rb'
@@ -180,7 +180,7 @@ Metrics/ParameterLists:
     - 'app/services/music_import_service/recording_collector.rb'
     - 'app/services/music_import_service.rb'
     - 'app/services/numismatics_import_service.rb'
-    - 'app/jobs/numismatic_issue_import_job.rb'
+    - 'app/jobs/issue_import_job.rb'
 Metrics/PerceivedComplexity:
   Exclude:
     - 'app/services/pdf_generator/canvas.rb'
@@ -233,9 +233,6 @@ RSpec/ExampleLength:
 RSpec/FilePath:
   Exclude:
     - 'spec/registered_adapter_spec.rb'
-RSpec/InstanceVariable:
-  Exclude:
-    - 'spec/resources/coins/coins_controller_spec.rb'
 RSpec/MessageChain:
   Exclude:
     - 'spec/resources/file_sets/file_set_decorator_spec.rb'
@@ -252,7 +249,7 @@ RSpec/NestedGroups:
     - 'spec/change_set_persisters/change_set_persister_spec.rb'
     - 'spec/requests/scanned_resource_spec.rb'
     - 'spec/controllers/bulk_ingest_controller_spec.rb'
-    - 'spec/resources/numismatic_monograms/numismatic_monograms_controller_spec.rb'
+    - 'spec/resources/numismatics/monograms/numismatics/monograms_controller_spec.rb'
     - 'spec/helpers/application_helper_spec.rb'
     - 'spec/requests/viewer_config_spec.rb'
 RSpec/VerifiedDoubles:
