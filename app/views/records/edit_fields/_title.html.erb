@@ -1,6 +1,11 @@
 <% if f.object.respond_to?(:source_metadata_identifier) %>
-  <%= f.input :title, as: :multi_value, readonly: f.object.source_metadata_identifier.present?, input_html: { class: 'mutex' } %>
-  <%= hidden_field_tag 'mutex_field', f.object.title.first || f.object.source_metadata_identifier, required: true %>
+  <% if f.object.multiple? :title %>
+    <%= f.input :title, as: :multi_value, readonly: f.object.source_metadata_identifier.present?, input_html: { class: 'mutex' } %>
+    <%= hidden_field_tag 'mutex_field', f.object.title.first || f.object.source_metadata_identifier, required: true %>
+  <% else %>
+    <%= f.input :title, readonly: f.object.source_metadata_identifier.present?, input_html: { class: 'mutex' } %>
+    <%= hidden_field_tag 'mutex_field', f.object.title || f.object.source_metadata_identifier, required: true %>
+  <% end %>
 <% elsif f.object.multiple? :title %>
   <%= f.input :title, as: :multi_value, input_html: { class: 'form-control' }, required: f.object.required?(key) %>
 <% else %>
