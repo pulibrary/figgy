@@ -31,7 +31,8 @@ class FileMetadata < Valkyrie::Resource
 
   # preservation attributes
   # ID of the object this node is a preservation copy of. Points to another
-  # FileMetadata ID, and used for checking if something is already preserved.
+  # FileMetadata ID (in a PreservationObject), and used for checking if something is
+  # already preserved.
   attribute :preservation_copy_of_id, Valkyrie::Types::ID.optional
 
   def self.for(file:)
