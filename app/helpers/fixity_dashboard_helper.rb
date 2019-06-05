@@ -15,6 +15,17 @@ module FixityDashboardHelper
     end
   end
 
+  def format_cloud_fixity_success(val)
+    case val
+    when nil
+      "in progress"
+    when "FAILURE"
+      "failed"
+    when "SUCCESS"
+      "succeeded"
+    end
+  end
+
   def fixity_success_level(val)
     case val
     when nil

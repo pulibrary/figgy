@@ -35,4 +35,28 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
   end
 
   delegate :downloadable?, to: :parent
+
+  def cloud_fixity_success_of(file_id)
+    cloud_fixity_events_for(file_id).max(&:created_at)&.status
+  end
+
+  def cloud_fixity_last_success_date_of(file_id)
+    cloud_fixity_events_for(file_id).select { |e| e.status == "SUCCESS" }.map(&:updated_at).max || "n/a"
+  end
+
+  def custom_queries
+    Valkyrie.config.metadata_adapter.query_service.custom_queries
+  end
+
+  def cloud_fixity_events_for(file_id)
+    custom_queries.find_by_property(property: :child_id, value: preservation_id_of(file_id))
+  end
+
+  def preservation_id_of(file_id)
+    preservation_binaries.select { |b| b.preservation_copy_of_id == file_id }.map(&:id).first
+  end
+
+  def preservation_binaries
+    preservation_objects.first&.binary_nodes || []
+  end
 end
