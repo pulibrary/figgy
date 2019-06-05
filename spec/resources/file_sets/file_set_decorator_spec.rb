@@ -66,7 +66,7 @@ RSpec.describe FileSetDecorator do
 
     it "differentiates between the good and bad files" do
       expect(decorator.cloud_fixity_success_of(good_file.id)).to eq("SUCCESS")
-      expect(decorator.cloud_fixity_last_success_date_of(good_file.id)).to eq(good_event.updated_at)
+      expect(decorator.cloud_fixity_last_success_date_of(good_file.id)).to eq(good_event.created_at)
 
       expect(decorator.cloud_fixity_success_of(bad_file.id)).to eq("FAILURE")
       expect(decorator.cloud_fixity_last_success_date_of(bad_file.id)).to eq("n/a")
