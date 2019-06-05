@@ -949,7 +949,6 @@ DEPENDENCIES
   ruby_tika_app!
   rubyzip (>= 1.2.2)
   sass-rails (~> 5.0)
-  selenium-webdriver
   shrine-google_cloud_storage
   sidekiq
   simple_form
