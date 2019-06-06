@@ -225,8 +225,8 @@ GEM
     capybara-screenshot (1.0.22)
       capybara (>= 1.0, < 4)
       launchy
-    childprocess (0.7.1)
-      ffi (~> 1.0, >= 1.0.11)
+    childprocess (1.0.1)
+      rake (< 13.0)
     chronic (0.10.2)
     cocoon (1.2.12)
     coderay (1.1.1)
@@ -329,7 +329,7 @@ GEM
       i18n (~> 0.5)
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
-    ffi (1.10.0)
+    ffi (1.11.1)
     flutie (2.0.0)
     font-awesome-rails (4.7.0.4)
       railties (>= 3.2, < 6.0)
@@ -538,7 +538,7 @@ GEM
       net-ssh (>= 2.6.5)
     net-ssh (4.1.0)
     nio4r (2.3.1)
-    nokogiri (1.10.1)
+    nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
     normalize-rails (4.1.1)
     oauth2 (1.4.1)
@@ -699,7 +699,7 @@ GEM
     ruby-progressbar (1.9.0)
     ruby-rc4 (0.1.5)
     ruby_dep (1.5.0)
-    rubyzip (1.2.2)
+    rubyzip (1.2.3)
     safe_yaml (1.0.4)
     sass (3.7.3)
       sass-listen (~> 4.0.0)
@@ -716,9 +716,9 @@ GEM
       ffi (~> 1.9)
       rake
     scrub_rb (1.0.1)
-    selenium-webdriver (3.4.4)
-      childprocess (~> 0.5)
-      rubyzip (~> 1.0)
+    selenium-webdriver (3.142.3)
+      childprocess (>= 0.5, < 2.0)
+      rubyzip (~> 1.2, >= 1.2.2)
     sequel (5.20.0)
     sequel_pg (1.12.1)
       pg (>= 0.18.0)
@@ -839,7 +839,7 @@ GEM
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
       railties (>= 5.0)
-    webdrivers (3.8.0)
+    webdrivers (4.0.0)
       nokogiri (~> 1.6)
       rubyzip (~> 1.0)
       selenium-webdriver (~> 3.0)
@@ -949,7 +949,6 @@ DEPENDENCIES
   ruby_tika_app!
   rubyzip (>= 1.2.2)
   sass-rails (~> 5.0)
-  selenium-webdriver
   shrine-google_cloud_storage
   sidekiq
   simple_form
@@ -969,7 +968,7 @@ DEPENDENCIES
   valkyrie-sequel (= 1.1.0)
   valkyrie-shrine
   web-console
-  webdrivers (~> 3.0)
+  webdrivers
   webmock
   webpacker (>= 4.0.x)
   whenever (~> 0.10)
