@@ -38,5 +38,10 @@ defmodule ExManifestApiResourceTest do
     assert output.id == "https://test.com/#{scanned_resource.id}/manifest"
     assert output.label == "Test Title"
     assert length(output.canvas_nodes) == 1
+
+    %{canvas_nodes: [canvas_node]} = output
+
+    assert canvas_node.id == "https://test.com/#{scanned_resource.id}/manifest/canvas/#{file_set.id}"
+    assert canvas_node.format == "image/tiff"
   end
 end

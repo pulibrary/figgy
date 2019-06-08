@@ -26,12 +26,15 @@ defmodule ExManifestApi.Resource do
     %ExIiifManifest.Resource{
       id: resource.id |> to_manifest_url,
       label: hd(resource.metadata.title),
-      canvas_nodes: resource |> members |> Enum.map(&to_image_node/1)
+      canvas_nodes: resource |> members |> Enum.map(&to_image_node(resource, &1))
     }
   end
 
   defp to_manifest_url(id) do
     "https://test.com/#{id}/manifest"
+  end
+  defp to_manifest_url(parent_id, canvas_id) do
+    "#{to_manifest_url(parent_id)}/canvas/#{canvas_id}"
   end
 
   def members(%{id: id}) do
@@ -48,7 +51,21 @@ defmodule ExManifestApi.Resource do
     |> ExManifestApi.Repo.all()
   end
 
-  defp to_image_node(file_set = %{internal_resource: "FileSet"}) do
-    %ExIiifManifest.ImageNode{}
+  defp to_image_node(parent_resource, file_set = %{internal_resource: "FileSet"}) do
+    %ExIiifManifest.ImageNode{
+      id: to_manifest_url(parent_resource.id, file_set.id),
+      format: hd(Map.get(original_file(file_set), "mime_type"))
+    }
+  end
+
+  defp original_file(%{metadata: %{"file_metadata" => file_metadata}}) do
+    file_metadata
+    |> Enum.find(&original_file?/1)
+  end
+  defp original_file?(%{"use" => [%{"@id" => "http://pcdm.org/use#OriginalFile"}]}) do
+    true
+  end
+  defp original_file?(%{}) do
+    false
   end
 end
