@@ -8,7 +8,7 @@ defmodule ExIiifManifestTest do
       viewingDirection: "left-to-right",
       label: "My Manifest",
       canvas_nodes: [
-        %ExIiifManifest.CanvasNode{
+        %ExIiifManifest.ImageNode{
           id: "https://test.example.com/1/2",
           label: "Page 1",
           type: "Image",
