@@ -5,6 +5,7 @@ defmodule ExIiifManifest.Resource do
   defstruct [
     :id,
     :viewingDirection,
-    :label
+    :label,
+    :canvas_nodes
   ]
 end
