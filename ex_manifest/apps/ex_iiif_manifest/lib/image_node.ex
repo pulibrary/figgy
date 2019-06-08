@@ -4,11 +4,11 @@ defmodule ExIiifManifest.ImageNode do
   """
   defstruct [
     :id,
+    :download_path,
     :label,
     :width,
     :height,
     :format,
-    :iiif_endpoint,
-    type: "Image"
+    :iiif_endpoint
   ]
 end

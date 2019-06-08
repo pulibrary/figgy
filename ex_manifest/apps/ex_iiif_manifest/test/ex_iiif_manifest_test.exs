@@ -11,10 +11,10 @@ defmodule ExIiifManifestTest do
         %ExIiifManifest.ImageNode{
           id: "https://test.example.com/1/2",
           label: "Page 1",
-          type: "Image",
           width: "1000",
           height: "500",
           format: "image/jpeg",
+          download_path: "https://test.example.com/download/2",
           iiif_endpoint: %ExIiifManifest.Endpoint{
             id: "https://imageserver.com/1",
             type: "ImageService2",
@@ -38,5 +38,34 @@ defmodule ExIiifManifestTest do
 
     assert %{viewingDirection: "left-to-right"} = output
     assert %{label: %{"@none": ["My Manifest"]}} = output
+
+    %{items: items} = output
+    assert length(items) == 1
+    canvas = hd(items)
+    assert %{id: "https://test.example.com/1/2"} = canvas
+    assert %{type: "Canvas"} = canvas
+    assert %{label: %{"@none": ["Page 1"]}} = canvas
+    assert %{height: 500, width: 1000} = canvas
+
+    %{items: items} = canvas
+    assert length(items) == 1
+    annotation = hd(items)
+    assert %{type: "AnnotationPage"} = annotation
+    assert %{
+      items: [
+        %{
+          type: "Annotation",
+          motivation: "painting",
+          target: "https://test.example.com/1/2",
+          body: %{
+            id: "https://test.example.com/download/2",
+            type: "Image",
+            format: "image/jpeg",
+            width: 1000,
+            height: 500
+          }
+        }
+      ]
+    } = annotation
   end
 end
