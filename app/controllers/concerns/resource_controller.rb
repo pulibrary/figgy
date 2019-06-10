@@ -11,10 +11,6 @@ module ResourceController
   def new
     @change_set = change_set_class.new(new_resource, append_id: params[:parent_id]).prepopulate!
     authorize! :create, resource_class
-  rescue NameError # This handles cases where the ChangeSet name cannot be resolved
-    Rails.logger.error("ScannedResources do not support #{params[:change_set]} as a ChangeSet.")
-    flash[:error] = "#{params[:change_set]} is not a valid resource type."
-    redirect_to new_scanned_resource_path
   end
 
   def new_resource
