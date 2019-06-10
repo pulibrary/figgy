@@ -37,7 +37,7 @@ RSpec.describe CreateDerivativesJob do
 
       before do
         allow(jp2_derivative_service).to receive(:cleanup_derivatives)
-        allow(jp2_derivative_service).to receive(:create_derivatives).and_raise(MiniMagick::Error)
+        allow(jp2_derivative_service).to receive(:create_derivatives).and_raise(MiniMagick::Error, "ImageMagick/GraphicsMagick is not installed")
         allow(Valkyrie::Derivatives::DerivativeService).to receive(:for).and_return(jp2_derivative_service)
         allow(Valkyrie.logger).to receive(:error)
       end
@@ -48,7 +48,7 @@ RSpec.describe CreateDerivativesJob do
         reloaded = query_service.find_by(id: file_set.id)
         expect(reloaded.thumbnail_files).to be_empty
 
-        expect(Valkyrie.logger).to have_received(:error).with(/Failed to generate derivatives for #{file_set.id}: MiniMagick::Error/)
+        expect(Valkyrie.logger).to have_received(:error).with("Failed to generate derivatives for #{file_set.id}: MiniMagick::Error: ImageMagick/GraphicsMagick is not installed")
       end
     end
 
