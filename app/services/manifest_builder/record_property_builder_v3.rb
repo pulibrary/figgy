@@ -13,10 +13,37 @@ class ManifestBuilder
           { "@context" => "http://universalviewer.io/context.json", "profile" => "http://universalviewer.io/ui-extensions-profile", "disableUI" => ["mediaDownload"] }
         ]
       end
+      manifest["posterCanvas"] = poster_canvas_builder.canvas unless poster_image_record.nil?
       manifest
     end
 
+    delegate :resource, to: :record
+
     private
+
+      def decorated
+        resource.decorate
+      end
+
+      def file_sets
+        return [] unless decorated.respond_to?(:file_sets)
+        decorated.file_sets
+      end
+
+      def image_file_sets
+        file_sets.select(&:image?)
+      end
+
+      def poster_image_record
+        return nil if image_file_sets.empty?
+        image_file_set = image_file_sets.first
+
+        ManifestBuilder::LeafNode.new(image_file_set, record)
+      end
+
+      def poster_canvas_builder
+        canvas_builder_factory.canvas_builder_factory.new(poster_image_record, record)
+      end
 
       def viewing_direction
         (record.respond_to?(:viewing_direction) && record.send(:viewing_direction))

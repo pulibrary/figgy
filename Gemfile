@@ -93,7 +93,7 @@ gem "geo_works-derivatives", github: "pulibrary/geo_works-derivatives", tag: "v0
 gem "graphql"
 gem "hydra-head"
 gem "hydra-role-management"
-gem "iiif_manifest", "0.5.0"
+gem "iiif_manifest", git: "https://github.com/samvera-labs/iiif_manifest"
 gem "iso-639"
 gem "jquery-datatables-rails", "~> 3.4.0"
 gem "json-schema"

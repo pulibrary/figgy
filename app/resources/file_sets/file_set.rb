@@ -86,6 +86,10 @@ class FileSet < Resource
     Array.wrap(mime_type).first.to_s.include?("audio/")
   end
 
+  def image?
+    Array.wrap(mime_type).first.to_s.include?("image/")
+  end
+
   private
 
     def original_file_checksum

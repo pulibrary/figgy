@@ -143,7 +143,7 @@ RSpec.describe ManifestBuilder do
       first_image = output["sequences"][0]["canvases"][0]["images"][0]
 
       expect(first_image["@id"]).to eq "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest/image/#{scanned_resource.member_ids.first}"
-      expect(first_image["resource"]["@id"]).to eq "http://www.example.com/image-service/#{scanned_resource.member_ids.first}/full/!1000,/0/default.jpg"
+      expect(first_image["resource"]["@id"]).to eq "http://www.example.com/image-service/#{scanned_resource.member_ids.first}/full/1000,/0/default.jpg"
       expect(output["sequences"][0]["canvases"][0]["local_identifier"]).to eq "p79409x97p"
 
       canvas_renderings = output["sequences"][0]["canvases"][0]["rendering"]
@@ -328,6 +328,56 @@ RSpec.describe ManifestBuilder do
             first_annotation_page = last_canvas["items"].first
             first_annotation = first_annotation_page["items"].first
             expect(first_annotation["body"]["id"]).to be nil
+          end
+        end
+
+        context "when the recording has FileSets for the XML metadata file, an image file, and two audio files", run_real_derivatives: true do
+          with_queue_adapter :inline
+          subject(:manifest_builder) { described_class.new(recording) }
+
+          let(:file1) { fixture_file_upload("files/audio_file.wav") }
+          let(:file2) { fixture_file_upload("files/example.tif") }
+          let(:recording) { FactoryBot.create_for_repository(:recording, files: [file1, file2]) }
+          let(:file_set1) do
+            recording.decorate.decorated_file_sets.first
+          end
+          let(:file_set2) do
+            recording.decorate.decorated_file_sets.last
+          end
+
+          it "render the image as a background file" do
+            manifest_builder
+            output = manifest_builder.build
+
+            expect(output).not_to be_empty
+            expect(output).to include("items")
+            items = output["items"]
+            expect(items.length).to eq(1)
+
+            audio_canvas = items.first
+            pages = audio_canvas["items"]
+            expect(pages.length).to eq(1)
+
+            annotations = pages.first["items"]
+            expect(annotations.length).to eq(1)
+
+            body = annotations.last["body"]
+            expect(body["label"]).to eq("@none" => ["audio_file.wav"])
+
+            expect(output).to include("posterCanvas")
+            poster_canvas = output["posterCanvas"]
+
+            pages = poster_canvas["items"]
+            expect(pages.length).to eq(1)
+
+            annotations = pages.first["items"]
+            expect(annotations.length).to eq(1)
+
+            body = annotations.last["body"]
+            expect(body["type"]).to eq("Image")
+            expect(body["height"]).to eq(287)
+            expect(body["width"]).to eq(200)
+            expect(body["format"]).to eq("image/jpeg")
           end
         end
       end
