@@ -127,11 +127,13 @@ Webpacker documentation assumes use of yarn as a javascript package manager. Our
 
 By default, Figgy provides users with the ability to upload binaries from the local file system environment using the directory [https://github.com/pulibrary/figgy/tree/master/staged_files](/staged_files).  One may copy files into this directory for aiding in development, and may upload these files in this directory using the "File Manager" interface (exposed after saving a Work).
 
-### Cloud Storage Support
+### Google Drive Storage Support
 
 Figgy may also be configured to upload files from hosted storage providers.  Support for users with Google Drive accounts has been tested and verified.  [Please reference the Browse Everything documentation for more details](https://github.com/pulibrary/figgy/blob/master/BROWSE_EVERYTHING.md).
 
 ## Preservation Configuration in Development
+
+Figgy uses Google Cloud Storage buckets for providing support for preserving certain resources.  Please find further documentation outlining the configuration for Google Cloud service authentication and permissions management [here](https://github.com/pulibrary/figgy/blob/master/GOOGLE_CLOUD_STORAGE.md).
 
 By default, in development, preserved objects will be stored in the directory
 "tmp/cloud_backup." If you'd like to configure and test Google Cloud storage

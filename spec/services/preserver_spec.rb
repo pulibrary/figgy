@@ -1,0 +1,89 @@
+# frozen_string_literal: true
+require "rails_helper"
+include ActionDispatch::TestProcess
+
+describe Preserver do
+  with_queue_adapter :inline
+
+  subject(:preserver) { described_class.new(change_set: change_set, change_set_persister: change_set_persister, storage_adapter: storage_adapter) }
+  let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+  let(:resource) do
+    FactoryBot.create_for_repository(:complete_scanned_resource,
+                                     preservation_policy: "cloud",
+                                     files: [file])
+  end
+  let(:unpreserved_resource) do
+    FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
+  end
+  let(:preservation_objects) { Wayfinder.for(resource).preservation_objects }
+  let(:preservation_object) { preservation_objects.first }
+  let(:shoulder) { "99999/fk4" }
+  let(:blade) { "123456" }
+  let(:change_set) { ScannedResourceChangeSet.new(unpreserved_resource) }
+  let(:storage_adapter) { instance_double(Valkyrie::Storage::Disk) }
+  let(:valkyrie_file) { FileMetadata.new(id: SecureRandom.uuid) }
+  let(:change_set_persister) do
+    ChangeSetPersister.new(
+      metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
+      storage_adapter: storage_adapter
+    )
+  end
+  let(:digest_md5) { instance_double(Digest::MD5) }
+  let(:digest_md5_2) { instance_double(Digest::MD5) }
+
+  describe "#preserve!" do
+    before do
+      stub_ezid(shoulder: shoulder, blade: blade)
+    end
+
+    it "preserves the metadata node" do
+      expect(preservation_object.metadata_node).not_to be nil
+      expect(preservation_object.metadata_node).to be_a FileMetadata
+      expect(preservation_object.metadata_node).to be_preserved_metadata
+    end
+
+    it "calculates the MD5 checksum" do
+      allow(storage_adapter).to receive(:upload).and_return(valkyrie_file)
+
+      preserver.preserve!
+
+      preserved = Wayfinder.for(unpreserved_resource).preservation_objects
+      local_checksum = preserved.first.metadata_node.checksum.first.md5
+      local_checksum_hex = [local_checksum].pack("H*")
+      local_md5_checksum = Base64.strict_encode64(local_checksum_hex)
+
+      expect(storage_adapter).to have_received(:upload).with(
+        hash_including(md5: local_md5_checksum)
+      )
+    end
+
+    context "when retrieving Preservation" do
+      let(:file_set) do
+        resource.decorate.file_sets.first
+      end
+      let(:preservation_objects) do
+        Wayfinder.for(file_set).preservation_objects
+      end
+      let(:change_set) { FileSetChangeSet.new(file_set) }
+
+      it "preserves all binary nodes" do
+        preservation_object
+        expect(preservation_object.binary_nodes).not_to be_empty
+        expect(preservation_object.binary_nodes.first).to be_a FileMetadata
+        expect(preservation_object.binary_nodes.first).not_to eq file_set.file_metadata.first
+      end
+
+      it "calculates the MD5 checksum" do
+        allow(storage_adapter).to receive(:upload).and_return(valkyrie_file)
+        allow(digest_md5_2).to receive(:base64digest).and_return("deKdu2vsqTLDbKQSHLietg==")
+        allow(Digest::MD5).to receive(:file).and_return(digest_md5_2)
+
+        preserver.preserve!
+
+        expect(storage_adapter).to have_received(:upload).with(
+          hash_including(md5: "Kij7cCKGeCssvy7ZpQQasQ==")
+        )
+      end
+    end
+  end
+end
