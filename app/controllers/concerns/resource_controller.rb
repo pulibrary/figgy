@@ -9,8 +9,14 @@ module ResourceController
   end
 
   def new
-    @change_set = change_set_class.new(new_resource, append_id: params[:parent_id]).prepopulate!
-    authorize! :create, resource_class
+    if change_set_class.nil?
+      Valkyrie.logger.error("Failed to find the ChangeSet class for #{change_set_param}.")
+      flash[:error] = "#{change_set_param} is not a valid resource type."
+      redirect_to new_scanned_resource_path
+    else
+      @change_set = change_set_class.new(new_resource, append_id: params[:parent_id]).prepopulate!
+      authorize! :create, resource_class
+    end
   end
 
   def new_resource
@@ -143,5 +149,9 @@ module ResourceController
 
     def find_resource(id)
       query_service.find_by(id: Valkyrie::ID.new(id))
+    end
+
+    def change_set_param
+      params[:change_set] || (resource_params && resource_params[:change_set])
     end
 end

@@ -22,15 +22,11 @@ class ScannedResourcesController < BaseResourceController
   end
 
   def change_set_class
-    if params[:change_set].present? || (resource_params && resource_params[:change_set].present?)
-      change_set_name = params[:change_set] || resource_params[:change_set]
-      DynamicChangeSet.class_from_param(change_set_name)
+    if change_set_param.present?
+      DynamicChangeSet.class_from_param(change_set_param)
     else
       DynamicChangeSet
     end
-  rescue NameError
-    Valkyrie.logger.error("Failed to find the ChangeSet class for #{change_set_name}.")
-    DynamicChangeSet
   end
 
   def handle_save_and_ingest(obj)

@@ -61,7 +61,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
       end
       it "creates a new ScannedResource and flashes a warning" do
         get :new, params: { change_set: "invalid" }
-        expect(Valkyrie.logger).to have_received(:error).with("Failed to find the ChangeSet class for invalid.")
+        expect(Valkyrie.logger).to have_received(:error).with("Failed to find the ChangeSet class for invalid.").at_least(:once)
       end
     end
   end
