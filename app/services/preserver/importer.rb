@@ -38,7 +38,7 @@ class Preserver
 
     def import!
       fs = build_file_set(metadata_file_identifier)
-      fs_change_set = FileSetChangeSet.new(fs)
+      fs_change_set = DynamicChangeSet.new(fs)
 
       files = import_binary_nodes(binary_file_identifiers)
       fs_change_set.validate(files: files)
@@ -51,6 +51,10 @@ class Preserver
     end
 
     private
+
+      def resource_class
+        FileSet
+      end
 
       def build_id(json)
         Valkyrie::ID.new(json["id"])
@@ -69,16 +73,22 @@ class Preserver
       end
 
       def build_file_set(file_identifier)
-        return {} if file_identifier.nil?
-        file = storage_adapter.find_by(id: file_identifier)
+        return resource_class.new if file_identifier.nil?
+        metadata_file = storage_adapter.find_by(id: file_identifier)
 
-        file_contents = file.read
-        metadata_json = JSON.parse(file_contents)
+        metadata_file_contents = metadata_file.read
+        metadata_json = JSON.parse(metadata_file_contents)
+        metadata_json.delete("file_metadata")
         resource_object = { metadata: metadata_json }
-        Valkyrie.config.metadata_adapter.resource_factory.to_resource(object: resource_object)
+        file_set = Valkyrie.config.metadata_adapter.resource_factory.to_resource(object: resource_object)
+        optimistic_lock_token = metadata_json["optimistic_lock_token"].map do |lock_json|
+          build_optimistic_lock_token(lock_json)
+        end
+        file_set.optimistic_lock_token = optimistic_lock_token
+        file_set
       rescue Valkyrie::StorageAdapter::FileNotFound => not_found_error
         Rails.logger.error("#{file_identifier} could not be retrieved: #{not_found_error.message}")
-        {}
+        resource_class.new
       end
 
       def import_binary_node(file_identifier)
