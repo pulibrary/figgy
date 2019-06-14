@@ -4,7 +4,6 @@ defmodule ExManifestApiResourceTest do
   setup do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
   end
-  require IEx
   test "converting a resource to a manifest" do
     {:ok, file_set} = Repo.insert(%Resource{
       internal_resource: "FileSet",
@@ -19,7 +18,7 @@ defmodule ExManifestApiResourceTest do
             width: ["500"]
           },
           %{
-            id: [%{id: "file_metadata_id_2"}],
+            id: %{id: "file_metadata_id_2"},
             use: [%{"@id": "http://pcdm.org/use#ServiceFile"}],
             mime_type: ["image/jp2"],
             file_identifiers: [%{id: "disk://01/02/03/derivative.jp2"}]
@@ -38,23 +37,22 @@ defmodule ExManifestApiResourceTest do
     scanned_resource = Repo.get!(Resource, scanned_resource.id)
     output = scanned_resource |> Manifest.to_manifest
 
-    assert output.id == "https://test.com/#{scanned_resource.id}/manifest"
+    assert output.id == "http://localhost:4002/#{scanned_resource.id}/manifest"
     assert output.label == "Test Title"
     assert length(output.canvas_nodes) == 1
 
     %{canvas_nodes: [canvas_node]} = output
 
-    assert canvas_node.id == "https://test.com/#{scanned_resource.id}/manifest/canvas/#{file_set.id}"
+    assert canvas_node.id == "http://localhost:4002/#{scanned_resource.id}/manifest/canvas/#{file_set.id}"
     assert canvas_node.format == "image/jpeg"
     assert canvas_node.width == "500"
     assert canvas_node.height == "1000"
     assert canvas_node.label == "Page 1"
-    assert canvas_node.download_path == "https://test.com/downloads/#{file_set.id}/file/file_metadata_id_2"
+    assert canvas_node.download_path == "http://localhost:3000/image-service/#{file_set.id}/full/!1000,/0/default.jpg"
 
     assert %{iiif_endpoint: endpoint = %ExIiifManifest.Endpoint{}} = canvas_node
-    assert endpoint.type == "ImageService2"
-    assert endpoint.profile == "level2"
-    assert endpoint.id == "http://imageservice.com/01%2F02%2F03%2Fderivative.jp2"
-    IEx.pry
+    assert Map.get(endpoint, :"@type") == "ImageService2"
+    assert endpoint.profile == "http://iiif.io/api/image/2/level2.json"
+    assert Map.get(endpoint, :"@id") == "http://localhost:3000/image-service/#{file_set.id}"
   end
 end

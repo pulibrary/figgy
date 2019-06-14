@@ -64,10 +64,8 @@ defmodule ExIiifManifest do
   defp create_annotation(node = %ExIiifManifest.ImageNode{}) do
     %{
       type: "AnnotationPage",
-      id: "#{node.id}/AnnotationPage",
       items: [
         %{
-          id: "#{node.id}/Annotation",
           type: "Annotation",
           motivation: "painting",
           target: node.id,

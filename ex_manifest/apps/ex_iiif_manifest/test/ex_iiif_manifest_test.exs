@@ -16,8 +16,8 @@ defmodule ExIiifManifestTest do
           format: "image/jpeg",
           download_path: "https://test.example.com/download/2",
           iiif_endpoint: %ExIiifManifest.Endpoint{
-            id: "https://imageserver.com/1",
-            type: "ImageService2",
+            "@id": "https://imageserver.com/1",
+            "@type": "ImageService2",
             profile: "level2"
           }
         }
@@ -63,11 +63,11 @@ defmodule ExIiifManifestTest do
             format: "image/jpeg",
             width: 1000,
             height: 500,
-            service: %{
-              id: "https://imageserver.com/1",
-              type: "ImageService2",
+            service: [%{
+              "@id": "https://imageserver.com/1",
+              "@type": "ImageService2",
               profile: "level2"
-            }
+            }]
           }
         }
       ]
