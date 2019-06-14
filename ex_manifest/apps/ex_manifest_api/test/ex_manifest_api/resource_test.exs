@@ -1,6 +1,6 @@
 defmodule ExManifestApiResourceTest do
   use ExUnit.Case
-  alias ExManifestApi.{Repo, Resource}
+  alias ExManifestApi.{Repo, Resource, Manifest}
   setup do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
   end
@@ -14,13 +14,14 @@ defmodule ExManifestApiResourceTest do
             id: [%{id: "file_metadata_id"}],
             use: [%{"@id": "http://pcdm.org/use#OriginalFile"}],
             mime_type: ["image/tiff"],
-            height: ["500"],
+            height: ["1000"],
             width: ["500"]
           },
           %{
             id: [%{id: "file_metadata_id_2"}],
             use: [%{"@id": "http://pcdm.org/use#ServiceFile"}],
-            mime_type: ["image/jp2"]
+            mime_type: ["image/jp2"],
+            file_identifiers: [%{id: "disk://01/02/03/derivative.jp2"}]
           }
         ]
       }
@@ -33,7 +34,7 @@ defmodule ExManifestApiResourceTest do
       }
     })
 
-    output = scanned_resource |> Resource.to_manifest
+    output = scanned_resource |> Manifest.to_manifest
 
     assert output.id == "https://test.com/#{scanned_resource.id}/manifest"
     assert output.label == "Test Title"
@@ -42,6 +43,15 @@ defmodule ExManifestApiResourceTest do
     %{canvas_nodes: [canvas_node]} = output
 
     assert canvas_node.id == "https://test.com/#{scanned_resource.id}/manifest/canvas/#{file_set.id}"
-    assert canvas_node.format == "image/tiff"
+    assert canvas_node.format == "image/jpeg"
+    assert canvas_node.width == "500"
+    assert canvas_node.height == "1000"
+    assert canvas_node.label == "Page 1"
+    assert canvas_node.download_path == "https://test.com/downloads/#{file_set.id}/file/file_metadata_id_2"
+
+    assert %{iiif_endpoint: endpoint = %ExIiifManifest.Endpoint{}} = canvas_node
+    assert endpoint.type == "ImageService2"
+    assert endpoint.profile == "level2"
+    assert endpoint.id == "http://imageservice.com/01%2F02%2F03%2Fderivative.jp2"
   end
 end
