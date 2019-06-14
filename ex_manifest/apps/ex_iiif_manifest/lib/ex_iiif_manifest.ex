@@ -38,6 +38,22 @@ defmodule ExIiifManifest do
     }
     |> apply_label(node)
     |> apply_annotation(node)
+    |> apply_thumbnail(node)
+  end
+
+  defp apply_thumbnail(manifest, node = %ExIiifManifest.ImageNode{}) do
+    manifest
+    |> Map.put(:thumbnail, [create_thumbnail(node)])
+  end
+
+  defp create_thumbnail(node = %ExIiifManifest.ImageNode{}) do
+    %{
+      id: "#{Map.get(node.iiif_endpoint, :"@id")}/full/200,/0/default.jpg",
+      type: "Image",
+      service: [
+        node.iiif_endpoint
+      ]
+    }
   end
 
   defp apply_annotation(manifest, node = %ExIiifManifest.ImageNode{}) do
@@ -48,8 +64,10 @@ defmodule ExIiifManifest do
   defp create_annotation(node = %ExIiifManifest.ImageNode{}) do
     %{
       type: "AnnotationPage",
+      id: "#{node.id}/AnnotationPage",
       items: [
         %{
+          id: "#{node.id}/Annotation",
           type: "Annotation",
           motivation: "painting",
           target: node.id,
@@ -58,7 +76,8 @@ defmodule ExIiifManifest do
             type: "Image",
             format: node.format,
             width: node.width |> ensure_int,
-            height: node.height |> ensure_int
+            height: node.height |> ensure_int,
+            service: [node.iiif_endpoint]
           }
         }
       ]

@@ -2,7 +2,7 @@ use Mix.Config
 
 # Configure your database
 config :ex_manifest_api, ExManifestApi.Repo,
-  database: "ex_manifest_api_dev",
+  database: "figgy_development",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 

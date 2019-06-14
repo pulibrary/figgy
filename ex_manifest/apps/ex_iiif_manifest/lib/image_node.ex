@@ -2,6 +2,7 @@ defmodule ExIiifManifest.ImageNode do
   @moduledoc """
   Documentation for ExIiifManifest.ImageNode
   """
+  @derive Jason.Encoder
   defstruct [
     :id,
     :download_path,

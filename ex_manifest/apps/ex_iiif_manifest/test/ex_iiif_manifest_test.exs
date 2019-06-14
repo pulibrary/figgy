@@ -62,7 +62,12 @@ defmodule ExIiifManifestTest do
             type: "Image",
             format: "image/jpeg",
             width: 1000,
-            height: 500
+            height: 500,
+            service: %{
+              id: "https://imageserver.com/1",
+              type: "ImageService2",
+              profile: "level2"
+            }
           }
         }
       ]

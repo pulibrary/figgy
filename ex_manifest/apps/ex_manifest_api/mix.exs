@@ -45,7 +45,8 @@ defmodule ExManifestApi.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:ex_iiif_manifest, in_umbrella: true }
+      {:ex_iiif_manifest, in_umbrella: true },
+      {:cors_plug, "~> 1.5"},
     ]
   end
 

@@ -4,6 +4,7 @@ defmodule ExManifestApiResourceTest do
   setup do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
   end
+  require IEx
   test "converting a resource to a manifest" do
     {:ok, file_set} = Repo.insert(%Resource{
       internal_resource: "FileSet",
@@ -34,6 +35,7 @@ defmodule ExManifestApiResourceTest do
       }
     })
 
+    scanned_resource = Repo.get!(Resource, scanned_resource.id)
     output = scanned_resource |> Manifest.to_manifest
 
     assert output.id == "https://test.com/#{scanned_resource.id}/manifest"
@@ -53,5 +55,6 @@ defmodule ExManifestApiResourceTest do
     assert endpoint.type == "ImageService2"
     assert endpoint.profile == "level2"
     assert endpoint.id == "http://imageservice.com/01%2F02%2F03%2Fderivative.jp2"
+    IEx.pry
   end
 end

@@ -3,17 +3,19 @@ defmodule ExManifestApi.Manifest do
   Documentation for ExManifestApi.Manifest
   """
   import ExManifestApi.Resource.Query
+  alias ExManifestApiWeb.Router.Helpers, as: Routes
+  alias ExManifestApiWeb.Endpoint
 
   def to_manifest(resource) do
     %ExIiifManifest.Resource{
       id: resource.id |> to_manifest_url,
-      label: hd(resource.metadata.title),
+      label: hd(Map.get(resource.metadata, "title")),
       canvas_nodes: resource |> members |> Enum.map(&to_image_node(resource, &1))
     }
   end
 
   defp to_manifest_url(id) do
-    "https://test.com/#{id}/manifest"
+    Routes.resource_url(Endpoint, :manifest, id)
   end
 
   defp to_manifest_url(parent_id, canvas_id) do
@@ -56,22 +58,26 @@ defmodule ExManifestApi.Manifest do
     file_id = file_set
          |> derivative_file
          |> Map.get("id")
-         |> hd
          |> Map.get("id")
-    "https://test.com/downloads/#{resource_id}/file/#{file_id}"
+    "#{image_service_path(resource_id)}/full/!1000,/0/default.jpg"
   end
 
   defp endpoint(file_set) do
     %ExIiifManifest.Endpoint{
-      id: file_set |> derivative_file |> image_service_path,
-      type: "ImageService2",
-      profile: "level2"
+      # id: file_set |> derivative_file |> image_service_path,
+      "@id": file_set.id |> image_service_path,
+      "@type": "ImageService2",
+      profile: "http://iiif.io/api/image/2/level2.json"
     }
   end
 
   defp image_service_path(%{"file_identifiers" => [%{"id" => image_id}]}) do
     id = image_id |> String.replace("disk://", "") |> String.replace("/", "%2F")
     "http://imageservice.com/#{id}"
+  end
+
+  defp image_service_path(id) do
+    "http://localhost:3000/image-service/#{id}"
   end
 
 end
