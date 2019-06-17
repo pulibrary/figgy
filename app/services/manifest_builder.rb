@@ -198,6 +198,7 @@ class ManifestBuilder
     end
 
     def sequence_rendering
+      return [] if audio_manifest?
       [
         {
           "@id" => helper.pdf_url(resource),
