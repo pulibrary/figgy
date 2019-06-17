@@ -259,6 +259,9 @@ RSpec.describe ManifestBuilder do
         it "generates the Canvases for the FileSets" do
           expect(output).not_to be_empty
 
+          expect(output).to include("rendering")
+          expect(output["rendering"]).to be_empty
+
           expect(output).to include("items")
           expect(output["items"].length).to eq(3)
 
