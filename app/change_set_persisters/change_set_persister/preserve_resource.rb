@@ -12,7 +12,9 @@ class ChangeSetPersister
     end
 
     def run
-      Preserver.for(change_set: change_set.class.new(post_save_resource), change_set_persister: change_set_persister).preserve!
+      cs = change_set.class.new(post_save_resource)
+      return unless cs.try(:preserve?)
+      PreserveResourceJob.perform_later(id: cs.id.to_s)
     end
   end
 end
