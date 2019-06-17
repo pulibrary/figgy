@@ -94,9 +94,7 @@ defmodule ExIiifManifest do
     }
   end
 
-  defp ensure_int(int) when is_integer(int) do
-    int
-  end
+  defp ensure_int(int) when is_integer(int), do: int
 
   defp ensure_int(int) when is_binary(int) do
     {parsed_int, _} = Integer.parse(int)
