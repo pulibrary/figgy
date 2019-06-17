@@ -49,6 +49,20 @@ RSpec.describe ScannedMapDerivativeService do
     expect(thumbnails.count).to eq 1
   end
 
+  it "works if it has previously failed" do
+    resource = query_service.find_by(id: valid_resource.id)
+    resource.original_file.error_message = ["Testing this"]
+    persister.save(resource: resource)
+    derivative_service.new(id: resource.id).cleanup_derivatives
+    derivative_service.new(id: resource.id).create_derivatives
+
+    resource = query_service.find_by(id: valid_resource.id)
+    jp2s = resource.file_metadata.find_all { |f| f.label == ["intermediate_file.jp2"] }
+    thumbnails = resource.file_metadata.find_all { |f| f.label == ["thumbnail.png"] }
+    expect(jp2s.count).to eq 1
+    expect(thumbnails.count).to eq 1
+  end
+
   describe "#cleanup_derivatives" do
     it "deletes the attached fileset when the resource is deleted" do
       derivative_service.new(id: valid_change_set.id).cleanup_derivatives
