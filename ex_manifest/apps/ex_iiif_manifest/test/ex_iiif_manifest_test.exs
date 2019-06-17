@@ -37,14 +37,14 @@ defmodule ExIiifManifestTest do
            } = output
 
     assert %{viewingDirection: "left-to-right"} = output
-    assert %{label: %{"@none": ["My Manifest"]}} = output
+    assert %{label: %{"@none" => ["My Manifest"]}} = output
 
     %{items: items} = output
     assert length(items) == 1
     canvas = hd(items)
     assert %{id: "https://test.example.com/1/2"} = canvas
     assert %{type: "Canvas"} = canvas
-    assert %{label: %{"@none": ["Page 1"]}} = canvas
+    assert %{label: %{"@none" => ["Page 1"]}} = canvas
     assert %{height: 500, width: 1000} = canvas
 
     %{items: items} = canvas

@@ -15,13 +15,25 @@ defmodule ExIiifManifest do
     |> Map.put(:viewingDirection, direction)
   end
 
-  defp apply_label(manifest, %{label: label}) when is_list(label) do
+  defp apply_label(manifest, label_map = %{label: _label}) do
     manifest
-    |> Map.put(:label, %{"@none": label})
+    |> Map.put(:label, label_map |> parse_label)
   end
 
-  defp apply_label(manifest, %{label: label}) when is_binary(label) do
-    apply_label(manifest, %{label: [label]})
+  defp parse_label(%{label: label, language: language}) when is_list(label) do
+    %{language => label}
+  end
+
+  defp parse_label(%{label: label, language: language}) when is_binary(label) do
+    parse_label(%{label: [label], language: language})
+  end
+
+  defp parse_label(%{label: %{"@language" => language, "@value" => value}}) do
+    parse_label(%{label: value, language: language})
+  end
+
+  defp parse_label(%{label: label}) do
+    parse_label(%{label: label, language: "@none"})
   end
 
   defp create_canvases(%{canvas_nodes: nodes}) do
@@ -85,6 +97,7 @@ defmodule ExIiifManifest do
   defp ensure_int(int) when is_integer(int) do
     int
   end
+
   defp ensure_int(int) when is_binary(int) do
     {parsed_int, _} = Integer.parse(int)
     parsed_int
