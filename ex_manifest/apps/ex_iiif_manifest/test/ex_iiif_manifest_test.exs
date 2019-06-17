@@ -2,6 +2,19 @@ defmodule ExIiifManifestTest do
   use ExUnit.Case
   doctest ExIiifManifest
 
+  test "label parsing" do
+    resource = %ExIiifManifest.Resource{
+      id: "https://test.example.com/1",
+      viewingDirection: "left-to-right",
+      label: %{"@language" => "eng", "@value" => "My Manifest"},
+      canvas_nodes: []
+    }
+
+    output = ExIiifManifest.generate_manifest(resource)
+
+    assert output.label == %{"eng" => ["My Manifest"]}
+  end
+
   test "generate_manifest" do
     resource = %ExIiifManifest.Resource{
       id: "https://test.example.com/1",
