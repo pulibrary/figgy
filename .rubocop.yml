@@ -124,6 +124,7 @@ Metrics/LineLength:
     - 'spec/resources/scanned_resources/scanned_resources_controller_spec.rb'
     - 'spec/views/catalog/_members_coin.html.erb_spec.rb'
     - 'spec/helpers/application_helper_spec.rb'
+    - 'spec/resources/collections/collections_controller_spec.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
@@ -255,6 +256,7 @@ RSpec/NestedGroups:
     - 'spec/resources/numismatics/monograms/numismatics/monograms_controller_spec.rb'
     - 'spec/helpers/application_helper_spec.rb'
     - 'spec/requests/viewer_config_spec.rb'
+    - 'spec/resources/collections/collections_controller_spec.rb'
 RSpec/VerifiedDoubles:
   Exclude:
     - 'spec/models/search_builder_spec.rb'

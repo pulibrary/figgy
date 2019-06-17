@@ -17,9 +17,9 @@
 
 <%= render partial: 'catalog/numismatics_home' %>
 
-<%= render partial: 'catalog/work_types', locals: { label: 'Collections',
-                                                    types: [Collection, ArchivalMediaCollection],
-                                                    bulk: [] } %>
+<%= render partial: 'catalog/work_types_collections', locals: { label: 'Collections',
+                                                                types: [Collection],
+                                                                bulk: [] } %>
 
 <%= render partial: 'catalog/work_types_media_reserves', locals: { label: 'Media Reserves',
                                                     types: [ScannedResource],

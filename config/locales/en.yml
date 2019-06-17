@@ -60,6 +60,7 @@ en:
     simple: 'Simple Resource'
     recording: 'Recording'
     letter: 'Letter'
+    archival_media_collection: 'Archival Media Collection'
   works:
     progress:
       header: 'Save Work'

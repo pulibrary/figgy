@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "bagit"
 
-# Job for ingesting ArchivalMediaCollection objects as Bags
+# Job for ingesting Collection (ArchivalMediaCollections) objects as Bags
 # @see https://tools.ietf.org/html/draft-kunze-bagit-14 BagIt File Packaging Format
 # Please note that this is typically invoked when any given ArchivalMediaCollection is persisted
 # (see ChangeSetPersister.registered_handlers and ChangeSetPersister::IngestBag)
@@ -23,12 +23,16 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
   private
 
+    def change_set_class
+      ArchivalMediaCollectionChangeSet
+    end
+
     def find_or_create_amc(component_id)
       existing_amc = metadata_adapter.query_service.custom_queries
                                      .find_by_property(property: :source_metadata_identifier, value: component_id)
-                                     .select { |r| r.is_a? ArchivalMediaCollection }.first
+                                     .select { |r| r.is_a? Collection }.first
       return existing_amc unless existing_amc.nil?
-      change_set = DynamicChangeSet.new(ArchivalMediaCollection.new)
+      change_set = change_set_class.new(Collection.new)
       change_set.validate(source_metadata_identifier: component_id)
       changeset_persister.save(change_set: change_set)
     end

@@ -6,20 +6,24 @@ class ArchivalMediaCollectionChangeSet < ChangeSet
   include RemoteMetadataProperty
   include VisibilityProperty
 
+  property :title, multiple: false, required: true
+  property :slug, multiple: false, required: true
   property :source_metadata_identifier, multiple: false, required: true
   property :bag_path, multiple: false, required: false, virtual: true
   # require visibility so imported resources can inherit
   property :visibility, multiple: false, required: true, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
   property :depositor, multiple: false, required: false, virtual: true
   property :read_groups, multiple: true, required: false
+  property :change_set, require: true, default: "archival_media_collection"
 
   validates :source_metadata_identifier, presence: true
   validates_with BagPathValidator
   validates_with SourceMetadataIdentifierValidator
   validates_with UniqueArchivalMediaComponentIdValidator
   validates_with UniqueArchivalMediaBarcodeValidator
+  validates_with UniqueSlugValidator
 
   def primary_terms
-    [:source_metadata_identifier, :bag_path]
+    [:title, :slug, :source_metadata_identifier, :bag_path, :change_set]
   end
 end

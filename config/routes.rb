@@ -248,11 +248,12 @@ Rails.application.routes.draw do
     member do
       get :manifest, defaults: { format: :json }
     end
+    collection do
+      get "new/archival_media_collection", action: :new, change_set: "archival_media_collection", as: :new_archival_media_collection
+    end
   end
   get "/iiif/collections", defaults: { format: :json }, to: "collections#index_manifest", as: :index_manifest
   get "collections/:id/ark_report", to: "collections#ark_report", as: :collections_ark_report
-
-  resources :archival_media_collections
 
   get "/catalog/parent/:parent_id/:id", to: "catalog#show", as: :parent_solr_document
   get "/iiif/lookup/:prefix/:naan/:arkid", to: "catalog#lookup_manifest", as: :lookup_manifest

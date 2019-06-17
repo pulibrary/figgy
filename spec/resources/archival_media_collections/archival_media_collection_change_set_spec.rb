@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe ArchivalMediaCollectionChangeSet do
   let(:change_set) { described_class.new(collection, bag_path: "") }
-  let(:collection) { FactoryBot.build(:archival_media_collection, state: "draft") }
+  let(:collection) { FactoryBot.build(:collection, state: "draft") }
   let(:form_resource) { collection }
 
   describe "#source_metadata_identifier" do
@@ -34,24 +34,24 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
     end
 
     context "when metadata identifier is not set" do
-      let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "") }
+      let(:collection) { FactoryBot.build(:collection, source_metadata_identifier: "") }
       it "is invalid" do
         expect(change_set).not_to be_valid
       end
     end
 
     context "when metadata identifier is set to a string that's not an id" do
-      let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "not an id") }
+      let(:collection) { FactoryBot.build(:collection, source_metadata_identifier: "not an id") }
       it "is invalid" do
         expect { change_set.valid? }.to raise_error(SourceMetadataIdentifierValidator::InvalidMetadataIdentifierError, "Invalid source metadata ID: not an id")
       end
     end
 
     context "when source_metadata_identifier is already in use on another amc" do
-      let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "AC044_c0003") }
+      let(:collection) { FactoryBot.build(:collection, source_metadata_identifier: "AC044_c0003") }
 
       it "is invalid" do
-        FactoryBot.create_for_repository(:archival_media_collection, source_metadata_identifier: "AC044_c0003")
+        FactoryBot.create_for_repository(:collection, source_metadata_identifier: "AC044_c0003")
         stub_pulfa(pulfa_id: "AC044_c0003")
 
         expect(change_set).not_to be_valid
@@ -59,7 +59,7 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
     end
 
     context "when source_metadata_identifier is already in use on a scanned resource" do
-      let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "AC044_c0003") }
+      let(:collection) { FactoryBot.build(:collection, source_metadata_identifier: "AC044_c0003") }
 
       it "is invalid" do
         stub_pulfa(pulfa_id: "AC044_c0003")
@@ -70,7 +70,7 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
     end
 
     context "when source_metadata_identifier is set" do
-      let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "AC044_c0003") }
+      let(:collection) { FactoryBot.build(:collection, source_metadata_identifier: "AC044_c0003") }
       it "is valid" do
         stub_pulfa(pulfa_id: "AC044_c0003")
         expect(change_set).to be_valid
@@ -79,7 +79,7 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
   end
 
   describe "bag path validation" do
-    let(:collection) { FactoryBot.build(:archival_media_collection, source_metadata_identifier: "totally_an_identifier") }
+    let(:collection) { FactoryBot.build(:collection, source_metadata_identifier: "totally_an_identifier") }
     before do
       allow_any_instance_of(SourceMetadataIdentifierValidator).to receive(:validate).and_return(true)
       allow_any_instance_of(UniqueArchivalMediaBarcodeValidator).to receive(:validate).and_return(true)
@@ -129,7 +129,7 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
 
       it "is invalid" do
         # create the collection so we know its id
-        collection = FactoryBot.create_for_repository(:archival_media_collection, source_metadata_identifier: collection_cid)
+        collection = FactoryBot.create_for_repository(:collection, source_metadata_identifier: collection_cid)
         # ingest the bag so it has the barcodes
         IngestArchivalMediaBagJob.perform_now(collection_component: collection_cid, bag_path: av_fixture_bag, user: nil)
         # retrieve the collection via the query service and put it in a change set with the bag
@@ -146,7 +146,7 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
       end
 
       it "is valid" do
-        collection = FactoryBot.create_for_repository(:archival_media_collection)
+        collection = FactoryBot.create_for_repository(:collection)
         change_set = described_class.new(collection, source_metadata_identifier: collection_cid, bag_path: "")
         expect(change_set).to be_valid
       end
@@ -155,7 +155,13 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
 
   describe "#primary_terms" do
     it "returns the primary terms" do
-      expect(change_set.primary_terms).to contain_exactly :source_metadata_identifier, :bag_path
+      expect(change_set.primary_terms).to contain_exactly(
+        :source_metadata_identifier,
+        :bag_path,
+        :slug,
+        :title,
+        :change_set
+      )
     end
   end
 

@@ -32,11 +32,11 @@ module ResourceController
       end
       after_create_success(obj, @change_set)
     else
-      Rails.logger.warn(@change_set.errors.details)
+      Valkyrie.logger.warn(@change_set.errors.details)
       render :new
     end
   rescue SourceMetadataIdentifierValidator::InvalidMetadataIdentifierError => invalid_metadata_id_error
-    Rails.logger.error(invalid_metadata_id_error.message)
+    Valkyrie.logger.error(invalid_metadata_id_error.message)
     flash[:error] = invalid_metadata_id_error.message
     render :new
   end
@@ -139,7 +139,7 @@ module ResourceController
     end
 
     def clean_params(h)
-      return unless h
+      return {} unless h
       h.map do |k, v|
         v.respond_to?(:strip) ? [k, v.strip] : [k, v]
       end.to_h.with_indifferent_access

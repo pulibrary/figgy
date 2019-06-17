@@ -1108,7 +1108,7 @@ RSpec.describe ChangeSetPersister do
     end
 
     context "with archival media collection and media resource members" do
-      let(:amc) { FactoryBot.create_for_repository(:archival_media_collection, state: "draft") }
+      let(:amc) { FactoryBot.create_for_repository(:collection, change_set: "archival_media_collection", state: "draft") }
       it "propagates the workflow state" do
         FactoryBot.create_for_repository(:media_resource, state: "draft", member_of_collection_ids: amc.id)
 
@@ -1310,7 +1310,7 @@ RSpec.describe ChangeSetPersister do
 
   context "when persisting a bag" do
     let(:bag_path) { Rails.root.join("spec", "fixtures", "bags", "valid_bag") }
-    let(:resource) { FactoryBot.build(:archival_media_collection) }
+    let(:resource) { FactoryBot.build(:collection, change_set: "archival_media_collection") }
     let(:change_set_class) { ArchivalMediaCollectionChangeSet }
     let(:change_set) { change_set_class.new(resource, bag_path: bag_path) }
 
@@ -1321,8 +1321,9 @@ RSpec.describe ChangeSetPersister do
 
     it "persists the file using the bag adapter" do
       output = change_set_persister.save(change_set: change_set)
-      expect(output).to be_an ArchivalMediaCollection
+      expect(output).to be_an Collection
       expect(output.id).not_to be nil
+      expect(output.change_set).to eq("archival_media_collection")
     end
 
     context "with an invalid bag path" do

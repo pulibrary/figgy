@@ -47,5 +47,38 @@ RSpec.describe HumanReadableTypeIndexer do
         expect(output[:human_readable_type_ssim]).to eq "Map Set"
       end
     end
+
+    context "when indexing an ArchivalMediaCollection" do
+      let(:resource) do
+        FactoryBot.create_for_repository(:collection, change_set: "archival_media_collection")
+      end
+      let(:output) do
+        described_class.new(resource: resource).to_solr
+      end
+
+      it "indexes as both a Collection and ArchivalMediaCollection" do
+        expect(output).to include :human_readable_type_ssim
+        expect(output[:human_readable_type_ssim]).to eq(["Collection", "Archival Media Collection"])
+      end
+    end
+
+    context "when indexing a resource with an invalid ChangeSet" do
+      let(:resource) do
+        FactoryBot.create_for_repository(:collection, change_set: "invalid")
+      end
+      let(:output) do
+        described_class.new(resource: resource).to_solr
+      end
+
+      before do
+        allow(Valkyrie.logger).to receive(:warn)
+      end
+
+      it "indexes as just the human readable type name" do
+        expect(output).to include :human_readable_type_ssim
+        expect(output[:human_readable_type_ssim]).to eq("Collection")
+        expect(Valkyrie.logger).to have_received(:warn).with("invalid is not a valid resource type.")
+      end
+    end
   end
 end

@@ -30,4 +30,17 @@ RSpec.describe MetadataFormHelper, type: :helper do
       expect(helper.form_title(params)).to eq "Edit formal letter resource"
     end
   end
+
+  describe "form_title based on the change_set value" do
+    it "constucts a title for cases where creating a new resource raises an error" do
+      params = {
+        "action" => "create",
+        "controller" => "scanned_resources",
+        "scanned_resource" => {
+          "change_set" => "simple"
+        }
+      }
+      expect(helper.form_title(params)).to eq "New simple resource"
+    end
+  end
 end

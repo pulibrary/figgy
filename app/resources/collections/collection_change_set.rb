@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class CollectionChangeSet < ChangeSet
+  apply_workflow(DraftCompleteWorkflow)
   include RemoteMetadataProperty
   delegate :human_readable_type, to: :model
   property :title, multiple: false, required: true

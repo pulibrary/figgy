@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 class Collection < Resource
   include Valkyrie::Resource::AccessControls
-  attribute :title, Valkyrie::Types::Set
+  include Schema::Common
   attribute :slug, Valkyrie::Types::Set
-  attribute :source_metadata_identifier, Valkyrie::Types::Set
   attribute :imported_metadata, Valkyrie::Types::Set.of(ImportedMetadata).optional
-  attribute :description, Valkyrie::Types::Set
-  attribute :visibility, Valkyrie::Types::Set
-  attribute :local_identifier, Valkyrie::Types::Set
   attribute :owners, Valkyrie::Types::Set # values should be User.uid
+  attribute :state
+  attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
+  attribute :change_set, Valkyrie::Types::String
 
   def thumbnail_id; end
 
