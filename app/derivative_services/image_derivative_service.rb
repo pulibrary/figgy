@@ -70,7 +70,7 @@ class ImageDerivativeService
   def create_derivatives
     run_derivatives
     change_set.files = [build_file]
-    change_set_persister.save(change_set: change_set)
+    @resource = change_set_persister.save(change_set: change_set)
     update_error_message(message: nil) if target_file.error_message.present?
   rescue StandardError => error
     update_error_message(message: error.message)

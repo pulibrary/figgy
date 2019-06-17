@@ -58,7 +58,7 @@ class Jp2DerivativeService
     run_derivatives
     change_set.files = [build_file]
     change_set_persister.buffer_into_index do |buffered_persister|
-      buffered_persister.save(change_set: change_set)
+      @resource = buffered_persister.save(change_set: change_set)
     end
     update_error_message(message: nil) if target_file.error_message.present?
   rescue StandardError => error
