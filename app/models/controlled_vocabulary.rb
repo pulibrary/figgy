@@ -323,7 +323,6 @@ class ControlledVocabulary
     # Retrieve all Terms within the vocabulary
     # @return [Array<Term>] the Term Objects capturing the most recently holding location for an item
     def all(_scope = nil)
-      return []
       values = json.map do |record|
         label = record[:label]
 

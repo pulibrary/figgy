@@ -269,7 +269,7 @@ Rails.application.config.to_prepare do
   Valkyrie::MetadataAdapter.register(
     IndexingAdapter.new(
       metadata_adapter: Valkyrie.config.metadata_adapter,
-      index_adapter: Valkyrie::Persistence::Memory::MetadataAdapter.new
+      index_adapter: Valkyrie::MetadataAdapter.find(:index_solr)
     ),
     :indexing_persister
   )

@@ -188,9 +188,5 @@ class ApplicationController < ActionController::Base
       return unless current_user && current_user.admin?
       Rack::MiniProfiler.authorize_request
     end
-
-    def current_user
-      User.first
-    end
   # :nocov:
 end
