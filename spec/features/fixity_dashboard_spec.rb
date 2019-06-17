@@ -3,6 +3,7 @@ require "rails_helper"
 include ActionDispatch::TestProcess
 
 RSpec.feature "Fixity dashboard" do
+  with_queue_adapter :inline
   let(:user) { FactoryBot.create(:admin) }
   let(:metadata_adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
