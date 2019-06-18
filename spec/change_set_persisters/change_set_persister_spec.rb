@@ -1720,4 +1720,14 @@ RSpec.describe ChangeSetPersister do
       end
     end
   end
+  context "when uploading a PDF to a ScannedResource", run_real_characterization: true, run_real_derivatives: true do
+    with_queue_adapter :inline
+    it "characterizes" do
+      file = fixture_file_upload("files/sample.pdf", "application/pdf")
+      resource = FactoryBot.create_for_repository(:scanned_resource, files: [file])
+      file_set = Wayfinder.for(resource).members.first
+
+      expect(file_set.original_file.checksum).to be_present
+    end
+  end
 end
