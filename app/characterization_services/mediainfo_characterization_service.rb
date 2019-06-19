@@ -46,6 +46,7 @@ class MediainfoCharacterizationService
   # Determines if the parent of the FileSet is a MediaResource
   # @return [TrueClass, FalseClass]
   def valid?
+    return false if preservation_file.nil?
     (parent.try(:media_resource?) || parent.try(:image_resource?)) && supported_format?
   end
 
