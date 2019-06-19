@@ -780,4 +780,25 @@ RSpec.describe ManifestBuilder do
       expect(output["manifests"][1]["label"]).to eq ["Numismatics::Coin: 2"]
     end
   end
+
+  context "when given a PDF ScannedResource", run_real_characterization: true do
+    let(:file) { fixture_file_upload("files/sample.pdf", "application/pdf") }
+    let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file]) }
+    before do
+      stub_bibdata(bib_id: "123456")
+      scanned_resource
+      change_set_persister.save(change_set: change_set)
+    end
+    it "builds a UV compatible PDF manifest" do
+      output = manifest_builder.build
+      file_set = Wayfinder.for(scanned_resource).members.first
+
+      media_sequence = output["mediaSequences"].first
+      expect(media_sequence["@type"]).to eq "ixif:MediaSequence"
+      expect(media_sequence["elements"][0]["@id"]).to eq "http://www.example.com/downloads/#{file_set.id}/file/#{file_set.original_file.id}"
+      expect(media_sequence["elements"][0]["format"]).to eq "application/pdf"
+      expect(media_sequence["elements"][0]["@type"]).to eq "foaf:Document"
+      expect(media_sequence["elements"][0]["label"]).to eq scanned_resource.title.first
+    end
+  end
 end

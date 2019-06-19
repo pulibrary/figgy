@@ -19,6 +19,7 @@ class ManifestBuilder
           rendering_builder,
           logo_builder,
           iiif_search_builder,
+          media_sequence_builder,
           composite_builder: composite_builder
         )
       end
@@ -84,6 +85,10 @@ class ManifestBuilder
 
       def iiif_search_builder
         ManifestBuilder::IIIFSearchBuilder
+      end
+
+      def media_sequence_builder
+        ManifestBuilder::MediaSequenceBuilder
       end
 
       ##
