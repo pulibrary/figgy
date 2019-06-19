@@ -46,6 +46,7 @@ class MediainfoCharacterizationService
   # Determines if the parent of the FileSet is a MediaResource
   # @return [TrueClass, FalseClass]
   def valid?
+    return false if preservation_file.nil?
     (parent.try(:media_resource?) || parent.try(:image_resource?)) && supported_format?
   end
 
@@ -152,10 +153,6 @@ class MediainfoCharacterizationService
     # Retrieves the master binary file in this FileSet
     # @return [FileNode]
     def preservation_file
-      if parent.try(:image_resource?) || parent.try(:media_resource?)
-        @file_set.original_file
-      else
-        @file_set.preservation_file
-      end
+      @file_set.original_file
     end
 end
