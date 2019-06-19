@@ -4,8 +4,8 @@ class ManifestBuilder
 
   ##
   # @param [Resource] resource the Resource subject
-  def initialize(resource, auth_token = nil)
-    @resource = RootNode.for(resource, auth_token)
+  def initialize(resource, auth_token = nil, current_ability = nil)
+    @resource = RootNode.for(resource, auth_token, current_ability)
   end
 
   ##
@@ -18,10 +18,10 @@ class ManifestBuilder
   ##
   # Presenter modeling the Resource subjects as root nodes
   class RootNode
-    def self.for(resource, auth_token = nil)
+    def self.for(resource, auth_token = nil, current_ability = nil)
       case resource
       when Collection
-        CollectionNode.new(resource)
+        CollectionNode.new(resource, nil, current_ability)
       when EphemeraProject
         EphemeraProjectNode.new(resource)
       when IndexCollection
@@ -41,7 +41,7 @@ class ManifestBuilder
         end
       end
     end
-    attr_reader :resource, :auth_token
+    attr_reader :resource, :auth_token, :current_ability
     delegate :query_service, to: :metadata_adapter
     delegate :decorate, :to_model, :id, to: :resource
 
@@ -51,9 +51,10 @@ class ManifestBuilder
 
     ##
     # @param [Resource] resource the Resource being modeled as the root
-    def initialize(resource, auth_token = nil)
+    def initialize(resource, auth_token = nil, current_ability = nil)
       @resource = resource
       @auth_token = auth_token
+      @current_ability = current_ability
     end
 
     ##
@@ -212,7 +213,12 @@ class ManifestBuilder
     # Retrieve the child members for the subject resource of the Manifest
     # @return [Resource]
     def members
-      @members ||= decorate.members.to_a
+      @members ||=
+        begin
+          decorate.members.to_a.select do |member|
+            !current_ability || current_ability.can?(:read, member)
+          end
+        end
     end
 
     ##
@@ -260,6 +266,20 @@ class ManifestBuilder
     # @return [Array]
     def file_set_presenters
       []
+    end
+
+    def work_presenters
+      @work_presenters ||=
+        begin
+          output = super
+          output.blank? ? FalseEmpty.new : output
+        end
+    end
+
+    class FalseEmpty < Array
+      def empty?
+        false
+      end
     end
 
     # Attempt to delegate the description to the CollectionDecorator

@@ -84,6 +84,22 @@ RSpec.describe CollectionsController, type: :controller do
       end
     end
 
+    describe "GET /concern/collections/:id/manifest anonymously" do
+      let(:user) { FactoryBot.create(:user) }
+      it "returns a IIIF manifest for publically accessible manifests" do
+        collection = FactoryBot.create_for_repository(:collection)
+        FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id)
+        scanned_resource2 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id)
+
+        get :manifest, params: { id: collection.id.to_s, format: :json }
+        manifest_response = MultiJson.load(response.body, symbolize_keys: true)
+
+        expect(response.headers["Content-Type"]).to include "application/json"
+        expect(manifest_response[:manifests].length).to eq 1
+        expect(manifest_response[:manifests][0][:@id]).to eq "http://www.example.com/concern/scanned_resources/#{scanned_resource2.id}/manifest"
+      end
+    end
+
     describe "GET /iiif/collections" do
       let(:collection) { FactoryBot.create_for_repository(:collection) }
       before do
