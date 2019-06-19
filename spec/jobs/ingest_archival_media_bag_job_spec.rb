@@ -52,15 +52,15 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
 
     it "for each component id-based Recording puts it on the collection" do
-      collection = query_service.find_all_of_model(model: ArchivalMediaCollection).first
+      collection = query_service.find_all_of_model(model: Collection).first
       expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
     end
   end
 
   describe "visibility settings" do
     before do
-      cs = DynamicChangeSet.new(ArchivalMediaCollection.new)
-      cs.validate(source_metadata_identifier: collection_cid, visibility: vis_auth)
+      cs = DynamicChangeSet.new(Collection.new(change_set: "archival_media_collection"))
+      cs.validate(source_metadata_identifier: collection_cid, visibility: vis_auth, slug: "test-collection")
       change_set_persister.save(change_set: cs)
       described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
     end
@@ -170,15 +170,15 @@ RSpec.describe IngestArchivalMediaBagJob do
   context "when you're ingesting to a collection you've already created" do
     before do
       # create the collection
-      cs = DynamicChangeSet.new(ArchivalMediaCollection.new)
-      cs.validate(source_metadata_identifier: collection_cid)
+      cs = DynamicChangeSet.new(Collection.new(change_set: "archival_media_collection"))
+      cs.validate(source_metadata_identifier: collection_cid, slug: "test-collection")
       change_set_persister.save(change_set: cs)
       # ingest to the same collection_cid
       described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
     end
 
     it "uses the existing collection" do
-      expect(query_service.find_all_of_model(model: ArchivalMediaCollection).size).to eq 1
+      expect(query_service.find_all_of_model(model: Collection).size).to eq 1
     end
   end
 
@@ -188,8 +188,8 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
 
     it "creates a collection for you" do
-      expect(query_service.find_all_of_model(model: ArchivalMediaCollection).size).to eq 1
-      collection = query_service.find_all_of_model(model: ArchivalMediaCollection).first
+      expect(query_service.find_all_of_model(model: Collection).size).to eq 1
+      collection = query_service.find_all_of_model(model: Collection).first
       expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
     end
   end
@@ -197,8 +197,8 @@ RSpec.describe IngestArchivalMediaBagJob do
   context "when another type of resource references the component ID" do
     before do
       # create the collection
-      cs = DynamicChangeSet.new(ArchivalMediaCollection.new)
-      cs.validate(source_metadata_identifier: collection_cid)
+      cs = DynamicChangeSet.new(Collection.new(change_set: "archival_media_collection"))
+      cs.validate(source_metadata_identifier: collection_cid, slug: "test-collection")
       change_set_persister.save(change_set: cs)
       # create another resource with the same component id
       FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: collection_cid)
@@ -207,7 +207,7 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
 
     it "doesn't try to use that other resource as an archival media collection" do
-      collection = query_service.find_all_of_model(model: ArchivalMediaCollection).first
+      collection = query_service.find_all_of_model(model: Collection).first
 
       expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
     end
@@ -240,7 +240,7 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
 
     it "uploads all resources to the same collection, giving them different upload set ids" do
-      collection = query_service.find_all_of_model(model: ArchivalMediaCollection).first
+      collection = query_service.find_all_of_model(model: Collection).first
       resources = query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids)
       expect(resources.size).to eq 2
       expect(resources.map(&:upload_set_id).to_a.uniq.size).to eq 2
@@ -252,7 +252,7 @@ RSpec.describe IngestArchivalMediaBagJob do
       it "Creates 2 audio FileSets, 1 image FileSet, 1 xml FileSet, and 2 Resources", run_real_characterization: true do
         described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
 
-        collection = query_service.find_all_of_model(model: ArchivalMediaCollection).first
+        collection = query_service.find_all_of_model(model: Collection).first
         resources = query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids)
 
         expect(resources.size).to eq 1
@@ -287,7 +287,7 @@ RSpec.describe IngestArchivalMediaBagJob do
         described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
 
         # Ensure there are two descriptive resources.
-        collection = query_service.find_all_of_model(model: ArchivalMediaCollection).first
+        collection = query_service.find_all_of_model(model: Collection).first
         resources = Wayfinder.for(collection).members
         expect(resources.size).to eq 2
         expect(resources.flat_map(&:source_metadata_identifier)).to contain_exactly(

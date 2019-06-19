@@ -35,4 +35,14 @@ RSpec.describe CollectionDecorator do
       expect(decorator.members_count).to eq 2
     end
   end
+
+  describe "#human_readable_type" do
+    context "with a Archival Media Collection" do
+      let(:collection) { FactoryBot.build(:collection, change_set: "archival_media_collection") }
+
+      it "returns Archival Media Collection" do
+        expect(decorator.human_readable_type).to eq "Archival Media Collection"
+      end
+    end
+  end
 end

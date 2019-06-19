@@ -11,5 +11,8 @@ FactoryBot.define do
     factory :private_collection do
       visibility "private"
     end
+    factory :archival_media_collection do
+      change_set "archival_media_collection"
+    end
   end
 end

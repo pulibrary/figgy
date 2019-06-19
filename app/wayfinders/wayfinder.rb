@@ -6,7 +6,6 @@
 class Wayfinder < BaseWayfinder
   class_attribute :registered_wayfinders
   self.registered_wayfinders = {
-    ArchivalMediaCollection => CollectionWayfinder,
     Collection => CollectionWayfinder,
     EphemeraFolder => EphemeraFolderWayfinder,
     EphemeraProject => EphemeraProjectWayfinder,

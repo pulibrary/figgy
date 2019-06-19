@@ -68,6 +68,55 @@ RSpec.describe CollectionsController, type: :controller do
 
         expect(reloaded.title).to eq ["New"]
       end
+
+      context "with an ArchivalMediaCollection" do
+        describe "create" do
+          let(:file) { File.open(Rails.root.join("spec", "fixtures", "some_finding_aid.xml"), "r") }
+          let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag") }
+
+          before do
+            stub_pulfa(pulfa_id: "AC044_c0003")
+            allow(Dir).to receive(:exist?).and_return(true)
+            allow(IngestArchivalMediaBagJob).to receive(:perform_later)
+          end
+
+          it "creates a collection and imports metadata and calls the ingest job" do
+            post :create, params: { change_set: "archival_media_collection", collection: { source_metadata_identifier: "AC044_c0003", slug: "test-collection", refresh_remote_metadata: "0", bag_path: bag_path } }
+
+            expect(response).to be_redirect
+
+            collection = query_service.find_all_of_model(model: Collection).first
+            expect(collection.change_set).to eq "archival_media_collection"
+            expect(collection.source_metadata_identifier).to eq ["AC044_c0003"]
+            expect(collection.primary_imported_metadata).to be_a ImportedMetadata
+            expect(collection.title).to contain_exactly "Alumni Council: Proposals for Electing Young Alumni Trustees"
+            expect(IngestArchivalMediaBagJob).to have_received(:perform_later)
+          end
+        end
+
+        describe "create" do
+          before do
+            allow(Valkyrie.logger).to receive(:warn)
+          end
+
+          it "creates a collection and imports metadata and calls the ingest job" do
+            post :create, params: { change_set: "archival_media_collection", collection: {} }
+
+            expect(response.status).to eq(200)
+            expect(response).to render_template(:new)
+            expect(Valkyrie.logger).to have_received(:warn).with(
+              source_metadata_identifier: [
+                error: "can't be blank"
+              ],
+              slug: [
+                {
+                  error: "contains invalid characters, please only use alphanumerics, dashes, and underscores"
+                }
+              ]
+            )
+          end
+        end
+      end
     end
 
     describe "GET /concern/collections/:id/manifest" do
@@ -148,7 +197,7 @@ RSpec.describe CollectionsController, type: :controller do
 
   context "when an anonymous user" do
     describe "show ark_report" do
-      let(:collection) { FactoryBot.create_for_repository(:archival_media_collection, source_metadata_identifier: ["C0652"], state: "draft") }
+      let(:collection) { FactoryBot.create_for_repository(:collection, source_metadata_identifier: ["C0652"], slug: "test-collection", state: "draft") }
 
       it "does not display" do
         get :ark_report, params: { id: collection.id }

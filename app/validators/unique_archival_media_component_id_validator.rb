@@ -14,7 +14,7 @@ class UniqueArchivalMediaComponentIdValidator < ActiveModel::Validator
         property: :source_metadata_identifier,
         value: record.source_metadata_identifier
       ).select do |resource|
-        resource.is_a?(ArchivalMediaCollection) && resource.id != record.id
+        resource.is_a?(Collection) && resource.id != record.id
       end
     end
 
@@ -23,6 +23,6 @@ class UniqueArchivalMediaComponentIdValidator < ActiveModel::Validator
     end
 
     def link_to_duplicate(resource)
-      "<a href=\"#{Rails.application.routes.url_helpers.edit_archival_media_collection_path(resource)}\">#{resource.title.first}</a>"
+      "<a href=\"#{Rails.application.routes.url_helpers.edit_collection_path(resource)}\">#{resource.title.first}</a>"
     end
 end

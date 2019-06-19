@@ -1,6 +1,6 @@
 <div class="admin-controls">
   <% if can?(:update, resource) %>
-    <%= link_to "Edit This #{resource.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-default' %>
+    <%= link_to "Edit This #{resource.decorate.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-default' %>
   <% end %>
   <% if can?(:file_manager, resource) %>
     <% if decorated_resource.manageable_files? %>
@@ -16,6 +16,6 @@
   <%= render "attach_child_default", resource: resource %>
 
   <% if can?(:destroy, resource) %>
-    <%= link_to "Delete This #{resource.human_readable_type}", main_app.polymorphic_path([resource]), class: 'btn btn-danger pull-right', data: { confirm: "Delete this #{resource.human_readable_type}?" }, method: :delete %>
+    <%= link_to "Delete This #{resource.decorate.human_readable_type}", main_app.polymorphic_path([resource]), class: 'btn btn-danger pull-right', data: { confirm: "Delete this #{resource.human_readable_type}?" }, method: :delete %>
   <% end %>
 </div>

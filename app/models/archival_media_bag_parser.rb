@@ -91,7 +91,7 @@ end
 class BarcodeComponentDict
   attr_reader :cid_lookup, :barcode_lookup
   # Constructor
-  # @param collection [ArchivalMediaCollection]
+  # @param component_id [String]
   def initialize(component_id)
     @component_id = component_id
     parse_cid_lookup

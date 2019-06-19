@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class CollectionDecorator < Valkyrie::ResourceDecorator
-  delegate :members, :parents, :collections, :members_count, to: :wayfinder
+  delegate :members, :parents, :collections, :members_count, :media_resources, to: :wayfinder
   display :owners
 
   def title
@@ -19,6 +19,14 @@ class CollectionDecorator < Valkyrie::ResourceDecorator
   # @return [Hash] a Hash of all of the resource attributes
   def iiif_manifest_attributes
     super.merge iiif_manifest_exhibit
+  end
+
+  def human_readable_type
+    if model.change_set
+      I18n.translate("models.#{model.change_set}", default: model.class.to_s)
+    else
+      super
+    end
   end
 
   private

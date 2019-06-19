@@ -20,7 +20,6 @@ RSpec.describe Collection do
     expect(collection.visibility).to eq ["open"]
   end
   it "has a local_identifier" do
-    expect(collection.local_identifier).to eq []
     collection.local_identifier = "test"
     expect(collection.local_identifier).to eq ["test"]
   end
