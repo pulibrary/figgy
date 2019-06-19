@@ -15,7 +15,7 @@ class CollectionsController < ApplicationController
     @resource = find_resource(params[:id])
     respond_to do |f|
       f.json do
-        render json: ManifestBuilder.new(@resource).build
+        render json: ManifestBuilder.new(@resource, nil, current_ability).build
       end
     end
   end

@@ -7,6 +7,7 @@ class ManifestBuilder
     def apply(manifest)
       manifest = super
       manifest.viewing_direction = viewing_direction if viewing_direction.present? && manifest.respond_to?(:viewing_direction=)
+      manifest["manifests"] ||= [] if record.is_a?(IIIFManifest::IIIFCollection)
       manifest
     end
 
