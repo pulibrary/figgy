@@ -2,6 +2,7 @@
 class MediaResourceChangeSet < ChangeSet
   apply_workflow(DraftCompleteWorkflow)
   delegate :human_readable_type, to: :resource
+  enable_preservation_support
 
   include VisibilityProperty
   include RemoteMetadataProperty

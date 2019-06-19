@@ -152,7 +152,7 @@ class MediainfoCharacterizationService
     # Retrieves the master binary file in this FileSet
     # @return [FileNode]
     def preservation_file
-      if parent.try(:image_resource?)
+      if parent.try(:image_resource?) || parent.try(:media_resource?)
         @file_set.original_file
       else
         @file_set.preservation_file
