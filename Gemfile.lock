@@ -170,9 +170,6 @@ GEM
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
       execjs (~> 2.0)
-    bagit (0.4.2)
-      docopt (~> 0.5.0)
-      validatable (~> 1.6)
     bcrypt (3.1.12)
     bindex (0.5.0)
     bixby (0.2.1)
@@ -276,7 +273,6 @@ GEM
       representable (>= 2.4.0, <= 3.1.0)
       uber (< 0.2.0)
     docile (1.3.1)
-    docopt (0.5.0)
     dotenv (2.2.1)
     dotenv-rails (2.2.1)
       dotenv (= 2.2.1)
@@ -811,7 +807,6 @@ GEM
       unf_ext
     unf_ext (0.0.7.5)
     unicode-display_width (1.3.0)
-    validatable (1.6.7)
     valkyrie (1.7.1)
       active-fedora
       activemodel
@@ -873,7 +868,6 @@ DEPENDENCIES
   arabic-letter-connector
   autoprefixer-rails
   awesome_print
-  bagit (~> 0.4)
   bixby
   blacklight
   blacklight_iiif_search!

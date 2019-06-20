@@ -2,7 +2,6 @@
 source "https://rubygems.org"
 
 gem "autoprefixer-rails"
-gem "bagit", "~> 0.4"
 gem "blacklight"
 gem "bootstrap-sass", "~> 3.4"
 gem "bunny"
