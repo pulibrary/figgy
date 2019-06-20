@@ -193,6 +193,69 @@ RSpec.describe CollectionsController, type: :controller do
         expect(response.body).to eq(data)
       end
     end
+
+    describe "POST /collections/:id/browse_everything_files" do
+      let(:file1) { File.open(Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag", "bagit.txt")) }
+      let(:file2) { File.open(Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag", "data", "32101047382401.xml")) }
+      let(:selected_files) do
+        {
+          "0" => {
+            "url" => "file://#{file1.path}",
+            "file_name" => File.basename(file1.path),
+            "file_size" => file1.size,
+            "directory" => false
+          },
+          "1" => {
+            "url" => "file://#{file2.path}",
+            "file_name" => File.basename(file2.path),
+            "file_size" => file2.size,
+            "directory" => false
+          }
+        }
+      end
+      let(:params) do
+        {
+          "selected_files" => selected_files
+        }
+      end
+
+      before do
+        stub_pulfa(pulfa_id: "C0652")
+        stub_pulfa(pulfa_id: "C0652_c0377")
+      end
+
+      it "uploads files" do
+        resource = FactoryBot.create_for_repository(:collection, change_set: "archival_media_collection", source_metadata_identifier: "C0652")
+
+        post :browse_everything_files, params: { id: resource.id, selected_files: params["selected_files"] }
+        expect(response).to redirect_to("/catalog/#{resource.id}")
+        expect(flash[:notice]).to have_text("Archival bags have been enqueued for ingestion in this collection.")
+        reloaded = adapter.query_service.find_by(id: resource.id)
+
+        expect(reloaded.decorate.members.length).to eq 1
+        expect(reloaded.decorate.members.first).to be_a ScannedResource
+        member = reloaded.decorate.members.first
+        expect(member.decorate.file_sets).to be_empty
+
+        expect(member.decorate.members.length).to eq 1
+        volume = member.decorate.members.first
+
+        expect(volume.decorate.file_sets.length).to eq 4
+        titles = volume.decorate.file_sets.map(&:title)
+        titles.flatten!
+        expect(titles).to include("32101047382401_2", "32101047382401_1", "32101047382401.xml", "32101047382401_AssetFront.jpg")
+        file_metadata = volume.decorate.file_sets.map(&:file_metadata)
+        file_metadata.flatten!
+        file_use_uris = file_metadata.map(&:use)
+        file_use_uris.flatten!
+        expect(file_use_uris).to include(
+          Valkyrie::Vocab::PCDMUse.OriginalFile,
+          Valkyrie::Vocab::PCDMUse.ServiceFile,
+          Valkyrie::Vocab::PCDMUse.IntermediateFile,
+          Valkyrie::Vocab::PCDMUse.PreservationMasterFile
+        )
+      end
+    end
   end
 
   context "when an anonymous user" do

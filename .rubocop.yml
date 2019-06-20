@@ -101,6 +101,7 @@ Metrics/ClassLength:
     - 'app/resources/coins/coins_controller.rb'
     - 'app/services/preserver.rb'
     - 'app/services/preserver/importer.rb'
+    - 'app/resources/collections/collections_controller.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/helpers/application_helper.rb'

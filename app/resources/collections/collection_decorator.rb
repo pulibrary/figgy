@@ -3,12 +3,18 @@ class CollectionDecorator < Valkyrie::ResourceDecorator
   delegate :members, :parents, :collections, :members_count, :media_resources, to: :wayfinder
   display :owners
 
+  def self.file_managed_change_sets
+    [
+      "archival_media_collection"
+    ]
+  end
+
   def title
     Array(super).first
   end
 
   def manageable_files?
-    false
+    self.class.file_managed_change_sets.include?(model.change_set)
   end
 
   def slug

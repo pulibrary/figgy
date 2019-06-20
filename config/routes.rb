@@ -247,6 +247,8 @@ Rails.application.routes.draw do
   resources :collections do
     member do
       get :manifest, defaults: { format: :json }
+      get :file_manager
+      post :browse_everything_files
     end
     collection do
       get "new/archival_media_collection", action: :new, change_set: "archival_media_collection", as: :new_archival_media_collection

@@ -11,7 +11,7 @@
       <% end %>
     </div>
   </div>
-  <% if @change_set.pending_uploads.present? %>
+  <% if @change_set.respond_to?(:pending_uploads) && @change_set.pending_uploads.present? %>
     <div class="col-md-9">
       <div class="well well-sm">
         <%= render "pending_uploads", uploads: @change_set.pending_uploads %>
