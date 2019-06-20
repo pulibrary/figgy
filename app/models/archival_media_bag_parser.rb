@@ -60,8 +60,17 @@ class ArchivalMediaBagParser
   # @see https://tools.ietf.org/html/draft-kunze-bagit-14 BagIt File Packaging Format
   # @return [TrueClass, FalseClass]
   def valid?
-    bag = BagIt::Bag.new @path
-    bag.valid?
+    files = Dir[Pathname.new(@path).join("**")]
+    sha_checksums = files.select { |x| x.include?("manifest-sha") }
+    md5_checksums = files.select { |x| x.include?("manifest-md5") }
+    return false if sha_checksums.empty? && md5_checksums.empty?
+    md5_checksums.each do |md5_file|
+      return false unless system("cd #{@path} && md5sum -c #{md5_file} 2>&1 > /dev/null")
+    end
+    sha_checksums.each do |sha_file|
+      return false unless system("cd #{@path} && shasum -c #{sha_file} 2>&1 > /dev/null")
+    end
+    true
   end
 
   private
