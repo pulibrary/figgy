@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-require "bagit"
-
 # Job for ingesting Collection (ArchivalMediaCollections) objects as Bags
 # @see https://tools.ietf.org/html/draft-kunze-bagit-14 BagIt File Packaging Format
 # Please note that this is typically invoked when any given ArchivalMediaCollection is persisted
