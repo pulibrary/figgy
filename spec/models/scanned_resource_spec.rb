@@ -29,4 +29,12 @@ RSpec.describe ScannedResource do
       expect(scanned_resource.primary_imported_metadata.location).to include "RCPPA BL980.G7 B66 1982"
     end
   end
+
+  describe "#media_resource?" do
+    it "is false by default" do
+      scanned_resource = FactoryBot.build(:scanned_resource)
+
+      expect(scanned_resource).not_to be_a_media_resource
+    end
+  end
 end

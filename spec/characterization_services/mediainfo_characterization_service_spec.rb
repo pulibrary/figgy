@@ -20,7 +20,7 @@ RSpec.describe MediainfoCharacterizationService do
   end
   let(:members) { query_service.find_members(resource: resource) }
   let(:valid_file_set) { members.first }
-  let(:parent) { FactoryBot.create_for_repository(:media_resource) }
+  let(:parent) { FactoryBot.create_for_repository(:scanned_resource, change_set: "recording") }
   let(:tracks) { double }
   let(:track_attributes) { double }
   let(:file) { fixture_file_upload("files/sample.ogg", "audio/ogg") }
