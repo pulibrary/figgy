@@ -61,12 +61,8 @@ class TikaFileCharacterizationService
     @file_set.original_file
   end
 
-  def intermediate_file
-    @file_set.intermediate_files.first
-  end
-
   def target_file
-    original_file || intermediate_file
+    original_file
   end
 
   def tika_config
