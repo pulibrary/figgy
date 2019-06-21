@@ -701,6 +701,7 @@ RSpec.describe ManifestBuilder do
       manifest_builder = described_class.new(recording)
       output = manifest_builder.build
       expect(output["items"].first["rendering"].map { |h| h["label"] }).to contain_exactly "Download the mp3"
+      expect(output["items"][0]["items"][0]["items"][0]["body"]["duration"]).to eq 0.255
     end
 
     it "builds a presentation 3 manifest", run_real_characterization: true do
