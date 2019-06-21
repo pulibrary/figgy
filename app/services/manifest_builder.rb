@@ -549,7 +549,7 @@ class ManifestBuilder
       # Retrieve the File related to the image resource
       # @return [File]
       def file
-        resource.original_file || resource.intermediate_files.first
+        resource.original_file || resource.preservation_file
       end
 
       def derivative
