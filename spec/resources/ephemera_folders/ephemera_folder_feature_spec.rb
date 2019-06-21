@@ -170,12 +170,10 @@ RSpec.feature "Ephemera Folders" do
 
     context "while editing existing folders" do
       context "boxed folder" do
-        scenario "users can delete existing folders", js: true do
+        scenario "users can delete existing folders" do
           visit polymorphic_path [:edit, ephemera_folder]
 
-          page.accept_confirm do
-            click_link "Delete This Ephemera Folder"
-          end
+          click_link "Delete This Ephemera Folder"
 
           expect(page.find(:css, ".alert-info")).to have_content "Deleted EphemeraFolder"
         end
