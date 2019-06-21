@@ -358,6 +358,7 @@ RSpec.describe IngestArchivalMediaBagJob do
 
         tape1_side1 = tape1_file_sets.find { |x| x.title.first.include?("_1") }
         expect(tape1_side1.derivative_partial_files).not_to be_blank
+        expect(tape1_side1.preservation_file.duration).not_to be_blank
       end
 
       it "gives all Recordings the same upload set id" do

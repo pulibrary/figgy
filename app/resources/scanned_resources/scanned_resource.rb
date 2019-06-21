@@ -46,4 +46,9 @@ class ScannedResource < Resource
     return false if change_set == "recording"
     true
   end
+
+  def media_resource?
+    return true if change_set == "recording"
+    false
+  end
 end
