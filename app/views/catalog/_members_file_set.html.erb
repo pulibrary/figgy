@@ -18,13 +18,11 @@
   <% end %>
   <% resource.derivative_files.each do |file| %>
     <tr>
-      <td><span class="label label-info">Derivative File</span>&nbsp;<%= file.label.first %></td>
-      <%= render partial: 'file_detail', locals: { file: file } %>
-    </tr>
-  <% end %>
-  <% resource.derivative_partial_files.each do |file| %>
-    <tr>
-      <td><span class="label label-info">Derivative Partial File</span>&nbsp;<%= file.label.first %></td>
+      <% if resource.derivative_partial_files.length > 0 && file.mime_type.include?("application/x-mpegURL") %>
+        <td><span class="label label-info">Derivative File</span>&nbsp;<%= file.label.first %> (<%= resource.derivative_partial_files.length %> Partials)</td>
+      <% else %>
+        <td><span class="label label-info">Derivative File</span>&nbsp;<%= file.label.first %></td>
+      <% end %>
       <%= render partial: 'file_detail', locals: { file: file } %>
     </tr>
   <% end %>

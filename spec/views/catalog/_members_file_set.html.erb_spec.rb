@@ -3,10 +3,11 @@ require "rails_helper"
 
 RSpec.describe "catalog/_members_file_set" do
   let(:original_file) { FileMetadata.new(id: "test-original-file", use: [Valkyrie::Vocab::PCDMUse.OriginalFile]) }
-  let(:derivative_file) { FileMetadata.new(id: "test-derivative-file", use: [Valkyrie::Vocab::PCDMUse.ServiceFile]) }
+  let(:derivative_file) { FileMetadata.new(id: "test-derivative-file", use: [Valkyrie::Vocab::PCDMUse.ServiceFile], mime_type: "application/x-mpegURL") }
+  let(:derivative_file_partial) { FileMetadata.new(id: "test-derivative-file-partial", use: [Valkyrie::Vocab::PCDMUse.ServiceFilePartial]) }
   let(:thumbnail_file) { FileMetadata.new(id: "test-thumbnail-file", use: [Valkyrie::Vocab::PCDMUse.ThumbnailImage]) }
   let(:file_set) do
-    FactoryBot.create_for_repository(:file_set, file_metadata: [original_file, derivative_file, thumbnail_file])
+    FactoryBot.create_for_repository(:file_set, file_metadata: [original_file, derivative_file, thumbnail_file, derivative_file_partial])
   end
   let(:solr) { Valkyrie::MetadataAdapter.find(:index_solr) }
   let(:document) { solr.resource_factory.from_resource(resource: file_set) }
@@ -63,9 +64,13 @@ RSpec.describe "catalog/_members_file_set" do
     end
     it "renders the download link for derivative files" do
       expect(rendered).to have_link "Download", href: download_path(resource_id: file_set.id, id: derivative_file.id)
+      expect(rendered).to have_text "(1 Partials)"
     end
     it "renders the download link for thumbnail files" do
       expect(rendered).to have_link "Download", href: download_path(resource_id: file_set.id, id: thumbnail_file.id)
+    end
+    it "renders a summary for derivative partials" do
+      expect(rendered).not_to have_link "Download", href: download_path(resource_id: file_set.id, id: derivative_file_partial.id)
     end
   end
 end
