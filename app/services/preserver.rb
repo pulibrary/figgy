@@ -66,7 +66,7 @@ class Preserver
 
     def resource_binary_nodes
       [:original_files, :intermediate_files, :preservation_files].flat_map do |node_type|
-        Array(resource[node_type]).map { |x| PreservationIntermediaryNode.new(binary_node: x, preservation_object: preservation_object) }
+        Array(resource.try(node_type)).map { |x| PreservationIntermediaryNode.new(binary_node: x, preservation_object: preservation_object) }
       end
     end
 

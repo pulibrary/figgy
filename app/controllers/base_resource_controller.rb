@@ -42,7 +42,7 @@ class BaseResourceController < ApplicationController
       auth_header_values = file_attributes.delete("auth_header")
       auth_header = JSON.generate(auth_header_values)
 
-      @new_pending_uploads << PendingUpload.new(file_attributes.merge(id: SecureRandom.uuid, created_at: Time.current.utc.iso8601, auth_header: auth_header))
+      @new_pending_uploads << PendingUpload.new(file_attributes.merge(id: SecureRandom.uuid, created_at: Time.current.utc.iso8601, auth_header: auth_header).symbolize_keys)
     end
 
     @new_pending_uploads

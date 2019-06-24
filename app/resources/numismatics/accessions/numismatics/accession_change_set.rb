@@ -41,7 +41,7 @@ module Numismatics
     # rubocop:enable Metrics/MethodLength
 
     def build_numismatic_citation
-      schema["numismatic_citation"][:nested].new(model.class.schema[:numismatic_citation][[{}]].first)
+      schema["numismatic_citation"][:nested].new(model_type_for(property: :numismatic_citation)[[{}]].first)
     end
   end
 end
