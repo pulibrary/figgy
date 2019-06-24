@@ -278,13 +278,15 @@ RSpec.describe IngestArchivalMediaBagJob do
 
         file_sets = Wayfinder.for(member).members
         expect(file_sets.count).to eq 4
-        # TODO: assert order
         expect(file_sets.flat_map(&:title)).to contain_exactly(
           "32101047382401.xml",
           "32101047382401_1",
           "32101047382401_2",
           "32101047382401_AssetFront.jpg"
         )
+        side_1_idx = file_sets.index { |x| x.title.first.include?("_1") }
+        side_2_idx = file_sets.index { |x| x.title.first.include?("_2") }
+        expect(side_1_idx < side_2_idx).to eq true
       end
     end
     context "3 cassettes in two components" do

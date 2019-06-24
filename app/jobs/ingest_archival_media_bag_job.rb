@@ -80,7 +80,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
         barcodes.each do |barcode|
           media_resource_change_set = find_or_create_media_resource(:local_identifier, barcode)
           pbcore = bag.pbcore_parser(barcode: barcode)
-          bag.audio_files_for_barcode(barcode: barcode).each do |file_set_title, audio_files|
+          bag.audio_files_for_barcode(barcode: barcode).sort_by(&:first).each do |file_set_title, audio_files|
             file_set = FileSet.new(
               title: file_set_title,
               side: audio_files.first.side,
