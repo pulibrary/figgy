@@ -289,6 +289,25 @@ RSpec.describe IngestArchivalMediaBagJob do
         expect(side_1_idx < side_2_idx).to eq true
       end
     end
+    context "a barcode not in the EAD", run_real_characterization: true do
+      let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag_unknown_barcode") }
+      it "creates a Recording which is put in a filler descriptive proxy" do
+        stub_pulfa(pulfa_id: "C0652_c0383")
+        stub_pulfa(pulfa_id: "C0652_c0389")
+        described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
+
+        collection = query_service.find_all_of_model(model: Collection).first
+        resources = query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids)
+
+        expect(resources.size).to eq 1
+        expect(resources.first.title.first).to eq "[Unorganized Barcodes]"
+        expect(resources.first.local_identifier.first).to eq "unorganized"
+
+        members = Wayfinder.for(resources.first).members
+        expect(members.length).to eq 1
+        expect(members.first.local_identifier).to eq ["32101047382400"]
+      end
+    end
     context "3 cassettes in two components" do
       let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_demo_bag") }
 

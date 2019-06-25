@@ -128,6 +128,12 @@ class IngestArchivalMediaBagJob < ApplicationJob
             member_ids: barcodes.flat_map { |b| barcode_lookup[b] },
             member_of_collection_ids: [collection.id]
           )
+          if component_id.nil?
+            component_change_set.validate(
+              title: "[Unorganized Barcodes]",
+              local_identifier: "unorganized"
+            )
+          end
           changeset_persister.save(change_set: component_change_set)
         end
       end
