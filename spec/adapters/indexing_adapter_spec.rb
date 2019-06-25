@@ -10,7 +10,15 @@ RSpec.describe IndexingAdapter do
   let(:query_service) { adapter.query_service }
   let(:persister) { adapter.persister }
   let(:index_solr) { Valkyrie::MetadataAdapter.find(:index_solr) }
-  it_behaves_like "a Valkyrie::Persister"
+
+  it_behaves_like "a Valkyrie::MetadataAdapter"
+
+  # Rather than having a separate spec file for the persister, this just inlines
+  # it and provides the required let(:persister).
+  describe "persister tests" do
+    let(:persister) { adapter.persister }
+    it_behaves_like "a Valkyrie::Persister"
+  end
 
   it "can buffer into an index" do
     persister.buffer_into_index do |buffered_adapter|
