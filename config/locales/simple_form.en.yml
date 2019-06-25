@@ -61,6 +61,8 @@ en:
       scanned_resource:
         source_metadata_identifier: 'Bib ID (1234567) or PULFA ID (C123 or C123_c456)'
         title: 'Required if Source Metadata ID is blank'
+      collection:
+        slug: 'Portion of URL that will show up in DPUL, e.g "https://dpul.princeton.edu/slug"'
     required:
       html: '<span class="label label-info required-tag">required</span>'
   helpers:
