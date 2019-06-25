@@ -5,9 +5,10 @@ class ArchivalMediaBagParser
   BARCODE_WITH_SIDE_AND_PART_REGEX = /(\d{14}_\d+?_p\d+).*/
   attr_reader :path, :audio_files, :component_groups, :component_dict, :pbcore_parsers
 
-  def initialize(path:, component_id:)
+  def initialize(path:, component_id:, barcodes: nil)
     @path = path
     @component_dict = BarcodeComponentDict.new(component_id)
+    @barcodes = barcodes
   end
 
   # Constructs IngestableAudioFile objects for each wav/mp3 file in the Bag
@@ -17,7 +18,7 @@ class ArchivalMediaBagParser
   end
 
   def barcodes
-    audio_files.map(&:barcode).uniq
+    @barcodes ||= audio_files.map(&:barcode).uniq
   end
 
   def audio_files_by_barcode
@@ -35,7 +36,7 @@ class ArchivalMediaBagParser
     @component_groups ||=
       begin
         h = {}
-        audio_files.map(&:barcode).uniq.each do |barcode|
+        barcodes.each do |barcode|
           cid = component_dict.component_id(barcode: barcode)
           h[cid] = h.fetch(cid, []).append(barcode).uniq
         end

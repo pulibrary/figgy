@@ -1764,4 +1764,27 @@ RSpec.describe ChangeSetPersister do
       expect(file_set.original_file.checksum).to be_present
     end
   end
+
+  context "when telling an archival_media_collection to reorganize" do
+    it "reorganizes" do
+      stub_pulfa(pulfa_id: "C0652")
+      stub_pulfa(pulfa_id: "C0652_c0377")
+      coll = FactoryBot.create_for_repository(:archival_media_collection, source_metadata_identifier: "C0652")
+      barcode_resource = FactoryBot.create_for_repository(:recording, local_identifier: "32101047382401")
+      FactoryBot.create_for_repository(
+        :recording,
+        local_identifier: "unorganized",
+        title: "[Unorganized Barcodes]",
+        member_ids: [barcode_resource.id],
+        member_of_collection_ids: [coll.id]
+      )
+
+      coll_change_set = DynamicChangeSet.new(coll)
+      coll_change_set.validate(reorganize: true)
+      change_set_persister.save(change_set: coll_change_set)
+
+      parent = Wayfinder.for(barcode_resource).parents.first
+      expect(parent.source_metadata_identifier).to eq ["C0652_c0377"]
+    end
+  end
 end
