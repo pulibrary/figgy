@@ -14,7 +14,7 @@ RSpec.describe CollectionDecorator do
 
     context "when the collection is an archival media collection" do
       let(:collection) { FactoryBot.build(:collection, change_set: "archival_media_collection") }
-      it "does not manage files" do
+      it "manages files" do
         expect(decorator.manageable_files?).to be true
       end
     end
