@@ -21,7 +21,12 @@ class ManifestBuilder
     def self.for(resource, auth_token = nil, current_ability = nil)
       case resource
       when Collection
-        CollectionNode.new(resource, nil, current_ability)
+        case DynamicChangeSet.new(resource)
+        when ArchivalMediaCollectionChangeSet
+          ArchivalMediaCollectionNode.new(resource, nil, current_ability)
+        else
+          CollectionNode.new(resource, nil, current_ability)
+        end
       when EphemeraProject
         EphemeraProjectNode.new(resource)
       when IndexCollection
@@ -148,9 +153,9 @@ class ManifestBuilder
       file_set_presenters.map do |file_set|
         TopStructure.new(
           Structure.new(
-            label: file_set&.display_content&.label,
+            label: file_set.label,
             nodes: StructureNode.new(
-              label: file_set&.display_content&.label,
+              label: file_set.label,
               proxy: file_set.id
             )
           )
@@ -241,7 +246,7 @@ class ManifestBuilder
       # Checks a mime_type against a blacklist
       # @return [TrueClass, FalseClass]
       def leaf_node_mime_type?(mime_type)
-        blacklist = ["application/xml; schema=mets", "application/xml"]
+        blacklist = ["application/xml; schema=mets", "application/xml", "application/xml; schema=pbcore"]
         (blacklist & Array.wrap(mime_type)).empty?
       end
 
@@ -318,6 +323,31 @@ class ManifestBuilder
 
     def id
       nil
+    end
+  end
+
+  class ArchivalMediaCollectionNode < RootNode
+    def members
+      return @members unless @members.nil?
+
+      member_nodes = super
+      nodes = member_nodes
+      nodes += member_nodes.map { |child| child.decorate.members }.flatten
+      @members = nodes
+    end
+
+    def file_sets
+      return @file_sets unless @file_sets.nil?
+
+      leaves = members.map { |child| child.decorate.members }.flatten
+      @file_sets = leaves.select { |x| x.instance_of?(FileSet) && !x.image? }
+    end
+
+    ##
+    # Retrieve the leaf nodes for the Manifest
+    # @return [FileSet]
+    def leaf_nodes
+      @leaf_nodes ||= file_sets.select { |x| leaf_node_mime_type?(x.mime_type) }
     end
   end
 
@@ -511,6 +541,10 @@ class ManifestBuilder
       end
     end
 
+    def label
+      resource.title || "Unlabeled"
+    end
+
     def display_content
       return unless file.mime_type.first.include?("audio")
 
@@ -683,11 +717,11 @@ class ManifestBuilder
     # @return [IIIFManifest]
     def manifest
       @manifest ||= begin
-        if audio_files(resource.try(:leaf_nodes)).empty?
-          IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocator).to_h
+        if !audio_files(resource.try(:leaf_nodes)).empty? || audio_collection?
+          IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocatorV3).to_h
         else
           # note this assumes audio resources use flat modeling
-          IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocatorV3).to_h
+          IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocator).to_h
         end
       end
     end
@@ -697,5 +731,11 @@ class ManifestBuilder
       file_sets.select do |fs|
         fs.mime_type.any? { |str| str.starts_with? "audio" }
       end
+    end
+
+    def audio_collection?
+      return false unless @resource.resource.respond_to?(:change_set)
+
+      DynamicChangeSet.new(@resource.resource).is_a?(ArchivalMediaCollectionChangeSet)
     end
 end
