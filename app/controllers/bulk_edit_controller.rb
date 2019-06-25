@@ -10,6 +10,9 @@ class BulkEditController < ApplicationController
   def resources_update
     args = {}.tap do |hash|
       hash[:mark_complete] = (params["mark_complete"] == "1")
+      BulkUpdateJob.supported_attributes.each do |key|
+        hash[key] = params[key.to_s] unless params[key.to_s].blank?
+      end
     end
     batches.each do |ids|
       BulkUpdateJob.perform_later(ids: ids, args: args)

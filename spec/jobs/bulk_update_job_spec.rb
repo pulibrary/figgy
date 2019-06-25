@@ -10,6 +10,7 @@ describe BulkUpdateJob do
   let(:resource2) { FactoryBot.create_for_repository(:scanned_resource, state: "pending") }
   let(:ids) { [resource1.id, resource2.id] }
   let(:args) { { mark_complete: true } }
+  let(:more_args) { { mark_complete: true, ocr_language: "eng" } }
   describe "#perform" do
     before do
       resource1
@@ -18,11 +19,13 @@ describe BulkUpdateJob do
     end
 
     it "updates the resource state" do
-      described_class.perform_now(ids: ids, args: args)
+      described_class.perform_now(ids: ids, args: more_args)
       r1 = query_service.find_by(id: resource1.id)
       r2 = query_service.find_by(id: resource2.id)
       expect(r1.state).to eq ["complete"]
+      expect(r1.ocr_language).to eq ["eng"]
       expect(r2.state).to eq ["complete"]
+      expect(r2.ocr_language).to eq ["eng"]
     end
 
     context "one of the resources is taken down" do
