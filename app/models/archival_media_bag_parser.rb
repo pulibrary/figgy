@@ -41,7 +41,7 @@ class ArchivalMediaBagParser
         end
         h.each do |component_id, barcodes|
           h[component_id] = barcodes.sort_by do |barcode|
-            component_dict.barcodes(cid: component_id).index(barcode)
+            component_dict.barcodes(cid: component_id)&.index(barcode)
           end
         end
         h
