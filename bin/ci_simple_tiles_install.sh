@@ -1,8 +1,7 @@
 if [ ! -d "tmp/simple-tiles" ]; then
-  mkdir ~/downloads
-  wget --no-check-certificate https://github.com/propublica/simple-tiles/archive/master.zip -O ~/downloads/simple-tiles.zip
   mkdir -p -m 777 tmp && cd tmp
-  unzip ~/downloads/simple-tiles.zip
+  wget --no-check-certificate https://github.com/propublica/simple-tiles/archive/master.zip -O simple-tiles.zip
+  unzip simple-tiles.zip
   mv simple-tiles-master simple-tiles
   cd simple-tiles
   ./configure -t $PWD && make
