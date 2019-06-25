@@ -7,7 +7,7 @@ module RemoteMetadataProperty
     property :refresh_remote_metadata, virtual: true, multiple: false
 
     def apply_remote_metadata?
-      source_metadata_identifier.present? && (!persisted? || refresh_remote_metadata == "1")
+      source_metadata_identifier.present? && (!persisted? || refresh_remote_metadata == "1" || changed["source_metadata_identifier"])
     end
   end
 end
