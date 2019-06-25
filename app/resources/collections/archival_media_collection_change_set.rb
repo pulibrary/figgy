@@ -30,7 +30,8 @@ class ArchivalMediaCollectionChangeSet < ChangeSet
       :source_metadata_identifier,
       :slug,
       :bag_path,
-      :change_set
+      :change_set,
+      :reorganize
     ]
   end
 end

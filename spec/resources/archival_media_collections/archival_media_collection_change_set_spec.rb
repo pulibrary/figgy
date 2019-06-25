@@ -159,7 +159,8 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
         :source_metadata_identifier,
         :bag_path,
         :slug,
-        :change_set
+        :change_set,
+        :reorganize
       )
     end
   end
