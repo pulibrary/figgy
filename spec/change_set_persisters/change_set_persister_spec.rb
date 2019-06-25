@@ -271,12 +271,23 @@ RSpec.describe ChangeSetPersister do
   end
   context "when a source_metadata_identifier is set afterwards" do
     it "does not change anything" do
-      resource = FactoryBot.create_for_repository(:scanned_resource, title: "Title", source_metadata_identifier: nil)
+      stub_bibdata(bib_id: "123456")
+      resource = FactoryBot.create_for_repository(:scanned_resource, title: "Title", source_metadata_identifier: "123456")
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: "123456", title: [], refresh_remote_metadata: "0")
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).to be_blank
+    end
+    it "refreshes the metadata if it's a different value" do
+      stub_bibdata(bib_id: "123456")
+      stub_bibdata(bib_id: "123456789")
+      resource = FactoryBot.create_for_repository(:scanned_resource, title: "Title", source_metadata_identifier: "123456")
+      change_set = change_set_class.new(resource)
+      change_set.validate(source_metadata_identifier: "123456789", title: [], refresh_remote_metadata: "0")
+      output = change_set_persister.save(change_set: change_set)
+
+      expect(output.primary_imported_metadata.title).not_to be_blank
     end
   end
   context "when a source_metadata_identifier is set for the first time, and it doesn't exist" do
