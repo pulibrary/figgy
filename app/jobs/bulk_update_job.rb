@@ -7,6 +7,9 @@ class BulkUpdateJob < ApplicationJob
         change_set = DynamicChangeSet.new(resource)
         attributes = {}.tap do |attrs|
           attrs[:state] = "complete" if args[:mark_complete] && !blacklisted_states.include?(resource.state.first)
+          BulkUpdateJob.supported_attributes.each do |key|
+            attrs[key] = args[key] if args[key]
+          end
         end
         change_set.validate(attributes)
         if change_set.changed?
@@ -15,6 +18,14 @@ class BulkUpdateJob < ApplicationJob
         end
       end
     end
+  end
+
+  # Fields that can be bulk-edited
+  def self.supported_attributes
+    [
+      :ocr_language,
+      :rights_statement
+    ]
   end
 
   private

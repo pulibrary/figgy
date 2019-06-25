@@ -6,10 +6,29 @@
     <div class="panel-heading">Bulk edit <%= @resources_count %> resources</div>
     <div class="panel-body">
       <%= form_tag bulk_edit_resources_update_url(search_params: search_state.params_for_search), id: "bulk-edit-form", class: "form-group" do %>
-        <label>Workflow State</label>
-        <div class="checkbox">
-          <%= check_box_tag "mark_complete" %>
-          <%= label_tag "mark_complete", "Mark all complete" %>
+        <div>
+          <div class="col-sm-2"><label>Workflow State</label></div>
+          <div class="checkbox">
+            <%= check_box_tag "mark_complete" %>
+            <%= label_tag "mark_complete", "Mark all complete" %>
+          </div>
+        </div>
+        <div>
+          <div class="col-sm-2"><%= label_tag "ocr_language", "OCR Language" %></div>
+          <%= select_tag :ocr_language,
+              options_from_collection_for_select(ControlledVocabulary.for(:ocr_language).all, "value", "label"),
+              hint: "Set this field to trigger OCR generation",
+              include_blank: "[Do not update]",
+              input_html: { class: 'form-control ocr-language' },
+              required: false %>
+        </div>
+        <div>
+          <div class="col-sm-2"><%= label_tag "rights_statement", "Rights Statement" %></div>
+          <%= select_tag :rights_statement,
+              options_from_collection_for_select(ControlledVocabulary.for(:rights_statement).all, "value", "label"),
+              include_blank: "[Do not update]",
+              input_html: { class: 'form-control rights-statement' },
+              required: false %>
         </div>
         <div class="panel-footer panel-save-controls pull-right">
           <%= submit_tag "Apply Edits",
