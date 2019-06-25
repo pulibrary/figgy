@@ -68,4 +68,14 @@ namespace :export do
     exporter = CicognaraMarc.new(cico_collection_id: coll, out_dir: output_dir)
     exporter.run
   end
+
+  desc "Export IIIF manifest links to PULFA DAOs"
+  task pulfa: :environment do
+    begin
+      since = ENV["SINCE"] || (Time.zone.today - 14).strftime("%Y-%m-%d")
+      PulfaExporter.new(since_date: since).export
+    rescue PulfaExporter::SvnClient::SvnDirectoryError => e
+      puts e.to_s
+    end
+  end
 end

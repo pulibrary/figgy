@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-10-18
+
+## Added
+
+* Automatically adding links to Figgy objects to finding aids as DAO elements.
+* Exporting collections as PDFs.
 
 # 2019-10-14
 
