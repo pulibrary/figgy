@@ -15,6 +15,22 @@ RSpec.describe ScannedResourceChangeSet do
   it_behaves_like "a ChangeSet"
 
   describe "validations" do
+    context "when moved to flagged with a note" do
+      let(:form_resource) { scanned_resource.new(state: "complete") }
+      it "is valid" do
+        change_set.validate(state: "flagged", new_workflow_note_attributes: { note: "Test", author: "Test" })
+
+        expect(change_set).to be_valid
+      end
+    end
+    context "when moved to flagged without a note" do
+      let(:form_resource) { scanned_resource.new(state: "complete") }
+      it "is invalid" do
+        change_set.validate(state: "flagged", new_workflow_note_attributes: { note: "", author: "Test" })
+
+        expect(change_set).not_to be_valid
+      end
+    end
     context "when neither title or metadata identifier is set" do
       let(:form_resource) { scanned_resource.new(title: "", source_metadata_identifier: "") }
       it "is invalid" do

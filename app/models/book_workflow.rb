@@ -72,4 +72,10 @@ class BookWorkflow < BaseWorkflow
   def self.ark_mint_states
     [:complete].map(&:to_s)
   end
+
+  # States which require a note to be added.
+  # @return [Array<String>] the states which require a note to be added
+  def self.note_required_states
+    [:flagged].map(&:to_s)
+  end
 end

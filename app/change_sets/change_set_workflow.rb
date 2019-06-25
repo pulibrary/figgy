@@ -2,6 +2,7 @@
 module ChangeSetWorkflow
   extend ActiveSupport::Concern
   included do
+    validate :state_requires_note
     property :state, multiple: false, required: true, default: workflow_class.aasm.initial_state.to_s
     property :workflow_note, multiple: true, required: false, default: []
     property :new_workflow_note_attributes, virtual: true
@@ -37,6 +38,11 @@ module ChangeSetWorkflow
 
     def old_state
       Array.wrap(model.state).first
+    end
+
+    def state_requires_note
+      return unless workflow_class.try(:note_required_states)&.include?(new_state)
+      errors.add(:new_workflow_note, "is required when changed to #{new_state}") unless new_workflow_note.valid?
     end
   end
 end
