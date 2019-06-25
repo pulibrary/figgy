@@ -122,19 +122,58 @@ class IngestArchivalMediaBagJob < ApplicationJob
       end
 
       def build_descriptive_proxies(barcode_lookup)
-        component_groups.each do |component_id, barcodes|
-          component_change_set = find_or_create_media_resource(:source_metadata_identifier, component_id)
-          component_change_set.validate(
-            member_ids: barcodes.flat_map { |b| barcode_lookup[b] },
-            member_of_collection_ids: [collection.id]
-          )
-          if component_id.nil?
+        DescriptiveProxyBuilder.new(
+          barcode_lookup: barcode_lookup,
+          component_groups: component_groups,
+          changeset_persister: changeset_persister,
+          collection: collection,
+          recording_attributes: {
+            upload_set_id: upload_set_id
+          }
+        ).build!
+      end
+
+      class DescriptiveProxyBuilder
+        attr_reader :barcode_lookup, :component_groups, :changeset_persister, :recording_attributes, :collection
+        delegate :query_service, to: :changeset_persister
+        def initialize(barcode_lookup:, component_groups:, changeset_persister:, collection:, recording_attributes: {})
+          @barcode_lookup = barcode_lookup
+          @component_groups = component_groups
+          @changeset_persister = changeset_persister
+          @recording_attributes = recording_attributes
+          @collection = collection
+        end
+
+        def build!
+          component_groups.each do |component_id, barcodes|
+            component_change_set = find_or_create_media_resource(:source_metadata_identifier, component_id)
             component_change_set.validate(
-              title: "[Unorganized Barcodes]",
-              local_identifier: "unorganized"
+              member_ids: barcodes.flat_map { |b| barcode_lookup[b] },
+              member_of_collection_ids: [collection.id]
             )
+            if component_id.nil?
+              component_change_set.validate(
+                title: "[Unorganized Barcodes]",
+                local_identifier: "unorganized"
+              )
+            end
+            changeset_persister.save(change_set: component_change_set)
           end
-          changeset_persister.save(change_set: component_change_set)
+        end
+
+        # Creates or finds an existing Recording Object using an EAD Component ID
+        # @param component_id [String]
+        # @return [RecordingChangeSet]
+        def find_or_create_media_resource(property, value)
+          results = value.nil? ? [] : query_service.custom_queries.find_by_property(property: property, value: value)
+          media_resource = results.size.zero? ? ScannedResource.new : results.first
+          RecordingChangeSet.new(
+            media_resource,
+            property => value,
+            visibility: collection.visibility.first,
+            downloadable: "public",
+            **recording_attributes
+          )
         end
       end
 

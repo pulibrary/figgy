@@ -16,6 +16,8 @@ class ArchivalMediaCollectionChangeSet < ChangeSet
   property :read_groups, multiple: true, required: false
   property :change_set, require: true, default: "archival_media_collection"
 
+  property :reorganize, virtual: true, require: false, default: false, type: Dry::Types["params.bool"]
+
   validates :source_metadata_identifier, presence: true
   validates_with BagPathValidator
   validates_with SourceMetadataIdentifierValidator
@@ -28,7 +30,8 @@ class ArchivalMediaCollectionChangeSet < ChangeSet
       :source_metadata_identifier,
       :slug,
       :bag_path,
-      :change_set
+      :change_set,
+      :reorganize
     ]
   end
 end
