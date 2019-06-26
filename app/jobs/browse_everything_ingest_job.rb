@@ -19,5 +19,7 @@ class BrowseEverythingIngestJob < ApplicationJob
       change_set.validate(files: selected_files)
       buffered_changeset_persister.save(change_set: change_set)
     end
+  rescue Valkyrie::Persistence::ObjectNotFoundError
+    Valkyrie.logger.warn "Unable to find resource with ID: #{resource_id}"
   end
 end

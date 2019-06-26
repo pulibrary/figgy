@@ -172,6 +172,7 @@ Metrics/MethodLength:
     - 'app/jobs/ingest_archival_media_bag_job.rb'
     - 'app/services/preserver/importer.rb'
     - 'app/jobs/bulk_update_job.rb'
+    - 'app/jobs/browse_everything_ingest_job.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
