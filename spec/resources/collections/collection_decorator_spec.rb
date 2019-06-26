@@ -7,19 +7,6 @@ RSpec.describe CollectionDecorator do
 
   it_behaves_like "a CollectionDecorator"
 
-  describe "#manageable_files?" do
-    it "does not manage files" do
-      expect(decorator.manageable_files?).to be false
-    end
-
-    context "when the collection is an archival media collection" do
-      let(:collection) { FactoryBot.build(:collection, change_set: "archival_media_collection") }
-      it "manages files" do
-        expect(decorator.manageable_files?).to be true
-      end
-    end
-  end
-
   describe "#title" do
     it "exposes the title" do
       expect(decorator.title).to eq "Title"

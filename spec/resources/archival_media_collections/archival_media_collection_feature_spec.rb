@@ -36,14 +36,15 @@ RSpec.feature "Browsing archival media collections" do
       expect(page).to have_link "Edit This Archival Media Collection", href: edit_collection_path(collection)
       expect(page).to have_link "Delete This Archival Media Collection", href: collection_path(collection)
     end
+  end
 
-    it "links to the file management interface" do
-      visit "catalog/#{collection.id}"
+  context "when ingesting a new archival media collection", js: true do
+    it "provides a file browser for selecting bag paths" do
+      visit "collections/new/archival_media_collection"
 
-      expect(page).to have_link "View all 1 items in this collection"
-      expect(page).to have_link "File Manager"
-      click_on "File Manager"
-      expect(page).to have_button "Upload Files from Server"
+      expect(page).to have_css ".btn-bag-path.browse-everything"
+      click_on(class: "btn-bag-path")
+      expect(page).to have_css "#browse-everything"
     end
   end
 end
