@@ -95,7 +95,7 @@ class ChangeSet < Valkyrie::ChangeSet
 
   def populate_nested_collection(fragment:, as:, collection:, index:, **)
     property_klass = model_type_for(property: as)
-    item = collection.find { |x| x.id.to_s == fragment["id"] }
+    item = collection.find { |x| x.id.to_s == (fragment["id"] || fragment[:id]) }
     if item
       if delete_fragment?(fragment)
         collection.delete_at(index)
@@ -115,7 +115,7 @@ class ChangeSet < Valkyrie::ChangeSet
   end
 
   def delete_fragment?(fragment)
-    fragment["_destroy"] == "1" || fragment.values.select(&:present?).blank?
+    fragment["_destroy"] == "1" || fragment[:_destroy] == "1" || fragment.values.select(&:present?).blank?
   end
 
   # Override prepopulate method to correctly populate nested properties.
@@ -131,5 +131,20 @@ class ChangeSet < Valkyrie::ChangeSet
     end
 
     super
+  end
+
+  # Overridden from
+  # https://github.com/trailblazer/reform-rails/blob/v0.1.7/lib/reform/form/active_model/form_builder_methods.rb#L37
+  # This had to be overridden to handle that sometimes the keys that come in are
+  # symbols.
+  def rename_nested_param_for!(params, dfn)
+    name        = dfn[:name]
+    nested_name = "#{name}_attributes"
+    return unless params.key?(nested_name) || params.key?(nested_name.to_sym)
+
+    value = params["#{name}_attributes"] || params["#{name}_attributes".to_sym]
+    value = value.values if dfn[:collection]
+
+    params[name.to_sym] = value
   end
 end

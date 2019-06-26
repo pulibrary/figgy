@@ -142,7 +142,7 @@ module ResourceController
       return {} unless h
       h.map do |k, v|
         v.respond_to?(:strip) ? [k, v.strip] : [k, v]
-      end.to_h.with_indifferent_access
+      end.to_h
     end
 
     def find_resource(id)

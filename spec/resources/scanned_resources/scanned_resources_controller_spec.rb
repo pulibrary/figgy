@@ -294,6 +294,26 @@ RSpec.describe ScannedResourcesController, type: :controller do
           expect(reloaded.title).to eq ["Updated simple resource title"]
         end
       end
+
+      context "when updating logical structure" do
+        it "works" do
+          sign_in user
+          resource = FactoryBot.create_for_repository(:scanned_resource)
+          structure = {
+            "logical_structure" =>
+            [{ "nodes" =>
+               [{ "label" => "Test", "nodes" => [{ "proxy" => "641b8b7a-52c7-4909-8ee8-36735fb5c52f" }] },
+                { "proxy" => "9aa2123a-553b-4d06-a06a-f39c936c47ba" }],
+               "label" => "Logical" }]
+          }
+          patch :update, params: { id: resource.id.to_s, scanned_resource: structure }
+
+          expect(response).to redirect_to(solr_document_path(resource.id))
+
+          reloaded = find_resource(resource.id)
+          expect(reloaded.logical_structure.first.nodes.first.label).to eq ["Test"]
+        end
+      end
     end
   end
 
