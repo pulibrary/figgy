@@ -1,6 +1,7 @@
 import SaveWorkControl from 'form/save_work_control'
 import DuplicateResourceDetectorFactory from 'form/detect_duplicates'
 import ServerUploader from "./server_uploader"
+import CollectionBagUploader from "./collection_bag_uploader"
 import StructureManager from "structure_manager"
 import ModalViewer from "modal_viewer"
 import DerivativeForm from "derivative_form"
@@ -17,6 +18,7 @@ import BoundingBoxSelector from "bounding_box_selector"
 export default class Initializer {
   constructor() {
     this.server_uploader = new ServerUploader
+    this.collection_bag_uploader = new CollectionBagUploader
     this.initialize_form()
     this.initialize_timepicker()
     this.initialize_bbox()

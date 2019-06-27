@@ -11,8 +11,32 @@
       color: #d9534f;
     }
   }
+
   .required-tag {
     background-color: $dark-blue;
+  }
+
+  .btn-bag-path {
+    background-image: image-url("folder.png");
+    background-repeat: no-repeat;
+    display: inline-block;
+    background-position: center;
+    background-size: 18px;
+  }
+
+  .collection_bag_path {
+    display: inline;
+
+    label {
+      display: block;
+      margin-bottom: 0px;
+      margin-top: 0px;
+    }
+
+    #collection_bag_path {
+      display: inline-block;
+      width: 75%;
+    }
   }
 }
 .form-group .radio input.radio_buttons {
