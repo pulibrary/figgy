@@ -31,4 +31,9 @@ module CatalogHelper
     return "" unless facet && values
     super(facet, values)
   end
+
+  def can_have_manifests?(resource)
+    return DynamicChangeSet.new(resource).can_have_manifests? if resource.respond_to?(:change_set)
+    resource.class.can_have_manifests?
+  end
 end

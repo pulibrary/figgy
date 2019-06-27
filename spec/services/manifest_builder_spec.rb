@@ -697,11 +697,40 @@ RSpec.describe ManifestBuilder do
       stub_pulfa(pulfa_id: "C0652_c0377")
       IngestArchivalMediaBagJob.perform_now(collection_component: "C0652", bag_path: bag_path, user: user)
 
-      recording = query_service.custom_queries.find_by_property(property: :local_identifier, value: "32101047382401").first
+      recording = query_service.custom_queries.find_by_property(property: :local_identifier, value: "32101047382401").last
       manifest_builder = described_class.new(recording)
       output = manifest_builder.build
       expect(output["items"].first["rendering"].map { |h| h["label"] }).to contain_exactly "Download the mp3"
       expect(output["items"][0]["items"][0]["items"][0]["body"]["duration"]).to eq 0.255
+    end
+
+    context "when given an ArchivalMediaCollection", run_real_characterization: true, run_real_derivatives: true do
+      let(:collection) { query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: "C0652").last }
+      let(:collection_members) { collection.decorate.members }
+      let(:recording) { collection_members.first.decorate.members.first }
+      let(:manifest_builder) { described_class.new(collection) }
+      let(:output) { manifest_builder.build }
+
+      before do
+        bag_path = Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag")
+        user = User.first
+        stub_pulfa(pulfa_id: "C0652")
+        stub_pulfa(pulfa_id: "C0652_c0377")
+        IngestArchivalMediaBagJob.perform_now(collection_component: "C0652", bag_path: bag_path, user: user)
+      end
+
+      it "builds a presentation 3 manifest with recordings as separate canvases" do
+        expect(output).to be_kind_of Hash
+        expect(output["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
+        expect(output["type"]).to eq "Manifest"
+        expect(output["items"].length).to eq 2
+        expect(output["items"].first).to include "label" => { "@none" => ["32101047382401_1"] }
+        expect(output["items"].last).to include "label" => { "@none" => ["32101047382401_2"] }
+
+        expect(output["structures"].length).to eq 2
+        expect(output["structures"].first).to include "label" => { "@none" => ["32101047382401_1"] }
+        expect(output["structures"].last).to include "label" => { "@none" => ["32101047382401_2"] }
+      end
     end
 
     it "builds a presentation 3 manifest", run_real_characterization: true do

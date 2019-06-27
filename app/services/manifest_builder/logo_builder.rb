@@ -18,8 +18,12 @@ class ManifestBuilder
 
     private
 
+      def resource_logo
+        Array.wrap(@record.resource.rights_statement)
+      end
+
       def logo
-        if @record.resource.respond_to?(:rights_statement) && @record.resource.rights_statement.include?(RDF::URI("http://cicognara.org/microfiche_copyright"))
+        if @record.resource.respond_to?(:rights_statement) && resource_logo.include?(RDF::URI("http://cicognara.org/microfiche_copyright"))
           "vatican.png"
         else
           "pul_logo_icon.png"
