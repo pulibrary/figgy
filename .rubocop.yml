@@ -182,6 +182,7 @@ Metrics/MethodLength:
     - 'app/services/preserver/importer.rb'
     - 'app/jobs/bulk_update_job.rb'
     - 'app/jobs/browse_everything_ingest_job.rb'
+    - 'app/derivative_services/scanned_map_derivative_service.rb'
     - 'app/controllers/application_controller.rb'
     - 'app/services/ingest_ephemera_mods.rb'
     - 'app/helpers/thumbnail_helper.rb'

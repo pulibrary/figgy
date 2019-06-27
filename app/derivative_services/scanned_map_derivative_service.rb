@@ -42,7 +42,24 @@ class ScannedMapDerivativeService
 
   def create_derivatives
     jp2_derivative_service.create_derivatives if jp2_derivative_service.valid?
-    thumbnail_derivative_service.create_derivatives if thumbnail_derivative_service.valid?
+    begin
+      thumbnail_derivative_service.create_derivatives if thumbnail_derivative_service.valid?
+    rescue StandardError => error
+      # Delete the derivative files
+      derivative_files = resource.file_metadata.select(&:derivative?)
+      derivative_files.each do |derivative_file|
+        derivative_file.file_identifiers.each do |file_id|
+          change_set_persister.storage_adapter.delete(id: file_id)
+        end
+      end
+
+      original_files = resource.file_metadata.reject(&:derivative?)
+      # Delete the metadata for the derivative files
+      resource.file_metadata = original_files
+      change_set_persister.persister.save(resource: resource)
+
+      raise error
+    end
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
