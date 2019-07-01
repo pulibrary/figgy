@@ -57,13 +57,11 @@ RSpec.describe ScannedResourcesController, type: :controller do
 
     context "when the params specify an invalid change_set" do
       before do
-        allow(Rails.logger).to receive(:error)
+        allow(Valkyrie.logger).to receive(:error)
       end
       it "creates a new ScannedResource and flashes a warning" do
         get :new, params: { change_set: "invalid" }
-        expect(Rails.logger).to have_received(:error).with("ScannedResources do not support invalid as a ChangeSet.")
-        expect(response).to redirect_to new_scanned_resource_path
-        expect(flash[:error]).to eq("invalid is not a valid resource type.")
+        expect(Valkyrie.logger).to have_received(:error).with("Failed to find the ChangeSet class for invalid.").at_least(:once)
       end
     end
   end

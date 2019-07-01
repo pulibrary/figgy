@@ -10,5 +10,8 @@ class DynamicChangeSet
 
   def self.class_from_param(param)
     "#{param.camelize}ChangeSet".constantize
+  rescue NameError
+    Valkyrie.logger.error("Failed to find the ChangeSet class for #{param}.")
+    nil
   end
 end
