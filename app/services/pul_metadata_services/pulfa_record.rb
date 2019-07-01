@@ -7,11 +7,11 @@ module PulMetadataServices
 
     # Constructor
     # @param source [String]
-    # @param model [Class]
+    # @param resource [Class]
     # @param full_source [String]
-    def initialize(source, model = nil, full_source = nil)
+    def initialize(source, resource = nil, full_source = nil)
       @source = source
-      @model = model
+      @resource = resource
       @full_source = full_source
     end
 
@@ -28,7 +28,7 @@ module PulMetadataServices
       # Retrieves the appropriate Class used for the metadata attributes
       # @return [Class]
       def attributes_klass
-        if @model == MediaResource
+        if @resource.try(:change_set) == "recording"
           MediaResourceAttributes
         elsif collection?
           CollectionAttributes
@@ -141,7 +141,7 @@ module PulMetadataServices
           # TODO
         end
 
-        # look for a component title; if not found look for a collection title
+        # look for a component title
         # @return [Nokogiri::XML::Node]
         def unittitle_element
           data.at_xpath("#{data_root}/did/unittitle")

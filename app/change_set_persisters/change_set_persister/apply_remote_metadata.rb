@@ -19,7 +19,7 @@ class ChangeSetPersister
     private
 
       def remote_record
-        RemoteRecord.retrieve(change_set.source_metadata_identifier, resource_klass: change_set.model.class)
+        RemoteRecord.retrieve(change_set.source_metadata_identifier, resource: change_set.resource)
       end
 
       # Determines whether or not the resource in the ChangeSet is a geospatial resource

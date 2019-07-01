@@ -4,11 +4,11 @@ class RemoteRecord
   # @param source_metadata_identifier [String]
   # @param resource [Resource]
   # @return [RemoteRecord, RemoteRecord::PulfaRecord]
-  def self.retrieve(source_metadata_identifier, resource_klass: nil)
+  def self.retrieve(source_metadata_identifier, resource: nil)
     if bibdata?(source_metadata_identifier)
       new(source_metadata_identifier)
     elsif pulfa?(source_metadata_identifier)
-      PulfaRecord.new(source_metadata_identifier, resource_klass)
+      PulfaRecord.new(source_metadata_identifier, resource)
     end
   end
 
