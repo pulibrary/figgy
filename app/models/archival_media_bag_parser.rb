@@ -133,7 +133,7 @@ class BarcodeComponentDict
     end
 
     def remote_record
-      @remote_record ||= RemoteRecord.retrieve(@component_id, resource_klass: MediaResource)
+      @remote_record ||= RemoteRecord.retrieve(@component_id, resource: ScannedResource.new(change_set: "recording"))
     end
 
     def remote_record_attributes
