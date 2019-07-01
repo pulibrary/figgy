@@ -47,4 +47,29 @@ RSpec.describe FileSetDecorator do
       expect(decorator.downloadable?).to be true
     end
   end
+
+  describe "cloud fixity" do
+    let(:good_file) { FileMetadata.new(label: "good.jp2", id: SecureRandom.uuid) }
+    let(:bad_file) { FileMetadata.new(label: "bad.tif", id: SecureRandom.uuid) }
+    let(:good_file_pres) { FileMetadata.new(preservation_copy_of_id: good_file.id, id: SecureRandom.uuid) }
+    let(:bad_file_pres) { FileMetadata.new(preservation_copy_of_id: bad_file.id, id: SecureRandom.uuid) }
+    let(:good_event) { FactoryBot.create_for_repository(:event, child_id: good_file_pres.id, status: "SUCCESS") }
+    let(:bad_event) { FactoryBot.create_for_repository(:event, child_id: bad_file_pres.id, status: "FAILURE") }
+    let(:pres_obj) { FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, binary_nodes: [good_file_pres, bad_file_pres]) }
+    let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: [good_file, bad_file]) }
+
+    before do
+      pres_obj
+      good_event
+      bad_event
+    end
+
+    it "differentiates between the good and bad files" do
+      expect(decorator.cloud_fixity_success_of(good_file.id)).to eq("SUCCESS")
+      expect(decorator.cloud_fixity_last_success_date_of(good_file.id)).to eq(good_event.created_at)
+
+      expect(decorator.cloud_fixity_success_of(bad_file.id)).to eq("FAILURE")
+      expect(decorator.cloud_fixity_last_success_date_of(bad_file.id)).to eq("n/a")
+    end
+  end
 end

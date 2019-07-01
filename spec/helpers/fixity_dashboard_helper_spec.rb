@@ -18,6 +18,14 @@ RSpec.describe FixityDashboardHelper do
     end
   end
 
+  describe "#format_cloud_fixity_success" do
+    it "translates the google status values to match our local labels" do
+      expect(helper.format_cloud_fixity_success(nil)).to eq "in progress"
+      expect(helper.format_cloud_fixity_success("FAILURE")).to eq "failed"
+      expect(helper.format_cloud_fixity_success("SUCCESS")).to eq "succeeded"
+    end
+  end
+
   describe "#fixity_success_level" do
     it "translates fixity status label to match bootstrap level" do
       expect(helper.fixity_success_level(nil)).to eq "info"
