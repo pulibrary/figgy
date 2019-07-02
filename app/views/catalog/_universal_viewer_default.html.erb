@@ -1,4 +1,4 @@
-<% if can_have_manifests?(resource) && resource.decorate.try(:members).present? %>
+<% if resource.class.can_have_manifests? && resource.try(:member_ids).present? %>
   <div class="intrinsic-container intrinsic-container-16x9 uv-container">
     <%# note: UV html file is '/uv/uv' %>
     <iframe src="<%= universal_viewer_path(resource) %>" allowfullscreen="true"></iframe>
