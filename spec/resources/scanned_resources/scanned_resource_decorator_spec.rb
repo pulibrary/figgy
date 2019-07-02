@@ -258,4 +258,43 @@ RSpec.describe ScannedResourceDecorator do
       end
     end
   end
+
+  describe "#cloud_fixity_summary" do
+    it "returns a cloud fixity summary" do
+      fs1 = create_file_set(cloud_fixity_success: false)
+      fs2 = create_file_set(cloud_fixity_success: false)
+      fs3 = create_file_set(cloud_fixity_success: false)
+      ok_fs = create_file_set(cloud_fixity_success: true)
+      # Unrelated FS
+      create_file_set(cloud_fixity_success: false)
+      volume1 = FactoryBot.create_for_repository(:scanned_resource, member_ids: fs1.id)
+      volume2 = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs2.id, ok_fs.id])
+      mvw = FactoryBot.create_for_repository(:scanned_resource, member_ids: [volume1.id, volume2.id, fs3.id])
+
+      decorator = described_class.new(mvw)
+
+      expect(decorator.cloud_fixity_summary).to eq(
+        "<div>failed <span title=\"failed\" class=\"fixity-count label label-warning\">3</span></div>" \
+        " <div>succeeded <span title=\"succeeded\" class=\"fixity-count label label-primary\">1</span></div>"
+      )
+    end
+
+    def create_file_set(cloud_fixity_success: true)
+      file_set = FactoryBot.create_for_repository(:file_set)
+      metadata_node = FileMetadata.new(id: SecureRandom.uuid)
+      preservation_object = FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, metadata_node: metadata_node)
+      if cloud_fixity_success
+        # Create an old failure, to guard for the case where it failed and we
+        # fixed it.
+        FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "FAILURE", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node)
+        FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "SUCCESS", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node)
+      else
+        # Create an old success, to guard for the case where it once succeeded
+        # and now it failed.
+        FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "SUCCESS", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node)
+        FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "FAILURE", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node)
+      end
+      file_set
+    end
+  end
 end
