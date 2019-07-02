@@ -703,6 +703,77 @@ RSpec.describe ManifestBuilder do
       expect(output["items"][0]["items"][0]["items"][0]["body"]["duration"]).to eq 0.255
     end
 
+    context "when given a multi-volume recording", run_real_characterization: true, run_real_derivatives: true do
+      subject(:manifest_builder) { described_class.new(scanned_resource) }
+
+      let(:file1) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "") }
+      let(:file2) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "") }
+      let(:volume1) { FactoryBot.create_for_repository(:scanned_resource, files: [file1]) }
+      let(:volume2) { FactoryBot.create_for_repository(:scanned_resource, files: [file2]) }
+      let(:scanned_resource) do
+        sr = FactoryBot.create_for_repository(:recording)
+        cs = ScannedResourceChangeSet.new(sr)
+        cs.validate(member_ids: [volume1.id, volume2.id])
+        change_set_persister.save(change_set: cs)
+      end
+      let(:output) { manifest_builder.build }
+
+      it "generates the Renderings for the audio FileSets" do
+        expect(output).to be_kind_of Hash
+        expect(output["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
+        expect(output["type"]).to eq "Manifest"
+        expect(output["items"].length).to eq 2
+        expect(output["items"].first).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
+        expect(output["items"].last).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
+
+        expect(output["structures"].length).to eq 2
+        expect(output["structures"].first).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
+        expect(output["structures"].last).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
+      end
+    end
+
+    context "when given a multi-volume recording with thumbnails", run_real_characterization: true, run_real_derivatives: true do
+      subject(:manifest_builder) { described_class.new(scanned_resource) }
+
+      let(:audio_file1) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "") }
+      let(:image_file1) { fixture_file_upload("files/example.tif") }
+      let(:audio_file2) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "") }
+      let(:image_file2) { fixture_file_upload("files/example.tif") }
+      let(:volume1) { FactoryBot.create_for_repository(:scanned_resource, files: [audio_file1, image_file1]) }
+      let(:volume2) { FactoryBot.create_for_repository(:scanned_resource, files: [audio_file2, image_file2]) }
+      let(:scanned_resource) do
+        sr = FactoryBot.create_for_repository(:recording)
+        cs = ScannedResourceChangeSet.new(sr)
+        cs.validate(member_ids: [volume1.id, volume2.id])
+        change_set_persister.save(change_set: cs)
+      end
+      let(:output) { manifest_builder.build }
+
+      it "generates the Renderings for the audio FileSets" do
+        expect(output).to be_kind_of Hash
+        expect(output["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
+        expect(output["type"]).to eq "Manifest"
+        expect(output["items"].length).to eq 2
+        first_item = output["items"].first
+        expect(first_item).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
+
+        expect(output).to include("posterCanvas")
+        poster_canvas = output["posterCanvas"]
+        pages = poster_canvas["items"]
+        expect(pages.length).to eq(1)
+        annotations = pages.first["items"]
+        expect(annotations.length).to eq(1)
+        body = annotations.last["body"]
+        expect(body["type"]).to eq("Image")
+
+        last_item = output["items"].last
+        expect(last_item).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
+        expect(output["structures"].length).to eq 2
+        expect(output["structures"].first).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
+        expect(output["structures"].last).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
+      end
+    end
+
     context "when given an ArchivalMediaCollection", run_real_characterization: true, run_real_derivatives: true do
       let(:collection) { query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: "C0652").last }
       let(:collection_members) { collection.decorate.members }

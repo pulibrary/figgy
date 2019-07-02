@@ -18,6 +18,17 @@ class ManifestBuilder
   ##
   # Presenter modeling the Resource subjects as root nodes
   class RootNode
+    def self.multi_volume_recording?(resource)
+      decorated = resource.decorate
+      return unless decorated.respond_to?(:volumes) && !decorated.volumes.empty?
+
+      volumes = decorated.volumes
+      volume_file_sets = volumes.map(&:file_sets)
+      volume_file_sets.flatten!
+      audio_file_sets = volume_file_sets.select(&:audio?)
+      !audio_file_sets.empty?
+    end
+
     def self.for(resource, auth_token = nil, current_ability = nil)
       case resource
       when Collection
@@ -40,7 +51,11 @@ class ManifestBuilder
       else
         case DynamicChangeSet.new(resource)
         when RecordingChangeSet
-          RecordingNode.new(resource)
+          if multi_volume_recording?(resource)
+            MultiVolumeRecordingNode.new(resource)
+          else
+            RecordingNode.new(resource)
+          end
         else
           new(resource, auth_token)
         end
@@ -115,9 +130,14 @@ class ManifestBuilder
     end
 
     def audio_manifest?
-      file_set_presenters.find do |fs_presenter|
+      audio_file_sets = file_set_presenters.select do |fs_presenter|
         fs_presenter.display_content.present?
-      end.present?
+      end
+
+      work_presenter_nodes = Array.wrap(work_presenters)
+      work_presenters = work_presenter_nodes.select(&:audio_manifest?)
+
+      !audio_file_sets.empty? || !work_presenters.empty?
     end
 
     def audio_ranges
@@ -346,6 +366,20 @@ class ManifestBuilder
     ##
     # Retrieve the leaf nodes for the Manifest
     # @return [FileSet]
+    def leaf_nodes
+      @leaf_nodes ||= file_sets.select { |x| leaf_node_mime_type?(x.mime_type) }
+    end
+  end
+
+  class MultiVolumeRecordingNode < RootNode
+    def child_members
+      @child_members ||= members.map { |child| child.decorate.members }.flatten
+    end
+
+    def file_sets
+      @file_sets ||= child_members.select { |x| x.instance_of?(FileSet) && !x.image? }
+    end
+
     def leaf_nodes
       @leaf_nodes ||= file_sets.select { |x| leaf_node_mime_type?(x.mime_type) }
     end
@@ -717,7 +751,7 @@ class ManifestBuilder
     # @return [IIIFManifest]
     def manifest
       @manifest ||= begin
-        if !audio_files(resource.try(:leaf_nodes)).empty? || audio_collection?
+        if audio_collection? || recording?
           IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocatorV3).to_h
         else
           # note this assumes audio resources use flat modeling
@@ -726,11 +760,16 @@ class ManifestBuilder
       end
     end
 
-    def audio_files(file_sets)
-      return [] unless file_sets
-      file_sets.select do |fs|
+    def recording?
+      audio_presenters = resource.work_presenters.select(&:audio_manifest?)
+      return true unless audio_presenters.empty?
+
+      file_sets = Array.wrap(resource.try(:leaf_nodes))
+      audio_file_sets = file_sets.select do |fs|
         fs.mime_type.any? { |str| str.starts_with? "audio" }
       end
+
+      !audio_file_sets.empty?
     end
 
     def audio_collection?
