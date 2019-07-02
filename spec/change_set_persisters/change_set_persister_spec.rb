@@ -1578,6 +1578,22 @@ RSpec.describe ChangeSetPersister do
         expect(file_set_preservation.binary_nodes[0].use).to eq [Valkyrie::Vocab::PCDMUse.PreservationCopy]
       end
     end
+    context "when preserving a parent" do
+      with_queue_adapter :test
+      it "preserves it inline" do
+        file = fixture_file_upload("files/example.tif", "image/tiff")
+        resource = FactoryBot.create_for_repository(:pending_scanned_resource, preservation_policy: "cloud", files: [file])
+        change_set = DynamicChangeSet.new(resource)
+        change_set.validate(state: "complete")
+
+        output = change_set_persister.save(change_set: change_set)
+        expect(Wayfinder.for(output).preservation_object.metadata_node.use).to eq [Valkyrie::Vocab::PCDMUse.PreservedMetadata]
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "#{resource.id}.json"))).to eq true
+
+        # Files aren't preserved yet, because jobs haven't run.
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "#{resource.member_ids.first}.json"))).to eq false
+      end
+    end
     context "when a preserved ScannedResource's metadata is updated" do
       it "refreshes the preserved metadata" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
