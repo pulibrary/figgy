@@ -71,5 +71,13 @@ RSpec.describe FileSetDecorator do
       expect(decorator.cloud_fixity_success_of(bad_file.id)).to eq("FAILURE")
       expect(decorator.cloud_fixity_last_success_date_of(bad_file.id)).to eq("n/a")
     end
+
+    context "when there's no preservation for a file" do
+      let(:good_file_pres) { FileMetadata.new(preservation_copy_of_id: SecureRandom.uuid, id: SecureRandom.uuid) }
+      it "returns in progress" do
+        expect(decorator.cloud_fixity_success_of(good_file.id)).to eq nil
+        expect(decorator.cloud_fixity_last_success_date_of(good_file.id)).to eq("n/a")
+      end
+    end
   end
 end
