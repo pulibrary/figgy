@@ -14,7 +14,14 @@ class ChangeSetPersister
     def run
       cs = change_set.class.new(post_save_resource)
       return unless cs.try(:preserve?)
-      PreserveResourceJob.perform_later(id: cs.id.to_s)
+      # It's important that we inline this for parents, to ensure that a race
+      # condition doesn't happen which makes it so that two jobs get queued up
+      # that each call PreserveChildrenJob, resulting in multiple file uploads
+      if cs.try(:member_ids).present?
+        PreserveResourceJob.perform_now(id: cs.id.to_s)
+      else
+        PreserveResourceJob.perform_later(id: cs.id.to_s)
+      end
     end
   end
 end
