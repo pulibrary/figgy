@@ -34,8 +34,4 @@ class ArchivalMediaCollectionChangeSet < ChangeSet
       :reorganize
     ]
   end
-
-  def can_have_manifests?
-    true
-  end
 end

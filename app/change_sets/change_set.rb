@@ -147,8 +147,4 @@ class ChangeSet < Valkyrie::ChangeSet
 
     params[name.to_sym] = value
   end
-
-  def can_have_manifests?
-    model.class.can_have_manifests?
-  end
 end
