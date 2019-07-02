@@ -109,6 +109,28 @@ class BaseWayfinder
     @deep_succeeded_local_fixity_count ||= deep_fixity_count(fixity_success: 1)
   end
 
+  def deep_failed_cloud_fixity_count
+    @deep_failed_cloud_fixity_count ||= query_service.custom_queries.find_deep_failed_cloud_fixity_count(
+      resource: resource
+    )
+  end
+
+  def deep_succeeded_cloud_fixity_count
+    @deep_succeeded_cloud_fixity_count ||=
+      query_service.custom_queries.find_deep_preservation_object_count(resource: resource) -
+      deep_failed_cloud_fixity_count
+  end
+
+  def deep_file_set_count
+    @deep_file_set_count ||= query_service.custom_queries.find_deep_children_with_property(
+      resource: resource,
+      model: FileSet,
+      property: :file_metadata,
+      value: nil,
+      count: true
+    )
+  end
+
   private
 
     def deep_fixity_count(fixity_success:)
