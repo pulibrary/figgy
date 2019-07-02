@@ -265,9 +265,10 @@ RSpec.describe ScannedResourceDecorator do
       fs2 = create_file_set(cloud_fixity_success: false)
       fs3 = create_file_set(cloud_fixity_success: false)
       ok_fs = create_file_set(cloud_fixity_success: true)
+      unchecked_fs = FactoryBot.create_for_repository(:file_set)
       # Unrelated FS
       create_file_set(cloud_fixity_success: false)
-      volume1 = FactoryBot.create_for_repository(:scanned_resource, member_ids: fs1.id)
+      volume1 = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs1.id, unchecked_fs.id])
       volume2 = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs2.id, ok_fs.id])
       mvw = FactoryBot.create_for_repository(:scanned_resource, member_ids: [volume1.id, volume2.id, fs3.id])
 
@@ -275,7 +276,8 @@ RSpec.describe ScannedResourceDecorator do
 
       expect(decorator.cloud_fixity_summary).to eq(
         "<div>failed <span title=\"failed\" class=\"fixity-count label label-warning\">3</span></div>" \
-        " <div>succeeded <span title=\"succeeded\" class=\"fixity-count label label-primary\">1</span></div>"
+        " <div>succeeded <span title=\"succeeded\" class=\"fixity-count label label-primary\">1</span></div>" \
+        " <div>in progress <span title=\"in progress\" class=\"fixity-count label label-info\">1</span></div>"
       )
     end
 
