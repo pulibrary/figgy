@@ -54,6 +54,9 @@ class NumismaticsImportService
       resource = klass.new
 
       change_set = DynamicChangeSet.new(resource)
+
+      # This was affecting testing Coin imports
+      attributes[:ruler_id] = Array.wrap(attributes[:ruler_id]) if attributes.key?(:ruler_id)
       return unless change_set.validate(**attributes)
       change_set.member_of_collection_ids = [collection.id] if collection.try(:id)
 
@@ -332,6 +335,7 @@ class NumismaticsImportService
       end
     end
 
+    # rubocop:disable Metrics/AbcSize
     def create_coins
       resources = []
       coin_numbers = coins.ids(column: "IssueID", value: issue_number)
@@ -352,13 +356,17 @@ class NumismaticsImportService
         attributes[:provenance] = provenance_attributes(coin_id: attributes[:coin_number])
         attributes[:loan] = loan_attributes(coin_id: attributes[:coin_number])
 
-        resources << new_resource(klass: Numismatics::Coin, **attributes)
+        new_coin_resource = new_resource(klass: Numismatics::Coin)
+        new_coin_change_set = Numismatics::CoinChangeSet.new(new_coin_resource)
+        new_coin_change_set.validate(**attributes)
+        persisted_coin = change_set_persister.save(change_set: new_coin_change_set)
+
+        resources << persisted_coin
       end
 
       resources.map(&:id)
     end
 
-    # rubocop:disable Metrics/AbcSize
     def create_issue(coin_ids:)
       attributes = issues.base_attributes(id: issue_number).to_h
       attributes[:depositor] = depositor
