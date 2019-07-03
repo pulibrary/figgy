@@ -1,7 +1,7 @@
 
 export default class CollectionBagUploader {
   constructor() {
-    this.element = $(".browse-everything")
+    this.element = $(".new_collection .browse-everything, .edit_collection .browse-everything")
     this.element.click((event) => event.preventDefault())
     this.mount_browse_everything()
   }
