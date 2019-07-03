@@ -157,7 +157,7 @@ Rails.application.routes.draw do
       resources :references
     end
 
-    get "/numismatics/issues/:parent_id/coin" => "coins#new", as: :parent_new_numismatics_coin
+    get "/numismatics/issues/:parent_id/coin" => "numismatics/coins#new", as: :parent_new_numismatics_coin
     get "/numismatics/references/:parent_id/new", to: "numismatics/references#new", as: :parent_new_numismatics_reference
 
     resources :ephemera_projects do
