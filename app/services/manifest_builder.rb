@@ -383,6 +383,30 @@ class ManifestBuilder
     def leaf_nodes
       @leaf_nodes ||= file_sets.select { |x| leaf_node_mime_type?(x.mime_type) }
     end
+
+    def default_audio_ranges
+      members.map do |member|
+        audio_file_sets = member.decorate.file_sets.select(&:audio?)
+        nodes = audio_file_sets.map do |file_set|
+          Structure.new(
+            label: file_set.title,
+            nodes: [
+              StructureNode.new(
+                label: IIIFManifest::V3::ManifestBuilder.language_map(file_set.title),
+                proxy: file_set.id
+              )
+            ]
+          )
+        end
+
+        TopStructure.new(
+          Structure.new(
+            label: member.title,
+            nodes: nodes
+          )
+        )
+      end
+    end
   end
 
   class ScannedMapNode < RootNode

@@ -11,5 +11,10 @@ class ManifestBuilder
     def rendering_builder
       ManifestBuilder::CanvasRenderingBuilder
     end
+
+    def label
+      return record.structure.label if record.respond_to?(:structure)
+      record.try(:label)
+    end
   end
 end

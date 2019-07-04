@@ -17,7 +17,8 @@ class ManifestBuilder
           canvas_builders.collect do |cb|
             {
               "type" => "Canvas",
-              "id" => "#{cb.path}#t=0,#{duration(cb)}"
+              "id" => "#{cb.path}#t=0,#{duration(cb)}",
+              "label" => cb.label
             }
           end
       end
