@@ -13,6 +13,7 @@ class ManifestBuilder
           { "@context" => "http://universalviewer.io/context.json", "profile" => "http://universalviewer.io/ui-extensions-profile", "disableUI" => ["mediaDownload"] }
         ]
       end
+
       manifest["posterCanvas"] = poster_canvas_builder.canvas unless poster_image_record.nil?
       manifest
     end

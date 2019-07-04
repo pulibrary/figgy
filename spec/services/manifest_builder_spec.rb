@@ -700,8 +700,11 @@ RSpec.describe ManifestBuilder do
       recording = query_service.custom_queries.find_by_property(property: :local_identifier, value: "32101047382401").last
       manifest_builder = described_class.new(recording)
       output = manifest_builder.build
-      expect(output["items"].first["rendering"].map { |h| h["label"] }).to contain_exactly "Download the mp3"
-      expect(output["items"][0]["items"][0]["items"][0]["body"]["duration"]).to eq 0.255
+      expect(output).to include "items"
+      canvases = output["items"]
+      expect(canvases.length).to eq 2
+      expect(canvases.first["rendering"].map { |h| h["label"] }).to contain_exactly "Download the mp3"
+      expect(canvases.first["items"][0]["items"][0]["body"]["duration"]).to eq 0.255
     end
 
     context "when given a multi-volume recording", run_real_characterization: true, run_real_derivatives: true do
@@ -719,17 +722,39 @@ RSpec.describe ManifestBuilder do
       end
       let(:output) { manifest_builder.build }
 
-      it "generates the Renderings for the audio FileSets" do
+      it "generates the Ranges for the audio FileSets" do
         expect(output).to be_kind_of Hash
         expect(output["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
         expect(output["type"]).to eq "Manifest"
         expect(output["items"].length).to eq 2
-        expect(output["items"].first).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
-        expect(output["items"].last).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
 
-        expect(output["structures"].length).to eq 2
-        expect(output["structures"].first).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
-        expect(output["structures"].last).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
+        first_canvas = output["items"].first
+        expect(first_canvas).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
+
+        last_canvas = output["items"].last
+        expect(last_canvas).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
+
+        expect(output).to include "structures"
+        ranges = output["structures"]
+        expect(ranges.length).to eq 2
+
+        expect(ranges.first["items"].length).to eq 1
+        expect(ranges.first["items"].first).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
+        child_ranges = ranges.first["items"]
+        expect(child_ranges.length).to eq 1
+        expect(child_ranges.first).to include "items"
+        range_canvases = child_ranges.first["items"]
+        expect(range_canvases.length).to eq 1
+        expect(range_canvases.first).to include "label" => [{ "@none" => ["32101047382401_1_pm.wav"] }]
+
+        expect(ranges.last["items"].length).to eq 1
+        expect(ranges.last["items"].first).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
+        child_ranges = ranges.last["items"]
+        expect(child_ranges.length).to eq 1
+        expect(child_ranges.first).to include "items"
+        range_canvases = child_ranges.first["items"]
+        expect(range_canvases.length).to eq 1
+        expect(range_canvases.first).to include "label" => [{ "@none" => ["32101047382401_1_pm.wav"] }]
       end
     end
 
@@ -750,7 +775,7 @@ RSpec.describe ManifestBuilder do
       end
       let(:output) { manifest_builder.build }
 
-      it "generates the Renderings for the audio FileSets" do
+      it "generates the posterCanvas for the Manifest" do
         expect(output).to be_kind_of Hash
         expect(output["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
         expect(output["type"]).to eq "Manifest"
@@ -766,12 +791,6 @@ RSpec.describe ManifestBuilder do
         expect(annotations.length).to eq(1)
         body = annotations.last["body"]
         expect(body["type"]).to eq("Image")
-
-        last_item = output["items"].last
-        expect(last_item).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
-        expect(output["structures"].length).to eq 2
-        expect(output["structures"].first).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
-        expect(output["structures"].last).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
       end
     end
 
