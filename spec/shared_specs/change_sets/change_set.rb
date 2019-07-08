@@ -33,7 +33,7 @@ RSpec.shared_examples "a ChangeSet" do
         expect(change_set).not_to be_valid
       end
     end
-    context "when visibility isn't set" do
+    context "when visibility is blank" do
       let(:form_resource) { resource_klass.new(visibility: [""]) }
       it "is invalid" do
         expect(change_set).not_to be_valid
