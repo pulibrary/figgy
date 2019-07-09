@@ -35,5 +35,11 @@ RSpec.describe VisibilityProperty do
       expect { change_set.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }.to change { change_set.read_groups }
         .to([])
     end
+
+    it "sets reading_room read group" do
+      change_set = DummyChangeSet.new(FactoryBot.build(:scanned_resource))
+      expect { change_set.visibility = ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_READING_ROOM }.to change { change_set.read_groups }
+        .to([::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_READING_ROOM])
+    end
   end
 end

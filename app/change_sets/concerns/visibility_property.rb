@@ -19,6 +19,8 @@ module VisibilityProperty
           self.read_groups = [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
         when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
           self.read_groups = [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED]
+        when ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_READING_ROOM
+          self.read_groups = [::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_READING_ROOM]
         when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
           self.read_groups = []
         end
