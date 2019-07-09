@@ -36,6 +36,10 @@ describe Ability do
     FactoryBot.create(:complete_campus_only_scanned_resource, title: "Campus Only", user: creating_user)
   end
 
+  let(:reading_room_scanned_resource) do
+    FactoryBot.create(:reading_room_scanned_resource, title: "Reading Room", user: creating_user)
+  end
+
   let(:pending_scanned_resource) do
     FactoryBot.create(:pending_scanned_resource, title: "Pending", user: creating_user)
   end
@@ -77,6 +81,7 @@ describe Ability do
   let(:staff_user) { FactoryBot.create(:staff) }
   let(:other_staff_user) { FactoryBot.create(:staff) }
   let(:campus_user) { FactoryBot.create(:user) }
+  let(:reading_room_user) { FactoryBot.create(:reading_room_user) }
   let(:role) { Role.where(name: "admin").first_or_create }
 
   describe "as an admin" do
@@ -91,6 +96,7 @@ describe Ability do
       is_expected.to be_able_to(:read, private_scanned_resource)
       is_expected.to be_able_to(:read, takedown_scanned_resource)
       is_expected.to be_able_to(:read, flagged_scanned_resource)
+      is_expected.to be_able_to(:read, reading_room_scanned_resource)
       is_expected.to be_able_to(:pdf, open_scanned_resource)
       is_expected.to be_able_to(:color_pdf, open_scanned_resource)
       is_expected.to be_able_to(:edit, open_scanned_resource)
@@ -108,6 +114,7 @@ describe Ability do
       is_expected.to be_able_to(:destroy, flagged_scanned_resource)
       is_expected.to be_able_to(:manifest, open_scanned_resource)
       is_expected.to be_able_to(:manifest, pending_scanned_resource)
+      is_expected.to be_able_to(:manifest, reading_room_scanned_resource)
       is_expected.to be_able_to(:read, :graphql)
     }
 
@@ -177,6 +184,8 @@ describe Ability do
       is_expected.to be_able_to(:manifest, open_scanned_resource)
       is_expected.to be_able_to(:read, pending_scanned_resource)
       is_expected.to be_able_to(:manifest, pending_scanned_resource)
+      is_expected.to be_able_to(:read, reading_room_scanned_resource)
+      is_expected.to be_able_to(:manifest, reading_room_scanned_resource)
       is_expected.to be_able_to(:read, :graphql)
     }
 
@@ -243,6 +252,8 @@ describe Ability do
       is_expected.not_to be_able_to(:read, metadata_review_scanned_resource)
       is_expected.not_to be_able_to(:read, final_review_scanned_resource)
       is_expected.not_to be_able_to(:read, takedown_scanned_resource)
+      is_expected.not_to be_able_to(:read, reading_room_scanned_resource)
+      is_expected.not_to be_able_to(:manifest, reading_room_scanned_resource)
       is_expected.not_to be_able_to(:file_manager, open_scanned_resource)
       is_expected.not_to be_able_to(:update, open_scanned_resource)
       is_expected.not_to be_able_to(:create, ScannedResource.new)
@@ -322,6 +333,30 @@ describe Ability do
     end
   end
 
+  describe "as a reading room user" do
+    subject { described_class.new(current_user, ip_address: "1.2.3") }
+    let(:creating_user) { staff_user }
+    let(:current_user) { reading_room_user }
+
+    context "without a whitelisted IP" do
+      it {
+        is_expected.not_to be_able_to(:read, reading_room_scanned_resource)
+        is_expected.not_to be_able_to(:manifest, reading_room_scanned_resource)
+      }
+    end
+
+    context "with a whitelisted IP" do
+      let(:config_hash) { { "access_control" => { "reading_room_ips" => ["1.2.3"] } } }
+      before do
+        allow(Figgy).to receive(:config).and_return(config_hash)
+      end
+      it {
+        is_expected.to be_able_to(:read, reading_room_scanned_resource)
+        is_expected.to be_able_to(:manifest, reading_room_scanned_resource)
+      }
+    end
+  end
+
   describe "as an anonymous user" do
     let(:creating_user) { staff_user }
     let(:current_user) { nil }
@@ -374,6 +409,8 @@ describe Ability do
       is_expected.not_to be_able_to(:read, metadata_review_scanned_resource)
       is_expected.not_to be_able_to(:read, final_review_scanned_resource)
       is_expected.not_to be_able_to(:read, takedown_scanned_resource)
+      is_expected.not_to be_able_to(:read, reading_room_scanned_resource)
+      is_expected.not_to be_able_to(:manifest, reading_room_scanned_resource)
       is_expected.not_to be_able_to(:manifest, ephemera_folder)
       is_expected.not_to be_able_to(:file_manager, open_scanned_resource)
       is_expected.not_to be_able_to(:update, open_scanned_resource)

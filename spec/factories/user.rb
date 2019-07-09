@@ -26,5 +26,9 @@ FactoryBot.define do
       email "takedown@example.com"
       roles { [Role.where(name: "notify_takedown").first_or_create] }
     end
+
+    factory :reading_room_user do
+      roles { [Role.where(name: "reading_room").first_or_create] }
+    end
   end
 end

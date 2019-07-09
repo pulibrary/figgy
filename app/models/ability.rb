@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class Ability
   include Hydra::Ability
-  # Define any customized permissions here.
 
+  # Define any customized permissions here.
   self.ability_logic += [:manifest_permissions]
 
   def custom_permissions
@@ -182,7 +182,18 @@ class Ability
   end
 
   def group_readable?(obj)
-    (user_groups & obj.read_groups).any?
+    groups = (user_groups & obj.read_groups)
+    return reading_room_ip? if groups == [::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_READING_ROOM]
+    groups.any?
+  end
+
+  def reading_room_ip?
+    ip = options.fetch(:ip_address, nil)
+    reading_room_ips.include? ip
+  end
+
+  def reading_room_ips
+    Figgy.config["access_control"]["reading_room_ips"]
   end
 
   def user_readable?(obj)
