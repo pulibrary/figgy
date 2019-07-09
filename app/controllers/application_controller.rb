@@ -11,6 +11,10 @@ class ApplicationController < ActionController::Base
   before_action :notify_read_only
   before_action :store_user_location!, if: :storable_location?
 
+  def current_ability
+    Ability.new(current_user, ip_address: request.remote_ip)
+  end
+
   def notify_read_only
     return unless Figgy.read_only_mode
     message = ["The site is currently in read-only mode."]
