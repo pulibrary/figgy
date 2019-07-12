@@ -25,13 +25,18 @@ en:
       class: "label-success"
       text: "open"
     authenticated:
-      note_html: Restrict access to only users and/or groups from Princeton University Library.
+      note_html: Restricted access. Only users logged in with a Princeton University NetID can view.
       warning_html: ''
       class: "label-info"
       text: "princeton"
+    reading_room:
+      note_html: Restricted access. Only users who have been granted reading room permission in this application and are physically in an RBSC reading room can view.
+      warning_html: ''
+      class: "label-warning"
+      text: "reading room"
     restricted:
       text: "private"
-      note_html: Only privileged users of this application can see the work.
+      note_html: Only privileged users of this application can view.
       warning_html: ''
       class: "label-danger"
   computed_visibility:

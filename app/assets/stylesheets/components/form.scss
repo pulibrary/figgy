@@ -88,6 +88,15 @@
         background-image: image-url("authenticated_visibility.png");
       }
     }
+    &-warning {
+      background-color: $university-black;
+      border: 2px solid $university-black;
+      padding-bottom: 2px;
+      padding-right: 6px;
+      .icon {
+        background-image: image-url("authenticated_visibility_white.png");
+      }
+    }
     &-danger {
       background-color: $university-black;
       padding-left: 10px;
