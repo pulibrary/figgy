@@ -136,12 +136,15 @@ class METSDocument
   def file_info(file, volume_id = nil)
     element = file.xpath("mets:FLocat/@xlink:href")
     content = element.to_s
+    checksumtype file.xpath("@CHECKSUMTYPE").to_s
+    checksum = file.xpath("@CHECKSUM").to_s.rjust((checksumtype == "MD5") ? 32 : 40, "0")
+
     path = content.gsub(/file:\/\//, "")
     replaces = volume_id ? "#{volume_id}/" : ""
     replaces += File.basename(path, File.extname(path))
     {
       id: file.xpath("@ID").to_s,
-      checksum: file.xpath("@CHECKSUM").to_s.rjust(40, "0"),
+      checksum: checksum,
       mime_type: file.xpath("@MIMETYPE").to_s,
       path: path,
       replaces: "#{pudl_id}/#{replaces}"
