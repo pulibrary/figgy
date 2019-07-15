@@ -84,6 +84,10 @@ FactoryBot.define do
       state "complete"
       visibility ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_READING_ROOM
     end
+    factory :campus_ip_scanned_resource do
+      state "complete"
+      visibility ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS
+    end
     factory :metadata_review_scanned_resource do
       state "metadata_review"
     end

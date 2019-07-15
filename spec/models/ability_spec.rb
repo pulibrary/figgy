@@ -40,6 +40,10 @@ describe Ability do
     FactoryBot.create(:reading_room_scanned_resource, title: "Reading Room", user: creating_user)
   end
 
+  let(:campus_ip_scanned_resource) do
+    FactoryBot.create(:campus_ip_scanned_resource, title: "On Campus", user: creating_user)
+  end
+
   let(:pending_scanned_resource) do
     FactoryBot.create(:pending_scanned_resource, title: "Pending", user: creating_user)
   end
@@ -80,7 +84,7 @@ describe Ability do
   let(:admin_user) { FactoryBot.create(:admin) }
   let(:staff_user) { FactoryBot.create(:staff) }
   let(:other_staff_user) { FactoryBot.create(:staff) }
-  let(:campus_user) { FactoryBot.create(:user) }
+  let(:netid_user) { FactoryBot.create(:user) }
   let(:reading_room_user) { FactoryBot.create(:reading_room_user) }
   let(:role) { Role.where(name: "admin").first_or_create }
 
@@ -97,6 +101,7 @@ describe Ability do
       is_expected.to be_able_to(:read, takedown_scanned_resource)
       is_expected.to be_able_to(:read, flagged_scanned_resource)
       is_expected.to be_able_to(:read, reading_room_scanned_resource)
+      is_expected.to be_able_to(:read, campus_ip_scanned_resource)
       is_expected.to be_able_to(:pdf, open_scanned_resource)
       is_expected.to be_able_to(:color_pdf, open_scanned_resource)
       is_expected.to be_able_to(:edit, open_scanned_resource)
@@ -115,6 +120,7 @@ describe Ability do
       is_expected.to be_able_to(:manifest, open_scanned_resource)
       is_expected.to be_able_to(:manifest, pending_scanned_resource)
       is_expected.to be_able_to(:manifest, reading_room_scanned_resource)
+      is_expected.to be_able_to(:manifest, campus_ip_scanned_resource)
       is_expected.to be_able_to(:read, :graphql)
     }
 
@@ -186,6 +192,8 @@ describe Ability do
       is_expected.to be_able_to(:manifest, pending_scanned_resource)
       is_expected.to be_able_to(:read, reading_room_scanned_resource)
       is_expected.to be_able_to(:manifest, reading_room_scanned_resource)
+      is_expected.to be_able_to(:read, campus_ip_scanned_resource)
+      is_expected.to be_able_to(:manifest, campus_ip_scanned_resource)
       is_expected.to be_able_to(:read, :graphql)
     }
 
@@ -227,9 +235,9 @@ describe Ability do
     end
   end
 
-  describe "as a campus user" do
+  describe "as a princeton netid user" do
     let(:creating_user) { staff_user }
-    let(:current_user) { campus_user }
+    let(:current_user) { netid_user }
 
     it {
       is_expected.to be_able_to(:read, open_scanned_resource)
@@ -254,6 +262,8 @@ describe Ability do
       is_expected.not_to be_able_to(:read, takedown_scanned_resource)
       is_expected.not_to be_able_to(:read, reading_room_scanned_resource)
       is_expected.not_to be_able_to(:manifest, reading_room_scanned_resource)
+      is_expected.not_to be_able_to(:read, campus_ip_scanned_resource)
+      is_expected.not_to be_able_to(:manifest, campus_ip_scanned_resource)
       is_expected.not_to be_able_to(:file_manager, open_scanned_resource)
       is_expected.not_to be_able_to(:update, open_scanned_resource)
       is_expected.not_to be_able_to(:create, ScannedResource.new)
@@ -266,6 +276,15 @@ describe Ability do
       is_expected.not_to be_able_to(:complete, pending_scanned_resource)
       is_expected.not_to be_able_to(:destroy, admin_file)
     }
+
+    context "when accessing figgy via a campus IP" do
+      subject { described_class.new(current_user, ip_address: "128.112.0.0") }
+
+      it {
+        is_expected.to be_able_to(:read, campus_ip_scanned_resource)
+        is_expected.to be_able_to(:manifest, campus_ip_scanned_resource)
+      }
+    end
 
     context "when read-only mode is on" do
       before { allow(Figgy).to receive(:read_only_mode).and_return(true) }
@@ -424,6 +443,15 @@ describe Ability do
       is_expected.not_to be_able_to(:complete, pending_scanned_resource)
       is_expected.not_to be_able_to(:destroy, admin_file)
     }
+
+    context "when accessing figgy via a campus IP" do
+      subject { described_class.new(current_user, ip_address: "128.112.0.0") }
+
+      it {
+        is_expected.to be_able_to(:read, campus_ip_scanned_resource)
+        is_expected.to be_able_to(:manifest, campus_ip_scanned_resource)
+      }
+    end
 
     context "when read-only mode is on" do
       before { allow(Figgy).to receive(:read_only_mode).and_return(true) }
