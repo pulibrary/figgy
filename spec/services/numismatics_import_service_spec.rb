@@ -38,5 +38,15 @@ RSpec.describe NumismaticsImportService do
       reverse_file_set = first_coin.decorate.decorated_file_sets.last
       expect(reverse_file_set.derivative_files).not_to be_empty
     end
+
+    it "filters for only TIF image files" do
+      expect(collection.decorate.members).not_to be_empty
+      members = collection.decorate.members
+      expect(members.first.decorate.decorated_file_sets).not_to be_empty
+      file_sets = members.first.decorate.decorated_file_sets
+      expect(file_sets.length).to eq 2
+      expect(file_sets.first.mime_type).to eq ["image/tiff"]
+      expect(file_sets.last.mime_type).to eq ["image/tiff"]
+    end
   end
 end
