@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div class="playlist-tracks">
     <h2>Search for Recordings to Add Tracks</h2>
     <form @submit.prevent="search">
       <div class="input-group">
         <input
           v-model="recording_query"
+          name="recording-query"
           placeholder="Search"
           class="form-control"
         >
@@ -19,10 +20,12 @@
     </form>
     <div>
       <table class="table table-striped">
-        <thead>
-          <th>Title</th>
-          <th>Actions</th>
-        </thead>
+        <template v-if="recordings.length > 0">
+          <thead>
+            <th>Title</th>
+            <th>Actions</th>
+          </thead>
+        </template>
         <tbody>
           <template
             v-for="recording in recordings"
@@ -158,9 +161,11 @@ export default {
         .then(function (data) { // Map to objects
           return data['response']['docs'].map(
             function (recordingDocument) {
+              const titles = recordingDocument['title_ssim'] ||
+recordingDocument['figgy_title_ssim']
               return {
                 id: recordingDocument['id'],
-                title: recordingDocument['title_ssim'][0],
+                title: titles[0],
                 tracks: []
               }
             }
