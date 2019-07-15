@@ -1,30 +1,64 @@
-<html>
-  <head>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link rel="stylesheet" type="text/css" href="uv/uv.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #login {
+          display: none;
+        }
+    </style>
     <script type="text/javascript" src="uv/lib/offline.js"></script>
     <script type="text/javascript" src="uv/lib/offline.js"></script>
     <script type="text/javascript" src="uv/helpers.js"></script>
     <script type="text/javascript">
-      window.addEventListener('uvLoaded', function(e) { 
+      function loadUV() {
         urlDataProvider = new UV.URLDataProvider(false);
-        uv = createUV('#uv', {
-          root: 'uv',
-          iiifResourceUri: urlDataProvider.get('manifest'),
-          configUri: 'uv/uv_config.json',
-          collectionIndex: Number(urlDataProvider.get('c', 0)),
-          manifestIndex: Number(urlDataProvider.get('m', 0)),
-          sequenceIndex: Number(urlDataProvider.get('s', 0)),
-          canvasIndex: Number(urlDataProvider.get('cv', 0)),
-          rangeId: urlDataProvider.get('rid', 0),
-          rotation: Number(urlDataProvider.get('r', 0)),
-          xywh: urlDataProvider.get('xywh', ''),
-          embedded: true
-        }, urlDataProvider);
-      }, false);
+        var manifest = urlDataProvider.get('manifest');
+        $('#login').hide();
+        $('#uv').hide();
+        $('#login').click(function(e) {
+          e.preventDefault();
+          var child = window.open('/users/auth/cas');
+          var timer = setInterval(checkChild, 200);
 
+          function checkChild() {
+            if (child.closed) {
+              loadUV();
+              clearInterval(timer);
+            }
+          }
+        })
+        $.ajax(manifest, { type: 'HEAD' }).done(function(data, status) {
+          $('#uv').show();
+          uv = createUV('#uv', {
+            root: 'uv',
+            iiifResourceUri: urlDataProvider.get('manifest'),
+            configUri: 'uv/uv_config.json',
+            collectionIndex: Number(urlDataProvider.get('c', 0)),
+            manifestIndex: Number(urlDataProvider.get('m', 0)),
+            sequenceIndex: Number(urlDataProvider.get('s', 0)),
+            canvasIndex: Number(urlDataProvider.get('cv', 0)),
+            rangeId: urlDataProvider.get('rid', 0),
+            rotation: Number(urlDataProvider.get('r', 0)),
+            xywh: urlDataProvider.get('xywh', ''),
+            embedded: true
+          }, urlDataProvider);
+        }).fail(function(data, status) {
+          if(data.status == 401) {
+            $('#login').show();
+          }
+        })
+      }
+      window.addEventListener('uvLoaded', loadUV, false);
     </script>
   </head>
   <body>
+    <button type="button" id="login">Login</button>
     <div id="uv" class="uv"></div>
     <script>
       $(function() {
