@@ -17,6 +17,13 @@
           <%= t('visibility.authenticated.note_html', institution: I18n.t("institution.name")) %>
         </label>
       </li>
+    <li class="radio">
+      <label>
+        <%= radio_button_tag :visibility, ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS %>
+        <%= visibility_badge(::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS) %>
+        <%= t('visibility.on_campus.note_html') %>
+      </label>
+    </li>
       <li class="radio">
         <label>
           <%= radio_button_tag :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE %>

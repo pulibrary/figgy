@@ -29,6 +29,11 @@ en:
       warning_html: ''
       class: "label-info"
       text: "princeton"
+    on_campus:
+      note_html: Restricted access. Users can only view on campus or VPN.
+      warning_html: ''
+      class: "label-info"
+      text: "on campus"
     reading_room:
       note_html: Restricted access. Only users who have been granted reading room permission in this application and are physically in an RBSC reading room can view.
       warning_html: ''
