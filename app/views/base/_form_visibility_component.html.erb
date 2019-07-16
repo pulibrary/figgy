@@ -21,13 +21,6 @@
     </li>
     <li class="radio">
       <label>
-        <%= f.radio_button :visibility, ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS %>
-        <%= visibility_badge(::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS) %>
-        <%= t('visibility.on_campus.note_html') %>
-      </label>
-    </li>
-    <li class="radio">
-      <label>
         <%= f.radio_button :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE %>
         <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE) %>
         <%= t('visibility.restricted.note_html') %>
