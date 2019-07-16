@@ -24,8 +24,8 @@ describe GeoDiscovery::DocumentBuilder do
 
   let(:document_class) { GeoDiscovery::GeoblacklightDocument.new }
   let(:coverage) { GeoCoverage.new(43.039, -69.856, 42.943, -71.032) }
-  let(:issued) { "01/02/2013" }
-  let(:issued_xmlschema) { "2013-02-01T00:00:00Z" }
+  let(:issued) { "2013" }
+  let(:issued_xmlschema) { "2013-01-01T00:00:00Z" }
   let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
   let(:change_set) { VectorResourceChangeSet.new(geo_work, files: [file, metadata_file]) }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
@@ -63,7 +63,7 @@ describe GeoDiscovery::DocumentBuilder do
       expect(document["dc_creator_sm"]).to eq(["Yosiwo George"])
       expect(document["dc_subject_sm"]).to eq(["Society"])
       expect(document["dct_spatial_sm"]).to eq(["Micronesia"])
-      expect(document["dct_temporal_sm"]).to eq(["2011"])
+      expect(document["dct_temporal_sm"]).to eq(["2011", "2013"])
       expect(document["dc_language_s"]).to eq("Esperanto")
       expect(document["dc_publisher_s"]).to eq("National Geographic")
 

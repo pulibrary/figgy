@@ -14,6 +14,7 @@ module GeoDiscovery
         document.layer_year = layer_year
         document.layer_modified = layer_modified
         document.issued = issued
+        document.temporal = temporal
       end
 
       private
@@ -21,11 +22,11 @@ module GeoDiscovery
         # Returns the date the layer was issued.
         # @return [String] date in XMLSchema format.
         def issued
-          datetime = resource_decorator.issued.first
+          issued_val = resource_decorator.issued.first
+          return unless issued_val
+          datetime = "#{issued_val}-01-01"
           datetime = DateTime.parse(datetime).utc
           datetime.utc.xmlschema
-        rescue
-          ""
         end
 
         # Returns the date the work was modified.
@@ -51,6 +52,15 @@ module GeoDiscovery
         def layer_year_temporal
           return if resource_decorator.temporal.empty?
           year_from_date(resource_decorator.temporal.first)
+        end
+
+        # Adds issued year to an array of temporal values.
+        # For better indexing.
+        # @return [String] temporal values
+        def temporal
+          issued = resource_decorator.issued&.first&.to_s
+          return resource_decorator.temporal unless issued
+          resource_decorator.temporal << issued
         end
 
         # Extracts year as your digit integer from date string
