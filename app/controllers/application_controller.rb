@@ -35,7 +35,13 @@ class ApplicationController < ActionController::Base
   rescue_from Blacklight::AccessControls::AccessDenied, CanCan::AccessDenied, with: :deny_resource_access
   def deny_resource_access(exception)
     respond_to do |format|
-      format.json { head :forbidden }
+      format.json do
+        if exception.action == :manifest && @resource.present?
+          manifest_denial
+        else
+          head :forbidden
+        end
+      end
       format.html do
         raise exception if :manifest == exception.action
         if current_user
@@ -44,6 +50,15 @@ class ApplicationController < ActionController::Base
           redirect_to "/users/auth/cas", alert: exception.message
         end
       end
+    end
+  end
+
+  def manifest_denial
+    decorated_resource = @resource.decorate
+    if decorated_resource.public_readable_state? && decorated_resource.read_groups.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED)
+      head :unauthorized
+    else
+      head :forbidden
     end
   end
 
