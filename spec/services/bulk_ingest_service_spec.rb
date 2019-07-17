@@ -57,6 +57,28 @@ RSpec.describe BulkIngestService do
         expect { ingester.attach_each_dir(base_directory: empty_dir) }.to raise_error(ArgumentError, "BulkIngestService: Directory is empty: #{empty_dir}")
       end
     end
+
+    context "with a path to a directory containing hidden files" do
+      let(:dir) { Rails.root.join("spec", "fixtures", "hidden_files") }
+      let(:barcode1) { "32101075851400" }
+      let(:folder1) { FactoryBot.create_for_repository(:ephemera_folder, barcode: [barcode1]) }
+
+      before do
+        folder1
+        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/32101075851400/jsonld").and_return(status: 404)
+      end
+
+      it "does not attach any hidden files" do
+        ingester.attach_each_dir(base_directory: dir, property: :barcode)
+
+        reloaded1 = query_service.find_by(id: folder1.id)
+
+        expect(reloaded1.member_ids.length).to eq 1
+        file_set = reloaded1.decorate.members.first
+        expect(file_set.file_metadata.length).to eq 1
+        expect(file_set.file_metadata.first.label).to eq ["normal_file.txt"]
+      end
+    end
   end
 
   describe "#attach_dir" do
