@@ -121,6 +121,10 @@ describe Ability do
       is_expected.to be_able_to(:manifest, pending_scanned_resource)
       is_expected.to be_able_to(:manifest, reading_room_scanned_resource)
       is_expected.to be_able_to(:manifest, campus_ip_scanned_resource)
+      is_expected.to be_able_to(:discover, open_scanned_resource)
+      is_expected.to be_able_to(:discover, pending_scanned_resource)
+      is_expected.to be_able_to(:discover, reading_room_scanned_resource)
+      is_expected.to be_able_to(:discover, campus_ip_scanned_resource)
       is_expected.to be_able_to(:read, :graphql)
     }
 
@@ -151,6 +155,10 @@ describe Ability do
         is_expected.not_to be_able_to(:destroy, flagged_scanned_resource)
         is_expected.to be_able_to(:manifest, open_scanned_resource)
         is_expected.to be_able_to(:manifest, pending_scanned_resource)
+        is_expected.to be_able_to(:discover, open_scanned_resource)
+        is_expected.to be_able_to(:discover, pending_scanned_resource)
+        is_expected.to be_able_to(:discover, reading_room_scanned_resource)
+        is_expected.to be_able_to(:discover, campus_ip_scanned_resource)
         is_expected.to be_able_to(:read, :graphql)
       }
     end
@@ -194,6 +202,10 @@ describe Ability do
       is_expected.to be_able_to(:manifest, reading_room_scanned_resource)
       is_expected.to be_able_to(:read, campus_ip_scanned_resource)
       is_expected.to be_able_to(:manifest, campus_ip_scanned_resource)
+      is_expected.to be_able_to(:discover, open_scanned_resource)
+      is_expected.to be_able_to(:discover, pending_scanned_resource)
+      is_expected.to be_able_to(:discover, reading_room_scanned_resource)
+      is_expected.to be_able_to(:discover, campus_ip_scanned_resource)
       is_expected.to be_able_to(:read, :graphql)
     }
 
@@ -230,6 +242,12 @@ describe Ability do
         is_expected.to be_able_to(:manifest, open_scanned_resource)
         is_expected.to be_able_to(:read, pending_scanned_resource)
         is_expected.to be_able_to(:manifest, pending_scanned_resource)
+        is_expected.to be_able_to(:manifest, open_scanned_resource)
+        is_expected.to be_able_to(:manifest, pending_scanned_resource)
+        is_expected.to be_able_to(:discover, open_scanned_resource)
+        is_expected.to be_able_to(:discover, pending_scanned_resource)
+        is_expected.to be_able_to(:discover, reading_room_scanned_resource)
+        is_expected.to be_able_to(:discover, campus_ip_scanned_resource)
         is_expected.to be_able_to(:read, :graphql)
       }
     end
@@ -275,6 +293,11 @@ describe Ability do
       is_expected.not_to be_able_to(:destroy, role)
       is_expected.not_to be_able_to(:complete, pending_scanned_resource)
       is_expected.not_to be_able_to(:destroy, admin_file)
+
+      is_expected.to be_able_to(:discover, open_scanned_resource)
+      is_expected.not_to be_able_to(:discover, pending_scanned_resource)
+      is_expected.to be_able_to(:discover, reading_room_scanned_resource)
+      is_expected.to be_able_to(:discover, campus_ip_scanned_resource)
     }
 
     context "when accessing figgy via a campus IP" do
@@ -442,6 +465,11 @@ describe Ability do
       is_expected.not_to be_able_to(:destroy, role)
       is_expected.not_to be_able_to(:complete, pending_scanned_resource)
       is_expected.not_to be_able_to(:destroy, admin_file)
+
+      is_expected.to be_able_to(:discover, open_scanned_resource)
+      is_expected.not_to be_able_to(:discover, pending_scanned_resource)
+      is_expected.to be_able_to(:discover, reading_room_scanned_resource)
+      is_expected.to be_able_to(:discover, campus_ip_scanned_resource)
     }
 
     context "when accessing figgy via a campus IP" do
