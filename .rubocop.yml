@@ -206,6 +206,7 @@ Rails/OutputSafety:
     - 'app/helpers/fixity_dashboard_helper.rb'
     - 'app/resources/**/*_decorator*'
     - 'app/validators/unique_archival_media_component_id_validator.rb'
+    - 'app/controllers/users/omniauth_callbacks_controller.rb'
 RSpec/AnyInstance:
   Exclude:
     - 'spec/jobs/ingest_mets_job_spec.rb'

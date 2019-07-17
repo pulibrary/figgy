@@ -30,7 +30,7 @@
         $('#uv').hide();
         $('#login').click(function(e) {
           e.preventDefault();
-          var child = window.open('/users/auth/cas');
+          var child = window.open('/users/auth/cas?login_popup=true');
           var timer = setInterval(checkChild, 200);
 
           function checkChild() {
