@@ -34,7 +34,7 @@ class Types::QueryType < Types::BaseObject
 
   def resource(id:)
     resource = query_service.find_by(id: id)
-    return unless ability.can? :read, resource
+    return unless ability.can? :discover, resource
     resource
   rescue Valkyrie::Persistence::ObjectNotFoundError
     Valkyrie.logger.error("Failed to retrieve the resource #{id} for a GraphQL query")
@@ -43,29 +43,29 @@ class Types::QueryType < Types::BaseObject
 
   def resources_by_figgy_ids(ids:)
     resources = query_service.find_many_by_ids(ids: ids)
-    readable_resources = resources.select { |resource| ability.can? :read, resource }
+    readable_resources = resources.select { |resource| ability.can? :discover, resource }
     readable_resources.select { |r| type_defined?(r) }.to_a
   end
 
   def resources_by_bibid(bib_id:)
-    resources = query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: bib_id).select { |resource| ability.can? :read, resource }.to_a
+    resources = query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: bib_id).select { |resource| ability.can? :discover, resource }.to_a
     resources.select { |r| type_defined?(r) }
   end
 
   def resources_by_bibids(bib_ids:)
     resources = query_service.custom_queries.find_many_by_property(property: :source_metadata_identifier, values: bib_ids)
-    readable_resources = resources.select { |resource| ability.can? :read, resource }
+    readable_resources = resources.select { |resource| ability.can? :discover, resource }
     readable_resources.select { |r| type_defined?(r) }.to_a
   end
 
   def resources_by_coin_number(coin_number:)
-    resources = query_service.custom_queries.find_by_property(property: :coin_number, value: coin_number.to_i).select { |resource| ability.can? :read, resource }
+    resources = query_service.custom_queries.find_by_property(property: :coin_number, value: coin_number.to_i).select { |resource| ability.can? :discover, resource }
     resources.select { |r| type_defined?(r) }
   end
 
   def resources_by_coin_numbers(coin_numbers:)
     numbers = coin_numbers.map(&:to_i)
-    resources = query_service.custom_queries.find_many_by_property(property: :coin_number, values: numbers).select { |resource| ability.can? :read, resource }
+    resources = query_service.custom_queries.find_many_by_property(property: :coin_number, values: numbers).select { |resource| ability.can? :discover, resource }
     resources.select { |r| type_defined?(r) }
   end
 

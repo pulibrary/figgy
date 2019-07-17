@@ -15,9 +15,9 @@ RSpec.describe Types::QueryType do
     it { is_expected.to have_field(:resourcesByBibid) }
   end
 
-  context "when the user can read the resource" do
+  context "when the user can discover the resource" do
     before do
-      allow(ability).to receive(:can?).with(:read, anything).and_return(true)
+      allow(ability).to receive(:can?).with(:discover, anything).and_return(true)
     end
 
     describe "resource field" do
@@ -42,9 +42,9 @@ RSpec.describe Types::QueryType do
     subject { described_class.fields["resourcesByBibid"] }
     it { is_expected.to accept_arguments(bibId: "String!") }
 
-    context "when a user can read the resource" do
+    context "when a user can discover the resource" do
       before do
-        allow(ability).to receive(:can?).with(:read, anything).and_return(true)
+        allow(ability).to receive(:can?).with(:discover, anything).and_return(true)
       end
 
       it "can return a resource by its bibid" do
@@ -69,9 +69,9 @@ RSpec.describe Types::QueryType do
       end
     end
 
-    context "when the user can't read the resource" do
+    context "when the user can't discover the resource" do
       before do
-        allow(ability).to receive(:can?).with(:read, anything).and_return(false)
+        allow(ability).to receive(:can?).with(:discover, anything).and_return(false)
       end
 
       it "returns nothing" do
@@ -84,7 +84,7 @@ RSpec.describe Types::QueryType do
 
     context "when the resource does not have a defined graphql type" do
       before do
-        allow(ability).to receive(:can?).with(:read, anything).and_return(true)
+        allow(ability).to receive(:can?).with(:discover, anything).and_return(true)
       end
 
       it "returns nothing" do
@@ -100,9 +100,9 @@ RSpec.describe Types::QueryType do
     subject { described_class.fields["resourcesByBibids"] }
     it { is_expected.to accept_arguments(bibIds: "[String!]!") }
 
-    context "when a user can read the resource" do
+    context "when a user can discover the resource" do
       before do
-        allow(ability).to receive(:can?).with(:read, anything).and_return(true)
+        allow(ability).to receive(:can?).with(:discover, anything).and_return(true)
       end
 
       it "can return resources by its bibid" do
@@ -115,9 +115,9 @@ RSpec.describe Types::QueryType do
       end
     end
 
-    context "when the user can't read the resource" do
+    context "when the user can't discover the resource" do
       before do
-        allow(ability).to receive(:can?).with(:read, anything).and_return(false)
+        allow(ability).to receive(:can?).with(:discover, anything).and_return(false)
       end
 
       it "returns nothing" do
@@ -132,7 +132,7 @@ RSpec.describe Types::QueryType do
 
     context "when one resource does not have a defined graphql type" do
       before do
-        allow(ability).to receive(:can?).with(:read, anything).and_return(true)
+        allow(ability).to receive(:can?).with(:discover, anything).and_return(true)
       end
 
       it "returns the resource with the defined type only" do
@@ -147,9 +147,9 @@ RSpec.describe Types::QueryType do
   end
 
   describe "#resources_by_coin_number" do
-    context "when a user can read the resource" do
+    context "when a user can discover the resource" do
       before do
-        allow(ability).to receive(:can?).with(:read, anything).and_return(true)
+        allow(ability).to receive(:can?).with(:discover, anything).and_return(true)
       end
 
       it "can return a resource by its coin number" do
@@ -159,9 +159,9 @@ RSpec.describe Types::QueryType do
       end
     end
 
-    context "when the user can't read the resource" do
+    context "when the user can't discover the resource" do
       before do
-        allow(ability).to receive(:can?).with(:read, anything).and_return(false)
+        allow(ability).to receive(:can?).with(:discover, anything).and_return(false)
       end
 
       it "returns nothing" do
@@ -173,9 +173,9 @@ RSpec.describe Types::QueryType do
   end
 
   describe "#resources_by_coin_numbers" do
-    context "when a user can read the resource" do
+    context "when a user can discover the resource" do
       before do
-        allow(ability).to receive(:can?).with(:read, anything).and_return(true)
+        allow(ability).to receive(:can?).with(:discover, anything).and_return(true)
       end
 
       it "can return resources by coin numbers" do
@@ -186,9 +186,9 @@ RSpec.describe Types::QueryType do
       end
     end
 
-    context "when the user can't read the resource" do
+    context "when the user can't discover the resource" do
       before do
-        allow(ability).to receive(:can?).with(:read, anything).and_return(false)
+        allow(ability).to receive(:can?).with(:discover, anything).and_return(false)
       end
 
       it "returns nothing" do
@@ -205,9 +205,9 @@ RSpec.describe Types::QueryType do
     subject { described_class.fields["resourcesByOrangelightId"] }
     it { is_expected.to accept_arguments(id: "String!") }
 
-    context "when the user can read the resource" do
+    context "when the user can discover the resource" do
       before do
-        allow(ability).to receive(:can?).with(:read, anything).and_return(true)
+        allow(ability).to receive(:can?).with(:discover, anything).and_return(true)
       end
 
       it "can return a resource by its bibid" do
@@ -229,9 +229,9 @@ RSpec.describe Types::QueryType do
     subject { described_class.fields["resourcesByFiggyIds"] }
     it { is_expected.to accept_arguments(ids: "[ID!]!") }
 
-    context "when a user can read the resource" do
+    context "when a user can discover the resource" do
       before do
-        allow(ability).to receive(:can?).with(:read, anything).and_return(true)
+        allow(ability).to receive(:can?).with(:discover, anything).and_return(true)
       end
       it "can return resources by figgy_id" do
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource)
@@ -240,9 +240,9 @@ RSpec.describe Types::QueryType do
         expect(type.resources_by_figgy_ids(ids: [scanned_resource.id, monogram.id]).map(&:id)).to contain_exactly(scanned_resource.id, monogram.id)
       end
     end
-    context "when the user can't read the resource" do
+    context "when the user can't discover the resource" do
       before do
-        allow(ability).to receive(:can?).with(:read, anything).and_return(false)
+        allow(ability).to receive(:can?).with(:discover, anything).and_return(false)
       end
 
       it "returns nothing" do
@@ -258,9 +258,9 @@ RSpec.describe Types::QueryType do
     subject { described_class.fields["resourcesByOrangelightIds"] }
     it { is_expected.to accept_arguments(ids: "[String!]!") }
 
-    context "when a user can read the resource" do
+    context "when a user can discover the resource" do
       before do
-        allow(ability).to receive(:can?).with(:read, anything).and_return(true)
+        allow(ability).to receive(:can?).with(:discover, anything).and_return(true)
       end
 
       it "can return resources by bibids" do
@@ -288,9 +288,9 @@ RSpec.describe Types::QueryType do
       end
     end
 
-    context "when the user can't read the resource" do
+    context "when the user can't discover the resource" do
       before do
-        allow(ability).to receive(:can?).with(:read, anything).and_return(false)
+        allow(ability).to receive(:can?).with(:discover, anything).and_return(false)
       end
 
       it "returns nothing" do
@@ -304,9 +304,9 @@ RSpec.describe Types::QueryType do
     end
   end
 
-  context "when the user cannot read the resource" do
+  context "when the user cannot discover the resource" do
     before do
-      allow(ability).to receive(:can?).with(:read, anything).and_return(false)
+      allow(ability).to receive(:can?).with(:discover, anything).and_return(false)
     end
 
     it "returns nothing" do
