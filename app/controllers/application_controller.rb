@@ -42,6 +42,7 @@ class ApplicationController < ActionController::Base
           head :forbidden
         end
       end
+      format.any(:jsonld, :nt, :ttl) { head :forbidden }
       format.html do
         raise exception if :manifest == exception.action
         if current_user
