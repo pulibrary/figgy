@@ -63,6 +63,17 @@ class Ability
     end
   end
 
+  def harvester_permissions
+    can [:read], SolrDocument do |doc|
+      resource = find_by(id: doc.id)
+      token_harvestable?(resource)
+    end
+
+    can [:read], Valkyrie::Resource do |resource|
+      token_harvestable?(resource)
+    end
+  end
+
   def curation_concerns
     [ScannedResource, EphemeraFolder, ScannedMap, VectorResource, RasterResource, Playlist, Numismatics::Coin,
      Numismatics::Issue, Numismatics::Accession, Numismatics::Firm, Numismatics::Monogram, Numismatics::Person, Numismatics::Place, Numismatics::Reference]
@@ -140,7 +151,7 @@ class Ability
   end
 
   def roles
-    ["anonymous", "campus_patron", "admin", "staff"]
+    ["anonymous", "campus_patron", "admin", "staff", "harvester"]
   end
 
   def universal_reader?
@@ -265,6 +276,10 @@ class Ability
     def admin?
       groups.include?("admin")
     end
+
+    def harvester?
+      groups.include?("harvester")
+    end
   end
 
   private
@@ -344,5 +359,14 @@ class Ability
 
       # Retrieve the Playlist
       authorized_by_token?(attaching_resource)
+    end
+
+    # Determines whether or not a resource can be harvested using an auth. token
+    # @param obj the object requested for harvesting
+    # @return [Boolean]
+    def token_harvestable?(obj)
+      return false if auth_token.nil?
+
+      current_user.harvester? && final_state?(obj) && !obj.visibility.include?(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE)
     end
 end
