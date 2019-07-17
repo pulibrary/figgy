@@ -8,7 +8,7 @@ RSpec.describe Types::ScannedResourceType do
     end
   end
 
-  subject(:type) { described_class.new(scanned_resource, {}) }
+  subject(:type) { described_class.new(scanned_resource, ability: ability) }
   let(:bibid) { "123456" }
   let(:scanned_resource) do
     FactoryBot.create_for_repository(
@@ -19,8 +19,10 @@ RSpec.describe Types::ScannedResourceType do
       source_metadata_identifier: [bibid]
     )
   end
+  let(:ability) { instance_double(Ability) }
 
   before do
+    allow(ability).to receive(:can?).and_return(true)
     stub_bibdata(bib_id: bibid)
   end
 
@@ -67,6 +69,10 @@ RSpec.describe Types::ScannedResourceType do
         )
       end
       let(:file_set) { FactoryBot.create_for_repository(:file_set) }
+      it "returns nil if there's no manifest permissions" do
+        allow(ability).to receive(:can?).with(:manifest, anything).and_return(false)
+        expect(type.thumbnail).to eq nil
+      end
       it "returns a thumbnail service url, image, and ID for the file set" do
         expect(type.thumbnail).to eq(
           iiif_service_url: "http://www.example.com/image-service/#{file_set.id}",

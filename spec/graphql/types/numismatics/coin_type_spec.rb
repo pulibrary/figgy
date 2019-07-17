@@ -8,7 +8,7 @@ RSpec.describe Types::Numismatics::CoinType do
     end
   end
 
-  subject(:type) { described_class.new(coin, {}) }
+  subject(:type) { described_class.new(coin, ability: ability) }
   let(:coin) do
     FactoryBot.create_for_repository(
       :coin,
@@ -17,6 +17,7 @@ RSpec.describe Types::Numismatics::CoinType do
       viewing_direction: "left-to-right"
     )
   end
+  let(:ability) { instance_double(Ability, can?: true) }
 
   describe "class methods" do
     subject { described_class }

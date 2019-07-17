@@ -2,7 +2,7 @@
 require "rails_helper"
 
 RSpec.describe Types::EphemeraFolderType do
-  subject(:type) { described_class.new(ephemera_folder, {}) }
+  subject(:type) { described_class.new(ephemera_folder, ability: ability) }
   let(:ephemera_folder) do
     FactoryBot.create_for_repository(
       :ephemera_folder,
@@ -11,6 +11,7 @@ RSpec.describe Types::EphemeraFolderType do
       viewing_direction: "left-to-right"
     )
   end
+  let(:ability) { instance_double(Ability, can?: true) }
 
   describe "fields" do
     it "has startPage" do
