@@ -168,14 +168,14 @@ class Ability
   end
 
   def valkyrie_test_manifest(obj)
-    return false unless token_readable?(obj) || group_readable?(obj) || user_readable?(obj) || universal_reader?
+    return false unless token_readable?(obj) || group_readable?(obj) || user_readable?(obj) || universal_reader? || ip_readable?(obj)
     # any group with :all permissions never hits this method
     #   other groups can only read published manifests, even if they have permissions indexed
     obj.decorate.manifestable_state?
   end
 
   def valkyrie_test_read(obj)
-    return false unless token_readable?(obj) || group_readable?(obj) || user_readable?(obj) || universal_reader?
+    return false unless token_readable?(obj) || group_readable?(obj) || user_readable?(obj) || universal_reader? || ip_readable?(obj)
     # any group with :all permissions never hits this method
     #   other groups can only read published manifests, even if they have permissions indexed
     obj.decorate.public_readable_state?
@@ -187,13 +187,26 @@ class Ability
     groups.any?
   end
 
+  def ip_readable?(obj)
+    obj.read_groups == [::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_ON_CAMPUS] && campus_ip?
+  end
+
   def reading_room_ip?
-    ip = options.fetch(:ip_address, nil)
-    reading_room_ips.include? ip
+    reading_room_ips.include? current_user_ip
   end
 
   def reading_room_ips
     Figgy.config["access_control"]["reading_room_ips"]
+  end
+
+  def campus_ip?
+    return false unless current_user_ip
+    ip_addr = IPAddr.new(current_user_ip)
+    Figgy.campus_ip_ranges.find { |range| range.include? ip_addr }.present?
+  end
+
+  def current_user_ip
+    @current_user_ip ||= options.fetch(:ip_address, nil)
   end
 
   def user_readable?(obj)

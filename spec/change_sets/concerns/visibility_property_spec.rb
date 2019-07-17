@@ -41,5 +41,11 @@ RSpec.describe VisibilityProperty do
       expect { change_set.visibility = ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_READING_ROOM }.to change { change_set.read_groups }
         .to([::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_READING_ROOM])
     end
+
+    it "sets on_campus read group" do
+      change_set = DummyChangeSet.new(FactoryBot.build(:scanned_resource))
+      expect { change_set.visibility = ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS }.to change { change_set.read_groups }
+        .to([::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_ON_CAMPUS])
+    end
   end
 end
