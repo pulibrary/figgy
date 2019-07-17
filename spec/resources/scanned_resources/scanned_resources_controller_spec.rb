@@ -30,9 +30,14 @@ RSpec.describe ScannedResourcesController, type: :controller do
     end
     context "when not logged in" do
       it "returns a 403" do
-        resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource)
+        resource = FactoryBot.create_for_repository(:complete_private_scanned_resource)
         get :manifest, params: { id: resource.id, format: :json }
         expect(response).to be_forbidden
+      end
+      it "returns a 401 for a complete netid-required resource" do
+        resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource)
+        get :manifest, params: { id: resource.id, format: :json }
+        expect(response).to be_unauthorized
       end
     end
   end
