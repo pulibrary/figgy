@@ -74,6 +74,7 @@ module Types::Resource
   end
 
   def thumbnail
+    return unless ability&.can?(:manifest, object)
     return if object.try(:thumbnail_id).blank? || thumbnail_resource.blank?
 
     figgy_thumbnail_path = helper.figgy_thumbnail_path(thumbnail_resource)
@@ -105,5 +106,9 @@ module Types::Resource
 
   def query_service
     Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
+  end
+
+  def ability
+    context[:ability]
   end
 end

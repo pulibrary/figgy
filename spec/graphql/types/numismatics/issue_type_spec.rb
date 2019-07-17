@@ -8,7 +8,7 @@ RSpec.describe Types::Numismatics::IssueType do
     end
   end
 
-  subject(:type) { described_class.new(numismatic_issue, {}) }
+  subject(:type) { described_class.new(numismatic_issue, ability: ability) }
   let(:numismatic_issue) do
     FactoryBot.create_for_repository(
       :numismatic_issue,
@@ -16,6 +16,7 @@ RSpec.describe Types::Numismatics::IssueType do
       viewing_direction: "left-to-right"
     )
   end
+  let(:ability) { instance_double(Ability, can?: true) }
 
   describe "class methods" do
     subject { described_class }

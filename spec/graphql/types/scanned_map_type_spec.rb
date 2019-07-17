@@ -8,7 +8,7 @@ RSpec.describe Types::ScannedMapType do
     end
   end
 
-  subject(:type) { described_class.new(scanned_map, {}) }
+  subject(:type) { described_class.new(scanned_map, ability: ability) }
   let(:bibid) { "5144620" }
   let(:scanned_map) do
     FactoryBot.create_for_repository(
@@ -20,6 +20,7 @@ RSpec.describe Types::ScannedMapType do
       source_metadata_identifier: [bibid]
     )
   end
+  let(:ability) { instance_double(Ability, can?: true) }
 
   before do
     stub_bibdata(bib_id: bibid)
