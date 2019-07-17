@@ -27,11 +27,11 @@ RSpec.describe NumismaticsImportService do
       numismatics_import_service.ingest_issue(issue_number: issue_number)
     end
 
-    it "creates a new Issue with member Coins from each file", run_real_derivatives: true do
+    it "creates a new Issue with member Coins from each file", run_real_characterization: true, run_real_derivatives: true do
       expect(collection.decorate.members).not_to be_empty
       members = collection.decorate.members
       expect(members.length).to eq 2
-      first_coin = members.first
+      first_coin = members.find { |member| member.is_a?(Numismatics::Coin) }
       expect(first_coin.decorate.decorated_file_sets).not_to be_empty
       obverse_file_set = first_coin.decorate.decorated_file_sets.first
       expect(obverse_file_set.derivative_files).not_to be_empty
@@ -39,14 +39,17 @@ RSpec.describe NumismaticsImportService do
       expect(reverse_file_set.derivative_files).not_to be_empty
     end
 
-    it "filters for only TIF image files" do
+    it "filters for only image files in the TIFF and JPEG format" do
       expect(collection.decorate.members).not_to be_empty
       members = collection.decorate.members
-      expect(members.first.decorate.decorated_file_sets).not_to be_empty
-      file_sets = members.first.decorate.decorated_file_sets
-      expect(file_sets.length).to eq 2
-      expect(file_sets.first.mime_type).to eq ["image/tiff"]
-      expect(file_sets.last.mime_type).to eq ["image/tiff"]
+      first_coin = members.find { |member| member.is_a?(Numismatics::Coin) }
+      expect(first_coin.decorate.decorated_file_sets).not_to be_empty
+      file_sets = first_coin.decorate.decorated_file_sets
+      expect(file_sets.length).to eq 3
+      labels = file_sets.map(&:file_metadata).flatten.map(&:label).flatten
+      expect(labels).to include "1O.tif"
+      expect(labels).to include "1R.tif"
+      expect(labels).to include "1O.jpg"
     end
   end
 end

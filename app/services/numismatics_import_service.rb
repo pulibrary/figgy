@@ -322,8 +322,8 @@ class NumismaticsImportService
 
     def coin_files(coin_number:)
       files = Dir.glob(file_root.join("**/#{coin_number}{O,R}.*"))
-      tiff_files = files.select { |file| File.extname(file).casecmp(".tif").zero? }
-      tiff_files.map do |file_path|
+      image_files = files.select { |file| File.extname(file).casecmp(".tif").zero? || File.extname(file) =~ /\.jpe?g$/i }
+      image_files.map do |file_path|
         IngestableFile.new(
           file_path: file_path,
           mime_type: "image/tiff",
