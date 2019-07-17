@@ -156,7 +156,7 @@ class MediainfoCharacterizationService
       if parent.try(:image_resource?)
         @file_set.original_file
       else
-        @file_set.preservation_file
+        @file_set.preservation_file || @file_set.original_file
       end
     end
 end

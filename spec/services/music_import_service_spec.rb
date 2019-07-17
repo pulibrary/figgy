@@ -91,7 +91,8 @@ RSpec.describe MusicImportService do
     end
   end
   describe "#ingest_recording" do
-    it "ingests a recording and its audio files" do
+    with_queue_adapter :inline
+    it "ingests a recording and its audio files", run_real_characterization: true do
       stub_bibdata(bib_id: "123456")
       recording = MusicImportService::RecordingCollector::MRRecording.new(
         14,
@@ -145,6 +146,8 @@ RSpec.describe MusicImportService do
       expect(members.first.title).to eq ["First File"]
       expect(members.first.original_file.original_filename).to eq ["cd-1_1.wav"]
       expect(members.first.local_identifier).to eq ["54204", "blabla"]
+      expect(members.first.mime_type).to eq ["audio/x-wav"]
+      expect(members.first.original_file.duration).not_to be_blank
 
       playlists = Wayfinder.for(output).playlists
 
