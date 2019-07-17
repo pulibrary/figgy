@@ -9,8 +9,8 @@ GIT
 
 GIT
   remote: git://github.com/jrgriffiniii/browse-everything.git
-  revision: cc7aa83515a5d4be1a7bcde2ef605c66c3a35328
-  branch: figgy-issues-1108-jrgriffiniii
+  revision: 86d21fb8ee942a4f3631d0e8156732b6ccbf2c77
+  branch: figgy-issues-3201-jrgriffiniii
   specs:
     browse-everything (1.0.1)
       addressable (~> 2.5)
@@ -19,6 +19,7 @@ GIT
       google-api-client (~> 0.23)
       google_drive (~> 2.1)
       googleauth (= 0.6.6)
+      puma (< 4.0)
       rails (>= 4.2)
       ruby-box
       signet (~> 0.8)

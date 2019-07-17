@@ -45,7 +45,9 @@ class BulkIngestService
   def attach_dir(base_directory:, property: nil, file_filters: [], **attributes)
     raise ArgumentError, "#{self.class}: Directory does not exist: #{base_directory}" unless File.exist?(base_directory)
 
-    entries = Dir["#{base_directory}/*"]
+    file_entries = Dir["#{base_directory}/*"]
+    # Filter for hidden files
+    entries = file_entries.reject { |entry| entry =~ /^\..+/ }
     raise ArgumentError, "#{self.class}: Directory is empty: #{base_directory}" if entries.empty?
     directory_path = absolute_path(base_directory)
 
