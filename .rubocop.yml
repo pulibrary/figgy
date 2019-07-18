@@ -262,6 +262,7 @@ RSpec/NestedGroups:
     - 'spec/helpers/application_helper_spec.rb'
     - 'spec/requests/viewer_config_spec.rb'
     - 'spec/resources/collections/collections_controller_spec.rb'
+    - 'spec/controllers/playlists_controller_spec.rb'
 RSpec/VerifiedDoubles:
   Exclude:
     - 'spec/models/search_builder_spec.rb'
