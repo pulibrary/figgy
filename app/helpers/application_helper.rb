@@ -115,7 +115,8 @@ module ApplicationHelper
   end
 
   def build_authorized_link
-    viewer_url = "#{root_url}viewer#?manifest=#{polymorphic_url([:manifest, resource], auth_token: resource.auth_token)}"
+    resource_title = resource.title.first || "Untitled"
+    viewer_url = "#{root_url}viewer#?manifest=#{polymorphic_url([:manifest, resource], auth_token: resource.auth_token)}&title=#{CGI.escape(resource_title)}"
     link_to viewer_url, viewer_url
   end
 

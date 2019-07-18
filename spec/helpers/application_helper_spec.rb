@@ -48,7 +48,23 @@ RSpec.describe ApplicationHelper, type: :helper do
 
         value = helper.build_authorized_link
 
-        url = "http://test.host/viewer#?manifest=http://test.host/concern/playlists/#{playlist.id}/manifest?auth_token=#{playlist.auth_token}"
+        url = "http://test.host/viewer#?manifest=http://test.host/concern/playlists/#{playlist.id}/manifest?auth_token=#{playlist.auth_token}&amp;title=My+Playlist"
+        expect(value).to eq(
+          %(<a href="#{url}">#{url}</a>)
+        )
+      end
+    end
+
+    context "when given a Playlist with an auth token and without a title" do
+      it "returns a link to the viewer using \"Untitled\" as the title" do
+        playlist = FactoryBot.create_for_repository(:playlist, auth_token: "banana", title: [])
+        doc = instance_double("SolrDocument")
+        allow(doc).to receive(:resource).and_return(playlist)
+        assign(:document, doc)
+
+        value = helper.build_authorized_link
+
+        url = "http://test.host/viewer#?manifest=http://test.host/concern/playlists/#{playlist.id}/manifest?auth_token=#{playlist.auth_token}&amp;title=Untitled"
         expect(value).to eq(
           %(<a href="#{url}">#{url}</a>)
         )
