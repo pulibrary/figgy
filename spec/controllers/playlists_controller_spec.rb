@@ -75,6 +75,16 @@ RSpec.describe PlaylistsController do
         expect(last_annotation).to include("body")
         expect(last_annotation["body"]).to include("format" => "application/vnd.apple.mpegurl")
       end
+
+      context "when transmitting a HEAD request" do
+        it "responds with a link header specifying the title of the resource" do
+          head :manifest, params: { id: resource.id.to_s }, format: :json
+
+          expect(response).to be_a_success
+          expect(response.headers).to include "Link"
+          expect(response.headers["Link"]).to eq "<http://test.host/concern/playlists/#{resource.id}/manifest>; rel=\"self\"; title=\"#{resource.title.first}\""
+        end
+      end
     end
 
     context "when the request contains an authorization token" do

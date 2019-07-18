@@ -36,11 +36,6 @@
       function loadUV() {
         urlDataProvider = new UV.URLDataProvider(false);
         var manifest = urlDataProvider.get('manifest');
-        var title = urlDataProvider.get('title');
-        if (title) {
-          var titleElement = document.getElementById('title');
-          titleElement.textContent = title;
-        }
         $('#loginContainer').hide();
         $('#uv').hide();
         $('#login').click(function(e) {
@@ -55,7 +50,17 @@
             }
           }
         })
-        $.ajax(manifest, { type: 'HEAD' }).done(function(data, status) {
+        $.ajax(manifest, { type: 'HEAD' }).done(function(data, status, jqXHR) {
+          var linkHeader = jqXHR.getResponseHeader('Link');
+          if (linkHeader) {
+            var segments = linkHeader.split(';');
+            var titleMatch = /title="(.+?)"/.exec(linkHeader);
+            if (titleMatch[1]) {
+              var title = titleMatch[1];
+              var titleElement = document.getElementById('title');
+              titleElement.textContent = title;
+            }
+          }
           $('#uv').show();
           uv = createUV('#uv', {
             root: 'uv',

@@ -24,6 +24,7 @@ class PlaylistsController < BaseResourceController
   def manifest
     @resource = find_resource(params[:id])
     authorize! :manifest, @resource
+    response.headers["Link"] = "<#{manifest_playlist_url(@resource)}>; rel=\"self\"; title=\"#{@resource.title.first}\""
     respond_to do |f|
       f.json do
         render json: manifest_builder.build
