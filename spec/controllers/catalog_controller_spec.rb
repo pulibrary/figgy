@@ -687,10 +687,10 @@ RSpec.describe CatalogController do
         expect(json_body[:part_of][0][:title]).to eq "Test"
       end
 
-      context "when the resource is NetID-restricted but complete" do
+      context "when the resource is incomplete" do
         let(:resource) do
           FactoryBot.create_for_repository(
-            :complete_campus_only_scanned_resource,
+            :draft_campus_only_scanned_resource,
             source_metadata_identifier: "123456",
             import_metadata: true,
             portion_note: "Test",
@@ -711,18 +711,57 @@ RSpec.describe CatalogController do
           expect(response).not_to be_success
           expect(response.status).to eq 403
         end
+      end
 
-        context "when requesting with an auth. token" do
-          let(:authorization_token) do
-            AuthToken.create!(group: ["harvester"], label: "DPUL Token")
-          end
+      context "when the resource is private" do
+        let(:resource) do
+          FactoryBot.create_for_repository(
+            :complete_private_scanned_resource,
+            source_metadata_identifier: "123456",
+            import_metadata: true,
+            portion_note: "Test",
+            nav_date: "Test"
+          )
+        end
 
-          it "generates the linked data expression" do
-            get :show, params: { id: resource.id, format: :jsonld, auth_token: authorization_token.token }
-            expect(response).to be_success
-            json_body = MultiJson.load(response.body, symbolize_keys: true)
-            expect(json_body[:title][0][:@value]).to eq "Earth rites : fertility rites in pre-industrial Britain"
-          end
+        before do
+          sign_out FactoryBot.create(:admin)
+
+          stub_bibdata(bib_id: "123456")
+          stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        end
+
+        it "denies access" do
+          get :show, params: { id: resource.id.to_s, format: :jsonld }
+
+          expect(response).not_to be_success
+          expect(response.status).to eq 403
+        end
+      end
+
+      context "when the resource is NetID-restricted but complete" do
+        let(:resource) do
+          FactoryBot.create_for_repository(
+            :complete_campus_only_scanned_resource,
+            source_metadata_identifier: "123456",
+            import_metadata: true,
+            portion_note: "Test",
+            nav_date: "Test"
+          )
+        end
+
+        before do
+          sign_out FactoryBot.create(:admin)
+
+          stub_bibdata(bib_id: "123456")
+          stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        end
+
+        it "generates the linked data expression" do
+          get :show, params: { id: resource.id, format: :jsonld }
+          expect(response).to be_success
+          json_body = MultiJson.load(response.body, symbolize_keys: true)
+          expect(json_body[:title][0][:@value]).to eq "Earth rites : fertility rites in pre-industrial Britain"
         end
       end
 
@@ -745,24 +784,11 @@ RSpec.describe CatalogController do
           stub_ezid(shoulder: "99999/fk4", blade: "123456")
         end
 
-        it "denies access" do
-          get :show, params: { id: resource.id.to_s, format: :jsonld }
-
-          expect(response).not_to be_success
-          expect(response.status).to eq 403
-        end
-
-        context "when requesting with an auth. token" do
-          let(:authorization_token) do
-            AuthToken.create!(group: ["harvester"], label: "DPUL Token")
-          end
-
-          it "generates the linked data expression" do
-            get :show, params: { id: resource.id, format: :jsonld, auth_token: authorization_token.token }
-            expect(response).to be_success
-            json_body = MultiJson.load(response.body, symbolize_keys: true)
-            expect(json_body[:title][0][:@value]).to eq "Earth rites : fertility rites in pre-industrial Britain"
-          end
+        it "generates the linked data expression" do
+          get :show, params: { id: resource.id, format: :jsonld }
+          expect(response).to be_success
+          json_body = MultiJson.load(response.body, symbolize_keys: true)
+          expect(json_body[:title][0][:@value]).to eq "Earth rites : fertility rites in pre-industrial Britain"
         end
       end
 
@@ -785,24 +811,11 @@ RSpec.describe CatalogController do
           stub_ezid(shoulder: "99999/fk4", blade: "123456")
         end
 
-        it "denies access" do
-          get :show, params: { id: resource.id.to_s, format: :jsonld }
-
-          expect(response).not_to be_success
-          expect(response.status).to eq 403
-        end
-
-        context "when requesting with an auth. token" do
-          let(:authorization_token) do
-            AuthToken.create!(group: ["harvester"], label: "DPUL Token")
-          end
-
-          it "generates the linked data expression" do
-            get :show, params: { id: resource.id, format: :jsonld, auth_token: authorization_token.token }
-            expect(response).to be_success
-            json_body = MultiJson.load(response.body, symbolize_keys: true)
-            expect(json_body[:title][0][:@value]).to eq "Earth rites : fertility rites in pre-industrial Britain"
-          end
+        it "generates the linked data expression" do
+          get :show, params: { id: resource.id, format: :jsonld }
+          expect(response).to be_success
+          json_body = MultiJson.load(response.body, symbolize_keys: true)
+          expect(json_body[:title][0][:@value]).to eq "Earth rites : fertility rites in pre-industrial Britain"
         end
       end
 

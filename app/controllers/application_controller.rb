@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   before_action :store_user_location!, if: :storable_location?
 
   def current_ability
-    Ability.new(current_user, ip_address: request.remote_ip)
+    Ability.new(current_user, ip_address: request.remote_ip, format: request.format)
   end
 
   def notify_read_only

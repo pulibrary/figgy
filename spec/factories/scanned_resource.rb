@@ -80,6 +80,10 @@ FactoryBot.define do
       state "complete"
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
     end
+    factory :draft_campus_only_scanned_resource do
+      state "draft"
+      visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+    end
     factory :reading_room_scanned_resource do
       state "complete"
       visibility ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_READING_ROOM
