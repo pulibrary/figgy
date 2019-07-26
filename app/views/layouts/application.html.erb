@@ -1,5 +1,7 @@
 <% provide :body do %>
-<%= render 'shared/header' %>
+<div class="lux">
+  <%= render 'shared/header' %>
+</div>
 <%= render 'shared/flash_message' %>
 <main>
   <div id="main" role="main" class="<%= container_type %> <%= yield(:page_class) if content_for?(:page_class)%> lux">
