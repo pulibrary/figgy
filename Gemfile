@@ -127,3 +127,5 @@ gem "valkyrie-shrine"
 group :development, :staging do
   gem "rack-mini-profiler", require: false
 end
+
+gem "extra_extra"
