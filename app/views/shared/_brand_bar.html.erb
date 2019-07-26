@@ -1,6 +1,8 @@
-<div class="container">
-  <a href="<%= t('institution.homepage_url') %>" title="<%= t('institution.name') %>" class="logo__pul col-xs-12 col-sm-6">
-     <%= image_tag("library_full_logo.svg", class: "logo-svg") %>
-     <%= image_tag("library_full_logo.png", class: "logo-no-svg") %>
-  </a>
+<div>
+  <library-header app-name="Figgy" app-url="/">
+    <menu-bar type="links" :menu-items="[
+        {name: 'Release Notes', component: 'Release Notes', href: '/release_notes'}
+      ]"
+    ></menu-bar>
+  </library-header>
 </div>
