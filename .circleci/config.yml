@@ -176,7 +176,7 @@ jobs:
           FIGGY_DB_PASSWORD:  ""
     steps:
       - checkout
-      - run: "! git diff origin/master --exit-code release_notes.md"
+      - run: "! git diff origin/master --exit-code RELEASE_NOTES.md"
 workflows:
   version: 2
   build_accept_deploy:
