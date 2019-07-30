@@ -66,5 +66,19 @@ RSpec.describe User, type: :model do
       expect(invalid_user.errors).to include :uid
       expect(invalid_user.errors[:uid]).to include "has already been taken"
     end
+
+    it "creates an email address based on netid" do
+      token = double("token", provider: "cas", uid: "test")
+      user = described_class.from_omniauth(token)
+      expect(user.email).to eq("test@princeton.edu")
+    end
+
+    context "with an external email address as a netid" do
+      it "uses the external email as-is" do
+        token = double("token", provider: "cas", uid: "test@example.org")
+        user = described_class.from_omniauth(token)
+        expect(user.email).to eq("test@example.org")
+      end
+    end
   end
 end
