@@ -38,6 +38,11 @@ class METSDocument
     element.to_s
   end
 
+  # Access the local ID for resources with MODS metadata
+  def local_id
+    mods&.local_identifier
+  end
+
   # Access the ID for the PUDL resource
   # @return [String]
   def pudl_id
@@ -136,8 +141,8 @@ class METSDocument
   def file_info(file, volume_id = nil)
     element = file.xpath("mets:FLocat/@xlink:href")
     content = element.to_s
-    checksumtype file.xpath("@CHECKSUMTYPE").to_s
-    checksum = file.xpath("@CHECKSUM").to_s.rjust((checksumtype == "MD5") ? 32 : 40, "0")
+    checksumtype = file.xpath("@CHECKSUMTYPE").to_s
+    checksum = file.xpath("@CHECKSUM").to_s.rjust(checksumtype == "MD5" ? 32 : 40, "0")
 
     path = content.gsub(/file:\/\//, "")
     replaces = volume_id ? "#{volume_id}/" : ""
