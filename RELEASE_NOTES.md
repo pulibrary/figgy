@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-08-02
+
+## Fixed
+
+* Email addresses for external users no longer have "@princeton.edu" added to the end of valid email addresses.
+
 # 2019-07-26
 
 ## Added
