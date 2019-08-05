@@ -12,8 +12,8 @@ class User < ApplicationRecord
     User.where(provider: access_token.provider, uid: unique_uid).first_or_create do |user|
       user.uid = unique_uid
       user.provider = access_token.provider
-      email = "#{access_token.uid}@princeton.edu"
-      user.email = email
+      uid = access_token.uid.to_s
+      user.email = uid.include?("@") ? uid : "#{uid}@princeton.edu"
     end
   end
   # Include default devise modules. Others available are:

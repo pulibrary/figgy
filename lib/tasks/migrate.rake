@@ -47,6 +47,14 @@ namespace :migrate do
     ExtractArchivalCollectionCodeJob.perform_now
   end
 
+  desc "Fix email addresses created with extra @princeton.edu appended to external email addresses"
+  task fix_external_emails: :environment do
+    User.where("email like '%@%@%'").each do |u|
+      u.email.gsub!(/@princeton.edu$/, "")
+      u.save!
+    end
+  end
+
   desc "update all local identifiers starting with `cico:` to start with `dcl:`"
   task cico_ids: :environment do
     coll = ENV["COLL"]
