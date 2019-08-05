@@ -96,7 +96,7 @@ class MusicImportService
     def import!
       if (found_recording = find_recording)
         logger.warn "Recording #{recording.id} is already ingested - skipping"
-        return found_recording
+        return update_courses(found_recording)
       end
       if files.empty?
         logger.warn "Unable to ingest recording #{recording.id} - there are no files associated or the files are missing from disk."
@@ -108,6 +108,11 @@ class MusicImportService
       else
         ingest_recording
       end
+    end
+
+    def update_courses(found_recording)
+      found_recording.part_of = (Array.wrap(found_recording.part_of) + recording.courses).uniq
+      change_set_persister.persister.save(resource: found_recording)
     end
 
     def recording_is_fake?
