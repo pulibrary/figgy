@@ -297,7 +297,7 @@ RSpec.describe MusicImportService do
       end
     end
     context "when the recording exists already" do
-      it "skips it" do
+      it "skips it, but updates course listing" do
         stub_bibdata(bib_id: "123456")
         recording = MusicImportService::RecordingCollector::MRRecording.new(
           14,
@@ -311,6 +311,7 @@ RSpec.describe MusicImportService do
         output = importer.ingest_recording(recording)
         expect(output).to be_a ScannedResource
         expect(logger).to have_received(:warn).with("Recording 14 is already ingested - skipping")
+        expect(output.part_of).to eq ["mus204", "mus549sb"]
       end
     end
     context "when the files are missing" do
