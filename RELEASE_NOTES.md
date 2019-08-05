@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-08-05
+
+## Removed
+
+* Removed redundant "Figgy" home link from secondary header
+
 # 2019-08-02
 
 ## Fixed

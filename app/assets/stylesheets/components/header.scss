@@ -71,18 +71,6 @@ header {
   display: none;
 }
 
-#site-title {
-  -webkit-transform-style: preserve-3d;
-  -moz-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-  height: 76px;
-
-  h1 {
-    font-size: 2em;
-    margin: 0.5em 0 0 0;
-  }
-}
-
 #site-actions {
   padding: 0;
   margin-bottom: 1.5em;
@@ -95,18 +83,9 @@ header {
 
 @media (min-width: $bp-medium) {
   .header__secondary > .container,
-  #site-title,
   #site-actions,
   #site-search {
     height: 76px;
-  }
-
-  #site-title h1 {
-    text-align: left;
-    font-size: 1.7em;
-    margin: 0;
-
-    @include vertical-align;
   }
 
   #site-actions {
@@ -156,20 +135,6 @@ header {
 .accessible-hidden,
 .visuallyhidden {
   @include visually-hidden;
-}
-
-#site-title h1 {
-  font-family: $font-family-serif;
-  text-align: center;
-  @media (min-width: 992px) {
-    text-align: left;
-  }
-
-  a,
-  a:hover,
-  a:focus {
-    text-decoration: none;
-  }
 }
 
 #site-actions {
