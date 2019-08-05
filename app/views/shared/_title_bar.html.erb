@@ -1,15 +1,11 @@
 <div class="container">
   <div id="title-bar" class="row">
 
-    <div id="site-title" class="col-md-3">
-      <h1><%= link_to t('product_name'), main_app.root_path, id: 'home-link' %></h1>
-    </div>
-
     <div id="site-search" class="col-md-6">
       <%= render 'shared/site_search' %>
     </div>
 
-    <nav id="site-actions" class="col-md-3" role="menu">
+    <nav id="site-actions" class="col-md-6" role="menu">
       <%= render 'shared/site_actions' %>
     </nav>
   </div>
