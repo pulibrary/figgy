@@ -15,6 +15,11 @@ Release notes template:
 -->
 # 2019-08-05
 
+## Changed
+
+* Music Reserves import now appends courses for existing recordings instead of simply
+skipping them.
+
 ## Removed
 
 * Removed redundant "Figgy" home link from secondary header
