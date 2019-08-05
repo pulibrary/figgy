@@ -81,7 +81,7 @@ class ArchivalMediaBagParser
     def image_files
       @image_files ||=
         begin
-          path.join("data").each_child.select { |file| [".jpg"].include? file.extname }.map { |file| ImageFile.new(path: file) }
+          path.join("data").each_child.select { |file| [".jpg"].include? file.extname.downcase }.map { |file| ImageFile.new(path: file) }
         end
     end
 end

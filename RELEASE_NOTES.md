@@ -13,6 +13,13 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-08-09
+
+## Fixed
+
+* Archival media collection upload will accept images with all-caps `JPG`
+  extension
+
 # 2019-08-08
 
 ## Changed
