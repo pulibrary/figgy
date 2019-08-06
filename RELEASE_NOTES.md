@@ -17,6 +17,8 @@ Release notes template:
 
 ## Fixed
 
+* Users should now be prevented from submitting multiple Order Manager updates before the initial update has successfully updated the Resource
+
 * The file upload interface should now filter hidden files on the file system within the File Manager for Resources
 
 # 2019-08-05

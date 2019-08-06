@@ -27,7 +27,7 @@
       Sorry, there was a problem saving your work!
     </alert>
     <wrapper
-      full-width="true"
+      :full-width="true"
       class="lux-galleryPanel"
       type="div"
     >
