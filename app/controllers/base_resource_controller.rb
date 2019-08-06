@@ -42,6 +42,13 @@ class BaseResourceController < ApplicationController
       auth_header_values = file_attributes.delete("auth_header")
       auth_header = JSON.generate(auth_header_values)
 
+      file_uri = file_attributes["url"]
+      file_path_match = /file\:\/\/(.+)/.match(file_uri)
+      if file_path_match
+        file_path = file_path_match[1]
+        next if File.basename(file_path) =~ /^\./
+      end
+
       @new_pending_uploads << PendingUpload.new(file_attributes.merge(id: SecureRandom.uuid, created_at: Time.current.utc.iso8601, auth_header: auth_header).symbolize_keys)
     end
 

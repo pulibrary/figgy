@@ -494,6 +494,39 @@ RSpec.describe ScannedResourcesController, type: :controller do
         expect(pending_upload.file_size).to eq [file.size]
         expect(pending_upload.created_at).not_to be_blank
       end
+
+      context "when the pending uploads have file URIs for hidden files" do
+        let(:selected_files) do
+          {
+            "0" => {
+              "url" => "file://#{file.path}",
+              "file_name" => File.basename(file.path),
+              "file_size" => file.size
+            },
+            "1" => {
+              "url" => "file:///tmp/.hidden_file.txt",
+              "file_name" => File.basename("hidden_file.txt"),
+              "file_size" => 0
+            }
+          }
+        end
+
+        it "filters the uploads" do
+          resource = FactoryBot.create_for_repository(:scanned_resource)
+          allow(BrowseEverythingIngestJob).to receive(:perform_later).and_return(true)
+
+          post :browse_everything_files, params: { id: resource.id, selected_files: params["selected_files"] }
+          reloaded = adapter.query_service.find_by(id: resource.id)
+
+          pending_uploads = reloaded.pending_uploads
+          expect(pending_uploads.length).to eq 1
+          pending_upload = pending_uploads.first
+          expect(pending_upload.file_name).to eq [File.basename(file.path)]
+          expect(pending_upload.url).to eq ["file://#{file.path}"]
+          expect(pending_upload.file_size).to eq [file.size]
+          expect(pending_upload.created_at).not_to be_blank
+        end
+      end
     end
   end
 
