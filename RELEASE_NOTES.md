@@ -15,6 +15,10 @@ Release notes template:
 -->
 # 2019-08-06
 
+## Added
+
+* Added ability to ingest ephemera with MODS metadata.
+
 ## Fixed
 
 * The file upload interface should now filter hidden files on the file system within the File Manager for Resources

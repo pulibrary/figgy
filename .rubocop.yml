@@ -20,6 +20,7 @@ Lint/ParenthesesAsGroupedExpression:
     - 'spec/services/manifest_builder_spec.rb'
 Metrics/AbcSize:
   Exclude:
+    - 'app/services/ingest_ephemera_mods.rb'
     - 'app/services/ingest_ephemera_service.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
@@ -175,6 +176,7 @@ Metrics/MethodLength:
     - 'app/jobs/bulk_update_job.rb'
     - 'app/jobs/browse_everything_ingest_job.rb'
     - 'app/controllers/application_controller.rb'
+    - 'app/services/ingest_ephemera_mods.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
