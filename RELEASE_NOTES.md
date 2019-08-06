@@ -17,7 +17,7 @@ Release notes template:
 
 ## Fixed
 
-* BrowseEverything file upload interface should now filter hidden files on the file system within the File Manager for Resources
+* The file upload interface should now filter hidden files on the file system within the File Manager for Resources
 
 # 2019-08-05
 
