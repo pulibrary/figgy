@@ -44,6 +44,7 @@ Release notes template:
 ## Fixed
 
 * Users should now be prevented from submitting multiple Order Manager updates before the initial update has successfully updated the Resource
+* Ensure that cases where thumbnails cannot be resolved for resources are handle with attempts to load thumbnails from any members
 
 * The file upload interface should now filter hidden files on the file system within the File Manager for Resources
 * Imported metadata attributes are now indexed without brackets, class names, etc.

@@ -177,6 +177,7 @@ Metrics/MethodLength:
     - 'app/jobs/browse_everything_ingest_job.rb'
     - 'app/controllers/application_controller.rb'
     - 'app/services/ingest_ephemera_mods.rb'
+    - 'app/helpers/thumbnail_helper.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'

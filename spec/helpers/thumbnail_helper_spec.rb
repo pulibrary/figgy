@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require "rails_helper"
+include ActionDispatch::TestProcess
 
 RSpec.describe ThumbnailHelper do
   describe "#figgy_thumbnail_path" do
@@ -107,6 +108,37 @@ RSpec.describe ThumbnailHelper do
       it "logs an error and generates the markup for the default thumbnail" do
         expect(helper.figgy_thumbnail_path(book)).to eq helper.default_icon_fallback
         expect(Rails.logger).to have_received(:error).with("Unable to retrieve the resource with the ID #{book.id}")
+      end
+    end
+
+    context "when the resource does not link to thumbnail ID but its first member does" do
+      let(:file1) { fixture_file_upload("files/abstract.tiff", "image/tiff") }
+      let(:member1) { FactoryBot.create_for_repository(:scanned_resource, files: [file1]) }
+      let(:scanned_record1) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [member1.id]) }
+
+      it "retrieves the thumbnail from the first member" do
+        expect(helper.figgy_thumbnail_path(scanned_record1)).to eq helper.figgy_thumbnail_path(member1)
+      end
+    end
+
+    context "when the resource does not link to thumbnail ID but its last member does" do
+      let(:file1) { fixture_file_upload("files/abstract.tiff", "image/tiff") }
+      let(:member1) { FactoryBot.create_for_repository(:scanned_resource) }
+      let(:member2) { FactoryBot.create_for_repository(:scanned_resource, files: [file1]) }
+      let(:scanned_record1) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [member1.id, member2.id]) }
+
+      it "retrieves the thumbnail from the last member" do
+        expect(helper.figgy_thumbnail_path(scanned_record1)).to eq helper.figgy_thumbnail_path(member2)
+      end
+    end
+
+    context "when the resource does not link to thumbnail ID and none of its members do" do
+      let(:member1) { FactoryBot.create_for_repository(:scanned_resource) }
+      let(:member2) { FactoryBot.create_for_repository(:scanned_resource) }
+      let(:scanned_record1) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [member1.id, member2.id]) }
+
+      it "retrieves no thumbnail" do
+        expect(helper.figgy_thumbnail_path(scanned_record1)).to eq nil
       end
     end
   end

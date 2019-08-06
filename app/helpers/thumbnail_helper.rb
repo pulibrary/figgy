@@ -64,8 +64,22 @@ module ThumbnailHelper
     image_tag url, image_options.merge(onerror: default_icon_fallback)
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
   def iiif_thumbnail_path(document, image_options = {})
-    return unless document.thumbnail_id
+    if document.thumbnail_id.blank?
+      return unless document.respond_to?(:member_ids)
+
+      document.member_ids.each do |member_id|
+        member = Valkyrie.config.metadata_adapter.query_service.find_by(id: member_id)
+        return iiif_thumbnail_path(member, image_options) if member.respond_to?(:thumbnail_id) && member.thumbnail_id
+      end
+
+      return nil
+    end
+    # rubocop:enable Metrics/CyclomaticComplexity
+    # rubocop:enable Metrics/PerceivedComplexity
+
     id = Array(document.thumbnail_id).first
     return build_iiif_thumbnail_path(document, image_options) if id == document.id
     return if id.blank?
