@@ -178,7 +178,9 @@ class Ability
   end
 
   def valkyrie_test_discover(obj)
-    obj.decorate.public_readable_state?
+    return true if valkyrie_test_read(obj)
+    return false if obj.read_groups.include?(::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_READING_ROOM) && !reading_room_ip?
+    obj.decorate.public_readable_state? && !obj.read_groups.empty?
   end
 
   def valkyrie_test_read(obj)

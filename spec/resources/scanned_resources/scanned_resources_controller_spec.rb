@@ -40,6 +40,20 @@ RSpec.describe ScannedResourcesController, type: :controller do
         expect(response).to be_unauthorized
       end
     end
+    context "when not logged, but in a reading room" do
+      let(:config_hash) { { "access_control" => { "reading_room_ips" => ["1.2.3"] } } }
+      before do
+        # rubocop:disable RSpec/InstanceVariable
+        @request.remote_addr = "1.2.3"
+        # rubocop:enable RSpec/InstanceVariable
+        allow(Figgy).to receive(:config).and_return(config_hash)
+      end
+      it "returns a 401" do
+        resource = FactoryBot.create_for_repository(:reading_room_scanned_resource)
+        get :manifest, params: { id: resource.id, format: :json }
+        expect(response).to be_unauthorized
+      end
+    end
   end
 
   describe "change_set_class" do
