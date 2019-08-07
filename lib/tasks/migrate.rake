@@ -20,6 +20,17 @@ namespace :migrate do
     end
   end
 
+  desc "Migrates Ukrainian Ephemera Folders from MODS metadata records"
+  task ukrainian_ephemera_mods: :environment do
+    project = ENV["PROJECT"]
+    mods = ENV["MODS"]
+    dir = ENV["DIR"]
+
+    usage = "usage: rake migrate:ukrainian_ephemera_mods PROJECT=project_id MODS=/path/to/metadata.mods DIR=/path/to/files"
+    abort usage unless project && dir && mods && Dir.exist?(dir) && File.exist?(mods)
+    IngestUkrainianEphemeraMODSJob.set(queue: :low).perform_now(project, mods, dir)
+  end
+
   desc "Migrates Collection members with children who have values in the member_of_collection_ids attribute"
   task collection_members_with_children: :environment do
     resources(model: Collection).each do |collection|

@@ -188,6 +188,10 @@ class METSDocument
       normalize_whitespace(value_from(xpath: "mods:originInfo/mods:place")).map(&:strip)
     end
 
+    def geographic_subject
+      value_from(xpath: "mods:subject/mods:geographic").map(&:strip).uniq
+    end
+
     def language
       value_from(xpath: "mods:language/mods:languageTerm")
     end

@@ -17,8 +17,8 @@ Release notes template:
 
 ## Added
 
-* If in a configured IP, reading room users can now log in to view Reading Room
-Only material.
+* If in a configured IP, reading room users can now log in to view Reading Room Only material.
+* Added ability to ingest ephemera with MODS metadata.
 
 ## Fixed
 

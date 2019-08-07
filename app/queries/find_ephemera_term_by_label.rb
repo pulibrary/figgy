@@ -12,15 +12,18 @@ class FindEphemeraTermByLabel
     @query_service = query_service
   end
 
-  def find_ephemera_term_by_label(label:, parent_vocab_label: nil)
+  def find_ephemera_term_by_label(label: nil, code: nil, parent_vocab_label: nil)
+    raise(ArgumentError, "Either label or code must be specified") unless label || code
     if parent_vocab_label
       internal_array = { label: Array.wrap(parent_vocab_label) }.to_json
       parent_vocab = run_query(query, EphemeraVocabulary.to_s, internal_array).first
-      internal_array = { label: Array.wrap(label), member_of_vocabulary_id: Array.wrap(parent_vocab.id) }.to_json
+      internal_array = { member_of_vocabulary_id: Array.wrap(parent_vocab.id) }
     else
-      internal_array = { label: Array.wrap(label) }.to_json
+      internal_array = {}
     end
-    run_query(query, EphemeraTerm.to_s, internal_array).first
+    internal_array[:code] = Array.wrap(code) if code
+    internal_array[:label] = Array.wrap(label) if label
+    run_query(query, EphemeraTerm.to_s, internal_array.to_json).first
   end
 
   def query
