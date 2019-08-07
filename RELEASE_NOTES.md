@@ -2,7 +2,7 @@
 
 Release notes template:
 
-# 2019-07-26
+# 2019-08-07
 
 ## Added
 
@@ -15,11 +15,20 @@ Release notes template:
 -->
 # 2019-08-07
 
+## Fixed
+
+* Clear derivative generation error message from file set when that file set's derivatives are cleaned up
+
 ## Changed
 
 * Links in the cover pages for generated PDFs direct users to public-facing platforms (DPUL, the catalog, or the finding aids)
 
 # 2019-08-06
+
+## Added
+
+* If in a configured IP, reading room users can now log in to view Reading Room Only material.
+* Added ability to ingest ephemera with MODS metadata.
 
 ## Fixed
 

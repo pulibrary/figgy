@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen SCHSchema="http://library.princeton.edu/departments/tsd/metadoc/main/mods.sch"?>
+<?xml-stylesheet type="text/css" href="../css/ukraine_form.css" title="ukraine_form" alternate="no"?>
+<mods:mods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd"
+    version="3.4">
+    <mods:titleInfo script="Latn" lang="rus" altRepGroup="00">
+        <mods:title>Narodnyĭ prezident: Ol'ga Bogomolet͡s</mods:title>
+    </mods:titleInfo>
+    <mods:titleInfo script="Cyrl" lang="rus" altRepGroup="00">
+        <mods:title>Народный президент: Ольга Богомолец</mods:title>
+    </mods:titleInfo>
+    <mods:name authority="naf" type="personal" script="Latn" altRepGroup="1">
+        <mods:namePart type="family"></mods:namePart>
+        <mods:namePart type="given"></mods:namePart>
+        <mods:namePart type="date"></mods:namePart>
+        <mods:role>
+            <mods:roleTerm type="code" authority="marcrelator">author</mods:roleTerm>
+        </mods:role>
+    </mods:name>
+    <mods:name authority="local" type="personal" script="Cyrl" lang="rus" altRepGroup="1">
+        <mods:namePart type="family"></mods:namePart>
+        <mods:namePart type="given"></mods:namePart>
+        <mods:namePart type="date"></mods:namePart>
+        <mods:role>
+            <mods:roleTerm type="code" authority="marcrelator">author</mods:roleTerm>
+        </mods:role>
+    </mods:name>
+    <mods:typeOfResource>text</mods:typeOfResource>
+    <mods:originInfo>
+        <mods:place>
+            <mods:placeTerm type="text">Kiev</mods:placeTerm>
+        </mods:place>
+        <mods:publisher/>
+        <mods:dateCreated encoding="w3cdtf" keyDate="yes">2014</mods:dateCreated>
+    </mods:originInfo>
+    <mods:language>
+        <mods:languageTerm type="code" authority="iso639-2b">rus</mods:languageTerm>
+    </mods:language>
+    <mods:physicalDescription>
+        <mods:extent>40 cm.</mods:extent>
+    </mods:physicalDescription>
+    <mods:note script="Latn" lang="rus" altRepGroup="03"/>
+    <mods:note script="Cyrl" lang="rus" altRepGroup="03"/>
+    <mods:note/>
+    <mods:note>Bohomolet︠s︡ʹ, Olʹha, 1966- </mods:note>
+    <mods:subject authority="lcsh">
+        <mods:geographic>Ukraine</mods:geographic>
+        <mods:topic>History</mods:topic>
+        <mods:topic>Euromaidan Protests, 2013-2014</mods:topic>
+    </mods:subject>
+    <mods:subject authority="lcsh">
+        <mods:geographic>Ukraine</mods:geographic>
+        <mods:topic>Politics and government</mods:topic>
+        <mods:temporal>1991-</mods:temporal>
+    </mods:subject>
+    <mods:subject authority="lcsh">
+        <mods:geographic>Ukraine</mods:geographic>
+        <mods:topic>Relations</mods:topic>
+        <mods:geographic>Russia (Federation)</mods:geographic>
+    </mods:subject>
+    <mods:subject authority="lcsh">
+        <mods:topic>Presidents</mods:topic>
+        <mods:geographic>Ukraine</mods:geographic>
+        <mods:topic>Election</mods:topic>
+        <mods:temporal>2014</mods:temporal>
+    </mods:subject>
+    <mods:subject authority="lcsh">
+        <mods:topic>Elections</mods:topic>
+        <mods:geographic>Ukraine</mods:geographic>
+    </mods:subject>
+    <mods:subject authority="lcsh">
+        <mods:topic>Political parties</mods:topic>
+        <mods:geographic>Ukraine</mods:geographic>
+    </mods:subject>
+    <mods:subject authority="lcsh">
+        <mods:topic>Political campaigns</mods:topic>
+        <mods:geographic>Ukraine</mods:geographic>
+    </mods:subject>
+    <mods:relatedItem type="host">
+        <mods:titleInfo>
+            <mods:title>Ukrainian Election Ephemera</mods:title>
+        </mods:titleInfo>
+        <mods:location>
+            <mods:url>http://pudl.princeton.edu/collections/pudl0144</mods:url>
+        </mods:location>
+    </mods:relatedItem>
+    <mods:identifier type="local"><!-- TODO: identifier from filename --></mods:identifier>
+    <mods:location>
+        <mods:physicalLocation type="text">Rare Books Off-Site Storage (rcpxr)</mods:physicalLocation>
+        <mods:physicalLocation type="code" authority="marcorg">NjP</mods:physicalLocation>
+    </mods:location>
+    <mods:accessCondition type="useAndReproduction"
+        xlink:href="http://www.princeton.edu/~rbsc/research/rights.html">Use and
+        reproduction</mods:accessCondition>
+    <mods:accessCondition type="restrictionOnAccess"
+        xlink:href="http://www.princeton.edu/~rbsc/research/rules.html">Restrictions on
+        access</mods:accessCondition>
+    <mods:recordInfo>
+        <mods:recordContentSource authority="marcorg">NjP</mods:recordContentSource>
+        <mods:recordIdentifier>http://diglib.princeton.edu/mdata/pudl0144/XXXX.mods</mods:recordIdentifier>
+        <mods:languageOfCataloging>
+            <mods:languageTerm authority="iso639-2b" type="code">eng</mods:languageTerm>
+        </mods:languageOfCataloging>
+    </mods:recordInfo>
+</mods:mods>
