@@ -12,6 +12,13 @@ Release notes template:
 
 ## Removed
 
+-->
+# 2019-12-20
+
+## Fixed
+
+* Derivative files are now deleted for geospatial resources (ScannedMaps, RasterResources, and VectorResources) when derivative generation fails.
+
 # 2019-12-16
 
 ## Fixed
