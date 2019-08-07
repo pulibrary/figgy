@@ -21,6 +21,14 @@ RSpec.describe ImportedMetadataIndexer do
       output = described_class.new(resource: resource).to_solr
 
       expect(output[:call_number_tsim]).to eq ["G8731.F7 1949 .C6 (b)"]
+      expect(output["imported_cartographer_tesim"]).to eq ["Nigeria. Survey Department"]
+    end
+
+    it "indexes objects as plain strings" do
+      resource = FactoryBot.build(:scanned_resource)
+      resource.imported_metadata = [ImportedMetadata.new(creator: RDF::Literal.new("Test Literal"))]
+      output = described_class.new(resource: resource).to_solr
+      expect(output["imported_creator_tesim"]).to eq ["Test Literal"]
     end
   end
 end
