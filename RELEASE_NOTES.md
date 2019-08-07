@@ -15,6 +15,11 @@ Release notes template:
 -->
 # 2019-08-06
 
+## Added
+
+* If in a configured IP, reading room users can now log in to view Reading Room
+Only material.
+
 ## Fixed
 
 * The file upload interface should now filter hidden files on the file system within the File Manager for Resources

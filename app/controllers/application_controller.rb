@@ -54,8 +54,7 @@ class ApplicationController < ActionController::Base
   end
 
   def manifest_denial
-    decorated_resource = @resource.decorate
-    if decorated_resource.public_readable_state? && decorated_resource.read_groups.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED)
+    if current_ability.can?(:discover, @resource)
       head :unauthorized
     else
       head :forbidden
