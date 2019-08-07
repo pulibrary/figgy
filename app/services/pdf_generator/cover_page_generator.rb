@@ -90,7 +90,14 @@ class PDFGenerator
 
         header(prawn_document, "Download Information")
         prawn_document.text "Date Rendered: #{Time.current.strftime('%Y-%m-%d %I:%M:%S %p %Z')}"
-        prawn_document.text "Available Online at: <u><a href='#{helper.solr_document_url(id: resource.id)}'>#{helper.solr_document_url(id: resource.id)}</a></u>", inline_format: true
+        resource_link = if resource.decorate.public_readable_state?
+                          identifier = Ark.new(resource.identifier)
+                          IdentifierService.get_ark_result(ark: identifier.ark)
+                        else
+                          IdentifierService.url_for(resource)
+                        end
+
+        prawn_document.text "Available Online at: <u><a href='#{resource_link}'>#{resource_link}</a></u>", inline_format: true
       end
     end
 
