@@ -19,6 +19,10 @@ Release notes template:
 
 * Clear derivative generation error message from file set when that file set's derivatives are cleaned up
 
+## Changed
+
+* Links in the cover pages for generated PDFs direct users to public-facing platforms (DPUL, the catalog, or the finding aids)
+
 # 2019-08-06
 
 ## Added

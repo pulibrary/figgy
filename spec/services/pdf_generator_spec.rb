@@ -314,5 +314,46 @@ RSpec.describe PDFGenerator do
         expect(File.exist?(file.io.path)).to eq true
       end
     end
+
+    context "when a resource is complete and has an ARK for identifier" do
+      let(:resource) { FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file], pdf_type: ["color"], identifier: "ark:/99999/fk4") }
+      let(:shoulder) { "99999" }
+      let(:blade) { "fk4" }
+      let(:ark) { instance_double(Ark) }
+
+      before do
+        stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/default.jpg")
+          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
+        stub_ezid(shoulder: shoulder, blade: blade)
+        allow(Ark).to receive(:new).and_return(ark)
+        allow(ark).to receive(:uri)
+      end
+
+      it "generates ARK links in the cover page" do
+        file_node = generator.render
+        file = Valkyrie::StorageAdapter.find_by(id: file_node.file_identifiers.first)
+        expect(File.exist?(file.io.path)).to eq true
+        expect(Ark).to have_received(:new).with("ark:/99999/fk4").at_least(:once)
+        expect(ark).to have_received(:uri).at_least(:once)
+      end
+    end
+
+    context "when a resource is complete and has no ARK" do
+      let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], pdf_type: ["color"], source_metadata_identifier: "123456") }
+
+      before do
+        stub_bibdata(bib_id: "123456")
+        stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/default.jpg")
+          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
+        allow(IdentifierService).to receive(:url_for).and_call_original
+      end
+
+      it "generates catalog or finding aid links in the cover page" do
+        file_node = generator.render
+        file = Valkyrie::StorageAdapter.find_by(id: file_node.file_identifiers.first)
+        expect(File.exist?(file.io.path)).to eq true
+        expect(IdentifierService).to have_received(:url_for)
+      end
+    end
   end
 end
