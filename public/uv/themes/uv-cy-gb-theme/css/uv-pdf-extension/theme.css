@@ -1564,8 +1564,10 @@ input[type=range]:focus::-ms-fill-upper {
 }
 .uv .headerPanel .informationBox .message {
   float: left;
-  overflow: hidden;
   margin: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .uv .headerPanel .informationBox .actions {
   float: left;
@@ -1585,6 +1587,9 @@ input[type=range]:focus::-ms-fill-upper {
 .uv .headerPanel .informationBox .close:focus,
 .uv .headerPanel .informationBox .close:hover {
   color: #010101;
+}
+.uv .leftPanel {
+  z-index: 10;
 }
 .uv .leftPanel a {
   color: #ffffff;
@@ -1654,6 +1659,9 @@ input[type=range]:focus::-ms-fill-upper {
 }
 .uv.browser-Explorer.browser-version-8 .leftPanel .closed .title {
   writing-mode: tb-lr;
+}
+.uv .rightPanel {
+  z-index: 10;
 }
 .uv .rightPanel .top {
   height: 35px;
@@ -1730,9 +1738,57 @@ input[type=range]:focus::-ms-fill-upper {
   font-size: 20px;
   color: #ffffff;
   padding: 0 20px 0 20px;
-}
-.uv .centerPanel .title span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   line-height: 30px;
+}
+.uv .centerPanel .subtitle {
+  font-size: 14px;
+  color: #ffffff;
+  line-height: 30px;
+  height: 30px;
+  scrollbar-width: none;
+}
+.uv .centerPanel .subtitle.hide {
+  display: none;
+}
+.uv .centerPanel .subtitle .wrapper {
+  z-index: 3;
+  background: rgba(0, 0, 0, 0.7);
+  scrollbar-width: none;
+}
+.uv .centerPanel .subtitle .wrapper .expand-btn {
+  width: 20px;
+  height: 30px;
+  float: left;
+  background: #000;
+  border: none;
+  color: #fff;
+  padding: 0;
+}
+.uv .centerPanel .subtitle .wrapper .text {
+  display: block;
+  float: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin: 0 10px 0 20px;
+  scrollbar-width: none;
+}
+.uv .centerPanel .subtitle .wrapper .text.elided {
+  margin: 0 10px 0 0;
+}
+.uv .centerPanel .subtitle .wrapper.expanded {
+  position: absolute;
+  overflow-y: scroll;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+.uv .centerPanel .subtitle .wrapper.expanded .text {
+  white-space: normal;
+  text-overflow: inherit;
+  overflow: scroll;
+  margin: -30px 10px 0 20px;
 }
 .uv .centerPanel .content .attribution {
   background: #343434;
@@ -2610,6 +2666,9 @@ input[type=range]:focus::-ms-fill-upper {
   .uv .mobileFooterPanel {
     display: none;
   }
+}
+.hidden {
+  display: none;
 }
 .uv {
   background-color: #000000;
