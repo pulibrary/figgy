@@ -255,6 +255,7 @@ describe("OrderManagerControls.vue", () => {
 
     // calls the appropriate action on save
     wrapper.vm.saveHandler()
+    expect(wrapper.vm.fetching).toBeTruthy()
     expect(actions.saveStateGql).toHaveBeenCalled()
   })
 
