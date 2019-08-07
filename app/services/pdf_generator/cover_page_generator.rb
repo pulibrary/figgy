@@ -91,8 +91,8 @@ class PDFGenerator
         header(prawn_document, "Download Information")
         prawn_document.text "Date Rendered: #{Time.current.strftime('%Y-%m-%d %I:%M:%S %p %Z')}"
         resource_link = if resource.decorate.public_readable_state?
-                          identifier = Ark.new(resource.identifier)
-                          IdentifierService.get_ark_result(ark: identifier.ark)
+                          identifier = Ark.new(resource.identifier.first)
+                          identifier.uri
                         else
                           IdentifierService.url_for(resource)
                         end
@@ -105,10 +105,6 @@ class PDFGenerator
 
       def holding_location_text(holding_location)
         ControlledVocabulary.for(:holding_location).find(holding_location).label
-      end
-
-      def helper
-        @helper ||= ManifestBuilder::ManifestHelper.new
       end
 
       def rights_statement_label(statement)

@@ -19,6 +19,12 @@ class IdentifierService
     final_result.headers["location"]
   end
 
+  def self.url_for(resource)
+    return Rails.application.routes.url_helpers.solr_document_url(resource, host: Figgy.default_url_options[:host]) if resource.try(:source_metadata_identifier).blank?
+    return "https://catalog.princeton.edu/catalog/#{resource.source_metadata_identifier.first}#view" if PulMetadataServices::Client.bibdata?(resource.source_metadata_identifier.first)
+    "http://findingaids.princeton.edu/collections/#{resource.source_metadata_identifier.first.tr('_', '/')}"
+  end
+
   private_class_method def self.mint_identifier(resource)
     resource_metadata = metadata(resource)
     minted = minter.mint(resource_metadata)
@@ -42,12 +48,6 @@ class IdentifierService
       dc_type: "Text",
       target: url_for(resource)
     }
-  end
-
-  def self.url_for(resource)
-    return Rails.application.routes.url_helpers.solr_document_url(resource, host: Figgy.default_url_options[:host]) if resource.try(:source_metadata_identifier).blank?
-    return "https://catalog.princeton.edu/catalog/#{resource.source_metadata_identifier.first}#view" if PulMetadataServices::Client.bibdata?(resource.source_metadata_identifier.first)
-    "http://findingaids.princeton.edu/collections/#{resource.source_metadata_identifier.first.tr('_', '/')}"
   end
 
   private_class_method def self.geo_metadata(resource)
