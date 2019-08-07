@@ -100,5 +100,31 @@ RSpec.describe ImageDerivativeService do
       reloaded = query_service.find_by(id: valid_resource.id)
       expect(reloaded.file_metadata.select { |file| (file.derivative? || file.thumbnail_file?) && file.mime_type.include?(image_mime_type) }).to be_empty
     end
+
+    it "deletes the error_message" do
+      resource = query_service.find_by(id: valid_resource.id)
+      resource.original_file.error_message = ["it went poorly"]
+      persister.save(resource: resource)
+      derivative_service.new(id: resource.id).cleanup_derivatives
+
+      resource = query_service.find_by(id: valid_resource.id)
+      expect(resource.original_file.error_message).to be_empty
+    end
+
+    context "with an intermediate file" do
+      it "deletes the error_message" do
+        resource = query_service.find_by(id: valid_resource.id)
+        resource.original_file.error_message = ["it went poorly"]
+        # turn it into an intermediate file
+        resource.original_file.use = [Valkyrie::Vocab::PCDMUse.IntermediateFile]
+        persisted = persister.save(resource: resource)
+        expect(persisted.intermediate_files.first.error_message).not_to be_empty
+
+        derivative_service.new(id: resource.id).cleanup_derivatives
+
+        resource = query_service.find_by(id: valid_resource.id)
+        expect(resource.intermediate_files.first.error_message).to be_empty
+      end
+    end
   end
 end

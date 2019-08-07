@@ -2,7 +2,7 @@
 
 Release notes template:
 
-# 2019-07-26
+# 2019-08-07
 
 ## Added
 
@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-08-07
+
+## Fixed
+
+* Clear derivative generation error message from file set when that file set's derivatives are cleaned up
+
 # 2019-08-06
 
 ## Added

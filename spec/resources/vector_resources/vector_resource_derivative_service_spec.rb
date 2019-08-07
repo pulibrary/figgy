@@ -69,5 +69,15 @@ RSpec.describe VectorResourceDerivativeService do
       reloaded = query_service.find_by(id: valid_resource.id)
       expect(reloaded.file_metadata.select(&:derivative?)).to be_empty
     end
+
+    it "deletes the error_message" do
+      resource = query_service.find_by(id: valid_resource.id)
+      resource.original_file.error_message = ["it went poorly"]
+      persister.save(resource: resource)
+      derivative_service.new(id: resource.id).cleanup_derivatives
+
+      resource = query_service.find_by(id: valid_resource.id)
+      expect(resource.original_file.error_message).to be_empty
+    end
   end
 end
