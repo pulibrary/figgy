@@ -26,8 +26,13 @@ class ImportedMetadataIndexer
 
     def primary_imported_properties
       resource.primary_imported_metadata.to_h.except(*suppressed_keys).map do |k, v|
-        ["imported_#{k}_tesim", v.to_s]
+        ["imported_#{k}_tesim", format_values(v)]
       end.to_h
+    end
+
+    def format_values(value)
+      return value.map(&:to_s) if value.is_a?(Array)
+      return value.to_s if value
     end
 
     def suppressed_keys

@@ -29,6 +29,7 @@ Release notes template:
 ## Fixed
 
 * The file upload interface should now filter hidden files on the file system within the File Manager for Resources
+* Imported metadata attributes are now indexed without brackets, class names, etc.
 
 # 2019-08-05
 
