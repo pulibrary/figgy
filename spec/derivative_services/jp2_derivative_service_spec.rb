@@ -148,5 +148,15 @@ RSpec.describe Jp2DerivativeService do
       file_set = query_service.find_all_of_model(model: FileSet).first
       expect(file_set.original_file.error_message).to include(/bad magic number/)
     end
+
+    it "deletes the error_message" do
+      resource = query_service.find_by(id: valid_resource.id)
+      resource.original_file.error_message = ["it went poorly"]
+      persister.save(resource: resource)
+      derivative_service.new(id: resource.id).cleanup_derivatives
+
+      resource = query_service.find_by(id: valid_resource.id)
+      expect(resource.original_file.error_message).to be_empty
+    end
   end
 end

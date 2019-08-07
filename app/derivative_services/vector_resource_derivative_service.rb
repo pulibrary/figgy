@@ -157,10 +157,12 @@ class VectorResourceDerivativeService
   private
 
     # This removes all Valkyrie::StorageAdapter::File member Objects from a given Resource (usually a FileSet)
+    # and clears error messages from remaining files
     # Resources consistently store the membership using #file_metadata
     # A ChangeSet for the purged members is created and persisted
     def cleanup_derivative_metadata(derivatives:)
       resource.file_metadata = resource.file_metadata.reject { |file| derivatives.include?(file.id) }
+      resource.file_metadata.map { |fm| fm.error_message = [] }
       updated_change_set = DynamicChangeSet.new(resource)
       change_set_persister.buffer_into_index do |buffered_persister|
         buffered_persister.save(change_set: updated_change_set)
