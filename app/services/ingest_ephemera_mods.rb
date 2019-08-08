@@ -122,7 +122,7 @@ class IngestEphemeraMODS
     end
 
     def files
-      @files ||= Dir["#{dir}/*.tif"].map do |file|
+      @files ||= Dir["#{dir}/*.tif"].sort.map do |file|
         IngestableFile.new(
           file_path: file,
           mime_type: "image/tiff",
