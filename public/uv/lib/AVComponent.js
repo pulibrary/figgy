@@ -124,7 +124,7 @@ var IIIFComponents;
             //private _lastCanvasWidth: number | undefined;
             _this._lowPriorityFrequency = 250;
             _this._mediaSyncMarginSecs = 1;
-            _this._rangeSpanPadding = 0.25;
+            _this._rangeSpanPadding = 0.0;
             _this._readyMediaCount = 0;
             _this._stallRequestedBy = []; //todo: type
             _this._wasPlaying = false;
@@ -144,9 +144,8 @@ var IIIFComponents;
         }
         CanvasInstance.prototype.loaded = function () {
             var _this = this;
-            setTimeout(function () {
-                _this.$playerElement.removeClass('player--loading');
-            }, 500);
+            _this.$playerElement.removeClass('player--loading');
+            return _this;
         };
         CanvasInstance.prototype.isPlaying = function () {
             return this._isPlaying;
@@ -376,7 +375,7 @@ var IIIFComponents;
                 if (!t) {
                     t = [0, this._getDuration()];
                 }
-                var positionLeft = parseInt(String(xywh[0])), positionTop = parseInt(String(xywh[1])), mediaWidth = parseInt(String(xywh[2])), mediaHeight = parseInt(String(xywh[3])), startTime = parseInt(String(t[0])), endTime = parseInt(String(t[1]));
+                var positionLeft = parseInt(String(xywh[0])), positionTop = parseInt(String(xywh[1])), mediaWidth = parseInt(String(xywh[2])), mediaHeight = parseInt(String(xywh[3])), startTime = parseFloat(String(t[0])), endTime = parseFloat(String(t[1]));
                 var percentageTop = this._convertToPercentage(positionTop, this._canvasHeight), percentageLeft = this._convertToPercentage(positionLeft, this._canvasWidth), percentageWidth = this._convertToPercentage(mediaWidth, this._canvasWidth), percentageHeight = this._convertToPercentage(mediaHeight, this._canvasHeight);
                 var temporalOffsets = /[\?|&]t=([^&]+)/g.exec(body.id);
                 var ot = void 0;
@@ -535,8 +534,12 @@ var IIIFComponents;
             }
         };
         CanvasInstance.prototype._hasRangeChanged = function () {
+            this._checkMediaSynchronization();
             var range = this._getRangeForCurrentTime();
             if (range && !this._data.limitToRange && (!this._data.range || (this._data.range && range.id !== this._data.range.id))) {
+                if(this._canvasClockTime <= this._data.range.getDuration().end && this._canvasClockTime >= this._data.range.getDuration().start) {
+                  return
+                }
                 this.set({
                     range: jQuery.extend(true, { autoChanged: true }, range)
                 });
@@ -1053,7 +1056,12 @@ var IIIFComponents;
                 this._$canvasTime.text(AVComponentUtils.formatTime(rangeClockTime));
             }
             else {
-                this._$canvasTime.text(AVComponentUtils.formatTime(this._canvasClockTime));
+                if(duration) {
+                  var rangeClockTime = this._canvasClockTime - duration.start;
+                  this._$canvasTime.text(AVComponentUtils.formatTime(rangeClockTime));
+                } else {
+                  this._$canvasTime.text(AVComponentUtils.formatTime(this._canvasClockTime));
+                }
             }
         };
         CanvasInstance.prototype._updateDurationDisplay = function () {
@@ -1065,7 +1073,11 @@ var IIIFComponents;
                 this._$canvasDuration.text(AVComponentUtils.formatTime(duration.getLength()));
             }
             else {
-                this._$canvasDuration.text(AVComponentUtils.formatTime(this._getDuration()));
+                if(duration) {
+                  this._$canvasDuration.text(AVComponentUtils.formatTime(duration.getLength()));
+                } else {
+                  this._$canvasDuration.text(AVComponentUtils.formatTime(this._getDuration()));
+                }
             }
         };
         // public setVolume(value: number): void {
@@ -1099,7 +1111,11 @@ var IIIFComponents;
             // if (isNaN(secondsAsFloat)) {
             //     return;
             // }
-            this._canvasClockTime = seconds; //secondsAsFloat;
+            var secondsAsFloat = parseFloat(seconds.toString());
+            if (isNaN(secondsAsFloat)) {
+              return;
+            }
+            this._canvasClockTime = secondsAsFloat;
             this._canvasClockStartDate = Date.now() - (this._canvasClockTime * 1000);
             this.logMessage('SET CURRENT TIME to: ' + this._canvasClockTime + ' seconds.');
             this._canvasClockUpdater();
@@ -1322,7 +1338,7 @@ var IIIFComponents;
                         var lag = Math.abs(factualTime - correctTime);
                         this.logMessage('DETECTED synchronization lag: ' + Math.abs(lag));
                         this._setMediaCurrentTime(contentAnnotation.element[0], correctTime);
-                        //this.synchronizeMedia();
+                        this._synchronizeMedia();
                     }
                     else {
                         contentAnnotation.outOfSync = false;
@@ -1616,10 +1632,7 @@ var IIIFComponents;
             return format.toString() === 'application/dash+xml';
         };
         AVComponentUtils.canPlayHls = function () {
-            var doc = typeof document === 'object' && document, videoelem = doc && doc.createElement('video'), isvideosupport = Boolean(videoelem && videoelem.canPlayType);
-            return isvideosupport && this.hlsMimeTypes.some(function (canItPlay) {
-                return /maybe|probably/i.test(videoelem.canPlayType(canItPlay));
-            });
+            return Hls.isSupported();
         };
         AVComponentUtils.hlsMimeTypes = [
             // Apple santioned
@@ -1987,6 +2000,9 @@ var IIIFComponents;
         AVComponent.prototype._checkAllMediaReady = function () {
             console.log('loading media');
             if (this._readyMedia === this.canvasInstances.length) {
+                this.canvasInstances.forEach(function(instance) {
+                  instance.loaded();
+                })
                 console.log('all media ready');
                 clearInterval(this._checkAllMediaReadyInterval);
                 //that._logMessage('CREATED CANVAS: ' + canvasInstance.canvasClockDuration + ' seconds, ' + canvasInstance.canvasWidth + ' x ' + canvasInstance.canvasHeight + ' px.');
@@ -2033,7 +2049,9 @@ var IIIFComponents;
             }, false);
             canvasInstance.on(AVComponent.Events.MEDIA_READY, function () {
                 _this._readyMedia++;
-                canvasInstance.loaded();
+                if (_this._readyMedia === _this.canvasInstances.length) {
+                  canvasInstance.loaded();
+                }
             }, false);
             canvasInstance.on(AVComponent.Events.WAVEFORM_READY, function () {
                 _this._readyWaveforms++;
