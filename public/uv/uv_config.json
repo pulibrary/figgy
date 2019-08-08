@@ -23,6 +23,13 @@
       {
         "shareEnabled": false
       }
+    },
+    "avCenterPanel":
+    {
+      "options":
+      {
+        "posterImageExpanded": true
+      }
     }
   }
 }

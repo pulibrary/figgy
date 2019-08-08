@@ -15,6 +15,10 @@ Release notes template:
 -->
 # 2019-08-07
 
+## Added
+
+* Updating the UniversalViewer to support A/V resources with fully expanded displays of attached image content
+
 ## Fixed
 
 * Clear derivative generation error message from file set when that file set's derivatives are cleaned up
