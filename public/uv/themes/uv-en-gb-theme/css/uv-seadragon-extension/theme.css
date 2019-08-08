@@ -3262,7 +3262,7 @@ input[type=range]:focus::-ms-fill-upper {
   display: none;
 }
 .uv .mobileFooterPanel .options .btn.fullScreen {
-  display: none;
+  display: inline-block;
 }
 @media only screen and (min-width: 0px) and (max-width: 312px) and (min-height: 0px) and (max-height: 390px) {
   .uv #debug #watch {
