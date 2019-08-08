@@ -5,7 +5,7 @@ describe IngestEphemeraMODS do
   subject(:service) { described_class.new(project.id, mods, dir, change_set_persister, logger) }
   let(:project) { FactoryBot.create(:ephemera_project) }
   let(:mods) { Rails.root.join("spec", "fixtures", "files", "ukrainian-001.mods") }
-  let(:dir) { Rails.root.join("spec", "fixtures", "files", "raster") }
+  let(:dir) { Rails.root.join("spec", "fixtures", "lae", "32101075851418") }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: db, storage_adapter: files) }
   let(:db) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:files) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
@@ -25,7 +25,8 @@ describe IngestEphemeraMODS do
       expect(output).to be_kind_of EphemeraFolder
       expect(output.date_created).to eq ["2014"]
       expect(output.decorate.language.first.label).to eq "Russian"
-      expect(output.member_ids.length).to eq 1
+      expect(output.member_ids.length).to eq 2
+      expect(output.decorate.members.map(&:title).flatten).to eq ["0001.tif", "0002.tif"]
     end
   end
 
@@ -40,7 +41,7 @@ describe IngestEphemeraMODS do
       expect(output.decorate.geo_subject.first.label).to eq "Ukraine"
       expect(output.decorate.geographic_origin.label).to eq "Ukraine"
       expect(output.decorate.subject).to include "Protest movements"
-      expect(output.member_ids.length).to eq 1
+      expect(output.member_ids.length).to eq 2
     end
   end
 end
