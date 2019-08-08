@@ -45,18 +45,24 @@ en:
       warning_html: ''
       class: "label-danger"
   computed_visibility:
-    public:
+    open:
       class: "alert-success"
-      note_html: "This item will sync to the Catalog, DPUL, Maps Portal, and/or LAE."
-    suppressed_visibility:
-      class: "alert-warning"
-      note_html: "This item will not sync to the Catalog, DPUL, Maps Portal, or LAE due to the visiblity setting."
+      note_html: "Users will be able to view this digital object on discovery sites."
+    authenticated:
+      class: "alert-info"
+      note_html: "Users will be able to view this digital object on discovery sites if they log in with CAS."
+    on_campus:
+      class: "alert-info"
+      note_html: "Users will be able to view this digital object on discovery sites if they are on campus or logged in to campus VPN."
+    reading_room:
+      class: "alert-info"
+      note_html: "Permitted users will be able to view this digital object on discovery sites if they are in the RBSC reading room."
+    restricted:
+      class: "alert-info"
+      note_html: "Permitted users will be able to view this digital object on discovery sites if they log in with CAS."
     suppressed_workflow:
       class: "alert-warning"
-      note_html: "This item will not sync to the Catalog, DPUL, Maps Portal, or LAE due to the workflow status."
-    suppressed_both:
-      class: "alert-warning"
-      note_html: "This item will not sync to the Catalog, DPUL, Maps Portal, or LAE due to the visibility setting and workflow status."
+      note_html: "Users will not be able to view this digital object on discovery sites due to the workflow status."
   base:
     form_progress:
       requirements: 'Requirements'
