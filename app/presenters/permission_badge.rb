@@ -26,10 +26,8 @@ class PermissionBadge
 
     # Generate a note of the final visibility, including both the visibility property and workflow state
     def computed_visibility
-      return "public" if @visibility == "open" && @public_readable_state
-      return "suppressed_both" if @visibility != "open" && !@public_readable_state
-      return "suppressed_visibility" if @visibility != "open"
-      "suppressed_workflow"
+      return "suppressed_workflow" unless @public_readable_state
+      @visibility
     end
 
     # Retrieve the text description for the computed visibility

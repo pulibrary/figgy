@@ -223,7 +223,7 @@ RSpec.describe Valkyrie::ResourceDecorator do
       let(:resource) { FactoryBot.build(:complete_scanned_resource) }
 
       it "has a public notice" do
-        expect(decorator.visibility.first).to have_selector("div.alert-success", text: "This item will sync to the Catalog, DPUL, Maps Portal, and/or LAE.")
+        expect(decorator.visibility.first).to have_selector("div.alert-success", text: "Users will be able to view this digital object on discovery sites.")
       end
     end
 
@@ -231,24 +231,71 @@ RSpec.describe Valkyrie::ResourceDecorator do
       let(:resource) { FactoryBot.build(:pending_scanned_resource) }
 
       it "has a warning about the workflow" do
-        expect(decorator.visibility.first).to have_selector("div.alert-warning", text: "This item will not sync to the Catalog, DPUL, Maps Portal, or LAE due to the workflow status.")
+        expect(decorator.visibility.first).to have_selector("div.alert-warning", text: "Users will not be able to view this digital object on discovery sites due to the workflow status.")
+      end
+    end
+
+    context "complete netid resource" do
+      let(:resource) { FactoryBot.build(:complete_campus_only_scanned_resource) }
+      it "has a login-required notice" do
+        expect(decorator.visibility.first).to have_selector("div.alert-info", text: "Users will be able to view this digital object on discovery sites if they log in with CAS.")
+      end
+    end
+
+    context "pending netid resource" do
+      let(:resource) { FactoryBot.build(:pending_campus_only_scanned_resource) }
+
+      it "has a warning about the workflow" do
+        expect(decorator.visibility.first).to have_selector("div.alert-warning", text: "Users will not be able to view this digital object on discovery sites due to the workflow status.")
+      end
+    end
+
+    context "complete campus ip resource" do
+      let(:resource) { FactoryBot.build(:complete_campus_ip_scanned_resource) }
+
+      it "has a location notice" do
+        note = "Users will be able to view this digital object on discovery sites if they are on campus or logged in to campus VPN."
+        expect(decorator.visibility.first).to have_selector("div.alert-info", text: note)
+      end
+    end
+
+    context "pending campus ip resource" do
+      let(:resource) { FactoryBot.build(:pending_campus_ip_scanned_resource) }
+
+      it "has a warning about the workflow" do
+        expect(decorator.visibility.first).to have_selector("div.alert-warning", text: "Users will not be able to view this digital object on discovery sites due to the workflow status.")
+      end
+    end
+
+    context "complete reading room resource" do
+      let(:resource) { FactoryBot.build(:complete_reading_room_scanned_resource) }
+      it "has a permissions / location notice" do
+        note = "Permitted users will be able to view this digital object on discovery sites if they are in the RBSC reading room."
+        expect(decorator.visibility.first).to have_selector("div.alert-info", text: note)
+      end
+    end
+
+    context "pending reading room resource" do
+      let(:resource) { FactoryBot.build(:pending_reading_room_scanned_resource) }
+
+      it "has a warning about the workflow" do
+        expect(decorator.visibility.first).to have_selector("div.alert-warning", text: "Users will not be able to view this digital object on discovery sites due to the workflow status.")
       end
     end
 
     context "complete private resource" do
       let(:resource) { FactoryBot.build(:complete_scanned_resource, visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE) }
 
-      it "has a warning about the workflow" do
-        expect(decorator.visibility.first).to have_selector("div.alert-warning", text: "This item will not sync to the Catalog, DPUL, Maps Portal, or LAE due to the visiblity setting.")
+      it "has a permissions notice" do
+        expect(decorator.visibility.first).to have_selector("div.alert-info", text: "Permitted users will be able to view this digital object on discovery sites if they log in with CAS.")
       end
     end
 
     context "pending private resource" do
       let(:resource) { FactoryBot.build(:pending_scanned_resource, visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE) }
 
-      it "has a warning about the visibility and workflow" do
-        note = "This item will not sync to the Catalog, DPUL, Maps Portal, or LAE due to the visibility setting and workflow status."
-        expect(decorator.visibility.first).to have_selector("div.alert-warning", text: note)
+      it "has a warning about the workflow" do
+        expect(decorator.visibility.first).to have_selector("div.alert-warning", text: "Users will not be able to view this digital object on discovery sites due to the workflow status.")
       end
     end
   end

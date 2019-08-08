@@ -13,6 +13,13 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-08-08
+
+## Changed
+
+* Visibility badge notices have been updated to reflect new authentication
+  feature in the viewer
+
 # 2019-08-07
 
 ## Fixed

@@ -80,11 +80,23 @@ FactoryBot.define do
       state "complete"
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
     end
-    factory :reading_room_scanned_resource do
+    factory :pending_campus_only_scanned_resource do
+      state "pending"
+      visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+    end
+    factory :pending_reading_room_scanned_resource do
+      state "pending"
+      visibility ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_READING_ROOM
+    end
+    factory :reading_room_scanned_resource, aliases: [:complete_reading_room_scanned_resource] do
       state "complete"
       visibility ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_READING_ROOM
     end
-    factory :campus_ip_scanned_resource do
+    factory :pending_campus_ip_scanned_resource do
+      state "pending"
+      visibility ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS
+    end
+    factory :campus_ip_scanned_resource, aliases: [:complete_campus_ip_scanned_resource] do
       state "complete"
       visibility ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS
     end
