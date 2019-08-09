@@ -13,6 +13,7 @@ class IngestEphemeraMODS
 
   def ingest
     change_set.validate(base_attributes)
+    change_set.validate(title_attributes)
     change_set.validate(mods_attributes)
     change_set.validate(files: files)
     change_set.validate(append_id: project_id)
@@ -50,8 +51,6 @@ class IngestEphemeraMODS
 
     def mods_attributes
       {
-        title: native_title,
-        transliterated_title: transliterated_title,
         sort_title: mods_doc.sort_title,
         alternative_title: mods_doc.alternative_title,
         series: mods_doc.series,
@@ -107,12 +106,21 @@ class IngestEphemeraMODS
       label
     end
 
+    def title_attributes
+      return { title: native_title, transliterated_title: transliterated_title } if native_title
+      { title: first_title }
+    end
+
     def native_title
-      mods_doc.title.select { |t| !t.language.to_s.downcase.end_with?("latn") }.first
+      mods_doc.title.select { |t| t.respond_to?(:language) && !t.language.to_s.downcase.end_with?("latn") }.first
     end
 
     def transliterated_title
-      mods_doc.title.select { |t| t.language.to_s.downcase.end_with?("latn") }.first
+      mods_doc.title.select { |t| t.respond_to?(:language) && t.language.to_s.downcase.end_with?("latn") }.first
+    end
+
+    def first_title
+      mods_doc.title.first
     end
 
     def base_attributes
