@@ -59,6 +59,8 @@
               var title = titleMatch[1];
               var titleElement = document.getElementById('title');
               titleElement.textContent = title;
+              titleElement.style.display = "block"
+              resize();
             }
           }
           $('#uv').show();
@@ -85,20 +87,21 @@
     </script>
   </head>
   <body>
-    <h1 id="title" class="lux-heading h1"></h1>
+    <h1 id="title" class="lux-heading h1" style="display: none;"></h1>
     <div id="loginContainer" style="display: none;">
       <button type="button" class="lux-button text medium" id="login">Princeton Users: Log in to View</button>
     </div>
     <div id="uv" class="uv"></div>
     <script>
+      var $UV = $('#uv');
+      function resize() {
+        var windowWidth = window.innerWidth;
+        var windowHeight = window.innerHeight;
+        var titleHeight = $("#title").outerHeight($("#title").is(":visible"));
+        $UV.width(windowWidth);
+        $UV.height(windowHeight-titleHeight);
+      }
       $(function() {
-        var $UV = $('#uv');
-        function resize() {
-          var windowWidth = window.innerWidth;
-          var windowHeight = window.innerHeight;
-          $UV.width(windowWidth);
-          $UV.height(windowHeight);
-        }
         $(window).on('resize' ,function() {
           resize();
         });
