@@ -31,6 +31,10 @@ class IngestEphemeraMODS
       ["Ukraine"]
     end
 
+    def geographic_subject
+      ["Ukraine"]
+    end
+
     def non_name_subjects
       [
         "Politics and government--Elections",
@@ -60,6 +64,7 @@ class IngestEphemeraMODS
         date_created: mods_doc.date_created,
         genre: find_term(label: mods_doc.genre, vocab: "LAE Genres"),
         subject: subjects,
+        local_identifier: File.basename(dir),
         language: [find_term(code: mods_doc.language.first, vocab: "LAE Languages")],
         geographic_origin: [find_term(label: mods_doc.geographic_origin.first, vocab: "LAE Areas")],
         geo_subject: [find_term(label: mods_doc.geographic_subject.first, vocab: "LAE Areas")],
