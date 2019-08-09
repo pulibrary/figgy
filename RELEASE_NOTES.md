@@ -19,6 +19,7 @@ Release notes template:
 
 * Archival media collection upload will accept images with all-caps `JPG`
   extension
+* Removed dead space at the top of the viewer.
 
 # 2019-08-08
 
