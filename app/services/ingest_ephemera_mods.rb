@@ -15,7 +15,7 @@ class IngestEphemeraMODS
     change_set.validate(base_attributes)
     change_set.validate(title_attributes)
     change_set.validate(mods_attributes)
-    change_set.validate(files: files)
+    change_set.validate(files: files.push(mods_file))
     change_set.validate(append_id: project_id)
     change_set_persister.save(change_set: change_set)
   end
@@ -143,5 +143,14 @@ class IngestEphemeraMODS
           copyable: true
         )
       end
+    end
+
+    def mods_file
+      IngestableFile.new(
+        file_path: mods,
+        mime_type: "application/xml; schema=mods",
+        original_filename: File.basename(mods),
+        copyable: true
+      )
     end
 end

@@ -72,6 +72,7 @@ Metrics/ClassLength:
     - 'app/services/geo_discovery/geoblacklight_document.rb'
     - 'app/services/geo_resource_reindexer.rb'
     - 'app/services/ingest_ephemera_service.rb'
+    - 'app/services/ingest_ephemera_mods.rb'
     - 'app/utils/data_seeder.rb'
     - 'app/resources/numismatics/coins/orangelight_coin_builder.rb'
     - 'app/resources/scanned_resources/scanned_resource_decorator.rb'

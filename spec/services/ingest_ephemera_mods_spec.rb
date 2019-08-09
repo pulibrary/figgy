@@ -26,8 +26,8 @@ describe IngestEphemeraMODS do
       expect(output).to be_kind_of EphemeraFolder
       expect(output.date_created).to eq ["2014"]
       expect(output.decorate.language.first.label).to eq "Russian"
-      expect(output.member_ids.length).to eq 2
-      expect(output.decorate.members.map(&:title).flatten).to eq ["0001.tif", "0002.tif"]
+      expect(output.member_ids.length).to eq 3
+      expect(output.decorate.members.map(&:title).flatten).to eq ["0001.tif", "0002.tif", "ukrainian-001.mods"]
     end
   end
 
@@ -42,7 +42,7 @@ describe IngestEphemeraMODS do
       expect(output.decorate.geo_subject.first.label).to eq "Ukraine"
       expect(output.decorate.geographic_origin.label).to eq "Ukraine"
       expect(output.decorate.subject).to include "Protest movements"
-      expect(output.member_ids.length).to eq 2
+      expect(output.member_ids.length).to eq 3
     end
   end
 
