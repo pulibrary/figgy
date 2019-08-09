@@ -26,7 +26,11 @@ class BaseResourceController < ApplicationController
       change_set.validate(pending_uploads: change_set.pending_uploads + new_pending_uploads)
       buffered_changeset_persister.save(change_set: change_set)
     end
-    BrowseEverythingIngestJob.perform_later(resource.id.to_s, self.class.to_s, new_pending_upload_ids)
+
+    unless new_pending_uploads.empty?
+      BrowseEverythingIngestJob.perform_later(resource.id.to_s, self.class.to_s, new_pending_upload_ids)
+    end
+
     redirect_to ContextualPath.new(child: resource, parent_id: nil).file_manager
   end
 
@@ -38,8 +42,9 @@ class BaseResourceController < ApplicationController
     @new_pending_uploads = []
     # Use the new structure for the resources
     selected_files.each do |selected_file|
-      file_attributes = selected_file.to_h.symbolize_keys
-      auth_header_values = file_attributes.delete(:auth_header)
+      file_attributes = selected_file.to_h
+      file_attributes["type"] = file_attributes["container"] == "true" ? "container" : "file"
+      auth_header_values = file_attributes.delete("auth_header")
       auth_header = JSON.generate(auth_header_values)
 
       file_uri = file_attributes[:url]
@@ -49,7 +54,16 @@ class BaseResourceController < ApplicationController
         next if File.basename(file_path) =~ /^\./
       end
 
-      @new_pending_uploads << PendingUpload.new(file_attributes.merge(id: SecureRandom.uuid, created_at: Time.current.utc.iso8601, auth_header: auth_header).symbolize_keys)
+      new_pending_upload = PendingUpload.new(
+        file_attributes.merge(
+          id: SecureRandom.uuid,
+          created_at: Time.current.utc.iso8601,
+          auth_header: auth_header,
+          local_id: file_attributes["id"]
+        ).symbolize_keys
+      )
+
+      @new_pending_uploads << new_pending_upload
     end
 
     @new_pending_uploads
