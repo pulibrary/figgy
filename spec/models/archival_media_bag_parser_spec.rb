@@ -21,6 +21,13 @@ RSpec.describe ArchivalMediaBagParser do
   describe "#image_file" do
     subject(:image_file) { amb_parser.image_file(barcode: barcode) }
     it { expect(image_file).to be_a ArchivalMediaBagParser::ImageFile }
+
+    context "when the image file has a '.JPG' extension" do
+      let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "JPG_bag") }
+      it "retrieves the file" do
+        expect(amb_parser.image_file(barcode: barcode)).to be_a ArchivalMediaBagParser::ImageFile
+      end
+    end
   end
 
   describe "PbcoreParser" do
