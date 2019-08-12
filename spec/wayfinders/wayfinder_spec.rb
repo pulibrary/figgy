@@ -89,6 +89,9 @@ RSpec.describe Wayfinder do
           # and now it failed.
           FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "SUCCESS", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node)
           FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "FAILURE", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node)
+          # Create a success on a different child property, to guard for a
+          # different node succeeding.
+          FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "SUCCESS", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :binary_nodes)
         end
         file_set
       end
