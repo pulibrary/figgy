@@ -28,6 +28,12 @@ Release notes template:
 
 * OCR jobs no longer hold up other processing.
 
+# 2019-08-12
+
+## Added
+
+* Displaying Creator in search results, and adding ability to filter by visibility.
+
 # 2019-08-09
 
 ## Fixed

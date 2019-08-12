@@ -31,4 +31,8 @@ module CatalogHelper
     return "" unless facet && values
     super(facet, values)
   end
+
+  def render_visibility_label(value)
+    I18n.t("visibility.#{value}.text").titleize
+  end
 end
