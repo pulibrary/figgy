@@ -11,6 +11,14 @@ class Migrations::AddPreservationObjectIdsMigrator
       preservation_objects(buffered_change_set_persister).each do |obj|
         migrate_preservation_object(obj, change_set_persister)
       end
+      delete_bad_events(buffered_change_set_persister)
+    end
+  end
+
+  def delete_bad_events(change_set_persister)
+    events = query_service.custom_queries.find_by_property(property: :child_id, value: Valkyrie::ID.new(""))
+    events.each do |event|
+      change_set_persister.metadata_adapter.persister.delete(resource: event)
     end
   end
 

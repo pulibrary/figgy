@@ -19,6 +19,23 @@ RSpec.describe Migrations::AddPreservationObjectIdsMigrator do
       expect(after_result.flat_map(&:binary_nodes).map(&:id).compact.length).to eq 2
     end
 
+    it "deletes all events that don't have a child ID" do
+      FactoryBot.create_for_repository(
+        :event,
+        child_id: Valkyrie::ID.new("")
+      )
+      FactoryBot.create_for_repository(
+        :event,
+        child_id: Valkyrie::ID.new(SecureRandom.uuid)
+      )
+
+      expect(query_service.custom_queries.count_all_of_model(model: Event)).to eq 2
+
+      described_class.call
+
+      expect(query_service.custom_queries.count_all_of_model(model: Event)).to eq 1
+    end
+
     def create_preservation_object(metadata_id: nil)
       FactoryBot.create_for_repository(
         :preservation_object,
