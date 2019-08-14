@@ -78,6 +78,11 @@ namespace :migrate do
     RecordingDownloadableMigrator.call
   end
 
+  desc "Add FileMetadata IDs to PreservationObjects"
+  task preservation_object_file_metadata_ids: :environment do
+    AddPreservationObjectIdsMigrator.call
+  end
+
   private
 
     # Construct or retrieve the memoized logger for STDOUT
