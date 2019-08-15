@@ -57,6 +57,22 @@ describe Preserver do
       )
     end
 
+    it "uploads some basic metadata" do
+      allow(storage_adapter).to receive(:upload).and_return(valkyrie_file)
+
+      preserver.preserve!
+
+      expect(storage_adapter).to have_received(:upload).with(
+        hash_including(
+          metadata: hash_including(
+            title: resource.title.first,
+            local_identifier: resource.local_identifier.first,
+            identifier: resource.identifier.first
+          )
+        )
+      )
+    end
+
     context "when retrieving Preservation" do
       let(:file_set) do
         resource.decorate.file_sets.first

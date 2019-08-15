@@ -53,7 +53,8 @@ class Preserver
         file: File.open(Valkyrie::StorageAdapter.find_by(id: resource_binary_node.file_identifiers.first).disk_path),
         original_filename: file_metadata.label.first,
         resource: resource,
-        md5: local_md5_checksum
+        md5: local_md5_checksum,
+        metadata: preservation_metadata
       )
       file_metadata.checksum = resource_binary_node.calculate_checksum
       unless file_metadata.file_identifiers.empty? || file_metadata.file_identifiers.include?(uploaded_file.id)
@@ -91,7 +92,8 @@ class Preserver
         file: temp_metadata_file.io,
         original_filename: metadata_node.label.first,
         resource: resource,
-        md5: local_md5_checksum
+        md5: local_md5_checksum,
+        metadata: preservation_metadata
       )
       metadata_node.file_identifiers = uploaded_file.id
       if preservation_object.metadata_node&.file_identifiers.present? && preservation_object.metadata_node.file_identifiers[0] != uploaded_file.id
@@ -102,6 +104,15 @@ class Preserver
       end
       preservation_object.metadata_node = metadata_node
       change_set_persister.metadata_adapter.persister.save(resource: preservation_object)
+    end
+
+    def preservation_metadata
+      {
+        title: resource.try(:title)&.first,
+        identifier: resource.try(:identifier)&.first,
+        local_identifier: resource.try(:local_identifier)&.first,
+        id: resource.id.to_s
+      }
     end
 
     def metadata_node
