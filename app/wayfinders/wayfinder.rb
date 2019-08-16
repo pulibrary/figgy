@@ -34,7 +34,8 @@ class Wayfinder < BaseWayfinder
     ScannedMap => ScannedMapWayfinder,
     VectorResource => VectorResourceWayfinder,
     Event => EventWayfinder,
-    PreservationObject => PreservationObjectWayfinder
+    PreservationObject => PreservationObjectWayfinder,
+    Preserver::BlindImporter::FileMetadataAdapter::QueryService::FileMetadataResource => Preserver::BlindImporter::FileMetadataAdapter::QueryService::BlindImporterMetadataWayfinder
   }
 
   def self.for(resource)
