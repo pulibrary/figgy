@@ -9,11 +9,12 @@ describe Preserver do
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:resource) do
     FactoryBot.create_for_repository(:complete_scanned_resource,
+                                     source_metadata_identifier: "123456",
                                      preservation_policy: "cloud",
                                      files: [file])
   end
   let(:unpreserved_resource) do
-    FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
+    FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "123456", files: [file])
   end
   let(:preservation_objects) { Wayfinder.for(resource).preservation_objects }
   let(:preservation_object) { preservation_objects.first }
@@ -34,6 +35,7 @@ describe Preserver do
   describe "#preserve!" do
     before do
       stub_ezid(shoulder: shoulder, blade: blade)
+      stub_bibdata(bib_id: "123456")
     end
 
     it "preserves the metadata node" do
@@ -67,7 +69,8 @@ describe Preserver do
           metadata: hash_including(
             title: resource.title.first,
             local_identifier: resource.local_identifier.first,
-            identifier: resource.identifier.first
+            identifier: resource.identifier.first,
+            source_metadata_identifier: resource.source_metadata_identifier.first
           )
         )
       )

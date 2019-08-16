@@ -111,7 +111,8 @@ class Preserver
         title: resource.try(:title)&.first,
         identifier: resource.try(:identifier)&.first,
         local_identifier: resource.try(:local_identifier)&.first,
-        id: resource.id.to_s
+        id: resource.id.to_s,
+        source_metadata_identifier: resource.try(:source_metadata_identifier)&.first
       }
     end
 
