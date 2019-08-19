@@ -22,7 +22,7 @@ class PendingUpload < Valkyrie::Resource
   end
 
   def container?
-    !type.empty? && type.first == "container"
+    !type.empty? && type.first == browse_everything_provider.class.container_mime_type
   end
 
   private
@@ -41,5 +41,11 @@ class PendingUpload < Valkyrie::Resource
         "type" => type,
         "provider" => provider
       )
+    end
+
+    def browse_everything_provider
+      return if provider.empty?
+
+      @browse_everything_provider ||= BrowserFactory.for(name: provider.first)
     end
 end

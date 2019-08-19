@@ -25,7 +25,7 @@ RSpec.describe BrowseEverythingIngestJob do
         file_size: 0,
         auth_token: "ya29.GltkBysb2tnNUmUscg0xL1BrXe3g-vALh4Xo5fXrPfOSpJLaPNxfxThztNi8Qdl3uBkEomFis8HeLDpsYb3tKMH1Kf6Zsih63J8HN0KowPHUbVM__",
         auth_header: JSON.generate("Authorization" => "Bearer ya29.GltkBysb2tnNUmUscg0xL1BrXe3g-vALh4Xo5fXrPfOSpJLaPNxfxThztNi8Qdl3uBkEomFis8HeLDpsYb3tKMH1Kf6Zsih63J8HN0KowPHUbVM__"),
-        type: "container",
+        type: "application/x-directory",
         provider: "google_drive"
       }
     end

@@ -43,7 +43,6 @@ class BaseResourceController < ApplicationController
     # Use the new structure for the resources
     selected_files.each do |selected_file|
       file_attributes = selected_file.to_h
-      file_attributes["type"] = file_attributes["container"] == "true" ? "container" : "file"
       auth_header_values = file_attributes.delete("auth_header")
       auth_header = JSON.generate(auth_header_values)
 
