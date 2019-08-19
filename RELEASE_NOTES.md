@@ -2,7 +2,7 @@
 
 Release notes template:
 
-# 2019-08-07
+# 2019-08-20
 
 ## Added
 
@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-08-20
+
+## Changed
+
+* Changed label of collection field "Slug" to "DPUL URL" for clarity.
+
 # 2019-08-19
 
 ## Changed
