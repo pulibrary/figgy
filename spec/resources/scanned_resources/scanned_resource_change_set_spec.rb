@@ -128,4 +128,16 @@ RSpec.describe ScannedResourceChangeSet do
       expect(change_set.primary_terms).not_to include :preservation_policy
     end
   end
+
+  describe "#replaces" do
+    let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+    let(:storage_adapter) { Valkyrie.config.storage_adapter }
+    let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
+
+    it "applies the value to the underlying resource" do
+      change_set.validate(replaces: "foo/xyz")
+      persisted = change_set_persister.save(change_set: change_set)
+      expect(persisted.replaces).to eq(["foo/xyz"])
+    end
+  end
 end
