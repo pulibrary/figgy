@@ -66,6 +66,10 @@ RSpec.describe BulkIngestController do
     end
 
     context "with one single-volume resource" do
+      before do
+        stub_bibdata(bib_id: 4609321)
+      end
+
       let(:attributes) do
         {
           workflow: { state: "pending" },
@@ -78,7 +82,7 @@ RSpec.describe BulkIngestController do
       let(:selected_files) do
         {
           "0" => {
-            "url" => "file:///base/resource1/1.tif",
+            "url" => "file:///base/4609321/1.tif",
             "file_name" => "1.tif",
             "file_size" => "100"
           }
@@ -87,7 +91,7 @@ RSpec.describe BulkIngestController do
 
       it "ingests the directory as a single resource" do
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: "/base/resource1", state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
+        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: "/base/4609321", state: "pending", visibility: "open", member_of_collection_ids: ["1234567"], source_metadata_identifier: "4609321"))
       end
 
       context "when no files have been selected" do

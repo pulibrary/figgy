@@ -79,9 +79,28 @@ class BulkIngestController < ApplicationController
     def attributes
       {
         member_of_collection_ids: collections_param,
+        source_metadata_identifier: source_metadata_id_from_path,
         state: params[:workflow][:state],
         visibility: params[:visibility]
       }
+    end
+
+    def source_metadata_id_from_path
+      base_path if valid_remote_identifier?(base_path)
+    end
+
+    def base_path
+      File.basename(parent_path.to_s)
+    end
+
+    # Determines whether or not the string encodes a bib. ID or a PULFA ID
+    # See SourceMetadataIdentifierValidator#validate
+    # @param [String] value
+    # @return [Boolean]
+    def valid_remote_identifier?(value)
+      RemoteRecord.valid?(value) && RemoteRecord.retrieve(value).success?
+    rescue URI::InvalidURIError
+      false
     end
 
     def collections
