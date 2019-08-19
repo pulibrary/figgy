@@ -22,6 +22,11 @@ RSpec.describe Preserver::BlindImporter do
       persister.delete(resource: resource)
       children.each do |child|
         persister.delete(resource: child)
+        child.file_metadata.each do |metadata|
+          metadata.file_identifiers.each do |identifier|
+            Valkyrie::StorageAdapter.delete(id: identifier)
+          end
+        end
       end
 
       output = described_class.import(id: resource.id)
@@ -31,6 +36,10 @@ RSpec.describe Preserver::BlindImporter do
 
       expect(file_sets.length).to eq 1
       expect(file_sets[0].id).to eq children.first.id
+      file_set = file_sets[0]
+      # Ensure the file actually got moved over.
+      Valkyrie::StorageAdapter.find_by(id: file_set.original_file.file_identifiers.first)
+      expect(file_set.derivative_files.length).to eq 1
     end
   end
 end
