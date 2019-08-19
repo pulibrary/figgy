@@ -22,7 +22,7 @@ class PendingUpload < Valkyrie::Resource
   end
 
   def container?
-    !type.empty? && type.first == browse_everything_provider.class.container_mime_type
+    type.present? && type.first == browse_everything_provider.class.container_mime_type
   end
 
   private
