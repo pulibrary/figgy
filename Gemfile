@@ -128,4 +128,5 @@ group :development, :staging do
   gem "rack-mini-profiler", require: false
 end
 
+gem "aws-sdk-s3"
 gem "extra_extra"
