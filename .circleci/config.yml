@@ -134,7 +134,7 @@ jobs:
       - attach_workspace:
           at: '~/figgy'
       - run: gem install simplecov
-      - run: gem install activesupport
+      - run: gem install activesupport -v 5.1.6.2
       - run:
           name: Merge and check coverage
           command: |
