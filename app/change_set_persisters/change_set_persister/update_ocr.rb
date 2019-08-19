@@ -12,7 +12,7 @@ class ChangeSetPersister
     def run
       return unless change_set.changed["ocr_language"] == true && change_set.ocr_language.present?
       query_service.find_members(resource: change_set.resource, model: FileSet).each do |file_set|
-        ::RunOCRJob.set(queue: change_set_persister.queue).perform_later(file_set.id.to_s)
+        ::RunOCRJob.perform_later(file_set.id.to_s)
       end
     end
 

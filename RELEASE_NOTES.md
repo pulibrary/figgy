@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-08-19
+
+## Changed
+
+* OCR jobs no longer hold up other processing.
+
 # 2019-08-09
 
 ## Fixed
