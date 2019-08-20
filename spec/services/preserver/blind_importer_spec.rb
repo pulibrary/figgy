@@ -41,5 +41,25 @@ RSpec.describe Preserver::BlindImporter do
       Valkyrie::StorageAdapter.find_by(id: file_set.original_file.file_identifiers.first)
       expect(file_set.derivative_files.length).to eq 1
     end
+    it "imports everything it can, even if a member didn't get preserved for some reason" do
+      resource = FactoryBot.create_for_repository(:complete_scanned_resource, preservation_policy: "cloud", files: [file])
+      children = query_service.find_members(resource: resource)
+
+      # Delete them without running callbacks which clean up from disk.
+      persister.delete(resource: resource)
+      children.each do |child|
+        persister.delete(resource: child)
+        child.file_metadata.each do |metadata|
+          metadata.file_identifiers.each do |identifier|
+            Valkyrie::StorageAdapter.delete(id: identifier)
+          end
+        end
+      end
+      FileUtils.rm_rf(Pathname.new(Figgy.config["disk_preservation_path"]).join(resource.id.to_s).join("data").join(children.first.id.to_s))
+
+      output = described_class.import(id: resource.id)
+      expect(output.id).to eq resource.id
+      expect(output.member_ids.length).to eq 0
+    end
   end
 end
