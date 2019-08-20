@@ -6,7 +6,7 @@ const { Storage } = require('@google-cloud/storage')
 jest.mock('@google-cloud/storage')
 const file = jest.fn(name => ({
   createReadStream: () => {
-    return fs.createReadStream(`test/fixtures/${name}`)
+    return fs.createReadStream(`cloud_fixity/test/fixtures/${name}`)
   }
 }))
 const bucket = jest.fn(() => ({ file }))
