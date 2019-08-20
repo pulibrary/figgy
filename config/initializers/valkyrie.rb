@@ -95,11 +95,12 @@ Rails.application.config.to_prepare do
   if ENV["STORAGE_PROJECT"] && ENV["STORAGE_CREDENTIALS"] && !Rails.env.test?
     require "shrine/storage/google_cloud_storage"
     Shrine.storages = {
-      preservation: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["preservation_bucket"])
+      preservation: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["preservation_bucket"]),
+      versioned_preservation: Shrine::Storage::GoogleCloudStorage::Versioned.new(bucket: Figgy.config["preservation_bucket"])
     }
     Valkyrie::StorageAdapter.register(
       Valkyrie::Storage::Shrine.new(
-        Shrine.storages[:preservation],
+        Shrine.storages[:versioned_preservation],
         nil,
         NestedStoragePath
       ),
