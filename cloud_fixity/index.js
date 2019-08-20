@@ -16,7 +16,7 @@ exports.checkFixity = (data, context) => {
   hash.setEncoding('hex')
 
   // read all file and pipe it (write it) to the hash object
-  var end = new Promise(function (resolve, reject) {
+  var compute = new Promise(function (resolve, reject) {
     fd.on('end', function () {
       hash.end()
       resolve(hash.read())
@@ -26,7 +26,7 @@ exports.checkFixity = (data, context) => {
   })
 
   // Compare MD5 with value
-  return end.then((result) => {
+  return compute.then((result) => {
     var promise = null
     if (result === md5) {
       promise = topic.publishJSON({
