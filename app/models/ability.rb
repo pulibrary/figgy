@@ -180,7 +180,7 @@ class Ability
   def valkyrie_test_discover(obj)
     return true if valkyrie_test_read(obj)
     return false if obj.read_groups.include?(::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_READING_ROOM) && !reading_room_ip?
-    obj.decorate.public_readable_state? && !obj.read_groups.empty?
+    obj.decorate.public_readable_state? && !private?(obj)
   end
 
   def valkyrie_test_read(obj)
@@ -317,6 +317,13 @@ class Ability
     def token_readable?(obj)
       return false unless !auth_token.nil? && tokenized_access?(obj)
       final_state?(obj) && obj.auth_token == auth_token.token
+    end
+
+    # Determines whether a resource has private visbility
+    # @param obj [Resource]
+    # @return [Boolean]
+    def private?(obj)
+      obj.read_groups.empty?
     end
 
     # Determines whether a resource's parent is readable because of an auth token
