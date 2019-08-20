@@ -128,7 +128,8 @@ class IngestArchivalMediaBagJob < ApplicationJob
           changeset_persister: changeset_persister,
           collection: collection,
           recording_attributes: {
-            upload_set_id: upload_set_id
+            upload_set_id: upload_set_id,
+            rights_statement: RightsStatements.copyright_not_evaluated
           }
         ).build!
       end
@@ -216,7 +217,8 @@ class IngestArchivalMediaBagJob < ApplicationJob
             visibility: collection.visibility.first,
             upload_set_id: upload_set_id,
             downloadable: "public",
-            preservation_policy: "cloud"
+            preservation_policy: "cloud",
+            rights_statement: RightsStatements.copyright_not_evaluated
           )
         end
 

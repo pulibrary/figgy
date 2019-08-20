@@ -2,7 +2,7 @@
 
 Release notes template:
 
-# 2019-08-07
+# 2019-08-20
 
 ## Added
 
@@ -13,6 +13,13 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-08-20
+
+## Changed
+
+* Archival Media Resources import with rights statement "Copyright Not
+  Evaluated"
+
 # 2019-08-19
 
 ## Changed
