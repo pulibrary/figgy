@@ -51,8 +51,10 @@ RSpec.describe IngestArchivalMediaBagJob do
       expect(query_service.find_all_of_model(model: ScannedResource).size).to eq 2
     end
 
-    it "adds an upload set id to the Recording" do
-      expect(query_service.find_all_of_model(model: ScannedResource).first.upload_set_id).to be_present
+    it "adds desired metadata to the Recording" do
+      recording = query_service.find_all_of_model(model: ScannedResource).first
+      expect(recording.upload_set_id).to be_present
+      expect(recording.rights_statement).to eq [RightsStatements.copyright_not_evaluated]
     end
 
     it "for each component id-based Recording puts it on the collection" do
@@ -304,6 +306,7 @@ RSpec.describe IngestArchivalMediaBagJob do
         expect(resources.size).to eq 1
         expect(resources.first.title.first).to eq "[Unorganized Barcodes]"
         expect(resources.first.local_identifier.first).to eq "unorganized"
+        expect(resources.first.rights_statement.first).to eq RightsStatements.copyright_not_evaluated
 
         members = Wayfinder.for(resources.first).members
         expect(members.length).to eq 1
