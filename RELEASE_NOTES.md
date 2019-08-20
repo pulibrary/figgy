@@ -17,6 +17,8 @@ Release notes template:
 
 ## Changed
 
+* Changed label of collection field "Slug" to "DPUL URL" for clarity.
+
 * Archival Media Resources import with rights statement "Copyright Not
   Evaluated"
 
