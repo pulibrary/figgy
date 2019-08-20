@@ -29,7 +29,7 @@ RSpec.describe Preserver::BlindImporter do
         end
       end
 
-      output = described_class.import(id: resource.id)
+      output = described_class.import(id: resource.id, change_set_persister: ScannedResourcesController.change_set_persister)
       expect(output.id).to eq resource.id
       expect(output.member_ids.length).to eq 1
       file_sets = query_service.find_members(resource: output)
@@ -57,7 +57,7 @@ RSpec.describe Preserver::BlindImporter do
       end
       FileUtils.rm_rf(Pathname.new(Figgy.config["disk_preservation_path"]).join(resource.id.to_s).join("data").join(children.first.id.to_s))
 
-      output = described_class.import(id: resource.id)
+      output = described_class.import(id: resource.id, change_set_persister: ScannedResourcesController.change_set_persister)
       expect(output.id).to eq resource.id
       expect(output.member_ids.length).to eq 0
     end
