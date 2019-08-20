@@ -32,6 +32,8 @@ class Preserver::BlindImporter::FileMetadataAdapter
       storage_adapter.is_a?(Valkyrie::Storage::Disk) ? "disk" : "shrine"
     end
 
+    # Cloud Storage has file identifiers which are for our local repository.
+    # This converts them to be their preservation counterparts.
     class ConvertLocalStorageIDs
       def self.call(resource:, adapter:)
         new(resource: resource, adapter: adapter).convert!
