@@ -24,7 +24,7 @@ class Preserver::BlindImporter
     member_ids = importing_resource.try(:member_ids) || []
     member_ids.map! do |member_id|
       begin
-        member = self.class.import(id: member_id, importing_metadata_adapter: importing_metadata_adapter.with_parent(parent: importing_resource))
+        member = self.class.import(id: member_id, importing_metadata_adapter: importing_metadata_adapter.with_context(parent: importing_resource))
         importing_change_set.created_file_sets += [member] if member.is_a?(FileSet)
         member.id
       rescue Valkyrie::Persistence::ObjectNotFoundError
