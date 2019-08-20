@@ -12,7 +12,9 @@ class Preserver::BlindImporter::FileMetadataAdapter
       json = JSON.parse(file.read)
       attributes = Valkyrie::Persistence::Shared::JSONValueMapper.new(json).result.symbolize_keys
       fix_file_metadata(Valkyrie::Types::Anything[attributes])
-    rescue NoMethodError
+    # Rescue NoMethodError because it's what the GCS shrine adapter is throwing
+    # right now when a file isn't found.
+    rescue NoMethodError, Valkyrie::StorageAdapter::FileNotFound
       raise Valkyrie::Persistence::ObjectNotFoundError
     end
 
@@ -20,9 +22,7 @@ class Preserver::BlindImporter::FileMetadataAdapter
       return resource unless resource.try(:file_metadata).present?
       resource.file_metadata.map! do |file_metadata|
         file_metadata.file_identifiers.map! do |identifier|
-          original_filename = Pathname.new(identifier.to_s).basename.to_s.split(".")
-          original_filename = "#{original_filename[0]}-#{file_metadata.id}.#{original_filename[1]}"
-          preservation_location = storage_id_from_resource_id(resource.id, original_filename: original_filename)
+          preservation_location = storage_id_from_resource_id(resource.id, original_filename: original_filename(identifier, file_metadata))
           begin
             storage_adapter.find_by(id: preservation_location).id
           # Rescue NoMethodError because the GCS Shrine Valkyrie adapter has a
@@ -37,18 +37,23 @@ class Preserver::BlindImporter::FileMetadataAdapter
       resource
     end
 
-    # TODO: I wonder if Valkyrie could provide some method of doing this?
+    def original_filename(identifier, file_metadata)
+      original_filename = Pathname.new(identifier.to_s).basename.to_s.split(".")
+      "#{original_filename[0]}-#{file_metadata.id}.#{original_filename[1]}"
+    end
+
     def storage_id_from_resource_id(id, original_filename: nil)
       path = storage_adapter.path_generator.generate(
         resource: FileMetadataResource.new(id: id, new_record: false, parents: adapter.parents),
         file: nil,
         original_filename: original_filename || "#{id}.json"
       )
-      if storage_adapter.is_a?(Valkyrie::Storage::Disk)
-        "disk://#{path}"
-      else
-        "shrine://#{path}"
-      end
+      "#{path_prefix}://#{path}"
+    end
+
+    # TODO: I wonder if Valkyrie could provide some method of doing this?
+    def path_prefix
+      storage_adapter.is_a?(Valkyrie::Storage::Disk) ? "disk" : "shrine"
     end
   end
 end
