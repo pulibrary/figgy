@@ -12,9 +12,7 @@ class Preserver::BlindImporter::FileMetadataAdapter
       json = JSON.parse(file.read)
       attributes = Valkyrie::Persistence::Shared::JSONValueMapper.new(json).result.symbolize_keys
       resource_processor.call(resource: Valkyrie::Types::Anything[attributes], adapter: adapter)
-    # Rescue NoMethodError because it's what the GCS shrine adapter is throwing
-    # right now when a file isn't found.
-    rescue NoMethodError, Valkyrie::StorageAdapter::FileNotFound
+    rescue Valkyrie::StorageAdapter::FileNotFound
       raise Valkyrie::Persistence::ObjectNotFoundError
     end
 
@@ -54,9 +52,7 @@ class Preserver::BlindImporter::FileMetadataAdapter
             preservation_location = storage_id_from_resource_id(resource.id, original_filename: original_filename(identifier, file_metadata))
             begin
               storage_adapter.find_by(id: preservation_location).id
-              # Rescue NoMethodError because the GCS Shrine Valkyrie adapter has a
-              # bug with NotFound not returning right.
-            rescue Valkyrie::StorageAdapter::FileNotFound, NoMethodError
+            rescue Valkyrie::StorageAdapter::FileNotFound
               nil
             end
           end.compact!

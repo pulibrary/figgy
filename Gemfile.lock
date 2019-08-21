@@ -44,6 +44,16 @@ GIT
       open4
 
 GIT
+  remote: git://github.com/tpendragon/valkyrie-shrine.git
+  revision: f3df1d635809a35f02bc6a69e39d5efb9e1fc49e
+  branch: use_exists_for_check
+  specs:
+    valkyrie-shrine (0.2.0)
+      aws-sdk-s3 (~> 1)
+      shrine (~> 2.0)
+      valkyrie (> 1.0)
+
+GIT
   remote: git://github.com/yob/pdf-reader.git
   revision: bb7747a3cb4279ecd963185f357dbd718f9d20f3
   specs:
@@ -837,10 +847,6 @@ GEM
       sequel
       sequel_pg
       valkyrie (= 2.0.0)
-    valkyrie-shrine (0.2.0)
-      aws-sdk-s3 (~> 1)
-      shrine (~> 2.0)
-      valkyrie (> 1.0)
     warden (1.2.8)
       rack (>= 2.0.6)
     web-console (3.5.1)
@@ -979,7 +985,7 @@ DEPENDENCIES
   valkyrie (~> 2.0.0)
   valkyrie-derivatives!
   valkyrie-sequel (~> 2.0.0)
-  valkyrie-shrine
+  valkyrie-shrine!
   web-console
   webdrivers
   webmock
