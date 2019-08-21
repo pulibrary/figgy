@@ -14,6 +14,7 @@ FactoryBot.define do
       user nil
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
       import_metadata false
+      run_callbacks false
     end
     after(:build) do |resource, evaluator|
       resource.depositor = evaluator.user.uid if evaluator.user.present?
@@ -26,7 +27,7 @@ FactoryBot.define do
       resource
     end
     after(:create) do |resource, evaluator|
-      if evaluator.files.present? || evaluator.import_metadata
+      if evaluator.files.present? || evaluator.import_metadata || evaluator.run_callbacks
         import_metadata = "1" if evaluator.import_metadata
         change_set = ScannedResourceChangeSet.new(resource, files: evaluator.files, refresh_remote_metadata: import_metadata)
         ::ChangeSetPersister.new(
