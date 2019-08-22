@@ -5,10 +5,10 @@ class Preserver::BlindImporter::FileMetadataAdapter::QueryService
   # be stored in a nested hierarchy.
   class BlindImporterMetadataWayfinder < Wayfinder
     def parent
-      return nil if resource.parents.blank?
-      last_parent = resource.parents.last
-      remaining_parents = resource.parents[0..-2]
-      resource.class.new(id: last_parent.id, new_record: false, parents: remaining_parents)
+      return nil if resource.ancestors.blank?
+      parent = resource.ancestors.last
+      remaining_ancestors = resource.ancestors[0..-2]
+      resource.class.new(id: parent.id, new_record: false, ancestors: remaining_ancestors)
     end
   end
 end

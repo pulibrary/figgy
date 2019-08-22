@@ -35,19 +35,19 @@ class Preserver::BlindImporter::FileMetadataAdapter
     end
 
     def storage_id_from_resource_id(id, parent_resource: nil, original_filename: nil)
-      parents = recursive_parents(parent_resource)
+      ancestors = find_ancestors(parent_resource)
       path = storage_adapter.path_generator.generate(
-        resource: FileMetadataResource.new(id: id, new_record: false, parents: parents),
+        resource: FileMetadataResource.new(id: id, new_record: false, ancestors: ancestors),
         file: nil,
         original_filename: original_filename || "#{id}.json"
       )
       "#{path_prefix}://#{path}"
     end
 
-    def recursive_parents(parent_resource)
+    def find_ancestors(parent_resource)
       return [] unless parent_resource
       grandparents = parent_resource.loaded[:parents] || []
-      ([parent_resource] + grandparents.flat_map { |grandparent| recursive_parents(grandparent) }).reverse
+      ([parent_resource] + grandparents.flat_map { |grandparent| find_ancestors(grandparent) }).reverse
     end
 
     # TODO: I wonder if Valkyrie could provide some method of doing this?

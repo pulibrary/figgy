@@ -5,6 +5,6 @@ class Preserver::BlindImporter::FileMetadataAdapter::QueryService
   # Preserver::BlindImporter::BlindImporterMetadataWayfinder can find parents to
   # be used in NestedStoragePath.
   class FileMetadataResource < Valkyrie::Resource
-    attribute :parents
+    attribute :ancestors
   end
 end
