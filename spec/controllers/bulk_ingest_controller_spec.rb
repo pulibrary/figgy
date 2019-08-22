@@ -84,7 +84,7 @@ RSpec.describe BulkIngestController do
       allow(IngestFoldersJob).to receive(:perform_later)
     end
 
-    context "with one single-volume resource" do
+    context "with one single-volume resource where the directory is the bibid" do
       before do
         stub_bibdata(bib_id: "4609321")
       end
@@ -111,6 +111,38 @@ RSpec.describe BulkIngestController do
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
         expected_attributes = {
           directory: "/base/4609321",
+          state: "pending",
+          visibility: "open",
+          member_of_collection_ids: ["1234567"]
+        }
+        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(expected_attributes))
+      end
+    end
+
+    context "when the directory does not look like a bibid" do
+      let(:attributes) do
+        {
+          workflow: { state: "pending" },
+          collections: ["1234567"],
+          visibility: "open",
+          mvw: false,
+          selected_files: selected_files
+        }
+      end
+      let(:selected_files) do
+        {
+          "0" => {
+            "url" => "file:///base/June 31/1.tif",
+            "file_name" => "1.tif",
+            "file_size" => "100"
+          }
+        }
+      end
+
+      it "ingests the directory as a single resource" do
+        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+        expected_attributes = {
+          directory: "/base/June 31",
           state: "pending",
           visibility: "open",
           member_of_collection_ids: ["1234567"]
