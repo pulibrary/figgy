@@ -13,20 +13,23 @@ exports.checkFixity = (data, context) => {
   const hash = crypto.createHash('md5')
   const pubsub = new PubSub()
   const topic = pubsub.topic(process.env.FIXITY_STATUS_TOPIC || 'figgy-staging-fixity-status')
+  const requestTopic = pubsub.topic(process.env.FIXITY_REQUEST_TOPIC || 'figgy-staging-fixity-request')
   hash.setEncoding('hex')
 
   // read all file and pipe it (write it) to the hash object
-  var end = new Promise(function (resolve, reject) {
+  var compute = new Promise(function (resolve, reject) {
     fd.on('end', function () {
       hash.end()
       resolve(hash.read())
     })
-    fd.on('error', (err) => { reject(err) }) // or something like that. might need to close `hash`
+    fd.on('error', (err) => {
+      reject('there was a stream error; re-queing')
+    })
     fd.pipe(hash)
   })
 
   // Compare MD5 with value
-  return end.then((result) => {
+  return compute.then((result) => {
     var promise = null
     if (result === md5) {
       promise = topic.publishJSON({
@@ -44,5 +47,17 @@ exports.checkFixity = (data, context) => {
       })
     }
     return promise
+  }).catch((err) => {
+    attributes['retry_count'] = (attributes['retry_count'] || 0) + 1
+    if(attributes['retry_count'] >= 5) {
+      return topic.publishJSON({
+        status: 'FAILURE',
+        resource_id: attributes.preservation_object_id,
+        child_id: attributes.file_metadata_node_id,
+        child_property: attributes.child_property
+      })
+    } else {
+      return requestTopic.publishJSON(attributes)
+    }
   })
 }
