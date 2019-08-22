@@ -89,5 +89,12 @@ RSpec.describe Preserver::BlindImporter do
       expect(output.id).to eq resource.id
       expect(output.member_ids.length).to eq 0
     end
+    context "when asked to import a resource that isn't preserved" do
+      it "raises a Valkyrie::Persistence::ObjectNotFoundError" do
+        resource = FactoryBot.create_for_repository(:pending_scanned_resource)
+
+        expect { described_class.import(id: resource.id, change_set_persister: ScannedResourcesController.change_set_persister) }.to raise_error Valkyrie::Persistence::ObjectNotFoundError
+      end
+    end
   end
 end
