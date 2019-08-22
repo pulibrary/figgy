@@ -80,17 +80,22 @@ RSpec.describe CatalogController do
 
       expect(assigns(:document_list).length).to eq 1
     end
-    it "can search by imported metadata title" do
-      stub_bibdata(bib_id: "123456")
-      stub_ezid(shoulder: "99999/fk4", blade: "123456")
-      output = persister.save(resource: FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "123456", import_metadata: true))
+    context "with imported metadata" do
+      render_views
+      it "can search by imported metadata title" do
+        stub_bibdata(bib_id: "123456")
+        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        output = persister.save(resource: FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "123456", import_metadata: true))
 
-      get :index, params: { q: "Earth rites" }
+        get :index, params: { q: "Earth rites" }
 
-      expect(assigns(:document_list).length).to eq 1
-      facets = assigns(:response)["facet_counts"]["facet_fields"]
-      expect(facets["state_ssim"]).to eq ["complete", 1]
-      expect(facets["display_subject_ssim"]).to eq [output.imported_metadata[0].subject.first, 1]
+        expect(response.body).to have_selector "td", text: "Bord, Janet, 1945-"
+        expect(assigns(:document_list).length).to eq 1
+        facets = assigns(:response)["facet_counts"]["facet_fields"]
+        expect(facets["state_ssim"]).to eq ["complete", 1]
+        expect(facets["display_subject_ssim"]).to eq [output.imported_metadata[0].subject.first, 1]
+        expect(facets["visibility_ssim"]).to eq ["open", 1]
+      end
     end
     it "can search by local identifiers" do
       persister.save(resource: FactoryBot.create_for_repository(:complete_scanned_resource, local_identifier: "p3b593k91p"))

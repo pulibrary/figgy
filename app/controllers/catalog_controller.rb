@@ -74,6 +74,7 @@ class CatalogController < ApplicationController
     config.add_facet_field "part_of_ssim", label: "Part of", limit: 5
     config.add_facet_field "has_structure_bsi", label: "Has Structure", helper_method: :display_boolean
     config.add_facet_field "depositor_ssim", label: "Depositor"
+    config.add_facet_field "visibility_ssim", label: "Visibility", helper_method: :render_visibility_label
     config.add_facet_fields_to_solr_request!
 
     config.add_search_field "all_fields", label: "All Fields"
@@ -112,6 +113,7 @@ class CatalogController < ApplicationController
     config.add_sort_field "updated_at_dtsi asc", label: "date modified \u25B2"
 
     # index fields
+    config.add_index_field "imported_creator_tesim", label: "Creator"
     config.add_index_field "source_metadata_identifier_ssim", label: "Source Metadata Identifier"
     config.add_index_field "identifier_ssim", label: "Identifier"
     config.add_index_field "state_ssim", label: "State"
