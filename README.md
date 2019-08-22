@@ -87,6 +87,7 @@ Remember you'll need to run `bundle install` and `yarn install` on an ongoing ba
    - `RAILS_ENV=test rake db:setup`
    - `rake figgy:test`
    - In a separate terminal: `bundle exec rspec`
+   - Run jest tests: `yarn test`
 2. For development:
    - ``export SECRET_KEY_BASE=`rake secret` ``
    - `rake db:setup`
@@ -118,10 +119,6 @@ To load the controlled vocabularies in `config/vocab/`:
   - `rails vocab:load CSV=config/vocab/lae_areas.csv NAME="LAE Areas"`
   - `rails vocab:load CSV=config/vocab/lae_genres.csv NAME="LAE Genres" LABEL=pul_label`
   - `rails vocab:load CSV=config/vocab/lae_subjects.csv NAME="LAE Subjects" CATEGORY=category LABEL=subject`
-
-## Note on webpacker setup
-
-Webpacker documentation assumes use of yarn as a javascript package manager. Our setup uses npm directly instead of yarn. Therefore, when upgrading webpacker modify instructions on the webpacker README to use `npm update --save` instead of `yarn upgrade --latest`
 
 ## Uploading files
 
