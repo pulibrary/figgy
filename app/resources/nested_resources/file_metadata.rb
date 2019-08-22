@@ -94,6 +94,7 @@ class FileMetadata < Valkyrie::Resource
     else
       self.fixity_success = 0
       self.fixity_actual_checksum = [new_checksum]
+      Honeybadger.notify("Local fixity failure on file #{actual_file.id}")
     end
     self
   end
