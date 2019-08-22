@@ -142,22 +142,6 @@ RSpec.describe BulkIngestService do
       end
     end
 
-    context "when a directory has a bibid as a name" do
-      let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_bibid", "4609321") }
-      it "assigns the bibid to the source metada identifier" do
-        ingester.attach_dir(
-          base_directory: single_dir,
-          file_filters: [".tif"],
-          collection: coll
-        )
-
-        updated_collection = query_service.find_by(id: coll.id)
-        decorated_collection = updated_collection.decorate
-        resource = decorated_collection.members.to_a.first
-        expect(resource.source_metadata_identifier).to include(bib)
-      end
-    end
-
     context "with a relative path for the directory" do
       let(:bulk_ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger) }
       let(:single_dir) { File.join("spec", "fixtures", "ingest_single") }
@@ -265,17 +249,6 @@ RSpec.describe BulkIngestService do
       end
       it "raises an error" do
         expect { ingester.attach_each_dir(base_directory: empty_dir) }.to raise_error(ArgumentError, "BulkIngestService: Directory is empty: #{empty_dir}")
-      end
-    end
-  end
-
-  describe "#valid_remote_identifier?" do
-    context "with a non-bibid identifier that contains invalid characters" do
-      # We might see a value like this in a directory tree, and therefore check it as a source metadata id
-      let(:value) { "June 31" }
-
-      it "returns false" do
-        expect(ingester.valid_remote_identifier?(value)).to be false
       end
     end
   end
