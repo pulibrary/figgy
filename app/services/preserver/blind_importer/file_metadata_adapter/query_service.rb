@@ -72,7 +72,7 @@ class Preserver::BlindImporter::FileMetadataAdapter
         return resource unless resource.try(:file_metadata).present?
         resource.file_metadata.map! do |file_metadata|
           file_metadata.file_identifiers.map! do |identifier|
-            get_file(identifier, file_metadata)
+            get_file_id(identifier, file_metadata)
           end.compact!
           file_metadata
         end
@@ -80,7 +80,7 @@ class Preserver::BlindImporter::FileMetadataAdapter
         resource
       end
 
-      def get_file(identifier, file_metadata)
+      def get_file_id(identifier, file_metadata)
         preservation_location = storage_id_from_resource_id(resource.id, parent_resource: resource.loaded[:parents]&.first, original_filename: original_filename(identifier, file_metadata))
         begin
           storage_adapter.find_by(id: preservation_location).id
