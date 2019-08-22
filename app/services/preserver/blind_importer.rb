@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Preserver::BlindImporter
-  def self.import(id:, change_set_persister:, source_metadata_adapter: default_source_metadata_adapter)
-    new(id: id, change_set_persister: change_set_persister, source_metadata_adapter: source_metadata_adapter).import!
+  def self.import(id: nil, source_resource: nil, change_set_persister:, source_metadata_adapter: default_source_metadata_adapter)
+    new(id: id, source_resource: source_resource, change_set_persister: change_set_persister, source_metadata_adapter: source_metadata_adapter).import!
   end
 
   def self.default_source_metadata_adapter
@@ -14,26 +14,25 @@ class Preserver::BlindImporter
 
   attr_reader :id, :source_metadata_adapter, :change_set_persister
   delegate :storage_adapter, to: :change_set_persister
-  def initialize(id:, source_metadata_adapter:, change_set_persister:)
+  def initialize(id: nil, source_metadata_adapter:, change_set_persister:, source_resource: nil)
     @id = id
     @source_metadata_adapter = source_metadata_adapter
     @change_set_persister = change_set_persister
+    @source_resource = source_resource
   end
 
   # Imports the given ID from the source metadata adapter as well as all its
   # children.
   def import!
     import_binary_files
-    member_ids = source_resource.try(:member_ids) || []
-    member_ids.map! do |member_id|
-      begin
-        member = self.class.import(id: member_id, source_metadata_adapter: source_metadata_adapter.with_context(parent: source_resource), change_set_persister: change_set_persister)
-        source_change_set.created_file_sets += [member] if member.is_a?(FileSet)
-        member.id
-      rescue Valkyrie::Persistence::ObjectNotFoundError
-        nil
-      end
-    end.compact!
+    member_ids = []
+    source_metadata_adapter.query_service.find_members(resource: source_resource).each do |member|
+      member = self.class.import(source_resource: member, source_metadata_adapter: source_metadata_adapter, change_set_persister: change_set_persister)
+      source_change_set.created_file_sets += [member] if member.is_a?(FileSet)
+      member_ids << member.id
+    end
+    # Get rid of non-preserved members.
+    source_change_set.try(:member_ids=, member_ids)
     output = change_set_persister.save(change_set: source_change_set)
     output
   end

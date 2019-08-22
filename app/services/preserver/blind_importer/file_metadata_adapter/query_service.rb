@@ -16,13 +16,36 @@ class Preserver::BlindImporter::FileMetadataAdapter
       raise Valkyrie::Persistence::ObjectNotFoundError
     end
 
-    def storage_id_from_resource_id(id, original_filename: nil)
+    def find_members(resource:)
+      member_ids = resource.try(:member_ids) || []
+      member_ids.lazy.map do |id|
+        begin
+          file = storage_adapter.find_by(id: storage_id_from_resource_id(id, parent_resource: resource))
+          json = JSON.parse(file.read)
+          attributes = Valkyrie::Persistence::Shared::JSONValueMapper.new(json).result.symbolize_keys
+          member = Valkyrie::Types::Anything[attributes]
+          member.loaded[:parents] = [resource]
+          resource_processor.call(resource: member, adapter: adapter)
+        rescue Valkyrie::StorageAdapter::FileNotFound
+          nil
+        end
+      end.select(&:present?)
+    end
+
+    def storage_id_from_resource_id(id, parent_resource: nil, original_filename: nil)
+      parents = recursive_parents(parent_resource)
       path = storage_adapter.path_generator.generate(
-        resource: FileMetadataResource.new(id: id, new_record: false, parents: adapter.parents),
+        resource: FileMetadataResource.new(id: id, new_record: false, parents: parents),
         file: nil,
         original_filename: original_filename || "#{id}.json"
       )
       "#{path_prefix}://#{path}"
+    end
+
+    def recursive_parents(parent_resource)
+      return [] unless parent_resource
+      grandparents = parent_resource.loaded[:parents] || []
+      ([parent_resource] + grandparents.flat_map { |grandparent| recursive_parents(grandparent) }).reverse
     end
 
     # TODO: I wonder if Valkyrie could provide some method of doing this?
@@ -49,17 +72,21 @@ class Preserver::BlindImporter::FileMetadataAdapter
         return resource unless resource.try(:file_metadata).present?
         resource.file_metadata.map! do |file_metadata|
           file_metadata.file_identifiers.map! do |identifier|
-            preservation_location = storage_id_from_resource_id(resource.id, original_filename: original_filename(identifier, file_metadata))
-            begin
-              storage_adapter.find_by(id: preservation_location).id
-            rescue Valkyrie::StorageAdapter::FileNotFound
-              nil
-            end
+            get_file(identifier, file_metadata)
           end.compact!
           file_metadata
         end
         resource.file_metadata = resource.file_metadata.select { |x| x.file_identifiers.present? }
         resource
+      end
+
+      def get_file(identifier, file_metadata)
+        preservation_location = storage_id_from_resource_id(resource.id, parent_resource: resource.loaded[:parents]&.first, original_filename: original_filename(identifier, file_metadata))
+        begin
+          storage_adapter.find_by(id: preservation_location).id
+        rescue Valkyrie::StorageAdapter::FileNotFound
+          nil
+        end
       end
 
       def original_filename(identifier, file_metadata)

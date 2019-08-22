@@ -11,9 +11,5 @@ class Preserver::BlindImporter
     def query_service
       @query_service ||= QueryService.new(adapter: self)
     end
-
-    def with_context(parent:, **_args)
-      self.class.new(storage_adapter: storage_adapter, parents: parents + [parent])
-    end
   end
 end
