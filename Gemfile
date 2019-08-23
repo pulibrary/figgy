@@ -122,10 +122,11 @@ gem "graphiql-rails", group: :development
 gem "cocoon"
 gem "google-cloud-pubsub"
 gem "shrine-google_cloud_storage"
-gem "valkyrie-shrine"
+gem "valkyrie-shrine", github: "tpendragon/valkyrie-shrine", branch: "use_exists_for_check"
 
 group :development, :staging do
   gem "rack-mini-profiler", require: false
 end
 
+gem "aws-sdk-s3"
 gem "extra_extra"
