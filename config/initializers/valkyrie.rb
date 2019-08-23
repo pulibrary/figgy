@@ -95,7 +95,8 @@ Rails.application.config.to_prepare do
   if ENV["STORAGE_PROJECT"] && ENV["STORAGE_CREDENTIALS"] && !Rails.env.test?
     require "shrine/storage/google_cloud_storage"
     Shrine.storages = {
-      preservation: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["preservation_bucket"])
+      preservation: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["preservation_bucket"]),
+      cloud_storage: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["storage_bucket"])
     }
     Valkyrie::StorageAdapter.register(
       Valkyrie::Storage::Shrine.new(
@@ -104,6 +105,15 @@ Rails.application.config.to_prepare do
         NestedStoragePath
       ),
       :google_cloud_storage
+    )
+    Valkyrie::StorageAdapter.register(
+      Valkyrie::Storage::Shrine.new(
+        Shrine.storages[:cloud_storage],
+        nil,
+        Valkyrie::Storage::Disk::BucketedStorage,
+        identifier_prefix: "gcs_primary"
+      ),
+      :cloud_storage
     )
   else
     # If GCS isn't configured, use a disk persister that saves in the same
@@ -115,6 +125,10 @@ Rails.application.config.to_prepare do
         path_generator: NestedStoragePath
       ),
       :google_cloud_storage
+    )
+    Valkyrie::StorageAdapter.register(
+      Valkyrie::StorageAdapter.find(:disk),
+      :cloud_storage
     )
   end
 

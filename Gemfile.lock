@@ -44,9 +44,9 @@ GIT
       open4
 
 GIT
-  remote: git://github.com/tpendragon/valkyrie-shrine.git
-  revision: f3df1d635809a35f02bc6a69e39d5efb9e1fc49e
-  branch: use_exists_for_check
+  remote: git://github.com/samvera-labs/valkyrie-shrine.git
+  revision: 036899e2a0d79c26cadaa28082d546d519e2fba6
+  branch: master
   specs:
     valkyrie-shrine (0.2.0)
       aws-sdk-s3 (~> 1)

@@ -1,6 +1,6 @@
 development:
   metadata_adapter: postgres
-  storage_adapter: disk
+  storage_adapter: cloud_storage
   standardize_query_result: true
 
 test:
@@ -15,5 +15,5 @@ production:
 
 staging:
   metadata_adapter: postgres
-  storage_adapter: disk
+  storage_adapter: cloud_storage
   standardize_query_result: true

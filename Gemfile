@@ -122,7 +122,7 @@ gem "graphiql-rails", group: :development
 gem "cocoon"
 gem "google-cloud-pubsub"
 gem "shrine-google_cloud_storage"
-gem "valkyrie-shrine", github: "tpendragon/valkyrie-shrine", branch: "use_exists_for_check"
+gem "valkyrie-shrine", github: "samvera-labs/valkyrie-shrine", branch: "master"
 
 group :development, :staging do
   gem "rack-mini-profiler", require: false

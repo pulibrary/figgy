@@ -1,4 +1,5 @@
 defaults: &defaults
+  storage_bucket: "figgy-staging-storage"
   preservation_bucket: "figgy-staging-preservation"
   fixity_status_topic: "figgy-staging-fixity-status"
   fixity_request_topic: "figgy-staging-fixity-request"

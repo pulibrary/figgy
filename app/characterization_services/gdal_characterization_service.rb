@@ -41,7 +41,7 @@ class GdalCharacterizationService
   # Determines the location of the file on disk for the file_set
   # @return [Pathname]
   def filename
-    return Pathname.new(file_object.io.path) if file_object.io.respond_to?(:path) && File.exist?(file_object.io.path)
+    return Pathname.new(file_object.disk_path) if file_object.respond_to?(:disk_path) && File.exist?(file_object.disk_path)
   end
 
   # Provides the file attached to the file_set

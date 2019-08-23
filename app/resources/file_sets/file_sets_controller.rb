@@ -6,7 +6,7 @@ class FileSetsController < ApplicationController
   self.resource_class = FileSet
   self.change_set_persister = ::ChangeSetPersister.new(
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
-    storage_adapter: Valkyrie::StorageAdapter.find(:disk)
+    storage_adapter: Valkyrie.config.storage_adapter
   )
   before_action :parent_resource, only: [:destroy]
 

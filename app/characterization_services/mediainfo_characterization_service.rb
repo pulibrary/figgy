@@ -116,7 +116,7 @@ class MediainfoCharacterizationService
     # Determines the location of the file on disk for the file_set
     # @return [String]
     def filename
-      return file_object.io.path if file_object.io.respond_to?(:path) && File.exist?(file_object.io.path)
+      return file_object.disk_path if file_object.respond_to?(:disk_path) && File.exist?(file_object.disk_path)
     end
 
     # Extract the MediaInfo tracks for the binary file stored on the FileSet
