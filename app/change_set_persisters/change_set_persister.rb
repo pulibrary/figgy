@@ -46,6 +46,7 @@ class ChangeSetPersister
         CleanupMembership::Factory.new(property: :member_ids),
         CleanupMembership::Factory.new(property: :member_of_collection_ids),
         PublishMessage::Factory.new(operation: :derivatives_delete),
+        CreateTombstone,
         DeleteReferenced::Factory.new(property: :preserved_object_id),
         CleanupTerms
       ],

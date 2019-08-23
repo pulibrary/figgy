@@ -1632,8 +1632,9 @@ RSpec.describe ChangeSetPersister do
         expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.preservation_file.id}.tif"))).to eq true
       end
     end
+
     context "when deleting a `cloud` preservation_policy resource" do
-      it "cleans up and deletes any related PreservationObjects" do
+      it "Deletes resource PreservationObjects, moves file set PreservationObjects into tombstones" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
         resource = FactoryBot.create_for_repository(:pending_scanned_resource, preservation_policy: "cloud", files: [file])
         change_set = DynamicChangeSet.new(resource)
@@ -1648,8 +1649,16 @@ RSpec.describe ChangeSetPersister do
         expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "#{resource.id}.json"))).to eq false
         expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "#{resource.member_ids.first}.json"))).to eq false
         expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.original_file.id}.tif"))).to eq false
+        tombstones = change_set_persister.query_service.find_all_of_model(model: Tombstone)
+        expect(tombstones.to_a.length).to eq 1
+        expect(tombstones.first.file_set_id).to eq file_set.id
+        expect(tombstones.first.file_set_title).to eq file_set.title
+        expect(tombstones.first.file_set_original_filename).to eq file_set.original_file.original_filename
+        expect(tombstones.first.deleted_at).to eq tombstones.first.created_at
+        expect(tombstones.first.preservation_object.preserved_object_id).to eq file_set.id
       end
     end
+
     context "when adding FGDC metadata to a `cloud` preserved object", run_real_derivatives: true, run_real_characterization: true do
       with_queue_adapter :inline
       it "updates the binary content in the preservation store" do
