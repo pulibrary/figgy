@@ -1,69 +1,263 @@
-"label","iso_3166_2_code","gac_code","uri","geoname_id","north","south","east","west"
-"Anguilla","ai","nwxa","http://id.loc.gov/vocabulary/countries/am","3573511","18.283424","18.166815","-62.971359","-63.172901"
-"Antigua and Barbuda","ag","nwaq","http://id.loc.gov/vocabulary/countries/aq","3576396","17.729387","16.996979","-61.672421","-61.906425"
-"Argentina","ag","s-ag","http://id.loc.gov/vocabulary/countries/ag","3576396","17.729387","16.996979","-61.672421","-61.906425"
-"Aruba","aw","nwaw","http://id.loc.gov/vocabulary/countries/aw","3577279","12.623718127152925","12.411707706190716","-69.86575120104982","-70.0644737196045"
-"Austria","at","e-au","http://id.loc.gov/vocabulary/countries/at","2782113"
-"Asia","","a","http://id.loc.gov/vocabulary/geographicAreas/a"
-"Africa","","f","http://id.loc.gov/vocabulary/geographicAreas/f"
-"Middle East","","aw","http://id.loc.gov/vocabulary/geographicAreas/aw"
-"Bahamas","bs","nwbf","http://id.loc.gov/vocabulary/countries/bf","3572887","26.919243","22.852743","-74.423874","-78.995911"
-"Barbados","bb","nwbb","http://id.loc.gov/vocabulary/countries/bb","3374084","13.327257","13.039844","-59.420376","-59.648922"
-"Belgium","be","e-be","http://id.loc.gov/vocabulary/countries/be"
-"Belize","bz","ncbh","http://id.loc.gov/vocabulary/countries/bh","3582678","18.496557","15.8893","-87.776985","-89.224815"
-"Bolivia","bo","s-bo","http://id.loc.gov/vocabulary/countries/bo","3923057","-9.680567","-22.896133","-57.45809600000001","-69.640762"
-"Brazil","br","s-bl","http://id.loc.gov/vocabulary/countries/bl","3469034","5.264877","-33.750706","-32.392998","-73.985535"
-"British Virgin Islands","vg","nwvb","http://id.loc.gov/vocabulary/countries/vb","3577718","18.757221","18.38998","-64.268768","-64.715363"
-"Canada","ca","n-cn","http://id.loc.gov/vocabulary/geographicAreas/n-cn","6251999","83.110619","41.681019","-52.620201","-141.002701"
-"Caribbean Area","","cc","http://id.loc.gov/vocabulary/geographicAreas/cc"
-"Caribbean Netherlands","","nwbn","http://id.loc.gov/vocabulary/countries/ca"
-"Central America","","nc","http://id.loc.gov/vocabulary/geographicAreas/nc"
-"Chile","cl","s-cl","http://id.loc.gov/vocabulary/countries/cl","3895114","-17.507553","-55.916348","-66.417557","-80.785851"
-"Colombia","co","s-ck","http://id.loc.gov/vocabulary/countries/ck","3686110","13.380502","-4.225869","-66.869835","-81.728111"
-"Costa Rica","cr","nccr","http://id.loc.gov/vocabulary/countries/cr","3624060","11.216819","8.032975","-82.555992","-85.950623"
-"Cuba","cu","nwcu","http://id.loc.gov/vocabulary/countries/cu","3562981","23.226042","19.828083","-74.131775","-84.957428"
-"Curaçao","cw","nwco","http://id.loc.gov/vocabulary/countries/co","7626836","12.385672","12.032745","-68.733948","-69.157204"
-"Dominica","dm","nwdq","http://id.loc.gov/vocabulary/countries/dq","3575830","15.631809","15.20169","-61.244152","-61.484108"
-"Dominican Republic","do","nwdr","http://id.loc.gov/vocabulary/countries/dr","3508796","19.929859","17.543159","-68.32","-72.003487"
-"Ecuador","ec","s-ec","http://id.loc.gov/vocabulary/countries/ec","3658394","1.43902","-4.998823","-75.184586","-81.078598"
-"El Salvador","sv","nces","http://id.loc.gov/vocabulary/countries/es","3585968","14.445067","13.148679","-87.692162","-90.128662"
-"Europe","","e","http://id.loc.gov/vocabulary/geographicAreas/e","6255148","81.008797","27.636311","39.869301","-31.266001"
-"France","fr","e-fr","http://id.loc.gov/vocabulary/countries/fr","3017382","51.092804","41.371582","9.561556","-5.142222"
-"French Guiana","gf","s-fg","http://id.loc.gov/vocabulary/countries/fg","3381670","5.776496","2.127094","-51.613949","-54.542511"
-"Germany","de","e-gx","http://id.loc.gov/vocabulary/countries/de","2921044","55.055637","47.275776","15.039889","5.865639"
-"Grenada","gd","nwgd","http://id.loc.gov/vocabulary/countries/gd","3580239","12.318283928171299","11.986893","-61.57676970108031","-61.802344"
-"Guadeloupe","gp","nwgp","http://id.loc.gov/vocabulary/countries/gp","3579143","16.516848","15.867565","-61","-61.544765"
-"Guatemala","gt","ncgt","http://id.loc.gov/vocabulary/countries/gt","3595528","17.81522","13.737302","-88.223198","-92.23629"
-"Guyana","gy","s-gy","http://id.loc.gov/vocabulary/countries/gy","3378535","8.557567","1.17508","-56.480251","-61.384762"
-"Haiti","ht","nwht","http://id.loc.gov/vocabulary/countries/ht","3723988","20.08782","18.021032","-71.613358","-74.478584"
-"Honduras","hn","ncho","http://id.loc.gov/vocabulary/countries/ho","3608932","16.510256","12.982411","-83.155403","-89.350792"
-"Italy","it","e-it","http://id.loc.gov/vocabulary/countries/it","3175395","47.095196","36.652779","18.513445","6.614889"
-"Jamaica","jm","nwjm","http://id.loc.gov/vocabulary/countries/jm","3489940","18.526976","17.703554","-76.180321","-78.366638"
-"Latin America","","cl","http://id.loc.gov/vocabulary/geographicAreas/cl"
-"Martinique","mq","nwmq","http://id.loc.gov/vocabulary/countries/mq","3570311","14.878819","14.392262","-60.81551","-61.230118"
-"Mexico","mx","n-mx","http://id.loc.gov/vocabulary/countries/mx","3996063","32.716759","14.532866","-86.703392","-118.453949"
-"Montserrat","ms","nwmj","http://id.loc.gov/vocabulary/countries/mj","3578097","16.824060205313184","16.674768935441556","-62.144100129608205","-62.24138237036129"
-"Netherlands","nl","e-ne","http://id.loc.gov/vocabulary/countries/nl","2750405","53.512196","50.753918","7.227944","3.362556"
-"Nicaragua","ni","ncnq","http://id.loc.gov/vocabulary/countries/nq","3617476","15.025909","10.707543","-82.738289","-87.690308"
-"Panama","pa","ncpn","http://id.loc.gov/vocabulary/countries/pn","3703430","9.637514","7.197906","-77.17411","-83.051445"
-"Paraguay","py","s-py","http://id.loc.gov/vocabulary/countries/py","3437598","-19.294041","-27.608738","-54.259354","-62.647076"
-"Peru","pe","s-pe","http://id.loc.gov/vocabulary/countries/pe","3932488","-0.012977","-18.349728","-68.677986","-81.326744"
-"Portugal","pt","e-po","http://id.loc.gov/vocabulary/countries/po","2264397","42.145638","36.96125","-6.182694","-9.495944"
-"Puerto Rico","pr","nwpr","http://id.loc.gov/vocabulary/countries/pr","4566966","18.520166","17.926405","-65.242737","-67.942726"
-"Saint Kitts and Nevis","kn","nwxi","http://id.loc.gov/vocabulary/geographicAreas/nwxi","3575174","17.420118","17.095343","-62.543266","-62.86956"
-"Saint Lucia","lc","nwxk","http://id.loc.gov/vocabulary/countries/xk","3576468","14.103245","13.704778","-60.874203","-61.07415"
-"Saint Vincent and the Grenadines","vc","nwxm","http://id.loc.gov/vocabulary/countries/xm","3577815","13.377834","12.583984810969037","-61.11388","-61.46090317727658"
-"Saint-Martin","mf","nwst","http://id.loc.gov/vocabulary/countries/st","3578421","18.130354","18.052231","-63.012993","-63.152767"
-"Sint Maarten","sx","nwsn","http://id.loc.gov/vocabulary/countries/sn","7609695","18.070248","18.011692","-63.012993","-63.144039"
-"South America","","s","http://id.loc.gov/vocabulary/geographicAreas/s"
-"Spain","es","e-sp","http://id.loc.gov/vocabulary/countries/sp","2510769","43.791721","36.000332","4.315389","-9.290778"
-"Suriname","sr","s-sr","http://id.loc.gov/vocabulary/geographicAreas/s-sr","3382998","6.004546","1.831145","-53.977493","-58.086563"
-"Sweden","se","e-sw","http://id.loc.gov/vocabulary/countries/se","2661886","69.0625","55.337112","24.156292483918484","11.118694"
-"Switzerland","ch","e-sz","http://id.loc.gov/vocabulary/countries/ch","2658434","47.805332","45.825695","10.491472","5.957472"
-"Trinidad and Tobago","tt","nwtr","http://id.loc.gov/vocabulary/countries/tr","3573591","11.338342","10.036105","-60.517933","-61.923771"
-"Turks and Caicos Islands","tc","nwtc","http://id.loc.gov/vocabulary/countries/tc","3576916","21.961878","21.422626","-71.123642","-72.483871"
-"United Kingdom","gb","e-uk","http://id.loc.gov/vocabulary/countries/gb","2635167","59.360249","49.906193","1.759","-8.623555"
-"United States","us","n-us","http://id.loc.gov/vocabulary/countries/xxu","6252001","49.388611","24.544245","-66.954811","-124.733253"
-"Uruguay","uy","s-uy","http://id.loc.gov/vocabulary/countries/uy","3439705","-30.082224","-34.980816","-53.073933","-58.442722"
-"Venezuela","ve","s-ve","http://id.loc.gov/vocabulary/countries/ve","3625428","12.201903","0.626311","-59.80378","-73.354073"
-"Virgin Islands of the United States","vi","nwvi","http://id.loc.gov/vocabulary/countries/vi","4796775","18.391747","17.681725","-64.565178","-65.038231"
+label,code,uri
+Afghanistan,,http://id.loc.gov/vocabulary/countries/af
+Africa,,http://id.loc.gov/vocabulary/geographicAreas/f
+Albania,,http://id.loc.gov/vocabulary/countries/aa
+Algeria,,http://id.loc.gov/vocabulary/countries/ae
+American Samoa,,http://id.loc.gov/vocabulary/countries/as
+Andorra,,http://id.loc.gov/vocabulary/countries/an
+Angola,,http://id.loc.gov/vocabulary/countries/ao
+Anguilla,,http://id.loc.gov/vocabulary/countries/am
+Antarctica,,http://id.loc.gov/vocabulary/countries/ay
+Antigua and Barbuda,,http://id.loc.gov/vocabulary/countries/aq
+Argentina,,http://id.loc.gov/vocabulary/countries/ag
+Armenia (Republic),,http://id.loc.gov/vocabulary/countries/ai
+Aruba,,http://id.loc.gov/vocabulary/countries/aw
+Asia,,http://id.loc.gov/vocabulary/geographicAreas/a
+Australia,,http://id.loc.gov/vocabulary/countries/at
+Austria,,http://id.loc.gov/vocabulary/countries/at
+Azerbaijan,,http://id.loc.gov/vocabulary/countries/aj
+Bahamas,,http://id.loc.gov/vocabulary/countries/bf
+Bahrain,,http://id.loc.gov/vocabulary/countries/ba
+Bangladesh,,http://id.loc.gov/vocabulary/countries/bg
+Barbados,,http://id.loc.gov/vocabulary/countries/bb
+Belarus,,http://id.loc.gov/vocabulary/countries/bw
+Belgium,,http://id.loc.gov/vocabulary/countries/be
+Belize,,http://id.loc.gov/vocabulary/countries/bh
+Benin,,http://id.loc.gov/vocabulary/countries/dm
+Bermuda Islands,,http://id.loc.gov/vocabulary/countries/bm
+Bhutan,,http://id.loc.gov/vocabulary/countries/bt
+Bolivia,,http://id.loc.gov/vocabulary/countries/bo
+Bosnia and Herzegovina,,http://id.loc.gov/vocabulary/countries/bn
+Botswana,,http://id.loc.gov/vocabulary/countries/bs
+Bouvet Island,,http://id.loc.gov/vocabulary/countries/bv
+Brazil,,http://id.loc.gov/vocabulary/countries/bl
+British Indian Ocean Territory,,http://id.loc.gov/vocabulary/countries/bi
+British Virgin Islands,,http://id.loc.gov/vocabulary/countries/vb
+Brunei,,http://id.loc.gov/vocabulary/countries/bx
+Bulgaria,,http://id.loc.gov/vocabulary/countries/bu
+Burkina Faso,,http://id.loc.gov/vocabulary/countries/uv
+Burma,,http://id.loc.gov/vocabulary/countries/br
+Burundi,,http://id.loc.gov/vocabulary/countries/bd
+Cabo Verde,,http://id.loc.gov/vocabulary/countries/cv
+Cambodia,,http://id.loc.gov/vocabulary/countries/cb
+Cameroon,,http://id.loc.gov/vocabulary/countries/cm
+Canada,,http://id.loc.gov/vocabulary/geographicAreas/n-cn
+Canary Islands,[],https://figgy.princeton.edu/ns/lAEGeographicAreas/canaryIslands
+Caribbean Area,,http://id.loc.gov/vocabulary/geographicAreas/cc
+Caribbean Netherlands,,http://id.loc.gov/vocabulary/countries/ca
+Cayman Islands,,http://id.loc.gov/vocabulary/countries/cj
+Central African Republic,,http://id.loc.gov/vocabulary/countries/cx
+Central America,,http://id.loc.gov/vocabulary/geographicAreas/nc
+Chad,,http://id.loc.gov/vocabulary/countries/cd
+Chile,,http://id.loc.gov/vocabulary/countries/cl
+China,,http://id.loc.gov/vocabulary/countries/cc
+China (Republic : 1949- ),,http://id.loc.gov/vocabulary/countries/ch
+Christmas Island (Indian Ocean),,http://id.loc.gov/vocabulary/countries/xa
+Cocos (Keeling) Islands,,http://id.loc.gov/vocabulary/countries/xb
+Colombia,,http://id.loc.gov/vocabulary/countries/ck
+Comoros,,http://id.loc.gov/vocabulary/countries/cq
+Congo (Brazzaville),,http://id.loc.gov/vocabulary/countries/cf
+Congo (Democratic Republic),,http://id.loc.gov/vocabulary/countries/cg
+Cook Islands,,http://id.loc.gov/vocabulary/countries/cw
+Costa Rica,,http://id.loc.gov/vocabulary/countries/cr
+Croatia,,http://id.loc.gov/vocabulary/countries/ci
+Cuba,,http://id.loc.gov/vocabulary/countries/cu
+Curaçao,,http://id.loc.gov/vocabulary/countries/co
+Cyprus,,http://id.loc.gov/vocabulary/countries/cy
+Czech Republic,,http://id.loc.gov/vocabulary/countries/xr
+Côte d'Ivoire,,http://id.loc.gov/vocabulary/countries/iv
+Denmark,,http://id.loc.gov/vocabulary/countries/dk
+Djibouti,,http://id.loc.gov/vocabulary/countries/ft
+Dominica,,http://id.loc.gov/vocabulary/countries/dq
+Dominican Republic,,http://id.loc.gov/vocabulary/countries/dr
+Ecuador,,http://id.loc.gov/vocabulary/countries/ec
+Egypt,,http://id.loc.gov/vocabulary/countries/ua
+El Salvador,,http://id.loc.gov/vocabulary/countries/es
+Equatorial Guinea,,http://id.loc.gov/vocabulary/countries/eg
+Eritrea,,http://id.loc.gov/vocabulary/countries/ea
+Estonia,,http://id.loc.gov/vocabulary/countries/er
+Ethiopia,,http://id.loc.gov/vocabulary/countries/et
+Europe,,http://id.loc.gov/vocabulary/geographicAreas/e
+Falkland Islands,,http://id.loc.gov/vocabulary/countries/fk
+Faroe Islands,,http://id.loc.gov/vocabulary/countries/fa
+Fiji,,http://id.loc.gov/vocabulary/countries/fj
+Finland,,http://id.loc.gov/vocabulary/countries/fi
+France,,http://id.loc.gov/vocabulary/countries/fr
+French Guiana,,http://id.loc.gov/vocabulary/countries/fg
+French Polynesia,,http://id.loc.gov/vocabulary/countries/fp
+Gabon,,http://id.loc.gov/vocabulary/countries/go
+Gambia,,http://id.loc.gov/vocabulary/countries/gm
+Gaza Strip,,http://id.loc.gov/vocabulary/countries/gz
+Georgia (Republic),,http://id.loc.gov/vocabulary/countries/gs
+Germany,,http://id.loc.gov/vocabulary/countries/de
+Ghana,,http://id.loc.gov/vocabulary/countries/gh
+Gibraltar,,http://id.loc.gov/vocabulary/countries/gi
+Greece,,http://id.loc.gov/vocabulary/countries/gr
+Greenland,,http://id.loc.gov/vocabulary/countries/gl
+Grenada,,http://id.loc.gov/vocabulary/countries/gd
+Guadeloupe,,http://id.loc.gov/vocabulary/countries/gp
+Guam,,http://id.loc.gov/vocabulary/countries/gu
+Guatemala,,http://id.loc.gov/vocabulary/countries/gt
+Guinea,,http://id.loc.gov/vocabulary/countries/gv
+Guinea-Bissau,,http://id.loc.gov/vocabulary/countries/pg
+Guyana,,http://id.loc.gov/vocabulary/countries/gy
+Haiti,,http://id.loc.gov/vocabulary/countries/ht
+Heard and McDonald Islands,,http://id.loc.gov/vocabulary/countries/hm
+Honduras,,http://id.loc.gov/vocabulary/countries/ho
+Hungary,,http://id.loc.gov/vocabulary/countries/hu
+Iceland,,http://id.loc.gov/vocabulary/countries/ic
+India,,http://id.loc.gov/vocabulary/countries/ii
+Indonesia,,http://id.loc.gov/vocabulary/countries/io
+Iran,,http://id.loc.gov/vocabulary/countries/ir
+Iraq,,http://id.loc.gov/vocabulary/countries/iq
+Iraq-Saudi Arabia Neutral Zone,,http://id.loc.gov/vocabulary/countries/iy
+Ireland,,http://id.loc.gov/vocabulary/countries/ie
+Israel,,http://id.loc.gov/vocabulary/countries/is
+Italy,,http://id.loc.gov/vocabulary/countries/it
+Jamaica,,http://id.loc.gov/vocabulary/countries/jm
+Japan,"[""ja""]",https://figgy.princeton.edu/ns/lAEGeographicAreas/japan
+Johnston Atoll,,http://id.loc.gov/vocabulary/countries/ji
+Jordan,,http://id.loc.gov/vocabulary/countries/jo
+Kazakhstan,,http://id.loc.gov/vocabulary/countries/kz
+Kenya,,http://id.loc.gov/vocabulary/countries/ke
+Kiribati,,http://id.loc.gov/vocabulary/countries/gb
+Korea (North),,http://id.loc.gov/vocabulary/countries/kn
+Korea (South),,http://id.loc.gov/vocabulary/countries/ko
+Kosovo,,http://id.loc.gov/vocabulary/countries/kv
+Kuwait,,http://id.loc.gov/vocabulary/countries/ku
+Kyrgyzstan,,http://id.loc.gov/vocabulary/countries/kg
+Laos,,http://id.loc.gov/vocabulary/countries/ls
+Latin America,,http://id.loc.gov/vocabulary/geographicAreas/cl
+Latvia,,http://id.loc.gov/vocabulary/countries/lv
+Lebanon,,http://id.loc.gov/vocabulary/countries/le
+Lesotho,,http://id.loc.gov/vocabulary/countries/lo
+Liberia,,http://id.loc.gov/vocabulary/countries/lb
+Libya,,http://id.loc.gov/vocabulary/countries/ly
+Liechtenstein,,http://id.loc.gov/vocabulary/countries/lh
+Lithuania,,http://id.loc.gov/vocabulary/countries/li
+Luxembourg,,http://id.loc.gov/vocabulary/countries/lu
+Macedonia,,http://id.loc.gov/vocabulary/countries/xn
+Madagascar,,http://id.loc.gov/vocabulary/countries/mg
+Malawi,,http://id.loc.gov/vocabulary/countries/mw
+Malaysia,,http://id.loc.gov/vocabulary/countries/my
+Maldives,,http://id.loc.gov/vocabulary/countries/xc
+Mali,,http://id.loc.gov/vocabulary/countries/ml
+Malta,,http://id.loc.gov/vocabulary/countries/mm
+Marshall Islands,,http://id.loc.gov/vocabulary/countries/xe
+Martinique,,http://id.loc.gov/vocabulary/countries/mq
+Mauritania,,http://id.loc.gov/vocabulary/countries/mu
+Mauritius,,http://id.loc.gov/vocabulary/countries/mf
+Mayotte,,http://id.loc.gov/vocabulary/countries/ot
+Mexico,,http://id.loc.gov/vocabulary/countries/mx
+Micronesia (Federated States),,http://id.loc.gov/vocabulary/countries/fm
+Middle East,,http://id.loc.gov/vocabulary/geographicAreas/aw
+Midway Islands,,http://id.loc.gov/vocabulary/countries/xf
+Moldova,,http://id.loc.gov/vocabulary/countries/mv
+Monaco,,http://id.loc.gov/vocabulary/countries/mc
+Mongolia,,http://id.loc.gov/vocabulary/countries/mp
+Montenegro,,http://id.loc.gov/vocabulary/countries/mo
+Montserrat,,http://id.loc.gov/vocabulary/countries/mj
+Morocco,,http://id.loc.gov/vocabulary/countries/mr
+Mozambique,,http://id.loc.gov/vocabulary/countries/mz
+Namibia,,http://id.loc.gov/vocabulary/countries/sx
+Nepal,,http://id.loc.gov/vocabulary/countries/np
+Netherlands,,http://id.loc.gov/vocabulary/countries/nl
+New Caledonia,,http://id.loc.gov/vocabulary/countries/nl
+New Zealand,,http://id.loc.gov/vocabulary/countries/nz
+Nicaragua,,http://id.loc.gov/vocabulary/countries/nq
+Niger,,http://id.loc.gov/vocabulary/countries/ng
+Nigeria,,http://id.loc.gov/vocabulary/countries/nr
+Niue,,http://id.loc.gov/vocabulary/countries/xh
+"No place, unknown, or undetermined",,http://id.loc.gov/vocabulary/countries/xx
+Norfolk Island,,http://id.loc.gov/vocabulary/countries/nx
+Northern Mariana Islands,,http://id.loc.gov/vocabulary/countries/nw
+Norway,,http://id.loc.gov/vocabulary/countries/no
+Oman,,http://id.loc.gov/vocabulary/countries/mk
+Pakistan,,http://id.loc.gov/vocabulary/countries/pk
+Palau,,http://id.loc.gov/vocabulary/countries/pw
+Panama,,http://id.loc.gov/vocabulary/countries/pn
+Papua New Guinea,,http://id.loc.gov/vocabulary/countries/pp
+Paracel Islands],,http://id.loc.gov/vocabulary/countries/pf
+Paraguay,,http://id.loc.gov/vocabulary/countries/py
+Peru,,http://id.loc.gov/vocabulary/countries/pe
+Philippines,,http://id.loc.gov/vocabulary/countries/ph
+Pitcairn Island,,http://id.loc.gov/vocabulary/countries/pc
+Poland,,http://id.loc.gov/vocabulary/countries/pl
+Portugal,,http://id.loc.gov/vocabulary/countries/po
+Puerto Rico,,http://id.loc.gov/vocabulary/countries/pr
+Qatar,,http://id.loc.gov/vocabulary/countries/qa
+Romania,,http://id.loc.gov/vocabulary/countries/rm
+Russia (Federation),,http://id.loc.gov/vocabulary/countries/ru
+Rwanda,,http://id.loc.gov/vocabulary/countries/rw
+Réunion,,http://id.loc.gov/vocabulary/countries/re
+Saint Helena,,http://id.loc.gov/vocabulary/countries/xj
+Saint Kitts and Nevis,,http://id.loc.gov/vocabulary/geographicAreas/nwxi
+Saint Kitts-Nevis,,http://id.loc.gov/vocabulary/countries/xd
+Saint Lucia,,http://id.loc.gov/vocabulary/countries/xk
+Saint Pierre and Miquelon,,http://id.loc.gov/vocabulary/countries/xl
+Saint Vincent and the Grenadines,,http://id.loc.gov/vocabulary/countries/xm
+Saint-Barthélemy,,http://id.loc.gov/vocabulary/countries/sc
+Saint-Martin,,http://id.loc.gov/vocabulary/countries/st
+Samoa,,http://id.loc.gov/vocabulary/countries/ws
+San Marino,,http://id.loc.gov/vocabulary/countries/sm
+Sao Tome and Principe,,http://id.loc.gov/vocabulary/countries/sf
+Saudi Arabia,,http://id.loc.gov/vocabulary/countries/su
+Senegal,,http://id.loc.gov/vocabulary/countries/sg
+Serbia,,http://id.loc.gov/vocabulary/countries/rb
+Seychelles,,http://id.loc.gov/vocabulary/countries/se
+Sierra Leone,,http://id.loc.gov/vocabulary/countries/sl
+Singapore,,http://id.loc.gov/vocabulary/countries/si
+Sint Maarten,,http://id.loc.gov/vocabulary/countries/sn
+Slovakia,,http://id.loc.gov/vocabulary/countries/xo
+Slovenia,,http://id.loc.gov/vocabulary/countries/xv
+Solomon Islands,,http://id.loc.gov/vocabulary/countries/bp
+Somalia,,http://id.loc.gov/vocabulary/countries/so
+South Africa,,http://id.loc.gov/vocabulary/countries/sa
+South America,,http://id.loc.gov/vocabulary/geographicAreas/s
+South Georgia and the South Sandwich Islands,,http://id.loc.gov/vocabulary/countries/xs
+South Sudan,,http://id.loc.gov/vocabulary/countries/sd
+Spain,,http://id.loc.gov/vocabulary/countries/sp
+Spanish North Africa,,http://id.loc.gov/vocabulary/countries/sh
+Spratly Island,,http://id.loc.gov/vocabulary/countries/xp
+Sri Lanka,,http://id.loc.gov/vocabulary/countries/ce
+Sudan,,http://id.loc.gov/vocabulary/countries/sj
+Surinam,,http://id.loc.gov/vocabulary/countries/sr
+Suriname,,http://id.loc.gov/vocabulary/geographicAreas/s-sr
+Swaziland,,http://id.loc.gov/vocabulary/countries/sq
+Sweden,,http://id.loc.gov/vocabulary/countries/se
+Switzerland,,http://id.loc.gov/vocabulary/countries/ch
+Syria,,http://id.loc.gov/vocabulary/countries/sy
+Tajikistan,,http://id.loc.gov/vocabulary/countries/ta
+Tanzania,,http://id.loc.gov/vocabulary/countries/tz
+Terres australes et antarctiques françaises,,http://id.loc.gov/vocabulary/countries/fs
+Thailand,,http://id.loc.gov/vocabulary/countries/th
+Timor-Leste,,http://id.loc.gov/vocabulary/countries/em
+Togo,,http://id.loc.gov/vocabulary/countries/tg
+Tonga,,http://id.loc.gov/vocabulary/countries/to
+Trinidad and Tobago,,http://id.loc.gov/vocabulary/countries/tr
+Tunisia,,http://id.loc.gov/vocabulary/countries/ti
+Turkey,,http://id.loc.gov/vocabulary/countries/tu
+Turkmenistan,,http://id.loc.gov/vocabulary/countries/tk
+Turks and Caicos Islands,,http://id.loc.gov/vocabulary/countries/tc
+Uganda,,http://id.loc.gov/vocabulary/countries/ug
+Ukraine,,http://id.loc.gov/vocabulary/countries/un
+United Arab Emirates,,http://id.loc.gov/vocabulary/countries/ts
+United Kingdom,,http://id.loc.gov/vocabulary/countries/gb
+United States,,http://id.loc.gov/vocabulary/countries/xxu
+United States Misc. Caribbean Islands,,http://id.loc.gov/vocabulary/countries/uc
+United States Misc. Pacific Islands,,http://id.loc.gov/vocabulary/countries/up
+Uruguay,,http://id.loc.gov/vocabulary/countries/uy
+Uzbekistan,,http://id.loc.gov/vocabulary/countries/uz
+Vanuatu,,http://id.loc.gov/vocabulary/countries/nn
+Various places,,http://id.loc.gov/vocabulary/countries/vp
+Vatican City,,http://id.loc.gov/vocabulary/countries/vc
+Venezuela,,http://id.loc.gov/vocabulary/countries/ve
+Vietnam,,http://id.loc.gov/vocabulary/countries/vm
+Virgin Islands of the United States,,http://id.loc.gov/vocabulary/countries/vi
+Wake Island,,http://id.loc.gov/vocabulary/countries/wk
+Wallis and Futuna,,http://id.loc.gov/vocabulary/countries/wf
+West Bank of the Jordan River,,http://id.loc.gov/vocabulary/countries/wj
+Western Sahara,,http://id.loc.gov/vocabulary/countries/ss
+Yemen,,http://id.loc.gov/vocabulary/countries/ye
+Zambia,,http://id.loc.gov/vocabulary/countries/za
+Zimbabwe,,http://id.loc.gov/vocabulary/countries/rh

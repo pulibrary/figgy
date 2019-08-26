@@ -1,24 +1,28 @@
-"pul_label","tgm_label","lcsh_label","uri"
-"Advertisements","Advertisements","Advertising","http://id.loc.gov/vocabulary/graphicMaterials/tgm000098"
-"Banners","Banners","","http://id.loc.gov/vocabulary/graphicMaterials/tgm000777"
-"Bookmarks","Bookmarks","Bookmarks","http://id.loc.gov/vocabulary/graphicMaterials/tgm001218"
-"Brochures","Leaflets","","http://id.loc.gov/vocabulary/graphicMaterials/tgm005863"
-"Business cards","Business cards","","http://id.loc.gov/vocabulary/graphicMaterials/tgm001469"
-"Calendars","Calendars","","http://id.loc.gov/vocabulary/graphicMaterials/tgm001550"
-"Correspondence","Correspondence","","http://id.loc.gov/vocabulary/graphicMaterials/tgm002590"
-"Electoral paraphernalia","","Political collectibles","http://id.loc.gov/authorities/subjects/sh85104350"
-"Flyers","Fliers (Printed matter)","","http://id.loc.gov/vocabulary/graphicMaterials/tgm004107"
-"Forms","Forms (Documents)","","http://id.loc.gov/vocabulary/graphicMaterials/tgm004238"
-"Games","Games","","http://id.loc.gov/vocabulary/graphicMaterials/tgm004414"
-"Leaflets","Leaflets","","http://id.loc.gov/vocabulary/graphicMaterials/tgm005863"
-"Manuscripts","Manuscripts","","http://id.loc.gov/vocabulary/graphicMaterials/tgm012286"
-"Maps","Maps","","http://id.loc.gov/vocabulary/graphicMaterials/tgm006261"
-"News clippings","Clippings","","http://id.loc.gov/vocabulary/graphicMaterials/tgm002169"
-"Pamphlets","Pamphlets","","http://id.loc.gov/vocabulary/graphicMaterials/tgm007415"
-"Pedagogical materials","","Teaching--Aids and devices","http://id.loc.gov/authorities/subjects/sh85133053"
-"Photographs","Photographs","","http://id.loc.gov/vocabulary/graphicMaterials/tgm007721"
-"Postcards","Postcards","","http://id.loc.gov/vocabulary/graphicMaterials/tgm008103"
-"Posters","Posters","","http://id.loc.gov/vocabulary/graphicMaterials/tgm008104"
-"Reports","","",""
-"Serials","Periodicals","","http://id.loc.gov/vocabulary/graphicMaterials/tgm007641"
-"Stickers","Stickers","Stickers","http://id.loc.gov/vocabulary/graphicMaterials/tgm010153"
+label,code,uri
+Advertisements,,http://id.loc.gov/vocabulary/graphicMaterials/tgm000098
+Banners,,http://id.loc.gov/vocabulary/graphicMaterials/tgm000777
+Bookmarks,,http://id.loc.gov/vocabulary/graphicMaterials/tgm001218
+Brochures,,http://id.loc.gov/vocabulary/graphicMaterials/tgm005863
+Business cards,,http://id.loc.gov/vocabulary/graphicMaterials/tgm001469
+Buttons,[],https://figgy.princeton.edu/ns/lAEGenres/buttons
+Calendars,,http://id.loc.gov/vocabulary/graphicMaterials/tgm001550
+Correspondence,,http://id.loc.gov/vocabulary/graphicMaterials/tgm002590
+Electoral paraphernalia,,http://id.loc.gov/authorities/subjects/sh85104350
+Flyers,,http://id.loc.gov/vocabulary/graphicMaterials/tgm004107
+Forms,,http://id.loc.gov/vocabulary/graphicMaterials/tgm004238
+Games,,http://id.loc.gov/vocabulary/graphicMaterials/tgm004414
+Leaflets,,http://id.loc.gov/vocabulary/graphicMaterials/tgm005863
+Manuscripts,,http://id.loc.gov/vocabulary/graphicMaterials/tgm012286
+Maps,,http://id.loc.gov/vocabulary/graphicMaterials/tgm006261
+Masks,[],https://figgy.princeton.edu/ns/lAEGenres/masks
+Montages,[],http://id.loc.gov/vocabulary/graphicMaterials/tgm006745
+News clippings,,http://id.loc.gov/vocabulary/graphicMaterials/tgm002169
+Pamphlets,,http://id.loc.gov/vocabulary/graphicMaterials/tgm007415
+Pedagogical materials,,http://id.loc.gov/authorities/subjects/sh85133053
+Photographs,,http://id.loc.gov/vocabulary/graphicMaterials/tgm007721
+Picket signs,[],https://figgy.princeton.edu/ns/lAEGenres/picketSigns
+Postcards,,http://id.loc.gov/vocabulary/graphicMaterials/tgm008103
+Posters,,http://id.loc.gov/vocabulary/graphicMaterials/tgm008104
+Reports,,https://figgy.princeton.edu/ns/lAEGenres/reports
+Serials,,http://id.loc.gov/vocabulary/graphicMaterials/tgm007641
+Stickers,,http://id.loc.gov/vocabulary/graphicMaterials/tgm010153
