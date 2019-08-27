@@ -3,7 +3,7 @@ class Preserver::BlindImporter::FileMetadataAdapter::QueryService
   # Wayfinder so that FileMetadataResources can return a parent used by
   # NestedStoragePath, as a way to figure out where a JSON or binary file would
   # be stored in a nested hierarchy.
-  class BlindImporterMetadataWayfinder < Wayfinder
+  class BlindImporterMetadataWayfinder < BaseWayfinder
     def parent
       return nil if resource.ancestors.blank?
       parent = resource.ancestors.last
