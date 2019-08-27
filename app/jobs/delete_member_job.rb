@@ -5,6 +5,8 @@ class DeleteMemberJob < ApplicationJob
     member = query_service.find_by(id: id)
     change_set = DynamicChangeSet.new(member)
     change_set_persister.delete(change_set: change_set)
+  rescue Valkyrie::Persistence::ObjectNotFoundError
+    Rails.logger.info("Resource #{id} does not exist, can't delete members")
   end
 
   def metadata_adapter
