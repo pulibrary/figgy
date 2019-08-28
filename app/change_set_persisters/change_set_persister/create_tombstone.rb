@@ -8,7 +8,7 @@ class ChangeSetPersister
     end
 
     def run
-      return unless resource.is_a?(FileSet)
+      return unless resource.is_a?(FileSet) && resource.try(:original_file)
       tombstone = Tombstone.new
       tombstone_change_set = DynamicChangeSet.new(tombstone)
       tombstone_change_set.validate(attributes)
