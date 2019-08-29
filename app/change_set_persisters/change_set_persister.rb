@@ -18,6 +18,7 @@ class ChangeSetPersister
         ApplyRemoteMetadata,
         ExtractArchivalCollectionCode,
         ApplyVisibilityByDate,
+        RestoreTombstones,
         CreateFile::Factory.new(file_appender: FileAppender),
         PropagateVisibilityAndState,
         CleanupPdfs,
