@@ -32,6 +32,12 @@ namespace :export do
     end
   end
 
+  task collection_pdf: :environment do
+    colid = ENV["COLL"]
+    abort "usage: rake export:archival_collection_pdfs COLL=[collection code]" unless colid
+    ExportCollectionPDFJob.perform_now(colid)
+  end
+
   desc "Exports Cicognara resource metadata to CSV"
   task cicognara: :environment do
     coll = ENV["COLL"]
