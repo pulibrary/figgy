@@ -9,6 +9,7 @@ RSpec.describe ExportService do
 
   before do
     FileUtils.rm_rf(export_path) if File.exist?(export_path)
+    FileUtils.mkdir_p(export_path)
   end
 
   describe "#export" do
@@ -59,12 +60,18 @@ RSpec.describe ExportService do
         file_set.original_file.width = 287
         file_set.original_file.height = 200
         Valkyrie::MetadataAdapter.find(:indexing_persister).persister.save(resource: file_set)
-
-        described_class.export_pdf(scanned_resource)
       end
 
       it "exports a PDF" do
+        described_class.export_pdf(scanned_resource)
         expect(File.exist?("#{export_path}/#{scanned_resource.id}.pdf")).to be true
+      end
+
+      it "doesn't export again if the resource hasn't been updated" do
+        FileUtils.touch("#{export_path}/#{scanned_resource.id}.pdf")
+        mtime = File.mtime("#{export_path}/#{scanned_resource.id}.pdf")
+        described_class.export_pdf(scanned_resource)
+        expect(File.mtime("#{export_path}/#{scanned_resource.id}.pdf")).to eq mtime
       end
     end
   end

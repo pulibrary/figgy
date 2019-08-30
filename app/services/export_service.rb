@@ -4,12 +4,15 @@ class ExportService
     export_members(resource.decorate)
   end
 
-  def self.export_pdf(resource)
+  def self.export_pdf(resource, filename: "#{resource.id}.pdf")
+    fn = "#{export_base}/#{filename}"
+    mtime = File.exist?(fn) && File.mtime(fn)
+    return if mtime && mtime > resource.updated_at
     change_set = DynamicChangeSet.new(resource)
     pdf_desc = PDFService.new(change_set_persister).find_or_generate(change_set)
     file = Valkyrie.config.storage_adapter.find_by(id: pdf_desc.file_identifiers.first.id)
     FileUtils.mkdir_p(export_base)
-    File.open("#{export_base}/#{resource.id}.pdf", "w") { |dest| IO.copy_stream(file, dest) }
+    File.open(fn, "w") { |dest| IO.copy_stream(file, dest) }
   end
 
   def self.change_set_persister
