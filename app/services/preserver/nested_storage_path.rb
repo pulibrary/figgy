@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-module Preserver
+class Preserver
   class NestedStoragePath
     attr_reader :base_path
     def initialize(base_path:)
