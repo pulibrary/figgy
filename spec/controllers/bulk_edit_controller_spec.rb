@@ -14,9 +14,9 @@ RSpec.describe BulkEditController, type: :controller do
   let(:params) { { f: { member_of_collection_titles_ssim: collection_title, state_ssim: state }, q: "significant" } }
   before do
     sign_in user
-    change_set_persister.save(change_set: DynamicChangeSet.new(collection))
-    change_set_persister.save(change_set: DynamicChangeSet.new(resource1))
-    change_set_persister.save(change_set: DynamicChangeSet.new(resource2))
+    change_set_persister.save(change_set: ChangeSet.for(collection))
+    change_set_persister.save(change_set: ChangeSet.for(resource1))
+    change_set_persister.save(change_set: ChangeSet.for(resource2))
   end
   describe "GET /bulk_edit" do
     render_views

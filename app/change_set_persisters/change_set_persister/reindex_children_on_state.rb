@@ -29,7 +29,7 @@ class ChangeSetPersister
     def run
       return unless post_save_resource.is_a?(model) && post_save_resource.state == Array.wrap(state)
       children.each do |resource|
-        cs = DynamicChangeSet.new(resource)
+        cs = ChangeSet.for(resource)
         change_set_persister.save(change_set: cs)
       end
     end

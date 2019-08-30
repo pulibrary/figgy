@@ -36,7 +36,7 @@ class AudioDerivativeService
   end
 
   def change_set
-    @change_set ||= DynamicChangeSet.new(resource)
+    @change_set ||= ChangeSet.for(resource)
   end
 
   def valid?
@@ -61,7 +61,7 @@ class AudioDerivativeService
     File.open(hls_file, "w") do |f|
       f.puts content
     end
-    change_set = DynamicChangeSet.new(output)
+    change_set = ChangeSet.for(output)
     change_set.files = [build_file(hls_file, filename: "hls.m3u8")]
     change_set_persister.buffer_into_index do |buffered_persister|
       buffered_persister.save(change_set: change_set)
@@ -128,7 +128,7 @@ class AudioDerivativeService
     # A ChangeSet for the purged members is created and persisted
     def cleanup_derivative_metadata(derivatives:)
       resource.file_metadata = resource.file_metadata.reject { |file| derivatives.include?(file.id) }
-      updated_change_set = DynamicChangeSet.new(resource)
+      updated_change_set = ChangeSet.for(resource)
       change_set_persister.buffer_into_index do |buffered_persister|
         buffered_persister.save(change_set: updated_change_set)
       end

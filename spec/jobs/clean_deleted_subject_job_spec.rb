@@ -20,7 +20,7 @@ RSpec.describe CleanDeletedSubjectJob do
     end
 
     context "when the changeset is invalid" do
-      let(:change_set) { DynamicChangeSet.new(resource) }
+      let(:change_set) { ChangeSet.for(resource) }
       let(:logger) { instance_double Logger }
       before do
         allow(DynamicChangeSet).to receive(:new).with(resource).and_return(change_set)

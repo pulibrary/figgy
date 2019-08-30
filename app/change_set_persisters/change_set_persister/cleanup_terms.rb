@@ -16,7 +16,7 @@ class ChangeSetPersister
       return unless resource.is_a?(EphemeraTerm)
       resources = query_service.custom_queries.find_id_usage_by_model(id: resource.id, model: EphemeraFolder)
       change_sets = resources.map do |parent_resource, keys|
-        parent_change_set = DynamicChangeSet.new(parent_resource)
+        parent_change_set = ChangeSet.for(parent_resource)
         keys.each do |key|
           parent_change_set.validate(key => (parent_resource[key] - [resource.id]))
         end

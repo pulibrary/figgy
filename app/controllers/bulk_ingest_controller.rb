@@ -150,7 +150,7 @@ class BulkIngestController < ApplicationController
     end
 
     def build_change_set(attrs)
-      change_set = DynamicChangeSet.new(build_resource)
+      change_set = ChangeSet.for(build_resource)
       change_set.validate(**attrs)
       change_set
     end
@@ -180,6 +180,6 @@ class BulkIngestController < ApplicationController
     end
 
     def workflow_class
-      @workflow_class ||= DynamicChangeSet.new(resource_class.new).workflow_class
+      @workflow_class ||= ChangeSet.for(resource_class.new).workflow_class
     end
 end

@@ -18,7 +18,7 @@ RSpec.feature "Bulk edit", js: true do
 
   before do
     [collection, member_scanned_resource, nonmember_scanned_resource].each do |resource|
-      change_set = DynamicChangeSet.new(resource)
+      change_set = ChangeSet.for(resource)
       change_set_persister.save(change_set: change_set)
     end
     sign_in user

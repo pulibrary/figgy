@@ -37,7 +37,7 @@ class VectorResourceDerivativeService
   end
 
   def change_set
-    @change_set ||= DynamicChangeSet.new(resource)
+    @change_set ||= ChangeSet.for(resource)
   end
 
   def build_display_file
@@ -163,7 +163,7 @@ class VectorResourceDerivativeService
     def cleanup_derivative_metadata(derivatives:)
       resource.file_metadata = resource.file_metadata.reject { |file| derivatives.include?(file.id) }
       resource.file_metadata.map { |fm| fm.error_message = [] }
-      updated_change_set = DynamicChangeSet.new(resource)
+      updated_change_set = ChangeSet.for(resource)
       change_set_persister.buffer_into_index do |buffered_persister|
         buffered_persister.save(change_set: updated_change_set)
       end
@@ -176,7 +176,7 @@ class VectorResourceDerivativeService
     # Updates error message property on the original file.
     def update_error_message(message:)
       original_file.error_message = [message]
-      updated_change_set = DynamicChangeSet.new(resource)
+      updated_change_set = ChangeSet.for(resource)
       change_set_persister.buffer_into_index do |buffered_persister|
         buffered_persister.save(change_set: updated_change_set)
       end

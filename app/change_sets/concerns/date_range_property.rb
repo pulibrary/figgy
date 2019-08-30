@@ -16,7 +16,7 @@ module DateRangeProperty
     end
 
     def date_range_form
-      @date_range_form ||= DynamicChangeSet.new(date_range_value || DateRange.new).tap(&:prepopulate!)
+      @date_range_form ||= ChangeSet.for(date_range_value || DateRange.new).tap(&:prepopulate!)
     end
 
     def date_range_value

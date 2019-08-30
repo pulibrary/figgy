@@ -5,7 +5,7 @@ class FindingAidsUpdateJob < ApplicationJob
   # @param id <String>
   def perform(id:)
     resource = query_service.find_by(id: id)
-    change_set = DynamicChangeSet.new(resource)
+    change_set = ChangeSet.for(resource)
     change_set.validate(refresh_remote_metadata: true)
     persister.save(change_set: change_set)
   end

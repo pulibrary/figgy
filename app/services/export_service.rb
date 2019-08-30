@@ -8,7 +8,7 @@ class ExportService
     fn = "#{export_base}/#{filename}"
     mtime = File.exist?(fn) && File.mtime(fn)
     return if mtime && mtime > resource.updated_at
-    change_set = DynamicChangeSet.new(resource)
+    change_set = ChangeSet.for(resource)
     pdf_desc = PDFService.new(change_set_persister).find_or_generate(change_set)
     file = Valkyrie.config.storage_adapter.find_by(id: pdf_desc.file_identifiers.first.id)
     FileUtils.mkdir_p(export_base)

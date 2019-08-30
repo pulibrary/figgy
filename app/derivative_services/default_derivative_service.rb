@@ -27,7 +27,7 @@ class DefaultDerivativeService
   end
 
   def change_set
-    @change_set ||= DynamicChangeSet.new(resource)
+    @change_set ||= ChangeSet.for(resource)
   end
 
   def valid?

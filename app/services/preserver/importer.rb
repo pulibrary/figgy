@@ -38,7 +38,7 @@ class Preserver
 
     def import!
       fs = build_file_set(metadata_file_identifier)
-      fs_change_set = DynamicChangeSet.new(fs)
+      fs_change_set = ChangeSet.for(fs)
 
       files = import_binary_nodes(binary_file_identifiers)
       fs_change_set.validate(files: files)

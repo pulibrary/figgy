@@ -15,7 +15,7 @@ module ChangeSetWorkflow
     # Default is set this way so that the WorkflowNoteChangeSet validations don't
     # show in the nested form.
     def new_workflow_note
-      @new_workflow_note ||= DynamicChangeSet.new(WorkflowNote.new)
+      @new_workflow_note ||= ChangeSet.for(WorkflowNote.new)
     end
 
     def workflow

@@ -4,7 +4,7 @@ class BulkUpdateJob < ApplicationJob
     change_set_persister.buffer_into_index do |buffered_change_set_persister|
       ids.each do |id|
         resource = query_service.find_by(id: id)
-        change_set = DynamicChangeSet.new(resource)
+        change_set = ChangeSet.for(resource)
         attributes = {}.tap do |attrs|
           attrs[:state] = "complete" if args[:mark_complete] && !blacklisted_states.include?(resource.state.first)
           BulkUpdateJob.supported_attributes.each do |key|

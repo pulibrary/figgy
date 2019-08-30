@@ -12,7 +12,7 @@ class VoyagerUpdateJob < ApplicationJob
           resource = query_service.find_by(id: id)
           next if resource.blank?
 
-          change_set = DynamicChangeSet.new(resource)
+          change_set = ChangeSet.for(resource)
           next unless change_set.respond_to?(:apply_remote_metadata?) && change_set.respond_to?(:source_metadata_identifier)
 
           change_set.validate(refresh_remote_metadata: "1")

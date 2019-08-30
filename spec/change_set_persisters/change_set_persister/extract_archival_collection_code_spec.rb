@@ -2,7 +2,7 @@
 require "rails_helper"
 
 RSpec.describe ChangeSetPersister::ExtractArchivalCollectionCode do
-  let(:change_set) { DynamicChangeSet.new(resource) }
+  let(:change_set) { ChangeSet.for(resource) }
   let(:resource) { FactoryBot.build(:scanned_resource, source_metadata_identifier: source_metadata_id) }
 
   context "with pulfa collection and component ids" do

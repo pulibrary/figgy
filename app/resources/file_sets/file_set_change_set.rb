@@ -20,6 +20,6 @@ class FileSetChangeSet < ChangeSet
     return false unless persisted?
     parent = Wayfinder.for(self).parent
     return false unless parent
-    DynamicChangeSet.new(parent).try(:preserve?) && Wayfinder.for(parent).try(:preservation_objects).present?
+    ChangeSet.for(parent).try(:preserve?) && Wayfinder.for(parent).try(:preservation_objects).present?
   end
 end

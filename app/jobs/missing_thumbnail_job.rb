@@ -15,7 +15,7 @@ class MissingThumbnailJob < ApplicationJob
     new_thumbnail_id = member_thumbnail_ids.first
 
     resource.thumbnail_id = new_thumbnail_id
-    change_set = DynamicChangeSet.new(resource)
+    change_set = ChangeSet.for(resource)
     updated_resource = change_set_persister.save(change_set: change_set)
     logger.info "Linked the missing thumbnail for #{updated_resource.id}"
     updated_resource

@@ -11,7 +11,7 @@ class ChangeSetPersister
     def run
       return unless collection_change_set? && change_set.changed?(:title)
       descendants.each do |resource|
-        cs = DynamicChangeSet.new(resource)
+        cs = ChangeSet.for(resource)
         change_set_persister.save(change_set: cs)
       end
     end
