@@ -4,6 +4,23 @@ class ChangeSet < Valkyrie::ChangeSet
   class_attribute :workflow_class
   class_attribute :feature_terms
 
+  # Factory
+  def self.for(record, *args)
+    if record.try(:change_set).present?
+      class_from_param(record.change_set).new(record, *args)
+    else
+      class_from_param(record.internal_resource).new(record, *args)
+    end
+  end
+
+  # Used by controllers that need to dynamically instantitate new change sets
+  def self.class_from_param(param)
+    "#{param.camelize}ChangeSet".constantize
+  rescue NameError
+    Valkyrie.logger.error("Failed to find the ChangeSet class for #{param}.")
+    nil
+  end
+
   # Delegating the to_hash method to the resource is a workaround that allows
   # syncing of the changeset. Reform does not appear to de-cast forms during sync.
   delegate :to_hash, to: :resource
