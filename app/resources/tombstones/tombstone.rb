@@ -5,5 +5,6 @@ class Tombstone < Valkyrie::Resource
   attribute :file_set_title
   attribute :file_set_original_filename
   attribute :preservation_object, PreservationObject
+  attribute :parent_id, Valkyrie::Types::ID
   alias deleted_at created_at
 end
