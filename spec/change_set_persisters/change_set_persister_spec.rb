@@ -1632,8 +1632,9 @@ RSpec.describe ChangeSetPersister do
         expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.preservation_file.id}.tif"))).to eq true
       end
     end
-    context "when deleting a `cloud` preservation_policy resource" do
-      it "cleans up and deletes any related PreservationObjects" do
+
+    context "when deleting a `cloud` preservation_policy FileSet" do
+      it "Deletes FileSet PreservationObjects, moves file set PreservationObjects into tombstones" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
         resource = FactoryBot.create_for_repository(:pending_scanned_resource, preservation_policy: "cloud", files: [file])
         change_set = DynamicChangeSet.new(resource)
@@ -1641,15 +1642,50 @@ RSpec.describe ChangeSetPersister do
 
         output = change_set_persister.save(change_set: change_set)
         file_set = Wayfinder.for(output).members.first
-        change_set = DynamicChangeSet.new(output)
+        change_set = DynamicChangeSet.new(file_set)
         change_set_persister.delete(change_set: change_set)
 
-        expect(change_set_persister.query_service.find_all_of_model(model: PreservationObject).to_a.length).to eq 0
-        expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "#{resource.id}.json"))).to eq false
+        expect(change_set_persister.query_service.find_all_of_model(model: PreservationObject).to_a.length).to eq 1
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "#{resource.id}.json"))).to eq true
         expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "#{resource.member_ids.first}.json"))).to eq false
         expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.original_file.id}.tif"))).to eq false
+        tombstones = change_set_persister.query_service.find_all_of_model(model: Tombstone)
+        expect(tombstones.to_a.length).to eq 1
+        tombstone = tombstones.first
+        expect(tombstone.file_set_id).to eq file_set.id
+        expect(tombstone.file_set_title).to eq file_set.title
+        expect(tombstone.file_set_original_filename).to eq file_set.original_file.original_filename
+        expect(tombstone.deleted_at).to eq tombstones.first.created_at
+        expect(tombstone.preservation_object.preserved_object_id).to eq file_set.id
+        expect(tombstone.parent_id).to eq resource.id
       end
     end
+    context "when deleting a `cloud` preservation_policy resource" do
+      it "deletes all previously created FileSet tombstones for that parent, related PreservationObjects, and cleans up the Preservation file store" do
+        file = fixture_file_upload("files/example.tif", "image/tiff")
+        resource = FactoryBot.create_for_repository(:pending_scanned_resource, preservation_policy: "cloud", files: [file])
+        change_set = DynamicChangeSet.new(resource)
+        change_set.validate(state: "complete")
+
+        output = change_set_persister.save(change_set: change_set)
+        file_set = Wayfinder.for(output).members.first
+        change_set = DynamicChangeSet.new(file_set)
+        change_set_persister.delete(change_set: change_set)
+
+        tombstones = change_set_persister.query_service.find_all_of_model(model: Tombstone)
+        expect(tombstones.to_a.length).to eq 1
+
+        reloaded = change_set_persister.query_service.find_by(id: output.id)
+        change_set_persister.delete(change_set: DynamicChangeSet.new(reloaded))
+
+        tombstones = change_set_persister.query_service.find_all_of_model(model: Tombstone)
+        expect(tombstones.to_a.length).to eq 0
+        # Ensure PreservationObject is deleted and preservation is cleaned up.
+        expect(change_set_persister.query_service.find_all_of_model(model: PreservationObject).to_a.length).to eq 0
+        expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "#{resource.id}.json"))).to eq false
+      end
+    end
+
     context "when adding FGDC metadata to a `cloud` preserved object", run_real_derivatives: true, run_real_characterization: true do
       with_queue_adapter :inline
       it "updates the binary content in the preservation store" do
