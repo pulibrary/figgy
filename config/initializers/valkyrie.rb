@@ -74,24 +74,6 @@ Rails.application.config.to_prepare do
     :disk_via_copy
   )
 
-  class NestedStoragePath
-    attr_reader :base_path
-    def initialize(base_path:)
-      @base_path = base_path
-    end
-
-    def generate(resource:, file:, original_filename:)
-      raise ArgumentError, "original_filename must be provided" unless original_filename
-      Pathname.new(base_path).join(*nested_path(resource)).join(original_filename)
-    end
-
-    def nested_path(resource)
-      parent = Wayfinder.for(resource).try(:parent)
-      return(nested_path(parent) + ["data", resource.id.to_s]) if parent
-      [resource.id.to_s]
-    end
-  end
-
   if ENV["STORAGE_PROJECT"] && ENV["STORAGE_CREDENTIALS"] && !Rails.env.test?
     require "shrine/storage/google_cloud_storage"
     Shrine.storages = {
@@ -101,7 +83,7 @@ Rails.application.config.to_prepare do
       Valkyrie::Storage::Shrine.new(
         Shrine.storages[:preservation],
         nil,
-        NestedStoragePath
+        Preserver::NestedStoragePath
       ),
       :google_cloud_storage
     )
@@ -112,7 +94,7 @@ Rails.application.config.to_prepare do
       Valkyrie::Storage::Disk.new(
         base_path: Figgy.config["disk_preservation_path"],
         file_mover: FileUtils.method(:cp),
-        path_generator: NestedStoragePath
+        path_generator: Preserver::NestedStoragePath
       ),
       :google_cloud_storage
     )
