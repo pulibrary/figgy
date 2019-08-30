@@ -4,6 +4,8 @@ class ChangeSet < Valkyrie::ChangeSet
   class_attribute :workflow_class
   class_attribute :feature_terms
 
+  class InvalidChangeSetError < StandardError; end
+
   # Factory
   def self.for(record, *args)
     if record.try(:change_set).present?
@@ -17,8 +19,7 @@ class ChangeSet < Valkyrie::ChangeSet
   def self.class_from_param(param)
     "#{param.camelize}ChangeSet".constantize
   rescue NameError
-    Valkyrie.logger.error("Failed to find the ChangeSet class for #{param}.")
-    nil
+    raise InvalidChangeSetError, "Failed to find the ChangeSet class for #{param}."
   end
 
   # Delegating the to_hash method to the resource is a workaround that allows

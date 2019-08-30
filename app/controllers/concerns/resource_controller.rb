@@ -2,20 +2,29 @@
 module ResourceController
   extend ActiveSupport::Concern
   included do
-    class_attribute :change_set_class, :resource_class, :change_set_persister
+    class_attribute :resource_class, :change_set_persister
     delegate :metadata_adapter, to: :change_set_persister
     delegate :persister, :query_service, to: :metadata_adapter
     include Blacklight::SearchContext
   end
 
   def new
-    if change_set_class.nil?
-      Valkyrie.logger.error("Failed to find the ChangeSet class for #{change_set_param}.")
-      flash[:error] = "#{change_set_param} is not a valid resource type."
-      redirect_to new_scanned_resource_path
+    @change_set = new_change_set
+    @change_set.append_id = params[:parent_id]
+    @change_set.prepopulate!
+    authorize! :create, resource_class
+  rescue InvalidChangeSetError => e
+    Valkyrie.logger.error(e.message)
+    flash[:error] = "#{change_set_param} is not a valid resource type."
+    redirect_to new_scanned_resource_path
+  end
+
+  # Will pass through an InvalidChangeSetError if received
+  def new_change_set
+    if change_set_param
+      ChangeSet.class_from_param(change_set_param).new(new_resource)
     else
-      @change_set = change_set_class.new(new_resource, append_id: params[:parent_id]).prepopulate!
-      authorize! :create, resource_class
+      ChangeSet.for(new_resource)
     end
   end
 
@@ -24,7 +33,7 @@ module ResourceController
   end
 
   def create
-    @change_set = change_set_class.new(resource_class.new)
+    @change_set = new_change_set
     authorize! :create, @change_set.resource
     if @change_set.validate(resource_params.merge(depositor: [current_user.uid]))
       @change_set.sync
@@ -48,7 +57,7 @@ module ResourceController
   end
 
   def destroy
-    @change_set = change_set_class.new(find_resource(params[:id]))
+    @change_set = ChangeSet.for(find_resource(params[:id]))
     authorize! :destroy, @change_set.resource
     change_set_persister.buffer_into_index do |persist|
       persist.delete(change_set: @change_set)
@@ -62,14 +71,14 @@ module ResourceController
   end
 
   def edit
-    @change_set = change_set_class.new(find_resource(params[:id]))
+    @change_set = ChangeSet.for(find_resource(params[:id]))
     authorize! :update, @change_set.resource
     @change_set.prepopulate!
     @change_set.valid? # Run validations to display errors on first load.
   end
 
   def update
-    @change_set = change_set_class.new(find_resource(params[:id]))
+    @change_set = ChangeSet.for(find_resource(params[:id]))
     authorize! :update, @change_set.resource
     if @change_set.validate(resource_params)
       @change_set.sync
@@ -112,16 +121,16 @@ module ResourceController
   end
 
   def file_manager
-    @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
+    @change_set = ChangeSet.for(find_resource(params[:id])).prepopulate!
     authorize! :file_manager, @change_set.resource
     file_set_children = Wayfinder.for(@change_set.resource).members_with_parents.select { |x| x.is_a?(FileSet) }
     @children = file_set_children.map do |x|
-      change_set_class.new(x).prepopulate!
+      ChangeSet.for(x).prepopulate!
     end.to_a
   end
 
   def order_manager
-    @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
+    @change_set = ChangeSet.for(find_resource(params[:id])).prepopulate!
     authorize! :order_manager, @change_set.resource
   end
 
