@@ -198,11 +198,10 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     @workflow_class ||=
       begin
         change_set = ChangeSet.for(model)
-        raise(WorkflowRegistry::EntryNotFound) if change_set.is_a?(DynamicChangeSet)
-        change_set.try(:workflow_class) || raise(WorkflowRegistry::EntryNotFound)
+        change_set.try(:workflow_class)
       end
   # If there's no change set for the model, raise an entry not found.
-  rescue NameError
+  rescue ChangeSet::InvalidChangeSetError
     raise WorkflowRegistry::EntryNotFound
   end
 
