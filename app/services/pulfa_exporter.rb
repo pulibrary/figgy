@@ -16,6 +16,12 @@ class PulfaExporter
     export_branch(group: "mss", exclude: "/mudd/")
   end
 
+  def export_pdf(colid)
+    col = Valkyrie.config.metadata_adapter.query_service.find_by(id: colid)
+    ead = ead_for(col.source_metadata_identifier.first)
+    update_ead(ead, col.decorate.members, pdf: true)
+  end
+
   private
 
     # all objects linked to finding aids that have been updated recently
@@ -66,25 +72,30 @@ class PulfaExporter
     end
 
     # update the DAO links in an EAD/XML file
-    def update_ead(filename, resources)
+    def update_ead(filename, resources, pdf: false)
       logger.info "Updating DAO URLs in #{filename}"
       ead = Nokogiri::XML(File.open(filename))
 
       resources.each do |r|
-        cid = r.source_metadata_identifier.first
+        cid = r.source_metadata_identifier&.first
         component = ead.at_xpath("//ead:c[@id=\'#{cid}\']", namespaces_for_xpath)
-        create_or_update_dao(ead, component, r) if component
+        create_or_update_dao(ead, component, r, pdf) if component
       end
 
       File.open(filename, "w") { |f| f.puts(ead.to_xml) }
     end
 
     # find a dao attached to this element, creating it if it doesn't exist
-    def create_or_update_dao(ead, component, r)
+    def create_or_update_dao(ead, component, r, pdf)
       dao = component.at_xpath(".//ead:dao", namespaces_for_xpath) || create_dao_element(ead, component)
 
       dao.attribute_nodes.each(&:remove)
-      dao.set_attribute("xlink:href", Rails.application.routes.url_helpers.manifest_scanned_resource_url(r))
+      if pdf
+        filename = r.source_metadata_identifier.first.gsub(/.*_/, "")
+        dao.set_attribute("xlink:href", "pdf/#{filename}.pdf")
+      else
+        dao.set_attribute("xlink:href", Rails.application.routes.url_helpers.manifest_scanned_resource_url(r))
+      end
       dao.set_attribute("xlink:type", "simple")
       dao.set_attribute("xlink:role", "https://iiif.io/api/presentation/2.1/")
     end

@@ -78,4 +78,10 @@ namespace :export do
       puts e.to_s
     end
   end
+
+  desc "Export PDFs to PULFA DAOs"
+  task pulfa_pdf: :environment do
+    colid = ENV["COLL"]
+    PulfaExporter.new(since_date: nil).export_pdf(colid)
+  end
 end
