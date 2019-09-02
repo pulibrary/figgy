@@ -11,6 +11,8 @@ require "rspec/rails"
 require Rails.root.join("spec", "shared_specs.rb")
 Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |file| require file }
 
+Capybara.server = :puma, { Silent: true }
+
 module Features
   # Extend this module in spec/support/features/*.rb
   include Formulaic::Dsl
