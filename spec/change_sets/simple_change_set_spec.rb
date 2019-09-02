@@ -19,7 +19,7 @@ RSpec.describe SimpleChangeSet do
 
   describe "date_range mixin" do
     it "is included" do
-      expect { change_set.date_range }.not_to raise_error NoMethodError
+      expect { change_set.date_range }.not_to raise_error
     end
   end
 

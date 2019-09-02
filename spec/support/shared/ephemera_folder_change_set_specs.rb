@@ -25,7 +25,7 @@ RSpec.shared_examples "an ephemera folder change set" do |change_set_class|
 
   describe "date_range mixin" do
     it "is included" do
-      expect { change_set.date_range }.not_to raise_error NoMethodError
+      expect { change_set.date_range }.not_to raise_error
     end
   end
 
