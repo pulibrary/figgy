@@ -87,17 +87,31 @@ class PulfaExporter
 
     # find a dao attached to this element, creating it if it doesn't exist
     def create_or_update_dao(ead, component, r, pdf)
-      dao = component.at_xpath(".//ead:dao", namespaces_for_xpath) || create_dao_element(ead, component)
-
-      dao.attribute_nodes.each(&:remove)
-      if pdf
-        filename = r.source_metadata_identifier.first.gsub(/.*_/, "")
-        dao.set_attribute("xlink:href", "pdf/#{filename}.pdf")
+      if pdf && !r.decorate.volumes.empty?
+        create_or_update_volume_daos(ead, component, r)
       else
-        dao.set_attribute("xlink:href", Rails.application.routes.url_helpers.manifest_scanned_resource_url(r))
+        dao = component.at_xpath(".//ead:dao", namespaces_for_xpath) || create_dao_element(ead, component)
+        if pdf
+          update_dao(dao, "pdf/#{r.source_metadata_identifier.first.gsub(/.*_/, '')}.pdf")
+        else
+          update_dao(dao, Rails.application.routes.url_helpers.manifest_scanned_resource_url(r))
+          dao.set_attribute("xlink:role", "https://iiif.io/api/presentation/2.1/")
+        end
       end
+    end
+
+    def create_or_update_volume_daos(ead, component, r)
+      r.decorate.volumes.each_with_index do |_vol, index|
+        href = "pdf/#{r.source_metadata_identifier.first.gsub(/.*_/, '')}_#{index}.pdf"
+        dao = component.at_xpath(".//ead:dao[xlink:href='" + href + "']", namespaces_for_xpath) || create_dao_element(ead, component)
+        update_dao(dao, href)
+      end
+    end
+
+    def update_dao(dao, href)
+      dao.attribute_nodes.each(&:remove)
+      dao.set_attribute("xlink:href", href)
       dao.set_attribute("xlink:type", "simple")
-      dao.set_attribute("xlink:role", "https://iiif.io/api/presentation/2.1/")
     end
 
     # create and attach a new dao element
@@ -115,5 +129,7 @@ class PulfaExporter
     # send email to configured address about branch being ready to review
     def notify(group, url)
       PulfaMailer.with(group: group, url: url).branch_notification.deliver_now
+    rescue StandardError => e
+      logger.warn "Error sending email: #{e}"
     end
 end
