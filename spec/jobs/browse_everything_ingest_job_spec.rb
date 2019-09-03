@@ -59,6 +59,16 @@ RSpec.describe BrowseEverythingIngestJob do
           file_size: 270_993,
           container: false,
           provider: "google_drive"
+        },
+        {
+          id: "1v3gRwJBqxuO4dU1rLHhwCUTTj-Q6XSdN",
+          url: "https://www.googleapis.com/drive/v3/files/CUTTj1v3gRwJBqxuO4dU1rLHhw?alt=media",
+          auth_token: auth_token,
+          auth_header: auth_header,
+          file_name: "cea2.tif",
+          file_size: 270_993,
+          container: false,
+          provider: "google_drive"
         }
       ]
     end
@@ -73,14 +83,19 @@ RSpec.describe BrowseEverythingIngestJob do
       allow(BrowseEverything::Retriever).to receive(:build_provider).and_return(provider)
       allow(BrowseEverything::Retriever).to receive(:new).and_return(retriever)
       allow(retriever).to receive(:member_resources).and_return(member_resources)
-      allow(retriever).to receive(:download).and_return(fixture_file_upload("files/example.tif", "image/tiff"))
+      allow(retriever).to receive(:download).and_return(
+        fixture_file_upload("files/example.tif", "image/tiff"),
+        fixture_file_upload("files/example.tif", "image/tiff")
+      )
     end
 
     it "recurses through and ingests the member resources" do
       described_class.perform_now(scanned_resource.id.to_s, "ScannedResourcesController", pending_upload_ids)
       updated = adapter.query_service.find_by(id: scanned_resource.id)
       expect(updated.decorate.file_sets).not_to be_empty
+      expect(updated.decorate.file_sets.length).to eq 2
       expect(updated.decorate.file_sets.first.title).to eq ["cea.tif"]
+      expect(updated.decorate.file_sets.last.title).to eq ["cea2.tif"]
     end
   end
 
