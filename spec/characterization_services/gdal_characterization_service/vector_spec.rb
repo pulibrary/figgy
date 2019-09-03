@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 require "rails_helper"
 require "valkyrie/specs/shared_specs"
-include ActionDispatch::TestProcess
 
 RSpec.describe GdalCharacterizationService::Vector do
   let(:file_characterization_service) { described_class }

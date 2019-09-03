@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require "rails_helper"
-include ActionDispatch::TestProcess
 
 RSpec.describe ThumbnailHelper do
   describe "#figgy_thumbnail_path" do

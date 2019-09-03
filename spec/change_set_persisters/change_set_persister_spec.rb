@@ -2,7 +2,6 @@
 # frozen_string_literal: true
 require "rails_helper"
 require "valkyrie/specs/shared_specs"
-include ActionDispatch::TestProcess
 
 RSpec.describe ChangeSetPersister do
   with_queue_adapter :inline

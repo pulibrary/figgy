@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require "rails_helper"
-include ActionDispatch::TestProcess
 
 RSpec.describe Bagit::BagFactory, run_real_derivatives: true do
   subject(:bag_factory) { described_class.new(adapter: adapter) }

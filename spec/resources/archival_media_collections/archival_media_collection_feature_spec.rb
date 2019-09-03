@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require "rails_helper"
-include ActionDispatch::TestProcess
 
 RSpec.feature "Browsing archival media collections" do
   let(:user) { FactoryBot.create(:admin) }

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require "rails_helper"
-include ActionDispatch::TestProcess
 
 RSpec.describe FileSetsSortedByUpdated do
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }

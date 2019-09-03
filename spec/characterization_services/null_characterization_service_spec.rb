@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-include ActionDispatch::TestProcess
 
 RSpec.describe NullCharacterizationService do
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
