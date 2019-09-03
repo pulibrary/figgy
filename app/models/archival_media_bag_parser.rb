@@ -65,6 +65,39 @@ class ArchivalMediaBagParser
     bag.valid?
   end
 
+  # Class modeling asset images
+  class ImageFile
+    attr_reader :path, :original_filename, :barcode
+
+    # Provide the MIME type used for all image files
+    # @return [String]
+    def self.mime_type
+      "image/jpeg"
+    end
+
+    # Constructor
+    # @param path [Pathname] path to the image file
+    def initialize(path:)
+      @path = path
+    end
+
+    # Retrieve the original filename
+    def original_filename
+      @original_filename ||= path.basename.to_s
+    end
+
+    # Retrieve the barcode
+    def barcode
+      @barcode ||= path.basename.to_s.split("_").first
+    end
+
+    # Generate the MIME type
+    # @return [String]
+    def mime_type
+      self.class.mime_type
+    end
+  end
+
   private
 
     # pbcore parsers by barcode
@@ -205,38 +238,5 @@ class PbcoreParser
   # @return [Nokogiri::XML::Element] the root element of the XML Document
   def xml
     @xml ||= Nokogiri::XML(path).remove_namespaces!
-  end
-end
-
-# Class modeling asset images
-class ImageFile
-  attr_reader :path, :original_filename, :barcode
-
-  # Provide the MIME type used for all image files
-  # @return [String]
-  def self.mime_type
-    "image/jpeg"
-  end
-
-  # Constructor
-  # @param path [Pathname] path to the image file
-  def initialize(path:)
-    @path = path
-  end
-
-  # Retrieve the original filename
-  def original_filename
-    @original_filename ||= path.basename.to_s
-  end
-
-  # Retrieve the barcode
-  def barcode
-    @barcode ||= path.basename.to_s.split("_").first
-  end
-
-  # Generate the MIME type
-  # @return [String]
-  def mime_type
-    self.class.mime_type
   end
 end
