@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-09-03
+
+## Fixed
+
+* Fixed error downloading PDFs for Ephemera
+
 # 2019-08-20
 
 ## Changed
