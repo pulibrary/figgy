@@ -26,6 +26,11 @@ RSpec.configure do |config|
         allow(rabbit).to receive(:record_member_updated)
         rabbit
       end
+    else
+      # silence bunny logging
+      logger = instance_double(Logger)
+      allow(logger).to receive(:warn)
+      allow_any_instance_of(Bunny::Session).to receive(:init_default_logger).and_return(logger)
     end
   end
 end
