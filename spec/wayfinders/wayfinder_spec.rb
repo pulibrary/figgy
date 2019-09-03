@@ -15,6 +15,25 @@ RSpec.describe Wayfinder do
       end
     end
 
+    describe "#child_tombstones" do
+      it "returns all tombstones with the given parent_id" do
+        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        file = fixture_file_upload("files/example.tif", "image/tiff")
+        change_set_persister = ScannedResourcesController.change_set_persister
+        resource = FactoryBot.create_for_repository(:pending_scanned_resource, preservation_policy: "cloud", files: [file])
+        change_set = DynamicChangeSet.new(resource)
+        change_set.validate(state: "complete")
+
+        output = change_set_persister.save(change_set: change_set)
+        file_set = described_class.for(output).members.first
+        change_set = DynamicChangeSet.new(file_set)
+        change_set_persister.delete(change_set: change_set)
+
+        tombstone = change_set_persister.query_service.find_all_of_model(model: Tombstone).first
+        expect(described_class.for(resource).child_tombstones.to_a).to eq [tombstone]
+      end
+    end
+
     describe "#in_process_file_sets_count" do
       it "returns a count of all in process file sets, deep" do
         fs1 = FactoryBot.create_for_repository(:file_set, processing_status: "in process")
