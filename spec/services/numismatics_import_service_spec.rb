@@ -10,7 +10,8 @@ RSpec.describe NumismaticsImportService do
       db_adapter: db_adapter,
       collection_id: collection_id,
       depositor: depositor,
-      file_root: file_root
+      file_root: file_root,
+      logger: logger
     )
   end
   let(:collection) { FactoryBot.create_for_repository(:collection) }
@@ -18,6 +19,7 @@ RSpec.describe NumismaticsImportService do
   let(:collection_id) { collection.id }
   let(:depositor) { FactoryBot.create(:admin) }
   let(:file_root) { Rails.root.join("spec", "fixtures", "numismatics") }
+  let(:logger) { Logger.new(IO::NULL) }
 
   describe "#ingest_issue" do
     let(:issue_number) { 1 }

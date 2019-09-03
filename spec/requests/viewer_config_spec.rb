@@ -1,7 +1,6 @@
 
 # frozen_string_literal: true
 require "rails_helper"
-include ActionDispatch::TestProcess
 
 RSpec.describe "ViewerConfiguration requests", type: :request do
   let(:scanned_resource) { FactoryBot.create_for_repository(:complete_scanned_resource) }

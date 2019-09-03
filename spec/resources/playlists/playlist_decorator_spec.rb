@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require "rails_helper"
-include ActionDispatch::TestProcess
 
 RSpec.describe PlaylistDecorator do
   subject(:decorator) { described_class.new(playlist) }

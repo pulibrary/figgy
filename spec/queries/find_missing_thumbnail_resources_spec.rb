@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require "rails_helper"
-include ActionDispatch::TestProcess
 
 RSpec.describe FindMissingThumbnailResources do
   subject(:query) { described_class.new(query_service: query_service) }

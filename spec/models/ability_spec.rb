@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 require "rails_helper"
 require "cancan/matchers"
-include ActionDispatch::TestProcess
 
 describe Ability do
   subject { described_class.new(current_user) }

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 require "rails_helper"
 require "valkyrie/derivatives/specs/shared_specs"
-include ActionDispatch::TestProcess
 
 RSpec.describe ImageDerivativeService do
   it_behaves_like "a Valkyrie::Derivatives::DerivativeService"
