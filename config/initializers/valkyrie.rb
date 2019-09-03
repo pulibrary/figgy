@@ -78,7 +78,7 @@ Rails.application.config.to_prepare do
     require "shrine/storage/google_cloud_storage"
     Shrine.storages = {
       preservation: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["preservation_bucket"]),
-      versioned_preservation: Shrine::Storage::GoogleCloudStorage::Versioned.new(bucket: Figgy.config["preservation_bucket"])
+      versioned_preservation: Shrine::Storage::VersionedGoogleCloudStorage.new(bucket: Figgy.config["preservation_bucket"])
     }
     Valkyrie::StorageAdapter.register(
       Valkyrie::Storage::Shrine.new(
@@ -92,7 +92,7 @@ Rails.application.config.to_prepare do
       Valkyrie::Storage::Shrine.new(
         Shrine.storages[:versioned_preservation],
         nil,
-        NestedStoragePath
+        Preserver::NestedStoragePath
       ),
       :versioned_google_cloud_storage
     )
