@@ -1685,6 +1685,42 @@ RSpec.describe ChangeSetPersister do
       end
     end
 
+    context "when reinstating a FileSet tombstone" do
+      before do
+        # Make preservation deletes not actually happen to simulate a versioned
+        # file store.
+        allow(Valkyrie::StorageAdapter.find(:google_cloud_storage)).to receive(:delete)
+        # This is a bug - right now all disk:// storage adapter IDs are going to
+        # this adapter, no matter what, so the above never gets called.
+        allow(Valkyrie::StorageAdapter.find(:disk)).to receive(:delete)
+      end
+      it "re-adds the FileSet" do
+        file = fixture_file_upload("files/example.tif", "image/tiff")
+        resource = FactoryBot.create_for_repository(:pending_scanned_resource, preservation_policy: "cloud", files: [file])
+        change_set = DynamicChangeSet.new(resource)
+        change_set.validate(state: "complete")
+
+        output = change_set_persister.save(change_set: change_set)
+        file_set = Wayfinder.for(output).members.first
+        change_set = DynamicChangeSet.new(file_set)
+        change_set_persister.delete(change_set: change_set)
+
+        resource = change_set_persister.query_service.find_by(id: resource.id)
+        tombstone = change_set_persister.query_service.find_all_of_model(model: Tombstone).first
+        change_set = DynamicChangeSet.new(resource)
+        change_set.tombstone_restore_ids = [tombstone.id]
+        output = change_set_persister.save(change_set: change_set)
+
+        expect(output.member_ids.length).to eq 1
+        file_set = change_set_persister.query_service.find_members(resource: output).first
+        expect(file_set.file_metadata.length).to eq 2
+
+        # Expect tombstone to be gone
+        tombstones = change_set_persister.query_service.find_all_of_model(model: Tombstone)
+        expect(tombstones.length).to eq 0
+      end
+    end
+
     context "when adding FGDC metadata to a `cloud` preserved object", run_real_derivatives: true, run_real_characterization: true do
       with_queue_adapter :inline
       it "updates the binary content in the preservation store" do

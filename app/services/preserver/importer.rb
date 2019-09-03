@@ -5,7 +5,7 @@ class Preserver
     attr_reader :metadata_file_identifier, :binary_file_identifiers, :storage_adapter, :change_set_persister
 
     def self.default_storage_adapter
-      Valkyrie::StorageAdapter.find(:google_cloud_storage)
+      Valkyrie::StorageAdapter.find(:versioned_google_cloud_storage)
     end
 
     def self.from_preservation_object(resource:, change_set_persister:, storage_adapter: nil)
