@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require "rails_helper"
-include ActionDispatch::TestProcess
 
 describe GeoDiscovery::DocumentBuilder::LayerInfoBuilder do
   with_queue_adapter :inline

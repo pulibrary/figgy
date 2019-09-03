@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require "rails_helper"
-include ActionDispatch::TestProcess
 
 RSpec.describe BulkIngestIntermediateService do
   subject(:service) { described_class.new(property: property, logger: logger, background: background) }

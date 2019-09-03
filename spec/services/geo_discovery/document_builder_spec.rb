@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require "rails_helper"
-include ActionDispatch::TestProcess
 
 # See https://github.com/geoblacklight/geoblacklight/wiki/Schema
 describe GeoDiscovery::DocumentBuilder do

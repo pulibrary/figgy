@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require "rails_helper"
-include ActionDispatch::TestProcess
 
 RSpec.describe ExportService do
   let(:query_service) { metadata_adapter.query_service }

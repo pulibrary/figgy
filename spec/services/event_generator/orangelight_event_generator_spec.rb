@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require "rails_helper"
-include ActionDispatch::TestProcess
 
 RSpec.describe EventGenerator::OrangelightEventGenerator do
   subject(:event_generator) { described_class.new(rabbit_connection) }
