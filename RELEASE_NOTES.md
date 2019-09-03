@@ -13,7 +13,7 @@ Release notes template:
 ## Removed
 
 -->
-# 2019-08-21
+# 2019-09-03
 
 ## Fixed
 
