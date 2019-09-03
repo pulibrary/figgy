@@ -23,8 +23,8 @@ RSpec.describe BrowseEverythingIngestJob do
         local_id: "1XzEWzaluDQj0qIH4xqcgxQXcr6",
         url: "https://www.googleapis.com/drive/v3/files/1XzEWzaluDQj0qIH4xqcgxQXcr6?alt=media",
         file_size: 0,
-        auth_token: "ya29.GltkBysb2tnNUmUscg0xL1BrXe3g-vALh4Xo5fXrPfOSpJLaPNxfxThztNi8Qdl3uBkEomFis8HeLDpsYb3tKMH1Kf6Zsih63J8HN0KowPHUbVM__",
-        auth_header: JSON.generate("Authorization" => "Bearer ya29.GltkBysb2tnNUmUscg0xL1BrXe3g-vALh4Xo5fXrPfOSpJLaPNxfxThztNi8Qdl3uBkEomFis8HeLDpsYb3tKMH1Kf6Zsih63J8HN0KowPHUbVM__"),
+        auth_token: "fake_token",
+        auth_header: JSON.generate("Authorization" => "Bearer fake_token"),
         type: "application/x-directory",
         provider: "google_drive"
       }
@@ -43,7 +43,7 @@ RSpec.describe BrowseEverythingIngestJob do
     let(:provider_class) { class_double(BrowseEverything::Driver::GoogleDrive) }
     let(:retriever) { instance_double(BrowseEverything::Retriever) }
     let(:auth_token) do
-      "ya29.GltkBysb2tnNUmUscg0xL1BrXe3g-vALh4Xo5fXrPfOSpJLaPNxfxThztNi8Qdl3uBkEomFis8HeLDpsYb3tKMH1Kf6Zsih63J8HN0KowPHUbVM__"
+      "fake_token"
     end
     let(:auth_header) do
       JSON.generate("Authorization" => "Bearer #{auth_token}")
@@ -87,7 +87,7 @@ RSpec.describe BrowseEverythingIngestJob do
   context "when called with a file resource" do
     let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource) }
     let(:auth_token) do
-      "ya29.GltkBysb2tnNUmUscg0xL1BrXe3g-vALh4Xo5fXrPfOSpJLaPNxfxThztNi8Qdl3uBkEomFis8HeLDpsYb3tKMH1Kf6Zsih63J8HN0KowPHUbVM__"
+      "fake_token"
     end
     let(:auth_header) do
       JSON.generate("Authorization" => "Bearer #{auth_token}")
