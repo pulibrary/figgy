@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 require "rails_helper"
-include ActionDispatch::TestProcess
+include FixtureFileUpload
 
 RSpec.describe VectorResourcesController, type: :controller do
   let(:user) { nil }
