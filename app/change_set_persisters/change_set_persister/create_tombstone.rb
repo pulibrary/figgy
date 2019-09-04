@@ -7,8 +7,19 @@ class ChangeSetPersister
       @change_set_persister = change_set_persister
     end
 
+    def file_set_with_parent?
+      if resource.is_a?(FileSet)
+        resource.try(:original_file) && parent
+      else
+        file_sets = resource.decorate.try(:file_sets)
+        return if file_sets.blank?
+
+        file_sets.first.try(:original_file)
+      end
+    end
+
     def run
-      return unless resource.is_a?(FileSet) && resource.try(:original_file) && parent
+      return unless file_set_with_parent?
       tombstone = Tombstone.new
       tombstone_change_set = DynamicChangeSet.new(tombstone)
       tombstone_change_set.validate(attributes)
@@ -17,14 +28,25 @@ class ChangeSetPersister
 
     private
 
+      def file_set
+        return resource if resource.is_a?(FileSet)
+
+        resource.decorate.file_sets.first
+      end
+
+      def original_filename
+        file_set.original_file.original_filename
+      end
+
       def attributes
-        {
+        values = {
           file_set_id: resource.id,
           file_set_title: resource.title,
-          file_set_original_filename: resource.original_file.original_filename,
-          preservation_object: preservation_object,
-          parent_id: parent.id
+          file_set_original_filename: original_filename,
+          preservation_object: preservation_object
         }
+        values[:parent_id] = parent.id if resource.is_a?(FileSet)
+        values
       end
 
       def preservation_object
