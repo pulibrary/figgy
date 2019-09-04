@@ -15,6 +15,10 @@ Release notes template:
 -->
 # 2019-09-03
 
+## Added
+
+* Preserved FileSets can be reinstated from the File Manager after delete.
+
 ## Fixed
 
 * Fixed error downloading PDFs for Ephemera
