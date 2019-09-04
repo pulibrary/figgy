@@ -1678,7 +1678,10 @@ RSpec.describe ChangeSetPersister do
         change_set_persister.delete(change_set: DynamicChangeSet.new(reloaded))
 
         tombstones = change_set_persister.query_service.find_all_of_model(model: Tombstone)
-        expect(tombstones.to_a.length).to eq 0
+        # Deleting a ScannedResource will create a Tombstone for that resource
+        # This ensures that no more Tombstones exist for the FileSet
+        file_set_tombstones = tombstones.find { |tombstone| tombstone.resource_id == file_set.id }
+        expect(file_set_tombstones.to_a.length).to eq 0
         # Ensure PreservationObject is deleted and preservation is cleaned up.
         expect(change_set_persister.query_service.find_all_of_model(model: PreservationObject).to_a.length).to eq 0
         expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "#{resource.id}.json"))).to eq false
@@ -1744,6 +1747,9 @@ RSpec.describe ChangeSetPersister do
 
         tombstones = change_set_persister.query_service.find_all_of_model(model: Tombstone)
         expect(tombstones).not_to be_empty
+        expect(tombstones.map(&:resource_id)).to include resource.id
+        preservation_objects = tombstones.map(&:preservation_object)
+        expect(preservation_objects.map(&:preserved_object_id)).to include resource.id
       end
     end
 

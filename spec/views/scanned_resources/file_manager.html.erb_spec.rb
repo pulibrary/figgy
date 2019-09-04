@@ -34,14 +34,14 @@ RSpec.describe "base/file_manager.html.erb", type: :view do
       FactoryBot.create_for_repository(
         :tombstone,
         parent_id: scanned_resource.id,
-        file_set_id: "1",
-        file_set_title: "Test Title",
-        file_set_original_filename: "02.tif",
+        resource_id: "1",
+        resource_title: "Test Title",
+        resource_original_filename: "02.tif",
         preservation_object: PreservationObject.new
       )
     end
     let(:unpreserved_tombstone) do
-      FactoryBot.create_for_repository(:tombstone, parent_id: scanned_resource.id, file_set_id: "1", file_set_title: "Test Title 2", file_set_original_filename: "01.tif")
+      FactoryBot.create_for_repository(:tombstone, parent_id: scanned_resource.id, resource_id: "1", resource_title: "Test Title 2", resource_original_filename: "01.tif")
     end
     it "renders a form to reinstate it" do
       expect(rendered).to include "<h2>Deleted Files</h2>"

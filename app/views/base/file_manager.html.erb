@@ -35,7 +35,7 @@
     <tbody>
       <% decorated_change_set_resource.wayfinder.child_tombstones.each do |tombstone| %>
         <tr>
-          <td><%= tombstone.file_set_title&.first %> (<%= tombstone.file_set_original_filename&.first %>)</td>
+          <td><%= tombstone.resource_title&.first %> (<%= tombstone.resource_original_filename&.first %>)</td>
           <td>
             <% if tombstone.preservation_object.present? && @change_set.respond_to?(:tombstone_restore_ids) %>
               <%= simple_form_for(@change_set) do |f| %>

@@ -42,6 +42,8 @@ class ChangeSetPersister
       end
 
       def preservation_object
+        return unless wayfinder.respond_to?(:preservation_object)
+
         wayfinder.preservation_object
       end
 
