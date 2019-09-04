@@ -109,7 +109,8 @@ RSpec.feature "File Manager" do
 
       visit polymorphic_path [:file_manager, resource]
 
-      expect(adapter.query_service).to have_received(:find_inverse_references_by).exactly(1).times
+      # Call for parents once, call for tombstones once.
+      expect(adapter.query_service).to have_received(:find_inverse_references_by).exactly(2).times
     end
   end
 end
