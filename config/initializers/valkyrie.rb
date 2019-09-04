@@ -230,7 +230,8 @@ Rails.application.config.to_prepare do
     ParentIssueIndexer,
     SortingIndexer,
     TitleIndexer,
-    TrackIndexer
+    TrackIndexer,
+    TombstoneIndexer
   )
   # Registers a metadata adapter for storing and indexing resource metadata into Solr
   # (see Valkyrie::Persistence::Solr::MetadataAdapter)
