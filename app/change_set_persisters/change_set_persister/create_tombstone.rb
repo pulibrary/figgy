@@ -39,14 +39,13 @@ class ChangeSetPersister
       end
 
       def attributes
-        values = {
-          file_set_id: resource.id,
-          file_set_title: resource.title,
-          file_set_original_filename: original_filename,
-          preservation_object: preservation_object
+        {
+          resource_id: resource.id,
+          resource_title: resource.try(:title),
+          resource_original_filename: original_filename,
+          preservation_object: preservation_object,
+          parent_id: parent.try(:id)
         }
-        values[:parent_id] = parent.id if resource.is_a?(FileSet)
-        values
       end
 
       def preservation_object

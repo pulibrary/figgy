@@ -1651,9 +1651,9 @@ RSpec.describe ChangeSetPersister do
         tombstones = change_set_persister.query_service.find_all_of_model(model: Tombstone)
         expect(tombstones.to_a.length).to eq 1
         tombstone = tombstones.first
-        expect(tombstone.file_set_id).to eq file_set.id
-        expect(tombstone.file_set_title).to eq file_set.title
-        expect(tombstone.file_set_original_filename).to eq file_set.original_file.original_filename
+        expect(tombstone.resource_id).to eq file_set.id
+        expect(tombstone.resource_title).to eq file_set.title
+        expect(tombstone.resource_original_filename).to eq file_set.original_file.original_filename
         expect(tombstone.deleted_at).to eq tombstones.first.created_at
         expect(tombstone.preservation_object.preserved_object_id).to eq file_set.id
         expect(tombstone.parent_id).to eq resource.id
