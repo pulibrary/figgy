@@ -90,7 +90,7 @@ class PDFGenerator
 
         header(prawn_document, "Download Information")
         prawn_document.text "Date Rendered: #{Time.current.strftime('%Y-%m-%d %I:%M:%S %p %Z')}"
-        resource_link = if resource.decorate.public_readable_state?
+        resource_link = if resource.decorate.public_readable_state? && resource.identifier
                           identifier = Ark.new(resource.identifier.first)
                           identifier.uri
                         else

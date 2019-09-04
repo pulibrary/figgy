@@ -354,5 +354,22 @@ RSpec.describe PDFGenerator do
         expect(IdentifierService).to have_received(:url_for)
       end
     end
+
+    context "with an ephemera folder" do
+      let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, files: [file], pdf_type: ["color"]) }
+
+      before do
+        stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/default.jpg")
+          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
+        allow(IdentifierService).to receive(:url_for).and_call_original
+      end
+
+      it "generates a figgy link in the cover page" do
+        file_node = generator.render
+        file = Valkyrie::StorageAdapter.find_by(id: file_node.file_identifiers.first)
+        expect(File.exist?(file.io.path)).to eq true
+        expect(IdentifierService).to have_received(:url_for)
+      end
+    end
   end
 end
