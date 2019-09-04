@@ -1766,6 +1766,7 @@ RSpec.describe ChangeSetPersister do
         persisted = change_set_persister.save(change_set: change_set)
         persisted_file_sets = persisted.decorate.file_sets
 
+        # Deleting and ensuring that the resource is no longer persisted
         change_set = DynamicChangeSet.new(resource)
         change_set_persister.delete(change_set: change_set)
         expect { change_set_persister.query_service.find_by(id: resource.id) }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
@@ -1773,12 +1774,16 @@ RSpec.describe ChangeSetPersister do
         tombstones = change_set_persister.query_service.find_all_of_model(model: Tombstone)
         expect(tombstones).not_to be_empty
 
-        output = Preserver::BlindImporter.import(id: resource.id, change_set_persister: ScannedResourcesController.change_set_persister)
-        expect(output.id).to eq resource.id
-        expect(output.member_ids.length).to eq 1
-        restored_file_sets = query_service.find_members(resource: output)
+        imported = Preserver::BlindImporter.import(id: resource.id, change_set_persister: ScannedResourcesController.change_set_persister)
+        expect(imported.id).to eq resource.id
+        expect(imported).to be_a ScannedResource
+        expect(imported.member_ids.length).to eq 1
+        restored_file_sets = query_service.find_members(resource: imported)
         expect(restored_file_sets).not_to be_empty
         expect(restored_file_sets.first.id).to eq persisted_file_sets.first.id
+
+        updated_tombstones = change_set_persister.query_service.find_all_of_model(model: Tombstone)
+        expect(updated_tombstones).to be_empty
       end
     end
 
