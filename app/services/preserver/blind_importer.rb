@@ -34,12 +34,10 @@ class Preserver::BlindImporter
     # Get rid of non-preserved members.
     source_change_set.try(:member_ids=, member_ids)
     # Delete any tombstones
-    source_change_set.created_file_sets.each do |_created_file_set|
-      persisted_tombstones = change_set_persister.query_service.custom_queries.find_by_property(property: :resource_id, value: source_resource.id)
-      persisted_tombstones.each do |tombstone|
-        tombstone_change_set = TombstoneChangeSet.new(tombstone)
-        change_set_persister.delete(change_set: tombstone_change_set)
-      end
+    persisted_tombstones = change_set_persister.query_service.custom_queries.find_by_property(property: :resource_id, value: source_resource.id)
+    persisted_tombstones.each do |tombstone|
+      tombstone_change_set = TombstoneChangeSet.new(tombstone)
+      change_set_persister.delete(change_set: tombstone_change_set)
     end
     output = change_set_persister.save(change_set: source_change_set)
     output
