@@ -17,5 +17,13 @@ RSpec.describe FindRandomResourcesByModel do
       expect(result.to_a.length).to eq 2
       expect(result.map(&:class).uniq.to_a).to eq [PreservationObject]
     end
+
+    context "when limit is 0" do
+      it "returns an empty array" do
+        result = query.find_random_resources_by_model(limit: 2, model: PreservationObject)
+
+        expect(result.to_a.length).to eq 2
+      end
+    end
   end
 end
