@@ -2,7 +2,7 @@
 
 Release notes template:
 
-# 2019-08-20
+# 2019-09-20
 
 ## Added
 
@@ -52,6 +52,7 @@ titles.
 ## Added
 
 * Visibility can now be edited with Bulk Edit
+* Start running daily fixity checks on a random subset of resources preserved in the cloud.
 
 # 2019-09-03
 
