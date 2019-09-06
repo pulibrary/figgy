@@ -13,6 +13,7 @@ class FindRandomResourcesByModel
   end
 
   def find_random_resources_by_model(limit:, model:)
+    return [] if limit.zero?
     resources.use_cursor.where(internal_resource: model.to_s).order(Sequel.function(:random)).limit(limit).lazy.map do |attributes|
       resource_factory.to_resource(object: attributes)
     end

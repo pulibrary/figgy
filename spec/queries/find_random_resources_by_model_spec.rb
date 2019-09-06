@@ -20,9 +20,9 @@ RSpec.describe FindRandomResourcesByModel do
 
     context "when limit is 0" do
       it "returns an empty array" do
-        result = query.find_random_resources_by_model(limit: 2, model: PreservationObject)
+        result = query.find_random_resources_by_model(limit: 0, model: PreservationObject)
 
-        expect(result.to_a.length).to eq 2
+        expect(result.to_a.length).to eq 0
       end
     end
   end
