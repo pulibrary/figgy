@@ -54,7 +54,8 @@ class SearchBuilder < Blacklight::SearchBuilder
       Numismatics::Reference,
       ProxyFileSet,
       Template,
-      PreservationObject
+      PreservationObject,
+      Tombstone
     ].join(",")
   end
 
