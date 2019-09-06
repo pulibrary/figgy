@@ -5,7 +5,7 @@
           <label>
             <%= radio_button_tag :visibility, viz.value, viz.value == "open" %>
             <%= visibility_badge(viz.value) %>
-            <%= t("visibility.#{viz.value}.note_html") %>
+            <%= viz.definition %>
           </label>
         </li>
       <% end %>

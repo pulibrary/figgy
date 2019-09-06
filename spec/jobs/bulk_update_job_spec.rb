@@ -29,6 +29,16 @@ describe BulkUpdateJob do
       expect(r2.ocr_language).to eq ["eng"]
     end
 
+    it "doesn't change values not specified" do
+      described_class.perform_now(ids: ids, args: more_args)
+      r1 = query_service.find_by(id: resource1.id)
+      r2 = query_service.find_by(id: resource2.id)
+      expect(r1.visibility).to eq ["open"]
+      expect(r1.rights_statement).to eq ["http://rightsstatements.org/vocab/NKC/1.0/"]
+      expect(r2.visibility).to eq ["open"]
+      expect(r2.rights_statement).to eq ["http://rightsstatements.org/vocab/NKC/1.0/"]
+    end
+
     context "updating all of the available attributes" do
       it "updates the resource state" do
         described_class.perform_now(ids: ids, args: all_args)

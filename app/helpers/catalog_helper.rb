@@ -33,6 +33,6 @@ module CatalogHelper
   end
 
   def render_visibility_label(value)
-    I18n.t("visibility.#{value}.text").titleize
+    PermissionBadge.new(value).text.titleize
   end
 end
