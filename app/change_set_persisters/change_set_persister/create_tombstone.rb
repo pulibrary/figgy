@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 class ChangeSetPersister
   class CreateTombstone
-    attr_reader :resource, :change_set_persister
+    attr_reader :change_set, :change_set_persister
+    delegate :resource, to: :change_set
     def initialize(change_set_persister: nil, change_set:, post_save_resource: nil)
-      @resource = change_set.resource
+      @change_set = change_set
       @change_set_persister = change_set_persister
     end
 
     def run
-      return unless resource.is_a?(FileSet) || resource.decorate.respond_to?(:file_sets)
+      return unless change_set.try(:preserve?)
 
       tombstone = Tombstone.new
       tombstone_change_set = DynamicChangeSet.new(tombstone)
