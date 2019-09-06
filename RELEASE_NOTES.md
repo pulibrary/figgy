@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-09-06
+
+## Added
+
+* Visibility can now be edited with Bulk Edit
+
 # 2019-09-03
 
 ## Added
