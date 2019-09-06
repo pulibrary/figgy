@@ -124,48 +124,4 @@ RSpec.describe CloudFixity do
       expect(Rails.logger).to have_received(:info).with("Enqueued 3 PreservationObjects for Cloud Fixity Checking")
     end
   end
-
-  describe ".queue_random!" do
-    it "queues a random percent of the total" do
-      pubsub = instance_double(Google::Cloud::Pubsub::Project)
-      allow(pubsub).to receive(:topic).and_return(topic)
-
-      allow(Google::Cloud::Pubsub).to receive(:new).and_return(pubsub)
-      id = SecureRandom.uuid
-      id2 = SecureRandom.uuid
-      resources = Array.new(10) do |_n|
-        FactoryBot.create_for_repository(
-          :preservation_object,
-          metadata_node: FileMetadata.new(
-            id: id,
-            file_identifiers: Valkyrie::ID.new("shrine://get/to/thechoppa.tif"),
-            checksum: MultiChecksum.new(md5: "5")
-          ),
-          binary_nodes: [
-            FileMetadata.new(
-              id: id2,
-              file_identifiers: Valkyrie::ID.new("shrine://ill/be/back.tif"),
-              checksum: MultiChecksum.new(md5: "5")
-            )
-          ]
-        )
-      end
-      allow(Valkyrie::MetadataAdapter.find(:postgres).query_service.custom_queries).to receive(:find_random_resources_by_model).and_return([resources[0]].lazy)
-
-      CloudFixity::FixityRequestor.queue_random!(percent: 10)
-
-      expect(Valkyrie::MetadataAdapter.find(:postgres).query_service.custom_queries).to have_received(:find_random_resources_by_model).with(limit: 1, model: PreservationObject)
-      expect(pubsub).to have_received(:topic).with("figgy-staging-fixity-request")
-      expect(batch_publisher).to have_received(:publish).exactly(2).times
-      expect(batch_publisher).to have_received(:publish).with(
-        {
-          md5: "5",
-          cloudPath: "get/to/thechoppa.tif",
-          preservation_object_id: resources[0].id.to_s,
-          file_metadata_node_id: id,
-          child_property: "metadata_node"
-        }.to_json
-      )
-    end
-  end
 end

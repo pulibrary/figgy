@@ -67,19 +67,6 @@ module CloudFixity
       Rails.logger.info "Enqueued #{limit} PreservationObjects for Cloud Fixity Checking"
     end
 
-    def self.queue_random!(percent:)
-      preservation_count = query_service.resources.where(internal_resource: PreservationObject.to_s).count
-      limit = preservation_count * percent / 100
-      limit = limit <= 0 ? 1 : limit
-      resources = query_service.custom_queries.find_random_resources_by_model(limit: limit, model: PreservationObject)
-      topic = pubsub.topic(pubsub_topic)
-      resources.each_slice(100).each do |resource_slice|
-        topic.publish do |publisher|
-          queue_resources(resource_slice, publisher)
-        end
-      end
-    end
-
     def self.queue_resources(resources, publisher)
       resources.each do |resource|
         publish_file_metadata(resource, resource.metadata_node, publisher, :metadata_node) if resource.metadata_node.present?
