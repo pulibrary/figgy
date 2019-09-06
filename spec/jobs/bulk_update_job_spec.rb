@@ -11,7 +11,7 @@ describe BulkUpdateJob do
   let(:ids) { [resource1.id, resource2.id] }
   let(:args) { { mark_complete: true } }
   let(:more_args) { { mark_complete: true, ocr_language: "eng" } }
-  let(:all_args) { { mark_complete: true, ocr_language: "eng", rights_statement: "http://rightsstatements.org/vocab/NoC-OKLR/1.0/" } }
+  let(:all_args) { { mark_complete: true, ocr_language: "eng", rights_statement: "http://rightsstatements.org/vocab/NoC-OKLR/1.0/", visibility: "reading_room" } }
   describe "#perform" do
     before do
       resource1
@@ -37,9 +37,11 @@ describe BulkUpdateJob do
         expect(r1.state).to eq ["complete"]
         expect(r1.ocr_language).to eq ["eng"]
         expect(r1.rights_statement).to eq ["http://rightsstatements.org/vocab/NoC-OKLR/1.0/"]
+        expect(r1.visibility).to eq ["reading_room"]
         expect(r2.state).to eq ["complete"]
         expect(r2.ocr_language).to eq ["eng"]
         expect(r2.rights_statement).to eq ["http://rightsstatements.org/vocab/NoC-OKLR/1.0/"]
+        expect(r2.visibility).to eq ["reading_room"]
       end
     end
 
