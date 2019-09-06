@@ -142,6 +142,25 @@ class ControlledVocabulary
     end
   end
 
+  # Controlled vocabulary for visibility
+  class Visibility < ControlledVocabulary
+    ControlledVocabulary.register(:visibility, self)
+    # Accessor for the class attribute storing the visibility options within an authorities YAML file
+    # @return [Hash] the parsed rights statement authorities files
+    def self.authority_config
+      @authority_config ||= YAML.safe_load(File.read(Rails.root.join("config", "authorities", "visibility.yml")), [Symbol])
+    end
+
+    # Accesses all Terms specified within the YAML config. files
+    # @return [Array<Term>] the Term Objects modeling each rights statement
+    def all(_scope = nil)
+      @all ||=
+        self.class.authority_config[:terms].map do |term|
+          Term.new(term)
+        end
+    end
+  end
+
   # Controlled vocabulary for rights statements
   # @see http://rightsstatements.org/en/
   class RightsStatement < ControlledVocabulary

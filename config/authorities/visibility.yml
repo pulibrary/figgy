@@ -1,0 +1,11 @@
+:terms:
+  - :value: open
+    :label: Open
+  - :value: authenticated
+    :label: Princeton
+  - :value: on_campus
+    :label: On Campus
+  - :value: reading_room
+    :label: Reading Room
+  - :value: restricted
+    :label: Private
