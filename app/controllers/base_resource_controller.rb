@@ -17,7 +17,7 @@ class BaseResourceController < ApplicationController
   end
 
   def change_set
-    @change_set ||= change_set_class.new(resource)
+    @change_set ||= ChangeSet.for(resource)
   end
 
   # Resources that allow uploads will use these browse everything methods

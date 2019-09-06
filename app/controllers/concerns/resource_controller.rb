@@ -13,7 +13,7 @@ module ResourceController
     @change_set.append_id = params[:parent_id]
     @change_set.prepopulate!
     authorize! :create, resource_class
-  rescue InvalidChangeSetError => e
+  rescue ChangeSet::InvalidChangeSetError => e
     Valkyrie.logger.error(e.message)
     flash[:error] = "#{change_set_param} is not a valid resource type."
     redirect_to new_scanned_resource_path
@@ -33,6 +33,7 @@ module ResourceController
   end
 
   def create
+    binding.pry
     @change_set = new_change_set
     authorize! :create, @change_set.resource
     if @change_set.validate(resource_params.merge(depositor: [current_user.uid]))
