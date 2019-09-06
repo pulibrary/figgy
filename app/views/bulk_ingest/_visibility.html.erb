@@ -1,41 +1,12 @@
     <legend class="bulk-ingest-legend">Visibility (1)</legend>
     <ul class="set-access-controls visibility">
-      <li class="radio">
-        <label>
-          <%= radio_button_tag :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC, data: { 'target': '#collapsePublic' }  %>
-          <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC) %>
-          <%= t('visibility.open.note_html') %>
-          <div class="collapse" id="collapsePublic">
-            <%= t('visibility.open.warning_html', label: visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)) %>
-          </div>
-        </label>
-      </li>
-      <li class="radio">
-        <label>
-          <%= radio_button_tag :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED %>
-          <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED) %>
-          <%= t('visibility.authenticated.note_html', institution: I18n.t("institution.name")) %>
-        </label>
-      </li>
-    <li class="radio">
-      <label>
-        <%= radio_button_tag :visibility, ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS %>
-        <%= visibility_badge(::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS) %>
-        <%= t('visibility.on_campus.note_html') %>
-      </label>
-    </li>
-      <li class="radio">
-        <label>
-          <%= radio_button_tag :visibility, ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_READING_ROOM %>
-          <%= visibility_badge(::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_READING_ROOM) %>
-          <%= t('visibility.reading_room.note_html') %>
-        </label>
-      </li>
-      <li class="radio">
-        <label>
-          <%= radio_button_tag :visibility, Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE %>
-            <%= visibility_badge(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE) %>
-          <%= t('visibility.restricted.note_html') %>
-        </label>
-      </li>
+      <% @visibility.each_with_index do |viz, i| %>
+        <li class="radio">
+          <label>
+            <%= radio_button_tag :visibility, viz.value, viz.value == "open" %>
+            <%= visibility_badge(viz.value) %>
+            <%= t("visibility.#{viz.value}.note_html") %>
+          </label>
+        </li>
+      <% end %>
     </ul>

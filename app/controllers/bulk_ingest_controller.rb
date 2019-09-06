@@ -23,6 +23,7 @@ class BulkIngestController < ApplicationController
     @collections = collections
     @resource_class = resource_class
     @states = workflow_states
+    @visibility = ControlledVocabulary.for(:visibility).all
   end
 
   def browse_everything_files
