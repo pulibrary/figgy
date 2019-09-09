@@ -7,7 +7,7 @@ RSpec.describe MemberValidator do
   context "when given a resource with no members" do
     it "adds no errors" do
       resource = FactoryBot.build(:scanned_resource)
-      change_set = DynamicChangeSet.new(resource)
+      change_set = ChangeSet.for(resource)
 
       validator.validate(change_set)
 
@@ -17,7 +17,7 @@ RSpec.describe MemberValidator do
   context "when given a resource with a bad member ID" do
     it "gives an error about it" do
       resource = FactoryBot.build(:scanned_resource, member_ids: [Valkyrie::ID.new("yo")])
-      change_set = DynamicChangeSet.new(resource)
+      change_set = ChangeSet.for(resource)
 
       validator.validate(change_set)
 
@@ -30,7 +30,7 @@ RSpec.describe MemberValidator do
       child = FactoryBot.create_for_repository(:scanned_resource)
       adapter.persister.delete(resource: child)
       resource = FactoryBot.build(:scanned_resource, member_ids: [child.id])
-      change_set = DynamicChangeSet.new(resource)
+      change_set = ChangeSet.for(resource)
 
       validator.validate(change_set)
 
@@ -41,7 +41,7 @@ RSpec.describe MemberValidator do
     it "adds no errors" do
       child = FactoryBot.create_for_repository(:scanned_resource)
       resource = FactoryBot.build(:scanned_resource, member_ids: [child.id])
-      change_set = DynamicChangeSet.new(resource)
+      change_set = ChangeSet.for(resource)
 
       validator.validate(change_set)
 

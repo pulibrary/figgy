@@ -21,7 +21,7 @@ RSpec.describe "base/order_manager.html.erb", type: :view do
   context "when given a MVW" do
     let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, title: "Test Title", member_ids: [child.id]) }
     let(:child) { FactoryBot.create_for_repository(:scanned_resource, title: "Child Title") }
-    let(:member) { DynamicChangeSet.new(child) }
+    let(:member) { ChangeSet.for(child) }
     let(:parent) { scanned_resource && member }
     let(:members) { [] }
     it "renders a breadcrumb for the parent" do

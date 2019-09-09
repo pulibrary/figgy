@@ -14,7 +14,7 @@ class ScannedResourcesController < BaseResourceController
 
   def change_set_class
     if change_set_param.present?
-      DynamicChangeSet.class_from_param(change_set_param)
+      ChangeSet.class_from_param(change_set_param)
     else
       DynamicChangeSet
     end

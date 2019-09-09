@@ -81,7 +81,7 @@ class FileSetsController < ApplicationController
     end
 
     def update_derivatives(obj)
-      @change_set = DynamicChangeSet.new(obj)
+      @change_set = ChangeSet.for(obj)
       return unless @change_set.validate(derivative_resource_params)
       derivative_change_set_persister.buffer_into_index do |persist|
         persist.save(change_set: @change_set)

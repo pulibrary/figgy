@@ -6,7 +6,7 @@ class CleanDeletedSubjectJob < ApplicationJob
     folders = qs.find_inverse_references_by(property: :subject, id: subject_id)
     csp = ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: Valkyrie.config.storage_adapter)
     folders.each do |folder|
-      cs = DynamicChangeSet.new(folder)
+      cs = ChangeSet.for(folder)
       subjects = cs.subject.reject { |id| id.to_s == subject_id }
       cs.validate(subject: subjects)
       if cs.valid?

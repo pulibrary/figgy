@@ -81,7 +81,7 @@ class IngestMETSJob < ApplicationJob
     # @param [ScannedResource] the resource being modified
     # @return [ScannedResource] the persisted resource with the logical structure assigned
     def assign_logical_structure(resource)
-      new_change_set = DynamicChangeSet.new(resource)
+      new_change_set = ChangeSet.for(resource)
       new_change_set.logical_structure = [{ label: "Main Structure", nodes: map_fileids(mets.structure)[:nodes] }]
       change_set_persister.save(change_set: new_change_set)
     end
@@ -91,7 +91,7 @@ class IngestMETSJob < ApplicationJob
     # @param [ScannedResource] the resource being modified
     # @return [ScannedResource] the persisted resource with the logical structure assigned
     def assign_attributes(resource)
-      new_change_set = DynamicChangeSet.new(resource)
+      new_change_set = ChangeSet.for(resource)
       return resource unless new_change_set.validate(mets.attributes)
       new_change_set.sync
       change_set_persister.save(change_set: new_change_set)

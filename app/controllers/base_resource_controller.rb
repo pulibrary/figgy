@@ -34,7 +34,7 @@ class BaseResourceController < ApplicationController
     parent_resource = find_resource(parent_resource_params[:id])
     authorize! :update, parent_resource
 
-    parent_change_set = DynamicChangeSet.new(parent_resource)
+    parent_change_set = ChangeSet.for(parent_resource)
     if parent_change_set.validate(parent_resource_params)
       current_member_ids = parent_resource.member_ids
       attached_member_ids = parent_change_set.member_ids
@@ -59,7 +59,7 @@ class BaseResourceController < ApplicationController
     parent_resource = find_resource(parent_resource_params[:id])
     authorize! :update, parent_resource
 
-    parent_change_set = DynamicChangeSet.new(parent_resource)
+    parent_change_set = ChangeSet.for(parent_resource)
     if parent_change_set.validate(parent_resource_params)
       current_member_ids = parent_resource.member_ids
       removed_member_ids = parent_change_set.member_ids

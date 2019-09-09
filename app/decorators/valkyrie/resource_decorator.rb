@@ -197,7 +197,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   def workflow_class
     @workflow_class ||=
       begin
-        change_set = DynamicChangeSet.new(model)
+        change_set = ChangeSet.for(model)
         raise(WorkflowRegistry::EntryNotFound) if change_set.is_a?(DynamicChangeSet)
         change_set.try(:workflow_class) || raise(WorkflowRegistry::EntryNotFound)
       end

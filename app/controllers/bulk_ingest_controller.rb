@@ -139,7 +139,7 @@ class BulkIngestController < ApplicationController
     end
 
     def workflow_class
-      @workflow_class ||= DynamicChangeSet.new(resource_class.new).workflow_class
+      @workflow_class ||= ChangeSet.for(resource_class.new).workflow_class
     end
 
     def collection_ids

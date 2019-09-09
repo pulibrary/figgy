@@ -32,7 +32,7 @@ class ManifestBuilder
     def self.for(resource, auth_token = nil, current_ability = nil)
       case resource
       when Collection
-        case DynamicChangeSet.new(resource)
+        case ChangeSet.for(resource)
         when ArchivalMediaCollectionChangeSet
           ArchivalMediaCollectionNode.new(resource, nil, current_ability)
         else
@@ -51,7 +51,7 @@ class ManifestBuilder
       when Playlist
         PlaylistNode.new(resource, auth_token)
       else
-        case DynamicChangeSet.new(resource)
+        case ChangeSet.for(resource)
         when RecordingChangeSet
           if multi_volume_recording?(resource)
             MultiVolumeRecordingNode.new(resource)
@@ -842,6 +842,6 @@ class ManifestBuilder
     def audio_collection?
       return false unless @resource.resource.respond_to?(:change_set)
 
-      DynamicChangeSet.new(@resource.resource).is_a?(ArchivalMediaCollectionChangeSet)
+      ChangeSet.for(@resource.resource).is_a?(ArchivalMediaCollectionChangeSet)
     end
 end

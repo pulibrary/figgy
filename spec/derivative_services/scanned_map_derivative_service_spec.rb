@@ -20,7 +20,7 @@ RSpec.describe ScannedMapDerivativeService do
   end
   let(:scanned_map_members) { query_service.find_members(resource: scanned_map) }
   let(:valid_resource) { scanned_map_members.first }
-  let(:valid_change_set) { DynamicChangeSet.new(valid_resource) }
+  let(:valid_change_set) { ChangeSet.for(valid_resource) }
   let(:valid_id) { valid_change_set.id }
 
   describe "#valid?" do

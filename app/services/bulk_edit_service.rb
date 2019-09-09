@@ -7,7 +7,7 @@ class BulkEditService
     c = metadata_adapter.query_service.find_by(id: collection_id)
     c.decorate.members.each do |member|
       logger.info "Updating attributes for #{member}"
-      change_set = DynamicChangeSet.new(member)
+      change_set = ChangeSet.for(member)
       if change_set.validate(attributes)
         change_set_persister.save(change_set: change_set)
       else

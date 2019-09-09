@@ -10,7 +10,7 @@ class RecordingDownloadableMigrator
       total: resources.count
     )
     resources.each do |resource|
-      change_set = DynamicChangeSet.new(resource)
+      change_set = ChangeSet.for(resource)
       change_set.validate(downloadable: "none")
       change_set_persister.save(change_set: change_set)
       progress_bar.progress += 1

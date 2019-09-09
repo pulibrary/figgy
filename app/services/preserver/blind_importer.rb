@@ -58,7 +58,7 @@ class Preserver::BlindImporter
   end
 
   def source_change_set
-    @change_set ||= DynamicChangeSet.new(source_resource)
+    @change_set ||= ChangeSet.for(source_resource)
   end
 
   def source_storage_adapter

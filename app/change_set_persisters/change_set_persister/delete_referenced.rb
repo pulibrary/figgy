@@ -23,7 +23,7 @@ class ChangeSetPersister
 
     def run
       resources.each do |resource|
-        cs = DynamicChangeSet.new(resource)
+        cs = ChangeSet.for(resource)
         change_set_persister.delete(change_set: cs)
       end
     end
