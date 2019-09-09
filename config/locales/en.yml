@@ -18,32 +18,6 @@ en:
   titles:
     application: Figgy
   sort_label: Sort
-  visibility:
-    open:
-      note_html: Open to the world. Anyone can view.
-      warning_html: ''
-      class: "label-success"
-      text: "open"
-    authenticated:
-      note_html: Restricted access. Only users logged in with a Princeton University NetID can view.
-      warning_html: ''
-      class: "label-info"
-      text: "princeton"
-    on_campus:
-      note_html: Restricted access. Users can only view on campus or VPN.
-      warning_html: ''
-      class: "label-info"
-      text: "on campus"
-    reading_room:
-      note_html: Restricted access. Only users who have been granted reading room permission in this application and are physically in an RBSC reading room can view.
-      warning_html: ''
-      class: "label-warning"
-      text: "reading room"
-    restricted:
-      text: "private"
-      note_html: Only privileged users of this application can view.
-      warning_html: ''
-      class: "label-danger"
   computed_visibility:
     open:
       class: "alert-success"

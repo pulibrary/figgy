@@ -16,7 +16,18 @@ class PermissionBadge
     content_tag(:div, children, class: "label #{label_class}") + computed_visibility_notice
   end
 
+  # Retrieve the text for the badge
+  # @return [String] the text for the badge
+  def text
+    visibility_term&.label
+  end
+
   private
+
+    # Get a Term object for the visibility option
+    def visibility_term
+      @visibility_term ||= ControlledVocabulary.for(:visibility).find(@visibility)
+    end
 
     # Draw a notice representing the computed visibility status
     def computed_visibility_notice
@@ -45,13 +56,7 @@ class PermissionBadge
     # Retrieve the class for the badge elements
     # @return [String] the class name
     def label_class
-      I18n.t("visibility.#{@visibility}.class")
-    end
-
-    # Retrieve the text for the badge
-    # @return [String] the text for the badge
-    def text
-      I18n.t("visibility.#{@visibility}.text")
+      visibility_term&.label_class
     end
 
     def text_span

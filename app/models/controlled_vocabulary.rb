@@ -55,6 +55,7 @@ class ControlledVocabulary
     attribute :value, Valkyrie::Types::Any
     attribute :notable, Valkyrie::Types::Bool
     attribute :definition, Valkyrie::Types::String
+    attribute :label_class, Valkyrie::Types::String
 
     # Whether or not this Term has been marked as notable
     #  Notable means that a user can add a note about this term via the UI.
@@ -139,6 +140,25 @@ class ControlledVocabulary
         draft: "label-default",
         published: "label-success"
       }
+    end
+  end
+
+  # Controlled vocabulary for visibility
+  class Visibility < ControlledVocabulary
+    ControlledVocabulary.register(:visibility, self)
+    # Accessor for the class attribute storing the visibility options within an authorities YAML file
+    # @return [Hash] the parsed visibility authority files
+    def self.authority_config
+      @authority_config ||= YAML.safe_load(ERB.new(File.read(Rails.root.join("config", "authorities", "visibility.yml"))).result, [Symbol])
+    end
+
+    # Accesses all Terms specified within the YAML config. files
+    # @return [Array<Term>] the Term Objects modeling each visibility option
+    def all(_scope = nil)
+      @all ||=
+        self.class.authority_config[:terms].map do |term|
+          Term.new(term)
+        end
     end
   end
 

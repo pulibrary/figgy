@@ -24,7 +24,8 @@ class BulkUpdateJob < ApplicationJob
   def self.supported_attributes
     [
       :ocr_language,
-      :rights_statement
+      :rights_statement,
+      :visibility
     ]
   end
 
