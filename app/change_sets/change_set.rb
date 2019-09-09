@@ -5,11 +5,13 @@ class ChangeSet < Valkyrie::ChangeSet
   class_attribute :feature_terms
 
   # Factory
-  def self.for(record, *args)
+  def self.for(record, change_set_param: nil, **args)
     if record.try(:change_set).present?
-      class_from_param(record.change_set).new(record, *args)
+      class_from_param(record.change_set).new(record, **args)
+    elsif change_set_param
+      class_from_param(change_set_param).new(record, **args)
     else
-      class_from_param(record.internal_resource).new(record, *args)
+      class_from_param(record.internal_resource).new(record, **args)
     end
   end
 

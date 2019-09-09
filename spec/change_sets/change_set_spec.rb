@@ -17,6 +17,12 @@ RSpec.describe ChangeSet do
         expect(change_set_class.for(resource).class).to eq RecordingChangeSet
       end
     end
+    context "if change_set is not set, but a param is provided" do
+      resource = FactoryBot.build(:scanned_resource)
+      it "returns a RecordingChangeSet" do
+        expect(change_set_class.for(resource, change_set_param: "recording").class).to eq RecordingChangeSet
+      end
+    end
     it "returns a ChangeSet class based on the resource" do
       resource = FactoryBot.build(:scanned_resource)
       expect(change_set_class.for(resource).class).to eq ScannedResourceChangeSet
