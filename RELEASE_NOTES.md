@@ -13,6 +13,13 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-09-12
+
+## Fixed
+
+* Viewer no longer pushes buttons to the next line when there are long page
+titles.
+
 # 2019-09-06
 
 ## Added
