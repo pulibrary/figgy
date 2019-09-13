@@ -72,7 +72,7 @@ jobs:
           POSTGRES_PASSWORD: ""
       - image: solr:7.1-alpine
         command: bin/solr -cloud -noprompt -f -p 8984
-    parallelism: 4
+    parallelism: 15
     environment:
       SPEC_OPTS: --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
       COVERALLS_PARALLEL: true
