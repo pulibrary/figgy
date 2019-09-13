@@ -18,6 +18,7 @@ class PermissionBadge
 
   # Retrieve the text for the badge
   # @return [String] the text for the badge
+  # Could return nil
   def text
     visibility_term&.label
   end

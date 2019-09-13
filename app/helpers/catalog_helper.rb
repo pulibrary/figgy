@@ -34,5 +34,8 @@ module CatalogHelper
 
   def render_visibility_label(value)
     PermissionBadge.new(value).text.titleize
+  rescue NoMethodError
+    Honeybadger.notify("Bad visibility value: #{value}")
+    value
   end
 end
