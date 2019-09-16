@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-09-16
+
+## Added
+
+* Updating imported metadata from PULFA nightly.
+
 # 2019-09-12
 
 ## Fixed

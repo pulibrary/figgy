@@ -10,6 +10,7 @@ job_type :logging_rake, "cd :path && :environment_variable=:environment bundle e
 
 every :day, at: "11:00 PM", roles: [:db] do
   logging_rake "figgy:update_bib_ids"
+  logging_rake "figgy:refresh:finding_aids:all"
 end
 
 every :monday, at: "10am", roles: [:db] do
