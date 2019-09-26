@@ -30,6 +30,11 @@
       {
         "posterImageExpanded": true
       }
+    },
+    "seadragonCenterPanel": {
+      "options": {
+        "immediateRender": true
+      }
     }
   }
 }

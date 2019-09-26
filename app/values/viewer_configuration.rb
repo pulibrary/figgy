@@ -29,6 +29,13 @@ class ViewerConfiguration < ActiveSupport::HashWithIndifferentAccess
           {
             "shareEnabled" => false
           }
+        },
+        "seadragonCenterPanel" =>
+        {
+          "options" =>
+          {
+            "immediateRender" => true
+          }
         }
       }
     }

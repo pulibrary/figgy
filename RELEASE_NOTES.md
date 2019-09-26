@@ -15,6 +15,12 @@ Release notes template:
 -->
 # 2019-09-26
 
+## Fixed
+
+* Fixed error with Universal Viewer / OpenSeadragon  attempting to load zero-dimension images.
+
+# 2019-09-26
+
 ## Added
 
 * Scanned map thumbnails images can now be chosen from a dropdown on the edit
