@@ -192,6 +192,19 @@ RSpec.describe ScannedMapsController, type: :controller do
         expect(response.body).to have_button "Save"
       end
     end
+    context "when a scanned map has a fileset and a child resource" do
+      let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: "image/tiff") }
+      let(:file_set) { FactoryBot.create_for_repository(:file_set, title: "File", file_metadata: [file_metadata]) }
+      let(:child_scanned_map) { FactoryBot.create_for_repository(:scanned_map, title: "Child Scanned Map") }
+
+      render_views
+      it "renders a drop-down to select thumbnail" do
+        scanned_map = FactoryBot.create_for_repository(:scanned_map, member_ids: [file_set.id, child_scanned_map.id])
+        get :edit, params: { id: scanned_map.id.to_s }
+
+        expect(response.body).to have_select "Thumbnail", name: "scanned_map[thumbnail_id]", options: ["File", "Child Scanned Map"]
+      end
+    end
   end
 
   describe "update" do

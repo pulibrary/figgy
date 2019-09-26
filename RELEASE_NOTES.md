@@ -13,6 +13,13 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-09-26
+
+## Added
+
+* Scanned map thumbnails images can now be chosen from a dropdown on the edit
+  page.
+
 # 2019-09-16
 
 ## Added

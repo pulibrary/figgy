@@ -8,6 +8,7 @@ class ScannedMapChangeSet < ScannedResourceChangeSet
   property :relation, multiple: false, required: false
   property :references, multiple: false, required: false
   property :gbl_suppressed_override, multiple: false, required: false
+  property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID.optional
 
   # rubocop:disable Metrics/MethodLength
   def primary_terms
@@ -18,6 +19,7 @@ class ScannedMapChangeSet < ScannedResourceChangeSet
       :downloadable,
       :rights_statement,
       :rights_note,
+      :thumbnail_id,
       :pdf_type,
       :portion_note,
       :local_identifier,
