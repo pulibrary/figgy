@@ -38,6 +38,13 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
     end
   end
 
+  describe "#transliterated_title" do
+    let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, transliterated_title: ["Test Title"]) }
+    it "gets returned in as_jsonld" do
+      expect(linked_ephemera_folder.as_jsonld["transliterated_title"]).to eq ["Test Title"]
+    end
+  end
+
   describe "#genre" do
     context "with Valkyrie::IDs for values" do
       let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, genre: ephemera_term.id) }
