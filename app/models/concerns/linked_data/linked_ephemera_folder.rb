@@ -20,6 +20,7 @@ module LinkedData
       :folder_number,
       :ephemera_box,
       :date_created,
+      :transliterated_title,
       to: :decorated_resource
     )
 
@@ -129,7 +130,8 @@ module LinkedData
           date_range: try(:date_range),
           date_created: try(:date_created),
           series: try(:series),
-          provenance: try(:provenance)
+          provenance: try(:provenance),
+          transliterated_title: try(:transliterated_title)
         }
       end
   end
