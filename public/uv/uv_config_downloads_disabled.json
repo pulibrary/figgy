@@ -24,6 +24,11 @@
         "downloadEnabled": false,
         "shareEnabled": false
       }
+    },
+    "seadragonCenterPanel": {
+      "options": {
+        "immediateRender": true
+      }
     }
   }
 }

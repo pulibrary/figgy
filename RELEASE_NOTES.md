@@ -13,11 +13,26 @@ Release notes template:
 ## Removed
 
 -->
-# 2019-09-24
+
+# 2019-09-27
 
 ## Added
 
 * Adding HathiTrust submission-information-package creator to exporters.
+
+
+# 2019-09-26
+
+## Fixed
+
+* Fixed error with Universal Viewer / OpenSeadragon  attempting to load zero-dimension images.
+
+# 2019-09-26
+
+## Added
+
+* Scanned map thumbnails images can now be chosen from a dropdown on the edit
+  page.
 
 # 2019-09-16
 
