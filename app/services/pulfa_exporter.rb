@@ -1,19 +1,17 @@
 # frozen_string_literal: true
 # Export Figgy content to PULFA, inserting DAOs into the EAD XML files linking to the Figgy manifest URLs
-# and creating two branches (one for Mudd, one for MSS) for review
 class PulfaExporter
   attr_reader :since_date, :svn_client, :logger
   def initialize(since_date:, logger: Logger.new(STDOUT), svn_client: nil)
     @logger = logger
     @since_date = since_date
     @svn_client = svn_client || SvnClient.new
+    @updated_eads = []
   end
 
   def export
-    svn_client.switch("trunk")
     svn_client.update
-    export_branch(group: "mudd", include: "/mudd/")
-    export_branch(group: "mss", exclude: "/mudd/")
+    export_daos
   end
 
   def export_pdf(colid)
@@ -35,30 +33,15 @@ class PulfaExporter
       @grouped_objects ||= updated_objects.group_by(&:archival_collection_code)
     end
 
-    # export everything from a group
-    def export_branch(group:, include: nil, exclude: nil)
-      logger.info "Exporting #{group}"
-      branch_url = svn_client.create_branch(group)
-      export_only(include) if include
-      export_except(exclude) if exclude
-      svn_client.commit(group)
-      notify(group, branch_url)
-    end
-
-    # export everything where the file includes the pattern
-    def export_only(pattern)
+    # export daos to PULFA SVN
+    def export_daos
+      logger.info "Exporting DAOs to PULFA SVN"
       grouped_objects.keys.each do |collection_code|
         file = ead_for(collection_code)
-        update_ead(file, grouped_objects[collection_code]) if file && file.include?(pattern)
+        update_ead(file, grouped_objects[collection_code])
       end
-    end
-
-    # export everything where the file doesn't include the pattern
-    def export_except(pattern)
-      grouped_objects.keys.each do |collection_code|
-        file = ead_for(collection_code)
-        update_ead(file, grouped_objects[collection_code]) unless !file || file.include?(pattern)
-      end
+      svn_client.commit
+      notify
     end
 
     # find the EAD file for a collection code
@@ -83,6 +66,7 @@ class PulfaExporter
       end
 
       File.open(filename, "w") { |f| f.puts(ead.to_xml) }
+      @updated_eads << filename
     end
 
     # find a dao attached to this element, creating it if it doesn't exist
@@ -94,8 +78,7 @@ class PulfaExporter
         if pdf
           update_dao(dao, "pdf/#{r.source_metadata_identifier.first.gsub(/.*_/, '')}.pdf")
         else
-          update_dao(dao, Rails.application.routes.url_helpers.manifest_scanned_resource_url(r))
-          dao.set_attribute("xlink:role", "https://iiif.io/api/presentation/2.1/")
+          update_dao(dao, Rails.application.routes.url_helpers.manifest_scanned_resource_url(r), "xlink:role" => "https://iiif.io/api/presentation/2.1/")
         end
       end
     end
@@ -108,10 +91,14 @@ class PulfaExporter
       end
     end
 
-    def update_dao(dao, href)
+    def update_dao(dao, href, attrs = {})
+      return if dao.get_attribute("xlink:href") == href
       dao.attribute_nodes.each(&:remove)
       dao.set_attribute("xlink:href", href)
       dao.set_attribute("xlink:type", "simple")
+      attrs.each do |key, value|
+        dao.set_attribute(key, value)
+      end
     end
 
     # create and attach a new dao element
@@ -127,9 +114,9 @@ class PulfaExporter
     end
 
     # send email to configured address about branch being ready to review
-    def notify(group, url)
-      PulfaMailer.with(group: group, url: url).branch_notification.deliver_now
+    def notify
+      PulfaMailer.with(updated: @updated_eads.sort).branch_notification.deliver_now
     rescue StandardError => e
-      logger.warn "Error sending email: #{e}"
+      Honeybadger.notify(e, error_message: "Error sending Pulfa export notification email")
     end
 end

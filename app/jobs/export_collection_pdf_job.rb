@@ -10,20 +10,9 @@ class ExportCollectionPDFJob < ApplicationJob
         next
       end
 
-      fn = member.source_metadata_identifier.first.gsub(/.*_/, "")
-      member.decorate.volumes.empty? ? export_file(member, fn) : export_volumes(member, fn)
+      fn_base = member.source_metadata_identifier.first.gsub(/.*_/, "")
+      ExportService.export_resource_or_volumes_pdf(member, filename_base: fn_base)
     end
-  end
-
-  def export_volumes(resource, filename)
-    resource.decorate.volumes.each_with_index do |vol, index|
-      export_file(vol, "#{filename}_#{index}")
-    end
-  end
-
-  def export_file(resource, filename)
-    logger.info "Exporting #{resource.id} as #{filename}.pdf"
-    ExportService.export_pdf(resource, filename: "#{filename}.pdf")
   end
 
   def query_service

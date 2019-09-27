@@ -4,11 +4,16 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
   </head>
   <body>
-    <h2>SVN Brach For Review</h2>
-    <p><a href="<%= @url %>"><%= @url %></a></p>
+    <h2>Figgy DAOs exported to PULFA SVN</h2>
+    <p>Updated EADs:</p>
+    <ul>
+      <% @updated.each do |file| %>
+        <li><%= file %></li>
+      <% end %>
+    </ul>
 
-    <p>You received this message because your email address is configured as the notification address for
-    <%= @group.titleize %>.  To change the notification address, please contact the Digital Repository and Discovery
+    <p>You received this message because your email address is configured as the notification address in
+    Figgy.  To change the notification address, please contact the Digital Repository and Discovery
     Services team.</p>
   </body>
 </html>

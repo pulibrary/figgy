@@ -40,6 +40,9 @@ namespace :export do
     end
   end
 
+  # Part of the process of exporting a finding aid to disk with local PDFs.  This task
+  # exports PDFs from a collection to disk, which are then linked to using the
+  # export:pulfa_pdf task.
   desc "Export PDFs for every item in a collection"
   task collection_pdf: :environment do
     colid = ENV["COLL"]
@@ -73,13 +76,16 @@ namespace :export do
   desc "Export IIIF manifest links to PULFA DAOs"
   task pulfa: :environment do
     begin
-      since = ENV["SINCE"] || (Time.zone.today - 14).strftime("%Y-%m-%d")
+      since = ENV["SINCE"] || (Time.zone.today - 7).strftime("%Y-%m-%d")
       PulfaExporter.new(since_date: since).export
     rescue PulfaExporter::SvnClient::SvnDirectoryError => e
       puts e.to_s
     end
   end
 
+  # Part of the process of exporting a finding aid to disk with local PDFs.  This task adds
+  # DAO links to the EAD pointing to the PDFs which are exported with export:collection_pdf
+  # task.
   desc "Export PDFs to PULFA DAOs"
   task pulfa_pdf: :environment do
     colid = ENV["COLL"]

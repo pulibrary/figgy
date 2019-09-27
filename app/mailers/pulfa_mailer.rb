@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 class PulfaMailer < ApplicationMailer
   def branch_notification
-    @group = params[:group]
-    @url = params[:url]
-
-    email = Figgy.config["pulfa"]["notify_#{params[:group]}"]
-    mail(to: email, subject: "SVN Branch For Review") unless email.blank?
+    @updated = params[:updated]
+    email = Figgy.config["pulfa_notify"]
+    mail(to: email, subject: "Figgy DAOs exported to PULFA SVN") unless email.blank?
   end
 end

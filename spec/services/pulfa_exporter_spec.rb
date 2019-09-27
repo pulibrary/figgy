@@ -53,27 +53,32 @@ RSpec.describe PulfaExporter do
     let(:exporter) { described_class.new(since_date: since_date, logger: logger, svn_client: svn_client) }
     let(:since_date) { (Time.zone.today - 2).strftime("%Y-%m-%d") }
 
-    it "adds a DAO link to the new resource" do
+    it "idempotently adds a DAO link to the new resource" do
       before = Nokogiri::XML(File.open(temp_ead))
       expect(before.at_xpath(xpath, ns).to_s).to eq ""
 
+      # run once to test export
       expect { exporter.export }.not_to raise_error
-
       after = Nokogiri::XML(File.open(temp_ead))
       expect(after.at_xpath(xpath, ns).to_s).to eq "http://www.example.com/concern/scanned_resources/#{resource.id}/manifest"
+
+      # run again to test idempotency
+      expect { exporter.export }.not_to raise_error
+      again = Nokogiri::XML(File.open(temp_ead))
+      expect(again.at_xpath(xpath, ns).to_s).to eq "http://www.example.com/concern/scanned_resources/#{resource.id}/manifest"
     end
 
     describe "when there is an error sending email" do
       let(:mailer) { instance_double(PulfaMailer) }
 
       before do
-        allow(logger).to receive(:warn)
+        allow(Honeybadger).to receive(:notify)
         allow(PulfaMailer).to receive(:with).and_raise(StandardError, "No route to host")
       end
 
       it "catches and logs the error" do
         expect { exporter.export }.not_to raise_error
-        expect(logger).to have_received(:warn).exactly(2).times
+        expect(Honeybadger).to have_received(:notify)
       end
     end
   end

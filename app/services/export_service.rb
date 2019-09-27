@@ -4,15 +4,32 @@ class ExportService
     export_members(resource.decorate)
   end
 
+  # Exports a PDF of a single-volume resource
+  # @param resource [Resource] Resource to export
+  # @param filename [String] Filename to export to, defaults to the resource ID with ".pdf" added
   def self.export_pdf(resource, filename: "#{resource.id}.pdf")
     fn = "#{export_base}/#{filename}"
     mtime = File.exist?(fn) && File.mtime(fn)
-    return if mtime && mtime > resource.updated_at
+    Rails.logger.info("Skipping fresh PDF: #{fn}") && return if mtime && mtime > resource.updated_at
+
     change_set = DynamicChangeSet.new(resource)
     pdf_desc = PDFService.new(change_set_persister).find_or_generate(change_set)
     file = Valkyrie.config.storage_adapter.find_by(id: pdf_desc.file_identifiers.first.id)
     FileUtils.mkdir_p(export_base)
     File.open(fn, "w") { |dest| IO.copy_stream(file, dest) }
+  end
+
+  # Exports a PDF of a single-volume resource, or PDFs for each volume of a multi-volume resource
+  # @param resource [Resource] Resource to export
+  # @param filename_base [String] Base filename, will have ".pdf" or "_0.pdf", etc. appended, defaults to the resource ID
+  def self.export_resource_or_volumes_pdf(resource, filename_base: resource.id.to_s)
+    if resource.decorate.volumes.empty?
+      export_pdf(resource, filename: "#{filename_base}.pdf")
+    else
+      resource.decorate.volumes.each_with_index do |vol, index|
+        export_pdf(vol, filename: "#{filename_base}_#{index}.pdf")
+      end
+    end
   end
 
   def self.change_set_persister
