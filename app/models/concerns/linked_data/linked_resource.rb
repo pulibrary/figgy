@@ -75,7 +75,9 @@ module LinkedData
           scopeNote: resource.try(:portion_note),
           navDate: resource.try(:nav_date),
           edm_rights: linked_rights,
-          memberOf: linked_collections
+          memberOf: linked_collections,
+          system_created_at: resource.try(:created_at),
+          system_updated_at: resource.try(:updated_at)
         }.merge(properties)
       end
   end
