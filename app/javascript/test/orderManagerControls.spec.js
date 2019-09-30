@@ -143,6 +143,7 @@ describe("OrderManagerControls.vue", () => {
   })
 
   it('will not allow save when nothing has changed', () => {
+    expect(window.fetching).toBeFalsy()
     expect(wrapper.vm.isDisabled).toBeTruthy()
   })
 
@@ -255,7 +256,7 @@ describe("OrderManagerControls.vue", () => {
 
     // calls the appropriate action on save
     wrapper.vm.saveHandler()
-    expect(wrapper.vm.fetching).toBeTruthy()
+    expect(window.fetching).toBeTruthy()
     expect(actions.saveStateGql).toHaveBeenCalled()
   })
 
