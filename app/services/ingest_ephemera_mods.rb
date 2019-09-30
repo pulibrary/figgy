@@ -13,8 +13,9 @@ class IngestEphemeraMODS
 
   def ingest
     change_set.validate(base_attributes)
+    change_set.validate(title_attributes)
     change_set.validate(mods_attributes)
-    change_set.validate(files: files)
+    change_set.validate(files: files.push(mods_file))
     change_set.validate(append_id: project_id)
     change_set_persister.save(change_set: change_set)
   end
@@ -27,6 +28,10 @@ class IngestEphemeraMODS
 
   class UkrainianEphemeraMODS < METSDocument::MODSDocument
     def geographic_origin
+      ["Ukraine"]
+    end
+
+    def geographic_subject
       ["Ukraine"]
     end
 
@@ -50,8 +55,6 @@ class IngestEphemeraMODS
 
     def mods_attributes
       {
-        title: native_title,
-        transliterated_title: transliterated_title,
         sort_title: mods_doc.sort_title,
         alternative_title: mods_doc.alternative_title,
         series: mods_doc.series,
@@ -61,6 +64,7 @@ class IngestEphemeraMODS
         date_created: mods_doc.date_created,
         genre: find_term(label: mods_doc.genre, vocab: "LAE Genres"),
         subject: subjects,
+        local_identifier: File.basename(dir),
         language: [find_term(code: mods_doc.language.first, vocab: "LAE Languages")],
         geographic_origin: [find_term(label: mods_doc.geographic_origin.first, vocab: "LAE Areas")],
         geo_subject: [find_term(label: mods_doc.geographic_subject.first, vocab: "LAE Areas")],
@@ -107,12 +111,21 @@ class IngestEphemeraMODS
       label
     end
 
+    def title_attributes
+      return { title: native_title, transliterated_title: transliterated_title } if native_title
+      { title: first_title }
+    end
+
     def native_title
-      mods_doc.title.select { |t| !t.language.to_s.downcase.end_with?("latn") }.first
+      mods_doc.title.select { |t| t.respond_to?(:language) && !t.language.to_s.downcase.end_with?("latn") }.first
     end
 
     def transliterated_title
-      mods_doc.title.select { |t| t.language.to_s.downcase.end_with?("latn") }.first
+      mods_doc.title.select { |t| t.respond_to?(:language) && t.language.to_s.downcase.end_with?("latn") }.first
+    end
+
+    def first_title
+      mods_doc.title.first
     end
 
     def base_attributes
@@ -130,5 +143,14 @@ class IngestEphemeraMODS
           copyable: true
         )
       end
+    end
+
+    def mods_file
+      IngestableFile.new(
+        file_path: mods,
+        mime_type: "application/xml; schema=mods",
+        original_filename: File.basename(mods),
+        copyable: true
+      )
     end
 end
