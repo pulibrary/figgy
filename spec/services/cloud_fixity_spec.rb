@@ -77,12 +77,13 @@ RSpec.describe CloudFixity do
     end
   end
 
-  describe ".queue_random!" do
-    it "queues a random percent of the total" do
+  describe ".queue_daily_check!" do
+    it "queues a random per-day subset given an annual percent to check" do
       pubsub = instance_double(Google::Cloud::Pubsub::Project)
       allow(pubsub).to receive(:topic).and_return(topic)
 
       allow(Google::Cloud::Pubsub).to receive(:new).and_return(pubsub)
+
       id = SecureRandom.uuid
       id2 = SecureRandom.uuid
       resources = Array.new(10) do |_n|
@@ -103,10 +104,12 @@ RSpec.describe CloudFixity do
         )
       end
       allow(Valkyrie::MetadataAdapter.find(:postgres).query_service.custom_queries).to receive(:find_random_resources_by_model).and_return([resources[0]].lazy)
+      allow(Valkyrie::MetadataAdapter.find(:postgres).query_service.custom_queries).to receive(:count_all_of_model).with(model: PreservationObject).and_return(10_000)
+      allow(Rails.logger).to receive(:info)
 
-      CloudFixity::FixityRequestor.queue_random!(percent: 10)
+      CloudFixity::FixityRequestor.queue_daily_check!(annual_percent: 10)
 
-      expect(Valkyrie::MetadataAdapter.find(:postgres).query_service.custom_queries).to have_received(:find_random_resources_by_model).with(limit: 1, model: PreservationObject)
+      expect(Valkyrie::MetadataAdapter.find(:postgres).query_service.custom_queries).to have_received(:find_random_resources_by_model).with(limit: 3, model: PreservationObject)
       expect(pubsub).to have_received(:topic).with("figgy-staging-fixity-request")
       expect(batch_publisher).to have_received(:publish).exactly(2).times
       expect(batch_publisher).to have_received(:publish).with(
@@ -118,6 +121,7 @@ RSpec.describe CloudFixity do
           child_property: "metadata_node"
         }.to_json
       )
+      expect(Rails.logger).to have_received(:info).with("Enqueued 3 PreservationObjects for Cloud Fixity Checking")
     end
   end
 end

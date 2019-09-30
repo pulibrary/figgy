@@ -53,10 +53,10 @@ module CloudFixity
       @pubsub_topic ||= Figgy.config["fixity_request_topic"]
     end
 
-    def self.queue_random!(percent:)
-      preservation_count = query_service.resources.where(internal_resource: PreservationObject.to_s).count
-      limit = preservation_count * percent / 100
-      limit = limit <= 0 ? 1 : limit
+    def self.queue_daily_check!(annual_percent:)
+      divisor = 365.0 * annual_percent
+      preservation_count = query_service.custom_queries.count_all_of_model(model: PreservationObject)
+      limit = (preservation_count / divisor).ceil
       resources = query_service.custom_queries.find_random_resources_by_model(limit: limit, model: PreservationObject)
       topic = pubsub.topic(pubsub_topic)
       resources.each_slice(100).each do |resource_slice|
@@ -64,6 +64,7 @@ module CloudFixity
           queue_resources(resource_slice, publisher)
         end
       end
+      Rails.logger.info "Enqueued #{limit} PreservationObjects for Cloud Fixity Checking"
     end
 
     def self.queue_resources(resources, publisher)
