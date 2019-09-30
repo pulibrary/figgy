@@ -33,7 +33,7 @@ export const resourceMutations = {
   },
   SAVED_STATE(state, saveStatus) {
     state.resource.saveState = saveStatus
-    state.fetching = false
+    window.fetching = false
   },
   SET_RESOURCE(state, resource) {
     state.resource.id = resource.id
