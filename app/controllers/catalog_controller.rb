@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 class CatalogController < ApplicationController
+  # @note If you're looking for the JSON-LD generation code, please see the
+  #   LinkedData module in `app/models/concerns/linked_data.rb`. It gets
+  #   registered here through `SolrDocument.use_extension`.
   include ::Hydra::Catalog
   include TokenAuth
   layout "application"

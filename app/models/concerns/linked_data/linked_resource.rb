@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+# Superclass for most LinkedData resources. Provides a generic implementation
+# for `#to_jsonld` and `#as_jsonld`. Subclasses are expected to override
+# `#properties`
 module LinkedData
   class LinkedResource
     attr_reader :resource
@@ -63,10 +66,14 @@ module LinkedData
         collections.map { |collection| LinkedCollection.new(resource: collection).as_jsonld }
       end
 
+      # @note It's expected that subclasses will override this to provide more
+      # terms.
       def properties
         { title: try(:title) }
       end
 
+      # Default set of properties every JSON-LD serialization should have. Add
+      # to this if you need to add more defaults.
       def linked_properties
         {
           '@context': "https://bibdata.princeton.edu/context.json",
@@ -75,7 +82,9 @@ module LinkedData
           scopeNote: resource.try(:portion_note),
           navDate: resource.try(:nav_date),
           edm_rights: linked_rights,
-          memberOf: linked_collections
+          memberOf: linked_collections,
+          system_created_at: resource.try(:created_at),
+          system_updated_at: resource.try(:updated_at)
         }.merge(properties)
       end
   end

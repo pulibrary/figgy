@@ -22,7 +22,7 @@ module LinkedData
     end
 
     def linked_properties
-      super.except(:title)
+      super.except(:title, :system_created_at, :system_updated_at)
     end
   end
 end
