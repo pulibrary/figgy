@@ -1,12 +1,18 @@
 # frozen_string_literal: true
+# Factory for abstracting the differences in properties to display through
+# JSON-LD depending on the type of resource.
+# @TODO: Refactor to use now-encouraged `.for` factory syntax.
 module LinkedData
   class LinkedResourceFactory
     delegate :query_service, to: :metadata_adapter
 
+    # @param resource [Valkyrie::Resource] Resource to convert to JSON-LD
     def initialize(resource:)
       @resource_node = resource
     end
 
+    # @return [#to_jsonld] LinkedResource which returns the JSON for a given
+    # resource.
     def new
       return LinkedSimpleResource.new(resource: resource_node) if resource_node.try(:change_set) == "simple"
       case resource_node

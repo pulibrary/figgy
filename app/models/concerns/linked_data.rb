@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+# Enables RDF views of Solr Documents. Included via
+# `SolrDocument.use_extension`.
 module LinkedData
   def self.extended(document)
     # Register our exportable formats
@@ -11,6 +13,8 @@ module LinkedData
     document.will_export_as(:ttl, "text/turtle")
   end
 
+  # @return [String] JSON-LD representation of the resource.
+  # @see LinkedData::LinkedResource#to_jsonld
   def export_as_jsonld
     LinkedResourceFactory.new(resource: resource).new.to_jsonld
   end
