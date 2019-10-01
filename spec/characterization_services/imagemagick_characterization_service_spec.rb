@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require "valkyrie/specs/shared_specs"
+require "valkyrie/derivatives/specs/shared_specs"
 
 RSpec.describe ImagemagickCharacterizationService do
-  # it_behaves_like 'a Valkyrie::Derivatives::FileCharacterizationService'
+  it_behaves_like "a Valkyrie::Derivatives::FileCharacterizationService"
+
   let(:file_characterization_service) { described_class }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
