@@ -24,8 +24,11 @@ RSpec.describe CloudFixity do
   let(:query_service) { metadata_adapter.query_service }
 
   before do
-    stub_ezid(shoulder: shoulder, blade: blade)
+    # Needed to prevent pubsub double from leaking into other examples
     described_class.instance_variable_set(:@pubsub, nil)
+    described_class::FixityRequestor.instance_variable_set(:@pubsub, nil)
+
+    stub_ezid(shoulder: shoulder, blade: blade)
     allow(Google::Cloud::Pubsub).to receive(:new).and_return(pubsub)
     allow(pubsub).to receive(:topic).and_return(topic)
     allow(topic).to receive(:subscription).and_return(subscription)
@@ -40,8 +43,6 @@ RSpec.describe CloudFixity do
 
   describe ".run!" do
     before do
-      allow(pubsub).to receive(:topic).and_return(topic)
-      allow(Google::Cloud::Pubsub).to receive(:new).and_return(pubsub)
       CloudFixity::Worker.run!
     end
 
@@ -79,11 +80,6 @@ RSpec.describe CloudFixity do
 
   describe ".queue_daily_check!" do
     it "queues a random per-day subset given an annual percent to check" do
-      pubsub = instance_double(Google::Cloud::Pubsub::Project)
-      allow(pubsub).to receive(:topic).and_return(topic)
-
-      allow(Google::Cloud::Pubsub).to receive(:new).and_return(pubsub)
-
       id = SecureRandom.uuid
       id2 = SecureRandom.uuid
       resources = Array.new(10) do |_n|
@@ -122,6 +118,48 @@ RSpec.describe CloudFixity do
         }.to_json
       )
       expect(Rails.logger).to have_received(:info).with("Enqueued 3 PreservationObjects for Cloud Fixity Checking")
+    end
+  end
+
+  describe ".queue_resource_check!" do
+    it "queues a single resource to check" do
+      id = SecureRandom.uuid
+      id2 = SecureRandom.uuid
+      resource = FactoryBot.create_for_repository(:scanned_resource)
+      preservation_object = begin
+                              FactoryBot.create_for_repository(
+                                :preservation_object,
+                                preserved_object_id: resource.id,
+                                metadata_node: FileMetadata.new(
+                                  id: id,
+                                  file_identifiers: Valkyrie::ID.new("shrine://yippie/ki/yay.tif"),
+                                  checksum: MultiChecksum.new(md5: "5")
+                                ),
+                                binary_nodes: [
+                                  FileMetadata.new(
+                                    id: id2,
+                                    file_identifiers: Valkyrie::ID.new("shrine://nakatomi/tower.tif"),
+                                    checksum: MultiChecksum.new(md5: "5")
+                                  )
+                                ]
+                              )
+                            end
+      allow(Rails.logger).to receive(:info)
+
+      CloudFixity::FixityRequestor.queue_resource_check!(id: resource.id.to_s)
+
+      expect(pubsub).to have_received(:topic).with("figgy-staging-fixity-request")
+      expect(batch_publisher).to have_received(:publish).exactly(2).times
+      expect(batch_publisher).to have_received(:publish).with(
+        {
+          md5: "5",
+          cloudPath: "yippie/ki/yay.tif",
+          preservation_object_id: preservation_object.id.to_s,
+          file_metadata_node_id: id,
+          child_property: "metadata_node"
+        }.to_json
+      )
+      expect(Rails.logger).to have_received(:info).with("Enqueued PreservationObject #{preservation_object.id} for Cloud Fixity Checking")
     end
   end
 end
