@@ -169,11 +169,8 @@ class Jp2DerivativeService
     @cleaned_file ||=
       begin
         t = Tempfile.new
-        MiniMagick::Tool::Convert.new do |convert|
-          convert << file_object.disk_path.to_s
-          convert.compress.+
-          convert << t.path.to_s
-        end
+        image = Vips::Image.new_from_file file_object.disk_path.to_s
+        image.tiffsave t.path.to_s, compression: 0
         t
       end
   end

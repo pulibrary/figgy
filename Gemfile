@@ -131,3 +131,4 @@ end
 
 gem "aws-sdk-s3"
 gem "extra_extra"
+gem "ruby-vips"
