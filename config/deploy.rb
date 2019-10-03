@@ -108,3 +108,18 @@ namespace :deploy do
     end
   end
 end
+
+namespace :rabbitmq do
+  desc 'Opens RabbitMQ Console'
+  task :console do
+    primary_app = primary(:app)
+    port = rand(9000..9999)
+    puts "Opening RabbitMQ Console on port #{port}"
+    puts "Press Ctrl+C to end Console connection"
+    Net::SSH.start(primary_app.hostname, primary_app.user) do |session|
+      session.forward.local(port, "localhost", 15672)
+      `open http://localhost:#{port}`
+      session.loop(0.1) { true }
+    end
+  end
+end
