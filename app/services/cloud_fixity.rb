@@ -67,6 +67,17 @@ module CloudFixity
       Rails.logger.info "Enqueued #{limit} PreservationObjects for Cloud Fixity Checking"
     end
 
+    def self.queue_resource_check!(id:)
+      resource = query_service.find_by(id: Valkyrie::ID.new(id))
+      preservation_object = Wayfinder.for(resource).try(:preservation_object)
+      return unless preservation_object
+      topic = pubsub.topic(pubsub_topic)
+      topic.publish do |publisher|
+        queue_resources([preservation_object], publisher)
+      end
+      Rails.logger.info "Enqueued PreservationObject #{preservation_object.id} for Cloud Fixity Checking"
+    end
+
     def self.queue_resources(resources, publisher)
       resources.each do |resource|
         publish_file_metadata(resource, resource.metadata_node, publisher, :metadata_node) if resource.metadata_node.present?

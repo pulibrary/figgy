@@ -11,4 +11,12 @@ namespace :fixity do
   task request_daily_cloud_fixity: :environment do
     CloudFixity::FixityRequestor.queue_daily_check!(annual_percent: 10)
   end
+
+  desc "Queues single resource fixity check"
+  task request_cloud_fixity: :environment do
+    id = ENV["ID"]
+    abort "usage: rake fixity:request_cloud_fixity ID=resourceid" unless id
+    Rails.logger = Logger.new(STDOUT)
+    CloudFixity::FixityRequestor.queue_resource_check!(id: id)
+  end
 end

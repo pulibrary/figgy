@@ -14,6 +14,13 @@ Release notes template:
 
 -->
 
+
+# 2019-10-02
+
+## Added
+
+* Added rake task to run a cloud fixity check on a single resource.
+
 # 2019-09-27
 
 ## Added
