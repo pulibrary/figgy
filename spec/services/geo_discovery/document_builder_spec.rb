@@ -93,7 +93,7 @@ describe GeoDiscovery::DocumentBuilder do
   end
 
   describe "scanned map" do
-    let(:geo_work) { FactoryBot.create_for_repository(:scanned_map, coverage: coverage.to_s, visibility: visibility) }
+    let(:geo_work) { FactoryBot.create_for_repository(:scanned_map, coverage: coverage.to_s, visibility: visibility, issued: issued) }
     let(:change_set) { ScannedMapChangeSet.new(geo_work, files: []) }
 
     before do
@@ -102,6 +102,7 @@ describe GeoDiscovery::DocumentBuilder do
     end
 
     context "with remote metadata" do
+      let(:issued) { "2013" }
       let(:geo_work) do
         FactoryBot.create_for_repository(:scanned_map,
                                          title: [],
@@ -208,6 +209,14 @@ describe GeoDiscovery::DocumentBuilder do
         expect(document["error"][0]).to include("solr_geom")
         expect(document["error"].size).to eq(1)
         expect(document_builder.to_hash[:error].size).to eq(1)
+      end
+    end
+
+    context "with an issue date string with non-numeric text" do
+      let(:issued) { "Published in New Orleans, 2013-14" }
+
+      it "does not return an issued value" do
+        expect(document).not_to include("dct_issued_dt")
       end
     end
   end
