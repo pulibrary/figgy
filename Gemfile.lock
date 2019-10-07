@@ -27,16 +27,6 @@ GIT
       typhoeus
 
 GIT
-  remote: git://github.com/pulibrary/geo_works-derivatives.git
-  revision: 62a89f482845b7ef48db806952afeedb8317d09a
-  tag: v0.3.2
-  specs:
-    geo_works-derivatives (0.3.2)
-      hydra-derivatives
-      mime-types
-      simpler-tiles
-
-GIT
   remote: git://github.com/pulibrary/ruby_tika_app.git
   revision: 19085f492790aee875d407221ffd0e85609cc250
   specs:
@@ -362,6 +352,10 @@ GEM
       activesupport
       capybara
       i18n
+    geo_works-derivatives (0.4.0)
+      hydra-derivatives
+      mime-types
+      simpler-tiles
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     google-api-client (0.28.7)
@@ -919,7 +913,7 @@ DEPENDENCIES
   font-awesome-rails
   foreman
   formulaic
-  geo_works-derivatives!
+  geo_works-derivatives (~> 0.4)
   google-cloud-pubsub
   graphiql-rails
   graphql
