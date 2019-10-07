@@ -13,7 +13,7 @@ export default class BoundingBoxSelector {
       this.$coverage = $(this.$inputId).val()
     }
 
-    if (this.$coverage) {
+    if ((this.$coverage) && (this.$coverage.length !== 0)) {
       initialBounds = this.coverageToBounds(this.$coverage)
       this.updateBboxInputs(initialBounds)
     } else {
