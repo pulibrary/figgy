@@ -5,6 +5,7 @@ class EphemeraProject < Resource
   attribute :title, Valkyrie::Types::Set
   attribute :slug, Valkyrie::Types::Set
   attribute :top_language, Valkyrie::Types::Set
+  attribute :contributor_uids, Valkyrie::Types::Set
 
   def logical_structure
     []
