@@ -14,6 +14,12 @@ Release notes template:
 
 -->
 
+# 2019-10-09
+
+## Added
+
+* Added keywords as an available field to Ephemera Folders
+
 # 2019-10-07
 
 ## Fixed

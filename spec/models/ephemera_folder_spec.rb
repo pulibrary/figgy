@@ -37,6 +37,10 @@ RSpec.describe EphemeraFolder do
     folder.downloadable = ["public"]
     expect(folder.downloadable).to eq ["public"]
   end
+  it "has a keywords attribute" do
+    folder.keywords = ["bla", "bla2"]
+    expect(folder.keywords).to eq ["bla", "bla2"]
+  end
 
   it "has an extent display" do
     folder.page_count = [1]
