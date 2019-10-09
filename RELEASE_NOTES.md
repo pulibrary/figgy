@@ -15,6 +15,12 @@ Release notes template:
 -->
 
 
+# 2019-10-07
+
+## Fixed
+
+* Fixed error where bounding box widget was not rendering on geo resources.
+
 # 2019-10-02
 
 ## Added
