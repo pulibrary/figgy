@@ -21,6 +21,7 @@ module LinkedData
       :ephemera_box,
       :date_created,
       :transliterated_title,
+      :keywords,
       to: :decorated_resource
     )
 
@@ -131,7 +132,8 @@ module LinkedData
           date_created: try(:date_created),
           series: try(:series),
           provenance: try(:provenance),
-          transliterated_title: try(:transliterated_title)
+          transliterated_title: try(:transliterated_title),
+          keywords: try(:keywords)
         }
       end
   end

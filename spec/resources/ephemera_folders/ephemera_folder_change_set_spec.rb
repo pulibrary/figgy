@@ -58,9 +58,18 @@ RSpec.describe EphemeraFolderChangeSet do
     end
   end
 
+  describe "#keywords" do
+    it "is multi-valued" do
+      expect(change_set.multiple?(:keywords)).to eq true
+    end
+  end
+
   describe "#primary_terms" do
     it "includes the transliterated title as a primary term" do
       expect(change_set.primary_terms).to include :transliterated_title
+    end
+    it "includes keywords" do
+      expect(change_set.primary_terms).to include :keywords
     end
   end
 

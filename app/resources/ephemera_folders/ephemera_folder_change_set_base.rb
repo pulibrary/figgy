@@ -40,6 +40,7 @@ class EphemeraFolderChangeSetBase < ChangeSet
   property :files, virtual: true, multiple: true, required: false
   property :pending_uploads, multiple: true, required: false
   property :append_id, virtual: true, multiple: false, required: false
+  property :keywords, multiple: true, required: false
 
   property :start_canvas, required: false
   property :viewing_direction, required: false
@@ -69,6 +70,7 @@ class EphemeraFolderChangeSetBase < ChangeSet
       :height,
       :page_count,
       :ocr_language,
+      :keywords,
       :series,
       :creator,
       :contributor,

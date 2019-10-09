@@ -45,6 +45,13 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
     end
   end
 
+  describe "#keywords" do
+    let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, keywords: ["Tardis", "Sonic Screwdriver"]) }
+    it "gets returned in as_jsonld" do
+      expect(linked_ephemera_folder.as_jsonld["keywords"]).to eq ["Tardis", "Sonic Screwdriver"]
+    end
+  end
+
   describe "#genre" do
     context "with Valkyrie::IDs for values" do
       let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, genre: ephemera_term.id) }

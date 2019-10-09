@@ -11,6 +11,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
           :width,
           :height,
           :page_count,
+          :keywords,
           :rights_statement,
           :series,
           :creator,
