@@ -183,6 +183,10 @@ class ManifestBuilder
       end
     end
 
+    def collection?
+      false
+    end
+
     def label(structure_node)
       proxy_id = structure_node.proxy.first
       file_set_presenter = file_set_presenters.find { |x| x.resource.id == proxy_id }
@@ -321,6 +325,10 @@ class ManifestBuilder
     # Collections should not have viewing hints
     # @return [nil]
     def viewing_hint; end
+
+    def collection?
+      true
+    end
   end
 
   class EphemeraProjectNode < CollectionNode
@@ -790,6 +798,8 @@ class ManifestBuilder
     end
 
     def recording?
+      # Skip check if it's a Collection node, for performance.
+      return false if resource.collection?
       audio_presenters = resource.work_presenters.select(&:audio_manifest?)
       return true unless audio_presenters.empty?
 
