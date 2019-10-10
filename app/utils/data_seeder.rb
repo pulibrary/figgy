@@ -283,7 +283,8 @@ class DataSeeder
     def geo_attributes
       {
         coverage: coverage,
-        provenance: "Princeton"
+        provenance: "Princeton",
+        held_by: "Princeton"
       }
     end
 

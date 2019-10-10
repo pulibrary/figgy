@@ -43,6 +43,11 @@ RSpec.describe DataSeeder do
       expect(query_service.find_all_of_model(model: RasterResource).count).to eq 2
       expect(query_service.find_all_of_model(model: VectorResource).count).to eq 1
 
+      scanned_maps = query_service.find_all_of_model(model: ScannedMap)
+      # held_by must be populated or the events can't be generated.
+      expect(scanned_maps.flat_map(&:held_by).compact.length).to eq 12
+      expect(scanned_maps.flat_map(&:held_by).uniq).to eq ["Princeton"]
+
       seeder.wipe_metadata!
       expect(Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_all.count).to eq 0
 
