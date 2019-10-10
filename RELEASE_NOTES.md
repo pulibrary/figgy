@@ -26,6 +26,12 @@ Release notes template:
 
 * Fixed error where bounding box widget was not rendering on geo resources.
 
+# 2019-10-04
+
+## Fixed
+
+* Fixed bug with generating formatted issue date values in GeoBlacklight documents.
+
 # 2019-10-02
 
 ## Added
@@ -49,7 +55,7 @@ Release notes template:
 
 ## Added
 
-* Scanned map thumbnails images can now be chosen from a dropdown on the edit
+* Scanned map thumbnail images can now be chosen from a dropdown on the edit
   page.
 
 # 2019-09-16
