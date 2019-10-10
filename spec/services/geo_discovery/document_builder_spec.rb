@@ -135,6 +135,26 @@ describe GeoDiscovery::DocumentBuilder do
         expect(refs["http://schema.org/url"]).to match(/catalog\/5144620/)
         expect(document["call_number_s"]).to eq("HMC04 (Mount Holly)")
       end
+
+      it "sets date to created date if not defined in imported metadata" do
+        expect(document["solr_year_i"]).to eq(2019)
+      end
+    end
+
+    context "with imported date" do
+      let(:geo_work) do
+        FactoryBot.create_for_repository(:scanned_map,
+                                         source_metadata_identifier: "5144620",
+                                         coverage: coverage.to_s,
+                                         visibility: visibility,
+                                         imported_metadata: [{
+                                           date: ["1884"]
+                                         }])
+      end
+
+      it "sets solr year using the date value" do
+        expect(document["solr_year_i"]).to eq(1884)
+      end
     end
 
     context "with no description" do

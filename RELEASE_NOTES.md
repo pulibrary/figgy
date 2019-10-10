@@ -14,6 +14,12 @@ Release notes template:
 
 -->
 
+# 2019-10-10
+
+## Fixed
+
+* Fixed issue where some scanned map geoblacklight documents don't have dates.
+
 # 2019-10-09
 
 ## Added

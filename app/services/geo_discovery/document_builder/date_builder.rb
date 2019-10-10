@@ -40,13 +40,21 @@ module GeoDiscovery
         # Returns a year associated with the layer.
         # @return [Integer] year
         def layer_year
-          layer_year_temporal || layer_year_created
+          layer_year_date || layer_year_temporal || layer_year_created
         end
 
         # Returns a year from resource created date.
         # @return [Integer] year
         def layer_year_created
           year_from_date(resource_decorator.model.created_at)
+        end
+
+        # Returns a year from first value in date.
+        # @return [Integer] year
+        def layer_year_date
+          date = resource_decorator.date
+          return if date.empty?
+          year_from_date(date.first)
         end
 
         # Returns a year from first value in temporal.
@@ -68,10 +76,8 @@ module GeoDiscovery
         # Extracts year as your digit integer from date string
         # @return [Integer] year
         def year_from_date(date)
-          year = date.match(/(?<=\D|^)(\d{4})(?=\D|$)/)
+          year = date.to_s.match(/(?<=\D|^)(\d{4})(?=\D|$)/)
           year ? year[0].to_i : nil
-        rescue
-          nil
         end
     end
   end
