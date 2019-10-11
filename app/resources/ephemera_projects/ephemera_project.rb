@@ -10,4 +10,9 @@ class EphemeraProject < Resource
   def logical_structure
     []
   end
+
+  # Append contributor_uids to edit_users
+  def edit_users
+    self[:edit_users] | contributor_uids
+  end
 end
