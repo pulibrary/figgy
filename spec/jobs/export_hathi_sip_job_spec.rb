@@ -31,7 +31,7 @@ RSpec.describe ExportHathiSipJob do
   describe ".perform" do
     it "exports the object" do
       described_class.perform_now(resource.id, deposit_path)
-      resource_path = deposit_path.join(resource.source_metadata_identifier.first.to_s + ".zip")
+      resource_path = deposit_path.join(resource.source_metadata_identifier.first.to_s + "_sip")
       expect(File.exist?(resource_path)).to eq true
     end
   end
