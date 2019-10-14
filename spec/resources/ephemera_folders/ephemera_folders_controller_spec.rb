@@ -44,6 +44,19 @@ RSpec.describe EphemeraFoldersController, type: :controller do
   describe "new" do
     it_behaves_like "an access controlled new request"
 
+    context "when they have permission to edit the parent" do
+      let(:user) { FactoryBot.create(:user) }
+      render_views
+      it "renders a form for editing the folder" do
+        box = FactoryBot.create_for_repository(:ephemera_box)
+        FactoryBot.create_for_repository(:ephemera_project, member_ids: box.id, contributor_uids: user.uid)
+
+        get :new, params: { parent_id: box.id.to_s }
+
+        expect(response.body).to have_field "Folder number"
+      end
+    end
+
     context "when they have permission" do
       let(:user) { FactoryBot.create(:admin) }
       render_views
@@ -165,6 +178,20 @@ RSpec.describe EphemeraFoldersController, type: :controller do
       let(:params) { valid_params }
       it_behaves_like "an access controlled create request"
     end
+
+    context "when they have permission to update the parent" do
+      let(:user) { FactoryBot.create(:user) }
+      it "can create an ephemera folder" do
+        box = FactoryBot.create_for_repository(:ephemera_box)
+        FactoryBot.create_for_repository(:ephemera_project, member_ids: box.id, contributor_uids: user.uid)
+
+        post :create, params: { ephemera_folder: valid_params.merge(append_id: box.id) }
+
+        expect(response).to be_redirect
+        expect(response.location).to start_with "http://test.host/catalog/"
+      end
+    end
+
     it "can create an ephemera folder" do
       post :create, params: { ephemera_folder: valid_params }
 

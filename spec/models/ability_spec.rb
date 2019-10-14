@@ -80,7 +80,9 @@ describe Ability do
   let(:other_staff_file) { other_staff_scanned_resource.decorate.members.first }
   let(:admin_file) { FactoryBot.build(:file_set, user: admin_user) }
 
-  let(:contributor_ephemera_project) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [contributor_ephemera_folder.id, contributor_ephemera_box.id], contributor_uids: [current_user&.uid]) }
+  let(:contributor_ephemera_project) do
+    FactoryBot.create_for_repository(:ephemera_project, member_ids: [contributor_ephemera_folder.id, contributor_ephemera_box.id], contributor_uids: [current_user&.uid])
+  end
   let(:contributor_ephemera_folder) { FactoryBot.create_for_repository(:ephemera_folder) }
   let(:contributor_ephemera_box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: contributor_ephemera_folder_in_box.id) }
   let(:contributor_ephemera_folder_in_box) { FactoryBot.create_for_repository(:ephemera_folder) }
