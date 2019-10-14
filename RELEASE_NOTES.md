@@ -14,6 +14,13 @@ Release notes template:
 
 -->
 
+# 2019-10-14
+
+## Added
+
+* Ephemera Projects can now have "contributors" assigned, who have permission to
+create/edit folders and boxes only in that Project.
+
 # 2019-10-10
 
 ## Fixed
