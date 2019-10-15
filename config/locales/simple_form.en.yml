@@ -51,6 +51,7 @@ en:
         end: "Date range end"
         approximate: "Date range is approximate"
         slug: "DPUL URL"
+        contributor_uids: "External Depositors"
       numismatics_accession:
         items_number: "Number of items"
       numismatics_issue:

@@ -1,0 +1,8 @@
+  <%= f.input key,
+              as: :select,
+              collection: ControlledVocabulary.for(key).all.sort_by(&:label),
+              label_method: :label,
+              value_method: :value,
+              include_blank: true,
+              input_html: { class: 'contributor-uids', multiple: f.object.multiple?(key) },
+              required: f.object.required?(key) %>

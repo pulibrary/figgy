@@ -65,4 +65,10 @@ class EphemeraFolder < Resource
   def extent
     "#{Array.wrap(page_count).first} page(s)" unless page_count.empty?
   end
+
+  # Inherit edit users from parent Project, to enable external contributors.
+  def edit_users
+    return self[:edit_users] unless persisted?
+    (self[:edit_users] + (Wayfinder.for(self).ephemera_project&.edit_users || [])).uniq
+  end
 end
