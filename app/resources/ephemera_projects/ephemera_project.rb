@@ -13,6 +13,6 @@ class EphemeraProject < Resource
 
   # Append contributor_uids to edit_users
   def edit_users
-    self[:edit_users] | contributor_uids
+    (self[:edit_users] + contributor_uids).uniq
   end
 end

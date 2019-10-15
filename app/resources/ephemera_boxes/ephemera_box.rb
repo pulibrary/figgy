@@ -25,6 +25,6 @@ class EphemeraBox < Resource
   # Inherit edit users from parent Project, to enable external contributors.
   def edit_users
     return self[:edit_users] unless persisted?
-    self[:edit_users] | (Wayfinder.for(self).ephemera_project&.edit_users || [])
+    (self[:edit_users] + (Wayfinder.for(self).ephemera_project&.edit_users || [])).uniq
   end
 end

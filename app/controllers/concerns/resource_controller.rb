@@ -15,11 +15,14 @@ module ResourceController
       redirect_to new_scanned_resource_path
     else
       @change_set = change_set_class.new(new_resource, append_id: params[:parent_id]).prepopulate!
-      # If there's a parent, authorize updating it instead.
       authorize_create!(change_set: @change_set)
     end
   end
 
+  # For new/create if a resource is going to be appended to a parent, the
+  # permissions should be based on the ability to update the parent it's going
+  # to be appended to. Enables users who only have permission to add to a single
+  # Ephemera Project.
   def authorize_create!(change_set:)
     if change_set.append_id.present?
       authorize! :update, query_service.find_by(id: Array(change_set.append_id).first)

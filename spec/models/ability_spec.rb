@@ -87,6 +87,13 @@ describe Ability do
   let(:contributor_ephemera_box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: contributor_ephemera_folder_in_box.id) }
   let(:contributor_ephemera_folder_in_box) { FactoryBot.create_for_repository(:ephemera_folder) }
 
+  let(:non_contributor_ephemera_project) do
+    FactoryBot.create_for_repository(:ephemera_project, member_ids: [contributor_ephemera_folder.id, contributor_ephemera_box.id])
+  end
+  let(:non_contributor_ephemera_folder) { FactoryBot.create_for_repository(:ephemera_folder) }
+  let(:non_contributor_ephemera_box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: contributor_ephemera_folder_in_box.id) }
+  let(:non_contributor_ephemera_folder_in_box) { FactoryBot.create_for_repository(:ephemera_folder) }
+
   let(:admin_user) { FactoryBot.create(:admin) }
   let(:staff_user) { FactoryBot.create(:staff) }
   let(:other_staff_user) { FactoryBot.create(:staff) }
@@ -318,6 +325,10 @@ describe Ability do
       is_expected.to be_able_to(:read, contributor_ephemera_folder)
       is_expected.to be_able_to(:read, contributor_ephemera_box)
       is_expected.to be_able_to(:read, contributor_ephemera_folder_in_box)
+      is_expected.to be_able_to(:manifest, contributor_ephemera_project)
+      is_expected.to be_able_to(:manifest, contributor_ephemera_folder)
+      is_expected.to be_able_to(:manifest, contributor_ephemera_box)
+      is_expected.to be_able_to(:manifest, contributor_ephemera_folder_in_box)
       is_expected.to be_able_to(:edit, contributor_ephemera_project)
       is_expected.to be_able_to(:edit, contributor_ephemera_folder)
       is_expected.to be_able_to(:edit, contributor_ephemera_box)
@@ -331,6 +342,24 @@ describe Ability do
       is_expected.not_to be_able_to(:delete, contributor_ephemera_folder)
       is_expected.not_to be_able_to(:delete, contributor_ephemera_box)
       is_expected.not_to be_able_to(:delete, contributor_ephemera_folder_in_box)
+
+      is_expected.not_to be_able_to(:manifest, non_contributor_ephemera_project)
+      is_expected.not_to be_able_to(:manifest, non_contributor_ephemera_folder)
+      is_expected.not_to be_able_to(:manifest, non_contributor_ephemera_box)
+      is_expected.not_to be_able_to(:manifest, non_contributor_ephemera_folder_in_box)
+      is_expected.not_to be_able_to(:edit, non_contributor_ephemera_project)
+      is_expected.not_to be_able_to(:edit, non_contributor_ephemera_folder)
+      is_expected.not_to be_able_to(:edit, non_contributor_ephemera_box)
+      is_expected.not_to be_able_to(:edit, non_contributor_ephemera_folder_in_box)
+      is_expected.not_to be_able_to(:update, non_contributor_ephemera_project)
+      is_expected.not_to be_able_to(:update, non_contributor_ephemera_folder)
+      is_expected.not_to be_able_to(:update, non_contributor_ephemera_box)
+      is_expected.not_to be_able_to(:update, non_contributor_ephemera_folder_in_box)
+
+      is_expected.not_to be_able_to(:delete, non_contributor_ephemera_project)
+      is_expected.not_to be_able_to(:delete, non_contributor_ephemera_folder)
+      is_expected.not_to be_able_to(:delete, non_contributor_ephemera_box)
+      is_expected.not_to be_able_to(:delete, non_contributor_ephemera_folder_in_box)
     }
 
     context "when accessing figgy via a campus IP" do
