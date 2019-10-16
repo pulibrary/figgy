@@ -9,7 +9,6 @@ describe Preserver do
   let(:resource) do
     FactoryBot.create_for_repository(:complete_scanned_resource,
                                      source_metadata_identifier: "123456",
-                                     preservation_policy: "cloud",
                                      files: [file])
   end
   let(:unpreserved_resource) do

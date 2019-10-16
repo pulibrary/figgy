@@ -31,14 +31,4 @@ RSpec.describe ControlledVocabulary do
       end
     end
   end
-
-  describe "preservation_policy" do
-    describe "#all" do
-      it "returns the cloud preservation policy" do
-        vocabulary = described_class.for(:preservation_policy)
-
-        expect(vocabulary.all).to contain_exactly ControlledVocabulary::Term.new(label: "Cloud Storage", value: "cloud")
-      end
-    end
-  end
 end

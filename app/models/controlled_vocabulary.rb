@@ -310,16 +310,6 @@ class ControlledVocabulary
     end
   end
 
-  class PreservationPolicy < ControlledVocabulary
-    ControlledVocabulary.register(:preservation_policy, self)
-
-    def all(_scope = nil)
-      [
-        Term.new(label: "Cloud Storage", value: "cloud")
-      ]
-    end
-  end
-
   # Controlled vocabularies for PDF types
   # Unlike with other authorities, no YAML file is used for these values
   class DownloadableState < ControlledVocabulary

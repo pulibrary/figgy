@@ -104,7 +104,7 @@ RSpec.describe MediaResourceChangeSet do
   end
 
   describe "#preserve?" do
-    let(:media_resource) { FactoryBot.create_for_repository(:media_resource, preservation_policy: "cloud", state: "complete") }
+    let(:media_resource) { FactoryBot.create_for_repository(:media_resource, state: "complete") }
 
     it "determines whether or not a resource should be preserved" do
       expect(change_set.preserve?).to be true
