@@ -76,7 +76,8 @@ module LinkedData
     end
 
     def title
-      Array.wrap(decorated_resource.title).first
+      [Array.wrap(decorated_resource.title).first] +
+        Array.wrap(try(:transliterated_title))
     end
 
     def series
