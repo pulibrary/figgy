@@ -20,6 +20,12 @@ Release notes template:
 * Automatically adding links to Figgy objects to finding aids as DAO elements.
 * Exporting collections as PDFs.
 
+# 2019-10-16
+
+## Added
+
+* Figgy resources are now preserved by default
+
 # 2019-10-14
 
 ## Added

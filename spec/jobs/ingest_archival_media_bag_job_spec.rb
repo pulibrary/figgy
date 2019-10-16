@@ -271,14 +271,12 @@ RSpec.describe IngestArchivalMediaBagJob do
 
         expect(resources.size).to eq 1
         expect(resources.first.source_metadata_identifier).to eq ["C0652_c0377"]
-        expect(DynamicChangeSet.new(resources.first).preservation_policy).to eq "cloud"
 
         member = Wayfinder.for(resources.first).members.first
         expect(member).to be_a ScannedResource
         expect(member.change_set).to eq "recording"
         expect(member.local_identifier.first).to eq "32101047382401"
         expect(member.title).to eq ["Interview: ERM / Jose Donoso (A2)"]
-        expect(DynamicChangeSet.new(member).preservation_policy).to eq "cloud"
 
         file_sets = Wayfinder.for(member).members
         expect(file_sets.count).to eq 4
