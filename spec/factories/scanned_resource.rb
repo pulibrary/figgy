@@ -53,6 +53,9 @@ FactoryBot.define do
       factory :draft_recording do
         state "draft"
       end
+      factory :complete_recording do
+        state "complete"
+      end
     end
     factory :open_scanned_resource do
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC

@@ -4,7 +4,7 @@ require "rails_helper"
 RSpec.describe TombstoneChangeSet do
   subject(:change_set) { described_class.new(resource) }
 
-  let(:resource) { FactoryBot.build(:tombstone) }
+  let(:resource) { FactoryBot.create_for_repository(:tombstone) }
 
   describe "#preserve?" do
     it "is not preserved" do
