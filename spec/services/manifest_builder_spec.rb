@@ -499,6 +499,15 @@ RSpec.describe ManifestBuilder do
     end
   end
 
+  context "when an ephemera folder has a transliterated title" do
+    subject(:manifest_builder) { described_class.new(query_service.find_by(id: folder.id)) }
+    let(:folder) { FactoryBot.create_for_repository(:ephemera_folder, title: ["title"], transliterated_title: ["transliterated"]) }
+    it "includes that in the manifest label" do
+      output = manifest_builder.build
+      expect(output["label"]).to eq ["title", "transliterated"]
+    end
+  end
+
   context "when given a nested child" do
     let(:scanned_resource) do
       FactoryBot.create_for_repository(:scanned_resource,

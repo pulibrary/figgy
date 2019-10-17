@@ -40,6 +40,8 @@ class ManifestBuilder
         end
       when EphemeraProject
         EphemeraProjectNode.new(resource)
+      when EphemeraFolder
+        EphemeraFolderNode.new(resource)
       when IndexCollection
         IndexCollectionNode.new(resource)
       when ScannedMap
@@ -334,6 +336,12 @@ class ManifestBuilder
   class EphemeraProjectNode < CollectionNode
     def members
       @members ||= query_service.custom_queries.find_project_folders(resource: resource).to_a
+    end
+  end
+
+  class EphemeraFolderNode < RootNode
+    def to_s
+      (resource.title + resource.transliterated_title).map(&:to_s)
     end
   end
 
