@@ -31,12 +31,10 @@ module Types::Resource
   end
 
   def members
-    # This loads members using FindMembersWithInverseRelationship, which
-    # populates `loaded` on all members with the given property. In this case
-    # all returned members have `loaded[:parents] = [parent]`, which the
-    # decorator takes advantage of if it exists (FileSetDecorator#parent). This
-    # way the parent is pre-loaded and it won't run N+1 queries to determine the
-    # FileSet's parent type.
+    # This loads members but pre-populates the object as the members' parent
+    # relationship in `loaded` so that each member won't have to query for its
+    # parent. The FileSet decorator takes advantage of this in
+    # `FileSetDecorator#parent`.
     @members ||= Wayfinder.for(object).members_with_parents
   end
 
