@@ -40,9 +40,13 @@ namespace :export do
     end
   end
 
+  # Part of the process of exporting a finding aid to disk with local PDFs.  This task
+  # exports PDFs from a collection to disk, which are then linked to using the
+  # export:pulfa_pdf task.
+  desc "Export PDFs for every item in a collection"
   task collection_pdf: :environment do
     colid = ENV["COLL"]
-    abort "usage: rake export:archival_collection_pdfs COLL=[collection code]" unless colid
+    abort "usage: rake export:collection_pdf COLL=[collection id]" unless colid
     ExportCollectionPDFJob.perform_now(colid)
   end
 
@@ -67,5 +71,24 @@ namespace :export do
     Dir.mkdir output_dir unless File.directory? output_dir
     exporter = CicognaraMarc.new(cico_collection_id: coll, out_dir: output_dir)
     exporter.run
+  end
+
+  desc "Export IIIF manifest links to PULFA DAOs"
+  task pulfa: :environment do
+    begin
+      since = ENV["SINCE"] || (Time.zone.today - 7).strftime("%Y-%m-%d")
+      PulfaExporter.new(since_date: since).export
+    rescue PulfaExporter::SvnClient::SvnDirectoryError => e
+      puts e.to_s
+    end
+  end
+
+  # Part of the process of exporting a finding aid to disk with local PDFs.  This task adds
+  # DAO links to the EAD pointing to the PDFs which are exported with export:collection_pdf
+  # task.
+  desc "Export PDFs to PULFA DAOs"
+  task pulfa_pdf: :environment do
+    colid = ENV["COLL"]
+    PulfaExporter.new(since_date: nil).export_pdf(colid)
   end
 end
