@@ -1851,6 +1851,22 @@ RSpec.describe ChangeSetPersister do
       end
     end
   end
+  context "when preserving a collection" do
+    before do
+      allow(PreserveChildrenJob).to receive(:perform_later)
+    end
+
+    it "does not preserve it's members" do
+      collection = FactoryBot.create_for_repository(:collection)
+      FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id)
+      change_set = DynamicChangeSet.new(collection)
+      change_set.validate(state: "complete")
+      change_set_persister.save(change_set: change_set)
+
+      expect(PreserveChildrenJob).to have_received(:perform_later).exactly(0).times
+    end
+  end
+
   context "when uploading a PDF to a ScannedResource", run_real_characterization: true, run_real_derivatives: true do
     with_queue_adapter :inline
     it "characterizes" do
