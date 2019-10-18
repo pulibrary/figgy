@@ -80,13 +80,6 @@ jobs:
       - attach_workspace:
           at: '~/figgy'
       - run: sudo sh bin/ci_mediainfo_install.sh
-      - run:
-          name: Install Chrome
-          command: |
-            wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-            sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-            sudo apt-get update
-            sudo apt-get -y install google-chrome-stable
       - run: sudo apt-get update
       - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev tesseract-ocr tesseract-ocr-ita tesseract-ocr-eng mediainfo ffmpeg postgresql-client
       - run: sudo sh bin/ci_simple_tiles_install.sh
