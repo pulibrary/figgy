@@ -67,7 +67,7 @@ class VectorResourceDerivativeService
     run_derivatives
     change_set.files = [build_display_file, build_thumbnail_file]
     change_set_persister.buffer_into_index do |buffered_persister|
-      buffered_persister.save(change_set: change_set)
+      @resource = buffered_persister.save(change_set: change_set)
     end
     unzip_display
     # Attempt to insert the file_set download path into an FGDC onlink

@@ -13,6 +13,13 @@ Release notes template:
 ## Removed
 
 -->
+
+# 2019-10-18
+
+## Fixed
+
+* Fixes stale object errors for raster and vector resource derivatives.
+
 # 2019-10-18
 
 ## Added
