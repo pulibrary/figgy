@@ -176,7 +176,7 @@ module ApplicationHelper
   # @param [Valkyrie::Resource]
   # @return [String]
   def universal_viewer_path(resource)
-    "/viewer#?manifest=#{manifest_url(resource)}&config=#{viewer_config_url(resource.id)}"
+    "/viewer#?manifest=#{manifest_url(resource)}&config=#{viewer_config_url(resource.id)}.json"
   end
 
   def collection_present?
