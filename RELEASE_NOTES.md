@@ -14,6 +14,13 @@ Release notes template:
 
 -->
 
+# 2019-10-23
+
+## Fixed
+
+* Removed the IIIF viewer download drop-down menu for non-downloadable public resources.
+* Anonymous downloads are disabled for non-downloadable public resources.
+
 # 2019-10-18
 
 ## Fixed

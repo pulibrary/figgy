@@ -6,6 +6,7 @@ describe Ability do
   subject { described_class.new(current_user) }
   let(:page_file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:page_file_2) { fixture_file_upload("files/example.tif", "image/tiff") }
+  let(:page_file_3) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:shoulder) { "99999/fk4" }
   let(:blade) { "123456" }
 
@@ -22,6 +23,12 @@ describe Ability do
   let(:open_file_set) do
     query_service.find_by(id: open_scanned_resource.member_ids.first)
   end
+
+  let(:no_public_download_open_scanned_resource) do
+    FactoryBot.create_for_repository(:complete_open_scanned_resource, user: creating_user, title: "Open", downloadable: "none", files: [page_file_3])
+  end
+
+  let(:no_public_download_open_file) { no_public_download_open_scanned_resource.decorate.members.first }
 
   let(:closed_file_set) do
     query_service.find_by(id: private_scanned_resource.member_ids.first)
@@ -147,6 +154,7 @@ describe Ability do
       is_expected.to be_able_to(:discover, reading_room_scanned_resource)
       is_expected.to be_able_to(:discover, campus_ip_scanned_resource)
       is_expected.to be_able_to(:read, :graphql)
+      is_expected.to be_able_to(:download, no_public_download_open_file)
     }
 
     context "when read-only mode is on" do
@@ -228,6 +236,7 @@ describe Ability do
       is_expected.to be_able_to(:discover, reading_room_scanned_resource)
       is_expected.to be_able_to(:discover, campus_ip_scanned_resource)
       is_expected.to be_able_to(:read, :graphql)
+      is_expected.to be_able_to(:download, no_public_download_open_file)
     }
 
     context "when read-only mode is on" do
@@ -314,6 +323,7 @@ describe Ability do
       is_expected.not_to be_able_to(:destroy, role)
       is_expected.not_to be_able_to(:complete, pending_scanned_resource)
       is_expected.not_to be_able_to(:destroy, admin_file)
+      is_expected.not_to be_able_to(:download, no_public_download_open_file)
 
       is_expected.to be_able_to(:discover, open_scanned_resource)
       is_expected.not_to be_able_to(:discover, pending_scanned_resource)
@@ -542,6 +552,7 @@ describe Ability do
       is_expected.not_to be_able_to(:destroy, role)
       is_expected.not_to be_able_to(:complete, pending_scanned_resource)
       is_expected.not_to be_able_to(:destroy, admin_file)
+      is_expected.not_to be_able_to(:download, no_public_download_open_file)
 
       is_expected.to be_able_to(:discover, open_scanned_resource)
       is_expected.not_to be_able_to(:discover, private_scanned_resource)
@@ -662,6 +673,7 @@ describe Ability do
 
       it "provides access to a resource" do
         is_expected.to be_able_to(:read, vector_resource)
+        is_expected.to be_able_to(:download, no_public_download_open_file)
       end
     end
 

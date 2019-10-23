@@ -9,12 +9,14 @@ RSpec.describe "catalog/_members_file_set" do
   let(:file_set) do
     FactoryBot.create_for_repository(:file_set, file_metadata: [original_file, derivative_file, thumbnail_file, derivative_file_partial])
   end
+  let(:parent) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [file_set.id]) }
   let(:solr) { Valkyrie::MetadataAdapter.find(:index_solr) }
   let(:document) { solr.resource_factory.from_resource(resource: file_set) }
   let(:solr_document) { SolrDocument.new(document) }
   let(:user) { FactoryBot.create(:user) }
 
   before do
+    parent
     assign :resource, file_set
     assign :document, solr_document
     sign_in user
