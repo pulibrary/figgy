@@ -24,6 +24,9 @@ describe ViewerConfiguration do
       expect(described_class.default_values["modules"]["footerPanel"]["options"]).to include(
         "shareEnabled" => false
       )
+      expect(described_class.default_values["modules"]["avCenterPanel"]["options"]).to include(
+        "posterImageExpanded" => true
+      )
     end
   end
 
