@@ -79,8 +79,8 @@ Rails.application.config.to_prepare do
     Shrine.storages = {
       preservation: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["preservation_bucket"]),
       versioned_preservation: Shrine::Storage::VersionedGoogleCloudStorage.new(bucket: Figgy.config["preservation_bucket"]),
-      private_raster_storage: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["raster_storage_bucket"]),
-      public_raster_storage: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["raster_storage_bucket"])
+      restricted_raster_storage: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["restricted_raster_storage_bucket"]),
+      public_raster_storage: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["public_raster_storage_bucket"], default_acl: "publicRead")
     }
     Valkyrie::StorageAdapter.register(
       Valkyrie::Storage::Shrine.new(
@@ -100,7 +100,10 @@ Rails.application.config.to_prepare do
     )
     Valkyrie::StorageAdapter.register(
       Valkyrie::Storage::Shrine.new(
-        Shrine.storages[:public_raster_storage]
+        Shrine.storages[:public_raster_storage],
+        nil,
+        Valkyrie::Storage::Disk::BucketedStorage,
+        identifier_prefix: "gcs_primary"
       ),
       :geo_derivatives
     )

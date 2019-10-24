@@ -31,8 +31,9 @@ class GeoserverMessageGenerator
     # Generate the file path for the first derivative appended to the resource
     # @return [String]
     def derivative_file_path
-      derivative_id = resource.derivative_file.file_identifiers.first
-      Valkyrie::StorageAdapter.find_by(id: derivative_id).io.path
+      # derivative_id = resource.derivative_file.file_identifiers.first
+      # Valkyrie::StorageAdapter.find_by(id: derivative_id).io.path
+      return ""
     rescue Valkyrie::StorageAdapter::FileNotFound
       return ""
     end

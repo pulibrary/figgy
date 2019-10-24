@@ -16,6 +16,7 @@ class DownloadsController < ApplicationController
     # Only append auth tokens to HLS if necessary, otherwise let normal behavior
     # take care of sending it.
     return send_hls if file_desc.mime_type.first.to_s == "application/x-mpegURL" && params[:auth_token].present?
+    return cloud_redirect if file.file.is_a?(Valkyrie::StorageAdapter::StreamFile)
     prepare_file_headers
     # Necessary until a Rack version is released which allows for multiple
     # HTTP_X_ACCEL_MAPPING. When this commit is in a released version:
@@ -23,6 +24,11 @@ class DownloadsController < ApplicationController
     # remove this line and move it to the nginx configuration.
     request.env["HTTP_X_ACCEL_MAPPING"] = "/opt/repository/=/restricted_repository/"
     send_file(load_file.file.disk_path, filename: load_file.original_name, type: load_file.mime_type, disposition: :inline)
+  end
+
+  def cloud_redirect
+    cloud_adapter = Valkyrie::StorageAdapter.adapter_for(id: file.file.id)
+    redirect_to cloud_adapter.shrine.url(cloud_adapter.send(:shrine_id_for, file.file.id), expires: 10.minutes.from_now.to_f)
   end
 
   def send_hls
@@ -84,6 +90,6 @@ class DownloadsController < ApplicationController
   end
 
   def storage_adapter
-    Valkyrie.config.storage_adapter
+    Valkyrie::StorageAdapter
   end
 end

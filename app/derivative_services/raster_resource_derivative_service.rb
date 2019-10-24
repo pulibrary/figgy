@@ -65,7 +65,7 @@ class RasterResourceDerivativeService
     run_derivatives
     change_set.files = [build_display_file, build_thumbnail_file]
     change_set_persister.buffer_into_index do |buffered_persister|
-      @resource = buffered_persister.save(change_set: change_set)
+      buffered_persister.save(change_set: change_set)
     end
     update_error_message(message: nil) if original_file.error_message.present?
   rescue StandardError => error
@@ -78,7 +78,7 @@ class RasterResourceDerivativeService
   end
 
   def filename
-    return Pathname.new(file_object.io.path) if file_object.io.respond_to?(:path) && File.exist?(file_object.io.path)
+    return Pathname.new(file_object.disk_path) if file_object.respond_to?(:disk_path) && File.exist?(file_object.disk_path)
   end
 
   def instructions_for_display

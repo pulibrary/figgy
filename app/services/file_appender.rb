@@ -117,6 +117,7 @@ class FileAppender
       )
       node = FileMetadata.for(file: file).new(attributes)
       original_filename = file.original_filename
+      file = File.open(file.path) if file.respond_to?(:path)
       file = storage_adapter.upload(file: file, resource: node, original_filename: original_filename)
       node.file_identifiers = node.file_identifiers + [file.id]
       node
