@@ -1,5 +1,7 @@
 defaults: &defaults
   preservation_bucket: "figgy-staging-preservation"
+  restricted_raster_storage_bucket: "figgy-staging-restricted-raster"
+  public_raster_storage_bucket: "figgy-staging-public-raster"
   fixity_status_topic: "figgy-staging-fixity-status"
   fixity_request_topic: "figgy-staging-fixity-request"
   disk_preservation_path: <%= Rails.root.join("tmp", "cloud_backup") %>

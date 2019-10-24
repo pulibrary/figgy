@@ -78,7 +78,9 @@ Rails.application.config.to_prepare do
     require "shrine/storage/google_cloud_storage"
     Shrine.storages = {
       preservation: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["preservation_bucket"]),
-      versioned_preservation: Shrine::Storage::VersionedGoogleCloudStorage.new(bucket: Figgy.config["preservation_bucket"])
+      versioned_preservation: Shrine::Storage::VersionedGoogleCloudStorage.new(bucket: Figgy.config["preservation_bucket"]),
+      private_raster_storage: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["raster_storage_bucket"]),
+      public_raster_storage: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["raster_storage_bucket"])
     }
     Valkyrie::StorageAdapter.register(
       Valkyrie::Storage::Shrine.new(
@@ -96,6 +98,14 @@ Rails.application.config.to_prepare do
       ),
       :versioned_google_cloud_storage
     )
+    Valkyrie::StorageAdapter.register(
+      Valkyrie::Storage::Shrine.new(
+        Shrine.storages[:public_raster_storage],
+        nil,
+        Valkyrie::Storage::Disk::BucketedStorage
+      ),
+      :geo_derivatives
+    )
   else
     # If GCS isn't configured, use a disk persister that saves in the same
     # structure as GCS.
@@ -110,6 +120,19 @@ Rails.application.config.to_prepare do
     Valkyrie::StorageAdapter.register(
       Valkyrie::StorageAdapter.find(:google_cloud_storage),
       :versioned_google_cloud_storage
+    )
+    Valkyrie::StorageAdapter.register(
+      InstrumentedStorageAdapter.new(
+        storage_adapter: Valkyrie::Storage::Disk.new(
+          base_path: Figgy.config["geo_derivative_path"],
+          file_mover: lambda { |old_path, new_path|
+                        FileUtils.mv(old_path, new_path)
+                        FileUtils.chmod(0o644, new_path)
+                      }
+        ),
+        tracer: Datadog.tracer
+      ),
+      :geo_derivatives
     )
   end
 
@@ -134,29 +157,6 @@ Rails.application.config.to_prepare do
       tracer: Datadog.tracer
     ),
     :derivatives
-  )
-
-  # Registers a storage adapter for a *NIX file system
-  # Binaries are persisted by invoking "mv" with access limited to read/write for owning users, and read-only for all others
-  # NOTE: "mv" may preserve the inode for the file system
-  # @see http://manpages.ubuntu.com/manpages/xenial/man1/mv.1.html
-  # This `mv` ensures that files can be read by any process on the server
-  # `644` is the octal value of the bitmask used in order to ensure that the derivative file globally-readable
-  # The file system in the server environment was overriding this, specifically for cases where files were saved to...
-  # ...the IIIF image server network file share (libimages1) with a file access control octal value of 600 (globally-unreadable)
-  # @see https://help.ubuntu.com/community/FilePermissions
-  Valkyrie::StorageAdapter.register(
-    InstrumentedStorageAdapter.new(
-      storage_adapter: Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config["geo_derivative_path"],
-        file_mover: lambda { |old_path, new_path|
-                      FileUtils.mv(old_path, new_path)
-                      FileUtils.chmod(0o644, new_path)
-                    }
-      ),
-      tracer: Datadog.tracer
-    ),
-    :geo_derivatives
   )
 
   # Registers a storage adapter for storing a Bag on a *NIX file system
