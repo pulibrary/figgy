@@ -79,8 +79,8 @@ Rails.application.config.to_prepare do
     Shrine.storages = {
       preservation: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["preservation_bucket"]),
       versioned_preservation: Shrine::Storage::VersionedGoogleCloudStorage.new(bucket: Figgy.config["preservation_bucket"]),
-      restricted_raster_storage: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["restricted_raster_storage_bucket"]),
-      public_raster_storage: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["public_raster_storage_bucket"], default_acl: "publicRead")
+      restricted_raster_storage: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["public_raster_storage_bucket"], prefix: "gcp_restricted_raster"),
+      public_raster_storage: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["public_raster_storage_bucket"], default_acl: "publicRead", prefix: "gcp_public_raster")
     }
     Valkyrie::StorageAdapter.register(
       Valkyrie::Storage::Shrine.new(
@@ -103,9 +103,18 @@ Rails.application.config.to_prepare do
         Shrine.storages[:public_raster_storage],
         nil,
         Valkyrie::Storage::Disk::BucketedStorage,
-        identifier_prefix: "gcs_primary"
+        identifier_prefix: "gcp_public_raster"
       ),
-      :geo_derivatives
+      :public_raster_derivatives
+    )
+    Valkyrie::StorageAdapter.register(
+      Valkyrie::Storage::Shrine.new(
+        Shrine.storages[:restricted_raster_storage],
+        nil,
+        Valkyrie::Storage::Disk::BucketedStorage,
+        identifier_prefix: "gcp_restricted_raster"
+      ),
+      :restricted_raster_derivatives
     )
   else
     # If GCS isn't configured, use a disk persister that saves in the same
@@ -133,9 +142,36 @@ Rails.application.config.to_prepare do
         ),
         tracer: Datadog.tracer
       ),
-      :geo_derivatives
+      :public_raster_derivatives
+    )
+    Valkyrie::StorageAdapter.register(
+      InstrumentedStorageAdapter.new(
+        storage_adapter: Valkyrie::Storage::Disk.new(
+          base_path: Figgy.config["geo_derivative_path"],
+          file_mover: lambda { |old_path, new_path|
+                        FileUtils.mv(old_path, new_path)
+                        FileUtils.chmod(0o644, new_path)
+                      }
+        ),
+        tracer: Datadog.tracer
+      ),
+      :restricted_raster_derivatives
     )
   end
+
+  Valkyrie::StorageAdapter.register(
+    InstrumentedStorageAdapter.new(
+      storage_adapter: Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config["geo_derivative_path"],
+        file_mover: lambda { |old_path, new_path|
+                      FileUtils.mv(old_path, new_path)
+                      FileUtils.chmod(0o644, new_path)
+                    }
+      ),
+      tracer: Datadog.tracer
+    ),
+    :geo_derivatives
+  )
 
   # Registers a storage adapter for a *NIX file system
   # Binaries are persisted by invoking "mv" with access limited to read/write for owning users, and read-only for all others
@@ -297,13 +333,22 @@ Rails.application.config.to_prepare do
     )
   )
 
-  # Construct and register the derivative service objects for geospatial raster data sets
-  Valkyrie::Derivatives::DerivativeService.services << RasterResourceDerivativeService::Factory.new(
+  # Construct and register the derivative service objects for public geospatial raster data sets
+  Valkyrie::Derivatives::DerivativeService.services << PublicRasterResourceDerivativeService::Factory.new(
     change_set_persister: ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
-      storage_adapter: Valkyrie::StorageAdapter.find(:geo_derivatives)
+      storage_adapter: Valkyrie::StorageAdapter.find(:public_raster_derivatives)
     )
   )
+
+  # Construct and register the derivative service objects for restricted geospatial raster data sets
+  Valkyrie::Derivatives::DerivativeService.services << RestrictedRasterResourceDerivativeService::Factory.new(
+    change_set_persister: ::ChangeSetPersister.new(
+      metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
+      storage_adapter: Valkyrie::StorageAdapter.find(:restricted_raster_derivatives)
+    )
+  )
+
   Valkyrie::Derivatives::DerivativeService.services << ExternalMetadataDerivativeService::Factory.new(
     change_set_persister: ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
