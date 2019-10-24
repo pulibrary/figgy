@@ -100,9 +100,7 @@ Rails.application.config.to_prepare do
     )
     Valkyrie::StorageAdapter.register(
       Valkyrie::Storage::Shrine.new(
-        Shrine.storages[:public_raster_storage],
-        nil,
-        Valkyrie::Storage::Disk::BucketedStorage
+        Shrine.storages[:public_raster_storage]
       ),
       :geo_derivatives
     )
