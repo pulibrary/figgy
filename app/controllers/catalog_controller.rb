@@ -57,6 +57,8 @@ class CatalogController < ApplicationController
       suggester_name: "iiifSuggester"
     }
 
+    config.repository_class = Postgres::Repository
+
     config.default_solr_params = {
       qf: search_config["qf"],
       qt: search_config["qt"],

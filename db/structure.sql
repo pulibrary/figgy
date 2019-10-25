@@ -490,6 +490,13 @@ CREATE INDEX index_orm_resources_on_metadata_jsonb_path_ops ON public.orm_resour
 
 
 --
+-- Name: index_orm_resources_on_to_tsvector_english_metadata; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_orm_resources_on_to_tsvector_english_metadata ON public.orm_resources USING gin (to_tsvector('english'::regconfig, metadata));
+
+
+--
 -- Name: index_orm_resources_on_updated_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -602,6 +609,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181030210350'),
 ('20181115195544'),
 ('20190102173711'),
-('20190521200107');
+('20191025015550');
 
 
