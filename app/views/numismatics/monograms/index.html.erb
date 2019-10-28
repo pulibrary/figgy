@@ -13,7 +13,7 @@
       <% @numismatic_monograms.each do |monogram| %>
         <tr>
           <td><%= render_thumbnail_tag monogram, { onerror: default_icon_fallback }, suppress_link: true %></td>
-          <td><%= monogram.decorated_file_sets&.first&.titles&.join(', ') %> </td>
+          <td><%= monogram.decorated_filename %> </td>
           <td><%= monogram.title %></td></td>
           <td>
             <%= link_to 'View', solr_document_path(monogram.id.to_s), class: 'btn btn-default' %>
