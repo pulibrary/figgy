@@ -2,11 +2,11 @@
 module Postgres
   class Repository < Blacklight::AbstractRepository
     def search(params = {})
+      params.query
+      relation = params.relation
       offset = (params.page - 1) * params.rows
-      relation = query_service.resources.exclude(internal_resource: [EphemeraTerm, FileSet, EphemeraVocabulary, EphemeraProject, EphemeraField].map(&:to_s)).where(Sequel.pg_jsonb_op(:metadata).contains({state: ["complete"], read_groups: ["public"]}))
-
       if params.query["q"].present?
-        relation = relation.full_text_search(Sequel.function(:to_tsvector, Sequel[:metadata]), params.query["q"], plain: true, tsvector: true, language: 'english')
+        relation = relation.full_text_search(Sequel.function(:to_tsvector, Sequel[:metadata]), params.query["q"], plain: true, tsvector: true, language: "english")
        end
       rows = relation.limit(params.rows).offset(offset).to_a.map do |resource|
         metadata_adapter.resource_factory.to_resource(object: resource)
@@ -20,9 +20,7 @@ module Postgres
       )
     end
 
-    def query_service
-      metadata_adapter.query_service
-    end
+    delegate :query_service, to: :metadata_adapter
 
     def query
       <<-SQL
@@ -61,9 +59,7 @@ module Postgres
       @count = count
     end
 
-    def rows
-      params.rows
-    end
+    delegate :rows, to: :params
 
     def grouped?
       false
