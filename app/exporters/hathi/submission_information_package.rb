@@ -55,8 +55,8 @@ module Hathi
 
       def deposit_checksums
         File.open(File.join(@export_dir, "checksum.md5"), "w") do |f|
-          # iterate over k,v in checksums
-          checksums.each { |k, v| f.write format("%s %s\n", v, k) }
+          # iterate over k,v in checksums; two spaces so md5sum command can verify
+          checksums.each { |k, v| f.write format("%s  %s\n", v, k) }
         end
       end
 
