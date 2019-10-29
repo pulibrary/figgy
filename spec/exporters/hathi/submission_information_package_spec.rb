@@ -8,18 +8,20 @@ RSpec.describe Hathi::SubmissionInformationPackage do
   let(:file2) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:deposit_path) { Rails.root.join("tmp", "test_hathi") }
   let(:package) { Hathi::ContentPackage.new(resource: resource) }
+  with_queue_adapter :inline
   let(:resource) do
     file1 = fixture_file_upload("files/example.tif", "image/tiff")
     file2 = fixture_file_upload("files/example.tif", "image/tiff")
     scanned_resource = FactoryBot.create_for_repository(:scanned_resource,
                                                         source_metadata_identifier: "123456",
+                                                        ocr_language: "eng",
                                                         files: [file1, file2])
-    Wayfinder.for(scanned_resource).members.each_with_index do |file_set, idx|
-      pagename = (idx + 1).to_s.rjust(8, "0")
-      file_set.ocr_content = "the OCR for page " + pagename
-      file_set.hocr_content = "the hOCR for page " + pagename
-      Valkyrie::MetadataAdapter.find(:indexing_persister).persister.save(resource: file_set)
-    end
+    # Wayfinder.for(scanned_resource).members.each_with_index do |file_set, idx|
+    #   pagename = (idx + 1).to_s.rjust(8, "0")
+    #   file_set.ocr_content = "the OCR for page " + pagename
+    #   file_set.hocr_content = "the hOCR for page " + pagename
+    #   Valkyrie::MetadataAdapter.find(:indexing_persister).persister.save(resource: file_set)
+    # end
     scanned_resource
   end
 
@@ -29,9 +31,9 @@ RSpec.describe Hathi::SubmissionInformationPackage do
     depositor.export
   end
 
-  after do
-    FileUtils.rm_rf(deposit_path) if File.exist?(deposit_path)
-  end
+  # after do
+  #   FileUtils.rm_rf(deposit_path) if File.exist?(deposit_path)
+  # end
 
   describe ".deposit" do
     it "creates a SIP directory on disk" do
@@ -48,10 +50,10 @@ RSpec.describe Hathi::SubmissionInformationPackage do
       dir.each do |f|
         file_names << f
       end
-      expect(file_names).to include("00000001.tif")
+      expect(file_names).to include("00000001.jp2")
       expect(file_names).to include("00000001.txt")
       expect(file_names).to include("00000001.html")
-      expect(file_names).to include("00000002.tif")
+      expect(file_names).to include("00000002.jp2")
       expect(file_names).to include("00000002.txt")
       expect(file_names).to include("00000002.html")
       expect(file_names).to include("checksum.md5")

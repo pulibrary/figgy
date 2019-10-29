@@ -29,10 +29,12 @@ module Hathi
       def deposit_files
         package.pages.each do |page|
           digester.reset
-          FileUtils.cp page.tiff_path,
-                       File.join(@export_dir, page.name + ".tif")
-          digester.file page.tiff_path
-          checksums[page.name + ".tif"] = digester.hexdigest
+          # FileUtils.cp page.tiff_path,
+          #              File.join(@export_dir, page.name + ".tif")
+          FileUtils.cp page.derivative_path,
+                       File.join(@export_dir, page.name + ".jp2")
+          digester.file page.derivative_path
+          checksums[page.name + ".jp2"] = digester.hexdigest
 
           next unless page.ocr?
           digester.reset

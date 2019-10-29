@@ -4,19 +4,21 @@ include ActionDispatch::TestProcess
 
 RSpec.describe Hathi::ContentPackage do
   subject(:package) { described_class.new(resource: dummy_resource) }
-
+  with_queue_adapter :inline
   let(:dummy_resource) do
     file1 = fixture_file_upload("files/example.tif", "image/tiff")
     file2 = fixture_file_upload("files/example.tif", "image/tiff")
     scanned_resource = FactoryBot.create_for_repository(:scanned_resource,
                                                         source_metadata_identifier: "123456",
+                                                        ocr_language: "eng",
                                                         files: [file1, file2])
-    Wayfinder.for(scanned_resource).members.each_with_index do |file_set, idx|
-      pagename = (idx + 1).to_s.rjust(8, "0")
-      file_set.ocr_content = "the OCR for page " + pagename
-      file_set.hocr_content = "the hOCR for page " + pagename
-      Valkyrie::MetadataAdapter.find(:indexing_persister).persister.save(resource: file_set)
-    end
+    # Wayfinder.for(scanned_resource).members.each_with_index do |file_set, idx|
+    #   pagename = (idx + 1).to_s.rjust(8, "0")
+    #   file_set.derivative_files << derivative_1
+    #   file_set.ocr_content = "the OCR for page " + pagename
+    #   file_set.hocr_content = "the hOCR for page " + pagename
+    #   Valkyrie::MetadataAdapter.find(:indexing_persister).persister.save(resource: file_set)
+    #    end
     scanned_resource
   end
 
@@ -57,14 +59,19 @@ RSpec.describe Hathi::ContentPackage do
       expect(page.tiff_path.ftype).to eq "file"
     end
 
+    it "has paths to jp2 files" do
+      page = package.pages.first
+      expect(page.derivative_path.ftype).to eq "file"
+    end
+
     it "has text streams" do
       page = package.pages.first
-      expect(page.to_txt).to eq("the OCR for page 00000001")
+      expect(page.to_txt).to be_present
     end
 
     it "has html streams" do
       page = package.pages.first
-      expect(page.to_html).to eq("the hOCR for page 00000001")
+      expect(page.to_html).to be_present
     end
   end
 end

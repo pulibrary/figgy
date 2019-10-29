@@ -46,6 +46,11 @@ module Hathi
         tiff_file.disk_path
       end
 
+      def derivative_path
+        file_metadata = source_page.derivative_file
+        Valkyrie::StorageAdapter.find_by(id: file_metadata.file_identifiers.first).disk_path
+      end
+
       def to_txt
         source_page.ocr_content.first if ocr?
       end
