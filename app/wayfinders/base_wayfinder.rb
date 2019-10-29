@@ -97,6 +97,9 @@ class BaseWayfinder
     @resource = resource
   end
 
+  # Define a preservation_objects relationship for all resources
+  inverse_relationship_by_property :preservation_objects, property: :preserved_object_id, singular: true, model: PreservationObject
+
   def metadata_adapter
     @metadata_adapter ||= Valkyrie::MetadataAdapter.find(:indexing_persister)
   end
