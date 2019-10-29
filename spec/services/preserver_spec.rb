@@ -74,7 +74,7 @@ describe Preserver do
       )
     end
 
-    context "when retrieving Preservation" do
+    context "when retrieving Preservation from a Scanned Resource" do
       let(:file_set) do
         resource.decorate.file_sets.first
       end
@@ -100,6 +100,28 @@ describe Preserver do
         expect(storage_adapter).to have_received(:upload).with(
           hash_including(md5: "Kij7cCKGeCssvy7ZpQQasQ==")
         )
+      end
+    end
+
+    context "when retrieving Preservation from a ScannedMap" do
+      let(:resource) do
+        FactoryBot.create_for_repository(:complete_scanned_map,
+                                         source_metadata_identifier: "123456",
+                                         files: [file])
+      end
+      let(:file_set) do
+        resource.decorate.file_sets.first
+      end
+      let(:preservation_objects) do
+        Wayfinder.for(file_set).preservation_objects
+      end
+      let(:change_set) { FileSetChangeSet.new(file_set) }
+
+      it "preserves all binary nodes" do
+        preservation_object
+        expect(preservation_object.binary_nodes).not_to be_empty
+        expect(preservation_object.binary_nodes.first).to be_a FileMetadata
+        expect(preservation_object.binary_nodes.first).not_to eq file_set.file_metadata.first
       end
     end
   end
