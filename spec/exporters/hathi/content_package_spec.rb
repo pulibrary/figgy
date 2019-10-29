@@ -12,13 +12,6 @@ RSpec.describe Hathi::ContentPackage do
                                                         source_metadata_identifier: "123456",
                                                         ocr_language: "eng",
                                                         files: [file1, file2])
-    # Wayfinder.for(scanned_resource).members.each_with_index do |file_set, idx|
-    #   pagename = (idx + 1).to_s.rjust(8, "0")
-    #   file_set.derivative_files << derivative_1
-    #   file_set.ocr_content = "the OCR for page " + pagename
-    #   file_set.hocr_content = "the hOCR for page " + pagename
-    #   Valkyrie::MetadataAdapter.find(:indexing_persister).persister.save(resource: file_set)
-    #    end
     scanned_resource
   end
 
