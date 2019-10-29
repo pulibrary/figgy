@@ -15,6 +15,18 @@ module ResourceController
       redirect_to new_scanned_resource_path
     else
       @change_set = change_set_class.new(new_resource, append_id: params[:parent_id]).prepopulate!
+      authorize_create!(change_set: @change_set)
+    end
+  end
+
+  # For new/create if a resource is going to be appended to a parent, the
+  # permissions should be based on the ability to update the parent it's going
+  # to be appended to. Enables users who only have permission to add to a single
+  # Ephemera Project.
+  def authorize_create!(change_set:)
+    if change_set.append_id.present?
+      authorize! :update, query_service.find_by(id: Array(change_set.append_id).first)
+    else
       authorize! :create, resource_class
     end
   end
@@ -25,8 +37,9 @@ module ResourceController
 
   def create
     @change_set = change_set_class.new(resource_class.new)
-    authorize! :create, @change_set.resource
-    if @change_set.validate(resource_params.merge(depositor: [current_user.uid]))
+    @change_set.validate(resource_params.merge(depositor: [current_user&.uid]))
+    authorize_create!(change_set: @change_set)
+    if @change_set.valid?
       @change_set.sync
       obj = nil
       change_set_persister.buffer_into_index do |buffered_changeset_persister|

@@ -35,6 +35,9 @@ A digital repository application in use at Princeton University Library for stor
 * [FreeTDS]
     * Needed for migration of music reserve data; we'll likely remove this dependency once that's all done
     * `brew install FreeTDS`
+* [FFMpeg](http://www.ffmpeg.org/)
+    * Used for AV derivatives.
+    * `brew install ffmpeg`
 
 ## Simple Tiles
 

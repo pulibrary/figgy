@@ -16,4 +16,8 @@ RSpec.describe EphemeraProject do
   it "has property top_language" do
     expect(project.top_language).to eq []
   end
+  it "has a list of contributor_uids" do
+    project.contributor_uids = ["tpend"]
+    expect(project.contributor_uids).to eq ["tpend"]
+  end
 end

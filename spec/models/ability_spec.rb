@@ -6,6 +6,7 @@ describe Ability do
   subject { described_class.new(current_user) }
   let(:page_file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:page_file_2) { fixture_file_upload("files/example.tif", "image/tiff") }
+  let(:page_file_3) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:shoulder) { "99999/fk4" }
   let(:blade) { "123456" }
 
@@ -22,6 +23,12 @@ describe Ability do
   let(:open_file_set) do
     query_service.find_by(id: open_scanned_resource.member_ids.first)
   end
+
+  let(:no_public_download_open_scanned_resource) do
+    FactoryBot.create_for_repository(:complete_open_scanned_resource, user: creating_user, title: "Open", downloadable: "none", files: [page_file_3])
+  end
+
+  let(:no_public_download_open_file) { no_public_download_open_scanned_resource.decorate.members.first }
 
   let(:closed_file_set) do
     query_service.find_by(id: private_scanned_resource.member_ids.first)
@@ -80,6 +87,20 @@ describe Ability do
   let(:other_staff_file) { other_staff_scanned_resource.decorate.members.first }
   let(:admin_file) { FactoryBot.build(:file_set, user: admin_user) }
 
+  let(:contributor_ephemera_project) do
+    FactoryBot.create_for_repository(:ephemera_project, member_ids: [contributor_ephemera_folder.id, contributor_ephemera_box.id], contributor_uids: [current_user&.uid])
+  end
+  let(:contributor_ephemera_folder) { FactoryBot.create_for_repository(:ephemera_folder) }
+  let(:contributor_ephemera_box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: contributor_ephemera_folder_in_box.id) }
+  let(:contributor_ephemera_folder_in_box) { FactoryBot.create_for_repository(:ephemera_folder) }
+
+  let(:non_contributor_ephemera_project) do
+    FactoryBot.create_for_repository(:ephemera_project, member_ids: [contributor_ephemera_folder.id, contributor_ephemera_box.id])
+  end
+  let(:non_contributor_ephemera_folder) { FactoryBot.create_for_repository(:ephemera_folder) }
+  let(:non_contributor_ephemera_box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: contributor_ephemera_folder_in_box.id) }
+  let(:non_contributor_ephemera_folder_in_box) { FactoryBot.create_for_repository(:ephemera_folder) }
+
   let(:admin_user) { FactoryBot.create(:admin) }
   let(:staff_user) { FactoryBot.create(:staff) }
   let(:other_staff_user) { FactoryBot.create(:staff) }
@@ -101,21 +122,29 @@ describe Ability do
       is_expected.to be_able_to(:read, flagged_scanned_resource)
       is_expected.to be_able_to(:read, reading_room_scanned_resource)
       is_expected.to be_able_to(:read, campus_ip_scanned_resource)
+      is_expected.to be_able_to(:read, contributor_ephemera_project)
+      is_expected.to be_able_to(:read, contributor_ephemera_folder)
       is_expected.to be_able_to(:pdf, open_scanned_resource)
       is_expected.to be_able_to(:color_pdf, open_scanned_resource)
       is_expected.to be_able_to(:edit, open_scanned_resource)
       is_expected.to be_able_to(:edit, private_scanned_resource)
       is_expected.to be_able_to(:edit, takedown_scanned_resource)
       is_expected.to be_able_to(:edit, flagged_scanned_resource)
+      is_expected.to be_able_to(:edit, contributor_ephemera_project)
+      is_expected.to be_able_to(:edit, contributor_ephemera_folder)
       is_expected.to be_able_to(:file_manager, open_scanned_resource)
       is_expected.to be_able_to(:update, open_scanned_resource)
       is_expected.to be_able_to(:update, private_scanned_resource)
       is_expected.to be_able_to(:update, takedown_scanned_resource)
       is_expected.to be_able_to(:update, flagged_scanned_resource)
+      is_expected.to be_able_to(:update, contributor_ephemera_project)
+      is_expected.to be_able_to(:update, contributor_ephemera_folder)
       is_expected.to be_able_to(:destroy, open_scanned_resource)
       is_expected.to be_able_to(:destroy, private_scanned_resource)
       is_expected.to be_able_to(:destroy, takedown_scanned_resource)
       is_expected.to be_able_to(:destroy, flagged_scanned_resource)
+      is_expected.to be_able_to(:destroy, contributor_ephemera_project)
+      is_expected.to be_able_to(:destroy, contributor_ephemera_folder)
       is_expected.to be_able_to(:manifest, open_scanned_resource)
       is_expected.to be_able_to(:manifest, pending_scanned_resource)
       is_expected.to be_able_to(:manifest, reading_room_scanned_resource)
@@ -125,6 +154,7 @@ describe Ability do
       is_expected.to be_able_to(:discover, reading_room_scanned_resource)
       is_expected.to be_able_to(:discover, campus_ip_scanned_resource)
       is_expected.to be_able_to(:read, :graphql)
+      is_expected.to be_able_to(:download, no_public_download_open_file)
     }
 
     context "when read-only mode is on" do
@@ -206,6 +236,7 @@ describe Ability do
       is_expected.to be_able_to(:discover, reading_room_scanned_resource)
       is_expected.to be_able_to(:discover, campus_ip_scanned_resource)
       is_expected.to be_able_to(:read, :graphql)
+      is_expected.to be_able_to(:download, no_public_download_open_file)
     }
 
     context "when read-only mode is on" do
@@ -292,11 +323,53 @@ describe Ability do
       is_expected.not_to be_able_to(:destroy, role)
       is_expected.not_to be_able_to(:complete, pending_scanned_resource)
       is_expected.not_to be_able_to(:destroy, admin_file)
+      is_expected.not_to be_able_to(:download, no_public_download_open_file)
 
       is_expected.to be_able_to(:discover, open_scanned_resource)
       is_expected.not_to be_able_to(:discover, pending_scanned_resource)
       is_expected.not_to be_able_to(:discover, reading_room_scanned_resource)
       is_expected.to be_able_to(:discover, campus_ip_scanned_resource)
+
+      # Ephemera Project Contributors
+      is_expected.to be_able_to(:read, contributor_ephemera_project)
+      is_expected.to be_able_to(:read, contributor_ephemera_folder)
+      is_expected.to be_able_to(:read, contributor_ephemera_box)
+      is_expected.to be_able_to(:read, contributor_ephemera_folder_in_box)
+      is_expected.to be_able_to(:manifest, contributor_ephemera_project)
+      is_expected.to be_able_to(:manifest, contributor_ephemera_folder)
+      is_expected.to be_able_to(:manifest, contributor_ephemera_box)
+      is_expected.to be_able_to(:manifest, contributor_ephemera_folder_in_box)
+      is_expected.to be_able_to(:edit, contributor_ephemera_project)
+      is_expected.to be_able_to(:edit, contributor_ephemera_folder)
+      is_expected.to be_able_to(:edit, contributor_ephemera_box)
+      is_expected.to be_able_to(:edit, contributor_ephemera_folder_in_box)
+      is_expected.to be_able_to(:update, contributor_ephemera_project)
+      is_expected.to be_able_to(:update, contributor_ephemera_folder)
+      is_expected.to be_able_to(:update, contributor_ephemera_box)
+      is_expected.to be_able_to(:update, contributor_ephemera_folder_in_box)
+
+      is_expected.not_to be_able_to(:delete, contributor_ephemera_project)
+      is_expected.not_to be_able_to(:delete, contributor_ephemera_folder)
+      is_expected.not_to be_able_to(:delete, contributor_ephemera_box)
+      is_expected.not_to be_able_to(:delete, contributor_ephemera_folder_in_box)
+
+      is_expected.not_to be_able_to(:manifest, non_contributor_ephemera_project)
+      is_expected.not_to be_able_to(:manifest, non_contributor_ephemera_folder)
+      is_expected.not_to be_able_to(:manifest, non_contributor_ephemera_box)
+      is_expected.not_to be_able_to(:manifest, non_contributor_ephemera_folder_in_box)
+      is_expected.not_to be_able_to(:edit, non_contributor_ephemera_project)
+      is_expected.not_to be_able_to(:edit, non_contributor_ephemera_folder)
+      is_expected.not_to be_able_to(:edit, non_contributor_ephemera_box)
+      is_expected.not_to be_able_to(:edit, non_contributor_ephemera_folder_in_box)
+      is_expected.not_to be_able_to(:update, non_contributor_ephemera_project)
+      is_expected.not_to be_able_to(:update, non_contributor_ephemera_folder)
+      is_expected.not_to be_able_to(:update, non_contributor_ephemera_box)
+      is_expected.not_to be_able_to(:update, non_contributor_ephemera_folder_in_box)
+
+      is_expected.not_to be_able_to(:delete, non_contributor_ephemera_project)
+      is_expected.not_to be_able_to(:delete, non_contributor_ephemera_folder)
+      is_expected.not_to be_able_to(:delete, non_contributor_ephemera_box)
+      is_expected.not_to be_able_to(:delete, non_contributor_ephemera_folder_in_box)
     }
 
     context "when accessing figgy via a campus IP" do
@@ -479,12 +552,19 @@ describe Ability do
       is_expected.not_to be_able_to(:destroy, role)
       is_expected.not_to be_able_to(:complete, pending_scanned_resource)
       is_expected.not_to be_able_to(:destroy, admin_file)
+      is_expected.not_to be_able_to(:download, no_public_download_open_file)
 
       is_expected.to be_able_to(:discover, open_scanned_resource)
       is_expected.not_to be_able_to(:discover, private_scanned_resource)
       is_expected.not_to be_able_to(:discover, pending_scanned_resource)
       is_expected.not_to be_able_to(:discover, reading_room_scanned_resource)
       is_expected.to be_able_to(:discover, campus_ip_scanned_resource)
+
+      # Ephemera Project Contributors
+      is_expected.not_to be_able_to(:edit, contributor_ephemera_project)
+      is_expected.not_to be_able_to(:edit, contributor_ephemera_folder)
+      is_expected.not_to be_able_to(:update, contributor_ephemera_project)
+      is_expected.not_to be_able_to(:update, contributor_ephemera_folder)
     }
 
     context "when accessing figgy via a campus IP" do
@@ -593,6 +673,7 @@ describe Ability do
 
       it "provides access to a resource" do
         is_expected.to be_able_to(:read, vector_resource)
+        is_expected.to be_able_to(:download, no_public_download_open_file)
       end
     end
 

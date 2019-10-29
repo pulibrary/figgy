@@ -26,13 +26,13 @@
     </tbody>
   </table>
 
-  <% if can?(:create, EphemeraBox) %>
+  <% if can?(:update, resource) %>
     <%= link_to 'Add Box', ephemera_project_add_box_path(resource, parent_id: resource.id), class: 'btn btn-primary' %>
   <% end %>
   <br/><br/>
 
   <%= render 'members_ephemera_box' %>
-  <% if can?(:create, EphemeraFolder) %>
+  <% if can?(:update, resource) %>
     <%= link_to 'Attach Folder', boxless_new_ephemera_folder_path(parent_id: resource.id), class: 'btn btn-primary' %>
   <% end %>
 

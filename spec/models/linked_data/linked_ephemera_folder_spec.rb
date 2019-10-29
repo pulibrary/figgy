@@ -38,6 +38,22 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
     end
   end
 
+  describe "#title" do
+    context "when there's no transliterated title" do
+      let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, title: ["Test Title"]) }
+      it "provides an array" do
+        expect(linked_ephemera_folder.as_jsonld["title"]).to eq ["Test Title"]
+      end
+    end
+
+    context "when there's also a transliterated title" do
+      let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, transliterated_title: ["Transliterated Title"], title: ["Test Title"]) }
+      it "provides the transliaterated title as another title" do
+        expect(linked_ephemera_folder.as_jsonld["title"]).to eq ["Test Title", "Transliterated Title"]
+      end
+    end
+  end
+
   describe "#transliterated_title" do
     let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, transliterated_title: ["Test Title"]) }
     it "gets returned in as_jsonld" do
@@ -262,7 +278,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
 
       expect(linked_ephemera_folder.as_jsonld).not_to be_empty
 
-      expect(linked_ephemera_folder.as_jsonld["title"]).to eq "test title"
+      expect(linked_ephemera_folder.as_jsonld["title"]).to eq ["test title"]
       expect(linked_ephemera_folder.as_jsonld["barcode"]).to eq "00000000000000"
       expect(linked_ephemera_folder.as_jsonld["folder_number"]).to eq "1"
       expect(linked_ephemera_folder.as_jsonld["sort_title"]).to eq ["test title"]

@@ -392,6 +392,7 @@ class ControlledVocabulary
   class Users < ControlledVocabulary
     ControlledVocabulary.register(:users, self)
     ControlledVocabulary.register(:owners, self)
+    ControlledVocabulary.register(:contributor_uids, self)
     # @return [Array<Term>] the Term Objects modeling every User.
     def all(_scope = nil)
       @all ||=

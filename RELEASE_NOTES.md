@@ -14,6 +14,33 @@ Release notes template:
 
 -->
 
+# 2019-10-23
+
+## Fixed
+
+* Removed the IIIF viewer download drop-down menu for non-downloadable public resources.
+* Anonymous downloads are disabled for non-downloadable public resources.
+
+# 2019-10-18
+
+## Fixed
+
+* Fixes stale object errors for raster and vector resource derivatives.
+
+# 2019-10-18
+
+## Added
+
+* Automatically adding links to Figgy objects to finding aids as DAO elements.
+* Exporting collections as PDFs.
+
+# 2019-10-14
+
+## Added
+
+* Ephemera Projects can now have "contributors" assigned, who have permission to
+create/edit folders and boxes only in that Project.
+
 # 2019-10-10
 
 ## Fixed

@@ -65,7 +65,7 @@ class RasterResourceDerivativeService
     run_derivatives
     change_set.files = [build_display_file, build_thumbnail_file]
     change_set_persister.buffer_into_index do |buffered_persister|
-      buffered_persister.save(change_set: change_set)
+      @resource = buffered_persister.save(change_set: change_set)
     end
     update_error_message(message: nil) if original_file.error_message.present?
   rescue StandardError => error
