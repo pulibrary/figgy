@@ -45,4 +45,15 @@ class EphemeraBoxChangeSet < ChangeSet
       :append_id
     ]
   end
+
+  # Boxes only have metadata, so we may as well preserve it always.
+  def preserve?
+    true
+  end
+
+  # Don't automatically preserve children on save. Children have their own
+  # states and will preserve on complete.
+  def preserve_children?
+    false
+  end
 end
