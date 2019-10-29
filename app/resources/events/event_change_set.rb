@@ -6,4 +6,8 @@ class EventChangeSet < ChangeSet
   property :child_property, multiple: false
   property :child_id, multiple: false, type: Valkyrie::Types::ID
   property :message, multiple: false, required: true
+
+  def preserve?
+    false
+  end
 end

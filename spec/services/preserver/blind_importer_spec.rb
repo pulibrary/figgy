@@ -16,7 +16,7 @@ RSpec.describe Preserver::BlindImporter do
   describe ".import" do
     it "can import arbitrarily deep" do
       volume = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file, file2])
-      mvw = FactoryBot.create_for_repository(:complete_scanned_resource, preservation_policy: "cloud", member_ids: [volume.id], run_callbacks: true)
+      mvw = FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: [volume.id], run_callbacks: true)
 
       # Wipe everything
       Blacklight.default_index.connection.delete_by_query("*:*")
@@ -42,7 +42,7 @@ RSpec.describe Preserver::BlindImporter do
       expect { Valkyrie::StorageAdapter.find_by(id: file_set2.original_file.file_identifiers.first) }.not_to raise_error
     end
     it "imports a preserved resource given an ID" do
-      resource = FactoryBot.create_for_repository(:complete_scanned_resource, preservation_policy: "cloud", files: [file])
+      resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
       children = query_service.find_members(resource: resource)
 
       # Delete them without running callbacks which clean up from disk.
@@ -69,7 +69,7 @@ RSpec.describe Preserver::BlindImporter do
       expect(file_set.derivative_files.length).to eq 1
     end
     it "imports everything it can, even if a member didn't get preserved for some reason" do
-      resource = FactoryBot.create_for_repository(:complete_scanned_resource, preservation_policy: "cloud", files: [file])
+      resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
       children = query_service.find_members(resource: resource)
 
       # Delete them without running callbacks which clean up from disk.

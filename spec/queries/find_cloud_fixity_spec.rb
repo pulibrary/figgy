@@ -12,7 +12,7 @@ RSpec.describe FindCloudFixity do
   let(:shoulder) { "99999/fk4" }
   let(:blade) { "123456" }
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
-  let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource, preservation_policy: "cloud", files: [file]) }
+  let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource, files: [file]) }
   let(:file_set) { resource.decorate.file_sets.first }
   let(:event) { FactoryBot.create_for_repository(:event, resource_id: file_set.id) }
   let(:event2) { FactoryBot.create_for_repository(:event, resource_id: file_set.id) }

@@ -12,7 +12,6 @@ describe Preserver::Importer do
   let(:change_set_persister) { ScannedResourcesController.change_set_persister }
   let(:storage_adapter) { Valkyrie::StorageAdapter.find(:google_cloud_storage) }
   let(:persisted_resource) do
-    resource.preservation_policy = "cloud"
     change_set_persister.metadata_adapter.persister.save(resource: resource)
   end
   let(:persisted_file_set) do

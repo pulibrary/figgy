@@ -39,18 +39,6 @@ RSpec.describe BulkEditService do
       end
     end
 
-    context "when updating preservation_policy" do
-      it "succeeds" do
-        obj1 = FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id])
-
-        attrs = { preservation_policy: "cloud" }
-        described_class.perform(collection_id: collection.id.to_s, attributes: attrs, logger: logger)
-
-        after = query_service.find_by(id: obj1.id)
-        expect(after.preservation_policy).to eq ["cloud"]
-      end
-    end
-
     context "when change set validation fails" do
       let(:logger) { instance_double ActiveSupport::Logger }
 

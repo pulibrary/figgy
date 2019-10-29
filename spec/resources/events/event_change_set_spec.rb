@@ -55,4 +55,10 @@ RSpec.describe EventChangeSet do
       expect(change_set.message).to eq message
     end
   end
+
+  describe "#preserve?" do
+    it "is not preserved" do
+      expect(change_set.preserve?).to be false
+    end
+  end
 end

@@ -173,7 +173,6 @@ class IngestArchivalMediaBagJob < ApplicationJob
             property => value,
             visibility: collection.visibility.first,
             downloadable: "public",
-            preservation_policy: "cloud",
             **recording_attributes
           )
         end
@@ -217,7 +216,6 @@ class IngestArchivalMediaBagJob < ApplicationJob
             visibility: collection.visibility.first,
             upload_set_id: upload_set_id,
             downloadable: "public",
-            preservation_policy: "cloud",
             rights_statement: RightsStatements.copyright_not_evaluated
           )
         end

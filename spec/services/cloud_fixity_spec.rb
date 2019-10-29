@@ -48,7 +48,7 @@ RSpec.describe CloudFixity do
 
     context "with a resource preserved in a cloud service" do
       let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
-      let(:scanned_resource) { FactoryBot.create_for_repository(:complete_scanned_resource, files: [file], preservation_policy: "cloud") }
+      let(:scanned_resource) { FactoryBot.create_for_repository(:complete_scanned_resource, files: [file]) }
       let(:resource) { Wayfinder.for(scanned_resource).preservation_objects.first }
       let(:file_metadata) { resource.metadata_node }
       let(:json) do
