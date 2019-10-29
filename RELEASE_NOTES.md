@@ -13,6 +13,11 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-10-28
+
+## Added
+
+* Added filename in numismatics manager.
 
 # 2019-10-23
 
