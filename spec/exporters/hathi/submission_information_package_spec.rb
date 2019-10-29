@@ -34,20 +34,19 @@ RSpec.describe Hathi::SubmissionInformationPackage do
   end
 
   describe ".deposit" do
-    it "builds a zip file on disk" do
-      resource_path = deposit_path.join(resource.source_metadata_identifier.first.to_s + ".zip")
+    it "creates a SIP directory on disk" do
+      resource_path = deposit_path.join(resource.source_metadata_identifier.first.to_s + "_sip")
       expect(File.exist?(resource_path)).to eq true
     end
   end
 
-  describe "zip contents" do
-    it "builds a zip file containing the right content" do
-      zip_path = deposit_path.join(resource.source_metadata_identifier.first.to_s + ".zip")
+  describe "sip contents" do
+    it "contains the right content" do
+      sip_path = deposit_path.join(resource.source_metadata_identifier.first.to_s + "_sip")
       file_names = []
-      Zip::File.open(zip_path) do |zip_file|
-        zip_file.each do |entry|
-          file_names << entry.name
-        end
+      dir = Dir.new(sip_path)
+      dir.each do |f|
+        file_names << f
       end
       expect(file_names).to include("00000001.tif")
       expect(file_names).to include("00000001.txt")
