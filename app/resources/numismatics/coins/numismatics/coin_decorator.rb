@@ -38,10 +38,6 @@ module Numismatics
 
     delegate :id, :label, to: :accession, prefix: true
 
-    def ark_mintable_state?
-      false
-    end
-
     def call_number
       "Numismatics::Coin #{coin_number}"
     end

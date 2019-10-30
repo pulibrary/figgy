@@ -2,7 +2,7 @@
 require "rails_helper"
 
 RSpec.describe Numismatics::Coin do
-  let(:coin) { FactoryBot.create_for_repository(:coin, weight: 5, rights_statement: "No Known Copyright") }
+  let(:coin) { FactoryBot.create_for_repository(:coin, weight: 5, identifier: "ark:/99999/fk4", rights_statement: "No Known Copyright") }
 
   it "has properties" do
     expect(coin.weight).to eq([5])
@@ -19,6 +19,10 @@ RSpec.describe Numismatics::Coin do
 
   it "has a title" do
     expect(coin.title).to include "Coin: 1"
+  end
+
+  it "has an identifier" do
+    expect(coin.identifier).to eq ["ark:/99999/fk4"]
   end
 
   describe "#pdf_file" do
