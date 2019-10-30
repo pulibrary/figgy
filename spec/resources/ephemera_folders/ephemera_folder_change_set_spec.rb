@@ -99,4 +99,28 @@ RSpec.describe EphemeraFolderChangeSet do
       end
     end
   end
+
+  describe "#preserve?" do
+    context "when in a box" do
+      let(:change_set) { DynamicChangeSet.new(FactoryBot.create_for_repository(:ephemera_folder)) }
+      let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: change_set.id) }
+      before do
+        box
+      end
+      it "is false when needs_qa" do
+        change_set.state = "needs_qa"
+        expect(change_set.preserve?).to eq false
+      end
+      it "is true when complete" do
+        change_set.state = "complete"
+        expect(change_set.preserve?).to eq true
+      end
+    end
+  end
+
+  describe "#preserve_children?" do
+    it "is true" do
+      expect(change_set.preserve_children?).to eq true
+    end
+  end
 end

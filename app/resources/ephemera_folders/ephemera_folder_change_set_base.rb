@@ -116,6 +116,10 @@ class EphemeraFolderChangeSetBase < ChangeSet
     super(subject_values.map { |subject_value| coerce_string_value(subject_value) })
   end
 
+  def preserve?
+    state == "complete"
+  end
+
   private
 
     def metadata_adapter

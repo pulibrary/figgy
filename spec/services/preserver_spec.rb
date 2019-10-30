@@ -124,5 +124,50 @@ describe Preserver do
         expect(preservation_object.binary_nodes.first).not_to eq file_set.file_metadata.first
       end
     end
+    context "when preserving an EphemeraProject" do
+      let(:resource) do
+        FactoryBot.create_for_repository(:ephemera_project,
+                                         member_ids: folder.id)
+      end
+      let(:change_set) { DynamicChangeSet.new(resource) }
+      let(:folder) do
+        FactoryBot.create_for_repository(:complete_ephemera_folder)
+      end
+      let(:preservation_objects) do
+        Wayfinder.for(folder).preservation_objects
+      end
+      let(:storage_adapter) { Valkyrie::StorageAdapter.find(:google_cloud_storage) }
+      it "does not preserve its children" do
+        preserver.preserve!
+        expect(preservation_objects).to be_blank
+      end
+      it "does preserve itself" do
+        preserver.preserve!
+        expect(Wayfinder.for(resource).preservation_object).to be_a PreservationObject
+      end
+    end
+
+    context "when preserving an EphemeraBox" do
+      let(:resource) do
+        FactoryBot.create_for_repository(:ephemera_box,
+                                         member_ids: folder.id)
+      end
+      let(:change_set) { DynamicChangeSet.new(resource) }
+      let(:folder) do
+        FactoryBot.create_for_repository(:complete_ephemera_folder)
+      end
+      let(:preservation_objects) do
+        Wayfinder.for(folder).preservation_objects
+      end
+      let(:storage_adapter) { Valkyrie::StorageAdapter.find(:google_cloud_storage) }
+      it "does not preserve its children" do
+        preserver.preserve!
+        expect(preservation_objects).to be_blank
+      end
+      it "does preserve itself" do
+        preserver.preserve!
+        expect(Wayfinder.for(resource).preservation_object).to be_a PreservationObject
+      end
+    end
   end
 end

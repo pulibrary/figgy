@@ -79,7 +79,7 @@ class Preserver
     end
 
     def preserve_children
-      return unless resource.try(:member_ids).present?
+      return unless resource.try(:member_ids).present? && change_set.try(:preserve_children?)
       PreserveChildrenJob.perform_later(id: resource.id.to_s)
     end
 
