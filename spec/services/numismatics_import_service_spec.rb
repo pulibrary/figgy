@@ -41,17 +41,17 @@ RSpec.describe NumismaticsImportService do
       expect(reverse_file_set.derivative_files).not_to be_empty
     end
 
-    it "filters for only image files in the TIFF and JPEG format" do
+    it "filters for only image files in the TIFF and JPEG format, and selects TIFF file if both are available" do
       expect(collection.decorate.members).not_to be_empty
       members = collection.decorate.members
       first_coin = members.find { |member| member.is_a?(Numismatics::Coin) }
       expect(first_coin.decorate.decorated_file_sets).not_to be_empty
       file_sets = first_coin.decorate.decorated_file_sets
-      expect(file_sets.length).to eq 3
+      expect(file_sets.length).to eq 2
       labels = file_sets.map(&:file_metadata).flatten.map(&:label).flatten
+      expect(labels).to include "1R.jpg"
       expect(labels).to include "1O.tif"
-      expect(labels).to include "1R.tif"
-      expect(labels).to include "1O.jpg"
+      expect(labels).not_to include "1O.jpg"
     end
   end
 end
