@@ -18,7 +18,7 @@ RSpec.describe Numismatics::Coin do
   end
 
   it "has a title" do
-    expect(coin.title).to include "Numismatics::Coin: 1"
+    expect(coin.title).to include "Coin: 1"
   end
 
   describe "#pdf_file" do

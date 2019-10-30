@@ -61,7 +61,7 @@ module Numismatics
     # Placeholder title.
     # TODO: Add more descriptive title when we have more information.
     def title
-      ["Numismatics::Coin: #{coin_number}"]
+      ["Coin: #{coin_number}"]
     end
 
     def pdf_file
