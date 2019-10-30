@@ -920,6 +920,7 @@ RSpec.describe ManifestBuilder do
       expect(output["@type"]).to eq "sc:Collection"
       expect(output["manifests"].length).to eq 2
       expect(output["manifests"][0]["label"]).to eq ["Numismatics::Coin: 1"]
+      expect(output["manifests"][0]["@id"]).to eq "http://www.example.com/concern/numismatics/coins/#{coin1.id}/manifest"
       expect(output["manifests"][1]["label"]).to eq ["Numismatics::Coin: 2"]
     end
   end

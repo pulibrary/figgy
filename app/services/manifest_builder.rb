@@ -706,7 +706,7 @@ class ManifestBuilder
       when FileSet
         ""
       else
-        "#{protocol}://#{host}/concern/#{resource.model_name.plural}/#{resource.id}/manifest"
+        "#{protocol}://#{host}/concern/#{resource.model_name.collection}/#{resource.id}/manifest"
       end
     end
 
