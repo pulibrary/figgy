@@ -111,7 +111,7 @@ RSpec.describe NumismaticImportJob do
       expect(coin.weight).to eq [1.47]
       expect(coin.find_number).to eq ["find number"]
       expect(coin.numismatic_collection).to eq ["collection name"]
-      expect(coin.member_ids.count).to eq 3
+      expect(coin.member_ids.count).to eq 2
       expect(coin.depositor). to eq [depositor]
 
       # nested citation

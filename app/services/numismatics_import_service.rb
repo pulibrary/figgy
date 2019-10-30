@@ -320,10 +320,22 @@ class NumismaticsImportService
       end
     end
 
+    def deduplicate_images(files)
+      groups = files.group_by { |f| File.basename(f, ".*") }.values
+      groups.map do |g|
+        tiff_files = g.select { |f| File.extname(f).casecmp(".tif").zero? }
+        if tiff_files.present?
+          tiff_files[0]
+        else
+          g[0]
+        end
+      end
+    end
+
     def coin_files(coin_number:)
       files = Dir.glob(file_root.join("**/#{coin_number}{O,R}.*"))
       image_files = files.select { |file| File.extname(file).casecmp(".tif").zero? || File.extname(file) =~ /\.jpe?g$/i }
-      image_files.map do |file_path|
+      deduplicate_images(image_files).map do |file_path|
         IngestableFile.new(
           file_path: file_path,
           mime_type: "image/tiff",
