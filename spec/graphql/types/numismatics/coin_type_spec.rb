@@ -106,7 +106,7 @@ RSpec.describe Types::Numismatics::CoinType do
 
   describe "#label" do
     it "maps to a resource's title" do
-      expect(type.label).to eq "Numismatics::Coin: #{coin.coin_number}"
+      expect(type.label).to eq "Coin: #{coin.coin_number}"
     end
   end
 
