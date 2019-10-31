@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-11-18
+
+## Fixed
+
+* Gracefully handling error reporting when an EAD can't be found for an item linked to PULFA.
+
 # 2019-11-12
 
 ## Fixed

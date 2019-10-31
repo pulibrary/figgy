@@ -81,6 +81,20 @@ RSpec.describe PulfaExporter do
         expect(Honeybadger).to have_received(:notify)
       end
     end
+
+    describe "when the finding aid doesn't exist" do
+      let(:bogus_objects) { { "XYZ_c123" => [resource2] } }
+
+      before do
+        allow(exporter).to receive(:grouped_objects).and_return(bogus_objects)
+        allow(Honeybadger).to receive(:notify)
+      end
+
+      it "catches and logs the error" do
+        expect { exporter.export }.not_to raise_error
+        expect(Honeybadger).to have_received(:notify)
+      end
+    end
   end
 
   describe "#export_pdf" do
