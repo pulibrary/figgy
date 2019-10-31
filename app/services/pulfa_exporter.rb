@@ -38,6 +38,7 @@ class PulfaExporter
       logger.info "Exporting DAOs to PULFA SVN"
       grouped_objects.keys.each do |collection_code|
         file = ead_for(collection_code)
+        next unless file
         update_ead(file, grouped_objects[collection_code])
       end
       svn_client.commit
