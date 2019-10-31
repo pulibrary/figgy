@@ -25,9 +25,9 @@ RSpec.describe Hathi::SubmissionInformationPackage do
     depositor.export
   end
 
-   after do
-     FileUtils.rm_rf(deposit_path) if File.exist?(deposit_path)
-   end
+  after do
+    FileUtils.rm_rf(deposit_path) if File.exist?(deposit_path)
+  end
 
   describe ".deposit" do
     it "creates a SIP directory on disk" do
