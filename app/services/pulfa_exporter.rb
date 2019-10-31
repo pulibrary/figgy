@@ -38,11 +38,12 @@ class PulfaExporter
       logger.info "Exporting DAOs to PULFA SVN"
       grouped_objects.keys.each do |collection_code|
         file = ead_for(collection_code)
+        puts "collection: #{collection_code}"
         next unless file
         update_ead(file, grouped_objects[collection_code])
       end
-      svn_client.commit
-      notify
+      #svn_client.commit
+      #notify
     end
 
     # find the EAD file for a collection code
@@ -66,7 +67,7 @@ class PulfaExporter
         create_or_update_dao(ead, component, r, pdf) if component
       end
 
-      File.open(filename, "w") { |f| f.puts(ead.to_xml) }
+      #File.open(filename, "w") { |f| f.puts(ead.to_xml) }
       @updated_eads << filename
     end
 
