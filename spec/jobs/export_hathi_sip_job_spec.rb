@@ -3,19 +3,19 @@ require "rails_helper"
 include ActionDispatch::TestProcess
 
 RSpec.describe ExportHathiSipJob do
+  subject(:depositor) { described_class.new(package: package, base_path: deposit_path) }
+  let(:file1) { fixture_file_upload("files/example.tif", "image/tiff") }
+  let(:file2) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:deposit_path) { Rails.root.join("tmp", "test_hathi") }
   let(:package) { Hathi::ContentPackage.new(resource: resource) }
+  with_queue_adapter :inline
   let(:resource) do
     file1 = fixture_file_upload("files/example.tif", "image/tiff")
     file2 = fixture_file_upload("files/example.tif", "image/tiff")
     scanned_resource = FactoryBot.create_for_repository(:scanned_resource,
                                                         source_metadata_identifier: "123456",
+                                                        ocr_language: "eng",
                                                         files: [file1, file2])
-    Wayfinder.for(scanned_resource).members.each_with_index do |file_set, idx|
-      pagename = (idx + 1).to_s.rjust(8, "0")
-      file_set.ocr_content = "the OCR for page " + pagename
-      file_set.hocr_content = "the hOCR for page " + pagename
-    end
     scanned_resource
   end
 
