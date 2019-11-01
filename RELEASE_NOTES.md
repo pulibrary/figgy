@@ -13,6 +13,10 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-11-01
+## Changed
+* Removed zip-file creation from Hathi SIP exporter.
+
 # 2019-10-28
 
 ## Added
