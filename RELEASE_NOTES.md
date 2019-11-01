@@ -13,6 +13,11 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-10-28
+
+## Added
+
+* Added filename in numismatics manager.
 
 # 2019-10-23
 
@@ -33,6 +38,12 @@ Release notes template:
 
 * Automatically adding links to Figgy objects to finding aids as DAO elements.
 * Exporting collections as PDFs.
+
+# 2019-10-16
+
+## Added
+
+* Figgy resources are now preserved by default
 
 # 2019-10-14
 

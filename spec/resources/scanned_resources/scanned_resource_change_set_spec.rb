@@ -123,12 +123,6 @@ RSpec.describe ScannedResourceChangeSet do
     end
   end
 
-  describe "#primary_terms" do
-    it "does not have preservation_policy" do
-      expect(change_set.primary_terms).not_to include :preservation_policy
-    end
-  end
-
   describe "#replaces" do
     let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
     let(:storage_adapter) { Valkyrie.config.storage_adapter }

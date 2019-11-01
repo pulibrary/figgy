@@ -11,12 +11,6 @@ RSpec.describe Numismatics::CoinDecorator do
   let(:provenance) { Numismatics::Provenance.new(date: "provenance date", note: "provenance note") }
   let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
 
-  describe "state" do
-    it "does not allow minting arks" do
-      expect(decorator.ark_mintable_state?).to be false
-    end
-  end
-
   describe "#citations" do
     it "renders the linked citations" do
       expect(decorator.citations).to eq(["short-title citation part citation number"])

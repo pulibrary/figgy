@@ -1532,7 +1532,7 @@ RSpec.describe ChangeSetPersister do
   end
 
   describe "preservation" do
-    context "when a completed resource is updated with a `cloud` preservation_policy outside of the change_set_persister" do
+    context "when a completed preserved resource is updated outside of the change_set_persister" do
       it "backgrounds any child preserving" do
         allow(Preserver).to receive(:new).and_call_original
         allow(PreserveChildrenJob).to receive(:perform_later).and_call_original
@@ -1541,21 +1541,20 @@ RSpec.describe ChangeSetPersister do
         resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
         file_set = Wayfinder.for(resource).members.first
         file_set.read_groups = []
-        resource.preservation_policy = "cloud"
         resource = change_set_persister.metadata_adapter.persister.save(resource: resource)
         change_set_persister.metadata_adapter.persister.save(resource: file_set)
         change_set = DynamicChangeSet.new(resource)
 
         change_set_persister.save(change_set: change_set)
         expect(PreserveChildrenJob).to have_received(:perform_later).exactly(1).times
-        expect(Preserver).to have_received(:new).exactly(2).times
+        expect(Preserver).to have_received(:new).exactly(5).times
         expect(CleanupFilesJob).not_to have_received(:perform_later)
       end
     end
-    context "when completing a `cloud` preservation_policy resource" do
+    context "when completing preserved resource" do
       it "saves to a backup location" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
-        resource = FactoryBot.create_for_repository(:pending_scanned_resource, preservation_policy: "cloud", files: [file])
+        resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
         change_set = DynamicChangeSet.new(resource)
         change_set.validate(state: "complete")
 
@@ -1581,7 +1580,7 @@ RSpec.describe ChangeSetPersister do
       with_queue_adapter :test
       it "preserves it inline" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
-        resource = FactoryBot.create_for_repository(:pending_scanned_resource, preservation_policy: "cloud", files: [file])
+        resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
         change_set = DynamicChangeSet.new(resource)
         change_set.validate(state: "complete")
 
@@ -1596,7 +1595,7 @@ RSpec.describe ChangeSetPersister do
     context "when a preserved ScannedResource's metadata is updated" do
       it "refreshes the preserved metadata" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
-        resource = FactoryBot.create_for_repository(:complete_scanned_resource, preservation_policy: "cloud", files: [file])
+        resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
         change_set_persister.save(change_set: DynamicChangeSet.new(resource))
         file_set = Wayfinder.for(resource).members.first
 
@@ -1622,7 +1621,7 @@ RSpec.describe ChangeSetPersister do
         file_set.preservation_file.file_identifiers = preservation.id
         file_set.preservation_file.label = "example.tif"
         change_set_persister.persister.save(resource: file_set)
-        resource = FactoryBot.create_for_repository(:complete_scanned_resource, preservation_policy: "cloud", member_ids: [file_set.id])
+        resource = FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: [file_set.id])
 
         change_set = DynamicChangeSet.new(resource)
         change_set_persister.save(change_set: change_set)
@@ -1632,10 +1631,10 @@ RSpec.describe ChangeSetPersister do
       end
     end
 
-    context "when deleting a `cloud` preservation_policy FileSet" do
+    context "when deleting a preserved FileSet" do
       it "Deletes FileSet PreservationObjects, moves file set PreservationObjects into tombstones" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
-        resource = FactoryBot.create_for_repository(:pending_scanned_resource, preservation_policy: "cloud", files: [file])
+        resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
         change_set = DynamicChangeSet.new(resource)
         change_set.validate(state: "complete")
 
@@ -1659,10 +1658,10 @@ RSpec.describe ChangeSetPersister do
         expect(tombstone.parent_id).to eq resource.id
       end
     end
-    context "when deleting a `cloud` preservation_policy resource" do
+    context "when deleting preserved resource" do
       it "deletes all previously created FileSet tombstones for that parent, related PreservationObjects, and cleans up the Preservation file store" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
-        resource = FactoryBot.create_for_repository(:pending_scanned_resource, preservation_policy: "cloud", files: [file])
+        resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
         change_set = DynamicChangeSet.new(resource)
         change_set.validate(state: "complete")
 
@@ -1696,7 +1695,7 @@ RSpec.describe ChangeSetPersister do
       end
       it "re-adds the FileSet" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
-        resource = FactoryBot.create_for_repository(:pending_scanned_resource, preservation_policy: "cloud", files: [file])
+        resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
         change_set = DynamicChangeSet.new(resource)
         change_set.validate(state: "complete")
 
@@ -1721,12 +1720,12 @@ RSpec.describe ChangeSetPersister do
       end
     end
 
-    context "when adding FGDC metadata to a `cloud` preserved object", run_real_derivatives: true, run_real_characterization: true do
+    context "when adding FGDC metadata to a preserved object", run_real_derivatives: true, run_real_characterization: true do
       with_queue_adapter :inline
       it "updates the binary content in the preservation store" do
         file = fixture_file_upload("files/vector/shapefile.zip", "application/zip")
         xml = fixture_file_upload("files/geo_metadata/fgdc.xml", "application/xml; schema=fgdc")
-        vector_resource = FactoryBot.create_for_repository(:complete_vector_resource, files: [file, xml], preservation_policy: "cloud")
+        vector_resource = FactoryBot.create_for_repository(:complete_vector_resource, files: [file, xml])
 
         output = change_set_persister.save(change_set: DynamicChangeSet.new(vector_resource))
         preservation_object = Wayfinder.for(output).preservation_objects.first
@@ -1742,7 +1741,7 @@ RSpec.describe ChangeSetPersister do
       with_queue_adapter :inline
       it "preserves the file nodes" do
         file = fixture_file_upload("files/audio_file.wav", "audio/x-wav")
-        resource = FactoryBot.create_for_repository(:complete_media_resource, preservation_policy: "cloud")
+        resource = FactoryBot.create_for_repository(:complete_media_resource)
         change_set = DynamicChangeSet.new(resource, files: [file])
         output = change_set_persister.save(change_set: change_set)
 
@@ -1775,10 +1774,10 @@ RSpec.describe ChangeSetPersister do
       it "moves the preservation structure" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
         resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
-        parent = FactoryBot.create_for_repository(:pending_scanned_resource, preservation_policy: "cloud", member_ids: resource.id)
+        parent = FactoryBot.create_for_repository(:pending_scanned_resource, member_ids: resource.id)
         change_set = DynamicChangeSet.new(parent)
         change_set.validate(state: "complete")
-        other_parent = FactoryBot.create_for_repository(:complete_scanned_resource, preservation_policy: "cloud")
+        other_parent = FactoryBot.create_for_repository(:complete_scanned_resource)
         # Save in nested structure.
         change_set_persister.save(change_set: change_set)
         # Preserve `other_parent`
@@ -1805,11 +1804,11 @@ RSpec.describe ChangeSetPersister do
         expect(File.exist?(cloud_path.join(parent.id.to_s, "data", resource.id.to_s, "data", file_set.id.to_s, "example-#{file_set.original_file.id}.tif"))).to eq false
       end
     end
-    context "when completing a `cloud` preservation_policy MVW" do
+    context "when completing a preserved MVW" do
       it "deeply nests file sets" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
         volume = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
-        parent = FactoryBot.create_for_repository(:pending_scanned_resource, preservation_policy: "cloud", member_ids: volume.id)
+        parent = FactoryBot.create_for_repository(:pending_scanned_resource, member_ids: volume.id)
         change_set = DynamicChangeSet.new(parent)
         change_set.validate(state: "complete")
 
@@ -1821,10 +1820,10 @@ RSpec.describe ChangeSetPersister do
         expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", parent.id.to_s, "data", volume.id.to_s, "data", file_set.id.to_s, "example-#{file_set.original_file.id}.tif"))).to eq true
       end
     end
-    context "when adding a file to a `cloud` preservation_policy resource" do
+    context "when adding a file to a preserved resource" do
       with_queue_adapter :inline
       it "preserves it" do
-        resource = FactoryBot.create_for_repository(:complete_scanned_resource, preservation_policy: "cloud")
+        resource = FactoryBot.create_for_repository(:complete_scanned_resource)
         file = fixture_file_upload("files/example.tif", "image/tiff")
         change_set_persister.buffer_into_index do |buffered_change_set_persister|
           change_set = DynamicChangeSet.new(resource)
@@ -1852,6 +1851,22 @@ RSpec.describe ChangeSetPersister do
       end
     end
   end
+  context "when preserving a collection" do
+    before do
+      allow(PreserveChildrenJob).to receive(:perform_later)
+    end
+
+    it "does not preserve it's members" do
+      collection = FactoryBot.create_for_repository(:collection)
+      FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id)
+      change_set = DynamicChangeSet.new(collection)
+      change_set.validate(state: "complete")
+      change_set_persister.save(change_set: change_set)
+
+      expect(PreserveChildrenJob).to have_received(:perform_later).exactly(0).times
+    end
+  end
+
   context "when uploading a PDF to a ScannedResource", run_real_characterization: true, run_real_derivatives: true do
     with_queue_adapter :inline
     it "characterizes" do

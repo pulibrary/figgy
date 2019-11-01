@@ -26,4 +26,15 @@ class EphemeraProjectChangeSet < Valkyrie::ChangeSet
   def language_options
     model.decorate.fields.select { |field| field.attribute_name == "language" }.map { |field| field.vocabulary.terms }.flatten
   end
+
+  # There's no real state to manage here. Just always preserve.
+  def preserve?
+    true
+  end
+
+  # Don't automatically preserve children on save. Children have their own
+  # states and will preserve on complete.
+  def preserve_children?
+    false
+  end
 end

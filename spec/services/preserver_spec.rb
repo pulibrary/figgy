@@ -9,7 +9,6 @@ describe Preserver do
   let(:resource) do
     FactoryBot.create_for_repository(:complete_scanned_resource,
                                      source_metadata_identifier: "123456",
-                                     preservation_policy: "cloud",
                                      files: [file])
   end
   let(:unpreserved_resource) do
@@ -75,7 +74,7 @@ describe Preserver do
       )
     end
 
-    context "when retrieving Preservation" do
+    context "when retrieving Preservation from a Scanned Resource" do
       let(:file_set) do
         resource.decorate.file_sets.first
       end
@@ -101,6 +100,73 @@ describe Preserver do
         expect(storage_adapter).to have_received(:upload).with(
           hash_including(md5: "Kij7cCKGeCssvy7ZpQQasQ==")
         )
+      end
+    end
+
+    context "when retrieving Preservation from a ScannedMap" do
+      let(:resource) do
+        FactoryBot.create_for_repository(:complete_scanned_map,
+                                         source_metadata_identifier: "123456",
+                                         files: [file])
+      end
+      let(:file_set) do
+        resource.decorate.file_sets.first
+      end
+      let(:preservation_objects) do
+        Wayfinder.for(file_set).preservation_objects
+      end
+      let(:change_set) { FileSetChangeSet.new(file_set) }
+
+      it "preserves all binary nodes" do
+        preservation_object
+        expect(preservation_object.binary_nodes).not_to be_empty
+        expect(preservation_object.binary_nodes.first).to be_a FileMetadata
+        expect(preservation_object.binary_nodes.first).not_to eq file_set.file_metadata.first
+      end
+    end
+    context "when preserving an EphemeraProject" do
+      let(:resource) do
+        FactoryBot.create_for_repository(:ephemera_project,
+                                         member_ids: folder.id)
+      end
+      let(:change_set) { DynamicChangeSet.new(resource) }
+      let(:folder) do
+        FactoryBot.create_for_repository(:complete_ephemera_folder)
+      end
+      let(:preservation_objects) do
+        Wayfinder.for(folder).preservation_objects
+      end
+      let(:storage_adapter) { Valkyrie::StorageAdapter.find(:google_cloud_storage) }
+      it "does not preserve its children" do
+        preserver.preserve!
+        expect(preservation_objects).to be_blank
+      end
+      it "does preserve itself" do
+        preserver.preserve!
+        expect(Wayfinder.for(resource).preservation_object).to be_a PreservationObject
+      end
+    end
+
+    context "when preserving an EphemeraBox" do
+      let(:resource) do
+        FactoryBot.create_for_repository(:ephemera_box,
+                                         member_ids: folder.id)
+      end
+      let(:change_set) { DynamicChangeSet.new(resource) }
+      let(:folder) do
+        FactoryBot.create_for_repository(:complete_ephemera_folder)
+      end
+      let(:preservation_objects) do
+        Wayfinder.for(folder).preservation_objects
+      end
+      let(:storage_adapter) { Valkyrie::StorageAdapter.find(:google_cloud_storage) }
+      it "does not preserve its children" do
+        preserver.preserve!
+        expect(preservation_objects).to be_blank
+      end
+      it "does preserve itself" do
+        preserver.preserve!
+        expect(Wayfinder.for(resource).preservation_object).to be_a PreservationObject
       end
     end
   end

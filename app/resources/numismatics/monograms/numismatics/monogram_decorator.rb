@@ -20,5 +20,9 @@ module Numismatics
     def manageable_order?
       false
     end
+
+    def decorated_filename
+      decorated_file_sets&.first&.titles&.join(", ")
+    end
   end
 end

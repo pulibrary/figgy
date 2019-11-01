@@ -6,7 +6,7 @@ RSpec.feature "Fixity dashboard" do
   let(:user) { FactoryBot.create(:admin) }
   let(:metadata_adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
-  let(:scanned_resource) { FactoryBot.create_for_repository(:complete_scanned_resource, preservation_policy: "cloud", files: [file]) }
+  let(:scanned_resource) { FactoryBot.create_for_repository(:complete_scanned_resource, files: [file]) }
   let(:preservation_object) { Wayfinder.for(scanned_resource).preservation_objects.first }
   let(:file_set) { metadata_adapter.query_service.find_by(id: preservation_object.preserved_object_id) }
   let(:metadata_node) { preservation_object.metadata_node }
