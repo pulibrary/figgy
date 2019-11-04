@@ -108,7 +108,7 @@ RSpec.describe ApplicationHelper, type: :helper do
     let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource) }
 
     it "generates the path for the embedded UV partial" do
-      expect(helper.universal_viewer_path(resource)).to eq "/viewer#?manifest=http://test.host/concern/scanned_resources/#{resource.id}/manifest&config=http://test.host/viewer/config/#{resource.id}.json"
+      expect(helper.universal_viewer_path(resource)).to eq "/viewer#?manifest=http://test.host/concern/scanned_resources/#{resource.id}/manifest"
     end
   end
 end

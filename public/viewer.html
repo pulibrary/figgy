@@ -64,10 +64,12 @@
             }
           }
           $('#uv').show();
+          manifestUri = urlDataProvider.get('manifest');
+          configUri = manifestUri.replace('/manifest','').replace(/.*\//,'') + '.json';
           uv = createUV('#uv', {
             root: 'uv',
-            iiifResourceUri: urlDataProvider.get('manifest'),
-            configUri: urlDataProvider.get('config'),
+            iiifResourceUri: manifestUri,
+            configUri: configUri,
             collectionIndex: Number(urlDataProvider.get('c', 0)),
             manifestIndex: Number(urlDataProvider.get('m', 0)),
             sequenceIndex: Number(urlDataProvider.get('s', 0)),
