@@ -28,7 +28,7 @@ module Hathi
     end
 
     def scanner_user
-      %{"Princeton University Library: Digital Photography Studio"}
+      %("Princeton University Library: Digital Photography Studio")
     end
 
     def bitonal?
