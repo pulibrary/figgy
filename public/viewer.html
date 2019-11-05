@@ -65,7 +65,7 @@
           }
           $('#uv').show();
           manifestUri = urlDataProvider.get('manifest');
-          configUri = manifestUri.replace('/manifest','').replace(/.*\//,'') + '.json';
+          configUri = '/viewer/config/' + manifestUri.replace('/manifest','').replace(/.*\//,'') + '.json';
           uv = createUV('#uv', {
             root: 'uv',
             iiifResourceUri: manifestUri,
