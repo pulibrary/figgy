@@ -44,7 +44,9 @@ RSpec.describe Hathi::ImageMetadata do
     expect(adapter.resolution).to eq(1120)
   end
 
-  it "supplies a scanning order"
-  it "supplies a reading order"
+  it "supplies a reading order" do
+    expect(adapter.reading_order).to eq(%("left-to-right"))
+  end
+
   it "supplies page data"
 end

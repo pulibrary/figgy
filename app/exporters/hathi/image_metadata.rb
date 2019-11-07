@@ -44,7 +44,11 @@ module Hathi
     end
 
     def reading_order
-      "left-to-right"
+      if resource.viewing_direction
+        resource.viewing_direction.first
+      else
+        %("left-to-right")
+      end
     end
 
     def pagedata; end
