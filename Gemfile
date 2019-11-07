@@ -38,7 +38,7 @@ gem "title"
 gem "uglifier"
 gem "valkyrie", "~> 2.0.0"
 gem "valkyrie-derivatives", git: "https://github.com/samvera-labs/valkyrie-derivatives.git"
-gem "webpacker", ">= 4.0.x"
+gem "webpacker", "~> 4.0"
 
 group :development do
   gem "benchmark-ips"
