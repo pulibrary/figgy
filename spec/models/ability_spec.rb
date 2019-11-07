@@ -7,6 +7,7 @@ describe Ability do
   let(:page_file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:page_file_2) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:page_file_3) { fixture_file_upload("files/example.tif", "image/tiff") }
+  let(:audio_file) { fixture_file_upload("files/audio_file.wav", "audio/x-wav") }
   let(:shoulder) { "99999/fk4" }
   let(:blade) { "123456" }
 
@@ -77,6 +78,16 @@ describe Ability do
   let(:staff_scanned_resource) do
     FactoryBot.create(:complete_scanned_resource, user: staff_user, identifier: ["ark:/99999/fk4445wg45"])
   end
+
+  let(:complete_playlist) do
+    FactoryBot.create_for_repository(:complete_playlist, user: creating_user, recording: complete_recording)
+  end
+
+  let(:complete_recording) do
+    FactoryBot.create_for_repository(:complete_recording, user: creating_user, files: [audio_file], visibility: ["restricted"], downloadable: ["none"])
+  end
+
+  let(:token_downloadable_audio_file) { complete_playlist.decorate.file_sets.first }
 
   let(:file) { fixture_file_upload("files/example.tif") }
   let(:other_staff_scanned_resource) do
@@ -155,6 +166,7 @@ describe Ability do
       is_expected.to be_able_to(:discover, campus_ip_scanned_resource)
       is_expected.to be_able_to(:read, :graphql)
       is_expected.to be_able_to(:download, no_public_download_open_file)
+      is_expected.to be_able_to(:download, token_downloadable_audio_file)
     }
 
     context "when read-only mode is on" do
@@ -237,6 +249,7 @@ describe Ability do
       is_expected.to be_able_to(:discover, campus_ip_scanned_resource)
       is_expected.to be_able_to(:read, :graphql)
       is_expected.to be_able_to(:download, no_public_download_open_file)
+      is_expected.to be_able_to(:download, token_downloadable_audio_file)
     }
 
     context "when read-only mode is on" do
@@ -324,6 +337,7 @@ describe Ability do
       is_expected.not_to be_able_to(:complete, pending_scanned_resource)
       is_expected.not_to be_able_to(:destroy, admin_file)
       is_expected.not_to be_able_to(:download, no_public_download_open_file)
+      is_expected.not_to be_able_to(:download, token_downloadable_audio_file)
 
       is_expected.to be_able_to(:discover, open_scanned_resource)
       is_expected.not_to be_able_to(:discover, pending_scanned_resource)
@@ -553,6 +567,7 @@ describe Ability do
       is_expected.not_to be_able_to(:complete, pending_scanned_resource)
       is_expected.not_to be_able_to(:destroy, admin_file)
       is_expected.not_to be_able_to(:download, no_public_download_open_file)
+      is_expected.not_to be_able_to(:download, token_downloadable_audio_file)
 
       is_expected.to be_able_to(:discover, open_scanned_resource)
       is_expected.not_to be_able_to(:discover, private_scanned_resource)
@@ -664,7 +679,7 @@ describe Ability do
       change_set_persister.save(change_set: VectorResourceChangeSet.new(private_vector_resource, files: [file]))
     end
 
-    context "with an auth token" do
+    context "with an admin auth token" do
       let(:token) { AuthToken.create(label: "Test", group: ["admin"]).token }
 
       it "uses the auth token" do
@@ -674,6 +689,16 @@ describe Ability do
       it "provides access to a resource" do
         is_expected.to be_able_to(:read, vector_resource)
         is_expected.to be_able_to(:download, no_public_download_open_file)
+        is_expected.to be_able_to(:download, token_downloadable_audio_file)
+      end
+    end
+
+    context "with an anonymous token" do
+      let(:token) { complete_playlist.auth_token }
+
+      it "allows downloading the token's corresponding item" do
+        is_expected.to be_able_to(:download, token_downloadable_audio_file)
+        is_expected.not_to be_able_to(:download, no_public_download_open_file)
       end
     end
 
