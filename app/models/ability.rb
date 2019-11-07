@@ -42,7 +42,7 @@ class Ability
       download_file_with_metadata?(resource)
     end
     can :download, FileSet do |resource|
-      downloadable?(resource) && (authorized_by_token?(resource) || geo_file_set?(resource) || can_read_parent?(resource))
+      authorized_by_token?(resource) || geo_file_set?(resource) || can_read_parent?(resource)
     end
     can :color_pdf, curation_concerns do |resource|
       resource.pdf_type == ["color"]
@@ -232,10 +232,6 @@ class Ability
 
   def user_editable?(obj)
     obj.edit_users.include?(current_user.user_key)
-  end
-
-  def downloadable?(obj)
-    obj.decorate.downloadable? || (!current_user.nil? && (current_user.staff? || current_user.admin?))
   end
 
   # Null object pattern for auth. tokens
