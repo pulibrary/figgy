@@ -14,7 +14,7 @@ module ResourceController
       flash[:error] = "#{change_set_param} is not a valid resource type."
       redirect_to new_scanned_resource_path
     else
-      @change_set = change_set_class.new(new_resource, append_id: params[:parent_id]).prepopulate!
+      @change_set = ChangeSet.for(new_resource, append_id: params[:parent_id], change_set_param: change_set_param).prepopulate!
       authorize_create!(change_set: @change_set)
     end
   end
@@ -36,7 +36,7 @@ module ResourceController
   end
 
   def create
-    @change_set = change_set_class.new(resource_class.new)
+    @change_set = ChangeSet.for(resource_class.new, change_set_param: change_set_param)
     @change_set.validate(resource_params.merge(depositor: [current_user&.uid]))
     authorize_create!(change_set: @change_set)
     if @change_set.valid?
@@ -60,7 +60,7 @@ module ResourceController
   end
 
   def destroy
-    @change_set = change_set_class.new(find_resource(params[:id]))
+    @change_set = ChangeSet.for(find_resource(params[:id]))
     authorize! :destroy, @change_set.resource
     change_set_persister.buffer_into_index do |persist|
       persist.delete(change_set: @change_set)
@@ -74,14 +74,14 @@ module ResourceController
   end
 
   def edit
-    @change_set = change_set_class.new(find_resource(params[:id]))
+    @change_set = ChangeSet.for(find_resource(params[:id]))
     authorize! :update, @change_set.resource
     @change_set.prepopulate!
     @change_set.valid? # Run validations to display errors on first load.
   end
 
   def update
-    @change_set = change_set_class.new(find_resource(params[:id]))
+    @change_set = ChangeSet.for(find_resource(params[:id]))
     authorize! :update, @change_set.resource
     if @change_set.validate(resource_params)
       @change_set.sync
@@ -124,16 +124,16 @@ module ResourceController
   end
 
   def file_manager
-    @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
+    @change_set = ChangeSet.for(find_resource(params[:id])).prepopulate!
     authorize! :file_manager, @change_set.resource
     file_set_children = Wayfinder.for(@change_set.resource).members_with_parents.select { |x| x.is_a?(FileSet) }
     @children = file_set_children.map do |x|
-      change_set_class.new(x).prepopulate!
+      ChangeSet.for(x).prepopulate!
     end.to_a
   end
 
   def order_manager
-    @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
+    @change_set = ChangeSet.for(find_resource(params[:id])).prepopulate!
     authorize! :order_manager, @change_set.resource
   end
 
