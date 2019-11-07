@@ -84,7 +84,7 @@ describe Ability do
   end
 
   let(:complete_recording) do
-    FactoryBot.create_for_repository(:complete_recording, user: creating_user, files: [audio_file], visibility: ["restricted"], downloadable: ["none"])
+    FactoryBot.create_for_repository(:complete_recording, user: creating_user, files: [audio_file])
   end
 
   let(:token_downloadable_audio_file) { complete_playlist.decorate.file_sets.first }
