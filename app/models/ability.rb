@@ -235,7 +235,7 @@ class Ability
   end
 
   def downloadable?(obj)
-    obj.decorate.downloadable? || (!current_user.nil? && (current_user.staff? || current_user.admin?))
+    obj.decorate.downloadable? || authorized_by_token?(obj) || (!current_user.nil? && (current_user.staff? || current_user.admin?))
   end
 
   # Null object pattern for auth. tokens

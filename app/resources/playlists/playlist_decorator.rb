@@ -5,7 +5,7 @@ class PlaylistDecorator < Valkyrie::ResourceDecorator
 
   display_in_manifest [:title]
 
-  delegate :members, to: :wayfinder
+  delegate :file_sets, :members, to: :wayfinder
 
   def manageable_files?
     false

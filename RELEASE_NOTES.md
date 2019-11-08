@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-11-7
+
+## Fixed
+
+* Allow anonymous download of audio resource streams with token.
+
 # 2019-10-28
 
 ## Added

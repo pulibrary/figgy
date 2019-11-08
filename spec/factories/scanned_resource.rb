@@ -55,6 +55,8 @@ FactoryBot.define do
       end
       factory :complete_recording do
         state "complete"
+        downloadable "none"
+        visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
       end
     end
     factory :open_scanned_resource do
