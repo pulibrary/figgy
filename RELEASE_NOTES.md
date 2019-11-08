@@ -13,6 +13,13 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-11-8
+
+## Fixed
+
+* Remove WFS endpoints from raster resource geoblacklight documents.
+* Add WCS endpoints to raster resource documents.
+
 # 2019-11-7
 
 ## Fixed

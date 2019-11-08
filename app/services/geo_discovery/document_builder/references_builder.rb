@@ -28,6 +28,7 @@ module GeoDiscovery
           document.wxs_identifier = wxs_identifier
           document.wms_path = wms_path
           document.wfs_path = wfs_path
+          document.wcs_path = wcs_path
         end
 
         # Builds metadata file references.
@@ -94,6 +95,12 @@ module GeoDiscovery
         # @return [String] wfs server url
         def wfs_path
           wxs.wfs_path
+        end
+
+        # Returns the wcs server url.
+        # @return [String] wcs server url
+        def wcs_path
+          wxs.wcs_path
         end
     end
   end

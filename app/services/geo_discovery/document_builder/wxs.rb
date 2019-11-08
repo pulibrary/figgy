@@ -19,15 +19,22 @@ module GeoDiscovery
       # Returns the wms server url.
       # @return [String] wms server url
       def wms_path
-        return unless @config && visibility && file_set && file_set_format?
+        return unless @config && visibility && file_set && (raster_file_set? || vector_file_set?)
         "#{path}/#{@config[visibility][:workspace]}/wms"
       end
 
       # Returns the wfs server url.
       # @return [String] wfs server url
       def wfs_path
-        return unless @config && visibility && file_set && file_set_format?
+        return unless @config && visibility && file_set && vector_file_set?
         "#{path}/#{@config[visibility][:workspace]}/wfs"
+      end
+
+      # Returns the wfc server url.
+      # @return [String] wcs server url
+      def wcs_path
+        return unless @config && visibility && file_set && raster_file_set?
+        "#{path}/#{@config[visibility][:workspace]}/wcs"
       end
 
       private
@@ -41,12 +48,6 @@ module GeoDiscovery
             members = resource_decorator.geo_members.select { |m| m.id == member_id }
             members.first.decorate unless members.empty?
           end
-        end
-
-        # Tests if the file set is a vector or raster format.
-        # @return [Bool]
-        def file_set_format?
-          raster_file_set? || vector_file_set?
         end
 
         # Mime type of the file set.

@@ -331,9 +331,16 @@ describe GeoDiscovery::DocumentBuilder do
       metadata_adapter.persister.save(resource: file_set)
     end
 
-    it "has layer info fields" do
+    it "has metadata" do
+      # Layer info fields
       expect(document["layer_geom_type_s"]).to eq("Raster")
       expect(document["dc_format_s"]).to eq("GeoTIFF")
+
+      # References
+      refs = JSON.parse(document["dct_references_s"])
+      expect(refs["http://www.opengis.net/def/serviceType/ogc/wms"]).to match(/geoserver\/public-figgy\/wms/)
+      expect(refs["http://www.opengis.net/def/serviceType/ogc/wcs"]).to match(/geoserver\/public-figgy\/wcs/)
+      expect(refs["http://www.opengis.net/def/serviceType/ogc/wfs"]).to be_nil
     end
 
     context "with a non-Princeton value in the held_by property" do
