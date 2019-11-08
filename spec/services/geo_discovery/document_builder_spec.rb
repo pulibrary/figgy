@@ -249,7 +249,7 @@ describe GeoDiscovery::DocumentBuilder do
                                        visibility: visibility,
                                        identifier: "ark:/99999/fk4")
     end
-    let(:child) { FactoryBot.create_for_repository(:scanned_map, coverage: coverage.to_s, visibility: visibility) }
+    let(:child) { FactoryBot.create_for_repository(:scanned_map, coverage: coverage.to_s, visibility: visibility, gbl_suppressed_override: "0") }
     let(:parent_change_set) { ScannedMapChangeSet.new(geo_work, files: []) }
 
     before do
@@ -268,10 +268,10 @@ describe GeoDiscovery::DocumentBuilder do
 
     context "when it is a child resouce and gbl_suppressed_override is true" do
       subject(:document_builder) { described_class.new(query_service.find_by(id: child.id), document_class) }
-      let(:child) { FactoryBot.create_for_repository(:scanned_map, coverage: coverage.to_s, visibility: visibility, gbl_suppressed_override: true) }
+      let(:child) { FactoryBot.create_for_repository(:scanned_map, coverage: coverage.to_s, visibility: visibility, gbl_suppressed_override: "1") }
       let(:child_change_set) { ScannedMapChangeSet.new(child, files: []) }
       it "returns a non-suppressed document" do
-        expect(document["suppressed_b"]).to be_nil
+        expect(document["suppressed_b"]).to be false
       end
     end
 
@@ -286,7 +286,7 @@ describe GeoDiscovery::DocumentBuilder do
       end
 
       it "returns an un-suppressed document with a thumbnail ref and no source field" do
-        expect(document["suppressed_b"]).to be_nil
+        expect(document["suppressed_b"]).to be false
         expect(document["dc_source_sm"]).to be_nil
       end
 

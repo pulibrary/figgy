@@ -17,6 +17,12 @@ Release notes template:
 
 ## Fixed
 
+* Ensure that Scanned Map children in MapSets are suppressed in GeoBlacklight.
+
+# 2019-11-8
+
+## Fixed
+
 * Remove WFS endpoints from raster resource geoblacklight documents.
 * Add WCS endpoints to raster resource documents.
 
