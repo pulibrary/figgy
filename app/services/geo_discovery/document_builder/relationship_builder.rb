@@ -39,8 +39,8 @@ module GeoDiscovery
         # Documents with a parent work should be supressed.
         # @return [Boolean] should document be supressed?
         def suppressed
-          return if resource_decorator.model.gbl_suppressed_override
-          return unless scanned_map? && parent?
+          return false if resource_decorator.model.gbl_suppressed_override == "1"
+          return false unless scanned_map? && parent?
           true
         end
     end
