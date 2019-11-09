@@ -9,7 +9,6 @@ module Hathi
     attr_reader :resource, :pages, :template, :image_md
     def initialize(resource:)
       @resource = resource
-      @image_md = ImageMetadata.new resource: resource
       @pages = []
       wayfinder = Wayfinder.for(resource)
       wayfinder.members.each_with_index do |fileset, idx|
@@ -41,11 +40,19 @@ module Hathi
       %("Princeton University Library: Digital Photography Studio")
     end
 
+    def bitonal?
+      pages.first.bitonal?
+    end
+
+    def resolution
+      pages.first.resolution
+    end
+
     def reading_order
-      if resource.viewing_direction.empty?
-        %("left-to-right")        
-      else
+      if resource.viewing_direction
         resource.viewing_direction.first
+      else
+        %("left-to-right")        
       end
     end
 
@@ -91,12 +98,17 @@ module Hathi
       end
 
       def scanner_model
-        @original_image.data["properties"]["tiff:model"]
+        @properties["tiff:model"]
       end
 
       def bitonal?
         @original_image["%z"] == 1
       end
+
+      def resolution
+        @original_image["resolution"].first
+      end
+
 
       def to_txt
         source_page.ocr_content.first if ocr?

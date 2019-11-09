@@ -39,10 +39,6 @@ module Hathi
       original_image["resolution"].first
     end
 
-    def scanning_order
-      "left-to-right"
-    end
-
     def reading_order
       if resource.viewing_direction
         resource.viewing_direction.first
@@ -51,6 +47,9 @@ module Hathi
       end
     end
 
-    def pagedata; end
+    def pagedata
+      wf = Wayfinder.for(resource)
+    end
+      
   end
 end

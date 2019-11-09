@@ -37,6 +37,36 @@ RSpec.describe Hathi::ContentPackage do
     end
   end
 
+  describe "properties" do
+    it "has a capture date" do
+      expect(package.capture_date).to eq("2014-07-01T05:31:54")
+    end
+
+    it "supplies a scanner make" do
+      expect(package.scanner_make).to eq("Phase One")
+    end
+    
+    it "supplies a scanner model" do
+      expect(package.scanner_model).to eq("P65+")
+    end
+
+    it "supplies a scanner user" do
+    expect(package.scanner_user).to eq("\"Princeton University Library: Digital Photography Studio\"")
+    end
+
+    it "knows it isn't bitonal" do
+      expect(package.bitonal?).to be false
+    end
+
+    it "supplies image resolution" do
+      expect(package.resolution).to eq(1120)
+    end
+    
+    it "supplies a reading order" do
+      expect(package.reading_order).to eq(%("left-to-right"))
+    end
+  end
+
   describe ".pages" do
     it "has the right number of pages" do
       expect(package.pages.count).to eq 2
