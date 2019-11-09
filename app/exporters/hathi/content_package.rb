@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 require "pathname"
 require "erb"
+require "mini_magick"
+
 module Hathi
   class ContentPackage
     # See https://www.hathitrust.org/deposit_guidelines
@@ -23,6 +25,30 @@ module Hathi
       end
     end
 
+    def capture_date
+      pages.first.capture_date
+    end
+
+    def scanner_make
+      pages.first.scanner_make
+    end
+
+    def scanner_model
+      pages.first.scanner_model
+    end
+
+    def scanner_user
+      %("Princeton University Library: Digital Photography Studio")
+    end
+
+    def reading_order
+      if resource.viewing_direction.empty?
+        %("left-to-right")        
+      else
+        resource.viewing_direction.first
+      end
+    end
+
     def template
       path = File.join(File.dirname(__FILE__), "templates/meta.yml.erb")
       File.read(path)
@@ -38,6 +64,11 @@ module Hathi
       def initialize(source_fileset, name)
         @name = name
         @source_page = source_fileset
+        original_file = Valkyrie::StorageAdapter.find_by(id: source_page.original_file.file_identifiers.first)
+        @original_image = MiniMagick::Image.new(original_file.disk_path)
+        derivative_file = Valkyrie::StorageAdapter.find_by(id: source_page.derivative_file.file_identifiers.first)
+        @derivative_image = MiniMagick::Image.new(derivative_file.disk_path)
+        @properties = @original_image.data["properties"]
       end
 
       def tiff_path
@@ -49,6 +80,22 @@ module Hathi
       def derivative_path
         file_metadata = source_page.derivative_file
         Valkyrie::StorageAdapter.find_by(id: file_metadata.file_identifiers.first).disk_path
+      end
+
+      def capture_date
+        @properties["xmp:CreateDate"]
+      end
+
+      def scanner_make
+        @properties["tiff:make"]
+      end
+
+      def scanner_model
+        @original_image.data["properties"]["tiff:model"]
+      end
+
+      def bitonal?
+        @original_image["%z"] == 1
       end
 
       def to_txt
