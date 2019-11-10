@@ -6,7 +6,7 @@ require "mini_magick"
 module Hathi
   class ContentPackage
     # See https://www.hathitrust.org/deposit_guidelines
-    attr_reader :resource, :pages, :template, :image_md
+    attr_reader :resource, :pages, :template
     def initialize(resource:)
       @resource = resource
       @pages = []
@@ -37,7 +37,7 @@ module Hathi
     end
 
     def scanner_user
-      %("Princeton University Library: Digital Photography Studio")
+      "Princeton University Library: Digital Photography Studio"
     end
 
     def bitonal?
@@ -61,12 +61,31 @@ module Hathi
       File.read(path)
     end
 
-    def metadata
+    def metadata_old
       ERB.new(template).result(binding)
     end
 
+    def metadata
+      md = {}
+      md["capture_date"] = capture_date
+      md["scanner_make"] = scanner_make
+      md["scanner_model"] = scanner_model
+      md["scanner_user"] = scanner_user
+      md["reading_order"] = reading_order
+      md["pagedata"] = pagedata
+      return md
+    end
+
+    def pagedata
+      pd = []
+      pages.each do |p|
+        pd << p.pagedata
+      end
+      pd
+    end
+
     class Page
-      attr_reader :source_page, :name
+      attr_reader :source_page, :name, :original_image, :derivative_image, :properties
 
       def initialize(source_fileset, name)
         @name = name
@@ -89,6 +108,10 @@ module Hathi
         Valkyrie::StorageAdapter.find_by(id: file_metadata.file_identifiers.first).disk_path
       end
 
+      def pagedata
+        { source_page.derivative_file.label.first => { "label" => source_page.title.first } }
+      end
+
       def capture_date
         @properties["xmp:CreateDate"]
       end
@@ -108,7 +131,6 @@ module Hathi
       def resolution
         @original_image["resolution"].first
       end
-
 
       def to_txt
         source_page.ocr_content.first if ocr?
