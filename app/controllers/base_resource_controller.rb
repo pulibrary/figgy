@@ -38,11 +38,11 @@ class BaseResourceController < ApplicationController
     @new_pending_uploads = []
     # Use the new structure for the resources
     selected_files.each do |selected_file|
-      file_attributes = selected_file.to_h
+      file_attributes = selected_file.to_h.symbolize_keys
       auth_header_values = file_attributes.delete("auth_header")
       auth_header = JSON.generate(auth_header_values)
 
-      file_uri = file_attributes["url"]
+      file_uri = file_attributes[:url]
       file_path_match = /file\:\/\/(.+)/.match(file_uri)
       if file_path_match
         file_path = file_path_match[1]

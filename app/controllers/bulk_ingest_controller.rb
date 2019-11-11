@@ -163,7 +163,7 @@ class BulkIngestController < ApplicationController
 
       @new_pending_uploads = []
       selected_files.each do |selected_file|
-        file_attributes = selected_file.to_h
+        file_attributes = selected_file.to_h.symbolize_keys
 
         # This is needed in order to ensure that files are authorized for the
         # download from the Cloud Service provider
