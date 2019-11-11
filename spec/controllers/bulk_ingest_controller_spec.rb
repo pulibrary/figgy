@@ -230,11 +230,18 @@ RSpec.describe BulkIngestController do
 
       before do
         allow(BrowseEverythingIngestJob).to receive(:perform_later)
+        allow(PendingUpload).to receive(:new).and_call_original
       end
 
       it "ingests the parent as two resources" do
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-
+        expect(PendingUpload).to have_received(:new).with(
+          hash_including(
+            url: "https://www.example.com/files/1.tif?alt=media",
+            file_name: "1.tif",
+            file_size: "100"
+          )
+        )
         expect(BrowseEverythingIngestJob).to have_received(:perform_later).with(resources.first.id.to_s, "BulkIngestController", [resources.first.pending_uploads.first.id.to_s])
         expect(BrowseEverythingIngestJob).to have_received(:perform_later).with(resources.last.id.to_s, "BulkIngestController", [resources.last.pending_uploads.first.id.to_s])
       end
@@ -263,6 +270,14 @@ RSpec.describe BulkIngestController do
         end
 
         it "ingests the file as FileSets on a new member resource for a new parent resource" do
+          expect(PendingUpload).to have_received(:new).with(
+            hash_including(
+              url: "https://www.example.com/files/1.tif?alt=media",
+              file_name: "1.tif",
+              file_size: "100"
+            )
+          )
+
           expect(member_resources.length).to eq(2)
 
           expect(BrowseEverythingIngestJob).to have_received(:perform_later).with(member_resources.first.id.to_s, "BulkIngestController", member_resources.first.pending_uploads.map(&:id).map(&:to_s))
