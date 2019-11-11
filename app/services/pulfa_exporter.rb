@@ -2,7 +2,7 @@
 # Export Figgy content to PULFA, inserting DAOs into the EAD XML files linking to the Figgy manifest URLs
 class PulfaExporter
   attr_reader :since_date, :svn_client, :logger
-  def initialize(since_date:, logger: Logger.new(STDOUT), svn_client: nil)
+  def initialize(since_date:, logger: Rails.logger, svn_client: nil)
     @logger = logger
     @since_date = since_date
     @svn_client = svn_client || SvnClient.new
