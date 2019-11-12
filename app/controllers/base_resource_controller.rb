@@ -39,7 +39,7 @@ class BaseResourceController < ApplicationController
     # Use the new structure for the resources
     selected_files.each do |selected_file|
       file_attributes = selected_file.to_h.symbolize_keys
-      auth_header_values = file_attributes.delete("auth_header")
+      auth_header_values = file_attributes.delete(:auth_header)
       auth_header = JSON.generate(auth_header_values)
 
       file_uri = file_attributes[:url]

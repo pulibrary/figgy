@@ -13,6 +13,13 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-11-12
+
+## Fixed
+
+* Fixes a problem with Google Drive uploads in which authorization headers were
+  not being passed to the PendingUpload Resources.
+
 # 2019-11-8
 
 ## Fixed
