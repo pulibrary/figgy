@@ -51,7 +51,7 @@ RSpec.describe Hathi::ContentPackage do
     end
 
     it "supplies a scanner user" do
-    expect(package.scanner_user).to eq("\"Princeton University Library: Digital Photography Studio\"")
+      expect(package.scanner_user).to eq("Princeton University Library: Digital Photography Studio")
     end
 
     it "knows it isn't bitonal" do
