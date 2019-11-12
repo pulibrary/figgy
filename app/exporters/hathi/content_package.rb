@@ -73,7 +73,7 @@ module Hathi
       md["scanner_user"] = scanner_user
       md["reading_order"] = reading_order
       md["pagedata"] = pagedata
-      return md
+      md
     end
 
     def pagedata

@@ -45,7 +45,7 @@ RSpec.describe Hathi::ContentPackage do
     it "supplies a scanner make" do
       expect(package.scanner_make).to eq("Phase One")
     end
-    
+   
     it "supplies a scanner model" do
       expect(package.scanner_model).to eq("P65+")
     end
@@ -61,7 +61,7 @@ RSpec.describe Hathi::ContentPackage do
     it "supplies image resolution" do
       expect(package.resolution).to eq(1120)
     end
-    
+
     it "supplies a reading order" do
       expect(package.reading_order).to eq(%("left-to-right"))
     end
