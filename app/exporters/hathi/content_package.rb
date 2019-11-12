@@ -52,7 +52,7 @@ module Hathi
       if resource.viewing_direction
         resource.viewing_direction.first
       else
-        %("left-to-right")        
+        %("left-to-right")
       end
     end
 
