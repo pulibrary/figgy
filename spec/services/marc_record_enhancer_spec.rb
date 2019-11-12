@@ -212,7 +212,15 @@ RSpec.describe MarcRecordEnhancer do
       let(:marc_record) do
         MARC::Record.new.tap do |r|
           r.append(cico_510)
+          r.append(cico_024)
         end
+      end
+      let(:cico_024) do
+        MARC::DataField.new(
+          "024", "7", " ",
+          MARC::Subfield.new("a", "3723"),
+          MARC::Subfield.new("2", "cico")
+        )
       end
       let(:cico_510) do
         MARC::DataField.new(
@@ -222,6 +230,35 @@ RSpec.describe MarcRecordEnhancer do
         )
       end
       it "leaves that 510" do
+        references = enhancer.enhance_cicognara.fields("510").select do |field|
+          field.indicator1 == "4" &&
+            field.indicator2 == " " &&
+            field.subfields.select { |subfield| subfield.code == "a" }.first.value.starts_with?("Cicognara") &&
+            field.subfields.select { |subfield| subfield.code == "c" }.count == 1
+        end
+        expect(references.count).to eq 1
+        subfield_c = references.first.subfields.select { |s| s.code == "c" }.first
+        expect(subfield_c.value).to eq "3723"
+      end
+    end
+
+    context "when the record has the cico number in a 024" do
+      let(:marc_record) do
+        MARC::Record.new.tap do |r|
+          r.append(cico_024)
+        end
+      end
+      let(:cico_024) do
+        MARC::DataField.new(
+          "024", "7", " ",
+          MARC::Subfield.new("a", "3723"),
+          MARC::Subfield.new("2", "cico")
+        )
+      end
+      before do
+        allow(metadata_mock).to receive(:references).and_return([])
+      end
+      it "creates a 510 out of it" do
         references = enhancer.enhance_cicognara.fields("510").select do |field|
           field.indicator1 == "4" &&
             field.indicator2 == " " &&

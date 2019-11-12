@@ -65,7 +65,7 @@ class MarcRecordEnhancer
     end
 
     def add_510
-      return unless resource.try(:imported_metadata)&.first&.references&.present?
+      return add_510_from_024 unless resource.try(:imported_metadata)&.first&.references&.present?
       cico_reference = resource.imported_metadata.first.references.first
       return unless cico_reference =~ /Cicognara/ && cico_reference =~ /(\d+)[\[A-Za-z\]]*$/
       cico_number = cico_reference.match(/(\d+)[\[A-Za-z\]]*$/)[1]
@@ -79,6 +79,22 @@ class MarcRecordEnhancer
       )
     end
 
+    def add_510_from_024
+      return unless cico_024s.present?
+      cico_024s.each do |cico024|
+        cico_number = cico024.subfields.find { |s| s.code == "a" }.value
+        # Don't copy over already existing 510
+        next if references.include?(cico_number)
+        marc.append(
+          MARC::DataField.new(
+            "510", "4", " ",
+            MARC::Subfield.new("a", "Cicognara,"),
+            MARC::Subfield.new("c", cico_number)
+          )
+        )
+      end
+    end
+
     def existing_856s
       @existing_856s ||= marc.fields("856").select { |f| f.indicator1.eql?("4") && f.indicator2.eql?("1") }
     end
@@ -87,6 +103,15 @@ class MarcRecordEnhancer
       existing_856s.select do |f|
         f.subfields.select { |s| s.code == "u" }.first.value == uri
       end.first
+    end
+
+    def cico_024s
+      @cico_024s ||=
+        begin
+          marc.fields("024").select do |f|
+            f.subfields.find { |s| s.code == "2" }&.value == "cico"
+          end
+        end
     end
 
     def existing_024s(id)

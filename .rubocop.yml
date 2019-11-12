@@ -105,6 +105,7 @@ Metrics/ClassLength:
     - 'app/services/preserver.rb'
     - 'app/services/preserver/importer.rb'
     - 'app/resources/collections/collections_controller.rb'
+    - 'app/services/marc_record_enhancer.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/helpers/application_helper.rb'
