@@ -58,6 +58,11 @@ MARC items. Currently only the marc21 `metadata_prefix` is supported.
 
 # 2019-11-12
 
+## Added
+
+* Added a query, job, and Rake task for cleaning resources with failed file
+  uploads.
+
 ## Fixed
 
 * Fixes a problem with Google Drive uploads in which authorization headers were

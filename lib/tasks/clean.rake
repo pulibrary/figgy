@@ -16,4 +16,9 @@ namespace :clean do
   task :dead_queues do
     CleanDeadQueuesJob.set(queue: :low).perform_later
   end
+
+  desc "Clean failed PendingUpload Resources."
+  task pending_uploads: [:environment] do
+    CleanPendingUploadsJob.set(queue: :low).perform_later
+  end
 end
