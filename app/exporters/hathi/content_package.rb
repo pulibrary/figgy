@@ -56,15 +56,6 @@ module Hathi
       end
     end
 
-    def template
-      path = File.join(File.dirname(__FILE__), "templates/meta.yml.erb")
-      File.read(path)
-    end
-
-    def metadata_old
-      ERB.new(template).result(binding)
-    end
-
     def metadata
       md = {}
       md["capture_date"] = capture_date

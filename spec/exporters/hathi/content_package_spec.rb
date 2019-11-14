@@ -11,6 +11,7 @@ RSpec.describe Hathi::ContentPackage do
     scanned_resource = FactoryBot.create_for_repository(:scanned_resource,
                                                         source_metadata_identifier: "123456",
                                                         ocr_language: "eng",
+                                                        viewing_direction: [%("right-to-left")],
                                                         files: [file1, file2])
     scanned_resource
   end
@@ -26,14 +27,19 @@ RSpec.describe Hathi::ContentPackage do
   end
 
   # stub the resource.source_metadata_identifier to return nil
-  describe "default id" do
+  describe "defaults" do
     before do
       allow(package.resource).to receive(:source_metadata_identifier).and_return(nil)
+      allow(package.resource).to receive(:viewing_direction).and_return(nil)
     end
 
     it "defaults to the resource id" do
       resource_id_string = package.resource.id.to_s
       expect(package.id).to eq(resource_id_string)
+    end
+
+    it "defaults to \"left-to-right\" reading order" do
+      expect(package.reading_order).to eq(%("left-to-right"))
     end
   end
 
@@ -63,7 +69,18 @@ RSpec.describe Hathi::ContentPackage do
     end
 
     it "supplies a reading order" do
-      expect(package.reading_order).to eq(%("left-to-right"))
+      expect(package.reading_order).to eq(%("right-to-left"))
+    end
+  end
+
+  describe "metadata" do
+    it "has metadata" do
+      expect(package.metadata['capture_date']).to eq(package.capture_date)
+      expect(package.metadata['scanner_make']).to eq(package.scanner_make)
+      expect(package.metadata['scanner_model']).to eq(package.scanner_model)
+      expect(package.metadata['scanner_user']).to eq(package.scanner_user)
+      expect(package.metadata['reading_order']).to eq(package.reading_order)
+      expect(package.metadata['pagedata']).to eq(package.pagedata)
     end
   end
 
