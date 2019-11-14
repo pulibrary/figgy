@@ -75,12 +75,12 @@ RSpec.describe Hathi::ContentPackage do
 
   describe "metadata" do
     it "has metadata" do
-      expect(package.metadata['capture_date']).to eq(package.capture_date)
-      expect(package.metadata['scanner_make']).to eq(package.scanner_make)
-      expect(package.metadata['scanner_model']).to eq(package.scanner_model)
-      expect(package.metadata['scanner_user']).to eq(package.scanner_user)
-      expect(package.metadata['reading_order']).to eq(package.reading_order)
-      expect(package.metadata['pagedata']).to eq(package.pagedata)
+      expect(package.metadata["capture_date"]).to eq(package.capture_date)
+      expect(package.metadata["scanner_make"]).to eq(package.scanner_make)
+      expect(package.metadata["scanner_model"]).to eq(package.scanner_model)
+      expect(package.metadata["scanner_user"]).to eq(package.scanner_user)
+      expect(package.metadata["reading_order"]).to eq(package.reading_order)
+      expect(package.metadata["pagedata"]).to eq(package.pagedata)
     end
   end
 
