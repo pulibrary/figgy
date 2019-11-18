@@ -38,7 +38,11 @@ class PulfaExporter
       logger.info "Exporting DAOs to PULFA SVN"
       grouped_objects.keys.each do |collection_code|
         file = ead_for(collection_code)
-        update_ead(file, grouped_objects[collection_code])
+        if file
+          update_ead(file, grouped_objects[collection_code])
+        else
+          Honeybadger.notify("Unable to find EAD for collection #{collection_code}")
+        end
       end
       svn_client.commit
       notify
