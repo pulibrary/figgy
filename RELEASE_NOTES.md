@@ -13,6 +13,13 @@ Release notes template:
 ## Removed
 
 -->
+# 2019-11-19
+
+## Added
+
+* OAI-PMH endpoint implemented at `/oai` for synchronization with Getty of our
+MARC items. Currently only the marc21 `metadata_prefix` is supported.
+
 # 2019-11-18
 
 ## Fixed
