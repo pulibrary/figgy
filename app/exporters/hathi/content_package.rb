@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 require "pathname"
 require "erb"
+require "mini_magick"
+
 module Hathi
   class ContentPackage
     # See https://www.hathitrust.org/deposit_guidelines
-    attr_reader :resource, :pages, :template, :image_md
+    attr_reader :resource, :pages, :template
     def initialize(resource:)
       @resource = resource
-      @image_md = ImageMetadata.new resource: resource
       @pages = []
       wayfinder = Wayfinder.for(resource)
       wayfinder.members.each_with_index do |fileset, idx|
@@ -23,21 +24,68 @@ module Hathi
       end
     end
 
-    def template
-      path = File.join(File.dirname(__FILE__), "templates/meta.yml.erb")
-      File.read(path)
+    def capture_date
+      pages.first.capture_date
+    end
+
+    def scanner_make
+      pages.first.scanner_make
+    end
+
+    def scanner_model
+      pages.first.scanner_model
+    end
+
+    def scanner_user
+      "Princeton University Library: Digital Photography Studio"
+    end
+
+    def bitonal?
+      pages.first.bitonal?
+    end
+
+    def resolution
+      pages.first.resolution
+    end
+
+    def reading_order
+      if resource.viewing_direction
+        resource.viewing_direction.first
+      else
+        %("left-to-right")
+      end
     end
 
     def metadata
-      ERB.new(template).result(binding)
+      md = {}
+      md["capture_date"] = capture_date
+      md["scanner_make"] = scanner_make
+      md["scanner_model"] = scanner_model
+      md["scanner_user"] = scanner_user
+      md["reading_order"] = reading_order
+      md["pagedata"] = pagedata
+      md
+    end
+
+    def pagedata
+      pd = []
+      pages.each do |p|
+        pd << p.pagedata
+      end
+      pd
     end
 
     class Page
-      attr_reader :source_page, :name
+      attr_reader :source_page, :name, :original_image, :derivative_image, :properties
 
       def initialize(source_fileset, name)
         @name = name
         @source_page = source_fileset
+        original_file = Valkyrie::StorageAdapter.find_by(id: source_page.original_file.file_identifiers.first)
+        @original_image = MiniMagick::Image.new(original_file.disk_path)
+        derivative_file = Valkyrie::StorageAdapter.find_by(id: source_page.derivative_file.file_identifiers.first)
+        @derivative_image = MiniMagick::Image.new(derivative_file.disk_path)
+        @properties = @original_image.data["properties"]
       end
 
       def tiff_path
@@ -49,6 +97,30 @@ module Hathi
       def derivative_path
         file_metadata = source_page.derivative_file
         Valkyrie::StorageAdapter.find_by(id: file_metadata.file_identifiers.first).disk_path
+      end
+
+      def pagedata
+        { source_page.derivative_file.label.first => { "label" => source_page.title.first } }
+      end
+
+      def capture_date
+        @properties["xmp:CreateDate"]
+      end
+
+      def scanner_make
+        @properties["tiff:make"]
+      end
+
+      def scanner_model
+        @properties["tiff:model"]
+      end
+
+      def bitonal?
+        @original_image["%z"] == 1
+      end
+
+      def resolution
+        @original_image["resolution"].first
       end
 
       def to_txt

@@ -62,9 +62,9 @@ module Hathi
 
       def deposit_metadata
         digester.reset
-        digester << package.metadata
+        digester << package.metadata.to_yaml
         File.open(File.join(@export_dir, "meta.yml"), "w") do |f|
-          f.write package.metadata
+          f.write package.metadata.to_yaml
         end
         checksums["meta.yml"] = digester.hexdigest
       end
