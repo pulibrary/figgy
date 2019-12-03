@@ -53,9 +53,9 @@ class ManifestBuilder
         {
           "@id" => helper.manifest_image_thumbnail_path(file_set),
           "service" => {
-            "@context" => "http://iiiif.io/api/image/2/context.json",
+            "@context" => "http://iiif.io/api/image/2/context.json",
             "@id" => helper.manifest_image_path(file_set),
-            "profile" => "http;//iiiif.io/api/image/2/level2.json"
+            "profile" => "http://iiif.io/api/image/2/level2.json"
           }
         }
       end
