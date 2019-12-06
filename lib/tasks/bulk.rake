@@ -28,12 +28,14 @@ namespace :bulk do
     replaces = ENV["REPLACES"]
     background = ENV["BACKGROUND"]
     model = ENV["MODEL"]
+    filter = ENV["FILTER"]
 
-    abort "usage: rake bulk:ingest DIR=/path/to/files BIB=1234567 COLL=collid LOCAL_ID=local_id REPLACES=replaces MODEL=ResourceClass" unless dir && Dir.exist?(dir)
+    abort "usage: rake bulk:ingest DIR=/path/to/files BIB=1234567 COLL=collid LOCAL_ID=local_id REPLACES=replaces FILTER=file_filter MODEL=ResourceClass" unless dir && Dir.exist?(dir)
 
     @logger = Logger.new(STDOUT)
     @logger.warn "No BIB id specified" unless bib
     @logger.info "ingesting files from: #{dir}"
+    @logger.info "filtering to files ending with #{filter}" if filter
     @logger.info "ingesting as: #{user.user_key} (override with USER=foo)"
     @logger.info "adding item to collection #{coll}" if coll
     if model
@@ -53,6 +55,7 @@ namespace :bulk do
         IngestFolderJob.set(queue: :low).perform_later(
           directory: dir,
           class_name: class_name,
+          file_filters: [filter],
           member_of_collection_ids: [coll],
           source_metadata_identifier: bib,
           local_identifier: local_id,
@@ -62,6 +65,7 @@ namespace :bulk do
         IngestFolderJob.perform_now(
           directory: dir,
           class_name: class_name,
+          file_filters: [filter],
           member_of_collection_ids: [coll],
           source_metadata_identifier: bib,
           local_identifier: local_id,
@@ -199,7 +203,7 @@ namespace :bulk do
           directory: dir,
           class_name: class_name,
           property: field,
-          file_filter: filter,
+          file_filters: [filter],
           change_set_class: change_set
         )
       else
@@ -207,7 +211,7 @@ namespace :bulk do
           directory: dir,
           class_name: class_name,
           property: field,
-          file_filter: filter,
+          file_filters: [filter],
           change_set_class: change_set
         )
       end
