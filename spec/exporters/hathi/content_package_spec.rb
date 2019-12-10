@@ -11,7 +11,7 @@ RSpec.describe Hathi::ContentPackage do
     scanned_resource = FactoryBot.create_for_repository(:scanned_resource,
                                                         source_metadata_identifier: "123456",
                                                         ocr_language: "eng",
-                                                        viewing_direction: [%("right-to-left")],
+                                                        viewing_direction: ["right-to-left"],
                                                         files: [file1, file2])
     scanned_resource
   end
@@ -39,7 +39,7 @@ RSpec.describe Hathi::ContentPackage do
     end
 
     it "defaults to \"left-to-right\" reading order" do
-      expect(package.reading_order).to eq(%("left-to-right"))
+      expect(package.reading_order).to eq("left-to-right")
     end
   end
 
@@ -69,7 +69,7 @@ RSpec.describe Hathi::ContentPackage do
     end
 
     it "supplies a reading order" do
-      expect(package.reading_order).to eq(%("right-to-left"))
+      expect(package.reading_order).to eq("right-to-left")
     end
   end
 
