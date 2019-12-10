@@ -342,6 +342,8 @@ GEM
       i18n (~> 0.5)
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
+    faraday_middleware (0.13.1)
+      faraday (>= 0.7.4, < 1.0)
     ffi (1.11.1)
     flutie (2.0.0)
     font-awesome-rails (4.7.0.4)
@@ -557,6 +559,10 @@ GEM
     nokogiri (1.10.5)
       mini_portile2 (~> 2.4.0)
     normalize-rails (4.1.1)
+    oai (1.0.0)
+      builder (>= 3.1.0)
+      faraday
+      faraday_middleware
     oauth2 (1.4.1)
       faraday (>= 0.8, < 0.16.0)
       jwt (>= 1.0, < 3.0)
@@ -943,6 +949,7 @@ DEPENDENCIES
   mini_magick
   modernizr-rails
   normalize-rails
+  oai (~> 1.0.0)
   omniauth (~> 1.9)
   omniauth-cas
   openseadragon
