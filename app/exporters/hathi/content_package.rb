@@ -96,6 +96,14 @@ module Hathi
         @basename + "." + extension
       end
 
+      def ocr_filename
+        @basename + ".txt"
+      end
+
+      def hocr_filename
+        @basename + ".html"
+      end
+
       def pagedata
         { image_filename => { "label" => @fileset.title.first } }
       end
