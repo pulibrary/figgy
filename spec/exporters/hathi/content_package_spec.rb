@@ -90,18 +90,13 @@ RSpec.describe Hathi::ContentPackage do
     end
 
     it "has the right page names" do
-      expect(package.pages.first.name).to eq "00000001"
-      expect(package.pages[1].name).to eq "00000002"
+      expect(package.pages.first.image_filename).to eq "00000001.jp2"
+      expect(package.pages[1].image_filename).to eq "00000002.jp2"
     end
 
-    it "has paths to tiff files" do
+    it "has path to image file" do
       page = package.pages.first
-      expect(page.tiff_path.ftype).to eq "file"
-    end
-
-    it "has paths to jp2 files" do
-      page = package.pages.first
-      expect(page.derivative_path.ftype).to eq "file"
+      expect(page.path_to_file.ftype).to eq "file"
     end
 
     it "has text streams" do
@@ -112,6 +107,14 @@ RSpec.describe Hathi::ContentPackage do
     it "has html streams" do
       page = package.pages.first
       expect(page.to_html).to be_present
+    end
+
+    it "has proper pagedata" do
+      pd = package.pages.first.pagedata
+      imagename = pd.keys.first
+      expect(imagename).to eq "00000001.jp2"
+      label = pd[imagename]["label"]
+      expect(label).to eq "example.tif"
     end
   end
 end
