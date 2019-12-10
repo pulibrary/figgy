@@ -76,7 +76,6 @@ module Hathi
     end
 
     class Page
-
       def initialize(fileset, basename)
         @basename = basename
         @fileset = fileset
@@ -93,7 +92,7 @@ module Hathi
       end
 
       def image_filename
-        extension = image_file.mime_type.first.split('/').last
+        extension = image_file.mime_type.first.split("/").last
         @basename + "." + extension
       end
 
@@ -149,6 +148,5 @@ module Hathi
         @fileset.derivative_file
       end
     end
-
   end
 end
