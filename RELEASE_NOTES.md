@@ -12,6 +12,12 @@ Release notes template:
 
 ## Removed
 
+# 2019-12-11
+
+## Fixed
+
+* Updated browse-everything in order to provide access to shared Google Drive
+ items
 
 # 2019-12-09
 
