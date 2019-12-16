@@ -47,11 +47,6 @@ class BaseResourceController < ApplicationController
       auth_header = JSON.generate(auth_header_values)
 
       file_uri = file_attributes[:url]
-      file_path_match = /file\:\/\/(.+)/.match(file_uri)
-      if file_path_match
-        file_path = file_path_match[1]
-        next if File.basename(file_path) =~ /^\./
-      end
 
       new_pending_upload = PendingUpload.new(
         file_attributes.merge(
