@@ -12,13 +12,183 @@ Release notes template:
 
 ## Removed
 
--->
-# 2019-09-03
+# 2019-12-16
 
 ## Fixed
 
 * Google Drive uploads should now work for directories with over 500 contained
   entries (and generally have improved performance)
+
+# 2019-12-11
+
+## Fixed
+
+* Updated browse-everything in order to provide access to shared Google Drive
+ items
+
+# 2019-12-09
+
+## Fixed
+
+* Alert messages are no longer hidden by the banner.
+
+# 2019-11-19
+
+## Added
+
+* OAI-PMH endpoint implemented at `/oai` for synchronization with Getty of our
+MARC items. Currently only the marc21 `metadata_prefix` is supported.
+
+# 2019-11-18
+
+## Fixed
+
+* Gracefully handling error reporting when an EAD can't be found for an item linked to PULFA.
+
+# 2019-11-12
+
+## Fixed
+
+* Fixes a problem with Google Drive uploads in which authorization headers were
+  not being passed to the PendingUpload Resources.
+
+# 2019-11-8
+
+## Fixed
+
+* Ensure that Scanned Map children in MapSets are suppressed in GeoBlacklight.
+
+# 2019-11-8
+
+## Fixed
+
+* Remove WFS endpoints from raster resource geoblacklight documents.
+* Add WCS endpoints to raster resource documents.
+
+# 2019-11-7
+
+## Fixed
+
+* Allow anonymous download of audio resource streams with token.
+
+# 2019-10-28
+
+## Added
+
+* Added filename in numismatics manager.
+
+# 2019-10-23
+
+## Fixed
+
+* Removed the IIIF viewer download drop-down menu for non-downloadable public resources.
+* Anonymous downloads are disabled for non-downloadable public resources.
+
+# 2019-10-18
+
+## Fixed
+
+* Fixes stale object errors for raster and vector resource derivatives.
+
+# 2019-10-18
+
+## Added
+
+* Automatically adding links to Figgy objects to finding aids as DAO elements.
+* Exporting collections as PDFs.
+
+# 2019-10-16
+
+## Added
+
+* Figgy resources are now preserved by default
+
+# 2019-10-14
+
+## Added
+
+* Ephemera Projects can now have "contributors" assigned, who have permission to
+create/edit folders and boxes only in that Project.
+
+# 2019-10-10
+
+## Fixed
+
+* Fixed issue where some scanned map geoblacklight documents don't have dates.
+
+# 2019-10-09
+
+## Added
+
+* Added keywords as an available field to Ephemera Folders
+
+# 2019-10-07
+
+## Fixed
+
+* Fixed error where bounding box widget was not rendering on geo resources.
+
+# 2019-10-04
+
+## Fixed
+
+* Fixed bug with generating formatted issue date values in GeoBlacklight documents.
+
+# 2019-10-02
+
+## Added
+
+* Added rake task to run a cloud fixity check on a single resource.
+
+# 2019-09-27
+
+## Added
+
+* Adding HathiTrust submission-information-package creator to exporters.
+
+
+# 2019-09-26
+
+## Fixed
+
+* Fixed error with Universal Viewer / OpenSeadragon  attempting to load zero-dimension images.
+
+# 2019-09-26
+
+## Added
+
+* Scanned map thumbnail images can now be chosen from a dropdown on the edit
+  page.
+
+# 2019-09-16
+
+## Added
+
+* Updating imported metadata from PULFA nightly.
+
+# 2019-09-12
+
+## Fixed
+
+* Viewer no longer pushes buttons to the next line when there are long page
+titles.
+
+# 2019-09-06
+
+## Added
+
+* Visibility can now be edited with Bulk Edit
+* Start running daily fixity checks on a random subset of resources preserved in the cloud.
+
+# 2019-09-03
+
+## Added
+
+* Preserved FileSets can be reinstated from the File Manager after delete.
+
+## Fixed
+
+* Fixed error downloading PDFs for Ephemera
 
 # 2019-08-20
 
