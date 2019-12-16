@@ -40,7 +40,7 @@ class BaseResourceController < ApplicationController
     return @new_pending_uploads unless @new_pending_uploads.nil?
 
     @new_pending_uploads = []
-    # Use the new structure for the resources
+    # This is provided within BrowseEverything::Parameters#selected_files
     selected_files.each do |selected_file|
       file_attributes = selected_file.to_h
       auth_header_values = file_attributes.delete("auth_header")
