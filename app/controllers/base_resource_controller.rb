@@ -46,8 +46,6 @@ class BaseResourceController < ApplicationController
       auth_header_values = file_attributes.delete("auth_header")
       auth_header = JSON.generate(auth_header_values)
 
-      file_uri = file_attributes[:url]
-
       new_pending_upload = PendingUpload.new(
         file_attributes.merge(
           id: SecureRandom.uuid,
