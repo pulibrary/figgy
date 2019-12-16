@@ -64,7 +64,7 @@ class PulfaExporter
       ead = Nokogiri::XML(File.open(filename))
 
       # make sure we have the xlink namespace
-      ead.root.add_namespace("xlink", namespaces_for_xpath["xlink"])
+      ead.root.add_namespace("xlink", namespaces_for_xpath[:xlink])
 
       resources.each do |r|
         cid = r.source_metadata_identifier&.first
