@@ -9,8 +9,9 @@ class ExportService
   # @param filename [String] Filename to export to, defaults to the resource ID with ".pdf" added
   def self.export_pdf(resource, filename: "#{resource.id}.pdf")
     fn = "#{export_base}/#{filename}"
-    mtime = File.exist?(fn) && File.mtime(fn)
-    Rails.logger.info("Skipping fresh PDF: #{fn}") && return if mtime && mtime > resource.updated_at
+    ead_time = File.exist?(fn) && File.mtime(fn)
+    obj_time = Time.strptime(resource.updated_at, "%m/%d/%y %H:%M:%S %p %Z")
+    Rails.logger.info("Skipping fresh PDF: #{fn}") && return if ead_time && ead_time > obj_time
 
     change_set = DynamicChangeSet.new(resource)
     pdf_desc = PDFService.new(change_set_persister).find_or_generate(change_set)
