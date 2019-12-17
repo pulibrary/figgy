@@ -166,6 +166,7 @@ class MusicImportService::RecordingCollector
 
     json = JSON.parse result.body
     # return nil unless json["response"]["docs"].count.positive?
+    return [] unless json["response"]
     json["response"]["docs"].map { |doc| doc["id"] } # will be [] if no results
   end
 
