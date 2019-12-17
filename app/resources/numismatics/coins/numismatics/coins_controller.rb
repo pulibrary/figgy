@@ -15,7 +15,7 @@ module Numismatics
     before_action :load_numismatic_firms, only: [:new, :edit]
     before_action :load_numismatic_people, only: [:new, :edit]
     before_action :load_numismatic_references, only: [:new, :edit]
-    before_action :load_available_issues, only: [:new, :edit]
+    #before_action :load_available_issues, only: [:new, :edit]
     before_action :selected_issue, only: [:new, :edit, :destroy]
 
     def load_find_places
