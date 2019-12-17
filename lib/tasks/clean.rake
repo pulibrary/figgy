@@ -18,7 +18,8 @@ namespace :clean do
   end
 
   desc "Clean failed PendingUpload Resources."
-  task pending_uploads: [:environment] do
-    CleanPendingUploadsJob.set(queue: :low).perform_later
+  task :pending_uploads, [:dry_run] => [:environment] do |_t, args|
+    args.with_defaults(dry_run: false)
+    CleanPendingUploadsJob.set(queue: :low).perform_later(dry_run: args[:dry_run].present?)
   end
 end
