@@ -12,7 +12,6 @@ class MusicImportService
     @file_root = file_root
   end
 
-  # yes there will be a #run method but the first step is the call number report
   def bibid_report
     suspected_playlists, real_recordings = recordings.partition { |rec| rec.call&.starts_with? "x-" }
     numbered_courses, rest = real_recordings.partition { |rec| rec.courses.any? { |course| numbered_course_name?(course) } }
@@ -197,7 +196,7 @@ class MusicImportService
     end
 
     def ingest_recording
-      logger.info "Ingesting #{recording.titles}"
+      logger.info "Ingesting #{recording.id}: #{recording.titles}"
       output = nil
       recording_change_set.files = files
       if in_performance_course?

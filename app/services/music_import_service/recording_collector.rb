@@ -26,6 +26,7 @@ class MusicImportService::RecordingCollector
     )
   end
 
+  # rubocop:disable Metrics/BlockLength
   def recordings
     @recordings ||=
       begin
@@ -44,6 +45,8 @@ class MusicImportService::RecordingCollector
             rec.bibs = bib_numbers_for(call_number: rec.call)
             logger.info "  got #{rec.bibs}"
           end
+          results_with_bib_populated = results.select { |x| x.bibs.present? }
+          logger.info "Found #{results_with_bib_populated} bibs from call numbers"
           # Find bibs via title
           @found_bibs = 0
           results.select { |x| x.bibs.empty? }.each do |recording|
@@ -55,11 +58,16 @@ class MusicImportService::RecordingCollector
             recording.recommended_bib = bib_records.find { |x| x[:title_distance] <= 6 }.try(:[], :id)
           end
           store_cached_bibs
-          logger.info "Found #{@found_bibs} bibs from searching"
+          logger.info "Found #{@found_bibs} bibs from titles"
+          logger.info "recordings without bibids:"
+          results.select { |x| x.bibs.empty? }.each do |recording|
+            logger.info "  #{recording}"
+          end
           results
         end
       end
   end
+  # rubocop:enable Metrics/BlockLength
 
   def populate_bib_from_title(recording)
     logger.info "populating bib from title for #{recording.titles.first}"
@@ -132,11 +140,11 @@ class MusicImportService::RecordingCollector
   def normalization_strategies
     { space_after_hyphen: "label",
       space_replace_hyphen: "label",
+      volume_expansion: "label",
+      volume_space_expansion: "label",
       space_after_hyphen_lc: "sort",
       space_replace_hyphen_lc: "sort",
-      just_lc: "sort",
-      volume_expansion: "label",
-      volume_space_expansion: "label" }
+      just_lc: "sort" }
   end
 
   # check the call numbers database for the call number given
@@ -170,7 +178,7 @@ class MusicImportService::RecordingCollector
     json["response"]["docs"].map { |doc| doc["id"] } # will be [] if no results
   end
 
-  # apply normalization which replaces a space with a hyphen
+  # apply normalization which adds a space after a hyphen
   def space_after_hyphen(call_number)
     return unless call_number
     general_normalization(call_number) do |cn|
@@ -201,7 +209,7 @@ class MusicImportService::RecordingCollector
     call_number
   end
 
-  # apply normalization which adds a space after a hyphen
+  # apply normalization which replaces a space with a hyphen
   def space_replace_hyphen(call_number)
     return unless call_number
     general_normalization(call_number) do |cn|
