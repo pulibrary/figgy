@@ -34,6 +34,7 @@ namespace :music do
       )
       importer.ingest_recording(new_collector.recordings.first)
     end
+
     desc "import a course's recordings"
     task course: :environment do
       sql_serv_user = ENV["SQL_SERV_USER"]
@@ -64,6 +65,7 @@ namespace :music do
       importer.ingest_course(course)
     end
   end
+
   namespace :report do
     # Note that to run this task you need to install FreeTDS `brew install FreeTDS`
     desc "report on resolving call numbers to bib ids"
