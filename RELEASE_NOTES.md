@@ -18,6 +18,8 @@ Release notes template:
 
 ## Added
 
+* Users now select monograms from a gallery UI component when they create or edit a numismatic issue
+
 * Added Collection membership to Ephemera folders
 
 # 2020-01-02

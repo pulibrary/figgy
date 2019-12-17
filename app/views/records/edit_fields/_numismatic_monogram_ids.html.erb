@@ -1,7 +1,3 @@
-<%= f.input :numismatic_monogram_ids,
-            collection: @numismatic_monograms&.sort_by(&:title),
-            label_method: :title,
-            value_method: :id,
-            input_html: { multiple: f.object.multiple?(key) },
-            include_blank: false,
-            required: f.object.required?(key) %>
+<label>Monogram</label>
+
+<issue-monograms :members="<%= @numismatic_monogram_attributes.to_json %>"></issue-monograms>
