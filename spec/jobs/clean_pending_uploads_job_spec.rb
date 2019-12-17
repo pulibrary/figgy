@@ -58,7 +58,8 @@ RSpec.describe CleanPendingUploadsJob do
       resource3
       described_class.perform_now
       # Ensure that the Resource with the PendingUploads has not been deleted
-      query_service.find_by(id: resource3.id)
+      found_resource3 = query_service.find_by(id: resource3.id)
+      expect(found_resource3).not_to be_nil
 
       found_resource2 = query_service.find_by(id: resource2.id)
       expect(found_resource2.decorate.file_sets).not_to be_empty
@@ -67,6 +68,16 @@ RSpec.describe CleanPendingUploadsJob do
 
       expect { query_service.find_by(id: resource_id) }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
       expect(Valkyrie.logger).to have_received(:info).with("Deleted a resource with failed uploads with the ID: #{resource_id}")
+    end
+
+    context "when being processed as a dry run" do
+      it "does not delete the resources with failed uploads but logs the resource IDs" do
+        described_class.perform_now(dry_run: true)
+
+        found_resource = query_service.find_by(id: resource_id)
+        expect(found_resource).not_to be_nil
+        expect(Valkyrie.logger).to have_received(:info).with("Found #{resource_id} as an uploaded resource without any FileSets - this would normally be deleted by CleanPendingUploadsJob")
+      end
     end
   end
 end
