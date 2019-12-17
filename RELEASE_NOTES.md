@@ -12,6 +12,13 @@ Release notes template:
 
 ## Removed
 
+# 2020-01-03
+
+## Added
+
+* Added a query, job, and Rake task for cleaning resources with failed file
+  uploads.
+
 # 2020-01-02
 
 ## Added
@@ -57,11 +64,6 @@ MARC items. Currently only the marc21 `metadata_prefix` is supported.
 * Gracefully handling error reporting when an EAD can't be found for an item linked to PULFA.
 
 # 2019-11-12
-
-## Added
-
-* Added a query, job, and Rake task for cleaning resources with failed file
-  uploads.
 
 ## Fixed
 
