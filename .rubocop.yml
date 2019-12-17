@@ -38,6 +38,7 @@ Metrics/AbcSize:
     - 'app/jobs/ingest_archival_media_bag_job.rb'
     - 'app/utils/data_seeder.rb'
     - 'app/exporters/hathi/submission_information_package.rb'
+    - 'app/jobs/browse_everything_ingest_job.rb'
 Metrics/BlockLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
@@ -59,6 +60,7 @@ Metrics/BlockLength:
     - 'lib/tasks/music_reserves.rake'
     - 'lib/tasks/figgy.rake'
     - 'lib/tasks/export.rake'
+    - 'app/jobs/browse_everything_ingest_job.rb'
 Metrics/ClassLength:
   Exclude:
     - 'app/change_sets/change_set.rb'
@@ -121,6 +123,7 @@ Metrics/CyclomaticComplexity:
     - 'app/services/music_import_service.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/services/manifest_builder.rb'
+    - 'app/jobs/browse_everything_ingest_job.rb'
 Metrics/LineLength:
   Exclude:
     - 'spec/views/scanned_resources/order_manager.html.erb_spec.rb'
@@ -210,6 +213,7 @@ Metrics/PerceivedComplexity:
     - 'app/services/music_import_service.rb'
     - 'app/helpers/application_helper.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
+    - 'app/jobs/browse_everything_ingest_job.rb'
 Rails/OutputSafety:
   Exclude:
     - 'app/helpers/fixity_dashboard_helper.rb'

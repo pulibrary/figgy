@@ -9,8 +9,8 @@ GIT
 
 GIT
   remote: git://github.com/jrgriffiniii/browse-everything.git
-  revision: c61cc1d6237412adbad0ff8f951481857062f113
-  branch: figgy-issues-3522-jrgriffiniii
+  revision: fba7d1ae4d18fb4a63eb7d331253d250393c68a6
+  branch: figgy-issues-3273-jrgriffiniii-rebase
   specs:
     browse-everything (1.0.1)
       addressable (~> 2.5)
@@ -19,7 +19,7 @@ GIT
       google-api-client (>= 0.30)
       google_drive (>= 3.0.3)
       googleauth (~> 0.6)
-      puma (< 4.0)
+      puma (~> 4.1)
       rails (>= 4.2)
       ruby-box
       signet (~> 0.8)
@@ -602,7 +602,8 @@ GEM
     pry-rails (0.3.6)
       pry (>= 0.10.4)
     public_suffix (4.0.1)
-    puma (3.12.2)
+    puma (4.3.1)
+      nio4r (~> 2.0)
     rack (2.0.7)
     rack-cors (1.0.6)
       rack (>= 1.6.0)
@@ -958,7 +959,7 @@ DEPENDENCIES
   prawn
   pry-byebug
   pry-rails
-  puma
+  puma (~> 4.1)
   rack (>= 2.0.6)
   rack-cors
   rack-mini-profiler

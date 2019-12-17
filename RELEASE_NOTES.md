@@ -12,6 +12,13 @@ Release notes template:
 
 ## Removed
 
+# 2019-12-16
+
+## Fixed
+
+* Google Drive uploads should now work for directories with over 500 contained
+  entries (and generally have improved performance)
+
 # 2019-12-11
 
 ## Fixed
