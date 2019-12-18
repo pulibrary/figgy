@@ -124,6 +124,16 @@ RSpec.describe MusicImportService::RecordingCollector do
     end
   end
 
+  context "a regular call number" do
+    before do
+      WebMock.allow_net_connect!
+    end
+    it "returns a bib" do
+      recordings = collector.recordings
+      expect(recordings.map(&:bibs).first).to eq ['1791261']
+    end
+  end
+
   context "call number containing single quote" do
     describe "#recordings" do
       let(:bad_call) { "'T LIKE -CRANE.MP3" }

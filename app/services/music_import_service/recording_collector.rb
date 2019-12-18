@@ -111,7 +111,7 @@ class MusicImportService::RecordingCollector
     normalization_strategies.each_pair do |strategy, column|
       next unless bib_numbers.empty?
       normalized = send(strategy, call_number)
-      bib_numbers = query_ol(column: column, call_number: normalized)
+      bib_numbers = query_ol_api(call_number: normalized)
       logger.info "Found bib with #{strategy} for #{call_number}" unless bib_numbers.empty?
     end
     bib_numbers
@@ -153,6 +153,9 @@ class MusicImportService::RecordingCollector
   def query_ol(column:, call_number:)
     result = postgres_adapter.execute(query: bib_query(column: column, call_num: call_number))
     return [] if result.empty?
+    # query orangelight as a backup for when the database returns a querystring param
+    #   "label"=>"CD- 9221",
+    #   e.g. "?f[call_number_browse_s][]=CD-+9221"
     if result.first["title"].match?(/^[\d]+ titles with this call number$/)
       logger.info "  trying ol"
       bib_numbers = query_ol_api(call_number: call_number)
@@ -162,9 +165,7 @@ class MusicImportService::RecordingCollector
     bib_numbers
   end
 
-  # query orangelight as a backup for when the database returns a querystring param
-  #   "label"=>"CD- 9221",
-  #   e.g. "?f[call_number_browse_s][]=CD-+9221"
+  # query orangelight via its blacklight api
   def query_ol_api(call_number:)
     conn = Faraday.new(url: "#{catalog_host}/catalog.json")
     result = conn.get do |req|
