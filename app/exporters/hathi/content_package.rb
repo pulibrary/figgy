@@ -139,11 +139,11 @@ module Hathi
       end
 
       def ocr?
-        not (source_page.ocr_content.nil? || source_page.ocr_content.empty?)
+        !(source_page.ocr_content.nil? || source_page.ocr_content.empty?)
       end
 
       def hocr?
-        not (source_page.hocr_content.nil? || source_page.hocr_content.empty?)
+        !(source_page.hocr_content.nil? || source_page.hocr_content.empty?)
       end
     end
   end
