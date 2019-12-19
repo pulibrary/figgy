@@ -15,7 +15,6 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
       get :new, params: { parent_id: issue.id.to_s }
 
       expect(assigns(:selected_issue)).to be_truthy
-      expect(assigns(:available_issues)).to be_truthy
     end
   end
   describe "create" do

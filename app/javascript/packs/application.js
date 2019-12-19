@@ -9,6 +9,8 @@ import IssueMonograms from '../components/issue_monograms'
 import axios from 'axios'
 import OrderManager from '../components/OrderManager.vue'
 import setupAuthLinkClipboard from '../packs/auth_link_clipboard.js'
+import AjaxSelect from '../components/ajax-select'
+import setupAjaxSelect from '../helpers/setup_ajax_select.js'
 
 Vue.use(system)
 
@@ -17,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Set CSRF token for axios requests.
   axios.defaults.headers.common['X-CSRF-Token'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
   var elements = document.getElementsByClassName('lux')
-  for(var i = 0; i < elements.length; i++){
+  for (var i = 0; i < elements.length; i++) {
     new Vue({
       el: elements[i],
       store,
@@ -25,7 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
         'document-adder': DocumentAdder,
         'playlistMembers': PlaylistMembers,
         'order-manager': OrderManager,
-        'issue-monograms': IssueMonograms
+        'issue-monograms': IssueMonograms,
+        'ajax-select': AjaxSelect
+      },
+      data: {
+        options: []
+      },
+      // Functions to run after Vue is mounted
+      mounted: function () {
+        setupAjaxSelect()
       }
     })
   }

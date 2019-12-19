@@ -44,8 +44,8 @@ RSpec.feature "Numismatics::Coins" do
   scenario "creating a new resource" do
     visit new_numismatics_coin_path
 
-    expect(page).to have_field "Issue"
-    expect(page).to have_field "Accession"
+    expect(page).to have_selector("label", text: "Issue")
+    expect(page).to have_selector("label", text: "Numismatic accession")
     expect(page).to have_field "Analysis"
     expect(page).to have_field "Counter stamp"
     expect(page).to have_field "Date"
@@ -58,23 +58,22 @@ RSpec.feature "Numismatics::Coins" do
     expect(page).to have_field "Find feature"
     expect(page).to have_field "Find locus"
     expect(page).to have_field "Find number"
-    expect(page).to have_field "Find Place"
-    expect(page).to have_field "Firm"
+    expect(page).to have_selector("label", text: "Find place")
+    expect(page).to have_selector("label", text: "Firm")
     expect(page).to have_field "Holding Location"
     expect(page).not_to have_css '.select[for="coin_holding_location"]', text: "Holding Location"
     expect(page).to have_field "Note"
     expect(page).to have_field "Number"
     expect(page).to have_field "Number in accession"
     expect(page).to have_field "Numismatic collection"
-    expect(page).to have_field "Numismatic Reference"
+    expect(page).to have_selector("label", text: "Numismatic reference")
     expect(page).to have_field "Part"
-    expect(page).to have_field "Person"
+    expect(page).to have_selector("label", text: "Person")
     expect(page).to have_field "Private note"
     expect(page).to have_field "Size"
     expect(page).to have_field "Technique"
     expect(page).to have_field "Type"
     expect(page).to have_field "Weight"
-    expect(page).to have_content "Issue: 1"
 
     fill_in "Size", with: "3 cm"
     click_button "Save"

@@ -1,14 +1,8 @@
 <div class='nested-fields'>
   <div class="row">
     <div class="col-md-6">
-      <%= f.input :person_id,
-            label: "Person",
-            collection: @numismatic_people&.sort_by(&:title),
-            label_method: :title,
-            value_method: :id,
-            input_html: { multiple: f.object.multiple?(:person_id) },
-            include_blank: true,
-            required: f.object.required?(:person_id) %>
+      <%= f.label :person_id, required: f.object.required?(:person_id) %>
+      <%= f.hidden_field :person_id, ajax_select_type: "Person"%>
     </div>
     <div class="col-md-6">
       <%= f.input :signature, required: f.object.required?(:signature), label: "Signature" %>

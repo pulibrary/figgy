@@ -10,37 +10,7 @@ module Numismatics
       storage_adapter: Valkyrie.config.storage_adapter
     )
 
-    before_action :load_find_places, only: [:new, :edit]
-    before_action :load_numismatic_accessions, only: [:new, :edit]
-    before_action :load_numismatic_firms, only: [:new, :edit]
-    before_action :load_numismatic_people, only: [:new, :edit]
-    before_action :load_numismatic_references, only: [:new, :edit]
-    before_action :load_available_issues, only: [:new, :edit]
     before_action :selected_issue, only: [:new, :edit, :destroy]
-
-    def load_find_places
-      @find_places = query_service.find_all_of_model(model: Numismatics::Place).map(&:decorate)
-    end
-
-    def load_numismatic_accessions
-      @numismatic_accessions = query_service.find_all_of_model(model: Numismatics::Accession).map(&:decorate).sort_by(&:label)
-    end
-
-    def load_numismatic_firms
-      @numismatic_firms = query_service.find_all_of_model(model: Numismatics::Firm).map(&:decorate)
-    end
-
-    def load_numismatic_people
-      @numismatic_people = query_service.find_all_of_model(model: Numismatics::Person).map(&:decorate)
-    end
-
-    def load_numismatic_references
-      @numismatic_references = query_service.find_all_of_model(model: Numismatics::Reference).map(&:decorate).sort_by(&:short_title)
-    end
-
-    def load_available_issues
-      @available_issues = query_service.find_all_of_model(model: Numismatics::Issue).map(&:decorate).sort_by(&:issue_number)
-    end
 
     def parent_resource
       @parent_resource ||=

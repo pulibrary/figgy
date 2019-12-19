@@ -76,9 +76,5 @@ module Numismatics
     def title
       ["Issue: #{issue_number}"]
     end
-
-    def title_display
-      title&.join
-    end
   end
 end

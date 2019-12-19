@@ -1,24 +1,12 @@
 <div class='nested-fields'>
   <div class="row">
     <div class="col-md-6">
-      <%= f.input :person_id,
-            label: "Person",
-            collection: @numismatic_people&.sort_by(&:title),
-            label_method: :title,
-            value_method: :id,
-            input_html: { multiple: f.object.multiple?(:person_id) },
-            include_blank: true,
-            required: f.object.required?(:person_id) %>
+      <%= f.label :person_id, required: f.object.required?(:person_id) %>
+      <%= f.hidden_field :person_id, ajax_select_type: "Person"%>
     </div>
     <div class="col-md-6">
-      <%= f.input :firm_id,
-            label: "Firm",
-            collection: @numismatic_firms&.sort_by(&:title),
-            label_method: :title,
-            value_method: :id,
-            input_html: { multiple: f.object.multiple?(:person_id) },
-            include_blank: true,
-            required: f.object.required?(:firm_id) %>
+      <%= f.label :firm_id, required: f.object.required?(:firm_id) %>
+      <%= f.hidden_field :firm_id, ajax_select_type: "Firm"%>
     </div>
   </div>
   <div class="row">
