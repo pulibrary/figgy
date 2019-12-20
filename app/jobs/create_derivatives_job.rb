@@ -5,7 +5,15 @@ class CreateDerivativesJob < ApplicationJob
   # @param file_set_id [string] stringified Valkyrie id
   def perform(file_set_id)
     derivative_service = find_derivative_service(file_set_id)
-    derivative_service.create_derivatives
+    begin
+      derivative_service.create_derivatives
+    rescue StandardError => error
+      # MiniMagick::Invalid is raised for ImageMagick
+      Valkyrie.logger.error "Failed to generate derivatives for #{file_set_id}: #{error.class}: #{error.message}"
+      # A StaleObject error will be raised if this is not reloaded
+      reloaded_derivative_service = find_derivative_service(file_set_id)
+      reloaded_derivative_service.cleanup_derivatives
+    end
     file_set = query_service.find_by(id: Valkyrie::ID.new(file_set_id))
     file_set.processing_status = "processed"
     metadata_adapter.persister.save(resource: file_set)
@@ -13,12 +21,6 @@ class CreateDerivativesJob < ApplicationJob
     CheckFixityJob.perform_later(file_set_id)
   rescue Valkyrie::Persistence::ObjectNotFoundError => not_found_error
     Valkyrie.logger.warn "#{self.class}: #{not_found_error}: Failed to find the resource #{file_set_id}"
-  rescue StandardError => error
-    Valkyrie.logger.error "Failed to generate derivatives for #{file_set_id}: #{error.class}: #{error.message}"
-    # A StaleObject error will be raised if this is not reloaded
-    reloaded_derivative_service = find_derivative_service(file_set_id)
-    reloaded_derivative_service.cleanup_derivatives
-    raise error
   end
 
   def metadata_adapter

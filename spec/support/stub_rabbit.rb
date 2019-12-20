@@ -30,6 +30,8 @@ RSpec.configure do |config|
       # silence bunny logging
       logger = instance_double(Logger)
       allow(logger).to receive(:warn)
+      allow(logger).to receive(:debug)
+      allow(logger).to receive(:info)
       allow_any_instance_of(Bunny::Session).to receive(:init_default_logger).and_return(logger)
     end
   end

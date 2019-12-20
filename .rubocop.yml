@@ -187,6 +187,7 @@ Metrics/MethodLength:
     - 'app/services/ingest_ephemera_mods.rb'
     - 'app/helpers/thumbnail_helper.rb'
     - 'app/exporters/hathi/submission_information_package.rb'
+    - 'app/jobs/create_derivatives_job.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
