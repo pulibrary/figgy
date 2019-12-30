@@ -258,7 +258,7 @@ describe GeoDiscovery::DocumentBuilder do
       change_set_persister.save(change_set: reloaded_child_change_set)
     end
 
-    context "when it is a child resouce" do
+    context "when it is a child resource" do
       subject(:document_builder) { described_class.new(query_service.find_by(id: child.id), document_class) }
       let(:child_change_set) { ScannedMapChangeSet.new(child, files: []) }
       it "returns a suppressed document with a source field" do
@@ -267,7 +267,7 @@ describe GeoDiscovery::DocumentBuilder do
       end
     end
 
-    context "when it is a child resouce and gbl_suppressed_override is true" do
+    context "when it is a child resource and gbl_suppressed_override is true" do
       subject(:document_builder) { described_class.new(query_service.find_by(id: child.id), document_class) }
       let(:child) { FactoryBot.create_for_repository(:scanned_map, coverage: coverage.to_s, visibility: visibility, gbl_suppressed_override: "1") }
       let(:child_change_set) { ScannedMapChangeSet.new(child, files: []) }
