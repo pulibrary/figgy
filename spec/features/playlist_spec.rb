@@ -48,7 +48,9 @@ RSpec.feature "PlaylistChangeSets" do
       playlist_members_elements = doc.xpath("//playlist-members[@resource-id='#{resource.id}']")
       expect(playlist_members_elements).not_to be_empty
       playlist_members_element = playlist_members_elements.first
-      expect(JSON.parse(playlist_members_element.attributes[":members"].value)).to eq JSON.parse(json_fixture(resource.decorate.decorated_proxies.first, recording))
+      members_value = JSON.parse(playlist_members_element.attributes[":members"].value).first
+      members_value.delete("optimistic_lock_token")
+      expect(members_value).to eq JSON.parse(json_fixture(persisted.decorate.decorated_proxies.first, recording)).first
     end
 
     scenario "returning to search results" do
