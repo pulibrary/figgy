@@ -2,7 +2,7 @@
 
 Release notes template:
 
-# 2019-09-20
+# 2019-12-30
 
 ## Added
 
@@ -11,6 +11,12 @@ Release notes template:
 ## Changed
 
 ## Removed
+
+# 2019-12-30
+
+## Added
+
+* Added optimistic locking to all resources
 
 # 2019-12-16
 
