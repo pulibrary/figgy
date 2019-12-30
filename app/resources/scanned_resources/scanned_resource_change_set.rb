@@ -59,7 +59,8 @@ class ScannedResourceChangeSet < ChangeSet
       :ocr_language,
       :portion_note,
       :nav_date,
-      :append_id
+      :append_id,
+      :optimistic_lock_token
     ]
   end
 end
