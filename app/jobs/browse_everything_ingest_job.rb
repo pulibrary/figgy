@@ -63,7 +63,7 @@ class BrowseEverythingIngestJob < ApplicationJob
         change_set_persister.buffer_into_index do |buffered_change_set_persister|
           change_set = change_set_class.new(resource)
           change_set.validate(pending_uploads: change_set.pending_uploads + member_uploads)
-          buffered_change_set_persister.save(change_set: change_set)
+          resource = buffered_change_set_persister.save(change_set: change_set)
         end
 
         upload_ids += member_uploads.map(&:id)
