@@ -1727,7 +1727,7 @@ RSpec.describe ChangeSetPersister do
         xml = fixture_file_upload("files/geo_metadata/fgdc.xml", "application/xml; schema=fgdc")
         vector_resource = FactoryBot.create_for_repository(:complete_vector_resource, files: [file, xml])
 
-        output = change_set_persister.save(change_set: DynamicChangeSet.new(vector_resource))
+        output = change_set_persister.save(change_set: DynamicChangeSet.new(query_service.find_by(id: vector_resource.id)))
         preservation_object = Wayfinder.for(output).preservation_objects.first
         expect(preservation_object).not_to eq nil
 
