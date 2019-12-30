@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Resource < Valkyrie::Resource
+  enable_optimistic_locking
+
   def self.human_readable_type
     default = @_human_readable_type || name.demodulize.titleize
     I18n.translate("models.#{new.model_name.i18n_key}", default: default)

@@ -47,4 +47,10 @@ RSpec.shared_examples "a Resource" do
       expect(resource.to_s).to eq "#{resource.human_readable_type}: One and Two"
     end
   end
+
+  describe "optimistic locking" do
+    it "is enabled" do
+      expect(described_class.optimistic_locking_enabled?).to eq true
+    end
+  end
 end
