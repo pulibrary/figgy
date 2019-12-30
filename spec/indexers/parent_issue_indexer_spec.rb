@@ -26,7 +26,7 @@ RSpec.describe ParentIssueIndexer do
         FactoryBot.create_for_repository(:numismatic_issue, member_ids: coin.id)
         indexer = described_class.new(resource: coin)
 
-        expect(indexer.to_solr).to eq(
+        expect(indexer.to_solr).to include(
           "issue_denomination_tesim" => ["$1"],
           "issue_downloadable_tesim" => ["public"],
           "issue_issue_number_tesim" => ["1"],
