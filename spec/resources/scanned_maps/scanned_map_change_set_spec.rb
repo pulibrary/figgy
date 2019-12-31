@@ -9,6 +9,8 @@ RSpec.describe ScannedMapChangeSet do
     stub_bibdata(bib_id: "123456")
   end
 
+  it_behaves_like "an optimistic locking change set"
+
   describe "#workflow" do
     it "has a workflow" do
       expect(change_set.workflow).to be_a(GeoWorkflow)
