@@ -8,6 +8,8 @@ RSpec.describe RecordingChangeSet do
   let(:scanned_resource) { ScannedResource.new(title: "Test", rights_statement: rights_statement, visibility: visibility, state: "draft") }
   let(:form_resource) { scanned_resource }
 
+  it_behaves_like "an optimistic locking change set"
+
   describe "validations" do
     it "is valid by default" do
       expect(change_set).to be_valid

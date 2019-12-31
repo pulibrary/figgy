@@ -117,7 +117,8 @@ class SimpleChangeSet < ChangeSet
       :source,
       :subject,
       :holding_location,
-      :change_set
+      :change_set,
+      :optimistic_lock_token
     ]
   end
 end

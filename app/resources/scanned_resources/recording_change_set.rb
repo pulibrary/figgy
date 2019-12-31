@@ -38,7 +38,8 @@ class RecordingChangeSet < ChangeSet
       :local_identifier,
       :part_of,
       :append_id,
-      :change_set
+      :change_set,
+      :optimistic_lock_token
     ]
   end
 
