@@ -97,7 +97,7 @@ module ResourceController
   rescue Valkyrie::Persistence::ObjectNotFoundError => not_found_error
     after_update_error not_found_error
   rescue Valkyrie::Persistence::StaleObjectError
-    flash[:alert] = "Sorry, another user or process updated this resource simultaneously.  Please resubmit your changes."
+    flash[:alert] = "Sorry, another user or process updated this resource simultaneously. Please resubmit your changes."
     after_update_failure
   end
 

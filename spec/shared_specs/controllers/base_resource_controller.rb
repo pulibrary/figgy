@@ -247,7 +247,7 @@ RSpec.shared_examples "a BaseResourceController" do |*flags|
           patch :update, params: { id: resource.id.to_s, param_key => { title: ["Two"], optimistic_lock_token: resource.optimistic_lock_token.map(&:serialize) } }
 
           expect(response).to render_template "base/edit"
-          expect(flash[:alert]).to eq "Sorry, another user or process updated this resource simultaneously.  Please resubmit your changes."
+          expect(flash[:alert]).to eq "Sorry, another user or process updated this resource simultaneously. Please resubmit your changes."
         end
       end
     end
