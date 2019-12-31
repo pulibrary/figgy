@@ -57,7 +57,8 @@ class RasterResourceChangeSet < ChangeSet
       :cartographic_scale,
       :cartographic_projection,
       :coverage,
-      :held_by
+      :held_by,
+      :optimistic_lock_token
     ]
   end
   # rubocop:enable Metrics/MethodLength
