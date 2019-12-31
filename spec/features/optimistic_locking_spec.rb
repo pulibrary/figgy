@@ -28,6 +28,14 @@ RSpec.feature "Optimistic Locking" do
     end
   end
 
+  context "Editing a file set that has been updated by another process" do
+    let(:resource) { FactoryBot.create_for_repository(:file_set) }
+    it "presents an error" do
+      visit edit_file_set_path(resource)
+      test_optlock(resource)
+    end
+  end
+
   def test_optlock(resource)
     # update the resource out of band
     change_set_persister.save(change_set: DynamicChangeSet.new(resource))

@@ -13,7 +13,8 @@ class FileSetChangeSet < ChangeSet
   delegate :thumbnail_id, to: :model
 
   def primary_terms
-    [:title]
+    [:title,
+     :optimistic_lock_token]
   end
 
   def preserve?

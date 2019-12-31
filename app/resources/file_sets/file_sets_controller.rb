@@ -40,17 +40,30 @@ class FileSetsController < ApplicationController
   def update
     @change_set = change_set_class.new(file_set)
     authorize! :update, @change_set.resource
-    if @change_set.validate(resource_params)
-      obj = nil
-      change_set_persister.buffer_into_index do |persist|
-        obj = persist.save(change_set: @change_set)
-      end
-      update_derivatives(obj) unless derivative_resource_params.empty?
-
-      after_update_success(obj, @change_set)
-    end
+    persist_change_set if @change_set.validate(resource_params)
   rescue Valkyrie::Persistence::ObjectNotFoundError => error
     after_update_error error
+  rescue Valkyrie::Persistence::StaleObjectError
+    flash[:alert] = "Sorry, another user or process updated this resource simultaneously. Please resubmit your changes."
+    after_update_failure
+  end
+
+  def persist_change_set
+    @change_set.sync
+    obj = nil
+    change_set_persister.buffer_into_index do |persist|
+      obj = persist.save(change_set: @change_set)
+    end
+    update_derivatives(obj) unless derivative_resource_params.empty?
+
+    after_update_success(obj, @change_set)
+  end
+
+  def after_update_failure
+    respond_to do |format|
+      format.html { render :edit }
+      format.json { head :bad_request }
+    end
   end
 
   def after_delete_success

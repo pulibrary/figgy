@@ -6,9 +6,11 @@ RSpec.describe FileSetChangeSet do
 
   let(:file_set) { FactoryBot.build(:file_set) }
 
+  it_behaves_like "an optimistic locking change set"
+
   describe "#primary_terms" do
-    it "is just the title" do
-      expect(change_set.primary_terms).to eq [:title]
+    it "is just the title and optimistic lock token" do
+      expect(change_set.primary_terms).to eq [:title, :optimistic_lock_token]
     end
   end
 end
