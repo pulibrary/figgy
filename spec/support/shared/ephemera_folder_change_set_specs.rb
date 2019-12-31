@@ -1,6 +1,9 @@
 RSpec.shared_examples "an ephemera folder change set" do |change_set_class|
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:change_set) { change_set_class.new(FactoryBot.build(:ephemera_folder)) }
+
+  it_behaves_like "an optimistic locking change set"
+
   describe "#visibility" do
     it "exposes the visibility" do
       expect(change_set.visibility).to include Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC

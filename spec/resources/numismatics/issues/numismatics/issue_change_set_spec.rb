@@ -5,6 +5,8 @@ RSpec.describe Numismatics::IssueChangeSet do
   subject(:change_set) { described_class.new(issue) }
   let(:issue) { FactoryBot.build(:numismatic_issue) }
 
+  it_behaves_like "an optimistic locking change set"
+
   describe "#primary_terms" do
     it "includes displayed fields" do
       expect(change_set.primary_terms).to be_a(Hash)

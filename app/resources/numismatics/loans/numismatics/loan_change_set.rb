@@ -30,7 +30,8 @@ module Numismatics
         :date_out,
         :exhibit_name,
         :note,
-        :type
+        :type,
+        :optimistic_lock_token
       ]
     end
   end

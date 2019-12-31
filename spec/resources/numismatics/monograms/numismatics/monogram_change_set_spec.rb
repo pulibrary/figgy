@@ -5,6 +5,8 @@ RSpec.describe Numismatics::MonogramChangeSet do
   subject(:change_set) { described_class.new(monogram) }
   let(:monogram) { FactoryBot.build(:numismatic_monogram) }
 
+  it_behaves_like "an optimistic locking change set"
+
   describe "#primary_terms" do
     it "includes displayed fields" do
       expect(change_set.primary_terms).to include(:title)

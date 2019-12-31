@@ -24,7 +24,8 @@ module Numismatics
         :person_id,
         :signature,
         :role,
-        :side
+        :side,
+        :optimistic_lock_token
       ]
     end
   end

@@ -25,7 +25,8 @@ class PlaylistChangeSet < ChangeSet
     [
       :title,
       :part_of,
-      :downloadable
+      :downloadable,
+      :optimistic_lock_token
     ]
   end
 end

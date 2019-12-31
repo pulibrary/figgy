@@ -25,7 +25,8 @@ module Numismatics
         :died,
         :class_of,
         :years_active_start,
-        :years_active_end
+        :years_active_end,
+        :optimistic_lock_token
       ]
     end
   end

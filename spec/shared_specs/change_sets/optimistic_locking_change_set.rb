@@ -13,7 +13,11 @@ RSpec.shared_examples "an optimistic locking change set" do
     end
 
     it "is defined as a primary term" do
-      expect(change_set.primary_terms).to include :optimistic_lock_token
+      if change_set.primary_terms.is_a? Array
+        expect(change_set.primary_terms).to include :optimistic_lock_token
+      elsif change_set.primary_terms.is_a? Hash
+        expect(change_set.primary_terms[""]).to include :optimistic_lock_token
+      end
     end
   end
 end

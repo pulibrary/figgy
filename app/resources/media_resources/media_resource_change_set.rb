@@ -36,7 +36,8 @@ class MediaResourceChangeSet < ChangeSet
       :source_metadata_identifier,
       :member_of_collection_ids,
       :downloadable,
-      :append_id
+      :append_id,
+      :optimistic_lock_token
     ]
   end
 end

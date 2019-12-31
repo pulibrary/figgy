@@ -42,7 +42,8 @@ class EphemeraBoxChangeSet < ChangeSet
       :received_date,
       :tracking_number,
       :drive_barcode,
-      :append_id
+      :append_id,
+      :optimistic_lock_token
     ]
   end
 

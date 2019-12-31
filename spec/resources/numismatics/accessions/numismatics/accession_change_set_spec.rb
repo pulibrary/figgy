@@ -5,6 +5,8 @@ RSpec.describe Numismatics::AccessionChangeSet do
   subject(:change_set) { described_class.new(accession) }
   let(:accession) { FactoryBot.build(:numismatic_accession) }
 
+  it_behaves_like "an optimistic locking change set"
+
   describe "#primary_terms" do
     it "includes displayed fields" do
       expect(change_set.primary_terms.keys).to eq(["", "Citation"])

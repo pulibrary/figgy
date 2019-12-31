@@ -10,6 +10,8 @@ RSpec.describe VectorResourceChangeSet do
     stub_bibdata(bib_id: "6592452")
   end
 
+  it_behaves_like "an optimistic locking change set"
+
   describe "#workflow" do
     it "has a workflow" do
       expect(change_set.workflow).to be_a(GeoWorkflow)

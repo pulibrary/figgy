@@ -4,6 +4,9 @@ require "rails_helper"
 RSpec.describe EphemeraBoxChangeSet do
   subject(:change_set) { described_class.new(ephemera_box) }
   let(:ephemera_box) { FactoryBot.build(:ephemera_box) }
+
+  it_behaves_like "an optimistic locking change set"
+
   describe "#visibility" do
     it "exposes the visibility" do
       expect(change_set.visibility).to include Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC

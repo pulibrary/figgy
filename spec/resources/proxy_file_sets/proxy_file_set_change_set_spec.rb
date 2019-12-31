@@ -7,6 +7,8 @@ RSpec.describe ProxyFileSetChangeSet do
   let(:proxy_file_set) { ProxyFileSet.new }
   let(:form_resource) { proxy_file_set }
 
+  it_behaves_like "an optimistic locking change set"
+
   describe "#prepopulate!" do
     it "sets default private visibility" do
       expect(change_set.visibility).to eq visibility
@@ -37,7 +39,7 @@ RSpec.describe ProxyFileSetChangeSet do
 
   describe "#primary_terms" do
     it "contains label" do
-      expect(change_set.primary_terms).to eq [:label]
+      expect(change_set.primary_terms).to include :label
     end
   end
 end

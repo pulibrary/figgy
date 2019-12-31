@@ -11,7 +11,8 @@ module Numismatics
     def primary_terms
       [
         :name,
-        :city
+        :city,
+        :optimistic_lock_token
       ]
     end
   end

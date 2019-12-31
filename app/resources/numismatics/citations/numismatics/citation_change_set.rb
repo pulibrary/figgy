@@ -22,7 +22,8 @@ module Numismatics
       [
         :part,
         :number,
-        :numismatic_reference_id
+        :numismatic_reference_id,
+        :optimistic_lock_token
       ]
     end
   end

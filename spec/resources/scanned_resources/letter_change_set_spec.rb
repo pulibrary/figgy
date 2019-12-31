@@ -9,6 +9,7 @@ RSpec.describe LetterChangeSet do
   let(:form_resource) { resource }
 
   it_behaves_like "a ChangeSet"
+  it_behaves_like "an optimistic locking change set"
 
   describe "#workflow" do
     it "has a workflow" do

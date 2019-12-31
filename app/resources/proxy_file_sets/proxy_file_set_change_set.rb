@@ -14,7 +14,8 @@ class ProxyFileSetChangeSet < ChangeSet
 
   def primary_terms
     [
-      :label
+      :label,
+      :optimistic_lock_token
     ]
   end
 end

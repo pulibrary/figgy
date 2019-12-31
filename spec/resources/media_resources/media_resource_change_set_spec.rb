@@ -7,6 +7,9 @@ RSpec.describe MediaResourceChangeSet do
   let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
   let(:media_resource) { MediaResource.new(title: "Test", rights_statement: rights_statement, visibility: visibility, state: "draft") }
   let(:form_resource) { media_resource }
+
+  it_behaves_like "an optimistic locking change set"
+
   describe "#prepopulate!" do
     it "doesn't make it look changed" do
       expect(change_set).not_to be_changed

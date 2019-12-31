@@ -20,7 +20,8 @@ module Numismatics
     def primary_terms
       [
         :description,
-        :name
+        :name,
+        :optimistic_lock_token
       ]
     end
   end

@@ -7,6 +7,8 @@ RSpec.describe PlaylistChangeSet do
   let(:playlist) { FactoryBot.build(:playlist) }
   let(:form_resource) { playlist }
 
+  it_behaves_like "an optimistic locking change set"
+
   describe "#prepopulate!" do
     it "sets default private visibility" do
       expect(change_set.visibility).to eq visibility

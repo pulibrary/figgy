@@ -7,7 +7,7 @@ class LetterChangeSet < ChangeSet
 
   collection :sender, multiple: true, required: false, form: NameWithPlaceChangeSet, populator: :populate_nested_collection, default: []
   collection :recipient, multiple: true, required: false, form: NameWithPlaceChangeSet, populator: :populate_nested_collection, default: []
-  self.feature_terms += [:member_of_collection_ids]
+  self.feature_terms += [:member_of_collection_ids, :optimistic_lock_token]
 
   def primary_terms
     {

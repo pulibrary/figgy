@@ -80,7 +80,8 @@ module Numismatics
           :numismatic_collection,
           :member_of_collection_ids,
           :rights_statement,
-          :pdf_type
+          :pdf_type,
+          :optimistic_lock_token
         ],
         "Accession" => [
           :numismatic_accession_id,

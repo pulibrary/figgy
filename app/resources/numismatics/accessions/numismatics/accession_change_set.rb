@@ -31,7 +31,8 @@ module Numismatics
           :person_id,
           :firm_id,
           :note,
-          :private_note
+          :private_note,
+          :optimistic_lock_token
         ],
         "Citation" => [
           :numismatic_citation

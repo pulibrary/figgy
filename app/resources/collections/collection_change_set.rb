@@ -15,6 +15,13 @@ class CollectionChangeSet < ChangeSet
   validates_with SourceMetadataIdentifierOrTitleValidator
 
   def primary_terms
-    [:title, :slug, :source_metadata_identifier, :description, :owners]
+    [
+      :title,
+      :slug,
+      :source_metadata_identifier,
+      :description,
+      :owners,
+      :optimistic_lock_token
+    ]
   end
 end

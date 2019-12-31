@@ -89,7 +89,8 @@ module Numismatics
           :workshop,
           :series,
           :numismatic_monogram_ids,
-          :numismatic_place_id
+          :numismatic_place_id,
+          :optimistic_lock_token
         ],
         "Obverse" => [
           :obverse_figure,

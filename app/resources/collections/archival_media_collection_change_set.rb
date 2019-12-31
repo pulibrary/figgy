@@ -31,7 +31,8 @@ class ArchivalMediaCollectionChangeSet < ChangeSet
       :slug,
       :bag_path,
       :change_set,
-      :reorganize
+      :reorganize,
+      :optimistic_lock_token
     ]
   end
 end

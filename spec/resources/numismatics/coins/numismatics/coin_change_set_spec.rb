@@ -6,6 +6,8 @@ RSpec.describe Numismatics::CoinChangeSet do
   let(:coin) { FactoryBot.build(:coin) }
   let(:issue) { FactoryBot.create_for_repository(member_ids: [coin.id]) }
 
+  it_behaves_like "an optimistic locking change set"
+
   describe "#primary_terms" do
     it "includes displayed fields" do
       expect(change_set.primary_terms.keys).to eq(["", "Accession", "Citation", "Provenance", "Loan", "Numismatic Issue"])

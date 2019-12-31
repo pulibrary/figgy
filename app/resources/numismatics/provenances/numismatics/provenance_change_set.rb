@@ -24,7 +24,8 @@ module Numismatics
         :date,
         :note,
         :person_id,
-        :firm_id
+        :firm_id,
+        :optimistic_lock_token
       ]
     end
   end

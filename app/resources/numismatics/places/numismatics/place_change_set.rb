@@ -13,7 +13,8 @@ module Numismatics
       [
         :city,
         :geo_state,
-        :region
+        :region,
+        :optimistic_lock_token
       ]
     end
   end

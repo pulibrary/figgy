@@ -6,6 +6,8 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
   let(:collection) { FactoryBot.build(:collection, state: "draft") }
   let(:form_resource) { collection }
 
+  it_behaves_like "an optimistic locking change set"
+
   describe "#source_metadata_identifier" do
     it "is single-valued and required" do
       expect(change_set.multiple?(:source_metadata_identifier)).to eq false
@@ -155,7 +157,7 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
 
   describe "#primary_terms" do
     it "returns the primary terms" do
-      expect(change_set.primary_terms).to contain_exactly(
+      expect(change_set.primary_terms).to include(
         :source_metadata_identifier,
         :bag_path,
         :slug,

@@ -4,6 +4,9 @@ require "rails_helper"
 RSpec.describe CollectionChangeSet do
   subject(:change_set) { described_class.new(collection) }
   let(:collection) { FactoryBot.build(:collection) }
+
+  it_behaves_like "an optimistic locking change set"
+
   describe "#title" do
     it "is single-valued and required" do
       expect(change_set.multiple?(:title)).to eq false
@@ -46,7 +49,7 @@ RSpec.describe CollectionChangeSet do
 
   describe "#primary_terms" do
     it "returns the primary terms" do
-      expect(change_set.primary_terms).to eq [:title, :slug, :source_metadata_identifier, :description, :owners]
+      expect(change_set.primary_terms).to include(:title, :slug, :source_metadata_identifier, :description, :owners)
     end
   end
 
