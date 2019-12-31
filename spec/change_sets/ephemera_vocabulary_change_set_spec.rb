@@ -3,6 +3,9 @@ require "rails_helper"
 
 RSpec.describe EphemeraVocabularyChangeSet do
   subject(:change_set) { described_class.new(FactoryBot.build(:ephemera_vocabulary)) }
+
+  it_behaves_like "an optimistic locking change set"
+
   describe "validations" do
     it "is valid by default" do
       expect(change_set).to be_valid

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class EphemeraProjectChangeSet < Valkyrie::ChangeSet
+  include OptimisticLockProperty
+
   property :title, multiple: false
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :slug, multiple: false, required: true
@@ -12,7 +14,7 @@ class EphemeraProjectChangeSet < Valkyrie::ChangeSet
   validates_with UniqueSlugValidator
 
   def primary_terms
-    [:title, :slug, :contributor_uids, :top_language]
+    [:title, :slug, :contributor_uids, :top_language, :optimistic_lock_token]
   end
 
   def top_language=(top_language_values)

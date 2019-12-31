@@ -3,6 +3,8 @@ module Numismatics
   class ReferenceChangeSet < Valkyrie::ChangeSet
     delegate :human_readable_type, to: :model
 
+    include OptimisticLockProperty
+
     property :part_of_parent, multiple: false, required: false
     property :pub_info, multiple: false, required: false
     property :short_title, multiple: false, required: true
@@ -22,7 +24,8 @@ module Numismatics
         :short_title,
         :title,
         :year,
-        :append_id
+        :append_id,
+        :optimistic_lock_token
       ]
     end
   end

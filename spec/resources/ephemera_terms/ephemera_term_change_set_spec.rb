@@ -5,6 +5,9 @@ RSpec.describe EphemeraTermChangeSet do
   subject(:change_set) { described_class.new(ephemera_term) }
   let(:ephemera_vocabulary) { FactoryBot.create_for_repository(:ephemera_vocabulary) }
   let(:ephemera_term) { FactoryBot.create_for_repository(:ephemera_term, member_of_vocabulary_id: ephemera_vocabulary.id) }
+
+  it_behaves_like "an optimistic locking change set"
+
   describe "validations" do
     it "is valid by default" do
       expect(change_set).to be_valid

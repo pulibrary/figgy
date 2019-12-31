@@ -4,6 +4,9 @@ require "rails_helper"
 RSpec.describe EphemeraProjectChangeSet do
   subject(:change_set) { described_class.new(resource) }
   let(:resource) { FactoryBot.build(:ephemera_project) }
+
+  it_behaves_like "an optimistic locking change set"
+
   describe "#title" do
     it "accesses the title of an Ephemera Project" do
       expect(change_set.title).to include "Test Project"
@@ -43,7 +46,7 @@ RSpec.describe EphemeraProjectChangeSet do
 
   describe "#primary_terms" do
     it "exposes the title, slug, and top_language as the primary terms for Ephemera Projects" do
-      expect(change_set.primary_terms).to eq [:title, :slug, :contributor_uids, :top_language]
+      expect(change_set.primary_terms).to include(:title, :slug, :contributor_uids, :top_language)
     end
   end
 

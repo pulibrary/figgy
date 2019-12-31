@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 class EphemeraVocabularyChangeSet < Valkyrie::ChangeSet
   validates :label, presence: true
+
+  include OptimisticLockProperty
+
   property :label, multiple: false, required: true
   property :uri, multiple: false, required: false, type: ::Types::URI
   property :definition, multiple: false, required: false
@@ -9,6 +12,6 @@ class EphemeraVocabularyChangeSet < Valkyrie::ChangeSet
   validates_with VocabularyValidator
 
   def primary_terms
-    [:label, :uri, :definition, :member_of_vocabulary_id]
+    [:label, :uri, :definition, :member_of_vocabulary_id, :optimistic_lock_token]
   end
 end

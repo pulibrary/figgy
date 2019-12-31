@@ -6,6 +6,12 @@ RSpec.describe TemplateChangeSet do
   let(:template) { Template.new(model_class: model_class) }
   let(:model_class) { "EphemeraFolder" }
 
+  describe "#optimistic_lock_token" do
+    it "is a defined property" do
+      expect(change_set.optimistic_lock_token).to be_a Array
+    end
+  end
+
   describe "#child_change_set" do
     before do
       change_set.prepopulate!

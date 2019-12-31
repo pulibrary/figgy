@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 class TemplateChangeSet < ChangeSet
   self.fields = [:title]
+
+  include OptimisticLockProperty
+
   property :title, required: true, multiple: false
   property :model_class, multiple: false, required: true
   property :nested_properties, type: Types::Strict::Array.of(Types::Strict::Hash), default: [{}]

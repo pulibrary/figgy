@@ -4,6 +4,8 @@ class ChangeSet < Valkyrie::ChangeSet
   class_attribute :workflow_class
   class_attribute :feature_terms
 
+  include OptimisticLockProperty
+
   # Delegating the to_hash method to the resource is a workaround that allows
   # syncing of the changeset. Reform does not appear to de-cast forms during sync.
   delegate :to_hash, to: :resource
@@ -59,10 +61,6 @@ class ChangeSet < Valkyrie::ChangeSet
   # saving this change_set. We may want to look into passing some sort of scope
   # around with the change_set in ChangeSetPersister instead, at some point.
   property :created_file_sets, virtual: true, multiple: true, required: false, default: []
-
-  # optimistic locking is on in all Resources
-  # this property still must be added to primary_fields in individual change sets
-  property :optimistic_lock_token, multiple: true, require: false, type: Valkyrie::Types::Set.of(Valkyrie::Types::OptimisticLockToken)
 
   def initialize(*args)
     super.tap do

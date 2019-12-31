@@ -9,7 +9,7 @@ RSpec.shared_examples "an optimistic locking change set" do
 
   describe "#optimistic_lock_token" do
     it "is a defined property" do
-      expect(change_set.optimistic_lock_token).to eq []
+      expect(change_set.optimistic_lock_token).to be_a Array
     end
 
     it "is defined as a primary term" do
