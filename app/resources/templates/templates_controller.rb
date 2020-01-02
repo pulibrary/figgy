@@ -10,6 +10,7 @@ class TemplatesController < ApplicationController
 
   before_action :find_parent, only: [:new, :create, :destroy]
   before_action :load_fields, only: [:new]
+  before_action :load_collections, only: [:new, :edit, :update, :create]
 
   def find_parent
     @parent ||= query_service.find_by(id: Valkyrie::ID.new(params[:ephemera_project_id]))
@@ -35,6 +36,10 @@ class TemplatesController < ApplicationController
 
   def _prefixes
     @_prefixes ||= super + ["base"]
+  end
+
+  def load_collections
+    @collections = query_service.find_all_of_model(model: Collection).map(&:decorate) || []
   end
 
   def load_fields

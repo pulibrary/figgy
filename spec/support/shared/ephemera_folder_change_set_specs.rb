@@ -29,6 +29,12 @@ RSpec.shared_examples "an ephemera folder change set" do |change_set_class|
     end
   end
 
+  describe "#primary_terms" do
+    it "includes collections" do
+      expect(change_set.primary_terms).to include :member_of_collection_ids
+    end
+  end
+
   context 'with controlled vocabulary terms' do
     subject(:change_set) do
       described_class.new(FactoryBot.build(:ephemera_folder))
