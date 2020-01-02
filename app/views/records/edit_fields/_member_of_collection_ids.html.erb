@@ -1,4 +1,4 @@
-<% unless resource_has_parents?(f.object.resource) %>
+<% if f.object.kind_of?(EphemeraFolderChangeSetBase) || !resource_has_parents?(f.object.resource) %>
   <%= f.input :member_of_collection_ids,
               collection: @collections.sort_by(&:title),
               label_method: :title,
