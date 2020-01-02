@@ -9,6 +9,17 @@ module Numismatics
     property :replaces, multiple: true, required: false, default: []
     property :depositor, multiple: false, required: false
 
+    # Virtual Attributes
+    property :_destroy, virtual: true
+
+    def new_record?
+      false
+    end
+
+    def marked_for_destruction?
+      false
+    end
+
     def primary_terms
       [
         :city,
