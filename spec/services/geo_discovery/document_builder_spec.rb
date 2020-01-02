@@ -137,7 +137,7 @@ describe GeoDiscovery::DocumentBuilder do
       end
 
       it "sets date to created date if not defined in imported metadata" do
-        expect(document["solr_year_i"]).to eq(2019)
+        expect(document["solr_year_i"]).to eq(Date.current.year)
       end
     end
 
