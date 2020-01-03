@@ -20,6 +20,7 @@ exports[`OrderManagerFilesetForm.vue has the expected html structure 1`] = `
       id="itemLabel"
       label="Label"
       placeholder="e.g., example.tif"
+      value="a"
     />
      
     <input-select-stub

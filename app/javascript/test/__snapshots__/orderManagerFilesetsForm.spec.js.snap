@@ -20,12 +20,14 @@ exports[`OrderManagerFilesetsForm.vue has the expected html structure 1`] = `
       id="unitLabel"
       label="Label"
       placeholder="e.g., p."
+      value="p. "
     />
      
     <input-text-stub
       id="startNum"
       label="Starting Numeral"
       placeholder="e.g., 10"
+      value="1"
     />
      
     <input-checkbox-stub
@@ -36,6 +38,7 @@ exports[`OrderManagerFilesetsForm.vue has the expected html structure 1`] = `
       id="labelMethod"
       label="Labeling Method"
       options="[object Object],[object Object]"
+      value="paginate"
     />
      
     <!---->
