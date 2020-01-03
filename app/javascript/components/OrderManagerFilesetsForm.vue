@@ -102,7 +102,6 @@ export default {
       frontLabel: 'r. ',
       backLabel: 'v. ',
       startsWith: 'front',
-      unitLabel: 'p. ',
       bracket: false
     }
   },
@@ -111,9 +110,10 @@ export default {
       resource: state => state.ordermanager.resource,
       gallery: state => state.gallery
     }),
+    unitLabel () {
+      return this.method === 'foliate' ? 'f. ' : 'p. '
+    },
     labelerOpts () {
-      let unitLabel = 'p. '
-
       if (this.method === 'paginate') {
         return {
           start: this.start,
@@ -121,19 +121,17 @@ export default {
           frontLabel: '',
           backLabel: '',
           startsWith: this.startsWith,
-          unitLabel: unitLabel,
+          unitLabel: this.unitLabel,
           bracket: this.bracket
         }
       } else {
-        unitLabel = 'f. '
-
         return {
           start: this.start,
           method: this.method,
           frontLabel: this.frontLabel,
           backLabel: this.backLabel,
           startsWith: this.startsWith,
-          unitLabel: unitLabel,
+          unitLabel: this.unitLabel,
           bracket: this.bracket
         }
       }
@@ -163,12 +161,6 @@ export default {
   },
   watch: {
     method: function (val) {
-      // This is not updated when the properties are explicitly set
-      if (val === 'foliate') {
-        this.unitLabel = 'f. '
-      } else if (val === 'paginate') {
-        this.unitLabel = 'p. '
-      }
       this.updateMultiLabels()
     }
   },
