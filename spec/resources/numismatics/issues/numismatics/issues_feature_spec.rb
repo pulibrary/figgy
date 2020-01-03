@@ -197,4 +197,51 @@ RSpec.feature "Numismatics::Issues" do
       expect(page).to have_selector "td", text: "Coin: #{member.coin_number}"
     end
   end
+
+  context "with referenced Numismatics::Monogram resources" do
+    let(:monogram1) do
+      persister.save(resource: FactoryBot.create_for_repository(:numismatic_monogram))
+    end
+    let(:file_set) do
+      persister.save(resource: FactoryBot.create_for_repository(:file_set))
+    end
+    let(:monogram2) do
+      persister.save(resource: FactoryBot.create_for_repository(:numismatic_monogram, member_ids: [file_set.id]))
+    end
+    let(:parent) do
+      persister.save(resource: FactoryBot.create_for_repository(:numismatic_issue, numismatic_monogram_ids: [monogram2.id]))
+    end
+    before do
+      monogram1
+      parent
+    end
+
+    scenario "when users are editing the Numismatics::Issue resource", js: true do
+      visit edit_numismatics_issue_path(parent)
+
+      doc = Nokogiri::HTML(page.body)
+      expect(doc.xpath("//issue-monograms")).not_to be_empty
+
+      issue_monogram_elements = doc.xpath("//issue-monograms")
+      expect(issue_monogram_elements).not_to be_empty
+
+      issue_monogram_element = issue_monogram_elements.first
+      attributes = JSON.parse(issue_monogram_element[":members"])
+      expect(attributes).to be_a Array
+      expect(attributes.length).to eq(2)
+
+      first_attribute = attributes.first
+      expect(first_attribute.keys).to include("id", "url", "thumbnail", "title", "attached")
+      expect(first_attribute["id"]).to eq(monogram2.id.to_s)
+      expect(first_attribute["title"]).to eq("Test Monogram")
+      expect(first_attribute["attached"]).to be true
+      expect(first_attribute["thumbnail"]).to include(file_set.id.to_s)
+
+      last_attribute = attributes.last
+      expect(last_attribute.keys).to include("id", "url", "thumbnail", "title", "attached")
+      expect(last_attribute["id"]).to eq(monogram1.id.to_s)
+      expect(last_attribute["title"]).to eq("Test Monogram")
+      expect(last_attribute["attached"]).to be false
+    end
+  end
 end

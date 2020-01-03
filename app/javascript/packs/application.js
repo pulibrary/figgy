@@ -5,6 +5,7 @@ import 'lux-design-system/dist/system/tokens/tokens.scss'
 import store from '../store'
 import DocumentAdder from '../components/document_adder'
 import PlaylistMembers from '../components/playlist_members'
+import IssueMonograms from '../components/issue_monograms'
 import axios from 'axios'
 import OrderManager from '../components/OrderManager.vue'
 import setupAuthLinkClipboard from '../packs/auth_link_clipboard.js'
@@ -22,8 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
       store,
       components: {
         'document-adder': DocumentAdder,
-	      'playlistMembers': PlaylistMembers,
-        'order-manager': OrderManager
+        'playlistMembers': PlaylistMembers,
+        'order-manager': OrderManager,
+        'issue-monograms': IssueMonograms
       }
     })
   }
