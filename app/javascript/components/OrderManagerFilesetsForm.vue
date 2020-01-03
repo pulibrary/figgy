@@ -112,20 +112,20 @@ export default {
       gallery: state => state.gallery
     }),
     labelerOpts () {
-      if (this.method === 'paginate') {
-        this.unitLabel = 'p. '
+      let unitLabel = 'p. '
 
+      if (this.method === 'paginate') {
         return {
           start: this.start,
           method: this.method,
           frontLabel: '',
           backLabel: '',
           startsWith: this.startsWith,
-          unitLabel: this.unitLabel,
+          unitLabel: unitLabel,
           bracket: this.bracket
         }
       } else {
-        this.unitLabel = 'f. '
+        unitLabel = 'f. '
 
         return {
           start: this.start,
@@ -133,7 +133,7 @@ export default {
           frontLabel: this.frontLabel,
           backLabel: this.backLabel,
           startsWith: this.startsWith,
-          unitLabel: this.unitLabel,
+          unitLabel: unitLabel,
           bracket: this.bracket
         }
       }
