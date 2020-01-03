@@ -69,6 +69,7 @@ RSpec.feature "Numismatics::Issues" do
     expect(page).to have_field "Signature"
     expect(page).to have_field "State"
     expect(page).to have_field "Subject"
+    expect(page).to have_field "Place"
     expect(page).to have_field "Type"
     expect(page).to have_field "Workshop"
 
@@ -99,6 +100,7 @@ RSpec.feature "Numismatics::Issues" do
         numismatic_citation: numismatic_citation,
         numismatic_note: numismatic_note,
         numismatic_subject: numismatic_subject,
+        numismatic_place: numismatic_place,
         obverse_attribute: numismatic_attribute,
         reverse_attribute: numismatic_attribute,
         ruler_id: numismatic_person.id,
@@ -159,7 +161,6 @@ RSpec.feature "Numismatics::Issues" do
       expect(page).to have_css ".attribute.obverse_orientation", text: "test value"
       expect(page).to have_css ".attribute.obverse_part", text: "test value"
       expect(page).to have_css ".attribute.obverse_symbol", text: "test value"
-      expect(page).to have_css ".attribute.rendered_place", text: "city, state, region"
       expect(page).to have_css ".attribute.replaces", text: "test value"
       expect(page).to have_css ".attribute.reverse_attributes", text: "attribute name, attribute description"
       expect(page).to have_css ".attribute.reverse_figure", text: "test value"
@@ -173,6 +174,7 @@ RSpec.feature "Numismatics::Issues" do
       expect(page).to have_css ".attribute.series", text: "test value"
       expect(page).to have_css ".attribute.shape", text: "test value"
       expect(page).to have_css ".attribute.subjects", text: "Animal, unicorn"
+      expect(page).to have_css ".attribute.rendered_place", text: "city, state, region"
       expect(page).to have_css ".attribute.workshop", text: "test value"
     end
   end
