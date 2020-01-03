@@ -18,7 +18,6 @@ jobs:
     steps:
       - checkout
       - run: sudo sh bin/ci_mediainfo_install.sh
-      - run: sudo apt-get update
       - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev mediainfo
       - run: sudo sh bin/ci_simple_tiles_install.sh
       - run: sudo sh bin/ci_free_tds_install.sh
