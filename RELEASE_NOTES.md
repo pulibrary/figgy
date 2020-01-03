@@ -12,6 +12,13 @@ Release notes template:
 
 ## Removed
 
+# 2020-01-02
+
+## Fixed
+
+* Ensuring that Numismatic Issue facet links in the dashboard interface are
+  properly structured
+
 # 2019-12-16
 
 ## Fixed
