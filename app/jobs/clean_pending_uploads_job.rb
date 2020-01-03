@@ -6,11 +6,11 @@ class CleanPendingUploadsJob < ApplicationJob
         if resource.respond_to?(:pending_uploads) && resource.pending_uploads.empty? && resource.state.include?("pending")
           change_set = DynamicChangeSet.new(resource)
           if dry_run
-            Valkyrie.logger.info("Found #{resource.id} as an uploaded resource without any FileSets - this would normally be deleted by CleanPendingUploadsJob")
+            Valkyrie.logger.info("Found #{resource.decorate.first_title} (#{resource.id}) as an uploaded resource without any FileSets - this would normally be deleted by CleanPendingUploadsJob")
           else
             buffered_changeset_persister.delete(change_set: change_set)
+            Valkyrie.logger.info "Deleted a resource with failed uploads with the title: #{resource.decorate.first_title} (#{resource.id})"
           end
-          Valkyrie.logger.info "Deleted a resource with failed uploads with the ID: #{resource.id}"
         end
       end
     end
