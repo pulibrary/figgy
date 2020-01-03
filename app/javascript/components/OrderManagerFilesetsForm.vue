@@ -113,6 +113,8 @@ export default {
     }),
     labelerOpts () {
       if (this.method === 'paginate') {
+        this.unitLabel = 'p. '
+
         return {
           start: this.start,
           method: this.method,
@@ -123,6 +125,8 @@ export default {
           bracket: this.bracket
         }
       } else {
+        this.unitLabel = 'f. '
+
         return {
           start: this.start,
           method: this.method,
@@ -159,6 +163,7 @@ export default {
   },
   watch: {
     method: function (val) {
+      // This is not updated when the properties are explicitly set
       if (val === 'foliate') {
         this.unitLabel = 'f. '
       } else if (val === 'paginate') {
