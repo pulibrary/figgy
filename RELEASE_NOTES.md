@@ -16,6 +16,12 @@ Release notes template:
 
 # 2020-01-03
 
+## Fixed
+
+* Restored directory browsing for the File Manager interface (this was breaking,
+  as users could no longer expand a directory in order to browse its contents
+  for file uploads).
+
 ## Added
 
 * Users now select monograms from a gallery UI component when they create or edit a numismatic issue

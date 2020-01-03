@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: git://github.com/jrgriffiniii/browse-everything.git
-  revision: fba7d1ae4d18fb4a63eb7d331253d250393c68a6
+  revision: 7390981fb96c038a5713da1984026dd0f1ea36cb
   branch: figgy-issues-3273-jrgriffiniii-rebase
   specs:
     browse-everything (1.0.1)
