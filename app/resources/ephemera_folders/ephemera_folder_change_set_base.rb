@@ -87,7 +87,8 @@ class EphemeraFolderChangeSetBase < ChangeSet
       :downloadable,
       :pdf_type,
       :holding_location,
-      :rights_statement
+      :rights_statement,
+      :member_of_collection_ids
     ]
   end
 

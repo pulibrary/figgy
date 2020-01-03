@@ -12,6 +12,12 @@ Release notes template:
 
 ## Removed
 
+# 2020-01-03
+
+## Added
+
+* Added Collection membership to Ephemera folders
+
 # 2020-01-02
 
 ## Added

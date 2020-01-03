@@ -20,4 +20,15 @@ module MetadataFormHelper
   def form_custom_title(params)
     params["change_set"].present?
   end
+
+  # Determine whether or not a resource has parents
+  # @param resource [Valkyrie::Resource]
+  # @return [TrueClass, FalseClass]
+  def resource_has_parents?(resource, params)
+    if !resource.persisted?
+      params[:parent_id]
+    else
+      resource.decorate.respond_to?(:decorated_parent) && !resource.decorate.decorated_parent.nil?
+    end
+  end
 end
