@@ -12,6 +12,8 @@ Release notes template:
 
 ## Removed
 
+-->
+
 # 2020-01-03
 
 ## Added
