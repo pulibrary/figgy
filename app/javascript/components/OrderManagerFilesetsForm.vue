@@ -102,6 +102,7 @@ export default {
       frontLabel: 'r. ',
       backLabel: 'v. ',
       startsWith: 'front',
+      unitLabel: 'p. ',
       bracket: false
     }
   },
@@ -110,19 +111,19 @@ export default {
       resource: state => state.ordermanager.resource,
       gallery: state => state.gallery
     }),
-    unitLabel () {
-      return this.method === 'foliate' ? 'f. ' : 'p. '
-    },
     labelerOpts () {
+      let unitLabel = this.method === 'foliate' ? 'f. ' : this.unitLabel
+
       if (this.method === 'paginate') {
+        unitLabel = 'p. '
         return {
           start: this.start,
           method: this.method,
           frontLabel: '',
           backLabel: '',
           startsWith: this.startsWith,
-          unitLabel: this.unitLabel,
-          bracket: this.bracket
+          bracket: this.bracket,
+          unitLabel
         }
       } else {
         return {
@@ -131,8 +132,8 @@ export default {
           frontLabel: this.frontLabel,
           backLabel: this.backLabel,
           startsWith: this.startsWith,
-          unitLabel: this.unitLabel,
-          bracket: this.bracket
+          bracket: this.bracket,
+          unitLabel
         }
       }
     },
