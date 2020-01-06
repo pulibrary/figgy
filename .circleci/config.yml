@@ -55,6 +55,9 @@ jobs:
       - run:
           name: Install NPM Dependencies via Yarn
           command: yarn install --frozen-lockfile
+      - run:
+          name: Rebuild the node-sass Package
+          command: yarn add --force node-sass
       # Store yarn / webpacker cache
       - save_cache:
           name: Save Yarn Package Cache
