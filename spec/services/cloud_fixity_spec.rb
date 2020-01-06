@@ -12,7 +12,7 @@ RSpec.describe CloudFixity do
   let(:json) do
     {
       status: "SUCCESS",
-      resource_id: "1",
+      resource_id: SecureRandom.uuid,
       child_id: "1",
       child_property: :metadata_node
     }.to_json
