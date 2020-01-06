@@ -14,6 +14,12 @@ Release notes template:
 
 -->
 
+# 2020-01-06
+
+## Fixed
+
+* Ensures that titles for all numismatic resources are indexed.
+
 # 2020-01-03
 
 ## Fixed
