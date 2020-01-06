@@ -24,6 +24,14 @@ jobs:
       - run: "wget -qP /tmp/ https://chromedriver.storage.googleapis.com/78.0.3904.105/chromedriver_linux64.zip"
       - run: "sudo unzip -o /tmp/chromedriver_linux64.zip -d /usr/local/bin"
       - run: "sudo chmod 755 /usr/local/bin/chromedriver"
+      - run:
+          name: "Update Node.js and npm"
+          command: |
+            curl -sSL "https://nodejs.org/dist/latest-erbium/node-v12.14.0-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v12.14.0-linux-x64/bin/node
+            curl https://www.npmjs.com/install.sh | sudo bash
+      - run:
+          name: Check current version of node
+          command: node -v
       # Restore Cached Dependencies
       - type: cache-restore
         name: Restore bundle cache
