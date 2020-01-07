@@ -35,5 +35,18 @@ RSpec.describe TitleIndexer do
       output = described_class.new(resource: resource).to_solr
       expect(output).to eq({})
     end
+
+    context "with a decorated title" do
+      it "properly indexes the title values" do
+        resource = FactoryBot.build(:numismatic_place)
+        title = "city, state, region"
+
+        output = described_class.new(resource: resource).to_solr
+        expect(output[:figgy_title_tesim]).to contain_exactly(title)
+        expect(output[:figgy_title_tesi]).to eq title
+        expect(output[:figgy_title_ssim]).to contain_exactly(title)
+        expect(output[:figgy_title_ssi]).to eq title
+      end
+    end
   end
 end

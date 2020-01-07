@@ -6,7 +6,7 @@ class TitleIndexer
   end
 
   def to_solr
-    return {} unless resource.respond_to?(:title) && resource.title.present?
+    return {} unless resource.decorate.respond_to?(:title) && resource.decorate.title.present?
     {
       figgy_title_tesim: title_strings,
       figgy_title_tesi: title_strings.first,
@@ -16,6 +16,6 @@ class TitleIndexer
   end
 
   def title_strings
-    @title_strings ||= resource.title.map(&:to_s)
+    @title_strings ||= Array.wrap(resource.decorate.title).map(&:to_s)
   end
 end
