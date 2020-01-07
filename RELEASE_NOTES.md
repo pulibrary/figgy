@@ -12,6 +12,33 @@ Release notes template:
 
 ## Removed
 
+-->
+
+# 2020-01-03
+
+## Fixed
+
+* Restored directory browsing for the File Manager interface (this was breaking,
+  as users could no longer expand a directory in order to browse its contents
+  for file uploads).
+
+## Added
+
+* Users now select monograms from a gallery UI component when they create or edit a numismatic issue
+
+* Added Collection membership to Ephemera folders
+
+# 2020-01-02
+
+## Added
+
+* Introduces nested Numismatic Places into the Numismatic Issue forms
+
+## Fixed
+
+* Ensuring that Numismatic Issue facet links in the dashboard interface are
+  properly structured
+
 # 2019-12-16
 
 ## Fixed
