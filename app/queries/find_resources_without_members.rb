@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-class FindByPropertyAndModel
+class FindResourcesWithoutMembers
   def self.queries
-    [:find_by_property_and_model]
+    [:find_resources_without_members]
   end
 
   attr_reader :query_service
@@ -12,15 +12,16 @@ class FindByPropertyAndModel
     @query_service = query_service
   end
 
-  def find_by_property_and_model(property:, value:, model:)
-    internal_array = { property => Array.wrap(value) }
-    run_query(query, internal_array.to_json, model)
+  def find_resources_without_members(model:)
+    run_query(query, model.to_s)
   end
 
   def query
     <<-SQL
-      select * FROM orm_resources WHERE
-      metadata @> ? AND internal_resource = ?
+      SELECT *
+      FROM orm_resources a
+      WHERE a.internal_resource = ?
+      AND jsonb_array_length(a.metadata->'member_ids') = 0
     SQL
   end
 end

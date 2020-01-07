@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# # frozen_string_literal: true
 namespace :numismatics do
   namespace :missing_coins do
     desc "generates a report for coins which do not have any images attached"
