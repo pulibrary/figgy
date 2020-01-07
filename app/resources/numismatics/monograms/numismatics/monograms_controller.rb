@@ -35,6 +35,19 @@ module Numismatics
 
     private
 
+      def render_json(object:)
+        object_url = solr_document_path(id: object.id)
+        object_thumbnail_url = helpers.build_monogram_thumbnail_url(object)
+
+        {
+          id: object.id.to_s,
+          url: object_url,
+          thumbnail: object_thumbnail_url,
+          title: object.decorate.first_title,
+          attached: true # This requires some context
+        }
+      end
+
       def load_numismatic_monograms
         @numismatic_monograms = query_service.find_all_of_model(model: Numismatics::Monogram).map(&:decorate)
         return [] if @numismatic_monograms.to_a.blank?

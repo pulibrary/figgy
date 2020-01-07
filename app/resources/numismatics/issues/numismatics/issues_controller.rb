@@ -139,21 +139,11 @@ module Numismatics
 
     private
 
-      def build_monogram_thumbnail_url(resource)
-        file_sets = resource.decorate.decorated_file_sets.reject { |fs| fs.thumbnail_id.nil? }
-
-        if file_sets.empty?
-          helpers.asset_url("default.png")
-        else
-          ManifestBuilder::ManifestHelper.new.manifest_image_thumbnail_path(file_sets.first)
-        end
-      end
-
       # Generates the Vue JSON for the Numismatic Monogram membership component
       # @return [Array<Hash>]
       def load_monogram_attributes
         numismatic_monogram_attributes = @numismatic_monograms.map do |monogram|
-          member_thumbnail_url = build_monogram_thumbnail_url(monogram)
+          member_thumbnail_url = helpers.build_monogram_thumbnail_url(monogram)
           member_url = solr_document_path(id: monogram.id)
           member_monogram_ids = params[:id] ? resource.decorate.decorated_numismatic_monograms.map(&:id) : []
 

@@ -45,7 +45,11 @@ module ResourceController
       change_set_persister.buffer_into_index do |buffered_changeset_persister|
         obj = buffered_changeset_persister.save(change_set: @change_set)
       end
-      after_create_success(obj, @change_set)
+
+      respond_to do |format|
+        format.html { after_create_success(obj, @change_set) }
+        format.json { render json: render_json(object: obj) }
+      end
     else
       Valkyrie.logger.warn(@change_set.errors.details)
       render :new
@@ -139,6 +143,10 @@ module ResourceController
   end
 
   private
+
+    def render_json(object:)
+      object.to_json
+    end
 
     def contextual_path(obj, change_set)
       ContextualPath.new(child: obj.id, parent_id: change_set.append_id)

@@ -1,7 +1,8 @@
 <template>
   <table
     id="numismatic-monograms"
-    class="table table-striped member-resources numismatic-monograms">
+    class="table table-striped member-resources numismatic-monograms"
+  >
     <thead>
       <tr>
         <th />
@@ -67,7 +68,27 @@ export default {
     defaultThumbnailUrl: {
       type: String,
       default: null
+    },
+    formId: {
+      type: String,
+      default: 'nested_new_numismatics_monogram'
     }
+  },
+  computed: {
+    form: function () {
+      // The form should be a root/parent component
+      return document.getElementById(this.formId)
+    }
+  },
+  created: function () {
+    // If the form is a root/parent component, this would be $emit elsewhere
+    // this.form.addEventListener('attach-monogram', this.addAndAttachMember)
+    window.addEventListener('attach-monogram', this.handleAttachMember)
+  },
+  beforeDestroy: function () {
+    // This should not be required
+    // this.form.removeEventListener('attach-monogram', this.addAndAttachMember)
+    window.removeEventListener('attach-monogram', this.handleAttachMember)
   },
   data: function () {
     return {
@@ -75,8 +96,19 @@ export default {
     }
   },
   methods: {
+    addMember (member) {
+      // This is inefficient, but one must avoid adding any existing members
+      const idx = this.members.findIndex((e) => e.id === member.id)
+      if (idx === -1) {
+        this.members.push(member)
+      }
+    },
     attach (attached) {
       this.attachedMembers.push(attached)
+    },
+    handleAttachMember (event) {
+      this.addMember(event.detail.data)
+      this.attach(event.detail.data)
     },
     detach (detached) {
       const idx = this.attachedMembers.findIndex((e) => e.id === detached.id)

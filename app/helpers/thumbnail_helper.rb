@@ -94,4 +94,14 @@ module ThumbnailHelper
     return :geo_thumbnail_path if geo_thumbnail?(document)
     :iiif_thumbnail_path
   end
+
+  def build_monogram_thumbnail_url(resource)
+    file_sets = resource.decorate.decorated_file_sets.reject { |fs| fs.thumbnail_id.nil? }
+
+    if file_sets.empty?
+      asset_url("default.png")
+    else
+      ManifestBuilder::ManifestHelper.new.manifest_image_thumbnail_path(file_sets.first)
+    end
+  end
 end

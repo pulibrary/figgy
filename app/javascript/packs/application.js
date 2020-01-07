@@ -6,6 +6,7 @@ import store from '../store'
 import DocumentAdder from '../components/document_adder'
 import PlaylistMembers from '../components/playlist_members'
 import IssueMonograms from '../components/issue_monograms'
+import IssueMonogramForm from '../components/issue_monogram_form'
 import axios from 'axios'
 import OrderManager from '../components/OrderManager.vue'
 import setupAuthLinkClipboard from '../packs/auth_link_clipboard.js'
@@ -27,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'document-adder': DocumentAdder,
         'playlistMembers': PlaylistMembers,
         'order-manager': OrderManager,
+        'issue-monogram-form': IssueMonogramForm,
         'issue-monograms': IssueMonograms,
         'ajax-select': AjaxSelect
       },
