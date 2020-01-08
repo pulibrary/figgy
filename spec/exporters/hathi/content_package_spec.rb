@@ -107,5 +107,13 @@ RSpec.describe Hathi::ContentPackage do
       page = package.pages.first
       expect(page.to_html).to be_present
     end
+
+    it "has proper pagedata" do
+      pd = package.pages.first.pagedata
+      imagename = pd.keys.first
+      expect(imagename).to eq "00000001.jp2"
+      label = pd[imagename]["label"]
+      expect(label).to eq "example.tif"
+    end
   end
 end
