@@ -80,7 +80,6 @@ RSpec.describe Hathi::ContentPackage do
       expect(package.metadata["scanner_model"]).to eq(package.scanner_model)
       expect(package.metadata["scanner_user"]).to eq(package.scanner_user)
       expect(package.metadata["reading_order"]).to eq(package.reading_order)
-      expect(package.metadata["pagedata"]).to eq(package.pagedata)
     end
   end
 
@@ -107,14 +106,6 @@ RSpec.describe Hathi::ContentPackage do
     it "has html streams" do
       page = package.pages.first
       expect(page.to_html).to be_present
-    end
-
-    it "has proper pagedata" do
-      pd = package.pages.first.pagedata
-      imagename = pd.keys.first
-      expect(imagename).to eq "00000001.jp2"
-      label = pd[imagename]["label"]
-      expect(label).to eq "example.tif"
     end
   end
 end

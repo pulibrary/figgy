@@ -63,16 +63,7 @@ module Hathi
       md["scanner_model"] = scanner_model
       md["scanner_user"] = scanner_user
       md["reading_order"] = reading_order
-      md["pagedata"] = pagedata
       md
-    end
-
-    def pagedata
-      pd = []
-      pages.each do |p|
-        pd << p.pagedata
-      end
-      pd
     end
 
     class Page
