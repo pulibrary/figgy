@@ -29,27 +29,27 @@ module Hathi
       def deposit_files
         package.pages.each do |page|
           digester.reset
-          FileUtils.cp page.derivative_path,
-                       File.join(@export_dir, page.name + ".jp2")
-          digester.file page.derivative_path
-          checksums[page.name + ".jp2"] = digester.hexdigest
+          FileUtils.cp page.path_to_file,
+                       File.join(@export_dir, page.image_filename)
+          digester.file page.path_to_file
+          checksums[page.image_filename] = digester.hexdigest
 
           next unless page.ocr?
           digester.reset
-          File.open(File.join(@export_dir, page.name + ".txt"), "w") do |f|
+          File.open(File.join(@export_dir, page.ocr_filename), "w") do |f|
             f.write page.to_txt
           end
           digester << page.to_txt
-          checksums[page.name + ".txt"] = digester.hexdigest
+          checksums[page.ocr_filename] = digester.hexdigest
 
           next unless page.hocr?
 
           digester.reset
-          File.open(File.join(@export_dir, page.name + ".html"), "w") do |f|
+          File.open(File.join(@export_dir, page.hocr_filename), "w") do |f|
             f.write page.to_html
           end
           digester << page.to_html
-          checksums[page.name + ".html"] = digester.hexdigest
+          checksums[page.hocr_filename] = digester.hexdigest
         end
       end
 
