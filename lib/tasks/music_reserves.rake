@@ -25,7 +25,7 @@ namespace :music do
         logger: logger
       )
       new_collector = collector.with_recordings_query(
-        collector.prerequisite_recordings_query([recording_id])
+        collector.dependent_recordings_query([recording_id])
       )
       importer = MusicImportService.new(
         recording_collector: new_collector,
