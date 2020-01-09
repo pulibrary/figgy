@@ -81,11 +81,18 @@ module Hathi
       def initialize(source_fileset, name)
         @name = name
         @source_page = source_fileset
-        original_file = Valkyrie::StorageAdapter.find_by(id: source_page.original_file.file_identifiers.first)
-        @original_image = MiniMagick::Image.new(original_file.disk_path)
-        derivative_file = Valkyrie::StorageAdapter.find_by(id: source_page.derivative_file.file_identifiers.first)
-        @derivative_image = MiniMagick::Image.new(derivative_file.disk_path)
-        @properties = @original_image.data["properties"]
+      end
+
+      def original_image
+        @original_image ||= MiniMagick::Image.new(tiff_path)
+      end
+
+      def derivative_image
+        @derivative_image ||= MiniMagick::Image.new(derivative_path)
+      end
+
+      def properties
+        @properties ||= original_image.data["properties"]
       end
 
       def tiff_path
@@ -104,23 +111,23 @@ module Hathi
       end
 
       def capture_date
-        @properties["xmp:CreateDate"]
+        properties["xmp:CreateDate"]
       end
 
       def scanner_make
-        @properties["tiff:make"]
+        properties["tiff:make"]
       end
 
       def scanner_model
-        @properties["tiff:model"]
+        properties["tiff:model"]
       end
 
       def bitonal?
-        @original_image["%z"] == 1
+        original_image["%z"] == 1
       end
 
       def resolution
-        @original_image["resolution"].first
+        original_image["resolution"].first
       end
 
       def to_txt
@@ -132,11 +139,11 @@ module Hathi
       end
 
       def ocr?
-        source_page.ocr_content
+        !(source_page.ocr_content.nil? || source_page.ocr_content.empty?)
       end
 
       def hocr?
-        source_page.hocr_content
+        !(source_page.hocr_content.nil? || source_page.hocr_content.empty?)
       end
     end
   end

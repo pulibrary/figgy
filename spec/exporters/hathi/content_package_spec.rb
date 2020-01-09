@@ -104,6 +104,16 @@ RSpec.describe Hathi::ContentPackage do
       expect(page.derivative_path.ftype).to eq "file"
     end
 
+    it "has a copy of the original image" do
+      image = package.pages.first.original_image
+      expect(image.mime_type).to eq "image/tiff"
+    end
+
+    it "has a copy of the derivative image" do
+      image = package.pages.first.derivative_image
+      expect(image).not_to be_nil
+    end
+
     it "has text streams" do
       page = package.pages.first
       expect(page.to_txt).to be_present
