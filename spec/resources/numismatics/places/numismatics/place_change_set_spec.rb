@@ -10,16 +10,4 @@ RSpec.describe Numismatics::PlaceChangeSet do
       expect(change_set.primary_terms).to include(:city, :geo_state, :region)
     end
   end
-
-  describe "#new_record?" do
-    it "returns false for supporting nested form integration" do
-      expect(change_set.new_record?).to be false
-    end
-  end
-
-  describe "#marked_for_destruction?" do
-    it "returns false for supporting nested form integration" do
-      expect(change_set.marked_for_destruction?).to be false
-    end
-  end
 end

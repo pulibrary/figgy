@@ -19,7 +19,6 @@ module Numismatics
     attribute :numismatic_citation, Valkyrie::Types::Array.of(Numismatics::Citation).meta(ordered: true)
     attribute :numismatic_note, Valkyrie::Types::Array.of(Numismatics::Note).meta(ordered: true)
     attribute :numismatic_subject, Valkyrie::Types::Array.of(Numismatics::Subject).meta(ordered: true)
-    attribute :numismatic_place, Valkyrie::Types::Array.of(Numismatics::Place).meta(ordered: true)
     attribute :obverse_attribute, Valkyrie::Types::Array.of(Numismatics::Attribute).meta(ordered: true)
     attribute :reverse_attribute, Valkyrie::Types::Array.of(Numismatics::Attribute).meta(ordered: true)
 
