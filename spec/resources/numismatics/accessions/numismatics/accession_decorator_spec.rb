@@ -22,6 +22,12 @@ RSpec.describe Numismatics::AccessionDecorator do
     end
   end
 
+  describe "#title" do
+    it "generates a title" do
+      expect(decorator.title).to eq(["Accession 1: 01/01/2001 gift name1 name2/firm name ($99.00)"])
+    end
+  end
+
   describe "#citations" do
     it "renders the linked citations" do
       expect(decorator.citations).to eq(["short-title citation part citation number"])

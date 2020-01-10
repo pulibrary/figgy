@@ -21,9 +21,5 @@ module Numismatics
     attribute :replaces
     attribute :type
     attribute :depositor
-
-    def title
-      ["Accession: #{accession_number}"]
-    end
   end
 end

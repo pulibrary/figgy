@@ -9,8 +9,4 @@ describe Numismatics::Accession do
     expect(accession.type).to eq(["purchase"])
     expect(accession.items_number).to eq(102)
   end
-
-  it "has a title" do
-    expect(accession.title).to include "Accession: "
-  end
 end
