@@ -61,6 +61,10 @@ module Numismatics
       [decorated_person.name1, decorated_person.name2].compact.join(" ")
     end
 
+    def title
+      ["Accession #{accession_number}: #{date} #{type} #{from_label} #{cost_label}"]
+    end
+
     def type
       Array.wrap(super).first
     end
