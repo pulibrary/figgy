@@ -59,7 +59,7 @@ module Numismatics
         numismatic_monogram_attributes = @numismatic_monograms.map do |monogram|
           member_thumbnail_url = build_monogram_thumbnail_url(monogram)
           member_url = solr_document_path(id: monogram.id)
-          member_monogram_ids = resource.decorate.decorated_numismatic_monograms.map(&:id)
+          member_monogram_ids = params[:id] ? resource.decorate.decorated_numismatic_monograms.map(&:id) : []
 
           {
             id: monogram.id.to_s,
