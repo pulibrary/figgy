@@ -7,7 +7,6 @@
     >
 
     <form
-      ref="form"
       :action="action"
       :method="method"
       @submit.prevent="submit($event)"
@@ -40,7 +39,6 @@
             />
 
             <input
-              required="required"
               aria-required="true"
               type="text"
               name="numismatics_monogram[title]"
@@ -88,7 +86,6 @@ export default {
   },
   computed: {
     valid: function () {
-      // return this.$refs.form.checkValidity()
       return this.title !== null && this.title.length > 0
     },
     disabled: function () {
