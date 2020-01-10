@@ -36,10 +36,6 @@ Release notes template:
 
 # 2020-01-02
 
-## Added
-
-* Introduces nested Numismatic Places into the Numismatic Issue forms
-
 ## Fixed
 
 * Ensuring that Numismatic Issue facet links in the dashboard interface are
