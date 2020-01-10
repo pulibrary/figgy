@@ -36,6 +36,25 @@ RSpec.describe Numismatics::MonogramsController, type: :controller do
       monogram = query_service.find_all_of_model(model: Numismatics::Monogram).select { |n| n["title"] == ["Monogram 1"] }.first
       expect(monogram.depositor).to eq [user.uid]
     end
+    context "when requesting a JSON response" do
+      it "returns the default JSON serialization for the resource" do
+        post :create, params: { numismatics_monogram: valid_params, format: :json }
+
+        expect(response.status).to eq(200)
+        expect(response.body).not_to be_empty
+        json_response = JSON.parse(response.body)
+        expect(json_response).to include("id")
+        id = json_response["id"]
+        resource = find_resource(id)
+        expect(json_response["id"]).to eq(resource.id.to_s)
+        expect(json_response).to include("title" => resource.title.first)
+        expect(json_response).to include("thumbnail")
+        expect(json_response["thumbnail"]).to include("http://test.host/assets/default-")
+        expect(json_response).to include("url")
+        expect(json_response["url"]).to eq("/catalog/#{id}")
+        expect(json_response).to include("attached" => true)
+      end
+    end
   end
   describe "destroy" do
     context "access control" do

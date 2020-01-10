@@ -30,7 +30,8 @@
             <input
               type="hidden"
               name="numismatics_issue[numismatic_monogram_ids][]"
-              :value="monogram.id" />
+              :value="monogram.id"
+            />
           </td>
         </template>
       </tr>
@@ -42,7 +43,6 @@
       </tr>
     </tfoot>
   </table>
-
 </template>
 <script>
 import IssueMonogram from './issue_monogram'
@@ -74,6 +74,11 @@ export default {
       default: 'nested_new_numismatics_monogram'
     }
   },
+  data: function () {
+    return {
+      attachedMembers: this.members.filter((e) => e.attached)
+    }
+  },
   computed: {
     form: function () {
       // The form should be a root/parent component
@@ -89,11 +94,6 @@ export default {
     // This should not be required
     // this.form.removeEventListener('attach-monogram', this.addAndAttachMember)
     window.removeEventListener('attach-monogram', this.handleAttachMember)
-  },
-  data: function () {
-    return {
-      attachedMembers: this.members.filter((e) => e.attached)
-    }
   },
   methods: {
     addMember (member) {

@@ -78,6 +78,21 @@ RSpec.shared_examples "a BaseResourceController" do |*flags|
       expect(resource.title).to contain_exactly "Title 1", "Title 2"
       expect(resource.depositor).to eq [user.uid]
     end
+    context "when requesting a JSON response" do
+      it "returns the default JSON serialization for the resource" do
+        post :create, params: { param_key => valid_params, format: :json }
+
+        expect(response.status).to eq(200)
+        expect(response.body).not_to be_empty
+        json_response = JSON.parse(response.body)
+        expect(json_response).to include("id")
+        # This is due to the formatting of Valkyrie IDs in Solr Documents
+        id = json_response["id"]["id"]
+        resource = find_resource(id)
+        expect(json_response["id"]).to eq("id" => resource.id.to_s)
+        expect(json_response).to include("title" => resource.title)
+      end
+    end
 
     context "when joining a collection" do
       let(:user) { FactoryBot.create(:admin) }

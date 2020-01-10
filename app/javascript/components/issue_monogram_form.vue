@@ -7,28 +7,31 @@
     >
 
     <form
+      id="nested_new_numismatics_monogram"
       :action="action"
       :method="method"
-      @submit.prevent="submit($event)"
-      @created="created"
       accept-charset="UTF-8"
       enctype="application/json"
-      id="nested_new_numismatics_monogram"
       class="simple_form new_numismatics_monogram"
-      >
-
+      @created="created"
+      @submit.prevent="submit($event)"
+    >
       <input
         name="utf8"
         type="hidden"
-        value="✓" />
+        value="✓"
+      />
 
-      <div id="metadata" class="form-panel-content">
+      <div
+        id="metadata"
+        class="form-panel-content"
+      >
         <div class="panel-body">
           <div class="form-group string required numismatics_monogram_title">
             <label
               for="numismatics_monogram_title"
               class="control-label string required"
-              >
+            >
               <span class="label label-info required-tag">required</span> Title
             </label>
 
@@ -39,12 +42,12 @@
             />
 
             <input
+              id="numismatics_monogram_title"
+              v-model="title"
               aria-required="true"
               type="text"
               name="numismatics_monogram[title]"
-              id="numismatics_monogram_title"
               class="form-control string required form-control"
-              v-model="title"
             />
           </div>
         </div>

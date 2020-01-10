@@ -2,23 +2,29 @@ import { createLocalVue, mount, shallowMount } from "@vue/test-utils"
 import flushPromises from 'flush-promises'
 import IssueMonogramForm from "../components/issue_monogram_form.vue"
 import moxios from 'moxios'
-// import jest from 'jest'
+
 jest.mock('axios')
 
 // create an extended `Vue` constructor
 const localVue = createLocalVue()
 
 describe("IssueMonogramForm.vue", () => {
-  const options = {
-  }
+  let wrapper
 
-  const wrapper = mount(IssueMonogramForm, {
-    options,
-    localVue
-  })
+  const response = {
+    data: {
+      id: {
+        id: 'test-id'
+      }
+    }
+  }
 
   beforeEach(() => {
     moxios.install()
+
+    wrapper = mount(IssueMonogramForm, {
+      localVue
+    })
   })
 
   afterEach(() => {
@@ -34,35 +40,48 @@ describe("IssueMonogramForm.vue", () => {
     expect(wrapper.vm.disabled).toBeFalsy()
   })
 
-  it('transmits a POST request when a new monogram is requested', async done => {
+  it('disables form submissions when a new monogram has been requested', () => {
     wrapper.vm.title = 'test monogram'
-    wrapper.find('input[type="submit"]').trigger('click')
-    const eventMap = {}
-    const originalMethod = window.addEventListener
-    const mockHandler = jest.fn((e) => e)
-    window.addEventListener = jest.fn((event) => {
-      eventMap[event] = mockHandler
-    })
+    wrapper.vm.requesting = true
+    expect(wrapper.vm.disabled).toBeTruthy()
+    wrapper.vm.requesting = false
+    expect(wrapper.vm.disabled).toBeFalsy()
+  })
 
-    moxios.stubRequest('', {
-      status: 200,
-      responseText: JSON.stringify({ data: { id: { id: 'test-id' } } })
+  describe('#reset', () => {
+    it('clears the ID for a newly-created Monogram and the title', () => {
+      wrapper.vm.title = 'test monogram'
+      wrapper.vm.id = 'test-id'
+      wrapper.vm.reset()
+      expect(wrapper.vm.title).toBeFalsy()
+      expect(wrapper.vm.id).toBeFalsy()
     })
+  })
 
-    moxios.wait(() => {
-      expect(eventMap.hasOwnProperty('attach-monogram'))
-      done()
+  describe('#created', () => {
+    it('parses the response from the Rails Controller endpoint and mutates "id"', () => {
+      expect(wrapper.vm.id).toBeFalsy()
+      wrapper.vm.created(response)
+      expect(wrapper.vm.id).toEqual('test-id')
     })
-
-    window.addEventListener = originalMethod
   })
 
   it('transmits a POST request when a new monogram is requested', () => {
-    wrapper.vm.title = 'test monogram'
-    wrapper.find('input[type="submit"]').trigger('click')
-    wrapper.vm.$nextTick( () => {
-      // expect axios to have received
-      // done()
+    const originalMethod = window.dispatchEvent
+    const mockHandler = jest.fn(e => e)
+    window.dispatchEvent = mockHandler
+
+    moxios.wait(() => {
+      moxios.stubRequest(wrapper.vm.action, {
+        status: 200,
+        responseText: JSON.stringify(response)
+      })
+
+      wrapper.vm.title = 'test monogram'
+      wrapper.find('form').trigger('submit')
+      expect(wrapper.vm.id).toEqual('test-id')
     })
+
+    window.dispatchEvent = originalMethod
   })
 })
