@@ -58,6 +58,14 @@ jobs:
             - figgy-yarn-{{ checksum "yarn.lock" }}-cc732be
             - figgy-yarn-
       - run:
+          name: "Update Node.js and npm"
+          command: |
+            curl -sSL "https://nodejs.org/dist/v10.18.1/node-v10.18.1-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v10.18.1-linux-x64/bin/node
+            curl https://www.npmjs.com/install.sh | sudo bash
+      - run:
+          name: Check current version of node
+          command: node -v
+      - run:
           name: Install NPM Dependencies via Yarn
           command: yarn install --frozen-lockfile
       # Store yarn / webpacker cache
@@ -122,10 +130,34 @@ jobs:
       # Wait for DB
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run: sudo sh bin/ci_kakadu_install.sh
-      # Remove cached simpler-tiles - needs to be reinstalled every time.
-      - run: rm vendor/bundle/ruby/2.6.0/specifications/simpler-tiles-0.3.1.gemspec || true
       # Install Bundler
       - run: gem install bundler -v '~> 2.0'
+      # Remove cached simpler-tiles - needs to be reinstalled every time.
+      - run: rm vendor/bundle/ruby/2.3.0/specifications/simpler-tiles-0.3.1.gemspec || true
+      - run:
+          name: "Update Node.js and npm"
+          command: |
+            curl -sSL "https://nodejs.org/dist/v10.18.1/node-v10.18.1-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v10.18.1-linux-x64/bin/node
+            curl https://www.npmjs.com/install.sh | sudo bash
+      - run:
+          name: Check current version of node
+          command: node -v
+      - run:
+          name: Install Chromedriver latest version
+          command: |
+            sudo apt-get install lsb-release libappindicator3-1
+            curl -L -o google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            sudo dpkg -i google-chrome.deb
+            sudo sed -i 's|HERE/chrome"|HERE/chrome" --no-sandbox|g' /opt/google/chrome/google-chrome
+            rm google-chrome.deb
+            curl -L https://chromedriver.storage.googleapis.com/79.0.3945.36/chromedriver_linux64.zip | gunzip -
+            wget https://chromedriver.storage.googleapis.com/79.0.3945.36/chromedriver_linux64.zip
+            unzip chromedriver_linux64.zip
+            sudo cp ./chromedriver /usr/local/bin/chromedriver
+      - run:
+          name: Check current version of chromedriver
+          command: chromedriver --version
+>>>>>>> Installing custom Node.js on CircleCI
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
       - run: yarn exec jest --coverage

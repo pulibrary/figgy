@@ -57,9 +57,9 @@ RSpec.feature "Bulk edit", js: true do
     it "updates the object" do
       visit bulk_edit_resources_edit_path("q" => "", "f[member_of_collection_titles_ssim][]" => "My Collection")
       expect(page).to have_content "You searched for"
-      page.check("mark_complete")
+      page.driver.execute_script("document.getElementById('mark_complete').click()")
       accept_alert do
-        click_button("Apply Edits")
+        page.driver.execute_script("document.getElementById('bulk-edit-submit').click()")
       end
       expect(current_path).to eq root_path
       expect(page).to have_content "1 resources were queued for bulk update."

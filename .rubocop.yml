@@ -39,6 +39,7 @@ Metrics/AbcSize:
     - 'app/utils/data_seeder.rb'
     - 'app/exporters/hathi/submission_information_package.rb'
     - 'app/jobs/browse_everything_ingest_job.rb'
+    - 'app/controllers/concerns/resource_controller.rb'
 Metrics/BlockLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
@@ -137,6 +138,7 @@ Metrics/LineLength:
     - 'spec/views/catalog/_members_coin.html.erb_spec.rb'
     - 'spec/helpers/application_helper_spec.rb'
     - 'spec/resources/collections/collections_controller_spec.rb'
+    - 'spec/resources/numismatics/issues/numismatics/issue_change_set_spec.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'

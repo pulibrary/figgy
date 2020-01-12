@@ -9,6 +9,15 @@ RSpec.describe Numismatics::IssuesController, type: :controller do
   end
   describe "new" do
     it_behaves_like "an access controlled new request"
+    context "when there are monogram resources ingested" do
+      let(:monogram1) { FactoryBot.create_for_repository(:numismatic_monogram) }
+      let(:monogram2) { FactoryBot.create_for_repository(:numismatic_monogram) }
+      before do
+        monogram1
+        monogram2
+      end
+      it_behaves_like "an access controlled new request"
+    end
   end
   describe "create" do
     let(:valid_params) do

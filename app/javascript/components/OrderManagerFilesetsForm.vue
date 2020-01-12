@@ -111,29 +111,6 @@ export default {
       resource: state => state.ordermanager.resource,
       gallery: state => state.gallery
     }),
-    labelerOpts () {
-      if (this.method === 'paginate') {
-        return {
-          start: this.start,
-          method: this.method,
-          frontLabel: '',
-          backLabel: '',
-          startsWith: this.startsWith,
-          unitLabel: this.unitLabel,
-          bracket: this.bracket
-        }
-      } else {
-        return {
-          start: this.start,
-          method: this.method,
-          frontLabel: this.frontLabel,
-          backLabel: this.backLabel,
-          startsWith: this.startsWith,
-          unitLabel: this.unitLabel,
-          bracket: this.bracket
-        }
-      }
-    },
     isMultiVolume () {
       return this.$store.getters.isMultiVolume
     },
@@ -146,7 +123,7 @@ export default {
           name: 'addBrackets',
           value: 'Add Brackets',
           id: 'addBrackets',
-          checked: this.labelerOpts.bracket
+          checked: this.labelerOpts().bracket
         }
       ]
     },
@@ -159,15 +136,33 @@ export default {
   },
   watch: {
     method: function (val) {
-      if (val === 'foliate') {
-        this.unitLabel = 'f. '
-      } else if (val === 'paginate') {
-        this.unitLabel = 'p. '
-      }
       this.updateMultiLabels()
     }
   },
   methods: {
+    labelerOpts () {
+      let unitLabel = this.unitLabel
+
+      // This should be generated with calculate() or watch()
+      if (this.method === 'paginate') {
+        unitLabel = 'p. '
+      } else if (this.method === 'foliate') {
+        unitLabel = 'f. '
+      }
+
+      let frontLabel = this.method === 'paginate' ? '' : this.frontLabel
+      let backLabel = this.method === 'paginate' ? '' : this.backLabel
+
+      return {
+        start: this.start,
+        method: this.method,
+        startsWith: this.startsWith,
+        bracket: this.bracket,
+        frontLabel,
+        backLabel,
+        unitLabel
+      }
+    },
     isNormalInteger (str) {
       return /^\+?(0|[1-9]\d*)$/.test(str)
     },
@@ -177,7 +172,7 @@ export default {
       this.start = this.isNormalInteger(this.start)
         ? this.start - 0
         : this.start
-      let generator = Lablr.pageLabelGenerator(this.labelerOpts)
+      let generator = Lablr.pageLabelGenerator(this.labelerOpts())
       for (let i = 0; i < this.selectedTotal; i++) {
         let index = this.gallery.items
           .map(function (item) {

@@ -14,7 +14,7 @@ let options
 let store
 let actions
 let items = [
-  { id: "a", title: "A", viewingHint: "single", caption: "a", mediaUrl: "https://picsum.photos/600/300/?random" },
+  { id: "a", title: "A", viewingHint: "single", mediaUrl: "https://picsum.photos/600/300/?random" },
   { id: "b", title: "B", caption: "b", mediaUrl: "https://picsum.photos/600/300/?random" },
   { id: "c", title: "C", caption: "c", mediaUrl: "https://picsum.photos/600/300/?random" },
 ]
