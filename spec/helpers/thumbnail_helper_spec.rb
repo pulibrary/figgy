@@ -171,4 +171,23 @@ RSpec.describe ThumbnailHelper do
       expect(helper.geo_file_set(vector_resource)).to be_a FileSet
     end
   end
+
+  describe "#build_monogram_thumbnail_url" do
+    let(:file_set) { FactoryBot.create_for_repository(:file_set) }
+    let(:monogram_resource) { FactoryBot.create_for_repository(:numismatic_monogram, member_ids: [file_set.id]) }
+
+    it "generates the URL for the thumbnail FileSet" do
+      manifest_helper = instance_double(ManifestBuilder::ManifestHelper)
+      allow(ManifestBuilder::ManifestHelper).to receive(:new).and_return(manifest_helper)
+      allow(manifest_helper).to receive(:manifest_image_thumbnail_path).and_return("http://test-thumbnail-url")
+      expect(helper.build_monogram_thumbnail_url(monogram_resource)).to eq("http://test-thumbnail-url")
+    end
+
+    context "when there is no thumbnail available" do
+      let(:monogram_resource) { FactoryBot.create_for_repository(:numismatic_monogram) }
+      it "generates the URL for the default placeholder" do
+        expect(helper.build_monogram_thumbnail_url(monogram_resource)).to include("http://test.host/assets/default-")
+      end
+    end
+  end
 end
