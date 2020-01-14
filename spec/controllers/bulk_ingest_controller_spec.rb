@@ -72,7 +72,7 @@ RSpec.describe BulkIngestController do
     let(:selected_files) do
       {
         "0" => {
-          "url" => "file:///base/4609321/1.tif",
+          "url" => "file:///base/4609321",
           "file_name" => "1.tif",
           "file_size" => "100"
         }
@@ -132,7 +132,7 @@ RSpec.describe BulkIngestController do
       let(:selected_files) do
         {
           "0" => {
-            "url" => "file:///base/June 31/1.tif",
+            "url" => "file:///base/June 31",
             "file_name" => "1.tif",
             "file_size" => "100"
           }

@@ -11,7 +11,7 @@ class BrowseEverythingFilePaths
   # @return [Pathname]
   def parent_path
     return if file_paths.empty?
-    return file_paths.first.dirname if file_paths.count == 1
+    return file_paths.first if file_paths.count == 1
     @parent_path ||= begin
       out_path = file_paths.first
       file_paths[1..-1].each do |f|
