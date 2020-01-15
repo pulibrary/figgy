@@ -143,19 +143,14 @@ jobs:
           name: Check current version of node
           command: node -v
       - run:
-          name: Install Chromedriver latest version
+          name: Install Chromedriver release 79.0.3945.36
           command: |
-            sudo apt-get install lsb-release libappindicator3-1
-            curl -L -o google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-            sudo dpkg -i google-chrome.deb
-            sudo sed -i 's|HERE/chrome"|HERE/chrome" --no-sandbox|g' /opt/google/chrome/google-chrome
-            rm google-chrome.deb
             curl -L https://chromedriver.storage.googleapis.com/79.0.3945.36/chromedriver_linux64.zip | gunzip -
             wget https://chromedriver.storage.googleapis.com/79.0.3945.36/chromedriver_linux64.zip
             unzip chromedriver_linux64.zip
             sudo cp ./chromedriver /usr/local/bin/chromedriver
       - run:
-          name: Check current version of chromedriver
+          name: Check the current version of Chromedriver
           command: chromedriver --version
 >>>>>>> Installing custom Node.js on CircleCI
       # Bundle install dependencies
