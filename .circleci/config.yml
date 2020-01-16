@@ -23,15 +23,15 @@ jobs:
       - run: sudo sh bin/ci_simple_tiles_install.sh
       - run: sudo sh bin/ci_free_tds_install.sh
       - run:
-          name: Install node@8.17.0 (need right version for `yarn`)
+          name: Install node@lts/erbium (need right version for `yarn`)
           command: |
             set +e
             touch $BASH_ENV
             curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.5/install.sh | bash
             echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
             echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
-            echo 'nvm install v8.17.0' >> $BASH_ENV
-            echo 'nvm alias default v8.17.0' >> $BASH_ENV
+            echo 'nvm install lts/erbium' >> $BASH_ENV
+            echo 'nvm alias default lts/erbium' >> $BASH_ENV
       - run:
           name: Check current version of node
           command: node -v
@@ -57,14 +57,6 @@ jobs:
           keys:
             - figgy-yarn-{{ checksum "yarn.lock" }}-cc732be
             - figgy-yarn-
-      - run:
-          name: "Update Node.js and npm"
-          command: |
-            curl -sSL "https://nodejs.org/dist/v10.18.1/node-v10.18.1-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v10.18.1-linux-x64/bin/node
-            curl https://www.npmjs.com/install.sh | sudo bash
-      - run:
-          name: Check current version of node
-          command: node -v
       - run:
           name: Install NPM Dependencies via Yarn
           command: yarn install --frozen-lockfile
@@ -152,7 +144,6 @@ jobs:
       - run:
           name: Check the current version of Chromedriver
           command: chromedriver --version
->>>>>>> Installing custom Node.js on CircleCI
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
       - run: yarn exec jest --coverage

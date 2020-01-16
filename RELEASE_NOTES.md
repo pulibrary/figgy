@@ -18,6 +18,11 @@ Release notes template:
 
 ## Added
 
+* Implements a Monogram creation widget within the Issue forms for Numismatic
+  resources
+
+## Added
+
  * Integrated the "Save and Duplicate Metadata" feature for Numismatic Issues and
   Coins
 

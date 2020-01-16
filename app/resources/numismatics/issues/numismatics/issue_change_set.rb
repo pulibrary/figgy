@@ -9,8 +9,6 @@ module Numismatics
     collection :numismatic_citation, multiple: true, required: false, form: Numismatics::CitationChangeSet, populator: :populate_nested_collection, default: []
     collection :numismatic_note, multiple: true, required: false, form: Numismatics::NoteChangeSet, populator: :populate_nested_collection, default: []
     collection :numismatic_subject, multiple: true, required: false, form: Numismatics::SubjectChangeSet, populator: :populate_nested_collection, default: []
-    collection :numismatic_place, multiple: true, required: false, form: Numismatics::PlaceChangeSet, populator: :populate_nested_collection, default: []
-    collection :numismatic_monogram, multiple: true, required: false, form: Numismatics::MonogramChangeSet, populator: :populate_nested_collection, default: []
     collection :obverse_attribute, multiple: true, required: false, form: Numismatics::AttributeChangeSet, populator: :populate_nested_collection, default: []
     collection :reverse_attribute, multiple: true, required: false, form: Numismatics::AttributeChangeSet, populator: :populate_nested_collection, default: []
     property :earliest_date, multiple: false, required: false
@@ -90,13 +88,10 @@ module Numismatics
           :master_id,
           :workshop,
           :series,
-          :numismatic_monogram_ids
+          :numismatic_place_id
         ],
         "Monograms" => [
-          :numismatic_monogram
-        ],
-        "Places" => [
-          :numismatic_place
+          :numismatic_monogram_ids
         ],
         "Obverse" => [
           :obverse_figure,
@@ -157,14 +152,6 @@ module Numismatics
 
     def build_numismatic_subject
       schema["numismatic_subject"][:nested].new(model_type_for(property: :numismatic_subject)[[{}]].first)
-    end
-
-    def build_numismatic_place
-      schema["numismatic_place"][:nested].new(model_type_for(property: :numismatic_place)[[{}]].first)
-    end
-
-    def build_numismatic_monogram
-      schema["numismatic_monogram"][:nested].new(model_type_for(property: :numismatic_monogram)[[{}]].first)
     end
 
     def build_obverse_attribute

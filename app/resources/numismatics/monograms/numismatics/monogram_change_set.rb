@@ -14,17 +14,6 @@ module Numismatics
     property :viewing_hint, multiple: false, required: false, default: "individuals"
     property :depositor, multiple: false, required: false
 
-    # Virtual Attributes
-    property :_destroy, virtual: true
-
-    def new_record?
-      false
-    end
-
-    def marked_for_destruction?
-      false
-    end
-
     def primary_terms
       [
         :title

@@ -1,1 +1,8 @@
-
+<%= f.input :numismatic_place_id,
+            label: "Place",
+            collection: @numismatic_places&.sort_by(&:title),
+            label_method: :title,
+            value_method: :id,
+            input_html: { multiple: f.object.multiple?(key) },
+            include_blank: true,
+            required: f.object.required?(key) %>
