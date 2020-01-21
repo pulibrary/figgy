@@ -167,8 +167,7 @@ class BulkIngestController < ApplicationController
 
         # This is needed in order to ensure that files are authorized for the
         # download from the Cloud Service provider
-        auth_header_values = file_attributes.delete(:auth_header)
-        auth_header = JSON.generate(auth_header_values)
+        auth_header = file_attributes.delete(:auth_header)
 
         @new_pending_uploads << PendingUpload.new(file_attributes.merge(id: SecureRandom.uuid, created_at: Time.current.utc.iso8601, auth_header: auth_header))
       end

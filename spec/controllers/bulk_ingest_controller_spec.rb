@@ -240,7 +240,7 @@ RSpec.describe BulkIngestController do
             url: "https://www.example.com/files/1.tif?alt=media",
             file_name: "1.tif",
             file_size: "100",
-            auth_header: "{\"Authorization\":\"Bearer secret\"}"
+            auth_header: { "Authorization": "Bearer secret" }
           )
         )
         expect(BrowseEverythingIngestJob).to have_received(:perform_later).with(resources.first.id.to_s, "BulkIngestController", [resources.first.pending_uploads.first.id.to_s])
@@ -276,7 +276,7 @@ RSpec.describe BulkIngestController do
               url: "https://www.example.com/files/1.tif?alt=media",
               file_name: "1.tif",
               file_size: "100",
-              auth_header: "{\"Authorization\":\"Bearer secret\"}"
+              auth_header: { "Authorization": "Bearer secret" }
             )
           )
 
