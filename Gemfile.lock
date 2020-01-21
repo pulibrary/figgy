@@ -9,8 +9,8 @@ GIT
 
 GIT
   remote: git://github.com/jrgriffiniii/browse-everything.git
-  revision: 7390981fb96c038a5713da1984026dd0f1ea36cb
-  branch: figgy-issues-3273-jrgriffiniii-rebase
+  revision: e03156af1b93b1884bdfa5e5d915fd8f25b41191
+  branch: figgy-issues-3587-jrgriffiniii
   specs:
     browse-everything (1.0.1)
       addressable (~> 2.5)
