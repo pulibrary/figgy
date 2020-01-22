@@ -42,8 +42,7 @@ class BaseResourceController < ApplicationController
     # This is provided within BrowseEverything::Parameters#selected_files
     selected_files.each do |selected_file|
       file_attributes = selected_file.to_h
-      auth_header_values = file_attributes.delete("auth_header")
-      auth_header = JSON.generate(auth_header_values)
+      auth_header = file_attributes.delete("auth_header")
 
       new_pending_upload = PendingUpload.new(
         file_attributes.merge(
