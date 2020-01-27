@@ -70,7 +70,7 @@ jobs:
           POSTGRES_USER: figgy
           POSTGRES_DB: figgy_test
           POSTGRES_PASSWORD: ""
-      - image: solr:7.1-alpine
+      - image: solr:7.7-alpine
         command: bin/solr -cloud -noprompt -f -p 8984
     parallelism: 4
     environment:
