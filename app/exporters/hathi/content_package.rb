@@ -56,6 +56,12 @@ module Hathi
       end
     end
 
+    # In Princeton Digital Studio, scanning order
+    # is always reading order.
+    def scanning_order
+      reading_order
+    end
+
     def metadata
       md = {}
       md["capture_date"] = capture_date
@@ -63,6 +69,7 @@ module Hathi
       md["scanner_model"] = scanner_model
       md["scanner_user"] = scanner_user
       md["reading_order"] = reading_order
+      md["scanning_order"] = scanning_order
       md["pagedata"] = pagedata
       md
     end

@@ -41,6 +41,10 @@ RSpec.describe Hathi::ContentPackage do
     it "defaults to \"left-to-right\" reading order" do
       expect(package.reading_order).to eq(%("left-to-right"))
     end
+
+    it "defaults to \"left-to-right\" scanning order" do
+      expect(package.scanning_order).to eq(%("left-to-right"))
+    end
   end
 
   describe "properties" do
@@ -71,7 +75,11 @@ RSpec.describe Hathi::ContentPackage do
     it "supplies a reading order" do
       expect(package.reading_order).to eq(%("right-to-left"))
     end
-  end
+
+    it "supplies a scanning order" do
+      expect(package.scanning_order).to eq(%("right-to-left"))
+    end
+end
 
   describe "metadata" do
     it "has metadata" do
@@ -80,6 +88,7 @@ RSpec.describe Hathi::ContentPackage do
       expect(package.metadata["scanner_model"]).to eq(package.scanner_model)
       expect(package.metadata["scanner_user"]).to eq(package.scanner_user)
       expect(package.metadata["reading_order"]).to eq(package.reading_order)
+      expect(package.metadata["scanning_order"]).to eq(package.scanning_order)
       expect(package.metadata["pagedata"]).to eq(package.pagedata)
     end
   end
