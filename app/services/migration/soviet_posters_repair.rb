@@ -12,22 +12,23 @@ class Migration::SovietPostersRepair
   def run!
     change_set_persister.buffer_into_index do |buffered_change_set_persister|
       broken_resources.each do |resource|
-        genre = Array.wrap(resource.genre).map { |x| x[:":id"] }
-        geo_subject = Array.wrap(resource.geo_subject).map { |x| x[:":id"] }
-        geographic_origin = Array.wrap(resource.geographic_origin).map { |x| x[:":id"] }
-        language = Array.wrap(resource.language).map { |x| x[:":id"] }
-        subject = Array.wrap(resource.subject).map { |x| x[:":id"] }
+        visibility = Array.wrap(resource.visibility).map { |x| convert_visibility(x) }
         change_set = DynamicChangeSet.new(resource)
-        change_set.validate(genre: genre, geo_subject: geo_subject, geographic_origin: geographic_origin, language: language, subject: subject)
+        change_set.validate(visibility: visibility)
         buffered_change_set_persister.save(change_set: change_set)
       end
     end
   end
 
+  def convert_visibility(visibility)
+    label = Nokogiri::HTML(visibility[:self]).css(".text").text
+    ControlledVocabulary.for(:visibility).all.find { |x| x.label == label }.value
+  end
+
   def broken_resources
     @broken_resources ||=
       begin
-        change_set_persister.query_service.custom_queries.find_by_property(property: :subject, value: [{ ":read_groups": [] }])
+        change_set_persister.query_service.custom_queries.find_by_property(property: :visibility, value: [{ html_safe: true }])
       end
   end
 end
