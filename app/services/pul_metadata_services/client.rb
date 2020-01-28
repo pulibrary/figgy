@@ -42,7 +42,7 @@ module PulMetadataServices
         def retrieve_from_pulfa(id)
           conn = Faraday.new(url: "https://findingaids.princeton.edu/collections/")
           response = conn.get("#{id.tr('_', '/')}.xml", scope: "record")
-          response.body.force_encoding("UTF-8")
+          response.body.dup.force_encoding("UTF-8")
         end
 
         # Retrieves an EAD Document (XML) from the Princeton University Library Finding Aids (PULFA) service using an ID
@@ -51,7 +51,7 @@ module PulMetadataServices
         def full_source_from_pulfa(id)
           conn = Faraday.new(url: "https://findingaids.princeton.edu/collections/")
           response = conn.get("#{id.tr('_', '/')}.xml")
-          response.body.force_encoding("UTF-8")
+          response.body.dup.force_encoding("UTF-8")
         end
     end
   end
