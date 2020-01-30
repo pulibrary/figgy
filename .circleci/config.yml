@@ -4,7 +4,7 @@ jobs:
   build:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.4.5-node-browsers
+      - image: circleci/ruby:2.6.5-node-browsers
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
@@ -22,12 +22,27 @@ jobs:
       - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev mediainfo
       - run: sudo sh bin/ci_simple_tiles_install.sh
       - run: sudo sh bin/ci_free_tds_install.sh
+      - run:
+          name: Install node@8.17.0 (need right version for `yarn`)
+          command: |
+            set +e
+            touch $BASH_ENV
+            curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.5/install.sh | bash
+            echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+            echo 'nvm install v8.17.0' >> $BASH_ENV
+            echo 'nvm alias default v8.17.0' >> $BASH_ENV
+      - run:
+          name: Check current version of node
+          command: node -v
       # Restore Cached Dependencies
       - type: cache-restore
         name: Restore bundle cache
         key: figgy-{{ checksum "Gemfile.lock" }}
       # Remove cached simpler-tiles - needs to be reinstalled every time.
-      - run: rm vendor/bundle/ruby/2.3.0/specifications/simpler-tiles-0.3.1.gemspec || true
+      - run: rm vendor/bundle/ruby/2.6.0/specifications/simpler-tiles-0.3.1.gemspec || true
+      # Install Bundler
+      - run: gem install bundler -v '~> 2.0'
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
       # Cache Dependencies
@@ -55,67 +70,10 @@ jobs:
       - persist_to_workspace:
           root: '~/figgy'
           paths: '*'
-  test_2_6:
-    working_directory: ~/figgy
-    docker:
-      - image: circleci/ruby:2.6-node-browsers
-        environment:
-          RAILS_ENV: test
-          FIGGY_DB_HOST: localhost
-          FIGGY_DB_USERNAME: figgy
-          FIGGY_DB_PASSWORD:  ""
-          MEDIAINFO_PATH: /usr/bin/mediainfo
-      - image: postgres:9.6-alpine
-        environment:
-          POSTGRES_USER: figgy
-          POSTGRES_DB: figgy_test
-          POSTGRES_PASSWORD: ""
-      - image: solr:7.7-alpine
-        command: bin/solr -cloud -noprompt -f -p 8984
-    parallelism: 4
-    environment:
-      SPEC_OPTS: --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
-      COVERALLS_PARALLEL: true
-    steps:
-      - attach_workspace:
-          at: '~/figgy'
-      - run: sudo sh bin/ci_mediainfo_install.sh
-      - run:
-          name: Install Chrome
-          command: |
-            wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-            sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-            sudo apt-get update
-            sudo apt-get -y install google-chrome-stable
-      - run: sudo apt-get update
-      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev tesseract-ocr tesseract-ocr-ita tesseract-ocr-eng mediainfo ffmpeg postgresql-client
-      - run: sudo sh bin/ci_simple_tiles_install.sh
-      - run: sudo sh bin/ci_free_tds_install.sh
-      # Wait for DB
-      - run: dockerize -wait tcp://localhost:5432 -timeout 1m
-      - run: sudo sh bin/ci_kakadu_install.sh
-      # Remove cached simpler-tiles - needs to be reinstalled every time.
-      - run: rm vendor/bundle/ruby/2.3.0/specifications/simpler-tiles-0.3.1.gemspec || true
-      # Bundle install dependencies
-      - run: bundle install --path vendor/bundle
-      - run: yarn exec jest --coverage
-      - run:
-          name: Load config into solr
-          command: |
-            cd solr/config
-            zip -1 -r solr_config.zip ./*
-            curl -H "Content-type:application/octet-stream" --data-binary @solr_config.zip "http://localhost:8984/solr/admin/configs?action=UPLOAD&name=figgy"
-            curl -H 'Content-type: application/json' http://localhost:8984/api/collections/ -d '{create: {name: figgy-core-test, config: figgy, numShards: 1}}'
-      - run: bundle exec rake db:migrate
-      - run:
-          name: Run rspec in parallel
-          command: |
-            mkdir /tmp/test-results
-            bundle exec rspec $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
   test:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.4.5-node-browsers
+      - image: circleci/ruby:2.6.5-node-browsers
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
@@ -148,11 +106,26 @@ jobs:
       - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev tesseract-ocr tesseract-ocr-ita tesseract-ocr-eng mediainfo ffmpeg postgresql-client
       - run: sudo sh bin/ci_simple_tiles_install.sh
       - run: sudo sh bin/ci_free_tds_install.sh
+      - run:
+          name: Install node@8.17.0 (need right version for `yarn`)
+          command: |
+            set +e
+            touch $BASH_ENV
+            curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.5/install.sh | bash
+            echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+            echo 'nvm install v8.17.0' >> $BASH_ENV
+            echo 'nvm alias default v8.17.0' >> $BASH_ENV
+      - run:
+          name: Check current version of node
+          command: node -v
       # Wait for DB
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run: sudo sh bin/ci_kakadu_install.sh
       # Remove cached simpler-tiles - needs to be reinstalled every time.
-      - run: rm vendor/bundle/ruby/2.3.0/specifications/simpler-tiles-0.3.1.gemspec || true
+      - run: rm vendor/bundle/ruby/2.6.0/specifications/simpler-tiles-0.3.1.gemspec || true
+      # Install Bundler
+      - run: gem install bundler -v '~> 2.0'
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
       - run: yarn exec jest --coverage
@@ -186,7 +159,7 @@ jobs:
   coverage_report:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.4.5-node-browsers
+      - image: circleci/ruby:2.6.5-node-browsers
     steps:
       - attach_workspace:
           at: '~/figgy'
@@ -202,7 +175,7 @@ jobs:
   rubocop:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.4.5-node-browsers
+      - image: circleci/ruby:2.6.5-node-browsers
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
@@ -216,8 +189,23 @@ jobs:
       - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev mediainfo
       - run: sudo sh bin/ci_simple_tiles_install.sh
       - run: sudo sh bin/ci_free_tds_install.sh
+      - run:
+          name: Install node@8.17.0 (need right version for `yarn`)
+          command: |
+            set +e
+            touch $BASH_ENV
+            curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.5/install.sh | bash
+            echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+            echo 'nvm install v8.17.0' >> $BASH_ENV
+            echo 'nvm alias default v8.17.0' >> $BASH_ENV
+      - run:
+          name: Check current version of node
+          command: node -v
       # Remove cached simpler-tiles - needs to be reinstalled every time.
-      - run: rm vendor/bundle/ruby/2.3.0/specifications/simpler-tiles-0.3.1.gemspec || true
+      - run: rm vendor/bundle/ruby/2.6.0/specifications/simpler-tiles-0.3.1.gemspec || true
+      # Install Bundler
+      - run: gem install bundler -v '~> 2.0'
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
       - run: bundle exec rake rubocop
@@ -225,7 +213,7 @@ jobs:
   ensure_release_notes:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.4.5-node-browsers
+      - image: circleci/ruby:2.6.5-node-browsers
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
@@ -240,9 +228,6 @@ workflows:
     jobs:
       - build
       - test:
-          requires:
-            - build
-      - test_2_6:
           requires:
             - build
       - rubocop:

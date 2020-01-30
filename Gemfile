@@ -54,7 +54,7 @@ end
 group :development, :test do
   gem "awesome_print"
   gem "bixby"
-  gem "bundler-audit"
+  gem "bundler-audit", require: false
   gem "dotenv-rails"
   gem "factory_bot_rails"
   gem "pdf-reader", github: "yob/pdf-reader"
