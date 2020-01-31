@@ -5,6 +5,7 @@ gem "autoprefixer-rails"
 gem "bagit", "~> 0.4"
 gem "blacklight"
 gem "bootstrap-sass", "~> 3.4"
+gem "bundler", "~> 2.0"
 gem "bunny"
 gem "ddtrace"
 gem "devise-guests", git: "https://github.com/cbeer/devise-guests.git"
@@ -53,7 +54,7 @@ end
 group :development, :test do
   gem "awesome_print"
   gem "bixby"
-  gem "bundler-audit", ">= 0.5.0", require: false
+  gem "bundler-audit", require: false
   gem "dotenv-rails"
   gem "factory_bot_rails"
   gem "pdf-reader", github: "yob/pdf-reader"
@@ -117,7 +118,7 @@ gem "tiny_tds"
 gem "valkyrie-sequel", "~> 2.0.0"
 gem "whenever", "~> 0.10"
 
-gem "blacklight_iiif_search", github: "boston-library/blacklight_iiif_search"
+gem "blacklight_iiif_search", "1.0.0"
 gem "graphiql-rails", group: :development
 
 gem "cocoon"
