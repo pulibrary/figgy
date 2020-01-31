@@ -88,6 +88,8 @@ Remember you'll need to run `bundle install` and `yarn install` on an ongoing ba
 
 ## Setup server
 
+### Manual Setup
+
 1. For test:
    - `RAILS_ENV=test rake db:setup`
    - `rake figgy:test`
@@ -99,6 +101,23 @@ Remember you'll need to run `bundle install` and `yarn install` on an ongoing ba
    - In a separate terminal: `foreman start`
      - Or run services separately as shown in [[https://github.com/pulibrary/figgy/blob/master/Procfile]]
      - If you run into problems with `solr_wrapper`, you can also start Solr with `rake figgy:development`
+   - Access Figgy at http://localhost:3000/
+
+### Lando
+
+1. Uninstall Docker
+2. Install Lando DMG from [[https://github.com/lando/lando/releases]]
+3. `lando start`
+
+1. For test:
+   - `RAILS_ENV=test rake db:setup`
+   - In a separate terminal: `bundle exec rspec`
+   - Run jest tests: `yarn test`
+2. For development:
+   - ``export SECRET_KEY_BASE=`rake secret` ``
+   - `rake db:setup`
+   - In a separate terminal: `foreman start` (you can close the one launching solr)
+     - Or run services separately as shown in [[https://github.com/pulibrary/figgy/blob/master/Procfile]]
    - Access Figgy at http://localhost:3000/
 
 ## Load sample development data

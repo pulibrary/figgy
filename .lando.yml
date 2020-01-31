@@ -1,0 +1,19 @@
+name: figgy
+services:
+  figgy_test_solr:
+    type: solr:7
+    portforward: true
+    core: figgy-core-test
+    config:
+      dir: solr/config
+  figgy_development_solr:
+    type: solr:7
+    portforward: true
+    core: figgy-core-dev
+    config:
+      dir: solr/config
+proxy:
+  figgy_test_solr:
+    - figgy.test.solr.lndo.site:8983
+  figgy_development_solr:
+    - figgy.dev.solr.lndo.site:8983
