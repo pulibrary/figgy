@@ -48,6 +48,10 @@ class ChangeSet < Valkyrie::ChangeSet
     validates_with MemberValidator
   end
 
+  def self.enable_structure_manager
+    property :logical_structure, multiple: true, required: false, type: Types::Strict::Array.of(Structure), default: [Structure.new(label: "Logical", nodes: [])]
+  end
+
   def self.enable_pdf_support
     property :pdf_type, multiple: false, required: false, default: "color"
     property :file_metadata, multiple: true, required: false, default: []

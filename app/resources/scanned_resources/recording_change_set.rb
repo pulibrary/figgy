@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class RecordingChangeSet < ChangeSet
   apply_workflow(DraftCompleteWorkflow)
+  enable_structure_manager
   delegate :human_readable_type, to: :resource
 
   include VisibilityProperty
