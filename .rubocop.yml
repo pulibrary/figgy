@@ -286,7 +286,7 @@ RSpec/VerifiedDoubles:
     - 'spec/derivative_services/image_derivative_service_spec.rb'
     - 'spec/derivative_services/jp2_derivative_service_spec.rb'
     - 'spec/jobs/ingest_intermediate_file_job_spec.rb'
-Style/FileName:
+Naming/FileName:
   Enabled: true
   Exclude:
     - 'Gemfile'
@@ -296,10 +296,10 @@ Lint/Void:
   Enabled: true
   Exclude:
     - 'app/derivative_services/jp2_derivative_service.rb'
-Style/MethodMissing:
+Style/MethodMissingSuper:
   Exclude:
     - 'app/decorators/media_info_tracks_decorator.rb'
-Style/PredicateName:
+Naming/PredicateName:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
     - 'app/models/ingestable_audio_file.rb'
