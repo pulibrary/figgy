@@ -18,7 +18,7 @@ RSpec.feature "Numismatics::Accessions" do
     expect(page).to have_field "Note"
     expect(page).to have_field "Number"
     expect(page).to have_field "Number of items"
-    expect(page).to have_field "Numismatic Reference"
+    expect(page).to have_selector("label", text: "Numismatic reference")
     expect(page).to have_field "Part"
     expect(page).to have_field "Person"
     expect(page).to have_field "Private note"

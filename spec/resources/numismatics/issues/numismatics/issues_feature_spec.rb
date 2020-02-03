@@ -42,10 +42,10 @@ RSpec.feature "Numismatics::Issues" do
     expect(page).to have_field "Name"
     expect(page).to have_field "Note"
     expect(page).to have_field "Number"
-    expect(page).to have_field "Numismatic Reference"
+    expect(page).to have_selector("label", text: "Numismatic reference")
     expect(page).to have_field "Part"
-    expect(page).to have_field "Person"
-    expect(page).to have_field "Place"
+    expect(page).to have_selector("label", text: "Person")
+    expect(page).to have_selector("label", text: "Numismatic place")
     expect(page).to have_field "Object type"
     expect(page).to have_field "Obverse figure"
     expect(page).to have_field "Obverse figure description"

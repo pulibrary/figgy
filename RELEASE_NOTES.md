@@ -13,6 +13,11 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-02-03
+
+## Added
+
+* Ajax-powered select elements for numismatic issues and coins.
 
 # 2020-01-31
 

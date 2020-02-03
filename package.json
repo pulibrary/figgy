@@ -13,8 +13,10 @@
     "apollo-boost": "^0.1.10",
     "axios": "^0.18.1",
     "clipboard": "^2.0.4",
+    "core-js": "2",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
+    "lodash": "^4.17.15",
     "lux-design-system": "^2.0.0",
     "npm": "^6.13.4",
     "openseadragon": "^2.3.1",
@@ -24,6 +26,7 @@
     "unfetch": "^4.0.1",
     "vue": "^2.5.17",
     "vue-loader": "^15.4.2",
+    "vue-select": "^3.4.0",
     "vue-template-compiler": "^2.5.17",
     "vuex": "^2.4.1"
   },
