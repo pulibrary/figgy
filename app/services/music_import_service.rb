@@ -205,7 +205,11 @@ class MusicImportService
       end
       change_set_persister.buffer_into_index do |buffered_change_set_persister|
         output = buffered_change_set_persister.save(change_set: recording_change_set)
-        create_playlists(output, buffered_change_set_persister) if in_non_performance_course?
+        if in_non_performance_course?
+          create_playlists(output, buffered_change_set_persister)
+        else
+          output = create_logical_structure(output, buffered_change_set_persister)
+        end
       end
       output
     end
@@ -264,6 +268,28 @@ class MusicImportService
         change_set.file_set_ids = ids
         buffered_change_set_persister.save(change_set: change_set)
       end
+    end
+
+    def create_logical_structure(output, buffered_change_set_persister)
+      selection_ids = audio_files.flat_map(&:selection_id).uniq.compact
+      return output unless selection_ids.present?
+      selections_to_courses = recording_collector.courses_for_selections(selection_ids).group_by { |x| Array.wrap(x.class_sort).first }
+      audio_files_by_date = Hash[
+        selections_to_courses.map { |date, selections| [date, selections.flat_map { |selection| audio_files.select { |audio_file| audio_file.selection_id == selection.id.to_s.to_i } }] }
+      ]
+      members = Wayfinder.for(output).members
+      structure = audio_files_by_date.each_with_object([]) do |date_audio_files, st|
+        date = date_audio_files.first
+        audio_files = date_audio_files.last
+        nodes = audio_files.map do |audio_file|
+          file_set_id = members.find { |member| member.local_identifier.first == audio_file.id.to_s }.try(&:id)
+          { proxy: file_set_id }
+        end
+        st << { nodes: nodes, label: date }
+      end
+      change_set = DynamicChangeSet.new(output)
+      change_set.logical_structure = [{ label: "By Date", nodes: structure }]
+      buffered_change_set_persister.save(change_set: change_set)
     end
 
     def change_set_persister
