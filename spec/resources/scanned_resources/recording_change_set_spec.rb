@@ -22,4 +22,11 @@ RSpec.describe RecordingChangeSet do
       end
     end
   end
+
+  describe "#logical_structure" do
+    let(:resource) { FactoryBot.create_for_repository(:complete_recording) }
+    it "responds to it" do
+      expect(change_set).to respond_to :logical_structure
+    end
+  end
 end

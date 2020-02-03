@@ -24,7 +24,7 @@ RSpec.describe "catalog/_admin_controls_default" do
   end
 
   it "hides the structure editor link for resources" do
-    expect(rendered).not_to have_link "Edit Structure", href: structure_scanned_resource_path(id: scanned_resource.id)
+    expect(rendered).not_to have_link "Structure Manager", href: structure_scanned_resource_path(id: scanned_resource.id)
   end
 
   it "hides links for attaching child resources" do

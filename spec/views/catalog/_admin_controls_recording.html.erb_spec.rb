@@ -26,5 +26,8 @@ RSpec.describe "catalog/_admin_controls_recording" do
         expect(rendered).not_to have_link "Create Playlist"
       end
     end
+    it "has a link to the structure editor" do
+      expect(rendered).to have_link "Structure Manager"
+    end
   end
 end

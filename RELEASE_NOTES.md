@@ -14,6 +14,13 @@ Release notes template:
 
 -->
 
+# 2020-01-31
+
+## Added
+
+* Added structure editor to Recordings to support Princeton University Orchestra
+  use cases.
+
 # 2020-01-06
 
 ## Fixed
