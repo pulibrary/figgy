@@ -77,9 +77,7 @@ module Bagit
 
         def resource_metadata
           output = resource.to_h.except(:imported_metadata).compact
-          if output[:optimistic_lock_token]
-            output[:optimistic_lock_token] = Array.wrap(output[:optimistic_lock_token]).map(&:serialize)
-          end
+          output[:optimistic_lock_token] = Array.wrap(output[:optimistic_lock_token]).map(&:serialize) if output[:optimistic_lock_token]
           output
         end
 

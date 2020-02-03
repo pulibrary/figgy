@@ -286,7 +286,7 @@ RSpec.describe CatalogController do
 
       context "with a non-Latin title which has been transliterated" do
         let(:title) { "Что делать?" }
-        let(:transliterated_title) { 'Chto delat\'?' }
+        let(:transliterated_title) { "Chto delat'?" }
 
         before do
           persister.save(resource: FactoryBot.build(:ephemera_folder, title: title, transliterated_title: transliterated_title))

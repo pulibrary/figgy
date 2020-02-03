@@ -203,7 +203,7 @@ class ApplicationController < ActionController::Base
     # :nocov:
     def authorize_mini_profiler
       return unless Rails.env.staging? || Rails.env.development?
-      return unless current_user && current_user.admin?
+      return unless current_user&.admin?
       Rack::MiniProfiler.authorize_request
     end
   # :nocov:

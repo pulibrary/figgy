@@ -63,9 +63,7 @@ module PulMetadataServices
         # thing, but may be useful.
         fields.each do |field|
           contributors << format_datafield(field)
-          if linked_field?(field)
-            contributors << format_datafield(get_linked_field(field))
-          end
+          contributors << format_datafield(get_linked_field(field)) if linked_field?(field)
         end
       end
       contributors
@@ -76,9 +74,7 @@ module PulMetadataServices
       if main_entries? && !any_7xx_without_t?
         field = data.fields(["100", "110", "111"])[0]
         creator << format_datafield(field)
-        if linked_field?(field)
-          creator << format_datafield(get_linked_field(field))
-        end
+        creator << format_datafield(get_linked_field(field)) if linked_field?(field)
       end
       creator
     end
@@ -183,9 +179,7 @@ module PulMetadataServices
       else
         # TODO: exclude 'i' when 246
         titles << format_datafield(ti_field)
-        if linked_field?(ti_field)
-          titles << format_datafield(get_linked_field(ti_field))
-        end
+        titles << format_datafield(get_linked_field(ti_field)) if linked_field?(ti_field)
       end
       titles
     end

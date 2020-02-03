@@ -24,9 +24,7 @@ class ChangeSetPersister
         resource_change_set = propagate_state_for_related(resource_change_set)
         # we need to save these through the change set persister so the member
         #   can mint an ark, emit rabbitmq messages, copy access to read_groups, etc.
-        if resource_change_set.changed?
-          change_set_persister.save(change_set: resource_change_set)
-        end
+        change_set_persister.save(change_set: resource_change_set) if resource_change_set.changed?
       end
     end
 

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 # get all the data files, provide lookups based on component and barcode
 class ArchivalMediaBagParser
-  BARCODE_WITH_SIDE_REGEX = /(\d{14}_\d+)_.*/
-  BARCODE_WITH_SIDE_AND_PART_REGEX = /(\d{14}_\d+?_p\d+).*/
+  BARCODE_WITH_SIDE_REGEX = /(\d{14}_\d+)_.*/.freeze
+  BARCODE_WITH_SIDE_AND_PART_REGEX = /(\d{14}_\d+?_p\d+).*/.freeze
   attr_reader :path, :audio_files, :component_groups, :component_dict, :pbcore_parsers
 
   def initialize(path:, component_id:, barcodes: nil)

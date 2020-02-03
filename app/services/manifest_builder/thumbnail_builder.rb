@@ -39,7 +39,7 @@ class ManifestBuilder
 
       def nearest_member_file_set
         member_file_set = find_thumbnail_file_set(nearest_member_thumbnail_id)
-        return unless member_file_set && member_file_set.derivative_file
+        return unless member_file_set&.derivative_file
         member_file_set
       rescue Valkyrie::Persistence::ObjectNotFoundError
         nil

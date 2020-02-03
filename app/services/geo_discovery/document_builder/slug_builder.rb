@@ -24,7 +24,7 @@ module GeoDiscovery
 
         def ark
           identifier = resource_decorator.identifier.try(:first)
-          identifier.to_s if identifier
+          identifier&.to_s
         end
     end
   end
