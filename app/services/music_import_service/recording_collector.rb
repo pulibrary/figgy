@@ -358,7 +358,7 @@ class MusicImportService::RecordingCollector
       )
       AND a.FilePath IS NOT NULL
       AND a.entryid IS NOT NULL
-      ORDER BY jAudioFiles.SortOrder, idFile
+      ORDER BY idSelection, jAudioFiles.SortOrder, idFile
     SQL
   end
 
