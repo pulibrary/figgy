@@ -299,6 +299,9 @@ Lint/Void:
 Style/MethodMissingSuper:
   Exclude:
     - 'app/decorators/media_info_tracks_decorator.rb'
+Style/MissingRespondToMissing:
+  Exclude:
+    - 'app/decorators/media_info_tracks_decorator.rb'
 Naming/PredicateName:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
@@ -315,3 +318,10 @@ RSpec/ScatteredSetup:
 Style/PreferredHashMethods:
   Exclude:
     - 'app/queries/find_ids_with_property_not_empty.rb'
+Lint/Void:
+  Exclude:
+    # It's important that an explicit false be returned here to match the
+    # expected signature, but Rubocop complains.
+    - 'app/resources/templates/template_change_set.rb'
+    # Triggered by a weird ImageMagick API that's necessary.
+    - 'app/derivative_services/jp2_derivative_service.rb'

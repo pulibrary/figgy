@@ -2,7 +2,7 @@
 require "csv"
 
 class MusicImportService::RecordingCollector
-  attr_reader :recordings, :sql_server_adapter, :postgres_adapter, :logger, :cache, :catalog_host, :csv_input_dir
+  attr_reader :sql_server_adapter, :postgres_adapter, :logger, :cache, :catalog_host, :csv_input_dir
   attr_writer :recordings_query
   def initialize(sql_server_adapter:, postgres_adapter:, logger:, cache: MarshalCache.new("tmp"), catalog_host: "https://catalog.princeton.edu", csv_input_dir: "tmp", recordings_query: nil)
     @sql_server_adapter = sql_server_adapter
