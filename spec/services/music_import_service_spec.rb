@@ -447,6 +447,7 @@ RSpec.describe MusicImportService do
       it "generates a logical structure according to the class structure" do
         output = importer.ingest_recording(recording)
         expect(output.logical_structure[0].nodes[0].label).to eq ["2001-10-19"]
+        expect(output.logical_structure[0].nodes[0].label[0]).to be_a String
         expect(output.logical_structure[0].nodes[0].nodes.length).to eq 1
         expect(output.logical_structure[0].nodes[0].nodes[0].proxy).not_to be_blank
       end
