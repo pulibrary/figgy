@@ -268,13 +268,15 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
         description: "test description",
         date_created: "1970/01/01",
         source_url: "http://example.com",
-        dspace_url: "http://example.com"
+        dspace_url: "http://example.com",
+        member_of_collection_ids: [collection.id]
       )
     end
+    let(:collection) { FactoryBot.create_for_repository(:collection) }
 
     it "exposes the attributes for serialization into JSON-LD" do
       ephemera_box = FactoryBot.create_for_repository(:ephemera_box, member_ids: [resource.id])
-      FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id])
+      project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id])
 
       expect(linked_ephemera_folder.as_jsonld).not_to be_empty
 
@@ -290,6 +292,16 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       expect(linked_ephemera_folder.as_jsonld["publisher"]).to eq ["test publisher"]
       expect(linked_ephemera_folder.as_jsonld["description"]).to eq ["test description"]
       expect(linked_ephemera_folder.as_jsonld["provenance"]).to eq "test provenance"
+
+      jsonld = linked_ephemera_folder.as_jsonld
+      collection_json = jsonld["memberOf"].find { |x| x["title"] == collection.title.first }
+      expect(collection_json).to eq(
+        "@id" => "http://www.example.com/catalog/#{collection.id}",
+        "@type" => "pcdm:Collection",
+        "title" => collection.title.first
+      )
+      project_json = jsonld["memberOf"].find { |x| x["title"] == project.title.first }
+      expect(project_json).not_to be_blank
     end
     context "with the title of a series specified" do
       it "exposes the attribute in JSON-LD", series: true do

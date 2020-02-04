@@ -88,10 +88,14 @@ module LinkedData
       Array.wrap(decorated_resource.provenance).first
     end
 
+    def collections
+      super + [ephemera_project]
+    end
+
     private
 
       def linked_collections
-        return unless ephemera_box
+        return super unless ephemera_box
         super.push(
           '@id': helper.solr_document_url(id: ephemera_box.id),
           '@type': "pcdm:Collection",
