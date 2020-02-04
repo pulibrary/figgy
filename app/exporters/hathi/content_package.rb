@@ -12,7 +12,7 @@ module Hathi
       @pages = []
       wayfinder = Wayfinder.for(resource)
       wayfinder.members.each_with_index do |fileset, idx|
-        pages << Page.new(fileset, (idx + 1).to_s.rjust(8, "0"))
+        pages << DerivativePage.new(fileset, (idx + 1).to_s.rjust(8, "0"))
       end
     end
 
@@ -52,7 +52,7 @@ module Hathi
       if resource.viewing_direction
         resource.viewing_direction.first
       else
-        %("left-to-right")
+        "left-to-right"
       end
     end
 
@@ -63,87 +63,84 @@ module Hathi
       md["scanner_model"] = scanner_model
       md["scanner_user"] = scanner_user
       md["reading_order"] = reading_order
-      md["pagedata"] = pagedata
       md
     end
 
-    def pagedata
-      pd = []
-      pages.each do |p|
-        pd << p.pagedata
-      end
-      pd
-    end
-
     class Page
-      attr_reader :source_page, :name, :original_image, :derivative_image, :properties
-
-      def initialize(source_fileset, name)
-        @name = name
-        @source_page = source_fileset
+      def initialize(fileset, basename)
+        @basename = basename
+        @fileset = fileset
+        original_file = Valkyrie::StorageAdapter.find_by(id: @fileset.original_file.file_identifiers.first)
+        @original_image = MiniMagick::Image.new(original_file.disk_path)
+        derivative_file = Valkyrie::StorageAdapter.find_by(id: @fileset.derivative_file.file_identifiers.first)
+        @derivative_image = MiniMagick::Image.new(derivative_file.disk_path)
+        @properties = @original_image.data["properties"]
       end
 
-      def original_image
-        @original_image ||= MiniMagick::Image.new(tiff_path)
+      def path_to_file
+        file = Valkyrie::StorageAdapter.find_by(id: image_file.file_identifiers.first)
+        file.disk_path
       end
 
-      def derivative_image
-        @derivative_image ||= MiniMagick::Image.new(derivative_path)
+      def image_filename
+        extension = image_file.mime_type.first.split("/").last
+        @basename + "." + extension
       end
 
-      def properties
-        @properties ||= original_image.data["properties"]
+      def ocr_filename
+        @basename + ".txt"
       end
 
-      def tiff_path
-        metadata = source_page.original_file
-        tiff_file = Valkyrie::StorageAdapter.find_by(id: metadata.file_identifiers.first)
-        tiff_file.disk_path
-      end
-
-      def derivative_path
-        file_metadata = source_page.derivative_file
-        Valkyrie::StorageAdapter.find_by(id: file_metadata.file_identifiers.first).disk_path
-      end
-
-      def pagedata
-        { source_page.derivative_file.label.first => { "label" => source_page.title.first } }
+      def hocr_filename
+        @basename + ".html"
       end
 
       def capture_date
-        properties["xmp:CreateDate"]
+        @properties["xmp:CreateDate"]
       end
 
       def scanner_make
-        properties["tiff:make"]
+        @properties["tiff:make"]
       end
 
       def scanner_model
-        properties["tiff:model"]
+        @properties["tiff:model"]
       end
 
       def bitonal?
-        original_image["%z"] == 1
+        @original_image["%z"] == 1
       end
 
       def resolution
-        original_image["resolution"].first
+        @original_image["resolution"].first
       end
 
       def to_txt
-        source_page.ocr_content.first if ocr?
+        @fileset.ocr_content.first if ocr?
       end
 
       def to_html
-        source_page.hocr_content.first if hocr?
+        @fileset.hocr_content.first if hocr?
       end
 
       def ocr?
-        !(source_page.ocr_content.nil? || source_page.ocr_content.empty?)
+        @fileset.ocr_content
       end
 
       def hocr?
-        !(source_page.hocr_content.nil? || source_page.hocr_content.empty?)
+        @fileset.hocr_content
+      end
+    end
+
+    class OriginalPage < Page
+      def image_file
+        @fileset.original_file
+      end
+    end
+
+    class DerivativePage < Page
+      def image_file
+        @fileset.derivative_file
       end
     end
   end

@@ -11,7 +11,7 @@ RSpec.describe Hathi::ContentPackage do
     scanned_resource = FactoryBot.create_for_repository(:scanned_resource,
                                                         source_metadata_identifier: "123456",
                                                         ocr_language: "eng",
-                                                        viewing_direction: [%("right-to-left")],
+                                                        viewing_direction: ["right-to-left"],
                                                         files: [file1, file2])
     scanned_resource
   end
@@ -39,7 +39,7 @@ RSpec.describe Hathi::ContentPackage do
     end
 
     it "defaults to \"left-to-right\" reading order" do
-      expect(package.reading_order).to eq(%("left-to-right"))
+      expect(package.reading_order).to eq("left-to-right")
     end
   end
 
@@ -69,7 +69,7 @@ RSpec.describe Hathi::ContentPackage do
     end
 
     it "supplies a reading order" do
-      expect(package.reading_order).to eq(%("right-to-left"))
+      expect(package.reading_order).to eq("right-to-left")
     end
   end
 
@@ -80,7 +80,6 @@ RSpec.describe Hathi::ContentPackage do
       expect(package.metadata["scanner_model"]).to eq(package.scanner_model)
       expect(package.metadata["scanner_user"]).to eq(package.scanner_user)
       expect(package.metadata["reading_order"]).to eq(package.reading_order)
-      expect(package.metadata["pagedata"]).to eq(package.pagedata)
     end
   end
 
@@ -90,28 +89,13 @@ RSpec.describe Hathi::ContentPackage do
     end
 
     it "has the right page names" do
-      expect(package.pages.first.name).to eq "00000001"
-      expect(package.pages[1].name).to eq "00000002"
+      expect(package.pages.first.image_filename).to eq "00000001.jp2"
+      expect(package.pages[1].image_filename).to eq "00000002.jp2"
     end
 
-    it "has paths to tiff files" do
+    it "has path to image file" do
       page = package.pages.first
-      expect(page.tiff_path.ftype).to eq "file"
-    end
-
-    it "has paths to jp2 files" do
-      page = package.pages.first
-      expect(page.derivative_path.ftype).to eq "file"
-    end
-
-    it "has a copy of the original image" do
-      image = package.pages.first.original_image
-      expect(image.mime_type).to eq "image/tiff"
-    end
-
-    it "has a copy of the derivative image" do
-      image = package.pages.first.derivative_image
-      expect(image).not_to be_nil
+      expect(page.path_to_file.ftype).to eq "file"
     end
 
     it "has text streams" do
@@ -122,6 +106,30 @@ RSpec.describe Hathi::ContentPackage do
     it "has html streams" do
       page = package.pages.first
       expect(page.to_html).to be_present
+    end
+  end
+
+  describe "original page image file" do
+    subject(:page) { Hathi::ContentPackage::OriginalPage.new(wayfinder.members.first, "opage") }
+    let(:wayfinder) { Wayfinder.for(package.resource) }
+
+    it "is of the right type" do
+      expect(page.image_filename).to eq "opage.tiff"
+    end
+
+    it "has an ocr file with the right name" do
+      expect(page.ocr_filename).to eq "opage.txt"
+    end
+    it "has an hocr file with the right name" do
+      expect(page.hocr_filename).to eq "opage.html"
+    end
+  end
+
+  describe "derivative page image file" do
+    subject(:page) { Hathi::ContentPackage::DerivativePage.new(wayfinder.members.first, "opage") }
+    let(:wayfinder) { Wayfinder.for(package.resource) }
+    it "is of the right type" do
+      expect(page.image_filename).to eq "opage.jp2"
     end
   end
 end
