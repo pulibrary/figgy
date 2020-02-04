@@ -13,6 +13,13 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-02-04
+
+## Fixed
+
+* Events for Ephemera Folders now include the collections they're a member of,
+fixing DPUL Synchronization for those.
+
 # 2020-02-03
 
 ## Added

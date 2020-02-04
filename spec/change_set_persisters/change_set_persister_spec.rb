@@ -743,6 +743,7 @@ RSpec.describe ChangeSetPersister do
       end
 
       it "publishes messages for updates and creating file sets", run_real_derivatives: false, rabbit_stubbed: true do
+        change_set.member_of_collection_ids = [FactoryBot.create_for_repository(:collection, slug: "testing").id]
         output = change_set_persister.save(change_set: change_set)
         ephemera_box = FactoryBot.create_for_repository(:ephemera_box, member_ids: [output.id])
         ephemera_project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id])
@@ -756,7 +757,7 @@ RSpec.describe ChangeSetPersister do
           "id" => output.id.to_s,
           "event" => "MEMBER_UPDATED",
           "manifest_url" => "http://www.example.com/concern/ephemera_folders/#{output.id}/manifest",
-          "collection_slugs" => [ephemera_project.decorate.slug]
+          "collection_slugs" => [ephemera_project.decorate.slug, "testing"]
         }
 
         expect(rabbit_connection).to have_received(:publish).at_least(:once).with(expected_result.to_json)

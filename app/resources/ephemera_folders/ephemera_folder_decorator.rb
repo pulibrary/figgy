@@ -116,7 +116,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   end
 
   def collection_slugs
-    @collection_slugs ||= Array.wrap(ephemera_project.try(:slug))
+    @collection_slugs ||= Array.wrap(ephemera_project.try(:slug)) + collections.flat_map(&:slug)
   end
 
   def manageable_files?
