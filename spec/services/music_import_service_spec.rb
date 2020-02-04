@@ -422,14 +422,34 @@ RSpec.describe MusicImportService do
             file_path: "cd-1",
             file_name: "cd-1_1.ra",
             entry_id: "blabla",
-            recording_id: 14
+            recording_id: 14,
+            selection_id: 15_929
+          )
+        ]
+      end
+
+      let(:selections) do
+        [
+          MusicImportService::RecordingCollector::Selection.new(
+            id: 15_929,
+            course_nums: ["puo"],
+            class_sort: ["2001-10-19"]
           )
         ]
       end
 
       before do
         stub_bibdata(bib_id: "123456")
+        allow(importer.recording_collector).to receive(:courses_for_selections).with([15_929]).and_return(selections)
         allow(importer.recording_collector).to receive(:audio_files).with(recording).and_return(audio_files)
+      end
+
+      it "generates a logical structure according to the class structure" do
+        output = importer.ingest_recording(recording)
+        expect(output.logical_structure[0].nodes[0].label).to eq ["2001-10-19"]
+        expect(output.logical_structure[0].nodes[0].label[0]).to be_a String
+        expect(output.logical_structure[0].nodes[0].nodes.length).to eq 1
+        expect(output.logical_structure[0].nodes[0].nodes[0].proxy).not_to be_blank
       end
 
       it "does not create any playlists" do

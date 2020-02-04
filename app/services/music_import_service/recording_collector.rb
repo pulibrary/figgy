@@ -192,9 +192,7 @@ class MusicImportService::RecordingCollector
   def volume_expansion(call_number)
     return unless call_number
     call_number = call_number.upcase
-    if format_prefix?(call_number)
-      call_number = call_number.sub("-", "- ").sub("V", " vol.")
-    end
+    call_number = call_number.sub("-", "- ").sub("V", " vol.") if format_prefix?(call_number)
     call_number = call_number.gsub(/'/, "''")
     call_number
   end
@@ -202,9 +200,7 @@ class MusicImportService::RecordingCollector
   def volume_space_expansion(call_number)
     return unless call_number
     call_number = call_number.upcase
-    if format_prefix?(call_number)
-      call_number = call_number.sub("-", "- ").sub("V", " vol. ")
-    end
+    call_number = call_number.sub("-", "- ").sub("V", " vol. ") if format_prefix?(call_number)
     call_number = call_number.gsub(/'/, "''")
     call_number
   end
@@ -365,13 +361,13 @@ class MusicImportService::RecordingCollector
   def courses_for_selections(selection_ids)
     results = sql_server_adapter.execute(query: courses_for_selections_query(selection_ids))
     results.group_by { |x| x["idSelection"] }.map do |selection_id, values|
-      Selection.new(id: selection_id, course_nums: values.flat_map { |x| x["CourseNo"] })
+      Selection.new(id: selection_id, course_nums: values.flat_map { |x| x["CourseNo"] }, class_sort: values.flat_map { |x| x["ClassSort"] }.uniq.first)
     end
   end
 
   def courses_for_selections_query(selection_ids)
     <<-SQL
-      select jSelections.idCourse, jSelections.idSelection, Courses.CourseNo FROM jSelections JOIN Courses ON jSelections.idCourse = Courses.idCourse WHERE idSelection IN (#{selection_ids.join(', ')})
+      select jSelections.idCourse, jSelections.idSelection, Courses.CourseNo, jSelections.ClassSort FROM jSelections JOIN Courses ON jSelections.idCourse = Courses.idCourse WHERE idSelection IN (#{selection_ids.join(', ')})
     SQL
   end
 
@@ -385,6 +381,7 @@ class MusicImportService::RecordingCollector
 
   class Selection < Valkyrie::Resource
     attribute :course_nums
+    attribute :class_sort
   end
 
   class AudioFile < Valkyrie::Resource
