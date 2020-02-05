@@ -281,9 +281,15 @@ class MusicImportService
       structure = audio_files_by_date.each_with_object([]) do |date_audio_files, st|
         date = date_audio_files.first
         audio_files = date_audio_files.last
-        nodes = audio_files.map do |audio_file|
-          file_set_id = members.find { |member| member.local_identifier.first == audio_file.id.to_s }.try(&:id)
-          { proxy: file_set_id }
+        nodes = audio_files.group_by(&:selection_title).flat_map do |title, selection_audio_files|
+          audio_file_nodes = selection_audio_files.map do |audio_file|
+            file_set_id = members.find { |member| member.local_identifier.first == audio_file.id.to_s }.try(&:id)
+            { proxy: file_set_id }
+          end
+          if title.present?
+            audio_file_nodes = [{ label: title, nodes: audio_file_nodes }]
+          end
+          audio_file_nodes
         end
         st << { nodes: nodes, label: date }
       end
@@ -303,13 +309,18 @@ class MusicImportService
 
     def resource
       @resource ||= begin
-        existing_resource = query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: identifier).first || ScannedResource.new
+        existing_resource = find_or_build_resource_by_identifier(identifier: identifier)
         existing_resource.local_identifier = Array.wrap(existing_resource.local_identifier) + [recording_id.to_s]
         existing_resource.part_of = Array.wrap(existing_resource.part_of) + recording.courses
         existing_resource.title = Array.wrap(existing_resource.title).first || Array.wrap(recording.titles).first
         existing_resource.source_metadata_identifier = identifier
         existing_resource
       end
+    end
+
+    def find_or_build_resource_by_identifier(identifier:)
+      return ScannedResource.new if identifier.blank?
+      query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: identifier).first || ScannedResource.new
     end
 
     def recording_change_set
