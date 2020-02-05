@@ -325,3 +325,6 @@ Lint/Void:
     - 'app/resources/templates/template_change_set.rb'
     # Triggered by a weird ImageMagick API that's necessary.
     - 'app/derivative_services/jp2_derivative_service.rb'
+# We don't like postfix conditionals.
+Style/IfUnlessModifier:
+  Enabled: false

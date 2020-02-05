@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 class UniqueSlugValidator < ActiveModel::Validator
   def validate(record)
-    record.errors.add(:slug, "contains invalid characters, please only use alphanumerics, dashes, and underscores") unless Slug.new(Array.wrap(record.slug).first).valid?
+    unless Slug.new(Array.wrap(record.slug).first).valid?
+      record.errors.add(:slug, "contains invalid characters, please only use alphanumerics, dashes, and underscores")
+    end
 
     return if find_duplicates(record).empty?
     record.errors.add(:slug, "is already in use by another collection")

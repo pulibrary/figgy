@@ -26,7 +26,9 @@ class BaseResourceController < ApplicationController
       buffered_changeset_persister.save(change_set: change_set)
     end
 
-    BrowseEverythingIngestJob.perform_later(resource.id.to_s, self.class.to_s, new_pending_upload_ids) unless new_pending_uploads.empty?
+    unless new_pending_uploads.empty?
+      BrowseEverythingIngestJob.perform_later(resource.id.to_s, self.class.to_s, new_pending_upload_ids)
+    end
 
     redirect_to ContextualPath.new(child: resource, parent_id: nil).file_manager
   end

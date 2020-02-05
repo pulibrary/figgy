@@ -81,7 +81,9 @@ module Types::Resource
     # Explicitly set this nil if the service URL cannot be parsed
     iiif_service_url = nil
     service_substr = "/full/!200,150/0/default.jpg"
-    iiif_service_url = figgy_thumbnail_path.gsub(service_substr, "") if figgy_thumbnail_path.include?(service_substr)
+    if figgy_thumbnail_path.include?(service_substr)
+      iiif_service_url = figgy_thumbnail_path.gsub(service_substr, "")
+    end
     {
       id: thumbnail_resource.id.to_s,
       thumbnail_url: figgy_thumbnail_path,

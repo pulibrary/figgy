@@ -134,7 +134,9 @@ class ChangeSet < Valkyrie::ChangeSet
       property_name = property[:name]
       property_klass = model_type_for(property: property_name)
       next if send(property_name).present?
-      send(:"#{property_name}=", property_klass[[{}]]) if property_klass.respond_to?(:primitive) && property_klass.primitive == Array
+      if property_klass.respond_to?(:primitive) && property_klass.primitive == Array
+        send(:"#{property_name}=", property_klass[[{}]])
+      end
     end
 
     super

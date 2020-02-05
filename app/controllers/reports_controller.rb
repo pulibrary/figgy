@@ -33,7 +33,9 @@ class ReportsController < ApplicationController
 
   def pulfa_ark_report
     authorize! :show, Report
-    @resources = query_service.custom_queries.updated_archival_resources(since_date: params[:since_date]) unless params[:since_date].blank?
+    unless params[:since_date].blank?
+      @resources = query_service.custom_queries.updated_archival_resources(since_date: params[:since_date])
+    end
 
     respond_to do |format|
       format.html

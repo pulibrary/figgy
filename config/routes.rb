@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
-  mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql" if Rails.env.development?
+  if Rails.env.development?
+    mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
+  end
   # Release notes
   mount ExtraExtra::Engine, at: "/release_notes"
 
@@ -271,7 +273,9 @@ Rails.application.routes.draw do
 
   mount BrowseEverything::Engine => "/browse"
 
-  mount Riiif::Engine => "/image-service", as: "riiif" if Rails.env.development? || Rails.env.test?
+  if Rails.env.development? || Rails.env.test?
+    mount Riiif::Engine => "/image-service", as: "riiif"
+  end
 
   require "sidekiq/web"
   authenticate :user do

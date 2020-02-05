@@ -17,7 +17,9 @@ namespace :figgy do
 
   desc "updates the remote metadata from Voyager"
   task update_bib_ids: :environment do
-    Rails.logger = Logger.new(STDOUT) if defined?(Rails) && (Rails.env == "development")
+    if defined?(Rails) && (Rails.env == "development")
+      Rails.logger = Logger.new(STDOUT)
+    end
     VoyagerUpdater::EventStream.new("https://bibdata.princeton.edu/events.json").process!
   end
 

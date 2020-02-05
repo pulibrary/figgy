@@ -8,7 +8,9 @@ class UpdateFixityJob < ApplicationJob
     event_change_set.validate(type: :cloud_fixity, status: status, resource_id: resource_id, child_property: child_property.to_sym, child_id: child_id)
     raise "Unable to update fixity. Invalid event: #{event_change_set.errors.full_messages.to_sentence}" unless event_change_set.valid?
     change_set_persister.save(change_set: event_change_set)
-    Honeybadger.notify("Cloud fixity failure on object with resource id: #{resource_id}, child property: #{child_property}, child id: #{child_id}") if status == "FAILURE"
+    if status == "FAILURE"
+      Honeybadger.notify("Cloud fixity failure on object with resource id: #{resource_id}, child property: #{child_property}, child id: #{child_id}")
+    end
   end
   # rubocop:enable Style/GuardClause
 
