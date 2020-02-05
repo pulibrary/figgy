@@ -288,7 +288,8 @@ class MusicImportService
         st << { nodes: nodes, label: date }
       end
       change_set = DynamicChangeSet.new(output)
-      change_set.logical_structure = [{ label: "By Date", nodes: structure }]
+      change_set.logical_structure[0].label = "By Date"
+      change_set.logical_structure[0].nodes += structure
       buffered_change_set_persister.save(change_set: change_set)
     end
 
@@ -301,7 +302,14 @@ class MusicImportService
     end
 
     def resource
-      @resource ||= ScannedResource.new(source_metadata_identifier: identifier, local_identifier: recording_id.to_s, part_of: recording.courses, title: Array.wrap(recording.titles).first)
+      @resource ||= begin
+        existing_resource = query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: identifier).first || ScannedResource.new
+        existing_resource.local_identifier = Array.wrap(existing_resource.local_identifier) + [recording_id.to_s]
+        existing_resource.part_of = Array.wrap(existing_resource.part_of) + recording.courses
+        existing_resource.title = Array.wrap(existing_resource.title).first || Array.wrap(recording.titles).first
+        existing_resource.source_metadata_identifier = identifier
+        existing_resource
+      end
     end
 
     def recording_change_set

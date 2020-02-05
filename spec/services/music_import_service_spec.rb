@@ -404,6 +404,80 @@ RSpec.describe MusicImportService do
       end
     end
 
+    context "when importing two performance recordings with the same bib-id" do
+      it "merges them into one Recording" do
+        recording1 = MusicImportService::RecordingCollector::MRRecording.new(
+          14,
+          "cd-431v1",
+          ["students"],
+          ["Symphonies nos. 55-69"],
+          ["123456"]
+        )
+        recording2 = MusicImportService::RecordingCollector::MRRecording.new(
+          15,
+          "cd-431v2",
+          ["students"],
+          ["Symphonies nos. 55-69 Day 2"],
+          ["123456"]
+        )
+        audio_files1 = [
+          MusicImportService::RecordingCollector::AudioFile.new(
+            id: 54_204,
+            file_path: "cd-1",
+            file_name: "cd-1_1.ra",
+            entry_id: "blabla",
+            recording_id: 14,
+            selection_id: 15_929
+          )
+        ]
+        audio_files2 = [
+          MusicImportService::RecordingCollector::AudioFile.new(
+            id: 54_205,
+            file_path: "cd-1",
+            file_name: "cd-1_1.ra",
+            entry_id: "blabla",
+            recording_id: 15,
+            selection_id: 15_930
+          )
+        ]
+        selections1 = [
+          MusicImportService::RecordingCollector::Selection.new(
+            id: 15_929,
+            course_nums: ["puo"],
+            class_sort: ["2001-10-19"]
+          )
+        ]
+        selections2 = [
+          MusicImportService::RecordingCollector::Selection.new(
+            id: 15_930,
+            course_nums: ["puo"],
+            class_sort: ["2001-10-20"]
+          )
+        ]
+        stub_bibdata(bib_id: "123456")
+        allow(importer.recording_collector).to receive(:courses_for_selections).with([15_929]).and_return(selections1)
+        allow(importer.recording_collector).to receive(:courses_for_selections).with([15_930]).and_return(selections2)
+        allow(importer.recording_collector).to receive(:audio_files).with(recording1).and_return(audio_files1)
+        allow(importer.recording_collector).to receive(:audio_files).with(recording2).and_return(audio_files2)
+
+        importer.ingest_recording(recording1)
+        output = importer.ingest_recording(recording2)
+
+        # The recording should have both recording_ids
+        expect(output.local_identifier).to eq ["14", "15"]
+        # Both audio files should go in the same recording.
+        expect(output.member_ids.length).to eq 2
+        # It should combine the logical structures.
+        expect(output.logical_structure[0].nodes[0].label).to eq ["2001-10-19"]
+        expect(output.logical_structure[0].nodes[0].label[0]).to be_a String
+        expect(output.logical_structure[0].nodes[0].nodes.length).to eq 1
+        expect(output.logical_structure[0].nodes[0].nodes[0].proxy).not_to be_blank
+        expect(output.logical_structure[0].nodes[1].label).to eq ["2001-10-20"]
+        expect(output.logical_structure[0].nodes[1].nodes.length).to eq 1
+        expect(output.logical_structure[0].nodes[1].nodes[0].proxy).not_to be_blank
+      end
+    end
+
     context "when the recording is part of a course representing a performance collection" do
       let(:recording) do
         MusicImportService::RecordingCollector::MRRecording.new(
