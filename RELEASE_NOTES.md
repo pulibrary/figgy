@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-02-05
+
+## Added
+
+* PUO Recordings now display multiple days in one Recording.
+
 # 2020-02-04
 
 ## Fixed
