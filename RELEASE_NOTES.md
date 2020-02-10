@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-02-10
+
+## Fixed
+
+* Ruler/Master in Numismatic Issues now has a dropdown for People.
+
 # 2020-02-05
 
 ## Fixed
