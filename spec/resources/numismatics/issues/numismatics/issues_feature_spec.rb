@@ -72,10 +72,10 @@ RSpec.feature "Numismatics::Issues" do
     expect(page).to have_field "Type"
     expect(page).to have_field "Workshop"
 
-    fill_in "Object type", with: "ancient coin"
+    fill_in "Era", with: "test era"
     click_button "Save"
 
-    expect(page).to have_content "ancient coin"
+    expect(page).to have_content "test era"
   end
 
   context "when a user creates a new numismatic issue" do

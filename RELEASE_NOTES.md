@@ -13,6 +13,13 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-02-11
+
+## Added
+
+* Numismatic Issue forms now have autocompletion and selection for the fields
+  Object Type, Denomination, Metal, Shape, Color, and Edge.
+
 # 2020-02-10
 
 ## Fixed
