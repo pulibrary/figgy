@@ -497,7 +497,8 @@ RSpec.describe MusicImportService do
             file_name: "cd-1_1.ra",
             entry_id: "blabla",
             recording_id: 14,
-            selection_id: 15_929
+            selection_id: 15_929,
+            selection_title: "First Piece"
           )
         ]
       end
@@ -523,7 +524,9 @@ RSpec.describe MusicImportService do
         expect(output.logical_structure[0].nodes[0].label).to eq ["2001-10-19"]
         expect(output.logical_structure[0].nodes[0].label[0]).to be_a String
         expect(output.logical_structure[0].nodes[0].nodes.length).to eq 1
-        expect(output.logical_structure[0].nodes[0].nodes[0].proxy).not_to be_blank
+        expect(output.logical_structure[0].nodes[0].nodes[0].label).to eq ["First Piece"]
+        expect(output.logical_structure[0].nodes[0].nodes[0].nodes.length).to eq 1
+        expect(output.logical_structure[0].nodes[0].nodes[0].nodes[0].proxy).not_to be_blank
       end
 
       it "does not create any playlists" do

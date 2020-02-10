@@ -15,6 +15,12 @@ Release notes template:
 -->
 # 2020-02-05
 
+## Fixed
+
+* PUO Recordings now have selection title in logical structure.
+
+# 2020-02-05
+
 ## Added
 
 * PUO Recordings now display multiple days in one Recording.
