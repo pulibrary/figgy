@@ -37,7 +37,7 @@ RSpec.feature "Numismatics::Issues" do
     expect(page).to have_field "Denomination"
     expect(page).to have_field "Edge"
     expect(page).to have_field "Era"
-    expect(page).to have_field "Master"
+    expect(page).to have_selector("label", text: "Master")
     expect(page).to have_field "Metal"
     expect(page).to have_field "Name"
     expect(page).to have_field "Note"
@@ -62,7 +62,7 @@ RSpec.feature "Numismatics::Issues" do
     expect(page).to have_field "Reverse part"
     expect(page).to have_field "Reverse symbol"
     expect(page).to have_field "Role"
-    expect(page).to have_field "Ruler"
+    expect(page).to have_selector("label", text: "Ruler")
     expect(page).to have_field "Series"
     expect(page).to have_field "Shape"
     expect(page).to have_field "Side"
