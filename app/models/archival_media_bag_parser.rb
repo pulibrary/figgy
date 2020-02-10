@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 # get all the data files, provide lookups based on component and barcode
 class ArchivalMediaBagParser
-  BARCODE_WITH_SIDE_REGEX = /(\d{14}_\d+)_.*/
-  BARCODE_WITH_SIDE_AND_PART_REGEX = /(\d{14}_\d+?_p\d+).*/
-  attr_reader :path, :audio_files, :component_groups, :component_dict, :pbcore_parsers
+  BARCODE_WITH_SIDE_REGEX = /(\d{14}_\d+)_.*/.freeze
+  BARCODE_WITH_SIDE_AND_PART_REGEX = /(\d{14}_\d+?_p\d+).*/.freeze
+  attr_reader :path, :component_dict
 
   def initialize(path:, component_id:, barcodes: nil)
     @path = path
@@ -67,7 +67,7 @@ class ArchivalMediaBagParser
 
   # Class modeling asset images
   class ImageFile
-    attr_reader :path, :original_filename, :barcode
+    attr_reader :path
 
     # Provide the MIME type used for all image files
     # @return [String]
@@ -209,7 +209,7 @@ class BarcodeComponentDict
 end
 
 class PbcoreParser
-  attr_reader :path, :barcode, :transfer_notes, :xml, :original_filename
+  attr_reader :path
   def initialize(path:)
     @path = path
   end

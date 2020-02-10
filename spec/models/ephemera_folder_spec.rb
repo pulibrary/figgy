@@ -12,7 +12,7 @@ RSpec.describe EphemeraFolder do
   context "with a title in a non-Latin orthographies" do
     subject(:folder) { described_class.new(title: title, transliterated_title: transliterated_title) }
     let(:title) { "Что делать?" }
-    let(:transliterated_title) { 'Chto delat\'?' }
+    let(:transliterated_title) { "Chto delat'?" }
     it "has a non-Latin title and a transliterated Latin title" do
       expect(folder.title).to include title
       expect(folder.transliterated_title).to include transliterated_title

@@ -30,7 +30,7 @@ class ImageDerivativeService
       super(io)
     end
   end
-  attr_reader :image_config, :use, :change_set_persister, :id
+  attr_reader :image_config, :change_set_persister, :id
   delegate :width, :height, :format, :output_name, to: :image_config
   delegate :mime_type, to: :target_file
   delegate :query_service, :storage_adapter, to: :change_set_persister

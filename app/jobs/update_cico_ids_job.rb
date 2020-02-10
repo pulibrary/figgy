@@ -18,7 +18,7 @@ class UpdateCicoIdsJob < ApplicationJob
   delegate :query_service, to: :metadata_adapter
 
   class IdSwitcher
-    attr_accessor :id_array, :new_array
+    attr_accessor :id_array
 
     def initialize(id_array)
       @id_array = id_array

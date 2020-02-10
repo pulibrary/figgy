@@ -28,7 +28,7 @@ module GeoDiscovery
           datetime = DateTime.parse(datetime).utc
           datetime.utc.xmlschema
         rescue ArgumentError
-          return nil
+          nil
         end
 
         # Returns the date the work was modified.

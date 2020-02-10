@@ -18,6 +18,7 @@ RSpec.shared_examples "LinkedData::Resource" do
   end
 
   describe ".new" do
+    subject(:linked_resource) { LinkedData::LinkedResourceFactory.new(resource: custom_resource).new }
     before do
       class MyCustomResource < Valkyrie::Resource
         attribute :title, Valkyrie::Types::Set
@@ -28,7 +29,6 @@ RSpec.shared_examples "LinkedData::Resource" do
       Object.send(:remove_const, :MyCustomResource)
     end
 
-    subject(:linked_resource) { LinkedData::LinkedResourceFactory.new(resource: custom_resource).new }
     let(:custom_resource) { MyCustomResource.new(title: "test title 1") }
     it "#title" do
       expect(linked_resource.title).to include RDF::Literal.new("test title 1", language: :eng)

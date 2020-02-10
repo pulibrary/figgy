@@ -69,7 +69,7 @@ module GeoDiscovery
             member_id = Array.wrap(resource_decorator.thumbnail_id).first
             return unless member_id
             member = query_service.find_by(id: member_id)
-            return member.decorate if member && member.is_a?(FileSet)
+            return member.decorate if member&.is_a?(FileSet)
             member.decorate.geo_members.try(:first)
           end
         rescue Valkyrie::Persistence::ObjectNotFoundError

@@ -41,7 +41,7 @@ class GeoMetadataExtractor
     end
 
     def creator
-      path = '//gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty/gmd:role/gmd:CI_RoleCode[@codeListValue=\'originator\']'
+      path = "//gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty/gmd:role/gmd:CI_RoleCode[@codeListValue='originator']"
       node = doc.xpath(path, NS)
       begin
         [node.at_xpath("ancestor-or-self::*/gmd:individualName", NS).text.strip]
@@ -51,7 +51,7 @@ class GeoMetadataExtractor
     end
 
     def source
-      path = '//gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty/gmd:role/gmd:CI_RoleCode[@codeListValue=\'custodian\']'
+      path = "//gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:citedResponsibleParty/gmd:CI_ResponsibleParty/gmd:role/gmd:CI_RoleCode[@codeListValue='custodian']"
       node = doc.xpath(path, NS)
       begin
         [node.at_xpath("ancestor-or-self::*/gmd:individualName", NS).text.strip]

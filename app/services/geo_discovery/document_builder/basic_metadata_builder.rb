@@ -83,7 +83,7 @@ module GeoDiscovery
           # This convoluted set ot method calls is required because, in this case, we need the
           # actual model decorator rather than the geoblacklight metadata decorator.
           decorated_title = resource_decorator.model.decorate.title.try(:first)
-          decorated_title.to_s if decorated_title
+          decorated_title&.to_s
         end
 
         def topic_categories

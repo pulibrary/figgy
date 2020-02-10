@@ -2,6 +2,7 @@
 require "rails_helper"
 
 RSpec.describe DateRangeProperty do
+  subject(:change_set) { TestChangeSet.new(resource) }
   before(:all) do
     class TestChangeSet < ChangeSet
       include DateRangeProperty
@@ -15,7 +16,6 @@ RSpec.describe DateRangeProperty do
     Object.send(:remove_const, :TestChangeSet)
   end
 
-  subject(:change_set) { TestChangeSet.new(resource) }
   let(:resource) { TestResource.new }
 
   it "can set date_range" do

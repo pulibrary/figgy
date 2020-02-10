@@ -2,7 +2,7 @@
 # Decorates the Pathname with some convenience parsing methods
 # Provides methods needed by FileMetadata.for
 class IngestableAudioFile
-  attr_reader :path, :barcode_with_side, :barcode, :side, :part
+  attr_reader :path
 
   def initialize(path:)
     @path = path

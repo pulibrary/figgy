@@ -34,7 +34,7 @@ class GeoserverMessageGenerator
       derivative_id = resource.derivative_file.file_identifiers.first
       Valkyrie::StorageAdapter.find_by(id: derivative_id).io.path
     rescue Valkyrie::StorageAdapter::FileNotFound
-      return ""
+      ""
     end
 
     # Access the path used for GeoServer derivatives

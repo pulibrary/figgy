@@ -17,7 +17,7 @@ class AudioDerivativeService
     end
   end
 
-  attr_reader :change_set, :change_set_persister, :id
+  attr_reader :change_set_persister, :id
   delegate :mime_type, to: :target_file
   delegate :storage_adapter, :query_service, to: :change_set_persister
   def initialize(id:, change_set_persister:)
