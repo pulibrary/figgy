@@ -235,6 +235,24 @@ RSpec.describe CatalogController do
     end
   end
 
+  describe "numismatics ajax lookups" do
+    context "staff user" do
+      it "can access solr metadata for numismatics place" do
+        sign_in FactoryBot.create(:staff)
+        persister.save(resource: FactoryBot.build(:numismatic_place))
+        get :index, params: { q: "", all_models: "true", f: { human_readable_type_ssim: ["Place"] } }
+        expect(assigns(:document_list).length).to eq 1
+      end
+    end
+    context "anonymous user" do
+      it "cannot access solr metadata for numismatics place" do
+        persister.save(resource: FactoryBot.build(:numismatic_place))
+        get :index, params: { q: "", all_models: "true", f: { human_readable_type_ssim: ["Place"] } }
+        expect(assigns(:document_list).length).to eq 0
+      end
+    end
+  end
+
   describe "EphemeraFolder behavior" do
     context "when not an admin" do
       it "displays a completed EphemeraFolder" do

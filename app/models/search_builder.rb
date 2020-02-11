@@ -61,7 +61,7 @@ class SearchBuilder < Blacklight::SearchBuilder
   end
 
   def add_access_controls_to_solr_params(*args)
-    return if current_ability.can?(:manage, Valkyrie::Resource)
+    return if current_ability.can?(:create, Valkyrie::Resource)
     apply_gated_discovery(*args)
   end
 end
