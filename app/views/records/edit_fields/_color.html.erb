@@ -5,8 +5,8 @@
 
   <select class="form-control select2" id="numismatics_issue_color" data-hidden="#color">
     <option <% f.object.model.color.blank? ? 'selected' : '' %>></option>
-    <% f.object.model.decorate.colors.each do |color| %>
-      <option <%= f.object.model.color&.first == color ? 'selected' : '' %> ><%= color %></option>
+    <% @colors.each do |color| %>
+      <option <%= f.object.model.color&.first == color.value ? 'selected' : '' %> ><%= color.value %></option>
     <% end %>
   </select>
 </div>

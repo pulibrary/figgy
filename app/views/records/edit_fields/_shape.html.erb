@@ -5,8 +5,8 @@
 
   <select class="form-control select2" id="numismatics_issue_shape" data-hidden="#shape">
     <option <% f.object.model.shape.blank? ? 'selected' : '' %></option>
-    <% f.object.model.decorate.shapes.each do |shape| %>
-      <option <% f.object.model.shape == shape ? 'selected' : '' %> ><%= shape %></option>
+    <% @shapes.each do |shape| %>
+      <option <% f.object.model.shape == shape.value ? 'selected' : '' %> ><%= shape.value %></option>
     <% end %>
   </select>
 </div>

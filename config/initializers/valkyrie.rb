@@ -366,7 +366,7 @@ Rails.application.config.to_prepare do
 
   # Register custom queries for the Valkyrie Solr metadata adapter used for indexing
   # (see Valkyrie::Persistence::CustomQueryContainer)
-  [FindMissingThumbnailResources, FindInvalidThumbnailResources].each do |solr_query_handler|
+  [FindMissingThumbnailResources, FindInvalidThumbnailResources, FindFacetValues].each do |solr_query_handler|
     Valkyrie::MetadataAdapter.find(:index_solr).query_service.custom_queries.register_query_handler(solr_query_handler)
   end
 
