@@ -13,6 +13,7 @@ Release notes template:
 ## Removed
 
 -->
+
 # 2020-02-11
 
 ## Added
@@ -20,17 +21,17 @@ Release notes template:
 * Numismatic Issue forms now have autocompletion and selection for the fields
   Object Type, Denomination, Metal, Shape, Color, and Edge.
 
-# 2020-02-10
+# 2020-02-11
 
 ## Fixed
 
 * Ruler/Master in Numismatic Issues now has a dropdown for People.
 
-# 2020-02-05
+# 2020-02-10
 
 ## Fixed
 
-* PUO Recordings now have selection title in logical structure.
+* Allows staff users to access numismatics typeahead dropdowns in forms.
 
 # 2020-02-05
 
