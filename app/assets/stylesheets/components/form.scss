@@ -187,6 +187,19 @@ form {
     margin-top: 0;
     margin-bottom: 10px;
   }
+
+  .select2-selection.select2-selection--single {
+    height: 39px;
+    width: 100%;
+
+    span {
+      margin-top: 4px;
+    }
+
+    .select2-selection__arrow {
+      margin-right: 6px;
+    }
+  }
 }
 
 .set-access-controls {
@@ -278,6 +291,21 @@ form.button-to {
           display: inline;
         }
       }
+    }
+  }
+}
+
+.select2-container {
+  .select2-search__field {
+    height: 36px;
+  }
+
+  .select2-results__options {
+    padding-bottom: 6px;
+
+    .select2-results__option--highlighted {
+      background-color: #337ab7 !important;
+      min-height: 31px;
     }
   }
 }

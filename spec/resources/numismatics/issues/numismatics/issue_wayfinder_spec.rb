@@ -18,4 +18,11 @@ describe Numismatics::IssueWayfinder do
       expect(numismatic_issue_wayfinder.issues_count).to eq 1
     end
   end
+
+  describe "#issues" do
+    it "returns the all issues" do
+      expect(numismatic_issue_wayfinder.issues).not_to be_empty
+      expect(numismatic_issue_wayfinder.issues.first).to be_a Numismatics::Issue
+    end
+  end
 end
