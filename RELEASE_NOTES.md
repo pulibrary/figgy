@@ -18,6 +18,12 @@ Release notes template:
 
 ## Changed
 
+* Allow Numismatic resource edit form select box values to be cleared.
+
+# 2020-02-12
+
+## Changed
+
 * Increased the load speed of numismatics issue edit pages by using
 * Solr queries to populate select boxes.
 
