@@ -65,6 +65,12 @@ RSpec.describe Numismatics::IssuesController, type: :controller do
                                                edge: "milled",
                                                metal: "copper",
                                                object_type: "coin",
+                                               obverse_figure: "obv figure",
+                                               obverse_orientation: "obv orientation",
+                                               obverse_part: "obv part",
+                                               reverse_figure: "rev figure",
+                                               reverse_orientation: "rev orientation",
+                                               reverse_part: "rev part",
                                                shape: "round")
       change_set = DynamicChangeSet.new(issue)
       change_set_persister.save(change_set: change_set)
@@ -75,6 +81,12 @@ RSpec.describe Numismatics::IssuesController, type: :controller do
       edges = assigns(:edges)
       metals = assigns(:metals)
       object_types = assigns(:object_types)
+      obverse_figures = assigns(:obverse_figures)
+      obverse_orientations = assigns(:obverse_orientations)
+      obverse_parts = assigns(:obverse_parts)
+      reverse_figures = assigns(:reverse_figures)
+      reverse_orientations = assigns(:reverse_orientations)
+      reverse_parts = assigns(:reverse_parts)
       shapes = assigns(:shapes)
 
       expect(colors.first.value).to eq "pink"
@@ -83,6 +95,12 @@ RSpec.describe Numismatics::IssuesController, type: :controller do
       expect(edges.first.value).to eq "milled"
       expect(metals.first.value).to eq "copper"
       expect(object_types.first.value).to eq "coin"
+      expect(obverse_figures.first.value).to eq "obv figure"
+      expect(obverse_orientations.first.value).to eq "obv orientation"
+      expect(obverse_parts.first.value).to eq "obv part"
+      expect(reverse_figures.first.value).to eq "rev figure"
+      expect(reverse_orientations.first.value).to eq "rev orientation"
+      expect(reverse_parts.first.value).to eq "rev part"
       expect(shapes.first.value).to eq "round"
     end
   end

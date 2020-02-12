@@ -16,6 +16,12 @@ Release notes template:
 
 # 2020-02-13
 
+## Added
+
+* Adds additional numismatic resource dropdowns.
+
+# 2020-02-13
+
 ## Changed
 
  * Ensured that the Universal Viewer is not rendered for Numismatic Issues when

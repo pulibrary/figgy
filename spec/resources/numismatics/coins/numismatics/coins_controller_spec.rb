@@ -73,6 +73,24 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
       let(:factory) { :coin }
       it_behaves_like "an access controlled edit request"
     end
+    let(:resource) { FactoryBot.create_for_repository(:coin) }
+    it "retrieves an array of facet values to for use in populating select boxes" do
+      metadata_adapter = Valkyrie::MetadataAdapter.find(:index_solr)
+      change_set_persister = ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter)
+      coin = FactoryBot.create_for_repository(:coin,
+                                              holding_location: "holding location",
+                                              numismatic_collection: "numismatic collection")
+      change_set = DynamicChangeSet.new(coin)
+      change_set_persister.save(change_set: change_set)
+
+      get :edit, params: { id: resource.id.to_s }
+      holding_locations = assigns(:holding_locations)
+      numismatic_collections = assigns(:numismatic_collections)
+
+      expect(holding_locations.first.value).to eq "holding location"
+      expect(holding_locations.first.hits).to eq 1
+      expect(numismatic_collections.first.value).to eq "numismatic collection"
+    end
   end
   describe "html update" do
     let(:user) { FactoryBot.create(:admin) }

@@ -11,6 +11,29 @@ module Numismatics
     )
 
     before_action :selected_issue, only: [:new, :edit, :destroy]
+    before_action :load_facet_values, only: [:new, :edit]
+    before_action :load_holding_locations, only: [:new, :edit]
+    before_action :load_numismatic_collections, only: [:new, :edit]
+
+    def facet_fields
+      [
+        :holding_location_ssim,
+        :numismatic_collection_ssim
+      ]
+    end
+
+    def load_facet_values
+      query = FindFacetValues.new(query_service: Valkyrie::MetadataAdapter.find(:index_solr).query_service)
+      @facet_values = query.find_facet_values(facet_fields: facet_fields)
+    end
+
+    def load_holding_locations
+      @holding_locations = @facet_values[:holding_location_ssim]
+    end
+
+    def load_numismatic_collections
+      @numismatic_collections = @facet_values[:numismatic_collection_ssim]
+    end
 
     def parent_resource
       @parent_resource ||=

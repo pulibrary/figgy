@@ -8,14 +8,20 @@ module Numismatics
       storage_adapter: Valkyrie.config.storage_adapter
     )
 
-    before_action :load_monograms, only: [:new, :edit]
-    before_action :load_monogram_attributes, only: [:new, :edit]
     before_action :load_facet_values, only: [:new, :edit]
     before_action :load_colors, only: [:new, :edit]
     before_action :load_denominations, only: [:new, :edit]
     before_action :load_edges, only: [:new, :edit]
     before_action :load_metals, only: [:new, :edit]
+    before_action :load_monograms, only: [:new, :edit]
+    before_action :load_monogram_attributes, only: [:new, :edit]
     before_action :load_object_types, only: [:new, :edit]
+    before_action :load_obverse_figures, only: [:new, :edit]
+    before_action :load_obverse_orientations, only: [:new, :edit]
+    before_action :load_obverse_parts, only: [:new, :edit]
+    before_action :load_reverse_figures, only: [:new, :edit]
+    before_action :load_reverse_orientations, only: [:new, :edit]
+    before_action :load_reverse_parts, only: [:new, :edit]
     before_action :load_shapes, only: [:new, :edit]
 
     def facet_fields
@@ -25,6 +31,12 @@ module Numismatics
         :edge_ssim,
         :metal_ssim,
         :object_type_ssim,
+        :obverse_figure_ssim,
+        :obverse_orientation_ssim,
+        :obverse_part_ssim,
+        :reverse_figure_ssim,
+        :reverse_orientation_ssim,
+        :reverse_part_ssim,
         :shape_ssim
       ]
     end
@@ -58,6 +70,30 @@ module Numismatics
 
     def load_object_types
       @object_types = @facet_values[:object_type_ssim]
+    end
+
+    def load_obverse_figures
+      @obverse_figures = @facet_values[:obverse_figure_ssim]
+    end
+
+    def load_obverse_orientations
+      @obverse_orientations = @facet_values[:obverse_orientation_ssim]
+    end
+
+    def load_obverse_parts
+      @obverse_parts = @facet_values[:obverse_part_ssim]
+    end
+
+    def load_reverse_figures
+      @reverse_figures = @facet_values[:reverse_figure_ssim]
+    end
+
+    def load_reverse_orientations
+      @reverse_orientations = @facet_values[:reverse_orientation_ssim]
+    end
+
+    def load_reverse_parts
+      @reverse_parts = @facet_values[:reverse_part_ssim]
     end
 
     def load_shapes
