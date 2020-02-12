@@ -83,7 +83,8 @@ export default class Initializer {
 
     $('select.select2').select2({
       tags: true,
-      placeholder: "Nothing selected"
+      placeholder: "Nothing selected",
+      allowClear: true
     }).on('select2:select', (event) => {
       const $target = $(event.target)
       const selected = $target.select2('data')
