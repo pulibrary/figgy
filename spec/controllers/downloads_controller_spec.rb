@@ -124,6 +124,35 @@ RSpec.describe DownloadsController do
       end
     end
 
+    context "with a netID only complete HLS playlist part and no auth token" do
+      let(:user) { FactoryBot.create(:campus_patron) }
+      with_queue_adapter :inline
+      it "allows download", run_real_derivatives: true, run_real_characterization: true do
+        sign_in user
+        file = fixture_file_upload("files/audio_file.wav", "audio/x-wav")
+        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        parent = FactoryBot.create_for_repository(:complete_recording, files: [file], visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED)
+        file_set = Wayfinder.for(parent).members.first
+        partial = file_set.derivative_partial_files.first
+
+        get :show, params: { resource_id: file_set.id.to_s, id: partial.id.to_s }
+
+        expect(response).to be_success
+      end
+      it "disallows download of the original file", run_real_derivatives: true, run_real_characterization: true do
+        sign_in user
+        file = fixture_file_upload("files/audio_file.wav", "audio/x-wav")
+        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        parent = FactoryBot.create_for_repository(:complete_recording, files: [file], visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED)
+        file_set = Wayfinder.for(parent).members.first
+        wav_file = file_set.original_files.first
+
+        get :show, params: { resource_id: file_set.id.to_s, id: wav_file.id.to_s }
+
+        expect(response).not_to be_success
+      end
+    end
+
     context "with an HLS playlist FileSet and no auth token" do
       let(:user) { FactoryBot.create(:admin) }
       it "doesn't modify the playlist" do

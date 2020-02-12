@@ -457,7 +457,7 @@ describe Ability do
       let(:vector_resource_members) { query_service.find_members(resource: vector_resource) }
       let(:file_set) { vector_resource_members.first }
       let(:vector_file) do
-        DownloadsController::FileWithMetadata.new(id: "1234", file: "", mime_type: "application/vnd.geo+json", original_name: "file.geosjon", file_set_id: file_set.id)
+        DownloadsController::FileWithMetadata.new(id: "1234", file: "", mime_type: "application/vnd.geo+json", original_name: "file.geosjon", file_set_id: file_set.id, file_metadata: file_set.file_metadata.first)
       end
       let(:vector_resource) do
         change_set_persister.save(change_set: VectorResourceChangeSet.new(campus_only_vector_resource, files: [file]))
@@ -522,13 +522,13 @@ describe Ability do
     let(:vector_resource_members) { query_service.find_members(resource: vector_resource) }
     let(:file_set) { vector_resource_members.first }
     let(:vector_file) do
-      DownloadsController::FileWithMetadata.new(id: "1234", file: "", mime_type: "application/vnd.geo+json", original_name: "file.geosjon", file_set_id: file_set.id)
+      DownloadsController::FileWithMetadata.new(id: "1234", file: "", mime_type: "application/vnd.geo+json", original_name: "file.geosjon", file_set_id: file_set.id, file_metadata: instance_double(FileMetadata, derivative?: false, derivative_partial?: false))
     end
     let(:metadata_file) do
-      DownloadsController::FileWithMetadata.new(id: "5768", file: "", mime_type: "application/xml; schema=fgdc", original_name: "fgdc.xml", file_set_id: file_set.id)
+      DownloadsController::FileWithMetadata.new(id: "5768", file: "", mime_type: "application/xml; schema=fgdc", original_name: "fgdc.xml", file_set_id: file_set.id, file_metadata: instance_double(FileMetadata, derivative?: false, derivative_partial?: false))
     end
     let(:thumbnail_file) do
-      DownloadsController::FileWithMetadata.new(id: "9abc", file: "", mime_type: "image/png", original_name: "thumbnail.png", file_set_id: file_set.id)
+      DownloadsController::FileWithMetadata.new(id: "9abc", file: "", mime_type: "image/png", original_name: "thumbnail.png", file_set_id: file_set.id, file_metadata: instance_double(FileMetadata, derivative?: true))
     end
 
     it {
@@ -640,7 +640,6 @@ describe Ability do
       end
 
       it {
-        is_expected.to be_able_to(:download, file_set)
         is_expected.to be_able_to(:download, thumbnail_file)
         is_expected.to be_able_to(:download, metadata_file)
         is_expected.to be_able_to(:download, vector_file)
@@ -658,7 +657,6 @@ describe Ability do
       end
 
       it {
-        is_expected.to be_able_to(:download, file_set)
         is_expected.to be_able_to(:download, thumbnail_file)
         is_expected.to be_able_to(:download, metadata_file)
         is_expected.not_to be_able_to(:download, vector_file)

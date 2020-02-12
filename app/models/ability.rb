@@ -42,7 +42,7 @@ class Ability
       download_file_with_metadata?(resource)
     end
     can :download, FileSet do |resource|
-      downloadable?(resource) && (authorized_by_token?(resource) || geo_file_set?(resource) || can_read_parent?(resource))
+      downloadable?(resource) && (authorized_by_token?(resource) || can_read_parent?(resource))
     end
     can :color_pdf, curation_concerns do |resource|
       resource.pdf_type == ["color"]
@@ -88,19 +88,20 @@ class Ability
   end
 
   def download_file_with_metadata?(resource)
-    token_readable_for_file_metadata?(resource) || pdf_file?(resource) || geo_thumbnail?(resource) || geo_metadata?(resource) || public_file?(resource)
+    return true if token_readable_for_file_metadata?(resource)
+    # Geo thumbnails/metadata are always downloadable no matter what.
+    return true if geo_thumbnail?(resource) || geo_metadata?(resource)
+    file_set = query_service.find_by(id: resource.file_set_id)
+    if resource.file_metadata.derivative? || resource.file_metadata.derivative_partial?
+      can?(:read, file_set)
+    else
+      can?(:download, file_set)
+    end
   end
 
   # Geo metadata is always downloadable
   def geo_metadata?(resource)
     ControlledVocabulary::GeoMetadataFormat.new.include?(resource.mime_type)
-  end
-
-  # Find visibility of parent resource and return true if it's public
-  def public_file?(resource)
-    file_set = query_service.find_by(id: resource.file_set_id)
-    visibility = file_set.decorate.parent.model.visibility
-    visibility.include?(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
   end
 
   # Find visibility of parent geo resource and return true if it's authenticated
@@ -122,10 +123,6 @@ class Ability
   def geo_thumbnail?(resource)
     return true if /thumbnail/ =~ resource.original_name
     false
-  end
-
-  def pdf_file?(resource)
-    resource.mime_type == "application/pdf"
   end
 
   # The search builder uses this to enumerate actual names of states
