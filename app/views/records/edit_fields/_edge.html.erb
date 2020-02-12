@@ -5,8 +5,8 @@
 
   <select class="form-control select2" id="numismatics_issue_edge" data-hidden="#edge">
     <option <% f.object.model.edge.blank? ? 'selected' : '' %>></option>
-    <% f.object.model.decorate.edges.each do |edge| %>
-      <option <%= f.object.model.edge&.first == edge ? 'selected' : '' %> ><%= edge %></option>
+    <% @edges.each do |edge| %>
+      <option <%= f.object.model.edge&.first == edge.value ? 'selected' : '' %> ><%= edge.value %></option>
     <% end %>
   </select>
 </div>

@@ -14,6 +14,13 @@ Release notes template:
 
 -->
 
+# 2020-02-12
+
+## Changed
+
+* Increased the load speed of numismatics issue edit pages by using
+* Solr queries to populate select boxes.
+
 # 2020-02-11
 
 ## Added

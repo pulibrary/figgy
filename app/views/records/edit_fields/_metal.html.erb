@@ -5,8 +5,8 @@
 
   <select class="form-control select2" id="numismatics_issue_metal" data-hidden="#metal">
     <option <% f.object.model.metal.blank? ? 'selected' : '' %>></option>
-    <% f.object.model.decorate.metals.each do |metal| %>
-      <option <%= f.object.model.metal&.first == metal ? 'selected' : '' %> ><%= metal %></option>
+    <% @metals.each do |metal| %>
+      <option <%= f.object.model.metal&.first == metal.value ? 'selected' : '' %> ><%= metal.value %></option>
     <% end %>
   </select>
 </div>

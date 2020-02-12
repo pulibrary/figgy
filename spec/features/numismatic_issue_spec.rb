@@ -3,15 +3,15 @@ require "rails_helper"
 
 RSpec.describe "Numismatics::Issue", js: true do
   let(:user) { FactoryBot.create(:admin) }
-  let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+  let(:adapter) { Valkyrie::MetadataAdapter.find(:index_solr) }
   let(:issue) do
-    FactoryBot.build(:numismatic_issue,
-                     object_type: "coin",
-                     denomination: "1/2 Penny",
-                     metal: "copper",
-                     shape: "round",
-                     color: "green",
-                     edge: "test value")
+    FactoryBot.create_for_repository(:numismatic_issue,
+                                     object_type: "coin",
+                                     denomination: "1/2 Penny",
+                                     metal: "copper",
+                                     shape: "round",
+                                     color: "green",
+                                     edge: "test value")
   end
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: Valkyrie.config.storage_adapter) }
 
@@ -20,21 +20,14 @@ RSpec.describe "Numismatics::Issue", js: true do
   end
 
   describe "form editing" do
-    it "permits users to save a new object types" do
+    it "displays select boxes for some properties" do
       visit new_numismatics_issue_path
-
-      expect(page).to have_css("#select2-numismatics_issue_object_type-container")
-      expect(page).to have_css("#select2-numismatics_issue_denomination-container")
-      expect(page).to have_css("#select2-numismatics_issue_metal-container")
-      expect(page).to have_css("#select2-numismatics_issue_shape-container")
-      expect(page).to have_css("#select2-numismatics_issue_color-container")
-      expect(page).to have_css("#select2-numismatics_issue_edge-container")
-
-      page.find("#select2-numismatics_issue_object_type-container").click
-      page.find(".select2-search__field", visible: false).send_keys("coin2", :enter)
-      page.find(".save").click
-
-      expect(page).to have_css(".attribute.object_type", text: "coin2")
+      expect(page).to have_css("#numismatics_issue_object_type.select2", visible: false)
+      expect(page).to have_css("#numismatics_issue_denomination.select2", visible: false)
+      expect(page).to have_css("#numismatics_issue_metal.select2", visible: false)
+      expect(page).to have_css("#numismatics_issue_shape.select2", visible: false)
+      expect(page).to have_css("#numismatics_issue_color.select2", visible: false)
+      expect(page).to have_css("#numismatics_issue_edge.select2", visible: false)
     end
 
     context "when Issues have been saved" do
@@ -59,11 +52,12 @@ RSpec.describe "Numismatics::Issue", js: true do
         hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#edge", visible: false)
         expect(hidden["value"]).to eq("test value")
 
-        page.find("#select2-numismatics_issue_object_type-container").click
-        page.find(".select2-search__field", visible: false).send_keys("coin3", :enter)
-        page.find(".save").click
-
-        expect(page).to have_css(".attribute.object_type", text: "coin3")
+        expect(page).to have_selector("option", text: "coin")
+        expect(page).to have_selector("option", text: "1/2 Penny")
+        expect(page).to have_selector("option", text: "copper")
+        expect(page).to have_selector("option", text: "round")
+        expect(page).to have_selector("option", text: "green")
+        expect(page).to have_selector("option", text: "test value")
       end
 
       it "persists already saved denominations" do

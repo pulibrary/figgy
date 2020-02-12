@@ -19,10 +19,6 @@ module Numismatics
       @issues_count = query_service.custom_queries.count_all_of_model(model: Numismatics::Issue)
     end
 
-    def issues
-      @issues = query_service.find_all_of_model(model: Numismatics::Issue)
-    end
-
     def members_with_parents
       @members_with_parents ||= members.map do |member|
         member.loaded[:parents] = [resource]

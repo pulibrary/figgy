@@ -56,6 +56,35 @@ RSpec.describe Numismatics::IssuesController, type: :controller do
         expect(assigns(:numismatic_monograms)).to eq([])
       end
     end
+    it "retrieves an array of facet values to for use in populating select boxes" do
+      metadata_adapter = Valkyrie::MetadataAdapter.find(:index_solr)
+      change_set_persister = ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter)
+      issue = FactoryBot.create_for_repository(:numismatic_issue,
+                                               color: "pink",
+                                               denomination: "Drachm",
+                                               edge: "milled",
+                                               metal: "copper",
+                                               object_type: "coin",
+                                               shape: "round")
+      change_set = DynamicChangeSet.new(issue)
+      change_set_persister.save(change_set: change_set)
+
+      get :edit, params: { id: resource.id.to_s }
+      colors = assigns(:colors)
+      denominations = assigns(:denominations)
+      edges = assigns(:edges)
+      metals = assigns(:metals)
+      object_types = assigns(:object_types)
+      shapes = assigns(:shapes)
+
+      expect(colors.first.value).to eq "pink"
+      expect(colors.first.hits).to eq 1
+      expect(denominations.first.value).to eq "Drachm"
+      expect(edges.first.value).to eq "milled"
+      expect(metals.first.value).to eq "copper"
+      expect(object_types.first.value).to eq "coin"
+      expect(shapes.first.value).to eq "round"
+    end
   end
   describe "html update" do
     let(:user) { FactoryBot.create(:admin) }

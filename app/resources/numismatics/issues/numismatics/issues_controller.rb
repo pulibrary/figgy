@@ -10,11 +10,58 @@ module Numismatics
 
     before_action :load_monograms, only: [:new, :edit]
     before_action :load_monogram_attributes, only: [:new, :edit]
+    before_action :load_facet_values, only: [:new, :edit]
+    before_action :load_colors, only: [:new, :edit]
+    before_action :load_denominations, only: [:new, :edit]
+    before_action :load_edges, only: [:new, :edit]
+    before_action :load_metals, only: [:new, :edit]
+    before_action :load_object_types, only: [:new, :edit]
+    before_action :load_shapes, only: [:new, :edit]
+
+    def facet_fields
+      [
+        :color_ssim,
+        :denomination_ssim,
+        :edge_ssim,
+        :metal_ssim,
+        :object_type_ssim,
+        :shape_ssim
+      ]
+    end
+
+    def load_colors
+      @colors = @facet_values[:color_ssim]
+    end
+
+    def load_denominations
+      @denominations = @facet_values[:denomination_ssim]
+    end
+
+    def load_edges
+      @edges = @facet_values[:edge_ssim]
+    end
+
+    def load_facet_values
+      query = FindFacetValues.new(query_service: Valkyrie::MetadataAdapter.find(:index_solr).query_service)
+      @facet_values = query.find_facet_values(facet_fields: facet_fields)
+    end
+
+    def load_metals
+      @metals = @facet_values[:metal_ssim]
+    end
 
     def load_monograms
       @numismatic_monograms = query_service.find_all_of_model(model: Numismatics::Monogram).map(&:decorate)
 
       return [] if @numismatic_monograms.to_a.blank?
+    end
+
+    def load_object_types
+      @object_types = @facet_values[:object_type_ssim]
+    end
+
+    def load_shapes
+      @shapes = @facet_values[:shape_ssim]
     end
 
     def manifest
