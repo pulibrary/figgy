@@ -66,7 +66,10 @@ class DownloadsController < ApplicationController
 
   # Customize the :download ability in your Ability class, or override this method
   def authorize_download!
-    authorize! :download, resource
+    # Partials are HLS parts - they should be authorized independent of the
+    # parent's `downloadable?` property, and just related to the parent's
+    # visibility, which is checked via `Ability#download_file_with_metadata?`
+    authorize!(:download, resource) unless file_desc&.derivative_partial?
     authorize! :download, load_file
   end
 
