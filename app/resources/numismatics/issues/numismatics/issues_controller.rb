@@ -109,6 +109,34 @@ module Numismatics
       end
     end
 
+    def after_create_success(obj, _change_set)
+      if params[:commit] == "Save and Duplicate Metadata"
+        redirect_to new_numismatics_issue_path(parent_id: resource_params[:append_id], create_another: obj.id.to_s), notice: "Issue #{obj.issue_number} Saved, Creating Another..."
+      else
+        super
+      end
+    end
+
+    def after_update_success(obj, _change_set)
+      if params[:commit] == "Save and Duplicate Metadata"
+        redirect_to new_numismatics_issue_path(parent_id: resource_params[:append_id], create_another: obj.id.to_s), notice: "Issue #{obj.issue_number} Saved, Creating Another..."
+      else
+        super
+      end
+    end
+
+    def new_resource
+      if params[:create_another]
+        resource = find_resource(params[:create_another])
+        # Setting new_record to true ensures that this is not treated as a persisted Resource
+        # @see Valkyrie::Resource#persisted?
+        # @see https://github.com/samvera-labs/valkyrie/blob/master/lib/valkyrie/resource.rb#L83
+        resource.new(id: nil, new_record: true, created_at: nil, updated_at: nil)
+      else
+        resource_class.new
+      end
+    end
+
     private
 
       def build_monogram_thumbnail_url(resource)

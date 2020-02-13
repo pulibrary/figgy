@@ -144,6 +144,59 @@ RSpec.feature "Numismatics::Coins" do
     end
   end
 
+  scenario "users can save a new coin" do
+    visit solr_document_path numismatic_issue
+    page.click_on "Attach Coin"
+
+    page.fill_in "numismatics_coin_analysis", with: "test analysis"
+    page.select "Copyright Not Evaluated", from: "Rights Statement"
+
+    page.click_on "Save"
+    expect(page).to have_css ".attribute.analysis", text: "test analysis"
+  end
+
+  scenario "users can save a new coin and create another" do
+    visit solr_document_path numismatic_issue
+    page.click_on "Attach Coin"
+
+    page.fill_in "numismatics_coin_analysis", with: "test analysis"
+    page.select "Copyright Not Evaluated", from: "Rights Statement"
+
+    page.click_on "Save and Duplicate Metadata"
+
+    expect(page).to have_content "Coin 2 Saved, Creating Another..."
+    expect(page).to have_field "numismatics_coin_analysis", with: "test analysis"
+  end
+
+  context "when editing an existing coin", js: true do
+    let(:coin) do
+      res = FactoryBot.create_for_repository(:coin, analysis: "test analysis")
+      persister.save(resource: res)
+    end
+
+    before do
+      coin
+      numismatic_issue
+      visit edit_numismatics_coin_path(id: coin.id)
+    end
+
+    scenario "users can edit and update any given coin" do
+      page.fill_in "numismatics_coin_analysis", with: "test analysis 2"
+
+      page.click_on "Save"
+      expect(page).to have_css ".attribute.analysis", text: "test analysis 2"
+    end
+
+    scenario "users can create a new issue with duplicated metadata" do
+      page.fill_in "numismatics_coin_analysis", with: "test analysis 2"
+
+      page.click_on "Save and Duplicate Metadata"
+
+      expect(page).to have_content "Coin 1 Saved, Creating Another..."
+      expect(page).to have_field "numismatics_coin_analysis", with: "test analysis 2"
+    end
+  end
+
   describe "form editing", js: true do
     let(:adapter) { Valkyrie::MetadataAdapter.find(:index_solr) }
     let(:coin) do

@@ -22,6 +22,15 @@
       <%= f.submit "Save and Duplicate Metadata", class: 'btn btn-primary save' %>
 
     <% end %>
+
+    <% if f.object.resource.is_a?(Numismatics::Issue) && params[:controller] == "numismatics/issues" %>
+      <%= f.submit "Save and Duplicate Metadata", class: 'btn btn-primary save' %>
+    <% end %>
+
+    <% if f.object.resource.is_a?(Numismatics::Coin) && params[:controller] == "numismatics/coins" %>
+      <%= f.submit "Save and Duplicate Metadata", class: 'btn btn-primary save' %>
+    <% end %>
+
   </div>
   <% if f.object.resource.is_a?(ScannedResource) %>
     <div class="panel-footer text-center">

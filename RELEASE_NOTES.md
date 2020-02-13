@@ -16,6 +16,11 @@ Release notes template:
 
 # 2020-02-14
 
+## Added
+
+ * Integrated the "Save and Duplicate Metadata" feature for Numismatic Issues and
+  Coins
+
 ## Fixed
 
  * Restored the dropdown form widget for the artist and citation fields
