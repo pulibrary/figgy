@@ -88,7 +88,6 @@ class Ability
   end
 
   def download_file_with_metadata?(resource)
-    return true if token_readable_for_file_metadata?(resource)
     # Geo thumbnails/metadata are always downloadable no matter what.
     return true if geo_thumbnail?(resource) || geo_metadata?(resource)
     file_set = query_service.find_by(id: resource.file_set_id)
@@ -339,20 +338,5 @@ class Ability
     # @return [Boolean]
     def can_read_parent?(resource)
       can?(:read, resource.decorate.parent&.object)
-    end
-
-    # Determines whether or not an auth token grants access to the parent of a given resource
-    # @param obj [Resource]
-    # @return [Boolean]
-    def token_readable_for_file_metadata?(obj)
-      return false unless auth_token && obj.respond_to?(:file_set_id)
-      # This is not always a FileSet, as PDFs are attached directly to ScannedResources
-      attaching_resource = find_by(id: obj.file_set_id)
-
-      return if attaching_resource.nil?
-      return token_readable?(attaching_resource) unless attaching_resource.is_a?(FileSet)
-
-      # Retrieve the Playlist
-      authorized_by_token?(attaching_resource)
     end
 end
