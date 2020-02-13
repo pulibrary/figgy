@@ -1,0 +1,5 @@
+<% if f.object.multiple? key %>
+  <%= f.input key, as: :multi_value, label: 'Weight (g)', input_html: { class: 'form-control' }, required: f.object.required?(key) %>
+<% else %>
+  <%= f.input key, label: 'Weight (g)', required: f.object.required?(key) %>
+<% end %>

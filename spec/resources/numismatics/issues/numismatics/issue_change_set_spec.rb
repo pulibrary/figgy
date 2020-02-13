@@ -62,9 +62,9 @@ RSpec.describe Numismatics::IssueChangeSet do
         expect(change_set).not_to be_valid
       end
     end
-    context "when ce1 or ce2 are not dates" do
+    context "when earliest_date or latest_date are not dates" do
       it "is not valid" do
-        change_set.validate(ce1: "abcd", ce2: "1979")
+        change_set.validate(earliest_date: "abcd", latest_date: "1979")
         expect(change_set).not_to be_valid
       end
     end

@@ -31,8 +31,8 @@ RSpec.feature "Numismatics::Issues" do
     expect(page).to have_css '.select[for="numismatics_issue_member_of_collection_ids"]', text: "Collections"
     expect(page).to have_field "Color"
     expect(page).to have_field "Date of object"
-    expect(page).to have_field "Ce1" # For the date range sequence
-    expect(page).to have_field "Ce2" # For the date range
+    expect(page).to have_field "Earliest date" # For the date range sequence
+    expect(page).to have_field "Latest date" # For the date range
     expect(page).to have_field "Description"
     expect(page).to have_field "Denomination"
     expect(page).to have_field "Edge"
@@ -103,8 +103,8 @@ RSpec.feature "Numismatics::Issues" do
         reverse_attribute: numismatic_attribute,
         ruler_id: numismatic_person.id,
         master_id: numismatic_person.id,
-        ce1: "2017",
-        ce2: "2018",
+        earliest_date: "2017",
+        latest_date: "2018",
         color: "test value",
         denomination: "test value",
         edge: "test value",
@@ -139,8 +139,8 @@ RSpec.feature "Numismatics::Issues" do
       expect(page).to have_css ".attribute.visibility", text: "open"
       expect(page).to have_css ".attribute.member_of_collections", text: "Title"
       expect(page).to have_css ".attribute.artists", text: "name1 name2, artist signature"
-      expect(page).to have_css ".attribute.ce1", text: "2017"
-      expect(page).to have_css ".attribute.ce2", text: "2018"
+      expect(page).to have_css ".attribute.earliest_date", text: "2017"
+      expect(page).to have_css ".attribute.latest_date", text: "2018"
       expect(page).to have_css ".attribute.citations", text: "short-title part number"
       expect(page).to have_css ".attribute.color", text: "test value"
       expect(page).to have_css ".attribute.denomination", text: "test value"

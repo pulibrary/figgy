@@ -11,8 +11,8 @@ module Numismatics
     collection :numismatic_subject, multiple: true, required: false, form: Numismatics::SubjectChangeSet, populator: :populate_nested_collection, default: []
     collection :obverse_attribute, multiple: true, required: false, form: Numismatics::AttributeChangeSet, populator: :populate_nested_collection, default: []
     collection :reverse_attribute, multiple: true, required: false, form: Numismatics::AttributeChangeSet, populator: :populate_nested_collection, default: []
-    property :ce1, multiple: false, required: false
-    property :ce2, multiple: false, required: false
+    property :earliest_date, multiple: false, required: false
+    property :latest_date, multiple: false, required: false
     property :color, multiple: false, required: false
     property :denomination, multiple: false, required: false
     property :edge, multiple: false, required: false
@@ -69,7 +69,7 @@ module Numismatics
     validates_with ViewingDirectionValidator
     validates_with ViewingHintValidator
     validates :visibility, presence: true
-    validates :ce1, :ce2, year: true
+    validates :earliest_date, :latest_date, year: true
 
     def primary_terms
       {
@@ -81,8 +81,8 @@ module Numismatics
           :color,
           :edge,
           :object_date,
-          :ce1,
-          :ce2,
+          :earliest_date,
+          :latest_date,
           :era,
           :ruler_id,
           :master_id,

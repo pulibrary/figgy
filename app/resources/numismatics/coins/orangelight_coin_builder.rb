@@ -67,8 +67,8 @@ class OrangelightCoinBuilder
     def document_parent_hash
       return unless parent
       {
-        pub_date_start_sort: parent.ce1&.first.to_i,
-        pub_date_end_sort: parent.ce2&.first.to_i,
+        pub_date_start_sort: parent.earliest_date&.first.to_i,
+        pub_date_end_sort: parent.latest_date&.first.to_i,
         issue_object_type_s: parent.object_type,
         issue_denomination_s: parent.denomination,
         issue_denomination_sort: parent.denomination&.first,

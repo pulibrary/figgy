@@ -14,6 +14,14 @@ Release notes template:
 
 -->
 
+# 2020-02-13
+
+## Changed
+
+* Updating the attributes "Ce1" and "Ce2" labels to "Earliest Date" and "Latest
+  Date" for Numismatic Issues; Updating the attributes "Weight" and "Size" to
+  "Weight (g)" and "Size (mm)" for Numismatic Coins
+
 # 2020-02-12
 
 ## Changed
