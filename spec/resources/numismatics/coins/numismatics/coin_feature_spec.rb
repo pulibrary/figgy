@@ -70,10 +70,10 @@ RSpec.feature "Numismatics::Coins" do
     expect(page).to have_field "Part"
     expect(page).to have_selector("label", text: "Person")
     expect(page).to have_field "Private note"
-    expect(page).to have_field "Size"
+    expect(page).to have_field "Size (mm)"
     expect(page).to have_field "Technique"
     expect(page).to have_field "Type"
-    expect(page).to have_field "Weight"
+    expect(page).to have_field "Weight (g)"
 
     fill_in "Size", with: "3 cm"
     click_button "Save"

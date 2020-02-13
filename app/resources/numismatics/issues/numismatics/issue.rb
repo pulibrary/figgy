@@ -23,8 +23,8 @@ module Numismatics
     attribute :reverse_attribute, Valkyrie::Types::Array.of(Numismatics::Attribute).meta(ordered: true)
 
     # descriptive metadata
-    attribute :ce1
-    attribute :ce2
+    attribute :earliest_date
+    attribute :latest_date
     attribute :color
     attribute :denomination
     attribute :edge

@@ -48,8 +48,8 @@ class NumismaticsImportService::Issues
     OpenStruct.new(
       issue_number: id,
       color: record["Color"],
-      ce1: record["CE1"].to_s,
-      ce2: record["CE2"].to_s,
+      earliest_date: record["CE1"].to_s,
+      latest_date: record["CE2"].to_s,
       denomination: record["Denomination name"],
       edge: record["Edge"],
       era: record["EraName"],
