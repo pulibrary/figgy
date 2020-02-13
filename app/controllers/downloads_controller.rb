@@ -41,7 +41,14 @@ class DownloadsController < ApplicationController
 
   def load_file
     return unless binary_file && file_desc
-    @load_file ||= FileWithMetadata.new(id: params[:id], file: binary_file, mime_type: file_desc.mime_type, original_name: file_desc.original_filename.first, file_set_id: resource.id, file_metadata: file_desc)
+    @load_file ||= FileWithMetadata.new(
+      id: params[:id],
+      file: binary_file,
+      mime_type: file_desc.mime_type,
+      original_name: file_desc.original_filename.first,
+      file_set_id: resource.id,
+      file_metadata: file_desc
+    )
   rescue Valkyrie::StorageAdapter::FileNotFound
     nil
   end
