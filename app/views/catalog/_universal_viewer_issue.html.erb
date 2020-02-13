@@ -1,4 +1,4 @@
-<% if resource.class.can_have_manifests? && resource.try(:member_ids).present? && !Wayfinder.for(resource).coin_file_sets.empty? %>
+<% if resource.class.can_have_manifests? && !Wayfinder.for(resource).coin_file_sets.empty? %>
   <div class="intrinsic-container intrinsic-container-16x9 uv-container">
     <%# note: UV html file is '/viewer' %>
     <iframe src="<%= universal_viewer_path(resource) %>" allowfullscreen="true"></iframe>
