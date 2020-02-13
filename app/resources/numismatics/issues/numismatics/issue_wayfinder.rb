@@ -25,5 +25,9 @@ module Numismatics
         member
       end
     end
+
+    def coin_file_sets
+      @coin_file_sets ||= decorated_coins.map(&:decorated_file_sets).flatten
+    end
   end
 end
