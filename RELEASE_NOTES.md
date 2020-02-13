@@ -18,6 +18,9 @@ Release notes template:
 
 ## Changed
 
+ * Ensured that the Universal Viewer is not rendered for Numismatic Issues when
+   there are no attached Coins, or, when attached Coins do not have files
+   uploaded for them.
 * Updating the attributes "Ce1" and "Ce2" labels to "Earliest Date" and "Latest
   Date" for Numismatic Issues; Updating the attributes "Weight" and "Size" to
   "Weight (g)" and "Size (mm)" for Numismatic Coins
