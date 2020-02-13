@@ -59,7 +59,7 @@ class Ability
     anonymous_permissions
 
     can :download, DownloadsController::FileWithMetadata do |resource|
-      download_file_with_metadata?(resource) || geo_campus_file?(resource)
+      download_file_with_metadata?(resource)
     end
   end
 
@@ -101,21 +101,6 @@ class Ability
   # Geo metadata is always downloadable
   def geo_metadata?(resource)
     ControlledVocabulary::GeoMetadataFormat.new.include?(resource.mime_type)
-  end
-
-  # Find visibility of parent geo resource and return true if it's authenticated
-  def geo_campus_file?(resource)
-    file_set = query_service.find_by(id: resource.file_set_id)
-    parent = file_set.decorate.parent
-    return unless parent.try(:geo_resource?)
-    visibility = parent.model.visibility
-    visibility.include?(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED)
-  end
-
-  def geo_file_set?(resource)
-    return false unless resource.is_a?(FileSet)
-    parent = resource.decorate.parent
-    parent.try(:geo_resource?)
   end
 
   # Geo thumbnails are always downloadable
