@@ -55,8 +55,6 @@ module Numismatics
     property :viewing_hint, multiple: false, required: false, default: "individuals"
 
     property :downloadable, multiple: false, require: true, default: "public"
-    property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
-    property :rights_note, multiple: false, required: false
     property :state, multiple: false, required: true, default: "complete"
 
     # Virtual Attributes
@@ -65,7 +63,6 @@ module Numismatics
     validates_with AutoIncrementValidator, property: :issue_number
     validates_with CollectionValidator
     validates_with MemberValidator
-    validates_with RightsStatementValidator
     validates_with StateValidator
     validates_with ViewingDirectionValidator
     validates_with ViewingHintValidator
@@ -89,7 +86,6 @@ module Numismatics
           :master_id,
           :workshop,
           :series,
-          :numismatic_monogram_ids,
           :numismatic_place_id
         ],
         "Obverse" => [
@@ -128,11 +124,8 @@ module Numismatics
         "Subject" => [
           :numismatic_subject
         ],
-        "Rights and Notes" => [
-          :member_of_collection_ids,
-          :downloadable,
-          :rights_statement,
-          :rights_note
+        "Monograms" => [
+          :numismatic_monogram_ids,
         ]
       }
     end

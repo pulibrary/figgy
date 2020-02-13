@@ -55,8 +55,6 @@ module Numismatics
     attribute :depositor
     attribute :identifier
     attribute :replaces
-    attribute :rights_statement
-    attribute :rights_note, Valkyrie::Types::Set
     attribute :state
     attribute :thumbnail_id
     attribute :visibility

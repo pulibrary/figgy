@@ -38,7 +38,6 @@ module Numismatics
             :notes,
             :subjects,
             :member_of_collections,
-            :rendered_rights_statement,
             :replaces,
             :visibility
 
@@ -46,8 +45,6 @@ module Numismatics
     suppress_from_manifest Schema::IIIF.attributes,
                            :visibility,
                            :internal_resource,
-                           :rights_statement,
-                           :rendered_rights_statement,
                            :thumbnail_id
 
     delegate :coin_count,
