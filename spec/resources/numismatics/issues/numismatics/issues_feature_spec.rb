@@ -196,58 +196,6 @@ RSpec.feature "Numismatics::Issues" do
     end
   end
 
-  context "with an existing reference" do
-    let(:reference1) { FactoryBot.create_for_repository(:numismatic_reference) }
-    let(:reference2) { FactoryBot.create_for_repository(:numismatic_reference, title: "Test Reference2") }
-
-    before do
-      reference1
-      reference2
-    end
-
-    scenario "when users add citations for an Issue", js: true do
-      visit edit_numismatics_issue_path(numismatic_issue)
-
-      # find("#numismatic_citation input.vs__search").send_keys("Test Reference", :enter)
-
-      expect(find_all("#numismatic_citation + .nested-fields input")).to be_empty
-      find("#numismatic_citation + .links .add").click
-      expect(find_all("#numismatic_citation + .nested-fields input").length).to eq(2)
-
-      # find("#numismatic_citation + .nested-fields input.vs__search").send_keys("Test Reference2", :enter)
-      # click("Save")
-
-      # expect(page).to have_css ".attribute.citations", text: "Test Reference"
-      # expect(page).to have_css ".attribute.citations", text: "Test Reference2"
-    end
-  end
-
-  context "with an existing person" do
-    let(:person1) { FactoryBot.create_for_repository(:numismatic_person) }
-    let(:person2) { FactoryBot.create_for_repository(:numismatic_person, name1: "name2") }
-
-    before do
-      person1
-      person2
-    end
-
-    scenario "when users add artists for an Issue" do
-      visit edit_numismatics_issue_path(numismatic_issue)
-
-      # find("#numismatic_artist input.vs__search").send_keys("name1", :enter)
-
-      expect(find_all("#numismatic_artist + .nested-fields input")).to be_empty
-      find("#numismatic_artist + .links .add").click
-      expect(find_all("#numismatic_artist .nested-fields input").length).to eq(3)
-
-      # find("#numismatic_artist + .nested-fields input.vs__search").send_keys("name1", :enter)
-      # click("Save")
-
-      # expect(page).to have_css ".attribute.citations", text: "name1"
-      # expect(page).to have_css ".attribute.citations", text: "name2"
-    end
-  end
-
   context "with referenced Numismatics::Monogram resources" do
     let(:monogram1) do
       persister.save(resource: FactoryBot.create_for_repository(:numismatic_monogram))
