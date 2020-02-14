@@ -14,6 +14,12 @@ Release notes template:
 
 -->
 
+# 2020-02-14
+
+## Fixed
+
+ * Restored the dropdown form widget for the artist and citation fields
+
 # 2020-02-13
 
 ## Added
