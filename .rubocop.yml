@@ -67,6 +67,7 @@ Metrics/ClassLength:
     - 'app/change_set_persisters/change_set_persister.rb'
     - 'app/resources/ephemera_folders/ephemera_folder_change_set_base.rb'
     - 'app/resources/numismatics/issues/numismatics/issue_change_set.rb'
+    - 'app/resources/numismatics/issues/numismatics/issues_controller.rb'
     - 'app/change_sets/scanned_resource_change_set.rb'
     - 'app/models/ability.rb'
     - 'app/resources/ephemera_folders/ephemera_folder_decorator.rb'

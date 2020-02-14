@@ -10,32 +10,31 @@ module Numismatics
       storage_adapter: Valkyrie.config.storage_adapter
     )
 
+    before_action :load_facet_values, only: [:new, :edit]
+    before_action :load_holding_locations, only: [:new, :edit]
+    before_action :load_numismatic_collections, only: [:new, :edit]
     before_action :selected_issue, only: [:new, :edit, :destroy]
 
-    def parent_resource
-      @parent_resource ||=
-        if params[:id]
-          find_resource(params[:id]).decorate.parent
-        elsif params[:parent_id]
-          find_resource(params[:parent_id])
-        end
+    def facet_fields
+      [
+        :holding_location_ssim,
+        :numismatic_collection_ssim
+      ]
     end
 
-    def numismatic_issue
-      parent_resource.is_a?(Numismatics::Issue) ? parent_resource : nil
+    def after_delete_success
+      flash[:alert] = "Numismatics::Coin was deleted successfully"
+      redirect_to solr_document_path(@selected_issue)
     end
 
-    def selected_issue
-      @selected_issue = numismatic_issue&.id.to_s
+    def auth_token_param
+      params[:auth_token]
     end
 
-    def manifest
-      authorize! :manifest, resource
-      respond_to do |f|
-        f.json do
-          render json: ManifestBuilder.new(resource).build
-        end
-      end
+    def auto_ingest
+      authorize! :create, resource_class
+      IngestFolderJob.perform_later(directory: file_locator.folder_pathname.to_s, property: "id", id: resource.id.to_s)
+      redirect_to file_manager_numismatics_coin_path(params[:id])
     end
 
     # report whether there are files
@@ -48,10 +47,39 @@ module Numismatics
       end
     end
 
-    def auto_ingest
-      authorize! :create, resource_class
-      IngestFolderJob.perform_later(directory: file_locator.folder_pathname.to_s, property: "id", id: resource.id.to_s)
-      redirect_to file_manager_numismatics_coin_path(params[:id])
+    def load_facet_values
+      query = FindFacetValues.new(query_service: Valkyrie::MetadataAdapter.find(:index_solr).query_service)
+      @facet_values = query.find_facet_values(facet_fields: facet_fields)
+    end
+
+    def load_holding_locations
+      @holding_locations = @facet_values[:holding_location_ssim]
+    end
+
+    def load_numismatic_collections
+      @numismatic_collections = @facet_values[:numismatic_collection_ssim]
+    end
+
+    def numismatic_issue
+      parent_resource.is_a?(Numismatics::Issue) ? parent_resource : nil
+    end
+
+    def manifest
+      authorize! :manifest, resource
+      respond_to do |f|
+        f.json do
+          render json: ManifestBuilder.new(resource).build
+        end
+      end
+    end
+
+    def parent_resource
+      @parent_resource ||=
+        if params[:id]
+          find_resource(params[:id]).decorate.parent
+        elsif params[:parent_id]
+          find_resource(params[:parent_id])
+        end
     end
 
     def pdf
@@ -64,17 +92,12 @@ module Numismatics
       redirect_to download_path(redirect_path_args)
     end
 
+    def selected_issue
+      @selected_issue = numismatic_issue&.id.to_s
+    end
+
     def storage_adapter
       Valkyrie.config.storage_adapter
-    end
-
-    def auth_token_param
-      params[:auth_token]
-    end
-
-    def after_delete_success
-      flash[:alert] = "Numismatics::Coin was deleted successfully"
-      redirect_to solr_document_path(@selected_issue)
     end
 
     private

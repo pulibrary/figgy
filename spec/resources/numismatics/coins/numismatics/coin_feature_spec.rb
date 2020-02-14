@@ -60,7 +60,7 @@ RSpec.feature "Numismatics::Coins" do
     expect(page).to have_field "Find number"
     expect(page).to have_selector("label", text: "Find place")
     expect(page).to have_selector("label", text: "Firm")
-    expect(page).to have_field "Holding Location"
+    expect(page).to have_field "Holding location"
     expect(page).not_to have_css '.select[for="coin_holding_location"]', text: "Holding Location"
     expect(page).to have_field "Note"
     expect(page).to have_field "Number"
@@ -141,6 +141,47 @@ RSpec.feature "Numismatics::Coins" do
       expect(page).to have_css ".attribute.size", text: "test value"
       expect(page).to have_css ".attribute.technique", text: "test value"
       expect(page).to have_css ".attribute.weight", text: "test value"
+    end
+  end
+
+  describe "form editing", js: true do
+    let(:adapter) { Valkyrie::MetadataAdapter.find(:index_solr) }
+    let(:coin) do
+      FactoryBot.create_for_repository(:coin,
+                                       holding_location: "holding location",
+                                       numismatic_collection: "numismatic collection")
+    end
+
+    it "displays select boxes for some properties" do
+      visit new_numismatics_coin_path
+      expect(page).to have_css("#numismatics_coin_holding_location.select2", visible: false)
+      expect(page).to have_css("#numismatics_coin_numismatic_collection.select2", visible: false)
+    end
+
+    context "when Coins have been saved" do
+      let(:persisted) do
+        change_set = Numismatics::CoinChangeSet.new(coin)
+        change_set_persister.save(change_set: change_set)
+      end
+
+      it "permits users to select from existing object types" do
+        visit edit_numismatics_coin_path(id: persisted.id)
+
+        hidden = page.find("body #main form.edit_numismatics_coin input[type='hidden']#holding_location", visible: false)
+        expect(hidden["value"]).to eq("holding location")
+        hidden = page.find("body #main form.edit_numismatics_coin input[type='hidden']#numismatic_collection", visible: false)
+        expect(hidden["value"]).to eq("numismatic collection")
+
+        expect(page).to have_selector("option", text: "holding location")
+        expect(page).to have_selector("option", text: "numismatic collection")
+      end
+
+      it "persists already saved denominations" do
+        visit edit_numismatics_coin_path(id: persisted.id)
+
+        hidden = page.find("body #main form.edit_numismatics_coin input[type='hidden']#numismatic_collection", visible: false)
+        expect(hidden["value"]).to eq("numismatic collection")
+      end
     end
   end
 end
