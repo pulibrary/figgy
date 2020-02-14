@@ -59,6 +59,12 @@ module Numismatics
       true
     end
 
+    # Determines whether or not the "Save and Duplicate Metadata" is supported for this Resource
+    # @return [Boolean]
+    def self.supports_save_and_duplicate?
+      true
+    end
+
     # Placeholder title.
     # TODO: Add more descriptive title when we have more information.
     def title

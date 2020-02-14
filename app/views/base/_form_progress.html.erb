@@ -18,19 +18,9 @@
   </div>
   <div class="panel-footer text-center panel-save-controls">
     <%= f.submit class: 'btn btn-primary save' %>
-    <% if f.object.resource.is_a?(EphemeraFolder) && params[:controller] == "ephemera_folders" %>
-      <%= f.submit "Save and Duplicate Metadata", class: 'btn btn-primary save' %>
-
-    <% end %>
-
-    <% if f.object.resource.is_a?(Numismatics::Issue) && params[:controller] == "numismatics/issues" %>
+    <% if support_save_and_duplicate?(resource: f.object.resource)  %>
       <%= f.submit "Save and Duplicate Metadata", class: 'btn btn-primary save' %>
     <% end %>
-
-    <% if f.object.resource.is_a?(Numismatics::Coin) && params[:controller] == "numismatics/coins" %>
-      <%= f.submit "Save and Duplicate Metadata", class: 'btn btn-primary save' %>
-    <% end %>
-
   </div>
   <% if f.object.resource.is_a?(ScannedResource) %>
     <div class="panel-footer text-center">
