@@ -125,7 +125,7 @@ module Numismatics
           :numismatic_subject
         ],
         "Monograms" => [
-          :numismatic_monogram_ids,
+          :numismatic_monogram_ids
         ]
       }
     end

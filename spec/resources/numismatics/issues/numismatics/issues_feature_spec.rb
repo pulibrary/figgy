@@ -26,9 +26,9 @@ RSpec.feature "Numismatics::Issues" do
   scenario "creating a new resource" do
     visit new_numismatics_issue_path
 
-    expect(page).to have_css '.select[for="numismatics_issue_rights_statement"]', text: "Rights Statement"
-    expect(page).to have_field "Rights Note"
-    expect(page).to have_css '.select[for="numismatics_issue_member_of_collection_ids"]', text: "Collections"
+    expect(page).not_to have_css '.select[for="numismatics_issue_rights_statement"]', text: "Rights Statement"
+    expect(page).not_to have_field "Rights Note"
+    expect(page).not_to have_css '.select[for="numismatics_issue_member_of_collection_ids"]', text: "Collections"
     expect(page).to have_field "Color"
     expect(page).to have_field "Date of object"
     expect(page).to have_field "Earliest date" # For the date range sequence
@@ -67,7 +67,7 @@ RSpec.feature "Numismatics::Issues" do
     expect(page).to have_field "Shape"
     expect(page).to have_field "Side"
     expect(page).to have_field "Signature"
-    expect(page).to have_field "State"
+    expect(page).not_to have_field "State"
     expect(page).to have_field "Subject"
     expect(page).to have_field "Type"
     expect(page).to have_field "Workshop"
@@ -92,7 +92,6 @@ RSpec.feature "Numismatics::Issues" do
     let(:numismatic_issue) do
       FactoryBot.create_for_repository(
         :numismatic_issue,
-        rights_statement: RightsStatements.copyright_not_evaluated.to_s,
         member_of_collection_ids: [collection.id],
         numismatic_place_id: numismatic_place.id,
         numismatic_artist: numismatic_artist,
@@ -188,7 +187,7 @@ RSpec.feature "Numismatics::Issues" do
 
     scenario "viewing a resource" do
       visit solr_document_path numismatic_issue
-      expect(page).to have_css ".attribute.rendered_rights_statement", text: "Copyright Not Evaluated"
+      expect(page).not_to have_css ".attribute.rendered_rights_statement", text: "Copyright Not Evaluated"
       expect(page).to have_css ".attribute.visibility", text: "open"
       expect(page).to have_css ".attribute.member_of_collections", text: "Title"
       expect(page).to have_css ".attribute.artists", text: "name1 name2, artist signature"
