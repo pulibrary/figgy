@@ -4,6 +4,7 @@
     <% if label.eql?("Monograms")%>
       <div class="panel-heading">
         <a data-toggle = "collapse" href = "#collapseMonograms"><%= label %></a>
+        <%= link_to 'New Monogram', new_numismatics_monogram_path, class: 'new-link', target: '_blank'%>
       </div>
       <div id = "collapseMonograms" class = "panel-collapse collapse">
          <div class = "panel-body">
