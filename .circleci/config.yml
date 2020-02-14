@@ -9,12 +9,12 @@ jobs:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
           FIGGY_DB_USERNAME: figgy
-          FIGGY_DB_PASSWORD:  "secret"
+          FIGGY_DB_PASSWORD: ""
       - image: postgres:10.6-alpine
         environment:
           POSTGRES_USER: figgy
           POSTGRES_DB: figgy_test
-          POSTGRES_PASSWORD: "secret"
+          POSTGRES_HOST_AUTH_METHOD: trust
     steps:
       - checkout
       - run: sudo sh bin/ci_mediainfo_install.sh
@@ -78,13 +78,13 @@ jobs:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
           FIGGY_DB_USERNAME: figgy
-          FIGGY_DB_PASSWORD:  "secret"
+          FIGGY_DB_PASSWORD: ""
           MEDIAINFO_PATH: /usr/bin/mediainfo
       - image: postgres:9.6-alpine
         environment:
           POSTGRES_USER: figgy
           POSTGRES_DB: figgy_test
-          POSTGRES_PASSWORD: "secret"
+          POSTGRES_HOST_AUTH_METHOD: trust
       - image: solr:7.7-alpine
         command: bin/solr -cloud -noprompt -f -p 8984
     parallelism: 4
@@ -180,7 +180,7 @@ jobs:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
           FIGGY_DB_USERNAME: figgy
-          FIGGY_DB_PASSWORD:  "secret"
+          FIGGY_DB_PASSWORD: ""
     steps:
       - attach_workspace:
           at: '~/figgy'
@@ -218,7 +218,7 @@ jobs:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
           FIGGY_DB_USERNAME: figgy
-          FIGGY_DB_PASSWORD:  "secret"
+          FIGGY_DB_PASSWORD: ""
     steps:
       - checkout
       - run: bin/ci_check_release_notes.sh
