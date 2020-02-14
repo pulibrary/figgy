@@ -1,0 +1,21 @@
+<div class="panel panel-default">
+  <% if label.present? %>
+    <%# when page loads the monograms panel stays collapsed %>
+    <% if label.eql?("Monograms")%>
+      <div class="panel-heading">
+        <a data-toggle = "collapse" href = "#collapseMonograms"><%= label %></a>
+      </div>
+      <div id = "collapseMonograms" class = "panel-collapse collapse">
+         <div class = "panel-body">
+           <%= render partial: 'form_metadata_inner', locals: { fields: fields, f: f } %>
+         </div>
+      </div>
+    <% else %>
+      <div class="panel-heading"><%= label %></div>
+      <%= render partial: 'form_metadata_inner', locals: { fields: fields, f: f } %>
+    <% end %>
+  <% else %>
+    <div class="panel-heading">Metadata</div>
+    <%= render partial: 'form_metadata_inner', locals: { fields: fields, f: f } %>
+  <% end %>
+</div>
