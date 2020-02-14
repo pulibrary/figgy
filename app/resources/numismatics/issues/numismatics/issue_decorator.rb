@@ -108,21 +108,6 @@ module Numismatics
       decorated_numismatic_place&.title
     end
 
-    def rendered_rights_statement
-      rights_statement.map do |rights_statement|
-        term = ControlledVocabulary.for(:rights_statement).find(rights_statement)
-        next unless term
-        h.link_to(term.label, term.value) +
-          h.content_tag("br") +
-          h.content_tag("p") do
-            term.definition.html_safe
-          end +
-          h.content_tag("p") do
-            I18n.t("works.show.attributes.rights_statement.boilerplate").html_safe
-          end
-      end
-    end
-
     def reverse_attributes
       reverse_attribute.map { |a| a.decorate.title }
     end
