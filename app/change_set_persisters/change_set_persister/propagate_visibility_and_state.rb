@@ -18,6 +18,7 @@ class ChangeSetPersister
     # Execute the handler
     def run
       return if new_collection_record
+      return if numismatics_issue
       members.each do |member|
         resource_change_set = DynamicChangeSet.new(member)
         resource_change_set = propagate_visibility(resource_change_set)
@@ -105,6 +106,10 @@ class ChangeSetPersister
       # it doesn't have members yet if it is just now being created
       def new_collection_record
         change_set.model.is_a?(Collection) && change_set.model.id.nil?
+      end
+
+      def numismatics_issue
+        change_set.model.is_a?(Numismatics::Issue)
       end
   end
 end

@@ -26,7 +26,7 @@ RSpec.describe Numismatics::IssueChangeSet do
 
   describe "#state" do
     it "pre-populates" do
-      expect(change_set.state).to eq "draft"
+      expect(change_set.state).to eq "complete"
     end
 
     context "when an issue has coin members" do
