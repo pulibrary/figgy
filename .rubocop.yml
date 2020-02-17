@@ -109,6 +109,7 @@ Metrics/ClassLength:
     - 'app/services/preserver/importer.rb'
     - 'app/resources/collections/collections_controller.rb'
     - 'app/services/marc_record_enhancer.rb'
+    - 'app/resources/numismatics/coins/numismatics/coins_controller.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/helpers/application_helper.rb'
