@@ -218,6 +218,13 @@ module ApplicationHelper
     link_to label, link_url, opts
   end
 
+  # Determine whether or not "Save and Duplicate Metadata" should be offered for a given Resource
+  # @param resource [Resource]
+  # @return [Boolean]
+  def support_save_and_duplicate?(resource:)
+    resource.class.supports_save_and_duplicate? && params[:controller] == resource.class.name.underscore.pluralize
+  end
+
   private
 
     # Retrieve the current search query parameters from the HTTP request

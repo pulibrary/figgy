@@ -133,6 +133,59 @@ RSpec.feature "Numismatics::Issues" do
       )
     end
 
+    scenario "users can save a new issue" do
+      visit new_numismatics_issue_path
+
+      page.fill_in "numismatics_issue_era", with: "test era"
+      page.select "Copyright Not Evaluated", from: "Rights Statement"
+
+      page.click_on "Save"
+
+      expect(page).to have_css ".attribute.era", text: "test era"
+    end
+
+    scenario "users can save a new issue and create another" do
+      visit new_numismatics_issue_path
+
+      page.fill_in "numismatics_issue_era", with: "test era"
+      page.select "Copyright Not Evaluated", from: "Rights Statement"
+
+      page.click_on "Save and Duplicate Metadata"
+
+      expect(page).to have_content "Issue 2 Saved, Creating Another..."
+      expect(page).to have_field "numismatics_issue_era", with: "test era"
+    end
+
+    context "when editing an existing issue" do
+      let(:numismatic_issue) do
+        res = FactoryBot.create_for_repository(:numismatic_issue, era: "test era")
+        persister.save(resource: res)
+      end
+
+      before do
+        visit edit_numismatics_issue_path(id: numismatic_issue.id)
+      end
+
+      scenario "users can update any given issue" do
+        page.fill_in "numismatics_issue_era", with: "test era 2"
+        page.select "Copyright Not Evaluated", from: "Rights Statement"
+
+        page.click_on "Save"
+
+        expect(page).to have_css ".attribute.era", text: "test era 2"
+      end
+
+      scenario "users can create a new issue with duplicated metadata" do
+        page.fill_in "numismatics_issue_era", with: "test era 2"
+        page.select "Copyright Not Evaluated", from: "Rights Statement"
+
+        page.click_on "Save and Duplicate Metadata"
+
+        expect(page).to have_content "Issue 1 Saved, Creating Another..."
+        expect(page).to have_field "numismatics_issue_era", with: "test era 2"
+      end
+    end
+
     scenario "viewing a resource" do
       visit solr_document_path numismatic_issue
       expect(page).to have_css ".attribute.rendered_rights_statement", text: "Copyright Not Evaluated"

@@ -73,6 +73,12 @@ module Numismatics
       true
     end
 
+    # Determines whether or not the "Save and Duplicate Metadata" is supported for this Resource
+    # @return [Boolean]
+    def self.supports_save_and_duplicate?
+      true
+    end
+
     def title
       ["Issue: #{issue_number}"]
     end
