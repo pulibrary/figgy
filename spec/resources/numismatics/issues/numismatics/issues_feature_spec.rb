@@ -71,9 +71,9 @@ RSpec.feature "Numismatics::Issues" do
     expect(page).to have_field "Subject"
     expect(page).to have_field "Type"
     expect(page).to have_field "Workshop"
-    expect(page).to have_css ".new-link", text: "New Place"
-    expect(page).to have_css ".new-link", text: "New Person"
-    expect(page).to have_css ".new-link", text: "New Monogram"
+    expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Place"
+    expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Person"
+    expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Monogram"
 
     fill_in "Era", with: "test era"
     click_button "Save"
@@ -295,9 +295,9 @@ RSpec.feature "Numismatics::Issues" do
       expect(last_attribute["id"]).to eq(monogram1.id.to_s)
       expect(last_attribute["title"]).to eq("Test Monogram")
       expect(last_attribute["attached"]).to be false
-      expect(page).to have_css ".new-link", text: "New Place"
-      expect(page).to have_css ".new-link", text: "New Person"
-      expect(page).to have_css ".new-link", text: "New Monogram"
+      expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Place"
+      expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Person"
+      expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Monogram"
     end
   end
 
