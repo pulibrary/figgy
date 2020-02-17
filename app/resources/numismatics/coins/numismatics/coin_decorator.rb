@@ -39,7 +39,7 @@ module Numismatics
     delegate :id, :label, to: :accession, prefix: true
 
     def call_number
-      "Numismatics::Coin #{coin_number}"
+      "Coin #{coin_number}"
     end
 
     def citations

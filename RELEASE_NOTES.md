@@ -14,6 +14,12 @@ Release notes template:
 
 -->
 
+# 2020-02-17
+
+## Fixed
+
+ * Fixed title and location for Coin documents ingested into Orangelight
+
 # 2020-02-14
 
 ## Added
