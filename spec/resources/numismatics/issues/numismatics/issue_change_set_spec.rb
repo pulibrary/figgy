@@ -32,19 +32,16 @@ RSpec.describe Numismatics::IssueChangeSet do
     context "when an issue has coin members" do
       subject(:change_set) { described_class.new(issue) }
       let(:coin) { FactoryBot.create_for_repository(:coin) }
-      let(:issue) { FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id]) }
+      let(:issue) { FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id], state: ["draft"]) }
       let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
       let(:storage_adapter) { Valkyrie.config.storage_adapter }
       let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
 
-      before do
-        stub_ezid(shoulder: "99999/fk4", blade: "123456")
-      end
-      it "propagates the state to member resources" do
+      it "does not propagate the state to member resources" do
         change_set.state = "complete"
         persisted = change_set_persister.save(change_set: change_set)
         coins = persisted.decorate.decorated_coins
-        expect(coins.first.state).to eq "complete"
+        expect(coins.first.state).to eq "draft"
       end
     end
   end

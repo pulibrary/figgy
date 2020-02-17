@@ -1205,23 +1205,6 @@ RSpec.describe ChangeSetPersister do
         expect(rabbit_connection).to have_received(:publish).twice.with(expected_result.to_json)
       end
     end
-    context "with a numismatic issue and coin member" do
-      let(:issue) { FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id], state: "draft") }
-      let(:coin) { FactoryBot.create_for_repository(:coin, state: "draft") }
-
-      it "does not propagate the workflow state" do
-        members = Wayfinder.for(issue).members
-        expect(members.first.state).to eq ["draft"]
-
-        change_set = DynamicChangeSet.new(issue)
-        change_set.validate(state: "complete")
-        output = change_set_persister.save(change_set: change_set)
-        expect(output.identifier.first).to eq "ark:/#{shoulder}#{blade}"
-
-        members = Wayfinder.for(output).members
-        expect(members.first.state).to eq ["draft"]
-      end
-    end
   end
 
   describe "appending" do
