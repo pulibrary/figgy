@@ -85,7 +85,7 @@ export default {
       this.search(loading, search, this)
     },
     search: _.debounce((loading, query, vm) => {
-      vm.query = `${query}*`
+      vm.query = `*${query}*`
       fetch(
         vm.searchURL
       ).then(res => {
