@@ -13,14 +13,15 @@ Release notes template:
 ## Removed
 
 -->
-# 2020-02-14
+# 2020-02-18
 
 ## Changed
 
 * Move the monograms to the bottom of the page. Keep the Monograms panel collapsed when the page loads.
-* Remove Rights and Notes panel from the Numismatics issue form
+* Remove Rights and Notes panel from the Numismatics issue and coin form
 * Move the Save, Cancel buttons to the bottom of the form
 * Remove Progress from sidebar from the Numismatics issue form.
+* Add a button in the form to open a new tab to create New Person, New Place, New Firm
 
 # 2020-02-18
 

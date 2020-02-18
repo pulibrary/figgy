@@ -2,10 +2,12 @@
   <div class="row">
     <div class="col-md-6">
       <%= f.label :person_id, required: f.object.required?(:person_id) %>
+      <%= link_to 'New Person', new_numismatics_person_path, class: 'btn btn-sm btn-primary new-link', target: '_blank'%>
       <%= f.hidden_field :person_id, ajax_select_type: "Person"%>
     </div>
     <div class="col-md-6">
       <%= f.label :firm_id, required: f.object.required?(:firm_id) %>
+      <%= link_to 'New Firm', new_numismatics_firm_path, class: 'btn btn-sm btn-primary new-link', target: '_blank'%>
       <%= f.hidden_field :firm_id, ajax_select_type: "Firm"%>
     </div>
   </div>
