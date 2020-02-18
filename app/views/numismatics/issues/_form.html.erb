@@ -1,0 +1,18 @@
+<h2><%= form_title(params) %></h2>
+<%= simple_form_for @change_set do |f| %>
+  <div class="row">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12" role="main">
+        <div class="form-panel-content" id="metadata">
+          <%= yield "metadata_tab".to_sym if content_for? "metadata_tab".to_sym %>
+          <%= render "form_metadata", f: f %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12">
+        <%= render 'form_numismatics_buttons', f: f %>
+      </div>
+    </div>
+  </div>
+<% end %>

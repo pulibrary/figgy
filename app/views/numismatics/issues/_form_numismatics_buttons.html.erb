@@ -1,4 +1,7 @@
 <%= f.submit class: 'btn btn-primary btn-save-numismatics' %>  
+<% if support_save_and_duplicate?(resource: f.object.resource)  %>
+  <%= f.submit "Save and Duplicate Metadata", class: 'btn btn-primary btn-save-numismatics' %>
+<% end %>
 <% if params[:action] == "edit" %>
   <%# send user back to object from edit, back to home from new %>
   <%= link_to t(:'helpers.action.cancel'),

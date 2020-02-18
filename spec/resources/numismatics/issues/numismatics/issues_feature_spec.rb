@@ -139,7 +139,6 @@ RSpec.feature "Numismatics::Issues" do
       visit new_numismatics_issue_path
 
       page.fill_in "numismatics_issue_era", with: "test era"
-      page.select "Copyright Not Evaluated", from: "Rights Statement"
 
       page.click_on "Save"
 
@@ -150,7 +149,6 @@ RSpec.feature "Numismatics::Issues" do
       visit new_numismatics_issue_path
 
       page.fill_in "numismatics_issue_era", with: "test era"
-      page.select "Copyright Not Evaluated", from: "Rights Statement"
 
       page.click_on "Save and Duplicate Metadata"
 
@@ -170,7 +168,6 @@ RSpec.feature "Numismatics::Issues" do
 
       scenario "users can update any given issue" do
         page.fill_in "numismatics_issue_era", with: "test era 2"
-        page.select "Copyright Not Evaluated", from: "Rights Statement"
 
         page.click_on "Save"
 
@@ -179,7 +176,6 @@ RSpec.feature "Numismatics::Issues" do
 
       scenario "users can create a new issue with duplicated metadata" do
         page.fill_in "numismatics_issue_era", with: "test era 2"
-        page.select "Copyright Not Evaluated", from: "Rights Statement"
 
         page.click_on "Save and Duplicate Metadata"
 
