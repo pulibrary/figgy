@@ -35,7 +35,6 @@ module Numismatics
     attribute :weight
     attribute :find_number
     attribute :numismatic_collection
-    attribute :rights_statement
 
     # administrative metadata
     attribute :depositor
