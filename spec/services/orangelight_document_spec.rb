@@ -92,21 +92,21 @@ describe OrangelightDocument do
         output = MultiJson.load(builder.to_json, symbolize_keys: true)
         holding = JSON.parse(output[:holdings_1display]).first.last
         expect(output[:id]).to eq coin.decorate.orangelight_id
-        expect(output[:title_display]).to eq "Numismatics::Coin: #{coin.coin_number}"
+        expect(output[:title_display]).to eq "Coin: #{coin.coin_number}"
         expect(output[:pub_created_display]).to eq "name1 name2 epithet (1868 - 1963), 1/2 Penny, city"
-        expect(output[:call_number_display]).to eq ["Numismatics::Coin #{coin.coin_number}"]
-        expect(output[:call_number_browse_s]).to eq ["Numismatics::Coin #{coin.coin_number}"]
+        expect(output[:call_number_display]).to eq ["Coin #{coin.coin_number}"]
+        expect(output[:call_number_browse_s]).to eq ["Coin #{coin.coin_number}"]
         expect(output[:access_facet]).to eq ["Online", "In the Library"]
-        expect(output[:location]).to eq ["Rare Books and Special Collections"]
-        expect(output[:location_display]).to eq ["Rare Books and Special Collections - Numismatics Collection"]
-        expect(output[:format]).to eq ["Numismatics::Coin"]
+        expect(output[:location]).to eq ["Special Collections"]
+        expect(output[:location_display]).to eq ["Special Collections - Numismatics Collection"]
+        expect(output[:format]).to eq ["Coin"]
         expect(output[:advanced_location_s]).to eq ["num"]
         expect(output[:location_code_s]).to eq ["num"]
-        expect(holding["call_number"]).to eq "Numismatics::Coin #{coin.coin_number}"
-        expect(holding["call_number_browse"]).to eq "Numismatics::Coin #{coin.coin_number}"
+        expect(holding["call_number"]).to eq "Coin #{coin.coin_number}"
+        expect(holding["call_number_browse"]).to eq "Coin #{coin.coin_number}"
         expect(holding["location_code"]).to eq "num"
-        expect(holding["location"]).to eq "Rare Books and Special Collections - Numismatics Collection"
-        expect(holding["library"]).to eq "Rare Books and Special Collections"
+        expect(holding["location"]).to eq "Special Collections - Numismatics Collection"
+        expect(holding["library"]).to eq "Special Collections"
         expect(output[:counter_stamp_s]).to eq ["two small counter-stamps visible as small circles on reverse, without known parallel"]
         expect(output[:analysis_s]).to eq ["holed at 12 o'clock, 16.73 grams"]
         expect(output[:notes_display]).to eq ["Abraham Usher| John Field| Charles Meredith.", "Black and red ink.", "Visible flecks of mica."]
