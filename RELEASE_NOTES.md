@@ -22,6 +22,14 @@ Release notes template:
 
 # 2020-02-14
 
+## Changed
+
+ * Sets default state of Numismatics Issues to "complete".
+ * Prevents propagation of Issue state to Coin members.
+ * Stops minting ARKs for Issues.
+
+# 2020-02-14
+
 ## Added
 
  * Integrated the "Save and Duplicate Metadata" feature for Numismatic Issues and

@@ -60,6 +60,11 @@ module Numismatics
              :members,
              to: :wayfinder
 
+    # Don't mink ARKs for Numismatics::Issues
+    def ark_mintable_state?
+      false
+    end
+
     def artists
       numismatic_artist.map { |a| a.decorate.title }
     end
