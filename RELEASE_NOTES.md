@@ -14,6 +14,13 @@ Release notes template:
 
 -->
 
+# 2020-02-18
+
+## Changed
+
+ * Allows for unicode characters in ajax search
+ * Improves search and formatting in numismatics search components
+
 # 2020-02-17
 
 ## Fixed

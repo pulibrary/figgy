@@ -47,7 +47,7 @@ export default {
   },
   computed: {
     searchURL: function () {
-      return `${this.searchURLBase}/?f%5Bhuman_readable_type_ssim%5D%5B%5D=${this.typeName}&all_models=true&q=${escape(this.query)}`
+      return `${this.searchURLBase}/?f%5Bhuman_readable_type_ssim%5D%5B%5D=${this.typeName}&all_models=true&q=${this.query}`
     }
   },
   created: function () {
@@ -85,7 +85,7 @@ export default {
       this.search(loading, search, this)
     },
     search: _.debounce((loading, query, vm) => {
-      vm.query = `${query}*`
+      vm.query = `*${query}*`
       fetch(
         vm.searchURL
       ).then(res => {
@@ -97,21 +97,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  img {
-    height: auto;
-    max-width: 2.5rem;
-    margin-right: 1rem;
-  }
-
   .d-center {
     display: flex;
     align-items: center;
-  }
-
-  .selected img {
-    width: auto;
-    max-height: 23px;
-    margin-right: 0.5rem;
   }
 
   .v-select .dropdown li {
