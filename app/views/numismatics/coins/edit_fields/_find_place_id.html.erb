@@ -1,2 +1,4 @@
-<%= f.label :find_place_id, required: f.object.required?(:find_place_id) %>
-<%= f.hidden_field :find_place_id, ajax_select_type: "Place" %>
+<div class="form-group string optional">
+  <%= f.label :find_place_id, required: f.object.required?(:find_place_id) %>
+  <%= f.hidden_field :find_place_id, ajax_select_type: "Place" %>
+</div>

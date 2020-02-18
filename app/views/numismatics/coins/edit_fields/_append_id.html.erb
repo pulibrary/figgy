@@ -1,2 +1,4 @@
-<%= f.label :append_id, label: "Issue", required: f.object.required?(:append_id) %>
-<%= f.hidden_field :append_id, ajax_select_type: "Issue", ajax_select_initial_id: @selected_issue %>
+<div class="form-group string optional">
+  <%= f.label :append_id, label: "Issue", required: f.object.required?(:append_id) %>
+  <%= f.hidden_field :append_id, ajax_select_type: "Issue", ajax_select_initial_id: @selected_issue %>
+</div>

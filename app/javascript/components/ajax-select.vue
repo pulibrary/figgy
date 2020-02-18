@@ -97,21 +97,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  img {
-    height: auto;
-    max-width: 2.5rem;
-    margin-right: 1rem;
-  }
-
   .d-center {
     display: flex;
     align-items: center;
-  }
-
-  .selected img {
-    width: auto;
-    max-height: 23px;
-    margin-right: 0.5rem;
   }
 
   .v-select .dropdown li {
