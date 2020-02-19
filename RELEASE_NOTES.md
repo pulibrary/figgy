@@ -14,6 +14,12 @@ Release notes template:
 
 -->
 
+# 2020-02-19
+
+## Added
+
+ * Logs users out of CAS when logging out of Figgy
+
 # 2020-02-18
 
 ## Changed

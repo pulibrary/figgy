@@ -34,5 +34,8 @@ module Figgy
     config.autoload_paths += Dir[Rails.root.join("app", "resources", "*")]
     config.autoload_paths += Dir[Rails.root.join("app", "resources", "numismatics", "*")]
     config.active_record.schema_format = :sql
+
+    # Redirect to CAS logout after signing out of Figgy
+    config.x.after_sign_out_url = "https://fed.princeton.edu/cas/logout"
   end
 end

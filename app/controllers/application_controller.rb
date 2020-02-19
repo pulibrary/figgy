@@ -11,6 +11,10 @@ class ApplicationController < ActionController::Base
   before_action :notify_read_only
   before_action :store_user_location!, if: :storable_location?
 
+  def after_sign_out_path_for(_resource)
+    Rails.configuration.x.after_sign_out_url
+  end
+
   def current_ability
     Ability.new(current_user, ip_address: request.remote_ip)
   end
