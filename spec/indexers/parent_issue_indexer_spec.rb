@@ -29,7 +29,8 @@ RSpec.describe ParentIssueIndexer do
         expect(indexer.to_solr).to eq(
           "issue_denomination_tesim" => ["$1"],
           "issue_downloadable_tesim" => ["public"],
-          "issue_issue_number_tesim" => ["1"]
+          "issue_issue_number_tesim" => ["1"],
+          "issue_rights_statement_tesim" => [RightsStatements.no_known_copyright]
         )
       end
     end

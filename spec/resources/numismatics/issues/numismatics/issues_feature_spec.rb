@@ -95,6 +95,7 @@ RSpec.feature "Numismatics::Issues" do
     let(:numismatic_issue) do
       FactoryBot.create_for_repository(
         :numismatic_issue,
+        rights_statement: RightsStatements.copyright_not_evaluated.to_s,
         member_of_collection_ids: [collection.id],
         numismatic_place_id: numismatic_place.id,
         numismatic_artist: numismatic_artist,
@@ -186,7 +187,7 @@ RSpec.feature "Numismatics::Issues" do
 
     scenario "viewing a resource" do
       visit solr_document_path numismatic_issue
-      expect(page).not_to have_css ".attribute.rendered_rights_statement", text: "Copyright Not Evaluated"
+      expect(page).to have_css ".attribute.rendered_rights_statement", text: "Copyright Not Evaluated"
       expect(page).to have_css ".attribute.visibility", text: "open"
       expect(page).to have_css ".attribute.member_of_collections", text: "Title"
       expect(page).to have_css ".attribute.artists", text: "name1 name2, artist signature"

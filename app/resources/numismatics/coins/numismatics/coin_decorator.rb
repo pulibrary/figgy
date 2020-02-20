@@ -11,6 +11,7 @@ module Numismatics
             :analysis,
             :public_note,
             :private_note,
+            :rights_statement,
             :find_place,
             :find_number,
             :find_date,

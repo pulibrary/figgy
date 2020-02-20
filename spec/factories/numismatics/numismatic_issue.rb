@@ -2,6 +2,7 @@
 FactoryBot.define do
   factory :numismatic_issue, class: Numismatics::Issue do
     denomination ["$1"]
+    rights_statement RightsStatements.no_known_copyright
     read_groups "public"
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)

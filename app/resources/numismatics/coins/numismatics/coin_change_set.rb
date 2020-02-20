@@ -28,6 +28,7 @@ module Numismatics
     property :replaces, multiple: true, required: false, default: []
     property :depositor, multiple: false, required: false
     property :read_groups, multiple: true, required: false
+    property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
     property :append_id, virtual: true, multiple: false, required: true
 
     # Resources linked by reference
@@ -55,6 +56,7 @@ module Numismatics
     validates_with StateValidator
     validates_with ViewingDirectionValidator
     validates_with ViewingHintValidator
+    validates_with RightsStatementValidator
     validates :visibility, presence: true
 
     def primary_terms

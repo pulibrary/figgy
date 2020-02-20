@@ -141,7 +141,7 @@ RSpec.feature "Numismatics::Coins" do
       expect(page).to have_css ".attribute.size", text: "test value"
       expect(page).to have_css ".attribute.technique", text: "test value"
       expect(page).to have_css ".attribute.weight", text: "test value"
-      expect(page).not_to have_css ".attribute.rights_statement", text: "test value"
+      expect(page).to have_css ".attribute.rights_statement", text: RightsStatements.no_known_copyright
     end
   end
 

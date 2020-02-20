@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :coin, class: Numismatics::Coin do
+    rights_statement RightsStatements.no_known_copyright
     read_groups "public"
     to_create do |instance|
       Valkyrie::MetadataAdapter.find(:indexing_persister).persister.save(resource: instance)

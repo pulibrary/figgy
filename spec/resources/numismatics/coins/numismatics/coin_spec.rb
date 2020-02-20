@@ -2,10 +2,14 @@
 require "rails_helper"
 
 RSpec.describe Numismatics::Coin do
-  let(:coin) { FactoryBot.create_for_repository(:coin, weight: 5, identifier: "ark:/99999/fk4") }
+  let(:coin) { FactoryBot.create_for_repository(:coin, weight: 5, identifier: "ark:/99999/fk4", rights_statement: "No Known Copyright") }
 
   it "has properties" do
     expect(coin.weight).to eq([5])
+  end
+
+  it "has rights_statement" do
+    expect(coin.rights_statement).not_to be nil
   end
 
   it "has ordered member_ids" do
