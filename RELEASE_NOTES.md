@@ -23,6 +23,12 @@ Release notes template:
 * Remove Progress from sidebar from the Numismatics issue form.
 * Add a button in the form to open a new tab to create New Person, New Place, New Firm
 
+# 2020-02-20
+
+## Changed
+
+* Electronic locations are now imported from bib record 856 fields.
+
 # 2020-02-19
 
 ## Added

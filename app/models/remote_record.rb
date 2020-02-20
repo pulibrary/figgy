@@ -101,6 +101,20 @@ class RemoteRecord
       end
     end
 
+    class LabeledURIBuilder < ::Valkyrie::ValueMapper
+      JSONLDBuilder.register(self)
+      def self.handles?(value)
+        value.is_a?(Hash) && value[:label] && value[:@id]
+      end
+
+      def result
+        ::LabeledURI.new(
+          uri: value[:@id],
+          label: value[:label]
+        )
+      end
+    end
+
     class HashValue < ::Valkyrie::ValueMapper
       JSONLDBuilder.register(self)
       def self.handles?(value)
