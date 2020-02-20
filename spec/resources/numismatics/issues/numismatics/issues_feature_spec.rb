@@ -26,9 +26,9 @@ RSpec.feature "Numismatics::Issues" do
   scenario "creating a new resource" do
     visit new_numismatics_issue_path
 
-    expect(page).to have_css '.select[for="numismatics_issue_rights_statement"]', text: "Rights Statement"
-    expect(page).to have_field "Rights Note"
-    expect(page).to have_css '.select[for="numismatics_issue_member_of_collection_ids"]', text: "Collections"
+    expect(page).not_to have_css '.select[for="numismatics_issue_rights_statement"]', text: "Rights Statement"
+    expect(page).not_to have_field "Rights Note"
+    expect(page).not_to have_css '.select[for="numismatics_issue_member_of_collection_ids"]', text: "Collections"
     expect(page).to have_field "Color"
     expect(page).to have_field "Date of object"
     expect(page).to have_field "Earliest date" # For the date range sequence
@@ -67,10 +67,13 @@ RSpec.feature "Numismatics::Issues" do
     expect(page).to have_field "Shape"
     expect(page).to have_field "Side"
     expect(page).to have_field "Signature"
-    expect(page).to have_field "State"
+    expect(page).not_to have_field "State"
     expect(page).to have_field "Subject"
     expect(page).to have_field "Type"
     expect(page).to have_field "Workshop"
+    expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Place"
+    expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Person"
+    expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Monogram"
 
     fill_in "Era", with: "test era"
     click_button "Save"
@@ -137,7 +140,6 @@ RSpec.feature "Numismatics::Issues" do
       visit new_numismatics_issue_path
 
       page.fill_in "numismatics_issue_era", with: "test era"
-      page.select "Copyright Not Evaluated", from: "Rights Statement"
 
       page.click_on "Save"
 
@@ -148,7 +150,6 @@ RSpec.feature "Numismatics::Issues" do
       visit new_numismatics_issue_path
 
       page.fill_in "numismatics_issue_era", with: "test era"
-      page.select "Copyright Not Evaluated", from: "Rights Statement"
 
       page.click_on "Save and Duplicate Metadata"
 
@@ -168,7 +169,6 @@ RSpec.feature "Numismatics::Issues" do
 
       scenario "users can update any given issue" do
         page.fill_in "numismatics_issue_era", with: "test era 2"
-        page.select "Copyright Not Evaluated", from: "Rights Statement"
 
         page.click_on "Save"
 
@@ -177,7 +177,6 @@ RSpec.feature "Numismatics::Issues" do
 
       scenario "users can create a new issue with duplicated metadata" do
         page.fill_in "numismatics_issue_era", with: "test era 2"
-        page.select "Copyright Not Evaluated", from: "Rights Statement"
 
         page.click_on "Save and Duplicate Metadata"
 
@@ -293,6 +292,9 @@ RSpec.feature "Numismatics::Issues" do
       expect(last_attribute["id"]).to eq(monogram1.id.to_s)
       expect(last_attribute["title"]).to eq("Test Monogram")
       expect(last_attribute["attached"]).to be false
+      expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Place"
+      expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Person"
+      expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Monogram"
     end
   end
 

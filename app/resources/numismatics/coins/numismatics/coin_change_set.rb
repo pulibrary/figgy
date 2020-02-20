@@ -79,7 +79,6 @@ module Numismatics
           :holding_location,
           :numismatic_collection,
           :member_of_collection_ids,
-          :rights_statement,
           :pdf_type
         ],
         "Accession" => [

@@ -894,8 +894,6 @@ RSpec.describe CatalogController do
         reverse_orientation: "issue-reverse-orientation",
         reverse_part: "issue-rev-part",
         reverse_symbol: "issue-rev-symbol",
-        rights_note: "issue-rights-note",
-        rights_statement: "issue-rights-statement",
         series: "issue-series",
         shape: "issue-series",
         workshop: "issue-workshop"

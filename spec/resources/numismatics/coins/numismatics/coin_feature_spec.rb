@@ -141,6 +141,7 @@ RSpec.feature "Numismatics::Coins" do
       expect(page).to have_css ".attribute.size", text: "test value"
       expect(page).to have_css ".attribute.technique", text: "test value"
       expect(page).to have_css ".attribute.weight", text: "test value"
+      expect(page).to have_css ".attribute.rights_statement", text: RightsStatements.no_known_copyright
     end
   end
 
@@ -149,7 +150,6 @@ RSpec.feature "Numismatics::Coins" do
     page.click_on "Attach Coin"
 
     page.fill_in "numismatics_coin_analysis", with: "test analysis"
-    page.select "Copyright Not Evaluated", from: "Rights Statement"
 
     page.click_on "Save"
     expect(page).to have_css ".attribute.analysis", text: "test analysis"
@@ -160,7 +160,6 @@ RSpec.feature "Numismatics::Coins" do
     page.click_on "Attach Coin"
 
     page.fill_in "numismatics_coin_analysis", with: "test analysis"
-    page.select "Copyright Not Evaluated", from: "Rights Statement"
 
     page.click_on "Save and Duplicate Metadata"
 

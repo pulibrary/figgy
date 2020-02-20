@@ -89,7 +89,6 @@ module Numismatics
           :master_id,
           :workshop,
           :series,
-          :numismatic_monogram_ids,
           :numismatic_place_id
         ],
         "Obverse" => [
@@ -128,11 +127,8 @@ module Numismatics
         "Subject" => [
           :numismatic_subject
         ],
-        "Rights and Notes" => [
-          :member_of_collection_ids,
-          :downloadable,
-          :rights_statement,
-          :rights_note
+        "Monograms" => [
+          :numismatic_monogram_ids
         ]
       }
     end
