@@ -259,6 +259,20 @@ form.button-to {
   width: auto;
 }
 
+.panel-heading a.monograms:after {
+    font-family:'Glyphicons Halflings';
+    content:"\2212";
+    float: left;
+    padding-right:5px;
+    color: $green;
+}
+.panel-heading a.monograms.collapsed:after {
+    content:"\2b";
+    float: left;
+    padding-right:5px;
+    color: $green;
+}
+
 #numismatic-monograms {
   tbody {
     border-left-width: 2px;
