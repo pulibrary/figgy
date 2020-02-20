@@ -14,6 +14,12 @@ Release notes template:
 
 -->
 
+# 2020-02-20
+
+## Changed
+
+* Electronic locations are now imported from bib record 856 fields.
+
 # 2020-02-19
 
 ## Added
