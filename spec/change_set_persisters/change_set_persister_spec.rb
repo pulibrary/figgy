@@ -40,6 +40,17 @@ RSpec.describe ChangeSetPersister do
       # doesn't populate an archival_collection_code field
       expect(output.archival_collection_code).to be_nil
     end
+    it "applies electronic locations" do
+      stub_bibdata(bib_id: "9106203")
+      resource = FactoryBot.build(:scanned_resource, title: [])
+      change_set = change_set_class.new(resource)
+      change_set.validate(source_metadata_identifier: "9106203")
+      output = change_set_persister.save(change_set: change_set)
+
+      expect(output.primary_imported_metadata.electronic_locations).to eq [
+        LabeledURI.new(uri: RDF::URI("http://lib-dbserver.princeton.edu/music/programs/2015-04-24-25.pdf"), label: "Program.")
+      ]
+    end
   end
 
   context "when a source_metadata_identifier is set for the first time on a scanned map" do
