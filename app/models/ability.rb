@@ -48,7 +48,7 @@ class Ability
       resource.pdf_type == ["color"]
     end
     can :read, FileSet do |resource|
-      can?(:read, resource.decorate.parent.object)
+      can?(:read, resource.decorate.parent.object) || authorized_by_token?(resource)
     end
     can [:read], Numismatics::Monogram
     can [:read], :graphql
