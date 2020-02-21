@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-02-21
+
+## Fixed
+
+* Fixed downloads of HLS content with a playlist auth token.
+
 # 2020-02-18
 
 ## Changed

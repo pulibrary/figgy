@@ -87,8 +87,10 @@ RSpec.describe DownloadsController do
       end
     end
 
-    context "with a FileSet proxied as a member of a Playlist" do
+    context "with a FileSet proxied as a member of a Playlist", run_real_characterization: true, run_real_derivatives: true do
+      with_queue_adapter :inline
       let(:sample_file) { fixture_file_upload("files/audio_file.wav", "audio/x-wav") }
+      let(:file_node) { file_set.file_metadata.find(&:derivative_partial?) }
       let(:playlist) do
         playlist = Playlist.new
         cs = PlaylistChangeSet.new(playlist)
@@ -96,14 +98,13 @@ RSpec.describe DownloadsController do
         change_set_persister.save(change_set: cs)
       end
 
-      it "allow clients to download the file with an auth. token" do
+      it "allow clients to download the HLS partial file with an auth. token" do
         persisted_playlist = meta.query_service.find_by(id: playlist.id)
 
         get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s, auth_token: persisted_playlist.auth_token }
 
-        expect(response.content_length).to eq(147_550)
-        expect(response.content_type).to eq("audio/x-wav")
-        expect(response.body).to eq(sample_file.read)
+        expect(response.content_length).to eq(5452)
+        expect(response.content_type).to eq("video/MP2T")
       end
     end
 
