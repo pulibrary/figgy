@@ -179,6 +179,26 @@ module ApplicationHelper
     "/viewer#?manifest=#{manifest_url(resource)}"
   end
 
+  def bulk_edit?
+    collection_present? || bulk_editable_types_present?
+  end
+
+  def bulk_editable_types
+    [
+      "Coin",
+      "Raster Resource",
+      "Scanned Map",
+      "Vector Resource"
+    ]
+  end
+
+  def bulk_editable_types_present?
+    return false unless params[:f] && params[:f]["human_readable_type_ssim"].present?
+    bulk_editable_types.any? do |type|
+      params[:f]["human_readable_type_ssim"] == [type]
+    end
+  end
+
   def collection_present?
     params[:f] && params[:f]["member_of_collection_titles_ssim"].present?
   end

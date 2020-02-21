@@ -47,6 +47,42 @@ RSpec.feature "Bulk edit", js: true do
       expect(uri.query).to eq "f%5Bmember_of_collection_titles_ssim%5D%5B%5D=My+Collection&q="
       expect(uri.path).to eq "/bulk_edit"
     end
+    it "will display when a coin is selected" do
+      visit root_path("q" => "", "f[human_readable_type_ssim][]" => "Coin")
+
+      expect(page).to have_css("#bulk-edit")
+      link = page.find_link("Bulk Edit")
+      uri = URI(link["href"])
+      expect(uri.query).to eq "f%5Bhuman_readable_type_ssim%5D%5B%5D=Coin&q="
+      expect(uri.path).to eq "/bulk_edit"
+    end
+    it "will display when a scanned map is selected" do
+      visit root_path("q" => "", "f[human_readable_type_ssim][]" => "Scanned Map")
+
+      expect(page).to have_css("#bulk-edit")
+      link = page.find_link("Bulk Edit")
+      uri = URI(link["href"])
+      expect(uri.query).to eq "f%5Bhuman_readable_type_ssim%5D%5B%5D=Scanned+Map&q="
+      expect(uri.path).to eq "/bulk_edit"
+    end
+    it "will display when a vector resource is selected" do
+      visit root_path("q" => "", "f[human_readable_type_ssim][]" => "Vector Resource")
+
+      expect(page).to have_css("#bulk-edit")
+      link = page.find_link("Bulk Edit")
+      uri = URI(link["href"])
+      expect(uri.query).to eq "f%5Bhuman_readable_type_ssim%5D%5B%5D=Vector+Resource&q="
+      expect(uri.path).to eq "/bulk_edit"
+    end
+    it "will display when a raster resource is selected" do
+      visit root_path("q" => "", "f[human_readable_type_ssim][]" => "Raster Resource")
+
+      expect(page).to have_css("#bulk-edit")
+      link = page.find_link("Bulk Edit")
+      uri = URI(link["href"])
+      expect(uri.query).to eq "f%5Bhuman_readable_type_ssim%5D%5B%5D=Raster+Resource&q="
+      expect(uri.path).to eq "/bulk_edit"
+    end
   end
 
   context "submit form" do
