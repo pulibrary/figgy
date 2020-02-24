@@ -3,7 +3,7 @@
   <div class="row">
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-md-12" role="main">
-        <div class="form-panel-content" id="metadata">
+        <div class="form-panel-content form-numismatics" id="metadata">
           <%= yield "metadata_tab".to_sym if content_for? "metadata_tab".to_sym %>
           <%= render "numismatics/form_metadata", f: f %>
         </div>
