@@ -1,24 +1,25 @@
 export default class ServerUploader {
-  constructor() {
-    this.element = $(".browse-everything")
-    this.element.click((event) => event.preventDefault())
-    this.mount_browse_everything()
+  constructor () {
+    window.addEventListener('browseEverything.upload', ServerUploader.appendElements)
+
+    // Special handling for Material UI in Bootstrap Modals
+    $('#browse-everything-modal').on('show.bs.modal', e => {
+      $(document).off('focusin.bs.modal', '**')
+      const $modal = $('#browse-everything-modal')
+      const modal = $modal.data('bs.modal')
+      modal.enforceFocus = (e) => {}
+    })
   }
 
-  mount_browse_everything() {
-    this.element.browseEverything({
-      route: "/browse",
-      target: "#browse-everything-form"
-    }).done(this.finished_browsing)
+  static submitFiles () {
+    $('#browse-everything-modal').modal('hide')
+    $('#browse-everything-form').submit()
   }
 
-  get finished_browsing() {
-    return () => {
-      this.submit_files()
-    }
-  }
-
-  submit_files() {
-    $("#browse-everything-form").submit()
+  static appendElements (event) {
+    const upload = event.detail
+    const $input = $(`<input type="hidden" name="browse_everything[uploads][]" value="${upload.id}" />`)
+    $('#browse-everything-form').append($input)
+    ServerUploader.submitFiles()
   }
 }
