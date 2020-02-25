@@ -1,49 +1,25 @@
-
 export default class CollectionBagUploader {
-  constructor() {
-    this.element = $(".new_collection .browse-everything, .edit_collection .browse-everything")
-    this.element.click((event) => event.preventDefault())
-    this.mount_browse_everything()
+  static closeModal () {
+    $('#browse-everything-modal').modal('hide')
   }
 
-  mount_browse_everything() {
-    this.element.browseEverything({
-      route: "/browse",
-      target: ".new_collection, .edit_collection"
-    }).done(this.finished_browsing)
+  static appendElements (event) {
+    const upload = event.detail
+    const container = upload.containers.shift()
+
+    $('#collection_bag_path').val(container.id)
+    CollectionBagUploader.closeModal()
   }
 
-  selectedInputElements () {
-    $("input[name*='selected_files']")
-  }
+  constructor () {
+    window.addEventListener('browseEverything.upload', CollectionBagUploader.appendElements)
 
-  selectedFiles () {
-    this.selected_input_elements().map(e => e.val())
-  }
-
-  static parseSelectedUrls (data) {
-    const urls = data.map(d => d.url)
-    return [...new Set(urls)]
-  }
-
-  static parseDirectoryUrls (urls) {
-    const directories = urls.map(url => {
-      const segments = url.split('/')
-      const baseSegments = segments.slice(2, -1)
-      return baseSegments.join('/')
+    // Special handling for Material UI in Bootstrap Modals
+    $('#browse-everything-modal').on('show.bs.modal', e => {
+      $(document).off('focusin.bs.modal', '**')
+      const $modal = $('#browse-everything-modal')
+      const modal = $modal.data('bs.modal')
+      modal.enforceFocus = (e) => {}
     })
-    const uniq = [...new Set(directories)]
-    return uniq.sort((u, v) => u.length - v.length)
-  }
-
-  finished_browsing (data) {
-    const urls = CollectionBagUploader.parseSelectedUrls(data)
-    const directories = CollectionBagUploader.parseDirectoryUrls(urls)
-    const directory = directories.shift()
-    $('#collection_bag_path').val(directory)
-  }
-
-  submit_files() {
-    $(".new_collection, .edit_collection").submit()
   }
 }

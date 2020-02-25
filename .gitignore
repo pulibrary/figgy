@@ -30,3 +30,4 @@ package-lock.json
 yarn-debug.log*
 .yarn-integrity
 /cloud_fixity/node_modules
+gdrive.yml

@@ -18,4 +18,5 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: "www.example.com" }
   config.active_job.queue_adapter = :test
   config.action_controller.action_on_unpermitted_parameters = false
+  config.active_storage.service = :test
 end

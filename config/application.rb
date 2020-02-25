@@ -11,6 +11,7 @@ require "action_mailer/railtie"
 require "action_view/railtie"
 require "action_cable/engine"
 require "sprockets/railtie"
+require "active_storage"
 Bundler.require(*Rails.groups)
 module Figgy
   class Application < Rails::Application
@@ -30,6 +31,10 @@ module Figgy
       allow do
         origins "*"
         resource "/graphql", headers: :any, methods: [:post]
+
+        if Rails.env.development?
+          resource "/browse/*", headers: :any, methods: [:options, :get, :post, :patch]
+        end
       end
     end
     config.autoload_paths += Dir[Rails.root.join("app", "resources", "*")]
@@ -39,5 +44,6 @@ module Figgy
     # Redirect to CAS logout after signing out of Figgy
     config.x.after_sign_out_url = "https://fed.princeton.edu/cas/logout"
     config.active_record.sqlite3.represent_boolean_as_integer = true
+    Webpacker::Compiler.env["FOO"] = "foo"
   end
 end

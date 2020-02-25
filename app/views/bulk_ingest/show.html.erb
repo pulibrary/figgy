@@ -20,9 +20,12 @@
       <div class="col-md-3">
         <legend class="bulk-ingest-legend">Files (5)</legend>
         <div class="well well-sm">
-          <%= button_tag id: 'browse_everything', type: 'button', class: 'browse-everything btn btn-primary' do %>
+
+          <button id="browse_everything" type="button" class="btn btn-primary browse-everything" data-toggle="modal" data-target="#browse-everything-modal">
             Select Folder on Server
-          <% end %>
+          </button>
+          <%= render 'browse_everything/modal' %>
+
         </div>
       </div>
     </div>

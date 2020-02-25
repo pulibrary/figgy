@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 class BulkIngestController < ApplicationController
-  include BrowseEverything::Parameters
-
   def self.metadata_adapter
     Valkyrie::MetadataAdapter.find(:indexing_persister)
   end
@@ -26,50 +24,157 @@ class BulkIngestController < ApplicationController
     @visibility = ControlledVocabulary.for(:visibility).all
   end
 
+  def browse_everything_params
+    @browse_everything_params ||= params["browse_everything"]
+  end
+
+  def browse_everything_uploads
+    @browse_everything_uploads ||= browse_everything_params["uploads"]
+  end
+
+  def find_upload(upload_id)
+    # This needs to be changed to #find_one
+    uploads = BrowseEverything::Upload.find_by(uuid: upload_id)
+    uploads.first
+  end
+
+  # Construct the pending download objects
+  # @return [Array<PendingUpload>]
+  def new_pending_upload_files
+    @new_pending_upload_files = []
+
+    browse_everything_uploads.each do |upload_id|
+      upload = find_upload(upload_id)
+      upload.files.each do |upload_file|
+        new_pending_upload = PendingUpload.new(
+          id: SecureRandom.uuid,
+          upload_id: upload_id,
+          upload_file_id: upload_file.id
+        )
+        @new_pending_upload_files << new_pending_upload
+      end
+    end
+
+    @new_pending_upload_files
+  end
+
+  def new_uploads
+    @new_uploads ||= begin
+                       browse_everything_uploads.map do |upload_id|
+                         find_upload(upload_id)
+                       end
+                     end
+  end
+
+  def ingest_multi_volume_works(change_set_persister)
+    new_uploads.each do |upload|
+      file_tree = {}
+      upload.files.each do |upload_file|
+        new_pending_upload = PendingUpload.new(
+          id: SecureRandom.uuid,
+          upload_id: upload.id,
+          upload_file_id: upload_file.id
+        )
+
+        if new_pending_upload.in_container?
+          pending_uploads = file_tree[upload_file.container_id] || []
+          file_tree[upload_file.container_id] = pending_uploads + [new_pending_upload]
+        end
+      end
+
+      directory_tree = {}
+      parent_containers = []
+      upload.containers.each do |container|
+        # Are there files for this container?
+        if file_tree.key?(container.id)
+          # Create the volume work
+          children = file_tree[container.id]
+          volume_name = container.name
+          member_change_set = build_change_set(title: volume_name, pending_uploads: children, files: children)
+
+          persisted = change_set_persister.save(change_set: member_change_set)
+
+          parent_id = container.parent_id
+          if parent_id
+            members = directory_tree[parent_id] || []
+            directory_tree[parent_id] = members + [persisted]
+          end
+        else
+          parent_containers << container
+        end
+      end
+
+      parent_containers.each do |container|
+        # If not, create a parent work
+        members = directory_tree[container.id] || []
+        member_ids = members.map(&:id)
+        parent_name = container.name
+
+        parent_change_set = build_change_set(title: parent_name, member_ids: member_ids)
+        change_set_persister.save(change_set: parent_change_set)
+      end
+    end
+  end
+
+  def ingest_works(change_set_persister)
+    new_uploads.each do |upload|
+      file_tree = {}
+      upload.files.each do |upload_file|
+        new_pending_upload = PendingUpload.new(
+          id: SecureRandom.uuid,
+          upload_id: upload.id,
+          upload_file_id: upload_file.id
+        )
+
+        if new_pending_upload.in_container?
+          pending_uploads = file_tree[upload_file.container_id] || []
+          file_tree[upload_file.container_id] = pending_uploads + [new_pending_upload]
+        end
+      end
+
+      upload.containers.each do |container|
+        # Are there files for this container?
+        next unless file_tree.key?(container.id)
+        # Create the volume work
+        children = file_tree[container.id]
+        volume_name = container.name
+        member_change_set = build_change_set(title: volume_name, pending_uploads: children, files: children)
+
+        change_set_persister.save(change_set: member_change_set)
+      end
+    end
+  end
+
+  def first_upload
+    @first_upload ||= new_uploads.first
+  end
+
+  def selected_cloud_files?
+    !first_upload.provider.is_a?(BrowseEverything::Provider::FileSystem)
+  end
+
+  def root_selected_folder_path
+    paths = first_upload.containers.map { |container| container.id.gsub("file://", "") }
+    sorted_paths = paths.sort_by(&:length)
+    sorted_paths.first
+  end
+
   def browse_everything_files
-    if selected_files.empty?
+    if browse_everything_uploads.empty? && first_upload.containers.empty?
       flash[:alert] = "Please select some files to ingest."
       return redirect_to bulk_ingest_show_path
     end
 
     if selected_cloud_files?
-      persisted_ids = {}
-      file_paths
-
-      if multi_volume_work?
-        self.class.change_set_persister.buffer_into_index do |buffered_changeset_persister|
-          persisted_members = []
-
-          # Only append one file as a FileSet to one member of one parent until browse-everything can provide links to parent resource IDs
-          new_pending_uploads.each do |pending_upload|
-            member_change_set = build_change_set(title: pending_upload.file_name, pending_uploads: [pending_upload])
-            persisted_members << buffered_changeset_persister.save(change_set: member_change_set)
-            persisted_ids[persisted_members.last.id.to_s] = [pending_upload.id.to_s]
-          end
-
-          parent_change_set = build_change_set(title: new_pending_uploads.first.file_name, member_ids: persisted_members.map(&:id))
-          buffered_changeset_persister.save(change_set: parent_change_set)
-        end
-      else
-        # Only append one file as a FileSet to one resource until browse-everything can provide links to parent resource IDs
-        self.class.change_set_persister.buffer_into_index do |buffered_changeset_persister|
-          new_pending_uploads.each do |pending_upload|
-            change_set = build_change_set(title: pending_upload.file_name, pending_uploads: [pending_upload])
-            persisted = buffered_changeset_persister.save(change_set: change_set)
-            persisted_ids[persisted.id.to_s] = [pending_upload.id.to_s]
-          end
+      self.class.change_set_persister.buffer_into_index do |buffered_changeset_persister|
+        if multi_volume_work?
+          ingest_multi_volume_works(buffered_changeset_persister)
+        else
+          ingest_works(buffered_changeset_persister)
         end
       end
-
-      # Use the IDs of the newly-persisted resources to attached the cloud files as FileSets
-      persisted_ids.each do |persisted_id, selected_file_ids|
-        BrowseEverythingIngestJob.perform_later(persisted_id, self.class.to_s, selected_file_ids)
-      end
-    elsif file_paths.max_parent_path_depth == 1
-      IngestFolderJob.perform_later(directory: parent_path.to_s, file_filter: nil, class_name: resource_class_name, **attributes)
-
     else
-      IngestFoldersJob.perform_later(directory: parent_path.to_s, file_filter: nil, class_name: resource_class_name, **attributes)
+      IngestFolderJob.perform_later(directory: root_selected_folder_path, file_filter: nil, class_name: resource_class_name, **attributes)
     end
 
     redirect_to root_url, notice: "Batch Ingest of #{resource_class.human_readable_type.pluralize} started"
@@ -91,7 +196,7 @@ class BulkIngestController < ApplicationController
     end
 
     def base_path
-      File.basename(parent_path.to_s)
+      File.basename(root_selected_folder_path)
     end
 
     # Determines whether or not the string encodes a bib. ID or a PULFA ID
@@ -113,25 +218,8 @@ class BulkIngestController < ApplicationController
       params[:collections] || []
     end
 
-    # Construct the paths from the BrowseEverything resources
-    # @return [BrowseEverythingFilePaths]
-    def file_paths
-      @file_paths ||= BrowseEverythingFilePaths.new(selected_files)
-    end
-
     def multi_volume_work?
       params[:mvw] == "true"
-    end
-
-    def parent_path
-      path = file_paths.parent_path
-      if multi_volume_work? && file_paths.max_parent_path_depth == 2
-        # Single multi-volume works need a parent path one level above to ingest properly.
-        # Otherwise, they are indistinguishable from multiple singe-volume works.
-        File.dirname(path)
-      else
-        path
-      end
     end
 
     def query_service
@@ -154,25 +242,6 @@ class BulkIngestController < ApplicationController
       change_set = DynamicChangeSet.new(build_resource)
       change_set.validate(**attrs)
       change_set
-    end
-
-    # Construct the pending download objects
-    # @return [Array<PendingUpload>]
-    def new_pending_uploads
-      return @new_pending_uploads unless @new_pending_uploads.nil?
-
-      @new_pending_uploads = []
-      selected_files.each do |selected_file|
-        file_attributes = selected_file.to_h.symbolize_keys
-
-        # This is needed in order to ensure that files are authorized for the
-        # download from the Cloud Service provider
-        auth_header = file_attributes.delete(:auth_header)
-
-        @new_pending_uploads << PendingUpload.new(file_attributes.merge(id: SecureRandom.uuid, created_at: Time.current.utc.iso8601, auth_header: auth_header))
-      end
-
-      @new_pending_uploads
     end
 
     def workflow_states

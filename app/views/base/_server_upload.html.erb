@@ -5,9 +5,11 @@
         <% if params[:parent_id] %>
           <%= hidden_field_tag 'parent_id', params[:parent_id] %>
         <% end %>
-        <%= button_tag id: 'browse_everything', type: 'button', class: 'browse-everything btn btn-primary' do %>
+
+        <button id="browse_everything" type="button" class="btn btn-primary browse-everything" data-toggle="modal" data-target="#browse-everything-modal">
           Upload Files from Server
-        <% end %>
+        </button>
+        <%= render 'browse_everything/modal' %>
       <% end %>
     </div>
   </div>

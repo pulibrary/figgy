@@ -10,20 +10,6 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
---
 -- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -64,6 +50,73 @@ CREATE FUNCTION public.get_ids_array(jsonb, text) RETURNS text[]
 SET default_tablespace = '';
 
 SET default_with_oids = false;
+
+--
+-- Name: active_storage_attachments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.active_storage_attachments (
+    id bigint NOT NULL,
+    name character varying,
+    record_gid character varying,
+    blob_id integer,
+    created_at time without time zone
+);
+
+
+--
+-- Name: active_storage_attachments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.active_storage_attachments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: active_storage_attachments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.active_storage_attachments_id_seq OWNED BY public.active_storage_attachments.id;
+
+
+--
+-- Name: active_storage_blobs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.active_storage_blobs (
+    id bigint NOT NULL,
+    key character varying,
+    filename character varying,
+    content_type character varying,
+    metadata text,
+    byte_size integer,
+    checksum character varying,
+    created_at time without time zone
+);
+
+
+--
+-- Name: active_storage_blobs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.active_storage_blobs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: active_storage_blobs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.active_storage_blobs_id_seq OWNED BY public.active_storage_blobs.id;
+
 
 --
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
@@ -109,6 +162,38 @@ CREATE SEQUENCE public.auth_tokens_id_seq
 --
 
 ALTER SEQUENCE public.auth_tokens_id_seq OWNED BY public.auth_tokens.id;
+
+
+--
+-- Name: authorization_models; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.authorization_models (
+    id bigint NOT NULL,
+    uuid character varying,
+    "authorization" text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: authorization_models_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.authorization_models_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: authorization_models_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.authorization_models_id_seq OWNED BY public.authorization_models.id;
 
 
 --
@@ -285,6 +370,102 @@ ALTER SEQUENCE public.searches_id_seq OWNED BY public.searches.id;
 
 
 --
+-- Name: session_models; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.session_models (
+    id bigint NOT NULL,
+    uuid character varying,
+    session text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: session_models_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.session_models_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: session_models_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.session_models_id_seq OWNED BY public.session_models.id;
+
+
+--
+-- Name: upload_files; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.upload_files (
+    id bigint NOT NULL,
+    container_id character varying,
+    name character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: upload_files_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.upload_files_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: upload_files_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.upload_files_id_seq OWNED BY public.upload_files.id;
+
+
+--
+-- Name: upload_models; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.upload_models (
+    id bigint NOT NULL,
+    uuid character varying,
+    upload text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: upload_models_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.upload_models_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: upload_models_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.upload_models_id_seq OWNED BY public.upload_models.id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -328,10 +509,31 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
+-- Name: active_storage_attachments id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_storage_attachments ALTER COLUMN id SET DEFAULT nextval('public.active_storage_attachments_id_seq'::regclass);
+
+
+--
+-- Name: active_storage_blobs id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN id SET DEFAULT nextval('public.active_storage_blobs_id_seq'::regclass);
+
+
+--
 -- Name: auth_tokens id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.auth_tokens ALTER COLUMN id SET DEFAULT nextval('public.auth_tokens_id_seq'::regclass);
+
+
+--
+-- Name: authorization_models id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.authorization_models ALTER COLUMN id SET DEFAULT nextval('public.authorization_models_id_seq'::regclass);
 
 
 --
@@ -363,10 +565,47 @@ ALTER TABLE ONLY public.searches ALTER COLUMN id SET DEFAULT nextval('public.sea
 
 
 --
+-- Name: session_models id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.session_models ALTER COLUMN id SET DEFAULT nextval('public.session_models_id_seq'::regclass);
+
+
+--
+-- Name: upload_files id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.upload_files ALTER COLUMN id SET DEFAULT nextval('public.upload_files_id_seq'::regclass);
+
+
+--
+-- Name: upload_models id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.upload_models ALTER COLUMN id SET DEFAULT nextval('public.upload_models_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Name: active_storage_attachments active_storage_attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_storage_attachments
+    ADD CONSTRAINT active_storage_attachments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: active_storage_blobs active_storage_blobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_storage_blobs
+    ADD CONSTRAINT active_storage_blobs_pkey PRIMARY KEY (id);
 
 
 --
@@ -383,6 +622,14 @@ ALTER TABLE ONLY public.ar_internal_metadata
 
 ALTER TABLE ONLY public.auth_tokens
     ADD CONSTRAINT auth_tokens_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: authorization_models authorization_models_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.authorization_models
+    ADD CONSTRAINT authorization_models_pkey PRIMARY KEY (id);
 
 
 --
@@ -434,6 +681,30 @@ ALTER TABLE ONLY public.searches
 
 
 --
+-- Name: session_models session_models_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.session_models
+    ADD CONSTRAINT session_models_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: upload_files upload_files_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.upload_files
+    ADD CONSTRAINT upload_files_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: upload_models upload_models_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.upload_models
+    ADD CONSTRAINT upload_models_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -467,6 +738,41 @@ CREATE INDEX flat_member_ids_idx ON public.orm_resources USING gin (public.get_i
 --
 
 CREATE INDEX flat_proxied_file_id_idx ON public.orm_resources USING gin (public.get_ids_array(metadata, 'proxied_file_id'::text));
+
+
+--
+-- Name: index_active_storage_attachments_on_blob_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_active_storage_attachments_on_blob_id ON public.active_storage_attachments USING btree (blob_id);
+
+
+--
+-- Name: index_active_storage_attachments_on_record_gid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_active_storage_attachments_on_record_gid ON public.active_storage_attachments USING btree (record_gid);
+
+
+--
+-- Name: index_active_storage_attachments_on_record_gid_and_blob_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_active_storage_attachments_on_record_gid_and_blob_id ON public.active_storage_attachments USING btree (record_gid, blob_id);
+
+
+--
+-- Name: index_active_storage_attachments_on_record_gid_and_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_active_storage_attachments_on_record_gid_and_name ON public.active_storage_attachments USING btree (record_gid, name);
+
+
+--
+-- Name: index_active_storage_blobs_on_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_active_storage_blobs_on_key ON public.active_storage_blobs USING btree (key);
 
 
 --
@@ -631,6 +937,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181030210350'),
 ('20181115195544'),
 ('20190102173711'),
-('20200106182149');
+('20200106182149'),
+('20200225213132'),
+('20200225213133'),
+('20200225213134'),
+('20200225213135'),
+('20200226052720');
 
 
