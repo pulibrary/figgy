@@ -273,6 +273,14 @@ form.button-to {
     color: $green;
 }
 
+.form-numismatics .panel-body {
+  padding: 8px;
+  div.form-group {
+    margin-bottom: 0.5em;
+    .control-label { margin-bottom: 5px; }
+  }
+}
+
 #numismatic-monograms {
   tbody {
     border-left-width: 2px;
