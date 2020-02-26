@@ -21,6 +21,13 @@ Release notes template:
 
 # 2020-02-21
 
+## Changed
+
+* Allow Coins, Scanned Maps, Vector Resources, and Raster Resources to be bulk
+  edited.
+
+# 2020-02-21
+
 ## Fixed
 
 * Fixed downloads of HLS content with a playlist auth token.
