@@ -332,6 +332,12 @@ RSpec.feature "Numismatics::Issues" do
       expect(page).to have_css("#numismatics_issue_shape.select2", visible: false)
     end
 
+    it "displays a collapsed Monograms panel" do
+      visit new_numismatics_issue_path
+      page.find(".panel-heading a.collapsed.monograms").click
+      expect(page).not_to have_css(".panel-heading a.collapsed.monograms")
+    end
+
     context "when Issues have been saved" do
       let(:persisted) do
         change_set = Numismatics::IssueChangeSet.new(numismatic_issue)
