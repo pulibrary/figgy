@@ -15,6 +15,13 @@ Release notes template:
 -->
 # 2020-02-26
 
+## Added
+
+* Added firm and person ajax drop downs to numismatics accessions.
+* Added buttons for new Numismatic Ruler and Master.
+
+# 2020-02-26
+
 ## Changed
 
 * Sort coins in members data table by date uploaded.
