@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-02-26
+
+## Changed
+
+* Sort coins in members data table by date uploaded.
+
 # 2020-02-24
 
 ## Changed

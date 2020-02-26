@@ -38,6 +38,10 @@ export default class Initializer {
     $("optgroup:not([label=Favorites])").addClass("closed")
     $("select:not(.select2)").selectpicker({'liveSearch': true})
     $(".datatable").DataTable()
+    // Set an initial sort order of data table for coins
+    $(".coin-datatable").DataTable({
+      "order": [[ 2, "asc" ]]
+    })
   }
 
   initialize_timepicker() {
