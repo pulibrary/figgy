@@ -2,4 +2,3 @@
 <% @change_set.primary_terms.each_pair do |label, fields| %>
   <%= render partial: 'numismatics/form_metadata_numismatics', locals: { label: label, fields: fields, f: f } %>
 <% end %>
-

@@ -13,6 +13,13 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-02-27
+
+## Added
+
+* Update layout/Move in one line Earliest Date and Latest Date fields.
+* Update layout/Move in one line Era and Date of the Object fields.
+
 # 2020-02-26
 
 ## Added

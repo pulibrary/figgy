@@ -76,6 +76,10 @@ RSpec.feature "Numismatics::Issues" do
     expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Monogram"
     expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Master"
     expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Ruler"
+    expect(page).to have_css "div.panel.panel-default div.panel-body div.col-sm-6 div.form-group div.col-sm-6 div.form-group input#numismatics_issue_earliest_date"
+    expect(page).to have_css "div.panel.panel-default div.panel-body div.col-sm-6 div.form-group div.col-sm-6 div.form-group input#numismatics_issue_latest_date"
+    expect(page).to have_css "div.panel.panel-default div.panel-body div.col-sm-6 div.form-group div.col-sm-6 div.form-group input#numismatics_issue_era"
+    expect(page).to have_css "div.panel.panel-default div.panel-body div.col-sm-6 div.form-group div.col-sm-6 div.form-group input#numismatics_issue_object_date"
 
     fill_in "Era", with: "test era"
     click_button "Save"

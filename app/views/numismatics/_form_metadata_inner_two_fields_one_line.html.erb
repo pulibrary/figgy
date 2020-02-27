@@ -1,0 +1,15 @@
+<%# This partial is using a 6 column with the assumption of a 2 elements array. %>
+<div class="panel panel-default">
+  <div class="panel-body">
+    <% field.each do |field| %>
+      <div class="col-sm-6" >
+        <div class="form-group">
+            <%= f.label field, field, class: "control-label col-sm-6" %>
+          <div class="col-sm-6">
+            <%= f.input field, label: false, required: f.object.required?(field), class: "form-control" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

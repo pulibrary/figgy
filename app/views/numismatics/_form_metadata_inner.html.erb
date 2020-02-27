@@ -1,0 +1,9 @@
+<div class="panel-body">
+  <% fields.each do |field| %>
+    <% unless field.is_a?(Array) %>
+      <%= render_edit_field_partial(field, f: f) %>
+    <% else %>
+      <%= render partial: "numismatics/form_metadata_inner_two_fields_one_line", locals: { field: field, f: f } %>
+    <% end %>
+  <% end %>
+</div>

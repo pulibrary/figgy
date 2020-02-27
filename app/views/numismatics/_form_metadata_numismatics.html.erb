@@ -9,16 +9,16 @@
       </div>
       <div id="collapseMonograms" class="panel-collapse collapse">
          <div class = "panel-body">
-           <%= render partial: 'form_metadata_inner', locals: { fields: fields, f: f } %>
+           <%= render partial: 'numismatics/form_metadata_inner', locals: { fields: fields, f: f } %>
          </div>
       </div>
       <%# Monograms panel ends %>
     <% else %>
       <div class="panel-heading"><%= label %></div>
-      <%= render partial: 'form_metadata_inner', locals: { fields: fields, f: f } %>
+      <%= render partial: 'numismatics/form_metadata_inner', locals: { fields: fields, f: f } %>
     <% end %>
   <% else %>
     <div class="panel-heading">Metadata</div>
-    <%= render partial: 'form_metadata_inner', locals: { fields: fields, f: f } %>
+    <%= render partial: 'numismatics/form_metadata_inner', locals: { fields: fields, f: f } %>
   <% end %>
 </div>
