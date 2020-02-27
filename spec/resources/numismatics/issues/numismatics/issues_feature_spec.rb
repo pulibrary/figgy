@@ -74,6 +74,8 @@ RSpec.feature "Numismatics::Issues" do
     expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Place"
     expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Person"
     expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Monogram"
+    expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Master"
+    expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Ruler"
 
     fill_in "Era", with: "test era"
     click_button "Save"
