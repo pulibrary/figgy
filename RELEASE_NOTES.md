@@ -17,6 +17,13 @@ Release notes template:
 
 ## Added
 
+* Update on the 'Numismatic Issue' form the label 'Numismatic Place' to 'Minting Location'.
+* Move the 'Numismatic Place' field under the 'Ruler' field.  
+
+# 2020-02-27
+
+## Added
+
 * Update layout/Move in one line Earliest Date and Latest Date fields.
 * Update layout/Move in one line Era and Date of the Object fields.
 
