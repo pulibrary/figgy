@@ -90,10 +90,10 @@ module Numismatics
             :object_date
           ],
           :ruler_id,
+          :numismatic_place_id,
           :master_id,
           :workshop,
-          :series,
-          :numismatic_place_id
+          :series
         ],
         "Obverse" => [
           :obverse_figure,

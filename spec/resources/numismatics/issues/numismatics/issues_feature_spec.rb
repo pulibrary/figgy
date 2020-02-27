@@ -45,7 +45,7 @@ RSpec.feature "Numismatics::Issues" do
     expect(page).to have_selector("label", text: "Numismatic reference")
     expect(page).to have_field "Part"
     expect(page).to have_selector("label", text: "Person")
-    expect(page).to have_selector("label", text: "Numismatic place")
+    expect(page).to have_selector("label", text: "Minting Location")
     expect(page).to have_field "Object type"
     expect(page).to have_field "Obverse figure"
     expect(page).to have_field "Obverse figure description"
