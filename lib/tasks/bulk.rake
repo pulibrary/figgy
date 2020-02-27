@@ -264,4 +264,25 @@ namespace :bulk do
       logger.error e.backtrace
     end
   end
+
+  desc "Remove all resources in an archival collection"
+  task remove: :environment do
+    abort "usage: rake bulk:remove CODE=archival_collection_code" unless ENV["CODE"]
+
+    archival_collection_code = ENV["CODE"]
+    background = ENV["BACKGROUND"]
+
+    @logger = Logger.new(STDOUT)
+    @logger.info "Removing archival collection #{archival_collection_code}"
+
+    begin
+      if background
+        DeleteArchivalCollectionJob.set(queue: :low).perform_later(id: archival_collection_code)
+      else
+        DeleteArchivalCollectionJob.perform_now(id: archival_collection_code)
+      end
+    rescue => e
+      @logger.error "Error: #{e.message}"
+    end
+  end
 end
