@@ -81,10 +81,14 @@ module Numismatics
           :shape,
           :color,
           :edge,
-          [:earliest_date,
-           :latest_date],
-          [:era,
-           :object_date],
+          [
+            :earliest_date,
+            :latest_date
+          ],
+          [
+            :era,
+            :object_date
+          ],
           :ruler_id,
           :master_id,
           :workshop,
