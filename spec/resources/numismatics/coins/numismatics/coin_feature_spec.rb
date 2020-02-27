@@ -47,6 +47,7 @@ RSpec.feature "Numismatics::Coins" do
     expect(page).to have_selector("label", text: "Issue")
     expect(page).to have_selector("label", text: "Numismatic accession")
     expect(page).to have_field "Analysis"
+    expect(page).to have_field "Citation type"
     expect(page).to have_field "Counter stamp"
     expect(page).to have_field "Date"
     expect(page).to have_field "Date in"
