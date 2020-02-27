@@ -1,16 +1,16 @@
 <div class='nested-fields'>
   <div class="row">
     <div class="col-md-6">
-      <%= f.input :part, required: f.object.required?(:part), label: "Part" %>
-    </div>
-    <div class="col-md-6">
-      <%= f.input :number, required: f.object.required?(:number), label: "Number" %>
+      <%= f.label :numismatic_reference_id, required: f.object.required?(:numismatic_reference_id) %>
+      <%= f.hidden_field :numismatic_reference_id, ajax_select_type: "Reference"%>
     </div>
   </div>
   <div class="row">
     <div class="col-md-6">
-      <%= f.label :numismatic_reference_id, required: f.object.required?(:numismatic_reference_id) %>
-      <%= f.hidden_field :numismatic_reference_id, ajax_select_type: "Reference"%>
+      <%= f.input :part, required: f.object.required?(:part), label: "Part" %>
+    </div>
+    <div class="col-md-6">
+      <%= f.input :number, required: f.object.required?(:number), label: "Number" %>
     </div>
   </div>
   <%= f.hidden_field :id %>
