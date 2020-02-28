@@ -18,6 +18,10 @@ module Numismatics
       decorated_authors.map(&:title)
     end
 
+    def indexed_title
+      [short_title, authors.first, year].compact.join(", ")
+    end
+
     def manageable_files?
       false
     end
