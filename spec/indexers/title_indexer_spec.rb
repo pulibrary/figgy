@@ -51,7 +51,7 @@ RSpec.describe TitleIndexer do
     context "with a distinct indexed title" do
       it "properly indexes the indexed title values" do
         resource = FactoryBot.build(:numismatic_reference, year: 2020)
-        title = "short-title, 2020"
+        title = "short-title, Test Reference, 2020"
 
         output = described_class.new(resource: resource).to_solr
         expect(output[:figgy_title_tesim]).to contain_exactly(title)

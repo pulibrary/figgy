@@ -15,6 +15,12 @@ Release notes template:
 -->
 # 2020-02-28
 
+## Changed
+
+* Refines indexed numismatic reference title.
+
+# 2020-02-28
+
 ## Added
 
 * Indexes a unique numismatic reference title into Solr.

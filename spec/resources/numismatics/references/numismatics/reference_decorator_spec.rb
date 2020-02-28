@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe Numismatics::ReferenceDecorator do
   subject(:decorator) { described_class.new(reference) }
-  let(:reference) { FactoryBot.create_for_repository(:numismatic_reference, author_id: numismatic_person.id, member_ids: [child_reference.id]) }
+  let(:reference) { FactoryBot.create_for_repository(:numismatic_reference, year: 2020, author_id: numismatic_person.id, member_ids: [child_reference.id]) }
   let(:numismatic_person) { FactoryBot.create_for_repository(:numismatic_person) }
   let(:child_reference) { FactoryBot.create_for_repository(:numismatic_reference) }
 
@@ -22,7 +22,13 @@ RSpec.describe Numismatics::ReferenceDecorator do
 
   describe "#authors" do
     it "renders short title as single value" do
-      expect(decorator.authors).to eq(["name1 name2 epithet (1868 - 1963)"])
+      expect(decorator.authors).to eq(["name1 name2"])
+    end
+  end
+
+  describe "#indexed_title" do
+    it "renders indexed title as single value" do
+      expect(decorator.indexed_title).to eq("short-title, name1 name2, Test Reference, 2020")
     end
   end
 

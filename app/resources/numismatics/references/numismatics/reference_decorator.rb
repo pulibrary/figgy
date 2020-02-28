@@ -15,11 +15,11 @@ module Numismatics
     end
 
     def authors
-      decorated_authors.map(&:title)
+      decorated_authors.map { |a| [a.name1, a.name2].compact.join(" ") }
     end
 
     def indexed_title
-      [short_title, authors.first, year].compact.join(", ")
+      [short_title, authors.first, title, year].compact.join(", ")
     end
 
     def manageable_files?
