@@ -17,6 +17,12 @@ Release notes template:
 
 ## Changed
 
+* Allow coin thumbnail to be set in the order manager.
+
+# 2020-02-28
+
+## Changed
+
 * Refines indexed numismatic reference title.
 
 # 2020-02-28
