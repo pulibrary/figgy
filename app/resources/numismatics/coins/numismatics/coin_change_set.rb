@@ -91,7 +91,7 @@ module Numismatics
         "Provenance" => [
           :provenance
         ],
-        "Loan" => [
+        "Loans and Exhibits" => [
           :loan
         ],
         "Numismatic Issue" => [
