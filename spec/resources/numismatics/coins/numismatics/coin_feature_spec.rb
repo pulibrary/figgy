@@ -77,6 +77,8 @@ RSpec.feature "Numismatics::Coins" do
     expect(page).to have_field "Type"
     expect(page).to have_field "Weight (g)"
 
+    expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Reference"
+
     fill_in "Size", with: "3 cm"
     click_button "Save"
 

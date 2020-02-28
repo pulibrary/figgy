@@ -2,6 +2,7 @@
   <div class="row">
     <div class="col-md-6">
       <%= f.label :numismatic_reference_id, required: f.object.required?(:numismatic_reference_id) %>
+      <%= link_to 'New Reference', new_numismatics_reference_path, class: 'btn btn-sm btn-primary new-link', target: '_blank'%>
       <%= f.hidden_field :numismatic_reference_id, ajax_select_type: "Reference"%>
     </div>
   </div>
