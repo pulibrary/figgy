@@ -15,6 +15,13 @@ Release notes template:
 -->
 # 2020-02-28
 
+## Added
+
+* Indexes a unique numismatic reference title into Solr.
+* Drop-down menus for references will display this title.
+
+# 2020-02-28
+
 ## Changed
 
 * Sort numismatics drop down values alphabetically.
