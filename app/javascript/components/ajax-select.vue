@@ -47,7 +47,7 @@ export default {
   },
   computed: {
     searchURL: function () {
-      return `${this.searchURLBase}/?f%5Bhuman_readable_type_ssim%5D%5B%5D=${this.typeName}&all_models=true&q=${this.query}`
+      return `${this.searchURLBase}/?f%5Bhuman_readable_type_ssim%5D%5B%5D=${this.typeName}&all_models=true&sort=figgy_title_ssi+asc&q=${this.query}`
     }
   },
   created: function () {

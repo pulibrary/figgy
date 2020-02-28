@@ -42,7 +42,7 @@ class FindFacetValues
         rows: 0,
         "facet": "on",
         "facet.limit": -1,
-        "facet.sort": "count",
+        "facet.sort": "index",
         "facet.field": facet_fields
       }
     end
