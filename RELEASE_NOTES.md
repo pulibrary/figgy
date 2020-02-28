@@ -15,6 +15,12 @@ Release notes template:
 -->
 # 2020-02-28
 
+## Added
+
+* Assign Coin FileSets a title based on image file name.
+
+# 2020-02-28
+
 ## Changed
 
 * Allow coin thumbnail to be set in the order manager.

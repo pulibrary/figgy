@@ -486,6 +486,7 @@ RSpec.describe ChangeSetPersister do
 
       expect(members.to_a.length).to eq 1
       expect(members.first).to be_kind_of FileSet
+      expect(members.first.title).to eq ["example.tif"]
       expect(output.thumbnail_id).to eq [members.first.id]
 
       file_metadata_nodes = members.first.file_metadata
@@ -599,6 +600,31 @@ RSpec.describe ChangeSetPersister do
         expect(members.first.original_file.duration).not_to be_blank
         expect(members.first.original_file.mime_type).to eq ["audio/x-wav"]
         expect(members.first.original_file.checksum).not_to be_blank
+      end
+    end
+
+    context "with numismatics coin files" do
+      let(:file1) { fixture_file_upload("numismatics/coin-images/1O.tif", "image/tiff") }
+      let(:file2) { fixture_file_upload("numismatics/coin-images/1R.jpg", "image/jpeg") }
+      let(:file3) { fixture_file_upload("files/abstract.tiff", "image/tiff") }
+      let(:change_set_class) { Numismatics::CoinChangeSet }
+      let(:change_set_persister) do
+        described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: false)
+      end
+
+      it "appends files as a FileSet with an Obverse or Reverse title" do
+        resource = FactoryBot.build(:coin)
+        change_set = change_set_class.new(resource, characterize: false)
+        change_set.files = [file1, file2, file3]
+
+        output = change_set_persister.save(change_set: change_set)
+        members = query_service.find_members(resource: output)
+
+        expect(members.to_a.length).to eq 3
+        expect(members.first).to be_kind_of FileSet
+        expect(members.first.title).to eq ["Obverse"]
+        expect(members[1].title).to eq ["Reverse"]
+        expect(members[2].title).to eq ["abstract.tiff"]
       end
     end
   end
