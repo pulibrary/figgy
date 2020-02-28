@@ -17,6 +17,12 @@ Release notes template:
 
 ## Changed
 
+* Sort numismatics drop down values alphabetically.
+
+# 2020-02-28
+
+## Changed
+
 * Hide PDF Type field on Coin edit form.
 
 # 2020-02-27
