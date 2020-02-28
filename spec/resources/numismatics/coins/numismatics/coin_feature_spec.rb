@@ -61,8 +61,7 @@ RSpec.feature "Numismatics::Coins" do
     expect(page).to have_field "Find number"
     expect(page).to have_selector("label", text: "Find place")
     expect(page).to have_selector("label", text: "Firm")
-    expect(page).to have_field "Holding location"
-    expect(page).not_to have_css '.select[for="coin_holding_location"]', text: "Holding Location"
+    expect(page).not_to have_field "Holding location"
     expect(page).to have_field "Note"
     expect(page).to have_field "Number"
     expect(page).to have_field "Number in accession"
@@ -106,7 +105,6 @@ RSpec.feature "Numismatics::Coins" do
         find_locus: "test value",
         find_number: "test value",
         find_place_id: find_place.id,
-        holding_location: "test value",
         loan: loan,
         private_note: "test value",
         numismatic_collection: "test value",
@@ -133,7 +131,6 @@ RSpec.feature "Numismatics::Coins" do
       expect(page).to have_css ".attribute.find_locus", text: "test value"
       expect(page).to have_css ".attribute.find_number", text: "test value"
       expect(page).to have_css ".attribute.find_place", text: "city, state, region"
-      expect(page).to have_css ".attribute.holding_location", text: "test value"
       expect(page).to have_css ".attribute.loan", text: "type, exhibit, note"
       expect(page).to have_css ".attribute.numismatic_collection", text: "test value"
       expect(page).to have_css ".attribute.private_note", text: "test value"
@@ -202,13 +199,11 @@ RSpec.feature "Numismatics::Coins" do
     let(:adapter) { Valkyrie::MetadataAdapter.find(:index_solr) }
     let(:coin) do
       FactoryBot.create_for_repository(:coin,
-                                       holding_location: "holding location",
                                        numismatic_collection: "numismatic collection")
     end
 
     it "displays select boxes for some properties" do
       visit new_numismatics_coin_path
-      expect(page).to have_css("#numismatics_coin_holding_location.select2", visible: false)
       expect(page).to have_css("#numismatics_coin_numismatic_collection.select2", visible: false)
     end
 
@@ -221,12 +216,9 @@ RSpec.feature "Numismatics::Coins" do
       it "permits users to select from existing object types" do
         visit edit_numismatics_coin_path(id: persisted.id)
 
-        hidden = page.find("body #main form.edit_numismatics_coin input[type='hidden']#holding_location", visible: false)
-        expect(hidden["value"]).to eq("holding location")
         hidden = page.find("body #main form.edit_numismatics_coin input[type='hidden']#numismatic_collection", visible: false)
         expect(hidden["value"]).to eq("numismatic collection")
 
-        expect(page).to have_selector("option", text: "holding location")
         expect(page).to have_selector("option", text: "numismatic collection")
       end
 

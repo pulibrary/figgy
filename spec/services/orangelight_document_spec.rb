@@ -28,7 +28,6 @@ describe OrangelightDocument do
       let(:coin) do
         FactoryBot.create_for_repository(:coin,
                                          files: [file],
-                                         holding_location: "Firestone",
                                          counter_stamp: "two small counter-stamps visible as small circles on reverse, without known parallel",
                                          analysis: "holed at 12 o'clock, 16.73 grams",
                                          public_note: ["Abraham Usher| John Field| Charles Meredith.", "Black and red ink.", "Visible flecks of mica."],
@@ -167,7 +166,6 @@ describe OrangelightDocument do
       subject(:builder) { described_class.new(coin) }
       let(:coin) do
         FactoryBot.create_for_repository(:coin,
-                                         holding_location: "Firestone",
                                          counter_stamp: "two small counter-stamps visible as small circles on reverse, without known parallel",
                                          analysis: "holed at 12 o'clock, 16.73 grams",
                                          public_note: ["Abraham Usher| John Field| Charles Meredith.", "Black and red ink.", "Visible flecks of mica."],

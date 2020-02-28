@@ -10,7 +10,6 @@ module Numismatics
     collection :provenance, multiple: true, required: false, form: Numismatics::ProvenanceChangeSet, populator: :populate_nested_collection, default: []
     property :coin_number, multiple: false, required: false
     property :number_in_accession, multiple: false, required: false
-    property :holding_location, multiple: false, required: false
     property :counter_stamp, multiple: false, required: false
     property :analysis, multiple: false, required: false
     property :public_note, multiple: true, required: false, default: []
@@ -76,7 +75,6 @@ module Numismatics
           :find_locus,
           :find_feature,
           :find_description,
-          :holding_location,
           :numismatic_collection,
           :member_of_collection_ids
         ],

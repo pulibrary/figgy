@@ -3,7 +3,6 @@ module Numismatics
   class CoinDecorator < Valkyrie::ResourceDecorator
     display :coin_number,
             :weight,
-            :holding_location,
             :size,
             :die_axis,
             :technique,

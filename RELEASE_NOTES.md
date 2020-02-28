@@ -29,6 +29,12 @@ Release notes template:
 
 ## Changed
 
+* Removed the holding location property from numismatics coin.
+
+# 2020-02-27
+
+## Changed
+
 * Reorganized nest citation form.
 * Added a citation type field to citiations.
 

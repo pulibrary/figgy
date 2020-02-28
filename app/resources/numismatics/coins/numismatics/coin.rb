@@ -19,7 +19,6 @@ module Numismatics
     # descriptive metadata
     attribute :coin_number, Valkyrie::Types::Anything
     attribute :number_in_accession, Valkyrie::Types::Integer
-    attribute :holding_location
     attribute :counter_stamp
     attribute :analysis
     attribute :public_note
