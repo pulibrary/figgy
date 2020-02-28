@@ -3,8 +3,9 @@
 module Numismatics
   class Citation < Resource
     include Valkyrie::Resource::AccessControls
-    attribute :part
-    attribute :numismatic_reference_id, Valkyrie::Types::Set
+    attribute :citation_type
     attribute :number
+    attribute :numismatic_reference_id, Valkyrie::Types::Set
+    attribute :part
   end
 end

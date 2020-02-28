@@ -4,6 +4,13 @@
       <%= f.label :numismatic_reference_id, required: f.object.required?(:numismatic_reference_id) %>
       <%= f.hidden_field :numismatic_reference_id, ajax_select_type: "Reference"%>
     </div>
+    <div class="col-md-6">
+      <%= f.input :citation_type,
+        as: :select,
+        collection: ["Exhibit"],
+        required: f.object.required?(:citation_type),
+        include_blank: true %>
+    </div>
   </div>
   <div class="row">
     <div class="col-md-6">

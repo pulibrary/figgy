@@ -15,6 +15,13 @@ Release notes template:
 -->
 # 2020-02-27
 
+## Changed
+
+* Reorganized nest citation form.
+* Added a citation type field to citiations.
+
+# 2020-02-27
+
 ## Added
 
 * Update on the 'Numismatic Issue' form the label 'Numismatic Place' to 'Minting Location'.
