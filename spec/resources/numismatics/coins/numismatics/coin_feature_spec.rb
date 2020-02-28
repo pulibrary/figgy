@@ -69,6 +69,7 @@ RSpec.feature "Numismatics::Coins" do
     expect(page).to have_field "Numismatic collection"
     expect(page).to have_selector("label", text: "Numismatic reference")
     expect(page).to have_field "Part"
+    expect(page).not_to have_field "PDF Type"
     expect(page).to have_selector("label", text: "Person")
     expect(page).to have_field "Private note"
     expect(page).to have_field "Size (mm)"

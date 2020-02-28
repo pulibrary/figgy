@@ -78,8 +78,7 @@ module Numismatics
           :find_description,
           :holding_location,
           :numismatic_collection,
-          :member_of_collection_ids,
-          :pdf_type
+          :member_of_collection_ids
         ],
         "Accession" => [
           :numismatic_accession_id,
