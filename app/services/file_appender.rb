@@ -32,7 +32,7 @@ class FileAppender
     return updated_files unless updated_files.empty?
 
     # Persist new files for the resource if there are none to update
-    file_resources = FileResources.new(build_file_sets || file_nodes)
+    file_resources = FileResources.new(build_file_sets(resource) || file_nodes)
 
     # Append the array of file metadata values to any FileSets with new FileNodes being appended
     resource.file_metadata += file_resources.file_metadata if file_set?(resource)
@@ -80,13 +80,39 @@ class FileAppender
       updated.compact
     end
 
+    # Generate a title for a FileSet based on resource class
+    # @param resource [Resource]
+    # @param filename [String]
+    # @return [String] title
+    def fileset_title(resource, filename)
+      case resource
+      when Numismatics::Coin
+        coin_image_title(filename)
+      else
+        filename
+      end
+    end
+
+    # Generate a title for a Coin FileSet
+    # @param filename [String]
+    # @return [String] title
+    def coin_image_title(filename)
+      if filename =~ /R/
+        "Reverse"
+      elsif filename =~ /O/
+        "Obverse"
+      else
+        filename
+      end
+    end
+
     # Create and persist a FileSet Resource using a file
     # @param file_node [File]
     # @param file [File]
     # @return [FileSet] the newly persisted FileSet Resource
-    def create_file_set(file_node, file)
+    def create_file_set(resource, file_node, file)
       attributes = {
-        title: file_node.original_filename,
+        title: fileset_title(resource, file_node.original_filename.first),
         file_metadata: [file_node],
         processing_status: "in process"
       }.merge(
@@ -98,10 +124,10 @@ class FileAppender
     # Constructs FileSet Objects using the files being uploaded
     # Does *not* construct new Objects if derivatives are being processed
     # @return [Array<FileSet>]
-    def build_file_sets
+    def build_file_sets(resource)
       return if file_nodes.empty? || processing_derivatives?
       file_nodes.each_with_index.map do |node, index|
-        file_set = create_file_set(node, files[index])
+        file_set = create_file_set(resource, node, files[index])
         file_set
       end
     end
