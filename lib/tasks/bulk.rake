@@ -29,6 +29,7 @@ namespace :bulk do
     background = ENV["BACKGROUND"]
     model = ENV["MODEL"]
     filter = ENV["FILTER"]
+    identifier = ENV["OBJID"] # will be the ark for the resource
 
     abort "usage: rake bulk:ingest DIR=/path/to/files BIB=1234567 COLL=collid LOCAL_ID=local_id REPLACES=replaces FILTER=file_filter MODEL=ResourceClass" unless dir && Dir.exist?(dir)
 
@@ -59,7 +60,8 @@ namespace :bulk do
           member_of_collection_ids: [coll],
           source_metadata_identifier: bib,
           local_identifier: local_id,
-          replaces: replaces
+          replaces: replaces,
+          identifier: identifier
         )
       else
         IngestFolderJob.perform_now(
@@ -69,7 +71,8 @@ namespace :bulk do
           member_of_collection_ids: [coll],
           source_metadata_identifier: bib,
           local_identifier: local_id,
-          replaces: replaces
+          replaces: replaces,
+          identifier: identifier
         )
       end
     rescue => e
@@ -259,6 +262,27 @@ namespace :bulk do
     rescue => e
       logger.error "Error: #{e.message}"
       logger.error e.backtrace
+    end
+  end
+
+  desc "Remove all resources in an archival collection"
+  task remove: :environment do
+    abort "usage: rake bulk:remove CODE=archival_collection_code" unless ENV["CODE"]
+
+    archival_collection_code = ENV["CODE"]
+    background = ENV["BACKGROUND"]
+
+    @logger = Logger.new(STDOUT)
+    @logger.info "Removing archival collection #{archival_collection_code}"
+
+    begin
+      if background
+        DeleteArchivalCollectionJob.set(queue: :low).perform_later(id: archival_collection_code)
+      else
+        DeleteArchivalCollectionJob.perform_now(id: archival_collection_code)
+      end
+    rescue => e
+      @logger.error "Error: #{e.message}"
     end
   end
 end
