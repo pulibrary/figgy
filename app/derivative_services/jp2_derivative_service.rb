@@ -85,51 +85,32 @@ class Jp2DerivativeService
     when ["image/tiff"]
       run_tiff_derivatives
     when ["image/jpeg"]
-      run_jpg_derivatives
+      run_tiff_derivatives
     end
   end
 
   def run_tiff_derivatives
     create_tiff_derivative(filename)
-  rescue RuntimeError # Rescue if there's a compression error.
-    create_tiff_derivative(clean_filename)
   end
 
   def create_tiff_derivative(filename)
-    Hydra::Derivatives::Jpeg2kImageDerivatives.create(
-      filename,
-      outputs: [
-        label: "intermediate_file",
-        recipe: recipe,
-        service: {
-          datastream: "intermediate_file"
-        },
-        url: URI("file://#{temporary_output.path}")
-      ]
-    )
+    color_corrected_tiff = correct_color(filename)
+    _stdout, stderr, status =
+      Open3.capture3("opj_compress", "-i", color_corrected_tiff.path.to_s, "-o", temporary_output.path.to_s, "-t", "1024,1024", "-p", "RPCL", "-n", "8", "-r", "10")
+    raise stderr unless status.success?
   end
 
-  def run_jpg_derivatives
-    create_tiff_derivative(jpg_tiff_filename)
-  end
-
-  def jpg_tiff_filename
-    @jpg_tiff_filename ||=
-      begin
-        Hydra::Derivatives::ImageDerivatives.create(
-          filename,
-          outputs: [
-            label: "intermediate_file",
-            url: URI("file://#{temporary_jpg_tiff.path}"),
-            format: "tiff"
-          ]
-        )
-        temporary_jpg_tiff
-      end
-  end
-
-  def temporary_jpg_tiff
-    @temporary_jpg_tiff ||= Tempfile.new(["temporary_jpg", ".tiff"])
+  def correct_color(filename)
+    temp_file = Tempfile.new(["tempfile", ".tif"])
+    file = MiniMagick::Image.open(filename)
+    return File.open(filename) unless file["%[channels]"] != "gray"
+    file.format "tiff"
+    file.combine_options do |c|
+      c.profile Hydra::Derivatives::Processors::Jpeg2kImage.srgb_profile_path
+      c.type "truecolor"
+    end
+    file.write temp_file.path
+    temp_file
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
@@ -157,33 +138,12 @@ class Jp2DerivativeService
     Pathname.new(file_object.disk_path)
   end
 
-  def clean_filename
-    @filename ||=
-      begin
-        Pathname.new(cleaned_file.path)
-      end
-  end
-
-  # Remove compression from given TIFF file, just in case.
-  def cleaned_file
-    @cleaned_file ||=
-      begin
-        t = Tempfile.new
-        MiniMagick::Tool::Convert.new do |convert|
-          convert << file_object.disk_path.to_s
-          convert.compress.+
-          convert << t.path.to_s
-        end
-        t
-      end
-  end
-
   def file_object
     @file_object ||= Valkyrie::StorageAdapter.find_by(id: target_file.file_identifiers[0])
   end
 
   def temporary_output
-    @temporary_file ||= Tempfile.new
+    @temporary_file ||= Tempfile.new(["intermediate_file", ".jp2"])
   end
 
   private
