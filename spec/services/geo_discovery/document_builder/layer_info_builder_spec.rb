@@ -13,6 +13,8 @@ describe GeoDiscovery::DocumentBuilder::LayerInfoBuilder do
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { metadata_adapter.query_service }
   let(:file) { fixture_file_upload("files/vector/shapefile.zip", 'application/zip; ogr-format="ESRI Shapefile"') }
+  let(:tika_output) { tika_shapefile_output }
+
   let(:document) { GeoDiscovery::GeoblacklightDocument.new }
   let(:geometry) { "None" }
 

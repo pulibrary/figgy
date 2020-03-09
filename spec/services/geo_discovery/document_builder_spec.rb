@@ -2,7 +2,7 @@
 require "rails_helper"
 
 # See https://github.com/geoblacklight/geoblacklight/wiki/Schema
-describe GeoDiscovery::DocumentBuilder do
+describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
   with_queue_adapter :inline
   subject(:document_builder) { described_class.new(query_service.find_by(id: geo_work.id), document_class) }
   let(:geo_work) do
@@ -35,6 +35,8 @@ describe GeoDiscovery::DocumentBuilder do
   let(:document) { JSON.parse(document_builder.to_json(nil)) }
 
   describe "vector resource" do
+    let(:tika_output) { tika_shapefile_output }
+
     before do
       output = change_set_persister.save(change_set: change_set)
       file_set_id = output.member_ids[0]
@@ -77,7 +79,7 @@ describe GeoDiscovery::DocumentBuilder do
       expect(document["solr_year_i"]).to eq(2011)
 
       # layer info fields
-      expect(document["layer_geom_type_s"]).to eq("Mixed")
+      expect(document["layer_geom_type_s"]).to eq("Polygon")
       expect(document["dc_format_s"]).to eq("Shapefile")
 
       # references
