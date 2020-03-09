@@ -167,23 +167,23 @@ class InstrumentedAdapter < SimpleDelegator
     # Traces "find_references_by" operations delegated to the QueryService
     # @param resource [Valkyrie::Resource] resource for which referenced resources are being queried
     # @param property [Symbol] the resource property for the relation
-    def find_references_by(resource:, property:)
+    def find_references_by(resource:, property:, model: nil)
       trace("valkyrie.find_references_by") do |span|
         span.set_tag("param.resource", resource.id.to_s)
         span.set_tag("param.property", property.to_s)
-        __getobj__.find_references_by(resource: resource, property: property)
+        __getobj__.find_references_by(resource: resource, property: property, model: model)
       end
     end
 
     # Traces "find_inverse_references_by" operations delegated to the QueryService
     # @param resource [Valkyrie::Resource] resource to which resources referencing are being queried
     # @param property [Symbol] the resource property for the relation
-    def find_inverse_references_by(resource: nil, id: nil, property:)
+    def find_inverse_references_by(resource: nil, id: nil, model: nil, property:)
       trace("valkyrie.find_inverse_references_by") do |span|
         span.set_tag("param.resource", resource.id.to_s) if resource
         span.set_tag("param.id", id.to_s) if id
         span.set_tag("param.property", property.to_s)
-        __getobj__.find_inverse_references_by(resource: resource, id: id, property: property)
+        __getobj__.find_inverse_references_by(resource: resource, id: id, property: property, model: model)
       end
     end
 
@@ -191,6 +191,13 @@ class InstrumentedAdapter < SimpleDelegator
       trace("valkyrie.find_by_alternate_identifier") do |span|
         span.set_tag("param.alternate_identifier", alternate_identifier.to_s)
         __getobj__.find_by_alternate_identifier(alternate_identifier: alternate_identifier)
+      end
+    end
+
+    def count_all_of_model(model:)
+      trace("valkyrie.count_all_of_model") do |span|
+        span.set_tag("param.model", model.to_s)
+        __getobj__.count_all_of_model(model: model)
       end
     end
 
