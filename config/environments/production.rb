@@ -21,5 +21,6 @@ Rails.application.configure do
   config.action_controller.action_on_unpermitted_parameters = false
   config.force_ssl = true
   config.action_dispatch.x_sendfile_header = "X-Accel-Redirect"
+  # This ensures that the files stored from downloads are only only stored temporarily
   config.active_storage.service = :test
 end

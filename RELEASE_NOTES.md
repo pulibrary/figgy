@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-04-21
+
+## Added
+
+* Upgraded the file and Google Drive upload interface for resources and the bulk ingest interface
+
 # 2020-04-16
 
 ## Added

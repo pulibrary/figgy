@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'tempfile'
+require "tempfile"
 
 class PendingUpload < Valkyrie::Resource
   attribute :file_name
@@ -40,7 +40,7 @@ class PendingUpload < Valkyrie::Resource
 
     def upload_file
       @upload_file ||= begin
-                         upload_files = UploadFile.find(upload_file_id)
+                         upload_files = BrowseEverything::UploadFile.find(upload_file_id)
                          upload_files.first
                        end
     end
@@ -48,13 +48,8 @@ class PendingUpload < Valkyrie::Resource
 
     def downloaded_file
       @downloaded_file ||= begin
-                             # I am not certain why Tempfile and ::Tempfile raises errors here
-                             # temp_file = ::TempFile.create do |f|
-                             #   f << bytestream.download
-                             # end
-
                              target = Dir::Tmpname.create(original_filename) {}
-                             File.open(target, 'wb') do |output|
+                             File.open(target, "wb") do |output|
                                output.write(bytestream.download)
                              end
                              target

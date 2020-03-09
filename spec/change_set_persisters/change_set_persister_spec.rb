@@ -413,21 +413,20 @@ RSpec.describe ChangeSetPersister do
       let(:file) do
         PendingUpload.new(
           id: SecureRandom.uuid,
-          created_at: Time.current.utc.iso8601,
-          auth_header: "{\"Authorization\":\"Bearer ya29.kQCEAHj1bwFXr2AuGQJmSGRWQXpacmmYZs4kzCiXns3d6H1ZpIDWmdM8\"}",
-          expires: "2018-06-06T22:12:11Z",
-          file_name: "file.pdf",
-          file_size: "1874822",
-          url: "https://retrieve.cloud.example.com/some/dir/file.pdf"
+          upload_id: "test-upload-id",
+          upload_file_id: "https://www.example.com/resource1/1.tif"
         )
       end
-      let(:http_request) { instance_double(Typhoeus::Request) }
-      let(:cloud_response) { Typhoeus::Response.new }
+      let(:bytestream) { instance_double(ActiveStorage::Blob) }
+      let(:upload_file) { double }
+      let(:upload_file_id) { "https://www.example.com/resource1/1.tif" }
 
       before do
-        allow(cloud_response).to receive(:code).and_return(403)
-        allow(http_request).to receive(:on_headers).and_yield(cloud_response)
-        allow(Typhoeus::Request).to receive(:new).and_return(http_request)
+        allow(upload_file).to receive(:bytestream).and_return(bytestream)
+        allow(upload_file).to receive(:name).and_return("example.tif")
+        allow(upload_file).to receive(:id).and_return(upload_file_id)
+        allow(BrowseEverything::UploadFile).to receive(:find).and_return([upload_file])
+        allow(bytestream).to receive(:download).and_raise(StandardError)
       end
 
       it "does not append files when the upload fails", run_real_derivatives: true do
