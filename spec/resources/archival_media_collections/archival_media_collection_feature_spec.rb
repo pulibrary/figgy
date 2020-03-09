@@ -43,7 +43,7 @@ RSpec.feature "Browsing archival media collections" do
 
       expect(page).to have_css ".btn-bag-path.browse-everything"
       click_on(class: "btn-bag-path")
-      expect(page).to have_css "#browse-everything"
+      expect(page).to have_css "#browse_everything"
     end
   end
 end

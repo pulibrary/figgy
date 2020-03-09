@@ -60,28 +60,46 @@ RSpec.describe BulkIngestController do
   end
 
   describe "POST #browse_everything_files" do
+    let(:file) { File.open(Rails.root.join("spec", "fixtures", "files", "example.tif")) }
+    let(:bytestream) { instance_double(ActiveStorage::Blob) }
+    let(:upload_file) { double }
+    let(:upload_file_id) { "test-upload-file-id" }
+    let(:upload) { instance_double(BrowseEverything::Upload) }
+    let(:uploads) { [upload.id] }
+    let(:upload_id) { "test-upload-id" }
+    let(:provider) { BrowseEverything::Provider::FileSystem.new }
+    let(:container) { instance_double(BrowseEverything::Container) }
+    let(:container_id) { "file:///base/4609321" }
+    let(:browse_everything) do
+      {
+        "uploads" => uploads
+      }
+    end
     let(:attributes) do
       {
         workflow: { state: "pending" },
         collections: ["1234567"],
         visibility: "open",
         mvw: false,
-        selected_files: selected_files
-      }
-    end
-    let(:selected_files) do
-      {
-        "0" => {
-          "url" => "file:///base/4609321",
-          "file_name" => "1.tif",
-          "file_size" => "100"
-        }
+        browse_everything: browse_everything
       }
     end
 
     before do
+      allow(bytestream).to receive(:download).and_return(file.read)
+      allow(upload_file).to receive(:bytestream).and_return(bytestream)
+      allow(upload_file).to receive(:name).and_return("example.tif")
+      allow(upload_file).to receive(:id).and_return(upload_file_id)
+      allow(BrowseEverything::UploadFile).to receive(:find).and_return([upload_file])
+      allow(upload).to receive(:provider).and_return(provider)
+      allow(upload).to receive(:containers).and_return([container])
+      allow(upload).to receive(:files).and_return([upload_file])
+      allow(upload).to receive(:id).and_return(upload_id)
+      allow(BrowseEverything::Upload).to receive(:find_by).and_return([upload])
+      allow(container).to receive(:name).and_return("example")
+      allow(container).to receive(:id).and_return(container_id)
+
       allow(IngestFolderJob).to receive(:perform_later)
-      allow(IngestFoldersJob).to receive(:perform_later)
     end
 
     context "with one single-volume resource where the directory is the bibid" do
@@ -120,23 +138,11 @@ RSpec.describe BulkIngestController do
     end
 
     context "when the directory does not look like a bibid" do
-      let(:attributes) do
-        {
-          workflow: { state: "pending" },
-          collections: ["1234567"],
-          visibility: "open",
-          mvw: false,
-          selected_files: selected_files
-        }
-      end
-      let(:selected_files) do
-        {
-          "0" => {
-            "url" => "file:///base/June 31",
-            "file_name" => "1.tif",
-            "file_size" => "100"
-          }
-        }
+      let(:container_id) { "file:///base/June 31" }
+      let(:container) { instance_double(BrowseEverything::Container) }
+
+      before do
+        allow(upload).to receive(:containers).and_return([container])
       end
 
       it "ingests the directory as a single resource" do
@@ -151,7 +157,7 @@ RSpec.describe BulkIngestController do
       end
 
       context "when no files have been selected" do
-        let(:selected_files) do
+        let(:browse_everything) do
           {}
         end
 
@@ -168,68 +174,70 @@ RSpec.describe BulkIngestController do
     end
 
     context "with two single-volume resources" do
-      let(:attributes) do
-        {
-          workflow: { state: "pending" },
-          visibility: "open",
-          mvw: false,
-          selected_files: selected_files
-        }
-      end
-      let(:selected_files) do
-        {
-          "0" => {
-            "url" => "file:///base/resource1/1.tif",
-            "file_name" => "1.tif",
-            "file_size" => "100"
-          },
-          "1" => {
-            "url" => "file:///base/resource2/1.tif",
-            "file_name" => "1.tif",
-            "file_size" => "100"
-          }
-        }
+      let(:bytestream2) { instance_double(ActiveStorage::Blob) }
+      let(:upload_file2) { double }
+      let(:upload_file2_id) { "file:///base/resource2/1.tif" }
+      let(:upload_file_id) { "file:///base/resource1/1.tif" }
+      let(:container2) { instance_double(BrowseEverything::Container) }
+      let(:container2_id) { "file:///base/resource2" }
+      let(:container_id) { "file:///base/resource1" }
+
+      before do
+        allow(bytestream2).to receive(:download).and_return(file.read)
+        allow(upload_file2).to receive(:bytestream).and_return(bytestream2)
+        allow(upload_file2).to receive(:name).and_return("1.tif")
+        allow(upload_file2).to receive(:id).and_return(upload_file2_id)
+        allow(BrowseEverything::UploadFile).to receive(:find).with([]).and_return([upload_file2])
+        allow(upload_file).to receive(:name).and_return("1.tif")
+
+        allow(container2).to receive(:name).and_return("resource2")
+        allow(container2).to receive(:id).and_return(container2_id)
+        allow(container).to receive(:name).and_return("resource1")
+
+        allow(upload).to receive(:files).and_return([upload_file, upload_file2])
+        allow(upload).to receive(:containers).and_return([container, container2])
+        allow(upload).to receive(:files).and_return([upload_file, upload_file2])
       end
 
       it "ingests the parent as two resources" do
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-        expect(IngestFoldersJob).to have_received(:perform_later).with(hash_including(directory: "/base", state: "pending", visibility: "open", member_of_collection_ids: []))
+        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: "/base/resource1", state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
       end
     end
 
     context "with files hosted on a cloud-storage provider" do
-      let(:selected_files) do
-        {
-          "0" => {
-            "url" => "https://www.example.com/files/1.tif?alt=media",
-            "file_name" => "1.tif",
-            "file_size" => "100",
-            "auth_header" => { "Authorization" => "Bearer secret" }
-          },
-          "1" => {
-            "url" => "https://www.example.com/files/2.tif?alt=media",
-            "file_name" => "2.tif",
-            "file_size" => "100",
-            "auth_header" => { "Authorization" => "Bearer secret" }
-          }
-        }
-      end
-
-      let(:attributes) do
-        {
-          workflow: { state: "pending" },
-          visibility: "open",
-          mvw: false,
-          selected_files: selected_files
-        }
-      end
+      let(:provider) { BrowseEverything::Provider::GoogleDrive.new }
+      let(:bytestream2) { instance_double(ActiveStorage::Blob) }
+      let(:upload_file2_id) { "https://www.example.com/resource2/1.tif" }
+      let(:upload_file2) { double }
+      let(:upload_file_id) { "https://www.example.com/resource1/1.tif" }
+      let(:container2_id) { "https://www.example.com/resource2" }
+      let(:container2) { instance_double(BrowseEverything::Container) }
+      let(:container_id) { "https://www.example.com/resource1" }
 
       let(:resources) do
         adapter.query_service.find_all_of_model(model: ScannedResource)
       end
 
       before do
-        allow(BrowseEverythingIngestJob).to receive(:perform_later)
+        allow(bytestream2).to receive(:download).and_return(file.read)
+        allow(upload_file2).to receive(:bytestream).and_return(bytestream2)
+        allow(upload_file2).to receive(:name).and_return("1.tif")
+        allow(upload_file2).to receive(:container_id).and_return(container2_id)
+        allow(upload_file2).to receive(:id).and_return(upload_file2_id)
+
+        allow(upload_file).to receive(:container_id).and_return(container_id)
+        allow(BrowseEverything::UploadFile).to receive(:find).with([upload_file2_id]).and_return([upload_file2])
+        allow(BrowseEverything::UploadFile).to receive(:find).with([upload_file_id]).and_return([upload_file])
+
+        allow(container2).to receive(:id).and_return(container2_id)
+        allow(container2).to receive(:name).and_return("resource2")
+        allow(container).to receive(:name).and_return("resource1")
+        allow(container).to receive(:id).and_return(container_id)
+
+        allow(upload).to receive(:files).and_return([upload_file, upload_file2])
+        allow(upload).to receive(:containers).and_return([container, container2])
+
         allow(PendingUpload).to receive(:new).and_call_original
       end
 
@@ -237,23 +245,35 @@ RSpec.describe BulkIngestController do
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
         expect(PendingUpload).to have_received(:new).with(
           hash_including(
-            url: "https://www.example.com/files/1.tif?alt=media",
-            file_name: "1.tif",
-            file_size: "100",
-            auth_header: { "Authorization": "Bearer secret" }
+            upload_id: "test-upload-id",
+            upload_file_id: "https://www.example.com/resource1/1.tif"
           )
         )
-        expect(BrowseEverythingIngestJob).to have_received(:perform_later).with(resources.first.id.to_s, "BulkIngestController", [resources.first.pending_uploads.first.id.to_s])
-        expect(BrowseEverythingIngestJob).to have_received(:perform_later).with(resources.last.id.to_s, "BulkIngestController", [resources.last.pending_uploads.first.id.to_s])
+        expect(PendingUpload).to have_received(:new).with(
+          hash_including(
+            upload_id: "test-upload-id",
+            upload_file_id: "https://www.example.com/resource2/1.tif"
+          )
+        )
       end
 
       context "when bulk ingesting multi-volume works" do
+        let(:bytestream2) { instance_double(ActiveStorage::Blob) }
+        let(:parent_container_id) { "https://www.example.com/parent" }
+        let(:parent_container) { instance_double(BrowseEverything::Container) }
+        let(:upload_file2_id) { "https://www.example.com/parent/resource2/1.tif" }
+        let(:upload_file2) { double }
+        let(:upload_file_id) { "https://www.example.com/parent/resource1/1.tif" }
+        let(:container2_id) { "https://www.example.com/parent/resource2" }
+        let(:container2) { instance_double(BrowseEverything::Container) }
+        let(:container_id) { "https://www.example.com/parent/resource1" }
+
         let(:attributes) do
           {
             workflow: { state: "pending" },
             visibility: "open",
             mvw: true,
-            selected_files: selected_files
+            browse_everything: browse_everything
           }
         end
 
@@ -261,101 +281,177 @@ RSpec.describe BulkIngestController do
           adapter.query_service.find_all_of_model(model: ScannedResource)
         end
         let(:resource) do
-          resources.reject { |res| res.member_ids.empty? }.first
+          resources.select { |res| res.member_ids.length == 2 }.first
         end
-        let(:member_resources) { resource.decorate.members }
 
         before do
-          allow(BrowseEverythingIngestJob).to receive(:perform_later)
+          allow(bytestream2).to receive(:download).and_return(file.read)
+          allow(upload_file2).to receive(:bytestream).and_return(bytestream2)
+          allow(upload_file2).to receive(:name).and_return("1.tif")
+          allow(upload_file2).to receive(:container_id).and_return(container2_id)
+          allow(upload_file2).to receive(:id).and_return(upload_file2_id)
+
+          allow(upload_file).to receive(:container_id).and_return(container_id)
+          allow(BrowseEverything::UploadFile).to receive(:find).with([upload_file2_id]).and_return([upload_file2])
+          allow(BrowseEverything::UploadFile).to receive(:find).with([upload_file_id]).and_return([upload_file])
+
+          allow(parent_container).to receive(:id).and_return(parent_container_id)
+          allow(parent_container).to receive(:name).and_return("parent")
+          allow(container2).to receive(:parent_id).and_return(parent_container_id)
+          allow(container2).to receive(:id).and_return(container2_id)
+          allow(container2).to receive(:name).and_return("resource2")
+          allow(container).to receive(:parent_id).and_return(parent_container_id)
+          allow(container).to receive(:name).and_return("resource1")
+          allow(container).to receive(:id).and_return(container_id)
+
+          allow(upload).to receive(:files).and_return([upload_file, upload_file2])
+          allow(upload).to receive(:containers).and_return([parent_container, container, container2])
+
           post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
         end
 
         it "ingests the file as FileSets on a new member resource for a new parent resource" do
           expect(PendingUpload).to have_received(:new).with(
             hash_including(
-              url: "https://www.example.com/files/1.tif?alt=media",
-              file_name: "1.tif",
-              file_size: "100",
-              auth_header: { "Authorization": "Bearer secret" }
+              upload_id: "test-upload-id",
+              upload_file_id: "https://www.example.com/parent/resource1/1.tif"
             )
           )
-
-          expect(member_resources.length).to eq(2)
-
-          expect(BrowseEverythingIngestJob).to have_received(:perform_later).with(member_resources.first.id.to_s, "BulkIngestController", member_resources.first.pending_uploads.map(&:id).map(&:to_s))
-          expect(BrowseEverythingIngestJob).to have_received(:perform_later).with(member_resources.last.id.to_s, "BulkIngestController", member_resources.last.pending_uploads.map(&:id).map(&:to_s))
+          expect(PendingUpload).to have_received(:new).with(
+            hash_including(
+              upload_id: "test-upload-id",
+              upload_file_id: "https://www.example.com/parent/resource2/1.tif"
+            )
+          )
+          expect(resource.member_ids.length).to eq(2)
+          expect(resource.decorate.volumes.first.file_sets.length).to eq(1)
+          expect(resource.decorate.volumes.last.file_sets.length).to eq(1)
         end
       end
     end
 
     context "with one multi-volume resource" do
+      let(:parent_container) { instance_double(BrowseEverything::Container) }
+      let(:parent_container_id) { "file://base/parent" }
+      let(:bytestream2) { instance_double(ActiveStorage::Blob) }
+      let(:upload_file2_id) { "file://base/parent/resource2/1.tif" }
+      let(:upload_file2) { double }
+      let(:upload_file_id) { "file://base/parent/resource1/1.tif" }
+      let(:container2_id) { "file://base/parent/resource2" }
+      let(:container2) { instance_double(BrowseEverything::Container) }
+      let(:container_id) { "file://base/resource1" }
       let(:attributes) do
         {
           workflow: { state: "pending" },
           collections: ["1234567"],
           visibility: "open",
           mvw: true,
-          selected_files: selected_files
+          browse_everything: browse_everything
         }
       end
-      let(:selected_files) do
-        {
-          "0" => {
-            "url" => "file:///base/resource1/vol1/1.tif",
-            "file_name" => "1.tif",
-            "file_size" => "100"
-          },
-          "1" => {
-            "url" => "file:///base/resource1/vol2/1.tif",
-            "file_name" => "1.tif",
-            "file_size" => "100"
-          }
-        }
+
+      before do
+        allow(bytestream2).to receive(:download).and_return(file.read)
+        allow(upload_file2).to receive(:bytestream).and_return(bytestream2)
+        allow(upload_file2).to receive(:name).and_return("1.tif")
+        allow(upload_file2).to receive(:id).and_return(upload_file2_id)
+
+        allow(BrowseEverything::UploadFile).to receive(:find).with([upload_file2_id]).and_return([upload_file2])
+        allow(BrowseEverything::UploadFile).to receive(:find).with([upload_file_id]).and_return([upload_file])
+
+        allow(parent_container).to receive(:id).and_return(parent_container_id)
+        allow(container2).to receive(:parent_id).and_return(parent_container_id)
+        allow(container2).to receive(:id).and_return(container2_id)
+        allow(container).to receive(:parent_id).and_return(parent_container_id)
+        allow(container).to receive(:id).and_return(container_id)
+
+        allow(upload).to receive(:files).and_return([upload_file, upload_file2])
+        allow(upload).to receive(:containers).and_return([parent_container, container, container2])
       end
 
       it "ingests the parent as two resources" do
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-        expect(IngestFoldersJob).to have_received(:perform_later).with(hash_including(directory: "/base", state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
+        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: "base/parent", state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
       end
     end
 
     context "with two multi-volume resources" do
+      let(:parent_container2) { instance_double(BrowseEverything::Container) }
+      let(:parent_container2_id) { "file://base/parent2" }
+
+      let(:bytestream4) { instance_double(ActiveStorage::Blob) }
+      let(:upload_file4_id) { "file://base/parent2/resource2/1.tif" }
+      let(:upload_file4) { double }
+
+      let(:bytestream3) { instance_double(ActiveStorage::Blob) }
+      let(:upload_file3_id) { "file://base/parent2/resource1/1.tif" }
+      let(:upload_file3) { double }
+
+      let(:container4_id) { "file://base/parent2/resource2" }
+      let(:container4) { instance_double(BrowseEverything::Container) }
+      let(:container3_id) { "file://base/parent2/resource1" }
+      let(:container3) { instance_double(BrowseEverything::Container) }
+
+      let(:parent_container) { instance_double(BrowseEverything::Container) }
+      let(:parent_container_id) { "file://base/parent" }
+      let(:bytestream2) { instance_double(ActiveStorage::Blob) }
+      let(:upload_file2_id) { "file://base/parent/resource2/1.tif" }
+      let(:upload_file2) { double }
+      let(:upload_file_id) { "file://base/parent/resource1/1.tif" }
+      let(:container2_id) { "file://base/parent/resource2" }
+      let(:container2) { instance_double(BrowseEverything::Container) }
+      let(:container_id) { "file://base/resource1" }
+
       let(:attributes) do
         {
           workflow: { state: "pending" },
+          collections: ["1234567"],
           visibility: "open",
           mvw: true,
-          selected_files: selected_files
+          browse_everything: browse_everything
         }
       end
-      let(:selected_files) do
-        {
-          "0" => {
-            "url" => "file:///base/resource1/vol1/1.tif",
-            "file_name" => "1.tif",
-            "file_size" => "100"
-          },
-          "1" => {
-            "url" => "file:///base/resource1/vol2/1.tif",
-            "file_name" => "1.tif",
-            "file_size" => "100"
-          },
-          "2" => {
-            "url" => "file:///base/resource2/vol3/1.tif",
-            "file_name" => "1.tif",
-            "file_size" => "100"
-          },
-          "3" => {
-            "url" => "file:///base/resource2/vol4/1.tif",
-            "file_name" => "1.tif",
-            "file_size" => "100"
-          }
-        }
+
+      before do
+        allow(bytestream4).to receive(:download).and_return(file.read)
+        allow(upload_file4).to receive(:bytestream).and_return(bytestream4)
+        allow(upload_file4).to receive(:name).and_return("1.tif")
+        allow(upload_file4).to receive(:id).and_return(upload_file4_id)
+
+        allow(bytestream3).to receive(:download).and_return(file.read)
+        allow(upload_file3).to receive(:bytestream).and_return(bytestream3)
+        allow(upload_file3).to receive(:name).and_return("1.tif")
+        allow(upload_file3).to receive(:id).and_return(upload_file3_id)
+
+        allow(bytestream2).to receive(:download).and_return(file.read)
+        allow(upload_file2).to receive(:bytestream).and_return(bytestream2)
+        allow(upload_file2).to receive(:name).and_return("1.tif")
+        allow(upload_file2).to receive(:id).and_return(upload_file2_id)
+
+        allow(BrowseEverything::UploadFile).to receive(:find).with([upload_file4_id]).and_return([upload_file4])
+        allow(BrowseEverything::UploadFile).to receive(:find).with([upload_file3_id]).and_return([upload_file3])
+        allow(BrowseEverything::UploadFile).to receive(:find).with([upload_file2_id]).and_return([upload_file2])
+        allow(BrowseEverything::UploadFile).to receive(:find).with([upload_file_id]).and_return([upload_file])
+
+        allow(parent_container2).to receive(:id).and_return(parent_container2_id)
+        allow(container4).to receive(:parent_id).and_return(parent_container2_id)
+        allow(container4).to receive(:id).and_return(container4_id)
+        allow(container3).to receive(:parent_id).and_return(parent_container2_id)
+        allow(container3).to receive(:id).and_return(container3_id)
+
+        allow(parent_container).to receive(:id).and_return(parent_container_id)
+        allow(container2).to receive(:parent_id).and_return(parent_container_id)
+        allow(container2).to receive(:id).and_return(container2_id)
+        allow(container).to receive(:parent_id).and_return(parent_container_id)
+        allow(container).to receive(:id).and_return(container_id)
+
+        allow(upload).to receive(:files).and_return([upload_file, upload_file2, upload_file3, upload_file4])
+        allow(upload).to receive(:containers).and_return([parent_container, container, container2, parent_container2, container3, container4])
       end
 
       it "ingests the parent as two resources" do
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-        expect(IngestFoldersJob).to have_received(:perform_later).with(hash_including(directory: "/base", state: "pending", visibility: "open", member_of_collection_ids: []))
+        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: "base/parent", state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
       end
     end
   end

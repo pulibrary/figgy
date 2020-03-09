@@ -86,10 +86,12 @@ class BaseResourceController < ApplicationController
     end
 
     def browse_everything_params
+      return {} unless params.key?("browse_everything")
       @browse_everything_params ||= params["browse_everything"]
     end
 
     def browse_everything_uploads
+      return [] unless browse_everything_params.key?("uploads")
       @browse_everything_uploads ||= browse_everything_params["uploads"]
     end
 
@@ -104,6 +106,9 @@ class BaseResourceController < ApplicationController
         upload = uploads.first
 
         upload.files.each do |upload_file|
+          # Filter for hidden files
+          next if upload_file.name =~ /^\./
+
           new_pending_upload = PendingUpload.new(
             id: SecureRandom.uuid,
             upload_file_id: upload_file.id
