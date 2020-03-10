@@ -16,8 +16,7 @@ class OrangelightReindexer
     all_orangelight_resources.each do |resources|
       resources.each do |resource|
         begin
-          decorator = resource.decorate
-          messenger.record_updated(decorator)
+          messenger.record_updated(resource)
           logger.info("Indexed into Orangelight: #{resource.id}")
         rescue StandardError => e
           logger.warn("Error: #{e.message}")
