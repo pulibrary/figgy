@@ -283,7 +283,7 @@ GEM
       railties (>= 3.2, < 5.2)
     down (4.8.0)
       addressable (~> 2.5)
-    draper (3.1.0)
+    draper (4.0.0)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
       activemodel-serializers-xml (>= 1.0)
@@ -302,16 +302,16 @@ GEM
       concurrent-ruby (~> 1.0)
     dry-equalizer (0.3.0)
     dry-inflector (0.2.0)
-    dry-logic (1.0.5)
+    dry-logic (1.0.6)
       concurrent-ruby (~> 1.0)
       dry-core (~> 0.2)
       dry-equalizer (~> 0.2)
-    dry-struct (1.2.0)
-      dry-core (~> 0.4, >= 0.4.3)
+    dry-struct (1.3.0)
+      dry-core (~> 0.4, >= 0.4.4)
       dry-equalizer (~> 0.3)
-      dry-types (~> 1.0)
+      dry-types (~> 1.3)
       ice_nine (~> 0.11)
-    dry-types (1.2.2)
+    dry-types (1.3.0)
       concurrent-ruby (~> 1.0)
       dry-container (~> 0.3)
       dry-core (~> 0.4, >= 0.4.4)
@@ -569,7 +569,7 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
-    oj (3.10.2)
+    oj (3.10.5)
     omniauth (1.9.0)
       hashie (>= 3.4.6, < 3.7.0)
       rack (>= 1.6.2, < 3)
@@ -747,7 +747,7 @@ GEM
     selenium-webdriver (3.142.3)
       childprocess (>= 0.5, < 2.0)
       rubyzip (~> 1.2, >= 1.2.2)
-    sequel (5.29.0)
+    sequel (5.30.0)
     sequel_pg (1.12.4)
       pg (>= 0.18.0, != 1.2.0)
       sequel (>= 4.38.0)
@@ -835,13 +835,14 @@ GEM
     unf_ext (0.0.7.5)
     unicode-display_width (1.4.1)
     validatable (1.6.7)
-    valkyrie (2.0.2)
+    valkyrie (2.1.0)
       activemodel
       activesupport
       disposable (~> 0.4.5)
       draper
       dry-struct
       dry-types (~> 1.0)
+      faraday (< 1.0)
       json
       json-ld
       railties
@@ -849,11 +850,11 @@ GEM
       rdf-vocab
       reform
       reform-rails
-    valkyrie-sequel (2.0.1)
+    valkyrie-sequel (2.1.0)
       oj
       sequel
       sequel_pg
-      valkyrie (~> 2.0.0)
+      valkyrie (~> 2.1.0)
     warden (1.2.8)
       rack (>= 2.0.6)
     web-console (3.5.1)
@@ -992,9 +993,9 @@ DEPENDENCIES
   tiny_tds
   title
   uglifier
-  valkyrie (~> 2.0.2)
+  valkyrie (~> 2.1.0)
   valkyrie-derivatives!
-  valkyrie-sequel (~> 2.0.1)
+  valkyrie-sequel (~> 2.1.0)
   valkyrie-shrine!
   web-console
   webdrivers

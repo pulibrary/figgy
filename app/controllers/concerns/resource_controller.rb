@@ -40,14 +40,13 @@ module ResourceController
     @change_set.validate(resource_params.merge(depositor: [current_user&.uid]))
     authorize_create!(change_set: @change_set)
     if @change_set.valid?
-      @change_set.sync
       obj = nil
       change_set_persister.buffer_into_index do |buffered_changeset_persister|
         obj = buffered_changeset_persister.save(change_set: @change_set)
       end
       after_create_success(obj, @change_set)
     else
-      Valkyrie.logger.warn(@change_set.errors.details)
+      Valkyrie.logger.warn(@change_set.errors.details.to_s)
       render :new
     end
   rescue SourceMetadataIdentifierValidator::InvalidMetadataIdentifierError => invalid_metadata_id_error

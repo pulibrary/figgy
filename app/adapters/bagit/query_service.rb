@@ -52,12 +52,13 @@ module Bagit
       find_inverse_references_by(resource: resource, property: :member_ids)
     end
 
-    def find_references_by(resource:, property:)
+    def find_references_by(resource:, property:, model: nil)
       ids = (resource.try(property) || []).select { |id| id.is_a?(Valkyrie::ID) }
       ids.uniq! unless resource.class.fields.include?(property) && resource.ordered_attribute?(property)
-      ids.lazy.map do |id|
+      resources = ids.lazy.map do |id|
         find_by(id: id)
       end
+      filter_by_model(resources, model)
     end
 
     def find_all_of_model(model:)
@@ -67,18 +68,31 @@ module Bagit
       end
     end
 
-    def find_inverse_references_by(resource: nil, id: nil, property:)
+    def count_all_of_model(model:)
+      Valkyrie.logger.warn("Bagit Query Service has been asked to find all resources of a specific type. This will require iterating over the metadata of every bag - AVOID.")
+      find_all_of_model(model: model).to_a.length
+    end
+
+    def find_inverse_references_by(resource: nil, id: nil, model: nil, property:)
       raise ArgumentError, "Provide resource or id" unless resource || id
       raise ArgumentError, "resource is not saved" unless !resource || resource.persisted?
       Valkyrie.logger.warn("Bagit Query Service has been asked to find inverse references. This will require iterating over the metadata of every bag - AVOID.")
       id ||= resource.id
-      find_all.select do |potential_inverse_reference|
+      resources = find_all.select do |potential_inverse_reference|
         (potential_inverse_reference.try(property) || []).include?(id)
       end
+      filter_by_model(resources, model)
     end
 
     def custom_queries
       @custom_queries ||= ::Valkyrie::Persistence::CustomQueryContainer.new(query_service: self)
     end
+
+    private
+
+      def filter_by_model(resources, model)
+        return resources unless model
+        resources.select { |found_resource| found_resource.class == model }
+      end
   end
 end

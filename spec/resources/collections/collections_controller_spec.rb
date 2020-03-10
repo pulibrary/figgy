@@ -105,14 +105,16 @@ RSpec.describe CollectionsController, type: :controller do
             expect(response.status).to eq(200)
             expect(response).to render_template(:new)
             expect(Valkyrie.logger).to have_received(:warn).with(
-              source_metadata_identifier: [
-                error: "can't be blank"
-              ],
-              slug: [
-                {
-                  error: "contains invalid characters, please only use alphanumerics, dashes, and underscores"
-                }
-              ]
+              {
+                source_metadata_identifier: [
+                  error: "can't be blank"
+                ],
+                slug: [
+                  {
+                    error: "contains invalid characters, please only use alphanumerics, dashes, and underscores"
+                  }
+                ]
+              }.to_s
             )
           end
         end
