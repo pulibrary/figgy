@@ -28,3 +28,10 @@ namespace :geoblacklight do
     GeoResourceReindexer.reindex_geoblacklight
   end
 end
+
+namespace :orangelight do
+  desc "Issue rabbitmq messages that each complete orangelight resource is updated"
+  task reindex: :environment do
+    OrangelightReindexer.reindex_orangelight
+  end
+end
