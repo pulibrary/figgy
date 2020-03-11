@@ -12,6 +12,25 @@ RSpec.describe FindByProperty do
       expect(output.id).to eq box.id
     end
 
+    it "can filter by model" do
+      FactoryBot.create_for_repository(:scanned_resource, title: "test", contributor: "testing")
+      FactoryBot.create_for_repository(:scanned_map, title: "test")
+
+      output = query.find_by_property(property: :title, value: "test", model: ScannedResource)
+      expect(output.to_a.length).to eq 1
+      expect(output.first.contributor).to eq ["testing"]
+    end
+
+    it "can return a lazy result set" do
+      FactoryBot.create_for_repository(:scanned_resource, title: "test", contributor: "testing")
+      FactoryBot.create_for_repository(:scanned_map, title: "test")
+
+      allow(query_service.resource_factory).to receive(:to_resource).and_call_original
+      output = query.find_by_property(property: :title, value: "test", lazy: true)
+      output.first
+      expect(query_service.resource_factory).to have_received(:to_resource).exactly(1).times
+    end
+
     context "when no objects have the string in that property" do
       it "returns no results" do
         output = query.find_by_property(property: :barcode, value: "notabarcode")
