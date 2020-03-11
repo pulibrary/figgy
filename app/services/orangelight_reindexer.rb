@@ -7,20 +7,18 @@ class OrangelightReindexer
     new(logger: logger).reindex_orangelight
   end
 
-  attr_reader :logger, :ogm_repo_path
+  attr_reader :logger
   def initialize(logger:)
     @logger = logger
   end
 
   def reindex_orangelight
-    all_orangelight_resources.each do |resources|
-      resources.each do |resource|
-        begin
-          messenger.record_updated(resource)
-          logger.info("Indexed into Orangelight: #{resource.id}")
-        rescue StandardError => e
-          logger.warn("Error: #{e.message}")
-        end
+    all_orangelight_resources.each do |resource|
+      begin
+        messenger.record_updated(resource)
+        logger.info("Indexed into Orangelight: #{resource.id}")
+      rescue StandardError => e
+        logger.warn("Error: #{e.message}")
       end
     end
   end
@@ -28,9 +26,7 @@ class OrangelightReindexer
   private
 
     def all_orangelight_resources
-      [
-        complete_resources(model: Numismatics::Coin)
-      ]
+      complete_resources(model: Numismatics::Coin)
     end
 
     def complete_resources(model:)
