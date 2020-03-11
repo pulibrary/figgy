@@ -30,8 +30,12 @@ class OrangelightReindexer
     end
 
     def complete_resources(model:)
-      resources = query_service.find_all_of_model(model: model)
-      resources.select { |r| r.state == ["complete"] }
+      query_service.custom_queries.find_by_property(
+        property: :state,
+        value: ["complete"],
+        model: model,
+        lazy: true
+      )
     end
 
     def messenger
