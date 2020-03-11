@@ -13,6 +13,8 @@ class OrangelightReindexer
   end
 
   def reindex_orangelight
+    # Tell OL it's going to get a lot of these; it won't commit each one
+    ENV["BULK"] = "true"
     all_orangelight_resources.each do |resource|
       begin
         messenger.record_updated(resource)

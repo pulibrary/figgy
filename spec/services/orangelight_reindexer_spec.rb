@@ -33,7 +33,7 @@ RSpec.describe OrangelightReindexer do
         expected_result = {
           "id" => resource.id.to_s,
           "event" => "UPDATED",
-          "bulk" => "false",
+          "bulk" => "true",
           "doc" => orangelight_doc
         }
         described_class.reindex_orangelight(logger: logger)
