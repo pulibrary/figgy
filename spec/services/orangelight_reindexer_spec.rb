@@ -11,7 +11,8 @@ RSpec.describe OrangelightReindexer do
       :coin,
       title: "Coin: 1474",
       state: "complete",
-      identifier: "ark:/99999/fk4")
+      identifier: "ark:/99999/fk4"
+    )
   end
 
   before do
