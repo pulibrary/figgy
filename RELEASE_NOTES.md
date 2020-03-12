@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-03-12
+
+## Changed
+
+* JP2 derivatives are now generated via OpenJPEG instead of Kakadu.
+
 # 2020-02-28
 
 ## Added
