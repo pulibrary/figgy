@@ -37,7 +37,7 @@ gem "sprockets", ">= 3.7.2"
 gem "sqlite3"
 gem "title"
 gem "uglifier"
-gem "valkyrie", "~> 2.1.0"
+gem "valkyrie", "~> 2.1.1"
 gem "valkyrie-derivatives", git: "https://github.com/samvera-labs/valkyrie-derivatives.git"
 gem "webpacker", "~> 4.0"
 
