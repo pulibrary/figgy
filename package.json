@@ -12,7 +12,7 @@
     "ajv": "^6.2.1",
     "apollo-boost": "^0.1.10",
     "axios": "^0.18.1",
-    "clipboard": "^2.0.4",
+    "clipboard": "^2.0.6",
     "core-js": "2",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
