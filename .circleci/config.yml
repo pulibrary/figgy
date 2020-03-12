@@ -23,15 +23,15 @@ jobs:
       - run: sudo sh bin/ci_simple_tiles_install.sh
       - run: sudo sh bin/ci_free_tds_install.sh
       - run:
-          name: Install node@8.17.0 (need right version for `yarn`)
+          name: Install node@lts/erbium (need right version for `yarn`)
           command: |
             set +e
             touch $BASH_ENV
             curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.5/install.sh | bash
             echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
             echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
-            echo 'nvm install v8.17.0' >> $BASH_ENV
-            echo 'nvm alias default v8.17.0' >> $BASH_ENV
+            echo 'nvm install lts/erbium' >> $BASH_ENV
+            echo 'nvm alias default lts/erbium' >> $BASH_ENV
       - run:
           name: Check current version of node
           command: node -v
@@ -107,15 +107,15 @@ jobs:
       - run: sudo sh bin/ci_simple_tiles_install.sh
       - run: sudo sh bin/ci_free_tds_install.sh
       - run:
-          name: Install node@8.17.0 (need right version for `yarn`)
+          name: Install node@lts/erbium (need right version for `yarn`)
           command: |
             set +e
             touch $BASH_ENV
             curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.5/install.sh | bash
             echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
             echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
-            echo 'nvm install v8.17.0' >> $BASH_ENV
-            echo 'nvm alias default v8.17.0' >> $BASH_ENV
+            echo 'nvm install lts/erbium' >> $BASH_ENV
+            echo 'nvm alias default lts/erbium' >> $BASH_ENV
       - run:
           name: Check current version of node
           command: node -v
@@ -190,15 +190,15 @@ jobs:
       - run: sudo sh bin/ci_simple_tiles_install.sh
       - run: sudo sh bin/ci_free_tds_install.sh
       - run:
-          name: Install node@8.17.0 (need right version for `yarn`)
+          name: Install node@lts/erbium (need right version for `yarn`)
           command: |
             set +e
             touch $BASH_ENV
             curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.5/install.sh | bash
             echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
             echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
-            echo 'nvm install v8.17.0' >> $BASH_ENV
-            echo 'nvm alias default v8.17.0' >> $BASH_ENV
+            echo 'nvm install lts/erbium' >> $BASH_ENV
+            echo 'nvm alias default lts/erbium' >> $BASH_ENV
       - run:
           name: Check current version of node
           command: node -v
