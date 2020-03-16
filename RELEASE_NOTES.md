@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-03-16
+
+## Fixed
+
+* PDFs now properly display in the viewer.
+
 # 2020-03-12
 
 ## Changed
