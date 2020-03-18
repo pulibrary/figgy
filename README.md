@@ -38,6 +38,8 @@ A digital repository application in use at Princeton University Library for stor
 * [FFMpeg](http://www.ffmpeg.org/)
     * Used for AV derivatives.
     * `brew install ffmpeg`
+* [VIPS]
+    * `brew install vips`
 
 ## Simple Tiles
 
