@@ -164,8 +164,10 @@ class ChangeSetPersister
       def run; end
     end
 
-    def with(metadata_adapter:)
-      yield self.class.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter, transaction: true, characterize: @characterize, queue: queue, handlers: handlers)
+    def with(metadata_adapter: self.metadata_adapter, storage_adapter: self.storage_adapter)
+      new_adapter = self.class.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter, transaction: true, characterize: @characterize, queue: queue, handlers: handlers)
+      return new_adapter unless block_given?
+      yield new_adapter
     end
 
     def messenger

@@ -6,7 +6,7 @@ class RiiifResolver < Riiif::AbstractFileSystemResolver
   def pattern(id)
     raise ArgumentError, "Invalid characters in id `#{id}`" unless id =~ /^[\w\-:]+$/
     file_set = query_service.find_by(id: Valkyrie::ID.new(id))
-    file_metadata = file_set.derivative_file
+    file_metadata = file_set.derivative_files.find { |x| x.mime_type == ["image/tiff"] } || file_set.derivative_file
     raise Valkyrie::Persistence::ObjectNotFoundError, id if file_metadata.nil?
     derivative_file = Valkyrie::StorageAdapter.find_by(id: file_metadata.file_identifiers.first)
     derivative_file.io.path

@@ -136,6 +136,20 @@ Rails.application.config.to_prepare do
     :derivatives
   )
 
+  Valkyrie::StorageAdapter.register(
+    InstrumentedStorageAdapter.new(
+      storage_adapter: Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config["pyramidal_derivative_path"],
+        file_mover: lambda { |old_path, new_path|
+                      FileUtils.mv(old_path, new_path)
+                      FileUtils.chmod(0o644, new_path)
+                    }
+      ),
+      tracer: Datadog.tracer
+    ),
+    :pyramidal_derivatives
+  )
+
   # Registers a storage adapter for a *NIX file system
   # Binaries are persisted by invoking "mv" with access limited to read/write for owning users, and read-only for all others
   # NOTE: "mv" may preserve the inode for the file system

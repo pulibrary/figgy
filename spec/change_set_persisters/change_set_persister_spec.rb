@@ -490,7 +490,7 @@ RSpec.describe ChangeSetPersister do
       expect(output.thumbnail_id).to eq [members.first.id]
 
       file_metadata_nodes = members.first.file_metadata
-      expect(file_metadata_nodes.to_a.length).to eq 2
+      expect(file_metadata_nodes.to_a.length).to eq 3
       expect(file_metadata_nodes.first).to be_kind_of FileMetadata
       expect(file_metadata_nodes.first.created_at).not_to be nil
       expect(file_metadata_nodes.first.updated_at).not_to be nil
@@ -514,6 +514,9 @@ RSpec.describe ChangeSetPersister do
       derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative_file_node.file_identifiers.first)
       expect(derivative_file).not_to be_blank
       expect(derivative_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["derivative_path"]).to_s)
+
+      pyramidal_derivative = file_metadata_nodes.find { |x| x.use == [Valkyrie::Vocab::PCDMUse.ServiceFile] && x.mime_type == ["image/tiff"] }
+      expect(pyramidal_derivative).not_to be_blank
 
       expect(query_service.find_all.to_a.map(&:class)).to contain_exactly ScannedResource, FileSet
 
@@ -1750,7 +1753,7 @@ RSpec.describe ChangeSetPersister do
 
         expect(output.member_ids.length).to eq 1
         file_set = change_set_persister.query_service.find_members(resource: output).first
-        expect(file_set.file_metadata.length).to eq 2
+        expect(file_set.file_metadata.length).to eq 3
 
         # Expect tombstone to be gone
         tombstones = change_set_persister.query_service.find_all_of_model(model: Tombstone)

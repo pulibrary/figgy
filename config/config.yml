@@ -5,6 +5,7 @@ defaults: &defaults
   disk_preservation_path: <%= Rails.root.join("tmp", "cloud_backup") %>
   locations_url: https://bibdata.princeton.edu/locations/digital_locations.json
   derivative_path: <%= Rails.root.join("tmp", "derivatives") %>
+  pyramidal_derivative_path: <%= Rails.root.join("tmp", "pyramidal_derivatives") %>
   geo_derivative_path: <%= Rails.root.join("tmp", "geo_derivatives") %>
   stream_derivatives_path: <%= Rails.root.join("tmp", "stream_derivatives") %>
   repository_path: <%= Rails.root.join("tmp", "files") %>
@@ -121,6 +122,7 @@ test:
   <<: *defaults
   repository_path: <%= Rails.root.join("tmp", "test_files") %>
   derivative_path: <%= Rails.root.join("tmp", "test_derivatives") %>
+  pyramidal_derivative_path: <%= Rails.root.join("tmp", "test_pyramidal_derivatives") %>
   geo_derivative_path: <%= Rails.root.join("tmp", "test_geo_derivatives") %>
   bag_path: <%= Rails.root.join("tmp", "test_bags") %>
   export_base: <%= Rails.root.join("tmp", "test_export") %>
@@ -164,6 +166,7 @@ staging:
   <<: *defaults
   repository_path: "/opt/repository/files"
   derivative_path: "/opt/repository/derivatives"
+  pyramidal_derivative_path: "/opt/repository/derivatives/pyramidals"
   geo_derivative_path: "/opt/repository/geo_derivatives"
   stream_derivatives_path: "/opt/repository/stream_derivatives"
   bag_path: <%= ENV["FIGGY_BAG_PATH"] || Rails.root.join("tmp", "bags") %>

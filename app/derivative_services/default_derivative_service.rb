@@ -44,6 +44,7 @@ class DefaultDerivativeService
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
       hocr_derivative_service(buffered_changeset_persister).create_derivatives if parent.try(:ocr_language).present? && hocr_derivative_service(buffered_changeset_persister).valid?
       jp2_derivative_service(buffered_changeset_persister).create_derivatives if jp2_derivative_service(buffered_changeset_persister).valid?
+      vips_derivative_service(buffered_changeset_persister).create_derivatives if vips_derivative_service(buffered_changeset_persister).valid?
     end
   end
 
@@ -62,5 +63,13 @@ class DefaultDerivativeService
 
   def hocr_derivative_service(change_set_persister = self.change_set_persister)
     HocrDerivativeService::Factory.new(change_set_persister: change_set_persister).new(id: id)
+  end
+
+  def vips_derivative_service(change_set_persister = self.change_set_persister)
+    VIPSDerivativeService::Factory.new(change_set_persister: pyramidal_change_set_persister(change_set_persister)).new(id: id)
+  end
+
+  def pyramidal_change_set_persister(change_set_persister)
+    change_set_persister.with(storage_adapter: Valkyrie::StorageAdapter.find(:pyramidal_derivatives))
   end
 end

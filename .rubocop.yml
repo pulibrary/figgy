@@ -112,6 +112,7 @@ Metrics/ClassLength:
     - 'app/resources/numismatics/coins/numismatics/coins_controller.rb'
     - 'app/resources/numismatics/issues/numismatics/issues_controller.rb'
     - 'app/resources/numismatics/coins/numismatics/coins_controller.rb'
+    - 'app/derivative_services/vips_derivative_service.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/helpers/application_helper.rb'
