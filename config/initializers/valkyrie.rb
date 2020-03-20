@@ -136,19 +136,40 @@ Rails.application.config.to_prepare do
     :derivatives
   )
 
-  Valkyrie::StorageAdapter.register(
-    InstrumentedStorageAdapter.new(
-      storage_adapter: Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config["pyramidal_derivative_path"],
-        file_mover: lambda { |old_path, new_path|
-                      FileUtils.mv(old_path, new_path)
-                      FileUtils.chmod(0o644, new_path)
-                    }
+  if Figgy.config["pyramidals_bucket"].present? && !Rails.env.test?
+    require "shrine/storage/s3"
+    Shrine.storages = (Shrine.storages || {}).merge(
+      pyramidal_storage: Shrine::Storage::S3.new(
+        bucket: Figgy.config["pyramidals_bucket"],
+        region: Figgy.config["pyramidals_region"],
+        access_key_id: Figgy.config["aws_access_key_id"],
+        secret_access_key: Figgy.config["aws_secret_access_key"]
+      )
+    )
+    Valkyrie::StorageAdapter.register(
+      Valkyrie::Storage::Shrine.new(
+        Shrine.storages[:pyramidal_storage],
+        nil,
+        Valkyrie::Storage::Disk::BucketedStorage,
+        identifier_prefix: "pyramidal-derivatives"
       ),
-      tracer: Datadog.tracer
-    ),
-    :pyramidal_derivatives
-  )
+      :pyramidal_derivatives
+    )
+  else
+    Valkyrie::StorageAdapter.register(
+      InstrumentedStorageAdapter.new(
+        storage_adapter: Valkyrie::Storage::Disk.new(
+          base_path: Figgy.config["pyramidal_derivative_path"],
+          file_mover: lambda { |old_path, new_path|
+            FileUtils.mv(old_path, new_path)
+            FileUtils.chmod(0o644, new_path)
+          }
+        ),
+        tracer: Datadog.tracer
+      ),
+      :pyramidal_derivatives
+    )
+  end
 
   # Registers a storage adapter for a *NIX file system
   # Binaries are persisted by invoking "mv" with access limited to read/write for owning users, and read-only for all others
