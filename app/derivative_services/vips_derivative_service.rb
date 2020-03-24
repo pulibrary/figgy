@@ -79,20 +79,14 @@ class VIPSDerivativeService
       Q: 50,
       tile_width: 1024,
       tile_height: 1024,
-      strip: true
+      strip: true,
+      profile: color_profile
     )
     raise "Unable to store pyramidal TIFF for #{filename}!" unless File.exist?(temporary_output.path)
   end
 
   def vips_image
-    @vips_image ||=
-      begin
-        if grayscale?
-          Vips::Image.thumbnail(filename.to_s, 30_000, size: :down, height: 30_000, auto_rotate: true)
-        else
-          Vips::Image.thumbnail(filename.to_s, 30_000, size: :down, height: 30_000, auto_rotate: true, import_profile: color_profile, export_profile: color_profile)
-        end
-      end
+    @vips_image ||= Vips::Image.new_from_file(filename.to_s)
   end
 
   def color_profile
