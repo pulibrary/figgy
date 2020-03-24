@@ -93,10 +93,6 @@ class VIPSDerivativeService
     Hydra::Derivatives::Processors::Jpeg2kImage.srgb_profile_path
   end
 
-  def grayscale?
-    @grayscale ||= MiniMagick::Image.open(filename)["%[channels]"] == "gray"
-  end
-
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
   # Please note that this simply deletes the files themselves from storage
   # File membership for the parent of the Valkyrie::StorageAdapter::File is removed using #cleanup_derivative_metadata
