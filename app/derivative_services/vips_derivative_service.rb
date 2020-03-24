@@ -76,9 +76,10 @@ class VIPSDerivativeService
       compression: :jpeg,
       tile: true,
       pyramid: true,
-      Q: 90,
-      tile_width: 256,
-      tile_height: 256
+      Q: 50,
+      tile_width: 1024,
+      tile_height: 1024,
+      strip: true
     )
     raise "Unable to store pyramidal TIFF for #{filename}!" unless File.exist?(temporary_output.path)
   end
