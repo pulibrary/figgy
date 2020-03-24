@@ -1,6 +1,6 @@
 development: &default
   host: <%= ENV["FIGGY_DB_HOST"] || "localhost" %>
-  username: <%= Figgy.read_only_mode ? ENV["FIGGY_DB_RO_USERNAME"] : ENV["FIGGY_DB_USERNAME"] || "postgres" %>
+  username: <%= Figgy.read_only_mode ? ENV["FIGGY_DB_RO_USERNAME"] : ENV["FIGGY_DB_USERNAME"] %>
   password: <%= Figgy.read_only_mode ? ENV["FIGGY_DB_RO_PASSWORD"] : ENV["FIGGY_DB_PASSWORD"] %>
   database: geo_development
 
