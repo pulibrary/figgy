@@ -71,29 +71,35 @@ class VIPSDerivativeService
   end
 
   def run_derivatives
-    color_corrected_tiff = correct_color(filename)
-    i = Vips::Image.new_from_file(color_corrected_tiff.path.to_s)
-    i.tiffsave(temporary_output.path.to_s,
-               compression: :jpeg,
-               tile: true,
-               pyramid: true,
-               Q: 75,
-               tile_width: 256,
-               tile_height: 256)
+    vips_image.tiffsave(
+      temporary_output.path.to_s,
+      compression: :jpeg,
+      tile: true,
+      pyramid: true,
+      Q: 90,
+      tile_width: 256,
+      tile_height: 256
+    )
     raise "Unable to store pyramidal TIFF for #{filename}!" unless File.exist?(temporary_output.path)
   end
 
-  def correct_color(filename)
-    temp_file = Tempfile.new(["tempfile", ".tif"])
-    file = MiniMagick::Image.open(filename)
-    return File.open(filename) unless file["%[channels]"] != "gray"
-    file.format "tiff"
-    file.combine_options do |c|
-      c.profile Hydra::Derivatives::Processors::Jpeg2kImage.srgb_profile_path
-      c.type "truecolor"
-    end
-    file.write temp_file.path
-    temp_file
+  def vips_image
+    @vips_image ||=
+      begin
+        if grayscale?
+          Vips::Image.thumbnail(filename.to_s, 30_000, size: :down, height: 30_000, auto_rotate: true)
+        else
+          Vips::Image.thumbnail(filename.to_s, 30_000, size: :down, height: 30_000, auto_rotate: true, import_profile: color_profile, export_profile: color_profile)
+        end
+      end
+  end
+
+  def color_profile
+    Hydra::Derivatives::Processors::Jpeg2kImage.srgb_profile_path
+  end
+
+  def grayscale?
+    @grayscale ||= MiniMagick::Image.open(filename)["%[channels]"] == "gray"
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
