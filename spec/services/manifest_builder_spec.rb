@@ -435,7 +435,7 @@ RSpec.describe ManifestBuilder do
         allow(Rails.env).to receive(:test?).and_return(false)
 
         output = manifest_builder.build
-        expect(output["sequences"][0]["canvases"][0]["images"][0]["resource"]["service"]["@id"]).to start_with "http://localhost:8182/iiif/2/"
+        expect(output["sequences"][0]["canvases"][0]["images"][0]["resource"]["service"]["@id"]).to start_with "http://localhost:8182/pyramidals/iiif/2/"
       end
     end
 
