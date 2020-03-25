@@ -60,7 +60,12 @@ class VectorResourceDerivativeService
       storage_adapter.delete(id: id)
       deleted_files << file.id
     end
+    cleanup_postgis_table
     cleanup_derivative_metadata(derivatives: deleted_files)
+  end
+
+  def cleanup_postgis_table
+    PostGisService.delete_table(name: prefixed_id)
   end
 
   def create_derivatives
@@ -117,13 +122,15 @@ class VectorResourceDerivativeService
   # Resource id prefixed with letter to avoid restrictions on
   # numbers in QNames from GeoServer generated WFS GML.
   def prefixed_id
-    "p-#{resource.id}"
+    "p_#{resource.id.to_s.gsub("-", "_")}"
   end
 
   def run_derivatives
     GeoWorks::Derivatives::Runners::VectorDerivatives.create(
       filename, outputs: [instructions_for_display, instructions_for_thumbnail]
     )
+
+    PostGisService.create_table(name: prefixed_id, file_path: filename.to_s, srid: "EPSG:4326")
   end
 
   def temporary_display_output

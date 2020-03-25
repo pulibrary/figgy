@@ -42,6 +42,8 @@ class ChangeSetPersister
       ],
       before_delete: [
         CreateTombstone,
+        CleanupPostGis,
+        CleanupFiles,
         CleanupFiles,
         CleanupStructure,
         DeleteReferenced::Factory.new(property: :member_of_vocabulary_id),
