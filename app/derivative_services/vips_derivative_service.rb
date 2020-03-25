@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 class VIPSDerivativeService
+  # Pixel width or height at which point it cuts the size in half for
+  # performance.
+  REDUCTION_THRESHOLD = 15_000
   class Factory
     attr_reader :change_set_persister
     delegate :metadata_adapter, to: :change_set_persister
@@ -86,7 +89,15 @@ class VIPSDerivativeService
   end
 
   def vips_image
-    @vips_image ||= Vips::Image.new_from_file(filename.to_s).resize(0.5)
+    @vips_image ||=
+      begin
+        image = Vips::Image.new_from_file(filename.to_s)
+        if image.height >= REDUCTION_THRESHOLD || image.width >= REDUCTION_THRESHOLD
+          image.resize(0.5)
+        else
+          image
+        end
+      end
   end
 
   def color_profile
