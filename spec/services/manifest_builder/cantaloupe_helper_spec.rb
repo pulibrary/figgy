@@ -15,7 +15,7 @@ RSpec.describe ManifestBuilder::CantaloupeHelper do
       it "generates a base URL for a pyramidal if it's present" do
         path = Valkyrie::StorageAdapter.find_by(id: file_set.pyramidal_derivative.file_identifiers[0]).io.path
         path = path.gsub(Figgy.config["pyramidal_derivative_path"], "").gsub(/^\//, "").gsub(".tif", "")
-        expect(cantaloupe_helper.base_url(file_set)).to eq "http://localhost:8182/iiif/2/#{path.gsub('/', '%2F')}"
+        expect(cantaloupe_helper.base_url(file_set)).to eq "http://localhost:8182/pyramidals/iiif/2/#{path.gsub('/', '%2F')}"
       end
       it "generates a base URL for a JPEG2000 derivative" do
         path = Valkyrie::StorageAdapter.find_by(id: derivative_file.file_identifiers[0]).io.path

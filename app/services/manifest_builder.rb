@@ -782,7 +782,7 @@ class ManifestBuilder
         raise Valkyrie::Persistence::ObjectNotFoundError, file_set.id if file_metadata.nil?
         file = file_metadata.file_identifiers[0].to_s.gsub(/^.*:\/\//, "")
         id = file.gsub(Figgy.config["pyramidal_derivative_path"], "").gsub(/^\//, "").gsub(".tif", "")
-        Pathname.new(Figgy.config["cantaloupe_url"]).join(
+        Pathname.new(Figgy.config["pyramidal_url"]).join(
           CGI.escape(id.to_s)
         ).to_s
       end
