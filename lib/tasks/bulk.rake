@@ -39,6 +39,7 @@ namespace :bulk do
     @logger.info "filtering to files ending with #{filter}" if filter
     @logger.info "ingesting as: #{user.user_key} (override with USER=foo)"
     @logger.info "adding item to collection #{coll}" if coll
+    @logger.info "passing identifier |#{identifier}|"
     if model
       begin
         model.constantize

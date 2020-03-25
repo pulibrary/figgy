@@ -28,6 +28,7 @@ class ScannedResourceChangeSet < ChangeSet
   property :depositor, multiple: false, require: false
   property :ocr_language, multiple: true, require: false, default: []
   property :replaces, multiple: true, require: false
+  property :identifier, multiple: false, require: false
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
