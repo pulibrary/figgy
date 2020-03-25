@@ -76,7 +76,7 @@ class VIPSDerivativeService
       compression: :jpeg,
       tile: true,
       pyramid: true,
-      Q: 50,
+      Q: 75,
       tile_width: 1024,
       tile_height: 1024,
       strip: true,
@@ -86,7 +86,7 @@ class VIPSDerivativeService
   end
 
   def vips_image
-    @vips_image ||= Vips::Image.new_from_file(filename.to_s)
+    @vips_image ||= Vips::Image.new_from_file(filename.to_s).resize(0.5)
   end
 
   def color_profile
