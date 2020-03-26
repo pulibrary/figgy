@@ -50,7 +50,7 @@ RSpec.describe IngestMETSJob do
       book = adapter.query_service.find_all_of_model(model: ScannedResource).first
       expect(book).not_to be_nil
       expect(book.source_metadata_identifier).to eq ["4612596"]
-      expect(book.identifier.first).to eq "ark:/88435/5m60qr98htest"
+      expect(book.identifier.first).to eq "ark:/88435/5m60qr98h"
       expect(book.logical_structure[0].nodes.length).to eq 1
       expect(book.logical_structure[0].nodes[0].label).to contain_exactly "leaf 1"
       expect(book.logical_structure[0].nodes[0].nodes[0].label).to contain_exactly "leaf 1. recto"
