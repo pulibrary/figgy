@@ -133,4 +133,4 @@ end
 gem "aws-sdk-s3"
 gem "extra_extra"
 
-gem "oai", "~> 1.0.0"
+gem "oai", github: "ndlib/ruby-oai", branch: "favor-instances-over-classes"
