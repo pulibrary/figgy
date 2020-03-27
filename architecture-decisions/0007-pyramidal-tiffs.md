@@ -1,4 +1,4 @@
-# 6. Pyramidal Tiffs & AWS Serverless Delivery
+# 7. Pyramidal Tiffs & AWS Serverless Delivery
 
 Date: 2020-03-27
 
