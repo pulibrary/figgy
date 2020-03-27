@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 class PostGisService
-  include GeoWorks::Derivatives::Processors::Zip
+  def self.clean_database
+    new.clean_database
+  end
 
   def self.create_database
     new.create_database
@@ -10,8 +12,16 @@ class PostGisService
     new(file_path: file_path, name: name).create_table
   end
 
+  def self.database_exist?
+    new.database_exist?
+  end
+
   def self.delete_table(name:)
     new(name: name).delete_table
+  end
+
+  def self.table_exist?(name:)
+    new(name: name).table_exist?
   end
 
   attr_reader :name, :file_path, :srid, :logger
@@ -22,14 +32,44 @@ class PostGisService
     @srid = srid || "EPSG:4326"
   end
 
+  def clean_database
+    conn = connection
+    conn.exec(clean_database_query)
+    logger.info("Cleaned database: #{PostGis.database}")
+    true
+  rescue PG::Error => e
+    logger.warn("Error: #{e.message}")
+    false
+  ensure
+    conn&.close
+  end
+
+  def clean_database_query
+    <<~SQL
+      DO $$ DECLARE
+          r RECORD;
+      BEGIN
+          FOR r IN (SELECT tablename
+                    FROM pg_tables
+                    WHERE schemaname = 'public' AND NOT tablename = 'spatial_ref_sys')
+      LOOP
+          EXECUTE 'DROP TABLE IF EXISTS ' || quote_ident(r.tablename) || ' CASCADE';
+      END LOOP;
+      END $$;
+    SQL
+  end
+
   def create_database
-    connection(with_database: false).exec("CREATE DATABASE #{PostGis.database};")
-    connection.exec("CREATE EXTENSION postgis;")
+    conn = connection(with_database: false)
+    conn.exec("CREATE DATABASE #{PostGis.database};")
+    conn.close
+    conn = connection
+    conn.exec("CREATE EXTENSION postgis;")
     logger.info("Created database: #{PostGis.database}")
   rescue PG::Error => e
     logger.warn("Error: #{e.message}")
   ensure
-    connection&.close
+    conn&.close
   end
 
   def create_table
@@ -56,13 +96,46 @@ class PostGisService
     EOF
   end
 
+  def database_exist?
+    conn = connection(with_database: false)
+    result = conn.exec("SELECT datname FROM pg_catalog.pg_database WHERE datname = '#{PostGis.database}'")
+    return false if result.first.nil?
+    true
+  rescue PG::Error => e
+    logger.warn("Error: #{e.message}")
+    false
+  ensure
+    conn&.close
+  end
+
   def delete_table
-    connection.exec("DROP TABLE IF EXISTS #{name};")
+    conn = connection
+    conn.exec("DROP TABLE IF EXISTS #{name};")
     logger.info("Deleted table: #{name}")
   rescue PG::Error => e
     logger.warn("Error: #{e.message}")
   ensure
-    connection&.close
+    conn&.close
+  end
+
+  def table_exist?
+    conn = connection(with_database: false)
+    result = conn.exec(table_exist_query)
+    return false if result.first.nil?
+    true
+  rescue PG::Error => e
+    logger.warn("Error: #{e.message}")
+  ensure
+    conn&.close
+  end
+
+  def table_exist_query
+    <<~SQL
+      SELECT 1
+      FROM information_schema.tables
+      WHERE table_schema = 'public'
+      AND table_name = '#{name}';
+    SQL
   end
 
   private

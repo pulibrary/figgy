@@ -13,6 +13,8 @@ Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |file| require
 
 Capybara.server = :puma, { Silent: true }
 
+PostGisService.create_database
+
 module Features
   # Extend this module in spec/support/features/*.rb
   include Formulaic::Dsl

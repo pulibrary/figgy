@@ -122,7 +122,7 @@ class VectorResourceDerivativeService
   # Resource id prefixed with letter to avoid restrictions on
   # numbers in QNames from GeoServer generated WFS GML.
   def prefixed_id
-    "p_#{resource.id.to_s.gsub("-", "_")}"
+    "p_#{resource.id.to_s.tr('-', '_')}"
   end
 
   def run_derivatives
