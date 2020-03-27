@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: https://github.com/ndlib/ruby-oai.git
-  revision: eae3c6c671288ce2f6e0aa9af00147493ae44c1f
+  revision: c99267120ee602a6ff615f6e23998525b60b0e4d
   branch: favor-instances-over-classes
   specs:
     oai (1.0.1)
