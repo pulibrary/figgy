@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-04-03
+
+## Added
+
+* Added support for ingesting PNG files.
+
 # 2020-03-30
 
 ## Changed

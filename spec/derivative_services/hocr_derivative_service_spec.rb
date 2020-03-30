@@ -40,6 +40,15 @@ RSpec.describe HocrDerivativeService do
       end
     end
 
+    context "when given a png mime_type" do
+      it "is valid" do
+        # rubocop:disable RSpec/SubjectStub
+        allow(valid_file).to receive(:mime_type).and_return(["image/png"])
+        # rubocop:enable RSpec/SubjectStub
+        is_expected.to be_valid
+      end
+    end
+
     context "when given an invalid mime_type" do
       it "does not validate" do
         # rubocop:disable RSpec/SubjectStub
@@ -73,6 +82,16 @@ RSpec.describe HocrDerivativeService do
 
   context "jpeg source" do
     let(:file) { fixture_file_upload("files/large-jpg-test.jpg", "image/jpeg") }
+    it "creates an HOCR file and attaches it to the fileset" do
+      derivative_service.new(id: valid_change_set.id).create_derivatives
+
+      reloaded = query_service.find_by(id: valid_resource.id)
+      expect(reloaded.hocr_content).not_to be_blank
+    end
+  end
+
+  context "png source" do
+    let(:file) { fixture_file_upload("files/abstract.png", "image/png") }
     it "creates an HOCR file and attaches it to the fileset" do
       derivative_service.new(id: valid_change_set.id).create_derivatives
 
