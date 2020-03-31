@@ -161,6 +161,7 @@ production:
   preservation_bucket: <%= ENV["FIGGY_PRESERVATION_BUCKET"] || "figgy-preservation" %>
   fixity_status_topic: "figgy-production-fixity-status"
   fixity_request_topic: "figgy-production-fixity-request"
+  pyramidals_bucket: "iiif-image-production"
   events:
     server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
     exchange:
