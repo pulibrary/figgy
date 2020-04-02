@@ -739,6 +739,8 @@ class ManifestBuilder
     def manifest_image_path(resource)
       if (Rails.env.development? && Figgy.config["pyramidals_bucket"].blank?) || Rails.env.test?
         RiiifHelper.new.base_url(resource.id)
+      elsif resource.pyramidal_derivative.present?
+        PyramidalHelper.new.base_url(resource)
       else
         CantaloupeHelper.new.base_url(resource)
       end
@@ -758,9 +760,26 @@ class ManifestBuilder
     end
   end
 
+  # Returns the URL for pyramidal objects stored in S3.
+  class PyramidalHelper
+    def base_url(file_set)
+      file_metadata = file_set.pyramidal_derivative
+      raise Valkyrie::Persistence::ObjectNotFoundError, file_set.id if file_metadata.nil?
+      begin
+        file = file_metadata.file_identifiers[0].to_s.gsub(/^.*:\/\//, "")
+        id = file.gsub(Figgy.config["pyramidal_derivative_path"], "").gsub(/^\//, "").gsub(".tif", "")
+        Pathname.new(Figgy.config["pyramidal_url"]).join(
+          CGI.escape(id.to_s)
+        ).to_s
+      rescue
+        Rails.logger.warn("Unable to find derivative path for #{file_set.id}")
+        nil
+      end
+    end
+  end
+
   class CantaloupeHelper
     def base_url(file_set)
-      return pyramidal_url(file_set) if file_set.pyramidal_derivative
       file_metadata = file_set.derivative_file
       raise Valkyrie::Persistence::ObjectNotFoundError, file_set.id if file_metadata.nil?
       begin
@@ -774,18 +793,6 @@ class ManifestBuilder
         nil
       end
     end
-
-    private
-
-      def pyramidal_url(file_set)
-        file_metadata = file_set.pyramidal_derivative
-        raise Valkyrie::Persistence::ObjectNotFoundError, file_set.id if file_metadata.nil?
-        file = file_metadata.file_identifiers[0].to_s.gsub(/^.*:\/\//, "")
-        id = file.gsub(Figgy.config["pyramidal_derivative_path"], "").gsub(/^\//, "").gsub(".tif", "")
-        Pathname.new(Figgy.config["pyramidal_url"]).join(
-          CGI.escape(id.to_s)
-        ).to_s
-      end
   end
 
   ##

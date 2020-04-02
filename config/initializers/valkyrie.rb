@@ -156,6 +156,8 @@ Rails.application.config.to_prepare do
       :pyramidal_derivatives
     )
   else
+    # Fall back to disk storage for development/test or if S3 is not
+    # configured.
     Valkyrie::StorageAdapter.register(
       InstrumentedStorageAdapter.new(
         storage_adapter: Valkyrie::Storage::Disk.new(
