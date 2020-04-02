@@ -42,6 +42,7 @@ class ScannedMapDerivativeService
 
   def create_derivatives
     jp2_derivative_service.create_derivatives if jp2_derivative_service.valid?
+    vips_derivative_service.create_derivatives if vips_derivative_service.valid?
     thumbnail_derivative_service.create_derivatives if thumbnail_derivative_service.valid?
   end
 
@@ -50,6 +51,7 @@ class ScannedMapDerivativeService
   # (see ImageDerivativeService#cleanup_derivatives)
   def cleanup_derivatives
     jp2_derivative_service.cleanup_derivatives if jp2_derivative_service.valid?
+    vips_derivative_service.cleanup_derivatives if vips_derivative_service.valid?
     thumbnail_derivative_service.cleanup_derivatives if thumbnail_derivative_service.valid?
   end
 
@@ -59,6 +61,14 @@ class ScannedMapDerivativeService
 
   def thumbnail_derivative_service
     ImageDerivativeService::Factory.new(change_set_persister: change_set_persister, image_config: image_config).new(id: id)
+  end
+
+  def vips_derivative_service
+    VIPSDerivativeService::Factory.new(change_set_persister: pyramidal_change_set_persister(change_set_persister)).new(id: id)
+  end
+
+  def pyramidal_change_set_persister(change_set_persister)
+    change_set_persister.with(storage_adapter: Valkyrie::StorageAdapter.find(:pyramidal_derivatives))
   end
 
   def image_config
