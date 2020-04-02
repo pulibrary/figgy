@@ -112,6 +112,7 @@ Metrics/ClassLength:
     - 'app/resources/numismatics/coins/numismatics/coins_controller.rb'
     - 'app/resources/numismatics/issues/numismatics/issues_controller.rb'
     - 'app/resources/numismatics/coins/numismatics/coins_controller.rb'
+    - 'app/derivative_services/vips_derivative_service.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/helpers/application_helper.rb'
@@ -289,6 +290,7 @@ RSpec/VerifiedDoubles:
     - 'spec/models/user_spec.rb'
     - 'spec/derivative_services/image_derivative_service_spec.rb'
     - 'spec/derivative_services/jp2_derivative_service_spec.rb'
+    - 'spec/derivative_services/vips_derivative_service_spec.rb'
     - 'spec/jobs/ingest_intermediate_file_job_spec.rb'
 Naming/FileName:
   Enabled: true

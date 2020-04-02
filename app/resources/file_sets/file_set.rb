@@ -46,6 +46,18 @@ class FileSet < Resource
     file_metadata.select(&:derivative?)
   end
 
+  def pyramidal_derivative
+    derivative_files.find do |derivative|
+      derivative.mime_type.include?("image/tiff")
+    end
+  end
+
+  def jp2_derivative
+    derivative_files.find do |derivative|
+      derivative.mime_type.include?("image/jp2")
+    end
+  end
+
   def derivative_partial_files
     file_metadata.select(&:derivative_partial?)
   end

@@ -13,6 +13,13 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-03-30
+
+## Changed
+
+* Image files now generate a Pyramidal Tiff and upload it to AWS for a new image
+server implementation.
+
 # 2020-03-16
 
 ## Fixed

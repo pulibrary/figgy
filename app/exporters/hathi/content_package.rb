@@ -72,7 +72,7 @@ module Hathi
         @fileset = fileset
         original_file = Valkyrie::StorageAdapter.find_by(id: @fileset.original_file.file_identifiers.first)
         @original_image = MiniMagick::Image.new(original_file.disk_path)
-        derivative_file = Valkyrie::StorageAdapter.find_by(id: @fileset.derivative_file.file_identifiers.first)
+        derivative_file = Valkyrie::StorageAdapter.find_by(id: @fileset.jp2_derivative.file_identifiers.first)
         @derivative_image = MiniMagick::Image.new(derivative_file.disk_path)
         @properties = @original_image.data["properties"]
       end
@@ -140,7 +140,7 @@ module Hathi
 
     class DerivativePage < Page
       def image_file
-        @fileset.derivative_file
+        @fileset.jp2_derivative
       end
     end
   end

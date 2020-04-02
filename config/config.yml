@@ -1,14 +1,20 @@
 defaults: &defaults
+  pyramidals_bucket: "iiif-image-staging"
+  pyramidals_region: "us-east-1"
+  aws_access_key_id: <%= ENV["FIGGY_AWS_ACCESS_KEY_ID"] %>
+  aws_secret_access_key: <%= ENV["FIGGY_AWS_SECRET_ACCESS_KEY"] %>
   preservation_bucket: "figgy-staging-preservation"
   fixity_status_topic: "figgy-staging-fixity-status"
   fixity_request_topic: "figgy-staging-fixity-request"
   disk_preservation_path: <%= Rails.root.join("tmp", "cloud_backup") %>
   locations_url: https://bibdata.princeton.edu/locations/digital_locations.json
   derivative_path: <%= Rails.root.join("tmp", "derivatives") %>
+  pyramidal_derivative_path: <%= Rails.root.join("tmp", "pyramidal_derivatives") %>
   geo_derivative_path: <%= Rails.root.join("tmp", "geo_derivatives") %>
   stream_derivatives_path: <%= Rails.root.join("tmp", "stream_derivatives") %>
   repository_path: <%= Rails.root.join("tmp", "files") %>
   cantaloupe_url: <%= ENV.fetch('CANTALOUPE_URL', 'http://localhost:8182/iiif/2/') %>
+  pyramidal_url: <%= ENV.fetch('PYRAMIDAL_URL', 'http://localhost:8182/iiif/2/') %>
   bag_path: <%= Rails.root.join("tmp", "bags") %>
   pudl_root: <%= Rails.root.join("tmp", "pudl_root") %>
   scanned_map_processing_note: <%= ENV.fetch('SCANNED_MAP_PROCESSING_NOTE', 'Scanned with an HD Ultra i4290s scanner using Nextimage 4.5.2 software') %>
@@ -121,11 +127,14 @@ test:
   <<: *defaults
   repository_path: <%= Rails.root.join("tmp", "test_files") %>
   derivative_path: <%= Rails.root.join("tmp", "test_derivatives") %>
+  pyramidal_derivative_path: <%= Rails.root.join("tmp", "test_pyramidal_derivatives") %>
   geo_derivative_path: <%= Rails.root.join("tmp", "test_geo_derivatives") %>
   bag_path: <%= Rails.root.join("tmp", "test_bags") %>
   export_base: <%= Rails.root.join("tmp", "test_export") %>
   pudl_root: <%= Rails.root.join("spec", "fixtures", "test_pudl_root") %>
   disk_preservation_path: <%= Rails.root.join("tmp", "cloud_backup_test") %>
+  cantaloupe_url: 'http://localhost:8182/iiif/2/'
+  pyramidal_url: 'http://localhost:8182/pyramidals/iiif/2/'
   events:
     log_file: '/dev/null'
   devise:
@@ -152,6 +161,7 @@ production:
   preservation_bucket: <%= ENV["FIGGY_PRESERVATION_BUCKET"] || "figgy-preservation" %>
   fixity_status_topic: "figgy-production-fixity-status"
   fixity_request_topic: "figgy-production-fixity-request"
+  pyramidals_bucket: "iiif-image-production"
   events:
     server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
     exchange:
@@ -164,6 +174,7 @@ staging:
   <<: *defaults
   repository_path: "/opt/repository/files"
   derivative_path: "/opt/repository/derivatives"
+  pyramidal_derivative_path: "/opt/repository/derivatives/pyramidals"
   geo_derivative_path: "/opt/repository/geo_derivatives"
   stream_derivatives_path: "/opt/repository/stream_derivatives"
   bag_path: <%= ENV["FIGGY_BAG_PATH"] || Rails.root.join("tmp", "bags") %>

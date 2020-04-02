@@ -124,7 +124,7 @@ gem "graphiql-rails", group: :development
 gem "cocoon"
 gem "google-cloud-pubsub"
 gem "shrine-google_cloud_storage"
-gem "valkyrie-shrine", github: "tpendragon/valkyrie-shrine", branch: "use_exists_for_check"
+gem "valkyrie-shrine"
 
 group :development, :staging do
   gem "rack-mini-profiler", require: false
@@ -134,3 +134,4 @@ gem "aws-sdk-s3"
 gem "extra_extra"
 
 gem "oai", "~> 1.0.0"
+gem "ruby-vips"

@@ -467,7 +467,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
         expect(Valkyrie::MetadataAdapter.find(:index_solr).persister).to have_received(:save_all).at_least(1).times
 
         file_sets = Valkyrie.config.metadata_adapter.query_service.find_members(resource: reloaded)
-        expect(file_sets.first.file_metadata.length).to eq 2
+        expect(file_sets.first.file_metadata.length).to eq 3
       end
 
       context "when sent duplicate files" do
