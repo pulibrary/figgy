@@ -39,6 +39,15 @@ RSpec.describe VIPSDerivativeService do
       end
     end
 
+    context "when given a png mime_type" do
+      it "is valid" do
+        # rubocop:disable RSpec/SubjectStub
+        allow(valid_file).to receive(:mime_type).and_return(["image/png"])
+        # rubocop:enable RSpec/SubjectStub
+        is_expected.to be_valid
+      end
+    end
+
     context "when given an invalid mime_type" do
       it "does not validate" do
         # rubocop:disable RSpec/SubjectStub
@@ -102,6 +111,20 @@ RSpec.describe VIPSDerivativeService do
 
   context "jpeg source", run_real_derivatives: true do
     let(:file) { fixture_file_upload("files/large-jpg-test.jpg", "image/jpeg") }
+    it "creates a tiff and attaches it to the fileset" do
+      derivative_service.new(id: valid_change_set.id).create_derivatives
+
+      reloaded = query_service.find_by(id: valid_resource.id)
+      derivative = reloaded.derivative_file
+
+      expect(derivative).to be_present
+      derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
+      expect(derivative_file.read).not_to be_blank
+    end
+  end
+
+  context "png source", run_real_derivatives: true do
+    let(:file) { fixture_file_upload("files/abstract.png", "image/png") }
     it "creates a tiff and attaches it to the fileset" do
       derivative_service.new(id: valid_change_set.id).create_derivatives
 
