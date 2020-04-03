@@ -48,13 +48,17 @@ class VIPSDerivativeService
   # @return [FileMetadata]
   def intermediate_target_files(resource)
     supported = resource.intermediate_files.select do |intermed|
-      ["image/tiff", "image/jpeg"].include?(intermed.mime_type.first)
+      valid_mime_types.include?(intermed.mime_type.first)
     end
     supported.empty? ? nil : supported.first
   end
 
   def valid?
-    ["image/tiff", "image/jpeg"].include?(mime_type.first)
+    valid_mime_types.include?(mime_type.first)
+  end
+
+  def valid_mime_types
+    ["image/tiff", "image/jpeg", "image/png"]
   end
 
   def create_derivatives

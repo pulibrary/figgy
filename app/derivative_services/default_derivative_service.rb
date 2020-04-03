@@ -32,7 +32,7 @@ class DefaultDerivativeService
 
   def valid?
     return false unless original_file
-    ["image/tiff", "image/jpeg"].include?(mime_type.first) && !parent.is_a?(ScannedMap)
+    ["image/tiff", "image/jpeg", "image/png"].include?(mime_type.first) && !parent.is_a?(ScannedMap)
   end
 
   def parent
