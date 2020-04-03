@@ -20,6 +20,10 @@ RSpec.describe OrangelightReindexer do
     change_set_persister.save(change_set: DynamicChangeSet.new(parent_issue))
   end
 
+  after do
+    ENV["BULK"] = nil
+  end
+
   describe "#reindex_orangelight" do
     context "with a valid orangelight resource" do
       let(:orangelight_event_generator) { EventGenerator::OrangelightEventGenerator.new(rabbit_connection) }
