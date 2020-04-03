@@ -147,9 +147,9 @@ class PostGisService
 
     def connection(with_database: true)
       if with_database
-        PG.connect(dbname: PostGis.database, user: PostGis.username, password: PostGis.password)
+        PG.connect(host: PostGis.host, dbname: PostGis.database, user: PostGis.username, password: PostGis.password)
       else
-        PG.connect(user: PostGis.username, password: PostGis.password)
+        PG.connect(host: PostGis.host, user: PostGis.username, password: PostGis.password)
       end
     end
 
