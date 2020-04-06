@@ -149,7 +149,7 @@ Rails.application.config.to_prepare do
     Valkyrie::StorageAdapter.register(
       Valkyrie::Storage::Shrine.new(
         Shrine.storages[:pyramidal_storage],
-        nil,
+        Shrine::NullVerifier,
         Valkyrie::Storage::Disk::BucketedStorage,
         identifier_prefix: "pyramidal-derivatives"
       ),
