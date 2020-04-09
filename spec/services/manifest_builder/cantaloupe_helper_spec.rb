@@ -7,7 +7,7 @@ RSpec.describe ManifestBuilder::CantaloupeHelper do
   let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
   let(:file_set) { query_service.find_members(resource: scanned_resource).to_a.first }
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
-  let(:derivative_file) { file_set.derivative_file }
+  let(:derivative_file) { file_set.jp2_derivative }
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
 
   describe "#base_url", run_real_derivatives: true do
@@ -26,7 +26,7 @@ RSpec.describe ManifestBuilder::CantaloupeHelper do
     end
     context "without generated derivatives" do
       before do
-        allow(file_set).to receive(:derivative_file).and_return(nil)
+        allow(file_set).to receive(:jp2_derivative).and_return(nil)
       end
       it "raises an Valkyrie::Persistence::ObjectNotFoundError" do
         expect { cantaloupe_helper.base_url(file_set) }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
