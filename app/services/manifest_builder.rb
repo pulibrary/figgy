@@ -739,7 +739,7 @@ class ManifestBuilder
     def manifest_image_path(resource)
       if (Rails.env.development? && Figgy.config["pyramidals_bucket"].blank?) || Rails.env.test?
         RiiifHelper.new.base_url(resource.id)
-      elsif resource.pyramidal_derivative.present?
+      elsif resource.pyramidal_derivative.present? && Figgy.config["enable_pyramidal_access"]
         PyramidalHelper.new.base_url(resource)
       else
         CantaloupeHelper.new.base_url(resource)

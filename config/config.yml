@@ -21,6 +21,7 @@ defaults: &defaults
   export_base: <%= ENV['FIGGY_EXPORT_BASE'] || Rails.root.join("tmp", "export") %>
   pulfa_notify: uaaglist@princeton.edu,mssdiv@princeton.edu,escowles@princeton.edu
   default_search_directory: studio_new/DPUL
+  enable_pyramidal_access: true
   jp2_recipes:
     default_color: >
       -rate 2.4,1.48331273,.91673033,.56657224,.35016049,.21641118,.13374944,.08266171
@@ -162,6 +163,7 @@ production:
   fixity_status_topic: "figgy-production-fixity-status"
   fixity_request_topic: "figgy-production-fixity-request"
   pyramidals_bucket: "iiif-image-production"
+  enable_pyramidal_access: <%= ENV["FIGGY_PYRAMIDAL_ACCESS"].present? || false %>
   events:
     server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
     exchange:
