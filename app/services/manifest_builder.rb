@@ -780,7 +780,7 @@ class ManifestBuilder
 
   class CantaloupeHelper
     def base_url(file_set)
-      file_metadata = file_set.derivative_file
+      file_metadata = file_set.jp2_derivative
       raise Valkyrie::Persistence::ObjectNotFoundError, file_set.id if file_metadata.nil?
       begin
         file = file_metadata.file_identifiers[0].to_s.gsub("disk://", "")
