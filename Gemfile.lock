@@ -848,7 +848,7 @@ GEM
       sequel
       sequel_pg
       valkyrie (~> 2.1.0)
-    valkyrie-shrine (0.3.0)
+    valkyrie-shrine (0.4.0)
       aws-sdk-s3 (~> 1)
       shrine (~> 2.0)
       valkyrie (> 1.0)
@@ -994,7 +994,7 @@ DEPENDENCIES
   valkyrie (~> 2.1.1)
   valkyrie-derivatives!
   valkyrie-sequel (~> 2.1.0)
-  valkyrie-shrine
+  valkyrie-shrine (~> 0.4.0)
   web-console
   webdrivers
   webmock
