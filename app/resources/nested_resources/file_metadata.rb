@@ -78,6 +78,10 @@ class FileMetadata < Valkyrie::Resource
     use.include?(Valkyrie::Vocab::PCDMUse.IntermediateFile)
   end
 
+  def image?
+    mime_type.first.include?("image")
+  end
+
   # Populates FileMetadata with fixity check results
   # @return [FileMetadata] you'll need to save this node after running the fixity
   def run_fixity
