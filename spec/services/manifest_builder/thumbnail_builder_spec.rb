@@ -49,6 +49,25 @@ describe ManifestBuilder::ThumbnailBuilder do
       end
     end
 
+    context "when there are no image FileSets" do
+      let(:audio_file_set) do
+        FactoryBot.create_for_repository(:audio_file_set)
+      end
+      let(:persisted) do
+        scanned_resource.member_ids = audio_file_set.id
+        # Adding the audio file as the thumbnail is weird, but is what FileAppender does right now.
+        scanned_resource.thumbnail_id = audio_file_set.id
+        change_set_persister.persister.save(resource: scanned_resource)
+      end
+      let(:output) { builder.apply(manifest) }
+
+      it "does not raise an exception" do
+        persisted
+        expect { output }.not_to raise_error
+        expect(output["thumbnail"]).to be_blank
+      end
+    end
+
     context "when viewing a Multi-Volume Work" do
       let(:persisted_volume) do
         change_set_persister.save(change_set: change_set)
