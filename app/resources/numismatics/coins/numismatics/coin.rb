@@ -53,6 +53,7 @@ module Numismatics
     attribute :start_canvas
     attribute :viewing_direction
     attribute :viewing_hint
+    attribute :downloadable
 
     def self.can_have_manifests?
       true

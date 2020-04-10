@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-04-10
+
+## Fixed
+
+* Allow Coin resource images to be downloaded from UV.
+
 # 2020-04-09
 
 ## Fixed

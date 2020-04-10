@@ -35,4 +35,9 @@ RSpec.describe Numismatics::Coin do
       expect(resource.pdf_file).to be_a FileMetadata
     end
   end
+
+  it "has a downloadable attribute" do
+    coin.downloadable = ["public"]
+    expect(coin.downloadable).to eq ["public"]
+  end
 end
