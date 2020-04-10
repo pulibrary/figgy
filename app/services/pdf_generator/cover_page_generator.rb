@@ -84,7 +84,7 @@ class PDFGenerator
         # collection name (from EAD) ? not in jsonld
 
         header(prawn_document, "Contact Information")
-        text = (resource.holding_location || []).map { |x| holding_location_text(x) }.join("")
+        text = (resource.try(:holding_location) || []).map { |x| holding_location_text(x) }.join("")
         prawn_document.text text, inline_format: true
         prawn_document.move_down 20
 

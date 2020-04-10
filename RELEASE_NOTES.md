@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-04-09
+
+## Fixed
+
+* Fixed PDF generation for coin resources.
+
 # 2020-04-03
 
 ## Added
