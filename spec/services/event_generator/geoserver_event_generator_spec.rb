@@ -62,6 +62,14 @@ RSpec.describe EventGenerator::GeoserverEventGenerator do
       end
     end
 
+    context "with a scanned map" do
+      let(:record) { FactoryBot.create_for_repository(:scanned_map) }
+
+      it "is not valid" do
+        expect(event_generator.valid?(record)).to be false
+      end
+    end
+
     context "with a file set without a derivative" do
       before do
         persister = Valkyrie.config.metadata_adapter.persister

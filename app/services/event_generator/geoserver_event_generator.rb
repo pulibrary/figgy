@@ -43,7 +43,7 @@ class EventGenerator
     def record_member_updated(record); end
 
     def valid?(record)
-      return true if record.try(:geo_resource?)
+      return true if record.is_a?(VectorResource) || record.is_a?(RasterResource)
       return true if geo_file_set?(record)
       false
     end
