@@ -343,5 +343,13 @@ RSpec.describe Valkyrie::ResourceDecorator do
         expect(decorator.downloadable?).to eq(decorator.visible? && decorator.public_readable_state?)
       end
     end
+
+    context "with a coin resource" do
+      let(:resource) { FactoryBot.build(:complete_open_coin) }
+
+      it "allows downloads" do
+        expect(decorator.downloadable?).to be true
+      end
+    end
   end
 end

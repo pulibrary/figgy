@@ -41,6 +41,7 @@ module Numismatics
     property :start_canvas, required: false
     property :viewing_direction, required: false
     property :viewing_hint, multiple: false, required: false, default: "individuals"
+    property :downloadable, multiple: false, require: true, default: "public"
 
     property :pdf_type, multiple: false, required: false, default: "color"
     property :file_metadata, multiple: true, required: false, default: []
