@@ -12,10 +12,10 @@
 
 development:
   adapter: solr
-  url: <%= ENV['SOLR_URL'] || "http://127.0.0.1:8983/solr/figgy-core-dev" %>
+  url: <%= ENV['SOLR_URL'] || "http://#{ENV["lando_figgy_development_solr_conn_host"] || "127.0.0.1"}:#{ENV['TEST_JETTY_PORT'] || ENV["lando_figgy_development_solr_conn_port"] || 8983}/solr/figgy-core-dev" %>
 test: &test
   adapter: solr
-  url: <%= ENV['SOLR_URL'] || "http://127.0.0.1:#{ENV['TEST_JETTY_PORT'] || 8984}/solr/figgy-core-test" %>
+  url: <%= ENV['SOLR_URL'] || "http://#{ENV["lando_figgy_test_solr_conn_host"] || "127.0.0.1"}:#{ENV['TEST_JETTY_PORT'] || ENV["lando_figgy_test_solr_conn_port"] || 8984}/solr/figgy-core-test" %>
 production:
   adapter: solr
   url: <%= ENV['SOLR_URL'] || "http://127.0.0.1:8983/solr/figgy-core" %>

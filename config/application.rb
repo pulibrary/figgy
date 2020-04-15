@@ -2,6 +2,7 @@
 require_relative "boot"
 require_relative "read_only_mode"
 require "rails"
+require_relative "lando_env"
 require "active_model/railtie"
 require "active_job/railtie"
 require "active_record/railtie"
