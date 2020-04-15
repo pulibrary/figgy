@@ -138,7 +138,7 @@ export default {
   },
   watch: {
     method: function (val) {
-      this.updateMultiLabels()
+      this.updateUnitLabel()
     }
   },
   methods: {
