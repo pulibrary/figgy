@@ -106,7 +106,7 @@ Remember you'll need to run `bundle install` and `yarn install` on an ongoing ba
 ### Lando
 
 1. Uninstall Docker
-2. Install Lando DMG from [[https://github.com/lando/lando/releases]]
+2. Install Lando v3.0.0-rrc.4 or later DMG from [[https://github.com/lando/lando/releases]]
 3. `lando start`
 
 1. For test:
