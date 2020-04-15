@@ -123,6 +123,7 @@ defaults: &defaults
 development:
   <<: *defaults
   repository_path: <%= Rails.root.join("tmp", "more_files") %>
+  pyramidals_bucket: <%= ENV["FIGGY_PYRAMIDALS_BUCKET"] %>
 
 test:
   <<: *defaults
