@@ -12,7 +12,6 @@ exports[`OrderManager.vue has the expected html structure 1`] = `
    
   <wrapper-stub
     class="lux-galleryPanel"
-    full-width="true"
     type="div"
   >
     <toolbar-stub

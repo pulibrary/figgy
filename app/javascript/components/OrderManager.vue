@@ -27,7 +27,7 @@
       Sorry, there was a problem saving your work!
     </alert>
     <wrapper
-      :full-width="true"
+      :full-width="false"
       class="lux-galleryPanel"
       type="div"
     >
@@ -167,7 +167,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .lux-title {
   font-weight: bold;
 }
@@ -205,6 +205,9 @@ export default {
   width: 70%;
   border-radius: 4px;
   border: 1px solid #ddd;
+}
+.lux-galleryPanel .lux-icon {
+  margin: auto;
 }
 .lux-galleryWrapper {
   overflow: auto;

@@ -7000,23 +7000,24 @@ lru-cache@^5.0.0, lru-cache@^5.1.1:
   dependencies:
     yallist "^3.0.2"
 
-lux-design-system@2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/lux-design-system/-/lux-design-system-2.0.3.tgz#1a2f646788a807514e392230ae403371120f4bfb"
-  integrity sha512-RA/msF7Ou3TQD2Y2KR6F4O/gmad2i5YiXfi0g9EGAMdzHHnTdxnbrLIp3kFGIt7zNYvCLTiJhZgSIi6v96ALWg==
+lux-design-system@2.16.6:
+  version "2.16.6"
+  resolved "https://registry.yarnpkg.com/lux-design-system/-/lux-design-system-2.16.6.tgz#d8053bb3de6eae6ce6c8c14bdb27916621560503"
+  integrity sha512-jfhN/p60wbGyBIpJHjVNPNJGRG+dICYC2sPlxnF52nZSvrD5SdRe6vzo1NSWMB46ITu42SuZMeHm0HnkfxIc2A==
   dependencies:
     lodash "^4.17.11"
-    mini-css-extract-plugin "^0.4.3"
+    mini-css-extract-plugin "^0.4.5"
     openseadragon "^2.4.0"
-    postcss-import "^12.0.0"
+    postcss-import "^12.0.1"
     postcss-loader "^3.0.0"
     postcss-safe-parser "^4.0.1"
     postcss-url "^8.0.0"
     tinycolor2 "^1.4.1"
-    vue "^2.5.17"
+    v-calendar "^0.9.7"
+    vue "^2.5.18"
     vue-lodash "^2.0.0"
-    vue-meta "^1.5.5"
-    vue-router "^3.0.1"
+    vue-meta "^1.5.6"
+    vue-router "^3.0.2"
     vuedraggable "^2.16.0"
     vuex "^3.0.1"
     webfontloader "^1.6.28"
@@ -7285,7 +7286,7 @@ mimic-fn@^2.0.0, mimic-fn@^2.1.0:
   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-2.1.0.tgz#7ed2c2ccccaf84d3ffcb7a69b57711fc2083401b"
   integrity sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==
 
-mini-css-extract-plugin@^0.4.3:
+mini-css-extract-plugin@^0.4.5:
   version "0.4.5"
   resolved "https://registry.yarnpkg.com/mini-css-extract-plugin/-/mini-css-extract-plugin-0.4.5.tgz#c99e9e78d54f3fa775633aee5933aeaa4e80719a"
   integrity sha512-dqBanNfktnp2hwL2YguV9Jh91PFX7gu7nRLs4TGsbAfAG6WOtlynFRYzwDwmmeSb5uIwHo9nx1ta0f7vAZVp2w==
@@ -8813,7 +8814,7 @@ postcss-image-set-function@^3.0.1:
     postcss "^7.0.2"
     postcss-values-parser "^2.0.0"
 
-postcss-import@^12.0.0, postcss-import@^12.0.1:
+postcss-import@^12.0.1:
   version "12.0.1"
   resolved "https://registry.yarnpkg.com/postcss-import/-/postcss-import-12.0.1.tgz#cf8c7ab0b5ccab5649024536e565f841928b7153"
   integrity sha512-3Gti33dmCjyKBgimqGxL3vcV8w9+bsHwO5UrBawp796+jdardbcFl4RP5w/76BwNL7aGzpKstIfF9I+kdE8pTw==
@@ -11515,6 +11516,13 @@ uuid@^3.0.1, uuid@^3.3.2, uuid@^3.3.3:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
 
+v-calendar@^0.9.7:
+  version "0.9.7"
+  resolved "https://registry.yarnpkg.com/v-calendar/-/v-calendar-0.9.7.tgz#a0c770d9132ada9dea1684f18f7a35c0da7f9838"
+  integrity sha512-xwSS7i81WGKkQfbNQ0SFdjPBKuXVK4F4y2rT1SGI8oiQbYyoI0PgT1NT0RZ+8FaFeEog6pms6ZMUAswrUe8QHg==
+  dependencies:
+    vue "^2.5.0"
+
 v8-compile-cache@2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/v8-compile-cache/-/v8-compile-cache-2.0.3.tgz#00f7494d2ae2b688cfe2899df6ed2c54bef91dbe"
@@ -11608,7 +11616,7 @@ vue-lodash@^2.0.0:
   resolved "https://registry.yarnpkg.com/vue-lodash/-/vue-lodash-2.1.2.tgz#1ec2b1471ee289518e8d285250a25516adee6c51"
   integrity sha512-6QsNC7/XjrK4xKxFhh6Ppvcrfm0uAeR/lFsySsMgfEFUWkvRztcAIS3MsqAI4bBnAaLo9ou+8tUfJ8d+yrljQg==
 
-vue-meta@^1.5.5:
+vue-meta@^1.5.6:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/vue-meta/-/vue-meta-1.6.0.tgz#89b664f6011a207e098e8ba3b9d32e29c819b65d"
   integrity sha512-LLHejsOYbJiSEDSgZvjHB3fFY7lUxsDFLkuSqf5eBohEvhhddBTOHa3heoFTcI5sxsZSZt26uUzoLVe4CT6Y4A==
@@ -11618,7 +11626,7 @@ vue-meta@^1.5.5:
     lodash.uniqueid "^4.0.1"
     object-assign "^4.1.1"
 
-vue-router@^3.0.1:
+vue-router@^3.0.2:
   version "3.1.6"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.1.6.tgz#45f5a3a3843e31702c061dd829393554e4328f89"
   integrity sha512-GYhn2ynaZlysZMkFE5oCHRUTqE8BWs/a9YbKpNLi0i7xD6KG1EzDqpHQmv1F5gXjr8kL5iIVS8EOtRaVUEXTqA==
@@ -11649,7 +11657,7 @@ vue-template-es2015-compiler@^1.6.0, vue-template-es2015-compiler@^1.9.0:
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
 
-vue@^2.5.17:
+vue@^2.5.0, vue@^2.5.17, vue@^2.5.18:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
   integrity sha512-VfPwgcGABbGAue9+sfrD4PuwFar7gPb1yl1UK1MwXoQPAw0BKSqWfoYCT/ThFrdEVWoI51dBuyCoiNU9bZDZxQ==
