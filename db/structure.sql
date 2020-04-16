@@ -10,6 +10,20 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+--
 -- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -165,38 +179,6 @@ ALTER SEQUENCE public.auth_tokens_id_seq OWNED BY public.auth_tokens.id;
 
 
 --
--- Name: authorization_models; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.authorization_models (
-    id bigint NOT NULL,
-    uuid character varying,
-    "authorization" text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: authorization_models_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.authorization_models_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: authorization_models_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.authorization_models_id_seq OWNED BY public.authorization_models.id;
-
-
---
 -- Name: bookmarks; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -230,6 +212,134 @@ CREATE SEQUENCE public.bookmarks_id_seq
 --
 
 ALTER SEQUENCE public.bookmarks_id_seq OWNED BY public.bookmarks.id;
+
+
+--
+-- Name: browse_everything_authorization_models; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.browse_everything_authorization_models (
+    id bigint NOT NULL,
+    uuid character varying,
+    "authorization" text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: browse_everything_authorization_models_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.browse_everything_authorization_models_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: browse_everything_authorization_models_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.browse_everything_authorization_models_id_seq OWNED BY public.browse_everything_authorization_models.id;
+
+
+--
+-- Name: browse_everything_session_models; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.browse_everything_session_models (
+    id bigint NOT NULL,
+    uuid character varying,
+    session text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: browse_everything_session_models_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.browse_everything_session_models_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: browse_everything_session_models_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.browse_everything_session_models_id_seq OWNED BY public.browse_everything_session_models.id;
+
+
+--
+-- Name: browse_everything_upload_files; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.browse_everything_upload_files (
+    id bigint NOT NULL,
+    container_id character varying,
+    name character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: browse_everything_upload_files_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.browse_everything_upload_files_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: browse_everything_upload_files_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.browse_everything_upload_files_id_seq OWNED BY public.browse_everything_upload_files.id;
+
+
+--
+-- Name: browse_everything_upload_models; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.browse_everything_upload_models (
+    id bigint NOT NULL,
+    uuid character varying,
+    upload text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: browse_everything_upload_models_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.browse_everything_upload_models_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: browse_everything_upload_models_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.browse_everything_upload_models_id_seq OWNED BY public.browse_everything_upload_models.id;
 
 
 --
@@ -370,102 +480,6 @@ ALTER SEQUENCE public.searches_id_seq OWNED BY public.searches.id;
 
 
 --
--- Name: session_models; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.session_models (
-    id bigint NOT NULL,
-    uuid character varying,
-    session text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: session_models_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.session_models_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: session_models_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.session_models_id_seq OWNED BY public.session_models.id;
-
-
---
--- Name: upload_files; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.upload_files (
-    id bigint NOT NULL,
-    container_id character varying,
-    name character varying,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: upload_files_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.upload_files_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: upload_files_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.upload_files_id_seq OWNED BY public.upload_files.id;
-
-
---
--- Name: upload_models; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.upload_models (
-    id bigint NOT NULL,
-    uuid character varying,
-    upload text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: upload_models_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.upload_models_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: upload_models_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.upload_models_id_seq OWNED BY public.upload_models.id;
-
-
---
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -530,17 +544,38 @@ ALTER TABLE ONLY public.auth_tokens ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- Name: authorization_models id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.authorization_models ALTER COLUMN id SET DEFAULT nextval('public.authorization_models_id_seq'::regclass);
-
-
---
 -- Name: bookmarks id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.bookmarks ALTER COLUMN id SET DEFAULT nextval('public.bookmarks_id_seq'::regclass);
+
+
+--
+-- Name: browse_everything_authorization_models id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.browse_everything_authorization_models ALTER COLUMN id SET DEFAULT nextval('public.browse_everything_authorization_models_id_seq'::regclass);
+
+
+--
+-- Name: browse_everything_session_models id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.browse_everything_session_models ALTER COLUMN id SET DEFAULT nextval('public.browse_everything_session_models_id_seq'::regclass);
+
+
+--
+-- Name: browse_everything_upload_files id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.browse_everything_upload_files ALTER COLUMN id SET DEFAULT nextval('public.browse_everything_upload_files_id_seq'::regclass);
+
+
+--
+-- Name: browse_everything_upload_models id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.browse_everything_upload_models ALTER COLUMN id SET DEFAULT nextval('public.browse_everything_upload_models_id_seq'::regclass);
 
 
 --
@@ -562,27 +597,6 @@ ALTER TABLE ONLY public.roles ALTER COLUMN id SET DEFAULT nextval('public.roles_
 --
 
 ALTER TABLE ONLY public.searches ALTER COLUMN id SET DEFAULT nextval('public.searches_id_seq'::regclass);
-
-
---
--- Name: session_models id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.session_models ALTER COLUMN id SET DEFAULT nextval('public.session_models_id_seq'::regclass);
-
-
---
--- Name: upload_files id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.upload_files ALTER COLUMN id SET DEFAULT nextval('public.upload_files_id_seq'::regclass);
-
-
---
--- Name: upload_models id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.upload_models ALTER COLUMN id SET DEFAULT nextval('public.upload_models_id_seq'::regclass);
 
 
 --
@@ -625,19 +639,43 @@ ALTER TABLE ONLY public.auth_tokens
 
 
 --
--- Name: authorization_models authorization_models_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.authorization_models
-    ADD CONSTRAINT authorization_models_pkey PRIMARY KEY (id);
-
-
---
 -- Name: bookmarks bookmarks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.bookmarks
     ADD CONSTRAINT bookmarks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: browse_everything_authorization_models browse_everything_authorization_models_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.browse_everything_authorization_models
+    ADD CONSTRAINT browse_everything_authorization_models_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: browse_everything_session_models browse_everything_session_models_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.browse_everything_session_models
+    ADD CONSTRAINT browse_everything_session_models_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: browse_everything_upload_files browse_everything_upload_files_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.browse_everything_upload_files
+    ADD CONSTRAINT browse_everything_upload_files_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: browse_everything_upload_models browse_everything_upload_models_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.browse_everything_upload_models
+    ADD CONSTRAINT browse_everything_upload_models_pkey PRIMARY KEY (id);
 
 
 --
@@ -678,30 +716,6 @@ ALTER TABLE ONLY public.schema_migrations
 
 ALTER TABLE ONLY public.searches
     ADD CONSTRAINT searches_pkey PRIMARY KEY (id);
-
-
---
--- Name: session_models session_models_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.session_models
-    ADD CONSTRAINT session_models_pkey PRIMARY KEY (id);
-
-
---
--- Name: upload_files upload_files_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.upload_files
-    ADD CONSTRAINT upload_files_pkey PRIMARY KEY (id);
-
-
---
--- Name: upload_models upload_models_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.upload_models
-    ADD CONSTRAINT upload_models_pkey PRIMARY KEY (id);
 
 
 --
@@ -937,6 +951,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181030210350'),
 ('20181115195544'),
 ('20190102173711'),
+('20190521200107'),
 ('20200106182149'),
 ('20200225213132'),
 ('20200225213133'),
