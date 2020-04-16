@@ -55,7 +55,7 @@ class Jp2DerivativeService
   end
 
   def valid_mime_types
-    ["image/tiff", "image/jpeg", "image/png"]
+    ["image/tiff", "image/jpeg", "image/png", "image/jp2"]
   end
 
   def create_derivatives
@@ -79,7 +79,11 @@ class Jp2DerivativeService
   end
 
   def run_tiff_derivatives
-    create_tiff_derivative(filename)
+    if mime_type.first == "image/jp2"
+      copy_file(filename)
+    else
+      create_tiff_derivative(filename)
+    end
   end
 
   def create_tiff_derivative(filename)
@@ -87,6 +91,10 @@ class Jp2DerivativeService
     _stdout, stderr, status =
       Open3.capture3("opj_compress", "-i", color_corrected_tiff.path.to_s, "-o", temporary_output.path.to_s, "-t", "1024,1024", "-p", "RPCL", "-n", "8", "-r", "10")
     raise stderr unless status.success?
+  end
+
+  def copy_file(filename)
+    FileUtils.cp(filename.to_s, temporary_output.path.to_s)
   end
 
   def correct_color(filename)

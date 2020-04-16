@@ -32,7 +32,11 @@ class ScannedMapDerivativeService
 
   def valid?
     return false unless original_file
-    mime_type == ["image/tiff"] && parent.is_a?(ScannedMap)
+    valid_mime_types.include?(mime_type.first) && parent.is_a?(ScannedMap)
+  end
+
+  def valid_mime_types
+    ["image/tiff", "image/jpeg", "image/png", "image/jp2"]
   end
 
   def parent
@@ -60,7 +64,7 @@ class ScannedMapDerivativeService
   end
 
   def thumbnail_derivative_service
-    ImageDerivativeService::Factory.new(change_set_persister: change_set_persister, image_config: image_config).new(id: id)
+    ThumbnailDerivativeService::Factory.new(change_set_persister: change_set_persister).new(id: id)
   end
 
   def vips_derivative_service
@@ -69,13 +73,5 @@ class ScannedMapDerivativeService
 
   def pyramidal_change_set_persister(change_set_persister)
     change_set_persister.with(storage_adapter: Valkyrie::StorageAdapter.find(:pyramidal_derivatives))
-  end
-
-  def image_config
-    ImageDerivativeService::Factory::ImageConfig.new(width: 200,
-                                                     height: 150,
-                                                     format: "png",
-                                                     mime_type: "image/png",
-                                                     output_name: "thumbnail")
   end
 end

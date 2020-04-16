@@ -1,18 +1,21 @@
 # frozen_string_literal: true
-class VIPSDerivativeService
-  # Pixel width or height at which point it cuts the size in half for
-  # performance.
-  REDUCTION_THRESHOLD = 15_000
+class ThumbnailDerivativeService
   class Factory
-    attr_reader :change_set_persister
+    attr_reader :change_set_persister, :image_config
     delegate :metadata_adapter, to: :change_set_persister
     delegate :query_service, to: :metadata_adapter
-    def initialize(change_set_persister:)
+    def initialize(change_set_persister:, image_config: ImageConfig.new(width: 200, height: 150))
       @change_set_persister = change_set_persister
+      @image_config = image_config
     end
 
     def new(id:)
-      VIPSDerivativeService.new(id: id, change_set_persister: change_set_persister)
+      ThumbnailDerivativeService.new(id: id, change_set_persister: change_set_persister, image_config: image_config)
+    end
+
+    class ImageConfig < Dry::Struct
+      attribute :width, Valkyrie::Types::Integer
+      attribute :height, Valkyrie::Types::Integer
     end
   end
 
@@ -26,12 +29,22 @@ class VIPSDerivativeService
     end
   end
 
-  attr_reader :change_set_persister, :id
+  attr_reader :image_config, :change_set_persister, :id
+  delegate :width, :height, to: :image_config
   delegate :mime_type, to: :target_file
-  delegate :query_service, to: :change_set_persister
-  def initialize(id:, change_set_persister:)
+  delegate :query_service, :storage_adapter, to: :change_set_persister
+  def initialize(id:, change_set_persister:, image_config:)
     @id = id
     @change_set_persister = change_set_persister
+    @image_config = image_config
+  end
+
+  def format
+    "png"
+  end
+
+  def thumbnail_mime_type
+    "image/png"
   end
 
   def resource
@@ -78,18 +91,11 @@ class VIPSDerivativeService
   end
 
   def run_derivatives
-    vips_image.tiffsave(
+    vips_image.pngsave(
       temporary_output.path.to_s,
-      compression: :jpeg,
-      tile: true,
-      pyramid: true,
-      Q: 75,
-      tile_width: 1024,
-      tile_height: 1024,
-      strip: true,
-      profile: color_profile
+      strip: true
     )
-    raise "Unable to store pyramidal TIFF for #{filename}!" unless File.exist?(temporary_output.path)
+    raise "Unable to store thunbnail for #{filename}!" unless File.exist?(temporary_output.path)
   end
 
   def convert_jp2
@@ -108,17 +114,12 @@ class VIPSDerivativeService
                else
                  filename
                end
-        image = Vips::Image.new_from_file(path.to_s)
-        if image.height >= REDUCTION_THRESHOLD || image.width >= REDUCTION_THRESHOLD
-          image.resize(0.5)
-        else
-          image
-        end
+        Vips::Image.thumbnail(
+          path.to_s,
+          width,
+          height: height
+        )
       end
-  end
-
-  def color_profile
-    Hydra::Derivatives::Processors::Jpeg2kImage.srgb_profile_path
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
@@ -126,8 +127,8 @@ class VIPSDerivativeService
   # File membership for the parent of the Valkyrie::StorageAdapter::File is removed using #cleanup_derivative_metadata
   def cleanup_derivatives
     deleted_files = []
-    pyramidal_derivatives = resource.file_metadata.select { |file| file.derivative? && file.mime_type.include?("image/tiff") }
-    pyramidal_derivatives.each do |file|
+    image_derivatives = resource.file_metadata.select { |file| (file.derivative? || file.thumbnail_file?) && file.mime_type.include?(thumbnail_mime_type) }
+    image_derivatives.each do |file|
       storage_adapter.delete(id: file.file_identifiers.first)
       deleted_files << file.id
     end
@@ -135,11 +136,11 @@ class VIPSDerivativeService
   end
 
   def build_file
-    IoDecorator.new(temporary_output, "intermediate_file.tif", "image/tiff", use)
+    IoDecorator.new(temporary_output, "thumbnail.#{format}", thumbnail_mime_type, use)
   end
 
   def use
-    [Valkyrie::Vocab::PCDMUse.ServiceFile]
+    [Valkyrie::Vocab::PCDMUse.ThumbnailImage]
   end
 
   def filename
@@ -151,7 +152,7 @@ class VIPSDerivativeService
   end
 
   def temporary_output
-    @temporary_file ||= Tempfile.new(["intermediate_file", ".tif"])
+    @temporary_file ||= Tempfile.new
   end
 
   private
@@ -167,10 +168,6 @@ class VIPSDerivativeService
       change_set_persister.buffer_into_index do |buffered_persister|
         buffered_persister.save(change_set: updated_change_set)
       end
-    end
-
-    def storage_adapter
-      @storage_adapter ||= Valkyrie::StorageAdapter.find(:pyramidal_derivatives)
     end
 
     # Updates error message property on the original file.
