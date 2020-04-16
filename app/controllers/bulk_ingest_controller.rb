@@ -85,7 +85,7 @@ class BulkIngestController < ApplicationController
 
     def ingest_multi_volume_works(change_set_persister)
       new_uploads.each do |upload|
-        file_tree = {}
+        file_tree = Hash.new([])
         upload.files.each do |upload_file|
           new_pending_upload = PendingUpload.new(
             id: SecureRandom.uuid,
@@ -94,8 +94,7 @@ class BulkIngestController < ApplicationController
           )
 
           if new_pending_upload.in_container?
-            pending_uploads = file_tree[upload_file.container_id] || []
-            file_tree[upload_file.container_id] = pending_uploads + [new_pending_upload]
+            file_tree[upload_file.container_id] += [new_pending_upload]
           end
         end
 
