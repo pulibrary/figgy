@@ -34,6 +34,7 @@
         v-model="method"
         label="Labeling Method"
         :options="methodOpts"
+        @change="updateUnitLabel"
       />
 
       <div
@@ -72,6 +73,7 @@
 // const Lablr = require('../utils/lablr').default
 import Lablr from 'page-label-generator'
 import { mapState } from 'vuex'
+import { debounce } from 'lodash'
 /**
  * This is the Filesets Form for the Order Manager in Figgy
  */
@@ -136,19 +138,20 @@ export default {
   },
   watch: {
     method: function (val) {
-      this.updateMultiLabels()
+      this.updateUnitLabel()
     }
   },
   methods: {
-    labelerOpts () {
-      let unitLabel = this.unitLabel
-
+    updateUnitLabel () {
       // This should be generated with calculate() or watch()
       if (this.method === 'paginate') {
-        unitLabel = 'p. '
+        this.unitLabel = 'p. '
       } else if (this.method === 'foliate') {
-        unitLabel = 'f. '
+        this.unitLabel = 'f. '
       }
+    },
+    labelerOpts () {
+      let unitLabel = this.unitLabel
 
       let frontLabel = this.method === 'paginate' ? '' : this.frontLabel
       let backLabel = this.method === 'paginate' ? '' : this.backLabel
@@ -166,7 +169,7 @@ export default {
     isNormalInteger (str) {
       return /^\+?(0|[1-9]\d*)$/.test(str)
     },
-    updateMultiLabels () {
+    updateMultiLabels: debounce(function () {
       let changeList = this.gallery.changeList
       let items = this.gallery.items
       this.start = this.isNormalInteger(this.start)
@@ -188,7 +191,7 @@ export default {
 
       this.$store.dispatch('updateChanges', changeList)
       this.$store.dispatch('updateItems', items)
-    }
+    }, 300, { 'leading': false, 'trailing': true })
   }
 }
 </script>

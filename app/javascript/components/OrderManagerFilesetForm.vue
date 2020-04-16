@@ -41,6 +41,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { debounce } from 'lodash'
 /**
  * This is the Fileset Form for the Order Manager in Figgy.
  * The only reason you can currently see this pattern is because hiding it causes an OpenSeadragon bug in the Order Manager.
@@ -159,7 +160,7 @@ export default {
       this.singleForm.viewingHint = viewHint
       this.updateSingle()
     },
-    updateSingle () {
+    updateSingle: debounce(function () {
       var changeList = this.gallery.changeList
       var items = this.gallery.items
       var index = this.gallery.items
@@ -175,7 +176,7 @@ export default {
 
       this.$store.dispatch('updateChanges', changeList)
       this.$store.dispatch('updateItems', items)
-    }
+    }, 300, { 'leading': false, 'trailing': true })
   }
 }
 </script>
