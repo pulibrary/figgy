@@ -102,8 +102,7 @@ class BaseResourceController < ApplicationController
 
       browse_everything_uploads.each do |upload_id|
         # This needs to be changed to #find_one
-        uploads = BrowseEverything::Upload.find_by(uuid: upload_id)
-        upload = uploads.first
+        upload = BrowseEverything::Upload.find_by(uuid: upload_id).first
 
         upload.files.each do |upload_file|
           # Filter for hidden files
