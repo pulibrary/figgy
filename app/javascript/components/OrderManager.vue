@@ -175,12 +175,12 @@ export default {
   position: relative;
   height: 80vh;
 }
-.lux-orderManager /deep/ .lux-heading {
+.lux-orderManager .lux-heading {
   margin: 12px 0 12px 0;
   line-height: 0.75;
   color: #001123;
 }
-.lux-orderManager /deep/ h2 {
+.lux-orderManager h2 {
   letter-spacing: 0;
   font-size: 24px;
 }
@@ -196,6 +196,9 @@ export default {
   padding: 0 30px 0 30px;
   // height: 100%;
   overflow-y: scroll;
+}
+.lux-sidePanel .lux-input {
+  display: block;
 }
 .lux-galleryPanel {
   position: absolute;
