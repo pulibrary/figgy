@@ -25,19 +25,19 @@ class BulkIngestController < ApplicationController
   end
 
   def browse_everything_files
-    load_uploads
     unless files_to_upload?
       flash[:alert] = "Please select some files to ingest."
       return redirect_to bulk_ingest_show_path
     end
 
-    BrowseEverythingIngester.new(
+    cloud_ingester = BrowseEverythingIngester.new(
       change_set_persister: self.class.change_set_persister,
-      params: params,
+      multi_volume_work: multi_volume_work?,
       uploads: new_uploads,
-      collection_ids: collections_param,
-      resource_class_name: resource_class_name
-    ).ingest
+      resource_class: resource_class
+    )
+
+    cloud_ingester.ingest_from_cloud || ingest_local_dir
 
     redirect_to root_url, notice: "Batch Ingest of #{resource_class.human_readable_type.pluralize} started"
   end
@@ -48,13 +48,50 @@ class BulkIngestController < ApplicationController
       new_uploads.any? && new_uploads.first.containers.any?
     end
 
+    def ingest_local_dir
+      IngestFolderJob.perform_later(directory: selected_folder_root_path, file_filter: nil, class_name: resource_class_name, **attributes)
+    end
+
+    def base_path
+      File.basename(selected_folder_root_path)
+    end
+
+    def selected_folder_root_path
+      paths = new_uploads.first.containers.map { |container| container.id.gsub("file://", "") }
+      sorted_paths = paths.sort_by(&:length)
+      sorted_paths.first
+    end
+
+    def attributes
+      {
+        member_of_collection_ids: collection_ids,
+        source_metadata_identifier: source_metadata_id_from_path,
+        state: params[:workflow][:state],
+        visibility: params[:visibility]
+      }
+    end
+
     def collections
       collection_decorators = query_service.find_all_of_model(model: Collection).map(&:decorate)
       collection_decorators.to_a.collect { |c| [c.title, c.id.to_s] }
     end
 
-    def collections_param
+    def collection_ids
       params[:collections] || []
+    end
+
+    def source_metadata_id_from_path
+      base_path if valid_remote_identifier?(base_path)
+    end
+
+    # Determines whether or not the string encodes a bib. ID or a PULFA ID
+    # See SourceMetadataIdentifierValidator#validate
+    # @param [String] value
+    # @return [Boolean]
+    def valid_remote_identifier?(value)
+      RemoteRecord.valid?(value) && RemoteRecord.retrieve(value).success?
+    rescue URI::InvalidURIError
+      false
     end
 
     def query_service
@@ -77,10 +114,15 @@ class BulkIngestController < ApplicationController
       @workflow_class ||= DynamicChangeSet.new(resource_class.new).workflow_class
     end
 
-    attr_reader :new_uploads
-    def load_uploads
-      @new_uploads = browse_everything_uploads.map do |upload_id|
-        find_upload(upload_id)
+    def multi_volume_work?
+      params[:mvw] == "true"
+    end
+
+    def new_uploads
+      @new_uploads ||= begin
+        browse_everything_uploads.map do |upload_id|
+          find_upload(upload_id)
+        end
       end
     end
 
@@ -100,70 +142,30 @@ class BulkIngestController < ApplicationController
 end
 
 class BrowseEverythingIngester
-  attr_reader :change_set_persister, :params, :uploads, :collection_ids, :resource_class_name
-  def initialize(change_set_persister:, params:, uploads:, collection_ids:, resource_class_name:)
+  attr_reader :change_set_persister, :multi_volume_work, :uploads, :resource_class
+  def initialize(change_set_persister:, multi_volume_work:, uploads:, resource_class:)
     @change_set_persister = change_set_persister
-    @params = params
+    @multi_volume_work = multi_volume_work
     @uploads = uploads
-    @collection_ids = collection_ids
-    @resource_class_name = resource_class_name
+    @resource_class = resource_class
   end
 
-  def ingest
-    if selected_cloud_files?
-      change_set_persister.buffer_into_index do |buffered_changeset_persister|
-        if multi_volume_work?
-          ingest_multi_volume_works(buffered_changeset_persister)
-        else
-          ingest_works(buffered_changeset_persister)
-        end
+  def ingest_from_cloud
+    return false unless selected_cloud_files?
+    change_set_persister.buffer_into_index do |buffered_changeset_persister|
+      if multi_volume_work
+        ingest_multi_volume_works(buffered_changeset_persister)
+      else
+        ingest_works(buffered_changeset_persister)
       end
-    else
-      IngestFolderJob.perform_later(directory: selected_folder_root_path, file_filter: nil, class_name: resource_class_name, **attributes)
     end
+    true
   end
 
   private
 
-    def multi_volume_work?
-      params[:mvw] == "true"
-    end
-
     def selected_cloud_files?
       !uploads.first.provider.is_a?(BrowseEverything::Provider::FileSystem)
-    end
-
-    def attributes
-      {
-        member_of_collection_ids: collection_ids,
-        source_metadata_identifier: source_metadata_id_from_path,
-        state: params[:workflow][:state],
-        visibility: params[:visibility]
-      }
-    end
-
-    def source_metadata_id_from_path
-      base_path if valid_remote_identifier?(base_path)
-    end
-
-    # Determines whether or not the string encodes a bib. ID or a PULFA ID
-    # See SourceMetadataIdentifierValidator#validate
-    # @param [String] value
-    # @return [Boolean]
-    def valid_remote_identifier?(value)
-      RemoteRecord.valid?(value) && RemoteRecord.retrieve(value).success?
-    rescue URI::InvalidURIError
-      false
-    end
-
-    def base_path
-      File.basename(selected_folder_root_path)
-    end
-
-    def selected_folder_root_path
-      paths = uploads.first.containers.map { |container| container.id.gsub("file://", "") }
-      sorted_paths = paths.sort_by(&:length)
-      sorted_paths.first
     end
 
     def ingest_multi_volume_works(change_set_persister)
@@ -215,16 +217,6 @@ class BrowseEverythingIngester
       end
     end
 
-    def build_change_set(attrs)
-      change_set = DynamicChangeSet.new(build_resource)
-      change_set.validate(**attrs)
-      change_set
-    end
-
-    def build_resource
-      resource_class_name.constantize.new
-    end
-
     def ingest_works(change_set_persister)
       uploads.each do |upload|
         file_tree = {}
@@ -254,4 +246,13 @@ class BrowseEverythingIngester
       end
     end
 
+    def build_change_set(attrs)
+      change_set = DynamicChangeSet.new(build_resource)
+      change_set.validate(**attrs)
+      change_set
+    end
+
+    def build_resource
+      resource_class.new
+    end
 end
