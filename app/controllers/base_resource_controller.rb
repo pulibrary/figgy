@@ -98,24 +98,24 @@ class BaseResourceController < ApplicationController
     # Construct the pending download objects
     # @return [Array<PendingUpload>]
     def new_pending_uploads
-      @new_pending_uploads = []
-
-      browse_everything_uploads.each do |upload_id|
-        # This needs to be changed to #find_one
-        upload = BrowseEverything::Upload.find_by(uuid: upload_id).first
-
-        upload.files.each do |upload_file|
-          # Filter for hidden files
-          next if upload_file.name =~ /^\./
-
-          new_pending_upload = PendingUpload.new(
-            id: SecureRandom.uuid,
-            upload_file_id: upload_file.id
-          )
-          @new_pending_uploads << new_pending_upload
-        end
+      @new_pending_uploads ||= begin
+        browse_everything_uploads.map do |upload_id|
+          upload_files(upload_id).map do |upload_file|
+            # create the pending upload
+            PendingUpload.new(
+              id: SecureRandom.uuid,
+              upload_file_id: upload_file.id
+            )
+          end
+        end.flatten
       end
+    end
 
-      @new_pending_uploads
+    # Load upload files, filtering out hidden files
+    def upload_files(upload_id)
+      # This needs to be changed to #find_one
+      BrowseEverything::Upload.find_by(uuid: upload_id).first.files.select do |upload_file|
+        !(upload_file.name =~ /^\./)
+      end
     end
 end
