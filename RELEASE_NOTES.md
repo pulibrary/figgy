@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-04-16
+
+## Added
+
+* Added support for ingesting JPEG2000 files.
+
 # 2020-04-10
 
 ## Fixed
