@@ -17,11 +17,12 @@ class VIPSDerivativeService
   end
 
   class IoDecorator < SimpleDelegator
-    attr_reader :original_filename, :content_type, :use
-    def initialize(io, original_filename, content_type, use)
+    attr_reader :original_filename, :content_type, :use, :upload_options
+    def initialize(io, original_filename, content_type, use, upload_options: {})
       @original_filename = original_filename
       @content_type = content_type
       @use = use
+      @upload_options = upload_options
       super(io)
     end
   end
@@ -135,7 +136,16 @@ class VIPSDerivativeService
   end
 
   def build_file
-    IoDecorator.new(temporary_output, "intermediate_file.tif", "image/tiff", use)
+    IoDecorator.new(temporary_output, "intermediate_file.tif", "image/tiff", use, upload_options: upload_options)
+  end
+
+  def upload_options
+    {
+      metadata: {
+        "width" => vips_image.width.to_s,
+        "height" => vips_image.height.to_s
+      }
+    }
   end
 
   def use

@@ -172,6 +172,13 @@ RSpec.describe VIPSDerivativeService do
       derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
       expect(Vips::Image.new_from_file(derivative_file.disk_path.to_s).height).to eq 144
     end
+    it "uploads it with the appropriate metadata" do
+      allow(storage_adapter).to receive(:upload).and_call_original
+      stub_const("VIPSDerivativeService::REDUCTION_THRESHOLD", 1)
+      derivative_service.new(id: valid_change_set.id).create_derivatives
+
+      expect(storage_adapter).to have_received(:upload).with(file: anything, resource: anything, original_filename: anything, metadata: { "height" => "144", "width" => "100" })
+    end
   end
 
   context "malformed tiff source", run_real_derivatives: true do
