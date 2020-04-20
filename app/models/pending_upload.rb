@@ -8,6 +8,9 @@ class PendingUpload < Valkyrie::Resource
   attribute :auth_header
   attribute :type
   attribute :provider
+  # Store optional extra upload arguments which can be passed to StorageAdapter#upload.
+  # Currently used for passing height/width to S3.
+  attribute :upload_arguments, Valkyrie::Types::Hash
 
   def original_filename
     file_name.first
