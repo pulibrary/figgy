@@ -32,7 +32,6 @@ Metrics/AbcSize:
     - 'app/services/pul_metadata_services/bib_record.rb'
     - 'app/services/music_import_service.rb'
     - 'app/services/music_import_service/recording_collector.rb'
-    - 'app/controllers/bulk_ingest_controller.rb'
     - 'app/helpers/application_helper.rb'
     - 'app/services/preserver.rb'
     - 'app/jobs/ingest_archival_media_bag_job.rb'
@@ -61,7 +60,6 @@ Metrics/BlockLength:
     - 'lib/tasks/figgy.rake'
     - 'lib/tasks/export.rake'
     - 'app/jobs/browse_everything_ingest_job.rb'
-    - 'app/controllers/bulk_ingest_controller.rb'
 Metrics/ClassLength:
   Exclude:
     - 'app/change_sets/change_set.rb'
@@ -131,7 +129,6 @@ Metrics/CyclomaticComplexity:
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/services/manifest_builder.rb'
     - 'app/jobs/browse_everything_ingest_job.rb'
-    - 'app/controllers/bulk_ingest_controller.rb'
 Metrics/LineLength:
   Exclude:
     - 'spec/views/scanned_resources/order_manager.html.erb_spec.rb'
@@ -172,7 +169,6 @@ Metrics/MethodLength:
     - 'app/services/manifest_builder/canvas_rendering_builder.rb'
     - 'app/services/music_import_service.rb'
     - 'app/services/music_import_service/recording_collector.rb'
-    - 'app/controllers/bulk_ingest_controller.rb'
     - 'config/initializers/sequel_active_support_notification.rb'
     - 'app/services/manifest_builder.rb'
     - 'app/indexers/imported_metadata_indexer.rb'
@@ -223,7 +219,6 @@ Metrics/PerceivedComplexity:
     - 'app/helpers/application_helper.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/jobs/browse_everything_ingest_job.rb'
-    - 'app/controllers/bulk_ingest_controller.rb'
 Rails/OutputSafety:
   Exclude:
     - 'app/helpers/fixity_dashboard_helper.rb'

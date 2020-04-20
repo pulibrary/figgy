@@ -33,7 +33,7 @@ class BulkIngestController < ApplicationController
     cloud_ingester = BrowseEverythingIngester.new(
       change_set_persister: self.class.change_set_persister,
       multi_volume_work: multi_volume_work?,
-      uploads: new_uploads,
+      upload_sets: upload_sets,
       resource_class: resource_class
     )
 
@@ -45,7 +45,7 @@ class BulkIngestController < ApplicationController
   private
 
     def files_to_upload?
-      new_uploads.any? && new_uploads.first.containers.any?
+      upload_sets.any? && upload_sets.first.containers.any?
     end
 
     def ingest_local_dir
@@ -57,7 +57,7 @@ class BulkIngestController < ApplicationController
     end
 
     def selected_folder_root_path
-      paths = new_uploads.first.containers.map { |container| container.id.gsub("file://", "") }
+      paths = upload_sets.first.containers.map { |container| container.id.gsub("file://", "") }
       sorted_paths = paths.sort_by(&:length)
       sorted_paths.first
     end
@@ -118,8 +118,8 @@ class BulkIngestController < ApplicationController
       params[:mvw] == "true"
     end
 
-    def new_uploads
-      @new_uploads ||= begin
+    def upload_sets
+      @upload_sets ||= begin
         browse_everything_uploads.map do |upload_id|
           find_upload(upload_id)
         end

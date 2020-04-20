@@ -232,8 +232,10 @@ RSpec.describe BulkIngestController do
 
         allow(container2).to receive(:id).and_return(container2_id)
         allow(container2).to receive(:name).and_return("resource2")
+        allow(container2).to receive(:parent_id).and_return("parent2")
         allow(container).to receive(:name).and_return("resource1")
         allow(container).to receive(:id).and_return(container_id)
+        allow(container).to receive(:parent_id).and_return("parent1")
 
         allow(upload).to receive(:files).and_return([upload_file, upload_file2])
         allow(upload).to receive(:containers).and_return([container, container2])
