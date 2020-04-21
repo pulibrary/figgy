@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
+# Ingests directories of files queued for upload by BrowseEverything
 # This class was extracted from BulkIngestController and is covered by its specs
-class BrowseEverythingIngester
+class BulkCloudIngester
   attr_reader :change_set_persister, :multi_volume_work, :upload_sets, :resource_class
 
   # @param change_set_persister [ChangeSetPersister]
@@ -15,7 +16,7 @@ class BrowseEverythingIngester
     @resource_class = resource_class
   end
 
-  def ingest_from_cloud
+  def ingest
     return false unless selected_cloud_files?
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
       upload_sets.each do |upload|
