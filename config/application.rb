@@ -32,6 +32,9 @@ module Figgy
         origins "*"
         resource "/graphql", headers: :any, methods: [:post]
 
+        # The browse everything front-end is a react app which can be run separately
+        #   from the rails server in development on a different port.
+        #   Permit the front-end to access the browse everything controllers.
         if Rails.env.development?
           resource "/browse/*", headers: :any, methods: [:options, :get, :post, :patch]
         end
