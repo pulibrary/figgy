@@ -120,7 +120,7 @@ RSpec.describe DownloadsController do
 
         get :show, params: { resource_id: output.id.to_s, id: output.file_metadata.first.id.to_s, auth_token: token.token }
 
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(M3u8::Playlist.read(response.body).items[0].segment).to end_with "?auth_token=#{token.token}"
       end
     end
@@ -138,7 +138,7 @@ RSpec.describe DownloadsController do
 
         get :show, params: { resource_id: file_set.id.to_s, id: partial.id.to_s }
 
-        expect(response).to be_success
+        expect(response).to be_successful
       end
       it "disallows download of the original file", run_real_derivatives: true, run_real_characterization: true do
         sign_in user
@@ -150,7 +150,7 @@ RSpec.describe DownloadsController do
 
         get :show, params: { resource_id: file_set.id.to_s, id: wav_file.id.to_s }
 
-        expect(response).not_to be_success
+        expect(response).not_to be_successful
       end
     end
 
@@ -167,7 +167,7 @@ RSpec.describe DownloadsController do
 
         get :show, params: { resource_id: output.id.to_s, id: output.file_metadata.first.id.to_s }
 
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(M3u8::Playlist.read(response.body).items[0].segment).not_to include "?auth_token"
       end
     end

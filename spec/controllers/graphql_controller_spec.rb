@@ -15,7 +15,7 @@ RSpec.describe GraphqlController do
       it "can run a graphql query" do
         post :execute, params: { query: query_string, format: :json }
 
-        expect(response).to be_success
+        expect(response).to be_successful
         json_response = JSON.parse(response.body)
         expect(json_response["data"]).to eq(
           "resource" => { "viewingHint" => "individuals" }
@@ -32,18 +32,18 @@ RSpec.describe GraphqlController do
 
         post :execute, params: { query: child_query_string, format: :json }
 
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(JSON.parse(response.body)["errors"]).to be_blank
         expect(adapter.query_service).not_to have_received(:find_inverse_references_by)
         expect(adapter.query_service).to have_received(:find_by).exactly(1).times
       end
       it "can support variables set as a JSON string" do
         post :execute, params: { query: query_string, variables: { episode: "bla" }.to_json }
-        expect(response).to be_success
+        expect(response).to be_successful
       end
       it "can support an empty string for variables" do
         post :execute, params: { query: query_string, variables: "" }
-        expect(response).to be_success
+        expect(response).to be_successful
       end
       it "will error if given something strange for a variable" do
         expect { post :execute, params: { query: query_string, variables: [1] } }.to raise_error ArgumentError
@@ -54,7 +54,7 @@ RSpec.describe GraphqlController do
       it "can run a graphql query for a public scanned resource" do
         post :execute, params: { query: query_string, format: :json }
 
-        expect(response).to be_success
+        expect(response).to be_successful
         json_response = JSON.parse(response.body)
         expect(json_response["data"]).to eq(
           "resource" => { "viewingHint" => "individuals" }

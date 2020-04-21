@@ -15,7 +15,7 @@ RSpec.describe CatalogController do
     it "can find documents via JSON" do
       get :index, params: { q: "", format: :json }
 
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 
@@ -36,7 +36,7 @@ RSpec.describe CatalogController do
 
         get :iiif_search, params: { solr_document_id: parent.id, q: "Content" }
 
-        expect(response).not_to be_success
+        expect(response).not_to be_successful
         expect(response).to redirect_to "http://test.host/users/auth/cas"
       end
     end
@@ -50,7 +50,7 @@ RSpec.describe CatalogController do
 
       get :iiif_search, params: { solr_document_id: parent.id, q: "Content" }
 
-      expect(response).to be_success
+      expect(response).to be_successful
       json_response = JSON.parse(response.body)
       expect(json_response["resources"].length).to eq 1
       expect(json_response["resources"][0]["on"]).to eq "http://www.example.com/concern/scanned_resources/#{parent.id}/manifest/canvas/#{child.id}#xywh=0,0,0,0"
@@ -64,7 +64,7 @@ RSpec.describe CatalogController do
 
       get :iiif_search, params: { solr_document_id: parent.id, q: "Content" }
 
-      expect(response).to be_success
+      expect(response).to be_successful
       json_response = JSON.parse(response.body)
       expect(json_response["resources"].length).to eq 1
       expect(json_response["resources"][0]["on"]).to eq "http://www.example.com/concern/scanned_resources/#{parent.id}/manifest/canvas/#{child.id}#xywh=1,2,2,2"
@@ -212,13 +212,13 @@ RSpec.describe CatalogController do
       u1.save(validate: false)
       sign_in u1
       get :index, params: { q: "" }
-      expect(response).to be_success
+      expect(response).to be_successful
 
       u2 = User.new uid: "guest_456"
       u2.save(validate: false)
       sign_in u2
       get :index, params: { q: "" }
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 
@@ -623,7 +623,7 @@ RSpec.describe CatalogController do
         resource = persister.save(resource: FactoryBot.build(:pending_private_scanned_resource, workflow_note: WorkflowNote.new(author: "Shakespeare", note: "Test Comment")))
 
         get :show, params: { id: resource.id, format: :json, auth_token: authorization_token.token }
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
     context "when rendered for an admin" do
@@ -665,7 +665,7 @@ RSpec.describe CatalogController do
 
         get :show, params: { id: resource.id.to_s, format: :jsonld }
 
-        expect(response).to be_success
+        expect(response).to be_successful
         json_body = MultiJson.load(response.body, symbolize_keys: true)
         expect(json_body[:title][0][:@value]).to eq "Earth rites : fertility rites in pre-industrial Britain"
         expect(json_body[:title][1][:@value]).to eq "test"
@@ -680,29 +680,29 @@ RSpec.describe CatalogController do
         expect(json_body[:memberOf][0][:title]).to eq collection.title.first
 
         get :show, params: { id: resource.id.to_s, format: :nt }
-        expect(response).to be_success
+        expect(response).to be_successful
 
         get :show, params: { id: resource.id.to_s, format: :ttl }
-        expect(response).to be_success
+        expect(response).to be_successful
 
         empty_resource = persister.save(resource: FactoryBot.build(:complete_scanned_resource))
         get :show, params: { id: empty_resource.id.to_s, format: :jsonld }
-        expect(response).to be_success
+        expect(response).to be_successful
 
         collection = persister.save(resource: FactoryBot.build(:collection))
         get :show, params: { id: collection.id.to_s, format: :jsonld }
-        expect(response).to be_success
+        expect(response).to be_successful
 
         folder = persister.save(resource: FactoryBot.build(:ephemera_folder))
         persister.save(resource: FactoryBot.build(:ephemera_project, member_ids: [folder.id]))
         get :show, params: { id: folder.id.to_s, format: :jsonld }
-        expect(response).to be_success
+        expect(response).to be_successful
         json_body = MultiJson.load(response.body, symbolize_keys: true)
         expect(json_body[:local_identifier][0]).to eq "xyz1"
 
         simple_resource = persister.save(resource: FactoryBot.build(:simple_resource, author: "Test Author", part_of: ArkWithTitle.new(identifier: "https://www.example.com", title: "Test")))
         get :show, params: { id: simple_resource.id.to_s, format: :jsonld }
-        expect(response).to be_success
+        expect(response).to be_successful
         json_body = MultiJson.load(response.body, symbolize_keys: true)
         expect(json_body[:author]).not_to be_blank
         expect(json_body[:pdf_type]).to be_blank
@@ -849,7 +849,7 @@ RSpec.describe CatalogController do
       end
       it "doesn't redirect when no_redirect is set" do
         get :lookup_manifest, params: { prefix: "ark:", naan: "99999", arkid: "12345", no_redirect: "true" }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(JSON.parse(response.body)["url"]).to eq "http://test.host/concern/scanned_resources/#{resource.id}/manifest"
       end
     end
