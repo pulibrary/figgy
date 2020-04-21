@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require "csv"
-
 class ImportMissingMaps
   def self.import_map_set(csv_path:, parent_id:, file_root:, depositor:)
     new(csv_path: csv_path, file_root: file_root, depositor: depositor).import_mapset_from_csv(parent_id: parent_id)
