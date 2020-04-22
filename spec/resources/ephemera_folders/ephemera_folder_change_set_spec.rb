@@ -32,6 +32,20 @@ RSpec.describe EphemeraFolderChangeSet do
     end
   end
 
+  describe "#height" do
+    it "is not required" do
+      expect(change_set.required?(:height)).to eq false
+      expect(change_set.validate(height: nil)).to eq true
+    end
+  end
+
+  describe "#width" do
+    it "is not required" do
+      expect(change_set.required?(:width)).to eq false
+      expect(change_set.validate(width: nil)).to eq true
+    end
+  end
+
   describe "#visibility" do
     let(:change_set) { described_class.new(FactoryBot.build(:ephemera_folder, visibility: nil)) }
     it "has a default of open" do
