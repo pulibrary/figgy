@@ -79,7 +79,7 @@ RSpec.describe PlaylistsController do
         it "responds with a link header specifying the title of the resource" do
           head :manifest, params: { id: resource.id.to_s }, format: :json
 
-          expect(response).to be_a_success
+          expect(response).to be_successful
           expect(response.headers).to include "Link"
           expect(response.headers["Link"]).to eq "<http://test.host/concern/playlists/#{resource.id}/manifest>; rel=\"self\"; title=\"#{resource.title.first}\""
         end

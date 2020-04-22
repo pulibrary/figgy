@@ -221,7 +221,7 @@ RSpec.describe RasterResourcesController, type: :controller do
 
       it "renders the document" do
         get :geoblacklight, params: { id: raster_resource.id, format: :json }
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
   end

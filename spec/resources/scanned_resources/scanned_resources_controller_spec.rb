@@ -24,7 +24,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
         authorization_token = AuthToken.create!(group: ["admin"], label: "Admin Token")
         get :manifest, params: { id: resource.id, format: :json, auth_token: authorization_token.token }
 
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(response.body).not_to eq "{}"
       end
     end

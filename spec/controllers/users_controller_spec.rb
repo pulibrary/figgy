@@ -12,7 +12,7 @@ RSpec.describe UsersController, type: :controller do
     it "returns a success response" do
       User.create! uid: "asdf", email: "asdf@princeton.edu", provider: "cas"
       get :index, params: {}
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 
@@ -33,7 +33,7 @@ RSpec.describe UsersController, type: :controller do
     context "with invalid params" do
       it "returns a success response (i.e. to display the 'new' template)" do
         post :create, params: { user: { name: "bob" } }
-        expect(response).not_to be_success
+        expect(response).not_to be_successful
       end
     end
   end
