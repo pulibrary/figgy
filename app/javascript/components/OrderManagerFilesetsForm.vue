@@ -37,6 +37,22 @@
         @change="updateUnitLabel"
       />
 
+      <input-select
+        id="twoUp"
+        v-model="twoUp"
+        label="Two Up"
+        :options="twoUpOpts"
+        @change="updateMultiLabels()"
+      />
+
+      <input-text
+        v-if="twoUp"
+        id="twoUpSeparator"
+        v-model="twoUpSeparator"
+        label="Two-Up Separator"
+        @input="updateMultiLabels()"
+      />
+
       <div
         v-if="method === 'foliate'"
         class="lux-row"
@@ -105,7 +121,9 @@ export default {
       backLabel: 'v. ',
       startsWith: 'front',
       unitLabel: 'p. ',
-      bracket: false
+      bracket: false,
+      twoUp: false,
+      twoUpSeparator: '/'
     }
   },
   computed: {
@@ -131,6 +149,16 @@ export default {
     },
     methodOpts: function () {
       return [{ label: 'Paginate (Default)', value: 'paginate' }, { label: 'Foliate', value: 'foliate' }]
+    },
+    twoUpOpts: function () {
+      return [
+        {
+          label: 'One-up (Default)', value: false
+        },
+        {
+          label: 'Two-up', value: true
+        }
+      ]
     },
     startWithOpts: function () {
       return [{ label: 'Front (Default)', value: 'front' }, { label: 'Back', value: 'back' }]
@@ -163,7 +191,9 @@ export default {
         bracket: this.bracket,
         frontLabel,
         backLabel,
-        unitLabel
+        unitLabel,
+        twoUp: this.twoUp,
+        twoUpSeparator: this.twoUpSeparator
       }
     },
     isNormalInteger (str) {
