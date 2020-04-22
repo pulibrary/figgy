@@ -15,6 +15,10 @@ Release notes template:
 -->
 # 2020-04-22
 
+## Added
+
+* Added two-up support to order manager.
+
 ## Fixed
 
 * Removing a source metadata identifier now clears imported metadata.
