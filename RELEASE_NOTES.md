@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-04-22
+
+## Fixed
+
+* Removing a source metadata identifier now clears imported metadata.
+
 # 2020-04-16
 
 ## Added

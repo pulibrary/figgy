@@ -16,6 +16,7 @@ class ChangeSetPersister
         SyncResource,
         MintIdentifier,
         ApplyRemoteMetadata,
+        ClearRemoteMetadata,
         ExtractArchivalCollectionCode,
         ApplyVisibilityByDate,
         RestoreTombstones,
