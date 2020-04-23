@@ -29,7 +29,7 @@ GIT
 
 GIT
   remote: https://github.com/samvera/browse-everything.git
-  revision: 36d42e42b10a460d82ac73970e1e2c76c1c994af
+  revision: f1d3b9be7d920a0752f5d2a9faa26ecf30a7d162
   branch: 2.x-stable
   specs:
     browse-everything (2.0.0.pre.beta1)

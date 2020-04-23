@@ -11,7 +11,7 @@ require "action_mailer/railtie"
 require "action_view/railtie"
 require "action_cable/engine"
 require "sprockets/railtie"
-require "active_storage"
+require "active_storage/engine"
 Bundler.require(*Rails.groups)
 module Figgy
   class Application < Rails::Application

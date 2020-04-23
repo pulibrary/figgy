@@ -71,10 +71,11 @@ SET default_with_oids = false;
 
 CREATE TABLE public.active_storage_attachments (
     id bigint NOT NULL,
-    name character varying,
-    record_gid character varying,
-    blob_id integer,
-    created_at time without time zone
+    name character varying NOT NULL,
+    record_type character varying NOT NULL,
+    record_id bigint NOT NULL,
+    blob_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -103,13 +104,13 @@ ALTER SEQUENCE public.active_storage_attachments_id_seq OWNED BY public.active_s
 
 CREATE TABLE public.active_storage_blobs (
     id bigint NOT NULL,
-    key character varying,
-    filename character varying,
+    key character varying NOT NULL,
+    filename character varying NOT NULL,
     content_type character varying,
     metadata text,
-    byte_size integer,
-    checksum character varying,
-    created_at time without time zone
+    byte_size bigint NOT NULL,
+    checksum character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -762,24 +763,10 @@ CREATE INDEX index_active_storage_attachments_on_blob_id ON public.active_storag
 
 
 --
--- Name: index_active_storage_attachments_on_record_gid; Type: INDEX; Schema: public; Owner: -
+-- Name: index_active_storage_attachments_uniqueness; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_active_storage_attachments_on_record_gid ON public.active_storage_attachments USING btree (record_gid);
-
-
---
--- Name: index_active_storage_attachments_on_record_gid_and_blob_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_active_storage_attachments_on_record_gid_and_blob_id ON public.active_storage_attachments USING btree (record_gid, blob_id);
-
-
---
--- Name: index_active_storage_attachments_on_record_gid_and_name; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_active_storage_attachments_on_record_gid_and_name ON public.active_storage_attachments USING btree (record_gid, name);
+CREATE UNIQUE INDEX index_active_storage_attachments_uniqueness ON public.active_storage_attachments USING btree (record_type, record_id, name, blob_id);
 
 
 --
@@ -923,6 +910,14 @@ CREATE INDEX resource_id_idx ON public.orm_resources USING btree ((((((metadata 
 
 
 --
+-- Name: active_storage_attachments fk_rails_c3b3935057; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_storage_attachments
+    ADD CONSTRAINT fk_rails_c3b3935057 FOREIGN KEY (blob_id) REFERENCES public.active_storage_blobs(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -951,12 +946,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181030210350'),
 ('20181115195544'),
 ('20190102173711'),
-('20190521200107'),
 ('20200106182149'),
 ('20200225213132'),
 ('20200225213133'),
 ('20200225213134'),
 ('20200225213135'),
-('20200226052720');
+('20200422192849');
 
 
