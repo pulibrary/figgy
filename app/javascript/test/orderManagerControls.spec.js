@@ -143,7 +143,6 @@ describe("OrderManagerControls.vue", () => {
   })
 
   it('will not allow save when nothing has changed', () => {
-    expect(window.fetching).toBeFalsy()
     expect(wrapper.vm.isDisabled).toBeTruthy()
   })
 
@@ -164,7 +163,7 @@ describe("OrderManagerControls.vue", () => {
     expect(wrapper.vm.galleryToResource(items)).toEqual(["a", "b", "c"])
   })
 
-  it('tests a number of scenarios once something has changed', () => {
+  it('tests a number of scenarios once something has changed', async () => {
     actions = {
       loadImageCollectionGql: jest.fn(),
       saveStateGql: jest.fn()
@@ -207,7 +206,7 @@ describe("OrderManagerControls.vue", () => {
           viewingDirection: null,
           members: [],
           loadState: "NOT_LOADED",
-          saveState: "NOT_SAVED",
+          saveState: "SAVING",
           ogState: {},
         },
       },
@@ -253,10 +252,12 @@ describe("OrderManagerControls.vue", () => {
 
     // displays an alert when page order has changed
     expect(wrapper.find('alert-stub').exists()).toBe(true)
+    
+    // Disable the button while saving.
+    expect(wrapper.vm.isDisabled).toBeTruthy()
 
     // calls the appropriate action on save
-    wrapper.vm.saveHandler()
-    expect(window.fetching).toBeTruthy()
+    await wrapper.vm.saveHandler()
     expect(actions.saveStateGql).toHaveBeenCalled()
   })
 

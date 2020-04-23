@@ -32,6 +32,15 @@
       type="div"
     >
       <toolbar @cards-resized="resizeCards($event)" />
+      <div
+        v-if="isLoading"
+        class="loader"
+      >
+        <loader
+          size="medium"
+          class="galleryLoader"
+        />
+      </div>
       <gallery
         class="lux-galleryWrapper"
         :card-pixel-width="cardPixelWidth"
@@ -143,6 +152,9 @@ export default {
     },
     saveError () {
       return this.resource.saveState === 'ERROR'
+    },
+    isLoading () {
+      return this.resource.saveState === 'SAVING'
     }
   },
   beforeMount: function () {
@@ -218,5 +230,24 @@ export default {
   border-radius: 4px;
   margin-bottom: 80px;
   clear: both;
+}
+
+.loader {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  padding-bottom: 64px;
+  z-index: 500;
+  margin-top: -16px;
+}
+.loader .galleryLoader {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.85);
+  display: flex;
+}
+.loader .galleryLoader .lux-loader {
+  margin: auto;
 }
 </style>
