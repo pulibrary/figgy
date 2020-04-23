@@ -97,6 +97,19 @@ RSpec.describe ChangeSetPersister do
     end
   end
 
+  context "when a source metadata identifier is set and then replaced with a title" do
+    it "uses the given title" do
+      stub_bibdata(bib_id: "123456")
+      resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456", import_metadata: true)
+      expect(resource.title.first.to_s).to eq "Earth rites : fertility rites in pre-industrial Britain"
+      change_set = DynamicChangeSet.new(resource)
+      change_set.validate(source_metadata_identifier: "", title: "Test")
+      output = change_set_persister.save(change_set: change_set)
+
+      expect(output.title).to eq ["Test"]
+    end
+  end
+
   context "when a source_metadata_identifier is set for the first time on a raster resource" do
     let(:change_set_class) { RasterResourceChangeSet }
     before do
