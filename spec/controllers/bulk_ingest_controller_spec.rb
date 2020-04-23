@@ -60,6 +60,36 @@ RSpec.describe BulkIngestController do
   end
 
   describe "POST #browse_everything_files" do
+    context "Many Single Volumes" do
+      # Many Single Volumes
+      # Lapidus
+      #  - 123456
+      #    page1
+      #  - 1234567
+      #    page1
+
+      it "ingests 2 unaffiliated volumes" do
+        # upload = BrowseEverything::Upload.build(container_ids: ["/lapidus", "/lapidus/123456", "/lapidus/1234567"])
+        upload = BrowseEverything::UploadMode.create(container_ids: ["/lapidus", "/lapidus/123456", "/lapidus/1234567"])
+        attributes =
+        {
+          workflow: { state: "pending" },
+          collections: ["1234567"],
+          visibility: "open",
+          mvw: false,
+          browse_everything: { "uploads" => [upload.id] }
+        }
+        allow(IngestFolderJob).to receive(:perform_later)
+        allow(BrowseEverything::Upload).to receive(:find_by).with(uuid: upload.id).and_return([upload])
+
+        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: "/lapidus/123456", state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
+        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: "/lapidus/1234567", state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
+      end
+    end
+  end
+
+  describe "POST #browse_everything_files" do
     let(:file) { File.open(Rails.root.join("spec", "fixtures", "files", "example.tif")) }
     let(:bytestream) { instance_double(ActiveStorage::Blob) }
     let(:upload_file) { double }
@@ -334,6 +364,12 @@ RSpec.describe BulkIngestController do
       end
     end
 
+    # Single MVW (Intened use of this controller if coming from Google Cloud)
+    # 123456
+    #  - vol1
+    #    - page1
+    #  - vol2
+    #    - page1
     context "with one multi-volume resource" do
       let(:parent_container) { instance_double(BrowseEverything::Container) }
       let(:parent_container_id) { "file://base/parent" }
@@ -373,7 +409,7 @@ RSpec.describe BulkIngestController do
         allow(upload).to receive(:containers).and_return([parent_container, container, container2])
       end
 
-      it "ingests the parent as two resources" do
+      it "ingests a multi-volume work with 2 volumes" do
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
         expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: "base/parent", state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
       end
@@ -453,7 +489,8 @@ RSpec.describe BulkIngestController do
         allow(upload).to receive(:containers).and_return([parent_container, container, container2, parent_container2, container3, container4])
       end
 
-      it "ingests the parent as two resources" do
+      # TODO: this test is wrong
+      it "Ingests 2 multi-volume works" do
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
         expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: "base/parent", state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
       end
