@@ -67,28 +67,35 @@ RSpec.describe BulkIngestController do
       #    page1
       #  - 1234567
       #    page1
-
-      it "ingests 2 unaffiliated volumes" do
-        # upload = BrowseEverything::Upload.build(container_ids: ["/lapidus", "/lapidus/123456", "/lapidus/1234567"])
+      #
+      def create_upload_for_container_ids(container_ids)
         created_session = BrowseEverything::SessionModel.create(
           uuid: SecureRandom.uuid,
           session: {
             provider_id: "file_system"
           }.to_json
         )
-        container_ids = ["/lapidus", "/lapidus/123456", "/lapidus/1234567"].map do |container|
-          Rails.root.join(*container.split("/"))
+        container_ids.each do |container|
+          FileUtils.mkdir_p(container) unless File.exist?(container)
         end
-        upload = BrowseEverything::UploadModel.create(
+        BrowseEverything::UploadModel.create(
           uuid: SecureRandom.uuid,
           upload: {
             session_id: created_session.uuid,
             container_ids: container_ids
           }.to_json
         )
-        container_ids.each do |container|
-          FileUtils.mkdir(container) unless File.exist?(container)
-        end
+      end
+
+      it "ingests 2 unaffiliated volumes" do
+        storage_root = Rails.root.join("tmp", "storage")
+        upload = create_upload_for_container_ids(
+          [
+            storage_root.join("lapidus"),
+            storage_root.join("lapidus", "123456"),
+            storage_root.join("lapidus", "1234567")
+          ]
+        )
         attributes =
           {
             workflow: { state: "pending" },
@@ -100,8 +107,8 @@ RSpec.describe BulkIngestController do
         allow(IngestFolderJob).to receive(:perform_later)
 
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: "#{Rails.root}/lapidus/123456", state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
-        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: "#{Rails.root}/lapidus/1234567", state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
+        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: storage_root.join("lapidus", "1234567"), state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
+        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: storage_root.join("lapidus", "123456"), state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
       end
     end
   end
