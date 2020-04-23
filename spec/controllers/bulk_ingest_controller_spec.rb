@@ -68,20 +68,23 @@ RSpec.describe BulkIngestController do
       #  - 1234567
       #    page1
       #
-      def create_upload_for_container_ids(container_ids)
-        created_session = BrowseEverything::SessionModel.create(
+      def create_session
+        BrowseEverything::SessionModel.create(
           uuid: SecureRandom.uuid,
           session: {
             provider_id: "file_system"
           }.to_json
         )
+      end
+
+      def create_upload_for_container_ids(container_ids)
         container_ids.each do |container|
           FileUtils.mkdir_p(container) unless File.exist?(container)
         end
         BrowseEverything::UploadModel.create(
           uuid: SecureRandom.uuid,
           upload: {
-            session_id: created_session.uuid,
+            session_id: create_session.uuid,
             container_ids: container_ids
           }.to_json
         )
