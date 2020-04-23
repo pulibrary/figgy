@@ -173,7 +173,7 @@ RSpec.describe BulkIngestController do
       end
     end
 
-    context "with two single-volume resources" do
+    context "with two top-level single-volume resources" do
       let(:bytestream2) { instance_double(ActiveStorage::Blob) }
       let(:upload_file2) { double }
       let(:upload_file2_id) { "file:///base/resource2/1.tif" }
@@ -199,7 +199,9 @@ RSpec.describe BulkIngestController do
         allow(upload).to receive(:files).and_return([upload_file, upload_file2])
       end
 
-      it "ingests the parent as two resources" do
+      # TODO: Make this actually check to see if two IngestFolderJobs are
+      # called.
+      it "ingests two resources" do
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
         expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: "/base/resource1", state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
       end

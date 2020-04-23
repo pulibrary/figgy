@@ -1,4 +1,30 @@
 # frozen_string_literal: true
+# Many Single Volumes
+# Lapidus
+#  - 123456
+#    page1
+#  - 1234567
+#    page1
+#
+# Many MVW
+# Lapidus
+#  - 123456
+#    - vol1
+#      - page1
+#    - vol2
+#      - page2
+#  - 1234567
+#    - vol1
+#      - page1
+#    - vol2
+#      - page2
+#
+# Single MVW (Valid if coming from Google Cloud)
+# 123456
+#  - vol1
+#    - page1
+#  - vol2
+#    - page1
 class BulkIngestController < ApplicationController
   def self.metadata_adapter
     Valkyrie::MetadataAdapter.find(:indexing_persister)
