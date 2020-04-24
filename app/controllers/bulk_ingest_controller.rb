@@ -93,10 +93,14 @@ class BulkIngestController < ApplicationController
       end
     end
 
+    # Get all paths which aren't a parent of another path.
     def ingest_paths
       paths = upload_sets.first.containers.map { |container| container.id.gsub("file://", "") }
-      sorted_paths = paths.sort_by(&:length)
-      sorted_paths.drop(1)
+      paths.reject do |path|
+        paths.any? do |child_path|
+          child_path != path && child_path.start_with?(path)
+        end
+      end
     end
 
     def selected_folder_root_path
