@@ -83,11 +83,6 @@ namespace :migrate do
     AddPreservationObjectIdsMigrator.call
   end
 
-  desc "Repair broken associations in Soviet Posters"
-  task soviet_poster_repair: :environment do
-    Migration::SovietPostersRepair.call
-  end
-
   private
 
     # Construct or retrieve the memoized logger for STDOUT
