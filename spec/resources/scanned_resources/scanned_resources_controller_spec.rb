@@ -403,7 +403,8 @@ RSpec.describe ScannedResourcesController, type: :controller do
       let(:resource) { FactoryBot.create_for_repository(:scanned_resource) }
 
       before do
-        allow(bytestream).to receive(:download).and_return(file.read)
+        allow(upload_file).to receive(:purge_bytestream)
+        allow(upload_file).to receive(:download).and_return(file.read)
         allow(upload_file).to receive(:bytestream).and_return(bytestream)
         allow(upload_file).to receive(:name).and_return("example.tif")
         allow(upload_file).to receive(:id).and_return(upload_file_id)
@@ -427,7 +428,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
 
       context "when a server-side error is encountered while downloading a file" do
         before do
-          allow(bytestream).to receive(:download).and_raise(StandardError)
+          allow(upload_file).to receive(:download).and_raise(StandardError)
         end
 
         it "does not persist any files" do
