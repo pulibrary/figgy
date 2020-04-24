@@ -5,7 +5,19 @@
 #    page1
 #  - 1234567
 #    page1
-#
+# or
+#  - 123456
+#    page1
+#  - 1234567
+#    page1
+# or
+# PUDL
+#   - Lapidus
+#     - 123456
+#       page1
+#     - 1234567
+#       page1
+
 # Many MVW
 # Lapidus
 #  - 123456
@@ -18,13 +30,14 @@
 #      - page1
 #    - vol2
 #      - page2
-#
+
 # Single MVW (Valid if coming from Google Cloud)
 # 123456
 #  - vol1
 #    - page1
 #  - vol2
 #    - page1
+
 class BulkIngestController < ApplicationController
   def self.metadata_adapter
     Valkyrie::MetadataAdapter.find(:indexing_persister)
@@ -75,11 +88,15 @@ class BulkIngestController < ApplicationController
     end
 
     def ingest_local_dir
-      IngestFolderJob.perform_later(directory: selected_folder_root_path, file_filter: nil, class_name: resource_class_name, **attributes)
+      ingest_paths.each do |path|
+        IngestFolderJob.perform_later(directory: path.to_s, file_filter: nil, class_name: resource_class_name, source_metadata_identifier: source_metadata_id_from_path(path), **attributes)
+      end
     end
 
-    def base_path
-      File.basename(selected_folder_root_path)
+    def ingest_paths
+      paths = upload_sets.first.containers.map { |container| container.id.gsub("file://", "") }
+      sorted_paths = paths.sort_by(&:length)
+      sorted_paths.drop(1)
     end
 
     def selected_folder_root_path
@@ -91,7 +108,6 @@ class BulkIngestController < ApplicationController
     def attributes
       {
         member_of_collection_ids: collection_ids,
-        source_metadata_identifier: source_metadata_id_from_path,
         state: params[:workflow][:state],
         visibility: params[:visibility]
       }
@@ -106,7 +122,8 @@ class BulkIngestController < ApplicationController
       params[:collections] || []
     end
 
-    def source_metadata_id_from_path
+    def source_metadata_id_from_path(path)
+      base_path = File.basename(path)
       base_path if valid_remote_identifier?(base_path)
     end
 
