@@ -13,6 +13,13 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-04-23
+
+## Fixed
+
+* Added a loading bar to the order manager while it's saving.
+* Disabled the "Apply Changes" button for order manager while saving.
+
 # 2020-04-22
 
 ## Added
