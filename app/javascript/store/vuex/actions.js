@@ -5,19 +5,19 @@ import gql from 'graphql-tag'
 
 const actions = {
   cut (context, items) {
-    context.commit("CUT", items)
+    context.commit('CUT', items)
   },
   paste (context, items) {
-    context.commit("PASTE", items)
+    context.commit('PASTE', items)
   },
   select (context, selectList) {
-    context.commit("SELECT", selectList)
+    context.commit('SELECT', selectList)
   },
   updateChanges (context, changeList) {
-    context.commit("UPDATE_CHANGES", changeList)
+    context.commit('UPDATE_CHANGES', changeList)
   },
   updateItems (context, items) {
-    context.commit("UPDATE_ITEMS", items)
+    context.commit('UPDATE_ITEMS', items)
   },
   updateStartCanvas (context, startCanvas) {
     context.commit('UPDATE_STARTCANVAS', startCanvas)
@@ -32,16 +32,16 @@ const actions = {
     context.commit('UPDATE_VIEWDIR', value)
   },
   async loadImageCollectionGql (context, resource) {
-      if (resource == null) {
-        context.commit('CHANGE_RESOURCE_LOAD_STATE', 'LOADING_ERROR')
-        console.error('Failed to retrieve the resource')
-        return
-      }
+    if (resource == null) {
+      context.commit('CHANGE_RESOURCE_LOAD_STATE', 'LOADING_ERROR')
+      console.error('Failed to retrieve the resource')
+      return
+    }
 
-      let id = resource.id
-      console.time(`getResourceById ${id}`)
+    let id = resource.id
+    console.time(`getResourceById ${id}`)
 
-      const query = gql`
+    const query = gql`
         query GetResource($id: ID!) {
           resource(id: $id) {
              id,
@@ -75,25 +75,24 @@ const actions = {
           }
         }`
 
-      const variables = {
-        id: id
-      }
+    const variables = {
+      id: id
+    }
 
-      try {
-        const response = await apollo.query({
-          query, variables
-        })
-        context.commit('SET_RESOURCE', response.data.resource)
-      } catch(err) {
-        context.commit('CHANGE_RESOURCE_LOAD_STATE', 'LOADING_ERROR')
-        console.error(err)
-      }
+    try {
+      const response = await apollo.query({
+        query, variables
+      })
+      context.commit('SET_RESOURCE', response.data.resource)
+    } catch (err) {
+      context.commit('CHANGE_RESOURCE_LOAD_STATE', 'LOADING_ERROR')
+      console.error(err)
+    }
 
-      console.timeEnd(`getResourceById ${resource.id}`)
-
+    console.timeEnd(`getResourceById ${resource.id}`)
   },
   async saveStateGql (context, resource) {
-    window.resource = resource
+    context.commit('SAVED_STATE', 'SAVING')
     let newResource = resource.body
     let newFilesets = resource.filesets
 
@@ -102,19 +101,16 @@ const actions = {
     const template = mb.build()
     const mutation = gql`${template}`
     const variables = mb.variables()
-
-    try {
-      const response = await apollo.mutate({
-        mutation, variables
+    return apollo.mutate({ mutation, variables })
+      .then(() => {
+        context.commit('SAVED_STATE', 'SAVED')
+        context.commit('APPLY_STATE', 1000)
       })
-      // reset the state to reflect applied changes
-      context.commit('SAVED_STATE', 'SAVED')
-      setTimeout(function(){ context.commit('APPLY_STATE') }, 1000);
-    } catch(err) {
-      context.commit('SAVED_STATE', 'ERROR')
-      console.error(err)
-    }
-  },
+      .catch((err) => {
+        console.error(err)
+        console.commit('SAVED_STATE', 'ERROR')
+      })
+  }
 }
 
 export default actions

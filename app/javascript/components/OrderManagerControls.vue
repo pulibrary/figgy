@@ -97,7 +97,9 @@ export default {
       return this.resource.isMultiVolume
     },
     isDisabled: function () {
-      if (this.$store.getters.stateChanged && !window.fetching) {
+      if (this.resource.saveState === 'SAVING') {
+        return true
+      } else if (this.$store.getters.stateChanged) {
         return false
       } else {
         return true
@@ -188,8 +190,6 @@ export default {
       for (let i = 0; i < memberNum; i++) {
         resource.filesets.push(membersBody[i])
       }
-      window.fetching = true
-      window.resource = resource
       this.$store.dispatch('saveStateGql', resource)
     },
     saveMVW: function () {
@@ -203,7 +203,6 @@ export default {
         thumbnail_id: this.thumbnail,
         id: this.id
       }
-      window.fetching = true
       this.$store.dispatch('saveStateGql', body)
     }
   }
