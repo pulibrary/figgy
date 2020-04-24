@@ -60,7 +60,58 @@ RSpec.describe BulkIngestController do
   end
 
   describe "POST #browse_everything_files" do
-    context "Many Single Volumes" do
+    def create_session
+      BrowseEverything::SessionModel.create(
+        uuid: SecureRandom.uuid,
+        session: {
+          provider_id: "file_system"
+        }.to_json
+      )
+    end
+
+    def create_upload_for_container_ids(container_ids)
+      container_ids.each do |container|
+        FileUtils.mkdir_p(container) unless File.exist?(container)
+      end
+      BrowseEverything::UploadModel.create(
+        uuid: SecureRandom.uuid,
+        upload: {
+          session_id: create_session.uuid,
+          container_ids: container_ids
+        }.to_json
+      )
+    end
+    # TODO: Remove when it cleans up after itself.
+    before do
+      FileUtils.rm_f(Rails.root.join("tmp", "storage"))
+    end
+    context "Many Single Volumes without Top Level Directory Selection" do
+      it "ingests 2 unaffiliated volumes" do
+        storage_root = Rails.root.join("tmp", "storage")
+        upload = create_upload_for_container_ids(
+          [
+            storage_root.join("lapidus", "123456"),
+            storage_root.join("lapidus", "4609321")
+          ]
+        )
+        attributes =
+          {
+            workflow: { state: "pending" },
+            collections: ["4609321"],
+            visibility: "open",
+            mvw: false,
+            browse_everything: { "uploads" => [upload.uuid] }
+          }
+        allow(IngestFolderJob).to receive(:perform_later)
+        stub_bibdata(bib_id: "123456")
+        stub_bibdata(bib_id: "4609321")
+
+        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: storage_root.join("lapidus", "4609321").to_s, state: "pending", visibility: "open", member_of_collection_ids: ["4609321"], source_metadata_identifier: "4609321"))
+        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: storage_root.join("lapidus", "123456").to_s, state: "pending", visibility: "open", member_of_collection_ids: ["4609321"], source_metadata_identifier: "123456"))
+      end
+    end
+    context "Many Single Volumes with a top level directory" do
       # Many Single Volumes
       # Lapidus
       #  - 123456
@@ -68,28 +119,6 @@ RSpec.describe BulkIngestController do
       #  - 1234567
       #    page1
       #
-      def create_session
-        BrowseEverything::SessionModel.create(
-          uuid: SecureRandom.uuid,
-          session: {
-            provider_id: "file_system"
-          }.to_json
-        )
-      end
-
-      def create_upload_for_container_ids(container_ids)
-        container_ids.each do |container|
-          FileUtils.mkdir_p(container) unless File.exist?(container)
-        end
-        BrowseEverything::UploadModel.create(
-          uuid: SecureRandom.uuid,
-          upload: {
-            session_id: create_session.uuid,
-            container_ids: container_ids
-          }.to_json
-        )
-      end
-
       it "ingests 2 unaffiliated volumes" do
         storage_root = Rails.root.join("tmp", "storage")
         upload = create_upload_for_container_ids(
