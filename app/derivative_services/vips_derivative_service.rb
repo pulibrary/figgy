@@ -59,7 +59,7 @@ class VIPSDerivativeService
   end
 
   def valid_mime_types
-    ["image/tiff", "image/jpeg", "image/png", "image/jp2"]
+    ["image/tiff", "image/jpeg", "image/png"]
   end
 
   def create_derivatives
@@ -93,23 +93,10 @@ class VIPSDerivativeService
     raise "Unable to store pyramidal TIFF for #{filename}!" unless File.exist?(temporary_output.path)
   end
 
-  def convert_jp2
-    temp_file = Tempfile.new(["tempfile", ".tif"])
-    _stdout, stderr, status =
-      Open3.capture3("opj_decompress", "-i", filename.to_s, "-o", temp_file.path)
-    raise stderr unless status.success?
-    temp_file
-  end
-
   def vips_image
     @vips_image ||=
       begin
-        path = if mime_type.first == "image/jp2"
-                 convert_jp2.path
-               else
-                 filename
-               end
-        image = Vips::Image.new_from_file(path.to_s)
+        image = Vips::Image.new_from_file(filename.to_s)
         if image.height >= REDUCTION_THRESHOLD || image.width >= REDUCTION_THRESHOLD
           image.resize(0.5)
         else

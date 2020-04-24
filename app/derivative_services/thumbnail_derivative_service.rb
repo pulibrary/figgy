@@ -71,7 +71,7 @@ class ThumbnailDerivativeService
   end
 
   def valid_mime_types
-    ["image/tiff", "image/jpeg", "image/png", "image/jp2"]
+    ["image/tiff", "image/jpeg", "image/png"]
   end
 
   def create_derivatives
@@ -98,24 +98,11 @@ class ThumbnailDerivativeService
     raise "Unable to store thunbnail for #{filename}!" unless File.exist?(temporary_output.path)
   end
 
-  def convert_jp2
-    temp_file = Tempfile.new(["tempfile", ".tif"])
-    _stdout, stderr, status =
-      Open3.capture3("opj_decompress", "-i", filename.to_s, "-o", temp_file.path)
-    raise stderr unless status.success?
-    temp_file
-  end
-
   def vips_image
     @vips_image ||=
       begin
-        path = if mime_type.first == "image/jp2"
-                 convert_jp2.path
-               else
-                 filename
-               end
         Vips::Image.thumbnail(
-          path.to_s,
+          filename.to_s,
           width,
           height: height
         )

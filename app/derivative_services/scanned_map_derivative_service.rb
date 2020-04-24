@@ -36,7 +36,7 @@ class ScannedMapDerivativeService
   end
 
   def valid_mime_types
-    ["image/tiff", "image/jpeg", "image/png", "image/jp2"]
+    ["image/tiff", "image/jpeg", "image/png"]
   end
 
   def parent
