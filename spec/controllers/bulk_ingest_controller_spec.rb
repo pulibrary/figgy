@@ -96,22 +96,24 @@ RSpec.describe BulkIngestController do
           [
             storage_root.join("lapidus"),
             storage_root.join("lapidus", "123456"),
-            storage_root.join("lapidus", "1234567")
+            storage_root.join("lapidus", "4609321")
           ]
         )
         attributes =
           {
             workflow: { state: "pending" },
-            collections: ["1234567"],
+            collections: ["4609321"],
             visibility: "open",
             mvw: false,
             browse_everything: { "uploads" => [upload.uuid] }
           }
         allow(IngestFolderJob).to receive(:perform_later)
+        stub_bibdata(bib_id: "123456")
+        stub_bibdata(bib_id: "4609321")
 
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: storage_root.join("lapidus", "1234567"), state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
-        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: storage_root.join("lapidus", "123456"), state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
+        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: storage_root.join("lapidus", "4609321"), state: "pending", visibility: "open", member_of_collection_ids: ["4609321"], source_metadata_identifier: "4609321"))
+        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: storage_root.join("lapidus", "123456"), state: "pending", visibility: "open", member_of_collection_ids: ["4609321"], source_metadata_identifier: "123456"))
       end
     end
   end
