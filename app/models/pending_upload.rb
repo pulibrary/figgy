@@ -50,8 +50,9 @@ class PendingUpload < Valkyrie::Resource
       @downloaded_file ||= begin
                              target = Dir::Tmpname.create(original_filename) {}
                              File.open(target, "wb") do |output|
-                               output.write(bytestream.download)
+                               output.write(upload_file.download)
                              end
+                             upload_file.purge_bytestream
                              target
                            end
     end

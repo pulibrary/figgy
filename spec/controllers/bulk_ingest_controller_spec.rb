@@ -81,8 +81,9 @@ RSpec.describe BulkIngestController do
         }.to_json
       )
     end
-    # TODO: Remove when it cleans up after itself.
+
     before do
+      # Cleanup happens in the IngestFolderJob, stubbed out in these tests
       FileUtils.rm_rf(Rails.root.join("tmp", "storage"))
     end
 
@@ -171,7 +172,8 @@ RSpec.describe BulkIngestController do
     end
 
     before do
-      allow(bytestream).to receive(:download).and_return(file.read)
+      allow(upload_file).to receive(:purge_bytestream)
+      allow(upload_file).to receive(:download).and_return(file.read)
       allow(upload_file).to receive(:bytestream).and_return(bytestream)
       allow(upload_file).to receive(:name).and_return("example.tif")
       allow(upload_file).to receive(:id).and_return(upload_file_id)
@@ -392,7 +394,7 @@ RSpec.describe BulkIngestController do
       container = instance_double(BrowseEverything::Container, id: parent_container, name: parent_container.split("/").last, parent_id: parent_container_id)
       create_cloud_upload_for_child_node(children_and_files[:children], parent_container, containers, files, bytestream) if children_and_files[:children].present?
       files.concat(children_and_files[:files].map do |file|
-        file = instance_double(BrowseEverything::UploadFile, id: file, name: file.split("/").last, container_id: parent_container, bytestream: bytestream)
+        file = instance_double(BrowseEverything::UploadFile, id: file, name: file.split("/").last, container_id: parent_container, bytestream: bytestream, download: bytestream.download, purge_bytestream: nil)
         allow(BrowseEverything::UploadFile).to receive(:find).with([file.id]).and_return([file])
         file
       end)
