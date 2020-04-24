@@ -112,8 +112,8 @@ RSpec.describe BulkIngestController do
         stub_bibdata(bib_id: "4609321")
 
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: storage_root.join("lapidus", "4609321"), state: "pending", visibility: "open", member_of_collection_ids: ["4609321"], source_metadata_identifier: "4609321"))
-        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: storage_root.join("lapidus", "123456"), state: "pending", visibility: "open", member_of_collection_ids: ["4609321"], source_metadata_identifier: "123456"))
+        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: storage_root.join("lapidus", "4609321").to_s, state: "pending", visibility: "open", member_of_collection_ids: ["4609321"], source_metadata_identifier: "4609321"))
+        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: storage_root.join("lapidus", "123456").to_s, state: "pending", visibility: "open", member_of_collection_ids: ["4609321"], source_metadata_identifier: "123456"))
       end
     end
   end
