@@ -41,12 +41,6 @@ RSpec.describe DefaultDerivativeService do
 
       it { is_expected.to be_valid }
     end
-
-    context "when given mime_type image/jp2" do
-      let(:file) { fixture_file_upload("files/example.jp2", "image/jp2") }
-
-      it { is_expected.to be_valid }
-    end
   end
 
   it "creates a JP2 and attaches it to the fileset" do

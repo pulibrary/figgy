@@ -48,15 +48,6 @@ RSpec.describe ScannedMapDerivativeService do
       end
     end
 
-    context "when given a JPEG2000 mime_type" do
-      it "is valid" do
-        # rubocop:disable RSpec/SubjectStub
-        allow(valid_file).to receive(:mime_type).and_return(["image/jp2"])
-        # rubocop:enable RSpec/SubjectStub
-        is_expected.to be_valid
-      end
-    end
-
     context "when given an invalid mime_type" do
       it "does not validate" do
         # rubocop:disable RSpec/SubjectStub
