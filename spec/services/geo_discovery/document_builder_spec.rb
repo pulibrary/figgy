@@ -241,6 +241,23 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
         expect(document).not_to include("dct_issued_dt")
       end
     end
+
+    context "with a valid coverage and an invalid imported coverge" do
+      let(:invalid_coverage) { "northlimit=15.744444; eastlimit=088.566667; southlimit=15.675000; westlimit=088.627778; units=degrees; projection=EPSG:4326" }
+      let(:geo_work) do
+        FactoryBot.create_for_repository(:scanned_map,
+                                         source_metadata_identifier: "5144620",
+                                         coverage: coverage.to_s,
+                                         visibility: visibility,
+                                         imported_metadata: [{
+                                           coverage: [invalid_coverage]
+                                         }])
+      end
+
+      it "sets solr_geom using the valid coverage value" do
+        expect(document["solr_geom"]).to eq("ENVELOPE(-71.032, -69.856, 43.039, 42.943)")
+      end
+    end
   end
 
   describe "scanned map set" do
