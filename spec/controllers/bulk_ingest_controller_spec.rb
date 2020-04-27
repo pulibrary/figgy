@@ -85,6 +85,41 @@ RSpec.describe BulkIngestController do
     before do
       FileUtils.rm_rf(Rails.root.join("tmp", "storage"))
     end
+
+    context "Many Multi-volume works with a parent directory" do
+
+      it "ingests 2 multi-volume works" do
+        storage_root = Rails.root.join("tmp", "storage")
+        upload = create_upload_for_container_ids(
+          [
+            storage_root.join("multi_volume"),
+            storage_root.join("multi_volume", "123456"),
+            storage_root.join("multi_volume", "4609321"),
+            storage_root.join("multi_volume", "4609321", "vol1"),
+            storage_root.join("multi_volume", "123456", "vol1"),
+            storage_root.join("multi_volume", "4609321", "vol2"),
+            storage_root.join("multi_volume", "123456", "vol2")
+          ]
+        )
+        attributes =
+          {
+            workflow: { state: "pending" },
+            collections: ["4609321"],
+            visibility: "open",
+            mvw: true,
+            browse_everything: { "uploads" => [upload.uuid] }
+          }
+        allow(IngestFolderJob).to receive(:perform_later)
+        stub_bibdata(bib_id: "123456")
+        stub_bibdata(bib_id: "4609321")
+
+        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: storage_root.join("multi_volume", "4609321").to_s, state: "pending", visibility: "open", member_of_collection_ids: ["4609321"], source_metadata_identifier: "4609321"))
+        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: storage_root.join("multi_volume", "123456").to_s, state: "pending", visibility: "open", member_of_collection_ids: ["4609321"], source_metadata_identifier: "123456"))
+      end
+
+    end
+
     context "Many Single Volumes without Top Level Directory Selection" do
       it "ingests 2 unaffiliated volumes" do
         storage_root = Rails.root.join("tmp", "storage")

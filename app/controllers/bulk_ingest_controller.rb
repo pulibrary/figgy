@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # Many Single Volumes
-# Lapidus
+# - Lapidus
 #  - 123456
 #    page1
 #  - 1234567
@@ -10,13 +10,6 @@
 #    page1
 #  - 1234567
 #    page1
-# or
-# PUDL
-#   - Lapidus
-#     - 123456
-#       page1
-#     - 1234567
-#       page1
 
 # Many MVW
 # Lapidus
@@ -31,6 +24,18 @@
 #    - vol2
 #      - page2
 
+# 802310
+#  - vol1
+#    - page1
+#  - vol2
+#    - page1
+# 123456
+#  - vol1
+#    - page1
+#  - vol2
+#    - page1
+
+# This is why we have to have a MVW flag
 # Single MVW (Valid if coming from Google Cloud)
 # 123456
 #  - vol1
