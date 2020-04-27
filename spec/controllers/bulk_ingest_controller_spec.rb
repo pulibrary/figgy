@@ -87,7 +87,6 @@ RSpec.describe BulkIngestController do
     end
 
     context "Many Multi-volume works with a parent directory" do
-
       it "ingests 2 multi-volume works" do
         storage_root = Rails.root.join("tmp", "storage")
         upload = create_upload_for_container_ids(
