@@ -83,7 +83,7 @@ RSpec.describe BulkIngestController do
     end
     # TODO: Remove when it cleans up after itself.
     before do
-      FileUtils.rm_f(Rails.root.join("tmp", "storage"))
+      FileUtils.rm_rf(Rails.root.join("tmp", "storage"))
     end
     context "Many Single Volumes without Top Level Directory Selection" do
       it "ingests 2 unaffiliated volumes" do
