@@ -1,5 +1,13 @@
 # Browse Everything
 
+## Getting it to work in development
+
+Before your bin/wepack-dev-server ensure you have
+REACT_APP_GOOGLE_DEVELOPER_KEY, REACT_APP_GOOGLE_CLIENT_ID,
+REACT_APP_GOOGLE_SCOPE, and REACT_APP_SECRET set. You can get copies of these
+from princeton_ansible for the staging variables, the secret is pulled from
+`config/secrets.yml`
+
 ## Using Google Drive as a storage provider
 ### Registering your Figgy
 - [Register for a Google Cloud Platform account](https://console.cloud.google.com)
