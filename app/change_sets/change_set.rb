@@ -58,6 +58,10 @@ class ChangeSet < Valkyrie::ChangeSet
     self.feature_terms += [:pdf_type]
   end
 
+  def self.enable_claiming
+    property :claimed_by, multiple: false, required: false, default: nil
+  end
+
   # This property is set by ChangeSetPersister::CreateFile and is used to keep
   # track of which FileSets were created by the ChangeSetPersister as part of
   # saving this change_set. We may want to look into passing some sort of scope

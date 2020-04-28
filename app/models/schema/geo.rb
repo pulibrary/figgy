@@ -22,6 +22,7 @@ module Schema
 
       # Can be used to override business logic about whether a record is discoverable in GeoBlacklight
       attribute :gbl_suppressed_override, Valkyrie::Types::Bool
+      attribute :claimed_by, Valkyrie::Types::String
     end
   end
 end

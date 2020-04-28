@@ -48,6 +48,7 @@ module Numismatics
     attribute :pdf_type
     attribute :file_metadata, Valkyrie::Types::Set.of(FileMetadata.optional)
     attribute :identifier
+    attribute :claimed_by, Valkyrie::Types::String
 
     # manifest metadata
     attribute :start_canvas

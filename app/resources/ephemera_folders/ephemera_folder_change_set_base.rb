@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class EphemeraFolderChangeSetBase < ChangeSet
   apply_workflow(FolderWorkflow)
+  enable_claiming
   validate :subject_present
   validates_with StateValidator
   validates_with RightsStatementValidator

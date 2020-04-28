@@ -49,6 +49,7 @@ class EphemeraFolder < Resource
   attribute :state
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
   attribute :holding_location
+  attribute :claimed_by, Valkyrie::Types::String
 
   def self.can_have_manifests?
     true

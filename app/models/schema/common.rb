@@ -87,6 +87,7 @@ module Schema
       Common.attributes.each do |common_attribute|
         attribute common_attribute
       end
+      attribute :claimed_by, Valkyrie::Types::String
     end
   end
 end

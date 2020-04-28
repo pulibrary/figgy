@@ -4,6 +4,7 @@ class ScannedMapChangeSet < ScannedResourceChangeSet
   include GeoChangeSetProperties
 
   apply_workflow(GeoWorkflow)
+  enable_claiming
 
   property :relation, multiple: false, required: false
   property :references, multiple: false, required: false

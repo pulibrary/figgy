@@ -3,6 +3,7 @@ class SimpleChangeSet < ChangeSet
   delegate :human_readable_type, to: :model
 
   apply_workflow(DraftCompleteWorkflow)
+  enable_claiming
 
   include VisibilityProperty
   include DateRangeProperty
