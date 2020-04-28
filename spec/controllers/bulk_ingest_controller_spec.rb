@@ -105,7 +105,6 @@ RSpec.describe BulkIngestController do
             workflow: { state: "pending" },
             collections: ["4609321"],
             visibility: "open",
-            mvw: true,
             browse_everything: { "uploads" => [upload.uuid] }
           }
         allow(IngestFolderJob).to receive(:perform_later)
@@ -134,7 +133,6 @@ RSpec.describe BulkIngestController do
             workflow: { state: "pending" },
             collections: ["4609321"],
             visibility: "open",
-            mvw: false,
             browse_everything: { "uploads" => [upload.uuid] }
           }
         allow(IngestFolderJob).to receive(:perform_later)
@@ -169,7 +167,6 @@ RSpec.describe BulkIngestController do
         workflow: { state: "pending" },
         collections: ["1234567"],
         visibility: "open",
-        mvw: false,
         browse_everything: browse_everything
       }
     end
@@ -365,8 +362,8 @@ RSpec.describe BulkIngestController do
           {
             workflow: { state: "pending" },
             visibility: "open",
-            mvw: true,
-            browse_everything: browse_everything
+            browse_everything: browse_everything,
+            mvw: true
           }
         end
 

@@ -79,14 +79,15 @@ class BulkIngestController < ApplicationController
       return redirect_to bulk_ingest_show_path
     end
 
-    cloud_ingester = BulkCloudIngester.new(
-      change_set_persister: self.class.change_set_persister,
-      multi_volume_work: multi_volume_work?,
-      upload_sets: upload_sets,
-      resource_class: resource_class
-    )
-
-    cloud_ingester.ingest || ingest_local_dir
+    # cloud_ingester = BulkCloudIngester.new(
+    #   change_set_persister: self.class.change_set_persister,
+    #   multi_volume_work: multi_volume_work?,
+    #   upload_sets: upload_sets,
+    #   resource_class: resource_class
+    # )
+    #
+    # cloud_ingester.ingest || ingest_local_dir
+    ingest_local_dir
 
     redirect_to root_url, notice: "Batch Ingest of #{resource_class.human_readable_type.pluralize} started"
   end
