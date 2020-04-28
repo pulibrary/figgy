@@ -32,28 +32,6 @@ RSpec.describe BrowseEverythingDirectoryTree do
       end
     end
 
-    #  - 123456
-    #    page1
-    #  - 1234567
-    #    page1
-    context "many single volumes, no parent" do
-      it "returns children of the root" do
-        tree = described_class.new(
-          [
-            "/lapidus/123456",
-            "/lapidus/1234567"
-          ]
-        )
-
-        expect(tree.tree).to eq(
-          "/lapidus/123456" => {},
-          "/lapidus/1234567" => {}
-        )
-
-        expect(tree.ingest_ids).to eq ["/lapidus/123456", "/lapidus/1234567"]
-      end
-    end
-
     # Many MVW
     # Lapidus
     #  - 123456

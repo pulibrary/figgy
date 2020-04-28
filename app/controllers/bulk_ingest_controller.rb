@@ -1,28 +1,40 @@
 # frozen_string_literal: true
+# Supported!!:
+#
 # Many Single Volumes
 # - Lapidus
-#  - 123456
-#    page1
-#  - 1234567
-#    page1
-# or
-#  - 123456
-#    page1
-#  - 1234567
-#    page1
+#   - 123456
+#     page1
+#   - 1234567
+#     page1
 
 # Many MVW
-# Lapidus
+# - Lapidus
+#   - 123456
+#     - vol1
+#       - page1
+#     - vol2
+#       - page2
+#   - 1234567
+#     - vol1
+#       - page1
+#     - vol2
+#       - page2
+
+# Single MVW
+# - Stuff
+#   - 123456
+#     - vol1
+#       page1
+#     - vol2
+#       page1
+
+# Not supported!
+
 #  - 123456
-#    - vol1
-#      - page1
-#    - vol2
-#      - page2
+#    page1
 #  - 1234567
-#    - vol1
-#      - page1
-#    - vol2
-#      - page2
+#    page1
 
 # 802310
 #  - vol1
@@ -35,13 +47,6 @@
 #  - vol2
 #    - page1
 
-# This is why we have to have a MVW flag
-# Single MVW (Valid if coming from Google Cloud)
-# 123456
-#  - vol1
-#    - page1
-#  - vol2
-#    - page1
 
 class BulkIngestController < ApplicationController
   def self.metadata_adapter
