@@ -8,16 +8,40 @@ class BrowseEverythingDirectoryTree
   end
 
   def tree
-    @tree ||= parse_container_ids({})
+    @tree ||= parse_container_ids
   end
 
-  def parse_container_ids(hsh)
-    container_ids.each_with_object(hsh) do |path, h|
-      if h[path.dirname.to_s]
-        h[path.dirname.to_s][path.to_s] = {}
-      else
-        h[path.to_s] = {}
+  def child_lookup
+    @child_lookup ||=
+      begin
+        {}.tap do |hsh|
+          container_ids.each do |container_id|
+            hsh[container_id] = container_ids.select { |x| x.dirname == container_id }
+          end
+        end
       end
+  end
+
+  def parse_container_ids
+    child_lookup.each_with_object({}) do |path_arr, hsh|
+      path, children = path_arr
+      # For every root directory, populate the hash with built hashes of its
+      # children.
+      unless child_lookup.key?(path.dirname)
+        hsh[path.to_s] = build_objects(child_lookup, children)
+      end
+    end
+  end
+
+  def build_objects(child_lookup, children)
+    # If the children have a key in the child lookup, it has children, so
+    # recurse. Otherwise just return an empty hash per child.
+    children.each_with_object({}) do |child, hsh|
+      hsh[child.to_s] = if child_lookup[child]
+                          build_objects(child_lookup, child_lookup[child])
+                        else
+                          {}
+                        end
     end
   end
 
