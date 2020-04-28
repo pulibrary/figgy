@@ -132,4 +132,11 @@ describe("OrderManagerFilesetsForm.vue", () => {
   it("has the expected html structure", () => {
     expect(wrapper.element).toMatchSnapshot()
   })
+
+  it('allows unnumbered labels when the starting numeral is blank', () => {
+    wrapper.vm.start = ''
+    wrapper.vm.updateMultiLabels()
+    expect(actions.updateChanges).toHaveBeenCalled()
+    expect(actions.updateItems).toHaveBeenCalled()
+  })
 })

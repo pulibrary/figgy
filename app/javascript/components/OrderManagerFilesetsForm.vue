@@ -212,7 +212,11 @@ export default {
             return item.id
           })
           .indexOf(this.gallery.selected[i].id)
-        items[index].caption = generator.next().value
+        // Allow unnumbered pages / flyleaves
+        let caption = !this.start || this.start.length === 0
+          ? ''
+          : generator.next().value
+        items[index].caption = caption
 
         if (changeList.indexOf(this.gallery.selected[i].id) === -1) {
           changeList.push(this.gallery.selected[i].id)
