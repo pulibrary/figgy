@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class BrowseEverythingDirectoryTree
-  attr_reader :container_ids, :tree
+  attr_reader :container_ids
   # @param container_ids [Array<String>]
   def initialize(container_ids)
     @container_ids = container_ids.sort.map { |str| Pathname.new(str) }
