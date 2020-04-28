@@ -34,7 +34,7 @@ class BrowseEverythingDirectoryTree
   end
 
   def build_objects(child_lookup, children)
-    # If the children have a key in the child lookup, it has children, so
+    # If a child has a key in the child lookup, it has children, so
     # recurse. Otherwise just return an empty hash per child.
     children.each_with_object({}) do |child, hsh|
       hsh[child.to_s] = if child_lookup[child]
