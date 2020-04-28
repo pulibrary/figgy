@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-04-28
+
+## Added
+
+* Allow unnumbered labels in order manager.
+
 # 2020-04-24
 
 ## Removed
