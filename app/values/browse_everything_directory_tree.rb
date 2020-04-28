@@ -8,27 +8,27 @@ class BrowseEverythingDirectoryTree
   end
 
   def tree
-    @tree ||= parse_container_ids
+    @tree ||= parse_container_ids({})
   end
 
-  def parse_container_ids
-    container_ids.each_with_object({}) do |path, h|
+  def parse_container_ids(hsh)
+    container_ids.each_with_object(hsh) do |path, h|
       if h[path.dirname.to_s]
-        h[path.dirname.to_s] << { path.to_s => [] }
+        h[path.dirname.to_s][path.to_s] = {}
       else
-        h[path.to_s] = []
+        h[path.to_s] = {}
       end
     end
   end
 
   # {"lapidus" => [{"/lapidus/1234567" => []}]
   def ingest_ids
-    tree.map do |parent, children|
+    tree.flat_map do |parent, children|
       if children.empty?
         parent
       else
-        children.flat_map(&:keys)
+        children.map(&:first)
       end
-    end.flatten
+    end
   end
 end
