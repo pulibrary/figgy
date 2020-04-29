@@ -351,16 +351,22 @@ RSpec.describe BulkIngestController do
       let(:upload) do
         create_cloud_upload_for_container_ids(
           {
-            "https://www.example.com/parent" => {
+            "https://www.example.com/root" => {
               files: [],
-              children: {
-                "https://www.example.com/parent/resource1" => {
-                  files: ["https://www.example.com/parent/resource1/1.tif"],
-                  children: {}
-                },
-                "https://www.example.com/parent/resource2" => {
-                  files: ["https://www.example.com/parent/resource2/1.tif"],
-                  children: {}
+              children:
+              {
+                "https://www.example.com/root/parent" => {
+                  files: [],
+                  children: {
+                    "https://www.example.com/root/parent/resource1" => {
+                      files: ["https://www.example.com/root/parent/resource1/1.tif"],
+                      children: {}
+                    },
+                    "https://www.example.com/root/parent/resource2" => {
+                      files: ["https://www.example.com/root/parent/resource2/1.tif"],
+                      children: {}
+                    }
+                  }
                 }
               }
             }
@@ -373,8 +379,7 @@ RSpec.describe BulkIngestController do
         {
           workflow: { state: "pending" },
           visibility: "open",
-          browse_everything: { "uploads" => [upload.id] },
-          mvw: true
+          browse_everything: { "uploads" => [upload.id] }
         }
       end
 
@@ -385,13 +390,13 @@ RSpec.describe BulkIngestController do
         expect(PendingUpload).to have_received(:new).with(
           hash_including(
             upload_id: "test-upload-id",
-            upload_file_id: "https://www.example.com/parent/resource1/1.tif"
+            upload_file_id: "https://www.example.com/root/parent/resource1/1.tif"
           )
         )
         expect(PendingUpload).to have_received(:new).with(
           hash_including(
             upload_id: "test-upload-id",
-            upload_file_id: "https://www.example.com/parent/resource2/1.tif"
+            upload_file_id: "https://www.example.com/root/parent/resource2/1.tif"
           )
         )
 
@@ -400,6 +405,7 @@ RSpec.describe BulkIngestController do
         expect(resource.member_ids.length).to eq(2)
         expect(resource.decorate.volumes.first.file_sets.length).to eq(1)
         expect(resource.decorate.volumes.last.file_sets.length).to eq(1)
+        expect(resources.length).to eq 3
       end
     end
   end
