@@ -188,6 +188,8 @@ RSpec.describe BulkIngestController do
       allow(IngestFolderJob).to receive(:perform_later)
     end
 
+    # TODO: rewrite or subsume into other tests
+    # We do need coverage of the bibid extraction
     context "with one single-volume resource where the directory is the bibid" do
       before do
         stub_bibdata(bib_id: "4609321")
@@ -259,41 +261,10 @@ RSpec.describe BulkIngestController do
       end
     end
 
-    context "with two top-level single-volume resources" do
-      let(:bytestream2) { instance_double(ActiveStorage::Blob) }
-      let(:upload_file2) { double }
-      let(:upload_file2_id) { "file:///base/resource2/1.tif" }
-      let(:upload_file_id) { "file:///base/resource1/1.tif" }
-      let(:container2) { instance_double(BrowseEverything::Container) }
-      let(:container2_id) { "file:///base/resource2" }
-      let(:container_id) { "file:///base/resource1" }
-
-      before do
-        allow(bytestream2).to receive(:download).and_return(file.read)
-        allow(upload_file2).to receive(:bytestream).and_return(bytestream2)
-        allow(upload_file2).to receive(:name).and_return("1.tif")
-        allow(upload_file2).to receive(:id).and_return(upload_file2_id)
-        allow(BrowseEverything::UploadFile).to receive(:find).with([]).and_return([upload_file2])
-        allow(upload_file).to receive(:name).and_return("1.tif")
-
-        allow(container2).to receive(:name).and_return("resource2")
-        allow(container2).to receive(:id).and_return(container2_id)
-        allow(container).to receive(:name).and_return("resource1")
-
-        allow(upload).to receive(:files).and_return([upload_file, upload_file2])
-        allow(upload).to receive(:containers).and_return([container, container2])
-        allow(upload).to receive(:files).and_return([upload_file, upload_file2])
-      end
-
-      # TODO: Make this actually check to see if two IngestFolderJobs are
-      # called.
-      it "ingests two resources" do
-        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: "/base/resource1", state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
-      end
-    end
-
-    context "with files hosted on a cloud-storage provider" do
+    # TODO
+    # Invalid Use case
+    # need aparent directory
+    context "Individual resources with files hosted on a cloud-storage provider" do
       let(:provider) { BrowseEverything::Provider::GoogleDrive.new }
       let(:bytestream2) { instance_double(ActiveStorage::Blob) }
       let(:upload_file2_id) { "https://www.example.com/resource2/1.tif" }
@@ -331,7 +302,7 @@ RSpec.describe BulkIngestController do
         allow(PendingUpload).to receive(:new).and_call_original
       end
 
-      it "ingests the parent as two resources" do
+      it "ingests two resources" do
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
         expect(PendingUpload).to have_received(:new).with(
           hash_including(
@@ -347,6 +318,9 @@ RSpec.describe BulkIngestController do
         )
       end
 
+      # TODO
+      # Invalid use case, need a parent directory
+      # Here, parent is an MVW; we need another level above.
       context "when bulk ingesting multi-volume works" do
         let(:bytestream2) { instance_double(ActiveStorage::Blob) }
         let(:parent_container_id) { "https://www.example.com/parent" }
@@ -357,6 +331,14 @@ RSpec.describe BulkIngestController do
         let(:container2_id) { "https://www.example.com/parent/resource2" }
         let(:container2) { instance_double(BrowseEverything::Container) }
         let(:container_id) { "https://www.example.com/parent/resource1" }
+        let(:browse_everything) do
+          {
+            "uploads" => uploads
+          }
+        end
+        let(:uploads) { [upload.id] }
+        let(:upload) { instance_double(BrowseEverything::Upload) }
+        let(:container) { instance_double(BrowseEverything::Container) }
 
         let(:attributes) do
           {
@@ -375,13 +357,26 @@ RSpec.describe BulkIngestController do
         end
 
         before do
+          allow(bytestream).to receive(:download).and_return(file.read)
+          allow(upload_file).to receive(:bytestream).and_return(bytestream)
+          allow(upload_file).to receive(:name).and_return("example.tif")
+          allow(upload_file).to receive(:id).and_return(upload_file_id)
+          allow(upload_file).to receive(:container_id).and_return(container_id)
+          allow(BrowseEverything::UploadFile).to receive(:find).and_return([upload_file])
+          allow(upload).to receive(:provider).and_return(provider)
+          allow(upload).to receive(:files).and_return([upload_file])
+          allow(upload).to receive(:id).and_return(upload_id)
+          allow(BrowseEverything::Upload).to receive(:find_by).and_return([upload])
+          allow(container).to receive(:name).and_return("example")
+          allow(container).to receive(:id).and_return(container_id)
+
+          allow(IngestFolderJob).to receive(:perform_later)
           allow(bytestream2).to receive(:download).and_return(file.read)
           allow(upload_file2).to receive(:bytestream).and_return(bytestream2)
           allow(upload_file2).to receive(:name).and_return("1.tif")
-          allow(upload_file2).to receive(:container_id).and_return(container2_id)
           allow(upload_file2).to receive(:id).and_return(upload_file2_id)
+          allow(upload_file2).to receive(:container_id).and_return(container2_id)
 
-          allow(upload_file).to receive(:container_id).and_return(container_id)
           allow(BrowseEverything::UploadFile).to receive(:find).with([upload_file2_id]).and_return([upload_file2])
           allow(BrowseEverything::UploadFile).to receive(:find).with([upload_file_id]).and_return([upload_file])
 
@@ -400,7 +395,7 @@ RSpec.describe BulkIngestController do
           post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
         end
 
-        it "ingests the file as FileSets on a new member resource for a new parent resource" do
+        it "Creates a multi-volume work" do
           expect(PendingUpload).to have_received(:new).with(
             hash_including(
               upload_id: "test-upload-id",
