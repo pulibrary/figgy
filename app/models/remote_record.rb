@@ -43,6 +43,11 @@ class RemoteRecord
     "https://findingaids.princeton.edu/collections/#{id.tr('_', '/')}.xml?scope=record" if pulfa?(id)
   end
 
+  def self.record_url(id)
+    return "https://catalog.princeton.edu/catalog/#{id}" if bibdata?(id)
+    "https://findingaids.princeton.edu/collections/#{id.tr('_', '/')}" if pulfa?(id)
+  end
+
   class PulfaRecord
     attr_reader :source_metadata_identifier
 

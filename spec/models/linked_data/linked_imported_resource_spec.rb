@@ -27,7 +27,7 @@ RSpec.describe LinkedData::LinkedImportedResource do
     let(:resource) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: source_id) }
     it "returns a link to the finding aids site" do
       stub_pulfa(pulfa_id: source_id)
-      expect(linked_resource.as_jsonld["link_to_finding_aid"]).to eq "http://findingaids.princeton.edu/collections/C0652/c0389"
+      expect(linked_resource.as_jsonld["link_to_finding_aid"]).to eq "https://findingaids.princeton.edu/collections/C0652/c0389"
     end
   end
 end

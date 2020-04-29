@@ -14,7 +14,7 @@ module LinkedData
 
       def record_link
         return {} unless resource.source_metadata_identifier
-        { record_link_heading => IdentifierService.url_for(resource) }
+        { record_link_heading => RemoteRecord.record_url(resource.source_metadata_identifier.first) }
       end
 
       def record_link_heading
