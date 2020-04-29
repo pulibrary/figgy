@@ -13,6 +13,7 @@ module LinkedData
       end
 
       def record_link
+        return {} unless resource.source_metadata_identifier
         { record_link_heading => IdentifierService.url_for(resource) }
       end
 
