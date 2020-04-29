@@ -19,6 +19,12 @@ Release notes template:
 
 * Allow unnumbered labels in order manager.
 
+# 2020-04-27
+
+## Fixed
+
+* GeoBlacklight documents with incorrect imported coverage can now sync.
+
 # 2020-04-24
 
 ## Removed

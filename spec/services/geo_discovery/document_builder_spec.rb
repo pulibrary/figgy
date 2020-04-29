@@ -7,10 +7,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
   subject(:document_builder) { described_class.new(query_service.find_by(id: geo_work.id), document_class) }
   let(:geo_work) do
     FactoryBot.create_for_repository(:vector_resource,
-                                     title: "Geo Work",
                                      coverage: coverage.to_s,
-                                     description: "This is a Geo Work",
-                                     creator: "Yosiwo George",
                                      publisher: "National Geographic",
                                      issued: issued,
                                      spatial: "Micronesia",
@@ -34,9 +31,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
   let(:metadata_file) { fixture_file_upload("files/geo_metadata/iso.xml") }
   let(:document) { JSON.parse(document_builder.to_json(nil)) }
 
-  describe "vector resource" do
-    let(:tika_output) { tika_shapefile_output }
-
+  describe "vector resource", run_real_characterization: true do
     before do
       output = change_set_persister.save(change_set: change_set)
       file_set_id = output.member_ids[0]
@@ -53,15 +48,15 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       # required metadata
       expect(document["dc_identifier_s"]).to eq("ark:/99999/fk4")
       expect(document["layer_slug_s"]).to eq("princeton-fk4")
-      expect(document["dc_title_s"]).to eq("Geo Work")
-      expect(document["solr_geom"]).to eq("ENVELOPE(-71.032, -69.856, 43.039, 42.943)")
+      expect(document["dc_title_s"]).to eq("S_566_1914_clip.tif")
+      expect(document["solr_geom"]).to eq("ENVELOPE(-112.469675, -109.860605, 57.595712, 56.407644)")
       expect(document["dct_provenance_s"]).to eq("Princeton")
       expect(document["dc_rights_s"]).to eq("Public")
       expect(document["geoblacklight_version"]).to eq("1.0")
 
       # optional metadata
-      expect(document["dc_description_s"]).to eq("This is a Geo Work")
-      expect(document["dc_creator_sm"]).to eq(["Yosiwo George"])
+      expect(document["dc_description_s"]).to include("This raster file is the result of georeferencing")
+      expect(document["dc_creator_sm"]).to eq(["University of Alberta"])
       expect(document["dc_subject_sm"]).to eq(["Society"])
       expect(document["dct_spatial_sm"]).to eq(["Micronesia"])
       expect(document["dct_temporal_sm"]).to eq(["2011", "2013"])
@@ -239,6 +234,23 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
 
       it "does not return an issued value" do
         expect(document).not_to include("dct_issued_dt")
+      end
+    end
+
+    context "with a valid coverage and an invalid imported coverge" do
+      let(:invalid_coverage) { "northlimit=15.744444; eastlimit=088.566667; southlimit=15.675000; westlimit=088.627778; units=degrees; projection=EPSG:4326" }
+      let(:geo_work) do
+        FactoryBot.create_for_repository(:scanned_map,
+                                         source_metadata_identifier: "5144620",
+                                         coverage: coverage.to_s,
+                                         visibility: visibility,
+                                         imported_metadata: [{
+                                           coverage: [invalid_coverage]
+                                         }])
+      end
+
+      it "sets solr_geom using the valid coverage value" do
+        expect(document["solr_geom"]).to eq("ENVELOPE(-71.032, -69.856, 43.039, 42.943)")
       end
     end
   end
