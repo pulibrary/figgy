@@ -3,6 +3,7 @@ module Numismatics
   class IssueChangeSet < ChangeSet
     delegate :human_readable_type, to: :model
     apply_workflow(DraftCompleteWorkflow)
+    enable_claiming
 
     include VisibilityProperty
     collection :numismatic_artist, multiple: true, required: false, form: Numismatics::ArtistChangeSet, populator: :populate_nested_collection, default: []

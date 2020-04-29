@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class MediaResourceChangeSet < ChangeSet
   apply_workflow(DraftCompleteWorkflow)
+  enable_claiming
   delegate :human_readable_type, to: :resource
 
   include VisibilityProperty

@@ -33,12 +33,23 @@ class CatalogController < ApplicationController
   # enforce hydra access controls
   before_action :set_id, only: :iiif_search
   before_action :enforce_show_permissions, only: [:show, :iiif_search]
+  before_action :claimed_by_facet
 
   # CatalogController-scope behavior and configuration for BlacklightIiifSearch
   include BlacklightIiifSearch::Controller
 
   def set_id
     params["id"] = params["solr_document_id"]
+  end
+
+  def claimed_by_facet
+    return unless current_user && (current_user.staff? || current_user.admin?)
+    return if blacklight_config.facet_fields.key?("claimed_by_ssim")
+    blacklight_config.add_facet_field "claimed_by_ssim", query: {
+      unclaimed: { label: "Unclaimed", fq: "-claimed_by_ssim:[* TO *]" },
+      claimed: { label: "Claimed", fq: "claimed_by_ssim:[* TO *]" },
+      claimed_by_me: { label: "Claimed by Me", fq: "claimed_by_ssim:#{current_user.uid}" }
+    }, label: "Claimed"
   end
 
   def iiif_search

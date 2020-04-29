@@ -220,6 +220,30 @@ RSpec.describe CatalogController do
       get :index, params: { q: "" }
       expect(response).to be_successful
     end
+
+    it "doesn't display claimed_by if not logged in" do
+      persister.save(resource: FactoryBot.build(:complete_scanned_resource, claimed_by: "Donatello"))
+      get :index, params: { q: "" }
+      expect(assigns(:document_list).length).to eq 1
+      expect(assigns(:response)["facet_counts"]["facet_queries"]).to be_empty
+    end
+
+    it "displays claimed_by if logged in" do
+      u = FactoryBot.create(:admin)
+      sign_in u
+      persister.save(resource: FactoryBot.build(:complete_scanned_resource, claimed_by: "Donatello"))
+      persister.save(resource: FactoryBot.build(:complete_scanned_resource, claimed_by: u.uid))
+      persister.save(resource: FactoryBot.build(:complete_scanned_resource))
+      get :index, params: { q: "" }
+      facet_queries = assigns(:response)["facet_counts"]["facet_queries"]
+      expect(facet_queries).not_to be_empty
+      # Unclaimed
+      expect(facet_queries["-claimed_by_ssim:[* TO *]"]).to eq 1
+      # Claimed
+      expect(facet_queries["claimed_by_ssim:[* TO *]"]).to eq 2
+      # Claimed by Me
+      expect(facet_queries["claimed_by_ssim:#{u.uid}"]).to eq 1
+    end
   end
 
   describe "FileSet behavior" do

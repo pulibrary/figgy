@@ -18,6 +18,7 @@ Release notes template:
 ## Added
 
 * Allow unnumbered labels in order manager.
+* Added the ability to "claim" a resource to work on.
 
 # 2020-04-27
 

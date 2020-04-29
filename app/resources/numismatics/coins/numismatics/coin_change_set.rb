@@ -3,6 +3,7 @@ module Numismatics
   class CoinChangeSet < ChangeSet
     delegate :human_readable_type, to: :model
     apply_workflow(DraftCompleteWorkflow)
+    enable_claiming
 
     include VisibilityProperty
     collection :numismatic_citation, multiple: true, required: false, form: Numismatics::CitationChangeSet, populator: :populate_nested_collection, default: []

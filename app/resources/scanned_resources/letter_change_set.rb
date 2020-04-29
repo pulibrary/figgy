@@ -4,6 +4,7 @@ class LetterChangeSet < ChangeSet
   core_resource(change_set: "letter")
   enable_order_manager
   enable_pdf_support
+  enable_claiming
 
   collection :sender, multiple: true, required: false, form: NameWithPlaceChangeSet, populator: :populate_nested_collection, default: []
   collection :recipient, multiple: true, required: false, form: NameWithPlaceChangeSet, populator: :populate_nested_collection, default: []

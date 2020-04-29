@@ -134,4 +134,13 @@ RSpec.describe ScannedResourceChangeSet do
       expect(persisted.replaces).to eq(["foo/xyz"])
     end
   end
+
+  describe "#claimed_by" do
+    it "has a claimed_by property" do
+      expect(change_set.claimed_by).to be_nil
+      change_set.validate(claimed_by: "tpend")
+      change_set.sync
+      expect(change_set.resource.claimed_by).to eq "tpend"
+    end
+  end
 end

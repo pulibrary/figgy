@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class VectorResourceChangeSet < ChangeSet
   apply_workflow(GeoWorkflow)
+  enable_claiming
   delegate :human_readable_type, to: :model
 
   include GeoChangeSetProperties
