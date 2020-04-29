@@ -12,4 +12,13 @@ RSpec.describe LinkedData::LinkedImportedResource do
     expect(linked_resource.as_jsonld["system_created_at"]).to be_present
     expect(linked_resource.as_jsonld["system_updated_at"]).to be_present
   end
+
+  context "when it has a source metadata id" do
+    let(:catalog_id) { "4609321" }
+    let(:resource) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: catalog_id) }
+    it "returns a link to the catalog" do
+      stub_bibdata(bib_id: catalog_id)
+      expect(linked_resource.as_jsonld["link_to_catalog"]).to eq "https://catalog.princeton.edu/catalog/#{catalog_id}"
+    end
+  end
 end
