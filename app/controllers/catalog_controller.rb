@@ -44,6 +44,7 @@ class CatalogController < ApplicationController
 
   def claimed_by_facet
     return unless current_user && (current_user.staff? || current_user.admin?)
+    return if blacklight_config.facet_fields.key?("claimed_by_ssim")
     blacklight_config.add_facet_field "claimed_by_ssim", query: {
       unclaimed: { label: "Unclaimed", fq: "-claimed_by_ssim:[* TO *]" },
       claimed: { label: "Claimed", fq: "claimed_by_ssim:[* TO *]" },

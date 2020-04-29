@@ -7,7 +7,7 @@ RSpec.describe "catalog/_show_header_default.html.erb" do
     before do
       allow(view).to receive(:render_document_heading)
     end
-    it "doesn't show" do
+    it "doesn't show a claim button" do
       resource = FactoryBot.create_for_repository(:scanned_resource)
       change_set = DynamicChangeSet.new(resource)
       assign :change_set, change_set
