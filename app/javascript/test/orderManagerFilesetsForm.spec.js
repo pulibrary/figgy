@@ -128,7 +128,6 @@ describe("OrderManagerFilesetsForm.vue", () => {
     expect(wrapper.vm.labelerOpts().backLabel).toEqual('')
   })
 
-
   it("has the expected html structure", () => {
     expect(wrapper.element).toMatchSnapshot()
   })
@@ -138,5 +137,48 @@ describe("OrderManagerFilesetsForm.vue", () => {
     wrapper.vm.updateMultiLabels()
     expect(actions.updateChanges).toHaveBeenCalled()
     expect(actions.updateItems).toHaveBeenCalled()
+  })
+
+  it('allows bracketing of odd and even numbered pages', () => {
+    wrapper.vm.bracket = true
+    expect(wrapper.vm.labelerOpts().bracket).toEqual(true)
+    expect(wrapper.vm.labelerOpts().bracketEvens).toEqual(false)
+    expect(wrapper.vm.labelerOpts().bracketOdds).toEqual(false)
+    expect(wrapper.vm.labelerOpts().twoUpBracketLeftOnly).toEqual(false)
+    expect(wrapper.vm.labelerOpts().twoUpBracketRightOnly).toEqual(false)
+
+    wrapper.vm.bracket = true
+    wrapper.vm.bracketLocation = 'left'
+    expect(wrapper.vm.labelerOpts().bracket).toEqual(false)
+    expect(wrapper.vm.labelerOpts().bracketEvens).toEqual(true)
+    expect(wrapper.vm.labelerOpts().bracketOdds).toEqual(false)
+    expect(wrapper.vm.labelerOpts().twoUpBracketLeftOnly).toEqual(false)
+    expect(wrapper.vm.labelerOpts().twoUpBracketRightOnly).toEqual(false)
+
+    wrapper.vm.bracket = true
+    wrapper.vm.bracketLocation = 'right'
+    expect(wrapper.vm.labelerOpts().bracket).toEqual(false)
+    expect(wrapper.vm.labelerOpts().bracketEvens).toEqual(false)
+    expect(wrapper.vm.labelerOpts().bracketOdds).toEqual(true)
+    expect(wrapper.vm.labelerOpts().twoUpBracketLeftOnly).toEqual(false)
+    expect(wrapper.vm.labelerOpts().twoUpBracketRightOnly).toEqual(false)
+
+    wrapper.vm.bracket = true
+    wrapper.vm.bracketLocation = 'left'
+    wrapper.vm.twoUp = true
+    expect(wrapper.vm.labelerOpts().bracket).toEqual(false)
+    expect(wrapper.vm.labelerOpts().bracketEvens).toEqual(false)
+    expect(wrapper.vm.labelerOpts().bracketOdds).toEqual(false)
+    expect(wrapper.vm.labelerOpts().twoUpBracketLeftOnly).toEqual(true)
+    expect(wrapper.vm.labelerOpts().twoUpBracketRightOnly).toEqual(false)
+
+    wrapper.vm.bracket = true
+    wrapper.vm.bracketLocation = 'right'
+    wrapper.vm.twoUp = true
+    expect(wrapper.vm.labelerOpts().bracket).toEqual(false)
+    expect(wrapper.vm.labelerOpts().bracketEvens).toEqual(false)
+    expect(wrapper.vm.labelerOpts().bracketOdds).toEqual(false)
+    expect(wrapper.vm.labelerOpts().twoUpBracketLeftOnly).toEqual(false)
+    expect(wrapper.vm.labelerOpts().twoUpBracketRightOnly).toEqual(true)
   })
 })

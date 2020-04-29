@@ -34,6 +34,8 @@ exports[`OrderManagerFilesetsForm.vue has the expected html structure 1`] = `
       options="[object Object]"
     />
      
+    <!---->
+     
     <input-select-stub
       id="labelMethod"
       label="Labeling Method"

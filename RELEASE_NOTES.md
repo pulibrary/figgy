@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-04-29
+
+## Added
+
+* Add support for bracketing of even and odd numbered pages in order manager.
+
 # 2020-04-28
 
 ## Added
