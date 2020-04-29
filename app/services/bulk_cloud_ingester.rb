@@ -71,7 +71,7 @@ class BulkCloudIngester
           first_child_container = upload.containers.find do |child_container|
             child_container.parent_id == container.id
           end
-          parent_containers << container if first_child_container && files_lookup.key?(first_child_container.id)
+          parent_containers << container if container.parent_id && first_child_container && files_lookup.key?(first_child_container.id)
         end
       end
 

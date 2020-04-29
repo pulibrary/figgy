@@ -259,126 +259,119 @@ RSpec.describe BulkIngestController do
         end
       end
     end
+  end
 
-    # TODO
-    # Invalid Use case
-    # need aparent directory
-    context "Individual resources with files hosted on a cloud-storage provider" do
-      let(:provider) { BrowseEverything::Provider::GoogleDrive.new }
-      let(:bytestream2) { instance_double(ActiveStorage::Blob) }
-      let(:upload_file2_id) { "https://www.example.com/resource2/1.tif" }
-      let(:upload_file2) { double }
-      let(:upload_file_id) { "https://www.example.com/resource1/1.tif" }
-      let(:container2_id) { "https://www.example.com/resource2" }
-      let(:container2) { instance_double(BrowseEverything::Container) }
-      let(:container_id) { "https://www.example.com/resource1" }
+  context "Individual resources with files hosted on a cloud-storage provider" do
+    let(:upload) do
+      create_cloud_upload_for_container_ids(
+        {
+          "https://www.example.com/root" => {
+            files: [],
+            children:
+            {
+              "https://www.example.com/root/resource1" => {
+                files: ["https://www.example.com/root/resource1/1.tif"],
+                children: {}
+              },
+              "https://www.example.com/root/resource2" => {
+                files: ["https://www.example.com/root/resource2/1.tif"],
+                children: {}
+              }
+            }
+          }
+        },
+        "test-upload-id"
+      )
+    end
 
-      let(:resources) do
-        adapter.query_service.find_all_of_model(model: ScannedResource)
-      end
+    let(:attributes) do
+      {
+        workflow: { state: "pending" },
+        visibility: "open",
+        browse_everything: { "uploads" => [upload.id] }
+      }
+    end
 
-      before do
-        allow(bytestream2).to receive(:download).and_return(file.read)
-        allow(upload_file2).to receive(:bytestream).and_return(bytestream2)
-        allow(upload_file2).to receive(:name).and_return("1.tif")
-        allow(upload_file2).to receive(:container_id).and_return(container2_id)
-        allow(upload_file2).to receive(:id).and_return(upload_file2_id)
-
-        allow(upload_file).to receive(:container_id).and_return(container_id)
-        allow(BrowseEverything::UploadFile).to receive(:find).with([upload_file2_id]).and_return([upload_file2])
-        allow(BrowseEverything::UploadFile).to receive(:find).with([upload_file_id]).and_return([upload_file])
-
-        allow(container2).to receive(:id).and_return(container2_id)
-        allow(container2).to receive(:name).and_return("resource2")
-        allow(container2).to receive(:parent_id).and_return("parent2")
-        allow(container).to receive(:name).and_return("resource1")
-        allow(container).to receive(:id).and_return(container_id)
-        allow(container).to receive(:parent_id).and_return("parent1")
-
-        allow(upload).to receive(:files).and_return([upload_file, upload_file2])
-        allow(upload).to receive(:containers).and_return([container, container2])
-
-        allow(PendingUpload).to receive(:new).and_call_original
-      end
-
-      it "ingests two resources" do
-        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-        expect(PendingUpload).to have_received(:new).with(
-          hash_including(
-            upload_id: "test-upload-id",
-            upload_file_id: "https://www.example.com/resource1/1.tif"
-          )
+    it "ingests two resources" do
+      stub_bibdata(bib_id: "4609321")
+      allow(PendingUpload).to receive(:new).and_call_original
+      post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+      expect(PendingUpload).to have_received(:new).with(
+        hash_including(
+          upload_id: "test-upload-id",
+          upload_file_id: "https://www.example.com/root/resource1/1.tif"
         )
-        expect(PendingUpload).to have_received(:new).with(
-          hash_including(
-            upload_id: "test-upload-id",
-            upload_file_id: "https://www.example.com/resource2/1.tif"
-          )
+      )
+      expect(PendingUpload).to have_received(:new).with(
+        hash_including(
+          upload_id: "test-upload-id",
+          upload_file_id: "https://www.example.com/root/resource2/1.tif"
         )
-      end
+      )
+
+      resources = adapter.query_service.find_all_of_model(model: ScannedResource)
+      expect(resources.length).to eq 2
     end
   end
-  context "when uploading from the cloud" do
-    context "when bulk ingesting multi-volume works" do
-      let(:upload) do
-        create_cloud_upload_for_container_ids(
-          {
-            "https://www.example.com/root" => {
-              files: [],
-              children:
-              {
-                "https://www.example.com/root/parent" => {
-                  files: [],
-                  children: {
-                    "https://www.example.com/root/parent/resource1" => {
-                      files: ["https://www.example.com/root/parent/resource1/1.tif"],
-                      children: {}
-                    },
-                    "https://www.example.com/root/parent/resource2" => {
-                      files: ["https://www.example.com/root/parent/resource2/1.tif"],
-                      children: {}
-                    }
+  context "bulk ingesting multi-volume works from the cloud" do
+    let(:upload) do
+      create_cloud_upload_for_container_ids(
+        {
+          "https://www.example.com/root" => {
+            files: [],
+            children:
+            {
+              "https://www.example.com/root/parent" => {
+                files: [],
+                children: {
+                  "https://www.example.com/root/parent/resource1" => {
+                    files: ["https://www.example.com/root/parent/resource1/1.tif"],
+                    children: {}
+                  },
+                  "https://www.example.com/root/parent/resource2" => {
+                    files: ["https://www.example.com/root/parent/resource2/1.tif"],
+                    children: {}
                   }
                 }
               }
             }
-          },
-          "test-upload-id"
-        )
-      end
+          }
+        },
+        "test-upload-id"
+      )
+    end
 
-      let(:attributes) do
-        {
-          workflow: { state: "pending" },
-          visibility: "open",
-          browse_everything: { "uploads" => [upload.id] }
-        }
-      end
+    let(:attributes) do
+      {
+        workflow: { state: "pending" },
+        visibility: "open",
+        browse_everything: { "uploads" => [upload.id] }
+      }
+    end
 
-      it "Creates a multi-volume work" do
-        stub_bibdata(bib_id: "4609321")
-        allow(PendingUpload).to receive(:new).and_call_original
-        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-        expect(PendingUpload).to have_received(:new).with(
-          hash_including(
-            upload_id: "test-upload-id",
-            upload_file_id: "https://www.example.com/root/parent/resource1/1.tif"
-          )
+    it "Creates a multi-volume work" do
+      stub_bibdata(bib_id: "4609321")
+      allow(PendingUpload).to receive(:new).and_call_original
+      post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+      expect(PendingUpload).to have_received(:new).with(
+        hash_including(
+          upload_id: "test-upload-id",
+          upload_file_id: "https://www.example.com/root/parent/resource1/1.tif"
         )
-        expect(PendingUpload).to have_received(:new).with(
-          hash_including(
-            upload_id: "test-upload-id",
-            upload_file_id: "https://www.example.com/root/parent/resource2/1.tif"
-          )
+      )
+      expect(PendingUpload).to have_received(:new).with(
+        hash_including(
+          upload_id: "test-upload-id",
+          upload_file_id: "https://www.example.com/root/parent/resource2/1.tif"
         )
+      )
 
-        resources = adapter.query_service.find_all_of_model(model: ScannedResource)
-        resource = resources.select { |res| res.member_ids.length == 2 }.first
-        expect(resource.member_ids.length).to eq(2)
-        expect(resource.decorate.volumes.first.file_sets.length).to eq(1)
-        expect(resource.decorate.volumes.last.file_sets.length).to eq(1)
-        expect(resources.length).to eq 3
-      end
+      resources = adapter.query_service.find_all_of_model(model: ScannedResource)
+      resource = resources.select { |res| res.member_ids.length == 2 }.first
+      expect(resource.member_ids.length).to eq(2)
+      expect(resource.decorate.volumes.first.file_sets.length).to eq(1)
+      expect(resource.decorate.volumes.last.file_sets.length).to eq(1)
+      expect(resources.length).to eq 3
     end
   end
 
@@ -406,5 +399,4 @@ RSpec.describe BulkIngestController do
       containers << container
     end
   end
-
 end
