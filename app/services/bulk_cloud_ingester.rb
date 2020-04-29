@@ -46,13 +46,13 @@ class BulkCloudIngester
         files_lookup = pending_upload_files(upload)
 
         upload.containers.each do |container|
-          save_container(container, files_lookup)
+          save_container(container, files_lookup, upload)
         end
 
-        save_parents if mvw
+        save_parents
       end
 
-      def save_container(container, files_lookup)
+      def save_container(container, files_lookup, upload)
         # Create the volume work if the container has files
         if files_lookup.key?(container.id)
           files = files_lookup[container.id]
@@ -66,9 +66,12 @@ class BulkCloudIngester
           end
         # if the container only had directories, it's a MVW parent work
         else
-          # create these later; we don't know their members until we're done
-          # iterating through the containers
-          parent_containers << container
+          # If my children have files, I'm a MVW container and should be saved
+          # later.
+          first_child_container = upload.containers.find do |child_container|
+            child_container.parent_id == container.id
+          end
+          parent_containers << container if first_child_container && files_lookup.key?(first_child_container.id)
         end
       end
 
