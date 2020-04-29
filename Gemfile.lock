@@ -185,6 +185,8 @@ GEM
       blacklight (~> 6.0)
       iiif-presentation
       rails (>= 4.2, < 6)
+    bootsnap (1.3.2)
+      msgpack (~> 1.0)
     bootstrap-sass (3.4.1)
       autoprefixer-rails (>= 5.2.1)
       sassc (>= 2.0.0)
@@ -905,6 +907,7 @@ DEPENDENCIES
   bixby
   blacklight
   blacklight_iiif_search (= 1.0.0)
+  bootsnap
   bootstrap-sass (~> 3.4)
   browse-everything!
   bundler (~> 2.0)

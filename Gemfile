@@ -133,5 +133,6 @@ end
 gem "aws-sdk-s3"
 gem "extra_extra"
 
+gem "bootsnap", require: false
 gem "oai", "~> 1.0.0"
 gem "ruby-vips"
