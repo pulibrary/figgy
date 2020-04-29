@@ -29,6 +29,15 @@
       />
 
       <input-select
+        v-if="bracket"
+        id="bracketLocation"
+        v-model="bracketLocation"
+        label="Bracket Location"
+        :options="bracketLocationOpts"
+        @change="updateMultiLabels()"
+      />
+
+      <input-select
         v-if="!isMultiVolume"
         id="labelMethod"
         v-model="method"
@@ -122,6 +131,7 @@ export default {
       startsWith: 'front',
       unitLabel: 'p. ',
       bracket: false,
+      bracketLocation: 'default',
       twoUp: false,
       twoUpSeparator: '/'
     }
@@ -143,9 +153,36 @@ export default {
           name: 'addBrackets',
           value: 'Add Brackets',
           id: 'addBrackets',
-          checked: this.labelerOpts().bracket
+          checked: this.bracket
         }
       ]
+    },
+    bracketLocationOpts: function () {
+      if (this.twoUp) {
+        return [
+          {
+            label: 'None', value: 'default'
+          },
+          {
+            label: 'Left Side Only', value: 'left'
+          },
+          {
+            label: 'Right Side Only', value: 'right'
+          }
+        ]
+      } else {
+        return [
+          {
+            label: 'All', value: 'default'
+          },
+          {
+            label: 'Evens', value: 'left'
+          },
+          {
+            label: 'Odds', value: 'right'
+          }
+        ]
+      }
     },
     methodOpts: function () {
       return [{ label: 'Paginate (Default)', value: 'paginate' }, { label: 'Foliate', value: 'foliate' }]
@@ -162,6 +199,21 @@ export default {
     },
     startWithOpts: function () {
       return [{ label: 'Front (Default)', value: 'front' }, { label: 'Back', value: 'back' }]
+    },
+    bracketAll: function () {
+      return this.bracket && !this.twoUp && this.bracketLocation === 'default'
+    },
+    bracketEvens: function () {
+      return this.bracket && !this.twoUp && this.bracketLocation === 'left'
+    },
+    bracketOdds: function () {
+      return this.bracket && !this.twoUp && this.bracketLocation === 'right'
+    },
+    twoUpBracketLeftOnly: function () {
+      return this.bracket && this.twoUp && this.bracketLocation === 'left'
+    },
+    twoUpBracketRightOnly: function () {
+      return this.bracket && this.twoUp && this.bracketLocation === 'right'
     }
   },
   watch: {
@@ -188,12 +240,16 @@ export default {
         start: this.start,
         method: this.method,
         startsWith: this.startsWith,
-        bracket: this.bracket,
+        bracket: this.bracketAll,
+        bracketEvens: this.bracketEvens,
+        bracketOdds: this.bracketOdds,
         frontLabel,
         backLabel,
         unitLabel,
         twoUp: this.twoUp,
-        twoUpSeparator: this.twoUpSeparator
+        twoUpSeparator: this.twoUpSeparator,
+        twoUpBracketLeftOnly: this.twoUpBracketLeftOnly,
+        twoUpBracketRightOnly: this.twoUpBracketRightOnly
       }
     },
     isNormalInteger (str) {
