@@ -83,13 +83,13 @@ RSpec.describe RemoteRecord, type: :model do
 
   describe ".source_metadata_url" do
     context "with a Voyager record ID" do
-      it "validates that this is not a bib. ID" do
+      it "provides a link to the catalog record" do
         expect(described_class.source_metadata_url("4609321")).to eq "https://bibdata.princeton.edu/bibliographic/4609321"
       end
     end
 
     context "with a PULFA record ID" do
-      it "validates that this is a bib. ID" do
+      it "provides a link to the finding aid" do
         expect(described_class.source_metadata_url("AC044_c0003")).to eq "https://findingaids.princeton.edu/collections/AC044/c0003.xml?scope=record"
       end
     end
