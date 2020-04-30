@@ -82,7 +82,7 @@ gem "rsolr", ">= 1.0"
 
 gem "aasm"
 gem "arabic-letter-connector"
-gem "browse-everything", github: "samvera/browse-everything", branch: "2.x-stable"
+gem "browse-everything", github: "jrgriffiniii/browse-everything", branch: "issues-351-jrgriffiniii-file-system-nodup"
 gem "capistrano", "~> 3.7.1"
 gem "capistrano-passenger"
 gem "capistrano-rails"
