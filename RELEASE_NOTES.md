@@ -2,7 +2,7 @@
 
 Release notes template:
 
-# 2019-09-20
+# 2020-04-30
 
 ## Added
 
@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-04-30
+
+## Added
+
+* Add link to finding aid on show page when source metadata id is a component id.
+
 # 2020-04-29
 
 ## Added

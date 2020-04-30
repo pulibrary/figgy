@@ -132,8 +132,9 @@ module ApplicationHelper
   end
 
   def catalog_link(_attribute, value)
-    return value unless RemoteRecord.bibdata?(value)
-    link_to value, "https://catalog.princeton.edu/catalog/#{value}"
+    url = RemoteRecord.record_url(value)
+    return value unless url
+    link_to value, url
   end
 
   # Classes added to a document's sidebar div. Overrides blacklight helper.
