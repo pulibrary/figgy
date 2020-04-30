@@ -145,7 +145,7 @@ RSpec.describe BulkIngestController do
         upload = create_upload_for_container_ids(
           [
             storage_root.join("lapidus"),
-            storage_root.join("lapidus", "123456"),
+            storage_root.join("lapidus", "AC044_c0003"),
             storage_root.join("lapidus", "4609321")
           ]
         )
@@ -157,7 +157,7 @@ RSpec.describe BulkIngestController do
             browse_everything: { "uploads" => [upload.uuid] }
           }
         allow(IngestFolderJob).to receive(:perform_later)
-        stub_bibdata(bib_id: "123456")
+        stub_pulfa(pulfa_id: "AC044_c0003")
         stub_bibdata(bib_id: "4609321")
 
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
@@ -176,11 +176,11 @@ RSpec.describe BulkIngestController do
           .to have_received(:perform_later)
           .with(
             hash_including(
-              directory: storage_root.join("lapidus", "123456").to_s,
+              directory: storage_root.join("lapidus", "AC044_c0003").to_s,
               state: "pending",
               visibility: "open",
               member_of_collection_ids: ["4609321"],
-              source_metadata_identifier: "123456"
+              source_metadata_identifier: "AC044_c0003"
             )
           )
       end
@@ -312,8 +312,8 @@ RSpec.describe BulkIngestController do
             files: [],
             children:
             {
-              "https://www.example.com/root/resource1" => {
-                files: ["https://www.example.com/root/resource1/1.tif"],
+              "https://www.example.com/root/4609321" => {
+                files: ["https://www.example.com/root/4609321/1.tif"],
                 children: {}
               },
               "https://www.example.com/root/resource2" => {
@@ -342,7 +342,7 @@ RSpec.describe BulkIngestController do
       expect(PendingUpload).to have_received(:new).with(
         hash_including(
           upload_id: "test-upload-id",
-          upload_file_id: "https://www.example.com/root/resource1/1.tif"
+          upload_file_id: "https://www.example.com/root/4609321/1.tif"
         )
       )
       expect(PendingUpload).to have_received(:new).with(
@@ -354,6 +354,7 @@ RSpec.describe BulkIngestController do
 
       resources = adapter.query_service.find_all_of_model(model: ScannedResource)
       expect(resources.length).to eq 2
+      expect(adapter.query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: "4609321").length).to eq 1
     end
   end
   context "bulk ingesting multi-volume works from the cloud" do
@@ -364,15 +365,15 @@ RSpec.describe BulkIngestController do
             files: [],
             children:
             {
-              "https://www.example.com/root/parent" => {
+              "https://www.example.com/root/AC044_c0003" => {
                 files: [],
                 children: {
-                  "https://www.example.com/root/parent/resource1" => {
-                    files: ["https://www.example.com/root/parent/resource1/1.tif"],
+                  "https://www.example.com/root/AC044_c0003/resource1" => {
+                    files: ["https://www.example.com/root/AC044_c0003/resource1/1.tif"],
                     children: {}
                   },
-                  "https://www.example.com/root/parent/resource2" => {
-                    files: ["https://www.example.com/root/parent/resource2/1.tif"],
+                  "https://www.example.com/root/AC044_c0003/resource2" => {
+                    files: ["https://www.example.com/root/AC044_c0003/resource2/1.tif"],
                     children: {}
                   }
                 }
@@ -393,24 +394,25 @@ RSpec.describe BulkIngestController do
     end
 
     it "Creates a multi-volume work" do
-      stub_bibdata(bib_id: "4609321")
+      stub_pulfa(pulfa_id: "AC044_c0003")
       allow(PendingUpload).to receive(:new).and_call_original
       post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
       expect(PendingUpload).to have_received(:new).with(
         hash_including(
           upload_id: "test-upload-id",
-          upload_file_id: "https://www.example.com/root/parent/resource1/1.tif"
+          upload_file_id: "https://www.example.com/root/AC044_c0003/resource1/1.tif"
         )
       )
       expect(PendingUpload).to have_received(:new).with(
         hash_including(
           upload_id: "test-upload-id",
-          upload_file_id: "https://www.example.com/root/parent/resource2/1.tif"
+          upload_file_id: "https://www.example.com/root/AC044_c0003/resource2/1.tif"
         )
       )
 
       resources = adapter.query_service.find_all_of_model(model: ScannedResource)
       resource = resources.select { |res| res.member_ids.length == 2 }.first
+      expect(resource.source_metadata_identifier).to eq ["AC044_c0003"]
       expect(resource.member_ids.length).to eq(2)
       expect(resource.decorate.volumes.first.file_sets.length).to eq(1)
       expect(resource.decorate.volumes.last.file_sets.length).to eq(1)
