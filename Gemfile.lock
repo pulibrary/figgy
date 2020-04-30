@@ -6,30 +6,6 @@ GIT
       devise
 
 GIT
-  remote: https://github.com/jrgriffiniii/browse-everything.git
-  revision: 1761edbe99ca6e806ce4663a7c35562345082e50
-  branch: issues-351-jrgriffiniii-file-system-nodup
-  specs:
-    browse-everything (2.0.0.pre.beta1)
-      activestorage
-      addressable (~> 2.5)
-      aws-sdk-s3
-      dropbox_api (>= 0.1.10)
-      fast_jsonapi
-      foreman
-      google-api-client (~> 0.23)
-      google_drive (~> 2.1)
-      googleauth (= 0.6.6)
-      jsonapi-resources
-      puma (>= 3.11)
-      rails (>= 5.1)
-      rswag (= 2.0.6)
-      ruby-box
-      signet (~> 0.8)
-      thor (~> 0.19)
-      typhoeus
-
-GIT
   remote: https://github.com/pulibrary/ruby_tika_app.git
   revision: 5b633a91c99eb56c3d26740d24706a67d6ffe42d
   specs:
@@ -50,6 +26,30 @@ GIT
     valkyrie-derivatives (0.1.0)
       hydra-derivatives
       valkyrie
+
+GIT
+  remote: https://github.com/samvera/browse-everything.git
+  revision: 516d8e74ccc5b3f68ebe3750e4f7004dbae512a6
+  branch: 2.x-stable
+  specs:
+    browse-everything (2.0.0.pre.beta1)
+      activestorage
+      addressable (~> 2.5)
+      aws-sdk-s3
+      dropbox_api (>= 0.1.10)
+      fast_jsonapi
+      foreman
+      google-api-client (~> 0.23)
+      google_drive (~> 2.1)
+      googleauth (= 0.6.6)
+      jsonapi-resources
+      puma (>= 3.11)
+      rails (>= 5.1)
+      rswag (= 2.0.6)
+      ruby-box
+      signet (~> 0.8)
+      thor (~> 0.19)
+      typhoeus
 
 GIT
   remote: https://github.com/yob/pdf-reader.git
