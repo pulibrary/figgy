@@ -3,6 +3,7 @@ require "rails_helper"
 
 RSpec.describe BulkIngestController do
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+  with_queue_adapter :inline
 
   describe ".metadata_adapter" do
     it "returns an adapter" do
