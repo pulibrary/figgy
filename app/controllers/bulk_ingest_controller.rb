@@ -47,7 +47,6 @@
 #  - vol2
 #    - page1
 
-
 class BulkIngestController < ApplicationController
   def self.metadata_adapter
     Valkyrie::MetadataAdapter.find(:indexing_persister)
