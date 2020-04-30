@@ -2,7 +2,7 @@
 module LinkedData
   class LinkedImportedResource < LinkedResource
     def as_jsonld
-      imported_jsonld.merge(super).stringify_keys
+      record_link.merge(imported_jsonld).merge(super).stringify_keys
     end
 
     private
@@ -10,6 +10,19 @@ module LinkedData
       def imported_jsonld
         return {} unless resource.respond_to?(:primary_imported_metadata) && resource.primary_imported_metadata.source_jsonld.present?
         @imported_jsonld ||= JSON.parse(resource.primary_imported_metadata.source_jsonld.first)
+      end
+
+      def record_link
+        return {} unless resource.source_metadata_identifier
+        { record_link_heading => RemoteRecord.record_url(resource.source_metadata_identifier.first) }
+      end
+
+      def record_link_heading
+        if PulMetadataServices::Client.bibdata?(resource.source_metadata_identifier.first)
+          :link_to_catalog
+        else
+          :link_to_finding_aid
+        end
       end
   end
 end
