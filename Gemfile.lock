@@ -29,8 +29,8 @@ GIT
 
 GIT
   remote: https://github.com/samvera/browse-everything.git
-  revision: 516d8e74ccc5b3f68ebe3750e4f7004dbae512a6
-  branch: 2.x-stable
+  revision: 9fab2f4dcf0fcb9796cc2c0ec7732e380221f21b
+  branch: efficiency_improvements
   specs:
     browse-everything (2.0.0.pre.beta1)
       activestorage
