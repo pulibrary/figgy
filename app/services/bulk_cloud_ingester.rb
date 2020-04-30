@@ -16,6 +16,11 @@ class BulkCloudIngester
     @resource_class = resource_class
   end
 
+  def queue_ingest
+    return false unless selected_cloud_files?
+    BulkBrowseEverythingCloudIngestJob.perform_later(upload_set_ids: upload_sets.map(&:id), resource_class: resource_class.to_s)
+  end
+
   def ingest
     return false unless selected_cloud_files?
     change_set_persister.buffer_into_index do |buffered_changeset_persister|

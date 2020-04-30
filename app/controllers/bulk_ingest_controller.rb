@@ -85,7 +85,7 @@ class BulkIngestController < ApplicationController
       resource_class: resource_class
     )
 
-    cloud_ingester.ingest || ingest_local_dir
+    cloud_ingester.queue_ingest || ingest_local_dir
 
     redirect_to root_url, notice: "Batch Ingest of #{resource_class.human_readable_type.pluralize} started"
   end
