@@ -80,7 +80,6 @@ class BulkIngestController < ApplicationController
 
     cloud_ingester = BulkCloudIngester.new(
       change_set_persister: self.class.change_set_persister,
-      multi_volume_work: multi_volume_work?,
       upload_sets: upload_sets,
       resource_class: resource_class
     )
@@ -164,10 +163,6 @@ class BulkIngestController < ApplicationController
 
     def workflow_class
       @workflow_class ||= DynamicChangeSet.new(resource_class.new).workflow_class
-    end
-
-    def multi_volume_work?
-      params[:mvw] == "true"
     end
 
     def upload_sets

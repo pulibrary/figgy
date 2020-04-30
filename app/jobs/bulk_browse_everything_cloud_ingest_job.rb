@@ -8,7 +8,7 @@ class BulkBrowseEverythingCloudIngestJob < ApplicationJob
       BrowseEverything::Upload.find_by(uuid: upload_id).first
     end
     resource_class = resource_class.constantize
-    BulkCloudIngester.new(change_set_persister: change_set_persister, multi_volume_work: false, upload_sets: upload_sets, resource_class: resource_class).ingest
+    BulkCloudIngester.new(change_set_persister: change_set_persister, upload_sets: upload_sets, resource_class: resource_class).ingest
   end
 
   private

@@ -3,15 +3,13 @@
 # Ingests directories of files queued for upload by BrowseEverything
 # This class was extracted from BulkIngestController and is covered by its specs
 class BulkCloudIngester
-  attr_reader :change_set_persister, :multi_volume_work, :upload_sets, :resource_class
+  attr_reader :change_set_persister, :upload_sets, :resource_class
 
   # @param change_set_persister [ChangeSetPersister]
-  # @param multi_volume_work [Boolean]
   # @param upload_sets Array<[BrowseEverything::Upload]>
   # @resource_class [String]
-  def initialize(change_set_persister:, multi_volume_work:, upload_sets:, resource_class:)
+  def initialize(change_set_persister:, upload_sets:, resource_class:)
     @change_set_persister = change_set_persister
-    @multi_volume_work = multi_volume_work
     @upload_sets = upload_sets
     @resource_class = resource_class
   end
@@ -25,7 +23,7 @@ class BulkCloudIngester
     return false unless selected_cloud_files?
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
       upload_sets.each do |upload|
-        UploadSetPersister.new(buffered_changeset_persister, resource_class: resource_class).save(upload, mvw: multi_volume_work)
+        UploadSetPersister.new(buffered_changeset_persister, resource_class: resource_class).save(upload)
       end
     end
     true
@@ -47,7 +45,7 @@ class BulkCloudIngester
         @parent_containers = []
       end
 
-      def save(upload, mvw:)
+      def save(upload)
         files_lookup = pending_upload_files(upload)
 
         upload.containers.each do |container|
