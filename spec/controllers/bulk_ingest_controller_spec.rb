@@ -113,8 +113,28 @@ RSpec.describe BulkIngestController do
         stub_bibdata(bib_id: "4609321")
 
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: storage_root.join("multi_volume", "4609321").to_s, state: "pending", visibility: "open", member_of_collection_ids: ["4609321"], source_metadata_identifier: "4609321"))
-        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: storage_root.join("multi_volume", "123456").to_s, state: "pending", visibility: "open", member_of_collection_ids: ["4609321"], source_metadata_identifier: "123456"))
+        expect(IngestFolderJob)
+          .to have_received(:perform_later)
+          .with(
+            hash_including(
+              directory: storage_root.join("multi_volume", "4609321").to_s,
+              state: "pending",
+              visibility: "open",
+              member_of_collection_ids: ["4609321"],
+              source_metadata_identifier: "4609321"
+            )
+          )
+        expect(IngestFolderJob)
+          .to have_received(:perform_later)
+          .with(
+            hash_including(
+              directory: storage_root.join("multi_volume", "123456").to_s,
+              state: "pending",
+              visibility: "open",
+              member_of_collection_ids: ["4609321"],
+              source_metadata_identifier: "123456"
+            )
+          )
       end
     end
 
@@ -140,8 +160,28 @@ RSpec.describe BulkIngestController do
         stub_bibdata(bib_id: "4609321")
 
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: storage_root.join("lapidus", "4609321").to_s, state: "pending", visibility: "open", member_of_collection_ids: ["4609321"], source_metadata_identifier: "4609321"))
-        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(directory: storage_root.join("lapidus", "123456").to_s, state: "pending", visibility: "open", member_of_collection_ids: ["4609321"], source_metadata_identifier: "123456"))
+        expect(IngestFolderJob)
+          .to have_received(:perform_later)
+          .with(
+            hash_including(
+              directory: storage_root.join("lapidus", "4609321").to_s,
+              state: "pending",
+              visibility: "open",
+              member_of_collection_ids: ["4609321"],
+              source_metadata_identifier: "4609321"
+            )
+          )
+        expect(IngestFolderJob)
+          .to have_received(:perform_later)
+          .with(
+            hash_including(
+              directory: storage_root.join("lapidus", "123456").to_s,
+              state: "pending",
+              visibility: "open",
+              member_of_collection_ids: ["4609321"],
+              source_metadata_identifier: "123456"
+            )
+          )
       end
     end
   end
@@ -389,16 +429,26 @@ RSpec.describe BulkIngestController do
     upload
   end
 
+  # rubocop:disable Metrics/MethodLength
   def create_cloud_upload_for_child_node(container_hash, parent_container_id, containers, files, bytestream)
     container_hash.each do |parent_container, children_and_files|
       container = instance_double(BrowseEverything::Container, id: parent_container, name: parent_container.split("/").last, parent_id: parent_container_id)
       create_cloud_upload_for_child_node(children_and_files[:children], parent_container, containers, files, bytestream) if children_and_files[:children].present?
       files.concat(children_and_files[:files].map do |file|
-        file = instance_double(BrowseEverything::UploadFile, id: file, name: file.split("/").last, container_id: parent_container, bytestream: bytestream, download: bytestream.download, purge_bytestream: nil)
+        file = instance_double(
+          BrowseEverything::UploadFile,
+          id: file,
+          name: file.split("/").last,
+          container_id: parent_container,
+          bytestream: bytestream,
+          download: bytestream.download,
+          purge_bytestream: nil
+        )
         allow(BrowseEverything::UploadFile).to receive(:find).with([file.id]).and_return([file])
         file
       end)
       containers << container
     end
   end
+  # rubocop:enable Metrics/MethodLength
 end
