@@ -109,6 +109,10 @@ class BulkCloudIngester
       end
 
       def build_change_set(attrs)
+        if attrs[:title] && RemoteRecord.valid?(attrs[:title])
+          attrs[:source_metadata_identifier] = attrs[:title]
+          attrs[:title] = nil
+        end
         change_set = DynamicChangeSet.new(build_resource)
         change_set.validate(**attrs)
         change_set
