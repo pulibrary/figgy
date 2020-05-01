@@ -14,8 +14,7 @@ class DefaultDerivativeService
   end
 
   attr_reader :change_set_persister, :id
-  delegate :original_file, to: :resource
-  delegate :mime_type, to: :original_file
+  delegate :mime_type, to: :target_file
   delegate :query_service, to: :change_set_persister
   def initialize(id:, change_set_persister:)
     @id = id
@@ -31,8 +30,27 @@ class DefaultDerivativeService
   end
 
   def valid?
-    return false unless original_file
-    ["image/tiff", "image/jpeg", "image/png"].include?(mime_type.first) && !parent.is_a?(ScannedMap)
+    return false unless target_file
+    valid_mime_types.include?(mime_type.first) && !parent.is_a?(ScannedMap)
+  end
+
+  def valid_mime_types
+    ["image/tiff", "image/jpeg", "image/png"]
+  end
+
+  def target_file
+    @target_file ||= intermediate_target_files(resource) || resource.original_file
+  end
+
+  # If there are intermediate files with the supported format attached to the
+  #   resource, select the first of these
+  # @param [Valkyrie::Resource] resource
+  # @return [FileMetadata]
+  def intermediate_target_files(resource)
+    supported = resource.intermediate_files.select do |intermed|
+      valid_mime_types.include?(intermed.mime_type.first)
+    end
+    supported.empty? ? nil : supported.first
   end
 
   def parent
