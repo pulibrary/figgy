@@ -41,6 +41,12 @@ RSpec.describe DefaultDerivativeService do
 
       it { is_expected.to be_valid }
     end
+
+    context "when given an intermediate file set" do
+      let(:valid_resource) { FactoryBot.create_for_repository(:intermediate_image_file_set) }
+
+      it { is_expected.to be_valid }
+    end
   end
 
   it "creates a JP2 and attaches it to the fileset" do
