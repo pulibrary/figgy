@@ -44,6 +44,7 @@ class RemoteRecord
   end
 
   def self.record_url(id)
+    return unless id
     return "https://catalog.princeton.edu/catalog/#{id}" if bibdata?(id)
     "https://findingaids.princeton.edu/collections/#{id.tr('_', '/')}" if pulfa?(id)
   end
