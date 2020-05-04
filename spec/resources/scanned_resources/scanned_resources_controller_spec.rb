@@ -403,6 +403,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
       let(:resource) { FactoryBot.create_for_repository(:scanned_resource) }
 
       before do
+        allow(BrowseEverything::UploadJob).to receive(:perform_now)
         allow(upload_file).to receive(:purge_bytestream)
         allow(upload_file).to receive(:download).and_return(file.read)
         allow(upload_file).to receive(:bytestream).and_return(bytestream)
