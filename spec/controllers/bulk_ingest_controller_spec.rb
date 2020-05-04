@@ -453,5 +453,8 @@ RSpec.describe BulkIngestController do
       containers << container
     end
   end
+
+  describe "full unstubbed ingest of a MVW" do
+  end
   # rubocop:enable Metrics/MethodLength
 end
