@@ -65,7 +65,7 @@ RSpec.describe BulkIngestController do
       BrowseEverything::SessionModel.create(
         uuid: SecureRandom.uuid,
         session: {
-          provider_id: "file_system"
+          provider_id: "fast_file_system"
         }.to_json
       )
     end
@@ -431,7 +431,7 @@ RSpec.describe BulkIngestController do
 
     def create_session
       BrowseEverything::Session.build(
-        provider_id: "file_system"
+        provider_id: "fast_file_system"
       ).tap(&:save)
     end
 

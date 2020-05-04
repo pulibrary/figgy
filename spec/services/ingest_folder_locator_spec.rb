@@ -7,7 +7,7 @@ describe IngestFolderLocator do
   let(:upload_path_value) { Rails.root.join("spec", "fixtures", "staged_files") }
 
   before do
-    allow(BrowseEverything).to receive(:config).and_return(file_system: {
+    allow(BrowseEverything).to receive(:config).and_return(fast_file_system: {
                                                              home: upload_path_value
                                                            })
   end

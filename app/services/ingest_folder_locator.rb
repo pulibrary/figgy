@@ -12,7 +12,7 @@ class IngestFolderLocator
   # Access the upload directory path from the BrowseEverything file system provider configuration
   # @return [String]
   def upload_path_value
-    file_system_config = BrowseEverything.config[:file_system]
+    file_system_config = BrowseEverything.config[:fast_file_system]
     file_system_config[:home]
   end
 
