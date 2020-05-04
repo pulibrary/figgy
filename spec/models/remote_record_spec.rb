@@ -107,5 +107,11 @@ RSpec.describe RemoteRecord, type: :model do
         expect(described_class.record_url("AC044_c0003")).to eq "https://findingaids.princeton.edu/collections/AC044/c0003"
       end
     end
+
+    context "when passed nil" do
+      it "returns nil" do
+        expect(described_class.record_url(nil)).to eq nil
+      end
+    end
   end
 end
