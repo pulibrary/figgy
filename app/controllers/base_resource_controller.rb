@@ -113,6 +113,9 @@ class BaseResourceController < ApplicationController
 
     # Load upload files, filtering out hidden files
     def upload_files(upload_id)
+      # Ensure files are downloaded via ActiveStorage. We delay this for
+      # performance.
+      BrowseEverything::UploadJob.perform_now(upload_id: upload_id)
       # This needs to be changed to #find_one
       BrowseEverything::Upload.find_by(uuid: upload_id).first.files.select do |upload_file|
         !(upload_file.name =~ /^\./)
