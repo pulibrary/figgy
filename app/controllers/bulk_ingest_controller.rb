@@ -78,33 +78,31 @@ class BulkIngestController < ApplicationController
       return redirect_to bulk_ingest_show_path
     end
 
-    cloud_ingester = BulkCloudIngester.new(
-      change_set_persister: self.class.change_set_persister,
-      upload_sets: upload_sets,
-      resource_class: resource_class
-    )
-
-    cloud_ingester.queue_ingest || ingest_local_dir
+    cloud_ingester.queue_ingest || local_ingester.ingest
 
     redirect_to root_url, notice: "Batch Ingest of #{resource_class.human_readable_type.pluralize} started"
   end
 
   private
 
+    def cloud_ingester
+      BulkCloudIngester.new(
+        change_set_persister: self.class.change_set_persister,
+        upload_sets: upload_sets,
+        resource_class: resource_class
+      )
+    end
+
+    def local_ingester
+      BrowseEverythingLocalIngester.new(
+        upload_sets: upload_sets,
+        resource_class_name: resource_class_name,
+        attributes: attributes
+      )
+    end
+
     def files_to_upload?
       upload_sets.any? && upload_sets.first.containers.any?
-    end
-
-    def ingest_local_dir
-      ingest_paths.each do |path|
-        IngestFolderJob.perform_later(directory: path.to_s, file_filter: nil, class_name: resource_class_name, source_metadata_identifier: source_metadata_id_from_path(path), **attributes)
-      end
-    end
-
-    # Get all paths which aren't a parent of another path.
-    def ingest_paths
-      paths = upload_sets.first.containers.map { |container| container.id.gsub("file://", "") }
-      BrowseEverythingDirectoryTree.new(paths).ingest_ids
     end
 
     def selected_folder_root_path
@@ -126,25 +124,6 @@ class BulkIngestController < ApplicationController
       collection_decorators.to_a.collect { |c| [c.title, c.id.to_s] }
     end
 
-    def collection_ids
-      params[:collections] || []
-    end
-
-    def source_metadata_id_from_path(path)
-      base_path = File.basename(path)
-      base_path if valid_remote_identifier?(base_path)
-    end
-
-    # Determines whether or not the string encodes a bib. ID or a PULFA ID
-    # See SourceMetadataIdentifierValidator#validate
-    # @param [String] value
-    # @return [Boolean]
-    def valid_remote_identifier?(value)
-      RemoteRecord.valid?(value) && RemoteRecord.retrieve(value).success?
-    rescue URI::InvalidURIError
-      false
-    end
-
     def query_service
       Valkyrie.config.metadata_adapter.query_service
     end
@@ -163,6 +142,10 @@ class BulkIngestController < ApplicationController
 
     def workflow_class
       @workflow_class ||= DynamicChangeSet.new(resource_class.new).workflow_class
+    end
+
+    def collection_ids
+      params[:collections] || []
     end
 
     def upload_sets
@@ -186,4 +169,40 @@ class BulkIngestController < ApplicationController
     def find_upload(upload_id)
       BrowseEverything::Upload.find_by(uuid: upload_id).first
     end
+end
+
+class BrowseEverythingLocalIngester
+  attr_reader :upload_sets, :resource_class_name, :attributes
+  def initialize(upload_sets:, resource_class_name:, attributes:)
+    @upload_sets = upload_sets
+    @resource_class_name = resource_class_name
+    @attributes = attributes
+  end
+
+  def ingest
+    ingest_paths.each do |path|
+      IngestFolderJob.perform_later(directory: path.to_s, file_filter: nil, class_name: resource_class_name, source_metadata_identifier: source_metadata_id_from_path(path), **attributes)
+    end
+  end
+
+  # Get all paths which aren't a parent of another path.
+  def ingest_paths
+    paths = upload_sets.first.containers.map { |container| container.id.gsub("file://", "") }
+    BrowseEverythingDirectoryTree.new(paths).ingest_ids
+  end
+
+  def source_metadata_id_from_path(path)
+    base_path = File.basename(path)
+    base_path if valid_remote_identifier?(base_path)
+  end
+
+  # Determines whether or not the string encodes a bib. ID or a PULFA ID
+  # See SourceMetadataIdentifierValidator#validate
+  # @param [String] value
+  # @return [Boolean]
+  def valid_remote_identifier?(value)
+    RemoteRecord.valid?(value) && RemoteRecord.retrieve(value).success?
+  rescue URI::InvalidURIError
+    false
+  end
 end
