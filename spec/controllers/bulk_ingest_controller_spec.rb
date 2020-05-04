@@ -453,8 +453,57 @@ RSpec.describe BulkIngestController do
       containers << container
     end
   end
-
-  describe "full unstubbed ingest of a MVW" do
-  end
   # rubocop:enable Metrics/MethodLength
+
+  # Because we're overriding the browse everything upload job, we want to do an
+  # integration test here
+  describe "full unstubbed ingest of a MVW" do
+    with_queue_adapter :inline
+
+    def create_session
+      BrowseEverything::Session.build(
+        provider_id: "file_system"
+      ).tap(&:save)
+    end
+
+    def create_upload_for_container_ids(container_ids)
+      container_ids.each do |container|
+        FileUtils.mkdir_p(container) unless File.exist?(container)
+      end
+      BrowseEverything::Upload.build(
+        container_ids: container_ids,
+        session_id: create_session.id
+      ).tap(&:save)
+    end
+
+    it "ingests a MVW" do
+      collection = FactoryBot.create_for_repository(:collection)
+      fixture_root = Rails.root.join("spec", "fixtures")
+      upload = create_upload_for_container_ids(
+        [
+          fixture_root.join("bulk_ingest")
+        ]
+      )
+      attributes =
+        {
+          workflow: { state: "pending" },
+          collections: [collection.id.to_s],
+          visibility: "open",
+          resource_type: "scanned_resource",
+          browse_everything: { "uploads" => [upload.uuid] }
+        }
+      stub_bibdata(bib_id: "123456")
+
+      post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+
+      resources = adapter.query_service.find_all_of_model(model: ScannedResource)
+      expect(resources.length).to eq 3
+      resource = resources.select { |res| res.member_ids.length == 2 }.first
+      expect(resource.source_metadata_identifier).to eq ["123456"]
+      expect(resource.member_ids.length).to eq(2)
+      expect(resource.decorate.volumes.first.file_sets.length).to eq(1)
+      expect(resource.decorate.volumes.last.file_sets.length).to eq(1)
+      expect(resource.decorate.collections.first.id).to eq collection.id
+    end
+  end
 end
