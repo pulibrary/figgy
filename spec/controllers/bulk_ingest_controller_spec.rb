@@ -338,6 +338,7 @@ RSpec.describe BulkIngestController do
     it "ingests two resources" do
       stub_bibdata(bib_id: "4609321")
       allow(PendingUpload).to receive(:new).and_call_original
+      allow(BrowseEverything::UploadJob).to receive(:perform_now)
       post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
       expect(PendingUpload).to have_received(:new).with(
         hash_including(
@@ -351,6 +352,7 @@ RSpec.describe BulkIngestController do
           upload_file_id: "https://www.example.com/root/resource2/1.tif"
         )
       )
+      expect(BrowseEverything::UploadJob).to have_received(:perform_now)
 
       resources = adapter.query_service.find_all_of_model(model: ScannedResource)
       expect(resources.length).to eq 2
@@ -396,6 +398,7 @@ RSpec.describe BulkIngestController do
     it "Creates a multi-volume work" do
       stub_pulfa(pulfa_id: "AC044_c0003")
       allow(PendingUpload).to receive(:new).and_call_original
+      allow(BrowseEverything::UploadJob).to receive(:perform_now)
       post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
       expect(PendingUpload).to have_received(:new).with(
         hash_including(
@@ -417,40 +420,6 @@ RSpec.describe BulkIngestController do
       expect(resource.decorate.volumes.first.file_sets.length).to eq(1)
       expect(resource.decorate.volumes.last.file_sets.length).to eq(1)
       expect(resources.length).to eq 3
-    end
-  end
-
-  def create_cloud_upload_for_container_ids(container_hash, upload_id)
-    containers = []
-    files = []
-    file_content = File.open(Rails.root.join("spec", "fixtures", "files", "example.tif")).read
-    bytestream = instance_double(ActiveStorage::Blob, download: file_content)
-    provider = BrowseEverything::Provider::GoogleDrive.new
-    create_cloud_upload_for_child_node(container_hash, nil, containers, files, bytestream)
-    upload = instance_double(BrowseEverything::Upload, id: upload_id || SecureRandom.uuid, files: files, containers: containers, provider: provider)
-    allow(BrowseEverything::Upload).to receive(:find_by).and_return([upload])
-    upload
-  end
-
-  # rubocop:disable Metrics/MethodLength
-  def create_cloud_upload_for_child_node(container_hash, parent_container_id, containers, files, bytestream)
-    container_hash.each do |parent_container, children_and_files|
-      container = instance_double(BrowseEverything::Container, id: parent_container, name: parent_container.split("/").last, parent_id: parent_container_id)
-      create_cloud_upload_for_child_node(children_and_files[:children], parent_container, containers, files, bytestream) if children_and_files[:children].present?
-      files.concat(children_and_files[:files].map do |file|
-        file = instance_double(
-          BrowseEverything::UploadFile,
-          id: file,
-          name: file.split("/").last,
-          container_id: parent_container,
-          bytestream: bytestream,
-          download: bytestream.download,
-          purge_bytestream: nil
-        )
-        allow(BrowseEverything::UploadFile).to receive(:find).with([file.id]).and_return([file])
-        file
-      end)
-      containers << container
     end
   end
   # rubocop:enable Metrics/MethodLength
@@ -504,6 +473,40 @@ RSpec.describe BulkIngestController do
       expect(resource.decorate.volumes.first.file_sets.length).to eq(1)
       expect(resource.decorate.volumes.last.file_sets.length).to eq(1)
       expect(resource.decorate.collections.first.id).to eq collection.id
+    end
+  end
+
+  def create_cloud_upload_for_container_ids(container_hash, upload_id)
+    containers = []
+    files = []
+    file_content = File.open(Rails.root.join("spec", "fixtures", "files", "example.tif")).read
+    bytestream = instance_double(ActiveStorage::Blob, download: file_content)
+    provider = BrowseEverything::Provider::GoogleDrive.new
+    create_cloud_upload_for_child_node(container_hash, nil, containers, files, bytestream)
+    upload = instance_double(BrowseEverything::Upload, id: upload_id || SecureRandom.uuid, files: files, containers: containers, provider: provider)
+    allow(BrowseEverything::Upload).to receive(:find_by).and_return([upload])
+    upload
+  end
+
+  # rubocop:disable Metrics/MethodLength
+  def create_cloud_upload_for_child_node(container_hash, parent_container_id, containers, files, bytestream)
+    container_hash.each do |parent_container, children_and_files|
+      container = instance_double(BrowseEverything::Container, id: parent_container, name: parent_container.split("/").last, parent_id: parent_container_id)
+      create_cloud_upload_for_child_node(children_and_files[:children], parent_container, containers, files, bytestream) if children_and_files[:children].present?
+      files.concat(children_and_files[:files].map do |file|
+        file = instance_double(
+          BrowseEverything::UploadFile,
+          id: file,
+          name: file.split("/").last,
+          container_id: parent_container,
+          bytestream: bytestream,
+          download: bytestream.download,
+          purge_bytestream: nil
+        )
+        allow(BrowseEverything::UploadFile).to receive(:find).with([file.id]).and_return([file])
+        file
+      end)
+      containers << container
     end
   end
 end
