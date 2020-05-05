@@ -140,6 +140,9 @@ describe OrangelightDocument do
         expect(output[:issue_workshop_s]).to eq ["Bristol"]
         expect(output[:issue_series_s]).to eq ["Hibernia"]
         expect(output[:issue_place_s]).to eq ["city, state, region"]
+        expect(output[:issue_city_s]).to eq ["city"]
+        expect(output[:issue_state_s]).to eq ["state"]
+        expect(output[:issue_region_s]).to eq ["region"]
         expect(output[:issue_place_sort]).to eq "city, state, region"
         expect(output[:issue_obverse_figure_s]).to eq ["bust"]
         expect(output[:issue_obverse_symbol_s]).to eq ["cornucopia"]

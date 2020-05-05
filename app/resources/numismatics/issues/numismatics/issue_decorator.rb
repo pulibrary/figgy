@@ -77,6 +77,14 @@ module Numismatics
       numismatic_citation.map { |c| c.decorate.title }
     end
 
+    def city
+      decorated_numismatic_place&.city
+    end
+
+    def geo_state
+      decorated_numismatic_place&.geo_state
+    end
+
     # Whether this box has a workflow state that grants access to its contents
     # @return [TrueClass, FalseClass]
     def grant_access_state?
@@ -105,6 +113,10 @@ module Numismatics
 
     def obverse_attributes
       obverse_attribute.map { |a| a.decorate.title }
+    end
+
+    def region
+      decorated_numismatic_place&.region
     end
 
     def rendered_place
