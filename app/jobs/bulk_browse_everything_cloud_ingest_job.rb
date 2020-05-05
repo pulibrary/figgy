@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class BulkBrowseEverythingCloudIngestJob < ApplicationJob
-  queue_as :low
   delegate :query_service, to: :metadata_adapter
 
   def perform(upload_set_ids:, resource_class:)
