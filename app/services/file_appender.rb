@@ -203,18 +203,5 @@ class FileAppender
       return unless resource.respond_to?(:pending_uploads)
       resource.pending_uploads = [] if resource.pending_uploads.blank?
       resource.pending_uploads = (resource.pending_uploads || []) - files
-
-      # This is needed for newly-created PendingUploads for uploads to the same UploadFile
-      appended_uploads = files.select { |f| f.respond_to?(:upload_file_id) }
-      return if appended_uploads.empty?
-
-      updated_pending_uploads = []
-      resource.pending_uploads.each do |pending|
-        attached = pending.upload_file_id
-        appended = appended_uploads.map(&:upload_file_id).flatten
-        updated_pending_uploads << pending if (attached & appended).empty?
-      end
-
-      resource.pending_uploads = updated_pending_uploads
     end
 end

@@ -387,21 +387,24 @@ RSpec.describe ScannedResourcesController, type: :controller do
     # This block tests functionality defined in `app/controllers/concerns/browse_everythingable.rb`
     #   Acts as a 'master spec' in this regard
     describe "POST /concern/scanned_resources/:id/browse_everything_files" do
-      it "uploads files" do
-        resource = FactoryBot.create_for_repository(:scanned_resource)
-        file_path = Rails.root.join("spec", "fixtures", "files", "example.tif")
+      def params_for_paths(paths, resource)
         session = BrowseEverything::Session.build(
           provider_id: "fast_file_system"
         ).tap(&:save)
         upload = BrowseEverything::Upload.build(
-          bytestream_ids: [file_path],
+          bytestream_ids: paths,
           session_id: session.id
         ).tap(&:save)
-        params = {
+        {
           "id": resource.id,
           "browse_everything" => { "uploads" => [upload.id] }
         }
-        post :browse_everything_files, params: params
+      end
+
+      it "uploads files" do
+        resource = FactoryBot.create_for_repository(:scanned_resource)
+        file_path = Rails.root.join("spec", "fixtures", "files", "example.tif")
+        post :browse_everything_files, params: params_for_paths([file_path], resource)
 
         reloaded = adapter.query_service.find_by(id: resource.id)
 
@@ -417,18 +420,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
           file_path = Rails.root.join("spec", "fixtures", "files", "example.tif")
           hidden_file_path = Rails.root.join("spec", "fixtures", "hidden_files", "32101075851400", ".hidden_file.txt")
           resource = FactoryBot.create_for_repository(:scanned_resource)
-          session = BrowseEverything::Session.build(
-            provider_id: "fast_file_system"
-          ).tap(&:save)
-          upload = BrowseEverything::Upload.build(
-            bytestream_ids: [file_path, hidden_file_path],
-            session_id: session.id
-          ).tap(&:save)
-          params = {
-            "id": resource.id,
-            "browse_everything" => { "uploads" => [upload.id] }
-          }
-          post :browse_everything_files, params: params
+          post :browse_everything_files, params: params_for_paths([file_path, hidden_file_path], resource)
 
           reloaded = adapter.query_service.find_by(id: resource.id)
 
@@ -436,44 +428,11 @@ RSpec.describe ScannedResourcesController, type: :controller do
           expect(reloaded.decorate.file_sets.first.title).to eq [File.basename(file_path)]
         end
       end
-    end
 
-    # This block tests functionality defined in `app/controllers/concerns/browse_everythingable.rb`
-    #   Acts as a 'master spec' in this regard
-    describe "POST /concern/scanned_resources/:id/browse_everything_files" do
-      let(:file) { File.open(Rails.root.join("spec", "fixtures", "files", "example.tif")) }
-      let(:bytestream) { instance_double(ActiveStorage::Blob) }
-      let(:upload_file) { double }
-      let(:upload_file_id) { "test-upload-file-id" }
-      let(:upload) { instance_double(BrowseEverything::Upload) }
-      let(:uploads) { [upload.id] }
-      let(:upload_id) { "test-upload-id" }
-      let(:params) do
-        {
-          "id": resource.id,
-          "browse_everything" => { "uploads" => uploads }
-        }
-      end
-      let(:resource) { FactoryBot.create_for_repository(:scanned_resource) }
-
-      before do
-        allow(BrowseEverything::UploadJob).to receive(:perform_now)
-        allow(upload_file).to receive(:purge_bytestream)
-        allow(upload_file).to receive(:download).and_return(file.read)
-        allow(upload_file).to receive(:bytestream).and_return(bytestream)
-        allow(upload_file).to receive(:name).and_return("example.tif")
-        allow(upload_file).to receive(:id).and_return(upload_file_id)
-        allow(BrowseEverything::UploadFile).to receive(:find).and_return([upload_file])
-        allow(upload).to receive(:files).and_return([upload_file])
-        allow(upload).to receive(:id).and_return(upload_id)
-        allow(BrowseEverything::Upload).to receive(:find_by).and_return([upload])
-      end
-
-      context "when given an empty array of selected files" do
-        let(:uploads) { [] }
-
+      context "when the user doesn't pick any files" do
         it "doesn't upload anything" do
-          post :browse_everything_files, params: params
+          resource = FactoryBot.create_for_repository(:scanned_resource)
+          post :browse_everything_files, params: params_for_paths([], resource)
           reloaded = adapter.query_service.find_by(id: resource.id)
 
           expect(response).to be_redirect
@@ -482,19 +441,19 @@ RSpec.describe ScannedResourcesController, type: :controller do
       end
 
       context "when a server-side error is encountered while downloading a file" do
-        before do
-          allow(upload_file).to receive(:download).and_raise(StandardError)
-        end
-
         it "does not persist any files" do
-          post :browse_everything_files, params: params
+          file_path = Rails.root.join("spec", "fixtures", "files", "example.tif")
+          resource = FactoryBot.create_for_repository(:scanned_resource)
+          # rubocop:disable RSpec/AnyInstance
+          allow_any_instance_of(BrowseEverything::UploadFile).to receive(:download).and_raise
+          # rubocop:enable RSpec/AnyInstance
+          post :browse_everything_files, params: params_for_paths([file_path], resource)
           reloaded = adapter.query_service.find_by(id: resource.id)
 
           expect(response).to be_redirect
           expect(reloaded.member_ids).to be_empty
         end
       end
-
     end
   end
 
