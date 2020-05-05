@@ -305,25 +305,23 @@ RSpec.describe BulkIngestController do
   end
 
   context "Individual resources with files hosted on a cloud-storage provider" do
+    with_queue_adapter :inline
     let(:upload) do
       create_cloud_upload_for_container_ids(
-        {
-          "https://www.example.com/root" => {
-            files: [],
-            children:
-            {
-              "https://www.example.com/root/4609321" => {
-                files: ["https://www.example.com/root/4609321/1.tif"],
-                children: {}
-              },
-              "https://www.example.com/root/resource2" => {
-                files: ["https://www.example.com/root/resource2/1.tif"],
-                children: {}
-              }
+        "https://www.example.com/root" => {
+          files: [],
+          children:
+          {
+            "https://www.example.com/root/4609321" => {
+              files: ["https://www.example.com/root/4609321/1.tif"],
+              children: {}
+            },
+            "https://www.example.com/root/resource2" => {
+              files: ["https://www.example.com/root/resource2/1.tif"],
+              children: {}
             }
           }
-        },
-        "test-upload-id"
+        }
       )
     end
 
@@ -337,22 +335,7 @@ RSpec.describe BulkIngestController do
 
     it "ingests two resources" do
       stub_bibdata(bib_id: "4609321")
-      allow(PendingUpload).to receive(:new).and_call_original
-      allow(BrowseEverything::UploadJob).to receive(:perform_now)
       post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-      expect(PendingUpload).to have_received(:new).with(
-        hash_including(
-          upload_id: "test-upload-id",
-          upload_file_id: "https://www.example.com/root/4609321/1.tif"
-        )
-      )
-      expect(PendingUpload).to have_received(:new).with(
-        hash_including(
-          upload_id: "test-upload-id",
-          upload_file_id: "https://www.example.com/root/resource2/1.tif"
-        )
-      )
-      expect(BrowseEverything::UploadJob).to have_received(:perform_now)
 
       resources = adapter.query_service.find_all_of_model(model: ScannedResource)
       expect(resources.length).to eq 2
@@ -360,30 +343,28 @@ RSpec.describe BulkIngestController do
     end
   end
   context "bulk ingesting multi-volume works from the cloud" do
+    with_queue_adapter :inline
     let(:upload) do
       create_cloud_upload_for_container_ids(
-        {
-          "https://www.example.com/root" => {
-            files: [],
-            children:
-            {
-              "https://www.example.com/root/AC044_c0003" => {
-                files: [],
-                children: {
-                  "https://www.example.com/root/AC044_c0003/resource1" => {
-                    files: ["https://www.example.com/root/AC044_c0003/resource1/1.tif"],
-                    children: {}
-                  },
-                  "https://www.example.com/root/AC044_c0003/resource2" => {
-                    files: ["https://www.example.com/root/AC044_c0003/resource2/1.tif"],
-                    children: {}
-                  }
+        "https://www.example.com/root" => {
+          files: [],
+          children:
+          {
+            "https://www.example.com/root/AC044_c0003" => {
+              files: [],
+              children: {
+                "https://www.example.com/root/AC044_c0003/resource1" => {
+                  files: ["https://www.example.com/root/AC044_c0003/resource1/1.tif"],
+                  children: {}
+                },
+                "https://www.example.com/root/AC044_c0003/resource2" => {
+                  files: ["https://www.example.com/root/AC044_c0003/resource2/1.tif"],
+                  children: {}
                 }
               }
             }
           }
-        },
-        "test-upload-id"
+        }
       )
     end
 
@@ -397,21 +378,7 @@ RSpec.describe BulkIngestController do
 
     it "Creates a multi-volume work" do
       stub_pulfa(pulfa_id: "AC044_c0003")
-      allow(PendingUpload).to receive(:new).and_call_original
-      allow(BrowseEverything::UploadJob).to receive(:perform_now)
       post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-      expect(PendingUpload).to have_received(:new).with(
-        hash_including(
-          upload_id: "test-upload-id",
-          upload_file_id: "https://www.example.com/root/AC044_c0003/resource1/1.tif"
-        )
-      )
-      expect(PendingUpload).to have_received(:new).with(
-        hash_including(
-          upload_id: "test-upload-id",
-          upload_file_id: "https://www.example.com/root/AC044_c0003/resource2/1.tif"
-        )
-      )
 
       resources = adapter.query_service.find_all_of_model(model: ScannedResource)
       resource = resources.select { |res| res.member_ids.length == 2 }.first
@@ -476,37 +443,17 @@ RSpec.describe BulkIngestController do
     end
   end
 
-  def create_cloud_upload_for_container_ids(container_hash, upload_id)
-    containers = []
-    files = []
+  def create_cloud_upload_for_container_ids(container_hash)
     file_content = File.open(Rails.root.join("spec", "fixtures", "files", "example.tif")).read
-    bytestream = instance_double(ActiveStorage::Blob, download: file_content)
-    provider = BrowseEverything::Provider::GoogleDrive.new
-    create_cloud_upload_for_child_node(container_hash, nil, containers, files, bytestream)
-    upload = instance_double(BrowseEverything::Upload, id: upload_id || SecureRandom.uuid, files: files, containers: containers, provider: provider)
-    allow(BrowseEverything::Upload).to receive(:find_by).and_return([upload])
+    provider = HashProvider.new(container_hash, file: file_content)
+    allow(BrowseEverything::Provider::GoogleDrive).to receive(:new).and_return(provider)
+    be_session = BrowseEverything::Session.build(
+      provider_id: "google_drive"
+    ).tap(&:save)
+    upload = BrowseEverything::Upload.build(
+      session_id: be_session.id,
+      container_ids: container_hash.keys
+    ).tap(&:save)
     upload
-  end
-
-  # rubocop:disable Metrics/MethodLength
-  def create_cloud_upload_for_child_node(container_hash, parent_container_id, containers, files, bytestream)
-    container_hash.each do |parent_container, children_and_files|
-      container = instance_double(BrowseEverything::Container, id: parent_container, name: parent_container.split("/").last, parent_id: parent_container_id)
-      create_cloud_upload_for_child_node(children_and_files[:children], parent_container, containers, files, bytestream) if children_and_files[:children].present?
-      files.concat(children_and_files[:files].map do |file|
-        file = instance_double(
-          BrowseEverything::UploadFile,
-          id: file,
-          name: file.split("/").last,
-          container_id: parent_container,
-          bytestream: bytestream,
-          download: bytestream.download,
-          purge_bytestream: nil
-        )
-        allow(BrowseEverything::UploadFile).to receive(:find).with([file.id]).and_return([file])
-        file
-      end)
-      containers << container
-    end
   end
 end
