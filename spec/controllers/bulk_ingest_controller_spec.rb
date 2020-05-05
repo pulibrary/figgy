@@ -334,12 +334,15 @@ RSpec.describe BulkIngestController do
     end
 
     it "ingests two resources" do
+      FileUtils.rm_rf(Rails.root.join("tmp", "storage"))
       stub_bibdata(bib_id: "4609321")
       post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
 
       resources = adapter.query_service.find_all_of_model(model: ScannedResource)
       expect(resources.length).to eq 2
       expect(adapter.query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: "4609321").length).to eq 1
+      files = Dir[Rails.root.join("tmp", "storage", "**", "*")].select { |x| File.file?(x) }
+      expect(files).to eq []
     end
   end
   context "bulk ingesting multi-volume works from the cloud" do
