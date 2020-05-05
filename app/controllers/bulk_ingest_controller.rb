@@ -109,12 +109,6 @@ class BulkIngestController < ApplicationController
       upload_sets.any? && upload_sets.first.containers.any?
     end
 
-    def selected_folder_root_path
-      paths = upload_sets.first.containers.map { |container| container.id.gsub("file://", "") }
-      sorted_paths = paths.sort_by(&:length)
-      sorted_paths.first
-    end
-
     def attributes
       {
         member_of_collection_ids: collection_ids,
