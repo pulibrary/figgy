@@ -37,6 +37,10 @@ module Numismatics
 
     delegate :id, :label, to: :accession, prefix: true
 
+    def accession_person
+      [decorated_numismatic_accession&.person]
+    end
+
     def call_number
       "Coin #{coin_number}"
     end
