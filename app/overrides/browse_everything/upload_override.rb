@@ -2,6 +2,10 @@
 
 module BrowseEverything
   class Upload
-    def perform_job; end
+    module Override
+      def perform_job; end
+    end
   end
 end
+
+BrowseEverything::Upload.prepend(BrowseEverything::Upload::Override)
