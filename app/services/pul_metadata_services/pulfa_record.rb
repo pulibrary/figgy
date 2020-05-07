@@ -143,7 +143,7 @@ module PulMetadataServices
 
         def component_creators
           creators = data.xpath("#{data_root}/did/origination/*")
-          creators.map(&:content).map(&:strip)
+          creators.map { |node| node.text.gsub(/\s+/, " ") }
         end
 
         def collection_date
@@ -168,7 +168,7 @@ module PulMetadataServices
           # @param result [Nokogiri::XML::Node]
           # @return [Array<String>]
           def text(result)
-            [result.text] if result
+            [result.text.gsub(/\s+/, " ")] if result
           end
 
           # Generate a description of the parent container for the item (using an encoded ID)

@@ -32,12 +32,12 @@ describe PulMetadataServices::PulfaRecord do
         expected = {
           title: ["Picnic west of Syracuse about 1885"],
           created: ["1885-01-01T00:00:00Z/1885-12-31T23:59:59Z"],
-          creator: ["Savage, C. R. (Charles Roscoe),\n                1832-1909"],
+          creator: ["Savage, C. R. (Charles Roscoe), 1832-1909"],
           publisher: ["Princeton University Library. Special Collections."],
           memberOf: [{ identifier: "WC064", title: "Princeton University Library Collection of Western Americana\n                Photographs" }],
-          date_created: ["circa\n            1885"],
+          date_created: ["circa 1885"],
           container: ["Box M32, Folder M1089"],
-          extent: ["1\n            item"],
+          extent: ["1 item"],
           heldBy: ["mss"],
           language: ["eng"]
         }
