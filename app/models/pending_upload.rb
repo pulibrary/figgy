@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require "tempfile"
+
 class PendingUpload < Valkyrie::Resource
   attribute :file_name
   attribute :local_id
@@ -11,44 +13,47 @@ class PendingUpload < Valkyrie::Resource
   # Store optional extra upload arguments which can be passed to StorageAdapter#upload.
   # Currently used for passing height/width to S3.
   attribute :upload_arguments, Valkyrie::Types::Hash
+  attribute :upload_id
+  attribute :upload_file_id
 
+  # This is still needed
   def original_filename
-    file_name.first
-  end
-
-  def content_type
-    "text/plain"
+    upload_file.name
   end
 
   def path
-    copied_file_name
+    downloaded_file
   end
 
-  def container?
-    type.present? && type.first == browse_everything_provider.class.container_mime_type
+  # This is normally overridden during characterization
+  def content_type
+    "application/octet-stream"
   end
+
+  def in_container?
+    upload_file.container_id.present?
+  end
+
+  delegate :container_id, to: :upload_file
 
   private
 
-    def headers
-      return {} if auth_header.blank?
-      JSON.parse auth_header.first
+    def upload_file
+      @upload_file ||= begin
+                         upload_files = BrowseEverything::UploadFile.find(upload_file_id)
+                         upload_files.first
+                       end
     end
+    delegate :bytestream, to: :upload_file
 
-    def copied_file_name
-      @copied_file_name ||= BrowseEverything::Retriever.new.download(
-        "file_name" => file_name.first,
-        "file_size" => file_size.first,
-        "url" => url.first,
-        "headers" => headers,
-        "type" => type,
-        "provider" => provider
-      )
-    end
-
-    def browse_everything_provider
-      return if provider.empty?
-
-      @browse_everything_provider ||= BrowserFactory.for(name: provider.first)
+    def downloaded_file
+      @downloaded_file ||= begin
+                             target = Dir::Tmpname.create(original_filename) {}
+                             File.open(target, "wb") do |output|
+                               output.write(upload_file.download)
+                             end
+                             upload_file.purge_bytestream
+                             target
+                           end
     end
 end

@@ -4,7 +4,6 @@ require "csv"
 class CollectionsController < ApplicationController
   include ResourceController
   include TokenAuth
-  include BrowseEverything::Parameters
   self.change_set_class = DynamicChangeSet
   self.resource_class = Collection
   self.change_set_persister = ::ChangeSetPersister.new(

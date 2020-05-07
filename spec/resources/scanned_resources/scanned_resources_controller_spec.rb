@@ -104,7 +104,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
     context "when asked to save and import" do
       before do
         allow(BrowseEverything).to receive(:config).and_return(
-          file_system: {
+          fast_file_system: {
             home: Rails.root.join("spec", "fixtures", "staged_files").to_s
           }
         )
@@ -387,26 +387,52 @@ RSpec.describe ScannedResourcesController, type: :controller do
     # This block tests functionality defined in `app/controllers/concerns/browse_everythingable.rb`
     #   Acts as a 'master spec' in this regard
     describe "POST /concern/scanned_resources/:id/browse_everything_files" do
-      let(:file) { File.open(Rails.root.join("spec", "fixtures", "files", "example.tif")) }
-      let(:selected_files) do
+      def params_for_paths(paths, resource)
+        session = BrowseEverything::Session.build(
+          provider_id: "fast_file_system"
+        ).tap(&:save)
+        upload = BrowseEverything::Upload.build(
+          bytestream_ids: paths,
+          session_id: session.id
+        ).tap(&:save)
         {
-          "0" => {
-            "url" => "file://#{file.path}",
-            "file_name" => File.basename(file.path),
-            "file_size" => file.size
-          }
+          "id": resource.id,
+          "browse_everything" => { "uploads" => [upload.id] }
         }
       end
-      let(:params) do
-        {
-          "selected_files" => selected_files
-        }
+
+      it "uploads files" do
+        resource = FactoryBot.create_for_repository(:scanned_resource)
+        file_path = Rails.root.join("spec", "fixtures", "files", "example.tif")
+        post :browse_everything_files, params: params_for_paths([file_path], resource)
+
+        reloaded = adapter.query_service.find_by(id: resource.id)
+
+        expect(reloaded.member_ids.length).to eq 1
+        expect(reloaded.pending_uploads).to be_empty
+
+        file_sets = Valkyrie.config.metadata_adapter.query_service.find_members(resource: reloaded)
+        expect(file_sets.first.file_metadata.length).to eq 3
       end
-      context "when given an empty array of selected files" do
+
+      context "the user selects hidden files" do
+        it "filters the uploads" do
+          file_path = Rails.root.join("spec", "fixtures", "files", "example.tif")
+          hidden_file_path = Rails.root.join("spec", "fixtures", "hidden_files", "32101075851400", ".hidden_file.txt")
+          resource = FactoryBot.create_for_repository(:scanned_resource)
+          post :browse_everything_files, params: params_for_paths([file_path, hidden_file_path], resource)
+
+          reloaded = adapter.query_service.find_by(id: resource.id)
+
+          expect(reloaded.member_ids.length).to eq 1
+          expect(reloaded.decorate.file_sets.first.title).to eq [File.basename(file_path)]
+        end
+      end
+
+      context "when the user doesn't pick any files" do
         it "doesn't upload anything" do
           resource = FactoryBot.create_for_repository(:scanned_resource)
-
-          post :browse_everything_files, params: { id: resource.id, selected_files: {} }
+          post :browse_everything_files, params: params_for_paths([], resource)
           reloaded = adapter.query_service.find_by(id: resource.id)
 
           expect(response).to be_redirect
@@ -415,130 +441,17 @@ RSpec.describe ScannedResourcesController, type: :controller do
       end
 
       context "when a server-side error is encountered while downloading a file" do
-        let(:expiry_time) { (Time.current + 3600).xmlschema }
-        let(:selected_files) do
-          {
-            "0" => {
-              "url" => "https://retrieve.cloud.example.com/some/dir/file.pdf",
-              "auth_header" => { "Authorization" => "Bearer ya29.kQCEAHj1bwFXr2AuGQJmSGRWQXpacmmYZs4kzCiXns3d6H1ZpIDWmdM8" },
-              "expires" => expiry_time,
-              "file_name" => "file.pdf",
-              "file_size" => "1874822"
-            }
-          }
-        end
-        let(:params) do
-          {
-            "selected_files" => selected_files
-          }
-        end
-        let(:http_request) { instance_double(Typhoeus::Request) }
-        let(:cloud_response) { Typhoeus::Response.new }
-
-        before do
-          allow(cloud_response).to receive(:code).and_return(403)
-          allow(http_request).to receive(:on_headers).and_yield(cloud_response)
-          allow(Typhoeus::Request).to receive(:new).and_return(http_request)
-        end
-
         it "does not persist any files" do
+          file_path = Rails.root.join("spec", "fixtures", "files", "example.tif")
           resource = FactoryBot.create_for_repository(:scanned_resource)
-
-          post :browse_everything_files, params: { id: resource.id, selected_files: params["selected_files"] }
+          # rubocop:disable RSpec/AnyInstance
+          allow_any_instance_of(BrowseEverything::UploadFile).to receive(:download).and_raise
+          # rubocop:enable RSpec/AnyInstance
+          post :browse_everything_files, params: params_for_paths([file_path], resource)
           reloaded = adapter.query_service.find_by(id: resource.id)
 
           expect(response).to be_redirect
           expect(reloaded.member_ids).to be_empty
-        end
-      end
-      it "uploads files" do
-        resource = FactoryBot.create_for_repository(:scanned_resource)
-        # Ensure that indexing is always safe and done at the end.
-        allow(Valkyrie::MetadataAdapter.find(:index_solr)).to receive(:persister).and_return(Valkyrie::MetadataAdapter.find(:index_solr).persister)
-        allow(Valkyrie::MetadataAdapter.find(:index_solr).persister).to receive(:save).and_call_original
-        allow(Valkyrie::MetadataAdapter.find(:index_solr).persister).to receive(:save_all).and_call_original
-
-        post :browse_everything_files, params: { id: resource.id, selected_files: params["selected_files"] }
-        reloaded = adapter.query_service.find_by(id: resource.id)
-
-        expect(reloaded.member_ids.length).to eq 1
-        expect(reloaded.pending_uploads).to be_empty
-        expect(Valkyrie::MetadataAdapter.find(:index_solr).persister).not_to have_received(:save)
-        expect(Valkyrie::MetadataAdapter.find(:index_solr).persister).to have_received(:save_all).at_least(1).times
-
-        file_sets = Valkyrie.config.metadata_adapter.query_service.find_members(resource: reloaded)
-        expect(file_sets.first.file_metadata.length).to eq 3
-      end
-
-      context "when sent duplicate files" do
-        let(:selected_files) do
-          {
-            "0" => {
-              "url" => "file://#{file.path}",
-              "file_name" => File.basename(file.path),
-              "file_size" => file.size
-            },
-            "1" => {
-              "url" => "file://#{file.path}",
-              "file_name" => File.basename(file.path),
-              "file_size" => file.size
-            }
-          }
-        end
-
-        it "deduplicates them" do
-          resource = FactoryBot.create_for_repository(:scanned_resource)
-          post :browse_everything_files, params: { id: resource.id, selected_files: params["selected_files"] }
-          reloaded = adapter.query_service.find_by(id: resource.id)
-          expect(reloaded.member_ids.length).to eq 1
-          expect(reloaded.pending_uploads).to be_empty
-        end
-      end
-
-      it "tracks pending uploads" do
-        resource = FactoryBot.create_for_repository(:scanned_resource)
-        allow(BrowseEverythingIngestJob).to receive(:perform_later).and_return(true)
-
-        post :browse_everything_files, params: { id: resource.id, selected_files: params["selected_files"] }
-        reloaded = adapter.query_service.find_by(id: resource.id)
-
-        pending_upload = reloaded.pending_uploads[0]
-        expect(pending_upload.file_name).to eq [File.basename(file.path)]
-        expect(pending_upload.url).to eq ["file://#{file.path}"]
-        expect(pending_upload.file_size).to eq [file.size]
-        expect(pending_upload.created_at).not_to be_blank
-      end
-
-      context "when the pending uploads have file URIs for hidden files" do
-        let(:selected_files) do
-          {
-            "0" => {
-              "url" => "file://#{file.path}",
-              "file_name" => File.basename(file.path),
-              "file_size" => file.size
-            },
-            "1" => {
-              "url" => "file:///tmp/.hidden_file.txt",
-              "file_name" => File.basename("hidden_file.txt"),
-              "file_size" => 0
-            }
-          }
-        end
-
-        it "filters the uploads" do
-          resource = FactoryBot.create_for_repository(:scanned_resource)
-          allow(BrowseEverythingIngestJob).to receive(:perform_later).and_return(true)
-
-          post :browse_everything_files, params: { id: resource.id, selected_files: params["selected_files"] }
-          reloaded = adapter.query_service.find_by(id: resource.id)
-
-          pending_uploads = reloaded.pending_uploads
-          expect(pending_uploads.length).to eq 1
-          pending_upload = pending_uploads.first
-          expect(pending_upload.file_name).to eq [File.basename(file.path)]
-          expect(pending_upload.url).to eq ["file://#{file.path}"]
-          expect(pending_upload.file_size).to eq [file.size]
-          expect(pending_upload.created_at).not_to be_blank
         end
       end
     end
@@ -548,7 +461,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
     let(:user) { FactoryBot.create(:admin) }
     before do
       allow(BrowseEverything).to receive(:config).and_return(
-        file_system: {
+        fast_file_system: {
           home: Rails.root.join("spec", "fixtures", "staged_files").to_s
         }
       )

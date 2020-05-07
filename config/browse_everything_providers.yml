@@ -3,7 +3,7 @@
 # The file_system provider can be a path to any directory on the server where your application is running.
 #
 ---
-file_system:
+fast_file_system:
   home: <%= ENV["INGEST_FOLDER_PATH"] || Rails.root.join("staged_files") %>
 google_drive:
   client_id: <%= ENV["GOOGLE_CLIENT_ID"] || 'client_id' %>

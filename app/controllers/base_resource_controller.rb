@@ -4,7 +4,6 @@
 class BaseResourceController < ApplicationController
   include ResourceController
   include TokenAuth
-  include BrowseEverything::Parameters
   before_action :load_collections, only: [:new, :edit, :update, :create]
 
   def load_collections
@@ -22,48 +21,11 @@ class BaseResourceController < ApplicationController
   # Resources that allow uploads will use these browse everything methods
   def browse_everything_files
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
-      change_set.validate(pending_uploads: change_set.pending_uploads + new_pending_uploads)
+      change_set.validate(pending_uploads: change_set.pending_uploads + new_pending_uploads, files: new_pending_uploads)
       buffered_changeset_persister.save(change_set: change_set)
     end
 
-    unless new_pending_uploads.empty?
-      BrowseEverythingIngestJob.perform_later(resource.id.to_s, self.class.to_s, new_pending_upload_ids)
-    end
-
     redirect_to ContextualPath.new(child: resource, parent_id: nil).file_manager
-  end
-
-  # Construct the pending download objects
-  # @return [Array<PendingUpload>]
-  def new_pending_uploads
-    return @new_pending_uploads unless @new_pending_uploads.nil?
-
-    @new_pending_uploads = []
-    # This is provided within BrowseEverything::Parameters#selected_files
-    selected_files.each do |selected_file|
-      file_attributes = selected_file.to_h
-      auth_header = file_attributes.delete("auth_header")
-
-      new_pending_upload = PendingUpload.new(
-        file_attributes.merge(
-          id: SecureRandom.uuid,
-          created_at: Time.current.utc.iso8601,
-          auth_header: auth_header,
-          local_id: file_attributes["id"]
-        ).symbolize_keys
-      )
-
-      @new_pending_uploads << new_pending_upload
-    end
-
-    @new_pending_uploads
-  end
-
-  # Retrieve the new IDs from the pending uploads
-  # @return [Array<String>]
-  def new_pending_upload_ids
-    ids = new_pending_uploads.map(&:id)
-    ids.map(&:to_s)
   end
 
   # Attach a resource to a parent
@@ -121,5 +83,44 @@ class BaseResourceController < ApplicationController
 
     def parent_resource_params
       params[:parent_resource].to_unsafe_h
+    end
+
+    def browse_everything_params
+      return {} unless params.key?("browse_everything")
+      @browse_everything_params ||= params["browse_everything"]
+    end
+
+    def browse_everything_uploads
+      return [] unless browse_everything_params.key?("uploads")
+      @browse_everything_uploads ||= browse_everything_params["uploads"]
+    end
+
+    # Construct the pending download objects
+    # @return [Array<PendingUpload>]
+    def new_pending_uploads
+      @new_pending_uploads ||= begin
+        browse_everything_uploads.map do |upload_id|
+          upload_files(upload_id).map do |upload_file|
+            # create the pending upload
+            PendingUpload.new(
+              id: SecureRandom.uuid,
+              upload_file_id: upload_file.id
+            )
+          end
+        end.flatten
+      end
+    end
+
+    # Load upload files, filtering out hidden files
+    def upload_files(upload_id)
+      # Ensure files are downloaded via ActiveStorage. We disable this in
+      # BrowseEverything via overriding BrowseEverything::Upload#perform_job so
+      # that the slow processing happens in our controllers where we can either
+      # not do it (in BulkIngest), or optimize it if possible later.
+      BrowseEverything::UploadJob.perform_now(upload_id: upload_id)
+      # This needs to be changed to #find_one
+      BrowseEverything::Upload.find_by(uuid: upload_id).first.files.select do |upload_file|
+        !(upload_file.name =~ /^\./)
+      end
     end
 end

@@ -118,7 +118,7 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
     let(:coin) { FactoryBot.create_for_repository(:complete_open_coin, coin_number: coin_number) }
     let(:staged_files) { Rails.root.join("spec", "fixtures", "staged_files") }
     before do
-      allow(BrowseEverything).to receive(:config).and_return(file_system: { home: staged_files.to_s })
+      allow(BrowseEverything).to receive(:config).and_return(fast_file_system: { home: staged_files.to_s })
       allow(IngestFolderJob).to receive(:perform_later)
     end
 

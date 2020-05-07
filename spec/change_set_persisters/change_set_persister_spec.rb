@@ -422,36 +422,54 @@ RSpec.describe ChangeSetPersister do
       described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: true)
     end
 
-    context "when uploading files from the cloud" do
+    context "when uploading files from the cloud", run_real_characterization: false, run_real_derivatives: false do
       let(:file) do
         PendingUpload.new(
           id: SecureRandom.uuid,
-          created_at: Time.current.utc.iso8601,
-          auth_header: "{\"Authorization\":\"Bearer ya29.kQCEAHj1bwFXr2AuGQJmSGRWQXpacmmYZs4kzCiXns3d6H1ZpIDWmdM8\"}",
-          expires: "2018-06-06T22:12:11Z",
-          file_name: "file.pdf",
-          file_size: "1874822",
-          url: "https://retrieve.cloud.example.com/some/dir/file.pdf"
+          upload_id: "test-upload-id",
+          upload_file_id: "https://www.example.com/resource1/1.tif"
         )
       end
-      let(:http_request) { instance_double(Typhoeus::Request) }
-      let(:cloud_response) { Typhoeus::Response.new }
+      let(:binary_file) { fixture_file_upload("files/example.tif", "image/tiff") }
+      let(:bytestream) { instance_double(ActiveStorage::Blob) }
+      let(:upload_file) { double }
+      let(:upload_file_id) { "https://www.example.com/resource1/1.tif" }
+      let(:pending_upload) { PendingUpload.new(upload_file_id: upload_file_id) }
 
       before do
-        allow(cloud_response).to receive(:code).and_return(403)
-        allow(http_request).to receive(:on_headers).and_yield(cloud_response)
-        allow(Typhoeus::Request).to receive(:new).and_return(http_request)
+        allow(upload_file).to receive(:purge_bytestream)
+        allow(upload_file).to receive(:name).and_return("example.tif")
+        allow(upload_file).to receive(:id).and_return(upload_file_id)
+        allow(BrowseEverything::UploadFile).to receive(:find).and_return([upload_file])
       end
 
-      it "does not append files when the upload fails", run_real_derivatives: true do
-        resource = FactoryBot.build(:scanned_resource)
+      it "persists the files" do
+        allow(upload_file).to receive(:download).and_return(File.read(binary_file))
+        resource = FactoryBot.build(:scanned_resource, pending_uploads: [pending_upload])
         change_set = change_set_class.new(resource, characterize: false, ocr_language: ["eng"])
         change_set.files = [file]
 
         output = change_set_persister.save(change_set: change_set)
         members = query_service.find_members(resource: output)
 
-        expect(members.to_a.length).to eq 0
+        expect(members.to_a.length).to eq 1
+      end
+
+      context "when the download fails" do
+        before do
+          allow(upload_file).to receive(:download).and_raise(StandardError)
+        end
+
+        it "does not append files when the upload fails", run_real_derivatives: true do
+          resource = FactoryBot.build(:scanned_resource)
+          change_set = change_set_class.new(resource, characterize: false, ocr_language: ["eng"])
+          change_set.files = [file]
+
+          output = change_set_persister.save(change_set: change_set)
+          members = query_service.find_members(resource: output)
+
+          expect(members.to_a.length).to eq 0
+        end
       end
     end
 

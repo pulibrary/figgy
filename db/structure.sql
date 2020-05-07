@@ -10,20 +10,6 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
---
 -- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -63,7 +49,75 @@ CREATE FUNCTION public.get_ids_array(jsonb, text) RETURNS text[]
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_table_access_method = heap;
+
+--
+-- Name: active_storage_attachments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.active_storage_attachments (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    record_type character varying NOT NULL,
+    record_id bigint NOT NULL,
+    blob_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: active_storage_attachments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.active_storage_attachments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: active_storage_attachments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.active_storage_attachments_id_seq OWNED BY public.active_storage_attachments.id;
+
+
+--
+-- Name: active_storage_blobs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.active_storage_blobs (
+    id bigint NOT NULL,
+    key character varying NOT NULL,
+    filename character varying NOT NULL,
+    content_type character varying,
+    metadata text,
+    byte_size bigint NOT NULL,
+    checksum character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: active_storage_blobs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.active_storage_blobs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: active_storage_blobs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.active_storage_blobs_id_seq OWNED BY public.active_storage_blobs.id;
+
 
 --
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
@@ -145,6 +199,137 @@ CREATE SEQUENCE public.bookmarks_id_seq
 --
 
 ALTER SEQUENCE public.bookmarks_id_seq OWNED BY public.bookmarks.id;
+
+
+--
+-- Name: browse_everything_authorization_models; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.browse_everything_authorization_models (
+    id bigint NOT NULL,
+    uuid character varying,
+    "authorization" text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: browse_everything_authorization_models_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.browse_everything_authorization_models_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: browse_everything_authorization_models_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.browse_everything_authorization_models_id_seq OWNED BY public.browse_everything_authorization_models.id;
+
+
+--
+-- Name: browse_everything_session_models; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.browse_everything_session_models (
+    id bigint NOT NULL,
+    uuid character varying,
+    session text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: browse_everything_session_models_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.browse_everything_session_models_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: browse_everything_session_models_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.browse_everything_session_models_id_seq OWNED BY public.browse_everything_session_models.id;
+
+
+--
+-- Name: browse_everything_upload_files; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.browse_everything_upload_files (
+    id bigint NOT NULL,
+    container_id character varying,
+    name character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    file_path character varying,
+    file_name character varying,
+    file_content_type character varying
+);
+
+
+--
+-- Name: browse_everything_upload_files_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.browse_everything_upload_files_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: browse_everything_upload_files_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.browse_everything_upload_files_id_seq OWNED BY public.browse_everything_upload_files.id;
+
+
+--
+-- Name: browse_everything_upload_models; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.browse_everything_upload_models (
+    id bigint NOT NULL,
+    uuid character varying,
+    upload text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: browse_everything_upload_models_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.browse_everything_upload_models_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: browse_everything_upload_models_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.browse_everything_upload_models_id_seq OWNED BY public.browse_everything_upload_models.id;
 
 
 --
@@ -328,6 +513,20 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
+-- Name: active_storage_attachments id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_storage_attachments ALTER COLUMN id SET DEFAULT nextval('public.active_storage_attachments_id_seq'::regclass);
+
+
+--
+-- Name: active_storage_blobs id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN id SET DEFAULT nextval('public.active_storage_blobs_id_seq'::regclass);
+
+
+--
 -- Name: auth_tokens id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -339,6 +538,34 @@ ALTER TABLE ONLY public.auth_tokens ALTER COLUMN id SET DEFAULT nextval('public.
 --
 
 ALTER TABLE ONLY public.bookmarks ALTER COLUMN id SET DEFAULT nextval('public.bookmarks_id_seq'::regclass);
+
+
+--
+-- Name: browse_everything_authorization_models id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.browse_everything_authorization_models ALTER COLUMN id SET DEFAULT nextval('public.browse_everything_authorization_models_id_seq'::regclass);
+
+
+--
+-- Name: browse_everything_session_models id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.browse_everything_session_models ALTER COLUMN id SET DEFAULT nextval('public.browse_everything_session_models_id_seq'::regclass);
+
+
+--
+-- Name: browse_everything_upload_files id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.browse_everything_upload_files ALTER COLUMN id SET DEFAULT nextval('public.browse_everything_upload_files_id_seq'::regclass);
+
+
+--
+-- Name: browse_everything_upload_models id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.browse_everything_upload_models ALTER COLUMN id SET DEFAULT nextval('public.browse_everything_upload_models_id_seq'::regclass);
 
 
 --
@@ -370,6 +597,22 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
+-- Name: active_storage_attachments active_storage_attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_storage_attachments
+    ADD CONSTRAINT active_storage_attachments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: active_storage_blobs active_storage_blobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_storage_blobs
+    ADD CONSTRAINT active_storage_blobs_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -391,6 +634,38 @@ ALTER TABLE ONLY public.auth_tokens
 
 ALTER TABLE ONLY public.bookmarks
     ADD CONSTRAINT bookmarks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: browse_everything_authorization_models browse_everything_authorization_models_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.browse_everything_authorization_models
+    ADD CONSTRAINT browse_everything_authorization_models_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: browse_everything_session_models browse_everything_session_models_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.browse_everything_session_models
+    ADD CONSTRAINT browse_everything_session_models_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: browse_everything_upload_files browse_everything_upload_files_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.browse_everything_upload_files
+    ADD CONSTRAINT browse_everything_upload_files_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: browse_everything_upload_models browse_everything_upload_models_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.browse_everything_upload_models
+    ADD CONSTRAINT browse_everything_upload_models_pkey PRIMARY KEY (id);
 
 
 --
@@ -467,6 +742,27 @@ CREATE INDEX flat_member_ids_idx ON public.orm_resources USING gin (public.get_i
 --
 
 CREATE INDEX flat_proxied_file_id_idx ON public.orm_resources USING gin (public.get_ids_array(metadata, 'proxied_file_id'::text));
+
+
+--
+-- Name: index_active_storage_attachments_on_blob_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_active_storage_attachments_on_blob_id ON public.active_storage_attachments USING btree (blob_id);
+
+
+--
+-- Name: index_active_storage_attachments_uniqueness; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_active_storage_attachments_uniqueness ON public.active_storage_attachments USING btree (record_type, record_id, name, blob_id);
+
+
+--
+-- Name: index_active_storage_blobs_on_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_active_storage_blobs_on_key ON public.active_storage_blobs USING btree (key);
 
 
 --
@@ -603,6 +899,14 @@ CREATE INDEX resource_id_idx ON public.orm_resources USING btree ((((((metadata 
 
 
 --
+-- Name: active_storage_attachments fk_rails_c3b3935057; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_storage_attachments
+    ADD CONSTRAINT fk_rails_c3b3935057 FOREIGN KEY (blob_id) REFERENCES public.active_storage_blobs(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -631,6 +935,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181030210350'),
 ('20181115195544'),
 ('20190102173711'),
-('20200106182149');
+('20200106182149'),
+('20200225213132'),
+('20200225213133'),
+('20200225213134'),
+('20200225213135'),
+('20200422192849'),
+('20200423183539');
 
 

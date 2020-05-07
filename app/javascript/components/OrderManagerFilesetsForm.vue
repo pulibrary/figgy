@@ -94,9 +94,7 @@
 </template>
 
 <script>
-// import Lablr from "../utils/lablr"
-// const Lablr = require('../utils/lablr').default
-import Lablr from 'page-label-generator'
+import Lablr from '../utils/page-label-generator'
 import { mapState } from 'vuex'
 import { debounce } from 'lodash'
 /**

@@ -144,8 +144,8 @@ class FileAppender
       node = FileMetadata.for(file: file).new(attributes)
       original_filename = file.original_filename
       upload_options = file.try(:upload_options) || {}
-      file = storage_adapter.upload(file: file, resource: node, original_filename: original_filename, **upload_options)
-      node.file_identifiers = node.file_identifiers + [file.id]
+      stored_file = storage_adapter.upload(file: file, resource: node, original_filename: original_filename, **upload_options)
+      node.file_identifiers = node.file_identifiers + [stored_file.id]
       node
     rescue StandardError => error
       Valkyrie.logger.error "#{self.class}: Failed to append the new file #{original_filename} for #{node.id}: #{error}"

@@ -3,6 +3,7 @@ require "rails_helper"
 
 RSpec.describe BulkIngestController do
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+  with_queue_adapter :inline
 
   describe ".metadata_adapter" do
     it "returns an adapter" do
@@ -60,30 +61,177 @@ RSpec.describe BulkIngestController do
   end
 
   describe "POST #browse_everything_files" do
+    def create_session
+      BrowseEverything::SessionModel.create(
+        uuid: SecureRandom.uuid,
+        session: {
+          provider_id: "fast_file_system"
+        }.to_json
+      )
+    end
+
+    def create_upload_for_container_ids(container_ids)
+      container_ids.each do |container|
+        FileUtils.mkdir_p(container) unless File.exist?(container)
+      end
+      BrowseEverything::UploadModel.create(
+        uuid: SecureRandom.uuid,
+        upload: {
+          session_id: create_session.uuid,
+          container_ids: container_ids
+        }.to_json
+      )
+    end
+
+    before do
+      # Cleanup happens in the IngestFolderJob, stubbed out in these tests
+      FileUtils.rm_rf(Rails.root.join("tmp", "storage"))
+    end
+
+    context "Many Multi-volume works with a parent directory" do
+      it "ingests 2 multi-volume works" do
+        storage_root = Rails.root.join("tmp", "storage")
+        upload = create_upload_for_container_ids(
+          [
+            storage_root.join("multi_volume"),
+            storage_root.join("multi_volume", "123456"),
+            storage_root.join("multi_volume", "4609321"),
+            storage_root.join("multi_volume", "4609321", "vol1"),
+            storage_root.join("multi_volume", "123456", "vol1"),
+            storage_root.join("multi_volume", "4609321", "vol2"),
+            storage_root.join("multi_volume", "123456", "vol2")
+          ]
+        )
+        attributes =
+          {
+            workflow: { state: "pending" },
+            collections: ["4609321"],
+            visibility: "open",
+            browse_everything: { "uploads" => [upload.uuid] }
+          }
+        allow(IngestFolderJob).to receive(:perform_later)
+        stub_bibdata(bib_id: "123456")
+        stub_bibdata(bib_id: "4609321")
+
+        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+        expect(IngestFolderJob)
+          .to have_received(:perform_later)
+          .with(
+            hash_including(
+              directory: storage_root.join("multi_volume", "4609321").to_s,
+              state: "pending",
+              visibility: "open",
+              member_of_collection_ids: ["4609321"],
+              source_metadata_identifier: "4609321"
+            )
+          )
+        expect(IngestFolderJob)
+          .to have_received(:perform_later)
+          .with(
+            hash_including(
+              directory: storage_root.join("multi_volume", "123456").to_s,
+              state: "pending",
+              visibility: "open",
+              member_of_collection_ids: ["4609321"],
+              source_metadata_identifier: "123456"
+            )
+          )
+      end
+    end
+
+    context "Many Single Volumes with a top level directory" do
+      it "ingests 2 unaffiliated volumes" do
+        storage_root = Rails.root.join("tmp", "storage")
+        upload = create_upload_for_container_ids(
+          [
+            storage_root.join("lapidus"),
+            storage_root.join("lapidus", "AC044_c0003"),
+            storage_root.join("lapidus", "4609321")
+          ]
+        )
+        attributes =
+          {
+            workflow: { state: "pending" },
+            collections: ["4609321"],
+            visibility: "open",
+            browse_everything: { "uploads" => [upload.uuid] }
+          }
+        allow(IngestFolderJob).to receive(:perform_later)
+        stub_pulfa(pulfa_id: "AC044_c0003")
+        stub_bibdata(bib_id: "4609321")
+
+        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+        expect(IngestFolderJob)
+          .to have_received(:perform_later)
+          .with(
+            hash_including(
+              directory: storage_root.join("lapidus", "4609321").to_s,
+              state: "pending",
+              visibility: "open",
+              member_of_collection_ids: ["4609321"],
+              source_metadata_identifier: "4609321"
+            )
+          )
+        expect(IngestFolderJob)
+          .to have_received(:perform_later)
+          .with(
+            hash_including(
+              directory: storage_root.join("lapidus", "AC044_c0003").to_s,
+              state: "pending",
+              visibility: "open",
+              member_of_collection_ids: ["4609321"],
+              source_metadata_identifier: "AC044_c0003"
+            )
+          )
+      end
+    end
+  end
+
+  describe "POST #browse_everything_files" do
+    let(:file) { File.open(Rails.root.join("spec", "fixtures", "files", "example.tif")) }
+    let(:bytestream) { instance_double(ActiveStorage::Blob) }
+    let(:upload_file) { double }
+    let(:upload_file_id) { "test-upload-file-id" }
+    let(:upload) { instance_double(BrowseEverything::Upload) }
+    let(:uploads) { [upload.id] }
+    let(:upload_id) { "test-upload-id" }
+    let(:provider) { BrowseEverything::Provider::FileSystem.new }
+    let(:container) { instance_double(BrowseEverything::Container) }
+    let(:container_id) { "file:///base/4609321" }
+    let(:browse_everything) do
+      {
+        "uploads" => uploads
+      }
+    end
     let(:attributes) do
       {
         workflow: { state: "pending" },
         collections: ["1234567"],
         visibility: "open",
-        mvw: false,
-        selected_files: selected_files
-      }
-    end
-    let(:selected_files) do
-      {
-        "0" => {
-          "url" => "file:///base/4609321",
-          "file_name" => "1.tif",
-          "file_size" => "100"
-        }
+        browse_everything: browse_everything
       }
     end
 
     before do
+      allow(upload_file).to receive(:purge_bytestream)
+      allow(upload_file).to receive(:download).and_return(file.read)
+      allow(upload_file).to receive(:bytestream).and_return(bytestream)
+      allow(upload_file).to receive(:name).and_return("example.tif")
+      allow(upload_file).to receive(:id).and_return(upload_file_id)
+      allow(BrowseEverything::UploadFile).to receive(:find).and_return([upload_file])
+      allow(upload).to receive(:provider).and_return(provider)
+      allow(upload).to receive(:containers).and_return([container])
+      allow(upload).to receive(:files).and_return([upload_file])
+      allow(upload).to receive(:id).and_return(upload_id)
+      allow(BrowseEverything::Upload).to receive(:find_by).and_return([upload])
+      allow(container).to receive(:name).and_return("example")
+      allow(container).to receive(:id).and_return(container_id)
+
       allow(IngestFolderJob).to receive(:perform_later)
-      allow(IngestFoldersJob).to receive(:perform_later)
     end
 
+    # TODO: rewrite or subsume into other tests
+    # We do need coverage of the bibid extraction
     context "with one single-volume resource where the directory is the bibid" do
       before do
         stub_bibdata(bib_id: "4609321")
@@ -120,23 +268,11 @@ RSpec.describe BulkIngestController do
     end
 
     context "when the directory does not look like a bibid" do
-      let(:attributes) do
-        {
-          workflow: { state: "pending" },
-          collections: ["1234567"],
-          visibility: "open",
-          mvw: false,
-          selected_files: selected_files
-        }
-      end
-      let(:selected_files) do
-        {
-          "0" => {
-            "url" => "file:///base/June 31",
-            "file_name" => "1.tif",
-            "file_size" => "100"
-          }
-        }
+      let(:container_id) { "file:///base/June 31" }
+      let(:container) { instance_double(BrowseEverything::Container) }
+
+      before do
+        allow(upload).to receive(:containers).and_return([container])
       end
 
       it "ingests the directory as a single resource" do
@@ -151,7 +287,7 @@ RSpec.describe BulkIngestController do
       end
 
       context "when no files have been selected" do
-        let(:selected_files) do
+        let(:browse_everything) do
           {}
         end
 
@@ -166,197 +302,161 @@ RSpec.describe BulkIngestController do
         end
       end
     end
+  end
 
-    context "with two single-volume resources" do
-      let(:attributes) do
-        {
-          workflow: { state: "pending" },
-          visibility: "open",
-          mvw: false,
-          selected_files: selected_files
-        }
-      end
-      let(:selected_files) do
-        {
-          "0" => {
-            "url" => "file:///base/resource1/1.tif",
-            "file_name" => "1.tif",
-            "file_size" => "100"
-          },
-          "1" => {
-            "url" => "file:///base/resource2/1.tif",
-            "file_name" => "1.tif",
-            "file_size" => "100"
-          }
-        }
-      end
-
-      it "ingests the parent as two resources" do
-        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-        expect(IngestFoldersJob).to have_received(:perform_later).with(hash_including(directory: "/base", state: "pending", visibility: "open", member_of_collection_ids: []))
-      end
-    end
-
-    context "with files hosted on a cloud-storage provider" do
-      let(:selected_files) do
-        {
-          "0" => {
-            "url" => "https://www.example.com/files/1.tif?alt=media",
-            "file_name" => "1.tif",
-            "file_size" => "100",
-            "auth_header" => { "Authorization" => "Bearer secret" }
-          },
-          "1" => {
-            "url" => "https://www.example.com/files/2.tif?alt=media",
-            "file_name" => "2.tif",
-            "file_size" => "100",
-            "auth_header" => { "Authorization" => "Bearer secret" }
-          }
-        }
-      end
-
-      let(:attributes) do
-        {
-          workflow: { state: "pending" },
-          visibility: "open",
-          mvw: false,
-          selected_files: selected_files
-        }
-      end
-
-      let(:resources) do
-        adapter.query_service.find_all_of_model(model: ScannedResource)
-      end
-
-      before do
-        allow(BrowseEverythingIngestJob).to receive(:perform_later)
-        allow(PendingUpload).to receive(:new).and_call_original
-      end
-
-      it "ingests the parent as two resources" do
-        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-        expect(PendingUpload).to have_received(:new).with(
-          hash_including(
-            url: "https://www.example.com/files/1.tif?alt=media",
-            file_name: "1.tif",
-            file_size: "100",
-            auth_header: { "Authorization": "Bearer secret" }
-          )
-        )
-        expect(BrowseEverythingIngestJob).to have_received(:perform_later).with(resources.first.id.to_s, "BulkIngestController", [resources.first.pending_uploads.first.id.to_s])
-        expect(BrowseEverythingIngestJob).to have_received(:perform_later).with(resources.last.id.to_s, "BulkIngestController", [resources.last.pending_uploads.first.id.to_s])
-      end
-
-      context "when bulk ingesting multi-volume works" do
-        let(:attributes) do
+  context "Individual resources with files hosted on a cloud-storage provider" do
+    with_queue_adapter :inline
+    let(:upload) do
+      create_cloud_upload_for_container_ids(
+        "https://www.example.com/root" => {
+          files: [],
+          children:
           {
-            workflow: { state: "pending" },
-            visibility: "open",
-            mvw: true,
-            selected_files: selected_files
+            "https://www.example.com/root/4609321" => {
+              files: ["https://www.example.com/root/4609321/1.tif"],
+              children: {}
+            },
+            "https://www.example.com/root/resource2" => {
+              files: ["https://www.example.com/root/resource2/1.tif"],
+              children: {}
+            }
           }
-        end
-
-        let(:resources) do
-          adapter.query_service.find_all_of_model(model: ScannedResource)
-        end
-        let(:resource) do
-          resources.reject { |res| res.member_ids.empty? }.first
-        end
-        let(:member_resources) { resource.decorate.members }
-
-        before do
-          allow(BrowseEverythingIngestJob).to receive(:perform_later)
-          post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-        end
-
-        it "ingests the file as FileSets on a new member resource for a new parent resource" do
-          expect(PendingUpload).to have_received(:new).with(
-            hash_including(
-              url: "https://www.example.com/files/1.tif?alt=media",
-              file_name: "1.tif",
-              file_size: "100",
-              auth_header: { "Authorization": "Bearer secret" }
-            )
-          )
-
-          expect(member_resources.length).to eq(2)
-
-          expect(BrowseEverythingIngestJob).to have_received(:perform_later).with(member_resources.first.id.to_s, "BulkIngestController", member_resources.first.pending_uploads.map(&:id).map(&:to_s))
-          expect(BrowseEverythingIngestJob).to have_received(:perform_later).with(member_resources.last.id.to_s, "BulkIngestController", member_resources.last.pending_uploads.map(&:id).map(&:to_s))
-        end
-      end
+        }
+      )
     end
 
-    context "with one multi-volume resource" do
-      let(:attributes) do
+    let(:attributes) do
+      {
+        workflow: { state: "pending" },
+        visibility: "open",
+        browse_everything: { "uploads" => [upload.id] }
+      }
+    end
+
+    it "ingests two resources" do
+      FileUtils.rm_rf(Rails.root.join("tmp", "storage"))
+      stub_bibdata(bib_id: "4609321")
+      post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+
+      resources = adapter.query_service.find_all_of_model(model: ScannedResource)
+      expect(resources.length).to eq 2
+      expect(adapter.query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: "4609321").length).to eq 1
+      files = Dir[Rails.root.join("tmp", "storage", "**", "*")].select { |x| File.file?(x) }
+      expect(files).to eq []
+    end
+  end
+  context "bulk ingesting multi-volume works from the cloud" do
+    with_queue_adapter :inline
+    let(:upload) do
+      create_cloud_upload_for_container_ids(
+        "https://www.example.com/root" => {
+          files: [],
+          children:
+          {
+            "https://www.example.com/root/AC044_c0003" => {
+              files: [],
+              children: {
+                "https://www.example.com/root/AC044_c0003/resource1" => {
+                  files: ["https://www.example.com/root/AC044_c0003/resource1/1.tif"],
+                  children: {}
+                },
+                "https://www.example.com/root/AC044_c0003/resource2" => {
+                  files: ["https://www.example.com/root/AC044_c0003/resource2/1.tif"],
+                  children: {}
+                }
+              }
+            }
+          }
+        }
+      )
+    end
+
+    let(:attributes) do
+      {
+        workflow: { state: "pending" },
+        visibility: "open",
+        browse_everything: { "uploads" => [upload.id] }
+      }
+    end
+
+    it "Creates a multi-volume work" do
+      stub_pulfa(pulfa_id: "AC044_c0003")
+      post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+
+      resources = adapter.query_service.find_all_of_model(model: ScannedResource)
+      resource = resources.select { |res| res.member_ids.length == 2 }.first
+      expect(resource.source_metadata_identifier).to eq ["AC044_c0003"]
+      expect(resource.member_ids.length).to eq(2)
+      expect(resource.decorate.volumes.first.file_sets.length).to eq(1)
+      expect(resource.decorate.volumes.last.file_sets.length).to eq(1)
+      expect(resources.length).to eq 3
+    end
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  # Because we're overriding the browse everything upload job, we want to do an
+  # integration test here
+  describe "full unstubbed ingest of a MVW" do
+    with_queue_adapter :inline
+
+    def create_session
+      BrowseEverything::Session.build(
+        provider_id: "fast_file_system"
+      ).tap(&:save)
+    end
+
+    def create_upload_for_container_ids(container_ids)
+      container_ids.each do |container|
+        FileUtils.mkdir_p(container) unless File.exist?(container)
+      end
+      BrowseEverything::Upload.build(
+        container_ids: container_ids,
+        session_id: create_session.id
+      ).tap(&:save)
+    end
+
+    it "ingests a MVW" do
+      collection = FactoryBot.create_for_repository(:collection)
+      fixture_root = Rails.root.join("spec", "fixtures")
+      upload = create_upload_for_container_ids(
+        [
+          fixture_root.join("bulk_ingest")
+        ]
+      )
+      attributes =
         {
           workflow: { state: "pending" },
-          collections: ["1234567"],
+          collections: [collection.id.to_s],
           visibility: "open",
-          mvw: true,
-          selected_files: selected_files
+          resource_type: "scanned_resource",
+          browse_everything: { "uploads" => [upload.uuid] }
         }
-      end
-      let(:selected_files) do
-        {
-          "0" => {
-            "url" => "file:///base/resource1/vol1/1.tif",
-            "file_name" => "1.tif",
-            "file_size" => "100"
-          },
-          "1" => {
-            "url" => "file:///base/resource1/vol2/1.tif",
-            "file_name" => "1.tif",
-            "file_size" => "100"
-          }
-        }
-      end
+      stub_bibdata(bib_id: "123456")
 
-      it "ingests the parent as two resources" do
-        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-        expect(IngestFoldersJob).to have_received(:perform_later).with(hash_including(directory: "/base", state: "pending", visibility: "open", member_of_collection_ids: ["1234567"]))
-      end
+      post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+
+      resources = adapter.query_service.find_all_of_model(model: ScannedResource)
+      expect(resources.length).to eq 3
+      resource = resources.select { |res| res.member_ids.length == 2 }.first
+      expect(resource.source_metadata_identifier).to eq ["123456"]
+      expect(resource.member_ids.length).to eq(2)
+      expect(resource.decorate.volumes.first.file_sets.length).to eq(1)
+      expect(resource.decorate.volumes.last.file_sets.length).to eq(1)
+      expect(resource.decorate.collections.first.id).to eq collection.id
     end
+  end
 
-    context "with two multi-volume resources" do
-      let(:attributes) do
-        {
-          workflow: { state: "pending" },
-          visibility: "open",
-          mvw: true,
-          selected_files: selected_files
-        }
-      end
-      let(:selected_files) do
-        {
-          "0" => {
-            "url" => "file:///base/resource1/vol1/1.tif",
-            "file_name" => "1.tif",
-            "file_size" => "100"
-          },
-          "1" => {
-            "url" => "file:///base/resource1/vol2/1.tif",
-            "file_name" => "1.tif",
-            "file_size" => "100"
-          },
-          "2" => {
-            "url" => "file:///base/resource2/vol3/1.tif",
-            "file_name" => "1.tif",
-            "file_size" => "100"
-          },
-          "3" => {
-            "url" => "file:///base/resource2/vol4/1.tif",
-            "file_name" => "1.tif",
-            "file_size" => "100"
-          }
-        }
-      end
-
-      it "ingests the parent as two resources" do
-        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-        expect(IngestFoldersJob).to have_received(:perform_later).with(hash_including(directory: "/base", state: "pending", visibility: "open", member_of_collection_ids: []))
-      end
-    end
+  def create_cloud_upload_for_container_ids(container_hash)
+    file_content = File.open(Rails.root.join("spec", "fixtures", "files", "example.tif")).read
+    provider = HashProvider.new(container_hash, file: file_content)
+    allow(BrowseEverything::Provider::GoogleDrive).to receive(:new).and_return(provider)
+    be_session = BrowseEverything::Session.build(
+      provider_id: "google_drive"
+    ).tap(&:save)
+    upload = BrowseEverything::Upload.build(
+      session_id: be_session.id,
+      container_ids: container_hash.keys
+    ).tap(&:save)
+    upload
   end
 end

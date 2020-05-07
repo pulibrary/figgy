@@ -148,3 +148,7 @@
 .non-selectable-panel {
   @extend .panel;
 }
+
+.picker-dialog {
+  z-index: 10000 !important
+}

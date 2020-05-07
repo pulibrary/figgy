@@ -21,7 +21,6 @@
 //= require blacklight/blacklight
 //= require cable
 //= require form/mutex
-//= require browse_everything
 //= require jquery-ui/sortable
 //= require jquery-ui/draggable
 //= require jquery-ui/slider

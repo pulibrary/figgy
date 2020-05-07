@@ -21,4 +21,5 @@ Rails.application.configure do
   config.action_controller.action_on_unpermitted_parameters = false
   config.force_ssl = true
   config.action_dispatch.x_sendfile_header = "X-Accel-Redirect"
+  config.active_storage.service = :local
 end

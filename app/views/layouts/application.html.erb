@@ -39,6 +39,9 @@
   <body>
     <%= content_for?(:body) ? yield(:body) : yield %>
     <%= render 'shared/ajax_modal' %>
+    <%# There were errors when we tried to include this webpack %>
+    <%# see comments culminating with https://github.com/pulibrary/figgy/pull/3754#issuecomment-598510375 %>
+    <script src="//cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.js"></script>
     <%= javascript_include_tag 'application' %>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 

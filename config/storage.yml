@@ -1,0 +1,8 @@
+# ActiveStorage configuration (used by BrowseEverything)
+test:
+  service: Disk
+  root: <%= Rails.root.join("tmp/storage") %>
+
+local:
+  service: Disk
+  root: <%= ENV["ACTIVE_STORAGE_ROOT"] || Rails.root.join("storage") %>

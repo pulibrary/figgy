@@ -60,6 +60,12 @@ Release notes template:
 ## Fixed
 
 * Removing a source metadata identifier now clears imported metadata.
+*
+# 2020-04-21
+
+## Added
+
+* Upgraded the file and Google Drive upload interface for resources and the bulk ingest interface
 
 # 2020-04-16
 
