@@ -65,7 +65,7 @@ module PulMetadataServices
             extent: extent,
             container: container,
             heldBy: location_code,
-            creator: collection_creators,
+            creator: creators,
             publisher: collection_creators,
             memberOf: collections
           }
@@ -116,6 +116,14 @@ module PulMetadataServices
           text(data.at_xpath("#{data_root}/did/physloc"))
         end
 
+        def creators
+          if data.at_xpath("#{data_root}/did/origination/*")
+            component_creators
+          else
+            collection_creators
+          end
+        end
+
         # Retrieve the creator information encoded for the collection in which the item is stored
         # @return [Array<String>]
         def collection_creators
@@ -134,7 +142,8 @@ module PulMetadataServices
         end
 
         def component_creators
-          # TODO
+          creators = data.xpath("#{data_root}/did/origination/*")
+          creators.map(&:content).map(&:strip)
         end
 
         def collection_date
