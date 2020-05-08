@@ -39,12 +39,19 @@ module BrowseEverything
       parent_path = Pathname.new(directory.path)
       children = Dir.children(directory.path)
       file_children_paths = children.select do |child|
-        File.file?(parent_path.join(child))
+        File.file?(parent_path.join(child)) && !child.start_with?(".")
       end
 
       file_children_paths.map do |path|
         build_bytestream(parent_path.join(path))
       end
+    end
+
+    def traverse_directory(directory)
+      @resources = []
+      @resources = find_container_children(directory)
+      @resources += find_bytestream_children(directory)
+      @resources.sort_by!(&:id)
     end
   end
 end
