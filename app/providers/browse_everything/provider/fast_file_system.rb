@@ -39,7 +39,7 @@ module BrowseEverything
       parent_path = Pathname.new(directory.path)
       children = Dir.children(directory.path)
       file_children_paths = children.select do |child|
-        File.file?(parent_path.join(child))
+        File.file?(parent_path.join(child)) && !child.start_with?(".")
       end
 
       file_children_paths.map do |path|

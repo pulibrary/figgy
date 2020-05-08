@@ -21,4 +21,11 @@ RSpec.describe BrowseEverything::Provider::FastFileSystem do
 
       expect(container.bytestreams.first.name).to eq "000001.tif"
     end
+    it "returns a container with no hidden files as bytestreams" do
+      provider = described_class.new
+      container = provider.find_container(id: Rails.root.join("spec", "fixtures", "hidden_files", "32101075851400").to_s)
+
+      expect(container.bytestreams.length).to eq 1
+    end
+  end
 end
