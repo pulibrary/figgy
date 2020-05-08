@@ -110,7 +110,7 @@ describe OrangelightDocument do
         expect(holding["library"]).to eq "Special Collections"
         expect(output[:counter_stamp_s]).to eq ["two small counter-stamps visible as small circles on reverse, without known parallel"]
         expect(output[:analysis_s]).to eq ["holed at 12 o'clock, 16.73 grams"]
-        expect(output[:accession_info_s]).to eq ["name1 name2"]
+        expect(output[:donor_s]).to eq ["name1 name2"]
         expect(output[:notes_display]).to eq ["Abraham Usher| John Field| Charles Meredith.", "Black and red ink.", "Visible flecks of mica."]
         expect(output[:find_place_s]).to eq ["city, state, region"]
         expect(output[:find_date_s]).to eq ["5/27/1939?"]

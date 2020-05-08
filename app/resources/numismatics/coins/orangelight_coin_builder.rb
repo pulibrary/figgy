@@ -61,7 +61,7 @@ class OrangelightCoinBuilder
         technique_s: decorator.technique,
         weight_s: decorator.weight,
         holdings_1display: holdings_hash,
-        accession_info_s: decorator.accession_person
+        donor_s: decorator.donor
       }
     end
 

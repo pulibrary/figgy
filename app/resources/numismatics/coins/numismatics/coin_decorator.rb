@@ -37,16 +37,16 @@ module Numismatics
 
     delegate :id, :label, to: :accession, prefix: true
 
-    def accession_person
-      [decorated_numismatic_accession&.person]
-    end
-
     def call_number
       "Coin #{coin_number}"
     end
 
     def citations
       numismatic_citation.map { |c| c.decorate.title }
+    end
+
+    def donor
+      [decorated_numismatic_accession&.person]
     end
 
     def find_place
