@@ -46,5 +46,12 @@ module BrowseEverything
         build_bytestream(parent_path.join(path))
       end
     end
+
+    def traverse_directory(directory)
+      @resources = []
+      @resources = find_container_children(directory)
+      @resources += find_bytestream_children(directory)
+      @resources.sort_by!(&:id)
+    end
   end
 end
