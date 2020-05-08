@@ -23,4 +23,21 @@ RSpec.describe "catalog/_members_issue" do
       expect(rendered).to have_link "Edit", href: edit_numismatics_coin_path(child.id)
     end
   end
+
+  context "when the Numismatics::Issue has no members" do
+    let(:issue) { FactoryBot.create_for_repository(:numismatic_issue) }
+    let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: issue) }
+    let(:solr_document) { SolrDocument.new(document) }
+    let(:change_set) { DynamicChangeSet.new(solr_document.resource) }
+    before do
+      assign :document, solr_document
+      assign :resource, solr_document.resource
+      assign :change_set, change_set
+      render
+    end
+
+    it "prompts user to attach one" do
+      expect(rendered).to have_selector "td", text: "This work has no coins attached. Click the \"Attach Coin\" button to create a new coin."
+    end
+  end
 end
