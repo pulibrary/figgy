@@ -13,6 +13,13 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-05-08
+
+## Changed
+
+* File Manager is now ordered alphabetically.
+* Hidden files are no longer displayed in file manager.
+
 # 2020-04-30
 
 ## Added
