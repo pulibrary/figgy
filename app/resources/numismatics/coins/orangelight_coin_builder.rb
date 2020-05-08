@@ -60,7 +60,8 @@ class OrangelightCoinBuilder
         size_s: decorator.size,
         technique_s: decorator.technique,
         weight_s: decorator.weight,
-        holdings_1display: holdings_hash
+        holdings_1display: holdings_hash,
+        donor_s: decorator.donor
       }
     end
 
@@ -85,6 +86,9 @@ class OrangelightCoinBuilder
         issue_workshop_s: parent.workshop,
         issue_series_s: parent.series,
         issue_place_s: [parent.rendered_place],
+        issue_city_s: [parent.city],
+        issue_state_s: [parent.geo_state],
+        issue_region_s: [parent.region],
         issue_place_sort: parent.rendered_place,
         issue_obverse_figure_s: parent.obverse_figure,
         issue_obverse_symbol_s: parent.obverse_symbol,

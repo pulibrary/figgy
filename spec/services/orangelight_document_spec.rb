@@ -23,6 +23,7 @@ describe OrangelightDocument do
       let(:numismatic_monogram1) { FactoryBot.create_for_repository(:numismatic_monogram, title: "Alexander", thumbnail_id: "alexander-url") }
       let(:numismatic_monogram2) { FactoryBot.create_for_repository(:numismatic_monogram, title: "Zeus", thumbnail_id: "zeus-url") }
       let(:artist) { FactoryBot.create_for_repository(:numismatic_artist) }
+      let(:numismatic_accession) { FactoryBot.create_for_repository(:numismatic_accession, person_id: person.id) }
       let(:numismatic_place) { FactoryBot.create_for_repository(:numismatic_place) }
       let(:numismatic_person) { FactoryBot.create_for_repository(:numismatic_person) }
       let(:coin) do
@@ -38,6 +39,7 @@ describe OrangelightDocument do
                                          find_locus: "8-N 40",
                                          find_number: "2237",
                                          find_description: "at join of carcares and w. cavea surface",
+                                         numismatic_accession_id: numismatic_accession.id,
                                          die_axis: "6",
                                          size: "27",
                                          technique: "Cast",
@@ -108,6 +110,7 @@ describe OrangelightDocument do
         expect(holding["library"]).to eq "Special Collections"
         expect(output[:counter_stamp_s]).to eq ["two small counter-stamps visible as small circles on reverse, without known parallel"]
         expect(output[:analysis_s]).to eq ["holed at 12 o'clock, 16.73 grams"]
+        expect(output[:donor_s]).to eq ["name1 name2"]
         expect(output[:notes_display]).to eq ["Abraham Usher| John Field| Charles Meredith.", "Black and red ink.", "Visible flecks of mica."]
         expect(output[:find_place_s]).to eq ["city, state, region"]
         expect(output[:find_date_s]).to eq ["5/27/1939?"]
@@ -137,6 +140,9 @@ describe OrangelightDocument do
         expect(output[:issue_workshop_s]).to eq ["Bristol"]
         expect(output[:issue_series_s]).to eq ["Hibernia"]
         expect(output[:issue_place_s]).to eq ["city, state, region"]
+        expect(output[:issue_city_s]).to eq ["city"]
+        expect(output[:issue_state_s]).to eq ["state"]
+        expect(output[:issue_region_s]).to eq ["region"]
         expect(output[:issue_place_sort]).to eq "city, state, region"
         expect(output[:issue_obverse_figure_s]).to eq ["bust"]
         expect(output[:issue_obverse_symbol_s]).to eq ["cornucopia"]
