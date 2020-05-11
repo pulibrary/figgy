@@ -30,7 +30,7 @@ namespace :numismatics do
         csv << headers
         coins.to_a.each do |coin|
           labels = Wayfinder.for(coin).decorated_members.map { |fs| fs.title.first }
-          if labels.present? && !labels.include?("Obverse")
+          if labels.present? && !(labels.include?("Obverse") || labels.include?("Reverse"))
             row = [coin.id.to_s, coin.coin_number, labels.join(";")]
             csv << row
           end
