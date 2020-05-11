@@ -40,6 +40,7 @@ Metrics/AbcSize:
     - 'app/jobs/browse_everything_ingest_job.rb'
 Metrics/BlockLength:
   Exclude:
+    - '**/*.rake'
     - 'app/controllers/catalog_controller.rb'
     - 'app/models/book_workflow.rb'
     - 'config/environments/**/*'
@@ -48,17 +49,10 @@ Metrics/BlockLength:
     - 'config/routes.rb'
     - 'lib/specs/**/*'
     - 'db/schema.rb'
-    - 'lib/tasks/dev.rake'
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/change_sets/change_set_workflow.rb'
-    - 'lib/tasks/bulk.rake'
-    - 'lib/tasks/lae.rake'
     - 'app/resources/scanned_resources/simple_change_set.rb'
     - 'app/controllers/concerns/resource_relations.rb'
-    - 'lib/tasks/migrate.rake'
-    - 'lib/tasks/music_reserves.rake'
-    - 'lib/tasks/figgy.rake'
-    - 'lib/tasks/export.rake'
     - 'app/jobs/browse_everything_ingest_job.rb'
 Metrics/ClassLength:
   Exclude:
