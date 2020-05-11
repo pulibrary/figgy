@@ -94,7 +94,7 @@ describe OrangelightDocument do
         holding = JSON.parse(output[:holdings_1display]).first.last
         expect(output[:id]).to eq coin.decorate.orangelight_id
         expect(output[:title_display]).to eq "Coin: #{coin.coin_number}"
-        expect(output[:pub_created_display]).to eq "name1 name2 epithet (1868 - 1963), 1/2 Penny, city"
+        expect(output[:pub_created_display]).to eq "name1 name2 epithet (1868 to 1963), 1/2 Penny, city"
         expect(output[:call_number_display]).to eq ["Coin #{coin.coin_number}"]
         expect(output[:call_number_browse_s]).to eq ["Coin #{coin.coin_number}"]
         expect(output[:access_facet]).to eq ["Online", "In the Library"]
@@ -134,9 +134,9 @@ describe OrangelightDocument do
         expect(output[:issue_color_s]).to eq ["green"]
         expect(output[:issue_edge_s]).to eq ["GOTT MIT UNS"]
         expect(output[:issue_era_s]).to eq ["uncertain"]
-        expect(output[:issue_ruler_s]).to eq ["name1 name2 epithet (1868 - 1963)"]
-        expect(output[:issue_ruler_sort]).to eq "name1 name2 epithet (1868 - 1963)"
-        expect(output[:issue_master_s]).to eq ["name1 name2 epithet (1868 - 1963)"]
+        expect(output[:issue_ruler_s]).to eq ["name1 name2 epithet (1868 to 1963)"]
+        expect(output[:issue_ruler_sort]).to eq "name1 name2 epithet (1868 to 1963)"
+        expect(output[:issue_master_s]).to eq ["name1 name2 epithet (1868 to 1963)"]
         expect(output[:issue_workshop_s]).to eq ["Bristol"]
         expect(output[:issue_series_s]).to eq ["Hibernia"]
         expect(output[:issue_place_s]).to eq ["city, state, region"]

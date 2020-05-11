@@ -89,7 +89,7 @@ RSpec.describe Numismatics::CoinDecorator do
         issue
       end
       it "returns a pub_created_display" do
-        expect(decorator.pub_created_display).to eq("name1 name2 epithet (1868 - 1963), 1/2 Penny")
+        expect(decorator.pub_created_display).to eq("name1 name2 epithet (1868 to 1963), 1/2 Penny")
       end
     end
     context "when the coin is not attached to a numismatic issue" do
