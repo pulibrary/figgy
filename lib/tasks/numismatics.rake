@@ -25,12 +25,14 @@ namespace :numismatics do
       metadata_adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
       query_service = metadata_adapter.query_service
       CSV.open(Rails.root.join("tmp", "numismatic_coins_to_label.csv"), "wb") do |csv|
+        coins_without_members = query_service.custom_queries.find_resources_without_members(model: Numismatics::Coin)
         coins = query_service.find_all_of_model(model: Numismatics::Coin)
+        coins_with_members = coins - coins_without_members
         headers = ["coin_id", "coin_number", "labels"]
         csv << headers
-        coins.to_a.each do |coin|
+        coins_with_members.to_a.each do |coin|
           labels = Wayfinder.for(coin).decorated_members.map { |fs| fs.title.first }
-          if labels.present? && !(labels.include?("Obverse") || labels.include?("Reverse"))
+          unless labels.include?("Obverse") || labels.include?("Reverse")
             row = [coin.id.to_s, coin.coin_number, labels.join(";")]
             csv << row
           end
