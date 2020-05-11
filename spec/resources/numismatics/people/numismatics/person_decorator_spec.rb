@@ -16,7 +16,7 @@ RSpec.describe Numismatics::PersonDecorator do
   describe "#title" do
     context "with a born and died date" do
       it "generates a title" do
-        expect(decorator.title).to eq("name1 name2 epithet (1868 - 1963)")
+        expect(decorator.title).to eq("name1 name2 epithet (1868 to 1963)")
       end
     end
 
@@ -30,7 +30,7 @@ RSpec.describe Numismatics::PersonDecorator do
       end
 
       it "generates a title" do
-        expect(decorator.title).to eq("name1 name2 epithet ( - 1963)")
+        expect(decorator.title).to eq("name1 name2 epithet ( to 1963)")
       end
     end
 
@@ -44,7 +44,7 @@ RSpec.describe Numismatics::PersonDecorator do
       end
 
       it "generates a title" do
-        expect(decorator.title).to eq("name1 name2 epithet (1894 - )")
+        expect(decorator.title).to eq("name1 name2 epithet (1894 to )")
       end
     end
   end
