@@ -75,7 +75,7 @@ class OrangelightCoinBuilder
         issue_denomination_sort: parent.denomination&.first,
         issue_number_s: parent.issue_number.to_s,
         issue_metal_s: parent.metal,
-        issue_metal_sort: parent.metal&.first,
+        issue_metal_sort: parent.metal&.first&.downcase,
         issue_shape_s: parent.shape,
         issue_color_s: parent.color,
         issue_edge_s: parent.edge,

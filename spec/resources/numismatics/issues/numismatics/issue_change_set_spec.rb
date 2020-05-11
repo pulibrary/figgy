@@ -5,6 +5,88 @@ RSpec.describe Numismatics::IssueChangeSet do
   subject(:change_set) { described_class.new(issue) }
   let(:issue) { FactoryBot.build(:numismatic_issue) }
 
+  describe "capitalizing values" do
+    let(:issue) do
+      FactoryBot.build(
+        :numismatic_issue,
+        metal: "copper",
+        color: "green",
+        object_type: "coin",
+        denomination: "grosso",
+        era: "uncertain",
+        obverse_figure: "bust",
+        obverse_symbol: "cornucopia",
+        obverse_part: "standing",
+        obverse_orientation: "right",
+        obverse_figure_description: "harp at left side, 5 strings.",
+        obverse_figure_relationship: "jointly holding cornucopia",
+        reverse_figure: "emperor and Virgin",
+        reverse_symbol: "mask",
+        reverse_part: "bow",
+        reverse_orientation: "from above",
+        reverse_figure_description: "in wreath order",
+        reverse_figure_relationship: "in provocatio",
+        shape: "round",
+
+        edge: "eX regVM consVLta DeVs fortVnet VbIqVe (=1691)",
+        workshop: "mint mark A",
+        series: "type B",
+        obverse_legend: "center: لااله الا الل",
+        reverse_legend: "in exergue - JUNE 16, 1880"
+
+        # numismatic_artist: numismatic_artist,
+        # numismatic_citation: numismatic_citation,
+        # numismatic_place_id: numismatic_place.id,
+        # obverse_attribute: numismatic_attribute,
+        # reverse_attribute: numismatic_attribute,
+        # ruler_id: numismatic_person.id,
+        # master_id: numismatic_person.id,
+        # numismatic_monogram_ids: [numismatic_monogram1.id, numismatic_monogram2.id],
+      )
+    end
+
+    it "capitalizes desired values" do
+      expect(change_set.metal).to eq "Copper"
+      expect(change_set.color).to eq "Green"
+      expect(change_set.denomination).to eq "Grosso"
+      expect(change_set.era).to eq "Uncertain"
+      expect(change_set.object_type).to eq "Coin"
+      expect(change_set.obverse_figure).to eq "Bust"
+      expect(change_set.obverse_figure_relationship).to eq "Jointly holding cornucopia"
+      expect(change_set.obverse_figure_description).to eq "Harp at left side, 5 strings."
+      expect(change_set.obverse_orientation).to eq "Right"
+      expect(change_set.obverse_part).to eq "Standing"
+      expect(change_set.obverse_symbol).to eq "Cornucopia"
+      expect(change_set.reverse_figure).to eq "Emperor and Virgin"
+      expect(change_set.reverse_figure_relationship).to eq "In provocatio"
+      expect(change_set.reverse_figure_description).to eq "In wreath order"
+      expect(change_set.reverse_orientation).to eq "From above"
+      expect(change_set.reverse_part).to eq "Bow"
+      expect(change_set.reverse_symbol).to eq "Mask"
+      expect(change_set.shape).to eq "Round"
+    end
+
+    it "does not capitalize fields that may have transcribed values" do
+      expect(change_set.edge).to eq "eX regVM consVLta DeVs fortVnet VbIqVe (=1691)"
+      expect(change_set.workshop).to eq "mint mark A"
+      expect(change_set.series).to eq "type B"
+      expect(change_set.obverse_legend).to eq "center: لااله الا الل"
+      expect(change_set.reverse_legend).to eq "in exergue - JUNE 16, 1880"
+    end
+
+    context "when a capitalized field contains a unicode value" do
+      let(:issue) do
+        FactoryBot.build(
+          :numismatic_issue,
+          reverse_figure: "上祥云 (cloud on top)"
+        )
+      end
+      it "respects the unicode value" do
+        expect(change_set.reverse_figure).to eq "上祥云 (cloud on top)"
+      end
+    end
+  end
+
   describe "#primary_terms" do
     it "includes displayed fields" do
       expect(change_set.primary_terms).to be_a(Hash)

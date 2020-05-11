@@ -89,19 +89,19 @@ RSpec.describe Numismatics::IssuesController, type: :controller do
       reverse_parts = assigns(:reverse_parts)
       shapes = assigns(:shapes)
 
-      expect(colors.first.value).to eq "pink"
+      expect(colors.first.value).to eq "Pink"
       expect(colors.first.hits).to eq 1
       expect(denominations.first.value).to eq "Drachm"
       expect(edges.first.value).to eq "milled"
-      expect(metals.first.value).to eq "copper"
-      expect(object_types.first.value).to eq "coin"
-      expect(obverse_figures.first.value).to eq "obv figure"
-      expect(obverse_orientations.first.value).to eq "obv orientation"
-      expect(obverse_parts.first.value).to eq "obv part"
-      expect(reverse_figures.first.value).to eq "rev figure"
-      expect(reverse_orientations.first.value).to eq "rev orientation"
-      expect(reverse_parts.first.value).to eq "rev part"
-      expect(shapes.first.value).to eq "round"
+      expect(metals.first.value).to eq "Copper"
+      expect(object_types.first.value).to eq "Coin"
+      expect(obverse_figures.first.value).to eq "Obv figure"
+      expect(obverse_orientations.first.value).to eq "Obv orientation"
+      expect(obverse_parts.first.value).to eq "Obv part"
+      expect(reverse_figures.first.value).to eq "Rev figure"
+      expect(reverse_orientations.first.value).to eq "Rev orientation"
+      expect(reverse_parts.first.value).to eq "Rev part"
+      expect(shapes.first.value).to eq "Round"
     end
   end
   describe "html update" do

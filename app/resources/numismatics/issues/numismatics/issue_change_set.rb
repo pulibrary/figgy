@@ -73,6 +73,15 @@ module Numismatics
     validates :visibility, presence: true
     validates :earliest_date, :latest_date, year: true
 
+    coerce_to_capital [:metal, :color, :denomination, :era,
+                       :object_type, :shape,
+                       :obverse_figure, :obverse_figure_relationship,
+                       :obverse_figure_description, :obverse_orientation,
+                       :obverse_part, :obverse_symbol,
+                       :reverse_figure, :reverse_figure_relationship,
+                       :reverse_figure_description, :reverse_orientation,
+                       :reverse_part, :reverse_symbol]
+
     def primary_terms
       {
         "" => [

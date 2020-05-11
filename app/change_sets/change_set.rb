@@ -62,6 +62,21 @@ class ChangeSet < Valkyrie::ChangeSet
     property :claimed_by, multiple: false, required: false, default: nil
   end
 
+  # Use http://trailblazer.to/gems/reform/api.html#overriding-accessors
+  # to coerce string values to capital first letter by dynamically defining
+  # accessor overrides for all desired fields
+  def self.coerce_to_capital(property_names)
+    property_names.each do |method_name|
+      define_method method_name do
+        value = super()
+        return unless value
+        return value.map(&:upcase_first) if value.is_a? Array
+        return value.upcase_first if value.respond_to? :upcase_first
+        value
+      end
+    end
+  end
+
   # This property is set by ChangeSetPersister::CreateFile and is used to keep
   # track of which FileSets were created by the ChangeSetPersister as part of
   # saving this change_set. We may want to look into passing some sort of scope
