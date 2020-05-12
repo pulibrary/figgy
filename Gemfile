@@ -61,7 +61,6 @@ group :development, :test do
   gem "pry-byebug"
   gem "pry-rails"
   gem "rails-controller-testing"
-  gem "rb-readline"
   gem "rspec-rails", "~> 3.5"
   gem "solr_wrapper", ">= 0.3"
 end
