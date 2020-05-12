@@ -61,6 +61,8 @@ module Numismatics
     validates_with RightsStatementValidator
     validates :visibility, presence: true
 
+    coerce_to_capital [:technique, :analysis, :public_note]
+
     def primary_terms
       {
         "" => [

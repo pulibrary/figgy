@@ -6,6 +6,28 @@ RSpec.describe Numismatics::CoinChangeSet do
   let(:coin) { FactoryBot.build(:coin) }
   let(:issue) { FactoryBot.create_for_repository(member_ids: [coin.id]) }
 
+  describe "capitalizing values" do
+    let(:coin) do
+      FactoryBot.build(
+        :coin,
+        technique: "enameled",
+        counter_stamp: "dolphin r.",
+        analysis: "double struck R; uneven flan rim",
+        public_note: "identification uncertain"
+      )
+    end
+
+    it "capitalizes desired values" do
+      expect(change_set.technique).to eq "Enameled"
+      expect(change_set.analysis).to eq "Double struck R; uneven flan rim"
+      expect(change_set.public_note).to eq ["Identification uncertain"]
+    end
+
+    it "does not capitalize fields that may have transcribed values" do
+      expect(change_set.counter_stamp).to eq "dolphin r."
+    end
+  end
+
   describe "#primary_terms" do
     it "includes displayed fields" do
       expect(change_set.primary_terms.keys).to eq(["", "Accession", "Citation", "Provenance", "Loans and Exhibits", "Numismatic Issue"])
