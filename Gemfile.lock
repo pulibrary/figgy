@@ -662,7 +662,6 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
-    rb-readline (0.5.5)
     rdf (3.0.13)
       hamster (~> 3.0)
       link_header (~> 0.0, >= 0.0.8)
@@ -1002,7 +1001,6 @@ DEPENDENCIES
   rack-mini-profiler
   rails (~> 5.2.4)
   rails-controller-testing
-  rb-readline
   recipient_interceptor
   redis-namespace
   riiif
