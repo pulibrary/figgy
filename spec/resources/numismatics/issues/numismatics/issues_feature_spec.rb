@@ -201,36 +201,36 @@ RSpec.feature "Numismatics::Issues" do
       expect(page).to have_css ".attribute.earliest_date", text: "2017"
       expect(page).to have_css ".attribute.latest_date", text: "2018"
       expect(page).to have_css ".attribute.citations", text: "short-title part number"
-      expect(page).to have_css ".attribute.color", text: "test value"
-      expect(page).to have_css ".attribute.denomination", text: "test value"
+      expect(page).to have_css ".attribute.color", text: "Test value"
+      expect(page).to have_css ".attribute.denomination", text: "Test value"
       expect(page).to have_css ".attribute.edge", text: "test value"
-      expect(page).to have_css ".attribute.era", text: "test value"
+      expect(page).to have_css ".attribute.era", text: "Test value"
       expect(page).to have_css ".attribute.master", text: "name1 name2 epithet (1868 - 1963)"
-      expect(page).to have_css ".attribute.metal", text: "test value"
+      expect(page).to have_css ".attribute.metal", text: "Test value"
       expect(page).to have_css ".attribute.notes", text: "note"
       expect(page).to have_css ".attribute.object_date", text: "test value"
-      expect(page).to have_css ".attribute.object_type", text: "test value"
+      expect(page).to have_css ".attribute.object_type", text: "Test value"
       expect(page).to have_css ".attribute.obverse_attributes", text: "attribute name, attribute description"
-      expect(page).to have_css ".attribute.obverse_figure", text: "test value"
-      expect(page).to have_css ".attribute.obverse_figure_relationship", text: "test value"
-      expect(page).to have_css ".attribute.obverse_figure_description", text: "test value"
+      expect(page).to have_css ".attribute.obverse_figure", text: "Test value"
+      expect(page).to have_css ".attribute.obverse_figure_relationship", text: "Test value"
+      expect(page).to have_css ".attribute.obverse_figure_description", text: "Test value"
       expect(page).to have_css ".attribute.obverse_legend", text: "test value"
-      expect(page).to have_css ".attribute.obverse_orientation", text: "test value"
-      expect(page).to have_css ".attribute.obverse_part", text: "test value"
-      expect(page).to have_css ".attribute.obverse_symbol", text: "test value"
+      expect(page).to have_css ".attribute.obverse_orientation", text: "Test value"
+      expect(page).to have_css ".attribute.obverse_part", text: "Test value"
+      expect(page).to have_css ".attribute.obverse_symbol", text: "Test value"
       expect(page).to have_css ".attribute.rendered_place", text: "city, state, region"
       expect(page).to have_css ".attribute.replaces", text: "test value"
       expect(page).to have_css ".attribute.reverse_attributes", text: "attribute name, attribute description"
-      expect(page).to have_css ".attribute.reverse_figure", text: "test value"
-      expect(page).to have_css ".attribute.reverse_figure_relationship", text: "test value"
-      expect(page).to have_css ".attribute.reverse_figure_description", text: "test value"
+      expect(page).to have_css ".attribute.reverse_figure", text: "Test value"
+      expect(page).to have_css ".attribute.reverse_figure_relationship", text: "Test value"
+      expect(page).to have_css ".attribute.reverse_figure_description", text: "Test value"
       expect(page).to have_css ".attribute.reverse_legend", text: "test value"
-      expect(page).to have_css ".attribute.reverse_orientation", text: "test value"
-      expect(page).to have_css ".attribute.reverse_part", text: "test value"
-      expect(page).to have_css ".attribute.reverse_symbol", text: "test value"
+      expect(page).to have_css ".attribute.reverse_orientation", text: "Test value"
+      expect(page).to have_css ".attribute.reverse_part", text: "Test value"
+      expect(page).to have_css ".attribute.reverse_symbol", text: "Test value"
       expect(page).to have_css ".attribute.rulers", text: "name1 name2 epithet (1868 - 1963)"
       expect(page).to have_css ".attribute.series", text: "test value"
-      expect(page).to have_css ".attribute.shape", text: "test value"
+      expect(page).to have_css ".attribute.shape", text: "Test value"
       expect(page).to have_css ".attribute.subjects", text: "Animal, unicorn"
       expect(page).to have_css ".attribute.workshop", text: "test value"
     end
@@ -355,42 +355,42 @@ RSpec.feature "Numismatics::Issues" do
         visit edit_numismatics_issue_path(id: persisted.id)
 
         hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#color", visible: false)
-        expect(hidden["value"]).to eq("green")
+        expect(hidden["value"]).to eq("Green")
         hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#denomination", visible: false)
         expect(hidden["value"]).to eq("1/2 Penny")
         hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#edge", visible: false)
         expect(hidden["value"]).to eq("edge")
         hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#metal", visible: false)
-        expect(hidden["value"]).to eq("copper")
+        expect(hidden["value"]).to eq("Copper")
         hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#object_type", visible: false)
-        expect(hidden["value"]).to eq("coin")
+        expect(hidden["value"]).to eq("Coin")
         hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#obverse_figure", visible: false)
-        expect(hidden["value"]).to eq("obv figure")
+        expect(hidden["value"]).to eq("Obv figure")
         hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#obverse_orientation", visible: false)
-        expect(hidden["value"]).to eq("obv orientation")
+        expect(hidden["value"]).to eq("Obv orientation")
         hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#obverse_part", visible: false)
-        expect(hidden["value"]).to eq("obv part")
+        expect(hidden["value"]).to eq("Obv part")
         hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#reverse_figure", visible: false)
-        expect(hidden["value"]).to eq("rev figure")
+        expect(hidden["value"]).to eq("Rev figure")
         hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#reverse_orientation", visible: false)
-        expect(hidden["value"]).to eq("rev orientation")
+        expect(hidden["value"]).to eq("Rev orientation")
         hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#reverse_part", visible: false)
-        expect(hidden["value"]).to eq("rev part")
+        expect(hidden["value"]).to eq("Rev part")
         hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#shape", visible: false)
-        expect(hidden["value"]).to eq("round")
+        expect(hidden["value"]).to eq("Round")
 
-        expect(page).to have_selector("option", text: "coin")
+        expect(page).to have_selector("option", text: "Coin")
         expect(page).to have_selector("option", text: "1/2 Penny")
-        expect(page).to have_selector("option", text: "copper")
-        expect(page).to have_selector("option", text: "round")
-        expect(page).to have_selector("option", text: "green")
+        expect(page).to have_selector("option", text: "Copper")
+        expect(page).to have_selector("option", text: "Round")
+        expect(page).to have_selector("option", text: "Green")
         expect(page).to have_selector("option", text: "edge")
-        expect(page).to have_selector("option", text: "obv figure")
-        expect(page).to have_selector("option", text: "obv orientation")
-        expect(page).to have_selector("option", text: "obv part")
-        expect(page).to have_selector("option", text: "rev figure")
-        expect(page).to have_selector("option", text: "rev orientation")
-        expect(page).to have_selector("option", text: "rev part")
+        expect(page).to have_selector("option", text: "Obv figure")
+        expect(page).to have_selector("option", text: "Obv orientation")
+        expect(page).to have_selector("option", text: "Obv part")
+        expect(page).to have_selector("option", text: "Rev figure")
+        expect(page).to have_selector("option", text: "Rev orientation")
+        expect(page).to have_selector("option", text: "Rev part")
       end
 
       it "persists already saved denominations" do
