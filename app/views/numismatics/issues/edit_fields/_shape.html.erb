@@ -6,7 +6,7 @@
   <select class="form-control select2" id="numismatics_issue_shape" data-hidden="#shape">
     <option <% f.object.model.shape.blank? ? 'selected' : '' %></option>
     <% @shapes.each do |shape| %>
-      <option <% f.object.model.shape == shape.value ? 'selected' : '' %> ><%= shape.value %></option>
+      <option <%= f.object.model.shape&.first == shape.value ? 'selected' : '' %> ><%= shape.value %></option>
     <% end %>
   </select>
 </div>

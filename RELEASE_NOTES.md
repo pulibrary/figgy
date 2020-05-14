@@ -2,7 +2,7 @@
 
 Release notes template:
 
-# 2020-04-30
+# 2020-05-14
 
 ## Added
 
@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-05-14
+
+## Fixed
+
+* Numismatics issue Shape field prepopulates the correct value
+
 # 2020-05-08
 
 ## Changed

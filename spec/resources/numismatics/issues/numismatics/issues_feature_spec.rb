@@ -311,7 +311,7 @@ RSpec.feature "Numismatics::Issues" do
       FactoryBot.create_for_repository(:numismatic_issue,
                                        color: "green",
                                        denomination: "1/2 Penny",
-                                       edge: "edge",
+                                       edge: "serrated",
                                        metal: "copper",
                                        object_type: "coin",
                                        obverse_figure: "obv figure",
@@ -359,7 +359,7 @@ RSpec.feature "Numismatics::Issues" do
         hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#denomination", visible: false)
         expect(hidden["value"]).to eq("1/2 Penny")
         hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#edge", visible: false)
-        expect(hidden["value"]).to eq("edge")
+        expect(hidden["value"]).to eq("serrated")
         hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#metal", visible: false)
         expect(hidden["value"]).to eq("copper")
         hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#object_type", visible: false)
@@ -384,7 +384,7 @@ RSpec.feature "Numismatics::Issues" do
         expect(page).to have_selector("option", text: "copper")
         expect(page).to have_selector("option", text: "round")
         expect(page).to have_selector("option", text: "green")
-        expect(page).to have_selector("option", text: "edge")
+        expect(page).to have_selector("option", text: "serrated")
         expect(page).to have_selector("option", text: "obv figure")
         expect(page).to have_selector("option", text: "obv orientation")
         expect(page).to have_selector("option", text: "obv part")
@@ -393,11 +393,22 @@ RSpec.feature "Numismatics::Issues" do
         expect(page).to have_selector("option", text: "rev part")
       end
 
-      it "persists already saved denominations" do
+      it "persists already-saved denominations" do
         visit edit_numismatics_issue_path(id: persisted.id)
 
         hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#denomination", visible: false)
         expect(hidden["value"]).to eq("1/2 Penny")
+      end
+
+      it "initializes the correct selected value in autocomplete fields" do
+        visit edit_numismatics_issue_path(id: persisted.id)
+
+        expect(page).to have_select("Color", selected: ["green"])
+        expect(page).to have_select("Metal", selected: ["copper"])
+        expect(page).to have_select("Edge", selected: ["serrated"])
+        expect(page).to have_select("Denomination", selected: ["1/2 Penny"])
+        expect(page).to have_select("Object type", selected: ["coin"])
+        expect(page).to have_select("Shape", selected: ["round"])
       end
     end
   end
