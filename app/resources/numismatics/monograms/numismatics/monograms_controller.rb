@@ -14,11 +14,11 @@ module Numismatics
     end
 
     def after_create_success(_obj, _change_set)
-      redirect_to numismatics_monograms_path
-    end
-
-    def after_update_success(_obj, _change_set)
-      redirect_to numismatics_monograms_path
+      if append_id.blank?
+        redirect_to numismatics_monograms_path
+      else
+        redirect_to solr_document_path(append_id)
+      end
     end
 
     def manifest
@@ -34,6 +34,10 @@ module Numismatics
     end
 
     private
+
+      def append_id
+        params[:numismatics_monogram][:append_id]
+      end
 
       def load_numismatic_monograms
         @numismatic_monograms = query_service.find_all_of_model(model: Numismatics::Monogram).map(&:decorate)

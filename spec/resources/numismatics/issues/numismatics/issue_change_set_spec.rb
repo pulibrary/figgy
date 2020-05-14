@@ -8,7 +8,7 @@ RSpec.describe Numismatics::IssueChangeSet do
   describe "#primary_terms" do
     it "includes displayed fields" do
       expect(change_set.primary_terms).to be_a(Hash)
-      expect(change_set.primary_terms.keys).to eq(["", "Obverse", "Obverse Attributes", "Reverse", "Reverse Attributes", "Artist", "Citation", "Note", "Subject", "Monograms"])
+      expect(change_set.primary_terms.keys).to eq(["", "Obverse", "Obverse Attributes", "Reverse", "Reverse Attributes", "Artist", "Citation", "Note", "Subject"])
       expect(change_set.primary_terms[""]).to include(:object_type, :denomination, :metal, :workshop)
       expect(change_set.primary_terms.values.flatten).not_to include(:issue_number)
     end

@@ -32,7 +32,6 @@ module Numismatics
             :reverse_symbol,
             :reverse_attributes,
             :reverse_legend,
-            :decorated_numismatic_monograms,
             :artists,
             :citations,
             :notes,
@@ -70,7 +69,13 @@ module Numismatics
     end
 
     def attachable_objects
-      [Numismatics::Coin]
+      [Numismatics::Coin, Numismatics::Monogram]
+    end
+
+    # Attached Numismatics::Coin resources with FileSets
+    # @return [Numismatics::CoinDecorator]
+    def coins_with_filesets
+      decorated_coins.select { |c| c.member_ids.present? }
     end
 
     def citations

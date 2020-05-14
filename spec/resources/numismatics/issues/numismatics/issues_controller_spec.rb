@@ -36,25 +36,10 @@ RSpec.describe Numismatics::IssuesController, type: :controller do
   end
   describe "edit" do
     let(:user) { FactoryBot.create(:admin) }
+    let(:resource) { FactoryBot.create_for_repository(:numismatic_issue) }
     context "access control" do
       let(:factory) { :numismatic_issue }
       it_behaves_like "an access controlled edit request"
-    end
-    let(:resource) { FactoryBot.create_for_repository(:numismatic_issue) }
-    it "retrieves all of the persisted numismatic monograms" do
-      monogram1 = FactoryBot.create_for_repository(:numismatic_monogram)
-      monogram2 = FactoryBot.create_for_repository(:numismatic_monogram)
-
-      get :edit, params: { id: resource.id.to_s }
-      numismatic_monograms = assigns(:numismatic_monograms)
-      expect(numismatic_monograms.map(&:id)).to include(monogram1.id)
-      expect(numismatic_monograms.map(&:id)).to include(monogram2.id)
-    end
-    context "when no numismatic monograms have been persisted" do
-      it "retrieves an empty array" do
-        get :edit, params: { id: resource.id.to_s }
-        expect(assigns(:numismatic_monograms)).to eq([])
-      end
     end
     it "retrieves an array of facet values to for use in populating select boxes" do
       metadata_adapter = Valkyrie::MetadataAdapter.find(:index_solr)

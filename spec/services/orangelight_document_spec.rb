@@ -47,7 +47,7 @@ describe OrangelightDocument do
       end
       let(:issue) do
         FactoryBot.create_for_repository(:numismatic_issue,
-                                         member_ids: [coin.id],
+                                         member_ids: [coin.id, numismatic_monogram1.id, numismatic_monogram2.id],
                                          object_type: "coin",
                                          numismatic_artist: numismatic_artist,
                                          numismatic_citation: numismatic_citation,
@@ -58,7 +58,6 @@ describe OrangelightDocument do
                                          master_id: numismatic_person.id,
                                          earliest_date: "-91",
                                          latest_date: "-41",
-                                         numismatic_monogram_ids: [numismatic_monogram1.id, numismatic_monogram2.id],
                                          denomination: "1/2 Penny",
                                          metal: "copper",
                                          shape: "round",

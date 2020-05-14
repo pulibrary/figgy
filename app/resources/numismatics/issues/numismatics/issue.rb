@@ -9,7 +9,7 @@ module Numismatics
     # resources linked by ID
     attribute :member_ids, Valkyrie::Types::Array
     attribute :member_of_collection_ids
-    attribute :numismatic_monogram_ids
+    attribute :numismatic_monogram_ids # DEPRECATED. Will remove once values are migrated to member_ids
     attribute :numismatic_place_id
     attribute :ruler_id
     attribute :master_id

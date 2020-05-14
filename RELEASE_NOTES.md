@@ -13,6 +13,14 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-05-18
+
+## Changed
+
+* Numismatic Monograms are now attached to Numismatic Issue resources as members. Instead
+  of linking monograms on the edit page, monograms are created and linked
+  on the Issue show page.
+
 # 2020-05-15
 
 ## Changed

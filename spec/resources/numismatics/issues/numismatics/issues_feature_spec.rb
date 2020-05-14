@@ -73,7 +73,6 @@ RSpec.feature "Numismatics::Issues" do
     expect(page).to have_field "Workshop"
     expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Place"
     expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Person"
-    expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Monogram"
     expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Master"
     expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Reference"
     expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Ruler"
@@ -234,100 +233,55 @@ RSpec.feature "Numismatics::Issues" do
     end
   end
 
-  context "with child Numismatics::Coin resources" do
+  context "with child Numismatics::Coin and Numismatics::Monogram resources" do
     let(:member) do
       persister.save(resource: FactoryBot.create_for_repository(:coin))
     end
+    let(:monogram) do
+      persister.save(resource: FactoryBot.create_for_repository(:numismatic_monogram))
+    end
     let(:parent) do
-      persister.save(resource: FactoryBot.create_for_repository(:numismatic_issue, member_ids: [member.id]))
+      persister.save(resource: FactoryBot.create_for_repository(:numismatic_issue, member_ids: [member.id, monogram.id]))
     end
     before do
       parent
     end
 
-    scenario "saved Numismatics::Coins are displayed as members" do
+    scenario "saved Numismatics::Coins and Numismatics::Monograms are displayed as members" do
       visit solr_document_path(parent)
 
       expect(page).to have_selector "h3", text: "Coins"
       expect(page).to have_selector "td", text: "Coin: #{member.coin_number}"
+      expect(page).to have_selector "h3", text: "Monograms"
+      expect(page).to have_selector "td", text: monogram.title.first
     end
   end
 
-  context "with referenced Numismatics::Monogram resources" do
-    let(:monogram1) do
-      persister.save(resource: FactoryBot.create_for_repository(:numismatic_monogram))
+  context "when editing an existing issue" do
+    let(:numismatic_issue) do
+      res = FactoryBot.create_for_repository(:numismatic_issue, era: "test era")
+      persister.save(resource: res)
     end
-    let(:file_set) do
-      persister.save(resource: FactoryBot.create_for_repository(:file_set))
-    end
-    let(:monogram2) do
-      persister.save(resource: FactoryBot.create_for_repository(:numismatic_monogram, member_ids: [file_set.id]))
-    end
-    let(:parent) do
-      persister.save(resource: FactoryBot.create_for_repository(:numismatic_issue, numismatic_monogram_ids: [monogram2.id]))
-    end
+
     before do
-      monogram1
-      parent
+      visit edit_numismatics_issue_path(id: numismatic_issue.id)
     end
 
-    context "when editing an existing issue" do
-      let(:numismatic_issue) do
-        res = FactoryBot.create_for_repository(:numismatic_issue, era: "test era")
-        persister.save(resource: res)
-      end
+    scenario "users can update any given issue" do
+      page.fill_in "numismatics_issue_era", with: "test era 2"
 
-      before do
-        visit edit_numismatics_issue_path(id: numismatic_issue.id)
-      end
+      page.click_on "Save"
 
-      scenario "users can update any given issue" do
-        page.fill_in "numismatics_issue_era", with: "test era 2"
-
-        page.click_on "Save"
-
-        expect(page).to have_css ".attribute.era", text: "test era 2"
-      end
-
-      scenario "users can create a new issue with duplicated metadata" do
-        page.fill_in "numismatics_issue_era", with: "test era 2"
-
-        page.click_on "Save and Duplicate Metadata"
-
-        expect(page).to have_content "Issue 1 Saved, Creating Another..."
-        expect(page).to have_field "numismatics_issue_era", with: "test era 2"
-      end
+      expect(page).to have_css ".attribute.era", text: "test era 2"
     end
 
-    scenario "when users are editing the Numismatics::Issue resource", js: true do
-      visit edit_numismatics_issue_path(parent)
+    scenario "users can create a new issue with duplicated metadata" do
+      page.fill_in "numismatics_issue_era", with: "test era 2"
 
-      doc = Nokogiri::HTML(page.body)
-      expect(doc.xpath("//issue-monograms")).not_to be_empty
+      page.click_on "Save and Duplicate Metadata"
 
-      issue_monogram_elements = doc.xpath("//issue-monograms")
-      expect(issue_monogram_elements).not_to be_empty
-
-      issue_monogram_element = issue_monogram_elements.first
-      attributes = JSON.parse(issue_monogram_element[":members"])
-      expect(attributes).to be_a Array
-      expect(attributes.length).to eq(2)
-
-      first_attribute = attributes.first
-      expect(first_attribute.keys).to include("id", "url", "thumbnail", "title", "attached")
-      expect(first_attribute["id"]).to eq(monogram2.id.to_s)
-      expect(first_attribute["title"]).to eq("Test Monogram")
-      expect(first_attribute["attached"]).to be true
-      expect(first_attribute["thumbnail"]).to include(file_set.id.to_s)
-
-      last_attribute = attributes.last
-      expect(last_attribute.keys).to include("id", "url", "thumbnail", "title", "attached")
-      expect(last_attribute["id"]).to eq(monogram1.id.to_s)
-      expect(last_attribute["title"]).to eq("Test Monogram")
-      expect(last_attribute["attached"]).to be false
-      expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Place"
-      expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Person"
-      expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Monogram"
+      expect(page).to have_content "Issue 1 Saved, Creating Another..."
+      expect(page).to have_field "numismatics_issue_era", with: "test era 2"
     end
   end
 
@@ -365,10 +319,10 @@ RSpec.feature "Numismatics::Issues" do
       expect(page).to have_css("#numismatics_issue_shape.select2", visible: false)
     end
 
-    it "displays a collapsed Monograms panel" do
+    it "displays buttons to create new related resources" do
       visit new_numismatics_issue_path
-      page.find(".panel-heading a.collapsed.monograms").click
-      expect(page).not_to have_css(".panel-heading a.collapsed.monograms")
+      expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Place"
+      expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Person"
     end
 
     context "when Issues have been saved" do

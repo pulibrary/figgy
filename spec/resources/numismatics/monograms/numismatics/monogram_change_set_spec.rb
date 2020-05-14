@@ -7,7 +7,7 @@ RSpec.describe Numismatics::MonogramChangeSet do
 
   describe "#primary_terms" do
     it "includes displayed fields" do
-      expect(change_set.primary_terms).to include(:title)
+      expect(change_set.primary_terms).to include(:title, :append_id)
     end
   end
 end

@@ -35,6 +35,22 @@ RSpec.describe Numismatics::MonogramsController, type: :controller do
       expect(response.location).to start_with "http://test.host/concern/numismatics/monograms"
       monogram = query_service.find_all_of_model(model: Numismatics::Monogram).select { |n| n["title"] == ["Monogram 1"] }.first
       expect(monogram.depositor).to eq [user.uid]
+      expect(response).to be_redirect
+      expect(response.location).to start_with "http://test.host/concern/numismatics/monograms"
+    end
+    context "when creating a monogram from a Numismatic Issue" do
+      let(:issue) { FactoryBot.create_for_repository(:numismatic_issue) }
+      let(:params) do
+        {
+          title: ["Monogram 1"],
+          append_id: issue.id
+        }
+      end
+      it "redirects to the parent Issue" do
+        post :create, params: { numismatics_monogram: params }
+        expect(response).to be_redirect
+        expect(response.location).to eq "http://test.host/catalog/#{issue.id}"
+      end
     end
   end
   describe "destroy" do
@@ -62,7 +78,7 @@ RSpec.describe Numismatics::MonogramsController, type: :controller do
       numismatic_monogram = FactoryBot.create_for_repository(:numismatic_monogram)
       patch :update, params: { id: numismatic_monogram.id.to_s, numismatics_monogram: { title: ["Monogram 45"] } }
       expect(response).to be_redirect
-      expect(response.location).to start_with "http://test.host/concern/numismatics/monograms"
+      expect(response.location).to start_with "http://test.host/catalog"
     end
   end
   describe "index" do

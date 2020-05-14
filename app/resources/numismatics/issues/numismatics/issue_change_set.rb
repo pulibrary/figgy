@@ -46,7 +46,6 @@ module Numismatics
     property :master_id, multiple: false, required: false, type: Valkyrie::Types::ID
     property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
     property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
-    property :numismatic_monogram_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
     property :numismatic_place_id, multiple: false, required: false, type: Valkyrie::Types::ID
     property :ruler_id, multiple: true, required: false, type: Valkyrie::Types::ID
     property :pending_uploads, multiple: true, required: false
@@ -131,9 +130,6 @@ module Numismatics
         ],
         "Subject" => [
           :numismatic_subject
-        ],
-        "Monograms" => [
-          :numismatic_monogram_ids
         ]
       }
     end

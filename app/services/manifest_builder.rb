@@ -460,10 +460,15 @@ class ManifestBuilder
   end
 
   class Numismatics::IssueNode < CollectionNode
-    # Only include coins which have file sets;
+    # Only include Coin resources which have file sets;
     # otherwise there is no image for the viewer.
     def members
-      @members ||= super.select { |coin| coin.member_ids.present? }
+      @members ||=
+        begin
+          decorate.coins_with_filesets.select do |member|
+            !current_ability || current_ability.can?(:read, member)
+          end
+        end
     end
   end
 

@@ -391,7 +391,6 @@ class NumismaticsImportService
       attributes[:numismatic_place_id] = valkyrie_id(value: attributes[:numismatic_place_id], model: Numismatics::Place)
       attributes[:ruler_id] = valkyrie_id(value: attributes[:ruler_id], model: Numismatics::Person)
       attributes[:master_id] = valkyrie_id(value: attributes[:master_id], model: Numismatics::Person)
-      attributes[:numismatic_monogram_ids] = issue_monogram_ids(issue_id: attributes[:issue_number])
 
       # Add nested properties
       attributes[:numismatic_artist] = artist_attributes(issue_id: attributes[:issue_number])
@@ -403,10 +402,11 @@ class NumismaticsImportService
 
       resource = new_resource(klass: Numismatics::Issue, **attributes)
 
-      # Add child coins
+      # Add child coins and monograms
       change_set_persister.buffer_into_index do |buffered_change_set_persister|
         change_set = DynamicChangeSet.new(resource)
-        change_set.member_ids = coin_ids
+        monogram_ids = issue_monogram_ids(issue_id: attributes[:issue_number])
+        change_set.member_ids = coin_ids + monogram_ids
         buffered_change_set_persister.save(change_set: change_set)
       end
     end

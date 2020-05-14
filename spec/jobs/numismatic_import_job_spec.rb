@@ -140,8 +140,8 @@ RSpec.describe NumismaticImportJob do
       # issues
       issue = query_service.find_all_of_model(model: Numismatics::Issue).first
       expect(issue.member_of_collection_ids.first.to_s).to eq collection_id
-      expect(issue.member_ids).to eq [coin.id]
-      expect(issue.numismatic_monogram_ids).to eq [monogram.id]
+      expect(issue.member_ids).to include coin.id
+      expect(issue.member_ids).to include monogram.id
       expect(issue.numismatic_place_id).to eq [place.id]
       expect(issue.ruler_id).to eq [ruler.id]
       expect(issue.master_id).to eq [person.id]

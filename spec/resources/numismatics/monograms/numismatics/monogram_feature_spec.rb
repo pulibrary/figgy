@@ -14,9 +14,20 @@ RSpec.feature "Monogram" do
       monogram
       sign_in(user)
     end
-    it "does not display the Order Manager button" do
+    it "does not display the Order Manager button or a button to create a new monogram" do
       visit solr_document_path(monogram)
       expect(page).not_to have_link "Order Manager"
+    end
+  end
+
+  describe "index page" do
+    before do
+      sign_in(user)
+    end
+
+    it "does not have a link for creating a new monogram" do
+      visit numismatics_monograms_path
+      expect(page).not_to have_css("a[href='#{new_numismatics_monogram_path}']")
     end
   end
 end

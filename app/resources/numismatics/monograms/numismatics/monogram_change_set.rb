@@ -13,10 +13,13 @@ module Numismatics
     property :viewing_direction, required: false
     property :viewing_hint, multiple: false, required: false, default: "individuals"
     property :depositor, multiple: false, required: false
+    property :append_id, virtual: true, multiple: false, required: true
+    property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID.optional
 
     def primary_terms
       [
-        :title
+        :title,
+        :append_id
       ]
     end
   end

@@ -1,6 +1,6 @@
 <table class="table table-striped coin-datatable">
   <thead>
-    <tr><h3>Numismatics::Coins</h3><tr>
+    <tr><h3>Coins</h3><tr>
     <tr>
       <th>Thumbnail</th>
       <th>Title</th>
@@ -27,6 +27,41 @@
     <% else %>
       <tr>
         <td>This work has no coins attached. Click the "Attach Coin" button to create a new coin.</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<table class="table table-striped monogram-datatable">
+  <thead>
+    <tr><h3>Monograms</h3><tr>
+    <tr>
+      <th>Thumbnail</th>
+      <th>Title</th>
+      <th>Date Uploaded</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% unless decorated_resource.decorated_numismatic_monograms.empty? %>
+      <% decorated_resource.decorated_numismatic_monograms.each do |monogram| %>
+        <% monogram_url = parent_solr_document_path(parent_id: resource.id, id: monogram.id) %>
+        <tr>
+          <td style="width: 30%"><%= link_to figgy_thumbnail_path(monogram, { class: 'thumbnail-inner', onerror: default_icon_fallback }), monogram_url %></td>
+          <td><%= monogram.first_title %></td>
+          <td><%= monogram.created_at %></td>
+          <td>
+              <%= link_to 'View', monogram_url, class: 'btn btn-default' %>
+          </td>
+        </tr>
+      <% end %>  
+    <% else %>
+      <tr>
+        <td>This work has no monograms attached. Click the "Attach Child" button to create a new monogram.</td>
         <td></td>
         <td></td>
         <td></td>

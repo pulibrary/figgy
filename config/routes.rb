@@ -160,6 +160,7 @@ Rails.application.routes.draw do
     end
 
     get "/numismatics/issues/:parent_id/coin" => "numismatics/coins#new", as: :parent_new_numismatics_coin
+    get "/numismatics/issues/:parent_id/monogram" => "numismatics/monograms#new", as: :parent_new_numismatics_monogram
     get "/numismatics/references/:parent_id/new", to: "numismatics/references#new", as: :parent_new_numismatics_reference
 
     resources :ephemera_projects do

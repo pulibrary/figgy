@@ -34,7 +34,7 @@ RSpec.describe Numismatics::IssueDecorator do
 
   describe "#attachable_objects" do
     it "allows attaching coins" do
-      expect(decorator.attachable_objects).to eq([Numismatics::Coin])
+      expect(decorator.attachable_objects).to eq([Numismatics::Coin, Numismatics::Monogram])
     end
   end
 
