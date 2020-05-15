@@ -87,8 +87,7 @@ class VIPSDerivativeService
       Q: 75,
       tile_width: 1024,
       tile_height: 1024,
-      strip: true,
-      profile: color_profile
+      strip: true
     )
     raise "Unable to store pyramidal TIFF for #{filename}!" unless File.exist?(temporary_output.path)
   end
@@ -96,17 +95,13 @@ class VIPSDerivativeService
   def vips_image
     @vips_image ||=
       begin
-        image = Vips::Image.new_from_file(filename.to_s)
+        image = Vips::Image.new_from_file(filename.to_s).icc_transform("srgb")
         if image.height >= REDUCTION_THRESHOLD || image.width >= REDUCTION_THRESHOLD
           image.resize(0.5)
         else
           image
         end
       end
-  end
-
-  def color_profile
-    Hydra::Derivatives::Processors::Jpeg2kImage.srgb_profile_path
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
