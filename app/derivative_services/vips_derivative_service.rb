@@ -95,13 +95,24 @@ class VIPSDerivativeService
   def vips_image
     @vips_image ||=
       begin
-        image = Vips::Image.new_from_file(filename.to_s).icc_transform("srgb")
+        image = image_from_file(filename.to_s)
         if image.height >= REDUCTION_THRESHOLD || image.width >= REDUCTION_THRESHOLD
           image.resize(0.5)
         else
           image
         end
       end
+  end
+
+  def image_from_file(filename)
+    image = Vips::Image.new_from_file(filename.to_s)
+    begin
+      profile = image.get("icc-profile-data")
+      image = image.icc_transform("srgb") if profile
+    rescue
+      Rails.logger.debug("No embedded profile - skipping ICC Transform")
+    end
+    image
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
