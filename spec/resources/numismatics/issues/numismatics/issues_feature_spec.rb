@@ -23,7 +23,7 @@ RSpec.feature "Numismatics::Issues" do
     sign_in user
   end
 
-  scenario "creating a new resource" do
+  scenario "form presented when creating a new resource" do
     visit new_numismatics_issue_path
 
     expect(page).not_to have_css '.select[for="numismatics_issue_rights_statement"]', text: "Rights Statement"
@@ -81,14 +81,31 @@ RSpec.feature "Numismatics::Issues" do
     expect(page).to have_css "div.panel.panel-default div.panel-body div.col-sm-6 div.form-group div.col-sm-6 div.form-group input#numismatics_issue_latest_date"
     expect(page).to have_css "div.panel.panel-default div.panel-body div.col-sm-6 div.form-group div.col-sm-6 div.form-group input#numismatics_issue_era"
     expect(page).to have_css "div.panel.panel-default div.panel-body div.col-sm-6 div.form-group div.col-sm-6 div.form-group input#numismatics_issue_object_date"
-
-    fill_in "Era", with: "test era"
-    click_button "Save"
-
-    expect(page).to have_content "test era"
   end
 
-  context "when a user creates a new numismatic issue" do
+  scenario "users can save a new issue" do
+    visit new_numismatics_issue_path
+
+    page.fill_in "numismatics_issue_era", with: "test era"
+
+    page.click_on "Save"
+
+    expect(page).to have_css ".attribute.era", text: "test era"
+  end
+
+  scenario "users can save a new issue and create another" do
+    visit new_numismatics_issue_path
+
+    page.fill_in "numismatics_issue_era", with: "test era"
+
+    page.click_on "Save and Duplicate Metadata"
+
+    expect(page).to have_content "Issue 2 Saved, Creating Another..."
+    expect(page).to have_field "numismatics_issue_era", with: "test era"
+  end
+
+
+  context "viewing a resource" do
     let(:collection) { FactoryBot.create_for_repository(:collection) }
     let(:numismatic_reference) { FactoryBot.create_for_repository(:numismatic_reference) }
     let(:person) { FactoryBot.create_for_repository(:numismatic_person) }
@@ -143,56 +160,7 @@ RSpec.feature "Numismatics::Issues" do
       )
     end
 
-    scenario "users can save a new issue" do
-      visit new_numismatics_issue_path
-
-      page.fill_in "numismatics_issue_era", with: "test era"
-
-      page.click_on "Save"
-
-      expect(page).to have_css ".attribute.era", text: "test era"
-    end
-
-    scenario "users can save a new issue and create another" do
-      visit new_numismatics_issue_path
-
-      page.fill_in "numismatics_issue_era", with: "test era"
-
-      page.click_on "Save and Duplicate Metadata"
-
-      expect(page).to have_content "Issue 2 Saved, Creating Another..."
-      expect(page).to have_field "numismatics_issue_era", with: "test era"
-    end
-
-    context "when editing an existing issue" do
-      let(:numismatic_issue) do
-        res = FactoryBot.create_for_repository(:numismatic_issue, era: "test era")
-        persister.save(resource: res)
-      end
-
-      before do
-        visit edit_numismatics_issue_path(id: numismatic_issue.id)
-      end
-
-      scenario "users can update any given issue" do
-        page.fill_in "numismatics_issue_era", with: "test era 2"
-
-        page.click_on "Save"
-
-        expect(page).to have_css ".attribute.era", text: "test era 2"
-      end
-
-      scenario "users can create a new issue with duplicated metadata" do
-        page.fill_in "numismatics_issue_era", with: "test era 2"
-
-        page.click_on "Save and Duplicate Metadata"
-
-        expect(page).to have_content "Issue 1 Saved, Creating Another..."
-        expect(page).to have_field "numismatics_issue_era", with: "test era 2"
-      end
-    end
-
-    scenario "viewing a resource" do
+    scenario "all fields are displayed" do
       visit solr_document_path numismatic_issue
       expect(page).to have_css ".attribute.rendered_rights_statement", text: "Copyright Not Evaluated"
       expect(page).to have_css ".attribute.visibility", text: "open"
@@ -271,6 +239,34 @@ RSpec.feature "Numismatics::Issues" do
     before do
       monogram1
       parent
+    end
+
+    context "when editing an existing issue" do
+      let(:numismatic_issue) do
+        res = FactoryBot.create_for_repository(:numismatic_issue, era: "test era")
+        persister.save(resource: res)
+      end
+
+      before do
+        visit edit_numismatics_issue_path(id: numismatic_issue.id)
+      end
+
+      scenario "users can update any given issue" do
+        page.fill_in "numismatics_issue_era", with: "test era 2"
+
+        page.click_on "Save"
+
+        expect(page).to have_css ".attribute.era", text: "test era 2"
+      end
+
+      scenario "users can create a new issue with duplicated metadata" do
+        page.fill_in "numismatics_issue_era", with: "test era 2"
+
+        page.click_on "Save and Duplicate Metadata"
+
+        expect(page).to have_content "Issue 1 Saved, Creating Another..."
+        expect(page).to have_field "numismatics_issue_era", with: "test era 2"
+      end
     end
 
     scenario "when users are editing the Numismatics::Issue resource", js: true do
