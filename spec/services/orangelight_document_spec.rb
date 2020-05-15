@@ -31,7 +31,7 @@ describe OrangelightDocument do
                                          files: [file],
                                          counter_stamp: "two small counter-stamps visible as small circles on reverse, without known parallel",
                                          analysis: "holed at 12 o'clock, 16.73 grams",
-                                         public_note: ["Abraham Usher| John Field| Charles Meredith.", "Black and red ink.", "Visible flecks of mica."],
+                                         public_note: ["identification uncertain"],
                                          private_note: ["was in the same case as coin #8822"],
                                          find_place_id: numismatic_place.id,
                                          find_date: "5/27/1939?",
@@ -74,7 +74,7 @@ describe OrangelightDocument do
                                          obverse_figure_description: "Harp at left side, 5 strings.",
                                          obverse_figure_relationship: "Victory behind",
                                          obverse_legend: "GEORGIUS•DEI•GRATIA•REX•",
-                                         reverse_figure: "Hibernia",
+                                         reverse_figure: "emperor and Virgin",
                                          reverse_symbol: "goat head",
                                          reverse_part: "seated",
                                          reverse_orientation: "left",
@@ -92,6 +92,16 @@ describe OrangelightDocument do
       it "returns an Orangelight document" do
         output = MultiJson.load(builder.to_json, symbolize_keys: true)
         holding = JSON.parse(output[:holdings_1display]).first.last
+
+        # Fields to capitalize
+        expect(output[:issue_metal_s]).to eq ["Copper"]
+        expect(output[:issue_era_s]).to eq ["Uncertain"]
+        expect(output[:issue_obverse_figure_s]).to eq ["Bust"]
+        expect(output[:issue_reverse_figure_s]).to eq ["Emperor and Virgin"]
+        expect(output[:analysis_s]).to eq ["Holed at 12 o'clock, 16.73 grams"]
+        expect(output[:notes_display]).to eq ["Identification uncertain"]
+
+        # All the rest of the fields
         expect(output[:id]).to eq coin.decorate.orangelight_id
         expect(output[:title_display]).to eq "Coin: #{coin.coin_number}"
         expect(output[:pub_created_display]).to eq "name1 name2 epithet (1868 to 1963), 1/2 Penny, city"
@@ -109,9 +119,7 @@ describe OrangelightDocument do
         expect(holding["location"]).to eq "Special Collections - Numismatics Collection"
         expect(holding["library"]).to eq "Special Collections"
         expect(output[:counter_stamp_s]).to eq ["two small counter-stamps visible as small circles on reverse, without known parallel"]
-        expect(output[:analysis_s]).to eq ["holed at 12 o'clock, 16.73 grams"]
         expect(output[:donor_s]).to eq ["name1 name2"]
-        expect(output[:notes_display]).to eq ["Abraham Usher| John Field| Charles Meredith.", "Black and red ink.", "Visible flecks of mica."]
         expect(output[:find_place_s]).to eq ["city, state, region"]
         expect(output[:find_date_s]).to eq ["5/27/1939?"]
         expect(output[:find_feature_s]).to eq ["Hill A?"]
@@ -128,12 +136,10 @@ describe OrangelightDocument do
         expect(output[:issue_denomination_s]).to eq ["1/2 Penny"]
         expect(output[:issue_denomination_sort]).to eq "1/2 Penny"
         expect(output[:issue_number_s]).to eq "1"
-        expect(output[:issue_metal_s]).to eq ["copper"]
         expect(output[:issue_metal_sort]).to eq "copper"
         expect(output[:issue_shape_s]).to eq ["round"]
         expect(output[:issue_color_s]).to eq ["green"]
         expect(output[:issue_edge_s]).to eq ["GOTT MIT UNS"]
-        expect(output[:issue_era_s]).to eq ["uncertain"]
         expect(output[:issue_ruler_s]).to eq ["name1 name2 epithet (1868 to 1963)"]
         expect(output[:issue_ruler_sort]).to eq "name1 name2 epithet (1868 to 1963)"
         expect(output[:issue_master_s]).to eq ["name1 name2 epithet (1868 to 1963)"]
@@ -144,7 +150,6 @@ describe OrangelightDocument do
         expect(output[:issue_state_s]).to eq ["state"]
         expect(output[:issue_region_s]).to eq ["region"]
         expect(output[:issue_place_sort]).to eq "city, state, region"
-        expect(output[:issue_obverse_figure_s]).to eq ["bust"]
         expect(output[:issue_obverse_symbol_s]).to eq ["cornucopia"]
         expect(output[:issue_obverse_part_s]).to eq ["standing"]
         expect(output[:issue_obverse_orientation_s]).to eq ["right"]
@@ -152,7 +157,6 @@ describe OrangelightDocument do
         expect(output[:issue_obverse_figure_relationship_s]).to eq ["Victory behind"]
         expect(output[:issue_obverse_legend_s]).to eq ["GEORGIUS•DEI•GRATIA•REX•"]
         expect(output[:issue_obverse_attributes_s]).to eq ["attribute name, attribute description"]
-        expect(output[:issue_reverse_figure_s]).to eq ["Hibernia"]
         expect(output[:issue_reverse_symbol_s]).to eq ["goat head"]
         expect(output[:issue_reverse_part_s]).to eq ["seated"]
         expect(output[:issue_reverse_orientation_s]).to eq ["left"]
@@ -170,22 +174,7 @@ describe OrangelightDocument do
 
     context "with a coin not attached to an issue" do
       subject(:builder) { described_class.new(coin) }
-      let(:coin) do
-        FactoryBot.create_for_repository(:coin,
-                                         counter_stamp: "two small counter-stamps visible as small circles on reverse, without known parallel",
-                                         analysis: "holed at 12 o'clock, 16.73 grams",
-                                         public_note: ["Abraham Usher| John Field| Charles Meredith.", "Black and red ink.", "Visible flecks of mica."],
-                                         private_note: ["was in the same case as coin #8822"],
-                                         find_date: "5/27/1939?",
-                                         find_feature: "Hill A?",
-                                         find_locus: "8-N 40",
-                                         find_number: "2237",
-                                         find_description: "at join of carcares and w. cavea surface",
-                                         die_axis: "6",
-                                         size: "27",
-                                         technique: "Cast",
-                                         weight: "8.26")
-      end
+      let(:coin) { FactoryBot.create_for_repository(:coin) }
 
       it "will display an error" do
         expect(builder.to_h[:error]).to eq("#{coin.title.first} with id: #{coin.id} has no parent numismatic issue and cannot build an OL document.")
