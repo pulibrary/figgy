@@ -48,8 +48,8 @@ class OrangelightCoinBuilder
         format: ["Coin"],
         advanced_location_s: [coin_location_code],
         counter_stamp_s: decorator.counter_stamp,
-        analysis_s: decorator.analysis,
-        notes_display: decorator.public_note,
+        analysis_s: initial_capital(decorator.analysis),
+        notes_display: initial_capital(decorator.public_note),
         find_place_s: [decorator.find_place],
         find_date_s: decorator.find_date,
         find_feature_s: decorator.find_feature,
@@ -74,12 +74,12 @@ class OrangelightCoinBuilder
         issue_denomination_s: parent.denomination,
         issue_denomination_sort: parent.denomination&.first,
         issue_number_s: parent.issue_number.to_s,
-        issue_metal_s: parent.metal,
+        issue_metal_s: initial_capital(parent.metal),
         issue_metal_sort: parent.metal&.first,
         issue_shape_s: parent.shape,
         issue_color_s: parent.color,
         issue_edge_s: parent.edge,
-        issue_era_s: parent.era,
+        issue_era_s: initial_capital(parent.era),
         issue_ruler_s: parent.rulers,
         issue_ruler_sort: parent.rulers&.first,
         issue_master_s: [parent.master],
@@ -90,7 +90,7 @@ class OrangelightCoinBuilder
         issue_state_s: [parent.geo_state],
         issue_region_s: [parent.region],
         issue_place_sort: parent.rendered_place,
-        issue_obverse_figure_s: parent.obverse_figure,
+        issue_obverse_figure_s: initial_capital(parent.obverse_figure),
         issue_obverse_symbol_s: parent.obverse_symbol,
         issue_obverse_part_s: parent.obverse_part,
         issue_obverse_orientation_s: parent.obverse_orientation,
@@ -98,7 +98,7 @@ class OrangelightCoinBuilder
         issue_obverse_figure_relationship_s: parent.obverse_figure_relationship,
         issue_obverse_legend_s: parent.obverse_legend,
         issue_obverse_attributes_s: parent.obverse_attributes,
-        issue_reverse_figure_s: parent.reverse_figure,
+        issue_reverse_figure_s: initial_capital(parent.reverse_figure),
         issue_reverse_symbol_s: parent.reverse_symbol,
         issue_reverse_part_s: parent.reverse_part,
         issue_reverse_orientation_s: parent.reverse_orientation,
@@ -133,6 +133,8 @@ class OrangelightCoinBuilder
         document_id: monogram.id.to_s
       }
     end
+    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize
 
     def coin_location_code
       "num"
@@ -145,6 +147,9 @@ class OrangelightCoinBuilder
     def coin_full_location
       "Special Collections - Numismatics Collection"
     end
-  # rubocop:enable Metrics/MethodLength
-  # rubocop:enable Metrics/AbcSize
+
+    def initial_capital(value)
+      return unless value
+      return value.map(&:upcase_first) if value.is_a? Array
+    end
 end

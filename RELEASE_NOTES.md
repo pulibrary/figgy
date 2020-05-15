@@ -13,6 +13,13 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-05-15
+
+## Changed
+
+* Some issue / coin fields are now capitalized when indexed to orangelight:
+  metal, era, obverse figure, reverse figure, analysis, public note
+
 # 2020-05-14
 
 ## Fixed
