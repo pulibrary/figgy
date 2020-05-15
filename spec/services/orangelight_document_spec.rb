@@ -170,22 +170,7 @@ describe OrangelightDocument do
 
     context "with a coin not attached to an issue" do
       subject(:builder) { described_class.new(coin) }
-      let(:coin) do
-        FactoryBot.create_for_repository(:coin,
-                                         counter_stamp: "two small counter-stamps visible as small circles on reverse, without known parallel",
-                                         analysis: "holed at 12 o'clock, 16.73 grams",
-                                         public_note: ["Abraham Usher| John Field| Charles Meredith.", "Black and red ink.", "Visible flecks of mica."],
-                                         private_note: ["was in the same case as coin #8822"],
-                                         find_date: "5/27/1939?",
-                                         find_feature: "Hill A?",
-                                         find_locus: "8-N 40",
-                                         find_number: "2237",
-                                         find_description: "at join of carcares and w. cavea surface",
-                                         die_axis: "6",
-                                         size: "27",
-                                         technique: "Cast",
-                                         weight: "8.26")
-      end
+      let(:coin) { FactoryBot.create_for_repository(:coin) }
 
       it "will display an error" do
         expect(builder.to_h[:error]).to eq("#{coin.title.first} with id: #{coin.id} has no parent numismatic issue and cannot build an OL document.")
