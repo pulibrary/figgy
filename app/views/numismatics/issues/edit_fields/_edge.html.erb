@@ -4,7 +4,7 @@
   <input id="edge" type="hidden" name="numismatics_issue[edge]" value="<%= f.object.model.edge&.first %>" />
 
   <select class="form-control select2" id="numismatics_issue_edge" data-hidden="#edge">
-    <option <% f.object.model.edge.blank? ? 'selected' : '' %>></option>
+    <option></option>
     <% @edges.each do |edge| %>
       <option <%= f.object.model.edge&.first == edge.value ? 'selected' : '' %> ><%= edge.value %></option>
     <% end %>

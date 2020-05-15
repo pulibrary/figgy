@@ -4,7 +4,7 @@
   <input id="metal" type="hidden" name="numismatics_issue[metal]" value="<%= f.object.model.metal&.first %>" />
 
   <select class="form-control select2" id="numismatics_issue_metal" data-hidden="#metal">
-    <option <% f.object.model.metal.blank? ? 'selected' : '' %>></option>
+    <option></option>
     <% @metals.each do |metal| %>
       <option <%= f.object.model.metal&.first == metal.value ? 'selected' : '' %> ><%= metal.value %></option>
     <% end %>

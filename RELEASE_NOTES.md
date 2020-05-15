@@ -20,6 +20,11 @@ Release notes template:
 * Some issue / coin fields are now capitalized when indexed to orangelight:
   metal, era, obverse figure, reverse figure, analysis, public note
 
+## Fixed
+
+* Numismatics issue Shape field prepopulates a blank value when there was
+  previously no value
+
 # 2020-05-14
 
 ## Fixed

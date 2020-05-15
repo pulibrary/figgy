@@ -83,6 +83,37 @@ RSpec.feature "Numismatics::Issues" do
     expect(page).to have_css "div.panel.panel-default div.panel-body div.col-sm-6 div.form-group div.col-sm-6 div.form-group input#numismatics_issue_object_date"
   end
 
+  context "when another issue already exists", js: true do
+    scenario "a new issue gets blank default values" do
+      preexisting_issue = FactoryBot.build(
+        :numismatic_issue,
+        shape: "round",
+        color: "green",
+        metal: "copper",
+        edge: "serrated",
+        denomination: "dollar",
+        object_type: "coin"
+      )
+      change_set_persister.save(change_set: DynamicChangeSet.new(preexisting_issue))
+
+      visit new_numismatics_issue_path
+
+      # default values
+      expect(page.find("#select2-numismatics_issue_shape-container").text).to eq "Nothing selected"
+      expect(page.find("#select2-numismatics_issue_color-container").text).to eq "Nothing selected"
+      expect(page.find("#select2-numismatics_issue_metal-container").text).to eq "Nothing selected"
+      expect(page.find("#select2-numismatics_issue_edge-container").text).to eq "Nothing selected"
+      expect(page.find("#select2-numismatics_issue_denomination-container").text).to eq "Nothing selected"
+      expect(page.find("#select2-numismatics_issue_object_type-container").text).to eq "Nothing selected"
+      expect(page).to have_select("Shape", selected: "")
+      expect(page).to have_select("Color", selected: "")
+      expect(page).to have_select("Metal", selected: "")
+      expect(page).to have_select("Edge", selected: "")
+      expect(page).to have_select("Denomination", selected: "")
+      expect(page).to have_select("Object type", selected: "")
+    end
+  end
+
   scenario "users can save a new issue" do
     visit new_numismatics_issue_path
 
@@ -103,7 +134,6 @@ RSpec.feature "Numismatics::Issues" do
     expect(page).to have_content "Issue 2 Saved, Creating Another..."
     expect(page).to have_field "numismatics_issue_era", with: "test era"
   end
-
 
   context "viewing a resource" do
     let(:collection) { FactoryBot.create_for_repository(:collection) }
