@@ -22,8 +22,13 @@ class PagedAllQuery
       relation.offset(offset).with_collections(collections).only_models(only_models).from(from).until(until_time)
       relation.only_marc if marc_only
 
-      relation.lazy.map do |object|
+      relation = relation.lazy.map do |object|
         resource_factory.to_resource(object: object)
+      end
+      # Remove objects with parents - this appears to be faster than a left join
+      # filter.
+      relation.select do |object|
+        Wayfinder.for(object).parents.blank?
       end
     end
   end
@@ -47,20 +52,20 @@ class PagedAllQuery
     def from(from)
       return self unless from
       tap do
-        self.relation = relation.where(Sequel[:updated_at] >= from)
+        self.relation = relation.where(Sequel[:orm_resources][:updated_at] >= from)
       end
     end
 
     def until(until_time)
       return self unless until_time
       tap do
-        self.relation = relation.where(Sequel[:updated_at] <= until_time)
+        self.relation = relation.where(Sequel[:orm_resources][:updated_at] <= until_time)
       end
     end
 
     def only_marc
       tap do
-        self.relation = relation.exclude(Sequel[:metadata].pg_jsonb.contains(archival_collection_code: []))
+        self.relation = relation.exclude(Sequel[:orm_resources][:metadata].pg_jsonb.contains(archival_collection_code: []))
       end
     end
 
@@ -73,14 +78,14 @@ class PagedAllQuery
     def with_collections(collections)
       return self unless collections.present?
       tap do
-        self.relation = relation.where(Sequel[:metadata].pg_jsonb.contains(initial_requirements.merge(member_of_collection_ids: collections.map(&:id))))
+        self.relation = relation.where(Sequel[:orm_resources][:metadata].pg_jsonb.contains(initial_requirements.merge(member_of_collection_ids: collections.map(&:id))))
       end
     end
 
     def only_models(models)
       return self unless models.present?
       tap do
-        self.relation = relation.where(internal_resource: Array(models).map(&:to_s))
+        self.relation = relation.where(Sequel[:orm_resources][:internal_resource] => Array(models).map(&:to_s))
       end
     end
 
@@ -89,7 +94,7 @@ class PagedAllQuery
     end
 
     def relation
-      @relation ||= orm_class.use_cursor.limit(limit).order(:updated_at)
+      @relation ||= orm_class.use_cursor.limit(limit).order(Sequel[:orm_resources][:updated_at])
     end
   end
 end

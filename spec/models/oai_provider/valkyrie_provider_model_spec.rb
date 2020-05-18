@@ -29,6 +29,16 @@ RSpec.describe OaiProvider::ValkyrieProviderModel do
         expect(output.length).to eq 1
         expect(output.first).to be_a OaiProvider::OAIWrapper
       end
+      it "doesn't return volumes" do
+        collection = FactoryBot.create_for_repository(:collection, slug: "cico")
+        first = create_scanned_resource(source_metadata_identifier: "8543429", collection_id: collection.id)
+        create_scanned_resource(source_metadata_identifier: "123456", collection_id: collection.id, member_ids: first.id)
+
+        output = described_class.new.find_all(set: "cico", metadata_prefix: "marc21")
+
+        expect(output.length).to eq 1
+        expect(output.first).to be_a OaiProvider::OAIWrapper
+      end
       it "can find items within a specific date range" do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
         Timecop.freeze(Time.zone.local(2008, 9, 1, 12, 0, 0))
@@ -60,10 +70,10 @@ RSpec.describe OaiProvider::ValkyrieProviderModel do
       end
     end
   end
-  def create_scanned_resource(source_metadata_identifier:, collection_id:)
+  def create_scanned_resource(source_metadata_identifier:, collection_id:, member_ids: [])
     stub_bibdata(bib_id: source_metadata_identifier)
     stub_bibdata(bib_id: source_metadata_identifier, content_type: "application/marcxml+xml") if File.exist?(bibdata_fixture_path(source_metadata_identifier, BibdataStubbing::CONTENT_TYPE_MARC_XML))
-    FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection_id, source_metadata_identifier: source_metadata_identifier, import_metadata: true)
+    FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection_id, source_metadata_identifier: source_metadata_identifier, import_metadata: true, member_ids: member_ids)
   end
   context "when there's more than the limit" do
     it "uses resumption tokens" do

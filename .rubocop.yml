@@ -317,6 +317,7 @@ RSpec/ScatteredSetup:
 Style/PreferredHashMethods:
   Exclude:
     - 'app/queries/find_ids_with_property_not_empty.rb'
+    - 'app/queries/paged_all_query.rb'
 Lint/Void:
   Exclude:
     # It's important that an explicit false be returned here to match the
