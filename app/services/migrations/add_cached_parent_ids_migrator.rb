@@ -10,8 +10,10 @@ module Migrations
 
     def run
       query_service.custom_queries.memory_efficient_all.each do |resource|
-        change_set = DynamicChangeSet.new(resource)
-        change_set_persister.save(change_set: change_set)
+        if resource.respond_to?(:cached_parent_id)
+          change_set = DynamicChangeSet.new(resource)
+          change_set_persister.save(change_set: change_set)
+        end
       end
     end
 
