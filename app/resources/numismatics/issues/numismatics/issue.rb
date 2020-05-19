@@ -63,6 +63,7 @@ module Numismatics
     attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
     attribute :pending_uploads, Valkyrie::Types::Array.of(PendingUpload)
     attribute :claimed_by, Valkyrie::Types::String
+    attribute :cached_parent_id, Valkyrie::Types::ID
 
     # manifest metadata
     attribute :start_canvas
