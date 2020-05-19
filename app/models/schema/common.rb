@@ -88,6 +88,7 @@ module Schema
         attribute common_attribute
       end
       attribute :claimed_by, Valkyrie::Types::String
+      attribute :cached_parent_id, Valkyrie::Types::ID
     end
   end
 end

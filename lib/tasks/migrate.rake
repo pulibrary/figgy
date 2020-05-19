@@ -83,6 +83,11 @@ namespace :migrate do
     AddPreservationObjectIdsMigrator.call
   end
 
+  desc "Add cached parent IDs to all non-filesets"
+  task cached_parent_ids: :environment do
+    Migration::AddCachedParentIdsMigrator.call
+  end
+
   private
 
     # Construct or retrieve the memoized logger for STDOUT

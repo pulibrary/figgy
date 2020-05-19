@@ -60,7 +60,7 @@ module Bagit
       end
 
       def id_references
-        ids = resource.to_h.except(:id).values.flat_map { |x| x }.select { |value| value.is_a?(Valkyrie::ID) } - (resource.try(:member_ids) || [])
+        ids = resource.to_h.except(:id).values.flat_map { |x| x }.select { |value| value.is_a?(Valkyrie::ID) } - (resource.try(:member_ids) || []) - Array.wrap(resource.try(:cached_parent_id))
         query_service.find_many_by_ids(ids: ids)
       end
 

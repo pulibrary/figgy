@@ -1291,6 +1291,7 @@ RSpec.describe ChangeSetPersister do
       expect(reloaded.thumbnail_id).to eq [output.id]
       solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "id:#{output.id}" })["response"]["docs"][0]
       expect(solr_record["member_of_ssim"]).to eq ["id-#{parent.id}"]
+      expect(output.cached_parent_id).to eq reloaded.id
     end
 
     it "will not append to the same parent twice" do
