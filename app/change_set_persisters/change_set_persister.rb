@@ -24,7 +24,8 @@ class ChangeSetPersister
         PropagateVisibilityAndState,
         CleanupPdfs,
         CreateProxyFileSets,
-        ApplyAuthToken
+        ApplyAuthToken,
+        CacheParentId
       ],
       after_save: [
         AppendToParent,
