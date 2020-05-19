@@ -31,8 +31,8 @@ RSpec.describe OaiProvider::ValkyrieProviderModel do
       end
       it "doesn't return volumes" do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
-        first = create_scanned_resource(source_metadata_identifier: "8543429", collection_id: collection.id)
-        create_scanned_resource(source_metadata_identifier: "123456", collection_id: collection.id, member_ids: first.id)
+        parent = create_scanned_resource(source_metadata_identifier: "123456", collection_id: collection.id)
+        create_scanned_resource(source_metadata_identifier: "8543429", collection_id: collection.id, append_id: parent.id)
 
         output = described_class.new.find_all(set: "cico", metadata_prefix: "marc21")
 
@@ -70,10 +70,17 @@ RSpec.describe OaiProvider::ValkyrieProviderModel do
       end
     end
   end
-  def create_scanned_resource(source_metadata_identifier:, collection_id:, member_ids: [])
+  def create_scanned_resource(source_metadata_identifier:, collection_id:, member_ids: [], append_id: nil)
     stub_bibdata(bib_id: source_metadata_identifier)
     stub_bibdata(bib_id: source_metadata_identifier, content_type: "application/marcxml+xml") if File.exist?(bibdata_fixture_path(source_metadata_identifier, BibdataStubbing::CONTENT_TYPE_MARC_XML))
-    FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection_id, source_metadata_identifier: source_metadata_identifier, import_metadata: true, member_ids: member_ids)
+    FactoryBot.create_for_repository(
+      :scanned_resource,
+      member_of_collection_ids: collection_id,
+      source_metadata_identifier: source_metadata_identifier,
+      import_metadata: true,
+      member_ids: member_ids,
+      append_id: append_id
+    )
   end
   context "when there's more than the limit" do
     it "uses resumption tokens" do

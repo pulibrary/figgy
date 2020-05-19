@@ -15,6 +15,7 @@ FactoryBot.define do
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
       import_metadata false
       run_callbacks false
+      append_id nil
     end
     after(:build) do |resource, evaluator|
       resource.depositor = evaluator.user.uid if evaluator.user.present?
@@ -27,9 +28,9 @@ FactoryBot.define do
       resource
     end
     after(:create) do |resource, evaluator|
-      if evaluator.files.present? || evaluator.import_metadata || evaluator.run_callbacks
+      if evaluator.files.present? || evaluator.import_metadata || evaluator.run_callbacks || evaluator.append_id.present?
         import_metadata = "1" if evaluator.import_metadata
-        change_set = ScannedResourceChangeSet.new(resource, files: evaluator.files, refresh_remote_metadata: import_metadata)
+        change_set = ScannedResourceChangeSet.new(resource, files: evaluator.files, refresh_remote_metadata: import_metadata, append_id: evaluator.append_id)
         ::ChangeSetPersister.new(
           metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
           storage_adapter: Valkyrie.config.storage_adapter

@@ -19,16 +19,11 @@ class PagedAllQuery
       return [] if collection_slug && collections.empty?
       relation = PagedAllBuilder.new(query_service: query_service, limit: limit)
 
-      relation.offset(offset).with_collections(collections).only_models(only_models).from(from).until(until_time)
+      relation.offset(offset).with_collections(collections).only_models(only_models).from(from).until(until_time).exclude_volumes
       relation.only_marc if marc_only
 
-      relation = relation.lazy.map do |object|
+      relation.lazy.map do |object|
         resource_factory.to_resource(object: object)
-      end
-      # Remove objects with parents - this appears to be faster than a left join
-      # filter.
-      relation.select do |object|
-        Wayfinder.for(object).parents.blank?
       end
     end
   end
@@ -86,6 +81,12 @@ class PagedAllQuery
       return self unless models.present?
       tap do
         self.relation = relation.where(Sequel[:orm_resources][:internal_resource] => Array(models).map(&:to_s))
+      end
+    end
+
+    def exclude_volumes
+      tap do
+        self.relation = relation.exclude(Sequel[:orm_resources][:metadata].pg_jsonb.contains(cached_parent_id: []))
       end
     end
 
