@@ -85,7 +85,7 @@ namespace :migrate do
 
   desc "Add cached parent IDs to all non-filesets"
   task cached_parent_ids: :environment do
-    Migration::AddCachedParentIdsMigrator.call
+    Migrations::AddCachedParentIdsMigrator.call
   end
 
   private
