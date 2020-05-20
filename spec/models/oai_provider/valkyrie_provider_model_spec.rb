@@ -10,8 +10,10 @@ RSpec.describe OaiProvider::ValkyrieProviderModel do
 
   describe "#find_all" do
     context "when requesting all items" do
-      it "returns them all" do
+      it "returns all complete public resources" do
         create_scanned_resource(source_metadata_identifier: "8543429", collection_id: nil)
+        create_scanned_resource(source_metadata_identifier: "8543429", collection_id: nil, state: "pending", visibility: ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS)
+        create_scanned_resource(source_metadata_identifier: "8543429", collection_id: nil, state: "complete", visibility: ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS)
 
         output = described_class.new.find_all(metadata_prefix: "marc21")
 
@@ -70,16 +72,19 @@ RSpec.describe OaiProvider::ValkyrieProviderModel do
       end
     end
   end
-  def create_scanned_resource(source_metadata_identifier:, collection_id:, member_ids: [], append_id: nil)
+  def create_scanned_resource(source_metadata_identifier:, collection_id:, member_ids: [], append_id: nil, state: "complete", visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
     stub_bibdata(bib_id: source_metadata_identifier)
     stub_bibdata(bib_id: source_metadata_identifier, content_type: "application/marcxml+xml") if File.exist?(bibdata_fixture_path(source_metadata_identifier, BibdataStubbing::CONTENT_TYPE_MARC_XML))
+    stub_ezid(shoulder: "99999/fk4", blade: source_metadata_identifier)
     FactoryBot.create_for_repository(
-      :scanned_resource,
+      :complete_scanned_resource,
       member_of_collection_ids: collection_id,
       source_metadata_identifier: source_metadata_identifier,
       import_metadata: true,
       member_ids: member_ids,
-      append_id: append_id
+      append_id: append_id,
+      state: state,
+      visibility: visibility
     )
   end
   context "when there's more than the limit" do

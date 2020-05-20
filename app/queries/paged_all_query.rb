@@ -13,13 +13,15 @@ class PagedAllQuery
     @query_service = query_service
   end
 
-  def paged_all(limit: 10, offset: 0, from: nil, until_time: nil, only_models: [], collection_slug: nil, marc_only: false)
+  def paged_all(limit: 10, offset: 0, from: nil, until_time: nil, only_models: [], collection_slug: nil, marc_only: false, requirements: {})
     connection.transaction(savepoint: true) do
       collections = collections(collection_slug)
       return [] if collection_slug && collections.empty?
       relation = PagedAllBuilder.new(query_service: query_service, limit: limit)
+      requirements ||= {}
+      requirements[:member_of_collection_ids] = collections.map(&:id) if collections.present?
 
-      relation.offset(offset).with_collections(collections).only_models(only_models).from(from).until(until_time).exclude_volumes
+      relation.offset(offset).with_requirements(requirements).only_models(only_models).from(from).until(until_time).exclude_volumes
       relation.only_marc if marc_only
 
       relation.lazy.map do |object|
@@ -70,10 +72,10 @@ class PagedAllQuery
       end
     end
 
-    def with_collections(collections)
-      return self unless collections.present?
+    def with_requirements(requirements)
+      return self unless requirements.present?
       tap do
-        self.relation = relation.where(Sequel[:orm_resources][:metadata].pg_jsonb.contains(initial_requirements.merge(member_of_collection_ids: collections.map(&:id))))
+        self.relation = relation.where(Sequel[:orm_resources][:metadata].pg_jsonb.contains(initial_requirements.merge(requirements)))
       end
     end
 

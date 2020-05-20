@@ -78,9 +78,20 @@ class OaiProvider < OAI::Provider::Base
         collection_slug: options.set,
         marc_only: options.marc?,
         from: options.from,
-        until_time: options.until
+        until_time: options.until,
+        requirements: oai_object_requirements
       ).to_a.compact.map { |r| OAIWrapper.new(r) }
       wrap_results(result, options)
+    end
+
+    # State requirements of objects that should show up in the set.
+    # @note Values are passed straight to SQL, so ensure they're wrapped in an
+    #   array.
+    def oai_object_requirements
+      {
+        state: ["complete"],
+        read_groups: [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
+      }
     end
 
     def wrap_results(result, options)
