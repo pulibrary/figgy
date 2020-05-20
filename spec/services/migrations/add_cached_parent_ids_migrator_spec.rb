@@ -23,12 +23,19 @@ RSpec.describe Migrations::AddCachedParentIdsMigrator do
         child_rr = FactoryBot.create_for_repository(:raster_resource)
         FactoryBot.create_for_repository(:raster_resource, member_ids: child_rr.id)
 
+        pre_cached_child = FactoryBot.create_for_repository(:scanned_resource, cached_parent_id: SecureRandom.uuid)
+
         described_class.call
 
-        [child_file_set, child_sr, child_sm, ephemera_box, ephemera_folder, child_vr, child_rr].each do |child|
+        [child_sr, child_sm, ephemera_box, ephemera_folder, child_vr, child_rr].each do |child|
           reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: child.id)
           expect(reloaded.cached_parent_id).not_to be_blank
         end
+        expect(child_file_set.cached_parent_id).to be_blank
+        reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: pre_cached_child.id)
+        # Ensure the migrator doesn't touch things that already have a cached
+        # ID.
+        expect(reloaded.cached_parent_id).to eq pre_cached_child.cached_parent_id
       end
     end
   end

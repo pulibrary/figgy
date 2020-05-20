@@ -17,7 +17,7 @@ class EphemeraBox < Resource
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
   attribute :thumbnail_id
   attribute :local_identifier
-  attribute :cached_parent_id, Valkyrie::Types::ID
+  attribute :cached_parent_id, Valkyrie::Types::ID.optional
 
   def title
     ["Ephemera Box"]

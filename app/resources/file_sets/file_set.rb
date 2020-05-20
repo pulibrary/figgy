@@ -14,7 +14,7 @@ class FileSet < Resource
   attribute :part, Valkyrie::Types::Set
   attribute :transfer_notes
   attribute :processing_status, Valkyrie::Types::String.optional
-  attribute :cached_parent_id, Valkyrie::Types::ID
+  attribute :cached_parent_id, Valkyrie::Types::ID.optional
 
   delegate :width,
            :height,
