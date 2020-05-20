@@ -18,5 +18,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import BrowseEverything from 'browse-everything-react'
+import 'browse-everything-react/src/vendor/gapi.es5.js'
 
 ReactDOM.render(<BrowseEverything />, document.getElementById('root'))

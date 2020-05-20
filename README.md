@@ -152,6 +152,35 @@ By default, Figgy provides users with the ability to upload binaries from the lo
 
 Figgy may also be configured to upload files from hosted storage providers.  Support for users with Google Drive accounts has been tested and verified.  [Please reference the Browse Everything documentation for more details](https://github.com/pulibrary/figgy/blob/master/BROWSE_EVERYTHING.md).
 
+### Developing with BrowseEverything
+
+Please install [yalc]():
+`yarn global add yalc` or `npm i yalc -g`
+
+Then, please `cd` into the current working directory for `browse-everything-react`:
+```
+cd ~/browse-everything-react
+yalc publish --private
+```
+
+From within the current working directory for `figgy`, please invoke:
+```
+yalc add browse-everything-react
+yalc update && yarn install
+```
+
+For each set of changes introduced into the React UI:
+
+From within the `browse-everything-react` working directory:
+```
+yalc publish --private
+```
+
+From within the `figgy` working directory:
+```
+yalc update && yarn install
+```
+
 ## Preservation Configuration in Development
 
 Figgy uses Google Cloud Storage buckets for providing support for preserving certain resources.  Please find further documentation outlining the configuration for Google Cloud service authentication and permissions management [here](https://github.com/pulibrary/figgy/blob/master/GOOGLE_CLOUD_STORAGE.md).
