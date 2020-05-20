@@ -13,13 +13,15 @@ class PagedAllQuery
     @query_service = query_service
   end
 
-  def paged_all(limit: 10, offset: 0, from: nil, until_time: nil, only_models: [], collection_slug: nil, marc_only: false)
+  def paged_all(limit: 10, offset: 0, from: nil, until_time: nil, only_models: [], collection_slug: nil, marc_only: false, requirements: {})
     connection.transaction(savepoint: true) do
       collections = collections(collection_slug)
       return [] if collection_slug && collections.empty?
       relation = PagedAllBuilder.new(query_service: query_service, limit: limit)
+      requirements ||= {}
+      requirements[:member_of_collection_ids] = collections.map(&:id) if collections.present?
 
-      relation.offset(offset).with_collections(collections).only_models(only_models).from(from).until(until_time)
+      relation.offset(offset).with_requirements(requirements).only_models(only_models).from(from).until(until_time).exclude_volumes
       relation.only_marc if marc_only
 
       relation.lazy.map do |object|
@@ -47,20 +49,20 @@ class PagedAllQuery
     def from(from)
       return self unless from
       tap do
-        self.relation = relation.where(Sequel[:updated_at] >= from)
+        self.relation = relation.where(Sequel[:orm_resources][:updated_at] >= from)
       end
     end
 
     def until(until_time)
       return self unless until_time
       tap do
-        self.relation = relation.where(Sequel[:updated_at] <= until_time)
+        self.relation = relation.where(Sequel[:orm_resources][:updated_at] <= until_time)
       end
     end
 
     def only_marc
       tap do
-        self.relation = relation.exclude(Sequel[:metadata].pg_jsonb.contains(archival_collection_code: []))
+        self.relation = relation.exclude(Sequel[:orm_resources][:metadata].pg_jsonb.contains(archival_collection_code: []))
       end
     end
 
@@ -70,17 +72,23 @@ class PagedAllQuery
       end
     end
 
-    def with_collections(collections)
-      return self unless collections.present?
+    def with_requirements(requirements)
+      return self unless requirements.present?
       tap do
-        self.relation = relation.where(Sequel[:metadata].pg_jsonb.contains(initial_requirements.merge(member_of_collection_ids: collections.map(&:id))))
+        self.relation = relation.where(Sequel[:orm_resources][:metadata].pg_jsonb.contains(initial_requirements.merge(requirements)))
       end
     end
 
     def only_models(models)
       return self unless models.present?
       tap do
-        self.relation = relation.where(internal_resource: Array(models).map(&:to_s))
+        self.relation = relation.where(Sequel[:orm_resources][:internal_resource] => Array(models).map(&:to_s))
+      end
+    end
+
+    def exclude_volumes
+      tap do
+        self.relation = relation.exclude(Sequel[:orm_resources][:metadata].pg_jsonb.contains(cached_parent_id: []))
       end
     end
 
@@ -89,7 +97,7 @@ class PagedAllQuery
     end
 
     def relation
-      @relation ||= orm_class.use_cursor.limit(limit).order(:updated_at)
+      @relation ||= orm_class.use_cursor.limit(limit).order(Sequel[:orm_resources][:updated_at])
     end
   end
 end

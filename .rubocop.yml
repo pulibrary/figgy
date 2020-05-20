@@ -132,6 +132,7 @@ Metrics/LineLength:
     - 'spec/views/catalog/_members_coin.html.erb_spec.rb'
     - 'spec/helpers/application_helper_spec.rb'
     - 'spec/resources/collections/collections_controller_spec.rb'
+    - 'spec/models/oai_provider/valkyrie_provider_model_spec.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
@@ -199,6 +200,7 @@ Metrics/ParameterLists:
     - 'app/services/numismatics_import_service.rb'
     - 'app/jobs/issue_import_job.rb'
     - 'app/queries/paged_all_query.rb'
+    - 'spec/models/oai_provider/valkyrie_provider_model_spec.rb'
 Metrics/PerceivedComplexity:
   Exclude:
     - 'app/services/pdf_generator/canvas.rb'
@@ -317,6 +319,7 @@ RSpec/ScatteredSetup:
 Style/PreferredHashMethods:
   Exclude:
     - 'app/queries/find_ids_with_property_not_empty.rb'
+    - 'app/queries/paged_all_query.rb'
 Lint/Void:
   Exclude:
     # It's important that an explicit false be returned here to match the
