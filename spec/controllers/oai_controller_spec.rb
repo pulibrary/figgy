@@ -6,9 +6,10 @@ RSpec.describe OaiController do
     context "when requesting a Cicognara set" do
       it "returns all the Cicognara item MarcXML" do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
+        stub_ezid(shoulder: "99999/fk4", blade: "8543429")
         stub_bibdata(bib_id: "8543429")
         stub_bibdata(bib_id: "8543429", content_type: "application/marcxml+xml")
-        FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429", import_metadata: true)
+        FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429", import_metadata: true)
 
         get :index, params: { "verb" => "ListRecords", "set" => "cico", "metadataPrefix" => "marc21" }
 
@@ -20,9 +21,10 @@ RSpec.describe OaiController do
     context "when there's no data" do
       it "works" do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
+        stub_ezid(shoulder: "99999/fk4", blade: "8543429")
         stub_bibdata(bib_id: "8543429")
         stub_bibdata(bib_id: "8543429", content_type: "application/marcxml+xml")
-        FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429", import_metadata: true)
+        FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429", import_metadata: true)
 
         get :index, params: { "verb" => "ListRecords", "set" => "nonexistent", "metadataPrefix" => "marc21" }
 
@@ -35,9 +37,10 @@ RSpec.describe OaiController do
 
   describe "GetRecord" do
     it "returns a specific item" do
+      stub_ezid(shoulder: "99999/fk4", blade: "8543429")
       stub_bibdata(bib_id: "8543429")
       stub_bibdata(bib_id: "8543429", content_type: "application/marcxml+xml")
-      resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "8543429")
+      resource = FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "8543429")
 
       get :index, params: { "verb" => "GetRecord", "metadataPrefix" => "marc21", identifier: "oai:figgy:#{resource.id}" }
 
@@ -61,9 +64,10 @@ RSpec.describe OaiController do
     context "when requesting a Cicognara set" do
       it "returns all the Cicognara item MarcXML" do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
+        stub_ezid(shoulder: "99999/fk4", blade: "8543429")
         stub_bibdata(bib_id: "8543429")
         stub_bibdata(bib_id: "8543429", content_type: "application/marcxml+xml")
-        FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429", import_metadata: true)
+        FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429", import_metadata: true)
 
         get :index, params: { "verb" => "ListRecords", "set" => "cico", "metadataPrefix" => "marc21" }
 
@@ -76,10 +80,11 @@ RSpec.describe OaiController do
         allow(OaiProvider::ValkyrieProviderModel).to receive(:limit).and_return(2)
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
         source_metadata_identifier = "8543429"
+        stub_ezid(shoulder: "99999/fk4", blade: source_metadata_identifier)
         stub_bibdata(bib_id: source_metadata_identifier)
         stub_bibdata(bib_id: source_metadata_identifier, content_type: "application/marcxml+xml")
         5.times do
-          FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: source_metadata_identifier, import_metadata: true)
+          FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: source_metadata_identifier, import_metadata: true)
         end
 
         get :index, params: { "verb" => "ListRecords", "set" => "cico", "metadataPrefix" => "marc21" }
