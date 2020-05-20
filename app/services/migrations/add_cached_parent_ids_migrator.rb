@@ -7,14 +7,28 @@ module Migrations
     end
 
     delegate :query_service, to: :change_set_persister
+    delegate :resource_factory, to: :query_service
+    delegate :orm_class, to: :resource_factory
 
     def run
-      query_service.custom_queries.memory_efficient_all.each do |resource|
+      resources = relation.map do |object|
+        resource_factory.to_resource(object: object)
+      end
+      resources.each do |resource|
         if resource.respond_to?(:cached_parent_id)
           change_set = DynamicChangeSet.new(resource)
           change_set_persister.save(change_set: change_set)
         end
       end
+    end
+
+    # Rather than make a query that's only used by this migration, just do one
+    # inline here.
+    def relation
+      orm_class.use_cursor
+               .exclude(internal_resource: [FileSet, PreservationObject, Tombstone, Event, EphemeraTerm].map(&:to_s))
+               .exclude(Sequel[:metadata].pg_jsonb.contains(cached_parent_id: [{}]))
+               .lazy
     end
 
     def change_set_persister

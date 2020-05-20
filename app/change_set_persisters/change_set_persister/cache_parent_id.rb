@@ -10,8 +10,8 @@ class ChangeSetPersister
 
     def run
       return unless change_set.resource.respond_to?(:cached_parent_id)
-      return unless append_id || existing_parent
-      change_set.resource.cached_parent_id = append_id || existing_parent.id
+      return unless append_id || existing_parent || change_set.resource.cached_parent_id.present?
+      change_set.resource.cached_parent_id = append_id || existing_parent&.id
     end
 
     def existing_parent

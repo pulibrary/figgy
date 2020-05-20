@@ -37,4 +37,13 @@ RSpec.describe ScannedResource do
       expect(scanned_resource).not_to be_a_media_resource
     end
   end
+
+  describe "#cached_parent_id" do
+    it "accepts a nil value" do
+      scanned_resource = FactoryBot.build(:scanned_resource)
+      scanned_resource.cached_parent_id = nil
+
+      expect(scanned_resource.cached_parent_id).to be_nil
+    end
+  end
 end

@@ -49,7 +49,7 @@ module Numismatics
     attribute :file_metadata, Valkyrie::Types::Set.of(FileMetadata.optional)
     attribute :identifier
     attribute :claimed_by, Valkyrie::Types::String
-    attribute :cached_parent_id, Valkyrie::Types::ID
+    attribute :cached_parent_id, Valkyrie::Types::ID.optional
 
     # manifest metadata
     attribute :start_canvas
