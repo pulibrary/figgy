@@ -34,7 +34,7 @@ export default class ParentResourcesTable extends RelatedResourcesTable {
     $this.element.find('.btn-add-row').click((event) => {
       const $element = $(event.target)
       const $row = $element.parents('.parent-resources-attach')
-      const parentId = $this.$select.val()
+      const parentId = $this.element.find('.related_resource_ids').val()
 
       if ($.inArray(parentId, $this.parents) > -1) {
         $this.setWarningMessage($row, 'Resource is already related.')

@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-05-22
+
+## Added
+
+* Allow users to attach existing volumes to scanned resources.
+
 # 2020-05-15
 
 ## Changed

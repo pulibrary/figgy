@@ -1,32 +1,77 @@
-  <h2>Members</h2>
-  <table id="members" class="table table-striped">
-    <tr>
-     <th>Thumbnail</th>
-     <th>Title</th>
-     <th>Date Uploaded</th>
-     <th>Visibility</th>
-     <th>Local Fixity</th>
-     <th>Actions</th>
-    </tr>
-    <% unless decorated_resource.volumes.empty? %>
-      <% decorated_resource.volumes.each do |volume| %>
-        <% volume_url = parent_solr_document_path("#{resource.id}", "#{volume.id}") %>
-        <tr>
-          <td><%= link_to figgy_thumbnail_path(volume, { class: 'thumbnail-inner', onerror: default_icon_fallback }), volume_url %></td>
-          <td><%= volume.first_title %></td>
-          <td><%= volume.created_at %></td>
-          <td><%= volume.visibility_badge.first.html_safe %></td>
-          <td><%= volume.fixity_badges.html_safe %></td>
-          <td>
-            <%= link_to 'View', volume_url, class: 'btn btn-default' %>
-            <%= link_to 'Edit', main_app.polymorphic_path([:edit, volume]), class: 'btn btn-default' %>
-            <%= link_to "Delete", main_app.polymorphic_path([volume]), class: 'btn btn-danger',
-                                  data: { confirm: "Delete this #{resource.human_readable_type}?" },
-                                  method: :delete %>
-          </td>
-        </tr>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h2 class="panel-title">Members</h2>
+    </div>
+    <div class="panel-body member-resources">
+      <%= simple_form_for @change_set do |f| %>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="loading-status hidden">Loading...</div>
+            <table id="members-scanned-resources"
+            class="table table-striped member-resources member-scanned-resources"
+            data-update-url="<%= polymorphic_url([resource]) %>"
+            data-query-url="<%= solr_document_path(id: resource.id) %>"
+            data-members="<%= decorated_resource.members.map { |member| member.id.to_s } %>"
+            data-param-key="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>">
+              <thead>
+                <tr>
+                  <th>Thumbnail</th>
+                  <th>Title</th>
+                  <th>Date Uploaded</th>
+                  <th>Visibility</th>
+                  <th>Local Fixity</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <% unless decorated_resource.volumes.empty? %>
+                  <% decorated_resource.volumes.each do |scanned_resource| %>
+                    <% scanned_resource_url = parent_solr_document_path(parent_id: resource.id, id: scanned_resource.id) %>
+                    <tr data-resource-id="<%= scanned_resource.id.to_s %>">
+                      <td><%= link_to figgy_thumbnail_path(scanned_resource, { class: 'thumbnail-inner', onerror: default_icon_fallback }), scanned_resource_url %></td>
+                      <td><%= scanned_resource.first_title %></td>
+                      <td><%= scanned_resource.created_at %></td>
+                      <td><%= scanned_resource.visibility_badge.first.html_safe %></td>
+                      <td><%= scanned_resource.fixity_badges.html_safe %></td>
+                      <td>
+                        <%= link_to 'View', scanned_resource_url, class: 'btn btn-default' %>
+                        <%= link_to 'Edit', main_app.polymorphic_path([:edit, scanned_resource]), class: 'btn btn-default' %>
+                        <%= f.button :button, "Detach", class: ["btn","btn-danger", 'btn-remove-row'] %>
+                      </td>
+                    </tr>
+                  <% end %>
+                <% end %>
+                <tr class="message has-warning hidden">
+                  <td id="warning-message" class="alert-warning"></td>
+                  <td class="alert-warning"></td>
+                  <td class="alert-warning"></td>
+                  <td class="alert-warning"></td>
+                  <td class="alert-warning"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :member_ids,
+                        placeholder: 'Attach an existing resource by ID...',
+                        label: false,
+                        required: false,
+                        input_html: {
+                          class: [
+                            'related_resource_ids',
+                            'resource_member_ids',
+                            'form-control'
+                          ],
+                          value: nil
+                        } %>
+          </div>
+          <div class="col-md-2">
+            <span class="input-group-btn">
+              <%= f.button :button, "Attach", class: ["btn","btn-primary","btn-add-row"] %>
+            </span>
+          </div>
+        </div>
       <% end %>
-    <% else %>
-      <td>This work has no volumes attached.  Click "Attach Scanned Resource" to attach volumes.</td>
-    <% end %>
-  </table>
+    </div>
+  </div>

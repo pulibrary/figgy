@@ -73,13 +73,13 @@ export default class Initializer {
       new FileSetForm($(element))
     )
 
-    $(".document table.member-resources").each((_i, element) => {
+    $(".document div.member-resources").each((_i, element) => {
       const $element = $(element)
       const $form = $element.parent('form')
       new MemberResourcesTables($element, $form)
     })
 
-    $(".document table.parent-resources").each((_i, element) => {
+    $(".document div.parent-resources").each((_i, element) => {
       const $element = $(element)
       const $form = $element.parent('form')
       new ParentResourcesTables($element, $form)
