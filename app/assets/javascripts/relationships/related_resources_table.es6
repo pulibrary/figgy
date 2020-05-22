@@ -5,7 +5,7 @@
 export default class RelatedResourcesTable {
   constructor(element, form) {
     this.element = $(element)
-    this.table = this.element
+    this.table = this.element.find('table')
     this.$tbody = this.table.find('tbody')
 
     this.update_url = this.table.data('update-url')
@@ -66,7 +66,7 @@ export default class RelatedResourcesTable {
     $this.element.find('.btn-add-row').click((event) => {
       const $element = $(event.target)
       const $row = $this.element.find('.member-actions')
-      const attachedId = $this.$select.val()
+      const attachedId = $this.element.find('.related_resource_ids').val()
 
       if (attachedId === '') {
         $this.setWarningMessage($row, 'ID cannot be empty.');
@@ -183,9 +183,11 @@ export default class RelatedResourcesTable {
   reloadTable() {
     const $this = this;
 
-    $this.$tbody.load(`${$this.query_url} #${this.element[0].id} tbody > *`, () => {
+    $this.$tbody.load(`${$this.query_url} #${this.table[0].id} tbody > *`, () => {
       $this.setLoading(false)
       $this.bindButtons();
+      // Clear existing resource input value
+      $this.element.find('.related_resource_ids').val('')
     });
   }
 

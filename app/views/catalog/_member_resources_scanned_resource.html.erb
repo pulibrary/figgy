@@ -2,71 +2,67 @@
     <div class="panel-heading">
       <h2 class="panel-title">Members</h2>
     </div>
-    <div class="row panel-body">
+    <div class="panel-body member-resources">
       <%= simple_form_for @change_set do |f| %>
-        <div class="loading-status hidden">Loading...</div>
-        <table id="members-scanned-resources"
-        class="table table-striped member-resources member-scanned-resources"
-        data-update-url="<%= polymorphic_url([resource]) %>"
-        data-query-url="<%= solr_document_path(id: resource.id) %>"
-        data-members="<%= decorated_resource.members.map { |member| member.id.to_s } %>"
-        data-param-key="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>">
-          <thead>
-            <tr>
-              <th>Thumbnail</th>
-              <th>Title</th>
-              <th>Date Uploaded</th>
-              <th>Visibility</th>
-              <th>Local Fixity</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="loading-status hidden">Loading...</div>
+            <table id="members-scanned-resources"
+            class="table table-striped member-resources member-scanned-resources"
+            data-update-url="<%= polymorphic_url([resource]) %>"
+            data-query-url="<%= solr_document_path(id: resource.id) %>"
+            data-members="<%= decorated_resource.members.map { |member| member.id.to_s } %>"
+            data-param-key="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>">
+              <thead>
+                <tr>
+                  <th>Thumbnail</th>
+                  <th>Title</th>
+                  <th>Date Uploaded</th>
+                  <th>Visibility</th>
+                  <th>Local Fixity</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
 
-          <tbody>
-            <tr>
-              <td>This work has no volumes attached. Click "Attach Scanned Resource" or attach existing resource.</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr class="message has-warning hidden">
-              <td id="warning-message" class="alert-warning"></td>
-              <td class="alert-warning"></td>
-              <td class="alert-warning"></td>
-              <td class="alert-warning"></td>
-              <td class="alert-warning"></td>
-            </tr>
-          </tbody>
-
-          <tfoot>
-            <tr class="member-resources-attach">
-              <td>
-                <%= f.input :member_ids,
-                            placeholder: 'Attach an existing resource by ID...',
-                            label: false,
-                            required: false,
-                            input_html: {
-                              class: [
-                                'related_resource_ids',
-                                'resource_member_ids',
-                                'form-control'
-                              ],
-                              value: nil
-                            } %>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>
-                <span class="input-group-btn">
-                  <%= f.button :button, "Attach", class: ["btn","btn-primary","btn-add-row"] %>
-                </span>
-              </td>
-            </tr>
-          </tfoot>
-        </table>
+              <tbody>
+                <tr>
+                  <td>This work has no volumes attached. Click "Attach Scanned Resource" or attach existing resource.</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr class="message has-warning hidden">
+                  <td id="warning-message" class="alert-warning"></td>
+                  <td class="alert-warning"></td>
+                  <td class="alert-warning"></td>
+                  <td class="alert-warning"></td>
+                  <td class="alert-warning"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :member_ids,
+                        placeholder: 'Attach an existing resource by ID...',
+                        label: false,
+                        required: false,
+                        input_html: {
+                          class: [
+                            'related_resource_ids',
+                            'resource_member_ids',
+                            'form-control'
+                          ],
+                          value: nil
+                        } %>
+          </div>
+          <div class="col-md-2">
+            <span class="input-group-btn">
+              <%= f.button :button, "Attach", class: ["btn","btn-primary","btn-add-row"] %>
+            </span>
+          </div>
+        </div>
       <% end %>
     </div>
   </div>

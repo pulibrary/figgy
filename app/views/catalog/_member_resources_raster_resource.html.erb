@@ -2,87 +2,84 @@
     <div class="panel-heading">
       <h2 class="panel-title">Child Raster Resources</h2>
     </div>
-    <div class="row panel-body">
+    <div class="panel-body member-resources">
       <%= simple_form_for @change_set do |f| %>
-        <div class="loading-status hidden">Loading...</div>
-        <table id="members-raster-resources"
-        class="table table-striped member-resources member-raster-resources"
-        data-update-url="<%= polymorphic_url([resource]) %>"
-        data-query-url="<%= solr_document_path(id: resource.id) %>"
-        data-members="<%= decorated_resource.members.map { |member| member.id.to_s } %>"
-        data-resource-id="<%= resource.id.to_s %>"
-        data-param-key="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>">
-          <thead>
-            <tr>
-             <th>Thumbnail</th>
-             <th>Title</th>
-             <th>Date Uploaded</th>
-             <th>Visibility</th>
-             <th>Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <% unless decorated_resource.raster_resource_members.empty? %>
-              <% decorated_resource.raster_resource_members.each do |raster_resource| %>
-                <% raster_resource_url = parent_solr_document_path(parent_id: resource.id, id: raster_resource.id) %>
-                <tr data-resource-id="<%= raster_resource.id.to_s %>">
-                  <td><%= link_to figgy_thumbnail_path(raster_resource, { class: 'thumbnail-inner', onerror: default_icon_fallback }), raster_resource_url %></td>
-                  <td><%= raster_resource.first_title %></td>
-                  <td><%= raster_resource.created_at %></td>
-                  <td><%= raster_resource.visibility_badge.first.html_safe %></td>
-                  <td>
-                    <%= link_to 'View', raster_resource_url, class: 'btn btn-default' %>
-                    <%= link_to 'Edit', main_app.polymorphic_path([:edit, raster_resource]), class: 'btn btn-default' %>
-                    <span class="input-group-btn">
-                      <%= f.button :button, "Detach", class: ["btn","btn-danger", 'btn-remove-row'] %>
-                    </span>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="loading-status hidden">Loading...</div>
+            <table id="members-raster-resources"
+            class="table table-striped member-resources member-raster-resources"
+            data-update-url="<%= polymorphic_url([resource]) %>"
+            data-query-url="<%= solr_document_path(id: resource.id) %>"
+            data-members="<%= decorated_resource.members.map { |member| member.id.to_s } %>"
+            data-resource-id="<%= resource.id.to_s %>"
+            data-param-key="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>">
+              <thead>
+                <tr>
+                <th>Thumbnail</th>
+                <th>Title</th>
+                <th>Date Uploaded</th>
+                <th>Visibility</th>
+                <th>Actions</th>
                 </tr>
-              <% end %>
-            <% else %>
-              <tr>
-                <td>This work has no raster resources attached.  Click "Attach Child" to attach raster resources.</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-            <% end %>
-            <tr class="message has-warning hidden">
-              <td class="alert-warning"></td>
-              <td id="warning-message" class="alert-warning"></td>
-              <td class="alert-warning"></td>
-              <td class="alert-warning"></td>
-              <td class="alert-warning"></td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr class="member-resources-attach">
-              <td>
-                <%= f.input :member_ids,
-                            placeholder: 'Attach an existing resource...',
-                            label: false,
-                            required: false,
-                            input_html: {
-                              class: [
-                                'related_resource_ids',
-                                'resource_member_ids',
-                                'form-control'
-                              ],
-                              value: nil
-                            } %>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>
-                <span class="input-group-btn">
-                  <%= f.button :button, "Attach", class: ["btn","btn-primary","btn-add-row"] %>
-                </span>
-              </td>
-            </tr>
-          </tfoot>
-        </table>
+              </thead>
+
+              <tbody>
+                <% unless decorated_resource.raster_resource_members.empty? %>
+                  <% decorated_resource.raster_resource_members.each do |raster_resource| %>
+                    <% raster_resource_url = parent_solr_document_path(parent_id: resource.id, id: raster_resource.id) %>
+                    <tr data-resource-id="<%= raster_resource.id.to_s %>">
+                      <td><%= link_to figgy_thumbnail_path(raster_resource, { class: 'thumbnail-inner', onerror: default_icon_fallback }), raster_resource_url %></td>
+                      <td><%= raster_resource.first_title %></td>
+                      <td><%= raster_resource.created_at %></td>
+                      <td><%= raster_resource.visibility_badge.first.html_safe %></td>
+                      <td>
+                        <%= link_to 'View', raster_resource_url, class: 'btn btn-default' %>
+                        <%= link_to 'Edit', main_app.polymorphic_path([:edit, raster_resource]), class: 'btn btn-default' %>
+                        <span class="input-group-btn">
+                          <%= f.button :button, "Detach", class: ["btn","btn-danger", 'btn-remove-row'] %>
+                        </span>
+                    </tr>
+                  <% end %>
+                <% else %>
+                  <tr>
+                    <td>This work has no raster resources attached.  Click "Attach Child" to attach raster resources.</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                <% end %>
+                <tr class="message has-warning hidden">
+                  <td class="alert-warning"></td>
+                  <td id="warning-message" class="alert-warning"></td>
+                  <td class="alert-warning"></td>
+                  <td class="alert-warning"></td>
+                  <td class="alert-warning"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :member_ids,
+                        placeholder: 'Attach an existing resource by ID...',
+                        label: false,
+                        required: false,
+                        input_html: {
+                          class: [
+                            'related_resource_ids',
+                            'resource_member_ids',
+                            'form-control'
+                          ],
+                          value: nil
+                        } %>
+          </div>
+          <div class="col-md-2">
+            <span class="input-group-btn">
+              <%= f.button :button, "Attach", class: ["btn","btn-primary","btn-add-row"] %>
+            </span>
+          </div>
+        </div>
       <% end %>
     </div>
   </div>

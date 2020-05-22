@@ -2,89 +2,85 @@
     <div class="panel-heading">
       <h2 class="panel-title">Parent Vector Resources</h2>
     </div>
-    <div class="row panel-body">
+    <div class="panel-body parent-resources">
       <%= simple_form_for @change_set do |f| %>
-        <div class="loading-status hidden">Loading...</div>
-        <table id="parent-vector-resources"
-               class="table table-striped parent-resources parent-vector-resources"
-               data-update-url="<%= polymorphic_path([ActiveModel::Naming.route_key(resource.class), :attach_to_parent], id: resource.id) %>"
-               data-query-url="<%= solr_document_path(id: resource.id) %>"
-               data-parents="<%= decorated_resource.parents.to_a.map { |parents| parents.id.to_s } %>"
-               data-resource-id="<%= resource.id.to_s %>"
-               data-param-key="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>">
-          <thead>
-            <tr>
-             <th>Thumbnail</th>
-             <th>Title</th>
-             <th>Date Uploaded</th>
-             <th>Visibility</th>
-             <th>Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <% unless decorated_resource.vector_resource_parents.empty? %>
-              <% decorated_resource.vector_resource_parents.each do |vector_resource| %>
-                <% vector_resource_url = solr_document_path(vector_resource.id) %>
-                <tr data-resource-id="<%= vector_resource.id.to_s %>" data-update-url="<%= polymorphic_path([ActiveModel::Naming.route_key(resource.class), :remove_from_parent], id: resource.id) %>">
-                  <td><%= link_to figgy_thumbnail_path(vector_resource, { class: 'thumbnail-inner', onerror: default_icon_fallback }), vector_resource_url %></td>
-                  <td><%= vector_resource.first_title %></td>
-                  <td><%= vector_resource.created_at %></td>
-                  <td><%= vector_resource.visibility_badge.first.html_safe %></td>
-                  <td>
-                    <%= link_to 'View', vector_resource_url, class: 'btn btn-default' %>
-                    <%= link_to 'Edit', main_app.polymorphic_path([:edit, vector_resource]), class: 'btn btn-default' %>
-                    <span class="input-group-btn">
-                      <%= f.button :button, "Detach", class: ["btn","btn-danger", 'btn-remove-row'] %>
-                    </span>
-                  </td>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="loading-status hidden">Loading...</div>
+            <table id="parent-vector-resources"
+                  class="table table-striped parent-resources parent-vector-resources"
+                  data-update-url="<%= polymorphic_path([ActiveModel::Naming.route_key(resource.class), :attach_to_parent], id: resource.id) %>"
+                  data-query-url="<%= solr_document_path(id: resource.id) %>"
+                  data-parents="<%= decorated_resource.parents.to_a.map { |parents| parents.id.to_s } %>"
+                  data-resource-id="<%= resource.id.to_s %>"
+                  data-param-key="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>">
+              <thead>
+                <tr>
+                <th>Thumbnail</th>
+                <th>Title</th>
+                <th>Date Uploaded</th>
+                <th>Visibility</th>
+                <th>Actions</th>
                 </tr>
-              <% end %>
-            <% else %>
-              <tr>
-                <td>This work is not attached to any vector resources.  Click "Attach" to attach to an existing vector resource.</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-            <% end %>
-            <tr class="message has-warning hidden">
-              <td id="warning-message" class="alert-warning"></td>
-              <td class="alert-warning"></td>
-              <td class="alert-warning"></td>
-              <td class="alert-warning"></td>
-              <td class="alert-warning"></td>
-            </tr>
-          </tbody>
+              </thead>
 
-          <tfoot>
-            <tr class="parent-resources-attach" >
-              <td>
-                <%= f.input :member_ids,
-                            placeholder: 'Attach to an existing resource...',
-                            label: false,
-                            required: false,
-                            input_html: {
-                              class: [
-                                'related_resource_ids',
-                                'resource_parent_ids',
-                                'form-control'
-                              ],
-                              value: nil
-                            } %>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>
-                <span class="input-group-btn">
-                  <%= f.button :button, "Attach", class: ["btn","btn-primary","btn-add-row"] %>
-                </span>
-              </td>
-            </tr>
-          </tfoot>
-        </table>
+              <tbody>
+                <% unless decorated_resource.vector_resource_parents.empty? %>
+                  <% decorated_resource.vector_resource_parents.each do |vector_resource| %>
+                    <% vector_resource_url = solr_document_path(vector_resource.id) %>
+                    <tr data-resource-id="<%= vector_resource.id.to_s %>" data-update-url="<%= polymorphic_path([ActiveModel::Naming.route_key(resource.class), :remove_from_parent], id: resource.id) %>">
+                      <td><%= link_to figgy_thumbnail_path(vector_resource, { class: 'thumbnail-inner', onerror: default_icon_fallback }), vector_resource_url %></td>
+                      <td><%= vector_resource.first_title %></td>
+                      <td><%= vector_resource.created_at %></td>
+                      <td><%= vector_resource.visibility_badge.first.html_safe %></td>
+                      <td>
+                        <%= link_to 'View', vector_resource_url, class: 'btn btn-default' %>
+                        <%= link_to 'Edit', main_app.polymorphic_path([:edit, vector_resource]), class: 'btn btn-default' %>
+                        <span class="input-group-btn">
+                          <%= f.button :button, "Detach", class: ["btn","btn-danger", 'btn-remove-row'] %>
+                        </span>
+                      </td>
+                    </tr>
+                  <% end %>
+                <% else %>
+                  <tr>
+                    <td>This work is not attached to any vector resources.  Click "Attach" to attach to an existing vector resource.</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                <% end %>
+                <tr class="message has-warning hidden">
+                  <td id="warning-message" class="alert-warning"></td>
+                  <td class="alert-warning"></td>
+                  <td class="alert-warning"></td>
+                  <td class="alert-warning"></td>
+                  <td class="alert-warning"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :member_ids,
+                        placeholder: 'Attach to an existing resource...',
+                        label: false,
+                        required: false,
+                        input_html: {
+                          class: [
+                            'related_resource_ids',
+                            'resource_parent_ids',
+                            'form-control'
+                          ],
+                          value: nil
+                        } %>
+          </div>
+          <div class="col-md-2">
+            <span class="input-group-btn">
+              <%= f.button :button, "Attach", class: ["btn","btn-primary","btn-add-row"] %>
+            </span>
+          </div>
+        </div>
       <% end %>
     </div>
   </div>
