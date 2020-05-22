@@ -35,8 +35,7 @@
                   <td>
                     <%= link_to 'View', scanned_resource_url, class: 'btn btn-default' %>
                     <%= link_to 'Edit', main_app.polymorphic_path([:edit, scanned_resource]), class: 'btn btn-default' %>
-                    <%= link_to "Delete", main_app.polymorphic_path([scanned_resource]), class: 'btn btn-danger', data: { confirm: "Delete this #{resource.human_readable_type}?" },
-                                          method: :delete %>
+                    <%= f.button :button, "Detach", class: ["btn","btn-danger", 'btn-remove-row'] %>
                   </td>
                 </tr>
               <% end %>
