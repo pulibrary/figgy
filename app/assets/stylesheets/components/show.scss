@@ -77,18 +77,6 @@ table.dataTable thead > tr > th {
       width: 232px;
     }
   }
-  // Overrides the Boostrap selector .table > tbody > tr > td
-  & > tbody > tr > td {
-    padding-left: 0.8rem;
-    padding-right: 0.8rem;
-    padding-top: 0.4rem;
-    padding-bottom: 0.6rem;
-    vertical-align: middle;
-
-    &:last-child {
-      width: percentage(1 / 12);
-    }
-  }
 }
 
 .show-sidebar {
