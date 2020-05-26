@@ -106,6 +106,9 @@ class VIPSDerivativeService
 
   def image_from_file(filename)
     image = Vips::Image.new_from_file(filename.to_s)
+    # Adjust color profile to be srgb. Unfortunately we were unable to find a
+    # good way to unit test that this is working, but manual testing shows that
+    # this results in the proper colors.
     begin
       profile = image.get("icc-profile-data")
       image = image.icc_transform("srgb") if profile
