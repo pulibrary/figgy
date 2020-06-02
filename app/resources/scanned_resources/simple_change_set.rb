@@ -8,7 +8,6 @@ class SimpleChangeSet < ChangeSet
   include VisibilityProperty
   include DateRangeProperty
   property :title, multiple: true, required: true, default: []
-  # property :sort_title, multiple: true, required: true, default: []
   property :downloadable, multiple: false, require: true, default: "public"
   property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
   property :rights_note, multiple: false, required: false
@@ -26,6 +25,9 @@ class SimpleChangeSet < ChangeSet
   property :file_metadata, multiple: true, required: false, default: []
   property :depositor, multiple: false, require: false
 
+  # The following were disabled until we have support for already-ingested
+  # content that have complicated values in these fields. See #1714 and #1713
+  # property :sort_title, multiple: true, required: true, default: []
   # property :abstract, multiple: true, required: false, default: []
   # property :alternative, multiple: true, required: false, default: []
   # property :alternative_title, multiple: true, required: false, default: []
