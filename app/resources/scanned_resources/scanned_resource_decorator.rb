@@ -31,7 +31,12 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
                          :ocr_language,
                          :thumbnail_id,
                          :rendered_date_range,
-                         :downloadable
+                         :downloadable,
+                         :archival_collection_code,
+                         :pdf_type,
+                         :source_metadata_identifier,
+                         :created_at,
+                         :updated_at
 
   delegate(*Schema::Common.attributes, to: :primary_imported_metadata, prefix: :imported)
   delegate :members, :file_sets, :collections, :playlists, :decorated_file_sets, to: :wayfinder
