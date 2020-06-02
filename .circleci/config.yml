@@ -30,8 +30,8 @@ jobs:
             curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.5/install.sh | bash
             echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
             echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
-            echo 'nvm install lts/erbium' >> $BASH_ENV
-            echo 'nvm alias default lts/erbium' >> $BASH_ENV
+            echo 'nvm install 12.16.1' >> $BASH_ENV
+            echo 'nvm alias default 12.16.1' >> $BASH_ENV
       - run:
           name: Check current version of node
           command: node -v
@@ -114,8 +114,8 @@ jobs:
             curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.5/install.sh | bash
             echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
             echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
-            echo 'nvm install lts/erbium' >> $BASH_ENV
-            echo 'nvm alias default lts/erbium' >> $BASH_ENV
+            echo 'nvm install 12.16.1' >> $BASH_ENV
+            echo 'nvm alias default 12.16.1' >> $BASH_ENV
       - run:
           name: Check current version of node
           command: node -v
@@ -197,8 +197,8 @@ jobs:
             curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.5/install.sh | bash
             echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
             echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
-            echo 'nvm install lts/erbium' >> $BASH_ENV
-            echo 'nvm alias default lts/erbium' >> $BASH_ENV
+            echo 'nvm install 12.16.1' >> $BASH_ENV
+            echo 'nvm alias default 12.16.1' >> $BASH_ENV
       - run:
           name: Check current version of node
           command: node -v
