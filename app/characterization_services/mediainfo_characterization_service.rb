@@ -40,7 +40,7 @@ class MediainfoCharacterizationService
   end
 
   def mime_type
-    `file --b --mime-type '#{filename}'`.strip
+    `file --b --mime-type #{Shellwords.escape(filename)}`.strip
   end
 
   # Determines if the parent of the FileSet is a MediaResource
