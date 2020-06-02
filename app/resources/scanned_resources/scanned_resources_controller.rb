@@ -7,15 +7,6 @@ class ScannedResourcesController < BaseResourceController
     storage_adapter: Valkyrie.config.storage_adapter
   )
 
-  def edit
-    if change_set.class == SimpleChangeSet
-      flash[:alert] = "Editing resources without imported metadata has been disabled while features are being added to support metadata from PUDL. Please contact us on Slack if you need help."
-      redirect_to solr_document_path(params[:id])
-    else
-      super
-    end
-  end
-
   def after_create_success(obj, change_set)
     super
     handle_save_and_ingest(obj)

@@ -8,7 +8,7 @@ class SimpleChangeSet < ChangeSet
   include VisibilityProperty
   include DateRangeProperty
   property :title, multiple: true, required: true, default: []
-  property :sort_title, multiple: true, required: true, default: []
+  # property :sort_title, multiple: true, required: true, default: []
   property :downloadable, multiple: false, require: true, default: "public"
   property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
   property :rights_note, multiple: false, required: false
@@ -26,43 +26,44 @@ class SimpleChangeSet < ChangeSet
   property :file_metadata, multiple: true, required: false, default: []
   property :depositor, multiple: false, require: false
 
-  property :abstract, multiple: true, required: false, default: []
-  property :alternative, multiple: true, required: false, default: []
-  property :alternative_title, multiple: true, required: false, default: []
-  property :archival_collection_code, multiple: false, required: false
-  property :bibliographic_citation, multiple: true, required: false, default: []
-  property :contents, multiple: true, required: false, default: []
-  property :extent, multiple: true, required: false, default: []
-  property :genre, multiple: true, required: false, default: []
-  property :geo_subject, multiple: true, required: false, default: []
-  property :license, multiple: true, required: false, default: []
-  property :part_of, multiple: true, required: false, default: []
-  property :replaces, multiple: true, required: false, default: []
-  property :type, multiple: true, required: false, default: []
-  property :contributor, multiple: true, required: false, default: []
-  property :coverage, multiple: true, required: false, default: []
-  property :coverage_point, multiple: true, required: false, default: []
-  property :creator, multiple: true, required: false, default: []
-  property :photographer, multiple: true, required: false, default: []
-  property :actor, multiple: true, required: false, default: []
-  property :director, multiple: true, required: false, default: []
-  property :date, multiple: true, required: false, default: []
-  property :description, multiple: true, required: false, default: []
-  property :keyword, multiple: true, required: false, default: []
-  property :language, multiple: true, required: false, default: []
-  property :publisher, multiple: true, required: false, default: []
-  property :date_published, multiple: true, required: false, default: []
-  property :date_issued, multiple: true, required: false, default: []
-  property :date_copyright, multiple: true, required: false, default: []
-  property :source, multiple: true, required: false, default: []
-  property :subject, multiple: true, required: false, default: []
+  # property :abstract, multiple: true, required: false, default: []
+  # property :alternative, multiple: true, required: false, default: []
+  # property :alternative_title, multiple: true, required: false, default: []
+  # property :archival_collection_code, multiple: false, required: false
+  # property :bibliographic_citation, multiple: true, required: false, default: []
+  # property :contents, multiple: true, required: false, default: []
+  # property :extent, multiple: true, required: false, default: []
+  # property :genre, multiple: true, required: false, default: []
+  # property :geo_subject, multiple: true, required: false, default: []
+  # property :license, multiple: true, required: false, default: []
+  # property :part_of, multiple: true, required: false, default: []
+  # property :replaces, multiple: true, required: false, default: []
+  # property :type, multiple: true, required: false, default: []
+  # property :contributor, multiple: true, required: false, default: []
+  # property :coverage, multiple: true, required: false, default: []
+  # property :coverage_point, multiple: true, required: false, default: []
+  # property :creator, multiple: true, required: false, default: []
+  # property :photographer, multiple: true, required: false, default: []
+  # property :actor, multiple: true, required: false, default: []
+  # property :director, multiple: true, required: false, default: []
+  # property :date, multiple: true, required: false, default: []
+  # property :description, multiple: true, required: false, default: []
+  # property :keyword, multiple: true, required: false, default: []
+  # property :language, multiple: true, required: false, default: []
+  # property :publisher, multiple: true, required: false, default: []
+  # property :date_published, multiple: true, required: false, default: []
+  # property :date_issued, multiple: true, required: false, default: []
+  # property :date_copyright, multiple: true, required: false, default: []
+  # property :source, multiple: true, required: false, default: []
+  # property :subject, multiple: true, required: false, default: []
+
   property :ocr_language, multiple: true, require: false, default: []
   property :logical_structure, multiple: true, required: false, type: Types::Strict::Array.of(Structure), default: [Structure.new(label: "Logical", nodes: [])]
   property :holding_location, multiple: false, required: false, type: ::Types::URI
-  property :location, multiple: true, required: false, default: []
-  property :date_created, multiple: false, required: false, default: []
-  property :geographic_origin, multiple: false, required: false, default: []
-  property :resource_type, multiple: false, required: false, default: []
+  # property :location, multiple: true, required: false, default: []
+  # property :date_created, multiple: false, required: false, default: []
+  # property :geographic_origin, multiple: false, required: false, default: []
+  # property :resource_type, multiple: false, required: false, default: []
   property :change_set, require: true, default: "simple"
 
   # Virtual Attributes
@@ -80,7 +81,7 @@ class SimpleChangeSet < ChangeSet
   def primary_terms
     [
       :title,
-      :sort_title,
+      # :sort_title,
       :rights_statement,
       :rights_note,
       :local_identifier,
@@ -91,32 +92,32 @@ class SimpleChangeSet < ChangeSet
       :nav_date,
       :member_of_collection_ids,
       :append_id,
-      :abstract,
-      :alternative,
-      :alternative_title,
-      :bibliographic_citation,
-      :contents,
-      :extent,
-      :genre,
-      :geo_subject,
-      :license,
-      :part_of,
-      :replaces,
-      :type,
-      :contributor,
-      :coverage,
-      :creator,
-      :date,
-      :description,
-      :keyword,
-      :language,
-      :publisher,
-      :date_published,
-      :date_issued,
-      :date_copyright,
-      :date_range_form,
-      :source,
-      :subject,
+      # :abstract,
+      # :alternative,
+      # :alternative_title,
+      # :bibliographic_citation,
+      # :contents,
+      # :extent,
+      # :genre,
+      # :geo_subject,
+      # :license,
+      # :part_of,
+      # :replaces,
+      # :type,
+      # :contributor,
+      # :coverage,
+      # :creator,
+      # :date,
+      # :description,
+      # :keyword,
+      # :language,
+      # :publisher,
+      # :date_published,
+      # :date_issued,
+      # :date_copyright,
+      # :date_range_form,
+      # :source,
+      # :subject,
       :holding_location,
       :change_set
     ]
