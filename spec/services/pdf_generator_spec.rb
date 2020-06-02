@@ -91,7 +91,7 @@ RSpec.describe PDFGenerator do
 
       it "logs the error" do
         expect { generator.render }.to raise_error(PDFGenerator::Error)
-        expect(Valkyrie.logger).to have_received(:error).with("PDFGenerator: Failed to generate a PDF for the resource #{resource.id}: IIIF Manifest canvas does not specify a service URL")
+        expect(Valkyrie.logger).to have_received(:error).with("PDFGenerator: Failed to generate a PDF for the resource #{resource.id}: IIIF Manifest image does not specify a service URL")
       end
     end
 
@@ -147,7 +147,7 @@ RSpec.describe PDFGenerator do
 
       it "logs the error" do
         expect { generator.render }.to raise_error(PDFGenerator::Error)
-        expect(Valkyrie.logger).to have_received(:error).with("PDFGenerator: Failed to generate a PDF for the resource #{resource.id}: IIIF Manifest canvas does not specify a width")
+        expect(Valkyrie.logger).to have_received(:error).with("PDFGenerator: Failed to generate a PDF for the resource #{resource.id}: IIIF Manifest image does not specify a width")
       end
     end
 
@@ -203,7 +203,7 @@ RSpec.describe PDFGenerator do
 
       it "logs the error" do
         expect { generator.render }.to raise_error(PDFGenerator::Error)
-        expect(Valkyrie.logger).to have_received(:error).with("PDFGenerator: Failed to generate a PDF for the resource #{resource.id}: IIIF Manifest canvas does not specify a height")
+        expect(Valkyrie.logger).to have_received(:error).with("PDFGenerator: Failed to generate a PDF for the resource #{resource.id}: IIIF Manifest image does not specify a height")
       end
     end
 
@@ -254,7 +254,7 @@ RSpec.describe PDFGenerator do
 
       it "logs the error" do
         expect { generator.render }.to raise_error(PDFGenerator::Error)
-        expect(Valkyrie.logger).to have_received(:error).with("PDFGenerator: Failed to generate a PDF for the resource #{resource.id}: IIIF Manifest canvas does not reference a resource")
+        expect(Valkyrie.logger).to have_received(:error).with("PDFGenerator: Failed to generate a PDF for the resource #{resource.id}: IIIF Manifest image does not reference a resource")
       end
     end
 
@@ -262,8 +262,11 @@ RSpec.describe PDFGenerator do
       before do
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/287,/0/gray.jpg")
           .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-landscape-pdf.jpg")), status: 200)
+        stub_request(:any, "http://www.example.com/concern/file_sets/#{file_set.id}/text")
+          .to_return(body: "Test Text", status: 200)
         file_set.original_file.width = 287
         file_set.original_file.height = 200
+        file_set.ocr_content = "Test Text"
         persister.save(resource: file_set)
       end
       it "renders a PDF" do
@@ -275,6 +278,7 @@ RSpec.describe PDFGenerator do
         expect(pdf_reader.page_count).to eq 2 # Including cover page
         expect(pdf_reader.pages.first.orientation).to eq "portrait"
         expect(pdf_reader.pages.last.orientation).to eq "landscape"
+        expect(pdf_reader.pages.last.text).to eq "Test Text"
       end
     end
     context "when it's set to color" do

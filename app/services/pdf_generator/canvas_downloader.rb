@@ -2,7 +2,7 @@
 class PDFGenerator
   class CanvasDownloader
     attr_reader :canvas
-    delegate :width, :height, to: :canvas
+    delegate :width, :height, :ocr_download_url, to: :canvas
     def initialize(canvas, quality: "gray")
       @canvas = canvas
       @quality = quality
@@ -12,6 +12,15 @@ class PDFGenerator
     # @return [File]
     def download
       open(download_url, "rb")
+    end
+
+    # The server isn't authorized to download from itself through HTTP. Instead,
+    # just grab it from the database.
+    def ocr_content
+      return "" unless ocr_download_url.present?
+      ocr_fileset_id = ocr_download_url.gsub(/.*file_sets\//, "").gsub("/text", "")
+      file_set = Valkyrie.config.metadata_adapter.query_service.find_by(id: ocr_fileset_id)
+      Array.wrap(file_set.ocr_content).first
     end
 
     def layout

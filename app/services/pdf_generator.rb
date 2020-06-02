@@ -23,6 +23,11 @@ class PDFGenerator
       download_attempts = 0
       begin
         prawn_document.image downloader.download, width: page_size.first, height: page_size.last, fit: page_size
+        if downloader.ocr_download_url
+          prawn_document.text_rendering_mode(:invisible) do
+            prawn_document.draw_text downloader.ocr_content, at: [0, 0]
+          end
+        end
       rescue OpenURI::HTTPError => uri_error
         Valkyrie.logger.error "#{self.class}: Failed to download a PDF using the following URI as a base: #{downloader.download_url}: #{uri_error}"
         download_attempts += 1
@@ -78,7 +83,7 @@ class PDFGenerator
   #   Image and use it to construct a Canvas Object
   # @return [Array<Canvas>]
   def canvas_images
-    @canvas_images ||= manifest_canvases.map { |x| x["images"].first }.map do |x|
+    @canvas_images ||= manifest_canvases.map do |x|
       Canvas.new(x)
     end
   end
