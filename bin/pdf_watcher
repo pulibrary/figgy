@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
+
+class PdfWatcher
+  def self.watch
+    new.watch
+  end
+
+  attr_reader :logger
+  def initialize(logger: Logger.new(STDOUT))
+    @logger = logger
+  end
+
+  def ocr_in_path
+    ENV["OCR_IN_PATH"]
+  end
+
+  def ocr_out_path
+    ENV["OCR_OUT_PATH"]
+  end
+
+  def watch
+    Filewatcher.new(ocr_in_path, every: true).watch do |file_path, event|
+      if File.extname(file_path) == ".pdf" && event == :created
+        out_path = File.join(ocr_out_path, File.basename(file_path))
+        logger.info("PDF OCR job initiated for: #{file_path}")
+        PdfOcrJob.perform_later(in_path: file_path, out_path: out_path)
+      end
+    end
+  end
+end
+
+PdfWatcher.watch
