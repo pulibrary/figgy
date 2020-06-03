@@ -68,6 +68,15 @@ RSpec.describe MediainfoCharacterizationService do
     end
   end
 
+  context "with an audio file that has an apostrophe in it" do
+    let(:file) { fixture_file_upload("files/audio's.wav", "audio/x-wav") }
+    it "pulls the mime type" do
+      new_file_set = described_class.new(file_set: valid_file_set, persister: persister).characterize(save: false)
+
+      expect(new_file_set.original_file.mime_type).to eq ["audio/x-wav"]
+    end
+  end
+
   context "with an audio file" do
     let(:file) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "audio/x-wav") }
     let(:audio_track_attributes) { double }
