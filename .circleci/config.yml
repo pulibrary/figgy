@@ -19,7 +19,7 @@ jobs:
       - checkout
       - run: sudo sh bin/ci_mediainfo_install.sh
       - run: sudo apt-get update
-      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev mediainfo libopenjp2-tools libopenjp2-7 libvips libvips-dev
+      - run: sudo apt-get install ca-certificates gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev mediainfo libopenjp2-tools libopenjp2-7 libvips libvips-dev
       - run: sudo sh bin/ci_simple_tiles_install.sh
       - run: sudo sh bin/ci_free_tds_install.sh
       - run:
@@ -103,7 +103,7 @@ jobs:
             sudo apt-get update
             sudo apt-get -y install google-chrome-stable
       - run: sudo apt-get update
-      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev tesseract-ocr tesseract-ocr-ita tesseract-ocr-eng mediainfo ffmpeg postgresql-client libopenjp2-tools libopenjp2-7 libvips libvips-dev
+      - run: sudo apt-get install ca-certificates gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev tesseract-ocr tesseract-ocr-ita tesseract-ocr-eng mediainfo ffmpeg postgresql-client libopenjp2-tools libopenjp2-7 libvips libvips-dev ocrmypdf
       - run: sudo sh bin/ci_simple_tiles_install.sh
       - run: sudo sh bin/ci_free_tds_install.sh
       - run:
@@ -186,7 +186,7 @@ jobs:
           at: '~/figgy'
       - run: sudo sh bin/ci_mediainfo_install.sh
       - run: sudo apt-get update
-      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev mediainfo libvips libvips-dev
+      - run: sudo apt-get install ca-certificates gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev mediainfo libvips libvips-dev
       - run: sudo sh bin/ci_simple_tiles_install.sh
       - run: sudo sh bin/ci_free_tds_install.sh
       - run:

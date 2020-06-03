@@ -13,6 +13,13 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-06-3
+
+## Added
+
+* Watch directory for PDFs and queue up jobs to OCR them and save in ILLiad
+  images directory.
+
 # 2020-05-22
 
 ## Added
