@@ -1191,7 +1191,7 @@ RSpec.describe ChangeSetPersister do
 
     context "with archival media collection and media resource members" do
       let(:amc) { FactoryBot.create_for_repository(:collection, change_set: "archival_media_collection", state: "draft") }
-      it "propagates the workflow state" do
+      it "does not propagate the workflow state" do
         FactoryBot.create_for_repository(:media_resource, state: "draft", member_of_collection_ids: amc.id)
 
         members = Wayfinder.for(amc).members
@@ -1203,14 +1203,14 @@ RSpec.describe ChangeSetPersister do
         expect(output.identifier.first).to eq "ark:/#{shoulder}#{blade}"
 
         members = Wayfinder.for(output).members
-        expect(members.first.state).to eq ["complete"]
-        expect(members.first.identifier.first).to eq "ark:/#{shoulder}#{blade}"
+        expect(members.first.state).to eq ["draft"]
+        expect(members.first.identifier).to be nil
       end
     end
 
     context "with a collection" do
       let(:collection) { FactoryBot.create_for_repository(:collection) }
-      it "propagates visibility" do
+      it "does not propagate visibility" do
         FactoryBot.create_for_repository(:pending_private_scanned_resource, member_of_collection_ids: collection.id)
 
         change_set = DynamicChangeSet.new(collection)
@@ -1218,7 +1218,7 @@ RSpec.describe ChangeSetPersister do
         output = change_set_persister.save(change_set: change_set)
 
         members = Wayfinder.for(output).members
-        expect(members.first.visibility).to eq [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC]
+        expect(members.first.visibility).to eq [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE]
       end
       it "doesn't propagate read groups or state, having neither of these fields" do
         FactoryBot.create_for_repository(:pending_private_scanned_resource, member_of_collection_ids: collection.id)
