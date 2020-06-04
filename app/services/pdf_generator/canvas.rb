@@ -17,31 +17,49 @@ class PDFGenerator
       validate!
     end
 
-    # Ensure that the IIIF Manifest canvas has a valid structure
+    def plain_text_download
+      rendering.find do |render|
+        render["format"] == "text/plain"
+      end || {}
+    end
+
+    def ocr_download_url
+      plain_text_download["@id"]
+    end
+
+    def rendering
+      canvas["rendering"] ||= []
+    end
+
+    def image
+      @image ||= canvas["images"].first
+    end
+
+    # Ensure that the IIIF Manifest image has a valid structure
     # @raise [InvalidIIIFManifestError]
     def validate!
-      raise(InvalidIIIFManifestError, "IIIF Manifest canvas does not reference a resource") unless canvas.key?("resource")
-      raise(InvalidIIIFManifestError, "IIIF Manifest canvas does not specify a width") unless canvas["resource"].key?("width") && canvas["resource"]["width"]
-      raise(InvalidIIIFManifestError, "IIIF Manifest canvas does not specify a height") unless canvas["resource"].key?("height") && canvas["resource"]["height"]
-      raise(InvalidIIIFManifestError, "IIIF Manifest canvas does not specify a service URL") unless canvas["resource"].key?("service") && canvas["resource"]["service"].key?("@id")
+      raise(InvalidIIIFManifestError, "IIIF Manifest image does not reference a resource") unless image.key?("resource")
+      raise(InvalidIIIFManifestError, "IIIF Manifest image does not specify a width") unless image["resource"].key?("width") && image["resource"]["width"]
+      raise(InvalidIIIFManifestError, "IIIF Manifest image does not specify a height") unless image["resource"].key?("height") && image["resource"]["height"]
+      raise(InvalidIIIFManifestError, "IIIF Manifest image does not specify a service URL") unless image["resource"].key?("service") && image["resource"]["service"].key?("@id")
     end
 
-    # Access the width for the canvas
+    # Access the width for the image
     # @return [Integer]
     def width
-      canvas["resource"]["width"].to_i
+      image["resource"]["width"].to_i
     end
 
-    # Access the height for the canvas
+    # Access the height for the image
     # @return [Integer]
     def height
-      canvas["resource"]["height"].to_i
+      image["resource"]["height"].to_i
     end
 
     # Access the URL for the IIIF image server
     # @return [String]
     def url
-      canvas["resource"]["service"]["@id"]
+      image["resource"]["service"]["@id"]
     end
   end
 end
