@@ -87,8 +87,7 @@ class VIPSDerivativeService
       Q: 75,
       tile_width: 1024,
       tile_height: 1024,
-      strip: true,
-      profile: color_profile
+      strip: true
     )
     raise "Unable to store pyramidal TIFF for #{filename}!" unless File.exist?(temporary_output.path)
   end
@@ -96,7 +95,7 @@ class VIPSDerivativeService
   def vips_image
     @vips_image ||=
       begin
-        image = Vips::Image.new_from_file(filename.to_s)
+        image = image_from_file(filename.to_s)
         if image.height >= REDUCTION_THRESHOLD || image.width >= REDUCTION_THRESHOLD
           image.resize(0.5)
         else
@@ -105,8 +104,18 @@ class VIPSDerivativeService
       end
   end
 
-  def color_profile
-    Hydra::Derivatives::Processors::Jpeg2kImage.srgb_profile_path
+  def image_from_file(filename)
+    image = Vips::Image.new_from_file(filename.to_s)
+    # Adjust color profile to be srgb. Unfortunately we were unable to find a
+    # good way to unit test that this is working, but manual testing shows that
+    # this results in the proper colors.
+    begin
+      profile = image.get("icc-profile-data")
+      image = image.icc_transform("srgb") if profile
+    rescue
+      Rails.logger.debug("No embedded profile - skipping ICC Transform")
+    end
+    image
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
