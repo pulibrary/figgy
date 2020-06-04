@@ -8,7 +8,6 @@ class SimpleChangeSet < ChangeSet
   include VisibilityProperty
   include DateRangeProperty
   property :title, multiple: true, required: true, default: []
-  property :sort_title, multiple: true, required: true, default: []
   property :downloadable, multiple: false, require: true, default: "public"
   property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
   property :rights_note, multiple: false, required: false
@@ -26,6 +25,9 @@ class SimpleChangeSet < ChangeSet
   property :file_metadata, multiple: true, required: false, default: []
   property :depositor, multiple: false, require: false
 
+  # The following are editable through automated ingest, but will not show up in
+  # the form until we have support for the data types in them in production.
+  property :sort_title, multiple: true, required: true, default: []
   property :abstract, multiple: true, required: false, default: []
   property :alternative, multiple: true, required: false, default: []
   property :alternative_title, multiple: true, required: false, default: []
@@ -56,6 +58,7 @@ class SimpleChangeSet < ChangeSet
   property :date_copyright, multiple: true, required: false, default: []
   property :source, multiple: true, required: false, default: []
   property :subject, multiple: true, required: false, default: []
+
   property :ocr_language, multiple: true, require: false, default: []
   property :logical_structure, multiple: true, required: false, type: Types::Strict::Array.of(Structure), default: [Structure.new(label: "Logical", nodes: [])]
   property :holding_location, multiple: false, required: false, type: ::Types::URI
@@ -80,7 +83,6 @@ class SimpleChangeSet < ChangeSet
   def primary_terms
     [
       :title,
-      :sort_title,
       :rights_statement,
       :rights_note,
       :local_identifier,
@@ -91,34 +93,37 @@ class SimpleChangeSet < ChangeSet
       :nav_date,
       :member_of_collection_ids,
       :append_id,
-      :abstract,
-      :alternative,
-      :alternative_title,
-      :bibliographic_citation,
-      :contents,
-      :extent,
-      :genre,
-      :geo_subject,
-      :license,
-      :part_of,
-      :replaces,
-      :type,
-      :contributor,
-      :coverage,
-      :creator,
-      :date,
-      :description,
-      :keyword,
-      :language,
-      :publisher,
-      :date_published,
-      :date_issued,
-      :date_copyright,
-      :date_range_form,
-      :source,
-      :subject,
       :holding_location,
       :change_set
+      # The following were disabled until we have support for already-ingested
+      # content that have complicated values in these fields. See #1714 and #1713
+      # :sort_title,
+      # :abstract,
+      # :alternative,
+      # :alternative_title,
+      # :bibliographic_citation,
+      # :contents,
+      # :extent,
+      # :genre,
+      # :geo_subject,
+      # :license,
+      # :part_of,
+      # :replaces,
+      # :type,
+      # :contributor,
+      # :coverage,
+      # :creator,
+      # :date,
+      # :description,
+      # :keyword,
+      # :language,
+      # :publisher,
+      # :date_published,
+      # :date_issued,
+      # :date_copyright,
+      # :date_range_form,
+      # :source,
+      # :subject,
     ]
   end
 end

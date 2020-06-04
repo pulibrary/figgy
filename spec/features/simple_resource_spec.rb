@@ -35,35 +35,36 @@ RSpec.feature "SimpleChangeSets" do
     expect(page).to have_field "Navigation Date"
     expect(page).to have_css '.select[for="scanned_resource_member_of_collection_ids"]', text: "Collections"
 
-    expect(page).to have_field "Abstract"
-    expect(page).to have_field "Alternative"
-    expect(page).to have_field "Alternative title"
-    expect(page).to have_field "Bibliographic citation"
-    expect(page).to have_field "Contents"
-    expect(page).to have_field "Extent"
-    expect(page).to have_field "Genre"
-    expect(page).to have_field "Geo subject"
-    expect(page).to have_field "License"
-    expect(page).to have_field "Part of"
-    expect(page).to have_field "Replaces"
-    expect(page).to have_field "Type"
-    expect(page).to have_field "Contributor"
-    expect(page).to have_css '.control-label[for="scanned_resource_coverage"]', text: "Coverage"
-    expect(page).to have_field "Creator"
-    expect(page).to have_field "Date"
-    expect(page).to have_field "Description"
-    expect(page).to have_field "Keyword"
-    expect(page).to have_field "Language"
-    expect(page).to have_field "Publisher"
-    expect(page).to have_field "Source"
-    expect(page).to have_field "Subject"
+    # The following were disabled until we have support for all these fields.
+    # expect(page).to have_field "Abstract"
+    # expect(page).to have_field "Alternative"
+    # expect(page).to have_field "Alternative title"
+    # expect(page).to have_field "Bibliographic citation"
+    # expect(page).to have_field "Contents"
+    # expect(page).to have_field "Extent"
+    # expect(page).to have_field "Genre"
+    # expect(page).to have_field "Geo subject"
+    # expect(page).to have_field "License"
+    # expect(page).to have_field "Part of"
+    # expect(page).to have_field "Replaces"
+    # expect(page).to have_field "Type"
+    # expect(page).to have_field "Contributor"
+    # expect(page).to have_css '.control-label[for="scanned_resource_coverage"]', text: "Coverage"
+    # expect(page).to have_field "Creator"
+    # expect(page).to have_field "Date"
+    # expect(page).to have_field "Description"
+    # expect(page).to have_field "Keyword"
+    # expect(page).to have_field "Language"
+    # expect(page).to have_field "Publisher"
+    # expect(page).to have_field "Source"
+    # expect(page).to have_field "Subject"
     expect(page.find("#scanned_resource_change_set", visible: false).value).to eq "simple"
 
-    fill_in "Title", with: "Test"
-    fill_in "Contributor", with: "Test Contributor"
+    fill_in "Title", with: "Test Title"
+    # fill_in "Contributor", with: "Test Contributor"
     click_button "Save"
 
-    expect(page).to have_content "Test Contributor"
+    expect(page).to have_content "Test Title"
   end
 
   scenario "creating an invalid resource" do
@@ -115,10 +116,14 @@ RSpec.feature "SimpleChangeSets" do
     scenario "editing a resource" do
       visit edit_scanned_resource_path(simple_resource)
 
-      expect(page).to have_content "Editing resources without imported metadata has been disabled while features are being added to support metadata from PUDL. " \
-        "Please contact us on Slack if you need help."
-
-      expect(current_path).to eq "/catalog/#{simple_resource.id}"
+      expect(page).to have_field "Title"
+      expect(page).to have_css '.select[for="scanned_resource_rights_statement"]', text: "Rights Statement"
+      expect(page).to have_field "Rights Note"
+      expect(page).to have_field "Local identifier"
+      expect(page).to have_css '.select[for="scanned_resource_pdf_type"]', text: "PDF Type"
+      expect(page).to have_field "Portion Note"
+      expect(page).to have_field "Navigation Date"
+      expect(page).to have_css '.select[for="scanned_resource_member_of_collection_ids"]', text: "Collections"
     end
 
     scenario "viewing a resource" do
