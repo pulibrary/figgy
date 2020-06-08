@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Filename:</strong>
+  <%= @ocr_request.filename %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @ocr_request.state %>
+</p>
+
+<p>
+  <strong>Note:</strong>
+  <%= @ocr_request.note %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @ocr_request.user %>
+</p>
+
+<%= link_to 'Edit', edit_ocr_request_path(@ocr_request) %> |
+<%= link_to 'Back', ocr_requests_path %>

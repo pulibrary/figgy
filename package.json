@@ -33,6 +33,7 @@
     "vue-loader": "^15.4.2",
     "vue-select": "^3.4.0",
     "vue-template-compiler": "^2.5.17",
+    "vue2-dropzone": "^3.6.0",
     "vuex": "^2.4.1"
   },
   "devDependencies": {
