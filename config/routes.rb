@@ -287,6 +287,6 @@ Rails.application.routes.draw do
 
   match "oai", to: "oai#index", via: [:get, :post]
 
-  resources :ocr_requests
+  resources :ocr_requests, only: [:index, :destroy]
   post "/ocr_requests/upload_file", to: "ocr_requests#upload_file", as: :upload_file
 end

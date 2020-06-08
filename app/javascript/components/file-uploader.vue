@@ -1,0 +1,54 @@
+<template>
+  <dropzone ref="fileUploaderDropzone" id="dropzone" :options="dropzoneOptions" v-on:vdropzone-complete="uploadComplete"/>
+</template>
+<script>
+import vue2Dropzone from 'vue2-dropzone'
+import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+
+export default {
+  name: 'FileUploader',
+  components: {
+    'dropzone': vue2Dropzone
+  },
+  props: {
+    csrfToken: {
+      type: String,
+      default: document.getElementsByName('csrf-token')[0].content
+    },
+    tableName: {
+      type: String,
+      default: null
+    },
+    mimeTypes: {
+      type: String,
+      default: null
+    },
+    uploadPath: {
+      type: String,
+      required: true
+    }
+  },
+  data () {
+    return {
+      options: [],
+      dropzoneOptions: {
+        acceptedFiles: this.mimeTypes,
+        createImageThumbnails: false,
+        headers: { 'X-CSRF-Token': this.csrfToken },
+        url: this.uploadPath
+      }
+    }
+  },
+  methods: {
+    uploadComplete (response) {
+      // Remove file from dropzone UI
+      this.$refs.fileUploaderDropzone.removeFile(response)
+
+      // If a global DataTable object name is passed in, get that object and reload
+      if (this.tableName !== null) {
+        window[this.tableName].ajax.reload()
+      }
+    }
+  }
+}
+</script>
