@@ -286,4 +286,7 @@ Rails.application.routes.draw do
   get "/viewer/exhibit/config", to: "application#viewer_exhibit_config", as: "viewer_exhibit_config"
 
   match "oai", to: "oai#index", via: [:get, :post]
+
+  resources :ocr_requests
+  post "/ocr_requests/upload_file", to: "ocr_requests#upload_file", as: :upload_file
 end

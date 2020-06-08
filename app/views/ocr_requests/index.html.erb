@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Ocr Requests (<%= current_user %> </h1>
+
+<dropzone id="dropzone" :options="dropzoneOptions"></dropzone>
+
+<table>
+  <thead>
+    <tr>
+      <th>Filename</th>
+      <th>Created</th>
+      <th>Updated</th>
+      <th>State</th>
+      <th>Note</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @ocr_requests.each do |ocr_request| %>
+      <tr>
+        <td><%= ocr_request.filename %></td>
+        <td><%= ocr_request.created_at %></td>
+        <td><%= ocr_request.updated_at %></td>
+        <td><%= ocr_request.state %></td>
+        <td><%= ocr_request.note %></td>
+        <td><%= link_to 'Destroy', ocr_request, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

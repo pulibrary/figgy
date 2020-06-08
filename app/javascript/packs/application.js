@@ -11,6 +11,10 @@ import OrderManager from '../components/OrderManager.vue'
 import setupAuthLinkClipboard from '../packs/auth_link_clipboard.js'
 import AjaxSelect from '../components/ajax-select'
 import setupAjaxSelect from '../helpers/setup_ajax_select.js'
+import vue2Dropzone from 'vue2-dropzone'
+import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+
+const csrfToken = document.getElementsByName('csrf-token')[0].content
 
 Vue.use(system)
 
@@ -28,10 +32,15 @@ document.addEventListener('DOMContentLoaded', () => {
         'playlistMembers': PlaylistMembers,
         'order-manager': OrderManager,
         'issue-monograms': IssueMonograms,
-        'ajax-select': AjaxSelect
+        'ajax-select': AjaxSelect,
+        'dropzone': vue2Dropzone
       },
       data: {
-        options: []
+        options: [],
+        dropzoneOptions: {
+          url: '/ocr_requests/upload_file',
+          headers: { "X-CSRF-Token": csrfToken }
+        }
       },
       // Functions to run after Vue is mounted
       mounted: function () {
