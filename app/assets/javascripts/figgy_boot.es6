@@ -129,7 +129,6 @@ export default class Initializer {
         { data: 'filename' },
         { data: 'created_at' },
         { data: 'state' },
-        { data: 'note' },
         { data: 'actions' }
       ]
     } )

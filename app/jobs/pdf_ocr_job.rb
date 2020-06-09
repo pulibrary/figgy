@@ -9,7 +9,7 @@ class PdfOcrJob < ApplicationJob
     @blob = resource.pdf # Required for ActiveStorage blob to tempfile method.
     update_state(state: "Processing")
     return unless pdf_attached?
-    run_ocr_pdf
+    run_pdf_ocr
     update_state(state: "Complete")
     # Delete original PDF
     resource.pdf.purge
