@@ -278,22 +278,23 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       ephemera_box = FactoryBot.create_for_repository(:ephemera_box, member_ids: [resource.id])
       project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id])
 
-      expect(linked_ephemera_folder.as_jsonld).not_to be_empty
-
-      expect(linked_ephemera_folder.as_jsonld["title"]).to eq ["test title"]
-      expect(linked_ephemera_folder.as_jsonld["barcode"]).to eq "00000000000000"
-      expect(linked_ephemera_folder.as_jsonld["folder_number"]).to eq "1"
-      expect(linked_ephemera_folder.as_jsonld["sort_title"]).to eq ["test title"]
-      expect(linked_ephemera_folder.as_jsonld["width"]).to eq ["test width"]
-      expect(linked_ephemera_folder.as_jsonld["height"]).to eq ["test height"]
-      expect(linked_ephemera_folder.as_jsonld["page_count"]).to eq "test page count"
-      expect(linked_ephemera_folder.as_jsonld["creator"]).to eq ["test creator"]
-      expect(linked_ephemera_folder.as_jsonld["contributor"]).to eq ["test contributor"]
-      expect(linked_ephemera_folder.as_jsonld["publisher"]).to eq ["test publisher"]
-      expect(linked_ephemera_folder.as_jsonld["description"]).to eq ["test description"]
-      expect(linked_ephemera_folder.as_jsonld["provenance"]).to eq "test provenance"
-
       jsonld = linked_ephemera_folder.as_jsonld
+      expect(jsonld).not_to be_empty
+
+      expect(jsonld["title"]).to eq ["test title"]
+      expect(jsonld["barcode"]).to eq "00000000000000"
+      expect(jsonld["folder_number"]).to eq "1"
+      expect(jsonld["sort_title"]).to eq ["test title"]
+      expect(jsonld["width"]).to eq ["test width"]
+      expect(jsonld["height"]).to eq ["test height"]
+      expect(jsonld["page_count"]).to eq "test page count"
+      expect(jsonld["creator"]).to eq ["test creator"]
+      expect(jsonld["contributor"]).to eq ["test contributor"]
+      expect(jsonld["publisher"]).to eq ["test publisher"]
+      expect(jsonld["description"]).to eq ["test description"]
+      expect(jsonld["provenance"]).to eq "test provenance"
+
+      expect(jsonld["member_of_collections"]).to be_nil
       collection_json = jsonld["memberOf"].find { |x| x["title"] == collection.title.first }
       expect(collection_json).to eq(
         "@id" => "http://www.example.com/catalog/#{collection.id}",

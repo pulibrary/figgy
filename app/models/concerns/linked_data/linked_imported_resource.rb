@@ -14,8 +14,12 @@ module LinkedData
         @imported_jsonld ||= JSON.parse(resource.primary_imported_metadata.source_jsonld.first)
       end
 
+      # remove :member_of_collections
+      #   it's a manifest attribute but jsonld adds memberOf instead
       def finding_aid_metadata
-        resource.decorate.iiif_manifest_attributes.select { |_k, v| v.present? }
+        resource.decorate.iiif_manifest_attributes
+                .reject { |k, _v| k == :member_of_collections }
+                .select { |_k, v| v.present? }
       end
 
       def record_link

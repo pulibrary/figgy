@@ -16,15 +16,26 @@ RSpec.describe LinkedData::LinkedImportedResource do
 
   context "when it has a bib id" do
     let(:source_id) { "4609321" }
-    let(:resource) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: source_id) }
+    let(:collection) { FactoryBot.create_for_repository(:collection) }
+    let(:resource) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: source_id, member_of_collection_ids: [collection.id]) }
     it "returns a link to the catalog" do
       stub_bibdata(bib_id: source_id)
       expect(linked_resource.as_jsonld["link_to_catalog"]).to eq "https://catalog.princeton.edu/catalog/#{source_id}"
+      expect(linked_resource.as_jsonld["member_of_collections"]).to be_nil
     end
   end
+
   context "when it has a component id" do
     let(:source_id) { "C0652_c0389" }
-    let(:resource) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: source_id, import_metadata: true) }
+    let(:collection) { FactoryBot.create_for_repository(:collection) }
+    let(:resource) do
+      FactoryBot.create_for_repository(
+        :scanned_resource,
+        source_metadata_identifier: source_id,
+        import_metadata: true,
+        member_of_collection_ids: [collection.id]
+      )
+    end
     it "returns a link to the finding aids site" do
       stub_pulfa(pulfa_id: source_id)
       expect(linked_resource.as_jsonld["link_to_finding_aid"]).to eq "https://findingaids.princeton.edu/collections/C0652/c0389"
@@ -44,6 +55,13 @@ RSpec.describe LinkedData::LinkedImportedResource do
       expect(jsonld["source_metadata_identifier"]).to be_nil
       expect(jsonld["created_at"]).to be_nil
       expect(jsonld["updated_at"]).to be_nil
+      expect(jsonld["member_of_collections"]).to be_nil
+      collection_json = jsonld["memberOf"].find { |x| x["title"] == collection.title.first }
+      expect(collection_json).to eq(
+        "@id" => "http://www.example.com/catalog/#{collection.id}",
+        "@type" => "pcdm:Collection",
+        "title" => collection.title.first
+      )
     end
   end
 end
