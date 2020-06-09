@@ -2,11 +2,14 @@
 
 class OcrRequestsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_ocr_request, only: [:destroy]
+  before_action :set_ocr_request, only: [:destroy, :show]
 
   def index
     @ocr_requests = OcrRequest.where(user_id: current_user)
   end
+
+  # def show
+  # end
 
   def destroy
     @ocr_request.destroy
