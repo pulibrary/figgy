@@ -1,31 +1,39 @@
 # frozen_string_literal: true
 class PdfOcrJob < ApplicationJob
-  class_attribute :max_wait, :sleep_interval
+  include ActiveStorage::Downloading
+  attr_reader :blob, :out_path, :resource
 
-  # Max time in seconds to wait for the file to be released by another process.
-  # Needed when copying large files to the input directory or
-  # transferring over the network.
-  self.max_wait = 300
-
-  # Time in seconds to wait between open file checks
-  self.sleep_interval = 10
-
-  def perform(in_path:, out_path:)
-    wait_for_file(in_path)
-    _stdout_str, error_str, status = Open3.capture3("ocrmypdf", "--force-ocr", "--rotate-pages", "--deskew", in_path.to_s, out_path.to_s)
-    raise "PDF OCR job failed: #{error_str}" unless status.success?
-    File.delete(in_path)
+  def perform(resource:, out_path:)
+    @resource = resource
+    @out_path = out_path
+    @blob = resource.pdf # Required for ActiveStorage blob to tempfile method.
+    update_state(state: "Processing")
+    return unless pdf_attached?
+    run_ocr_pdf
+    update_state(state: "Complete")
+    # Delete original PDF
+    resource.pdf.purge
   end
 
-  def wait_for_file(in_path)
-    counter = 0
-    loop do
-      raise "PDF OCR job failed: Timed out. File is open by another process." if counter >= max_wait
-      stdout_str, error_str, _status = Open3.capture3("lsof", in_path.to_s)
-      break if stdout_str == "" && error_str == ""
-      raise "PDF OCR job failed: #{error_str}" if error_str != ""
-      counter += sleep_interval
-      sleep sleep_interval
+  def pdf_attached?
+    return true if resource.pdf.attached?
+    update_state(state: "Error", message: "Resource has no attached PDF.")
+    false
+  end
+
+  def run_pdf_ocr
+    download_blob_to_tempfile do |file|
+      _stdout_str, error_str, status = Open3.capture3("ocrmypdf", "--force-ocr", "--rotate-pages", "--deskew", file.path, out_path.to_s)
+      return if status.success?
+      message = "PDF OCR job failed: #{error_str}"
+      update_state(state: "Error", message: message)
+      raise message unless status.success?
     end
+  end
+
+  def update_state(state:, message: nil)
+    resource.state = state
+    resource.note = message if message
+    resource.save
   end
 end

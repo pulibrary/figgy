@@ -8,9 +8,6 @@ class OcrRequestsController < ApplicationController
     @ocr_requests = OcrRequest.where(user_id: current_user)
   end
 
-  # def show
-  # end
-
   def destroy
     @ocr_request.destroy
     respond_to do |format|
@@ -22,6 +19,7 @@ class OcrRequestsController < ApplicationController
   def upload_file
     @ocr_request = OcrRequest.new(ocr_request_params)
     if @ocr_request.save
+      PdfOcrJob.perform_later(resource: @ocr_request, out_path: ocr_out_file)
       render status: :ok, json: { message: "uploaded" }
     else
       render status: :unprocessable_entity, json: @ocr_request.errors
@@ -30,8 +28,14 @@ class OcrRequestsController < ApplicationController
 
   private
 
-    def set_ocr_request
-      @ocr_request = OcrRequest.find(params[:id])
+    def ocr_out_file
+      out_dir = ENV["OCR_OUT_PATH"] || temp_ocr_out_dir
+      File.join(out_dir, @ocr_request.filename)
+    end
+
+    def temp_ocr_out_dir
+      path = Rails.root.join("tmp", "ocr_out")
+      FileUtils.mkdir_p(path).first
     end
 
     def ocr_request_params
@@ -41,5 +45,9 @@ class OcrRequestsController < ApplicationController
         user_id: current_user.id,
         pdf: params["file"]
       }
+    end
+
+    def set_ocr_request
+      @ocr_request = OcrRequest.find(params[:id])
     end
 end
