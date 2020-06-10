@@ -38,8 +38,19 @@ module LinkedData
 
       def overwritten_properties
         {
-          part_of: part_of
+          part_of: part_of,
+          actor: actor
         }
+      end
+
+      def actor
+        Array.wrap(resource.actor).map do |actor|
+          if actor.is_a? Grouping
+            { "grouping" => actor.elements }
+          else
+            actor
+          end
+        end
       end
 
       def part_of
