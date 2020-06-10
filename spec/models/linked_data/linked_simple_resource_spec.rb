@@ -2,10 +2,37 @@
 require "rails_helper"
 
 RSpec.describe LinkedData::LinkedSimpleResource do
-  subject(:linked_ephemera_folder) { described_class.new(resource: resource) }
+  subject(:linked_resource) { described_class.new(resource: resource) }
   let(:resource) { FactoryBot.create_for_repository(:simple_resource, date_range: date_range) }
   let(:date_range) { DateRange.new(start: "2013", end: "2017") }
   let(:resource_factory) { :simple_resource }
 
   it_behaves_like "LinkedData::Resource::WithDateRange"
+
+  describe "as_jsonld" do
+    context "when it has an actor field with Strings, Groupings and RDF literals" do
+      let(:resource) do
+        FactoryBot.create_for_repository(
+          :simple_resource,
+          actor: [
+            RDF::Literal.new("هدى سلطان", language: "ara-Arab"),
+            "Name String",
+            Grouping.new(
+              elements: [
+                RDF::Literal.new("Milījī, Maḥmūd", language: "ara-Latn"),
+                RDF::Literal.new("محمود المليجي", language: "ara-Arab")
+              ]
+            )
+          ]
+        )
+      end
+
+      it "provides appropriate json structure" do
+        jsonld = linked_resource.as_jsonld
+        expect(jsonld["actor"].first).to be_a RDF::Literal
+        expect(jsonld["actor"][1]).to eq "Name String"
+        expect(jsonld["actor"].last["grouping"].map(&:class)).to eq [RDF::Literal, RDF::Literal]
+      end
+    end
+  end
 end
