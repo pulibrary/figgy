@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class OaiProvider < OAI::Provider::Base
+module OAI::Figgy
   class ValkyrieProviderModel < OAI::Provider::Model
     def self.limit
       10

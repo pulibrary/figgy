@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class OaiProvider < OAI::Provider::Base
+module OAI::Figgy
   class MARC21 < OAI::Provider::Metadata::Format
     def initialize
       @prefix = "marc21"

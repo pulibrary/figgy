@@ -1,0 +1,12 @@
+# frozen_string_literal: true
+module OAI::Figgy
+  class Provider < OAI::Provider::Base
+    repository_name "Princeton University Library"
+    repository_url ::ManifestBuilder::ManifestHelper.new.oai_url
+    record_prefix "oai:figgy"
+    admin_email ""
+    source_model ::OAI::Figgy::ValkyrieProviderModel.new
+    sample_id "1"
+    register_format(::OAI::Figgy::MARC21.instance)
+  end
+end

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class OaiProvider < OAI::Provider::Base
+module OAI::Figgy
   class OAIWrapper < SimpleDelegator
     def to_marc21
       MarcRecordEnhancer.for(__getobj__).enhance_cicognara.to_xml.to_s

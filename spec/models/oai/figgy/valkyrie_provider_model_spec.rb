@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe OaiProvider::ValkyrieProviderModel do
+RSpec.describe OAI::Figgy::ValkyrieProviderModel do
   describe "#deleted?" do
     it "is false" do
       expect(described_class.new).not_to be_deleted
@@ -29,7 +29,7 @@ RSpec.describe OaiProvider::ValkyrieProviderModel do
         output = described_class.new.find_all(set: "cico", metadata_prefix: "marc21")
 
         expect(output.length).to eq 1
-        expect(output.first).to be_a OaiProvider::OAIWrapper
+        expect(output.first).to be_a OAI::Figgy::OAIWrapper
       end
       it "doesn't return volumes" do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
@@ -39,7 +39,7 @@ RSpec.describe OaiProvider::ValkyrieProviderModel do
         output = described_class.new.find_all(set: "cico", metadata_prefix: "marc21")
 
         expect(output.length).to eq 1
-        expect(output.first).to be_a OaiProvider::OAIWrapper
+        expect(output.first).to be_a OAI::Figgy::OAIWrapper
       end
       it "can find items within a specific date range" do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
@@ -68,7 +68,7 @@ RSpec.describe OaiProvider::ValkyrieProviderModel do
         output = described_class.new.find_all(set: "cico", metadata_prefix: "marc21")
 
         expect(output.length).to eq 1
-        expect(output.first).to be_a OaiProvider::OAIWrapper
+        expect(output.first).to be_a OAI::Figgy::OAIWrapper
       end
     end
   end

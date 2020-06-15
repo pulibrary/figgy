@@ -2,6 +2,13 @@
 require "rails_helper"
 
 RSpec.describe OaiController do
+  describe "Identify" do
+    it "has the correct repository name" do
+      get :index, params: { "verb" => "Identify" }
+      result = Nokogiri::XML(response.body).remove_namespaces!
+      expect(result.xpath("//repositoryName").text).to eq "Princeton University Library"
+    end
+  end
   describe "ListRecords" do
     context "when requesting a Cicognara set" do
       it "returns all the Cicognara item MarcXML" do
@@ -77,7 +84,7 @@ RSpec.describe OaiController do
       end
 
       it "can page" do
-        allow(OaiProvider::ValkyrieProviderModel).to receive(:limit).and_return(2)
+        allow(OAI::Figgy::ValkyrieProviderModel).to receive(:limit).and_return(2)
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
         source_metadata_identifier = "8543429"
         stub_ezid(shoulder: "99999/fk4", blade: source_metadata_identifier)
