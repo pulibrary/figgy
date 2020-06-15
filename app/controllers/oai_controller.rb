@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class OaiController < ApplicationController
   def index
-    provider = OaiProvider.new
+    provider = OAI::Figgy::Provider.new
     response = provider.process_request(oai_params.to_h)
     render body: response, content_type: "text/xml"
   end
