@@ -86,6 +86,9 @@ RSpec.describe OaiController do
         expect(records.length).to eq 1
         expect(result.xpath("//title").text).to eq "156. Camp à Providence sur le chemin de Boston, le 13 Novembre, 4 miles de l'ancien Camp"
         expect(result.xpath("//creator").text).to eq "Berthier, Louis-Alexandre, 1753-1815."
+        expect(result.xpath("//publisher").text).to eq "Berthier, Louis-Alexandre, 1753-1815."
+        expect(result.xpath("//date").text).to eq "1-1"
+        expect(result.xpath("//rights").text).to eq "No Known Copyright"
       end
     end
   end
