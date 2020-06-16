@@ -20,6 +20,7 @@ RSpec.describe OAI::Figgy::ValkyrieProviderModel do
         expect(output.to_a.length).to eq 1
       end
     end
+
     context "when requesting the cico set" do
       it "returns only items that are a member of that set" do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
@@ -31,6 +32,7 @@ RSpec.describe OAI::Figgy::ValkyrieProviderModel do
         expect(output.length).to eq 1
         expect(output.first).to be_a OAI::Figgy::OAIWrapper
       end
+
       it "doesn't return volumes" do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
         parent = create_scanned_resource(source_metadata_identifier: "123456", collection_id: collection.id)
@@ -41,6 +43,7 @@ RSpec.describe OAI::Figgy::ValkyrieProviderModel do
         expect(output.length).to eq 1
         expect(output.first).to be_a OAI::Figgy::OAIWrapper
       end
+
       it "can find items within a specific date range" do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
         Timecop.freeze(Time.zone.local(2008, 9, 1, 12, 0, 0))
@@ -55,6 +58,7 @@ RSpec.describe OAI::Figgy::ValkyrieProviderModel do
 
         expect(output.map(&:id)).to eq [new_resource.id]
       end
+
       it "returns only items that can be converted to MARC21" do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
         stub_pulfa(pulfa_id: "AC044_c0003")
@@ -72,21 +76,7 @@ RSpec.describe OAI::Figgy::ValkyrieProviderModel do
       end
     end
   end
-  def create_scanned_resource(source_metadata_identifier:, collection_id:, member_ids: [], append_id: nil, state: "complete", visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
-    stub_bibdata(bib_id: source_metadata_identifier)
-    stub_bibdata(bib_id: source_metadata_identifier, content_type: "application/marcxml+xml") if File.exist?(bibdata_fixture_path(source_metadata_identifier, BibdataStubbing::CONTENT_TYPE_MARC_XML))
-    stub_ezid(shoulder: "99999/fk4", blade: source_metadata_identifier)
-    FactoryBot.create_for_repository(
-      :complete_scanned_resource,
-      member_of_collection_ids: collection_id,
-      source_metadata_identifier: source_metadata_identifier,
-      import_metadata: true,
-      member_ids: member_ids,
-      append_id: append_id,
-      state: state,
-      visibility: visibility
-    )
-  end
+
   context "when there's more than the limit" do
     it "uses resumption tokens" do
       allow(described_class).to receive(:limit).and_return(2)
@@ -104,5 +94,21 @@ RSpec.describe OAI::Figgy::ValkyrieProviderModel do
 
       expect(next_set.length).to eq 1
     end
+  end
+
+  def create_scanned_resource(source_metadata_identifier:, collection_id:, member_ids: [], append_id: nil, state: "complete", visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
+    stub_bibdata(bib_id: source_metadata_identifier)
+    stub_bibdata(bib_id: source_metadata_identifier, content_type: "application/marcxml+xml") if File.exist?(bibdata_fixture_path(source_metadata_identifier, BibdataStubbing::CONTENT_TYPE_MARC_XML))
+    stub_ezid(shoulder: "99999/fk4", blade: source_metadata_identifier)
+    FactoryBot.create_for_repository(
+      :complete_scanned_resource,
+      member_of_collection_ids: collection_id,
+      source_metadata_identifier: source_metadata_identifier,
+      import_metadata: true,
+      member_ids: member_ids,
+      append_id: append_id,
+      state: state,
+      visibility: visibility
+    )
   end
 end
