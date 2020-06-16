@@ -1,30 +1,53 @@
 #!/usr/bin/env ruby
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
 
+class Filewatcher
+  attr_accessor :update_proc
+  def update_spinner(_label)
+    update_proc.call
+  end
+end
+
 class PdfWatcher
   def self.watch
     new.watch
   end
 
-  attr_reader :logger
-  def initialize(logger: Logger.new(STDOUT))
+  attr_reader :logger, :file_wait_time, :files_queue
+  def initialize(logger: Logger.new(STDOUT), file_wait_time: 60)
     @logger = logger
+    @file_wait_time = file_wait_time
+    @files_queue = {}
   end
 
   def ocr_in_path
-    ENV["OCR_IN_PATH"]
+    path = ENV["OCR_IN_PATH"] || Rails.root.join("tmp", "ocr_in")
+    FileUtils.mkdir_p(path) unless Dir.exist?(path)
+
+    path
   end
 
-  def ocr_out_path
-    ENV["OCR_OUT_PATH"]
+  def process_files
+    Proc.new do
+      completed_files = files_queue.select { |k,v| Time.now > v + file_wait_time }
+      completed_files.each do |file_path, time|
+        CreateOcrRequestJob.perform_later(file_path: file_path)
+        files_queue.delete(file_path)
+      end
+    end
   end
 
   def watch
-    Filewatcher.new(ocr_in_path, every: true).watch do |file_path, event|
-      if File.extname(file_path) == ".pdf" && event == :created
-        out_path = File.join(ocr_out_path, File.basename(file_path))
-        logger.info("PDF OCR job initiated for: #{file_path}")
-        PdfOcrJob.perform_later(in_path: file_path, out_path: out_path)
+    fw = Filewatcher.new(ocr_in_path, spinner: true, immediate: true, every: true)
+    fw.update_proc = process_files
+    fw.watch do |file_path, event|
+      next unless File.extname(file_path) == ".pdf"
+      if event == :created || event == :updated
+        logger.info "PdfWatcher file event '#{event}': #{file_path}"
+        files_queue[file_path] = Time.now
+      elsif event == :deleted
+        # Delete file_path from hash if it exists
+        files_queue.delete(file_path)
       end
     end
   end

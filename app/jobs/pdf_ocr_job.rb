@@ -4,6 +4,7 @@ class PdfOcrJob < ApplicationJob
   attr_reader :blob, :out_path, :resource
 
   def perform(resource:, out_path:)
+    logger.info("PDF OCR job initiated for: #{resource.filename}")
     @resource = resource
     @out_path = out_path
     @blob = resource.pdf # Required for ActiveStorage blob to tempfile method.

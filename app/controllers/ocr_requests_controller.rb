@@ -5,7 +5,7 @@ class OcrRequestsController < ApplicationController
   before_action :set_ocr_request, only: [:destroy, :show]
 
   def index
-    @ocr_requests = OcrRequest.where(user_id: current_user)
+    @ocr_requests = OcrRequest.all
   end
 
   def destroy
