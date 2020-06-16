@@ -40,6 +40,21 @@ RSpec.describe OaiController do
         expect(records.length).to eq 0
       end
     end
+
+    context "when requesting a Louis-Alexandre Berthier set" do
+      it "returns all the resources in oai_dc" do
+        collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
+        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        stub_pulfa(pulfa_id: "C0022_c0145")
+        FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "C0022_c0145", import_metadata: true)
+
+        get :index, params: { "verb" => "ListRecords", "set" => "C0022", "metadataPrefix" => "oai_dc" }
+
+        result = Nokogiri::XML(response.body).remove_namespaces!
+        records = result.xpath("//ListRecords/record")
+        expect(records.length).to eq 1
+      end
+    end
   end
 
   describe "GetRecord" do
@@ -55,6 +70,23 @@ RSpec.describe OaiController do
       records = result.xpath("//GetRecord/record")
       expect(records.length).to eq 1
       expect(result.xpath("//request").text).to eq "http://www.example.com/oai"
+    end
+
+    context "when getting an oai_dc / finding aid record" do
+      it "returns the record with desired fields populated" do
+        collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
+        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        stub_pulfa(pulfa_id: "C0022_c0145")
+        resource = FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "C0022_c0145", import_metadata: true)
+
+        get :index, params: { "verb" => "GetRecord", "identifier" => "oai:figgy:#{resource.id}", "metadataPrefix" => "oai_dc" }
+
+        result = Nokogiri::XML(response.body).remove_namespaces!
+        records = result.xpath("//GetRecord/record")
+        expect(records.length).to eq 1
+        expect(result.xpath("//title").text).to eq "156. Camp à Providence sur le chemin de Boston, le 13 Novembre, 4 miles de l'ancien Camp"
+        expect(result.xpath("//creator").text).to eq "Berthier, Louis-Alexandre, 1753-1815."
+      end
     end
   end
 
