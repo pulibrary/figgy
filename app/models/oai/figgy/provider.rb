@@ -6,7 +6,7 @@ module OAI::Figgy
     record_prefix "oai:figgy"
     admin_email "digital-library@princeton.libanswers.com"
     source_model ::OAI::Figgy::ValkyrieProviderModel.new
-    sample_id "1"
+    sample_id "fb4ecf51-58c8-4481-8a91-12f05d4729aa"
     register_format(::OAI::Figgy::MARC21.instance)
   end
 end

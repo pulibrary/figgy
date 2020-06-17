@@ -14,6 +14,12 @@ RSpec.describe OaiController do
       result = Nokogiri::XML(response.body).remove_namespaces!
       expect(result.xpath("//adminEmail").text).to eq "digital-library@princeton.libanswers.com"
     end
+
+    it "gives a sample id in the correct form" do
+      get :index, params: { "verb" => "Identify" }
+      result = Nokogiri::XML(response.body).remove_namespaces!
+      expect(result.xpath("//sampleIdentifier").text).to eq "oai:figgy:fb4ecf51-58c8-4481-8a91-12f05d4729aa"
+    end
   end
 
   describe "ListRecords" do
