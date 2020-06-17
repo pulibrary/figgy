@@ -8,7 +8,14 @@ RSpec.describe OaiController do
       result = Nokogiri::XML(response.body).remove_namespaces!
       expect(result.xpath("//repositoryName").text).to eq "Princeton University Library"
     end
+
+    it "has the correct email address" do
+      get :index, params: { "verb" => "Identify" }
+      result = Nokogiri::XML(response.body).remove_namespaces!
+      expect(result.xpath("//adminEmail").text).to eq "digital-library@princeton.libanswers.com"
+    end
   end
+
   describe "ListRecords" do
     context "when requesting a Cicognara set" do
       it "returns all the Cicognara item MarcXML" do

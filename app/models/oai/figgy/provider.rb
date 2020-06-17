@@ -4,7 +4,7 @@ module OAI::Figgy
     repository_name "Princeton University Library"
     repository_url ::ManifestBuilder::ManifestHelper.new.oai_url
     record_prefix "oai:figgy"
-    admin_email ""
+    admin_email "digital-library@princeton.libanswers.com"
     source_model ::OAI::Figgy::ValkyrieProviderModel.new
     sample_id "1"
     register_format(::OAI::Figgy::MARC21.instance)
