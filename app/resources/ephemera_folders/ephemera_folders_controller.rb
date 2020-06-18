@@ -63,7 +63,7 @@ class EphemeraFoldersController < BaseResourceController
   end
 
   def pdf
-    change_set = change_set_class.new(find_resource(params[:id]))
+    change_set = ChangeSet.for(find_resource(params[:id]))
     authorize! :pdf, change_set.resource
     pdf_file = PDFService.new(change_set_persister).find_or_generate(change_set)
 
