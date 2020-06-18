@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-06-18
+
+## Changed
+
+* Import dimensions from finding aids, appended to figgy's extent field.
+
 # 2020-05-22
 
 ## Added
