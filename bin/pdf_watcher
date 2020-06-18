@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
 
+# Monkey patch the Filewatcher gem `update_spinner` method to trigger a
+# callback proc. The method is called after each filesystem check which makes
+# it useful triggering any file-related logic that needs to occur between checks.
 class Filewatcher
   attr_accessor :update_proc
   def update_spinner(_label)
@@ -9,17 +12,21 @@ class Filewatcher
 end
 
 class PdfWatcher
-  def self.watch
-    new.watch
+  def self.watch(file_wait_time: 60)
+    new.watch(file_wait_time: file_wait_time)
   end
 
+  # @param logger [Logger]
+  # @param file_wait_time [Integer] time in seconds to wait after last file event
   attr_reader :logger, :file_wait_time, :files_queue
-  def initialize(logger: Logger.new(STDOUT), file_wait_time: 60)
+  def initialize(logger: Logger.new(STDOUT), file_wait_time:)
     @logger = logger
     @file_wait_time = file_wait_time
     @files_queue = {}
   end
 
+  # Path to watched directory of PDFs that need OCR
+  # @return [String]
   def ocr_in_path
     path = ENV["OCR_IN_PATH"] || Rails.root.join("tmp", "ocr_in")
     FileUtils.mkdir_p(path) unless Dir.exist?(path)
@@ -27,6 +34,10 @@ class PdfWatcher
     path
   end
 
+  # Check files_queue for completed files whose last filesystem event time stamp
+  # is older than the file_wait_time value. Trigger a new job to create an
+  # OcrRequest object for completed files and remove them from the files_queue hash.
+  # @return [Proc]
   def process_files
     Proc.new do
       completed_files = files_queue.select { |k,v| Time.now > v + file_wait_time }
@@ -39,14 +50,16 @@ class PdfWatcher
 
   def watch
     fw = Filewatcher.new(ocr_in_path, spinner: true, immediate: true, every: true)
+    # Set the proc that filewatcher will call between filesystem checks
     fw.update_proc = process_files
     fw.watch do |file_path, event|
       next unless File.extname(file_path) == ".pdf"
       if event == :created || event == :updated
         logger.info "PdfWatcher file event '#{event}': #{file_path}"
+        # Add or update file in files_queue with event time stamp
         files_queue[file_path] = Time.now
       elsif event == :deleted
-        # Delete file_path from hash if it exists
+        # Delete file_path from files_queue if it exists
         files_queue.delete(file_path)
       end
     end
