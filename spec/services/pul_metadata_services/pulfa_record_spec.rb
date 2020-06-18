@@ -37,7 +37,7 @@ describe PulMetadataServices::PulfaRecord do
           memberOf: [{ identifier: "WC064", title: "Princeton University Library Collection of Western Americana\n                Photographs" }],
           date_created: ["circa 1885"],
           container: ["Box M32, Folder M1089"],
-          extent: ["1 item"],
+          extent: ["1 item; 10 x 22 cm."],
           heldBy: ["mss"],
           language: ["eng"]
         }
@@ -121,7 +121,6 @@ describe PulMetadataServices::PulfaRecord do
         expect(pulfa_record.attributes).to include title: ["Emir Rodriguez Monegal Papers"]
         expect(pulfa_record.attributes).to include created: ["1941-01-01T00:00:00Z/1985-12-31T23:59:59Z"]
         expect(pulfa_record.attributes).to include date_created: ["1941-1985"]
-        expect(pulfa_record.attributes).to include extent: ["11 linear feet"]
         expect(pulfa_record.attributes).to include heldBy: ["mss"]
         expect(pulfa_record.attributes).to include language: ["spa"]
       end

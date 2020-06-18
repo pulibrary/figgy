@@ -97,10 +97,17 @@ module PulMetadataServices
           text(data.at_xpath("#{data_root}/did/unitdate/@normal"))
         end
 
+        # Retrieve the physical dimensions for the resource
+        # @return [String]
+        def dimensions
+          text(data.at_xpath("#{data_root}/did/physdesc/dimensions"))
+        end
+
         # Retrieve the physical extent for the resource
         # @return [String]
         def extent
-          text(data.at_xpath("#{data_root}/did/physdesc/extent"))
+          extent = text(data.at_xpath("#{data_root}/did/physdesc/extent"))
+          Array.wrap([extent, dimensions].compact.join("; "))
         end
 
         # Retrieve the physical containers encoded for the resource
