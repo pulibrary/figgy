@@ -10,12 +10,8 @@ class EphemeraFoldersController < BaseResourceController
   before_action :cache_parent, only: [:destroy]
   before_action :load_boxes, only: [:edit]
 
-  def change_set_class_string
-    @change_set_class_string ||= parent_resource.is_a?(EphemeraBox) ? "ephemera_folder" : "boxless_ephemera_folder"
-  end
-
-  def change_set
-    @change_set ||= ChangeSet.for(resource, change_set_param: change_set_class_string)
+  def change_set_param
+    parent_resource.is_a?(EphemeraBox) ? "ephemera_folder" : "boxless_ephemera_folder"
   end
 
   def after_create_success(obj, _change_set)
