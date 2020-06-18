@@ -9,14 +9,12 @@ module ResourceController
   end
 
   def new
-    if change_set_class.nil?
-      Valkyrie.logger.error("Failed to find the ChangeSet class for #{change_set_param}.")
-      flash[:error] = "#{change_set_param} is not a valid resource type."
-      redirect_to new_scanned_resource_path
-    else
-      @change_set = ChangeSet.for(new_resource, append_id: params[:parent_id], change_set_param: change_set_param).prepopulate!
-      authorize_create!(change_set: @change_set)
-    end
+    @change_set = ChangeSet.for(new_resource, append_id: params[:parent_id], change_set_param: change_set_param).prepopulate!
+    authorize_create!(change_set: @change_set)
+  rescue ChangeSet::NotFoundError
+    Valkyrie.logger.error("Failed to find the ChangeSet class for #{change_set_param}.")
+    flash[:error] = "#{change_set_param} is not a valid resource type."
+    redirect_to new_scanned_resource_path
   end
 
   # For new/create if a resource is going to be appended to a parent, the

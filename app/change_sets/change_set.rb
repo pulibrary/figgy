@@ -1,18 +1,22 @@
 # frozen_string_literal: true
 require "reform/form/active_model/form_builder_methods"
 class ChangeSet < Valkyrie::ChangeSet
+  class NotFoundError < RuntimeError; end
   class_attribute :workflow_class
   class_attribute :feature_terms
 
   # Factory
   def self.for(record, change_set_param: nil, **args)
-    if record.try(:change_set).present?
-      class_from_param(record.change_set).new(record, **args)
-    elsif change_set_param
-      class_from_param(change_set_param).new(record, **args)
-    else
-      class_from_param(record.internal_resource).new(record, **args)
-    end
+    klass =
+      if record.try(:change_set).present?
+        class_from_param(record.change_set)
+      elsif change_set_param
+        class_from_param(change_set_param)
+      else
+        class_from_param(record.internal_resource)
+      end
+    raise ::ChangeSet::NotFoundError if klass.nil?
+    klass.new(record, **args)
   end
 
   # Used by controllers that need to dynamically instantitate new change sets

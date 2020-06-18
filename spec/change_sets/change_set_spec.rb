@@ -27,6 +27,12 @@ RSpec.describe ChangeSet do
       resource = FactoryBot.build(:scanned_resource)
       expect(change_set_class.for(resource).class).to eq ScannedResourceChangeSet
     end
+    context "if given an invalid change_set_param" do
+      it "raises a ChangeSet::NotFoundError" do
+        resource = FactoryBot.build(:scanned_resource)
+        expect { change_set_class.for(resource, change_set_param: "animal_cracker") }.to raise_error ChangeSet::NotFoundError
+      end
+    end
   end
 
   describe "#class_from_param" do
