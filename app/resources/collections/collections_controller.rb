@@ -43,14 +43,14 @@ class CollectionsController < ApplicationController
     end
   end
 
-  def change_set_class
-    if params[:change_set].present? || (resource_params && resource_params[:change_set].present?)
-      ChangeSet.class_from_param(params[:change_set] || resource_params[:change_set])
-    else
-      DynamicChangeSet
-    end
-  end
-
+  # def change_set_class
+  #   if params[:change_set].present? || (resource_params && resource_params[:change_set].present?)
+  #     ChangeSet.class_from_param(params[:change_set] || resource_params[:change_set])
+  #   else
+  #     DynamicChangeSet
+  #   end
+  # end
+  #
   private
 
     def ark_report_records(collection)
