@@ -12,14 +12,6 @@ class ScannedResourcesController < BaseResourceController
     handle_save_and_ingest(obj)
   end
 
-  def change_set_class
-    if change_set_param.present?
-      ChangeSet.class_from_param(change_set_param)
-    else
-      DynamicChangeSet
-    end
-  end
-
   def handle_save_and_ingest(obj)
     return unless params[:commit] == "Save and Ingest"
     locator = IngestFolderLocator.new(id: params[:scanned_resource][:source_metadata_identifier], search_directory: ingest_folder)
@@ -77,7 +69,7 @@ class ScannedResourcesController < BaseResourceController
     end
 
     def ingest_folder
-      if change_set_class.eql? RecordingChangeSet
+      if change_set_param.eql? "recording"
         "music"
       else
         Figgy.config["default_search_directory"]

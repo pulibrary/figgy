@@ -11,7 +11,7 @@ class FileSetsController < ApplicationController
   before_action :parent_resource, only: [:destroy]
 
   def derivatives
-    @change_set = change_set_class.new(file_set).prepopulate!
+    @change_set = ChangeSet.for(file_set).prepopulate!
     authorize! :derive, @change_set.resource
     output = RegenerateDerivativesJob.perform_later(params[:id])
     respond_to do |format|
@@ -38,7 +38,7 @@ class FileSetsController < ApplicationController
   end
 
   def update
-    @change_set = change_set_class.new(file_set)
+    @change_set = ChangeSet.for(file_set)
     authorize! :update, @change_set.resource
     if @change_set.validate(resource_params)
       obj = nil
