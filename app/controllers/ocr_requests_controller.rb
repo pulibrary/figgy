@@ -29,19 +29,15 @@ class OcrRequestsController < ApplicationController
   private
 
     def ocr_out_file
-      out_dir = ENV["OCR_OUT_PATH"] || temp_ocr_out_dir
+      out_dir = Figgy.config["ocr_out_path"]
+      FileUtils.mkdir_p(out_dir) unless File.directory?(out_dir)
       File.join(out_dir, @ocr_request.filename)
-    end
-
-    def temp_ocr_out_dir
-      path = Rails.root.join("tmp", "ocr_out")
-      FileUtils.mkdir_p(path).first
     end
 
     def ocr_request_params
       {
         filename: params["file"].original_filename,
-        state: "enqueued",
+        state: "Enqueued",
         user_id: current_user.id,
         pdf: params["file"]
       }

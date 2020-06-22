@@ -6,7 +6,7 @@ class CreateOcrRequestJob < ApplicationJob
     logger.info("Create OCR Request job initiated for: #{file_path}")
     return unless File.exist? file_path
     filename = File.basename file_path
-    ocr_request = OcrRequest.new(filename: filename, state: "enqueued")
+    ocr_request = OcrRequest.new(filename: filename, state: "Enqueued")
     ocr_request.save
     ocr_request.pdf.attach(io: File.open(file_path), filename: filename, content_type: "application/pdf")
     out_path = File.join(ocr_out_dir, filename)
@@ -15,9 +15,9 @@ class CreateOcrRequestJob < ApplicationJob
   end
 
   def ocr_out_dir
-    path = ENV["OCR_OUT_PATH"] || Rails.root.join("tmp", "ocr_out")
-    FileUtils.mkdir_p(path) unless Dir.exist?(path)
+    out_dir = Figgy.config["ocr_out_path"]
+    FileUtils.mkdir_p(out_dir) unless File.directory?(out_dir)
 
-    path
+    out_dir
   end
 end
