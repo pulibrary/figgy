@@ -21,6 +21,10 @@ module OAI::Figgy
       ControlledVocabulary.for(:rights_statement).find(decorated_resource.rights_statement.first).label
     end
 
+    def formats
+      decorated_resource.file_sets.flat_map(&:mime_type) + extents
+    end
+
     def sets
       ScannedResourcesController.change_set_persister.query_service.find_references_by(resource: __getobj__, property: :member_of_collection_ids).map do |collection|
         OAI::Set.new(
@@ -34,6 +38,10 @@ module OAI::Figgy
 
       def decorated_resource
         __getobj__.decorate
+      end
+
+      def extents
+        decorated_resource.extent || decorated_resource.imported_extent || []
       end
   end
 end

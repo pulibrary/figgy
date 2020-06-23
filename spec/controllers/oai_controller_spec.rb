@@ -88,9 +88,10 @@ RSpec.describe OaiController do
     context "when getting an oai_dc / finding aid record" do
       it "returns the record with desired fields populated" do
         collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
+        file1 = fixture_file_upload("files/abstract.tiff", "image/tiff")
         stub_ezid(shoulder: "99999/fk4", blade: "123456")
         stub_pulfa(pulfa_id: "C0022_c0145")
-        resource = FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "C0022_c0145", import_metadata: true)
+        resource = FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "C0022_c0145", import_metadata: true, files: [file1])
 
         get :index, params: { "verb" => "GetRecord", "identifier" => "oai:figgy:#{resource.id}", "metadataPrefix" => "oai_dc" }
 
@@ -102,6 +103,7 @@ RSpec.describe OaiController do
         expect(result.xpath("//publisher").text).to eq "Berthier, Louis-Alexandre, 1753-1815."
         expect(result.xpath("//date").text).to eq "1-1"
         expect(result.xpath("//rights").text).to eq "No Known Copyright"
+        expect(result.xpath("//format").map(&:text)).to eq ["image/tiff", "1 item"]
       end
     end
   end
