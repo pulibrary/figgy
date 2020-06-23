@@ -22,7 +22,6 @@ export default class Initializer {
     this.initialize_form()
     this.initialize_timepicker()
     this.initialize_bbox()
-    this.initialize_ocr_requests_data_table()
     this.structure_manager = new StructureManager
     this.modal_viewer = new ModalViewer
     this.derivative_form = new DerivativeForm
@@ -42,6 +41,10 @@ export default class Initializer {
     // Set an initial sort order of data table for coins
     $(".coin-datatable").DataTable({
       "order": [[ 2, "asc" ]]
+    })
+    // Set an initial sort order of data table for ocr requests
+    $("#requests-table").DataTable({
+      order: [[1, "desc"]],
     })
   }
 
@@ -114,23 +117,5 @@ export default class Initializer {
       ui.placeholder.width(found_element.width())
       ui.placeholder.height(found_element.height())
     })
-  }
-
-  initialize_ocr_requests_data_table() {
-    // Set the datatable as a global variable so it can be updated by other
-    // components. For example, the file-uploader VueJS component.
-    window.requestsTable = $('#requests-table').DataTable( {
-      order: [[1, "desc"]],
-      ajax: {
-        url: '/ocr_requests.json',
-        dataSrc: ''
-      },
-      columns: [
-        { data: 'filename' },
-        { data: 'created_at' },
-        { data: 'state' },
-        { data: 'actions' }
-      ]
-    } )
   }
 }

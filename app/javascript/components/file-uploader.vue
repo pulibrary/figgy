@@ -47,11 +47,6 @@ export default {
     uploadComplete (response) {
       // Remove file from dropzone UI
       this.$refs.fileUploaderDropzone.removeFile(response)
-
-      // If a global DataTable object name is passed in, get that object and reload
-      if (this.tableName !== null) {
-        window[this.tableName].ajax.reload()
-      }
     }
   }
 }
