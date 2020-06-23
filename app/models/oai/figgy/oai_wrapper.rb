@@ -25,6 +25,10 @@ module OAI::Figgy
       mime_types + extents
     end
 
+    def source
+      "Princeton University Library, #{decorated_resource.source_metadata_identifier&.first || resource.id}"
+    end
+
     def sets
       ScannedResourcesController.change_set_persister.query_service.find_references_by(resource: __getobj__, property: :member_of_collection_ids).map do |collection|
         OAI::Set.new(
