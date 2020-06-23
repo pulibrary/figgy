@@ -202,9 +202,6 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
       rescue ChangeSet::NotFoundError
         raise(WorkflowRegistry::EntryNotFound)
       end
-  # If there's no change set for the model, raise an entry not found.
-  rescue NameError
-    raise WorkflowRegistry::EntryNotFound
   end
 
   def manages_state?
