@@ -12,6 +12,7 @@ class PluckEarliestUpdatedAt
   end
 
   def pluck_earliest_updated_at
-    orm_class.select(:updated_at).order(:updated_at).limit(1).first[:updated_at]
+    resource = orm_class.select(:updated_at).order(:updated_at).limit(1).first || {}
+    resource[:updated_at]
   end
 end
