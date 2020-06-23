@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class ScannedResourcesController < BaseResourceController
-  self.change_set_class = DynamicChangeSet
   self.resource_class = ScannedResource
   self.change_set_persister = ::ChangeSetPersister.new(
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),

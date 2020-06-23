@@ -60,10 +60,6 @@ class BulkIngestController < ApplicationController
     @change_set_persister ||= ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter)
   end
 
-  def self.change_set_class
-    DynamicChangeSet
-  end
-
   def show
     authorize! :create, resource_class
     @collections = collections

@@ -2,7 +2,7 @@
 module ResourceController
   extend ActiveSupport::Concern
   included do
-    class_attribute :change_set_class, :resource_class, :change_set_persister
+    class_attribute :resource_class, :change_set_persister
     delegate :metadata_adapter, to: :change_set_persister
     delegate :persister, :query_service, to: :metadata_adapter
     include Blacklight::SearchContext

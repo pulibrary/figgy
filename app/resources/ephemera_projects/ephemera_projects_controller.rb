@@ -2,7 +2,6 @@
 class EphemeraProjectsController < BaseResourceController
   include ResourceController
   include TokenAuth
-  self.change_set_class = DynamicChangeSet
   self.resource_class = EphemeraProject
   self.change_set_persister = ::ChangeSetPersister.new(
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),

@@ -4,7 +4,6 @@ class VectorResourcesController < BaseResourceController
   include GeoblacklightDocumentController
   before_action :load_thumbnail_members, only: [:edit]
 
-  self.change_set_class = DynamicChangeSet
   self.resource_class = VectorResource
   self.change_set_persister = ::ChangeSetPersister.new(
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class TemplatesController < ApplicationController
   include ResourceController
-  self.change_set_class = TemplateChangeSet
   self.resource_class = Template
   self.change_set_persister = ::ChangeSetPersister.new(
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
