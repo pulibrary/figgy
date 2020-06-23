@@ -109,6 +109,7 @@ RSpec.describe OaiController do
           records = result.xpath("//GetRecord/record")
           expect(records.length).to eq 1
           expect(result.xpath("//format").map(&:text)).to eq ["image/tiff", "17 inches"]
+          expect(result.xpath("//source").text).to eq "Princeton University Library, #{resource.id}"
         end
       end
 
@@ -136,6 +137,7 @@ RSpec.describe OaiController do
           expect(result.xpath("//date").text).to eq "1-1"
           expect(result.xpath("//rights").text).to eq "No Known Copyright"
           expect(result.xpath("//format").map(&:text)).to eq ["image/tiff", "1 item; 33 x 29 cm"]
+          expect(result.xpath("//source").text).to eq "Princeton University Library, C0022_c0145"
         end
       end
 
@@ -150,6 +152,7 @@ RSpec.describe OaiController do
           result = Nokogiri::XML(response.body).remove_namespaces!
           records = result.xpath("//GetRecord/record")
           expect(records.length).to eq 1
+          expect(result.xpath("//source").text).to eq "Princeton University Library, #{resource.id}"
         end
       end
     end
