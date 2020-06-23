@@ -12,14 +12,14 @@ class Filewatcher
 end
 
 class PdfWatcher
-  def self.watch(file_wait_time: 60)
-    new.watch(file_wait_time: file_wait_time)
+  def self.watch
+    new.watch
   end
 
   # @param logger [Logger]
   # @param file_wait_time [Integer] time in seconds to wait after last file event
   attr_reader :logger, :file_wait_time, :files_queue
-  def initialize(logger: Logger.new(STDOUT), file_wait_time:)
+  def initialize(logger: Logger.new(STDOUT), file_wait_time: 60)
     @logger = logger
     @file_wait_time = file_wait_time
     @files_queue = {}
@@ -28,10 +28,10 @@ class PdfWatcher
   # Path to watched directory of PDFs that need OCR
   # @return [String]
   def ocr_in_path
-    path = ENV["OCR_IN_PATH"] || Rails.root.join("tmp", "ocr_in")
-    FileUtils.mkdir_p(path) unless Dir.exist?(path)
+    in_dir = Figgy.config["ocr_in_path"]
+    FileUtils.mkdir_p(in_dir) unless File.directory?(in_dir)
 
-    path
+    in_dir
   end
 
   # Check files_queue for completed files whose last filesystem event time stamp

@@ -1,5 +1,9 @@
 <template>
-  <dropzone ref="fileUploaderDropzone" id="dropzone" :options="dropzoneOptions" v-on:vdropzone-complete="uploadComplete"/>
+  <dropzone ref="fileUploaderDropzone" id="dropzone" :options="dropzoneOptions" v-on:vdropzone-complete="uploadComplete" :useCustomSlot=true >
+    <div class="dropzone-custom-content">
+      <div class="dropzone-custom-title">Drag and drop PDFs here to upload</div>
+    </div>
+  </dropzone>
 </template>
 <script>
 import vue2Dropzone from 'vue2-dropzone'

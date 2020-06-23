@@ -35,6 +35,10 @@
         <li class="divider"></li>
         <li><%= link_to 'Manage Auth Tokens', main_app.auth_tokens_path, class: 'menu-heading manage-auth-tokens', role: 'menuitem' %></li>
       <% end %>
+      <% if can?(:create, OcrRequest) %>
+        <li class="divider"></li>
+        <li><%= link_to 'Manage OCR Requests', main_app.ocr_requests_path, class: 'menu-heading manage-ocr-requests', role: 'menuitem' %></li>
+      <% end %>
     </ul>
   </div>
 <% end %>
