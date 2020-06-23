@@ -30,16 +30,16 @@ RSpec.describe PdfOcrJob do
       end
     end
 
-    context "with an invalid PDF" do
+    context "with a PDF that can't be OCRed" do
       let(:fixture_path) { Rails.root.join("spec", "fixtures", "files", "bad.pdf") }
 
-      it "raises an exception and does not delete the attached PDF" do
-        expect { described_class.perform_now(resource: resource, out_path: out_path) }
-          .to raise_error(/PDF OCR job failed/)
+      it "saves error on the ocr request resource and copies original file to out path" do
+        described_class.perform_now(resource: resource, out_path: out_path)
         ocr_request = OcrRequest.all.first
         expect(ocr_request.state).to eq "Error"
         expect(ocr_request.note).to include "PDF OCR job failed"
-        expect(ocr_request.pdf.attached?).to be true
+        expect(File.exist?(out_path)).to be true
+        expect(ocr_request.pdf.attached?).to be false
       end
     end
 

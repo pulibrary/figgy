@@ -10,8 +10,7 @@ class PdfOcrJob < ApplicationJob
     @blob = resource.pdf # Required for ActiveStorage blob to tempfile method.
     update_state(state: "Processing")
     return unless pdf_attached?
-    run_pdf_ocr
-    update_state(state: "Complete")
+    update_state(state: "Complete") if run_pdf_ocr
     # Delete original PDF
     resource.pdf.purge
   end
@@ -25,11 +24,14 @@ class PdfOcrJob < ApplicationJob
   def run_pdf_ocr
     download_blob_to_tempfile do |file|
       _stdout_str, error_str, status = Open3.capture3("ocrmypdf", "--force-ocr", "--rotate-pages", "--deskew", file.path, out_path.to_s)
-      return if status.success?
-      message = "PDF OCR job failed: #{error_str}"
-      update_state(state: "Error", message: message)
-      raise message unless status.success?
+      return true if status.success?
+      update_state(state: "Error", message: "PDF OCR job failed: #{error_str}")
+
+      # Copy orginal file to destination without OCR
+      FileUtils.cp file.path, out_path.to_s
     end
+
+    false
   end
 
   def update_state(state:, message: nil)
