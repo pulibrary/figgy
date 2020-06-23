@@ -2,7 +2,7 @@
 require "rails_helper"
 
 RSpec.describe PluckEarliestUpdatedAt do
-  it "returns all ids which are persisted" do
+  it "returns the earliest updated at value" do
     resource1 = nil
     Timecop.freeze(Time.now.utc - 10.minutes) do
       resource1 = FactoryBot.create_for_repository(:scanned_resource)
