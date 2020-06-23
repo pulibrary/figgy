@@ -107,6 +107,7 @@ Metrics/ClassLength:
     - 'app/resources/numismatics/coins/numismatics/coins_controller.rb'
     - 'app/derivative_services/vips_derivative_service.rb'
     - 'app/derivative_services/thumbnail_derivative_service.rb'
+    - 'app/wayfinders/base_wayfinder.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/helpers/application_helper.rb'
