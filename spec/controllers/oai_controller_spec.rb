@@ -9,6 +9,13 @@ RSpec.describe OaiController do
       expect(result.xpath("//repositoryName").text).to eq "Princeton University Library"
     end
 
+    it "has an earliest timestamp" do
+      resource = FactoryBot.create_for_repository(:scanned_resource)
+      get :index, params: { "verb" => "Identify" }
+      result = Nokogiri::XML(response.body).remove_namespaces!
+      expect(result.xpath("//earliestDatestamp").text).to eq resource.updated_at.iso8601
+    end
+
     it "has the correct email address" do
       get :index, params: { "verb" => "Identify" }
       result = Nokogiri::XML(response.body).remove_namespaces!

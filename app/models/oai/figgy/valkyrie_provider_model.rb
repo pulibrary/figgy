@@ -7,7 +7,7 @@ module OAI::Figgy
 
     require_relative "oai_wrapper"
     def earliest
-      Time.zone.at(0)
+      query_service.custom_queries.pluck_earliest_updated_at || Time.zone.at(0)
     end
 
     # Add one second to the current time so that tests will be able to page and
