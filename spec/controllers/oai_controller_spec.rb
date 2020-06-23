@@ -85,6 +85,23 @@ RSpec.describe OaiController do
       expect(result.xpath("//request").text).to eq "http://www.example.com/oai"
     end
 
+    context "when getting an oai_dc / multi-volume work" do
+      it "returns the record with desired fields populated" do
+        collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
+        file1 = fixture_file_upload("files/abstract.tiff", "image/tiff")
+        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        child = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file1])
+        resource = FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, member_ids: [child.id], extent: "17 inches")
+
+        get :index, params: { "verb" => "GetRecord", "identifier" => "oai:figgy:#{resource.id}", "metadataPrefix" => "oai_dc" }
+
+        result = Nokogiri::XML(response.body).remove_namespaces!
+        records = result.xpath("//GetRecord/record")
+        expect(records.length).to eq 1
+        expect(result.xpath("//format").map(&:text)).to eq ["image/tiff", "17 inches"]
+      end
+    end
+
     context "when getting an oai_dc / finding aid record" do
       it "returns the record with desired fields populated" do
         collection = FactoryBot.create_for_repository(:collection, slug: "C0022")

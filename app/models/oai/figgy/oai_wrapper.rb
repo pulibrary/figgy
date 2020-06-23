@@ -2,7 +2,7 @@
 module OAI::Figgy
   class OAIWrapper < SimpleDelegator
     def to_marc21
-      MarcRecordEnhancer.for(__getobj__).enhance_cicognara.to_xml.to_s
+      MarcRecordEnhancer.for(resource).enhance_cicognara.to_xml.to_s
     end
 
     def creator
@@ -22,7 +22,7 @@ module OAI::Figgy
     end
 
     def formats
-      decorated_resource.file_sets.flat_map(&:mime_type) + extents
+      mime_types + extents
     end
 
     def sets
@@ -36,8 +36,18 @@ module OAI::Figgy
 
     private
 
+      def resource
+        __getobj__
+      end
+
       def decorated_resource
         __getobj__.decorate
+      end
+
+      def mime_types
+        file_sets = decorated_resource.file_sets
+        return file_sets.flat_map(&:mime_type) unless file_sets.empty?
+        Wayfinder.for(resource).deep_file_sets.flat_map(&:mime_type)
       end
 
       def extents

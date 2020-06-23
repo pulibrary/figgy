@@ -205,6 +205,20 @@ RSpec.describe Wayfinder do
       end
     end
 
+    describe "#deep_file_sets" do
+      it "returns undecorated FileSets descending from this resource" do
+        member = FactoryBot.create_for_repository(:scanned_resource)
+        member2 = FactoryBot.create_for_repository(:file_set)
+        resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: [member.id, member2.id])
+        parent = FactoryBot.create_for_repository(:scanned_resource, member_ids: resource.id)
+
+        wayfinder = described_class.for(parent)
+
+        expect(wayfinder.deep_file_sets.map(&:id)).to eq [member2.id]
+        expect(wayfinder.deep_file_sets.map(&:class)).to eq [FileSet]
+      end
+    end
+
     describe "#collections" do
       it "returns undecorated parent collections" do
         collection = FactoryBot.create_for_repository(:collection)

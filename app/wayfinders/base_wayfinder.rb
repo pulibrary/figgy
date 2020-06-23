@@ -124,6 +124,15 @@ class BaseWayfinder
       deep_failed_cloud_fixity_count
   end
 
+  def deep_file_sets
+    @deep_file_sets ||= query_service.custom_queries.find_deep_children_with_property(
+      resource: resource,
+      model: FileSet,
+      property: :file_metadata,
+      value: nil
+    )
+  end
+
   def deep_file_set_count
     @deep_file_set_count ||= query_service.custom_queries.find_deep_children_with_property(
       resource: resource,
