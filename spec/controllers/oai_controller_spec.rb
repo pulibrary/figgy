@@ -89,9 +89,11 @@ RSpec.describe OaiController do
       it "returns the record with desired fields populated" do
         collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
         file1 = fixture_file_upload("files/abstract.tiff", "image/tiff")
+        file2 = fixture_file_upload("files/abstract.tiff", "image/tiff")
         stub_ezid(shoulder: "99999/fk4", blade: "123456")
-        child = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file1])
-        resource = FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, member_ids: [child.id], extent: "17 inches")
+        child1 = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file1])
+        child2 = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file2])
+        resource = FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, member_ids: [child1.id, child2.id], extent: "17 inches")
 
         get :index, params: { "verb" => "GetRecord", "identifier" => "oai:figgy:#{resource.id}", "metadataPrefix" => "oai_dc" }
 

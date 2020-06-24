@@ -46,8 +46,8 @@ module OAI::Figgy
 
       def mime_types
         file_sets = decorated_resource.file_sets
-        return file_sets.flat_map(&:mime_type) unless file_sets.empty?
-        Wayfinder.for(resource).deep_file_sets.flat_map(&:mime_type)
+        return file_sets.flat_map(&:mime_type).uniq unless file_sets.empty?
+        Wayfinder.for(resource).deep_file_sets.flat_map(&:mime_type).uniq
       end
 
       def extents
