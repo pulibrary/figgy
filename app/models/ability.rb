@@ -23,6 +23,7 @@ class Ability
   def staff_permissions
     can [:create, :read, :download, :update, :manifest, :discover], :all
     can [:destroy], Template
+    can [:destroy], OcrRequest
     can [:destroy], FileSet do |obj|
       obj.depositor == [current_user.uid]
     end

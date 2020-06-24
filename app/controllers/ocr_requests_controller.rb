@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 
 class OcrRequestsController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_ocr_request, only: [:destroy, :show]
 
   def index
+    authorize! :update, OcrRequest.new
     @ocr_requests = OcrRequest.all
   end
 
   def destroy
+    authorize! :destroy, @ocr_request
     @ocr_request.destroy
     respond_to do |format|
       format.html { redirect_to ocr_requests_url, notice: "Ocr request was successfully destroyed." }
@@ -17,6 +18,7 @@ class OcrRequestsController < ApplicationController
   end
 
   def upload_file
+    authorize! :update, OcrRequest.new
     @ocr_request = OcrRequest.new(ocr_request_params)
     if @ocr_request.save
       PdfOcrJob.perform_later(resource: @ocr_request, out_path: ocr_out_file)

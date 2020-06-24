@@ -22,6 +22,14 @@ RSpec.describe OcrRequestsController, type: :controller do
       expect(assigns(:ocr_requests).count).to eq 1
       expect(response).to be_successful
     end
+
+    context "when user is a campus_patron" do
+      let(:user) { FactoryBot.create(:campus_patron) }
+      it "does not display " do
+        get :index
+        expect(flash[:alert]).to have_content "You are not authorized to access this page"
+      end
+    end
   end
 
   describe "GET #show" do
