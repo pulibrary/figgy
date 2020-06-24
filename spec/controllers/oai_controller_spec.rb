@@ -135,7 +135,7 @@ RSpec.describe OaiController do
           expect(result.xpath("//publisher").text).to eq "Berthier, Louis-Alexandre, 1753-1815."
           expect(result.xpath("//date").text).to eq "1-1"
           expect(result.xpath("//rights").text).to eq "No Known Copyright"
-          expect(result.xpath("//format").map(&:text)).to eq ["image/tiff", "1 item"]
+          expect(result.xpath("//format").map(&:text)).to eq ["image/tiff", "1 item; 33 x 29 cm"]
         end
       end
 
