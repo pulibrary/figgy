@@ -16,7 +16,6 @@ every :monday, at: "10am", roles: [:db] do
   rake "figgy:send_collection_reports"
 end
 
-env "SVN_USER", "systems"
 every :monday, at: "7am", roles: [:db] do
   rake "export:pulfa"
 end
