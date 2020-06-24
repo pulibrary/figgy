@@ -85,49 +85,65 @@ RSpec.describe OaiController do
       expect(result.xpath("//request").text).to eq "http://www.example.com/oai"
     end
 
-    context "when getting an oai_dc / multi-volume work" do
-      it "returns the record with desired fields populated" do
-        collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
-        file1 = fixture_file_upload("files/abstract.tiff", "image/tiff")
-        file2 = fixture_file_upload("files/abstract.tiff", "image/tiff")
-        stub_ezid(shoulder: "99999/fk4", blade: "123456")
-        child1 = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file1])
-        child2 = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file2])
-        resource = FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, member_ids: [child1.id, child2.id], extent: "17 inches")
+    context "when requesting oai_dc" do
+      context "for a multi-volume work" do
+        it "returns the record with desired fields populated" do
+          collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
+          file1 = fixture_file_upload("files/abstract.tiff", "image/tiff")
+          file2 = fixture_file_upload("files/abstract.tiff", "image/tiff")
+          stub_ezid(shoulder: "99999/fk4", blade: "123456")
+          child1 = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file1])
+          child2 = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file2])
+          resource = FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, member_ids: [child1.id, child2.id], extent: "17 inches")
 
-        get :index, params: { "verb" => "GetRecord", "identifier" => "oai:figgy:#{resource.id}", "metadataPrefix" => "oai_dc" }
+          get :index, params: { "verb" => "GetRecord", "identifier" => "oai:figgy:#{resource.id}", "metadataPrefix" => "oai_dc" }
 
-        result = Nokogiri::XML(response.body).remove_namespaces!
-        records = result.xpath("//GetRecord/record")
-        expect(records.length).to eq 1
-        expect(result.xpath("//format").map(&:text)).to eq ["image/tiff", "17 inches"]
+          result = Nokogiri::XML(response.body).remove_namespaces!
+          records = result.xpath("//GetRecord/record")
+          expect(records.length).to eq 1
+          expect(result.xpath("//format").map(&:text)).to eq ["image/tiff", "17 inches"]
+        end
       end
-    end
 
-    context "when getting an oai_dc / finding aid record" do
-      it "returns the record with desired fields populated" do
-        collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
-        file1 = fixture_file_upload("files/abstract.tiff", "image/tiff")
-        stub_ezid(shoulder: "99999/fk4", blade: "123456")
-        stub_pulfa(pulfa_id: "C0022_c0145")
-        resource = FactoryBot.create_for_repository(
-          :complete_scanned_resource,
-          member_of_collection_ids: collection.id,
-          source_metadata_identifier: "C0022_c0145",
-          import_metadata: true, files: [file1]
-        )
+      context "for a finding aid record" do
+        it "returns the record with desired fields populated" do
+          collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
+          file1 = fixture_file_upload("files/abstract.tiff", "image/tiff")
+          stub_ezid(shoulder: "99999/fk4", blade: "123456")
+          stub_pulfa(pulfa_id: "C0022_c0145")
+          resource = FactoryBot.create_for_repository(
+            :complete_scanned_resource,
+            member_of_collection_ids: collection.id,
+            source_metadata_identifier: "C0022_c0145",
+            import_metadata: true, files: [file1]
+          )
 
-        get :index, params: { "verb" => "GetRecord", "identifier" => "oai:figgy:#{resource.id}", "metadataPrefix" => "oai_dc" }
+          get :index, params: { "verb" => "GetRecord", "identifier" => "oai:figgy:#{resource.id}", "metadataPrefix" => "oai_dc" }
 
-        result = Nokogiri::XML(response.body).remove_namespaces!
-        records = result.xpath("//GetRecord/record")
-        expect(records.length).to eq 1
-        expect(result.xpath("//title").text).to eq "156. Camp à Providence sur le chemin de Boston, le 13 Novembre, 4 miles de l'ancien Camp"
-        expect(result.xpath("//creator").text).to eq "Berthier, Louis-Alexandre, 1753-1815."
-        expect(result.xpath("//publisher").text).to eq "Berthier, Louis-Alexandre, 1753-1815."
-        expect(result.xpath("//date").text).to eq "1-1"
-        expect(result.xpath("//rights").text).to eq "No Known Copyright"
-        expect(result.xpath("//format").map(&:text)).to eq ["image/tiff", "1 item"]
+          result = Nokogiri::XML(response.body).remove_namespaces!
+          records = result.xpath("//GetRecord/record")
+          expect(records.length).to eq 1
+          expect(result.xpath("//title").text).to eq "156. Camp à Providence sur le chemin de Boston, le 13 Novembre, 4 miles de l'ancien Camp"
+          expect(result.xpath("//creator").text).to eq "Berthier, Louis-Alexandre, 1753-1815."
+          expect(result.xpath("//publisher").text).to eq "Berthier, Louis-Alexandre, 1753-1815."
+          expect(result.xpath("//date").text).to eq "1-1"
+          expect(result.xpath("//rights").text).to eq "No Known Copyright"
+          expect(result.xpath("//format").map(&:text)).to eq ["image/tiff", "1 item"]
+        end
+      end
+
+      context "for a resource with no file_sets" do
+        it "returns the record with desired fields populated" do
+          collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
+          stub_ezid(shoulder: "99999/fk4", blade: "123456")
+          resource = FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id)
+
+          get :index, params: { "verb" => "GetRecord", "identifier" => "oai:figgy:#{resource.id}", "metadataPrefix" => "oai_dc" }
+
+          result = Nokogiri::XML(response.body).remove_namespaces!
+          records = result.xpath("//GetRecord/record")
+          expect(records.length).to eq 1
+        end
       end
     end
   end
