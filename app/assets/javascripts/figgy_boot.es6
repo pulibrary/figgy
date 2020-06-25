@@ -42,6 +42,10 @@ export default class Initializer {
     $(".coin-datatable").DataTable({
       "order": [[ 2, "asc" ]]
     })
+    // Set an initial sort order of data table for ocr requests
+    $("#requests-table").DataTable({
+      order: [[1, "desc"]],
+    })
   }
 
   initialize_timepicker() {

@@ -1,0 +1,32 @@
+<h3>OCR Requests</h3>
+
+<file-uploader upload-path='/ocr_requests/upload_file' mime-types='application/pdf' ></file-uploader>
+
+<br>
+<hr>
+<br>
+
+<table id="requests-table" class="table table-striped requests-datatable">
+  <thead>
+    <tr>
+      <th>Filename</th>
+      <th>Created</th>
+      <th>State</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @ocr_requests.each do |ocr_request| %>
+      <% ocr_request_url = solr_document_path("#{ocr_request.id}") %>
+      <tr>
+        <td><%= ocr_request.filename %></td></td>
+        <td><%= ocr_request.created_at %></td></td>
+        <td><%= ocr_request.state %></td></td>
+        <td>
+          <%= link_to 'View', ocr_request, class: 'btn btn-default' %>
+          <%= link_to 'Delete', main_app.polymorphic_path([ocr_request]), class: 'btn btn-danger', data: { confirm: 'Are you sure?' }, method: :delete %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

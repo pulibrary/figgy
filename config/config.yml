@@ -1,4 +1,6 @@
 defaults: &defaults
+  ocr_in_path: <%= ENV["OCR_IN_PATH"] %>
+  ocr_out_path: <%= ENV["OCR_OUT_PATH"] %>
   pyramidals_bucket: "iiif-image-staging"
   pyramidals_region: "us-east-1"
   aws_access_key_id: <%= ENV["FIGGY_AWS_ACCESS_KEY_ID"] %>
@@ -122,11 +124,15 @@ defaults: &defaults
 
 development:
   <<: *defaults
+  ocr_in_path: <%= Rails.root.join("tmp", "ocr_in") %>
+  ocr_out_path: <%= Rails.root.join("tmp", "ocr_out") %>
   repository_path: <%= Rails.root.join("tmp", "more_files") %>
   pyramidals_bucket: <%= ENV["FIGGY_PYRAMIDALS_BUCKET"] %>
 
 test:
   <<: *defaults
+  ocr_in_path: <%= Rails.root.join("tmp", "test_ocr_in") %>
+  ocr_out_path: <%= Rails.root.join("tmp", "test_ocr_out") %>
   repository_path: <%= Rails.root.join("tmp", "test_files") %>
   derivative_path: <%= Rails.root.join("tmp", "test_derivatives") %>
   pyramidal_derivative_path: <%= Rails.root.join("tmp", "test_pyramidal_derivatives") %>

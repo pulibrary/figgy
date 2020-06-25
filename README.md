@@ -40,6 +40,8 @@ A digital repository application in use at Princeton University Library for stor
     * `brew install ffmpeg`
 * [VIPS]
     * `brew install vips`
+* [OCRmyPDF](https://ocrmypdf.readthedocs.io/)
+    * `brew install ocrmypdf`
 
 ## Simple Tiles
 

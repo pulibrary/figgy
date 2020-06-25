@@ -348,6 +348,8 @@ GEM
     fast_jsonapi (1.5)
       activesupport (>= 4.2)
     ffi (1.11.1)
+    filewatcher (1.1.1)
+      optimist (~> 3.0)
     flutie (2.0.0)
     font-awesome-rails (4.7.0.4)
       railties (>= 3.2, < 6.0)
@@ -595,6 +597,7 @@ GEM
     openseadragon (0.3.3)
       rails (> 3.2.0)
     opentracing (0.4.1)
+    optimist (3.0.1)
     orm_adapter (0.5.0)
     os (1.0.0)
     parallel (1.19.1)
@@ -953,6 +956,7 @@ DEPENDENCIES
   ezid-client
   factory_bot_rails
   faker
+  filewatcher
   flutie
   font-awesome-rails
   foreman

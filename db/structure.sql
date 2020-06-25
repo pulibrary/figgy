@@ -49,7 +49,7 @@ CREATE FUNCTION public.get_ids_array(jsonb, text) RETURNS text[]
 
 SET default_tablespace = '';
 
-SET default_table_access_method = heap;
+SET default_with_oids = false;
 
 --
 -- Name: active_storage_attachments; Type: TABLE; Schema: public; Owner: -
@@ -373,6 +373,40 @@ ALTER SEQUENCE public.delayed_jobs_id_seq OWNED BY public.delayed_jobs.id;
 
 
 --
+-- Name: ocr_requests; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ocr_requests (
+    id bigint NOT NULL,
+    filename character varying,
+    state character varying,
+    note text,
+    user_id bigint,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: ocr_requests_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.ocr_requests_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ocr_requests_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.ocr_requests_id_seq OWNED BY public.ocr_requests.id;
+
+
+--
 -- Name: orm_resources; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -576,6 +610,13 @@ ALTER TABLE ONLY public.delayed_jobs ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
+-- Name: ocr_requests id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ocr_requests ALTER COLUMN id SET DEFAULT nextval('public.ocr_requests_id_seq'::regclass);
+
+
+--
 -- Name: roles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -674,6 +715,14 @@ ALTER TABLE ONLY public.browse_everything_upload_models
 
 ALTER TABLE ONLY public.delayed_jobs
     ADD CONSTRAINT delayed_jobs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ocr_requests ocr_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ocr_requests
+    ADD CONSTRAINT ocr_requests_pkey PRIMARY KEY (id);
 
 
 --
@@ -777,6 +826,13 @@ CREATE INDEX index_bookmarks_on_document_id ON public.bookmarks USING btree (doc
 --
 
 CREATE INDEX index_bookmarks_on_user_id ON public.bookmarks USING btree (user_id);
+
+
+--
+-- Name: index_ocr_requests_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ocr_requests_on_user_id ON public.ocr_requests USING btree (user_id);
 
 
 --
@@ -899,6 +955,14 @@ CREATE INDEX resource_id_idx ON public.orm_resources USING btree ((((((metadata 
 
 
 --
+-- Name: ocr_requests fk_rails_712a4527c4; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ocr_requests
+    ADD CONSTRAINT fk_rails_712a4527c4 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
 -- Name: active_storage_attachments fk_rails_c3b3935057; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -941,6 +1005,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200225213134'),
 ('20200225213135'),
 ('20200422192849'),
-('20200423183539');
+('20200423183539'),
+('20200605213204'),
+('20200605214148'),
+('20200605215751'),
+('20200608044923'),
+('20200608055833'),
+('20200608160046');
 
 

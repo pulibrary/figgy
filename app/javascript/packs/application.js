@@ -11,6 +11,7 @@ import OrderManager from '../components/OrderManager.vue'
 import setupAuthLinkClipboard from '../packs/auth_link_clipboard.js'
 import AjaxSelect from '../components/ajax-select'
 import setupAjaxSelect from '../helpers/setup_ajax_select.js'
+import FileUploader from '../components/file-uploader'
 
 Vue.use(system)
 
@@ -28,10 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
         'playlistMembers': PlaylistMembers,
         'order-manager': OrderManager,
         'issue-monograms': IssueMonograms,
-        'ajax-select': AjaxSelect
+        'ajax-select': AjaxSelect,
+        'file-uploader': FileUploader
       },
       data: {
-        options: []
+        options: [],
       },
       // Functions to run after Vue is mounted
       mounted: function () {
