@@ -80,7 +80,9 @@ class RemoteRecord
   end
 
   def attributes
-    JSONLDBuilder.for(jsonld).result.merge(source_jsonld: jsonld.to_json)
+    hash = JSONLDBuilder.for(jsonld).result
+    hash[:content_type] = hash[:format] # we can't use format because it's a rails reserved word
+    hash.merge(source_jsonld: jsonld.to_json)
   end
 
   private

@@ -34,6 +34,7 @@ module Schema
           :title, # http://purl.org/dc/terms/title
           :uniform_title, # http://purl.org/dc/elements/1.1/title
           :type, # http://purl.org/dc/terms/type
+          :content_type, # also a dc:type, but broader. For bib records holds type from fixed fields, whereas :type holds 655
           :provenance, # http://purl.org/dc/terms/provenance
 
           :contributor, # http://purl.org/dc/elements/1.1/contributor

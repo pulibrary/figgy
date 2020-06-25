@@ -28,6 +28,10 @@ RSpec.describe ScannedResource do
     it "imports the location" do
       expect(scanned_resource.primary_imported_metadata.location).to include "RCPPA BL980.G7 B66 1982"
     end
+
+    it "imports the format to a content_type field" do
+      expect(scanned_resource.primary_imported_metadata.content_type).to include "Book"
+    end
   end
 
   describe "#media_resource?" do
