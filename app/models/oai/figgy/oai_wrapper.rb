@@ -9,6 +9,10 @@ module OAI::Figgy
       decorated_resource.creator || decorated_resource.imported_creator
     end
 
+    def contributor
+      decorated_resource.contributor || decorated_resource.imported_contributor
+    end
+
     def publisher
       decorated_resource.publisher || decorated_resource.imported_publisher
     end

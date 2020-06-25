@@ -147,6 +147,7 @@ RSpec.describe OaiController do
           descriptions = result.xpath("//description").map(&:text)
           expect(descriptions.count).to eq 3
           expect(descriptions.first).to start_with("Great Britain")
+          expect(result.xpath("//contributor").map(&:text)).to eq ["Maunsell, F. R."]
         end
       end
 
