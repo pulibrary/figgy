@@ -144,6 +144,9 @@ RSpec.describe OaiController do
           expect(records.length).to eq 1
           # includes type and content_type
           expect(result.xpath("//type").map(&:text)).to eq ["image", "maps"]
+          descriptions = result.xpath("//description").map(&:text)
+          expect(descriptions.count).to eq 3
+          expect(descriptions.first).to start_with("Great Britain")
         end
       end
 
