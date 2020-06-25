@@ -31,6 +31,33 @@ module OAI::Figgy
       mime_types + extents
     end
 
+    def types
+      content_types + genre_types
+    end
+
+    def content_types
+      values = Array.wrap(decorated_resource.content_type || decorated_resource.imported_content_type)
+      return ["text"] if values.empty?
+      values.map do |content_type|
+        content_type_map[content_type.downcase]
+      end
+    end
+
+    # map of non-text values; if it's not here use "text"
+    def content_type_map
+      Hash.new("text").tap do |h|
+        h["audio"] = "sound"
+        h["visual material"] = "image"
+        h["video"] = "video"
+        h["musical score"] = "sound"
+        h["map"] = "image"
+      end
+    end
+
+    def genre_types
+      Array.wrap(decorated_resource.type || decorated_resource.imported_type).map(&:downcase)
+    end
+
     def source
       "Princeton University Library, #{decorated_resource.source_metadata_identifier&.first || resource.id}"
     end
