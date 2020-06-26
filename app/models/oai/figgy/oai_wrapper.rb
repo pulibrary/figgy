@@ -9,12 +9,24 @@ module OAI::Figgy
       decorated_resource.creator || decorated_resource.imported_creator
     end
 
+    def contributor
+      decorated_resource.contributor || decorated_resource.imported_contributor
+    end
+
     def publisher
       decorated_resource.publisher || decorated_resource.imported_publisher
     end
 
     def date
       decorated_resource.created || decorated_resource.imported_created
+    end
+
+    def description
+      decorated_resource.description || decorated_resource.imported_description
+    end
+
+    def subject
+      decorated_resource.subject || decorated_resource.imported_subject
     end
 
     def rights
