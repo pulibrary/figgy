@@ -9,7 +9,7 @@ class PersistenceAdapter
   def create(*args)
     resource = @model.new(*args)
     begin
-      change_set = change_set_class.new(resource)
+      change_set = ChangeSet.for(resource)
     rescue
       raise NotImplementedError, "Change Set for #{@model} not implemented."
     end
@@ -19,10 +19,4 @@ class PersistenceAdapter
     return unless change_set.validate(resource.attributes)
     @change_set_persister.save(change_set: change_set)
   end
-
-  private
-
-    def change_set_class
-      @change_set ||= DynamicChangeSet
-    end
 end
