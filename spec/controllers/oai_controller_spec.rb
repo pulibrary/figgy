@@ -93,15 +93,24 @@ RSpec.describe OaiController do
     end
 
     context "when requesting oai_dc" do
-      context "for a multi-volume work" do
+      context "for a multi-volume work / bibliographic record" do
         it "returns the record with desired fields populated" do
+          bib_id = "123456"
           collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
           file1 = fixture_file_upload("files/abstract.tiff", "image/tiff")
           file2 = fixture_file_upload("files/abstract.tiff", "image/tiff")
           stub_ezid(shoulder: "99999/fk4", blade: "123456")
+          stub_bibdata(bib_id: bib_id)
           child1 = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file1])
           child2 = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file2])
-          resource = FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, member_ids: [child1.id, child2.id], extent: "17 inches")
+          resource = FactoryBot.create_for_repository(
+            :complete_scanned_resource,
+            member_of_collection_ids: collection.id,
+            member_ids: [child1.id, child2.id],
+            extent: "17 inches",
+            source_metadata_identifier: bib_id,
+            import_metadata: true
+          )
 
           get :index, params: { "verb" => "GetRecord", "identifier" => "oai:figgy:#{resource.id}", "metadataPrefix" => "oai_dc" }
 
@@ -109,7 +118,32 @@ RSpec.describe OaiController do
           records = result.xpath("//GetRecord/record")
           expect(records.length).to eq 1
           expect(result.xpath("//format").map(&:text)).to eq ["image/tiff", "17 inches"]
-          expect(result.xpath("//source").text).to eq "Princeton University Library, #{resource.id}"
+          expect(result.xpath("//source").text).to eq "Princeton University Library, #{bib_id}"
+          # uses default hash value
+          expect(result.xpath("//type").map(&:text)).to eq ["text"]
+        end
+      end
+
+      context "for a map bibliographic record" do
+        it "returns the record with desired fields populated" do
+          bib_id = "6866386"
+          collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
+          stub_ezid(shoulder: "99999/fk4", blade: "123456")
+          stub_bibdata(bib_id: bib_id)
+          resource = FactoryBot.create_for_repository(
+            :complete_scanned_resource,
+            member_of_collection_ids: collection.id,
+            source_metadata_identifier: bib_id,
+            import_metadata: true
+          )
+
+          get :index, params: { "verb" => "GetRecord", "identifier" => "oai:figgy:#{resource.id}", "metadataPrefix" => "oai_dc" }
+
+          result = Nokogiri::XML(response.body).remove_namespaces!
+          records = result.xpath("//GetRecord/record")
+          expect(records.length).to eq 1
+          # includes type and content_type
+          expect(result.xpath("//type").map(&:text)).to eq ["image", "maps"]
         end
       end
 
@@ -137,12 +171,14 @@ RSpec.describe OaiController do
           expect(result.xpath("//date").text).to eq "1-1"
           expect(result.xpath("//rights").text).to eq "No Known Copyright"
           expect(result.xpath("//format").map(&:text)).to eq ["image/tiff", "1 item; 33 x 29 cm"]
+          # defaults to "text" when no values are defined
+          expect(result.xpath("//type").map(&:text)).to eq ["text"]
           expect(result.xpath("//source").text).to eq "Princeton University Library, C0022_c0145"
           expect(result.xpath("//language").text).to eq "eng"
         end
       end
 
-      context "for a resource with no file_sets" do
+      context "for a resource with no source metadata identifier and no file_sets" do
         it "returns the record with desired fields populated" do
           collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
           stub_ezid(shoulder: "99999/fk4", blade: "123456")
