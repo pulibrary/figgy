@@ -25,6 +25,10 @@ module OAI::Figgy
       decorated_resource.description || decorated_resource.imported_description
     end
 
+    def subject
+      decorated_resource.subject || decorated_resource.imported_subject
+    end
+
     def rights
       ControlledVocabulary.for(:rights_statement).find(decorated_resource.rights_statement.first).label
     end

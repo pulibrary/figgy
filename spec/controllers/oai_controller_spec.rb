@@ -148,6 +148,7 @@ RSpec.describe OaiController do
           expect(descriptions.count).to eq 3
           expect(descriptions.first).to start_with("Great Britain")
           expect(result.xpath("//contributor").map(&:text)).to eq ["Maunsell, F. R."]
+          expect(result.xpath("//subject").map(&:text)).to eq ["Topographic maps", "Turkey—Maps"]
         end
       end
 
