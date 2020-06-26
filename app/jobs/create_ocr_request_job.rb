@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class CreateOcrRequestJob < ApplicationJob
   include ActiveStorage::Downloading
+  queue_as :high
 
   def perform(file_path:)
     logger.info("Create OCR Request job initiated for: #{file_path}")
