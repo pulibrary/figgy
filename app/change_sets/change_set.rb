@@ -102,7 +102,7 @@ class ChangeSet < Valkyrie::ChangeSet
     return false unless persisted?
     parent = Wayfinder.for(resource).try(:parent)
     if parent.present? && parent.id != resource.id
-      DynamicChangeSet.new(parent).try(:preserve?)
+      ChangeSet.for(parent).try(:preserve?)
     elsif resource.respond_to?(:state)
       state == "complete"
     else

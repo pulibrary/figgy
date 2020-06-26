@@ -16,8 +16,8 @@ RSpec.describe OrangelightReindexer do
   end
 
   before do
-    change_set_persister.save(change_set: DynamicChangeSet.new(resource))
-    change_set_persister.save(change_set: DynamicChangeSet.new(parent_issue))
+    change_set_persister.save(change_set: ChangeSet.for(resource))
+    change_set_persister.save(change_set: ChangeSet.for(parent_issue))
   end
 
   after do

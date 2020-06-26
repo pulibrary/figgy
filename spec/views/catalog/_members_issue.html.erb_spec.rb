@@ -28,7 +28,7 @@ RSpec.describe "catalog/_members_issue" do
     let(:issue) { FactoryBot.create_for_repository(:numismatic_issue) }
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: issue) }
     let(:solr_document) { SolrDocument.new(document) }
-    let(:change_set) { DynamicChangeSet.new(solr_document.resource) }
+    let(:change_set) { ChangeSet.for(solr_document.resource) }
     before do
       assign :document, solr_document
       assign :resource, solr_document.resource

@@ -293,7 +293,7 @@ class MusicImportService
         end
         st << { nodes: nodes, label: date }
       end
-      change_set = DynamicChangeSet.new(output)
+      change_set = ChangeSet.for(output)
       change_set.logical_structure[0].label = "By Date"
       change_set.logical_structure[0].nodes += structure
       buffered_change_set_persister.save(change_set: change_set)

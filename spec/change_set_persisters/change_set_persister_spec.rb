@@ -102,7 +102,7 @@ RSpec.describe ChangeSetPersister do
       stub_bibdata(bib_id: "123456")
       resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456", import_metadata: true)
       expect(resource.title.first.to_s).to eq "Earth rites : fertility rites in pre-industrial Britain"
-      change_set = DynamicChangeSet.new(resource)
+      change_set = ChangeSet.for(resource)
       change_set.validate(source_metadata_identifier: "", title: "Test")
       output = change_set_persister.save(change_set: change_set)
 
@@ -1708,12 +1708,12 @@ RSpec.describe ChangeSetPersister do
       it "Deletes FileSet PreservationObjects, moves file set PreservationObjects into tombstones" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
         resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
-        change_set = DynamicChangeSet.new(resource)
+        change_set = ChangeSet.for(resource)
         change_set.validate(state: "complete")
 
         output = change_set_persister.save(change_set: change_set)
         file_set = Wayfinder.for(output).members.first
-        change_set = DynamicChangeSet.new(file_set)
+        change_set = ChangeSet.for(file_set)
         change_set_persister.delete(change_set: change_set)
 
         expect(change_set_persister.query_service.find_all_of_model(model: PreservationObject).to_a.length).to eq 1
@@ -1747,7 +1747,7 @@ RSpec.describe ChangeSetPersister do
         expect(tombstones.to_a.length).to eq 1
 
         reloaded = change_set_persister.query_service.find_by(id: output.id)
-        change_set_persister.delete(change_set: DynamicChangeSet.new(reloaded))
+        change_set_persister.delete(change_set: ChangeSet.for(reloaded))
 
         tombstones = change_set_persister.query_service.find_all_of_model(model: Tombstone)
         expect(tombstones.to_a.length).to eq 0
@@ -1769,17 +1769,17 @@ RSpec.describe ChangeSetPersister do
       it "re-adds the FileSet" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
         resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
-        change_set = DynamicChangeSet.new(resource)
+        change_set = ChangeSet.for(resource)
         change_set.validate(state: "complete")
 
         output = change_set_persister.save(change_set: change_set)
         file_set = Wayfinder.for(output).members.first
-        change_set = DynamicChangeSet.new(file_set)
+        change_set = ChangeSet.for(file_set)
         change_set_persister.delete(change_set: change_set)
 
         resource = change_set_persister.query_service.find_by(id: resource.id)
         tombstone = change_set_persister.query_service.find_all_of_model(model: Tombstone).first
-        change_set = DynamicChangeSet.new(resource)
+        change_set = ChangeSet.for(resource)
         change_set.tombstone_restore_ids = [tombstone.id]
         output = change_set_persister.save(change_set: change_set)
 
@@ -1932,7 +1932,7 @@ RSpec.describe ChangeSetPersister do
     it "does not preserve it's members" do
       collection = FactoryBot.create_for_repository(:collection)
       FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id)
-      change_set = DynamicChangeSet.new(collection)
+      change_set = ChangeSet.for(collection)
       change_set.validate(state: "complete")
       change_set_persister.save(change_set: change_set)
 

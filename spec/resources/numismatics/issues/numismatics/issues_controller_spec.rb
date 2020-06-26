@@ -72,7 +72,7 @@ RSpec.describe Numismatics::IssuesController, type: :controller do
                                                reverse_orientation: "rev orientation",
                                                reverse_part: "rev part",
                                                shape: "round")
-      change_set = DynamicChangeSet.new(issue)
+      change_set = ChangeSet.for(issue)
       change_set_persister.save(change_set: change_set)
 
       get :edit, params: { id: resource.id.to_s }

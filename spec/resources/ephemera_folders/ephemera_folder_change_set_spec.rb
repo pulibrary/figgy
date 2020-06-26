@@ -116,7 +116,7 @@ RSpec.describe EphemeraFolderChangeSet do
 
   describe "#preserve?" do
     context "when in a box" do
-      let(:change_set) { DynamicChangeSet.new(FactoryBot.create_for_repository(:ephemera_folder)) }
+      let(:change_set) { ChangeSet.for(FactoryBot.create_for_repository(:ephemera_folder)) }
       let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: change_set.id) }
       before do
         box

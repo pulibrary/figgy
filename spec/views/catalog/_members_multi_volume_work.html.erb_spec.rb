@@ -10,7 +10,7 @@ RSpec.describe "catalog/_members_multi_volume_work" do
     let(:parent) { FactoryBot.create_for_repository(:scanned_resource, title: "Mui", rights_statement: "y", member_ids: [child.id]) }
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: parent) }
     let(:solr_document) { SolrDocument.new(document) }
-    let(:change_set) { DynamicChangeSet.new(solr_document.resource) }
+    let(:change_set) { ChangeSet.for(solr_document.resource) }
     before do
       assign :document, solr_document
       assign :change_set, change_set

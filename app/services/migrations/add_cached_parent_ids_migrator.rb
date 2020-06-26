@@ -16,7 +16,7 @@ module Migrations
       end
       resources.each do |resource|
         if resource.respond_to?(:cached_parent_id)
-          change_set = DynamicChangeSet.new(resource)
+          change_set = ChangeSet.for(resource)
           change_set_persister.save(change_set: change_set)
         end
       end

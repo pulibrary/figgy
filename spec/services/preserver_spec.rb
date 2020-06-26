@@ -129,7 +129,7 @@ describe Preserver do
         FactoryBot.create_for_repository(:ephemera_project,
                                          member_ids: folder.id)
       end
-      let(:change_set) { DynamicChangeSet.new(resource) }
+      let(:change_set) { ChangeSet.for(resource) }
       let(:folder) do
         FactoryBot.create_for_repository(:complete_ephemera_folder)
       end
@@ -152,7 +152,7 @@ describe Preserver do
         FactoryBot.create_for_repository(:ephemera_box,
                                          member_ids: folder.id)
       end
-      let(:change_set) { DynamicChangeSet.new(resource) }
+      let(:change_set) { ChangeSet.for(resource) }
       let(:folder) do
         FactoryBot.create_for_repository(:complete_ephemera_folder)
       end

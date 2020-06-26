@@ -19,7 +19,7 @@ RSpec.describe ThumbnailDerivativeService do
   end
   let(:scanned_map_members) { query_service.find_members(resource: scanned_map) }
   let(:valid_resource) { scanned_map_members.first }
-  let(:valid_change_set) { DynamicChangeSet.new(valid_resource) }
+  let(:valid_change_set) { ChangeSet.for(valid_resource) }
   let(:valid_id) { valid_change_set.id }
 
   describe "#valid?" do
@@ -34,7 +34,7 @@ RSpec.describe ThumbnailDerivativeService do
     let(:storage_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
     let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
     let(:valid_resource) { scanned_resource.decorate.members.first }
-    let(:valid_change_set) { DynamicChangeSet.new(valid_resource) }
+    let(:valid_change_set) { ChangeSet.for(valid_resource) }
     let(:intermediate_file) { instance_double("IngestableFile") }
 
     before do

@@ -40,7 +40,7 @@ RSpec.describe ChangeSet do
       before do
         allow(Valkyrie.logger).to receive(:error)
       end
-      it "returns a DynamicChangeSet and logs an error" do
+      it "returns nil and logs an error" do
         expect(described_class.class_from_param("bla")).to be nil
         expect(Valkyrie.logger).to have_received(:error).with("Failed to find the ChangeSet class for bla.")
       end
