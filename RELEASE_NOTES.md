@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-06-26
+
+## Added
+
+* Populate fields for OAI harvesting via oai_dc metadata format.
+
 # 2020-06-23
 
 ## Added
