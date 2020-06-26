@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class PdfOcrJob < ApplicationJob
   include ActiveStorage::Downloading
+  queue_as :high
   attr_reader :blob, :out_path, :resource
 
   def perform(resource:, out_path:)
