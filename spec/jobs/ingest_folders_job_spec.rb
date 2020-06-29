@@ -57,7 +57,7 @@ RSpec.describe IngestFoldersJob do
       let(:query_service) { metadata_adapter.query_service }
       let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
       let(:class_name) { "ScannedResource" }
-      let(:change_set) { "SimpleChangeSet" }
+      let(:change_set) { "simple" }
 
       it "ingest the directory files as SimpleResource objects" do
         ingest_service = instance_double(BulkIngestService)
@@ -69,10 +69,10 @@ RSpec.describe IngestFoldersJob do
           class_name: class_name,
           property: property,
           file_filters: filters,
-          change_set_class: change_set
+          change_set_param: change_set
         )
 
-        expect(BulkIngestService).to have_received(:new).with(hash_including(klass: ScannedResource, change_set_class: SimpleChangeSet))
+        expect(BulkIngestService).to have_received(:new).with(hash_including(klass: ScannedResource, change_set_param: "simple"))
 
         expect(ingest_service).to have_received(:attach_each_dir).with(
           base_directory: Pathname.new(multi_dir),

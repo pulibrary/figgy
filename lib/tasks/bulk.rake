@@ -181,9 +181,9 @@ namespace :bulk do
     filter = ENV["FILTER"]
     background = ENV["BACKGROUND"]
     model = ENV["MODEL"]
-    change_set = ENV["CHANGE_SET"] || "DynamicChangeSet"
+    change_set_name = ENV["CHANGE_SET_NAME"]
 
-    abort "usage: rake bulk:attach_each_dir DIR=/path/to/files FIELD=barcode FILTER=filter MODEL=ResourceClass CHANGE_SET=DynamicChangeSet" unless field && dir && Dir.exist?(dir)
+    abort "usage: rake bulk:attach_each_dir DIR=/path/to/files FIELD=barcode FILTER=filter MODEL=ResourceClass CHANGE_SET_NAME=simple" unless field && dir && Dir.exist?(dir)
 
     @logger = Logger.new(STDOUT)
     @logger.info "attaching files from: #{dir}"
@@ -208,7 +208,7 @@ namespace :bulk do
           class_name: class_name,
           property: field,
           file_filters: [filter],
-          change_set_class: change_set
+          change_set_param: change_set_name
         )
       else
         IngestFoldersJob.perform_now(
@@ -216,7 +216,7 @@ namespace :bulk do
           class_name: class_name,
           property: field,
           file_filters: [filter],
-          change_set_class: change_set
+          change_set_param: change_set_name
         )
       end
     rescue => e

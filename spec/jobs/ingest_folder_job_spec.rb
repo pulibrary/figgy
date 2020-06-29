@@ -78,7 +78,7 @@ RSpec.describe IngestFolderJob do
       let(:query_service) { metadata_adapter.query_service }
       let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
       let(:class_name) { "ScannedResource" }
-      let(:change_set_class) { "SimpleChangeSet" }
+      let(:change_set_param) { "simple" }
 
       it "ingest the files as SimpleResource objects" do
         coll = FactoryBot.create_for_repository(:collection)
@@ -90,13 +90,13 @@ RSpec.describe IngestFolderJob do
         described_class.perform_now(
           directory: single_dir,
           class_name: class_name,
-          change_set_class: change_set_class,
+          change_set_param: change_set_param,
           source_metadata_identifier: bib,
           local_identifier: local_id,
           member_of_collection_ids: [coll.id]
         )
 
-        expect(BulkIngestService).to have_received(:new).with(hash_including(klass: ScannedResource, change_set_class: SimpleChangeSet))
+        expect(BulkIngestService).to have_received(:new).with(hash_including(klass: ScannedResource, change_set_param: "simple"))
 
         expect(ingest_service).to have_received(:attach_dir).with(
           base_directory: single_dir,
