@@ -25,6 +25,8 @@ A digital repository application in use at Princeton University Library for stor
 * [GDAL](http://www.gdal.org/)
     * You can install it on Mac OSX with `brew install gdal`.
     * On Ubuntu, use `sudo apt-get install gdal-bin`.
+* [Simple Tiles](http://propublica.github.io/simple-tiles/)
+    * Install via Homebrew: `brew install simple-tiles`
 * [Tesseract](https://github.com/tesseract-ocr/tesseract)
     * Version 3.04 is on the servers; homebrew installs 3.05: `brew install
       tesseract --with-all-languages`
@@ -43,39 +45,18 @@ A digital repository application in use at Princeton University Library for stor
 * [OCRmyPDF](https://ocrmypdf.readthedocs.io/)
     * `brew install ocrmypdf`
 
-## Simple Tiles
+### Troubleshooting
 
-Figgy requires the image generation library [Simple Tiles](http://propublica.github.io/simple-tiles/).
+Occasionally tests may start to give messages about not finding the gdal package, the
+following steps usually resolve this issue:
 
-Mac OS X:
+1. `gem uninstall simpler-tiles`
+1. `brew uninstall simple-tiles`
+1. (only sometimes required) `brew uninstall gdal`
+1. `brew install simple-tiles`
+1. `bundle install`
 
-* Install via Homebrew: ```brew install simple-tiles```
-
-Linux:
-
-* Install dependencies:
-
-  ```
-  apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev
-  ```
-
-* Compile:
-
-  ```
-  git clone git@github.com:propublica/simple-tiles.git
-  cd simple-tiles
-  ./configure
-  make && make install
-  ```
-  * Python:
-
-    Should you receive the following error during the installation...
-
-    ```
-    TypeError: unsupported operand type(s) for +: 'dict_items' and 'list' make: *** [install] Error 2
-    ```
-
-    ...please know that you must downgrade to the latest stable release of Python 2.x.
+This sort of dance sometimes helps with other similar errors.
 
 ## Initial Setup
 
