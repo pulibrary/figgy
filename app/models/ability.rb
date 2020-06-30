@@ -153,10 +153,16 @@ class Ability
   end
 
   def valkyrie_test_manifest(obj)
-    return false unless token_readable?(obj) || group_readable?(obj) || user_readable?(obj) || universal_reader? || ip_readable?(obj)
+    return false unless token_readable?(obj) || group_readable?(obj) || user_readable?(obj) || universal_reader? || ip_readable?(obj) || cdl_readable?(obj)
     # any group with :all permissions never hits this method
     #   other groups can only read published manifests, even if they have permissions indexed
     obj.decorate.manifestable_state?
+  end
+
+  def cdl_readable?(obj)
+    resource_charge_list = Wayfinder.for(obj).try(:resource_charge_list)
+    return false unless resource_charge_list
+    resource_charge_list.charged_items.map(&:netid).include?(current_user.uid)
   end
 
   def valkyrie_test_discover(obj)
@@ -166,7 +172,7 @@ class Ability
   end
 
   def valkyrie_test_read(obj)
-    return false unless token_readable?(obj) || group_readable?(obj) || user_readable?(obj) || universal_reader? || ip_readable?(obj)
+    return false unless token_readable?(obj) || group_readable?(obj) || user_readable?(obj) || universal_reader? || ip_readable?(obj) || cdl_readable?(obj)
     # any group with :all permissions never hits this method
     #   other groups can only read published manifests, even if they have permissions indexed
     obj.decorate.public_readable_state?

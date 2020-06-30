@@ -104,4 +104,13 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
     return ["#{super.first} (#{portion_note.first})"] unless portion_note.blank?
     super
   end
+
+  # Overridden because we don't care if the object isn't visible - downloadable
+  # takes precedence for vector resources.
+  def downloadable?
+    return false unless respond_to?(:downloadable)
+    return visible? && public_readable_state? if downloadable.nil?
+
+    downloadable&.include?("public")
+  end
 end
