@@ -289,4 +289,6 @@ Rails.application.routes.draw do
 
   resources :ocr_requests, only: [:index, :destroy, :show]
   post "/ocr_requests/upload_file", to: "ocr_requests#upload_file", as: :upload_file
+
+  get "/viewer", to: "viewer#index"
 end
