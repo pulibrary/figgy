@@ -1,5 +1,5 @@
 function loadUV () {
-  let urlDataProvider = new UV.URLDataProvider(false)
+  var urlDataProvider = new UV.URLDataProvider(false)
   var manifest = urlDataProvider.get('manifest')
   $('#loginContainer').hide()
   $('#uv').hide()
