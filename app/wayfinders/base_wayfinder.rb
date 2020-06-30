@@ -100,6 +100,10 @@ class BaseWayfinder
   # Define a preservation_objects relationship for all resources
   inverse_relationship_by_property :preservation_objects, property: :preserved_object_id, singular: true, model: PreservationObject
 
+  def resource_charge_list
+    @resource_charge_list ||= query_service.custom_queries.find_by_property(property: :resource_id, value: resource.id, model: CDL::ResourceChargeList).first
+  end
+
   def metadata_adapter
     @metadata_adapter ||= Valkyrie::MetadataAdapter.find(:indexing_persister)
   end
