@@ -2,12 +2,14 @@
 
 module Cdl
   class EligibleItemService
+    # EligibleItemService will return from Voyager items eligible for Controlled Digital Lending (Cdl)
+    # on_cdl == "Y"
     class << self
       def item_ids(source_metadata_identifier:)
         item_ids = []
         conn = Faraday.new(url: "https://bibdata.princeton.edu/")
         response = conn.get("#{source_metadata_identifier}/items")
-        items = JSON.parse(response.body).values.map { |l| l[0]["items"] }
+        items = JSON.parse(response.body).values.map { |l| l[0]["items"] }.compact
         items.each do |i|
           if i[0]["on_cdl"] == "Y"
             item_ids << i[0]["id"]
