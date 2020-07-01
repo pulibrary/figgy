@@ -33,7 +33,7 @@ RSpec.describe Cdl::EligibleItemService do
       before do
         stub_request(:get, "https://bibdata.princeton.edu/#{bib_id}/items")
           .to_return(status: 404,
-                     body: {}.to_json, headers: {})
+                     body: {}.to_json, headers: {"Content-Type" => "application/json"})
       end
       let(:bib_id) { "11174664" }
       it "will return an empty array" do
@@ -45,7 +45,7 @@ RSpec.describe Cdl::EligibleItemService do
       before do
         stub_request(:get, "https://bibdata.princeton.edu/#{bib_id}/items")
           .to_return(status: 200,
-                     body: file_fixture("bibdata/#{bib_id}.json").read, headers: {})
+                     body: file_fixture("bibdata/#{bib_id}.json").read, headers: {"Content-Type" => "application/json"})
       end
       let(:bib_id) { "1377084" }
       it "returns only the cdl charged items" do
