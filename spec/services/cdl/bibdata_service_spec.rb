@@ -97,7 +97,7 @@ RSpec.describe Cdl::BibdataService do
   end
 
   describe ".item_ids" do
-    let(:id) { "7214786" }
+    let(:bib_id) { "7214786" }
 
     it "is a cdl charged item" do
     end
@@ -115,7 +115,7 @@ RSpec.describe Cdl::BibdataService do
 
     context "a bib_id with items in more than one locations" do
       it "returns only the cdl charged items" do
-        expect(described_class.item_ids(id)).to eq [1_666_779, 1_666_782]
+        expect(described_class.item_ids(source_metadata_identifier: bib_id)).to eq [1_666_779, 1_666_782]
       end
     end
   end
