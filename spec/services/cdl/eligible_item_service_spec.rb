@@ -7,85 +7,85 @@ RSpec.describe Cdl::EligibleItemService do
       .to_return(status: 200,
                  body:
              {
-               :f => [
+               f: [
                  {
-                   :holding_id => 1_581_046,
-                   :call_number => "NA203 .G5 1967",
-                   :items => [
+                   holding_id: 1_581_046,
+                   call_number: "NA203 .G5 1967",
+                   items: [
                      {
-                       :id => 1_666_778,
-                       :on_cdl => "N",
-                       :on_reserve => "N",
-                       :copy_number => 1,
-                       :item_sequence_number => 1,
-                       :temp_location => "null",
-                       :perm_location => "f",
-                       :circ_group_id => 1,
-                       :pickup_location_code => "fcirc",
-                       :pickup_location_id => 299,
-                       :enum => "null",
-                       :chron => "null",
-                       :barcode => "32101003160700",
-                       :item_type => "Gen",
-                       :due_date => "null",
-                       :status => [
+                       id: 1_666_778,
+                       on_cdl: "N",
+                       on_reserve: "N",
+                       copy_number: 1,
+                       item_sequence_number: 1,
+                       temp_location: "null",
+                       perm_location: "f",
+                       circ_group_id: 1,
+                       pickup_location_code: "fcirc",
+                       pickup_location_id: 299,
+                       enum: "null",
+                       chron: "null",
+                       barcode: "32101003160700",
+                       item_type: "Gen",
+                       due_date: "null",
+                       status: [
                          "Not Charged"
                        ]
                      }
                    ],
-                   :sortable_call_number => "NA.0203.G5.1967"
+                   sortable_call_number: "NA.0203.G5.1967"
                  }
                ],
-               :st => [
+               st: [
                  {
-                   :holding_id => 1_581_047,
-                   :call_number => "NA200 .G38 1967",
-                   :items => [
+                   holding_id: 1_581_047,
+                   call_number: "NA200 .G38 1967",
+                   items: [
                      {
-                       :id => 1_666_779,
-                       :on_cdl => "Y",
-                       :on_reserve => "N",
-                       :copy_number => 1,
-                       :item_sequence_number => 1,
-                       :temp_location => "null",
-                       :perm_location => "st",
-                       :circ_group_id => 14,
-                       :pickup_location_code => "stcirc",
-                       :pickup_location_id => 345,
-                       :enum => "null",
-                       :chron => "null",
-                       :barcode => "32101015237520",
-                       :item_type => "Gen",
-                       :due_date => "null",
-                       :status => [
+                       id: 1_666_779,
+                       on_cdl: "Y",
+                       on_reserve: "N",
+                       copy_number: 1,
+                       item_sequence_number: 1,
+                       temp_location: "null",
+                       perm_location: "st",
+                       circ_group_id: 14,
+                       pickup_location_code: "stcirc",
+                       pickup_location_id: 345,
+                       enum: "null",
+                       chron: "null",
+                       barcode: "32101015237520",
+                       item_type: "Gen",
+                       due_date: "null",
+                       status: [
                          "Not Charged"
                        ]
                      }
                    ]
                  }
                ],
-               :uesrf => [
+               uesrf: [
                  {
-                   :holding_id => 1_581_050,
-                   :call_number => "NA203 .G5 1967",
-                   :items => [
+                   holding_id: 1_581_050,
+                   call_number: "NA203 .G5 1967",
+                   items: [
                      {
-                       :id => 1_666_782,
-                       :on_cdl => "Y",
-                       :on_reserve => "N",
-                       :copy_number => 2,
-                       :item_sequence_number => 1,
-                       :temp_location => "null",
-                       :perm_location => "uesrf",
-                       :circ_group_id => 5,
-                       :pickup_location_code => "uescirc",
-                       :pickup_location_id => 356,
-                       :enum => "null",
-                       :chron => "null",
-                       :barcode => "32101019151941",
-                       :item_type => "NoCirc",
-                       :due_date => "null",
-                       :status => [
+                       id: 1_666_782,
+                       on_cdl: "Y",
+                       on_reserve: "N",
+                       copy_number: 2,
+                       item_sequence_number: 1,
+                       temp_location: "null",
+                       perm_location: "uesrf",
+                       circ_group_id: 5,
+                       pickup_location_code: "uescirc",
+                       pickup_location_id: 356,
+                       enum: "null",
+                       chron: "null",
+                       barcode: "32101019151941",
+                       item_type: "NoCirc",
+                       due_date: "null",
+                       status: [
                          "Not Charged"
                        ]
                      }
@@ -101,28 +101,28 @@ RSpec.describe Cdl::EligibleItemService do
       before do
         stub_request(:get, "https://bibdata.princeton.edu/#{bib_id}/items")
           .to_return(status: 200,
-                     body: { :uesrf => [
+                     body: { uesrf: [
                        {
-                         :holding_id => 1_581_050,
-                         :call_number => "NA203 .G5 1967",
-                         :items => [
+                         holding_id: 1_581_050,
+                         call_number: "NA203 .G5 1967",
+                         items: [
                            {
-                             :id => 1_666_782,
-                             :on_cdl => "null",
-                             :on_reserve => "N",
-                             :copy_number => 2,
-                             :item_sequence_number => 1,
-                             :temp_location => "null",
-                             :perm_location => "uesrf",
-                             :circ_group_id => 5,
-                             :pickup_location_code => "uescirc",
-                             :pickup_location_id => 356,
-                             :enum => "null",
-                             :chron => "null",
-                             :barcode => "32101019151941",
-                             :item_type => "NoCirc",
-                             :due_date => "null",
-                             :status => [
+                             id: 1_666_782,
+                             on_cdl: "null",
+                             on_reserve: "N",
+                             copy_number: 2,
+                             item_sequence_number: 1,
+                             temp_location: "null",
+                             perm_location: "uesrf",
+                             circ_group_id: 5,
+                             pickup_location_code: "uescirc",
+                             pickup_location_id: 356,
+                             enum: "null",
+                             chron: "null",
+                             barcode: "32101019151941",
+                             item_type: "NoCirc",
+                             due_date: "null",
+                             status: [
                                "Not Charged"
                              ]
                            }
