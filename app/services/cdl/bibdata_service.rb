@@ -7,7 +7,6 @@ module Cdl
         item_ids = []
         conn = Faraday.new(url: "https://bibdata.princeton.edu/")
         response = conn.get("#{source_metadata_identifier}/items")
-        response.body
         items = JSON.parse(response.body).values.map { |l| l[0]["items"] }
         items.each do |i|
           if i[0]["on_cdl"] == "Y"

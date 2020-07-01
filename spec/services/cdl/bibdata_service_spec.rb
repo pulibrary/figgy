@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe Cdl::BibdataService do
   before do
-    stub_request(:get, "https://bibdata.princeton.edu/7214786/items")
+    stub_request(:get, "https://bibdata.princeton.edu/#{bib_id}/items")
       .to_return(status: 200,
                  body:
              {
@@ -97,23 +97,60 @@ RSpec.describe Cdl::BibdataService do
   end
 
   describe ".item_ids" do
-    let(:bib_id) { "7214786" }
+    context "on_cdl is null" do
+      before do
+        stub_request(:get, "https://bibdata.princeton.edu/#{bib_id}/items")
+          .to_return(status: 200,
+                     body: { :uesrf => [
+                       {
+                         :holding_id => 1_581_050,
+                         :call_number => "NA203 .G5 1967",
+                         :items => [
+                           {
+                             :id => 1_666_782,
+                             :on_cdl => "null",
+                             :on_reserve => "N",
+                             :copy_number => 2,
+                             :item_sequence_number => 1,
+                             :temp_location => "null",
+                             :perm_location => "uesrf",
+                             :circ_group_id => 5,
+                             :pickup_location_code => "uescirc",
+                             :pickup_location_id => 356,
+                             :enum => "null",
+                             :chron => "null",
+                             :barcode => "32101019151941",
+                             :item_type => "NoCirc",
+                             :due_date => "null",
+                             :status => [
+                               "Not Charged"
+                             ]
+                           }
+                         ]
+                       }
+                     ] }.to_json, headers: {})
+      end
+      let(:bib_id) { "7214786" }
 
-    it "is a cdl charged item" do
+      it "will not error if the on_cdl is null" do
+        expect(described_class.item_ids(source_metadata_identifier: bib_id)).to eq []
+      end
     end
 
-    it "is not a cdl charged item" do
-    end
-
-    it "will not error if the on_cdl is null" do
-      # return []  if on_cdl = []
-    end
-
-    it "will not error if bib is suppressed," do
-      # it will return an []
+    context "querying a suppressed bib" do
+      before do
+        stub_request(:get, "https://bibdata.princeton.edu/#{bib_id}/items")
+          .to_return(status: 404,
+                     body: {}.to_json, headers: {})
+      end
+      let(:bib_id) { "11174664" }
+      it "will not error" do
+        expect(described_class.item_ids(source_metadata_identifier: bib_id)).to eq []
+      end
     end
 
     context "a bib_id with items in more than one locations" do
+      let(:bib_id) { "7214786" }
       it "returns only the cdl charged items" do
         expect(described_class.item_ids(source_metadata_identifier: bib_id)).to eq [1_666_779, 1_666_782]
       end
