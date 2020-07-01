@@ -1,8 +1,4 @@
 function loadUV () {
-  var urlDataProvider = new UV.URLDataProvider(false)
-  var manifest = urlDataProvider.get('manifest')
-  $('#loginContainer').hide()
-  $('#uv').hide()
   $('#login').click(function (e) {
     e.preventDefault()
     var child = window.open('/users/auth/cas?login_popup=true')
@@ -10,11 +6,14 @@ function loadUV () {
 
     function checkChild () {
       if (child.closed) {
-        loadUV()
         clearInterval(timer)
+        window.location.reload()
       }
     }
   })
+  var urlDataProvider = new UV.URLDataProvider(false)
+  var manifest = urlDataProvider.get('manifest')
+  $('#uv').hide()
   $.ajax(manifest, { type: 'HEAD' }).done(function (data, status, jqXHR) {
     var linkHeader = jqXHR.getResponseHeader('Link')
     if (linkHeader) {
@@ -29,9 +28,9 @@ function loadUV () {
       }
     }
     $('#uv').show()
-    manifestUri = urlDataProvider.get('manifest')
-    configUri = '/viewer/config/' + manifestUri.replace('/manifest', '').replace(/.*\//, '') + '.json'
-    uv = createUV('#uv', {
+    var manifestUri = urlDataProvider.get('manifest')
+    var configUri = '/viewer/config/' + manifestUri.replace('/manifest', '').replace(/.*\//, '') + '.json'
+    createUV('#uv', {
       root: 'uv',
       iiifResourceUri: manifestUri,
       configUri: configUri,
@@ -45,8 +44,13 @@ function loadUV () {
       embedded: true
     }, urlDataProvider)
   }).fail(function (data, status) {
-    if (data.status == 401) {
-      $('#loginContainer').show()
+    if (data.status === 401) {
+      var urlDataProvider = new UV.URLDataProvider(false)
+      var manifestUri = urlDataProvider.get('manifest')
+      if (manifestUri.includes(window.location.host)) {
+        var figgyId = manifestUri.replace('/manifest', '').replace(/.*\//, '')
+        window.location.href = '/viewer/' + figgyId + '/auth'
+      }
     }
   })
 }
