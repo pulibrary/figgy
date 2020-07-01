@@ -96,7 +96,7 @@ RSpec.describe Cdl::BibdataService do
                  headers: { "Content-Type" => "application/json" })
   end
 
-  describe ".cdl_items" do
+  describe ".item_ids" do
     let(:id) { "7214786" }
 
     it "is a cdl charged item" do
@@ -115,7 +115,7 @@ RSpec.describe Cdl::BibdataService do
 
     context "a bib_id with items in more than one locations" do
       it "returns only the cdl charged items" do
-        expect(described_class.cdl_items(id)).to eq [1_666_779, 1_666_782]
+        expect(described_class.item_ids(id)).to eq [1_666_779, 1_666_782]
       end
     end
   end

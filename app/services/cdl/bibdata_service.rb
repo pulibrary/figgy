@@ -3,7 +3,7 @@
 module Cdl
   class BibdataService
     class << self
-      def cdl_items(id)
+      def item_ids(id)
         item_ids = []
         conn = Faraday.new(url: "https://bibdata.princeton.edu/")
         response = conn.get("#{id}/items")
