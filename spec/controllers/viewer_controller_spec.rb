@@ -9,7 +9,38 @@ RSpec.describe ViewerController do
     it "generates a hidden login container" do
       get :index
 
-      expect(response.body).to have_selector "#login", text: "Princeton Users: Log in to View", visible: false
+      expect(response.body).to have_selector "h1#title", visible: false
+    end
+  end
+
+  describe "#auth" do
+    context "when the user is not logged in and could get access to the resource" do
+      it "displays a sign in button" do
+        resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource)
+
+        get :auth, params: { id: resource.id.to_s }
+
+        expect(response.body).to have_link "Princeton Users: Log in to View"
+      end
+      context "and the resource is private" do
+        it "redirects the user back to the viewer" do
+          resource = FactoryBot.create_for_repository(:complete_private_scanned_resource)
+
+          get :auth, params: { id: resource.id.to_s }
+
+          expect(response).to redirect_to viewer_index_path(anchor: "?manifest=http://www.example.com/concern/scanned_resources/#{resource.id}/manifest")
+        end
+      end
+    end
+    context "when the user is logged in" do
+      it "redirects back to the viewer" do
+        sign_in FactoryBot.create(:user)
+        resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource)
+
+        get :auth, params: { id: resource.id.to_s }
+
+        expect(response).to redirect_to viewer_index_path(anchor: "?manifest=http://www.example.com/concern/scanned_resources/#{resource.id}/manifest")
+      end
     end
   end
 end
