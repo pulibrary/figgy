@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe Cdl::BibdataService do
+RSpec.describe Cdl::EligibleItemService do
   before do
     stub_request(:get, "https://bibdata.princeton.edu/#{bib_id}/items")
       .to_return(status: 200,

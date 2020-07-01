@@ -310,7 +310,7 @@ Naming/PredicateName:
     - 'app/models/ingestable_audio_file.rb'
 Style/HashSyntax:
   Exclude:
-    - 'spec/services/cdl/bibdata_service_spec.rb'
+    - 'spec/services/cdl/eligible_item_service_spec.rb'
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 Security/MarshalLoad:

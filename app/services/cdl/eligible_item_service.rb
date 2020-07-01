@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Cdl
-  class BibdataService
+  class EligibleItemService
     class << self
       def item_ids(source_metadata_identifier:)
         item_ids = []
