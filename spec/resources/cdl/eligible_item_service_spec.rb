@@ -1,8 +1,14 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe Cdl::EligibleItemService do
+RSpec.describe CDL::EligibleItemService do
   describe ".item_ids" do
+    context "when given a component ID" do
+      it "returns an empty array" do
+        expect(described_class.item_ids(source_metadata_identifier: "AC101_C002")).to eq []
+      end
+    end
+
     context "on_cdl is null" do
       before do
         stub_request(:get, "https://bibdata.princeton.edu/#{bib_id}/items")

@@ -124,6 +124,7 @@ Metrics/CyclomaticComplexity:
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/services/manifest_builder.rb'
     - 'app/jobs/browse_everything_ingest_job.rb'
+    - 'app/models/ability.rb'
 Metrics/LineLength:
   Exclude:
     - 'spec/views/scanned_resources/order_manager.html.erb_spec.rb'

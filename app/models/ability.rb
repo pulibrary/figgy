@@ -165,9 +165,24 @@ class Ability
     resource_charge_list.charged_items.map(&:netid).include?(current_user.uid)
   end
 
+  def cdl_eligible?(obj)
+    return false unless obj.persisted?
+    return false unless obj.decorate.public_readable_state?
+    CDL::ChargeManager.new(resource_id: obj.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister).eligible?
+  end
+
+  def eligible_item_service
+    CDL::EligibleItemService
+  end
+
+  def change_set_persister
+    ChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter)
+  end
+
   def valkyrie_test_discover(obj)
     return true if valkyrie_test_read(obj)
     return false if obj.read_groups.include?(::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_READING_ROOM) && !reading_room_ip?
+    return true if cdl_eligible?(obj)
     obj.decorate.public_readable_state? && !private?(obj)
   end
 
