@@ -2,6 +2,8 @@
 
 class ViewerController < ApplicationController
   layout "viewer_layout"
+  after_action :allow_iframe
+
   def index
     render :index
   end
@@ -27,4 +29,10 @@ class ViewerController < ApplicationController
   def query_service
     Valkyrie.config.metadata_adapter.query_service
   end
+
+  private
+
+    def allow_iframe
+      response.headers.except! "X-Frame-Options"
+    end
 end
