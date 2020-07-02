@@ -13,12 +13,16 @@ module CDL
       clear_expired_charges
     end
 
+    def eligible?
+      item_ids.present?
+    end
+
     def clear_expired_charges
       resource_charge_list.charged_items = resource_charge_list.charged_items.reject(&:expired?)
     end
 
     def available_for_charge?
-      return false unless item_ids.present?
+      return false unless eligible?
       resource_charge_list.charged_items.count < item_ids.count
     end
 
