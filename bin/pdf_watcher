@@ -53,7 +53,8 @@ class PdfWatcher
     # Set the proc that filewatcher will call between filesystem checks
     fw.update_proc = process_files
     fw.watch do |file_path, event|
-      next unless File.extname(file_path) == ".pdf"
+      # Check if file is a PDF and the base filename only contains numbers
+      next unless /^\d+$/ =~ File.basename(file_path, ".pdf")
       if event == :created || event == :updated
         logger.info "PdfWatcher file event '#{event}': #{file_path}"
         # Add or update file in files_queue with event time stamp
