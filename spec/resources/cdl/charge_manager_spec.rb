@@ -21,6 +21,29 @@ describe CDL::ChargeManager do
 
   let(:change_set_persister) { ScannedResourcesController.change_set_persister }
 
+  describe "#initialize" do
+    it "clears expired charges from in-memory array" do
+      stub_bibdata(bib_id: "123456")
+      resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
+      eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
+
+      Timecop.freeze(Time.current - 1.hour) do
+        charged_items = [
+          FactoryBot.build(:charged_item, expiration_time: Time.current + 1.hour)
+        ]
+        FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items)
+
+        manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+        expect(manager.resource_charge_list.charged_items.count).to eq 1
+      end
+
+      manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+      # It's been updated in memory, not on disk
+      expect(manager.resource_charge_list.charged_items.count).to eq 0
+      expect(Valkyrie.config.metadata_adapter.query_service.find_all_of_model(model: CDL::ResourceChargeList).first.charged_items.count).to eq 1
+    end
+  end
+
   describe "#create_charge" do
     context "it is available for charge" do
       context "there is a ResourceChargeList" do

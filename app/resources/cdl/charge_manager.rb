@@ -10,6 +10,11 @@ module CDL
       @resource_id = resource_id
       @eligible_item_service = eligible_item_service
       @change_set_persister = change_set_persister
+      clear_expired_charges
+    end
+
+    def clear_expired_charges
+      resource_charge_list.charged_items = resource_charge_list.charged_items.reject(&:expired?)
     end
 
     def available_for_charge?
