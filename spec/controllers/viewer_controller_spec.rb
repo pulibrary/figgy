@@ -11,6 +11,11 @@ RSpec.describe ViewerController do
 
       expect(response.body).to have_selector "h1#title", visible: false
     end
+    it "doesn't have an x-frame-options header" do
+      get :index
+
+      expect(response.headers["X-Frame-Options"]).to be_nil
+    end
   end
 
   describe "#auth" do
@@ -21,6 +26,13 @@ RSpec.describe ViewerController do
         get :auth, params: { id: resource.id.to_s }
 
         expect(response.body).to have_link "Princeton Users: Log in to View"
+      end
+      it "doesn't have an x-frame-options header" do
+        resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource)
+
+        get :auth, params: { id: resource.id.to_s }
+
+        expect(response.headers["X-Frame-Options"]).to be_nil
       end
       context "and the resource is private" do
         it "redirects the user back to the viewer" do
