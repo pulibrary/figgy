@@ -421,7 +421,7 @@ describe Ability do
       }
     end
 
-    context "with a whitelisted reading room IP" do
+    context "with an allowed reading room IP" do
       subject { described_class.new(current_user, ip_address: "1.2.3") }
       let(:config_hash) { { "access_control" => { "reading_room_ips" => ["1.2.3"] } } }
       before do
@@ -515,7 +515,7 @@ describe Ability do
     let(:creating_user) { staff_user }
     let(:current_user) { reading_room_user }
 
-    context "without a whitelisted IP" do
+    context "without an allowed IP" do
       it {
         is_expected.not_to be_able_to(:read, reading_room_scanned_resource)
         is_expected.not_to be_able_to(:manifest, reading_room_scanned_resource)
@@ -523,7 +523,7 @@ describe Ability do
       }
     end
 
-    context "with a whitelisted IP" do
+    context "with an allowed IP" do
       let(:config_hash) { { "access_control" => { "reading_room_ips" => ["1.2.3"] } } }
       before do
         allow(Figgy).to receive(:config).and_return(config_hash)
