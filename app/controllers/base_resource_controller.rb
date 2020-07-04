@@ -15,7 +15,7 @@ class BaseResourceController < ApplicationController
   end
 
   def change_set
-    @change_set ||= change_set_class.new(resource)
+    @change_set ||= ChangeSet.for(resource)
   end
 
   # Resources that allow uploads will use these browse everything methods
@@ -30,11 +30,11 @@ class BaseResourceController < ApplicationController
 
   # Attach a resource to a parent
   def attach_to_parent
-    @change_set = change_set_class.new(find_resource(params[:id]))
+    @change_set = ChangeSet.for(resource, change_set_param: change_set_param)
     parent_resource = find_resource(parent_resource_params[:id])
     authorize! :update, parent_resource
 
-    parent_change_set = DynamicChangeSet.new(parent_resource)
+    parent_change_set = ChangeSet.for(parent_resource)
     if parent_change_set.validate(parent_resource_params)
       current_member_ids = parent_resource.member_ids
       attached_member_ids = parent_change_set.member_ids
@@ -55,11 +55,11 @@ class BaseResourceController < ApplicationController
 
   # Remove a resource from a parent
   def remove_from_parent
-    @change_set = change_set_class.new(find_resource(params[:id]))
+    @change_set = ChangeSet.for(resource)
     parent_resource = find_resource(parent_resource_params[:id])
     authorize! :update, parent_resource
 
-    parent_change_set = DynamicChangeSet.new(parent_resource)
+    parent_change_set = ChangeSet.for(parent_resource)
     if parent_change_set.validate(parent_resource_params)
       current_member_ids = parent_resource.member_ids
       removed_member_ids = parent_change_set.member_ids

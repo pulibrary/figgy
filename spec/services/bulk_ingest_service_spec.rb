@@ -114,7 +114,7 @@ RSpec.describe BulkIngestService do
     end
 
     context "when using the SimpleChangeSet" do
-      subject(:ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger, change_set_class: SimpleChangeSet) }
+      subject(:ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger, change_set_param: "simple") }
 
       before do
         # Used for checking whether or not the PULFA record exists

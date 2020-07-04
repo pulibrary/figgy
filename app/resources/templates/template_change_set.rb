@@ -17,7 +17,7 @@ class TemplateChangeSet < ChangeSet
   end
 
   def child_change_set
-    @child_change_set ||= TemplateChangeSetDecorator.new(DynamicChangeSet.new(child_record)).tap(&:prepopulate!)
+    @child_change_set ||= TemplateChangeSetDecorator.new(ChangeSet.for(child_record)).tap(&:prepopulate!)
   end
 
   def child_record

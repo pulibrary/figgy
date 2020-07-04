@@ -38,7 +38,7 @@ class HocrDerivativeService
     result = processor.run!
     change_set_persister.buffer_into_index do |buffered_persister|
       reloaded = buffered_persister.query_service.find_by(id: id)
-      reloaded_change_set = DynamicChangeSet.new(reloaded)
+      reloaded_change_set = ChangeSet.for(reloaded)
       reloaded_change_set.hocr_content = result.hocr_content
       reloaded_change_set.ocr_content = result.ocr_content
       buffered_persister.save(change_set: reloaded_change_set)

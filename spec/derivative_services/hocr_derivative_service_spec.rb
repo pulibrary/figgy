@@ -21,7 +21,7 @@ RSpec.describe HocrDerivativeService do
   end
   let(:book_members) { query_service.find_members(resource: scanned_resource) }
   let(:valid_resource) { book_members.first }
-  let(:valid_change_set) { DynamicChangeSet.new(valid_resource) }
+  let(:valid_change_set) { ChangeSet.for(valid_resource) }
   let(:valid_id) { valid_change_set.id }
 
   describe "#valid?" do
@@ -106,7 +106,7 @@ RSpec.describe HocrDerivativeService do
     end
     let(:folder_members) { query_service.find_members(resource: ephemera_folder) }
     let(:valid_resource) { folder_members.first }
-    let(:valid_change_set) { DynamicChangeSet.new(valid_resource) }
+    let(:valid_change_set) { ChangeSet.for(valid_resource) }
 
     let(:hocr_content) { File.read(Rails.root.join("spec", "fixtures", "hocr.hocr")) }
     let(:ocr_content) { File.read(Rails.root.join("spec", "fixtures", "ocr.txt")) }

@@ -51,7 +51,7 @@ RSpec.describe IdentifierService do
   context "when there is an imported identifier" do
     let(:obj) do
       resource = FactoryBot.build :scanned_resource, source_metadata_identifier: "10001789"
-      change_set = DynamicChangeSet.new(resource)
+      change_set = ChangeSet.for(resource)
       change_set.validate(source_metadata_identifier: "10001789")
       change_set_persister.save(change_set: change_set)
     end

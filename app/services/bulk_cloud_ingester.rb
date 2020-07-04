@@ -117,7 +117,7 @@ class BulkCloudIngester
           attrs[:source_metadata_identifier] = attrs[:title]
           attrs[:title] = nil
         end
-        change_set = DynamicChangeSet.new(build_resource)
+        change_set = ChangeSet.for(build_resource)
         change_set.validate(**attrs)
         change_set
       end

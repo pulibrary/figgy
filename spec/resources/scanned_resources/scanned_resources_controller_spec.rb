@@ -56,7 +56,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
     end
   end
 
-  describe "change_set_class" do
+  describe "change sets" do
     let(:user) { FactoryBot.create(:admin) }
     render_views
 

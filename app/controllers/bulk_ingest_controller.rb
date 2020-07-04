@@ -60,10 +60,6 @@ class BulkIngestController < ApplicationController
     @change_set_persister ||= ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter)
   end
 
-  def self.change_set_class
-    DynamicChangeSet
-  end
-
   def show
     authorize! :create, resource_class
     @collections = collections
@@ -139,7 +135,7 @@ class BulkIngestController < ApplicationController
     end
 
     def workflow_class
-      @workflow_class ||= DynamicChangeSet.new(resource_class.new).workflow_class
+      @workflow_class ||= ChangeSet.for(resource_class.new).workflow_class
     end
 
     def collection_ids

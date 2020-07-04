@@ -9,7 +9,7 @@ RSpec.describe RightsStatementValidator do
       it "does not add errors" do
         rights_statement = RightsStatements.no_known_copyright
         resource = FactoryBot.build(:scanned_resource)
-        change_set = DynamicChangeSet.new(resource, rights_statement: rights_statement)
+        change_set = ChangeSet.for(resource, rights_statement: rights_statement)
 
         validator.validate(change_set)
         expect(change_set.errors).to be_blank
@@ -20,7 +20,7 @@ RSpec.describe RightsStatementValidator do
       it "adds an error" do
         rights_statement = RDF::URI.new("http://rightsstatements.org/vocab/BAD/1.0/")
         resource = FactoryBot.build(:scanned_resource)
-        change_set = DynamicChangeSet.new(resource, rights_statement: rights_statement)
+        change_set = ChangeSet.for(resource, rights_statement: rights_statement)
 
         validator.validate(change_set)
         expect(change_set.errors[:rights_statement]).to eq ["#{rights_statement} is not a valid rights_statement"]
@@ -30,7 +30,7 @@ RSpec.describe RightsStatementValidator do
     context "when rights_statement is nil" do
       it "adds an error" do
         resource = FactoryBot.build(:scanned_resource)
-        change_set = DynamicChangeSet.new(resource, rights_statement: nil)
+        change_set = ChangeSet.for(resource, rights_statement: nil)
 
         validator.validate(change_set)
         expect(change_set.errors[:rights_statement]).to eq [" is not a valid rights_statement"]
@@ -40,7 +40,7 @@ RSpec.describe RightsStatementValidator do
     context "when rights_statement is blank" do
       it "adds an error" do
         resource = FactoryBot.build(:scanned_resource)
-        change_set = DynamicChangeSet.new(resource, rights_statement: "")
+        change_set = ChangeSet.for(resource, rights_statement: "")
 
         validator.validate(change_set)
         expect(change_set.errors[:rights_statement]).to eq [" is not a valid rights_statement"]

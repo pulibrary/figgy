@@ -12,7 +12,7 @@ describe FindingAidsUpdater do
   let(:r1) do
     Timecop.freeze(Time.now.utc - 1.week) do
       resource = FactoryBot.build(:scanned_resource, title: [])
-      cs1 = DynamicChangeSet.new(resource)
+      cs1 = ChangeSet.for(resource)
       cs1.validate(source_metadata_identifier: "C0652_c0389")
       persister.save(change_set: cs1)
     end
@@ -21,7 +21,7 @@ describe FindingAidsUpdater do
   let(:r2) do
     Timecop.freeze(Time.now.utc - 1.week) do
       resource = FactoryBot.build(:scanned_resource, title: [])
-      cs2 = DynamicChangeSet.new(resource)
+      cs2 = ChangeSet.for(resource)
       cs2.validate(source_metadata_identifier: "MC016_c9616")
       persister.save(change_set: cs2)
     end
@@ -30,7 +30,7 @@ describe FindingAidsUpdater do
   let(:r3) do
     Timecop.freeze(Time.now.utc - 1.week) do
       resource = FactoryBot.build(:scanned_resource, title: [])
-      cs3 = DynamicChangeSet.new(resource)
+      cs3 = ChangeSet.for(resource)
       cs3.validate(source_metadata_identifier: "AC044_c0003")
       persister.save(change_set: cs3)
     end
@@ -47,7 +47,7 @@ describe FindingAidsUpdater do
     Timecop.freeze(Time.now.utc - 1.week) do
       # A bibid resource
       resource = FactoryBot.build(:scanned_resource, title: [])
-      cs5 = DynamicChangeSet.new(resource)
+      cs5 = ChangeSet.for(resource)
       cs5.validate(source_metadata_identifier: "4609321")
       persister.save(change_set: cs5)
     end

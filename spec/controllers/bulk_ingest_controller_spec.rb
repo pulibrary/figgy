@@ -25,12 +25,6 @@ RSpec.describe BulkIngestController do
     end
   end
 
-  describe ".change_set_class" do
-    it "accesses the ChangeSet Class used for persisting resources" do
-      expect(described_class.change_set_class).to eq DynamicChangeSet
-    end
-  end
-
   describe "GET #show" do
     let(:user) { FactoryBot.create(:admin) }
     let(:persister) { adapter.persister }

@@ -13,8 +13,8 @@ if Rails.env.development? || Rails.env.staging?
         change_set_persister = ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter)
         amc = qs.find_by(id: id)
         amc_wayfinder = Wayfinder.for(amc)
-        amc_wayfinder.members.each { |member| change_set_persister.delete(change_set: DynamicChangeSet.new(member)) }
-        change_set_persister.delete(change_set: DynamicChangeSet.new(amc))
+        amc_wayfinder.members.each { |member| change_set_persister.delete(change_set: ChangeSet.for(member)) }
+        change_set_persister.delete(change_set: ChangeSet.for(amc))
       end
     end
   end

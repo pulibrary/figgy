@@ -7,7 +7,7 @@ class PreserveResourceJob < ApplicationJob
   def perform(id:)
     resource = query_service.find_by(id: id)
     change_set_persister.buffer_into_index do |buffered_change_set_persister|
-      change_set = DynamicChangeSet.new(resource)
+      change_set = ChangeSet.for(resource)
       Preserver.for(change_set: change_set, change_set_persister: buffered_change_set_persister).preserve!
     end
   end

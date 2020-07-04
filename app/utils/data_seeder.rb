@@ -188,13 +188,13 @@ class DataSeeder
   private
 
     def add_child_resource(child:, parent_id:)
-      change_set = DynamicChangeSet.new(child)
+      change_set = ChangeSet.for(child)
       change_set.append_id = parent_id
       change_set_persister.save(change_set: change_set)
     end
 
     def add_ephemera_box(project)
-      change_set = DynamicChangeSet.new(EphemeraBox.new)
+      change_set = ChangeSet.for(EphemeraBox.new)
       change_set.validate(barcode: "00000000000000", box_number: "1")
       box = change_set_persister.save(change_set: change_set)
       add_member(parent: project, member: box)
@@ -210,7 +210,7 @@ class DataSeeder
         ["5", "LAE Subjects"]
       ].each do |pair|
         # create the ephemera field
-        field_change_set = DynamicChangeSet.new(EphemeraField.new)
+        field_change_set = ChangeSet.for(EphemeraField.new)
         vocab = query_service.custom_queries.find_ephemera_vocabulary_by_label(label: pair[1])
         raise "Could not ingest the field for #{pair[0]}!" unless field_change_set.validate(field_name: [pair[0]], member_of_vocabulary_id: vocab.id)
         updated_field = change_set_persister.save(change_set: field_change_set)
@@ -221,7 +221,7 @@ class DataSeeder
 
     def add_ephemera_folders(n:, project:, box:)
       n.times do |i|
-        change_set = DynamicChangeSet.new(EphemeraFolder.new)
+        change_set = ChangeSet.for(EphemeraFolder.new)
         change_set.validate(
           barcode: "00000000000000",
           folder_number: i,
@@ -243,13 +243,13 @@ class DataSeeder
 
     def add_file(resource:, file: nil)
       ingestable_file = file || IngestableFile.new(file_path: Rails.root.join("spec", "fixtures", "files", "example.tif"), mime_type: "image/tiff", original_filename: "example.tif")
-      change_set = DynamicChangeSet.new(resource)
+      change_set = ChangeSet.for(resource)
       change_set.files = [ingestable_file]
       change_set_persister.save(change_set: change_set)
     end
 
     def add_member(parent:, member:)
-      member_change_set = DynamicChangeSet.new(member)
+      member_change_set = ChangeSet.for(member)
       member_change_set.append_id = parent.id
       change_set_persister.save(change_set: member_change_set)
       logger.info "Added #{member.class} #{member.id} to #{parent.class} #{parent.title || parent.box_number}"

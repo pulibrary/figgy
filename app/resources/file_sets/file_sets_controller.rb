@@ -2,7 +2,6 @@
 class FileSetsController < ApplicationController
   include ResourceController
   include TokenAuth
-  self.change_set_class = DynamicChangeSet
   self.resource_class = FileSet
   self.change_set_persister = ::ChangeSetPersister.new(
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
@@ -11,7 +10,7 @@ class FileSetsController < ApplicationController
   before_action :parent_resource, only: [:destroy]
 
   def derivatives
-    @change_set = change_set_class.new(file_set).prepopulate!
+    @change_set = ChangeSet.for(file_set).prepopulate!
     authorize! :derive, @change_set.resource
     output = RegenerateDerivativesJob.perform_later(params[:id])
     respond_to do |format|
@@ -38,7 +37,7 @@ class FileSetsController < ApplicationController
   end
 
   def update
-    @change_set = change_set_class.new(file_set)
+    @change_set = ChangeSet.for(file_set)
     authorize! :update, @change_set.resource
     if @change_set.validate(resource_params)
       obj = nil
@@ -81,7 +80,7 @@ class FileSetsController < ApplicationController
     end
 
     def update_derivatives(obj)
-      @change_set = DynamicChangeSet.new(obj)
+      @change_set = ChangeSet.for(obj)
       return unless @change_set.validate(derivative_resource_params)
       derivative_change_set_persister.buffer_into_index do |persist|
         persist.save(change_set: @change_set)

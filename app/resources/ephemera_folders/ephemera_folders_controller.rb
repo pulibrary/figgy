@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class EphemeraFoldersController < BaseResourceController
-  self.change_set_class = DynamicChangeSet
   self.resource_class = EphemeraFolder
   self.change_set_persister = ::ChangeSetPersister.new(
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
@@ -10,8 +9,8 @@ class EphemeraFoldersController < BaseResourceController
   before_action :cache_parent, only: [:destroy]
   before_action :load_boxes, only: [:edit]
 
-  def change_set_class
-    @change_set_class ||= parent_resource.is_a?(EphemeraBox) ? EphemeraFolderChangeSet : BoxlessEphemeraFolderChangeSet
+  def change_set_param
+    parent_resource.is_a?(EphemeraBox) ? "ephemera_folder" : "boxless_ephemera_folder"
   end
 
   def after_create_success(obj, _change_set)
@@ -63,7 +62,7 @@ class EphemeraFoldersController < BaseResourceController
   end
 
   def pdf
-    change_set = change_set_class.new(find_resource(params[:id]))
+    change_set = ChangeSet.for(find_resource(params[:id]))
     authorize! :pdf, change_set.resource
     pdf_file = PDFService.new(change_set_persister).find_or_generate(change_set)
 

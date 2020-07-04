@@ -37,7 +37,7 @@ class ExternalMetadataDerivativeService
   end
 
   def parent_change_set
-    DynamicChangeSet.new(parent)
+    ChangeSet.for(parent)
   end
 
   def valid?

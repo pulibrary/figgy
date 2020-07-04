@@ -81,7 +81,7 @@ class IngestMETSJob < ApplicationJob
     # @param [ScannedResource] the resource being modified
     # @return [ScannedResource] the persisted resource with the logical structure assigned
     def assign_logical_structure(resource)
-      new_change_set = DynamicChangeSet.new(resource)
+      new_change_set = ChangeSet.for(resource)
       new_change_set.logical_structure = [{ label: "Main Structure", nodes: map_fileids(mets.structure)[:nodes] }]
       change_set_persister.save(change_set: new_change_set)
     end
@@ -91,7 +91,7 @@ class IngestMETSJob < ApplicationJob
     # @param [ScannedResource] the resource being modified
     # @return [ScannedResource] the persisted resource with the logical structure assigned
     def assign_attributes(resource)
-      new_change_set = DynamicChangeSet.new(resource)
+      new_change_set = ChangeSet.for(resource)
       return resource unless new_change_set.validate(mets.attributes)
       new_change_set.sync
       change_set_persister.save(change_set: new_change_set)
@@ -116,35 +116,29 @@ class IngestMETSJob < ApplicationJob
       existing_collections.first.id
     end
 
-    # Provide the resource class used for ingesting Resources using a METS Document
-    # @return [Class]
-    def resource_klass
-      ScannedResource
-    end
-
     # Construct the ChangeSet object for the new resource
     # @return [ChangeSet]
     def change_set
       @change_set ||=
         begin
-          change_set_class.new(resource_klass.new)
+          ChangeSet.for(ScannedResource.new, change_set_param: change_set_param)
         end
     end
 
     # METS comes in two forms: with a bib-id and without.
     #
     # If a record has a bib-ID, don't bother migrating any of the MODS, and
-    # likely use the ScannedResourceChangeSet.
+    # use a ScannedResourceChangeSet.
     #
     # If no bib-id, use a SimpleChangeSet to migrate the MODS metadata.
     # Items which have PULFA metadata don't have a bib-id in the METS,
     # they just have a link to the ARK for the PULFA collection they're a part of,
     # so this path will happen for those items. This is intended.
-    def change_set_class
+    def change_set_param
       if mets.bib_id.present?
-        DynamicChangeSet
+        "scanned_resource"
       else
-        SimpleChangeSet
+        "simple"
       end
     end
 

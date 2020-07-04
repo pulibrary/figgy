@@ -10,7 +10,7 @@ class DeleteArchivalCollectionJob < ApplicationJob
       Rails.logger.info("removing #{resources.count} resources from collection #{id}.")
       change_set_persister = ScannedResourcesController.change_set_persister
       resources.each do |resource|
-        change_set = DynamicChangeSet.new(resource)
+        change_set = ChangeSet.for(resource)
         change_set_persister.delete(change_set: change_set)
       end
     end

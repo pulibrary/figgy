@@ -123,7 +123,7 @@ class MusicImportService
 
     def find_recording
       query_service.custom_queries.find_by_property(property: :local_identifier, value: recording.id.to_s).find do |x|
-        DynamicChangeSet.new(x).is_a?(RecordingChangeSet)
+        ChangeSet.for(x).is_a?(RecordingChangeSet)
       end
     end
 
@@ -169,14 +169,14 @@ class MusicImportService
               query_service.custom_queries.find_by_property(property: :local_identifier, value: file.entry_id.to_s).first&.id => file.id
             }
           end.inject(&:merge).compact
-          change_set = DynamicChangeSet.new(playlist)
+          change_set = ChangeSet.for(playlist)
           change_set.file_set_ids = file_set_ids.keys
           output = buffered_change_set_persister.save(change_set: change_set)
           # Fix labels
           members = Wayfinder.for(output).members
           possible_files = selection_files.group_by(&:id)
           members.each do |member|
-            change_set = DynamicChangeSet.new(member)
+            change_set = ChangeSet.for(member)
             file = Array.wrap(possible_files[file_set_ids[member.proxied_file_id]]).first
             change_set.label = file.file_note
             change_set.local_identifier = file.id.to_s
@@ -249,7 +249,7 @@ class MusicImportService
           existing.first
         else
           collection = Collection.new(slug: pair[0], title: pair[1])
-          change_set_persister.save(change_set: DynamicChangeSet.new(collection))
+          change_set_persister.save(change_set: ChangeSet.for(collection))
         end
       end
     end
@@ -264,7 +264,7 @@ class MusicImportService
         end
         ids = file_set_members.map(&:id)
         playlist = Playlist.new(title: selection_files.first.selection_title, local_identifier: selection_id.to_s, part_of: selections_to_courses[selection_id]&.first&.course_nums)
-        change_set = DynamicChangeSet.new(playlist)
+        change_set = ChangeSet.for(playlist)
         change_set.file_set_ids = ids
         buffered_change_set_persister.save(change_set: change_set)
       end
@@ -293,7 +293,7 @@ class MusicImportService
         end
         st << { nodes: nodes, label: date }
       end
-      change_set = DynamicChangeSet.new(output)
+      change_set = ChangeSet.for(output)
       change_set.logical_structure[0].label = "By Date"
       change_set.logical_structure[0].nodes += structure
       buffered_change_set_persister.save(change_set: change_set)

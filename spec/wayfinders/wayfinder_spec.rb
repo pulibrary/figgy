@@ -21,12 +21,12 @@ RSpec.describe Wayfinder do
         file = fixture_file_upload("files/example.tif", "image/tiff")
         change_set_persister = ScannedResourcesController.change_set_persister
         resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
-        change_set = DynamicChangeSet.new(resource)
+        change_set = ChangeSet.for(resource)
         change_set.validate(state: "complete")
 
         output = change_set_persister.save(change_set: change_set)
         file_set = described_class.for(output).members.first
-        change_set = DynamicChangeSet.new(file_set)
+        change_set = ChangeSet.for(file_set)
         change_set_persister.delete(change_set: change_set)
 
         tombstone = change_set_persister.query_service.find_all_of_model(model: Tombstone).first

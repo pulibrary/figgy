@@ -19,7 +19,7 @@ class ChangeSetPersister
         change_set.member_ids += [file_set.id]
         change_set.sync
         change_set.created_file_sets += [file_set]
-        change_set_persister.delete(change_set: DynamicChangeSet.new(tombstone))
+        change_set_persister.delete(change_set: ChangeSet.for(tombstone))
       end
     end
 

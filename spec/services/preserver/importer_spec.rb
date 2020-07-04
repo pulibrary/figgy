@@ -35,7 +35,7 @@ describe Preserver::Importer do
   before do
     stub_ezid(shoulder: shoulder, blade: blade)
     persisted_file_set
-    change_set = DynamicChangeSet.new(persisted_resource)
+    change_set = ChangeSet.for(persisted_resource)
     change_set_persister.save(change_set: change_set)
   end
 

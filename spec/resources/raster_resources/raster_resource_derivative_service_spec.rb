@@ -20,7 +20,7 @@ RSpec.describe RasterResourceDerivativeService do
   end
   let(:raster_resource_members) { query_service.find_members(resource: raster_resource) }
   let(:valid_resource) { raster_resource_members.first }
-  let(:valid_change_set) { DynamicChangeSet.new(valid_resource) }
+  let(:valid_change_set) { ChangeSet.for(valid_resource) }
   let(:tika_output) { tika_geotiff_output }
   let(:valid_id) { valid_change_set.id }
 

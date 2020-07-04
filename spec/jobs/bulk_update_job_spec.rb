@@ -83,9 +83,9 @@ describe BulkUpdateJob do
     end
 
     context "there's a validation error on one of the change sets" do
-      let(:change_set) { DynamicChangeSet.new(resource1) }
+      let(:change_set) { ChangeSet.for(resource1) }
       before do
-        allow(DynamicChangeSet).to receive(:new).and_return(change_set)
+        allow(ChangeSet).to receive(:for).and_return(change_set)
         allow(change_set).to receive(:valid?).and_return(false)
       end
       it "raises an error" do

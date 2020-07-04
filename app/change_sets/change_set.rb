@@ -1,8 +1,31 @@
 # frozen_string_literal: true
 require "reform/form/active_model/form_builder_methods"
 class ChangeSet < Valkyrie::ChangeSet
+  class NotFoundError < RuntimeError; end
   class_attribute :workflow_class
   class_attribute :feature_terms
+
+  # Factory
+  def self.for(record, change_set_param: nil, **args)
+    klass =
+      if record.try(:change_set).present?
+        class_from_param(record.change_set)
+      elsif change_set_param
+        class_from_param(change_set_param)
+      else
+        class_from_param(record.internal_resource)
+      end
+    raise ::ChangeSet::NotFoundError if klass.nil?
+    klass.new(record, **args)
+  end
+
+  # Used by controllers that need to dynamically instantitate new change sets
+  def self.class_from_param(param)
+    "#{param.camelize}ChangeSet".constantize
+  rescue NameError
+    Valkyrie.logger.error("Failed to find the ChangeSet class for #{param}.")
+    nil
+  end
 
   # Delegating the to_hash method to the resource is a workaround that allows
   # syncing of the changeset. Reform does not appear to de-cast forms during sync.
@@ -79,7 +102,7 @@ class ChangeSet < Valkyrie::ChangeSet
     return false unless persisted?
     parent = Wayfinder.for(resource).try(:parent)
     if parent.present? && parent.id != resource.id
-      DynamicChangeSet.new(parent).try(:preserve?)
+      ChangeSet.for(parent).try(:preserve?)
     elsif resource.respond_to?(:state)
       state == "complete"
     else

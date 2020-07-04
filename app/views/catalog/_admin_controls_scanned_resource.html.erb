@@ -1,4 +1,4 @@
-<% if DynamicChangeSet.new(resource).is_a?(RecordingChangeSet) %>
+<% if ChangeSet.for(resource).is_a?(RecordingChangeSet) %>
   <%= render "admin_controls_recording", resource: resource %>
 <% else %>
   <%= render "admin_controls_default", resource: resource %>

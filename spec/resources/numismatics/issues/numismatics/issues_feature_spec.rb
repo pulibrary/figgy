@@ -94,7 +94,7 @@ RSpec.feature "Numismatics::Issues" do
         denomination: "dollar",
         object_type: "coin"
       )
-      change_set_persister.save(change_set: DynamicChangeSet.new(preexisting_issue))
+      change_set_persister.save(change_set: ChangeSet.for(preexisting_issue))
 
       visit new_numismatics_issue_path
 

@@ -79,7 +79,7 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
       change_set_persister = ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter)
       coin = FactoryBot.create_for_repository(:coin,
                                               numismatic_collection: "numismatic collection")
-      change_set = DynamicChangeSet.new(coin)
+      change_set = ChangeSet.for(coin)
       change_set_persister.save(change_set: change_set)
 
       get :edit, params: { id: resource.id.to_s }

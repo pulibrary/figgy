@@ -155,7 +155,7 @@ class CatalogController < ApplicationController
     authorize! :show, resource
 
     set_parent_document
-    @change_set = DynamicChangeSet.new(resource)
+    @change_set = ChangeSet.for(resource)
     @change_set.prepopulate!
   end
 

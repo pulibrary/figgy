@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class ScannedResourcesController < BaseResourceController
-  self.change_set_class = DynamicChangeSet
   self.resource_class = ScannedResource
   self.change_set_persister = ::ChangeSetPersister.new(
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
@@ -12,14 +11,6 @@ class ScannedResourcesController < BaseResourceController
     handle_save_and_ingest(obj)
   end
 
-  def change_set_class
-    if change_set_param.present?
-      DynamicChangeSet.class_from_param(change_set_param)
-    else
-      DynamicChangeSet
-    end
-  end
-
   def handle_save_and_ingest(obj)
     return unless params[:commit] == "Save and Ingest"
     locator = IngestFolderLocator.new(id: params[:scanned_resource][:source_metadata_identifier], search_directory: ingest_folder)
@@ -28,7 +19,7 @@ class ScannedResourcesController < BaseResourceController
 
   # View the structural metadata for a given repository resource
   def structure
-    @change_set = change_set_class.new(find_resource(params[:id])).prepopulate!
+    @change_set = ChangeSet.for(find_resource(params[:id]), change_set_param: change_set_param).prepopulate!
     authorize! :structure, @change_set.resource
     @logical_order = (Array(@change_set.logical_structure).first || Structure.new).decorate
     members = Wayfinder.for(@change_set.resource).members_with_parents
@@ -51,7 +42,7 @@ class ScannedResourcesController < BaseResourceController
   end
 
   def pdf
-    change_set = change_set_class.new(find_resource(params[:id]))
+    change_set = ChangeSet.for(find_resource(params[:id]), change_set_param: change_set_param)
     authorize! :pdf, change_set.resource
     pdf_file = PDFService.new(change_set_persister).find_or_generate(change_set)
 
@@ -77,7 +68,7 @@ class ScannedResourcesController < BaseResourceController
     end
 
     def ingest_folder
-      if change_set_class.eql? RecordingChangeSet
+      if change_set_param.eql? "recording"
         "music"
       else
         Figgy.config["default_search_directory"]

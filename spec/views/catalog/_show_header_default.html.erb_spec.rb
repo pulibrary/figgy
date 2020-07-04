@@ -9,7 +9,7 @@ RSpec.describe "catalog/_show_header_default.html.erb" do
     end
     it "doesn't show a claim button" do
       resource = FactoryBot.create_for_repository(:scanned_resource)
-      change_set = DynamicChangeSet.new(resource)
+      change_set = ChangeSet.for(resource)
       assign :change_set, change_set
 
       render partial: "catalog/show_header_default", locals: { resource: resource, document: {} }
@@ -24,7 +24,7 @@ RSpec.describe "catalog/_show_header_default.html.erb" do
     end
     it "shows a claim button" do
       resource = FactoryBot.create_for_repository(:scanned_resource)
-      change_set = DynamicChangeSet.new(resource)
+      change_set = ChangeSet.for(resource)
       assign :change_set, change_set
 
       render partial: "catalog/show_header_default", locals: { resource: resource, document: {} }
@@ -33,7 +33,7 @@ RSpec.describe "catalog/_show_header_default.html.erb" do
     end
     it "shows a claim button if already claimed by someone else" do
       resource = FactoryBot.create_for_repository(:scanned_resource, claimed_by: "Michaelangelo")
-      change_set = DynamicChangeSet.new(resource)
+      change_set = ChangeSet.for(resource)
       assign :change_set, change_set
 
       render partial: "catalog/show_header_default", locals: { resource: resource, document: {} }
@@ -42,7 +42,7 @@ RSpec.describe "catalog/_show_header_default.html.erb" do
     end
     it "shows an Unclaim button if claimed by them" do
       resource = FactoryBot.create_for_repository(:scanned_resource, claimed_by: user.uid)
-      change_set = DynamicChangeSet.new(resource)
+      change_set = ChangeSet.for(resource)
       assign :change_set, change_set
 
       render partial: "catalog/show_header_default", locals: { resource: resource, document: {} }

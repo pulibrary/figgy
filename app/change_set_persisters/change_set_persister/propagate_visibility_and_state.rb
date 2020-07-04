@@ -20,7 +20,7 @@ class ChangeSetPersister
       return if collection_record
       return if numismatics_issue
       members.each do |member|
-        resource_change_set = DynamicChangeSet.new(member)
+        resource_change_set = ChangeSet.for(member)
         resource_change_set = propagate_visibility(resource_change_set)
         resource_change_set = propagate_state_for_related(resource_change_set)
         # we need to save these through the change set persister so the member
@@ -52,7 +52,7 @@ class ChangeSetPersister
       # @return [BaseWorkflow]
       def related_workflow(related_resource)
         related_resource_state = Array.wrap(related_resource.state).first
-        DynamicChangeSet.new(related_resource).workflow_class.new(related_resource_state)
+        ChangeSet.for(related_resource).workflow_class.new(related_resource_state)
       end
 
       # Retrieve all possible valid workflow states for a resource

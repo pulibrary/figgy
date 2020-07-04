@@ -3,7 +3,6 @@ module Numismatics
   class CoinsController < BaseResourceController
     include OrangelightDocumentController
 
-    self.change_set_class = DynamicChangeSet
     self.resource_class = Numismatics::Coin
     self.change_set_persister = ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
@@ -77,7 +76,7 @@ module Numismatics
     end
 
     def pdf
-      change_set = change_set_class.new(find_resource(params[:id]))
+      change_set = ChangeSet.for(find_resource(params[:id]))
       authorize! :pdf, change_set.resource
       pdf_file = PDFService.new(change_set_persister).find_or_generate(change_set)
 

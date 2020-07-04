@@ -10,7 +10,7 @@ class ChangeSetPersister
     def run
       return unless resource.is_a?(FileSet) && resource.try(:original_file) && parent
       tombstone = Tombstone.new
-      tombstone_change_set = DynamicChangeSet.new(tombstone)
+      tombstone_change_set = ChangeSet.for(tombstone)
       tombstone_change_set.validate(attributes)
       change_set_persister.save(change_set: tombstone_change_set)
     end

@@ -3,7 +3,7 @@ class DeleteResourceJob < ApplicationJob
   def perform(id)
     resource = metadata_adapter.query_service.find_by(id: Valkyrie::ID.new(id))
     indexing_adapter.persister.delete(resource: resource)
-    change_set_persister.delete(change_set: DynamicChangeSet.new(resource))
+    change_set_persister.delete(change_set: ChangeSet.for(resource))
   end
 
   def indexing_adapter

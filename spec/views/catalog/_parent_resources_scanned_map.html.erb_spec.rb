@@ -7,7 +7,7 @@ RSpec.describe "catalog/_parent_resources_scanned_map" do
     let(:parent) { FactoryBot.create_for_repository(:scanned_map, title: "parent map", rights_statement: "y", member_ids: [child.id]) }
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: child) }
     let(:solr_document) { SolrDocument.new(document) }
-    let(:change_set) { DynamicChangeSet.new(solr_document.resource) }
+    let(:change_set) { ChangeSet.for(solr_document.resource) }
     before do
       parent
       assign :document, solr_document

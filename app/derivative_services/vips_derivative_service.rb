@@ -75,7 +75,7 @@ class VIPSDerivativeService
   end
 
   def change_set
-    @change_set ||= DynamicChangeSet.new(resource)
+    @change_set ||= ChangeSet.for(resource)
   end
 
   def run_derivatives
@@ -169,7 +169,7 @@ class VIPSDerivativeService
     def cleanup_derivative_metadata(derivatives:)
       resource.file_metadata = resource.file_metadata.reject { |file| derivatives.include?(file.id) }
       resource.file_metadata.map { |fm| fm.error_message = [] }
-      updated_change_set = DynamicChangeSet.new(resource)
+      updated_change_set = ChangeSet.for(resource)
       change_set_persister.buffer_into_index do |buffered_persister|
         buffered_persister.save(change_set: updated_change_set)
       end
@@ -182,7 +182,7 @@ class VIPSDerivativeService
     # Updates error message property on the original file.
     def update_error_message(message:)
       target_file.error_message = [message]
-      updated_change_set = DynamicChangeSet.new(resource)
+      updated_change_set = ChangeSet.for(resource)
       change_set_persister.buffer_into_index do |buffered_persister|
         buffered_persister.save(change_set: updated_change_set)
       end

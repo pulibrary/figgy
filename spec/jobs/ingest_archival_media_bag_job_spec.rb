@@ -65,7 +65,7 @@ RSpec.describe IngestArchivalMediaBagJob do
 
   describe "visibility settings" do
     before do
-      cs = DynamicChangeSet.new(Collection.new(change_set: "archival_media_collection"))
+      cs = ChangeSet.for(Collection.new(change_set: "archival_media_collection"))
       cs.validate(source_metadata_identifier: collection_cid, visibility: vis_auth, slug: "test-collection")
       change_set_persister.save(change_set: cs)
       described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
@@ -184,7 +184,7 @@ RSpec.describe IngestArchivalMediaBagJob do
   context "when you're ingesting to a collection you've already created" do
     before do
       # create the collection
-      cs = DynamicChangeSet.new(Collection.new(change_set: "archival_media_collection"))
+      cs = ChangeSet.for(Collection.new(change_set: "archival_media_collection"))
       cs.validate(source_metadata_identifier: collection_cid, slug: "test-collection")
       change_set_persister.save(change_set: cs)
       # ingest to the same collection_cid
@@ -211,7 +211,7 @@ RSpec.describe IngestArchivalMediaBagJob do
   context "when another type of resource references the component ID" do
     before do
       # create the collection
-      cs = DynamicChangeSet.new(Collection.new(change_set: "archival_media_collection"))
+      cs = ChangeSet.for(Collection.new(change_set: "archival_media_collection"))
       cs.validate(source_metadata_identifier: collection_cid, slug: "test-collection")
       change_set_persister.save(change_set: cs)
       # create another resource with the same component id

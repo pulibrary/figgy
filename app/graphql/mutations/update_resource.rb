@@ -33,7 +33,7 @@ class Mutations::UpdateResource < Mutations::BaseMutation
   end
 
   def update_resource(resource, attributes)
-    change_set = DynamicChangeSet.new(resource)
+    change_set = ChangeSet.for(resource)
     change_set.validate(attributes)
     if change_set.valid? && valid_member_ids?(change_set, attributes)
       {

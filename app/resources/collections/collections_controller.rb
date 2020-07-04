@@ -4,7 +4,6 @@ require "csv"
 class CollectionsController < ApplicationController
   include ResourceController
   include TokenAuth
-  self.change_set_class = DynamicChangeSet
   self.resource_class = Collection
   self.change_set_persister = ::ChangeSetPersister.new(
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
@@ -40,14 +39,6 @@ class CollectionsController < ApplicationController
         send_data ark_csv(@records),
                   filename: "ark-report-#{@collection.title.parameterize}-#{Time.zone.today}.csv"
       end
-    end
-  end
-
-  def change_set_class
-    if params[:change_set].present? || (resource_params && resource_params[:change_set].present?)
-      DynamicChangeSet.class_from_param(params[:change_set] || resource_params[:change_set])
-    else
-      DynamicChangeSet
     end
   end
 

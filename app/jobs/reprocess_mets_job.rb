@@ -11,7 +11,7 @@ class ReprocessMetsJob < ApplicationJob
         next unless mets_fileset
         mets_file = Valkyrie::StorageAdapter.find_by(id: mets_fileset.original_file.file_identifiers.first)
         mets_document = METSDocument::Factory.new(mets_file.disk_path).new
-        change_set = DynamicChangeSet.new(member)
+        change_set = ChangeSet.for(member)
         change_set.validate(mets_document.attributes)
         buffered_adapter.save(change_set: change_set)
       end

@@ -53,7 +53,7 @@ class NumismaticsImportService
 
       resource = klass.new
 
-      change_set = DynamicChangeSet.new(resource)
+      change_set = ChangeSet.for(resource)
 
       # This was affecting testing Coin imports
       attributes[:ruler_id] = Array.wrap(attributes[:ruler_id]) if attributes.key?(:ruler_id)
@@ -231,7 +231,7 @@ class NumismaticsImportService
         next if ids.empty?
 
         change_set_persister.buffer_into_index do |buffered_change_set_persister|
-          change_set = DynamicChangeSet.new(resource)
+          change_set = ChangeSet.for(resource)
           change_set.member_ids = ids
           buffered_change_set_persister.save(change_set: change_set)
         end
@@ -405,7 +405,7 @@ class NumismaticsImportService
 
       # Add child coins
       change_set_persister.buffer_into_index do |buffered_change_set_persister|
-        change_set = DynamicChangeSet.new(resource)
+        change_set = ChangeSet.for(resource)
         change_set.member_ids = coin_ids
         buffered_change_set_persister.save(change_set: change_set)
       end

@@ -114,7 +114,7 @@ RSpec.describe DownloadsController do
         change_set_persister = ScannedResourcesController.change_set_persister
         file_set = FactoryBot.create_for_repository(:file_set)
         file = fixture_file_upload("files/hls_playlist.m3u8", "application/x-mpegURL")
-        change_set = DynamicChangeSet.new(file_set)
+        change_set = ChangeSet.for(file_set)
         change_set.files = [file]
         output = change_set_persister.save(change_set: change_set)
 
@@ -161,7 +161,7 @@ RSpec.describe DownloadsController do
         change_set_persister = ScannedResourcesController.change_set_persister
         file_set = FactoryBot.create_for_repository(:file_set)
         file = fixture_file_upload("files/hls_playlist.m3u8", "application/x-mpegURL")
-        change_set = DynamicChangeSet.new(file_set)
+        change_set = ChangeSet.for(file_set)
         change_set.files = [file]
         output = change_set_persister.save(change_set: change_set)
 
