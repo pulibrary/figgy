@@ -31,7 +31,7 @@ module CDL
     end
 
     def charged_item
-      charge_manager.charged_items.find do |charged_item|
+      @charged_item ||= charge_manager.charged_items.find do |charged_item|
         charged_item.netid == user.uid
       end
     end
