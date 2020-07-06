@@ -101,6 +101,7 @@ describe CDL::ChargeManager do
 
         charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
 
+        expect(charge_manager.eligible?).to eq false
         expect(charge_manager.available_for_charge?).to eq false
       end
     end
@@ -113,6 +114,7 @@ describe CDL::ChargeManager do
 
         charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
 
+        expect(charge_manager.eligible?).to eq true
         expect(charge_manager.available_for_charge?).to eq true
       end
     end
@@ -129,6 +131,7 @@ describe CDL::ChargeManager do
         FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items)
 
         charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+        expect(charge_manager.eligible?).to eq true
         expect(charge_manager.available_for_charge?).to eq true
       end
     end
@@ -146,6 +149,7 @@ describe CDL::ChargeManager do
         FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items)
 
         charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+        expect(charge_manager.eligible?).to eq true
         expect(charge_manager.available_for_charge?).to eq false
       end
     end

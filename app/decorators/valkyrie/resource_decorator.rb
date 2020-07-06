@@ -141,6 +141,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   def downloadable?
     return false unless respond_to?(:downloadable)
     return visible? && public_readable_state? if downloadable.nil?
+    return false unless visible?
 
     downloadable&.include?("public")
   end

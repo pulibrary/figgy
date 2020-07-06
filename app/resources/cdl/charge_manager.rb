@@ -13,12 +13,16 @@ module CDL
       clear_expired_charges
     end
 
+    def eligible?
+      item_ids.present?
+    end
+
     def clear_expired_charges
       resource_charge_list.charged_items = resource_charge_list.charged_items.reject(&:expired?)
     end
 
     def available_for_charge?
-      return false unless item_ids.present?
+      return false unless eligible?
       resource_charge_list.charged_items.count < item_ids.count
     end
 
@@ -36,7 +40,7 @@ module CDL
     end
 
     def item_ids
-      eligible_item_service.item_ids(source_metadata_identifier: resource.source_metadata_identifier&.first)
+      eligible_item_service.item_ids(source_metadata_identifier: resource.try(:source_metadata_identifier)&.first)
     end
 
     def resource_charge_list
