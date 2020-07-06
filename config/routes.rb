@@ -299,6 +299,7 @@ Rails.application.routes.draw do
   resources :cdl, controller: "cdl/cdl", only: [] do
     member do
       get :status, defaults: { format: :json }
+      post :charge
     end
   end
 end

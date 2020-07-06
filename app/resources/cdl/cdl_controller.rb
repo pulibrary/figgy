@@ -6,6 +6,21 @@ module Cdl
       @charge_manager = charge_manager(params[:id])
       render json: CDL::Status.new(charge_manager: @charge_manager, user: current_user)
     end
+
+    def charge
+      return forbidden unless current_user
+      @charge_manager = charge_manager(params[:id])
+      @charge_manager.create_charge(netid: current_user.uid)
+      redirect_to auth_viewer_path(params[:id])
+    rescue CDL::UnavailableForCharge
+      flash[:alert] = "This item is not currently available for check out."
+      redirect_to auth_viewer_path(params[:id])
+    end
+
+    def forbidden
+      head :forbidden
+    end
+
     def charge_manager(resource_id)
       CDL::ChargeManager.new(
         resource_id: resource_id,
