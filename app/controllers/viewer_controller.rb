@@ -9,12 +9,12 @@ class ViewerController < ApplicationController
   end
 
   def auth
-    resource = query_service.find_by(id: params[:id])
-    return redirect_to_viewer(resource) if current_user
-    if can?(:discover, resource)
+    @charge_manager = CDL::ChargeManager.new(resource_id: params[:id], eligible_item_service: CDL::EligibleItemService, change_set_persister: change_set_persister)
+    return redirect_to_viewer(@charge_manager.resource) if current_user
+    if can?(:discover, @charge_manager.resource)
       render :auth
     else
-      redirect_to_viewer(resource)
+      redirect_to_viewer(@charge_manager.resource)
     end
   end
 
@@ -26,8 +26,11 @@ class ViewerController < ApplicationController
     ManifestBuilder::ManifestHelper.new
   end
 
-  def query_service
-    Valkyrie.config.metadata_adapter.query_service
+  def change_set_persister
+    ChangeSetPersister.new(
+      metadata_adapter: Valkyrie.config.metadata_adapter,
+      storage_adapter: Valkyrie.config.storage_adapter
+    )
   end
 
   private
