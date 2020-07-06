@@ -5,6 +5,7 @@ module CDL
   class UnavailableForCharge < StandardError; end
   class ChargeManager
     attr_reader :resource_id, :eligible_item_service, :change_set_persister
+    delegate :charged_items, to: :resource_charge_list
     # TODO: default eligible_item_service from #4033
     def initialize(resource_id:, eligible_item_service:, change_set_persister:)
       @resource_id = resource_id

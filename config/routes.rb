@@ -295,4 +295,10 @@ Rails.application.routes.draw do
       get :auth
     end
   end
+
+  resources :cdl, controller: "cdl/cdl", only: [] do
+    member do
+      get :status, defaults: { format: :json }
+    end
+  end
 end
