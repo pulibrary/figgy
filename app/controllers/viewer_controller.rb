@@ -10,11 +10,22 @@ class ViewerController < ApplicationController
 
   def auth
     @charge_manager = CDL::ChargeManager.new(resource_id: params[:id], eligible_item_service: CDL::EligibleItemService, change_set_persister: change_set_persister)
-    return redirect_to_viewer(@charge_manager.resource) if current_user
+    return cdl_check(@charge_manager) if current_user
     if can?(:discover, @charge_manager.resource)
       render :auth
     else
       redirect_to_viewer(@charge_manager.resource)
+    end
+  end
+
+  def cdl_check(charge_manager)
+    if can?(:read, charge_manager.resource)
+      redirect_to_viewer(charge_manager.resource)
+    elsif charge_manager.eligible?
+      render :cdl_checkout
+    else
+      # This only happens if the user has manually gone to this URL.
+      redirect_to_viewer(charge_manager.resource)
     end
   end
 

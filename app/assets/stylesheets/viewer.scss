@@ -13,6 +13,14 @@ body {
   width: 100%;
   height: 100%;
 }
+#cdl-notice {
+  overflow-y: auto;
+  height: 100%;
+  max-width: 1000px;
+  margin-top: 60px;
+  margin-left: auto;
+  margin-right: auto;
+}
 h1 {
   font-family: "Dejavu Sans", "Arial Unicode MS", Helvetica, sans-serif;
   color: #337ab7;
