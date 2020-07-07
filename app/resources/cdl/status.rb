@@ -2,9 +2,9 @@
 
 module CDL
   class Status
-    attr_reader :resource, :user
-    def initialize(resource:, user:)
-      @resource = resource
+    attr_reader :charge_manager, :user
+    def initialize(charge_manager:, user:)
+      @charge_manager = charge_manager
       @user = user
     end
 
@@ -38,21 +38,6 @@ module CDL
 
     def available_status
       charge_manager.available_for_charge?
-    end
-
-    def charge_manager
-      @charge_manager ||= CDL::ChargeManager.new(
-        resource_id: resource.id,
-        eligible_item_service: CDL::EligibleItemService,
-        change_set_persister: change_set_persister
-      )
-    end
-
-    def change_set_persister
-      ChangeSetPersister.new(
-        metadata_adapter: Valkyrie.config.metadata_adapter,
-        storage_adapter: Valkyrie.config.storage_adapter
-      )
     end
   end
 end
