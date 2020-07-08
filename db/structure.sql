@@ -49,7 +49,7 @@ CREATE FUNCTION public.get_ids_array(jsonb, text) RETURNS text[]
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_table_access_method = heap;
 
 --
 -- Name: active_storage_attachments; Type: TABLE; Schema: public; Owner: -
@@ -1006,11 +1006,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200225213135'),
 ('20200422192849'),
 ('20200423183539'),
-('20200605213204'),
-('20200605214148'),
-('20200605215751'),
-('20200608044923'),
-('20200608055833'),
 ('20200608160046');
 
 

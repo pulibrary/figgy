@@ -11,6 +11,9 @@ module Cdl
       return forbidden unless current_user
       @charge_manager = charge_manager(params[:id])
       @charge_manager.create_charge(netid: current_user.uid)
+      # pass the current_user netid to the CDL::EventLogging
+      #@patron_group = CDL::EventLogging.get_patron_group(netid: current_user.uid)
+      @charge_event = CDL::EventLogging.google_charge_event(netid: current_user.uid, params[:id])
       redirect_to auth_viewer_path(params[:id])
     rescue CDL::UnavailableForCharge
       flash[:alert] = "This item is not currently available for check out."
