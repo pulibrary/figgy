@@ -30,9 +30,22 @@ export default class CDLTimer {
     if (oldElement !== null) { oldElement.parentNode.removeChild(oldElement) }
     const timeElement = document.createElement('div')
     timeElement.setAttribute('id', 'remaining-time')
-    timeElement.innerHTML = `Remaining Checkout Time: ${this.remainingTimeString(remainingTime)}`
+    timeElement.innerHTML = this.timeString(remainingTime)
     const uvPane = document.getElementById('uv').firstChild
     uvPane.insertBefore(timeElement, uvPane.firstChild)
+  }
+
+  timeString (remainingSeconds) {
+    if (remainingSeconds > 300) {
+      return `Expires At: ${this.localExpireTime}`
+    } else {
+      return `Remaining Checkout Time: ${this.remainingTimeString(remainingSeconds)}`
+    }
+  }
+
+  get localExpireTime () {
+    const expiresDate = new Date(this.status.expires_at * 1000)
+    return expiresDate.toLocaleTimeString()
   }
 
   remainingTimeString (seconds) {
