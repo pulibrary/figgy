@@ -1,7 +1,6 @@
 export default class CDLTimer {
   constructor (figgyId) {
     this.figgyId = figgyId
-    this.initializeTimer()
   }
 
   // Check time every second.

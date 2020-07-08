@@ -33,6 +33,7 @@ export default class UVManager {
       embedded: true
     }, this.urlDataProvider)
     this.cdlTimer = new CDLTimer(this.figgyId)
+    this.cdlTimer.initializeTimer()
   }
 
   requestAuth (data, status) {
