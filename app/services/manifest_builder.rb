@@ -269,16 +269,16 @@ class ManifestBuilder
       end
 
       ##
-      # Checks a mime_type against a blacklist
+      # Checks a mime_type against an ignore list
       # @return [TrueClass, FalseClass]
       def leaf_node_mime_type?(mime_type)
-        blacklist = [
+        ignore_list = [
           "application/xml",
           "application/xml; schema=mets",
           "application/xml; schema=mods",
           "application/xml; schema=pbcore"
         ]
-        (blacklist & Array.wrap(mime_type)).empty?
+        (ignore_list & Array.wrap(mime_type)).empty?
       end
 
       ##

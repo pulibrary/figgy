@@ -29,7 +29,7 @@ class Reindexer
     @batch_size = batch_size
   end
 
-  def reindex_all(except_models: blacklisted_models)
+  def reindex_all(except_models: excluded_models)
     wipe_records if wipe
     logger.info "Reindexing all records (except #{except_models.to_sentence})"
     progress_bar
@@ -47,7 +47,7 @@ class Reindexer
   end
 
   def reindex_works
-    reindex_all(except_models: blacklisted_models + ["FileSet"])
+    reindex_all(except_models: excluded_models + ["FileSet"])
   end
 
   def run_individual_retries(records, progress_bar)
@@ -76,7 +76,7 @@ class Reindexer
     solr_adapter.persister.save(resource: record)
   end
 
-  def blacklisted_models
+  def excluded_models
     [
       ProcessedEvent,
       Event
