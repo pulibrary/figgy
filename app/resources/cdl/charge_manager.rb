@@ -4,6 +4,7 @@
 module CDL
   class UnavailableForCharge < StandardError; end
   class ChargeManager
+    include ActionView::Helpers::DateHelper
     attr_reader :resource_id, :eligible_item_service, :change_set_persister
     delegate :charged_items, to: :resource_charge_list
     # TODO: default eligible_item_service from #4033
@@ -25,6 +26,12 @@ module CDL
     def available_for_charge?
       return false unless eligible?
       resource_charge_list.charged_items.count < item_ids.count
+    end
+
+    def estimated_wait_time
+      return if available_for_charge?
+      earliest = charged_items.flat_map(&:expiration_time).sort.first
+      distance_of_time_in_words(Time.current - earliest)
     end
 
     def create_charge(netid:)

@@ -154,4 +154,22 @@ describe CDL::ChargeManager do
       end
     end
   end
+
+  describe "#estimated_wait_time" do
+    it "uses the rails estimator" do
+      charged_items = [
+        CDL::ChargedItem.new(item_id: "1234", netid: "skye", expiration_time: Time.current + 1.hour + 20.minutes),
+        CDL::ChargedItem.new(item_id: "5678", netid: "zelda", expiration_time: Time.current + 3.hours)
+      ]
+      eligible_item_service = EligibleItemService.new(item_ids: ["1234", "5678"])
+      stub_bibdata(bib_id: "123456")
+      resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
+
+      FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items)
+
+      charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+
+      expect(charge_manager.estimated_wait_time.to_s).to eq "about 1 hour"
+    end
+  end
 end

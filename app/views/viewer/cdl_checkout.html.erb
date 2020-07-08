@@ -1,0 +1,19 @@
+<% content_for :head do %>
+  <%= stylesheet_link_tag 'application' %>
+  <%= stylesheet_pack_tag 'application' %>
+<% end %>
+<div id="cdl-notice">
+  <p>This Item may be protected by third-party copyright and/or related intellectual property rights. It is provided by Princeton University Library on a non-commercial basis for your personal fair-use academic and educational research purposes only. For other uses, you must obtain permission from the rights-holder. In addition, you may not make copies of the Item, display it online (e.g., on the internet), or distribute it to anyone else, including friends, colleagues, or classmates. By continuing to use this digital resource you are acknowledging and agree to comply with these terms of use. For additional details, see the following Copyright Notice.</p>
+
+  <h2>NOTICE WARNING CONCERNING COPYRIGHT RESTRICTIONS</h2>
+
+  <p>The copyright law of the United States (title 17, United States Code) governs the making of photocopies or other reproductions of copyrighted material.</p>
+
+  <p>Under certain conditions specified in the law, libraries and archives are authorized to furnish a photocopy or other reproduction. One of these specific conditions is that the photocopy or reproduction is not to be “used for any purpose other than private study, scholarship, or research.” If a user makes a request for, or later uses, a photocopy or reproduction for purposes in excess of “fair use,” that user may be liable for copyright infringement.</p>
+
+  <p>This institution reserves the right to refuse to accept a copying order if, in its judgment, fulfillment of the order would involve violation of copyright law.</p>
+  <%= button_to "Check Out", { action: "charge", controller: "cdl/cdl" }, class: "btn btn-primary", disabled: !@charge_manager.available_for_charge?, params: { id: params[:id] } %>
+  <% if !@charge_manager.available_for_charge? %>
+    <b>This item is currently checked out. The estimated wait time is <%= @charge_manager.estimated_wait_time %>.</b>
+  <% end %>
+</div>
