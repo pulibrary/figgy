@@ -30,11 +30,11 @@ describe('CDLTimer', () => {
     })
 
     it('updates the expire time', async () => {
-       document.body.innerHTML =
+      document.body.innerHTML =
         '<div id="uv">' +
         '  <div>' +
-        '  </div>'
-        '</div>';
+        '  </div>' +
+      '</div>'
 
       const json = {
         'charged': true,
@@ -61,11 +61,11 @@ describe('CDLTimer', () => {
       })
       global.fetch = jest.fn().mockImplementation(() => mockFetchPromise)
 
-      jest.spyOn(window.location, 'reload').mockImplementation( () => true)
+      jest.spyOn(window.location, 'reload').mockImplementation(() => true)
 
       const timer = new CDLTimer('b627a6ce-6717-4dd0-a16a-7a0c0b8a5788')
       await timer.initializeTimer()
-      expect(window.location.reload).toHaveBeenCalled
+      expect(window.location.reload).toHaveBeenCalled()
     })
   })
 })
