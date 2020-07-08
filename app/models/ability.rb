@@ -162,7 +162,7 @@ class Ability
   def cdl_readable?(obj)
     resource_charge_list = Wayfinder.for(obj).try(:resource_charge_list)
     return false unless resource_charge_list
-    resource_charge_list.charged_items.map(&:netid).include?(current_user.uid)
+    resource_charge_list.charged_items.reject(&:expired?).map(&:netid).include?(current_user.uid)
   end
 
   def cdl_eligible?(obj)
