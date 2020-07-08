@@ -34,7 +34,7 @@ class SearchBuilder < Blacklight::SearchBuilder
     WorkflowRegistry.all_states - unreadable_states
   end
 
-  # This is a blacklist of models that should not be presented in search results
+  # This is a list of models that should not be presented in search results
   def models_to_solr_clause
     [
       FileMetadata,

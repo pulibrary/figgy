@@ -6,7 +6,7 @@ class BulkUpdateJob < ApplicationJob
         resource = query_service.find_by(id: id)
         change_set = ChangeSet.for(resource)
         attributes = {}.tap do |attrs|
-          attrs[:state] = "complete" if args[:mark_complete] && !blacklisted_states.include?(resource.state.first)
+          attrs[:state] = "complete" if args[:mark_complete] && !deny_states.include?(resource.state.first)
           BulkUpdateJob.supported_attributes.each do |key|
             attrs[key] = args[key] if args[key]
           end
@@ -31,7 +31,7 @@ class BulkUpdateJob < ApplicationJob
 
   private
 
-    def blacklisted_states
+    def deny_states
       [
         "complete",
         "takedown"
