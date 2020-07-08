@@ -1,4 +1,5 @@
 /* global UV, $, createUV */
+import CDLTimer from 'viewer/cdl_timer'
 export default class UVManager {
   initialize () {
     this.bindLogin()
@@ -31,15 +32,19 @@ export default class UVManager {
       xywh: this.urlDataProvider.get('xywh', ''),
       embedded: true
     }, this.urlDataProvider)
+    this.cdlTimer = new CDLTimer(this.figgyId)
   }
 
   requestAuth (data, status) {
     if (data.status === 401) {
       if (this.manifest.includes(window.location.host)) {
-        const figgyId = this.manifest.replace('/manifest', '').replace(/.*\//, '')
-        window.location.href = '/viewer/' + figgyId + '/auth'
+        window.location.href = '/viewer/' + this.figgyId + '/auth'
       }
     }
+  }
+
+  get figgyId () {
+    return this.manifest.replace('/manifest', '').replace(/.*\//, '')
   }
 
   get configURI () {
