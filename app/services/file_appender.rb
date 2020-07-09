@@ -27,16 +27,16 @@ class FileAppender
   def append_to(resource)
     return [] if files.empty?
     return file_set_append_to(resource) if file_set?(resource)
-
+    resource_append_to(resource)
+  end
+  
+  def resource_append_to(resource)
     # Update the files for the resource if they have already been appended
     updated_files = update_files(resource)
     return updated_files unless updated_files.empty?
 
     # Persist new files for the resource if there are none to update
     file_resources = FileResources.new(build_file_sets(resource) || file_nodes)
-
-    # Append the array of file metadata values to any FileSets with new FileNodes being appended
-    resource.file_metadata += file_resources.file_metadata if file_set?(resource)
 
     # If this resource can be viewed (e. g. has thumbnails), retrieve and set the resource thumbnail ID to the appropriate FileNode
     if viewable_resource?(resource)
@@ -57,24 +57,10 @@ class FileAppender
     updated_files = update_files(resource)
     return updated_files unless updated_files.empty?
 
-    # Persist new files for the resource if there are none to update
-    file_resources = FileResources.new(build_file_sets(resource) || file_nodes)
-
     # Append the array of file metadata values to any FileSets with new FileNodes being appended
-    resource.file_metadata += file_resources.file_metadata if file_set?(resource)
+    resource.file_metadata += file_nodes
 
-    # If this resource can be viewed (e. g. has thumbnails), retrieve and set the resource thumbnail ID to the appropriate FileNode
-    if viewable_resource?(resource)
-      resource.member_ids += file_resources.ids
-      # Set the thumbnail id if a valid file resource is found
-      thumbnail_id = find_thumbnail_id(resource, file_resources)
-      resource.thumbnail_id = thumbnail_id if thumbnail_id
-    end
-
-    # Update the state of the pending uploads for this resource
-    adjust_pending_uploads(resource)
-
-    file_resources
+    file_nodes
   end
 
   private
