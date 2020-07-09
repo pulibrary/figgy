@@ -25,7 +25,6 @@ Metrics/AbcSize:
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
     - 'app/models/ability.rb'
-    - 'app/services/file_appender.rb'
     - 'app/services/pdf_generator.rb'
     - 'app/jobs/ingest_mets_job.rb'
     - 'app/jobs/ingest_intermediate_file_job.rb'
@@ -112,7 +111,6 @@ Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/helpers/application_helper.rb'
     - 'app/models/concerns/linked_data/linked_resource_factory.rb'
-    - 'app/services/file_appender.rb'
     - 'app/services/pdf_generator/canvas.rb'
     - 'app/jobs/ingest_intermediate_file_job.rb'
     - 'app/services/pul_metadata_services/bib_record.rb'
