@@ -37,6 +37,7 @@ Metrics/AbcSize:
     - 'app/utils/data_seeder.rb'
     - 'app/exporters/hathi/submission_information_package.rb'
     - 'app/jobs/browse_everything_ingest_job.rb'
+    - 'app/services/file_appender.rb'
 Metrics/BlockLength:
   Exclude:
     - '**/*.rake'
