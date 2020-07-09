@@ -26,29 +26,41 @@ class FileAppender
   # @return [Array<FileNode>] the updated or newly created FileNodes
   def append_to(resource)
     return [] if files.empty?
+    return file_set_append_to(resource) if file_set?(resource)
+    resource_append_to(resource)
+  end
 
+  def resource_append_to(resource)
     # Update the files for the resource if they have already been appended
     updated_files = update_files(resource)
     return updated_files unless updated_files.empty?
 
-    # Persist new files for the resource if there are none to update
-    file_resources = FileResources.new(build_file_sets(resource) || file_nodes)
-
-    # Append the array of file metadata values to any FileSets with new FileNodes being appended
-    resource.file_metadata += file_resources.file_metadata if file_set?(resource)
+    file_sets = build_file_sets(resource)
 
     # If this resource can be viewed (e. g. has thumbnails), retrieve and set the resource thumbnail ID to the appropriate FileNode
     if viewable_resource?(resource)
-      resource.member_ids += file_resources.ids
+      resource.member_ids += file_sets.map(&:id)
       # Set the thumbnail id if a valid file resource is found
-      thumbnail_id = find_thumbnail_id(resource, file_resources)
+      thumbnail_id = find_thumbnail_id(resource, file_sets)
       resource.thumbnail_id = thumbnail_id if thumbnail_id
     end
 
     # Update the state of the pending uploads for this resource
     adjust_pending_uploads(resource)
 
-    file_resources
+    file_sets
+  end
+
+  # A use case: adding derivatives to file sets
+  def file_set_append_to(resource)
+    # Update the files for the resource if they have already been appended
+    updated_files = update_files(resource)
+    return updated_files unless updated_files.empty?
+
+    # Append the array of file metadata values to any FileSets with new FileNodes being appended
+    resource.file_metadata += file_nodes
+
+    file_nodes
   end
 
   private
@@ -125,7 +137,7 @@ class FileAppender
     # Does *not* construct new Objects if derivatives are being processed
     # @return [Array<FileSet>]
     def build_file_sets(resource)
-      return if file_nodes.empty? || processing_derivatives?
+      return [] if file_nodes.empty?
       file_nodes.each_with_index.map do |node, index|
         file_set = create_file_set(resource, node, files[index])
         file_set
@@ -162,22 +174,14 @@ class FileAppender
     # @param resource [Resource]
     # @return [TrueClass, FalseClass]
     def file_set?(resource)
-      ResourceDetector.file_set?(resource)
+      resource.respond_to?(:file_metadata) && !resource.respond_to?(:member_ids)
     end
 
     # Determines if the resource being changed has a thumbnail
     # @param resource [Resource]
     # @return [TrueClass, FalseClass]
     def viewable_resource?(resource)
-      ResourceDetector.viewable_resource?(resource)
-    end
-
-    # Determine if derivatives are being processed for the new files
-    # Checks if the first FileMetadata node for new files is not the master file
-    # (Master files are ordered first when the processing is finished)
-    # @return [TrueClass, FalseClass]
-    def processing_derivatives?
-      !file_nodes.first.original_file?
+      resource.respond_to?(:member_ids) && resource.respond_to?(:thumbnail_id)
     end
 
     # Extensions for original_files that shouldn't be used as thumbnails.
@@ -186,12 +190,12 @@ class FileAppender
       [".xml"]
     end
 
-    # Returns a thumbnail id for a resource and a array of file_resources.
-    def find_thumbnail_id(resource, file_resources)
+    # Returns a thumbnail id for a resource and a array of file_sets.
+    def find_thumbnail_id(resource, file_sets)
       return unless resource.thumbnail_id.blank?
-      file_resources.each do |file_resource|
-        extension = File.extname(file_resource.original_file.original_filename.first)
-        return file_resource.id unless no_thumbail_extensions.include?(extension)
+      file_sets.each do |file_set|
+        extension = File.extname(file_set.original_file.original_filename.first)
+        return file_set.id unless no_thumbail_extensions.include?(extension)
       end
 
       nil
