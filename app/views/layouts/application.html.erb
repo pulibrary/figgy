@@ -33,7 +33,7 @@
     <meta name="google-site-verification" content="ahsnadaG77nHGY5J1JM9ZBi9yIjK8HkHUtGLRbKjkTc" />
     <%= stylesheet_link_tag 'application' %>
     <%= stylesheet_pack_tag 'application' %>
-    <%= render 'shared/matomo' if Rails.env.production? %>
+    <%= render 'shared/analytics' if Rails.env.production? %>
     <%= yield :head %>
   </head>
   <body>
