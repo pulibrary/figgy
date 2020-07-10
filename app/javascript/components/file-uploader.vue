@@ -1,7 +1,17 @@
 <template>
-  <dropzone ref="fileUploaderDropzone" id="dropzone" :options="dropzoneOptions" v-on:vdropzone-complete="uploadComplete" :useCustomSlot=true >
+  <dropzone
+    id="dropzone"
+    ref="fileUploaderDropzone"
+    :options="dropzoneOptions"
+    :use-custom-slot="true"
+    @vdropzone-complete="uploadComplete"
+    @vdropzone-sending="sendingEvent"
+    @vdropzone-complete-multiple="reloadPage"
+  >
     <div class="dropzone-custom-content">
-      <div class="dropzone-custom-title">Drag and drop PDFs here to upload</div>
+      <div class="dropzone-custom-title">
+        {{ infoString }}
+      </div>
     </div>
   </dropzone>
 </template>
@@ -15,6 +25,10 @@ export default {
     'dropzone': vue2Dropzone
   },
   props: {
+    infoString: {
+      type: String,
+      default: 'Drag and drop PDFs here to upload'
+    },
     csrfToken: {
       type: String,
       default: document.getElementsByName('csrf-token')[0].content
@@ -30,6 +44,18 @@ export default {
     uploadPath: {
       type: String,
       required: true
+    },
+    paramName: {
+      type: String,
+      default: 'file'
+    },
+    multiple: {
+      type: Boolean,
+      default: false
+    },
+    patch: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -39,7 +65,9 @@ export default {
         acceptedFiles: this.mimeTypes,
         createImageThumbnails: false,
         headers: { 'X-CSRF-Token': this.csrfToken },
-        url: this.uploadPath
+        url: this.uploadPath,
+        paramName: this.paramName,
+        uploadMultiple: this.multiple
       }
     }
   },
@@ -47,6 +75,14 @@ export default {
     uploadComplete (response) {
       // Remove file from dropzone UI
       this.$refs.fileUploaderDropzone.removeFile(response)
+    },
+    sendingEvent (file, xhr, formData) {
+      if (this.patch === true) {
+        formData.append('_method', 'patch')
+      }
+    },
+    reloadPage () {
+      window.location.reload()
     }
   }
 }
