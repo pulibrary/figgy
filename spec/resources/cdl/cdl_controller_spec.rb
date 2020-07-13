@@ -4,6 +4,10 @@ require "rails_helper"
 
 RSpec.describe Cdl::CdlController, type: :controller do
   describe "POST /cdl/:id/charge" do
+    before do
+      allow(CDL::EventLogging).to receive(:google_charge_event)
+    end
+
     context "when not logged in" do
       it "returns a 403 forbidden" do
         resource = FactoryBot.create_for_repository(:scanned_resource)

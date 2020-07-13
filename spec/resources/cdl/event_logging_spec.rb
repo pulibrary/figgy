@@ -17,22 +17,21 @@ RSpec.describe CDL::EventLogging do
       end
     end
   end
-  
+
   describe ".google_charge_event" do
-    let(:netid) {"abc123"}
-    let(:bibid) {"12345"}
+    let(:netid) { "abc123" }
+    let(:bibid) { "12345" }
     before do
       stub_request(:get, "https://bibdata.princeton.edu/patron/#{netid}")
         .to_return(status: 200,
                    body: file_fixture("bibdata/#{netid}.json").read, headers: { "Content-Type" => "application/json" })
-      stub_request(:get, "https://www.google-analytics.com/collect")
+      stub_request(:post, "https://www.google-analytics.com/collect")
+      allow(SecureRandom).to receive(:uuid).and_return("1")
     end
     it "sends an analytics google charge request" do
       described_class.google_charge_event(source_metadata_identifier: bibid, netid: netid)
-      expect(a_request(:post, "www.google-analytics.com/collect")
-      .with(body: {
-        "v"=>"1", "tid"=>"UA-15870237-29", "ua"=>"Figgy", "t"=>"event", "cid"=>"1","ec"=>"CDL-staff","ea"=>"charge", "el"=>"12345"
-      })).to have_been_made
+      expect(a_request(:post, "https://www.google-analytics.com/collect")
+      .with(body: "cid=1&ea=charge&ec=CDL-staff&el=12345&t=event&tid=UA-15870237-29&ua=Figgy&v=1")).to have_been_made
     end
   end
 end

@@ -13,6 +13,7 @@ describe CDL::ChargeManager do
         cached_item_ids
       end
     end
+    allow(CDL::EventLogging).to receive(:google_charge_event)
   end
 
   after do
@@ -59,6 +60,7 @@ describe CDL::ChargeManager do
           expect(charged_item).to be_a CDL::ChargedItem
           reloaded_charges = Valkyrie.config.metadata_adapter.query_service.find_by(id: resource_charge_list.id)
           expect(reloaded_charges.charged_items).to be_present
+          expect(CDL::EventLogging).to have_received(:google_charge_event).with(netid: "skye", source_metadata_identifier: "123456")
         end
       end
 
