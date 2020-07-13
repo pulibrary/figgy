@@ -31,10 +31,10 @@ module CDL
       def google_figgy_base
         Faraday.new(url: "https://www.google-analytics.com/collect?v=1&tid=UA-15870237-29&ua=Figgy&t=event")
       end
-      
+
       # track charge action
-      def google_charge_event(resource_id, netid)
-        self.google_figgy_base+"&#{cid: resource_id}ec=CDL-Charge&ea=charge&#{el: self.get_patron_group(netid: netid)}"
+      def google_charge_event(source_metadata_identifier:, netid:)
+        #self.google_figgy_base+"&#{cid: resource_id}ec=CDL-Charge&ea=charge&#{el: self.get_patron_group(netid: netid)}"
       end
 
       # track renewal action

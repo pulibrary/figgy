@@ -40,6 +40,7 @@ module CDL
       change_set = CDL::ResourceChargeListChangeSet.new(resource_charge_list)
       change_set.validate(charged_items: resource_charge_list.charged_items + [charge])
       change_set_persister.save(change_set: change_set)
+      @charge_event = CDL::EventLogging.google_charge_event(netid: current_user.uid, resource.try(:source_metadata_identifier)&.first)
       charge
     end
 
