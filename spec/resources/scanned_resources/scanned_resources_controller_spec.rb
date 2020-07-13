@@ -312,6 +312,18 @@ RSpec.describe ScannedResourcesController, type: :controller do
         end
       end
 
+      context "when uploading local files from the vue widget" do
+        let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+        it "works" do
+          sign_in user
+          resource = FactoryBot.create_for_repository(:scanned_resource)
+
+          patch :update, params: { id: resource.id.to_s, scanned_resource: { files: { "0" => file } } }
+
+          expect(Wayfinder.for(resource).members.first.title).to eq ["example.tif"]
+        end
+      end
+
       context "when updating logical structure" do
         it "works" do
           sign_in user

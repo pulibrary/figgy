@@ -153,7 +153,14 @@ module ResourceController
     def clean_params(h)
       return {} unless h
       h.map do |k, v|
-        v.respond_to?(:strip) ? [k, v.strip] : [k, v]
+        # The vue widget uploads files named scanned_resource[files][0] instead
+        # of scanned_resource[files][], this converts the resulting hash back to
+        # an array.
+        if k.to_s == "files" && v.is_a?(Hash)
+          [k, v.values]
+        else
+          v.respond_to?(:strip) ? [k, v.strip] : [k, v]
+        end
       end.to_h
     end
 
