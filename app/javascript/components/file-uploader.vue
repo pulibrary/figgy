@@ -27,7 +27,7 @@ export default {
   props: {
     infoString: {
       type: String,
-      default: 'Drag and drop PDFs here to upload'
+      default: 'Drag and drop files here to upload.'
     },
     csrfToken: {
       type: String,
