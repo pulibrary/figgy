@@ -37,7 +37,7 @@ module CDL
     end
 
     def available_status
-      charge_manager.available_for_charge?
+      charge_manager.available_for_charge?(netid: user.uid)
     end
   end
 end

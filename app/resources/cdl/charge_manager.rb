@@ -23,7 +23,7 @@ module CDL
       resource_charge_list.charged_items = resource_charge_list.charged_items.reject(&:expired?)
     end
 
-    def available_for_charge?
+    def available_for_charge?(netid: nil)
       return false unless eligible?
       resource_charge_list.charged_items.count < item_ids.count
     end
@@ -35,7 +35,7 @@ module CDL
     end
 
     def create_charge(netid:)
-      raise CDL::UnavailableForCharge unless available_for_charge?
+      raise CDL::UnavailableForCharge unless available_for_charge?(netid: netid)
       charge = CDL::ChargedItem.new(item_id: available_item_id, netid: netid, expiration_time: Time.current + 3.hours)
       change_set = CDL::ResourceChargeListChangeSet.new(resource_charge_list)
       change_set.validate(charged_items: resource_charge_list.charged_items + [charge])

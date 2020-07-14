@@ -102,7 +102,7 @@ describe CDL::ChargeManager do
         charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
 
         expect(charge_manager.eligible?).to eq false
-        expect(charge_manager.available_for_charge?).to eq false
+        expect(charge_manager.available_for_charge?(netid: "miku")).to eq false
       end
     end
 
@@ -115,7 +115,7 @@ describe CDL::ChargeManager do
         charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
 
         expect(charge_manager.eligible?).to eq true
-        expect(charge_manager.available_for_charge?).to eq true
+        expect(charge_manager.available_for_charge?(netid: "miku")).to eq true
       end
     end
 
@@ -132,7 +132,7 @@ describe CDL::ChargeManager do
 
         charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
         expect(charge_manager.eligible?).to eq true
-        expect(charge_manager.available_for_charge?).to eq true
+        expect(charge_manager.available_for_charge?(netid: "miku")).to eq true
       end
     end
 
@@ -150,7 +150,7 @@ describe CDL::ChargeManager do
 
         charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
         expect(charge_manager.eligible?).to eq true
-        expect(charge_manager.available_for_charge?).to eq false
+        expect(charge_manager.available_for_charge?(netid: "miku")).to eq false
       end
     end
   end
