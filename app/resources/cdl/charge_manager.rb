@@ -53,7 +53,10 @@ module CDL
       raise CDL::UnavailableForCharge unless available_for_charge?(netid: netid)
       charge = CDL::ChargedItem.new(item_id: available_item_id, netid: netid, expiration_time: Time.current + 3.hours)
       change_set = CDL::ResourceChargeListChangeSet.new(resource_charge_list)
-      change_set.validate(charged_items: resource_charge_list.charged_items + [charge])
+      updated_hold_queue = resource_charge_list.hold_queue.reject do |hold|
+        hold.netid == netid
+      end
+      change_set.validate(charged_items: resource_charge_list.charged_items + [charge], hold_queue: updated_hold_queue)
       change_set_persister.save(change_set: change_set)
       charge
     end
