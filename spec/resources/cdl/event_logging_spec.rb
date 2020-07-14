@@ -30,7 +30,7 @@ RSpec.describe CDL::EventLogging do
     context "when the connection is a bad uri" do
       let(:netid) { [] }
       it "will not raise an error" do
-        expect(described_class.get_patron_group(netid: netid)).to be_falsy
+        expect { described_class.get_patron_group(netid: netid) }.not_to raise_error
       end
     end
   end

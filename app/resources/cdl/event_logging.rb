@@ -11,7 +11,7 @@ module CDL
           patron["patron_group"]
         end
       rescue
-        false
+        nil
       end
 
       def google_charge_event(source_metadata_identifier:, netid:)
