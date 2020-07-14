@@ -67,7 +67,8 @@ export default {
         headers: { 'X-CSRF-Token': this.csrfToken },
         url: this.uploadPath,
         paramName: this.paramName,
-        uploadMultiple: this.multiple
+        uploadMultiple: this.multiple,
+        timeout: 300000
       }
     }
   },
