@@ -69,7 +69,7 @@ RSpec.describe ViewerController do
 
           expect(response).to be_successful
           expect(response.body).to have_content "This Item may be protected by third-party copyright and/or related intellectual property rights."
-          expect(response.body).to have_button "Check Out"
+          expect(response.body).to have_selector(:button, "Check Out for 3 Hours")
         end
       end
       context "when the item is checked out to the user" do
@@ -105,7 +105,7 @@ RSpec.describe ViewerController do
 
           expect(response).to be_successful
           expect(response.body).to have_content "This Item may be protected by third-party copyright and/or related intellectual property rights."
-          expect(response.body).to have_button "Check Out", disabled: true
+          expect(response.body).to have_selector(:button, "Check Out for 3 Hours", disabled: true)
           expect(response.body).to have_content "This item is currently checked out. The estimated wait time is about 3 hours."
         end
       end
