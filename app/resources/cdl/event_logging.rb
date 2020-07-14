@@ -9,8 +9,6 @@ module CDL
         if patron_record.status == 200
           patron = JSON.parse(patron_record.body).with_indifferent_access
           patron["patron_group"]
-        else
-          false
         end
       rescue
         false
