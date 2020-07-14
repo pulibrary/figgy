@@ -25,7 +25,22 @@ module CDL
 
     def available_for_charge?(netid: nil)
       return false unless eligible?
-      resource_charge_list.charged_items.count < item_ids.count
+      return true if charged_item_count < item_ids.count && active_hold?(netid: netid)
+      (charged_item_count + held_item_count) < item_ids.count
+    end
+
+    def active_hold?(netid:)
+      resource_charge_list.hold_queue.find do |hold|
+        hold.active? && !hold.expired? && hold.netid == netid
+      end.present?
+    end
+
+    def charged_item_count
+      resource_charge_list.charged_items.count
+    end
+
+    def held_item_count
+      resource_charge_list.pending_or_active_holds.count
     end
 
     def estimated_wait_time
