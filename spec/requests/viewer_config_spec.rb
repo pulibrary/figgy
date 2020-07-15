@@ -31,7 +31,7 @@ RSpec.describe "ViewerConfiguration requests", type: :request do
       )
       expect(response_values["modules"]["footerPanel"]).to include "options"
       expect(response_values["modules"]["footerPanel"]["options"]).to include(
-        "shareEnabled" => false
+        "shareEnabled" => true
       )
     end
 
