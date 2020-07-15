@@ -11,7 +11,7 @@ module CDL
     end
 
     def expired?
-      expiration_time <= Time.current
+      expiration_time.present? && expiration_time <= Time.current
     end
   end
 end
