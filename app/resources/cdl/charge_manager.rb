@@ -35,6 +35,12 @@ module CDL
       end.present?
     end
 
+    def hold?(netid:)
+      resource_charge_list.hold_queue.find do |hold|
+        hold.netid == netid && !hold.expired?
+      end.present?
+    end
+
     def charged_item_count
       resource_charge_list.charged_items.count
     end
@@ -60,6 +66,15 @@ module CDL
       change_set_persister.save(change_set: change_set)
       CDL::EventLogging.google_charge_event(netid: netid, source_metadata_identifier: resource.try(:source_metadata_identifier)&.first)
       charge
+    end
+
+    def create_hold(netid:)
+      return if hold?(netid: netid)
+      return create_charge(netid: netid) if available_for_charge?(netid: netid)
+      hold = CDL::Hold.new(netid: netid)
+      change_set = CDL::ResourceChargeListChangeSet.new(resource_charge_list)
+      change_set.validate(hold_queue: resource_charge_list.hold_queue + [hold])
+      change_set_persister.save(change_set: change_set)
     end
 
     def available_item_id

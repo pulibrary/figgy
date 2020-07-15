@@ -45,6 +45,86 @@ describe CDL::ChargeManager do
     end
   end
 
+  describe "#create_hold" do
+    context "it is not available for charge" do
+      context "there is a ResourceChargeList and an existing unexpired hold for that user" do
+        it "doesn't do anything" do
+          charged_items = [
+            CDL::ChargedItem.new(item_id: "1234", netid: "skye", expiration_time: Time.current + 3.hours)
+          ]
+          holds = [
+            CDL::Hold.new(netid: "zelda")
+          ]
+          eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
+          stub_bibdata(bib_id: "123456")
+          resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
+
+          resource_charge_list = FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items, hold_queue: holds)
+          charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+
+          charge_manager.create_hold(netid: "zelda")
+          reloaded_charges = Valkyrie.config.metadata_adapter.query_service.find_by(id: resource_charge_list.id)
+          expect(reloaded_charges.hold_queue.length).to eq 1
+        end
+      end
+      context "there is a ResourceChargeList and an existing expired hold for that user" do
+        it "creates a new hold" do
+          charged_items = [
+            CDL::ChargedItem.new(item_id: "1234", netid: "skye", expiration_time: Time.current + 3.hours)
+          ]
+          holds = [
+            CDL::Hold.new(netid: "zelda", expiration_time: 1.hour.ago)
+          ]
+          eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
+          stub_bibdata(bib_id: "123456")
+          resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
+
+          resource_charge_list = FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items, hold_queue: holds)
+          charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+
+          charge_manager.create_hold(netid: "zelda")
+          reloaded_charges = Valkyrie.config.metadata_adapter.query_service.find_by(id: resource_charge_list.id)
+          expect(reloaded_charges.hold_queue.length).to eq 2
+        end
+      end
+      context "there is a ResourceChargeList and no existing hold" do
+        it "creates a hold" do
+          charged_items = [
+            CDL::ChargedItem.new(item_id: "1234", netid: "skye", expiration_time: Time.current + 3.hours)
+          ]
+          eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
+          stub_bibdata(bib_id: "123456")
+          resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
+
+          resource_charge_list = FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items)
+          charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+
+          charge_manager.create_hold(netid: "miku")
+          reloaded_charges = Valkyrie.config.metadata_adapter.query_service.find_by(id: resource_charge_list.id)
+          expect(reloaded_charges.hold_queue).to be_present
+          hold = reloaded_charges.hold_queue.first
+          expect(hold.netid).to eq "miku"
+        end
+      end
+    end
+    context "it is available for charge" do
+      it "creates a charge instead" do
+        charged_items = []
+        eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
+        stub_bibdata(bib_id: "123456")
+        resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
+
+        resource_charge_list = FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items)
+        charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+
+        charge_manager.create_hold(netid: "miku")
+        reloaded_charges = Valkyrie.config.metadata_adapter.query_service.find_by(id: resource_charge_list.id)
+        expect(reloaded_charges.hold_queue).to be_empty
+        expect(reloaded_charges.charged_items).not_to be_empty
+      end
+    end
+  end
+
   describe "#create_charge" do
     context "it is available for charge" do
       context "there is a ResourceChargeList" do
