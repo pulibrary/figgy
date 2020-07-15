@@ -23,9 +23,24 @@ module CDL
       resource_charge_list.charged_items = resource_charge_list.charged_items.reject(&:expired?)
     end
 
-    def available_for_charge?
+    def available_for_charge?(netid: nil)
       return false unless eligible?
-      resource_charge_list.charged_items.count < item_ids.count
+      return true if charged_item_count < item_ids.count && active_hold?(netid: netid)
+      (charged_item_count + held_item_count) < item_ids.count
+    end
+
+    def active_hold?(netid:)
+      resource_charge_list.hold_queue.find do |hold|
+        hold.active? && !hold.expired? && hold.netid == netid
+      end.present?
+    end
+
+    def charged_item_count
+      resource_charge_list.charged_items.count
+    end
+
+    def held_item_count
+      resource_charge_list.pending_or_active_holds.count
     end
 
     def estimated_wait_time
@@ -35,10 +50,13 @@ module CDL
     end
 
     def create_charge(netid:)
-      raise CDL::UnavailableForCharge unless available_for_charge?
+      raise CDL::UnavailableForCharge unless available_for_charge?(netid: netid)
       charge = CDL::ChargedItem.new(item_id: available_item_id, netid: netid, expiration_time: Time.current + 3.hours)
       change_set = CDL::ResourceChargeListChangeSet.new(resource_charge_list)
-      change_set.validate(charged_items: resource_charge_list.charged_items + [charge])
+      updated_hold_queue = resource_charge_list.hold_queue.reject do |hold|
+        hold.netid == netid
+      end
+      change_set.validate(charged_items: resource_charge_list.charged_items + [charge], hold_queue: updated_hold_queue)
       change_set_persister.save(change_set: change_set)
       CDL::EventLogging.google_charge_event(netid: netid, source_metadata_identifier: resource.try(:source_metadata_identifier)&.first)
       charge

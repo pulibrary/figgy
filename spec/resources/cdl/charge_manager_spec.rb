@@ -62,6 +62,20 @@ describe CDL::ChargeManager do
           expect(reloaded_charges.charged_items).to be_present
           expect(CDL::EventLogging).to have_received(:google_charge_event).with(netid: "skye", source_metadata_identifier: "123456")
         end
+        it "removes any existing holds for that netid" do
+          eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
+          stub_bibdata(bib_id: "123456")
+          resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
+
+          resource_charge_list = FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, hold_queue: CDL::Hold.new(netid: "skye", expiration_time: Time.current + 1.hour))
+          charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+
+          charged_item = charge_manager.create_charge(netid: "skye")
+          expect(charged_item).to be_a CDL::ChargedItem
+          reloaded_charges = Valkyrie.config.metadata_adapter.query_service.find_by(id: resource_charge_list.id)
+          expect(reloaded_charges.charged_items).to be_present
+          expect(reloaded_charges.hold_queue).to be_empty
+        end
       end
 
       context "there is no ResourceChargeList" do
@@ -91,7 +105,6 @@ describe CDL::ChargeManager do
         expect { charge_manager.create_charge(netid: "zelda") }.to raise_error CDL::UnavailableForCharge
       end
     end
-    # (netid:) (checks bibdata for items, compares with current charged items, if possible creates a charge.)
   end
 
   describe "#available_for_charge?" do
@@ -104,7 +117,7 @@ describe CDL::ChargeManager do
         charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
 
         expect(charge_manager.eligible?).to eq false
-        expect(charge_manager.available_for_charge?).to eq false
+        expect(charge_manager.available_for_charge?(netid: "miku")).to eq false
       end
     end
 
@@ -117,7 +130,7 @@ describe CDL::ChargeManager do
         charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
 
         expect(charge_manager.eligible?).to eq true
-        expect(charge_manager.available_for_charge?).to eq true
+        expect(charge_manager.available_for_charge?(netid: "miku")).to eq true
       end
     end
 
@@ -134,7 +147,7 @@ describe CDL::ChargeManager do
 
         charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
         expect(charge_manager.eligible?).to eq true
-        expect(charge_manager.available_for_charge?).to eq true
+        expect(charge_manager.available_for_charge?(netid: "miku")).to eq true
       end
     end
 
@@ -152,7 +165,69 @@ describe CDL::ChargeManager do
 
         charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
         expect(charge_manager.eligible?).to eq true
-        expect(charge_manager.available_for_charge?).to eq false
+        expect(charge_manager.available_for_charge?(netid: "miku")).to eq false
+      end
+    end
+    context "when an item isn't charged but there's a hold queue" do
+      it "returns false" do
+        eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
+        stub_bibdata(bib_id: "123456")
+        resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
+
+        FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, hold_queue: CDL::Hold.new(netid: "tiberius"))
+
+        charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+        expect(charge_manager.eligible?).to eq true
+        expect(charge_manager.available_for_charge?(netid: "miku")).to eq false
+      end
+    end
+    context "when an item isn't charged and there's an active hold for that user" do
+      it "returns true" do
+        eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
+        stub_bibdata(bib_id: "123456")
+        resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
+
+        FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, hold_queue: CDL::Hold.new(netid: "miku", expiration_time: Time.current + 1.hour))
+
+        charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+        expect(charge_manager.eligible?).to eq true
+        expect(charge_manager.available_for_charge?(netid: "miku")).to eq true
+      end
+    end
+    # When and under what circumstances a hold is activated should be left to
+    # the create_hold method. Don't worry about those logistics for checking
+    # availability - if it's not an active hold, then don't let them charge.
+    context "when an item isn't charged and there's an inactive hold for that user" do
+      it "returns false" do
+        eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
+        stub_bibdata(bib_id: "123456")
+        resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
+
+        FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, hold_queue: CDL::Hold.new(netid: "miku"))
+
+        charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+        expect(charge_manager.eligible?).to eq true
+        expect(charge_manager.available_for_charge?(netid: "miku")).to eq false
+      end
+    end
+    context "when an item isn't charged and there's an expired hold for that user" do
+      it "returns false" do
+        eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
+        stub_bibdata(bib_id: "123456")
+        resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
+
+        FactoryBot.create_for_repository(
+          :resource_charge_list,
+          resource_id: resource.id,
+          hold_queue: [
+            CDL::Hold.new(netid: "miku", expiration_time: Time.current - 1.hour),
+            CDL::Hold.new(netid: "tiberius")
+          ]
+        )
+
+        charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+        expect(charge_manager.eligible?).to eq true
+        expect(charge_manager.available_for_charge?(netid: "miku")).to eq false
       end
     end
   end
