@@ -27,7 +27,7 @@ class ViewerConfiguration < ActiveSupport::HashWithIndifferentAccess
         {
           "options" =>
           {
-            "shareEnabled" => false
+            "shareEnabled" => true
           }
         },
         "avCenterPanel" =>
