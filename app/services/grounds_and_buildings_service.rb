@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'csv'
+require "csv"
 class GroundsAndBuildingsService
   attr_reader :items, :collection, :change_set_persister, :logger
   def initialize(collection, table, change_set_persister, logger: Valkyrie.logger)
@@ -13,14 +13,14 @@ class GroundsAndBuildingsService
 
   def components
     all = @items.collect do |item|
-      "#{collection}_#{item['componentID']}" 
+      "#{collection}_#{item['componentID']}"
     end
     all.uniq
   end
 
   def children(componentID)
-    rows = items.select { |item| item['componentID'] == componentID.split('_').last }
-    urls = rows.collect { |row| row['Figgy URL'] }
+    rows = items.select { |item| item["componentID"] == componentID.split("_").last }
+    urls = rows.collect { |row| row["Figgy URL"] }
     urls.map { |url| figgyID(url) }
   end
 
@@ -28,7 +28,8 @@ class GroundsAndBuildingsService
     # is there already a mvw?
     mvw = change_set_persister.query_service.custom_queries.find_by_property(
       property: :source_metadata_identifier,
-      value: componentID).first
+      value: componentID
+    ).first
     if mvw.nil?
       ScannedResource.new(source_metadata_identifier: componentID) # import_metadata: true?
     else
@@ -43,9 +44,8 @@ class GroundsAndBuildingsService
   end
 end
 
-
 private
 
-def figgyID url
+def figgyID(url)
   url.match(/^.*catalog\//).post_match
 end
