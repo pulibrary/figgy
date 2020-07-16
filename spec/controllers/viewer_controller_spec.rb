@@ -89,8 +89,35 @@ RSpec.describe ViewerController do
           expect(response).to redirect_to viewer_index_path(anchor: "?manifest=http://www.example.com/concern/scanned_resources/#{resource.id}/manifest")
         end
       end
+      context "when the item is unavailable and the user has a hold on the item" do
+        it "displays a copyright statement and information about their hold" do
+          user = FactoryBot.create(:user)
+          stub_bibdata(bib_id: "123456")
+          resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
+          allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
+          charged_items = [
+            CDL::ChargedItem.new(item_id: "1", netid: "other", expiration_time: Time.current + 3.hours)
+          ]
+          held_items = [
+            CDL::Hold.new(skye: "zelda", expiration_time: 1.hour.ago),
+            CDL::Hold.new(netid: "zelda"),
+            CDL::Hold.new(netid: user.uid)
+          ]
+          FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items, hold_queue: held_items)
+          sign_in user
+
+          get :auth, params: { id: resource.id.to_s }
+
+          expect(response).to be_successful
+          expect(response.body).to have_content "This Item may be protected by third-party copyright and/or related intellectual property rights."
+          expect(response.body).to have_selector(:button, "Create Reservation", disabled: true)
+          expect(response.body).to have_content(
+            "There are 1 reservation(s) ahead of you. We will send you an email notification when your reservation is ready for check out."
+          )
+        end
+      end
       context "when the item is unavailable" do
-        it "displays a copyright statement, a disabled check-out button, and an ETA in hours" do
+        it "displays a copyright statement and a hold button" do
           user = FactoryBot.create(:user)
           stub_bibdata(bib_id: "123456")
           resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
@@ -105,8 +132,12 @@ RSpec.describe ViewerController do
 
           expect(response).to be_successful
           expect(response.body).to have_content "This Item may be protected by third-party copyright and/or related intellectual property rights."
-          expect(response.body).to have_selector(:button, "Check Out for 3 Hours", disabled: true)
-          expect(response.body).to have_content "This item is currently checked out. The estimated wait time is about 3 hours."
+          expect(response.body).to have_selector(:button, "Create Reservation")
+          expect(response.body).to have_content(
+            "This item is currently checked out. However, if you create a reservation we will notify you when it is available for check out" \
+            " and hold it for you from that point for up to 1 hour."
+          )
+          expect(response.body).to have_content "There are currently 0 reservation(s) for this item."
         end
       end
     end

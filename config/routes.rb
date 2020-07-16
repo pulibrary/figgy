@@ -300,6 +300,7 @@ Rails.application.routes.draw do
     member do
       get :status, defaults: { format: :json }
       post :charge
+      post :hold
     end
   end
 end

@@ -6,7 +6,7 @@ module CDL
   class ChargeManager
     include ActionView::Helpers::DateHelper
     attr_reader :resource_id, :eligible_item_service, :change_set_persister
-    delegate :charged_items, to: :resource_charge_list
+    delegate :charged_items, :pending_or_active_holds, to: :resource_charge_list
     # TODO: default eligible_item_service from #4033
     def initialize(resource_id:, eligible_item_service:, change_set_persister:)
       @resource_id = resource_id
@@ -47,6 +47,12 @@ module CDL
 
     def held_item_count
       resource_charge_list.pending_or_active_holds.count
+    end
+
+    def hold_index(netid:)
+      pending_or_active_holds.index do |hold|
+        hold.netid == netid
+      end
     end
 
     def estimated_wait_time

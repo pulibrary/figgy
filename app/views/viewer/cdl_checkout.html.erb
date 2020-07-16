@@ -12,8 +12,20 @@
   <p>Under certain conditions specified in the law, libraries and archives are authorized to furnish a photocopy or other reproduction. One of these specific conditions is that the photocopy or reproduction is not to be “used for any purpose other than private study, scholarship, or research.” If a user makes a request for, or later uses, a photocopy or reproduction for purposes in excess of “fair use,” that user may be liable for copyright infringement.</p>
 
   <p>This institution reserves the right to refuse to accept a copying order if, in its judgment, fulfillment of the order would involve violation of copyright law.</p>
-  <%= button_to "Check Out for 3 Hours", { action: "charge", controller: "cdl/cdl" }, class: "btn btn-primary", disabled: !@charge_manager.available_for_charge?(netid: current_user&.uid), params: { id: params[:id] } %>
-  <% if !@charge_manager.available_for_charge?(netid: current_user&.uid) %>
-    <b>This item is currently checked out. The estimated wait time is <%= @charge_manager.estimated_wait_time %>.</b>
+  <% if @charge_manager.available_for_charge?(netid: current_user&.uid) %>
+    <%= button_to "Check Out for 3 Hours", { action: "charge", controller: "cdl/cdl" }, class: "btn btn-primary", params: { id: params[:id] } %>
+  <% elsif @charge_manager.hold?(netid: current_user&.uid) %>
+    <%= button_to "Create Reservation", { action: "hold", controller: "cdl/cdl" }, class: "btn btn-primary", params: { id: params[:id] }, disabled: true %>
+    <p>
+    There are <%= @charge_manager.hold_index(netid: current_user&.uid)%> reservation(s) ahead of you. We will send you an email notification when your reservation is ready for check out.
+    </p>
+  <% else %>
+    <%= button_to "Create Reservation", { action: "hold", controller: "cdl/cdl" }, class: "btn btn-primary", params: { id: params[:id] } %>
+    <p>
+    This item is currently checked out. However, if you create a reservation we will notify you when it is available for check out and hold it for you from that point for up to 1 hour.
+    </p>
+    <p>
+    There are currently <%= @charge_manager.held_item_count %> reservation(s) for this item.
+    </p>
   <% end %>
 </div>
