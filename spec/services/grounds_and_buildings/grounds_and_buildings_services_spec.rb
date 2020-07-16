@@ -28,16 +28,6 @@ RSpec.describe GroundsAndBuildingsService do
     expect(service.children("AC111_c0161")).to include("a6fb5c97-4b1f-41b3-b6d7-d7a8603e9bed")
   end
 
-  it "finds an existing component" do
-    mvw = service.mvw(componentID)
-    expect(mvw).to be_an_instance_of(ScannedResource)
-  end
-
-  it "creates a new resource if a component is not found" do
-    mvw = service.mvw("nonsensical_component_id")
-    expect(mvw).to be_an_instance_of(ScannedResource)
-  end
-
   context "when there is an existing component resource" do
     it "adds the associated resources to member_ids" do
       stub_request(:get, "https://findingaids.princeton.edu/collections/AC111/c0161.xml?scope=record")
