@@ -29,10 +29,8 @@ class GroundsAndBuildingsService
     change_set.validate(member_ids: children(mvw.source_metadata_identifier.first))
     change_set_persister.save(change_set: change_set)
   end
-end
 
-private
-
-def figgy_id(url)
-  url.match(/^.*catalog\//).post_match
+  def figgy_id(url)
+    url.match(/^.*catalog\//).post_match
+  end
 end
