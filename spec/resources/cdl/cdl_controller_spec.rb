@@ -3,6 +3,57 @@
 require "rails_helper"
 
 RSpec.describe Cdl::CdlController, type: :controller do
+  describe "POST /cdl/:id/hold" do
+    context "when not logged in" do
+      it "returns a 403 forbidden" do
+        resource = FactoryBot.create_for_repository(:scanned_resource)
+
+        post :hold, params: { id: resource.id.to_s }
+
+        expect(response).to be_forbidden
+      end
+    end
+    context "when logged in and already held" do
+      it "redirects back to auth" do
+        user = FactoryBot.create(:user)
+        stub_bibdata(bib_id: "123456")
+        resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
+        allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
+        charged_items = [
+          CDL::ChargedItem.new(item_id: "1", netid: "other", expiration_time: Time.current + 3.hours)
+        ]
+        hold_queue = [
+          CDL::Hold.new(netid: user.uid)
+        ]
+        FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items, hold_queue: hold_queue)
+        sign_in user
+
+        post :hold, params: { id: resource.id.to_s }
+
+        expect(response).to redirect_to "/viewer/#{resource.id}/auth"
+        expect(flash[:alert]).to eq "You already have a reservation for this item."
+      end
+    end
+    context "when logged in not held" do
+      it "creates a hold and redirects to auth" do
+        user = FactoryBot.create(:user)
+        stub_bibdata(bib_id: "123456")
+        resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
+        allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
+        charged_items = [
+          CDL::ChargedItem.new(item_id: "1", netid: "other", expiration_time: Time.current + 3.hours)
+        ]
+        FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items)
+        sign_in user
+
+        post :hold, params: { id: resource.id.to_s }
+
+        expect(response).to redirect_to "/viewer/#{resource.id}/auth"
+        charge_list = Wayfinder.for(resource).resource_charge_list
+        expect(charge_list.hold_queue.first.netid).to eq user.uid
+      end
+    end
+  end
   describe "POST /cdl/:id/charge" do
     before do
       allow(CDL::EventLogging).to receive(:google_charge_event)

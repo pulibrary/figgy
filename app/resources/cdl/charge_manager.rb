@@ -3,6 +3,7 @@
 # Controlled Digital Lending
 module CDL
   class UnavailableForCharge < StandardError; end
+  class HoldExists < StandardError; end
   class ChargeManager
     include ActionView::Helpers::DateHelper
     attr_reader :resource_id, :eligible_item_service, :change_set_persister
@@ -75,7 +76,7 @@ module CDL
     end
 
     def create_hold(netid:)
-      return if hold?(netid: netid)
+      raise CDL::HoldExists if hold?(netid: netid)
       return create_charge(netid: netid) if available_for_charge?(netid: netid)
       hold = CDL::Hold.new(netid: netid)
       change_set = CDL::ResourceChargeListChangeSet.new(resource_charge_list)

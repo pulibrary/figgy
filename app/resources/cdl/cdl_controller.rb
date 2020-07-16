@@ -17,6 +17,16 @@ module Cdl
       redirect_to auth_viewer_path(params[:id])
     end
 
+    def hold
+      return forbidden unless current_user
+      @charge_manager = charge_manager(params[:id])
+      @charge_manager.create_hold(netid: current_user.uid)
+      redirect_to auth_viewer_path(params[:id])
+    rescue CDL::HoldExists
+      flash[:alert] = "You already have a reservation for this item."
+      redirect_to auth_viewer_path(params[:id])
+    end
+
     def forbidden
       head :forbidden
     end
