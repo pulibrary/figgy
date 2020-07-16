@@ -18,23 +18,10 @@ class GroundsAndBuildingsService
     all.uniq
   end
 
-  def children(componentID)
-    rows = items.select { |item| item["componentID"] == componentID.split("_").last }
+  def children(component_id)
+    rows = items.select { |item| item["componentID"] == component_id.split("_").last }
     urls = rows.collect { |row| row["Figgy URL"] }
-    urls.map { |url| figgyID(url) }
-  end
-
-  def mvw(componentID)
-    # is there already a mvw?
-    mvw = change_set_persister.query_service.custom_queries.find_by_property(
-      property: :source_metadata_identifier,
-      value: componentID
-    ).first
-    if mvw.nil?
-      ScannedResource.new(source_metadata_identifier: componentID) # import_metadata: true?
-    else
-      mvw
-    end
+    urls.map { |url| figgy_id(url) }
   end
 
   def add_members_to_mvw(mvw)
@@ -46,6 +33,6 @@ end
 
 private
 
-def figgyID(url)
+def figgy_id(url)
   url.match(/^.*catalog\//).post_match
 end
