@@ -6,7 +6,7 @@
       "items": [
         {
           "id": 6476228,
-          "on_cdl":"null",
+          "patron_group_charged":"null",
           "on_reserve": "N",
           "copy_number": 1,
           "item_sequence_number": 1,
