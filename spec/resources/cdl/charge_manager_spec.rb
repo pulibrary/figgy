@@ -48,7 +48,7 @@ describe CDL::ChargeManager do
   describe "#create_hold" do
     context "it is not available for charge" do
       context "there is a ResourceChargeList and an existing unexpired hold for that user" do
-        it "doesn't do anything" do
+        it "raises CDL::HoldExists" do
           charged_items = [
             CDL::ChargedItem.new(item_id: "1234", netid: "skye", expiration_time: Time.current + 3.hours)
           ]
@@ -62,7 +62,7 @@ describe CDL::ChargeManager do
           resource_charge_list = FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items, hold_queue: holds)
           charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
 
-          charge_manager.create_hold(netid: "zelda")
+          expect { charge_manager.create_hold(netid: "zelda") }.to raise_error CDL::HoldExists
           reloaded_charges = Valkyrie.config.metadata_adapter.query_service.find_by(id: resource_charge_list.id)
           expect(reloaded_charges.hold_queue.length).to eq 1
         end

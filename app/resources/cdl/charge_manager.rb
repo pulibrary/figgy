@@ -3,10 +3,11 @@
 # Controlled Digital Lending
 module CDL
   class UnavailableForCharge < StandardError; end
+  class HoldExists < StandardError; end
   class ChargeManager
     include ActionView::Helpers::DateHelper
     attr_reader :resource_id, :eligible_item_service, :change_set_persister
-    delegate :charged_items, to: :resource_charge_list
+    delegate :charged_items, :pending_or_active_holds, to: :resource_charge_list
     # TODO: default eligible_item_service from #4033
     def initialize(resource_id:, eligible_item_service:, change_set_persister:)
       @resource_id = resource_id
@@ -49,6 +50,12 @@ module CDL
       resource_charge_list.pending_or_active_holds.count
     end
 
+    def hold_index(netid:)
+      pending_or_active_holds.index do |hold|
+        hold.netid == netid
+      end
+    end
+
     def estimated_wait_time
       return if available_for_charge?
       earliest = charged_items.flat_map(&:expiration_time).sort.first
@@ -69,7 +76,7 @@ module CDL
     end
 
     def create_hold(netid:)
-      return if hold?(netid: netid)
+      raise CDL::HoldExists if hold?(netid: netid)
       return create_charge(netid: netid) if available_for_charge?(netid: netid)
       hold = CDL::Hold.new(netid: netid)
       change_set = CDL::ResourceChargeListChangeSet.new(resource_charge_list)
