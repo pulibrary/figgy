@@ -53,5 +53,6 @@ module Figgy
         Rails.configuration.cache_classes ? require(c) : load(c)
       end
     end
+    config.action_mailer.deliver_later_queue_name = "high"
   end
 end

@@ -38,9 +38,7 @@ module CDL
     end
 
     def expired_holds
-      hold_queue.select do |hold|
-        hold.expired?
-      end
+      hold_queue.select(&:expired?)
     end
 
     def active_holds
