@@ -15,14 +15,14 @@
   <% if @charge_manager.available_for_charge?(netid: current_user&.uid) %>
     <%= button_to "Check Out for 3 Hours", { action: "charge", controller: "cdl/cdl" }, class: "btn btn-primary", params: { id: params[:id] } %>
   <% elsif @charge_manager.hold?(netid: current_user&.uid) %>
-    <%= button_to "Create Reservation", { action: "hold", controller: "cdl/cdl" }, class: "btn btn-primary", params: { id: params[:id] }, disabled: true %>
+    <%= button_to "Reserve", { action: "hold", controller: "cdl/cdl" }, class: "btn btn-primary", params: { id: params[:id] }, disabled: true %>
     <p>
     There are <%= @charge_manager.hold_index(netid: current_user&.uid)%> reservation(s) ahead of you. We will send you an email notification when your reservation is ready for check out.
     </p>
   <% else %>
-    <%= button_to "Create Reservation", { action: "hold", controller: "cdl/cdl" }, class: "btn btn-primary", params: { id: params[:id] } %>
+    <%= button_to "Reserve", { action: "hold", controller: "cdl/cdl" }, class: "btn btn-primary", params: { id: params[:id] } %>
     <p>
-    This item is currently checked out. However, if you create a reservation we will notify you when it is available for check out and hold it for you from that point for up to 1 hour.
+    This item is currently checked out. However, if you create a reservation we will notify you when it is available for check out and hold it for you for up to 1 hour.
     </p>
     <p>
     There are currently <%= @charge_manager.held_item_count %> reservation(s) for this item.

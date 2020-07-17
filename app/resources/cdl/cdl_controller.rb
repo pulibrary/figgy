@@ -23,7 +23,7 @@ module Cdl
       @charge_manager.create_hold(netid: current_user.uid)
       redirect_to auth_viewer_path(params[:id])
     rescue CDL::HoldExists
-      flash[:alert] = "You already have a reservation for this item."
+      flash[:alert] = "You have already reserved this item."
       redirect_to auth_viewer_path(params[:id])
     end
 

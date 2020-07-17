@@ -31,7 +31,7 @@ RSpec.describe Cdl::CdlController, type: :controller do
         post :hold, params: { id: resource.id.to_s }
 
         expect(response).to redirect_to "/viewer/#{resource.id}/auth"
-        expect(flash[:alert]).to eq "You already have a reservation for this item."
+        expect(flash[:alert]).to eq "You have already reserved this item."
       end
     end
     context "when logged in not held" do

@@ -110,7 +110,7 @@ RSpec.describe ViewerController do
 
           expect(response).to be_successful
           expect(response.body).to have_content "This Item may be protected by third-party copyright and/or related intellectual property rights."
-          expect(response.body).to have_selector(:button, "Create Reservation", disabled: true)
+          expect(response.body).to have_selector(:button, "Reserve", disabled: true)
           expect(response.body).to have_content(
             "There are 1 reservation(s) ahead of you. We will send you an email notification when your reservation is ready for check out."
           )
@@ -132,10 +132,10 @@ RSpec.describe ViewerController do
 
           expect(response).to be_successful
           expect(response.body).to have_content "This Item may be protected by third-party copyright and/or related intellectual property rights."
-          expect(response.body).to have_selector(:button, "Create Reservation")
+          expect(response.body).to have_selector(:button, "Reserve")
           expect(response.body).to have_content(
             "This item is currently checked out. However, if you create a reservation we will notify you when it is available for check out" \
-            " and hold it for you from that point for up to 1 hour."
+            " and hold it for you for up to 1 hour."
           )
           expect(response.body).to have_content "There are currently 0 reservation(s) for this item."
         end
