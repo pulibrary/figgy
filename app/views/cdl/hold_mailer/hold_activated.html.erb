@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>
+    <%= @resource.decorate.first_title %> is now available for check out for the next 1 hour. In that time please visit the catalog here (<%= link_to RemoteRecord.record_url(@resource.source_metadata_identifier.first), RemoteRecord.record_url(@resource.source_metadata_identifier.first) %>) to view it.
+    </p>
+  </body>
+</html>

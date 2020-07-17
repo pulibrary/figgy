@@ -45,6 +45,80 @@ describe CDL::ChargeManager do
     end
   end
 
+  describe "#activate_holds" do
+    context "it has no available charge slots" do
+      it "does nothing" do
+        charged_items = [
+          CDL::ChargedItem.new(item_id: "1234", netid: "skye", expiration_time: Time.current + 3.hours)
+        ]
+        holds = [
+          CDL::Hold.new(netid: "zelda")
+        ]
+        eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
+        stub_bibdata(bib_id: "123456")
+        resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
+
+        resource_charge_list = FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items, hold_queue: holds)
+        charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+
+        charge_manager.activate_holds!
+
+        reloaded_charges = Valkyrie.config.metadata_adapter.query_service.find_by(id: resource_charge_list.id)
+        expect(reloaded_charges.updated_at).to eq resource_charge_list.updated_at
+      end
+    end
+    context "it has an available charge slot, but a hold is already active" do
+      it "does nothing" do
+        charged_items = [
+          CDL::ChargedItem.new(item_id: "1234", netid: "skye", expiration_time: Time.current - 3.hours)
+        ]
+        holds = [
+          CDL::Hold.new(netid: "zelda", expiration_time: 1.hour.from_now),
+          CDL::Hold.new(netid: "miku")
+        ]
+        eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
+        stub_bibdata(bib_id: "123456")
+        resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
+
+        resource_charge_list = FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items, hold_queue: holds)
+        charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+
+        charge_manager.activate_holds!
+
+        reloaded_charges = Valkyrie.config.metadata_adapter.query_service.find_by(id: resource_charge_list.id)
+        expect(reloaded_charges.updated_at).to eq resource_charge_list.updated_at
+      end
+    end
+    context "it has an available charge slot" do
+      with_queue_adapter :inline
+      it "activates the hold and notifies the user" do
+        charged_items = [
+          CDL::ChargedItem.new(item_id: "1234", netid: "skye", expiration_time: Time.current - 3.hours)
+        ]
+        User.create!(uid: "skye", email: "skye@princeton.edu")
+        holds = [
+          CDL::Hold.new(netid: "miku", expiration_time: 1.hour.from_now),
+          CDL::Hold.new(netid: "skye")
+        ]
+        eligible_item_service = EligibleItemService.new(item_ids: ["1234", "4567"])
+        stub_bibdata(bib_id: "123456")
+        resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
+
+        resource_charge_list = FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items, hold_queue: holds)
+        charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+
+        charge_manager.activate_holds!
+
+        reloaded_charges = Valkyrie.config.metadata_adapter.query_service.find_by(id: resource_charge_list.id)
+        expect(reloaded_charges.hold_queue.first).to be_active
+        expect(reloaded_charges.hold_queue.last).to be_active
+        expect(ActionMailer::Base.deliveries.size).to eq 1
+        mail = ActionMailer::Base.deliveries.first
+        expect(mail.to).to eq ["skye@princeton.edu"]
+        expect(mail.subject).to eq "Available for Digital Checkout: Title"
+      end
+    end
+  end
   describe "#create_hold" do
     context "it is not available for charge" do
       context "there is a ResourceChargeList and an existing unexpired hold for that user" do
@@ -309,24 +383,6 @@ describe CDL::ChargeManager do
         expect(charge_manager.eligible?).to eq true
         expect(charge_manager.available_for_charge?(netid: "miku")).to eq false
       end
-    end
-  end
-
-  describe "#estimated_wait_time" do
-    it "uses the rails estimator" do
-      charged_items = [
-        CDL::ChargedItem.new(item_id: "1234", netid: "skye", expiration_time: Time.current + 1.hour + 20.minutes),
-        CDL::ChargedItem.new(item_id: "5678", netid: "zelda", expiration_time: Time.current + 3.hours)
-      ]
-      eligible_item_service = EligibleItemService.new(item_ids: ["1234", "5678"])
-      stub_bibdata(bib_id: "123456")
-      resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
-
-      FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items)
-
-      charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
-
-      expect(charge_manager.estimated_wait_time.to_s).to eq "about 1 hour"
     end
   end
 end
