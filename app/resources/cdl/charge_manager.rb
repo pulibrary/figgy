@@ -38,7 +38,7 @@ module CDL
 
     def create_charge(netid:)
       raise CDL::UnavailableForCharge unless available_for_charge?(netid: netid)
-      charge = CDL::ChargedItem.new(item_id: available_item_id, netid: netid, expiration_time: Time.current + 3.hours)
+      charge = CDL::ChargedItem.new(item_id: available_item_ids.first, netid: netid, expiration_time: Time.current + 3.hours)
       change_set = CDL::ResourceChargeListChangeSet.new(resource_charge_list)
       updated_hold_queue = resource_charge_list.hold_queue.reject do |hold|
         hold.netid == netid
@@ -77,10 +77,6 @@ module CDL
 
     def notify_hold_active(hold:)
       CDL::HoldMailer.with(user: User.where(uid: hold.netid).first!, resource_id: resource_id.to_s).hold_activated.deliver_later
-    end
-
-    def available_item_id
-      available_item_ids.first
     end
 
     def available_item_ids
