@@ -17,7 +17,7 @@
     "core-js": "2",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "lux-design-system": "2.16.6",
     "npm": "^6.13.4",
     "openseadragon": "^2.3.1",
