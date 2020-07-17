@@ -7,7 +7,7 @@ module CDL
   class ChargeManager
     include ActionView::Helpers::DateHelper
     attr_reader :resource_id, :eligible_item_service, :change_set_persister
-    delegate :charged_items, :pending_or_active_holds, :active_hold?, :hold?, to: :resource_charge_list
+    delegate :charged_items, :pending_or_active_holds, :active_hold?, :hold?, :expired_holds, to: :resource_charge_list
     # TODO: default eligible_item_service from #4033
     def initialize(resource_id:, eligible_item_service:, change_set_persister:)
       @resource_id = resource_id
@@ -59,8 +59,8 @@ module CDL
     end
 
     def activate_holds!
+      @resource_charge_list = expire_holds!
       return unless available_charge_slot? && resource_charge_list.pending_or_active_holds.present?
-      activate_hold_count = available_item_ids.size - resource_charge_list.active_holds.size
       return unless activate_hold_count.positive?
       activated_holds = Array.new(activate_hold_count).map do
         hold = resource_charge_list.pending_holds.first
@@ -75,8 +75,26 @@ module CDL
       end
     end
 
+    def activate_hold_count
+      available_item_ids.size - resource_charge_list.active_holds.size
+    end
+
+    def expire_holds!
+      return resource_charge_list if expired_holds.empty?
+      expired_holds.each do |expired_hold|
+        notify_hold_expired(hold: expired_hold)
+      end
+      change_set = CDL::ResourceChargeListChangeSet.new(resource_charge_list)
+      change_set.validate(hold_queue: resource_charge_list.hold_queue - expired_holds)
+      change_set_persister.save(change_set: change_set)
+    end
+
     def notify_hold_active(hold:)
       CDL::HoldMailer.with(user: User.where(uid: hold.netid).first!, resource_id: resource_id.to_s).hold_activated.deliver_later
+    end
+
+    def notify_hold_expired(hold:)
+      CDL::HoldMailer.with(user: User.where(uid: hold.netid).first!, resource_id: resource_id.to_s).hold_expired.deliver_later
     end
 
     def available_item_ids
