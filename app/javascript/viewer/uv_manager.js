@@ -8,8 +8,8 @@ export default class UVManager {
     await this.loadUV()
   }
 
-  loadUV () {
-    this.checkManifest().then(this.createUV.bind(this)).catch(this.requestAuth.bind(this))
+  async loadUV () {
+    return this.checkManifest().then(this.createUV.bind(this)).catch(this.requestAuth.bind(this)).promise()
   }
 
   checkManifest () {
