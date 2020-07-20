@@ -47,12 +47,5 @@ describe('UVManager', () => {
       await uvManager.initialize()
       expect(window.location.assign).toHaveBeenCalledWith('/viewer/12345/auth')
     })
-    it('adds a IIIF icon', async () => {
-      buildMocks(200)
-
-      // Initialize
-      const uvManager = new UVManager()
-      await uvManager.initialize()
-    })
   })
 })
