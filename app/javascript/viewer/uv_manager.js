@@ -42,14 +42,21 @@ export default class UVManager {
     if (existingButton !== null) {
       return
     }
-    const shareButton = document.querySelector('button.share')
+    const shareButton = document.querySelector('.footerPanel button.share')
+    const mobileShareButton = document.querySelector('.mobileFooterPanel button.share')
+    // Pull link from the UV share popup.
+    shareButton.parentNode.insertBefore(this.createIIIFDragElement(), shareButton.nextSibling)
+    mobileShareButton.parentNode.insertBefore(this.createIIIFDragElement(), mobileShareButton.nextSibling)
+  }
+
+  createIIIFDragElement () {
     const link = document.querySelector('a.imageBtn.iiif').href
     const iconElement = document.createElement('a')
     iconElement.className = 'btn imageBtn iiif-drag'
     iconElement.href = link
     iconElement.target = '_blank'
     iconElement.innerHTML = `<img src="${IIIFLogo}" style="width:30px; height=30px;"/>`
-    shareButton.parentNode.insertBefore(iconElement, shareButton.nextSibling)
+    return iconElement
   }
 
   waitForElementToDisplay (selector, time, callback) {
@@ -98,7 +105,7 @@ export default class UVManager {
     const titleHeight = $('#title').outerHeight($('#title').is(':visible'))
     this.uvElement.width(windowWidth)
     this.uvElement.height(windowHeight - titleHeight)
-    this.waitForElementToDisplay('button.share', 500, this.addIIIFIcon)
+    this.waitForElementToDisplay('button.share', 500, this.addIIIFIcon.bind(this))
   }
 
   bindResize () {
