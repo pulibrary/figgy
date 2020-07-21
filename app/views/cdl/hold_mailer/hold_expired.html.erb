@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>
+    Your reservation for <%= @resource.decorate.first_title %> has expired. If you'd still like to check this item out, please visit <%= link_to RemoteRecord.record_url(@resource.source_metadata_identifier.first), RemoteRecord.record_url(@resource.source_metadata_identifier.first) %>.
+    </p>
+  </body>
+</html>
