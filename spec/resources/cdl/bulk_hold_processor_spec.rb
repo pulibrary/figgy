@@ -15,7 +15,7 @@ RSpec.describe CDL::BulkHoldProcessor do
     )
     resource_charge_list2 = FactoryBot.create_for_repository(:resource_charge_list, resource_id: FactoryBot.create_for_repository(:complete_private_scanned_resource).id)
 
-    described_class.new(change_set_persister: ScannedResourcesController.change_set_persister).process!
+    described_class.process!
 
     reloaded_resource_charge_list1 = query_service.find_by(id: resource_charge_list1.id)
     expect(reloaded_resource_charge_list1.updated_at).not_to eq resource_charge_list1.updated_at
@@ -33,7 +33,7 @@ RSpec.describe CDL::BulkHoldProcessor do
     )
     resource_charge_list2 = FactoryBot.create_for_repository(:resource_charge_list, resource_id: FactoryBot.create_for_repository(:complete_private_scanned_resource).id)
 
-    described_class.new(change_set_persister: ScannedResourcesController.change_set_persister).process!
+    described_class.process!
 
     reloaded_resource_charge_list1 = query_service.find_by(id: resource_charge_list1.id)
     expect(reloaded_resource_charge_list1.updated_at).not_to eq resource_charge_list1.updated_at

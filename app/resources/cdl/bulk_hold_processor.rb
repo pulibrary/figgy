@@ -2,6 +2,19 @@
 
 module CDL
   class BulkHoldProcessor
+    def self.process!
+      change_set_persister.buffer_into_index do |buffered_change_set_persister|
+        new(change_set_persister: buffered_change_set_persister).process!
+      end
+    end
+
+    def self.change_set_persister
+      ::ChangeSetPersister.new(
+        metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
+        storage_adapter: Valkyrie.config.storage_adapter
+      )
+    end
+
     attr_reader :change_set_persister
     delegate :metadata_adapter, to: :change_set_persister
     delegate :query_service, to: :metadata_adapter
