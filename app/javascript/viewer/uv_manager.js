@@ -1,5 +1,6 @@
 /* global UV, $, createUV */
 import CDLTimer from 'viewer/cdl_timer'
+import IIIFLogo from 'images/iiif-logo.svg'
 export default class UVManager {
   async initialize () {
     this.bindLogin()
@@ -8,8 +9,8 @@ export default class UVManager {
     await this.loadUV()
   }
 
-  loadUV () {
-    this.checkManifest().then(this.createUV.bind(this)).catch(this.requestAuth.bind(this))
+  async loadUV () {
+    return this.checkManifest().then(this.createUV.bind(this)).catch(this.requestAuth.bind(this)).promise()
   }
 
   checkManifest () {
@@ -34,6 +35,38 @@ export default class UVManager {
     }, this.urlDataProvider)
     this.cdlTimer = new CDLTimer(this.figgyId)
     this.cdlTimer.initializeTimer()
+  }
+
+  addIIIFIcon () {
+    const existingButton = document.querySelector('a.iiif-drag')
+    if (existingButton !== null) {
+      return
+    }
+    const shareButton = document.querySelector('.footerPanel button.share')
+    const mobileShareButton = document.querySelector('.mobileFooterPanel button.share')
+    // Pull link from the UV share popup.
+    shareButton.parentNode.insertBefore(this.createIIIFDragElement(), shareButton.nextSibling)
+    mobileShareButton.parentNode.insertBefore(this.createIIIFDragElement(), mobileShareButton.nextSibling)
+  }
+
+  createIIIFDragElement () {
+    const link = document.querySelector('a.imageBtn.iiif').href
+    const iconElement = document.createElement('a')
+    iconElement.className = 'btn imageBtn iiif-drag'
+    iconElement.href = link
+    iconElement.target = '_blank'
+    iconElement.innerHTML = `<img src="${IIIFLogo}" style="width:30px; height=30px;"/>`
+    return iconElement
+  }
+
+  waitForElementToDisplay (selector, time, callback) {
+    if (document.querySelector(selector) != null) {
+      callback()
+    } else {
+      setTimeout(function () {
+        this.waitForElementToDisplay(selector, time, callback)
+      }.bind(this), time)
+    }
   }
 
   requestAuth (data, status) {
@@ -72,6 +105,7 @@ export default class UVManager {
     const titleHeight = $('#title').outerHeight($('#title').is(':visible'))
     this.uvElement.width(windowWidth)
     this.uvElement.height(windowHeight - titleHeight)
+    this.waitForElementToDisplay('button.share', 500, this.addIIIFIcon.bind(this))
   }
 
   bindResize () {
