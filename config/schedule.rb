@@ -24,6 +24,10 @@ every :day, at: "9:00 PM", roles: [:db] do
   rake "fixity:request_daily_cloud_fixity"
 end
 
+every 10.minutes, roles: [:db] do
+  rake "cdl:bulk_hold_process"
+end
+
 # Example:
 #
 # set :output, "/path/to/my/cron_log.log"
