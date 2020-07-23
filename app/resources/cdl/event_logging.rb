@@ -15,6 +15,14 @@ module CDL
       end
 
       def google_charge_event(source_metadata_identifier:, netid:)
+        google_event(action: "charge", netid: netid, source_metadata_identifier: source_metadata_identifier)
+      end
+
+      def google_hold_event(source_metadata_identifier:, netid:)
+        google_event(action: "hold", netid: netid, source_metadata_identifier: source_metadata_identifier)
+      end
+
+      def google_event(action:, netid:, source_metadata_identifier:)
         Faraday.post(
           "https://www.google-analytics.com/collect?",
           v: "1",
@@ -23,7 +31,7 @@ module CDL
           t: "event",
           cid: SecureRandom.uuid,
           ec: "CDL-#{get_patron_group(netid: netid)}",
-          ea: "charge",
+          ea: action,
           el: source_metadata_identifier
         )
       end
