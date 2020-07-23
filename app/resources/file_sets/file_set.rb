@@ -28,12 +28,13 @@ class FileSet < Resource
            :run_fixity,
            :processing_note,
            :error_message,
-           to: :original_file,
+           :mime_type,
+           to: :primary_file,
            allow_nil: true
 
   delegate :date_of_digitization, :producer, :source_media_type, :duration, to: :preservation_file, allow_nil: true
 
-  delegate :md5, :sha1, :sha256, to: :original_file_checksum, allow_nil: true
+  delegate :md5, :sha1, :sha256, to: :primary_file_checksum, allow_nil: true
 
   def thumbnail_id
     id
@@ -83,15 +84,21 @@ class FileSet < Resource
     file_metadata.select(&:preservation_file?)
   end
 
+  def intermediate_file
+    file_metadata.find(&:intermediate_file?)
+  end
+
   def intermediate_files
     file_metadata.select(&:intermediate_file?)
   end
 
-  def mime_type
+  def primary_file
     if original_file
-      original_file.mime_type
+      original_file
     elsif preservation_file
-      preservation_file.mime_type
+      preservation_file
+    elsif intermediate_file
+      intermediate_file
     end
   end
 
@@ -105,7 +112,7 @@ class FileSet < Resource
 
   private
 
-    def original_file_checksum
-      original_file&.checksum&.first
+    def primary_file_checksum
+      primary_file&.checksum&.first
     end
 end

@@ -662,7 +662,7 @@ class ManifestBuilder
       # Retrieve the File related to the image resource
       # @return [File]
       def file
-        resource.original_file || resource.preservation_file
+        resource.primary_file
       end
 
       def derivative
