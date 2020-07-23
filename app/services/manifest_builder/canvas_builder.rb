@@ -8,6 +8,11 @@ class ManifestBuilder
       rendering_builder.new(record).apply(canvas)
     end
 
+    def apply(sequence)
+      return sequence if record.resource.mime_type.include?("application/pdf")
+      super
+    end
+
     def rendering_builder
       ManifestBuilder::CanvasRenderingBuilder
     end

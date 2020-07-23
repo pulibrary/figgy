@@ -945,9 +945,31 @@ RSpec.describe ManifestBuilder do
       scanned_resource
       change_set_persister.save(change_set: change_set)
     end
-    it "builds a UV compatible PDF manifest" do
+    it "builds a PDF manifest of image pages" do
       output = manifest_builder.build
-      file_set = Wayfinder.for(scanned_resource).members.first
+
+      expect(output["mediaSequences"]).to be_nil
+      canvases = output["sequences"].first["canvases"]
+      expect(canvases.length).to eq 2
+    end
+  end
+
+  context "when given a legacy PDF ScannedResource" do
+    it "builds a PDF mediaSequence" do
+      file_set = FactoryBot.create_for_repository(
+        :file_set,
+        file_metadata: [
+          FileMetadata.new(
+            id: SecureRandom.uuid,
+            mime_type: "application/pdf",
+            use: Valkyrie::Vocab::PCDMUse.OriginalFile,
+            file_identifiers: ["disk://bla/bla.pdf"]
+          )
+        ]
+      )
+      scanned_resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: file_set.id)
+
+      output = described_class.new(scanned_resource).build
 
       media_sequence = output["mediaSequences"].first
       expect(media_sequence["@type"]).to eq "ixif:MediaSequence"
@@ -956,5 +978,16 @@ RSpec.describe ManifestBuilder do
       expect(media_sequence["elements"][0]["@type"]).to eq "foaf:Document"
       expect(media_sequence["elements"][0]["label"]).to eq scanned_resource.title.first
     end
+    # it "builds a UV compatible PDF manifest" do
+    #   output = manifest_builder.build
+    #   file_set = Wayfinder.for(scanned_resource).members.first
+    #
+    #   media_sequence = output["mediaSequences"].first
+    #   expect(media_sequence["@type"]).to eq "ixif:MediaSequence"
+    #   expect(media_sequence["elements"][0]["@id"]).to eq "http://www.example.com/downloads/#{file_set.id}/file/#{file_set.original_file.id}"
+    #   expect(media_sequence["elements"][0]["format"]).to eq "application/pdf"
+    #   expect(media_sequence["elements"][0]["@type"]).to eq "foaf:Document"
+    #   expect(media_sequence["elements"][0]["label"]).to eq scanned_resource.title.first
+    # end
   end
 end
