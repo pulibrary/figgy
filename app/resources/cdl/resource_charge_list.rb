@@ -3,6 +3,7 @@
 # Controlled Digital Lending
 module CDL
   class ResourceChargeList < Valkyrie::Resource
+    enable_optimistic_locking
     attribute :resource_id, Valkyrie::Types::ID
     attribute :charged_items, Valkyrie::Types::Set.of(CDL::ChargedItem)
     attribute :hold_queue, Valkyrie::Types::Set.of(CDL::Hold)
