@@ -26,6 +26,10 @@ module CDL
         google_event(action: "hold-charged", netid: netid, source_metadata_identifier: source_metadata_identifier)
       end
 
+      def google_hold_expired_event(source_metadata_identifier:, netid:)
+        google_event(action: "hold-expired", netid: netid, source_metadata_identifier: source_metadata_identifier)
+      end
+
       def google_event(action:, netid:, source_metadata_identifier:, value: nil)
         params = {
           v: "1",
@@ -37,7 +41,7 @@ module CDL
           ea: action,
           el: source_metadata_identifier,
           ev: value
-        }.compact!
+        }.compact
         Faraday.post("https://www.google-analytics.com/collect?", params)
       end
     end

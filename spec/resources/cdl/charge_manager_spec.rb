@@ -16,6 +16,7 @@ describe CDL::ChargeManager do
     allow(CDL::EventLogging).to receive(:google_charge_event)
     allow(CDL::EventLogging).to receive(:google_hold_event)
     allow(CDL::EventLogging).to receive(:google_hold_charged_event)
+    allow(CDL::EventLogging).to receive(:google_hold_expired_event)
   end
 
   after do
@@ -121,6 +122,7 @@ describe CDL::ChargeManager do
         expired_hold_mail = ActionMailer::Base.deliveries.first
         expect(expired_hold_mail.to).to eq ["miku@princeton.edu"]
         expect(expired_hold_mail.subject).to eq "Digital Checkout Reservation Expired: Title"
+        expect(CDL::EventLogging).to have_received(:google_hold_expired_event).with(source_metadata_identifier: "123456", netid: "miku")
         activated_hold_mail = ActionMailer::Base.deliveries.last
         expect(activated_hold_mail.subject).to eq "Available for Digital Checkout: Title"
       end

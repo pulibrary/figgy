@@ -104,6 +104,7 @@ module CDL
     end
 
     def notify_hold_expired(hold:)
+      CDL::EventLogging.google_hold_expired_event(source_metadata_identifier: source_metadata_identifier, netid: hold.netid)
       CDL::HoldMailer.with(user: User.where(uid: hold.netid).first!, resource_id: resource_id.to_s).hold_expired.deliver_later
     end
 
