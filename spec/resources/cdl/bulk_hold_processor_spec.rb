@@ -32,6 +32,7 @@ RSpec.describe CDL::BulkHoldProcessor do
       inactive_hold_netids: ["one", "two"]
     )
     resource_charge_list2 = FactoryBot.create_for_repository(:resource_charge_list, resource_id: FactoryBot.create_for_repository(:complete_private_scanned_resource).id)
+    resource_charge_list3 = FactoryBot.create_for_repository(:resource_charge_list, resource_id: FactoryBot.create_for_repository(:complete_private_scanned_resource).id, inactive_hold_netids: ["one"])
 
     described_class.process!
 
@@ -40,6 +41,12 @@ RSpec.describe CDL::BulkHoldProcessor do
     expect(reloaded_resource_charge_list1.hold_queue.size).to eq 2
     expect(reloaded_resource_charge_list1.active_holds.size).to eq 1
     expect(reloaded_resource_charge_list1.active_holds[0].netid).to eq "one"
+
     expect(query_service.find_by(id: resource_charge_list2.id).updated_at).to eq resource_charge_list2.updated_at
+
+    # Ensure all resources are activated.
+    reloaded_resource_charge_list3 = query_service.find_by(id: resource_charge_list3.id)
+    expect(reloaded_resource_charge_list3.hold_queue.size).to eq 1
+    expect(reloaded_resource_charge_list3.active_holds.size).to eq 1
   end
 end
