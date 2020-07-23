@@ -15,6 +15,7 @@ describe CDL::ChargeManager do
     end
     allow(CDL::EventLogging).to receive(:google_charge_event)
     allow(CDL::EventLogging).to receive(:google_hold_event)
+    allow(CDL::EventLogging).to receive(:google_hold_charged_event)
   end
 
   after do
@@ -262,6 +263,8 @@ describe CDL::ChargeManager do
           reloaded_charges = Valkyrie.config.metadata_adapter.query_service.find_by(id: resource_charge_list.id)
           expect(reloaded_charges.charged_items).to be_present
           expect(reloaded_charges.hold_queue).to be_empty
+          expect(CDL::EventLogging).to have_received(:google_hold_charged_event).with(netid: "skye", source_metadata_identifier: "123456")
+          expect(CDL::EventLogging).not_to have_received(:google_hold_event)
         end
       end
 

@@ -46,7 +46,11 @@ module CDL
       end
       change_set.validate(charged_items: resource_charge_list.charged_items + [charge], hold_queue: updated_hold_queue)
       change_set_persister.save(change_set: change_set)
-      CDL::EventLogging.google_charge_event(netid: netid, source_metadata_identifier: source_metadata_identifier)
+      if change_set.changed["hold_queue"]
+        CDL::EventLogging.google_hold_charged_event(netid: netid, source_metadata_identifier: source_metadata_identifier)
+      else
+        CDL::EventLogging.google_charge_event(netid: netid, source_metadata_identifier: source_metadata_identifier)
+      end
       charge
     end
 

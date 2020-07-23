@@ -68,4 +68,21 @@ RSpec.describe CDL::EventLogging do
       .with(body: "cid=1&ea=hold&ec=CDL-staff&el=12345&ev=1&t=event&tid=UA-15870237-29&ua=Figgy&v=1")).to have_been_made
     end
   end
+
+  describe ".google_hold_charged_event" do
+    let(:netid) { "abc123" }
+    let(:bibid) { "12345" }
+    before do
+      stub_request(:get, "https://bibdata.princeton.edu/patron/#{netid}")
+        .to_return(status: 200,
+                   body: file_fixture("bibdata/#{netid}.json").read, headers: { "Content-Type" => "application/json" })
+      stub_request(:post, "https://www.google-analytics.com/collect")
+      allow(SecureRandom).to receive(:uuid).and_return("1")
+    end
+    it "sends a hold-charged event to google analytics" do
+      described_class.google_hold_charged_event(source_metadata_identifier: bibid, netid: netid)
+      expect(a_request(:post, "https://www.google-analytics.com/collect")
+      .with(body: "cid=1&ea=hold-charged&ec=CDL-staff&el=12345&t=event&tid=UA-15870237-29&ua=Figgy&v=1")).to have_been_made
+    end
+  end
 end

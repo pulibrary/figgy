@@ -22,9 +22,12 @@ module CDL
         google_event(action: "hold", netid: netid, source_metadata_identifier: source_metadata_identifier, value: hold_queue_size)
       end
 
+      def google_hold_charged_event(source_metadata_identifier:, netid:)
+        google_event(action: "hold-charged", netid: netid, source_metadata_identifier: source_metadata_identifier)
+      end
+
       def google_event(action:, netid:, source_metadata_identifier:, value: nil)
-        Faraday.post(
-          "https://www.google-analytics.com/collect?",
+        params = {
           v: "1",
           tid: "UA-15870237-29",
           ua: "Figgy",
@@ -34,7 +37,8 @@ module CDL
           ea: action,
           el: source_metadata_identifier,
           ev: value
-        )
+        }.compact!
+        Faraday.post("https://www.google-analytics.com/collect?", params)
       end
     end
   end
