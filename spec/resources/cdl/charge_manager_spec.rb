@@ -190,7 +190,8 @@ describe CDL::ChargeManager do
           charge_manager.create_hold(netid: "zelda")
           reloaded_charges = Valkyrie.config.metadata_adapter.query_service.find_by(id: resource_charge_list.id)
           expect(reloaded_charges.hold_queue.length).to eq 2
-          expect(CDL::EventLogging).to have_received(:google_hold_event).with(source_metadata_identifier: "123456", netid: "zelda")
+          # Send an event with the number of active holds.
+          expect(CDL::EventLogging).to have_received(:google_hold_event).with(source_metadata_identifier: "123456", netid: "zelda", hold_queue_size: 1)
         end
       end
       context "there is a ResourceChargeList and no existing hold" do

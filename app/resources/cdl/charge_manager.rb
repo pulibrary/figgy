@@ -60,8 +60,8 @@ module CDL
       hold = CDL::Hold.new(netid: netid)
       change_set = CDL::ResourceChargeListChangeSet.new(resource_charge_list)
       change_set.validate(hold_queue: resource_charge_list.hold_queue + [hold])
-      change_set_persister.save(change_set: change_set).tap do
-        CDL::EventLogging.google_hold_event(netid: netid, source_metadata_identifier: source_metadata_identifier)
+      change_set_persister.save(change_set: change_set).tap do |list|
+        CDL::EventLogging.google_hold_event(netid: netid, source_metadata_identifier: source_metadata_identifier, hold_queue_size: list.pending_or_active_holds.size)
       end
     end
 

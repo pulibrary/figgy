@@ -62,10 +62,10 @@ RSpec.describe CDL::EventLogging do
       stub_request(:post, "https://www.google-analytics.com/collect")
       allow(SecureRandom).to receive(:uuid).and_return("1")
     end
-    it "sends a hold event to google analytics" do
-      described_class.google_hold_event(source_metadata_identifier: bibid, netid: netid)
+    it "sends a hold event to google analytics including the hold queue size as the value" do
+      described_class.google_hold_event(source_metadata_identifier: bibid, netid: netid, hold_queue_size: 1)
       expect(a_request(:post, "https://www.google-analytics.com/collect")
-      .with(body: "cid=1&ea=hold&ec=CDL-staff&el=12345&t=event&tid=UA-15870237-29&ua=Figgy&v=1")).to have_been_made
+      .with(body: "cid=1&ea=hold&ec=CDL-staff&el=12345&ev=1&t=event&tid=UA-15870237-29&ua=Figgy&v=1")).to have_been_made
     end
   end
 end

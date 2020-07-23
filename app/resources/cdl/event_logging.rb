@@ -18,11 +18,11 @@ module CDL
         google_event(action: "charge", netid: netid, source_metadata_identifier: source_metadata_identifier)
       end
 
-      def google_hold_event(source_metadata_identifier:, netid:)
-        google_event(action: "hold", netid: netid, source_metadata_identifier: source_metadata_identifier)
+      def google_hold_event(source_metadata_identifier:, netid:, hold_queue_size:)
+        google_event(action: "hold", netid: netid, source_metadata_identifier: source_metadata_identifier, value: hold_queue_size)
       end
 
-      def google_event(action:, netid:, source_metadata_identifier:)
+      def google_event(action:, netid:, source_metadata_identifier:, value: nil)
         Faraday.post(
           "https://www.google-analytics.com/collect?",
           v: "1",
@@ -32,7 +32,8 @@ module CDL
           cid: SecureRandom.uuid,
           ec: "CDL-#{get_patron_group(netid: netid)}",
           ea: action,
-          el: source_metadata_identifier
+          el: source_metadata_identifier,
+          ev: value
         )
       end
     end
