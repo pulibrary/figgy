@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 require "csv"
 class GroundsAndBuildingsService
-  attr_reader :items, :collection, :change_set_persister, :logger
-  def initialize(collection, table, change_set_persister, logger: Valkyrie.logger)
+  attr_reader :items, :collection, :change_set_persister
+  def initialize(collection, table, change_set_persister)
     @collection = collection
     @change_set_persister = change_set_persister
     @items = []
