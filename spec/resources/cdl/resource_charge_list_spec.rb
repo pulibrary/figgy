@@ -20,4 +20,15 @@ describe CDL::ResourceChargeList do
       expect(charge_manager.charged_items[0]).to eq charged_item
     end
   end
+
+  it "has optimistic locking enabled" do
+    resource_charge_list = FactoryBot.create_for_repository(:resource_charge_list)
+    change_set = ChangeSet.for(resource_charge_list)
+    change_set.validate(resource_id: SecureRandom.uuid)
+    ScannedResourcesController.change_set_persister.save(change_set: change_set)
+
+    change_set = ChangeSet.for(resource_charge_list)
+    change_set.validate(resource_id: SecureRandom.uuid)
+    expect { ScannedResourcesController.change_set_persister.save(change_set: change_set) }.to raise_error Valkyrie::Persistence::StaleObjectError
+  end
 end
