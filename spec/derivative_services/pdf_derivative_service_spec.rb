@@ -49,10 +49,12 @@ RSpec.describe PDFDerivativeService do
 
       reloaded_members = query_service.find_members(resource: scanned_resource)
 
-      intermediate_files = reloaded_members.flat_map(&:file_metadata).select(&:intermediate_file?)
       expect(reloaded_members.reject { |fs| fs.preservation_file.nil? }.map(&:id).first).to eq valid_resource.id
+      intermediate_files = reloaded_members.reject { |fs| fs.intermediate_file.nil? }
       expect(intermediate_files.count).to eq 2
-      expect(intermediate_files.first.checksum.first).not_to eq intermediate_files.last.checksum.first
+      expect(intermediate_files.first.title).to eq [1]
+      expect(intermediate_files.last.title).to eq [2]
+      expect(intermediate_files.first.intermediate_file.checksum.first).not_to eq intermediate_files.last.intermediate_file.checksum.first
     end
   end
 end

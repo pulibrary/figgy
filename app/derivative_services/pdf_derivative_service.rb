@@ -73,7 +73,6 @@ class PDFDerivativeService
     query_service.find_by(id: id)
   end
 
-  # TODO: it would be better to just know how many pages are in the pdf
   def convert_pages
     files = []
     page = 0
@@ -81,14 +80,14 @@ class PDFDerivativeService
       image = convert_page(page: page)
       break unless image
       page += 1
-      files << build_file(page)
+      files << build_file(page, image)
     end
     files
   end
 
-  def build_file(page)
+  def build_file(page, file_path)
     IngestableFile.new(
-      file_path: temporary_output(page).path.to_s,
+      file_path: file_path,
       mime_type: "image/tiff",
       use: Valkyrie::Vocab::PCDMUse.IntermediateFile,
       original_filename: "converted_from_pdf_page_#{page}.tiff",
@@ -100,10 +99,11 @@ class PDFDerivativeService
 
   def convert_page(page:)
     vips_image = Vips::Image.pdfload(filename, page: page)
-    vips_image.tiffsave(
-      temporary_output(page).path.to_s
-    )
-    true
+    location = temporary_output(page).path.to_s
+    vips_image.tiffsave(location)
+    location
+  # TODO: raise when it's not an out of range error, log it as a derivatives
+  # error so we know to regenerate derivatives
   # Vips::Error: pdfload: pages out of range
   rescue Vips::Error
     Rails.logger.info "vips error page #{page}"
@@ -111,7 +111,7 @@ class PDFDerivativeService
   end
 
   def temporary_output(page)
-    @temporary_file ||= Tempfile.new(["intermediate_file#{page}", ".tif"])
+    Tempfile.new(["intermediate_file#{page}", ".tif"])
   end
 
   def filename
