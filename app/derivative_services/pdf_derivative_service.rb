@@ -20,7 +20,7 @@ class PDFDerivativeService
   end
 
   def valid?
-    valid_mime_types.include?(mime_type.first)
+    valid_mime_types.include?(mime_type.first) && !resource.preservation_file.nil?
   end
 
   def create_derivatives
@@ -30,12 +30,13 @@ class PDFDerivativeService
   end
 
   def update_pdf_use
-    pdf_file_metadata = resource.file_metadata.select { |f| f.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }.select(&:pdf?).first
+    cached_resource = resource
+    pdf_file_metadata = cached_resource.file_metadata.select { |f| f.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }.select(&:pdf?).first
     return unless pdf_file_metadata
+
     pdf_file_metadata.use = [Valkyrie::Vocab::PCDMUse.PreservationMasterFile]
-    change_set = ChangeSet.for(resource)
-    change_set.validate(file_metadata: [pdf_file_metadata])
-    change_set_persister.save(change_set: change_set)
+    cached_resource.file_metadata = cached_resource.file_metadata.select { |x| x.id != pdf_file_metadata.id } + [pdf_file_metadata]
+    persister.save(resource: cached_resource)
   end
 
   def add_file_sets(files)
@@ -45,11 +46,17 @@ class PDFDerivativeService
   end
 
   def parent_change_set
-    ChangeSet.for(Wayfinder.for(resource).parent)
+    ChangeSet.for(parent)
+  end
+
+  def parent
+    Wayfinder.for(resource).parent
   end
 
   def cleanup_derivatives
-    # TODO
+    # TODO: this should delete the filesets that were generated from the pdf.
+    # This means we should split pdf pages from an original file or a
+    # preservation master, so that derivatives can be re-generated.
     nil
   end
 
@@ -113,5 +120,9 @@ class PDFDerivativeService
 
   def file_object
     @file_object ||= Valkyrie::StorageAdapter.find_by(id: target_file.file_identifiers[0])
+  end
+
+  def persister
+    change_set_persister.metadata_adapter.persister
   end
 end

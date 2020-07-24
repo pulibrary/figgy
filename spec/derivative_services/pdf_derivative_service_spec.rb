@@ -42,16 +42,17 @@ RSpec.describe PDFDerivativeService do
     end
   end
 
-  describe "#create_derivatives", run_real_derivatives: true do
+  describe "#create_derivatives", run_real_derivatives: true, run_real_characterization: true do
+    with_queue_adapter :inline
     it "creates an intermediate tiff for each page and marks the pdf as preservation master" do
       derivative_service.new(id: valid_change_set.id).create_derivatives
 
       reloaded_members = query_service.find_members(resource: scanned_resource)
 
-      expect(reloaded_members.flat_map(&:file_metadata).select(&:intermediate_file?).count).to eq 2
+      intermediate_files = reloaded_members.flat_map(&:file_metadata).select(&:intermediate_file?)
       expect(reloaded_members.reject { |fs| fs.preservation_file.nil? }.map(&:id).first).to eq valid_resource.id
-
-      # TODO: test that derivatives are kicked off for each new tiff
+      expect(intermediate_files.count).to eq 2
+      expect(intermediate_files.first.checksum.first).not_to eq intermediate_files.last.checksum.first
     end
   end
 end
