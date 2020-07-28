@@ -143,4 +143,10 @@ RSpec.describe ScannedResourceChangeSet do
       expect(change_set.resource.claimed_by).to eq "tpend"
     end
   end
+
+  describe "MARCRelators" do
+    it "has MARCRelator properties" do
+      expect(change_set).to respond_to(:complainant_appellant)
+    end
+  end
 end

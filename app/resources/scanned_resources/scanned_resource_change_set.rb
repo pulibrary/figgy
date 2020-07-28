@@ -31,6 +31,9 @@ class ScannedResourceChangeSet < ChangeSet
   property :replaces, multiple: true, require: false
   property :identifier, multiple: false, require: false
 
+  # MARCRelator attributes
+  Schema::MARCRelators.attributes.each { |field| property field }
+
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
   property :pending_uploads, multiple: true, required: false
