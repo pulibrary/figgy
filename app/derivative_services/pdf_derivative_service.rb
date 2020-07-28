@@ -19,8 +19,10 @@ class PDFDerivativeService
     @change_set_persister = change_set_persister
   end
 
+  # We only run this if the resource is an original_file
+  # Don't run again on preservation masters (for now)
   def valid?
-    valid_mime_types.include?(mime_type.first) && !resource.preservation_file.nil?
+    valid_mime_types.include?(mime_type.first) && resource.original_file
   end
 
   def create_derivatives
@@ -65,7 +67,7 @@ class PDFDerivativeService
   end
 
   def target_file
-    @target_file ||= resource.original_file
+    @target_file ||= resource.primary_file
   end
 
   # don't memoize; it needs to be reloaded to save correctly

@@ -19,16 +19,15 @@ RSpec.describe PDFDerivativeService do
   end
   let(:book_members) { query_service.find_members(resource: scanned_resource) }
   let(:valid_resource) { book_members.first }
-  let(:valid_change_set) { ChangeSet.for(valid_resource) }
-  let(:valid_id) { valid_change_set.id }
+  let(:valid_id) { valid_resource.id }
 
   describe "#valid?" do
-    subject(:valid_file) { derivative_service.new(id: valid_change_set.id) }
+    subject(:valid_file) { derivative_service.new(id: valid_id) }
 
     # TODO: do we need to ensure the file use is original?
     # Think about idempotence, re-generating failed derivatives or pages.
 
-    context "when given a pdf mime_type" do
+    context "when given a pdf original_file" do
       it { is_expected.to be_valid }
     end
 
@@ -45,7 +44,7 @@ RSpec.describe PDFDerivativeService do
   describe "#create_derivatives", run_real_derivatives: true, run_real_characterization: true do
     with_queue_adapter :inline
     it "creates an intermediate tiff for each page and marks the pdf as preservation master" do
-      derivative_service.new(id: valid_change_set.id).create_derivatives
+      valid_resource
 
       reloaded_members = query_service.find_members(resource: scanned_resource)
 
