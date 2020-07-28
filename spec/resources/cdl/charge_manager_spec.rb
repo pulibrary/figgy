@@ -14,6 +14,9 @@ describe CDL::ChargeManager do
       end
     end
     allow(CDL::EventLogging).to receive(:google_charge_event)
+    allow(CDL::EventLogging).to receive(:google_hold_event)
+    allow(CDL::EventLogging).to receive(:google_hold_charged_event)
+    allow(CDL::EventLogging).to receive(:google_hold_expired_event)
   end
 
   after do
@@ -119,6 +122,7 @@ describe CDL::ChargeManager do
         expired_hold_mail = ActionMailer::Base.deliveries.first
         expect(expired_hold_mail.to).to eq ["miku@princeton.edu"]
         expect(expired_hold_mail.subject).to eq "Digital Checkout Reservation Expired: Title"
+        expect(CDL::EventLogging).to have_received(:google_hold_expired_event).with(source_metadata_identifier: "123456", netid: "miku")
         activated_hold_mail = ActionMailer::Base.deliveries.last
         expect(activated_hold_mail.subject).to eq "Available for Digital Checkout: Title"
       end
@@ -189,6 +193,8 @@ describe CDL::ChargeManager do
           charge_manager.create_hold(netid: "zelda")
           reloaded_charges = Valkyrie.config.metadata_adapter.query_service.find_by(id: resource_charge_list.id)
           expect(reloaded_charges.hold_queue.length).to eq 2
+          # Send an event with the number of active holds.
+          expect(CDL::EventLogging).to have_received(:google_hold_event).with(source_metadata_identifier: "123456", netid: "zelda", hold_queue_size: 1)
         end
       end
       context "there is a ResourceChargeList and no existing hold" do
@@ -259,6 +265,8 @@ describe CDL::ChargeManager do
           reloaded_charges = Valkyrie.config.metadata_adapter.query_service.find_by(id: resource_charge_list.id)
           expect(reloaded_charges.charged_items).to be_present
           expect(reloaded_charges.hold_queue).to be_empty
+          expect(CDL::EventLogging).to have_received(:google_hold_charged_event).with(netid: "skye", source_metadata_identifier: "123456")
+          expect(CDL::EventLogging).not_to have_received(:google_hold_event)
         end
       end
 

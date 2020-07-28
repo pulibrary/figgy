@@ -46,8 +46,16 @@ module CDL
       end
       change_set.validate(charged_items: resource_charge_list.charged_items + [charge], hold_queue: updated_hold_queue)
       change_set_persister.save(change_set: change_set)
-      CDL::EventLogging.google_charge_event(netid: netid, source_metadata_identifier: resource.try(:source_metadata_identifier)&.first)
+      if change_set.changed["hold_queue"]
+        CDL::EventLogging.google_hold_charged_event(netid: netid, source_metadata_identifier: source_metadata_identifier)
+      else
+        CDL::EventLogging.google_charge_event(netid: netid, source_metadata_identifier: source_metadata_identifier)
+      end
       charge
+    end
+
+    def source_metadata_identifier
+      resource.try(:source_metadata_identifier)&.first
     end
 
     def create_hold(netid:)
@@ -56,7 +64,9 @@ module CDL
       hold = CDL::Hold.new(netid: netid)
       change_set = CDL::ResourceChargeListChangeSet.new(resource_charge_list)
       change_set.validate(hold_queue: resource_charge_list.hold_queue + [hold])
-      change_set_persister.save(change_set: change_set)
+      change_set_persister.save(change_set: change_set).tap do |list|
+        CDL::EventLogging.google_hold_event(netid: netid, source_metadata_identifier: source_metadata_identifier, hold_queue_size: list.pending_or_active_holds.size)
+      end
     end
 
     def activate_holds!
@@ -94,6 +104,7 @@ module CDL
     end
 
     def notify_hold_expired(hold:)
+      CDL::EventLogging.google_hold_expired_event(source_metadata_identifier: source_metadata_identifier, netid: hold.netid)
       CDL::HoldMailer.with(user: User.where(uid: hold.netid).first!, resource_id: resource_id.to_s).hold_expired.deliver_later
     end
 

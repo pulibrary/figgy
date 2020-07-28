@@ -3,6 +3,12 @@
 require "rails_helper"
 
 RSpec.describe Cdl::CdlController, type: :controller do
+  before do
+    allow(CDL::EventLogging).to receive(:google_charge_event)
+    allow(CDL::EventLogging).to receive(:google_hold_event)
+    allow(CDL::EventLogging).to receive(:google_hold_charged_event)
+    allow(CDL::EventLogging).to receive(:google_hold_expired_event)
+  end
   describe "POST /cdl/:id/hold" do
     context "when not logged in" do
       it "returns a 403 forbidden" do

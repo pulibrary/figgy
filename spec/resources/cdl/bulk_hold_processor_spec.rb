@@ -4,6 +4,12 @@ require "rails_helper"
 
 RSpec.describe CDL::BulkHoldProcessor do
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
+  before do
+    allow(CDL::EventLogging).to receive(:google_charge_event)
+    allow(CDL::EventLogging).to receive(:google_hold_event)
+    allow(CDL::EventLogging).to receive(:google_hold_charged_event)
+    allow(CDL::EventLogging).to receive(:google_hold_expired_event)
+  end
   it "expires all expired holds" do
     allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
     User.create!(uid: "one", email: "one@princeton.edu")
