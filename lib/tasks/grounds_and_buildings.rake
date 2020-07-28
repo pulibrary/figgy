@@ -36,4 +36,39 @@ namespace :sip do
       csp.save(change_set: component_resource_change_set)
     end
   end
+
+  desc "Update images with additional metadata"
+  task update_image_metadata: :environment do
+    table_path = ENV["TABLE"]
+    abort "usage: rake sip:update_image_metadata TABLE=path_to_table" unless File.exist?(table_path)
+
+    @logger = Logger.new(STDOUT)
+    @logger.info "updating metadata of figgy objects in #{table_path}"
+
+    table = CSV.parse(File.read(table_path), headers: true)
+    metadata_adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
+    qs = metadata_adapter.query_service
+    csp = ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter)
+    
+    table.each do |row|
+      figgy_id = row["Figgy URL"].match(/^.*catalog\//).post_match
+      # get the resource
+      resource = qs.find_by(id: figgy_id)
+      # get changeset for resource
+      cs = ChangeSet.for(resource)
+      # update resource and changeset with field values; date is special
+      date = if row["End Date"]
+               DateRange.new(start: row["Date"],
+                             end: row["End Date"],
+                             approximate: row["Approximate"] == "approximate")
+             else
+               row["Date"]
+             end
+      cs.validate(date: date,
+                  title: row["Title"],
+                  subject: row["Subject"],
+                  photographer: row["Photographer"])
+      csp.save(change_set: cs)
+    end
+  end
 end
