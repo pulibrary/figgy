@@ -1947,7 +1947,7 @@ RSpec.describe ChangeSetPersister do
       resource = FactoryBot.create_for_repository(:scanned_resource, files: [file])
       file_set = Wayfinder.for(resource).members.first
 
-      expect(file_set.original_file.checksum).to be_present
+      expect(file_set.primary_file.checksum).to be_present
     end
   end
 
