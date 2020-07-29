@@ -35,6 +35,17 @@ RSpec.describe PDFDerivativeService do
         is_expected.not_to be_valid
       end
     end
+
+    context "when given a pdf preservation master" do
+      it "is valid" do
+        pdf_file_metadata = valid_resource.file_metadata.select { |f| f.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }.first
+        pdf_file_metadata.use = [Valkyrie::Vocab::PCDMUse.PreservationMasterFile]
+        valid_resource.file_metadata = [pdf_file_metadata]
+        adapter.persister.save(resource: valid_resource)
+
+        is_expected.to be_valid
+      end
+    end
   end
 
   describe "#create_derivatives", run_real_derivatives: true, run_real_characterization: true do
@@ -59,7 +70,6 @@ RSpec.describe PDFDerivativeService do
     it "deletes all intermediate files with original_filename starting 'converted_from_pdf'" do
 
       derivative_service.new(id: valid_resource.id).cleanup_derivatives
-      reloaded = query_service.find_by(id: valid_resource.id)
 
       reloaded_members = query_service.find_members(resource: scanned_resource)
       expect(reloaded_members.count).to eq 1

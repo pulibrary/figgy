@@ -19,10 +19,8 @@ class PDFDerivativeService
     @change_set_persister = change_set_persister
   end
 
-  # We only run this if the resource is an original_file
-  # Don't run again on preservation masters (for now)
   def valid?
-    valid_mime_types.include?(mime_type.first) && resource.original_file
+    valid_mime_types.include?(mime_type.first)
   end
 
   def create_derivatives
