@@ -12,7 +12,6 @@ RSpec.describe PDFDerivativeService do
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
-  let(:persister) { adapter.persister }
   let(:query_service) { adapter.query_service }
   let(:scanned_resource) do
     change_set_persister.save(change_set: ScannedResourceChangeSet.new(ScannedResource.new, files: [file]))
@@ -23,9 +22,6 @@ RSpec.describe PDFDerivativeService do
 
   describe "#valid?" do
     subject(:valid_file) { derivative_service.new(id: valid_id) }
-
-    # TODO: do we need to ensure the file use is original?
-    # Think about idempotence, re-generating failed derivatives or pages.
 
     context "when given a pdf original_file" do
       it { is_expected.to be_valid }
@@ -54,6 +50,23 @@ RSpec.describe PDFDerivativeService do
       expect(intermediate_files.first.title).to eq [1]
       expect(intermediate_files.last.title).to eq [2]
       expect(intermediate_files.first.intermediate_file.checksum.first).not_to eq intermediate_files.last.intermediate_file.checksum.first
+    end
+  end
+
+  describe "#cleanup_derivatives", run_real_derivatives: true, run_real_characterization: true do
+    with_queue_adapter :inline
+    before { valid_resource }
+    it "deletes all intermediate files with original_filename starting 'converted_from_pdf'" do
+
+      derivative_service.new(id: valid_resource.id).cleanup_derivatives
+      reloaded = query_service.find_by(id: valid_resource.id)
+
+      reloaded_members = query_service.find_members(resource: scanned_resource)
+      expect(reloaded_members.count).to eq 1
+      expect(reloaded_members.first.id).to eq valid_resource.id
+
+      intermediate_files = reloaded_members.reject { |fs| fs.intermediate_file.nil? }
+      expect(intermediate_files).to be_empty
     end
   end
 end

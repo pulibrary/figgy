@@ -55,11 +55,19 @@ class PDFDerivativeService
     Wayfinder.for(resource).parent
   end
 
+  # Delete the filesets that were generated from the pdf.
+  # TODO: This means we should split pdf pages from an original file or a
+  # preservation master, so that derivatives can be re-generated.
   def cleanup_derivatives
-    # TODO: this should delete the filesets that were generated from the pdf.
-    # This means we should split pdf pages from an original file or a
-    # preservation master, so that derivatives can be re-generated.
-    nil
+    intermediate_derivatives = Wayfinder.for(parent).members.select do |member|
+      member.intermediate_files.present? && member.primary_file.original_filename.first.starts_with?("converted_from_pdf")
+    end
+    intermediate_derivatives.each { |fs| cleanup_resource(fs) }
+  end
+
+  def cleanup_resource(resource)
+    change_set = ChangeSet.for(resource)
+    change_set_persister.delete(change_set: change_set)
   end
 
   def valid_mime_types
