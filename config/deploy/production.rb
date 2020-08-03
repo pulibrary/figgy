@@ -13,6 +13,8 @@ server "lib-proc6", user: "deploy", roles: %w[worker]
 server "lib-proc7", user: "deploy", roles: %w[worker]
 server "lib-proc8", user: "deploy", roles: %w[worker]
 server "lib-proc9", user: "deploy", roles: %w[worker]
+server "lib-proc10", user: "deploy", roles: %w[worker]
+server "lib-proc11", user: "deploy", roles: %w[worker]
 
 set :google_fixity_request_topic, "figgy-production-fixity-request"
 set :google_service_account, "figgy-preservation-production@pulibrary-figgy-storage-1.iam.gserviceaccount.com"
