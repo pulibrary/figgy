@@ -54,8 +54,6 @@ class PDFDerivativeService
   end
 
   # Delete the filesets that were generated from the pdf.
-  # TODO: This means we should split pdf pages from an original file or a
-  # preservation master, so that derivatives can be re-generated.
   def cleanup_derivatives
     intermediate_derivatives = Wayfinder.for(parent).members.select do |member|
       member.intermediate_files.present? && member.primary_file.original_filename.first.starts_with?("converted_from_pdf")
@@ -110,12 +108,10 @@ class PDFDerivativeService
     location = temporary_output(page).path.to_s
     vips_image.tiffsave(location)
     location
-  # TODO: raise when it's not an out of range error, log it as a derivatives
-  # error so we know to regenerate derivatives
-  # Vips::Error: pdfload: pages out of range
-  rescue Vips::Error
-    Rails.logger.info "vips error page #{page}"
-    nil
+  rescue Vips::Error => error
+    return nil if error.message.strip == "pdfload: pages out of range"
+    update_error_message(message: error.message)
+    raise error
   end
 
   def temporary_output(page)
@@ -132,5 +128,14 @@ class PDFDerivativeService
 
   def persister
     change_set_persister.metadata_adapter.persister
+  end
+
+  # Updates error message property on the primary file.
+  def update_error_message(message:)
+    cached_resource = resource
+    primary_file = cached_resource.primary_file
+    primary_file.error_message = [message]
+    cached_resource.file_metadata = cached_resource.file_metadata.select { |x| x.id != primary_file.id } + [primary_file]
+    persister.save(resource: cached_resource)
   end
 end

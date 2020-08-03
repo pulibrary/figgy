@@ -48,19 +48,35 @@ RSpec.describe PDFDerivativeService do
     end
   end
 
-  describe "#create_derivatives", run_real_derivatives: true, run_real_characterization: true do
-    with_queue_adapter :inline
-    it "creates an intermediate tiff for each page and marks the pdf as preservation master" do
-      valid_resource
+  describe "#create_derivatives" do
+    context "when there are no errors", run_real_derivatives: true, run_real_characterization: true do
+      with_queue_adapter :inline
+      it "creates an intermediate tiff for each page and marks the pdf as preservation master" do
+        valid_resource
 
-      reloaded_members = query_service.find_members(resource: scanned_resource)
+        reloaded_members = query_service.find_members(resource: scanned_resource)
 
-      expect(reloaded_members.reject { |fs| fs.preservation_file.nil? }.map(&:id).first).to eq valid_resource.id
-      intermediate_files = reloaded_members.reject { |fs| fs.intermediate_file.nil? }
-      expect(intermediate_files.count).to eq 2
-      expect(intermediate_files.first.title).to eq [1]
-      expect(intermediate_files.last.title).to eq [2]
-      expect(intermediate_files.first.intermediate_file.checksum.first).not_to eq intermediate_files.last.intermediate_file.checksum.first
+        expect(reloaded_members.reject { |fs| fs.preservation_file.nil? }.map(&:id).first).to eq valid_resource.id
+        intermediate_files = reloaded_members.reject { |fs| fs.intermediate_file.nil? }
+        expect(intermediate_files.count).to eq 2
+        expect(intermediate_files.first.title).to eq [1]
+        expect(intermediate_files.last.title).to eq [2]
+        expect(intermediate_files.first.intermediate_file.checksum.first).not_to eq intermediate_files.last.intermediate_file.checksum.first
+      end
+    end
+
+    context "when there is a vips error" do
+      before { valid_resource }
+      it "updates the error message and raises" do
+        allow(Vips::Image).to receive(:pdfload).and_raise(Vips::Error, "not the pagerange error")
+        expect { derivative_service.new(id: valid_resource.id).create_derivatives }.to raise_error(Vips::Error)
+        reloaded_members = query_service.find_members(resource: scanned_resource)
+        expect(reloaded_members.count).to eq 1
+        file_set = reloaded_members.first
+        expect(file_set.id).to eq valid_resource.id
+        expect(file_set.file_metadata.flat_map(&:use)).to eq [Valkyrie::Vocab::PCDMUse.OriginalFile]
+        expect(file_set.original_file.error_message).to include(/not the pagerange error/)
+      end
     end
   end
 
@@ -68,7 +84,6 @@ RSpec.describe PDFDerivativeService do
     with_queue_adapter :inline
     before { valid_resource }
     it "deletes all intermediate files with original_filename starting 'converted_from_pdf'" do
-
       derivative_service.new(id: valid_resource.id).cleanup_derivatives
 
       reloaded_members = query_service.find_members(resource: scanned_resource)
