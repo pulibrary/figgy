@@ -36,10 +36,15 @@ class ChangeSet < Valkyrie::ChangeSet
     include(ChangeSetWorkflow)
   end
 
-  def self.core_resource(change_set: nil)
+  def self.core_resource(change_set: nil, remote_metadata: false)
     delegate :human_readable_type, to: :model
     property :title, multiple: true, required: true, default: []
-    validates_with TitleValidator
+    validates_with(TitleValidator) unless remote_metadata
+    if remote_metadata
+      include RemoteMetadataProperty
+      validates_with SourceMetadataIdentifierOrTitleValidator
+      property :source_metadata_identifier, required: true, multiple: false
+    end
     # Rights
     property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
     property :rights_note, multiple: false, required: false

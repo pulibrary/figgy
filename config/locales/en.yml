@@ -51,6 +51,7 @@ en:
     recording: 'Recording'
     letter: 'Letter'
     archival_media_collection: 'Archival Media Collection'
+    CDL::Resource: 'CDL Resource'
   works:
     progress:
       header: 'Save Work'

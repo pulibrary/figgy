@@ -93,6 +93,7 @@ Rails.application.routes.draw do
         get "new/simple", action: :new, change_set: "simple", as: :new_simple
         get "new/recording", action: :new, change_set: "recording", as: :new_recording
         get "new/letter", action: :new, change_set: "letter", as: :new_letter
+        get "new/cdl_resource", action: :new, change_set: "CDL::Resource", as: :new_cdl_resource
       end
       collection do
         get "save_and_ingest/:id", action: :save_and_ingest, constraints: { id: /[^\/]+/ }, defaults: { format: :json }
