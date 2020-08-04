@@ -29,18 +29,6 @@ class PDFDerivativeService
     update_pdf_use
   end
 
-  def update_pdf_use
-    # pull the resource again to prevent StaleObjectError from when its parent
-    # was saved
-    pdf_file_set = query_service.find_by(id: id)
-    pdf_file_metadata = pdf_file_set.file_metadata.select { |f| f.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }.select(&:pdf?).first
-    return unless pdf_file_metadata
-
-    pdf_file_metadata.use = [Valkyrie::Vocab::PCDMUse.PreservationMasterFile]
-    pdf_file_set.file_metadata = pdf_file_set.file_metadata.select { |x| x.id != pdf_file_metadata.id } + [pdf_file_metadata]
-    persister.save(resource: pdf_file_set)
-  end
-
   def add_file_sets(files)
     change_set = parent_change_set
     change_set.validate(files: files)
@@ -77,7 +65,7 @@ class PDFDerivativeService
   end
 
   def resource
-    @resource ||= query_service.find_by(id: id)
+    query_service.find_by(id: id)
   end
 
   def convert_pages
@@ -135,11 +123,24 @@ class PDFDerivativeService
     change_set_persister.metadata_adapter.persister
   end
 
+  def update_pdf_use
+    # pull the resource again to prevent StaleObjectError from when its parent
+    # was saved
+    pdf_file_set = query_service.find_by(id: id)
+    pdf_file_metadata = pdf_file_set.file_metadata.select { |f| f.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }.select(&:pdf?).first
+    return unless pdf_file_metadata
+
+    pdf_file_metadata.use = [Valkyrie::Vocab::PCDMUse.PreservationMasterFile]
+    pdf_file_set.file_metadata = pdf_file_set.file_metadata.select { |x| x.id != pdf_file_metadata.id } + [pdf_file_metadata]
+    persister.save(resource: pdf_file_set)
+  end
+
   # Updates error message property on the primary file.
   def update_error_message(message:)
-    primary_file = resource.primary_file
+    file_set = resource
+    primary_file = file_set.primary_file
     primary_file.error_message = [message]
-    resource.file_metadata = resource.file_metadata.select { |x| x.id != primary_file.id } + [primary_file]
-    persister.save(resource: resource)
+    file_set.file_metadata = file_set.file_metadata.select { |x| x.id != primary_file.id } + [primary_file]
+    persister.save(resource: file_set)
   end
 end
