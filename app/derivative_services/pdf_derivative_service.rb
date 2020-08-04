@@ -30,13 +30,15 @@ class PDFDerivativeService
   end
 
   def update_pdf_use
-    cached_resource = resource
-    pdf_file_metadata = cached_resource.file_metadata.select { |f| f.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }.select(&:pdf?).first
+    # pull the resource again to prevent StaleObjectError from when its parent
+    # was saved
+    pdf_file_set = query_service.find_by(id: id)
+    pdf_file_metadata = pdf_file_set.file_metadata.select { |f| f.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }.select(&:pdf?).first
     return unless pdf_file_metadata
 
     pdf_file_metadata.use = [Valkyrie::Vocab::PCDMUse.PreservationMasterFile]
-    cached_resource.file_metadata = cached_resource.file_metadata.select { |x| x.id != pdf_file_metadata.id } + [pdf_file_metadata]
-    persister.save(resource: cached_resource)
+    pdf_file_set.file_metadata = pdf_file_set.file_metadata.select { |x| x.id != pdf_file_metadata.id } + [pdf_file_metadata]
+    persister.save(resource: pdf_file_set)
   end
 
   def add_file_sets(files)
@@ -58,11 +60,11 @@ class PDFDerivativeService
     intermediate_derivatives = Wayfinder.for(parent).members.select do |member|
       member.intermediate_files.present? && member.primary_file.original_filename.first.starts_with?("converted_from_pdf")
     end
-    intermediate_derivatives.each { |fs| cleanup_resource(fs) }
+    intermediate_derivatives.each { |fs| cleanup_file_set(fs) }
   end
 
-  def cleanup_resource(resource)
-    change_set = ChangeSet.for(resource)
+  def cleanup_file_set(file_set)
+    change_set = ChangeSet.for(file_set)
     change_set_persister.delete(change_set: change_set)
   end
 
@@ -74,9 +76,8 @@ class PDFDerivativeService
     @target_file ||= resource.primary_file
   end
 
-  # don't memoize; it needs to be reloaded to save correctly
   def resource
-    query_service.find_by(id: id)
+    @resource ||= query_service.find_by(id: id)
   end
 
   def convert_pages
@@ -132,10 +133,9 @@ class PDFDerivativeService
 
   # Updates error message property on the primary file.
   def update_error_message(message:)
-    cached_resource = resource
-    primary_file = cached_resource.primary_file
+    primary_file = resource.primary_file
     primary_file.error_message = [message]
-    cached_resource.file_metadata = cached_resource.file_metadata.select { |x| x.id != primary_file.id } + [primary_file]
-    persister.save(resource: cached_resource)
+    resource.file_metadata = resource.file_metadata.select { |x| x.id != primary_file.id } + [primary_file]
+    persister.save(resource: resource)
   end
 end
