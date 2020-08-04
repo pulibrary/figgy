@@ -4,7 +4,7 @@ module CDL
   class PDFIngestJob < ApplicationJob
     queue_as :high
     def perform(file_name:)
-      file_path = Pathname.new(Figgy.config["cdl_in_path"]).join(file_name)
+      file_path = Pathname.new(Figgy.config["cdl_in_path"]).join("ingesting", file_name)
       # Open the file so it'll error if it doesn't exist.
       file = File.open(file_path)
       # Use IngestableFile to decorate the necessary methods to ingest via

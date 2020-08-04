@@ -6,8 +6,8 @@ RSpec.describe CDL::PDFIngestJob, run_real_derivatives: true, run_real_character
   context "when given a PDF path" do
     it "creates a new resource from it and adds it as a file" do
       stub_bibdata(bib_id: "123456")
-      pdf_path = Rails.root.join("tmp", "test_cdl_in", "123456.pdf")
-      FileUtils.mkdir(pdf_path.parent) unless File.exist?(pdf_path.parent)
+      pdf_path = Rails.root.join("tmp", "test_cdl_in", "ingesting", "123456.pdf")
+      FileUtils.mkdir_p(pdf_path.parent) unless File.exist?(pdf_path.parent)
       FileUtils.cp(Rails.root.join("spec", "fixtures", "files", "sample.pdf"), pdf_path)
       query_service = ScannedResourcesController.change_set_persister.query_service
 
