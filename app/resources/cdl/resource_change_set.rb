@@ -11,6 +11,7 @@ module CDL
     property :portion_note, multiple: false, required: false
     property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
     property :rights_statement, multiple: false, required: true, default: RightsStatements.in_copyright, type: ::Types::URI
+    property :depositor, multiple: false, require: false
 
     # Don't preserve copyrighted material.
     def preserve?
