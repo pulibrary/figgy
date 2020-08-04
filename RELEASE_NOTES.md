@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-08-04
+
+## Added
+
+* Split pdfs into one tiff per page to improve viewer experience
+
 # 2020-06-26
 
 ## Added
