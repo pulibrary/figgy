@@ -19,4 +19,23 @@ RSpec.describe CDL::ResourceChangeSet do
     # Use draft/complete workflow.
     expect(change_set.state).to eq "draft"
   end
+
+  describe "#primary_terms" do
+    it "has necessary terms for the form" do
+      change_set = described_class.new(ScannedResource.new)
+
+      expect(change_set.primary_terms).to include(
+        :title,
+        :source_metadata_identifier,
+        :member_of_collection_ids,
+        :rights_statement,
+        :rights_note,
+        :downloadable,
+        :ocr_language,
+        :portion_note,
+        :append_id,
+        :change_set
+      )
+    end
+  end
 end
