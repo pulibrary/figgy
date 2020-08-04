@@ -99,9 +99,13 @@ class PDFDerivativeService
       use: Valkyrie::Vocab::PCDMUse.IntermediateFile,
       original_filename: "converted_from_pdf_page_#{page}.tiff",
       container_attributes: {
-        title: page # TODO: pad with 0s?
+        title: pad_with_zeroes(page)
       }
     )
+  end
+
+  def pad_with_zeroes(n)
+    format("%08d", n)
   end
 
   def convert_page(page:)

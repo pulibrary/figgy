@@ -59,8 +59,8 @@ RSpec.describe PDFDerivativeService do
         expect(reloaded_members.reject { |fs| fs.preservation_file.nil? }.map(&:id).first).to eq valid_resource.id
         intermediate_files = reloaded_members.reject { |fs| fs.intermediate_file.nil? }
         expect(intermediate_files.count).to eq 2
-        expect(intermediate_files.first.title).to eq [1]
-        expect(intermediate_files.last.title).to eq [2]
+        expect(intermediate_files.first.title).to eq ["00000001"]
+        expect(intermediate_files.last.title).to eq ["00000002"]
         expect(intermediate_files.first.intermediate_file.checksum.first).not_to eq intermediate_files.last.intermediate_file.checksum.first
       end
     end
