@@ -74,8 +74,7 @@ RSpec.describe PDFDerivativeService do
         expect(reloaded_members.count).to eq 1
         file_set = reloaded_members.first
         expect(file_set.id).to eq valid_resource.id
-        expect(file_set.file_metadata.flat_map(&:use)).to eq [Valkyrie::Vocab::PCDMUse.OriginalFile]
-        expect(file_set.original_file.error_message).to include(/not the pagerange error/)
+        expect(file_set.primary_file.error_message).to include(/not the pagerange error/)
       end
     end
   end

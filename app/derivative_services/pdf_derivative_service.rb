@@ -24,9 +24,9 @@ class PDFDerivativeService
   end
 
   def create_derivatives
+    update_pdf_use
     tiffs = convert_pages
     add_file_sets(tiffs)
-    update_pdf_use
   end
 
   def add_file_sets(files)
@@ -65,7 +65,7 @@ class PDFDerivativeService
   end
 
   def resource
-    query_service.find_by(id: id)
+    @resource ||= query_service.find_by(id: id)
   end
 
   def convert_pages
@@ -124,20 +124,18 @@ class PDFDerivativeService
   end
 
   def update_pdf_use
-    # pull the resource again to prevent StaleObjectError from when its parent
-    # was saved
-    pdf_file_set = query_service.find_by(id: id)
-    pdf_file_metadata = pdf_file_set.file_metadata.select { |f| f.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }.select(&:pdf?).first
+    pdf_file_metadata = resource.file_metadata.select { |f| f.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }.select(&:pdf?).first
     return unless pdf_file_metadata
 
     pdf_file_metadata.use = [Valkyrie::Vocab::PCDMUse.PreservationMasterFile]
-    pdf_file_set.file_metadata = pdf_file_set.file_metadata.select { |x| x.id != pdf_file_metadata.id } + [pdf_file_metadata]
-    persister.save(resource: pdf_file_set)
+    resource.file_metadata = resource.file_metadata.select { |x| x.id != pdf_file_metadata.id } + [pdf_file_metadata]
+    persister.save(resource: resource)
   end
 
   # Updates error message property on the primary file.
   def update_error_message(message:)
-    file_set = resource
+    # refresh the resource to prevent StaleObjectError from update_pdf_use
+    file_set = query_service.find_by(id: id)
     primary_file = file_set.primary_file
     primary_file.error_message = [message]
     file_set.file_metadata = file_set.file_metadata.select { |x| x.id != primary_file.id } + [primary_file]
