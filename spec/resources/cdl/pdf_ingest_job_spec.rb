@@ -19,6 +19,7 @@ RSpec.describe CDL::PDFIngestJob, run_real_derivatives: true, run_real_character
       expect(File.exist?(pdf_path)).to eq false
       expect(resource.depositor).to eq ["cdl_auto_ingest"]
       expect(resource.member_of_collection_ids).to eq [collection.id]
+      expect(resource.member_ids).not_to be_blank
     end
   end
 end
