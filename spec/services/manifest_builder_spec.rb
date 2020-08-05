@@ -978,16 +978,5 @@ RSpec.describe ManifestBuilder do
       expect(media_sequence["elements"][0]["@type"]).to eq "foaf:Document"
       expect(media_sequence["elements"][0]["label"]).to eq scanned_resource.title.first
     end
-    # it "builds a UV compatible PDF manifest" do
-    #   output = manifest_builder.build
-    #   file_set = Wayfinder.for(scanned_resource).members.first
-    #
-    #   media_sequence = output["mediaSequences"].first
-    #   expect(media_sequence["@type"]).to eq "ixif:MediaSequence"
-    #   expect(media_sequence["elements"][0]["@id"]).to eq "http://www.example.com/downloads/#{file_set.id}/file/#{file_set.original_file.id}"
-    #   expect(media_sequence["elements"][0]["format"]).to eq "application/pdf"
-    #   expect(media_sequence["elements"][0]["@type"]).to eq "foaf:Document"
-    #   expect(media_sequence["elements"][0]["label"]).to eq scanned_resource.title.first
-    # end
   end
 end
