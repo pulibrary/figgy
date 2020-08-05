@@ -6,7 +6,7 @@ class FindingAidsUpdateJob < ApplicationJob
   def perform(id:)
     resource = query_service.find_by(id: id)
     change_set = ChangeSet.for(resource)
-    change_set.validate(refresh_remote_metadata: true)
+    change_set.validate(refresh_remote_metadata: "1")
     persister.save(change_set: change_set)
   end
 
