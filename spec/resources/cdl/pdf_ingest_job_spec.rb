@@ -4,7 +4,8 @@ require "rails_helper"
 
 RSpec.describe CDL::PDFIngestJob, run_real_derivatives: true, run_real_characterization: true do
   context "when given a PDF path" do
-    it "creates a new resource from it and adds it as a file" do
+    it "creates a new resource from it and adds it as a file, adds it to the CDL collection" do
+      collection = FactoryBot.create_for_repository(:collection, slug: "cdl", title: "CDL")
       stub_bibdata(bib_id: "123456")
       pdf_path = Rails.root.join("tmp", "test_cdl_in", "ingesting", "123456.pdf")
       FileUtils.mkdir_p(pdf_path.parent) unless File.exist?(pdf_path.parent)
@@ -17,6 +18,7 @@ RSpec.describe CDL::PDFIngestJob, run_real_derivatives: true, run_real_character
       expect(resource.change_set).to eq "CDL::Resource"
       expect(File.exist?(pdf_path)).to eq false
       expect(resource.depositor).to eq ["cdl_auto_ingest"]
+      expect(resource.member_of_collection_ids).to eq [collection.id]
     end
   end
 end
