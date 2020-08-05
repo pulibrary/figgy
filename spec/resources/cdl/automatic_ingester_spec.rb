@@ -9,7 +9,8 @@ RSpec.describe CDL::AutomaticIngester do
       FileUtils.mkdir_p(file_path.join("ingesting")) unless File.exist?(file_path.join("ingesting"))
       FileUtils.cp(Rails.root.join("spec", "fixtures", "files", "sample.pdf"), file_path.join("123456.pdf"))
       FileUtils.cp(Rails.root.join("spec", "fixtures", "files", "sample.pdf"), file_path.join("notabib.pdf"))
-      FileUtils.cp(Rails.root.join("spec", "fixtures", "files", "sample.pdf"), file_path.join("ingesting", "123456.pdf"))
+      # Ensure already ingesting files aren't ingested again.
+      FileUtils.cp(Rails.root.join("spec", "fixtures", "files", "sample.pdf"), file_path.join("ingesting", "45678.pdf"))
       FileUtils.cp(Rails.root.join("spec", "fixtures", "files", "example.tif"), file_path.join("123456.tif"))
       allow(CDL::PDFIngestJob).to receive(:perform_later)
 
