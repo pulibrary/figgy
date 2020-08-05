@@ -163,6 +163,7 @@ GEM
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
       execjs (~> 2.0)
+    backport (1.1.2)
     bagit (0.4.2)
       docopt (~> 0.5.0)
       validatable (~> 1.6)
@@ -552,6 +553,7 @@ GEM
       unf
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
+    maruku (0.7.3)
     mediainfo (1.0.2)
     memoist (0.16.0)
     method_source (0.8.2)
@@ -698,6 +700,8 @@ GEM
       actionpack (>= 5.0)
       railties (>= 5.0)
     retriable (3.1.1)
+    reverse_markdown (1.4.0)
+      nokogiri
     riiif (1.5.0)
       railties (>= 4.2, < 6)
     rly (0.2.3)
@@ -809,6 +813,18 @@ GEM
     simplecov-html (0.10.2)
     simpler-tiles (0.3.1)
     slop (3.6.0)
+    solargraph (0.38.0)
+      backport (~> 1.1)
+      bundler (>= 1.17.2)
+      jaro_winkler (~> 1.5)
+      maruku (~> 0.7, >= 0.7.3)
+      nokogiri (~> 1.9, >= 1.9.1)
+      parser (~> 2.3)
+      reverse_markdown (~> 1.0, >= 1.0.5)
+      rubocop (~> 0.52)
+      thor (~> 0.19, >= 0.19.4)
+      tilt (~> 2.0)
+      yard (~> 0.9)
     solr_wrapper (1.1.0)
       faraday
       retriable
@@ -918,6 +934,7 @@ GEM
     xml-simple (1.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
+    yard (0.9.25)
 
 PLATFORMS
   ruby
@@ -1021,6 +1038,7 @@ DEPENDENCIES
   sidekiq
   simple_form
   simplecov
+  solargraph
   solr_wrapper (>= 0.3)
   spring
   spring-commands-rspec

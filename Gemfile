@@ -46,6 +46,7 @@ group :development do
   gem "foreman"
   gem "listen"
   gem "ruby-prof"
+  gem "solargraph"
   gem "spring"
   gem "spring-commands-rspec"
   gem "web-console"

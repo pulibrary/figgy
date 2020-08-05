@@ -4,4 +4,9 @@ namespace :cdl do
   task bulk_hold_process: :environment do
     CDL::BulkHoldProcessor.process!
   end
+
+  desc "Automatically ingest everything in the CDL ingest directory"
+  task automatic_ingest: :environment do
+    CDL::AutomaticIngester.run
+  end
 end

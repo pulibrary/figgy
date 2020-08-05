@@ -1,4 +1,5 @@
 defaults: &defaults
+  cdl_in_path: <%= ENV["CDL_IN_PATH"] %>
   ocr_in_path: <%= ENV["OCR_IN_PATH"] %>
   ocr_out_path: <%= ENV["OCR_OUT_PATH"] %>
   pyramidals_bucket: "iiif-image-staging"
@@ -124,6 +125,7 @@ defaults: &defaults
 
 development:
   <<: *defaults
+  cdl_in_path: <%= Rails.root.join("tmp", "cdl_in") %>
   ocr_in_path: <%= Rails.root.join("tmp", "ocr_in") %>
   ocr_out_path: <%= Rails.root.join("tmp", "ocr_out") %>
   repository_path: <%= Rails.root.join("tmp", "more_files") %>
@@ -131,6 +133,7 @@ development:
 
 test:
   <<: *defaults
+  cdl_in_path: <%= Rails.root.join("tmp", "test_cdl_in") %>
   ocr_in_path: <%= Rails.root.join("tmp", "test_ocr_in") %>
   ocr_out_path: <%= Rails.root.join("tmp", "test_ocr_out") %>
   repository_path: <%= Rails.root.join("tmp", "test_files") %>
