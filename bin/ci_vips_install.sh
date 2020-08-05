@@ -1,3 +1,4 @@
+apt-get install libpoppler-glib-dev
 if [ ! -d "tmp/vips" ]; then
   mkdir -p -m 777 tmp && cd tmp
   wget --no-check-certificate https://github.com/libvips/libvips/releases/download/v8.9.1/vips-8.9.1.tar.gz -O vips.tar.gz

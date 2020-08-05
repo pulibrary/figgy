@@ -24,7 +24,7 @@ RSpec.describe FixityDashboardController, type: :controller do
     # they have to be saved to come out in the query
     file_set = query_service.find_members(resource: output).first
     file_set_change_set = FileSetChangeSet.new(file_set)
-    file_set.file_metadata = file_metadata
+    file_set_change_set.validate(file_metadata: file_metadata)
     change_set_persister.save(change_set: file_set_change_set)
   end
 

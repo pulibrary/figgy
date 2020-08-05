@@ -241,6 +241,7 @@ namespace :bulk do
     BulkEditService.perform(collection_id: Valkyrie::ID.new(coll), attributes: attrs, metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), logger: logger)
   end
 
+  # Intermediate files were created to add watermarks
   desc "Ingest a directory of TIFFs as intermediate files for existing ScannedResources"
   task ingest_intermediate_files: :environment do
     logger = Logger.new(STDOUT)

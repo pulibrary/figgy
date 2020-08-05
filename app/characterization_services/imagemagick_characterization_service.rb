@@ -71,7 +71,7 @@ class ImagemagickCharacterizationService
   # Retrieve the master file from the FileSet
   # @return [FileMetadata]
   def original_file
-    @file_set.original_file
+    @file_set.primary_file
   end
 
   # Retrieve the Resource to which the FileSet is attached

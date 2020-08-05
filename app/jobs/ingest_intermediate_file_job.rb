@@ -30,7 +30,7 @@ class IngestIntermediateFileJob < ApplicationJob
     change_set.sync
 
     updated_file_metadata = file_set.file_metadata.delete_if(&:derivative?)
-    change_set.resource.file_metadata = updated_file_metadata
+    change_set.file_metadata = updated_file_metadata
 
     change_set_persister.save(change_set: change_set)
 

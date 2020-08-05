@@ -11,6 +11,7 @@ class ManifestBuilder
 
     def apply(manifest)
       return manifest unless resource.leaf_nodes&.first&.mime_type == ["application/pdf"]
+      return manifest if pdf_node.primary_file.preservation_file?
       manifest["mediaSequences"] = [media_sequence]
       manifest
     end

@@ -82,6 +82,10 @@ class FileMetadata < Valkyrie::Resource
     mime_type.first.include?("image")
   end
 
+  def pdf?
+    mime_type.first == "application/pdf"
+  end
+
   # Populates FileMetadata with fixity check results
   # @return [FileMetadata] you'll need to save this node after running the fixity
   def run_fixity
