@@ -27,6 +27,8 @@ class PDFDerivativeService
     update_pdf_use
     tiffs = convert_pages
     add_file_sets(tiffs)
+  ensure
+    FileUtils.remove_entry(tmpdir) if File.exist?(tmpdir)
   end
 
   def add_file_sets(files)
@@ -79,8 +81,8 @@ class PDFDerivativeService
       # See https://github.com/libvips/ruby-vips/issues/67
       GC.start
       page_image = Vips::Image.new_from_file(filename, access: :sequential, memory: true, page: page)
-      location = temporary_output(page)
-      page_image.tiffsave(location.path.to_s)
+      location = temporary_output(page).to_s
+      page_image.tiffsave(location)
       build_file(page + 1, location)
     end
     GC.start
@@ -103,8 +105,12 @@ class PDFDerivativeService
     format("%08d", n)
   end
 
+  def tmpdir
+    @tmpdir ||= Pathname.new(Dir.mktmpdir("pdf_derivatives"))
+  end
+
   def temporary_output(page)
-    Tempfile.new(["intermediate_file#{page}", ".tif"])
+    tmpdir.join("intermediate_file#{page}.tif")
   end
 
   def filename
