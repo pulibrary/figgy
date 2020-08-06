@@ -28,7 +28,7 @@ class PDFDerivativeService
     tiffs = convert_pages
     add_file_sets(tiffs)
   ensure
-    FileUtils.remove_entry(tmpdir) if File.exist?(tmpdir)
+    FileUtils.remove_entry(tmpdir, true) if File.exist?(tmpdir)
   end
 
   def add_file_sets(files)
