@@ -3,7 +3,11 @@ require "rails_helper"
 
 RSpec.describe ScannedResourceDecorator do
   subject(:decorator) { described_class.new(resource) }
-  let(:resource) { FactoryBot.build(:scanned_resource) }
+
+  let(:resource) do
+    FactoryBot.build(:scanned_resource)
+  end
+
   let(:resource_klass) { ScannedResource }
 
   it_behaves_like "a Valkyrie::ResourceDecorator"
@@ -45,6 +49,24 @@ RSpec.describe ScannedResourceDecorator do
     end
   end
 
+  context "with a holding location" do
+    let(:resource) do
+      FactoryBot.build(:scanned_resource,
+                       holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/15")
+    end
+    describe "Voyager downtime" do
+      it "handles error caused by Voyager downtime" do
+        stub_request(:get, "https://bibdata.princeton.edu/locations/digital_locations.json")
+          .to_return(status: 502)
+        expect(resource.decorate.rendered_holding_location).to eq([])
+      end
+    end
+
+    it "exposes markup for rendered holding_location" do
+      expect(resource.decorate.rendered_holding_location.first).to eq("Firestone Library")
+    end
+  end
+
   context "with imported metadata" do
     let(:resource) do
       FactoryBot.build(:scanned_resource,
@@ -57,6 +79,7 @@ RSpec.describe ScannedResourceDecorator do
                          location: ["RCPPA BL980.G7 B66 1982"]
                        }])
     end
+
     describe "#iiif_manifest_attributes" do
       it "returns attributes merged with the imported metadata for the IIIF Manifest" do
         expect(decorator.iiif_manifest_attributes).to include title: ["test title"]
@@ -71,6 +94,7 @@ RSpec.describe ScannedResourceDecorator do
         expect(decorator.display_imported_language).to eq ["English"]
       end
     end
+
     describe "raw imported metadata" do
       it "is not displayed" do
         expect(decorator.display_attributes.keys).not_to include :source_metadata
