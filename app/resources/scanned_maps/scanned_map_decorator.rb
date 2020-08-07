@@ -127,6 +127,8 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
     value.map do |holding_location|
       vocabulary.find(holding_location).label
     end
+  rescue MultiJson::ParseError
+    []
   end
 
   def rendered_links

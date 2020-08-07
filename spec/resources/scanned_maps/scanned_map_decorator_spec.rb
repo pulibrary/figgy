@@ -24,6 +24,13 @@ RSpec.describe ScannedMapDecorator do
       "iiif_manifest_paths": "https://figgy.princeton.edu/concern/scanned_maps/pb8518582r/manifest"
     }
   end
+  describe "Voyager downtime" do
+    it "handles error caused by Voyager downtime" do
+      stub_request(:get, "https://bibdata.princeton.edu/locations/digital_locations.json")
+        .to_return(status: 502)
+      expect(resource.decorate.rendered_holding_location).to eq([])
+    end
+  end
   describe "#iiif_manifest_attributes" do
     it "returns attributes" do
       expect(decorator.iiif_manifest_attributes).to include title: ["test title"]
