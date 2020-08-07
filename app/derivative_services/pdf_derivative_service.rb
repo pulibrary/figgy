@@ -27,6 +27,11 @@ class PDFDerivativeService
     update_pdf_use
     tiffs = convert_pages
     add_file_sets(tiffs)
+  rescue StandardError => e
+    update_error_message(message: e.message)
+    raise e
+  ensure
+    FileUtils.remove_entry(tmpdir, true) if File.exist?(tmpdir)
   end
 
   def add_file_sets(files)
@@ -69,14 +74,21 @@ class PDFDerivativeService
   end
 
   def convert_pages
-    files = []
-    page = 0
-    loop do
-      image = convert_page(page: page)
-      break unless image
-      page += 1
-      files << build_file(page, image)
+    image = Vips::Image.pdfload(filename, access: :sequential, memory: true)
+    pages = image.get_value("pdf-n_pages")
+    files = Array.new(pages).each_with_index.map do |_, page|
+      # Ruby's set to mark and sweep for GC, and we can't explicitly close VIPS
+      # references. The file handles aren't freed up until the garbage collector
+      # runs, but it's 4 handles per VIPS access. So force a GC to keep the
+      # handles low.
+      # See https://github.com/libvips/ruby-vips/issues/67
+      GC.start
+      page_image = Vips::Image.new_from_file(filename, access: :sequential, memory: true, page: page)
+      location = temporary_output(page).to_s
+      page_image.tiffsave(location)
+      build_file(page + 1, location)
     end
+    GC.start
     files
   end
 
@@ -88,7 +100,8 @@ class PDFDerivativeService
       original_filename: "converted_from_pdf_page_#{page}.tiff",
       container_attributes: {
         title: pad_with_zeroes(page)
-      }
+      },
+      copyable: true
     )
   end
 
@@ -96,19 +109,12 @@ class PDFDerivativeService
     format("%08d", n)
   end
 
-  def convert_page(page:)
-    vips_image = Vips::Image.pdfload(filename, page: page)
-    location = temporary_output(page).path.to_s
-    vips_image.tiffsave(location)
-    location
-  rescue Vips::Error => error
-    return nil if error.message.strip == "pdfload: pages out of range"
-    update_error_message(message: error.message)
-    raise error
+  def tmpdir
+    @tmpdir ||= Pathname.new(Dir.mktmpdir("pdf_derivatives"))
   end
 
   def temporary_output(page)
-    Tempfile.new(["intermediate_file#{page}", ".tif"])
+    tmpdir.join("intermediate_file#{page}.tif")
   end
 
   def filename
