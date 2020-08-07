@@ -97,7 +97,8 @@ class PDFDerivativeService
       original_filename: "converted_from_pdf_page_#{page}.tiff",
       container_attributes: {
         title: pad_with_zeroes(page)
-      }
+      },
+      copyable: true
     )
   end
 
