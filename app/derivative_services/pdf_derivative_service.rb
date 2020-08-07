@@ -27,6 +27,9 @@ class PDFDerivativeService
     update_pdf_use
     tiffs = convert_pages
     add_file_sets(tiffs)
+  rescue StandardError => e
+    update_error_message(message: e.message)
+    raise e
   ensure
     FileUtils.remove_entry(tmpdir, true) if File.exist?(tmpdir)
   end
