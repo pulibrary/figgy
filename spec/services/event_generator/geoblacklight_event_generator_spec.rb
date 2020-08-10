@@ -4,7 +4,8 @@ require "rails_helper"
 RSpec.describe EventGenerator::GeoblacklightEventGenerator do
   subject(:event_generator) { described_class.new(rabbit_connection) }
   let(:rabbit_connection) { instance_double(GeoblacklightMessagingClient, publish: true) }
-  let(:record) { FactoryBot.create_for_repository(:complete_scanned_map) }
+  let(:coverage) { GeoCoverage.new(43.039, -69.856, 42.943, -71.032).to_s }
+  let(:record) { FactoryBot.create_for_repository(:complete_scanned_map, coverage: coverage) }
 
   it_behaves_like "an EventGenerator"
 
@@ -142,6 +143,14 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
 
     context "with a scanned resource" do
       let(:record) { FactoryBot.create_for_repository(:scanned_resource) }
+
+      it "is not valid" do
+        expect(event_generator.valid?(record)).to be false
+      end
+    end
+
+    context "when a record generates an invalid geoblacklight document" do
+      let(:coverage) { nil }
 
       it "is not valid" do
         expect(event_generator.valid?(record)).to be false

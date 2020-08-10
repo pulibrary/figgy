@@ -36,7 +36,10 @@ class EventGenerator
 
     def valid?(record)
       return false if record.is_a?(FileSet)
-      record.try(:geo_resource?) || false
+      return false unless record.try(:geo_resource?)
+      return false if errors?(record)
+
+      true
     end
 
     private
@@ -46,7 +49,7 @@ class EventGenerator
       end
 
       def message(type, record)
-        base_message(type, record).merge("doc" => generate_document(record))
+        base_message(type, record).merge("doc" => document_generator(record))
       end
 
       def delete_message(type, record)
@@ -69,12 +72,19 @@ class EventGenerator
         end
       end
 
-      def generate_document(record)
-        GeoDiscovery::DocumentBuilder.new(record, GeoDiscovery::GeoblacklightDocument.new)
+      def document_generator(record)
+        @document_generator ||= GeoDiscovery::DocumentBuilder.new(record, GeoDiscovery::GeoblacklightDocument.new)
       end
 
       def slug(record)
         GeoDiscovery::DocumentBuilder::SlugBuilder.new(record).slug
+      end
+
+      def errors?(record)
+        doc = document_generator(record).to_hash
+        return true unless doc[:error].nil?
+
+        false
       end
   end
 end
