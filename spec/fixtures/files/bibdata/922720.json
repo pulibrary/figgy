@@ -1,0 +1,1103 @@
+{
+  "f": [
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 5688313,
+      "items": [
+        {
+          "barcode": "32101066930510",
+          "chron": null,
+          "circ_group_id": 1,
+          "copy_number": 3,
+          "due_date": null,
+          "enum": null,
+          "id": 5038997,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": null,
+          "perm_location": "f",
+          "pickup_location_code": "fcirc",
+          "pickup_location_id": 299,
+          "status": [
+            "Not Charged"
+          ],
+          "temp_location": null
+        }
+      ],
+      "sortable_call_number": "HB.0135.B59.1994"
+    }
+  ],
+  "res": [
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 5449073,
+      "items": [
+        {
+          "barcode": "32101060496773",
+          "chron": null,
+          "circ_group_id": 10,
+          "copy_number": 51,
+          "due_date": "2021-06-15T22:00:00.000+00:00",
+          "enum": null,
+          "id": 4675813,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "GRAD",
+          "perm_location": "res",
+          "pickup_location_code": "anxacirc",
+          "pickup_location_id": 293,
+          "status": [
+            "Renewed"
+          ],
+          "temp_location": null
+        }
+      ]
+    }
+  ],
+  "sci": [
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 5193599,
+      "items": [
+        {
+          "barcode": "32101061043913",
+          "chron": null,
+          "circ_group_id": 1,
+          "copy_number": 1,
+          "due_date": null,
+          "enum": null,
+          "id": 4494224,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": null,
+          "perm_location": "sci",
+          "pickup_location_code": "fcirc",
+          "pickup_location_id": 299,
+          "status": [
+            "Not Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 5436285,
+      "items": [
+        {
+          "barcode": "32101060495031",
+          "chron": null,
+          "circ_group_id": 24,
+          "copy_number": 2,
+          "due_date": "2021-06-15T21:00:00.000+00:00",
+          "enum": null,
+          "id": 4649695,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "P",
+          "perm_location": "sci",
+          "pickup_location_code": "scicirc",
+          "pickup_location_id": 489,
+          "status": [
+            "Renewed"
+          ],
+          "temp_location": null
+        }
+      ]
+    }
+  ],
+  "spia": [
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 7024845,
+      "items": [
+        {
+          "barcode": "32101031539859",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 1,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 6425580,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "GRAD",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Renewed"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11664777,
+      "items": [
+        {
+          "barcode": "32101097285876",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 2,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350681,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11664778,
+      "items": [
+        {
+          "barcode": "32101097285884",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 3,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350682,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11664779,
+      "items": [
+        {
+          "barcode": "32101097285892",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 4,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350683,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11664780,
+      "items": [
+        {
+          "barcode": "32101097285900",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 5,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350684,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11664781,
+      "items": [
+        {
+          "barcode": "32101097285918",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 6,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350685,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11664787,
+      "items": [
+        {
+          "barcode": "32101097285926",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 7,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350686,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11664950,
+      "items": [
+        {
+          "barcode": "32101097285934",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 8,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350687,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11665127,
+      "items": [
+        {
+          "barcode": "32101097285942",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 9,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350688,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11665321,
+      "items": [
+        {
+          "barcode": "32101097285959",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 10,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350689,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11665460,
+      "items": [
+        {
+          "barcode": "32101097285967",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 11,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350690,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11666055,
+      "items": [
+        {
+          "barcode": "32101097285975",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 12,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350692,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11666196,
+      "items": [
+        {
+          "barcode": "32101097285983",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 13,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350693,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11666324,
+      "items": [
+        {
+          "barcode": "32101097285991",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 14,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350694,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11666511,
+      "items": [
+        {
+          "barcode": "32101097286007",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 15,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350695,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11666692,
+      "items": [
+        {
+          "barcode": "32101097286015",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 16,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350697,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11666883,
+      "items": [
+        {
+          "barcode": "32101097286023",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 17,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350698,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11667330,
+      "items": [
+        {
+          "barcode": "32101097286031",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 18,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350699,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11667527,
+      "items": [
+        {
+          "barcode": "32101097286049",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 19,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350700,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11667751,
+      "items": [
+        {
+          "barcode": "32101097286056",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 20,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350701,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11667886,
+      "items": [
+        {
+          "barcode": "32101097286064",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 21,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350702,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11668077,
+      "items": [
+        {
+          "barcode": "32101097286072",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 22,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350704,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11668211,
+      "items": [
+        {
+          "barcode": "32101097286080",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 23,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350705,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11668355,
+      "items": [
+        {
+          "barcode": "32101097286098",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 24,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350706,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11668469,
+      "items": [
+        {
+          "barcode": "32101097286106",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 25,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350707,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11668608,
+      "items": [
+        {
+          "barcode": "32101097286114",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 26,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350708,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11668736,
+      "items": [
+        {
+          "barcode": "32101097286122",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 27,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350709,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11668876,
+      "items": [
+        {
+          "barcode": "32101097286130",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 28,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350710,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11668995,
+      "items": [
+        {
+          "barcode": "32101097286148",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 29,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350712,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11669142,
+      "items": [
+        {
+          "barcode": "32101097286155",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 30,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350713,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11669262,
+      "items": [
+        {
+          "barcode": "32101097286163",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 31,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350714,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11669409,
+      "items": [
+        {
+          "barcode": "32101097286171",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 32,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350715,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11669568,
+      "items": [
+        {
+          "barcode": "32101097286189",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 33,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350716,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11669748,
+      "items": [
+        {
+          "barcode": "32101097286197",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 34,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350718,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11669876,
+      "items": [
+        {
+          "barcode": "32101097286205",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 35,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350719,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11670726,
+      "items": [
+        {
+          "barcode": "32101097286213",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 36,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350720,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11670816,
+      "items": [
+        {
+          "barcode": "32101097286221",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 37,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350721,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    },
+    {
+      "call_number": "HB135 .B59 1994",
+      "holding_id": 11670982,
+      "items": [
+        {
+          "barcode": "32101097286239",
+          "chron": null,
+          "circ_group_id": 13,
+          "copy_number": 38,
+          "due_date": "2021-06-15T20:00:00.000+00:00",
+          "enum": null,
+          "id": 8350722,
+          "item_sequence_number": 1,
+          "item_type": "Gen",
+          "on_reserve": "N",
+          "patron_group_charged": "CDL",
+          "perm_location": "spia",
+          "pickup_location_code": "piaprcirc",
+          "pickup_location_id": 333,
+          "status": [
+            "Charged"
+          ],
+          "temp_location": null
+        }
+      ]
+    }
+  ]
+}
