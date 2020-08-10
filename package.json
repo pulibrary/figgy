@@ -19,7 +19,7 @@
     "graphql-tag": "^2.9.2",
     "lodash": "^4.17.19",
     "lux-design-system": "2.16.6",
-    "npm": "^6.13.4",
+    "npm": "^6.14.6",
     "openseadragon": "^2.3.1",
     "page-label-generator": "^1.1.0",
     "path": "^0.12.7",
