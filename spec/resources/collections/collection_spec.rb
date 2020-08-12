@@ -28,4 +28,9 @@ RSpec.describe Collection do
     collection.owners = "test"
     expect(collection.owners).to eq ["test"]
   end
+  it "has a list of restricted_viewers" do
+    expect(collection.restricted_viewers).to eq []
+    collection.restricted_viewers = ["miku", "skye"]
+    expect(collection.restricted_viewers).to eq ["miku", "skye"]
+  end
 end

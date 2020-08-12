@@ -56,4 +56,12 @@ RSpec.describe CollectionChangeSet do
       expect(change_set.required?(:owners)).to eq false
     end
   end
+
+  describe "#restricted_viewers" do
+    it "is multi-valued and not required" do
+      expect(change_set.multiple?(:restricted_viewers)).to eq true
+      expect(change_set.required?(:restricted_viewers)).to eq false
+      expect(change_set.primary_terms).to include :restricted_viewers
+    end
+  end
 end
