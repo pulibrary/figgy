@@ -62,6 +62,12 @@ RSpec.describe PDFDerivativeService do
         expect(intermediate_files.first.title).to eq ["00000001"]
         expect(intermediate_files.last.title).to eq ["00000002"]
         expect(intermediate_files.first.intermediate_file.checksum.first).not_to eq intermediate_files.last.intermediate_file.checksum.first
+        # Ensure the derivative is created with a decent size for better
+        # quality.
+        intermediate_file = intermediate_files.first.intermediate_file
+        intermediate_disk_file = Valkyrie::StorageAdapter.find_by(id: intermediate_file.file_identifiers.first)
+        vips_image = Vips::Image.new_from_file(intermediate_disk_file.disk_path.to_s)
+        expect(vips_image.width).to eq 2550
       end
     end
 
