@@ -83,7 +83,7 @@ class PDFDerivativeService
       # handles low.
       # See https://github.com/libvips/ruby-vips/issues/67
       GC.start
-      page_image = Vips::Image.new_from_file(filename, access: :sequential, memory: true, page: page)
+      page_image = Vips::Image.new_from_file(filename, access: :sequential, memory: true, page: page, dpi: 300)
       location = temporary_output(page).to_s
       page_image.tiffsave(location)
       build_file(page + 1, location)
