@@ -153,7 +153,7 @@ class Ability
   end
 
   def valkyrie_test_manifest(obj)
-    return false unless token_readable?(obj) || group_readable?(obj) || user_readable?(obj) || universal_reader? || ip_readable?(obj) || cdl_readable?(obj)
+    return false unless token_readable?(obj) || group_readable?(obj) || user_readable?(obj) || universal_reader? || ip_readable?(obj) || cdl_readable?(obj) || restricted_collection_viewer?(obj)
     # any group with :all permissions never hits this method
     #   other groups can only read published manifests, even if they have permissions indexed
     obj.decorate.manifestable_state?
@@ -181,16 +181,30 @@ class Ability
 
   def valkyrie_test_discover(obj)
     return true if valkyrie_test_read(obj)
+    return true if restricted_collections?(obj)
     return false if obj.read_groups.include?(::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_READING_ROOM) && !reading_room_ip?
     return true if cdl_eligible?(obj)
     obj.decorate.public_readable_state? && !private?(obj)
   end
 
   def valkyrie_test_read(obj)
-    return false unless token_readable?(obj) || group_readable?(obj) || user_readable?(obj) || universal_reader? || ip_readable?(obj) || cdl_readable?(obj)
+    return false unless token_readable?(obj) || group_readable?(obj) || user_readable?(obj) || universal_reader? || ip_readable?(obj) || cdl_readable?(obj) || restricted_collection_viewer?(obj)
     # any group with :all permissions never hits this method
     #   other groups can only read published manifests, even if they have permissions indexed
     obj.decorate.public_readable_state?
+  end
+
+  def restricted_collection_viewer?(obj)
+    return false unless current_user && obj.decorate.public_readable_state?
+    return false if private?(obj)
+    collections = Wayfinder.for(obj).try(:collections) || []
+    collections.flat_map(&:restricted_viewers).include?(current_user.uid)
+  end
+
+  def restricted_collections?(obj)
+    return false if private?(obj)
+    collections = Wayfinder.for(obj).try(:collections) || []
+    collections.flat_map(&:restricted_viewers).present?
   end
 
   def group_readable?(obj)
