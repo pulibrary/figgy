@@ -55,4 +55,19 @@ describe IngestEphemeraMODS do
       expect(output.title.map(&:to_s)).to eq ["I love UA"]
     end
   end
+
+  context "GNIB ephemera" do
+    subject(:service) { IngestEphemeraMODS::IngestGNIBMODS.new(project.id, mods, dir, change_set_persister, logger) }
+    let(:mods) { Rails.root.join("spec", "fixtures", "files", "GNIB", "00223.mods") }
+    let(:dir) { Rails.root.join("spec", "fixtures", "GNIB", "00223") }
+
+    it "ingests the MODS file and TIFFs with metadata overrides" do
+      output = service.ingest
+      expect(output).to be_kind_of EphemeraFolder
+      expect(output.member_ids.length).to eq 3
+      expect(output.decorate.genre).to eq "ephemera"
+      expect(output.decorate.members.map(&:title).flatten).to eq ["00223.tif", "00224.tif", "00223.mods"]
+      expect(output.decorate.subject).to include "Free trade"
+    end
+  end
 end
