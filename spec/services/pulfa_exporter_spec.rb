@@ -55,17 +55,23 @@ RSpec.describe PulfaExporter do
 
     it "idempotently adds a DAO link to the new resource" do
       before = Nokogiri::XML(File.open(temp_ead))
-      expect(before.at_xpath(xpath, ns).to_s).to eq ""
+      expect(before.xpath(xpath, ns).to_a).to eq []
 
       # run once to test export
       expect { exporter.export }.not_to raise_error
       after = Nokogiri::XML(File.open(temp_ead))
-      expect(after.at_xpath(xpath, ns).to_s).to eq "http://www.example.com/concern/scanned_resources/#{resource.id}/manifest"
+      expect(after.xpath(xpath, ns).map(&:to_s)).to eq [
+        "http://www.example.com/concern/scanned_resources/#{resource.id}/manifest",
+        "http://www.example.com/concern/scanned_resources/#{resource2.id}/manifest"
+      ]
 
       # run again to test idempotency
       expect { exporter.export }.not_to raise_error
       again = Nokogiri::XML(File.open(temp_ead))
-      expect(again.at_xpath(xpath, ns).to_s).to eq "http://www.example.com/concern/scanned_resources/#{resource.id}/manifest"
+      expect(again.xpath(xpath, ns).map(&:to_s)).to eq [
+        "http://www.example.com/concern/scanned_resources/#{resource.id}/manifest",
+        "http://www.example.com/concern/scanned_resources/#{resource2.id}/manifest"
+      ]
     end
 
     describe "when there is an error sending email" do
