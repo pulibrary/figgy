@@ -6,7 +6,8 @@
   <% if @charge_manager.eligible? %>
     <%= link_to 'Princeton Users: Log In to Digitally Check Out', main_app.new_user_session_path, class: 'btn btn-primary', id: "login" %>
   <% elsif restricted_viewership? %>
-    <%= link_to 'Authorized Users: Log In to View Restricted Material', main_app.new_user_session_path, class: 'btn btn-primary', id: "login" %>
+    <h1>Access to this material is limited to specific classes. Use your Princeton credentials to login.</h1>
+    <%= link_to 'Login', main_app.new_user_session_path, class: 'btn btn-primary', id: "login" %>
   <% else %>
     <%= link_to 'Princeton Users: Log in to View', main_app.new_user_session_path, class: 'btn btn-primary', id: "login" %>
   <% end %>

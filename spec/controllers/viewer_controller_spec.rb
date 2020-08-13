@@ -51,7 +51,8 @@ RSpec.describe ViewerController do
           get :auth, params: { id: resource.id.to_s }
 
           expect(response).to be_successful
-          expect(response.body).to have_link "Authorized Users: Log In to View Restricted Material"
+          expect(response.body).to have_content "Access to this material is limited to specific classes. Use your Princeton credentials to login."
+          expect(response.body).to have_link "Login"
         end
       end
       context "and the resource is CDL eligible" do

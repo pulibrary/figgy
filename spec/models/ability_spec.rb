@@ -141,6 +141,8 @@ describe Ability do
   let(:non_contributor_ephemera_box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: contributor_ephemera_folder_in_box.id) }
   let(:non_contributor_ephemera_folder_in_box) { FactoryBot.create_for_repository(:ephemera_folder) }
   let(:restricted_viewer_collection) do
+    # There's no current_user for anonymous user tests, but we need a netid in
+    # `restricted_viewers`, so if there's no current_user fill it with "rando"
     FactoryBot.create_for_repository(:collection, restricted_viewers: [current_user&.uid || "rando"])
   end
   let(:ineligible_restricted_viewer_collection) do
