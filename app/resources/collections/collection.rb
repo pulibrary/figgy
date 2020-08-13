@@ -8,6 +8,7 @@ class Collection < Resource
   attribute :state
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
   attribute :change_set, Valkyrie::Types::String
+  attribute :restricted_viewers, Valkyrie::Types::Set
 
   def thumbnail_id; end
 

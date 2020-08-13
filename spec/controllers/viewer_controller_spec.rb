@@ -43,6 +43,18 @@ RSpec.describe ViewerController do
           expect(response).to redirect_to viewer_index_path(anchor: "?manifest=http://www.example.com/concern/scanned_resources/#{resource.id}/manifest")
         end
       end
+      context "and the resource is in a restricted viewership collection" do
+        it "displays a restricted viewer specific login button" do
+          collection = FactoryBot.create_for_repository(:collection, restricted_viewers: ["tpend"])
+          resource = FactoryBot.create_for_repository(:complete_reading_room_scanned_resource, member_of_collection_ids: collection.id)
+
+          get :auth, params: { id: resource.id.to_s }
+
+          expect(response).to be_successful
+          expect(response.body).to have_content "Access to this material is limited to specific classes. Use your Princeton credentials to login."
+          expect(response.body).to have_link "Login"
+        end
+      end
       context "and the resource is CDL eligible" do
         it "displays a CDL-specific login button" do
           allow(CDL::EligibleItemService).to receive(:item_ids).with(source_metadata_identifier: "123456").and_return(["12345"])

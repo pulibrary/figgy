@@ -218,6 +218,7 @@ Metrics/PerceivedComplexity:
     - 'app/helpers/application_helper.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/jobs/browse_everything_ingest_job.rb'
+    - 'app/models/ability.rb'
 Rails/OutputSafety:
   Exclude:
     - 'app/helpers/fixity_dashboard_helper.rb'

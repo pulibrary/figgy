@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class CollectionDecorator < Valkyrie::ResourceDecorator
   delegate :members, :parents, :collections, :members_count, :media_resources, to: :wayfinder
-  display :owners
+  display :owners, :restricted_viewers
 
   def title
     Array(super).first

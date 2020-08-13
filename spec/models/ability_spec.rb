@@ -13,6 +13,7 @@ describe Ability do
 
   before do
     stub_ezid(shoulder: shoulder, blade: blade)
+    allow(CDL::EligibleItemService).to receive(:item_ids)
   end
 
   let(:open_scanned_resource) do
@@ -139,6 +140,23 @@ describe Ability do
   let(:non_contributor_ephemera_folder) { FactoryBot.create_for_repository(:ephemera_folder) }
   let(:non_contributor_ephemera_box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: contributor_ephemera_folder_in_box.id) }
   let(:non_contributor_ephemera_folder_in_box) { FactoryBot.create_for_repository(:ephemera_folder) }
+  let(:restricted_viewer_collection) do
+    # There's no current_user for anonymous user tests, but we need a netid in
+    # `restricted_viewers`, so if there's no current_user fill it with "rando"
+    FactoryBot.create_for_repository(:collection, restricted_viewers: [current_user&.uid || "rando"])
+  end
+  let(:ineligible_restricted_viewer_collection) do
+    FactoryBot.create_for_repository(:collection, restricted_viewers: ["rando"])
+  end
+  let(:ineligible_restricted_viewer_scanned_resource) do
+    FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [page_file_2], member_of_collection_ids: ineligible_restricted_viewer_collection.id)
+  end
+  let(:reading_room_collection_restricted_viewer_scanned_resource) do
+    FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [page_file_2], member_of_collection_ids: [restricted_viewer_collection.id])
+  end
+  let(:private_collection_restricted_viewer_scanned_resource) do
+    FactoryBot.create_for_repository(:complete_private_scanned_resource, files: [page_file_2], member_of_collection_ids: restricted_viewer_collection.id)
+  end
 
   let(:ocr_request) { FactoryBot.create(:ocr_request) }
 
@@ -448,6 +466,24 @@ describe Ability do
       is_expected.not_to be_able_to(:read, expired_private_cdl_scanned_resource)
       is_expected.to be_able_to(:discover, expired_private_cdl_scanned_resource)
       is_expected.not_to be_able_to(:download, expired_private_cdl_scanned_resource.decorate.members.first)
+
+      # Restricted Viewers
+      is_expected.not_to be_able_to(:read, private_collection_restricted_viewer_scanned_resource)
+      is_expected.not_to be_able_to(:manifest, private_collection_restricted_viewer_scanned_resource)
+      is_expected.not_to be_able_to(:discover, private_collection_restricted_viewer_scanned_resource)
+      is_expected.not_to be_able_to(:download, private_collection_restricted_viewer_scanned_resource)
+      is_expected.not_to be_able_to(:download, private_collection_restricted_viewer_scanned_resource.decorate.members.first)
+
+      is_expected.not_to be_able_to(:read, ineligible_restricted_viewer_scanned_resource)
+      is_expected.not_to be_able_to(:manifest, ineligible_restricted_viewer_scanned_resource)
+      is_expected.not_to be_able_to(:download, ineligible_restricted_viewer_scanned_resource)
+      is_expected.to be_able_to(:discover, ineligible_restricted_viewer_scanned_resource)
+
+      is_expected.to be_able_to(:read, reading_room_collection_restricted_viewer_scanned_resource)
+      is_expected.to be_able_to(:manifest, reading_room_collection_restricted_viewer_scanned_resource)
+      is_expected.to be_able_to(:discover, reading_room_collection_restricted_viewer_scanned_resource)
+      is_expected.not_to be_able_to(:download, reading_room_collection_restricted_viewer_scanned_resource)
+      is_expected.not_to be_able_to(:download, reading_room_collection_restricted_viewer_scanned_resource.decorate.members.first)
     }
 
     context "when accessing figgy via a campus IP" do
@@ -683,6 +719,24 @@ describe Ability do
       # Controlled Digital Lending
       is_expected.to be_able_to(:discover, private_cdl_scanned_resource)
       is_expected.not_to be_able_to(:read, private_cdl_scanned_resource)
+
+      # Restricted Viewers
+      is_expected.not_to be_able_to(:read, private_collection_restricted_viewer_scanned_resource)
+      is_expected.not_to be_able_to(:manifest, private_collection_restricted_viewer_scanned_resource)
+      is_expected.not_to be_able_to(:discover, private_collection_restricted_viewer_scanned_resource)
+      is_expected.not_to be_able_to(:download, private_collection_restricted_viewer_scanned_resource)
+      is_expected.not_to be_able_to(:download, private_collection_restricted_viewer_scanned_resource.decorate.members.first)
+
+      is_expected.not_to be_able_to(:read, ineligible_restricted_viewer_scanned_resource)
+      is_expected.not_to be_able_to(:manifest, ineligible_restricted_viewer_scanned_resource)
+      is_expected.not_to be_able_to(:download, ineligible_restricted_viewer_scanned_resource)
+      is_expected.to be_able_to(:discover, ineligible_restricted_viewer_scanned_resource)
+
+      is_expected.not_to be_able_to(:read, reading_room_collection_restricted_viewer_scanned_resource)
+      is_expected.not_to be_able_to(:manifest, reading_room_collection_restricted_viewer_scanned_resource)
+      is_expected.to be_able_to(:discover, reading_room_collection_restricted_viewer_scanned_resource)
+      is_expected.not_to be_able_to(:download, reading_room_collection_restricted_viewer_scanned_resource)
+      is_expected.not_to be_able_to(:download, reading_room_collection_restricted_viewer_scanned_resource.decorate.members.first)
     }
 
     context "when accessing figgy via a campus IP" do

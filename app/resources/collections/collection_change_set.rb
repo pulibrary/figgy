@@ -9,12 +9,13 @@ class CollectionChangeSet < ChangeSet
   property :description, multiple: false, required: false
   property :visibility, multiple: false, required: false
   property :owners, multiple: true, required: false
+  property :restricted_viewers, multiple: true, required: false
   validates :slug, presence: true
   validates_with UniqueSlugValidator
   validates_with SourceMetadataIdentifierValidator
   validates_with SourceMetadataIdentifierOrTitleValidator
 
   def primary_terms
-    [:title, :slug, :source_metadata_identifier, :description, :owners]
+    [:title, :slug, :source_metadata_identifier, :description, :owners, :restricted_viewers]
   end
 end

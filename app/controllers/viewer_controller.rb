@@ -18,6 +18,12 @@ class ViewerController < ApplicationController
     end
   end
 
+  def restricted_viewership?
+    collections = Wayfinder.for(@charge_manager.resource).try(:collections) || []
+    collections.flat_map(&:restricted_viewers).present?
+  end
+  helper_method :restricted_viewership?
+
   def cdl_check(charge_manager)
     if can?(:read, charge_manager.resource)
       redirect_to_viewer(charge_manager.resource)
