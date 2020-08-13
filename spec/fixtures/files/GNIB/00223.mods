@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen SCHSchema="http://library.princeton.edu/departments/tsd/metadoc/main/GNIB.sch"?>
+<?xml-stylesheet type="text/css" href="http://library.princeton.edu/departments/tsd/metadoc/main/GNIB.css"?>
+<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd">
+   <mods:titleInfo>
+      <mods:title>Guatemala and the issues of "free trade"</mods:title>
+   </mods:titleInfo>
+   <mods:typeOfResource>text</mods:typeOfResource>
+   <mods:genre authority="aat">ephemera</mods:genre>
+   <mods:language>
+      <mods:languageTerm type="code" authority="iso639-2b">eng</mods:languageTerm>
+   </mods:language>
+   <mods:note>Document extracted from:</mods:note>
+   <mods:subject authority="lcsh">
+      <mods:topic>Free trade</mods:topic>
+      <mods:geographic>Guatemala</mods:geographic>
+   </mods:subject>
+   <mods:relatedItem>
+      <mods:titleInfo>
+         <mods:title>Civil War, Society and Political Transition in Guatemala</mods:title>
+         <mods:subTitle>the Guatemala News and Information Bureau Archive
+				(1963-2000)</mods:subTitle>
+      </mods:titleInfo>
+      <mods:location>
+         <mods:url note="Digital Collection">http://pudl.princeton.edu/collections/pudl0066</mods:url>
+      </mods:location>
+   </mods:relatedItem>
+   <mods:location>
+      <mods:physicalLocation type="code" authority="marcorg">NjP</mods:physicalLocation>
+      <mods:physicalLocation type="text">Princeton University Library. Department of Rare Books and Special
+			Collections, Off-site storage.</mods:physicalLocation>
+      <mods:holdingSimple>
+         <mods:copyInformation>
+            <mods:subLocation>rcpxr</mods:subLocation>
+            <mods:shelfLocator>F1466.7.C584</mods:shelfLocator>
+         </mods:copyInformation>
+      </mods:holdingSimple>
+   </mods:location>
+   <mods:accessCondition type="useAndReproduction">Researchers are responsible for determining any copyright
+		questions</mods:accessCondition>
+   <mods:accessCondition type="restrictionOnAccess">The collection is open for research</mods:accessCondition>
+   <mods:recordInfo>
+      <mods:recordContentSource>NjP</mods:recordContentSource>
+      <mods:languageOfCataloging>
+         <mods:languageTerm authority="iso639-2b" type="code">eng</mods:languageTerm>
+      </mods:languageOfCataloging>
+      <mods:recordIdentifier>http://diglib.princeton.edu/mdata/pudl0066/ephemera/E/E_0_3/00223.mods</mods:recordIdentifier>
+   </mods:recordInfo>
+</mods:mods>
