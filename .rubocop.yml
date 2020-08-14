@@ -241,6 +241,7 @@ RSpec/AnyInstance:
     - 'spec/services/cloud_fixity_spec.rb'
     - 'spec/views/catalog/_members_multi_volume_work.html.erb_spec.rb'
     - 'spec/views/catalog/_resource_attributes_default.html.erb_spec.rb'
+    - 'spec/resources/cdl/pdf_ingest_job_spec.rb'
 RSpec/DescribeClass:
   Exclude:
     - 'spec/abilities/**/*'
