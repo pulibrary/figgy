@@ -4,10 +4,6 @@
 set :application, 'figgy'
 set :repo_url, 'https://github.com/pulibrary/figgy.git'
 
-# Default branch is :master
-# ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
-set :branch, ENV['BRANCH'] || 'master'
-
 # Default deploy_to directory is /var/www/my_app_name
 # set :deploy_to, '/var/www/my_app_name'
 set :deploy_to, '/opt/figgy'
@@ -36,6 +32,14 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/derivatives', 'tmp/up
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 set :passenger_restart_with_touch, true
+
+# this will keep deploys from hubot-deploy working as expected
+def set_branch
+  branch = ENV['BRANCH'] || 'main'
+  return branch unless branch == 'master'
+  return 'main'
+end
+set :branch, set_branch
 
 desc "Write the current version to public/version.txt"
 task :write_version do
