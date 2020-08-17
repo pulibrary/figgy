@@ -16,7 +16,7 @@ every :monday, at: "10am", roles: [:db] do
   rake "figgy:send_collection_reports"
 end
 
-every :monday, at: "7am", roles: [:production_db] do
+every :monday, at: "7am", roles: [:pulfa] do
   rake "export:pulfa"
 end
 
