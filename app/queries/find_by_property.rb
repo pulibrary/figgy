@@ -16,12 +16,12 @@ class FindByProperty
   # be a hash to query for the value of multiple properties.
   def find_by_property(property:, value:, model: nil, lazy: false)
     relation = orm_class.use_cursor
-    if(property.to_sym != :metadata)
+    if property.to_sym != :metadata
       relation = relation.where(Sequel[:metadata].pg_jsonb.contains(property => Array.wrap(value)))
     else
       # Wrap all the values in the hash in an array, since that's how they're
       # stored.
-      value = Hash[value.map{|k, v| [k, Array.wrap(v)]}]
+      value = Hash[value.map { |k, v| [k, Array.wrap(v)] }]
       relation = orm_class.where(Sequel[:metadata].pg_jsonb.contains(value))
     end
     relation = relation.where(internal_resource: model.to_s) if model
