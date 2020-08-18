@@ -16,7 +16,7 @@ RSpec.describe FindByProperty do
       FactoryBot.create_for_repository(:scanned_resource, change_set: "test", title: "bla")
       FactoryBot.create_for_repository(:scanned_resource, change_set: "other", title: "bla")
 
-      output = query.find_by_property(property: :metadata, value: {change_set: ["test"], title: ["bla"]})
+      output = query.find_by_property(property: :metadata, value: {change_set: "test", title: "bla"})
       expect(output.to_a.length).to eq 1
     end
 
