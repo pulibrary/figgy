@@ -1,4 +1,4 @@
-output=`git diff --numstat --exit-code origin/master RELEASE_NOTES.md`
+output=`git diff --numstat --exit-code origin/main RELEASE_NOTES.md`
 # there was no difference in the file
 if [ $? -eq 0 ]
   then
