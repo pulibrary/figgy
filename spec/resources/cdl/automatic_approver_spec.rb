@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe CDL::AutomaticApprover, run_real_derivatives: true, run_real_characterization: true do
+RSpec.describe CDL::AutomaticApprover do
   let(:file) { fixture_file_upload("files/sample.pdf", "application/pdf") }
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
   let(:change_set_persister) { ScannedResourcesController.change_set_persister }
@@ -31,7 +31,7 @@ RSpec.describe CDL::AutomaticApprover, run_real_derivatives: true, run_real_char
         expect(resource.state).to eq ["pending"]
       end
     end
-    context "when there's CDL items with processed files" do
+    context "when there's CDL items with processed files", run_real_derivatives: true, run_real_characterization: true do
       with_queue_adapter :inline
       it "approves them" do
         stub_ezid(shoulder: "99999/fk4", blade: "")
