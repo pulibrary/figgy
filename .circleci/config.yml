@@ -243,7 +243,7 @@ workflows:
           filters:
             branches:
               ignore:
-                - master
+                - main
   nightly:
     triggers:
       - schedule:
@@ -251,7 +251,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
     jobs:
       - build
       - test:
