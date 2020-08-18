@@ -6,6 +6,7 @@ module CDL
       @resources = params[:resource_ids].map do |resource_id|
         query_service.find_by(id: resource_id)
       end
+      return unless collection.present?
       @users = collection.owners.map do |owner|
         User.where(uid: owner).first
       end
