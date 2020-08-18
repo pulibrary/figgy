@@ -27,6 +27,16 @@ module Cdl
       redirect_to auth_viewer_path(params[:id])
     end
 
+    def return
+      return forbidden unless current_user
+      @charge_manager = charge_manager(params[:id])
+      @charge_manager.return(netid: current_user.uid)
+      flash[:notice] = "Thank you for returning this item."
+      redirect_to auth_viewer_path(params[:id])
+    rescue CDL::NotCharged
+      redirect_to auth_viewer_path(params[:id])
+    end
+
     def forbidden
       head :forbidden
     end
