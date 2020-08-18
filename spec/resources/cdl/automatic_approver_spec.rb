@@ -35,13 +35,21 @@ RSpec.describe CDL::AutomaticApprover, run_real_derivatives: true, run_real_char
       with_queue_adapter :inline
       it "approves them" do
         stub_ezid(shoulder: "99999/fk4", blade: "")
-        resource = FactoryBot.create_for_repository(:pending_cdl_resource, files: [file])
+        stub_bibdata(bib_id: "123456")
+        User.create!(uid: "skye", email: "skye@princeton.edu")
+        User.create!(uid: "zelda", email: "zelda@princeton.edu")
+        collection = FactoryBot.create_for_repository(:collection, slug: "cdl", title: "CDL", owners: ["skye", "zelda"])
+        resource = FactoryBot.create_for_repository(:pending_cdl_resource, files: [file], member_of_collection_ids: [collection.id], source_metadata_identifier: "123456")
 
         described_class.run
 
         resource = query_service.find_by(id: resource.id)
         expect(resource.member_ids.length).to eq 3
         expect(resource.state).to eq ["complete"]
+        expect(ActionMailer::Base.deliveries.size).to eq 1
+        mail = ActionMailer::Base.deliveries.first
+        expect(mail.to).to eq ["skye@princeton.edu", "zelda@princeton.edu"]
+        expect(mail.subject).to eq "CDL Items Complete: 123456"
       end
     end
     context "when the manifest builder fails to generate" do
