@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-08-18
+
+## Added
+
+* PDFs uploaded for CDL into the cdl_scans directory are automatically ingested and approved.
+
 # 2020-08-04
 
 ## Added
