@@ -20,12 +20,19 @@ module CDL
     end
 
     def run
+      resources = []
       pending_cdl_resources.each do |pending_resource|
         next unless ready_for_completion?(pending_resource)
         change_set = ChangeSet.for(pending_resource)
         change_set.validate(state: "complete")
-        change_set_persister.save(change_set: change_set)
+        resource = change_set_persister.save(change_set: change_set)
+        resources += [resource]
       end
+      notify(resources: resources)
+    end
+
+    def notify(resources:)
+      CDL::CompleteMailer.with(resource_ids: resources.map(&:id).map(&:to_s)).resources_completed.deliver_later
     end
 
     def pending_cdl_resources
