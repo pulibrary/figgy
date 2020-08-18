@@ -12,6 +12,10 @@ module CDL
       self.charged_items = charged_items.reject(&:expired?)
     end
 
+    def active_charge?(netid:)
+      charged_items.map(&:netid).include? netid
+    end
+
     # Hold Queries
 
     def active_hold?(netid:)
