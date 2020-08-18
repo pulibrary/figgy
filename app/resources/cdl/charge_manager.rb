@@ -4,6 +4,7 @@
 module CDL
   class UnavailableForCharge < StandardError; end
   class HoldExists < StandardError; end
+  class NotCharged < StandardError; end
   class ChargeManager
     include ActionView::Helpers::DateHelper
     attr_reader :resource_id, :eligible_item_service, :change_set_persister
@@ -52,6 +53,15 @@ module CDL
         CDL::EventLogging.google_charge_event(netid: netid, source_metadata_identifier: source_metadata_identifier)
       end
       charge
+    end
+
+    def return(netid:)
+      raise CDL::NotCharged unless resource_charge_list.active_charge?(netid: netid)
+      change_set = CDL::ResourceChargeListChangeSet.new(resource_charge_list)
+      new_charged_items = resource_charge_list.charged_items.reject { |i| i.netid == netid }
+      change_set.validate(charged_items: new_charged_items)
+      change_set_persister.save(change_set: change_set)
+      true
     end
 
     def source_metadata_identifier

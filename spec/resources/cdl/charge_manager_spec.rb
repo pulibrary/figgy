@@ -421,4 +421,47 @@ describe CDL::ChargeManager do
       end
     end
   end
+
+  describe "#return" do
+    context "it is not charged to the user" do
+      it "raises CDL::NotCharged" do
+        eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
+        stub_bibdata(bib_id: "123456")
+        resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
+        User.create!(uid: "zelda", email: "zelda@princeton.edu")
+
+        charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+        expect { charge_manager.return(netid: "zelda") }.to raise_error CDL::NotCharged
+      end
+    end
+
+    context "it is charged to the user" do
+      it "removes the charge" do
+        eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
+        stub_bibdata(bib_id: "123456")
+        resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
+        charged_items = [
+          CDL::ChargedItem.new(item_id: "1234", netid: "zelda", expiration_time: Time.current + 3.hours)
+        ]
+        User.create!(uid: "zelda", email: "zelda@princeton.edu")
+        resource_charge_list = FactoryBot.create_for_repository(
+          :resource_charge_list,
+          resource_id: resource.id,
+          charged_items: charged_items
+        )
+
+        charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+        returned = charge_manager.return(netid: "zelda")
+        expect(returned).to eq true
+
+        reloaded_charges = Valkyrie.config.metadata_adapter.query_service.find_by(id: resource_charge_list.id)
+        expect(reloaded_charges.charged_items).to be_empty
+      end
+
+      context "when another user had a hold" do
+        it "notifies the next user in the hold queue" do
+        end
+      end
+    end
+  end
 end
