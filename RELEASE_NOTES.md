@@ -17,7 +17,7 @@ Release notes template:
 
 ## Added
 
-* PDFs uploaded for CDL into the cdl_scans directory are automatically ingested and approved.
+* PDFs uploaded for CDL into the cdl_scans directory are automatically ingested and completed.
 
 # 2020-08-04
 
