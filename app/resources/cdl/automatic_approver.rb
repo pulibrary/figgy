@@ -68,6 +68,7 @@ module CDL
 
       def pages_match?
         first_member.mime_type.include?("application/pdf")
+        # The first member is the PDF itself, so do member_count - 1.
         pdf_page_count == resource.member_ids.size - 1
       end
 
