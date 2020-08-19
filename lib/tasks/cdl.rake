@@ -9,4 +9,9 @@ namespace :cdl do
   task automatic_ingest: :environment do
     CDL::AutomaticIngester.run
   end
+
+  desc "Automatically complete processed CDL items."
+  task automatic_completion: :environment do
+    CDL::AutomaticCompleter.run
+  end
 end

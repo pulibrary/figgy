@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Identifier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @resources.each do |resource| %>
+          <tr>
+            <td><%= link_to resource.title.first, RemoteRecord.record_url(resource.source_metadata_identifier.first) %></td>
+            <td><%= resource.source_metadata_identifier.first %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    </p>
+  </body>
+</html>

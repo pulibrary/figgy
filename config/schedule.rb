@@ -32,6 +32,10 @@ every :day, at: "2:00 AM", roles: [:db] do
   rake "cdl:automatic_ingest"
 end
 
+every :hour, roles: [:db] do
+  rake "cdl:automatic_completion"
+end
+
 # Example:
 #
 # set :output, "/path/to/my/cron_log.log"

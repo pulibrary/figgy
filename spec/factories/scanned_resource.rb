@@ -82,6 +82,9 @@ FactoryBot.define do
     end
     factory :pending_scanned_resource do
       state "pending"
+      factory :pending_cdl_resource do
+        change_set "CDL::Resource"
+      end
     end
     factory :complete_campus_only_scanned_resource do
       state "complete"
