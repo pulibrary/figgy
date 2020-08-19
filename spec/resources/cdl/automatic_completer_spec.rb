@@ -8,7 +8,7 @@ RSpec.describe CDL::AutomaticCompleter do
   let(:change_set_persister) { ScannedResourcesController.change_set_persister }
   describe ".run" do
     context "when there's in process CDL items" do
-      it "does not approve them" do
+      it "does not complete them" do
         resource = FactoryBot.create_for_repository(:pending_cdl_resource, files: [file])
 
         described_class.run
@@ -19,7 +19,7 @@ RSpec.describe CDL::AutomaticCompleter do
     end
     context "when the PDF page count doesn't match the file count" do
       with_queue_adapter :inline
-      it "doesn't approve them" do
+      it "doesn't complete them" do
         resource = FactoryBot.create_for_repository(:pending_cdl_resource, files: [file])
         cs = ChangeSet.for(resource)
         cs.validate(files: [file])
@@ -33,7 +33,7 @@ RSpec.describe CDL::AutomaticCompleter do
     end
     context "when there's CDL items with processed files", run_real_derivatives: true, run_real_characterization: true do
       with_queue_adapter :inline
-      it "approves them" do
+      it "completes them" do
         stub_ezid(shoulder: "99999/fk4", blade: "")
         stub_bibdata(bib_id: "123456")
         User.create!(uid: "skye", email: "skye@princeton.edu")
@@ -54,7 +54,7 @@ RSpec.describe CDL::AutomaticCompleter do
     end
     context "when the manifest builder fails to generate", run_real_derivatives: true, run_real_characterization: true do
       with_queue_adapter :inline
-      it "doesn't approve it" do
+      it "doesn't complete it" do
         resource = FactoryBot.create_for_repository(:pending_cdl_resource, files: [file])
         allow_any_instance_of(ManifestBuilder).to receive(:build).and_raise("Broken")
 
