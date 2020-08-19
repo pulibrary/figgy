@@ -21,24 +21,24 @@ module CDL
 
     def run
       resources = []
-      pending_cdl_resources.each do |pending_resource|
-        next unless ready_for_completion?(pending_resource)
-        change_set = ChangeSet.for(pending_resource)
+      draft_cdl_resources.each do |draft_resource|
+        next unless ready_for_completion?(draft_resource)
+        change_set = ChangeSet.for(draft_resource)
         change_set.validate(state: "complete")
         resource = change_set_persister.save(change_set: change_set)
         resources += [resource]
       end
-      notify(resources: resources)
+      notify(resources: resources) if resources.present?
     end
 
     def notify(resources:)
       CDL::CompleteMailer.with(resource_ids: resources.map(&:id).map(&:to_s)).resources_completed.deliver_later
     end
 
-    def pending_cdl_resources
+    def draft_cdl_resources
       query_service.custom_queries.find_by_property(
         property: :metadata,
-        value: { state: "pending", change_set: "CDL::Resource" },
+        value: { state: "draft", change_set: "CDL::Resource" },
         model: ScannedResource,
         lazy: true
       )
