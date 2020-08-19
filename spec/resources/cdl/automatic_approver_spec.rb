@@ -52,7 +52,7 @@ RSpec.describe CDL::AutomaticApprover do
         expect(mail.subject).to eq "CDL Items Complete: 123456"
       end
     end
-    context "when the manifest builder fails to generate" do
+    context "when the manifest builder fails to generate", run_real_derivatives: true, run_real_characterization: true do
       with_queue_adapter :inline
       it "doesn't approve it" do
         resource = FactoryBot.create_for_repository(:pending_cdl_resource, files: [file])
