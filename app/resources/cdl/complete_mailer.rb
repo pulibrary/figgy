@@ -12,7 +12,7 @@ module CDL
       end
       mail(
         to: @users.map(&:email),
-        subject: "CDL Items Complete: #{@resources.map { |x| x.source_metadata_identifier.first }.join(", ")}"
+        subject: "#{@resources.size} CDL Item(s) Completed"
       )
     end
 

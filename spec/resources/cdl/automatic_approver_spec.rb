@@ -49,7 +49,7 @@ RSpec.describe CDL::AutomaticApprover do
         expect(ActionMailer::Base.deliveries.size).to eq 1
         mail = ActionMailer::Base.deliveries.first
         expect(mail.to).to eq ["skye@princeton.edu", "zelda@princeton.edu"]
-        expect(mail.subject).to eq "CDL Items Complete: 123456"
+        expect(mail.subject).to eq "1 CDL Item(s) Completed"
       end
     end
     context "when the manifest builder fails to generate", run_real_derivatives: true, run_real_characterization: true do
