@@ -10,8 +10,8 @@ namespace :cdl do
     CDL::AutomaticIngester.run
   end
 
-  desc "Automatically approve processed CDL items."
-  task automatic_approval: :environment do
-    CDL::AutomaticApprover.run
+  desc "Automatically complete processed CDL items."
+  task automatic_completion: :environment do
+    CDL::AutomaticCompleter.run
   end
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module CDL
-  class AutomaticApprover
+  class AutomaticCompleter
     def self.run
       change_set_persister.buffer_into_index do |buffered_change_set_persister|
         new(change_set_persister: buffered_change_set_persister).run
