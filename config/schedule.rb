@@ -33,7 +33,7 @@ every :day, at: "2:00 AM", roles: [:db] do
 end
 
 every :hour, roles: [:db] do
-  rake "cdl:automatic_approval"
+  rake "cdl:automatic_completion"
 end
 
 # Example:
