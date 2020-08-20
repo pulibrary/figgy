@@ -1,5 +1,11 @@
 import CDLTimer from 'viewer/cdl_timer'
 describe('CDLTimer', () => {
+  const initialHTML =
+    '<form id="return-early-form" action="/viewer" method="post">' +
+    '  <input type="hidden" name="id" id="id">' +
+    '</form>' +
+  '<div id="uv"><div></div></div>'
+
   afterEach(() => {
     if (global.fetch !== undefined) {
       global.fetch.mockClear()
@@ -30,11 +36,7 @@ describe('CDLTimer', () => {
     })
 
     it('displays a timer if <= 5 minutes left', async () => {
-      document.body.innerHTML =
-        '<div id="uv">' +
-        '  <div>' +
-        '  </div>' +
-      '</div>'
+      document.body.innerHTML = initialHTML
 
       const json = {
         'charged': true,
@@ -51,11 +53,7 @@ describe('CDLTimer', () => {
     })
 
     it('displays an expiration time if > 5 minutes left', async () => {
-      document.body.innerHTML =
-        '<div id="uv">' +
-        '  <div>' +
-        '  </div>' +
-      '</div>'
+      document.body.innerHTML = initialHTML
 
       const expireTime = Math.round(Date.now() / 1000) + 600
       const json = {
@@ -73,6 +71,51 @@ describe('CDLTimer', () => {
       const time = new Date(expireTime * 1000).toLocaleTimeString()
 
       expect(document.getElementById('remaining-time').innerHTML).toMatch(`Expires At: ${time}`)
+    })
+
+    it('places the return button before the timer', async () => {
+      document.body.innerHTML = initialHTML
+
+      const expireTime = Math.round(Date.now() / 1000) + 600
+      const json = {
+        'charged': true,
+        'available': false,
+        'expires_at': expireTime
+      }
+      const mockFetchPromise = Promise.resolve({
+        json: () => json
+      })
+      global.fetch = jest.fn().mockImplementation(() => mockFetchPromise)
+
+      const timer = new CDLTimer('b627a6ce-6717-4dd0-a16a-7a0c0b8a5788')
+      await timer.initializeTimer()
+
+      let buttonElement = document.getElementById('return-early-button')
+      expect(buttonElement.nextSibling.id).toBe('remaining-time')
+    })
+
+    it('updates the return form and links the button to the form', async () => {
+      document.body.innerHTML = initialHTML
+
+      const expireTime = Math.round(Date.now() / 1000) + 600
+      const json = {
+        'charged': true,
+        'available': false,
+        'expires_at': expireTime
+      }
+      const mockFetchPromise = Promise.resolve({
+        json: () => json
+      })
+      global.fetch = jest.fn().mockImplementation(() => mockFetchPromise)
+      const id = 'b627a6ce-6717-4dd0-a16a-7a0c0b8a5788'
+      const timer = new CDLTimer(id)
+      await timer.initializeTimer()
+
+      const formElement = document.getElementById('return-early-form')
+      expect(formElement.getAttribute('action')).toBe(`/cdl/${id}/return`)
+      expect(formElement.lastChild.getAttribute('value')).toBe(id)
+      const buttonElement = document.getElementById('return-early-button')
+      expect(buttonElement.firstChild.getAttribute('form')).toBe('return-early-form')
     })
 
     it('reloads the page when the hold expires', async () => {

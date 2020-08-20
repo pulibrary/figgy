@@ -9,8 +9,30 @@ export default class CDLTimer {
     // If item isn't charged we're seeing it some other way - don't spin up a
     // timer.
     if (this.status.charged === false) { return }
+    this.setupReturnForm()
+    const uvPane = document.getElementById('uv').firstChild
+    uvPane.insertBefore(this.returnButton(), uvPane.firstChild)
     await this.checkTime()
     window.setInterval(() => { this.checkTime() }, 1000)
+  }
+
+  // We don't know the id when this form is set up in rails
+  //   so we adjust it a bit here
+  setupReturnForm () {
+    // Set form submission target (we don't know the id in the view)
+    const formAction = `/cdl/${this.figgyId}/return`
+    const form = document.getElementById('return-early-form')
+    form.setAttribute('action', formAction)
+    form.lastElementChild.setAttribute('value', this.figgyId)
+  }
+
+  // button to return early
+  returnButton () {
+    const buttonElement = document.createElement('div')
+    buttonElement.setAttribute('id', 'cdl-viewer')
+    const html = `<div id="return-early-button"><input type="submit" value="Return this item" class="btn btn-primary" form="return-early-form"></div>`
+    buttonElement.innerHTML = html
+    return buttonElement
   }
 
   async checkTime () {
@@ -31,8 +53,9 @@ export default class CDLTimer {
     const timeElement = document.createElement('div')
     timeElement.setAttribute('id', 'remaining-time')
     timeElement.innerHTML = this.timeString(remainingTime)
-    const uvPane = document.getElementById('uv').firstChild
-    uvPane.insertBefore(timeElement, uvPane.firstChild)
+    // place it after the return button
+    const buttonElement = document.getElementById('return-early-button')
+    buttonElement.parentNode.insertBefore(timeElement, buttonElement.nextSibling)
   }
 
   timeString (remainingSeconds) {

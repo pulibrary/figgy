@@ -1,2 +1,7 @@
 <h1 id="title" class="lux-heading h1" style="display: none;"></h1>
+<%# We generate a rails form to have a csrf token %>
+<%# then adjust it as-needed in cdl_timer.js %>
+<%= form_with id: "return-early-form", action: "/cdl/:id/return" do |f| %>
+<%= hidden_field_tag(:id) %>
+<% end %>
 <div id="uv" class="uv"></div>
