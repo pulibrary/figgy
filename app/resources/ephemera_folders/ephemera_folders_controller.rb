@@ -8,6 +8,7 @@ class EphemeraFoldersController < BaseResourceController
   before_action :load_fields, only: [:new, :edit, :update, :create]
   before_action :cache_parent, only: [:destroy]
   before_action :load_boxes, only: [:edit]
+  before_action :skip_validation, only: [:update, :create]
 
   def change_set_param
     parent_resource.is_a?(EphemeraBox) ? "ephemera_folder" : "boxless_ephemera_folder"
@@ -18,6 +19,12 @@ class EphemeraFoldersController < BaseResourceController
       redirect_to parent_new_ephemera_box_path(parent_id: resource_params[:append_id], create_another: obj.id.to_s), notice: "Folder #{obj.folder_number.first} Saved, Creating Another..."
     else
       super
+    end
+  end
+
+  def skip_validation
+    if params[:commit] == "Save Draft"
+      resource_params[:skip_validation] = true
     end
   end
 
