@@ -49,6 +49,14 @@ RSpec.feature "Ephemera Folders" do
       expect(page).to have_content "EphemeraFolder"
     end
 
+    scenario "users can save a draft", js: true do
+      visit boxless_new_ephemera_folder_path(parent_id: ephemera_project.id)
+
+      page.click_on "Save Draft"
+
+      expect(page).to have_content "EphemeraFolder"
+    end
+
     scenario "users can save a new folder and create another" do
       visit boxless_new_ephemera_folder_path(parent_id: ephemera_project.id)
 

@@ -29,6 +29,11 @@
       </div>
     </div>
   <% end %>
+  <% if f.object.respond_to?(:skip_validation) %>
+    <div class="panel-footer text-center">
+      <%= f.submit "Save Draft", class: 'btn btn-primary', formnovalidate: true %>
+    </div>
+  <% end %>
 
   <% if params[:action] == "edit" %>
     <div class="panel-footer text-center panel-delete-controls">
