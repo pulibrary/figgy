@@ -54,6 +54,9 @@ class EphemeraFolderChangeSetBase < ChangeSet
 
   property :local_identifier, multiple: false, required: false
 
+  # Skip Validation
+  property :skip_validation, virtual: true, type: ::Types::Bool, default: false
+
   delegate :human_readable_type, to: :model
 
   def primary_terms
@@ -91,6 +94,11 @@ class EphemeraFolderChangeSetBase < ChangeSet
       :rights_statement,
       :member_of_collection_ids
     ]
+  end
+
+  def valid?
+    return true if skip_validation == true
+    super
   end
 
   def genre=(genre_value)
