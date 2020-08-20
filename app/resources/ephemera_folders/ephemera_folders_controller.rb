@@ -23,9 +23,8 @@ class EphemeraFoldersController < BaseResourceController
   end
 
   def skip_validation
-    if params[:commit] == "Save Draft"
-      resource_params[:skip_validation] = true
-    end
+    return unless params[:commit] == "Save Draft"
+    resource_params[:skip_validation] = true
   end
 
   def after_update_success(obj, _change_set)
