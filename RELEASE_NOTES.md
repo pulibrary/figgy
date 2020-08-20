@@ -17,6 +17,12 @@ Release notes template:
 
 ## Added
 
+* Ephemera Folders can "Save Draft" to avoid all required fields.
+
+# 2020-08-20
+
+## Added
+
 * CDL items can be returned before their checkout time is expired.
 
 # 2020-08-18
