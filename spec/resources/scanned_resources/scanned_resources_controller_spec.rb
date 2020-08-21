@@ -424,7 +424,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
         expect(reloaded.pending_uploads).to be_empty
 
         file_sets = Valkyrie.config.metadata_adapter.query_service.find_members(resource: reloaded)
-        expect(file_sets.first.file_metadata.length).to eq 3
+        expect(file_sets.first.file_metadata.length).to eq 2
       end
 
       context "the user selects hidden files" do

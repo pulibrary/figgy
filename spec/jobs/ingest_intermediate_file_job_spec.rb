@@ -59,7 +59,7 @@ RSpec.describe IngestIntermediateFileJob do
 
         expect(cleanup_files_job).to have_received(:perform_now).with(file_identifiers: file_identifiers)
         file_set_with_intermediates = metadata_adapter.query_service.find_by(id: file_set.id)
-        expect(file_set_with_intermediates.derivative_files.length).to eq(2)
+        expect(file_set_with_intermediates.derivative_files.length).to eq(1)
       end
     end
 

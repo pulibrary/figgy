@@ -66,7 +66,7 @@ RSpec.describe Preserver::BlindImporter do
       file_set = file_sets[0]
       # Ensure the file actually got moved over.
       Valkyrie::StorageAdapter.find_by(id: file_set.original_file.file_identifiers.first)
-      expect(file_set.derivative_files.length).to eq 2
+      expect(file_set.derivative_files.length).to eq 1
     end
     it "imports everything it can, even if a member didn't get preserved for some reason" do
       resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])

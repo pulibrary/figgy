@@ -439,18 +439,6 @@ RSpec.describe ManifestBuilder do
       end
     end
 
-    context "when in staging and pyramidals are disabled" do
-      it "uses the cantaloupe link" do
-        allow(Rails.env).to receive(:development?).and_return(false)
-        allow(Rails.env).to receive(:test?).and_return(false)
-        allow(Figgy.config).to receive(:[]).and_call_original
-        allow(Figgy.config).to receive(:[]).with("enable_pyramidal_access").and_return(false)
-
-        output = manifest_builder.build
-        expect(output["sequences"][0]["canvases"][0]["images"][0]["resource"]["service"]["@id"]).to start_with "http://localhost:8182/iiif/2/"
-      end
-    end
-
     it "generates a IIIF document with metadata" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash

@@ -61,7 +61,6 @@ class DefaultDerivativeService
   def create_derivatives
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
       hocr_derivative_service(buffered_changeset_persister).create_derivatives if parent.try(:ocr_language).present? && hocr_derivative_service(buffered_changeset_persister).valid?
-      jp2_derivative_service(buffered_changeset_persister).create_derivatives if jp2_derivative_service(buffered_changeset_persister).valid?
       vips_derivative_service(buffered_changeset_persister).create_derivatives if vips_derivative_service(buffered_changeset_persister).valid?
     end
   end
@@ -71,13 +70,8 @@ class DefaultDerivativeService
   def cleanup_derivatives
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
       hocr_derivative_service(buffered_changeset_persister).cleanup_derivatives if parent.try(:ocr_language).present? && hocr_derivative_service(buffered_changeset_persister).valid?
-      jp2_derivative_service(buffered_changeset_persister).cleanup_derivatives if jp2_derivative_service(buffered_changeset_persister).valid?
       vips_derivative_service(buffered_changeset_persister).cleanup_derivatives if vips_derivative_service(buffered_changeset_persister).valid?
     end
-  end
-
-  def jp2_derivative_service(change_set_persister = self.change_set_persister)
-    Jp2DerivativeService::Factory.new(change_set_persister: change_set_persister).new(id: id)
   end
 
   def hocr_derivative_service(change_set_persister = self.change_set_persister)
