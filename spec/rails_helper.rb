@@ -28,10 +28,8 @@ RSpec.configure do |config|
   # Prevent leaking view contexts between tests
   # see https://github.com/drapergem/draper/issues/814
   # see https://github.com/drapergem/draper/issues/655
-  [:decorator, :controller, :mailer].each do |type|
-    config.before(:each, type: type) { Draper::ViewContext.clear! }
-    config.after(:each, type: type) { Draper::ViewContext.clear! }
-  end
+  config.before { Draper::ViewContext.clear! }
+  config.after { Draper::ViewContext.clear! }
 end
 
 ActiveRecord::Migration.maintain_test_schema!
