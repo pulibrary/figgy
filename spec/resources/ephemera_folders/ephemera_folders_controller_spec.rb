@@ -208,6 +208,17 @@ RSpec.describe EphemeraFoldersController, type: :controller do
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/ephemera_boxes/#{box.id}/ephemera_folders/new?create_another"
     end
+    it "can save a draft" do
+      post :create, params: { commit: "Save Draft", ephemera_folder: valid_params.merge(subject: []) }
+
+      expect(response).to be_redirect
+      expect(response.location).to start_with "http://test.host/catalog/"
+      id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/")
+      resource = find_resource(id)
+      expect(resource.folder_number).to contain_exactly "one"
+      expect(resource.depositor).to eq [user.uid]
+      expect(resource.subject).to be_blank
+    end
     it "indexes the folder with the project it's a part of" do
       box = FactoryBot.create_for_repository(:ephemera_box)
       project = FactoryBot.create_for_repository(:ephemera_project, member_ids: box.id)

@@ -146,8 +146,11 @@ module ResourceController
     end
 
     def resource_params
-      h = params[resource_class.to_s.underscore.tr("/", "_").to_sym]&.to_unsafe_h&.deep_symbolize_keys
-      clean_params(h)
+      @resource_params ||=
+        begin
+          h = params[resource_class.to_s.underscore.tr("/", "_").to_sym]&.to_unsafe_h&.deep_symbolize_keys
+          clean_params(h)
+        end
     end
 
     def clean_params(h)

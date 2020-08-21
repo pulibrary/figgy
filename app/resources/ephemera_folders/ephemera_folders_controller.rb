@@ -8,6 +8,7 @@ class EphemeraFoldersController < BaseResourceController
   before_action :load_fields, only: [:new, :edit, :update, :create]
   before_action :cache_parent, only: [:destroy]
   before_action :load_boxes, only: [:edit]
+  before_action :skip_validation, only: [:update, :create]
 
   def change_set_param
     parent_resource.is_a?(EphemeraBox) ? "ephemera_folder" : "boxless_ephemera_folder"
@@ -19,6 +20,11 @@ class EphemeraFoldersController < BaseResourceController
     else
       super
     end
+  end
+
+  def skip_validation
+    return unless params[:commit] == "Save Draft"
+    resource_params[:skip_validation] = true
   end
 
   def after_update_success(obj, _change_set)

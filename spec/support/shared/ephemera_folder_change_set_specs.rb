@@ -11,6 +11,17 @@ RSpec.shared_examples "an ephemera folder change set" do |change_set_class|
     end
   end
 
+  describe "subject validation" do
+    it "is invalid without a subject" do
+      expect(change_set.validate(subject: [])).to eq false
+      expect(change_set).not_to be_valid
+    end
+    it "is valid if we skip validation" do
+      expect(change_set.validate(subject: [], skip_validation: true)).to eq true
+      expect(change_set).to be_valid
+    end
+  end
+
   describe "#state" do
     it "pre-populates" do
       expect(change_set.state).to eq "needs_qa"
