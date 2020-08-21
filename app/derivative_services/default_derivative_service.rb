@@ -66,7 +66,6 @@ class DefaultDerivativeService
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
-  # (see Jp2DerivativeService#cleanup_derivatives)
   def cleanup_derivatives
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
       hocr_derivative_service(buffered_changeset_persister).cleanup_derivatives if parent.try(:ocr_language).present? && hocr_derivative_service(buffered_changeset_persister).valid?

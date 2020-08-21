@@ -50,7 +50,6 @@ class ScannedMapDerivativeService
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
-  # (see Jp2DerivativeService#cleanup_derivatives)
   # (see ImageDerivativeService#cleanup_derivatives)
   def cleanup_derivatives
     vips_derivative_service.cleanup_derivatives if vips_derivative_service.valid?
