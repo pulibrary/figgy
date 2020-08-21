@@ -111,7 +111,7 @@ class ChangeSetPersister
     end
 
     def buffer_into_index
-      if transaction?
+      if transaction? || !metadata_adapter.persister.respond_to?(:buffer_into_index)
         yield self
         return
       end

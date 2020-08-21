@@ -72,8 +72,6 @@ module Hathi
         @fileset = fileset
         original_file = Valkyrie::StorageAdapter.find_by(id: @fileset.original_file.file_identifiers.first)
         @original_image = MiniMagick::Image.new(original_file.disk_path)
-        derivative_file = Valkyrie::StorageAdapter.find_by(id: @fileset.jp2_derivative.file_identifiers.first)
-        @derivative_image = MiniMagick::Image.new(derivative_file.disk_path)
         @properties = @original_image.data["properties"]
       end
 
@@ -140,7 +138,29 @@ module Hathi
 
     class DerivativePage < Page
       def image_file
-        @fileset.jp2_derivative
+        jp2_derivative
+      end
+
+      def path_to_file
+        @path_to_file ||= ephemeral_change_set_persister.storage_adapter.find_by(id: jp2_derivative.file_identifiers.first).disk_path
+      end
+
+      def jp2_derivative
+        @jp2_derivative ||=
+          begin
+            ephemeral_change_set_persister.metadata_adapter.persister.save(resource: @fileset)
+            Jp2DerivativeService.new(id: @fileset.id, change_set_persister: ephemeral_change_set_persister).create_derivatives
+            fileset = ephemeral_change_set_persister.metadata_adapter.query_service.find_by(id: @fileset.id)
+            fileset.jp2_derivative
+          end
+      end
+
+      def ephemeral_change_set_persister
+        @csp ||=
+          ChangeSetPersister.new(
+            metadata_adapter: Valkyrie::Persistence::Memory::MetadataAdapter.new,
+            storage_adapter: Valkyrie::Storage::Memory.new
+          )
       end
     end
   end
