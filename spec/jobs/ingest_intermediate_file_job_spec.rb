@@ -64,13 +64,8 @@ RSpec.describe IngestIntermediateFileJob do
     end
 
     context "when the ChangeSet does not validate when persisting" do
-      let(:file_change_set) { instance_double(FileSetChangeSet) }
-
       before do
-        allow(file_change_set).to receive(:prepopulate!)
-        allow(file_change_set).to receive(:validate).and_return(false)
-        allow(file_change_set).to receive(:errors).and_return(test: "error")
-        allow(FileSetChangeSet).to receive(:new).and_return(file_change_set)
+        allow_any_instance_of(FileSetChangeSet).to receive(:validate).and_return(false)
       end
 
       it "ingests a file and appends it to an existing resource as an intermediate file" do
