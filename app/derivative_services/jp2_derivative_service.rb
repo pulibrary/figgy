@@ -59,8 +59,8 @@ class Jp2DerivativeService
   end
 
   def create_derivatives
-    run_derivatives
-    change_set.files = [build_file]
+    output = create_tiff_derivative(filename)
+    change_set.files = [build_file(output)]
     change_set_persister.buffer_into_index do |buffered_persister|
       @resource = buffered_persister.save(change_set: change_set)
     end
@@ -74,19 +74,8 @@ class Jp2DerivativeService
     @change_set ||= ChangeSet.for(resource)
   end
 
-  def run_derivatives
-    run_tiff_derivatives if valid_mime_types.include?(mime_type.first)
-  end
-
-  def run_tiff_derivatives
-    create_tiff_derivative(filename)
-  end
-
   def create_tiff_derivative(filename)
-    color_corrected_tiff = correct_color(filename)
-    _stdout, stderr, status =
-      Open3.capture3("opj_compress", "-i", color_corrected_tiff.path.to_s, "-o", temporary_output.path.to_s, "-t", "1024,1024", "-p", "RPCL", "-n", "8", "-r", "10")
-    raise stderr unless status.success?
+    JP2Creator.new(filename: filename).generate
   end
 
   def correct_color(filename)
@@ -115,8 +104,8 @@ class Jp2DerivativeService
     cleanup_derivative_metadata(derivatives: deleted_files)
   end
 
-  def build_file
-    IoDecorator.new(temporary_output, "intermediate_file.jp2", "image/jp2", use)
+  def build_file(output)
+    IoDecorator.new(output, "intermediate_file.jp2", "image/jp2", use)
   end
 
   def use
@@ -129,10 +118,6 @@ class Jp2DerivativeService
 
   def file_object
     @file_object ||= Valkyrie::StorageAdapter.find_by(id: target_file.file_identifiers[0])
-  end
-
-  def temporary_output
-    @temporary_file ||= Tempfile.new(["intermediate_file", ".jp2"])
   end
 
   private
