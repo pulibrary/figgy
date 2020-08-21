@@ -75,11 +75,6 @@ module Hathi
         @properties = @original_image.data["properties"]
       end
 
-      def path_to_file
-        file = Valkyrie::StorageAdapter.find_by(id: image_file.file_identifiers.first)
-        file.disk_path
-      end
-
       def image_filename
         extension = image_file.mime_type.first.split("/").last
         @basename + "." + extension
