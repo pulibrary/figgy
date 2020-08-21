@@ -21,7 +21,7 @@ class ChangeSetPersister
 
     def run
       return unless change_set.respond_to?(:created_file_sets=)
-      appender = file_appender.new(storage_adapter: storage_adapter, persister: persister, files: files)
+      appender = file_appender.new(files: files, change_set_persister: change_set_persister)
       created_file_sets = appender.append_to(change_set.resource)
       change_set.created_file_sets += created_file_sets
     end
