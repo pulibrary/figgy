@@ -132,30 +132,20 @@ module Hathi
     end
 
     class DerivativePage < Page
-      def image_file
-        jp2_derivative
+      def image_filename
+        "#{@basename}.jp2"
       end
 
       def path_to_file
-        @path_to_file ||= ephemeral_change_set_persister.storage_adapter.find_by(id: jp2_derivative.file_identifiers.first).disk_path
+        @path_to_file ||= Pathname.new(jp2_derivative.path)
       end
 
       def jp2_derivative
-        @jp2_derivative ||=
-          begin
-            ephemeral_change_set_persister.metadata_adapter.persister.save(resource: @fileset)
-            Jp2DerivativeService.new(id: @fileset.id, change_set_persister: ephemeral_change_set_persister).create_derivatives
-            fileset = ephemeral_change_set_persister.metadata_adapter.query_service.find_by(id: @fileset.id)
-            fileset.jp2_derivative
-          end
+        @jp2_derivative ||= JP2Creator.new(filename: original_file_path.to_s).generate
       end
 
-      def ephemeral_change_set_persister
-        @csp ||=
-          ChangeSetPersister.new(
-            metadata_adapter: Valkyrie::Persistence::Memory::MetadataAdapter.new,
-            storage_adapter: Valkyrie::Storage::Memory.new
-          )
+      def original_file_path
+        Valkyrie::StorageAdapter.find_by(id: @fileset.original_file.file_identifiers.first).disk_path
       end
     end
   end
