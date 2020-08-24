@@ -30,4 +30,4 @@ class JP2Creator
   def temporary_output
     @temporary_file ||= Tempfile.new(["intermediate_file", ".jp2"])
   end
-  end
+end
