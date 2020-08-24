@@ -521,7 +521,7 @@ RSpec.describe ChangeSetPersister do
       expect(output.thumbnail_id).to eq [members.first.id]
 
       file_metadata_nodes = members.first.file_metadata
-      expect(file_metadata_nodes.to_a.length).to eq 3
+      expect(file_metadata_nodes.to_a.length).to eq 2
       expect(file_metadata_nodes.first).to be_kind_of FileMetadata
       expect(file_metadata_nodes.first.created_at).not_to be nil
       expect(file_metadata_nodes.first.updated_at).not_to be nil
@@ -544,7 +544,7 @@ RSpec.describe ChangeSetPersister do
       expect(derivative_file_node).not_to be_blank
       derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative_file_node.file_identifiers.first)
       expect(derivative_file).not_to be_blank
-      expect(derivative_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["derivative_path"]).to_s)
+      expect(derivative_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["pyramidal_derivative_path"]).to_s)
 
       pyramidal_derivative = file_metadata_nodes.find { |x| x.use == [Valkyrie::Vocab::PCDMUse.ServiceFile] && x.mime_type == ["image/tiff"] }
       expect(pyramidal_derivative).not_to be_blank
@@ -1620,7 +1620,7 @@ RSpec.describe ChangeSetPersister do
 
         change_set_persister.save(change_set: change_set)
         expect(PreserveChildrenJob).to have_received(:perform_later).exactly(1).times
-        expect(Preserver).to have_received(:new).exactly(5).times
+        expect(Preserver).to have_received(:new).exactly(4).times
         expect(CleanupFilesJob).not_to have_received(:perform_later)
       end
     end
@@ -1785,7 +1785,7 @@ RSpec.describe ChangeSetPersister do
 
         expect(output.member_ids.length).to eq 1
         file_set = change_set_persister.query_service.find_members(resource: output).first
-        expect(file_set.file_metadata.length).to eq 3
+        expect(file_set.file_metadata.length).to eq 2
 
         # Expect tombstone to be gone
         tombstones = change_set_persister.query_service.find_all_of_model(model: Tombstone)
@@ -1893,7 +1893,7 @@ RSpec.describe ChangeSetPersister do
         expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", parent.id.to_s, "data", volume.id.to_s, "data", file_set.id.to_s, "example-#{file_set.original_file.id}.tif"))).to eq true
       end
     end
-    context "when adding a file to a preserved resource" do
+    context "when adding a file to a preserved resource", run_real_characterization: true, run_real_derivatives: true do
       with_queue_adapter :inline
       it "preserves it" do
         resource = FactoryBot.create_for_repository(:complete_scanned_resource)

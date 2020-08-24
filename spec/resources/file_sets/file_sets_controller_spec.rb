@@ -55,7 +55,7 @@ RSpec.describe FileSetsController, type: :controller do
         }
 
         updated_file_set = query_service.find_by(id: file_set.id)
-        expect(updated_file_set.file_metadata.length).to eq 3
+        expect(updated_file_set.file_metadata.length).to eq 2
         expect(updated_file_set.file_metadata.first).to be_a FileMetadata
         expect(updated_file_set.file_metadata.last).to be_a FileMetadata
       end

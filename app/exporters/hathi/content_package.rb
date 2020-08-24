@@ -72,14 +72,7 @@ module Hathi
         @fileset = fileset
         original_file = Valkyrie::StorageAdapter.find_by(id: @fileset.original_file.file_identifiers.first)
         @original_image = MiniMagick::Image.new(original_file.disk_path)
-        derivative_file = Valkyrie::StorageAdapter.find_by(id: @fileset.jp2_derivative.file_identifiers.first)
-        @derivative_image = MiniMagick::Image.new(derivative_file.disk_path)
         @properties = @original_image.data["properties"]
-      end
-
-      def path_to_file
-        file = Valkyrie::StorageAdapter.find_by(id: image_file.file_identifiers.first)
-        file.disk_path
       end
 
       def image_filename
@@ -139,8 +132,20 @@ module Hathi
     end
 
     class DerivativePage < Page
-      def image_file
-        @fileset.jp2_derivative
+      def image_filename
+        "#{@basename}.jp2"
+      end
+
+      def path_to_file
+        @path_to_file ||= Pathname.new(jp2_derivative.path)
+      end
+
+      def jp2_derivative
+        @jp2_derivative ||= JP2Creator.new(filename: original_file_path.to_s).generate
+      end
+
+      def original_file_path
+        Valkyrie::StorageAdapter.find_by(id: @fileset.original_file.file_identifiers.first).disk_path
       end
     end
   end

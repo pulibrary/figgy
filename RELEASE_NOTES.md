@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-08-24
+
+## Changed
+
+* Removed JP2 Derivative Generation. Now only pyramidal tiffs are used.
+
 # 2020-08-20
 
 ## Added

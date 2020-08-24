@@ -10,15 +10,12 @@ RSpec.describe GeneratePyramidalTiffJob do
         resource = FactoryBot.create_for_repository(:scanned_resource, files: [file])
         file_set = Wayfinder.for(resource).file_sets[0]
         pyramidal_derivative = file_set.pyramidal_derivative
-        jp2_derivative = file_set.jp2_derivative
 
         described_class.perform_now(file_set.id.to_s)
 
         reloaded = Valkyrie.config.metadata_adapter.query_service.find_by(id: file_set.id)
         expect(reloaded.pyramidal_derivative.id).not_to eq pyramidal_derivative.id
-        # Ensure JP2 didn't get regenerated.
-        expect(reloaded.jp2_derivative.id).to eq jp2_derivative.id
-        expect(reloaded.file_metadata.length).to eq 3
+        expect(reloaded.file_metadata.length).to eq 2
       end
     end
 
