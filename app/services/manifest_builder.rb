@@ -739,10 +739,8 @@ class ManifestBuilder
     def manifest_image_path(resource)
       if (Rails.env.development? && Figgy.config["pyramidals_bucket"].blank?) || Rails.env.test?
         RiiifHelper.new.base_url(resource.id)
-      elsif resource.pyramidal_derivative.present? && Figgy.config["enable_pyramidal_access"]
-        PyramidalHelper.new.base_url(resource)
       else
-        CantaloupeHelper.new.base_url(resource)
+        PyramidalHelper.new.base_url(resource)
       end
     end
 
@@ -769,23 +767,6 @@ class ManifestBuilder
         file = file_metadata.file_identifiers[0].to_s.gsub(/^.*:\/\//, "")
         id = file.gsub(Figgy.config["pyramidal_derivative_path"], "").gsub(/^\//, "").gsub(".tif", "")
         Pathname.new(Figgy.config["pyramidal_url"]).join(
-          CGI.escape(id.to_s)
-        ).to_s
-      rescue
-        Rails.logger.warn("Unable to find derivative path for #{file_set.id}")
-        nil
-      end
-    end
-  end
-
-  class CantaloupeHelper
-    def base_url(file_set)
-      file_metadata = file_set.jp2_derivative
-      raise Valkyrie::Persistence::ObjectNotFoundError, file_set.id if file_metadata.nil?
-      begin
-        file = file_metadata.file_identifiers[0].to_s.gsub("disk://", "")
-        id = file.gsub(Figgy.config["derivative_path"], "").gsub(/^\//, "")
-        Pathname.new(Figgy.config["cantaloupe_url"]).join(
           CGI.escape(id.to_s)
         ).to_s
       rescue

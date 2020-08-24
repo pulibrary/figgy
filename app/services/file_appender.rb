@@ -7,18 +7,18 @@ class FileAppender
   # Class for capturing file upload errors
   class UpdateFileError < StandardError; end
 
-  attr_reader :storage_adapter, :persister, :files
+  attr_reader :files
+  attr_reader :change_set_persister
+  delegate :storage_adapter, to: :change_set_persister
 
   # Constructor
-  # @param storage_adapter
-  # @param persister [ChangeSetPersister] the persister object used for ChangeSets
+  # @param change_set_persister
   # @param files [Array<Object>] the files being updated or created for the resource being changed
   # files must respond to:
   #   #path, #content_type, and #original_filename
-  def initialize(storage_adapter:, persister:, files:)
-    @storage_adapter = storage_adapter
-    @persister = persister
+  def initialize(files:, change_set_persister:)
     @files = files
+    @change_set_persister = change_set_persister
   end
 
   # Append FileNodes to a given resource
@@ -130,7 +130,9 @@ class FileAppender
       }.merge(
         file.try(:container_attributes) || {}
       )
-      persister.save(resource: FileSet.new(attributes))
+      file_set = FileSet.new(attributes)
+      change_set = ChangeSet.for(file_set)
+      change_set_persister.save(change_set: change_set)
     end
 
     # Constructs FileSet Objects using the files being uploaded

@@ -58,12 +58,10 @@ RSpec.describe ScannedMapDerivativeService do
     end
   end
 
-  it "creates a JP2 intermediate file, a pyramidal tiff, and a thumbnail" do
+  it "creates a pyramidal tiff and a thumbnail" do
     resource = query_service.find_by(id: valid_resource.id)
-    jp2s = resource.file_metadata.find_all { |f| f.label == ["intermediate_file.jp2"] }
     thumbnails = resource.file_metadata.find_all { |f| f.label == ["thumbnail.png"] }
     expect(resource.pyramidal_derivative).not_to be_blank
-    expect(jp2s.count).to eq 1
     expect(thumbnails.count).to eq 1
   end
 

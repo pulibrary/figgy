@@ -45,22 +45,15 @@ class ScannedMapDerivativeService
   end
 
   def create_derivatives
-    jp2_derivative_service.create_derivatives if jp2_derivative_service.valid?
     vips_derivative_service.create_derivatives if vips_derivative_service.valid?
     thumbnail_derivative_service.create_derivatives if thumbnail_derivative_service.valid?
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
-  # (see Jp2DerivativeService#cleanup_derivatives)
   # (see ImageDerivativeService#cleanup_derivatives)
   def cleanup_derivatives
-    jp2_derivative_service.cleanup_derivatives if jp2_derivative_service.valid?
     vips_derivative_service.cleanup_derivatives if vips_derivative_service.valid?
     thumbnail_derivative_service.cleanup_derivatives if thumbnail_derivative_service.valid?
-  end
-
-  def jp2_derivative_service
-    Jp2DerivativeService::Factory.new(change_set_persister: change_set_persister).new(id: id)
   end
 
   def thumbnail_derivative_service
