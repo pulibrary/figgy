@@ -36,10 +36,12 @@ class PDFDerivativeService
 
   def add_file_sets(files)
     resource = parent
-    files.each_slice(200) do |file_slice|
-      change_set = ChangeSet.for(resource)
-      change_set.validate(files: file_slice)
-      resource = change_set_persister.save(change_set: change_set)
+    change_set_persister.buffer_into_index do |buffered_change_set_persister|
+      files.each_slice(200) do |file_slice|
+        change_set = ChangeSet.for(resource)
+        change_set.validate(files: file_slice)
+        resource = buffered_change_set_persister.save(change_set: change_set)
+      end
     end
   end
 
