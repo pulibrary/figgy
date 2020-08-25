@@ -29,6 +29,9 @@ class FileMetadata < Valkyrie::Resource
   attribute :fixity_success, Valkyrie::Types::Integer
   attribute :fixity_last_success_date, Valkyrie::Types::DateTime.optional
 
+  # PDF Metadata
+  attribute :page_count, Valkyrie::Types::Integer
+
   # preservation attributes
   # ID of the object this node is a preservation copy of. Points to another
   # FileMetadata ID (in a PreservationObject), and used for checking if something is
