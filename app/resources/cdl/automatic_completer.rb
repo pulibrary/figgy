@@ -83,12 +83,8 @@ module CDL
         @first_member ||= query_service.find_by(id: resource.member_ids.first)
       end
 
-      def pdf_file_path
-        @pdf_file_path ||= Valkyrie::StorageAdapter.find_by(id: first_member.primary_file.file_identifiers.first).disk_path
-      end
-
       def pdf_page_count
-        @pdf_page_count ||= Vips::Image.pdfload(pdf_file_path.to_s, access: :sequential, memory: true).get_value("pdf-n_pages")
+        first_member.primary_file.page_count
       end
     end
   end
