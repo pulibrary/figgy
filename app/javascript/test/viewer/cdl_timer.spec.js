@@ -27,7 +27,8 @@ describe('CDLTimer', () => {
         'available': false
       }
       const mockFetchPromise = Promise.resolve({ // 3
-        json: () => json
+        json: () => json,
+        ok: true
       })
       global.fetch = jest.fn().mockImplementation(() => mockFetchPromise)
       const timer = new CDLTimer('b627a6ce-6717-4dd0-a16a-7a0c0b8a5788')
@@ -44,12 +45,34 @@ describe('CDLTimer', () => {
         'expires_at': Math.round(Date.now() / 1000) + 300
       }
       const mockFetchPromise = Promise.resolve({ // 3
-        json: () => json
+        json: () => json,
+        ok: true
       })
       global.fetch = jest.fn().mockImplementation(() => mockFetchPromise)
       const timer = new CDLTimer('b627a6ce-6717-4dd0-a16a-7a0c0b8a5788')
       await timer.initializeTimer()
       expect(document.getElementById('remaining-time').innerHTML).toMatch(/Remaining Checkout Time: \d\d:\d\d:\d\d/)
+    })
+
+    it("doesn't add a return button on error", async () => {
+      document.body.innerHTML = initialHTML
+
+      const json = {
+        'status': 500,
+        'error': 'Internal Server Error'
+      }
+
+      const mockFetchPromise = Promise.resolve({
+        json: () => json,
+        ok: false
+      })
+      global.fetch = jest.fn().mockImplementation(() => mockFetchPromise)
+
+      const timer = new CDLTimer('b627a6ce-6717-4dd0-a16a-7a0c0b8a5788')
+      await timer.initializeTimer()
+
+      let buttonElement = document.getElementById('return-early-button')
+      expect(buttonElement).toBe(null)
     })
 
     it('displays an expiration time if > 5 minutes left', async () => {
@@ -62,7 +85,8 @@ describe('CDLTimer', () => {
         'expires_at': expireTime
       }
       const mockFetchPromise = Promise.resolve({ // 3
-        json: () => json
+        json: () => json,
+        ok: true
       })
       global.fetch = jest.fn().mockImplementation(() => mockFetchPromise)
       const timer = new CDLTimer('b627a6ce-6717-4dd0-a16a-7a0c0b8a5788')
@@ -83,7 +107,8 @@ describe('CDLTimer', () => {
         'expires_at': expireTime
       }
       const mockFetchPromise = Promise.resolve({
-        json: () => json
+        json: () => json,
+        ok: true
       })
       global.fetch = jest.fn().mockImplementation(() => mockFetchPromise)
 
@@ -104,7 +129,8 @@ describe('CDLTimer', () => {
         'expires_at': expireTime
       }
       const mockFetchPromise = Promise.resolve({
-        json: () => json
+        json: () => json,
+        ok: true
       })
       global.fetch = jest.fn().mockImplementation(() => mockFetchPromise)
       const id = 'b627a6ce-6717-4dd0-a16a-7a0c0b8a5788'
@@ -125,7 +151,8 @@ describe('CDLTimer', () => {
         'expires_at': Math.round(Date.now() / 1000) - 1
       }
       const mockFetchPromise = Promise.resolve({ // 3
-        json: () => json
+        json: () => json,
+        ok: true
       })
       global.fetch = jest.fn().mockImplementation(() => mockFetchPromise)
 

@@ -5,15 +5,18 @@ export default class CDLTimer {
 
   // Check time every second.
   async initializeTimer () {
-    this.status = await this.fetchStatus()
-    // If item isn't charged we're seeing it some other way - don't spin up a
-    // timer.
-    if (this.status.charged === false) { return }
-    this.setupReturnForm()
-    const uvPane = document.getElementById('uv').firstChild
-    uvPane.insertBefore(this.returnButton(), uvPane.firstChild)
-    await this.checkTime()
-    window.setInterval(() => { this.checkTime() }, 1000)
+    try {
+      this.status = await this.fetchStatus()
+      // If item isn't charged we're seeing it some other way - don't spin up a
+      // timer.
+      if (this.status.charged === false) { return }
+      this.setupReturnForm()
+      const uvPane = document.getElementById('uv').firstChild
+      uvPane.insertBefore(this.returnButton(), uvPane.firstChild)
+      await this.checkTime()
+      window.setInterval(() => { this.checkTime() }, 1000)
+    } catch (e) {
+    }
   }
 
   // We don't know the id when this form is set up in rails
@@ -84,7 +87,12 @@ export default class CDLTimer {
     return Math.round(Date.now() / 1000)
   }
 
+  okCheck (response) {
+    if (response.ok === true) { return response }
+    return Promise.reject(response)
+  }
+
   async fetchStatus () {
-    return fetch(`/cdl/${this.figgyId}/status`).then(response => response.json())
+    return fetch(`/cdl/${this.figgyId}/status`).then(this.okCheck).then(response => response.json())
   }
 }

@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-08-25
+
+## Fixed
+
+* Return this item button doesn't appear for non-CDL items now.
+
 # 2020-08-24
 
 ## Changed
