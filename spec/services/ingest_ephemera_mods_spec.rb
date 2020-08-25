@@ -57,7 +57,7 @@ describe IngestEphemeraMODS do
   end
 
   context "GNIB ephemera" do
-    subject(:service) { IngestEphemeraMODS::IngestGNIBMODS.new(project.id, mods, dir, change_set_persister, logger) }
+    subject(:service) { IngestEphemeraMODS::IngestGnibMODS.new(project.id, mods, dir, change_set_persister, logger) }
     let(:mods) { Rails.root.join("spec", "fixtures", "files", "GNIB", "00223.mods") }
     let(:dir) { Rails.root.join("spec", "fixtures", "GNIB", "00223") }
 
