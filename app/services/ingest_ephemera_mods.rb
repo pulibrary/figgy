@@ -47,13 +47,13 @@ class IngestEphemeraMODS
     end
   end
 
-  class IngestGNIBMODS < IngestEphemeraMODS
+  class IngestGnibMODS < IngestEphemeraMODS
     def mods_class
-      GNIBMODS
+      GnibMODS
     end
   end
 
-  class GNIBMODS < METSDocument::MODSDocument
+  class GnibMODS < METSDocument::MODSDocument
     def non_name_subjects
       topics = normalize_whitespace(value_from(xpath: "mods:subject//mods:topic")).map(&:strip)
       topics.map { |topic| "topic--#{topic}" }
