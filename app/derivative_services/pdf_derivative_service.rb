@@ -35,13 +35,14 @@ class PDFDerivativeService
   end
 
   def add_file_sets(files)
-    change_set = parent_change_set
-    change_set.validate(files: files)
-    change_set_persister.save(change_set: change_set)
-  end
-
-  def parent_change_set
-    ChangeSet.for(parent)
+    resource = parent
+    change_set_persister.buffer_into_index do |buffered_change_set_persister|
+      files.each_slice(200) do |file_slice|
+        change_set = ChangeSet.for(resource)
+        change_set.validate(files: file_slice)
+        resource = buffered_change_set_persister.save(change_set: change_set)
+      end
+    end
   end
 
   def parent
@@ -76,7 +77,7 @@ class PDFDerivativeService
   def convert_pages
     image = Vips::Image.pdfload(filename, access: :sequential, memory: true)
     pages = image.get_value("pdf-n_pages")
-    files = Array.new(pages).each_with_index.map do |_, page|
+    files = Array.new(pages).lazy.each_with_index.map do |_, page|
       # Ruby's set to mark and sweep for GC, and we can't explicitly close VIPS
       # references. The file handles aren't freed up until the garbage collector
       # runs, but it's 4 handles per VIPS access. So force a GC to keep the
@@ -88,7 +89,6 @@ class PDFDerivativeService
       page_image.tiffsave(location)
       build_file(page + 1, location)
     end
-    GC.start
     files
   end
 

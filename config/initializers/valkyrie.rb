@@ -358,7 +358,7 @@ Rails.application.config.to_prepare do
   Valkyrie::Derivatives::DerivativeService.services << PDFDerivativeService::Factory.new(
     change_set_persister: ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
-      storage_adapter: Valkyrie::StorageAdapter.find(:disk_via_copy)
+      storage_adapter: Valkyrie::StorageAdapter.find(:disk)
     )
   )
 
