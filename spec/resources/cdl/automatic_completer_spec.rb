@@ -50,7 +50,7 @@ RSpec.describe CDL::AutomaticCompleter do
         expect(resource.state).to eq ["complete"]
         expect(ActionMailer::Base.deliveries.size).to eq 1
         mail = ActionMailer::Base.deliveries.first
-        expect(mail.to).to eq ["skye@princeton.edu", "zelda@princeton.edu"]
+        expect(mail.to).to eq ["reserves@princeton.edu", "skye@princeton.edu", "zelda@princeton.edu"]
         expect(mail.subject).to eq "1 CDL Item(s) Completed"
       end
     end

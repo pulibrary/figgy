@@ -11,7 +11,7 @@ module CDL
         User.where(uid: owner).first
       end
       mail(
-        to: @users.map(&:email),
+        to: ["reserves@princeton.edu"] + @users.map(&:email),
         subject: "#{@resources.size} CDL Item(s) Completed"
       )
     end
