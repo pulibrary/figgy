@@ -36,4 +36,12 @@ describe ViewerConfiguration do
       expect(viewer_configuration["foo"]).to eq "bar"
     end
   end
+
+  describe ".disable_share!" do
+    it "disables the share value" do
+      config = described_class.new
+      config.disable_share!
+      expect(config.as_json["modules"]["footerPanel"]["options"]["shareEnabled"]).to eq false
+    end
+  end
 end

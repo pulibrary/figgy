@@ -56,4 +56,9 @@ class ViewerConfiguration < ActiveSupport::HashWithIndifferentAccess
 
     super(build_values)
   end
+
+  # Disables sharing.
+  def disable_share!
+    self["modules"]["footerPanel"]["options"]["shareEnabled"] = false
+  end
 end
