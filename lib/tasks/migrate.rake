@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require "find"
+
 namespace :migrate do
   desc "Migrate users in group image_editor to group staff"
   task image_editor: :environment do
@@ -31,13 +33,39 @@ namespace :migrate do
     IngestUkrainianEphemeraMODSJob.set(queue: :low).perform_now(project, mods, dir)
   end
 
-  desc "Migrates GNIB Ephemera Folders from MODS metadata records"
-  task gnib_ephemera_mods: :environment do
+  desc "Migrates directory of GNIB records"
+  task gnib_directory: :environment do
+    project = ENV["PROJECT"]
+    md_root = ENV["METADATA"]
+    image_root = ENV["IMAGES"]
+
+    usage = "usage: rake migrate:gnib_directory PROJECT=project_id METADATA=/path/to/mods_records IMAGES=/path/to/images"
+    abort usage unless project && image_root && md_root && Dir.exist?(image_root) && Dir.exist?(md_root)
+    logger.info "Ingesting GNIB records from #{md_root}"
+    change_set_persister = ChangeSetPersister.new(
+      metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
+      storage_adapter: Valkyrie::StorageAdapter.find(:disk_via_copy)
+    )
+    output = nil
+
+    Find.find(md_root) do |md_path|
+      next unless File.basename(md_path) =~ /mods$/
+      subdir_name = File.dirname(md_path).match(/^.*pudl0066\/(.*)$/)[1]
+      image_path = File.join(image_root, subdir_name, File.basename(md_path, ".*"))
+      change_set_persister.buffer_into_index do |buffered_changeset_persister|
+        output = IngestEphemeraMODS::IngestGnibMODS.new(project, md_path, image_path, buffered_changeset_persister, logger).ingest
+      end
+      logger.info "Imported #{md_path} from pulstore: #{output.id}"
+    end
+  end
+
+  desc "Migrates a single MODS and images"
+  task gnib_single_record: :environment do
     project = ENV["PROJECT"]
     mods = ENV["MODS"]
     dir = ENV["DIR"]
 
-    usage = "usage: rake migrate:gnib_ephemera_mods PROJECT=project_id MODS=/path/to/metadata.mods DIR=/path/to/files"
+    usage = "usage: rake migrate:gnib_single_record PROJECT=project_id MODS=/path/to/metadata.mods DIR=/path/to/files"
     abort usage unless project && dir && mods && Dir.exist?(dir) && File.exist?(mods)
     IngestGnibMODSJob.set(queue: :low).perform_now(project, mods, dir)
   end
