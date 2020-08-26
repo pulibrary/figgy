@@ -39,10 +39,10 @@ export default class UVManager {
 
   addIIIFIcon () {
     const existingButton = document.querySelector('a.iiif-drag')
-    if (existingButton !== null) {
+    const shareButton = document.querySelector('.footerPanel button.share')
+    if (existingButton !== null || shareButton === null || shareButton.style.display === "none") {
       return
     }
-    const shareButton = document.querySelector('.footerPanel button.share')
     const mobileShareButton = document.querySelector('.mobileFooterPanel button.share')
     // Pull link from the UV share popup.
     shareButton.parentNode.insertBefore(this.createIIIFDragElement(), shareButton.nextSibling)

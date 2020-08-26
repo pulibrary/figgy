@@ -85,16 +85,31 @@ class ApplicationController < ActionController::Base
   # Retrieve the viewer configuration for a given resource
   def viewer_config
     resource = find_resource(resource_id_param)
-
-    config = if resource.decorate.downloadable? || (!current_user.nil? && (current_user.staff? || current_user.admin?))
-               default_uv_config
-             else
-               downloads_disabled_uv_config
-             end
-
     respond_to do |format|
-      format.json { render json: config }
+      format.json { render json: viewer_config_value(resource) }
     end
+  end
+
+  def viewer_config_value(resource)
+    return default_uv_config if full_viewer_capability?(resource)
+    downloads_disabled_uv_config.tap do |config|
+      config.disable_share! if cdl_eligible?(resource)
+    end
+  end
+
+  def cdl_eligible?(resource)
+    CDL::ChargeManager.new(
+      resource_id: resource.id,
+      eligible_item_service: CDL::EligibleItemService,
+      change_set_persister: ChangeSetPersister.new(
+        metadata_adapter: Valkyrie.config.metadata_adapter,
+        storage_adapter: Valkyrie.config.storage_adapter
+      )
+    ).eligible?
+  end
+
+  def full_viewer_capability?(resource)
+    resource.decorate.downloadable? || (!current_user.nil? && (current_user.staff? || current_user.admin?))
   end
 
   # GET /viewer/exhibit/config
