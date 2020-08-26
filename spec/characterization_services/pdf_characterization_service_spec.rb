@@ -19,11 +19,7 @@ RSpec.describe PDFCharacterizationService do
   end
 
   it "characterizes a sample file" do
-    file = fixture_file_upload("files/sample.pdf", "application/pdf")
-    resource = FactoryBot.create_for_repository(:scanned_resource, files: [file])
-    file_set = Wayfinder.for(resource).file_sets.first
-
-    described_class.new(file_set: file_set, persister: persister).characterize(save: true)
+    described_class.new(file_set: valid_file_set, persister: persister).characterize(save: true)
 
     file_set = Wayfinder.for(resource).file_sets.first
     checksum = file_set.original_file.checksum
