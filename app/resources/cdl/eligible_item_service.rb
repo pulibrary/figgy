@@ -17,6 +17,8 @@ module CDL
           item && item["patron_group_charged"] == "CDL"
         end
         items.map { |x| x["id"] }
+      rescue JSON::ParserError
+        []
       end
 
       def bibdata_base
