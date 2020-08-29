@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mods xmlns="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3"
+   xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+   <typeOfResource>still image</typeOfResource>
+   <titleInfo>
+      <nonSort>The</nonSort>
+      <title>Chapel, Princeton University</title>
+   </titleInfo>
+   <relatedItem type="host">
+      <titleInfo>
+         <title>Princeton University Historical postcard collection</title>
+         <subTitle>Series 1</subTitle>
+         <subTitle>Buildings, circa 1900-1960</subTitle>
+      </titleInfo>
+      <location>
+         <url note="Digital Collection">http://arks.princeton.edu/ark:/88435/d217qp492</url>
+      </location>
+   </relatedItem>
+   <relatedItem type="host">
+      <titleInfo>
+         <title>Historical Postcard Collection, circa 1900-1960</title>
+      </titleInfo>
+      <location>
+         <url note="Finding Aid">http://arks.princeton.edu/ark:/88435/qn59q398k</url>
+      </location>
+   </relatedItem>
+   <originInfo>
+      <publisher>Published by H. M. Hinkson, Stationer, Princeton, N. J.</publisher>
+      <publisher>The Albertype Co., Brooklyn, N.Y.</publisher>
+      <dateOther encoding="w3cdtf">1941</dateOther>
+   </originInfo>
+   <language>
+      <languageTerm authority="iso639-2b">eng</languageTerm>
+   </language>
+   <abstract>Exterior view of the chapel in black and white. Divided back postcard.</abstract>
+   <genre authority="aat">Picture postcards</genre>
+   <subject authority="aat">
+      <topic>Eye-level views</topic>
+   </subject>
+   <subject authority="aat">
+      <topic>Exterior views</topic>
+   </subject>
+   <subject authority="lcsh">
+      <name type="corporate">
+         <namePart>Princeton University</namePart>
+      </name>
+      <topic>Buildings</topic>
+   </subject>
+   <subject authority="lcsh">
+      <name type="corporate">
+         <namePart>Princeton University. Chapel</namePart>
+      </name>
+   </subject>
+   <location>
+      <physicalLocation type="text">Princeton University Library. Department of Rare Books and Special Collections. Seeley G. Mudd Manuscript Library.</physicalLocation>
+      <physicalLocation authority="marcorg" type="code">NjP</physicalLocation>
+      <holdingSimple>
+         <copyInformation>
+            <subLocation>Mudd</subLocation>
+            <shelfLocator>AC045</shelfLocator>
+         </copyInformation>
+      </holdingSimple>
+   </location>
+   <recordInfo>
+      <recordIdentifier>http://diglib.princeton.edu/mdata/pudl0009/1/0001.mods</recordIdentifier>
+   </recordInfo>
+</mods>
