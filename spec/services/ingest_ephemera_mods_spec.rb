@@ -70,4 +70,20 @@ describe IngestEphemeraMODS do
       expect(output.decorate.subject).to include "Free trade"
     end
   end
+
+  context "Postcard ephemera" do
+    subject(:service) { IngestEphemeraMODS::IngestPostcardMODS.new(project.id, mods, dir, change_set_persister, logger) }
+    let(:mods) { Rails.root.join("spec", "fixtures", "metadata", "pudl0009", "1", "0001.mods.xml") }
+    let(:dir) { Rails.root.join("spec", "fixtures", "images", "pudl0009", "1", "0001") }
+
+    it "ingests the MODS file and TIFFs with metadata overrides" do
+      output = service.ingest
+      expect(output).to be_kind_of EphemeraFolder
+      expect(output.member_ids.length).to eq 3
+      expect(output.decorate.title.first).to eq "The Chapel, Princeton University"
+      expect(output.decorate.genre).to eq "Picture postcards"
+      expect(output.decorate.members.map(&:title).flatten).to eq ["00000001.tif", "00000002.tif", "0001.mods.xml"]
+      expect(output.decorate.subject).to include "Buildings"
+    end
+  end
 end

@@ -70,6 +70,33 @@ namespace :migrate do
     IngestGnibMODSJob.set(queue: :low).perform_now(project, mods, dir)
   end
 
+  desc "Migrates directory of postcard records"
+  task postcard_directory: :environment do
+    project = ENV["PROJECT"]
+    md_root = ENV["METADATA"]
+    image_root = ENV["IMAGES"]
+
+    usage = "usage: rake migrate:postcard_directory PROJECT=project_id METADATA=/path/to/mods_records IMAGES=/path/to/images"
+    abort usage unless project && image_root && md_root && Dir.exist?(image_root) && Dir.exist?(md_root)
+    logger.info "Ingesting postcard records from #{md_root}"
+    change_set_persister = ChangeSetPersister.new(
+      metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
+      storage_adapter: Valkyrie::StorageAdapter.find(:disk_via_copy)
+    )
+    output = nil
+
+    Find.find(md_root) do |md_path|
+      next unless File.basename(md_path, ".*") =~ /mods$/
+      subdir_name = File.dirname(md_path).match(/^.*pudl0009\/(.*)$/)[1]
+      image_path = File.join(image_root, subdir_name, File.basename(File.basename(md_path, ".*"), ".*"))
+      logger.info "Ingesting images from #{image_path}"
+      change_set_persister.buffer_into_index do |buffered_changeset_persister|
+        output = IngestEphemeraMODS::IngestPostcardMODS.new(project, md_path, image_path, buffered_changeset_persister, logger).ingest
+      end
+      logger.info "Imported #{md_path} from pulstore: #{output.id}"
+    end
+  end
+
   desc "Migrates Collection members with children who have values in the member_of_collection_ids attribute"
   task collection_members_with_children: :environment do
     resources(model: Collection).each do |collection|
