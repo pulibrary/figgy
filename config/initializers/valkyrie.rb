@@ -419,4 +419,6 @@ Rails.application.config.to_prepare do
 
   # Ensure that the logger used for Valkyrie is the same used by Rails
   Valkyrie.logger = Rails.logger
+rescue Sequel::DatabaseConnectionError
+  Rails.logger.info "Unable to connect to database - skipping Valkyrie initialization."
 end
