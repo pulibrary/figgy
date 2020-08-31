@@ -80,8 +80,6 @@ class IngestEphemeraMODS
     def transliterated_title
       mods_doc.title
     end
-
-
   end
 
   class PostcardMODS < METSDocument::MODSDocument
