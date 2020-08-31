@@ -1,5 +1,24 @@
 # frozen_string_literal: true
 namespace :bulk do
+  desc "Migrates directory of METS files"
+  task ingest_mets: :environment do
+    md_root = ENV["METADATA"]
+    import_mods = ENV["IMPORT_MODS"]&.casecmp("TRUE")&.zero?
+    user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
+    user = User.all.select(&:admin?).first unless user
+
+    usage = "usage: rake bulk:ingest_mets METADATA=/path/to/mets_records IMPORT_MODS=TRUE USER=user"
+    abort usage unless md_root && Dir.exist?(md_root)
+    logger.info "Ingesting METS records from #{md_root}"
+
+    Find.find(md_root) do |md_path|
+      next unless File.basename(md_path, ".*") =~ /mets$/
+      logger.info "Importing #{md_path}"
+      IngestMETSJob.perform(md_path, user, import_mods)
+      logger.info "Imported #{md_path} from pulstore: #{output.id}"
+    end
+  end
+
   desc "Re-apply METS metadata to objects in a collection"
   task reprocess_mets: :environment do
     collection_id = ENV["COLL"]
