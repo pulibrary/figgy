@@ -117,6 +117,7 @@ RSpec.describe OaiController do
           result = Nokogiri::XML(response.body).remove_namespaces!
           records = result.xpath("//GetRecord/record")
           expect(records.length).to eq 1
+          expect(result.xpath("//identifier").map(&:text)).to eq ["oai:figgy:#{resource.id}", "ark:/99999/fk4123456", "http://arks.princeton.edu/ark:/99999/fk4123456"]
           expect(result.xpath("//format").map(&:text)).to eq ["image/tiff", "17 inches"]
           expect(result.xpath("//source").text).to eq "Princeton University Library, #{bib_id}"
           # uses default hash value
@@ -194,6 +195,7 @@ RSpec.describe OaiController do
           result = Nokogiri::XML(response.body).remove_namespaces!
           records = result.xpath("//GetRecord/record")
           expect(records.length).to eq 1
+          expect(result.xpath("//identifier").map(&:text)).to eq ["oai:figgy:#{resource.id}"]
           expect(result.xpath("//source").text).to eq "Princeton University Library, #{resource.id}"
         end
       end
