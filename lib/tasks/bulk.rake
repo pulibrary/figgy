@@ -12,10 +12,11 @@ namespace :bulk do
     logger.info "Ingesting METS records from #{md_root}"
 
     Find.find(md_root) do |md_path|
-      next unless File.basename(md_path, ".*") =~ /mets$/
-      logger.info "Importing #{md_path}"
-      IngestMETSJob.perform(md_path, user, import_mods)
-      logger.info "Imported #{md_path} from pulstore: #{output.id}"
+      logger.info "Importing #{md_path} with user=#{user} and import_mods=#{import_mods}"
+      if File.file?(md_path)
+        IngestMETSJob.perform_now(md_path, user, import_mods)
+        logger.info "Imported #{md_path}"
+      end
     end
   end
 
