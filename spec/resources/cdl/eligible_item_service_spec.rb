@@ -47,6 +47,19 @@ RSpec.describe CDL::EligibleItemService do
       end
     end
 
+    context "querying a bib with no items" do
+      before do
+        html_body = "Record #{bib_id} not found or suppressed"
+        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/#{bib_id}/items")
+          .to_return(status: 404,
+                     body: html_body, headers: { "Content-Type" => "application/json" })
+      end
+      let(:bib_id) { "11174664" }
+      it "will return an empty array" do
+        expect(described_class.item_ids(source_metadata_identifier: bib_id)).to eq []
+      end
+    end
+
     context "a bib_id with items in more than one locations" do
       before do
         stub_request(:get, "https://bibdata.princeton.edu/bibliographic/#{bib_id}/items")
