@@ -60,35 +60,6 @@ class IngestEphemeraMODS
     end
   end
 
-  class IngestPostcardMODS < IngestEphemeraMODS
-    def mods_class
-      PostcardMODS
-    end
-
-    def title_attributes_bk
-      { title: first_title }
-    end
-
-    def first_title
-      mods_doc.title
-    end
-
-    def native_title
-      mods_doc.title
-    end
-
-    def transliterated_title
-      mods_doc.title
-    end
-  end
-
-  class PostcardMODS < METSDocument::MODSDocument
-    def non_name_subjects
-      topics = normalize_whitespace(value_from(xpath: "mods:subject//mods:topic")).map(&:strip)
-      topics.map { |topic| "topic--#{topic}" }
-    end
-  end
-
   private
 
     def change_set
