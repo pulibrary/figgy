@@ -5,6 +5,12 @@ module OAI::Figgy
       MarcRecordEnhancer.for(resource).enhance_cicognara.to_xml.to_s
     end
 
+    def identifier
+      return [] unless decorated_resource.identifier
+      ark = Ark.new(decorated_resource.identifier)
+      [ark.identifier, ark.uri]
+    end
+
     def creator
       decorated_resource.creator || decorated_resource.imported_creator
     end
