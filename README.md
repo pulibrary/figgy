@@ -71,7 +71,31 @@ Remember you'll need to run `bundle install` and `yarn install` on an ongoing ba
 
 ## Setup server
 
-### Manual Setup
+You can either run Solr/Postgres locally or spin them up in Docker containers
+with Lando.
+
+### Lando
+
+Lando will automatically set up docker images for Solr and Postgres which match
+the versions we use in Production. The ports will not collide with any other
+projects you're using Solr/Postgres for, and you can easily clean up with `lando
+destroy` or turn off all services with `lando spindown`.
+
+1. Install Lando DMG from [[https://github.com/lando/lando/releases]]
+1. `lando start`
+
+1. For test:
+   - `RAILS_ENV=test rake db:setup`
+   - In a separate terminal: `bundle exec rspec`
+   - Run jest tests: `yarn test`
+1. For development:
+   - ``export SECRET_KEY_BASE=`rake secret` ``
+   - `rake db:setup`
+   - In a separate terminal: `foreman start` (you can close the one launching solr)
+     - Or run services separately as shown in [[https://github.com/pulibrary/figgy/blob/master/Procfile]]
+   - Access Figgy at http://localhost:3000/
+
+### Manual Local Setup (Deprecated)
 
 1. For test:
    - `RAILS_ENV=test rake db:setup`
@@ -84,23 +108,6 @@ Remember you'll need to run `bundle install` and `yarn install` on an ongoing ba
    - In a separate terminal: `foreman start`
      - Or run services separately as shown in [[https://github.com/pulibrary/figgy/blob/master/Procfile]]
      - If you run into problems with `solr_wrapper`, you can also start Solr with `rake figgy:development`
-   - Access Figgy at http://localhost:3000/
-
-### Lando
-
-1. Uninstall Docker
-2. Install Lando v3.0.0-rrc.4 or later DMG from [[https://github.com/lando/lando/releases]]
-3. `lando start`
-
-1. For test:
-   - `RAILS_ENV=test rake db:setup`
-   - In a separate terminal: `bundle exec rspec`
-   - Run jest tests: `yarn test`
-2. For development:
-   - ``export SECRET_KEY_BASE=`rake secret` ``
-   - `rake db:setup`
-   - In a separate terminal: `foreman start` (you can close the one launching solr)
-     - Or run services separately as shown in [[https://github.com/pulibrary/figgy/blob/master/Procfile]]
    - Access Figgy at http://localhost:3000/
 
 ## Load sample development data
