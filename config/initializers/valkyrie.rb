@@ -2,6 +2,7 @@
 require_relative "figgy"
 
 Rails.application.config.to_prepare do
+  begin
   # Registers a storage adapter for a *NIX file system
   # Binaries are persisted by invoking "mv" with access limited to read/write for owning users, and read-only for all others
   # NOTE: "mv" may preserve the inode for the file system
@@ -419,6 +420,7 @@ Rails.application.config.to_prepare do
 
   # Ensure that the logger used for Valkyrie is the same used by Rails
   Valkyrie.logger = Rails.logger
-rescue Sequel::DatabaseConnectionError
-  Rails.logger.info "Unable to connect to database - skipping Valkyrie initialization."
+  rescue Sequel::DatabaseConnectionError
+    Rails.logger.info "Unable to connect to database - skipping Valkyrie initialization."
+end
 end
