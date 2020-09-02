@@ -188,16 +188,16 @@ class FileAppender
 
     # Extensions for original_files that shouldn't be used as thumbnails.
     # @return [Array<String>] the file extensions
-    def no_thumbnail_extensions
-      [".xml", ".pdf"]
+    def no_thumbail_extensions
+      [".xml"]
     end
 
     # Returns a thumbnail id for a resource and a array of file_sets.
     def find_thumbnail_id(resource, file_sets)
       return unless resource.thumbnail_id.blank?
       file_sets.each do |file_set|
-        extension = File.extname(file_set.primary_file.original_filename.first)
-        return file_set.id unless no_thumbnail_extensions.include?(extension)
+        extension = File.extname(file_set.original_file.original_filename.first)
+        return file_set.id unless no_thumbail_extensions.include?(extension)
       end
 
       nil
