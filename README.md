@@ -79,7 +79,7 @@ with Lando.
 Lando will automatically set up docker images for Solr and Postgres which match
 the versions we use in Production. The ports will not collide with any other
 projects you're using Solr/Postgres for, and you can easily clean up with `lando
-destroy` or turn off all services with `lando spindown`.
+destroy` or turn off all services with `lando poweroff`.
 
 1. Install Lando DMG from [[https://github.com/lando/lando/releases]]
 1. `lando start`
