@@ -110,6 +110,7 @@ Metrics/ClassLength:
     - 'app/resources/numismatics/coins/numismatics/coins_controller.rb'
     - 'app/wayfinders/base_wayfinder.rb'
     - 'app/resources/cdl/charge_manager.rb'
+    - 'app/services/pulfa_exporter.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/helpers/application_helper.rb'
