@@ -1,11 +1,32 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
-  </head>
-  <body>
-    <p>
-    Your reservation for <%= @resource.decorate.first_title %> has expired. If you'd still like to check this item out, please visit <%= link_to RemoteRecord.record_url(@resource.source_metadata_identifier.first), RemoteRecord.record_url(@resource.source_metadata_identifier.first) %>.
+<tr class="email-header">
+  <td colspan="2" style="padding: 18px;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" class="responsive-table">
+      <tr>
+        <td valign="top" width="100%" class="responsive-column-container">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr><td class="left-aligned-desktop" style="text-align:left;">
+                <div style="font-size:25px;font-weight:bold;display:block;line-height:1.2;">Digital Reservation Expired</div>
+              </td></tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="message">
+  <td colspan="2" style="padding: 18px;">
+    <p class="body-content">
+    Your reservation for <%= @resource.decorate.first_title %> has expired.
     </p>
-  </body>
-</html>
+    <p class="body-content">
+    If you'd still like to check this item out please visit the "View Item" link below.
+    </p>
+  </td>
+</tr>
+<tr>
+  <td colspan="2">
+    <div style="margin:18px;">
+      <a href="<%= RemoteRecord.record_url(@resource.source_metadata_identifier.first) %>" target="_blank" style="border-style:solid;border-width:2px;border-color:#e77500;text-align:center;padding: 9px 18px;display: inline-block;font-weight:bold;" class="button-a">View Item</a>
+    </div>
+  </td>
+</tr>
