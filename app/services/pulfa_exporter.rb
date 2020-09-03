@@ -66,7 +66,12 @@ class PulfaExporter
       resources.each do |r|
         cid = r.source_metadata_identifier&.first
         component = ead.at_xpath("//ead:c[@id=\'#{cid}\']", namespaces_for_xpath)
-        create_or_update_dao(ead, component, r, pdf) if component
+        next unless component
+        if pdf
+          create_or_update_pdf_dao(ead, component, r)
+        else
+          create_or_update_dao(ead, component, r)
+        end
       end
 
       File.open(filename, "w") { |f| f.puts(ead.to_xml) }
@@ -74,17 +79,27 @@ class PulfaExporter
     end
 
     # find a dao attached to this element, creating it if it doesn't exist
-    def create_or_update_dao(ead, component, r, pdf)
-      if pdf && !r.decorate.volumes.empty?
+    def create_or_update_dao(ead, component, r)
+      dao = component.at_xpath(".//ead:dao", namespaces_for_xpath) || create_dao_element(ead, component)
+      if zip_file?(r)
+        file_set = Wayfinder.for(r).file_sets.first
+        update_dao(dao, Rails.application.routes.url_helpers.download_url(file_set.id, file_set.primary_file.id))
+      else
+        update_dao(dao, Rails.application.routes.url_helpers.manifest_scanned_resource_url(r), "xlink:role" => "https://iiif.io/api/presentation/2.1/")
+      end
+    end
+
+    def create_or_update_pdf_dao(ead, component, r)
+      if !r.decorate.volumes.empty?
         create_or_update_volume_daos(ead, component, r)
       else
         dao = component.at_xpath(".//ead:dao", namespaces_for_xpath) || create_dao_element(ead, component)
-        if pdf
-          update_dao(dao, "pdf/#{r.source_metadata_identifier.first.gsub(/.*_/, '')}.pdf")
-        else
-          update_dao(dao, Rails.application.routes.url_helpers.manifest_scanned_resource_url(r), "xlink:role" => "https://iiif.io/api/presentation/2.1/")
-        end
+        update_dao(dao, "pdf/#{r.source_metadata_identifier.first.gsub(/.*_/, '')}.pdf")
       end
+    end
+
+    def zip_file?(resource)
+      Wayfinder.for(resource).file_sets.first&.mime_type&.include?("application/zip")
     end
 
     def create_or_update_volume_daos(ead, component, r)

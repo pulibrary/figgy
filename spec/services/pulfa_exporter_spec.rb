@@ -74,6 +74,35 @@ RSpec.describe PulfaExporter do
       ]
     end
 
+    context "when a resource is a ZIP file", run_real_characterization: true do
+      let(:resource) do
+        r = FactoryBot.build(:complete_scanned_resource, title: [])
+        change_set = ScannedResourceChangeSet.new(r)
+        change_set.validate(source_metadata_identifier: component_id, state: ["complete"], member_of_collection_ids: [collection.id], files: [zip_file])
+        change_set_persister.save(change_set: change_set)
+      end
+      let(:zip_file) { fixture_file_upload("files/raster/arcgrid.zip", "application/zip") }
+      let(:resource2) {}
+      it "adds the download link for the first FileSet as the DAO" do
+        file_set = Wayfinder.for(resource).members.first
+        # run once to test export
+        expect { exporter.export }.not_to raise_error
+        after = Nokogiri::XML(File.open(temp_ead))
+        expect(after.xpath(xpath2, ns).map(&:to_s)).to eq [
+          "bioghist-images/msslogo.jpg",
+          "http://www.example.com/downloads/#{file_set.id}/file/#{file_set.primary_file.id}"
+        ]
+
+        # run again to test idempotency
+        expect { exporter.export }.not_to raise_error
+        again = Nokogiri::XML(File.open(temp_ead))
+        expect(again.xpath(xpath2, ns).map(&:to_s)).to eq [
+          "bioghist-images/msslogo.jpg",
+          "http://www.example.com/downloads/#{file_set.id}/file/#{file_set.primary_file.id}"
+        ]
+      end
+    end
+
     describe "when there is an error sending email" do
       let(:mailer) { instance_double(PulfaMailer) }
 
