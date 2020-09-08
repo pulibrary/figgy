@@ -60,7 +60,7 @@ namespace :migrate do
   end
 
   desc "Migrates directory of Moscow Election records"
-  task gnib_directory: :environment do
+  task pudl0125_directory: :environment do
     project = ENV["PROJECT"]
     md_root = ENV["METADATA"]
     image_root = ENV["IMAGES"]
