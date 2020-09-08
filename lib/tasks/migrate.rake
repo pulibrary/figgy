@@ -65,7 +65,7 @@ namespace :migrate do
     md_root = ENV["METADATA"]
     image_root = ENV["IMAGES"]
 
-    usage = "usage: rake migrate:gnib_directory PROJECT=project_id METADATA=/path/to/mods_records IMAGES=/path/to/images"
+    usage = "usage: rake migrate:pudl0125_directory PROJECT=project_id METADATA=/path/to/mods_records IMAGES=/path/to/images"
     abort usage unless project && image_root && md_root && Dir.exist?(image_root) && Dir.exist?(md_root)
     logger.info "Ingesting Moscow election records from #{md_root}"
     change_set_persister = ChangeSetPersister.new(
@@ -79,7 +79,7 @@ namespace :migrate do
       subdir_name = File.dirname(md_path).match(/^.*pudl0125\/(.*)$/)[1]
       image_path = File.join(image_root, subdir_name, File.basename(md_path, ".*"))
       change_set_persister.buffer_into_index do |buffered_changeset_persister|
-        output = IngestEphemeraMODS::IngestGnibMODS.new(project, md_path, image_path, buffered_changeset_persister, logger).ingest
+        output = IngestEphemeraMODS::IngestMoscowMODS.new(project, md_path, image_path, buffered_changeset_persister, logger).ingest
       end
       logger.info "Imported #{md_path} from pulstore: #{output.id}"
     end
