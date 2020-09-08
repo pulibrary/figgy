@@ -25,9 +25,13 @@ module CDL
     end
 
     def hold?(netid:)
+      hold_for(netid: netid).present?
+    end
+
+    def hold_for(netid:)
       hold_queue.find do |hold|
         hold.netid == netid && !hold.expired?
-      end.present?
+      end
     end
 
     def pending_or_active_holds

@@ -2,6 +2,7 @@
 
 module CDL
   class HoldMailer < ApplicationMailer
+    layout "holds/mailer"
     def hold_activated
       @user = params[:user]
       @resource = query_service.find_by(id: params[:resource_id])
