@@ -16,12 +16,14 @@ RSpec.feature "Ephemera Folders" do
     res = FactoryBot.create_for_repository(:ephemera_folder)
     adapter.persister.save(resource: res)
   end
+  let(:collection) { FactoryBot.create_for_repository(:collection, title: "Test Collection") }
 
   before do
     sign_in user
     ephemera_project
     ephemera_box
     ephemera_folder
+    collection
   end
 
   context "within an existing ephemera project" do
@@ -39,6 +41,7 @@ RSpec.feature "Ephemera Folders" do
       page.fill_in "ephemera_folder_series", with: "test series"
       page.fill_in "ephemera_folder_subject", with: "test subject"
       page.select "Copyright Not Evaluated", from: "Rights Statement"
+      page.select collection.title.first, from: "Collections"
 
       page.click_on "Save"
 
@@ -47,6 +50,7 @@ RSpec.feature "Ephemera Folders" do
       expect(page).to have_content "test series"
       expect(page).to have_content "Attributes"
       expect(page).to have_content "EphemeraFolder"
+      expect(page).to have_content collection.title.first
     end
 
     scenario "users can save a draft", js: true do

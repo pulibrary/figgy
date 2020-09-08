@@ -30,7 +30,8 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
           :visibility,
           :rendered_rights_statement,
           :rendered_ocr_language,
-          :rendered_holding_location
+          :rendered_holding_location,
+          :member_of_collections
 
   display_in_manifest displayed_attributes, :subject, :categories
   suppress_from_manifest Schema::IIIF.attributes,
