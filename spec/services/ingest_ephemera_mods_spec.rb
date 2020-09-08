@@ -70,4 +70,19 @@ describe IngestEphemeraMODS do
       expect(output.decorate.subject).to include "Free trade"
     end
   end
+
+  context "Moscow election ephemera" do
+    subject(:service) { IngestEphemeraMODS::IngestMoscowMODS.new(project.id, mods, dir, change_set_persister, logger) }
+    let(:mods) { Rails.root.join("spec", "fixtures", "files", "pudl0125", "001.mods") }
+    let(:dir) { Rails.root.join("spec", "fixtures", "pudl0125", "001") }
+
+    it "ingests the MODS file and TIFFs with metadata overrides" do
+      output = service.ingest
+      expect(output).to be_kind_of EphemeraFolder
+      expect(output.member_ids.length).to eq 2
+      expect(output.decorate.genre).to eq "Ephemera"
+      expect(output.decorate.members.map(&:title).flatten).to eq ["example.tif", "001.mods"]
+      expect(output.decorate.subject).to include "Mayors"
+    end
+  end
 end
