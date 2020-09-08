@@ -72,7 +72,7 @@ describe IngestEphemeraMODS do
   end
 
   context "Moscow election ephemera" do
-    subject(:service) { IngestEphemeraMODS::IngestGnibMODS.new(project.id, mods, dir, change_set_persister, logger) }
+    subject(:service) { IngestEphemeraMODS::IngestMoscowMODS.new(project.id, mods, dir, change_set_persister, logger) }
     let(:mods) { Rails.root.join("spec", "fixtures", "files", "pudl0125", "001.mods") }
     let(:dir) { Rails.root.join("spec", "fixtures", "pudl0125", "001") }
 
