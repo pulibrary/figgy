@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen SCHSchema="http://library.princeton.edu/departments/tsd/metadoc/main/mods.sch"?>
+<?xml-stylesheet type="text/css" href="css/moscow_form.css" title="moscow_form" alternate="no"?>
+<mods:mods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd" version="3.4">
+   <mods:titleInfo script="Latn" lang="rus" altRepGroup="01">
+      <mods:title>Programma kandidata v mėry Moskvy Aleksei︠a︡ Navalʹnogo; 2013 god</mods:title>
+      <mods:subTitle>izmeni Rossii︠u︡, nachni s Moskvy</mods:subTitle>
+   </mods:titleInfo>
+   <mods:titleInfo script="Cyrl" lang="rus" altRepGroup="01">
+      <mods:title>Программа кандидата в мэры Москвы Алексея Навального; 2013 год</mods:title>
+      <mods:subTitle>измени Россию, начни с Москвы</mods:subTitle>
+   </mods:titleInfo>
+   <mods:typeOfResource>text</mods:typeOfResource>
+   <mods:genre authority="aat">Ephemera</mods:genre>
+   <mods:originInfo>
+      
+      
+      <mods:dateCreated encoding="w3cdtf" keyDate="yes">2013</mods:dateCreated>
+   </mods:originInfo>
+   <mods:language>
+      <mods:languageTerm type="code" authority="iso639-2b">rus</mods:languageTerm>
+   </mods:language>
+   <mods:physicalDescription>
+      <mods:extent>20 pages ; 21 cm</mods:extent>
+   </mods:physicalDescription>
+   <mods:note script="Latn" lang="rus" altRepGroup="03">"Izgotovleno OOO ’Poligraficheskiĭ kompleks’. 143300, g. Naro-Fominsk, M.O., ul. Kalinina, d. 8/1, INN 50300045907. Zakazchik- kandidat na dolzhnostʹ Mėra Moskvy Navalʹnyĭ Alekseĭ Anatolʹevich. Data vypuska 23.07.2013, tirazh 30 000 ėkz. Oplacheno iz sredstv izbiratelʹnogo fonda kandidata na dolzhnostʹ Mėra Moskvy Navalʹnogo Aleksei︠a︡ Anatolʹevicha."</mods:note>
+   <mods:note script="Cyrl" lang="rus" altRepGroup="03">"Изготовлено ООО «Полиграфический комплекс». 143300, г. Наро-Фоминск, М.О., ул. Калинина, д. 8/1, ИНН 5030045907.  Заказчик- кандидат на должность Мэра Москвы Навальный Алексей Анатольевич. Дата выпуска 23.07.2013, тираж 30 000 экз. Оплачено из средств избирательного фонда кандидата на должность Мэра Москвы Навального Алексея Анатольевича."</mods:note>
+   <mods:note>Additional AAT genre: pamphlets.</mods:note>
+   <mods:subject authority="lcsh">
+      <mods:name type="personal" authority="naf">
+         <mods:namePart type="family">Navalʹnyĭ, Alekseĭ</mods:namePart>
+      </mods:name>
+   </mods:subject>
+   <mods:subject authority="lcsh">
+      <mods:name type="corporate" authority="naf">
+         <mods:namePart>Respublikanskai︠a︡ partii︠a︡ Rossiĭskoĭ Federat︠s︡ii</mods:namePart>
+      </mods:name>
+   </mods:subject>
+   <mods:subject authority="lcsh">
+      <mods:topic>Mayors</mods:topic>
+      <mods:geographic>Russia (Federation)</mods:geographic>
+      <mods:geographic>Moscow</mods:geographic>
+      <mods:topic>Elections</mods:topic>
+   </mods:subject>
+   <mods:subject authority="lcsh">
+      <mods:topic>Political campaigns</mods:topic>
+      <mods:geographic>Russia (Federation)</mods:geographic>
+      <mods:geographic>Moscow</mods:geographic>
+      <mods:topic>History</mods:topic>
+      <mods:temporal>21st century</mods:temporal>
+      <mods:genre>Sources</mods:genre>
+   </mods:subject>
+   <mods:subject authority="lcsh">
+      <mods:topic>Elections</mods:topic>
+      <mods:geographic>Russia (Federation)</mods:geographic>
+      <mods:geographic>Moscow</mods:geographic>
+      <mods:topic>History</mods:topic>
+      <mods:temporal>21st century</mods:temporal>
+      <mods:genre>Sources</mods:genre>
+   </mods:subject>
+   <mods:subject authority="lcsh">
+      <mods:geographic>Moscow (Russia)</mods:geographic>
+      <mods:topic>Politics and government</mods:topic>
+      <mods:temporal>21st century</mods:temporal>
+      <mods:genre>Sources</mods:genre>
+   </mods:subject>
+   <mods:relatedItem type="host">
+      <mods:titleInfo>
+         <mods:title>Moscow Mayoral Election 2013</mods:title>
+      </mods:titleInfo>
+      <mods:location>
+         <mods:url>http://pudl.princeton.edu/collections/pudl0125</mods:url>
+      </mods:location>
+   </mods:relatedItem>
+   <mods:identifier type="local">001</mods:identifier>
+   <mods:location>
+      <mods:physicalLocation type="text">Rare Books Off-Site Storage (rcpxr)</mods:physicalLocation>
+      <mods:physicalLocation type="code" authority="marcorg">NjP</mods:physicalLocation>
+      <mods:holdingSimple>
+         <mods:copyInformation>
+            <mods:subLocation>rcpxr</mods:subLocation>
+            <mods:shelfLocator>
+               <!-- TODO -->
+            </mods:shelfLocator>
+         </mods:copyInformation>
+      </mods:holdingSimple>
+   </mods:location>
+   <mods:accessCondition type="useAndReproduction" xlink:href="http://www.princeton.edu/~rbsc/research/rights.html">Use and
+        reproduction</mods:accessCondition>
+   <mods:accessCondition type="restrictionOnAccess" xlink:href="http://www.princeton.edu/~rbsc/research/rules.html">Restrictions on
+        access</mods:accessCondition>
+   <mods:recordInfo>
+      <mods:recordContentSource authority="marcorg">NjP</mods:recordContentSource>
+      <mods:recordIdentifier>http://diglib.princeton.edu/mdata/pudl0125/7867489/001.mods</mods:recordIdentifier>
+      <mods:languageOfCataloging>
+         <mods:languageTerm authority="iso639-2b" type="code">eng</mods:languageTerm>
+      </mods:languageOfCataloging>
+   </mods:recordInfo>
+</mods:mods>
