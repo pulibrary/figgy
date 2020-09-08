@@ -67,6 +67,10 @@ class IngestEphemeraMODS
   end
 
   class MoscowMODS < METSDocument::MODSDocument
+    def non_name_subjects
+      topics = normalize_whitespace(value_from(xpath: "mods:subject//mods:topic")).map(&:strip)
+      topics.map { |topic| "topic--#{topic}" }
+    end
   end
 
   private
