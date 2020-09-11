@@ -50,6 +50,8 @@ namespace :bulk do
     model = ENV["MODEL"]
     filter = ENV["FILTER"]
     identifier = ENV["OBJID"] # will be the ark for the resource
+    title = ENV["TITLE"]
+    note = ENV["NOTE"]
 
     abort "usage: rake bulk:ingest DIR=/path/to/files BIB=1234567 COLL=collid LOCAL_ID=local_id REPLACES=replaces FILTER=file_filter MODEL=ResourceClass" unless dir && Dir.exist?(dir)
 
@@ -82,7 +84,9 @@ namespace :bulk do
           source_metadata_identifier: bib,
           local_identifier: local_id,
           replaces: replaces,
-          identifier: identifier
+          identifier: identifier,
+          title: title,
+          portion_note: note
         )
       else
         IngestFolderJob.perform_now(
@@ -93,7 +97,10 @@ namespace :bulk do
           source_metadata_identifier: bib,
           local_identifier: local_id,
           replaces: replaces,
-          identifier: identifier
+          identifier: identifier,
+          title: title,
+          portion_note: note
+
         )
       end
     rescue => e
