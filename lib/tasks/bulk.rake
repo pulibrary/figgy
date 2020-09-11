@@ -102,6 +102,80 @@ namespace :bulk do
     end
   end
 
+  # Derrida
+  desc "Ingest a directory of TIFFs as a ScannedResource, or a directory of directories as a MultiVolumeWork"
+  task derrida: :environment do
+    user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
+    user = User.all.select(&:admin?).first unless user
+    dir = ENV["DIR"]
+    bib = ENV["BIB"]
+    coll = ENV["COLL"]
+    local_id = ENV["LOCAL_ID"]
+    replaces = ENV["REPLACES"]
+    background = ENV["BACKGROUND"]
+    model = ENV["MODEL"]
+    filter = ENV["FILTER"]
+    identifier = ENV["OBJID"] # will be the ark for the resource
+    title = ENV["TITLE"]
+    note = ENV["NOTE"]
+
+    abort "usage: rake bulk:ingest DIR=/path/to/files BIB=1234567 COLL=collid LOCAL_ID=local_id REPLACES=replaces FILTER=file_filter MODEL=ResourceClass" unless dir && Dir.exist?(dir)
+
+    @logger = Logger.new(STDOUT)
+    @logger.warn "No BIB id specified" unless bib
+    @logger.info "ingesting files from: #{dir}"
+    @logger.info "filtering to files ending with #{filter}" if filter
+    @logger.info "ingesting as: #{user.user_key} (override with USER=foo)"
+    @logger.info "adding item to collection #{coll}" if coll
+    @logger.info "passing identifier |#{identifier}|"
+    if model
+      begin
+        model.constantize
+        class_name = model
+      rescue
+        @logger.error "Invalid model specified: #{model}.  Using ScannedResource as the default."
+        class_name = "ScannedResource"
+      end
+    else
+      class_name = "ScannedResource"
+    end
+
+    begin
+      if background
+        IngestFolderJob.set(queue: :low).perform_later(
+          directory: dir,
+          class_name: class_name,
+          file_filters: [filter],
+          member_of_collection_ids: [coll],
+          source_metadata_identifier: bib,
+          local_identifier: local_id,
+          replaces: replaces,
+          identifier: identifier,
+          title: title,
+          portion_note: note
+        )
+      else
+        IngestFolderJob.perform_now(
+          directory: dir,
+          class_name: class_name,
+          file_filters: [filter],
+          member_of_collection_ids: [coll],
+          source_metadata_identifier: bib,
+          local_identifier: local_id,
+          replaces: replaces,
+          identifier: identifier,
+          title: title,
+          portion_note: note
+        )
+      end
+    rescue => e
+      @logger.error "Error: #{e.message}"
+      @logger.error e.backtrace
+    end
+  end
+
+  # end Derrida
+
   desc "Ingest a directory of scanned map TIFFs, each filename corresponds to a Bib ID"
   task ingest_scanned_maps: :environment do
     user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
