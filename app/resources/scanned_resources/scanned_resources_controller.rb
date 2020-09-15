@@ -32,13 +32,19 @@ class ScannedResourcesController < BaseResourceController
     authorize! :manifest, @resource
     respond_to do |f|
       f.json do
-        render json: ManifestBuilder.new(@resource, auth_token_param).build
+        render json: cached_manifest(@resource, auth_token_param)
       end
     end
   rescue Valkyrie::Persistence::ObjectNotFoundError
     @resource = query_service.custom_queries.find_by_local_identifier(local_identifier: params[:id]).first
     raise Valkyrie::Persistence::ObjectNotFoundError unless @resource
     redirect_to manifest_scanned_resource_path(id: @resource.id.to_s)
+  end
+
+  def cached_manifest(resource, auth_token_param)
+    Rails.cache.fetch("#{ManifestKey.for(resource)}/#{auth_token_param}") do
+      ManifestBuilder.new(resource, auth_token_param).build
+    end
   end
 
   def pdf

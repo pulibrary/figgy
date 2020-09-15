@@ -19,4 +19,5 @@ Rails.application.configure do
   config.active_job.queue_adapter = :test
   config.action_controller.action_on_unpermitted_parameters = false
   config.active_storage.service = :test
+  config.cache_store = :null_store
 end
