@@ -10,7 +10,8 @@ class FacetIndexer
       {
         display_subject_ssim: resource.primary_imported_metadata.subject,
         display_language_ssim: imported_language,
-        has_structure_bsi: structure?
+        has_structure_bsi: structure?,
+        pub_date_start_itsi: pub_date_start
       }
     else
       {
@@ -46,6 +47,20 @@ class FacetIndexer
     resource.logical_structure.first.nodes.length.positive?
   rescue
     false
+  end
+
+  def pub_date_start
+    date = resource.primary_imported_metadata.created
+    return unless date.present?
+    date = date.first
+    date =
+      begin
+        Time.zone.parse(date) unless date.is_a?(Time)
+      rescue TypeError, ArgumentError
+        nil
+      end
+    return unless date
+    date.year
   end
 
   def decorated_resource
