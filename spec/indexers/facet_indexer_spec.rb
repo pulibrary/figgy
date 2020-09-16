@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe FacetIndexer do
   describe ".to_solr" do
-    context "when the resource has imported metadata" do
+    context "when the resource has imported bibdata metadata" do
       it "indexes relevant facets" do
         stub_bibdata(bib_id: "123456")
         scanned_resource = FactoryBot.create(:pending_scanned_resource, source_metadata_identifier: "123456", import_metadata: true)
@@ -11,8 +11,59 @@ RSpec.describe FacetIndexer do
 
         expect(output[:display_subject_ssim]).to eq scanned_resource.imported_metadata.first.subject
         expect(output[:display_language_ssim]).to eq ["English"]
+        expect(output[:pub_date_start_itsi]).to eq 1982
+      end
+
+      it "parses the first year from a date range" do
+        # 1699-01-01T00:00:00Z/1700-12-31T23:59:59Z
+        bib_id = "3013481"
+        stub_bibdata(bib_id: bib_id)
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: bib_id, import_metadata: true)
+
+        output = described_class.new(resource: scanned_resource).to_solr
+        expect(output[:pub_date_start_itsi]).to eq 1699
+      end
+
+      it "handles an empty date created" do
+        bib_id = "10001790"
+        stub_bibdata(bib_id: bib_id)
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: bib_id, import_metadata: true)
+
+        output = described_class.new(resource: scanned_resource).to_solr
+        expect(output[:pub_date_start_itsi]).to eq nil
+      end
+
+      it "handles a non-date string" do
+        bib_id = "10001791"
+        stub_bibdata(bib_id: bib_id)
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: bib_id, import_metadata: true)
+
+        output = described_class.new(resource: scanned_resource).to_solr
+        expect(output[:pub_date_start_itsi]).to eq nil
+      end
+
+      it "handles a non string" do
+        bib_id = "10001792"
+        stub_bibdata(bib_id: bib_id)
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: bib_id, import_metadata: true)
+
+        output = described_class.new(resource: scanned_resource).to_solr
+        expect(output[:pub_date_start_itsi]).to eq nil
       end
     end
+
+    context "when the resource has imported pulfa metadata" do
+      it "parses the first year from a date range" do
+        # 1941-01-01T00:00:00Z/1985-12-31T23:59:59Z
+        pulfa_id = "C0652_c0377"
+        stub_pulfa(pulfa_id: pulfa_id)
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: pulfa_id, import_metadata: true)
+
+        output = described_class.new(resource: scanned_resource).to_solr
+        expect(output[:pub_date_start_itsi]).to eq 1941
+      end
+    end
+
     context "when the resource has only local metadata" do
       let(:vocabulary) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: "Large vocabulary") }
       let(:category) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: "Egg Creatures", member_of_vocabulary_id: [vocabulary.id]) }
