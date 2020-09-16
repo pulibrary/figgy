@@ -1,0 +1,52 @@
+{
+  "@context": "http://bibdata.princeton.edu/context.json",
+  "@id": "http://bibdata.princeton.edu/bibliographic/10001789",
+  "title": {
+    "@value": "Cameroons under United Kingdom Trusteeship 1949",
+    "@language": "eng"
+  },
+  "language": "eng",
+  "creator": "Nigeria. Survey Department",
+  "call_number": "G8731.F7 1949 .C6 (b)",
+  "extent": [
+    "Scale 1:2,000,000 or 1 inch to 31.56 miles. (E 8°33ʹ00ʹʹ--E 14°37ʹ00ʹʹ/N 12°30ʹ00ʹʹ--N 3°53ʹ24ʹʹ).",
+    "1 map : color ; 38 x 58 cm"
+  ],
+  "edition": "Issued in 1950.",
+  "format": "Map",
+  "type": "Maps",
+  "description": [
+    "The territory of the Cameroons under the United KIngdom trusteeship consisted of two mountainous strips on the eastern frontier of Nigeria, extending from Lake Chad to the Atlantic Ocean. It is divided by a strech of approximately 45 miles into north and south by the Benue River.",
+    "Map shows international, provincial, Nigeria-Cameroons, divisional, and district boundaries, customs stations, three classes of roads, railways, lighthouses, telegraph lines, wireless stations, and native courts. The Trustee Territories administered as part of Bornu, Adamawa, Benue, and Eastern Provinces are shown by color code.",
+    "\"1750/766/4-50\"",
+    "Original maps is filed in the Map/Geospatial Center, a map reproduction is attached to companion volumes."
+  ],
+  "publisher": [
+    "Lagos, Nigeria : Survey Department, 1950.",
+    "London : His Majesty's Stationery Office, 1950."
+  ],
+  "subject": [
+    "Administrative and political divisions—Maps",
+    "Cameroon—Administrative and political divisions",
+    "Nigeria—Administrative and political divisions",
+    "Great Britain—Colonies",
+    "Cameroon—Maps",
+    "Nigeria—Maps"
+  ],
+  "coverage": "northlimit=12.500000; eastlimit=014.620000; southlimit=03.890000; westlimit=008.550000; units=degrees; projection=EPSG:4326",
+  "title_sort": "Cameroons under United Kingdom Trusteeship 1949 / drawn & reproduced by Survey Department, Lagos, Nigeria.",
+  "cartographic_scale": "Scale 1:2,000,000 or 1 inch to 31.56 miles.",
+  "spatial": [
+    "Cameroon",
+    "Nigeria"
+  ],
+  "relation": "Colonial Office. Report by His Majesty's Government in the United Kingdom of Great Britain and Northern Ireland to the General Assembly of the United Nations on the administration of the Cameroons under United Kingdom Trusteeship for the year 1949. Colonial 262, map facing page 384. London : His Majesty's Stationery Office, 1950. (384 pages : 2 maps ; 25 cm).",
+  "references": "{\"http://arks.princeton.edu/ark:/88435/jq085p05h\":[\"arks.princeton.edu\",\"See the map.\"]}",
+  "issuing_body": [
+    "Great Britain. Colonial Office",
+    "Great Britain. His Majesty's Stationery Office"
+  ],
+  "cartographer": "Nigeria. Survey Department",
+  "date": "1949-1950",
+  "identifier": "http://arks.princeton.edu/ark:/88435/jq085p05h"
+}
