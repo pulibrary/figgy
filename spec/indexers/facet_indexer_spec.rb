@@ -43,7 +43,18 @@ RSpec.describe FacetIndexer do
       end
 
       it "handles a non string" do
+        # gives TypeError
         bib_id = "10001792"
+        stub_bibdata(bib_id: bib_id)
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: bib_id, import_metadata: true)
+
+        output = described_class.new(resource: scanned_resource).to_solr
+        expect(output[:pub_date_start_itsi]).to eq nil
+      end
+
+      it "handles a bad date" do
+        # gives ArgumentError
+        bib_id = "123456789"
         stub_bibdata(bib_id: bib_id)
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: bib_id, import_metadata: true)
 
