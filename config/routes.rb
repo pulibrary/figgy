@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
+  concern :range_searchable, BlacklightRangeLimit::Routes::RangeSearchable.new
   if Rails.env.development?
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
   end
@@ -55,6 +56,7 @@ Rails.application.routes.draw do
 
   resource :catalog, only: [:index], as: "catalog", path: "/catalog", controller: "catalog" do
     concerns :searchable
+    concerns :range_searchable
   end
 
   concern :exportable, Blacklight::Routes::Exportable.new
