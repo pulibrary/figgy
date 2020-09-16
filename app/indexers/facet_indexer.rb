@@ -56,7 +56,7 @@ class FacetIndexer
     date =
       begin
         Time.zone.parse(date) unless date.is_a?(Time)
-      rescue TypeError
+      rescue TypeError, ArgumentError
         nil
       end
     return unless date
