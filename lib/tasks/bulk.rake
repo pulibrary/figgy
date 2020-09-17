@@ -37,11 +37,11 @@ namespace :bulk do
     BulkUpdateRemoteMetadataService.call(batch_size: batch_size)
   end
 
-  desc "Ingest a directory of TIFFs as a ScannedResource, or a directory of directories as a MultiVolumeWork"
+  desc "Ingest one or more directories of TIFFs as a ScannedResource, or a directory of directories as a MultiVolumeWork"
   task ingest: :environment do
     user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
     user = User.all.select(&:admin?).first unless user
-    dir = ENV["DIR"]
+    dirs = ENV["DIR"].split(",") if ENV["DIR"]
     bib = ENV["BIB"]
     coll = ENV["COLL"]
     local_id = ENV["LOCAL_ID"]
@@ -53,11 +53,11 @@ namespace :bulk do
     title = ENV["TITLE"]
     note = ENV["NOTE"]
 
-    abort "usage: rake bulk:ingest DIR=/path/to/files BIB=1234567 COLL=collid LOCAL_ID=local_id REPLACES=replaces FILTER=file_filter MODEL=ResourceClass" unless dir && Dir.exist?(dir)
+    abort "usage: rake bulk:ingest DIR=/path/to/files BIB=1234567 COLL=collid LOCAL_ID=local_id REPLACES=replaces FILTER=file_filter MODEL=ResourceClass" unless dirs&.each { |d| Dir.exist?(d) }
 
     @logger = Logger.new(STDOUT)
     @logger.warn "No BIB id specified" unless bib
-    @logger.info "ingesting files from: #{dir}"
+    @logger.info "ingesting files from: #{dirs}"
     if filter
       @logger.info "filtering to files ending with #{filter}"
     else
@@ -82,7 +82,7 @@ namespace :bulk do
     begin
       if background
         IngestFolderJob.set(queue: :low).perform_later(
-          directory: dir,
+          directory: dirs,
           class_name: class_name,
           file_filters: [filter],
           member_of_collection_ids: [coll],
@@ -95,7 +95,7 @@ namespace :bulk do
         )
       else
         IngestFolderJob.perform_now(
-          directory: dir,
+          directory: dirs,
           class_name: class_name,
           file_filters: [filter],
           member_of_collection_ids: [coll],

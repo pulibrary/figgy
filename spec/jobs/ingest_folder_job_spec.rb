@@ -19,7 +19,7 @@ RSpec.describe IngestFolderJob do
         allow(BulkIngestService).to receive(:new).and_return(ingest_service)
 
         described_class.perform_now(
-          directory: single_dir,
+          directory: [single_dir],
           class_name: "EphemeraFolder",
           source_metadata_identifier: bib
         )
@@ -35,7 +35,7 @@ RSpec.describe IngestFolderJob do
       end
     end
 
-    context "with a directory of Scanned TIFFs" do
+    context "with one or more directories of Scanned TIFFs" do
       let(:logger) { Logger.new(nil) }
       let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single") }
       let(:bib) { "4609321" }
@@ -52,7 +52,7 @@ RSpec.describe IngestFolderJob do
         allow(BulkIngestService).to receive(:new).and_return(ingest_service)
 
         described_class.perform_now(
-          directory: single_dir,
+          directory: [single_dir],
           source_metadata_identifier: bib,
           local_identifier: local_id,
           member_of_collection_ids: [coll.id]
@@ -88,7 +88,7 @@ RSpec.describe IngestFolderJob do
         allow(BulkIngestService).to receive(:new).and_return(ingest_service)
 
         described_class.perform_now(
-          directory: single_dir,
+          directory: [single_dir],
           class_name: class_name,
           change_set_param: change_set_param,
           source_metadata_identifier: bib,
