@@ -58,7 +58,12 @@ namespace :bulk do
     @logger = Logger.new(STDOUT)
     @logger.warn "No BIB id specified" unless bib
     @logger.info "ingesting files from: #{dir}"
-    @logger.info "filtering to files ending with #{filter}" if filter
+    if filter
+      @logger.info "filtering to files ending with #{filter}"
+    else
+      filter = ".tif"
+      @logger.info "no filter provided; defaulting to files ending with #{filter}"
+    end
     @logger.info "ingesting as: #{user.user_key} (override with USER=foo)"
     @logger.info "adding item to collection #{coll}" if coll
     @logger.info "passing identifier |#{identifier}|"
