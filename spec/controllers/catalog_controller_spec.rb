@@ -225,7 +225,8 @@ RSpec.describe CatalogController do
       persister.save(resource: FactoryBot.build(:complete_scanned_resource, claimed_by: "Donatello"))
       get :index, params: { q: "" }
       expect(assigns(:document_list).length).to eq 1
-      expect(assigns(:response)["facet_counts"]["facet_queries"]).to be_empty
+      queries = assigns(:response)["facet_counts"]["facet_queries"]
+      expect(queries.keys.select { |x| x.include?("claimed") }).to be_empty
     end
 
     it "displays claimed_by if logged in" do
