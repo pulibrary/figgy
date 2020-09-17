@@ -13,6 +13,13 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-09-17
+
+## Added
+
+* Publication dates now have a "Date" facet. This should work for items which
+have dates pulled from the catalog or finding aids.
+
 # 2020-08-25
 
 ## Fixed
