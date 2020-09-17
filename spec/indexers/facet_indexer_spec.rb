@@ -7,6 +7,16 @@ RSpec.describe FacetIndexer do
       it "indexes relevant facets" do
         stub_bibdata(bib_id: "123456")
         scanned_resource = FactoryBot.create(:pending_scanned_resource, source_metadata_identifier: "123456", import_metadata: true)
+        solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "*:*" })["response"]["docs"][0]
+
+        expect(solr_record["display_subject_ssim"]).to eq scanned_resource.imported_metadata.first.subject
+        expect(solr_record["display_language_ssim"]).to eq ["English"]
+        expect(solr_record["pub_date_start_itsi"]).to eq 1982
+      end
+
+      it "reindexes relevant facets" do
+        stub_bibdata(bib_id: "123456")
+        scanned_resource = FactoryBot.create(:pending_scanned_resource, source_metadata_identifier: "123456", import_metadata: true)
         output = described_class.new(resource: scanned_resource).to_solr
 
         expect(output[:display_subject_ssim]).to eq scanned_resource.imported_metadata.first.subject
