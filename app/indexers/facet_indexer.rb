@@ -52,15 +52,16 @@ class FacetIndexer
   def pub_date_start
     date = resource.primary_imported_metadata.created
     return unless date.present?
-    date = date.first
-    date =
-      begin
-        Time.zone.parse(date) unless date.is_a?(Time)
-      rescue TypeError, ArgumentError
-        nil
-      end
+    date = parse_date(date.first)
     return unless date
     date.year
+  end
+
+  def parse_date(date)
+    return date if date.is_a?(Time)
+    Time.zone.parse(date)
+  rescue TypeError, ArgumentError
+    nil
   end
 
   def decorated_resource
