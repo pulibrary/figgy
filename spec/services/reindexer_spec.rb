@@ -104,10 +104,11 @@ RSpec.describe Reindexer do
   end
 
   describe ".reindex_works" do
-    context "when there are FileSets" do
+    context "when there are disallowed models" do
       it "doesn't index them" do
         postgres_adapter.persister.save(resource: FactoryBot.build(:file_set))
         scanned_resource = postgres_adapter.persister.save(resource: FactoryBot.build(:scanned_resource))
+        postgres_adapter.persister.save(resource: FactoryBot.build(:preservation_object))
         described_class.reindex_works(logger: logger, wipe: true)
         expect(solr_adapter.query_service.find_all.map(&:id)).to eq([scanned_resource.id])
       end
