@@ -63,13 +63,6 @@ namespace :sidekiq do
       execute :sudo, :service, "figgy-workers", :restart
     end
   end
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      within release_path do
-        execute :rake, 'cache:clear'
-      end
-    end
-  end
 end
 namespace :pubsub do
   task :restart do
@@ -118,6 +111,14 @@ namespace :deploy do
     desc "Reindex Geospatial Resources (for synchronized GeoBlacklight installations)"
     task :reindex do
       execute :rake, "geoblacklight:reindex"
+    end
+  end
+
+  after :restart, :clear_cache do
+    on roles(:web), in: :groups, limit: 3, wait: 10 do
+      within release_path do
+        execute :rake, 'cache:clear'
+      end
     end
   end
 end
