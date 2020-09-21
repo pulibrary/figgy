@@ -272,12 +272,30 @@ Rails.application.config.to_prepare do
   )
   # Registers a metadata adapter for storing and indexing resource metadata into Solr
   # (see Valkyrie::Persistence::Solr::MetadataAdapter)
+
+  # Index to both solr7 and solr8 as a migration strategy.
+  solr7 = Valkyrie::Persistence::Solr::MetadataAdapter.new(
+    connection: Blacklight.default_index.connection,
+    resource_indexer: indexer
+  )
+  solr8 = Valkyrie::Persistence::Solr::MetadataAdapter.new(
+    connection: RSolr.connect(
+      url: Figgy.config["solr8_url"]
+    ),
+    resource_indexer: indexer
+  )
+
+  composite_index = Valkyrie::AdapterContainer.new(
+    persister: Valkyrie::Persistence::CompositePersister.new(
+      solr7.persister,
+      solr8.persister
+    ),
+    query_service: solr7.query_service
+  )
+
   Valkyrie::MetadataAdapter.register(
     InstrumentedAdapter.new(
-      metadata_adapter: Valkyrie::Persistence::Solr::MetadataAdapter.new(
-        connection: Blacklight.default_index.connection,
-        resource_indexer: indexer
-      ),
+      metadata_adapter: composite_index,
       tracer: Datadog.tracer
     ),
     :index_solr

@@ -6,6 +6,12 @@ services:
     core: figgy-core-test
     config:
       dir: solr/config
+  figgy_test_solr_8:
+    type: solr:8.4
+    portforward: true
+    core: figgy-8-test
+    config:
+      dir: solr/config
   figgy_development_solr:
     type: solr:7
     portforward: true
@@ -18,5 +24,7 @@ services:
 proxy:
   figgy_test_solr:
     - figgy.test.solr.lndo.site:8983
+  figgy_test_solr_8:
+    - figgy.test.solr8.lndo.site:8983
   figgy_development_solr:
     - figgy.dev.solr.lndo.site:8983

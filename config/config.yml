@@ -146,6 +146,7 @@ test:
   disk_preservation_path: <%= Rails.root.join("tmp", "cloud_backup_test") %>
   cantaloupe_url: 'http://localhost:8182/iiif/2/'
   pyramidal_url: 'http://localhost:8182/pyramidals/iiif/2/'
+  solr8_url: <%= "http://#{ENV["lando_figgy_test_solr_8_conn_host"]}:#{ENV["lando_figgy_test_solr_8_conn_port"]}/solr/figgy-8-test" %>
   events:
     log_file: '/dev/null'
   devise:
