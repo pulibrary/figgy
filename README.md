@@ -1,4 +1,4 @@
-e Figgy
+# Figgy
 
 A digital repository application in use at Princeton University Library for storing and managing digital representations of manuscripts, ephemera, vector, and raster data for export into a variety of front-end displays.
 
