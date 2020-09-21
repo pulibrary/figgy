@@ -1,9 +1,8 @@
-# Figgy
+e Figgy
 
 A digital repository application in use at Princeton University Library for storing and managing digital representations of manuscripts, ephemera, vector, and raster data for export into a variety of front-end displays.
 
 [![CircleCI](https://circleci.com/gh/pulibrary/figgy.svg?style=svg)](https://circleci.com/gh/pulibrary/figgy)
-[![Coverage Status](https://coveralls.io/repos/pulibrary/figgy/badge.svg?branch=master&service=github)](https://coveralls.io/github/pulibrary/figgy?branch=master)
 [![Browserstack](./browserstack-logo.svg)](https://www.browserstack.com/)
 
 ## Dependencies
