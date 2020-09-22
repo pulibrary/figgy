@@ -47,7 +47,7 @@ class Reindexer
   end
 
   def reindex_works
-    reindex_all(except_models: excluded_models + ["FileSet"])
+    reindex_all(except_models: excluded_models + ["FileSet", "PreservationObject"])
   end
 
   def run_individual_retries(records, progress_bar)
