@@ -110,7 +110,7 @@ module CDL
     end
 
     def notify_hold_active(hold:)
-      CDL::HoldMailer.with(user: User.where(uid: hold.netid).first!, resource_id: resource_id.to_s).hold_activated.deliver_later
+      CDL::HoldMailer.with(user: User.where(uid: hold.netid).first!, resource_id: resource_id.to_s).hold_activated.deliver_now
     end
 
     def notify_hold_expired(hold:)
