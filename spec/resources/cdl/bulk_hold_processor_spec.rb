@@ -28,17 +28,28 @@ RSpec.describe CDL::BulkHoldProcessor do
     expect(reloaded_resource_charge_list1.hold_queue).to be_empty
     expect(query_service.find_by(id: resource_charge_list2.id).updated_at).to eq resource_charge_list2.updated_at
   end
+
   it "activates any eligible holds" do
     allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
     User.create!(uid: "one", email: "one@princeton.edu")
     User.create!(uid: "two", email: "two@princeton.edu")
+    stub_bibdata(bib_id: "123456")
+    stub_bibdata(bib_id: "8543429")
+    stub_bibdata(bib_id: "4609321")
     resource_charge_list1 = FactoryBot.create_for_repository(
       :resource_charge_list,
-      resource_id: FactoryBot.create_for_repository(:complete_private_scanned_resource).id,
+      resource_id: FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456").id,
       inactive_hold_netids: ["one", "two"]
     )
-    resource_charge_list2 = FactoryBot.create_for_repository(:resource_charge_list, resource_id: FactoryBot.create_for_repository(:complete_private_scanned_resource).id)
-    resource_charge_list3 = FactoryBot.create_for_repository(:resource_charge_list, resource_id: FactoryBot.create_for_repository(:complete_private_scanned_resource).id, inactive_hold_netids: ["one"])
+    resource_charge_list2 = FactoryBot.create_for_repository(
+      :resource_charge_list,
+      resource_id: FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456").id
+    )
+    resource_charge_list3 = FactoryBot.create_for_repository(
+      :resource_charge_list,
+      resource_id: FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456").id,
+      inactive_hold_netids: ["one"]
+    )
 
     described_class.process!
 
