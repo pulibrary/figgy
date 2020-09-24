@@ -8,7 +8,7 @@ class BulkEditService
     c.decorate.members.each do |member|
       logger.info "Updating attributes for #{member}"
       change_set = ChangeSet.for(member)
-      if change_set.validate(incorporate_proposed_attributes(member.attributes, attributes))
+      if change_set.validate(append_or_replace_attributes(member.attributes, attributes))
         change_set_persister.save(change_set: change_set)
       else
         logger.warn "  Failed validation: #{change_set.errors}"
@@ -16,7 +16,7 @@ class BulkEditService
     end
   end
 
-  def self.incorporate_proposed_attributes(existing_attributes, proposed_attributes)
+  def self.append_or_replace_attributes(existing_attributes, proposed_attributes)
     incorporated_attributes = {}
     proposed_attributes.each_key do |key|
       incorporated_attributes[key] = case key
