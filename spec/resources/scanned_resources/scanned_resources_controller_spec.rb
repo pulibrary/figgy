@@ -35,6 +35,17 @@ RSpec.describe ScannedResourcesController, type: :controller do
 
       expect(ManifestBuilder).to have_received(:new).exactly(1).times
     end
+    it "caches based on a given auth token" do
+      stub_ezid(shoulder: "99999/fk4", blade: "")
+      resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource, files: [file])
+
+      get :manifest, params: { id: resource.id, format: :json }
+      get :manifest, params: { id: resource.id, format: :json, auth_token: "1" }
+      get :manifest, params: { id: resource.id, format: :json, auth_token: "1" }
+      get :manifest, params: { id: resource.id, format: :json, auth_token: "2" }
+
+      expect(ManifestBuilder).to have_received(:new).exactly(3).times
+    end
   end
 
   describe "new" do
