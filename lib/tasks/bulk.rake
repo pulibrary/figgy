@@ -318,11 +318,11 @@ namespace :bulk do
   desc "Adds all members of a Collection to an additional collection"
   task update_attrs: :environment do
     coll = ENV["COLL"]
-    add_coll = ENV["ADD_COLL"]
+    append_coll = ENV["APPEND_COLL"]
 
-    abort "usage: rake bulk:update_attrs COLL=[collection id] ADD_COLL=[new collection id]" unless coll && add_coll
+    abort "usage: rake bulk:update_attrs COLL=[collection id] APPEND_COLL=[new collection id]" unless coll && append_coll
     logger = Logger.new(STDOUT)
-    attrs = { member_of_collection_ids: Valkyrie::ID.new(add_coll) }
+    attrs = { member_of_collection_ids: Valkyrie::ID.new(append_coll) }
     BulkEditService.perform(collection_id: Valkyrie::ID.new(coll), attributes: attrs, metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), logger: logger)
   end
 end

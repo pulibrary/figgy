@@ -87,7 +87,7 @@ RSpec.describe BulkEditService do
         obj = FactoryBot.create_for_repository(:scanned_resource,
                                                member_of_collection_ids: [collection.id],
                                                title: "original")
-        attrs = { member_of_collection_ids: collection2.id, title: "updated" }
+        attrs = { append_collection_ids: collection2.id, title: "updated" }
         described_class.perform(collection_id: collection.id, attributes: attrs, logger: logger)
 
         after = query_service.find_by(id: obj.id)
