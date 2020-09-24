@@ -20,8 +20,8 @@ class BulkEditService
     incorporated_attributes = {}
     proposed_attributes.each_key do |key|
       incorporated_attributes[key] = case key
-                                     when :member_of_collection_ids
-                                       existing_attributes[key] << proposed_attributes[key]
+                                     when :append_collection_ids
+                                       existing_attributes[:member_of_collection_ids] << proposed_attributes[key]
                                      else
                                        proposed_attributes[key]
                                      end
