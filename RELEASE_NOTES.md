@@ -13,6 +13,13 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-09-21
+
+# Added
+
+* Manifests for scanned resources are now cached after the first access in an
+LRU cache. This should speed up load time in Orangelight significantly.
+
 # 2020-09-17
 
 ## Added

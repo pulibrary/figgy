@@ -17,6 +17,37 @@ RSpec.describe ScannedResourcesController, type: :controller do
 
   it_behaves_like "a BaseResourceController"
 
+  describe "manifest caching" do
+    let(:memory_store) { ActiveSupport::Cache.lookup_store(:memory_store) }
+    let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+    let(:user) { FactoryBot.create(:admin) }
+    before do
+      allow(Rails).to receive(:cache).and_return(memory_store)
+      allow(ManifestBuilder).to receive(:new).and_call_original
+      Rails.cache.clear
+    end
+    it "caches a manifest between sessions" do
+      stub_ezid(shoulder: "99999/fk4", blade: "")
+      resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource, files: [file])
+
+      get :manifest, params: { id: resource.id, format: :json }
+      get :manifest, params: { id: resource.id, format: :json }
+
+      expect(ManifestBuilder).to have_received(:new).exactly(1).times
+    end
+    it "caches based on a given auth token" do
+      stub_ezid(shoulder: "99999/fk4", blade: "")
+      resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource, files: [file])
+
+      get :manifest, params: { id: resource.id, format: :json }
+      get :manifest, params: { id: resource.id, format: :json, auth_token: "1" }
+      get :manifest, params: { id: resource.id, format: :json, auth_token: "1" }
+      get :manifest, params: { id: resource.id, format: :json, auth_token: "2" }
+
+      expect(ManifestBuilder).to have_received(:new).exactly(3).times
+    end
+  end
+
   describe "new" do
     context "when not logged in but an auth token is given" do
       it "renders the full manifest" do
