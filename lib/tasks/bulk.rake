@@ -314,4 +314,15 @@ namespace :bulk do
       @logger.error "Error: #{e.message}"
     end
   end
+
+  desc "Adds all members of a Collection to an additional collection"
+  task update_attrs: :environment do
+    coll = ENV["COLL"]
+    add_coll = ENV["ADD_COLL"]
+
+    abort "usage: rake bulk:update_attrs COLL=[collection id] ADD_COLL=[new collection id]" unless coll && add_coll
+    logger = Logger.new(STDOUT)
+    attrs = { member_of_collection_ids: Valkyrie::ID.new(add_coll) }
+    BulkEditService.perform(collection_id: Valkyrie::ID.new(coll), attributes: attrs, metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), logger: logger)
+  end
 end
