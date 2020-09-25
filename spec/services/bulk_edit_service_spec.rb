@@ -4,6 +4,7 @@ require "rails_helper"
 RSpec.describe BulkEditService do
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
   let(:collection) { FactoryBot.create_for_repository(:collection) }
+  let(:collection2) { FactoryBot.create_for_repository(:collection) }
   let(:logger) { Logger.new(nil) }
   let(:initial_rights) { RightsStatements.no_known_copyright }
   let(:new_rights) { RightsStatements.copyright_not_evaluated }
@@ -78,6 +79,21 @@ RSpec.describe BulkEditService do
         after = query_service.find_by(id: obj2.id)
         expect(after.rights_statement).to eq([new_rights])
         expect(after.state).to eq(["complete"])
+      end
+    end
+
+    context "when updating collection_ids" do
+      it "adds to the existing collection set" do
+        obj = FactoryBot.create_for_repository(:scanned_resource,
+                                               member_of_collection_ids: [collection.id],
+                                               title: "original")
+        attrs = { append_collection_ids: collection2.id, title: "updated" }
+        described_class.perform(collection_id: collection.id, attributes: attrs, logger: logger)
+
+        after = query_service.find_by(id: obj.id)
+        expect(after.member_of_collection_ids).to include(collection.id)
+        expect(after.member_of_collection_ids).to include(collection2.id)
+        expect(after.title).to eq(["updated"])
       end
     end
   end
