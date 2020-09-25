@@ -322,7 +322,7 @@ namespace :bulk do
 
     abort "usage: rake bulk:update_attrs COLL=[collection id] APPEND_COLL=[new collection id]" unless coll && append_coll
     logger = Logger.new(STDOUT)
-    attrs = { member_of_collection_ids: Valkyrie::ID.new(append_coll) }
+    attrs = { append_collection_ids: Valkyrie::ID.new(append_coll) }
     BulkEditService.perform(collection_id: Valkyrie::ID.new(coll), attributes: attrs, metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), logger: logger)
   end
 end
