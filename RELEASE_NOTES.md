@@ -731,6 +731,9 @@ skipping them.
 * Display title of a playlist at the top of the Playlist viewer. [#3203](https://github.com/pulibrary/figgy/issues/3203)
 * Add depositor facet [#3217](https://github.com/pulibrary/figgy/issues/3217)
 
+## Changed
+* Modified BulkEditService to enable users to add all items in one collection to another [#2586](https://github.com/pulibrary/figgy/issues/2586)
+
 ## Fixed
 
 * Don't ingest hidden files which start with a `.`
