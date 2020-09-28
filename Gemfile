@@ -3,8 +3,8 @@ source "https://rubygems.org"
 
 gem "autoprefixer-rails"
 gem "bagit", "~> 0.4"
-gem "blacklight"
-gem "blacklight_range_limit", "~> 6.0"
+gem "blacklight", '~> 7.0.0'
+gem "blacklight_range_limit", "~> 7.0"
 gem "bootstrap-sass", "~> 3.4"
 gem "bundler", "~> 2.0"
 gem "bunny"
@@ -121,7 +121,7 @@ gem "tiny_tds"
 gem "valkyrie-sequel", "~> 2.1.0"
 gem "whenever", "~> 0.10"
 
-gem "blacklight_iiif_search", "1.0.0"
+gem "blacklight_iiif_search", "2.0.0"
 gem "graphiql-rails", group: :development
 
 gem "cocoon"
