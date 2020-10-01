@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+require "csv"
+
+
 namespace :bulk do
   desc "Migrates directory of METS files"
   task ingest_mets: :environment do
@@ -324,5 +327,47 @@ namespace :bulk do
     logger = Logger.new(STDOUT)
     attrs = { append_collection_ids: Valkyrie::ID.new(append_coll), skip_validation: true }
     BulkEditService.perform(collection_id: Valkyrie::ID.new(coll), attributes: attrs, metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), logger: logger)
+  end
+
+  desc "Ingest resources from a csv file"
+  task from_csv: :environment do
+    basedir = ENV["BASEDIR"]
+    coll = ENV["COLL"]
+    csvfile = ENV["CSV"]
+
+    abort "usage: COLL=collection_id BASEDIR=directory CSV=csvfile rake bulk:from_csv" unless coll && basedir 
+    abort "no such file #{csvfile}" unless File.file?(csvfile)
+
+    user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
+    user = User.all.select(&:admin?).first unless user
+    class_name = "ScannedResource"
+    @logger = Logger.new(STDOUT)
+
+    begin
+      csv = CSV.read(csvfile, headers: true)
+    rescue => e
+      @logger.error "Error: #{e.message}"
+      @logger.error e.backtrace
+    end
+
+    logger.info "processing #{csv.length} rows"
+    csv.each do |row|
+      logger.info "processing #{row}"
+      attrs = {}
+      row.to_h.keys.each do |k|
+        attrs[k.to_sym] = row[k]
+      end
+      dir = File.join(basedir, attrs.delete(:path))
+      filters = [".jpg", ".png"]
+      @logger.info "dir: #{dir}; class_name: #{class_name}; file_filters: #{filters}; attributes: #{attrs}"
+      IngestFolderJob.perform_now(
+        directory: dir,
+        class_name: class_name,
+        member_of_collection_ids: [coll],
+        file_filters: filters,
+        attributes: attrs
+        )
+      
+    end
   end
 end
