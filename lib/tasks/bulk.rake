@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 require "csv"
 
-
 namespace :bulk do
   desc "Migrates directory of METS files"
   task ingest_mets: :environment do
@@ -335,7 +334,7 @@ namespace :bulk do
     coll = ENV["COLL"]
     csvfile = ENV["CSV"]
 
-    abort "usage: COLL=collection_id BASEDIR=directory CSV=csvfile rake bulk:from_csv" unless coll && basedir 
+    abort "usage: COLL=collection_id BASEDIR=directory CSV=csvfile rake bulk:from_csv" unless coll && basedir
     abort "no such file #{csvfile}" unless File.file?(csvfile)
 
     user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
@@ -366,8 +365,7 @@ namespace :bulk do
         member_of_collection_ids: [coll],
         file_filters: filters,
         attributes: attrs
-        )
-      
+      )
     end
   end
 end
