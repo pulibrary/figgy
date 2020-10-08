@@ -1949,6 +1949,13 @@ RSpec.describe ChangeSetPersister do
 
       expect(file_set.primary_file.checksum).to be_present
     end
+    it "creates resources which can be OCR'd" do
+      file = fixture_file_upload("files/sample.pdf", "application/pdf")
+      resource = FactoryBot.create_for_repository(:scanned_resource, files: [file], ocr_language: "eng")
+      file_set = Wayfinder.for(resource).members.last
+
+      expect(file_set.ocr_content).to be_present
+    end
   end
 
   context "when telling an archival_media_collection to reorganize" do
