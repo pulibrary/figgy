@@ -15,11 +15,11 @@ class HocrDerivativeService
   end
 
   attr_reader :change_set_persister, :processor, :id
-  delegate :mime_type, to: :original_file
+  delegate :mime_type, to: :primary_file
   delegate :resource, to: :change_set
   delegate :metadata_adapter, :storage_adapter, to: :change_set_persister
   delegate :query_service, to: :metadata_adapter
-  delegate :original_file, to: :resource
+  delegate :primary_file, to: :resource
   def initialize(change_set_persister:, processor_factory:, id:)
     @change_set_persister = change_set_persister
     @id = id
@@ -57,7 +57,7 @@ class HocrDerivativeService
   end
 
   def file_object
-    @file_object ||= Valkyrie::StorageAdapter.find_by(id: original_file.file_identifiers[0])
+    @file_object ||= Valkyrie::StorageAdapter.find_by(id: primary_file.file_identifiers[0])
   end
 
   class TesseractProcessor
