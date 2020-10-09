@@ -13,6 +13,10 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-10-09
+## Added
+* bulk.rake now includes a task to ingest resources and metadata from a csv file.
+
 # 2020-09-21
 
 # Added
