@@ -336,9 +336,6 @@ namespace :bulk do
 
     abort "usage: COLL=collection_id BASEDIR=directory CSV=csvfile rake bulk:from_csv" unless coll && basedir
     abort "no such file #{csvfile}" unless File.file?(csvfile)
-
-    user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
-    user = User.all.select(&:admin?).first unless user
     class_name = "ScannedResource"
     @logger = Logger.new(STDOUT)
 
@@ -352,10 +349,7 @@ namespace :bulk do
     logger.info "processing #{csv.length} rows"
     csv.each do |row|
       logger.info "processing #{row}"
-      attrs = {}
-      row.to_h.keys.each do |k|
-        attrs[k.to_sym] = row[k]
-      end
+      attrs = row.map { |k, v| [k.to_sym, v] }.to_h
       dir = File.join(basedir, attrs.delete(:path))
       filters = [".jpg", ".png"]
       @logger.info "dir: #{dir}; class_name: #{class_name}; file_filters: #{filters}; attributes: #{attrs}"
