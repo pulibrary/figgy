@@ -108,7 +108,7 @@ const actions = {
       })
       .catch((err) => {
         console.error(err)
-        console.commit('SAVED_STATE', 'ERROR')
+        context.commit('SAVED_STATE', 'ERROR')
       })
   }
 }
