@@ -69,7 +69,7 @@ export default {
         paramName: this.paramName,
         uploadMultiple: this.multiple,
         maxFilesize: null,
-        timeout: 300000
+        timeout: 7200000
       }
     }
   },
