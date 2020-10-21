@@ -160,7 +160,7 @@ have dates pulled from the catalog or finding aids.
 ## Fixed
 
 * Removing a source metadata identifier now clears imported metadata.
-*
+
 # 2020-04-21
 
 ## Added
