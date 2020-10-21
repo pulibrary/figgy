@@ -15,8 +15,8 @@ describe IngestEphemeraCSV do
     languages = FactoryBot.create_for_repository(:ephemera_vocabulary,
                                                  label: "LAE Languages")
     FactoryBot.create_for_repository(:ephemera_term,
-                                     label: ["Russian"],
-                                     code: ["rus"],
+                                     label: ["Spanish"],
+                                     code: ["es"],
                                      member_of_vocabulary_id: languages.id)
 
     areas = FactoryBot.create_for_repository(:ephemera_vocabulary,
@@ -32,7 +32,6 @@ describe IngestEphemeraCSV do
       expect(output).to be_kind_of EphemeraFolder
       expect(output.creator).to eq ["Tomás Bravo Urízar"]
       expect(output.date_created).to eq [2019]
-#      expect(output.geographic_subject).to eq ["Chile"]
       expect(output.geo_subject).to eq ["Chile"]
       expect(output.description).to eq ["November 29. Museo de Arte Contemporáneo (MAC), Parque Forestal, Santiago. Protest/performance \"Un violador en tu camino,\" created by Las Tesis."]
     end
