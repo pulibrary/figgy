@@ -68,6 +68,7 @@ export default {
         url: this.uploadPath,
         paramName: this.paramName,
         uploadMultiple: this.multiple,
+        maxFilesize: null,
         timeout: 300000
       }
     }
