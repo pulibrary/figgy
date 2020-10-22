@@ -17,10 +17,13 @@ class IngestEphemeraCSV
     ingested = []
     mdata_table.each do |row|
       folder_data = FolderData.new(base_path: imgdir, **row.to_h)
+      logger.info "validating #{row.to_s}"
       change_set.validate(folder_data.attributes)
       change_set.validate(files: folder_data.files)
       change_set.validate(append_id: project_id)
+      logger.info "persisting #{row.to_s}"
       ingested << change_set_persister.save(change_set: change_set)
+      logger.info "finished #{row.to_s}"
     end
     ingested
   end
