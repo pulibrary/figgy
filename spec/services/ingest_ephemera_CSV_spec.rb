@@ -29,12 +29,34 @@ describe IngestEphemeraCSV do
   describe "#ingest" do
     it "ingests the metadata" do
       output = service.ingest
-      expect(output).to be_kind_of EphemeraFolder
-      expect(output.creator).to eq ["Tomás Bravo Urízar"]
-      expect(output.date_created).to eq [2019]
-      expect(output.geo_subject).to eq ["Chile"]
-      expect(output.description).to eq ["November 29. Museo de Arte Contemporáneo (MAC), Parque Forestal, Santiago. Protest/performance \"Un violador en tu camino,\" created by Las Tesis."]
+      folder = output.first
+      expect(folder).to be_kind_of EphemeraFolder
+      expect(folder.creator).to eq ["Tomás Bravo Urízar"]
+      expect(folder.date_created).to eq ["2019"]
+      expect(folder.geo_subject).to eq ["Chile"]
+      expect(folder.description).to eq ["November 29. Museo de Arte Contemporáneo (MAC), Parque Forestal, Santiago. Protest/performance \"Un violador en tu camino,\" created by Las Tesis."]
+    end
+  end
+end
+
+describe IngestEphemeraCSV::FolderData do
+  subject(:folder) { described_class.new(base_path: imgdir, **fields) }
+  let(:fields) { table.first.to_h }
+  let(:table) { CSV.read(mdata, headers: true, header_converters: :symbol) }
+  let(:mdata) { Rails.root.join("spec", "fixtures", "files", "ephemera.csv") }
+  let(:imgdir) { Rails.root.join("spec", "fixtures", "ephemera", "chile") }
+
+
+  describe "#fields" do
+    it "has fields" do
+      expect(folder.fields[:date_created]).to eq("2019")
     end
   end
 
+  describe "#files" do
+    it "has an image path" do
+      expect(folder.image_path).to eq(File.join(imgdir, "01"))
+      expect(folder.files.first.original_filename).to eq("01.jpg")
+    end
+  end
 end
