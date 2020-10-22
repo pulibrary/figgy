@@ -33,15 +33,32 @@ class IngestEphemeraCSV
 
     def attributes
       {
-        subject: fields[:subject],
-        title: fields[:title],
-        language: fields[:language],
+        member_ids: Array(fields[:member_ids]),
+        title: Array(fields[:title] || "untitled"),
+        sort_title: Set.new(Array(fields[:sort_title])),
+        alternative_title: Set.new(Array(fields[:alternative_title])),
+        transliterated_title: Set.new(Array(fields[:transliterated_title])),
+        language: Set.new(Array(fields[:language])),
         genre: fields[:genre],
-        page_count: fields[:page_count],
-        creator: fields[:creator],
-        description: fields[:description],
-        date_created: fields[:date_created],
-        geo_subject: [fields[:geographic_subject]]
+        width: Set.new(Array(fields[:width])),
+        height: Set.new(Array(fields[:height])),
+        page_count: Set.new(Array(fields[:page_count])),
+        rights_statement: RightsStatements.copyright_not_evaluated.to_s,
+        rights_note: Set.new(Array(fields[:rights_note])),
+        series: Set.new(Array(fields[:series])),
+        creator: Set.new(Array(fields[:creator])),
+        contributor: Set.new(Array(fields[:contributor])),
+        publisher: Set.new(Array(fields[:publisher])),
+        geographic_origin: Array(fields[:geographic_origin]),
+        subject: Set.new(Array(fields[:subject])),
+        geo_subject: Set.new(Array(fields[:geo_subject])),
+        description: Set.new(Array(fields[:description])),
+        date_created: Set.new(Array(fields[:date_created])),
+        provenance: Set.new(Array(fields[:provenance])),
+        depositor: Set.new(Array(fields[:depositor])),
+        date_range: Array(fields[:date_range]),
+        ocr_language: Set.new(Array(fields[:ocr_language])),
+        keywords: Set.new(Array(fields[:keywords]))
       }
     end
 
