@@ -36,7 +36,7 @@ namespace :csv do
   end
 
   desc "Ingest resources from a csv file"
-  task from_csv: :environment do
+  task ingest_resources: :environment do
     basedir = ENV["BASEDIR"]
     coll = ENV["COLL"]
     csvfile = ENV["CSV"]
