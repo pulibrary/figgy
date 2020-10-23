@@ -1,15 +1,12 @@
 # frozen_string_literal: true
 require "csv"
 
-=begin
-
-These tasks are designed to be used when employing a spreadsheet of
-metadata to import ephemera materials into Figgy.
-
-=end
+#
+# These tasks are designed to be used when employing a spreadsheet of
+# metadata to import ephemera materials into Figgy.
+#
 
 namespace :csv do
-
   desc "ingest ephemera from a csv file"
   task ingest_ephemera: :environment do
     basedir = ENV["BASEDIR"]
@@ -28,7 +25,8 @@ namespace :csv do
 
     change_set_persister = ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
-      storage_adapter: Valkyrie::StorageAdapter.find(:disk_via_copy))
+      storage_adapter: Valkyrie::StorageAdapter.find(:disk_via_copy)
+    )
 
     @logger.info "beginning to ingest ephemera into #{project.title} from #{csvfile} with basedir #{basedir}"
     IngestEphemeraCSVJob.perform_now(project.id, csvfile, basedir)
@@ -66,7 +64,7 @@ namespace :csv do
         file_filters: filters,
         **attrs
       )
-      @logger.info "Processd row #{row} --- dir: #{dir}; class_name: #{class_name}; file_filters: #{filters}; attributes: #{attrs}"      
+      @logger.info "Processd row #{row} --- dir: #{dir}; class_name: #{class_name}; file_filters: #{filters}; attributes: #{attrs}"
     end
   end
 end
