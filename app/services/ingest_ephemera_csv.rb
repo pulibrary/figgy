@@ -31,6 +31,8 @@ class IngestEphemeraCSV
       @fields = arg_fields.except(:path)
     end
 
+    # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Metrics/AbcSize
     def attributes
       {
         member_ids: Array(fields[:member_ids]),
@@ -61,6 +63,8 @@ class IngestEphemeraCSV
         keywords: Set.new(Array(fields[:keywords]))
       }
     end
+    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize
 
     def files
       @files || Dir.glob("#{image_path}/*.{tif,jpg,jpeg,png}").sort.map do |file|
