@@ -6,11 +6,6 @@ require "csv"
 These tasks are designed to be used when employing a spreadsheet of
 metadata to import ephemera materials into Figgy.
 
-They build on pre-existing code that ingests ephemera objects from
-JSON files, so the first task converts a CSV file into JSON.  The next
-uses generalized versions of ingest_folder_job and
-folder_json_importer to do the real work.
-
 =end
 
 namespace :csv do
