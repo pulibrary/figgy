@@ -22,16 +22,20 @@ describe IngestEphemeraCSV do
     areas = FactoryBot.create_for_repository(:ephemera_vocabulary,
                                              label: "LAE Areas")
     FactoryBot.create_for_repository(:ephemera_term,
-                                     label: ["Ukraine"],
+                                     label: ["Chile"],
                                      member_of_vocabulary_id: areas.id)
   end
 
   describe IngestEphemeraCSV::FolderData do
-    subject(:folder) { described_class.new(base_path: imgdir, **fields) }
+    subject(:folder) { described_class.new(base_path: imgdir, change_set_persister: change_set_persister, **fields) }
     let(:fields) { table.first.to_h }
     let(:table) { CSV.read(mdata, headers: true, header_converters: :symbol) }
     let(:mdata) { Rails.root.join("spec", "fixtures", "files", "ephemera.csv") }
     let(:imgdir) { Rails.root.join("spec", "fixtures", "ephemera", "chile") }
+    let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: db, storage_adapter: files) }
+    let(:db) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+    let(:files) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
+
 
     describe "#fields" do
       it "has fields" do
@@ -54,8 +58,13 @@ describe IngestEphemeraCSV do
       expect(folder).to be_kind_of EphemeraFolder
       expect(folder.creator).to eq ["Tomás Bravo Urízar"]
       expect(folder.date_created).to eq ["2019"]
-      expect(folder.geo_subject).to eq ["Chile"]
       expect(folder.description).to eq ["November 29. Museo de Arte Contemporáneo (MAC), Parque Forestal, Santiago. Protest/performance \"Un violador en tu camino,\" created by Las Tesis."]
+
+      geo_sub_id = folder.geo_subject.first.id
+      qs = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
+      resource = qs.find_by(id: geo_sub_id)
+      expect(resource).to be_an_instance_of(EphemeraTerm)
     end
   end
+
 end
