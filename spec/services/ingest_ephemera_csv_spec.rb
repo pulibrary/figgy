@@ -12,6 +12,16 @@ describe IngestEphemeraCSV do
   let(:logger) { Logger.new(nil) }
 
   before do
+    politics_and_government = FactoryBot.create_for_repository(:ephemera_vocabulary,
+                                                 label: "Politics and government")
+
+    FactoryBot.create_for_repository(:ephemera_term,
+                                     label: "Democracy",
+                                     member_of_vocabulary_id: politics_and_government.id)
+
+    imported_terms = FactoryBot.create_for_repository(:ephemera_vocabulary,
+                                                label: "Imported Terms")
+
     languages = FactoryBot.create_for_repository(:ephemera_vocabulary,
                                                  label: "LAE Languages")
     FactoryBot.create_for_repository(:ephemera_term,
@@ -61,12 +71,9 @@ describe IngestEphemeraCSV do
       expect(folder.creator).to eq ["Tomás Bravo Urízar"]
       expect(folder.date_created).to eq ["2019"]
       expect(folder.description).to eq ["November 29. Museo de Arte Contemporáneo (MAC), Parque Forestal, Santiago. Protest/performance \"Un violador en tu camino,\" created by Las Tesis."]
-      expect(folder.subject.first).to eq("Politics and government--Democracy")
-
-      geo_sub_id = folder.geo_subject.first.id
       qs = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
-      resource = qs.find_by(id: geo_sub_id)
-      expect(resource).to be_an_instance_of(EphemeraTerm)
+      expect(qs.find_by(id: folder.subject.first)).to be_an EphemeraTerm
+      expect(qs.find_by(id: folder.geo_subject.first.id)).to be_an EphemeraTerm
 
     end
   end
