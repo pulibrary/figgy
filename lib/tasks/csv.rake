@@ -15,18 +15,12 @@ namespace :csv do
 
     abort "usage: PROJECT=project_id BASEDIR=directory CSV=csvfile rake csv:ingest_ephemera" unless input_project_id && basedir
     abort "no such file #{csvfile}" unless File.file?(csvfile)
-    class_name = "ScannedResource"
     @logger = Logger.new(STDOUT)
 
     qs = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
     project = qs.find_by(id: input_project_id)
 
     abort "no such project" unless project
-
-    change_set_persister = ChangeSetPersister.new(
-      metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
-      storage_adapter: Valkyrie::StorageAdapter.find(:disk_via_copy)
-    )
 
     @logger.info "beginning to ingest ephemera into #{project.title} from #{csvfile} with basedir #{basedir}"
     IngestEphemeraCSVJob.perform_now(project.id, csvfile, basedir)

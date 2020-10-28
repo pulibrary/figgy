@@ -43,7 +43,7 @@ class FolderData
     @fields = arg_fields.except(:path)
     @change_set_persister = change_set_persister
     @vocab_service = VocabularyService::EphemeraVocabularyService.new(change_set_persister: change_set_persister,
-                                                                  persist_if_not_found: true)
+                                                                      persist_if_not_found: true)
   end
 
   # rubocop:disable Metrics/MethodLength
@@ -115,7 +115,7 @@ class FolderData
 
   def subject
     return unless fields[:subjects].present?
-    subjects = fields[:subjects].split("/").map {|s| s.split("--")}.map { |c, s| {"category" => c, "topic" => s } }
+    subjects = fields[:subjects].split("/").map { |s| s.split("--") }.map { |c, s| { "category" => c, "topic" => s } }
     subjects.uniq.map do |sub|
       vocab_service.find_subject_by(category: sub["category"], topic: sub["topic"]).id
     end
