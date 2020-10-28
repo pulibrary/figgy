@@ -65,7 +65,7 @@ class FolderData
       creator: Set.new(Array(fields[:creator])),
       contributor: Set.new(Array(fields[:contributor])),
       publisher: Set.new(Array(fields[:publisher])),
-      geographic_origin: Array(fields[:geographic_origin]),
+      geographic_origin: geo_origin,
       subject: subject,
       geo_subject: geo_subject,
       description: Set.new(Array(fields[:description])),
@@ -124,10 +124,6 @@ class FolderData
   def geo_subject
     return unless fields[:geo_subject].present?
     Array(vocab_service.find_term(label: Array(fields[:geo_subject]).first, vocab: "LAE Areas"))
-  end
-
-  def imported_vocabulary
-    @imported_vocabulary ||= vocab_service.find_vocabulary_by(label: "Imported Terms")
   end
 end
 # rubocop:enable Metrics/ClassLength
