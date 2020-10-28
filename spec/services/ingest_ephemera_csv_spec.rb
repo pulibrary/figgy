@@ -13,14 +13,11 @@ describe IngestEphemeraCSV do
 
   before do
     politics_and_government = FactoryBot.create_for_repository(:ephemera_vocabulary,
-                                                 label: "Politics and government")
+                                                               label: "Politics and government")
 
     FactoryBot.create_for_repository(:ephemera_term,
                                      label: "Democracy",
                                      member_of_vocabulary_id: politics_and_government.id)
-
-    imported_terms = FactoryBot.create_for_repository(:ephemera_vocabulary,
-                                                label: "Imported Terms")
 
     languages = FactoryBot.create_for_repository(:ephemera_vocabulary,
                                                  label: "LAE Languages")
@@ -45,7 +42,6 @@ describe IngestEphemeraCSV do
     let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: db, storage_adapter: files) }
     let(:db) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
     let(:files) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
-
 
     describe "#fields" do
       it "has fields" do
@@ -74,8 +70,6 @@ describe IngestEphemeraCSV do
       qs = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
       expect(qs.find_by(id: folder.subject.first)).to be_an EphemeraTerm
       expect(qs.find_by(id: folder.geo_subject.first.id)).to be_an EphemeraTerm
-
     end
   end
-
 end

@@ -2,8 +2,10 @@
 require "rails_helper"
 
 RSpec.describe VocabularyService::EphemeraVocabularyService do
-  subject(:service) { described_class.new(change_set_persister: change_set_persister,
-                                          persist_if_not_found: false) }
+  subject(:service) do
+    described_class.new(change_set_persister: change_set_persister,
+                        persist_if_not_found: false)
+  end
   let(:change_set_persister) do
     ChangeSetPersister.new(
       metadata_adapter: adapter,
@@ -15,14 +17,18 @@ RSpec.describe VocabularyService::EphemeraVocabularyService do
 
   before do
     politics_and_government = FactoryBot.create_for_repository(:ephemera_vocabulary,
-                                                 label: "Politics and government")
+                                                               label: "Politics and government")
 
     FactoryBot.create_for_repository(:ephemera_term,
                                      label: "Government policy",
                                      member_of_vocabulary_id: politics_and_government.id)
 
     imported_terms = FactoryBot.create_for_repository(:ephemera_vocabulary,
-                                                label: "Imported Terms")
+                                                      label: "Imported Terms")
+
+    FactoryBot.create_for_repository(:ephemera_term,
+                                     label: "Some place",
+                                     member_of_vocabulary_id: imported_terms.id)
 
     languages = FactoryBot.create_for_repository(:ephemera_vocabulary,
                                                  label: "LAE Languages")
@@ -36,17 +42,13 @@ RSpec.describe VocabularyService::EphemeraVocabularyService do
     FactoryBot.create_for_repository(:ephemera_term,
                                      label: ["Chile"],
                                      member_of_vocabulary_id: areas.id)
-
   end
-
-
 
   it "can find a new subject" do
     subject = service.find_subject_by(category: "Politics and government",
                                       topic: "Government policy")
     expect(subject.label.first).to eq("Government policy")
   end
-
 
   it "can find a vocabulary" do
     vocab = service.find_vocabulary_by(label: "LAE Languages")
@@ -66,7 +68,6 @@ RSpec.describe VocabularyService::EphemeraVocabularyService do
 
     term = service.find_term(label: "Chile", vocab: "LAE Languages")
     expect(term).to be_nil
-    
   end
 
   context "when persist_if_not_found is false" do
@@ -100,6 +101,5 @@ RSpec.describe VocabularyService::EphemeraVocabularyService do
       vocab = service.find_vocabulary_by(label: "Made up vocab")
       expect(vocab.label.first).to eq("Made up vocab")
     end
-
   end
 end

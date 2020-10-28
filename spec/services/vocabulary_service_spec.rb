@@ -2,8 +2,10 @@
 require "rails_helper"
 
 RSpec.describe VocabularyService do
-  subject(:service) { described_class.new(change_set_persister: change_set_persister,
-                                          persist_if_not_found: false) }
+  subject(:service) do
+    described_class.new(change_set_persister: change_set_persister,
+                        persist_if_not_found: false)
+  end
   let(:change_set_persister) do
     ChangeSetPersister.new(
       metadata_adapter: adapter,
@@ -18,5 +20,4 @@ RSpec.describe VocabularyService do
     service.persist_if_not_found = true
     expect(service.persist_if_not_found).to eq(true)
   end
-
 end
