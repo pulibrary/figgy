@@ -13,9 +13,16 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-10-28
+
+## Added
+* Service for ingesting ephemera and metadata from a csv file.
+* A vocabulary helper service that encapsulates vocabulary lookups.
+* A subclass of the vocabulary service for Ephemera.
+
 # 2020-09-21
 
-# Added
+## Added
 
 * Manifests for scanned resources are now cached after the first access in an
 LRU cache. This should speed up load time in Orangelight significantly.
