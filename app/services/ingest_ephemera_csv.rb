@@ -34,7 +34,7 @@ end
 # rubocop:disable Metrics/AbcSize
 
 class FolderData
-  attr_accessor :image_path, :fields, :change_set_persister
+  attr_accessor :image_path, :fields, :change_set_persister, :vocab_service
   delegate :metadata_adapter, to: :change_set_persister
   delegate :query_service, :persister, to: :metadata_adapter
 
@@ -42,6 +42,8 @@ class FolderData
     @image_path = File.join(base_path, arg_fields[:path])
     @fields = arg_fields.except(:path)
     @change_set_persister = change_set_persister
+    @vocab_service = VocabularyService::EphemeraVocabularyService.new(change_set_persister: change_set_persister,
+                                                                  persist_if_not_found: true)
   end
 
   # rubocop:disable Metrics/MethodLength
@@ -64,7 +66,7 @@ class FolderData
       contributor: Set.new(Array(fields[:contributor])),
       publisher: Set.new(Array(fields[:publisher])),
       geographic_origin: Array(fields[:geographic_origin]),
-      subject: Set.new(Array(fields[:subject])),
+      subject: subject,
       geo_subject: geo_subject,
       description: Set.new(Array(fields[:description])),
       date_created: Set.new(Array(fields[:date_created])),
@@ -103,56 +105,29 @@ class FolderData
 
   def language
     return unless fields[:language].present?
-    @language ||= find_or_create_term_by(label: ISO_639.find_by_code(resource["language"]).english_name.split(";").first).id
+    @language ||= vocab_service.find_term_by(label: ISO_639.find_by_code(resource["language"]).english_name.split(";").first).id
   end
 
   def geo_origin
     return unless fields[:geo_origin].present?
-    @geo_origin ||= find_or_create_term_by(label: fields[:geo_origin]).id
+    @geo_origin ||= vocab_service.find_term_by(label: fields[:geo_origin]).id
   end
 
   def subject
     return unless fields[:subjects].present?
-    fields[:subjects].uniq.map do |sub|
-      find_or_create_subject_by(category: sub["category"], topic: sub["topic"]).id
+    subjects = fields[:subjects].split("/").map {|s| s.split("--")}.map { |c, s| {"category" => c, "topic" => s } }
+    subjects.uniq.map do |sub|
+      vocab_service.find_subject_by(category: sub["category"], topic: sub["topic"]).id
     end
   end
 
   def geo_subject
     return unless fields[:geo_subject].present?
-    Array(find_term(label: Array(fields[:geo_subject]).first, vocab: "LAE Areas"))
-  end
-
-  def find_term(label: nil, code: nil, vocab: nil)
-    query_service.custom_queries.find_ephemera_term_by_label(label: label, code: code, parent_vocab_label: vocab).id
-  rescue
-    label
-  end
-
-  def find_or_create_term_by(label:)
-    query_service.custom_queries.find_ephemera_term_by_label(label: label) ||
-      persister.save(resource: EphemeraTerm.new(label: label, member_of_vocabulary_id: imported_vocabulary.id))
+    Array(vocab_service.find_term(label: Array(fields[:geo_subject]).first, vocab: "LAE Areas"))
   end
 
   def imported_vocabulary
-    @imported_vocabulary ||= find_or_create_vocabulary_by(label: "Imported Terms")
-  end
-
-  def find_or_create_vocabulary_by(label:, vocabulary_id: nil)
-    query_service.custom_queries.find_ephemera_vocabulary_by_label(label: label) ||
-      persister.save(resource: EphemeraVocabulary.new(label: label, member_of_vocabulary_id: vocabulary_id))
-  end
-
-  def find_or_create_subject_by(category:, topic:)
-    query_service.custom_queries.find_ephemera_term_by_label(label: topic, parent_vocab_label: category) ||
-      create_subject_by(category: category, topic: topic)
-  rescue
-    create_subject_by(category: category, topic: topic)
-  end
-
-  def create_subject_by(category:, topic:)
-    vocabulary = find_or_create_vocabulary_by(label: category, vocabulary_id: imported_vocabulary.id)
-    persister.save(resource: EphemeraTerm.new(label: topic, member_of_vocabulary_id: vocabulary.id))
+    @imported_vocabulary ||= vocab_service.find_vocabulary_by(label: "Imported Terms")
   end
 end
 # rubocop:enable Metrics/ClassLength

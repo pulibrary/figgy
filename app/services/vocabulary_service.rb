@@ -39,11 +39,10 @@ class VocabularyService
     end
     
     def find_subject_by(category:, topic:)
-      vocabulary = find_vocabulary_by(label: category, vocabulary_id: imported_vocabulary.id)
       subject = query_service.custom_queries.find_ephemera_term_by_label(label: topic, parent_vocab_label: category)
       return subject if subject
       if persist_if_not_found
-
+      vocabulary = find_vocabulary_by(label: category, vocabulary_id: imported_vocabulary.id)
         persister.save(resource: EphemeraTerm.new(label: topic, member_of_vocabulary_id: vocabulary.id))
       end
     end
