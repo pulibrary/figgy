@@ -66,12 +66,11 @@ describe IngestEphemeraCSV do
       expect(folder).to be_kind_of EphemeraFolder
       expect(folder.creator).to eq ["Tomás Bravo Urízar"]
       expect(folder.date_created).to eq ["2019"]
-expect(folder.description).to eq ["November 29. Museo de Arte Contemporáneo (MAC), Parque Forestal, Santiago. Protest/performance \"Un violador en tu camino,\" created by Las Tesis."]
+      expect(folder.description).to eq ["November 29. Museo de Arte Contemporáneo (MAC), Parque Forestal, Santiago. Protest/performance \"Un violador en tu camino,\" created by Las Tesis."]
       qs = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
       expect(qs.find_by(id: folder.subject.first)).to be_an EphemeraTerm
       expect(qs.find_by(id: folder.geo_subject.first.id)).to be_an EphemeraTerm
       expect(qs.find_by(id: folder.geographic_origin.first.id)).to be_an EphemeraTerm
-      
     end
   end
 end
