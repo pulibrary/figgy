@@ -54,7 +54,7 @@ class FolderData
       sort_title: Set.new(Array(fields[:sort_title])),
       alternative_title: Set.new(Array(fields[:alternative_title])),
       transliterated_title: Set.new(Array(fields[:transliterated_title])),
-      language: language,
+      language: Array(language),
       genre: fields[:genre],
       width: Set.new(Array(fields[:width])),
       height: Set.new(Array(fields[:height])),
@@ -69,7 +69,7 @@ class FolderData
       subject: subject,
       geo_subject: geo_subject,
       description: Set.new(Array(fields[:description])),
-      date_created: Set.new(Array(fields[:date_created])),
+      date_created: date_created,
       provenance: Set.new(Array(fields[:provenance])),
       depositor: Set.new(Array(fields[:depositor])),
       date_range: Array(fields[:date_range]),
@@ -95,22 +95,18 @@ class FolderData
   end
 
   def date_created
-    return if self["date_created"] == "Unknown"
-    self["date_created"]
-  end
-
-  def names
-    self["names"] || []
+    return if fields["date_created"] == "Unknown"
+    fields[:date_created]
   end
 
   def language
     return unless fields[:language].present?
-    @language ||= vocab_service.find_term_by(label: ISO_639.find_by_code(resource["language"]).english_name.split(";").first).id
+    @language ||= vocab_service.find_term(label: ISO_639.find_by_code(fields[:language]).english_name.split(";").first).id
   end
 
   def geo_origin
     return unless fields[:geo_origin].present?
-    @geo_origin ||= vocab_service.find_term_by(label: fields[:geo_origin]).id
+    @geo_origin ||= vocab_service.find_term(label: fields[:geo_origin]).id
   end
 
   def subject
