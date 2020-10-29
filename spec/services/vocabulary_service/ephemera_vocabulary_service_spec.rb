@@ -4,7 +4,7 @@ require "rails_helper"
 RSpec.describe VocabularyService::EphemeraVocabularyService do
   subject(:service) do
     described_class.new(change_set_persister: change_set_persister,
-                        persist_if_not_found: false)
+                        persist_if_not_found: true)
   end
   let(:change_set_persister) do
     ChangeSetPersister.new(
@@ -44,10 +44,17 @@ RSpec.describe VocabularyService::EphemeraVocabularyService do
                                      member_of_vocabulary_id: areas.id)
   end
 
-  it "can find a new subject" do
+  it "can find an existing subject" do
     subject = service.find_subject_by(category: "Politics and government",
                                       topic: "Government policy")
     expect(subject.label.first).to eq("Government policy")
+  end
+
+  it "can find a new subject" do
+    subject = service.find_subject_by(category: "Politics and government",
+                                      topic: "Bogus topic")
+    expect(subject).not_to be_nil
+    expect(subject.label.first).to eq("Bogus topic")
   end
 
   it "can find a vocabulary" do
@@ -65,9 +72,6 @@ RSpec.describe VocabularyService::EphemeraVocabularyService do
 
     term = service.find_term(label: "Chile")
     expect(term).to be_a(Valkyrie::ID)
-
-    term = service.find_term(label: "Chile", vocab: "LAE Languages")
-    expect(term).to be_nil
   end
 
   context "when persist_if_not_found is false" do
