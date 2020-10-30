@@ -27,7 +27,7 @@ describe IngestEphemeraCSV do
                                      member_of_vocabulary_id: languages.id)
 
     areas = FactoryBot.create_for_repository(:ephemera_vocabulary,
-                                             label: "LAE Areas")
+                                             label: "LAE Geographic Areas")
     FactoryBot.create_for_repository(:ephemera_term,
                                      label: ["Chile"],
                                      member_of_vocabulary_id: areas.id)

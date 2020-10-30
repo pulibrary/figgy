@@ -119,7 +119,7 @@ class FolderData
 
   def geo_subject
     return unless fields[:geo_subject].present?
-    Array(vocab_service.find_term(label: Array(fields[:geo_subject]).first, vocab: "LAE Areas"))
+    Array(vocab_service.find_term(label: Array(fields[:geo_subject]).first))
   end
 end
 # rubocop:enable Metrics/ClassLength
