@@ -81,6 +81,10 @@ export default {
     sendingEvent (file, xhr, formData) {
       if (this.patch === true) {
         formData.append('_method', 'patch')
+        formData.append(
+          this.paramName.replace(/\[.*\]/, '[skip_validation]'),
+          'true'
+        )
       }
     },
     reloadPage () {

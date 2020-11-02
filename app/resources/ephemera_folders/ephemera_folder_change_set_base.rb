@@ -55,7 +55,7 @@ class EphemeraFolderChangeSetBase < ChangeSet
   property :local_identifier, multiple: false, required: false
 
   # Skip Validation
-  property :skip_validation, virtual: true, type: ::Types::Bool, default: false
+  property :skip_validation, virtual: true, type: ::Types::Params::Bool, default: false
 
   delegate :human_readable_type, to: :model
 

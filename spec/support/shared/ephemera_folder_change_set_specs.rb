@@ -17,7 +17,7 @@ RSpec.shared_examples "an ephemera folder change set" do |change_set_class|
       expect(change_set).not_to be_valid
     end
     it "is valid if we skip validation" do
-      expect(change_set.validate(subject: [], skip_validation: true)).to eq true
+      expect(change_set.validate(subject: [], skip_validation: "true")).to eq true
       expect(change_set).to be_valid
     end
   end
