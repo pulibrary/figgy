@@ -23,11 +23,9 @@ class IngestEphemeraCSV
     end
   end
 
-
   def project_resource
     @project_resource ||= query_service.custom_queries.find_by_property(property: :title, value: project.first).first
   end
-
 
   private
 
@@ -143,11 +141,12 @@ class FolderData
   def member_of_collection_ids
     headers = fields.keys.find_all { |e| /^member_of_collection/ =~ e.to_s }
     collection_titles = headers.collect { |h| fields[h] }
-    collection_titles.collect { |title|
+    collection_titles.collect do |title|
       collections = query_service.custom_queries.find_by_property(
-        property: :title, value: title)
+        property: :title, value: title
+      )
       collections.first.id
-    }
+    end
   end
 end
 # rubocop:enable Metrics/ClassLength

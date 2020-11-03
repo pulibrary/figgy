@@ -3,12 +3,16 @@ require "rails_helper"
 
 describe IngestEphemeraCSV do
   subject(:service) { described_class.new(project.title, mdata, imgdir, change_set_persister, logger) }
-  let(:project) { FactoryBot.create(:ephemera_project,
-                                    title: "project_1",
-                                   id: Valkyrie::ID.new("project_number_1")) }
-  let(:project2) { FactoryBot.create(:ephemera_project,
-                                    title: "project_2",
-                                   id: Valkyrie::ID.new("project_number_2")) }
+  let(:project) do
+    FactoryBot.create(:ephemera_project,
+                      title: "project_1",
+                      id: Valkyrie::ID.new("project_number_1"))
+  end
+  let(:project2) do
+    FactoryBot.create(:ephemera_project,
+                      title: "project_2",
+                      id: Valkyrie::ID.new("project_number_2"))
+  end
   let(:mdata) { Rails.root.join("spec", "fixtures", "files", "ephemera.csv") }
   let(:imgdir) { Rails.root.join("spec", "fixtures", "ephemera", "chile") }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: db, storage_adapter: files) }
@@ -82,6 +86,4 @@ describe IngestEphemeraCSV do
       end
     end
   end
-
-
 end
