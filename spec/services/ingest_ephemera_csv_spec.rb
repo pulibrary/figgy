@@ -2,8 +2,13 @@
 require "rails_helper"
 
 describe IngestEphemeraCSV do
-  subject(:service) { described_class.new(project.id, mdata, imgdir, change_set_persister, logger) }
-  let(:project) { FactoryBot.create(:ephemera_project) }
+  subject(:service) { described_class.new(project.title, mdata, imgdir, change_set_persister, logger) }
+  let(:project) { FactoryBot.create(:ephemera_project,
+                                    title: "project_1",
+                                   id: Valkyrie::ID.new("project_number_1")) }
+  let(:project2) { FactoryBot.create(:ephemera_project,
+                                    title: "project_2",
+                                   id: Valkyrie::ID.new("project_number_2")) }
   let(:mdata) { Rails.root.join("spec", "fixtures", "files", "ephemera.csv") }
   let(:imgdir) { Rails.root.join("spec", "fixtures", "ephemera", "chile") }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: db, storage_adapter: files) }
@@ -12,6 +17,7 @@ describe IngestEphemeraCSV do
   let(:logger) { Logger.new(nil) }
 
   before do
+    project2.title
     politics_and_government = FactoryBot.create_for_repository(:ephemera_vocabulary,
                                                                label: "Politics and government")
 
@@ -31,6 +37,24 @@ describe IngestEphemeraCSV do
     FactoryBot.create_for_repository(:ephemera_term,
                                      label: ["Chile"],
                                      member_of_vocabulary_id: areas.id)
+  end
+
+  describe "#ingest" do
+    it "ingests the metadata" do
+      output = service.ingest
+      folder = output.first
+      expect(folder).to be_kind_of EphemeraFolder
+      expect(folder.creator).to eq ["Tomás Bravo Urízar"]
+      expect(folder.date_created).to eq ["2019"]
+      expect(folder.description.first).to eq "Un violador en tu camino"
+      expect(folder.description[1]).to eq "description number 2"
+      expect(folder.language.count).to eq(1)
+      qs = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
+      expect(qs.find_by(id: folder.subject.first)).to be_an EphemeraTerm
+      expect(qs.find_by(id: folder.geo_subject.first.id)).to be_an EphemeraTerm
+      expect(qs.find_by(id: folder.geographic_origin.first.id)).to be_an EphemeraTerm
+      expect(folder.member_of_collection_ids.count).to eq(2)
+    end
   end
 
   describe FolderData do
@@ -59,18 +83,5 @@ describe IngestEphemeraCSV do
     end
   end
 
-  describe "#ingest" do
-    it "ingests the metadata" do
-      output = service.ingest
-      folder = output.first
-      expect(folder).to be_kind_of EphemeraFolder
-      expect(folder.creator).to eq ["Tomás Bravo Urízar"]
-      expect(folder.date_created).to eq ["2019"]
-      expect(folder.description).to eq ["November 29. Museo de Arte Contemporáneo (MAC), Parque Forestal, Santiago. Protest/performance \"Un violador en tu camino,\" created by Las Tesis."]
-      qs = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
-      expect(qs.find_by(id: folder.subject.first)).to be_an EphemeraTerm
-      expect(qs.find_by(id: folder.geo_subject.first.id)).to be_an EphemeraTerm
-      expect(qs.find_by(id: folder.geographic_origin.first.id)).to be_an EphemeraTerm
-    end
-  end
+
 end

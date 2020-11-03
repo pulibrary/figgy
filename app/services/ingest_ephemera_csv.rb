@@ -2,11 +2,11 @@
 require "csv"
 
 class IngestEphemeraCSV
-  attr_accessor :project_id, :mdata_table, :imgdir, :change_set_persister, :logger
+  attr_accessor :project, :mdata_table, :imgdir, :change_set_persister, :logger
   delegate :query_service, to: :change_set_persister
 
-  def initialize(project_id, mdata_file, imgdir, change_set_persister, logger)
-    @project_id = project_id
+  def initialize(project, mdata_file, imgdir, change_set_persister, logger)
+    @project = project
     @mdata_table = CSV.read(mdata_file, headers: true, header_converters: :symbol)
     @imgdir = imgdir
     @change_set_persister = change_set_persister
@@ -18,10 +18,16 @@ class IngestEphemeraCSV
       folder_data = FolderData.new(base_path: imgdir, change_set_persister: change_set_persister, **row.to_h)
       change_set.validate(folder_data.attributes)
       change_set.validate(files: folder_data.files)
-      change_set.validate(append_id: project_id)
+      change_set.validate(append_id: project_resource.id) # TODO: fix this so it is derived from the spreadsheet; use member_of_collection_ids
       change_set_persister.save(change_set: change_set)
     end
   end
+
+
+  def project_resource
+    @project_resource ||= query_service.custom_queries.find_by_property(property: :title, value: project.first).first
+  end
+
 
   private
 
@@ -64,17 +70,19 @@ class FolderData
       series: Set.new(Array(fields[:series])),
       creator: Set.new(Array(fields[:creator])),
       contributor: Set.new(Array(fields[:contributor])),
-      publisher: Set.new(Array(fields[:publisher])),
+      publisher: publishers,
       geographic_origin: geo_origin,
       subject: subject,
       geo_subject: geo_subject,
-      description: Set.new(Array(fields[:description])),
+      description: descriptions,
       date_created: date_created,
       provenance: Set.new(Array(fields[:provenance])),
       depositor: Set.new(Array(fields[:depositor])),
       date_range: Array(fields[:date_range]),
       ocr_language: Set.new(Array(fields[:ocr_language])),
-      keywords: Set.new(Array(fields[:keywords]))
+      keywords: Set.new(Array(fields[:keywords])),
+      member_of_collection_ids: member_of_collection_ids,
+      append_collection_ids: member_of_collection_ids
     }
   end
   # rubocop:enable Metrics/MethodLength
@@ -120,6 +128,26 @@ class FolderData
   def geo_subject
     return unless fields[:geo_subject].present?
     Array(vocab_service.find_term(label: Array(fields[:geo_subject]).first))
+  end
+
+  def descriptions
+    headers = fields.keys.find_all { |e| /^description/ =~ e.to_s }
+    headers.collect { |h| fields[h] }
+  end
+
+  def publishers
+    headers = fields.keys.find_all { |e| /^publisher/ =~ e.to_s }
+    headers.collect { |h| fields[h] }
+  end
+
+  def member_of_collection_ids
+    headers = fields.keys.find_all { |e| /^member_of_collection/ =~ e.to_s }
+    collection_titles = headers.collect { |h| fields[h] }
+    collection_titles.collect { |title|
+      collections = query_service.custom_queries.find_by_property(
+        property: :title, value: title)
+      collections.first.id
+    }
   end
 end
 # rubocop:enable Metrics/ClassLength
