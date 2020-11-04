@@ -27,7 +27,7 @@ describe IngestEphemeraCSV do
                                                                label: "Politics and government")
 
     human_and_civil_rights = FactoryBot.create_for_repository(:ephemera_vocabulary,
-                                                               label: "Human and civil rights")
+                                                              label: "Human and civil rights")
 
     FactoryBot.create_for_repository(:ephemera_term,
                                      label: "Human rights advocacy",
@@ -62,7 +62,7 @@ describe IngestEphemeraCSV do
                                      label: ["Sri Lanka"],
                                      member_of_vocabulary_id: areas.id)
   end
-
+  # rubocop:disable Metrics/LineLength
   describe "#ingest" do
     it "ingests the metadata" do
       output = service.ingest
@@ -73,9 +73,8 @@ describe IngestEphemeraCSV do
       expect(folder.description.first).to eq "Contributor-provided translation of title:  Reccomendations of the Movement for Inter Racial Justice and Equality (MIRJE)for the completion of Provincial Council recommendations  ; Left wing political pamphlets"
       expect(folder.language.count).to eq(1)
       qs = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
-#      expect(qs.find_by(id: folder.subject.first)).to be_an EphemeraTerm
-#     expect(qs.find_by(id: folder.geo_subject.first.id)).to be_an EphemeraTerm
-#      expect(qs.find_by(id: folder.geographic_origin.first.id)).to be_an EphemeraTerm
+      expect(qs.find_by(id: folder.subject.first)).to be_an EphemeraTerm
+      expect(qs.find_by(id: folder.geo_subject.first.id)).to be_an EphemeraTerm
       expect(folder.member_of_collection_ids.count).to eq(2)
     end
   end
@@ -96,7 +95,14 @@ describe IngestEphemeraCSV do
         expect(folder.fields[:subject]).to eq("Politics and government--Constitutions/Politics and government--Politics and government/Politics and government--Decentralization in government/Human and civil rights--Human rights advocacy/Human and civil rights--Civil Rights")
       end
     end
+    # rubocop:enable Metrics/LineLength
 
+    describe "#keywords" do
+      it "has keywords" do
+        expect(folder.keywords).to include("Movement of Inter Racial Justice and Equality")
+      end
+    end
+    
     describe "#subject" do
       it "has subjects" do
         expect(folder.subject.count).to eq(5)
