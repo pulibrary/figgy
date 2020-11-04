@@ -72,7 +72,7 @@ class FolderData
       geographic_origin: geo_origin,
       subject: subject,
       geo_subject: geo_subject,
-      description: descriptions,
+      description: fields[:description],
       date_created: date_created,
       provenance: Set.new(Array(fields[:provenance])),
       depositor: Set.new(Array(fields[:depositor])),
@@ -91,6 +91,7 @@ class FolderData
         file_path: file,
         mime_type: case File.extname(file)
                    when ".tif" then "image/tiff"
+                   when ".TIF" then "image/tiff"
                    when ".jpeg", ".jpg" then "image/jpeg"
                    when ".png" then "image/png"
                    end,
@@ -115,9 +116,14 @@ class FolderData
     @geo_origin ||= vocab_service.find_term(label: fields[:geo_origin]).id
   end
 
+  def keywords
+    return unless fields[:keywords].present?
+    fields[:keywords].split(",")
+  end
+
   def subject
-    return unless fields[:subjects].present?
-    subjects = fields[:subjects].split("/").map { |s| s.split("--") }.map { |c, s| { "category" => c, "topic" => s } }
+    return unless fields[:subject].present?
+    subjects = fields[:subject].split("/").map { |s| s.split("--") }.map { |c, s| { "category" => c, "topic" => s } }
     subjects.uniq.map do |sub|
       vocab_service.find_subject_by(category: sub["category"], topic: sub["topic"]).id
     end
@@ -126,11 +132,6 @@ class FolderData
   def geo_subject
     return unless fields[:geo_subject].present?
     Array(vocab_service.find_term(label: Array(fields[:geo_subject]).first))
-  end
-
-  def descriptions
-    headers = fields.keys.find_all { |e| /^description/ =~ e.to_s }
-    headers.collect { |h| fields[h] }
   end
 
   def publishers
