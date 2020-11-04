@@ -102,7 +102,7 @@ describe IngestEphemeraCSV do
         expect(folder.keywords).to include("Movement of Inter Racial Justice and Equality")
       end
     end
-    
+
     describe "#subject" do
       it "has subjects" do
         expect(folder.subject.count).to eq(5)
