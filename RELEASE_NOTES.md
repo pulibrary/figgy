@@ -13,6 +13,11 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-11-05
+
+## Changed
+* extended ingesting of ephemera from csv file to support more fields.
+
 # 2020-10-28
 
 ## Added
