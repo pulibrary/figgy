@@ -90,8 +90,7 @@ class FolderData
       IngestableFile.new(
         file_path: file,
         mime_type: case File.extname(file)
-                   when ".tif" then "image/tiff"
-                   when ".TIF" then "image/tiff"
+                   when ".tif", ".TIF" then "image/tiff"
                    when ".jpeg", ".jpg" then "image/jpeg"
                    when ".png" then "image/png"
                    end,
