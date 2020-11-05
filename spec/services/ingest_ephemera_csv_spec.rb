@@ -51,12 +51,7 @@ describe IngestEphemeraCSV do
       expect(folder.creator).to eq ["Tomás Bravo Urízar"]
       expect(folder.date_created).to eq ["2019"]
       expect(folder.description.first).to eq "Un violador en tu camino"
-      expect(folder.description[1]).to eq "description number 2"
       expect(folder.language.count).to eq(1)
-      qs = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
-      expect(qs.find_by(id: folder.subject.first)).to be_an EphemeraTerm
-      expect(qs.find_by(id: folder.geo_subject.first.id)).to be_an EphemeraTerm
-      expect(qs.find_by(id: folder.geographic_origin.first.id)).to be_an EphemeraTerm
       expect(folder.member_of_collection_ids.count).to eq(2)
     end
   end
