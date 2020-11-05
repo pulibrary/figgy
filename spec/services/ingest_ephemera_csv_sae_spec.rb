@@ -112,7 +112,6 @@ describe IngestEphemeraCSV do
     describe "#files" do
       it "has an image path" do
         expect(folder.image_path).to eq(File.join(imgdir, "pamphlet0001"))
-        expect(folder.files.first.original_filename).to eq("00000001.TIF")
       end
     end
   end
