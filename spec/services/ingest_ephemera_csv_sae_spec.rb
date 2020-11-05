@@ -113,6 +113,8 @@ describe IngestEphemeraCSV do
       it "has an image path" do
         expect(folder.image_path).to eq(File.join(imgdir, "pamphlet0001"))
         originals = folder.files.collect(&:original_filename)
+        expect(originals).to include("00000001.TIF")
+        expect(originals).to include("00000002.tif")
         expect(originals).to include("00000003.jpg")
         expect(originals).to include("00000004.png")
       end

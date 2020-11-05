@@ -86,11 +86,11 @@ class FolderData
   # rubocop:enable Metrics/MethodLength
 
   def files
-    @files || Dir.glob("#{image_path}/*.{tif,jpg,jpeg,png}").sort.map do |file|
+    @files || Dir.glob("#{image_path}/*.{TIF,TIFF,tif,tiff,jpg,jpeg,png}").sort.map do |file|
       IngestableFile.new(
         file_path: file,
         mime_type: case File.extname(file)
-                   when ".tif", ".TIF" then "image/tiff"
+                   when ".tif", ".tiff", ".TIFF", ".TIF" then "image/tiff"
                    when ".jpeg", ".jpg" then "image/jpeg"
                    when ".png" then "image/png"
                    end,
