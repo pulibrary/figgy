@@ -2,7 +2,7 @@
 require "rails_helper"
 
 describe IngestEphemeraCSV do
-  subject(:service) { described_class.new(project.title, mdata, imgdir, change_set_persister, logger) }
+  subject(:service) { described_class.new([project.id, project2.id], mdata, imgdir, change_set_persister, logger) }
   let(:project) do
     FactoryBot.create(:ephemera_project,
                       title: "South Asian Ephemera",
@@ -66,6 +66,7 @@ describe IngestEphemeraCSV do
   describe "#ingest" do
     it "ingests the metadata" do
       output = service.ingest
+      expect(output.count).to eq(2)
       folder = output.first
       expect(folder).to be_kind_of EphemeraFolder
       expect(folder.creator).to eq ["Movement for Inter Racial Justice and Equality (MIRJE)"]

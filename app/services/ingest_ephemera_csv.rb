@@ -2,11 +2,11 @@
 require "csv"
 
 class IngestEphemeraCSV
-  attr_accessor :project, :mdata_table, :imgdir, :change_set_persister, :logger
+  attr_accessor :project_ids, :mdata_table, :imgdir, :change_set_persister, :logger
   delegate :query_service, to: :change_set_persister
 
-  def initialize(project, mdata_file, imgdir, change_set_persister, logger)
-    @project = project
+  def initialize(project_ids, mdata_file, imgdir, change_set_persister, logger)
+    @project_ids = project_ids
     @mdata_table = CSV.read(mdata_file, headers: true, header_converters: :symbol)
     @imgdir = imgdir
     @change_set_persister = change_set_persister
@@ -15,10 +15,13 @@ class IngestEphemeraCSV
 
   def ingest
     mdata_table.collect do |row|
+      change_set = BoxlessEphemeraFolderChangeSet.new(EphemeraFolder.new)
       folder_data = FolderData.new(base_path: imgdir, change_set_persister: change_set_persister, **row.to_h)
       change_set.validate(folder_data.attributes)
       change_set.validate(files: folder_data.files)
-      change_set.validate(append_id: project_resource.id) # TODO: fix this so it is derived from the spreadsheet; use member_of_collection_ids
+      folder_data.member_of_collection_ids.each do |pid|
+        change_set.validate(append_id: pid.id)
+      end
       change_set_persister.save(change_set: change_set)
     end
   end
@@ -29,9 +32,9 @@ class IngestEphemeraCSV
 
   private
 
-    def change_set
-      @change_set ||= BoxlessEphemeraFolderChangeSet.new(EphemeraFolder.new)
-    end
+#    def change_set
+#      @change_set ||= BoxlessEphemeraFolderChangeSet.new(EphemeraFolder.new)
+#    end
 end
 
 # rubocop:disable Metrics/ClassLength
@@ -54,6 +57,7 @@ class FolderData
   def attributes
     {
       member_ids: Array(fields[:member_ids]),
+      local_identifier: fields[:local_identifier],
       title: Array(fields[:title] || "untitled"),
       sort_title: Set.new(Array(fields[:sort_title])),
       alternative_title: Set.new(Array(fields[:alternative_title])),
