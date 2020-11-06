@@ -29,12 +29,6 @@ class IngestEphemeraCSV
   def project_resource
     @project_resource ||= query_service.custom_queries.find_by_property(property: :title, value: project.first).first
   end
-
-  private
-
-#    def change_set
-#      @change_set ||= BoxlessEphemeraFolderChangeSet.new(EphemeraFolder.new)
-#    end
 end
 
 # rubocop:disable Metrics/ClassLength
