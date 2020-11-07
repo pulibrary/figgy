@@ -9,7 +9,7 @@ class IngestEphemeraCSVJob < ApplicationJob
     change_set_persister.queue = queue_name
     output = nil
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
-      output = IngestEphemeraCSV.new(project, csvfile, basedir, buffered_changeset_persister, logger).ingest
+      output = IngestEphemeraCSV.new(project.split(","), csvfile, basedir, buffered_changeset_persister, logger).ingest
     end
     logger.info "Ingested #{csvfile}: #{output.count} objects"
   end

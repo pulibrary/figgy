@@ -5,7 +5,7 @@ class VocabularyService
   delegate :metadata_adapter, to: :change_set_persister
   delegate :query_service, :persister, to: :metadata_adapter
 
-  def initialize(change_set_persister:, persist_if_not_found: false)
+  def initialize(change_set_persister:, persist_if_not_found: true)
     @change_set_persister = change_set_persister
     @persist_if_not_found = persist_if_not_found
   end
@@ -35,10 +35,18 @@ class VocabularyService
     end
 
     def find_subject_by(category:, topic:)
-      subject = query_service.custom_queries.find_ephemera_term_by_label(label: topic, parent_vocab_label: category)
+      begin
+        subject = query_service.custom_queries.find_ephemera_term_by_label(label: topic, parent_vocab_label: category)
+      rescue
+        subject = nil
+      end
       return subject if subject
-      vocabulary = find_vocabulary_by(label: category, vocabulary_id: imported_vocabulary.id)
-      persister.save(resource: EphemeraTerm.new(label: topic, member_of_vocabulary_id: vocabulary.id)) if persist_if_not_found
+      begin
+        vocabulary = find_vocabulary_by(label: category, vocabulary_id: imported_vocabulary.id)
+      rescue
+        vocabulary = nil
+      end
+      persister.save(resource: EphemeraTerm.new(label: topic, member_of_vocabulary_id: vocabulary.id)) if vocabulary && persist_if_not_found
     end
   end
 end

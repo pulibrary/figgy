@@ -63,20 +63,35 @@ describe IngestEphemeraCSV do
                                      member_of_vocabulary_id: areas.id)
   end
   # rubocop:disable Metrics/LineLength
-  describe "#ingest" do
-    it "ingests the metadata" do
-      output = service.ingest
+  context "ingest" do
+    let(:output) { service.ingest }
+    let(:qs) { Valkyrie::MetadataAdapter.find(:indexing_persister).query_service }
+
+    it "ingests the both rows to both projects" do
       expect(output.count).to eq(2)
-      folder = output.first
-      expect(folder).to be_kind_of EphemeraFolder
+      expect(output.first.count).to eq(2)
+      expect(output[1].count).to eq(2)
+    end
+
+    it "ingests the rows as EphemeraFolders" do
+      project = qs.find_by(id: output.first.first)
+      expect(project).to be_an EphemeraProject
+      expect(project.member_ids.count).to eq(2)
+      folder = qs.find_by(id: project.member_ids.first)
+      expect(folder).to be_an EphemeraFolder
+      folder = qs.find_by(id: project.member_ids[1])
+      expect(folder).to be_an EphemeraFolder
+    end
+
+    it "attaches metadata to the folders" do
+      project = qs.find_by(id: output.first.first)
+      folder = qs.find_by(id: project.member_ids.first)
       expect(folder.creator).to eq ["Movement for Inter Racial Justice and Equality (MIRJE)"]
       expect(folder.date_created).to eq ["Circa 1986"]
       expect(folder.description.first).to eq "Contributor-provided translation of title:  Reccomendations of the Movement for Inter Racial Justice and Equality (MIRJE)for the completion of Provincial Council recommendations  ; Left wing political pamphlets"
       expect(folder.language.count).to eq(1)
-      qs = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
-      expect(qs.find_by(id: folder.subject.first)).to be_an EphemeraTerm
-      expect(qs.find_by(id: folder.geo_subject.first.id)).to be_an EphemeraTerm
       expect(folder.member_of_collection_ids.count).to eq(2)
+      expect(qs.find_by(id: folder.geo_subject.first.id)).to be_an EphemeraTerm
     end
   end
 
@@ -89,6 +104,7 @@ describe IngestEphemeraCSV do
     let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: db, storage_adapter: files) }
     let(:db) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
     let(:files) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
+    let(:qs) { Valkyrie::MetadataAdapter.find(:indexing_persister).query_service }
 
     describe "#fields" do
       it "has fields" do
@@ -107,6 +123,7 @@ describe IngestEphemeraCSV do
     describe "#subject" do
       it "has subjects" do
         expect(folder.subject.count).to eq(5)
+        expect(qs.find_by(id: folder.geo_subject.first.id)).to be_an EphemeraTerm
       end
     end
 

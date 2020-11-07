@@ -21,8 +21,8 @@ class IngestEphemeraCSV
       change_set.validate(files: folder_data.files)
       folder_data.member_of_collection_ids.each do |pid|
         change_set.validate(append_id: pid.id)
+        change_set_persister.save(change_set: change_set)
       end
-      change_set_persister.save(change_set: change_set)
     end
   end
 
@@ -122,7 +122,8 @@ class FolderData
     return unless fields[:subject].present?
     subjects = fields[:subject].split("/").map { |s| s.split("--") }.map { |c, s| { "category" => c, "topic" => s } }
     subjects.uniq.map do |sub|
-      vocab_service.find_subject_by(category: sub["category"], topic: sub["topic"]).id
+      subject = vocab_service.find_subject_by(category: sub["category"], topic: sub["topic"])
+      subject&.id
     end
   end
 
