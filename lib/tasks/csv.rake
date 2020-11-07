@@ -31,6 +31,8 @@ namespace :csv do
     abort "usage: COLL=collection_id BASEDIR=directory CSV=csvfile rake bulk:ingest_resources" unless coll && basedir
     abort "no such file #{csvfile}" unless File.file?(csvfile)
     abort "no such directory #{basedir}" unless File.directory?(basedir)
+    abort "usage: COLL=collection_id BASEDIR=directory CSV=csvfile rake bulk:from_csv" unless coll && basedir
+    abort "no such file #{csvfile}" unless File.file?(csvfile)
     class_name = "ScannedResource"
     @logger = Logger.new(STDOUT)
 
