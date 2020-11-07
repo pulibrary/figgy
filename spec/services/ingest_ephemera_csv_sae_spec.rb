@@ -2,7 +2,7 @@
 require "rails_helper"
 
 describe IngestEphemeraCSV do
-  subject(:service) { described_class.new([project.id, project2.id], mdata, imgdir, change_set_persister, logger) }
+  subject(:service) { described_class.new(mdata, imgdir, change_set_persister, logger) }
   let(:project) do
     FactoryBot.create(:ephemera_project,
                       title: "South Asian Ephemera",
@@ -21,6 +21,8 @@ describe IngestEphemeraCSV do
   let(:logger) { Logger.new(nil) }
 
   before do
+    project
+    project2
     project2.title
     project2.id
     politics_and_government = FactoryBot.create_for_repository(:ephemera_vocabulary,

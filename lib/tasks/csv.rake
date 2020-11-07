@@ -10,20 +10,15 @@ namespace :csv do
   desc "ingest ephemera from a csv file"
   task ingest_ephemera: :environment do
     basedir = ENV["BASEDIR"]
-    input_project_id = ENV["PROJECT"]
     csvfile = ENV["CSV"]
 
-    abort "usage: PROJECT=project_id BASEDIR=directory CSV=csvfile rake csv:ingest_ephemera" unless input_project_id && basedir
+    abort "usage: BASEDIR=directory CSV=csvfile rake csv:ingest_ephemera" unless basedir
     abort "no such file #{csvfile}" unless File.file?(csvfile)
+    abort "no such directory #{basedir}" unless File.directory?(basedir)
     @logger = Logger.new(STDOUT)
 
-    qs = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
-    project = qs.find_by(id: input_project_id)
-
-    abort "no such project" unless project
-
-    @logger.info "beginning to ingest ephemera into #{project.title} from #{csvfile} with basedir #{basedir}"
-    IngestEphemeraCSVJob.perform_now(project.id, csvfile, basedir)
+    @logger.info "beginning to ingest ephemera from #{csvfile} with basedir #{basedir}"
+    IngestEphemeraCSVJob.perform_now(csvfile, basedir)
     @logger.info "finished ingesting ephemera"
   end
 

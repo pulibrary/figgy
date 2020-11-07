@@ -10,7 +10,7 @@ RSpec.describe IngestEphemeraCSVJob do
       allow(service).to receive(:ingest).and_return([record])
     end
     it "Ingests an ephemera CSV file" do
-      described_class.perform_now("project_id", "mdata_table", "/path/to/files")
+      described_class.perform_now("mdata_table", "/path/to/files")
       expect(service).to have_received(:ingest)
     end
   end

@@ -2,11 +2,10 @@
 require "csv"
 
 class IngestEphemeraCSV
-  attr_accessor :project_ids, :mdata_table, :imgdir, :change_set_persister, :logger
+  attr_accessor :mdata_table, :imgdir, :change_set_persister, :logger
   delegate :query_service, to: :change_set_persister
 
-  def initialize(project_ids, mdata_file, imgdir, change_set_persister, logger)
-    @project_ids = project_ids
+  def initialize(mdata_file, imgdir, change_set_persister, logger)
     @mdata_table = CSV.read(mdata_file, headers: true, header_converters: :symbol)
     @imgdir = imgdir
     @change_set_persister = change_set_persister
@@ -24,10 +23,6 @@ class IngestEphemeraCSV
         change_set_persister.save(change_set: change_set)
       end
     end
-  end
-
-  def project_resource
-    @project_resource ||= query_service.custom_queries.find_by_property(property: :title, value: project.first).first
   end
 end
 
