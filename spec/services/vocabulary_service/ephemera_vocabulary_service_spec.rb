@@ -57,6 +57,13 @@ RSpec.describe VocabularyService::EphemeraVocabularyService do
     expect(subject.label.first).to eq("Bogus topic")
   end
 
+  it "can recover from being given a bad category" do
+    subject = service.find_subject_by(category: "Bogus category",
+                                      topic: "Bogus topic")
+    expect(subject).not_to be_nil
+    expect(subject.label.first).to eq("Bogus topic")
+  end
+
   it "can find a vocabulary" do
     vocab = service.find_vocabulary_by(label: "LAE Languages")
     expect(vocab.label.first).to eq("LAE Languages")
