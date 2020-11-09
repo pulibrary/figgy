@@ -62,7 +62,7 @@ class FolderData
       creator: Set.new(Array(fields[:creator])),
       contributor: Set.new(Array(fields[:contributor])),
       publisher: publishers,
-      geographic_origin: geo_origin,
+      geographic_origin: geographic_origin,
       subject: subject,
       geo_subject: geo_subject,
       description: fields[:description],
@@ -103,9 +103,9 @@ class FolderData
     @language ||= vocab_service.find_term(label: ISO_639.find_by_code(fields[:language]).english_name.split(";").first).id
   end
 
-  def geo_origin
-    return unless fields[:geo_origin].present?
-    @geo_origin ||= vocab_service.find_term(label: fields[:geo_origin]).id
+  def geographic_origin
+    return unless fields[:geographic_origin].present?
+    @geographic_origin ||= vocab_service.find_term(label: fields[:geographic_origin])
   end
 
   def keywords

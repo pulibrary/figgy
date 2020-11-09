@@ -121,6 +121,11 @@ describe IngestEphemeraCSV do
         expect(folder.keywords).to include("Movement of Inter Racial Justice and Equality")
       end
     end
+    describe "#geographic_origin" do
+      it "has a geographic origin" do
+        expect(folder.geographic_origin).to be_a Valkyrie::ID
+      end
+    end
 
     describe "#subject" do
       it "has subjects" do
