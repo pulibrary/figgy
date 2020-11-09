@@ -41,11 +41,7 @@ class VocabularyService
         subject = nil
       end
       return subject if subject
-      begin
-        vocabulary = find_vocabulary_by(label: category, vocabulary_id: imported_vocabulary.id)
-      rescue
-        vocabulary = nil
-      end
+      vocabulary = find_vocabulary_by(label: category, vocabulary_id: imported_vocabulary.id)
       persister.save(resource: EphemeraTerm.new(label: topic, member_of_vocabulary_id: vocabulary.id)) if vocabulary && persist_if_not_found
     end
   end
