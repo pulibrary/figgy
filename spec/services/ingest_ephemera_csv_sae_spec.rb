@@ -63,6 +63,14 @@ describe IngestEphemeraCSV do
     FactoryBot.create_for_repository(:ephemera_term,
                                      label: ["Sri Lanka"],
                                      member_of_vocabulary_id: areas.id)
+
+    areas2 = FactoryBot.create_for_repository(:ephemera_vocabulary,
+                                             label: "LAE Areas")
+    FactoryBot.create_for_repository(:ephemera_term,
+                                     label: ["Sri Lanka"],
+                                     member_of_vocabulary_id: areas.id)
+
+
   end
   # rubocop:disable Metrics/LineLength
   context "ingest" do

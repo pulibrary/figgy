@@ -124,7 +124,7 @@ class FolderData
 
   def geo_subject
     return unless fields[:geo_subject].present?
-    Array(vocab_service.find_term(label: Array(fields[:geo_subject]).first))
+    Array(vocab_service.find_term(label: Array(fields[:geo_subject]).first, vocab: "LAE Areas"))
   end
 
   def publishers
