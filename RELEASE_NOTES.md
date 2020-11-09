@@ -12,6 +12,7 @@ Release notes template:
 
 ## Removed
 
+-->
 
 # 2020-11-05
 
