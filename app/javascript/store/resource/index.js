@@ -20,12 +20,6 @@ export const resourceMutations = {
   APPLY_STATE(state) {
     state.gallery.ogItems = state.gallery.items
     state.gallery.changeList = []
-    state.resource.ogState = {
-      startCanvas: resource.startPage,
-      thumbnail: resource.thumbnail,
-      viewingHint: resource.viewingHint,
-      viewingDirection: resource.viewingDirection,
-    }
     state.resource.saveState = "NOT_SAVED"
   },
   CHANGE_RESOURCE_LOAD_STATE(state, loadState) {

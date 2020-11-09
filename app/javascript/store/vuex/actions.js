@@ -104,11 +104,11 @@ const actions = {
     return apollo.mutate({ mutation, variables })
       .then(() => {
         context.commit('SAVED_STATE', 'SAVED')
-        context.commit('APPLY_STATE', 1000)
+        context.commit('APPLY_STATE')
       })
       .catch((err) => {
         console.error(err)
-        console.commit('SAVED_STATE', 'ERROR')
+        context.commit('SAVED_STATE', 'ERROR')
       })
   }
 }
