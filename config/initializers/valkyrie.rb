@@ -55,23 +55,6 @@ Rails.application.config.to_prepare do
       ),
       tracer: Datadog.tracer
     ),
-    :lae_storage
-  )
-
-  # Registers a storage adapter for a *NIX file system
-  # Binaries are persisted by invoking "cp" (duplicating the file)
-  # NOTE: This doubles the size of binaries being persisted if the repository
-  # @see http://manpages.ubuntu.com/manpages/xenial/man1/cp.1.html
-  # is deployed on the same file system as the one storing the files being uploaded
-  # NOTE: Separate inodes are created
-  Valkyrie::StorageAdapter.register(
-    InstrumentedStorageAdapter.new(
-      storage_adapter: Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config["repository_path"],
-        file_mover: FileUtils.method(:cp)
-      ),
-      tracer: Datadog.tracer
-    ),
     :disk_via_copy
   )
 

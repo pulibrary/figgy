@@ -22,7 +22,7 @@ RSpec.describe IngestEphemeraService, :admin_set do
                            storage_adapter: storage_adapter)
   end
   let(:metadata_adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
-  let(:storage_adapter) { Valkyrie::StorageAdapter.find(:lae_storage) }
+  let(:storage_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
   before do
     postcards
     museums

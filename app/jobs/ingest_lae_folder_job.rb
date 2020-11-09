@@ -4,7 +4,7 @@ class IngestLaeFolderJob < ApplicationJob
     logger.info "Ingesting LAE folder #{folder_dir}"
     change_set_persister = ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
-      storage_adapter: Valkyrie::StorageAdapter.find(:lae_storage)
+      storage_adapter: Valkyrie::StorageAdapter.find(:disk_via_copy)
     )
     change_set_persister.queue = queue_name
     output = nil
