@@ -6,28 +6,23 @@ class IngestEphemeraCSV
   delegate :query_service, to: :change_set_persister
 
   def initialize(project_id, mdata_file, imgdir, change_set_persister, logger)
-    @project_id = project_id
     @mdata_table = CSV.read(mdata_file, headers: true, header_converters: :symbol)
     @imgdir = imgdir
     @change_set_persister = change_set_persister
     @logger = logger
+    @project_id = project_id
   end
 
   def ingest
     mdata_table.collect do |row|
+      change_set = BoxlessEphemeraFolderChangeSet.new(EphemeraFolder.new)
       folder_data = FolderData.new(base_path: imgdir, change_set_persister: change_set_persister, **row.to_h)
       change_set.validate(folder_data.attributes)
       change_set.validate(files: folder_data.files)
-      change_set.validate(append_id: project_id)
-      change_set_persister.save(change_set: change_set)
+      change_set.validate(append_id: project_id) # relies on append_to_parent feature of change_set
+      change_set_persister.save(change_set: change_set) # finally, persist the change set
     end
   end
-
-  private
-
-    def change_set
-      @change_set ||= BoxlessEphemeraFolderChangeSet.new(EphemeraFolder.new)
-    end
 end
 
 # rubocop:disable Metrics/ClassLength
@@ -50,12 +45,14 @@ class FolderData
   def attributes
     {
       member_ids: Array(fields[:member_ids]),
+      folder_number: Set.new(Array(fields[:folder_number])),
+      local_identifier: fields[:local_identifier],
       title: Array(fields[:title] || "untitled"),
       sort_title: Set.new(Array(fields[:sort_title])),
       alternative_title: Set.new(Array(fields[:alternative_title])),
       transliterated_title: Set.new(Array(fields[:transliterated_title])),
       language: Array(language),
-      genre: fields[:genre],
+      genre: genre,
       width: Set.new(Array(fields[:width])),
       height: Set.new(Array(fields[:height])),
       page_count: Set.new(Array(fields[:page_count])),
@@ -64,27 +61,29 @@ class FolderData
       series: Set.new(Array(fields[:series])),
       creator: Set.new(Array(fields[:creator])),
       contributor: Set.new(Array(fields[:contributor])),
-      publisher: Set.new(Array(fields[:publisher])),
-      geographic_origin: geo_origin,
+      publisher: publishers,
+      geographic_origin: geographic_origin,
       subject: subject,
       geo_subject: geo_subject,
-      description: Set.new(Array(fields[:description])),
+      description: fields[:description],
       date_created: date_created,
       provenance: Set.new(Array(fields[:provenance])),
       depositor: Set.new(Array(fields[:depositor])),
       date_range: Array(fields[:date_range]),
       ocr_language: Set.new(Array(fields[:ocr_language])),
-      keywords: Set.new(Array(fields[:keywords]))
+      keywords: Set.new(Array(fields[:keywords])),
+      member_of_collection_ids: member_of_collection_ids,
+      append_collection_ids: member_of_collection_ids
     }
   end
   # rubocop:enable Metrics/MethodLength
 
   def files
-    @files || Dir.glob("#{image_path}/*.{tif,jpg,jpeg,png}").sort.map do |file|
+    @files || Dir.glob("#{image_path}/*.{TIF,TIFF,tif,tiff,jpg,jpeg,png}").sort.map do |file|
       IngestableFile.new(
         file_path: file,
         mime_type: case File.extname(file)
-                   when ".tif" then "image/tiff"
+                   when ".tif", ".tiff", ".TIFF", ".TIF" then "image/tiff"
                    when ".jpeg", ".jpg" then "image/jpeg"
                    when ".png" then "image/png"
                    end,
@@ -104,22 +103,49 @@ class FolderData
     @language ||= vocab_service.find_term(label: ISO_639.find_by_code(fields[:language]).english_name.split(";").first).id
   end
 
-  def geo_origin
-    return unless fields[:geo_origin].present?
-    @geo_origin ||= vocab_service.find_term(label: fields[:geo_origin]).id
+  def geographic_origin
+    return unless fields[:geographic_origin].present?
+    @geographic_origin ||= vocab_service.find_term(label: fields[:geographic_origin])
+  end
+
+  def keywords
+    return unless fields[:keywords].present?
+    fields[:keywords].split(",")
   end
 
   def subject
-    return unless fields[:subjects].present?
-    subjects = fields[:subjects].split("/").map { |s| s.split("--") }.map { |c, s| { "category" => c, "topic" => s } }
+    return unless fields[:subject].present?
+    subjects = fields[:subject].split("/").map { |s| s.split("--") }.map { |c, s| { "category" => c, "topic" => s } }
     subjects.uniq.map do |sub|
-      vocab_service.find_subject_by(category: sub["category"], topic: sub["topic"]).id
+      subject = vocab_service.find_subject_by(category: sub["category"], topic: sub["topic"])
+      subject&.id
     end
   end
 
   def geo_subject
     return unless fields[:geo_subject].present?
-    Array(vocab_service.find_term(label: Array(fields[:geo_subject]).first, vocab: "LAE Areas"))
+    Array(vocab_service.find_term(label: Array(fields[:geo_subject]).first, vocab: "LAE Geographic Areas"))
+  end
+
+  def publishers
+    headers = fields.keys.find_all { |e| /^publisher/ =~ e.to_s }
+    headers.collect { |h| fields[h] }
+  end
+
+  def member_of_collection_ids
+    headers = fields.keys.find_all { |e| /^member_of_collection/ =~ e.to_s }
+    collection_titles = headers.collect { |h| fields[h] }
+    collection_titles.collect do |title|
+      collections = query_service.custom_queries.find_by_property(
+        property: :title, value: title
+      )
+      collections.first.id
+    end
+  end
+
+  def genre
+    return unless fields[:genre].present?
+    vocab_service.find_term(label: fields[:genre]).id
   end
 end
 # rubocop:enable Metrics/ClassLength
