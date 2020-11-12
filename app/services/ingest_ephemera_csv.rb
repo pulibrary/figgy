@@ -5,11 +5,12 @@ class IngestEphemeraCSV
   attr_accessor :mdata_table, :imgdir, :change_set_persister, :logger
   delegate :query_service, to: :change_set_persister
 
-  def initialize(mdata_file, imgdir, change_set_persister, logger)
+  def initialize(project_id, mdata_file, imgdir, change_set_persister, logger)
     @mdata_table = CSV.read(mdata_file, headers: true, header_converters: :symbol)
     @imgdir = imgdir
     @change_set_persister = change_set_persister
     @logger = logger
+    @project_id = project_id
   end
 
   def ingest
@@ -18,10 +19,8 @@ class IngestEphemeraCSV
       folder_data = FolderData.new(base_path: imgdir, change_set_persister: change_set_persister, **row.to_h)
       change_set.validate(folder_data.attributes)
       change_set.validate(files: folder_data.files)
-      folder_data.member_of_collection_ids.each do |pid|
-        change_set.validate(append_id: pid.id)
-        change_set_persister.save(change_set: change_set)
-      end
+      change_set.validate(append_id: project_id) # relies on append_to_parent feature of change_set
+      change_set_persister.save(change_set: change_set) # finally, persist the change set
     end
   end
 end
@@ -46,13 +45,14 @@ class FolderData
   def attributes
     {
       member_ids: Array(fields[:member_ids]),
+      folder_number: Set.new(Array(fields[:folder_number])),
       local_identifier: fields[:local_identifier],
       title: Array(fields[:title] || "untitled"),
       sort_title: Set.new(Array(fields[:sort_title])),
       alternative_title: Set.new(Array(fields[:alternative_title])),
       transliterated_title: Set.new(Array(fields[:transliterated_title])),
       language: Array(language),
-      genre: fields[:genre],
+      genre: genre,
       width: Set.new(Array(fields[:width])),
       height: Set.new(Array(fields[:height])),
       page_count: Set.new(Array(fields[:page_count])),
@@ -124,7 +124,28 @@ class FolderData
 
   def geo_subject
     return unless fields[:geo_subject].present?
-    Array(vocab_service.find_term(label: Array(fields[:geo_subject]).first, vocab: "LAE Areas"))
+    Array(vocab_service.find_term(label: Array(fields[:geo_subject]).first, vocab: "LAE Geographic Areas"))
+  end
+
+  def publishers
+    headers = fields.keys.find_all { |e| /^publisher/ =~ e.to_s }
+    headers.collect { |h| fields[h] }
+  end
+
+  def member_of_collection_ids
+    headers = fields.keys.find_all { |e| /^member_of_collection/ =~ e.to_s }
+    collection_titles = headers.collect { |h| fields[h] }
+    collection_titles.collect do |title|
+      collections = query_service.custom_queries.find_by_property(
+        property: :title, value: title
+      )
+      collections.first.id
+    end
+  end
+
+  def genre
+    return unless fields[:genre].present?
+    vocab_service.find_term(label: fields[:genre]).id
   end
 
   def publishers

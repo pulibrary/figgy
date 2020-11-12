@@ -2,16 +2,15 @@
 require "rails_helper"
 
 describe IngestEphemeraCSV do
-  subject(:service) { described_class.new(mdata, imgdir, change_set_persister, logger) }
+  subject(:service) { described_class.new(project.id, mdata, imgdir, change_set_persister, logger) }
   let(:project) do
-    FactoryBot.create(:ephemera_project,
-                      title: "South Asian Ephemera",
-                      id: Valkyrie::ID.new("project_number_1"))
+    FactoryBot.create_for_repository(:ephemera_project,
+                                     title: "South Asian Ephemera",
+                                     id: Valkyrie::ID.new("project_number_1"))
   end
-  let(:project2) do
-    FactoryBot.create(:ephemera_project,
-                      title: "Dissidents and Activists in Sri Lanka, 1960s to 1990",
-                      id: Valkyrie::ID.new("project_number_2"))
+  let(:collection) do
+    FactoryBot.create_for_repository(:collection,
+                                     title: "Dissidents and Activists in Sri Lanka, 1960s to 1990")
   end
   let(:mdata) { Rails.root.join("spec", "fixtures", "files", "sae_ephemera.csv") }
   let(:imgdir) { Rails.root.join("spec", "fixtures", "ephemera", "sae") }
@@ -21,10 +20,7 @@ describe IngestEphemeraCSV do
   let(:logger) { Logger.new(nil) }
 
   before do
-    project
-    project2
-    project2.title
-    project2.id
+    collection
     politics_and_government = FactoryBot.create_for_repository(:ephemera_vocabulary,
                                                                label: "Politics and government")
 
@@ -65,42 +61,37 @@ describe IngestEphemeraCSV do
                                      member_of_vocabulary_id: areas.id)
 
     areas2 = FactoryBot.create_for_repository(:ephemera_vocabulary,
-                                             label: "LAE Areas")
+                                              label: "LAE Areas")
     FactoryBot.create_for_repository(:ephemera_term,
                                      label: ["Sri Lanka"],
-                                     member_of_vocabulary_id: areas.id)
-
-
+                                     member_of_vocabulary_id: areas2.id)
   end
   # rubocop:disable Metrics/LineLength
   context "ingest" do
     let(:output) { service.ingest }
+    let(:folder) { output.first }
+    let(:folder2) { output[1] }
     let(:qs) { Valkyrie::MetadataAdapter.find(:indexing_persister).query_service }
 
-    it "ingests the both rows to both projects" do
+    it "ingests the rows as EphemeraFolders" do
       expect(output.count).to eq(2)
-      expect(output.first.count).to eq(2)
-      expect(output[1].count).to eq(2)
+      expect(folder).to be_an EphemeraFolder
+      expect(folder2).to be_an EphemeraFolder
     end
 
-    it "ingests the rows as EphemeraFolders" do
-      project = qs.find_by(id: output.first.first)
-      expect(project).to be_an EphemeraProject
-      expect(project.member_ids.count).to eq(2)
-      folder = qs.find_by(id: project.member_ids.first)
-      expect(folder).to be_an EphemeraFolder
-      folder = qs.find_by(id: project.member_ids[1])
-      expect(folder).to be_an EphemeraFolder
+    it "assocates folders with the project" do
+      expect(folder.cached_parent_id).to eq(project.id)
+    end
+
+    it "assocates folders with a collection" do
+      expect(folder.member_of_collection_ids.first).to eq(collection.id)
     end
 
     it "attaches metadata to the folders" do
-      project = qs.find_by(id: output.first.first)
-      folder = qs.find_by(id: project.member_ids.first)
       expect(folder.creator).to eq ["Movement for Inter Racial Justice and Equality (MIRJE)"]
       expect(folder.date_created).to eq ["Circa 1986"]
       expect(folder.description.first).to eq "Contributor-provided translation of title:  Reccomendations of the Movement for Inter Racial Justice and Equality (MIRJE)for the completion of Provincial Council recommendations  ; Left wing political pamphlets"
       expect(folder.language.count).to eq(1)
-      expect(folder.member_of_collection_ids.count).to eq(2)
       expect(qs.find_by(id: folder.geo_subject.first.id)).to be_an EphemeraTerm
     end
   end
@@ -118,6 +109,7 @@ describe IngestEphemeraCSV do
 
     describe "#fields" do
       it "has fields" do
+        expect(folder.fields[:folder_number]).to eq("1")
         expect(folder.fields[:date_created]).to eq("Circa 1986")
         expect(folder.fields[:subject]).to eq("Politics and government--Constitutions/Politics and government--Politics and government/Politics and government--Decentralization in government/Human and civil rights--Human rights advocacy/Human and civil rights--Civil Rights")
       end
@@ -129,6 +121,7 @@ describe IngestEphemeraCSV do
         expect(folder.keywords).to include("Movement of Inter Racial Justice and Equality")
       end
     end
+    
     describe "#geographic_origin" do
       it "has a geographic origin" do
         expect(folder.geographic_origin).to be_a Valkyrie::ID
@@ -139,6 +132,14 @@ describe IngestEphemeraCSV do
       it "has subjects" do
         expect(folder.subject.count).to eq(5)
         expect(qs.find_by(id: folder.geo_subject.first.id)).to be_an EphemeraTerm
+      end
+    end
+
+    describe "#genre" do
+      it "has a genre" do
+        term = qs.find_by(id: folder.genre)
+        expect(term).to be_an EphemeraTerm
+        expect(term.label.first).to eq("pamphlet")
       end
     end
 

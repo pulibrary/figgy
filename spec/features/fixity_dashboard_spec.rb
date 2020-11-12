@@ -32,6 +32,22 @@ RSpec.feature "Fixity dashboard" do
     end
   end
 
+  context "the fixity check for a resource by a cloud service provider is for a deleted resource" do
+    it "displays that the event was a success and that the preservation object was deleted" do
+      cloud_fixity_event
+      file_set
+      preservation_object
+      metadata_adapter.persister.delete(resource: file_set)
+      metadata_adapter.persister.delete(resource: preservation_object)
+      metadata_adapter.persister.delete(resource: scanned_resource)
+
+      visit fixity_dashboard_path
+
+      expect(page).to have_css "#cloud-fixity-checks table tr td", text: "Preservation Object: #{preservation_object.id} (Deleted)"
+      expect(page).to have_css "#cloud-fixity-checks table tr td", text: "SUCCESS"
+    end
+  end
+
   context "the fixity check for a resource by a cloud service provider has failed" do
     scenario "it displays that the event was a failure and links to the resource" do
       failed_cloud_fixity_event

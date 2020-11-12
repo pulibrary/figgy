@@ -11,14 +11,16 @@ namespace :csv do
   task ingest_ephemera: :environment do
     basedir = ENV["BASEDIR"]
     csvfile = ENV["CSV"]
+    project_id = ENV["PROJECT"]
 
-    abort "usage: BASEDIR=directory CSV=csvfile rake csv:ingest_ephemera" unless basedir
+
+    abort "usage: BASEDIR=directory CSV=csvfile PROJECT=project_id rake csv:ingest_ephemera" unless basedir && project_id && csvfile
     abort "no such file #{csvfile}" unless File.file?(csvfile)
     abort "no such directory #{basedir}" unless File.directory?(basedir)
     @logger = Logger.new(STDOUT)
 
     @logger.info "beginning to ingest ephemera from #{csvfile} with basedir #{basedir}"
-    IngestEphemeraCSVJob.perform_now(csvfile, basedir)
+    IngestEphemeraCSVJob.perform_now(project_id, csvfile, basedir)
     @logger.info "finished ingesting ephemera"
   end
 

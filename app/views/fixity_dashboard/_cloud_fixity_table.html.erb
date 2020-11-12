@@ -10,8 +10,18 @@
   <tbody>
     <% resources.each do |event| %>
       <tr>
-        <td><%= link_to(event.affected_resource.preserved_resource.title.first, solr_document_path(id: event.affected_resource.preserved_resource.id)) %></td>
-        <td><%= link_to(event.affected_child.label.first, solr_document_path(id: event.affected_resource.preserved_resource.id)) %></td>
+        <td>
+          <% if event.affected_resource&.preserved_resource.present? %>
+            <%= link_to(event.affected_resource.preserved_resource.title.first, solr_document_path(id: event.affected_resource.preserved_resource.id)) %>
+          <% else %>
+            Preservation Object: <%= event.resource_id %> (Deleted)
+          <% end %>
+        </td>
+        <td>
+          <% if event.affected_child.present? && event.affected_resource.preserved_resource.present? %>
+            <%= link_to(event.affected_child.label.first, solr_document_path(id: event.affected_resource.preserved_resource.id)) %>
+          <% end %>
+        </td>
         <td><%= event.status %></td>
         <td><%= event.updated_at %></td>
       </tr>
