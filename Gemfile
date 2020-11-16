@@ -3,7 +3,7 @@ source "https://rubygems.org"
 
 gem "autoprefixer-rails"
 gem "bagit", "~> 0.4"
-gem "blacklight", '~> 7.0.0'
+gem "blacklight", "~> 7.0.0"
 gem "blacklight_range_limit", "~> 7.0"
 gem "bootstrap-sass", "~> 3.4"
 gem "bundler", "~> 2.0"
