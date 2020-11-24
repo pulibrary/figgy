@@ -12,7 +12,9 @@ RSpec.describe Numismatics::IssueDecorator do
                                      numismatic_note: numismatic_note,
                                      numismatic_subject: numismatic_subject,
                                      obverse_attribute: numismatic_attribute,
-                                     reverse_attribute: numismatic_attribute)
+                                     reverse_attribute: numismatic_attribute,
+                                     earliest_date: "-91",
+                                     latest_date: "-41")
   end
   let(:coin) { FactoryBot.create_for_repository(:coin) }
   let(:numismatic_citation) { Numismatics::Citation.new(part: "citation part", number: "citation number", numismatic_reference_id: [reference.id]) }
@@ -96,6 +98,12 @@ RSpec.describe Numismatics::IssueDecorator do
   describe "#manageable_order" do
     it "manages order" do
       expect(decorator.manageable_order?).to be true
+    end
+  end
+
+  describe "#date_range" do
+    it "concatenates earliest and latest dates" do
+      expect(decorator.date_range).to eq("-91 to -41")
     end
   end
 end
