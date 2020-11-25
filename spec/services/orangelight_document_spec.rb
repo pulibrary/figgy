@@ -127,7 +127,6 @@ describe OrangelightDocument do
         expect(holding["location"]).to eq "Special Collections - Numismatics Collection"
         expect(holding["library"]).to eq "Special Collections"
         expect(output[:counter_stamp_s]).to eq ["two small counter-stamps visible as small circles on reverse, without known parallel"]
-        expect(output[:donor_s]).to eq ["name1 name2"]
         expect(output[:find_place_s]).to eq ["city, state, region"]
         expect(output[:find_date_s]).to eq ["5/27/1939?"]
         expect(output[:find_feature_s]).to eq ["Hill A?"]
@@ -142,7 +141,7 @@ describe OrangelightDocument do
         expect(output[:pub_date_end_sort]).to eq(-41)
         expect(output[:numismatic_collection_s]).to eq ["Firestone"]
         expect(output[:numismatic_accession_s]).to eq ["1: 2001-01-01 name1 name2"]
-        expect(output[:numismatic_provenance_sm]).to eq ["name1 name2; 12/04/1999; note"]
+        expect(output[:numismatic_provenance_s]).to eq ["name1 name2; 12/04/1999; note"]
         expect(output[:issue_object_type_s]).to eq ["coin"]
         expect(output[:issue_denomination_s]).to eq ["1/2 Penny"]
         expect(output[:issue_denomination_sort]).to eq "1/2 Penny"
@@ -177,7 +176,7 @@ describe OrangelightDocument do
         expect(output[:issue_references_s]).to eq ["short-title citation part citation number"]
         expect(output[:issue_references_sort]).to eq "short-title citation part citation number"
         expect(output[:issue_artists_s]).to eq ["name1 name2, artist signature"]
-        expect(output[:issue_subjects_sm]).to eq ["Other Person, Athena"]
+        expect(output[:issue_subjects_s]).to eq ["Other Person, Athena"]
         expect(output[:issue_artists_sort]).to eq "name1 name2, artist signature"
         expect(output[:issue_monogram_title_s]).to contain_exactly("Alexander", "Zeus")
         expect(output[:issue_date_s]).to eq ["-91 to -41"]
