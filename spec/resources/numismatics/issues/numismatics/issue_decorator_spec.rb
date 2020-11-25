@@ -105,5 +105,12 @@ RSpec.describe Numismatics::IssueDecorator do
     it "concatenates earliest and latest dates" do
       expect(decorator.date_range).to eq("-91 to -41")
     end
+    context "when both earliest and latest dates are nil" do
+      let(:issue) { FactoryBot.create_for_repository(:numismatic_issue) }
+
+      it "returns a nil value" do
+        expect(decorator.date_range).to be_nil
+      end
+    end
   end
 end

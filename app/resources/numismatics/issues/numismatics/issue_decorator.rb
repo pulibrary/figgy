@@ -82,6 +82,7 @@ module Numismatics
     end
 
     def date_range
+      return nil unless earliest_date | latest_date
       [earliest_date, latest_date].compact.join(" to ")
     end
 
