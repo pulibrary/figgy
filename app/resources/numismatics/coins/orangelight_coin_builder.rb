@@ -63,7 +63,7 @@ class OrangelightCoinBuilder
         holdings_1display: holdings_hash,
         numismatic_collection_s: decorator.numismatic_collection,
         numismatic_accession_s: [decorator.decorated_numismatic_accession&.indexed_label],
-        numismatic_provenance_sm: decorator.provenance
+        numismatic_provenance_s: decorator.provenance
       }
     end
 
@@ -113,7 +113,7 @@ class OrangelightCoinBuilder
         issue_artists_sort: parent.artists&.first,
         issue_monogram_title_s: parent.decorated_numismatic_monograms.map(&:title),
         issue_monogram_1display: parent.decorated_numismatic_monograms.map { |m| monogram_hash(m) }.to_json.to_s,
-        issue_subjects_sm: parent.subjects,
+        issue_subjects_s: parent.subjects,
         issue_date_s: [parent.date_range]
       }
     end
