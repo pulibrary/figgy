@@ -18,6 +18,7 @@ describe OrangelightDocument do
       let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
       let(:person) { FactoryBot.create_for_repository(:numismatic_person) }
       let(:numismatic_artist) { Numismatics::Artist.new(person_id: person.id, signature: "artist signature", role: "artist role", side: "artist side") }
+      let(:numismatic_subject) { Numismatics::Subject.new(type: "Other Person", subject: "Athena") }
       let(:numismatic_attribute) { Numismatics::Attribute.new(description: "attribute description", name: "attribute name") }
       let(:numismatic_citation) { Numismatics::Citation.new(part: "citation part", number: "citation number", numismatic_reference_id: reference.id) }
       let(:numismatic_monogram1) { FactoryBot.create_for_repository(:numismatic_monogram, title: "Alexander", thumbnail_id: "alexander-url") }
@@ -26,6 +27,7 @@ describe OrangelightDocument do
       let(:numismatic_accession) { FactoryBot.create_for_repository(:numismatic_accession, person_id: person.id) }
       let(:numismatic_place) { FactoryBot.create_for_repository(:numismatic_place) }
       let(:numismatic_person) { FactoryBot.create_for_repository(:numismatic_person) }
+      let(:numismatic_provenance) { Numismatics::Provenance.new(person_id: person.id, note: "note", date: "12/04/1999") }
       let(:coin) do
         FactoryBot.create_for_repository(:coin,
                                          files: [file],
@@ -40,6 +42,8 @@ describe OrangelightDocument do
                                          find_number: "2237",
                                          find_description: "at join of carcares and w. cavea surface",
                                          numismatic_accession_id: numismatic_accession.id,
+                                         numismatic_collection: "Firestone",
+                                         provenance: numismatic_provenance,
                                          die_axis: "6",
                                          size: "27",
                                          technique: "Cast",
@@ -51,6 +55,7 @@ describe OrangelightDocument do
                                          object_type: "coin",
                                          numismatic_artist: numismatic_artist,
                                          numismatic_citation: numismatic_citation,
+                                         numismatic_subject: numismatic_subject,
                                          numismatic_place_id: numismatic_place.id,
                                          obverse_attribute: numismatic_attribute,
                                          reverse_attribute: numismatic_attribute,
@@ -135,6 +140,9 @@ describe OrangelightDocument do
         expect(output[:weight_s]).to eq ["8.26"]
         expect(output[:pub_date_start_sort]).to eq(-91)
         expect(output[:pub_date_end_sort]).to eq(-41)
+        expect(output[:numismatic_collection_s]).to eq ["Firestone"]
+        expect(output[:numismatic_accession_s]).to eq ["1: 2001-01-01 name1 name2"]
+        expect(output[:numismatic_provenance_sm]).to eq ["name1 name2; 12/04/1999; note"]
         expect(output[:issue_object_type_s]).to eq ["coin"]
         expect(output[:issue_denomination_s]).to eq ["1/2 Penny"]
         expect(output[:issue_denomination_sort]).to eq "1/2 Penny"
@@ -169,8 +177,10 @@ describe OrangelightDocument do
         expect(output[:issue_references_s]).to eq ["short-title citation part citation number"]
         expect(output[:issue_references_sort]).to eq "short-title citation part citation number"
         expect(output[:issue_artists_s]).to eq ["name1 name2, artist signature"]
+        expect(output[:issue_subjects_sm]).to eq ["Other Person, Athena"]
         expect(output[:issue_artists_sort]).to eq "name1 name2, artist signature"
         expect(output[:issue_monogram_title_s]).to contain_exactly("Alexander", "Zeus")
+        expect(output[:issue_date_s]).to eq ["-91 to -41"]
       end
     end
 

@@ -13,6 +13,11 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-11-24
+
+## Added
+* Added additional fields to orangelight coin document
+
 # 2020-10-28
 
 ## Added

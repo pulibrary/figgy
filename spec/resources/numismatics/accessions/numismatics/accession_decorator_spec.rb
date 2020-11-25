@@ -33,4 +33,10 @@ RSpec.describe Numismatics::AccessionDecorator do
       expect(decorator.citations).to eq(["short-title citation part citation number"])
     end
   end
+
+  describe "#indexed_label" do
+    it "renders a label for use in orangelight indexing" do
+      expect(decorator.indexed_label).to eq("1: 2001-01-01 name1 name2/firm name")
+    end
+  end
 end

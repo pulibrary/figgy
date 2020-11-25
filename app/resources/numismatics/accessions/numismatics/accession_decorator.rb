@@ -61,6 +61,15 @@ module Numismatics
       [decorated_person.name1, decorated_person.name2].compact.join(" ")
     end
 
+    def indexed_label
+      "#{accession_number}: #{formatted_date} #{from_label}"
+    end
+
+    def formatted_date
+      return unless date
+      Time.find_zone("UTC").parse(date)&.to_date
+    end
+
     def title
       ["Accession #{accession_number}: #{date} #{type} #{from_label} #{cost_label}"]
     end

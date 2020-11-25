@@ -81,6 +81,10 @@ module Numismatics
       decorated_numismatic_place&.city
     end
 
+    def date_range
+      [earliest_date, latest_date].compact.join(" to ")
+    end
+
     def geo_state
       decorated_numismatic_place&.geo_state
     end
