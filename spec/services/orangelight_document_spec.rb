@@ -127,7 +127,6 @@ describe OrangelightDocument do
         expect(holding["location"]).to eq "Special Collections - Numismatics Collection"
         expect(holding["library"]).to eq "Special Collections"
         expect(output[:counter_stamp_s]).to eq ["two small counter-stamps visible as small circles on reverse, without known parallel"]
-        expect(output[:donor_s]).to eq ["name1 name2"]
         expect(output[:find_place_s]).to eq ["city, state, region"]
         expect(output[:find_date_s]).to eq ["5/27/1939?"]
         expect(output[:find_feature_s]).to eq ["Hill A?"]

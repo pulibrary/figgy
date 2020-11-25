@@ -45,10 +45,6 @@ module Numismatics
       numismatic_citation.map { |c| c.decorate.title }
     end
 
-    def donor
-      [decorated_numismatic_accession&.person]
-    end
-
     def find_place
       decorated_find_place&.title
     end
