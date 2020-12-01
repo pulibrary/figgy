@@ -25,7 +25,21 @@ module Figgy
   end
 
   def campus_ip_ranges
-    @campus_ip_ranges ||= config[:access_control][:campus_ip_ranges].map { |str| IPAddr.new(str) }
+    @campus_ip_ranges ||= config[:access_control][:campus_ip_ranges].map { |str| IPAddr.new(str) } + global_protect_ips
+  end
+
+  def global_protect_ips
+    @global_protect_ips ||= config[:access_control][:global_protect_fqdns].map do |fqdn|
+      begin
+        address = Dnsruby::Resolver.new.query(fqdn).answer[0]&.address
+        if address.present?
+          IPAddr.new(address.to_s)
+        end
+      rescue
+        Rails.logger.debug("Unable to resolve #{fqdn}")
+        nil
+      end
+    end.compact
   end
 
   private
@@ -35,4 +49,5 @@ module Figgy
     end
 
     module_function :config, :config_yaml, :messaging_client, :geoblacklight_messaging_client, :geoserver_messaging_client, :orangelight_messaging_client, :default_url_options, :campus_ip_ranges
+    module_function :global_protect_ips
 end
