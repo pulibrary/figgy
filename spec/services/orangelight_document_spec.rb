@@ -24,7 +24,7 @@ describe OrangelightDocument do
       let(:numismatic_monogram1) { FactoryBot.create_for_repository(:numismatic_monogram, title: "Alexander", thumbnail_id: "alexander-url") }
       let(:numismatic_monogram2) { FactoryBot.create_for_repository(:numismatic_monogram, title: "Zeus", thumbnail_id: "zeus-url") }
       let(:artist) { FactoryBot.create_for_repository(:numismatic_artist) }
-      let(:numismatic_accession) { FactoryBot.create_for_repository(:numismatic_accession, person_id: person.id) }
+      let(:numismatic_accession) { FactoryBot.create_for_repository(:numismatic_accession, date: "1939-01-01T00:00:00.000Z", person_id: person.id) }
       let(:numismatic_place) { FactoryBot.create_for_repository(:numismatic_place) }
       let(:numismatic_person) { FactoryBot.create_for_repository(:numismatic_person) }
       let(:numismatic_provenance) { Numismatics::Provenance.new(person_id: person.id, note: "note", date: "12/04/1999") }
@@ -140,7 +140,7 @@ describe OrangelightDocument do
         expect(output[:pub_date_start_sort]).to eq(-91)
         expect(output[:pub_date_end_sort]).to eq(-41)
         expect(output[:numismatic_collection_s]).to eq ["Firestone"]
-        expect(output[:numismatic_accession_s]).to eq ["1: 2001-01-01 name1 name2"]
+        expect(output[:numismatic_accession_s]).to eq ["1: 1939-01-01 name1 name2"]
         expect(output[:numismatic_provenance_s]).to eq ["name1 name2; 12/04/1999; note"]
         expect(output[:issue_object_type_s]).to eq ["coin"]
         expect(output[:issue_denomination_s]).to eq ["1/2 Penny"]

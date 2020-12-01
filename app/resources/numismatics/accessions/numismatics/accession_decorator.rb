@@ -66,8 +66,8 @@ module Numismatics
     end
 
     def formatted_date
-      return unless date
-      Time.find_zone("UTC").parse(date)&.to_date
+      return unless date.present?
+      Time.zone.parse(date.to_s)&.strftime("%F")
     end
 
     def title
