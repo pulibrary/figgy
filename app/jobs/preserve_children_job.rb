@@ -8,6 +8,8 @@ class PreserveChildrenJob < ApplicationJob
     (resource.try(:member_ids) || []).each do |member_id|
       PreserveResourceJob.perform_later(id: member_id.to_s)
     end
+  rescue Valkyrie::Persistence::ObjectNotFoundError
+    Rails.logger.info "Object not found: #{id}"
   end
 
   def change_set_persister
