@@ -25,6 +25,19 @@ RSpec.describe DownloadsController do
         expect(response.headers["Content-Disposition"]).to eq('inline; filename="example.tif"')
       end
 
+      # The following appears to be from old items before we set this metadata.
+      it "doesn't error if there's no updated_at on the file description" do
+        file_set.file_metadata.first.updated_at = nil
+        change_set_persister.metadata_adapter.persister.save(resource: file_set)
+
+        get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s }
+
+        expect(response.body).to eq(sample_file.read)
+        expect(response.content_length).to eq(196_882)
+        expect(response.content_type).to eq("image/tiff")
+        expect(response.headers["Content-Disposition"]).to eq('inline; filename="example.tif"')
+      end
+
       it "returns an 404 when the file_set doesn't exist" do
         get :show, params: { resource_id: file_set.id.to_s, id: "bogus" }
         expect(response.status).to eq(404)
