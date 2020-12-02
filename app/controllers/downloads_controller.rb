@@ -83,7 +83,7 @@ class DownloadsController < ApplicationController
     response.headers["Content-Type"] = file_desc.mime_type.first.to_s
     response.headers["Content-Length"] ||= binary_file.size.to_s
     # Prevent Rack::ETag from calculating a digest over body
-    response.headers["Last-Modified"] = file_desc.updated_at.utc.strftime("%a, %d %b %Y %T GMT")
+    response.headers["Last-Modified"] = file_desc.updated_at.utc.strftime("%a, %d %b %Y %T GMT") unless file_desc.updated_at.blank?
   end
 
   def query_service
