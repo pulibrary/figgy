@@ -9,6 +9,18 @@ RSpec.describe CDL::EligibleItemService do
       end
     end
 
+    context "voyager is down" do
+      before do
+        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/#{bib_id}/items")
+          .to_return(status: 500,
+                     body: "500", headers: { "Content-Type" => "application/json" })
+      end
+      let(:bib_id) { "7214786" }
+      it "will return an empty array" do
+        expect(described_class.item_ids(source_metadata_identifier: bib_id)).to eq []
+      end
+    end
+
     context "patron_group_charged is null" do
       before do
         stub_request(:get, "https://bibdata.princeton.edu/bibliographic/#{bib_id}/items")
