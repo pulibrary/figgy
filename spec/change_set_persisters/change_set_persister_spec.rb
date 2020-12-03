@@ -663,7 +663,7 @@ RSpec.describe ChangeSetPersister do
     end
   end
 
-  describe "updating files" do
+  describe "member message service events" do
     let(:file1) { fixture_file_upload("files/example.tif", "image/tiff") }
     let(:file2) { fixture_file_upload("files/holding_locations.json", "application/json") }
     let(:change_set_persister) do
@@ -673,29 +673,6 @@ RSpec.describe ChangeSetPersister do
     before do
       now = Time.current
       allow(Time).to receive(:current).and_return(now, now + 1, now + 2)
-    end
-
-    it "can append files as FileSets", run_real_derivatives: true do
-      # upload a file
-      resource = FactoryBot.build(:scanned_resource)
-      change_set = change_set_class.new(resource, characterize: false)
-      change_set.files = [file1]
-      output = change_set_persister.save(change_set: change_set)
-      file_set = query_service.find_members(resource: output).first
-      file_node = file_set.file_metadata.find { |x| x.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }
-      file = storage_adapter.find_by(id: file_node.file_identifiers.first)
-      expect(file.size).to eq 196_882
-
-      # update the file
-      change_set = FileSetChangeSet.new(file_set)
-      change_set.files = [{ file_node.id.to_s => file2 }]
-      change_set_persister.save(change_set: change_set)
-      updated_file_set = query_service.find_by(id: file_set.id)
-      updated_file_node = updated_file_set.file_metadata.find { |x| x.id == file_node.id }
-      expect(updated_file_node.label).to include file2.original_filename
-      updated_file = storage_adapter.find_by(id: updated_file_node.file_identifiers.first)
-      expect(updated_file.size).to eq 5600
-      expect(updated_file_node.updated_at).to be > updated_file_node.created_at
     end
 
     context "with a messaging service for scanned resources" do
@@ -899,33 +876,6 @@ RSpec.describe ChangeSetPersister do
         }
 
         expect(rabbit_connection).to have_received(:publish).once.with(expected_result.to_json)
-      end
-    end
-
-    context "when an error occurs during the update" do
-      let(:upload_decorator) { double }
-
-      it "does not append files when the update fails", run_real_derivatives: true do
-        # upload a file
-        resource = FactoryBot.build(:scanned_resource)
-        change_set = change_set_class.new(resource, characterize: false)
-        change_set.files = [file1]
-        output = change_set_persister.save(change_set: change_set)
-        file_set = query_service.find_members(resource: output).first
-        file_node = file_set.file_metadata.find { |x| x.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }
-        file = storage_adapter.find_by(id: file_node.file_identifiers.first)
-        expect(file.size).to eq 196_882
-
-        # update the file
-        allow(upload_decorator).to receive(:path).and_return("invalid")
-        allow(upload_decorator).to receive(:original_filename).and_return(file2.original_filename)
-        allow(UploadDecorator).to receive(:new).and_return(upload_decorator)
-
-        change_set = FileSetChangeSet.new(file_set)
-        change_set.files = [{ file_node.id.to_s => file2 }]
-        change_set_persister.save(change_set: change_set)
-        updated_file_set = query_service.find_by(id: file_set.id)
-        expect(updated_file_set.file_metadata.find { |x| x.label == file2.original_filename }).to be nil
       end
     end
   end

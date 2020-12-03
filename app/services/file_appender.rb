@@ -51,41 +51,9 @@ class FileAppender
 
     # A use case: adding derivatives to file sets
     def file_set_append_to(resource)
-      # Update the files for the resource if they have already been appended
-      # updated_files = update_files(resource)
-      # return updated_files unless updated_files.empty?
-
-      # Append the array of file metadata values to any FileSets with new FileNodes being appended
       resource.file_metadata += file_nodes
 
       file_nodes
-    end
-
-    # Updates the files appended to a given resource
-    # @param resource [Resource]
-    # @return [Array<File>]
-    def update_files(resource)
-      updated = files.select { |file| file.is_a?(Hash) }.map do |file|
-        node = resource.file_metadata.select { |x| x.id.to_s == file.keys.first.to_s }.first
-        node.updated_at = Time.current
-        # Uses the UploadDecorator to abstract the interface for the File Object during persistence by the storage_adapter
-        file_wrapper = UploadDecorator.new(file.values.first, node.original_filename.first)
-
-        # Ensure that errors for one file are logged but do not block updates for others
-        begin
-          storage_adapter.upload(file: file_wrapper, original_filename: file_wrapper.original_filename, resource: node)
-          node.label = file.values.first.original_filename
-          node.mime_type = file.values.first.content_type
-          node
-        rescue StandardError => error
-          Valkyrie.logger.error "#{self.class}: Failed to update the file #{file_wrapper.original_filename} for #{node.id}: #{error}"
-          # Ensure that this file is not created instead of updated
-          @files.delete_if { |updated_file| updated_file.values.first.original_filename == file_wrapper.original_filename }
-          nil
-        end
-      end
-
-      updated.compact
     end
 
     # Generate a title for a FileSet based on resource class
