@@ -30,40 +30,40 @@ class FileAppender
     resource_append_to(resource)
   end
 
-  def resource_append_to(resource)
-    # Update the files for the resource if they have already been appended
-    updated_files = update_files(resource)
-    return updated_files unless updated_files.empty?
+  private
 
-    file_sets = build_file_sets(resource)
+    def resource_append_to(resource)
+      # Update the files for the resource if they have already been appended
+      # updated_files = update_files(resource)
+      # return updated_files unless updated_files.empty?
+      #
+      file_sets = build_file_sets(resource)
 
-    # If this resource can be viewed (e. g. has thumbnails), retrieve and set the resource thumbnail ID to the appropriate FileNode
-    if viewable_resource?(resource)
-      resource.member_ids += file_sets.map(&:id)
-      # Set the thumbnail id if a valid file resource is found
-      thumbnail_id = find_thumbnail_id(resource, file_sets)
-      resource.thumbnail_id = thumbnail_id if thumbnail_id
+      # If this resource can be viewed (e. g. has thumbnails), retrieve and set the resource thumbnail ID to the appropriate FileNode
+      if viewable_resource?(resource)
+        resource.member_ids += file_sets.map(&:id)
+        # Set the thumbnail id if a valid file resource is found
+        thumbnail_id = find_thumbnail_id(resource, file_sets)
+        resource.thumbnail_id = thumbnail_id if thumbnail_id
+      end
+
+      # Update the state of the pending uploads for this resource
+      adjust_pending_uploads(resource)
+
+      file_sets
     end
 
-    # Update the state of the pending uploads for this resource
-    adjust_pending_uploads(resource)
+    # A use case: adding derivatives to file sets
+    def file_set_append_to(resource)
+      # Update the files for the resource if they have already been appended
+      updated_files = update_files(resource)
+      return updated_files unless updated_files.empty?
 
-    file_sets
-  end
+      # Append the array of file metadata values to any FileSets with new FileNodes being appended
+      resource.file_metadata += file_nodes
 
-  # A use case: adding derivatives to file sets
-  def file_set_append_to(resource)
-    # Update the files for the resource if they have already been appended
-    updated_files = update_files(resource)
-    return updated_files unless updated_files.empty?
-
-    # Append the array of file metadata values to any FileSets with new FileNodes being appended
-    resource.file_metadata += file_nodes
-
-    file_nodes
-  end
-
-  private
+      file_nodes
+    end
 
     # Updates the files appended to a given resource
     # @param resource [Resource]
