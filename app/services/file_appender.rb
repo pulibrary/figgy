@@ -33,10 +33,6 @@ class FileAppender
   private
 
     def resource_append_to(resource)
-      # Update the files for the resource if they have already been appended
-      # updated_files = update_files(resource)
-      # return updated_files unless updated_files.empty?
-      #
       file_sets = build_file_sets(resource)
 
       # If this resource can be viewed (e. g. has thumbnails), retrieve and set the resource thumbnail ID to the appropriate FileNode
@@ -56,8 +52,8 @@ class FileAppender
     # A use case: adding derivatives to file sets
     def file_set_append_to(resource)
       # Update the files for the resource if they have already been appended
-      updated_files = update_files(resource)
-      return updated_files unless updated_files.empty?
+      # updated_files = update_files(resource)
+      # return updated_files unless updated_files.empty?
 
       # Append the array of file metadata values to any FileSets with new FileNodes being appended
       resource.file_metadata += file_nodes
