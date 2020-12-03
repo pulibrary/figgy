@@ -33,7 +33,12 @@ class FileAppender
   def resource_append_to(resource)
     # Update the files for the resource if they have already been appended
     updated_files = update_files(resource)
-    return updated_files unless updated_files.empty?
+
+    # rubocop:disable Style/GuardClause
+    unless updated_files.empty?
+      return updated_files
+    end
+    # rubocop:enable Style/GuardClause
 
     file_sets = build_file_sets(resource)
 
