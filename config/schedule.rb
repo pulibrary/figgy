@@ -9,7 +9,9 @@ job_type :logging_rake, "cd :path && :environment_variable=:environment bundle e
 
 every :day, at: "11:00 PM", roles: [:db] do
   logging_rake "figgy:update_bib_ids", output: "/tmp/figgy_update_bib_ids.log"
-  logging_rake "figgy:refresh:finding_aids:all", output: "/tmp/figgy_update_finding_aids.log"
+  # Disabled - it wasn't working and the requests from DPUL working to reindex
+  # from Figgy were crashing Figgy.
+  # logging_rake "figgy:refresh:finding_aids:all", output: "/tmp/figgy_update_finding_aids.log"
 end
 
 every :monday, at: "10am", roles: [:db] do
