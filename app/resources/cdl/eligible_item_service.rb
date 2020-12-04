@@ -8,6 +8,7 @@ module CDL
       def item_ids(source_metadata_identifier:)
         return [] unless RemoteRecord.bibdata?(source_metadata_identifier)
         response = Faraday.new(url: bibdata_base).get("bibliographic/#{source_metadata_identifier}/items")
+        return [] unless response.success?
         items = JSON.parse(response.body).flat_map do |_location, holdings|
           holdings.flat_map do |holding|
             holding["items"]
@@ -17,8 +18,6 @@ module CDL
           item && item["patron_group_charged"] == "CDL"
         end
         items.map { |x| x["id"] }
-      rescue JSON::ParserError
-        []
       end
 
       def bibdata_base
