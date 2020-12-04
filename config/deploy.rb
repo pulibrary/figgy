@@ -91,9 +91,9 @@ namespace :deploy do
 
   desc "Generate the crontab tasks using Whenever"
   task :whenever do
-    on roles(:db) do
+    on roles(:db) do |host|
       within release_path do
-        execute("cd #{release_path} && bundle exec whenever --update-crontab #{fetch :application} --set environment=#{fetch :rails_env, fetch(:stage, 'production')} --user deploy")
+        execute("cd #{release_path} && bundle exec whenever --update-crontab #{fetch :application} --set environment=#{fetch :rails_env, fetch(:stage, 'production')} --user=deploy --roles=#{host.roles_array.join(",")}")
       end
     end
   end
