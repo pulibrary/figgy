@@ -84,7 +84,8 @@ namespace :deploy do
   task :yarn_install do
     on roles(:web) do
       within release_path do
-        execute("cd #{release_path} && yarn install")
+        # Clean cache, otherwise branch changes in yarn don't work.
+        execute("cd #{release_path} && yarn cache clean && yarn install")
       end
     end
   end
