@@ -3832,9 +3832,9 @@ brorand@^1.0.1:
   resolved "https://registry.yarnpkg.com/brorand/-/brorand-1.1.0.tgz#12c25efe40a45e3c323eb8675a0a0ce57b22371f"
   integrity sha1-EsJe/kCkXjwyPrhnWgoM5XsiNx8=
 
-browse-everything-react@samvera-labs/browse-everything-redux-react#authorize_over_signin:
+browse-everything-react@samvera-labs/browse-everything-redux-react#authorize_over_signin_2:
   version "1.0.0"
-  resolved "https://codeload.github.com/samvera-labs/browse-everything-redux-react/tar.gz/5eea51d2542621751ac8a07606b34d837c1d6aed"
+  resolved "https://codeload.github.com/samvera-labs/browse-everything-redux-react/tar.gz/d1757222e1f38489dee0a9cd6201cdb82a378a84"
   dependencies:
     "@material-ui/core" "^4.4.2"
     "@material-ui/icons" "^4.4.3"
