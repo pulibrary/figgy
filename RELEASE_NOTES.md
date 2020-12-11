@@ -13,6 +13,13 @@ Release notes template:
 ## Removed
 
 -->
+# 2020-12-11
+
+## Added
+* Service, job, and rake task for adding items in an Ephemera Project
+to a Figgy collection, so that they may be accessed in DPUL.
+
+
 # 2020-11-24
 
 ## Added
