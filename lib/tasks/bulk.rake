@@ -325,4 +325,14 @@ namespace :bulk do
     attrs = { append_collection_ids: Valkyrie::ID.new(append_coll), skip_validation: true }
     BulkEditService.perform(collection_id: Valkyrie::ID.new(coll), attributes: attrs, metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), logger: logger)
   end
+
+  desc "Adds EphemeraFolders from an EphemeraProject to a Collection"
+  task add_ephemera_to_collection: :environment do
+    project_id = ENV["PROJECT"]
+    collection_id = ENV["COLL"]
+    abort "usage: rake bulk:ephemera_add_to_collection PROJECT=project_id COLL=collection_id" unless project_id && collection_id
+
+    AddEphemeraToCollectionJob.perform_now(project_id, collection_id)
+    logger.info "Added ephemera from #{project_id} to collection #{collection_id}"
+  end
 end
