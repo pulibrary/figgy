@@ -60,12 +60,12 @@ namespace :migrate do
   end
 
   desc "Migrates directory of Moscow Election records"
-  task gnib_directory: :environment do
+  task pudl0125: :environment do
     project = ENV["PROJECT"]
     md_root = ENV["METADATA"]
     image_root = ENV["IMAGES"]
 
-    usage = "usage: rake migrate:gnib_directory PROJECT=project_id METADATA=/path/to/mods_records IMAGES=/path/to/images"
+    usage = "usage: rake migrate:pudl0125 PROJECT=project_id METADATA=/path/to/mods_records IMAGES=/path/to/images"
     abort usage unless project && image_root && md_root && Dir.exist?(image_root) && Dir.exist?(md_root)
     logger.info "Ingesting Moscow election records from #{md_root}"
     change_set_persister = ChangeSetPersister.new(

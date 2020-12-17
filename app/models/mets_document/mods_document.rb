@@ -226,6 +226,10 @@ class METSDocument
       value_from(xpath: "mods:identifier[@type=\"localAccession\"]") + value_from(xpath: "mods:identifier[@type=\"local\"]")
     end
 
+    def record_identifier
+      value_from(xpath: "//mods:recordIdentifier").first
+    end
+
     private
 
       def find_elements(xpath, element: @element)
