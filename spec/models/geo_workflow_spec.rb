@@ -9,7 +9,7 @@ describe GeoWorkflow do
       # initial state: pending
       expect(workflow.pending?).to be true
       expect(workflow.may_finalize_digitization?).to be true
-      expect(workflow.may_make_complete?).to be false
+      expect(workflow.may_make_complete?).to be true
       expect(workflow.may_mark_for_takedown?).to be false
       expect(workflow.may_flag?).to be false
 
