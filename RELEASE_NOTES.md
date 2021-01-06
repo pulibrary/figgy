@@ -13,6 +13,12 @@ Release notes template:
 ## Removed
 
 -->
+# 2021-01-06
+
+## Changed
+* Geo resources: status can change directly from "pending" to "complete," which
+  allows bulk completion without errors
+
 # 2020-12-11
 
 ## Added
