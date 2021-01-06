@@ -13,6 +13,7 @@ class GeoWorkflow < BaseWorkflow
       transitions from: :pending, to: :final_review
     end
     event :make_complete do
+      transitions from: :pending, to: :complete
       transitions from: :final_review, to: :complete
     end
 

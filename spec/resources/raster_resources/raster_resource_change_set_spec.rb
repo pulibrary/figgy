@@ -59,7 +59,7 @@ RSpec.describe RasterResourceChangeSet do
     end
     context "when given an invalid state transition" do
       it "is invalid" do
-        change_set.validate(state: "complete")
+        change_set.validate(state: "takedown")
         expect(change_set).not_to be_valid
       end
     end
