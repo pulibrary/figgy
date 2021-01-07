@@ -451,6 +451,7 @@ RSpec.describe ManifestBuilder do
       metadata_values = metadata_object["value"]
       expect(metadata_values).to be_kind_of Array
       expect(metadata_values).to include "test value1"
+      expect(metadata_values).to include "RCPPA BL980.G7 B66 1982"
     end
 
     context "when the resource has linked vocabulary terms" do

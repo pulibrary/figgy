@@ -167,7 +167,6 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
       :created_at,
       :depositor,
       :description, # this is included in the manifest builder
-      :location,
       :pdf_type,
       :references,
       :updated_at
