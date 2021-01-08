@@ -445,12 +445,15 @@ RSpec.describe ManifestBuilder do
       expect(output).to include "metadata"
       metadata = output["metadata"]
       expect(metadata).to be_kind_of Array
-      expect(metadata.length).to eq(7)
+      expect(metadata.length).to eq(8)
 
       metadata_object = metadata.find { |h| h["label"] == "Portion Note" }
       metadata_values = metadata_object["value"]
       expect(metadata_values).to be_kind_of Array
       expect(metadata_values).to include "test value1"
+
+      location = metadata.find { |h| h["label"] == "Location" }
+      expect(location["value"]).to include "RCPPA BL980.G7 B66 1982"
     end
 
     context "when the resource has linked vocabulary terms" do
