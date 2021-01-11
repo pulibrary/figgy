@@ -12,9 +12,9 @@ class ScannedResourcesController < BaseResourceController
   end
 
   def handle_save_and_ingest(obj)
-    return unless params[:commit] == "Save and Ingest"
+    return unless params[:save_and_ingest_path].present?
     locator = IngestFolderLocator.new(id: params[:scanned_resource][:source_metadata_identifier], search_directory: ingest_folder)
-    IngestFolderJob.perform_later(directory: locator.folder_pathname.to_s, property: "id", id: obj.id.to_s)
+    IngestFolderJob.perform_later(directory: locator.root_path.join(params[:save_and_ingest_path]).to_s, property: "id", id: obj.id.to_s)
   end
 
   # View the structural metadata for a given repository resource

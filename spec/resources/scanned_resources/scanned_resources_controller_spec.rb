@@ -150,6 +150,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
             rights_statement: RightsStatements.copyright_not_evaluated.to_s,
             visibility: "restricted"
           },
+          save_and_ingest_path: "Santa/ready/123456",
           commit: "Save and Ingest"
         }
 
@@ -170,6 +171,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
             rights_statement: RightsStatements.copyright_not_evaluated.to_s,
             visibility: "restricted"
           },
+          save_and_ingest_path: "Santa/ready/4609321",
           commit: "Save and Ingest"
         }
 
@@ -192,6 +194,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
               rights_statement: RightsStatements.copyright_not_evaluated.to_s,
               visibility: "restricted"
             },
+            save_and_ingest_path: "Santa/ready/1791261",
             commit: "Save and Ingest"
           }
 
