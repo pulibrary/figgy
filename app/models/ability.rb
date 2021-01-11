@@ -30,6 +30,7 @@ class Ability
     can [:destroy], curation_concerns do |obj|
       obj.depositor == [current_user.uid]
     end
+    cannot [:create, :destroy], Role
   end
 
   def anonymous_permissions

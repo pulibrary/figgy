@@ -314,6 +314,8 @@ describe Ability do
       is_expected.to be_able_to(:read, :graphql)
       is_expected.to be_able_to(:download, no_public_download_open_file)
       is_expected.to be_able_to(:download, token_downloadable_audio_file)
+      is_expected.not_to be_able_to(:create, Role.new)
+      is_expected.not_to be_able_to(:destroy, role)
     }
 
     context "when read-only mode is on" do
