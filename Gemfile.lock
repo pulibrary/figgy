@@ -687,7 +687,7 @@ GEM
       rdf (~> 3.0, >= 3.0.11)
     recipient_interceptor (0.1.2)
       mail
-    redcarpet (3.4.0)
+    redcarpet (3.5.1)
     redis (3.3.3)
     redis-namespace (1.5.3)
       redis (~> 3.0, >= 3.0.4)
