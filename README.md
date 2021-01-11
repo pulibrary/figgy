@@ -81,15 +81,12 @@ projects you're using Solr/Postgres for, and you can easily clean up with `lando
 destroy` or turn off all services with `lando poweroff`.
 
 1. Install Lando DMG from [[https://github.com/lando/lando/releases]]
-1. `lando start`
+1. `rake figgy:server:start`
 
 1. For test:
-   - `RAILS_ENV=test rake db:setup`
    - In a separate terminal: `bundle exec rspec`
    - Run jest tests: `yarn test`
 1. For development:
-   - ``export SECRET_KEY_BASE=`rake secret` ``
-   - `rake db:setup`
    - In a separate terminal: `foreman start`
      - Or run services separately as shown in [[https://github.com/pulibrary/figgy/blob/master/Procfile]]
    - Access Figgy at http://localhost:3000/

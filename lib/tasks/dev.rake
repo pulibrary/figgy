@@ -3,6 +3,21 @@ if Rails.env.development? || Rails.env.test?
   require "factory_bot"
 
   namespace :figgy do
+    namespace :server do
+      desc "Start solr and postgres servers using lando."
+      task :start do
+        system("lando start")
+        system("rake db:create")
+        system("rake db:migrate")
+        system("rake db:migrate RAILS_ENV=test")
+      end
+
+      desc "Stop lando solr and postgres servers."
+      task :stop do
+        system("lando stop")
+      end
+    end
+
     desc "Start solr server for testing."
     task :test do
       shared_solr_opts = { managed: true, verbose: true, persist: false, download_dir: "tmp" }
