@@ -91,23 +91,6 @@ destroy` or turn off all services with `lando poweroff`.
      - Or run services separately as shown in [[https://github.com/pulibrary/figgy/blob/master/Procfile]]
    - Access Figgy at http://localhost:3000/
 
-### Manual Local Setup (Deprecated)
-
-The following steps will not work if you have Lando installed on your machine.
-
-1. For test:
-   - `RAILS_ENV=test rake db:setup`
-   - `rake figgy:test`
-   - In a separate terminal: `bundle exec rspec`
-   - Run jest tests: `yarn test`
-2. For development:
-   - ``export SECRET_KEY_BASE=`rake secret` ``
-   - `rake db:setup`
-   - `rake figgy:development`
-   - In a separate terminal: `foreman start`
-     - Or run services separately as shown in [[https://github.com/pulibrary/figgy/blob/master/Procfile]]
-   - Access Figgy at http://localhost:3000/
-
 ## Load sample development data
 
 1. Log in to your development instance using your princeton credentials; this creates your user in figgy's db.

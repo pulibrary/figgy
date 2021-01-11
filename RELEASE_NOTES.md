@@ -15,6 +15,12 @@ Release notes template:
 -->
 # 2021-01-11
 
+## Changed
+* Added rake tasks for starting and stopping Lando in development
+* Removed solr_wrapper dependency
+
+# 2021-01-11
+
 ## Fixed
 * Geo coverages with small floating point values will now generate valid GeoBlacklight bounding boxes
 

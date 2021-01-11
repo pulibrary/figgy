@@ -31,6 +31,7 @@ gem "rack-cors", require: "rack/cors"
 gem "rails", "~> 5.2.4"
 gem "recipient_interceptor"
 gem "redis-namespace"
+gem "ruby-progressbar"
 gem "ruby_tika_app", github: "pulibrary/ruby_tika_app"
 gem "rubyzip", ">= 1.2.2"
 gem "sass-rails", "~> 5.0"
@@ -65,7 +66,6 @@ group :development, :test do
   gem "pry-rails"
   gem "rails-controller-testing"
   gem "rspec-rails", "~> 3.5"
-  gem "solr_wrapper", ">= 0.3"
 end
 
 group :test do
