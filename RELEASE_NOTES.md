@@ -13,6 +13,11 @@ Release notes template:
 ## Removed
 
 -->
+# 2021-01-11
+
+## Fixed
+* Geo coverages with small floating point values will now generate valid GeoBlacklight bounding boxes
+
 # 2021-01-06
 
 ## Changed
