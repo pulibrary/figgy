@@ -25,7 +25,7 @@ class Ability
     can [:destroy], Template
     can [:destroy], OcrRequest
     can [:destroy], FileSet do |obj|
-      obj.depositor == [current_user.uid]
+      obj.depositor == [current_user.uid] || (obj.persisted? && Wayfinder.for(obj).try(:parent)&.depositor == [current_user.uid])
     end
     can [:destroy], curation_concerns do |obj|
       obj.depositor == [current_user.uid]
