@@ -25,5 +25,3 @@ if defined? RuboCop
 end
 
 task default: "bundler:audit"
-
-require "solr_wrapper/rake_task" unless Rails.env.production? || Rails.env.staging?

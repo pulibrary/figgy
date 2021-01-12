@@ -834,11 +834,6 @@ GEM
       thor (~> 0.19, >= 0.19.4)
       tilt (~> 2.0)
       yard (~> 0.9)
-    solr_wrapper (1.1.0)
-      faraday
-      retriable
-      ruby-progressbar
-      rubyzip
     solrizer (4.1.0)
       activesupport
       nokogiri
@@ -1042,6 +1037,7 @@ DEPENDENCIES
   rspec-rails (~> 3.5)
   rspec_junit_formatter
   ruby-prof
+  ruby-progressbar
   ruby-vips
   ruby_tika_app!
   rubyzip (>= 1.2.2)
@@ -1051,7 +1047,6 @@ DEPENDENCIES
   simple_form
   simplecov
   solargraph
-  solr_wrapper (>= 0.3)
   spring
   spring-commands-rspec
   sprockets (>= 3.7.2)
