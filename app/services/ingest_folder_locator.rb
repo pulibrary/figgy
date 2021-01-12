@@ -75,7 +75,9 @@ class IngestFolderLocator
     # Construct or retrieve the memoized file system path for the directory whose name matches the ID
     # @return [String]
     def folder_location
-      @folder_location ||= Dir.glob(root_path.join("**/#{id}")).first
+      @folder_location ||= Find.find(root_path).find do |path|
+        FileTest.directory?(path) && path.end_with?(id.to_s)
+      end
     end
 
     # Default sub-directory to search if not specified
