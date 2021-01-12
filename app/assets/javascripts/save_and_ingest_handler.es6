@@ -3,6 +3,7 @@ export default class SaveAndIngestHandler {
     this.button_element = $(this.buttonSelector)
     this.field_element = $(this.fieldElementSelector)
     this.info_element = $(this.infoElementSelector)
+    this.save_and_ingest_field_element = $(this.saveAndIngestField)
     this.resetButton()
     this.current_promise = null
     this.field_element.change((e) => {
@@ -21,6 +22,7 @@ export default class SaveAndIngestHandler {
           if (data.exists === true) {
             this.resetButton()
             this.button_element.prop('disabled', false)
+            this.save_and_ingest_field_element.val(data.location)
             if (data.file_count != 0) { this.info_element.text(`Ingest ${data.file_count} files from ${data.location}`) } else { this.info_element.text(`Ingest ${data.volume_count} volumes from ${data.location}`) }
           } else {
             this.resetButton()
@@ -30,6 +32,7 @@ export default class SaveAndIngestHandler {
   }
 
   resetButton () {
+    this.save_and_ingest_field_element.val(null)
     this.button_element.attr('disabled', true)
     this.button_element.val('Save and Ingest')
     this.info_element.text('')
@@ -41,6 +44,10 @@ export default class SaveAndIngestHandler {
 
   get fieldElementSelector () {
     return "*[data-field='source_metadata_identifier_ssim']"
+  }
+
+  get saveAndIngestField () {
+    return "*[name='save_and_ingest_path']"
   }
 
   get infoElementSelector () {
