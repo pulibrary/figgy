@@ -23,13 +23,22 @@ class GeoCoverage
   def initialize(n, e, s, w)
     raise InvalidGeometryError, "n=#{n} < s=#{s}" if n.to_f < s.to_f
     raise InvalidGeometryError, "e=#{e} < w=#{w}" if e.to_f < w.to_f
-    @n = n
-    @e = e
-    @s = s
-    @w = w
+    @n = format_coordinate(n)
+    @e = format_coordinate(e)
+    @s = format_coordinate(s)
+    @w = format_coordinate(w)
   end
 
   def to_s
     "northlimit=#{n}; eastlimit=#{e}; southlimit=#{s}; westlimit=#{w}; units=degrees; projection=EPSG:4326"
   end
+
+  private
+
+    def format_coordinate(c)
+      # Convert floating point value into string
+      # Convert float with exponential notation into standard notation
+      # Trim trailing zeros
+      format("%f", c).gsub(/\.?0+$/, "")
+    end
 end
