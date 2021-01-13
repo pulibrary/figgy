@@ -58,8 +58,6 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   # TODO: Rename to decorated_ephemera_box
   def ephemera_box
     wayfinder.decorated_ephemera_box
-  rescue ArgumentError # Necessary because ability_spec.rb doesn't always save objects. TODO: Fix.
-    nil
   end
 
   def ephemera_project

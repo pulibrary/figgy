@@ -69,43 +69,43 @@ describe Ability do
   end
 
   let(:campus_only_scanned_resource) do
-    FactoryBot.create(:complete_campus_only_scanned_resource, title: "Campus Only", user: creating_user)
+    FactoryBot.create_for_repository(:complete_campus_only_scanned_resource, title: "Campus Only", user: creating_user)
   end
 
   let(:reading_room_scanned_resource) do
-    FactoryBot.create(:reading_room_scanned_resource, title: "Reading Room", user: creating_user)
+    FactoryBot.create_for_repository(:reading_room_scanned_resource, title: "Reading Room", user: creating_user)
   end
 
   let(:campus_ip_scanned_resource) do
-    FactoryBot.create(:campus_ip_scanned_resource, title: "On Campus", user: creating_user)
+    FactoryBot.create_for_repository(:campus_ip_scanned_resource, title: "On Campus", user: creating_user)
   end
 
   let(:pending_scanned_resource) do
-    FactoryBot.create(:pending_scanned_resource, title: "Pending", user: creating_user)
+    FactoryBot.create_for_repository(:pending_scanned_resource, title: "Pending", user: creating_user)
   end
 
   let(:metadata_review_scanned_resource) do
-    FactoryBot.create(:metadata_review_scanned_resource, user: creating_user)
+    FactoryBot.create_for_repository(:metadata_review_scanned_resource, user: creating_user)
   end
 
   let(:final_review_scanned_resource) do
-    FactoryBot.create(:final_review_scanned_resource, user: creating_user)
+    FactoryBot.create_for_repository(:final_review_scanned_resource, user: creating_user)
   end
 
   let(:complete_scanned_resource) do
-    FactoryBot.create(:complete_scanned_resource, user: other_staff_user, identifier: ["ark:/99999/fk4445wg45"])
+    FactoryBot.create_for_repository(:complete_scanned_resource, user: other_staff_user, identifier: ["ark:/99999/fk4445wg45"])
   end
 
   let(:takedown_scanned_resource) do
-    FactoryBot.create(:takedown_scanned_resource, user: other_staff_user, identifier: ["ark:/99999/fk4445wg45"])
+    FactoryBot.create_for_repository(:takedown_scanned_resource, user: other_staff_user, identifier: ["ark:/99999/fk4445wg45"])
   end
 
   let(:flagged_scanned_resource) do
-    FactoryBot.create(:flagged_scanned_resource, user: other_staff_user, identifier: ["ark:/99999/fk4445wg45"])
+    FactoryBot.create_for_repository(:flagged_scanned_resource, user: other_staff_user, identifier: ["ark:/99999/fk4445wg45"])
   end
 
   let(:staff_scanned_resource) do
-    FactoryBot.create(:complete_scanned_resource, user: staff_user, identifier: ["ark:/99999/fk4445wg45"])
+    FactoryBot.create_for_repository(:complete_scanned_resource, user: staff_user, identifier: ["ark:/99999/fk4445wg45"], files: [file])
   end
 
   let(:complete_playlist) do
@@ -123,7 +123,7 @@ describe Ability do
     FactoryBot.create_for_repository(:complete_scanned_resource, user: other_staff_user, identifier: ["ark:/99999/fk4445wg45"], files: [file])
   end
 
-  let(:staff_file) { FactoryBot.build(:file_set, user: staff_user) }
+  let(:staff_file) { staff_scanned_resource.decorate.members.first }
   let(:other_staff_file) { other_staff_scanned_resource.decorate.members.first }
   let(:admin_file) { FactoryBot.build(:file_set, user: admin_user) }
 
@@ -552,7 +552,7 @@ describe Ability do
     end
 
     context "with a campus only vector resource" do
-      let(:campus_only_vector_resource) { FactoryBot.create(:complete_campus_only_vector_resource, user: creating_user) }
+      let(:campus_only_vector_resource) { FactoryBot.create_for_repository(:complete_campus_only_vector_resource, user: creating_user) }
       let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
       let(:storage_adapter) { Valkyrie.config.storage_adapter }
       let(:persister) { adapter.persister }
@@ -621,10 +621,10 @@ describe Ability do
     let(:no_pdf_scanned_resource) do
       FactoryBot.build(:open_scanned_resource, user: creating_user, state: "complete", pdf_type: [])
     end
-    let(:ephemera_folder) { FactoryBot.create(:ephemera_folder, user: current_user) }
-    let(:open_vector_resource) { FactoryBot.create(:complete_open_vector_resource, user: creating_user) }
-    let(:private_vector_resource) { FactoryBot.create(:complete_private_vector_resource, user: creating_user) }
-    let(:monogram) { FactoryBot.create(:numismatic_monogram) }
+    let(:ephemera_folder) { FactoryBot.create_for_repository(:ephemera_folder, user: current_user) }
+    let(:open_vector_resource) { FactoryBot.create_for_repository(:complete_open_vector_resource, user: creating_user) }
+    let(:private_vector_resource) { FactoryBot.create_for_repository(:complete_private_vector_resource, user: creating_user) }
+    let(:monogram) { FactoryBot.create_for_repository(:numismatic_monogram) }
     let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
     let(:storage_adapter) { Valkyrie.config.storage_adapter }
     let(:persister) { adapter.persister }
@@ -827,7 +827,7 @@ describe Ability do
     subject(:ability) { described_class.new(nil, auth_token: token) }
 
     let(:creating_user) { admin_user }
-    let(:private_vector_resource) { FactoryBot.create(:complete_private_vector_resource, user: creating_user) }
+    let(:private_vector_resource) { FactoryBot.create_for_repository(:complete_private_vector_resource, user: creating_user) }
     let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
     let(:storage_adapter) { Valkyrie.config.storage_adapter }
     let(:file) { fixture_file_upload("files/vector/geo.json", "application/vnd.geo+json") }
