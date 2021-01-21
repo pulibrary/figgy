@@ -45,6 +45,7 @@ class FolderData
   def attributes
     {
       member_ids: Array(fields[:member_ids]),
+      barcode: barcode,
       folder_number: Set.new(Array(fields[:folder_number])),
       local_identifier: fields[:local_identifier],
       title: Array(fields[:title] || "untitled"),
@@ -91,6 +92,10 @@ class FolderData
         copyable: true
       )
     end
+  end
+
+  def barcode
+    fields[:barcode] || "0000000000"
   end
 
   def date_created
