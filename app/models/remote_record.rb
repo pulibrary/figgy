@@ -18,13 +18,13 @@ class RemoteRecord
 
   def self.pulfa?(source_metadata_identifier)
     return false if source_metadata_identifier.match?(/\//)
-    source_metadata_identifier.match?(/^([A-Z][a-zA-Z0-9\.-]+)(_[a-z0-9]+)?/)
+    source_metadata_identifier.match?(/^(aspace_)?([A-Z][a-zA-Z0-9\.-]+)(_[a-z0-9]+)?/)
   end
 
   def self.pulfa_collection(source_metadata_identifier)
     return if source_metadata_identifier.match?(/\//)
-    m = source_metadata_identifier.match(/^([A-Z][a-zA-Z0-9.-]+)([_][a-z0-9]+)?/)
-    m[1] if m
+    m = source_metadata_identifier.match(/^(aspace_)?(?<code>[A-Z][a-zA-Z0-9.-]+)([_][a-z0-9]+)?/)
+    m[:code] if m
   end
 
   def self.pulfa_component(source_metadata_identifier)

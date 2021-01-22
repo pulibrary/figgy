@@ -276,6 +276,21 @@ RSpec.describe ChangeSetPersister do
     end
   end
 
+  context "when a source_metadata_identifier is set and it's from aspace pulfalight" do
+    it "applies remote metadata from aspace Pulfalight" do
+      stub_aspace(pulfa_id: "aspace_MC001-01_c000001")
+      resource = FactoryBot.build(:scanned_resource, title: [])
+      change_set = change_set_class.new(resource)
+      change_set.validate(source_metadata_identifier: "aspace_MC001-01_c000001")
+      output = change_set_persister.save(change_set: change_set)
+
+      expect(output.primary_imported_metadata.title).to eq ["Series 1: Reel Contents - American Civil Liberties Union Microfilm"]
+      expect(output.primary_imported_metadata.source_metadata).not_to be_blank
+      # populates an archival_collection_code field
+      expect(output.archival_collection_code).to eq "MC001-01"
+    end
+  end
+
   context "when a source_metadata_identifier is set for a collection from PULFA" do
     let(:blade) { "C0652" }
     let(:change_set_class) { ArchivalMediaCollectionChangeSet }

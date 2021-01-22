@@ -69,6 +69,30 @@ module BibdataStubbing
           'Content-Type' => "application/json+ld"
         }
       )
+    # If we're stubbing pulfa, it's not in aspace, so return 404 from there.
+    stub_request(:get, "#{aspace_domain}/catalog/#{pulfa_id.tr("/", "_")}.json")
+      .to_return(
+        status: 404,
+        headers: {
+          "Content-Type" => "application/json"
+        },
+        body: { status: 404, error: "Not Found" }.to_json
+      )
+  end
+
+  def stub_aspace(pulfa_id:, body: nil)
+    stub_request(:get, "#{aspace_domain}/catalog/#{pulfa_id}.json")
+      .to_return(
+        status: 200,
+        headers: {
+          "Content-Type" => "application/json"
+        },
+        body: body || file_fixture("pulfa/aspace/#{pulfa_id}.json").read
+      )
+  end
+
+  def aspace_domain
+    "https://findingaids-beta.princeton.edu"
   end
 
   def stub_bibdata_context
