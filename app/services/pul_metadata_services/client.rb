@@ -10,12 +10,21 @@ module PulMetadataServices
         if bibdata?(id)
           src = retrieve_from_bibdata(id)
           record = PulMetadataServices::BibRecord.new(src)
+        elsif (src = retrieve_from_aspace_pulfa(id))
+          record = PulMetadataServices::AspacePulfaRecord.new(src)
         else
           src = retrieve_from_pulfa(id)
           full_src = full_source_from_pulfa(id)
           record = PulMetadataServices::PulfaRecord.new(src, model, full_src)
         end
         record
+      end
+
+      def retrieve_from_aspace_pulfa(id)
+        conn = Faraday.new(url: "https://findingaids-beta.princeton.edu/catalog/")
+        response = conn.get("#{id}.json")
+        return nil if response.status != 200
+        response.body.dup.force_encoding("UTF-8")
       end
 
       # Determines whether or not a remote metadata identifier is an identifier for Voyager records

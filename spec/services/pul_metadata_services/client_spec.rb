@@ -8,6 +8,7 @@ describe PulMetadataServices::Client do
     stub_bibdata(bib_id: "4609321", content_type: content_type_marc_xml)
     stub_pulfa(pulfa_id: "AC044_c0003")
     stub_pulfa(pulfa_id: "RBD1_c13076")
+    stub_aspace(pulfa_id: "aspace_MC001-01_c000001")
   end
 
   describe ".retrieve" do
@@ -28,6 +29,13 @@ describe PulMetadataServices::Client do
         output = described_class.retrieve("AC044_c0003")
         expect(output.source).to eq source
         expect(output.full_source).to eq full_source
+      end
+      it "makes requests to aspace first" do
+        output = described_class.retrieve("aspace_MC001-01_c000001")
+        attributes = output.attributes
+        expect(attributes[:title]).to eq ["Series 1: Reel Contents - American Civil Liberties Union Microfilm"]
+        expect(attributes[:extent]).to eq ["12 boxes", "44 items", "5 Reels", "1881 Volumes"]
+        expect(attributes[:date_created]).to eq ["1912-1950"]
       end
     end
     context "with a Pulfa-like id, when the metadata contains non-ASCII characters" do
