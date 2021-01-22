@@ -335,4 +335,24 @@ namespace :bulk do
     AddEphemeraToCollectionJob.perform_now(project_id, collection_id)
     logger.info "Added ephemera from #{project_id} to collection #{collection_id}"
   end
+
+  desc "adds blank barcode to everything"
+  task add_barcodes: :environment do
+    project_id = ENV["PROJECTID"]
+    abort "usage rake bulk:add_barcodes PROJECTID=projectid" unless project_id
+
+    change_set_persister = ChangeSetPersister.new(
+      metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
+      storage_adapter: Valkyrie::StorageAdapter.find(:disk_via_copy)
+    )
+    qs = Valkyrie.config.metadata_adapter.query_service
+    project = qs.find_by(id: project_id)
+    abort "no project found" unless project
+    Wayfinder.for(project).members.each do |folder|
+      logger.info "processing #{folder.id}"
+      cs = BoxlessEphemeraFolderChangeSet.new(folder)
+      cs.validate(barcode: "0000000000")
+      change_set_persister.save(change_set: cs)
+    end
+  end
 end
