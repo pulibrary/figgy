@@ -66,5 +66,8 @@ FactoryBot.define do
     factory :complete_ephemera_folder do
       state "complete"
     end
+    factory :non_validating_ephemera_folder do
+      barcode nil
+    end
   end
 end

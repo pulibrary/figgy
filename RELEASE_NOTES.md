@@ -13,6 +13,11 @@ Release notes template:
 ## Removed
 
 -->
+# 2021-01-27
+
+## Changed
+* Improved CSV-based SIP processing
+
 # 2021-01-11
 
 ## Changed

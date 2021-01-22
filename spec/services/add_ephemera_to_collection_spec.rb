@@ -61,4 +61,30 @@ describe AddEphemeraToCollection do
       expect(collection.decorate.members.first.id).to eq(folder.id)
     end
   end
+
+  context "when folder isn't complete" do
+    subject(:service) do
+      described_class.new(project_id: project.id,
+                          collection_id: collection.id,
+                          change_set_persister: change_set_persister,
+                          logger: logger)
+    end
+    let(:project) do
+      FactoryBot.create_for_repository(:ephemera_project,
+                                       member_ids: folder.id)
+    end
+    let(:collection) { FactoryBot.create_for_repository(:collection) }
+    let(:folder) { FactoryBot.create_for_repository(:non_validating_ephemera_folder) }
+    let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: db, storage_adapter: files) }
+    let(:db) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+    let(:files) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
+    let(:logger) { Logger.new(nil) }
+
+    it "cannot add incomplete folder to collection" do
+      expect(collection.decorate.members.count).to eq(0)
+      expect(logger).to have_received(:error)
+      service.add_ephemera
+      expect(collection.decorate.members.count).to eq(0)
+    end
+  end
 end
