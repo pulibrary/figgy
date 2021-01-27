@@ -21,11 +21,8 @@ class AddEphemeraToCollection
     collection = query_service.find_by(id: collection_id)
     col_ids = folder.member_of_collection_ids + [collection.id]
     change_set = ChangeSet.for(folder)
-    if change_set.validate(member_of_collection_ids: col_ids)
-      change_set_persister.save(change_set: change_set)
-    else
-      logger.error("could not validate collection ids: #{col_ids}")
-    end
+    change_set.validate(member_of_collection_ids: col_ids)
+    change_set_persister.save(change_set: change_set)
   end
 
   def add_ephemera
