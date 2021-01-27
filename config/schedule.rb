@@ -18,9 +18,10 @@ every :monday, at: "10am", roles: [:db] do
   rake "figgy:send_collection_reports"
 end
 
-every :monday, at: "7am", roles: [:production_db] do
-  rake "export:pulfa"
-end
+# We've disabled DAO synchronization until Pulfalight can handle this.
+# every :monday, at: "7am", roles: [:production_db] do
+#   rake "export:pulfa"
+# end
 
 every :day, at: "9:00 PM", roles: [:db] do
   rake "fixity:request_daily_cloud_fixity"
