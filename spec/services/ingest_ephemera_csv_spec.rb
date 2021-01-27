@@ -84,11 +84,12 @@ describe IngestEphemeraCSV do
     end
 
     it "attaches metadata to the folders" do
-      expect(folder.creator).to eq ["foobar"]
+      expect(folder.creator).to eq ["John Doe"]
       expect(folder.date_created).to eq ["2013"]
       expect(folder.language.count).to eq(1)
       expect(folder.barcode.first).to eq("10000000")
-      expect(folder2.barcode.first).to eq("0000000000")
+      expect(folder2.barcode.first).to eq("00000000")
+      expect(folder2.page_count.first).to eq("20")
     end
   end
 
@@ -96,8 +97,8 @@ describe IngestEphemeraCSV do
     subject(:folder) { described_class.new(base_path: imgdir, change_set_persister: change_set_persister, **fields) }
     let(:fields) { table.first.to_h }
     let(:table) { CSV.read(mdata, headers: true, header_converters: :symbol) }
-    let(:mdata) { Rails.root.join("spec", "fixtures", "files", "sae_ephemera.csv") }
-    let(:imgdir) { Rails.root.join("spec", "fixtures", "ephemera", "sae") }
+    let(:mdata) { Rails.root.join("spec", "fixtures", "files", "pudl0125.csv") }
+    let(:imgdir) { Rails.root.join("spec", "fixtures", "ephemera", "pudl0125") }
     let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: db, storage_adapter: files) }
     let(:db) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
     let(:files) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
@@ -105,29 +106,34 @@ describe IngestEphemeraCSV do
 
     describe "#fields" do
       it "has fields" do
-        expect(folder.fields[:folder_number]).to eq("1")
-        expect(folder.fields[:date_created]).to eq("Circa 1986")
-        expect(folder.fields[:subject]).to eq("Politics and government--Constitutions/Politics and government--Politics and government/Politics and government--Decentralization in government/Human and civil rights--Human rights advocacy/Human and civil rights--Civil Rights")
+        expect(folder.fields[:folder_number]).to eq("001")
+        expect(folder.fields[:date_created]).to eq("2013")
+        expect(folder.fields[:subject]).to eq("Mayors--Elections;Political campaigns--History;Elections--History")
       end
     end
     # rubocop:enable Metrics/LineLength
 
-    describe "#keywords" do
-      it "has keywords" do
-        expect(folder.keywords).to include("Movement of Inter Racial Justice and Equality")
+    describe "#geographic_origin" do
+      it "has a geographic origin" do
+        expect(folder.geographic_origin).to be_a EphemeraTerm
       end
     end
 
-    describe "#geographic_origin" do
-      it "has a geographic origin" do
-        expect(folder.geographic_origin).to be_a Valkyrie::ID
+    describe "#page_count" do
+      it "defaults to the number of images" do
+        expect(folder.page_count.first).to eq("1")
       end
     end
 
     describe "#subject" do
       it "has subjects" do
-        expect(folder.subject.count).to eq(5)
-        expect(qs.find_by(id: folder.geo_subject.first.id)).to be_an EphemeraTerm
+        expect(folder.subject.count).to eq(3)
+      end
+    end
+
+    describe "#geographic_subject" do
+      it "has a geographic_subjects" do
+        expect(folder.geographic_subject.count).to eq(1)
       end
     end
 
@@ -135,17 +141,15 @@ describe IngestEphemeraCSV do
       it "has a genre" do
         term = qs.find_by(id: folder.genre)
         expect(term).to be_an EphemeraTerm
-        expect(term.label.first).to eq("pamphlet")
+        expect(term.label.first).to eq("Ephemera")
       end
     end
 
     describe "#files" do
       it "has an image path" do
-        expect(folder.image_path).to eq(File.join(imgdir, "pamphlet0001"))
+        expect(folder.image_path).to eq(File.join(imgdir, "001"))
         originals = folder.files.collect(&:original_filename)
-        expect(originals).to include("00000001.TIF")
-        expect(originals).to include("00000003.jpg")
-        expect(originals).to include("00000004.png")
+        expect(originals).to include("example.tif")
       end
     end
   end

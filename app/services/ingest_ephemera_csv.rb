@@ -56,7 +56,7 @@ class FolderData
       genre: genre,
       width: Set.new(Array(fields[:width])),
       height: Set.new(Array(fields[:height])),
-      page_count: Set.new(Array(fields[:page_count])),
+      page_count: page_count,
       rights_statement: RightsStatements.copyright_not_evaluated.to_s,
       rights_note: Set.new(Array(fields[:rights_note])),
       series: Set.new(Array(fields[:series])),
@@ -65,7 +65,7 @@ class FolderData
       publisher: publishers,
       geographic_origin: geographic_origin,
       subject: subject,
-      geo_subject: geo_subject,
+      geographic_subject: geographic_subject,
       description: fields[:description],
       date_created: date_created,
       provenance: Set.new(Array(fields[:provenance])),
@@ -80,7 +80,7 @@ class FolderData
   # rubocop:enable Metrics/MethodLength
 
   def files
-    @files || Dir.glob("#{image_path}/*.{TIF,TIFF,tif,tiff,jpg,jpeg,png}").sort.map do |file|
+    @files || Dir.glob("#{image_path}/*.{tif,tiff,jpg,jpeg,png}", File::FNM_CASEFOLD).sort.map do |file|
       IngestableFile.new(
         file_path: file,
         mime_type: case File.extname(file)
@@ -98,6 +98,14 @@ class FolderData
     fields[:barcode] || "0000000000"
   end
 
+  def page_count
+    if fields[:page_count]
+      Array(fields[:page_count])
+    else
+      Array(Array(files).count.to_s)
+    end
+  end
+
   def date_created
     return if fields["date_created"] == "Unknown"
     fields[:date_created]
@@ -110,7 +118,7 @@ class FolderData
 
   def geographic_origin
     return unless fields[:geographic_origin].present?
-    @geographic_origin ||= vocab_service.find_term(label: fields[:geographic_origin])
+    @geographic_origin ||= vocab_service.find_term(label: Array(fields[:geographic_origin]).first, vocab: "LAE Geographic Areas")
   end
 
   def keywords
@@ -120,16 +128,16 @@ class FolderData
 
   def subject
     return unless fields[:subject].present?
-    subjects = fields[:subject].split("/").map { |s| s.split("--") }.map { |c, s| { "category" => c, "topic" => s } }
+    subjects = fields[:subject].split(";").map { |s| s.split("--") }.map { |c, s| { "category" => c, "topic" => s } }
     subjects.uniq.map do |sub|
       subject = vocab_service.find_subject_by(category: sub["category"], topic: sub["topic"])
       subject&.id
     end
   end
 
-  def geo_subject
-    return unless fields[:geo_subject].present?
-    Array(vocab_service.find_term(label: Array(fields[:geo_subject]).first, vocab: "LAE Geographic Areas"))
+  def geographic_subject
+    return unless fields[:geographic_subject].present?
+    Array(vocab_service.find_term(label: Array(fields[:geographic_subject]).first, vocab: "LAE Geographic Areas"))
   end
 
   def publishers
