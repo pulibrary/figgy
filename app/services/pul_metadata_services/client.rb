@@ -22,7 +22,7 @@ module PulMetadataServices
 
       def retrieve_from_aspace_pulfa(id)
         conn = Faraday.new(url: "https://findingaids-beta.princeton.edu/catalog/")
-        response = conn.get("#{id}.json")
+        response = conn.get("#{id.tr('.', '-')}.json")
         return nil if response.status != 200
         response.body.dup.force_encoding("UTF-8")
       end
