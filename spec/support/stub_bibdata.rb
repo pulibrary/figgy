@@ -3,8 +3,8 @@ module BibdataStubbing
   BIBDATA_SCHEME = "https"
   BIBDATA_HOST = "bibdata.princeton.edu"
   BIBDATA_PATH = "/bibliographic"
-  CONTENT_TYPE_JSON_LD = Mime::Type.lookup_by_extension('jsonld')
-  CONTENT_TYPE_XML = Mime::Type.lookup_by_extension('xml')
+  CONTENT_TYPE_JSON_LD = Mime::Type.lookup_by_extension("jsonld")
+  CONTENT_TYPE_XML = Mime::Type.lookup_by_extension("xml")
   CONTENT_TYPE_MARC_XML = "application/marcxml+xml"
 
   def bibdata_url(bib_id, content_type = CONTENT_TYPE_JSON_LD)
@@ -42,7 +42,7 @@ module BibdataStubbing
         .to_return(
           body: file_fixture(fixture_path).read,
           headers: {
-            'Content-Type' => content_type
+            "Content-Type" => content_type
           }
         )
     else
@@ -54,23 +54,23 @@ module BibdataStubbing
   end
 
   def stub_pulfa(pulfa_id:, body: nil)
-    pulfa_id = pulfa_id.gsub("_", "/")
+    pulfa_id = pulfa_id.tr("_", "/")
     stub_request(:get, "https://findingaids.princeton.edu/collections/#{pulfa_id}.xml?scope=record")
       .to_return(
         body: body || file_fixture("pulfa/#{pulfa_id}.xml").read,
         headers: {
-          'Content-Type' => "application/json+ld"
+          "Content-Type" => "application/json+ld"
         }
       )
     stub_request(:get, "https://findingaids.princeton.edu/collections/#{pulfa_id}.xml")
       .to_return(
         body: body || file_fixture("pulfa/#{pulfa_id}_full.xml").read,
         headers: {
-          'Content-Type' => "application/json+ld"
+          "Content-Type" => "application/json+ld"
         }
       )
     # If we're stubbing pulfa, it's not in aspace, so return 404 from there.
-    stub_request(:get, "#{aspace_domain}/catalog/#{pulfa_id.tr("/", "_")}.json")
+    stub_request(:get, "#{aspace_domain}/catalog/#{pulfa_id.tr('/', '_')}.json")
       .to_return(
         status: 404,
         headers: {
@@ -81,7 +81,7 @@ module BibdataStubbing
   end
 
   def stub_aspace(pulfa_id:, body: nil)
-    stub_request(:get, "#{aspace_domain}/catalog/#{pulfa_id}.json")
+    stub_request(:get, "#{aspace_domain}/catalog/#{pulfa_id.tr('.', '-')}.json")
       .to_return(
         status: 200,
         headers: {
@@ -100,7 +100,7 @@ module BibdataStubbing
       .to_return(
         body: file_fixture("bibdata/context.json").read,
         headers: {
-          'Content-Type' => "application/json"
+          "Content-Type" => "application/json"
         }
       )
   end
