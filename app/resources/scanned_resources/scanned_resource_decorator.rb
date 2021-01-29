@@ -164,7 +164,16 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
     return if output.blank?
     # we know these will always be iso8601 so if there's a slash it's a range
     return output.map { |entry| display_date_range(entry) } if output.to_s.include? "/"
-    output.map { |value| Date.parse(value.to_s).strftime("%B %-d, %Y") }
+    output.map do |date|
+      date_string(date)
+    end
+  end
+
+  def date_string(date)
+    Date.parse(date.to_s).strftime("%B %-d, %Y")
+  rescue ArgumentError
+    # When the date's not ISO8601, just display it as-is.
+    date
   end
 
   def rendered_date_range

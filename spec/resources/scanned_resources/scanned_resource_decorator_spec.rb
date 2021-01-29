@@ -31,6 +31,12 @@ RSpec.describe ScannedResourceDecorator do
         expect(decorator.imported_created).to eq ["1941-1985"]
       end
     end
+    context "with just a year" do
+      let(:imported_metadata) { [{ created: "1970" }] }
+      it "exposes the year" do
+        expect(decorator.imported_created).to eq ["1970"]
+      end
+    end
   end
 
   describe "#human_readable_type" do
