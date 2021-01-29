@@ -161,6 +161,7 @@ class Ability
   end
 
   def cdl_readable?(obj)
+    obj = obj.cached_parent_id.present? ? find_by(id: obj.cached_parent_id.id) : obj if obj.respond_to?(:cached_parent_id)
     resource_charge_list = Wayfinder.for(obj).try(:resource_charge_list)
     return false unless resource_charge_list
     resource_charge_list.charged_items.reject(&:expired?).map(&:netid).include?(current_user.uid)
