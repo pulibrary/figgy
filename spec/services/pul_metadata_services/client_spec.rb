@@ -31,7 +31,7 @@ describe PulMetadataServices::Client do
         expect(output.full_source).to eq full_source
       end
       it "makes requests to aspace first" do
-        output = described_class.retrieve("MC001-01_c000001")
+        output = described_class.retrieve("MC001.01_c000001")
         attributes = output.attributes
         expect(attributes[:title]).to eq ["Series 1: Reel Contents - American Civil Liberties Union Microfilm"]
         expect(attributes[:extent]).to eq ["12 boxes", "44 items", "5 Reels", "1881 Volumes"]
