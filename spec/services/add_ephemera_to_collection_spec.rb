@@ -7,7 +7,6 @@ describe AddEphemeraToCollection do
     subject(:service) do
       described_class.new(project_id: project.id,
                           collection_id: collection.id,
-                          change_set_persister: change_set_persister,
                           logger: logger)
     end
     let(:project) do
@@ -20,10 +19,6 @@ describe AddEphemeraToCollection do
                                        member_ids: folder.id)
     end
     let(:folder) { FactoryBot.create_for_repository(:complete_ephemera_folder) }
-
-    let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: db, storage_adapter: files) }
-    let(:db) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
-    let(:files) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
     let(:logger) { Logger.new(nil) }
 
     it "adds folder to collection" do
@@ -39,7 +34,6 @@ describe AddEphemeraToCollection do
     subject(:service) do
       described_class.new(project_id: project.id,
                           collection_id: collection.id,
-                          change_set_persister: change_set_persister,
                           logger: logger)
     end
     let(:project) do
@@ -48,9 +42,6 @@ describe AddEphemeraToCollection do
     end
     let(:collection) { FactoryBot.create_for_repository(:collection) }
     let(:folder) { FactoryBot.create_for_repository(:complete_ephemera_folder) }
-    let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: db, storage_adapter: files) }
-    let(:db) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
-    let(:files) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
     let(:logger) { Logger.new(nil) }
 
     it "adds folder to collection" do

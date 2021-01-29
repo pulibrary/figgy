@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 class AddEphemeraToCollection
-  attr_reader :project_id, :collection_id, :change_set_persister, :logger, :query_service
-  def initialize(project_id:, collection_id:, change_set_persister:, logger: Valkyrie.logger)
+  attr_reader :project_id, :collection_id, :logger, :query_service
+  def initialize(project_id:, collection_id:, logger: Valkyrie.logger)
     @project_id = project_id
     @collection_id = collection_id
-    @change_set_persister = change_set_persister
     @logger = logger
     @query_service = Valkyrie.config.metadata_adapter.query_service
   end
@@ -18,14 +17,10 @@ class AddEphemeraToCollection
 
   def add_folder(folder)
     logger.info("Processing a folder: #{folder.decorate.title.first}")
+    db = Valkyrie::MetadataAdapter.find(:indexing_persister)
     collection = query_service.find_by(id: collection_id)
-    col_ids = folder.member_of_collection_ids + [collection.id]
-    change_set = ChangeSet.for(folder)
-    if change_set.validate(member_of_collection_ids: col_ids)
-      change_set_persister.save(change_set: change_set)
-    else
-      logger.error("change set didn't validate for #{folder.decorate.title.first}; not added to collection")
-    end
+    folder.member_of_collection_ids << collection.id
+    db.persister.save(resource: folder)
   end
 
   def add_ephemera

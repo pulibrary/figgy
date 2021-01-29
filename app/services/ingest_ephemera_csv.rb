@@ -38,7 +38,7 @@ class FolderData
     @fields = arg_fields.except(:path)
     @change_set_persister = change_set_persister
     @vocab_service = VocabularyService::EphemeraVocabularyService.new(change_set_persister: change_set_persister,
-                                                                      persist_if_not_found: true)
+                                                                      persist_if_not_found: false)
   end
 
   # rubocop:disable Metrics/MethodLength
