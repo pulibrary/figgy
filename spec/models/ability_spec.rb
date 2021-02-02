@@ -57,7 +57,12 @@ describe Ability do
   let(:private_cdl_mvw_scanned_resource) do
     stub_bibdata(bib_id: "123456")
     volume = FactoryBot.create_for_repository(:complete_private_scanned_resource, files: [page_file_2])
-    mvw_resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, title: "Private", source_metadata_identifier: "123456", user: creating_user, member_ids: [volume.id], run_callbacks: true)
+    mvw_resource = FactoryBot.create_for_repository(:complete_private_scanned_resource,
+                                                    title: "Private",
+                                                    source_metadata_identifier: "123456",
+                                                    user: creating_user,
+                                                    member_ids: [volume.id],
+                                                    run_callbacks: true)
     FactoryBot.create_for_repository(
       :resource_charge_list,
       resource_id: mvw_resource.id,
