@@ -161,8 +161,7 @@ class Ability
   end
 
   def cdl_readable?(obj)
-    obj = Wayfinder.for(obj).parent.present? ? Wayfinder.for(obj).parent : obj if Wayfinder.for(obj).respond_to?(:parent)
-    resource_charge_list = Wayfinder.for(obj).try(:resource_charge_list)
+    resource_charge_list = Wayfinder.for(single_or_multivolume?(obj)).try(:resource_charge_list)
     return false unless resource_charge_list
     resource_charge_list.charged_items.reject(&:expired?).map(&:netid).include?(current_user.uid)
   end
@@ -255,6 +254,10 @@ class Ability
 
   def downloadable?(obj)
     obj.decorate.downloadable? || authorized_by_token?(obj) || (!current_user.nil? && (current_user.staff? || current_user.admin?))
+  end
+
+  def single_or_multivolume?(obj)
+    Wayfinder.for(obj).try(:parent) || obj
   end
 
   # Null object pattern for auth. tokens
