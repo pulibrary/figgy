@@ -54,6 +54,26 @@ describe Ability do
     resource
   end
 
+  let(:private_cdl_mvw_scanned_resource) do
+    stub_bibdata(bib_id: "123456")
+    volume = FactoryBot.create_for_repository(:complete_private_scanned_resource, files: [page_file_2])
+    mvw_resource = FactoryBot.create_for_repository(:complete_private_scanned_resource,
+                                                    title: "Private",
+                                                    source_metadata_identifier: "123456",
+                                                    user: creating_user,
+                                                    member_ids: [volume.id],
+                                                    run_callbacks: true)
+    FactoryBot.create_for_repository(
+      :resource_charge_list,
+      resource_id: mvw_resource.id,
+      charged_items: [
+        CDL::ChargedItem.new(item_id: "1234", netid: current_user&.uid || "rando", expiration_time: Time.current + 3.hours)
+      ]
+    )
+    allow(CDL::EligibleItemService).to receive(:item_ids).with(source_metadata_identifier: "123456").and_return(["1"])
+    mvw_resource
+  end
+
   let(:expired_private_cdl_scanned_resource) do
     stub_bibdata(bib_id: "123456")
     resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, title: "Private", source_metadata_identifier: "123456", user: creating_user, files: [page_file_2])
@@ -464,6 +484,10 @@ describe Ability do
       is_expected.to be_able_to(:read, private_cdl_scanned_resource)
       is_expected.to be_able_to(:discover, private_cdl_scanned_resource)
       is_expected.not_to be_able_to(:download, private_cdl_scanned_resource.decorate.members.first)
+      is_expected.to be_able_to(:manifest, private_cdl_mvw_scanned_resource)
+      is_expected.to be_able_to(:read, private_cdl_mvw_scanned_resource)
+      is_expected.to be_able_to(:discover, private_cdl_mvw_scanned_resource)
+      is_expected.not_to be_able_to(:download, private_cdl_mvw_scanned_resource.decorate.members.first)
       is_expected.not_to be_able_to(:manifest, expired_private_cdl_scanned_resource)
       is_expected.not_to be_able_to(:read, expired_private_cdl_scanned_resource)
       is_expected.to be_able_to(:discover, expired_private_cdl_scanned_resource)
