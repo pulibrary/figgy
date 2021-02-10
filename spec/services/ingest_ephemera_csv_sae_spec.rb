@@ -92,6 +92,7 @@ describe IngestEphemeraCSV do
       expect(folder.date_created).to eq ["Circa 1986"]
       expect(folder.description.first).to eq "Contributor-provided translation of title:  Reccomendations of the Movement for Inter Racial Justice and Equality (MIRJE)for the completion of Provincial Council recommendations  ; Left wing political pamphlets"
       expect(folder.language.count).to eq(1)
+      expect(folder2.language.count).to eq(2)
     end
   end
 

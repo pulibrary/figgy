@@ -113,7 +113,9 @@ class FolderData
 
   def language
     return unless fields[:language].present?
-    @language ||= vocab_service.find_term(label: ISO_639.find_by_code(fields[:language]).english_name.split(";").first).id
+    fields[:language].split(";").map do |lang|
+      vocab_service.find_term(label: ISO_639.find_by_code(lang).english_name.split(";").first).id
+    end
   end
 
   def geographic_origin
