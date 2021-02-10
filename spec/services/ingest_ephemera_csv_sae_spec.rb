@@ -92,7 +92,7 @@ describe IngestEphemeraCSV do
       expect(folder.date_created).to eq ["Circa 1986"]
       expect(folder.description.first).to eq "Contributor-provided translation of title:  Reccomendations of the Movement for Inter Racial Justice and Equality (MIRJE)for the completion of Provincial Council recommendations  ; Left wing political pamphlets"
       expect(folder.language.count).to eq(1)
-      expect(folder2.language.count).to eq(2)
+      expect(folder2.language.count).to eq(3)
     end
   end
 
@@ -111,7 +111,7 @@ describe IngestEphemeraCSV do
       it "has fields" do
         expect(folder.fields[:folder_number]).to eq("1")
         expect(folder.fields[:date_created]).to eq("Circa 1986")
-        expect(folder.fields[:subject]).to eq("Politics and government--Constitutions;Politics and government--Politics and government;Politics and government--Decentralization in government;Human and civil rights--Human rights advocacy;Human and civil rights--Civil Rights")
+        expect(folder.fields[:subject]).to eq("Politics and government--Constitutions/ Politics and government--Politics and government/ Politics and government--Decentralization in government/ Human and civil rights--Human rights advocacy/ Human and civil rights--Civil Rights")
       end
     end
     # rubocop:enable Metrics/LineLength
@@ -131,6 +131,9 @@ describe IngestEphemeraCSV do
     describe "#subject" do
       it "has subjects" do
         expect(folder.subject.count).to eq(5)
+        expect(folder.subject.first).to be_a Valkyrie::ID
+        subject = qs.find_by(id: folder.subject.first)
+        expect(subject.label.first).to eq("Constitutions")
       end
     end
 
