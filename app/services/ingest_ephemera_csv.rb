@@ -15,6 +15,7 @@ class IngestEphemeraCSV
 
   def ingest
     mdata_table.collect do |row|
+      logger.info "Ingesting row #{row}"
       change_set = BoxlessEphemeraFolderChangeSet.new(EphemeraFolder.new)
       folder_data = FolderData.new(base_path: imgdir, change_set_persister: change_set_persister, **row.to_h)
       change_set.validate(folder_data.attributes)
@@ -114,7 +115,7 @@ class FolderData
   def language
     return unless fields[:language].present?
     fields[:language].split(";").map do |lang|
-      vocab_service.find_term(label: ISO_639.find_by_code(lang).english_name.split(";").first).id
+      vocab_service.find_term(label: ISO_639.find_by_code(lang.strip).english_name.split(";").first).id
     end
   end
 
@@ -130,7 +131,7 @@ class FolderData
 
   def subject
     return unless fields[:subject].present?
-    subjects = fields[:subject].split(";").map { |s| s.split("--") }.map { |c, s| { "category" => c, "topic" => s } }
+    subjects = fields[:subject].split(/;|\//).map { |s| s.strip.split("--") }.map { |c, s| { "category" => c, "topic" => s } }
     subjects.uniq.map do |sub|
       subject = vocab_service.find_subject_by(category: sub["category"], topic: sub["topic"])
       subject&.id
