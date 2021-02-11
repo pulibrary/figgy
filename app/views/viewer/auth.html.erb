@@ -4,7 +4,7 @@
 <% end %>
 <div id="loginContainer">
   <% if @charge_manager.eligible? %>
-    <%= link_to 'Princeton Users: Log In to Digitally Check Out', main_app.new_user_session_path, class: 'btn btn-primary', id: "login" %>
+    <%= link_to 'Princeton Users: Log in to check out a digital copy', main_app.new_user_session_path, class: 'btn btn-primary', id: "login" %>
   <% elsif restricted_viewership? %>
     <h1>Access to this material is limited to specific classes. Use your Princeton credentials to login.</h1>
     <%= link_to 'Login', main_app.new_user_session_path, class: 'btn btn-primary', id: "login" %>
