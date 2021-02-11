@@ -64,7 +64,7 @@ RSpec.describe ViewerController do
           get :auth, params: { id: resource.id.to_s }
 
           expect(response).to be_successful
-          expect(response.body).to have_link "Princeton Users: Log In to Digitally Check Out"
+          expect(response.body).to have_link "Princeton Users: Log in to check out a digital copy"
         end
       end
     end
