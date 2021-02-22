@@ -57,7 +57,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       # optional metadata
       expect(document["dc_description_s"]).to include("This raster file is the result of georeferencing")
       expect(document["dc_creator_sm"]).to eq(["University of Alberta"])
-      expect(document["dc_subject_sm"]).to eq(["Society"])
+      expect(document["dc_subject_sm"]).to eq(["Human settlements", "Society"])
       expect(document["dct_spatial_sm"]).to eq(["Micronesia"])
       expect(document["dct_temporal_sm"]).to eq(["2011", "2013"])
       expect(document["dc_language_s"]).to eq("Esperanto")
@@ -333,7 +333,12 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
   end
 
   describe "raster resource" do
-    let(:geo_work) { FactoryBot.create_for_repository(:raster_resource, coverage: coverage.to_s, visibility: visibility) }
+    let(:geo_work) do
+      FactoryBot.create_for_repository(:raster_resource,
+                                       coverage: coverage.to_s,
+                                       subject: ["Human settlements", "Society"],
+                                       visibility: visibility)
+    end
     let(:change_set) { RasterResourceChangeSet.new(geo_work, files: [file]) }
     let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tiff; gdal-format=GTiff") }
 
@@ -355,6 +360,9 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wms"]).to match(/geoserver\/public-figgy\/wms/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wcs"]).to match(/geoserver\/public-figgy\/wcs/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wfs"]).to be_nil
+
+      # Subjects filtered by FGDC topics
+      expect(document["dc_subject_sm"]).to eq(["Society"])
     end
 
     context "with a non-Princeton value in the held_by property" do

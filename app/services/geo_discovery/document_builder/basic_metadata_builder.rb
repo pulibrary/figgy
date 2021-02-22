@@ -73,7 +73,8 @@ module GeoDiscovery
         # non ISO 19115 topic category subjects are filtered out.
         # @return [Array<String>] subjects
         def subject
-          return resource_decorator.subject if resource_decorator.model.is_a?(ScannedMap)
+          # TODO: Add a second field for unfiltered subjects
+          return resource_decorator.subject if resource_decorator.model.is_a?(ScannedMap) || resource_decorator.model.is_a?(VectorResource)
           resource_decorator.subject.select { |v| topic_categories.value?(v) }
         end
 
