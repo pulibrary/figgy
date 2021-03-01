@@ -7,7 +7,6 @@ class DownloadsController < ApplicationController
     if resource && load_file
       send_content
     else
-      Honeybadger.notify("DownloadsController 404 for resource #{params[:resource_id]}, file #{params[:id]}")
       render_404
     end
   end
