@@ -26,6 +26,7 @@ module GeoDiscovery
           document.identifier = identifier
           document.title = title
           document.subject = subject
+          document.all_subject = unfiltered_subject
         end
 
         # Builds simple metadata attributes.
@@ -88,6 +89,12 @@ module GeoDiscovery
 
         def topic_categories
           GeoMetadataExtractor::Fgdc::TOPIC_CATEGORIES
+        end
+
+        # Returns an array of unfiltered subject strings.
+        # @return [Array<String>] subjects
+        def unfiltered_subject
+          resource_decorator.subject
         end
     end
   end
