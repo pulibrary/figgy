@@ -4,8 +4,9 @@ class ManifestBuilder
   # performance.
   class CollectionManifestServiceLocator < ManifestBuilder::ManifestServiceLocator
     class << self
-      ##
       # Builder for a manifest which is a sub-item in a collection.
+      # @note This is the same as in ManifestServiceLocator, but there's no
+      #   thumbnail builder, to improve render time.
       def real_child_manifest_builder
         IIIFManifest::ManifestServiceLocator::InjectedFactory.new(
           IIIFManifest::ManifestBuilder,
