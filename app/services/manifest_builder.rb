@@ -799,6 +799,9 @@ class ManifestBuilder
       @manifest ||= begin
         if audio_collection? || recording?
           IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocatorV3).to_h
+        # If not multi-part and a collection, it's not a MVW
+        elsif @resource.viewing_hint.blank? && @resource.collection?
+          IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: CollectionManifestServiceLocator).to_h
         else
           # note this assumes audio resources use flat modeling
           IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocator).to_h
