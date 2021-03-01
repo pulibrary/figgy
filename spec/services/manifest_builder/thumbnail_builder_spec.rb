@@ -70,9 +70,9 @@ describe ManifestBuilder::ThumbnailBuilder do
 
     context "when viewing a Multi-Volume Work" do
       let(:persisted_volume) do
-        change_set_persister.save(change_set: change_set)
+        FactoryBot.create_for_repository(:scanned_resource, files: [file])
       end
-      let(:parent_change_set) { ScannedResourceChangeSet.new(scanned_resource, member_ids: [persisted_volume.id]) }
+      let(:parent_change_set) { ScannedResourceChangeSet.new(scanned_resource, member_ids: [persisted_volume.id], thumbnail_id: persisted_volume.id) }
       let(:persisted) do
         change_set_persister.save(change_set: parent_change_set)
       end
