@@ -26,6 +26,7 @@ module GeoDiscovery
           document.identifier = identifier
           document.title = title
           document.subject = subject
+          document.all_subject = unfiltered_subject
         end
 
         # Builds simple metadata attributes.
@@ -73,8 +74,7 @@ module GeoDiscovery
         # non ISO 19115 topic category subjects are filtered out.
         # @return [Array<String>] subjects
         def subject
-          # TODO: Add a second field for unfiltered subjects
-          return resource_decorator.subject if resource_decorator.model.is_a?(ScannedMap) || resource_decorator.model.is_a?(VectorResource)
+          return resource_decorator.subject if resource_decorator.model.is_a?(ScannedMap)
           resource_decorator.subject.select { |v| topic_categories.value?(v) }
         end
 
@@ -89,6 +89,12 @@ module GeoDiscovery
 
         def topic_categories
           GeoMetadataExtractor::Fgdc::TOPIC_CATEGORIES
+        end
+
+        # Returns an array of unfiltered subject strings.
+        # @return [Array<String>] subjects
+        def unfiltered_subject
+          resource_decorator.subject
         end
     end
   end

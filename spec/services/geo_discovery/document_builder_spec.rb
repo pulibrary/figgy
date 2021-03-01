@@ -57,7 +57,8 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       # optional metadata
       expect(document["dc_description_s"]).to include("This raster file is the result of georeferencing")
       expect(document["dc_creator_sm"]).to eq(["University of Alberta"])
-      expect(document["dc_subject_sm"]).to eq(["Human settlements", "Society"])
+      expect(document["dc_subject_sm"]).to eq(["Society"])
+      expect(document["all_subject_sm"]).to eq(["Human settlements", "Society"])
       expect(document["dct_spatial_sm"]).to eq(["Micronesia"])
       expect(document["dct_temporal_sm"]).to eq(["2011", "2013"])
       expect(document["dc_language_s"]).to eq("Esperanto")
@@ -354,6 +355,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       # Layer info fields
       expect(document["layer_geom_type_s"]).to eq("Raster")
       expect(document["dc_format_s"]).to eq("GeoTIFF")
+      expect(document["all_subject_sm"]).to eq(["Human settlements", "Society"])
 
       # References
       refs = JSON.parse(document["dct_references_s"])

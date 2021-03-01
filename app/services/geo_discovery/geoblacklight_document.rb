@@ -50,6 +50,7 @@ module GeoDiscovery
           dc_language_s: language.try(:first),
           dc_publisher_s: publisher.try(:first),
           dc_subject_sm: subject,
+          all_subject_sm: all_subject,
           dct_spatial_sm: spatial,
           dct_temporal_sm: temporal,
           solr_year_i: layer_year,
