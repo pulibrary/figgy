@@ -60,18 +60,4 @@ namespace :csv do
       @logger.info "Processd row #{row} --- dir: #{dir}; class_name: #{class_name}; file_filters: #{filters}; attributes: #{attrs}"
     end
   end
-
-  desc "Validate ephemera csv file"
-  task validate_sip: :environment do
-    basedir = ENV["BASEDIR"]
-    csvfile = ENV["CSV"]
-    project_id = ENV["PROJECT"]
-
-    abort "no such file #{csvfile}" unless File.file?(csvfile)
-    abort "no such directory #{basedir}" unless File.directory?(basedir)
-
-    @logger = Logger.new(STDOUT)
-
-    ValidateEphemeraCSVJob.perform_now(project_id, csvfile, basedir)
-  end
 end
