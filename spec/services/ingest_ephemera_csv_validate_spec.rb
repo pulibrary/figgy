@@ -83,7 +83,6 @@ describe IngestEphemeraCSV do
   end
   # rubocop:disable Metrics/LineLength
 
-
   context "validate" do
     it "handles validation" do
       output = service.validate

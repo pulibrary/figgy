@@ -104,7 +104,7 @@ class FolderData
 
   def creator
     return [] unless fields[:creator].present?
-    fields[:creator].split(";").collect { |c| c.strip }
+    fields[:creator].split(";").collect(&:strip)
   end
 
   def title
@@ -204,11 +204,9 @@ class FolderData
         property: :title, value: title
       )
       begin
-        id = collections.first.id
+        collections.first.id
       rescue
         logger.warn format("no collection with title %s", title)
-      else
-        id
       end
     end
   end
