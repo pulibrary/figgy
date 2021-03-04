@@ -87,13 +87,13 @@ class FolderData
       publisher: publishers,
       geographic_origin: geographic_origin,
       subject: subject,
-      geographic_subject: geographic_subject,
+      geo_subject: geo_subject,
       description: fields[:description],
       date_created: date_created,
       provenance: Set.new(Array(fields[:provenance])),
       depositor: Set.new(Array(fields[:depositor])),
-      date_range: Array(fields[:date_range]),
-      ocr_language: Set.new(Array(ocr_language)),
+      date_range: date_range,
+      ocr_language: Array(ocr_language),
       keywords: Set.new(keywords),
       member_of_collection_ids: member_of_collection_ids,
       append_collection_ids: member_of_collection_ids
@@ -101,6 +101,11 @@ class FolderData
   end
 
   # rubocop:enable Metrics/MethodLength
+
+  def date_range
+    return unless fields[:date_range_start].present? && fields[:date_range_end].present?
+    DateRange.new(start: fields[:date_range_start], end: fields[:date_range_end], approximate: fields[:date_range_approximate].present?)
+  end
 
   def creator
     return [] unless fields[:creator].present?
@@ -159,7 +164,7 @@ class FolderData
 
   def ocr_language
     return unless fields[:ocr_language].present?
-    fields[:ocr_language].split(";").collect { |lang| find_language(lang.strip) }
+    @ocr_language ||= fields[:ocr_language].split(";").collect(&:strip)
   end
 
   def geographic_origin
@@ -186,9 +191,9 @@ class FolderData
     end
   end
 
-  def geographic_subject
-    return unless fields[:geographic_subject].present?
-    Array(vocab_service.find_term(label: Array(fields[:geographic_subject]).first, vocab: "LAE Geographic Areas"))
+  def geo_subject
+    return unless fields[:geo_subject].present?
+    Array(vocab_service.find_term(label: Array(fields[:geo_subject]).first, vocab: "LAE Geographic Areas"))
   end
 
   def publishers
