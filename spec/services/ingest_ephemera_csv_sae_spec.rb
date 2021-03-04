@@ -140,6 +140,12 @@ describe IngestEphemeraCSV do
     end
     # rubocop:enable Metrics/LineLength
 
+    describe "#date_range" do
+      it "handles date ranges" do
+        expect(folder.date_range).to be_a DateRange
+      end
+    end
+
     describe "#keywords" do
       it "has keywords" do
         expect(folder.keywords).to include("Movement of Inter Racial Justice and Equality")
