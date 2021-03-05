@@ -9,11 +9,14 @@ class ReportsController < ApplicationController
     end
     @ephemera_projects = query_service.find_all_of_model(model: EphemeraProject).map(&:decorate) unless @ephemera_project
 
+    fields = %w[id local_identifier barcode folder_number title alternative_title
+                transliterated_title language creator contributor publisher genre
+                width height page_count series keywords subject geo_subject geographic_origin
+                description date_created provenance source_url dspace_url rights_statement]
     respond_to do |format|
       format.html
       format.csv do
-        send_data to_csv(@resources, fields: { id: "id", title: "title", creator: "creator",
-                                               contributor: "contributor", publisher: "publisher" }),
+        send_data to_csv(@resources, fields: fields.map { |f| [f.to_sym, f] }.to_h),
                   filename: "#{@ephemera_project.title.parameterize}-data-#{Time.zone.today}.csv"
       end
     end
@@ -76,9 +79,14 @@ class ReportsController < ApplicationController
       CSV.generate(headers: true) do |csv|
         csv << fields.map { |_k, v| v }
         records.each do |record|
-          csv << fields.map { |k, _v| Array.wrap(record.send(k)).join(";") }
+          csv << fields.map { |k, _v| values_or_labels(record, k) }
         end
       end
+    end
+
+    def values_or_labels(record, field)
+      val = record.send(field)
+      Array.wrap(val).map { |v| v.respond_to?(:label) ? v.label : v }.join(";")
     end
 
     def find_resource(id)

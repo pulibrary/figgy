@@ -137,6 +137,7 @@ Metrics/LineLength:
     - 'spec/helpers/application_helper_spec.rb'
     - 'spec/resources/collections/collections_controller_spec.rb'
     - 'spec/models/oai/figgy/valkyrie_provider_model_spec.rb'
+    - 'spec/controllers/reports_controller_spec.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
@@ -172,6 +173,7 @@ Metrics/MethodLength:
     - 'app/services/manifest_builder.rb'
     - 'app/indexers/imported_metadata_indexer.rb'
     - 'app/controllers/concerns/resource_controller.rb'
+    - 'app/controllers/reports_controller.rb'
     - 'app/models/search_builder.rb'
     - 'app/helpers/application_helper.rb'
     - 'app/change_sets/change_set.rb'

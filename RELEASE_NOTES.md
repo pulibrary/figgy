@@ -13,6 +13,11 @@ Release notes template:
 ## Removed
 
 -->
+# 2021-03-05
+
+## Changed
+* Expanding fields included in ephemera metadata export
+
 # 2021-01-27
 
 ## Changed
