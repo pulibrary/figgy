@@ -355,4 +355,17 @@ namespace :bulk do
       change_set_persister.save(change_set: cs)
     end
   end
+
+  desc "Delete all members of a collection, keeping the collection"
+  task clear: :environment do
+    id = ENV["ID"]
+    abort "usage: rake bulk:clear ID=collectionid" unless id
+
+    metadata_adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
+    qs = metadata_adapter.query_service
+    change_set_persister = ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter)
+    amc = qs.find_by(id: id)
+    amc_wayfinder = Wayfinder.for(amc)
+    amc_wayfinder.members.each { |member| change_set_persister.delete(change_set: ChangeSet.for(member)) }
+  end
 end
