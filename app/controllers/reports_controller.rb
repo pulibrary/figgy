@@ -5,7 +5,7 @@ class ReportsController < ApplicationController
     authorize! :show, Report
     if params[:project_id]
       @ephemera_project = find_resource(params[:project_id]).decorate
-      @resources = @ephemera_project.boxes.map(&:folders).flatten
+      @resources = @ephemera_project.boxes.map(&:folders).flatten + @ephemera_project.folders
     end
     @ephemera_projects = query_service.find_all_of_model(model: EphemeraProject).map(&:decorate) unless @ephemera_project
 

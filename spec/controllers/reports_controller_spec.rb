@@ -5,7 +5,7 @@ RSpec.describe ReportsController, type: :controller do
   let(:user) { FactoryBot.create(:admin) }
 
   describe "GET #ephemera_data" do
-    let(:project) { FactoryBot.create_for_repository(:ephemera_project, member_ids: box.id) }
+    let(:project) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [box.id, boxless.id]) }
     let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: folder.id) }
     let(:folder) do
       FactoryBot.create_for_repository(:ephemera_folder, contributor: ["contributor 1", "contributor 2"],
@@ -15,12 +15,26 @@ RSpec.describe ReportsController, type: :controller do
                                                          geographic_origin: geo_origin,
                                                          transliterated_title: "test transliterated title")
     end
+    let(:boxless) { FactoryBot.create_for_repository(:ephemera_folder, title: "boxless folder") }
     let(:language) { EphemeraTerm.new label: "test language" }
     let(:genre) { EphemeraTerm.new label: "test genre" }
     let(:subject) { EphemeraTerm.new label: "test subject" }
     let(:geo_subject) { EphemeraTerm.new label: "test geo subject" }
     let(:geo_origin) { EphemeraTerm.new label: "test geo origin" }
-    let(:data) { "id,local_identifier,barcode,folder_number,title,alternative_title,transliterated_title,language,creator,contributor,publisher,genre,width,height,page_count,series,keywords,subject,geo_subject,geographic_origin,description,date_created,provenance,source_url,dspace_url,rights_statement\n#{folder.id},xyz1,12345678901234,one,test folder,test alternative title,test transliterated title,test language,test creator,contributor 1;contributor 2,test publisher,test genre,10,20,30,test series,keyword1;keyword2,test subject,test geo subject,test geo origin,test description,1970/01/01,Donated by the Mario Bros.,http://example.com,http://example.com,http://rightsstatements.org/vocab/NKC/1.0/\n" }
+    let(:data) do
+      "id,local_identifier,barcode,folder_number,title,alternative_title,transliterated_title,language," +
+        "creator,contributor,publisher,genre,width,height,page_count,series,keywords,subject,geo_subject," +
+        "geographic_origin,description,date_created,provenance,source_url,dspace_url,rights_statement\n" +
+        "#{folder.id},xyz1,12345678901234,one,test folder,test alternative title,test transliterated title," +
+        "test language,test creator,contributor 1;contributor 2,test publisher,test genre,10,20,30," +
+        "test series,keyword1;keyword2,test subject,test geo subject,test geo origin,test description," +
+        "1970/01/01,Donated by the Mario Bros.,http://example.com,http://example.com," +
+        "http://rightsstatements.org/vocab/NKC/1.0/\n" +
+        "#{boxless.id},xyz1,12345678901234,one,boxless folder,test alternative title,\"\",test language," +
+        "test creator,test contributor,test publisher,test genre,10,20,30,test series,\"\",test subject," +
+        "\"\",\"\",test description,1970/01/01,Donated by the Mario Bros.," +
+        "http://example.com,http://example.com,http://rightsstatements.org/vocab/NKC/1.0/\n"
+    end
 
     before do
       sign_in user
