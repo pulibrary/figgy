@@ -172,6 +172,7 @@ Metrics/MethodLength:
     - 'app/services/manifest_builder.rb'
     - 'app/indexers/imported_metadata_indexer.rb'
     - 'app/controllers/concerns/resource_controller.rb'
+    - 'app/controllers/reports_controller.rb'
     - 'app/models/search_builder.rb'
     - 'app/helpers/application_helper.rb'
     - 'app/change_sets/change_set.rb'
@@ -305,6 +306,9 @@ Lint/Void:
   Enabled: true
   Exclude:
     - 'app/derivative_services/jp2_derivative_service.rb'
+Style/LineEndConcatenation:
+  Exclude:
+    - 'spec/controllers/reports_controller_spec.rb'
 Style/MethodMissingSuper:
   Exclude:
     - 'app/decorators/media_info_tracks_decorator.rb'
