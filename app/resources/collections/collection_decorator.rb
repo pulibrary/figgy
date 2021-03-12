@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class CollectionDecorator < Valkyrie::ResourceDecorator
   delegate :members, :parents, :collections, :members_count, :media_resources, to: :wayfinder
-  display :owners, :restricted_viewers
+  display Schema::Common.attributes, :owners, :restricted_viewers, :rendered_manifest_url, :rendered_dpul_url
 
   def title
     Array(super).first
@@ -35,5 +35,17 @@ class CollectionDecorator < Valkyrie::ResourceDecorator
     # @return [Hash] the exhibit metadata hash
     def iiif_manifest_exhibit
       { exhibit: slug }
+    end
+
+    def rendered_dpul_url
+      rendered_link("https://dpul.princeton.edu/#{slug}")
+    end
+
+    def rendered_manifest_url
+      rendered_link(helpers.manifest_collection_url(self))
+    end
+
+    def rendered_link(url)
+      "<a href=\"#{url}\">#{url}</a>".html_safe
     end
 end

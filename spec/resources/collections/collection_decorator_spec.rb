@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe CollectionDecorator do
   subject(:decorator) { described_class.new(collection) }
-  let(:collection) { FactoryBot.build(:collection) }
+  let(:collection) { FactoryBot.build(:collection, id: "1234") }
 
   it_behaves_like "a CollectionDecorator"
 
@@ -16,10 +16,16 @@ RSpec.describe CollectionDecorator do
   describe "#owners" do
     let(:collection) do
       FactoryBot.build(:collection,
-                       owners: ["owner"])
+                       owners: ["owner"], description: ["test description"])
     end
     it "displays the owners" do
       expect(decorator.display_attributes[:owners]).to eq ["owner"]
+    end
+    it "displays the description" do
+      expect(decorator.display_attributes[:description]).to eq ["test description"]
+    end
+    it "displays the DPUL url" do
+      expect(decorator.display_attributes[:rendered_dpul_url]).to eq ["<a href=\"https://dpul.princeton.edu/test\">https://dpul.princeton.edu/test</a>"]
     end
   end
 
