@@ -13,6 +13,11 @@ Release notes template:
 ## Removed
 
 -->
+# 2021-03-15
+
+## Added
+* Added OGC Web Service override properties to raster and vector resources
+
 # 2021-03-05
 
 ## Changed

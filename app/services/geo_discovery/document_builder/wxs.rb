@@ -11,6 +11,7 @@ module GeoDiscovery
       # Returns the identifier to use with WMS/WFS/WCS services.
       # @return [String] wxs indentifier
       def identifier
+        return resource_decorator.layer_name if resource_decorator.layer_name
         return unless file_set
         return file_set.id.to_s unless @config && visibility
         "#{@config[visibility][:workspace]}:p-#{file_set.id}" if @config[visibility][:workspace]
@@ -19,13 +20,15 @@ module GeoDiscovery
       # Returns the wms server url.
       # @return [String] wms server url
       def wms_path
-        return unless @config && visibility && file_set && (raster_file_set? || vector_file_set?)
+        return resource_decorator.wms_url if resource_decorator.wms_url
+        return unless generate_wms_path?
         "#{path}/#{@config[visibility][:workspace]}/wms"
       end
 
       # Returns the wfs server url.
       # @return [String] wfs server url
       def wfs_path
+        return resource_decorator.wfs_url if resource_decorator.wfs_url
         return unless @config && visibility && file_set && vector_file_set?
         "#{path}/#{@config[visibility][:workspace]}/wfs"
       end
@@ -54,6 +57,12 @@ module GeoDiscovery
         # @return [String]
         def file_set_mime_type
           file_set.mime_type.first
+        end
+
+        # Determines if the wms path should be generated
+        # @return [Boolean]
+        def generate_wms_path?
+          @config && visibility && file_set && (raster_file_set? || vector_file_set?)
         end
 
         # Geoserver base url.

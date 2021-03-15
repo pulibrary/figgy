@@ -8,6 +8,30 @@ RSpec.feature "RasterResources" do
     sign_in user
   end
 
+  scenario "creating a new resource" do
+    visit new_raster_resource_path
+
+    expect(page).to have_field "Title"
+    expect(page).to have_field "Source Metadata ID"
+    expect(page).to have_css ".select[for='raster_resource_rights_statement']", text: "Rights Statement"
+    expect(page).to have_field "Rights Note"
+    expect(page).to have_field "Portion Note"
+    expect(page).to have_field "Local identifier"
+    expect(page).to have_css ".select[for='raster_resource_holding_location']", text: "Holding Location"
+    expect(page).to have_css ".select[for='raster_resource_member_of_collection_ids']", text: "Collections"
+    expect(page).to have_css ".control-label[for='raster_resource_coverage']", text: "Coverage"
+    expect(page).to have_field "Description"
+    expect(page).to have_field "Subject"
+    expect(page).to have_field "Place Name"
+    expect(page).to have_field "Temporal"
+    expect(page).to have_field "Issued"
+    expect(page).to have_field "Creator"
+    expect(page).to have_field "Language"
+    expect(page).to have_field "Wms url"
+    expect(page).not_to have_field "Wfs url"
+    expect(page).to have_field "Layer name"
+  end
+
   context "when a user creates a new raster resource" do
     let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
     let(:persister) { adapter.persister }

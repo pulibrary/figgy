@@ -24,6 +24,12 @@ module Schema
       attribute :gbl_suppressed_override, Valkyrie::Types::Bool
       attribute :claimed_by, Valkyrie::Types::String
       attribute :cached_parent_id, Valkyrie::Types::ID.optional
+
+      # Custom values for overriding auto-generated OGC Web Service properties.
+      # Used to build records for manually created GeoServer raster mosaics, for example.
+      attribute :wms_url, Valkyrie::Types::String
+      attribute :wfs_url, Valkyrie::Types::String
+      attribute :layer_name, Valkyrie::Types::String
     end
   end
 end
