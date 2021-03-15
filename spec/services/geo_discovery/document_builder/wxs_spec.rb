@@ -38,6 +38,15 @@ describe GeoDiscovery::DocumentBuilder::Wxs do
         expect(wxs_builder.identifier).to eq file_set_id.to_s
       end
     end
+
+    context "when the layer_name property is set on the resource" do
+      let(:layer_name) { "layer" }
+      let(:geo_work) { FactoryBot.create_for_repository(:vector_resource, visibility: visibility, layer_name: layer_name) }
+
+      it "returns the overridden identifier" do
+        expect(wxs_builder.identifier).to eq layer_name
+      end
+    end
   end
 
   describe "#wms_path" do
@@ -60,12 +69,21 @@ describe GeoDiscovery::DocumentBuilder::Wxs do
         expect(wxs_builder.wms_path).to be_nil
       end
     end
+
+    context "when the wms_url property is set on the resource" do
+      let(:wms_url) { "https://geoserver.princeton.edu/geoserver/mosaics/wms" }
+      let(:geo_work) { FactoryBot.create_for_repository(:vector_resource, visibility: visibility, wms_url: wms_url) }
+
+      it "returns a the overriden wms value" do
+        expect(wxs_builder.wms_path).to eq wms_url
+      end
+    end
   end
 
   describe "#wfs_path" do
     context "public document" do
       let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
-      it "returns a valid wms path" do
+      it "returns a valid wfs path" do
         expect(wxs_builder.wfs_path).to eq "http://localhost:8080/geoserver/public-figgy/wfs"
       end
     end
@@ -74,6 +92,15 @@ describe GeoDiscovery::DocumentBuilder::Wxs do
       let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
       it "returns a nil value" do
         expect(wxs_builder.wfs_path).to be_nil
+      end
+    end
+
+    context "when the wfs_url property is set on the resource" do
+      let(:wfs_url) { "https://geoserver.princeton.edu/geoserver/mosaics/wfs" }
+      let(:geo_work) { FactoryBot.create_for_repository(:vector_resource, visibility: visibility, wfs_url: wfs_url) }
+
+      it "returns a the overriden wfs value" do
+        expect(wxs_builder.wfs_path).to eq wfs_url
       end
     end
   end
