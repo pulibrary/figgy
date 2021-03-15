@@ -36,30 +36,36 @@ class RasterResourceChangeSet < ChangeSet
 
   # rubocop:disable Metrics/MethodLength
   def primary_terms
-    [
-      :title,
-      :source_metadata_identifier,
-      :downloadable,
-      :rights_statement,
-      :rights_note,
-      :thumbnail_id,
-      :portion_note,
-      :local_identifier,
-      :holding_location,
-      :member_of_collection_ids,
-      :append_id,
-      :description,
-      :subject,
-      :spatial,
-      :temporal,
-      :issued,
-      :creator,
-      :language,
-      :cartographic_scale,
-      :cartographic_projection,
-      :coverage,
-      :held_by
-    ]
+    {
+      "" => [
+        :title,
+        :source_metadata_identifier,
+        :downloadable,
+        :rights_statement,
+        :rights_note,
+        :thumbnail_id,
+        :portion_note,
+        :local_identifier,
+        :holding_location,
+        :member_of_collection_ids,
+        :append_id,
+        :description,
+        :subject,
+        :spatial,
+        :temporal,
+        :issued,
+        :creator,
+        :language,
+        :cartographic_scale,
+        :cartographic_projection,
+        :coverage,
+        :held_by
+      ],
+      "OGC Web Service Overrides" => [
+        :wms_url,
+        :layer_name
+      ]
+    }
   end
   # rubocop:enable Metrics/MethodLength
 end
