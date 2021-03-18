@@ -61,9 +61,10 @@ class VectorResourceChangeSet < ChangeSet
         :coverage,
         :held_by
       ],
-      "OGC Web Service Overrides" => [
+      "Geospatial Web Service Overrides" => [
         :wms_url,
         :wfs_url,
+        :tile_layer_url,
         :layer_name
       ]
     }

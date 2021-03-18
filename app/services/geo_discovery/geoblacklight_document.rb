@@ -133,6 +133,7 @@ module GeoDiscovery
           "http://www.opengis.net/def/serviceType/ogc/wms" => wms_path,
           "http://www.opengis.net/def/serviceType/ogc/wfs" => wfs_path,
           "http://www.opengis.net/def/serviceType/ogc/wcs" => wcs_path,
+          "https://wiki.osgeo.org/wiki/Tile_Map_Service_Specification" => tile_layer_url,
           "http://iiif.io/api/image" => iiif,
           "http://iiif.io/api/presentation#manifest" => iiif_manifest
         }
