@@ -29,6 +29,7 @@ module GeoDiscovery
           document.wms_path = wms_path
           document.wfs_path = wfs_path
           document.wcs_path = wcs_path
+          document.tile_layer_url = resource_decorator.tile_layer_url
         end
 
         # Builds metadata file references.

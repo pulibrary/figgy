@@ -13,6 +13,11 @@ Release notes template:
 ## Removed
 
 -->
+# 2021-03-18
+
+## Added
+* Added tile layer url to raster and vector resources
+
 # 2021-03-15
 
 ## Added
