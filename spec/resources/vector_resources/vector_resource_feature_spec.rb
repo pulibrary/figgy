@@ -29,6 +29,7 @@ RSpec.feature "VectorResources" do
     expect(page).to have_field "Language"
     expect(page).to have_field "Wms url"
     expect(page).to have_field "Wfs url"
+    expect(page).to have_field "Tile layer url"
     expect(page).to have_field "Layer name"
   end
 
