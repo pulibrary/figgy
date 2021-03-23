@@ -43,7 +43,7 @@ jobs:
       # Remove cached simpler-tiles - needs to be reinstalled every time.
       - run: rm vendor/bundle/ruby/2.6.0/specifications/simpler-tiles-0.3.1.gemspec || true
       # Install Bundler
-      - run: gem install bundler -v '~> 2.0'
+      - run: gem install bundler -v '~> 2.2.14'
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
       # Cache Dependencies
@@ -127,7 +127,7 @@ jobs:
       # Remove cached simpler-tiles - needs to be reinstalled every time.
       - run: rm vendor/bundle/ruby/2.6.0/specifications/simpler-tiles-0.3.1.gemspec || true
       # Install Bundler
-      - run: gem install bundler -v '~> 2.0'
+      - run: gem install bundler -v '~> 2.2.14'
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
       - run: yarn exec jest --coverage
@@ -208,7 +208,7 @@ jobs:
       # Remove cached simpler-tiles - needs to be reinstalled every time.
       - run: rm vendor/bundle/ruby/2.6.0/specifications/simpler-tiles-0.3.1.gemspec || true
       # Install Bundler
-      - run: gem install bundler -v '~> 2.0'
+      - run: gem install bundler -v '~> 2.2.14'
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
       - run: bundle exec rake rubocop
