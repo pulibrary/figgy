@@ -13,6 +13,11 @@ Release notes template:
 ## Removed
 
 -->
+# 2021-03-23
+
+## Changed
+* pinned bundler to 2.2.14 in .circleci/config.yaml to solve CircleCI breakage
+
 # 2021-03-18
 
 ## Added
