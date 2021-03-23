@@ -21,20 +21,6 @@ RSpec.describe ReportsController, type: :controller do
     let(:subject) { EphemeraTerm.new label: "test subject" }
     let(:geo_subject) { EphemeraTerm.new label: "test geo subject" }
     let(:geo_origin) { EphemeraTerm.new label: "test geo origin" }
-    let(:data) do
-      "id,local_identifier,barcode,folder_number,title,alternative_title,transliterated_title,language," +
-        "creator,contributor,publisher,genre,width,height,page_count,series,keywords,subject,geo_subject," +
-        "geographic_origin,description,date_created,provenance,source_url,dspace_url,rights_statement\n" +
-        "#{folder.id},xyz1,12345678901234,one,test folder,test alternative title,test transliterated title," +
-        "test language,test creator,contributor 1;contributor 2,test publisher,test genre,10,20,30," +
-        "test series,keyword1;keyword2,test subject,test geo subject,test geo origin,test description," +
-        "1970/01/01,Donated by the Mario Bros.,http://example.com,http://example.com," +
-        "http://rightsstatements.org/vocab/NKC/1.0/\n" +
-        "#{boxless.id},xyz1,12345678901234,one,boxless folder,test alternative title,\"\",test language," +
-        "test creator,test contributor,test publisher,test genre,10,20,30,test series,\"\",test subject," +
-        "\"\",\"\",test description,1970/01/01,Donated by the Mario Bros.," +
-        "http://example.com,http://example.com,http://rightsstatements.org/vocab/NKC/1.0/\n"
-    end
 
     before do
       sign_in user
@@ -48,7 +34,11 @@ RSpec.describe ReportsController, type: :controller do
     end
     it "allows downloading a CSV file" do
       get :ephemera_data, params: { project_id: project.id }, format: "csv"
-      expect(response.body).to eq(data)
+      # expect(response.body).to eq(data)
+      csv = CSV.parse(response.body, headers: true, header_converters: :symbol)
+      expect(csv[1][:local_identifier]).to eq "xyz1"
+      expect(csv[1][:folder_number]).to eq "one"
+
       expect(response.headers["Content-Disposition"]).to eq("attachment; filename=\"test-project-data-#{Time.zone.today}.csv\"")
     end
     context "when no project is specified" do
