@@ -60,6 +60,10 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     wayfinder.decorated_ephemera_box
   end
 
+  def ephemera_box_number
+    ephemera_box.box_number if ephemera_box
+  end
+
   def ephemera_project
     wayfinder.decorated_ephemera_projects.first
   end

@@ -6,7 +6,7 @@ RSpec.describe ReportsController, type: :controller do
 
   describe "GET #ephemera_data" do
     let(:project) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [box.id, boxless.id]) }
-    let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: folder.id) }
+    let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: [folder.id]) }
     let(:folder) do
       FactoryBot.create_for_repository(:ephemera_folder, contributor: ["contributor 1", "contributor 2"],
                                                          language: language, genre: genre, subject: subject,
@@ -36,8 +36,11 @@ RSpec.describe ReportsController, type: :controller do
       get :ephemera_data, params: { project_id: project.id }, format: "csv"
       # expect(response.body).to eq(data)
       csv = CSV.parse(response.body, headers: true, header_converters: :symbol)
-      expect(csv[1][:local_identifier]).to eq "xyz1"
-      expect(csv[1][:folder_number]).to eq "one"
+      row1 = csv[1]
+      expect(row1[:local_identifier]).to eq "xyz1"
+      expect(row1[:folder_number]).to eq "one"
+      expect(row1[:language]).to eq language.label.first
+      expect(row1[:ephemera_box_number]).to eq "1"
 
       expect(response.headers["Content-Disposition"]).to eq("attachment; filename=\"test-project-data-#{Time.zone.today}.csv\"")
     end

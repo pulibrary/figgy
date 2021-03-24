@@ -9,7 +9,7 @@ class ReportsController < ApplicationController
     end
     @ephemera_projects = query_service.find_all_of_model(model: EphemeraProject).map(&:decorate) unless @ephemera_project
 
-    fields = %w[id local_identifier barcode ephemera_box folder_number title sort_title alternative_title
+    fields = %w[id local_identifier barcode ephemera_box_number folder_number title sort_title alternative_title
                 transliterated_title language ocr_language creator contributor publisher genre
                 width height page_count series keywords subject geo_subject geographic_origin
                 description date_created rendered_date_range
