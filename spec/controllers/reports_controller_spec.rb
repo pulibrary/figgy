@@ -34,13 +34,20 @@ RSpec.describe ReportsController, type: :controller do
     end
     it "allows downloading a CSV file" do
       get :ephemera_data, params: { project_id: project.id }, format: "csv"
-      # expect(response.body).to eq(data)
       csv = CSV.parse(response.body, headers: true, header_converters: :symbol)
-      row1 = csv[1]
+      row1 = csv.first
       expect(row1[:local_identifier]).to eq "xyz1"
-      expect(row1[:folder_number]).to eq "one"
-      expect(row1[:language]).to eq language.label.first
+      expect(row1[:barcode]).to eq "12345678901234"
       expect(row1[:ephemera_box_number]).to eq "1"
+      expect(row1[:folder_number]).to eq "one"
+      expect(row1[:title]).to eq "test folder"
+      expect(row1[:transliterated_title]).to eq "test transliterated title"
+      expect(row1[:language]).to eq "test language"
+      expect(row1[:genre]).to eq "test genre"
+      expect(row1[:keywords]).to eq "keyword1;keyword2"
+      expect(row1[:subject]).to eq "test subject"
+      expect(row1[:geo_subject]).to eq "test geo subject"
+      expect(row1[:geographic_origin]).to eq "test geo origin"
 
       expect(response.headers["Content-Disposition"]).to eq("attachment; filename=\"test-project-data-#{Time.zone.today}.csv\"")
     end

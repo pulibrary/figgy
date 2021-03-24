@@ -61,7 +61,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   end
 
   def ephemera_box_number
-    ephemera_box.box_number if ephemera_box
+    ephemera_box&.box_number
   end
 
   def ephemera_project
