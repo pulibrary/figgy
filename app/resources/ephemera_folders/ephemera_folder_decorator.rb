@@ -55,6 +55,10 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
     wayfinder.decorated_collections
   end
 
+  def collection_titles
+    wayfinder.decorated_collections.map(&:title)
+  end
+
   # TODO: Rename to decorated_ephemera_box
   def ephemera_box
     wayfinder.decorated_ephemera_box

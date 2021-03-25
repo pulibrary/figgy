@@ -13,7 +13,8 @@ RSpec.describe ReportsController, type: :controller do
                                                          keywords: ["keyword1", "keyword2"],
                                                          geo_subject: geo_subject,
                                                          geographic_origin: geo_origin,
-                                                         transliterated_title: "test transliterated title")
+                                                         transliterated_title: "test transliterated title",
+                                                         member_of_collection_ids: [collection.id])
     end
     let(:boxless) { FactoryBot.create_for_repository(:ephemera_folder, title: "boxless folder") }
     let(:language) { EphemeraTerm.new label: "test language" }
@@ -21,6 +22,7 @@ RSpec.describe ReportsController, type: :controller do
     let(:subject) { EphemeraTerm.new label: "test subject" }
     let(:geo_subject) { EphemeraTerm.new label: "test geo subject" }
     let(:geo_origin) { EphemeraTerm.new label: "test geo origin" }
+    let(:collection) { FactoryBot.create_for_repository(:collection, title: "test collection") }
 
     before do
       sign_in user
@@ -48,6 +50,7 @@ RSpec.describe ReportsController, type: :controller do
       expect(row1[:subject]).to eq "test subject"
       expect(row1[:geo_subject]).to eq "test geo subject"
       expect(row1[:geographic_origin]).to eq "test geo origin"
+      expect(row1[:collection_titles]).to eq "test collection"
 
       expect(response.headers["Content-Disposition"]).to eq("attachment; filename=\"test-project-data-#{Time.zone.today}.csv\"")
     end

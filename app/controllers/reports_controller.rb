@@ -12,7 +12,7 @@ class ReportsController < ApplicationController
                 transliterated_title language ocr_language creator contributor publisher genre
                 width height page_count series keywords subject geo_subject geographic_origin
                 description date_created rendered_date_range
-                provenance source_url dspace_url rights_statement member_of_collections]
+                provenance source_url dspace_url rights_statement collection_titles]
     respond_to do |format|
       format.html
       format.csv do
