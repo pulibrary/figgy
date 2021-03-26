@@ -14,7 +14,7 @@ services:
       dir: solr/config
   figgy_database:
     type: postgres:10
-    portforward: true
+    portforward: 32787
 proxy:
   figgy_test_solr:
     - figgy.test.solr.lndo.site:8983
