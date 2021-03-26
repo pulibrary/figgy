@@ -1,0 +1,17 @@
+{
+  "recap$pa": [
+    {
+      "holding_id": "22258767470006421",
+      "call_number": "KKT1504 .B748 2009",
+      "items": [
+        {
+          "pid": "23258767460006421",
+          "id": "23258767460006421",
+          "temp_location": null,
+          "perm_location": "recap$pa",
+          "cdl": false
+        }
+      ]
+    }
+  ]
+}
