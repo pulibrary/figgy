@@ -4,6 +4,7 @@ module CDL
   class EligibleItemService
     # EligibleItemService will return from Voyager items eligible for Controlled Digital Lending (Cdl)
     # patron_group_charged == "CDL"
+    # with alma the field will be "cdl": true
     class << self
       def item_ids(source_metadata_identifier:)
         return [] unless RemoteRecord.bibdata?(source_metadata_identifier)
@@ -15,13 +16,17 @@ module CDL
           end
         end
         items = items.select do |item|
-          item && item["patron_group_charged"] == "CDL"
+          item && cdl?(item)
         end
         items.map { |x| x["id"] }
       end
 
       def bibdata_base
         "https://bibdata.princeton.edu/"
+      end
+
+      def cdl?(item)
+        item["patron_group_charged"] == "CDL" || item["cdl"]
       end
     end
   end

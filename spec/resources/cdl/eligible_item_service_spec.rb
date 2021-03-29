@@ -95,5 +95,31 @@ RSpec.describe CDL::EligibleItemService do
         expect(described_class.item_ids(source_metadata_identifier: "922720")).not_to be_blank
       end
     end
+
+    context "patron_group_charged is missing and cdl is true" do
+      before do
+        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/#{bib_id}/items")
+          .to_return(status: 200,
+                     body: file_fixture("bibdata/#{bib_id}.json").read, headers: { "Content-Type" => "application/json" })
+      end
+      let(:bib_id) { "9965126093506421" }
+
+      it "returns the item pid" do
+        expect(described_class.item_ids(source_metadata_identifier: bib_id)).to eq ["23202918780006421"]
+      end
+    end
+
+    context "patron_group_charged is missing and cdl is false" do
+      before do
+        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/#{bib_id}/items")
+          .to_return(status: 200,
+                     body: file_fixture("bibdata/#{bib_id}.json").read, headers: { "Content-Type" => "application/json" })
+      end
+      let(:bib_id) { "9968643943506421" }
+
+      it "will return an empty array" do
+        expect(described_class.item_ids(source_metadata_identifier: bib_id)).to eq []
+      end
+    end
   end
 end

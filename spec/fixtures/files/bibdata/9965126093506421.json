@@ -1,0 +1,17 @@
+{
+  "firestone$stacks": [
+    {
+      "holding_id": "22202918790006421",
+      "call_number": "PS3558.A62424 B43 2010",
+      "items": [
+        {
+          "pid": "23202918780006421",
+          "id": "23202918780006421",
+          "temp_location": null,
+          "perm_location": "firestone$stacks",
+          "cdl": true
+        }
+      ]
+    }
+  ]
+}
