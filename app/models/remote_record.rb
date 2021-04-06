@@ -16,6 +16,10 @@ class RemoteRecord
     PulMetadataServices::Client.bibdata?(source_metadata_identifier)
   end
 
+  def self.alma?(source_metadata_identifier)
+    bibdata?(source_metadata_identifier) && source_metadata_identifier.start_with?("99") && source_metadata_identifier.end_with?("6421")
+  end
+
   def self.pulfa?(source_metadata_identifier)
     return false if source_metadata_identifier.match?(/\//)
     source_metadata_identifier.match?(/^(aspace_)?([A-Z][a-zA-Z0-9\.-]+)(_[a-z0-9]+)?/)
@@ -91,15 +95,11 @@ class RemoteRecord
       @jsonld_request ||=
         begin
           request = Faraday.get("https://bibdata.princeton.edu/bibliographic/#{source_metadata_identifier}/jsonld")
-          if !alma_id? && !request.success? && request.status.to_s == "404"
+          if !self.class.alma?(source_metadata_identifier) && !request.success? && request.status.to_s == "404"
             request = Faraday.get("https://bibdata.princeton.edu/bibliographic/99#{source_metadata_identifier}3506421/jsonld")
           end
           request
         end
-    end
-
-    def alma_id?
-      source_metadata_identifier.start_with?("99") && source_metadata_identifier.end_with?("6421")
     end
 
     def jsonld

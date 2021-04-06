@@ -48,7 +48,7 @@ class Types::QueryType < Types::BaseObject
   end
 
   def resources_by_bibid(bib_id:)
-    resources = query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: bib_id).select { |resource| ability.can? :discover, resource }.to_a
+    resources = query_service.custom_queries.find_by_source_metadata_identifier(source_metadata_identifier: bib_id).select { |resource| ability.can? :discover, resource }.to_a
     resources.select { |r| type_defined?(r) }
   end
 

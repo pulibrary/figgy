@@ -217,6 +217,13 @@ RSpec.describe Types::QueryType do
         expect(type.resources_by_orangelight_id(id: "7214786").map(&:id)).to eq [scanned_resource.id]
       end
 
+      it "can return a resource by its alma ID" do
+        stub_bibdata(bib_id: "7214786")
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
+        type = described_class.new(nil, context)
+        expect(type.resources_by_orangelight_id(id: "9972147863506421").map(&:id)).to eq [scanned_resource.id]
+      end
+
       it "can return a resource by its coin id" do
         coin = FactoryBot.create_for_repository(:coin, coin_number: 1)
         type = described_class.new(nil, context)
