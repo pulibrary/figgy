@@ -279,6 +279,17 @@ RSpec.describe Types::QueryType do
         expect(type.resources_by_orangelight_ids(ids: ["7214786", "8543429"]).map(&:id)).to contain_exactly(scanned_resource.id, scanned_resource2.id)
       end
 
+      it "can return resources by BibIDs even if some are ingested without alma IDs" do
+        stub_bibdata(bib_id: "991234563506421")
+        stub_bibdata(bib_id: "8543429")
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "991234563506421")
+        scanned_resource2 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "8543429")
+
+        type = described_class.new(nil, context)
+
+        expect(type.resources_by_orangelight_ids(ids: ["991234563506421", "9985434293506421"]).map(&:id)).to contain_exactly(scanned_resource.id, scanned_resource2.id)
+      end
+
       it "can return resources by coin_ids" do
         coin = FactoryBot.create_for_repository(:coin, coin_number: 43)
         coin2 = FactoryBot.create_for_repository(:coin, coin_number: 42)
