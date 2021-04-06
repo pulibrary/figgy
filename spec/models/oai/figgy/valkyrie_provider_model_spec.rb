@@ -14,6 +14,7 @@ RSpec.describe OAI::Figgy::ValkyrieProviderModel do
         create_scanned_resource(source_metadata_identifier: "8543429", collection_id: nil)
         create_scanned_resource(source_metadata_identifier: "8543429", collection_id: nil, state: "pending", visibility: ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS)
         create_scanned_resource(source_metadata_identifier: "8543429", collection_id: nil, state: "complete", visibility: ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS)
+        create_scanned_resource(source_metadata_identifier: "8543429", collection_id: nil, state: "complete", rights_statement: RightsStatements.no_copyright_contractual_restrictions)
 
         output = described_class.new.find_all(metadata_prefix: "marc21")
 
@@ -96,7 +97,7 @@ RSpec.describe OAI::Figgy::ValkyrieProviderModel do
     end
   end
 
-  def create_scanned_resource(source_metadata_identifier:, collection_id:, member_ids: [], append_id: nil, state: "complete", visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
+  def create_scanned_resource(source_metadata_identifier:, collection_id:, member_ids: [], append_id: nil, state: "complete", visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC, rights_statement: RightsStatements.no_known_copyright)
     stub_bibdata(bib_id: source_metadata_identifier)
     stub_bibdata(bib_id: source_metadata_identifier, content_type: "application/marcxml+xml") if File.exist?(bibdata_fixture_path(source_metadata_identifier, BibdataStubbing::CONTENT_TYPE_MARC_XML))
     stub_ezid(shoulder: "99999/fk4", blade: source_metadata_identifier)
@@ -107,6 +108,7 @@ RSpec.describe OAI::Figgy::ValkyrieProviderModel do
       import_metadata: true,
       member_ids: member_ids,
       append_id: append_id,
+      rights_statement: rights_statement,
       state: state,
       visibility: visibility
     )
