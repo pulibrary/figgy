@@ -50,6 +50,10 @@ module BibdataStubbing
         .to_return(
           status: status
         )
+      stub_request(:get, bibdata_url("99#{bib_id}3506421", content_type))
+        .to_return(
+          status: status
+        )
     end
   end
 

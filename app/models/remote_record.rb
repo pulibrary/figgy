@@ -88,7 +88,18 @@ class RemoteRecord
   private
 
     def jsonld_request
-      @jsonld_request ||= Faraday.get("https://bibdata.princeton.edu/bibliographic/#{source_metadata_identifier}/jsonld")
+      @jsonld_request ||=
+        begin
+          request = Faraday.get("https://bibdata.princeton.edu/bibliographic/#{source_metadata_identifier}/jsonld")
+          if !alma_id? && !request.success? && request.status.to_s == "404"
+            request = Faraday.get("https://bibdata.princeton.edu/bibliographic/99#{source_metadata_identifier}3506421/jsonld")
+          end
+          request
+        end
+    end
+
+    def alma_id?
+      source_metadata_identifier.start_with?("99") && source_metadata_identifier.end_with?("6421")
     end
 
     def jsonld
