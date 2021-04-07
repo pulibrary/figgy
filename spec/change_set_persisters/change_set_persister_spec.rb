@@ -276,6 +276,19 @@ RSpec.describe ChangeSetPersister do
     end
   end
 
+  context "when requesting from Alma" do
+    it "converts the old ID syntax and tries that too" do
+      stub_bibdata(bib_id: "123456", status: 404)
+      stub_bibdata(bib_id: "991234563506421")
+
+      resource = FactoryBot.build(:scanned_resource, title: [])
+      change_set = change_set_class.new(resource)
+      expect(change_set.validate(source_metadata_identifier: "123456")).to eq true
+      output = change_set_persister.save(change_set: change_set)
+
+      expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Earth rites : fertility rites in pre-industrial Britain", language: :fr)]
+    end
+  end
   context "when a source_metadata_identifier is set and it's from aspace pulfalight" do
     it "applies remote metadata from aspace Pulfalight" do
       stub_aspace(pulfa_id: "MC001.01_c000001")

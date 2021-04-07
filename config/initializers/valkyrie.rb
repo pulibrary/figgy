@@ -391,7 +391,8 @@ Rails.application.config.to_prepare do
     PagedAllQuery,
     FindResourcesWithoutMembers,
     PluckEarliestUpdatedAt,
-    LatestMemberTimestamp
+    LatestMemberTimestamp,
+    FindBySourceMetadataIdentifier
   ].each do |query_handler|
     Valkyrie.config.metadata_adapter.query_service.custom_queries.register_query_handler(query_handler)
   end
