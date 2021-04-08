@@ -13,7 +13,7 @@ class PagedAllQuery
     @query_service = query_service
   end
 
-  def paged_all(limit: 10, offset: 0, from: nil, until_time: nil, only_models: [], collection_slug: nil, marc_only: false, requirements: {})
+  def paged_all(limit: 10, offset: 0, from: nil, until_time: nil, only_models: [], collection_slug: nil, marc_only: false, requirements: {}, exclude_rights: [])
     connection.transaction(savepoint: true) do
       collections = collections(collection_slug)
       return [] if collection_slug && collections.empty?
@@ -23,6 +23,7 @@ class PagedAllQuery
 
       relation.offset(offset).with_requirements(requirements).only_models(only_models).from(from).until(until_time).exclude_volumes
       relation.only_marc if marc_only
+      relation.exclude_rights(exclude_rights) unless exclude_rights.empty?
 
       relation.lazy.map do |object|
         resource_factory.to_resource(object: object)
@@ -63,6 +64,14 @@ class PagedAllQuery
     def only_marc
       tap do
         self.relation = relation.exclude(Sequel[:orm_resources][:metadata].pg_jsonb.contains(archival_collection_code: []))
+      end
+    end
+
+    def exclude_rights(exclude_rights)
+      tap do
+        exclude_rights.each do |rights|
+          self.relation = relation.exclude(Sequel[:orm_resources][:metadata].pg_jsonb.contains(rights_statement: [rights]))
+        end
       end
     end
 

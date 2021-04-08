@@ -79,7 +79,8 @@ module OAI::Figgy
         marc_only: options.marc?,
         from: options.from,
         until_time: options.until,
-        requirements: oai_object_requirements
+        requirements: oai_object_requirements,
+        exclude_rights: suppress_rights_statements
       ).to_a.compact.map { |r| OAIWrapper.new(r) }
       wrap_results(result, options)
     end
@@ -92,6 +93,12 @@ module OAI::Figgy
         state: ["complete"],
         read_groups: [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
       }
+    end
+
+    def suppress_rights_statements
+      [
+        RightsStatements.no_copyright_contractual_restrictions
+      ]
     end
 
     def wrap_results(result, options)
