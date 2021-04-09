@@ -12,6 +12,7 @@ In Figgy Directory:
 In Figx Directory:
 
 1. `mix deps.get`
+1. `mix test`
 2. `cd assets && npm install && cd ..`
 
 To start your Phoenix server:
