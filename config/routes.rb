@@ -21,6 +21,8 @@ Rails.application.routes.draw do
     concerns :iiif_search
   end
 
+  get "catalog/:solr_document_id/pdf", to: "catalog#pdf", as: "pdf"
+
   resources :bookmarks do
     concerns :exportable
 

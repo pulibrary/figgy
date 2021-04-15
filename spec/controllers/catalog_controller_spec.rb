@@ -966,4 +966,29 @@ RSpec.describe CatalogController do
       end
     end
   end
+
+  describe "#pdf" do
+    context "when the resource can generate a pdf" do
+      let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource) }
+      before do
+        persister.save_all(resources: [resource])
+      end
+
+      it "redirects to the pdf" do
+        get :pdf, params: { solr_document_id: resource.id }
+        expect(response).to redirect_to "http://test.host/concern/scanned_resources/#{resource.id}/pdf"
+      end
+    end
+    context "when the resource can't generate a pdf" do
+      let(:resource) { FactoryBot.create_for_repository(:collection) }
+      before do
+        persister.save_all(resources: [resource])
+      end
+
+      it "redirects to the show page" do
+        get :pdf, params: { solr_document_id: resource.id.to_s }
+        expect(response).to redirect_to "http://test.host/catalog/#{resource.id}"
+      end
+    end
+  end
 end

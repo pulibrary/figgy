@@ -32,7 +32,7 @@ class CatalogController < ApplicationController
   end
 
   # enforce hydra access controls
-  before_action :set_id, only: :iiif_search
+  before_action :set_id, only: [:iiif_search, :pdf]
   before_action :enforce_show_permissions, only: [:show, :iiif_search]
   before_action :claimed_by_facet
 
@@ -196,6 +196,18 @@ class CatalogController < ApplicationController
       params[:no_redirect] ? render(json: { url: url }) : redirect_to(url)
     else
       render json: { message: "No manifest found for #{ark}" }, status: 404
+    end
+  end
+
+  def pdf
+    _, @document = fetch(params[:solr_document_id])
+    authorize! :show, resource
+
+    pdf_path = helpers.pdf_path(resource)
+    if pdf_path
+      redirect_to "#{request.base_url}#{pdf_path}"
+    else
+      redirect_to solr_document_url(resource), notice: "No PDF available for this item"
     end
   end
 end
