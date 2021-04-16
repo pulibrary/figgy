@@ -147,6 +147,19 @@ class BaseWayfinder
     )
   end
 
+  # Convenience accessor for loading the first member object, without having to
+  # load all of the other members.
+  def first_member
+    return unless resource.try(:member_ids)&.first
+    @first_member ||= query_service.find_by(id: resource.member_ids.first)
+  end
+
+  # Special case of loading the first member, but suppressing it unless it's a
+  # pdf file.
+  def source_pdf
+    first_member if first_member.try(:mime_type) == ["application/pdf"]
+  end
+
   private
 
     def deep_fixity_count(fixity_success:)

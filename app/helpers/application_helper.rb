@@ -180,6 +180,28 @@ module ApplicationHelper
     "/viewer#?manifest=#{manifest_url(resource)}"
   end
 
+  def fileset_download_path(fileset)
+    download_path(fileset.id, fileset.file_metadata.first.id)
+  end
+
+  def figgy_pdf_path(resource)
+    polymorphic_path([:pdf, resource]) if pdf_allowed?(resource)
+  end
+
+  def pdf_allowed?(resource)
+    return false unless pdf_types.include?(resource.class)
+    ["color", "gray", "bitonal"].include?(resource&.pdf_type&.first)
+  end
+
+  def pdf_types
+    [
+      Numismatics::Coin,
+      EphemeraFolder,
+      ScannedMap,
+      ScannedResource
+    ]
+  end
+
   def bulk_edit?
     collection_present? || bulk_editable_types_present?
   end

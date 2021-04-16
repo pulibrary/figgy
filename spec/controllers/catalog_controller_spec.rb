@@ -966,4 +966,40 @@ RSpec.describe CatalogController do
       end
     end
   end
+
+  describe "#pdf" do
+    let(:resources) { [resource] }
+    before do
+      persister.save_all(resources: resources)
+    end
+
+    context "when the resource was ingested from a pdf" do
+      let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: [file_set.id]) }
+      let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: [file_meta]) }
+      let(:file_meta) { FileMetadata.new(id: "1234", use: Valkyrie::Vocab::PCDMUse.OriginalFile, mime_type: "application/pdf") }
+      let(:resources) { [resource, file_set] }
+
+      it "downloads the original pdf" do
+        get :pdf, params: { solr_document_id: resource.id }
+        expect(response).to redirect_to "http://test.host/downloads/#{file_set.id}/file/1234"
+      end
+    end
+
+    context "when the resource can generate a pdf" do
+      let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource) }
+
+      it "redirects to the pdf" do
+        get :pdf, params: { solr_document_id: resource.id }
+        expect(response).to redirect_to "http://test.host/concern/scanned_resources/#{resource.id}/pdf"
+      end
+    end
+    context "when the resource can't generate a pdf" do
+      let(:resource) { FactoryBot.create_for_repository(:collection) }
+
+      it "redirects to the show page" do
+        get :pdf, params: { solr_document_id: resource.id.to_s }
+        expect(response).to redirect_to "http://test.host/catalog/#{resource.id}"
+      end
+    end
+  end
 end
