@@ -112,22 +112,21 @@ RSpec.describe ApplicationHelper, type: :helper do
     end
   end
 
-  describe "#pdf_path" do
-    context "when the resource was ingested from a pdf" do
-      let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: [file_set.id]) }
-      let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: [file_meta]) }
-      let(:file_meta) { FileMetadata.new(id: "1234", use: Valkyrie::Vocab::PCDMUse.OriginalFile, mime_type: "application/pdf") }
+  describe "#fileset_download_path" do
+    let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: [file_meta]) }
+    let(:file_meta) { FileMetadata.new(id: "1234", use: Valkyrie::Vocab::PCDMUse.OriginalFile, mime_type: "application/pdf") }
 
-      it "points to the original pdf" do
-        expect(helper.pdf_path(resource)).to eq "/downloads/#{file_set.id}/file/1234"
-      end
+    it "points to the original pdf" do
+      expect(helper.fileset_download_path(file_set)).to eq "/downloads/#{file_set.id}/file/1234"
     end
+  end
 
+  describe "#figgy_pdf_path" do
     context "when the resource supports pdf generation" do
       let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource) }
 
       it "points to the figgy-generated pdf" do
-        expect(helper.pdf_path(resource)).to eq "/concern/scanned_resources/#{resource.id}/pdf"
+        expect(helper.figgy_pdf_path(resource)).to eq "/concern/scanned_resources/#{resource.id}/pdf"
       end
     end
 
@@ -135,7 +134,7 @@ RSpec.describe ApplicationHelper, type: :helper do
       let(:resource) { FactoryBot.create_for_repository(:collection) }
 
       it "is nil" do
-        expect(helper.pdf_path(resource)).to be_nil
+        expect(helper.figgy_pdf_path(resource)).to be_nil
       end
     end
   end

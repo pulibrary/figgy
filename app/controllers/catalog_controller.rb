@@ -201,11 +201,12 @@ class CatalogController < ApplicationController
 
   def pdf
     _, @document = fetch(params[:solr_document_id])
-    authorize! :show, resource
 
-    pdf_path = helpers.pdf_path(resource)
-    if pdf_path
-      redirect_to "#{request.base_url}#{pdf_path}"
+    source_pdf = Wayfinder.for(resource).source_pdf
+    if source_pdf && can?(:download, source_pdf)
+      redirect_to "#{request.base_url}#{helpers.fileset_download_path(source_pdf)}"
+    elsif helpers.pdf_allowed?(resource) && can?(:pdf, resource)
+      redirect_to "#{request.base_url}#{polymorphic_path([:pdf, resource])}"
     else
       redirect_to solr_document_url(resource), notice: "No PDF available for this item"
     end

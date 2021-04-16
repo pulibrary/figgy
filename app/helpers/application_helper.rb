@@ -180,13 +180,8 @@ module ApplicationHelper
     "/viewer#?manifest=#{manifest_url(resource)}"
   end
 
-  def pdf_path(resource)
-    original_pdf_path(resource) || figgy_pdf_path(resource)
-  end
-
-  def original_pdf_path(resource)
-    first_member = resource.decorate.try(:members)&.first
-    download_path(first_member.id, first_member.file_metadata.first.id) if first_member&.mime_type&.first == "application/pdf"
+  def fileset_download_path(fileset)
+    download_path(fileset.id, fileset.file_metadata.first.id)
   end
 
   def figgy_pdf_path(resource)
