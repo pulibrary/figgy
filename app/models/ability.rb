@@ -184,8 +184,8 @@ class Ability
     return true if valkyrie_test_read(obj)
     return true if restricted_collections?(obj)
     return false if obj.read_groups.include?(::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_READING_ROOM) && !reading_room_ip?
-    return true if cdl_eligible?(obj)
-    obj.decorate.public_readable_state? && !private?(obj)
+    return true if obj.decorate.public_readable_state? && !private?(obj)
+    cdl_eligible?(obj) # check this last to minimize hits to alma API
   end
 
   def valkyrie_test_read(obj)
