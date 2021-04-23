@@ -3,6 +3,9 @@ defmodule FigxWeb.ManifestsController do
 
   def show(conn, _params) do
     # TODO: fetch resource
-    render(conn, "show.json", %{resource: nil})
+    resources = Figx.Repo.all_collections()
+    resources = resources |>
+    Enum.map(fn(%{id: id, metadata: %{title: title}}) -> %{id: id, label: title} end)
+    render(conn, "show.json", resources)
   end
 end
