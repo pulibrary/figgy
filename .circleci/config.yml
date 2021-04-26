@@ -213,18 +213,6 @@ jobs:
       - run: bundle install --path vendor/bundle
       - run: bundle exec rake rubocop
       - run: yarn lint
-  ensure_release_notes:
-    working_directory: ~/figgy
-    docker:
-      - image: circleci/ruby:2.6.5-node-browsers
-        environment:
-          RAILS_ENV: test
-          FIGGY_DB_HOST: localhost
-          FIGGY_DB_USERNAME: figgy
-          FIGGY_DB_PASSWORD: ""
-    steps:
-      - checkout
-      - run: bin/ci_check_release_notes.sh
 workflows:
   version: 2
   build_accept_deploy:
@@ -239,11 +227,7 @@ workflows:
       - coverage_report:
           requires:
             - test
-      - ensure_release_notes:
-          filters:
-            branches:
-              ignore:
-                - main
+
   nightly:
     triggers:
       - schedule:

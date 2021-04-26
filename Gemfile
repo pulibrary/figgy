@@ -134,7 +134,6 @@ group :development, :staging do
 end
 
 gem "aws-sdk-s3"
-gem "extra_extra"
 
 gem "bootsnap", require: false
 gem "dnsruby"

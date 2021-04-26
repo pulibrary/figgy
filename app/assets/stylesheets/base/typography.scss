@@ -68,15 +68,3 @@ body .form-control {
   font-family: verdana, arial;
   font-size: 150%;
 }
-
-.release-notes {
-  h2 {
-    @extend .h2;
-  }
-  h3 {
-    @extend .h3;
-  }
-  h4 {
-    @extend .h4;
-  }
-}

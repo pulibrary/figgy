@@ -4,8 +4,6 @@ Rails.application.routes.draw do
   if Rails.env.development?
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
   end
-  # Release notes
-  mount ExtraExtra::Engine, at: "/release_notes"
 
   post "/graphql", to: "graphql#execute", defaults: { format: :json }
   get "dashboard/fixity", to: "fixity_dashboard#show", as: "fixity_dashboard"
