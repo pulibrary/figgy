@@ -126,8 +126,9 @@ gem "graphiql-rails", group: :development
 
 gem "cocoon"
 gem "google-cloud-pubsub"
+gem "shrine", ">= 3.3.0"
 gem "shrine-google_cloud_storage"
-gem "valkyrie-shrine", "~> 0.4.0"
+gem "valkyrie-shrine", "~> 0.5"
 
 group :development, :staging do
   gem "rack-mini-profiler", require: false
