@@ -12,6 +12,7 @@ class IngestEphemeraMODS
   end
 
   def ingest
+    return nil unless files.count.positive?
     change_set.validate(base_attributes)
     change_set.validate(title_attributes)
     change_set.validate(mods_attributes)
@@ -50,6 +51,31 @@ class IngestEphemeraMODS
   class IngestGnibMODS < IngestEphemeraMODS
     def mods_class
       GnibMODS
+    end
+
+    def base_attributes
+      super.merge(
+        barcode: barcode,
+        folder_number: folder_number
+      )
+    end
+
+    def barcode
+      "00000000"
+    end
+
+    def ocr_language
+      mods_doc.language
+    end
+
+    def local_identifier
+      folder_number + "_" + File.basename(dir)
+    end
+
+    def folder_number
+      record_identifier = mods_doc.record_identifier
+      path = URI(record_identifier).path
+      path.split("/")[-2]
     end
   end
 
@@ -90,14 +116,23 @@ class IngestEphemeraMODS
         date_created: mods_doc.date_created,
         genre: find_term(label: mods_doc.genre, vocab: "LAE Genres"),
         subject: subjects,
-        local_identifier: File.basename(dir),
+        local_identifier: local_identifier,
         language: [find_term(code: mods_doc.language.first, vocab: "LAE Languages")],
         geographic_origin: [find_term(label: mods_doc.geographic_origin.first, vocab: "LAE Areas")],
         geo_subject: [find_term(label: mods_doc.geographic_subject.first, vocab: "LAE Areas")],
         height: height_from_extent,
         width: width_from_extent,
-        page_count: page_count
+        page_count: page_count,
+        ocr_language: ocr_language
       }
+    end
+
+    def local_identifier
+      File.basename(dir)
+    end
+
+    def ocr_language
+      []
     end
 
     def subjects
