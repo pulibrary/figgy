@@ -4,6 +4,9 @@ defmodule FigxWeb.ManifestsView do
   # manifest is an ecto Resource object
   def render("show.json", %{resource: resource}) do
     # Manifester.from_resource(resource)
-    %{id: "hi"}
+    %{
+      id: resource.id,
+      label: resource.metadata["title"]
+    }
   end
 end
