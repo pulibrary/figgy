@@ -5,7 +5,9 @@ defmodule FigxWeb.ManifestsView do
   def render("show.json", %{resource: resource}) do
     # Manifester.from_resource(resource)
     %{
-      id: resource.id,
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": resource.id,
+      "@type": "sc:Collection",
       label: resource.metadata["title"]
     }
   end
