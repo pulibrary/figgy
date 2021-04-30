@@ -8,4 +8,8 @@ defmodule Figx.Repo do
     from(Figx.Resource, where: [internal_resource: "Collection"])
     |> all()
   end
+
+  def get_resource(id) do
+    get(Figx.Resource, id)
+  end
 end
