@@ -29,13 +29,6 @@ class FileSetsController < ApplicationController
     render plain: resource.ocr_content.first
   end
 
-  def derivative_change_set_persister
-    ::ChangeSetPersister.new(
-      metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
-      storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)
-    )
-  end
-
   def update
     @change_set = ChangeSet.for(file_set)
     authorize! :update, @change_set.resource
@@ -44,7 +37,6 @@ class FileSetsController < ApplicationController
       change_set_persister.buffer_into_index do |persist|
         obj = persist.save(change_set: @change_set)
       end
-      update_derivatives(obj) unless derivative_resource_params.empty?
 
       after_update_success(obj, @change_set)
     end
@@ -63,27 +55,4 @@ class FileSetsController < ApplicationController
   def file_set
     @file_set ||= find_resource(params[:id])
   end
-
-  private
-
-    def filtered_file_params(file_filter:)
-      filtered = resource_params
-      files = filtered.fetch(file_filter, [])
-      return {} if files.empty?
-      filtered[:files] = files
-      filtered.delete(file_filter)
-      filtered
-    end
-
-    def derivative_resource_params
-      @derivative_resource_params ||= filtered_file_params(file_filter: :derivative_files)
-    end
-
-    def update_derivatives(obj)
-      @change_set = ChangeSet.for(obj)
-      return unless @change_set.validate(derivative_resource_params)
-      derivative_change_set_persister.buffer_into_index do |persist|
-        persist.save(change_set: @change_set)
-      end
-    end
 end
