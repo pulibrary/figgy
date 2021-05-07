@@ -14,6 +14,7 @@ defmodule FigxWeb.ManifestsControllerTest do
       assert json["@context"] == "http://iiif.io/api/presentation/2/context.json"
       assert json["@type"] == "sc:Collection"
       assert json["label"] == ["Test Collection"]
+      assert json["description"] == ["Test Description"]
     end
 
     test "returns 400 for a resource manifest request", %{conn: conn} do
