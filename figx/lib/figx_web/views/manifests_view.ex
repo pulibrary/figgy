@@ -6,7 +6,7 @@ defmodule FigxWeb.ManifestsView do
     # Manifester.from_resource(resource)
     %{
       "@context": "http://iiif.io/api/presentation/2/context.json",
-      "@id": resource.id,
+      "@id": "#{FigxWeb.Endpoint.url()}/collections/#{resource.id}/manifest",
       "@type": "sc:Collection",
       label: resource.metadata["title"],
       description: resource.metadata["description"],

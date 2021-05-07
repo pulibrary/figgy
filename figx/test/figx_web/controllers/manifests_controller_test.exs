@@ -10,7 +10,10 @@ defmodule FigxWeb.ManifestsControllerTest do
       resource_id = "597edce8-3a2f-41cd-be2b-182dae7b9a8f"
       conn = get(conn, "/manifest/#{resource_id}")
       json = json_response(conn, 200)
-      assert json["@id"] == "597edce8-3a2f-41cd-be2b-182dae7b9a8f"
+
+      assert json["@id"] ==
+               "http://localhost:4002/collections/597edce8-3a2f-41cd-be2b-182dae7b9a8f/manifest"
+
       assert json["@context"] == "http://iiif.io/api/presentation/2/context.json"
       assert json["@type"] == "sc:Collection"
       assert json["label"] == ["Test Collection"]
