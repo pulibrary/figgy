@@ -8,7 +8,8 @@ defmodule FigxWeb.ManifestsView do
       "@context": "http://iiif.io/api/presentation/2/context.json",
       "@id": resource.id,
       "@type": "sc:Collection",
-      label: resource.metadata["title"]
+      label: resource.metadata["title"],
+      description: resource.metadata["description"]
     }
   end
 end
