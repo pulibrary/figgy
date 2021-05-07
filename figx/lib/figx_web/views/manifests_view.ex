@@ -9,7 +9,8 @@ defmodule FigxWeb.ManifestsView do
       "@id": resource.id,
       "@type": "sc:Collection",
       label: resource.metadata["title"],
-      description: resource.metadata["description"]
+      description: resource.metadata["description"],
+      metadata: [%{"label" => "Exhibit", "value" => resource.metadata["slug"]}]
     }
   end
 end
