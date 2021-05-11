@@ -25,7 +25,8 @@ class ChangeSetPersister
         CleanupPdfs,
         CreateProxyFileSets,
         ApplyAuthToken,
-        CacheParentId
+        CacheParentId,
+        UpdateAspaceDao
       ],
       after_save: [
         AppendToParent,
