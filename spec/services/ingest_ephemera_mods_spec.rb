@@ -15,8 +15,8 @@ describe IngestEphemeraMODS do
   before do
     languages = FactoryBot.create_for_repository(:ephemera_vocabulary, label: "LAE Languages")
     FactoryBot.create_for_repository(:ephemera_term, label: ["Russian"], code: ["rus"], member_of_vocabulary_id: languages.id)
-    FactoryBot.create_for_repository(:ephemera_term, label: ["English"], code: ["eng"], member_of_vocabulary_id: languages.id)
-    FactoryBot.create_for_repository(:ephemera_term, label: ["Spanish"], code: ["spa"], member_of_vocabulary_id: languages.id)
+    FactoryBot.create_for_repository(:ephemera_term, label: ["English"], code: ["en"], member_of_vocabulary_id: languages.id)
+    FactoryBot.create_for_repository(:ephemera_term, label: ["Spanish"], code: ["es"], member_of_vocabulary_id: languages.id)
 
     areas = FactoryBot.create_for_repository(:ephemera_vocabulary, label: "LAE Areas")
     FactoryBot.create_for_repository(:ephemera_term, label: ["Ukraine"], member_of_vocabulary_id: areas.id)
@@ -70,24 +70,25 @@ describe IngestEphemeraMODS do
       expect(output.decorate.genre).to eq "ephemera"
       expect(output.decorate.members.map(&:title).flatten).to eq ["00223.tif", "00224.tif", "00223.mods"]
       expect(output.decorate.subject).to include "Free trade"
+      expect(output.decorate.geo_subject).to include "Guatemala"
       expect(output.decorate.language.first.label).to eq "English"
       expect(output.decorate.barcode).to eq "00000000"
       expect(output.decorate.folder_number).to eq "E_0_3"
       expect(output.decorate.local_identifier.first).to eq "E_0_3_00223"
     end
 
-    it "gets ocr" do
+    it "sets ocr language" do
       output = service.ingest
       expect(output.ocr_language.first).to eq "eng"
     end
   end
 
-  context "GNIB object has no image files" do
+  context "When GNIB object has no image files" do
     subject(:service) { IngestEphemeraMODS::IngestGnibMODS.new(project.id, mods, dir, change_set_persister, logger) }
     let(:mods) { Rails.root.join("spec", "fixtures", "files", "GNIB", "00223.mods") }
     let(:dir) { Rails.root.join("spec", "fixtures", "GNIB", "empty") }
 
-    it "does not ingest the object" do
+    it "the object is not ingested" do
       output = service.ingest
       expect(output).to be_nil
     end
