@@ -1,0 +1,867 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MD_Metadata xmlns="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:gml="http://www.opengis.net/gml" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <language>
+    <LanguageCode codeList="http://www.loc.gov/standards/iso639-2/php/code_list.php" codeListValue="eng" codeSpace="ISO639-2">eng</LanguageCode>
+  </language>
+  <characterSet>
+    <MD_CharacterSetCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" codeSpace="ISOTC211/19115">utf8</MD_CharacterSetCode>
+  </characterSet>
+  <hierarchyLevel>
+    <MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset" codeSpace="ISOTC211/19115">dataset</MD_ScopeCode>
+  </hierarchyLevel>
+  <hierarchyLevelName>
+    <gco:CharacterString>dataset</gco:CharacterString>
+  </hierarchyLevelName>
+  <contact>
+    <CI_ResponsibleParty>
+      <organisationName>
+        <gco:CharacterString>Map and Geospatial Information Center, Lewis Library, Princeton University</gco:CharacterString>
+      </organisationName>
+      <contactInfo>
+        <CI_Contact>
+          <phone>
+            <CI_Telephone>
+              <voice>
+                <gco:CharacterString>609-258-1097</gco:CharacterString>
+              </voice>
+            </CI_Telephone>
+          </phone>
+          <address>
+            <CI_Address>
+              <city>
+                <gco:CharacterString>Princeton</gco:CharacterString>
+              </city>
+              <administrativeArea>
+                <gco:CharacterString>NJ</gco:CharacterString>
+              </administrativeArea>
+              <postalCode>
+                <gco:CharacterString>08544</gco:CharacterString>
+              </postalCode>
+              <country>
+                <Country codeList="http://www.iso.org/iso/country_codes/iso_3166_code_lists.htm" codeListValue="US" codeSpace="ISO3166-1">US</Country>
+              </country>
+            </CI_Address>
+          </address>
+        </CI_Contact>
+      </contactInfo>
+      <role>
+        <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="custodian" codeSpace="ISOTC211/19115">custodian</CI_RoleCode>
+      </role>
+    </CI_ResponsibleParty>
+  </contact>
+  <contact>
+    <CI_ResponsibleParty>
+      <individualName>
+        <gco:CharacterString>Andrew Pascale</gco:CharacterString>
+      </individualName>
+      <role>
+        <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="originator" codeSpace="ISOTC211/19115">originator</CI_RoleCode>
+      </role>
+    </CI_ResponsibleParty>
+  </contact>
+  <dateStamp>
+    <gco:Date>2021-05-05</gco:Date>
+  </dateStamp>
+  <metadataStandardName>
+    <gco:CharacterString>ISO 19139 Geographic Information - Metadata - Implementation Specification</gco:CharacterString>
+  </metadataStandardName>
+  <metadataStandardVersion>
+    <gco:CharacterString>2007</gco:CharacterString>
+  </metadataStandardVersion>
+  <spatialRepresentationInfo>
+    <MD_VectorSpatialRepresentation>
+      <topologyLevel>
+        <MD_TopologyLevelCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_TopologyLevelCode" codeListValue="geometryOnly" codeSpace="ISOTC211/19115">geometryOnly</MD_TopologyLevelCode>
+      </topologyLevel>
+      <geometricObjects>
+        <MD_GeometricObjects>
+          <geometricObjectType>
+            <MD_GeometricObjectTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_GeometricObjectTypeCode" codeListValue="composite" codeSpace="ISOTC211/19115">composite</MD_GeometricObjectTypeCode>
+          </geometricObjectType>
+          <geometricObjectCount>
+            <gco:Integer>43327</gco:Integer>
+          </geometricObjectCount>
+        </MD_GeometricObjects>
+      </geometricObjects>
+    </MD_VectorSpatialRepresentation>
+  </spatialRepresentationInfo>
+  <referenceSystemInfo>
+    <MD_ReferenceSystem>
+      <referenceSystemIdentifier>
+        <RS_Identifier>
+          <code>
+            <gco:CharacterString>0</gco:CharacterString>
+          </code>
+        </RS_Identifier>
+      </referenceSystemIdentifier>
+    </MD_ReferenceSystem>
+  </referenceSystemInfo>
+  <identificationInfo>
+    <MD_DataIdentification>
+      <citation>
+        <CI_Citation>
+          <title>
+            <gco:CharacterString>Net-Zero America selected renewable resource projects for high-electrification scenario (base land use), 2050</gco:CharacterString>
+          </title>
+          <date>
+            <CI_Date>
+              <date>
+                <gco:Date>2021-04-14</gco:Date>
+              </date>
+              <dateType>
+                <CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication" codeSpace="ISOTC211/19115">publication</CI_DateTypeCode>
+              </dateType>
+            </CI_Date>
+          </date>
+          <citedResponsibleParty>
+            <CI_ResponsibleParty>
+              <individualName>
+                <gco:CharacterString>Emily Leslie</gco:CharacterString>
+              </individualName>
+              <organisationName>
+                <gco:CharacterString>Energy Reflections, LLC</gco:CharacterString>
+              </organisationName>
+              <positionName>
+                <gco:CharacterString>Principal</gco:CharacterString>
+              </positionName>
+              <role>
+                <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="originator" codeSpace="ISOTC211/19115">originator</CI_RoleCode>
+              </role>
+            </CI_ResponsibleParty>
+          </citedResponsibleParty>
+          <citedResponsibleParty>
+            <CI_ResponsibleParty>
+              <individualName>
+                <gco:CharacterString>Andrew Pascale</gco:CharacterString>
+              </individualName>
+              <organisationName>
+                <gco:CharacterString>Andlinger Center, Princeton University</gco:CharacterString>
+              </organisationName>
+              <positionName>
+                <gco:CharacterString>Post-Doctoral Research Associate</gco:CharacterString>
+              </positionName>
+              <role>
+                <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="originator" codeSpace="ISOTC211/19115">originator</CI_RoleCode>
+              </role>
+            </CI_ResponsibleParty>
+          </citedResponsibleParty>
+          <citedResponsibleParty>
+            <CI_ResponsibleParty>
+              <individualName>
+                <gco:CharacterString>Jesse Jenkins</gco:CharacterString>
+              </individualName>
+              <organisationName>
+                <gco:CharacterString>Mechanical and Aerospace Engineering Department and Andlinger Center, Princeton University</gco:CharacterString>
+              </organisationName>
+              <positionName>
+                <gco:CharacterString>Assistant Professor</gco:CharacterString>
+              </positionName>
+              <role>
+                <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="principalInvestigator" codeSpace="ISOTC211/19115">principalInvestigator</CI_RoleCode>
+              </role>
+            </CI_ResponsibleParty>
+          </citedResponsibleParty>
+          <citedResponsibleParty>
+            <CI_ResponsibleParty>
+              <individualName>
+                <gco:CharacterString>Eric Larson</gco:CharacterString>
+              </individualName>
+              <organisationName>
+                <gco:CharacterString>Andlinger Center, Princeton University</gco:CharacterString>
+              </organisationName>
+              <positionName>
+                <gco:CharacterString>Senior Research Engineer</gco:CharacterString>
+              </positionName>
+              <role>
+                <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="principalInvestigator" codeSpace="ISOTC211/19115">principalInvestigator</CI_RoleCode>
+              </role>
+            </CI_ResponsibleParty>
+          </citedResponsibleParty>
+          <citedResponsibleParty>
+            <CI_ResponsibleParty>
+              <individualName>
+                <gco:CharacterString>Chris Greig</gco:CharacterString>
+              </individualName>
+              <organisationName>
+                <gco:CharacterString>Andlinger Center, Princeton University</gco:CharacterString>
+              </organisationName>
+              <positionName>
+                <gco:CharacterString>Senior Research Scientist</gco:CharacterString>
+              </positionName>
+              <role>
+                <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="principalInvestigator" codeSpace="ISOTC211/19115">principalInvestigator</CI_RoleCode>
+              </role>
+            </CI_ResponsibleParty>
+          </citedResponsibleParty>
+          <citedResponsibleParty>
+            <CI_ResponsibleParty>
+              <individualName>
+                <gco:CharacterString>Erin Mayfield</gco:CharacterString>
+              </individualName>
+              <organisationName>
+                <gco:CharacterString>High Meadows Environmental Institute, Princeton University</gco:CharacterString>
+              </organisationName>
+              <positionName>
+                <gco:CharacterString>Post-Doctoral Research Associate</gco:CharacterString>
+              </positionName>
+              <role>
+                <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author" codeSpace="ISOTC211/19115">author</CI_RoleCode>
+              </role>
+            </CI_ResponsibleParty>
+          </citedResponsibleParty>
+          <citedResponsibleParty>
+            <CI_ResponsibleParty>
+              <individualName>
+                <gco:CharacterString>Chuan Zhang</gco:CharacterString>
+              </individualName>
+              <organisationName>
+                <gco:CharacterString>Andlinger Center, Princeton University</gco:CharacterString>
+              </organisationName>
+              <positionName>
+                <gco:CharacterString>Post-Doctoral Research Associate</gco:CharacterString>
+              </positionName>
+              <role>
+                <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author" codeSpace="ISOTC211/19115">author</CI_RoleCode>
+              </role>
+            </CI_ResponsibleParty>
+          </citedResponsibleParty>
+          <citedResponsibleParty>
+            <CI_ResponsibleParty>
+              <individualName>
+                <gco:CharacterString>Joshua Drossman</gco:CharacterString>
+              </individualName>
+              <organisationName>
+                <gco:CharacterString>Operations Research and Financial Engineering Department, Princeton University</gco:CharacterString>
+              </organisationName>
+              <positionName>
+                <gco:CharacterString>Undergraduate, Class of 2022</gco:CharacterString>
+              </positionName>
+              <role>
+                <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author" codeSpace="ISOTC211/19115">author</CI_RoleCode>
+              </role>
+            </CI_ResponsibleParty>
+          </citedResponsibleParty>
+          <citedResponsibleParty>
+            <CI_ResponsibleParty>
+              <individualName>
+                <gco:CharacterString>Robert Williams</gco:CharacterString>
+              </individualName>
+              <organisationName>
+                <gco:CharacterString>Andlinger Center, Princeton University</gco:CharacterString>
+              </organisationName>
+              <positionName>
+                <gco:CharacterString>Senior Research Scientist Emeritus</gco:CharacterString>
+              </positionName>
+              <role>
+                <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author" codeSpace="ISOTC211/19115">author</CI_RoleCode>
+              </role>
+            </CI_ResponsibleParty>
+          </citedResponsibleParty>
+          <citedResponsibleParty>
+            <CI_ResponsibleParty>
+              <individualName>
+                <gco:CharacterString>Steve Pacala</gco:CharacterString>
+              </individualName>
+              <organisationName>
+                <gco:CharacterString>Ecology and Evolutionary Biology Department and High Meadows Environmental Institute, Princeton University</gco:CharacterString>
+              </organisationName>
+              <positionName>
+                <gco:CharacterString>Professor and Director of the Carbon Mitigation Initiative</gco:CharacterString>
+              </positionName>
+              <role>
+                <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author" codeSpace="ISOTC211/19115">author</CI_RoleCode>
+              </role>
+            </CI_ResponsibleParty>
+          </citedResponsibleParty>
+          <citedResponsibleParty>
+            <CI_ResponsibleParty>
+              <individualName>
+                <gco:CharacterString>Robert Socolow</gco:CharacterString>
+              </individualName>
+              <organisationName>
+                <gco:CharacterString>Mechanical and Aerospace Engineering Department and High Meadows Environmental Institute, Princeton University</gco:CharacterString>
+              </organisationName>
+              <positionName>
+                <gco:CharacterString>Professor Emeritus</gco:CharacterString>
+              </positionName>
+              <role>
+                <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author" codeSpace="ISOTC211/19115">author</CI_RoleCode>
+              </role>
+            </CI_ResponsibleParty>
+          </citedResponsibleParty>
+          <citedResponsibleParty>
+            <CI_ResponsibleParty>
+              <individualName>
+                <gco:CharacterString>Ejeong Baik</gco:CharacterString>
+              </individualName>
+              <organisationName>
+                <gco:CharacterString>Department of Energy Resources Engineering, Stanford University</gco:CharacterString>
+              </organisationName>
+              <positionName>
+                <gco:CharacterString>Ph.D. Candidate</gco:CharacterString>
+              </positionName>
+              <role>
+                <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author" codeSpace="ISOTC211/19115">author</CI_RoleCode>
+              </role>
+            </CI_ResponsibleParty>
+          </citedResponsibleParty>
+          <citedResponsibleParty>
+            <CI_ResponsibleParty>
+              <individualName>
+                <gco:CharacterString>Rich Birdsey</gco:CharacterString>
+              </individualName>
+              <organisationName>
+                <gco:CharacterString>U.S. Forest Service</gco:CharacterString>
+              </organisationName>
+              <positionName>
+                <gco:CharacterString>retired</gco:CharacterString>
+              </positionName>
+              <role>
+                <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author" codeSpace="ISOTC211/19115">author</CI_RoleCode>
+              </role>
+            </CI_ResponsibleParty>
+          </citedResponsibleParty>
+          <citedResponsibleParty>
+            <CI_ResponsibleParty>
+              <individualName>
+                <gco:CharacterString>Rick Duke</gco:CharacterString>
+              </individualName>
+              <organisationName>
+                <gco:CharacterString>Gigaton Strategies, LLC</gco:CharacterString>
+              </organisationName>
+              <positionName>
+                <gco:CharacterString>Principal</gco:CharacterString>
+              </positionName>
+              <role>
+                <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author" codeSpace="ISOTC211/19115">author</CI_RoleCode>
+              </role>
+            </CI_ResponsibleParty>
+          </citedResponsibleParty>
+          <citedResponsibleParty>
+            <CI_ResponsibleParty>
+              <individualName>
+                <gco:CharacterString>Ryan Jones</gco:CharacterString>
+              </individualName>
+              <organisationName>
+                <gco:CharacterString>Evolved Energy Research</gco:CharacterString>
+              </organisationName>
+              <positionName>
+                <gco:CharacterString>Principal</gco:CharacterString>
+              </positionName>
+              <role>
+                <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author" codeSpace="ISOTC211/19115">author</CI_RoleCode>
+              </role>
+            </CI_ResponsibleParty>
+          </citedResponsibleParty>
+          <citedResponsibleParty>
+            <CI_ResponsibleParty>
+              <individualName>
+                <gco:CharacterString>Ben Haley</gco:CharacterString>
+              </individualName>
+              <organisationName>
+                <gco:CharacterString>Evolved Energy Research</gco:CharacterString>
+              </organisationName>
+              <positionName>
+                <gco:CharacterString>Principal</gco:CharacterString>
+              </positionName>
+              <role>
+                <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author" codeSpace="ISOTC211/19115">author</CI_RoleCode>
+              </role>
+            </CI_ResponsibleParty>
+          </citedResponsibleParty>
+          <citedResponsibleParty>
+            <CI_ResponsibleParty>
+              <individualName>
+                <gco:CharacterString>Keith Paustian</gco:CharacterString>
+              </individualName>
+              <organisationName>
+                <gco:CharacterString>Department of Soil and Crop Sciences and Natural Resource Ecology Laboratory, Colorado State University</gco:CharacterString>
+              </organisationName>
+              <positionName>
+                <gco:CharacterString>Professor and Senior Research Scientist</gco:CharacterString>
+              </positionName>
+              <role>
+                <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author" codeSpace="ISOTC211/19115">author</CI_RoleCode>
+              </role>
+            </CI_ResponsibleParty>
+          </citedResponsibleParty>
+          <citedResponsibleParty>
+            <CI_ResponsibleParty>
+              <individualName>
+                <gco:CharacterString>Amy Swan</gco:CharacterString>
+              </individualName>
+              <organisationName>
+                <gco:CharacterString>Natural Resource Ecology Laboratory, Colorado State University</gco:CharacterString>
+              </organisationName>
+              <positionName>
+                <gco:CharacterString>Project Scientist</gco:CharacterString>
+              </positionName>
+              <role>
+                <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author" codeSpace="ISOTC211/19115">author</CI_RoleCode>
+              </role>
+            </CI_ResponsibleParty>
+          </citedResponsibleParty>
+          <citedResponsibleParty>
+            <CI_ResponsibleParty>
+              <organisationName>
+                <gco:CharacterString>Map and Geospatial Information Center, Lewis Library, Princeton University</gco:CharacterString>
+              </organisationName>
+              <contactInfo>
+                <CI_Contact>
+                  <phone>
+                    <CI_Telephone>
+                      <voice>
+                        <gco:CharacterString>609-258-1097</gco:CharacterString>
+                      </voice>
+                    </CI_Telephone>
+                  </phone>
+                  <address>
+                    <CI_Address>
+                      <city>
+                        <gco:CharacterString>Princeton</gco:CharacterString>
+                      </city>
+                      <administrativeArea>
+                        <gco:CharacterString>NJ</gco:CharacterString>
+                      </administrativeArea>
+                      <postalCode>
+                        <gco:CharacterString>08544</gco:CharacterString>
+                      </postalCode>
+                      <country>
+                        <Country codeList="http://www.iso.org/iso/country_codes/iso_3166_code_lists.htm" codeListValue="US" codeSpace="ISO3166-1">US</Country>
+                      </country>
+                    </CI_Address>
+                  </address>
+                </CI_Contact>
+              </contactInfo>
+              <role>
+                <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="custodian" codeSpace="ISOTC211/19115">custodian</CI_RoleCode>
+              </role>
+            </CI_ResponsibleParty>
+          </citedResponsibleParty>
+          <citedResponsibleParty>
+            <CI_ResponsibleParty>
+              <organisationName>
+                <gco:CharacterString>Princeton University</gco:CharacterString>
+              </organisationName>
+              <contactInfo>
+                <CI_Contact>
+                  <phone>
+                    <CI_Telephone>
+                      <voice>
+                        <gco:CharacterString>609-258-3000</gco:CharacterString>
+                      </voice>
+                    </CI_Telephone>
+                  </phone>
+                  <address>
+                    <CI_Address>
+                      <city>
+                        <gco:CharacterString>Princeton</gco:CharacterString>
+                      </city>
+                      <administrativeArea>
+                        <gco:CharacterString>NJ</gco:CharacterString>
+                      </administrativeArea>
+                      <postalCode>
+                        <gco:CharacterString>08544</gco:CharacterString>
+                      </postalCode>
+                      <country>
+                        <Country codeList="http://www.iso.org/iso/country_codes/iso_3166_code_lists.htm" codeListValue="US" codeSpace="ISO3166-1">US</Country>
+                      </country>
+                    </CI_Address>
+                  </address>
+                </CI_Contact>
+              </contactInfo>
+              <role>
+                <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="owner" codeSpace="ISOTC211/19115">owner</CI_RoleCode>
+              </role>
+            </CI_ResponsibleParty>
+          </citedResponsibleParty>
+          <presentationForm>
+            <CI_PresentationFormCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_PresentationFormCode" codeListValue="mapDigital" codeSpace="ISOTC211/19115">mapDigital</CI_PresentationFormCode>
+          </presentationForm>
+        </CI_Citation>
+      </citation>
+      <abstract>
+        <gco:CharacterString>This dataset shows the wind and solar development in the contiguous United States that will be required by 2050 under a net-zero-emissions scenario with high electrification and more permissive land-use assumptions. For an overview of this "E+" high-electrification scenario and these "base" land-use assumptions, please refer to the "supplemental information" portion of this record.</gco:CharacterString>
+      </abstract>
+      <purpose>
+        <gco:CharacterString>For visualizing renewable energy using GIS software. A growing number of pledges are being made by major corporations, municipalities, states, and national governments to reach net-zero emissions by 2050 or sooner. As part of the Net-Zero America Project, this dataset provides granular guidance on what getting to net-zero really requires and on actions needed to translate these pledges into tangible progress. </gco:CharacterString>
+      </purpose>
+      <credit>
+        <gco:CharacterString>E. Leslie, A. Pascale, J. Jenkins, E. Larson, C. Greig, E. Mayfield, C. Zhang, J. Drossman, R. Williams, S. Pacala, R. Socolow, EJ Baik, R. Birdsey, R. Duke, R. Jones, B. Haley, K. Paustian, A. Swan</gco:CharacterString>
+      </credit>
+      <credit>
+        <gco:CharacterString>Princeton University</gco:CharacterString>
+      </credit>
+      <status>
+        <MD_ProgressCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ProgressCode" codeListValue="completed" codeSpace="ISOTC211/19115">completed</MD_ProgressCode>
+      </status>
+      <pointOfContact>
+        <CI_ResponsibleParty>
+          <organisationName>
+            <gco:CharacterString>Map and Geospatial Information Center, Lewis Library, Princeton University</gco:CharacterString>
+          </organisationName>
+          <contactInfo>
+            <CI_Contact>
+              <phone>
+                <CI_Telephone>
+                  <voice>
+                    <gco:CharacterString>609-258-1097</gco:CharacterString>
+                  </voice>
+                </CI_Telephone>
+              </phone>
+              <address>
+                <CI_Address>
+                  <city>
+                    <gco:CharacterString>Princeton</gco:CharacterString>
+                  </city>
+                  <administrativeArea>
+                    <gco:CharacterString>NJ</gco:CharacterString>
+                  </administrativeArea>
+                  <postalCode>
+                    <gco:CharacterString>08544</gco:CharacterString>
+                  </postalCode>
+                  <country>
+                    <Country codeList="http://www.iso.org/iso/country_codes/iso_3166_code_lists.htm" codeListValue="US" codeSpace="ISO3166-1">US</Country>
+                  </country>
+                </CI_Address>
+              </address>
+            </CI_Contact>
+          </contactInfo>
+          <role>
+            <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="custodian" codeSpace="ISOTC211/19115">custodian</CI_RoleCode>
+          </role>
+        </CI_ResponsibleParty>
+      </pointOfContact>
+      <pointOfContact>
+        <CI_ResponsibleParty>
+          <individualName>
+            <gco:CharacterString>Andrew Pascale</gco:CharacterString>
+          </individualName>
+          <role>
+            <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="originator" codeSpace="ISOTC211/19115">originator</CI_RoleCode>
+          </role>
+        </CI_ResponsibleParty>
+      </pointOfContact>
+      <resourceMaintenance>
+        <MD_MaintenanceInformation>
+          <maintenanceAndUpdateFrequency>
+            <MD_MaintenanceFrequencyCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode" codeListValue="notPlanned" codeSpace="ISOTC211/19115">notPlanned</MD_MaintenanceFrequencyCode>
+          </maintenanceAndUpdateFrequency>
+        </MD_MaintenanceInformation>
+      </resourceMaintenance>
+      <descriptiveKeywords>
+        <MD_Keywords>
+          <keyword>
+            <gco:CharacterString>United States</gco:CharacterString>
+          </keyword>
+          <type>
+            <MD_KeywordTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="place" codeSpace="ISOTC211/19115">place</MD_KeywordTypeCode>
+          </type>
+        </MD_Keywords>
+      </descriptiveKeywords>
+      <descriptiveKeywords>
+        <MD_Keywords>
+          <keyword>
+            <gco:CharacterString>2020</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>2025</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>2030</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>2035</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>2040</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>2045</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>2050</gco:CharacterString>
+          </keyword>
+          <type>
+            <MD_KeywordTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="temporal" codeSpace="ISOTC211/19115">temporal</MD_KeywordTypeCode>
+          </type>
+        </MD_Keywords>
+      </descriptiveKeywords>
+      <descriptiveKeywords>
+        <MD_Keywords>
+          <keyword>
+            <gco:CharacterString>net-zero</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>solar</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>wind</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>offshore</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>transmission</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>spur</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>bulk</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>renewable energy</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>transition</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>energy</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>infrastructure</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>electricity</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>netzeroamerica</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>E+</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>high-electrification</gco:CharacterString>
+          </keyword>
+          <keyword>
+            <gco:CharacterString>BLUA</gco:CharacterString>
+          </keyword>
+          <type>
+            <MD_KeywordTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme" codeSpace="ISOTC211/19115">theme</MD_KeywordTypeCode>
+          </type>
+        </MD_Keywords>
+      </descriptiveKeywords>
+      <descriptiveKeywords>
+        <MD_Keywords>
+          <keyword>
+            <gco:CharacterString>Downloadable Data</gco:CharacterString>
+          </keyword>
+          <thesaurusName uuidref="723f6998-058e-11dc-8314-0800200c9a66"/>
+        </MD_Keywords>
+      </descriptiveKeywords>
+      <resourceConstraints>
+        <MD_Constraints>
+          <useLimitation>
+            <gco:CharacterString>This dataset is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License. Any non-commercial use is permitted. All uses must credit Princeton University and carry this same license.</gco:CharacterString>
+          </useLimitation>
+        </MD_Constraints>
+      </resourceConstraints>
+      <resourceConstraints>
+        <MD_LegalConstraints>
+          <accessConstraints>
+            <MD_RestrictionCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_RestrictionCode" codeListValue="license" codeSpace="ISOTC211/19115">license</MD_RestrictionCode>
+          </accessConstraints>
+          <useConstraints>
+            <MD_RestrictionCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_RestrictionCode" codeListValue="license" codeSpace="ISOTC211/19115">license</MD_RestrictionCode>
+          </useConstraints>
+        </MD_LegalConstraints>
+      </resourceConstraints>
+      <spatialRepresentationType>
+        <MD_SpatialRepresentationTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_SpatialRepresentationTypeCode" codeListValue="vector" codeSpace="ISOTC211/19115">vector</MD_SpatialRepresentationTypeCode>
+      </spatialRepresentationType>
+      <language>
+        <LanguageCode codeList="http://www.loc.gov/standards/iso639-2/php/code_list.php" codeListValue="eng" codeSpace="ISO639-2">eng</LanguageCode>
+      </language>
+      <characterSet>
+        <MD_CharacterSetCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" codeSpace="ISOTC211/19115">utf8</MD_CharacterSetCode>
+      </characterSet>
+      <topicCategory>
+        <MD_TopicCategoryCode>utilitiesCommunication</MD_TopicCategoryCode>
+      </topicCategory>
+      <environmentDescription>
+        <gco:CharacterString> Version 6.2 (Build 9200) ; Esri ArcGIS 10.8.1.14362</gco:CharacterString>
+      </environmentDescription>
+      <extent>
+        <EX_Extent>
+          <description>
+            <gco:CharacterString>Date of publication.</gco:CharacterString>
+          </description>
+          <temporalElement>
+            <EX_TemporalExtent>
+              <extent>
+                <gml:TimeInstant gml:id="ID0EGOAC">
+                  <gml:timePosition>2021-04-14T00:00:00</gml:timePosition>
+                </gml:TimeInstant>
+              </extent>
+            </EX_TemporalExtent>
+          </temporalElement>
+        </EX_Extent>
+      </extent>
+      <extent>
+        <EX_Extent>
+          <description>
+            <gco:CharacterString>Time frame of analysis.</gco:CharacterString>
+          </description>
+          <temporalElement>
+            <EX_TemporalExtent>
+              <extent>
+                <gml:TimePeriod gml:id="ID0EVBAE">
+                  <gml:beginPosition>2020-01-01T00:00:00</gml:beginPosition>
+                  <gml:endPosition>2050-12-31T00:00:00</gml:endPosition>
+                </gml:TimePeriod>
+              </extent>
+            </EX_TemporalExtent>
+          </temporalElement>
+        </EX_Extent>
+      </extent>
+      <extent>
+        <EX_Extent>
+          <geographicElement>
+            <EX_GeographicBoundingBox>
+              <extentTypeCode>
+                <gco:Boolean>true</gco:Boolean>
+              </extentTypeCode>
+              <westBoundLongitude>
+                <gco:Decimal>-127.875418</gco:Decimal>
+              </westBoundLongitude>
+              <eastBoundLongitude>
+                <gco:Decimal>-65.703868</gco:Decimal>
+              </eastBoundLongitude>
+              <southBoundLatitude>
+                <gco:Decimal>23.33353</gco:Decimal>
+              </southBoundLatitude>
+              <northBoundLatitude>
+                <gco:Decimal>50.315241</gco:Decimal>
+              </northBoundLatitude>
+            </EX_GeographicBoundingBox>
+          </geographicElement>
+        </EX_Extent>
+      </extent>
+      <supplementalInformation>
+        <gco:CharacterString>The E+ scenario, or high-electrification scenario, is one of five defined pathways whereby the United States can become carbon-neutral by 2050, as detailed in the Net-Zero America report of December 2020. Between 2020 and 2050, the E+ scenario assumes: 1) a high degree of end-use electrification in transportation and buildings, 2) a minimum of 10% yearly growth in wind and solar, 3) an 80-year life for 50% of existing nuclear power, 4) no new nuclear power in California, and 5) the ongoing use of fossil fuels. By 2050, the E+ scenario further assumes: 1) carbon dioxide storage of no more than 1.8 Gt/y, 2) carbon dioxide emissions of -0.17 Gt, and 3) a biomass supply limit of 0.7 Gt/y biomass with no new land converted to bioenergy.
+
+Both the "base" land-use assumptions on which this scenario is predicated and the "constrained" alternative stipulate that new renewable-energy sites will be selected based on: 1) numerous environmental, cultural, and economic exclusions, 2) buffers of varying extent around water bodies, urban areas, and certain infrastructure, and 3) slope and population-density limits. The "base" case additionally allows for 1) sites with Theobald Human Modification Index values of 0.082 or more, and 2) wind development on prime farmlands. These assumptions are detailed in the Net-Zero America report.</gco:CharacterString>
+      </supplementalInformation>
+    </MD_DataIdentification>
+  </identificationInfo>
+  <distributionInfo>
+    <MD_Distribution>
+      <distributionFormat>
+        <MD_Format>
+          <name>
+            <gco:CharacterString>Shapefile</gco:CharacterString>
+          </name>
+          <version gco:nilReason="missing"/>
+        </MD_Format>
+      </distributionFormat>
+      <transferOptions>
+        <MD_DigitalTransferOptions>
+          <transferSize>
+            <gco:Real>36.653</gco:Real>
+          </transferSize>
+        </MD_DigitalTransferOptions>
+      </transferOptions>
+    </MD_Distribution>
+  </distributionInfo>
+  <dataQualityInfo>
+    <DQ_DataQuality>
+      <scope gco:nilReason="missing"/>
+      <lineage>
+        <LI_Lineage>
+          <statement>
+            <gco:CharacterString>This dataset contains GIS representations of wind and solar projects. Each polygon represents a “Selected Project Area” with attributes indicating the technology used at the site, nameplate capacity, annual generation, region, year in which it is installed, and so on. All energy and capacity values are incremental for each five-year timestep, so if you want to see how many MW are installed cumulatively by 2050, you need to sum all the MW installed in each timestep. A full description of the processes used to generate this data can be found in Annex D of the main report. The main report and report annexes can be found at https://netzeroamerica.princeton.edu/.</gco:CharacterString>
+          </statement>
+          <processStep>
+            <LI_ProcessStep>
+              <description>
+                <gco:CharacterString>The version of 4/14/2021 is an update to the version of 12/15/2020. The 4/14/2021 version removes approximately 40,000 duplicate features introduced during data aggregation, removes features with generation or capacity values of "null" or "zero," and adds the model year 2020 back into the data.</gco:CharacterString>
+              </description>
+              <dateTime>
+                <gco:DateTime>2021-04-14T00:00:00</gco:DateTime>
+              </dateTime>
+              <processor>
+                <CI_ResponsibleParty>
+                  <individualName>
+                    <gco:CharacterString>Andrew Pascale</gco:CharacterString>
+                  </individualName>
+                  <role>
+                    <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="originator" codeSpace="ISOTC211/19115">originator</CI_RoleCode>
+                  </role>
+                </CI_ResponsibleParty>
+              </processor>
+            </LI_ProcessStep>
+          </processStep>
+          <source>
+            <LI_Source>
+              <description>
+                <gco:CharacterString>Net-Zero America report, 2020</gco:CharacterString>
+              </description>
+              <sourceCitation>
+                <CI_Citation>
+                  <title>
+                    <gco:CharacterString>Net-Zero America: potential pathways, infrastructure, and impacts, interim report</gco:CharacterString>
+                  </title>
+                  <date>
+                    <CI_Date>
+                      <date>
+                        <gco:Date>2020-12-15</gco:Date>
+                      </date>
+                      <dateType>
+                        <CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication" codeSpace="ISOTC211/19115">publication</CI_DateTypeCode>
+                      </dateType>
+                    </CI_Date>
+                  </date>
+                  <citedResponsibleParty>
+                    <CI_ResponsibleParty>
+                      <organisationName>
+                        <gco:CharacterString>Princeton University</gco:CharacterString>
+                      </organisationName>
+                      <contactInfo>
+                        <CI_Contact>
+                          <phone>
+                            <CI_Telephone>
+                              <voice>
+                                <gco:CharacterString>609-258-3000</gco:CharacterString>
+                              </voice>
+                            </CI_Telephone>
+                          </phone>
+                          <address>
+                            <CI_Address>
+                              <city>
+                                <gco:CharacterString>Princeton</gco:CharacterString>
+                              </city>
+                              <administrativeArea>
+                                <gco:CharacterString>NJ</gco:CharacterString>
+                              </administrativeArea>
+                              <postalCode>
+                                <gco:CharacterString>08544</gco:CharacterString>
+                              </postalCode>
+                              <country>
+                                <Country codeList="http://www.iso.org/iso/country_codes/iso_3166_code_lists.htm" codeListValue="US" codeSpace="ISO3166-1">US</Country>
+                              </country>
+                            </CI_Address>
+                          </address>
+                        </CI_Contact>
+                      </contactInfo>
+                      <role>
+                        <CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="publisher" codeSpace="ISOTC211/19115">publisher</CI_RoleCode>
+                      </role>
+                    </CI_ResponsibleParty>
+                  </citedResponsibleParty>
+                </CI_Citation>
+              </sourceCitation>
+            </LI_Source>
+          </source>
+        </LI_Lineage>
+      </lineage>
+    </DQ_DataQuality>
+  </dataQualityInfo>
+  <metadataMaintenance>
+    <MD_MaintenanceInformation>
+      <maintenanceAndUpdateFrequency>
+        <MD_MaintenanceFrequencyCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode" codeListValue="notPlanned" codeSpace="ISOTC211/19115">notPlanned</MD_MaintenanceFrequencyCode>
+      </maintenanceAndUpdateFrequency>
+    </MD_MaintenanceInformation>
+  </metadataMaintenance>
+</MD_Metadata>

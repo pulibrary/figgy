@@ -8,7 +8,6 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
   let(:geo_work) do
     FactoryBot.create_for_repository(:vector_resource,
                                      coverage: coverage.to_s,
-                                     publisher: "National Geographic",
                                      issued: issued,
                                      spatial: "Micronesia",
                                      temporal: "2011",
@@ -21,7 +20,6 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
   let(:document_class) { GeoDiscovery::GeoblacklightDocument.new }
   let(:coverage) { GeoCoverage.new(43.039, -69.856, 42.943, -71.032) }
   let(:issued) { "2013" }
-  let(:issued_xmlschema) { "2013-01-01T00:00:00Z" }
   let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
   let(:change_set) { VectorResourceChangeSet.new(geo_work, files: [file, metadata_file]) }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
@@ -57,22 +55,22 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       # optional metadata
       expect(document["dc_description_s"]).to include("This raster file is the result of georeferencing")
       expect(document["dc_creator_sm"]).to eq(["University of Alberta"])
-      expect(document["dc_subject_sm"]).to eq(["Society"])
-      expect(document["all_subject_sm"]).to eq(["Human settlements", "Society"])
-      expect(document["dct_spatial_sm"]).to eq(["Micronesia"])
-      expect(document["dct_temporal_sm"]).to eq(["2011", "2013"])
+      expect(document["dc_subject_sm"]).to eq(["Society", "Imagery and Base Maps", "Biology and Ecology"])
+      expect(document["all_subject_sm"]).to eq(["Society", "Imagery and Base Maps", "Biology and Ecology", "Land cover", "Land use, rural"])
+      expect(document["dct_spatial_sm"]).to eq(["Alberta", "Western Canada", "Fort McMurray (Alta.)", "McKay (Alta.)"])
+      expect(document["dct_temporal_sm"]).to eq(["1914", "2014-09-01"])
       expect(document["dc_language_s"]).to eq("Esperanto")
-      expect(document["dc_publisher_s"]).to eq("National Geographic")
+      expect(document["dc_publisher_s"]).to eq("University of Alberta")
 
       # modified date
       expect(document["layer_modified_dt"]).to match(/\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d(Z|\+00:00)/)
 
       # issued date
       expect(document).to include("dct_issued_dt")
-      expect(document["dct_issued_dt"]).to eq(issued_xmlschema)
+      expect(document["dct_issued_dt"]).to eq("2014-09-01T00:00:00Z")
 
       # solr year
-      expect(document["solr_year_i"]).to eq(2011)
+      expect(document["solr_year_i"]).to eq(1914)
 
       # layer info fields
       expect(document["layer_geom_type_s"]).to eq("Polygon")

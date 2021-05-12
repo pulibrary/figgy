@@ -111,6 +111,7 @@ Metrics/ClassLength:
     - 'app/wayfinders/base_wayfinder.rb'
     - 'app/resources/cdl/charge_manager.rb'
     - 'app/services/pulfa_exporter.rb'
+    - 'app/services/geo_metadata_extractor/iso19139.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/helpers/application_helper.rb'
