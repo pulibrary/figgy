@@ -64,6 +64,23 @@ class IngestEphemeraMODS
       "00000000"
     end
 
+    def language
+      code_map = {
+        "eng" => "en",
+        "spa" => "es",
+        "fre" => "fr",
+        "ger" => "de",
+        "sa" => "es",
+        "may" => "myn",
+        "myn" => "myn",
+        "dan" => "da",
+        "fin" => "fi",
+        "swe" => "sv"
+      }
+
+      [find_term(code: code_map[mods_doc.language.first.strip], vocab: "LAE Languages")]
+    end
+
     def ocr_language
       mods_doc.language
     end
@@ -80,6 +97,10 @@ class IngestEphemeraMODS
   end
 
   class GnibMODS < METSDocument::MODSDocument
+    def geographic_subject
+      ["Guatemala"]
+    end
+
     def non_name_subjects
       topics = normalize_whitespace(value_from(xpath: "mods:subject//mods:topic")).map(&:strip)
       topics.map { |topic| "topic--#{topic}" }
@@ -117,7 +138,7 @@ class IngestEphemeraMODS
         genre: find_term(label: mods_doc.genre, vocab: "LAE Genres"),
         subject: subjects,
         local_identifier: local_identifier,
-        language: [find_term(code: mods_doc.language.first, vocab: "LAE Languages")],
+        language: language,
         geographic_origin: [find_term(label: mods_doc.geographic_origin.first, vocab: "LAE Areas")],
         geo_subject: [find_term(label: mods_doc.geographic_subject.first, vocab: "LAE Areas")],
         height: height_from_extent,
@@ -129,6 +150,10 @@ class IngestEphemeraMODS
 
     def local_identifier
       File.basename(dir)
+    end
+
+    def language
+      [find_term(code: mods_doc.language.first, vocab: "LAE Languages")]
     end
 
     def ocr_language
