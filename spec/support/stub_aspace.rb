@@ -30,6 +30,14 @@ module AspaceStubbing
       .to_return(status: 200, body: {}.to_json, headers: { "Content-Type": "application/json" })
   end
 
+  def stub_find_digital_object(ref:)
+    _, _, repository_id, _, digital_object_id = ref.split("/")
+    path = Rails.root.join("spec", "fixtures", "aspace", "repositories", repository_id.to_s, "digital_object_#{digital_object_id}.json")
+    cache_path(uri: ref, path: path)
+    stub_request(:get, "https://aspace.test.org/staff/api#{ref}")
+      .to_return(status: 200, body: File.open(path), headers: { "Content-Type": "application/json" })
+  end
+
   def stub_find_archival_object(component_id:)
     Aspace::Client.new.repositories.each do |repository|
       repository_id = repository["uri"].split("/").last

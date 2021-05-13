@@ -19,6 +19,8 @@ class ChangeSetPersister
       link_digital_object(archival_object: archival_object, digital_object: digital_object)
     end
 
+    # Add a new instance to the existing Archival Object to link the new digital
+    # object to it.
     def link_digital_object(archival_object:, digital_object:)
       instance = new_instance(digital_object["uri"])
       payload = archival_object.source
@@ -50,7 +52,8 @@ class ChangeSetPersister
           {
             "file_uri" => ManifestBuilder::ManifestHelper.new.manifest_url(change_set.resource),
             "publish" => true,
-            "jsonmodel_type" => "file_version"
+            "jsonmodel_type" => "file_version",
+            "use_statement" => "https://iiif.io/api/presentation/2.1/"
           }
         ]
       }
