@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Aspace
   class DigitalObject
     attr_reader :source
