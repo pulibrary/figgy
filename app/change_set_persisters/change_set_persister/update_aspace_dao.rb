@@ -10,6 +10,7 @@ class ChangeSetPersister
     def run
       return unless pulfa_record?
       return unless recently_published?
+      archival_object = aspace_client.find_archival_object_by_component_id(component_id: change_set.source_metadata_identifier)
       # Get ASpace archival object ID
       # Get ASpace Archival Object
       # Get digital objects.
@@ -21,6 +22,10 @@ class ChangeSetPersister
 
     def pulfa_record?
       RemoteRecord.pulfa?(change_set.try(:source_metadata_identifier).to_s)
+    end
+
+    def aspace_client
+      @aspace_client ||= Aspace::Client.new
     end
   end
 end
