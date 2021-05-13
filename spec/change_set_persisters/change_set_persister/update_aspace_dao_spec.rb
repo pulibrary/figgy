@@ -10,6 +10,8 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
     stub_find_archival_object(component_id: "MC001.01_c000001")
     stub_aspace(pulfa_id: "MC001.01_c000001")
     stub_ezid(shoulder: shoulder, blade: blade)
+    mocked_digital_object_create = stub_create_digital_object
+    mocked_archival_object_update = stub_archival_object_update(archival_object_id: "260330")
     change_set_persister = ScannedResourcesController.change_set_persister
     resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "MC001.01_c000001")
     change_set = ChangeSet.for(resource)
@@ -18,13 +20,7 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
 
     change_set_persister.save(change_set: change_set)
 
-    # Expect that DAO got created, probably via webmock.
-    # NOTES:
-    # https://github.com/duke-libraries/archivesspace-duke-scripts/blob/master/python/asUpdateDAOs.py
-    # client.get("/repositories/5/find_by_id/archival_objects?ref_id[]=WC064_c1868").parsed
-    # => {"archival_objects"=>
-    #   [{"ref"=>"/repositories/5/archival_objects/818025"}]}
-    # client.get(client.get("/repositories/5/find_by_id/archival_objects?ref_id[]=WC064_c1868").parsed["archival_objects"][0]["ref"]).parsed
-    # digital_objects = obj["instances"].select{|x| x["instance_type"] == "digital_object"}
+    expect(mocked_digital_object_create).to have_been_made
+    expect(mocked_archival_object_update).to have_been_made
   end
 end

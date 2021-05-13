@@ -12,6 +12,24 @@ module AspaceStubbing
       .to_return(status: 200, body: File.open(path), headers: { "Content-Type": "application/json" })
   end
 
+  def stub_create_digital_object
+    response = {
+      "status" => "Created",
+      "id" => 56_588,
+      "lock_version" => 0,
+      "stale" => true,
+      "uri" => "/repositories/3/digital_objects/56588",
+      "warnings" => []
+    }
+    stub_request(:post, "https://aspace.test.org/staff/api/repositories/3/digital_objects")
+      .to_return(status: 200, body: response.to_json, headers: { "Content-Type": "application/json" })
+  end
+
+  def stub_archival_object_update(archival_object_id:)
+    stub_request(:post, "https://aspace.test.org/staff/api/repositories/3/archival_objects/#{archival_object_id}")
+      .to_return(status: 200, body: {}.to_json, headers: { "Content-Type": "application/json" })
+  end
+
   def stub_find_archival_object(component_id:)
     Aspace::Client.new.repositories.each do |repository|
       repository_id = repository["uri"].split("/").last
