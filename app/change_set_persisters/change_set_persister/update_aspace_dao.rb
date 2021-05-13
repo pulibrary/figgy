@@ -11,9 +11,7 @@ class ChangeSetPersister
       return unless pulfa_record?
       return unless recently_published?
       archival_object = aspace_client.find_archival_object_by_component_id(component_id: change_set.source_metadata_identifier)
-      # Get ASpace archival object ID
-      # Get ASpace Archival Object
-      # Get digital objects.
+      return if archival_object.manifest?(source_metadata_identifier: change_set.source_metadata_identifier)
     end
 
     def recently_published?

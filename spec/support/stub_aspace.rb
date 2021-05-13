@@ -16,11 +16,25 @@ module AspaceStubbing
     Aspace::Client.new.repositories.each do |repository|
       repository_id = repository["uri"].split("/").last
       path = Rails.root.join("spec", "fixtures", "aspace", "repositories", repository_id.to_s, "find_archival_object_#{component_id}.json")
-      uri = "#{repository["uri"]}/find_by_id/archival_objects?ref_id%5B%5D=#{component_id}"
+      uri = "#{repository['uri']}/find_by_id/archival_objects?ref_id%5B%5D=#{component_id}"
       cache_path(uri: uri, path: path)
+      json = JSON.parse(File.read(path))
+      # Auto stub any finds - this'll always get called, so may as well not
+      # force another stub.
+      if json["archival_objects"]&.first.present?
+        stub_archival_object(ref: json["archival_objects"][0]["ref"])
+      end
       stub_request(:get, "https://aspace.test.org/staff/api#{uri}")
         .to_return(status: 200, body: File.open(path), headers: { "Content-Type": "application/json" })
     end
+  end
+
+  def stub_archival_object(ref:)
+    _, _, repository_id, _, archival_object_id = ref.split("/")
+    path = Rails.root.join("spec", "fixtures", "aspace", "repositories", repository_id.to_s, "archival_object_#{archival_object_id}.json")
+    cache_path(uri: ref, path: path)
+    stub_request(:get, "https://aspace.test.org/staff/api#{ref}")
+      .to_return(status: 200, body: File.open(path), headers: { "Content-Type": "application/json" })
   end
 
   # It took too long to manually create the mocks for navigating the whole tree,
