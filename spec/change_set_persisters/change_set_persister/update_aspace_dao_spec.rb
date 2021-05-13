@@ -20,7 +20,10 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
 
     change_set_persister.save(change_set: change_set)
 
+    # Ensure the digital object was made.
     expect(mocked_digital_object_create).to have_been_made
+    expect(mocked_digital_object_create.with { |req| req.body.include?("http://www.example.com/concern/scanned_resources/#{change_set.id}/manifest") }).to have_been_made
+    # Ensure the archival object was linked to the digital object.
     expect(mocked_archival_object_update).to have_been_made
   end
 end

@@ -48,7 +48,7 @@ class ChangeSetPersister
         "publish" => true,
         "file_versions" => [
           {
-            "file_uri" => "https://figgy.princeton.edu/concern/scanned_resources/#{change_set.id}/manifest",
+            "file_uri" => ManifestBuilder::ManifestHelper.new.manifest_url(change_set.resource),
             "publish" => true,
             "jsonmodel_type" => "file_version"
           }
