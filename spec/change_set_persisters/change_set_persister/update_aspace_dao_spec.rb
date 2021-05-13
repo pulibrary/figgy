@@ -7,6 +7,7 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
   let(:blade) { "123456" }
   it "updates ASpace with a new DAO when an item is marked complete" do
     stub_aspace_login
+    stub_find_archival_object(component_id: "MC001.01_c000001")
     stub_aspace(pulfa_id: "MC001.01_c000001")
     stub_ezid(shoulder: shoulder, blade: blade)
     change_set_persister = ScannedResourcesController.change_set_persister

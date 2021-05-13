@@ -19,8 +19,9 @@ module Aspace
     end
 
     def find_archival_object_by_component_id(component_id:)
+      # Check every repository, we don't store things by repository in Figgy.
       repositories.each do |repository|
-        binding.pry
+        archival_object = get("#{repository["uri"]}/find_by_id/archival_objects?ref_id[]=#{component_id}").parsed
       end
     end
   end
