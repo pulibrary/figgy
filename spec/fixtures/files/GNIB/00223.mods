@@ -8,7 +8,7 @@
    <mods:typeOfResource>text</mods:typeOfResource>
    <mods:genre authority="aat">ephemera</mods:genre>
    <mods:language>
-      <mods:languageTerm type="code" authority="iso639-2b">eng</mods:languageTerm>
+      <mods:languageTerm type="code" authority="iso639-2b">eng </mods:languageTerm>
    </mods:language>
    <mods:note>Document extracted from:</mods:note>
    <mods:subject authority="lcsh">

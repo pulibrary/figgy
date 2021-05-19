@@ -82,7 +82,7 @@ class IngestEphemeraMODS
     end
 
     def ocr_language
-      mods_doc.language
+      mods_doc.language.map(&:strip)
     end
 
     def local_identifier
