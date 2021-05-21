@@ -22,5 +22,6 @@ namespace :figx do
       slug: "noark"
     )
     FactoryBot.create_for_repository(:scanned_resource, id: "abd5f5a2-7caa-435a-924e-d5982b0a6260")
+    FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: ["597edce8-3a2f-41cd-be2b-182dae7b9a8f"])
   end
 end
