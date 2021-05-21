@@ -16,5 +16,20 @@ defmodule FigxWeb.ManifestsView do
         "format" => "application/ld+json"
       }
     }
+    |> add_rendering(resource)
   end
+
+  # Add rendering property if the identifier property exists.
+  def add_rendering(manifest, %{metadata: %{"identifier" => [identifier | _rest]}}) do
+    manifest
+    |> Map.put(
+      :rendering,
+      %{
+        "@id" => "https://arks.princeton.edu/#{identifier}",
+        "format" => "text/html"
+      }
+    )
+  end
+
+  def add_rendering(manifest, _resource), do: manifest
 end
