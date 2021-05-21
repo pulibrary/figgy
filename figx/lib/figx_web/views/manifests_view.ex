@@ -10,7 +10,11 @@ defmodule FigxWeb.ManifestsView do
       "@type": "sc:Collection",
       label: resource.metadata["title"],
       description: resource.metadata["description"],
-      metadata: [%{"label" => "Exhibit", "value" => resource.metadata["slug"]}]
+      metadata: [%{"label" => "Exhibit", "value" => resource.metadata["slug"]}],
+      seeAlso: %{
+        "@id" => "#{FigxWeb.Endpoint.url()}/catalog/#{resource.id}.jsonld",
+        "format" => "application/ld+json"
+      }
     }
   end
 end

@@ -19,6 +19,12 @@ defmodule FigxWeb.ManifestsControllerTest do
       assert json["label"] == ["Test Collection"]
       assert json["description"] == ["Test Description"]
       assert json["metadata"] == [%{"label" => "Exhibit", "value" => ["studentperf"]}]
+
+      assert json["seeAlso"] == %{
+               "@id" =>
+                 "http://localhost:4002/catalog/597edce8-3a2f-41cd-be2b-182dae7b9a8f.jsonld",
+               "format" => "application/ld+json"
+             }
     end
 
     test "returns 400 for a resource manifest request", %{conn: conn} do
