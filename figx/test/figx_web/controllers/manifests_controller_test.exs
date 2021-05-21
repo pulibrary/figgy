@@ -25,6 +25,19 @@ defmodule FigxWeb.ManifestsControllerTest do
                  "http://localhost:4002/catalog/597edce8-3a2f-41cd-be2b-182dae7b9a8f.jsonld",
                "format" => "application/ld+json"
              }
+
+      assert json["rendering"] == %{
+               "@id" => "https://arks.princeton.edu/ark:/88435/0p096g241",
+               "format" => "text/html"
+             }
+    end
+
+    test "works for a collection with no ARK", %{conn: conn} do
+      resource_id = "868e05da-53b9-483b-8b6b-2d115becce84"
+      conn = get(conn, "/manifest/#{resource_id}")
+      json = json_response(conn, 200)
+
+      assert json["rendering"] == nil
     end
 
     test "returns 400 for a resource manifest request", %{conn: conn} do
