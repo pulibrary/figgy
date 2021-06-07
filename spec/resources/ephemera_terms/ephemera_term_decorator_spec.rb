@@ -4,6 +4,7 @@ require "rails_helper"
 RSpec.describe EphemeraTermDecorator do
   subject(:decorator) { described_class.new(resource) }
   let(:resource) { FactoryBot.build(:ephemera_term) }
+
   describe "decoration" do
     it "decorates an EphemeraTerm" do
       expect(resource.decorate).to be_a described_class
@@ -24,6 +25,23 @@ RSpec.describe EphemeraTermDecorator do
   it "exposes the label when cast to a string" do
     expect(resource.decorate.to_s).to eq resource.decorate.label
   end
+
+  describe "#internal_url" do
+    let(:vocabulary) { FactoryBot.create_for_repository(:ephemera_vocabulary) }
+    let(:resource) { FactoryBot.create_for_repository(:ephemera_term, member_of_vocabulary_id: vocabulary.id) }
+
+    it "generates a figgy uri" do
+      expect(resource.decorate.internal_url.to_s).to eq "https://figgy.princeton.edu/ns/testVocabulary/testTerm"
+    end
+
+    context "when the term contains UTF-8 characters" do
+      let(:resource) { FactoryBot.create_for_repository(:ephemera_term, label: "San José, Costa Rica", member_of_vocabulary_id: vocabulary.id) }
+      it "still generates a figgy uri" do
+        expect(resource.decorate.internal_url.to_s).to eq "https://figgy.princeton.edu/ns/testVocabulary/sanJos%C3%A9,CostaRica"
+      end
+    end
+  end
+
   context "when a child of a vocabulary" do
     let(:vocab) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: "test parent vocabulary") }
     let(:resource) do
