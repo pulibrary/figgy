@@ -13,8 +13,8 @@ RSpec.describe IngestArchivalMediaBagJob do
   let(:collection_cid) { "C0652" }
 
   before do
-    stub_pulfa(pulfa_id: "C0652")
-    stub_pulfa(pulfa_id: "C0652_c0377")
+    stub_aspace(pulfa_id: "C0652")
+    stub_aspace(pulfa_id: "C0652_c0377")
   end
 
   context "general functionality" do
@@ -131,7 +131,7 @@ RSpec.describe IngestArchivalMediaBagJob do
     let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag3") }
 
     before do
-      stub_pulfa(pulfa_id: "C0652_c0383")
+      stub_aspace(pulfa_id: "C0652_c0383")
 
       described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
     end
@@ -150,7 +150,7 @@ RSpec.describe IngestArchivalMediaBagJob do
     let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag4") }
 
     before do
-      stub_pulfa(pulfa_id: "C0652_c0383")
+      stub_aspace(pulfa_id: "C0652_c0383")
       described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
     end
 
@@ -247,8 +247,8 @@ RSpec.describe IngestArchivalMediaBagJob do
     let(:bag_path2) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag2") }
 
     before do
-      stub_pulfa(pulfa_id: "C0652_c0383")
-      stub_pulfa(pulfa_id: "C0652_c0389")
+      stub_aspace(pulfa_id: "C0652_c0383")
+      stub_aspace(pulfa_id: "C0652_c0389")
       described_class.perform_now(collection_component: collection_cid, bag_path: bag_path1, user: user)
       described_class.perform_now(collection_component: collection_cid, bag_path: bag_path2, user: user)
     end
@@ -294,8 +294,8 @@ RSpec.describe IngestArchivalMediaBagJob do
     context "a barcode not in the EAD", run_real_characterization: true do
       let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag_unknown_barcode") }
       it "creates a Recording which is put in a filler descriptive proxy" do
-        stub_pulfa(pulfa_id: "C0652_c0383")
-        stub_pulfa(pulfa_id: "C0652_c0389")
+        stub_aspace(pulfa_id: "C0652_c0383")
+        stub_aspace(pulfa_id: "C0652_c0389")
         described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
 
         collection = query_service.find_all_of_model(model: Collection).first
@@ -315,8 +315,8 @@ RSpec.describe IngestArchivalMediaBagJob do
       let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_demo_bag") }
 
       before do
-        stub_pulfa(pulfa_id: "C0652_c0383")
-        stub_pulfa(pulfa_id: "C0652_c0389")
+        stub_aspace(pulfa_id: "C0652_c0383")
+        stub_aspace(pulfa_id: "C0652_c0389")
       end
 
       it "Creates 3 Resources from barcodes, 2 Resources from component IDs", run_real_characterization: true do

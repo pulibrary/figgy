@@ -1,0 +1,20 @@
+<c id="AC044_c0003" level="file">
+  <did>
+    <unittitle>Alumni Council: Proposals for Electing Young Alumni Trustees</unittitle>
+    <physdesc altrender="whole">
+      <extent altrender="materialtype spaceoccupied">1 folder</extent>
+    </physdesc>
+    <unitdate datechar="creation" normal="1969-03/1969-03">1969 March</unitdate>
+    <container altrender="mudd" encodinganalog="NBox" id="99aa89165f7dc7b67e2f5cc6c02a18d1" label="Mixed Materials [32101106215070]" type="box">1</container>
+    <container id="6296026ea74ee5bd76c166554890a71e" parent="99aa89165f7dc7b67e2f5cc6c02a18d1" type="folder">2</container>
+    <dao xlink:actuate="onRequest" xlink:href="https://figgy.princeton.edu/concern/scanned_resources/b164aa38-629f-4636-bb1a-1c0c5efd33da/manifest" xlink:role="https://iiif.io/api/presentation/2.1/" xlink:show="new" xlink:title="View digital content" xlink:type="simple">
+      <daodesc>
+        <p>View digital content</p>
+      </daodesc>
+    </dao>
+  </did>
+  <accessrestrict id="ce4a1d0603c47ea2872dc7c19d97c218">
+    <head>Conditions Governing Access</head>
+    <p>Collection is open for research use.</p>
+  </accessrestrict>
+</c>

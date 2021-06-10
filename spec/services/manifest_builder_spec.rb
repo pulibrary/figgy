@@ -704,8 +704,8 @@ RSpec.describe ManifestBuilder do
     it "builds a manifest for an ArchivalMediaBag ingested Recording", run_real_characterization: true, run_real_derivatives: true do
       bag_path = Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag")
       user = User.first
-      stub_pulfa(pulfa_id: "C0652")
-      stub_pulfa(pulfa_id: "C0652_c0377")
+      stub_aspace(pulfa_id: "C0652")
+      stub_aspace(pulfa_id: "C0652_c0377")
       IngestArchivalMediaBagJob.perform_now(collection_component: "C0652", bag_path: bag_path, user: user)
 
       recording = query_service.custom_queries.find_by_property(property: :local_identifier, value: "32101047382401").last
@@ -815,8 +815,8 @@ RSpec.describe ManifestBuilder do
       before do
         bag_path = Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag")
         user = User.first
-        stub_pulfa(pulfa_id: "C0652")
-        stub_pulfa(pulfa_id: "C0652_c0377")
+        stub_aspace(pulfa_id: "C0652")
+        stub_aspace(pulfa_id: "C0652_c0377")
         IngestArchivalMediaBagJob.perform_now(collection_component: "C0652", bag_path: bag_path, user: user)
       end
 

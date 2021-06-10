@@ -28,9 +28,7 @@ module PulMetadataServices
       # Retrieves the appropriate Class used for the metadata attributes
       # @return [Class]
       def attributes_klass
-        if @resource.try(:change_set) == "recording"
-          MediaResourceAttributes
-        elsif collection?
+        if collection?
           CollectionAttributes
         else
           Attributes
@@ -214,18 +212,6 @@ module PulMetadataServices
 
         def collections
           []
-        end
-      end
-
-      class MediaResourceAttributes < Attributes
-        def collection_data_root
-          "/archdesc"
-        end
-
-        # look for a component title; if not found look for a collection title
-        # @return [Nokogiri::XML::Node]
-        def unittitle_element
-          data.at_xpath("#{collection_data_root}/did/unittitle") || data.at_xpath("#{data_root}/did/unittitle")
         end
       end
   end

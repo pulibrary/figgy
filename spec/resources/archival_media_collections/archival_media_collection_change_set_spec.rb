@@ -123,8 +123,8 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
       let(:query_service) { Valkyrie::MetadataAdapter.find(:indexing_persister).query_service }
       with_queue_adapter :inline
       before do
-        stub_pulfa(pulfa_id: "C0652")
-        stub_pulfa(pulfa_id: "C0652_c0377")
+        stub_aspace(pulfa_id: "C0652")
+        stub_aspace(pulfa_id: "C0652_c0377")
       end
 
       it "is invalid" do
