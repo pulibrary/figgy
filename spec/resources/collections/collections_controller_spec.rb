@@ -75,7 +75,7 @@ RSpec.describe CollectionsController, type: :controller do
           let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag") }
 
           before do
-            stub_pulfa(pulfa_id: "AC044_c0003")
+            stub_aspace(pulfa_id: "AC044_c0003")
             allow(Dir).to receive(:exist?).and_return(true)
             allow(IngestArchivalMediaBagJob).to receive(:perform_later)
           end

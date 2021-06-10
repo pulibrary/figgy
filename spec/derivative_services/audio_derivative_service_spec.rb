@@ -44,7 +44,7 @@ RSpec.describe AudioDerivativeService do
         DataSeeder.new.generate_archival_recording
       end
       it "creates HLS partials and attaches it to the fileset" do
-        stub_pulfa(pulfa_id: "C0652")
+        stub_aspace(pulfa_id: "C0652")
 
         derivative_service.new(id: valid_change_set.id).create_derivatives
         reloaded = query_service.find_by(id: valid_resource.id)

@@ -1388,7 +1388,7 @@ RSpec.describe ChangeSetPersister do
     let(:change_set) { change_set_class.new(resource, bag_path: bag_path) }
 
     before do
-      stub_pulfa(pulfa_id: "C0652")
+      stub_aspace(pulfa_id: "C0652")
       change_set.source_metadata_identifier = "C0652"
     end
 
@@ -1420,8 +1420,8 @@ RSpec.describe ChangeSetPersister do
       let(:change_set) { ArchivalMediaCollectionChangeSet.new(collection, source_metadata_identifier: "C0652", bag_path: bag_path) }
 
       before do
-        stub_pulfa(pulfa_id: "C0652")
-        stub_pulfa(pulfa_id: "C0652_c0377")
+        stub_aspace(pulfa_id: "C0652")
+        stub_aspace(pulfa_id: "C0652_c0377")
       end
 
       it "persists imported metadata for new MediaResources" do
@@ -1432,8 +1432,7 @@ RSpec.describe ChangeSetPersister do
         members = results.to_a
         expect(members.size).to eq 1
 
-        expect(members.first.title).to include "Emir Rodriguez Monegal Papers"
-        expect(members.first.title).to eq output.title
+        expect(members.first.title).to include "Interview: ERM / Jose Donoso (A2)"
         expect(members.first.source_metadata_identifier).to include "C0652_c0377"
       end
     end
@@ -1950,8 +1949,8 @@ RSpec.describe ChangeSetPersister do
 
   context "when telling an archival_media_collection to reorganize" do
     it "reorganizes" do
-      stub_pulfa(pulfa_id: "C0652")
-      stub_pulfa(pulfa_id: "C0652_c0377")
+      stub_aspace(pulfa_id: "C0652")
+      stub_aspace(pulfa_id: "C0652_c0377")
       coll = FactoryBot.create_for_repository(:archival_media_collection, source_metadata_identifier: "C0652")
       barcode_resource = FactoryBot.create_for_repository(:recording, local_identifier: "32101047382401")
       FactoryBot.create_for_repository(

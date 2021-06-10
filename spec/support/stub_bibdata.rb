@@ -93,6 +93,16 @@ module BibdataStubbing
         },
         body: body || file_fixture("pulfa/aspace/#{pulfa_id}.json").read
       )
+    ead = Pathname.new(file_fixture_path).join("pulfa/aspace/#{pulfa_id}.ead.xml")
+    return unless File.exist?(ead)
+    stub_request(:get, "#{aspace_domain}/catalog/#{pulfa_id.tr('.', '-')}.xml")
+      .to_return(
+        status: 200,
+        headers: {
+          "Content-Type" => "application/json"
+        },
+        body: File.read(ead)
+      )
   end
 
   def aspace_domain

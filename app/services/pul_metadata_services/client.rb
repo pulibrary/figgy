@@ -27,6 +27,13 @@ module PulMetadataServices
         response.body.dup.force_encoding("UTF-8")
       end
 
+      def retrieve_aspace_pulfa_ead(id)
+        conn = Faraday.new(url: "https://findingaids-beta.princeton.edu/catalog/")
+        response = conn.get("#{id.tr('.', '-')}.xml")
+        return nil if response.status != 200
+        response.body.dup.force_encoding("UTF-8")
+      end
+
       # Determines whether or not a remote metadata identifier is an identifier for Voyager records
       # @param source_metadata_id [String] the remote metadata identifier
       # @return [Boolean]

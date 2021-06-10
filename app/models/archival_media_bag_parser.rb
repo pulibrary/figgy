@@ -165,16 +165,8 @@ class BarcodeComponentDict
       node.xpath("altformavail/p").map { |barcode_node| get_barcode(barcode_node) }.uniq
     end
 
-    def remote_record
-      @remote_record ||= RemoteRecord.retrieve(@component_id, resource: ScannedResource.new(change_set: "recording"))
-    end
-
-    def remote_record_attributes
-      remote_record.attributes
-    end
-
     def remote_record_source_metadata
-      remote_record_attributes[:source_metadata]
+      @remote_record_source_metadata ||= PulMetadataServices::Client.retrieve_aspace_pulfa_ead(@component_id)
     end
 
     # Parses XML from Collection Resource metadata
@@ -204,7 +196,7 @@ class BarcodeComponentDict
     # @param node [Nokogiri::XML::Node]
     # @return [String, nil] the captured string content
     def get_barcode(node)
-      node.content.split("_").first
+      node.content.split("_").first.strip
     end
 end
 
