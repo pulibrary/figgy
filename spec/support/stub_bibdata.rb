@@ -99,7 +99,7 @@ module BibdataStubbing
       .to_return(
         status: 200,
         headers: {
-          "Content-Type" => "application/json"
+          "Content-Type" => "application/xml"
         },
         body: File.read(ead)
       )
