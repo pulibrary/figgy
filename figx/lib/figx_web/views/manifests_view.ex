@@ -14,7 +14,8 @@ defmodule FigxWeb.ManifestsView do
       seeAlso: %{
         "@id" => "#{FigxWeb.Endpoint.url()}/catalog/#{resource.id}.jsonld",
         "format" => "application/ld+json"
-      }
+      },
+      manifests: member_manifests(resource)
     }
     |> add_rendering(resource)
   end
@@ -32,4 +33,8 @@ defmodule FigxWeb.ManifestsView do
   end
 
   def add_rendering(manifest, _resource), do: manifest
+
+  def member_manifests(resource) do
+    members = Figx.Repo.get_collection_members(resource.id)
+  end
 end
