@@ -22,6 +22,12 @@ namespace :figx do
       slug: "noark"
     )
     FactoryBot.create_for_repository(:scanned_resource, id: "abd5f5a2-7caa-435a-924e-d5982b0a6260")
-    FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: ["597edce8-3a2f-41cd-be2b-182dae7b9a8f"])
+    FactoryBot.create_for_repository(
+      :scanned_resource,
+      id: "cad0a459-e520-442d-9139-c338bd60af6f",
+      member_of_collection_ids: ["597edce8-3a2f-41cd-be2b-182dae7b9a8f"],
+      label: ["Concert, 2012, April 07"],
+      description: "A complete program is available in Mendel Music Library."
+    )
   end
 end

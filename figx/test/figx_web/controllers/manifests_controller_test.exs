@@ -30,6 +30,20 @@ defmodule FigxWeb.ManifestsControllerTest do
                "@id" => "https://arks.princeton.edu/ark:/88435/0p096g241",
                "format" => "text/html"
              }
+      assert json["manifests"] == [
+        %{
+          "@context" => "http://iiif.io/api/presentation/2/context.json",
+          "@type" => "sc:Manifest",
+          "@id" => "http://localhost:4002/concern/scanned_resources/cad0a459-e520-442d-9139-c338bd60af6f/manifest",
+          "label" => [
+            "Concert, 2012, April 07"
+          ],
+          "description" => [
+            "A complete program is available in Mendel Music Library."
+          ]
+        }
+      ]
+
     end
 
     test "works for a collection with no ARK", %{conn: conn} do
