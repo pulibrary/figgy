@@ -21,6 +21,25 @@ module Aspace
       end
     end
 
+    def resolved_digital_objects
+      @resolved_digital_objects ||=
+        begin
+          digital_objects.map do |digital_object|
+            aspace_client.find_digital_object_by_ref(ref: digital_object["digital_object"]["ref"])
+          end
+        end
+    end
+
+    def figgy_objects
+      resolved_digital_objects.select(&:linked_to_figgy?)
+    end
+
+    def non_figgy_instances
+      source["instances"].select do |instance|
+        instance["instance_type"] != "digital_object" || !figgy_objects.map(&:uri).include?(instance["digital_object"]["ref"])
+      end
+    end
+
     def existing_figgy_digital_object
       digital_objects.find do |digital_object|
         resolved = aspace_client.find_digital_object_by_ref(ref: digital_object["digital_object"]["ref"])
@@ -28,8 +47,6 @@ module Aspace
       end
     end
 
-    # TODO: Implement this. It should check instances for digital objects which
-    # correspond to the given figgy manifest.
     def manifest?(source_metadata_identifier:)
       existing_figgy_digital_object.present?
     end

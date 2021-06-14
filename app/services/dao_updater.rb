@@ -9,7 +9,7 @@ class DaoUpdater
 
   def update!
     archival_object = aspace_client.find_archival_object_by_component_id(component_id: change_set.source_metadata_identifier)
-    return if archival_object.manifest?(source_metadata_identifier: change_set.source_metadata_identifier)
+    # return if archival_object.manifest?(source_metadata_identifier: change_set.source_metadata_identifier)
 
     # Create digital object.
     digital_object = create_digital_object(archival_object)
@@ -22,6 +22,7 @@ class DaoUpdater
   def link_digital_object(archival_object:, digital_object:)
     instance = new_instance(digital_object["uri"])
     payload = archival_object.source
+    payload["instances"] = archival_object.non_figgy_instances
     payload["instances"] += [instance]
     aspace_client.post(archival_object.uri, payload)
   end

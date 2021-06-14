@@ -12,5 +12,9 @@ module Aspace
         version["file_uri"].include?("figgy")
       end
     end
+
+    def uri
+      source["uri"]
+    end
   end
 end
