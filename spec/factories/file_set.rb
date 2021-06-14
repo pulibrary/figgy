@@ -16,6 +16,10 @@ FactoryBot.define do
       file_metadata FileMetadata.new(mime_type: ControlledVocabulary.for(:geo_metadata_format).all.first.value, use: Valkyrie::Vocab::PCDMUse.OriginalFile)
     end
 
+    factory :zip_file_set do
+      file_metadata FileMetadata.new(mime_type: "application/zip", use: Valkyrie::Vocab::PCDMUse.OriginalFile, id: SecureRandom.uuid)
+    end
+
     factory :geo_image_file_set do
       file_metadata FileMetadata.new(mime_type: ControlledVocabulary.for(:geo_image_format).all.first.value, use: Valkyrie::Vocab::PCDMUse.OriginalFile)
     end
