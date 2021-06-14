@@ -40,17 +40,6 @@ module Aspace
       end
     end
 
-    def existing_figgy_digital_object
-      digital_objects.find do |digital_object|
-        resolved = aspace_client.find_digital_object_by_ref(ref: digital_object["digital_object"]["ref"])
-        resolved.linked_to_figgy?
-      end
-    end
-
-    def manifest?(source_metadata_identifier:)
-      existing_figgy_digital_object.present?
-    end
-
     def aspace_client
       @aspace_client ||= Aspace::Client.new
     end
