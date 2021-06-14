@@ -5,6 +5,7 @@ require "rails_helper"
 RSpec.describe ChangeSetPersister::UpdateAspaceDao do
   let(:shoulder) { "99999/fk4" }
   let(:blade) { "123456" }
+  with_queue_adapter :inline
   it "updates ASpace with a new DAO when an item is marked complete" do
     stub_aspace_login
     stub_find_archival_object(component_id: "MC001.01_c000001")
@@ -33,6 +34,9 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
     stub_ezid(shoulder: shoulder, blade: blade)
     mocked_digital_object_create = stub_create_digital_object
     mocked_archival_object_update = stub_archival_object_update(archival_object_id: "260330")
+    # Stub preservation since we have a stubbed FileSet with no real content to
+    # preserve.
+    allow(PreserveResourceJob).to receive(:perform_later)
     change_set_persister = ScannedResourcesController.change_set_persister
     zip_file_set = FactoryBot.create_for_repository(:zip_file_set)
     resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "MC001.01_c000001", member_ids: zip_file_set.id)
