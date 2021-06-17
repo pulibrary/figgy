@@ -191,6 +191,7 @@ Metrics/MethodLength:
     - 'app/helpers/thumbnail_helper.rb'
     - 'app/exporters/hathi/submission_information_package.rb'
     - 'app/resources/numismatics/issues/numismatics/issues_controller.rb'
+    - 'spec/support/stub_aspace.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'

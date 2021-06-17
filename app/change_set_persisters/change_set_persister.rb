@@ -36,7 +36,8 @@ class ChangeSetPersister
         ReindexChildrenOnState::Factory.new(model: EphemeraBox, state: "all_in_production"),
         IngestBag,
         PreserveResource,
-        ReorganizeCollection
+        ReorganizeCollection,
+        UpdateAspaceDao
       ],
       after_update_commit: [
         ReindexCollectionMembers,

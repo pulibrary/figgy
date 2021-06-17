@@ -6,6 +6,16 @@ GIT
       devise
 
 GIT
+  remote: https://github.com/pulibrary/archivesspace-client.git
+  revision: 808b08d66b71025a331f0ba67d84b2b28be5a4ae
+  branch: fix_login
+  specs:
+    archivesspace-client (0.1.5)
+      httparty (= 0.14.0)
+      json (>= 2.0.3)
+      nokogiri (>= 1.6.8.1)
+
+GIT
   remote: https://github.com/pulibrary/ruby_tika_app.git
   revision: 5b633a91c99eb56c3d26740d24706a67d6ffe42d
   specs:
@@ -434,6 +444,8 @@ GEM
     hashie (3.5.6)
     honeybadger (4.8.0)
     http_logger (0.6.0)
+    httparty (0.14.0)
+      multi_xml (>= 0.5.2)
     httpclient (2.8.3)
     hydra-access-controls (10.5.0)
       active-fedora (>= 10.0.0, < 12)
@@ -939,6 +951,7 @@ PLATFORMS
 DEPENDENCIES
   aasm
   arabic-letter-connector
+  archivesspace-client!
   autoprefixer-rails
   awesome_print
   aws-sdk-s3

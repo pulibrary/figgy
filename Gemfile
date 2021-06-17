@@ -139,3 +139,5 @@ gem "bootsnap", require: false
 gem "dnsruby"
 gem "oai", "~> 1.0.0"
 gem "ruby-vips"
+
+gem "archivesspace-client", github: "pulibrary/archivesspace-client", branch: "fix_login"
