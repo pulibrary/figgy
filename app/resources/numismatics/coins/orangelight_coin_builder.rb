@@ -140,7 +140,7 @@ class OrangelightCoinBuilder
     # rubocop:enable Metrics/AbcSize
 
     def coin_location_code
-      "num"
+      "rare$num"
     end
 
     def coin_library_location
