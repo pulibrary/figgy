@@ -119,11 +119,11 @@ describe OrangelightDocument do
         expect(output[:location]).to eq ["Special Collections"]
         expect(output[:location_display]).to eq ["Special Collections - Numismatics Collection"]
         expect(output[:format]).to eq ["Coin"]
-        expect(output[:advanced_location_s]).to eq ["num"]
-        expect(output[:location_code_s]).to eq ["num"]
+        expect(output[:advanced_location_s]).to eq ["rare$num"]
+        expect(output[:location_code_s]).to eq ["rare$num"]
         expect(holding["call_number"]).to eq "Coin #{coin.coin_number}"
         expect(holding["call_number_browse"]).to eq "Coin #{coin.coin_number}"
-        expect(holding["location_code"]).to eq "num"
+        expect(holding["location_code"]).to eq "rare$num"
         expect(holding["location"]).to eq "Special Collections - Numismatics Collection"
         expect(holding["library"]).to eq "Special Collections"
         expect(output[:counter_stamp_s]).to eq ["two small counter-stamps visible as small circles on reverse, without known parallel"]
