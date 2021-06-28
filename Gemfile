@@ -84,6 +84,7 @@ gem "rsolr", ">= 1.0"
 
 gem "aasm"
 gem "arabic-letter-connector"
+gem "archivesspace-client"
 gem "browse-everything", github: "samvera/browse-everything", branch: "2.x-stable"
 gem "capistrano", "~> 3.7.1"
 gem "capistrano-passenger"
@@ -139,5 +140,3 @@ gem "bootsnap", require: false
 gem "dnsruby"
 gem "oai", "~> 1.0.0"
 gem "ruby-vips"
-
-gem "archivesspace-client", github: "pulibrary/archivesspace-client", branch: "fix_login"
