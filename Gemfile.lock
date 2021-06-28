@@ -866,7 +866,6 @@ GEM
     thread_safe (0.3.6)
     tilt (2.0.8)
     timecop (0.9.1)
-    tiny_tds (2.1.2)
     title (0.0.7)
       i18n
       rails (>= 3.1)
@@ -1053,7 +1052,6 @@ DEPENDENCIES
   sqlite3
   string_rtl
   timecop
-  tiny_tds
   title
   uglifier
   valkyrie (~> 2.1.1)
