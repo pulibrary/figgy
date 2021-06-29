@@ -23,7 +23,7 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
 
     # Ensure the digital object was made.
     expect(mocked_digital_object_create).to have_been_made
-    expect(mocked_digital_object_create.with { |req| req.body.include?("http://www.example.com/concern/scanned_resources/#{change_set.id}/manifest") }).to have_been_made
+    expect(mocked_digital_object_create.with { |req| CGI.unescape(req.body).include?("http://www.example.com/concern/scanned_resources/#{change_set.id}/manifest") }).to have_been_made
     # Ensure the archival object was linked to the digital object.
     expect(mocked_archival_object_update).to have_been_made
   end
@@ -48,7 +48,7 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
 
     # Ensure the digital object was made.
     expect(mocked_digital_object_create).to have_been_made
-    expect(mocked_digital_object_create.with { |req| req.body.include?("http://www.example.com/downloads/#{zip_file_set.id}/file/#{zip_file_set.original_file.id}") }).to have_been_made
+    expect(mocked_digital_object_create.with { |req| CGI.unescape(req.body).include?("http://www.example.com/downloads/#{zip_file_set.id}/file/#{zip_file_set.original_file.id}") }).to have_been_made
     # Ensure the archival object was linked to the digital object.
     expect(mocked_archival_object_update).to have_been_made
   end
@@ -69,7 +69,7 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
     change_set_persister.save(change_set: change_set)
 
     # Ensure the digital object was made.
-    expect(mocked_digital_object_create.with { |req| req.body.include?("http://www.example.com/concern/scanned_resources/#{change_set.id}/manifest") }).to have_been_made
+    expect(mocked_digital_object_create.with { |req| CGI.unescape(req.body).include?("http://www.example.com/concern/scanned_resources/#{change_set.id}/manifest") }).to have_been_made
     expect(mocked_archival_object_update).to have_been_made
     # Ensure the old figgy URI isn't in there.
     expect(mocked_archival_object_update.with { |req| req.body.include?("/repositories/3/digital_objects/12331") })
