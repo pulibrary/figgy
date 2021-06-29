@@ -97,6 +97,17 @@ class BaseWayfinder
     @resource = resource
   end
 
+  # Collections are only assigned at the MVW level, but permissions for volumes
+  # need to see if a user has permission for a restricted collection. To do that
+  # it needs its parents collections if it has one.
+  def self_or_parent_collections
+    if try(:parent).present?
+      Wayfinder.for(parent).try(:collections)
+    else
+      try(:collections) || []
+    end
+  end
+
   # Define a preservation_objects relationship for all resources
   inverse_relationship_by_property :preservation_objects, property: :preserved_object_id, singular: true, model: PreservationObject
 

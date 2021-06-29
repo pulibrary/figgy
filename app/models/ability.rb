@@ -198,7 +198,7 @@ class Ability
   def restricted_collection_viewer?(obj)
     return false unless current_user && obj.decorate.public_readable_state?
     return false if private?(obj)
-    collections = Wayfinder.for(obj).try(:collections) || []
+    collections = Wayfinder.for(obj).try(:self_or_parent_collections) || []
     collections.flat_map(&:restricted_viewers).include?(current_user.uid)
   end
 

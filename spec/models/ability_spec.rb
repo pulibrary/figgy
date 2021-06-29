@@ -3,11 +3,13 @@ require "rails_helper"
 require "cancan/matchers"
 
 describe Ability do
+  include ActiveJob::TestHelper
   subject { described_class.new(current_user) }
   let(:page_file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:page_file_2) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:page_file_3) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:audio_file) { fixture_file_upload("files/audio_file.wav", "audio/x-wav") }
+  let(:audio_file_2) { fixture_file_upload("files/audio_file.wav", "audio/x-wav") }
   let(:shoulder) { "99999/fk4" }
   let(:blade) { "123456" }
 
@@ -173,6 +175,25 @@ describe Ability do
   end
   let(:reading_room_collection_restricted_viewer_scanned_resource) do
     FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [page_file_2], member_of_collection_ids: [restricted_viewer_collection.id])
+  end
+  let(:reading_room_collection_restricted_viewer_recording) do
+    parent = FactoryBot.create_for_repository(:reading_room_scanned_resource, member_of_collection_ids: [restricted_viewer_collection.id])
+    perform_enqueued_jobs do
+      FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [audio_file_2], append_id: parent.id)
+    end
+  end
+  let(:reading_room_audio_file) do
+    Wayfinder.for(reading_room_collection_restricted_viewer_recording).file_sets.first
+  end
+  let(:reading_room_audio_file_partial) do
+    DownloadsController::FileWithMetadata.new(
+      id: reading_room_audio_file.derivative_partial_files.first.id.to_s,
+      file: "",
+      mime_type: reading_room_audio_file.derivative_partial_files.first.mime_type,
+      original_name: "hls0.ts",
+      file_set_id: reading_room_audio_file.id.to_s,
+      file_metadata: reading_room_audio_file.derivative_partial_files.first
+    )
   end
   let(:private_collection_restricted_viewer_scanned_resource) do
     FactoryBot.create_for_repository(:complete_private_scanned_resource, files: [page_file_2], member_of_collection_ids: restricted_viewer_collection.id)
@@ -510,6 +531,8 @@ describe Ability do
       is_expected.to be_able_to(:discover, reading_room_collection_restricted_viewer_scanned_resource)
       is_expected.not_to be_able_to(:download, reading_room_collection_restricted_viewer_scanned_resource)
       is_expected.not_to be_able_to(:download, reading_room_collection_restricted_viewer_scanned_resource.decorate.members.first)
+
+      is_expected.to be_able_to(:download, reading_room_audio_file_partial)
     }
 
     context "when accessing figgy via a campus IP" do
