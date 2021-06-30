@@ -8,6 +8,7 @@ class DaoUpdater
   end
 
   def update!
+    return unless change_set.resource.decorate.public_readable_state?
     archival_object = aspace_client.find_archival_object_by_component_id(component_id: change_set.source_metadata_identifier)
 
     # Create digital object.
