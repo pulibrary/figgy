@@ -2,17 +2,11 @@
 
 # Service to update Voyager bibids to alma mms ids
 class BibidUpdater
-  def self.update(logger: Logger.new(STDOUT))
-    new(logger: logger).update
-  end
-
-  attr_reader :logger
-  def initialize(logger:)
-    @logger = logger
+  def self.update
+    new.update
   end
 
   def update
-    logger.info "Updating #{total_count} records"
     progress_bar
     resources.each do |resource|
       change_set = ChangeSet.for(resource)
@@ -25,8 +19,8 @@ class BibidUpdater
   private
 
     def change_set_persister
-      @change_set_perisister ||= ChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter,
-                                                        storage_adapter: Valkyrie.config.storage_adapter)
+      @change_set_persister ||= ChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter,
+                                                       storage_adapter: Valkyrie.config.storage_adapter)
     end
 
     def progress_bar
@@ -38,15 +32,16 @@ class BibidUpdater
     end
 
     def resources
-      @resources ||= query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: [], lazy: true).select do |resource|
+      query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: [], lazy: true).select do |resource|
         id = resource.source_metadata_identifier.first
         next if id =~ /99.*3506421/
         RemoteRecord.bibdata?(id)
       end
     end
 
+    # Approximate resource total
     def total_count
-      @total_count ||= resources.count
+      75_000
     end
 
     def transform_id(voyager_id)
