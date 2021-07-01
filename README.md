@@ -28,8 +28,7 @@ A digital repository application in use at Princeton University Library for stor
 * [Simple Tiles](http://propublica.github.io/simple-tiles/)
     * Install via Homebrew: `brew install simple-tiles`
 * [Tesseract](https://github.com/tesseract-ocr/tesseract)
-    * Version 3.04 is on the servers; homebrew installs 3.05: `brew install
-      tesseract --with-all-languages`
+    * Version 3.04 is on the servers; homebrew installs 4.1.1: `brew install tesseract-lang`
     * For Ubuntu you'll have to [compile](https://github.com/tesseract-ocr/tesseract/wiki/Compiling) it.
 * [MediaInfo](https://mediaarea.net/en/MediaInfo)
     * You can install it on Mac OSX with `brew install mediainfo`.
