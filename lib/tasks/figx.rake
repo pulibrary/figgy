@@ -25,9 +25,11 @@ namespace :figx do
     FactoryBot.create_for_repository(
       :scanned_resource,
       id: "cad0a459-e520-442d-9139-c338bd60af6f",
-      member_of_collection_ids: ["597edce8-3a2f-41cd-be2b-182dae7b9a8f"],
-      label: ["Concert, 2012, April 07"],
-      description: "A complete program is available in Mendel Music Library."
+      member_of_collection_ids: [Valkyrie::ID.new("597edce8-3a2f-41cd-be2b-182dae7b9a8f")],
+      imported_metadata: [{
+        title: ["Concert, 2012, April 07"],
+        description: ["A complete program is available in Mendel Music Library."]
+      }]
     )
   end
 end
