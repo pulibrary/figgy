@@ -41,9 +41,19 @@ defmodule FigxWeb.ManifestsControllerTest do
           "description" => [
             "A complete program is available in Mendel Music Library."
           ]
-        }
+        },
+        %{
+          "@context" => "http://iiif.io/api/presentation/2/context.json",
+          "@type" => "sc:Manifest",
+          "@id" => "http://localhost:4002/concern/ephemera_folders/02f7dad6-cbaa-47e8-913e-b89bdd16bb17/manifest",
+          "label" => [
+            "Ephemera Folder"
+          ],
+          "description" => [
+            "I'm ephemera."
+          ]
+        },
       ]
-
     end
 
     test "works for a collection with no ARK", %{conn: conn} do

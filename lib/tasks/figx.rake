@@ -31,5 +31,12 @@ namespace :figx do
         description: ["A complete program is available in Mendel Music Library."]
       }]
     )
+    FactoryBot.create_for_repository(
+      :ephemera_folder,
+      id: "02f7dad6-cbaa-47e8-913e-b89bdd16bb17",
+      member_of_collection_ids: [Valkyrie::ID.new("597edce8-3a2f-41cd-be2b-182dae7b9a8f")],
+      title: ["Ephemera Folder"],
+      description: ["I'm ephemera."]
+    )
   end
 end
