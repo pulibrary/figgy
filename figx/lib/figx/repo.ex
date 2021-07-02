@@ -15,7 +15,8 @@ defmodule Figx.Repo do
   end
 
   def get_collection_members(id) do
-    from(Figx.Resource, where: fragment("metadata @> ?::jsonb", %{ member_of_collection_ids: [%{ id: id }]}))
+    p = %{ member_of_collection_ids: [%{id: id}] }
+    from(Figx.Resource, where: fragment("metadata @> ?::jsonb", ^p))
     |> all()
   end
 end

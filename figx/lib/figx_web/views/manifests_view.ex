@@ -35,6 +35,17 @@ defmodule FigxWeb.ManifestsView do
   def add_rendering(manifest, _resource), do: manifest
 
   def member_manifests(resource) do
-    members = Figx.Repo.get_collection_members(resource.id)
+    Figx.Repo.get_collection_members(resource.id)
+    |> Enum.map(&render_collection_member/1)
+  end
+
+  def render_collection_member(resource = %Figx.Resource{}) do
+    %{
+       "@context" => "http://iiif.io/api/presentation/2/context.json",
+       "@type" => "sc:Manifest",
+       "@id" => "#{FigxWeb.Endpoint.url()}/concern/scanned_resources/#{resource.id}/manifest",
+      "label" => resource.metadata["imported_metadata"] |> hd |> Map.get("title"),
+      "description" => resource.metadata["imported_metadata"] |> hd |> Map.get("description")
+    }
   end
 end
