@@ -1,5 +1,6 @@
 defmodule FigxWeb.ManifestsView do
   use FigxWeb, :view
+  alias Figx.Resource
 
   # manifest is an ecto Resource object
   def render("show.json", %{resource: resource}) do
@@ -39,13 +40,13 @@ defmodule FigxWeb.ManifestsView do
     |> Enum.map(&render_collection_member/1)
   end
 
-  def render_collection_member(resource = %Figx.Resource{}) do
+  def render_collection_member(resource = %Resource{}) do
     %{
        "@context" => "http://iiif.io/api/presentation/2/context.json",
        "@type" => "sc:Manifest",
-       "@id" => "#{FigxWeb.Endpoint.url()}/concern/scanned_resources/#{resource.id}/manifest",
-      "label" => resource.metadata["imported_metadata"] |> hd |> Map.get("title"),
-      "description" => resource.metadata["imported_metadata"] |> hd |> Map.get("description")
+       "@id" => "#{FigxWeb.Endpoint.url()}/concern/#{Macro.underscore(resource.internal_resource)}s/#{resource.id}/manifest",
+      "label" => resource |> Resource.title,
+      "description" => resource |> Resource.description
     }
   end
 end

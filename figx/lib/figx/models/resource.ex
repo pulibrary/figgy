@@ -6,4 +6,11 @@ defmodule Figx.Resource do
     field :metadata, :map
     field :internal_resource, :string
   end
+
+  def title(%{metadata: %{"imported_metadata" => [%{"title" => title}]}}), do: title
+  def title(%{metadata: %{"title" => title}}), do: title
+
+
+  def description(%{metadata: %{"imported_metadata" => [%{"description" => description}]}}), do: description
+  def description(%{metadata: %{"description" => description}}), do: description
 end
