@@ -14,6 +14,7 @@ RSpec.describe CDL::EligibleItemService do
         stub_request(:get, "https://bibdata.princeton.edu/bibliographic/#{bib_id}/items")
           .to_return(status: 500,
                      body: "500", headers: { "Content-Type" => "application/json" })
+        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/99#{bib_id}3506421/items").to_return(status: 500, body: "500", headers: { "Content-Type" => "application/json" })
       end
       let(:bib_id) { "7214786" }
       it "will return an empty array" do
@@ -26,6 +27,7 @@ RSpec.describe CDL::EligibleItemService do
         stub_request(:get, "https://bibdata.princeton.edu/bibliographic/#{bib_id}/items")
           .to_return(status: 200,
                      body: file_fixture("bibdata/#{bib_id}.json").read, headers: { "Content-Type" => "application/json" })
+        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/99#{bib_id}3506421/items").to_return(status: 500, body: "500", headers: { "Content-Type" => "application/json" })
       end
       let(:bib_id) { "7214786" }
 
@@ -39,6 +41,7 @@ RSpec.describe CDL::EligibleItemService do
         stub_request(:get, "https://bibdata.princeton.edu/bibliographic/#{bib_id}/items")
           .to_return(status: 200,
                      body: file_fixture("bibdata/#{bib_id}.json").read, headers: { "Content-Type" => "application/json" })
+        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/99#{bib_id}3506421/items").to_return(status: 500, body: "500", headers: { "Content-Type" => "application/json" })
       end
       let(:bib_id) { "7214787" }
 
@@ -52,6 +55,7 @@ RSpec.describe CDL::EligibleItemService do
         stub_request(:get, "https://bibdata.princeton.edu/bibliographic/#{bib_id}/items")
           .to_return(status: 404,
                      body: {}.to_json, headers: { "Content-Type" => "application/json" })
+        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/99#{bib_id}3506421/items").to_return(status: 500, body: "500", headers: { "Content-Type" => "application/json" })
       end
       let(:bib_id) { "11174664" }
       it "will return an empty array" do
@@ -65,6 +69,7 @@ RSpec.describe CDL::EligibleItemService do
         stub_request(:get, "https://bibdata.princeton.edu/bibliographic/#{bib_id}/items")
           .to_return(status: 404,
                      body: html_body, headers: { "Content-Type" => "application/json" })
+        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/99#{bib_id}3506421/items").to_return(status: 500, body: "500", headers: { "Content-Type" => "application/json" })
       end
       let(:bib_id) { "11174664" }
       it "will return an empty array" do
@@ -109,11 +114,26 @@ RSpec.describe CDL::EligibleItemService do
       end
     end
 
+    context "a non-alma ID has no items, but an alma one does" do
+      it "returns the alma item PIDs" do
+        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/9965126093506421/items")
+          .to_return(status: 200,
+                     body: file_fixture("bibdata/9965126093506421.json").read, headers: { "Content-Type" => "application/json" })
+        html_body = "Record 6512609 not found or suppressed"
+        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/6512609/items")
+          .to_return(status: 404,
+                     body: html_body, headers: { "Content-Type" => "application/json" })
+
+        expect(described_class.item_ids(source_metadata_identifier: "6512609")).to eq ["23202918780006421"]
+      end
+    end
+
     context "patron_group_charged is missing and cdl is false" do
       before do
         stub_request(:get, "https://bibdata.princeton.edu/bibliographic/#{bib_id}/items")
           .to_return(status: 200,
                      body: file_fixture("bibdata/#{bib_id}.json").read, headers: { "Content-Type" => "application/json" })
+        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/99#{bib_id}3506421/items").to_return(status: 500, body: "500", headers: { "Content-Type" => "application/json" })
       end
       let(:bib_id) { "9968643943506421" }
 

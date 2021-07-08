@@ -7,6 +7,16 @@ module CDL
     # with alma the field will be "cdl": true
     class << self
       def item_ids(source_metadata_identifier:)
+        item_ids = get_item_ids(source_metadata_identifier: source_metadata_identifier)
+        # If no matches, try the alma ID version.
+        if item_ids.empty?
+          get_item_ids(source_metadata_identifier: "99#{source_metadata_identifier}3506421")
+        else
+          item_ids
+        end
+      end
+
+      def get_item_ids(source_metadata_identifier:)
         return [] unless RemoteRecord.bibdata?(source_metadata_identifier)
         response = Faraday.new(url: bibdata_base).get("bibliographic/#{source_metadata_identifier}/items")
         return [] unless response.success?
@@ -22,7 +32,7 @@ module CDL
       end
 
       def bibdata_base
-        "https://bibdata-alma-staging.princeton.edu/"
+        ENV["BIBDATA_BASE"] || "https://bibdata.princeton.edu/"
       end
 
       def cdl?(item)
