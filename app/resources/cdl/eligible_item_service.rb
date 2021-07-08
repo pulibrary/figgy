@@ -22,7 +22,7 @@ module CDL
       end
 
       def bibdata_base
-        "https://bibdata.princeton.edu/"
+        "https://bibdata-alma-staging.princeton.edu/"
       end
 
       def cdl?(item)
