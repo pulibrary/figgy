@@ -123,7 +123,6 @@ jobs:
           command: node -v
       # Wait for DB
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
-      - run: sudo sh bin/ci_kakadu_install.sh
       # Remove cached simpler-tiles - needs to be reinstalled every time.
       - run: rm vendor/bundle/ruby/2.6.0/specifications/simpler-tiles-0.3.1.gemspec || true
       # Install Bundler
