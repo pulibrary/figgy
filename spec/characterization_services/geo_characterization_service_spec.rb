@@ -41,6 +41,22 @@ RSpec.describe GeoCharacterizationService do
     end
   end
 
+  context "with a shapefile name that contains parens" do
+    let(:file) { fixture_file_upload("files/vector/shapefile(parens).zip", "application/zip") }
+    let(:resource) do
+      change_set_persister.save(change_set: VectorResourceChangeSet.new(VectorResource.new, files: [file]))
+    end
+
+    it "sets the correct mime_type on the file_set on characterize", run_real_characterization: true do
+      file_set = valid_file_set
+      Timeout.timeout(20) do
+        new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+        expect(new_file_set.original_file.mime_type).to eq ['application/zip; ogr-format="ESRI Shapefile"']
+        expect(new_file_set.original_file.geometry).to eq ["Polygon"]
+      end
+    end
+  end
+
   describe "#valid?" do
     let(:decorator) { instance_double(FileSetDecorator, parent: parent) }
 

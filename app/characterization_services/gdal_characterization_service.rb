@@ -67,7 +67,7 @@ class GdalCharacterizationService
 
   # Uncompresses a zipped file and sets dataset_path variable to the resulting directory.
   def unzip_original_file
-    system "unzip -qq -o -j #{filename} -d #{zip_file_directory}" unless File.directory?(zip_file_directory)
+    system %(unzip -qq -o -j "#{filename}" -d #{zip_file_directory}) unless File.directory?(zip_file_directory)
     @dataset_path = zip_file_directory
   end
 
@@ -80,7 +80,9 @@ class GdalCharacterizationService
   # Path to directory in which to extract zip file
   # @return [String]
   def zip_file_directory
-    "#{File.dirname(filename)}/#{File.basename(filename, '.zip')}"
+    # Get the base file name and remove problematic parens
+    basename = File.basename(filename, ".zip").delete("(").delete(")")
+    "#{File.dirname(filename)}/#{basename}"
   end
 
   class Raster < GdalCharacterizationService
