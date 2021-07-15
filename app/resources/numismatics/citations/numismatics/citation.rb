@@ -7,5 +7,6 @@ module Numismatics
     attribute :number
     attribute :numismatic_reference_id, Valkyrie::Types::Set
     attribute :part
+    attribute :uri
   end
 end

@@ -3,7 +3,8 @@ module Numismatics
   class CitationDecorator < Valkyrie::ResourceDecorator
     display :part,
             :number,
-            :numismatic_reference
+            :numismatic_reference,
+            :uri
 
     delegate :decorated_numismatic_reference, to: :wayfinder
 

@@ -6,11 +6,7 @@
       <%= f.hidden_field :numismatic_reference_id, ajax_select_type: "Reference"%>
     </div>
     <div class="col-md-6">
-      <%= f.input :citation_type,
-        as: :select,
-        collection: ["Exhibit"],
-        required: f.object.required?(:citation_type),
-        include_blank: true %>
+      <%= f.input :uri, required: f.object.required?(:uri), label: "URI" %>
     </div>
   </div>
   <div class="row">
@@ -19,6 +15,15 @@
     </div>
     <div class="col-md-6">
       <%= f.input :number, required: f.object.required?(:number), label: "Number" %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :citation_type,
+        as: :select,
+        collection: ["Exhibit"],
+        required: f.object.required?(:citation_type),
+        include_blank: true %>
     </div>
   </div>
   <%= f.hidden_field :id %>
