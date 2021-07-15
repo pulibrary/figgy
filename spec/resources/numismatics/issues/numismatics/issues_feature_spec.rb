@@ -70,6 +70,7 @@ RSpec.feature "Numismatics::Issues" do
     expect(page).not_to have_field "State"
     expect(page).to have_field "Subject"
     expect(page).to have_field "Type"
+    expect(page).to have_field "URI"
     expect(page).to have_field "Workshop"
     expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Place"
     expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Person"

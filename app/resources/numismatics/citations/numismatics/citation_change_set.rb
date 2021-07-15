@@ -7,6 +7,7 @@ module Numismatics
     property :number, multiple: false, required: false
     property :numismatic_reference_id, multiple: false, required: false, type: Valkyrie::Types::ID.optional
     property :part, multiple: false, required: false
+    property :uri, multiple: false, required: false
 
     # Virtual Attributes
     property :_destroy, virtual: true
@@ -24,7 +25,8 @@ module Numismatics
         :citation_type,
         :part,
         :number,
-        :numismatic_reference_id
+        :numismatic_reference_id,
+        :uri
       ]
     end
   end

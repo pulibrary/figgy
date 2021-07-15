@@ -5,6 +5,9 @@
       <%= link_to 'New Reference', new_numismatics_reference_path, class: 'btn btn-sm btn-primary new-link', target: '_blank'%>
       <%= f.hidden_field :numismatic_reference_id, ajax_select_type: "Reference"%>
     </div>
+    <div class="col-md-6">
+      <%= f.input :uri, required: f.object.required?(:uri), label: "URI" %>
+    </div>
   </div>
   <div class="row">
     <div class="col-md-6">

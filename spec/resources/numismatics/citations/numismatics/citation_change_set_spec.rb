@@ -7,7 +7,7 @@ RSpec.describe Numismatics::CitationChangeSet do
 
   describe "#primary_terms" do
     it "includes displayed fields" do
-      expect(change_set.primary_terms).to include(:citation_type, :part, :number, :numismatic_reference_id)
+      expect(change_set.primary_terms).to include(:citation_type, :part, :number, :numismatic_reference_id, :uri)
     end
   end
 end
