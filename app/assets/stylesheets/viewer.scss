@@ -38,6 +38,16 @@ body {
   }
 
 }
+#takedown-rights {
+  font-size: 12px;
+  vertical-align: inherit;
+  padding-left: 5px;
+}
+
+.uv .mobileFooterPanel #takedown-rights {
+    font-size: 10px;
+}
+
 h1 {
   font-family: "Dejavu Sans", "Arial Unicode MS", Helvetica, sans-serif;
   color: #337ab7;
@@ -48,6 +58,12 @@ h1 {
   font-weight: inherit;
   line-height: 1.2;
 }
-.uv .mobileFooterPanel .options.minimiseButtons {
-  width: auto;
+.uv .mobileFooterPanel {
+  #takedown-rights {
+    font-size: 10px;
+  }
+
+  .options.minimiseButtons {
+    width: auto;
+  }
 }
