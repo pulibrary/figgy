@@ -1,6 +1,8 @@
 /* global UV, $, createUV */
 import CDLTimer from 'viewer/cdl_timer'
 import IIIFLogo from 'images/iiif-logo.svg'
+import TakedownLogo from 'images/takedown.png'
+
 export default class UVManager {
   async initialize () {
     this.bindLogin()
@@ -37,14 +39,19 @@ export default class UVManager {
     this.cdlTimer.initializeTimer()
   }
 
-  addIIIFIcon () {
+  addViewerIcons () {
     const existingButton = document.querySelector('a.iiif-drag')
+    const takedownButton = document.querySelector('a.takedown')
     const shareButton = document.querySelector('.footerPanel button.share')
     if (existingButton !== null || shareButton === null || shareButton.style.display === "none") {
       return
     }
     const mobileShareButton = document.querySelector('.mobileFooterPanel button.share')
     // Pull link from the UV share popup.
+
+    shareButton.parentNode.insertBefore(this.createTakedownElement(), shareButton.nextSibling)
+    mobileShareButton.parentNode.insertBefore(this.createTakedownElement(), mobileShareButton.nextSibling)
+
     shareButton.parentNode.insertBefore(this.createIIIFDragElement(), shareButton.nextSibling)
     mobileShareButton.parentNode.insertBefore(this.createIIIFDragElement(), mobileShareButton.nextSibling)
   }
@@ -56,6 +63,15 @@ export default class UVManager {
     iconElement.href = link
     iconElement.target = '_blank'
     iconElement.innerHTML = `<img src="${IIIFLogo}" style="width:30px; height=30px;"/>`
+    return iconElement
+  }
+
+  createTakedownElement () {
+    const iconElement = document.createElement('a')
+    iconElement.className = 'btn imageBtn takedown'
+    iconElement.href = 'https://library.princeton.edu/takedown-request'
+    iconElement.target = '_blank'
+    iconElement.innerHTML = `<img src="${TakedownLogo}" style="width:30px; height=30px;"/> <span id="takedown-rights">Rights and Permissions</span>`
     return iconElement
   }
 
@@ -105,7 +121,7 @@ export default class UVManager {
     const titleHeight = $('#title').outerHeight($('#title').is(':visible'))
     this.uvElement.width(windowWidth)
     this.uvElement.height(windowHeight - titleHeight)
-    this.waitForElementToDisplay('button.share', 500, this.addIIIFIcon.bind(this))
+    this.waitForElementToDisplay('button.share', 500, this.addViewerIcons.bind(this))
   }
 
   bindResize () {
