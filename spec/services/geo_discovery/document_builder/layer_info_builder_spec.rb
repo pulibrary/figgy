@@ -52,5 +52,14 @@ describe GeoDiscovery::DocumentBuilder::LayerInfoBuilder do
         expect(document.geom_type).to eq("Line")
       end
     end
+
+    context "with a geometry value of Measured Line String" do
+      let(:geometry) { "Measured Line String" }
+
+      it "returns a value of Line" do
+        builder.build(document)
+        expect(document.geom_type).to eq("Line")
+      end
+    end
   end
 end
