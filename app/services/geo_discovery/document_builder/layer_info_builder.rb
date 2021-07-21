@@ -66,7 +66,7 @@ module GeoDiscovery
         # @return [String] cleaned geometry
         def vector_geom_clean(value)
           return "Mixed" if value == "None"
-          removable_strings = ["Multi ", "3D ", " String"]
+          removable_strings = ["Multi ", "3D ", " String", "Measured "]
           removable_strings.each  do |s|
             value = value.gsub(s, "")
           end
