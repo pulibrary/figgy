@@ -39,6 +39,6 @@ class EphemeraTermDecorator < Valkyrie::ResourceDecorator
   private
 
     def camelized_label
-      Array.wrap(label).first.gsub(/\s/, "_").camelize(:lower)
+      Array.wrap(label).first.gsub(/\s/, "_").delete("'").tr("/", "-").camelize(:lower)
     end
 end

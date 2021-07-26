@@ -40,6 +40,14 @@ RSpec.describe EphemeraTermDecorator do
         expect(resource.decorate.internal_url.to_s).to eq "https://figgy.princeton.edu/ns/testVocabulary/sanJos%C3%A9,CostaRica"
       end
     end
+
+    context "when the label contains a slash and apostrophe" do
+      it "generates a figgy uri" do
+        resource = FactoryBot.create_for_repository(:ephemera_term, label: "Women's rights/ Gender", member_of_vocabulary_id: vocabulary.id)
+
+        expect(resource.decorate.internal_url.to_s).to eq "https://figgy.princeton.edu/ns/testVocabulary/womensRights-Gender"
+      end
+    end
   end
 
   context "when a child of a vocabulary" do
