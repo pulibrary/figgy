@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module Numismatics
-  class CoinsController < BaseResourceController
+  class CoinsController < ResourceController
     include OrangelightDocumentController
 
     self.resource_class = Numismatics::Coin
