@@ -9,9 +9,9 @@ module Numismatics
       storage_adapter: Valkyrie.config.storage_adapter
     )
 
-    before_action :load_facet_values, only: [:new, :edit]
-    before_action :load_numismatic_collections, only: [:new, :edit]
-    before_action :selected_issue, only: [:new, :edit, :destroy]
+    before_action :load_facet_values, only: [:new, :edit, :update]
+    before_action :load_numismatic_collections, only: [:new, :edit, :update]
+    before_action :selected_issue, only: [:new, :edit, :destroy, :update]
 
     def facet_fields
       [

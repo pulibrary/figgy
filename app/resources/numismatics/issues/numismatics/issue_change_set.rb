@@ -72,6 +72,8 @@ module Numismatics
     validates_with ViewingHintValidator
     validates :visibility, presence: true
     validates :earliest_date, :latest_date, year: true
+    validate :earliest_date_and_latest_date_set
+    validate :earliest_date_before_latest_date
 
     def primary_terms
       {
@@ -160,6 +162,26 @@ module Numismatics
 
     def build_reverse_attribute
       schema["reverse_attribute"][:nested].new(model_type_for(property: :reverse_attribute)[[{}]].first)
+    end
+
+    def earliest_date_before_latest_date
+      return if earliest_date.blank? && latest_date.blank?
+      return if earliest_date.to_i < latest_date.to_i
+      errors.add(:earliest_date, "must be a date before Latest Date")
+    end
+
+    def earliest_date_and_latest_date_set
+      return if earliest_date_and_latest_date_set?
+      if latest_date.present?
+        errors.add(:earliest_date, "must not be blank if Latest Date is set")
+      elsif earliest_date.present?
+        errors.add(:latest_date, "must not be blank if Earliest Date is set")
+      end
+    end
+
+    # Returns true if both earliest_date and end are either set or not set
+    def earliest_date_and_latest_date_set?
+      [earliest_date, latest_date].map(&:present?).uniq.length == 1
     end
   end
 end

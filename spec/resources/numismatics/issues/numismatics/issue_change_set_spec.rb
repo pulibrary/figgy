@@ -65,6 +65,24 @@ RSpec.describe Numismatics::IssueChangeSet do
         expect(change_set).not_to be_valid
       end
     end
+    context "when earliest_date is missing" do
+      it "is not valid" do
+        change_set.validate(latest_date: "1979")
+        expect(change_set).not_to be_valid
+      end
+    end
+    context "when latest_date is missing" do
+      it "is not valid" do
+        change_set.validate(earliest_date: "1979")
+        expect(change_set).not_to be_valid
+      end
+    end
+    context "when earliest_date is later than latest_date" do
+      it "is not valid" do
+        change_set.validate(earliest_date: "2020", latest_date: "1979")
+        expect(change_set).not_to be_valid
+      end
+    end
   end
 
   describe "#downloadable" do
