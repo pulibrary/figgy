@@ -7,21 +7,21 @@ module Numismatics
       storage_adapter: Valkyrie.config.storage_adapter
     )
 
-    before_action :load_facet_values, only: [:new, :edit]
-    before_action :load_colors, only: [:new, :edit]
-    before_action :load_denominations, only: [:new, :edit]
-    before_action :load_edges, only: [:new, :edit]
-    before_action :load_metals, only: [:new, :edit]
-    before_action :load_monograms, only: [:new, :edit]
-    before_action :load_monogram_attributes, only: [:new, :edit]
-    before_action :load_object_types, only: [:new, :edit]
-    before_action :load_obverse_figures, only: [:new, :edit]
-    before_action :load_obverse_orientations, only: [:new, :edit]
-    before_action :load_obverse_parts, only: [:new, :edit]
-    before_action :load_reverse_figures, only: [:new, :edit]
-    before_action :load_reverse_orientations, only: [:new, :edit]
-    before_action :load_reverse_parts, only: [:new, :edit]
-    before_action :load_shapes, only: [:new, :edit]
+    before_action :load_facet_values, only: [:new, :edit, :update]
+    before_action :load_colors, only: [:new, :edit, :update]
+    before_action :load_denominations, only: [:new, :edit, :update]
+    before_action :load_edges, only: [:new, :edit, :update]
+    before_action :load_metals, only: [:new, :edit, :update]
+    before_action :load_monograms, only: [:new, :edit, :update]
+    before_action :load_monogram_attributes, only: [:new, :edit, :update]
+    before_action :load_object_types, only: [:new, :edit, :update]
+    before_action :load_obverse_figures, only: [:new, :edit, :update]
+    before_action :load_obverse_orientations, only: [:new, :edit, :update]
+    before_action :load_obverse_parts, only: [:new, :edit, :update]
+    before_action :load_reverse_figures, only: [:new, :edit, :update]
+    before_action :load_reverse_orientations, only: [:new, :edit, :update]
+    before_action :load_reverse_parts, only: [:new, :edit, :update]
+    before_action :load_shapes, only: [:new, :edit, :update]
 
     def facet_fields
       [
