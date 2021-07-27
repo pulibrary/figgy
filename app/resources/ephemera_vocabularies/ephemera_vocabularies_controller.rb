@@ -1,7 +1,5 @@
 # frozen_string_literal: true
-class EphemeraVocabulariesController < ApplicationController
-  include ResourceController
-  include TokenAuth
+class EphemeraVocabulariesController < ResourceController
   self.resource_class = EphemeraVocabulary
   self.change_set_persister = ::ChangeSetPersister.new(
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),

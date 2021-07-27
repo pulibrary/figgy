@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.shared_examples "a BaseResourceController" do |*flags|
+RSpec.shared_examples "a ResourceController" do |*flags|
   include ActionDispatch::Routing::PolymorphicRoutes
   include Rails.application.routes.url_helpers
   with_queue_adapter :inline

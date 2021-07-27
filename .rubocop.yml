@@ -98,7 +98,7 @@ Metrics/ClassLength:
     - 'app/services/numismatics_import_service.rb'
     - 'app/controllers/bulk_ingest_controller.rb'
     - 'app/controllers/application_controller.rb'
-    - 'app/controllers/base_resource_controller.rb'
+    - 'app/controllers/resource_controller.rb'
     - 'app/resources/numismatics/issues/numismatics/issue_decorator.rb'
     - 'app/resources/coins/coins_controller.rb'
     - 'app/services/preserver.rb'
@@ -156,7 +156,7 @@ Metrics/MethodLength:
     - 'app/resources/scanned_resources/simple_change_set.rb'
     - 'app/resources/numismatics/issues/numismatics/issue_change_set.rb'
     - 'app/resources/numismatics/coins/numismatics/coin_change_set.rb'
-    - 'app/controllers/base_resource_controller.rb'
+    - 'app/controllers/resource_controller.rb'
     - 'app/services/pdf_generator.rb'
     - 'app/services/file_appender.rb'
     - 'app/jobs/voyager_update_job.rb'
@@ -172,7 +172,6 @@ Metrics/MethodLength:
     - 'config/initializers/sequel_active_support_notification.rb'
     - 'app/services/manifest_builder.rb'
     - 'app/indexers/imported_metadata_indexer.rb'
-    - 'app/controllers/concerns/resource_controller.rb'
     - 'app/controllers/reports_controller.rb'
     - 'app/models/search_builder.rb'
     - 'app/helpers/application_helper.rb'
@@ -195,7 +194,6 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
-    - 'app/controllers/concerns/resource_controller.rb'
     - 'app/helpers/application_helper.rb'
 Metrics/ParameterLists:
   Exclude:
