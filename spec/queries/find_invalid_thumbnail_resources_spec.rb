@@ -13,7 +13,7 @@ RSpec.describe FindInvalidThumbnailResources do
   end
   let(:file) { fixture_file_upload("files/color-landscape.tif", "image/tiff") }
   let(:resource2) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
-  let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
+  let(:change_set_persister) { ScannedResourcesController.change_set_persister }
 
   before do
     stub_bibdata(bib_id: "123456")

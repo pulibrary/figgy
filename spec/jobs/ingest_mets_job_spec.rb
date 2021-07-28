@@ -37,7 +37,7 @@ RSpec.describe IngestMETSJob do
   end
 
   context "when ingesting to an existing collection" do
-    let(:pudl0001) { FactoryBot.build(:collection, id: Valkyrie::ID.new("pudl0001"), slug: "pudl0001") }
+    let(:pudl0001) { FactoryBot.build(:collection, slug: "pudl0001") }
     before do
       allow(Valkyrie.config.metadata_adapter.query_service.custom_queries).to receive(:find_by_property).and_return([pudl0001])
       allow(Valkyrie.config.metadata_adapter.query_service).to receive(:find_references_by).and_return([pudl0001])
@@ -70,7 +70,7 @@ RSpec.describe IngestMETSJob do
     let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "tsop_typed_no_files.mets") }
 
     it "ingests the METS file and extracts MODS metadata" do
-      FactoryBot.create_for_repository(:collection, id: Valkyrie::ID.new("pudl0044"), slug: "pudl0044")
+      FactoryBot.create_for_repository(:collection, slug: "pudl0044")
       described_class.perform_now(mets_file, user, true)
       allow(FileUtils).to receive(:mv).and_call_original
 
@@ -85,7 +85,7 @@ RSpec.describe IngestMETSJob do
 
       it "defaults to copyright not evaluated" do
         stub_ezid(shoulder: "88435", blade: "ww72bb49w", location: "http://findingaids.princeton.edu/collections/AC111")
-        FactoryBot.create_for_repository(:collection, id: Valkyrie::ID.new("pudl0038"), slug: "pudl0038")
+        FactoryBot.create_for_repository(:collection, slug: "pudl0038")
         described_class.perform_now(mets_file, user, true)
 
         book = adapter.query_service.find_all_of_model(model: ScannedResource).first
@@ -100,7 +100,7 @@ RSpec.describe IngestMETSJob do
       let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0038-7350.mets") }
 
       it "maps holding_simple_sublocation to controlled vocab term for holding_location" do
-        FactoryBot.create_for_repository(:collection, id: Valkyrie::ID.new("pudl0038"), slug: "pudl0038")
+        FactoryBot.create_for_repository(:collection, slug: "pudl0038")
         described_class.perform_now(mets_file, user, true)
 
         book = adapter.query_service.find_all_of_model(model: ScannedResource).first
@@ -108,7 +108,7 @@ RSpec.describe IngestMETSJob do
       end
 
       it "pulls shelf_locator into location attribute" do
-        FactoryBot.create_for_repository(:collection, id: Valkyrie::ID.new("pudl0038"), slug: "pudl0038")
+        FactoryBot.create_for_repository(:collection, slug: "pudl0038")
         described_class.perform_now(mets_file, user, true)
 
         book = adapter.query_service.find_all_of_model(model: ScannedResource).first
@@ -116,7 +116,7 @@ RSpec.describe IngestMETSJob do
       end
 
       it "puts collection_code into archival_collection_code" do
-        FactoryBot.create_for_repository(:collection, id: Valkyrie::ID.new("pudl0038"), slug: "pudl0038")
+        FactoryBot.create_for_repository(:collection, slug: "pudl0038")
         described_class.perform_now(mets_file, user, true)
 
         book = adapter.query_service.find_all_of_model(model: ScannedResource).first

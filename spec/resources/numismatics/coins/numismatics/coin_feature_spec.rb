@@ -18,7 +18,7 @@ RSpec.feature "Numismatics::Coins" do
     Numismatics::IssueChangeSet.new(numismatic_issue)
   end
   let(:change_set_persister) do
-    ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: Valkyrie.config.storage_adapter)
+    Numismatics::CoinsController.change_set_persister
   end
 
   before do
@@ -199,7 +199,6 @@ RSpec.feature "Numismatics::Coins" do
   end
 
   describe "form editing", js: true do
-    let(:adapter) { Valkyrie::MetadataAdapter.find(:index_solr) }
     let(:coin) do
       FactoryBot.create_for_repository(:coin,
                                        numismatic_collection: "numismatic collection")

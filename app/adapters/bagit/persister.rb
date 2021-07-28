@@ -2,14 +2,15 @@
 module Bagit
   class Persister
     attr_reader :adapter
-    delegate :bag_factory, to: :adapter
+    delegate :bag_factory, :query_service, to: :adapter
     def initialize(adapter:)
       @adapter = adapter
     end
 
-    def save(resource:)
+    def save(resource:, external_resource: false)
       # save
       raise Valkyrie::Persistence::StaleObjectError, "The object #{resource.id} has been updated by another process." unless valid_lock?(resource)
+      raise Valkyrie::Persistence::ObjectNotFoundError, "The object #{resource.id} is previously persisted but not found at save time." unless external_resource || valid_for_save?(resource)
       internal_resource = resource.dup
 
       internal_resource = generate_id(internal_resource) if internal_resource.id.blank?
@@ -28,6 +29,11 @@ module Bagit
     rescue Valkyrie::Persistence::StaleObjectError
       # Re-raising with no error message to prevent confusion
       raise Valkyrie::Persistence::StaleObjectError, "One or more resources have been updated by another process."
+    end
+
+    def valid_for_save?(resource)
+      return true unless resource.persisted? # a new resource
+      query_service.find_by(id: resource.id).present? # a persisted resource must be found
     end
 
     def delete(resource:)

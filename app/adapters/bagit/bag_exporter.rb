@@ -32,7 +32,7 @@ module Bagit
           bag_file = storage_adapter.upload(file: file, original_filename: original_file.original_filename.first, resource: resource)
           resource.original_file.file_identifiers = [bag_file.id]
         end
-        metadata_adapter.persister.save(resource: resource)
+        metadata_adapter.persister.save(resource: resource, external_resource: true)
         export_members
         export_references
       end

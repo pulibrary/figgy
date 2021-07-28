@@ -73,7 +73,7 @@ class Reindexer
   end
 
   def single_index_persist(record)
-    solr_adapter.persister.save(resource: record)
+    solr_adapter.persister.save(resource: record, external_resource: true)
   end
 
   def excluded_models

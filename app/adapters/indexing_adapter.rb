@@ -41,8 +41,8 @@ class IndexingAdapter
     # (see Valkyrie::Persistence::Memory::Persister#save)
     # @note This saves into both the `persister` and `index_persister`
     #   concurrently.
-    def save(resource:)
-      composite_persister.save(resource: resource)
+    def save(resource:, external_resource: false)
+      composite_persister.save(resource: resource, external_resource: external_resource)
     end
 
     # (see Valkyrie::Persistence::Memory::Persister#save_all)
