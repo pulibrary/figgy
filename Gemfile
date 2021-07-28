@@ -117,7 +117,7 @@ gem "openseadragon"
 gem "prawn"
 gem "riiif"
 gem "string_rtl"
-gem "valkyrie-sequel", "~> 2.2.0"
+gem "valkyrie-sequel", "~> 2.2.0", github: "samvera-labs/valkyrie-sequel", branch: "support_new_requirement"
 gem "whenever", "~> 0.10"
 
 gem "blacklight_iiif_search", "1.0.0"

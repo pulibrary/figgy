@@ -28,6 +28,17 @@ GIT
       valkyrie
 
 GIT
+  remote: https://github.com/samvera-labs/valkyrie-sequel.git
+  revision: 219b958de9b96deb2930528c3abad8bf6b5942da
+  branch: support_new_requirement
+  specs:
+    valkyrie-sequel (2.2.1)
+      oj (~> 3.0)
+      sequel (~> 5.0)
+      sequel_pg (~> 1.0)
+      valkyrie (>= 2.1, < 2.3)
+
+GIT
   remote: https://github.com/samvera/browse-everything.git
   revision: 516d8e74ccc5b3f68ebe3750e4f7004dbae512a6
   branch: 2.x-stable
@@ -53,7 +64,7 @@ GIT
 
 GIT
   remote: https://github.com/samvera/valkyrie.git
-  revision: 8d12c44545770d59e51ae0b369a3f4590ad8d77c
+  revision: 59bf5ac6530ebeb6f64a8116f621c583e9d895b3
   branch: 837-persisters-should-error
   specs:
     valkyrie (2.2.0)
@@ -911,11 +922,6 @@ GEM
     unf_ext (0.0.7.5)
     unicode-display_width (1.4.1)
     validatable (1.6.7)
-    valkyrie-sequel (2.2.1)
-      oj (~> 3.0)
-      sequel (~> 5.0)
-      sequel_pg (~> 1.0)
-      valkyrie (>= 2.1, < 2.3)
     valkyrie-shrine (0.4.0)
       aws-sdk-s3 (~> 1)
       shrine (~> 2.0)
@@ -1066,7 +1072,7 @@ DEPENDENCIES
   uglifier
   valkyrie!
   valkyrie-derivatives!
-  valkyrie-sequel (~> 2.2.0)
+  valkyrie-sequel (~> 2.2.0)!
   valkyrie-shrine (~> 0.4.0)
   web-console
   webdrivers
