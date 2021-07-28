@@ -52,6 +52,27 @@ GIT
       typhoeus
 
 GIT
+  remote: https://github.com/samvera/valkyrie.git
+  revision: 8d12c44545770d59e51ae0b369a3f4590ad8d77c
+  branch: 837-persisters-should-error
+  specs:
+    valkyrie (2.2.0)
+      activemodel
+      activesupport
+      disposable (~> 0.4.5)
+      draper
+      dry-struct
+      dry-types (~> 1.0)
+      faraday (< 1.0)
+      json
+      json-ld
+      railties
+      rdf (~> 3.0, >= 3.0.10)
+      rdf-vocab
+      reform (~> 2.2)
+      reform-rails
+
+GIT
   remote: https://github.com/yob/pdf-reader.git
   revision: 54d39a246c22ebdd1c8ee3d16387de5dbc71ac98
   specs:
@@ -302,40 +323,36 @@ GEM
       railties (>= 3.2, < 6.1)
     down (5.1.1)
       addressable (~> 2.5)
-    draper (4.0.0)
+    draper (4.0.2)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
       activemodel-serializers-xml (>= 1.0)
       activesupport (>= 5.0)
       request_store (>= 1.0)
+      ruby2_keywords
     dropbox_api (0.1.18)
       faraday (<= 1.0)
       oauth2 (~> 1.1)
-    dry-configurable (0.11.3)
+    dry-configurable (0.12.1)
       concurrent-ruby (~> 1.0)
-      dry-core (~> 0.4, >= 0.4.7)
-      dry-equalizer (~> 0.2)
-    dry-container (0.7.2)
+      dry-core (~> 0.5, >= 0.5.0)
+    dry-container (0.8.0)
       concurrent-ruby (~> 1.0)
       dry-configurable (~> 0.1, >= 0.1.3)
-    dry-core (0.4.9)
+    dry-core (0.7.1)
       concurrent-ruby (~> 1.0)
-    dry-equalizer (0.3.0)
-    dry-inflector (0.2.0)
-    dry-logic (1.0.6)
+    dry-inflector (0.2.1)
+    dry-logic (1.2.0)
       concurrent-ruby (~> 1.0)
-      dry-core (~> 0.2)
-      dry-equalizer (~> 0.2)
-    dry-struct (1.3.0)
-      dry-core (~> 0.4, >= 0.4.4)
-      dry-equalizer (~> 0.3)
-      dry-types (~> 1.3)
+      dry-core (~> 0.5, >= 0.5)
+    dry-struct (1.4.0)
+      dry-core (~> 0.5, >= 0.5)
+      dry-types (~> 1.5)
       ice_nine (~> 0.11)
-    dry-types (1.4.0)
+    dry-types (1.5.1)
       concurrent-ruby (~> 1.0)
       dry-container (~> 0.3)
-      dry-core (~> 0.4, >= 0.4.4)
-      dry-equalizer (~> 0.3)
+      dry-core (~> 0.5, >= 0.5)
       dry-inflector (~> 0.1, >= 0.1.2)
       dry-logic (~> 1.0, >= 1.0.2)
     ebnf (1.1.3)
@@ -601,7 +618,7 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
-    oj (3.10.5)
+    oj (3.12.2)
     omniauth (1.9.0)
       hashie (>= 3.4.6, < 3.7.0)
       rack (>= 1.6.2, < 3)
@@ -697,12 +714,13 @@ GEM
     redis (3.3.3)
     redis-namespace (1.5.3)
       redis (~> 3.0, >= 3.0.4)
-    reform (2.2.4)
-      disposable (>= 0.4.1)
+    reform (2.5.0)
+      disposable (>= 0.4.2, < 0.5.0)
       representable (>= 2.4.0, < 3.1.0)
-    reform-rails (0.1.7)
-      activemodel (>= 3.2)
-      reform (>= 2.2.0)
+      uber (< 0.2.0)
+    reform-rails (0.2.2)
+      activemodel (>= 5.0)
+      reform (>= 2.3.1, < 3.0.0)
     regexp_parser (1.6.0)
     representable (3.0.4)
       declarative (< 0.1.0)
@@ -776,6 +794,7 @@ GEM
     ruby-rc4 (0.1.5)
     ruby-vips (2.0.17)
       ffi (~> 1.9)
+    ruby2_keywords (0.0.5)
     ruby_dep (1.5.0)
     rubyzip (1.3.0)
     safe_yaml (1.0.5)
@@ -796,8 +815,8 @@ GEM
     selenium-webdriver (3.142.3)
       childprocess (>= 0.5, < 2.0)
       rubyzip (~> 1.2, >= 1.2.2)
-    sequel (5.30.0)
-    sequel_pg (1.12.4)
+    sequel (5.46.0)
+    sequel_pg (1.14.0)
       pg (>= 0.18.0, != 1.2.0)
       sequel (>= 4.38.0)
     shrine (2.19.4)
@@ -892,26 +911,11 @@ GEM
     unf_ext (0.0.7.5)
     unicode-display_width (1.4.1)
     validatable (1.6.7)
-    valkyrie (2.1.1)
-      activemodel
-      activesupport
-      disposable (~> 0.4.5)
-      draper
-      dry-struct
-      dry-types (~> 1.0)
-      faraday (< 1.0)
-      json
-      json-ld
-      railties
-      rdf (~> 3.0.10)
-      rdf-vocab
-      reform
-      reform-rails
-    valkyrie-sequel (2.1.0)
-      oj
-      sequel
-      sequel_pg
-      valkyrie (~> 2.1.0)
+    valkyrie-sequel (2.2.1)
+      oj (~> 3.0)
+      sequel (~> 5.0)
+      sequel_pg (~> 1.0)
+      valkyrie (>= 2.1, < 2.3)
     valkyrie-shrine (0.4.0)
       aws-sdk-s3 (~> 1)
       shrine (~> 2.0)
@@ -1060,9 +1064,9 @@ DEPENDENCIES
   timecop
   title
   uglifier
-  valkyrie (~> 2.1.1)
+  valkyrie!
   valkyrie-derivatives!
-  valkyrie-sequel (~> 2.1.0)
+  valkyrie-sequel (~> 2.2.0)
   valkyrie-shrine (~> 0.4.0)
   web-console
   webdrivers
