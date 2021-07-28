@@ -12,7 +12,7 @@ class ScannedResourcesController < ResourceController
   end
 
   def handle_save_and_ingest(obj)
-    return unless params[:save_and_ingest_path].present?
+    return unless params[:save_and_ingest_path].present? && params[:commit] == "Save and Ingest"
     locator = IngestFolderLocator.new(id: params[:scanned_resource][:source_metadata_identifier], search_directory: ingest_folder)
     IngestFolderJob.perform_later(directory: locator.root_path.join(params[:save_and_ingest_path]).to_s, property: "id", id: obj.id.to_s)
   end
