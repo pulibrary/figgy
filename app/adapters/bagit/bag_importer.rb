@@ -49,7 +49,7 @@ module Bagit
           migrated_file = storage_adapter.upload(file: file, original_filename: bag_original_file.original_filename.first, resource: bag_resource)
           bag_resource.original_file.file_identifiers = [migrated_file.id]
         end
-        resource = metadata_adapter.persister.save(resource: bag_resource)
+        resource = metadata_adapter.persister.save(resource: bag_resource, external_resource: true)
         import_members!
         import_references!
         resource

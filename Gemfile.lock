@@ -29,7 +29,7 @@ GIT
 
 GIT
   remote: https://github.com/samvera-labs/valkyrie-sequel.git
-  revision: 219b958de9b96deb2930528c3abad8bf6b5942da
+  revision: e94c1b86d8c63b4f834fa4975f4a6e7a869acd80
   branch: support_new_requirement
   specs:
     valkyrie-sequel (2.2.1)
@@ -64,7 +64,7 @@ GIT
 
 GIT
   remote: https://github.com/samvera/valkyrie.git
-  revision: 59bf5ac6530ebeb6f64a8116f621c583e9d895b3
+  revision: 931cb2e60c8a69e826b2572a55550d115645125d
   branch: 837-persisters-should-error
   specs:
     valkyrie (2.2.0)
@@ -725,13 +725,12 @@ GEM
     redis (3.3.3)
     redis-namespace (1.5.3)
       redis (~> 3.0, >= 3.0.4)
-    reform (2.5.0)
-      disposable (>= 0.4.2, < 0.5.0)
+    reform (2.2.4)
+      disposable (>= 0.4.1)
       representable (>= 2.4.0, < 3.1.0)
-      uber (< 0.2.0)
-    reform-rails (0.2.2)
-      activemodel (>= 5.0)
-      reform (>= 2.3.1, < 3.0.0)
+    reform-rails (0.1.7)
+      activemodel (>= 3.2)
+      reform (>= 2.2.0)
     regexp_parser (1.6.0)
     representable (3.0.4)
       declarative (< 0.1.0)
@@ -1046,6 +1045,7 @@ DEPENDENCIES
   rails-controller-testing
   recipient_interceptor
   redis-namespace
+  reform (= 2.2.4)
   riiif
   rsolr (>= 1.0)
   rspec-graphql_matchers

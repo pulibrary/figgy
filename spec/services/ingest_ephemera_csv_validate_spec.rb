@@ -5,8 +5,7 @@ describe IngestEphemeraCSV do
   subject(:service) { described_class.new(project.id, mdata, imgdir, change_set_persister, logger) }
   let(:project) do
     FactoryBot.create_for_repository(:ephemera_project,
-                                     title: "South Asian Ephemera",
-                                     id: Valkyrie::ID.new("project_number_1"))
+                                     title: "South Asian Ephemera")
   end
   let(:collection) do
     FactoryBot.create_for_repository(:collection,

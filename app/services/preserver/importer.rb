@@ -85,6 +85,7 @@ class Preserver
           build_optimistic_lock_token(lock_json)
         end
         file_set.optimistic_lock_token = optimistic_lock_token
+        file_set.new_record = true
         file_set
       rescue Valkyrie::StorageAdapter::FileNotFound => not_found_error
         Rails.logger.error("#{file_identifier} could not be retrieved: #{not_found_error.message}")

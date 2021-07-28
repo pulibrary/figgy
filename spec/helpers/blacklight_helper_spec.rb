@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe ::BlacklightHelper do
   describe "#render_document_heading" do
-    let(:model) { FactoryBot.create_for_repository(:ephemera_term, id: "test", label: "Test") }
+    let(:model) { FactoryBot.create_for_repository(:ephemera_term, label: "Test") }
     let(:solr_document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: model) }
     let(:document) { SolrDocument.new(solr_document) }
     before do
@@ -16,13 +16,13 @@ RSpec.describe ::BlacklightHelper do
       end
     end
     context "when given a Vocabulary" do
-      let(:model) { FactoryBot.create_for_repository(:ephemera_vocabulary, id: "test", label: "Test") }
+      let(:model) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: "Test") }
       it "renders the label" do
         expect(helper.render_document_heading(document, tag: :h1)).to eq "<h1 itemprop=\"name\" dir=\"ltr\">Test</h1>"
       end
     end
     context "when given a value with RTL text" do
-      let(:model) { FactoryBot.create_for_repository(:ephemera_vocabulary, id: "test", label: "للفاسق") }
+      let(:model) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: "للفاسق") }
       it "renders the label" do
         expect(helper.render_document_heading(document, tag: :h1)).to eq "<h1 itemprop=\"name\" dir=\"rtl\">للفاسق</h1>"
       end

@@ -644,8 +644,8 @@ RSpec.describe ChangeSetPersister do
         expect(members.first).to be_kind_of FileSet
 
         expect(members.first.date_of_digitization).not_to be_empty
-        expect(members.first.date_of_digitization.first).to be_a Time
-        expect(members.first.date_of_digitization.first).to eq DateTime.iso8601("2009-03-30T19:49:13.000Z").to_time.utc
+        expect(members.first.date_of_digitization.first).to be_a DateTime
+        expect(members.first.date_of_digitization.first).to eq DateTime.iso8601("2009-03-30T19:49:13.000Z").utc
         expect(members.first.producer).to eq ["PULibrary"]
         expect(members.first.source_media_type).to eq ["cassette"]
         expect(members.first.duration).to eq ["23.123"]
