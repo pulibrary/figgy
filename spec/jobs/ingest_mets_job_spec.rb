@@ -37,13 +37,9 @@ RSpec.describe IngestMETSJob do
   end
 
   context "when ingesting to an existing collection" do
-    let(:pudl0001) { FactoryBot.build(:collection, slug: "pudl0001") }
-    before do
-      allow(Valkyrie.config.metadata_adapter.query_service.custom_queries).to receive(:find_by_property).and_return([pudl0001])
-      allow(Valkyrie.config.metadata_adapter.query_service).to receive(:find_references_by).and_return([pudl0001])
-    end
-
+    let(:pudl0001) { FactoryBot.create_for_repository(:collection, slug: "pudl0001") }
     it "ingests a METS file" do
+      pudl0001
       described_class.perform_now(mets_file, user)
       allow(FileUtils).to receive(:mv).and_call_original
 
