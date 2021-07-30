@@ -143,6 +143,24 @@ RSpec.describe ScannedResourcesController, type: :controller do
         stub_bibdata(bib_id: "4609321")
         stub_bibdata(bib_id: "1791261")
       end
+      it "does not save and ingest if the save button is hit" do
+        post :create, params: {
+          scanned_resource: {
+            source_metadata_identifier: "123456",
+            rights_statement: RightsStatements.copyright_not_evaluated.to_s,
+            visibility: "restricted"
+          },
+          save_and_ingest_path: "Santa/ready/123456",
+          commit: "Save"
+        }
+
+        expect(response).to be_redirect
+        expect(response.location).to start_with "http://test.host/catalog/"
+        id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/")
+        resource = find_resource(id)
+
+        expect(resource.member_ids.length).to eq 0
+      end
       it "can create and import at once" do
         post :create, params: {
           scanned_resource: {
