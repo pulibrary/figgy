@@ -13,6 +13,7 @@ class ChangeSetPersister
   def self.registered_handlers
     {
       before_save: [
+        AppendToCollection,
         SyncResource,
         MintIdentifier,
         ApplyRemoteMetadata,

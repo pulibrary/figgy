@@ -38,6 +38,15 @@
               input_html: { class: 'form-control rights-statement' },
               required: false %>
         </div>
+        <div>
+          <div class="col-sm-2"><%= label_tag "append_collection_ids", "Add to Collection" %></div>
+          <%= select_tag :append_collection_ids,
+              options_from_collection_for_select(@collections, "id", "title"),
+              include_blank: "[Do not update]",
+              input_html: { class: 'form-control append-collection-ids' },
+              multiple: true,
+              required: false %>
+        </div>
         <div class="panel-footer panel-save-controls pull-right">
           <%= submit_tag "Apply Edits",
             id: 'bulk-edit-submit',

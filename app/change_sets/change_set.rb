@@ -58,6 +58,7 @@ class ChangeSet < Valkyrie::ChangeSet
     property :pending_uploads, multiple: true, required: false
     # Collections
     property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
+    property :append_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID), virtual: true
     validates_with CollectionValidator
     property(:change_set, require: true, default: change_set) if change_set
     self.feature_terms += [:title, :rights_statement, :rights_note]

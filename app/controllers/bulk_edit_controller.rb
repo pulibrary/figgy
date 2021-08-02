@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class BulkEditController < ApplicationController
   include Blacklight::SearchHelper
+  before_action :load_collections, only: [:resources_edit]
 
   def resources_edit
     (solr_response, _document_list) = search_results(q: params["q"], f: params["f"])
@@ -23,6 +24,10 @@ class BulkEditController < ApplicationController
   end
 
   private
+
+    def load_collections
+      @collections = Valkyrie.config.metadata_adapter.query_service.find_all_of_model(model: Collection).map(&:decorate) || []
+    end
 
     # Prepare / execute the search and process into id arrays
     def batches
