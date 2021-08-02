@@ -169,7 +169,21 @@ class Ability
   def cdl_eligible?(obj)
     return false unless obj.persisted?
     return false unless obj.decorate.public_readable_state?
-    CDL::ChargeManager.new(resource_id: obj.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister).eligible?
+    charge_manager(obj).eligible?
+  end
+
+  def charge_manager(obj)
+    if cached_charge_manager&.resource_id&.to_s == obj.id.to_s
+      cached_charge_manager
+    else
+      CDL::ChargeManager.new(resource_id: obj.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+    end
+  end
+
+  # Sometimes a charge manager is passed through from viewer auth to reduce the
+  # calls to bibdata.
+  def cached_charge_manager
+    @cached_charge_manager ||= options.fetch(:charge_manager, nil)
   end
 
   def eligible_item_service
