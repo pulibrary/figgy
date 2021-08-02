@@ -65,6 +65,7 @@ RSpec.describe ViewerController do
 
           expect(response).to be_successful
           expect(response.body).to have_link "Princeton Users: Log in to check out a digital copy"
+          expect(CDL::EligibleItemService).to have_received(:item_ids).exactly(1).times
         end
       end
     end

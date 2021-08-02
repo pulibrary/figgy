@@ -52,6 +52,10 @@ class ViewerController < ApplicationController
 
   private
 
+    def current_ability
+      Ability.new(current_user, charge_manager: @charge_manager)
+    end
+
     def allow_iframe
       response.headers.except! "X-Frame-Options"
     end

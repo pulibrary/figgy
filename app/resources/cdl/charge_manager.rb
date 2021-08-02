@@ -19,7 +19,7 @@ module CDL
     end
 
     def eligible?
-      item_ids.present?
+      @eligible ||= item_ids.present?
     end
 
     def available_for_charge?(netid: nil)
