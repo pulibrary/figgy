@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+def sidekiq_pro_credentials
+  content = `lpass show "Shared-ITIMS-Passwords/Sidekiq Pro Instructions"`
+  content = content.split("\n").find { |x| x.start_with?("BUNDLE_GEMS") }
+  content.split("=").last
+end
+
+`bundle config gems.contribsys.com #{sidekiq_pro_credentials}`

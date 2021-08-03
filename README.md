@@ -57,6 +57,7 @@ This sort of dance sometimes helps with other similar errors.
 ```sh
 git clone https://github.com/pulibrary/figgy.git
 cd figgy
+`bin/setup_keys`
 bundle install
 yarn install
 ```
