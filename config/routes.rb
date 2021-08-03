@@ -280,7 +280,7 @@ Rails.application.routes.draw do
     mount Riiif::Engine => "/image-service", as: "riiif"
   end
 
-  require "sidekiq/web"
+  require "sidekiq/pro/web"
   authenticate :user do
     mount Sidekiq::Web => "/sidekiq"
   end

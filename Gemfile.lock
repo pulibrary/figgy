@@ -63,6 +63,12 @@ GIT
       ttfunk
 
 GEM
+  remote: https://gems.contribsys.com/
+  specs:
+    sidekiq-pro (3.7.1)
+      sidekiq (>= 4.1.5)
+
+GEM
   remote: https://rubygems.org/
   specs:
     Ascii85 (1.0.3)
@@ -255,7 +261,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.8)
-    connection_pool (2.2.1)
+    connection_pool (2.2.5)
     content_disposition (1.0.0)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
@@ -637,7 +643,7 @@ GEM
       rack (>= 1.6.0)
     rack-mini-profiler (1.0.2)
       rack (>= 1.2.0)
-    rack-protection (2.0.0)
+    rack-protection (2.1.0)
       rack
     rack-proxy (0.6.5)
       rack
@@ -1042,7 +1048,7 @@ DEPENDENCIES
   rubyzip (>= 1.2.2)
   sass-rails (~> 5.0)
   shrine-google_cloud_storage
-  sidekiq
+  sidekiq-pro!
   simple_form
   simplecov
   solargraph

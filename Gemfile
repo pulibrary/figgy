@@ -116,7 +116,6 @@ gem "omniauth-cas"
 gem "openseadragon"
 gem "prawn"
 gem "riiif"
-gem "sidekiq"
 gem "string_rtl"
 gem "valkyrie-sequel", "~> 2.1.0"
 gem "whenever", "~> 0.10"
@@ -128,6 +127,10 @@ gem "cocoon"
 gem "google-cloud-pubsub"
 gem "shrine-google_cloud_storage"
 gem "valkyrie-shrine", "~> 0.4.0"
+
+source "https://gems.contribsys.com/" do
+  gem "sidekiq-pro"
+end
 
 group :development, :staging do
   gem "rack-mini-profiler", require: false
