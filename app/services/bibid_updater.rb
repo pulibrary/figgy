@@ -9,6 +9,8 @@ class BibidUpdater
   def update
     progress_bar
     resources.each do |resource|
+      # Reload resource to get a new version.
+      resource = query_service.find_by(id: resource.id)
       change_set = ChangeSet.for(resource)
       change_set.source_metadata_identifier = transform_id(change_set.source_metadata_identifier)
       change_set_persister.save(change_set: change_set)
