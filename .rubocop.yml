@@ -342,3 +342,6 @@ Lint/Void:
 # We don't like postfix conditionals.
 Style/IfUnlessModifier:
   Enabled: false
+Lint/HandleExceptions:
+  Exclude:
+    - 'lib/tasks/performance.rake'
