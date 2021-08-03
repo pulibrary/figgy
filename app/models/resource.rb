@@ -18,13 +18,21 @@ class Resource < Valkyrie::Resource
   end
 
   def self.model_name
-    ::ActiveModel::Name.new(self)
+    @model_name ||= ::ActiveModel::Name.new(self)
   end
 
   # Determines whether or not the "Save and Duplicate Metadata" is supported for this Resource
   # @return [Boolean]
   def self.supports_save_and_duplicate?
     false
+  end
+
+  def decorate
+    @decorated_resource ||= super
+  end
+
+  def model_name
+    @model_name ||= super
   end
 
   # Determines if this is an image resource
