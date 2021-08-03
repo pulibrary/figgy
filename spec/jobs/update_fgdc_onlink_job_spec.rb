@@ -11,7 +11,7 @@ RSpec.describe UpdateFgdcOnlinkJob do
     change_set_persister.save(change_set: VectorResourceChangeSet.new(VectorResource.new, files: [fgdc_file], member_ids: [vector_file_set.id]))
   end
   let(:fgdc_file) { fixture_file_upload("files/geo_metadata/fgdc-no-onlink.xml", "application/xml") }
-  let(:fgdc_file_set) { parent_resource.decorate.geo_metadata_members.first }
+  let(:fgdc_file_set) { Wayfinder.for(parent_resource).geo_metadata_members.first }
   let(:vector_file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: vector_file_metadata) }
   let(:vector_file_id) { "1234567" }
   let(:vector_file_metadata) do

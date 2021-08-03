@@ -27,11 +27,11 @@ describe AddEphemeraToCollection do
     let(:logger) { Logger.new(nil) }
 
     it "adds folder to collection" do
-      expect(collection.decorate.members.count).to eq(0)
+      expect(Wayfinder.for(collection).members.count).to eq(0)
       service.add_ephemera
-      expect(collection.decorate.members.count).to eq(1)
-      expect(collection.decorate.members.first).to be_a_kind_of(EphemeraFolder)
-      expect(collection.decorate.members.first.id).to eq(folder.id)
+      expect(Wayfinder.for(collection).members.count).to eq(1)
+      expect(Wayfinder.for(collection).members.first).to be_a_kind_of(EphemeraFolder)
+      expect(Wayfinder.for(collection).members.first.id).to eq(folder.id)
     end
   end
 
@@ -54,11 +54,11 @@ describe AddEphemeraToCollection do
     let(:logger) { Logger.new(nil) }
 
     it "adds folder to collection" do
-      expect(collection.decorate.members.count).to eq(0)
+      expect(Wayfinder.for(collection).members.count).to eq(0)
       service.add_ephemera
-      expect(collection.decorate.members.count).to eq(1)
-      expect(collection.decorate.members.first).to be_a_kind_of(EphemeraFolder)
-      expect(collection.decorate.members.first.id).to eq(folder.id)
+      expect(Wayfinder.for(collection).members.count).to eq(1)
+      expect(Wayfinder.for(collection).members.first).to be_a_kind_of(EphemeraFolder)
+      expect(Wayfinder.for(collection).members.first.id).to eq(folder.id)
     end
   end
 end
