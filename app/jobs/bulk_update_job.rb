@@ -25,7 +25,8 @@ class BulkUpdateJob < ApplicationJob
     [
       :ocr_language,
       :rights_statement,
-      :visibility
+      :visibility,
+      :append_collection_ids
     ]
   end
 
