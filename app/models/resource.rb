@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 class Resource < Valkyrie::Resource
   def self.human_readable_type
-    default = @_human_readable_type || name.demodulize.titleize
-    I18n.translate("models.#{new.model_name.i18n_key}", default: default)
+    @human_readable_type ||=
+      begin
+        default = @_human_readable_type || name.demodulize.titleize
+        I18n.translate("models.#{new.model_name.i18n_key}", default: default)
+      end
   end
 
   def self.can_have_manifests?

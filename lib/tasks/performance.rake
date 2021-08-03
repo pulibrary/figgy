@@ -7,7 +7,7 @@ namespace :performance do
     require "ruby-prof"
     raise unless Rails.env.test?
     DataSeeder.new.wipe_metadata!
-    Array.new(30) do
+    Array.new(600) do
       FactoryBot.create_for_repository(:file_set)
     end
     Reindexer.reindex_all
