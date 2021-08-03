@@ -105,5 +105,19 @@ RSpec.feature "Bulk edit", js: true do
       expect(updated.state).to eq ["complete"]
       expect(updated.member_of_collection_ids).to eq [collection.id, collection2.id]
     end
+    it "doesn't add a collection if one isn't picked" do
+      FactoryBot.create_for_repository(:collection)
+      visit bulk_edit_resources_edit_path("q" => "", "f[member_of_collection_titles_ssim][]" => "My Collection")
+      expect(page).to have_content "You searched for"
+      page.check("mark_complete")
+      accept_alert do
+        click_button("Apply Edits")
+      end
+      expect(current_path).to eq root_path
+      expect(page).to have_content "1 resources were queued for bulk update."
+      updated = adapter.query_service.find_by(id: member_scanned_resource.id)
+      expect(updated.state).to eq ["complete"]
+      expect(updated.member_of_collection_ids).to eq [collection.id]
+    end
   end
 end
