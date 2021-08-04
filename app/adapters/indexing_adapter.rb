@@ -7,6 +7,13 @@
 # efficient when the `index_adapter` is significantly faster for `save_all`
 # than individual `saves` (such as with Solr).
 class IndexingAdapter
+  def self.no_index_models
+    [
+      Event,
+      ProcessedEvent,
+      PreservationObject
+    ]
+  end
   attr_reader :metadata_adapter, :index_adapter
   # @param metadata_adapter [#persister,#query_service]
   # @param index_adapter [#persister,#query_service]
@@ -19,6 +26,10 @@ class IndexingAdapter
     IndexingAdapter::Persister.new(metadata_adapter: self)
   end
 
+  def no_index_models
+    self.class.no_index_models
+  end
+
   delegate :query_service, :id, to: :metadata_adapter
 
   class Persister
@@ -26,6 +37,7 @@ class IndexingAdapter
     delegate :index_adapter, to: :metadata_adapter
     delegate :persister, to: :primary_adapter
     delegate :wipe!, to: :composite_persister
+    delegate :no_index_models, to: :metadata_adapter
     def initialize(metadata_adapter:)
       @metadata_adapter = metadata_adapter
     end
@@ -42,7 +54,11 @@ class IndexingAdapter
     # @note This saves into both the `persister` and `index_persister`
     #   concurrently.
     def save(resource:)
-      composite_persister.save(resource: resource)
+      if no_index_models.include?(resource.class)
+        persister.save(resource: resource)
+      else
+        composite_persister.save(resource: resource)
+      end
     end
 
     # (see Valkyrie::Persistence::Memory::Persister#save_all)
@@ -79,6 +95,9 @@ class IndexingAdapter
             index_persister.delete(resource: delete)
           end
           buffered_resources = buffer.query_service.find_all.to_a
+          buffered_resources.reject! do |resource|
+            no_index_models.include?(resource.class)
+          end
           index_persister.save_all(resources: buffered_resources) unless buffered_resources.empty?
         end
       end

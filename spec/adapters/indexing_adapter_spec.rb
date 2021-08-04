@@ -56,4 +56,17 @@ RSpec.describe IndexingAdapter do
 
     expect(adapter.index_adapter.persister).not_to have_received(:save_all)
   end
+
+  it "doesn't index certain models" do
+    resource = FactoryBot.create_for_repository(:event)
+    allow(adapter.index_adapter.persister).to receive(:save_all)
+    allow(adapter.index_adapter.persister).to receive(:save)
+    persister.buffer_into_index do |buffered_adapter|
+      buffered_adapter.persister.save(resource: resource)
+    end
+    persister.save(resource: resource)
+
+    expect(adapter.index_adapter.persister).not_to have_received(:save_all)
+    expect(adapter.index_adapter.persister).not_to have_received(:save)
+  end
 end
