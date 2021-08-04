@@ -11,7 +11,8 @@ class IndexingAdapter
     [
       Event,
       ProcessedEvent,
-      PreservationObject
+      PreservationObject,
+      Tombstone
     ]
   end
   attr_reader :metadata_adapter, :index_adapter
