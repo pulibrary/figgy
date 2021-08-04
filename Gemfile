@@ -41,7 +41,7 @@ gem "sprockets", ">= 3.7.2"
 gem "sqlite3"
 gem "title"
 gem "uglifier"
-gem "valkyrie", github: "samvera/valkyrie", branch: "837-persisters-should-error"
+gem "valkyrie", github: "samvera/valkyrie", branch: "persisters_should_error_also_write_only"
 gem "valkyrie-derivatives", git: "https://github.com/samvera-labs/valkyrie-derivatives.git"
 gem "webpacker", "~> 4.0"
 

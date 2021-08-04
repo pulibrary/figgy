@@ -19,9 +19,11 @@ RSpec.describe Valkyrie::MetadataAdapter do
       let(:adapter) { adapter }
       let(:persister) { adapter.persister }
       let(:query_service) { adapter.query_service }
-      it_behaves_like "a Valkyrie::MetadataAdapter", adapter
-      it_behaves_like "a Valkyrie::Persister"
-      it_behaves_like "a Valkyrie query provider"
+      unless adapter.try(:write_only?)
+        it_behaves_like "a Valkyrie::MetadataAdapter", adapter
+        it_behaves_like "a Valkyrie::Persister"
+        it_behaves_like "a Valkyrie query provider"
+      end
     end
   end
 end

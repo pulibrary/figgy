@@ -64,8 +64,8 @@ GIT
 
 GIT
   remote: https://github.com/samvera/valkyrie.git
-  revision: 931cb2e60c8a69e826b2572a55550d115645125d
-  branch: 837-persisters-should-error
+  revision: fd41704045e9b02fc8252f769c3e61a9a2488254
+  branch: persisters_should_error_also_write_only
   specs:
     valkyrie (2.2.0)
       activemodel
@@ -1081,4 +1081,4 @@ DEPENDENCIES
   whenever (~> 0.10)
 
 BUNDLED WITH
-   2.2.16
+   2.2.25

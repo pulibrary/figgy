@@ -73,7 +73,7 @@ class InstrumentedAdapter < SimpleDelegator
     def save(resource:, external_resource: false)
       trace("valkyrie.save") do |span|
         __getobj__.save(resource: resource, external_resource: external_resource).tap do |output|
-          span.set_tag("param.resource", output.id.to_s)
+          span.set_tag("param.resource", output.try(:id).to_s)
         end
       end
     end
@@ -92,7 +92,9 @@ class InstrumentedAdapter < SimpleDelegator
     def save_all(resources:)
       trace("valkyrie.save_all") do |span|
         __getobj__.save_all(resources: resources).tap do |output|
-          span.set_tag("param.resources", output.map { |x| x.id.to_s })
+          if output.is_a?(Array)
+            span.set_tag("param.resources", output.map { |x| x.id.to_s })
+          end
         end
       end
     end

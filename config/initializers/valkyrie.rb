@@ -259,7 +259,8 @@ Rails.application.config.to_prepare do
     InstrumentedAdapter.new(
       metadata_adapter: Valkyrie::Persistence::Solr::MetadataAdapter.new(
         connection: Blacklight.default_index.connection,
-        resource_indexer: indexer
+        resource_indexer: indexer,
+        write_only: true
       ),
       tracer: Datadog.tracer
     ),
@@ -272,7 +273,8 @@ Rails.application.config.to_prepare do
       InstrumentedAdapter.new(
         metadata_adapter: Valkyrie::Persistence::Solr::MetadataAdapter.new(
           connection: RSolr.connect(url: ENV["CLEAN_REINDEX_SOLR_URL"]),
-          resource_indexer: indexer
+          resource_indexer: indexer,
+          write_only: true
         ),
         tracer: Datadog.tracer
       ),
