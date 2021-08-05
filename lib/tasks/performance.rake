@@ -33,6 +33,31 @@ namespace :performance do
         end
       end
     end
+    task conversion_profile: :environment do
+      raise unless Rails.env.test?
+      DataSeeder.new.wipe_metadata!
+      fs = FactoryBot.create_for_repository(:scanned_resource)
+      solr_index = Valkyrie::MetadataAdapter.find(:index_solr)
+      solr_index.resource_factory.from_resource(resource: fs)
+      result = RubyProf.profile do
+        solr_index.resource_factory.from_resource(resource: fs)
+      end
+      printer = RubyProf::CallStackPrinter.new(result)
+      printer.print(File.open("tmp/output.html", "w"))
+    end
+    task conversion_benchmark: :environment do
+      require "benchmark/ips"
+      raise unless Rails.env.test?
+      DataSeeder.new.wipe_metadata!
+      fs = FactoryBot.create_for_repository(:scanned_resource)
+      solr_index = Valkyrie::MetadataAdapter.find(:index_solr)
+      solr_index.resource_factory.from_resource(resource: fs)
+      Benchmark.ips do |x|
+        x.report("solr from_resource") do
+          solr_index.resource_factory.from_resource(resource: fs)
+        end
+      end
+    end
   rescue LoadError
   end
 end

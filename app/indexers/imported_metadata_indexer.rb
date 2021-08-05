@@ -25,7 +25,7 @@ class ImportedMetadataIndexer
     end
 
     def primary_imported_properties
-      resource.primary_imported_metadata.to_h.except(*suppressed_keys).map do |k, v|
+      resource.primary_imported_metadata.__attributes__.except(*suppressed_keys).map do |k, v|
         ["imported_#{k}_tesim", format_values(v)]
       end.to_h
     end
