@@ -37,7 +37,7 @@ class ScannedResource < Resource
   end
 
   def title
-    primary_imported_metadata.title.present? ? primary_imported_metadata.title : attributes[:title]
+    imported_metadata&.first&.title.present? ? imported_metadata&.first&.title : __attributes__[:title]
   end
 
   # Determines if this is an image resource

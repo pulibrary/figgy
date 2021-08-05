@@ -142,8 +142,7 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
   end
 
   def imported_attribute(attribute_key)
-    return primary_imported_metadata.send(attribute_key) if primary_imported_metadata.try(attribute_key)
-    Array.wrap(primary_imported_metadata.attributes.fetch(attribute_key, []))
+    imported_metadata&.first.try(attribute_key) || []
   end
 
   def imported_language
