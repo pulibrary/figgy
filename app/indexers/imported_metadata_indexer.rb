@@ -21,7 +21,8 @@ class ImportedMetadataIndexer
     end
 
     def imported_or_existing(attribute:)
-      resource.primary_imported_metadata.send(attribute) ? resource.primary_imported_metadata.send(attribute) : resource.try(attribute)
+      return resource[attribute] if resource.imported_metadata.blank?
+      resource.imported_metadata.first[attribute] || resource[attribute]
     end
 
     def primary_imported_properties

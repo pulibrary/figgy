@@ -6,9 +6,9 @@ class FacetIndexer
   end
 
   def to_solr
-    if resource.try(:primary_imported_metadata)
+    if resource.try(:imported_metadata)&.first
       {
-        display_subject_ssim: resource.primary_imported_metadata.subject,
+        display_subject_ssim: resource.imported_metadata.first.subject,
         display_language_ssim: imported_language,
         has_structure_bsi: structure?,
         pub_date_start_itsi: pub_date_start
@@ -50,7 +50,7 @@ class FacetIndexer
   end
 
   def pub_date_start
-    date = resource.primary_imported_metadata.created
+    date = resource.imported_metadata&.first&.created
     return unless date.present?
     date = parse_date(date.first)
     return unless date
