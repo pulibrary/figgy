@@ -10,7 +10,7 @@ namespace :performance do
       raise unless Rails.env.test?
       DataSeeder.new.wipe_metadata!
       Array.new(600) do
-        FactoryBot.create_for_repository(:file_set)
+        FactoryBot.create_for_repository(:scanned_resource)
       end
       Reindexer.reindex_all
       result = RubyProf.profile do
