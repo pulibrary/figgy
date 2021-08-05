@@ -77,10 +77,7 @@ class Reindexer
   end
 
   def excluded_models
-    [
-      ProcessedEvent,
-      Event
-    ]
+    IndexingAdapter.no_index_models
   end
 
   def progress_bar
