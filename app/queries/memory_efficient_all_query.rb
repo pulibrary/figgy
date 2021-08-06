@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class MemoryEfficientAllQuery
   def self.queries
-    [:memory_efficient_all]
+    [:memory_efficient_all, :count_all_except_models]
   end
 
   attr_reader :query_service
@@ -20,6 +20,14 @@ class MemoryEfficientAllQuery
       relation.lazy.map do |object|
         resource_factory.to_resource(object: object)
       end
+    end
+  end
+
+  def count_all_except_models(except_models: [])
+    connection.transaction(savepoint: true) do
+      relation = orm_class.use_cursor
+      relation = relation.exclude(internal_resource: Array(except_models).map(&:to_s)) if except_models.present?
+      relation.count
     end
   end
 end

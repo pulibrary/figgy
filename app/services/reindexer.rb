@@ -32,17 +32,7 @@ class Reindexer
   def reindex_all(except_models: excluded_models)
     wipe_records if wipe
     logger.info "Reindexing all records (except #{except_models.to_sentence})"
-    progress_bar
-    index_individually = []
-    all_resources(except_models).each_slice(batch_size) do |records|
-      begin
-        multi_index_persist(records)
-        progress_bar.progress += records.count
-      rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http
-        index_individually += records
-      end
-    end
-    run_individual_retries(index_individually, progress_bar)
+    FilteredIndexer.new(indexer: self, except_models: except_models).index!
     logger.info "Done"
   end
 
@@ -50,45 +40,68 @@ class Reindexer
     reindex_all(except_models: excluded_models + ["FileSet", "PreservationObject"])
   end
 
-  def run_individual_retries(records, progress_bar)
-    logger.info "Reindexing #{records.count} individually due to errors during batch indexing"
-    records.each { |record| single_index(record, progress_bar) }
-  end
-
   def wipe_records
     logger.info "Clearing Solr"
     solr_adapter.persister.wipe!
-  end
-
-  def single_index(record, progress_bar)
-    single_index_persist(record)
-    progress_bar.progress += 1
-  rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http => e
-    logger.error("Could not index #{record.id} due to #{e.class}")
-    Honeybadger.notify(e, context: { record_id: record.id })
-  end
-
-  def multi_index_persist(records)
-    solr_adapter.persister.save_all(resources: records)
-  end
-
-  def single_index_persist(record)
-    solr_adapter.persister.save(resource: record)
   end
 
   def excluded_models
     IndexingAdapter.no_index_models
   end
 
-  def progress_bar
-    @progress_bar ||= ProgressBar.create format: "%a %e %P% Processed: %c from %C", total: total
-  end
+  class FilteredIndexer
+    attr_reader :indexer, :except_models
+    delegate :solr_adapter, :query_service, :logger, :batch_size, to: :indexer
+    def initialize(indexer:, except_models:)
+      @indexer = indexer
+      @except_models = except_models
+    end
 
-  def all_resources(except_models)
-    query_service.custom_queries.memory_efficient_all(except_models: except_models)
-  end
+    def index!
+      progress_bar
+      index_individually = []
+      all_resources.each_slice(batch_size) do |records|
+        begin
+          multi_index_persist(records)
+          progress_bar.progress += records.count
+        rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http
+          index_individually += records
+        end
+      end
+      run_individual_retries(index_individually)
+    end
 
-  def total
-    query_service.resources.count
+    def run_individual_retries(records)
+      logger.info "Reindexing #{records.count} individually due to errors during batch indexing"
+      records.each { |record| single_index(record) }
+    end
+
+    def single_index(record)
+      single_index_persist(record)
+      progress_bar.progress += 1
+    rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http => e
+      logger.error("Could not index #{record.id} due to #{e.class}")
+      Honeybadger.notify(e, context: { record_id: record.id })
+    end
+
+    def multi_index_persist(records)
+      solr_adapter.persister.save_all(resources: records)
+    end
+
+    def single_index_persist(record)
+      solr_adapter.persister.save(resource: record)
+    end
+
+    def progress_bar
+      @progress_bar ||= ProgressBar.create format: "%a %e %P% Processed: %c from %C", total: total
+    end
+
+    def all_resources
+      query_service.custom_queries.memory_efficient_all(except_models: except_models)
+    end
+
+    def total
+      query_service.custom_queries.count_all_except_models(except_models: except_models)
+    end
   end
 end
