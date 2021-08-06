@@ -9,8 +9,9 @@ describe BibidUpdater do
       stub_bibdata(bib_id: "123456")
       stub_bibdata(bib_id: "991234563506421")
       stub_bibdata(bib_id: "7214786")
-      stub_bibdata(bib_id: "9972147863506421")
       stub_aspace(pulfa_id: "C0652_c0383")
+      # Don't stub the call for the Alma version of this bibid to ensure it
+      # doesn't refresh metadata.
       r1 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: ["123456"])
       r2 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: ["7214786"])
       r3 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: ["991234563506421"])
