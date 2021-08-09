@@ -77,7 +77,7 @@ class IngestFolderLocator
     # @return [String]
     def folder_location
       @folder_location ||= Find.find(root_path).find do |path|
-        FileTest.directory?(path) && path.end_with?(id.to_s)
+        FileTest.directory?(path) && path.split("/").last == id.to_s
       end
     end
 
