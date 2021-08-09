@@ -7,8 +7,8 @@ A digital repository application in use at Princeton University Library for stor
 
 ## Dependencies
 
-* Ruby
-* Node v.8.2.1
+* Ruby (See .tool-versions)
+* Node (See .tool-versions)
 * Java (to run Solr server)
 * [Google Chrome](https://google.com/chrome/) (for feature tests)
 * Postgres (for OSX dev systems, install via homebrew)
