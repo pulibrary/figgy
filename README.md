@@ -5,11 +5,27 @@ A digital repository application in use at Princeton University Library for stor
 [![CircleCI](https://circleci.com/gh/pulibrary/figgy.svg?style=svg)](https://circleci.com/gh/pulibrary/figgy)
 [![Browserstack](./browserstack-logo.svg)](https://www.browserstack.com/)
 
-## Dependencies
+## Language Dependencies
 
-* Ruby (See .tool-versions)
-* Node (See .tool-versions)
-* Java (to run Solr server)
+Figgy provides a `.tool-versions` file -- consule this file for required languages and their current versions. `asdf` users should ensure all plugins listed there are installed via `asdf plugin-add` and then run `asdf install`.
+
+### Java via ASDF on Mac
+You need to add the following line to your `~/.asdfrc` file:
+
+```
+java_macos_integration_enable = yes
+```
+
+And if you have this line you may need to remove it:
+
+```
+legacy_version_file = yes
+```
+
+After making these changes open a new terminal window for figgy.
+
+## Package Dependencies
+
 * [Google Chrome](https://google.com/chrome/) (for feature tests)
 * Postgres (for OSX dev systems, install via homebrew)
 * [Redis](http://redis.io/)
