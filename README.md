@@ -52,6 +52,13 @@ following steps usually resolve this issue:
 
 This sort of dance sometimes helps with other similar errors.
 
+## Automatically pull vault password from lastpass
+More information about lastpass-cli can be found here: https://lastpass.github.io/lastpass-cli/lpass.1.html
+```
+brew install lastpass-cli
+lpass login <email@email.com>
+```
+
 ## Initial Setup
 
 ```sh
