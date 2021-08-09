@@ -7,8 +7,8 @@ A digital repository application in use at Princeton University Library for stor
 
 ## Dependencies
 
-* Ruby
-* Node v.8.2.1
+* Ruby (See .tool-versions)
+* Node (See .tool-versions)
 * Java (to run Solr server)
 * [Google Chrome](https://google.com/chrome/) (for feature tests)
 * Postgres (for OSX dev systems, install via homebrew)
@@ -51,6 +51,13 @@ following steps usually resolve this issue:
 1. `bundle install`
 
 This sort of dance sometimes helps with other similar errors.
+
+## Automatically pull vault password from lastpass
+More information about lastpass-cli can be found here: https://lastpass.github.io/lastpass-cli/lpass.1.html
+```
+brew install lastpass-cli
+lpass login <email@email.com>
+```
 
 ## Initial Setup
 
