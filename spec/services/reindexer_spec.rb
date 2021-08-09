@@ -43,6 +43,14 @@ RSpec.describe Reindexer do
 
         expect { solr_adapter.query_service.find_by(id: output.id) }.to raise_error Valkyrie::Persistence::ObjectNotFoundError
       end
+      it "sets up ProgressBar to not include those resources" do
+        FactoryBot.create_for_repository(:processed_event)
+        allow(ProgressBar).to receive(:create).and_call_original
+
+        described_class.reindex_all(logger: logger, wipe: true)
+
+        expect(ProgressBar).to have_received(:create).with(hash_including(total: 0))
+      end
     end
 
     context "when there are records in solr which are no longer in postgres" do
@@ -79,14 +87,22 @@ RSpec.describe Reindexer do
         )
       end
 
+      let(:filtered_indexer) do
+        Reindexer::FilteredIndexer.new(
+          indexer: indexer,
+          except_models: []
+        )
+      end
+
       before do
-        allow(indexer).to receive(:single_index_persist).and_call_original
+        allow(Reindexer::FilteredIndexer).to receive(:new).and_return(filtered_indexer)
+        allow(filtered_indexer).to receive(:single_index_persist).and_call_original
       end
 
       it "tolerates RSolr::Error::ConnectionRefused, logging bad id" do
         error = RSolr::Error::ConnectionRefused
-        allow(indexer).to receive(:multi_index_persist).and_raise error
-        allow(indexer).to receive(:single_index_persist).with(resources[0]).and_raise error
+        allow(filtered_indexer).to receive(:multi_index_persist).and_raise error
+        allow(filtered_indexer).to receive(:single_index_persist).with(resources[0]).and_raise error
 
         indexer.reindex_all
         expect(logger).to have_received(:error).with("Could not index #{resources[0].id} due to RSolr::Error::ConnectionRefused")
@@ -94,8 +110,8 @@ RSpec.describe Reindexer do
 
       it "tolerates RSolr::Error::Http, logging bad id" do
         error = RSolr::Error::Http.new({ uri: "http://example.com" }, nil)
-        allow(indexer).to receive(:multi_index_persist).and_raise error
-        allow(indexer).to receive(:single_index_persist).with(resources[0]).and_raise error
+        allow(filtered_indexer).to receive(:multi_index_persist).and_raise error
+        allow(filtered_indexer).to receive(:single_index_persist).with(resources[0]).and_raise error
 
         indexer.reindex_all
         expect(logger).to have_received(:error).with("Could not index #{resources[0].id} due to RSolr::Error::Http")
