@@ -7,7 +7,13 @@ A digital repository application in use at Princeton University Library for stor
 
 ## Language Dependencies
 
-Figgy provides a `.tool-versions` file -- consule this file for required languages and their current versions. `asdf` users should ensure all plugins listed there are installed via `asdf plugin-add` and then run `asdf install`.
+Figgy provides a `.tool-versions` file -- consule this file for required languages and their current versions. `asdf` users should ensure all plugins listed there are installed:
+
+`$ asdf plugin-add ruby`
+`$ asdf plugin-add nodejs`
+`$ asdf plugin-add java`
+
+and then run `asdf install`.
 
 ### Java via ASDF on Mac
 You need to add the following line to your `~/.asdfrc` file:
