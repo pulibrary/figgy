@@ -106,19 +106,19 @@ projects you're using Solr/Postgres for, and you can easily clean up with `lando
 destroy` or turn off all services with `lando poweroff`.
 
 1. Install Lando DMG from [[https://github.com/lando/lando/releases]]
-1. `rake figgy:server:start`
+1. `bundle exec rake figgy:server:start`
 
 1. For test:
    - In a separate terminal: `bundle exec rspec`
    - Run jest tests: `yarn test`
 1. For development:
-   - In a separate terminal: `foreman start`
+   - In a separate terminal: `bundle exec foreman start`
      - Or run services separately as shown in [[https://github.com/pulibrary/figgy/blob/master/Procfile]]
    - Access Figgy at http://localhost:3000/
 
 ## Load sample development data
 
-1. Log in to your development instance using your princeton credentials; this creates your user in figgy's db.
+1. Log in to your development instance using your princeton credentials; this creates your user in figgy's db. If you only have user access and need admin access, run `bundle exec rake figgy:set_admin_user`
 1. Start sidekiq (see below)
 1. `rails db:seed` # pipe through `grep -v WARN` to ignore log warnings about the rabbitmq port
 
