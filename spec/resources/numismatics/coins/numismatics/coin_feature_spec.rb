@@ -219,17 +219,7 @@ RSpec.feature "Numismatics::Coins" do
       it "permits users to select from existing object types" do
         visit edit_numismatics_coin_path(id: persisted.id)
 
-        hidden = page.find("body #main form.edit_numismatics_coin input[type='hidden']#numismatic_collection", visible: false)
-        expect(hidden["value"]).to eq("numismatic collection")
-
-        expect(page).to have_selector("option", text: "numismatic collection")
-      end
-
-      it "persists already saved denominations" do
-        visit edit_numismatics_coin_path(id: persisted.id)
-
-        hidden = page.find("body #main form.edit_numismatics_coin input[type='hidden']#numismatic_collection", visible: false)
-        expect(hidden["value"]).to eq("numismatic collection")
+        expect(page).to have_select("numismatics_coin_numismatic_collection", selected: "numismatic collection")
       end
     end
   end

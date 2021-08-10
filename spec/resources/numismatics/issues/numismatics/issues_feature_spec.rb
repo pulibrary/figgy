@@ -398,8 +398,7 @@ RSpec.feature "Numismatics::Issues" do
       it "persists already-saved denominations" do
         visit edit_numismatics_issue_path(id: persisted.id)
 
-        hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#denomination", visible: false)
-        expect(hidden["value"]).to eq("1/2 Penny")
+        expect(page).to have_select("numismatics_issue_denomination", selected: "1/2 Penny")
       end
 
       it "initializes the correct selected value in autocomplete fields" do
