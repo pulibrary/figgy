@@ -1,9 +1,7 @@
 <div class="form-group">
 
   <label for="numismatics_issue_object_type" class="control-label select optional">Object type</label>
-  <input id="object_type" type="hidden" name="numismatics_issue[object_type]" value="<%= f.object.model.object_type&.first %>" />
-
-  <select class="form-control select2" id="numismatics_issue_object_type" data-hidden="#object_type">
+  <select class="form-control select2" id="numismatics_issue_object_type">
     <option></option>
     <% @object_types.each do |object_type| %>
       <option <%= f.object.model.object_type&.first == object_type.value ? 'selected' : '' %> ><%= object_type.value %></option>

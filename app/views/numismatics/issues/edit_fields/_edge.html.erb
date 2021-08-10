@@ -1,9 +1,7 @@
 <div class="form-group">
 
   <label for="numismatics_issue_edge" class="control-label select optional">Edge</label>
-  <input id="edge" type="hidden" name="numismatics_issue[edge]" value="<%= f.object.model.edge&.first %>" />
-
-  <select class="form-control select2" id="numismatics_issue_edge" data-hidden="#edge">
+  <select class="form-control select2" id="numismatics_issue_edge">
     <option></option>
     <% @edges.each do |edge| %>
       <option <%= f.object.model.edge&.first == edge.value ? 'selected' : '' %> ><%= edge.value %></option>
