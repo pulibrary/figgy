@@ -111,6 +111,7 @@ RSpec.describe Cdl::CdlController, type: :controller do
           resource_charge_list = Wayfinder.for(resource).resource_charge_list
           expect(resource_charge_list.charged_items[0].netid).to eq user.uid
           expect(response).to redirect_to "/viewer/#{resource.id}/auth"
+          expect(CDL::EligibleItemService).to have_received(:item_ids).exactly(1).times
         end
       end
     end

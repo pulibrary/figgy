@@ -123,7 +123,7 @@ module CDL
     end
 
     def item_ids
-      eligible_item_service.item_ids(source_metadata_identifier: resource.try(:source_metadata_identifier)&.first)
+      @item_ids ||= eligible_item_service.item_ids(source_metadata_identifier: resource.try(:source_metadata_identifier)&.first)
     end
 
     def resource_charge_list
