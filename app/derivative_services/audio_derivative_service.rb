@@ -40,7 +40,7 @@ class AudioDerivativeService
   end
 
   def valid?
-    target_file && ["audio/x-wav", "audio/vnd.wave"].include?(mime_type.first)
+    target_file && ["audio/x-wav", "audio/vnd.wave", "video/mp4"].include?(mime_type.first)
   end
 
   def create_derivatives

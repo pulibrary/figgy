@@ -97,7 +97,7 @@ class FileSet < Resource
   end
 
   def audio?
-    Array.wrap(mime_type).first.to_s.include?("audio/")
+    Array.wrap(mime_type).first.to_s.include?("audio/") || Array.wrap(mime_type).first.to_s.include?("video/")
   end
 
   def image?

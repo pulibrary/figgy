@@ -217,6 +217,7 @@ defaults: &defaults
       supported_mime_types:
         - 'audio/x-wav'
         - 'audio/mpeg'
+        - 'video/mp4'
 
 development:
   <<: *defaults
