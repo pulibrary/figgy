@@ -21,8 +21,7 @@ class BibidUpdater
   private
 
     def change_set_persister
-      @change_set_persister ||= ChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter,
-                                                       storage_adapter: Valkyrie.config.storage_adapter)
+      @change_set_persister ||= ScannedResourcesController.change_set_persister
     end
 
     def progress_bar
@@ -30,20 +29,24 @@ class BibidUpdater
     end
 
     def query_service
-      @query_service ||= Valkyrie::MetadataAdapter.find(:postgres).query_service
+      @query_service ||= change_set_persister.query_service
     end
 
+    # We have to load everything into memory because otherwise the set runs
+    # inside a transaction, which results in solr being different than postgres.
     def resources
-      query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: [], lazy: true).select do |resource|
-        id = resource.source_metadata_identifier.first
-        next if id =~ /99.*3506421/
-        RemoteRecord.bibdata?(id)
-      end
+      @resources ||=
+        begin
+          query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: [], lazy: true).select do |resource|
+            id = resource.source_metadata_identifier.first
+            next if id =~ /99.*3506421/
+            RemoteRecord.bibdata?(id)
+          end.to_a
+        end
     end
 
-    # Approximate resource total
     def total_count
-      75_000
+      resources.size
     end
 
     def transform_id(voyager_id)
