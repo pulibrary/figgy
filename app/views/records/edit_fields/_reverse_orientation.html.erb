@@ -1,7 +1,7 @@
 <div class="form-group">
 
   <label for="numismatics_issue_reverse_orientation" class="control-label select optional">Reverse orientation</label>
-  <select class="form-control select2" id="numismatics_issue_reverse_orientation">
+  <select class="form-control select2" id="numismatics_issue_reverse_orientation" name="numismatics_issue[reverse_orientation]">
     <option <% f.object.model.reverse_orientation.blank? ? 'selected' : '' %>></option>
     <% @reverse_orientations.each do |reverse_orientation| %>
       <option <%= f.object.model.reverse_orientation&.first == reverse_orientation.value ? 'selected' : '' %> ><%= reverse_orientation.value %></option>

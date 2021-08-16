@@ -1,7 +1,7 @@
 <div class="form-group">
 
   <label for="numismatics_issue_metal" class="control-label select optional">Metal</label>
-  <select class="form-control select2" id="numismatics_issue_metal">
+  <select class="form-control select2" id="numismatics_issue_metal" name="numismatics_issue[metal]">
     <option></option>
     <% @metals.each do |metal| %>
       <option <%= f.object.model.metal&.first == metal.value ? 'selected' : '' %> ><%= metal.value %></option>

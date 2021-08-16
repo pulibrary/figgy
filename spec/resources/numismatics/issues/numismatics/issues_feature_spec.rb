@@ -116,12 +116,54 @@ RSpec.feature "Numismatics::Issues" do
   end
 
   scenario "users can save a new issue" do
+    preexisting_issue = FactoryBot.build(
+      :numismatic_issue,
+      object_type: "coin",
+      shape: "round",
+      color: "green",
+      metal: "copper",
+      edge: "serrated",
+      denomination: "dollar",
+      obverse_figure: "testObverseFigure",
+      obverse_orientation: "testObverseOrientation",
+      obverse_part: "testObversePart",
+      reverse_figure: "testReverseFigure",
+      reverse_orientation: "testReverseOrientation",
+      reverse_part: "testReversePart"
+    )
+    change_set_persister.save(change_set: ChangeSet.for(preexisting_issue))
+
     visit new_numismatics_issue_path
+
+    page.select "coin", from: "numismatics_issue_object_type", visible: false
+    page.select "round", from: "numismatics_issue_shape", visible: false
+    page.select "green", from: "numismatics_issue_color", visible: false
+    page.select "copper", from: "numismatics_issue_metal", visible: false
+    page.select "serrated", from: "numismatics_issue_edge", visible: false
+    page.select "dollar", from: "numismatics_issue_denomination", visible: false
+    page.select "testObverseFigure", from: "numismatics_issue_obverse_figure", visible: false
+    page.select "testObverseOrientation", from: "numismatics_issue_obverse_orientation", visible: false
+    page.select "testObversePart", from: "numismatics_issue_obverse_part", visible: false
+    page.select "testReverseFigure", from: "numismatics_issue_reverse_figure", visible: false
+    page.select "testReverseOrientation", from: "numismatics_issue_reverse_orientation", visible: false
+    page.select "testReversePart", from: "numismatics_issue_reverse_part", visible: false
 
     page.fill_in "numismatics_issue_era", with: "test era"
 
     page.click_on "Save"
 
+    expect(page).to have_content "coin"
+    expect(page).to have_content "round"
+    expect(page).to have_content "green"
+    expect(page).to have_content "copper"
+    expect(page).to have_content "serrated"
+    expect(page).to have_content "dollar"
+    expect(page).to have_content "testObverseFigure"
+    expect(page).to have_content "testObverseOrientation"
+    expect(page).to have_content "testObversePart"
+    expect(page).to have_content "testReverseFigure"
+    expect(page).to have_content "testReverseOrientation"
+    expect(page).to have_content "testReversePart"
     expect(page).to have_css ".attribute.era", text: "test era"
   end
 

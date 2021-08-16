@@ -93,14 +93,6 @@ export default class Initializer {
       tags: true,
       placeholder: "Nothing selected",
       allowClear: true
-    }).on('select2:select', (event) => {
-      const $target = $(event.target)
-      const selected = $target.select2('data')
-      const selectedItem = selected.shift()
-      const value = selectedItem.text
-      const $hidden = $($target.data('hidden'))
-
-      $hidden.val(value)
     })
   }
 

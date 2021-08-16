@@ -1,7 +1,7 @@
 <div class="form-group">
 
   <label for="numismatics_issue_color" class="control-label select optional">Color</label>
-  <select class="form-control select2" id="numismatics_issue_color">
+  <select class="form-control select2" id="numismatics_issue_color" name="numismatics_issue[color]">
     <option></option>
     <% @colors.each do |color| %>
       <option <%= f.object.model.color&.first == color.value ? 'selected' : '' %> ><%= color.value %></option>
