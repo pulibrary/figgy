@@ -39,7 +39,7 @@ class RemoteRecord
   end
 
   def self.source_metadata_url(id)
-    return "https://bibdata.princeton.edu/bibliographic/#{id}" if bibdata?(id)
+    return "#{Figgy.config[:bibdata_url]}#{id}" if bibdata?(id)
     "#{Figgy.config[:legacy_findingaids_url]}#{id.tr('_', '/')}.xml?scope=record" if pulfa?(id)
   end
 
@@ -90,9 +90,9 @@ class RemoteRecord
     def jsonld_request
       @jsonld_request ||=
         begin
-          request = Faraday.get("https://bibdata.princeton.edu/bibliographic/#{source_metadata_identifier}/jsonld")
+          request = Faraday.get("#{Figgy.config[:bibdata_url]}#{source_metadata_identifier}/jsonld")
           if request.status.to_s == "404"
-            request = Faraday.get("https://bibdata.princeton.edu/bibliographic/99#{source_metadata_identifier}3506421/jsonld")
+            request = Faraday.get("#{Figgy.config[:bibdata_url]}99#{source_metadata_identifier}3506421/jsonld")
           end
           request
         end
