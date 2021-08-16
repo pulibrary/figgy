@@ -124,7 +124,7 @@ RSpec.describe DownloadsController do
     context "with an HLS playlist FileSet and an auth token" do
       it "modifies the playlist to include auth tokens" do
         token = AuthToken.create!(group: ["admin"], label: "admin_token")
-        change_set_persister = ScannedResourcesController.change_set_persister
+        change_set_persister = ChangeSetPersister.default
         file_set = FactoryBot.create_for_repository(:file_set)
         file = fixture_file_upload("files/hls_playlist.m3u8", "application/x-mpegURL")
         change_set = ChangeSet.for(file_set)
@@ -171,7 +171,7 @@ RSpec.describe DownloadsController do
       let(:user) { FactoryBot.create(:admin) }
       it "doesn't modify the playlist" do
         sign_in(user)
-        change_set_persister = ScannedResourcesController.change_set_persister
+        change_set_persister = ChangeSetPersister.default
         file_set = FactoryBot.create_for_repository(:file_set)
         file = fixture_file_upload("files/hls_playlist.m3u8", "application/x-mpegURL")
         change_set = ChangeSet.for(file_set)

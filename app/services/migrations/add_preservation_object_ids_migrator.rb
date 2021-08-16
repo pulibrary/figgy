@@ -49,6 +49,6 @@ class Migrations::AddPreservationObjectIdsMigrator
   end
 
   def change_set_persister
-    @change_set_persister ||= ScannedResourcesController.change_set_persister
+    @change_set_persister ||= ChangeSetPersister.default
   end
 end

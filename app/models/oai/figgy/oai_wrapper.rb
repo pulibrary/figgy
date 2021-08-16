@@ -81,7 +81,7 @@ module OAI::Figgy
     end
 
     def sets
-      ScannedResourcesController.change_set_persister.query_service.find_references_by(resource: __getobj__, property: :member_of_collection_ids).map do |collection|
+      ChangeSetPersister.default.query_service.find_references_by(resource: __getobj__, property: :member_of_collection_ids).map do |collection|
         OAI::Set.new(
           spec: collection.slug.first,
           name: collection.title.first

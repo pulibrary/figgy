@@ -23,7 +23,7 @@ describe CDL::ChargeManager do
     Object.send(:remove_const, :EligibleItemService)
   end
 
-  let(:change_set_persister) { ScannedResourcesController.change_set_persister }
+  let(:change_set_persister) { ChangeSetPersister.default }
 
   describe "#initialize" do
     it "clears expired charges from in-memory array" do

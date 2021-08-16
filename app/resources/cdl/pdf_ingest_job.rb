@@ -21,7 +21,7 @@ module CDL
     end
 
     def change_set_persister
-      ScannedResourcesController.change_set_persister
+      ChangeSetPersister.default
     end
 
     def collection_id

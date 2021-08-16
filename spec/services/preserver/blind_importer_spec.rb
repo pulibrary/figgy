@@ -4,8 +4,8 @@ require "rails_helper"
 RSpec.describe Preserver::BlindImporter do
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:file2) { fixture_file_upload("files/example.tif", "image/tiff") }
-  let(:query_service) { ScannedResourcesController.change_set_persister.query_service }
-  let(:persister) { ScannedResourcesController.change_set_persister.metadata_adapter.persister }
+  let(:query_service) { ChangeSetPersister.default.query_service }
+  let(:persister) { ChangeSetPersister.default.metadata_adapter.persister }
   let(:shoulder) { "99999/fk4" }
   let(:blade) { "123456" }
   let(:importer) { described_class.new }
@@ -25,7 +25,7 @@ RSpec.describe Preserver::BlindImporter do
       FileUtils.rm_rf(Figgy.config["repository_path"])
 
       # MVW Ingested
-      mvw_reloaded = described_class.import(id: mvw.id, change_set_persister: ScannedResourcesController.change_set_persister)
+      mvw_reloaded = described_class.import(id: mvw.id, change_set_persister: ChangeSetPersister.default)
       expect(mvw_reloaded.id).to eq mvw.id
       # Volume Ingested
       volumes = query_service.find_members(resource: mvw_reloaded)
@@ -56,7 +56,7 @@ RSpec.describe Preserver::BlindImporter do
         end
       end
 
-      output = described_class.import(id: resource.id, change_set_persister: ScannedResourcesController.change_set_persister)
+      output = described_class.import(id: resource.id, change_set_persister: ChangeSetPersister.default)
       expect(output.id).to eq resource.id
       expect(output.member_ids.length).to eq 1
       file_sets = query_service.find_members(resource: output)
@@ -84,7 +84,7 @@ RSpec.describe Preserver::BlindImporter do
       end
       FileUtils.rm_rf(Pathname.new(Figgy.config["disk_preservation_path"]).join(resource.id.to_s).join("data").join(children.first.id.to_s))
 
-      output = described_class.import(id: resource.id, change_set_persister: ScannedResourcesController.change_set_persister)
+      output = described_class.import(id: resource.id, change_set_persister: ChangeSetPersister.default)
       expect(output.id).to eq resource.id
       expect(output.member_ids.length).to eq 0
     end
@@ -92,7 +92,7 @@ RSpec.describe Preserver::BlindImporter do
       it "raises a Valkyrie::Persistence::ObjectNotFoundError" do
         resource = FactoryBot.create_for_repository(:pending_scanned_resource)
 
-        expect { described_class.import(id: resource.id, change_set_persister: ScannedResourcesController.change_set_persister) }.to raise_error Valkyrie::Persistence::ObjectNotFoundError
+        expect { described_class.import(id: resource.id, change_set_persister: ChangeSetPersister.default) }.to raise_error Valkyrie::Persistence::ObjectNotFoundError
       end
     end
   end

@@ -13,6 +13,6 @@ class PreserveResourceJob < ApplicationJob
   end
 
   def change_set_persister
-    ScannedResourcesController.change_set_persister
+    ChangeSetPersister.default
   end
 end

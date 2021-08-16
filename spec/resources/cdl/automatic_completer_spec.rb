@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe CDL::AutomaticCompleter do
   let(:file) { fixture_file_upload("files/sample.pdf", "application/pdf") }
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
-  let(:change_set_persister) { ScannedResourcesController.change_set_persister }
+  let(:change_set_persister) { ChangeSetPersister.default }
   describe ".run" do
     context "when there's in process CDL items" do
       it "does not complete them" do

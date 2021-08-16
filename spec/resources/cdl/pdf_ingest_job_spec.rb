@@ -10,7 +10,7 @@ RSpec.describe CDL::PDFIngestJob, run_real_derivatives: true, run_real_character
       pdf_path = Rails.root.join("tmp", "test_cdl_in", "ingesting", "123456.pdf")
       FileUtils.mkdir_p(pdf_path.parent) unless File.exist?(pdf_path.parent)
       FileUtils.cp(Rails.root.join("spec", "fixtures", "files", "sample.pdf"), pdf_path)
-      query_service = ScannedResourcesController.change_set_persister.query_service
+      query_service = ChangeSetPersister.default.query_service
 
       described_class.perform_now(file_name: "123456.pdf")
 
@@ -30,7 +30,7 @@ RSpec.describe CDL::PDFIngestJob, run_real_derivatives: true, run_real_character
       pdf_path = Rails.root.join("tmp", "test_cdl_in", "ingesting", "123456.pdf")
       FileUtils.mkdir_p(pdf_path.parent) unless File.exist?(pdf_path.parent)
       FileUtils.cp(Rails.root.join("spec", "fixtures", "files", "sample.pdf"), pdf_path)
-      query_service = ScannedResourcesController.change_set_persister.query_service
+      query_service = ChangeSetPersister.default.query_service
 
       expect { described_class.perform_now(file_name: "123456.pdf") }.to raise_error "No PDF Found: 123456.pdf"
 

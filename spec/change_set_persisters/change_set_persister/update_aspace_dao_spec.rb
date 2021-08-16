@@ -13,7 +13,7 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
     stub_ezid(shoulder: shoulder, blade: blade)
     mocked_digital_object_create = stub_create_digital_object
     mocked_archival_object_update = stub_archival_object_update(archival_object_id: "260330")
-    change_set_persister = ScannedResourcesController.change_set_persister
+    change_set_persister = ChangeSetPersister.default
     resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "MC001.01_c000001")
     change_set = ChangeSet.for(resource)
     change_set.validate(state: "complete")
@@ -37,7 +37,7 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
     # Stub preservation since we have a stubbed FileSet with no real content to
     # preserve.
     allow(PreserveResourceJob).to receive(:perform_later)
-    change_set_persister = ScannedResourcesController.change_set_persister
+    change_set_persister = ChangeSetPersister.default
     zip_file_set = FactoryBot.create_for_repository(:zip_file_set)
     resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "MC001.01_c000001", member_ids: zip_file_set.id)
     change_set = ChangeSet.for(resource)
@@ -60,7 +60,7 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
     stub_ezid(shoulder: shoulder, blade: blade)
     mocked_digital_object_create = stub_create_digital_object
     mocked_archival_object_update = stub_archival_object_update(archival_object_id: "298998")
-    change_set_persister = ScannedResourcesController.change_set_persister
+    change_set_persister = ChangeSetPersister.default
     resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "MC230_c117")
     change_set = ChangeSet.for(resource)
     change_set.validate(state: "complete")
