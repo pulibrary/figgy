@@ -10,6 +10,8 @@ class PreserveResourceJob < ApplicationJob
       change_set = ChangeSet.for(resource)
       Preserver.for(change_set: change_set, change_set_persister: buffered_change_set_persister).preserve!
     end
+  rescue Valkyrie::Persistence::ObjectNotFoundError
+    Rails.logger.info "Object not found: #{id}"
   end
 
   def change_set_persister
