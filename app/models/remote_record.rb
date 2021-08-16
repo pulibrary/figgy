@@ -40,13 +40,13 @@ class RemoteRecord
 
   def self.source_metadata_url(id)
     return "https://bibdata.princeton.edu/bibliographic/#{id}" if bibdata?(id)
-    "https://findingaids.princeton.edu/collections/#{id.tr('_', '/')}.xml?scope=record" if pulfa?(id)
+    "#{Figgy.config[:legacy_findingaids_url]}#{id.tr('_', '/')}.xml?scope=record" if pulfa?(id)
   end
 
   def self.record_url(id)
     return unless id
     return "https://catalog.princeton.edu/catalog/#{id}" if bibdata?(id)
-    "https://findingaids.princeton.edu/collections/#{id.tr('_', '/')}" if pulfa?(id)
+    "#{Figgy.config[:legacy_findingaids_url]}#{id.tr('_', '/')}" if pulfa?(id)
   end
 
   class PulfaRecord
