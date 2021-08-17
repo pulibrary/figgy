@@ -9,7 +9,7 @@ RSpec.describe PDFCharacterizationService do
   let(:file) { fixture_file_upload("files/sample.pdf", "application/pdf") }
   let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
   let(:valid_file_set) { Wayfinder.for(resource).file_sets.first }
-  let(:persister) { ScannedResourcesController.change_set_persister.metadata_adapter.persister }
+  let(:persister) { ChangeSetPersister.default.metadata_adapter.persister }
   let(:file_characterization_service) { described_class }
 
   before do

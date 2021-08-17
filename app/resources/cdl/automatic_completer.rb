@@ -9,7 +9,7 @@ module CDL
     end
 
     def self.change_set_persister
-      ScannedResourcesController.change_set_persister
+      ChangeSetPersister.default
     end
 
     delegate :metadata_adapter, to: :change_set_persister

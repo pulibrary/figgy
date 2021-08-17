@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe Migrations::AddPreservationObjectIdsMigrator do
   describe ".call" do
-    let(:query_service) { ScannedResourcesController.change_set_persister.query_service }
+    let(:query_service) { ChangeSetPersister.default.query_service }
     it "adds IDs to the MetadataNodes of all PreservationObjects" do
       preservation_object1 = create_preservation_object(metadata_id: SecureRandom.uuid)
       create_preservation_object

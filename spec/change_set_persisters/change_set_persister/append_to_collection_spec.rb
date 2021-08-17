@@ -7,7 +7,7 @@ RSpec.describe ChangeSetPersister::AppendToCollection do
   it "can append a collection to the resource" do
     collection1 = FactoryBot.create_for_repository(:collection)
     collection2 = FactoryBot.create_for_repository(:collection)
-    change_set_persister = ScannedResourcesController.change_set_persister
+    change_set_persister = ChangeSetPersister.default
     resource = FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection1.id])
     change_set = ChangeSet.for(resource)
 

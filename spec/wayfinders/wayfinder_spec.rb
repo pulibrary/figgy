@@ -19,7 +19,7 @@ RSpec.describe Wayfinder do
       it "returns all tombstones with the given parent_id" do
         stub_ezid(shoulder: "99999/fk4", blade: "123456")
         file = fixture_file_upload("files/example.tif", "image/tiff")
-        change_set_persister = ScannedResourcesController.change_set_persister
+        change_set_persister = ChangeSetPersister.default
         resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
         change_set = ChangeSet.for(resource)
         change_set.validate(state: "complete")

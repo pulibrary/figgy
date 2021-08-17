@@ -21,7 +21,7 @@ class BibidUpdater
   private
 
     def change_set_persister
-      @change_set_persister ||= ScannedResourcesController.change_set_persister
+      @change_set_persister ||= ChangeSetPersister.default
     end
 
     def progress_bar

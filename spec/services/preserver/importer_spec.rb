@@ -9,7 +9,7 @@ describe Preserver::Importer do
   let(:file_set) { resource.decorate.file_sets.first }
   let(:shoulder) { "99999/fk4" }
   let(:blade) { "123456" }
-  let(:change_set_persister) { ScannedResourcesController.change_set_persister }
+  let(:change_set_persister) { ChangeSetPersister.default }
   let(:storage_adapter) { Valkyrie::StorageAdapter.find(:google_cloud_storage) }
   let(:persisted_resource) do
     change_set_persister.metadata_adapter.persister.save(resource: resource)
