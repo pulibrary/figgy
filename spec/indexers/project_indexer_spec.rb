@@ -9,7 +9,9 @@ RSpec.describe ProjectIndexer do
       project = FactoryBot.create_for_repository(:ephemera_project, member_ids: box.id)
 
       output = described_class.new(resource: folder).to_solr
+
       expect(output["ephemera_project_ssim"]).to eq project.title
+      expect(output["ephemera_project_tesim"]).to eq project.title
     end
     it "indexes the project when it's a box" do
       box = FactoryBot.create_for_repository(:ephemera_box)

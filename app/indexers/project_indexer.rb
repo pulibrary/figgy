@@ -10,7 +10,8 @@ class ProjectIndexer
     return {} unless resource.is_a?(EphemeraFolder) || resource.is_a?(EphemeraBox)
     return {} unless project
     {
-      "ephemera_project_ssim" => [project.title]
+      "ephemera_project_ssim" => [project.title],
+      "ephemera_project_tesim" => [project.title]
     }
   end
 
