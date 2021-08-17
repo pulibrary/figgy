@@ -116,12 +116,54 @@ RSpec.feature "Numismatics::Issues" do
   end
 
   scenario "users can save a new issue" do
+    preexisting_issue = FactoryBot.build(
+      :numismatic_issue,
+      object_type: "coin",
+      shape: "round",
+      color: "green",
+      metal: "copper",
+      edge: "serrated",
+      denomination: "dollar",
+      obverse_figure: "testObverseFigure",
+      obverse_orientation: "testObverseOrientation",
+      obverse_part: "testObversePart",
+      reverse_figure: "testReverseFigure",
+      reverse_orientation: "testReverseOrientation",
+      reverse_part: "testReversePart"
+    )
+    change_set_persister.save(change_set: ChangeSet.for(preexisting_issue))
+
     visit new_numismatics_issue_path
+
+    page.select "coin", from: "numismatics_issue_object_type", visible: false
+    page.select "round", from: "numismatics_issue_shape", visible: false
+    page.select "green", from: "numismatics_issue_color", visible: false
+    page.select "copper", from: "numismatics_issue_metal", visible: false
+    page.select "serrated", from: "numismatics_issue_edge", visible: false
+    page.select "dollar", from: "numismatics_issue_denomination", visible: false
+    page.select "testObverseFigure", from: "numismatics_issue_obverse_figure", visible: false
+    page.select "testObverseOrientation", from: "numismatics_issue_obverse_orientation", visible: false
+    page.select "testObversePart", from: "numismatics_issue_obverse_part", visible: false
+    page.select "testReverseFigure", from: "numismatics_issue_reverse_figure", visible: false
+    page.select "testReverseOrientation", from: "numismatics_issue_reverse_orientation", visible: false
+    page.select "testReversePart", from: "numismatics_issue_reverse_part", visible: false
 
     page.fill_in "numismatics_issue_era", with: "test era"
 
     page.click_on "Save"
 
+    expect(page).to have_content "coin"
+    expect(page).to have_content "round"
+    expect(page).to have_content "green"
+    expect(page).to have_content "copper"
+    expect(page).to have_content "serrated"
+    expect(page).to have_content "dollar"
+    expect(page).to have_content "testObverseFigure"
+    expect(page).to have_content "testObverseOrientation"
+    expect(page).to have_content "testObversePart"
+    expect(page).to have_content "testReverseFigure"
+    expect(page).to have_content "testReverseOrientation"
+    expect(page).to have_content "testReversePart"
     expect(page).to have_css ".attribute.era", text: "test era"
   end
 
@@ -381,50 +423,24 @@ RSpec.feature "Numismatics::Issues" do
       it "permits users to select from existing object types" do
         visit edit_numismatics_issue_path(id: persisted.id)
 
-        hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#color", visible: false)
-        expect(hidden["value"]).to eq("green")
-        hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#denomination", visible: false)
-        expect(hidden["value"]).to eq("1/2 Penny")
-        hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#edge", visible: false)
-        expect(hidden["value"]).to eq("serrated")
-        hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#metal", visible: false)
-        expect(hidden["value"]).to eq("copper")
-        hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#object_type", visible: false)
-        expect(hidden["value"]).to eq("coin")
-        hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#obverse_figure", visible: false)
-        expect(hidden["value"]).to eq("obv figure")
-        hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#obverse_orientation", visible: false)
-        expect(hidden["value"]).to eq("obv orientation")
-        hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#obverse_part", visible: false)
-        expect(hidden["value"]).to eq("obv part")
-        hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#reverse_figure", visible: false)
-        expect(hidden["value"]).to eq("rev figure")
-        hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#reverse_orientation", visible: false)
-        expect(hidden["value"]).to eq("rev orientation")
-        hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#reverse_part", visible: false)
-        expect(hidden["value"]).to eq("rev part")
-        hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#shape", visible: false)
-        expect(hidden["value"]).to eq("round")
-
-        expect(page).to have_selector("option", text: "coin")
-        expect(page).to have_selector("option", text: "1/2 Penny")
-        expect(page).to have_selector("option", text: "copper")
-        expect(page).to have_selector("option", text: "round")
-        expect(page).to have_selector("option", text: "green")
-        expect(page).to have_selector("option", text: "serrated")
-        expect(page).to have_selector("option", text: "obv figure")
-        expect(page).to have_selector("option", text: "obv orientation")
-        expect(page).to have_selector("option", text: "obv part")
-        expect(page).to have_selector("option", text: "rev figure")
-        expect(page).to have_selector("option", text: "rev orientation")
-        expect(page).to have_selector("option", text: "rev part")
+        expect(page).to have_select("numismatics_issue_color", selected: "green")
+        expect(page).to have_select("numismatics_issue_denomination", selected: "1/2 Penny")
+        expect(page).to have_select("numismatics_issue_edge", selected: "serrated")
+        expect(page).to have_select("numismatics_issue_metal", selected: "copper")
+        expect(page).to have_select("numismatics_issue_object_type", selected: "coin")
+        expect(page).to have_select("numismatics_issue_obverse_figure", selected: "obv figure")
+        expect(page).to have_select("numismatics_issue_obverse_orientation", selected: "obv orientation")
+        expect(page).to have_select("numismatics_issue_obverse_part", selected: "obv part")
+        expect(page).to have_select("numismatics_issue_reverse_figure", selected: "rev figure")
+        expect(page).to have_select("numismatics_issue_reverse_orientation", selected: "rev orientation")
+        expect(page).to have_select("numismatics_issue_reverse_part", selected: "rev part")
+        expect(page).to have_select("numismatics_issue_shape", selected: "round")
       end
 
       it "persists already-saved denominations" do
         visit edit_numismatics_issue_path(id: persisted.id)
 
-        hidden = page.find("body #main form.edit_numismatics_issue input[type='hidden']#denomination", visible: false)
-        expect(hidden["value"]).to eq("1/2 Penny")
+        expect(page).to have_select("numismatics_issue_denomination", selected: "1/2 Penny")
       end
 
       it "initializes the correct selected value in autocomplete fields" do

@@ -1,9 +1,7 @@
 <div class="form-group">
 
   <label for="numismatics_issue_obverse_part" class="control-label select optional">Obverse part</label>
-  <input id="obverse_part" type="hidden" name="numismatics_issue[obverse_part]" value="<%= f.object.model.obverse_part&.first %>" />
-
-  <select class="form-control select2" id="numismatics_issue_obverse_part" data-hidden="#obverse_part">
+  <select class="form-control select2" id="numismatics_issue_obverse_part" name="numismatics_issue[obverse_part]">
     <option <% f.object.model.obverse_part.blank? ? 'selected' : '' %>></option>
     <% @obverse_parts.each do |obverse_part| %>
       <option <%= f.object.model.obverse_part&.first == obverse_part.value ? 'selected' : '' %> ><%= obverse_part.value %></option>

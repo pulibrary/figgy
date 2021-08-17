@@ -1,9 +1,7 @@
 <div class="form-group">
 
   <label for="numismatics_coin_numismatic_collection" class="control-label select optional">Numismatic collection</label>
-  <input id="numismatic_collection" type="hidden" name="numismatics_coin[numismatic_collection]" value="<%= f.object.model.numismatic_collection&.first %>" />
-
-  <select class="form-control select2" id="numismatics_coin_numismatic_collection" data-hidden="#numismatic_collection">
+  <select class="form-control select2" id="numismatics_coin_numismatic_collection" name="numismatics_coin[numismatic_collection]">
     <option <% f.object.model.numismatic_collection.blank? ? 'selected' : '' %>></option>
     <% @numismatic_collections.each do |numismatic_collection| %>
       <option <%= f.object.model.numismatic_collection&.first == numismatic_collection.value ? 'selected' : '' %> ><%= numismatic_collection.value %></option>
