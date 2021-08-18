@@ -136,21 +136,15 @@ class ChangeSet < Valkyrie::ChangeSet
     # Find the nested object we want to change
     item = collection.find { |x| x.id.to_s == (fragment["id"] || fragment[:id]) }
 
-    # Handle if we are updating, deleting, or creating a new nested object
-    if item
-      # If object is being deleted, then delete it
-      if delete_fragment?(fragment)
-        collection.delete_at(index)
-        return skip!
-      # If object is not being deleted, return it
-      else
-        item
-      end
-    # If object doesn't exist anymore and we're trying to delete it, skip
-    elsif delete_fragment?(fragment)
+    if delete_fragment?(fragment)
+      # If the object should be deleted, then delete it if it exists
+      collection.delete_at(index) if item
       skip!
-    # If object is being created, then append it to its parent collection
+    elsif item
+      # If the object shouldn't be deleted but it exists, then return it
+      item
     else
+      # If the object shouldn't be deleted and doesn't exist, then add it to its parent collection
       collection.append(property_klass.call_unsafe([{ id: SecureRandom.uuid }]).first)
     end
   end
