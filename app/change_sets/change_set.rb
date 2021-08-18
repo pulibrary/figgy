@@ -81,12 +81,6 @@ class ChangeSet < Valkyrie::ChangeSet
     property :logical_structure, multiple: true, required: false, type: Types::Strict::Array.of(Structure), default: [Structure.new(label: "Logical", nodes: [])]
   end
 
-  def self.enable_pdf_support
-    property :pdf_type, multiple: false, required: false, default: "color"
-    property :file_metadata, multiple: true, required: false, default: []
-    self.feature_terms += [:pdf_type]
-  end
-
   def self.enable_claiming
     property :claimed_by, multiple: false, required: false, default: nil
   end
@@ -135,18 +129,27 @@ class ChangeSet < Valkyrie::ChangeSet
     @_changes = Disposable::Twin::Changed::Changes.new
   end
 
+  # Populator Documentation: https://trailblazer.to/2.0/gems/reform/populator.html
   def populate_nested_collection(fragment:, as:, collection:, index:, **)
     property_klass = model_type_for(property: as)
+
+    # Find the nested object we want to change
     item = collection.find { |x| x.id.to_s == (fragment["id"] || fragment[:id]) }
+
+    # Handle if we are updating, deleting, or creating a new nested object
     if item
+      # If object is being deleted, then delete it
       if delete_fragment?(fragment)
         collection.delete_at(index)
         return skip!
+      # If object is not being deleted, return it
       else
         item
       end
+    # If object doesn't exist anymore and we're trying to delete it, skip
     elsif delete_fragment?(fragment)
       skip!
+    # If object is being created, then append it to its parent collection
     else
       collection.append(property_klass.call_unsafe([{ id: SecureRandom.uuid }]).first)
     end

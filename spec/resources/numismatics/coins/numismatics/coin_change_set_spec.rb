@@ -70,4 +70,12 @@ RSpec.describe Numismatics::CoinChangeSet do
       expect(change_set.downloadable).to eq "public"
     end
   end
+
+  describe "#loan" do
+    it "can be set with a note and a type" do
+      change_set.validate("loan_attributes" => { "0" => { note: "Test2", type: "Type" } })
+      expect(change_set.loan.first.note).to eq "Test2"
+      expect(change_set.loan.first.type).to eq "Type"
+    end
+  end
 end
