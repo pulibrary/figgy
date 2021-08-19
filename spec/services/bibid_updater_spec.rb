@@ -9,6 +9,7 @@ describe BibidUpdater do
       stub_bibdata(bib_id: "123456")
       stub_bibdata(bib_id: "991234563506421")
       stub_bibdata(bib_id: "7214786")
+      stub_bibdata(bib_id: "99125378001906421")
       stub_aspace(pulfa_id: "C0652_c0383")
       # Don't stub the call for the Alma version of this bibid to ensure it
       # doesn't refresh metadata.
@@ -17,6 +18,8 @@ describe BibidUpdater do
       r3 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: ["991234563506421"])
       r4 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: ["C0652_c0383"])
       r5 = FactoryBot.create_for_repository(:scanned_resource)
+      # Alma native resource - don't migrate this.
+      r6 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: ["99125378001906421"])
 
       described_class.update
 
@@ -25,12 +28,14 @@ describe BibidUpdater do
       r3 = query_service.find_by(id: r3.id.to_s)
       r4 = query_service.find_by(id: r4.id.to_s)
       r5 = query_service.find_by(id: r5.id.to_s)
+      r6 = query_service.find_by(id: r6.id.to_s)
 
       expect(r1.source_metadata_identifier).to eq ["991234563506421"]
       expect(r2.source_metadata_identifier).to eq ["9972147863506421"]
       expect(r3.source_metadata_identifier).to eq ["991234563506421"]
       expect(r4.source_metadata_identifier).to eq ["C0652_c0383"]
       expect(r5.source_metadata_identifier).to be_nil
+      expect(r6.source_metadata_identifier).to eq ["99125378001906421"]
     end
   end
 end
