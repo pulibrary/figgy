@@ -170,8 +170,9 @@ RSpec.feature "Numismatics::Coins" do
   end
 
   context "when editing an existing coin", js: true do
+    let(:loan) { Numismatics::Loan.new(exhibit_name: "exhibit", note: "note", type: "type") }
     let(:coin) do
-      res = FactoryBot.create_for_repository(:coin, analysis: "test analysis")
+      res = FactoryBot.create_for_repository(:coin, analysis: "test analysis", loan: loan)
       persister.save(resource: res)
     end
 
@@ -195,6 +196,17 @@ RSpec.feature "Numismatics::Coins" do
 
       expect(page).to have_content "Coin 1 Saved, Creating Another..."
       expect(page).to have_field "numismatics_coin_analysis", with: "test analysis 2"
+    end
+
+    scenario "users can edit a nested resource" do
+      within "#loan" do
+        find(".remove_fields", match: :first).click
+      end
+
+      click_button "Save"
+
+      visit solr_document_path coin
+      expect(page).not_to have_css ".attribute.loan", text: "type, exhibit, note"
     end
   end
 
