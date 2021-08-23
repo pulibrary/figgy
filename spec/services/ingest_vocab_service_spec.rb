@@ -27,6 +27,7 @@ RSpec.describe IngestVocabService do
 
       it "loads the terms with categories" do
         expect(ephemera_terms.map(&:label)).to contain_exactly("Agricultural development projects", "Architecture")
+        expect(ephemera_terms[0].uri.to_s).to eq "http://id.loc.gov/authorities/subjects/sh85002306"
         expect(ephemera_vocabularies.map(&:label)).to contain_exactly("Agrarian and rural issues", "Arts and culture", "Subjects")
       end
     end
