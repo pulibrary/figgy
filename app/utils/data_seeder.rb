@@ -296,8 +296,8 @@ class DataSeeder
           columns: { label: "label", category: nil } },
         { file: File.join("spec", "fixtures", "lae_genres.csv"), name: "LAE Genres",
           columns: { label: "pul_label", category: nil } },
-        { file: File.join("spec", "fixtures", "lae_subjects.csv"), name: "LAE Subjects",
-          columns: { label: "subject", category: "category" } }
+        { file: File.join("config", "vocab", "lae_subjects.csv"), name: "LAE Subjects",
+          columns: { label: "label", code: "code", uri: "uri", category: "category" } }
       ]
       to_load.each do |vocab|
         change_set_persister.buffer_into_index do |buffered_change_set_persister|
