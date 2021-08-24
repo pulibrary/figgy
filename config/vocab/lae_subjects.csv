@@ -1,5 +1,6 @@
 label,code,uri,category
-Agricultural Research Institute,,http://id.loc.gov/authorities/names/nr91024508,Agrarian and rural issues
+Guatemala,[],http://viaf.org/viaf/133607895,LAE Subjects
+Agricultural Research Institute,[],http://id.loc.gov/authorities/names/nr91024508,Agrarian and rural issues
 Agricultural development projects,,http://id.loc.gov/authorities/subjects/sh85002306,Agrarian and rural issues
 Agricultural exhibitions,,http://id.loc.gov/authorities/subjects/sh85002317,Agrarian and rural issues
 Agricultural industries,,http://id.loc.gov/authorities/subjects/sh85002331,Agrarian and rural issues
@@ -8,11 +9,16 @@ Agricultural technology,,https://figgy.princeton.edu/ns/lAESubjects/agrarianAndR
 Agriculture,,http://id.loc.gov/authorities/subjects/sh85002415,Agrarian and rural issues
 Agriculture and politics,,http://id.loc.gov/authorities/subjects/sh85002483,Agrarian and rural issues
 Agriculture and state,,http://id.loc.gov/authorities/subjects/sh85002484,Agrarian and rural issues
+"Agriculture, Cooperative",[],http://id.loc.gov/authorities/subjects/sh85002472,Agrarian and rural issues
 Agriculture--Economic aspects,,http://id.loc.gov/authorities/subjects/sh85002427,Agrarian and rural issues
 "Agriculture--Handbooks, manuals, etc.",,"https://figgy.princeton.edu/ns/lAESubjects/agrarianAndRuralIssues/agriculture--Handbooks,Manuals,Etc.",Agrarian and rural issues
 Agriculture--International cooperation,,http://id.loc.gov/authorities/subjects/sh85002440,Agrarian and rural issues
 Animal rights,,http://id.loc.gov/authorities/subjects/sh89005495,Agrarian and rural issues
+Banana trade,[],http://id.loc.gov/authorities/subjects/sh85011459,Agrarian and rural issues
 Cattle trade,,http://id.loc.gov/authorities/subjects/sh85021415,Agrarian and rural issues
+Coffee industry,[],http://id.loc.gov/authorities/subjects/sh85027724,Agrarian and rural issues
+Collectivization of agriculture,[],http://id.loc.gov/authorities/subjects/sh85028262,Agrarian and rural issues
+Famines,[],http://id.loc.gov/authorities/subjects/sh85047075,Agrarian and rural issues
 Flowers,,http://id.loc.gov/authorities/subjects/sh85049332,Agrarian and rural issues
 Food industry,,https://figgy.princeton.edu/ns/lAESubjects/agrarianAndRuralIssues/foodIndustry,Agrarian and rural issues
 Food supply,,http://id.loc.gov/authorities/subjects/sh85050339,Agrarian and rural issues
@@ -33,12 +39,14 @@ Artists,,http://id.loc.gov/authorities/subjects/sh85008276,Arts and culture
 Arts,,http://id.loc.gov/authorities/subjects/sh85008324,Arts and culture
 Arts--Political aspects,,http://id.loc.gov/authorities/subjects/sh2009113916,Arts and culture
 Books and reading,,http://id.loc.gov/authorities/subjects/sh85015758,Arts and culture
+Caricatures and cartoons,[],http://id.loc.gov/authorities/subjects/sh85020312,Arts and culture
 Celebrities,,http://id.loc.gov/authorities/subjects/sh85021618,Arts and culture
 Culture,,http://id.loc.gov/authorities/subjects/sh85034755,Arts and culture
 Documentary films,,http://id.loc.gov/authorities/subjects/sh85088115,Arts and culture
 Ethnic art,,http://id.loc.gov/authorities/subjects/sh85045163,Arts and culture
 Festivals,,http://id.loc.gov/authorities/subjects/sh85047932,Arts and culture
 Folk art,,http://id.loc.gov/authorities/subjects/sh85049650,Arts and culture
+Folklore,[],https://id.loc.gov/authorities/subjects/sh85050104.html,Arts and culture
 Gastronomy,,http://id.loc.gov/authorities/subjects/sh85053492,Arts and culture
 Holidays,[],http://id.loc.gov/authorities/subjects/sh85061453,Arts and culture
 Indigenous art,,http://id.loc.gov/authorities/subjects/sh2006008419,Arts and culture
@@ -52,6 +60,7 @@ Museum exhibits,,http://id.loc.gov/authorities/subjects/sh96009328,Arts and cult
 Museums,,http://id.loc.gov/authorities/subjects/sh85088723,Arts and culture
 Music,,http://id.loc.gov/authorities/subjects/sh85088762,Arts and culture
 Performing arts,,http://id.loc.gov/authorities/subjects/sh85099818,Arts and culture
+Photography,[],https://figgy.princeton.edu/ns/lAESubjects/artsAndCulture/photography,Arts and culture
 Politics and culture,,http://id.loc.gov/authorities/subjects/sh85104468,Arts and culture
 Popular culture,,http://id.loc.gov/authorities/subjects/sh85104904,Arts and culture
 Pre-Columbian art,,http://id.loc.gov/authorities/subjects/sh85065027,Arts and culture
@@ -86,13 +95,14 @@ Youth--Drug use,,http://id.loc.gov/authorities/subjects/sh85149320,Children and 
 Youth--Health and hygiene,,http://id.loc.gov/authorities/subjects/sh85149328,Children and youth
 Youth--Political activity,,http://id.loc.gov/authorities/subjects/sh85149336,Children and youth
 Youth--Sexual behavior,,http://id.loc.gov/authorities/subjects/sh85149343,Children and youth
+Boycotts,[],http://id.loc.gov/authorities/subjects/sh85016199,Consumer behavior
 Advertising,,http://id.loc.gov/authorities/subjects/sh85001086,Economics
 Banks and banking,,http://id.loc.gov/authorities/subjects/sh85011609,Economics
 Business,,http://id.loc.gov/authorities/subjects/sh85018260,Economics
 Capitalism,[],http://id.loc.gov/authorities/subjects/sh85019958,Economics
 Commerce,,http://id.loc.gov/authorities/subjects/sh85028901,Economics
-Consumer Protection,,http://id.loc.gov/authorities/subjects/sh85031486,Economics
-Consumer protection--Economic aspects,,https://figgy.princeton.edu/ns/lAESubjects/economics/consumerProtection--EconomicAspects,Economics
+Consumer protection,[],http://id.loc.gov/authorities/subjects/sh85031486,Economics
+Consumer protection--Economic aspects,[],http://id.loc.gov/authorities/subjects/sh85031486,Economics
 Cooperative societies,,http://id.loc.gov/authorities/subjects/sh85032217,Economics
 "Debts, External",,http://id.loc.gov/authorities/subjects/sh85036140,Economics
 Economic conditions,,http://id.loc.gov/authorities/subjects/sh85040802,Economics
@@ -108,6 +118,7 @@ Fish trade,,http://id.loc.gov/authorities/subjects/sh85048657,Economics
 Fisheries,,http://id.loc.gov/authorities/subjects/sh85048666,Economics
 Foreign and trade relations,,http://id.loc.gov/authorities/subjects/sh85067395,Economics
 Forestry,,http://id.loc.gov/authorities/subjects/sh85050707,Economics
+Fraud,[],http://id.loc.gov/authorities/subjects/sh85051619,Economics
 Income distribution,,http://id.loc.gov/authorities/subjects/sh85064765,Economics
 Industries,,http://id.loc.gov/authorities/subjects/sh85065960,Economics
 Informal sector (Economics),,http://id.loc.gov/authorities/subjects/sh85066135,Economics
@@ -115,6 +126,7 @@ Infrastructure (Economics),,https://figgy.princeton.edu/ns/lAESubjects/economics
 International business enterprises,,http://id.loc.gov/authorities/subjects/sh85067372,Economics
 "Investments, Foreign",,http://id.loc.gov/authorities/subjects/sh85067736,Economics
 Local government --Economic aspects,,https://figgy.princeton.edu/ns/lAESubjects/economics/localGovernment--EconomicAspects,Economics
+Macroeconomics,[],https://id.loc.gov/authorities/subjects/sh85079443.html,Economics
 Marketing,,http://id.loc.gov/authorities/subjects/sh85081333,Economics
 Mass media--Economic aspects,,http://id.loc.gov/authorities/subjects/sh2008107497,Economics
 Micro finance,,http://id.loc.gov/authorities/subjects/sh97007705,Economics
@@ -123,6 +135,7 @@ Oil industries,,http://id.loc.gov/authorities/subjects/sh85094337,Economics
 Trade associations,,http://id.loc.gov/authorities/subjects/sh95006344,Economics
 Adult education,,http://id.loc.gov/authorities/subjects/sh85001028,Education
 Dropouts,,http://id.loc.gov/authorities/subjects/sh85039629,Education
+Early childhood education,[],http://id.loc.gov/authorities/subjects/sh87007854,Education
 Education,,http://id.loc.gov/authorities/subjects/sh85040989,Education
 Education and state,,http://id.loc.gov/authorities/subjects/sh85041091,Education
 "Education, Bilingual",,http://id.loc.gov/authorities/subjects/sh85041053,Education
@@ -142,13 +155,13 @@ Poor--Education,,https://figgy.princeton.edu/ns/lAESubjects/education/poor--Educ
 Popular education,,http://id.loc.gov/authorities/subjects/sh91005791,Education
 Schools,,http://id.loc.gov/authorities/subjects/sh85118451,Education
 Science education,,http://id.loc.gov/authorities/subjects/sh85118587,Education
-Social Science Research Institute,,https://figgy.princeton.edu/ns/lAESubjects/education/socialScienceResearchInstitute,Education
 Student unions,,http://id.loc.gov/authorities/subjects/sh85129292,Education
 Teachers' unions,,http://id.loc.gov/authorities/subjects/sh85133046,Education
 Teaching--Aids and devices,,http://id.loc.gov/authorities/subjects/sh85133053,Education
 Universities and colleges,,http://id.loc.gov/authorities/subjects/sh85141086,Education
 Universities and students,,https://figgy.princeton.edu/ns/lAESubjects/education/universitiesAndStudents,Education
 Vocational education,,http://id.loc.gov/authorities/subjects/sh85144178,Education
+Animal culture,[],https://id.loc.gov/authorities/subjects/sh85005169.html,Environment and ecology
 Biodiversity,,http://id.loc.gov/authorities/subjects/sh87005569,Environment and ecology
 Climate change,,http://id.loc.gov/authorities/names/n96900901,Environment and ecology
 Community development--Environmental aspects,,https://figgy.princeton.edu/ns/lAESubjects/environmentAndEcology/communityDevelopment--EnvironmentalAspects,Environment and ecology
@@ -164,11 +177,11 @@ Environmental law,,http://id.loc.gov/authorities/subjects/sh85044184,Environment
 Environmental policy,,http://id.loc.gov/authorities/subjects/sh85044197,Environment and ecology
 Environmental protection,,http://id.loc.gov/authorities/subjects/sh85044203,Environment and ecology
 Environmentalism,,http://id.loc.gov/authorities/subjects/sh93004752,Environment and ecology
-Fish trade--environmental aspects,,https://figgy.princeton.edu/ns/lAESubjects/environmentAndEcology/fishTrade--environmentalAspects,Environment and ecology
+Fish trade--Environmental aspects,[],https://figgy.princeton.edu/ns/lAESubjects/environmentAndEcology/fishTrade--EnvironmentalAspects,Environment and ecology
 Forests and forestry,,http://id.loc.gov/authorities/subjects/sh85050707,Environment and ecology
 Green technology,,http://id.loc.gov/authorities/subjects/sh94001791,Environment and ecology
 Marine resources,,http://id.loc.gov/authorities/subjects/sh85081257,Environment and ecology
-Mineral industries--environmental aspects,,http://id.loc.gov/authorities/subjects/sh85085556,Environment and ecology
+Mineral industries--Environmental aspects,[],http://id.loc.gov/authorities/subjects/sh85085556,Environment and ecology
 National parks and reserves,,http://id.loc.gov/authorities/subjects/sh85090045,Environment and ecology
 Natural disasters,,http://id.loc.gov/authorities/subjects/sh85090214,Environment and ecology
 Natural gas,,http://id.loc.gov/authorities/subjects/sh85053223,Environment and ecology
@@ -219,6 +232,7 @@ Transgender people,,http://id.loc.gov/authorities/subjects/sh2007003708,Gender
 Women,,http://id.loc.gov/authorities/subjects/sh85147274,Gender
 Women household employees,,http://id.loc.gov/authorities/subjects/sh85147520,Gender
 Women in art,,http://id.loc.gov/authorities/subjects/sh85147554,Gender
+Women in development,[],https://id.loc.gov/authorities/subjects/sh86000607.html,Gender
 Women--Crimes against,,http://id.loc.gov/authorities/subjects/sh85147284,Gender
 Women--Education,,http://id.loc.gov/authorities/subjects/sh85147291,Gender
 Women--Employment,,http://id.loc.gov/authorities/subjects/sh85147294,Gender
@@ -246,6 +260,7 @@ Health policy,,http://id.loc.gov/authorities/subjects/sh85083002,Health
 Health services accessibility,,http://id.loc.gov/authorities/subjects/sh92006496,Health
 Health--Environmental aspects,,http://id.loc.gov/authorities/subjects/sh85044173,Health
 Immunization,,http://id.loc.gov/authorities/subjects/sh85064545,Health
+Industrial accidents,[],https://id.loc.gov/authorities/subjects/sh85065821.html,Health
 Medical care,,http://id.loc.gov/authorities/subjects/sh85082871,Health
 Mental health,,http://id.loc.gov/authorities/subjects/sh85083615,Health
 Nutrition,,http://id.loc.gov/authorities/subjects/sh85093451,Health
@@ -268,8 +283,9 @@ History,,http://id.loc.gov/authorities/subjects/sh85061212,History
 Local history,,http://id.loc.gov/authorities/subjects/sh85077932,History
 Numismatics,[],http://id.loc.gov/authorities/subjects/sh85093255,History
 Philately,[],https://figgy.princeton.edu/ns/lAESubjects/history/philately,History
+Press coverage,,https://figgy.princeton.edu/ns/lAESubjects/history/pressCoverage,History
 Animal welfare,,https://figgy.princeton.edu/ns/lAESubjects/humanAndCivilRights/animalWelfare,Human and civil rights
-Civil Rights,,http://id.loc.gov/authorities/subjects/sh85026371,Human and civil rights
+Civil rights,[],http://id.loc.gov/authorities/subjects/sh85026371,Human and civil rights
 Civil rights--Government policy,,https://figgy.princeton.edu/ns/lAESubjects/humanAndCivilRights/civilRights--GovernmentPolicy,Human and civil rights
 Collective memory,,http://id.loc.gov/authorities/subjects/sh2006002444,Human and civil rights
 Consumer protection,,http://id.loc.gov/authorities/subjects/sh85031486,Human and civil rights
@@ -284,6 +300,7 @@ Human rights--Government policy,,https://figgy.princeton.edu/ns/lAESubjects/huma
 Human rights--Law and legislation,,http://id.loc.gov/authorities/subjects/sh85026379,Human and civil rights
 Human trafficking,,http://id.loc.gov/authorities/subjects/sh2006002629,Human and civil rights
 Immigrants--Civil rights,,https://figgy.princeton.edu/ns/lAESubjects/humanAndCivilRights/immigrants--CivilRights,Human and civil rights
+Indigenous peoples,,https://figgy.princeton.edu/ns/lAESubjects/humanAndCivilRights/indigenousPeoples,Human and civil rights
 Indigenous peoples--Civil rights,,http://id.loc.gov/authorities/subjects/sh2001006129,Human and civil rights
 Massacres,,http://id.loc.gov/authorities/subjects/sh85081954,Human and civil rights
 Minorities--Civil rights,,http://id.loc.gov/authorities/subjects/sh98005421,Human and civil rights
@@ -303,6 +320,7 @@ Terrorism,,http://id.loc.gov/authorities/subjects/sh85134112,Human and civil rig
 Torture,,http://id.loc.gov/authorities/subjects/sh85136190,Human and civil rights
 Truth commissions,,http://id.loc.gov/authorities/subjects/sh2001002255,Human and civil rights
 Women's rights,,http://id.loc.gov/authorities/subjects/sh85147765,Human and civil rights
+Youth,,https://figgy.princeton.edu/ns/lAESubjects/humanAndCivilRights/youth,Human and civil rights
 Youth--Civil rights,,https://figgy.princeton.edu/ns/lAESubjects/humanAndCivilRights/youth--CivilRights,Human and civil rights
 Agricultural workers,,http://id.loc.gov/authorities/subjects/sh85002338,Labor
 Employee rights,,http://id.loc.gov/authorities/subjects/sh85042873,Labor
@@ -331,30 +349,39 @@ Affirmative action,,"https://figgy.princeton.edu/ns/lAESubjects/minorities,Ethni
 Arabs,,http://id.loc.gov/authorities/subjects/sh85006349,"Minorities, ethnic and racial groups"
 Asians,,http://id.loc.gov/authorities/subjects/sh85008657,"Minorities, ethnic and racial groups"
 Blacks,,http://id.loc.gov/authorities/subjects/sh85014672,"Minorities, ethnic and racial groups"
+Communalism,[],http://id.loc.gov/authorities/subjects/sh87001938,"Minorities, ethnic and racial groups"
 Culture,,"https://figgy.princeton.edu/ns/lAESubjects/minorities,EthnicAndRacialGroups/culture","Minorities, ethnic and racial groups"
 Dalits,,http://id.loc.gov/authorities/subjects/sh85141203,"Minorities, ethnic and racial groups"
 Discrimination,,http://id.loc.gov/authorities/subjects/sh85038376,"Minorities, ethnic and racial groups"
 Ethnic groups,,http://id.loc.gov/authorities/subjects/sh85045172,"Minorities, ethnic and racial groups"
 Ethnic relations,,http://id.loc.gov/authorities/subjects/sh85045182,"Minorities, ethnic and racial groups"
+Ethnicity,,"https://figgy.princeton.edu/ns/lAESubjects/minorities,EthnicAndRacialGroups/ethnicity","Minorities, ethnic and racial groups"
 Ethnicity--Political aspects,,http://id.loc.gov/authorities/subjects/sh2008119896,"Minorities, ethnic and racial groups"
 Europeans,,http://id.loc.gov/authorities/subjects/sh85045859,"Minorities, ethnic and racial groups"
+Europeans--Politics and government,[],"https://figgy.princeton.edu/ns/lAESubjects/minorities,EthnicAndRacialGroups/europeans--PoliticsAndGovernment","Minorities, ethnic and racial groups"
 Folklore,,http://id.loc.gov/authorities/subjects/sh85050104,"Minorities, ethnic and racial groups"
 Immigrants,,http://id.loc.gov/authorities/subjects/sh85064517,"Minorities, ethnic and racial groups"
 Indigenous peoples,,http://id.loc.gov/authorities/subjects/sh85090174,"Minorities, ethnic and racial groups"
 "Indigenous peoples--Legal status, laws, etc.",,"https://figgy.princeton.edu/ns/lAESubjects/minorities,EthnicAndRacialGroups/indigenousPeoples--LegalStatus,Laws,Etc.","Minorities, ethnic and racial groups"
+Indo-Aryans,[],http://id.loc.gov/authorities/subjects/sh85065700,"Minorities, ethnic and racial groups"
 Mestizos,,http://id.loc.gov/authorities/subjects/sh93008230,"Minorities, ethnic and racial groups"
 Minorities,,http://id.loc.gov/authorities/subjects/sh85085792,"Minorities, ethnic and racial groups"
 "Minorities--Legal status, laws, etc.",,"https://figgy.princeton.edu/ns/lAESubjects/minorities,EthnicAndRacialGroups/minorities--LegalStatus,Laws,Etc.","Minorities, ethnic and racial groups"
 Minorities--Political activity,,http://id.loc.gov/authorities/subjects/sh85085807,"Minorities, ethnic and racial groups"
 Minorities--Politics and government,,"https://figgy.princeton.edu/ns/lAESubjects/minorities,EthnicAndRacialGroups/minorities--PoliticsAndGovernment","Minorities, ethnic and racial groups"
 Minorities--Population,,http://id.loc.gov/authorities/subjects/sh85085808,"Minorities, ethnic and racial groups"
+Mulattos,[],"https://figgy.princeton.edu/ns/lAESubjects/minorities,EthnicAndRacialGroups/mulattos","Minorities, ethnic and racial groups"
 Racism,,http://id.loc.gov/authorities/subjects/sh85110266,"Minorities, ethnic and racial groups"
 Separatist movements,,http://id.loc.gov/authorities/subjects/sh85120098,"Minorities, ethnic and racial groups"
 Administrative regulations,,http://id.loc.gov/authorities/subjects/sh85036560,Politics and government
 Armed Forces,,http://id.loc.gov/authorities/subjects/sh85007241,Politics and government
 Autonomy and independence movements,,http://id.loc.gov/authorities/subjects/sh87004331,Politics and government
+Bharatiya Jan Sangh,[],http://id.loc.gov/authorities/names/no00016550,Politics and government
 Bharatiya Janata Party (BJP),,http://id.loc.gov/authorities/names/n82127449,Politics and government
+Border security,[],https://id.loc.gov/authorities/subjects/sh2006007505.html,Politics and government
 "Brezhnev, Leonid Ilʹich, 1906-1982",[],http://id.loc.gov/authorities/names/n79084765,Politics and government
+Citizen participation,[],https://figgy.princeton.edu/ns/lAESubjects/politicsAndGovernment/citizenParticipation,Politics and government
+Civil society,[],http://id.loc.gov/authorities/subjects/sh90004194,Politics and government
 Communism,[],http://id.loc.gov/authorities/subjects/sh85029120,Politics and government
 Communist Party of India (Marxist) – CPI(M),,http://id.loc.gov/authorities/names/n50054212,Politics and government
 Communist Party of India - Maoist – CPI-Maoist,,http://id.loc.gov/authorities/names/n2006207516,Politics and government
@@ -365,16 +392,18 @@ Decentralization in government,,http://id.loc.gov/authorities/subjects/sh8503618
 Democracy,,http://id.loc.gov/authorities/subjects/sh85036647,Politics and government
 Disaster planning and relief,,http://id.loc.gov/authorities/subjects/sh91000441,Politics and government
 Elections,,http://id.loc.gov/authorities/subjects/sh85041557,Politics and government
+European Union countries,[],https://id.loc.gov/authorities/subjects/sh94003571.html,Politics and government
 Foreign relations,,http://id.loc.gov/authorities/subjects/sh85050519,Politics and government
 Government accountability,,http://id.loc.gov/authorities/subjects/sh2007008050,Politics and government
 Government policy,,http://id.loc.gov/authorities/subjects/sh85056091,Politics and government
 Guerrillas,,http://id.loc.gov/authorities/subjects/sh85057696,Politics and government
 Hindu nationalism,,http://id.loc.gov/authorities/subjects/sh2006005183,Politics and government
 Imperialism,[],http://id.loc.gov/authorities/subjects/sh85064628,Politics and government
-India National Congress Party,,https://figgy.princeton.edu/ns/lAESubjects/politicsAndGovernment/indiaNationalCongressParty,Politics and government
+Indian National Congress Party,[],https://figgy.princeton.edu/ns/lAESubjects/politicsAndGovernment/indianNationalCongressParty,Politics and government
 International agencies,,http://id.loc.gov/authorities/subjects/sh85067357,Politics and government
 International cooperation,,http://id.loc.gov/authorities/subjects/sh85067385,Politics and government
 International relations,,http://id.loc.gov/authorities/subjects/sh85067435,Politics and government
+Islam and politics,[],http://id.loc.gov/authorities/subjects/sh85068420,Politics and government
 Judicial system,[],https://figgy.princeton.edu/ns/lAESubjects/politicsAndGovernment/judicialSystem,Politics and government
 Kommunisticheskai︠a︡ partii︠a︡ Sovetskogo Soi︠u︡za,[],http://id.loc.gov/authorities/names/n80126146,Politics and government
 Latin America--Relations--United States,,https://figgy.princeton.edu/ns/lAESubjects/politicsAndGovernment/latinAmerica--Relations--UnitedStates,Politics and government
@@ -382,6 +411,7 @@ Latin America--Relations--United States; United States--Relations--Latin America
 Laws,,https://figgy.princeton.edu/ns/lAESubjects/politicsAndGovernment/laws,Politics and government
 "Lenin, Vladimir Ilʹich, 1870-1924",[],http://id.loc.gov/authorities/names/n80067085,Politics and government
 Local government,,http://id.loc.gov/authorities/subjects/sh85077923,Politics and government
+Mass media,[],http://id.loc.gov/authorities/subjects/sh85081863,Politics and government
 Mass media--Political aspects,,http://id.loc.gov/authorities/subjects/sh85081871,Politics and government
 NGOs,,http://id.loc.gov/authorities/subjects/sh86007360,Politics and government
 National security,,http://id.loc.gov/authorities/subjects/sh85090122,Politics and government
@@ -405,6 +435,7 @@ Propaganda,[],http://id.loc.gov/authorities/subjects/sh85107443,Politics and gov
 Protest movements,,http://id.loc.gov/authorities/subjects/sh91005953,Politics and government
 Public administration,,http://id.loc.gov/authorities/subjects/sh85108611,Politics and government
 Public safety,,http://id.loc.gov/authorities/subjects/sh2008002399,Politics and government
+Rashtriya Swayam Sevak Sangh (RSS),[],http://id.loc.gov/authorities/names/n50061921,Politics and government
 Revolutionaries,,http://id.loc.gov/authorities/subjects/sh85113502,Politics and government
 Revolutions,[],http://id.loc.gov/authorities/subjects/sh85113507,Politics and government
 "Self-determination, National",,http://id.loc.gov/authorities/subjects/sh85119735,Politics and government
@@ -412,15 +443,19 @@ Social movements,,http://id.loc.gov/authorities/subjects/sh85123979,Politics and
 Socialism,[],http://id.loc.gov/authorities/subjects/sh85124118,Politics and government
 South Asian Association of regional Cooperation (SAARC),,http://id.loc.gov/authorities/names/n85338121,Politics and government
 "Stalin, Joseph, 1878-1953",[],http://id.loc.gov/authorities/names/n80044789,Politics and government
+Students,,https://figgy.princeton.edu/ns/lAESubjects/politicsAndGovernment/students,Politics and government
 Students--Political activity,,http://id.loc.gov/authorities/subjects/sh85129306,Politics and government
 Tibetan government in exile,,http://id.loc.gov/authorities/names/n89297339,Politics and government
 Transportation,,http://id.loc.gov/authorities/subjects/sh85137027,Politics and government
 United States--Relations--Latin America,,https://figgy.princeton.edu/ns/lAESubjects/politicsAndGovernment/unitedStates--Relations--LatinAmerica,Politics and government
+Viśva Hindū Parishad,[],http://id.loc.gov/authorities/names/n89284696,Politics and government
 Voting,,http://id.loc.gov/authorities/subjects/sh85144418,Politics and government
 War,,http://id.loc.gov/authorities/subjects/sh85145114,Politics and government
 "World War, 1939-1945",[],http://id.loc.gov/authorities/subjects/sh85148273,Politics and government
 Afro-Brazilian cults,,http://id.loc.gov/authorities/subjects/sh88007804,Religion
 Afro-Caribbean cults,,http://id.loc.gov/authorities/subjects/sh96010511,Religion
+Ahmadiyya,[],http://id.loc.gov/authorities/subjects/sh85002528,Religion
+Arya-Samaj,[],http://id.loc.gov/authorities/names/n50073154,Religion
 Atheism,,http://id.loc.gov/authorities/subjects/sh85009109,Religion
 Bahaism,,http://id.loc.gov/authorities/subjects/sh85010990,Religion
 Bible,,http://id.loc.gov/authorities/subjects/sh85013576,Religion
@@ -429,11 +464,13 @@ Catholic Church,,http://id.loc.gov/authorities/subjects/sh85021043,Religion
 Christians,,http://id.loc.gov/authorities/subjects/sh85025293,Religion
 Church and state,,http://id.loc.gov/authorities/subjects/sh85025534,Religion
 Church of England,,https://figgy.princeton.edu/ns/lAESubjects/religion/churchOfEngland,Religion
+Conversion,[],http://id.loc.gov/authorities/subjects/sh85031702,Religion
 Cults,,http://id.loc.gov/authorities/subjects/sh85034719,Religion
 Ecumenical movement,,http://id.loc.gov/authorities/subjects/sh85040933,Religion
 Episcopal Church,,http://id.loc.gov/authorities/subjects/sh85044442,Religion
 Evangelicalism,,http://id.loc.gov/authorities/subjects/sh85045933,Religion
 Freemasonry,[],https://figgy.princeton.edu/ns/lAESubjects/religion/freemasonry,Religion
+Hadith,[],http://id.loc.gov/authorities/subjects/sh85058192,Religion
 Hinduism,,http://id.loc.gov/authorities/subjects/sh85060932,Religion
 Independent churches,,http://id.loc.gov/authorities/subjects/sh85064846,Religion
 Indians--Religion,,http://id.loc.gov/authorities/subjects/sh85065067,Religion
@@ -442,18 +479,25 @@ Ismailites,,http://id.loc.gov/authorities/subjects/sh85068625,Religion
 Jainism,,http://id.loc.gov/authorities/subjects/sh85069282,Religion
 Jehovah's Witnesses,,http://id.loc.gov/authorities/subjects/sh85069870,Religion
 Judaism,,http://id.loc.gov/authorities/subjects/sh85070835,Religion
-Liberation theology,,http://id.loc.gov/authorities/subjects/sh85076447,Religion
+Liberation theology,[],http://id.loc.gov/authorities/subjects/sh85076447,Religion
 Missionaries,,http://id.loc.gov/authorities/subjects/sh85086017,Religion
+Mosques,[],http://id.loc.gov/authorities/subjects/sh85087470,Religion
+"Muḥammad, Prophet, -632",[],http://id.loc.gov/authorities/names/n79130881,Religion
+Pilgrims and pilgrimages,[],http://id.loc.gov/authorities/subjects/sh85102131,Religion
 Protestant churches,,http://id.loc.gov/authorities/subjects/sh85107712,Religion
+Qurʼan,[],http://id.loc.gov/authorities/subjects/sh85072953,Religion
 Religion,,http://id.loc.gov/authorities/subjects/sh85112549,Religion
 Religion and politics,,http://id.loc.gov/authorities/subjects/sh85112577,Religion
 Religious architecture,,http://id.loc.gov/authorities/subjects/sh2004000703,Religion
 Religious art,,http://id.loc.gov/authorities/subjects/sh85112607,Religion
 Religious education,,http://id.loc.gov/authorities/subjects/sh85112630,Religion
 Rites and ceremonies,,http://id.loc.gov/authorities/subjects/sh85114211,Religion
+Saints,[],http://id.loc.gov/authorities/subjects/sh85116629,Religion
+Secularism,[],https://id.loc.gov/authorities/subjects/sh85119460.html,Religion
 Sikhism,,http://id.loc.gov/authorities/subjects/sh85122435,Religion
 Spiritualism,,http://id.loc.gov/authorities/subjects/sh85126775,Religion
 Sufism,,http://id.loc.gov/authorities/subjects/sh85129660,Religion
+Temples,[],http://id.loc.gov/authorities/subjects/sh85133743,Religion
 Zoroastrianism,,http://id.loc.gov/authorities/subjects/sh85150018,Religion
 Astronautics,[],http://id.loc.gov/authorities/subjects/sh85008947,Science and Technology
 Biotechnology,,http://id.loc.gov/authorities/subjects/sh85014263,Science and Technology
@@ -482,17 +526,19 @@ Infrastructure (Economics),,http://id.loc.gov/authorities/subjects/sh85066333,So
 Migration,[],https://figgy.princeton.edu/ns/lAESubjects/socioeconomicConditionsAndDevelopment/migration,Socioeconomic conditions and development
 Poverty,,http://id.loc.gov/authorities/subjects/sh85105939,Socioeconomic conditions and development
 Power resources,,http://id.loc.gov/authorities/subjects/sh85105992,Socioeconomic conditions and development
-Public safety--Social aspects,,https://figgy.princeton.edu/ns/lAESubjects/socioeconomicConditionsAndDevelopment/publicSafety--SocialAspects,Socioeconomic conditions and development
+Public safety,[],http://id.loc.gov/authorities/subjects/sh2008002399,Socioeconomic conditions and development
+Public safety--Social aspects,[],http://id.loc.gov/authorities/subjects/sh2008002399,Socioeconomic conditions and development
 Retirement,,http://id.loc.gov/authorities/subjects/sh85113347,Socioeconomic conditions and development
 Small business,,http://id.loc.gov/authorities/subjects/sh85123568,Socioeconomic conditions and development
 Social conditions,,http://id.loc.gov/authorities/subjects/sh2001008850,Socioeconomic conditions and development
 Social justice,,http://id.loc.gov/authorities/subjects/sh85123969,Socioeconomic conditions and development
 Social policy,,http://id.loc.gov/authorities/subjects/sh85123985,Socioeconomic conditions and development
-Social policy--citizen participation,,https://figgy.princeton.edu/ns/lAESubjects/socioeconomicConditionsAndDevelopment/socialPolicy--citizenParticipation,Socioeconomic conditions and development
+Social policy--Citizen participation,[],http://id.loc.gov/authorities/subjects/sh85123985,Socioeconomic conditions and development
 Social problems,[],http://id.loc.gov/authorities/subjects/sh85123988,Socioeconomic conditions and development
 Technical assistance,,http://id.loc.gov/authorities/subjects/sh85133088,Socioeconomic conditions and development
 Violence,,http://id.loc.gov/authorities/subjects/sh85143514,Socioeconomic conditions and development
 Caste,,http://id.loc.gov/authorities/subjects/sh85020649,Sociology
+Divorce,[],http://id.loc.gov/authorities/subjects/sh85038616,Sociology
 Families,,http://id.loc.gov/authorities/subjects/sh85047009,Sociology
 Marriage,,http://id.loc.gov/authorities/subjects/sh85081416,Sociology
 Societies and clubs,[],http://id.loc.gov/authorities/subjects/sh2001008900,Sociology
