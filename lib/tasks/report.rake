@@ -19,7 +19,7 @@ namespace :report do
         csv << [
           term.label,
           term.code,
-          JSON.parse(term.decorate.uri).first,
+          term.decorate.uri.to_s,
           term.decorate.vocabulary.label
         ]
       end

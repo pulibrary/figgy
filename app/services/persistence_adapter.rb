@@ -16,7 +16,6 @@ class PersistenceAdapter
 
     yield change_set if block_given?
     change_set.sync
-    return unless change_set.validate(resource.attributes)
     @change_set_persister.save(change_set: change_set)
   end
 end
