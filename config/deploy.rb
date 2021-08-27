@@ -79,6 +79,28 @@ after "sidekiq:restart", "pubsub:restart"
 before "deploy:assets:precompile", "deploy:yarn_install"
 before "deploy:assets:precompile", "deploy:whenever"
 
+namespace :figx do
+  task :get_deps do
+    on roles(:app) do
+      within release_path do
+        execute("cd #{release_path}/figx && MIX_ENV=#{fetch(:rails_env, fetch(:stage, 'staging'))} mix local.hex --force")
+        execute("cd #{release_path}/figx && MIX_ENV=#{fetch(:rails_env, fetch(:stage, 'staging'))} mix local.rebar --force")
+        execute("cd #{release_path}/figx && MIX_ENV=#{fetch(:rails_env, fetch(:stage, 'staging'))} mix deps.get")
+      end
+    end
+  end
+  task :build_release do
+    on roles(:app) do
+      within release_path do
+        execute("cd #{release_path}/figx && MIX_ENV=#{fetch(:rails_env, fetch(:stage, 'staging'))} mix release")
+      end
+    end
+  end
+end
+
+after "bundler:install", "figx:get_deps"
+after "figx:get_deps", "figx:build_release"
+
 namespace :deploy do
   desc "Run rake yarn install"
   task :yarn_install do
