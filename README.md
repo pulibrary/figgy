@@ -86,7 +86,7 @@ lpass login <email@email.com>
 ```sh
 git clone https://github.com/pulibrary/figgy.git
 cd figgy
-`bin/setup_keys`
+./bin/setup
 bundle install
 yarn install
 ```
