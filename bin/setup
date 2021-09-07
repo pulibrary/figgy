@@ -6,16 +6,17 @@
 # Exit if any subcommand fails
 set -e
 
-# Set up Ruby dependencies via Bundler
-gem install bundler --conservative
-bundle check || bundle install
+asdf plugin-add ruby || true
+asdf plugin-add java || true
+asdf plugin-add nodejs || true
+asdf install
+gem install bundler:2.2.16
+brew install imagemagick gdal simple-tiles tesseract-lang mediainfo ffmpeg vips ocrmypdf lastpass-cli
+brew install --cask lando
 
-# Set up database and add any development seed data
-bin/rake dev:prime
-
-# Add binstubs to PATH via export PATH=".git/safe/../../bin:$PATH" in ~/.zshenv
-mkdir -p .git/safe
-
-# Only if this isn't CI
-# if [ -z "$CI" ]; then
-# fi
+echo "Enter lastpass username:" 
+read USERNAME
+lpass login $USERNAME
+./bin/setup_keys
+bundle install
+yarn install
