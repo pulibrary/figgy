@@ -7,13 +7,9 @@ A digital repository application in use at Princeton University Library for stor
 
 ## Language Dependencies
 
-Figgy provides a `.tool-versions` file -- consule this file for required languages and their current versions. `asdf` users should ensure all plugins listed there are installed:
+For asdf users `./bin/setup` will ensure that required languages are installed at the right versions. (See note on java, below)
 
-`$ asdf plugin-add ruby`
-`$ asdf plugin-add nodejs`
-`$ asdf plugin-add java`
-
-and then run `asdf install`.
+Otherwise consult `.tool-versions` for required languages and their current versions.
 
 ### Java via ASDF on Mac
 You need to add the following line to your `~/.asdfrc` file:
@@ -32,34 +28,28 @@ After making these changes open a new terminal window for figgy.
 
 ## Package Dependencies
 
+The following dependencies will be installed via homebrew by `./bin/setup`:
+
+* [ImageMagick](https://www.imagemagick.org)
+* [GDAL](http://www.gdal.org/)
+* [Simple Tiles](http://propublica.github.io/simple-tiles/)
+* [Tesseract](https://github.com/tesseract-ocr/tesseract)
+    * Note that version 3.04 is on the servers but homebrew installs 4.1.1
+* [MediaInfo](https://mediaarea.net/en/MediaInfo)
+* [FFMpeg](http://www.ffmpeg.org/) (for AV derivatives)
+* [VIPS]
+* [OCRmyPDF](https://ocrmypdf.readthedocs.io/)
+
+Other dependencies:
+
 * [Google Chrome](https://google.com/chrome/) (for feature tests)
 * Postgres (for OSX dev systems, install via homebrew)
 * [Redis](http://redis.io/)
     * Start Redis with `redis-server` or if you're on certain Linuxes, you can do this via `sudo service redis-server start`.
-* [ImageMagick](https://www.imagemagick.org)
-    * On a mac, do `brew install imagemagick`
 * [RabbitMQ](https://www.rabbitmq.com/) (Optional)
     * Start with rabbitmq-server
     * Used for publishing create/update/delete events for systems such as
       [Pomegranate](https://github.com/pulibrary/pomegranate)
-* [GDAL](http://www.gdal.org/)
-    * You can install it on Mac OSX with `brew install gdal`.
-    * On Ubuntu, use `sudo apt-get install gdal-bin`.
-* [Simple Tiles](http://propublica.github.io/simple-tiles/)
-    * Install via Homebrew: `brew install simple-tiles`
-* [Tesseract](https://github.com/tesseract-ocr/tesseract)
-    * Version 3.04 is on the servers; homebrew installs 4.1.1: `brew install tesseract-lang`
-    * For Ubuntu you'll have to [compile](https://github.com/tesseract-ocr/tesseract/wiki/Compiling) it.
-* [MediaInfo](https://mediaarea.net/en/MediaInfo)
-    * You can install it on Mac OSX with `brew install mediainfo`.
-    * On Ubuntu, use `sudo apt-get install mediainfo`.
-* [FFMpeg](http://www.ffmpeg.org/)
-    * Used for AV derivatives.
-    * `brew install ffmpeg`
-* [VIPS]
-    * `brew install vips`
-* [OCRmyPDF](https://ocrmypdf.readthedocs.io/)
-    * `brew install ocrmypdf`
 
 ### Troubleshooting
 
@@ -75,6 +65,9 @@ following steps usually resolve this issue:
 This sort of dance sometimes helps with other similar errors.
 
 ## Automatically pull vault password from lastpass
+
+These steps are performed by `./bin/setup`.
+
 More information about lastpass-cli can be found here: https://lastpass.github.io/lastpass-cli/lpass.1.html
 ```
 brew install lastpass-cli
