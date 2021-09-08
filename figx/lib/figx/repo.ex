@@ -3,20 +3,10 @@ defmodule Figx.Repo do
     otp_app: :figx,
     adapter: Ecto.Adapters.Postgres
 
-  import Ecto.Query, only: [from: 2]
 
-  def all_collections do
-    from(Figx.Resource, where: [internal_resource: "Collection"])
-    |> all()
-  end
 
   def get_resource(id) do
     get(Figx.Resource, id)
   end
 
-  def get_collection_members(id) do
-    p = %{ member_of_collection_ids: [%{id: id}] }
-    from(Figx.Resource, where: fragment("metadata @> ?::jsonb", ^p))
-    |> all()
-  end
 end

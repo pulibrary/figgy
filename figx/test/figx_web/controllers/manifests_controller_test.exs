@@ -1,5 +1,5 @@
 defmodule FigxWeb.ManifestsControllerTest do
-  use FigxWeb.ConnCase
+  use FigxWeb.ConnCase, async: true
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")

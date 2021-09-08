@@ -1,16 +1,17 @@
 defmodule FigxWeb.ManifestsController do
   use FigxWeb, :controller
+  alias Figx.Manifest
 
   def show(conn, %{"id" => id}) do
-    resource = Figx.Repo.get_resource(id)
+    resource = Manifest.get(id)
     render_resource(conn, resource)
   end
 
-  def render_resource(conn, resource = %{internal_resource: "Collection"}) do
+  def render_resource(conn, resource = %{"@type": "sc:Collection"}) do
     render(conn, "show.json", %{resource: resource})
   end
 
-  def render_resource(conn, resource) do
+  def render_resource(conn, _resource) do
     conn
     |> send_resp(400, "")
   end
