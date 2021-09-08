@@ -1,5 +1,6 @@
 defmodule Figx.Resource do
   use Figx, :model
+  alias Figx.Repo
   @primary_key {:id, :binary_id, autogenerate: false}
 
   schema "orm_resources" do
