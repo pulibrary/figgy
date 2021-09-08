@@ -8,10 +8,6 @@ defmodule Figx.Resource do
     field :internal_resource, :string
   end
 
-  def get(id) do
-    Repo.get(__MODULE__, id)
-  end
-
   def title(%{metadata: %{"imported_metadata" => [%{"title" => title}]}}), do: title
   def title(%{metadata: %{"title" => title}}), do: title
 

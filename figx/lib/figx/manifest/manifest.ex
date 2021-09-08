@@ -1,8 +1,8 @@
 defmodule Figx.Manifest do
-  alias Figx.{Resource, Collection}
+  alias Figx.{Repo, Resource, Collection}
 
   def get(id) do
-    Resource.get(id)
+    Repo.get(Resource, id)
     |> from_resource
   end
 
