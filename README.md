@@ -99,7 +99,7 @@ projects you're using Solr/Postgres for, and you can easily clean up with `lando
 destroy` or turn off all services with `lando poweroff`.
 
 1. Install Lando DMG from [[https://github.com/lando/lando/releases]]
-1. `bundle exec rake figgy:server:start`
+1. `bundle exec rake servers:start`
 
 1. For test:
    - In a separate terminal: `bundle exec rspec`

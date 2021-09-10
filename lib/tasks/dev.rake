@@ -3,27 +3,27 @@ if Rails.env.development? || Rails.env.test?
   require "factory_bot"
 
   namespace :figgy do
-    namespace :server do
-      desc "Start solr and postgres servers using lando."
-      task :start do
-        system("lando start")
-        system("rake db:create")
-        system("rake db:migrate")
-        system("rake db:migrate RAILS_ENV=test")
-      end
-
-      desc "Stop lando solr and postgres servers."
-      task :stop do
-        system("lando stop")
-      end
-    end
-
     desc "Promote last created user to admin"
     task set_admin_user: :environment do
       u = User.last
       puts "Making #{u} an admin"
       u.roles << Role.find_or_create_by(name: "admin")
       u.save
+    end
+  end
+
+  namespace :servers do
+    desc "Start solr and postgres servers using lando."
+    task :start do
+      system("lando start")
+      system("rake db:create")
+      system("rake db:migrate")
+      system("rake db:migrate RAILS_ENV=test")
+    end
+
+    desc "Stop lando solr and postgres servers."
+    task :stop do
+      system("lando stop")
     end
   end
 
