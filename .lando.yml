@@ -1,13 +1,13 @@
 name: figgy
 services:
   figgy_test_solr:
-    type: solr:7
+    type: solr:8.4
     portforward: true
     core: figgy-core-test
     config:
       dir: solr/config
   figgy_development_solr:
-    type: solr:7
+    type: solr:8.4
     portforward: true
     core: figgy-core-dev
     config:
