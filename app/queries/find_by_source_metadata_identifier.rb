@@ -28,9 +28,11 @@ class FindBySourceMetadataIdentifier
   # @return [Array<Valkyrie::Resource>] Resources which match the given
   #   identifiers.
   def find_by_source_metadata_identifiers(source_metadata_identifiers:)
-    old_id_equivalents = source_metadata_identifiers.map do |alma_id|
-      alma_id.match(/^99([\d]*)3506421/)&.[](1)
-    end.compact.select(&:present?)
-    query_service.custom_queries.find_many_by_property(property: :source_metadata_identifier, values: source_metadata_identifiers + old_id_equivalents)
+    source_metadata_identifiers = source_metadata_identifiers.flat_map do |alma_id|
+      [alma_id, alma_id.match(/^99([\d]*)3506421/)&.[](1)]
+    end.select(&:present?)
+    query_service.custom_queries.find_many_by_property(property: :source_metadata_identifier, values: source_metadata_identifiers).sort_by do |resource|
+      source_metadata_identifiers.index(resource.source_metadata_identifier&.first)
+    end
   end
 end
