@@ -75,7 +75,7 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
     end
     let(:resource) { FactoryBot.create_for_repository(:coin) }
     it "retrieves an array of facet values to for use in populating select boxes" do
-      metadata_adapter = Valkyrie::MetadataAdapter.find(:index_solr)
+      metadata_adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
       change_set_persister = ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter)
       coin = FactoryBot.create_for_repository(:coin,
                                               numismatic_collection: "numismatic collection")

@@ -64,7 +64,7 @@ GIT
 
 GIT
   remote: https://github.com/samvera/valkyrie.git
-  revision: d81d2ae2562a86a5767ed945ecfa59ffe3ebe918
+  revision: 43042a0256248185e9c4db88238686760ad1b358
   branch: 837-persisters-should-error
   specs:
     valkyrie (2.2.0)
