@@ -26,7 +26,7 @@ RSpec.describe FindInvalidThumbnailResources do
       resource
     end
     it "only finds resources with invalid thumbnails" do
-      output = query.find_invalid_thumbnail_resources(model: ScannedResource)
+      output = query_service.custom_queries.find_invalid_thumbnail_resources(model: ScannedResource)
       ids = output.map(&:id)
       expect(ids).to include resource.id
       expect(ids).not_to include resource2.id

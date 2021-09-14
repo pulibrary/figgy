@@ -26,7 +26,7 @@ RSpec.describe FindMissingThumbnailResources do
       resource
     end
     it "only finds resources missing thumbnails" do
-      output = query.find_missing_thumbnail_resources(model: ScannedResource)
+      output = query_service.custom_queries.find_missing_thumbnail_resources(model: ScannedResource)
       ids = output.map(&:id)
       expect(ids).to include resource.id
       expect(ids).not_to include resource2.id
