@@ -256,12 +256,10 @@ Rails.application.config.to_prepare do
   # Registers a metadata adapter for storing and indexing resource metadata into Solr
   # (see Valkyrie::Persistence::Solr::MetadataAdapter)
   Valkyrie::MetadataAdapter.register(
-    InstrumentedAdapter.new(
-      metadata_adapter: Valkyrie::Persistence::Solr::MetadataAdapter.new(
-        connection: Blacklight.default_index.connection,
-        resource_indexer: indexer
-      ),
-      tracer: Datadog.tracer
+    Valkyrie::Persistence::Solr::MetadataAdapter.new(
+      connection: Blacklight.default_index.connection,
+      resource_indexer: indexer,
+      write_only: true
     ),
     :index_solr
   )
@@ -269,12 +267,10 @@ Rails.application.config.to_prepare do
   if ENV["CLEAN_REINDEX_SOLR_URL"]
     # Register an indexer for a clean reindex.
     Valkyrie::MetadataAdapter.register(
-      InstrumentedAdapter.new(
-        metadata_adapter: Valkyrie::Persistence::Solr::MetadataAdapter.new(
-          connection: RSolr.connect(url: ENV["CLEAN_REINDEX_SOLR_URL"]),
-          resource_indexer: indexer
-        ),
-        tracer: Datadog.tracer
+      Valkyrie::Persistence::Solr::MetadataAdapter.new(
+        connection: RSolr.connect(url: ENV["CLEAN_REINDEX_SOLR_URL"]),
+        resource_indexer: indexer,
+        write_only: true
       ),
       :clean_reindex_solr
     )
