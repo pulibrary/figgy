@@ -18,7 +18,7 @@ RSpec.feature "Numismatics::Coins" do
     Numismatics::IssueChangeSet.new(numismatic_issue)
   end
   let(:change_set_persister) do
-    Numismatics::CoinsController.change_set_persister
+    ChangeSetPersister.default
   end
 
   before do

@@ -57,7 +57,7 @@ RSpec.describe Numismatics::IssuesController, type: :controller do
       end
     end
     it "retrieves an array of facet values to for use in populating select boxes" do
-      change_set_persister = Numismatics::IssuesController.change_set_persister
+      change_set_persister = ChangeSetPersister.default
       issue = FactoryBot.create_for_repository(:numismatic_issue,
                                                color: "pink",
                                                denomination: "Drachm",
