@@ -46,7 +46,7 @@ RSpec.describe IndexingAdapter do
       end
     end.to raise_error("Bad")
     expect(query_service.find_all.to_a.length).to eq 0
-    expect(index_solr.query_service.find_all.to_a.length).to eq 0
+    expect(index_solr.connection.get("select", params: { q: "*:*" })["response"]["numFound"]).to eq 0
   end
 
   it "doesn't try to persist if nothing happens" do

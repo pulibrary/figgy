@@ -148,7 +148,7 @@ namespace :bulk do
     model = ENV["MODEL"]
 
     @logger = Logger.new(STDOUT)
-    query = FindMissingThumbnailResources.new(query_service: Valkyrie::MetadataAdapter.find(:index_solr).query_service)
+    query = Valkyrie::MetadataAdapter.find(:index_solr).query_service.custom_queries
     resources = if model.present?
                   @logger.info "linking missing thumbnails for #{model.to_s.titleize}"
                   query.find_missing_thumbnail_resources(model: model)
@@ -176,7 +176,7 @@ namespace :bulk do
     model = ENV["MODEL"]
 
     @logger = Logger.new(STDOUT)
-    query = FindInvalidThumbnailResources.new(query_service: Valkyrie::MetadataAdapter.find(:index_solr).query_service)
+    query = Valkyrie::MetadataAdapter.find(:index_solr).query_service.custom_queries
     resources = if model.present?
                   @logger.info "linking thumbnails for #{model.to_s.titleize}"
                   query.find_invalid_thumbnail_resources(model: model)

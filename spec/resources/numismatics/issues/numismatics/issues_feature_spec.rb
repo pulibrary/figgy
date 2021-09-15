@@ -13,7 +13,7 @@ RSpec.feature "Numismatics::Issues" do
     Numismatics::IssueChangeSet.new(numismatic_issue)
   end
   let(:change_set_persister) do
-    ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: Valkyrie.config.storage_adapter)
+    ChangeSetPersister.default
   end
 
   before do

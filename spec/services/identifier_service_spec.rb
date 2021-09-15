@@ -120,7 +120,7 @@ RSpec.describe IdentifierService do
 
     context "without a source_metadata_identifier" do
       let(:metadata) { base_metadata.merge(target: "http://www.example.com/catalog/#{obj.id}") }
-      let(:obj) { FactoryBot.create :scanned_resource, id: "1234567", source_metadata_identifier: nil }
+      let(:obj) { FactoryBot.create :scanned_resource, source_metadata_identifier: nil }
       it "links to OrangeLight" do
         described_class.mint_or_update(resource: obj)
         expect(minter).to have_received(:mint).with(metadata)
@@ -140,7 +140,7 @@ RSpec.describe IdentifierService do
     end
 
     context "with a blank identifier" do
-      let(:obj) { FactoryBot.create :scanned_map, id: "1234567" }
+      let(:obj) { FactoryBot.create :scanned_map }
 
       it "mints an ARK then modifies the metadata with a link to Pulmap" do
         described_class.mint_or_update(resource: obj)
@@ -150,7 +150,7 @@ RSpec.describe IdentifierService do
     end
 
     context "with an existing identifier" do
-      let(:obj) { FactoryBot.create :scanned_map, id: "1234567", identifier: ark }
+      let(:obj) { FactoryBot.create :scanned_map, identifier: ark }
 
       it "udpates the ARK metadata " do
         described_class.mint_or_update(resource: obj)
@@ -162,7 +162,7 @@ RSpec.describe IdentifierService do
 
   context "integration test" do
     let(:metadata) { base_metadata.merge(target: "http://example.com/catalog/#{obj.id}") }
-    let(:obj) { FactoryBot.create :scanned_resource, id: "1234567", source_metadata_identifier: nil }
+    let(:obj) { FactoryBot.create :scanned_resource, source_metadata_identifier: nil }
     let(:shoulder) { "99999/fk4" }
     let(:blade) { "123456" }
 

@@ -94,9 +94,9 @@ class ChangeSetPersister
       handlers
     end
 
-    def save(change_set:)
+    def save(change_set:, external_resource: false)
       before_save(change_set: change_set)
-      persister.save(resource: change_set.resource).tap do |output|
+      persister.save(resource: change_set.resource, external_resource: external_resource).tap do |output|
         after_save(change_set: change_set, updated_resource: output)
         # Invoke the "after_update_commit" handlers only if this resource has already been persisted
         after_update_commit(change_set: change_set) if change_set.persisted?

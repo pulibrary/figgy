@@ -57,8 +57,7 @@ RSpec.describe Numismatics::IssuesController, type: :controller do
       end
     end
     it "retrieves an array of facet values to for use in populating select boxes" do
-      metadata_adapter = Valkyrie::MetadataAdapter.find(:index_solr)
-      change_set_persister = ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter)
+      change_set_persister = ChangeSetPersister.default
       issue = FactoryBot.create_for_repository(:numismatic_issue,
                                                color: "pink",
                                                denomination: "Drachm",

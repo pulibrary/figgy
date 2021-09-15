@@ -50,8 +50,8 @@ RSpec.describe DefaultDerivativeService do
   end
 
   it "creates a JP2 and attaches it to the fileset" do
-    # Stub so we can ensure only one transaction is used.
-    allow(adapter.metadata_adapter.connection).to receive(:transaction).and_call_original
+    # Stub so we can ensure only buffer is used.
+    allow(adapter.persister).to receive(:buffer_into_index).and_call_original
     derivative_service.new(id: valid_change_set.id).create_derivatives
 
     reloaded = query_service.find_by(id: valid_resource.id)
@@ -60,8 +60,11 @@ RSpec.describe DefaultDerivativeService do
     expect(derivative).to be_present
     derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
     expect(derivative_file.read).not_to be_blank
-    # Ensure only one transaction is used
-    expect(adapter.metadata_adapter.connection).to have_received(:transaction).exactly(1).times
+    # Ensure only one buffer is used.
+    # This is important so that callbacks don't fire until all derivatives are
+    # created.
+    # See https://github.com/pulibrary/figgy/issues/2188
+    expect(adapter.persister).to have_received(:buffer_into_index).exactly(1).times
   end
 
   describe "#cleanup_derivatives" do

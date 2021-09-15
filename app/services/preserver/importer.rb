@@ -45,7 +45,7 @@ class Preserver
 
       persisted = nil
       change_set_persister.buffer_into_index do |buffered_change_set_persister|
-        persisted = buffered_change_set_persister.save(change_set: fs_change_set)
+        persisted = buffered_change_set_persister.save(change_set: fs_change_set, external_resource: true)
       end
       persisted
     end

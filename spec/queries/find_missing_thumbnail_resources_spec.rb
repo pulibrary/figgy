@@ -13,7 +13,7 @@ RSpec.describe FindMissingThumbnailResources do
   end
   let(:file) { fixture_file_upload("files/color-landscape.tif", "image/tiff") }
   let(:resource2) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
-  let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
+  let(:change_set_persister) { ChangeSetPersister.default }
 
   before do
     stub_bibdata(bib_id: "123456")
@@ -26,7 +26,7 @@ RSpec.describe FindMissingThumbnailResources do
       resource
     end
     it "only finds resources missing thumbnails" do
-      output = query.find_missing_thumbnail_resources(model: ScannedResource)
+      output = query_service.custom_queries.find_missing_thumbnail_resources(model: ScannedResource)
       ids = output.map(&:id)
       expect(ids).to include resource.id
       expect(ids).not_to include resource2.id

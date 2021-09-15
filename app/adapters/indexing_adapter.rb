@@ -24,7 +24,7 @@ class IndexingAdapter
   end
 
   def persister
-    IndexingAdapter::Persister.new(metadata_adapter: self)
+    @persister ||= IndexingAdapter::Persister.new(metadata_adapter: self)
   end
 
   def no_index_models
@@ -54,11 +54,11 @@ class IndexingAdapter
     # (see Valkyrie::Persistence::Memory::Persister#save)
     # @note This saves into both the `persister` and `index_persister`
     #   concurrently.
-    def save(resource:)
+    def save(resource:, external_resource: false)
       if no_index_models.include?(resource.class)
-        persister.save(resource: resource)
+        persister.save(resource: resource, external_resource: external_resource)
       else
-        composite_persister.save(resource: resource)
+        composite_persister.save(resource: resource, external_resource: external_resource)
       end
     end
 

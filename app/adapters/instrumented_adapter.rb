@@ -70,9 +70,9 @@ class InstrumentedAdapter < SimpleDelegator
 
     # Traces "save" operations delegated to the ChangeSetPersister
     # @param resource [Valkyrie::Resource] resource being persisted
-    def save(resource:)
+    def save(resource:, external_resource: false)
       trace("valkyrie.save") do |span|
-        __getobj__.save(resource: resource).tap do |output|
+        __getobj__.save(resource: resource, external_resource: external_resource).tap do |output|
           span.set_tag("param.resource", output.id.to_s)
         end
       end

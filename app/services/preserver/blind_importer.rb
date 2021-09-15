@@ -33,7 +33,7 @@ class Preserver::BlindImporter
     end
     # Get rid of non-preserved members.
     source_change_set.try(:member_ids=, member_ids)
-    output = change_set_persister.save(change_set: source_change_set)
+    output = change_set_persister.save(change_set: source_change_set, external_resource: true)
     output
   end
 

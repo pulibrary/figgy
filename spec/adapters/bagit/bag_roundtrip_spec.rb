@@ -37,7 +37,7 @@ RSpec.describe "Bag Roundtripping" do
       folder = FactoryBot.create_for_repository(:ephemera_folder, genre: term.id)
       exporter.export(resource: folder)
       importer.metadata_adapter.persister.wipe!
-      output = importer.metadata_adapter.persister.save(resource: vocabulary)
+      output = importer.metadata_adapter.persister.save(resource: vocabulary, external_resource: true)
 
       importer.import(id: folder.id)
 

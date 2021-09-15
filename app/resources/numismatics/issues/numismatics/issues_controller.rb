@@ -53,8 +53,7 @@ module Numismatics
     end
 
     def load_facet_values
-      query = FindFacetValues.new(query_service: Valkyrie::MetadataAdapter.find(:index_solr).query_service)
-      @facet_values = query.find_facet_values(facet_fields: facet_fields)
+      @facet_values = Valkyrie::MetadataAdapter.find(:index_solr).query_service.custom_queries.find_facet_values(facet_fields: facet_fields)
     end
 
     def load_metals

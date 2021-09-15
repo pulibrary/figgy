@@ -58,7 +58,7 @@ class FacetIndexer
   end
 
   def parse_date(date)
-    return date if date.is_a?(Time)
+    return date if date.is_a?(Time) || date.is_a?(DateTime)
     Time.zone.parse(date)
   rescue TypeError, ArgumentError
     nil

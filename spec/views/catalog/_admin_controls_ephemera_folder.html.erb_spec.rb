@@ -9,7 +9,7 @@ RSpec.describe "catalog/_admin_controls_ephemera_folder" do
   let(:user) { FactoryBot.create(:user) }
 
   before do
-    solr.persister.save(resource: parent)
+    solr.persister.save(resource: parent, external_resource: true)
     assign :document, solr_document
     sign_in user
     render
