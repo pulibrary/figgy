@@ -24,7 +24,7 @@ class IndexingAdapter
   end
 
   def persister
-    IndexingAdapter::Persister.new(metadata_adapter: self)
+    @persister ||= IndexingAdapter::Persister.new(metadata_adapter: self)
   end
 
   def no_index_models
