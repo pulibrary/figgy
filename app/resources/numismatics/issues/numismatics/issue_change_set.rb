@@ -166,7 +166,7 @@ module Numismatics
 
     def earliest_date_before_latest_date
       return if earliest_date.blank? && latest_date.blank?
-      return if earliest_date.to_i < latest_date.to_i
+      return if earliest_date.to_i <= latest_date.to_i
       errors.add(:earliest_date, "must be a date before Latest Date")
     end
 
