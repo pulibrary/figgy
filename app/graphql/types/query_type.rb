@@ -101,8 +101,6 @@ class Types::QueryType < Types::BaseObject
 
     def type_defined?(resource)
       "Types::#{resource.class}Type".constantize
-    rescue NameError
-      false
     end
 
     delegate :metadata_adapter, to: :change_set_persister
