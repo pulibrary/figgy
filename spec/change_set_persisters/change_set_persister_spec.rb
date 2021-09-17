@@ -1808,38 +1808,6 @@ RSpec.describe ChangeSetPersister do
       end
     end
 
-    # context "when preserving a MediaResource" do
-    #   with_queue_adapter :inline
-    #   it "preserves the file nodes" do
-    #     file = fixture_file_upload("files/audio_file.wav", "audio/x-wav")
-    #     resource = FactoryBot.create_for_repository(:complete_media_resource)
-    #     change_set = ChangeSet.for(resource, files: [file])
-    #     output = change_set_persister.save(change_set: change_set)
-    #
-    #     preservation_object = Wayfinder.for(output).preservation_objects.first
-    #     expect(preservation_object).not_to eq nil
-    #
-    #     expect(Wayfinder.for(output).preservation_object.metadata_node.use).to eq [Valkyrie::Vocab::PCDMUse.PreservedMetadata]
-    #     expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "#{resource.id}.json"))).to eq true
-    #
-    #     # Verify we can convert from the JSON back to an object.
-    #     attributes = JSON.parse(File.read(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "#{resource.id}.json")))
-    #     attributes = Valkyrie::Persistence::Postgres::ORMConverter::RDFMetadata.new(attributes).result.symbolize_keys
-    #     resource = Valkyrie::Types::Anything[attributes]
-    #     expect(resource).to be_a MediaResource
-    #
-    #     # Verify files exist.
-    #     expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "#{resource.member_ids.first}.json"))).to eq true
-    #
-    #     file_set = Wayfinder.for(output).members.first
-    #     expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "audio_file-#{file_set.original_file.id}.wav"))).to eq true
-    #     file_set_preservation = Wayfinder.for(file_set).preservation_object
-    #     expect(file_set_preservation.metadata_node.use).to eq [Valkyrie::Vocab::PCDMUse.PreservedMetadata]
-    #     expect(file_set_preservation.binary_nodes.length).to eq 1
-    #     expect(file_set_preservation.binary_nodes[0].use).to eq [Valkyrie::Vocab::PCDMUse.PreservationCopy]
-    #   end
-    # end
-
     context "when a child is moved around" do
       with_queue_adapter :inline
       it "moves the preservation structure" do

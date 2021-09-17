@@ -49,16 +49,4 @@ RSpec.describe ArchivalMediaCollectionDecorator do
       expect(decorator.display_attributes.keys).not_to include :source_metadata
     end
   end
-
-  # describe "#media_resources" do
-  #   let(:collection) { FactoryBot.create_for_repository(:archival_media_collection) }
-  #
-  #   it "returns child media resources" do
-  #     FactoryBot.create_for_repository(:media_resource, member_of_collection_ids: [collection.id])
-  #     FactoryBot.create_for_repository(:media_resource, member_of_collection_ids: [collection.id])
-  #     FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id])
-  #
-  #     expect(decorator.media_resources.size).to eq 2
-  #   end
-  # end
 end
