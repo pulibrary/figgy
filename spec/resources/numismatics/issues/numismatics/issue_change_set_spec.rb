@@ -83,6 +83,12 @@ RSpec.describe Numismatics::IssueChangeSet do
         expect(change_set).not_to be_valid
       end
     end
+    context "when earliest_date is the same year as latest_date" do
+      it "is valid" do
+        change_set.validate(earliest_date: "2020", latest_date: "2020")
+        expect(change_set).to be_valid
+      end
+    end
   end
 
   describe "#downloadable" do
