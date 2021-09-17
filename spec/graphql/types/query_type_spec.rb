@@ -130,21 +130,21 @@ RSpec.describe Types::QueryType do
       end
     end
 
-  #   context "when one resource does not have a defined graphql type" do
-  #     before do
-  #       allow(ability).to receive(:can?).with(:discover, anything).and_return(true)
-  #     end
-  #
-  #     it "returns the resource with the defined type only" do
-  #       stub_bibdata(bib_id: "7214786")
-  #       stub_bibdata(bib_id: "8543429")
-  #       scanned_map = FactoryBot.create_for_repository(:scanned_map, source_metadata_identifier: "7214786")
-  #       FactoryBot.create_for_repository(:ephemera_box, source_metadata_identifier: "8543429")
-  #       type = described_class.new(nil, context)
-  #       expect(type.resources_by_bibids(bib_ids: ["7214786", "8543429"]).map(&:id)).to contain_exactly(scanned_map.id)
-  #     end
-  #   end
-  # end
+    # context "when one resource does not have a defined graphql type" do
+    #   before do
+    #     allow(ability).to receive(:can?).with(:discover, anything).and_return(true)
+    #   end
+    #
+    #   it "returns the resource with the defined type only" do
+    #     stub_bibdata(bib_id: "7214786")
+    #     stub_bibdata(bib_id: "8543429")
+    #     scanned_map = FactoryBot.create_for_repository(:scanned_map, source_metadata_identifier: "7214786")
+    #     FactoryBot.create_for_repository(:ephemera_box, source_metadata_identifier: "8543429")
+    #     type = described_class.new(nil, context)
+    #     expect(type.resources_by_bibids(bib_ids: ["7214786", "8543429"]).map(&:id)).to contain_exactly(scanned_map.id)
+    #   end
+    # end
+  end
 
   describe "#resources_by_coin_number" do
     context "when a user can discover the resource" do
