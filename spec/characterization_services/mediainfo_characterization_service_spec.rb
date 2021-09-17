@@ -15,7 +15,7 @@ RSpec.describe MediainfoCharacterizationService do
     file_metadata_node = FileMetadata.for(file: file).new(attributes)
     allow(FileMetadata).to receive(:for).and_return(file_metadata_node)
 
-    change_set_persister.save(change_set: MediaResourceChangeSet.new(MediaResource.new, files: [file]))
+    change_set_persister.save(change_set: RecordingChangeSet.new(ScannedResource.new, files: [file]))
   end
   let(:members) { query_service.find_members(resource: resource) }
   let(:valid_file_set) { members.first }
@@ -154,8 +154,8 @@ RSpec.describe MediainfoCharacterizationService do
       expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be false
     end
 
-    context "with a media resource parent" do
-      let(:parent) { MediaResource.new }
+    context "with a scanned resource parent" do
+      let(:parent) { ScannedResource.new }
       it "is invalid without a supported media type" do
         expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be false
       end

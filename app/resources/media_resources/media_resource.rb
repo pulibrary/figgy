@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# Generated with `rails generate valkyrie:model MediaResource`
+# GeneratedMediaResource with `rails generate valkyrie:model MediaResource`
 class MediaResource < Resource
   include Valkyrie::Resource::AccessControls
   include Schema::Common

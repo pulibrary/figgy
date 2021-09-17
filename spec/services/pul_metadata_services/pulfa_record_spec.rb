@@ -111,8 +111,8 @@ describe PulMetadataServices::PulfaRecord do
     end
   end
 
-  context "with a record for a MediaResource" do
-    subject(:pulfa_record) { described_class.new(source, MediaResource.new) }
+  context "with a record for a Recording" do
+    subject(:pulfa_record) { described_class.new(source, ScannedResource.new) }
     let(:pulfa_id) { "C0652_c0377" }
     let(:source) { file_fixture("pulfa/C0652/c0377.xml").read }
 

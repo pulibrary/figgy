@@ -61,12 +61,5 @@ RSpec.describe DefaultCharacterizationService do
         expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true
       end
     end
-
-    context "with a media resource parent" do
-      let(:parent) { MediaResource.new }
-      it "is valid" do
-        expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true
-      end
-    end
   end
 end

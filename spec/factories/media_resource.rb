@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :media_resource do
+  factory :media_resource, class: "ScannedResource" do
     title "Title"
     rights_statement RightsStatements.no_known_copyright
     read_groups "public"
@@ -16,7 +16,8 @@ FactoryBot.define do
     after(:build) do |resource, evaluator|
       resource.depositor = evaluator.user.uid if evaluator.user.present?
       if evaluator.visibility.present?
-        change_set = MediaResourceChangeSet.new(resource)
+        change_set = RecordingChangeSet.new(resource)
+        # change_set = MediaResourceChangeSet.new(resource)
         change_set.validate(visibility: Array(evaluator.visibility).first)
         change_set.sync
         resource = change_set.model

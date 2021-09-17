@@ -193,7 +193,7 @@ RSpec.describe CollectionsController, type: :controller do
         stub_ezid(shoulder: "99999/fk4", blade: "7564298")
         stub_pulfa(pulfa_id: "C0652_c0377")
 
-        change_set = MediaResourceChangeSet.new(resource)
+        change_set = RecordingChangeSet.new(resource)
         change_set.validate(source_metadata_identifier: "C0652_c0377", member_of_collection_ids: [collection.id])
         change_set_persister.save(change_set: change_set)
       end
@@ -206,7 +206,7 @@ RSpec.describe CollectionsController, type: :controller do
 
       it "allows downloading a CSV file" do
         get :ark_report, params: { id: collection.id, format: "csv" }
-        data = "source_metadata_id,ark,manifest_url\nC0652_c0377,ark:/99999/fk47564298,http://test.host/concern/media_resources/#{resource.id}/manifest\n"
+        data = "source_metadata_id,ark,manifest_url\nC0652_c0377,ark:/99999/fk47564298,http://test.host/concern/scanned_resources/#{resource.id}/manifest\n"
 
         expect(response.body).to eq(data)
       end
