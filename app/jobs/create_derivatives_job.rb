@@ -12,6 +12,8 @@ class CreateDerivativesJob < ApplicationJob
     CheckFixityJob.perform_later(file_set_id)
   rescue Valkyrie::Persistence::ObjectNotFoundError => error
     Valkyrie.logger.warn "#{self.class}: #{error}: Failed to find the resource #{file_set_id}"
+  rescue Valkyrie::StorageAdapter::FileNotFound => error
+    Valkyrie.logger.warn "#{self.class}: #{error}: Failed to find the resource #{file_set_id}"
   end
 
   def metadata_adapter
