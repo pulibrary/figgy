@@ -50,9 +50,9 @@ class Resource < Valkyrie::Resource
     false
   end
 
-  # Determines if this is a media resource
+  # Determines if this is a recording
   # @return [TrueClass, FalseClass]
-  def media_resource?
+  def recording?
     false
   end
 

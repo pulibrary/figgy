@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :media_resource, class: "ScannedResource" do
+  factory :recording, class: "ScannedResource" do
     title "Title"
     rights_statement RightsStatements.no_known_copyright
     read_groups "public"
@@ -23,10 +23,10 @@ FactoryBot.define do
       end
       resource
     end
-    factory :complete_media_resource do
+    factory :complete_recording do
       state "complete"
     end
-    factory :media_resource_with_audio_file do
+    factory :recording_with_audio_file do
       after(:build) do |resource, _evaluator|
         resource.member_ids ||= []
         resource.member_ids += [FactoryBot.create_for_repository(:audio_file_set).id]

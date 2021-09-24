@@ -186,7 +186,7 @@ RSpec.describe CollectionsController, type: :controller do
 
     describe "show ark_report" do
       let(:collection) { FactoryBot.create_for_repository(:archival_media_collection, source_metadata_identifier: ["C0652"]) }
-      let(:resource) { FactoryBot.create_for_repository(:complete_media_resource, title: []) }
+      let(:resource) { FactoryBot.create_for_repository(:complete_recording, title: []) }
       let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
 
       before do

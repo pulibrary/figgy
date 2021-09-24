@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 # Generates MP3s from uploaded WAV files.
-# @note This will not generate files for MediaResources, but ONLY because
-# MediaResource stores its primary file as a PreservationMaster instead of an
-# OriginalFile. If that changes, this will have to be updated in some way.
+# @note This will not generate files for any Resource that stores its primary
+# file as a PreservationMaster instead of an original file.
 class AudioDerivativeService
   class Factory
     attr_reader :change_set_persister

@@ -573,13 +573,13 @@ RSpec.describe CatalogController do
     end
   end
 
-  describe "MediaResource behavior" do
+  describe "Recording behavior" do
     before do
       sign_in FactoryBot.create(:admin)
     end
 
-    it "displays indexed MediaResources" do
-      persister.save(resource: FactoryBot.build(:media_resource))
+    it "displays indexed Recordings" do
+      persister.save(resource: FactoryBot.build(:recording))
 
       get :index, params: { q: "" }
 

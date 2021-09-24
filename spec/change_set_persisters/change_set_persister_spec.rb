@@ -629,7 +629,7 @@ RSpec.describe ChangeSetPersister do
       end
 
       it "appends file as a FileSet and extracts the technical metadata" do
-        resource = FactoryBot.build(:media_resource)
+        resource = FactoryBot.build(:recording)
         change_set = change_set_class.new(resource, characterize: true)
         change_set.files = [file]
 
@@ -1182,7 +1182,7 @@ RSpec.describe ChangeSetPersister do
     context "with archival media collection and media resource members" do
       let(:amc) { FactoryBot.create_for_repository(:collection, change_set: "archival_media_collection", state: "draft") }
       it "does not propagate the workflow state" do
-        FactoryBot.create_for_repository(:media_resource, state: "draft", member_of_collection_ids: amc.id)
+        FactoryBot.create_for_repository(:recording, state: "draft", member_of_collection_ids: amc.id)
 
         members = Wayfinder.for(amc).members
         expect(members.first.state).to eq ["draft"]
@@ -1433,7 +1433,7 @@ RSpec.describe ChangeSetPersister do
         stub_aspace(pulfa_id: "C0652_c0377")
       end
 
-      it "persists imported metadata for new MediaResources" do
+      it "persists imported metadata for new Recording" do
         output = change_set_persister.save(change_set: change_set)
         reloaded = query_service.find_by(id: output.id)
 

@@ -34,7 +34,7 @@ RSpec.describe ScannedResource do
     end
   end
 
-  describe "#media_resource?" do
+  describe "#recording?" do
     it "is false by default" do
       scanned_resource = FactoryBot.build(:scanned_resource)
 
