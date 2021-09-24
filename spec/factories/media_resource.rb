@@ -17,7 +17,6 @@ FactoryBot.define do
       resource.depositor = evaluator.user.uid if evaluator.user.present?
       if evaluator.visibility.present?
         change_set = RecordingChangeSet.new(resource)
-        # change_set = MediaResourceChangeSet.new(resource)
         change_set.validate(visibility: Array(evaluator.visibility).first)
         change_set.sync
         resource = change_set.model

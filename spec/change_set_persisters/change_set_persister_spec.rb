@@ -605,7 +605,7 @@ RSpec.describe ChangeSetPersister do
 
     context "with an audiovisual media file" do
       with_queue_adapter :inline
-      let(:change_set_class) { MediaResourceChangeSet }
+      let(:change_set_class) { RecordingChangeSet }
       let(:file) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "audio/x-wav") }
       let(:change_set_persister) do
         described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: true)
