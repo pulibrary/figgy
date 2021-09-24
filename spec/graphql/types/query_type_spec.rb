@@ -81,6 +81,7 @@ RSpec.describe Types::QueryType do
         expect(type.resources_by_bibid(bib_id: "7214786")).to eq []
       end
     end
+  end
 
   describe "#resources_by_bibids" do
     subject { described_class.fields["resourcesByBibids"] }
