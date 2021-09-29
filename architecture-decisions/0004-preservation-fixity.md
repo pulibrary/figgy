@@ -16,10 +16,10 @@ Cloud Function.
 ## Decisions
 
 1. Fixity Checking Timeline
-   1. Every week a random 0.2% of the repository's preserved materials will be queued up
-      to have their integrity checked. This process can be executed via
+   1. Every day a random 0.027% of the repository's preserved materials 
+      will be queued up to have their integrity checked. This process can be executed via
       ```
-      RAILS_ENV=production PERCENT_OF_RESOURCES=0.2 bundle exec rake fixity:request_random_fixity
+      RAILS_ENV=production bundle exec rake fixity:request_daily_cloud_fixity
       ```
       It will be configured as a cron job on a single worker machine.
 2. Process
