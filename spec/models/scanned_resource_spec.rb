@@ -38,7 +38,7 @@ RSpec.describe ScannedResource do
     it "is false by default" do
       scanned_resource = FactoryBot.build(:scanned_resource)
 
-      expect(scanned_resource).not_to be_a_media_resource
+      expect(scanned_resource).not_to be_a_recording
     end
   end
 

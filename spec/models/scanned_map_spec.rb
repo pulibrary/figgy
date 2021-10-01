@@ -14,7 +14,7 @@ RSpec.describe ScannedMap do
   end
   describe "#recording?" do
     it "is not a recording" do
-      expect(scanned_map).not_to be_a_media_resource
+      expect(scanned_map).not_to be_a_recording
     end
   end
 end

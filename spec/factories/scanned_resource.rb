@@ -59,6 +59,12 @@ FactoryBot.define do
         downloadable "none"
         visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
       end
+      factory :recording_with_audio_file do
+        after(:build) do |resource, _evaluator|
+          resource.member_ids ||= []
+          resource.member_ids += [FactoryBot.create_for_repository(:audio_file_set).id]
+        end
+      end
     end
     factory :open_scanned_resource do
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
