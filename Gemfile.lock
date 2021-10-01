@@ -633,10 +633,13 @@ GEM
     omniauth (1.9.0)
       hashie (>= 3.4.6, < 3.7.0)
       rack (>= 1.6.2, < 3)
-    omniauth-cas (1.1.1)
+    omniauth-cas (2.0.0)
       addressable (~> 2.3)
       nokogiri (~> 1.5)
       omniauth (~> 1.2)
+    omniauth-rails_csrf_protection (0.1.2)
+      actionpack (>= 4.2)
+      omniauth (>= 1.3.1)
     open4 (1.3.4)
     openseadragon (0.3.3)
       rails (> 3.2.0)
@@ -1030,7 +1033,8 @@ DEPENDENCIES
   normalize-rails
   oai (~> 1.0.0)
   omniauth (~> 1.9)
-  omniauth-cas
+  omniauth-cas (~> 2.0)
+  omniauth-rails_csrf_protection (~> 0.1)
   openseadragon
   pdf-reader!
   pg (~> 1.0)
