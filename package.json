@@ -66,20 +66,23 @@
     ],
     "moduleDirectories": [
       "node_modules",
-      "app/javascript"
+      "app/javascript",
+      "app/assets/javascripts"
     ],
     "moduleNameMapper": {
       ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2|svg)$": "identity-obj-proxy",
       "^@/(.*)$": "app/javascript/$1"
     },
     "moduleFileExtensions": [
+      "es6",
       "js",
       "json",
       "vue"
     ],
     "transform": {
       "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
-      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
+      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest",
+      "^.+\\.es6$": "<rootDir>/node_modules/babel-jest"
     },
     "snapshotSerializers": [
       "<rootDir>/node_modules/jest-serializer-vue"
