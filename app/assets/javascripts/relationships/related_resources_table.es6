@@ -82,7 +82,7 @@ export default class RelatedResourcesTable {
           row: $row,
           members: null,
           member: null,
-          url: $this.update_url,
+          url: $this.get_update_url(attachedId),
           element: $element,
           object: $this,
           data: $this.buildFormData(),
@@ -91,6 +91,10 @@ export default class RelatedResourcesTable {
         });
       }
     });
+  }
+
+  get_update_url(attachedId) {
+    return this.update_url
   }
 
   /**
