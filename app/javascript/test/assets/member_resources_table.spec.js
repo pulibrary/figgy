@@ -32,13 +32,10 @@ describe('MemberResourcesTable', () => {
 
       expect(ajax_spy).toBeCalledWith(
         expect.objectContaining({
-          url: `http://localhost:3000/concern/scanned_resources/${parentId}`,
+          url: `http://localhost:3000/concern/scanned_resources/${newMemberId}`,
           data: expect.objectContaining({
             "scanned_resource": {
-            "member_ids": [
-              "301a6e54-d934-4bfd-bb5a-10edb5fc1601",
-              newMemberId
-              ]
+              "append_id": parentId
             }
           })
         })
