@@ -5,7 +5,7 @@ global.$ = jQ;
 describe('MemberResourcesTable', () => {
 
   describe('bindAddButton', () => {
-    it('instantiates', () => {
+    it('binds an event that sends the right ajax call', async () => {
       const parentId = "7709d87f-0a21-4f8d-b17f-78d5caf4803a"
       const newMemberId = "317fa019-3c12-4423-bfe8-b913111559ed"
       const initialHTML = `
@@ -25,7 +25,12 @@ describe('MemberResourcesTable', () => {
       const form = null
       const element = document.getElementsByClassName('member-resources')[0];
       const table = new MemberResourcesTable(element, form)
-      const ajax_spy = jest.spyOn(table, 'callAjax').mockImplementation(() => true)
+
+      // mock $.ajax
+      const status = 200
+      const data = { status: status }
+      const jqxhr = { getResponseHeader: () => null }
+      const ajax_spy = jest.spyOn($, 'ajax').mockImplementation(() => { return jQ.Deferred().resolve(data, status, jqxhr) } )
 
       document.getElementById('scanned_resource_member_ids').value = newMemberId
       document.getElementsByClassName('btn-add-row')[0].click()
@@ -33,11 +38,7 @@ describe('MemberResourcesTable', () => {
       expect(ajax_spy).toBeCalledWith(
         expect.objectContaining({
           url: `http://localhost:3000/concern/scanned_resources/${newMemberId}`,
-          data: expect.objectContaining({
-            "scanned_resource": {
-              "append_id": parentId
-            }
-          })
+          data: "{\"scanned_resource\":{\"append_id\":\"7709d87f-0a21-4f8d-b17f-78d5caf4803a\"}}"
         })
       )
     })
