@@ -49,7 +49,7 @@ class HocrDerivativeService
   def cleanup_derivatives; end
 
   def parent
-    @parent ||= query_service.find_inverse_references_by(id: id, property: :member_ids).first
+    @parent ||= Wayfinder.for(resource).parent
   end
 
   def filename
