@@ -7,12 +7,11 @@
 set :job_template, "bash -l -c 'export PATH=\"/usr/local/bin/:$PATH\" && :job'"
 job_type :logging_rake, "cd :path && :environment_variable=:environment bundle exec rake :task :output"
 
-every :day, at: "11:00 PM", roles: [:db] do
-  logging_rake "figgy:update_bib_ids", output: "/tmp/figgy_update_bib_ids.log"
-  # Disabled - it wasn't working and the requests from DPUL working to reindex
-  # from Figgy were crashing Figgy.
-  # logging_rake "figgy:refresh:finding_aids:all", output: "/tmp/figgy_update_finding_aids.log"
-end
+# Disabled - it wasn't working and the requests from DPUL working to reindex
+# from Figgy were crashing Figgy.
+# every :day, at: "11:00 PM", roles: [:db] do
+#   logging_rake "figgy:refresh:finding_aids:all", output: "/tmp/figgy_update_finding_aids.log"
+# end
 
 every :monday, at: "10am", roles: [:db] do
   rake "figgy:send_collection_reports"
