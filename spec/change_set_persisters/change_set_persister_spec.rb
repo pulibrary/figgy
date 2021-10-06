@@ -1320,6 +1320,15 @@ RSpec.describe ChangeSetPersister do
       solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "id:#{output.id}" })["response"]["docs"][0]
       expect(solr_record["member_of_ssim"]).to eq ["id-#{new_parent.id}"]
     end
+
+    it "will not append a resource as a child of itself" do
+      resource = FactoryBot.create_for_repository(:scanned_resource)
+      change_set = change_set_class.new(resource)
+      change_set.validate(append_id: resource.id.to_s)
+
+      output = change_set_persister.save(change_set: change_set)
+      expect(output.member_ids).to eq []
+    end
   end
 
   context "setting visibility from remote metadata" do
