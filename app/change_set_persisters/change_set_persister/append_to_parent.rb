@@ -11,6 +11,7 @@ class ChangeSetPersister
 
     def run
       return unless append_id.present?
+      return if post_save_resource.id == append_id
       remove_from_old_parent
       add_to_new_parent
       # Re-save to solr unless it's going to be done by save_all
