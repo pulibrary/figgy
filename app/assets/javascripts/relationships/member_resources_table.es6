@@ -7,24 +7,24 @@ export default class MemberResourcesTable extends RelatedResourcesTable {
 
   constructor(element, form) {
     super(element, form);
-    this.attribute = 'append_id';
+    this.attribute = 'member_ids';
   }
 
   /**
   * Builds form data strings.
   */
-  buildFormData() {
+  buildChildFormData() {
     let parentId = this.update_url.split("/").pop()
     return {
       'authenticity_token': this.authenticityToken,
       [this.model]: {
-        [this.attribute]: parentId
+        ["append_id"]: parentId
       }
     };
   }
 
   // replace parent id with new member Id
-  get_update_url(attachedId) {
+  get_child_update_url(attachedId) {
     let stuff = this.update_url.split("/")
     stuff.pop()
     stuff.push(attachedId)
@@ -56,10 +56,10 @@ export default class MemberResourcesTable extends RelatedResourcesTable {
           row: $row,
           members: null,
           member: null,
-          url: $this.get_update_url(attachedId),
+          url: $this.get_child_update_url(attachedId),
           element: $element,
           object: $this,
-          data: $this.buildFormData(),
+          data: $this.buildChildFormData(),
           on_error: $this.handleError,
           on_success: $this.reloadTable
         });
