@@ -9,7 +9,7 @@ export default class CDLTimer {
       this.status = await this.fetchStatus()
       // If item isn't charged we're seeing it some other way - don't spin up a
       // timer.
-      if (this.status.charged === false) { return }
+      // if (this.status.charged === false) { return }
       this.setupReturnForm()
       const uvPane = document.getElementById('uv').firstChild
       uvPane.insertBefore(this.returnButton(), uvPane.firstChild)
@@ -39,9 +39,11 @@ export default class CDLTimer {
   }
 
   async checkTime () {
-    const remainingTime = this.status.expires_at - this.currentTime
+    // const remainingTime = this.status.expires_at - this.currentTime
+    const remainingTime = 100
     if (remainingTime <= 0) {
-      return this.exitViewer()
+      // return this.exitViewer()
+      this.setTime(remainingTime)
     } else {
       this.setTime(remainingTime)
     }

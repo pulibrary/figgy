@@ -1,3 +1,5 @@
 import UVManager from 'viewer/uv_manager'
+import videojs from 'video.js'
 const UVManagerInstance = new UVManager()
-window.addEventListener('uvLoaded', UVManagerInstance.initialize.bind(UVManagerInstance), false)
+window.uv_manager = UVManagerInstance
+window.addEventListener('DOMContentLoaded', UVManagerInstance.initialize.bind(UVManagerInstance), false)

@@ -2,17 +2,66 @@
 import CDLTimer from 'viewer/cdl_timer'
 import IIIFLogo from 'images/iiif-logo.svg'
 import TakedownLogo from 'images/takedown.png'
+import Mirador from 'mirador'
+import videojs from 'video.js'
 
 export default class UVManager {
   async initialize () {
     this.bindLogin()
     this.bindResize()
-    this.uvElement.hide()
-    await this.loadUV()
+    // this.uvElement.hide()
+    // await this.loadUV()
+    await this.loadMirador()
+  }
+
+  async loadMirador () {
+    return this.checkManifest().then(
+      this.createMirador.bind(this)
+    ).catch(this.requestAuth.bind(this)).then(this.setupAudio.bind(this))
+  }
+
+  async setupAudio () {
+    console.log("SEtting up.")
+    videojs('audioplayer')
   }
 
   async loadUV () {
     return this.checkManifest().then(this.createUV.bind(this)).catch(this.requestAuth.bind(this)).promise()
+  }
+
+  async createMirador (data, status, jqXHR) {
+    this.processTitle(jqXHR)
+    this.uvElement.show()
+    this.miradorInstance = await Mirador.viewer({
+      id: 'uv',
+      window: {
+        allowClose: false,
+        allowFullscreen: true,
+        allowMaximize: false,
+        sideBarPanel: 'canvas',
+        sideBarOpen: true
+      },
+      thumbnailNavigation: {
+        defaultPosition: 'far-bottom'
+      },
+      windows: [
+        {
+          manifestId: this.manifest
+        }
+      ],
+      workspace: {
+        allowNewWindows: false,
+        isWorkspaceAddVisible: false
+      },
+      workspaceControlPanel: {
+        enabled: false
+      },
+      audioOptions: {
+        'id': 'audioplayer'
+      }
+    })
+    this.cdlTimer = new CDLTimer(this.figgyId)
+    this.cdlTimer.initializeTimer()
   }
 
   checkManifest () {

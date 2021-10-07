@@ -1,16 +1,16 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <link rel="stylesheet" type="text/css" href="uv/uv.css">
+    <!-- <link rel="stylesheet" type="text/css" href="uv/uv.css"> -->
     <%= stylesheet_link_tag 'viewer' %>
     <%= yield :head %>
     <script type="text/javascript" src="/uv/lib/offline.js"></script>
-    <script type="text/javascript" src="/uv/lib/offline.js"></script>
-    <script type="text/javascript" src="/uv/helpers.js"></script>
+    <!-- <script type="text/javascript" src="/uv/lib/offline.js"></script> -->
+    <!-- <script type="text/javascript" src="/uv/helpers.js"></script> -->
   </head>
   <body>
     <%= yield %>
-    <%= javascript_pack_tag 'viewer' %>
     <script type="text/javascript" src="/uv/uv.js"></script>
+    <%= javascript_pack_tag 'viewer' %>
   </body>
 </html>
