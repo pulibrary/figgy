@@ -292,7 +292,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
-    concurrent-ruby (1.1.8)
+    concurrent-ruby (1.1.9)
     connection_pool (2.2.5)
     content_disposition (1.0.0)
     crack (0.4.3)
@@ -722,7 +722,7 @@ GEM
       rdf (~> 3.0, >= 3.0.11)
     recipient_interceptor (0.1.2)
       mail
-    redis (3.3.3)
+    redis (3.3.5)
     redis-namespace (1.5.3)
       redis (~> 3.0, >= 3.0.4)
     reform (2.2.4)
@@ -835,11 +835,11 @@ GEM
     shrine-google_cloud_storage (2.0.1)
       google-cloud-storage (~> 1.6)
       shrine (~> 2.11)
-    sidekiq (5.0.4)
-      concurrent-ruby (~> 1.0)
-      connection_pool (~> 2.2, >= 2.2.0)
+    sidekiq (5.2.9)
+      connection_pool (~> 2.2, >= 2.2.2)
+      rack (~> 2.0)
       rack-protection (>= 1.5.0)
-      redis (~> 3.3, >= 3.3.3)
+      redis (>= 3.3.5, < 4.2)
     signet (0.12.0)
       addressable (~> 2.3)
       faraday (~> 0.9)
