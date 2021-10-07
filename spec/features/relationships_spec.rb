@@ -72,11 +72,55 @@ RSpec.feature "Related Resources", js: true do
     end
 
     it "can attach and detach a parent vector" do
+      resource = persister.save(resource: FactoryBot.create_for_repository(:vector_resource))
+      parent = persister.save(resource: FactoryBot.create_for_repository(:vector_resource))
 
+      # attach
+      visit "/catalog/#{resource.id}"
+      fill_in("parent_vector_resource_id_input", with: parent.id.to_s)
+      click_on("parent_vector_resource_button")
+
+      new_row = page.find("tr[data-resource-id]")
+
+      parent = adapter.query_service.find_by(id: parent.id)
+      expect(Wayfinder.for(parent).members.map(&:id)).to eq [resource.id]
+
+      # detach
+      within new_row do
+        click_on("button")
+      end
+
+      # wait for page change
+      expect(page).not_to have_selector("tr[data-resource-id]")
+
+      parent = adapter.query_service.find_by(id: parent.id)
+      expect(Wayfinder.for(parent).members).to be_empty
     end
 
     it "can attach and detach a parent raster" do
+      resource = persister.save(resource: FactoryBot.create_for_repository(:raster_resource))
+      parent = persister.save(resource: FactoryBot.create_for_repository(:raster_resource))
 
+      # attach
+      visit "/catalog/#{resource.id}"
+      fill_in("parent_raster_resource_id_input", with: parent.id.to_s)
+      click_on("parent_raster_resource_button")
+
+      new_row = page.find("tr[data-resource-id]")
+
+      parent = adapter.query_service.find_by(id: parent.id)
+      expect(Wayfinder.for(parent).members.map(&:id)).to eq [resource.id]
+
+      # detach
+      within new_row do
+        click_on("button")
+      end
+
+      # wait for page change
+      expect(page).not_to have_selector("tr[data-resource-id]")
+
+      parent = adapter.query_service.find_by(id: parent.id)
+      expect(Wayfinder.for(parent).members).to be_empty
     end
   end
 
