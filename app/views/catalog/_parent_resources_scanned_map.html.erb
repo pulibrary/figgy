@@ -9,7 +9,7 @@
             <div class="loading-status hidden">Loading...</div>
             <table id="parent-scanned-maps"
                   class="table table-striped parent-resources parent-scanned-maps"
-                  data-update-url="<%= polymorphic_path([ActiveModel::Naming.route_key(resource.class), :attach_to_parent], id: resource.id) %>"
+                  data-update-url="<%= polymorphic_url([resource]) %>"
                   data-query-url="<%= solr_document_path(id: resource.id) %>"
                   data-parents="<%= decorated_resource.parents.to_a.map { |parents| parents.id.to_s } %>"
                   data-resource-id="<%= resource.id.to_s %>"
