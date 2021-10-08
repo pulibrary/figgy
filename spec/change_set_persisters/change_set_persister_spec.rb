@@ -605,7 +605,7 @@ RSpec.describe ChangeSetPersister do
 
     context "with an audiovisual media file" do
       with_queue_adapter :inline
-      let(:change_set_class) { MediaResourceChangeSet }
+      let(:change_set_class) { RecordingChangeSet }
       let(:file) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "audio/x-wav") }
       let(:change_set_persister) do
         described_class.new(metadata_adapter: adapter, storage_adapter: storage_adapter, characterize: true)
@@ -629,7 +629,7 @@ RSpec.describe ChangeSetPersister do
       end
 
       it "appends file as a FileSet and extracts the technical metadata" do
-        resource = FactoryBot.build(:media_resource)
+        resource = FactoryBot.build(:recording)
         change_set = change_set_class.new(resource, characterize: true)
         change_set.files = [file]
 
@@ -1182,7 +1182,7 @@ RSpec.describe ChangeSetPersister do
     context "with archival media collection and media resource members" do
       let(:amc) { FactoryBot.create_for_repository(:collection, change_set: "archival_media_collection", state: "draft") }
       it "does not propagate the workflow state" do
-        FactoryBot.create_for_repository(:media_resource, state: "draft", member_of_collection_ids: amc.id)
+        FactoryBot.create_for_repository(:recording, state: "draft", member_of_collection_ids: amc.id)
 
         members = Wayfinder.for(amc).members
         expect(members.first.state).to eq ["draft"]
@@ -1433,7 +1433,7 @@ RSpec.describe ChangeSetPersister do
         stub_aspace(pulfa_id: "C0652_c0377")
       end
 
-      it "persists imported metadata for new MediaResources" do
+      it "persists imported metadata for new Recording" do
         output = change_set_persister.save(change_set: change_set)
         reloaded = query_service.find_by(id: output.id)
 
@@ -1805,38 +1805,6 @@ RSpec.describe ChangeSetPersister do
         fgdc_file_set = Wayfinder.for(output).geo_metadata_members[0]
         fgdc_preservation = Wayfinder.for(fgdc_file_set).preservation_objects.first
         expect(fgdc_preservation.binary_nodes[0].checksum[0].md5).to eq fgdc_file_set.original_file.checksum[0].md5
-      end
-    end
-
-    context "when preserving a MediaResource" do
-      with_queue_adapter :inline
-      it "preserves the file nodes" do
-        file = fixture_file_upload("files/audio_file.wav", "audio/x-wav")
-        resource = FactoryBot.create_for_repository(:complete_media_resource)
-        change_set = ChangeSet.for(resource, files: [file])
-        output = change_set_persister.save(change_set: change_set)
-
-        preservation_object = Wayfinder.for(output).preservation_objects.first
-        expect(preservation_object).not_to eq nil
-
-        expect(Wayfinder.for(output).preservation_object.metadata_node.use).to eq [Valkyrie::Vocab::PCDMUse.PreservedMetadata]
-        expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "#{resource.id}.json"))).to eq true
-
-        # Verify we can convert from the JSON back to an object.
-        attributes = JSON.parse(File.read(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "#{resource.id}.json")))
-        attributes = Valkyrie::Persistence::Postgres::ORMConverter::RDFMetadata.new(attributes).result.symbolize_keys
-        resource = Valkyrie::Types::Anything[attributes]
-        expect(resource).to be_a MediaResource
-
-        # Verify files exist.
-        expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "#{resource.member_ids.first}.json"))).to eq true
-
-        file_set = Wayfinder.for(output).members.first
-        expect(File.exist?(Rails.root.join("tmp", "cloud_backup_test", resource.id.to_s, "data", resource.member_ids.first.to_s, "audio_file-#{file_set.original_file.id}.wav"))).to eq true
-        file_set_preservation = Wayfinder.for(file_set).preservation_object
-        expect(file_set_preservation.metadata_node.use).to eq [Valkyrie::Vocab::PCDMUse.PreservedMetadata]
-        expect(file_set_preservation.binary_nodes.length).to eq 1
-        expect(file_set_preservation.binary_nodes[0].use).to eq [Valkyrie::Vocab::PCDMUse.PreservationCopy]
       end
     end
 

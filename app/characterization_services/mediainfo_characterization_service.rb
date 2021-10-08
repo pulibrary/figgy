@@ -43,11 +43,11 @@ class MediainfoCharacterizationService
     `file --b --mime-type #{Shellwords.escape(filename)}`.strip
   end
 
-  # Determines if the parent of the FileSet is a MediaResource
+  # Determines if the parent of the FileSet is a Recording
   # @return [TrueClass, FalseClass]
   def valid?
     return false if preservation_file.nil?
-    (parent.try(:media_resource?) || parent.try(:image_resource?)) && supported_format?
+    (parent.try(:recording?) || parent.try(:image_resource?)) && supported_format?
   end
 
   private

@@ -5,8 +5,6 @@ class ArchivalMediaCollectionDecorator < CollectionDecorator
 
   delegate(*Schema::Common.attributes, to: :primary_imported_metadata, prefix: :imported)
 
-  delegate :media_resources, to: :wayfinder
-
   # Display the resource attributes
   # @return [Hash] a Hash of all of the resource attributes
   def display_attributes

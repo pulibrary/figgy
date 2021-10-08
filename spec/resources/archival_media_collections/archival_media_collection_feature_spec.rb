@@ -13,8 +13,8 @@ RSpec.feature "Browsing archival media collections" do
   end
   let(:file) { fixture_file_upload("files/audio_file.wav") }
   let(:member) do
-    resource = FactoryBot.build(:complete_media_resource)
-    change_set = MediaResourceChangeSet.new(resource, member_of_collection_ids: [collection.id], files: [file])
+    resource = FactoryBot.build(:complete_recording)
+    change_set = RecordingChangeSet.new(resource, member_of_collection_ids: [collection.id], files: [file])
     change_set_persister.save(change_set: change_set)
   end
 

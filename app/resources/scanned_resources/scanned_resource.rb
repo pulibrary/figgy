@@ -43,12 +43,10 @@ class ScannedResource < Resource
   # Determines if this is an image resource
   # @return [TrueClass, FalseClass]
   def image_resource?
-    return false if change_set == "recording"
-    true
+    change_set != "recording"
   end
 
-  def media_resource?
-    return true if change_set == "recording"
-    false
+  def recording?
+    change_set == "recording"
   end
 end

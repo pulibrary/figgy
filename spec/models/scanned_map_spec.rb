@@ -12,9 +12,9 @@ RSpec.describe ScannedMap do
   it "can have manifests" do
     expect(scanned_map.class.can_have_manifests?).to be true
   end
-  describe "#media_resource?" do
-    it "is not a media resource" do
-      expect(scanned_map).not_to be_a_media_resource
+  describe "#recording?" do
+    it "is not a recording" do
+      expect(scanned_map).not_to be_a_recording
     end
   end
 end

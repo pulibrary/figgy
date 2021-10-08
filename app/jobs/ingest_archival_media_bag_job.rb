@@ -78,7 +78,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
       def ingest
         barcode_lookup = Hash.new([])
         barcodes.each do |barcode|
-          media_resource_change_set = find_or_create_media_resource(:local_identifier, barcode)
+          recording_change_set = find_or_create_recording(:local_identifier, barcode)
           pbcore = bag.pbcore_parser(barcode: barcode)
           bag.audio_files_for_barcode(barcode: barcode).sort_by(&:first).each do |file_set_title, audio_files|
             file_set = FileSet.new(
@@ -96,29 +96,29 @@ class IngestArchivalMediaBagJob < ApplicationJob
             end
 
             file_set = changeset_persister.save(change_set: FileSetChangeSet.new(file_set))
-            media_resource_change_set.created_file_sets += [file_set]
-            media_resource_change_set.member_ids += [file_set.id]
+            recording_change_set.created_file_sets += [file_set]
+            recording_change_set.member_ids += [file_set.id]
           end
-          create_and_attach_file(pbcore, media_resource_change_set) if pbcore
-          media_resource_change_set.title = pbcore&.main_title
+          create_and_attach_file(pbcore, recording_change_set) if pbcore
+          recording_change_set.title = pbcore&.main_title
 
           image = bag.image_file(barcode: barcode)
-          create_and_attach_file(image, media_resource_change_set) if image
+          create_and_attach_file(image, recording_change_set) if image
 
-          persisted = changeset_persister.save(change_set: media_resource_change_set)
+          persisted = changeset_persister.save(change_set: recording_change_set)
           barcode_lookup[barcode] += [persisted.id]
         end
         build_descriptive_proxies(barcode_lookup)
       end
 
-      def create_and_attach_file(builder, media_resource_change_set)
+      def create_and_attach_file(builder, recording_change_set)
         file = IngestableFile.new(
           file_path: builder.path,
           mime_type: builder.mime_type,
           original_filename: builder.original_filename,
           container_attributes: { read_groups: file_set_read_groups }
         )
-        media_resource_change_set.files << file
+        recording_change_set.files << file
       end
 
       def build_descriptive_proxies(barcode_lookup)
@@ -147,7 +147,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
         def build!
           component_groups.each do |component_id, barcodes|
-            component_change_set = find_or_create_media_resource(:source_metadata_identifier, component_id)
+            component_change_set = find_or_create_recording(:source_metadata_identifier, component_id)
             component_change_set.validate(
               member_ids: barcodes.flat_map { |b| barcode_lookup[b] },
               member_of_collection_ids: [collection.id]
@@ -165,11 +165,11 @@ class IngestArchivalMediaBagJob < ApplicationJob
         # Creates or finds an existing Recording Object using an EAD Component ID
         # @param component_id [String]
         # @return [RecordingChangeSet]
-        def find_or_create_media_resource(property, value)
+        def find_or_create_recording(property, value)
           results = value.nil? ? [] : query_service.custom_queries.find_by_property(property: property, value: value)
-          media_resource = results.size.zero? ? ScannedResource.new : results.first
+          recording = results.size.zero? ? ScannedResource.new : results.first
           RecordingChangeSet.new(
-            media_resource,
+            recording,
             property => value,
             visibility: collection.visibility.first,
             downloadable: "public",
@@ -206,11 +206,11 @@ class IngestArchivalMediaBagJob < ApplicationJob
         # Creates or finds an existing Recording Object using an EAD Component ID
         # @param component_id [String]
         # @return [RecordingChangeSet]
-        def find_or_create_media_resource(property, value)
+        def find_or_create_recording(property, value)
           results = value.nil? ? [] : query_service.custom_queries.find_by_property(property: property, value: value)
-          media_resource = results.size.zero? ? ScannedResource.new : results.first
+          recording = results.size.zero? ? ScannedResource.new : results.first
           RecordingChangeSet.new(
-            media_resource,
+            recording,
             property => value,
             files: [],
             visibility: collection.visibility.first,

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class CollectionDecorator < Valkyrie::ResourceDecorator
-  delegate :members, :parents, :collections, :members_count, :media_resources, to: :wayfinder
+  delegate :members, :parents, :collections, :members_count, to: :wayfinder
   display Schema::Common.attributes, :owners, :restricted_viewers, :rendered_manifest_url, :rendered_dpul_url
 
   def title

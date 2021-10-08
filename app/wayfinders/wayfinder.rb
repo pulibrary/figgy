@@ -16,7 +16,6 @@ class Wayfinder < BaseWayfinder
     FileSet => FileSetWayfinder,
     FileSetChangeSet => FileSetWayfinder,
     EphemeraVocabulary => EphemeraVocabularyWayfinder,
-    MediaResource => MediaResourceWayfinder,
     Playlist => PlaylistWayfinder,
     Numismatics::Coin => Numismatics::CoinWayfinder,
     Numismatics::Accession => Numismatics::AccessionWayfinder,

@@ -101,7 +101,7 @@ Rails.application.routes.draw do
         get "save_and_ingest/:id", action: :save_and_ingest, constraints: { id: /[^\/]+/ }, defaults: { format: :json }
       end
     end
-    resources :media_resources do
+    resources :recordings do
       member do
         get :manifest, defaults: { format: :json }
       end

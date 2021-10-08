@@ -573,13 +573,13 @@ RSpec.describe CatalogController do
     end
   end
 
-  describe "MediaResource behavior" do
+  describe "Recording behavior" do
     before do
       sign_in FactoryBot.create(:admin)
     end
 
-    it "displays indexed MediaResources" do
-      persister.save(resource: FactoryBot.build(:media_resource))
+    it "displays indexed Recordings" do
+      persister.save(resource: FactoryBot.build(:recording))
 
       get :index, params: { q: "" }
 
@@ -762,6 +762,7 @@ RSpec.describe CatalogController do
 
         expect(response.body).to have_content "Review and Approval"
       end
+
       it "renders for an Ephemera Project" do
         resource = persister.save(resource: FactoryBot.build(:ephemera_project))
 
@@ -769,6 +770,7 @@ RSpec.describe CatalogController do
 
         expect(response.body).to have_selector "h1", text: resource.title.first
       end
+
       it "renders for an Ephemera Box" do
         resource = persister.save(resource: FactoryBot.build(:ephemera_box))
 
@@ -777,14 +779,7 @@ RSpec.describe CatalogController do
         expect(response.body).to have_content "Review and Approval"
         expect(response.body).to have_link "Create New Folder Template"
       end
-      it "renders for a MediaResource" do
-        resource = persister.save(resource: FactoryBot.create_for_repository(:media_resource_with_audio_file))
 
-        get :show, params: { id: resource.id.to_s }
-
-        expect(response.body).to have_selector "h1", text: resource.title.first
-        expect(response.body).to have_selector "audio[src='/downloads/#{resource.member_ids.first}/file/derivative']"
-      end
       it "renders for a Recording" do
         file_set = FactoryBot.create_for_repository(:file_set)
         resource = persister.save(resource: FactoryBot.create_for_repository(:recording, member_ids: file_set.id))

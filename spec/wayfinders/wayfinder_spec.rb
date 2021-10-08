@@ -404,22 +404,6 @@ RSpec.describe Wayfinder do
     end
   end
 
-  context "when given an ArchivalMediaCollection" do
-    describe "#media_resources" do
-      it "returns all media resource members" do
-        collection = FactoryBot.create_for_repository(:archival_media_collection)
-        FactoryBot.create_for_repository(:media_resource, member_of_collection_ids: [collection.id])
-        FactoryBot.create_for_repository(:media_resource, member_of_collection_ids: [collection.id])
-        FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id])
-
-        wayfinder = described_class.for(collection)
-
-        expect(wayfinder.media_resources.size).to eq 2
-        expect(wayfinder.media_resources.map(&:class).uniq).to eq [MediaResource]
-      end
-    end
-  end
-
   context "when given an EphemeraField" do
     describe "#ephemera_vocabulary" do
       it "returns the vocabulary for an ephemera field" do
