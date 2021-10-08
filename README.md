@@ -168,6 +168,13 @@ To put figgy in readonly mode, use the [ansible playbook](https://github.com/pul
 Documentation on setup for staging/production Fixity configuration can be found
 in [preservation_documentation.md](/preservation_documentation.md).
 
+### Deployment Steps
+
+1. `gcloud components install beta`
+1. `gcloud auth login`
+1. `gcloud config set project pulibrary-figgy-storage-1`
+1. `cap [staging/production] deploy:google_cloud_function`
+
 ## ArchivesSpace Synchronization
 
 Figgy will persist DAOs to ArchivesSpace on completion of finding aid resources.
