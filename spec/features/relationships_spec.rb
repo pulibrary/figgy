@@ -151,7 +151,6 @@ RSpec.feature "Related Resources", js: true do
 
       parent = adapter.query_service.find_by(id: parent.id)
       expect(Wayfinder.for(parent).members).to be_empty
-
     end
 
     it "can attach and detach a child vector" do
