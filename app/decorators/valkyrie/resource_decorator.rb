@@ -297,8 +297,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
       values.map do |element|
         return element unless element.is_a?(EphemeraTerm)
 
-        factory = LinkedData::LinkedResourceFactory.new(resource: element)
-        resource = factory.new.without_context
+        resource = LinkedData::LinkedResource.for(resource: element).without_context
         resource.fetch("pref_label")
       end
     end
