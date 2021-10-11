@@ -69,6 +69,10 @@ table.dataTable thead > tr > th {
   .member-resources.loading, .parent-resources.loading {
     opacity: 0.4;
   }
+
+  .vector_resource_member_ids label, .raster_resource_member_ids label {
+    display: none;
+  }
 }
 
 .member-resources {

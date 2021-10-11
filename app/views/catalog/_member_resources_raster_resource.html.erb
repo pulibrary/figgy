@@ -62,10 +62,11 @@
           </div>
           <div class="col-md-4">
             <%= f.input :member_ids,
-                        placeholder: 'Attach an existing resource by ID...',
-                        label: false,
+                        placeholder: 'Enter existing raster resource id...',
+                        label: "Child raster resource identifier",
                         required: false,
                         input_html: {
+                          id: "child_raster_resource_id_input",
                           class: [
                             'related_resource_ids',
                             'resource_member_ids',
@@ -76,7 +77,7 @@
           </div>
           <div class="col-md-2">
             <span class="input-group-btn">
-              <%= f.button :button, "Attach", class: ["btn","btn-primary","btn-add-row"] %>
+              <%= f.button :button, "Attach", id: "child_raster_resource_button", class: ["btn","btn-primary","btn-add-row"] %>
             </span>
           </div>
         </div>
