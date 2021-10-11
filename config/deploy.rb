@@ -102,7 +102,7 @@ namespace :deploy do
   task :google_cloud_function do
     on roles(:db) do
       run_locally do
-        execute "cd cloud_fixity && gcloud beta functions deploy checkFixity#{fetch(:stage, 'production')} --runtime nodejs8 --set-env-vars BUCKET=#{fetch(:google_fixity_bucket)},FIXITY_STATUS_TOPIC=#{fetch(:google_fixity_status_topic)},FIXITY_REQUEST_TOPIC=#{fetch(:google_fixity_request_topic)} --trigger-topic #{fetch(:google_fixity_request_topic)} --service-account #{fetch(:google_service_account)} --entry-point checkFixity --max-instances 100"
+        execute "cd cloud_fixity && gcloud beta functions deploy checkFixity#{fetch(:stage, 'production')} --runtime nodejs14 --set-env-vars BUCKET=#{fetch(:google_fixity_bucket)},FIXITY_STATUS_TOPIC=#{fetch(:google_fixity_status_topic)},FIXITY_REQUEST_TOPIC=#{fetch(:google_fixity_request_topic)} --trigger-topic #{fetch(:google_fixity_request_topic)} --service-account #{fetch(:google_service_account)} --entry-point checkFixity --max-instances 100"
       end
     end
   end

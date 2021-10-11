@@ -13,7 +13,7 @@ const bucket = jest.fn(() => ({ file }))
 beforeEach(() => {
   file.mockImplementation(name => ({
     createReadStream: () => {
-      return fs.createReadStream(`cloud_fixity/test/fixtures/${name}`)
+      return fs.createReadStream(`${__dirname}/fixtures/${name}`)
     }
   }))
 })
@@ -132,7 +132,7 @@ describe('when given a bad MD5', () => {
   beforeEach(() => {
     file.mockImplementation(name => ({
       createReadStream: () => {
-        return fs.createReadStream(`cloud_fixity/test/fixtures/${name}`)
+        return fs.createReadStream(`${__dirname}/fixtures/${name}`)
       }
     }))
   })
