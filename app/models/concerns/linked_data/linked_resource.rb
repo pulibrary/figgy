@@ -4,6 +4,35 @@
 # `#properties`
 module LinkedData
   class LinkedResource
+    # rubocop:disable all
+    def self.for(resource:)
+      if resource.is_a? Valkyrie::ID
+        begin
+          resource_node = ChangeSetPersister.default.query_service.find_by(id: resource)
+        rescue Valkyrie::Persistence::ObjectNotFoundError
+          resource_node = nil
+        end
+      else
+        resource_node = resource
+      end
+      return LinkedSimpleResource.new(resource: resource_node) if resource_node.try(:change_set) == "simple"
+      case resource_node
+      when EphemeraFolder
+        LinkedEphemeraFolder.new(resource: resource_node)
+      when EphemeraVocabulary
+        LinkedEphemeraVocabulary.new(resource: resource_node)
+      when EphemeraTerm
+        LinkedEphemeraTerm.new(resource: resource_node)
+      when ScannedResource || ScannedMap || VectorResource
+        LinkedImportedResource.new(resource: resource_node)
+      when NilClass
+        Literal.new(value: resource_node)
+      else
+        LinkedResource.new(resource: resource_node)
+      end
+    end
+    # rubocop:enable all
+
     attr_reader :resource
     delegate(
       :collections,
