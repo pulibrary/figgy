@@ -72,7 +72,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
     context "with Valkyrie::IDs for values" do
       let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, genre: ephemera_term.id) }
       it "exposes the values as JSON-LD Objects" do
-        expect(linked_ephemera_folder.genre).to eq(
+        expect(linked_ephemera_folder.as_jsonld["format"]).to eq(
           [{
             "@id" => "http://www.example.com/catalog/#{ephemera_term.id}",
             "@type" => "skos:Concept",

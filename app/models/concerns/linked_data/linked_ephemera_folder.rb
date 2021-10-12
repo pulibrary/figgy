@@ -118,7 +118,7 @@ module LinkedData
           label: "Folder #{folder_number}",
           is_part_of: ephemera_project.try(:title),
           coverage: try(:geo_subject),
-          dcterms_type: try(:genre),
+          format: try(:genre),
           origin_place: try(:geographic_origin),
           language: try(:language),
           subject: try(:subject),
