@@ -64,8 +64,8 @@ GIT
 
 GIT
   remote: https://github.com/samvera/valkyrie.git
-  revision: 43042a0256248185e9c4db88238686760ad1b358
-  branch: 837-persisters-should-error
+  revision: a90abb3ce941c4d62192f7828b864489372526f7
+  branch: rebased_file_descriptors
   specs:
     valkyrie (2.2.0)
       activemodel
