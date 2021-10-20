@@ -3,6 +3,8 @@ require "rails_helper"
 include FixtureFileUpload
 
 RSpec.describe ScannedMapsController, type: :controller do
+  include Rails.application.routes.url_helpers
+
   let(:user) { nil }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:persister) { adapter.persister }
@@ -360,6 +362,23 @@ RSpec.describe ScannedMapsController, type: :controller do
         expect(persisted.decorate.decorated_scanned_map_parents).to be_empty
         parent = query_service.find_by(id: parent_scanned_map.id)
         expect(Wayfinder.for(parent).members.map(&:id)).to eq [sibling_resource.id]
+      end
+    end
+  end
+
+  describe "#manifestv3" do
+    it "renders a IIIF Presentation 3.0 manifest" do
+      resource = FactoryBot.create_for_repository(:complete_open_scanned_map)
+      get :manifest_v3, params: { id: resource.id, format: :json }
+      manifest = JSON.parse(response.body)
+      expect(manifest["@context"]).to include("http://iiif.io/api/presentation/3/context.json")
+    end
+
+    context "when given a local identifier" do
+      it "still renders a IIIF Presentation 3.0 manifest" do
+        resource = FactoryBot.create_for_repository(:complete_open_scanned_map, local_identifier: "pk643fd004")
+        get :manifest_v3, params: { id: resource.local_identifier.first, format: :json }
+        expect(response).to redirect_to polymorphic_path([:manifest_v3, resource])
       end
     end
   end

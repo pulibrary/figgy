@@ -237,7 +237,7 @@ RSpec.describe PlaylistsController, type: :controller do
           expect(manifest_values["items"].length).to eq(2)
 
           first_canvas = manifest_values["items"].first
-          expect(first_canvas["label"]["@none"]).to eq ["Proxy Title"]
+          expect(first_canvas["label"]["eng"]).to eq ["Proxy Title"]
 
           expect(first_canvas).to include("items")
           expect(first_canvas["items"].length).to eq(1)

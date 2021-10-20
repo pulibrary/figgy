@@ -192,6 +192,7 @@ Metrics/MethodLength:
     - 'app/exporters/hathi/submission_information_package.rb'
     - 'app/resources/numismatics/issues/numismatics/issues_controller.rb'
     - 'spec/support/stub_aspace.rb'
+    - 'spec/services/manifest_builder_v3_spec.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'

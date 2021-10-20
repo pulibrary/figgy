@@ -265,7 +265,7 @@ RSpec.describe ManifestBuilder do
           expect(output["items"].length).to eq(3)
 
           first_canvas = output["items"].first
-          expect(first_canvas["label"]["@none"]).to eq ["Proxy Title"]
+          expect(first_canvas["label"]["eng"]).to eq ["Proxy Title"]
 
           expect(first_canvas).to include("items")
           expect(first_canvas["items"].length).to eq(1)
@@ -286,10 +286,10 @@ RSpec.describe ManifestBuilder do
           expect(last_annotation).to include("body")
           expect(last_annotation["body"]).to include("format" => "application/vnd.apple.mpegurl")
 
-          expect(output["structures"][0]["items"][0]["label"]).to eq("@none" => ["Proxy Title"])
+          expect(output["structures"][0]["items"][0]["label"]).to eq("eng" => ["Proxy Title"])
           expect(output["structures"][0]["items"][0]["items"][0]["id"].split("#").first).to eq first_canvas["id"]
-          expect(output["structures"][0]["items"][1]["items"][0]["label"]).to eq("@none" => ["Proxy Title2"])
-          expect(output["structures"][0]["items"][2]["label"]).to eq("@none" => ["Proxy Title3"])
+          expect(output["structures"][0]["items"][1]["items"][0]["label"]).to eq("eng" => ["Proxy Title2"])
+          expect(output["structures"][0]["items"][2]["label"]).to eq("eng" => ["Proxy Title3"])
         end
 
         context "when an authorization token is used to access the Playlist Manifest" do
@@ -364,7 +364,7 @@ RSpec.describe ManifestBuilder do
             expect(annotations.length).to eq(1)
 
             body = annotations.last["body"]
-            expect(body["label"]).to eq("@none" => ["audio_file.wav"])
+            expect(body["label"]).to eq("eng" => ["audio_file.wav"])
 
             expect(output).to include("posterCanvas")
             poster_canvas = output["posterCanvas"]
@@ -749,32 +749,32 @@ RSpec.describe ManifestBuilder do
         expect(output["items"].length).to eq 2
 
         first_canvas = output["items"].first
-        expect(first_canvas).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
+        expect(first_canvas).to include "label" => { "eng" => ["32101047382401_1_pm.wav"] }
 
         last_canvas = output["items"].last
-        expect(last_canvas).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
+        expect(last_canvas).to include "label" => { "eng" => ["32101047382401_1_pm.wav"] }
 
         expect(output).to include "structures"
         ranges = output["structures"]
         expect(ranges.length).to eq 2
 
         expect(ranges.first["items"].length).to eq 1
-        expect(ranges.first["items"].first).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
+        expect(ranges.first["items"].first).to include "label" => { "eng" => ["32101047382401_1_pm.wav"] }
         child_ranges = ranges.first["items"]
         expect(child_ranges.length).to eq 1
         expect(child_ranges.first).to include "items"
         range_canvases = child_ranges.first["items"]
         expect(range_canvases.length).to eq 1
-        expect(range_canvases.first).to include "label" => [{ "@none" => ["32101047382401_1_pm.wav"] }]
+        expect(range_canvases.first).to include "label" => [{ "eng" => ["32101047382401_1_pm.wav"] }]
 
         expect(ranges.last["items"].length).to eq 1
-        expect(ranges.last["items"].first).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
+        expect(ranges.last["items"].first).to include "label" => { "eng" => ["32101047382401_1_pm.wav"] }
         child_ranges = ranges.last["items"]
         expect(child_ranges.length).to eq 1
         expect(child_ranges.first).to include "items"
         range_canvases = child_ranges.first["items"]
         expect(range_canvases.length).to eq 1
-        expect(range_canvases.first).to include "label" => [{ "@none" => ["32101047382401_1_pm.wav"] }]
+        expect(range_canvases.first).to include "label" => [{ "eng" => ["32101047382401_1_pm.wav"] }]
       end
     end
 
@@ -801,7 +801,7 @@ RSpec.describe ManifestBuilder do
         expect(output["type"]).to eq "Manifest"
         expect(output["items"].length).to eq 2
         first_item = output["items"].first
-        expect(first_item).to include "label" => { "@none" => ["32101047382401_1_pm.wav"] }
+        expect(first_item).to include "label" => { "eng" => ["32101047382401_1_pm.wav"] }
 
         expect(output).to include("posterCanvas")
         poster_canvas = output["posterCanvas"]
@@ -834,12 +834,12 @@ RSpec.describe ManifestBuilder do
         expect(output["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
         expect(output["type"]).to eq "Manifest"
         expect(output["items"].length).to eq 2
-        expect(output["items"].first).to include "label" => { "@none" => ["32101047382401_1"] }
-        expect(output["items"].last).to include "label" => { "@none" => ["32101047382401_2"] }
+        expect(output["items"].first).to include "label" => { "eng" => ["32101047382401_1"] }
+        expect(output["items"].last).to include "label" => { "eng" => ["32101047382401_2"] }
 
         expect(output["structures"].length).to eq 2
-        expect(output["structures"].first).to include "label" => { "@none" => ["32101047382401_1"] }
-        expect(output["structures"].last).to include "label" => { "@none" => ["32101047382401_2"] }
+        expect(output["structures"].first).to include "label" => { "eng" => ["32101047382401_1"] }
+        expect(output["structures"].last).to include "label" => { "eng" => ["32101047382401_2"] }
       end
     end
 
@@ -867,7 +867,7 @@ RSpec.describe ManifestBuilder do
         output = manifest_builder.build
         # A default table of contents should display
         expect(output["structures"][0]["items"][0]["id"]).to include "#t="
-        expect(output["structures"][0]["label"]["@none"]).to eq ["32101047382401_1_pm.wav"]
+        expect(output["structures"][0]["label"]["eng"]).to eq ["32101047382401_1_pm.wav"]
       end
     end
   end
