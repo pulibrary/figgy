@@ -151,6 +151,7 @@ Metrics/MethodLength:
     - 'app/services/bulk_ingest_service.rb'
     - 'app/controllers/file_sets_controller.rb'
     - 'app/services/folder_json_importer.rb'
+    - 'app/services/manifest_builder/nav_place_builder.rb'
     - 'app/models/ability.rb'
     - 'app/models/controlled_vocabulary.rb'
     - 'app/resources/scanned_resources/simple_change_set.rb'

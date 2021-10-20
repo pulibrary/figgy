@@ -586,8 +586,8 @@ RSpec.describe ManifestBuilder do
     it "builds a IIIF document" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
-      expect(output["description"]).to eq ["Test Description"]
-      expect(output["sequences"][0]["canvases"][0]["images"].length).to eq 1
+      expect(output["summary"]["@none"]).to eq ["Test Description"]
+      expect(output["items"].select { |i| i["type"] == "Canvas" }.count).to eq 1
     end
   end
 
@@ -600,10 +600,10 @@ RSpec.describe ManifestBuilder do
     it "builds a IIIF document" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
-      expect(output["description"]).to eq ["Test Description"]
-      expect(output["@type"]).to eq "sc:Manifest"
-      expect(output["manifests"]).to eq nil
-      expect(output["sequences"].first["canvases"].length).to eq 1
+      expect(output["summary"]["@none"]).to eq ["Test Description"]
+      expect(output["type"]).to eq "Manifest"
+      expect(output["manifests"]).to be_nil
+      expect(output["items"].select { |i| i["type"] == "Canvas" }.count).to eq 1
     end
   end
 
@@ -618,13 +618,10 @@ RSpec.describe ManifestBuilder do
     it "builds a IIIF collection" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
-      expect(output["description"]).to eq ["Test Description"]
-      expect(output["@type"]).to eq "sc:Collection"
-      expect(output["viewingHint"]).to eq "multi-part"
+      expect(output["summary"]["@none"]).to eq ["Test Description"]
+      expect(output["type"]).to eq "Collection"
       expect(output["manifests"].length).to eq 1
-      expect(output["manifests"][0]["@id"]).to eq "http://www.example.com/concern/scanned_maps/#{volume1.id}/manifest"
-      expect(output["manifests"][0]["viewingHint"]).to be_nil
-      expect(output["manifests"][0]["metadata"]).to be_nil
+      expect(output["manifests"][0]["id"]).to eq "http://www.example.com/concern/scanned_maps/#{volume1.id}/manifest"
     end
   end
 

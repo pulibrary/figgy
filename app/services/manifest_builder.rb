@@ -452,6 +452,12 @@ class ManifestBuilder
       @leaf_nodes ||= members.select { |x| x.instance_of?(FileSet) && geo_image?(x) }
     end
 
+    # Scanned Maps and MapSets don't have structure, but might in the future.
+    # TODO: Add correct V3 structure and ranges
+    def logical_structure
+      []
+    end
+
     private
 
       def geo_image?(member)
@@ -797,7 +803,7 @@ class ManifestBuilder
     # @return [IIIFManifest]
     def manifest
       @manifest ||= begin
-        if audio_collection? || recording?
+        if audio_collection? || recording? || scanned_map?
           IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocatorV3).to_h
         # If not multi-part and a collection, it's not a MVW
         elsif @resource.viewing_hint.blank? && @resource.collection?
@@ -827,5 +833,9 @@ class ManifestBuilder
       return false unless @resource.resource.respond_to?(:change_set)
 
       ChangeSet.for(@resource.resource).is_a?(ArchivalMediaCollectionChangeSet)
+    end
+
+    def scanned_map?
+      @resource.resource.is_a? ScannedMap
     end
 end

@@ -14,9 +14,29 @@ class ManifestBuilder
           structure_builder,
           see_also_builder,
           license_builder,
+          thumbnail_builder,
+          rendering_builder,
           logo_builder,
+          iiif_search_builder,
+          media_sequence_builder,
+          nav_place_builder,
           composite_builder: composite_builder
         )
+      end
+
+      def iiif_search_builder
+        ManifestBuilder::IIIFSearchBuilder
+      end
+
+      def media_sequence_builder
+        ManifestBuilder::MediaSequenceBuilder
+      end
+
+      ##
+      # Class accessor for the rendering builder
+      # @return [Class]
+      def rendering_builder
+        ManifestBuilder::RenderingBuilder
       end
 
       def structure_builder
@@ -25,6 +45,12 @@ class ManifestBuilder
           canvas_builder_factory: canvas_builder,
           iiif_range_factory: iiif_range_factory
         )
+      end
+
+      ##
+      # Builder to add thumbnails to manifests.
+      def thumbnail_builder
+        ::ManifestBuilder::ThumbnailBuilder
       end
 
       ##
@@ -46,6 +72,13 @@ class ManifestBuilder
       # @return [Class]
       def logo_builder
         ManifestBuilder::LogoBuilder
+      end
+
+      ##
+      # Class accessor for the navPlace builder
+      # @return [Class]
+      def nav_place_builder
+        ManifestBuilder::NavPlaceBuilder
       end
 
       ##
