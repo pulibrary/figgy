@@ -98,9 +98,6 @@ describe OrangelightDocument do
         output = MultiJson.load(builder.to_json, symbolize_keys: true)
         holding = JSON.parse(output[:holdings_1display]).first.last
 
-        # Removed fields
-        expect(output[:issue_number_s]).to be_nil
-
         # Fields to capitalize
         expect(output[:issue_metal_s]).to eq ["Copper"]
         expect(output[:issue_era_s]).to eq ["Uncertain"]
@@ -145,6 +142,7 @@ describe OrangelightDocument do
         expect(output[:issue_object_type_s]).to eq ["coin"]
         expect(output[:issue_denomination_s]).to eq ["1/2 Penny"]
         expect(output[:issue_denomination_sort]).to eq "1/2 Penny"
+        expect(output[:issue_number_s]).to eq "1"
         expect(output[:issue_metal_sort]).to eq "copper"
         expect(output[:issue_shape_s]).to eq ["round"]
         expect(output[:issue_color_s]).to eq ["green"]
