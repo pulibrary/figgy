@@ -158,5 +158,13 @@ module Numismatics
     def subjects
       numismatic_subject.map { |s| s.decorate.title }
     end
+
+    def obverse_description
+      [initial_capital(obverse_figure), obverse_part, obverse_orientation, obverse_figure_description].select(&:present?).join(", ")
+    end
+
+    def reverse_description
+      [initial_capital(reverse_figure), reverse_part, obverse_orientation, obverse_figure_description].select(&:present?).join(", ")
+    end
   end
 end

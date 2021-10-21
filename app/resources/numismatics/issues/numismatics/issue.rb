@@ -84,5 +84,10 @@ module Numismatics
     def title
       ["Issue: #{issue_number}"]
     end
+
+    def initial_capital(value)
+      return unless value
+      return value.map(&:upcase_first) if value.is_a? Array
+    end
   end
 end

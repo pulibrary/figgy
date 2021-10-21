@@ -158,6 +158,7 @@ describe OrangelightDocument do
         expect(output[:issue_region_s]).to eq ["region"]
         expect(output[:issue_place_sort]).to eq "city, state, region"
         expect(output[:issue_obverse_symbol_s]).to eq ["cornucopia"]
+        expect(output[:issue_obverse_description_s]).to eq "Bust, standing, right, Harp at left side, 5 strings."
         expect(output[:issue_obverse_part_s]).to eq ["standing"]
         expect(output[:issue_obverse_orientation_s]).to eq ["right"]
         expect(output[:issue_obverse_figure_description_s]).to eq ["Harp at left side, 5 strings."]
@@ -165,6 +166,7 @@ describe OrangelightDocument do
         expect(output[:issue_obverse_legend_s]).to eq ["GEORGIUS•DEI•GRATIA•REX•"]
         expect(output[:issue_obverse_attributes_s]).to eq ["attribute name, attribute description"]
         expect(output[:issue_reverse_symbol_s]).to eq ["goat head"]
+        expect(output[:issue_reverse_description_s]).to eq "Emperor and Virgin, seated, right, Harp at left side, 5 strings."
         expect(output[:issue_reverse_part_s]).to eq ["seated"]
         expect(output[:issue_reverse_orientation_s]).to eq ["left"]
         expect(output[:issue_reverse_figure_description_s]).to eq ["Harp at right side, 11 strings. Right arm holding up a palm-branch"]
