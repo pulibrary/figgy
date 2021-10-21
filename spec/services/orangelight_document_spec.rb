@@ -137,7 +137,7 @@ describe OrangelightDocument do
         expect(output[:pub_date_start_sort]).to eq(-91)
         expect(output[:pub_date_end_sort]).to eq(-41)
         expect(output[:numismatic_collection_s]).to eq ["Firestone"]
-        expect(output[:numismatic_accession_s]).to eq ["1: 1939-01-01 name1 name2"]
+        expect(output[:numismatic_accession_s]).to eq ["Accession number: 1, 1939-01-01, Gift of: name1 name2"]
         expect(output[:numismatic_provenance_s]).to eq ["name1 name2; 12/04/1999; note"]
         expect(output[:issue_object_type_s]).to eq ["coin"]
         expect(output[:issue_denomination_s]).to eq ["1/2 Penny"]

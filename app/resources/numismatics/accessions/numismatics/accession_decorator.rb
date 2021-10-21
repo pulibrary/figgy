@@ -62,7 +62,9 @@ module Numismatics
     end
 
     def indexed_label
-      "#{accession_number}: #{formatted_date} #{from_label}"
+      accession_number_label = "Accession number: " if accession_number
+      gift_of_label = ", Gift of:" if from_label
+      "#{accession_number_label}#{accession_number}, #{formatted_date}#{gift_of_label} #{from_label}"
     end
 
     def formatted_date
