@@ -22,10 +22,10 @@ class FindHighestValue
 
   def highest_value_query(property)
     <<-SQL
-      select metadata->'#{property}'->0 as highest
+      select CAST(metadata->'#{property}'->>0 as integer) as highest
       from orm_resources
       where metadata->'#{property}'->0 is not null
-      order by metadata->'#{property}'->0 desc limit 1
+      order by CAST(metadata->'#{property}'->>0 AS integer) desc limit 1
     SQL
   end
 end

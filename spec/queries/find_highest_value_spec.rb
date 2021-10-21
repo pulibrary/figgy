@@ -16,5 +16,12 @@ RSpec.describe FindHighestValue do
       output = query.find_highest_value(property: :coin_number)
       expect(output).to eq(3)
     end
+    it "can handle there being string values" do
+      FactoryBot.create_for_repository(:coin, coin_number: "11")
+
+      output = query.find_highest_value(property: :coin_number)
+
+      expect(output).to eq(11)
+    end
   end
 end
