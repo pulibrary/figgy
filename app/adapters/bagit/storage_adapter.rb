@@ -24,7 +24,8 @@ module Bagit
         FileUtils.cp(old_path, new_path)
         output_file = find_by(id: Valkyrie::ID.new("bag://#{new_path.relative_path_from(base_path)}"))
         create_manifests(output_file, original_filename, resource)
-        output_file
+        output_file.io.close
+        find_by(id: Valkyrie::ID.new("bag://#{new_path.relative_path_from(base_path)}"))
       end
 
       def create_manifests(file, original_filename, resource)
@@ -64,7 +65,7 @@ module Bagit
       end
 
       def find_by(id:)
-        Valkyrie::StorageAdapter::File.new(id: Valkyrie::ID.new(id.to_s), io: ::File.open(file_path(id), "rb"))
+        Valkyrie::StorageAdapter::File.new(id: Valkyrie::ID.new(id.to_s), io: ::Valkyrie::Storage::Disk::LazyFile.open(file_path(id), "rb"))
       rescue Errno::ENOENT
         raise Valkyrie::StorageAdapter::FileNotFound
       end
