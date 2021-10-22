@@ -33,6 +33,18 @@ class GeoCoverage
     "northlimit=#{n}; eastlimit=#{e}; southlimit=#{s}; westlimit=#{w}; units=degrees; projection=EPSG:4326"
   end
 
+  def to_coordinates
+    [
+      [
+        [e.to_f, n.to_f],
+        [w.to_f, n.to_f],
+        [w.to_f, s.to_f],
+        [e.to_f, s.to_f],
+        [e.to_f, n.to_f]
+      ]
+    ]
+  end
+
   private
 
     def format_coordinate(c)

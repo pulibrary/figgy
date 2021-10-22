@@ -191,6 +191,7 @@ Metrics/MethodLength:
     - 'app/helpers/thumbnail_helper.rb'
     - 'app/exporters/hathi/submission_information_package.rb'
     - 'app/resources/numismatics/issues/numismatics/issues_controller.rb'
+    - 'app/services/manifest_builder_v3/nav_place_builder.rb'
     - 'spec/support/stub_aspace.rb'
     - 'spec/services/manifest_builder_v3_spec.rb'
 Metrics/ModuleLength:

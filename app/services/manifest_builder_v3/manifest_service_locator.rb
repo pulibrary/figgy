@@ -18,6 +18,7 @@ class ManifestBuilderV3
           thumbnail_builder,
           rendering_builder,
           iiif_search_builder,
+          nav_place_builder,
           composite_builder: composite_builder
         )
       end
@@ -89,6 +90,13 @@ class ManifestBuilderV3
       # @return [Class]
       def rendering_builder
         ManifestBuilderV3::RenderingBuilder
+      end
+
+      ##
+      # Class accessor for the navPlace builder
+      # @return [Class]
+      def nav_place_builder
+        ManifestBuilderV3::NavPlaceBuilder
       end
     end
   end

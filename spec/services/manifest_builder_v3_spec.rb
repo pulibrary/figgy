@@ -37,9 +37,11 @@ RSpec.describe ManifestBuilderV3 do
     context "when given a scanned map" do
       let(:ocr_language) { "eng" }
       let(:title) { RDF::Literal.new("testin otsikko", language: :fin) }
+      let(:coverage) { GeoCoverage.new(43.039, -69.856, 42.943, -71.032).to_s }
       let(:resource) do
         FactoryBot.create_for_repository(:scanned_map,
                                          title: title,
+                                         coverage: coverage,
                                          label: "test label",
                                          actor: "test person",
                                          sort_title: "test title2",
@@ -66,6 +68,7 @@ RSpec.describe ManifestBuilderV3 do
         change_set.validate(logical_structure: logical_structure(file_set_id), start_canvas: file_set_id)
         change_set_persister.save(change_set: change_set)
       end
+
       it "builds a IIIF Presentation 3 document" do
         output = manifest_builder.build
         expect(output).to be_kind_of Hash
@@ -90,6 +93,9 @@ RSpec.describe ManifestBuilderV3 do
 
         # thumbnail
         expect(output["thumbnail"][0]["type"]).to eq "Image"
+
+        # navPlace
+        expect(output["navPlace"]["type"]).to eq "FeatureCollection"
       end
     end
 
