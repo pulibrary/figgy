@@ -267,7 +267,14 @@ class Ability
   end
 
   def downloadable?(obj)
-    obj.decorate.downloadable? || authorized_by_token?(obj) || (!current_user.nil? && (current_user.staff? || current_user.admin?))
+    obj.decorate.downloadable? || authorized_by_token?(obj) || (!current_user.nil? && (current_user.staff? || current_user.admin?)) || authorized_downloadable_file_set?(obj)
+  end
+
+  def authorized_downloadable_file_set?(obj)
+    return false unless obj.is_a?(FileSet)
+    # Zip files can be downloaded if the user is authorized by restricted
+    # collection viewership.
+    obj.try(:mime_type).try(:first) == "application/zip" && restricted_collection_viewer?(parent_or_self?(obj))
   end
 
   def parent_or_self?(obj)

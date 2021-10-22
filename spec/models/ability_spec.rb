@@ -5,6 +5,8 @@ require "cancan/matchers"
 describe Ability do
   include ActiveJob::TestHelper
   subject { described_class.new(current_user) }
+  let(:zip_file) { fixture_file_upload("files/vector/shapefile.zip", "application/zip") }
+  let(:zip_file_2) { fixture_file_upload("files/vector/shapefile.zip", "application/zip") }
   let(:page_file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:page_file_2) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:page_file_3) { fixture_file_upload("files/example.tif", "image/tiff") }
@@ -175,6 +177,38 @@ describe Ability do
   end
   let(:reading_room_collection_restricted_viewer_scanned_resource) do
     FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [page_file_2], member_of_collection_ids: [restricted_viewer_collection.id])
+  end
+  let(:reading_room_collection_restricted_viewer_zip_file) do
+    FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [zip_file], member_of_collection_ids: [restricted_viewer_collection.id])
+  end
+  let(:reading_room_zip_file) do
+    Wayfinder.for(reading_room_collection_restricted_viewer_zip_file).file_sets.first
+  end
+  let(:reading_room_zip_file_with_metadata) do
+    DownloadsController::FileWithMetadata.new(
+      id: reading_room_zip_file.primary_file.id.to_s,
+      file: "",
+      mime_type: reading_room_zip_file.primary_file.mime_type,
+      original_name: "file.zip",
+      file_set_id: reading_room_zip_file.id.to_s,
+      file_metadata: reading_room_zip_file.primary_file
+    )
+  end
+  let(:reading_room_ineligible_collection_restricted_viewer_zip_file) do
+    FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [zip_file_2], member_of_collection_ids: [ineligible_restricted_viewer_collection.id])
+  end
+  let(:reading_room_ineligible_zip_file) do
+    Wayfinder.for(reading_room_ineligible_collection_restricted_viewer_zip_file).file_sets.first
+  end
+  let(:reading_room_ineligible_zip_file_with_metadata) do
+    DownloadsController::FileWithMetadata.new(
+      id: reading_room_ineligible_zip_file.primary_file.id.to_s,
+      file: "",
+      mime_type: reading_room_ineligible_zip_file.primary_file.mime_type,
+      original_name: "file.zip",
+      file_set_id: reading_room_ineligible_zip_file.id.to_s,
+      file_metadata: reading_room_ineligible_zip_file.primary_file
+    )
   end
   let(:reading_room_collection_restricted_viewer_recording) do
     parent = FactoryBot.create_for_repository(:reading_room_scanned_resource, member_of_collection_ids: [restricted_viewer_collection.id])
@@ -533,6 +567,10 @@ describe Ability do
       is_expected.not_to be_able_to(:download, reading_room_collection_restricted_viewer_scanned_resource.decorate.members.first)
 
       is_expected.to be_able_to(:download, reading_room_audio_file_partial)
+      # Able to download zip files I'm a collection restricted viewer for.
+      is_expected.to be_able_to(:download, reading_room_zip_file_with_metadata)
+      # Unable to download zip files I'm not a collection restricted viewer for.
+      is_expected.not_to be_able_to(:download, reading_room_ineligible_zip_file_with_metadata)
     }
 
     context "when accessing figgy via a campus IP" do
