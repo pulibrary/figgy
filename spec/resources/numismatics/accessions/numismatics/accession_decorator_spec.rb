@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe Numismatics::AccessionDecorator do
   subject(:decorator) { described_class.new(accession) }
-  let(:accession) { FactoryBot.create_for_repository(:numismatic_accession, numismatic_citation: numismatic_citation, firm_id: numismatic_firm.id, person_id: numismatic_person.id) }
+  let(:accession) { FactoryBot.create_for_repository(:numismatic_accession, numismatic_citation: numismatic_citation, firm_id: numismatic_firm.id, type: "gift", person_id: numismatic_person.id) }
   let(:numismatic_citation) { Numismatics::Citation.new(part: "citation part", number: "citation number", numismatic_reference_id: [reference.id]) }
   let(:numismatic_person) { FactoryBot.create_for_repository(:numismatic_person) }
   let(:numismatic_firm) { FactoryBot.create_for_repository(:numismatic_firm) }
