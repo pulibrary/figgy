@@ -36,7 +36,7 @@ RSpec.describe Numismatics::AccessionDecorator do
 
   describe "#indexed_label" do
     it "renders a label for use in orangelight indexing" do
-      expect(decorator.indexed_label).to eq("1: 2001-01-01 name1 name2/firm name")
+      expect(decorator.indexed_label).to eq("Accession number: 1, 2001-01-01, Gift of: name1 name2/firm name")
     end
   end
 end
