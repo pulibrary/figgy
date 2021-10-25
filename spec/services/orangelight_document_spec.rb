@@ -16,11 +16,13 @@ describe OrangelightDocument do
       subject(:builder) { described_class.new(coin) }
       let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
       let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
+      let(:reference_coin) { FactoryBot.create_for_repository(:numismatic_reference, title: "Coin Test Reference", short_title: "Coin short-title") }
       let(:person) { FactoryBot.create_for_repository(:numismatic_person) }
       let(:numismatic_artist) { Numismatics::Artist.new(person_id: person.id, signature: "artist signature", role: "artist role", side: "artist side") }
       let(:numismatic_subject) { Numismatics::Subject.new(type: "Other Person", subject: "Athena") }
       let(:numismatic_attribute) { Numismatics::Attribute.new(description: "attribute description", name: "attribute name") }
       let(:numismatic_citation) { Numismatics::Citation.new(part: "citation part", number: "citation number", numismatic_reference_id: reference.id) }
+      let(:numismatic_citation_coin) { Numismatics::Citation.new(part: "coin citation part", number: "coin citation number", numismatic_reference_id: reference_coin.id) }
       let(:numismatic_monogram1) { FactoryBot.create_for_repository(:numismatic_monogram, title: "Alexander", thumbnail_id: "alexander-url") }
       let(:numismatic_monogram2) { FactoryBot.create_for_repository(:numismatic_monogram, title: "Zeus", thumbnail_id: "zeus-url") }
       let(:artist) { FactoryBot.create_for_repository(:numismatic_artist) }
@@ -43,6 +45,7 @@ describe OrangelightDocument do
                                          find_description: "at join of carcares and w. cavea surface",
                                          numismatic_accession_id: numismatic_accession.id,
                                          numismatic_collection: "Firestone",
+                                         numismatic_citation: numismatic_citation_coin,
                                          provenance: numismatic_provenance,
                                          die_axis: "6",
                                          size: "27",
@@ -180,6 +183,8 @@ describe OrangelightDocument do
         expect(output[:issue_artists_sort]).to eq "name1 name2, artist signature"
         expect(output[:issue_monogram_title_s]).to contain_exactly("Alexander", "Zeus")
         expect(output[:issue_date_s]).to eq ["-91 to -41"]
+        expect(output[:coin_references_s]).to eq ["Coin short-title coin citation part coin citation number"]
+        expect(output[:coin_references_sort]).to eq "Coin short-title coin citation part coin citation number"
       end
     end
 
