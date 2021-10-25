@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe Numismatics::AccessionDecorator do
   subject(:decorator) { described_class.new(accession) }
-  let(:accession) { FactoryBot.create_for_repository(:numismatic_accession, numismatic_citation: numismatic_citation, firm_id: numismatic_firm.id, person_id: numismatic_person.id) }
+  let(:accession) { FactoryBot.create_for_repository(:numismatic_accession, numismatic_citation: numismatic_citation, firm_id: numismatic_firm.id, type: "gift", person_id: numismatic_person.id) }
   let(:numismatic_citation) { Numismatics::Citation.new(part: "citation part", number: "citation number", numismatic_reference_id: [reference.id]) }
   let(:numismatic_person) { FactoryBot.create_for_repository(:numismatic_person) }
   let(:numismatic_firm) { FactoryBot.create_for_repository(:numismatic_firm) }
@@ -36,7 +36,14 @@ RSpec.describe Numismatics::AccessionDecorator do
 
   describe "#indexed_label" do
     it "renders a label for use in orangelight indexing" do
-      expect(decorator.indexed_label).to eq("1: 2001-01-01 name1 name2/firm name")
+      expect(decorator.indexed_label).to eq("Accession number: 1, 2001-01-01, Gift of: name1 name2/firm name")
+    end
+  end
+
+  context "when accession is not a gift" do
+    let(:accession) { FactoryBot.create_for_repository(:numismatic_accession, numismatic_citation: numismatic_citation, firm_id: numismatic_firm.id, person_id: numismatic_person.id, type: "purchase") }
+    it "renders a label without a gift of text" do
+      expect(decorator.indexed_label).to eq("Accession number: 1, 2001-01-01, name1 name2/firm name")
     end
   end
 end

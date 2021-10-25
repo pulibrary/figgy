@@ -138,6 +138,7 @@ Metrics/LineLength:
     - 'spec/helpers/application_helper_spec.rb'
     - 'spec/resources/collections/collections_controller_spec.rb'
     - 'spec/models/oai/figgy/valkyrie_provider_model_spec.rb'
+    - 'spec/resources/numismatics/accessions/numismatics/accession_decorator_spec.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
