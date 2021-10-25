@@ -575,19 +575,28 @@ RSpec.describe ManifestBuilder do
   context "when given a scanned map" do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_map.id)) }
     let(:scanned_map) do
-      FactoryBot.create_for_repository(:scanned_map, description: "Test Description")
+      FactoryBot.create_for_repository(:scanned_map,
+                                       description: "Test Description",
+                                       references: { "http://www.jstor.org/stable/1797655": ["www.jstor.org"] }.to_json,
+                                       electronic_locations: ["@id": "http://arks.princeton.edu/ark:/88435/1234567"])
     end
     let(:change_set) { ScannedMapChangeSet.new(scanned_map, files: [file]) }
+
     before do
       output = change_set_persister.save(change_set: change_set)
       change_set = ScannedMapChangeSet.new(output)
       change_set_persister.save(change_set: change_set)
     end
+
     it "builds a IIIF document" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
       expect(output["description"]).to eq ["Test Description"]
       expect(output["sequences"][0]["canvases"][0]["images"].length).to eq 1
+      expect(output["metadata"].find { |m| m["label"] == "Gbl Suppressed Override" }).to be nil
+      expect(output["metadata"].find { |m| m["label"] == "Rendered Coverage" }).to be nil
+      expect(output["metadata"].find { |m| m["label"] == "Electronic Locations" }).to be nil
+      expect(output["metadata"].find { |m| m["label"] == "Rendered Links" }).to be nil
     end
   end
 
