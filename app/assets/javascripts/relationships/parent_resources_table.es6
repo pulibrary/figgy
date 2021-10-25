@@ -55,6 +55,7 @@ export default class ParentResourcesTable extends RelatedResourcesTable {
           on_success: $this.reloadTable
         });
       }
+      event.preventDefault()
     });
   }
 
@@ -86,6 +87,7 @@ export default class ParentResourcesTable extends RelatedResourcesTable {
         on_error: $this.handleError,
         on_success: $this.reloadTable
       })
+      event.preventDefault()
     });
   }
 }

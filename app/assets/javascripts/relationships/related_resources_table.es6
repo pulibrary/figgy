@@ -90,6 +90,7 @@ export default class RelatedResourcesTable {
           on_success: $this.reloadTable
         });
       }
+      event.preventDefault()
     });
   }
 
@@ -123,6 +124,7 @@ export default class RelatedResourcesTable {
         on_error: $this.handleError,
         on_success: $this.reloadTable
       });
+      event.preventDefault()
     });
   }
 

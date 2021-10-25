@@ -64,6 +64,7 @@ export default class MemberResourcesTable extends RelatedResourcesTable {
           on_success: $this.reloadTable
         });
       }
+      event.preventDefault()
     });
   }
 }
