@@ -131,9 +131,9 @@ describe OrangelightDocument do
         expect(output[:find_number_s]).to eq ["2237"]
         expect(output[:find_description_s]).to eq ["at join of carcares and w. cavea surface"]
         expect(output[:die_axis_s]).to eq ["6"]
-        expect(output[:size_s]).to eq ["27"]
+        expect(output[:size_s]).to eq ["27 in mm"]
         expect(output[:technique_s]).to eq ["Cast"]
-        expect(output[:weight_s]).to eq ["8.26"]
+        expect(output[:weight_s]).to eq ["8.26 in grams"]
         expect(output[:pub_date_start_sort]).to eq(-91)
         expect(output[:pub_date_end_sort]).to eq(-41)
         expect(output[:numismatic_collection_s]).to eq ["Firestone"]
