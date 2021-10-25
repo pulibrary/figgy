@@ -87,5 +87,21 @@ module Numismatics
     def state
       super.first
     end
+
+    def weight_label
+      ["#{weight} in grams"] if weight
+    end
+
+    def size_label
+      ["#{size} in mm"] if size
+    end
+
+    def weight
+      Array.wrap(super).first
+    end
+
+    def size
+      Array.wrap(super).first
+    end
   end
 end
