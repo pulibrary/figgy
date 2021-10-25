@@ -63,8 +63,8 @@ module Numismatics
 
     def indexed_label
       accession_number_label = "Accession number: " if accession_number
-      gift_of_label = from_label && gift? ? ", Gift of:" : from_label
-      "#{accession_number_label}#{accession_number}, #{formatted_date}#{gift_of_label} #{from_label}"
+      gift_of_label = "Gift of: " if from_label && gift?
+      ["#{accession_number_label}#{accession_number}", formatted_date, "#{gift_of_label}#{from_label}"].compact.select(&:present?).join(", ")
     end
 
     def formatted_date

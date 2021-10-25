@@ -39,4 +39,11 @@ RSpec.describe Numismatics::AccessionDecorator do
       expect(decorator.indexed_label).to eq("Accession number: 1, 2001-01-01, Gift of: name1 name2/firm name")
     end
   end
+
+  context "when accession is not a gift" do
+    let(:accession) { FactoryBot.create_for_repository(:numismatic_accession, numismatic_citation: numismatic_citation, firm_id: numismatic_firm.id, person_id: numismatic_person.id, type: "purchase") }
+    it "renders a label without a gift of text" do
+      expect(decorator.indexed_label).to eq("Accession number: 1, 2001-01-01, name1 name2/firm name")
+    end
+  end
 end
