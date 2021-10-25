@@ -11,15 +11,18 @@ end
 
 desc "Wipes SOLR and reindexes everything."
 task wipe_and_reindex: :environment do
-  Reindexer.reindex_all(wipe: true, solr_adapter: reindexer_solr_adapter)
+  batch_size = ENV["BATCH_SIZE"] || 500
+  Reindexer.reindex_all(wipe: true, solr_adapter: reindexer_solr_adapter, batch_size: batch_size.to_i)
 end
 desc "Reindexes everything without wiping Solr."
 task reindex: :environment do
-  Reindexer.reindex_all(wipe: false, solr_adapter: reindexer_solr_adapter)
+  batch_size = ENV["BATCH_SIZE"] || 500
+  Reindexer.reindex_all(wipe: false, solr_adapter: reindexer_solr_adapter, batch_size: batch_size.to_i)
 end
 desc "Reindexes everything but FileSets without wiping Solr."
 task reindex_works: :environment do
-  Reindexer.reindex_works(wipe: false, solr_adapter: reindexer_solr_adapter)
+  batch_size = ENV["BATCH_SIZE"] || 500
+  Reindexer.reindex_works(wipe: false, solr_adapter: reindexer_solr_adapter, batch_size: batch_size.to_i)
 end
 
 namespace :geoblacklight do
