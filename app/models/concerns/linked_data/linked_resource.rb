@@ -16,6 +16,9 @@ module LinkedData
         resource_node = resource
       end
       return LinkedSimpleResource.new(resource: resource_node) if resource_node.try(:change_set) == "simple"
+      # Ideal replacement: resource_node.linked_resource
+      # This is called Replace Conditional with Polymorphism:
+      # https://refactoring.guru/replace-conditional-with-polymorphism
       case resource_node
       when EphemeraFolder
         LinkedEphemeraFolder.new(resource: resource_node)
