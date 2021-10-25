@@ -370,7 +370,7 @@ class Ability
     # @param obj [Resource]
     # @return [Boolean]
     def private?(obj)
-      obj.read_groups.empty?
+      obj.decorate.try(:private_visibility?)
     end
 
     # Determines whether a resource's parent is readable because of an auth token

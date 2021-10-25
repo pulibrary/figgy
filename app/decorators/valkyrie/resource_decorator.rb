@@ -194,6 +194,11 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     workflow_class.ark_mint_states.include? Array.wrap(state).first&.underscore
   end
 
+  # If no read_groups then only Figgy admins can see this item.
+  def private_visibility?
+    try(:read_groups).blank?
+  end
+
   def workflow_class
     @workflow_class ||=
       begin
