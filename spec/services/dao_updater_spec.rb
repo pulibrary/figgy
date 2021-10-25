@@ -16,5 +16,17 @@ RSpec.describe DaoUpdater do
         updater.update!
       end
     end
+    context "when the resource is private" do
+      it "does nothing" do
+        resource = FactoryBot.create_for_repository(:complete_private_scanned_resource)
+        change_set_persister = instance_double(ChangeSetPersister)
+
+        updater = described_class.new(change_set: ChangeSet.for(resource), change_set_persister: change_set_persister)
+
+        # We haven't stubbed ASpace, so webmock will error if it tries to do
+        # something.
+        updater.update!
+      end
+    end
   end
 end

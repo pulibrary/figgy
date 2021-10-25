@@ -8,13 +8,18 @@ class DaoUpdater
   end
 
   def update!
-    return unless change_set.resource.decorate.public_readable_state?
+    return unless decorated_resource.public_readable_state?
+    return if decorated_resource.private_visibility?
     archival_object = aspace_client.find_archival_object_by_component_id(component_id: change_set.source_metadata_identifier)
 
     # Create digital object.
     digital_object = create_digital_object(archival_object)
     # Assign digital object to Archival Object.
     link_digital_object(archival_object: archival_object, digital_object: digital_object)
+  end
+
+  def decorated_resource
+    @decorated_resource ||= change_set.resource.decorate
   end
 
   # Add a new instance to the existing Archival Object to link the new digital
