@@ -27,6 +27,16 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
 
   delegate(*Schema::Geo.attributes, to: :primary_imported_metadata, prefix: :imported)
 
+  # Suppress unwanted fields from scanned map IIIF manifests
+  def iiif_suppressed_metadata
+    super + [
+      :electronic_locations,
+      :gbl_suppressed_override,
+      :rendered_coverage,
+      :rendered_links
+    ]
+  end
+
   def attachable_objects
     [ScannedMap, RasterResource]
   end
