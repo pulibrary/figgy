@@ -69,7 +69,16 @@ module Numismatics
 
     def formatted_date
       return unless date.present?
-      Time.zone.parse(date.to_s)&.strftime("%F")
+      parsed_date&.strftime("%F")
+    end
+
+    def parsed_date
+      if date.to_s.include?("/")
+        # It's an american hand-entered date, parse it as such
+        Time.zone.strptime(date, "%m/%d/%Y")
+      else
+        Time.zone.parse(date.to_s)
+      end
     end
 
     def title
