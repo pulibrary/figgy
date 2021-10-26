@@ -264,13 +264,25 @@ Rails.application.config.to_prepare do
     :index_solr
   )
 
+  # Adapter for reindexing - disables commits
+  Valkyrie::MetadataAdapter.register(
+    Valkyrie::Persistence::Solr::MetadataAdapter.new(
+      connection: Blacklight.default_index.connection,
+      resource_indexer: indexer,
+      write_only: true,
+      soft_commit: false
+    ),
+    :reindex_solr
+  )
+
   if ENV["CLEAN_REINDEX_SOLR_URL"]
     # Register an indexer for a clean reindex.
     Valkyrie::MetadataAdapter.register(
       Valkyrie::Persistence::Solr::MetadataAdapter.new(
         connection: RSolr.connect(url: ENV["CLEAN_REINDEX_SOLR_URL"]),
         resource_indexer: indexer,
-        write_only: true
+        write_only: true,
+        soft_commit: false
       ),
       :clean_reindex_solr
     )

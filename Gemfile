@@ -42,7 +42,7 @@ gem "sprockets", ">= 3.7.2"
 gem "sqlite3"
 gem "title"
 gem "uglifier"
-gem "valkyrie", "~> 3.0.0.beta1"
+gem "valkyrie", "~> 3.0.0.beta1", github: "samvera/valkyrie", branch: "disable_write_only_commit"
 gem "valkyrie-derivatives", git: "https://github.com/samvera-labs/valkyrie-derivatives.git"
 gem "webpacker", "~> 4.0"
 

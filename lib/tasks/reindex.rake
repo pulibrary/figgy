@@ -5,7 +5,7 @@ def reindexer_solr_adapter
   if ENV["CLEAN_REINDEX_SOLR_URL"]
     :clean_reindex_solr
   else
-    :index_solr
+    :reindex_solr
   end
 end
 

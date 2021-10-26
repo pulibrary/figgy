@@ -3,7 +3,7 @@ require "rails_helper"
 require "ruby-progressbar/outputs/null"
 
 RSpec.describe Reindexer do
-  let(:solr_adapter) { Valkyrie::MetadataAdapter.find(:index_solr) }
+  let(:solr_adapter) { Valkyrie::MetadataAdapter.find(:reindex_solr) }
   let(:postgres_adapter) { Valkyrie::MetadataAdapter.find(:postgres) }
   let(:logger) { instance_double("Logger").as_null_object }
   let(:progress_bar) { ProgressBar.create(output: ProgressBar::Outputs::Null) }

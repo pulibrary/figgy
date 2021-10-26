@@ -52,6 +52,25 @@ GIT
       typhoeus
 
 GIT
+  remote: https://github.com/samvera/valkyrie.git
+  revision: c5f8fe8ccc75f0fc10d9c6468d04631390c0d776
+  branch: disable_write_only_commit
+  specs:
+    valkyrie (3.0.0.beta1)
+      activemodel
+      activesupport
+      dry-struct
+      dry-types (~> 1.0)
+      faraday (< 1.0)
+      json
+      json-ld
+      railties
+      rdf (~> 3.0, >= 3.0.10)
+      rdf-vocab
+      reform (~> 2.2)
+      reform-rails
+
+GIT
   remote: https://github.com/yob/pdf-reader.git
   revision: 54d39a246c22ebdd1c8ee3d16387de5dbc71ac98
   specs:
@@ -889,19 +908,6 @@ GEM
     unf_ext (0.0.7.5)
     unicode-display_width (1.4.1)
     validatable (1.6.7)
-    valkyrie (3.0.0.beta1)
-      activemodel
-      activesupport
-      dry-struct
-      dry-types (~> 1.0)
-      faraday (< 1.0)
-      json
-      json-ld
-      railties
-      rdf (~> 3.0, >= 3.0.10)
-      rdf-vocab
-      reform (~> 2.2)
-      reform-rails
     valkyrie-sequel (3.0.0.beta1)
       oj (~> 3.0)
       sequel (~> 5.0)
@@ -1057,7 +1063,7 @@ DEPENDENCIES
   timecop
   title
   uglifier
-  valkyrie (~> 3.0.0.beta1)
+  valkyrie (~> 3.0.0.beta1)!
   valkyrie-derivatives!
   valkyrie-sequel (~> 3.0.0.beta1)
   valkyrie-shrine (~> 0.4.0)
