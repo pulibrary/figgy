@@ -16,6 +16,13 @@ RSpec.describe Numismatics::AccessionDecorator do
     end
   end
 
+  describe "#formatted_date" do
+    it "can handle hand-entered american style dates" do
+      accession.date = "1/17/2007"
+      expect { decorator.formatted_date }.not_to raise_error
+    end
+  end
+
   describe "#label" do
     it "generates a label" do
       expect(decorator.label).to eq("1: 01/01/2001 gift name1 name2/firm name ($99.00)")
