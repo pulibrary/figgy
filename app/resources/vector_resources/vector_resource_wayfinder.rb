@@ -9,8 +9,8 @@ class VectorResourceWayfinder < BaseWayfinder
   inverse_relationship_by_property :vector_resource_parents, property: :member_ids, model: VectorResource
   inverse_relationship_by_property :preservation_objects, property: :preserved_object_id, singular: true, model: PreservationObject
 
-  def geo_vector_members
-    @geo_vector_members ||=
+  def geo_members
+    @geo_members ||=
       begin
         members.select do |member|
           next unless member.respond_to?(:mime_type)

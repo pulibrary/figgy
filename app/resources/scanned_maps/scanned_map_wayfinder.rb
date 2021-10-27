@@ -8,7 +8,7 @@ class ScannedMapWayfinder < BaseWayfinder
   inverse_relationship_by_property :scanned_map_parents, property: :member_ids, model: ScannedMap
   inverse_relationship_by_property :parents, property: :member_ids, singular: true
 
-  def geo_image_members
+  def geo_members
     @geo_members ||=
       begin
         members.select do |member|
@@ -48,7 +48,7 @@ class ScannedMapWayfinder < BaseWayfinder
     def generate_logical_structure_members
       members_with_parents.map do |member|
         decorator = member.decorate
-        if decorator.respond_to?(:scanned_map_members) && decorator.scanned_map_members.empty?
+        if decorator.respond_to?(:decorated_scanned_maps) && decorator.decorated_scanned_maps.empty?
           member.decorate.geo_members.first
         else
           member

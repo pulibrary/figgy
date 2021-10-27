@@ -24,8 +24,8 @@
               </thead>
 
               <tbody>
-                <% unless decorated_resource.scanned_map_members.empty? %>
-                  <% decorated_resource.scanned_map_members.each do |scanned_map| %>
+                <% unless decorated_resource.decorated_scanned_maps.empty? %>
+                  <% decorated_resource.decorated_scanned_maps.each do |scanned_map| %>
                     <% scanned_map_url = parent_solr_document_path(parent_id: resource.id, id: scanned_map.id) %>
                     <tr data-resource-id="<%= scanned_map.id.to_s %>">
                       <td><%= link_to figgy_thumbnail_path(scanned_map, { class: 'thumbnail-inner', onerror: default_icon_fallback }), scanned_map_url %></td>

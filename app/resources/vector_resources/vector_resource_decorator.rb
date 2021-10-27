@@ -9,34 +9,15 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
     [VectorResource]
   end
 
-  delegate :members, :parents, :geo_metadata_members, to: :wayfinder
-
-  # TODO: Rename to decorated_file_sets
-  def file_sets
-    wayfinder.decorated_file_sets
-  end
-
-  # TODO: Rename to geo_vector_members
-  def geo_members
-    wayfinder.geo_vector_members
-  end
-
-  # TODO: Rename to decorated_raster_resource_parents
-  def raster_resource_parents
-    wayfinder.decorated_raster_resource_parents
-  end
-
-  # Use case for nesting vector resources
-  #   - time series: e.g., nyc transit system, released every 6 months
-  # TODO: Rename to decorated_vector_resources
-  def vector_resource_members
-    wayfinder.decorated_vector_resources
-  end
-
-  # TODO: rename to decorated_vector_resource_parents
-  def vector_resource_parents
-    wayfinder.decorated_vector_resource_parents
-  end
+  delegate :decorated_file_sets,
+           :decorated_raster_resource_parents,
+           :decorated_vector_resources,
+           :decorated_vector_resource_parents,
+           :geo_members,
+           :geo_metadata_members,
+           :members,
+           :parents,
+           to: :wayfinder
 
   def imported_attribute(attribute_key)
     return primary_imported_metadata.send(attribute_key) if primary_imported_metadata.try(attribute_key)
@@ -97,7 +78,7 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
 
   def thumbnail_members
     decorated_geo_members = geo_members.map(&:decorate)
-    decorated_geo_members + vector_resource_members
+    decorated_geo_members + decorated_vector_resources
   end
 
   def title

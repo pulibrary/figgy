@@ -25,8 +25,8 @@
               </thead>
 
               <tbody>
-                <% unless decorated_resource.raster_resource_parents.empty? %>
-                  <% decorated_resource.raster_resource_parents.each do |raster_resource| %>
+                <% unless decorated_resource.decorated_raster_resource_parents.empty? %>
+                  <% decorated_resource.decorated_raster_resource_parents.each do |raster_resource| %>
                     <% raster_resource_url = solr_document_path(raster_resource.id) %>
                     <tr data-resource-id="<%= raster_resource.id.to_s %>" data-update-url="<%= polymorphic_path([ActiveModel::Naming.route_key(resource.class), :remove_from_parent], id: resource.id) %>">
                       <td><%= link_to figgy_thumbnail_path(raster_resource, { class: 'thumbnail-inner', onerror: default_icon_fallback }), raster_resource_url %></td>

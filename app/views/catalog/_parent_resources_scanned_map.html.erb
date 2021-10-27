@@ -25,8 +25,8 @@
               </thead>
 
               <tbody>
-                <% unless decorated_resource.scanned_map_parents.empty? %>
-                  <% decorated_resource.scanned_map_parents.each do |scanned_map| %>
+                <% unless decorated_resource.decorated_scanned_map_parents.empty? %>
+                  <% decorated_resource.decorated_scanned_map_parents.each do |scanned_map| %>
                     <% scanned_map_url = solr_document_path(scanned_map.id) %>
                     <tr data-resource-id="<%= scanned_map.id.to_s %>" data-update-url="<%= polymorphic_path([ActiveModel::Naming.route_key(resource.class), :remove_from_parent], id: resource.id) %>">
                       <td><%= link_to figgy_thumbnail_path(scanned_map, { class: 'thumbnail-inner', onerror: default_icon_fallback }), scanned_map_url %></td>

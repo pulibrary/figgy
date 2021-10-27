@@ -25,8 +25,8 @@
               </thead>
 
               <tbody>
-                <% unless decorated_resource.vector_resource_parents.empty? %>
-                  <% decorated_resource.vector_resource_parents.each do |vector_resource| %>
+                <% unless decorated_resource.decorated_vector_resource_parents.empty? %>
+                  <% decorated_resource.decorated_vector_resource_parents.each do |vector_resource| %>
                     <% vector_resource_url = solr_document_path(vector_resource.id) %>
                     <tr data-resource-id="<%= vector_resource.id.to_s %>" data-update-url="<%= polymorphic_path([ActiveModel::Naming.route_key(resource.class), :remove_from_parent], id: resource.id) %>">
                       <td><%= link_to figgy_thumbnail_path(vector_resource, { class: 'thumbnail-inner', onerror: default_icon_fallback }), vector_resource_url %></td>

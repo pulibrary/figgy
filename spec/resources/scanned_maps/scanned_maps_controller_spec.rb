@@ -353,8 +353,8 @@ RSpec.describe ScannedMapsController, type: :controller do
       }
 
       persisted = query_service.find_by(id: scanned_map.id)
-      expect(persisted.decorate.scanned_map_parents).not_to be_empty
-      expect(persisted.decorate.scanned_map_parents.first.id).to eq parent_scanned_map.id
+      expect(persisted.decorate.decorated_scanned_map_parents).not_to be_empty
+      expect(persisted.decorate.decorated_scanned_map_parents.first.id).to eq parent_scanned_map.id
     end
   end
 
@@ -373,7 +373,7 @@ RSpec.describe ScannedMapsController, type: :controller do
         }
 
         persisted = query_service.find_by(id: scanned_map.id)
-        expect(persisted.decorate.scanned_map_parents).to be_empty
+        expect(persisted.decorate.decorated_scanned_map_parents).to be_empty
       end
     end
   end

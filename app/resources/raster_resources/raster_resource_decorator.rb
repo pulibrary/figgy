@@ -8,34 +8,16 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
     [RasterResource, VectorResource]
   end
 
-  # TODO: Rename to decorated_file_sets
-  def file_sets
-    wayfinder.decorated_file_sets
-  end
-
-  delegate :geo_metadata_members, :geo_members, :members, :parents, to: :wayfinder
-
-  # Use case for nesting raster resources
-  #   - set of georectified scanned maps or set of aerial imagery
-  #   TODO: Rename to decorated_raster_resources
-  def raster_resource_members
-    wayfinder.decorated_raster_resources
-  end
-
-  # TODO: Rename to decorated_raster_resource_parents
-  def raster_resource_parents
-    wayfinder.decorated_raster_resource_parents
-  end
-
-  # TODO: Rename to decorated_scanned_map_parents
-  def scanned_map_parents
-    wayfinder.decorated_scanned_map_parents
-  end
-
-  # TODO: Rename to decorated_vector_resources
-  def vector_resource_members
-    wayfinder.decorated_vector_resources
-  end
+  delegate :decorated_file_sets,
+           :decorated_raster_resources,
+           :decorated_raster_resource_parents,
+           :decorated_scanned_map_parents,
+           :decorated_vector_resources,
+           :geo_members,
+           :geo_metadata_members,
+           :members,
+           :parents,
+           to: :wayfinder
 
   def imported_attribute(attribute_key)
     return primary_imported_metadata.send(attribute_key) if primary_imported_metadata.try(attribute_key)
@@ -96,7 +78,7 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
 
   def thumbnail_members
     decorated_geo_members = geo_members.map(&:decorate)
-    decorated_geo_members + raster_resource_members + vector_resource_members
+    decorated_geo_members + decorated_raster_resources + decorated_vector_resources
   end
 
   def title

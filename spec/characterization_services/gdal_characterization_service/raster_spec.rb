@@ -13,8 +13,8 @@ RSpec.describe GdalCharacterizationService::Raster do
   let(:raster_resource) do
     change_set_persister.save(change_set: RasterResourceChangeSet.new(RasterResource.new, files: [file]))
   end
-  let(:raster_resource_members) { query_service.find_members(resource: raster_resource) }
-  let(:valid_file_set) { raster_resource_members.first }
+  let(:decorated_raster_resources) { query_service.find_members(resource: raster_resource) }
+  let(:valid_file_set) { decorated_raster_resources.first }
 
   context "with a geotiff" do
     let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tiff") }

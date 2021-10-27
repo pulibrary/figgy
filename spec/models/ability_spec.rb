@@ -644,8 +644,8 @@ describe Ability do
       let(:query_service) { adapter.query_service }
       let(:file) { fixture_file_upload("files/vector/geo.json", "application/vnd.geo+json") }
       let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
-      let(:vector_resource_members) { query_service.find_members(resource: vector_resource) }
-      let(:file_set) { vector_resource_members.first }
+      let(:decorated_vector_resources) { query_service.find_members(resource: vector_resource) }
+      let(:file_set) { decorated_vector_resources.first }
       let(:vector_file) do
         DownloadsController::FileWithMetadata.new(
           id: "1234",
@@ -716,8 +716,8 @@ describe Ability do
     let(:query_service) { adapter.query_service }
     let(:file) { fixture_file_upload("files/vector/geo.json", "application/vnd.geo+json") }
     let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
-    let(:vector_resource_members) { query_service.find_members(resource: vector_resource) }
-    let(:file_set) { vector_resource_members.first }
+    let(:decorated_vector_resources) { query_service.find_members(resource: vector_resource) }
+    let(:file_set) { decorated_vector_resources.first }
     let(:vector_file) do
       DownloadsController::FileWithMetadata.new(
         id: "1234",

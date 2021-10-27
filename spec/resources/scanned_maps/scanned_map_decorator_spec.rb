@@ -63,13 +63,13 @@ RSpec.describe ScannedMapDecorator do
   it "can manage structure" do
     expect(decorator.manageable_structure?).to be true
   end
-  describe "#raster_resource_members" do
+  describe "#decorated_raster_resources" do
     let(:raster_resource) { FactoryBot.create_for_repository(:raster_resource) }
     let(:resource) { FactoryBot.create_for_repository(:scanned_map, member_ids: [raster_resource.id]) }
     it "accesses raster resources" do
-      expect(resource.decorate.raster_resource_members).not_to be_empty
-      expect(resource.decorate.raster_resource_members.first).to be_a RasterResourceDecorator
-      expect(resource.decorate.raster_resource_members.first.id).to eq raster_resource.id
+      expect(resource.decorate.decorated_raster_resources).not_to be_empty
+      expect(resource.decorate.decorated_raster_resources.first).to be_a RasterResourceDecorator
+      expect(resource.decorate.decorated_raster_resources.first.id).to eq raster_resource.id
     end
   end
   describe "#display_imported_language" do
@@ -150,9 +150,9 @@ RSpec.describe ScannedMapDecorator do
     end
   end
 
-  describe "#file_sets" do
+  describe "#decorated_file_sets" do
     it "retrieves all file sets" do
-      expect(decorator.file_sets).to be_empty
+      expect(decorator.decorated_file_sets).to be_empty
     end
   end
 

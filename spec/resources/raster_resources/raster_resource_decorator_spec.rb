@@ -39,22 +39,22 @@ RSpec.describe RasterResourceDecorator do
   it "cannot manage structure" do
     expect(decorator.manageable_structure?).to be false
   end
-  describe "#vector_resource_members" do
+  describe "#decorated_vector_resources" do
     let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource) }
     let(:resource) { FactoryBot.create_for_repository(:raster_resource, member_ids: [vector_resource.id]) }
     it "accesses vector resources" do
-      expect(resource.decorate.vector_resource_members).not_to be_empty
-      expect(resource.decorate.vector_resource_members.first).to be_a VectorResourceDecorator
-      expect(resource.decorate.vector_resource_members.first.id).to eq vector_resource.id
+      expect(resource.decorate.decorated_vector_resources).not_to be_empty
+      expect(resource.decorate.decorated_vector_resources.first).to be_a VectorResourceDecorator
+      expect(resource.decorate.decorated_vector_resources.first.id).to eq vector_resource.id
     end
   end
-  describe "#scanned_map_parents" do
+  describe "#decorated_scanned_map_parents" do
     let(:resource) { FactoryBot.create_for_repository(:raster_resource) }
     it "accesses parent scanned maps" do
       scanned_map = FactoryBot.create_for_repository(:scanned_map, member_ids: [resource.id])
-      expect(resource.decorate.scanned_map_parents).not_to be_empty
-      expect(resource.decorate.scanned_map_parents.first).to be_a ScannedMapDecorator
-      expect(resource.decorate.scanned_map_parents.first.id).to eq scanned_map.id
+      expect(resource.decorate.decorated_scanned_map_parents).not_to be_empty
+      expect(resource.decorate.decorated_scanned_map_parents.first).to be_a ScannedMapDecorator
+      expect(resource.decorate.decorated_scanned_map_parents.first.id).to eq scanned_map.id
     end
   end
   describe "#display_imported_language" do
@@ -112,13 +112,13 @@ RSpec.describe RasterResourceDecorator do
     end
   end
 
-  describe "#raster_resource_members" do
+  describe "#decorated_raster_resources" do
     let(:child) { FactoryBot.create_for_repository(:raster_resource) }
     let(:resource) { FactoryBot.create_for_repository(:raster_resource, member_ids: [child.id]) }
 
     it "decorates member raster resources" do
-      expect(resource.decorate.raster_resource_members).not_to be_empty
-      expect(resource.decorate.raster_resource_members.first.id).to eq child.id
+      expect(resource.decorate.decorated_raster_resources).not_to be_empty
+      expect(resource.decorate.decorated_raster_resources.first.id).to eq child.id
     end
   end
   describe "#title" do
@@ -132,9 +132,9 @@ RSpec.describe RasterResourceDecorator do
       end
     end
   end
-  describe "#file_sets" do
+  describe "#decorated_file_sets" do
     it "retrieves all file sets" do
-      expect(decorator.file_sets).to be_empty
+      expect(decorator.decorated_file_sets).to be_empty
     end
   end
 end

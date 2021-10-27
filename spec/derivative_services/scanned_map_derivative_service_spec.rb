@@ -18,8 +18,8 @@ RSpec.describe ScannedMapDerivativeService do
   let(:scanned_map) do
     change_set_persister.save(change_set: ScannedMapChangeSet.new(ScannedMap.new, files: [file]))
   end
-  let(:scanned_map_members) { query_service.find_members(resource: scanned_map) }
-  let(:valid_resource) { scanned_map_members.first }
+  let(:decorated_scanned_maps) { query_service.find_members(resource: scanned_map) }
+  let(:valid_resource) { decorated_scanned_maps.first }
   let(:valid_change_set) { ChangeSet.for(valid_resource) }
   let(:valid_id) { valid_change_set.id }
 
