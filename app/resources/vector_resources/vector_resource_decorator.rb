@@ -11,16 +11,13 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
 
   delegate :decorated_file_sets,
            :decorated_raster_resource_parents,
+           :decorated_vector_resources,
+           :decorated_vector_resource_parents,
            :geo_members,
            :geo_metadata_members,
            :members,
            :parents,
            to: :wayfinder
-
-  # TODO: rename to decorated_vector_resource_parents
-  def vector_resource_parents
-    wayfinder.decorated_vector_resource_parents
-  end
 
   def imported_attribute(attribute_key)
     return primary_imported_metadata.send(attribute_key) if primary_imported_metadata.try(attribute_key)
