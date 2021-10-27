@@ -31,7 +31,7 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
     [ScannedMap, RasterResource]
   end
 
-  delegate :collections, :geo_metadata_members, :members, :parents, to: :wayfinder
+  delegate :collections, :decorated_scanned_maps, :geo_metadata_members, :members, :parents, to: :wayfinder
 
   def collection_slugs
     @collection_slugs ||= collections.flat_map(&:slug)
@@ -50,11 +50,6 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   # TODO: Rename to decorated_raster_resources
   def raster_resource_members
     wayfinder.decorated_raster_resources
-  end
-
-  # TODO: Rename to decorated_scanned_maps
-  def scanned_map_members
-    wayfinder.decorated_scanned_maps
   end
 
   # TODO: Rename to decorated_scanned_map_parents
@@ -112,7 +107,7 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   end
 
   def map_set?
-    !scanned_map_members.empty?
+    !decorated_scanned_maps.empty?
   end
 
   def rendered_coverage
@@ -157,7 +152,7 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
 
   def thumbnail_members
     decorated_geo_members = geo_members.map(&:decorate)
-    decorated_geo_members + scanned_map_members
+    decorated_geo_members + decorated_scanned_maps
   end
 
   def title
