@@ -250,8 +250,8 @@ RSpec.describe VectorResourcesController, type: :controller do
       }
 
       persisted = query_service.find_by(id: vector_resource.id)
-      expect(persisted.decorate.raster_resource_parents).not_to be_empty
-      expect(persisted.decorate.raster_resource_parents.first.id).to eq parent_raster_resource.id
+      expect(persisted.decorate.decorated_raster_resource_parents).not_to be_empty
+      expect(persisted.decorate.decorated_raster_resource_parents.first.id).to eq parent_raster_resource.id
     end
   end
 
@@ -270,7 +270,7 @@ RSpec.describe VectorResourcesController, type: :controller do
         }
 
         persisted = query_service.find_by(id: vector_resource.id)
-        expect(persisted.decorate.raster_resource_parents).to be_empty
+        expect(persisted.decorate.decorated_raster_resource_parents).to be_empty
       end
     end
   end

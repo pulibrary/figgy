@@ -37,13 +37,13 @@ RSpec.describe VectorResourceDecorator do
   it "cannot manage structure" do
     expect(decorator.manageable_structure?).to be false
   end
-  describe "#raster_resource_parents" do
+  describe "#decorated_raster_resource_parents" do
     let(:resource) { FactoryBot.create_for_repository(:vector_resource) }
     it "accesses parent scanned maps" do
       raster_resource = FactoryBot.create_for_repository(:raster_resource, member_ids: [resource.id])
-      expect(resource.decorate.raster_resource_parents).not_to be_empty
-      expect(resource.decorate.raster_resource_parents.first).to be_a RasterResourceDecorator
-      expect(resource.decorate.raster_resource_parents.first.id).to eq raster_resource.id
+      expect(resource.decorate.decorated_raster_resource_parents).not_to be_empty
+      expect(resource.decorate.decorated_raster_resource_parents.first).to be_a RasterResourceDecorator
+      expect(resource.decorate.decorated_raster_resource_parents.first.id).to eq raster_resource.id
     end
   end
   describe "#display_imported_language" do

@@ -10,16 +10,12 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
   end
 
   delegate :decorated_file_sets,
+           :decorated_raster_resource_parents,
            :geo_members,
            :geo_metadata_members,
            :members,
            :parents,
            to: :wayfinder
-
-  # TODO: Rename to decorated_raster_resource_parents
-  def raster_resource_parents
-    wayfinder.decorated_raster_resource_parents
-  end
 
   # Use case for nesting vector resources
   #   - time series: e.g., nyc transit system, released every 6 months
