@@ -69,6 +69,7 @@ class Reindexer
         end
       end
       run_individual_retries(index_individually)
+      solr_adapter.connection.commit
     end
 
     def run_individual_retries(records)

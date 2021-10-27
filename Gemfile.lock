@@ -889,7 +889,7 @@ GEM
     unf_ext (0.0.7.5)
     unicode-display_width (1.4.1)
     validatable (1.6.7)
-    valkyrie (3.0.0.beta1)
+    valkyrie (3.0.0.pre.beta.1)
       activemodel
       activesupport
       dry-struct
@@ -902,11 +902,11 @@ GEM
       rdf-vocab
       reform (~> 2.2)
       reform-rails
-    valkyrie-sequel (3.0.0.beta1)
+    valkyrie-sequel (3.0.0.pre.beta.1)
       oj (~> 3.0)
       sequel (~> 5.0)
       sequel_pg (~> 1.0)
-      valkyrie (>= 3.0.0.beta1)
+      valkyrie (>= 3.0.0.pre.beta.1)
     valkyrie-shrine (0.4.0)
       aws-sdk-s3 (~> 1)
       shrine (~> 2.0)
@@ -1057,9 +1057,9 @@ DEPENDENCIES
   timecop
   title
   uglifier
-  valkyrie (~> 3.0.0.beta1)
+  valkyrie (~> 3.0.0.pre.beta.1)
   valkyrie-derivatives!
-  valkyrie-sequel (~> 3.0.0.beta1)
+  valkyrie-sequel (~> 3.0.0.pre.beta.1)
   valkyrie-shrine (~> 0.4.0)
   web-console
   webdrivers
