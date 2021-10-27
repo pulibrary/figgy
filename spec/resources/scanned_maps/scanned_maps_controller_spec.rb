@@ -340,24 +340,6 @@ RSpec.describe ScannedMapsController, type: :controller do
     end
   end
 
-  describe "#attach_to_parent" do
-    let(:user) { FactoryBot.create(:admin) }
-    let(:parent_scanned_map) { FactoryBot.create_for_repository(:scanned_map) }
-    let(:scanned_map) { FactoryBot.create_for_repository(:scanned_map) }
-
-    it "appends an existing ScannedMap as a parent" do
-      patch :attach_to_parent, params: {
-        id: scanned_map.id.to_s, parent_resource: {
-          id: parent_scanned_map.id.to_s, member_ids: [scanned_map.id.to_s]
-        }
-      }
-
-      persisted = query_service.find_by(id: scanned_map.id)
-      expect(persisted.decorate.decorated_scanned_map_parents).not_to be_empty
-      expect(persisted.decorate.decorated_scanned_map_parents.first.id).to eq parent_scanned_map.id
-    end
-  end
-
   describe "#remove_from_parent" do
     let(:user) { FactoryBot.create(:admin) }
     let(:scanned_map) { FactoryBot.create_for_repository(:scanned_map) }
