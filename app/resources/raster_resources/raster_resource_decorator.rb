@@ -13,7 +13,7 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
     wayfinder.decorated_file_sets
   end
 
-  delegate :geo_metadata_members, :geo_members, :members, :parents, to: :wayfinder
+  delegate :decorated_scanned_map_parents, :geo_metadata_members, :geo_members, :members, :parents, to: :wayfinder
 
   # Use case for nesting raster resources
   #   - set of georectified scanned maps or set of aerial imagery
@@ -25,11 +25,6 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
   # TODO: Rename to decorated_raster_resource_parents
   def raster_resource_parents
     wayfinder.decorated_raster_resource_parents
-  end
-
-  # TODO: Rename to decorated_scanned_map_parents
-  def scanned_map_parents
-    wayfinder.decorated_scanned_map_parents
   end
 
   # TODO: Rename to decorated_vector_resources

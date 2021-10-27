@@ -48,13 +48,13 @@ RSpec.describe RasterResourceDecorator do
       expect(resource.decorate.vector_resource_members.first.id).to eq vector_resource.id
     end
   end
-  describe "#scanned_map_parents" do
+  describe "#decorated_scanned_map_parents" do
     let(:resource) { FactoryBot.create_for_repository(:raster_resource) }
     it "accesses parent scanned maps" do
       scanned_map = FactoryBot.create_for_repository(:scanned_map, member_ids: [resource.id])
-      expect(resource.decorate.scanned_map_parents).not_to be_empty
-      expect(resource.decorate.scanned_map_parents.first).to be_a ScannedMapDecorator
-      expect(resource.decorate.scanned_map_parents.first.id).to eq scanned_map.id
+      expect(resource.decorate.decorated_scanned_map_parents).not_to be_empty
+      expect(resource.decorate.decorated_scanned_map_parents.first).to be_a ScannedMapDecorator
+      expect(resource.decorate.decorated_scanned_map_parents.first.id).to eq scanned_map.id
     end
   end
   describe "#display_imported_language" do
