@@ -9,12 +9,7 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
     [VectorResource]
   end
 
-  delegate :members, :parents, :geo_metadata_members, to: :wayfinder
-
-  # TODO: Rename to decorated_file_sets
-  def file_sets
-    wayfinder.decorated_file_sets
-  end
+  delegate :members, :parents, :decorated_file_sets, :geo_metadata_members, to: :wayfinder
 
   # TODO: Rename to geo_vector_members
   def geo_members

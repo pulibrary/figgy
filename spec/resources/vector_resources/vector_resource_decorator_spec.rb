@@ -121,9 +121,9 @@ RSpec.describe VectorResourceDecorator do
       end
     end
   end
-  describe "#file_sets" do
+  describe "#decorated_file_sets" do
     it "retrieves all file sets" do
-      expect(decorator.file_sets).to be_empty
+      expect(decorator.decorated_file_sets).to be_empty
     end
   end
 end

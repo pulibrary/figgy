@@ -110,7 +110,7 @@ describe Preserver do
                                          files: [file])
       end
       let(:file_set) do
-        resource.decorate.file_sets.first
+        resource.decorate.decorated_file_sets.first
       end
       let(:preservation_objects) do
         Wayfinder.for(file_set).preservation_objects
