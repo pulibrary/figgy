@@ -112,13 +112,13 @@ RSpec.describe RasterResourceDecorator do
     end
   end
 
-  describe "#raster_resource_members" do
+  describe "#decorated_raster_resources" do
     let(:child) { FactoryBot.create_for_repository(:raster_resource) }
     let(:resource) { FactoryBot.create_for_repository(:raster_resource, member_ids: [child.id]) }
 
     it "decorates member raster resources" do
-      expect(resource.decorate.raster_resource_members).not_to be_empty
-      expect(resource.decorate.raster_resource_members.first.id).to eq child.id
+      expect(resource.decorate.decorated_raster_resources).not_to be_empty
+      expect(resource.decorate.decorated_raster_resources.first.id).to eq child.id
     end
   end
   describe "#title" do

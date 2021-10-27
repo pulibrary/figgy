@@ -25,8 +25,8 @@
               </thead>
 
               <tbody>
-                <% unless decorated_resource.raster_resource_members.empty? %>
-                  <% decorated_resource.raster_resource_members.each do |raster_resource| %>
+                <% unless decorated_resource.decorated_raster_resources.empty? %>
+                  <% decorated_resource.decorated_raster_resources.each do |raster_resource| %>
                     <% raster_resource_url = parent_solr_document_path(parent_id: resource.id, id: raster_resource.id) %>
                     <tr data-resource-id="<%= raster_resource.id.to_s %>">
                       <td><%= link_to figgy_thumbnail_path(raster_resource, { class: 'thumbnail-inner', onerror: default_icon_fallback }), raster_resource_url %></td>
