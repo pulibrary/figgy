@@ -105,7 +105,7 @@ class IndexingAdapter
     end
 
     def composite_persister
-      @composite_persister ||= Valkyrie::Persistence::CompositePersister.new(persister, index_persister)
+      @composite_persister ||= TransactionCompositePersister.new(persister, index_persister)
     end
 
     def buffered_persister

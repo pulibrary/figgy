@@ -69,4 +69,13 @@ RSpec.describe IndexingAdapter do
     expect(adapter.index_adapter.persister).not_to have_received(:save_all)
     expect(adapter.index_adapter.persister).not_to have_received(:save)
   end
+
+  it "rolls back the transaction if the solr adapter fails" do
+    allow(adapter.index_adapter.persister).to receive(:save).and_raise("Error")
+    resource = FactoryBot.build(:scanned_resource)
+
+    expect { persister.save(resource: resource) }.to raise_error "Error"
+
+    expect(query_service.find_all.to_a.size).to eq 0
+  end
 end
