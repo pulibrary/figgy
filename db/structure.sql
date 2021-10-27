@@ -834,6 +834,13 @@ CREATE INDEX index_ocr_requests_on_user_id ON public.ocr_requests USING btree (u
 
 
 --
+-- Name: index_orm_resources_on_id_varchar; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_orm_resources_on_id_varchar ON public.orm_resources USING btree (((id)::character varying));
+
+
+--
 -- Name: index_orm_resources_on_internal_resource; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1004,6 +1011,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200225213135'),
 ('20200422192849'),
 ('20200423183539'),
-('20200608160046');
+('20200608160046'),
+('20211025213822');
 
 
