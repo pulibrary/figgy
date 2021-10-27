@@ -17,13 +17,6 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
            :parents,
            to: :wayfinder
 
-  # Use case for nesting vector resources
-  #   - time series: e.g., nyc transit system, released every 6 months
-  # TODO: Rename to decorated_vector_resources
-  def vector_resource_members
-    wayfinder.decorated_vector_resources
-  end
-
   # TODO: rename to decorated_vector_resource_parents
   def vector_resource_parents
     wayfinder.decorated_vector_resource_parents
@@ -88,7 +81,7 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
 
   def thumbnail_members
     decorated_geo_members = geo_members.map(&:decorate)
-    decorated_geo_members + vector_resource_members
+    decorated_geo_members + decorated_vector_resources
   end
 
   def title

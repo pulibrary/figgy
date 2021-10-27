@@ -12,16 +12,12 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
            :decorated_raster_resources,
            :decorated_raster_resource_parents,
            :decorated_scanned_map_parents,
+           :decorated_vector_resources,
            :geo_members,
            :geo_metadata_members,
            :members,
            :parents,
            to: :wayfinder
-
-  # TODO: Rename to decorated_vector_resources
-  def vector_resource_members
-    wayfinder.decorated_vector_resources
-  end
 
   def imported_attribute(attribute_key)
     return primary_imported_metadata.send(attribute_key) if primary_imported_metadata.try(attribute_key)
@@ -82,7 +78,7 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
 
   def thumbnail_members
     decorated_geo_members = geo_members.map(&:decorate)
-    decorated_geo_members + decorated_raster_resources + vector_resource_members
+    decorated_geo_members + decorated_raster_resources + decorated_vector_resources
   end
 
   def title

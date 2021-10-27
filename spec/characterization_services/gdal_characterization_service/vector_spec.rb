@@ -13,8 +13,8 @@ RSpec.describe GdalCharacterizationService::Vector do
   let(:vector_resource) do
     change_set_persister.save(change_set: VectorResourceChangeSet.new(VectorResource.new, files: [file]))
   end
-  let(:vector_resource_members) { query_service.find_members(resource: vector_resource) }
-  let(:valid_file_set) { vector_resource_members.first }
+  let(:decorated_vector_resources) { query_service.find_members(resource: vector_resource) }
+  let(:valid_file_set) { decorated_vector_resources.first }
 
   context "with a geojson file" do
     let(:file) { fixture_file_upload("files/vector/geo.json", "application/vnd.geo+json") }

@@ -18,8 +18,8 @@ RSpec.describe VectorResourceDerivativeService do
   let(:vector_resource) do
     change_set_persister.save(change_set: VectorResourceChangeSet.new(VectorResource.new, files: [file]))
   end
-  let(:vector_resource_members) { query_service.find_members(resource: vector_resource) }
-  let(:valid_resource) { vector_resource_members.first }
+  let(:decorated_vector_resources) { query_service.find_members(resource: vector_resource) }
+  let(:valid_resource) { decorated_vector_resources.first }
   let(:valid_change_set) { ChangeSet.for(valid_resource) }
   let(:tika_output) { tika_shapefile_output }
   let(:valid_id) { valid_change_set.id }
