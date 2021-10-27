@@ -31,15 +31,19 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
     [ScannedMap, RasterResource]
   end
 
-  delegate :collections, :decorated_file_sets, :decorated_raster_resources, :decorated_scanned_maps, :decorated_scanned_map_parents, :geo_metadata_members, :members, :parents, to: :wayfinder
+  delegate :collections,
+           :decorated_file_sets,
+           :decorated_raster_resources,
+           :decorated_scanned_maps,
+           :decorated_scanned_map_parents,
+           :geo_members,
+           :geo_metadata_members,
+           :members,
+           :parents,
+           to: :wayfinder
 
   def collection_slugs
     @collection_slugs ||= collections.flat_map(&:slug)
-  end
-
-  # TODO: Rename to geo_image_members
-  def geo_members
-    wayfinder.geo_image_members
   end
 
   # Display the resource attributes

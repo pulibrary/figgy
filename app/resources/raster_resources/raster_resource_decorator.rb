@@ -8,7 +8,14 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
     [RasterResource, VectorResource]
   end
 
-  delegate :decorated_file_sets, :decorated_raster_resources, :decorated_scanned_map_parents, :geo_metadata_members, :geo_members, :members, :parents, to: :wayfinder
+  delegate :decorated_file_sets,
+           :decorated_raster_resources,
+           :decorated_scanned_map_parents,
+           :geo_members,
+           :geo_metadata_members,
+           :members,
+           :parents,
+           to: :wayfinder
 
   # TODO: Rename to decorated_raster_resource_parents
   def raster_resource_parents

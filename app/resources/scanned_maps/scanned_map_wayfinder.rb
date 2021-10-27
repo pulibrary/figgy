@@ -8,7 +8,7 @@ class ScannedMapWayfinder < BaseWayfinder
   inverse_relationship_by_property :scanned_map_parents, property: :member_ids, model: ScannedMap
   inverse_relationship_by_property :parents, property: :member_ids, singular: true
 
-  def geo_image_members
+  def geo_members
     @geo_members ||=
       begin
         members.select do |member|

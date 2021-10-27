@@ -657,7 +657,7 @@ RSpec.describe Wayfinder do
       end
     end
 
-    describe "#geo_image_members" do
+    describe "#geo_members" do
       it "returns all geo image members" do
         file_set = FactoryBot.create_for_repository(:geo_image_file_set)
         file_set2 = FactoryBot.create_for_repository(:geo_metadata_file_set)
@@ -665,8 +665,8 @@ RSpec.describe Wayfinder do
 
         wayfinder = described_class.for(scanned_map)
 
-        expect(wayfinder.geo_image_members.map(&:id)).to eq [file_set.id]
-        expect(wayfinder.geo_image_members.map(&:class)).to eq [FileSet]
+        expect(wayfinder.geo_members.map(&:id)).to eq [file_set.id]
+        expect(wayfinder.geo_members.map(&:class)).to eq [FileSet]
       end
     end
 
@@ -773,7 +773,7 @@ RSpec.describe Wayfinder do
       end
     end
 
-    describe "#geo_vector_members" do
+    describe "#geo_members" do
       it "returns all vector mime-type filesets" do
         child = FactoryBot.create_for_repository(:geo_metadata_file_set)
         child2 = FactoryBot.create_for_repository(:geo_vector_file_set)
@@ -782,8 +782,8 @@ RSpec.describe Wayfinder do
 
         wayfinder = described_class.for(resource)
 
-        expect(wayfinder.geo_vector_members.map(&:id)).to eq [child2.id]
-        expect(wayfinder.geo_vector_members.map(&:class)).to eq [FileSet]
+        expect(wayfinder.geo_members.map(&:id)).to eq [child2.id]
+        expect(wayfinder.geo_members.map(&:class)).to eq [FileSet]
       end
     end
     describe "#geo_metadata_members" do
