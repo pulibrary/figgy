@@ -43,7 +43,7 @@ module Figgy
   end
 
   def index_read_only?
-    ENV.fetch("INDEX_READ_ONLY", false) == "true"
+    config["index_read_only"]
   end
 
   def all_environment_config
@@ -56,6 +56,6 @@ module Figgy
       all_environment_config[Rails.env]
     end
 
-    module_function :config, :config_yaml, :messaging_client, :geoblacklight_messaging_client, :geoserver_messaging_client, :orangelight_messaging_client, :default_url_options, :campus_ip_ranges, :index_read_only?
-    module_function :global_protect_ips, :all_environment_config
+    module_function :config, :config_yaml, :messaging_client, :geoblacklight_messaging_client, :geoserver_messaging_client, :orangelight_messaging_client, :default_url_options, :campus_ip_ranges
+    module_function :global_protect_ips, :all_environment_config, :index_read_only?
 end
