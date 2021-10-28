@@ -33,18 +33,13 @@ RSpec.describe DaoUpdater do
         stub_aspace_login
 
         stub_aspace(pulfa_id: "MC230_c117")
-        stub_find_archival_object(component_id: "MC230_c117")
-        stub_create_digital_object
-        stub_find_digital_object(ref: "/repositories/3/digital_objects/12331")
-        stub_archival_object_update(archival_object_id: "298998")
+        stub_find_archival_object_not_found(component_id: "MC230_c117")
 
         resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, source_metadata_identifier: "MC230_c117")
         change_set_persister = instance_double(ChangeSetPersister)
 
         updater = described_class.new(change_set: ChangeSet.for(resource), change_set_persister: change_set_persister)
 
-        # We haven't stubbed ASpace, so webmock will error if it tries to do
-        # something.
         updater.update!
       end
     end
