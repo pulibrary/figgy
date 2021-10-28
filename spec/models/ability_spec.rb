@@ -297,6 +297,47 @@ describe Ability do
       is_expected.to be_able_to(:download, token_downloadable_audio_file)
     }
 
+    context "when index read-only mode is on" do
+      before { allow(Figgy).to receive(:index_read_only?).and_return(true) }
+
+      it {
+        is_expected.not_to be_able_to(:create, ScannedResource.new)
+        is_expected.not_to be_able_to(:create, FileSet.new)
+        is_expected.not_to be_able_to(:create, OcrRequest.new)
+        is_expected.to be_able_to(:read, open_scanned_resource)
+        is_expected.to be_able_to(:read, private_scanned_resource)
+        is_expected.to be_able_to(:read, takedown_scanned_resource)
+        is_expected.to be_able_to(:read, flagged_scanned_resource)
+        is_expected.to be_able_to(:read, flagged_scanned_resource)
+        is_expected.to be_able_to(:read, ocr_request)
+        is_expected.not_to be_able_to(:pdf, open_scanned_resource)
+        is_expected.not_to be_able_to(:color_pdf, open_scanned_resource)
+        is_expected.not_to be_able_to(:edit, open_scanned_resource)
+        is_expected.not_to be_able_to(:edit, private_scanned_resource)
+        is_expected.not_to be_able_to(:edit, takedown_scanned_resource)
+        is_expected.not_to be_able_to(:edit, flagged_scanned_resource)
+        is_expected.not_to be_able_to(:edit, ocr_request)
+        is_expected.not_to be_able_to(:file_manager, open_scanned_resource)
+        is_expected.not_to be_able_to(:update, open_scanned_resource)
+        is_expected.not_to be_able_to(:update, private_scanned_resource)
+        is_expected.not_to be_able_to(:update, takedown_scanned_resource)
+        is_expected.not_to be_able_to(:update, flagged_scanned_resource)
+        is_expected.not_to be_able_to(:update, ocr_request)
+        is_expected.not_to be_able_to(:destroy, open_scanned_resource)
+        is_expected.not_to be_able_to(:destroy, private_scanned_resource)
+        is_expected.not_to be_able_to(:destroy, takedown_scanned_resource)
+        is_expected.not_to be_able_to(:destroy, flagged_scanned_resource)
+        is_expected.not_to be_able_to(:destroy, ocr_request)
+        is_expected.to be_able_to(:manifest, open_scanned_resource)
+        is_expected.to be_able_to(:manifest, pending_scanned_resource)
+        is_expected.to be_able_to(:discover, open_scanned_resource)
+        is_expected.to be_able_to(:discover, pending_scanned_resource)
+        is_expected.to be_able_to(:discover, reading_room_scanned_resource)
+        is_expected.to be_able_to(:discover, campus_ip_scanned_resource)
+        is_expected.to be_able_to(:read, :graphql)
+      }
+    end
+
     context "when read-only mode is on" do
       before { allow(Figgy).to receive(:read_only_mode).and_return(true) }
 
@@ -572,6 +613,26 @@ describe Ability do
       # Unable to download zip files I'm not a collection restricted viewer for.
       is_expected.not_to be_able_to(:download, reading_room_ineligible_zip_file_with_metadata)
     }
+
+    context "when index read-only mode is on" do
+      before { allow(Figgy).to receive(:index_read_only?).and_return(true) }
+
+      it {
+        # Controlled digital lending.
+        is_expected.to be_able_to(:manifest, private_cdl_scanned_resource)
+        is_expected.to be_able_to(:read, private_cdl_scanned_resource)
+        is_expected.to be_able_to(:discover, private_cdl_scanned_resource)
+        is_expected.not_to be_able_to(:download, private_cdl_scanned_resource.decorate.members.first)
+        is_expected.to be_able_to(:manifest, private_cdl_mvw_scanned_resource)
+        is_expected.to be_able_to(:read, private_cdl_mvw_scanned_resource)
+        is_expected.to be_able_to(:discover, private_cdl_mvw_scanned_resource)
+        is_expected.not_to be_able_to(:download, private_cdl_mvw_scanned_resource.decorate.members.first)
+        is_expected.not_to be_able_to(:manifest, expired_private_cdl_scanned_resource)
+        is_expected.not_to be_able_to(:read, expired_private_cdl_scanned_resource)
+        is_expected.to be_able_to(:discover, expired_private_cdl_scanned_resource)
+        is_expected.not_to be_able_to(:download, expired_private_cdl_scanned_resource.decorate.members.first)
+      }
+    end
 
     context "when accessing figgy via a campus IP" do
       subject { described_class.new(current_user, ip_address: "128.112.0.0") }

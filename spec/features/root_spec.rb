@@ -23,6 +23,18 @@ RSpec.feature "Home Page" do
     end
   end
 
+  context "in index read-only mode" do
+    before do
+      allow(Figgy).to receive(:index_read_only?).and_return(true)
+      sign_in user
+    end
+
+    scenario "prepends read-only flash notice before other notices" do
+      notice = "Figgy is currently undergoing maintenance and resource ingest and editing is disabled. Successfully authenticated from CAS account."
+      expect(page).to have_content notice
+    end
+  end
+
   context "in read-only mode" do
     before do
       allow(Figgy).to receive(:read_only_mode).and_return(true)
