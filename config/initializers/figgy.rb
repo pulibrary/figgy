@@ -42,6 +42,10 @@ module Figgy
     end.compact
   end
 
+  def index_read_only?
+    ENV.fetch("INDEX_READ_ONLY", false) == "true"
+  end
+
   def all_environment_config
     YAML.safe_load(ERB.new(File.read(Rails.root.join("config", "config.yml"))).result, [], [], true)
   end
@@ -52,6 +56,6 @@ module Figgy
       all_environment_config[Rails.env]
     end
 
-    module_function :config, :config_yaml, :messaging_client, :geoblacklight_messaging_client, :geoserver_messaging_client, :orangelight_messaging_client, :default_url_options, :campus_ip_ranges
+    module_function :config, :config_yaml, :messaging_client, :geoblacklight_messaging_client, :geoserver_messaging_client, :orangelight_messaging_client, :default_url_options, :campus_ip_ranges, :index_read_only?
     module_function :global_protect_ips, :all_environment_config
 end
