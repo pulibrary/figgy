@@ -108,7 +108,18 @@ module LinkedData
       # to this if you need to add more defaults.
       def linked_properties
         {
-          '@context': "https://bibdata.princeton.edu/context.json",
+          "@context": [
+            "https://bibdata.princeton.edu/context.json",
+            {
+              "wgs84": "http://www.w3.org/2003/01/geo/wgs84_pos#",
+              "latitude": {
+                "@id": "wgs84:lat"
+              },
+              "longitude": {
+                "@id": "wgs84:lon"
+              }
+            }
+          ],
           '@id': url,
           identifier: resource.try(:identifier),
           scopeNote: resource.try(:portion_note),

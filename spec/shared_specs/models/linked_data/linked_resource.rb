@@ -13,7 +13,20 @@ RSpec.shared_examples "LinkedData::Resource" do
     it "provides the base local fields" do
       expect(linked_resource.as_jsonld).to be_a Hash
       expect(linked_resource.as_jsonld).not_to be_empty
-      expect(linked_resource.as_jsonld).to include "@context" => "https://bibdata.princeton.edu/context.json"
+      expect(linked_resource.as_jsonld["@context"]).to eq(
+        [
+          "https://bibdata.princeton.edu/context.json",
+          {
+            "wgs84": "http://www.w3.org/2003/01/geo/wgs84_pos#",
+            "latitude": {
+              "@id": "wgs84:lat"
+            },
+            "longitude": {
+              "@id": "wgs84:lon"
+            }
+          }
+        ]
+      )
     end
   end
 

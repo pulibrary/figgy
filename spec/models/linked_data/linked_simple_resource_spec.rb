@@ -8,6 +8,7 @@ RSpec.describe LinkedData::LinkedSimpleResource do
   let(:resource_factory) { :simple_resource }
 
   it_behaves_like "LinkedData::Resource::WithDateRange"
+  it_behaves_like "LinkedData::Resource"
 
   describe "as_jsonld" do
     context "when it has an actor field with Strings, Groupings and RDF literals" do
