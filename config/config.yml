@@ -288,7 +288,7 @@ production:
 
 staging:
   <<: *defaults
-  index_read_only: false # set to true if doing a long reindex process.
+  index_read_only: true # set to true if doing a long reindex process.
   repository_path: "/opt/repository/files"
   derivative_path: "/opt/repository/derivatives"
   pyramidal_derivative_path: "/opt/repository/derivatives/pyramidals"
