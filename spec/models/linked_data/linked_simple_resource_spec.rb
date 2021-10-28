@@ -52,9 +52,8 @@ RSpec.describe LinkedData::LinkedSimpleResource do
 
       it "provides appropriate json structure" do
         jsonld = linked_resource.as_jsonld
-        expect(jsonld["coverage_point"].first["@type"]).to eq "TBD"
-        expect(jsonld["coverage_point"].first["lat"]).to eq lat
-        expect(jsonld["coverage_point"].first["lon"]).to eq lon
+        expect(jsonld["latitude"]).to eq [lat]
+        expect(jsonld["longitude"]).to eq [lon]
       end
     end
   end
