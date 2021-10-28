@@ -79,6 +79,7 @@ Metrics/ClassLength:
     - 'app/resources/scanned_resources/scanned_resource_decorator.rb'
     - 'app/resources/scanned_maps/scanned_map_decorator.rb'
     - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
+    - 'app/models/concerns/linked_data/linked_resource.rb'
     - 'app/services/manifest_builder/manifest_service_locator.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/decorators/valkyrie/resource_decorator.rb'
@@ -115,7 +116,6 @@ Metrics/ClassLength:
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/helpers/application_helper.rb'
-    - 'app/models/concerns/linked_data/linked_resource_factory.rb'
     - 'app/services/pdf_generator/canvas.rb'
     - 'app/jobs/ingest_intermediate_file_job.rb'
     - 'app/services/pul_metadata_services/bib_record.rb'
@@ -166,7 +166,7 @@ Metrics/MethodLength:
     - 'app/services/bulk_ingest_intermediate_service.rb'
     - 'app/models/remote_record.rb'
     - 'app/services/pul_metadata_services/bib_record.rb'
-    - 'app/models/concerns/linked_data/linked_resource_factory.rb'
+    - 'app/models/concerns/linked_data/linked_resource.rb'
     - 'app/services/manifest_builder/canvas_rendering_builder.rb'
     - 'app/services/music_import_service.rb'
     - 'app/services/music_import_service/recording_collector.rb'

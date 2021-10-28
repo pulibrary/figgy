@@ -27,12 +27,22 @@ module LinkedData
       Array.wrap(decorated_resource.date_range).map { |r| LinkedDateRange.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
     end
 
+    def latitude
+      Array.wrap(resource.coverage_point).map(&:lat)
+    end
+
+    def longitude
+      Array.wrap(resource.coverage_point).map(&:lon)
+    end
+
     private
 
       def properties
         {
           '@type': "pcdm:Object",
-          date_range: try(:date_range)
+          date_range: try(:date_range),
+          latitude: try(:latitude),
+          longitude: try(:longitude)
         }.merge(schema_properties).merge(overwritten_properties)
       end
 

@@ -8,6 +8,7 @@ RSpec.describe LinkedData::LinkedSimpleResource do
   let(:resource_factory) { :simple_resource }
 
   it_behaves_like "LinkedData::Resource::WithDateRange"
+  it_behaves_like "LinkedData::Resource"
 
   describe "as_jsonld" do
     context "when it has an actor field with Strings, Groupings and RDF literals" do
@@ -32,6 +33,28 @@ RSpec.describe LinkedData::LinkedSimpleResource do
         expect(jsonld["actor"].first).to be_a RDF::Literal
         expect(jsonld["actor"][1]).to eq "Name String"
         expect(jsonld["actor"].last["grouping"].map(&:class)).to eq [RDF::Literal, RDF::Literal]
+      end
+    end
+
+    context "when it has a coverage point" do
+      let(:lat) { 40.34781552 }
+      let(:lon) { -74.65862657 }
+      let(:resource) do
+        FactoryBot.create_for_repository(
+          :simple_resource,
+          coverage_point: [
+            CoveragePoint.new(
+              lat: lat,
+              lon: lon
+            )
+          ]
+        )
+      end
+
+      it "provides appropriate json structure" do
+        jsonld = linked_resource.as_jsonld
+        expect(jsonld["latitude"]).to eq [lat]
+        expect(jsonld["longitude"]).to eq [lon]
       end
     end
   end
