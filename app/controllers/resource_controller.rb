@@ -158,53 +158,21 @@ class ResourceController < ApplicationController
     redirect_to ContextualPath.new(child: resource, parent_id: nil).file_manager
   end
 
-  # Attach a resource to a parent
-  def attach_to_parent
-    @change_set = ChangeSet.for(resource, change_set_param: change_set_param)
-    parent_resource = find_resource(parent_resource_params[:id])
-    authorize! :update, parent_resource
-
-    parent_change_set = ChangeSet.for(parent_resource)
-    if parent_change_set.validate(parent_resource_params)
-      current_member_ids = parent_resource.member_ids
-      attached_member_ids = parent_change_set.member_ids
-      parent_change_set.member_ids = current_member_ids + attached_member_ids
-      obj = nil
-      change_set_persister.buffer_into_index do |persist|
-        obj = persist.save(change_set: parent_change_set)
-      end
-      after_update_success(obj, @change_set)
-    else
-      after_update_failure
-    end
-  rescue Dry::Types::ConstraintError
-    after_update_failure
-  rescue Valkyrie::Persistence::ObjectNotFoundError => e
-    after_update_error e
-  end
-
-  # Remove a resource from a parent
+  # Remove the resource from given parent
   def remove_from_parent
     @change_set = ChangeSet.for(resource)
     parent_resource = find_resource(parent_resource_params[:id])
     authorize! :update, parent_resource
 
     parent_change_set = ChangeSet.for(parent_resource)
-    if parent_change_set.validate(parent_resource_params)
-      current_member_ids = parent_resource.member_ids
-      removed_member_ids = parent_change_set.member_ids
-      parent_change_set.member_ids = current_member_ids - removed_member_ids
+    current_member_ids = parent_resource.member_ids
+    parent_change_set.member_ids = current_member_ids - [resource.id]
 
-      obj = nil
-      change_set_persister.buffer_into_index do |persist|
-        obj = persist.save(change_set: parent_change_set)
-      end
-      after_update_success(obj, @change_set)
-    else
-      after_update_failure
+    obj = nil
+    change_set_persister.buffer_into_index do |persist|
+      obj = persist.save(change_set: parent_change_set)
     end
-  rescue Dry::Types::ConstraintError
-    after_update_failure
+    after_update_success(obj, @change_set)
   rescue Valkyrie::Persistence::ObjectNotFoundError => e
     after_update_error e
   end

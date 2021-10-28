@@ -12,15 +12,22 @@ export default class ParentResourcesTable extends RelatedResourcesTable {
     this.resourceId = this.table.data('resource-id')
   }
 
+  buildAddFormData(parentId) {
+    return {
+      [this.model]: {
+        ["append_id"]: parentId
+      }
+    }
+  }
+
   /**
   * Builds form data strings.
   */
-  buildFormData(parentId) {
+  buildRemoveFormData(parentId) {
     return {
       'authenticity_token': this.authenticityToken,
       'parent_resource': {
-        id: parentId,
-        [this.attribute]: [this.resourceId]
+        id: parentId
       }
     };
   }
@@ -50,7 +57,7 @@ export default class ParentResourcesTable extends RelatedResourcesTable {
           url: $this.update_url,
           element: $element,
           object: $this,
-          data: $this.buildFormData(parentId),
+          data: $this.buildAddFormData(parentId),
           on_error: $this.handleError,
           on_success: $this.reloadTable
         });
@@ -80,7 +87,7 @@ export default class ParentResourcesTable extends RelatedResourcesTable {
         row: $row,
         members: null,
         member: null,
-        data: $this.buildFormData(parentId),
+        data: $this.buildRemoveFormData(parentId),
         url: update_url,
         element: $element,
         object: $this,

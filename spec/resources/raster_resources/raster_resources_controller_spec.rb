@@ -226,65 +226,6 @@ RSpec.describe RasterResourcesController, type: :controller do
     end
   end
 
-  describe "#attach_to_parent" do
-    let(:user) { FactoryBot.create(:admin) }
-    let(:child) { FactoryBot.create_for_repository(:raster_resource) }
-    let(:parent) { FactoryBot.create_for_repository(:scanned_map) }
-    let(:params) do
-      {
-        id: child.id,
-        parent_resource: { id: parent.id, member_ids: [child.id] }
-      }
-    end
-
-    it "attaches a raster resource to any scanned map resource" do
-      patch :attach_to_parent, params: params, format: :json
-
-      expect(response.status).to eq(200)
-      reloaded = find_resource(parent.id)
-      expect(reloaded.member_ids.first.to_s).to eq child.id.to_s
-    end
-    context "with invalid parameter types" do
-      let(:params) do
-        {
-          id: child.id,
-          parent_resource: { id: parent.id, member_ids: nil }
-        }
-      end
-
-      it "returns a bad request server response" do
-        patch :attach_to_parent, params: params, format: :json
-        expect(response.status).to eq 400
-      end
-    end
-    context "with invalid parameters" do
-      let(:params) do
-        {
-          id: child.id,
-          parent_resource: { id: parent.id, member_ids: [], title: nil }
-        }
-      end
-
-      it "returns a bad request server response" do
-        patch :attach_to_parent, params: params, format: :json
-        expect(response.status).to eq 400
-      end
-    end
-    context "with an invalid parent ID" do
-      let(:params) do
-        {
-          id: child.id,
-          parent_resource: { id: "invalid", member_ids: [child.id] }
-        }
-      end
-
-      it "returns a not found server response" do
-        patch :attach_to_parent, params: params, format: :json
-        expect(response.status).to eq 404
-      end
-    end
-  end
-
   describe "#remove_from_parent" do
     let(:user) { FactoryBot.create(:admin) }
     let(:child) { FactoryBot.create_for_repository(:raster_resource) }
@@ -292,9 +233,10 @@ RSpec.describe RasterResourcesController, type: :controller do
     let(:params) do
       {
         id: child.id,
-        parent_resource: { id: parent.id, member_ids: [child.id] }
+        parent_resource: { id: parent.id }
       }
     end
+
     it "removes any raster resource attached to a given scanned map resource" do
       patch :remove_from_parent, params: params, format: :json
 
@@ -302,37 +244,12 @@ RSpec.describe RasterResourcesController, type: :controller do
       reloaded = find_resource(parent.id)
       expect(reloaded.member_ids).to be_empty
     end
-    context "with invalid parameter types" do
-      let(:params) do
-        {
-          id: child.id,
-          parent_resource: { id: parent.id, member_ids: nil }
-        }
-      end
 
-      it "returns a bad request server response" do
-        patch :remove_from_parent, params: params, format: :json
-        expect(response.status).to eq 400
-      end
-    end
-    context "with invalid parameters" do
-      let(:params) do
-        {
-          id: child.id,
-          parent_resource: { id: parent.id, member_ids: [], title: nil }
-        }
-      end
-
-      it "returns a bad request server response" do
-        patch :remove_from_parent, params: params, format: :json
-        expect(response.status).to eq 400
-      end
-    end
     context "with an invalid parent ID" do
       let(:params) do
         {
           id: child.id,
-          parent_resource: { id: "invalid", member_ids: [child.id] }
+          parent_resource: { id: "invalid" }
         }
       end
 
@@ -343,40 +260,26 @@ RSpec.describe RasterResourcesController, type: :controller do
     end
   end
 
-  describe "#attach_to_parent" do
-    let(:user) { FactoryBot.create(:admin) }
-    let(:parent_scanned_map) { FactoryBot.create_for_repository(:scanned_map) }
-    let(:raster_resource) { FactoryBot.create_for_repository(:raster_resource) }
-
-    it "appends an existing ScannedMap as a parent" do
-      patch :attach_to_parent, params: {
-        id: raster_resource.id.to_s, parent_resource: {
-          id: parent_scanned_map.id.to_s, member_ids: [raster_resource.id.to_s]
-        }
-      }
-
-      persisted = query_service.find_by(id: raster_resource.id)
-      expect(persisted.decorate.decorated_scanned_map_parents).not_to be_empty
-      expect(persisted.decorate.decorated_scanned_map_parents.first.id).to eq parent_scanned_map.id
-    end
-  end
-
   describe "#remove_from_parent" do
     let(:user) { FactoryBot.create(:admin) }
     let(:raster_resource) { FactoryBot.create_for_repository(:raster_resource) }
+    let(:sibling_resource) { FactoryBot.create_for_repository(:raster_resource) }
 
     context "when a RasterResource belongs to a ScannedMap parent" do
-      it "removes an existing parent ScannedMap" do
-        parent_scanned_map = FactoryBot.create_for_repository(:scanned_map, member_ids: [raster_resource.id])
+      it "removes an existing parent ScannedMap, retaining its other children" do
+        parent_scanned_map = FactoryBot.create_for_repository(:scanned_map, member_ids: [raster_resource.id, sibling_resource.id])
 
         patch :remove_from_parent, params: {
-          id: raster_resource.id.to_s, parent_resource: {
-            id: parent_scanned_map.id.to_s, member_ids: [raster_resource.id.to_s]
+          id: raster_resource.id.to_s,
+          parent_resource: {
+            id: parent_scanned_map.id.to_s
           }
         }
 
         persisted = query_service.find_by(id: raster_resource.id)
         expect(persisted.decorate.decorated_scanned_map_parents).to be_empty
+        parent = query_service.find_by(id: parent_scanned_map.id)
+        expect(Wayfinder.for(parent).members.map(&:id)).to eq [sibling_resource.id]
       end
     end
   end
