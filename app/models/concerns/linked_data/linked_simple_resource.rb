@@ -39,7 +39,8 @@ module LinkedData
       def overwritten_properties
         {
           part_of: part_of,
-          actor: actor
+          actor: actor,
+          coverage_point: coverage_point
         }
       end
 
@@ -50,6 +51,16 @@ module LinkedData
           else
             actor
           end
+        end
+      end
+
+      def coverage_point
+        Array.wrap(resource.coverage_point).map do |cp|
+          {
+            "@type" => "TBD",
+            "lat" => cp.lat,
+            "lon" => cp.lon
+          }
         end
       end
 

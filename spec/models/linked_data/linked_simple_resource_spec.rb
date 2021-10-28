@@ -34,5 +34,28 @@ RSpec.describe LinkedData::LinkedSimpleResource do
         expect(jsonld["actor"].last["grouping"].map(&:class)).to eq [RDF::Literal, RDF::Literal]
       end
     end
+
+    context "when it has a coverage point" do
+      let(:lat) { 40.34781552 }
+      let(:lon) { -74.65862657 }
+      let(:resource) do
+        FactoryBot.create_for_repository(
+          :simple_resource,
+          coverage_point: [
+            CoveragePoint.new(
+              lat: lat,
+              lon: lon
+            )
+          ]
+        )
+      end
+
+      it "provides appropriate json structure" do
+        jsonld = linked_resource.as_jsonld
+        expect(jsonld["coverage_point"].first["@type"]).to eq "TBD"
+        expect(jsonld["coverage_point"].first["lat"]).to eq lat
+        expect(jsonld["coverage_point"].first["lon"]).to eq lon
+      end
+    end
   end
 end
