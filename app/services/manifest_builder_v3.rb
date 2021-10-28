@@ -154,8 +154,8 @@ class ManifestBuilderV3
       @members ||= begin
         manifestable_members.map do |member|
           decorator = member.decorate
-          if decorator.respond_to?(:scanned_map_members) && decorator.scanned_map_members.empty?
-            member.decorate.geo_members.first
+          if decorator.respond_to?(:decorated_scanned_maps) && decorator.decorated_scanned_maps.empty?
+            decorator.geo_members.first
           else
             member
           end

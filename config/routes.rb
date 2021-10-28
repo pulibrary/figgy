@@ -74,6 +74,7 @@ Rails.application.routes.draw do
   end
 
   get "/downloads/:resource_id/file/:id", to: "downloads#show", as: :download
+  get "/manifests/:id/v3", to: "manifests#v3", as: :manifest_v3, defaults: { format: :json }
 
   scope "/concern" do
     resources :file_sets do
@@ -220,7 +221,6 @@ Rails.application.routes.draw do
       end
     end
     get "/scanned_maps/:parent_id/new", to: "scanned_maps#new", as: :parent_new_scanned_map
-    get "/scanned_maps/:id/v3/manifest", to: "scanned_maps#manifest_v3", as: :manifest_v3_scanned_map, defaults: { format: :json }
     put "/scanned_maps/:id/extract_metadata/:file_set_id", to: "scanned_maps#extract_metadata", as: :scanned_maps_extract_metadata
     patch "/scanned_maps/:id/remove_from_parent", to: "scanned_maps#remove_from_parent", as: :scanned_maps_remove_from_parent, defaults: { format: :json }
 

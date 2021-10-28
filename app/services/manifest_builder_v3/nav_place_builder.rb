@@ -41,7 +41,7 @@ class ManifestBuilderV3
       end
 
       def coverage
-        resource.coverage || resource.primary_imported_metadata.coverage
+        resource.coverage.try(:first) || resource.primary_imported_metadata.coverage.try(:first)
       end
 
       def feature_collection_id
@@ -53,7 +53,7 @@ class ManifestBuilderV3
       end
 
       def geo_coverage
-        @geo_coverage ||= GeoCoverage.parse(coverage.try(:first))
+        @geo_coverage ||= GeoCoverage.parse(coverage)
       end
 
       def helper

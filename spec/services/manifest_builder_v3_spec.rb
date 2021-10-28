@@ -99,9 +99,31 @@ RSpec.describe ManifestBuilderV3 do
       end
     end
 
+    context "when a scanned map has imported coverage and is not downloadable" do
+      let(:coverage) { GeoCoverage.new(43.039, -69.856, 42.943, -71.032).to_s }
+      let(:resource) do
+        FactoryBot.create_for_repository(:scanned_map,
+                                         downloadable: "none",
+                                         imported_metadata: [{
+                                           coverage: coverage,
+                                           description: "Test Description"
+                                         }])
+      end
+
+      it "displays coverage and disables download" do
+        output = manifest_builder.build
+
+        # navPlace
+        expect(output["navPlace"]["type"]).to eq "FeatureCollection"
+
+        # not downloadable
+        output["service"][0]["disableUI"] == ["mediaDownload"]
+      end
+    end
+
     context "when given a nested scanned map set" do
       let(:resource) do
-        FactoryBot.create_for_repository(:scanned_map, downloadable: "none", description: "Test Description", member_ids: child.id)
+        FactoryBot.create_for_repository(:scanned_map, description: "Test Description", member_ids: child.id)
       end
       let(:child) { FactoryBot.create_for_repository(:scanned_map, files: [file]) }
       it "builds a IIIF document" do
@@ -114,9 +136,6 @@ RSpec.describe ManifestBuilderV3 do
 
         # structure is empty when the resource has no stucture defined
         expect(output["structures"]).to be_nil
-
-        # not downloadable
-        output["service"][0]["disableUI"] == ["mediaDownload"]
       end
     end
 
