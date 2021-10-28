@@ -141,6 +141,28 @@ RSpec.feature "Related Resources", js: true do
       end
     end
 
+    describe "when removing a parent vector" do
+      it "retains other children on the parent" do
+        resource = persister.save(resource: FactoryBot.create_for_repository(:vector_resource))
+        sibling = persister.save(resource: FactoryBot.create_for_repository(:vector_resource))
+        parent = persister.save(resource: FactoryBot.create_for_repository(:vector_resource, title: "New Parent", member_ids: [sibling.id, resource.id]))
+
+        visit "/catalog/#{resource.id}"
+        parent_row = page.find("tr[data-resource-id]")
+
+        # detach
+        within parent_row do
+          click_on("button")
+        end
+
+        # wait for page change
+        expect(page).not_to have_selector("tr[data-resource-id]")
+
+        parent = adapter.query_service.find_by(id: parent.id)
+        expect(Wayfinder.for(parent).members.map(&:id)).to eq [sibling.id]
+      end
+    end
+
     it "can attach and detach a parent raster" do
       resource = persister.save(resource: FactoryBot.create_for_repository(:raster_resource))
       parent = persister.save(resource: FactoryBot.create_for_repository(:raster_resource))

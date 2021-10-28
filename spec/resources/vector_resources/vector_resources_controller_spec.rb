@@ -240,19 +240,23 @@ RSpec.describe VectorResourcesController, type: :controller do
   describe "#remove_from_parent" do
     let(:user) { FactoryBot.create(:admin) }
     let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource) }
+    let(:sibling_resource) { FactoryBot.create_for_repository(:vector_resource) }
 
-    context "when a RasterResource belongs to a ScannedMap parent" do
-      it "removes an existing parent ScannedMap" do
-        parent_raster_resource = FactoryBot.create_for_repository(:raster_resource, member_ids: [vector_resource.id])
+    context "when a VectorResource belongs to a RasterResource parent" do
+      it "removes an existing parent RasterResource, retaining its other children" do
+        parent_raster_resource = FactoryBot.create_for_repository(:raster_resource, member_ids: [vector_resource.id, sibling_resource.id])
 
         patch :remove_from_parent, params: {
-          id: vector_resource.id.to_s, parent_resource: {
-            id: parent_raster_resource.id.to_s, member_ids: [vector_resource.id.to_s]
+          id: vector_resource.id.to_s,
+          parent_resource: {
+            id: parent_raster_resource.id.to_s
           }
         }
 
         persisted = query_service.find_by(id: vector_resource.id)
         expect(persisted.decorate.decorated_raster_resource_parents).to be_empty
+        parent = query_service.find_by(id: parent_raster_resource.id)
+        expect(Wayfinder.for(parent).members.map(&:id)).to eq [sibling_resource.id]
       end
     end
   end
