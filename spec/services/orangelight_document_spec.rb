@@ -16,6 +16,7 @@ describe OrangelightDocument do
       subject(:builder) { described_class.new(coin) }
       let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
       let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
+      let(:reference_coin) { FactoryBot.create_for_repository(:numismatic_reference, title: "Coin Test Reference", short_title: "Coin short-title") }
       let(:person) { FactoryBot.create_for_repository(:numismatic_person) }
       let(:numismatic_artist) { Numismatics::Artist.new(person_id: person.id, signature: "artist signature", role: "artist role", side: "artist side") }
       let(:numismatic_subject) { Numismatics::Subject.new(type: "Other Person", subject: "Athena") }
@@ -43,6 +44,7 @@ describe OrangelightDocument do
                                          find_description: "at join of carcares and w. cavea surface",
                                          numismatic_accession_id: numismatic_accession.id,
                                          numismatic_collection: "Firestone",
+                                         numismatic_citation: numismatic_citation,
                                          provenance: numismatic_provenance,
                                          die_axis: "6",
                                          size: "27",
@@ -180,6 +182,8 @@ describe OrangelightDocument do
         expect(output[:issue_artists_sort]).to eq "name1 name2, artist signature"
         expect(output[:issue_monogram_title_s]).to contain_exactly("Alexander", "Zeus")
         expect(output[:issue_date_s]).to eq ["-91 to -41"]
+        expect(output[:coin_references_s]).to eq ["short-title citation part citation number"]
+        expect(output[:coin_references_sort]).to eq "short-title citation part citation number"
       end
     end
 

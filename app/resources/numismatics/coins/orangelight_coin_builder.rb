@@ -61,6 +61,8 @@ class OrangelightCoinBuilder
         technique_s: decorator.technique,
         weight_s: decorator.weight_label,
         holdings_1display: holdings_hash,
+        coin_references_s: decorator.citations,
+        coin_references_sort: decorator.citations&.first,
         numismatic_collection_s: decorator.numismatic_collection,
         numismatic_accession_s: [decorator.decorated_numismatic_accession&.indexed_label],
         numismatic_provenance_s: decorator.provenance
